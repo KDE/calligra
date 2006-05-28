@@ -20,12 +20,13 @@
 #include <math.h>
 
 #include <qdom.h>
-//Added by qt3to4:
+#include <QSizeF>
 #include <Q3ValueList>
 
 #include "vpainter.h"
 #include "vpath.h"
 #include "vsegment.h"
+#include "vglobal.h"
 
 #include <kdebug.h>
 
@@ -81,7 +82,7 @@ VSegment::setDegree( unsigned short deg )
 
 	// Remember old nodes.
 	VNodeData* oldNodes = m_nodes;
-	KoPoint oldKnot = knot();
+	QPointF oldKnot = knot();
 
 	// Allocate new node data.
 	m_nodes = new VNodeData[ deg ];
@@ -101,7 +102,7 @@ VSegment::setDegree( unsigned short deg )
 		// Fill with "zeros" if necessary.
 		for( unsigned short i = 0; i < offset; ++i )
 		{
-			m_nodes[ i ].m_vector = KoPoint( 0.0, 0.0 );
+			m_nodes[ i ].m_vector = QPointF( 0.0, 0.0 );
 		}
 	}
 
@@ -163,10 +164,10 @@ VSegment::isFlat( double flatness ) const
 	return true;
 }
 
-KoPoint
+QPointF
 VSegment::pointAt( double t ) const
 {
-	KoPoint p;
+	QPointF p;
 
 	pointDerivativesAt( t, &p );
 
@@ -174,8 +175,8 @@ VSegment::pointAt( double t ) const
 }
 
 void
-VSegment::pointDerivativesAt( double t, KoPoint* p,
-							  KoPoint* d1, KoPoint* d2 ) const
+VSegment::pointDerivativesAt( double t, QPointF* p,
+							  QPointF* d1, QPointF* d2 ) const
 {
 	if( !prev() )
 		return;
@@ -184,7 +185,7 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 	// Optimise the line case.
 	if( degree() == 1 )
 	{
-		const KoPoint diff = knot() - prev()->knot();
+		const QPointF diff = knot() - prev()->knot();
 
 		if( p )
 			*p = prev()->knot() + diff * t;
@@ -193,7 +194,7 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 			*d1 = diff;
 
 		if( d2 )
-			*d2 = KoPoint( 0.0, 0.0 );
+			*d2 = QPointF( 0.0, 0.0 );
 
 		return;
 	}
@@ -202,7 +203,7 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 	// Beziers.
 
 	// Copy points.
-	KoPoint* q = new KoPoint[ degree() + 1 ];
+	QPointF* q = new QPointF[ degree() + 1 ];
 
 	q[ 0 ] = prev()->knot();
 
@@ -246,10 +247,10 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 	return;
 }
 
-KoPoint
+QPointF
 VSegment::tangentAt( double t ) const
 {
-	KoPoint tangent;
+	QPointF tangent;
 
 	pointTangentNormalAt( t, 0L, &tangent );
 
@@ -257,11 +258,11 @@ VSegment::tangentAt( double t ) const
 }
 
 void
-VSegment::pointTangentNormalAt( double t, KoPoint* p,
-								KoPoint* tn, KoPoint* n ) const
+VSegment::pointTangentNormalAt( double t, QPointF* p,
+								QPointF* tn, QPointF* n ) const
 {
 	// Calculate derivative if necessary.
-	KoPoint d;
+	QPointF d;
 
 	pointDerivativesAt( t, p, tn || n ? &d : 0L );
 
@@ -272,7 +273,7 @@ VSegment::pointTangentNormalAt( double t, KoPoint* p,
 		const double norm =
 			sqrt( d.x() * d.x() + d.y() * d.y() );
 
-		d = norm ? d * ( 1.0 / norm ) : KoPoint( 0.0, 0.0 );
+		d = norm ? d * ( 1.0 / norm ) : QPointF( 0.0, 0.0 );
 	}
 
 	// Assign tangent vector.
@@ -366,9 +367,9 @@ VSegment::chordLength() const
 		return 0.0;
 
 
-	KoPoint d = knot() - prev()->knot();
+	QPointF d = knot() - prev()->knot();
 
-	return sqrt( d * d );
+	return sqrt( VGlobal::multiplyPoints(d,d) );
 }
 
 double
@@ -379,15 +380,15 @@ VSegment::polyLength() const
 
 
 	// Start with distance |first point - previous knot|.
-	KoPoint d = point( 0 ) - prev()->knot();
+	QPointF d = point( 0 ) - prev()->knot();
 
-	double length = sqrt( d * d );
+	double length = sqrt( VGlobal::multiplyPoints(d,d) );
 
 	// Iterate over remaining points.
 	for( unsigned short i = 1; i < degree(); ++i )
 	{
 		d = point( i ) - point( i - 1 );
-		length += sqrt( d * d );
+		length += sqrt( VGlobal::multiplyPoints(d,d) );
 	}
 
 
@@ -436,7 +437,7 @@ VSegment::lengthParam( double len ) const
 }
 
 double
-VSegment::nearestPointParam( const KoPoint& p ) const
+VSegment::nearestPointParam( const QPointF& p ) const
 {
 	if( !prev() )
 	{
@@ -479,7 +480,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 
 	// Calculate the c_i = point( i ) - P.
-	KoPoint* c = new KoPoint[ degree() + 1 ];
+	QPointF* c = new QPointF[ degree() + 1 ];
 
 	c[ 0 ] = prev()->knot() - p;
 
@@ -490,7 +491,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 
 	// Calculate the d_j = point( j + 1 ) - point( j ).
-	KoPoint* d = new KoPoint[ degree() ];
+	QPointF* d = new QPointF[ degree() ];
 
 	d[ 0 ] = point( 0 ) - prev()->knot();
 
@@ -526,7 +527,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 		for( unsigned short i = 0; i <= degree(); ++i )
 		{
 			products[ j * ( degree() + 1 ) + i ] =
-				d[ j ] * c[ i ];
+				VGlobal::multiplyPoints(d[ j ],c[ i ]);
 		}
 	}
 
@@ -544,7 +545,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	{
 		newCurve.current()->setP(
 			u,
-			KoPoint(
+			QPointF(
 				static_cast<double>( u ) / static_cast<double>( 2 * degree() - 1 ),
 				0.0 ) );
 	}
@@ -565,7 +566,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 			// p_k += products[j][i] * z[j][i].
 			newCurve.getLast()->setP(
 				k,
-				KoPoint(
+				QPointF(
 					newCurve.getLast()->p( k ).x(),
 					newCurve.getLast()->p( k ).y() +
 						products[ j * ( degree() + 1 ) + i ] *
@@ -595,11 +596,11 @@ kDebug(38000) << endl;
 	double resultParam;
 	double distanceSquared;
 	double oldDistanceSquared;
-	KoPoint dist;
+	QPointF dist;
 
 	// First candidate is the previous knot.
 	dist = prev()->knot() - p;
-	distanceSquared = dist * dist;
+	distanceSquared = VGlobal::multiplyPoints(dist,dist);
 	resultParam = 0.0;
 
 	// Iterate over the found candidate params.
@@ -608,7 +609,7 @@ kDebug(38000) << endl;
 		pointDerivativesAt( *itr, &dist );
 		dist -= p;
 		oldDistanceSquared = distanceSquared;
-		distanceSquared = dist * dist;
+		distanceSquared = VGlobal::multiplyPoints(dist,dist);
 
 		if( distanceSquared < oldDistanceSquared )
 			resultParam = *itr;
@@ -617,7 +618,7 @@ kDebug(38000) << endl;
 	// Last candidate is the knot.
 	dist = knot() - p;
 	oldDistanceSquared = distanceSquared;
-	distanceSquared = dist * dist;
+	distanceSquared = VGlobal::multiplyPoints(dist,dist);
 
 	if( distanceSquared < oldDistanceSquared )
 		resultParam = 1.0;
@@ -647,7 +648,7 @@ VSegment::rootParams( Q3ValueList<double>& params ) const
 			if( isFlat( VGlobal::flatnessTolerance / chordLength() ) )
 			{
 				// Calculate intersection of chord with x-axis.
-				KoPoint chord = knot() - prev()->knot();
+				QPointF chord = knot() - prev()->knot();
 
 kDebug(38000) << prev()->knot().x()  << " " << prev()->knot().y()
 << knot().x() << " " << knot().y() << " ---> "
@@ -707,8 +708,8 @@ VSegment::isSmooth( const VSegment& next ) const
 
 
 	// Calculate tangents.
-	KoPoint t1;
-	KoPoint t2;
+	QPointF t1;
+	QPointF t2;
 
 	pointTangentNormalAt( 1.0, 0L, &t1 );
 
@@ -716,17 +717,17 @@ VSegment::isSmooth( const VSegment& next ) const
 
 
 	// Dot product.
-	if( t1 * t2 >= VGlobal::parallelTolerance )
+	if( VGlobal::multiplyPoints(t1,t2) >= VGlobal::parallelTolerance )
 		return true;
 
 	return false;
 }
 
-KoRect
+QRectF
 VSegment::boundingBox() const
 {
 	// Initialize with knot.
-	KoRect rect( knot(), knot() );
+	QRectF rect( knot(), QSizeF(knot().x(), knot().y()) );
 
 	// Add p0, if it exists.
 	if( prev() )
@@ -773,14 +774,14 @@ VSegment::boundingBox() const
 		double t[4];
 	
 		// calcualting the differnces between successive control points
-		KoPoint x0 = p(1)-p(0);
-		KoPoint x1 = p(2)-p(1);
-		KoPoint x2 = p(3)-p(2);
+		QPointF x0 = p(1)-p(0);
+		QPointF x1 = p(2)-p(1);
+		QPointF x2 = p(3)-p(2);
 
 		// calculating the coefficents
-		KoPoint a = x2 - 2.0*x1 + x0;
-		KoPoint b = 2.0*x1 - 2.0*x0;
-		KoPoint c = x0;
+		QPointF a = x2 - 2.0*x1 + x0;
+		QPointF b = 2.0*x1 - 2.0*x0;
+		QPointF c = x0;
 
 		// calculating parameter t at minimum/maximum in x-direction
 		if( a.x() == 0.0 )
@@ -817,7 +818,7 @@ VSegment::boundingBox() const
 		{
 			if( t[i] >= 0.0 && t[i] <= 1.0 )
 			{
-				KoPoint p = pointAt( t[i] );
+				QPointF p = pointAt( t[i] );
 	
 				if( p.x() < rect.left() )
 					rect.setLeft( p.x() );
@@ -885,7 +886,7 @@ VSegment::splitAt( double t )
 	// Beziers.
 
 	// Copy points.
-	KoPoint* q = new KoPoint[ degree() + 1 ];
+	QPointF* q = new QPointF[ degree() + 1 ];
 
 	q[ 0 ] = prev()->knot();
 
@@ -922,9 +923,9 @@ VSegment::splitAt( double t )
 
 double
 VSegment::height(
-	const KoPoint& a,
-	const KoPoint& p,
-	const KoPoint& b )
+	const QPointF& a,
+	const QPointF& p,
+	const QPointF& b )
 {
 	// Calculate determinant of AP and AB to obtain projection of vector AP to
 	// the orthogonal vector of AB.
@@ -933,8 +934,8 @@ VSegment::height(
 		a.x() * p.y() + a.x() * b.y() - b.x() * a.y();
 
 	// Calculate norm = length(AB).
-	const KoPoint ab = b - a;
-	const double norm = sqrt( ab * ab );
+	const QPointF ab = b - a;
+	const double norm = sqrt( VGlobal::multiplyPoints(ab, ab) );
 
 	// If norm is very small, simply use distance AP.
 	if( norm < VGlobal::verySmallNumber )
@@ -949,12 +950,12 @@ VSegment::height(
 
 bool
 VSegment::linesIntersect(
-	const KoPoint& a0,
-	const KoPoint& a1,
-	const KoPoint& b0,
-	const KoPoint& b1 )
+	const QPointF& a0,
+	const QPointF& a1,
+	const QPointF& b0,
+	const QPointF& b1 )
 {
-	const KoPoint delta_a = a1 - a0;
+	const QPointF delta_a = a1 - a0;
 	const double det_a = a1.x() * a0.y() - a1.y() * a0.x();
 
 	const double r_b0 = delta_a.y() * b0.x() - delta_a.x() * b0.y() + det_a;
@@ -963,7 +964,7 @@ VSegment::linesIntersect(
 	if( r_b0 != 0.0 && r_b1 != 0.0 && r_b0 * r_b1 > 0.0 )
 		return false;
 
-	const KoPoint delta_b = b1 - b0;
+	const QPointF delta_b = b1 - b0;
 
 	const double det_b = b1.x() * b0.y() - b1.y() * b0.x();
 
@@ -993,13 +994,13 @@ VSegment::intersects( const VSegment& segment ) const
 
 // TODO: Move this function into "userland"
 uint
-VSegment::nodeNear( const KoPoint& p, double isNearRange ) const
+VSegment::nodeNear( const QPointF& p, double isNearRange ) const
 {
 	int index = 0;
 
 	for( unsigned short i = 0; i < degree(); ++i )
 	{
-		if( point( 0 ).isNear( p, isNearRange ) )
+		if( VGlobal::pointsAreNear(point( 0 ), p, isNearRange) )
 		{
 			index = i + 1;
 			break;
@@ -1071,18 +1072,18 @@ VSegment::load( const QDomElement& element )
 
 		setPoint(
 			0,
-			KoPoint(
+			QPointF(
 				element.attribute( "x1" ).toDouble(),
 				element.attribute( "y1" ).toDouble() ) );
 
 		setPoint(
 			1,
-			KoPoint(
+			QPointF(
 				element.attribute( "x2" ).toDouble(),
 				element.attribute( "y2" ).toDouble() ) );
 
 		setKnot(
-			KoPoint(
+			QPointF(
 				element.attribute( "x3" ).toDouble(),
 				element.attribute( "y3" ).toDouble() ) );
 	}
@@ -1091,7 +1092,7 @@ VSegment::load( const QDomElement& element )
 		setDegree( 1 );
 
 		setKnot(
-			KoPoint(
+			QPointF(
 				element.attribute( "x" ).toDouble(),
 				element.attribute( "y" ).toDouble() ) );
 	}
@@ -1100,7 +1101,7 @@ VSegment::load( const QDomElement& element )
 		setDegree( 1 );
 
 		setKnot(
-			KoPoint(
+			QPointF(
 				element.attribute( "x" ).toDouble(),
 				element.attribute( "y" ).toDouble() ) );
 	}

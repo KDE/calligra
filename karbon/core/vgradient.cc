@@ -19,7 +19,7 @@
 
 #include <qdom.h>
 #include <qbuffer.h>
-//Added by qt3to4:
+#include <QMatrix>
 #include <Q3PtrList>
 
 #include "vdocument.h"
@@ -29,6 +29,8 @@
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+
+#include <kdebug.h>
 
 int VGradient::VColorStopList::compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 )
 {
@@ -52,8 +54,8 @@ VGradient::VGradient( VGradientType type )
 	color.set( 1.0, 1.0, 0.0 );
 	addStop( color, 1.0, 0.5 );
 
-	setOrigin( KoPoint( 0, 0 ) );
-	setVector( KoPoint( 0, 50 ) );
+	setOrigin( QPointF( 0, 0 ) );
+	setVector( QPointF( 0, 50 ) );
 	setRepeatMethod( VGradient::reflect );
 }
 
@@ -228,7 +230,7 @@ VGradient::loadOasis( const QDomElement &object, KoStyleStack &/*stack*/, VObjec
 	kDebug(38000) << "namespaceURI: " << object.namespaceURI() << endl;
 	kDebug(38000) << "localName: " << object.localName() << endl;
 
-	KoRect bb;
+	QRectF bb;
 	
 	if( parent )
 		bb =  parent->boundingBox();
@@ -366,7 +368,14 @@ VGradient::load( const QDomElement& element )
 void
 VGradient::transform( const QMatrix &m )
 {
-	m_origin	= m_origin.transform( m );
-	m_focalPoint	= m_focalPoint.transform( m );
-	m_vector	= m_vector.transform( m );
+	double x, y;
+
+	m.map(m_origin.x(), m_origin.y(), &x, &y);
+	m_origin	= QPointF(x,y);
+
+	m.map(m_focalPoint.x(), m_focalPoint.y(), &x, &y);
+	m_focalPoint	= QPointF(x,y);
+
+	m.map(m_vector.x(), m_vector.y(), &x, &y);
+	m_vector	= QPointF(x,y);
 }

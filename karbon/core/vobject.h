@@ -22,7 +22,7 @@
 #define __VOBJECT_H__
 
 
-#include <KoRect.h>
+#include <QRectF>
 #include <dcopobject.h>
 #include <koffice_export.h>
 
@@ -97,7 +97,7 @@ public:
 	 * @param rect represents the visible rectangular area. If this object doesn't
 	 *             intersect with this area it is not drawn.
 	 */
-	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const 
+	virtual void draw( VPainter* painter, const QRectF* rect = 0L ) const 
 	{ 
 		Q_UNUSED( painter );
 		Q_UNUSED( rect );
@@ -108,7 +108,7 @@ public:
 	 *
 	 * @return the bounding box.
 	 */
-	virtual const KoRect& boundingBox() const
+	virtual const QRectF& boundingBox() const
 		{ return m_boundingBox; }
 
 	/**
@@ -282,7 +282,7 @@ protected:
 	virtual void saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesojectauto ) const;
 
 protected:
-	mutable KoRect m_boundingBox; /**< the object's bounding box */
+	mutable QRectF m_boundingBox; /**< the object's bounding box */
 	mutable VState m_state				: 8; /**< the object's state */
 	mutable bool m_boundingBoxIsInvalid : 1; /**< the flag stating if the bounding box is valid */
 

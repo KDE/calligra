@@ -21,6 +21,7 @@
 #include <qcursor.h>
 #include <qevent.h>
 #include <QLabel>
+#include <QPointF>
 
 #include <klocale.h>
 
@@ -40,6 +41,8 @@
 #include <widgets/vcanvas.h>
 
 #include <kactioncollection.h>
+
+#include "vglobal.h"
 
 VPolylineTool::VPolylineTool( KarbonView *view )
 	: VTool( view, "tool_polyline" )
@@ -91,10 +94,10 @@ VPolylineTool::deactivate()
 	if( m_bezierPoints.count() > 2 )
 	{
 		polyline = new VPath( 0L );
-		KoPoint* p1 = m_bezierPoints.first();
-		KoPoint* p2;
-		KoPoint* p3;
-		KoPoint* p4;
+		QPointF* p1 = m_bezierPoints.first();
+		QPointF* p2;
+		QPointF* p3;
+		QPointF* p4;
 
 		polyline->moveTo( *p1 );
 
@@ -150,9 +153,9 @@ VPolylineTool::draw()
 		VPath polyline( 0L );
 		polyline.moveTo( *m_bezierPoints.first() );
 
-		KoPoint* p2;
-		KoPoint *p3;
-		KoPoint *p4;
+		QPointF *p2;
+		QPointF *p3;
+		QPointF *p4;
 
 		while(
 			( p2 = m_bezierPoints.next() ) &&
@@ -168,7 +171,7 @@ VPolylineTool::draw()
 }
 
 void
-VPolylineTool::drawBezierVector( KoPoint& start, KoPoint& end )
+VPolylineTool::drawBezierVector( QPointF& start, QPointF& end )
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
 
@@ -196,19 +199,19 @@ VPolylineTool::drawBezierVector( KoPoint& start, KoPoint& end )
 
 	float width = 2.0;
 
-	painter->moveTo( KoPoint(
+	painter->moveTo( QPointF(
 		end.x() - width / zoomFactor,
 		end.y() - width / zoomFactor ) );
-	painter->lineTo( KoPoint(
+	painter->lineTo( QPointF(
 		end.x() + width / zoomFactor,
 		end.y() - width / zoomFactor ) );
-	painter->lineTo( KoPoint(
+	painter->lineTo( QPointF(
 		end.x() + width / zoomFactor,
 		end.y() + width / zoomFactor ) );
-	painter->lineTo( KoPoint(
+	painter->lineTo( QPointF(
 		end.x() - width / zoomFactor,
 		end.y() + width / zoomFactor ) );
-	painter->lineTo( KoPoint(
+	painter->lineTo( QPointF(
 		end.x() - width / zoomFactor,
 		end.y() - width / zoomFactor ) );
 
@@ -221,13 +224,13 @@ VPolylineTool::mouseMove()
 {
 	if( m_bezierPoints.count() != 0 )
 	{
-		KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+		QPointF _last = view()->canvasWidget()->snapToGrid( last() );
 		draw();
 
 		m_bezierPoints.removeLast();
 		m_bezierPoints.removeLast();
-		m_bezierPoints.append( new KoPoint( _last ) );
-		m_bezierPoints.append( new KoPoint( _last ) );
+		m_bezierPoints.append( new QPointF( _last ) );
+		m_bezierPoints.append( new QPointF( _last ) );
 
 		draw();
 	}
@@ -236,19 +239,19 @@ VPolylineTool::mouseMove()
 void
 VPolylineTool::mouseButtonPress()
 {
-	KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+	QPointF _last = view()->canvasWidget()->snapToGrid( last() );
 	if( m_bezierPoints.count() != 0 )
 	{
 		draw();
 		m_bezierPoints.removeLast();
 		m_bezierPoints.removeLast();
-		m_bezierPoints.append( new KoPoint( _last ) );
+		m_bezierPoints.append( new QPointF( _last ) );
 	}
 
 	m_lastVectorEnd = m_lastVectorStart = _last;
 
-	m_bezierPoints.append( new KoPoint( _last ) );
-	m_bezierPoints.append( new KoPoint( _last ) );
+	m_bezierPoints.append( new QPointF( _last ) );
+	m_bezierPoints.append( new QPointF( _last ) );
 	drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 	draw();
 }
@@ -256,13 +259,13 @@ VPolylineTool::mouseButtonPress()
 void
 VPolylineTool::mouseButtonRelease()
 {
-	KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+	QPointF _last = view()->canvasWidget()->snapToGrid( last() );
 	if( m_bezierPoints.count() == 2 )
 	{
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 
 		m_bezierPoints.removeLast();
-		m_bezierPoints.append( new KoPoint( _last ) );
+		m_bezierPoints.append( new QPointF( _last ) );
 
 		VPainter* painter = view()->painterFactory()->editpainter();
 		painter->save();
@@ -283,49 +286,49 @@ VPolylineTool::mouseButtonRelease()
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 		draw();
 		m_bezierPoints.removeLast();
-		KoPoint* p = new KoPoint( *m_bezierPoints.last() );
+		QPointF* p = new QPointF( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
-		KoPoint* b = new KoPoint( *m_bezierPoints.last() );
+		QPointF* b = new QPointF( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
 
 		if( shiftPressed() )
 		{
 			m_bezierPoints.removeLast();
-			m_bezierPoints.append( new KoPoint( *m_bezierPoints.last() ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
+			m_bezierPoints.append( new QPointF( *m_bezierPoints.last() ) );
+			m_bezierPoints.append( new QPointF( *p ) );
+			m_bezierPoints.append( new QPointF( *p ) );
+			m_bezierPoints.append( new QPointF( *p ) );
 			m_lastVectorStart = m_lastVectorEnd = *p;
 		}
 		else if( ctrlPressed() )
 		{
 			m_bezierPoints.removeLast();
 			m_lastVectorStart = *m_bezierPoints.last();
-			m_bezierPoints.append( new KoPoint( _last ) );
-			m_bezierPoints.append( new KoPoint( *b ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
-			m_bezierPoints.append( new KoPoint( *p - ( *b - *p ) ) );
+			m_bezierPoints.append( new QPointF( _last ) );
+			m_bezierPoints.append( new QPointF( *b ) );
+			m_bezierPoints.append( new QPointF( *p ) );
+			m_bezierPoints.append( new QPointF( *p - ( *b - *p ) ) );
 			m_lastVectorEnd = _last;
 		}
 		else
 		{
-			m_bezierPoints.append( new KoPoint( _last ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
-			m_bezierPoints.append( new KoPoint( *p - ( _last - *p ) ) );
+			m_bezierPoints.append( new QPointF( _last ) );
+			m_bezierPoints.append( new QPointF( *p ) );
+			m_bezierPoints.append( new QPointF( *p - ( _last - *p ) ) );
 			m_lastVectorStart = *p;
 			m_lastVectorEnd = _last;
 		}
-		if( m_bezierPoints.count() > 2 && p->isNear( *m_bezierPoints.first(), 3 ) )
+		if( m_bezierPoints.count() > 2 && VGlobal::pointsAreNear(*p, *m_bezierPoints.first(), 3 ) )
 		{
-			m_bezierPoints.append( new KoPoint( _last ) );
+			m_bezierPoints.append( new QPointF( _last ) );
 			m_close = true;
 			accept();
 			return;
 		}
 	}
 
-	m_bezierPoints.append( new KoPoint( _last ) );
-	m_bezierPoints.append( new KoPoint( _last ) );
+	m_bezierPoints.append( new QPointF( _last ) );
+	m_bezierPoints.append( new QPointF( _last ) );
 
 	draw();
 }
@@ -346,14 +349,14 @@ VPolylineTool::mouseButtonDblClick()
 void
 VPolylineTool::mouseDrag()
 {
-	KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+	QPointF _last = view()->canvasWidget()->snapToGrid( last() );
 
 	if( m_bezierPoints.count() == 2 )
 	{
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 
 		m_bezierPoints.removeLast();
-		m_bezierPoints.append( new KoPoint( _last ) );
+		m_bezierPoints.append( new QPointF( _last ) );
 		m_lastVectorEnd = _last;
 
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
@@ -364,35 +367,35 @@ VPolylineTool::mouseDrag()
 		draw();
 
 		m_bezierPoints.removeLast();
-		KoPoint* p = new KoPoint( *m_bezierPoints.last() );
+		QPointF* p = new QPointF( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
-		KoPoint* b = new KoPoint( *m_bezierPoints.last() );
+		QPointF* b = new QPointF( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
 
 		if( shiftPressed() )
 		{
 			m_bezierPoints.removeLast();
-			m_bezierPoints.append( new KoPoint( *m_bezierPoints.last() ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
+			m_bezierPoints.append( new QPointF( *m_bezierPoints.last() ) );
+			m_bezierPoints.append( new QPointF( *p ) );
+			m_bezierPoints.append( new QPointF( *p ) );
+			m_bezierPoints.append( new QPointF( *p ) );
 			m_lastVectorStart = m_lastVectorEnd = *p;
 		}
 		else if( ctrlPressed() )
 		{
 			m_bezierPoints.removeLast();
 			m_lastVectorStart = *m_bezierPoints.last();
-			m_bezierPoints.append( new KoPoint( _last ) );
-			m_bezierPoints.append( new KoPoint( *b ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
-			m_bezierPoints.append( new KoPoint( *p - ( *b - *p ) ) );
+			m_bezierPoints.append( new QPointF( _last ) );
+			m_bezierPoints.append( new QPointF( *b ) );
+			m_bezierPoints.append( new QPointF( *p ) );
+			m_bezierPoints.append( new QPointF( *p - ( *b - *p ) ) );
 			m_lastVectorEnd = _last;
 		}
 		else
 		{
-			m_bezierPoints.append( new KoPoint( _last ) );
-			m_bezierPoints.append( new KoPoint( *p ) );
-			m_bezierPoints.append( new KoPoint( *p - ( _last - *p ) ) );
+			m_bezierPoints.append( new QPointF( _last ) );
+			m_bezierPoints.append( new QPointF( *p ) );
+			m_bezierPoints.append( new QPointF( *p - ( _last - *p ) ) );
 			m_lastVectorStart = *p;
 			m_lastVectorEnd = _last;
 		}
@@ -419,7 +422,7 @@ VPolylineTool::mouseDragCtrlPressed()
 	// Moves the mouse to the other bezier vector position.
 	if( m_bezierPoints.count() > 3 )
 	{
-		KoPoint p;
+		QPointF p;
 		p = *m_bezierPoints.at( m_bezierPoints.count() - 4) - *m_bezierPoints.at( m_bezierPoints.count() - 3 );
 
 		view()->setPos( p );
@@ -436,7 +439,7 @@ VPolylineTool::mouseDragCtrlReleased()
 {
 	if( m_bezierPoints.count() > 3 )
 	{
-		KoPoint p;
+		QPointF p;
 		p = *m_bezierPoints.at( m_bezierPoints.count() - 3) - *m_bezierPoints.at( m_bezierPoints.count() - 4 );
 
 		view()->setPos( p );
@@ -461,11 +464,11 @@ VPolylineTool::cancelStep()
 		m_bezierPoints.removeLast();
 		m_bezierPoints.removeLast();
 		m_bezierPoints.removeLast();
-		KoPoint p1 = *m_bezierPoints.last();
+		QPointF p1 = *m_bezierPoints.last();
 		m_bezierPoints.removeLast();
 		m_bezierPoints.removeLast();
-		m_bezierPoints.append( new KoPoint( p1 ) );
-		m_bezierPoints.append( new KoPoint( p1 ) );
+		m_bezierPoints.append( new QPointF( p1 ) );
+		m_bezierPoints.append( new QPointF( p1 ) );
 
 		view()->setPos( p1 );
 	}

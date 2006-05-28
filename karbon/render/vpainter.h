@@ -25,7 +25,7 @@
 // painter abstraction
 
 #include <qnamespace.h>
-#include <KoRect.h>
+#include <QRectF>
 #include <vfillrule.h>
 
 class QMatrix;
@@ -38,8 +38,7 @@ class QImage;
 class VStroke;
 class VFill;
 
-class KoPoint;
-class KoRect;
+class QPointF;
 
 class VPainter
 {
@@ -51,9 +50,9 @@ public:
 	virtual void resize( unsigned int w, unsigned int h ) = 0;
 	virtual void begin() = 0;
 	virtual void end() = 0;
-	virtual void blit( const KoRect & ) = 0;
+	virtual void blit( const QRectF & ) = 0;
 	virtual void clear( const QColor & ) = 0;
-	virtual void clear( const KoRect &, const QColor & ) = 0;
+	virtual void clear( const QRectF &, const QColor & ) = 0;
 
 	// matrix manipulation
 	virtual void setMatrix( const QMatrix & ) = 0;
@@ -62,9 +61,9 @@ public:
 	virtual double zoomFactor() { return 1.0; }
 
 	// drawing
-	virtual void moveTo( const KoPoint & ) = 0;
-	virtual void lineTo( const KoPoint & ) = 0;
-	virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & ) = 0;
+	virtual void moveTo( const QPointF & ) = 0;
+	virtual void lineTo( const QPointF & ) = 0;
+	virtual void curveTo( const QPointF &, const QPointF &, const QPointF & ) = 0;
 	virtual void newPath() = 0;
 	virtual void strokePath() = 0;
 	virtual void fillPath() = 0;
@@ -73,8 +72,8 @@ public:
 	virtual void resetClipPath() = 0;
 
 	// helper
-	virtual void drawNode( const KoPoint& , int ) {}
-	virtual void drawRect( const KoRect & ) {}
+	virtual void drawNode( const QPointF& , int ) {}
+	virtual void drawRect( const QRectF & ) {}
 	virtual void drawRect( double, double, double, double ) {}
 
 	// pen + brush

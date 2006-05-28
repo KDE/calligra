@@ -36,7 +36,7 @@ VSpiral::VSpiral( VObject* parent, VState state )
 }
 
 VSpiral::VSpiral( VObject* parent,
-		const KoPoint& center, double radius, uint segments, double fade,
+		const QPointF& center, double radius, uint segments, double fade,
 		bool clockwise, double angle, VSpiralType type )
 	: VPath( parent ), m_center( center), m_radius( radius ), m_fade( fade ), m_segments( segments ), m_clockwise( clockwise ), m_angle( angle ), m_type( type )
 {
@@ -65,9 +65,9 @@ VSpiral::init()
 	// radius of first segment is non-faded radius:
 	double r = m_radius;
 
-	KoPoint oldP( 0.0, ( m_clockwise ? -1.0 : 1.0 ) * m_radius );
-	KoPoint newP;
-	KoPoint newCenter( 0.0, 0.0 );
+	QPointF oldP( 0.0, ( m_clockwise ? -1.0 : 1.0 ) * m_radius );
+	QPointF newP;
+	QPointF newCenter( 0.0, 0.0 );
 	moveTo( oldP );
 
 	for ( uint i = 0; i < m_segments; ++i )

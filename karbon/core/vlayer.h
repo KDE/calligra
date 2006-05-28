@@ -22,6 +22,9 @@
 
 #include "vgroup.h"
 #include <koffice_export.h>
+
+#include <QRectF>
+
 class QDomElement;
 class DCOPObject;
 
@@ -54,7 +57,7 @@ public:
 	virtual ~VLayer();
 	virtual DCOPObject* dcopObject();
 
-	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
+	virtual void draw( VPainter *painter, const QRectF* rect = 0L ) const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const;

@@ -22,6 +22,8 @@
 #define __VGLOBAL_H__
 
 #include <kglobal.h>
+#include <QPointF>
+#include <QMatrix>
 
 // define some often used mathematical constants et al:
 
@@ -68,7 +70,7 @@ namespace VGlobal
 	const double paramLengthTolerance = 0.001;
 
 	/**
-	 * A range for KoPoint::isNear() check, to decide if a KoPoint "is the same"
+	 * A range for the isNear() check, to decide if a QPointF "is the same"
 	 * as another.
 	 */
 	const double isNearRange = 0.001;
@@ -103,6 +105,10 @@ namespace VGlobal
 	 * Calculates the value ln| Gamma(x) | for x > 0.
 	 */
 	double gammaLn( double x );
+
+	QPointF transformPoint(const QPointF &p, const QMatrix &m);
+	double multiplyPoints(const QPointF &p1, const QPointF &p2);
+	bool pointsAreNear(const QPointF &p1, const QPointF &p2, double range);
 }
 
 #endif

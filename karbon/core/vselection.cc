@@ -29,7 +29,7 @@
 #include "vcolor.h"
 #include "vfill.h"
 #include "vstroke.h"
-//Added by qt3to4:
+
 #include <Q3PtrList>
 
 uint VSelection::m_handleNodeSize = 3;
@@ -37,7 +37,7 @@ uint VSelection::m_handleNodeSize = 3;
 VSelection::VSelection( VObject* parent )
 	: VObject( parent ), m_showhandle( true )
 {
-	m_handleRect = new KoRect[ 10 ];
+	m_handleRect = new QRectF[ 10 ];
 	setStroke( VStroke( VColor( Qt::black ) ) );
 	setFill( VFill() );
 
@@ -47,7 +47,7 @@ VSelection::VSelection( VObject* parent )
 VSelection::VSelection( const VSelection& selection )
 	: VObject( selection ), VVisitor()
 {
-	m_handleRect = new KoRect[ 10 ];
+	m_handleRect = new QRectF[ 10 ];
 
 	VObjectListIterator itr = selection.m_objects;
 	for ( ; itr.current() ; ++itr )
@@ -85,7 +85,7 @@ VSelection::take( VObject& object )
 }
 
 bool
-VSelection::take( const KoRect& rect, bool selectObjects, bool exclusive )
+VSelection::take( const QRectF& rect, bool selectObjects, bool exclusive )
 {
 	bool success = false;
 
@@ -153,7 +153,7 @@ VSelection::append( const VObjectList &objects )
 }
 
 bool
-VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
+VSelection::append( const QRectF& rect, bool selectObjects, bool exclusive )
 {
 	bool success = false;
 
@@ -221,13 +221,13 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 	op.visitVSelection( (VSelection &)*this );
 
 	// get bounding box:
-	const KoRect& rect = boundingBox();
+	const QRectF& rect = boundingBox();
 
 	// calculate displaycoords of big handle rect:
 	m_handleRect[ 0 ].setCoords(	qRound( rect.left() ), qRound( rect.top() ),
 									qRound( rect.right() ), qRound( rect.bottom() ) );
 
-	KoPoint center = m_handleRect[ 0 ].center();
+	QPointF center = m_handleRect[ 0 ].center();
 
 	double handleNodeSize = m_handleNodeSize / zoomFactor;
 
@@ -249,7 +249,7 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 	// painter->setPen( Qt::blue.light() );
 	painter->setBrush( Qt::NoBrush );
 
-	painter->drawRect( KoRect( m_handleRect[ 0 ].x() * zoomFactor, m_handleRect[ 0 ].y() * zoomFactor,
+	painter->drawRect( QRectF( m_handleRect[ 0 ].x() * zoomFactor, m_handleRect[ 0 ].y() * zoomFactor,
 							  m_handleRect[ 0 ].width() * zoomFactor, m_handleRect[ 0 ].height() * zoomFactor ) );
 	
 	// TODO: needs porting to Qt4
@@ -262,7 +262,7 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 		// painter->setPen( Qt::blue.light() );
 		painter->setBrush( Qt::white );
 
-		KoRect temp;
+		QRectF temp;
 		for( uint i = node_lt; i <= node_rb; ++i )
 		{
 			if( i != node_mm )
@@ -276,7 +276,7 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 	}
 }
 
-const KoRect&
+const QRectF&
 VSelection::boundingBox() const
 {
 // disable bbox caching for selection since there is no reliable
@@ -284,7 +284,7 @@ VSelection::boundingBox() const
 //	if( m_boundingBoxIsInvalid )
 //	{
 		// clear:
-		m_boundingBox = KoRect();
+		m_boundingBox = QRectF();
 
 		VObjectListIterator itr = m_objects;
 		for( ; itr.current(); ++itr )
@@ -298,7 +298,7 @@ VSelection::boundingBox() const
 
 
 VHandleNode
-VSelection::handleNode( const KoPoint &point ) const
+VSelection::handleNode( const QPointF &point ) const
 {
 	for( uint i = node_lt; i <= node_rb; ++i )
 	{
@@ -310,7 +310,7 @@ VSelection::handleNode( const KoPoint &point ) const
 }
 
 Q3PtrList<VSegment>
-VSelection::getSegments( const KoRect& rect )
+VSelection::getSegments( const QRectF& rect )
 {
 	VTestNodes op( rect );
 

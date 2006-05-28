@@ -27,6 +27,7 @@
 #include <QMap>
 #include <q3ptrlist.h>
 #include <q3ptrdict.h>
+#include <QRectF>
 
 #include "vobject.h"
 
@@ -78,7 +79,7 @@ public:
 	 */
 	virtual ~VDocument();
 
-	virtual void draw( VPainter* painter, const KoRect* rect ) const;
+	virtual void draw( VPainter* painter, const QRectF* rect ) const;
 	
 	/**
 	 * Draw the document frame to a painting device.

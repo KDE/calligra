@@ -3,9 +3,9 @@
 
 #include <QString>
 #include <q3ptrlist.h>
-#include "KoPoint.h"
+#include <QPointF>
 
-VPath *bezierFit(Q3PtrList<KoPoint> &points,float error);
+VPath *bezierFit(Q3PtrList<QPointF> &points,float error);
 
 #endif
 

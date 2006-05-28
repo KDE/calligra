@@ -18,14 +18,14 @@
 */
 
 #include <QColor>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <Q3Frame>
 #include <QMouseEvent>
 #include <QEvent>
+#include <QPoint>
+#include <QRect>
 
 #include <kdebug.h>
-#include <KoPoint.h>
 
 #include "karbon_part.h"
 #include "vcolordlg.h"
@@ -224,22 +224,22 @@ VStrokeFillPreview::drawFill( const VFill &f )
 			{
 				if( f.gradient().type() == VGradient::linear )
 				{
-					fill.gradient().setOrigin( KoPoint( 30, 20 ) );
-					fill.gradient().setVector( KoPoint( 30, 50 ) );
+					fill.gradient().setOrigin( QPointF( 30, 20 ) );
+					fill.gradient().setVector( QPointF( 30, 50 ) );
 				}
 				else if( f.gradient().type() == VGradient::radial ||
 						 f.gradient().type() == VGradient::conic )
 				{
-					fill.gradient().setOrigin( KoPoint( 30, 35 ) );
-					fill.gradient().setFocalPoint( KoPoint( 30, 35 ) );
-					fill.gradient().setVector( KoPoint( 30, 50 ) );
+					fill.gradient().setOrigin( QPointF( 30, 35 ) );
+					fill.gradient().setFocalPoint( QPointF( 30, 35 ) );
+					fill.gradient().setVector( QPointF( 30, 50 ) );
 				}
 			}
 			if( f.type() == VFill::patt )
 			{
 				fill.pattern() = f.pattern();
-				fill.pattern().setOrigin( KoPoint( 20, 10 ) );
-				fill.pattern().setVector( KoPoint( 30, 10 ) );
+				fill.pattern().setOrigin( QPointF( 20, 10 ) );
+				fill.pattern().setVector( QPointF( 30, 10 ) );
 				fill.setType( VFill::patt );
 			}
 
@@ -248,7 +248,7 @@ VStrokeFillPreview::drawFill( const VFill &f )
 		else
 			m_painter->setBrush( f );
 		m_painter->setPen( Qt::NoPen );
-		m_painter->drawRect( KoRect( FILL_TOPX, FILL_TOPY, FILL_BOTTOMX - FILL_TOPX, FILL_BOTTOMY - FILL_TOPY ) );
+		m_painter->drawRect( QRectF( FILL_TOPX, FILL_TOPY, FILL_BOTTOMX - FILL_TOPX, FILL_BOTTOMY - FILL_TOPY ) );
 	}
 	else
 	{
@@ -258,7 +258,7 @@ VStrokeFillPreview::drawFill( const VFill &f )
 		m_painter->setBrush( fill );
 		m_painter->setPen( Qt::NoPen );
 
-		m_painter->drawRect( KoRect(	FILL_TOPX, FILL_TOPY,
+		m_painter->drawRect( QRectF(	FILL_TOPX, FILL_TOPY,
 										FILL_BOTTOMX - FILL_TOPX,
 										FILL_BOTTOMY - FILL_TOPY ) );
 	}
@@ -272,9 +272,9 @@ VStrokeFillPreview::drawFill( const VFill &f )
 	m_painter->setPen( stroke );
 
 	m_painter->newPath();
-	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
-	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
-	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+	m_painter->moveTo( QPointF( FILL_BOTTOMX, FILL_TOPY ) );
+	m_painter->lineTo( QPointF( FILL_TOPX, FILL_TOPY ) );
+	m_painter->lineTo( QPointF( FILL_TOPX, FILL_BOTTOMY ) );
 	m_painter->strokePath();
 
 	color.set( 0.5, 0.5, 0.5 );
@@ -282,9 +282,9 @@ VStrokeFillPreview::drawFill( const VFill &f )
 	m_painter->setPen( stroke );
 
 	m_painter->newPath();
-	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
-	m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
-	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+	m_painter->moveTo( QPointF( FILL_BOTTOMX, FILL_TOPY ) );
+	m_painter->lineTo( QPointF( FILL_BOTTOMX, FILL_BOTTOMY ) );
+	m_painter->lineTo( QPointF( FILL_TOPX, FILL_BOTTOMY ) );
 	m_painter->strokePath();
 
 	if( f.type() == VFill::none )
@@ -293,8 +293,8 @@ VStrokeFillPreview::drawFill( const VFill &f )
 		// stroke.setColor( Qt::red );
 		m_painter->setPen( stroke );
 		m_painter->newPath();
-		m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
-		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+		m_painter->moveTo( QPointF( FILL_BOTTOMX, FILL_TOPY ) );
+		m_painter->lineTo( QPointF( FILL_TOPX, FILL_BOTTOMY ) );
 		m_painter->strokePath();
 	}
 }
@@ -319,15 +319,15 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 
 				if( s.gradient().type() == VGradient::linear )
 				{
-					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 10 ) );
-					fill.gradient().setVector( KoPoint( FILL_TOPX, 40 ) );
+					fill.gradient().setOrigin( QPointF( FILL_TOPX, 10 ) );
+					fill.gradient().setVector( QPointF( FILL_TOPX, 40 ) );
 				}
 				else if( s.gradient().type() == VGradient::radial ||
 						 s.gradient().type() == VGradient::conic )
 				{
-					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 25 ) );
-					fill.gradient().setFocalPoint( KoPoint( FILL_TOPX, 25 ) );
-					fill.gradient().setVector( KoPoint( FILL_TOPX, 40 ) );
+					fill.gradient().setOrigin( QPointF( FILL_TOPX, 25 ) );
+					fill.gradient().setFocalPoint( QPointF( FILL_TOPX, 25 ) );
+					fill.gradient().setVector( QPointF( FILL_TOPX, 40 ) );
 				}
 
 				fill.setType( VFill::grad );
@@ -335,8 +335,8 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 			if( s.type() == VStroke::patt )
 			{
 				fill.pattern() = s.pattern();
-				fill.pattern().setOrigin( KoPoint( FILL_TOPX, 10 ) );
-				fill.pattern().setVector( KoPoint( FILL_TOPX, 40 ) );
+				fill.pattern().setOrigin( QPointF( FILL_TOPX, 10 ) );
+				fill.pattern().setVector( QPointF( FILL_TOPX, 40 ) );
 				fill.setType( VFill::patt );
 			}
 		}
@@ -348,17 +348,17 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 		m_painter->setBrush( fill );
 
 		m_painter->newPath();
-		m_painter->moveTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
-		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_TOPY ) );
-		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
+		m_painter->moveTo( QPointF( STROKE_TOPX, STROKE_TOPY ) );
+		m_painter->lineTo( QPointF( STROKE_BOTTOMX, STROKE_TOPY ) );
+		m_painter->lineTo( QPointF( STROKE_BOTTOMX, STROKE_BOTTOMY ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_BOTTOMY ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_TOPY ) );
 
-		m_painter->moveTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER, STROKE_BOTTOMY_INNER ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_BOTTOMY_INNER ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->moveTo( QPointF( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER, STROKE_BOTTOMY_INNER ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX_INNER, STROKE_BOTTOMY_INNER ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
 		m_painter->fillPath();
 	}
 	else
@@ -372,17 +372,17 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 		m_painter->setPen( Qt::NoPen );
 
 		m_painter->newPath();
-		m_painter->moveTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
-		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_TOPY ) );
-		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
+		m_painter->moveTo( QPointF( STROKE_TOPX, STROKE_TOPY ) );
+		m_painter->lineTo( QPointF( STROKE_BOTTOMX, STROKE_TOPY ) );
+		m_painter->lineTo( QPointF( STROKE_BOTTOMX, STROKE_BOTTOMY ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_BOTTOMY ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_TOPY ) );
 
-		m_painter->moveTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER, STROKE_TOPY_INNER ) );
-		m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER, STROKE_BOTTOMY_INNER ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_BOTTOMY_INNER ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->moveTo( QPointF( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER, STROKE_BOTTOMY_INNER ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX_INNER, STROKE_BOTTOMY_INNER ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
 		m_painter->fillPath();
 	}
 
@@ -395,9 +395,9 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 	m_painter->setPen( stroke );
 
 	m_painter->newPath();
-	m_painter->moveTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
-	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_TOPY - 1 ) );
-	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
+	m_painter->moveTo( QPointF( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
+	m_painter->lineTo( QPointF( STROKE_TOPX - 1, STROKE_TOPY - 1 ) );
+	m_painter->lineTo( QPointF( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
 	m_painter->strokePath();
 
 	color.set( 0.5, 0.5, 0.5 );
@@ -405,17 +405,17 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 	m_painter->setPen( stroke );
 
 	m_painter->newPath();
-	m_painter->moveTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
-	m_painter->lineTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_BOTTOMY + 1 ) );
-	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
+	m_painter->moveTo( QPointF( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
+	m_painter->lineTo( QPointF( STROKE_BOTTOMX + 1, STROKE_BOTTOMY + 1 ) );
+	m_painter->lineTo( QPointF( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
 	m_painter->strokePath();
 
 	//stroke.setColor( Qt::black.rgb() );
 	//m_painter->setPen( stroke );
 	m_painter->newPath();
-	m_painter->moveTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
-	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_TOPY_INNER + 1 ) );
-	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
+	m_painter->moveTo( QPointF( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
+	m_painter->lineTo( QPointF( STROKE_TOPX_INNER + 1, STROKE_TOPY_INNER + 1 ) );
+	m_painter->lineTo( QPointF( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
 	m_painter->strokePath();
 
 	color.set( 1.0, 1.0, 1.0 );
@@ -423,9 +423,9 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 	m_painter->setPen( stroke );
 
 	m_painter->newPath();
-	m_painter->moveTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
-	m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_BOTTOMY_INNER - 1 ) );
-	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
+	m_painter->moveTo( QPointF( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
+	m_painter->lineTo( QPointF( STROKE_BOTTOMX_INNER - 1, STROKE_BOTTOMY_INNER - 1 ) );
+	m_painter->lineTo( QPointF( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
 	m_painter->strokePath();
 
 	if( s.type() == VStroke::none )
@@ -435,8 +435,8 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 		m_painter->setPen( stroke );
 
 		m_painter->newPath();
-		m_painter->moveTo( KoPoint( STROKE_BOTTOMX, STROKE_TOPY ) );
-		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_BOTTOMY ) );
+		m_painter->moveTo( QPointF( STROKE_BOTTOMX, STROKE_TOPY ) );
+		m_painter->lineTo( QPointF( STROKE_TOPX, STROKE_BOTTOMY ) );
 		m_painter->strokePath();
 	}
 }

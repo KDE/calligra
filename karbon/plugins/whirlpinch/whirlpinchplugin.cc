@@ -170,7 +170,7 @@ void
 VWhirlPinchCmd::visitVSubpath( VSubpath& path )
 {
 	QMatrix m;
-	KoPoint delta;
+	QPointF delta;
 	double dist;
 
 	path.first();
@@ -202,7 +202,7 @@ VWhirlPinchCmd::visitVSubpath( VSubpath& path )
 			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 			m.translate( -m_center.x(), -m_center.y() );
 
-			path.current()->setKnot( path.current()->knot().transform( m ) );
+			path.current()->setKnot( VGlobal::transformPoint(path.current()->knot(), m ) );
 		}
 
 		if( path.current()->isCurve() )
@@ -226,7 +226,7 @@ VWhirlPinchCmd::visitVSubpath( VSubpath& path )
 				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 				m.translate( -m_center.x(), -m_center.y() );
 
-				path.current()->setPoint( 0, path.current()->point(0).transform( m ) );
+				path.current()->setPoint( 0, VGlobal::transformPoint(path.current()->point(0), m ) );
 			}
 
 
@@ -249,7 +249,7 @@ VWhirlPinchCmd::visitVSubpath( VSubpath& path )
 				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 				m.translate( -m_center.x(), -m_center.y() );
 
-				path.current()->setPoint( 1, path.current()->point(1).transform( m ) );
+				path.current()->setPoint( 1, VGlobal::transformPoint(path.current()->point(1), m ) );
 			}
 		}
 

@@ -24,6 +24,8 @@
 #include "vdocument.h"
 #include "vlayer.h"
 
+#include <kdebug.h>
+
 VZOrderCmd::VZOrderCmd( VDocument *doc, VOrder state )
 	: VCommand( doc, i18n( "Order Selection" ) ), m_state( state )
 {

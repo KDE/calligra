@@ -34,7 +34,7 @@ VSinus::VSinus( VObject* parent, VState state )
 }
 
 VSinus::VSinus( VObject* parent,
-		const KoPoint& topLeft, double width, double height, uint periods )
+		const QPointF& topLeft, double width, double height, uint periods )
 	: VPath( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_periods( periods )
 {
 	// We want at least 1 period:
@@ -46,9 +46,9 @@ VSinus::VSinus( VObject* parent,
 void
 VSinus::init()
 {
-	KoPoint p1;
-	KoPoint p2;
-	KoPoint p3( 0.0, 0.0 );
+	QPointF p1;
+	QPointF p2;
+	QPointF p3( 0.0, 0.0 );
 	moveTo( p3 );
 
 	for ( uint i = 0; i < m_periods; ++i )

@@ -21,6 +21,8 @@
 #include "vcomposite_iface.h"
 #include "vcomposite.h"
 
+#include <QPointF>
+
 VPathIface::VPathIface( VPath *composite )
 	: VObjectIface( composite ), m_composite( composite )
 {
@@ -29,37 +31,37 @@ VPathIface::VPathIface( VPath *composite )
 bool
 VPathIface::moveTo( double x, double y )
 {
-	return m_composite->moveTo( KoPoint( x, y ) );
+	return m_composite->moveTo( QPointF( x, y ) );
 }
 
 bool 
 VPathIface::lineTo( double x, double y )
 {
-	return m_composite->lineTo( KoPoint( x, y ) );
+	return m_composite->lineTo( QPointF( x, y ) );
 }
 
 bool 
 VPathIface::curveTo( double x1, double y1, double x2, double y2, double x3, double y3 )
 {
-	return m_composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
+	return m_composite->curveTo( QPointF( x1, y1 ), QPointF( x2, y2 ), QPointF( x3, y3 ) );
 }
 
 bool 
 VPathIface::curve1To( double x2, double y2, double x3, double y3 )
 {
-	return m_composite->curve1To( KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
+	return m_composite->curve1To( QPointF( x2, y2 ), QPointF( x3, y3 ) );
 }
 
 bool 
 VPathIface::curve2To( double x1, double y1, double x2, double y2 )
 {
-	return m_composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
+	return m_composite->curve2To( QPointF( x1, y1 ), QPointF( x2, y2 ) );
 }
 
 bool 
 VPathIface::arcTo( double x1, double y1, double x2, double y2, double r )
 {
-	return m_composite->arcTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), r );
+	return m_composite->arcTo( QPointF( x1, y1 ), QPointF( x2, y2 ), r );
 }
 
 void 

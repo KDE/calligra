@@ -20,11 +20,12 @@
 #ifndef __VPATTERN_H__
 #define __VPATTERN_H__
 
-#include <KoPoint.h>
+#include <QPointF>
 #include <koIconChooser.h>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <koffice_export.h>
+
 class QDomElement;
 
 
@@ -38,11 +39,11 @@ public:
 	unsigned int tileWidth() const;
 	unsigned int tileHeight() const;
 
-	KoPoint origin() const { return m_origin; }
-	void setOrigin( const KoPoint &origin ) { m_origin = origin; }
+	QPointF origin() const { return m_origin; }
+	void setOrigin( const QPointF &origin ) { m_origin = origin; }
 
-	KoPoint vector() const { return m_vector; }
-	void setVector( const KoPoint &vector ) { m_vector = vector; }
+	QPointF vector() const { return m_vector; }
+	void setVector( const QPointF &vector ) { m_vector = vector; }
 
 	void load( const QString &tilename );
 
@@ -61,8 +62,8 @@ public:
 
 private:
 	// coordinates:
-	KoPoint m_origin;
-	KoPoint m_vector;
+	QPointF m_origin;
+	QPointF m_vector;
 	QImage m_image;
 	QPixmap m_pixmap;
 	QPixmap m_pixmapThumb;

@@ -28,7 +28,6 @@
 #include <qtabwidget.h>
 #include <QLabel>
 #include <qcursor.h>
-//Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3PtrList>
 #include <QPixmap>
@@ -37,6 +36,7 @@
 #include <QEvent>
 #include <Q3VBoxLayout>
 #include <QPaintEvent>
+#include <QRectF>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -108,7 +108,7 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		scaleFactor = ( height() - 4 ) / m_document->height();
 		xoffset = ( ( width() - 4 ) / scaleFactor - m_document->width() ) / 2;
 	}
-	KoRect rect = m_view->canvasWidget()->boundingBox();
+	QRectF rect = m_view->canvasWidget()->boundingBox();
 
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 	if( event->type() == QEvent::MouseButtonPress )
@@ -116,7 +116,7 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		m_firstPoint.setX( mouseEvent->pos().x() );
 		m_firstPoint.setY( mouseEvent->pos().y() );
 		m_lastPoint = m_firstPoint;
-		KoPoint p3( m_firstPoint.x() / scaleFactor - xoffset,
+		QPointF p3( m_firstPoint.x() / scaleFactor - xoffset,
 					( height() - m_firstPoint.y() ) / scaleFactor - yoffset );
 		m_dragging = rect.contains( p3 );
 	}
@@ -150,7 +150,7 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		}
 		else
 		{
-			KoPoint p3( mouseEvent->pos().x() / scaleFactor - xoffset,
+			QPointF p3( mouseEvent->pos().x() / scaleFactor - xoffset,
 						( height() - mouseEvent->pos().y() ) / scaleFactor - yoffset );
 			setCursor( rect.contains( p3 ) ? Qt::SizeAllCursor : QCursor( Qt::ArrowCursor ) );
 		}
@@ -187,13 +187,13 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		p.clear( QColor( 195, 194, 193 ) );
 		p.setMatrix( QMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
 		p.setZoomFactor( scaleFactor );
-		KoRect rect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset );
+		QRectF rect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset );
 		// draw doc outline
 		VColor c( Qt::black );
 		VStroke stroke( c, 0L, 1.0 / scaleFactor );
 		p.setPen( stroke );
 		p.setBrush( Qt::white );
-		p.drawRect( KoRect( 2, 2, m_document->width() - 2, m_document->height() - 2 ) );
+		p.drawRect( QRectF( 2, 2, m_document->width() - 2, m_document->height() - 2 ) );
 		m_document->draw( &p, &rect );
 		p.end();
 	}
@@ -206,9 +206,9 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		p.setPen( Qt::red );
 		double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
 		double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
-		KoPoint p1( dx / scaleFactor, dy / scaleFactor );
+		QPointF p1( dx / scaleFactor, dy / scaleFactor );
 		p1 = m_view->canvasWidget()->toContents( p1 );
-		KoPoint p2( dx / scaleFactor + m_view->canvasWidget()->width(), dy / scaleFactor + m_view->canvasWidget()->height() );
+		QPointF p2( dx / scaleFactor + m_view->canvasWidget()->width(), dy / scaleFactor + m_view->canvasWidget()->height() );
 		p2 = m_view->canvasWidget()->toContents( p2 );
 		p.drawRect( int( p1.x() ), int( p1.y() ), int( p2.x() - p1.x() ), int( p2.y() - p1.y() ) );
 	}
@@ -346,7 +346,7 @@ VObjectListViewItem::update()
 	// Y mirroring
 	QMatrix mat;
 	mat.scale( 1, -1 );
-	KoRect bbox = m_object->boundingBox();
+	QRectF bbox = m_object->boundingBox();
 	mat.translate( 0, -16 );
 	double factor = 16. / qMax( bbox.width(), bbox.height() );
 	mat.translate( -bbox.x() * factor, -bbox.y() * factor );
@@ -359,7 +359,7 @@ VObjectListViewItem::update()
 	p.setMatrix( QMatrix() );
 	p.setPen( Qt::black );
 	p.setBrush( Qt::NoBrush );
-	p.drawRect( KoRect( 0, 0, 16, 16 ) );
+	p.drawRect( QRectF( 0, 0, 16, 16 ) );
 	p.end();
 
 	// set thumb preview, lock and visible pixmaps
@@ -412,7 +412,7 @@ VLayerListViewItem::update()
 	p.setMatrix( QMatrix() );
 	p.setPen( Qt::black );
 	p.setBrush( Qt::NoBrush );
-	p.drawRect( KoRect( 0, 0, 16, 16 ) );
+	p.drawRect( QRectF( 0, 0, 16, 16 ) );
 	p.end();
 
 	// text description

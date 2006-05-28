@@ -25,6 +25,7 @@
 
 #include "vtool.h"
 
+class QPointF;
 class KarbonView;
 
 class VSelectOptionsWidget : public KDialogBase
@@ -93,8 +94,8 @@ private:
 	double m_s2;
 	double m_distx;
 	double m_disty;
-	KoPoint m_sp;
-	KoPoint m_current;
+	QPointF m_sp;
+	QPointF m_current;
 
 	VHandleNode m_activeNode;
 

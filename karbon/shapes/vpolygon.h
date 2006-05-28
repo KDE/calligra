@@ -22,12 +22,14 @@
 
 #include "vcomposite.h"
 
+#include <QPointF>
+
 class VPolygon : public VPath
 {
 public:
 	VPolygon( VObject* parent, VState state = edit );
 	VPolygon( VObject* parent, const QString &points,
-		const KoPoint& topLeft, double width, double height );
+		const QPointF& topLeft, double width, double height );
 
 	virtual QString name() const;
 
@@ -42,7 +44,7 @@ protected:
 	void init();
 
 private:
-	KoPoint m_topLeft;
+	QPointF m_topLeft;
 	double m_width;
 	double m_height;
 	QString m_points;

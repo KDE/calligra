@@ -58,8 +58,9 @@
 #include <kiconloader.h>
 #include <math.h>
 
-#include <KoPoint.h>
-#include <KoRect.h>
+#include <QPointF>
+#include <QRectF>
+
 #include <karbon_factory.h>
 #include <karbon_resourceserver.h>
 
@@ -166,7 +167,7 @@ VKoPainter::end()
 }
 
 void
-VKoPainter::blit( const KoRect &r )
+VKoPainter::blit( const QRectF &r )
 {
 	//kDebug(38000) << "m_width : " << m_width << endl;
 	//kDebug(38000) << "m_height : " << m_height << endl;
@@ -195,7 +196,7 @@ VKoPainter::clear( const QColor &c )
 }
 
 void
-VKoPainter::clear( const KoRect &r, const QColor &c )
+VKoPainter::clear( const QRectF &r, const QColor &c )
 {
 	unsigned int color = c.rgb();
 	int x		= qMax( 0, int( r.x() ) );
@@ -240,7 +241,7 @@ VKoPainter::ensureSpace( unsigned int newindex )
 }
 
 void 
-VKoPainter::moveTo( const KoPoint &p )
+VKoPainter::moveTo( const QPointF &p )
 {
 	ensureSpace( m_index + 1 );
 
@@ -253,7 +254,7 @@ VKoPainter::moveTo( const KoPoint &p )
 }
 
 void 
-VKoPainter::lineTo( const KoPoint &p )
+VKoPainter::lineTo( const QPointF &p )
 {
 	ensureSpace( m_index + 1 );
 
@@ -265,7 +266,7 @@ VKoPainter::lineTo( const KoPoint &p )
 }
 
 void
-VKoPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
+VKoPainter::curveTo( const QPointF &p1, const QPointF &p2, const QPointF &p3 )
 {
 	ensureSpace( m_index + 1 );
 
@@ -468,7 +469,7 @@ VKoPainter::clampToViewport( const ArtSVP &svp, int &x0, int &y0, int &x1, int &
 	ArtDRect bbox;
 	art_drect_svp( &bbox, &svp );
 	// Remove comments if we really decide for SVP bbox usage
-	//m_bbox = KoRect( bbox.x0, bbox.y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0 );
+	//m_bbox = QRectF( bbox.x0, bbox.y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0 );
 
 	// clamp to viewport
 	x0 = int( bbox.x0 );
@@ -874,11 +875,11 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 }
 
 void
-VKoPainter::drawNode( const KoPoint& p, int width )
+VKoPainter::drawNode( const QPointF& p, int width )
 {
 	if( !m_bDrawNodes ) return;
 
-	KoPoint _p( m_matrix.map( QPoint( int( p.x() * m_zoomFactor ), int( p.y() * m_zoomFactor ) ) ) );
+	QPointF _p( m_matrix.map( QPoint( int( p.x() * m_zoomFactor ), int( p.y() * m_zoomFactor ) ) ) );
 	int x1 = int( _p.x() - width );
 	int x2 = int( _p.x() + width );
 	int y1 = int( _p.y() - width );
@@ -930,7 +931,7 @@ VKoPainter::drawImage( const QImage &image, const QMatrix &affine )
 }
 
 void
-VKoPainter::drawRect( const KoRect &r )
+VKoPainter::drawRect( const QRectF &r )
 {
 	newPath();
 	moveTo( r.topLeft() );
@@ -945,6 +946,6 @@ VKoPainter::drawRect( const KoRect &r )
 void
 VKoPainter::drawRect( double x, double y, double w, double h )
 {
-	drawRect( KoRect( x, y, w, h ) );
+	drawRect( QRectF( x, y, w, h ) );
 }
 

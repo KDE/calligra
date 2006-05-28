@@ -22,7 +22,7 @@
 #include <qfileinfo.h>
 #include <qpainter.h>
 #include <q3paintdevicemetrics.h>
-//Added by qt3to4:
+#include <QRectF>
 #include <Q3ValueList>
 
 #include <kconfig.h>
@@ -538,7 +538,7 @@ KarbonPart::repaintAllViews( bool repaint )
 }
 
 void
-KarbonPart::repaintAllViews( const KoRect &rect )
+KarbonPart::repaintAllViews( const QRectF &rect )
 {
 	foreach ( KoView* view, views() )
 		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( rect );
@@ -550,7 +550,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 {
 	kDebug(38000) << "**** part->paintContent()" << endl;
 
-	KoRect r = KoRect::fromQRect( rect );
+	QRectF r = rect;
 	double zoomFactorX = double( r.width() ) / double( document().width() );
 	double zoomFactorY = double( r.height() ) / double( document().height() );
 	double zoomFactor = qMin( zoomFactorX, zoomFactorY );

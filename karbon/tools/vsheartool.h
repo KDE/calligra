@@ -22,6 +22,8 @@
 
 #include "vtool.h"
 
+class QPointF;
+
 class VShearTool : public VTool
 {
 public:
@@ -49,7 +51,7 @@ protected:
 private:
 	void recalc();
 
-	KoPoint m_center;
+	QPointF m_center;
 	double m_s1, m_s2;
 
 	VHandleNode m_activeNode;

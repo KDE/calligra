@@ -21,7 +21,7 @@
 #define __VPATH_H__
 
 
-#include <KoPoint.h>
+#include <QPointF>
 
 #include "vobject.h"
 #include <koffice_export.h>
@@ -49,18 +49,18 @@ public:
 	VSubpath( const VSegment& segment );
 	virtual ~VSubpath();
 
-	const KoPoint& currentPoint() const;
+	const QPointF& currentPoint() const;
 
-	bool moveTo( const KoPoint& p );
-	bool lineTo( const KoPoint& p );
+	bool moveTo( const QPointF& p );
+	bool lineTo( const QPointF& p );
 	bool curveTo(
-		const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
+		const QPointF& p1, const QPointF& p2, const QPointF& p3 );
 	bool curve1To(
-		const KoPoint& p2, const KoPoint& p3 );
+		const QPointF& p2, const QPointF& p3 );
 	bool curve2To(
-		const KoPoint& p1, const KoPoint& p3 );
+		const QPointF& p1, const QPointF& p3 );
 	bool arcTo(
-		const KoPoint& p1, const KoPoint& p2, const double r );
+		const QPointF& p1, const QPointF& p2, const double r );
 
 	bool isClosed() const
 	{
@@ -74,7 +74,7 @@ public:
 	 * Returns true if point p is located inside the path.
 	 * The winding number test is used.
 	 */
-	bool pointIsInside( const KoPoint& p ) const;
+	bool pointIsInside( const QPointF& p ) const;
 
 	/**
 	 * Returns true if the segment intersects this path.
@@ -103,7 +103,7 @@ public:
 	}
 
 
-	virtual const KoRect& boundingBox() const;
+	virtual const QRectF& boundingBox() const;
 
 
 	virtual void save( QDomElement& /*element*/) const

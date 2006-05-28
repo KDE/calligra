@@ -23,7 +23,7 @@
 #include <QFile>
 #include <qfileinfo.h>
 #include <qstringlist.h>
-//Added by qt3to4:
+#include <QPointF>
 #include <QPixmap>
 #include <Q3PtrList>
 #include <QTextStream>
@@ -285,9 +285,9 @@ KarbonResourceServer::loadGradient( const QString& filename )
 	{
 		VGradient vgrad;
 
-		vgrad.setOrigin(KoPoint(grad->originX, grad->originY));
-		vgrad.setVector(KoPoint(grad->vectorX, grad->vectorY));
-		vgrad.setFocalPoint(KoPoint(grad->focalpointX, grad->focalpointY));
+		vgrad.setOrigin(QPointF(grad->originX, grad->originY));
+		vgrad.setVector(QPointF(grad->vectorX, grad->vectorY));
+		vgrad.setFocalPoint(QPointF(grad->focalpointX, grad->focalpointY));
 		
 		switch(grad->gradientType)
 		{

@@ -27,11 +27,9 @@
 //Added by qt3to4:
 #include <QLabel>
 
-#include "KoPoint.h"
-
 #include "vtool.h"
 
-
+class QPointF;
 class QLabel;
 class QWidget;
 class VPath;
@@ -73,7 +71,7 @@ class VPolylineTool : public VTool
 		/**
 		 * Helper method: draws a bezier vector.
 		 */
-		void drawBezierVector( KoPoint& start, KoPoint& end );
+		void drawBezierVector( QPointF& start, QPointF& end );
 
 		virtual void mouseMove();
 		virtual void mouseButtonPress();
@@ -94,17 +92,17 @@ class VPolylineTool : public VTool
 		/**
 		 * The list of this polyline points.
 		 */
-		Q3PtrList<KoPoint> m_bezierPoints;
+		Q3PtrList<QPointF> m_bezierPoints;
 
 		/**
 		 * The start of the last drawn vector.
 		 */
-		KoPoint m_lastVectorStart;
+		QPointF m_lastVectorStart;
 
 		/**
 		 * The end of the last drawn vector.
 		 */
-		KoPoint m_lastVectorEnd;
+		QPointF m_lastVectorEnd;
 
 		/**
 		 * Indicates if the polyline is to close.

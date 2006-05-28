@@ -405,7 +405,7 @@ KarbonView::dropEvent( QDropEvent *e )
 	else if( KarbonDrag::decode( e, selection, m_part->document() ) )
 	{
 		VObject *clipart = selection.first();
-		KoPoint p( e->pos() );
+		QPointF p( e->pos() );
 		p = m_canvas->toContents( p );
 		QMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
 
@@ -436,7 +436,7 @@ KarbonView::print( KPrinter &printer )
 	double w = zoom*part()->document().width();
 	double h = zoom*part()->document().height();
 
-	KoRect rect( 0, 0, w, h );
+	QRectF rect( 0, 0, w, h );
 
 	QPixmap img( static_cast<int>( w ), static_cast<int>( h ) );
 
@@ -789,7 +789,7 @@ KarbonView::viewModeChanged()
 }
 
 void
-KarbonView::setZoomAt( double zoom, const KoPoint &p )
+KarbonView::setZoomAt( double zoom, const QPointF &p )
 {
 	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
 	QStringList stl = m_zoomAction->items();
@@ -820,7 +820,7 @@ KarbonView::viewZoomOut()
 }
 
 void
-KarbonView::zoomChanged( const KoPoint &p )
+KarbonView::zoomChanged( const QPointF &p )
 {
 	double centerX;
 	double centerY;
@@ -1165,7 +1165,7 @@ KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/, bool /*tran
 }
 
 bool
-KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
+KarbonView::mouseEvent( QMouseEvent* event, const QPointF &p )
 {
 	int mx = event->pos().x();
 	int my = event->pos().y();
@@ -1185,7 +1185,7 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 	m_horizRuler->updatePointer(px, py);
 	m_vertRuler->updatePointer(px, py);
 
-	KoPoint xy;
+	QPointF xy;
 	xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
 	xy.setY( qRound(m_part->document().height()) - (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
 
@@ -1453,7 +1453,7 @@ KarbonView::setCursor( const QCursor &c )
 }
 
 void
-KarbonView::repaintAll( const KoRect &r )
+KarbonView::repaintAll( const QRectF &r )
 {
 	m_canvas->repaintAll( r );
 }
@@ -1464,13 +1464,13 @@ KarbonView::repaintAll( bool repaint )
 	m_canvas->repaintAll( repaint );
 }
 void
-KarbonView::setPos( const KoPoint& p )
+KarbonView::setPos( const QPointF& p )
 {
 	m_canvas->setPos( p );
 }
 
 void
-KarbonView::setViewportRect( const KoRect &rect )
+KarbonView::setViewportRect( const QRectF &rect )
 {
 	m_canvas->setViewportRect( rect );
 }

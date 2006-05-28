@@ -22,7 +22,7 @@
 
 #include <QString>
 
-#include <KoPoint.h>
+#include <QPointF>
 
 #include "vtool.h"
 
@@ -63,7 +63,7 @@ protected:
 	/**
 	 * Output coordinates.
 	 */
-	KoPoint m_p;
+	QPointF m_p;
 	double m_d1;
 	double m_d2;
 

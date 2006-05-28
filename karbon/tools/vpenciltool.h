@@ -29,7 +29,6 @@
 
 #include <klocale.h>
 #include <kdialogbase.h>
-#include "KoPoint.h"
 
 #include "vtool.h"
 
@@ -43,6 +42,7 @@ class Q3WidgetStack;
 class QComboBox;
 class KDoubleNumInput;
 class QCursor;
+class QPointF;
 
 class VPencilOptionsWidget : public KDialogBase
 {
@@ -126,17 +126,17 @@ class VPencilTool : public VTool
 		/**
 		 * The list of this polyline points.
 		 */
-		Q3PtrList<KoPoint> m_Points;
+		Q3PtrList<QPointF> m_Points;
 
 		/**
 		 * The start of the last drawn vector.
 		 */
-		KoPoint m_lastVectorStart;
+		QPointF m_lastVectorStart;
 
 		/**
 		 * The end of the last drawn vector.
 		 */
-		KoPoint m_lastVectorEnd;
+		QPointF m_lastVectorEnd;
 
 		/**
 		 * Indicates if the Line is to close.

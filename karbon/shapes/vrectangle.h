@@ -23,12 +23,14 @@
 #include "vcomposite.h"
 #include <koffice_export.h>
 
+#include <QPointF>
+
 class KARBONBASE_EXPORT VRectangle : public VPath
 {
 public:
 	VRectangle( VObject* parent, VState state = edit );
 	VRectangle( VObject* parent,
-		const KoPoint& topLeft, double width, double height, double rx = 0.0, double ry = 0.0 );
+		const QPointF& topLeft, double width, double height, double rx = 0.0, double ry = 0.0 );
 
 	virtual QString name() const;
 
@@ -43,7 +45,7 @@ protected:
 	void init();
 
 private:
-	KoPoint m_topLeft;
+	QPointF m_topLeft;
 	double m_width;
 	double m_height;
 	double m_rx;

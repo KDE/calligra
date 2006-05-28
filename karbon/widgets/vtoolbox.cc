@@ -21,6 +21,8 @@
 #include "vtoolbox.h"
 #include "vtool.h"
 
+#include <kdebug.h>
+
 VToolBox::VToolBox( KMainWindow *mainWin, const char* name, KInstance* instance ) : KoToolBox( mainWin, name, instance, 5 )
 {
 }

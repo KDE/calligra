@@ -87,7 +87,7 @@ VToolController::unregisterTool( VTool *tool )
 }
 
 bool
-VToolController::mouseEvent( QMouseEvent* event, const KoPoint &p )
+VToolController::mouseEvent( QMouseEvent* event, const QPointF &p )
 {
 	if( !m_currentTool ) {
 		return false;

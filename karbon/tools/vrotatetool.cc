@@ -23,7 +23,7 @@
 #include <QLabel>
 
 #include <klocale.h>
-#include <KoRect.h>
+#include <QRectF>
 
 #include <karbon_part.h>
 #include <karbon_view.h>

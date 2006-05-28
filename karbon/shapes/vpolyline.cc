@@ -20,6 +20,7 @@
 
 #include "vpolyline.h"
 #include <qdom.h>
+#include <QPointF>
 
 #include "vglobal.h"
 #include <klocale.h>
@@ -59,7 +60,7 @@ VPolyline::init()
 	QStringList::Iterator end(pointList.end());
 	for( QStringList::Iterator it = pointList.begin(); it != end; ++it )
 	{
-		KoPoint point;
+		QPointF point;
 		point.setX( (*it).toDouble() );
 		point.setY( (*++it).toDouble() );
 		if( bFirst )
@@ -147,7 +148,7 @@ VPolyline::loadOasis( const QDomElement &element, KoOasisLoadingContext &context
 
 	if( element.localName() == "line" )
 	{
-		KoPoint p1, p2;
+		QPointF p1, p2;
 		p1.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", QString::null ) ) );
 		p1.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", QString::null ) ) );
 		p2.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString::null ) ) );

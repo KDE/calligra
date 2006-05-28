@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <QEvent>
 #include <QDragEnterEvent>
+#include <QSizeF>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -65,15 +66,15 @@ VCanvas::pageOffsetY() const
 		return int( 0.5 * ( contentsHeight() - zoomedHeight ) );
 }
 
-KoPoint VCanvas::snapToGrid( const KoPoint &point )
+QPointF VCanvas::snapToGrid( const QPointF &point )
 {
 	if( !m_part->document().grid().isSnap )
 		return point;
 
-	KoPoint p = point;
+	QPointF p = point;
 
-	KoSize dist = m_part->document().grid().snap;
-	KoSize dxy = m_part->document().grid().freq;
+	QSizeF dist = m_part->document().grid().snap;
+	QSizeF dxy = m_part->document().grid().freq;
 
 	int dx = qRound( p.x() / dxy.width() );
 	int dy = qRound( p.y() / dxy.height() );
@@ -131,10 +132,10 @@ VCanvas::~VCanvas()
 }
 
 void
-VCanvas::setPos( const KoPoint& p )
+VCanvas::setPos( const QPointF& p )
 {
-	KoPoint p2 = toViewport( p );
-	QCursor::setPos( mapToGlobal( QPoint( int(p2.x()), int(p2.y()) ) ) );
+	QPointF p2 = toViewport( p );
+	QCursor::setPos( mapToGlobal( p2.toPoint() ) );
 }
 
 bool
@@ -152,7 +153,7 @@ VCanvas::eventFilter( QObject* object, QEvent* event )
 
 	if( mouseEvent && m_view )
 	{
-		KoPoint canvasCoordinate = toContents( KoPoint( mouseEvent->pos() ) );
+		QPointF canvasCoordinate = toContents( QPointF( mouseEvent->pos() ) );
 		return m_view->mouseEvent( mouseEvent, canvasCoordinate );
 	}
 
@@ -166,10 +167,10 @@ VCanvas::focusInEvent( QFocusEvent * )
 {
 }
 
-KoPoint
-VCanvas::toViewport( const KoPoint &p ) const
+QPointF
+VCanvas::toViewport( const QPointF &p ) const
 {
-	KoPoint p2 = p;
+	QPointF p2 = p;
 	p2.setX( ( p.x() * m_view->zoom() ) - contentsX() + pageOffsetX() );
 	if( contentsHeight() > height() )
 		p2.setY( ( contentsHeight() - ( p.y() * m_view->zoom() + contentsY() + pageOffsetY() ) ) );
@@ -178,10 +179,10 @@ VCanvas::toViewport( const KoPoint &p ) const
 	return p2;
 }
 
-KoPoint
-VCanvas::toContents( const KoPoint &p ) const
+QPointF
+VCanvas::toContents( const QPointF &p ) const
 {
-	KoPoint p2 = p;
+	QPointF p2 = p;
 	p2.setX( ( p.x() + contentsX() - pageOffsetX() ) / m_view->zoom() );
 	if( contentsHeight() > height() )
 		p2.setY( ( contentsHeight() - ( p.y() + contentsY() + pageOffsetY()) ) / m_view->zoom() );
@@ -190,17 +191,17 @@ VCanvas::toContents( const KoPoint &p ) const
 	return p2;
 }
 
-KoRect
+QRectF
 VCanvas::boundingBox() const
 {
-	KoPoint p1( 0, 0 );
-	KoPoint p2( width(), height() );
+	QPointF p1( 0, 0 );
+	QPointF p2( width(), height() );
 	if( !m_view->documentDeleted() )
 	{
 		p1 = toContents( p1 );
 		p2 = toContents( p2 );
 	}
-	return KoRect( p1, p2 ).normalize();
+	return QRectF( p1, QSizeF(p2.x(), p2.y()) ).normalized();
 }
 
 void
@@ -222,8 +223,7 @@ VCanvas::setYMirroring( VPainter *p )
 void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
-	QRect eventRect = e->rect();
-	KoRect rect = KoRect::fromQRect( eventRect );
+	QRectF rect = e->rect();
 	
 	setYMirroring( m_view->painterFactory()->editpainter() );
 	viewport()->setUpdatesEnabled( false );
@@ -249,7 +249,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	p->setClipPath();
 
 	m_part->document().drawPage( p, m_part->pageLayout(), m_view->showPageMargins() );
-	KoRect bbox = boundingBox();
+	QRectF bbox = boundingBox();
 	m_part->document().draw( p, &bbox );
 
 	p->resetClipPath();
@@ -264,7 +264,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	if( m_view->toolController()->currentTool() )
 		m_view->toolController()->currentTool()->draw( &qpainter );
 
-	bitBlt( viewport(), eventRect.topLeft(), p->device(), eventRect );
+	bitBlt( viewport(), rect.topLeft().toPoint(), p->device(), rect.toRect() );
 	viewport()->setUpdatesEnabled( true );
 }
 
@@ -276,7 +276,7 @@ VCanvas::setViewport( double centerX, double centerY )
 }
 
 void
-VCanvas::setViewportRect( const KoRect &r )
+VCanvas::setViewportRect( const QRectF &r )
 {
 	viewport()->setUpdatesEnabled( false );
 	double zoomX = m_view->zoom() * ( ( visibleWidth() / m_view->zoom() ) / r.width() );
@@ -297,11 +297,11 @@ void
 VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 	int clipw, int cliph  )
 {
-	drawDocument( painter, KoRect( clipx, clipy, clipw, cliph ) );
+	drawDocument( painter, QRectF( clipx, clipy, clipw, cliph ) );
 }
 
 void
-VCanvas::drawDocument( QPainter* /*painter*/, const KoRect&, bool drawVObjects )
+VCanvas::drawDocument( QPainter* /*painter*/, const QRectF&, bool drawVObjects )
 {
 	setYMirroring( m_view->painterFactory()->editpainter() );
 
@@ -317,7 +317,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect&, bool drawVObjects )
 		p->setMatrix( mat.translate( -.5, -.5 ) );
 
 		m_part->document().drawPage( p, m_part->pageLayout(), m_view->showPageMargins() );
-		KoRect r2 = boundingBox();
+		QRectF r2 = boundingBox();
 		m_part->document().draw( p, &r2 );
 
 		p->end();
@@ -338,12 +338,12 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect&, bool drawVObjects )
 void
 VCanvas::repaintAll( bool drawVObjects )
 {
-	drawDocument( 0, KoRect( 0, 0, width(), height() ), drawVObjects );
+	drawDocument( 0, QRectF( 0, 0, width(), height() ), drawVObjects );
 }
 
 /// repaints just a rect area (no scrolling)
 void
-VCanvas::repaintAll( const KoRect &r )
+VCanvas::repaintAll( const QRectF &r )
 {
 	drawDocument( 0, r );
 }

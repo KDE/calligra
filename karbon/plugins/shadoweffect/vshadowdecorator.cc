@@ -45,7 +45,7 @@ VShadowDecorator::~VShadowDecorator()
 }
 
 void
-VShadowDecorator::draw( VPainter* painter, const KoRect* rect ) const
+VShadowDecorator::draw( VPainter* painter, const QRectF* rect ) const
 {
 	if( state() == deleted ||
 		state() == hidden ||

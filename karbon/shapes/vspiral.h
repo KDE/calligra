@@ -23,6 +23,8 @@
 #include "vcomposite.h"
 #include <koffice_export.h>
 
+#include <QPointF>
+
 class KARBONBASE_EXPORT VSpiral : public VPath
 {
 public:
@@ -33,7 +35,7 @@ public:
 	};
 	VSpiral( VObject* parent, VState state = edit );
 	VSpiral( VObject* parent,
-		const KoPoint& center, double radius, uint segments,
+		const QPointF& center, double radius, uint segments,
 		double fade, bool clockwise, double angle = 0.0, VSpiralType type = round );
 
 	virtual QString name() const;
@@ -47,7 +49,7 @@ protected:
 	void init();
 
 private:
-	KoPoint m_center;
+	QPointF m_center;
 	double m_radius;
 	double m_fade;
 	uint m_segments;

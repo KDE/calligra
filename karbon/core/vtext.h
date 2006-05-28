@@ -34,6 +34,7 @@
 #include "vpath.h"
 #include "vcomposite.h"
 
+class QRectF;
 class VGroup;
 
 typedef Q3PtrList<VPath> VPathList;
@@ -92,9 +93,9 @@ public:
 		return m_glyphs;
 	}
 
-	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
+	virtual void draw( VPainter *painter, const QRectF* rect = 0L ) const;
 
-	virtual const KoRect& boundingBox() const;
+	virtual const QRectF& boundingBox() const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );

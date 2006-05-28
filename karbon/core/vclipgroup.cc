@@ -24,6 +24,8 @@
 #endif
 
 #include <qdom.h>
+#include <QRectF>
+#include <QPointF>
 
 #include <kdebug.h>
 
@@ -38,7 +40,7 @@ VClipGroup::VClipGroup( const VClipGroup& group ) : VGroup( group ) {}
 
 VClipGroup::~VClipGroup() { }
 
-void VClipGroup::draw( VPainter* painter, const KoRect* rect ) const
+void VClipGroup::draw( VPainter* painter, const QRectF* rect ) const
 {
 	return VGroup::draw( painter, rect );
 	if(
@@ -143,9 +145,9 @@ void PathRenderer::visitVSubpath( VSubpath& path )
 
 	for(path.first(); VSegment *segment = path.current(); path.next() )
 	{
-		KoPoint p1;
-		KoPoint p2;
-		KoPoint p3;
+		QPointF p1;
+		QPointF p2;
+		QPointF p3;
 
 		QString buffer;
 
@@ -154,19 +156,19 @@ void PathRenderer::visitVSubpath( VSubpath& path )
 			if (segment->isBegin()) {
 			    p1 = segment->point( 0 );
 
-			    kDebug(38000) << "calling painter.moveTo with " << p1 << endl;
+			    //kDebug(38000) << "calling painter.moveTo with " << p1 << endl;
 			    m_painter->moveTo( p1 );
 			} else if (segment->isCurve()) {
 			    p1 = segment->point( 0 );
 			    p2 = segment->point( 1 );
 			    p3 = segment->point( 2 );
 
-			    kDebug(38000) << "calling painter.curveTo with " << p1 << " " << p2 << " " << p3 << endl;
+			    //kDebug(38000) << "calling painter.curveTo with " << p1 << " " << p2 << " " << p3 << endl;
 			    m_painter->curveTo( p1, p2, p3 );
 
 			} else if (segment->isLine()) {
 			    p1 = segment->point( 0 );
-			    kDebug(38000) << "calling painter.lineTo with " << p1 << endl;
+			    //kDebug(38000) << "calling painter.lineTo with " << p1 << endl;
 			    m_painter->lineTo( p1 );
 			}
 		}

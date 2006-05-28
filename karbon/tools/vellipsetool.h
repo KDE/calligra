@@ -32,6 +32,7 @@ class KIntSpinBox;
 class KarbonView;
 class QLabel;
 class QWidget;
+class QPointF;
 
 class VEllipseOptionsWidget : public KDialogBase
 {
@@ -86,7 +87,7 @@ private:
 	VEllipseOptionsWidget *m_optionsWidget;
 	double m_startAngle;
 	double m_endAngle;
-	KoPoint m_center;
+	QPointF m_center;
 };
 
 #endif

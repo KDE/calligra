@@ -23,13 +23,13 @@
 
 
 #include <q3ptrlist.h>
-
-#include <KoRect.h>
+#include <QRectF>
 
 #include "vobject.h"
 #include "vvisitor.h"
 #include <koffice_export.h>
-class KoPoint;
+
+class QPointF;
 class QObject;
 class VPainter;
 class VVisitor;
@@ -85,7 +85,7 @@ public:
 	 */
 	void draw( VPainter* painter, double zoomFactor ) const;
 
-	virtual const KoRect& boundingBox() const;
+	virtual const QRectF& boundingBox() const;
 
 	virtual VSelection* clone() const;
 
@@ -112,7 +112,7 @@ public:
 	 * Adds all objects ( selectObjects == true ) or all nodes
 	 * ( selectObjects == false ) within rect to the selection.
 	 */
-	bool append( const KoRect& rect, bool selectObjects = true, bool exclusive = true );
+	bool append( const QRectF& rect, bool selectObjects = true, bool exclusive = true );
 
 	/**
 	 * Removes the reference to the object, not the object itself.
@@ -123,7 +123,7 @@ public:
 	 * Removes all objects ( selectObjects == true ) or all nodes
 	 * ( selectObjects == false ) within rect from the selection.
 	 */
-	bool take( const KoRect& rect, bool selectObjects = true, bool exclusive = true );
+	bool take( const QRectF& rect, bool selectObjects = true, bool exclusive = true );
 
 	/**
 	 * Removes the references to all objects, not the objects themselves.
@@ -141,7 +141,7 @@ public:
 	 * @param rect the selection rect
 	 * @return the list of segments
 	 */
-	Q3PtrList<VSegment> getSegments( const KoRect& rect );
+	Q3PtrList<VSegment> getSegments( const QRectF& rect );
 
 	/**
 	 * Selects or deselects all nodes.
@@ -151,12 +151,12 @@ public:
 	void selectNodes( bool select = true );
 
 	/**
-	 * Returns the handle node id, the KoPoint is inside.
+	 * Returns the handle node id, the QPointF is inside.
 	 *
 	 * @param point the selection point 
 	 * @return the handle the point is inside or node_none if point is not inside any node
 	 */
-	VHandleNode handleNode( const KoPoint &point ) const;
+	VHandleNode handleNode( const QPointF &point ) const;
 
 	/**
 	 * Toggle selection handles on/off.
@@ -197,7 +197,7 @@ private:
 	 * Paint coordinates of handle rectangle and handle nodes.
 	 * Used for handle node determination and handle node drawing.
 	 */
-	KoRect *m_handleRect;
+	QRectF *m_handleRect;
 
 	/**
 	 * Paint size of nodes.

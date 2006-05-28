@@ -189,14 +189,14 @@ VSubpath::~VSubpath()
 	delete m_iteratorList;
 }
 
-const KoPoint&
+const QPointF&
 VSubpath::currentPoint() const
 {
 	return getLast()->knot();
 }
 
 bool
-VSubpath::moveTo( const KoPoint& p )
+VSubpath::moveTo( const QPointF& p )
 {
 	// Move "begin" segment if path is still empty.
 	if( isEmpty() )
@@ -209,7 +209,7 @@ VSubpath::moveTo( const KoPoint& p )
 }
 
 bool
-VSubpath::lineTo( const KoPoint& p )
+VSubpath::lineTo( const QPointF& p )
 {
 	if( isClosed() )
 		return false;
@@ -226,7 +226,7 @@ VSubpath::lineTo( const KoPoint& p )
 
 bool
 VSubpath::curveTo(
-	const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+	const QPointF& p1, const QPointF& p2, const QPointF& p3 )
 {
 	if( isClosed() )
 		return false;
@@ -245,7 +245,7 @@ VSubpath::curveTo(
 }
 
 bool
-VSubpath::curve1To( const KoPoint& p2, const KoPoint& p3 )
+VSubpath::curve1To( const QPointF& p2, const QPointF& p3 )
 {
 	if( isClosed() )
 		return false;
@@ -264,7 +264,7 @@ VSubpath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 }
 
 bool
-VSubpath::curve2To( const KoPoint& p1, const KoPoint& p3 )
+VSubpath::curve2To( const QPointF& p1, const QPointF& p3 )
 {
 	if( isClosed() )
 		return false;
@@ -284,7 +284,7 @@ VSubpath::curve2To( const KoPoint& p1, const KoPoint& p3 )
 
 bool
 VSubpath::arcTo(
-	const KoPoint& p1, const KoPoint& p2, const double r )
+	const QPointF& p1, const QPointF& p2, const double r )
 {
 	/* This routine is inspired by code in GNU ghostscript.
 	 *
@@ -339,21 +339,21 @@ VSubpath::arcTo(
 		double dP1B0 = fabs( r * num / denom );
 
 		// B0 = P1 + |P1B0| * T10/|T10|.
-		KoPoint b0 = p1 + KoPoint( dx0, dy0 ) * ( dP1B0 / sqrt( dsqT10 ) );
+		QPointF b0 = p1 + QPointF( dx0, dy0 ) * ( dP1B0 / sqrt( dsqT10 ) );
 
 		// If B0 deviates from current point P0, add a line to it.
-		if( !b0.isNear( currentPoint(), VGlobal::isNearRange ) )
+		if( (currentPoint().x() >= b0.x() - VGlobal::isNearRange && currentPoint().x() <= b0.x() + VGlobal::isNearRange && currentPoint().y() >= b0.y() - VGlobal::isNearRange && currentPoint().y() <= b0.y() + VGlobal::isNearRange) )
 			lineTo( b0 );
 
 		// B3 = P1 + |P1B3| * T12/|T12|.
-		KoPoint b3 = p1 + KoPoint( dx2, dy2 ) * ( dP1B0 / sqrt( dsqT12 ) );
+		QPointF b3 = p1 + QPointF( dx2, dy2 ) * ( dP1B0 / sqrt( dsqT12 ) );
 
 
 		// The two bezier-control points are located on the tangents at a fraction
 		// of the distance[ tangent points <-> tangent intersection ].
-		const KoPoint d = p1 - b0;
+		const QPointF d = p1 - b0;
 
-		double distsq = d * d;
+		double distsq = d.x() * d.x() + d.y() * d.y();
 
 		double rsq = r * r;
 
@@ -370,8 +370,8 @@ VSubpath::arcTo(
 			fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );
 		}
 
-		KoPoint b1 = b0 + ( p1 - b0 ) * fract;
-		KoPoint b2 = b3 + ( p1 - b3 ) * fract;
+		QPointF b1 = b0 + ( p1 - b0 ) * fract;
+		QPointF b2 = b3 + ( p1 - b3 ) * fract;
 
 		// Finally add the bezier-segment.
 		curveTo( b1, b2, b3 );
@@ -396,9 +396,7 @@ VSubpath::close()
 	// Append a line, if necessary.
 	else
 	{
-		if(
-			getLast()->knot().isNear(
-				getFirst()->knot(), VGlobal::isNearRange ) )
+		if((getFirst()->knot().x() >= getLast()->knot().x() - VGlobal::isNearRange && getFirst()->knot().x() <= getLast()->knot().x() + VGlobal::isNearRange && getFirst()->knot().y() >= getLast()->knot().y() - VGlobal::isNearRange && getFirst()->knot().y() <= getLast()->knot().y() + VGlobal::isNearRange))
 		{
 			// Move last knot.
 			getLast()->setKnot( getFirst()->knot() );
@@ -414,7 +412,7 @@ VSubpath::close()
 }
 
 bool
-VSubpath::pointIsInside( const KoPoint& p ) const
+VSubpath::pointIsInside( const QPointF& p ) const
 {
 	// If the point is not inside the boundingbox, it cannot be inside the path either.
 	if( !boundingBox().contains( p ) )
@@ -505,8 +503,8 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 	// the line through the first and last knot and the x-axis too
 	if( ! closed )
 	{
-		KoPoint prevKnot = getLast()->knot() - p;
-		KoPoint nextKnot = getFirst()->knot() - p;
+		QPointF prevKnot = getLast()->knot() - p;
+		QPointF nextKnot = getFirst()->knot() - p;
 
 		double dx = nextKnot.x() - prevKnot.x();
 		double dy = nextKnot.y() - prevKnot.y();
@@ -671,13 +669,13 @@ VSubpath::revert()
 	*this = list;
 }
 
-const KoRect&
+const QRectF&
 VSubpath::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
 	{
 		// Reset the boundingbox.
-		m_boundingBox = KoRect();
+		m_boundingBox = QRectF();
 
 		VSegment* segment = m_first;
 

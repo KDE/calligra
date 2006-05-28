@@ -24,7 +24,7 @@
 #include <q3ptrvector.h>
 
 #include <koffice_export.h>
-#include <KoPoint.h>
+#include <QPointF>
 
 #include "vcolor.h"
 
@@ -97,14 +97,14 @@ public:
 	void removeStop( const VColorStop& colorStop );
 	void clearStops();
 
-	KoPoint origin() const { return m_origin; }
-	void setOrigin( const KoPoint &origin ) { m_origin = origin; }
+	QPointF origin() const { return m_origin; }
+	void setOrigin( const QPointF &origin ) { m_origin = origin; }
 
-	KoPoint focalPoint() const { return m_focalPoint; }
-	void setFocalPoint( const KoPoint &focalPoint ) { m_focalPoint = focalPoint; }
+	QPointF focalPoint() const { return m_focalPoint; }
+	void setFocalPoint( const QPointF &focalPoint ) { m_focalPoint = focalPoint; }
 
-	KoPoint vector() const { return m_vector; }
-	void setVector( const KoPoint &vector ) { m_vector = vector; }
+	QPointF vector() const { return m_vector; }
+	void setVector( const QPointF &vector ) { m_vector = vector; }
 
 	void save( QDomElement& element ) const;
 	QString saveOasis( KoGenStyles &mainStyles ) const;
@@ -121,9 +121,9 @@ private:
 	VGradientRepeatMethod m_repeatMethod	: 2;
 
 	// coordinates:
-	KoPoint m_origin;
-	KoPoint m_focalPoint;
-	KoPoint m_vector;
+	QPointF m_origin;
+	QPointF m_focalPoint;
+	QPointF m_vector;
 }; // VGradient
 
 #endif /* __VGRADIENT_H__ */

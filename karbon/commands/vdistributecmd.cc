@@ -25,6 +25,8 @@
 #include "vdocument.h"
 #include "vselection.h"
 
+#include <QRectF>
+
 VDistributeCmd::VDistributeCmd( VDocument *doc, Distribute distribute )
 	: VCommand( doc, i18n( "Distribute Objects" ) ), m_distribute( distribute )
 {
@@ -41,7 +43,7 @@ VDistributeCmd::execute()
 	if( document()->selection()->objects().count() <= 2 )
 		return;
 	
-	KoRect bbox;
+	QRectF bbox;
 	double extent = 0.0;
 	double dx, dy;
 

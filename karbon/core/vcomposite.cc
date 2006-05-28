@@ -22,8 +22,6 @@
 #include <qmatrix.h>
 #include <QRegExp>
 
-#include <KoPoint.h>
-#include <KoRect.h>
 #include <KoUnit.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
@@ -99,7 +97,7 @@ DCOPObject* VPath::dcopObject()
 
 
 void
-VPath::draw( VPainter* painter, const KoRect *rect ) const
+VPath::draw( VPainter* painter, const QRectF *rect ) const
 {
 	if(
 		state() == deleted ||
@@ -172,14 +170,14 @@ VPath::draw( VPainter* painter, const KoRect *rect ) const
 	painter->restore();
 }
 
-const KoPoint&
+const QPointF&
 VPath::currentPoint() const
 {
 	return m_paths.getLast()->currentPoint();
 }
 
 bool
-VPath::moveTo( const KoPoint& p )
+VPath::moveTo( const QPointF& p )
 {
 	// Append a new subpath if current subpath is not empty.
 	if( !m_paths.getLast()->isEmpty() )
@@ -192,32 +190,32 @@ VPath::moveTo( const KoPoint& p )
 }
 
 bool
-VPath::lineTo( const KoPoint& p )
+VPath::lineTo( const QPointF& p )
 {
 	return m_paths.getLast()->lineTo( p );
 }
 
 bool
 VPath::curveTo(
-	const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+	const QPointF& p1, const QPointF& p2, const QPointF& p3 )
 {
 	return m_paths.getLast()->curveTo( p1, p2, p3 );
 }
 
 bool
-VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
+VPath::curve1To( const QPointF& p2, const QPointF& p3 )
 {
 	return m_paths.getLast()->curve1To( p2, p3 );
 }
 
 bool
-VPath::curve2To( const KoPoint& p1, const KoPoint& p3 )
+VPath::curve2To( const QPointF& p1, const QPointF& p3 )
 {
 	return m_paths.getLast()->curve2To( p1, p3 );
 }
 
 bool
-VPath::arcTo( const KoPoint& p1, const KoPoint& p2, const double r )
+VPath::arcTo( const QPointF& p1, const QPointF& p2, const double r )
 {
 	return m_paths.getLast()->arcTo( p1, p2, r );
 }
@@ -263,7 +261,7 @@ VPath::combinePath( const VSubpath& path )
 }
 
 bool
-VPath::pointIsInside( const KoPoint& p ) const
+VPath::pointIsInside( const QPointF& p ) const
 {
 	// Check if point is inside boundingbox.
 	if( !boundingBox().contains( p ) )
@@ -307,7 +305,7 @@ VPath::fillMode() const
 	return ( m_paths.count() > 1 ) ? evenOdd : winding;
 }
 
-const KoRect&
+const QRectF&
 VPath::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
@@ -315,7 +313,7 @@ VPath::boundingBox() const
 		VSubpathListIterator itr( m_paths );
 		itr.toFirst();
 
-		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect();
+		m_boundingBox = itr.current() ? itr.current()->boundingBox() : QRectF();
 
 		for( ++itr; itr.current(); ++itr )
 			m_boundingBox |= itr.current()->boundingBox();
@@ -552,19 +550,19 @@ VPath::saveSvgPath( QString &d ) const
 void
 VPath::svgMoveTo( double x1, double y1, bool )
 {
-	moveTo( KoPoint( x1, y1 ) );
+	moveTo( QPointF( x1, y1 ) );
 }
 
 void
 VPath::svgLineTo( double x1, double y1, bool )
 {
-	lineTo( KoPoint( x1, y1 ) );
+	lineTo( QPointF( x1, y1 ) );
 }
 
 void
 VPath::svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool )
 {
-	curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x, y ) );
+	curveTo( QPointF( x1, y1 ), QPointF( x2, y2 ), QPointF( x, y ) );
 }
 
 void

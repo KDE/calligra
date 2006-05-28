@@ -20,12 +20,11 @@
 #include <config-karbon.h>
 #include <qdom.h>
 #include <QFile>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include <QPointF>
+#include <QRectF>
 
 #include <kdebug.h>
-#include <KoPoint.h>
-#include <KoRect.h>
 
 #include "vpath.h"
 #include "vtext.h"
@@ -61,7 +60,7 @@ int traceMoveto( FT_Vector *to, VPath *composite )
 
 	//QString add = "M" + QString::number(tox) + "," + QString::number(toy) + " ";
 	//kDebug(38000) << add.latin1() << endl;
-	composite->moveTo( KoPoint( tox, toy ) );
+	composite->moveTo( QPointF( tox, toy ) );
 
 	return 0;
 }
@@ -74,7 +73,7 @@ int traceLineto( FT_Vector *to, VPath *composite )
 	//QString add = "L" + QString::number(tox) + "," + QString::number(toy) + " ";
 	//kDebug(38000) << add.latin1() << endl;
 
-	composite->lineTo( KoPoint( tox, toy ) );
+	composite->lineTo( QPointF( tox, toy ) );
 
 	return 0;
 }
@@ -88,8 +87,8 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VPath *composite )
 
 	//QString add = "Q" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + " ";
 	//kDebug(38000) << add.latin1() << endl;
-	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x2, y2 ) );
-	//composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
+	composite->curveTo( QPointF( x1, y1 ), QPointF( x2, y2 ), QPointF( x2, y2 ) );
+	//composite->curve2To( QPointF( x1, y1 ), QPointF( x2, y2 ) );
 
 	return 0;
 }
@@ -106,7 +105,7 @@ int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VPath *composit
 	//QString add = "C" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + "," + QString::number(x3) + "," + QString::number(y3);
 	//kDebug(38000) << add.latin1() << endl;
 
-	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
+	composite->curveTo( QPointF( x1, y1 ), QPointF( x2, y2 ), QPointF( x3, y3 ) );
 
 	return 0;
 }
@@ -183,7 +182,7 @@ DCOPObject* VText::dcopObject()
 
 
 void
-VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
+VText::draw( VPainter* painter, const QRectF* /*rect*/ ) const
 {
 	if(
 		state() == deleted ||
@@ -257,7 +256,7 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 	painter->restore();
 }
 
-const KoRect&
+const QRectF&
 VText::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
@@ -265,7 +264,7 @@ VText::boundingBox() const
 		VPathListIterator itr( m_glyphs );
 		itr.toFirst();
 		// clear:
-		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect();
+		m_boundingBox = itr.current() ? itr.current()->boundingBox() : QRectF();
 		for( ++itr; itr.current(); ++itr )
 			if( !itr.current()->boundingBox().isEmpty() )
 				m_boundingBox |= itr.current()->boundingBox();
@@ -588,13 +587,13 @@ VText::traceText()
 	float y = 0;
 	float dx = 0;
 	float sp = 0;
-	KoPoint point;
-	KoPoint normal;
-	KoPoint tangent;
+	QPointF point;
+	QPointF normal;
+	QPointF tangent;
 	VSubpathIterator pathIt( m_basePath );
 	VSegment* oldSeg = pathIt.current();
 	seg = ++pathIt;
-	KoPoint extPoint;
+	QPointF extPoint;
 	bool ext = false;
 	float fsx = 0;
 	float yoffset = ( m_position == Above ? 0 : ( m_position == On ? m_font.pointSize() / 3 : m_font.pointSize() / 1.5 ) );

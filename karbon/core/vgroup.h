@@ -21,9 +21,11 @@
 #define __VGROUP_H__
 
 #include <q3ptrlist.h>
+#include <QRectF>
 
 #include "vobject.h"
 #include <koffice_export.h>
+
 typedef Q3PtrList<VObject> VObjectList;
 typedef Q3PtrListIterator<VObject> VObjectListIterator;
 
@@ -56,9 +58,9 @@ public:
 	 */
 	virtual ~VGroup();
 
-	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const;
+	virtual void draw( VPainter* painter, const QRectF* rect = 0L ) const;
 
-	virtual const KoRect& boundingBox() const;
+	virtual const QRectF& boundingBox() const;
 
 	virtual void setStroke( const VStroke& stroke );
 	virtual void setFill( const VFill& fill );

@@ -23,6 +23,9 @@
 
 #include <q3valuevector.h>
 #include <QMap>
+#include <QPointF>
+#include <QMatrix>
+
 #include "vcommand.h"
 #include "vgroup.h"
 #include <koffice_export.h>
@@ -78,21 +81,21 @@ public:
 class KARBONCOMMAND_EXPORT VScaleCmd : public VTransformCmd
 {
 public:
-	VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate = false );
+	VScaleCmd( VDocument *doc, const QPointF& p, double s1, double s2, bool duplicate = false );
 };
 
 
 class KARBONCOMMAND_EXPORT VShearCmd : public VTransformCmd
 {
 public:
-	VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate = false );
+	VShearCmd( VDocument *doc, const QPointF& p, double s1, double s2, bool duplicate = false );
 };
 
 
 class KARBONCOMMAND_EXPORT VRotateCmd : public VTransformCmd
 {
 public:
-	VRotateCmd( VDocument *doc, const KoPoint& p, double angle, bool duplicate = false );
+	VRotateCmd( VDocument *doc, const QPointF& p, double angle, bool duplicate = false );
 };
 
 class KARBONCOMMAND_EXPORT VTranslateBezierCmd : public VCommand

@@ -25,6 +25,8 @@
 #include "vdocument.h"
 #include "vselection.h"
 
+#include <QRectF>
+
 #include <kdebug.h>
 
 VAlignCmd::VAlignCmd( VDocument *doc, Align align )
@@ -43,8 +45,8 @@ VAlignCmd::execute()
 	if( document()->selection()->objects().count() == 0 )
 		return;
 	double dx, dy;
-	KoRect bbox;
-	KoRect r;
+	QRectF bbox;
+	QRectF r;
 	if( document()->selection()->objects().count() == 1 )
 		r = document()->boundingBox();
 	else

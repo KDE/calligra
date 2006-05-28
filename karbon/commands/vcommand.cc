@@ -27,6 +27,7 @@
 
 #include <kstdaction.h>
 
+#include <kdebug.h>
 
 VCommandHistory::VCommandHistory( KarbonPart* part )
 	: m_part( part ), m_undoLimit( 50 ), m_redoLimit( 30 ), m_savedPos( 0 )

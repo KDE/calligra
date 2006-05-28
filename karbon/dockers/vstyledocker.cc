@@ -24,10 +24,10 @@
 #include <qsize.h>
 #include <Q3HButtonGroup>
 #include <qtoolbutton.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3PtrList>
 #include <Q3VBoxLayout>
+#include <QRectF>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -217,7 +217,7 @@ ClipartWidget::addClipart()
 
 	if( clipart )
 	{
-		KoRect clipartBox = clipart->boundingBox();
+		QRectF clipartBox = clipart->boundingBox();
 		double scaleFactor = 1. / qMax( clipartBox.width(), clipartBox.height() );
 		QMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
 

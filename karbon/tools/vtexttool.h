@@ -38,6 +38,7 @@
 #include "vtext.h"
 #include "vtool.h"
 
+class QPointF;
 class KFontCombo;
 class KIntNumInput;
 class QCheckBox;
@@ -277,7 +278,7 @@ private:
 	bool createText( VSubpath &path );
 
 	VTextOptionsWidget* m_optionsWidget;
-	KoPoint m_last;
+	QPointF m_last;
 	VText* m_text;
 	VText* m_editedText;
 	bool m_creating;

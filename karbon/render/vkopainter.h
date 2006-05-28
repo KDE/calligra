@@ -33,7 +33,8 @@ struct _ArtSVP;
 struct _ArtGradientStop;
 class VGradient;
 class VPattern;
-class KoRect;
+class QRectF;
+class QPointF;
 
 class KARBONBASE_EXPORT VKoPainter : public VPainter
 {
@@ -45,10 +46,10 @@ public:
 	virtual void resize( unsigned int w, unsigned int h );
 	virtual void begin();
 	virtual void end();
-	virtual void blit( const KoRect & );
+	virtual void blit( const QRectF & );
 	void clear();
 	virtual void clear( const QColor & );
-	virtual void clear( const KoRect &, const QColor & );
+	virtual void clear( const QRectF &, const QColor & );
 
 	// matrix manipulation
 	virtual void setMatrix( const QMatrix & );
@@ -57,9 +58,9 @@ public:
 	virtual double zoomFactor() { return m_zoomFactor; }
 
 	// drawing
-	virtual void moveTo( const KoPoint & );
-	virtual void lineTo( const KoPoint & );
-	virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & );
+	virtual void moveTo( const QPointF & );
+	virtual void lineTo( const QPointF & );
+	virtual void curveTo( const QPointF &, const QPointF &, const QPointF & );
 	virtual void newPath();
 	virtual void fillPath();
 	virtual void setFillRule( VFillRule );
@@ -68,8 +69,8 @@ public:
 	virtual void resetClipPath();
 
 	// helper
-	virtual void drawNode( const KoPoint& p, int width );
-	virtual void drawRect( const KoRect & );
+	virtual void drawNode( const QPointF& p, int width );
+	virtual void drawRect( const QRectF & );
 	virtual void drawRect( double, double, double, double );
 
 	// pen + brush

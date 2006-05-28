@@ -22,7 +22,6 @@
 
 #include <q3listview.h>
 #include <q3ptrdict.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QLabel>
@@ -30,6 +29,7 @@
 
 class Q3HButtonGroup;
 class QPoint;
+class QPointF;
 class QLabel;
 class QPixmap;
 class QCheckBox;
@@ -59,8 +59,8 @@ class VDocumentPreview : public QWidget
 	private:
 		VDocument	*m_document;
 		KarbonView	*m_view;
-		KoPoint		m_firstPoint;
-		KoPoint		m_lastPoint;
+		QPointF		m_firstPoint;
+		QPointF		m_lastPoint;
 		bool		m_dragging;
 		QPixmap		*m_docpixmap;
 }; // VDocumentPreview

@@ -25,8 +25,8 @@
 #include <Q3PtrList>
 
 #include <klocale.h>
-#include <KoPoint.h>
-#include <KoRect.h>
+#include <QPointF>
+#include <QRectF>
 
 #include <karbon_part.h>
 #include <karbon_view.h>
@@ -91,7 +91,7 @@ VSelectNodesTool::draw()
 
 	VSelection* selection = view()->part()->document().selection();
 
-	KoRect selrect = calcSelRect( last() );	
+	QRectF selrect = calcSelRect( last() );	
 
 	Q3PtrList<VSegment> segments = selection->getSegments( selrect );
 	if( selection->objects().count() > 0 &&
@@ -112,12 +112,12 @@ VSelectNodesTool::draw()
 					m_state = movingbezier2;
 					segments.at( 0 )->selectPoint( 0, false );
 				}
-				selection->append( selrect.normalize(), false, true );
+				selection->append( selrect.normalized(), false, true );
 			}
 			else
 			{
 				m_state = moving;
-				selection->append( selrect.normalize(), false, false );
+				selection->append( selrect.normalized(), false, false );
 			}
 
 			recalc();
@@ -132,11 +132,11 @@ VSelectNodesTool::draw()
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
-		painter->moveTo( KoPoint( first().x(), first().y() ) );
-		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
-		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), first().y() ) );
+		painter->moveTo( QPointF( first().x(), first().y() ) );
+		painter->lineTo( QPointF( m_current.x(), first().y() ) );
+		painter->lineTo( QPointF( m_current.x(), m_current.y() ) );
+		painter->lineTo( QPointF( first().x(), m_current.y() ) );
+		painter->lineTo( QPointF( first().x(), first().y() ) );
 		painter->strokePath();
 
 		m_state = dragging;
@@ -148,7 +148,7 @@ VSelectNodesTool::setCursor() const
 {
 	if( m_state == moving ) return;
 
-	KoRect selrect = calcSelRect( last() );
+	QRectF selrect = calcSelRect( last() );
 
 	Q3PtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
 	if( segments.count() > 0 &&
@@ -236,12 +236,12 @@ VSelectNodesTool::mouseButtonRelease()
 
 	VSelection* selection = view()->part()->document().selection();
 
-	KoRect selrect = calcSelRect( last() );
+	QRectF selrect = calcSelRect( last() );
 
 	if( ctrlPressed() )
-		selection->append( selrect.normalize(), false, false );
+		selection->append( selrect.normalized(), false, false );
 	else
-		selection->append( selrect.normalize(), false, true );
+		selection->append( selrect.normalized(), false, true );
 
 	view()->selectionChanged();
 	view()->part()->repaintAllViews();
@@ -256,9 +256,9 @@ VSelectNodesTool::rightMouseButtonRelease()
 
 	VSelection* selection = view()->part()->document().selection();
 
-	KoRect selrect = calcSelRect( last() );
+	QRectF selrect = calcSelRect( last() );
 
-	selection->take( selrect.normalize(), false, false );
+	selection->take( selrect.normalized(), false, false );
 
 	view()->selectionChanged();
 	view()->part()->repaintAllViews();
@@ -285,7 +285,7 @@ VSelectNodesTool::mouseDragRelease()
 		Q3PtrList<VSegment> segments;
 		if( m_state == movingbezier1 || m_state == movingbezier2 )
 		{
-			KoRect selrect = calcSelRect( first() );
+			QRectF selrect = calcSelRect( first() );
 			segments = view()->part()->document().selection()->getSegments( selrect );
 			cmd = new VTranslateBezierCmd( &view()->part()->document(), segments.at( 0 ),
 					qRound( ( last().x() - first().x() ) ),
@@ -304,14 +304,14 @@ VSelectNodesTool::mouseDragRelease()
 	}
 	else
 	{
-		KoPoint fp = first();
-		KoPoint lp = last();
+		QPointF fp = first();
+		QPointF lp = last();
 
 		if ( (fabs(lp.x() - fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
 		{
 			// AK - should take the middle point here
-			fp = last() - KoPoint(8.0, 8.0);
-			lp = last() + KoPoint(8.0, 8.0);
+			fp = last() - QPointF(8.0, 8.0);
+			lp = last() + QPointF(8.0, 8.0);
 		}
 
 		// erase old object:
@@ -321,13 +321,13 @@ VSelectNodesTool::mouseDragRelease()
 		{
 			view()->part()->document().selection()->append();	// select all
 			view()->part()->document().selection()->append(
-				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
+				QRectF( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalized(),
 				false );
 		}
 		else
 		{
 			view()->part()->document().selection()->take(
-				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
+				QRectF( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalized(),
 				false, false );
 		}
 		view()->selectionChanged();
@@ -357,7 +357,7 @@ VSelectNodesTool::recalc()
 	}
 	else if( m_state == moving || m_state == movingbezier1 || m_state == movingbezier2 )
 	{
-		KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
+		QPointF _last = view()->canvasWidget()->snapToGrid( last() );
 		double distx = _last.x() - first().x();
 		double disty = _last.y() - first().y();
 		// move operation
@@ -398,9 +398,9 @@ VSelectNodesTool::setup( KActionCollection *collection )
 	}
 }
 
-KoRect 
-VSelectNodesTool::calcSelRect( const KoPoint &pos ) const
+QRectF 
+VSelectNodesTool::calcSelRect( const QPointF &pos ) const
 {
 	double tolerance = view()->part()->document().selection()->handleSize() / view()->zoom();
-	return KoRect( pos.x() - tolerance, pos.y() - tolerance, 2 * tolerance + 1.0, 2 * tolerance + 1.0 );
+	return QRectF( pos.x() - tolerance, pos.y() - tolerance, 2 * tolerance + 1.0, 2 * tolerance + 1.0 );
 }

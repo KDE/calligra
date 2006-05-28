@@ -21,10 +21,9 @@
 #define __VTOOLCONTROLLER_H__
 
 #include <q3dict.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QEvent>
-#include <KoPoint.h>
+#include <QPointF>
 
 class QEvent;
 
@@ -46,7 +45,7 @@ public:
 	void setCurrentTool( VTool * );
 	VTool *currentTool() const { return m_currentTool; }
 
-	bool mouseEvent( QMouseEvent* event, const KoPoint& );
+	bool mouseEvent( QMouseEvent* event, const QPointF& );
 	bool keyEvent( QEvent* event );
 
 	const Q3Dict<VTool> &tools() { return m_tools; }

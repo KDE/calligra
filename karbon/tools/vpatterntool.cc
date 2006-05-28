@@ -26,7 +26,8 @@
 #include <qfileinfo.h>
 #include <QLabel>
 #include <qcursor.h>
-//Added by qt3to4:
+#include <QRectF>
+#include <QPointF>
 #include <Q3PtrList>
 #include <Q3VBoxLayout>
 
@@ -265,12 +266,12 @@ VPatternTool::draw( VPainter* painter )
 	if( ! getPattern( m_pattern ) )
 		return;
 
-	KoPoint s = m_pattern.origin();
-	KoPoint e = m_pattern.vector();
+	QPointF s = m_pattern.origin();
+	QPointF e = m_pattern.vector();
 
 	// save the handle rects for later inside testing
-	m_origin = KoRect( s.x()-m_handleSize, s.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
-	m_vector = KoRect( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
+	m_origin = QRectF( s.x()-m_handleSize, s.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
+	m_vector = QRectF( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 
 	/* this needs porting
 	painter->setPen( Qt::blue.light() );
@@ -355,7 +356,7 @@ VPatternTool::mouseButtonRelease()
 
 		if( ( ! strokeSelected && obj->fill()->type() != VFill::patt ) || (strokeSelected &&  obj->stroke()->type() != VStroke::patt ) )
 		{
-			KoRect bbox = obj->boundingBox();
+			QRectF bbox = obj->boundingBox();
 			oldPattern.setOrigin( bbox.bottomLeft() + 0.5*(bbox.topLeft()-bbox.bottomLeft()) );
 			oldPattern.setVector( bbox.bottomRight() + 0.5*(bbox.topRight()-bbox.bottomRight()) );
 		}

@@ -23,12 +23,14 @@
 #include "vcomposite.h"
 #include <koffice_export.h>
 
+#include <QPointF>
+
 class KARBONBASE_EXPORT VSinus : public VPath
 {
 public:
 	VSinus( VObject* parent, VState state = edit );
 	VSinus( VObject* parent,
-		const KoPoint& topLeft, double width, double height, uint periods );
+		const QPointF& topLeft, double width, double height, uint periods );
 
 	virtual QString name() const;
 
@@ -41,7 +43,7 @@ protected:
 	void init();
 
 private:
-	KoPoint m_topLeft;
+	QPointF m_topLeft;
 	double m_width;
 	double m_height;
 	uint m_periods;

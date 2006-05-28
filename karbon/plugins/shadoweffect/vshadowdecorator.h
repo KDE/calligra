@@ -20,9 +20,10 @@
 #ifndef __VSHADOWDECORATOR_H__
 #define __VSHADOWDECORATOR_H__
 
-
 #include "vobject.h"
 #include <koffice_export.h>
+
+#include <QRectF>
 
 /**
  */
@@ -34,9 +35,9 @@ public:
 
 	virtual ~VShadowDecorator();
 
-	virtual void draw( VPainter* /*painter*/, const KoRect* /*rect*/ = 0L ) const;
+	virtual void draw( VPainter* /*painter*/, const QRectF* /*rect*/ = 0L ) const;
 
-	virtual const KoRect& boundingBox() const { return m_object->boundingBox(); }
+	virtual const QRectF& boundingBox() const { return m_object->boundingBox(); }
 	VStroke* stroke() const { return m_object->stroke(); }
 	virtual void setStroke( const VStroke& stroke );
 	VFill* fill() const { return m_object->fill(); }

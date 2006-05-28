@@ -21,7 +21,8 @@
 #define __VSELECTOBJECTS_H__
 
 
-#include "KoRect.h"
+#include <QRectF>
+#include <QPointF>
 
 #include "vcomposite.h"
 #include "vgroup.h"
@@ -41,10 +42,10 @@ public:
 	VSelectObjects( VObjectList& selection, bool select = true )
 		: m_selection( selection ), m_select( select ), m_insideGroups( false ) {}
 
-	VSelectObjects( VObjectList& selection, const KoRect& rect, bool select = true )
+	VSelectObjects( VObjectList& selection, const QRectF& rect, bool select = true )
 		: m_selection( selection ), m_select( select ), m_rect( rect ), m_rectMode( true ), m_insideGroups( false ) { }
 
-	VSelectObjects( VObjectList& selection, const KoPoint& point, bool select = true, bool insideGroups = false )
+	VSelectObjects( VObjectList& selection, const QPointF& point, bool select = true, bool insideGroups = false )
 		: m_selection( selection ), m_select( select ), m_point( point ), m_rectMode( false ), m_insideGroups( insideGroups )  {}
 
 	virtual void visitVGroup( VGroup& group );
@@ -61,8 +62,8 @@ private:
 
 	bool m_select;
 
-	KoRect m_rect;
-	KoPoint m_point;
+	QRectF m_rect;
+	QPointF m_point;
 	bool m_rectMode;
 	bool m_insideGroups;
 };

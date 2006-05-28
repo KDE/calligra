@@ -36,7 +36,7 @@ VPolygon::VPolygon( VObject* parent, VState state )
 }
 
 VPolygon::VPolygon( VObject* parent, const QString &points,
-		const KoPoint& topLeft, double width, double height )
+		const QPointF& topLeft, double width, double height )
 	: VPath( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_points( points )
 {
 	init();
@@ -55,7 +55,7 @@ VPolygon::init()
 	QStringList::Iterator end(pointList.end());
 	for( QStringList::Iterator it = pointList.begin(); it != end; ++it )
 	{
-		KoPoint point;
+		QPointF point;
 		point.setX( (*it).toDouble() );
 		point.setY( (*++it).toDouble() );
 		if( bFirst )

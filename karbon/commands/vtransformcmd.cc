@@ -30,6 +30,7 @@
 #include "vstroke.h"
 #include "vfill.h"
 #include "vdocument.h"
+#include "vglobal.h"
 
 #include <kdebug.h>
 
@@ -189,7 +190,7 @@ VTransformCmd::visitVSubpath( VSubpath& path )
 	{
 		for( unsigned short i = 0; i < segment->degree(); ++i )
 		{
-			segment->setPoint( i, segment->point( i ).transform( m_mat ) );
+			segment->setPoint( i, VGlobal::transformPoint(segment->point( i ), m_mat ) );
 		}
 
 		segment = segment->next();
@@ -241,7 +242,7 @@ VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2, bool duplica
 }
 
 
-VScaleCmd::VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate )
+VScaleCmd::VScaleCmd( VDocument *doc, const QPointF& p, double s1, double s2, bool duplicate )
 		: VTransformCmd( doc, i18n( "Scale Objects" ), "14_select", duplicate )
 {
 	if( !duplicate && ( !m_selection || m_selection->objects().count() == 1 ) )
@@ -253,7 +254,7 @@ VScaleCmd::VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bo
 }
 
 
-VShearCmd::VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate )
+VShearCmd::VShearCmd( VDocument *doc, const QPointF& p, double s1, double s2, bool duplicate )
 		: VTransformCmd( doc, i18n( "Shear Objects" ), "14_shear", duplicate )
 {
 	if( !duplicate && ( !m_selection || m_selection->objects().count() == 1 ) )
@@ -264,7 +265,7 @@ VShearCmd::VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bo
 	m_mat.translate( -p.x(), -p.y() );
 }
 
-VRotateCmd::VRotateCmd( VDocument *doc, const KoPoint& p, double angle, bool duplicate )
+VRotateCmd::VRotateCmd( VDocument *doc, const QPointF& p, double angle, bool duplicate )
 		: VTransformCmd( doc, i18n( "Rotate Objects" ), "14_rotate", duplicate )
 {
 	if( !duplicate && ( !m_selection || m_selection->objects().count() == 1 ) )
@@ -314,7 +315,7 @@ VTranslateBezierCmd::execute()
 					m_segmenttwo->selectPoint( i, i == 1 );
 
 					if( i == 1 )
-						m_segmenttwo->setPoint( i, m_segmenttwo->point( i ).transform( m2 ) );
+						m_segmenttwo->setPoint( i, VGlobal::transformPoint(m_segmenttwo->point( i ), m2 ) );
 				}
 			}
 		}
@@ -328,7 +329,7 @@ VTranslateBezierCmd::execute()
 					m_segmenttwo->selectPoint( i, i == 0 );
 
 					if( i == 0 )
-						m_segmenttwo->setPoint( i, m_segmenttwo->point( i ).transform( m2 ) );
+						m_segmenttwo->setPoint( i, VGlobal::transformPoint(m_segmenttwo->point( i ), m2 ) );
 				}
 			}
 		}
@@ -338,7 +339,7 @@ VTranslateBezierCmd::execute()
 			m_segment->selectPoint( i, i == uint( m_firstControl ? 0 : 1 ) );
 
 			if( i == uint( m_firstControl ? 0 : 1 ) )
-				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat ) );
+				m_segment->setPoint( i, VGlobal::transformPoint(m_segment->point( i ), m_mat ) );
 		}
 	}
 
@@ -359,7 +360,7 @@ VTranslateBezierCmd::unexecute()
 			m_segment->selectPoint( i, i == uint( m_firstControl ? 0 : 1 ) );
 	
 			if( i == uint( m_firstControl ? 0 : 1 ) )
-				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat.invert() ) );
+				m_segment->setPoint( i, VGlobal::transformPoint(m_segment->point( i ), m_mat.invert() ) );
 		}
 
 		if( m_segmenttwo )
@@ -370,7 +371,7 @@ VTranslateBezierCmd::unexecute()
 				m_segmenttwo->selectPoint( i, i == index );
 
 			if( i == index )
-				m_segmenttwo->setPoint( i, m_segmenttwo->point( i ).transform( m2.invert() ) );
+				m_segmenttwo->setPoint( i, VGlobal::transformPoint(m_segmenttwo->point( i ), m2.invert() ) );
 			}
 		}
 	}
@@ -481,7 +482,7 @@ VTranslatePointCmd::translatePoints()
 
 		int pntCnt = pnts.size();
 		for( int i = 0; i < pntCnt; ++i )
-			segment->setPoint( pnts[i], segment->point( pnts[i] ).transform( m_mat ) );
+			segment->setPoint( pnts[i], VGlobal::transformPoint(segment->point( pnts[i] ), m_mat ) );
 	}
 
 	// invalidate all changed subpaths

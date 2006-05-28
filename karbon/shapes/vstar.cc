@@ -36,7 +36,7 @@ VStar::VStar( VObject* parent, VState state )
 }
 
 VStar::VStar( VObject* parent,
-		const KoPoint& center, double outerRadius, double innerRadius,
+		const QPointF& center, double outerRadius, double innerRadius,
 		uint edges, double angle, uint innerAngle, double roundness, VStarType type )
 	: VPath( parent ), m_center( center), m_outerRadius( outerRadius ), m_innerRadius( innerRadius), m_edges( edges ), m_angle( angle ), m_innerAngle( innerAngle ), m_roundness( roundness ), m_type( type )
 {
@@ -64,8 +64,8 @@ VStar::init()
 		m_roundness = 0.01;
 
 	// We start at angle + VGlobal::pi_2:
-	KoPoint p2, p3;
-	KoPoint p(
+	QPointF p2, p3;
+	QPointF p(
 		m_outerRadius * cos( angle + VGlobal::pi_2 ),
 		m_outerRadius * sin( angle + VGlobal::pi_2 ) );
 	moveTo( p );
@@ -238,17 +238,17 @@ VStar::getOptimalInnerRadius( uint edges, double outerRadius, uint /*innerAngle*
 	int j = (edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
 
 	// get two well chosen lines of the star
-	KoPoint p1( outerRadius * cos( VGlobal::pi_2 ), outerRadius * sin( VGlobal::pi_2 ) );
+	QPointF p1( outerRadius * cos( VGlobal::pi_2 ), outerRadius * sin( VGlobal::pi_2 ) );
 	int jumpto = ( j ) % edges;
 	double nextOuterAngle = VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
-	KoPoint p2( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
+	QPointF p2( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
 
 	nextOuterAngle = VGlobal::pi_2 + VGlobal::twopi / edges;
-	KoPoint p3( outerRadius * cos( nextOuterAngle ),
+	QPointF p3( outerRadius * cos( nextOuterAngle ),
 				outerRadius * sin( nextOuterAngle ) );
 	jumpto = ( edges - j + 1 ) % edges;
 	nextOuterAngle = VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
-	KoPoint p4( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
+	QPointF p4( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
 
 	// calc (x, y) -> intersection point
 	double b1 = ( p2.y() - p1.y() ) / ( p2.x() - p1.x() );

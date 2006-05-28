@@ -29,7 +29,7 @@
 #include <qpixmap.h>
 #include <QPushButton>
 #include <qtabwidget.h>
-//Added by qt3to4:
+#include <QPointF>
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
 #include <QMouseEvent>
@@ -64,17 +64,17 @@ traceShape( VKoPainter* p, int x, int y, int w, int h )
 {
 /* TODO lineto and moveto need porting
 	p->newPath();
-	p->moveTo( KoPoint( x + w , y + h ) );
-	p->lineTo( KoPoint( x + w / 3, y + h ) );
-	p->lineTo( KoPoint( x + w / 3, y + h / 3 ) );
-	p->lineTo( KoPoint( x + w , y + h / 3 ) );
-	p->lineTo( KoPoint( x + w , y + h ) );
+	p->moveTo( QPointF( x + w , y + h ) );
+	p->lineTo( QPointF( x + w / 3, y + h ) );
+	p->lineTo( QPointF( x + w / 3, y + h / 3 ) );
+	p->lineTo( QPointF( x + w , y + h / 3 ) );
+	p->lineTo( QPointF( x + w , y + h ) );
 
-	p->moveTo( KoPoint( x , y ) );
-	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y ) );
-	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y + ( h / 3 ) * 2 ) );
-	p->lineTo( KoPoint( x , y + ( h / 3 ) * 2 ) );
-	p->lineTo( KoPoint( x , y ) );*/
+	p->moveTo( QPointF( x , y ) );
+	p->lineTo( QPointF( x + ( w / 3 ) * 2, y ) );
+	p->lineTo( QPointF( x + ( w / 3 ) * 2, y + ( h / 3 ) * 2 ) );
+	p->lineTo( QPointF( x , y + ( h / 3 ) * 2 ) );
+	p->lineTo( QPointF( x , y ) );*/
 }
 
 ShadowPreview::ShadowPreview( ShadowWidget* parent )
@@ -130,11 +130,11 @@ ShadowPreview::paintEvent( QPaintEvent* )
 	fill.setType( VFill::patt );
 
 	p.newPath();
-	p.moveTo( KoPoint( 0, 0 ) );
-	p.lineTo( KoPoint( 0, h ) );
-	p.lineTo( KoPoint( w, h ) );
-	p.lineTo( KoPoint( w, 0 ) );
-	p.lineTo( KoPoint( 0, 0 ) );
+	p.moveTo( QPointF( 0, 0 ) );
+	p.lineTo( QPointF( 0, h ) );
+	p.lineTo( QPointF( w, h ) );
+	p.lineTo( QPointF( w, 0 ) );
+	p.lineTo( QPointF( 0, 0 ) );
 	p.setBrush( fill );
 	p.fillPath();
 
@@ -178,11 +178,11 @@ ShadowPreview::paintEvent( QPaintEvent* )
 	{
 /* TODO moveto and lineto need porting
 		p.newPath();
-		p.moveTo( KoPoint( 0, 0 ) );
-		p.lineTo( KoPoint( 0, h ) );
-		p.lineTo( KoPoint( w, h ) );
-		p.lineTo( KoPoint( w, 0 ) );
-		p.lineTo( KoPoint( 0, 0 ) );
+		p.moveTo( QPointF( 0, 0 ) );
+		p.lineTo( QPointF( 0, h ) );
+		p.lineTo( QPointF( w, h ) );
+		p.lineTo( QPointF( w, 0 ) );
+		p.lineTo( QPointF( 0, 0 ) );
 		VColor c( colorGroup().background() );
 		c.setOpacity( .8 );
 		p.setBrush( VFill( c ) );
@@ -700,7 +700,7 @@ VTextTool::mouseButtonRelease()
 		// use a default horizontal path when just clicking
 		VSubpath path( 0L );
 		path.moveTo( first() );
-		path.lineTo( KoPoint( first().x()+10, first().y() ) );
+		path.lineTo( QPointF( first().x()+10, first().y() ) );
 	
 		if( ! createText( path ) )
 			return;
@@ -721,8 +721,8 @@ VTextTool::mouseDrag()
 
 	if( m_stepwise && shiftPressed() )
 	{
-		KoPoint act = last();
-		KoPoint dst = act - first();
+		QPointF act = last();
+		QPointF dst = act - first();
  
 		double angle = atan2( dst.y(), dst.x() );
 		if( angle < 0 )

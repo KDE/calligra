@@ -23,6 +23,8 @@
 #include "vgroup.h"
 #include "vvisitor.h"
 #include <koffice_export.h>
+
+class QRectF;
 class VPainter;
 
 /**
@@ -38,7 +40,7 @@ public:
 
 	virtual ~VClipGroup();
 
-	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const;
+	virtual void draw( VPainter* painter, const QRectF* rect = 0L ) const;
 
 	virtual VClipGroup* clone() const;
 

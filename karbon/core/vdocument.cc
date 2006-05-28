@@ -18,8 +18,8 @@
 */
 
 #include <qdom.h>
-//Added by qt3to4:
 #include <Q3ValueList>
+#include <QRectF>
 
 #include "vdocument.h"
 #include "vselection.h"
@@ -85,12 +85,12 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 		double dy = m_gridData.freq.height();
 		p->setPen( s );
 		p->setBrush( Qt::NoBrush );
-		KoPoint p0( dx, dy );
+		QPointF p0( dx, dy );
 		while( p0.x() < m_width )
 		{
 			p->newPath();
-			p->moveTo( KoPoint( p0.x(), 0 ) );
-			p->lineTo( KoPoint( p0.x(), m_height ) );
+			p->moveTo( QPointF( p0.x(), 0 ) );
+			p->lineTo( QPointF( p0.x(), m_height ) );
 			p->strokePath();
 
 			p0.rx() += dx;
@@ -98,8 +98,8 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 		while( p0.y() < m_height )
 		{
 			p->newPath();
-			p->moveTo( KoPoint( 0, p0.y() ) );
-			p->lineTo( KoPoint( m_width, p0.y() ) );
+			p->moveTo( QPointF( 0, p0.y() ) );
+			p->lineTo( QPointF( m_width, p0.y() ) );
 			p->strokePath();
 
 			p0.ry() += dy;
@@ -125,7 +125,7 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 }
 
 void
-VDocument::draw( VPainter *painter, const KoRect* rect ) const
+VDocument::draw( VPainter *painter, const QRectF* rect ) const
 {
 	Q3PtrListIterator<VLayer> itr = m_layers;
 

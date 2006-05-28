@@ -21,12 +21,11 @@
 #define __VTOOL_H__
 
 #include <qobject.h>
-//Added by qt3to4:
+#include <QPointF>
 #include <QEvent>
 #include <QMouseEvent>
 #include <kaction.h>
 #include <klocale.h>
-#include <KoPoint.h>
 #include <koffice_export.h>
 class KAction;
 class KarbonPart;
@@ -125,7 +124,7 @@ public:
 	 * It then calls suiting functions like mouseMoved() so deriving tools
 	 * don't need to directly deal with events themselves.
 	 */
-	bool mouseEvent( QMouseEvent* event, const KoPoint& );
+	bool mouseEvent( QMouseEvent* event, const QPointF& );
 
 	/**
 	 * This function processes every important key event.
@@ -279,12 +278,12 @@ protected:
 	/**
 	 * Most tools need to know the first mouse coordinate.
 	 */
-	const KoPoint& first() const { return m_firstPoint; }
+	const QPointF& first() const { return m_firstPoint; }
 
 	/**
 	 * The last mouse coordinate.
 	 */
-	const KoPoint& last() const { return m_lastPoint; }
+	const QPointF& last() const { return m_lastPoint; }
 
 	/**
 	 * The status of the shift key.
@@ -322,12 +321,12 @@ private:
 	/**
 	 * First input mouse coordinate.
 	 */
-	KoPoint m_firstPoint;
+	QPointF m_firstPoint;
 
 	/**
 	 * Last input mouse coordinate.
 	 */
-	KoPoint m_lastPoint;
+	QPointF m_lastPoint;
 
 	/**
 	 * A tool state.

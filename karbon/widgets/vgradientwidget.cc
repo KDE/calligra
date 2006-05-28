@@ -21,11 +21,12 @@
 #include <QLabel>
 #include <q3frame.h>
 #include <qbitmap.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <Q3PtrList>
+#include <QPointF>
+#include <QRectF>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -106,19 +107,19 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	// gp.setRasterOp( Qt::XorROP );
 	VGradient gradient( *m_gradient );
 	gradient.setType( VGradient::linear );
-	gradient.setOrigin( KoPoint( 2, 2 ) );
-	gradient.setFocalPoint( KoPoint( 2, 2 ) );
-	gradient.setVector( KoPoint( 2 + w, 2 ) );
+	gradient.setOrigin( QPointF( 2, 2 ) );
+	gradient.setFocalPoint( QPointF( 2, 2 ) );
+	gradient.setVector( QPointF( 2 + w, 2 ) );
 	VFill fill;
 	KIconLoader il;
 	fill.pattern() = VPattern( il.iconPath( "karbon.png", K3Icon::Small ) );
 	fill.setType( VFill::patt );
 	gp.setBrush( fill );
-	gp.drawRect( KoRect( 2, 2, w, gh ) );
+	gp.drawRect( QRectF( 2, 2, w, gh ) );
 	fill.gradient() = gradient;
 	fill.setType( VFill::grad );
 	gp.setBrush( fill );
-	gp.drawRect( KoRect( 2, 2, w, gh ) );
+	gp.drawRect( QRectF( 2, 2, w, gh ) );
 	gp.end();
 
 	QPainter p( &pixmap );

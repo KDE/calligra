@@ -25,8 +25,8 @@
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
 
-#include <KoPoint.h>
-#include <KoRect.h>
+#include <QPointF>
+#include <QRectF>
 #include <kdebug.h>
 
 #include <karbon_part.h>
@@ -122,7 +122,7 @@ VSelectTool::draw()
 	// TODO: rasterops need porting to Qt4
 	// painter->setRasterOp( Qt::NotROP );
 
-	KoRect rect = view()->part()->document().selection()->boundingBox();
+	QRectF rect = view()->part()->document().selection()->boundingBox();
 
 	if( m_state != normal )
 	{
@@ -136,11 +136,11 @@ VSelectTool::draw()
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
-		painter->moveTo( KoPoint( first().x(), first().y() ) );
-		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
-		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), first().y() ) );
+		painter->moveTo( QPointF( first().x(), first().y() ) );
+		painter->lineTo( QPointF( m_current.x(), first().y() ) );
+		painter->lineTo( QPointF( m_current.x(), m_current.y() ) );
+		painter->lineTo( QPointF( first().x(), m_current.y() ) );
+		painter->lineTo( QPointF( first().x(), first().y() ) );
 		painter->strokePath();
 
 		m_state = normal;
@@ -183,7 +183,7 @@ VSelectTool::mouseButtonPress()
 	m_current = first();
 
 	m_activeNode = view()->part()->document().selection()->handleNode( first() );
-	KoRect rect = view()->part()->document().selection()->boundingBox();
+	QRectF rect = view()->part()->document().selection()->boundingBox();
 
 	if( m_activeNode != node_none )
 		m_state = scaling;
@@ -316,12 +316,12 @@ VSelectTool::mouseDragRelease()
 	if( m_state == normal )
 	{
 		// Y mirroring
-		KoPoint fp = first();
-		KoPoint lp = last();
+		QPointF fp = first();
+		QPointF lp = last();
 		if( ! ctrlPressed() )
 			view()->part()->document().selection()->clear();
 		
-		KoRect selRect = KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize();
+		QRectF selRect = QRectF( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalized();
 		if( m_add )
 			view()->part()->document().selection()->append( selRect );
 		else
@@ -420,7 +420,7 @@ VSelectTool::updateStatusBar() const
 	int objcount = view()->part()->document().selection()->objects().count();
 	if( objcount > 0 )
 	{
-		KoRect rect = view()->part()->document().selection()->boundingBox();
+		QRectF rect = view()->part()->document().selection()->boundingBox();
 
 		double x = KoUnit::toUserValue( rect.x(), view()->part()->unit() );
 		double y = KoUnit::toUserValue( rect.y(), view()->part()->unit() );
@@ -497,13 +497,13 @@ VSelectTool::recalc()
 	else
 	{
 		VTransformCmd* cmd;
-		KoPoint _first = view()->canvasWidget()->snapToGrid( first() );
-		KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
-		KoRect rect = view()->part()->document().selection()->boundingBox();
+		QPointF _first = view()->canvasWidget()->snapToGrid( first() );
+		QPointF _last = view()->canvasWidget()->snapToGrid( last() );
+		QRectF rect = view()->part()->document().selection()->boundingBox();
 
 		if( m_state == moving )
 		{
-			KoPoint p( rect.x() + last().x() - first().x(), rect.bottom() + last().y() - first().y() );
+			QPointF p( rect.x() + last().x() - first().x(), rect.bottom() + last().y() - first().y() );
 			p = view()->canvasWidget()->snapToGrid( p );
 			m_distx = p.x() - rect.x();
 			m_disty = p.y() - rect.bottom();
@@ -517,49 +517,49 @@ VSelectTool::recalc()
 		{
 			if( m_activeNode == node_lb )
 			{
-				m_sp = KoPoint( rect.right(), rect.bottom() );
+				m_sp = QPointF( rect.right(), rect.bottom() );
 				m_s1 = ( rect.right() - _last.x() ) / double( rect.width() );
 				m_s2 = ( rect.bottom() - _last.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_mb )
 			{
-				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
+				m_sp = QPointF( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
 				m_s1 = 1;
 				m_s2 = ( rect.bottom() - _last.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_rb )
 			{
-				m_sp = KoPoint( rect.x(), rect.bottom() );
+				m_sp = QPointF( rect.x(), rect.bottom() );
 				m_s1 = ( _last.x() - rect.x() ) / double( rect.width() );
 				m_s2 = ( rect.bottom() - _last.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_rm)
 			{
-				m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
+				m_sp = QPointF( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
 				m_s1 = ( _last.x() - rect.x() ) / double( rect.width() );
 				m_s2 = 1;
 			}
 			else if( m_activeNode == node_rt )
 			{
-				m_sp = KoPoint( rect.x(), rect.y() );
+				m_sp = QPointF( rect.x(), rect.y() );
 				m_s1 = ( _last.x() - rect.x() ) / double( rect.width() );
 				m_s2 = ( _last.y() - rect.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_mt )
 			{
-				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
+				m_sp = QPointF( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
 				m_s1 = 1;
 				m_s2 = ( _last.y() - rect.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_lt )
 			{
-				m_sp = KoPoint( rect.right(), rect.y() );
+				m_sp = QPointF( rect.right(), rect.y() );
 				m_s1 = ( rect.right() - _last.x() ) / double( rect.width() );
 				m_s2 = ( _last.y() - rect.y() ) / double( rect.height() );
 			}
 			else if( m_activeNode == node_lm )
 			{
-				m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
+				m_sp = QPointF( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
 				m_s1 = ( rect.right() - _last.x() ) / double( rect.width() );
 				m_s2 = 1;
 			}

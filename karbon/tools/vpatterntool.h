@@ -24,13 +24,13 @@
 
 #include "vtool.h"
 #include "vpattern.h"
-#include "KoRect.h"
-//Added by qt3to4:
 #include <Q3PtrList>
 
 class Q3HButtonGroup;
 class QToolButton;
 class KoIconChooser;
+class QPointF;
+class QRectF;
 
 class VPatternWidget : public KDialogBase
 {
@@ -105,11 +105,11 @@ private:
 	enum { normal, moveOrigin, moveVector, createNew } m_state;
 
 	VPattern             m_pattern;
-	KoPoint              m_current;  /**< the current position when dragging */
-	KoPoint              m_fixed;    /**< the fixed point when only dragging one point of the gradient vector */
+	QPointF              m_current;  /**< the current position when dragging */
+	QPointF              m_fixed;    /**< the fixed point when only dragging one point of the gradient vector */
 	VPatternWidget*	m_optionsWidget; /**< the options dialog, for selecting patterns */
-	KoRect               m_origin;   /**< the handle of the pattern origin */
-	KoRect               m_vector;   /**< the handle of the pattern vector */
+	QRectF               m_origin;   /**< the handle of the pattern origin */
+	QRectF               m_vector;   /**< the handle of the pattern vector */
 	int                  m_handleSize; /**< the handle's size */
 	bool                 m_active;   /**< holds active state of the tool, which is used for drawing of the pattern vector */
 }; // VPatternTool

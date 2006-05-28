@@ -47,7 +47,7 @@
 
 class FitVector {
 	public:
-	FitVector(KoPoint &p){
+	FitVector(QPointF &p){
 		m_X=p.x();
 		m_Y=p.y();
 	}
@@ -57,7 +57,7 @@ class FitVector {
 		m_Y=0;
 	}
 
-	FitVector(KoPoint &a,KoPoint &b){
+	FitVector(QPointF &a,QPointF &b){
 		m_X=a.x()-b.x();
 		m_Y=a.y()-b.y();
 	}
@@ -90,8 +90,8 @@ class FitVector {
 		return (double) sqrt(m_X*m_X+m_Y*m_Y); 
 	}
 
-	KoPoint operator+(KoPoint &p){
-		KoPoint b(p.x()+m_X,p.y()+m_Y);
+	QPointF operator+(QPointF &p){
+		QPointF b(p.x()+m_X,p.y()+m_Y);
 		return b;
 	}
 
@@ -99,14 +99,14 @@ class FitVector {
 		double m_X,m_Y;
 };
 
-double distance(KoPoint *p1,KoPoint *p2){
+double distance(QPointF *p1,QPointF *p2){
 	double dx = (p1->x()-p2->x());
 	double dy = (p1->y()-p2->y());
 	return sqrt( dx*dx + dy*dy );
 }
 
 
-FitVector ComputeLeftTangent(Q3PtrList<KoPoint> &points,int end){
+FitVector ComputeLeftTangent(Q3PtrList<QPointF> &points,int end){
 	FitVector tHat1(*points.at(end+1),*points.at(end));
 
 	tHat1.normalize();
@@ -114,7 +114,7 @@ FitVector ComputeLeftTangent(Q3PtrList<KoPoint> &points,int end){
 	return tHat1;
 }
 
-FitVector ComputeRightTangent(Q3PtrList<KoPoint> &points,int end){
+FitVector ComputeRightTangent(Q3PtrList<QPointF> &points,int end){
 	FitVector tHat1(*points.at(end-1),*points.at(end));
 
 	tHat1.normalize();
@@ -127,7 +127,7 @@ FitVector ComputeRightTangent(Q3PtrList<KoPoint> &points,int end){
  *	Assign parameter values to digitized points 
  *	using relative distances between points.
  */
-static double *ChordLengthParameterize(Q3PtrList<KoPoint> points,int first,int last)
+static double *ChordLengthParameterize(Q3PtrList<QPointF> points,int first,int last)
 {
     int		i;	
     double	*u;			/*  Parameterization		*/
@@ -167,7 +167,7 @@ static FitVector VectorSub(FitVector a,FitVector b)
     return (c);
 }
 
-static FitVector ComputeCenterTangent(Q3PtrList<KoPoint> points,int center)
+static FitVector ComputeCenterTangent(Q3PtrList<QPointF> points,int center)
 {
     FitVector V1, V2, tHatCenter;
     
@@ -216,7 +216,7 @@ static double B3(double u)
  *  Use least-squares method to find Bezier control points for region.
  *
  */
-KoPoint* GenerateBezier(Q3PtrList<KoPoint> &points, int first, int last, double *uPrime,FitVector tHat1,FitVector tHat2)
+QPointF* GenerateBezier(Q3PtrList<QPointF> &points, int first, int last, double *uPrime,FitVector tHat1,FitVector tHat2)
 {
     int 	i;
     FitVector	A[MAXPOINTS][2];	/* Precomputed rhs for eqn	*/
@@ -229,9 +229,9 @@ KoPoint* GenerateBezier(Q3PtrList<KoPoint> &points, int first, int last, double 
     double 	alpha_l,		/* Alpha values, left and right	*/
     	   	alpha_r;
     FitVector 	tmp;			/* Utility variable		*/
-    KoPoint	*curve;
+    QPointF	*curve;
 	
-    curve = new KoPoint[4];
+    curve = new QPointF[4];
     nPts = last - first + 1;
 
  
@@ -331,13 +331,13 @@ KoPoint* GenerateBezier(Q3PtrList<KoPoint> &points, int first, int last, double 
  *  	Evaluate a Bezier curve at a particular parameter value
  * 
  */
-static KoPoint BezierII(int degree,KoPoint *V, double t)
+static QPointF BezierII(int degree,QPointF *V, double t)
 {
     int 	i, j;		
-    KoPoint 	Q;	        /* Point on curve at parameter t	*/
-    KoPoint 	*Vtemp;		/* Local copy of control points		*/
+    QPointF 	Q;	        /* Point on curve at parameter t	*/
+    QPointF 	*Vtemp;		/* Local copy of control points		*/
 
-    Vtemp = new KoPoint[degree+1];
+    Vtemp = new QPointF[degree+1];
     
     for (i = 0; i <= degree; i++) {
 		Vtemp[i] = V[i];
@@ -361,12 +361,12 @@ static KoPoint BezierII(int degree,KoPoint *V, double t)
  *	Find the maximum squared distance of digitized points
  *	to fitted curve.
 */
-static double ComputeMaxError(Q3PtrList<KoPoint> points,int first,int last,KoPoint *curve,double *u,int *splitPoint)
+static double ComputeMaxError(Q3PtrList<QPointF> points,int first,int last,QPointF *curve,double *u,int *splitPoint)
 {
     int		i;
     double	maxDist;		/*  Maximum error		*/
     double	dist;		/*  Current error		*/
-    KoPoint P;			/*  Point on curve		*/
+    QPointF P;			/*  Point on curve		*/
     FitVector	v;			/*  Vector from point to curve	*/
 
     *splitPoint = (last - first + 1)/2;
@@ -388,11 +388,11 @@ static double ComputeMaxError(Q3PtrList<KoPoint> points,int first,int last,KoPoi
  *  NewtonRaphsonRootFind :
  *	Use Newton-Raphson iteration to find better root.
  */
-static double NewtonRaphsonRootFind(KoPoint *Q,KoPoint P,double u)
+static double NewtonRaphsonRootFind(QPointF *Q,QPointF P,double u)
 {
     double 		numerator, denominator;
-    KoPoint 		Q1[3], Q2[2];	/*  Q' and Q''			*/
-    KoPoint		Q_u, Q1_u, Q2_u; /*u evaluated at Q, Q', & Q''	*/
+    QPointF 		Q1[3], Q2[2];	/*  Q' and Q''			*/
+    QPointF		Q_u, Q1_u, Q2_u; /*u evaluated at Q, Q', & Q''	*/
     double 		uPrime;		/*  Improved u			*/
     int 		i;
     
@@ -431,7 +431,7 @@ static double NewtonRaphsonRootFind(KoPoint *Q,KoPoint P,double u)
  *   a better parameterization.
  *
  */
-static double *Reparameterize(Q3PtrList<KoPoint> points,int first,int last,double *u,KoPoint *curve)
+static double *Reparameterize(Q3PtrList<QPointF> points,int first,int last,double *u,QPointF *curve)
 {
     int 	nPts = last-first+1;	
     int 	i;
@@ -445,7 +445,7 @@ static double *Reparameterize(Q3PtrList<KoPoint> points,int first,int last,doubl
     return (uPrime);
 }
 
-KoPoint *FitCubic(Q3PtrList<KoPoint> &points,int first,int last,FitVector tHat1,FitVector tHat2,float error,int &width){
+QPointF *FitCubic(Q3PtrList<QPointF> &points,int first,int last,FitVector tHat1,FitVector tHat2,float error,int &width){
 	double *u;
 	double *uPrime;
 	double maxError;
@@ -454,7 +454,7 @@ KoPoint *FitCubic(Q3PtrList<KoPoint> &points,int first,int last,FitVector tHat1,
 	double iterationError;
 	int maxIterations=4;
 	FitVector tHatCenter;
-	KoPoint *curve;
+	QPointF *curve;
 	int i;
 
 	width=0;
@@ -466,7 +466,7 @@ KoPoint *FitCubic(Q3PtrList<KoPoint> &points,int first,int last,FitVector tHat1,
 	if(nPts == 2){
 	    	double dist = distance(points.at(last), points.at(first)) / 3.0;
 
-		curve = new KoPoint[4];
+		curve = new QPointF[4];
 		
 		curve[0] = *points.at(first);
 		curve[3] = *points.at(last);
@@ -519,13 +519,13 @@ KoPoint *FitCubic(Q3PtrList<KoPoint> &points,int first,int last,FitVector tHat1,
 	tHatCenter = ComputeCenterTangent(points, splitPoint);
 
 	int w1,w2;
-	KoPoint *cu1=NULL, *cu2=NULL;
+	QPointF *cu1=NULL, *cu2=NULL;
 	cu1 = FitCubic(points, first, splitPoint, tHat1, tHatCenter, error,w1);
 
 	tHatCenter.negate();
 	cu2 = FitCubic(points, splitPoint, last, tHatCenter, tHat2, error,w2);
 
-	KoPoint *newcurve = new KoPoint[w1+w2];
+	QPointF *newcurve = new QPointF[w1+w2];
 	for(int i=0;i<w1;i++){
 		newcurve[i]=cu1[i];
 	}
@@ -540,14 +540,14 @@ KoPoint *FitCubic(Q3PtrList<KoPoint> &points,int first,int last,FitVector tHat1,
 }
 
 
-VPath *bezierFit(Q3PtrList<KoPoint> &points,float error){
+VPath *bezierFit(Q3PtrList<QPointF> &points,float error){
 	FitVector tHat1, tHat2;
 
 	tHat1 = ComputeLeftTangent(points,0);
 	tHat2 = ComputeRightTangent(points,points.count()-1);
 	
 	int width=0;
-	KoPoint *curve;
+	QPointF *curve;
 	curve = FitCubic(points,0,points.count()-1,tHat1,tHat2,error,width);
 	
 	VPath *path = new VPath(NULL);

@@ -21,7 +21,7 @@
 #define __VSELECTNODES_H__
 
 
-#include "KoRect.h"
+#include <QRectF>
 
 #include "vvisitor.h"
 #include "vsegment.h"
@@ -37,7 +37,7 @@ public:
 		m_exclusive = exclusive;
 	}
 
-	VSelectNodes( const KoRect& rect, bool select = true, bool exclusive = true )
+	VSelectNodes( const QRectF& rect, bool select = true, bool exclusive = true )
 	{
 		m_select = select;
 		m_exclusive = exclusive;
@@ -50,13 +50,13 @@ public:
 private:
 	bool m_select;
 	bool m_exclusive;
-	KoRect m_rect;
+	QRectF m_rect;
 };
 
 class VTestNodes : public VVisitor
 {
 public:
-	VTestNodes( const KoRect& rect ) : m_rect( rect ) { m_segments.clear(); }
+	VTestNodes( const QRectF& rect ) : m_rect( rect ) { m_segments.clear(); }
 
 	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVLayer( VLayer& layer );
@@ -64,7 +64,7 @@ public:
 	Q3PtrList<VSegment> &result() { return m_segments; }
 
 private:
-	KoRect m_rect;
+	QRectF m_rect;
 	Q3PtrList<VSegment>	m_segments;
 };
 

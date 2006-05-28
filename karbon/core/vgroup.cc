@@ -80,7 +80,7 @@ VGroup::~VGroup()
 }
 
 void
-VGroup::draw( VPainter* painter, const KoRect* rect ) const
+VGroup::draw( VPainter* painter, const QRectF* rect ) const
 {
 	if(
 		state() == deleted ||
@@ -96,13 +96,13 @@ VGroup::draw( VPainter* painter, const KoRect* rect ) const
 		itr.current()->draw( painter, rect );
 }
 
-const KoRect&
+const QRectF&
 VGroup::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
 	{
 		// clear:
-		m_boundingBox = KoRect();
+		m_boundingBox = QRectF();
 
 		VObjectListIterator itr = m_objects;
 		for( ; itr.current(); ++itr )

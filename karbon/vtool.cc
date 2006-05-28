@@ -73,7 +73,7 @@ VTool::view() const
 }
 
 bool
-VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
+VTool::mouseEvent( QMouseEvent* mouseEvent, const QPointF &canvasCoordinate )
 {
 	if( !view() || !view()->part() || !view()->part()->isReadWrite() )
 		return false;

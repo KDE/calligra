@@ -35,7 +35,7 @@ VEllipse::VEllipse( VObject* parent, VState state ) : VPath( parent, state )
 }
 
 VEllipse::VEllipse( VObject* parent,
-		const KoPoint& topLeft, double width, double height,
+		const QPointF& topLeft, double width, double height,
 		VEllipseType type, double startAngle, double endAngle )
 	: VPath( parent ), m_type( type ), m_startAngle( startAngle ), m_endAngle( endAngle )
 {
@@ -66,15 +66,15 @@ VEllipse::init()
 	endAngle   = VGlobal::pi_2 * ( endAngle / 90.0 );
 	// Create (half-)unity circle with topLeft at (0|0):
 	double currentAngle = -startAngle - VGlobal::pi_2;
-	KoPoint start( 0.5 * sin( -startAngle ), 0.5 * cos( -startAngle ) );
-	moveTo( KoPoint( start.x(), start.y() ) );
+	QPointF start( 0.5 * sin( -startAngle ), 0.5 * cos( -startAngle ) );
+	moveTo( QPointF( start.x(), start.y() ) );
 	double midAngle = currentAngle + VGlobal::pi_2 / 2.0;
 	double midAmount = 0.5 / sin( VGlobal::pi_2 / 2.0 );
 	for( int i = 0;i < nsegs;i++ )
 	{
 		midAngle -= VGlobal::pi_2;
-		arcTo( KoPoint( cos( midAngle ) * midAmount, -sin( midAngle ) * midAmount ),
-						KoPoint( 0.5 * sin( currentAngle ), 0.5 * cos( currentAngle ) ), 0.5 );
+		arcTo( QPointF( cos( midAngle ) * midAmount, -sin( midAngle ) * midAmount ),
+						QPointF( 0.5 * sin( currentAngle ), 0.5 * cos( currentAngle ) ), 0.5 );
 		currentAngle -= VGlobal::pi_2;
 	}
 	double rest = ( -endAngle - VGlobal::pi_2 - currentAngle ) * 90.0 / VGlobal::pi_2;
@@ -84,12 +84,12 @@ VEllipse::init()
 	{
 		midAngle = currentAngle - ( -rest / 360.0 ) * VGlobal::pi;
 		midAmount = 0.5 / cos( currentAngle - midAngle );
-		KoPoint end( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) );
-		arcTo( KoPoint( cos( midAngle ) * midAmount, -sin( midAngle ) * midAmount ),
-				KoPoint( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) ), 0.5 );
+		QPointF end( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) );
+		arcTo( QPointF( cos( midAngle ) * midAmount, -sin( midAngle ) * midAmount ),
+				QPointF( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) ), 0.5 );
 	}
 	if( m_type == cut )
-		lineTo( KoPoint( 0.0, 0.0 ) );
+		lineTo( QPointF( 0.0, 0.0 ) );
 	if( m_type != arc )
 		close();
 

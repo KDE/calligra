@@ -11,7 +11,8 @@
 
 #include <qdom.h>
 #include <qimage.h>
-#include <KoRect.h>
+#include <QRectF>
+#include <QPointF>
 
 #include <render/vqpainter.h>
 
@@ -46,7 +47,7 @@ VImage::~VImage()
 }
 
 void
-VImage::draw( VPainter *painter, const KoRect * ) const
+VImage::draw( VPainter *painter, const QRectF * ) const
 {
 	if(
 		state() == deleted ||
@@ -58,11 +59,21 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 
 	if( state() == edit )
 	{
-		KoRect bbox = KoRect( 0, 0, m_image->width(), m_image->height() );
-		KoPoint tl = bbox.topLeft().transform( m_matrix );
-		KoPoint tr = bbox.topRight().transform( m_matrix );
-		KoPoint bl = bbox.bottomLeft().transform( m_matrix );
-		KoPoint br = bbox.bottomRight().transform( m_matrix );
+		QRectF bbox = QRectF( 0, 0, m_image->width(), m_image->height() );
+
+		double x, y;
+
+		m_matrix.map(bbox.topLeft().x(), bbox.topLeft().y(), &x, &y);
+		QPointF tl = QPointF(x,y);
+
+		m_matrix.map(bbox.topRight().x(), bbox.topRight().y(), &x, &y);
+		QPointF tr = QPointF(x,y);
+
+		m_matrix.map(bbox.bottomLeft().x(), bbox.bottomLeft().y(), &x, &y);
+		QPointF bl = QPointF(x,y);
+
+		m_matrix.map(bbox.bottomRight().x(), bbox.bottomRight().y(), &x, &y);
+		QPointF br = QPointF(x,y);
 
 	    painter->moveTo( tl );
 	    painter->lineTo( tr );
@@ -83,8 +94,8 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 	//painter->setMatrix( m_matrix );
 
 	//*m_image = m_image->smoothScale( m_image->width() * zoomFactor, m_image->height() * zoomFactor, QImage::ScaleMin );
-	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
-	m_boundingBox = m_boundingBox.transform( m_matrix );
+	m_boundingBox = QRectF( 0, 0, m_image->width(), m_image->height() );
+	// TODO: QRectF doesn't contain a transform function: m_boundingBox = m_boundingBox.transform( m_matrix );
 	if( !m_image->isNull() )
 		painter->drawImage( *m_image, m_matrix );
 }
@@ -96,7 +107,7 @@ VImage::transform( const QMatrix& m )
 	//m_matrix *= m2.scale( 1.0, -1.0 );
 	m_matrix *= m;
 	kDebug(38000) << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
-	m_boundingBox = m_boundingBox.transform( m );
+	// TODO: QRectF doesn't contain a transform function: m_boundingBox = m_boundingBox.transform( m );
 }
 
 VObject *
@@ -142,7 +153,7 @@ VImage::load( const QDomElement& element )
 	m_image->setAlphaBuffer( true );
 	*m_image = m_image->swapRGB();
 	*m_image = m_image->mirror( false, true );
-	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
+	m_boundingBox = QRectF( 0, 0, m_image->width(), m_image->height() );
 }
 
 void

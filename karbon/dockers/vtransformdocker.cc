@@ -23,12 +23,12 @@
 #include <QWidget>
 #include <qmatrix.h>
 #include <QToolTip>
-//Added by qt3to4:
 #include <Q3GridLayout>
+#include <QPointF>
+#include <QRectF>
 
 #include <klocale.h>
 #include <KoMainWindow.h>
-#include <KoRect.h>
 #include <KoUnitWidgets.h>
 
 #include "karbon_part.h"
@@ -139,7 +139,7 @@ VTransformDocker::update()
 	if ( objcount>0 )
 	{
 		setEnabled( true );
-		KoRect rect = m_view->part()->document().selection()->boundingBox();
+		QRectF rect = m_view->part()->document().selection()->boundingBox();
 
 		m_x->changeValue( rect.x() );
 		m_y->changeValue( rect.y() );
@@ -169,7 +169,7 @@ VTransformDocker::translate()
 	double newX = m_x->value();
 	double newY = m_y->value();
 
-	KoRect rect = m_view->part()->document().selection()->boundingBox();
+	QRectF rect = m_view->part()->document().selection()->boundingBox();
 
 	if( rect.x() != newX || rect.y() != newY )
 	{
@@ -186,7 +186,7 @@ VTransformDocker::scale()
 	double newW = m_width->value();
 	double newH = m_height->value();
 
-	KoRect rect = m_view->part()->document().selection()->boundingBox();
+	QRectF rect = m_view->part()->document().selection()->boundingBox();
 
 	if( rect.width() != newW || rect.height() != newH )
 	{
@@ -219,7 +219,7 @@ VTransformDocker::shearX()
 
 	if( shear != 0.0 )
 	{
-		KoRect rect = m_view->part()->document().selection()->boundingBox();
+		QRectF rect = m_view->part()->document().selection()->boundingBox();
 		shear /= double(rect.width()*0.5);
 		VShearCmd *cmd = new VShearCmd( &m_view->part()->document(), rect.center(), shear, 0 );
 		m_view->part()->addCommand( cmd );
@@ -237,7 +237,7 @@ VTransformDocker::shearY()
 
 	if( shear != 0.0 )
 	{
-		KoRect rect = m_view->part()->document().selection()->boundingBox();
+		QRectF rect = m_view->part()->document().selection()->boundingBox();
 		shear /= double(rect.height()*0.5);
 		VShearCmd *cmd = new VShearCmd( &m_view->part()->document(), rect.center(), 0, shear );
 		m_view->part()->addCommand( cmd );
@@ -255,7 +255,7 @@ VTransformDocker::rotate()
 	
 	if( angle != 0.0 )
 	{
-		KoPoint center = m_view->part()->document().selection()->boundingBox().center();
+		QPointF center = m_view->part()->document().selection()->boundingBox().center();
 		VRotateCmd *cmd = new VRotateCmd(  &m_view->part()->document(), center, angle );
 		m_view->part()->addCommand( cmd );
 		m_part->repaintAllViews( true );

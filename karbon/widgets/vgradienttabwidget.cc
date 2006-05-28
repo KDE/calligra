@@ -24,10 +24,10 @@
 #include <QPushButton>
 #include <qfileinfo.h>
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <Q3GridLayout>
 #include <Q3PtrList>
+#include <QPointF>
 
 #include <knuminput.h>
 #include <kcombobox.h>
@@ -52,19 +52,19 @@ VGradientListItem::VGradientListItem( const VGradient& gradient, QString filenam
 	// gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
 	VGradient grad( *m_gradient );
-	grad.setOrigin( KoPoint( 0, 0 ) );
-	grad.setVector( KoPoint( m_pixmap.width() - 1, 0 ) );
+	grad.setOrigin( QPointF( 0, 0 ) );
+	grad.setVector( QPointF( m_pixmap.width() - 1, 0 ) );
 	grad.setType( VGradient::linear );
 	VFill fill;
 	fill.gradient() = grad;
 	fill.setType( VFill::grad );
 	gp.setBrush( fill );
-/* Port to Qt4:
-	gp.moveTo( KoPoint( 0, 0 ) );
-	gp.lineTo( KoPoint( 0, m_pixmap.height() - 1 ) );
-	gp.lineTo( KoPoint( m_pixmap.width() - 1, m_pixmap.height() - 1 ) );
-	gp.lineTo( KoPoint( m_pixmap.width() - 1, 0 ) );
-	gp.lineTo( KoPoint( 0, 0 ) );
+/* TODO: Port to Qt4:
+	gp.moveTo( QPointF( 0, 0 ) );
+	gp.lineTo( QPointF( 0, m_pixmap.height() - 1 ) );
+	gp.lineTo( QPointF( m_pixmap.width() - 1, m_pixmap.height() - 1 ) );
+	gp.lineTo( QPointF( m_pixmap.width() - 1, 0 ) );
+	gp.lineTo( QPointF( 0, 0 ) );
 */
 	gp.fillPath();
 	gp.end();
@@ -130,14 +130,14 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	VGradient gradient( *m_gradient );
 	if( gradient.type() == VGradient::radial || gradient.type() == VGradient::conic )
 	{
-		gradient.setOrigin( KoPoint( width() / 2, height() / 2 ) );
-		gradient.setFocalPoint( KoPoint( width() / 2, height() / 2 ) );
-		gradient.setVector( KoPoint( width() / 4, height() / 4 ) );
+		gradient.setOrigin( QPointF( width() / 2, height() / 2 ) );
+		gradient.setFocalPoint( QPointF( width() / 2, height() / 2 ) );
+		gradient.setVector( QPointF( width() / 4, height() / 4 ) );
 	}
 	else
 	{
-		gradient.setOrigin( KoPoint( width() / 3, 2 * ( height() / 3 ) ) );
-		gradient.setVector( KoPoint( 2 * ( width() / 3 ), height() / 3 ) );
+		gradient.setOrigin( QPointF( width() / 3, 2 * ( height() / 3 ) ) );
+		gradient.setVector( QPointF( 2 * ( width() / 3 ), height() / 3 ) );
 	}
 	VFill fill;
 	KIconLoader il;
@@ -151,12 +151,12 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	c.setOpacity( *m_opacity );
 	fill.setColor( c, false );
 	gp.setBrush( fill );
-	/* Port to Qt4:
-	gp.moveTo( KoPoint( 2, 2 ) );
-	gp.lineTo( KoPoint( 2, height() - 2 ) );
-	gp.lineTo( KoPoint( width() - 2, height() - 2 ) );
-	gp.lineTo( KoPoint( width() - 2, 2 ) );
-	gp.lineTo( KoPoint( 2, 2 ) );
+	/* TODO: Port to Qt4:
+	gp.moveTo( QPointF( 2, 2 ) );
+	gp.lineTo( QPointF( 2, height() - 2 ) );
+	gp.lineTo( QPointF( width() - 2, height() - 2 ) );
+	gp.lineTo( QPointF( width() - 2, 2 ) );
+	gp.lineTo( QPointF( 2, 2 ) );
 	*/
 	gp.fillPath();
 	gp.end();
@@ -164,7 +164,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	QPainter p( &pixmap );
 
 	p.setPen( colorGroup().light() );
-	/* Port to Qt4:
+	/* TODO: Port to Qt4:
 	p.moveTo( 1, height() - 1 );
 	p.lineTo( 1, 1 );
 	p.lineTo( width() - 1, 1 );

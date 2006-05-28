@@ -33,8 +33,8 @@ VFill::VFill()
 {
 	/*m_gradient.addStop( VColor( Qt::red.rgb() ), 0.0 );
 	m_gradient.addStop( VColor( Qt::yellow.rgb() ), 1.0 );
-	m_gradient.setOrigin( KoPoint( 0, 0 ) );
-	m_gradient.setVector( KoPoint( 0, 50 ) );
+	m_gradient.setOrigin( QPointF( 0, 0 ) );
+	m_gradient.setVector( QPointF( 0, 50 ) );
 	m_gradient.setSpreadMethod( gradient_spread_reflect );*/
 	//kDebug(38000) << "Size of VFill : " << sizeof(*this) << endl;
 }

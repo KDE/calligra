@@ -20,7 +20,7 @@
 #ifndef KARBON_GRID_DATA_H
 #define KARBON_GRID_DATA_H
 
-#include <KoSize.h>
+#include <QSizeF>
 #include <QColor>
 
 class QDomElement;
@@ -34,8 +34,8 @@ public:
   void save(QDomElement&, const QString&);
   void load(const QDomElement&, const QString&);
 
-  KoSize freq;
-  KoSize snap;
+  QSizeF freq;
+  QSizeF snap;
   QColor color;
   bool isSnap;
   bool isShow;

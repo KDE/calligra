@@ -25,7 +25,7 @@
 #endif
 
 #include <KoView.h>
-#include <KoPoint.h>
+#include <QPointF>
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <KoUnit.h>
@@ -47,7 +47,7 @@ class KoContextHelpAction;
 class KoLineStyleAction;
 
 class KoUnitDoubleSpinComboBox;
-class KoRect;
+class QRectF;
 class VRuler;
 
 class KoPaletteManager;
@@ -89,7 +89,7 @@ public:
 
 	virtual void paintEverything( QPainter &p, const QRect &rect, bool transparent = false );
 
-	bool mouseEvent( QMouseEvent* event, const KoPoint & );
+	bool mouseEvent( QMouseEvent* event, const QPointF & );
 	bool keyEvent( QEvent* event );
 	void dropEvent( QDropEvent *e );
 
@@ -115,13 +115,13 @@ public:
 
 	void setCursor( const QCursor & );
 
-	void repaintAll( const KoRect & );
+	void repaintAll( const QRectF & );
 	void repaintAll( bool = true );
 
-	void setPos( const KoPoint& p );
+	void setPos( const QPointF& p );
 
-	void setViewportRect( const KoRect &rect );
-	void setZoomAt( double zoom, const KoPoint & = KoPoint() );
+	void setViewportRect( const QRectF &rect );
+	void setZoomAt( double zoom, const QPointF & = QPointF() );
 
 	VToolController *toolController();
 
@@ -194,7 +194,7 @@ protected slots:
 
 	// View.
 	void viewModeChanged();
-	void zoomChanged( const KoPoint & = KoPoint() );
+	void zoomChanged( const QPointF & = QPointF() );
 	void setLineStyle( int );
 
 	// Toolbox dialogs.

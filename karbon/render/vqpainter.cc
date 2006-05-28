@@ -28,10 +28,10 @@
 #include <qpainter.h>
 #include <qpaintdevice.h>
 #include <qpen.h>
-//Added by qt3to4:
+
 #include <Q3PointArray>
 
-#include <KoPoint.h>
+#include <QPointF>
 #include <kdebug.h>
 
 VQPainter::VQPainter( QPaintDevice *target, unsigned int w, unsigned int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
@@ -54,7 +54,7 @@ VQPainter::resize( unsigned int w, unsigned int h )
 }
 
 void
-VQPainter::blit( const KoRect & )
+VQPainter::blit( const QRectF & )
 {
 	end();
 }
@@ -104,7 +104,7 @@ VQPainter::setZoomFactor( double zoomFactor )
 }
 
 void 
-VQPainter::moveTo( const KoPoint &p )
+VQPainter::moveTo( const QPointF &p )
 {
 	//m_index = 0;
 	if( m_pa.size() <= m_index )
@@ -116,7 +116,7 @@ VQPainter::moveTo( const KoPoint &p )
 }
 
 void 
-VQPainter::lineTo( const KoPoint &p )
+VQPainter::lineTo( const QPointF &p )
 {
 	if( m_pa.size() <= m_index )
 		m_pa.resize( m_index + 10 );
@@ -127,7 +127,7 @@ VQPainter::lineTo( const KoPoint &p )
 }
 
 void
-VQPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
+VQPainter::curveTo( const QPointF &p1, const QPointF &p2, const QPointF &p3 )
 {
 	// calculate cubic bezier using a temp QPointArray
 	Q3PointArray pa( 4 );
@@ -254,14 +254,14 @@ VQPainter::setRasterOp( Qt::RasterOp r )
 */
 
 void
-VQPainter::drawNode( const KoPoint &p, int width )
+VQPainter::drawNode( const QPointF &p, int width )
 {
 	m_painter->drawRect( QRect( int( p.x() * m_zoomFactor ) - width, int( p.y() * m_zoomFactor ) - width,
 	                            2 * width + 1,  2 * width + 1 ) );
 }
 
 void
-VQPainter::drawRect( const KoRect &rect )
+VQPainter::drawRect( const QRectF &rect )
 {
 	m_painter->drawRect( QRect( int( rect.x() ), int( rect.y() ), int( rect.width() ),  int( rect.height() ) ) );
 }

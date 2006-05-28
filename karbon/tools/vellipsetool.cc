@@ -163,7 +163,7 @@ VEllipseTool::shape( bool interactive ) const
 		return
 			new VEllipse(
 				0L,
-				KoPoint( m_center.x() - d1, m_center.y() - d2 ),
+				QPointF( m_center.x() - d1, m_center.y() - d2 ),
 				d1 * 2.0, d2 * 2.0,
 				(VEllipse::VEllipseType)m_optionsWidget->type(),
 				m_optionsWidget->startAngle(),
@@ -173,7 +173,7 @@ VEllipseTool::shape( bool interactive ) const
 		return
 			new VEllipse(
 				0L,
-				KoPoint( m_center.x() - m_d1, m_center.y() - m_d2 ),
+				QPointF( m_center.x() - m_d1, m_center.y() - m_d2 ),
 				m_d1 * 2.0,
 				m_d2 * 2.0,
 				(VEllipse::VEllipseType)m_optionsWidget->type(),

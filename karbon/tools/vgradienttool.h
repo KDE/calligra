@@ -24,7 +24,9 @@
 
 #include "vtool.h"
 #include "vgradient.h"
-#include "KoRect.h"
+
+class QRectF;
+class QPointF;
 
 class VGradientTabWidget;
 
@@ -84,12 +86,12 @@ private:
 		VGradientTabWidget *m_gradientWidget;
 	};
 	VGradient            m_gradient; /**< the actual gradient */
-	KoPoint              m_current;  /**< the current position when dragging */
-	KoPoint              m_fixed;    /**< the fixed point when only dragging one point of the gradient vector */
+	QPointF              m_current;  /**< the current position when dragging */
+	QPointF              m_fixed;    /**< the fixed point when only dragging one point of the gradient vector */
 	VGradientOptionsWidget*  m_optionsWidget; /**< the options dialog, for editing gradients */
-	KoRect               m_origin;   /**< the handle of the gradient origin */
-	KoRect               m_vector;   /**< the handle of the gradient vector */
-	KoRect               m_center;   /**< the handle of the radial gradient focal point */
+	QRectF               m_origin;   /**< the handle of the gradient origin */
+	QRectF               m_vector;   /**< the handle of the gradient vector */
+	QRectF               m_center;   /**< the handle of the radial gradient focal point */
 	int                  m_handleSize; /**< the handle's size */
 	bool                 m_active;   /**< holds active state of the tool, which is used for drawing of the gradient vector */
 };

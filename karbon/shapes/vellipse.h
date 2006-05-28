@@ -23,6 +23,8 @@
 #include "vcomposite.h"
 #include <koffice_export.h>
 
+#include <QPointF>
+
 class KARBONBASE_EXPORT VEllipse : public VPath
 {
 public:
@@ -35,7 +37,7 @@ public:
 	};
 	VEllipse( VObject* parent, VState state = edit );
 	VEllipse( VObject* parent,
-		const KoPoint& topLeft, double width, double height,
+		const QPointF& topLeft, double width, double height,
 		VEllipseType type = full, double startAngle = 0, double endAngle = 0 );
 
 	virtual QString name() const;
@@ -52,7 +54,7 @@ protected:
 
 private:
 	VEllipseType m_type;
-	KoPoint m_center;
+	QPointF m_center;
 	double m_rx;
 	double m_ry;
 	double m_startAngle;

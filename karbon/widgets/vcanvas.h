@@ -31,10 +31,10 @@
 #include <QPaintEvent>
 #include <QFocusEvent>
 #include <koffice_export.h>
+class QPointF;
+class QRectF;
 class KarbonPart;
 class KarbonView;
-class KoRect;
-class KoPoint;
 class VPainter;
 
 // The canvas is a QScrollView.
@@ -46,7 +46,7 @@ public:
 	VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part );
 	virtual ~VCanvas();
 
-	void repaintAll( const KoRect & );
+	void repaintAll( const QRectF & );
 	void repaintAll( bool drawVObjects = true );
 
 	QPixmap *pixmap() { return m_pixmap; }
@@ -54,11 +54,11 @@ public:
 	/**
 	 * Sets mouse position to point p.
 	 */
-	void setPos( const KoPoint& p );
+	void setPos( const QPointF& p );
 
-	KoPoint toViewport( const KoPoint & ) const;
-	KoPoint toContents( const KoPoint & ) const;
-	KoRect boundingBox() const;
+	QPointF toViewport( const QPointF & ) const;
+	QPointF toContents( const QPointF & ) const;
+	QRectF boundingBox() const;
 
 	/**
 	 * Adjusts the viewport top-left position. This doesn't change the zoom level.
@@ -72,12 +72,12 @@ public:
 	 * Sets the canvas viewport rectangle to rect. The zoom level is adjusted for this, if
 	 * needed.
 	 */
-	void setViewportRect( const KoRect &rect );
+	void setViewportRect( const QRectF &rect );
 
 	int pageOffsetX() const;
 	int pageOffsetY() const;
 
-	KoPoint snapToGrid( const KoPoint & );
+	QPointF snapToGrid( const QPointF & );
 
 protected:
 	virtual void dragEnterEvent( QDragEnterEvent * );
@@ -86,7 +86,7 @@ protected:
 	virtual void viewportPaintEvent( QPaintEvent* );
 	virtual void drawContents( QPainter* painter, int clipx, int clipy,
 		int clipw, int cliph  );
-	void drawDocument( QPainter* painter, const KoRect& rect, bool drawVObjects = true );
+	void drawDocument( QPainter* painter, const QRectF& rect, bool drawVObjects = true );
 
 	virtual void resizeEvent( QResizeEvent* event );
 

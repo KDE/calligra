@@ -21,6 +21,7 @@
 
 #include <q3ptrlist.h>
 #include <q3valuelist.h>
+#include <QPointF>
 
 #include <klocale.h>
 #include <q3tl.h>
@@ -159,8 +160,8 @@ VBooleanCmd::recursiveSubdivision(
 		// calculate intersection of line segments:
 		if( segment2.isFlat() )
 		{
-			KoPoint v1  = segment1.knot() - segment1.prev()->knot();
-			KoPoint v2  = segment2.knot() - segment2.prev()->knot();
+			QPointF v1  = segment1.knot() - segment1.prev()->knot();
+			QPointF v2  = segment2.knot() - segment2.prev()->knot();
 
 			double det = v2.x() * v1.y() - v2.y() * v1.x();
 
@@ -168,7 +169,7 @@ VBooleanCmd::recursiveSubdivision(
 				return;
 			else
 			{
-				KoPoint v = segment2.prev()->knot() - segment1.prev()->knot();
+				QPointF v = segment2.prev()->knot() - segment1.prev()->knot();
 				const double one_det = 1.0 / det;
 
 				double t1 = one_det * ( v2.x() * v.y() - v2.y() * v.x() );

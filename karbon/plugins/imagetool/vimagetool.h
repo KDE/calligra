@@ -22,6 +22,7 @@
 #define __VIMAGETOOL_H__
 
 #include <QString>
+#include <QPointF>
 
 #include "vtool.h"
 #include <commands/vcommand.h>
@@ -48,7 +49,7 @@ protected:
 	class VInsertImageCmd : public VCommand
 	{
 	public:
-		VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, KoPoint pos );
+		VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, QPointF pos );
 		virtual ~VInsertImageCmd() {}
 
 		virtual void execute();
@@ -57,7 +58,7 @@ protected:
 
 	protected:
 		VImage	*m_image;
-		KoPoint	m_pos;
+		QPointF	m_pos;
 	};
 
 	virtual void mouseButtonRelease();

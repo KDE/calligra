@@ -22,6 +22,9 @@
 
 #include "vcomposite.h"
 #include <koffice_export.h>
+
+#include <QPointF>
+
 /**
  * This shape offers star-like shapes with a lot of parameters :
  *
@@ -59,7 +62,7 @@ public:
 	};
 	VStar( VObject* parent, VState state = edit );
 	VStar( VObject* parent,
-		const KoPoint& center, double outerRadius, double innerRadius,
+		const QPointF& center, double outerRadius, double innerRadius,
 		uint edges, double angle = 0.0, uint innerAngle = 0,
 		double roundness = 0.0, VStarType type = star_outline );
 
@@ -77,7 +80,7 @@ protected:
 	void init();
 
 private:
-	KoPoint m_center;
+	QPointF m_center;
 	double m_outerRadius;
 	double m_innerRadius;
 	uint   m_edges;

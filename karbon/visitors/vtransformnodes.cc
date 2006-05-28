@@ -21,6 +21,7 @@
 #include "vpath.h"
 #include "vsegment.h"
 #include "vtransformnodes.h"
+#include "vglobal.h"
 
 
 VTransformNodes::VTransformNodes( const QMatrix& m )
@@ -46,7 +47,7 @@ VTransformNodes::visitVSubpath( VSubpath& path )
 				// Do extra reverse trafo for smooth beziers
 				QMatrix m2( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(),
 							-m_matrix.dx(), -m_matrix.dy() );
-				path.current()->next()->setPoint( 0, path.current()->next()->point( 0 ).transform( m2 ) );
+				path.current()->next()->setPoint( 0, VGlobal::transformPoint(path.current()->next()->point( 0 ), m2 ) );
 			}
 			if( path.current()->pointIsSelected( 0 ) &&
 				path.current()->prev() &&
@@ -58,14 +59,14 @@ VTransformNodes::visitVSubpath( VSubpath& path )
 				// Do extra reverse trafo for smooth beziers
 				QMatrix m2( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(),
 							-m_matrix.dx(), -m_matrix.dy() );
-				path.current()->prev()->setPoint( 1, path.current()->prev()->point( 1 ).transform( m2 ) );
+				path.current()->prev()->setPoint( 1, VGlobal::transformPoint(path.current()->prev()->point( 1 ), m2 ) );
 			}
 		}
 
 		for( uint i = 0; i < path.current()->degree(); ++i )
 		{
 			if( path.current()->pointIsSelected( i ) )
-				path.current()->setPoint( i, path.current()->point( i ).transform( m_matrix ) );
+				path.current()->setPoint( i, VGlobal::transformPoint(path.current()->point( i ), m_matrix ) );
 		}
 
 		if( !success() )

@@ -23,6 +23,8 @@
 #include <qpixmap.h>
 #define THUMB_SIZE 30
 
+#include "vglobal.h"
+
 VPattern::VPattern()
 {
 	m_valid = false;
@@ -122,8 +124,8 @@ VPattern::load( const QDomElement& element )
 void
 VPattern::transform( const QMatrix &m )
 {
-	m_origin = m_origin.transform( m );
-	m_vector = m_vector.transform( m );
+	m_origin = VGlobal::transformPoint( m_origin, m );
+	m_vector = VGlobal::transformPoint( m_vector, m );
 }
 
 QPixmap& VPattern::pixmap() const

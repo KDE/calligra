@@ -22,8 +22,9 @@
 
 
 #include <q3ptrlist.h>
-
-#include <KoPoint.h>
+#include <QPointF>
+#include <QRectF>
+#include <QMatrix>
 
 #include "vobject.h"
 #include "svgpathparser.h"
@@ -56,11 +57,11 @@ public:
 	/**
 	 * Returns the knot of the last segment of the last subpath.
 	 */
-	const KoPoint& currentPoint() const;
+	const QPointF& currentPoint() const;
 
 
-	bool moveTo( const KoPoint& p );
-	bool lineTo( const KoPoint& p );
+	bool moveTo( const QPointF& p );
+	bool lineTo( const QPointF& p );
 
 	/*
 	curveTo():
@@ -74,7 +75,7 @@ public:
 	*/
 
 	bool curveTo(
-		const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
+		const QPointF& p1, const QPointF& p2, const QPointF& p3 );
 
 	/*
 	curve1To():
@@ -87,7 +88,7 @@ public:
 	currP          p3
 	*/
 
-	bool curve1To( const KoPoint& p2, const KoPoint& p3 );
+	bool curve1To( const QPointF& p2, const QPointF& p3 );
 
 	/*
 	curve2To():
@@ -100,7 +101,7 @@ public:
 	currP          p3
 	*/
 
-	bool curve2To( const KoPoint& p1, const KoPoint& p3 );
+	bool curve2To( const QPointF& p1, const QPointF& p3 );
 
 	/**
 	 * A convenience function to aproximate a circular arc with a
@@ -120,7 +121,7 @@ public:
 	      |
 	      x currP
 	 */
-	bool arcTo( const KoPoint& p1, const KoPoint& p2, double r );
+	bool arcTo( const QPointF& p1, const QPointF& p2, double r );
 
 	/**
 	 * Closes the current subpath.
@@ -143,7 +144,7 @@ public:
 	/**
 	 * Returns true if point p is located inside the composite.
 	 */
-	bool pointIsInside( const KoPoint& p ) const;
+	bool pointIsInside( const QPointF& p ) const;
 
 
 	/**
@@ -157,7 +158,7 @@ public:
 		return m_paths;
 	}
 
-	virtual const KoRect& boundingBox() const;
+	virtual const QRectF& boundingBox() const;
 
 
 	VFillRule fillMode() const;
@@ -174,7 +175,7 @@ public:
 	}
 
 
-	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
+	virtual void draw( VPainter *painter, const QRectF* rect = 0L ) const;
 
 	bool drawCenterNode() const
 	{

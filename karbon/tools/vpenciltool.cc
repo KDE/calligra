@@ -27,7 +27,7 @@
 #include <QCheckBox>
 #include <q3vbox.h>
 #include <q3widgetstack.h>
-//Added by qt3to4:
+#include <QPointF>
 #include <Q3PtrList>
 
 #include <klocale.h>
@@ -188,8 +188,8 @@ VPencilTool::deactivate()
 
 	VPath* line = 0L;
 
-	Q3PtrList<KoPoint> complete;
-	Q3PtrList<KoPoint> *points = &m_Points;
+	Q3PtrList<QPointF> complete;
+	Q3PtrList<QPointF> *points = &m_Points;
 
 	if( m_Points.count() > 1 )
 	{
@@ -215,7 +215,7 @@ VPencilTool::deactivate()
 			//Now we need to get the angle of the first line
 			float langle = ANGLE( complete.at( 0 ), complete.at( 1 ) );
 
-			KoPoint *nextp = NULL;
+			QPointF *nextp = NULL;
 			while( ( nextp = m_Points.next() ) )
 			{
 				float angle = ANGLE( complete.last(), nextp );
@@ -241,11 +241,11 @@ VPencilTool::deactivate()
 			case RAW:
 			{
 				line = new VPath( 0L );
-				KoPoint* p1 = (*points).first();
-				KoPoint* plast = p1;
+				QPointF* p1 = (*points).first();
+				QPointF* plast = p1;
 				line->moveTo( *p1 );
 
-				KoPoint* pnext = 0L;
+				QPointF* pnext = 0L;
 
 				while( ( pnext = (*points).next() ) )
 				{
@@ -288,7 +288,7 @@ VPencilTool::draw()
 		VPath line( 0L );
 		line.moveTo( *m_Points.first() );
 
-		KoPoint *pnext;
+		QPointF *pnext;
 		while((pnext=m_Points.next())){
 			line.lineTo( *pnext );
 		}
@@ -308,7 +308,7 @@ VPencilTool::mouseMove()
 void
 VPencilTool::mouseButtonPress()
 {
-	m_Points.append( new KoPoint( last() ) );
+	m_Points.append( new QPointF( last() ) );
 
 	draw();
 }
@@ -316,7 +316,7 @@ VPencilTool::mouseButtonPress()
 void
 VPencilTool::mouseButtonRelease()
 {
-	m_Points.append( new KoPoint( last() ) );
+	m_Points.append( new QPointF( last() ) );
 	draw();
 	accept();
 	return;
@@ -335,7 +335,7 @@ VPencilTool::mouseDrag()
 	{
 		draw();
 
-		m_Points.append( new KoPoint( last() ) );
+		m_Points.append( new QPointF( last() ) );
 
 		draw();
 	}

@@ -24,12 +24,12 @@
 #include <QLabel>
 #include <QLayout>
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <QPaintEvent>
+#include <QPointF>
+#include <QRectF>
 
 #include <klocale.h>
-#include <KoPoint.h>
 
 #include "vcolor.h"
 #include "vfill.h"
@@ -101,7 +101,7 @@ VSmallPreview::drawFill( const VFill &f )
 	// TODO: needs porting:
 	// fill.setColor( Qt::white );
 	m_painter->setBrush( fill );
-	m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
+	m_painter->drawRect( QRectF( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
 	
 	switch ( f.type() )
 	{
@@ -130,15 +130,15 @@ VSmallPreview::drawFill( const VFill &f )
 			m_fillLabel->setText( i18n( "Fill: Gradient") );
 			if( f.gradient().type() == VGradient::linear )
 			{
-				fill.gradient().setOrigin( KoPoint( m_fillFrame->width() * 0.5, 0 ) );
-				fill.gradient().setVector( KoPoint( m_fillFrame->width() * 0.5, m_fillFrame->height() ) );
+				fill.gradient().setOrigin( QPointF( m_fillFrame->width() * 0.5, 0 ) );
+				fill.gradient().setVector( QPointF( m_fillFrame->width() * 0.5, m_fillFrame->height() ) );
 			}
 			else if( f.gradient().type() == VGradient::radial ||
 				f.gradient().type() == VGradient::conic )
 			{
-				fill.gradient().setOrigin( KoPoint( m_fillFrame->width() * 0.5, m_fillFrame->height() * 0.5 ) );
-				fill.gradient().setFocalPoint( KoPoint( m_fillFrame->width() * 0.5, m_fillFrame->height() * 0.5 ) );
-				fill.gradient().setVector( KoPoint( m_fillFrame->width() * 0.5, m_fillFrame->height() ) );
+				fill.gradient().setOrigin( QPointF( m_fillFrame->width() * 0.5, m_fillFrame->height() * 0.5 ) );
+				fill.gradient().setFocalPoint( QPointF( m_fillFrame->width() * 0.5, m_fillFrame->height() * 0.5 ) );
+				fill.gradient().setVector( QPointF( m_fillFrame->width() * 0.5, m_fillFrame->height() ) );
 			}
 			break;
 
@@ -146,8 +146,8 @@ VSmallPreview::drawFill( const VFill &f )
 		case VFill::patt:
 		{
 			fill.pattern() = f.pattern();
-			fill.pattern().setOrigin( KoPoint( 0, 0 ) );
-			fill.pattern().setVector( KoPoint( m_fillFrame->width() * 0.5, 0 ) );
+			fill.pattern().setOrigin( QPointF( 0, 0 ) );
+			fill.pattern().setVector( QPointF( m_fillFrame->width() * 0.5, 0 ) );
 			fill.setType( VFill::patt );
 			m_fillLabel->setText( i18n( "Fill: Pattern") );
 			break;
@@ -158,14 +158,14 @@ VSmallPreview::drawFill( const VFill &f )
 			// TODO: needs porting
 			// fill.setColor( Qt::white );
 			m_painter->setBrush( fill );
-			m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
+			m_painter->drawRect( QRectF( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
 			// TODO: needs porting
 			// stroke.setColor( Qt::red );
 			stroke.setLineWidth( 2.0 );
 			m_painter->setPen( stroke );
 			m_painter->newPath();
-			m_painter->moveTo( KoPoint( 4, m_fillFrame->height() - 4 ) );
-			m_painter->lineTo( KoPoint( m_fillFrame->width() - 4, 4 ) );
+			m_painter->moveTo( QPointF( 4, m_fillFrame->height() - 4 ) );
+			m_painter->lineTo( QPointF( m_fillFrame->width() - 4, 4 ) );
 			m_painter->strokePath();
 		}
 	}
@@ -174,7 +174,7 @@ VSmallPreview::drawFill( const VFill &f )
 	{
 		m_painter->setPen( stroke );
 		m_painter->setBrush( fill );
-		m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );	
+		m_painter->drawRect( QRectF( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );	
 	}
 
 	m_painter->end();
@@ -200,7 +200,7 @@ VSmallPreview::drawStroke( const VStroke &s )
 	// TODO: needs porting
 	// fill.setColor( Qt::white );
 	m_painter->setBrush( fill );
-	m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
+	m_painter->drawRect( QRectF( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
 	
 	
 	switch ( s.type() )
@@ -230,23 +230,23 @@ VSmallPreview::drawStroke( const VStroke &s )
 			m_strokeLabel->setText( i18n( "Stroke: Gradient") );
 			if( s.gradient().type() == VGradient::linear )
 			{
-				fill.gradient().setOrigin( KoPoint( m_strokeFrame->width() * 0.5, 0 ) );
-				fill.gradient().setVector( KoPoint( m_strokeFrame->width() * 0.5, m_strokeFrame->height() ) );
+				fill.gradient().setOrigin( QPointF( m_strokeFrame->width() * 0.5, 0 ) );
+				fill.gradient().setVector( QPointF( m_strokeFrame->width() * 0.5, m_strokeFrame->height() ) );
 			}
 			else if( s.gradient().type() == VGradient::radial ||
 				s.gradient().type() == VGradient::conic )
 			{
-				fill.gradient().setOrigin( KoPoint( m_strokeFrame->width() * 0.5, m_strokeFrame->height() * 0.5 ) );
-				fill.gradient().setFocalPoint( KoPoint( m_strokeFrame->width() * 0.5, m_strokeFrame->height() * 0.5 ) );
-				fill.gradient().setVector( KoPoint( m_strokeFrame->width() * 0.5, m_strokeFrame->height() ) );
+				fill.gradient().setOrigin( QPointF( m_strokeFrame->width() * 0.5, m_strokeFrame->height() * 0.5 ) );
+				fill.gradient().setFocalPoint( QPointF( m_strokeFrame->width() * 0.5, m_strokeFrame->height() * 0.5 ) );
+				fill.gradient().setVector( QPointF( m_strokeFrame->width() * 0.5, m_strokeFrame->height() ) );
 			}
 			break;
 		}
 		case VStroke::patt:
 		{
 			fill.pattern() = s.pattern();
-			fill.pattern().setOrigin( KoPoint( 0, 0 ) );
-			fill.pattern().setVector( KoPoint( m_strokeFrame->width() * 0.5, 0 ) );
+			fill.pattern().setOrigin( QPointF( 0, 0 ) );
+			fill.pattern().setVector( QPointF( m_strokeFrame->width() * 0.5, 0 ) );
 			fill.setType( VFill::patt );
 			m_strokeLabel->setText( i18n( "Stroke: Pattern") );
 			break;
@@ -257,14 +257,14 @@ VSmallPreview::drawStroke( const VStroke &s )
 			// TODO: needs porting
 			// fill.setColor( Qt::white );
 			m_painter->setBrush( fill );
-			m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
+			m_painter->drawRect( QRectF( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
 			// TODO: needs porting
 			// stroke.setColor( Qt::red );
 			stroke.setLineWidth( 2.0 );
 			m_painter->setPen( stroke );
 			m_painter->newPath();
-			m_painter->moveTo( KoPoint( 4, m_strokeFrame->height() - 4 ) );
-			m_painter->lineTo( KoPoint( m_strokeFrame->width() - 4, 4 ) );
+			m_painter->moveTo( QPointF( 4, m_strokeFrame->height() - 4 ) );
+			m_painter->lineTo( QPointF( m_strokeFrame->width() - 4, 4 ) );
 			m_painter->strokePath();
 		}
 	}
@@ -273,7 +273,7 @@ VSmallPreview::drawStroke( const VStroke &s )
 	{
 		m_painter->setPen( stroke );
 		m_painter->setBrush( fill );
-		m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
+		m_painter->drawRect( QRectF( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
 	}
 
 	m_painter->end();

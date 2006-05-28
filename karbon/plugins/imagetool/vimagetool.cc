@@ -81,7 +81,7 @@ VImageTool::mouseButtonRelease()
 	}
 }
 
-VImageTool::VInsertImageCmd::VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, KoPoint pos )
+VImageTool::VInsertImageCmd::VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, QPointF pos )
 	: VCommand( doc, name, "frame_image" ), m_image( image ), m_pos( pos )
 {
 }

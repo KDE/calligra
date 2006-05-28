@@ -21,6 +21,8 @@
 /* vselecttoolbar.cc */
 
 #include <QLabel>
+#include <QPointF>
+#include <QRectF>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -31,7 +33,7 @@
 #include "karbon_part.h"
 #include "vselection.h"
 #include "vtransformcmd.h"
-#include <KoRect.h>
+
 
 VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar( view, name ), m_view( view )
 {
@@ -95,7 +97,7 @@ VSelectToolBar::slotWidthChanged( double newval )
 	if( newval != 0.0 )
 	{
 		double sx = newval / m_view->part()->document().selection()->boundingBox().width();
-		KoPoint sp = m_view->part()->document().selection()->boundingBox().topLeft();
+		QPointF sp = m_view->part()->document().selection()->boundingBox().topLeft();
 		m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, sx, 1.0 ), true );
 	}
 }
@@ -106,7 +108,7 @@ VSelectToolBar::slotHeightChanged( double newval )
 	if( newval != 0.0 )
 	{
 		double sy = newval / m_view->part()->document().selection()->boundingBox().height();
-		KoPoint sp = m_view->part()->document().selection()->boundingBox().bottomLeft();
+		QPointF sp = m_view->part()->document().selection()->boundingBox().bottomLeft();
 		m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, 1.0, sy ), true );
 	}
 }
@@ -118,7 +120,7 @@ VSelectToolBar::slotSelectionChanged()
 	m_y->blockSignals( true );
 	m_width->blockSignals( true );
 	m_height->blockSignals( true );
-	KoRect rect = m_view->part()->document().selection()->boundingBox();
+	QRectF rect = m_view->part()->document().selection()->boundingBox();
 	m_x->setValue( rect.topLeft().x() );
 	m_y->setValue( rect.topLeft().y() );
 	m_width->setValue( rect.width() );

@@ -20,7 +20,6 @@
 #include <qdom.h>
 
 #include <klocale.h>
-#include <KoRect.h>
 
 #include "vcomposite.h"
 #include "vdocument.h"
@@ -64,7 +63,7 @@ DCOPObject* VLayer::dcopObject()
 }
 
 void
-VLayer::draw( VPainter* painter, const KoRect* rect ) const
+VLayer::draw( VPainter* painter, const QRectF* rect ) const
 {
 	if(
 		state() == deleted ||

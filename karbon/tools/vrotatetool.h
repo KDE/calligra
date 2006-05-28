@@ -23,6 +23,7 @@
 #include "vselection.h"
 #include "vtool.h"
 
+class QPointF;
 
 class VRotateTool : public VTool
 {
@@ -50,7 +51,7 @@ protected:
 private:
 	void recalc();
 
-	KoPoint m_center;
+	QPointF m_center;
 	double m_angle;
 
 	VHandleNode m_activeNode;

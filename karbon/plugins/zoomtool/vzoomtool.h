@@ -21,7 +21,7 @@
 #ifndef __VZOOMTOOL_H__
 #define __VZOOMTOOL_H__
 
-#include "KoPoint.h"
+#include <QPointF>
 #include <QString>
 
 #include "vtool.h"
@@ -58,7 +58,7 @@ protected:
 
 	void recalc();
 
-	KoPoint m_current;
+	QPointF m_current;
 
 private:
 	QCursor* m_plusCursor;

@@ -19,6 +19,8 @@
 
 #include <qcursor.h>
 #include <QLabel>
+#include <QRectF>
+#include <QPointF>
 
 #include <klocale.h>
 
@@ -187,14 +189,14 @@ VGradientTool::draw( VPainter* painter )
 	if( ! getGradient( m_gradient ) )
 		return;
 
-	KoPoint s = m_gradient.origin();
-	KoPoint e = m_gradient.vector();
-	KoPoint f = m_gradient.focalPoint();
+	QPointF s = m_gradient.origin();
+	QPointF e = m_gradient.vector();
+	QPointF f = m_gradient.focalPoint();
 
 	// save the handle rects for later inside testing
-	m_origin = KoRect( s.x()-m_handleSize, s.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
-	m_vector = KoRect( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
-	m_center = KoRect( f.x()-m_handleSize, f.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
+	m_origin = QRectF( s.x()-m_handleSize, s.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
+	m_vector = QRectF( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
+	m_center = QRectF( f.x()-m_handleSize, f.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 
 	/* TODO porting required
 	painter->setPen( Qt::blue.light() );
@@ -211,8 +213,8 @@ VGradientTool::draw( VPainter* painter )
 	{
 		// draw the focal point cross
 		double size = (double)m_handleSize / view()->zoom();
-		KoPoint focal = m_center.center();
-		KoRect cross = KoRect( focal.x()-3*size, focal.y()-3*size, 6*size, 6*size );
+		QPointF focal = m_center.center();
+		QRectF cross = QRectF( focal.x()-3*size, focal.y()-3*size, 6*size, 6*size );
 		painter->newPath();
 		painter->moveTo( cross.topLeft() );
 		painter->lineTo( cross.bottomRight() );
@@ -261,7 +263,7 @@ VGradientTool::draw()
 	{
 		// draw the focal point cross
 		double size = (double)m_handleSize / view()->zoom();
-		KoRect cross = KoRect( m_current.x()-3*size, m_current.y()-3*size, 6*size, 6*size );
+		QRectF cross = QRectF( m_current.x()-3*size, m_current.y()-3*size, 6*size, 6*size );
 		painter->moveTo( cross.topLeft() );
 		painter->lineTo( cross.bottomRight() );
 		painter->strokePath();
@@ -362,7 +364,7 @@ VGradientTool::mouseButtonRelease()
 		if( ( ! strokeSelected && obj->fill()->type() != VFill::grad ) 
 		|| ( strokeSelected && obj->stroke()->type() != VStroke::grad ) )
 		{
-			KoRect bbox = obj->boundingBox();
+			QRectF bbox = obj->boundingBox();
 			switch( m_gradient.type() )
 			{
 				case VGradient::linear:

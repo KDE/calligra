@@ -7,6 +7,10 @@
 
 #include "vobject.h"
 #include <koffice_export.h>
+
+#include <QMatrix>
+
+class QRectF;
 class QImage;
 
 // all vobjects exist inside a layer.
@@ -18,9 +22,9 @@ public:
 	VImage( const VImage & );
 	virtual ~VImage();
 
-	virtual void draw( VPainter *painter, const KoRect *rect ) const;
+	virtual void draw( VPainter *painter, const QRectF *rect ) const;
 
-    virtual void transform( const QMatrix& m );
+	virtual void transform( const QMatrix& m );
 	virtual VObject* clone() const;
 
 	virtual void save( QDomElement& element ) const;

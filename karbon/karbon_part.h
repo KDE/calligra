@@ -29,7 +29,7 @@
 #include "koffice_export.h"
 
 class DCOPObject;
-class KoRect;
+class QRectF;
 class QRect;
 class VCommand;
 class VDocument;
@@ -108,7 +108,7 @@ public:
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
-	void repaintAllViews( const KoRect& );
+	void repaintAllViews( const QRectF& );
 	void slotDocumentRestored();
 	void slotCommandExecuted( VCommand * );
 	void slotUnitChanged( KoUnit::Unit unit );

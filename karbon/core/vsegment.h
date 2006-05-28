@@ -22,9 +22,8 @@
 
 #include <q3ptrlist.h>
 #include <q3valuelist.h>
-
-#include <KoPoint.h>
-#include <KoRect.h>
+#include <QPointF>
+#include <QRectF>
 
 #include "vglobal.h"
 #include <koffice_export.h>
@@ -33,7 +32,7 @@ class QDomElement;
 class VPainter;
 
 /**
- * A class representing lines and beziers. We waste some KoPoints, if we
+ * A class representing lines and beziers. We waste some QPointFs, if we
  * would use only lines, but this makes it easy to convert the segment types
  * into each other. Make sure yourself, that you pass values to functions within
  * proper ranges.
@@ -112,7 +111,7 @@ public:
 	/**
 	 * Returns the segment's point with index 0 <= i < degree().
 	 */
-	const KoPoint& point( int i ) const
+	const QPointF& point( int i ) const
 	{
 		return m_nodes[ i ].m_vector;
 	}
@@ -122,7 +121,7 @@ public:
 	 * 0 <= i <= degree() while p( 0 ) is the knot of the previous
 	 * segment.
 	 */
-	const KoPoint& p( int i ) const
+	const QPointF& p( int i ) const
 	{
 		return i == 0
 			   ? prev()->knot()
@@ -132,7 +131,7 @@ public:
 	/**
 	 * Returns the knot. This is a convenience function using point().
 	 */
-	const KoPoint& knot() const
+	const QPointF& knot() const
 	{
 		return point( degree() - 1 );
 	}
@@ -140,7 +139,7 @@ public:
 	/**
 	 * Sets the segment's point with index 0 <= i < degree() to "p".
 	 */
-	void setPoint( int i, const KoPoint& p )
+	void setPoint( int i, const QPointF& p )
 	{
 		m_nodes[ i ].m_vector = p;
 	}
@@ -150,7 +149,7 @@ public:
 	 * 0 <= i <= degree() to "p" while setP( 0 ) sets the knot of the
 	 * previous segment.
 	 */
-	void setP( int i, const KoPoint& p )
+	void setP( int i, const QPointF& p )
 	{
 		if( i == 0 )
 			prev()->setKnot( p );
@@ -161,7 +160,7 @@ public:
 	/**
 	 * Sets the knot. This is a convenience function.
 	 */
-	void setKnot( const KoPoint& p )
+	void setKnot( const QPointF& p )
 	{
 		m_nodes[ degree() - 1 ].m_vector = p;
 	}
@@ -205,7 +204,7 @@ public:
 	 * segment point matches point p.
 	 */
 	// TODO: Move this function into "userland"
-	uint nodeNear( const KoPoint& p,
+	uint nodeNear( const QPointF& p,
 				   double isNearRange = VGlobal::isNearRange ) const;
 
 
@@ -232,14 +231,14 @@ public:
 	 * Calculates the point on this segment at parameter 0 <= t <= 1.
 	 * This is a convenience wrapper for pointDerivativesAt().
 	 */
-	KoPoint pointAt( double t ) const;
+	QPointF pointAt( double t ) const;
 
 	/**
 	 * Calculates the point and the derivatives of first and
 	 * second order for 0 <= t <= 1.
 	 */
-	void pointDerivativesAt( double t, KoPoint* p = 0L,
-							 KoPoint* d1 = 0L, KoPoint* d2 = 0L ) const;
+	void pointDerivativesAt( double t, QPointF* p = 0L,
+							 QPointF* d1 = 0L, QPointF* d2 = 0L ) const;
 
 
 	/**
@@ -249,15 +248,15 @@ public:
 	 * need to calculate the point and normal vector or tangent vector
 	 * at once.
 	 */
-	KoPoint tangentAt( double t ) const;
+	QPointF tangentAt( double t ) const;
 
 	/**
 	 * Calculates the point, the tangent vector and the normal vector for
 	 * 0 <= t <= 1. The tangent vector and the normal vector are
 	 * normalized (length=1).
 	 */
-	void pointTangentNormalAt( double t, KoPoint* p = 0L,
-							   KoPoint* tn = 0L, KoPoint* n = 0L ) const;
+	void pointTangentNormalAt( double t, QPointF* p = 0L,
+							   QPointF* tn = 0L, QPointF* n = 0L ) const;
 
 
 	/**
@@ -289,7 +288,7 @@ public:
 	 * Calculates the parameter of the nearest point on this segment
 	 * to the point p. This function is pretty expensive.
 	 */
-	double nearestPointParam( const KoPoint& p ) const;
+	double nearestPointParam( const QPointF& p ) const;
 
 
 	/**
@@ -327,19 +326,19 @@ public:
 	 * Calculates height of point p above line AB.
 	 */
 	static double height(
-		const KoPoint& a,
-		const KoPoint& p,
-		const KoPoint& b );
+		const QPointF& a,
+		const QPointF& p,
+		const QPointF& b );
 
 
 	/**
 	 * Calculates whether lines A0A1 and B0B1 intersect.
 	 */
 	static bool linesIntersect(
-		const KoPoint& a0,
-		const KoPoint& a1,
-		const KoPoint& b0,
-		const KoPoint& b1 );
+		const QPointF& a0,
+		const QPointF& a1,
+		const QPointF& b0,
+		const QPointF& b1 );
 
 	/**
 	 * Returns true, if this segment intersects the other segment.
@@ -352,7 +351,7 @@ public:
 	 * a number < 0 if it's right of the infinite line through the
 	 * previous segment's knot and the current knot.
 	 */
-	double pointIsLeft( const KoPoint& p ) const
+	double pointIsLeft( const QPointF& p ) const
 	{
 		return
 			( knot().x() - prev()->knot().x() ) *
@@ -365,7 +364,7 @@ public:
 	/**
 	 * Calculates the bounding box.
 	 */
-	KoRect boundingBox() const;
+	QRectF boundingBox() const;
 
 
 	void draw( VPainter* painter ) const;
@@ -407,7 +406,7 @@ private:
 	 */
 	struct VNodeData
 	{
-		KoPoint m_vector;
+		QPointF m_vector;
 		bool m_isSelected;
 	};
 

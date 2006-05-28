@@ -20,6 +20,7 @@
 
 #include <qcursor.h>
 #include <qevent.h>
+#include <QRectF>
 
 #include <klocale.h>
 
@@ -86,11 +87,11 @@ VZoomTool::draw()
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
 /* TODO lineto and moveto need porting
-		painter->moveTo( KoPoint( first().x(), first().y() ) );
-		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
-		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), first().y() ) );
+		painter->moveTo( QPointF( first().x(), first().y() ) );
+		painter->lineTo( QPointF( m_current.x(), first().y() ) );
+		painter->lineTo( QPointF( m_current.x(), m_current.y() ) );
+		painter->lineTo( QPointF( first().x(), m_current.y() ) );
+		painter->lineTo( QPointF( first().x(), first().y() ) );
 */
 		painter->strokePath();
 	}
@@ -131,8 +132,8 @@ VZoomTool::mouseDrag()
 void
 VZoomTool::mouseDragRelease()
 {
-	KoRect rect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() );
-	rect = rect.normalize();
+	QRectF rect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() );
+	rect = rect.normalized();
 	view()->setViewportRect( rect );
 }
 

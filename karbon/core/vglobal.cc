@@ -88,3 +88,21 @@ VGlobal::gammaLn( double x )
 	return -tmp + log( 2.5066282746310005 * ser / x );
 }
 
+QPointF VGlobal::transformPoint(const QPointF &p, const QMatrix &m)
+{
+	double x, y;
+	m.map(p.x(), p.y(), &x, &y);
+	return QPointF(x, y);
+}
+
+double VGlobal::multiplyPoints(const QPointF &p1, const QPointF &p2)
+{
+	return p1.x() * p2.x() + p1.y() * p2.y();
+}
+
+bool VGlobal::pointsAreNear(const QPointF &p1, const QPointF &p2, double range)
+{
+	return (p2.x() >= p1.x() - range && p2.x() <= p1.x() + range && p2.y() >= p1.y() - range && p2.y() <= p1.y() + range);
+}
+
+

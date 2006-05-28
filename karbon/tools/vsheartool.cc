@@ -23,7 +23,7 @@
 #include <QLabel>
 
 #include <klocale.h>
-#include <KoRect.h>
+#include <QRectF>
 
 #include <karbon_part.h>
 #include <karbon_view.h>
@@ -147,7 +147,7 @@ VShearTool::cancel()
 void
 VShearTool::recalc()
 {
-	KoRect rect = view()->part()->document().selection()->boundingBox();
+	QRectF rect = view()->part()->document().selection()->boundingBox();
 
 	if( m_activeNode == node_lt )
 	{

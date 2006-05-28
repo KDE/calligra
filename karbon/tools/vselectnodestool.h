@@ -22,6 +22,9 @@
 
 #include "vtool.h"
 
+class QPointF;
+class QRectF;
+
 class VSelectNodesTool : public VTool
 {
 public:
@@ -57,12 +60,12 @@ private:
 
 	void recalc();
 
-	KoRect calcSelRect( const KoPoint &pos ) const;
+	QRectF calcSelRect( const QPointF &pos ) const;
 
 	// A list of temporary objects:
 	VObjectList m_objects;
 
-	KoPoint m_current;
+	QPointF m_current;
 
 	bool m_select;
 };

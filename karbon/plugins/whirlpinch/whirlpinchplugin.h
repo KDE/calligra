@@ -24,6 +24,8 @@
 #include <kparts/plugin.h>
 #include <commands/vcommand.h>
 
+#include <QPointF>
+
 class KarbonView;
 class VWhirlPinchDlg;
 
@@ -83,7 +85,7 @@ public:
 protected:
 	VSelection* m_selection;
 
-	KoPoint m_center;
+	QPointF m_center;
 	double m_angle;
 	double m_pinch;
 	double m_radius;

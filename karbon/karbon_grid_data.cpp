@@ -24,8 +24,8 @@
 KarbonGridData::KarbonGridData()
 {
 	color = QColor( 228, 228, 228 );
-	freq = KoSize( 20, 20 );
-	snap = KoSize( 20, 20 );
+	freq = QSizeF( 20, 20 );
+	snap = QSizeF( 20, 20 );
 	isSnap = false;
 	isShow = false;
 }
@@ -45,8 +45,8 @@ void KarbonGridData::save(QDomElement& /*element*/, const QString& /*name*/)
 
 void KarbonGridData::load(const QDomElement& /*element*/, const QString& /*name*/)
 {
-/*  KoSize sdef;
-  sdef = KoSize(10.0, 10.0);
+/*  QSizeF sdef;
+  sdef = QSizeF(10.0, 10.0);
   freq = Karbon::loadSize(element, name + "Freg", sdef);
   snap = Karbon::loadSize(element, name + "Snap", sdef);
 

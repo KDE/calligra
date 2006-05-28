@@ -36,7 +36,7 @@ VRectangle::VRectangle( VObject* parent, VState state )
 }
 
 VRectangle::VRectangle( VObject* parent,
-		const KoPoint& topLeft, double width, double height, double rx, double ry )
+		const QPointF& topLeft, double width, double height, double rx, double ry )
 	: VPath( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_rx( rx ), m_ry( ry )
 {
 	setDrawCenterNode();
@@ -58,9 +58,9 @@ VRectangle::init()
 	if( m_rx == 0 && m_ry == 0 )
 	{
 		moveTo( m_topLeft );
-		lineTo( KoPoint( m_topLeft.x(), m_topLeft.y() - m_height ) );
-		lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() - m_height ) );
-		lineTo( KoPoint( m_topLeft.x() + m_width, m_topLeft.y() ) );
+		lineTo( QPointF( m_topLeft.x(), m_topLeft.y() - m_height ) );
+		lineTo( QPointF( m_topLeft.x() + m_width, m_topLeft.y() - m_height ) );
+		lineTo( QPointF( m_topLeft.x() + m_width, m_topLeft.y() ) );
 	}
 	else
 	{
@@ -68,27 +68,27 @@ VRectangle::init()
 		double ry = m_ry;
 		double x = m_topLeft.x();
 		double y = m_topLeft.y();
-		moveTo( KoPoint( x + rx, y ) );
-		curveTo( KoPoint( x + rx * ( 1 - 0.552 ), y ),
-				 KoPoint( x, y - ry * ( 1 - 0.552 ) ),
-				 KoPoint( x, y - ry ) );
+		moveTo( QPointF( x + rx, y ) );
+		curveTo( QPointF( x + rx * ( 1 - 0.552 ), y ),
+				 QPointF( x, y - ry * ( 1 - 0.552 ) ),
+				 QPointF( x, y - ry ) );
 		if( ry < m_height / 2 )
-		 	lineTo( KoPoint( x, y - m_height + ry ) );
-		curveTo( KoPoint( x, y - m_height + ry * ( 1 - 0.552 ) ),
-				 KoPoint( x + rx * ( 1 - 0.552 ), y - m_height ),
-				 KoPoint( x + rx, y - m_height ) );
+		 	lineTo( QPointF( x, y - m_height + ry ) );
+		curveTo( QPointF( x, y - m_height + ry * ( 1 - 0.552 ) ),
+				 QPointF( x + rx * ( 1 - 0.552 ), y - m_height ),
+				 QPointF( x + rx, y - m_height ) );
 		if( rx < m_width / 2 )
-		 	lineTo( KoPoint( x + m_width - rx, y - m_height ) );
-		curveTo( KoPoint( x + m_width - rx * ( 1 - 0.552 ), y - m_height ),
-				 KoPoint( x + m_width, y - m_height + ry * ( 1 - 0.552 ) ),
-				 KoPoint( x + m_width, y - m_height + ry ) );
+		 	lineTo( QPointF( x + m_width - rx, y - m_height ) );
+		curveTo( QPointF( x + m_width - rx * ( 1 - 0.552 ), y - m_height ),
+				 QPointF( x + m_width, y - m_height + ry * ( 1 - 0.552 ) ),
+				 QPointF( x + m_width, y - m_height + ry ) );
 		if( ry < m_height / 2 )
-			lineTo( KoPoint( x + m_width, y - ry ) );
-		curveTo( KoPoint( x + m_width, y - ry * ( 1 - 0.552 ) ),
-				 KoPoint( x + m_width - rx * ( 1 - 0.552 ), y ),
-				 KoPoint( x + m_width - rx, y ) );
+			lineTo( QPointF( x + m_width, y - ry ) );
+		curveTo( QPointF( x + m_width, y - ry * ( 1 - 0.552 ) ),
+				 QPointF( x + m_width - rx * ( 1 - 0.552 ), y ),
+				 QPointF( x + m_width - rx, y ) );
 		if( rx < m_width / 2 )
-		 	lineTo( KoPoint( x + rx, y ) );
+		 	lineTo( QPointF( x + rx, y ) );
 	}
 	close();
 }
