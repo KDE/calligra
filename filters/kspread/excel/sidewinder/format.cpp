@@ -38,13 +38,17 @@ public:
   UString fontFamily;
   double fontSize;
   Color color;
+
+  static UString defaultFont;
 };
+
+UString FormatFont::Private::defaultFont("Arial");
 
 FormatFont::FormatFont()
 {
   d = new FormatFont::Private();
   d->null        = true;
-  d->fontFamily  = "Arial";
+  d->fontFamily  = Private::defaultFont;
   d->fontSize    = 11;
   d->bold        = false;
   d->italic      = false;
