@@ -100,21 +100,28 @@ static inline double readFloat64( const void*p )
 // RK value is special encoded integer or floating-point
 // see any documentation of Excel file format for detail description
 static inline void decodeRK( unsigned rkvalue, bool& isInteger,
-  int& i, double& f )
+  int& intResult, double& floatResult )
 {
-  double factor = (rkvalue & 0x01) ? 0.01 : 1;
-  if( rkvalue & 0x02 )
+  bool div100 = rkvalue & 0x01;
+  isInteger = rkvalue & 0x02;
+
+  if( isInteger )
   {
     // FIXME check that int is 32 bits ?
-    isInteger = true;
-    i = (int)(factor * (*((int*) &rkvalue) >> 2) );
+    intResult = *((int*) &rkvalue) >> 2;
+
+    // divide by 100, fall to floating-point
+    if(div100)
+    {
+      isInteger = false;
+      floatResult = (double)intResult / 100.0;
+    }
   }
   else
   {
     // TODO ensure double takes 8 bytes
-    isInteger = false;
     unsigned char* s = (unsigned char*) &rkvalue;
-    unsigned char* r = (unsigned char*) &f;
+    unsigned char* r = (unsigned char*) &floatResult;
     if( isLittleEndian() )
     {
       r[0] = r[1] = r[2] = r[3] = 0;
@@ -127,8 +134,10 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
       r[4] = s[0] & 0xfc;
       r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
     }  
-    memcpy( &f, r, 8 );
-    f *= factor;
+    memcpy( &floatResult, r, 8 );
+
+    if( div100 )
+      floatResult *= 0.01;
   }
 }
 
