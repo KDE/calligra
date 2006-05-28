@@ -3149,7 +3149,7 @@ QString KDChartParams::legendPositionToString( LegendPosition pos ) {
         case LegendBottomLeft:
             return "LegendBottomLeft";
         case LegendBottomLeftBottom:
-            return "LegendBottomLeftTop";
+            return "LegendBottomLeftBottom";
         case LegendBottomLeftLeft:
             return "LegendBottomLeftLeft";
         case LegendTopRight:
@@ -3161,7 +3161,7 @@ QString KDChartParams::legendPositionToString( LegendPosition pos ) {
         case LegendBottomRight:
             return "LegendBottomRight";
         case LegendBottomRightBottom:
-            return "LegendBottomRightTop";
+            return "LegendBottomRightBottom";
         case LegendBottomRightRight:
             return "LegendBottomRightRight";
         default: // should not happen
