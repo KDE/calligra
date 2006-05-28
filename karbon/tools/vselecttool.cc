@@ -430,10 +430,11 @@ VSelectTool::updateStatusBar() const
 		double b = KoUnit::toUserValue( rect.bottom(), view()->part()->unit() );
 
 		// print bottom-left (%1,%2), top-right (%3,%4) corner of selection bounding box and document unit (%5)
-		
-		// TODO: i18n needs porting
-QString selectMessage = "";
-		//QString selectMessage = i18n( "[(left,bottom), (right,top)] (actual unit)", "Selection [(%1, %2), (%3, %4)] (%5)", ( x, 0, 'f', 1 ), ( y, 0, 'f', 1 ), ( r, 0, 'f', 1 ), ( b, 0, 'f', 1 ), ( view()->part()->unitName() ) );
+		QString selectMessage = i18nc( "[(left,bottom), (right,top)] (actual unit)", 
+			"Selection [(%1, %2), (%3, %4)] (%5)", 
+			QString::number( x, 'f', 1 ), QString::number( y, 'f', 1 ), 
+			QString::number( r, 'f', 1 ), QString::number( b, 'f', 1 ), 
+			view()->part()->unitName() );
 
 		VSelectionDescription selectionDesc;
 		selectionDesc.visit( *view()->part()->document().selection() );

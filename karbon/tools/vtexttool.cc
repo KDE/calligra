@@ -398,14 +398,13 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	m_convertToShapes->setEnabled( true );
 
-	/* TODO i18 needs porting
-	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Left") );
-	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Center") );
-	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Right") );
+	m_textAlignment->insertItem( i18nc( "Horizontal alignment", "Left") );
+	m_textAlignment->insertItem( i18nc( "Horizontal alignment", "Center") );
+	m_textAlignment->insertItem( i18nc( "Horizontal alignment", "Right") );
 
-	m_textPosition->insertItem( i18n( "Vertical alignment", "Above") );
-	m_textPosition->insertItem( i18n( "Vertical alignment", "On") );
-	m_textPosition->insertItem( i18n( "Vertical alignment", "Under") );*/
+	m_textPosition->insertItem( i18nc( "Vertical alignment", "Above") );
+	m_textPosition->insertItem( i18nc( "Vertical alignment", "On") );
+	m_textPosition->insertItem( i18nc( "Vertical alignment", "Under") );
 
 	m_textOffset->setRange( 0.0, 100.0, 1.0, true );
 
