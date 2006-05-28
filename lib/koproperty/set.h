@@ -31,9 +31,6 @@ namespace KoProperty {
 class Property;
 class SetPrivate;
 
-typedef QMap<QCString, QValueList<QCString> > StringListMap ;
-typedef QMapIterator<QCString, QStringList> StringListMapIterator;
-
 /*! \brief Lists holding properties in groups
 
    \author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -139,14 +136,31 @@ class KOPROPERTY_EXPORT Set : public QObject
 		By default, it only calls Property::setValue(). */
 		void changeProperty(const QCString &property, const QVariant &value);
 
-		/*! Sets the i18n'ed string that will be shown in Editor to represent this group. */
-		void setGroupDescription(const QCString &group, const QString desc);
+		/*! Sets the i18n'ed string that will be shown in Editor to represent 
+		 \a group. */
+		void setGroupDescription(const QCString &group, const QString& desc);
 
-		QString groupDescription(const QCString &group);
+		/*! \return the i18n'ed description string for \a group that will 
+		 be shown in Editor to represent \a group. If there is no special 
+		 description set for the group, \a group is just returned. */
+		QString groupDescription(const QCString &group) const;
 
-		const StringListMap& groups();
+		/*! Sets the icon name \a icon to be displayed for \a group. */
+		void setGroupIcon(const QCString &group, const QString& icon);
 
-		/*! Used by property editor to preserve previous selection when this set is assigned again. */
+		/*! \return the icons name for \a group. */
+		QString groupIcon(const QCString &group) const;
+
+		/*! \return a list of all group names. The order is the same as the order 
+		 of creation. */
+		const QValueList<QCString>& groupNames() const;
+
+		/*! \return a list of all property names. The order is the same as the order 
+		 of creation. */
+		const QValueList<QCString>& propertyNamesForGroup(const QCString &group) const;
+
+		/*! Used by property editor to preserve previous selection when this set 
+		 is assigned again. */
 		QCString prevSelection() const;
 
 		void setPrevSelection(const QCString& prevSelection);
@@ -159,6 +173,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		 For comparing purposes, type names are case insensitive.*/
 		QString typeName() const;
 
+		/*! Prints debug output for this set. */
 		void debug();
 
 	protected:

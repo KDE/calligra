@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -170,7 +170,8 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	connect(this, SIGNAL(expanded(QListViewItem *)), this, SLOT(slotExpanded(QListViewItem *)));
 	connect(this, SIGNAL(collapsed(QListViewItem *)), this, SLOT(slotCollapsed(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
-	connect(header(), SIGNAL(clicked(int)), this, SLOT(updateEditorGeometry()));
+//	connect(header(), SIGNAL(clicked(int)), this, SLOT(updateEditorGeometry()));
+//	connect(header(), SIGNAL(clicked(int)), this, SLOT(updateEditorGeometryAndGroupLabels()));
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
 }
 
@@ -198,29 +199,36 @@ Editor::fill()
 
 	d->topItem = new EditorDummyItem(this);
 
-//	int i = 0;
-	StringListMap map = d->set->groups();
-//	kopropertydbg << "Editor::fill(): groups = " << map.count() << endl;
-	if(map.count() == 1) { // one group (default one), so don't show groups
-//		EditorGroupItem *hiddenGroupItem = new EditorGroupItem(d->topItem, "");
-
-		QValueList<QCString> props = map.begin().data();
-		QValueList<QCString>::ConstIterator it = props.constBegin();
-		for( ; it != props.constEnd(); ++it)
+	const QValueList<QCString> groupNames = d->set->groupNames();
+//	kopropertydbg << "Editor::fill(): group names = " << groupNames.count() << endl;
+	if(groupNames.count() == 1) { // one group (default one), so don't show groups
+		//add flat set of properties
+		const QValueList<QCString>& propertyNames = d->set->propertyNamesForGroup( groupNames.first() );
+		QValueListConstIterator<QCString> it = propertyNames.constBegin();
+		for( ; it != propertyNames.constEnd(); ++it)
 			addItem(*it, d->topItem);
+	}
+	else { // create a groupItem for each group
+		EditorGroupItem *prevGroupItem = 0;
+		int sortOrder = 0;
+		for (QValueListConstIterator<QCString> it = groupNames.constBegin(); it!=groupNames.constEnd(); 
+			++it, sortOrder++) 
+		{
+			const QValueList<QCString>& propertyNames = d->set->propertyNamesForGroup(*it);
+			EditorGroupItem *groupItem;
+			if (prevGroupItem)
+				groupItem = new EditorGroupItem(d->topItem, prevGroupItem, 
+					d->set->groupDescription(*it), d->set->groupIcon(*it), sortOrder );
+			else
+				groupItem = new EditorGroupItem(d->topItem, 
+					d->set->groupDescription(*it), d->set->groupIcon(*it), sortOrder );
 
-	} else { // else create a groupItem for each group
-		StringListMap::ConstIterator it = map.constBegin();
-		for( ; it != map.constEnd(); ++it) {
-			EditorGroupItem *groupItem = 0;
-			if(!it.key().isEmpty() && !it.data().isEmpty() && map.count() > 1)
-				groupItem = new EditorGroupItem(d->topItem, d->set->groupDescription(it.key()) );
-
-			QValueList<QCString>::ConstIterator it2 = it.data().constBegin();
-			for( ; it2 != it.data().constEnd(); ++it2)
+			QValueList<QCString>::ConstIterator it2 = propertyNames.constBegin();
+			for( ; it2 != propertyNames.constEnd(); ++it2)
 				addItem(*it2, groupItem);
-		}
 
+			prevGroupItem = groupItem;
+		}
 	}
 
 //	repaint();
@@ -751,6 +759,8 @@ Editor::slotExpanded(QListViewItem *item)
 	}
 	updateEditorGeometry();
 	updateGroupLabelsPosition();
+	repaintContents();
+	repaint();
 }
 
 void
@@ -773,6 +783,8 @@ Editor::slotCollapsed(QListViewItem *item)
 	}
 	updateEditorGeometry();
 	updateGroupLabelsPosition();
+	repaintContents();
+	repaint();
 }
 
 void
@@ -781,7 +793,6 @@ Editor::slotColumnSizeChanged(int section, int oldSize, int newSize)
 	Q_UNUSED(section);
 	Q_UNUSED(oldSize);
 	Q_UNUSED(newSize);
-	updateEditorGeometry();
 	/*for (QListViewItemIterator it(this); it.current(); ++it) {
 		if (section == 0 && dynamic_cast<EditorGroupItem*>(it.current())) {
 			it.current()->repaint();
@@ -800,6 +811,9 @@ Editor::slotColumnSizeChanged(int section, int oldSize, int newSize)
 					d->currentWidget->height());
 		}
 	}*/
+//	repaintContents();
+//	repaint();
+	updateEditorGeometry();
 	update();
 }
 
@@ -965,6 +979,18 @@ Editor::contentsMousePressEvent( QMouseEvent * e )
 		return;
 	}
 	KListView::contentsMousePressEvent(e);
+}
+
+void
+Editor::setSorting( int column, bool ascending )
+{
+	if (d->set && d->set->groupNames().count()>1) //do not sort when groups are present (maybe reenable this later?)
+		return;
+	KListView::setSorting( column, ascending );
+	updateEditorGeometry();
+	updateGroupLabelsPosition();
+	repaintContents();
+	repaint();
 }
 
 #include "editor.moc"
