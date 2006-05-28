@@ -3043,8 +3043,12 @@ void KWView::updateZoomControls()
     }
 }
 
+static bool hackZoom = false;
 void KWView::changeZoomMenu( int zoom )
 {
+if(hackZoom)
+    return;
+hackZoom=true;
     QString mode;
     if ( m_gui && m_gui->canvasWidget() && viewMode())
         mode = viewMode()->type();
@@ -5680,7 +5684,7 @@ void KWView::spellCheckerRemoveHighlight()
             textdoc->textFrameSet()->removeHighlight();
     }
     KWTextFrameSetEdit * edit = currentTextEdit();
-    if (edit)
+    if (false && edit)
         edit->drawCursor( true );
 }
 
