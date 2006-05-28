@@ -173,6 +173,7 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 //	connect(header(), SIGNAL(clicked(int)), this, SLOT(updateEditorGeometry()));
 //	connect(header(), SIGNAL(clicked(int)), this, SLOT(updateEditorGeometryAndGroupLabels()));
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
+	updateGroupLabelsPosition();
 }
 
 Editor::~Editor()

@@ -3,7 +3,7 @@ INCLUDES = -I$(srcdir)/editors -I$(top_srcdir)/lib/kofficecore $(all_includes)
 lib_LTLIBRARIES =  libkoproperty.la
 
 libkoproperty_la_LIBADD = $(LIB_KDEUI) ./editors/libkopropertyeditors.la
-libkoproperty_la_LDFLAGS = -no-undefined $(all_libraries)
+libkoproperty_la_LDFLAGS = -no-undefined $(all_libraries) -version-info 2:0:0
 libkoproperty_la_SOURCES = property.cpp customproperty.cpp set.cpp editor.cpp \
 	editoritem.cpp factory.cpp widget.cpp
 
