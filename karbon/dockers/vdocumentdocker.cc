@@ -203,7 +203,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 	{
 		QPainter p( &pixmap );
 		p.setMatrix( QMatrix( scaleFactor, 0, 0, -scaleFactor, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
-		p.setPen( Qt::red );
+		p.setPen( QColor( "red" ) );
 		double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
 		double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
 		QPointF p1( dx / scaleFactor, dy / scaleFactor );
@@ -357,7 +357,7 @@ VObjectListViewItem::update()
 	m_object->draw( &p );
 	p.setZoomFactor( 1 );
 	p.setMatrix( QMatrix() );
-	p.setPen( Qt::black );
+	p.setPen( QColor( "black" ) );
 	p.setBrush( Qt::NoBrush );
 	p.drawRect( QRectF( 0, 0, 16, 16 ) );
 	p.end();
@@ -410,7 +410,7 @@ VLayerListViewItem::update()
 	m_layer->draw( &p );
 	p.setZoomFactor( 1 );
 	p.setMatrix( QMatrix() );
-	p.setPen( Qt::black );
+	p.setPen( QColor( "black" ) );
 	p.setBrush( Qt::NoBrush );
 	p.drawRect( QRectF( 0, 0, 16, 16 ) );
 	p.end();

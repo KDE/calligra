@@ -198,9 +198,10 @@ VGradientTool::draw( VPainter* painter )
 	m_vector = QRectF( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 	m_center = QRectF( f.x()-m_handleSize, f.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 
+	QColor lightBlue = QColor( "blue" ).light();
+	painter->setPen( lightBlue );
+	painter->setBrush( lightBlue );
 	/* TODO porting required
-	painter->setPen( Qt::blue.light() );
-	painter->setBrush( Qt::blue.light() );
 	painter->setRasterOp( Qt::XorROP );*/
 
 	// draw the gradient vector

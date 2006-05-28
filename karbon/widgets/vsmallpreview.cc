@@ -98,8 +98,7 @@ VSmallPreview::drawFill( const VFill &f )
 
 	m_painter->begin();
 	m_painter->setPen( Qt::NoPen );
-	// TODO: needs porting:
-	// fill.setColor( Qt::white );
+	fill.setColor( QColor( "white" ) );
 	m_painter->setBrush( fill );
 	m_painter->drawRect( QRectF( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
 	
@@ -155,12 +154,10 @@ VSmallPreview::drawFill( const VFill &f )
 		default: //None or unknown
 		{
 			m_fillLabel->setText( i18n( "Fill: None") );
-			// TODO: needs porting
-			// fill.setColor( Qt::white );
+			fill.setColor( QColor( "white" ) );
 			m_painter->setBrush( fill );
 			m_painter->drawRect( QRectF( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
-			// TODO: needs porting
-			// stroke.setColor( Qt::red );
+			stroke.setColor( QColor( "red" ) );
 			stroke.setLineWidth( 2.0 );
 			m_painter->setPen( stroke );
 			m_painter->newPath();
@@ -197,8 +194,7 @@ VSmallPreview::drawStroke( const VStroke &s )
 
 	m_painter->begin();
 	m_painter->setPen( Qt::NoPen );
-	// TODO: needs porting
-	// fill.setColor( Qt::white );
+	fill.setColor( QColor( "white" ) );
 	m_painter->setBrush( fill );
 	m_painter->drawRect( QRectF( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
 	
@@ -254,12 +250,10 @@ VSmallPreview::drawStroke( const VStroke &s )
 		default: //None or unknown
 		{
 			m_strokeLabel->setText( i18n( "Stroke: None") );
-			// TODO: needs porting
-			// fill.setColor( Qt::white );
+			fill.setColor( QColor( "white" ) );
 			m_painter->setBrush( fill );
 			m_painter->drawRect( QRectF( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
-			// TODO: needs porting
-			// stroke.setColor( Qt::red );
+			stroke.setColor( QColor( "red" ) );
 			stroke.setLineWidth( 2.0 );
 			m_painter->setPen( stroke );
 			m_painter->newPath();

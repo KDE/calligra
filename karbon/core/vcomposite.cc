@@ -124,7 +124,7 @@ VPath::draw( VPainter* painter, const QRectF *rect ) const
 				painter->newPath();
 				// TODO: needs porting to Qt4
 				// painter->setRasterOp( Qt::XorROP );
-				painter->setPen( Qt::yellow );
+				painter->setPen( QColor( "yellow" ) );
 				painter->setBrush( Qt::NoBrush );
 
 				VSubpathIterator jtr( *( itr.current() ) );

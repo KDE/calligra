@@ -86,7 +86,7 @@ VImage::draw( VPainter *painter, const QRectF * ) const
 		// painter->setRasterOp( Qt::XorROP );
 
 		//painter->setPen( stroke() );
-		painter->setPen( Qt::yellow );
+		painter->setPen( QColor( "yellow" ) );
 		painter->setBrush( Qt::NoBrush );
 		painter->strokePath();
 		return;

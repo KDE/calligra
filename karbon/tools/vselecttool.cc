@@ -411,6 +411,8 @@ VSelectTool::keyReleased( Qt::Key key )
 void
 VSelectTool::updateStatusBar() const
 {
+	kDebug() << k_funcinfo << endl;
+
 	if( ! view() ) 
 		return;
 

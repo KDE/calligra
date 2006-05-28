@@ -244,7 +244,7 @@ VText::draw( VPainter* painter, const QRectF* /*rect*/ ) const
 		painter->newPath();
 		// TODO: Needs porting to Qt4
 		// painter->setRasterOp( Qt::XorROP );
-		painter->setPen( Qt::yellow );
+		painter->setPen( QColor( "yellow" ) );
 		painter->setBrush( Qt::NoBrush );
 
 		for( itr.toFirst(); itr.current(); ++itr )

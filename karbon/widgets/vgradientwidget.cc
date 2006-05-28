@@ -82,7 +82,7 @@ void VGradientWidget::paintColorStop( QPainter& p, int x, VColor& color )
 
 	bitmap = QBitmap( colorStopBorder_width, colorStopBorder_height, colorStopBorder_bits, true );
 	bitmap.setMask( bitmap );
-	p.setPen( Qt::black );
+	p.setPen( QColor( "black" ) );
 	p.drawPixmap( x - 5, 1, bitmap );
 } // VGradientWidget::paintColorStop
 
@@ -90,7 +90,7 @@ void VGradientWidget::paintMidPoint( QPainter& p, int x )
 {
 	QBitmap bitmap( midPoint_width, midPoint_height, midPoint_bits, true );
 	bitmap.setMask( bitmap );
-	p.setPen( Qt::black );
+	p.setPen( QColor( "black" ) );
 	p.drawPixmap( x - 3, 1, bitmap );
 } // VGradientWidget::paintMidPoint
 

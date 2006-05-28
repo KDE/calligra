@@ -207,7 +207,7 @@ ShadowPreview::paintEvent( QPaintEvent* )
 	painter.moveTo( width() - 2, 2 );
 	painter.lineTo( width() - 2, height() - 2 );
 	painter.lineTo( 2, height() - 2 );
-	painter.setPen( Qt::black );
+	painter.setPen( QColor( "black" ) );
 	painter.drawLine( width() / 2 - 2, height() / 2, width() / 2 + 2, height() / 2 );
 	painter.drawLine( width() / 2, height() / 2 - 2, width() / 2, height() / 2 + 2 );*/
 }

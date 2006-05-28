@@ -67,7 +67,7 @@ VDocument::~VDocument()
 void
 VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins ) const
 {
-	p->setPen( Qt::black );
+	p->setPen( QColor( "black" ) );
 	p->setBrush( Qt::white );
 	p->drawRect( 0, 0, m_width, m_height );
 

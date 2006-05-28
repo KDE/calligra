@@ -243,23 +243,21 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 
 	if( !m_showhandle ) return;
 
-	// draw handle rect:
+	QColor lightBlue = QColor( "blue" ).light();
 
-	// TODO: needs porting to Qt4
-	// painter->setPen( Qt::blue.light() );
+	// draw handle rect:
+	painter->setPen( lightBlue );
 	painter->setBrush( Qt::NoBrush );
 
 	painter->drawRect( QRectF( m_handleRect[ 0 ].x() * zoomFactor, m_handleRect[ 0 ].y() * zoomFactor,
 							  m_handleRect[ 0 ].width() * zoomFactor, m_handleRect[ 0 ].height() * zoomFactor ) );
 	
-	// TODO: needs porting to Qt4
-	// painter->setPen( Qt::blue.light() );
+	painter->setPen( lightBlue );
 
 	// draw nodes:
 	if( state() == VObject::selected )
 	{
-		// TODO: needs porting to Qt4
-		// painter->setPen( Qt::blue.light() );
+		painter->setPen( lightBlue );
 		painter->setBrush( Qt::white );
 
 		QRectF temp;

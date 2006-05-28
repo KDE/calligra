@@ -253,8 +253,7 @@ VStrokeFillPreview::drawFill( const VFill &f )
 	else
 	{
 		VFill fill;
-		// Needs porting:
-		// fill.setColor( Qt::white );
+		fill.setColor( QColor( "white" ) );
 		m_painter->setBrush( fill );
 		m_painter->setPen( Qt::NoPen );
 
@@ -289,8 +288,7 @@ VStrokeFillPreview::drawFill( const VFill &f )
 
 	if( f.type() == VFill::none )
 	{
-		// Needs porting:
-		// stroke.setColor( Qt::red );
+		stroke.setColor( QColor( "red" ) );
 		m_painter->setPen( stroke );
 		m_painter->newPath();
 		m_painter->moveTo( QPointF( FILL_BOTTOMX, FILL_TOPY ) );
@@ -365,8 +363,7 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 	{
 		VFill fill;
 		m_painter->setFillRule( evenOdd );
-		// Needs porting:
-		// fill.setColor( Qt::white );
+		fill.setColor( QColor( "white" ) );
 
 		m_painter->setBrush( fill );
 		m_painter->setPen( Qt::NoPen );
@@ -410,8 +407,8 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 	m_painter->lineTo( QPointF( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
 	m_painter->strokePath();
 
-	//stroke.setColor( Qt::black.rgb() );
-	//m_painter->setPen( stroke );
+	stroke.setColor( QColor( "black" ) );
+	m_painter->setPen( stroke );
 	m_painter->newPath();
 	m_painter->moveTo( QPointF( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
 	m_painter->lineTo( QPointF( STROKE_TOPX_INNER + 1, STROKE_TOPY_INNER + 1 ) );
@@ -430,8 +427,7 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 
 	if( s.type() == VStroke::none )
 	{
-		// Needs porting:
-		// stroke.setColor( Qt::red );
+		stroke.setColor( QColor( "red" ) );
 		m_painter->setPen( stroke );
 
 		m_painter->newPath();

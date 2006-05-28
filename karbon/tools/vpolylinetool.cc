@@ -182,7 +182,7 @@ VPolylineTool::drawBezierVector( QPointF& start, QPointF& end )
 	// TODO: rasterops need porting
 	// painter->setRasterOp( Qt::NotROP );
 	painter->newPath();
-/*  VStroke stroke( Qt::blue, 0L, 1.0 );
+/*  VStroke stroke( QColor( "blue" ), 0L, 1.0 );
 	QValueList<float> array;
 	array << 2.0 << 3.0;
 	stroke.dashPattern().setArray( array );*/
@@ -195,7 +195,7 @@ VPolylineTool::drawBezierVector( QPointF& start, QPointF& end )
 	// TODO: rasterops need porting
 	// painter->setRasterOp( Qt::XorROP );
 	painter->newPath();
-	painter->setPen( Qt::yellow );
+	painter->setPen( QColor( "yellow" ) );
 
 	float width = 2.0;
 

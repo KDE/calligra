@@ -43,6 +43,9 @@ VDrawSelection::visitVPath( VPath &composite )
 
 	const bool editnodes = composite.state() == VObject::edit && m_nodeediting;
 
+	QColor yellow( "yellow" );
+	QColor blue( "blue" );
+
 	VSubpathListIterator itr( composite.paths() );
 
 	if(
@@ -57,7 +60,7 @@ VDrawSelection::visitVPath( VPath &composite )
 			m_painter->setRasterOp( Qt::XorROP );
 		*/
 
-		m_painter->setPen( editnodes ? Qt::yellow : Qt::blue );
+		m_painter->setPen( editnodes ? yellow : blue );
 		m_painter->setBrush( Qt::NoBrush );
 
 		for( itr.toFirst(); itr.current(); ++itr )
@@ -104,10 +107,10 @@ VDrawSelection::visitVPath( VPath &composite )
 				if( !editnodes )
 				{
 					m_painter->setPen( stroke );
-					m_painter->setPen( Qt::blue );
+					m_painter->setPen( blue );
 				}
 				else
-					m_painter->setPen( Qt::yellow );
+					m_painter->setPen( yellow );
 
 				m_painter->setBrush( Qt::NoBrush );
 
@@ -131,7 +134,7 @@ VDrawSelection::visitVPath( VPath &composite )
 						m_painter->strokePath();
 						// Draw control node2:
 						m_painter->newPath();
-						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
+						m_painter->setBrush( editnodes ? yellow : blue );
 						m_painter->drawNode( jtr.current()->point( 1 ), m_nodeSize );
 						m_painter->strokePath();
 					}
@@ -152,21 +155,21 @@ VDrawSelection::visitVPath( VPath &composite )
 						m_painter->strokePath();
 						// Draw control node1:
 						m_painter->newPath();
-						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
+						m_painter->setBrush( editnodes ? yellow : blue );
 						m_painter->drawNode( jtr.current()->point( 0 ), m_nodeSize );
 						m_painter->strokePath();
 					}
 				}
 
 				// Draw knot.
-				m_painter->setPen( editnodes ? Qt::yellow : Qt::blue );
+				m_painter->setPen( editnodes ? yellow : blue );
 
 				if( !m_nodeediting )
-					m_painter->setBrush( Qt::blue );
+					m_painter->setBrush( blue );
 				else if( jtr.current()->knotIsSelected() )
-					m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
+					m_painter->setBrush( editnodes ? yellow : blue );
 				else
-					m_painter->setBrush( Qt::white );
+					m_painter->setBrush( QColor( "white" ) );
 
 				m_painter->drawNode( jtr.current()->knot(), m_nodeSize );
 			}
@@ -177,8 +180,7 @@ VDrawSelection::visitVPath( VPath &composite )
 	if( composite.drawCenterNode() && composite.state() == VObject::selected && !m_nodeediting )
 	{
 		m_painter->setPen( Qt::NoPen );
-		// TODO: this needs porting:
-		// m_painter->setBrush( Qt::blue.light() );
+		m_painter->setBrush( blue.light() );
 		m_painter->drawNode( composite.boundingBox().center(), m_nodeSize );
 	}
 

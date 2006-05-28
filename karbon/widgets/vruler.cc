@@ -78,8 +78,7 @@ void VRuler::initMarker(qint32 w, qint32 h)
 
     m_pixmapMarker.resize(w, h);
     p.begin(&m_pixmapMarker);
-    // TODO: needs porting
-    // p.setPen(Qt::Blue);
+    p.setPen( QColor( "blue" ) );
     p.eraseRect(0, 0, w, h);
     p.drawLine(0, 0, w - 1, h - 1);
     p.end();

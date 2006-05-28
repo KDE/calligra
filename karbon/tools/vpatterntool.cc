@@ -273,9 +273,10 @@ VPatternTool::draw( VPainter* painter )
 	m_origin = QRectF( s.x()-m_handleSize, s.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 	m_vector = QRectF( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 
+	QColor lightBlue = QColor( "blue" ).light();
+	painter->setPen( lightBlue );
+	painter->setBrush( lightBlue );
 	/* this needs porting
-	painter->setPen( Qt::blue.light() );
-	painter->setBrush( Qt::blue.light() );
 	painter->setRasterOp( Qt::XorROP );
 */
 
