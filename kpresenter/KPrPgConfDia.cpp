@@ -37,7 +37,7 @@
 #include <QPushButton>
 #include <qradiobutton.h>
 #include <q3valuelist.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3Frame>
@@ -64,7 +64,7 @@ KPrPgConfDia::KPrPgConfDia( QWidget* parent, KPrDocument* doc )
 void KPrPgConfDia::setupPageGeneral()
 {
     QFrame* generalPage = addPage( i18n("&General") );
-    Q3WhatsThis::add( generalPage, i18n("<p>This dialog allows you to configure how the slideshow "
+    generalPage->setWhatsThis( i18n("<p>This dialog allows you to configure how the slideshow "
 				       "will be displayed, including whether the slides are "
 				       "automatically sequenced or manually controlled, and also "
 				       "allows you to configure a <em>drawing pen</em> that can "
@@ -74,7 +74,7 @@ void KPrPgConfDia::setupPageGeneral()
     generalLayout->setAutoAdd( true );
 
     Q3VButtonGroup *switchGroup = new Q3VButtonGroup( i18n("&Transition Type"), generalPage );
-    Q3WhatsThis::add( switchGroup, i18n("<li><p>If you select <b>Manual transition to next step or slide</b> "
+    switchGroup->setWhatsThis( i18n("<li><p>If you select <b>Manual transition to next step or slide</b> "
 					  "then each transition and effect on a slide, or transition from "
 					  "one slide to the next, will require an action. Typically this "
 					  "action will be a mouse click, or the space bar.</p></li>"
@@ -91,7 +91,7 @@ void KPrPgConfDia::setupPageGeneral()
     m_autoButton->setChecked( !m_doc->spManualSwitch() );
 
     infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
-    Q3WhatsThis::add( infiniteLoop, i18n("<p>If this checkbox is selected, then the slideshow "
+    infiniteLoop->setWhatsThis( i18n("<p>If this checkbox is selected, then the slideshow "
 					"will restart at the first slide after the last slide "
 					"has been displayed. It is only available if the "
 					"<b>Automatic transition to next step or slide</b> "
@@ -102,7 +102,7 @@ void KPrPgConfDia::setupPageGeneral()
     connect( m_autoButton, SIGNAL( toggled(bool) ), infiniteLoop, SLOT( setEnabled(bool) ) );
 
     presentationDuration = new QCheckBox( i18n( "Measure presentation &duration" ), generalPage );
-    Q3WhatsThis::add( presentationDuration, i18n("<p>If this checkbox is selected, the time that "
+    presentationDuration->setWhatsThis( i18n("<p>If this checkbox is selected, the time that "
 						"each slide was displayed for, and the total time "
 						"for the presentation will be measured.</p> "
 						"<p>The times will be displayed at the end of the "
@@ -116,7 +116,7 @@ void KPrPgConfDia::setupPageGeneral()
     // presentation pen (color and width)
 
     Q3GroupBox* penGroup = new Q3GroupBox( i18n("Presentation Pen") , generalPage );
-    Q3WhatsThis::add( penGroup, i18n("<p>This part of the dialog allows you to configure the "
+    penGroup->setWhatsThis( i18n("<p>This part of the dialog allows you to configure the "
 				    "<em>drawing mode</em>, which allows you to add additional "
 				    "information, emphasise particular content, or to correct "
 				    "errors during the presentation by drawing on the slides "
@@ -142,7 +142,7 @@ void KPrPgConfDia::setupPageGeneral()
 void KPrPgConfDia::setupPageSlides()
 {
     QFrame* slidesPage = addPage( i18n("&Slides") );
-    Q3WhatsThis::add( slidesPage, i18n("<p>This dialog allows you to configure which slides "
+    slidesPage->setWhatsThis( i18n("<p>This dialog allows you to configure which slides "
 				      "are used in the presentation. Slides that are not "
 				      "selected will not be displayed during the slide "
 				      "show.</p>") );

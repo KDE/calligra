@@ -26,7 +26,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <qslider.h>
-#include <q3whatsthis.h>
+
 #include <q3widgetstack.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
@@ -48,7 +48,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     m_typeCombo->insertItem( i18n( "Single Color" ) );
     m_typeCombo->insertItem( i18n( "Gradient" ) );
     m_typeCombo->insertItem( i18n( "Transparent" ) );
-    Q3WhatsThis::add(m_typeCombo, i18n( "You can choose between Single Color, Gradient or Transparent as the type." ) );
+    m_typeCombo->setWhatsThis( i18n( "You can choose between Single Color, Gradient or Transparent as the type." ) );
 
     QLabel *typeLabel = new QLabel( i18n( "&Type:" ), this );
     layout->addWidget( typeLabel, 0, 0 );
@@ -78,7 +78,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
 
     m_preview_color = new KPrPBPreview( m_brushUI->previewPanel, KPrPBPreview::Brush );
     Q3HBoxLayout *hbox = new Q3HBoxLayout( m_brushUI->previewPanel );
-    Q3WhatsThis::add(m_preview_color, i18n( "This displays a preview of your choices." ) );
+    m_preview_color->setWhatsThis( i18n( "This displays a preview of your choices." ) );
     hbox->addWidget(m_preview_color);
 
     connect( m_brushUI->styleCombo, SIGNAL( activated( int ) ),

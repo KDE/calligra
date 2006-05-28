@@ -24,7 +24,7 @@
 #include <q3vbox.h>
 #include <qtextstream.h>
 #include <QDir>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <QPixmap>
@@ -89,7 +89,7 @@ void AFChoose::setupTabs()
         for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
         {
             grpPtr->tab = new Q3VBox(this);
-            Q3WhatsThis::add(grpPtr->tab, i18n( "Choose a predefined shape by clicking on it then clicking the OK button (or just double-click on the shape). You can then insert the shape onto your slide by drawing the area with the mouse pointer." ) );
+            grpPtr->tab->setWhatsThis( i18n( "Choose a predefined shape by clicking on it then clicking the OK button (or just double-click on the shape). You can then insert the shape onto your slide by drawing the area with the mouse pointer." ) );
             grpPtr->loadWid = new KIconCanvas(grpPtr->tab);
             // Changes for the new KIconCanvas (Werner)
             QDir d( grpPtr->dir.absoluteFilePath() );

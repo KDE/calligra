@@ -43,7 +43,7 @@
 #include <qpainter.h>
 #include <QPushButton>
 #include <q3vbox.h>
-#include <q3whatsthis.h>
+
 #include <Q3GroupBox>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
@@ -350,7 +350,7 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     colourGroup = new Q3GroupBox( 2, Qt::Vertical,
                                             i18n("Preliminary Slides"),
                                             this , "colourBox" );
-    Q3WhatsThis::add( colourGroup,
+    colourGroup->setWhatsThis(
                      i18n( "This section allows you to set the colors for "
                            "the preliminary slides; it does not affect the "
                            "presentation in any way, and it is normal to "
@@ -370,16 +370,16 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
 
     Q3HBox *buttonLayout = new Q3HBox( this );
     KPushButton *helpButton = new KPushButton( KStdGuiItem::help(), buttonLayout );
-    Q3WhatsThis::add( helpButton,
+    helpButton->setWhatsThis(
                      i18n( "Selecting this button will take you to the KPresenter "
                            "documentation that provides more information on how "
                            "to use the Memory Stick export function. ") );
     KPushButton *createButton = new KPushButton( KStdGuiItem::ok(), buttonLayout );
-    Q3WhatsThis::add( createButton,
+    createButton->setWhatsThis(
                      i18n( "Selecting this button will proceed to generating "
                            "the presentation in the special Sony format." ) );
     KPushButton *cancelButton = new KPushButton( KStdGuiItem::cancel(), buttonLayout );
-    Q3WhatsThis::add( cancelButton,
+    cancelButton->setWhatsThis(
                      i18n( "Selecting this button will cancel out of the "
                            "generation of the presentation, and return "
                            "to the normal KPresenter view. No files will "
