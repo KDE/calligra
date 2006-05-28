@@ -26,8 +26,7 @@
 #include <QToolTip>
 #include <qevent.h>
 #include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QMouseEvent>
 
 #include <klocale.h>
@@ -58,7 +57,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	: QWidget(), m_part ( part ), m_view( parent )
 {
 	m_isStrokeDocker = false;
-	setCaption( i18n( "Color Chooser" ) );
+	setWindowTitle( i18n( "Color Chooser" ) );
 
 	m_opacity = 1;
 
@@ -95,10 +94,13 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 	mOpacity->setToolTip( i18n( "Alpha (opacity)" ) );
 
-	Q3VBoxLayout *mainWidgetLayout = new Q3VBoxLayout( this, 3 );
+	QVBoxLayout *mainWidgetLayout = new QVBoxLayout;
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->addWidget( mOpacity );
 	mainWidgetLayout->activate();
+
+	setLayout(mainWidgetLayout);
+
 	setMaximumHeight( 174 );
 	setMinimumWidth( 194 );
 	
