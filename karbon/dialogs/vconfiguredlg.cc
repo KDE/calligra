@@ -20,14 +20,12 @@
 #include <float.h>
 
 #include <QCheckBox>
-#include <q3groupbox.h>
 #include <QLabel>
 #include <QLayout>
 #include <QGroupBox>
 #include <QComboBox>
 #include <q3grid.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kiconloader.h>
 #include <kconfig.h>
@@ -108,8 +106,10 @@ void VConfigureDlg::slotDefault()
 
 VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 		KVBox* box, char* name )
-		: QObject( box->parent(), name )
+		: QObject( box->parent() )
 {
+	setObjectName(name);
+
 	m_view = view;
 	m_config = KarbonFactory::instance()->config();
 
@@ -122,20 +122,17 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 
 	m_config->setGroup( "" );
 
-	m_oldDockerFontSize = m_config->readNumEntry( "palettefontsize", m_oldDockerFontSize );
+	m_oldDockerFontSize = m_config->readEntry( "palettefontsize", m_oldDockerFontSize );
 
 	if( m_config->hasGroup( "Interface" ) )
 	{
 		m_config->setGroup( "Interface" );
 
-		m_oldRecentFiles = m_config->readNumEntry(
-							   "NbRecentFile", m_oldRecentFiles );
+		m_oldRecentFiles = m_config->readEntry("NbRecentFile", m_oldRecentFiles);
 
-		oldShowStatusBar = m_config->readBoolEntry(
-							   "ShowStatusBar" , true );
+		oldShowStatusBar = m_config->readEntry("ShowStatusBar", true);
 
-		m_oldCopyOffset = m_config->readNumEntry(
-							   "CopyOffset", m_oldCopyOffset );
+		m_oldCopyOffset = m_config->readEntry("CopyOffset", m_oldCopyOffset);
 	}
 
 	m_showStatusBar = new QCheckBox( i18n( "Show status bar" ), tmpQGroupBox );
@@ -213,18 +210,20 @@ void VConfigInterfacePage::slotDefault()
 
 
 VConfigMiscPage::VConfigMiscPage( KarbonView* view, KVBox* box, char* name )
-		: QObject( box->parent(), name )
+		: QObject( box->parent() )
 {
+    setObjectName(name);
+
     m_view = view;
     m_config = KarbonFactory::instance()->config();
 
     KoUnit::Unit unit = view->part()->unit();
 
-    Q3GroupBox* tmpQGroupBox = new Q3GroupBox( 0, Qt::Vertical, i18n( "Misc" ), box, "GroupBox" );
-    tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
-    tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
+    QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Misc" ), box );
 
-    Q3GridLayout* grid = new Q3GridLayout(tmpQGroupBox->layout(), 4, 2 );
+    QGridLayout* grid = new QGridLayout();
+    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(KDialog::marginHint());
 
     m_oldUndoRedo = 30;
 
@@ -236,22 +235,25 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, KVBox* box, char* name )
     if( m_config->hasGroup( "Misc" ) )
     {
         m_config->setGroup( "Misc" );
-        m_oldUndoRedo = m_config->readNumEntry( "UndoRedo", m_oldUndoRedo );
+        m_oldUndoRedo = m_config->readEntry( "UndoRedo", m_oldUndoRedo );
     }
 
     m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
     m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
     m_undoRedo->setRange( 10, 60, 1 );
 
-    grid->addMultiCellWidget( m_undoRedo, 0, 0, 0, 1 );
+    grid->addWidget( m_undoRedo, 0, 0, 0, 1 );
 
     grid->addWidget( new QLabel(  i18n(  "Units:" ), tmpQGroupBox ), 1, 0 );
 
     m_unit = new QComboBox( tmpQGroupBox );
-    m_unit->insertStringList( KoUnit::listOfUnitName() );
+    m_unit->addItems( KoUnit::listOfUnitName() );
     grid->addWidget( m_unit, 1, 1 );
     m_oldUnit = KoUnit::unit( unitType );
-    m_unit->setCurrentItem( m_oldUnit );
+    m_unit->setCurrentIndex( m_oldUnit );
+
+    tmpQGroupBox->setLayout(grid);
+
     connect( m_unit, SIGNAL( activated( int ) ), SIGNAL( unitChanged( int ) ) );
 }
 
@@ -261,9 +263,9 @@ void VConfigMiscPage::apply()
 
     m_config->setGroup( "Misc" );
 
-    if( m_oldUnit != m_unit->currentItem() )
+    if( m_oldUnit != m_unit->currentIndex() )
     {
-        m_oldUnit = m_unit->currentItem();
+        m_oldUnit = m_unit->currentIndex();
 	part->setUnit( static_cast<KoUnit::Unit>( m_oldUnit ) );
 	part->document().setUnit(part->unit());
         m_config->writeEntry( "Units", KoUnit::unitName( part->unit() ) );
@@ -282,12 +284,14 @@ void VConfigMiscPage::apply()
 void VConfigMiscPage::slotDefault()
 {
     m_undoRedo->setValue( 30 );
-    m_unit->setCurrentItem( 0 );
+    m_unit->setCurrentIndex( 0 );
 }
 
 VConfigGridPage::VConfigGridPage( KarbonView* view, KVBox* page, char* name )
-		: QObject( page->parent(), name )
+		: QObject( page->parent() )
 {
+	setObjectName(name);
+
 	m_view = view;
 	KoUnit::Unit unit = view->part()->document().unit();
 	KarbonGridData &gd = view->part()->document().grid();
@@ -305,20 +309,33 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, KVBox* page, char* name )
 	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), page);
 	m_gridColorBtn = new KColorButton( gd.color, page );
 	gridColorLbl->setBuddy( m_gridColorBtn );
-	Q3GroupBox* spacingGrp = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Spacing" ), page );
-	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ), spacingGrp );
+
+	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), page );
+	QGridLayout* layoutSpacingGrp = new QGridLayout;
+	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ) );
 	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, fw, unit );
 	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
-	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ), spacingGrp );
+	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ) );
 	m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgh, 0.1, fh, unit );
 	spaceVertLbl->setBuddy( m_spaceVertUSpin );
-	Q3GroupBox* snapGrp = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Snap Distance" ), page );
-	QLabel* snapHorizLbl = new QLabel( i18n( "H&orizontal:" ), snapGrp );
+	layoutSpacingGrp->addWidget(spaceHorizLbl, 0, 0);
+	layoutSpacingGrp->addWidget(m_spaceHorizUSpin, 0, 1);
+	layoutSpacingGrp->addWidget(spaceVertLbl, 1, 0);
+	layoutSpacingGrp->addWidget(m_spaceVertUSpin, 1, 1);
+	spacingGrp->setLayout(layoutSpacingGrp);
+
+	QGroupBox* snapGrp = new QGroupBox( i18n( "Snap Distance" ), page );
+	QGridLayout* layoutSnapGrp = new QGridLayout;
+	QLabel* snapHorizLbl = new QLabel( i18n( "H&orizontal:" ) );
 	m_snapHorizUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fw, 0.1, sw, unit );
 	snapHorizLbl->setBuddy( m_snapHorizUSpin );
-	QLabel* snapVertLbl = new QLabel( i18n( "V&ertical:" ), snapGrp );
+	QLabel* snapVertLbl = new QLabel( i18n( "V&ertical:" ) );
 	m_snapVertUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fh, 0.1, sh, unit );
 	snapVertLbl->setBuddy( m_snapVertUSpin );
+	layoutSnapGrp->addWidget(snapHorizLbl, 0, 0);
+	layoutSnapGrp->addWidget(m_snapHorizUSpin, 0, 1);
+	layoutSnapGrp->addWidget(snapVertLbl, 1, 0);
+	layoutSnapGrp->addWidget(m_snapVertUSpin, 1, 1);
 
 	QGridLayout* gl = new QGridLayout();
 	gl->setSpacing( KDialog::spacingHint() );
@@ -381,8 +398,10 @@ void VConfigGridPage::slotDefault()
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
                                         KVBox* box, char* name )
-    : QObject( box->parent(), name )
+    : QObject( box->parent() )
 {
+    setObjectName(name);
+
     m_view = view;
 
     m_config = KarbonFactory::instance()->config();
@@ -402,9 +421,9 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
     if( m_config->hasGroup( "Interface" ) )
     {
         m_config->setGroup( "Interface" );
-        m_oldAutoSave = m_config->readNumEntry( "AutoSave", m_oldAutoSave );
-        m_oldBackupFile = m_config->readBoolEntry( "BackupFile", m_oldBackupFile );
-        m_oldSaveAsPath = m_config->readBoolEntry( "SaveAsPath", m_oldSaveAsPath );
+        m_oldAutoSave = m_config->readEntry( "AutoSave", m_oldAutoSave );
+        m_oldBackupFile = m_config->readEntry( "BackupFile", m_oldBackupFile );
+        m_oldSaveAsPath = m_config->readEntry( "SaveAsPath", m_oldSaveAsPath );
     }
 
     m_autoSave = new KIntNumInput( m_oldAutoSave, gbDocumentSettings );

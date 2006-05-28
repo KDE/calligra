@@ -25,9 +25,11 @@
 #include "vcolortab.h"
 
 VColorDlg::VColorDlg( const VColor &c, QWidget* parent, const char* name )
-	: KDialogBase ( parent, name, true, i18n( "Uniform Color" ),
-		KDialogBase::Ok | KDialogBase::Cancel )
+	: KDialog ( parent, i18n( "Uniform Color" ), KDialog::Ok | KDialog::Cancel )
 {
+	setObjectName(name);
+	setModal(true);
+
 	m_colortab = new VColorTab( VColor( c ), this, name );
 
 	setMainWidget( m_colortab );

@@ -18,11 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3groupbox.h>
+#include <QGroupBox>
 #include <QLabel>
 #include <QLayout>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kcolordialog.h>
 #include <klocale.h>
@@ -37,17 +36,19 @@
 
 
 VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
-	: QTabWidget( parent, name )
+	: QTabWidget( parent )
 {
-	Q3GridLayout *mainLayout;
+	setObjectName(name);
+
+	QGridLayout *mainLayout;
 
 	mRGBWidget = new QWidget( this );
-	mainLayout = new Q3GridLayout( mRGBWidget, 3, 3 );
+	mainLayout = new QGridLayout;
 	mColorSelector = new KHSSelector( mRGBWidget );
 	mColorSelector->setMinimumHeight( 165 );
 	mColorSelector->setMinimumWidth( 165 );
 	connect( mColorSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
-	mainLayout->addMultiCellWidget(mColorSelector, 0, 2, 0, 0 );
+	mainLayout->addWidget(mColorSelector, 0, 2, 0, 0 );
 
 	//Selector
 	mSelector = new KGradientSelector( Qt::Vertical, mRGBWidget );
@@ -55,14 +56,22 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mSelector->setMinimumWidth( 20 );
 	//TODO: Make it autochange color if the solid-filled object is selected (also for QSpinBoxes)
 	connect( mSelector, SIGNAL( valueChanged( int ) ), this, SLOT( slotVChanged( int ) ) );
-	mainLayout->addMultiCellWidget( mSelector, 0, 2, 1, 1 );
+	mainLayout->addWidget( mSelector, 0, 2, 1, 1 );
 
 	//Reference
-	Q3GroupBox* groupbox = new Q3GroupBox( 2, Qt::Vertical, i18n( "Reference" ), mRGBWidget );
-	new QLabel( i18n( "Old:" ), groupbox );
-	new QLabel( i18n( "New:" ), groupbox );
-	mOldColor = new KColorPatch( groupbox );
-	mColorPreview = new KColorPatch( groupbox );
+	QGroupBox* groupbox = new QGroupBox( i18n( "Reference" ), mRGBWidget );
+
+	QGridLayout* layout = new QGridLayout;
+
+	mOldColor = new KColorPatch(groupbox);
+	mColorPreview = new KColorPatch(groupbox);
+
+	layout->addWidget(new QLabel(i18n( "Old:" )), 0, 0);
+	layout->addWidget(mOldColor, 0, 1);
+	layout->addWidget(new QLabel(i18n( "New:" )), 1, 0);
+	layout->addWidget(mColorPreview, 1, 1);
+
+	groupbox->setLayout(layout);
 
 	QColor color( c );
 	mOldColor->setColor( color );
@@ -70,38 +79,50 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addWidget( groupbox, 0, 2 );
 
 	//Components
-	Q3GroupBox* cgroupbox = new Q3GroupBox( 3, Qt::Vertical, i18n( "Components" ), mRGBWidget );
+	QGroupBox* cgroupbox = new QGroupBox( i18n( "Components" ), mRGBWidget );
+
+	QGridLayout* clayout = new QGridLayout;
 
 	//--->RGB
-	new QLabel( i18n( "R:" ), cgroupbox );
-	new QLabel( i18n( "G:" ), cgroupbox );
-	new QLabel( i18n( "B:" ), cgroupbox );
+	clayout->addWidget(new QLabel(i18n( "R:" )), 0, 0);
+	clayout->addWidget(new QLabel(i18n( "G:" )), 1, 0);
+	clayout->addWidget(new QLabel(i18n( "B:" )), 2, 0);
 	mRed = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
 	mGreen = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
 	mBlue = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
+	clayout->addWidget(mRed, 0, 1);
+	clayout->addWidget(mGreen, 1, 1);
+	clayout->addWidget(mBlue, 2, 1);
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 
 	//--->HSV
-/* TODO: i18n needs porting:
-	new QLabel( i18n( "Hue:", "H:" ), cgroupbox );
-	new QLabel( i18n( "Saturation:", "S:" ), cgroupbox );
-	new QLabel( i18n( "Value:", "V:" ), cgroupbox );
-*/
+	clayout->addWidget(new QLabel(i18nc( "Hue:", "H:" )), 0, 2);
+	clayout->addWidget(new QLabel(i18nc( "Saturation:", "S:" )), 1, 2);
+	clayout->addWidget(new QLabel(i18nc( "Value:", "V:" )), 2, 2);
+
 	mHue = new KIntSpinBox( 0, 359, 1, 0, cgroupbox );
 	mSaturation = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
 	mValue = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
+	clayout->addWidget(mHue, 0, 3);
+	clayout->addWidget(mSaturation, 1, 3);
+	clayout->addWidget(mValue, 2, 3);
 	connect( mHue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
+
+	cgroupbox->setLayout(clayout);
 	mainLayout->addWidget( cgroupbox, 1, 2 );
 
 	//--->Opacity
-	Q3GroupBox* ogroupBox = new Q3GroupBox( 1, Qt::Vertical, i18n( "Opacity" ), mRGBWidget );
+	QGroupBox* ogroupBox = new QGroupBox( i18n( "Opacity" ), mRGBWidget );
+	QGridLayout* olayout = new QGridLayout;
 	mOpacity = new KIntNumInput( 100, ogroupBox );
 	mOpacity->setRange( 0, 100, 1, true );
 	mOpacity->setValue( int( c.opacity() * 100.0 ) );
+	olayout->addWidget(mOpacity,0,0);
+	ogroupBox->setLayout(olayout);
 	mainLayout->addWidget( ogroupBox, 2, 2 );
 
 	mainLayout->setSpacing( 2 );
@@ -114,11 +135,14 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mRed->setValue( color.red() );
 	mGreen->setValue( color.green() );
 	mBlue->setValue( color.blue() );
+
+	mRGBWidget->setLayout(mainLayout);
 }
 
 void VColorTab::slotUpdateFromRGBSpinBoxes()
 {
-	QColor color( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb );
+	QColor color;
+	color.setRgb( mRed->value(), mGreen->value(), mBlue->value() );
 	mColorPreview->setColor( color );
 	mColorPreview->update();
 
@@ -127,8 +151,9 @@ void VColorTab::slotUpdateFromRGBSpinBoxes()
 	mSaturation->blockSignals( true );
 	mValue->blockSignals( true );
 
-	int h, s, v;
-	color.hsv( &h, &s, &v );
+	int h = color.hue();
+	int s = color.saturation();
+	int v = color.value();
 	mHue->setValue( h );
 	mSaturation->setValue( s );
 	mValue->setValue( v );
@@ -147,8 +172,9 @@ void VColorTab::slotUpdateFromRGBSpinBoxes()
 
 void VColorTab::slotUpdateFromHSVSpinBoxes()
 {
-    QColor color( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv );
-    mColorPreview->setColor( color );
+	QColor color;
+	color.setHsv( mHue->value(), mSaturation->value(), mValue->value() );
+	mColorPreview->setColor( color );
 	mColorPreview->update();
 
 	// update gradient selector
@@ -188,8 +214,10 @@ void VColorTab::slotHSChanged( int h, int s )
 	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
 	mHue->setValue( h );
 	mSaturation->setValue( s );
-	QColor color1( h, s, 255, QColor::Hsv );
-	QColor color2( h, s, 0, QColor::Hsv );
+	QColor color1;
+	color1.setHsv( h, s, 255 );
+	QColor color2;
+	color2.setHsv( h, s, 0 );
 	mSelector->setColors( color1, color2 );
 }
 

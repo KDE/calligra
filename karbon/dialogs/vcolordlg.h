@@ -21,13 +21,13 @@
 #ifndef __VCOLORDLG_H__
 #define __VCOLORDLG_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class VColor;
 class VColorTab;
 class VFill;
 
-class VColorDlg : public KDialogBase
+class VColorDlg : public KDialog
 {
 	Q_OBJECT
 
