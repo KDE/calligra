@@ -28,15 +28,18 @@
 #include <qtabwidget.h>
 #include <QLabel>
 #include <qcursor.h>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3PtrList>
 #include <QPixmap>
 #include <Q3Frame>
 #include <QMouseEvent>
 #include <QEvent>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPaintEvent>
 #include <QRectF>
+#include <QPalette>
+#include <QBrush>
+#include <QPainter>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -70,11 +73,15 @@ static long g_lastKey = 0;
  *************************************************************************/
 
 VDocumentPreview::VDocumentPreview( KarbonView* view, QWidget* parent )
-		: QWidget( parent, "DocumentPreview" ), m_document( &view->part()->document() ), m_view( view )
+		: QWidget( parent ), m_document( &view->part()->document() ), m_view( view )
 {
+	setObjectName("DocumentPreview");
+
 	update();
 	installEventFilter( this );
-	setBackgroundMode( Qt::NoBackground );
+	QBrush b(Qt::NoBrush);
+	QPalette p = palette();
+	p.setBrush(QPalette::Window, b);
 	setMouseTracking( true );
 	m_dragging = false;
 	m_docpixmap = 0L;
@@ -197,7 +204,8 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		m_document->draw( &p, &rect );
 		p.end();
 	}
-	bitBlt( &pixmap, 0, 0, m_docpixmap, 0, 0, width(), height() );
+	QPainter pmp(&pixmap);
+	pmp.drawPixmap( QPoint(0, 0), *m_docpixmap, QRect(0, 0, width(), height()) );
 
 	// draw viewport rect
 	{
@@ -214,35 +222,38 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 	}
 
 	QPainter pw( &pixmap );
-	pw.setPen( colorGroup().light() );
+	pw.setPen( palette().light().color() );
 	pw.drawLine( 1, 1, 1, height() - 2 );
 	pw.drawLine( 1, 1, width() - 2, 1 );
 	pw.drawLine( width() - 1, height() - 1, 0, height() - 1 );
 	pw.drawLine( width() - 1, height() - 1, width() - 1, 0 );
-	pw.setPen( colorGroup().dark() );
+	pw.setPen( palette().dark().color() );
 	pw.drawLine( 0, 0, width() - 1, 0 );
 	pw.drawLine( 0, 0, 0, height() - 1 );
 	pw.drawLine( width() - 2, height() - 2, width() - 2, 1 );
 	pw.drawLine( width() - 2, height() - 2, 1, height() - 2 );
 	pw.end();
-	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
+	QPainter pmp2(this);
+	pmp2.drawPixmap( QPoint(0, 0), pixmap, QRect(0, 0, width(), height()) );
 } // VDocumentPreview::paintEvent
 
 VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
-		: QWidget( parent, "DocumentTab" ), m_view( view )
+		: QWidget( parent ), m_view( view )
 {
+	setObjectName("DocumentTab");
+
 	Q3Frame* frame;
-	Q3GridLayout* layout = new Q3GridLayout( this );
+	QGridLayout* layout = new QGridLayout;
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
-	layout->addMultiCellWidget( m_documentPreview = new VDocumentPreview( m_view, this ), 0, 7, 2, 2 );
+	layout->addWidget( m_documentPreview = new VDocumentPreview( m_view, this ), 0, 7, 2, 2 );
 	layout->addWidget( new QLabel( i18n( "Width:" ), this ), 0, 0 );
 	layout->addWidget( new QLabel( i18n( "Height:" ), this ), 1, 0 );
-	layout->addMultiCellWidget( frame = new Q3Frame( this ), 2, 2, 0, 1 );
+	layout->addWidget( frame = new Q3Frame( this ), 2, 2, 0, 1 );
 	frame->setFrameShape( Q3Frame::HLine );
 	layout->addWidget( new QLabel( i18n( "Layers:" ), this ), 3, 0 );
 	layout->addWidget( new QLabel( i18n( "Format:" ), this ), 4, 0 );
-	layout->addMultiCellWidget( frame = new Q3Frame( this ), 5, 5, 0, 1 );
+	layout->addWidget( frame = new Q3Frame( this ), 5, 5, 0, 1 );
 	frame->setFrameShape( Q3Frame::HLine );
 	//layout->addMultiCellWidget( new QLabel( i18n( "Zoom factor:" ), this ), 6, 6, 0, 1 );
 	layout->addWidget( m_width = new QLabel( this ), 0, 1 );
@@ -250,9 +261,9 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 	layout->addWidget( m_layers = new QLabel( this ), 3, 1 );
 	layout->addWidget( m_format = new QLabel( this ), 4, 1 );
 	layout->setRowStretch( 7, 1 );
-	layout->setColStretch( 0, 0 );
-	layout->setColStretch( 1, 0 );
-	layout->setColStretch( 2, 2 );
+	layout->setColumnStretch( 0, 0 );
+	layout->setColumnStretch( 1, 0 );
+	layout->setColumnStretch( 2, 2 );
 	//layout->addWidget(
 
 	m_width->setAlignment( Qt::AlignRight );
@@ -264,6 +275,8 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 	connect( view->part()->commandHistory(), SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 	connect( view, SIGNAL( pageLayoutChanged() ), this, SLOT( slotCommandExecuted() ) );
 	connect( view->canvasWidget(), SIGNAL( viewportChanged() ), this, SLOT( slotViewportChanged() ) );
+
+	setLayout(layout);
 
 	updateDocumentInfo();
 } // VDocumentTab::VDocumentTab
@@ -340,8 +353,7 @@ VObjectListViewItem::update()
 	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
 
 	// draw thumb preview (16x16)
-	QPixmap preview;
-	preview.resize( 16, 16 );
+	QPixmap preview( 16, 16 );
 	VKoPainter p( &preview, 16, 16, false );
 	// Y mirroring
 	QMatrix mat;
@@ -396,8 +408,7 @@ void
 VLayerListViewItem::update()
 {
 	// draw thumb preview (16x16)
-	QPixmap preview;
-	preview.resize( 16, 16 );
+	QPixmap preview( 16, 16 );
 	VKoPainter p( &preview, 16, 16, false );
 	// Y mirroring
 	QMatrix mat;
@@ -458,29 +469,30 @@ VLayerListViewItem::compare( Q3ListViewItem *i, int /*col*/, bool /*ascending*/ 
 }
 
 VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
-		: QWidget( parent, "LayersTab" ), m_view( view ), m_document( &view->part()->document() )
+		: QWidget( parent ), m_view( view ), m_document( &view->part()->document() )
 {
+	setObjectName("LayersTab");
 
 	QToolButton* button;
-	Q3VBoxLayout* layout = new Q3VBoxLayout( this, 1 );
+	QVBoxLayout* layout = new QVBoxLayout;
 	layout->addWidget( m_layersListView = new Q3ListView( this ), 1 );
 	m_buttonGroup = new Q3HButtonGroup( this );
 	m_buttonGroup->setInsideMargin( 3 );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIcon( "14_layer_newlayer" ) );
-	button->setTextLabel( i18n( "New" ) );
+	button->setIcon( SmallIcon( "14_layer_newlayer" ) );
+	button->setText( i18n( "New" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIcon( "14_layer_raiselayer" ) );
-	button->setTextLabel( i18n( "Raise" ) );
+	button->setIcon( SmallIcon( "14_layer_raiselayer" ) );
+	button->setText( i18n( "Raise" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIcon( "14_layer_lowerlayer" ) );
-	button->setTextLabel( i18n( "Lower" ) );
+	button->setIcon( SmallIcon( "14_layer_lowerlayer" ) );
+	button->setText( i18n( "Lower" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIcon( "14_layer_deletelayer" ) );
-	button->setTextLabel( i18n( "Delete" ) );
+	button->setIcon( SmallIcon( "14_layer_deletelayer" ) );
+	button->setText( i18n( "Delete" ) );
 	m_buttonGroup->insert( button );
 	layout->addWidget( m_buttonGroup, 0);
 	layout->setSpacing( 0 );
@@ -506,6 +518,8 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	connect( view->part()->commandHistory(), SIGNAL( commandExecuted( VCommand*) ), this, SLOT( slotCommandExecuted( VCommand* ) ) );
 
 	layout->activate();
+	setLayout(layout);
+
 	updateLayers();
 } // VLayersTab::VLayersTab
 
@@ -1125,14 +1139,17 @@ VHistoryGroupItem::paintCell( QPainter* p, const QColorGroup& cg, int column, in
 			n++;
 		item = (VHistoryItem*)item->nextSibling();
 	}
+
+	QColor bc = cg.brush(QPalette::Base).color();
+
 	if ( e > 0 )
 	{
-		p->fillRect( 0, 0, width, height(), cg.base() );
+		p->fillRect( 0, 0, width, height(), bc );
 		if ( n > 0 )
-			p->fillRect( 0, 0, width, height(), QBrush( cg.base().dark( 140 ), Qt::BDiagPattern ) );
+			p->fillRect( 0, 0, width, height(), QBrush( bc.dark( 140 ), Qt::BDiagPattern ) );
 	}
 	else
-		p->fillRect( 0, 0, width, height(), cg.base().dark( 140 ) );
+		p->fillRect( 0, 0, width, height(), bc.dark( 140 ) );
 
 	const QPixmap* pixmap = this->pixmap( column );
 	int xstart;
@@ -1145,7 +1162,7 @@ VHistoryGroupItem::paintCell( QPainter* p, const QColorGroup& cg, int column, in
 	}
 	else
 		xstart = 4;
-	p->setPen( cg.text() );
+	p->setPen( cg.brush(QPalette::Text).color() );
 	p->drawText( xstart, 0, width - xstart, height(), align | Qt::AlignVCenter, text( column ) );
 } // VHistoryGroupItem::paintCell
 
@@ -1187,7 +1204,7 @@ VHistoryItem::~VHistoryItem()
 void
 VHistoryItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
 {
-	p->fillRect( 0, 0, width, height(), ( m_command->success() ? cg.base() : cg.base().dark( 140 ) ) );
+	p->fillRect( 0, 0, width, height(), ( m_command->success() ? cg.brush(QPalette::Base).color() : cg.brush(QPalette::Base).color().dark( 140 ) ) );
 
 	const QPixmap* pixmap = this->pixmap( column );
 	int xstart;
@@ -1200,7 +1217,7 @@ VHistoryItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int wid
 	}
 	else
 		xstart = 4;
-	p->setPen( cg.text() );
+	p->setPen( cg.brush(QPalette::Text).color() );
 	p->drawText( xstart, 0, width - xstart, height(), align | Qt::AlignVCenter, text( column ) );
 } // VHistoryItem::paintCell
 
@@ -1215,16 +1232,16 @@ VHistoryItem::paintFocus( QPainter*, const QColorGroup&, const QRect& )
 VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 		: QWidget( parent ), m_part( part )
 {
-	Q3VBoxLayout* layout = new Q3VBoxLayout( this );
+	QVBoxLayout* layout = new QVBoxLayout;
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
-	layout->add( m_history = new Q3ListView( this ) );
+	layout->addWidget( m_history = new Q3ListView( this ) );
 	m_history->setVScrollBarMode( Q3ListView::AlwaysOn );
 	m_history->setSelectionMode( Q3ListView::NoSelection );
 	m_history->addColumn( i18n( "Commands" ) );
 	m_history->setResizeMode( Q3ListView::AllColumns );
 	m_history->setRootIsDecorated( true );
-	layout->add( m_groupCommands = new QCheckBox( i18n( "Group commands" ), this ) );
+	layout->addWidget( m_groupCommands = new QCheckBox( i18n( "Group commands" ), this ) );
 
 	m_history->setSorting( 0, true );
 	VHistoryGroupItem* group = 0;
@@ -1266,6 +1283,8 @@ VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 	connect( this, SIGNAL( redoCommand( VCommand* ) ), part->commandHistory(), SLOT( redo( VCommand* ) ) );
 	connect( this, SIGNAL( undoCommandsTo( VCommand* ) ), part->commandHistory(), SLOT( undoAllTo( VCommand* ) ) );
 	connect( this, SIGNAL( redoCommandsTo( VCommand* ) ), part->commandHistory(), SLOT( redoAllTo( VCommand* ) ) );
+
+	setLayout(layout);
 } // VHistoryTab::VHistoryTab
 
 VHistoryTab::~VHistoryTab()
