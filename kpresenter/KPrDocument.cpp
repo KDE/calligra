@@ -282,7 +282,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
     initConfig();
 
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
-    connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+    connect( m_commandHistory, SIGNAL( commandExecuted(KCommand *) ), this, SLOT( slotCommandExecuted() ) );
 
     dcopObject();
 }

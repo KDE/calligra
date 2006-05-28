@@ -2462,8 +2462,8 @@ void KPrView::setupActions()
     actionTextFontFamily = new KFontAction( i18n( "Font Family" ),
                                             actionCollection(), "text_fontfamily" );
 #endif
-    connect( actionTextFontFamily , SIGNAL( activated( const QString & ) ),
-             this, SLOT( fontSelected( const QString & ) ) );
+    connect( actionTextFontFamily , SIGNAL( triggered(const QString &) ),
+             this, SLOT( fontSelected(const QString &) ) );
 
     actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", Qt::CTRL + Qt::Key_B,
                                         this, SLOT( textBold() ),
