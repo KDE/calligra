@@ -26,7 +26,7 @@
 #include <KoUnitWidgets.h>
 #include <klocale.h>
 #include <QLabel>
-#include <q3vbox.h>
+#include <kvbox.h>
 
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWDocument *doc, int resizeColumn )
     : KDialogBase( parent, "resize column dialog" , true, "", Ok | Cancel | User1 | Apply )

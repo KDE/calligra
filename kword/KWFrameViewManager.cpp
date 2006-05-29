@@ -20,6 +20,7 @@
 #include <KWFrameView.h>
 #include <KWFrame.h>
 #include <KWFrameSet.h>
+#include "KWView.h"
 
 #include <kdebug.h>
 #include <kcursor.h>

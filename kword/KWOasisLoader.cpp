@@ -34,7 +34,7 @@
 #include <KoOasisSettings.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
-#include <KoXmlNS.h>
+#include <KoTextParag.h>
 
 #include <kdebug.h>
 #include <klocale.h>

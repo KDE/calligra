@@ -33,7 +33,7 @@
 #include <QRadioButton>
 
 #include <QLabel>
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <QLayout>
 #include <QComboBox>
 //Added by qt3to4:

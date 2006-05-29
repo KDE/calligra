@@ -25,6 +25,7 @@
 #include "KWFrameViewManager.h"
 #include "KWFrameView.h"
 #include "KWViewMode.h"
+#include "KWView.h"
 
 #include <KoOasisContext.h>
 #include <KoXmlWriter.h>

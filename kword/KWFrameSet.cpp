@@ -32,6 +32,7 @@
 #include "KWPage.h"
 #include "KWFrameViewManager.h"
 #include "KWFrameView.h"
+#include "KWTextParag.h"
 
 #include <KoOasisContext.h>
 #include <KoXmlNS.h>
@@ -1196,6 +1197,7 @@ void KWFrameSet::setName( const QString &name )
 #ifndef NDEBUG
 #include "KWFrameViewManager.h"
 #include "KWFrameView.h"
+#include "KWView.h"
 void KWFrameSet::printDebug()
 {
     static const char * typeFrameset[] = { "base", "txt", "picture", "part", "formula", "clipart",
@@ -1244,7 +1246,7 @@ void KWFrameSet::printDebug()
         kDebug() << "     FrameBehavior: "<< frameBh[ frame->frameBehavior() ] << endl;
         kDebug() << "     NewFrameBehavior: "<< newFrameBh[ frame->newFrameBehavior() ] << endl;
         QColor col = frame->backgroundColor().color();
-        kDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name().latin1() : "(default)" ) << endl;
+        kDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name() : QString("(default)") ) << endl;
         kDebug() << "     SheetSide "<< frame->sheetSide() << endl;
         kDebug() << "     Z Order: " << frame->zOrder() << endl;
 

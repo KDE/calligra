@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include "KWDocument.h"
 
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <QLayout>
 #include <QLineEdit>
 #include <QPushButton>

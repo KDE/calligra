@@ -27,6 +27,7 @@
 #include "KWViewMode.h"
 #include "KWDocument.h"
 #include "KWCanvas.h"
+#include "KWView.h"
 
 #include "KoZoomHandler.h"
 

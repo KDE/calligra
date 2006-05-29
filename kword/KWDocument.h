@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3ValueList>
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002-2006 David Faure <faure@kde.org>
@@ -25,10 +22,7 @@
 #ifndef kwdoc_h
 #define kwdoc_h
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
+class KWFrameView;
 class Q3DragObject;
 class KoSavingContext;
 class KoGenStyles;
@@ -48,6 +42,7 @@ class KWTableStyle;
 class KWTableTemplate;
 #define KoParagStyle KoParagStyle
 class KWFrame;
+class KWView;
 class KWViewMode;
 class KMacroCommand;
 class KoDocumentEntry;
@@ -88,16 +83,19 @@ class KoTextParag;
 class KoOasisSettings;
 
 #include "KWAnchorPos.h" // legacy loading stuff
-#include "KWView.h"
+#include "defs.h" // FrameSetType
 
 #include <KoDocument.h>
 #include <KoTextZoomHandler.h>
 #include <KoPictureKey.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 
+#include <QPixmap>
 #include <QMap>
-#include <q3ptrlist.h>
 #include <QFont>
+
+#include <q3ptrlist.h>
+#include <Q3ValueList>
 #include <q3valuevector.h>
 
 /******************************************************************/

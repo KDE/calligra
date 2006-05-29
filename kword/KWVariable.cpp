@@ -28,6 +28,7 @@
 #include "KWPageManager.h"
 
 #include <KoVariable.h>
+#include <KoTextParag.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>

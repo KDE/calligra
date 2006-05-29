@@ -25,6 +25,7 @@
 
 #include <KoParagCounter.h>
 #include <KoTextDocument.h>
+#include <KoTextParag.h>
 
 #include "KoParagStyle.h"
 #include "KWFrameStyleManager.h"

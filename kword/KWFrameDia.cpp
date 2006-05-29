@@ -30,6 +30,7 @@
 
 #include <KoSetPropCommand.h>
 #include <KoBorderPreview.h>
+#include <KoTextParag.h>
 
 #include <knuminput.h>
 #include <klocale.h>

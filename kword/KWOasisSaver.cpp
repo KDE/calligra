@@ -17,12 +17,12 @@
 */
 
 #include "KWOasisSaver.h"
+#include "KWDocument.h"
 #include <KoStore.h>
 #include <KoOasisStore.h>
 #include <KoOasisContext.h>
 #include <KoXmlWriter.h>
-#include "KWDocument.h"
-//Added by qt3to4:
+#include <KoTextParag.h>
 #include <QList>
 
 KWOasisSaver::KWOasisSaver( KWDocument* doc )

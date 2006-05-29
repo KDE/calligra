@@ -24,6 +24,7 @@
 #include "KWTableFrameSet.h"
 #include "KWDocument.h"
 #include "KWTextDocument.h"
+#include <KoTextParag.h>
 
 #include <KoRect.h>
 
