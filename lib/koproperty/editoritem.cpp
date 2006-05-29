@@ -24,12 +24,14 @@
 #include "property.h"
 #include "widget.h"
 #include "factory.h"
+#include "utils.h"
 
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qheader.h>
 #include <qstyle.h>
 #include <qlabel.h>
+#include <qlayout.h>
 
 #ifdef QT_ONLY
 #else
@@ -91,58 +93,168 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QCo
 
 //! @internal
 //! Based on KPopupTitle, see kpopupmenu.cpp
-class GroupWidget : public QWidget
+class GroupWidgetBase : public QWidget
 {
 	public:
-		GroupWidget(EditorGroupItem *parentItem)
-		: QWidget(parentItem->listView()->viewport())
-		, m_parentItem(parentItem)
+		GroupWidgetBase(QWidget* parent)
+		: QWidget(parent)
+		, m_isOpen(true)
+		, m_mouseDown(false)
 		{
 		}
 
 		void setText( const QString &text )
 		{
-			titleStr = text;
+			m_titleStr = text;
 		}
 
 		void setIcon( const QPixmap &pix )
 		{
-			miniicon = pix;
+			m_miniicon = pix;
+		}
+
+		virtual bool isOpen() const
+		{
+			return m_isOpen;
+		}
+
+		virtual void setOpen(bool set)
+		{
+			m_isOpen = set;
+		}
+
+		virtual QSize sizeHint () const
+		{
+			QSize s( QWidget::sizeHint() );
+			s.setHeight(fontMetrics().height()*2);
+			return s;
 		}
 
 	protected:
 		virtual void paintEvent(QPaintEvent *) {
 			QRect r(rect());
 			QPainter p(this);
-			kapp->style().drawPrimitive(QStyle::PE_HeaderSection, &p, r, palette().active());
+			QStyle::StyleFlags flags = m_mouseDown ? QStyle::Style_Down : QStyle::Style_Default;
+			kapp->style().drawPrimitive(QStyle::PE_HeaderSection, &p, r, palette().active(), flags);
 
-			paintListViewExpander(&p, this, r.height()+2, palette().active(), m_parentItem->isOpen());
-			if (!miniicon.isNull()) {
-				p.drawPixmap(24, (r.height()-miniicon.height())/2, miniicon);
+			paintListViewExpander(&p, this, r.height()+2, palette().active(), isOpen());
+			if (!m_miniicon.isNull()) {
+				p.drawPixmap(24, (r.height()-m_miniicon.height())/2, m_miniicon);
 			}
 
-			if (!titleStr.isNull())
+			if (!m_titleStr.isNull())
 			{
-				int indent = 16 + (miniicon.isNull() ? 0 : (miniicon.width()+4));
+				int indent = 16 + (m_miniicon.isNull() ? 0 : (m_miniicon.width()+4));
 				p.setPen(palette().active().text());
 				QFont f = p.font();
 				f.setBold(true);
 				p.setFont(f);
 				p.drawText(indent+8, 0, width()-(indent+8),
 						height(), AlignLeft | AlignVCenter | SingleLine,
-						titleStr);
+						m_titleStr);
 			}
 //			p.setPen(palette().active().mid());
 //			p.drawLine(0, 0, r.right(), 0);
 		}
-		QString titleStr;
-		QPixmap miniicon;
+
+		virtual bool event( QEvent * e ) {
+			if (e->type()==QEvent::MouseButtonPress || e->type()==QEvent::MouseButtonRelease) {
+				QMouseEvent* me = static_cast<QMouseEvent*>(e);
+				if (me->button() == Qt::LeftButton) {
+					m_mouseDown = e->type()==QEvent::MouseButtonPress;
+					update();
+				}
+			}
+			return QWidget::event(e);
+		}
+
+	protected:
+		QString m_titleStr;
+		QPixmap m_miniicon;
+		bool m_isOpen : 1;
+		bool m_mouseDown : 1;
+};
+
+class GroupWidget : public GroupWidgetBase
+{
+	public:
+		GroupWidget(EditorGroupItem *parentItem)
+		: GroupWidgetBase(parentItem->listView()->viewport())
+		, m_parentItem(parentItem)
+		{
+		}
+
+		virtual bool isOpen() const
+		{
+			return m_parentItem->isOpen();
+		}
+
+	protected:
 		EditorGroupItem *m_parentItem;
 };
 
-}
+class GroupContainer::Private
+{
+	public:
+		GroupContainer::Private() {}
+		QVBoxLayout* lyr;
+		GroupWidgetBase *groupWidget;
+		QGuardedPtr<QWidget> contents;
+};
+
+}//namespace
 
 using namespace KoProperty;
+
+GroupContainer::GroupContainer(const QString& title, QWidget* parent)
+: QWidget(parent)
+, d(new Private())
+{
+	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+	d->lyr = new QVBoxLayout(this);
+	d->groupWidget = new GroupWidgetBase(this);
+	d->groupWidget->setText( title );
+	d->lyr->addWidget(d->groupWidget);
+	d->lyr->addSpacing(4);
+}
+
+GroupContainer::~GroupContainer()
+{
+	delete d;
+}
+
+void GroupContainer::setContents( QWidget* contents )
+{
+	if (d->contents) {
+		d->contents->hide();
+		d->lyr->remove(d->contents);
+		delete d->contents;
+	}
+	d->contents = contents;
+	if (d->contents) {
+		d->lyr->addWidget(d->contents);
+		d->contents->show();
+	}
+	update();
+}
+
+bool GroupContainer::event( QEvent * e ) {
+	if (e->type()==QEvent::MouseButtonPress) {
+		QMouseEvent* me = static_cast<QMouseEvent*>(e);
+		if (me->button() == Qt::LeftButton && d->contents && d->groupWidget->rect().contains(me->pos())) {
+			d->groupWidget->setOpen(!d->groupWidget->isOpen());
+			if (d->groupWidget->isOpen())
+				d->contents->show();
+			else
+				d->contents->hide();
+			d->lyr->invalidate();
+			update();
+		}
+	}
+	return QWidget::event(e);
+}
+
+//////////////////////////////////////////////////////
 
 EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, QListViewItem *after)
  : KListViewItem(parent, after,
