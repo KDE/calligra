@@ -22,25 +22,26 @@
 
 #include <QLayout>
 #include <QLabel>
-//Added by qt3to4:
 #include <QEvent>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <knuminput.h>
 #include <kselector.h>
 
 #include "vcolorslider.h"
 
 VColorSlider::VColorSlider( QWidget* parent, const char* name )
-	: QWidget( parent, name )
+	: QWidget( parent )
 {
+	setObjectName(name);
 	init();
 }
 
 // Label, left color, right color, min, max, value ...
 VColorSlider::VColorSlider( const QString& label, const QColor& col1,
 	const QColor& col2, int min, int max, int value, QWidget* parent, const char* name )
-		: QWidget( parent, name )
+		: QWidget( parent )
 {
+	setObjectName(name);
 	init();
 	setLabel( label );
 	setColors( col1, col2 );
@@ -56,7 +57,7 @@ VColorSlider::~VColorSlider()
 void VColorSlider::init()
 {
 	m_isDragging = false;
-	Q3HBoxLayout *layout = new Q3HBoxLayout( this, 3 );
+	QHBoxLayout *layout = new QHBoxLayout;
 
 	m_label = new QLabel( this );
 	m_gradientSelect = new KGradientSelector( Qt::Horizontal, this );
@@ -76,6 +77,7 @@ void VColorSlider::init()
 	m_gradientSelect->installEventFilter( this );
 
 	layout->activate();
+	setLayout(layout);
 }
 
 void VColorSlider::setLabel( const QString& label )
@@ -97,15 +99,15 @@ void VColorSlider::setValue( int value )
 void VColorSlider::setMinValue( int value )
 {
 	m_minValue = value;
-	m_spinBox->setMinValue( value );
-	m_gradientSelect->setMinValue( value );
+	m_spinBox->setMinimum( value );
+	m_gradientSelect->setMinimum( value );
 }
 
 void VColorSlider::setMaxValue( int value )
 {
 	m_maxValue = value;
-	m_spinBox->setMaxValue( value );
-	m_gradientSelect->setMaxValue( value );
+	m_spinBox->setMaximum( value );
+	m_gradientSelect->setMaximum( value );
 }
 
 int VColorSlider::value()

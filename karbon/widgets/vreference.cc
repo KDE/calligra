@@ -23,15 +23,14 @@
 #include <q3buttongroup.h>
 #include <QLayout>
 #include <qradiobutton.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3Frame>
 
 #include "vreference.h"
 
 VReference::VReference( QWidget *parent, const char *name ) : Q3Frame ( parent, name )
 {
-	Q3VBoxLayout* layout = new Q3VBoxLayout( this );
+	QVBoxLayout* layout = new QVBoxLayout;
 	mButtonGroup = new Q3ButtonGroup (3, Qt::Vertical, this );
 	QRadioButton* radio = new QRadioButton ( mButtonGroup );
 	mButtonGroup->insert( radio, TopLeft );
@@ -59,6 +58,7 @@ VReference::VReference( QWidget *parent, const char *name ) : Q3Frame ( parent, 
 	mButtonGroup->setButton( Center );
 	layout->addWidget( mButtonGroup );
 	layout->activate();
+	setLayout(layout);
 	setReferencePoint( Center );
 }
 

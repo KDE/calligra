@@ -25,7 +25,7 @@
 #include <qfileinfo.h>
 #include <qpixmap.h>
 #include <QPaintEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3PtrList>
 #include <QPointF>
 
@@ -46,7 +46,7 @@ VGradientListItem::VGradientListItem( const VGradient& gradient, QString filenam
 {
 	m_gradient = new VGradient( gradient );
 
-	m_pixmap.resize( 200, 16 );
+	m_pixmap.scaled( 200, 16 );
 	VKoPainter gp( &m_pixmap, m_pixmap.width(), m_pixmap.height() );
 	// Port to Qt4:
 	// gp.setRasterOp( Qt::XorROP );
@@ -94,25 +94,30 @@ int VGradientListItem::width( const Q3ListBox* lb ) const
 void VGradientListItem::paint( QPainter* painter )
 {
 	painter->save();
-	// Port to Qt4:
+	// TODO: Port to Qt4:
 	// painter->setRasterOp( Qt::CopyROP );
 	QRect r ( 0, 0, width( listBox() ), height( listBox() ) );
 	painter->scale( ( (float)( width( listBox() ) ) ) / 200., 1. );
 	painter->drawPixmap( 0, 0, m_pixmap );
 	painter->restore();
 	if ( isSelected() )
-		painter->setPen( listBox()->colorGroup().highlightedText() );
+		painter->setPen( listBox()->palette().highlightedText().color() );
 	else
-		painter->setPen( listBox()->colorGroup().base() );
+		painter->setPen( listBox()->palette().base().color() );
 	painter->drawRect( r );
-	// Port to Qt4:
+	// TODO: Port to Qt4:
 	// painter->flush();
 } // VGradientListItem::paint
 
 VGradientPreview::VGradientPreview( VGradient& gradient, double& opacity, QWidget* parent, const char* name )
-		: QWidget( parent, name ), m_gradient( &gradient ), m_opacity( &opacity )
+		: QWidget( parent ), m_gradient( &gradient ), m_opacity( &opacity )
 {
-	setBackgroundMode( Qt::NoBackground );
+	setObjectName(name);
+
+	QPalette p = palette();
+	p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
+	// TODO: check if this is equivalent with the line below
+	// setBackgroundMode( Qt::NoBackground );
 	setMinimumSize( 70, 70 );
 } // VGradientPreview::VGradientPreview
 
@@ -163,7 +168,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 
 	QPainter p( &pixmap );
 
-	p.setPen( colorGroup().light() );
+	p.setPen( palette().light().color() );
 	/* TODO: Port to Qt4:
 	p.moveTo( 1, height() - 1 );
 	p.lineTo( 1, 1 );
@@ -177,12 +182,15 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	p.moveTo( width() - 2, 2 );
 	p.lineTo( width() - 2, height() - 2 );
 	p.lineTo( 2, height() - 2 );*/
-	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
+
+	QPainter p2(this);
+	p2.drawPixmap(QPoint(0, 0), pixmap, QRect(0, 0, width(), height()));
 } // VGradientPreview::paintEvent
 
 VGradientTabWidget::VGradientTabWidget( VGradient& gradient, KarbonResourceServer* server, QWidget* parent, const char* name )
-		: QTabWidget( parent, name ), m_gradient( gradient ), m_resourceServer( server )
+		: QTabWidget( parent ), m_gradient( gradient ), m_resourceServer( server )
 {
+	setObjectName(name);
 	setupUI();
 	setupConnections();
 	initUI();
@@ -195,43 +203,45 @@ VGradientTabWidget::~VGradientTabWidget()
 void VGradientTabWidget::setupUI()
 {
 	m_editGroup = new Q3GroupBox( i18n( "Edit Gradient" ) );
-	Q3GridLayout* editLayout = new Q3GridLayout( m_editGroup, 7, 3 );
+	QGridLayout* editLayout = new QGridLayout;
 	editLayout->setSpacing( 3 );
 	editLayout->setMargin( 6 );
-	editLayout->addRowSpacing( 0, 12 );
-	editLayout->addMultiCellWidget( m_gradientPreview = new VGradientPreview( m_gradient, m_gradOpacity, m_editGroup ), 1, 3, 0, 0 );
+	editLayout->setRowMinimumHeight( 0, 12 );
+	editLayout->addWidget( m_gradientPreview = new VGradientPreview( m_gradient, m_gradOpacity, m_editGroup ), 1, 3, 0, 0 );
 	editLayout->addWidget( new QLabel( i18n( "Type:" ), m_editGroup ), 1, 1 );
 	editLayout->addWidget( new QLabel( i18n( "Repeat:" ), m_editGroup ), 2, 1 );
 	editLayout->addWidget( new QLabel( i18n( "Target:" ), m_editGroup ), 3, 1 );
 	editLayout->addWidget( m_gradientType = new KComboBox( false, m_editGroup ), 1, 2 );
-	m_gradientType->insertItem( i18n( "Linear" ), 0 );
-	m_gradientType->insertItem( i18n( "Radial" ), 1 );
-	m_gradientType->insertItem( i18n( "Conical" ), 2 );
+	m_gradientType->insertItem( 0, i18n( "Linear" ) );
+	m_gradientType->insertItem( 1, i18n( "Radial" ) );
+	m_gradientType->insertItem( 2, i18n( "Conical" ) );
 	editLayout->addWidget( m_gradientRepeat = new KComboBox( false, m_editGroup ), 2, 2 );
-	m_gradientRepeat->insertItem( i18n( "None" ), 0 );
-	m_gradientRepeat->insertItem( i18n( "Reflect" ), 1 );
-	m_gradientRepeat->insertItem( i18n( "Repeat" ), 2 );
+	m_gradientRepeat->insertItem( 0, i18n( "None" ) );
+	m_gradientRepeat->insertItem( 1, i18n( "Reflect" ) );
+	m_gradientRepeat->insertItem( 2, i18n( "Repeat" ) );
 	editLayout->addWidget( m_gradientTarget = new KComboBox( false, m_editGroup ), 3, 2 );
-	m_gradientTarget->insertItem( i18n( "Stroke" ), 0 );
-	m_gradientTarget->insertItem( i18n( "Fill" ), 1 );
-	editLayout->addMultiCellWidget( m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), m_editGroup ), 6, 6, 0, 2 );
-	editLayout->addMultiCellWidget( m_gradientWidget = new VGradientWidget( m_gradient, m_editGroup ), 4, 4, 0, 2 );
+	m_gradientTarget->insertItem( 0, i18n( "Stroke" ) );
+	m_gradientTarget->insertItem( 1, i18n( "Fill" ) );
+	editLayout->addWidget( m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), m_editGroup ), 6, 6, 0, 2 );
+	editLayout->addWidget( m_gradientWidget = new VGradientWidget( m_gradient, m_editGroup ), 4, 4, 0, 2 );
 	editLayout->addWidget( new QLabel( i18n( "Overall opacity:" ), m_editGroup ), 5, 0 );
 	m_opacity = new KIntNumInput( 100, m_editGroup );
 	m_opacity->setRange( 0, 100, 1, true );
 	m_opacity->setValue( 100 );
-	editLayout->addMultiCellWidget( m_opacity, 5, 5, 1, 2 );
+	editLayout->addWidget( m_opacity, 5, 5, 1, 2 );
+	m_editGroup->setLayout(editLayout);
 	addTab( m_editGroup, i18n( "Edit" ) );
 
 	Q3GroupBox* predefGroup  = new Q3GroupBox( i18n( "Predefined Gradients" ) );
-	Q3GridLayout* predefLayout = new Q3GridLayout( predefGroup, 3, 2 );
+	QGridLayout* predefLayout = new QGridLayout;
 	predefLayout->setSpacing( 3 );
 	predefLayout->setMargin( 6 );
-	predefLayout->addRowSpacing( 0, 12 );
-	predefLayout->addMultiCellWidget( m_predefGradientsView = new KListBox( predefGroup ), 1, 1, 0, 2 );
+	predefLayout->setRowMinimumHeight( 0, 12 );
+	predefLayout->addWidget( m_predefGradientsView = new KListBox( predefGroup ), 1, 1, 0, 2 );
 	predefLayout->addWidget( m_predefDelete = new QPushButton( i18n( "&Delete" ), predefGroup ), 2, 0 );
 	predefLayout->addWidget( m_predefImport = new QPushButton( i18n( "&Import" ), predefGroup ), 2, 1 );
 	m_predefImport->setEnabled( false );
+	predefGroup->setLayout(predefLayout);
 	addTab( predefGroup, i18n( "Predefined" ) );
 } // VGradientTabWidget::setupUI
 
@@ -248,9 +258,9 @@ void VGradientTabWidget::setupConnections()
 
 void VGradientTabWidget::initUI()
 {
-	m_gradientType->setCurrentItem( m_gradient.type() );
-	m_gradientRepeat->setCurrentItem( m_gradient.repeatMethod() );
-	m_gradientTarget->setCurrentItem( FILL );
+	m_gradientType->setCurrentIndex( m_gradient.type() );
+	m_gradientRepeat->setCurrentIndex( m_gradient.repeatMethod() );
+	m_gradientTarget->setCurrentIndex( FILL );
 	m_opacity->setValue( 100 );
 
 	m_predefGradientsView->clear();
@@ -291,18 +301,18 @@ void VGradientTabWidget::setGradient( VGradient& gradient )
 
 VGradientTabWidget::VGradientTarget VGradientTabWidget::target()
 {
-	return (VGradientTarget)m_gradientTarget->currentItem();
+	return (VGradientTarget)m_gradientTarget->currentIndex();
 } // VGradientTabWidget::target
 
 void VGradientTabWidget::setTarget( VGradientTarget target )
 {
-	m_gradientTarget->setCurrentItem( target );
+	m_gradientTarget->setCurrentIndex( target );
 } // VGradientTabWidget::setTarget
 
 void VGradientTabWidget::combosChange( int )
 {
-	m_gradient.setType( (VGradient::VGradientType)m_gradientType->currentItem() );
-	m_gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_gradientRepeat->currentItem() );
+	m_gradient.setType( (VGradient::VGradientType)m_gradientType->currentIndex() );
+	m_gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_gradientRepeat->currentIndex() );
 
 	m_gradientPreview->update();
 } // VGradientTabWidget::combosChange
@@ -334,12 +344,12 @@ void VGradientTabWidget::changeToPredef( Q3ListBoxItem* item )
 	{
 		VGradientListItem* gradientItem = (VGradientListItem*)item;
 		m_gradient = *gradientItem->gradient();
-		m_gradientType->setCurrentItem( m_gradient.type() );
-		m_gradientRepeat->setCurrentItem( m_gradient.repeatMethod() );
+		m_gradientType->setCurrentIndex( m_gradient.type() );
+		m_gradientRepeat->setCurrentIndex( m_gradient.repeatMethod() );
 		m_opacity->setValue( 100 );
 		m_gradientPreview->update();
 		m_gradientWidget->update();
-		showPage( m_editGroup );
+		setCurrentWidget( m_editGroup );
 	}
 } // VGradientTabWidget::changeToPredef
 

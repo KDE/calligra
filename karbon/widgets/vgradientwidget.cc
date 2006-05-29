@@ -61,9 +61,15 @@ static unsigned char colorStop_bits[] = {
 };
 
 VGradientWidget::VGradientWidget( VGradient& gradient, QWidget* parent, const char* name )
-		: QWidget( parent, name ), m_gradient( &gradient )
+		: QWidget( parent ), m_gradient( &gradient )
 {
-	setBackgroundMode( Qt::NoBackground );
+	setObjectName(name);
+
+	QPalette p = palette();
+	p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
+	// TODO: check if this is equivalent with the line underneath. It might need autoFillBackground = true
+	//setBackgroundMode( Qt::NoBackground );
+
 	setMinimumSize( 105, 35 );
 } // VGradientWidget::VGradientWidget
 
@@ -75,12 +81,14 @@ void VGradientWidget::paintColorStop( QPainter& p, int x, VColor& color )
 {
 	QBitmap bitmap;
 
-	bitmap = QBitmap( colorStop_width, colorStop_height, colorStop_bits, true );
+	// TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true. Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
+	bitmap = QBitmap::fromData( QSize(colorStop_width, colorStop_height), colorStop_bits );
 	bitmap.setMask( bitmap );
 	p.setPen( color );
 	p.drawPixmap( x - 4, 1, bitmap );
 
-	bitmap = QBitmap( colorStopBorder_width, colorStopBorder_height, colorStopBorder_bits, true );
+	// TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true. Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
+	bitmap = QBitmap::fromData( QSize(colorStopBorder_width, colorStopBorder_height), colorStopBorder_bits );
 	bitmap.setMask( bitmap );
 	p.setPen( QColor( "black" ) );
 	p.drawPixmap( x - 5, 1, bitmap );
@@ -88,7 +96,8 @@ void VGradientWidget::paintColorStop( QPainter& p, int x, VColor& color )
 
 void VGradientWidget::paintMidPoint( QPainter& p, int x )
 {
-	QBitmap bitmap( midPoint_width, midPoint_height, midPoint_bits, true );
+	// TODO: in Qt3, the bitmap data was loaded with bool isXbitmap = true. Check if this is still correct otherwise in Qt4, QImage::Format monoFormat needs to change.
+	QBitmap bitmap = QBitmap::fromData( QSize(midPoint_width, midPoint_height), midPoint_bits );
 	bitmap.setMask( bitmap );
 	p.setPen( QColor( "black" ) );
 	p.drawPixmap( x - 3, 1, bitmap );
@@ -124,7 +133,9 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 
 	QPainter p( &pixmap );
 
-	p.setPen( colorGroup().light() );
+	// TODO: check if this is equivalent with colorGroup().light()
+	p.setPen( palette().light().color() );
+
 	// light frame around widget
 /* Needs porting to Qt4
 	p.moveTo( 1, height() - 1 );
@@ -161,7 +172,8 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 
 	m_pntArea.setRect( 2, height() - ph - 2, w, ph );
 	// clear point area
-	p.fillRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height(), colorGroup().background() );
+	// TODO: check if palette().window().color() is equivalent with colorGroup().background()
+	p.fillRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height(), palette().window().color() );
 
 	p.setClipRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height() );
 	p.translate( m_pntArea.x(), m_pntArea.y() );
@@ -179,7 +191,9 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 		paintColorStop( p, int( stop->rampPoint * w ), stop->color );
 	}
 	p.end();
-	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
+
+	QPainter p2(this);
+	p2.drawPixmap( QPoint(0, 0), pixmap, QRect(0, 0, width(), height()) );
 } // VGradientWidget::paintEvent
 
 void VGradientWidget::mousePressEvent( QMouseEvent* e )
@@ -279,7 +293,7 @@ void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 
 void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 {
-	if( e->state() & Qt::RightButton )
+	if( e->buttons() & Qt::RightButton )
 		return;
 
 	Q3PtrList<VColorStop>& colorStops = m_gradient->m_colorStops;

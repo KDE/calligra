@@ -112,8 +112,12 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
 	viewport()->setMouseTracking( true );
 	setMouseTracking( true );
 
-	viewport()->setBackgroundColor( Qt::white );
-	viewport()->setBackgroundMode( Qt::NoBackground );
+	QPalette p = viewport()->palette();
+	QBrush b(QColor("white"), Qt::NoBrush);
+	p.setBrush(QPalette::Window, b);
+	// TODO Check if the code above is ok when karbon actually runs.
+	//viewport()->setBackgroundColor( Qt::white );
+	//viewport()->setBackgroundMode( Qt::NoBackground );
 	viewport()->installEventFilter( this );
 
 	resizeContents( 800, 600 );
@@ -264,7 +268,12 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	if( m_view->toolController()->currentTool() )
 		m_view->toolController()->currentTool()->draw( &qpainter );
 
+	/* TODO: Replace bitBlt with these two lines when ported to qpainter
+	QPainter p2(viewport());
+	p2.drawPixmap(rect.topLeft().toPoint(), p, rect.toRect());
+	*/
 	bitBlt( viewport(), rect.topLeft().toPoint(), p->device(), rect.toRect() );
+
 	viewport()->setUpdatesEnabled( true );
 }
 
@@ -332,6 +341,10 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRectF&, bool drawVObjects )
 	if( m_view->toolController()->currentTool() )
 		m_view->toolController()->currentTool()->draw( &qpainter );
 
+	/* TODO: Replace bitBlt with these two lines when ported to qpainter
+	QPainter p2(viewport());
+	p2.drawPixmap(QPoint(0, 0), p, QRect(0, 0, width(), height()));
+	*/
 	bitBlt( viewport(), 0, 0, p->device(), 0, 0, width(), height() );
 }
 
@@ -358,7 +371,7 @@ VCanvas::resizeEvent( QResizeEvent* event )
 	if( !m_pixmap )
 		m_pixmap = new QPixmap( width(), height() );
 	else
-		m_pixmap->resize( width(), height() );
+		m_pixmap->scaled( width(), height() );
 
 	VPainter *p = m_view->painterFactory()->painter();
 	p->resize( width(), height() );
@@ -375,7 +388,7 @@ VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 void
 VCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
-	e->accept( KarbonDrag::canDecode( e ) || KColorMimeData::canDecode( e->mimeData() ) );
+	e->setAccepted( KarbonDrag::canDecode( e ) || KColorMimeData::canDecode( e->mimeData() ) );
 }
 
 void
