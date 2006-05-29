@@ -21,7 +21,7 @@
 #include "KWTextFrameSet.h"
 #include "KWTableFrameSet.h"
 #include "KWDocument.h"
-#include "KWView.h"
+#include "KWView.h" // for checkClipboard only; maybe move it to KWCanvas?
 #include "KWViewMode.h"
 #include "KWCanvas.h"
 #include "KWAnchor.h"

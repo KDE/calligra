@@ -18,7 +18,6 @@
 */
 
 #include "KWEditPersonnalExpression.h"
-#include "KWView.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -35,6 +34,7 @@
 #include <Q3GridLayout>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
+#include <QDomDocument>
 
 KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, i18n("Edit Personal Expression"), Ok|Cancel, Ok, true )

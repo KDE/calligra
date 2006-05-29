@@ -19,7 +19,6 @@
 */
 
 #include "KWFrameSetEdit.h"
-#include "KWView.h"
 #include "KWCanvas.h"
 #include "KWFrame.h"
 #include "KWAnchor.h"
