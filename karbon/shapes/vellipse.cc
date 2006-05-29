@@ -129,7 +129,7 @@ VEllipse::save( QDomElement& element ) const
 
 		// save fill/stroke untransformed
 		VPath path( *this );
-		VTransformCmd cmd( 0L, m_matrix.invert() );
+		VTransformCmd cmd( 0L, m_matrix.inverted() );
 		cmd.visit( path );
 		path.VObject::save( me );
 		//VObject::save( me );
@@ -263,7 +263,7 @@ VEllipse::load( const QDomElement& element )
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 		if( list.item( i ).isElement() )
 			VObject::load( list.item( i ).toElement() );
 
