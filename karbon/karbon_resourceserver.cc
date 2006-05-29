@@ -189,7 +189,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 
 	QString name = fi.baseName();
 
-	QString ext = '.' + fi.extension( false );
+	QString ext = '.' + fi.suffix();
 
 	QString filename = KarbonFactory::instance()->dirs()->saveLocation(
 						   "kis_pattern" ) + name + ext;
@@ -510,7 +510,7 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 	m_clipart = clipart->clone();
 	m_clipart->setState( VObject::normal );
 
-	m_pixmap.resize( 64, 64 );
+	m_pixmap = QPixmap( 64, 64 );
 	VKoPainter p( &m_pixmap, 64, 64 );
 	QMatrix mat( 64., 0, 0, 64., 0, 0 );
 
@@ -519,12 +519,12 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 
 	m_clipart->draw( &p, &m_clipart->boundingBox() );
 
-	trafo.setMatrix( mat.invert() );
+	trafo.setMatrix( mat.inverted() );
 	trafo.visit( *m_clipart );
 
 	p.end();
 
-	m_thumbPixmap.resize( 32, 32 );
+	m_thumbPixmap = QPixmap( 32, 32 );
 	VKoPainter p2( &m_thumbPixmap, 32, 32 );
 	mat.setMatrix( 32., 0, 0, 32., 0, 0 );
 
@@ -533,7 +533,7 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 
 	m_clipart->draw( &p2, &m_clipart->boundingBox() );
 
-	trafo.setMatrix( mat.invert() );
+	trafo.setMatrix( mat.inverted() );
 	trafo.visit( *m_clipart );
 
 	p2.end();
