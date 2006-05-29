@@ -25,7 +25,6 @@
 %token ACOS
 %token AMPERSAND
 %token SQL_ABSOLUTE
-%token ACOS
 %token ADA
 %token ADD
 %token ADD_DAYS
