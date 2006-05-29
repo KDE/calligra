@@ -216,8 +216,7 @@ static const char* const buttonpattern[]={
 
 #include "vtypebuttonbox.h"
 
-VTypeButtonBox::VTypeButtonBox( KarbonPart *part, 
-								QWidget* parent, const char* name )
+VTypeButtonBox::VTypeButtonBox( KarbonPart *part, QWidget* parent, const char* name )
 	: Q3HButtonGroup( parent, name ),
 	  m_part( part ), m_isStrokeManipulator( false )
 {
@@ -225,7 +224,7 @@ VTypeButtonBox::VTypeButtonBox( KarbonPart *part,
 
 	// The button for no fill
 	QToolButton* button = new QToolButton( this );
-	button->setPixmap( QPixmap( (const char **) buttonnone ) );
+	button->setIcon( QPixmap( (const char **) buttonnone ) );
 	button->setMaximumWidth( 14 );
 	button->setMaximumHeight( 14 );
 	button->setToolTip( i18n( "None" ) );
@@ -233,7 +232,7 @@ VTypeButtonBox::VTypeButtonBox( KarbonPart *part,
 
 	// The button for solid fill
 	button = new QToolButton( this );
-	button->setPixmap( QPixmap( (const char **) buttonsolid ) );
+	button->setIcon( QPixmap( (const char **) buttonsolid ) );
 	button->setMaximumWidth( 14 );
 	button->setMaximumHeight( 14 );
 	button->setToolTip( i18n( "Solid" ) );
@@ -241,7 +240,7 @@ VTypeButtonBox::VTypeButtonBox( KarbonPart *part,
 
 	// The button for gradient fill
 	button = new QToolButton( this );
-	button->setPixmap( QPixmap( (const char **) buttongradient ) );
+	button->setIcon( QPixmap( (const char **) buttongradient ) );
 	button->setMaximumWidth( 14 );
 	button->setMaximumHeight( 14 );
 	button->setToolTip( i18n( "Gradient" ) );
@@ -249,7 +248,7 @@ VTypeButtonBox::VTypeButtonBox( KarbonPart *part,
 
 	// The button for pattern fill
 	button = new QToolButton( this );
-	button->setPixmap( QPixmap( (const char **) buttonpattern ) );
+	button->setIcon( QPixmap( (const char **) buttonpattern ) );
 	button->setMaximumWidth( 14 );
 	button->setMaximumHeight( 14 );
 	button->setToolTip( i18n( "Pattern" ) );

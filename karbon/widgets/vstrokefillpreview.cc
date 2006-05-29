@@ -24,6 +24,7 @@
 #include <QEvent>
 #include <QPoint>
 #include <QRect>
+#include <QPainter>
 
 #include <kdebug.h>
 
@@ -70,7 +71,7 @@ VStrokeFillPreview::VStrokeFillPreview(
 #endif
 
 	installEventFilter( this );
-	m_pixmap.resize( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
+	m_pixmap.scaled( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
 	m_painter = new VKoPainter( &m_pixmap, uint( PANEL_SIZEX ), uint( PANEL_SIZEY ) );
 }
 
@@ -82,10 +83,8 @@ VStrokeFillPreview::~VStrokeFillPreview()
 void
 VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
-        bitBlt( this,
-                (int)( width() - PANEL_SIZEX ) / 2, (int)( height() - PANEL_SIZEY ) / 2,
-		&m_pixmap,
-                0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY );
+	QPainter p(this);
+	p.drawPixmap(QPoint((int)( width() - PANEL_SIZEX ) / 2, (int)( height() - PANEL_SIZEY ) / 2), m_pixmap, QRect(0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY ));
 
 	Q3Frame::paintEvent( event );
 }

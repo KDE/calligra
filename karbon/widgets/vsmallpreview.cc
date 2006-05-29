@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <qpixmap.h>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QPaintEvent>
 #include <QPointF>
 #include <QRectF>
@@ -43,10 +43,12 @@
 #define FRAMEWIDTH		40
 
 VSmallPreview::VSmallPreview( QWidget* parent, const char* name )
-	: QWidget( parent, name )
+	: QWidget( parent )
 {
+	setObjectName(name);
+
 	/* Create widget layout */
-	Q3HBoxLayout *layout = new Q3HBoxLayout( this, 4 );
+	QHBoxLayout *layout = new QHBoxLayout;
 	m_strokeLabel = new QLabel( i18n( "Stroke: None" ), this );
 	layout->addWidget( m_strokeLabel );
 	m_strokeFrame = new Q3Frame( this );
@@ -60,6 +62,8 @@ VSmallPreview::VSmallPreview( QWidget* parent, const char* name )
 	m_fillFrame->setFrameStyle( QFrame::StyledPanel | Q3Frame::Plain );
 	layout->addWidget( m_fillFrame );
 	layout->activate();
+
+	setLayout(layout);
 
 	m_fill = VFill();
 	m_stroke = VStroke();
@@ -93,7 +97,7 @@ VSmallPreview::drawFill( const VFill &f )
 	VStroke stroke;
 	
 	QPixmap m_pixmap;
-	m_pixmap.resize( m_fillFrame->width(), m_fillFrame->height() );
+	m_pixmap.scaled( m_fillFrame->width(), m_fillFrame->height() );
 	VKoPainter* m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 
 	m_painter->begin();
@@ -189,7 +193,7 @@ VSmallPreview::drawStroke( const VStroke &s )
 	VStroke stroke;
 
 	QPixmap m_pixmap;
-	m_pixmap.resize( m_fillFrame->width(), m_fillFrame->height() );
+	m_pixmap.scaled( m_fillFrame->width(), m_fillFrame->height() );
 	VKoPainter* m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 
 	m_painter->begin();

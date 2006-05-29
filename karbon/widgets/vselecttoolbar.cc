@@ -37,38 +37,29 @@
 
 VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar( view, name ), m_view( view )
 {
-	setCaption( i18n( "Object Properties" ) );
-	QLabel *x_label = new QLabel( i18n( "X:" ), this, "kde toolbar widget" );
-	// needs porting:
-	//insertWidget( 0, x_label->width(), x_label );
+	setWindowTitle( i18n( "Object Properties" ) );
+	QLabel *x_label = new QLabel( i18n( "X:" ), this );
+	addWidget( x_label );
 	m_x = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( slotXChanged( double ) ) );
-	// needs porting:
-	// insertWidget( 1, m_x->width(), m_x );
-	QLabel *y_label = new QLabel( i18n( "Y:" ), this, "kde toolbar widget" );
-	// needs porting:
-	// insertWidget( 2, y_label->width(), y_label );
+	addWidget( m_x );
+	QLabel *y_label = new QLabel( i18n( "Y:" ), this );
+	addWidget( y_label );
 	m_y = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( slotYChanged( double ) ) );
-	// needs porting:
-	// insertWidget( 3, m_y->width(), m_y );
+	addWidget( m_y );
 	
-	// needs porting:
-	// insertSeparator(4);
-	QLabel *w_label = new QLabel( i18n( "Width:" ), this, "kde toolbar widget" );
-	// needs porting:
-	// insertWidget( 5, w_label->width(), w_label );
+	addSeparator();
+	QLabel *w_label = new QLabel( i18n( "Width:" ), this );
+	addWidget( w_label );
 	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( slotWidthChanged( double ) ) );
-	// needs porting:
-	// insertWidget( 6, m_width->width(), m_width );
-	QLabel *h_label = new QLabel( i18n( "Height:" ), this, "kde toolbar widget" );
-	// needs porting:
-	// insertWidget( 7, h_label->width(), h_label );
+	addWidget( m_width );
+	QLabel *h_label = new QLabel( i18n( "Height:" ), this );
+	addWidget( h_label );
 	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( slotHeightChanged( double ) ) );
-	// needs porting:
-	// insertWidget( 8, m_height->width(), m_height );
+	addWidget( m_height );
 
 	connect( m_view, SIGNAL( selectionChange() ), this, SLOT( slotSelectionChanged() ) );
 }

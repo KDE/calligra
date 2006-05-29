@@ -18,12 +18,13 @@
 */
 
 #include "vstatebutton.h"
-//Added by qt3to4:
 #include <QMouseEvent>
 
 VStateButton::VStateButton( QWidget* parent, const char* name )
-		: QPushButton( parent, name )
+		: QPushButton( parent )
 {
+	setObjectName(name);
+
 	m_index = 0;
 	m_pixmaps.setAutoDelete( true );
 }
@@ -39,7 +40,7 @@ VStateButton::mouseReleaseEvent( QMouseEvent *e )
 	if( m_pixmaps.count() > 0 )
 	{
 		m_index = ++m_index % m_pixmaps.count();
-		setPixmap( *( m_pixmaps.at( m_index ) ) );
+		setIcon( *( m_pixmaps.at( m_index ) ) );
 	}
 }
 
@@ -47,5 +48,5 @@ void
 VStateButton::setState( unsigned int /*index*/ )
 {
 	if( m_pixmaps.count() > 0 )
-		setPixmap( *( m_pixmaps.at( m_index ) ) );
+		setIcon( *( m_pixmaps.at( m_index ) ) );
 }

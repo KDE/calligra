@@ -22,9 +22,8 @@
 #include <QLabel>
 #include <QLayout>
 #include <QString>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3GridLayout>
+#include <QVBoxLayout>
+#include <QGridLayout>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kstdguiitem.h>
@@ -33,21 +32,22 @@
 #include "vtranslate.h"
 
 VTranslate::VTranslate( QWidget* parent, const char* name )
-	: QWidget( parent, name )
+	: QWidget( parent )
 {
-	setCaption( i18n( "Translate" ) );
+	setObjectName(name);
+	setWindowTitle( i18n( "Translate" ) );
 
-	Q3VBoxLayout *mainlayout = new Q3VBoxLayout(this, 7);
+	QVBoxLayout *mainlayout = new QVBoxLayout;
 	mainlayout->addSpacing(5);
 
-	Q3GridLayout *inputlayout = new Q3GridLayout(this, 5, 3);
+	QGridLayout *inputlayout = new QGridLayout;
 	mainlayout->addLayout(inputlayout);
 	m_labelX = new QLabel(i18n("X:"), this);
 	inputlayout->addWidget(m_labelX, 0, 0);
 	labely = new QLabel(i18n("Y:"), this);
 	inputlayout->addWidget(labely, 1, 0);
-	inputlayout->addColSpacing(1, 1);
-	inputlayout->addColSpacing(3, 5);
+	inputlayout->setColumnMinimumWidth(1, 1);
+	inputlayout->setColumnMinimumWidth(3, 5);
 	m_inputX = new KDoubleNumInput( this );
 	m_inputX->setRange(-10000.00, 10000.00, 1.00, false); //range is just for example - for now :-)
 	inputlayout->addWidget(m_inputX, 0, 2);
@@ -69,6 +69,7 @@ VTranslate::VTranslate( QWidget* parent, const char* name )
 	mainlayout->addWidget(m_buttonApply);
 
 	mainlayout->activate();
+	setLayout(mainlayout);
 
 	setFixedSize(baseSize()); //Set the size tp fixed values
 }

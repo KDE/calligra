@@ -30,7 +30,7 @@ VToolBox::VToolBox( KMainWindow *mainWin, const char* name, KInstance* instance 
 void
 VToolBox::registerTool( VTool *tool )
 {
-	kDebug(38000) << "VToolBox::registerTool : " << tool->name() << endl;
+	kDebug(38000) << "VToolBox::registerTool : " << tool->objectName() << endl;
 	KoToolBox::registerTool( tool->action(), tool->toolType(), tool->priority() );
 }
 
