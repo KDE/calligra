@@ -5688,7 +5688,7 @@ void KWView::spellCheckerRemoveHighlight()
             textdoc->textFrameSet()->removeHighlight();
     }
     KWTextFrameSetEdit * edit = currentTextEdit();
-    if (false && edit)
+    if (edit)
         edit->drawCursor( true );
 }
 
