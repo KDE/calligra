@@ -24,8 +24,7 @@
 #include <QPushButton>
 #include <QWidget>
 #include <QToolTip>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3Frame>
 
 #include <kiconloader.h>
@@ -45,11 +44,11 @@
 VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: QWidget(), m_part ( part ), m_view( parent )
 {
-	setCaption( i18n( "Stroke Properties" ) );
+	setWindowTitle( i18n( "Stroke Properties" ) );
 
 	QPushButton *button;
 
-	Q3GridLayout *mainLayout = new Q3GridLayout( this, 4, 2 );
+	QGridLayout *mainLayout = new QGridLayout;
 	
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), this );
 	mainLayout->addWidget( widthLabel, 0, 0 );
@@ -68,18 +67,18 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	m_capGroup->setInsideMargin( 1 );
 	m_capGroup->setExclusive( true );
 	button = new QPushButton( "", m_capGroup );
-	button->setPixmap( SmallIcon( "cap_butt" ) );
-	button->setToggleButton( true );
+	button->setIcon( SmallIcon( "cap_butt" ) );
+	button->setCheckable( true );
     button->setToolTip( i18n( "Butt cap" ) );
 	m_capGroup->insert( button );
 	button = new QPushButton( "", m_capGroup );
-	button->setPixmap( SmallIcon( "cap_round" ) );
-	button->setToggleButton( true );
+	button->setIcon( SmallIcon( "cap_round" ) );
+	button->setCheckable( true );
     button->setToolTip( i18n( "Round cap" ) );
 	m_capGroup->insert( button );
 	button = new QPushButton( "", m_capGroup );
-	button->setPixmap( SmallIcon( "cap_square" ) );
-	button->setToggleButton( true );
+	button->setIcon( SmallIcon( "cap_square" ) );
+	button->setCheckable( true );
     button->setToolTip( i18n( "Square cap" ) );
 	m_capGroup->insert( button );
 	mainLayout->addWidget( m_capGroup, 1, 1 );
@@ -94,26 +93,28 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	m_joinGroup->setInsideMargin( 1 );
 	m_joinGroup->setExclusive( true );
 	button = new QPushButton( "", m_joinGroup );
-	button->setPixmap( SmallIcon( "join_miter" ) );
-	button->setToggleButton( true );
-    button->setToolTip( i18n( "Miter join" ) );
+	button->setIcon( SmallIcon( "join_miter" ) );
+	button->setCheckable( true );
+	button->setToolTip( i18n( "Miter join" ) );
 	m_joinGroup->insert( button );
 	button = new QPushButton( "", m_joinGroup );
-	button->setPixmap( SmallIcon( "join_round" ) );
-	button->setToggleButton( true );
-    button->setToolTip( i18n( "Round join" ) );
+	button->setIcon( SmallIcon( "join_round" ) );
+	button->setCheckable( true );
+	button->setToolTip( i18n( "Round join" ) );
 	m_joinGroup->insert( button );
 	button = new QPushButton( "", m_joinGroup );
-	button->setPixmap( SmallIcon( "join_bevel" ) );
-	button->setToggleButton( true );
-    button->setToolTip( i18n( "Bevel join" ) );
+	button->setIcon( SmallIcon( "join_bevel" ) );
+	button->setCheckable( true );
+	button->setToolTip( i18n( "Bevel join" ) );
 	m_joinGroup->insert( button );
 	mainLayout->addWidget( m_joinGroup, 2, 1 );
 	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 
 	mainLayout->setRowStretch( 3, 1 );
-	mainLayout->setColStretch( 1, 1 );
+	mainLayout->setColumnStretch( 1, 1 );
 	mainLayout->activate();
+
+	setLayout(mainLayout);
 
 	updateDocker();
 }

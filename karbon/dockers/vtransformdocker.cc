@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <qmatrix.h>
 #include <QToolTip>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QPointF>
 #include <QRectF>
 
@@ -42,9 +42,9 @@
 VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: QWidget(), m_part ( part ), m_view( parent )
 {
-	setCaption( i18n( "Transform" ) );
+	setWindowTitle( i18n( "Transform" ) );
 
-	Q3GridLayout *mainLayout = new Q3GridLayout( this, 5, 5 );
+	QGridLayout *mainLayout = new QGridLayout;
 
 	//X: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* xLabel = new QLabel( i18n ( "X:" ), this );
@@ -97,8 +97,10 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 	m_shearY->setToolTip( i18n("Shear actual selection in y-direction") );
 
 	mainLayout->setRowStretch( 4, 1 );
-	mainLayout->setColStretch( 1, 1 );
-	mainLayout->setColStretch( 3, 1 );
+	mainLayout->setColumnStretch( 1, 1 );
+	mainLayout->setColumnStretch( 3, 1 );
+
+	setLayout(mainLayout);
 
 	update();
 }

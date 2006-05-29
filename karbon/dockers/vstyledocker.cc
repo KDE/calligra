@@ -26,7 +26,7 @@
 #include <qtoolbutton.h>
 #include <QMouseEvent>
 #include <Q3PtrList>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QRectF>
 
 #include <klocale.h>
@@ -79,13 +79,13 @@ ClipartChooser::startDrag()
 VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: QWidget(), m_part ( part ), m_view( parent )
 {
-	setCaption( i18n( "Resources" ) );
+	setWindowTitle( i18n( "Resources" ) );
 
 	mTabWidget = new QTabWidget( this );
 
 	//Pattern
 	KoPatternChooser *pPatternChooser = new KoPatternChooser( KarbonFactory::rServer()->patterns(), mTabWidget );
-	pPatternChooser->setCaption( i18n( "Patterns" ) );
+	pPatternChooser->setWindowTitle( i18n( "Patterns" ) );
 
 	connect( pPatternChooser, SIGNAL(selected( KoIconItem * ) ), this, SLOT( slotItemSelected( KoIconItem * )));
 	mTabWidget->addTab( pPatternChooser, i18n( "Patterns" ) );
@@ -94,9 +94,11 @@ VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	ClipartWidget *pClipartWidget = new ClipartWidget( KarbonFactory::rServer()->cliparts(), part, mTabWidget );
 	mTabWidget->addTab( pClipartWidget, i18n( "Clipart" ) );
 
-	Q3VBoxLayout *mainWidgetLayout = new Q3VBoxLayout( this, 2 );
+	QVBoxLayout *mainWidgetLayout = new QVBoxLayout;
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->activate();
+	setLayout(mainWidgetLayout);
+
 	setMinimumHeight( 174 );
 	setMinimumWidth( 194 );
 }
@@ -109,7 +111,7 @@ void VStyleDocker::slotItemSelected( KoIconItem *item )
 {
 	VPattern *pattern = (VPattern *)item;
 	if( !pattern ) return;
-	kDebug(38000) << "loading pattern : " << pattern->tilename().latin1() << endl;
+	kDebug(38000) << "loading pattern : " << pattern->tilename().toLatin1() << endl;
 	if( m_part && m_part->document().selection() )
 	{
 		VFill fill;
@@ -130,19 +132,19 @@ ClipartWidget::ClipartWidget( Q3PtrList<VClipartIconItem>* clipartItems, KarbonP
 {
 	KIconLoader il;
 
-	Q3VBoxLayout* layout = new Q3VBoxLayout( this );
+	QVBoxLayout* layout = new QVBoxLayout;
 	layout->addWidget( m_clipartChooser = new ClipartChooser( QSize( 32, 32 ), this ) );
 	layout->addWidget( m_buttonGroup = new Q3HButtonGroup( this ) );
 	QToolButton* m_addClipartButton;
 	m_buttonGroup->insert( m_addClipartButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_importClipartButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deleteClipartButton = new QToolButton( m_buttonGroup ) );
-	m_addClipartButton->setIconSet( SmallIcon( "14_layer_newlayer" ) );
-	m_addClipartButton->setTextLabel( i18n( "Add" ) );
-	m_importClipartButton->setIconSet( SmallIcon( "fileimport" ) );
-	m_importClipartButton->setTextLabel( i18n( "Import" ) );
-	m_deleteClipartButton->setIconSet( SmallIcon( "14_layer_deletelayer" ) );
-	m_deleteClipartButton->setTextLabel( i18n( "Delete" ) );
+	m_addClipartButton->setIcon( SmallIcon( "14_layer_newlayer" ) );
+	m_addClipartButton->setText( i18n( "Add" ) );
+	m_importClipartButton->setIcon( SmallIcon( "fileimport" ) );
+	m_importClipartButton->setText( i18n( "Import" ) );
+	m_deleteClipartButton->setIcon( SmallIcon( "14_layer_deletelayer" ) );
+	m_deleteClipartButton->setText( i18n( "Delete" ) );
 
 	m_buttonGroup->setInsideMargin( 3 );
 
@@ -162,6 +164,8 @@ ClipartWidget::ClipartWidget( Q3PtrList<VClipartIconItem>* clipartItems, KarbonP
 	m_clipartItem = ( clipartItems->first() ) ? clipartItems->first()->clone() : 0;
 	if( !m_clipartItem )
 		m_deleteClipartButton->setEnabled( false );
+
+	setLayout(layout);
 }
 
 ClipartWidget::~ClipartWidget()
@@ -262,7 +266,7 @@ ClipartWidget::importClipart()
 	}
 	QString fname = dialog->selectedFile();
 	delete dialog;
-	if( m_part->nativeFormatMimeType() == dialog->currentMimeFilter().latin1() )
+	if( m_part->nativeFormatMimeType() == dialog->currentMimeFilter().toLatin1() )
 		m_part->mergeNativeFormat( fname );
 	else
 	{
