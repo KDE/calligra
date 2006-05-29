@@ -6,10 +6,11 @@ This chapter gives a short introduction on selections.
 </para><para>
 You can select a part of an image masking off the rest. This is handy when
 you want to cut, copy or just modify a part of the image without affecting
-the rest. &krita; handles selections with a mask where each pixel is given any
-of 256 levels between selected and unselected. Yes, that is right, you can
-have fractionally selected pixels. And by working on individual pixels you
-can effectively <quote>paint</quote> your selection.
+the rest. For processing selected objects &krita; applies a mask. Each pixel of
+the selection is processed based on a value of its mask, or the "level
+of the selection", that can range from 0 (unselected) to 255
+(selected). Yes, that is right, you can have fractionally selected pixels.
+And by working on individual pixels you can <quote>paint</quote> your selection.
 </para><para>
 The selection mask is visualized with unselected pixels having a blueish
 tint, and selected pixels looking like normal. Fractionally selected pixels
