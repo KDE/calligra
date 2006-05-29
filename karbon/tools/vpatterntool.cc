@@ -29,7 +29,7 @@
 #include <QRectF>
 #include <QPointF>
 #include <Q3PtrList>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kiconloader.h>
 #include <koIconChooser.h>
@@ -52,19 +52,20 @@
 #include <kactioncollection.h>
 
 VPatternWidget::VPatternWidget( Q3PtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
-	: KDialogBase( parent, "", true, i18n( "Choose Pattern" ), Ok | Cancel ), m_pattern( 0 )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, "", true, i18n( "Choose Pattern" ), Ok | Cancel )
+	, m_pattern( 0 )
 {
 	QWidget *base = new QWidget( this );
-	Q3VBoxLayout* layout = new Q3VBoxLayout( base );
+	QVBoxLayout* layout = new QVBoxLayout( base );
 	layout->addWidget( m_patternChooser = new KoIconChooser( QSize( 32, 32 ), base ) );
 	layout->addWidget( m_buttonGroup = new Q3HButtonGroup( base ) );
 	m_buttonGroup->insert( m_importPatternButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deletePatternButton = new QToolButton( m_buttonGroup ) );
 	m_patternChooser->setFixedSize( 180, 120 );
-	m_importPatternButton->setIconSet( SmallIconSet( "14_layer_newlayer" ) );
-	m_importPatternButton->setTextLabel( i18n( "Import" ) );
-	m_deletePatternButton->setIconSet( SmallIconSet("14_layer_deletelayer" ) );
-	m_deletePatternButton->setTextLabel( i18n( "Delete" ) );
+	m_importPatternButton->setIcon( SmallIconSet( "14_layer_newlayer" ) );
+	m_importPatternButton->setText( i18n( "Import" ) );
+	m_deletePatternButton->setIcon( SmallIconSet("14_layer_deletelayer" ) );
+	m_deletePatternButton->setText( i18n( "Delete" ) );
 
 	m_buttonGroup->setInsideMargin( 3 );
 	m_importPatternButton->setEnabled( true );

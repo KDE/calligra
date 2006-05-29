@@ -30,10 +30,10 @@
 #include <QPushButton>
 #include <qtabwidget.h>
 #include <QPointF>
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QMouseEvent>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPaintEvent>
 
 #include <kdebug.h>
@@ -218,14 +218,14 @@ ShadowWidget::ShadowWidget( QWidget* parent, const char* name, int angle, int di
 	setTitle( i18n( "Shadow" ) );
 	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 
-	Q3GridLayout* layout = new Q3GridLayout( this );
-	layout->addRowSpacing( 0, 12 );
+	QGridLayout* layout = new QGridLayout( this );
+	layout->addItem(new QSpacerItem(0, 12), 0, 0);
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
-	layout->setColStretch( 0, 1 );
-	layout->setColStretch( 1, 0 );
-	layout->setColStretch( 2, 2 );
-	layout->addMultiCellWidget( m_preview = new ShadowPreview( this ), 1, 3, 0, 0 );
+	layout->setColumnStretch( 0, 1 );
+	layout->setColumnStretch( 1, 0 );
+	layout->setColumnStretch( 2, 2 );
+	layout->addWidget( m_preview = new ShadowPreview( this ), 1, 0, 3, 1 );
 	layout->addWidget( new QLabel( i18n( "Angle:" ), this ), 1, 1 );
 	layout->addWidget( m_angle = new KIntNumInput( this ), 1, 2 );
 	layout->addWidget( new QLabel( i18n( "Distance:" ), this ), 2, 1 );
@@ -326,38 +326,39 @@ ShadowWidget::updatePreview()
 }
 
 VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
-	: KDialogBase( parent, "", true, i18n( "Text" ), Ok | Cancel ), m_tool( tool )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, "", true, i18n( "Text" ), Ok | Cancel )
+	, m_tool( tool )
 {
 	//setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 	//setFrameStyle( Box | Sunken );
 	QWidget *base = new QWidget( this );
-	Q3VBoxLayout* mainLayout = new Q3VBoxLayout( base );
+	QVBoxLayout* mainLayout = new QVBoxLayout( base );
 	mainLayout->setMargin( 3 );
 
-	mainLayout->add( m_tabWidget = new QTabWidget( base ) );
+	mainLayout->addWidget( m_tabWidget = new QTabWidget( base ) );
 
 	m_tabWidget->setFont( QFont( KGlobalSettings::generalFont().family() , 8 ) );
 
 	QWidget* textWidget = new QWidget( m_tabWidget );
 
-	Q3GridLayout* textLayout = new Q3GridLayout( textWidget );
+	QGridLayout* textLayout = new QGridLayout( textWidget );
 
 	QStringList list;
 	KFontChooser::getFontList( list, KFontChooser::SmoothScalableFonts );
 
 	textLayout->setMargin( 3 );
 	textLayout->setSpacing( 2 );
-	textLayout->addMultiCellWidget( m_fontCombo = new KFontCombo( list, textWidget ), 0, 0, 0, 2 );
+	textLayout->addWidget( m_fontCombo = new KFontCombo( list, textWidget ), 0, 0, 1, 3 );
 	textLayout->addWidget( m_fontSize = new KIntNumInput( textWidget ), 1, 0 );
 	textLayout->addWidget( m_boldCheck = new QCheckBox( i18n( "Bold" ), textWidget ), 1, 1 );
 	textLayout->addWidget( m_italicCheck = new QCheckBox( i18n( "Italic" ), textWidget ), 1, 2 );
-	textLayout->addMultiCellWidget( m_textEditor = new QLineEdit( textWidget ), 2, 2, 0, 2 );
+	textLayout->addWidget( m_textEditor = new QLineEdit( textWidget ), 2, 0, 1, 3 );
 
 	m_tabWidget->addTab( textWidget, i18n( "Text" ) );
 
 	QWidget* posWidget = new QWidget( m_tabWidget );
 	
-	Q3GridLayout* posLayout = new Q3GridLayout( posWidget );
+	QGridLayout* posLayout = new QGridLayout( posWidget );
 	textLayout->setMargin( 3 );
 	posLayout->setSpacing( 2 );
 	posLayout->addWidget( new QLabel( i18n( "Alignment:" ), posWidget ), 0, 0 );
@@ -366,28 +367,29 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 	posLayout->addWidget( m_textPosition = new QComboBox( posWidget ), 1, 1 );
 	posLayout->addWidget( new QLabel( i18n( "Offset:" ), posWidget ), 2, 0 );
 	posLayout->addWidget( m_textOffset = new KDoubleNumInput( posWidget ), 2, 1 );
-	posLayout->setColStretch( 0, 0 );
-	posLayout->setColStretch( 1, 1 );
+	posLayout->setColumnStretch( 0, 0 );
+	posLayout->setColumnStretch( 1, 1 );
 	
 	m_tabWidget->addTab( posWidget, i18n( "Position" ) );
 
 	QWidget* fxWidget = new QWidget( m_tabWidget );
 
-	Q3VBoxLayout* fxLayout = new Q3VBoxLayout( fxWidget );
+	QVBoxLayout* fxLayout = new QVBoxLayout( fxWidget );
 
 	fxLayout->setMargin( 3 );
 	fxLayout->setSpacing( 2 );
-	fxLayout->add( m_shadow = new ShadowWidget( fxWidget, 0L, 315, 4, true ) );
+	fxLayout->addWidget( m_shadow = new ShadowWidget( fxWidget, 0L, 315, 4, true ) );
 
-	Q3HBoxLayout* fxLayout2 = new Q3HBoxLayout( fxLayout );
+	QHBoxLayout* fxLayout2 = new QHBoxLayout();
 
 	fxLayout2->setSpacing( 2 );
 	fxLayout2->addWidget( m_editBasePath = new QPushButton( i18n( "Edit Base Path" ), fxWidget ) );
 	fxLayout2->addWidget( m_convertToShapes = new QPushButton( i18n( "Convert to Shapes" ), fxWidget ) );
+	fxLayout->addLayout( fxLayout2 );
 
 	m_tabWidget->addTab( fxWidget, i18n( "Effects" ) );
 
-	m_fontCombo->setCurrentText( KGlobalSettings::generalFont().family() );
+	m_fontCombo->setItemText( m_fontCombo->currentIndex(), KGlobalSettings::generalFont().family() );
 
 	m_fontSize->setValue( 12 );
 	m_fontSize->setSuffix( " pt" );
@@ -398,13 +400,13 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	m_convertToShapes->setEnabled( true );
 
-	m_textAlignment->insertItem( i18nc( "Horizontal alignment", "Left") );
-	m_textAlignment->insertItem( i18nc( "Horizontal alignment", "Center") );
-	m_textAlignment->insertItem( i18nc( "Horizontal alignment", "Right") );
+	m_textAlignment->insertItem( 0, i18nc( "Horizontal alignment", "Left") );
+	m_textAlignment->insertItem( 1, i18nc( "Horizontal alignment", "Center") );
+	m_textAlignment->insertItem( 2, i18nc( "Horizontal alignment", "Right") );
 
-	m_textPosition->insertItem( i18nc( "Vertical alignment", "Above") );
-	m_textPosition->insertItem( i18nc( "Vertical alignment", "On") );
-	m_textPosition->insertItem( i18nc( "Vertical alignment", "Under") );
+	m_textPosition->insertItem( 0, i18nc( "Vertical alignment", "Above") );
+	m_textPosition->insertItem( 1, i18nc( "Vertical alignment", "On") );
+	m_textPosition->insertItem( 2, i18nc( "Vertical alignment", "Under") );
 
 	m_textOffset->setRange( 0.0, 100.0, 1.0, true );
 
@@ -487,7 +489,7 @@ VTextOptionsWidget::convertToShapes()
 void
 VTextOptionsWidget::setFont( const QFont& font )
 {
-	m_fontCombo->setCurrentText( font.family() );
+	m_fontCombo->setItemText( m_fontCombo->currentIndex(), font.family() );
 
 	m_boldCheck->setChecked( font.bold() );
 
@@ -520,23 +522,23 @@ QString VTextOptionsWidget::text()
 void
 VTextOptionsWidget::setPosition( VText::Position position )
 {
-	m_textPosition->setCurrentItem( position );
+	m_textPosition->setCurrentIndex( position );
 }
 
 VText::Position VTextOptionsWidget::position()
 {
-	return ( VText::Position ) m_textPosition->currentItem();
+	return ( VText::Position ) m_textPosition->currentIndex();
 }
 
 void
 VTextOptionsWidget::setAlignment( VText::Alignment alignment )
 {
-	m_textAlignment->setCurrentItem( alignment );
+	m_textAlignment->setCurrentIndex( alignment );
 }
 
 VText::Alignment VTextOptionsWidget::alignment()
 {
-	return ( VText::Alignment ) m_textAlignment->currentItem();
+	return ( VText::Alignment ) m_textAlignment->currentIndex();
 }
 
 void 

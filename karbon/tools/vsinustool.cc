@@ -34,7 +34,8 @@
 #include <kactioncollection.h>
 
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert Sinus" ), Ok | Cancel ), m_part( part )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Sinus" ), Ok | Cancel )
+	, m_part( part )
 {
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
@@ -48,7 +49,7 @@ VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part, QWidget*
 
 	new QLabel( i18n( "Periods:" ), group );
 	m_periods = new KIntSpinBox( group );
-	m_periods->setMinValue( 1 );
+	m_periods->setMinimum( 1 );
 
 	group->setInsideMargin( 4 );
 	group->setInsideSpacing( 2 );

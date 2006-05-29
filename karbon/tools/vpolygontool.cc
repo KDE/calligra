@@ -33,7 +33,8 @@
 #include <kactioncollection.h>
 
 VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonView *view, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert Polygon" ), Ok | Cancel ), m_view(view)
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Polygon" ), Ok | Cancel )
+	, m_view(view)
 {
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
@@ -42,7 +43,7 @@ VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonView *view, QW
 	refreshUnit();
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new KIntSpinBox( group );
-	m_edges->setMinValue( 3 );
+	m_edges->setMinimum( 3 );
 
 	group->setInsideMargin( 4 );
 	group->setInsideSpacing( 2 );

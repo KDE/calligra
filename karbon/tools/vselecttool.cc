@@ -43,7 +43,8 @@
 #include <kactioncollection.h>
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
-	: KDialogBase( 0L, "", true, i18n( "Selection" ), Ok | Cancel ), m_part( part )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, 0L, "", true, i18n( "Selection" ), Ok | Cancel )
+	, m_part( part )
 {
 	Q3ButtonGroup *group = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ), this );
 

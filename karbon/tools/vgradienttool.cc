@@ -42,7 +42,7 @@
 #include <kactioncollection.h>
 
 VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient& gradient )
-	: KDialogBase( 0L, "", true, i18n( "Edit Gradient" ), Ok | Cancel )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, 0L, "", true, i18n( "Edit Gradient" ), Ok | Cancel )
 {
 	m_gradientWidget = new VGradientTabWidget( gradient, KarbonFactory::rServer(), this );
 	setMainWidget( m_gradientWidget );

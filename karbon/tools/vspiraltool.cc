@@ -34,29 +34,30 @@
 
 
 VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert Spiral" ), Ok | Cancel ), m_part( part )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Spiral" ), Ok | Cancel )
+	, m_part( part )
 {
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Type:" ), group );
 	m_type = new KComboBox( false, group );
-	m_type->insertItem( i18n( "Round" ), 0 );
-	m_type->insertItem( i18n( "Rectangular" ), 1 );
+	m_type->insertItem( 0, i18n( "Round" ) );
+	m_type->insertItem( 1, i18n( "Rectangular" ) );
 
 	new QLabel( i18n( "Radius:" ), group );
 	m_radius = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 	refreshUnit();
 	new QLabel( i18n( "Segments:" ), group );
 	m_segments = new KIntSpinBox( group );
-	m_segments->setMinValue( 1 );
+	m_segments->setMinimum( 1 );
 	new QLabel( i18n( "Fade:" ), group );
 	m_fade = new KDoubleNumInput( group );
 	m_fade->setRange( 0.0, 1.0, 0.05 );
 
 	new QLabel( i18n( "Orientation:" ), group );
 	m_clockwise = new KComboBox( false, group );
-	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
-	m_clockwise->insertItem( i18n( "Counter Clockwise" ), 1 );
+	m_clockwise->insertItem( 0, i18n( "Clockwise" ) );
+	m_clockwise->insertItem( 1, i18n( "Counter Clockwise" ) );
 
 	group->setInsideMargin( 4 );
 	group->setInsideSpacing( 2 );
@@ -86,13 +87,13 @@ VSpiralTool::VSpiralOptionsWidget::fade() const
 bool
 VSpiralTool::VSpiralOptionsWidget::clockwise() const
 {
-	return m_clockwise->currentItem() == 0;
+	return m_clockwise->currentIndex() == 0;
 }
 
 uint
 VSpiralTool::VSpiralOptionsWidget::type() const
 {
-	return m_type->currentItem();
+	return m_type->currentIndex();
 }
 
 void
@@ -116,7 +117,7 @@ VSpiralTool::VSpiralOptionsWidget::setFade( double value )
 void
 VSpiralTool::VSpiralOptionsWidget::setClockwise( bool value )
 {
-	m_clockwise->setCurrentItem( value ? 0 : 1 );
+	m_clockwise->setCurrentIndex( value ? 0 : 1 );
 }
 
 void

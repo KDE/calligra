@@ -32,7 +32,8 @@
 #include <kactioncollection.h>
 
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert Rectangle" ), Ok | Cancel ), m_part( part )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Rectangle" ), Ok | Cancel )
+	, m_part( part )
 {
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	// add width/height-input:

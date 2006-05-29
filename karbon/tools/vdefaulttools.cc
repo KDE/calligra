@@ -53,9 +53,9 @@ VDefaultTools::VDefaultTools(QObject *parent, const QStringList &)
 	setInstance(VDefaultToolsFactory::instance());
 
 	kDebug() << "VDefaultTools. Class: "
-		<< className()
+		<< metaObject()->className()
 		<< ", Parent: "
-		<< parent -> className()
+		<< parent->metaObject()->className()
 		<< "\n";
 
 	if ( parent->inherits("KarbonFactory") )

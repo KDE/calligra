@@ -37,15 +37,16 @@
 
 
 VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent, const char *name )
-	: KDialogBase( parent, name, true, i18n( "Insert Ellipse" ), Ok | Cancel ), m_part( part )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Ellipse" ), Ok | Cancel )
+	, m_part( part )
 {
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Type:" ), group );
 	m_type = new KComboBox( false, group );
-	m_type->insertItem( i18n( "Full" ), VEllipse::full );
-	m_type->insertItem( i18n( "Section" ), VEllipse::section );
-	m_type->insertItem( i18n( "Pie" ), VEllipse::cut );
-	m_type->insertItem( i18n( "Arc" ), VEllipse::arc );
+	m_type->insertItem( VEllipse::full, i18n( "Full" ) );
+	m_type->insertItem( VEllipse::section, i18n( "Section" ) );
+	m_type->insertItem( VEllipse::cut, i18n( "Pie" ) );
+	m_type->insertItem( VEllipse::arc, i18n( "Arc" ) );
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
@@ -56,13 +57,13 @@ VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent,
 
 	new QLabel( i18n( "Start angle:" ), group );
 	m_startAngle = new KIntSpinBox( group );
-	m_startAngle->setMinValue( 0 );
-	m_startAngle->setMaxValue( 360 );
+	m_startAngle->setMinimum( 0 );
+	m_startAngle->setMaximum( 360 );
 
 	new QLabel( i18n( "End angle:" ), group );
 	m_endAngle = new KIntSpinBox( group );
-	m_endAngle->setMinValue( 0 );
-	m_endAngle->setMaxValue( 360 );
+	m_endAngle->setMinimum( 0 );
+	m_endAngle->setMaximum( 360 );
 
 	typeChanged( VEllipse::full );
 
@@ -85,7 +86,7 @@ VEllipseOptionsWidget::typeChanged( int type )
 uint
 VEllipseOptionsWidget::type() const
 {
-	return m_type->currentItem();
+	return m_type->currentIndex();
 }
 
 uint

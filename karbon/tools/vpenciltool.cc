@@ -55,15 +55,16 @@
 #include "vpenciltool.moc"
 
 VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Pencil Settings" ), Ok | Cancel ), m_view( view )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Pencil Settings" ), Ok | Cancel )
+	, m_view( view )
 {
 	Q3VBox *vbox = new Q3VBox( this );
 
 	m_combo = new QComboBox( vbox );
 
-	m_combo->insertItem( i18n( "Raw" ) );
-	m_combo->insertItem( i18n( "Curve" ) );
-	m_combo->insertItem( i18n( "Straight" ) );
+	m_combo->insertItem( 0, i18n( "Raw" ) );
+	m_combo->insertItem( 1, i18n( "Curve" ) );
+	m_combo->insertItem( 2, i18n( "Straight" ) );
 
 	m_widgetStack  = new Q3WidgetStack( vbox );
 
@@ -125,9 +126,9 @@ float VPencilOptionsWidget::fittingError()
 
 void VPencilOptionsWidget::selectMode()
 {
-	m_widgetStack->raiseWidget( m_combo->currentItem() + 1 );
+	m_widgetStack->raiseWidget( m_combo->currentIndex() + 1 );
 
-	switch( m_combo->currentItem() )
+	switch( m_combo->currentIndex() )
 	{
 		case 0: m_mode = VPencilTool::RAW; break;
 		case 1: m_mode = VPencilTool::CURVE; break;

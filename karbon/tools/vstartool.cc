@@ -34,18 +34,19 @@
 
 
 VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert Star" ), Ok | Cancel ), m_part( part )
+	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Star" ), Ok | Cancel )
+	, m_part( part )
 {
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Type:" ), group );
 	m_type = new KComboBox( false, group );
-	m_type->insertItem( i18n( "Star Outline" ), VStar::star_outline );
-	m_type->insertItem( i18n( "Spoke" ), VStar::spoke );
-	m_type->insertItem( i18n( "Wheel" ), VStar::wheel );
-	m_type->insertItem( i18n( "Polygon" ), VStar::polygon );
-	m_type->insertItem( i18n( "Framed Star" ), VStar::framed_star);
-	m_type->insertItem( i18n( "Star" ), VStar::star );
-	m_type->insertItem( i18n( "Gear" ), VStar::gear );
+	m_type->insertItem( VStar::star_outline, i18n( "Star Outline" ) );
+	m_type->insertItem( VStar::spoke, i18n( "Spoke" ) );
+	m_type->insertItem( VStar::wheel, i18n( "Wheel" ) );
+	m_type->insertItem( VStar::polygon, i18n( "Polygon" ) );
+	m_type->insertItem( VStar::framed_star, i18n( "Framed Star" ));
+	m_type->insertItem( VStar::star, i18n( "Star" ) );
+	m_type->insertItem( VStar::gear, i18n( "Gear" ) );
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
@@ -60,13 +61,13 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new KIntSpinBox( group );
-	m_edges->setMinValue( 3 );
+	m_edges->setMinimum( 3 );
 	connect( m_edges, SIGNAL( valueChanged( int ) ), this, SLOT( setEdges( int ) ) );
 
 	new QLabel( i18n( "Inner angle:" ), group );
 	m_innerAngle = new KIntSpinBox( group );
-	m_innerAngle->setMinValue( 0 );
-	m_innerAngle->setMaxValue( 360 );
+	m_innerAngle->setMinimum( 0 );
+	m_innerAngle->setMaximum( 360 );
 
 	new QLabel( i18n( "Roundness:" ), group );
 	m_roundness = new KDoubleNumInput( group );
@@ -141,7 +142,7 @@ VStarOptionsWidget::outerRadius() const
 uint
 VStarOptionsWidget::type() const
 {
-	return m_type->currentItem();
+	return m_type->currentIndex();
 }
 
 uint
