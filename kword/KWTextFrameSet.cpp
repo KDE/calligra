@@ -41,6 +41,7 @@
 #include "KWFrameList.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWGUI.h"
 
 #include <KoParagCounter.h>
 #include <KoCustomVariablesDia.h>
@@ -2840,10 +2841,10 @@ void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int lengt
         canvas->editTextFrameSet( this, parag, index );
         // Ensure text is fully visible
         QRect expose = canvas->viewMode()->normalToView( paragRect( parag ) );
-        canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
+/*        canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
                                (expose.top()+expose.bottom()) / 2,
                                (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
-                               (expose.bottom()-expose.top()) / 2);
+                               (expose.bottom()-expose.top()) / 2); */
         if ( dialog ) {
             //kDebug() << k_funcinfo << " dialog=" << dialog << " avoiding rect=" << expose << endl;
             QRect globalRect( expose );
@@ -3312,7 +3313,7 @@ void KWTextFrameSetEdit::startDrag()
 {
     textView()->dragStarted();
     m_canvas->dragStarted();
-    Q3DragObject *drag = newDrag( m_canvas->viewport() );
+    Q3DragObject *drag = newDrag( m_canvas );
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         drag->dragCopy();
     else {
@@ -3376,7 +3377,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     cursorHeight = textFrameSet()->kWordDocument()->layoutUnitToPixelY( cursorHeight );
     //kDebug() << "KWTextFrameSetEdit::ensureCursorVisible pt=" << pt << " cursorPos=" << cursorPos
     //          << " areaLeft=" << areaLeft << " areaRight=" << areaRight << " y=" << y << endl;
-    m_canvas->ensureVisible( cursorPos.x() - areaLeft, cursorPos.y() + cursorHeight / 2, areaLeft + areaRight, cursorHeight / 2 + 2 );
+    //m_canvas->ensureVisible( cursorPos.x() - areaLeft, cursorPos.y() + cursorHeight / 2, areaLeft + areaRight, cursorHeight / 2 + 2 );
 }
 
 bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fromRight )
@@ -3640,8 +3641,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kDebug(32001) << "KWTextFrameSetEdit::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
-        if ( ( e->source() == m_canvas ||
-               e->source() == m_canvas->viewport() ) &&
+        if ( e->source() == m_canvas &&
                e->action() == QDropEvent::Move &&
               // this is the indicator that the source and dest text objects are the same
              textDocument()->hasSelection( KoTextDocument::Standard ) ) {
@@ -3704,16 +3704,18 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
         return;
     if ( m_canvas->viewMode()->hasFrames() && !m_currentFrame )
         return;
-
+/*
     QPainter p( m_canvas->viewport() );
     p.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );
     p.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
 
     textFrameSet()->drawCursor( &p, cursor(), visible, m_canvas, m_currentFrame );
+*/
 }
 
 bool KWTextFrameSetEdit::pgUpKeyPressed()
 {
+#if 0
     QRect crect( m_canvas->contentsX(), m_canvas->contentsY(),
                  m_canvas->visibleWidth(), m_canvas->visibleHeight() );
     crect = m_canvas->viewMode()->viewToNormal( crect );
@@ -3740,10 +3742,12 @@ bool KWTextFrameSetEdit::pgUpKeyPressed()
         return false;
     }
     return true;
+#endif
 }
 
 bool KWTextFrameSetEdit::pgDownKeyPressed()
 {
+#if 0
     QRect crect( m_canvas->contentsX(), m_canvas->contentsY(),
                  m_canvas->visibleWidth(), m_canvas->visibleHeight() );
     crect = m_canvas->viewMode()->viewToNormal( crect );
@@ -3773,6 +3777,7 @@ bool KWTextFrameSetEdit::pgDownKeyPressed()
         m_canvas->viewportScroll( false );
         return false;
     }
+#endif
     return true;
 }
 
@@ -4082,8 +4087,8 @@ QPoint KWTextFrameSet::cursorPos( KoTextCursor *cursor, KWCanvas* canvas, KWFram
     if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
     {
         vPoint = viewMode->normalToView( m_doc->zoomPointOld( dPoint ) ); // from doc to view contents
-        vPoint.rx() -= canvas->contentsX();
-        vPoint.ry() -= canvas->contentsY();
+        //vPoint.rx() -= canvas->contentsX();
+        //vPoint.ry() -= canvas->contentsY();
     } // else ... ?
     return vPoint;
 }

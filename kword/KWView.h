@@ -21,34 +21,23 @@
 #ifndef kwview_h
 #define kwview_h
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <kprinter.h>
-
 #include <KoBorder.h>
 #include "defs.h"
 #include "KWTextParag.h"
 
-#include <KoPageLayoutDia.h>
 #include <KoView.h>
-#include <KoPoint.h>
-#include <kshortcut.h>
+#include <KoUnit.h>
 #include <KoZoomMode.h>
 
-#include <QBrush>
-
-//Added by qt3to4:
 #include <Q3ValueList>
-#include <QResizeEvent>
 #include <QMenu>
-#include <Q3PtrList>
+
+#include <kshortcut.h>
 
 class KWPage;
 class KWViewMode;
-class KWDocStruct;
-class KWCanvas;
+//   class KWDocStruct;
+//   class KWCanvas;
 class KWDocument;
 class KWGUI;
 class KWFrame;
@@ -61,11 +50,11 @@ class KWFindReplace;
 class KWFrameStyle;
 class KWTableStyle;
 class KWTableFrameSet;
-
+//
 class KoPicture;
 class KoSearchContext;
 class KoTextFormatInterface;
-class KoRuler;
+//   class KoRuler;
 class TKSelectColorAction;
 class KoPartSelectAction;
 class KoCharSelectDia;
@@ -73,11 +62,12 @@ class KoTextFormat;
 class KoFontDia;
 class KoParagDia;
 class KoTextIterator;
-
-class DCOPObject;
+class KoParagCounter;
+//
+//   class DCOPObject;
 class KStatusBarLabel;
 class KoSpell;
-class KUrl;
+//   class KUrl;
 class KAction;
 class KActionMenu;
 class KSelectAction;
@@ -85,7 +75,8 @@ class KToggleAction;
 class KFontSizeAction;
 class KFontAction;
 class QResizeEvent;
-class QSplitter;
+//   class QSplitter;
+struct KoPageLayout;
 
 #include <kspell2/broker.h>
 #include <kvbox.h>
@@ -819,53 +810,6 @@ private: // variables
     struct {
         unsigned int columns, rows;
     } m_tableSplit;
-};
-
-/******************************************************************/
-/* Class: KWGUI                                                   */
-/******************************************************************/
-
-class KWGUI : public KHBox
-{
-    Q_OBJECT
-
-public:
-    KWGUI( const QString& viewMode, QWidget *parent, KWView *view );
-
-    void showGUI();
-
-    KWView *getView()const { return m_view; }
-    KWCanvas *canvasWidget()const { return m_canvas; }
-    KoRuler *getVertRuler()const { return m_vertRuler; }
-    KoRuler *getHorzRuler()const { return m_horRuler; }
-    KoTabChooser *getTabChooser()const { return m_tabChooser; }
-    KWDocStruct *getDocStruct()const { return m_docStruct; }
-
-public slots:
-    void reorganize();
-
-protected slots:
-    void unitChanged( KoUnit::Unit );
-
-protected:
-    void resizeEvent( QResizeEvent *e );
-
-    // A pointer to the view.
-    KWView          *m_view;
-
-    // The left side
-    KWDocStruct     *m_docStruct;
-
-    // The right side
-    QWidget         *m_right;	// The layout widget.
-
-    KoTabChooser    *m_tabChooser;
-    KoRuler         *m_vertRuler;
-    KoRuler         *m_horRuler;
-    KWCanvas        *m_canvas;
-
-    QSplitter       *m_panner;
-
 };
 
 #endif

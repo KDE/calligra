@@ -28,6 +28,7 @@
 #include "KWFormulaFrameSet.h"
 #include "KWPictureFrameSet.h"
 #include "KWTextDocument.h"
+#include "KWGUI.h"
 
 // KOffice includes.
 #include <KoParagCounter.h>

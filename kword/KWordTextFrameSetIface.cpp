@@ -28,6 +28,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include "KWordFrameSetIface.h"
+#include "KWGUI.h"
 #include <kdebug.h>
 #include <kcommand.h>
 //Added by qt3to4:

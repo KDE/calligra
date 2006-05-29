@@ -22,6 +22,7 @@
 #include <kurl.h>
 
 #include "KWView.h"
+#include "KWGUI.h"
 #include "KWCanvas.h"
 #include "KWDocument.h"
 #include "KWFrameSet.h"

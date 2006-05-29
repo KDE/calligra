@@ -118,7 +118,8 @@ set(kwordprivate_LIB_SRCS
    KWFrameViewManager.cpp 
    KWFrameView.cpp 
    KWStartupWidget.cpp 
-   KWLoadingInfo.cpp )
+   KWLoadingInfo.cpp
+    KWGUI.cpp )
 
 kde4_automoc(${kwordprivate_LIB_SRCS})
 

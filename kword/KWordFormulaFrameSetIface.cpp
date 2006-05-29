@@ -22,6 +22,7 @@
 #include "KWFrame.h"
 #include "KWFormulaFrameSet.h"
 #include "KWView.h"
+#include "KWGUI.h"
 #include "KWCanvas.h"
 #include "KWDocument.h"
 #include <kapplication.h>

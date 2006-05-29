@@ -20,6 +20,7 @@
 #ifndef docstruct_h
 #define docstruct_h
 
+#include "defs.h"
 #include <k3listview.h>
 #include <QWidget>
 //Added by qt3to4:
@@ -36,6 +37,8 @@ class Q3VBoxLayout;
 class KWFrame;
 class KWFrameSet;
 class KWTextParag;
+class KWTextFrameSet;
+class KWTableFrameSet;
 
 class KWDocListViewItem : public K3ListViewItem
 {

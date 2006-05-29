@@ -19,13 +19,14 @@
  * Boston, MA 02110-1301, USA
 */
 
-#undef Unsorted
-
+//   #undef Unsorted
+//
 #include "KWView.h"
-
+#include "KWFrameSet.h"
+//
 #include "KWordViewIface.h"
 #include "KWConfigFootNoteDia.h"
-#include "defs.h"
+//   #include "defs.h"
 #include "KWDeleteDia.h"
 #include "KWDocStruct.h"
 #include "KWFootNoteDia.h"
@@ -33,7 +34,7 @@
 #include "KWAnchor.h"
 #include "KoTextBookmark.h"
 #include "KWCanvas.h"
-#include "KWCommand.h"
+//   #include "KWCommand.h"
 #include "KWConfig.h"
 #include "KWCreateBookmarkDia.h"
 #include "KWDocument.h"
@@ -41,7 +42,7 @@
 #include "KWFormulaFrameSet.h"
 #include "KWFrame.h"
 #include "KWPictureFrameSet.h"
-#include "KWFrameStyle.h"
+//   #include "KWFrameStyle.h"
 #include "KWFrameStyleManager.h"
 #include "KWImportStyleDia.h"
 #include "KWInsertPageDia.h"
@@ -52,7 +53,7 @@
 #include "KWTableStyle.h"
 #include "KWTableStyleManager.h"
 #include "KWTextDocument.h"
-#include "KWVariable.h"
+//   #include "KWVariable.h"
 #include "KWViewMode.h"
 #include "KWMailMergeDataBase.h"
 #include "KWMailMergeLabelAction.h"
@@ -70,43 +71,47 @@
 #include "KWFrameViewManager.h"
 #include "KWFrameView.h"
 #include "KWStatisticsDialog.h"
-
+#include "KWGUI.h"
+//
 #include <kformuladocument.h>
+#include <klocale.h>
 #include <kformulamimesource.h>
-
-#include <QSplitter>
-#include <KoRichText.h>
+//
+//   #include <QSplitter>
+//   #include <KoRichText.h>
 #include <KoAutoFormat.h>
 #include <KoAutoFormatDia.h>
-#include <KoChangeCaseDia.h>
+//   #include <KoChangeCaseDia.h>
 #include <KoCharSelectDia.h>
 #include <KoCommentDia.h>
 #include <KoCreateStyleDia.h>
 #include <KoDocumentInfo.h>
 #include <KoFontDia.h>
-#include <KoFrame.h>
+//   #include <KoFrame.h>
 #include <KoInsertLink.h>
 #include <KoMainWindow.h>
 #include <KoParagDia.h>
 #include <KoPartSelectAction.h>
-#include <KoPictureFilePreview.h>
+#include <KoCanvasView.h>
+#include <KoPageLayoutDia.h>
+//   #include <KoPictureFilePreview.h>
 #include <KoSearchDia.h>
 #include <KoStore.h>
-#include <KoStoreDrag.h>
+//   #include <KoStoreDrag.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCompletionDia.h>
-#include <KoVariable.h>
+//   #include <KoVariable.h>
 #include <KoCustomVariablesDia.h>
 #include <KoTextObject.h>
 #include "KoSpell.h"
 #include <tkcoloractions.h>
-
+//
 #include <kparts/partmanager.h>
 #include <kaccelgen.h>
-#include <kcolordialog.h>
-#include <kdebug.h>
-#include <kfiledialog.h>
-#include <kimageio.h>
+//   #include <kcolordialog.h>
+//   #include <kdebug.h>
+//   #include <kfiledialog.h>
+//   #include <kimageio.h>
 #include <kinputdialog.h>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
@@ -116,38 +121,41 @@
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <ktempfile.h>
-#include <kdeversion.h>
+//   #include <kdeversion.h>
 #include <kiconloader.h>
 #include <kxmlguifactory.h>
 #include <kfontsizeaction.h>
 #include <kactioncollection.h>
 #include <kfontaction.h>
 #include <kseparatoraction.h>
-#include <kvbox.h>
-
+#include <kfontdialog.h>
+//   #include <kvbox.h>
+//
 #include <QClipboard>
+#include <Q3DragObject>
 #include <QApplication>
-#include <q3groupbox.h>
-#include <QLayout>
-#include <q3progressdialog.h>
-#include <QRegExp>
+//   #include <q3groupbox.h>
+//   #include <QLayout>
+//   #include <q3progressdialog.h>
+//   #include <QRegExp>
 #include <QTimer>
 #include <QBuffer>
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <QMenu>
-#include <Q3StrList>
-#include <Q3GridLayout>
+//   //Added by qt3to4:
+//   #include <QResizeEvent>
+//   #include <QMenu>
+//   #include <Q3StrList>
+//   #include <Q3GridLayout>
 #include <Q3CString>
 #include <Q3ValueList>
-#include <Q3PtrList>
-#include <QPixmap>
-
-#include <stdlib.h>
-
+//   #include <Q3PtrList>
+//   #include <QPixmap>
+#include <QMap>
+//
+//   #include <stdlib.h>
+//
 #include <kspell2/dialog.h>
 #include <kspell2/defaultdictionary.h>
-#include <q3tl.h>
+//   #include <q3tl.h>
 
 using namespace KSpell2;
 
@@ -481,8 +489,9 @@ void KWView::slotSetInitialPosition()
     KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
     if ( textedit )
         textedit->ensureCursorVisible();
-    else
+/*    else
         m_gui->canvasWidget()->setContentsPos( 0, 0 );
+*/
 }
 
 void KWView::changeNbOfRecentFiles(int nb)
@@ -1807,10 +1816,6 @@ void KWView::print( KPrinter &prt )
         m_doc->recalcVariables(  VT_ALL );
     }
 
-// Don't repaint behind the print dialog until we're done zooming/unzooming the doc
-    m_gui->canvasWidget()->setUpdatesEnabled(false);
-    m_gui->canvasWidget()->viewport()->setCursor( Qt::WaitCursor );
-
     prt.setFullPage( true );
 
     // ### HACK: disable zooming-when-printing if embedded parts are used.
@@ -1943,7 +1948,6 @@ void KWView::print( KPrinter &prt )
     kDebug() << "KWView::print zoom&res reset" << endl;
 
     m_gui->canvasWidget()->setUpdatesEnabled(true);
-    m_gui->canvasWidget()->viewport()->setCursor( Qt::IBeamCursor );
     m_doc->repaintAllViews();
 
     if ( displayFieldCode )
@@ -3234,10 +3238,10 @@ void KWView::viewZoom( const QString &s )
     if ( s == KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH) )
     {
         m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
-        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_currentPage->width() ) ) - 1;
+        zoom = qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_currentPage->width() ) ) - 1;
 
-        if(zoom != m_doc->zoom() && !canvas->verticalScrollBar() ||
-                !canvas->verticalScrollBar()->isVisible()) { // has no vertical scrollbar
+        if(zoom != m_doc->zoom() && !m_gui->m_canvasView->verticalScrollBar() ||
+                !m_gui->m_canvasView->verticalScrollBar()->isVisible()) { // has no vertical scrollbar
             // we have to do this twice to take into account a possibly appearing vertical scrollbar
             QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
         }
@@ -3248,8 +3252,8 @@ void KWView::viewZoom( const QString &s )
         m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
         double height = m_doc->resolutionY() * m_currentPage->height();
         double width = m_doc->resolutionX() * m_currentPage->height();
-        zoom = qMin( qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height ),
-                     qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) ) - 1;
+        zoom = qMin( qRound( static_cast<double>(m_gui->visibleHeight() * 100 ) / height ),
+                     qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / width ) ) - 1;
 
         ok = true;
     }
@@ -6050,12 +6054,12 @@ QWidget* KWView::canvas() const
 
 int KWView::canvasXOffset() const
 {
-    return m_gui->canvasWidget()->contentsX();
+    return 0; // m_gui->canvasWidget()->contentsX();
 }
 
 int KWView::canvasYOffset() const
 {
-    return m_gui->canvasWidget()->contentsY();
+    return 0; // m_gui->canvasWidget()->contentsY();
 }
 
 void KWView::canvasAddChild( KoViewChild * child )
@@ -7557,156 +7561,6 @@ void KWView::deleteSelectedFrames() {
     }
     else
         delete macroCmd;
-}
-
-
-/******************************************************************/
-/* Class: KWGUI                                                */
-/******************************************************************/
-KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
-  : KHBox( parent),
-    m_view ( daView )
-{
-
-    KWDocument * doc = m_view->kWordDocument();
-
-    m_horRuler  = 0;
-    m_vertRuler = 0;
-
-    // The splitter
-    m_panner = new QSplitter( Qt::Horizontal, this );
-
-    // The left side
-    m_docStruct = new KWDocStruct( m_panner, doc, this );
-    m_docStruct->setMinimumWidth( 0 );
-
-    // The right side
-    m_right = new QWidget( m_panner );
-    Q3GridLayout *gridLayout = new Q3GridLayout( m_right, 2, 2 );
-    m_canvas = new KWCanvas( viewMode, m_right, doc, this );
-    gridLayout->addWidget( m_canvas, 1, 1 );
-
-    QList<int> l;
-    l << 10;
-    l << 90;
-    m_panner->setSizes( l );
-
-    KoPageLayout layout = doc->pageLayout();
-
-    m_tabChooser = new KoTabChooser( m_right, KoTabChooser::TAB_ALL );
-    m_tabChooser->setReadWrite(doc->isReadWrite());
-    gridLayout->addWidget( m_tabChooser, 0, 0 );
-
-    m_horRuler = new KoRuler( m_right, m_canvas->viewport(), Qt::Horizontal, layout,
-			      KoRuler::F_INDENTS | KoRuler::F_TABS,
-			      doc->unit(), m_tabChooser );
-    m_horRuler->setReadWrite(doc->isReadWrite());
-    gridLayout->addWidget( m_horRuler, 0, 1 );
-
-    m_vertRuler = new KoRuler( m_right, m_canvas->viewport(), Qt::Vertical, layout,
-			       0, doc->unit() );
-    m_vertRuler->setReadWrite(doc->isReadWrite());
-    gridLayout->addWidget( m_vertRuler, 1, 0 );
-
-    m_horRuler->setZoom( doc->zoomedResolutionX() );
-    m_vertRuler->setZoom( doc->zoomedResolutionY() );
-
-    m_horRuler->setGridSize(doc->gridX());
-
-    connect( m_horRuler, SIGNAL( newPageLayout( const KoPageLayout & ) ), m_view, SLOT( newPageLayout( const KoPageLayout & ) ) );
-    connect( m_horRuler, SIGNAL( newLeftIndent( double ) ), m_view, SLOT( newLeftIndent( double ) ) );
-    connect( m_horRuler, SIGNAL( newFirstIndent( double ) ), m_view, SLOT( newFirstIndent( double ) ) );
-    connect( m_horRuler, SIGNAL( newRightIndent( double ) ), m_view, SLOT( newRightIndent( double ) ) );
-
-    connect( m_horRuler, SIGNAL( doubleClicked() ), m_view, SLOT( slotHRulerDoubleClicked() ) );
-    connect( m_horRuler, SIGNAL( doubleClicked(double) ), m_view, SLOT( slotHRulerDoubleClicked(double) ) );
-    connect( m_horRuler, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
-    connect( m_vertRuler, SIGNAL( newPageLayout( const KoPageLayout & ) ), m_view, SLOT( newPageLayout( const KoPageLayout & ) ) );
-    connect( m_vertRuler, SIGNAL( doubleClicked() ), m_view, SLOT( formatPage() ) );
-    connect( m_vertRuler, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
-
-    m_horRuler->hide();
-    m_vertRuler->hide();
-
-    m_canvas->show();
-
-    reorganize();
-
-    connect( m_horRuler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), m_view,
-             SLOT( tabListChanged( const KoTabulatorList & ) ) );
-
-    setKeyCompression( true );
-    setAcceptDrops( true );
-    setFocusPolicy( Qt::NoFocus );
-}
-
-void KWGUI::showGUI()
-{
-    reorganize();
-}
-
-void KWGUI::resizeEvent( QResizeEvent *e )
-{
-    QWidget::resizeEvent( e );
-    reorganize();
-}
-
-void KWGUI::reorganize()
-{
-    int hSpace = m_vertRuler->minimumSizeHint().width();
-    int vSpace = m_horRuler->minimumSizeHint().height();
-    if(m_view->kWordDocument()->showRuler())
-    {
-        m_vertRuler->show();
-        m_horRuler->show();
-        m_tabChooser->show();
-        m_tabChooser->setGeometry( 0, 0, hSpace, vSpace );
-    }
-    else
-    {
-        m_vertRuler->hide();
-        m_horRuler->hide();
-        m_tabChooser->hide();
-        hSpace = 0;
-        vSpace = 0;
-    }
-
-    if(m_view->kWordDocument()->showdocStruct()) {
-        if(m_docStruct->isHidden()) {
-            m_docStruct->show();
-            if(m_panner->sizes()[0] < 50) {
-                QList<int> l;
-                l << 100;
-                l << width()-100;
-                m_panner->setSizes( l );
-            }
-        }
-    } else
-        m_docStruct->hide();
-
-    if( m_view->statusBar())
-    {
-        if(m_view->kWordDocument()->showStatusBar())
-            m_view->statusBar()->show();
-        else
-            m_view->statusBar()->hide();
-    }
-
-    if ( m_view->kWordDocument()->showScrollBar())
-    {
-        m_canvas->setVScrollBarMode(Q3ScrollView::Auto);
-        m_canvas->setHScrollBarMode(Q3ScrollView::Auto);
-    }
-    else
-    {
-        m_canvas->setVScrollBarMode(Q3ScrollView::AlwaysOff);
-        m_canvas->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    }
-}
-
-void KWGUI::unitChanged( KoUnit::Unit u )
-{
-    m_view->kWordDocument()->setUnit( u );
 }
 
 QPoint KWView::applyViewTransformations( const QPoint& p ) const

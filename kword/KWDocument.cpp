@@ -48,6 +48,7 @@
 #include "KWFrameView.h"
 #include "KWFrameViewManager.h"
 #include "KWStartupWidget.h"
+#include "KWGUI.h"
 
 #include <KoPictureCollection.h>
 #include <KoTemplateChooseDia.h>

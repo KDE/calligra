@@ -49,6 +49,7 @@
 #include "KWFrameSet.h"
 #include "KWDocument.h"
 #include "KWCanvas.h"
+#include "KWGUI.h"
 #include "KWViewMode.h"
 #include "KWCommand.h"
 #include "KWVariable.h"

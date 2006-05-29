@@ -26,6 +26,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include "KWView.h"
+#include "KWGUI.h"
 #include "KWDocument.h"
 #include "KWCanvas.h"
 

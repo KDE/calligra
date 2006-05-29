@@ -18,13 +18,13 @@
 */
 
 #include "KWDocument.h"
-#include "KWView.h"
 #include "KWViewMode.h"
 #include "KWCanvas.h"
 #include "KWFrame.h"
 #include "defs.h"
 #include "KWTextFrameSet.h"
-//#include "KWAnchor.h"
+#include "KWGUI.h"
+#include "KWView.h"
 #include <KoTextObject.h> // for customItemChar!
 
 #include <kformulacontainer.h>
@@ -471,7 +471,7 @@ void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
             nPoint += formulaView->getCursorPoint();
             // Apply viewmode conversion
             QPoint p = m_canvas->viewMode()->normalToView( nPoint );
-            m_canvas->ensureVisible( p.x(), p.y() );
+            //m_canvas->ensureVisible( p.x(), p.y() );
         }
     }
     formulaFrameSet()->setChanged();

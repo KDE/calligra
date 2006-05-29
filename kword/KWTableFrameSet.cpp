@@ -32,6 +32,7 @@ DESCRIPTION
 #include "KWCommand.h"
 #include "KWViewMode.h"
 #include "KWView.h"
+#include "KWGUI.h"
 #include "KWordFrameSetIface.h"
 #include "KWordTableFrameSetIface.h"
 #include "KWFrameList.h"

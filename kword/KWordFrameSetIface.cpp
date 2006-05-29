@@ -19,7 +19,6 @@
 
 #include "KWordFrameSetIface.h"
 #include "KWFrameSet.h"
-#include "KWView.h"
 #include "KWDocument.h"
 #include <dcopclient.h>
 
