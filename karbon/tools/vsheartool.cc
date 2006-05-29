@@ -37,7 +37,7 @@
 
 VShearTool::VShearTool( KarbonView *view ) : VTool( view, "sheartool" )
 {
-	setName( "tool_shear" );
+	setObjectName( "tool_shear" );
 	m_objects.setAutoDelete( true );
 	registerTool( this );
 }
@@ -210,12 +210,14 @@ VShearTool::recalc()
 void
 VShearTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( objectName() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( i18n( "Shear Tool" ), "14_shear", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( KIcon( "14_shear" ), i18n( "Shear Tool" ), collection, objectName() );
+		m_action->setDefaultShortcut( Qt::SHIFT+Qt::Key_H );
 		m_action->setToolTip( i18n( "Shear" ) );
+		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO porting needed: m_action->setExclusiveGroup( "manipulation" );
 		//m_ownAction = true;
 	}
