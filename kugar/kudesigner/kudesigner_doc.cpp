@@ -45,6 +45,7 @@ KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QOb
         : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), m_plugin( 0 ), m_propPos( DockRight ), m_modified( false )
 {
     setInstance( KudesignerFactory::global(), false );
+    setTemplateType("kudesigner_template");
     history = new KoCommandHistory( actionCollection() );
 
     //     connect( history, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
