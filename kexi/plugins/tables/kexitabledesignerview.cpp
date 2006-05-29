@@ -675,7 +675,9 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 		if (set["primaryKey"].value().toBool()==true) {
 			//primary keys require big int, so if selected type is not integer- remove PK
 			if (fieldTypeGroup != KexiDB::Field::IntegerGroup) {
+				/*not needed, line below will do the work
 				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
+				d->view->data()->saveRowChanges(*item); */
 				//set["primaryKey"] = QVariant(false, 1);
 				d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(false, 1), changeDataTypeCommand );
 //! @todo should we display (passive?) dialog informing about cleared pkey?
@@ -935,13 +937,13 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 			else
 				toplevelCommand = setPrimaryKeyCommand;
 
-			d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(true,1), setPrimaryKeyCommand, true /*forceAddCommand*/ );
+			d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(false,1), setPrimaryKeyCommand, true /*forceAddCommand*/ );
 			d->setPropertyValueIfNeeded( set, "autoIncrement", QVariant(false,1), setPrimaryKeyCommand );
 //			set["autoIncrement"] = QVariant(false,1);
 
 //down			addHistoryCommand( toplevelCommand, false /* !execute */ );
 		}
-		switchPrimaryKey(set, toplevelCommand/*property.value().toBool()*/, true/*wasPKey*/, toplevelCommand);
+		switchPrimaryKey(set, false, true/*wasPKey*/, toplevelCommand);
 		d->updatePropertiesVisibility(
 			KexiDB::Field::typeForString( set["subType"].value().toString() ), set, toplevelCommand);
 		addHistoryCommand( toplevelCommand, false /* !execute */ );
