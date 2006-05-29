@@ -943,7 +943,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 
 //down			addHistoryCommand( toplevelCommand, false /* !execute */ );
 		}
-		switchPrimaryKey(set, false, true/*wasPKey*/, toplevelCommand);
+		switchPrimaryKey(set, setPrimaryKey, true/*wasPKey*/, toplevelCommand);
 		d->updatePropertiesVisibility(
 			KexiDB::Field::typeForString( set["subType"].value().toString() ), set, toplevelCommand);
 		addHistoryCommand( toplevelCommand, false /* !execute */ );
