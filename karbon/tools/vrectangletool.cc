@@ -131,12 +131,14 @@ VRectangleTool::showDialog() const
 void
 VRectangleTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( objectName() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( i18n( "Rectangle Tool" ), "14_rectangle", Qt::Key_Plus+Qt::Key_F9, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( KIcon( "14_rectangle" ), i18n( "Rectangle Tool" ), collection, objectName() );
+		m_action->setDefaultShortcut( Qt::Key_Plus+Qt::Key_F9 );
 		m_action->setToolTip( i18n( "Rectangle" ) );
+		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}

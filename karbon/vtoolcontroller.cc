@@ -62,14 +62,14 @@ VToolController::setCurrentTool( VTool *tool )
 		m_currentTool->action()->setChecked( true );
 		m_currentTool->action()->trigger();
 	}
-	m_toolBox->slotSetTool( tool->name() );
+	m_toolBox->slotSetTool( tool->objectName() );
 }
 
 void
 VToolController::registerTool( VTool *tool )
 {
-	if( !m_tools.find( tool->name() ) )
-		m_tools.insert( tool->name(), tool );
+	if( !m_tools.find( tool->objectName() ) )
+		m_tools.insert( tool->objectName(), tool );
 	//kDebug(38000) << "active tool : " << m_currentTool->name() << endl;
 }
 
@@ -156,7 +156,7 @@ VToolController::findTool( const QString &toolName ) const
 	VTool *tool = 0;
 	Q3DictIterator<VTool> it( m_tools );
 	for( ; it.current(); ++it )
-		if( it.current()->name() == toolName )
+		if( it.current()->objectName() == toolName )
 			return it.current();
 	return tool;
 }

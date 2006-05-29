@@ -402,12 +402,14 @@ VPencilTool::showDialog() const
 void
 VPencilTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( objectName() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( i18n( "Pencil Tool" ), "14_pencil", Qt::SHIFT+Qt::Key_P, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( KIcon( "14_pencil" ), i18n( "Pencil Tool" ), collection, objectName() );
+		m_action->setDefaultShortcut( Qt::SHIFT+Qt::Key_P );
 		m_action->setToolTip( i18n( "Pencil" ) );
+		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO needs porting: m_action->setExclusiveGroup( "freehand" );
 		//m_ownAction = true;
 	}

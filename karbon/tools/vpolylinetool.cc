@@ -272,9 +272,8 @@ VPolylineTool::mouseButtonRelease()
 		painter->setZoomFactor( view()->zoom() );
 		// TODO: rasterops need porting
 		// painter->setRasterOp( Qt::XorROP );
-		// TODO: color needs porting
-		// VStroke stroke( Qt::yellow, 0L, 1.0 );
-		// painter->setPen( stroke );
+		VStroke stroke( QColor( "yellow" ), 0L, 1.0 );
+		painter->setPen( stroke );
 		painter->setBrush( Qt::yellow );
 		painter->newPath();
 		painter->drawNode( m_lastVectorStart, 2 );
@@ -489,14 +488,16 @@ VPolylineTool::accept()
 void
 VPolylineTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( objectName() ) );
 
 	if( m_action == 0 )
 	{
-	        KShortcut shortcut( Qt::Key_Plus );
-      		shortcut.append( KShortcut( Qt::Key_F9 ) );
-		m_action = new KAction( i18n( "Polyline Tool" ), "14_polyline", shortcut, this, SLOT( activate() ), collection, name() );
+		KShortcut shortcut( Qt::Key_Plus );
+		shortcut.append( KShortcut( Qt::Key_F9 ) );
+		m_action = new KAction( KIcon( "14_polyline" ), i18n( "Polyline Tool" ), collection, objectName() );
+		m_action->setDefaultShortcut( shortcut );
 		m_action->setToolTip( i18n( "Polyline" ) );
+		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO needs porting: m_action->setExclusiveGroup( "freehand" );
 		//m_ownAction = true;
 	}

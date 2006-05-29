@@ -52,7 +52,7 @@ VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient& gradie
 VGradientTool::VGradientTool( KarbonView *view )
 	: VTool( view, "gradienttool" ), m_state( normal ), m_handleSize( 3 ), m_active( false )
 {
-	setName( "tool_gradient" );
+	setObjectName( "tool_gradient" );
 	m_optionsWidget = new VGradientOptionsWidget( m_gradient );
 	registerTool( this );
 }
@@ -479,12 +479,14 @@ VGradientTool::showDialog() const
 void
 VGradientTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( objectName() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( i18n( "Gradient Tool" ), "14_gradient", Qt::Key_G, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( KIcon( "14_gradient" ), i18n( "Gradient Tool" ), collection, objectName() );
+		m_action->setDefaultShortcut( Qt::Key_G );
 		m_action->setToolTip( i18n( "Gradient" ) );
+		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO needs porting: m_action->setExclusiveGroup( "misc" );
 		//m_ownAction = true;
 	}

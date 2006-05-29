@@ -35,8 +35,9 @@
 #include "vtool.moc"
 
 
-VTool::VTool( KarbonView *view, const char *name ) : QObject( 0, name ), m_view( view )
+VTool::VTool( KarbonView *view, const char *name ) : QObject( 0 ), m_view( view )
 {
+	setObjectName( name );
 	m_mouseButtonIsDown	= false;
 	m_isDragging		= false;
 	m_shiftPressed		= false;
@@ -83,9 +84,9 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const QPointF &canvasCoordinate )
 
 	setCursor();
 
-	m_altPressed = mouseEvent->state() & Qt::AltModifier;
-	m_shiftPressed = mouseEvent->state() & Qt::ShiftModifier;
-	m_ctrlPressed = mouseEvent->state() & Qt::ControlModifier;
+	m_altPressed = mouseEvent->modifiers() & Qt::AltModifier;
+	m_shiftPressed = mouseEvent->modifiers() & Qt::ShiftModifier;
+	m_ctrlPressed = mouseEvent->modifiers() & Qt::ControlModifier;
 
 	// Mouse events:
 	if( mouseEvent->type() == QEvent::MouseButtonDblClick )

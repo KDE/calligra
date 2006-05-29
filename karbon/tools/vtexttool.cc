@@ -1158,12 +1158,14 @@ VTextTool::mouseDragShiftReleased()
 void
 VTextTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( objectName() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( i18n( "Text Tool" ), "14_text", Qt::SHIFT+Qt::Key_T, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( KIcon( "14_text" ), i18n( "Text Tool" ), collection, objectName() );
+		m_action->setDefaultShortcut( Qt::SHIFT+Qt::Key_T );
 		m_action->setToolTip( i18n( "Text Tool" ) );
+		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO needs porting: m_action->setExclusiveGroup( "misc" );
 		//m_ownAction = true;
 	}

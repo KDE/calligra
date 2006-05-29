@@ -202,12 +202,14 @@ VSpiralTool::showDialog() const
 void
 VSpiralTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( objectName() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( i18n( "Spiral Tool" ), "14_spiral", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( KIcon( "14_spiral" ), i18n( "Spiral Tool" ), collection, objectName() );
+		m_action->setDefaultShortcut( Qt::SHIFT+Qt::Key_H );
 		m_action->setToolTip( i18n( "Spiral" ) );
+		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}
