@@ -30,12 +30,13 @@ This section describes &krita;'s dialog windows.
 You can create a selection based on the color values of pixels here. In the
 dropdown box, choose which color range you want to select. Pixels will be
 selected according to their color value on this scale (&eg; a fully yellow
-pixel would score maximally on the red, green, and yellow scales).
-If you check the <guilabel>Invert</guilabel> box, pixels are more selected if they
-have a lower value in the range. You can choose if the current selection should be
-added to or subtracted from by the color range selection by clicking the
+pixel would score maximally on the yellow scale and on the red and green scales).
+If you check the <guilabel>Invert</guilabel> box, the selection becomes inverted:
+pixels will be more selected if they have a lower value in the specified range.
+You can choose if the current selection should be
+added to or subtracted from the color range selection by clicking the
 respective option: <guilabel>Add to current selection</guilabel> or
-<guilabel>Select from current selection</guilabel>. Choose
+<guilabel>Subtract from current selection</guilabel>. Choose
 <guibutton>Select</guibutton> to actually perform the selection or
 <guibutton>Deselect</guibutton> to remove these pixels from the selection.
 </para>
@@ -104,7 +105,7 @@ which may result in unwanted changes to near colors.
 </para>
 
 <para>
-On this dialog you can a couple of image properties. First of all, the
+In this dialog you can change a couple of image properties. First of all, the
 <guilabel>Name</guilabel> of the image. If you did not set a name earlier
 (that can also be done when creating the image), it will have a default name
 like <quote>Image1</quote>. Then, you can set its size (determined by the
@@ -166,7 +167,7 @@ pixels). BSpline uses a 4 x 4 pixel grid and results into a quite high
 blurring. Bell is quite fast while resulting in a reasonably smooth image.
 Box is the fastest method, but yields the least appealing result. Hermite
 keeps the image quite sharp, while smoothing it as well, and is reasonably
-fast. Lancros3 results inte sharp images, but is very slow.  Mitchell (the
+fast. Lanczos3 results in sharp images, but is very slow.  Mitchell (the
 default) is not very fast, but often yields a good intermediate result.
 Triangle/Bilinear uses the 2 x 2 pixel grid around the calculated location,
 resulting in relatively sharp lines. 
@@ -246,8 +247,8 @@ channel, be discarded, or separated on its own.
 </para>
 <para>
 The two options at the bottom of the dialog, finally, determine whether the
-source should be downscaled to 8 bit colors (if it contains more), and if the
-output should be in color (default is to separate the channels to grayscale
+source should be downscaled to 8 bit colors (if it contains more), and whether
+the output should be in color (default is to separate the channels to grayscale
 values).
 </para>
 </sect3>
@@ -430,7 +431,7 @@ new width and height will always be set to the same percentage. For example,
 if you have a layer of 200 x 100 pixels, and set the width to 20 pixels, the
 height will automatically be changed to 10. With this checkbox unselected, you
 can also resize the layer non-proportionally. The <guilabel>Filter:</guilabel>
-dropdown list can be used to select a different algorithm for resizing nthe
+dropdown list can be used to select a different algorithm for resizing the
 layer.
 </para>
 
@@ -497,7 +498,7 @@ descriptions.
 You can add a new layer to your image with this dialog. If you want a
 descriptive name for your layer, you can fill one in at
 <guilabel>Name:</guilabel>. You can select the desired colorspace for the new
-layer with the <guilabel>Colorspace:</guilabel> list, and the specific
+layer from the <guilabel>Colorspace:</guilabel> list, and the specific
 color profile for that colorspace at <guilabel>Profile:</guilabel>.
 You can preset the layer's opacity (you can change it later with the slider in
 the layer box), and choose the mode with which the layer should be composited
@@ -571,7 +572,7 @@ generic part, at the right. The generic part contains a preview window, which
 you can configure using the controls below it. Choose
 <guilabel>Preview</guilabel> or <guilabel>Original</guilabel> depending on
 whether you want the preview window to show the preview of the filter effect
-or the original image. You can soom in and zoom out, and refresh the preview,
+or the original image. You can zoom in and zoom out, and refresh the preview,
 with the three buttons at the bottom right. Furthermore, the option
 <guilabel>Autoupdate</guilabel> determines if the preview window is updated
 automatically. If you uncheck this checkbox, you will have to refresh the

@@ -62,7 +62,7 @@ the pure respective color is obtained.
 </para><para>
 Two more examples: if both red and green are emitted at 100 percent and blue
 is not emitted, pure yellow is obtained. A color with all three components at
-the same is a shade of gray.
+the same intensity is a shade of gray.
 </para><para>
 There are various colorspaces that implement the RGB model. For example, the
 so-called RGB8 colorspace represents each color with 8 bits per component.

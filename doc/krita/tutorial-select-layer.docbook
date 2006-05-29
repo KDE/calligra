@@ -129,9 +129,10 @@ Size...</guimenuitem></menuchoice> dialog for this.
 </screenshot>
 
 <para>
-Add a new layer, and place it below the old layer. You do this by selecting the new layer in the layerbox, and then pressing the little 'down' arrow at the bottom.
+Add a new layer, and place it below the old layer. You do this by selecting
+the new layer in the layerbox, and then pressing the little 'down' arrow at the bottom.
 Now we are going to select the area around the head with a contiguous select
-(the tool has a selection-with-bucketfill icon).
+(the tool has a selection-with-bucketfill icon at the border).
 </para>
 
 <screenshot>

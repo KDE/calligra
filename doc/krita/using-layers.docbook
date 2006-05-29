@@ -53,7 +53,7 @@ tutorial</link> for a small hands-on introduction.
 
 <para>Adjustment Layers are layers that consist of a filter and an optional
 selection. The filter effect is applied to the composite image of all
-layers under the adjustmentlayer in the current layergroup. The big
+layers under the adjustmentlayer in the current layer group. The big
 thing is, adjustment layers apply these effects non-destructively. The
 original image data is not modified.
 </para><para>

@@ -55,7 +55,7 @@ This section offers three options. First of all, the setting in the
 cursor looks like. You can choose between a cursor resembling the actual tool
 you are working with, a normal cursor, a crosshair, and a brush-shaped cursor.
 Then you can select the <guilabel>Palette Behavior</guilabel>. You can set
-here when palettes may be <quote>docked</quote> (set aside at a screen
+here when palettes may be <quote>docked</quote> (set aside at a window
 border): always (<guilabel>Allow docking</guilabel>), never
 (<guilabel>Allow only floating</guilabel>), or when there is enough space
 (<guilabel>Allow docking only on large screens</guilabel>). The last option is

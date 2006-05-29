@@ -46,7 +46,7 @@ After having deselected you can bring your selection back by choosing
 <sect1 id="selections-painting">
 <title>Painting your selection</title>
 <para>
-As said above you can essentially paint you selection, and just like
+As said above you can essentially paint your selection, and just like
 when you paint normally you can choose to paint your selection freehand or
 guided with rectangles, ellipses, &etc;. You also have the choice of different
 paint tools like pen, brush, airbrush, &etc;. Choose the guide tool, and the
@@ -162,7 +162,7 @@ flooding stops.
 <title>Selecting similar colors</title>
 <para>
 The Select Similar tool lets you pick a pixel and then select all pixels that
-have a similar color. pickng a color in one corner of the image may select a
+have a similar color. Picking a color in one corner of the image may select a
 pixel in another corner if they have similar color.
 In the fuzziness option you can set how similar the colors must be to be
 selected.

@@ -87,7 +87,7 @@ component (0 to 255), value component (0 to 255).
 
 For example (in Ruby):
 <programlisting>
-Krosskritacore::newRGBColor(255,125,0)
+Krosskritacore::newHSVColor(255,125,0)
 </programlisting></para></listitem>
 
 <listitem><para>Function: <function>newImage</function></para><para>
@@ -141,7 +141,7 @@ image.convertToColorspace("CMYK")
 </programlisting></para></listitem>
 
 <listitem><para>Function: <function>createHistogram</function></para><para>
-This function creates an Histogram for this layer. It takes two arguments:
+This function creates a Histogram for this layer. It takes two arguments:
 the type of the histogram ("RGB8HISTO"), and 0 if the histogram is linear, or
 1 if it is logarithmic.</para></listitem>
 
@@ -152,7 +152,7 @@ position of the row), width of the row.</para></listitem>
 
 <listitem><para>Function: <function>createPainter</function></para><para>
 This function creates a <classname>Painter</classname> which will allow you to
-some painting on the layer. </para></listitem>
+paint on the layer. </para></listitem>
 
 <listitem><para>Function: <function>createRectIterator</function></para><para>
 Create an iterator over a layer, it will iterate on a rectangular area. This
@@ -165,13 +165,13 @@ takes three arguments: <varname>x</varname> (horizontal position of the
 column), <varname>y</varname> (start in the column), height of the column.</para></listitem>
 
 <listitem><para>Function: <function>endPainting</function></para><para>
-Uses this function to close the current undo entry and add it to the history.</para></listitem>
+This function closes the current undo entry and adds it to the history.</para></listitem>
 
 <listitem><para>Function: <function>fastWaveletTransformation</function></para><para>
-Return the fast wavelet transformed of the layer.</para></listitem>
+Returns the fast wavelet transformation of the layer.</para></listitem>
 
 <listitem><para>Function: <function>fastWaveletUntransformation</function></para><para>
-Untransform a fast wavelet into this layer. It takes one argument: a wavelet
+Untransforms a fast wavelet into this layer. It takes one argument: a wavelet
 object.
 For example (in Ruby):
 <programlisting>
@@ -201,7 +201,7 @@ source layer. You can also use these four aguments: <varname>x</varname>,
 (<varname>x</varname>,<varname>y</varname>,<varname>width</varname>,<varname>height</varname>)
 defines the rectangular area on which the filter
 will be computed. If the rectangle is not defined, then the filter will be
-apply on the entire source layer.
+applied on the entire source layer.
 For example (in Ruby)
 <programlisting>
 doc = Krosskritacore::get("KritaDocument")
@@ -272,7 +272,7 @@ This function returns the mean of the histogram.</para></listitem>
 
 <listitem><para>Function: <function>getMin</function></para><para>
 This function returns the minimum bound of the histogram (values at smaller
-position than the minimum are null) The value is in the range 0.0 &ndash; 1.0.</para></listitem>
+position than the minimum are null). The value is in the range 0.0 &ndash; 1.0.</para></listitem>
 
 <listitem><para>Function: <function>getNumberOfBins</function></para><para>
 Return the number of bins of this histogram. </para></listitem>
@@ -359,7 +359,7 @@ coefficient.</para></listitem>
 
 <listitem><para>Function: <function>convolve</function></para><para>
 This function applies a convolution kernel to an image. It takes at least three arguments:
-a list of a list with the kernel (all lists need to have the same size),
+a list of kernels (all lists need to have the same size),
 factor, and offset.
 </para><para>
 The value of a pixel will be given by the following function: K * P / factor + offset,
@@ -487,7 +487,7 @@ this pixel.</para></listitem>
 Set the value of all channels. This function takes one argument: an array with
 the new values for all channels.</para></listitem>
 
-<listitem><para>Function <function>getA</function>,
+<listitem><para>Functions: <function>getA</function>,
 <function>getB</function>, <function>getC</function></para><para>
 Return the value of one of the channels of this pixel.</para></listitem>
 
