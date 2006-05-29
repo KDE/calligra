@@ -196,7 +196,7 @@ class GroupWidget : public GroupWidgetBase
 class GroupContainer::Private
 {
 	public:
-		GroupContainer::Private() {}
+		Private() {}
 		QVBoxLayout* lyr;
 		GroupWidgetBase *groupWidget;
 		QGuardedPtr<QWidget> contents;
