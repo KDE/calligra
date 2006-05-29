@@ -480,7 +480,7 @@ private:
 class ModifyEffortCmd : public NamedCommand
 {
 public:
-    ModifyEffortCmd(Part *part, Effort *effort, Duration oldvalue, Duration newvalue, QString name=0);
+    ModifyEffortCmd(Part *part, Node &node, Duration oldvalue, Duration newvalue, QString name=0);
     void execute();
     void unexecute();
 
@@ -493,7 +493,7 @@ private:
 class EffortModifyOptimisticRatioCmd : public NamedCommand
 {
 public:
-    EffortModifyOptimisticRatioCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name=0);
+    EffortModifyOptimisticRatioCmd(Part *part, Node &node, int oldvalue, int newvalue, QString name=0);
     void execute();
     void unexecute();
 
@@ -506,7 +506,7 @@ private:
 class EffortModifyPessimisticRatioCmd : public NamedCommand
 {
 public:
-    EffortModifyPessimisticRatioCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name=0);
+    EffortModifyPessimisticRatioCmd(Part *part, Node &node, int oldvalue, int newvalue, QString name=0);
     void execute();
     void unexecute();
 
@@ -519,7 +519,20 @@ private:
 class ModifyEffortTypeCmd : public NamedCommand
 {
 public:
-    ModifyEffortTypeCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name=0);
+    ModifyEffortTypeCmd(Part *part, Node &node, int oldvalue, int newvalue, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Effort *m_effort;
+    int m_oldvalue, m_newvalue;
+
+};
+
+class EffortModifyRiskCmd : public NamedCommand
+{
+public:
+    EffortModifyRiskCmd(Part *part, Node &node, int oldvalue, int newvalue, QString name=0);
     void execute();
     void unexecute();
 

@@ -43,7 +43,7 @@
 #include <KoCommandHistory.h>
 #include <KoGlobal.h>
 
-#define CURRENT_SYNTAX_VERSION "0.4"
+#define CURRENT_SYNTAX_VERSION "0.5"
 
 namespace KPlato
 {

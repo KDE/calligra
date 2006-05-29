@@ -98,7 +98,7 @@ class Duration {
         Duration operator/(int unit) const;
         double operator/(const Duration &d) const;
         
-        Duration operator+(Duration &d) const
+        Duration operator+(const Duration &d) const
             {Duration dur(*this); dur.add(d); return dur; }
         Duration &operator+=(const Duration &d) {add(d); return *this; }
         

@@ -51,7 +51,7 @@ public:
     virtual QTime endTime();
     virtual QDate startDate();
     virtual QDate endDate();
-
+    virtual int risktype() const;
 public slots:
     virtual void setSchedulingType( int type );
     virtual void changeLeader();
@@ -77,6 +77,7 @@ public slots:
     virtual void setEndDateTime( const QDateTime & dt );
     virtual void setStartDate( const QDate & date );
     virtual void setEndDate( const QDate & date );
+    virtual void setRisktype( int r );
 
 signals:
     void obligatedFieldsFilled( bool );

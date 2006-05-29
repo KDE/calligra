@@ -568,18 +568,15 @@ public:
     void setType(Type type) { m_type = type; }
     void setType(QString type);
     QString typeToString() const;
+    
+    enum Risktype { Risk_None, Risk_Low, Risk_High };
+    Risktype risktype() const { return m_risktype; }
+    void setRisktype(Risktype type) { m_risktype = type; }
+    void setRisktype(QString type);
+    QString risktypeToString() const;
 
     enum Use { Use_Expected=0, Use_Optimistic=1, Use_Pessimistic=2 };
-    const Duration& effort(int use) {
-        if (use == Effort::Use_Expected)
-            return m_expectedEffort;
-        else if (use == Effort::Use_Optimistic)
-            return m_optimisticEffort;
-        else if (use == Effort::Use_Pessimistic)
-            return m_pessimisticEffort;
-        
-        return m_expectedEffort; // default
-    }
+    Duration effort(int use) const;
     const Duration& optimistic() const {return m_optimisticEffort;}
     const Duration& pessimistic() const {return m_pessimisticEffort;}
     const Duration& expected() const {return m_expectedEffort;}
@@ -618,12 +615,18 @@ public:
      */
     static const Effort zeroEffort;
 
+    Duration variance() const;
+    Duration pertExpected() const;
+    Duration pertOptimistic() const;
+    Duration pertPessimistic() const;
+
 private:
     Duration m_optimisticEffort;
     Duration m_pessimisticEffort;
     Duration m_expectedEffort;
 
     Type m_type;
+    Risktype m_risktype;
     
 #ifndef NDEBUG
 public:

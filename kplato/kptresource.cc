@@ -456,7 +456,7 @@ void Resource::addSchedule(Schedule *schedule) {
     m_schedules.replace(schedule->id(), schedule);
 }
 
-ResourceSchedule *Resource::createSchedule(QString name, int type, int id) {
+ResourceSchedule *Resource::createSchedule(QString name, int type, long id) {
     ResourceSchedule *sch = new ResourceSchedule(this, name, (Schedule::Type)type, id);
     addSchedule(sch);
     return sch;

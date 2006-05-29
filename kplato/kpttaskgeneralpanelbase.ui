@@ -10,11 +10,11 @@
             <x>0</x>
             <y>0</y>
             <width>653</width>
-            <height>401</height>
+            <height>418</height>
         </rect>
     </property>
     <property name="caption">
-        <string></string>
+        <string>TaskGeneralPanelBase</string>
     </property>
     <vbox>
         <property name="name">
@@ -214,27 +214,6 @@ The estimation can be either effort based or duration based. If it is effort bas
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KComboBox" row="2" column="1">
-                    <item>
-                        <property name="text">
-                            <string>Effort</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Duration</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>estimateType</cstring>
-                    </property>
-                    <property name="editable">
-                        <bool>false</bool>
-                    </property>
-                    <property name="urlDropsEnabled" stdset="0">
-                        <bool>false</bool>
-                    </property>
-                </widget>
                 <widget class="KComboBox" row="0" column="1">
                     <item>
                         <property name="text">
@@ -292,22 +271,6 @@ The estimation can be either effort based or duration based. If it is effort bas
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>scheduleType</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>textLabel3_2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Estimate:</string>
                     </property>
                 </widget>
                 <widget class="KDateWidget" row="0" column="2">
@@ -405,6 +368,106 @@ The estimation can be either effort based or duration based. If it is effort bas
                         </widget>
                     </hbox>
                 </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel3_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Estimate:</string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="2" column="1">
+                    <item>
+                        <property name="text">
+                            <string>Effort</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Duration</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>estimateType</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>false</bool>
+                    </property>
+                    <property name="urlDropsEnabled" stdset="0">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="3" column="1">
+                    <item>
+                        <property name="text">
+                            <string>None</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Low</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>High</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>risk</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>false</bool>
+                    </property>
+                    <property name="urlDropsEnabled" stdset="0">
+                        <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Risk controles the PERT distribution used when calculating the actual estimate for this task.</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;Risk controles the PERT distribution used when calculating the actual estimate for the task.
+&lt;b&gt;None&lt;/b&gt; means the Expected estimate is used as is.
+&lt;b&gt;Low risk&lt;/b&gt; means that a normal distribution is used.
+&lt;b&gt;High risk&lt;/b&gt; means that the estimate will be slightly pessimistic compared to Low risk.&lt;/p&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel3_2_3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Risk:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>risk</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Risk controles the PERT distribution used when calculating the actual estimate for this task.</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;Risk controles the PERT distribution used when calculating the actual estimate for the task.
+&lt;b&gt;None&lt;/b&gt; means the Expected estimate is used as is.
+&lt;b&gt;Low risk&lt;/b&gt; means that a normal distribution is used.
+&lt;b&gt;High risk&lt;/b&gt; means that the estimate will be slightly pessimistic compared to Low risk.&lt;/p&gt;</string>
+                    </property>
+                </widget>
             </grid>
         </widget>
         <widget class="QLabel">
@@ -464,6 +527,7 @@ The estimation can be either effort based or duration based. If it is effort bas
     <tabstop>scheduleEndTime</tabstop>
     <tabstop>estimateType</tabstop>
     <tabstop>estimate</tabstop>
+    <tabstop>risk</tabstop>
     <tabstop>optimisticValue</tabstop>
     <tabstop>pessimisticValue</tabstop>
     <tabstop>descriptionfield</tabstop>

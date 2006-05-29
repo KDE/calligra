@@ -915,71 +915,113 @@ void RemoveResourceRequestCmd::unexecute() {
     setCommandType(1);
 }
 
-ModifyEffortCmd::ModifyEffortCmd(Part *part, Effort *effort, Duration oldvalue, Duration newvalue, QString name)
+ModifyEffortCmd::ModifyEffortCmd(Part *part, Node &node, Duration oldvalue, Duration newvalue, QString name)
     : NamedCommand(part, name),
-      m_effort(effort),
+      m_effort(node.effort()),
       m_oldvalue(oldvalue),
       m_newvalue(newvalue) {
+
+    QIntDictIterator<Schedule> it = node.schedules();
+    for (; it.current(); ++it) {
+        addSchScheduled(it.current());
+    }
 }
 void ModifyEffortCmd::execute() {
     m_effort->set(m_newvalue);
-    
+    setSchScheduled(false);
     setCommandType(1);
 }
 void ModifyEffortCmd::unexecute() {
     m_effort->set(m_oldvalue);
-    
+    setSchScheduled();
     setCommandType(1);
 }
 
-EffortModifyOptimisticRatioCmd::EffortModifyOptimisticRatioCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name)
+EffortModifyOptimisticRatioCmd::EffortModifyOptimisticRatioCmd(Part *part, Node &node, int oldvalue, int newvalue, QString name)
     : NamedCommand(part, name),
-      m_effort(effort),
+      m_effort(node.effort()),
       m_oldvalue(oldvalue),
       m_newvalue(newvalue) {
+
+    QIntDictIterator<Schedule> it = node.schedules();
+    for (; it.current(); ++it) {
+        addSchScheduled(it.current());
+    }
 }
 void EffortModifyOptimisticRatioCmd::execute() {
     m_effort->setOptimisticRatio(m_newvalue);
-    
+    setSchScheduled(false);
     setCommandType(1);
 }
 void EffortModifyOptimisticRatioCmd::unexecute() {
     m_effort->setOptimisticRatio(m_oldvalue);
-    
+    setSchScheduled();
     setCommandType(1);
 }
 
-EffortModifyPessimisticRatioCmd::EffortModifyPessimisticRatioCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name)
+EffortModifyPessimisticRatioCmd::EffortModifyPessimisticRatioCmd(Part *part, Node &node, int oldvalue, int newvalue, QString name)
     : NamedCommand(part, name),
-      m_effort(effort),
+      m_effort(node.effort()),
       m_oldvalue(oldvalue),
       m_newvalue(newvalue) {
+
+    QIntDictIterator<Schedule> it = node.schedules();
+    for (; it.current(); ++it) {
+        addSchScheduled(it.current());
+    }
 }
 void EffortModifyPessimisticRatioCmd::execute() {
     m_effort->setPessimisticRatio(m_newvalue);
-    
+    setSchScheduled(false);
     setCommandType(1);
 }
 void EffortModifyPessimisticRatioCmd::unexecute() {
     m_effort->setPessimisticRatio(m_oldvalue);
-    
+    setSchScheduled();
     setCommandType(1);
 }
 
-ModifyEffortTypeCmd::ModifyEffortTypeCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name)
+ModifyEffortTypeCmd::ModifyEffortTypeCmd(Part *part, Node &node, int oldvalue, int newvalue, QString name)
     : NamedCommand(part, name),
-      m_effort(effort),
+      m_effort(node.effort()),
       m_oldvalue(oldvalue),
       m_newvalue(newvalue) {
+    
+    QIntDictIterator<Schedule> it = node.schedules();
+    for (; it.current(); ++it) {
+        addSchScheduled(it.current());
+    }
 }
 void ModifyEffortTypeCmd::execute() {
     m_effort->setType(static_cast<Effort::Type>(m_newvalue));
-    
+    setSchScheduled(false);
     setCommandType(1);
 }
 void ModifyEffortTypeCmd::unexecute() {
     m_effort->setType(static_cast<Effort::Type>(m_oldvalue));
-    
+    setSchScheduled();
+    setCommandType(1);
+}
+
+EffortModifyRiskCmd::EffortModifyRiskCmd(Part *part, Node &node, int oldvalue, int newvalue, QString name)
+    : NamedCommand(part, name),
+      m_effort(node.effort()),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+
+    QIntDictIterator<Schedule> it = node.schedules();
+    for (; it.current(); ++it) {
+        addSchScheduled(it.current());
+    }
+}
+void EffortModifyRiskCmd::execute() {
+    m_effort->setRisktype(static_cast<Effort::Risktype>(m_newvalue));
+    setSchScheduled(false);
+    setCommandType(1);
+}
+void EffortModifyRiskCmd::unexecute() {
+    m_effort->setRisktype(static_cast<Effort::Risktype>(m_oldvalue));
+    setSchScheduled();
     setCommandType(1);
 }
 
