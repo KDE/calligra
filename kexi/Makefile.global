@@ -20,6 +20,9 @@ KDE_CXXFLAGS += -DKEXI_NO_CURSOR_PROPERTY
 # temporary: turn off processEvents() to avoid possible crashes
 # KDE_CXXFLAGS += -DKEXI_NO_PROCESS_EVENTS
 
+# temp: turn off advanced alter table
+KDE_CXXFLAGS += -DKEXI_NO_UNDOREDO_ALTERTABLE
+
 KDE_CXXFLAGS += -DKEXI_NO_CTXT_HELP -DKEXI_NO_SUBFORM
 
 # TODO: undefine this before release!
