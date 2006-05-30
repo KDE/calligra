@@ -384,7 +384,7 @@ public:
     ~KWShapeController() {};
     void addShape(KoShape* shape);
     void removeShape(KoShape* shape);
-    KoShape* createShape(QRectF outline) const;
+    KoShape* createShape(const QRectF &outline) const;
     void setFactoryType(FrameType frameType) { m_type = frameType; }
 
 private:

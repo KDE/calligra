@@ -2161,8 +2161,7 @@ void KWShapeController::removeShape( KoShape* shape ) {
         view->getGUI()->canvasWidget()->shapeManager()->remove(shape);
 }
 
-KoShape* KWShapeController::createShape(QRectF outline) const {
-kDebug() << "KWShapeController::createShape " << outline << endl;
+KoShape* KWShapeController::createShape(const QRectF &outline) const {
     KoShape *rect = new KoRectangleShape();
     rect->setBackground(QColor(Qt::blue));
     rect->setPosition(outline.topLeft());
