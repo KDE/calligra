@@ -93,14 +93,16 @@ AlterTableHandler::MoveFieldPositionAction& AlterTableHandler::ActionBase::toMov
 
 //--------------------------------------------------------
 
-AlterTableHandler::FieldActionBase::FieldActionBase(const QString& fieldName)
+AlterTableHandler::FieldActionBase::FieldActionBase(const QString& fieldName, int uid)
  : ActionBase()
  , m_fieldName(fieldName)
+ , m_fieldUID(uid)
 {
 }
 
 AlterTableHandler::FieldActionBase::FieldActionBase(bool)
  : ActionBase(true)
+ , m_fieldUID(-1)
 {
 }
 
@@ -120,9 +122,9 @@ static int alteringTypeForProperty(const char *propertyName)
 		KexiDB_alteringTypeForProperty_deleter.setObject( KexiDB_alteringTypeForProperty, 
 			new QMap<QCString,int>() );
 #define I(name, type) \
-	KexiDB_alteringTypeForProperty->insert(name, AlterTableHandler::type)
+	KexiDB_alteringTypeForProperty->insert(QCString(name).lower(), AlterTableHandler::type)
 #define I2(name, type1, type2) \
-	KexiDB_alteringTypeForProperty->insert(name, AlterTableHandler::type1|AlterTableHandler::type2)
+	KexiDB_alteringTypeForProperty->insert(QCString(name).lower(), AlterTableHandler::type1|AlterTableHandler::type2)
 
 	/* useful links: 
 		http://dev.mysql.com/doc/refman/5.0/en/create-table.html
@@ -159,8 +161,8 @@ static int alteringTypeForProperty(const char *propertyName)
 //---
 
 AlterTableHandler::ChangeFieldPropertyAction::ChangeFieldPropertyAction(
-	const QString& fieldName, const QString& propertyName, const QVariant& newValue)
- : FieldActionBase(fieldName)
+	const QString& fieldName, const QString& propertyName, const QVariant& newValue, int uid)
+ : FieldActionBase(fieldName, uid)
  , m_propertyName(propertyName)
  , m_newValue(newValue)
 {
@@ -183,28 +185,35 @@ void AlterTableHandler::ChangeFieldPropertyAction::updateAlteringRequirements()
 
 QString AlterTableHandler::ChangeFieldPropertyAction::debugString()
 {
-	return QString("Set \"%1\" property for table field \"%2\" to \"%3\"")
-		.arg(m_propertyName).arg(fieldName()).arg(m_newValue.toString());
+	return QString("Set \"%1\" property for table field \"%2\" to \"%3\" (UID=%4)")
+		.arg(m_propertyName).arg(fieldName()).arg(m_newValue.toString()).arg(m_fieldUID);
 }
 
 static AlterTableHandler::ActionDict* createActionDict( 
-	AlterTableHandler::ActionDictDict &fieldActions, const QString& forFieldName )
+	AlterTableHandler::ActionDictDict &fieldActions, int forFieldUID )
 {
 	AlterTableHandler::ActionDict* dict = new AlterTableHandler::ActionDict(101, false);
 	dict->setAutoDelete(true);
-	fieldActions.insert( forFieldName.latin1(), dict );
+	fieldActions.insert( forFieldUID, dict );
 	return dict;
 }
 
-static void debugActionDict(AlterTableHandler::ActionDict *dict, const char* fieldName, bool simulate)
+static void debugActionDict(AlterTableHandler::ActionDict *dict, int fieldUID, bool simulate)
 {
-	QString dbg = QString("Action dict for field \"%1\" (%2):").arg(fieldName).arg(dict->count());
+	QString fieldName;
+	AlterTableHandler::ActionDictIterator it(*dict);
+	if (dynamic_cast<AlterTableHandler::FieldActionBase*>(it.current())) //retrieve field name from the 1st related action
+		fieldName = dynamic_cast<AlterTableHandler::FieldActionBase*>(it.current())->fieldName();
+	else
+		fieldName = "??";
+	QString dbg = QString("Action dict for field \"%1\" (%2, UID=%3):")
+		.arg(fieldName).arg(dict->count()).arg(fieldUID);
 	KexiDBDbg << dbg << endl;
 #ifdef KEXI_DEBUG_GUI
 	if (simulate)
 		KexiUtils::addAlterTableActionDebug(dbg, 1);
 #endif
-	for (AlterTableHandler::ActionDictIterator it(*dict); it.current(); ++it) {
+	for (;it.current(); ++it) {
 		it.current()->debug();
 #ifdef KEXI_DEBUG_GUI
 		if (simulate)
@@ -224,68 +233,104 @@ static void debugFieldActions(const AlterTableHandler::ActionDictDict &fieldActi
 	}
 }
 
+/*! 
+ Legend: A,B==objects, P==property, [....]==action, (..,..,..) group of actions, <...> internal operation.
+ Case 1. (special)
+    when new action=[rename A to B]
+    and exists=[rename B to C] 
+    =>
+    remove [rename B to C]
+    and set result to new [rename A to C]
+    and go to 1b.
+ Case 1b. when new action=[rename A to B]
+    and actions exist like [set property P to C in field B] 
+    or like [delete field B] 
+    or like [move field B] 
+    =>
+    change B to A for all these actions
+ Case 2. when new action=[change property in field A] (property != name)
+    and exists=[remove A] or exists=[change property in field A]
+    =>
+    do not add [change property in field A] because it will be removed anyway or the property will change
+*/
 void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDict &fieldActions)
 {
-//	ActionDict *actionsForThisField = fieldActions[ newName ];
+	ActionDict *actionsLikeThis = fieldActions[ uid() ]; //newName.latin1() ];
 	if (m_propertyName=="name") {
-		// special case: name1 -> name2, i.e. rename action
+		// Case 1. special: name1 -> name2, i.e. rename action
 		QString newName( newValue().toString() );
 		// try to find rename(newName, otherName) action
-		ActionDict *actionsLikeThis = fieldActions[ newName.latin1() ];
 		ActionBase *renameActionLikeThis = actionsLikeThis ? actionsLikeThis->find( "name" ) : 0;
 		if (dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)) {
 			// 1. instead of having rename(fieldName(), newValue()) action,
-			// create rename(fieldName(), otherName) action
-			AlterTableHandler::ChangeFieldPropertyAction* newRenameAction 
+			// let's have rename(fieldName(), otherName) action
+			dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue 
+				= dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue;
+/*			AlterTableHandler::ChangeFieldPropertyAction* newRenameAction 
 				= new AlterTableHandler::ChangeFieldPropertyAction( *this );
 			newRenameAction->m_newValue = dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue;
-			// 2. (m_order is the same as in newAction)
-			// 3. replace prev. rename action (if any)
+			// (m_order is the same as in newAction)
+			// replace prev. rename action (if any)
 			actionsLikeThis->remove( "name" );
 			ActionDict *adict = fieldActions[ fieldName().latin1() ];
 			if (!adict)
 				adict = createActionDict( fieldActions, fieldName() );
-			adict->insert(m_propertyName.latin1(), newRenameAction);
+			adict->insert(m_propertyName.latin1(), newRenameAction);*/
 		}
 		else {
-			//just insert a copy of the rename action
-			if (!actionsLikeThis)
-				actionsLikeThis = createActionDict( fieldActions, fieldName() );
-			AlterTableHandler::ChangeFieldPropertyAction* newRenameAction = new AlterTableHandler::ChangeFieldPropertyAction( *this );
-			KexiDBDbg << "ChangeFieldPropertyAction::simplifyActions(): insert into '"<< fieldName() << "' dict:"  << newRenameAction->debugString() << endl;
-			actionsLikeThis->insert( m_propertyName.latin1(), newRenameAction );
-			return;
+			ActionBase *removeActionForThisField = actionsLikeThis ? actionsLikeThis->find( ":remove:" ) : 0;
+			if (removeActionForThisField) {
+				//if this field is going to be removed, jsut change the action's field name 
+				// and do not add a new action
+			}
+			else {
+				//just insert a copy of the rename action
+				if (!actionsLikeThis)
+					actionsLikeThis = createActionDict( fieldActions, uid() ); //fieldName() );
+				AlterTableHandler::ChangeFieldPropertyAction* newRenameAction 
+					= new AlterTableHandler::ChangeFieldPropertyAction( *this );
+				KexiDBDbg << "ChangeFieldPropertyAction::simplifyActions(): insert into '"
+					<< fieldName() << "' dict:"  << newRenameAction->debugString() << endl;
+				actionsLikeThis->insert( m_propertyName.latin1(), newRenameAction );
+				return;
+			}
 		}
 		if (actionsLikeThis) {
-			// 4. change "field name" information to fieldName() in any action that 
+			// Case 1b. change "field name" information to fieldName() in any action that 
 			//    is related to newName
 			//    e.g. if there is setCaption("B", "captionA") action after rename("A","B"),
 			//    replace setCaption action with setCaption("A", "captionA")
 			foreach_dict (ActionDictIterator, it, *actionsLikeThis) {
-				dynamic_cast<ChangeFieldPropertyAction*>(it.current())->m_fieldName = fieldName();
+				dynamic_cast<FieldActionBase*>(it.current())->setFieldName( fieldName() );
 			}
 		}
 		return;
 	}
-	// other cases: just give up with adding this "intermediate" action
-	// e.g. [ setCaption(A, "captionA"), setCaption(A, "captionB") ]
+	ActionBase *removeActionForThisField = actionsLikeThis ? actionsLikeThis->find( ":remove:" ) : 0;
+	if (removeActionForThisField) {
+		//if this field is going to be removed, jsut change the action's field name 
+		// and do not add a new action
+		return;
+	}
+	// Case 2. other cases: just give up with adding this "intermediate" action
+	// so, e.g. [ setCaption(A, "captionA"), setCaption(A, "captionB") ]
 	//  becomes: [ setCaption(A, "captionB") ]
 	// because adding this action does nothing
-	ActionDict *nextActionsLikeThis = fieldActions[ fieldName().latin1() ];
+	ActionDict *nextActionsLikeThis = fieldActions[ uid() ]; //fieldName().latin1() ];
 	if (!nextActionsLikeThis || !nextActionsLikeThis->find( m_propertyName.latin1() )) { 
 		//no such action, add this
 		AlterTableHandler::ChangeFieldPropertyAction* newAction 
 			= new AlterTableHandler::ChangeFieldPropertyAction( *this );
 		if (!nextActionsLikeThis)
-			nextActionsLikeThis = createActionDict( fieldActions, fieldName() );
+			nextActionsLikeThis = createActionDict( fieldActions, uid() );//fieldName() );
 		nextActionsLikeThis->insert( m_propertyName.latin1(), newAction );
 	}
 }
 
 //--------------------------------------------------------
 
-AlterTableHandler::RemoveFieldAction::RemoveFieldAction(const QString& fieldName)
- : FieldActionBase(fieldName)
+AlterTableHandler::RemoveFieldAction::RemoveFieldAction(const QString& fieldName, int uid)
+ : FieldActionBase(fieldName, uid)
 {
 }
 
@@ -308,13 +353,30 @@ void AlterTableHandler::RemoveFieldAction::updateAlteringRequirements()
 
 QString AlterTableHandler::RemoveFieldAction::debugString()
 {
-	return QString("Remove table field \"%1\"").arg(m_fieldName);
+	return QString("Remove table field \"%1\" (UID=%2)").arg(m_fieldName).arg(m_fieldUID);
+}
+
+/*! 
+ Legend: A,B==objects, P==property, [....]==action, (..,..,..) group of actions, <...> internal operation.
+ Preconditions: we assume there cannot be such case encountered: ([remove A], [do something related on A])
+  (except for [remove A], [insert A])
+ General Case. it's safe to always insert a [remove A] action.
+*/
+void AlterTableHandler::RemoveFieldAction::simplifyActions(ActionDictDict &fieldActions)
+{
+	//! @todo not checked
+	AlterTableHandler::RemoveFieldAction* newAction 
+			= new AlterTableHandler::RemoveFieldAction( *this );
+	ActionDict *actionsLikeThis = fieldActions[ uid() ]; //fieldName().latin1() ];
+	if (!actionsLikeThis)
+		actionsLikeThis = createActionDict( fieldActions, uid() ); //fieldName() );
+	actionsLikeThis->insert( ":remove:", newAction ); //special
 }
 
 //--------------------------------------------------------
 
-AlterTableHandler::InsertFieldAction::InsertFieldAction(int fieldIndex, KexiDB::Field *field)
- : FieldActionBase(field->name())
+AlterTableHandler::InsertFieldAction::InsertFieldAction(int fieldIndex, KexiDB::Field *field, int uid)
+ : FieldActionBase(field->name(), uid)
  , m_index(fieldIndex)
  , m_field(field)
 {
@@ -343,15 +405,29 @@ void AlterTableHandler::InsertFieldAction::updateAlteringRequirements()
 
 QString AlterTableHandler::InsertFieldAction::debugString()
 {
-	return QString("Insert table field \"%1\" at position %1")
-		.arg(m_field->name()).arg(m_index);
+	return QString("Insert table field \"%1\" at position %2 (UID=%3)")
+		.arg(m_field->name()).arg(m_index).arg(m_fieldUID);
 }
+
+void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &fieldActions)
+{
+	// Try to find actions related to this action
+	ActionDict *actionsForThisField = fieldActions[ uid() ]; //m_field->name().latin1() ];
+
+	// Let's name this action as "insert A"
+	// Case 1: there is "rename A to B" action: 
+	//  just remove the "rename" and change this action to "insert B"
+//todo	if (actionsLikeThis
+
+}
+
+
 
 //--------------------------------------------------------
 
 AlterTableHandler::MoveFieldPositionAction::MoveFieldPositionAction(
-	int fieldIndex, const QString& fieldName)
- : FieldActionBase(fieldName)
+	int fieldIndex, const QString& fieldName, int uid)
+ : FieldActionBase(fieldName, uid)
  , m_index(fieldIndex)
 {
 }
@@ -373,8 +449,14 @@ void AlterTableHandler::MoveFieldPositionAction::updateAlteringRequirements()
 
 QString AlterTableHandler::MoveFieldPositionAction::debugString()
 {
-	return QString("Move table field \"%1\" to position %1")
-		.arg(m_fieldName).arg(m_index);
+	return QString("Move table field \"%1\" to position %2 (UID=%3)")
+		.arg(m_fieldName).arg(m_index).arg(m_fieldUID);
+}
+
+void AlterTableHandler::MoveFieldPositionAction::simplifyActions(ActionDictDict &fieldActions)
+{
+	Q_UNUSED(fieldActions);
+	//! @todo
 }
 
 //--------------------------------------------------------
@@ -463,8 +545,8 @@ bool AlterTableHandler::execute(const QString& tableName, bool simulate)
 	QString dbg = QString("AlterTableHandler::execute(): overall altering requirements: %1").arg(req);
 	KexiDBDbg << dbg << endl;
 #ifdef KEXI_DEBUG_GUI
-		if (simulate)
-			KexiUtils::addAlterTableActionDebug(dbg, 0);
+	if (simulate)
+		KexiUtils::addAlterTableActionDebug(dbg, 0);
 #endif
 	if (req == 0) {
 		return true;
