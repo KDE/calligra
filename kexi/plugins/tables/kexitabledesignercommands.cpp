@@ -54,9 +54,9 @@ ChangeFieldPropertyCommand::ChangeFieldPropertyCommand( KexiTableDesignerView* v
  : Command(view)
  , m_alterTableAction(
 		propertyName=="name" ? oldValue.toString() : set.property("name").value().toString(), 
-		propertyName, newValue)
+		propertyName, newValue, set["uid"].value().toInt())
  , m_oldValue(oldValue)
- , m_fieldUID(set["uid"].value().toInt())
+// , m_fieldUID(set["uid"].value().toInt())
  , m_oldListData( oldListData ? new KoProperty::Property::ListData(*oldListData) : 0 )
  , m_listData( newListData ? new KoProperty::Property::ListData(*newListData) : 0 )
 {
@@ -89,13 +89,13 @@ QString ChangeFieldPropertyCommand::debugString()
 				QString("%1 -> %2")
 				.arg(m_listData->keysAsStringList().join(",")).arg(m_listData->names.join(","))
 				: QString("<NONE>"));
-	return s;
+	return s + QString(" (UID=%1)").arg(m_alterTableAction.uid());
 }
 
 void ChangeFieldPropertyCommand::execute()
 {
 	m_view->changeFieldProperty( 
-		m_fieldUID,
+		m_alterTableAction.uid(),
 		m_alterTableAction.propertyName().latin1(),
 		m_alterTableAction.newValue(), m_listData );
 }
@@ -103,7 +103,7 @@ void ChangeFieldPropertyCommand::execute()
 void ChangeFieldPropertyCommand::unexecute()
 {
 	m_view->changeFieldProperty( 
-		m_fieldUID,
+		m_alterTableAction.uid(),
 		m_alterTableAction.propertyName().latin1(),
 		m_oldValue, m_oldListData );
 }
@@ -118,7 +118,8 @@ KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction(
 RemoveFieldCommand::RemoveFieldCommand( KexiTableDesignerView* view, int fieldIndex, 
 	const KoProperty::Set* set)
  : Command(view)
- , m_alterTableAction( set ? (*set)["name"].value().toString() : QString::null )
+ , m_alterTableAction( set ? (*set)["name"].value().toString() : QString::null, 
+	set ? (*set)["uid"].value().toInt() : -1 )
  , m_set( set ? new KoProperty::Set(*set /*deep copy*/) : 0 )
  , m_fieldIndex(fieldIndex)
 {
@@ -155,7 +156,8 @@ QString RemoveFieldCommand::debugString()
 		return name();
 
 	return name() + "\nAT ROW " + QString::number(m_fieldIndex)
-		+ ", FIELD: " + (*m_set)["caption"].value().toString();
+		+ ", FIELD: " + (*m_set)["caption"].value().toString()
+		+ QString(" (UID=%1)").arg(m_alterTableAction.uid());
 }
 
 KexiDB::AlterTableHandler::ActionBase* RemoveFieldCommand::createAction()
@@ -173,7 +175,8 @@ InsertFieldCommand::InsertFieldCommand( KexiTableDesignerView* view,
 {
 	KexiDB::Field *f = view->buildField( m_set );
 	if (f)
-		m_alterTableAction = new KexiDB::AlterTableHandler::InsertFieldAction(fieldIndex, f);
+		m_alterTableAction = new KexiDB::AlterTableHandler::InsertFieldAction(
+			fieldIndex, f, set["uid"].value().toInt());
 	else //null action
 		m_alterTableAction = new KexiDB::AlterTableHandler::InsertFieldAction(true);
 }
@@ -208,8 +211,8 @@ KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction()
 ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand( KexiTableDesignerView* view,
 	const KoProperty::Set& set, const QCString& propertyName, bool visible)
  : Command(view)
- , m_alterTableAction(set.property("name").value().toString(), propertyName, visible)
- , m_fieldUID(set["uid"].value().toInt())
+ , m_alterTableAction(set.property("name").value().toString(), propertyName, visible, set["uid"].value().toInt())
+// , m_fieldUID(set["uid"].value().toInt())
  , m_oldVisibility( set.property(propertyName).isVisible() )
 {
 	kexipluginsdbg << "ChangePropertyVisibilityCommand: " << debugString() << endl;
@@ -230,7 +233,7 @@ QString ChangePropertyVisibilityCommand::name() const
 void ChangePropertyVisibilityCommand::execute()
 {
 	m_view->changePropertyVisibility( 
-		m_fieldUID,
+		m_alterTableAction.uid(),
 		m_alterTableAction.propertyName().latin1(),
 		m_alterTableAction.newValue().toBool() );
 }
@@ -238,7 +241,7 @@ void ChangePropertyVisibilityCommand::execute()
 void ChangePropertyVisibilityCommand::unexecute()
 {
 	m_view->changePropertyVisibility( 
-		m_fieldUID,
+		m_alterTableAction.uid(),
 		m_alterTableAction.propertyName().latin1(),
 		m_oldVisibility );
 }

@@ -84,7 +84,7 @@ class ChangeFieldPropertyCommand : public Command
 	protected:
 		KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
 		QVariant m_oldValue;
-		int m_fieldUID;
+//		int m_fieldUID;
 		KoProperty::Property::ListData* m_oldListData, *m_listData;
 };
 
@@ -160,7 +160,7 @@ class ChangePropertyVisibilityCommand : public Command
 
 	protected:
 		KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
-		int m_fieldUID;
+//		int m_fieldUID;
 		bool m_oldVisibility;
 };
 
