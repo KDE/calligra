@@ -83,8 +83,6 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *d, KWGUI *lGui)
     m_frameViewManager = new KWFrameViewManager(d);
     m_tool = new KoInteractionTool(this);
 
-setMinimumSize(800, 1200);
-
     m_gui = lGui;
     m_shapeManager = new KoShapeManager(this);
     m_currentFrameSetEdit = 0L;
@@ -183,6 +181,7 @@ m_shapeManager->add(r);
         }
     }
     m_doc->deleteInitialEditingInfo();
+    updateSize();
 
     connect(frameViewManager(), SIGNAL(sigFrameResized(const Q3ValueList<KWFrame*>&)),
         m_doc, SLOT(framesChanged(const Q3ValueList<KWFrame*>&)));
@@ -2135,6 +2134,9 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
     painter.end();
 }
 
-
+void KWCanvas::updateSize() {
+    QSize size = viewMode()->contentsSize();
+    setMinimumSize(size.width(), size.height());
+}
 
 #include "KWCanvas.moc"

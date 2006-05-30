@@ -3269,6 +3269,7 @@ void KWView::setZoom( int zoom, bool updateViews )
     // Also set the zoom in KoView (for embedded views)
     kDebug() << "KWView::setZoom " << zoom << " setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
     KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ );
+    m_gui->canvasWidget()->updateSize();
 }
 
 void KWView::insertPicture()
@@ -6022,12 +6023,12 @@ QWidget* KWView::canvas() const
 
 int KWView::canvasXOffset() const
 {
-    return 0; // m_gui->canvasWidget()->contentsX();
+    return m_gui->m_canvasView->canvasOffsetX();
 }
 
 int KWView::canvasYOffset() const
 {
-    return 0; // m_gui->canvasWidget()->contentsY();
+    return m_gui->m_canvasView->canvasOffsetY();
 }
 
 void KWView::canvasAddChild( KoViewChild * child )

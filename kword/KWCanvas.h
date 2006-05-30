@@ -232,6 +232,7 @@ public:
     KWTextFrameSetEdit* currentTextEdit() const;
 
     bool insertInlinePicture();
+    void updateSize();
 
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
