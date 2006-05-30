@@ -21,7 +21,6 @@
 // painter factory
 
 #include "vpainterfactory.h"
-#include "vkopainter.h"
 #include "vqpainter.h"
 
 VPainterFactory::VPainterFactory()
@@ -47,7 +46,7 @@ VPainterFactory::setPainter( QPaintDevice *target, int w, int h )
 {
 	if( m_painter )
 		delete m_painter;
-	m_painter = new VKoPainter( target, w, h );
+	m_painter = new VQPainter( target, w, h );
 }
 
 VPainter *
