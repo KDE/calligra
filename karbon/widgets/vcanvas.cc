@@ -373,9 +373,25 @@ VCanvas::resizeEvent( QResizeEvent* event )
 	else
 		m_pixmap->scaled( width(), height() );
 
-	VPainter *p = m_view->painterFactory()->painter();
-	p->resize( width(), height() );
-	p->clear( QColor( 195, 194, 193 ) );
+	/* TODO: this gives problems while starting Karbon:
+
+Program received signal SIGSEGV, Segmentation fault.
+[Switching to Thread 16384 (LWP 15982)]
+VPainterFactory::painter (this=0x6100680073002f) at /home/kde4dev/kde/src/koffice/karbon/render/vpainterfactory.cc:42
+42              return m_painter;
+(gdb) bt
+#0  VPainterFactory::painter (this=0x6100680073002f) at /home/kde4dev/kde/src/koffice/karbon/render/vpainterfactory.cc:42
+#1  0x00002aaaaad4472d in VCanvas::resizeEvent (this=0x8caa50, event=0x168) at /home/kde4dev/kde/src/koffice/karbon/widgets/vcanvas.cc:376
+
+
+
+	if(m_view->painterFactory()->painter())
+	{
+		VPainter *p = m_view->painterFactory()->painter();
+		p->resize( width(), height() );
+		p->clear( QColor( 195, 194, 193 ) );
+	}*/
+
 	setViewport( centerX, centerY );
 }
 
