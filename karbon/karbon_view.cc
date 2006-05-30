@@ -1434,7 +1434,8 @@ KarbonView::selectionChanged()
 			//if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_strokeFillPreview )
 			m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
-  		m_lineStyleAction->setEnabled( false );
+  		/* TODO: this will crash karbon when starting:
+		m_lineStyleAction->setEnabled( false );*/
 		m_deleteSelectionAction->setEnabled( false );
 	}
 	emit selectionChange();
