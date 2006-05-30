@@ -271,6 +271,7 @@ protected:
     void updateCanvas(const QRectF& rc);
     KoTool* activeTool() { return m_tool; }
     KoViewConverter *viewConverter();
+    QWidget* canvasWidget() { return this; }
 
 signals:
     // Emitted when the current frameset edit changes

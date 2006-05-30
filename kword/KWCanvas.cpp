@@ -2125,8 +2125,6 @@ void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
 }
 
 void KWCanvas::paintEvent(QPaintEvent * ev) {
-kDebug() << "KWCanvas::paintEvent" << endl;
-kDebug() << "Size: " << width() << "x" << height() << endl;
     QPainter painter( this );
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect(ev->rect());
