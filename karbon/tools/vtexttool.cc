@@ -53,14 +53,14 @@
 #include <core/vstroke.h>
 #include <core/vcursor.h>
 #include <render/vpainterfactory.h>
-#include <render/vkopainter.h>
+#include <render/vqpainter.h>
 #include "vtexttool.h"
 
 #include <kactioncollection.h>
 
 
 static void
-traceShape( VKoPainter* p, int x, int y, int w, int h )
+traceShape( VQPainter* p, int x, int y, int w, int h )
 {
 /* TODO lineto and moveto need porting
 	p->newPath();
@@ -121,7 +121,7 @@ ShadowPreview::paintEvent( QPaintEvent* )
 	int a = 360 - m_parent->shadowAngle();
 
 	QPixmap pm( w, h );
-	VKoPainter p( &pm, w, h );
+	VQPainter p( &pm, w, h );
 	VColor color( VColor::rgb );
 
 	VFill fill;

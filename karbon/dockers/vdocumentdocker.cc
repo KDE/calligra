@@ -53,7 +53,7 @@
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
 #include "vdocument.h"
-#include "vkopainter.h"
+#include "vqpainter.h"
 #include "vlayer.h"
 #include "vlayercmd.h"
 #include "vdeletecmd.h"
@@ -190,7 +190,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 	{
 		delete m_docpixmap;
 		m_docpixmap = new QPixmap( width(), height() );
-		VKoPainter p( m_docpixmap, width(), height() );
+		VQPainter p( m_docpixmap, width(), height() );
 		p.clear( QColor( 195, 194, 193 ) );
 		p.setMatrix( QMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
 		p.setZoomFactor( scaleFactor );
@@ -354,7 +354,7 @@ VObjectListViewItem::update()
 
 	// draw thumb preview (16x16)
 	QPixmap preview( 16, 16 );
-	VKoPainter p( &preview, 16, 16, false );
+	VQPainter p( &preview, 16, 16, false );
 	// Y mirroring
 	QMatrix mat;
 	mat.scale( 1, -1 );
@@ -409,7 +409,7 @@ VLayerListViewItem::update()
 {
 	// draw thumb preview (16x16)
 	QPixmap preview( 16, 16 );
-	VKoPainter p( &preview, 16, 16, false );
+	VQPainter p( &preview, 16, 16, false );
 	// Y mirroring
 	QMatrix mat;
 	mat.scale( 1, -1 );

@@ -34,7 +34,8 @@ class QPainter;
 class VQPainter : public VPainter
 {
 public:
-	VQPainter( QPaintDevice *target, unsigned int w = 0, unsigned int h = 0 );
+	VQPainter( QPaintDevice *target, unsigned int w = 0, unsigned int h = 0, bool drawNodes = true );
+	VQPainter( unsigned char *buffer, unsigned int w = 0, unsigned int h = 0, bool drawNodes = true );
 	virtual ~VQPainter();
 
     //
@@ -79,6 +80,7 @@ public:
 	// helper
 	virtual void drawNode( const QPointF& , int );
 	virtual void drawRect( const QRectF & );
+	virtual void drawRect( double, double, double, double );
 
 	//
 	/* Port to Qt4
@@ -95,6 +97,8 @@ private:
 	QPaintDevice *m_target;
 	unsigned int m_width;
 	unsigned int m_height;
+	unsigned char *m_buffer;
+	bool m_bDrawNodes;
 };
 
 #endif

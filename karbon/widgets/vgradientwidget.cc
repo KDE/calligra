@@ -37,7 +37,7 @@
 #include "vgradientwidget.h"
 #include "vcolordlg.h"
 #include "vfill.h"
-#include "vkopainter.h"
+#include "vqpainter.h"
 #include "vcursor.h"
 
 #define midPoint_width 7
@@ -111,7 +111,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	int gh = h - ph;       // gradient area height
 
 	QPixmap pixmap( width(), height() );
-	VKoPainter gp( &pixmap, width(), height() );
+	VQPainter gp( &pixmap, width(), height() );
 	// Port to Qt4:
 	// gp.setRasterOp( Qt::XorROP );
 	VGradient gradient( *m_gradient );

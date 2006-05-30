@@ -519,7 +519,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	//QPaintDeviceMetrics metrics( painter.device() );
 	painterFactory->setPainter( painter.device(), rect.width(), rect.height() );
 	VPainter *p = painterFactory->painter();
-	//VPainter *p = new VKoPainter( painter.device() );
+	//VPainter *p = new VQPainter( painter.device() );
 	p->begin();
 	p->setZoomFactor( zoomFactor );
 	kDebug(38000) << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;

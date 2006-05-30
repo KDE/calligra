@@ -102,7 +102,6 @@
 #include "vgroup.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
-#include "vkopainter.h"
 #include "vstrokefillpreview.h"
 #include "vtypebuttonbox.h"
 #include "vstatebutton.h"
@@ -434,8 +433,8 @@ KarbonView::print( KPrinter &printer )
 
 	QPixmap img( static_cast<int>( w ), static_cast<int>( h ) );
 
-	// first use the libarts painter to draw into the pixmap
-	VKoPainter kop( ( QPaintDevice * )&img, static_cast<int>( w ), static_cast<int>( h ) );
+	// first use the painter to draw into the pixmap
+	VQPainter kop( ( QPaintDevice * )&img, static_cast<int>( w ), static_cast<int>( h ) );
 	
 	kop.setZoomFactor( zoom );
 	kop.setMatrix( mat );
@@ -448,7 +447,7 @@ KarbonView::print( KPrinter &printer )
 
 	QPainter p;
 
-	// us kopainter to draw the pixmap
+	// us qpainter to draw the pixmap
 	// note that it is looking unsmooth when previewing,
 	// but the print is actually ok as we are printing at 100% zoom anyway
 	p.begin( &printer );

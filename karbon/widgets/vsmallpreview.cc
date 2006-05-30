@@ -34,7 +34,7 @@
 #include "vcolor.h"
 #include "vfill.h"
 #include "vgradient.h"
-#include "vkopainter.h"
+#include "vqpainter.h"
 #include "vpattern.h"
 #include "vstroke.h"
 
@@ -97,7 +97,7 @@ VSmallPreview::drawFill( const VFill &f )
 	VStroke stroke;
 	
 	QPixmap m_pixmap( m_fillFrame->width(), m_fillFrame->height() );
-	VKoPainter* m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
+	VQPainter* m_painter = new VQPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 
 	m_painter->begin();
 	m_painter->setPen( Qt::NoPen );
@@ -192,7 +192,7 @@ VSmallPreview::drawStroke( const VStroke &s )
 	VStroke stroke;
 
 	QPixmap m_pixmap( m_fillFrame->width(), m_fillFrame->height() );
-	VKoPainter* m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
+	VQPainter* m_painter = new VQPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 
 	m_painter->begin();
 	m_painter->setPen( Qt::NoPen );

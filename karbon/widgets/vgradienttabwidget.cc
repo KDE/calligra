@@ -38,7 +38,7 @@
 #include "vgradientwidget.h"
 #include "vgradienttabwidget.h"
 #include "karbon_resourceserver.h"
-#include "vkopainter.h"
+#include "vqpainter.h"
 #include "vfill.h"
 
 VGradientListItem::VGradientListItem( const VGradient& gradient, QString filename )
@@ -47,7 +47,7 @@ VGradientListItem::VGradientListItem( const VGradient& gradient, QString filenam
 	m_gradient = new VGradient( gradient );
 
 	m_pixmap = QPixmap( 200, 16 );
-	VKoPainter gp( &m_pixmap, m_pixmap.width(), m_pixmap.height() );
+	VQPainter gp( &m_pixmap, m_pixmap.width(), m_pixmap.height() );
 	// Port to Qt4:
 	// gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
@@ -128,7 +128,7 @@ VGradientPreview::~VGradientPreview()
 void VGradientPreview::paintEvent( QPaintEvent* )
 {
 	QPixmap pixmap( width(), height() );
-	VKoPainter gp( &pixmap, width(), height() );
+	VQPainter gp( &pixmap, width(), height() );
 	// Port to Qt4:
 	// gp.setRasterOp( Qt::XorROP );
 	gp.newPath();

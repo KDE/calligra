@@ -32,7 +32,7 @@
 #include "vcolordlg.h"
 #include "vfill.h"
 #include "vfillcmd.h"
-#include "vkopainter.h"
+#include "vqpainter.h"
 #include "vselection.h"
 #include "vstroke.h"
 #include "vstrokecmd.h"
@@ -72,7 +72,7 @@ VStrokeFillPreview::VStrokeFillPreview(
 
 	installEventFilter( this );
 	m_pixmap = QPixmap( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
-	m_painter = new VKoPainter( &m_pixmap, uint( PANEL_SIZEX ), uint( PANEL_SIZEY ) );
+	m_painter = new VQPainter( &m_pixmap, uint( PANEL_SIZEX ), uint( PANEL_SIZEY ) );
 }
 
 VStrokeFillPreview::~VStrokeFillPreview()

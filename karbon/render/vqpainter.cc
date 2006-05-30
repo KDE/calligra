@@ -34,11 +34,16 @@
 #include <QPointF>
 #include <kdebug.h>
 
-VQPainter::VQPainter( QPaintDevice *target, unsigned int w, unsigned int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
+VQPainter::VQPainter( QPaintDevice *target, unsigned int w, unsigned int h, bool drawNodes ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h ), m_bDrawNodes( drawNodes )
 {
 	m_zoomFactor = 1;
 	m_index = 0;
 	m_painter = new QPainter( target );
+}
+
+VQPainter::VQPainter( unsigned char *buffer, unsigned int w, unsigned int h, bool drawNodes ) : VPainter( 0L, w, h ), m_painter( 0L ), m_buffer( buffer ), m_width( w ), m_height( h ), m_bDrawNodes( drawNodes )
+{
+// TODO: implement
 }
 
 VQPainter::~VQPainter()
@@ -264,6 +269,12 @@ void
 VQPainter::drawRect( const QRectF &rect )
 {
 	m_painter->drawRect( QRect( int( rect.x() ), int( rect.y() ), int( rect.width() ),  int( rect.height() ) ) );
+}
+
+void
+VQPainter::drawRect( double, double, double, double )
+{
+//TODO: Implement
 }
 
 void

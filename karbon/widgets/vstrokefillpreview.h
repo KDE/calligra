@@ -22,11 +22,10 @@
 
 #include <q3frame.h>
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <QEvent>
 
-class VKoPainter;
+class VQPainter;
 class VFill;
 class VStroke;
 class KarbonPart;
@@ -62,7 +61,7 @@ protected:
 	virtual void paintEvent( QPaintEvent* event );
 
 private:
-	VKoPainter* m_painter;
+	VQPainter* m_painter;
 	void drawFill( const VFill & );
 	void drawStroke( const VStroke & );
 	QPixmap m_pixmap;

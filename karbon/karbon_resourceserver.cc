@@ -44,7 +44,7 @@
 #include "vgroup.h"
 #include "vobject.h"
 #include "vtext.h"
-#include "vkopainter.h"
+#include "vqpainter.h"
 #include "vtransformcmd.h"
 #include "shapes/vellipse.h"
 #include "shapes/vrectangle.h"
@@ -511,7 +511,7 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 	m_clipart->setState( VObject::normal );
 
 	m_pixmap = QPixmap( 64, 64 );
-	VKoPainter p( &m_pixmap, 64, 64 );
+	VQPainter p( &m_pixmap, 64, 64 );
 	QMatrix mat( 64., 0, 0, 64., 0, 0 );
 
 	VTransformCmd trafo( 0L, mat );
@@ -525,7 +525,7 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 	p.end();
 
 	m_thumbPixmap = QPixmap( 32, 32 );
-	VKoPainter p2( &m_thumbPixmap, 32, 32 );
+	VQPainter p2( &m_thumbPixmap, 32, 32 );
 	mat.setMatrix( 32., 0, 0, 32., 0, 0 );
 
 	trafo.setMatrix( mat );
