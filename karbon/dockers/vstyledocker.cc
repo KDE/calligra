@@ -255,18 +255,16 @@ ClipartWidget::importClipart()
 {
 	QStringList filter;
 	filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
-	KFileDialog *dialog = new KFileDialog( "foo", "", 0);
-	dialog->setCaption("Choose Graphic to Add");
-	dialog->setModal(true);
-	dialog->setMimeFilter( filter, "application/x-karbon" );
-	if( dialog->exec()!=QDialog::Accepted )
+	KFileDialog dialog( "foo", "", 0);
+	dialog.setCaption("Choose Graphic to Add");
+	dialog.setModal(true);
+	dialog.setMimeFilter( filter, "application/x-karbon" );
+	if( dialog.exec()!=QDialog::Accepted )
 	{
-		delete dialog;
 		return;
 	}
-	QString fname = dialog->selectedFile();
-	delete dialog;
-	if( m_part->nativeFormatMimeType() == dialog->currentMimeFilter().toLatin1() )
+	QString fname = dialog.selectedFile();
+	if( m_part->nativeFormatMimeType() == dialog.currentMimeFilter().toLatin1() )
 		m_part->mergeNativeFormat( fname );
 	else
 	{
