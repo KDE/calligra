@@ -1405,7 +1405,7 @@ VHistoryTab::removeLastCommand()
 		Q3ListViewItem* last = m_history->firstChild();
 		while ( last && last->nextSibling() )
 			last = last->nextSibling();
-		if ( last->rtti() == 1002 )
+		if ( last && last->rtti() == 1002 )
 			delete last;
 		else
 		{
