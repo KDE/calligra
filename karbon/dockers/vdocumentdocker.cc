@@ -707,7 +707,7 @@ VLayersTab::itemClicked( Q3ListViewItem* item, const QPoint &, int col )
 		}
 		else
 		{
-			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( item );
+			VObjectListViewItem *objectItem = static_cast< VObjectListViewItem *>( item );
 
 			if( col == 0 )
 			{
