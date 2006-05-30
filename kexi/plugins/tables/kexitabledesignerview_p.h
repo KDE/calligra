@@ -118,6 +118,8 @@ class KexiTableDesignerViewPrivate
 
 		KToggleAction *action_toggle_pkey;
 
+		KPopupTitle *contextMenuTitle;
+
 		int uniqueIdCounter;
 
 		//! internal

@@ -137,9 +137,13 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 	connect(d->sets, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
 	connect(d->sets, SIGNAL(rowInserted()), this, SLOT(slotRowInserted()));
 
+	d->contextMenuTitle = new KPopupTitle(d->view->contextMenu());
+	d->view->contextMenu()->insertItem(d->contextMenuTitle, -1, 0);
+	connect(d->view->contextMenu(), SIGNAL(aboutToShow()), this, SLOT(slotAboutToShowContextMenu()));
+
 	plugSharedAction("tablepart_toggle_pkey", this, SLOT(slotTogglePrimaryKey()));
 	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
-	d->action_toggle_pkey->plug(d->view->contextMenu(), 0); //add at the beg.
+	d->action_toggle_pkey->plug(d->view->contextMenu(), 1); //add at the beginning
 	setAvailable("tablepart_toggle_pkey", !conn->isReadOnly());
 
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
@@ -1387,6 +1391,22 @@ void KexiTableDesignerView::slotCommandExecuted(KCommand *command)
 #endif
 }
 
+void KexiTableDesignerView::slotAboutToShowContextMenu()
+{
+	//update title
+	if (propertySet()) {
+		const KoProperty::Set &set = *propertySet();
+		QString captionOrName(set["caption"].value().toString());
+		if (captionOrName.isEmpty())
+			captionOrName = set["name"].value().toString();
+//! @todo show "field" icon
+		d->contextMenuTitle->setTitle( i18n("Table field \"%1\"").arg(captionOrName) );
+	}
+	else {
+		d->contextMenuTitle->setTitle( i18n("Empty table row", "Empty row") );
+	}
+}
+
 // -- low-level actions used by undo/redo framework
 
 void KexiTableDesignerView::clearRow(int row)
@@ -1456,7 +1476,10 @@ void KexiTableDesignerView::deleteField( int row )
 	KexiTableItem *item = d->view->itemAt( row );
 	if (!item)
 		return;
-	if (!d->view->deleteItem(item))
+	d->addHistoryCommand_in_slotAboutToDeleteRow_enabled = false;
+	const bool res = d->view->deleteItem(item);
+	d->addHistoryCommand_in_slotAboutToDeleteRow_enabled = true;
+	if (!res)
 		return;
 }
 
@@ -1491,8 +1514,10 @@ void KexiTableDesignerView::changeFieldProperty( int fieldUID,
 		Q_ASSERT(item);
 		//special cases: properties displayed within the data grid:
 		if (propertyName == "caption") {
+			d->slotBeforeCellChanged_enabled = false;
 			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, newValue);
 			d->view->data()->saveRowChanges(*item);
+			d->slotBeforeCellChanged_enabled = true;
 		}
 		else if (propertyName == "type") {
 			d->slotBeforeCellChanged_enabled = false;

@@ -109,6 +109,8 @@ class KexiTableDesignerView : public KexiDataTable
 
 		virtual void slotUpdateRowActions(int row);
 
+		void slotAboutToShowContextMenu();
+
 		//! Called before cell change in tableview.
 		void slotBeforeCellChanged(KexiTableItem *item, int colnum,
 			QVariant& newValue, KexiDB::ResultInfo* result);

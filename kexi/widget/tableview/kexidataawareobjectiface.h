@@ -396,6 +396,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void dataRefreshed() = 0;
 		virtual void dataSet( KexiTableViewData *data ) = 0;
 
+		/*! \return a pointer to context menu. This can be used to plug some actions there. */
 		KMenu* contextMenu() const { return m_popup; }
 
 		/*! \return true if the context menu is enabled (visible) for the view.
