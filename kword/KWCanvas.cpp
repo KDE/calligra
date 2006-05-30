@@ -19,7 +19,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "KWCanvas.h"
 #include "KWTableFrameSet.h"
 #include "KWPartFrameSet.h"
@@ -39,18 +38,11 @@
 #include "KWGUI.h"
 #include "KWView.h"
 
-#include <QBuffer>
 #include <QTimer>
-#include <QClipboard>
 #include <q3progressdialog.h>
-#include <QObject>
 #include <QApplication>
-#include <q3whatsthis.h>
-//Added by qt3to4:
 #include <QResizeEvent>
-#include <QMouseEvent>
 #include <QKeyEvent>
-#include <QEvent>
 #include <QDragMoveEvent>
 #include <QDragLeaveEvent>
 #include <Q3ValueList>
@@ -62,6 +54,7 @@
 #include <KoStoreDrag.h>
 #include <KoPictureCollection.h>
 #include <KoGfxEvent.h>
+#include <KoShapeManager.h>
 
 #include <ktempfile.h>
 #include <klocale.h>
@@ -72,8 +65,9 @@
 #include <k3urldrag.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
+#include <kprinter.h>
 
-#include <assert.h>
+//#include <assert.h>
 
 #include <KoRectangleShape.h>
 

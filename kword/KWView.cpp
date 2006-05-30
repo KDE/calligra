@@ -65,6 +65,7 @@
 #include "KWFrameView.h"
 #include "KWStatisticsDialog.h"
 #include "KWGUI.h"
+#include "KWCommand.h"
 
 // koffice includes
 #include "KoTextBookmark.h"
@@ -114,6 +115,7 @@
 #include <kfontdialog.h>
 #include <kspell2/dialog.h>
 #include <kspell2/defaultdictionary.h>
+#include <kprinter.h>
 
 // Qt includes
 #include <QClipboard>

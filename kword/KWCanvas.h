@@ -22,49 +22,34 @@
 #ifndef KWCANVAS_H
 #define KWCANVAS_H
 
-#include <kprinter.h>
+#include "defs.h"
+#include "KWVariable.h"
+
 #include <KoRect.h>
-#include <q3stylesheet.h>
-//Added by qt3to4:
-#include <QDragLeaveEvent>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <Q3ValueList>
-#include <QResizeEvent>
-#include <QDragEnterEvent>
-#include <QMouseEvent>
-#include <QWidget>
-#include <KoRichText.h>
 #include <KoQueryTrader.h>
 #include <KoPicture.h>
-
-#include <KoShapeManager.h>
-#include <KoViewConverter.h>
+#include <KoPoint.h>
 #include <KoCanvasBase.h>
 #include <KoInteractionTool.h>
 
-#include "KWTextParag.h"
-#include "KWFrame.h"
-#include "KWVariable.h"
-#include "KWCommand.h"
+#include <QWidget>
+#include <QMimeData>
 
 class KWTextFrameSetEdit;
 class KWDocument;
-class KWFrame;
 class KWFrameSet;
 class KWFrameSetEdit;
 class KWTableFrameSet;
-class KWFrameMoveCommand;
 class KWViewMode;
 class KWFrameViewManager;
 class KWGUI;
 class KWTableTemplate;
 class KoTextParag;
-class QTimer;
-class KWFrameView;
-class KWGui;
+
+class KoTool;
+class KoShapeManager;
+
+class KPrinter;
 
 /**
  * Class: KWCanvas
