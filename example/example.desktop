@@ -48,4 +48,5 @@ Exec=example
 MimeType=application/x-example
 Type=Application
 Icon=example
+Categories=Qt;KDE;Office;
 X-KDE-NativeMimeType=application/x-example

@@ -41,7 +41,7 @@ install_targets(/bin writeup )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  writeuppart.desktop )
 install_files( ${DATA_INSTALL_DIR}/writeup FILES  writeup.rc writeup_readonly.rc )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  writeup.desktop )
+install_files( ${XDG_APPS_DIR} FILES  writeup.desktop )
 
 
 

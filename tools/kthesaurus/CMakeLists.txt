@@ -20,7 +20,7 @@ install_targets(/bin kthesaurus )
 
 ########### install files ###############
 
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  KThesaurus.desktop )
+install_files( ${XDG_APPS_DIR} FILES  KThesaurus.desktop )
 
 
 

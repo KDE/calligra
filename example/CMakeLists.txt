@@ -26,7 +26,7 @@ install_targets(${PLUGIN_INSTALL_DIR} examplepart )
 install_files( ${MIME_INSTALL_DIR}/application FILES  x-vnd.kde.example.desktop )
 install_files( ${SERVICES_INSTALL_DIR} FILES  examplepart.desktop )
 install_files( ${DATA_INSTALL_DIR}/example FILES  example.rc example_readonly.rc )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  example.desktop )
+install_files( ${XDG_APPS_DIR} FILES  example.desktop )
 
 
 

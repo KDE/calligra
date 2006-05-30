@@ -58,7 +58,7 @@ install_targets(/bin kudesigner )
 
 ########### install files ###############
 
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kudesigner.desktop )
+install_files( ${XDG_APPS_DIR} FILES  kudesigner.desktop )
 install_files( ${DATA_INSTALL_DIR}/kudesigner FILES  kudesignerui.rc kudesigner_readonly.rc )
 
 

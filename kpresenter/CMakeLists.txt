@@ -196,8 +196,8 @@ install_targets(/bin kpresenter )
 
 install_files( ${DATA_INSTALL_DIR}/kpresenter FILES  kpresenter.rc kpresenter_readonly.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenterpart.desktop )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kpresenter.desktop )
-install_files(  FILES  kprconverter.pl )
+install_files( ${XDG_APPS_DIR} FILES  kpresenter.desktop )
+install_files( /bin FILES  kprconverter.pl )
 
 
 

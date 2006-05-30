@@ -97,7 +97,7 @@ install_targets(/bin kchart )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kchartpart.desktop )
 install_files( ${DATA_INSTALL_DIR}/kchart FILES  kchart.rc kchart_readonly.rc )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kchart.desktop )
+install_files( ${XDG_APPS_DIR} FILES  kchart.desktop )
 
 
 

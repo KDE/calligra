@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krita_raw_import )
 ########### install files ###############
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_raw_import.desktop )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_raw.desktop )
+install_files( ${XDG_APPS_DIR} FILES  krita_raw.desktop )
 
 
 

@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/karbon/gradients FILES  simple.kgr allcolors.
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES  karbon_module.desktop )
 install_files( ${SERVICES_INSTALL_DIR} FILES  karbonpart.desktop )
 install_files( ${DATA_INSTALL_DIR}/karbon FILES  karbon.rc karbon_readonly.rc )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  karbon.desktop )
+install_files( ${XDG_APPS_DIR} FILES  karbon.desktop )
 
 
 

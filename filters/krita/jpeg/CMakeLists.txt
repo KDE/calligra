@@ -50,7 +50,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritajpegexport )
 ########### install files ###############
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_jpeg_import.desktop krita_jpeg_export.desktop )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_jpeg.desktop )
+install_files( ${XDG_APPS_DIR} FILES  krita_jpeg.desktop )
 
 
 

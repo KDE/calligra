@@ -55,7 +55,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatiffexport )
 ########### install files ###############
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_tiff_export.desktop krita_tiff_import.desktop )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_tiff.desktop )
+install_files( ${XDG_APPS_DIR} FILES  krita_tiff.desktop )
 
 
 

@@ -50,7 +50,7 @@ install_targets(/bin kformula )
 install_files( ${DATA_INSTALL_DIR}/kformula FILES  tips )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kformulapart.desktop )
 install_files( ${DATA_INSTALL_DIR}/kformula FILES  kformula.rc kformula_readonly.rc )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kformula.desktop )
+install_files( ${XDG_APPS_DIR} FILES  kformula.desktop )
 
 
 

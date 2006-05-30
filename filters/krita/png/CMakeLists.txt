@@ -37,7 +37,7 @@ target_link_libraries(kritapngexport kritaui ${PNG_LIBRARIES})
 install_targets(${PLUGIN_INSTALL_DIR} kritapngexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_png_import.desktop krita_png_export.desktop )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_png.desktop )
+install_files( ${XDG_APPS_DIR} FILES  krita_png.desktop )
 
 
 

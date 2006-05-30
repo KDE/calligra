@@ -22,7 +22,7 @@ install_targets(/bin koshell )
 
 ########### install files ###############
 
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  koshell.desktop )
+install_files( ${XDG_APPS_DIR} FILES  koshell.desktop )
 install_files( ${KCFG_INSTALL_DIR} FILES  koshell.kcfg )
 install_files( ${DATA_INSTALL_DIR}/koshell FILES  koshellui.rc )
 

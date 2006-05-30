@@ -167,7 +167,7 @@ install_targets(/bin kword )
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES  kwmailmerge.desktop )
 install_files( ${DATA_INSTALL_DIR}/kword FILES  kword.rc kword_readonly.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kwordpart.desktop )
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kword.desktop )
+install_files( ${XDG_APPS_DIR} FILES  kword.desktop )
 install_files( /include/kword FILES  KWMailMergeDataSource.h )
 
 
