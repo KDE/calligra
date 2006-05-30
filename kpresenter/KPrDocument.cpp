@@ -3286,74 +3286,16 @@ void KPrDocument::updateHeaderFooterPosition( )
     repaint(_footer);
 }
 
-bool KPrDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
-{
-
-    if (flags==KoDocument::InitDocEmpty)
-    {
-        QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
-                                 KPrFactory::global() ) );
-        objStartY = 0;
-        _clean = true;
-        bool ok = loadNativeFormat( fileName );
-        if ( !ok )
-            showLoadingErrorDialog();
-        resetURL();
-        setEmpty();
-        return ok;
-    }
-
-    QString file;
-    KoTemplateChooseDia::ReturnType ret;
-    KoTemplateChooseDia::DialogType dlgtype;
-    if (flags != InitDocFileNew)
-            dlgtype = KoTemplateChooseDia::Everything;
-    else
-            dlgtype = KoTemplateChooseDia::OnlyTemplates;
-
-    ret = KoTemplateChooseDia::choose( KPrFactory::global(), file,
-                                       dlgtype, "kpresenter_template", parentWidget );
-    if ( ret == KoTemplateChooseDia::Template ) {
-        _clean = true; //was a parameter called "clean", but unused
-        bool ok = loadNativeFormat( file );
-        if ( !ok )
-            showLoadingErrorDialog();
-        objStartY = 0;
-        _clean = true;
-        resetURL();
-        setEmpty();
-        return ok;
-    } else if ( ret == KoTemplateChooseDia::File ) {
-        objStartY = 0;
-        _clean = true;
-        KUrl url( file );
-        bool ok = openURL( url );
-        return ok;
-    } else if ( ret == KoTemplateChooseDia::Empty ) {
-        QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
-                                 KPrFactory::global() ) );
-        objStartY = 0;
-        _clean = true;
-        bool ok = loadNativeFormat( fileName );
-        if ( !ok )
-            showLoadingErrorDialog();
-        resetURL();
-        setEmpty();
-        return ok;
-    } else
-        return false;
-}
-
-void KPrDocument::openExistingFile( const QString& file )
+void KPrDocument::openExistingFile( const KUrl& url )
 {
     objStartY = 0;
     _clean = true;
-    KoDocument::openExistingFile( file );
+    KoDocument::openExistingFile( url );
 }
 
-void KPrDocument::openTemplate( const QString& file )
+void KPrDocument::openTemplate( const KUrl& url )
 {
-  KoDocument::openTemplate( file );
+  KoDocument::openTemplate( url );
   objStartY = 0;
   _clean = true;
 }

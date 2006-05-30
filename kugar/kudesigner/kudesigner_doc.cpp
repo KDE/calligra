@@ -65,50 +65,6 @@ void KudesignerDoc::addCommand( KCommand *cmd )
     /*    history->addCommand(cmd);*/
 }
 
-bool KudesignerDoc::initDoc( InitDocFlags flags, QWidget* parentWidget )
-{
-    // If nothing is loaded, do initialize here
-    bool ok = FALSE;
-
-    // TODO if (flags==KoDocument::InitDocEmpty)
-
-    QString file;
-    KoTemplateChooseDia::DialogType dlgtype;
-    if ( flags != KoDocument::InitDocFileNew )
-        dlgtype = KoTemplateChooseDia::Everything;
-    else
-        dlgtype = KoTemplateChooseDia::OnlyTemplates;
-
-    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-                                              KudesignerFactory::global(), file,
-                                              dlgtype, "kudesigner_template", parentWidget );
-    if ( ret == KoTemplateChooseDia::Template )
-    {
-        resetURL();
-        ok = loadNativeFormat( file );
-        if ( !ok )
-            showLoadingErrorDialog();
-        setEmpty();
-    }
-    else if ( ret == KoTemplateChooseDia::File )
-    {
-        KUrl url( file );
-        ok = openURL( url );
-    }
-    else if ( ret == KoTemplateChooseDia::Empty )
-    {
-        QString fileName( locate( "kudesigner_template", "General/.source/A4.ktm", KudesignerFactory::global() ) );
-        resetURL();
-        ok = loadNativeFormat( fileName );
-        if ( !ok )
-            showLoadingErrorDialog();
-        setEmpty();
-    }
-    setModified( FALSE );
-
-    return ok;
-}
-
 void KudesignerDoc::initEmpty()
 {
     QString fileName( locate( "kudesigner_template", "General/.source/A4.ktm", KudesignerFactory::global() ) );

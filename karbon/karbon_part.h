@@ -53,9 +53,6 @@ public:
 	virtual void paintContent( QPainter& painter, const QRect& rect,
 							   bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
-	/// standard koDocument inherited methods
-	virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-
 	/// file-> open calls this method
 	virtual bool loadXML( QIODevice*, const QDomDocument& document );
 	virtual bool loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDomDocument &settings, KoStore *store );

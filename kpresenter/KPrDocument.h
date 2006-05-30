@@ -160,7 +160,6 @@ class KPrDocument : public KoDocument
 
     virtual int supportedSpecialFormats() const;
 
-    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
     virtual void setEmpty();
 
     virtual void addView( KoView *_view );
@@ -542,8 +541,8 @@ protected slots:
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
 
-    virtual void openExistingFile( const QString& file );
-    virtual void openTemplate( const QString& file );
+    virtual void openExistingFile( const KUrl& url );
+    virtual void openTemplate( const KUrl& url );
 
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );

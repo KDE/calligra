@@ -105,37 +105,6 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
     return ok;
 }
 
-bool KugarPart::initDoc( InitDocFlags /*flags*/, QWidget* /*parentWidget*/ )
-{
-    QString filename;
-    bool ok = false;
-
-    KFileDialog *dialog =
-        new KFileDialog( QString::null, QString::null, 0L);
-    dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
-                           KoFilterManager::Import ) );
-    if ( dialog->exec() != QDialog::Accepted )
-    {
-        delete dialog;
-        return false;
-    }
-
-    KUrl url( dialog->selectedURL() );
-    delete dialog;
-
-    if ( url.isEmpty() )
-        return false;
-
-    if ( url.isValid() )
-    {
-        ok = openURL( url );
-    }
-    return ok;
-
-    // If nothing is loaded, do initialize here
-    return TRUE;
-}
-
 KoView* KugarPart::createViewInstance( QWidget* parent, const char* name )
 {
     KugarView * v = new KugarView( this, parent, name );

@@ -30,8 +30,6 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
-    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual QDomDocument saveXML();
 

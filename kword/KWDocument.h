@@ -139,8 +139,6 @@ public:
     static const int CURRENT_SYNTAX_VERSION;
 
 public:
-    virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store );
 
     /**
@@ -820,8 +818,8 @@ protected slots:
     void slotChapterParagraphFormatted( KoTextParag* parag );
     void saveDialogShown(); ///< called just before the save-dialog is shown
 
-    virtual void openExistingFile( const QString& file );
-    virtual void openTemplate( const QString& file );
+    virtual void openExistingFile( const KUrl& url );
+    virtual void openTemplate( const KUrl& url );
 
 private slots:
     /// is called from a singleShot timer due to frameChanged()

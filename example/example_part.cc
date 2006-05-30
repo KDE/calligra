@@ -29,23 +29,6 @@ ExamplePart::ExamplePart( QWidget *parentWidget, QObject* parent, bool singleVie
     setInstance( ExampleFactory::global(), false );
 }
 
-bool ExamplePart::initDoc(InitDocFlags flags, QWidget* parentWidget)
-{
-    // If nothing is loaded, do initialize here
-    // Most KOffice applications use the template dialog here, with code like:
-/*
-    KoTemplateChooseDia::DialogType dlgtype;
-    if (initDocFlags() != KoDocument::InitDocFileNew )
-        dlgtype = KoTemplateChooseDia::Everything;
-    else
-        dlgtype = KoTemplateChooseDia::OnlyTemplates;
-
-    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-     .... )
-*/
-    return true;
-}
-
 KoView* ExamplePart::createViewInstance( QWidget* parent, const char* name )
 {
     return new ExampleView( this, parent, name );

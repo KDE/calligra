@@ -29,7 +29,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktempfile.h>
-#include <KoTemplateChooseDia.h>
 #include <KoStoreDevice.h>
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
@@ -117,46 +116,6 @@ KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit )
 	m_doc.setUnit( _unit );
 	m_doc.setWidth( m_pageLayout.ptWidth );
 	m_doc.setHeight( m_pageLayout.ptHeight );
-}
-
-bool
-KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
-{
-        if (flags==KoDocument::InitDocEmpty)
-        {
-                return true;
-        }
-	QString file;
-	KoTemplateChooseDia::ReturnType result;
-
-        KoTemplateChooseDia::DialogType dlgtype;
-        if (flags != KoDocument::InitDocFileNew)
-            dlgtype = KoTemplateChooseDia::Everything;
-        else
-            dlgtype = KoTemplateChooseDia::OnlyTemplates;
-
-	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, dlgtype, "karbon_template", parentWidget );
-
-	if( result == KoTemplateChooseDia::Template )
-	{
-		resetURL();
-		bool ok = loadNativeFormat( file );
-		if ( !ok )
-			showLoadingErrorDialog();
-		setEmpty();
-		return ok;
-	}
-	else if( result == KoTemplateChooseDia::Empty )
-	{
-		return true;
-	}
-	else if( result == KoTemplateChooseDia::File )
-	{
-		KUrl url( file );
-		return openURL( url );
-	}
-
-	return false;
 }
 
 KoView*

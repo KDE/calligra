@@ -20,7 +20,6 @@ using std::cerr;
 #include "kdchart/KDChart.h"
 #include "kdchart/KDChartTable.h"
 
-#include <KoTemplateChooseDia.h>
 #include <KoDom.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -101,78 +100,6 @@ KChartPart::~KChartPart()
     delete m_params;
 }
 
-
-// Reimplement KoDocument::initDoc()
-
-bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
-{
-    // Initialize the parameter set for this chart document
-#if 0
-    kDebug(35001) << "================================================================" << endl;
-    kDebug(35001) << "InitDOC: flags = " << flags << endl;
-    kDebug(35001) << "================================================================" << endl;
-#endif
-
-    QString f;
-
-    // Embedded documents are initially created like a normal empty
-    // document.  If this is in KSpread or another program where the
-    // data is external then the document will be updated later on in
-    // the creation process anyway.
-    if (flags == KoDocument::InitDocEmbedded) {
-	initEmpty();
-	return true;
-    }
-
-    // If we are supposed to create a new, empty document, then do so.
-    if (flags == KoDocument::InitDocEmpty) {
-	initEmpty();
-	return true;
-    }
-
-    KoTemplateChooseDia::ReturnType  ret;
-    KoTemplateChooseDia::DialogType  dlgtype;
-
-    // If we must create a new document, then only present templates
-    // to the user, otherwise also present existing documents and
-    // recent documents.
-    if (flags == KoDocument::InitDocFileNew )
-	dlgtype = KoTemplateChooseDia::OnlyTemplates;
-    else
-	dlgtype = KoTemplateChooseDia::Everything;
-    ret = KoTemplateChooseDia::choose( KChartFactory::global(), f,
-                                       dlgtype, "kchart_template",
-				       parentWidget );
-
-    if ( ret == KoTemplateChooseDia::File ) {
-	KUrl url( f );
-	return openURL( url );
-    }
-    else if ( ret == KoTemplateChooseDia::Empty ) {
-	initEmpty();
-	return true;
-    }
-    else if ( ret == KoTemplateChooseDia::Template ) {
-		//TODO: Activate this for KOffice 1.5/2.0
-// 		if ( f.endsWith("/templates/chart/.source/BarChart.chrt") ) {
-// 			generateBarChartTemplate();
-// 			return true;
-// 		}
-        QFileInfo fileInfo( f );
-        QString fileName( fileInfo.dirPath( true ) + "/" +
-            fileInfo.baseName() + ".chrt" );
-
-        resetURL();
-        bool ok = loadNativeFormat( fileName );
-        if ( !ok )
-            showLoadingErrorDialog();
-        setEmpty();
-        //initConfig();
-        return ok;
-    }
-
-    return false;
-}
 
 void KChartPart::initEmpty()
 {

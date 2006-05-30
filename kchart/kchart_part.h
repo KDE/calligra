@@ -34,8 +34,6 @@ public:
 
     // Methods inherited from KoDocument:
 
-    virtual bool  initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-
     virtual void  paintContent( QPainter& painter, const QRect& rect,
 				bool transparent = false,
 				double zoomX = 1.0, double zoomY = 1.0 );

@@ -557,8 +557,6 @@ public:
 
   virtual void addView( KoView *_view );
 
-  virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-
   /**
    * Change the zoom factor to @p z (e.g. 150 for 150%)
    * and/or change the resolution, given in DPI.
@@ -722,6 +720,8 @@ public slots:
   void refreshInterface();
   void flushDamages();
 
+  virtual void initEmpty();
+
 signals:
   /**
    * Emitted if all views have to be updated.
@@ -747,8 +747,7 @@ protected slots:
   void commandExecuted();
   void documentRestored();
 
-  virtual void openTemplate( const QString& file );
-  virtual void initEmpty();
+  virtual void openTemplate( const KUrl& url );
 
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );

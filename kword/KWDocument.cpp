@@ -51,7 +51,6 @@
 #include "KWGUI.h"
 
 #include <KoPictureCollection.h>
-#include <KoTemplateChooseDia.h>
 #include <KoMainWindow.h>
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
@@ -496,77 +495,7 @@ void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
     }
 }
 
-bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
-{
-    m_pageColumns.columns = 1;
-    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
-
-    m_pageHeaderFooter.header = HF_SAME;
-    m_pageHeaderFooter.footer = HF_SAME;
-    m_pageHeaderFooter.ptHeaderBodySpacing = 10;
-    m_pageHeaderFooter.ptFooterBodySpacing = 10;
-    m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
-
-    bool ok = false;
-
-    if ( isEmbedded() )
-    {
-      QString fileName( locate( "kword_template", "Normal/.source/Embedded.kwt" , KWFactory::instance() ) );
-      resetURL();
-     ok = loadNativeFormat( fileName );
-      if ( !ok )
-        showLoadingErrorDialog();
-      setEmpty();
-      setModified( false );
-      return ok;
-    }
-    else if (flags==KoDocument::InitDocEmpty)
-    {
-        QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
-        resetURL();
-        ok = loadNativeFormat( fileName );
-        if ( !ok )
-            showLoadingErrorDialog();
-        setEmpty();
-        setModified( false );
-        return ok;
-    }
-
-    KoTemplateChooseDia::DialogType dlgtype;
-
-    if (flags != KoDocument::InitDocFileNew)
-        dlgtype = KoTemplateChooseDia::Everything;
-    else
-        dlgtype = KoTemplateChooseDia::OnlyTemplates;
-
-
-    QString file;
-    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
-        KWFactory::instance(), file,
-        dlgtype, "kword_template", parentWidget );
-    if ( ret == KoTemplateChooseDia::Template ) {
-        resetURL();
-        ok = loadNativeFormat( file );
-        if ( !ok )
-            showLoadingErrorDialog();
-        setEmpty();
-    } else if ( ret == KoTemplateChooseDia::File ) {
-        KUrl url( file );
-        //kDebug() << "KWDocument::initDoc opening URL " << url.prettyUrl() << endl;
-        ok = openURL( url );
-    } else if ( ret == KoTemplateChooseDia::Empty ) {
-        QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );
-        resetURL();
-        ok = loadNativeFormat( fileName );
-        if ( !ok )
-            showLoadingErrorDialog();
-        setEmpty();
-    }
-    setModified( false );
-    return ok;
-}
-
-void KWDocument::openExistingFile( const QString& file )
+void KWDocument::openExistingFile( const KUrl& url )
 {
   m_pageColumns.columns = 1;
   m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
@@ -577,10 +506,10 @@ void KWDocument::openExistingFile( const QString& file )
   m_pageHeaderFooter.ptFooterBodySpacing = 10;
   m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
-  KoDocument::openExistingFile( file );
+  KoDocument::openExistingFile( url );
 }
 
-void KWDocument::openTemplate( const QString& file )
+void KWDocument::openTemplate( const KUrl& url )
 {
   m_pageColumns.columns = 1;
   m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
@@ -591,7 +520,7 @@ void KWDocument::openTemplate( const QString& file )
   m_pageHeaderFooter.ptFooterBodySpacing = 10;
   m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
-  KoDocument::openTemplate( file );
+  KoDocument::openTemplate( url );
 }
 
 void KWDocument::initEmpty()

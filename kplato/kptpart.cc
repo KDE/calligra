@@ -31,6 +31,7 @@
 
 #include <qpainter.h>
 #include <qfileinfo.h>
+#include <QTimer>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -38,7 +39,6 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kcommand.h>
-#include <KoTemplateChooseDia.h>
 #include <kcommand.h>
 #include <KoGlobal.h>
 
@@ -86,57 +86,6 @@ Part::~Part() {
       delete m_embeddedGanttView;
     if (m_embeddedContext)
       delete m_embeddedContext;
-}
-
-
-bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
-    bool result = true;
-
-    if (flags==KoDocument::InitDocEmpty)
-    {
-        delete m_project;
-        m_project = new Project();
-        setAutoSave(0); // disable
-        setModified(false);
-        return true;
-    }
-
-    QString templateDoc;
-    KoTemplateChooseDia::ReturnType ret;
-    KoTemplateChooseDia::DialogType dlgtype;
-    if (flags != KoDocument::InitDocFileNew )
-        dlgtype = KoTemplateChooseDia::Everything;
-    else
-        dlgtype = KoTemplateChooseDia::OnlyTemplates;
-
-    ret = KoTemplateChooseDia::choose(Factory::global(), templateDoc,
-                                      dlgtype,
-                                      "kplato_template",
-                                      parentWidget);
-    if (ret == KoTemplateChooseDia::Template) {
-        resetURL();
-        result = loadNativeFormat(templateDoc);
-        if ( !result )
-            showLoadingErrorDialog();
-    } else if (ret == KoTemplateChooseDia::File) {
-        KUrl url(templateDoc);
-        kDebug() << "Part::initDoc opening URL " << url.prettyUrl() <<endl;
-        result = openURL(url);
-    } else if (ret == KoTemplateChooseDia::Empty) {
-        // Make a fresh project and let the user enter some info
-        delete m_project;
-        m_project = new Project();
-       // an emty project should be empty
-        // m_projectDialog = new ProjectDialog(*m_project, m_view);
-        // m_projectDialog->exec();
-
-        result = true;
-    } else {
-        result = false;
-    }
-    setAutoSave(0); // disable
-    setModified(false);
-    return result;
 }
 
 

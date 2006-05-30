@@ -37,6 +37,7 @@
 #include <QFileInfo>
 #include <QFont>
 #include <QPair>
+#include <QTimer>
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -55,7 +56,6 @@
 #include <KoOasisSettings.h>
 #include <KoOasisStyles.h>
 #include <KoStoreDevice.h>
-#include <KoTemplateChooseDia.h>
 #include <KoVariable.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -276,101 +276,11 @@ QList<Doc*> Doc::documents()
   return Private::s_docs;
 }
 
-bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
-{
-  //  ElapsedTime et( "      initDoc        " );
-
-    QString f;
-
-    if (flags==KoDocument::InitDocEmpty)
-    {
-        KConfig *config = Factory::global()->config();
-        int _page=1;
-        if( config->hasGroup("Parameters" ))
-        {
-                config->setGroup( "Parameters" );
-                _page=config->readEntry( "NbPage",1 ) ;
-        }
-
-        for( int i=0; i<_page; i++ )
-          map()->addNewSheet();
-
-        resetURL();
-        setEmpty();
-        initConfig();
-        styleManager()->createBuiltinStyles();
-
-        return true;
-    }
-
-    KoTemplateChooseDia::ReturnType ret;
-    KoTemplateChooseDia::DialogType dlgtype;
-    if (flags != KoDocument::InitDocFileNew )
-            dlgtype = KoTemplateChooseDia::Everything;
-    else
-            dlgtype = KoTemplateChooseDia::OnlyTemplates;
-
-    ret = KoTemplateChooseDia::choose( Factory::global(), f,
-                                       dlgtype, "kspread_template", parentWidget );
-
-    if ( ret == KoTemplateChooseDia::File )
-    {
-  KUrl url( f );
-
-  bool ok=openURL(url);
-
-  while (KoDocument::isLoading())
-    kapp->processEvents();
-
-  return ok;
-
-
-    }
-
-    if ( ret == KoTemplateChooseDia::Empty )
-    {
-  KConfig *config = Factory::global()->config();
-  int _page=1;
-  if( config->hasGroup("Parameters" ))
-  {
-    config->setGroup( "Parameters" );
-    _page=config->readEntry( "NbPage",1 ) ;
-  }
-
-  for( int i=0; i<_page; i++ )
-    map()->addNewSheet ();
-
-  resetURL();
-  setEmpty();
-  initConfig();
-        styleManager()->createBuiltinStyles();
-  return true;
-    }
-
-    if ( ret == KoTemplateChooseDia::Template )
-    {
-        resetURL();
-        d->loadingInfo = new KSPLoadingInfo;
-        d->loadingInfo->setLoadTemplate( true );
-        bool ok = loadNativeFormat( f );
-        if ( !ok )
-        {
-            showLoadingErrorDialog();
-            deleteLoadingInfo();
-        }
-        setEmpty();
-        initConfig();
-        return ok;
-    }
-
-    return false;
-}
-
-void Doc::openTemplate (const QString& file)
+void Doc::openTemplate (const KUrl& url)
 {
     d->loadingInfo = new KSPLoadingInfo;
     d->loadingInfo->setLoadTemplate( true );
-    KoDocument::openTemplate( file );
+    KoDocument::openTemplate( url );
     deleteLoadingInfo();
     initConfig();
 }

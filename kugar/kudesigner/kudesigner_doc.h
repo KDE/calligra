@@ -43,8 +43,6 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 );
 
-    virtual bool initDoc( InitDocFlags flags, QWidget* parentWidget );
-
     virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
 
