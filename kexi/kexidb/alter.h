@@ -23,7 +23,7 @@
 #include "connection.h"
 
 #include <q3valuelist.h>
-#include <q3asciidict.h>
+#include <qasciidict.h>
 
 #include <kdebug.h>
 
@@ -132,16 +132,16 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		};
 
 		class ActionBase;
-		typedef Q3AsciiDict<ActionBase> ActionDict;
-		typedef Q3AsciiDict< ActionDict > ActionDictDict;
-		typedef Q3AsciiDictIterator<ActionBase> ActionDictIterator;
-		typedef Q3AsciiDictIterator< ActionDict > ActionDictDictIterator;
+		typedef QAsciiDict<ActionBase> ActionDict; //!< for collecting actions related to a single field
+		typedef QIntDict<ActionDict> ActionDictDict; //!< for collecting groups of actions by field UID
+		typedef QAsciiDictIterator<ActionBase> ActionDictIterator;
+		typedef QIntDictIterator<ActionDict> ActionDictDictIterator;
 
 		//! Defines a type for action list.
-		typedef Q3PtrList<ActionBase> ActionList;
+		typedef QPtrList<ActionBase> ActionList;
 
 		//! Defines a type for action list's iterator.
-		typedef Q3PtrListIterator<ActionBase> ActionListIterator;
+		typedef QPtrListIterator<ActionBase> ActionListIterator;
 
 		//! Abstract base class used for implementing all the AlterTable actions.
 		class KEXI_DB_EXPORT ActionBase {
@@ -187,15 +187,31 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		//! Abstract base class used for implementing table field-related actions.
 		class KEXI_DB_EXPORT FieldActionBase : public ActionBase {
 			public:
-				FieldActionBase(const QString& fieldName);
+				FieldActionBase(const QString& fieldName, int uid);
 				FieldActionBase(bool);
 				virtual ~FieldActionBase();
 
 				//! \return field name for this action
 				QString fieldName() const { return m_fieldName; }
 
+				/*! \return field's unique identifier
+				 This id is needed because in the meantime there can be more than one
+				 field sharing the same name, so we need to identify them unambiguously. 
+				 After the (valid) altering is completed all the names will be unique. 
+				
+				 Example scenario when user exchanged the field names:
+				 1. At the beginning: [field A], [field B]
+				 2. Rename the 1st field to B: [field B], [field B]
+				 3. Rename the 2nd field to A: [field B], [field A] */
+				int uid() const { return m_fieldUID; }
+
+				//! Sets field name for this action
+				void setFieldName(const QString& fieldName) { m_fieldName = fieldName; }
+
 			protected:
 				QString m_fieldName;
+				//! field's unique identifier, @see uid()
+				int m_fieldUID;
 		};
 
 		/*! Defines an action for changing a single property value of a table field.
@@ -209,7 +225,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		class KEXI_DB_EXPORT ChangeFieldPropertyAction : public FieldActionBase {
 			public:
 				ChangeFieldPropertyAction(const QString& fieldName, 
-					const QString& propertyName, const QVariant& newValue);
+					const QString& propertyName, const QVariant& newValue, int uid);
 				//! @internal, used for constructing null action
 				ChangeFieldPropertyAction(bool null);
 				virtual ~ChangeFieldPropertyAction();
@@ -230,11 +246,13 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		//! Defines an action for removing a single table field.
 		class KEXI_DB_EXPORT RemoveFieldAction : public FieldActionBase {
 			public:
-				RemoveFieldAction(const QString& fieldName);
+				RemoveFieldAction(const QString& fieldName, int uid);
 				RemoveFieldAction(bool);
 				virtual ~RemoveFieldAction();
 
 				virtual QString debugString();
+
+				virtual void simplifyActions(ActionDictDict &fieldActions);
 
 			protected:
 				virtual void updateAlteringRequirements();
@@ -243,13 +261,15 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		//! Defines an action for inserting a single table field.
 		class KEXI_DB_EXPORT InsertFieldAction : public FieldActionBase {
 			public:
-				InsertFieldAction(int fieldIndex, KexiDB::Field *newField);
+				InsertFieldAction(int fieldIndex, KexiDB::Field *newField, int uid);
 				InsertFieldAction(bool);
 				virtual ~InsertFieldAction();
 
 				int index() const { return m_index; }
 				KexiDB::Field& field() const { return *m_field; }
 				virtual QString debugString();
+
+				virtual void simplifyActions(ActionDictDict &fieldActions);
 
 			protected:
 				virtual void updateAlteringRequirements();
@@ -262,12 +282,14 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		 position within table schema. */
 		class KEXI_DB_EXPORT MoveFieldPositionAction : public FieldActionBase {
 			public:
-				MoveFieldPositionAction(int fieldIndex, const QString& fieldName);
+				MoveFieldPositionAction(int fieldIndex, const QString& fieldName, int uid);
 				MoveFieldPositionAction(bool);
 				virtual ~MoveFieldPositionAction();
 
 				int index() const { return m_index; }
 				virtual QString debugString();
+
+				virtual void simplifyActions(ActionDictDict &fieldActions);
 
 			protected:
 				virtual void updateAlteringRequirements();
