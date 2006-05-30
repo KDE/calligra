@@ -74,8 +74,8 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int 
     grid->addColSpacing( 0, lCols->width() );
     grid->addColSpacing( 0, nCols->width() );
     grid->addColSpacing( 1, 150 );
-    grid->setColStretch( 0, 0 );
-    grid->setColStretch( 1, 1 );
+    grid->setColumnStretch( 0, 0 );
+    grid->setColumnStretch( 1, 1 );
 
     grid->activate();
     enableButtonOK( !(m_rows==1 && m_cols==1) );

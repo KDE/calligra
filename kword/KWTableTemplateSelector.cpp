@@ -589,8 +589,8 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     grid->setRowStretch( 0, 1 );
     grid->setRowStretch( 1, 0 );
     grid->addColSpacing( 0, innerHolder->width() );
-    grid->setColStretch( 0, 0 );
-    grid->setColStretch( 1, 1 );
+    grid->setColumnStretch( 0, 0 );
+    grid->setColumnStretch( 1, 1 );
     grid->activate();
 
     connect( cbFirstRow, SIGNAL( toggled( bool ) ), preview, SLOT( cbFirstRowChanged( bool ) ) );

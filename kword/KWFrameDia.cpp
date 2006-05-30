@@ -1316,7 +1316,7 @@ void KWFrameDia::setupTab6() // Border style
     m_prev3->setBottomBorder( m_bottomBorder );
 
     grid->setRowStretch( 7, 1 );
-    grid->setColStretch( 1, 1 );
+    grid->setColumnStretch( 1, 1 );
 }
 
 void KWFrameDia::initBorderSettings()

@@ -112,8 +112,8 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, 
     grid->setRowStretch( 1, 1 );
     grid->setRowStretch( 2, 1 );
     grid->setRowStretch( 3, 10 );
-    grid->setColStretch( 0, 1 );
-    grid->setColStretch( 1, 10 );
+    grid->setColumnStretch( 0, 1 );
+    grid->setColumnStretch( 1, 10 );
     m_cbKeepRatio->setChecked(_keepRatio);
     m_cbInline->setChecked( _inline );
     enableButtonOK( false );

@@ -212,8 +212,8 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     }
 #endif
     grid->addColSpacing( 1, 150 );
-    grid->setColStretch( 0, 0 );
-    grid->setColStretch( 1, 1 );
+    grid->setColumnStretch( 0, 0 );
+    grid->setColumnStretch( 1, 1 );
 
     grid->activate();
 

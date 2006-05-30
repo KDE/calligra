@@ -715,9 +715,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     Q3GridLayout * fontLayout = new Q3GridLayout(fontContainer, 1, 3);
 
     fontLayout->setSpacing(KDialog::spacingHint());
-    fontLayout->setColStretch(0, 0);
-    fontLayout->setColStretch(1, 1);
-    fontLayout->setColStretch(2, 0);
+    fontLayout->setColumnStretch(0, 0);
+    fontLayout->setColumnStretch(1, 1);
+    fontLayout->setColumnStretch(2, 0);
 
     QLabel *fontTitle = new QLabel(i18n("Default font:"), fontContainer);
 
@@ -752,8 +752,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     Q3GridLayout * languageLayout = new Q3GridLayout(languageContainer, 1, 3);
 
     languageLayout->setSpacing(KDialog::spacingHint());
-    languageLayout->setColStretch(0, 0);
-    languageLayout->setColStretch(1, 1);
+    languageLayout->setColumnStretch(0, 0);
+    languageLayout->setColumnStretch(1, 1);
 
     QLabel *languageTitle = new QLabel(i18n("Global language:"), languageContainer);
 
