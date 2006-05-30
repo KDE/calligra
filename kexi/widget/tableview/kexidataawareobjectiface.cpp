@@ -1148,7 +1148,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
 KexiTableItem *KexiDataAwareObjectInterface::insertEmptyRow(int row)
 {
 	if ( !acceptRowEdit() || !isEmptyRowInsertingEnabled() 
-		|| (row!=-1 && row >= (rows()+isInsertingEnabled()?1:0) ) )
+		|| (row!=-1 && row <= (rows()+isInsertingEnabled()?1:0) ) )
 		return 0;
 
 	KexiTableItem *newItem = m_data->createItem(); //new KexiTableItem(m_data->columns.count());
@@ -1417,11 +1417,12 @@ void KexiDataAwareObjectInterface::slotAboutToDeleteRow(KexiTableItem& item,
 void KexiDataAwareObjectInterface::slotRowDeleted()
 {
 	if (m_rowWillBeDeleted >= 0) {
-		if (m_rowWillBeDeleted > 0 && m_rowWillBeDeleted >= rows())
-			m_rowWillBeDeleted--; //move up
+		if (m_rowWillBeDeleted > 0 && m_rowWillBeDeleted >= (rows()-1) && !m_spreadSheetMode)
+			m_rowWillBeDeleted = rows()-1; //move up if it's the last row
 		updateWidgetContentsSize();
 
-		setCursorPosition(m_rowWillBeDeleted, m_curCol, true/*forceSet*/);
+		if (! (m_spreadSheetMode && m_rowWillBeDeleted>=(rows()-1)))
+			setCursorPosition(m_rowWillBeDeleted, m_curCol, true/*forceSet*/);
 		if (m_verticalHeader)
 			m_verticalHeader->removeLabel();
 
@@ -1447,6 +1448,9 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiTableItem *item)/*, bool moveC
 
 	QString msg, desc;
 //	bool current = (item == d->pCurrentItem);
+	const bool lastRowDeleted = m_spreadSheetMode && m_data->last() == item; //we need to know this so we
+	                                                                         //can return to the last row 
+	                                                                         //after reinserting it
 	if (!m_data->deleteRow(*item, true /*repaint*/)) {
 		//error
 		if (m_data->result()->desc.isEmpty())
@@ -1462,9 +1466,11 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiTableItem *item)/*, bool moveC
 
 //	repaintAfterDelete();
 	if (m_spreadSheetMode) { //append empty row for spreadsheet mode
-			m_data->append(m_data->createItem());//new KexiTableItem(m_data->columns.count()));
-			if (m_verticalHeader)
-				m_verticalHeader->addLabels(1);
+		m_data->append(m_data->createItem());//new KexiTableItem(m_data->columns.count()));
+		if (m_verticalHeader)
+			m_verticalHeader->addLabels(1);
+		if (lastRowDeleted) //back to the last row
+			setCursorPosition(rows()-1, m_curCol, true/*forceSet*/);
 	}
 	return true;
 }
