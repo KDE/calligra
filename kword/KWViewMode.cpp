@@ -226,7 +226,7 @@ QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
 int KWViewModeNormal::xOffset(KWPage *page, int canvasWidth /* = -1 */) {
     // Center horizontally
     if(canvasWidth < 0)
-        canvasWidth = 100; // canvas()->visibleWidth();
+        canvasWidth = 100; // was: canvas()->visibleWidth(); TODO
     return qMax( 0, ( canvasWidth - m_doc->zoomItXOld( page->width() ) ) / 2 );
 }
 
@@ -239,7 +239,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
 
     int lastPage = m_doc->lastPage();
     Q_ASSERT(canvas());
-    const int canvasWidth = 100; // canvas()->visibleWidth();
+    const int canvasWidth = 100; // was canvas()->visibleWidth(); TODO
     double pagePosPt = 0;
     int topOfPage = 0; // in pixels
     for ( int pageNr = m_doc->startPage(); pageNr <= lastPage; pageNr++ )
@@ -323,8 +323,8 @@ int KWViewModePreview::leftSpacing()
             pagesPerRow = m_pagesPerRow;
 
         int pagesWidth = ( m_spacing + ( m_doc->paperWidth(m_doc->startPage()) + m_spacing ) * pagesPerRow );
-        if ( pagesWidth < 100 )
-            return ( m_spacing + ( 100 / 2 ) - ( pagesWidth / 2 ) );
+        if ( pagesWidth < 100 ) // 100 was: canvas()->visibleWidth() TODO
+            return ( m_spacing + ( 100 / 2 ) - ( pagesWidth / 2 ) ); // 100 was: canvas()->visibleWidth() TODO
     }
     return m_spacing;
 }
@@ -334,8 +334,8 @@ int KWViewModePreview::topSpacing()
     if ( canvas() )
     {
         int pagesHeight = ( m_spacing + ( m_doc->paperHeight(m_doc->startPage()) + m_spacing ) * numRows() );
-        if ( pagesHeight < 100 )
-            return ( m_spacing + ( 100 / 2 ) - ( pagesHeight / 2 ) );
+        if ( pagesHeight < 100 ) // 100 was: canvas()->visibleHeight() TODO
+            return ( m_spacing + ( 100 / 2 ) - ( pagesHeight / 2 ) ); // 100 was: canvas()->visibleHeight() TODO
     }
     return m_spacing;
 }
