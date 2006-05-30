@@ -61,6 +61,7 @@ void VColorSlider::init()
 
 	m_label = new QLabel( this );
 	m_gradientSelect = new KGradientSelector( Qt::Horizontal, this );
+	m_gradientSelect->setMinimumHeight( 2 );
 	m_spinBox = new KIntSpinBox( this );
 
 	layout->addWidget( m_label );

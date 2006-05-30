@@ -1,16 +1,8 @@
-add_subdirectory( xrgbrender )
-
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOPAINTER_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/render/xrgbrender ${LIBART_INCLUDE_DIR} )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOPAINTER_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon )
 
 set(vpainter_SRCS
     vpainterfactory.cc
     vqpainter.cc
-    art_render_pattern.c
-    art_render_misc.c
-    art_rgb_svp.c
-    art_rgb.c
-    art_rgba_affine.c
-    vkopainter.cc
     )
 
 kde4_automoc(${vpainter_SRCS})
@@ -18,8 +10,6 @@ kde4_automoc(${vpainter_SRCS})
 kde4_add_library(vpainter ${vpainter_SRCS})
 
 kde4_install_libtool_file( ${LIB_INSTALL_DIR} vpainter )
-
-target_link_libraries(vpainter ${LIBART_LIBRARIES} karbonxrgbrender)
 
 install_targets(${LIB_INSTALL_DIR} vpainter )
 
