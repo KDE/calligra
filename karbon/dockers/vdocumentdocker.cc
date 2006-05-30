@@ -777,9 +777,10 @@ VLayersTab::renameItem( Q3ListViewItem* item, const QPoint&, int col )
 	{
 		bool ok = true;
 		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( item );
-		if( !layerItem )
+
+	        VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( item );
+		if( !layerItem  && objectItem)
 		{
-			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( item );
 			VObject *obj = objectItem->object();
 			QString name = KInputDialog::getText( i18n( "Current Object" ), i18n( "Change the name of the object:" ),
 												  obj->name(), &ok, this );
