@@ -36,8 +36,6 @@
 
 class KWPage;
 class KWViewMode;
-//   class KWDocStruct;
-//   class KWCanvas;
 class KWDocument;
 class KWGUI;
 class KWFrame;
@@ -50,11 +48,10 @@ class KWFindReplace;
 class KWFrameStyle;
 class KWTableStyle;
 class KWTableFrameSet;
-//
+
 class KoPicture;
 class KoSearchContext;
 class KoTextFormatInterface;
-//   class KoRuler;
 class TKSelectColorAction;
 class KoPartSelectAction;
 class KoCharSelectDia;
@@ -63,20 +60,18 @@ class KoFontDia;
 class KoParagDia;
 class KoTextIterator;
 class KoParagCounter;
-//
-//   class DCOPObject;
-class KStatusBarLabel;
 class KoSpell;
-//   class KUrl;
+struct KoPageLayout;
+
+class KStatusBarLabel;
 class KAction;
 class KActionMenu;
 class KSelectAction;
 class KToggleAction;
 class KFontSizeAction;
 class KFontAction;
+
 class QResizeEvent;
-//   class QSplitter;
-struct KoPageLayout;
 
 #include <kspell2/broker.h>
 #include <kvbox.h>

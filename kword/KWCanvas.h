@@ -31,6 +31,7 @@
 #include <KoPoint.h>
 #include <KoCanvasBase.h>
 #include <KoInteractionTool.h>
+#include <KoShapeControllerInterface.h>
 
 #include <QWidget>
 #include <QMimeData>
@@ -219,6 +220,18 @@ public:
     bool insertInlinePicture();
     void updateSize();
 
+    void startCreateTool();
+
+    // KoCanvasBase interface methods.
+    void gridSize(double *horizontal, double *vertical) const;
+    bool snapToGrid() const;
+    void addCommand(KCommand *command, bool execute = true);
+    KoShapeManager *shapeManager() const { return m_shapeManager; }
+    void updateCanvas(const QRectF& rc);
+    KoTool* activeTool() { return m_tool; }
+    KoViewConverter *viewConverter();
+    QWidget* canvasWidget() { return this; }
+
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
 
@@ -248,16 +261,6 @@ protected:
 
     void terminateCurrentEdit();
     bool insertInlineTable();
-
-    // KoCanvasBase interface methods.
-    void gridSize(double *horizontal, double *vertical) const;
-    bool snapToGrid() const;
-    void addCommand(KCommand *command, bool execute = true);
-    KoShapeManager *shapeManager() const { return m_shapeManager; }
-    void updateCanvas(const QRectF& rc);
-    KoTool* activeTool() { return m_tool; }
-    KoViewConverter *viewConverter();
-    QWidget* canvasWidget() { return this; }
 
 signals:
     // Emitted when the current frameset edit changes
@@ -372,6 +375,21 @@ private:
         bool pictureInline;
         bool keepRatio;
     }m_picture;
+};
+
+class KWShapeController : public KoShapeControllerInterface {
+public:
+    enum FrameType { TextFrameType };
+    KWShapeController(KWDocument *document);
+    ~KWShapeController() {};
+    void addShape(KoShape* shape);
+    void removeShape(KoShape* shape);
+    KoShape* createShape(QRectF outline) const;
+    void setFactoryType(FrameType frameType) { m_type = frameType; }
+
+private:
+    KWDocument *m_document;
+    FrameType m_type;
 };
 
 #endif

@@ -55,6 +55,7 @@
 #include <KoPictureCollection.h>
 #include <KoGfxEvent.h>
 #include <KoShapeManager.h>
+#include <KoCreateShapesTool.h>
 
 #include <ktempfile.h>
 #include <klocale.h>
@@ -66,8 +67,6 @@
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kprinter.h>
-
-//#include <assert.h>
 
 #include <KoRectangleShape.h>
 
@@ -2131,6 +2130,44 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
 void KWCanvas::updateSize() {
     QSize size = viewMode()->contentsSize();
     setMinimumSize(size.width(), size.height());
+}
+
+void KWCanvas::startCreateTool() {
+    KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(m_tool);
+    if(createTool) {
+        //createTool->shapesController->setFactoryType(KWShapeController::TextFrameType);
+        return;
+    }
+    delete m_tool;
+    m_tool = new KoCreateShapesTool(this, new KWShapeController(m_doc));
+    // TODO; this causes a leak due to the not deleted shapeController!
+}
+
+// ************* KWShapeController ***************
+KWShapeController::KWShapeController(KWDocument *document)
+: m_document(document)
+{
+    m_type = TextFrameType;
+}
+
+void KWShapeController::addShape( KoShape* shape ) {
+kDebug() << "KWShapeController::addShape" << endl;
+    foreach(KWView *view, m_document->getAllViews())
+        view->getGUI()->canvasWidget()->shapeManager()->add(shape);
+}
+
+void KWShapeController::removeShape( KoShape* shape ) {
+    foreach(KWView *view, m_document->getAllViews())
+        view->getGUI()->canvasWidget()->shapeManager()->remove(shape);
+}
+
+KoShape* KWShapeController::createShape(QRectF outline) const {
+kDebug() << "KWShapeController::createShape " << outline << endl;
+    KoShape *rect = new KoRectangleShape();
+    rect->setBackground(QColor(Qt::blue));
+    rect->setPosition(outline.topLeft());
+    rect->resize(outline.size());
+    return rect;
 }
 
 #include "KWCanvas.moc"
