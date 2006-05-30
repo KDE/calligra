@@ -43,7 +43,8 @@ set(kexidb_LIB_SRCS
    preparedstatement.cpp 
    dbproperties.cpp 
    admin.cpp 
-   alter.cpp )
+#temp. disabled   alter.cpp
+)
 
 kde4_automoc(${kexidb_LIB_SRCS})
 

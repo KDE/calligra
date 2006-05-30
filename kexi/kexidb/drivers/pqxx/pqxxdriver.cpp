@@ -34,8 +34,8 @@ KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql )
 
 //==================================================================================
 //
-pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringList &args )
-	: Driver( parent, name, args )
+pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const QStringList &args )
+	: Driver( parent, args )
 {
 	d->isFileDriver = false;
 	d->features = SingleTransactions | CursorForward | CursorBackward;
