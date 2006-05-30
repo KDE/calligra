@@ -19,22 +19,17 @@
  * Boston, MA 02110-1301, USA
 */
 
-//   #undef Unsorted
-//
+// kword includes
 #include "KWView.h"
 #include "KWFrameSet.h"
-//
 #include "KWordViewIface.h"
 #include "KWConfigFootNoteDia.h"
-//   #include "defs.h"
 #include "KWDeleteDia.h"
 #include "KWDocStruct.h"
 #include "KWFootNoteDia.h"
 #include "KWInsertDia.h"
 #include "KWAnchor.h"
-#include "KoTextBookmark.h"
 #include "KWCanvas.h"
-//   #include "KWCommand.h"
 #include "KWConfig.h"
 #include "KWCreateBookmarkDia.h"
 #include "KWDocument.h"
@@ -42,7 +37,6 @@
 #include "KWFormulaFrameSet.h"
 #include "KWFrame.h"
 #include "KWPictureFrameSet.h"
-//   #include "KWFrameStyle.h"
 #include "KWFrameStyleManager.h"
 #include "KWImportStyleDia.h"
 #include "KWInsertPageDia.h"
@@ -53,7 +47,6 @@
 #include "KWTableStyle.h"
 #include "KWTableStyleManager.h"
 #include "KWTextDocument.h"
-//   #include "KWVariable.h"
 #include "KWViewMode.h"
 #include "KWMailMergeDataBase.h"
 #include "KWMailMergeLabelAction.h"
@@ -72,46 +65,37 @@
 #include "KWFrameView.h"
 #include "KWStatisticsDialog.h"
 #include "KWGUI.h"
-//
-#include <kformuladocument.h>
-#include <klocale.h>
-#include <kformulamimesource.h>
-//
-//   #include <QSplitter>
-//   #include <KoRichText.h>
+
+// koffice includes
+#include "KoTextBookmark.h"
 #include <KoAutoFormat.h>
 #include <KoAutoFormatDia.h>
-//   #include <KoChangeCaseDia.h>
 #include <KoCharSelectDia.h>
 #include <KoCommentDia.h>
 #include <KoCreateStyleDia.h>
 #include <KoDocumentInfo.h>
 #include <KoFontDia.h>
-//   #include <KoFrame.h>
 #include <KoInsertLink.h>
 #include <KoMainWindow.h>
 #include <KoParagDia.h>
 #include <KoPartSelectAction.h>
 #include <KoCanvasView.h>
 #include <KoPageLayoutDia.h>
-//   #include <KoPictureFilePreview.h>
 #include <KoSearchDia.h>
 #include <KoStore.h>
-//   #include <KoStoreDrag.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCompletionDia.h>
-//   #include <KoVariable.h>
 #include <KoCustomVariablesDia.h>
 #include <KoTextObject.h>
 #include "KoSpell.h"
+#include <kformulamimesource.h>
+#include <kformuladocument.h>
 #include <tkcoloractions.h>
-//
+
+// kde includes
+#include <klocale.h>
 #include <kparts/partmanager.h>
 #include <kaccelgen.h>
-//   #include <kcolordialog.h>
-//   #include <kdebug.h>
-//   #include <kfiledialog.h>
-//   #include <kimageio.h>
 #include <kinputdialog.h>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
@@ -121,7 +105,6 @@
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <ktempfile.h>
-//   #include <kdeversion.h>
 #include <kiconloader.h>
 #include <kxmlguifactory.h>
 #include <kfontsizeaction.h>
@@ -129,33 +112,18 @@
 #include <kfontaction.h>
 #include <kseparatoraction.h>
 #include <kfontdialog.h>
-//   #include <kvbox.h>
-//
+#include <kspell2/dialog.h>
+#include <kspell2/defaultdictionary.h>
+
+// Qt includes
 #include <QClipboard>
 #include <Q3DragObject>
 #include <QApplication>
-//   #include <q3groupbox.h>
-//   #include <QLayout>
-//   #include <q3progressdialog.h>
-//   #include <QRegExp>
 #include <QTimer>
 #include <QBuffer>
-//   //Added by qt3to4:
-//   #include <QResizeEvent>
-//   #include <QMenu>
-//   #include <Q3StrList>
-//   #include <Q3GridLayout>
 #include <Q3CString>
 #include <Q3ValueList>
-//   #include <Q3PtrList>
-//   #include <QPixmap>
 #include <QMap>
-//
-//   #include <stdlib.h>
-//
-#include <kspell2/dialog.h>
-#include <kspell2/defaultdictionary.h>
-//   #include <q3tl.h>
 
 using namespace KSpell2;
 
