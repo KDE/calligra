@@ -71,7 +71,7 @@ VStrokeFillPreview::VStrokeFillPreview(
 #endif
 
 	installEventFilter( this );
-	m_pixmap.scaled( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
+	m_pixmap = QPixmap( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
 	m_painter = new VKoPainter( &m_pixmap, uint( PANEL_SIZEX ), uint( PANEL_SIZEY ) );
 }
 

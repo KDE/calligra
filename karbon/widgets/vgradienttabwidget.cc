@@ -46,7 +46,7 @@ VGradientListItem::VGradientListItem( const VGradient& gradient, QString filenam
 {
 	m_gradient = new VGradient( gradient );
 
-	m_pixmap.scaled( 200, 16 );
+	m_pixmap = QPixmap( 200, 16 );
 	VKoPainter gp( &m_pixmap, m_pixmap.width(), m_pixmap.height() );
 	// Port to Qt4:
 	// gp.setRasterOp( Qt::XorROP );

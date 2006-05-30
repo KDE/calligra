@@ -96,8 +96,7 @@ VSmallPreview::drawFill( const VFill &f )
 	VFill fill;
 	VStroke stroke;
 	
-	QPixmap m_pixmap;
-	m_pixmap.scaled( m_fillFrame->width(), m_fillFrame->height() );
+	QPixmap m_pixmap( m_fillFrame->width(), m_fillFrame->height() );
 	VKoPainter* m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 
 	m_painter->begin();
@@ -192,8 +191,7 @@ VSmallPreview::drawStroke( const VStroke &s )
 	VFill fill;
 	VStroke stroke;
 
-	QPixmap m_pixmap;
-	m_pixmap.scaled( m_fillFrame->width(), m_fillFrame->height() );
+	QPixmap m_pixmap( m_fillFrame->width(), m_fillFrame->height() );
 	VKoPainter* m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 
 	m_painter->begin();

@@ -79,7 +79,7 @@ void VRuler::initMarker(qint32 w, qint32 h)
 {
     QPainter p;
 
-    m_pixmapMarker.scaled(w, h);
+    m_pixmapMarker = QPixmap(w, h);
     p.begin(&m_pixmapMarker);
     p.setPen( QColor( "blue" ) );
     p.eraseRect(0, 0, w, h);
