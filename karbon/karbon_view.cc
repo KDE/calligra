@@ -1110,7 +1110,7 @@ KarbonView::initActions()
 	// object <-----
 
 	// line style (dashes)
-	// TODO: KoLineStyleAction isn't ported yet (needs to be added to kofficeui too).
+	// TODO: KoLineStyleAction isn't ported yet.
 	//m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)), actionCollection(), "setLineStyle");
 
 	// line width
