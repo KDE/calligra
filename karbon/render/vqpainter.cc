@@ -29,8 +29,6 @@
 #include <qpaintdevice.h>
 #include <qpen.h>
 
-#include <Q3PointArray>
-
 #include <QPointF>
 #include <kdebug.h>
 
@@ -41,9 +39,15 @@ VQPainter::VQPainter( QPaintDevice *target, unsigned int w, unsigned int h, bool
 	m_painter = new QPainter( target );
 }
 
-VQPainter::VQPainter( unsigned char *buffer, unsigned int w, unsigned int h, bool drawNodes ) : VPainter( 0L, w, h ), m_painter( 0L ), m_buffer( buffer ), m_width( w ), m_height( h ), m_bDrawNodes( drawNodes )
+VQPainter::VQPainter( unsigned char *buffer, unsigned int w, unsigned int h, bool drawNodes ) : VPainter( 0L, w, h ), m_painter( 0L ), m_width( w ), m_height( h ), m_bDrawNodes( drawNodes )
 {
-// TODO: implement
+	m_buffer = buffer;
+	m_zoomFactor = 1;
+	m_index = 0;
+	// TODO: load the buffer in the painter
+	//m_painter = new QPainter( QPixmap(m_buffer) );
+	// for now use:
+	m_painter = new QPainter;
 }
 
 VQPainter::~VQPainter()
@@ -67,7 +71,7 @@ VQPainter::blit( const QRectF & )
 void
 VQPainter::clear( const QColor &c )
 {
-	m_painter->setBackgroundColor( c );
+	m_painter->setBackground(QBrush(c, Qt::SolidPattern));
 	m_painter->eraseRect( 0, 0, m_width, m_height );
 }
 
@@ -90,7 +94,7 @@ VQPainter::end()
 const QMatrix
 VQPainter::worldMatrix()
 {
-	return m_painter->worldMatrix();
+	return m_painter->matrix();
 }
 
 void
@@ -111,42 +115,19 @@ VQPainter::setZoomFactor( double zoomFactor )
 void 
 VQPainter::moveTo( const QPointF &p )
 {
-	//m_index = 0;
-	if( m_pa.size() <= m_index )
-		m_pa.resize( m_index + 10 );
-
-	m_pa.setPoint( m_index, static_cast<int>(p.x() * m_zoomFactor), static_cast<int>(p.y() * m_zoomFactor) );
-
-	m_index++;
+	m_pa.moveTo(p * m_zoomFactor);
 }
 
 void 
 VQPainter::lineTo( const QPointF &p )
 {
-	if( m_pa.size() <= m_index )
-		m_pa.resize( m_index + 10 );
-
-	m_pa.setPoint( m_index, static_cast<int>(p.x() * m_zoomFactor), static_cast<int>(p.y() * m_zoomFactor) );
-
-	m_index++;
+	m_pa.lineTo(p * m_zoomFactor);
 }
 
 void
 VQPainter::curveTo( const QPointF &p1, const QPointF &p2, const QPointF &p3 )
 {
-	// calculate cubic bezier using a temp QPointArray
-	Q3PointArray pa( 4 );
-	pa.setPoint( 0, m_pa.point( m_index - 1 ).x(), m_pa.point( m_index - 1 ).y() );
-	pa.setPoint( 1, static_cast<int>(p1.x() * m_zoomFactor), static_cast<int>(p1.y() * m_zoomFactor) );
-	pa.setPoint( 2, static_cast<int>(p2.x() * m_zoomFactor), static_cast<int>(p2.y() * m_zoomFactor) );
-	pa.setPoint( 3, static_cast<int>(p3.x() * m_zoomFactor), static_cast<int>(p3.y() * m_zoomFactor) );
-
-	Q3PointArray pa2( pa.cubicBezier() );
-
-	m_pa.resize( m_index + pa2.size() );
-	m_pa.putPoints( m_index, pa2.size(), pa2 );
-
-	m_index += pa2.size();
+	m_pa.cubicTo(p1 * m_zoomFactor, p2 * m_zoomFactor, p3 * m_zoomFactor);
 }
 
 void
@@ -158,16 +139,13 @@ VQPainter::newPath()
 void
 VQPainter::fillPath()
 {
-	// we probably dont need filling for qpainter
-	//m_index = 0;
-	m_painter->drawPolygon( m_pa, FALSE, 0, m_index );
+	m_painter->fillPath(m_pa, m_painter->brush());
 }
 
 void
 VQPainter::strokePath()
 {
-	m_painter->drawPolyline( m_pa, 0, m_index );
-	m_index = 0;
+	m_painter->strokePath(m_pa, m_painter->pen());
 }
 
 void
@@ -280,7 +258,7 @@ VQPainter::drawRect( double, double, double, double )
 void
 VQPainter::drawImage( const QImage &image, const QMatrix &affine )
 {
-	QMatrix matrix = m_painter->worldMatrix();
+	QMatrix matrix = m_painter->matrix();
 	
 	double m11 = affine.m11() * matrix.m11() * m_zoomFactor + affine.m12() * matrix.m21();
 	double m12 = (affine.m11() * matrix.m12() + affine.m12() * matrix.m22() ) * m_zoomFactor;

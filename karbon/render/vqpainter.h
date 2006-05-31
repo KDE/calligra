@@ -24,8 +24,8 @@
 // qpainter wrapper
 
 #include "vpainter.h"
-#include "q3pointarray.h"
 
+#include <QPainterPath>
 #include <QRectF>
 #include <QPointF>
 
@@ -38,7 +38,7 @@ public:
 	VQPainter( unsigned char *buffer, unsigned int w = 0, unsigned int h = 0, bool drawNodes = true );
 	virtual ~VQPainter();
 
-    //
+	//
 	virtual void resize( unsigned int w, unsigned int h );
 	virtual void begin();
 	virtual void end();
@@ -53,12 +53,12 @@ public:
 	virtual double zoomFactor() { return m_zoomFactor; }
 
 	// drawing
-    virtual void moveTo( const QPointF & );
-    virtual void lineTo( const QPointF & );
+	virtual void moveTo( const QPointF & );
+	virtual void lineTo( const QPointF & );
 	virtual void curveTo( const QPointF &, const QPointF &, const QPointF & );
-    virtual void newPath();
-    virtual void strokePath();
-    virtual void fillPath();
+	virtual void newPath();
+	virtual void strokePath();
+	virtual void fillPath();
 	virtual void setFillRule( VFillRule ) {}
 	virtual void setClipPath() {}
 	virtual void resetClipPath() {}
@@ -91,8 +91,8 @@ public:
 
 private:
 	double m_zoomFactor;
-	unsigned int m_index;
-	Q3PointArray m_pa;
+	int m_index;
+	QPainterPath m_pa;
 	QPainter *m_painter;
 	QPaintDevice *m_target;
 	unsigned int m_width;
