@@ -45,7 +45,8 @@ VDistributeCmd::execute()
 	
 	QRectF bbox;
 	double extent = 0.0;
-	double dx, dy;
+	double dx = 0.0;
+	double dy = 0.0;
 
 	VObjectList objs = document()->selection()->objects();
 	VObjectListIterator itr( objs );
@@ -83,8 +84,8 @@ VDistributeCmd::execute()
 		}
 	}
 	
-	VObject* first = sortedPos.begin().data();
-	VObject* last = (--sortedPos.end()).data();
+	VObject* first = sortedPos.begin().value();
+	VObject* last = (--sortedPos.end()).value();
 
 	// determine the available space to distribute
 	double space = getAvailableSpace( first, last, extent );

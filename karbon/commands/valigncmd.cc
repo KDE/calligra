@@ -44,7 +44,8 @@ VAlignCmd::execute()
 {
 	if( document()->selection()->objects().count() == 0 )
 		return;
-	double dx, dy;
+	double dx = 0.0;
+	double dy = 0.0;
 	QRectF bbox;
 	QRectF r;
 	if( document()->selection()->objects().count() == 1 )

@@ -113,7 +113,7 @@ void
 VTransformCmd::unexecute()
 {
 	// inverting the matrix should undo the affine transformation
-	m_mat = m_mat.invert();
+	m_mat = m_mat.inverted();
 
 	if( m_duplicate )
 	{
@@ -140,7 +140,7 @@ VTransformCmd::unexecute()
 		document()->selection()->append( m_selection->objects() );
 	}
 	// reset
-	m_mat = m_mat.invert();
+	m_mat = m_mat.inverted();
 	setSuccess( false );
 }
 
@@ -360,7 +360,7 @@ VTranslateBezierCmd::unexecute()
 			m_segment->selectPoint( i, i == uint( m_firstControl ? 0 : 1 ) );
 	
 			if( i == uint( m_firstControl ? 0 : 1 ) )
-				m_segment->setPoint( i, VGlobal::transformPoint(m_segment->point( i ), m_mat.invert() ) );
+				m_segment->setPoint( i, VGlobal::transformPoint(m_segment->point( i ), m_mat.inverted() ) );
 		}
 
 		if( m_segmenttwo )
@@ -371,7 +371,7 @@ VTranslateBezierCmd::unexecute()
 				m_segmenttwo->selectPoint( i, i == index );
 
 			if( i == index )
-				m_segmenttwo->setPoint( i, VGlobal::transformPoint(m_segmenttwo->point( i ), m2.invert() ) );
+				m_segmenttwo->setPoint( i, VGlobal::transformPoint(m_segmenttwo->point( i ), m2.inverted() ) );
 			}
 		}
 	}
@@ -411,7 +411,7 @@ VTranslatePointCmd::VTranslatePointCmd( VDocument *doc, double d1, double d2 )
 		for( ; itr.current() ; ++itr )
 			visit( *itr.current() );
 	
-		if( m_segPnts.size() > 1 || ( m_segPnts.size() == 0 && m_segPnts.begin().data().size() > 1 ) )
+		if( m_segPnts.size() > 1 || ( m_segPnts.size() == 0 && m_segPnts.begin().value().size() > 1 ) )
 			setName( i18n( "Translate Point" ) );
 	}
 }
@@ -430,9 +430,9 @@ VTranslatePointCmd::execute()
 void
 VTranslatePointCmd::unexecute()
 {
-	m_mat = m_mat.invert();
+	m_mat = m_mat.inverted();
 	translatePoints();
-	m_mat = m_mat.invert();
+	m_mat = m_mat.inverted();
 	setSuccess( false );
 }
 
@@ -446,7 +446,7 @@ VTranslatePointCmd::visitVSubpath( VSubpath& path )
 
 	VSegment* segment = path.first();
 
-	uint segCnt = m_segPnts.size();
+	int segCnt = m_segPnts.size();
 
 	// save indices of selected points for all segments
 	while( segment )
@@ -478,7 +478,7 @@ VTranslatePointCmd::translatePoints()
 	for( it = m_segPnts.begin(); it != et; ++it )
 	{
 		VSegment *segment = it.key();
-		Q3ValueVector<int> &pnts = it.data();
+		Q3ValueVector<int> &pnts = it.value();
 
 		int pntCnt = pnts.size();
 		for( int i = 0; i < pntCnt; ++i )
