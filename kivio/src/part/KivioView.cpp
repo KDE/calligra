@@ -22,6 +22,8 @@
 #include <QGridLayout>
 #include <QScrollBar>
 
+#include <KoCanvasView.h>
+
 #include "KivioCanvas.h"
 
 KivioView::KivioView(KoDocument* document, QWidget* parent, const char* name)
@@ -55,19 +57,13 @@ void KivioView::initGUI()
   layout->setSpacing(0);
   layout->setMargin(0);
   setLayout(layout);
-  m_canvas = new KivioCanvas(this);
-  m_scrollBarX = new QScrollBar(Qt::Horizontal, this);
-  m_scrollBarX->setMaximum(m_canvas->pageWidth() - m_canvas->width());
-  m_scrollBarX->setPageStep(m_canvas->width());
-  connect(m_scrollBarX, SIGNAL(valueChanged(int)), m_canvas, SLOT(setOffsetX(int)));
-  m_scrollBarY = new QScrollBar(Qt::Vertical, this);
-  m_scrollBarY->setMaximum(m_canvas->pageHeight() - m_canvas->height());
-  m_scrollBarY->setPageStep(m_canvas->height());
-  connect(m_scrollBarY, SIGNAL(valueChanged(int)), m_canvas, SLOT(setOffsetY(int)));
 
-  layout->addWidget(m_canvas, 0, 0);
-  layout->addWidget(m_scrollBarY, 0, 1);
-  layout->addWidget(m_scrollBarX, 1, 0);
+  m_canvas = new KivioCanvas(this);
+
+  KoCanvasView* canvasView = new KoCanvasView(this);
+  canvasView->setCanvas(m_canvas);
+
+  layout->addWidget(canvasView, 0, 0);
 }
 
 #include "KivioView.moc"

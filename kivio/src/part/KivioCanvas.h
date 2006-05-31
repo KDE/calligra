@@ -22,10 +22,13 @@
 
 #include <QWidget>
 
+#include <KoCanvasBase.h>
+
 class QPaintEvent;
+class KoZoomHandler;
 class KivioView;
 
-class KivioCanvas : public QWidget
+class KivioCanvas : public QWidget, public KoCanvasBase
 {
   Q_OBJECT
 
@@ -33,28 +36,74 @@ class KivioCanvas : public QWidget
     KivioCanvas(KivioView* parent);
     ~KivioCanvas();
 
-    /// The offset from the left
-    int offsetX() const;
-    /// The offset from the top
-    int offsetY() const;
+    /**
+     * retrieve the grid size setting.
+     * The grid spacing will be provided in pt.
+     * @param horizontal a pointer to a double that will be filled with the horizontal grid-spacing
+     * @param vertical a pointer to a double that will be filled with the vertical grid-spacing
+     */
+    virtual void gridSize(double *horizontal, double *vertical) const;
 
-    /// The zoomed width of the page displayed
-    int pageWidth() const;
-    /// The zoomed height of the page displayed
-    int pageHeight() const;
+    /**
+     * return if snap to grid is enabled.
+     * @return if snap to grid is enabled.
+     */
+    virtual bool snapToGrid() const;
+
+    /**
+     * Adds a command to the history. Call this for each @p command you create.
+     * Unless you set @p execute to false, this will also execute the command.
+     * This means, most of the application's code will look like
+     *    MyCommand * cmd = new MyCommand( parameters );
+     *    canvas.addCommand( cmd );
+     *
+     * Note that the command history takes ownership of the command, it will delete
+     * it when the undo limit is reached, or when deleting the command history itself.
+     * @param command the command to add
+     * @param execute if true, the commands execute method will be called
+     */
+    virtual void addCommand(KCommand *command, bool execute = true);
+
+    /**
+     * return the current shapeManager
+     * @return the current shapeManager
+     */
+    virtual KoShapeManager *shapeManager() const;
+
+    /**
+     * Tell the canvas repaint the specified rectangle. The coordinates
+     * are document coordinates, not view coordinates.
+     */
+    virtual void updateCanvas(const QRectF& rc);
+
+    /**
+     * Return the curently active tool, or 0 if non active.
+     * @return the curently active tool, or 0 if non active.
+     */
+    virtual KoTool* activeTool();
+
+    /**
+     * Return the viewConverter for this view.
+     * @return the viewConverter for this view.
+     */
+    virtual KoViewConverter *viewConverter();
+
+    /**
+     * Return the widget that will be added to the scrollArea.
+     */
+    virtual QWidget* canvasWidget();
 
   public slots:
-    /// Set the offset from the left to @p offset
-    void setOffsetX(int offset);
-    /// Set the offset from the top to @p offset
-    void setOffsetY(int offset);
+    /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
+    void updateSize();
 
   protected:
     virtual void paintEvent(QPaintEvent* event);
 
   private:
-    int m_offsetX;
-    int m_offsetY;
+    KivioView* m_view;
+
+    KoZoomHandler* m_zoomHandler;
 };
 
 #endif

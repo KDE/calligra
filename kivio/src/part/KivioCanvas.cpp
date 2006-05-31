@@ -30,87 +30,84 @@
 KivioCanvas::KivioCanvas(KivioView* parent)
   : QWidget(parent)
 {
-  m_offsetX = m_offsetY = 0;
+  m_zoomHandler = new KoZoomHandler;
 
   setAttribute(Qt::WA_OpaquePaintEvent, true);
+  setAutoFillBackground(false);
   setMouseTracking(true);
+
+  updateSize();
 }
 
 KivioCanvas::~KivioCanvas()
 {
+  delete m_zoomHandler;
+  m_zoomHandler = 0;
 }
 
-void KivioCanvas::setOffsetX(int offset)
+void KivioCanvas::gridSize(double *horizontal, double *vertical) const
 {
-  m_offsetX = offset;
-  update();
+  // TODO Implement this
+  *horizontal = 0;
+  *vertical = 0;
 }
 
-void KivioCanvas::setOffsetY(int offset)
+bool KivioCanvas::snapToGrid() const
 {
-  m_offsetY = offset;
-  update();
+  // TODO Implement this
+  return false;
 }
 
-int KivioCanvas::offsetX() const
+void KivioCanvas::addCommand(KCommand* command, bool execute)
 {
-  return m_offsetX;
+  // TODO Implement this
 }
 
-int KivioCanvas::offsetY() const
+KoShapeManager* KivioCanvas::shapeManager() const
 {
-  return m_offsetY;
+  // TODO Implement this
+  return 0;
 }
 
-int KivioCanvas::pageWidth() const
+void KivioCanvas::updateCanvas(const QRectF& rc)
 {
-  // TODO Implement this correctly
-  KoZoomHandler zoomHandler;
+  QRect clipRect(viewConverter()->normalToView(rc).toRect());
+  clipRect.adjust(-2, -2, 2, 2); // Resize to fit anti-aliasing
+  update(clipRect);
+}
+
+KoTool* KivioCanvas::activeTool()
+{
+  // TODO Implement this
+  return 0;
+}
+
+KoViewConverter* KivioCanvas::viewConverter()
+{
+  return m_zoomHandler;
+}
+
+QWidget* KivioCanvas::canvasWidget()
+{
+  return this;
+}
+
+void KivioCanvas::updateSize()
+{
+  // TODO Use the layout of the actual page
   KoPageLayout pageLayout = KoPageLayout::standardLayout();
-  return zoomHandler.zoomItXOld(pageLayout.ptWidth);
-}
-
-int KivioCanvas::pageHeight() const
-{
-  // TODO Implement this correctly
-  KoZoomHandler zoomHandler;
-  KoPageLayout pageLayout = KoPageLayout::standardLayout();
-  return zoomHandler.zoomItYOld(pageLayout.ptHeight);
+  int width = qRound(m_zoomHandler->zoomItX(pageLayout.ptWidth));
+  int height = qRound(m_zoomHandler->zoomItX(pageLayout.ptHeight));
+  setMinimumSize(width, height);
 }
 
 void KivioCanvas::paintEvent(QPaintEvent* event)
 {
-  Q_UNUSED(event);
-  KoPageLayout pageLayout = KoPageLayout::standardLayout();
-
   QPainter painter(this);
-  painter.translate(-offsetX(), -offsetY());
+  painter.setClipRect(event->rect());
+  painter.fillRect(event->rect(), Qt::white); // TODO Make the background color a page property
 
-  KoZoomHandler zoomHandler;
-  int pageWidth = zoomHandler.zoomItXOld(pageLayout.ptWidth);
-  int pageHeight = zoomHandler.zoomItYOld(pageLayout.ptHeight);
-  qreal pageX = 0.0;
-  qreal pageY = 0.0;
-
-  if(pageWidth < width()) {
-    pageX = (width() - pageWidth) / 2;
-  }
-
-  if(pageHeight < height()) {
-    pageY = (height() - pageHeight) / 2;
-  }
-
-  if((pageX > 0.0) || (pageY > 0.0)) {
-    painter.fillRect(offsetX(), offsetY(), width(), height(), Qt::darkGray);
-  }
-
-  QRectF pageRect(pageX, pageY, pageWidth, pageHeight);
-  painter.setPen(Qt::black);
-  painter.setBrush(Qt::white);
-  painter.drawRect(pageRect);
-  painter.setPen(QPen(QColor(5, 5, 5, 127), 3));
-  painter.drawLine(QPointF(pageX + pageWidth + 1, pageY + 3), QPointF(pageX + pageWidth + 1, pageY + pageHeight + 1));
-  painter.drawLine(QPointF(pageX + 3, pageY + pageHeight + 1), QPointF(pageX + pageWidth - 2, pageY + pageHeight + 1));
+  painter.setRenderHint(QPainter::Antialiasing);
 }
 
 #include "KivioCanvas.moc"
