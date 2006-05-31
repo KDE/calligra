@@ -1110,12 +1110,12 @@ KarbonView::initActions()
 	// object <-----
 
 	// line style (dashes)
-	m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", actionCollection(), "setLineStyle");
-	connect(m_lineStyleAction, SIGNAL(selectionChanged(int)), this, SLOT(setLineStyle(int)));
+	// TODO: KoLineStyleAction isn't ported yet (needs to be added to kofficeui too).
+	//m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)), actionCollection(), "setLineStyle");
 
 	// line width
 	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
-	/* port
+	/* TODO: port
 new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
 */
 	m_setLineWidth->insertItem( 0.25 );
@@ -1422,8 +1422,8 @@ KarbonView::selectionChanged()
 			//if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_strokeFillPreview )
 			m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
-  		/* TODO: this will crash karbon when starting:
-		m_lineStyleAction->setEnabled( false );*/
+		// TODO: activate the line below when KoLineStyleAction is ported.
+		// m_lineStyleAction->setEnabled( false );
 		m_deleteSelectionAction->setEnabled( false );
 	}
 	emit selectionChange();
