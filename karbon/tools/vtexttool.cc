@@ -62,7 +62,6 @@
 static void
 traceShape( VQPainter* p, int x, int y, int w, int h )
 {
-/* TODO lineto and moveto need porting
 	p->newPath();
 	p->moveTo( QPointF( x + w , y + h ) );
 	p->lineTo( QPointF( x + w / 3, y + h ) );
@@ -74,13 +73,14 @@ traceShape( VQPainter* p, int x, int y, int w, int h )
 	p->lineTo( QPointF( x + ( w / 3 ) * 2, y ) );
 	p->lineTo( QPointF( x + ( w / 3 ) * 2, y + ( h / 3 ) * 2 ) );
 	p->lineTo( QPointF( x , y + ( h / 3 ) * 2 ) );
-	p->lineTo( QPointF( x , y ) );*/
+	p->lineTo( QPointF( x , y ) );
 }
 
 ShadowPreview::ShadowPreview( ShadowWidget* parent )
 		: QWidget( parent ), m_parent( parent )
 {
-	setBackgroundMode( Qt::NoBackground );
+	QPalette p = palette();
+	p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
 	setMinimumSize( 60, 60 );
 
 	connect( this, SIGNAL( changed( int, int, bool ) ), m_parent, SLOT( setShadowValues( int, int, bool ) ) );
