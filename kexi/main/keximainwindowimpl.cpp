@@ -19,7 +19,7 @@
 */
 
 #include "keximainwindowimpl.h"
-
+#include <config-kexi.h>
 #include <unistd.h>
 
 #include <qapplication.h>
