@@ -404,7 +404,7 @@ VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 void
 VCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
-	e->setAccepted( KarbonDrag::canDecode( e ) || KColorMimeData::canDecode( e->mimeData() ) );
+	e->setAccepted( KarbonDrag::canDecode( e->mimeData() ) || KColorMimeData::canDecode( e->mimeData() ) );
 }
 
 void

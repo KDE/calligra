@@ -26,7 +26,6 @@
 #include <q3popupmenu.h>
 #include <q3paintdevicemetrics.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QResizeEvent>
 #include <QPixmap>
 #include <QMouseEvent>
@@ -274,9 +273,9 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		toolController()->setUp( actionCollection(), m_toolbox );
 
 		kDebug() << "Toolbox position: " << element.attribute( "position" ) << "\n";
-	        Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).lower() );
+	        Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).toLower() );
 
-	        /* Port to KDE/Qt 4
+	        /* TODO: Port to KDE/Qt 4
 		
 		mainWindow()->addDockWindow( m_toolbox, dock, false);
 	        mainWindow()->moveDockWindow( m_toolbox, dock, false, 0, 0 );
@@ -395,7 +394,7 @@ KarbonView::dropEvent( QDropEvent *e )
 			else
 				part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
 	}
-	else if( KarbonDrag::decode( e, selection, m_part->document() ) )
+	else if( KarbonDrag::decode( e->mimeData(), selection, m_part->document() ) )
 	{
 		VObject *clipart = selection.first();
 		QPointF p( e->pos() );
@@ -472,7 +471,7 @@ KarbonView::fileImportGraphic()
 	//kDebug(38000) << "in : " << fname.latin1() << endl;
 	//kDebug(38000) << "part()->document()->nativeFormatMimeType().latin1() : " << part()->nativeFormatMimeType() << endl;
 	//kDebug(38000) << "dialog->currentMimeFilter().latin1() : " << dialog->currentMimeFilter().latin1() << endl;
-	if( part()->nativeFormatMimeType() == dialog->currentMimeFilter().latin1() )
+	if( part()->nativeFormatMimeType() == dialog->currentMimeFilter().toLatin1() )
 		part()->mergeNativeFormat( fname );
 	else
 	{
@@ -509,7 +508,7 @@ KarbonView::addSelectionToClipboard() const
 
 	KarbonDrag* kd = new KarbonDrag();
 	kd->setObjectList( part()->document().selection()->objects() );
-	QApplication::clipboard()->setData( kd );
+	QApplication::clipboard()->setMimeData( kd->mimeData() );
 }
 
 void
@@ -518,7 +517,7 @@ KarbonView::editPaste()
 	KarbonDrag kd;
 	VObjectList objects;
 
-	if( !kd.decode( QApplication::clipboard()->data(), objects, part()->document() ) )
+	if( !kd.decode( QApplication::clipboard()->mimeData(), objects, part()->document() ) )
 		return;
 
 	// Paste with a small offset.

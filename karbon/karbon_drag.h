@@ -20,8 +20,8 @@
 #ifndef KARBON_DRAG_H
 #define KARBON_DRAG_H
 
-#include <q3dragobject.h>
-//Added by qt3to4:
+#include <QDrag>
+#include <QMimeData>
 #include <Q3CString>
 
 #include "vgroup.h"
@@ -31,15 +31,15 @@ class VDocument;
 #define NumEncodeFmts 1
 #define NumDecodeFmts 1
 
-class KarbonDrag : public Q3DragObject
+class KarbonDrag : public QDrag
 {
 	Q_OBJECT
 public:
 	KarbonDrag( QWidget* dragSource = 0, const char* name = 0 );
 	const char* format( int i ) const;
 	QByteArray encodedData( const char* mimetype ) const;
-	static bool canDecode( QMimeSource * );
-	static bool decode( QMimeSource* e, VObjectList& sl, VDocument& vdoc );
+	static bool canDecode( const QMimeData * );
+	static bool decode( const QMimeData* e, VObjectList& sl, VDocument& vdoc );
 	void setObjectList( VObjectList l );
 
 private:

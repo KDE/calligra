@@ -29,8 +29,10 @@ Q3CString KarbonDrag::m_encodeFormats[NumEncodeFmts];
 Q3CString KarbonDrag::m_decodeFormats[NumDecodeFmts];
 
 KarbonDrag::KarbonDrag( QWidget *dragSource, const char *name )
- : Q3DragObject( dragSource, name )
+ : QDrag( dragSource )
 {
+	setObjectName(name);
+
 	m_encodeFormats[0] = "application/vnd.kde.karbon";
 	m_decodeFormats[0] = "application/vnd.kde.karbon";
 }
@@ -68,11 +70,11 @@ KarbonDrag::encodedData( const char* mimetype ) const
 }
 
 bool
-KarbonDrag::canDecode( QMimeSource* e)
+KarbonDrag::canDecode(const QMimeData* e)
 {
 	for( int i = 0; i < NumDecodeFmts; i++ )
 	{
-		if( e->provides( m_decodeFormats[i] ) )
+		if( e->hasFormat( m_decodeFormats[i] ) )
 			return true;
 	}
 
@@ -80,12 +82,12 @@ KarbonDrag::canDecode( QMimeSource* e)
 }
 
 bool
-KarbonDrag::decode( QMimeSource* e, VObjectList& sl, VDocument& vdoc )
+KarbonDrag::decode( const QMimeData* e, VObjectList& sl, VDocument& vdoc )
 {
-	if( e->provides( m_decodeFormats[0] ) )
+	if( e->hasFormat( m_decodeFormats[0] ) )
 	{
 		QDomDocument doc( "clip" );
-		QByteArray data = e->encodedData( m_decodeFormats[0] );
+		QByteArray data = e->data( m_decodeFormats[0] );
 		doc.setContent( Q3CString( data, data.size()+1 ) );
 		QDomElement clip = doc.documentElement();
 		// Try to parse the clipboard data

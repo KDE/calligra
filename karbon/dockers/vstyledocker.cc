@@ -73,7 +73,7 @@ ClipartChooser::startDrag()
 
 	objects.append( clipart );
 	kd->setObjectList( objects );
-	kd->dragCopy();
+	kd->start(Qt::CopyAction);
 }
 
 VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )

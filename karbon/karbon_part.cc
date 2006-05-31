@@ -58,10 +58,12 @@
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
 
-KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
-						QObject* parent, const char* name, bool singleViewMode )
-		: KoDocument( parentWidget, parent, singleViewMode )
+KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* parent, const char* name, bool singleViewMode )
+: KoDocument( parentWidget, parent, singleViewMode )
 {
+	Q_UNUSED(widgetName)
+
+	setObjectName(name);
 	setInstance( KarbonFactory::instance(), false );
 	setTemplateType( "karbon_template" );
 	m_bShowStatusBar = true;
@@ -522,14 +524,14 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	//VPainter *p = new VQPainter( painter.device() );
 	p->begin();
 	p->setZoomFactor( zoomFactor );
-	kDebug(38000) << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
-	kDebug(38000) << "painter.worldMatrix().dy() : " << painter.worldMatrix().dy() << endl;
+	kDebug(38000) << "painter.worldMatrix().dx() : " << painter.matrix().dx() << endl;
+	kDebug(38000) << "painter.worldMatrix().dy() : " << painter.matrix().dy() << endl;
 	kDebug(38000) << "rect.x() : "<< rect.x() << endl;
 	kDebug(38000) << "rect.y() : "<< rect.y() << endl;
 	kDebug(38000) << "rect.width() : "<< rect.width() << endl;
 	kDebug(38000) << "rect.height() : "<< rect.height() << endl;
 	r = document().boundingBox();
-	QMatrix mat = painter.worldMatrix();
+	QMatrix mat = painter.matrix();
 	mat.scale( 1, -1 );
 	mat.translate( 0, -r.height() * zoomFactor );
 	p->setMatrix( mat );
@@ -574,17 +576,17 @@ KarbonPart::initConfig()
 	if( config->hasGroup( "Interface" ) )
 	{
 		config->setGroup( "Interface" );
-		setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
-		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
-		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
-		setBackupFile( config->readNumEntry( "BackupFile", true ) );
-		m_doc.saveAsPath( config->readBoolEntry( "SaveAsPath", true ) );
+		setAutoSave( config->readEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
+		m_maxRecentFiles = config->readEntry( "NbRecentFile", 10 );
+		setShowStatusBar( config->readEntry( "ShowStatusBar" , true ) );
+		setBackupFile( config->readEntry( "BackupFile", true ) );
+		m_doc.saveAsPath( config->readEntry( "SaveAsPath", true ) );
 	}
 	int undos = 30;
 	if( config->hasGroup( "Misc" ) )
 	{
 		config->setGroup( "Misc" );
-		undos = config->readNumEntry( "UndoRedo", -1 );
+		undos = config->readEntry( "UndoRedo", -1 );
 		QString defaultUnit = "cm";
 
 		if( KGlobal::locale()->measureSystem() == KLocale::Imperial )
