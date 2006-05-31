@@ -21,7 +21,7 @@
 #define __SHADOWEFFECTPLUGIN_H__
 
 #include <kparts/plugin.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <commands/vcommand.h>
 
 class KarbonView;
@@ -44,7 +44,7 @@ private:
 
 class KIntNumInput;
 
-class VShadowEffectDlg : public KDialogBase
+class VShadowEffectDlg : public KDialog
 {
 	Q_OBJECT
 

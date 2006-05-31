@@ -35,11 +35,11 @@ ImageToolPlugin::ImageToolPlugin(QObject *parent, const QStringList &) : KParts:
 {
 	setInstance(ImageToolPluginFactory::instance());
 
-	kDebug() << "VImageToolPlugin. Class: "
+	/*kDebug() << "VImageToolPlugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()
-		<< "\n";
+		<< "\n";*/
 
 	if ( parent->inherits("KarbonFactory") )
 	{

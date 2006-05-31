@@ -21,7 +21,7 @@
 #define __ROUNDCORNERSPLUGIN_H__
 
 #include <kparts/plugin.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <commands/vreplacingcmd.h>
 #include <koffice_export.h>
 
@@ -44,7 +44,7 @@ private:
 
 class KDoubleNumInput;
 
-class VRoundCornersDlg : public KDialogBase
+class VRoundCornersDlg : public KDialog
 {
 	Q_OBJECT
 

@@ -35,9 +35,8 @@ K_EXPORT_COMPONENT_FACTORY( karbon_roundcornersplugin, VRoundCornersPluginFactor
 
 VRoundCornersPlugin::VRoundCornersPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
-	new KAction(
-		i18n( "&Round Corners..." ), "14_roundcorners", 0, this,
-		SLOT( slotRoundCorners() ), actionCollection(), "path_round_corners" );
+	KAction *actionRoundCorners = new KAction(KIcon("14_roundcorners"), i18n("&Round Corners..."), actionCollection(), "path_round_corners");
+	connect(actionRoundCorners, SIGNAL(triggered()), this, SLOT(slotRoundCorners()));
 
 	m_roundCornersDlg = new VRoundCornersDlg();
 	m_roundCornersDlg->setRadius( 10.0 );
@@ -57,8 +56,11 @@ VRoundCornersPlugin::slotRoundCorners()
 
 
 VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true,  i18n( "Polygonize" ), Ok | Cancel  )
+	: KDialog( parent, i18n( "Polygonize" ), KDialog::Ok | KDialog::Cancel  )
 {
+	setObjectName(name);
+	setModal(true);
+
 	// add input:
 	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
 

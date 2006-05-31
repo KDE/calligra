@@ -37,9 +37,8 @@ K_EXPORT_COMPONENT_FACTORY( karbon_flattenpathplugin, FlattenPathPluginFactory( 
 FlattenPathPlugin::FlattenPathPlugin( KarbonView *parent, const QStringList & )
 : Plugin( parent/*, name*/ )
 {
-	new KAction(
-		i18n( "&Flatten Path..." ), "14_flatten", 0, this,
-		SLOT( slotFlattenPath() ), actionCollection(), "path_flatten" );
+	KAction *actionFlattenPath = new KAction(KIcon("14_flatten"), i18n("&Flatten Path..."), actionCollection(), "path_flatten");
+	connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
 
 	m_flattenPathDlg = new VFlattenDlg();
 	m_flattenPathDlg->setFlatness( 0.2 );
@@ -54,8 +53,11 @@ FlattenPathPlugin::slotFlattenPath()
 }
 
 VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true,  i18n( "Flatten Path" ), Ok | Cancel )
+	: KDialog( parent,  i18n( "Flatten Path" ), KDialog::Ok | KDialog::Cancel )
 {
+	setObjectName(name);
+	setModal(true);
+
 	// add input fields on the left:
 	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
 

@@ -21,7 +21,7 @@
 #define __FLATTENPATHPLUGIN_H__
 
 #include <kparts/plugin.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KarbonView;
 class VFlattenDlg;
@@ -42,7 +42,7 @@ private:
 
 class KDoubleNumInput;
 
-class VFlattenDlg : public KDialogBase
+class VFlattenDlg : public KDialog
 {
 	Q_OBJECT
 

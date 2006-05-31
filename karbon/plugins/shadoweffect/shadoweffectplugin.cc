@@ -41,9 +41,8 @@ K_EXPORT_COMPONENT_FACTORY( karbon_shadoweffectplugin, ShadowEffectPluginFactory
 ShadowEffectPlugin::ShadowEffectPlugin( KarbonView *parent, const QStringList & )
 : Plugin( parent )
 {
-	new KAction(
-		i18n( "&Shadow Effect..." ), "shadowRB", 0, this,
-		SLOT( slotShadowEffect() ), actionCollection(), "object_shadow" );
+	KAction *actionShadowEffect = new KAction(KIcon("shadowRB"), i18n("&Shadow Effect..."), actionCollection(), "object_shadow");
+	connect(actionShadowEffect, SIGNAL(triggered()), this, SLOT(slotShadowEffect()));
 
 	m_shadowEffectDlg = new VShadowEffectDlg();
 	m_shadowEffectDlg->setDistance( 2 );
@@ -59,8 +58,11 @@ ShadowEffectPlugin::slotShadowEffect()
 }
 
 VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true,  i18n( "Create Shadow Effect" ), Ok | Cancel )
+	: KDialog( parent, i18n( "Create Shadow Effect" ), KDialog::Ok | KDialog::Cancel )
 {
+	setObjectName(name);
+	setModal(true);
+
 	// add input fields on the left:
 	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
 

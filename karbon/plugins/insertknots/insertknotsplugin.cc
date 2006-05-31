@@ -35,9 +35,8 @@ K_EXPORT_COMPONENT_FACTORY( karbon_insertknotsplugin, InsertKnotsPluginFactory( 
 
 InsertKnotsPlugin::InsertKnotsPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
-	new KAction(
-		i18n( "&Insert Knots..." ), "14_insertknots", 0, this,
-		SLOT( slotInsertKnots() ), actionCollection(), "path_insert_knots" );
+	KAction *actionInsertKnots = new KAction(KIcon("14_insertknots"), i18n("&Insert Knots..."), actionCollection(), "path_insert_knots");
+	connect(actionInsertKnots, SIGNAL(triggered()), this, SLOT(slotInsertKnots()));
 
 	m_insertKnotsDlg = new VInsertKnotsDlg();
 }
@@ -51,10 +50,13 @@ InsertKnotsPlugin::slotInsertKnots()
 }
 
 VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true,  i18n( "Insert Knots" ), Ok | Cancel )
+	: KDialog( parent, i18n( "Insert Knots" ), KDialog::Ok | KDialog::Cancel )
 {
+	setObjectName(name);
+	setModal(true);
+
 	// add input fields:
-/* TODO needs porting: parent of QGroupBox
+/* TODO needs porting: 
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Knots:" ), group );

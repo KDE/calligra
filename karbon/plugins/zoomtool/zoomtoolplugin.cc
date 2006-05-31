@@ -35,11 +35,11 @@ ZoomToolPlugin::ZoomToolPlugin(QObject *parent, const QStringList &)
 {
 	setInstance(ZoomToolPluginFactory::instance());
 
-	kDebug() << "Zoom tool plugin. Class: "
+	/*kDebug() << "Zoom tool plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()
-		<< "\n";
+		<< "\n";*/
 
 	if ( parent->inherits("KarbonFactory") )
 	{

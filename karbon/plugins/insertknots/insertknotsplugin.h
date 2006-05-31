@@ -21,7 +21,7 @@
 #define __INSERTKNOTSPLUGIN_H__
 
 #include <kparts/plugin.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <commands/vreplacingcmd.h>
 
 class VInsertKnotsDlg;
@@ -43,7 +43,7 @@ private:
 
 class KIntSpinBox;
 
-class VInsertKnotsDlg : public KDialogBase
+class VInsertKnotsDlg : public KDialog
 {
 	Q_OBJECT
 
