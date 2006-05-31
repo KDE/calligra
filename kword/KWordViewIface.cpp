@@ -147,7 +147,7 @@ double KWordViewIface::zoom()
 void KWordViewIface::setZoom( int zoom)
 {
     view->showZoom( zoom ); // share the same zoom
-    view->setZoom( zoom,true);
+    view->setZoom( zoom );
     view->kWordDocument()->updateZoomRuler();
 }
 

@@ -27,7 +27,7 @@
 
 #include <KoView.h>
 #include <KoUnit.h>
-#include <KoZoomMode.h>
+#include <KoZoomHandler.h>
 
 #include <Q3ValueList>
 #include <QMenu>
@@ -114,7 +114,7 @@ public:
     void showRulerIndent( double leftMargin, double firstLine, double rightMargin, bool rtl );
     void showZoom( int zoom ); // show a zoom value in the combo
     void showZoom( const QString& zoom ); // show a zoom value in the combo
-    void setZoom( int zoom, bool updateViews ); // change the zoom value
+    void setZoom( int zoom ); /// < change the zoom value
 
     bool viewFrameBorders() const { return m_viewFrameBorders; }
     void setViewFrameBorders(bool b);
@@ -223,6 +223,10 @@ public:
     void pasteData( const QMimeData* data, bool drop );
 
     KWFrameViewManager* frameViewManager() const;
+
+    KoViewConverter* viewConverter() {
+        return &m_zoomHandler;
+    }
 
 public slots:
     void fileStatistics();
@@ -805,6 +809,8 @@ private: // variables
     struct {
         unsigned int columns, rows;
     } m_tableSplit;
+
+    KoZoomHandler m_zoomHandler;
 };
 
 #endif

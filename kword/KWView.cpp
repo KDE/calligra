@@ -240,16 +240,6 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_tableSplit.columns = 1;
     m_tableSplit.rows = 1;
 
-    // Default values.
-    m_zoomViewModeNormal.m_zoom = m_doc->zoom();
-    m_zoomViewModeNormal.m_zoomMode = m_doc->zoomMode();
-    m_zoomViewModePreview.m_zoom = 33; // TODO: bad to leave hardcoded...
-    m_zoomViewModePreview.m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
-
-    m_viewFrameBorders = m_doc->viewFrameBorders();
-    KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
-    //m_viewTableGrid = true;
-
     setInstance( KWFactory::instance() );
     if ( !m_doc->isReadWrite() )
         setXMLFile( "kword_readonly.rc" );
@@ -301,6 +291,18 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
         m_sbUnitLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         addStatusBarItem( m_sbUnitLabel, 0 );
     }
+
+    // Default values.
+    m_zoomViewModeNormal.m_zoom = m_doc->zoom();
+    m_zoomViewModeNormal.m_zoomMode = m_doc->zoomMode();
+    m_zoomViewModePreview.m_zoom = 33; // TODO: bad to leave hardcoded...
+    m_zoomViewModePreview.m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
+
+    m_viewFrameBorders = m_doc->viewFrameBorders();
+    m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY());
+    //m_viewTableGrid = true;
+
+    setZoom( 100 ); // initial value
 
     connect( m_doc, SIGNAL( modified( bool ) ),
              this, SLOT( documentModified( bool )) );
@@ -387,7 +389,7 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     //in konqueror we can't change zoom -- ### TODO ?
     if(!m_doc->isReadWrite())
     {
-        setZoom( 100, true );
+        setZoom( 100 );
         slotUpdateRuler();
         initGui();
     }
@@ -1807,8 +1809,7 @@ void KWView::print( KPrinter &prt )
     int dpiY = doZoom ? 300 : KoGlobal::dpiY();
     ///////// Changing the dpiX/dpiY is very wrong nowadays. This has no effect on the font size
     ///////// that we give Qt, anymore, so it leads to minuscule fonts in the printout => doZoom==false.
-    m_doc->setZoomAndResolution( 100, dpiX, dpiY );
-    m_doc->newZoomAndResolution( false, true /* for printing*/ );
+    m_zoomHandler.setZoomAndResolution( 100, dpiX, dpiY );
     //kDebug() << "KWView::print metrics: " << metrics.logicalDpiX() << "," << metrics.logicalDpiY() << endl;
     //kDebug() << "x11AppDPI: " << KoGlobal::dpiX() << "," << KoGlobal::dpiY() << endl;
 
@@ -1913,8 +1914,7 @@ void KWView::print( KPrinter &prt )
             fit.current()->preparePrinting( 0L, 0L, processedParags );
 #endif
 
-    m_doc->setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
-    m_doc->newZoomAndResolution( false, false );
+    m_zoomHandler.setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     kDebug() << "KWView::print zoom&res reset" << endl;
 
     m_gui->canvasWidget()->setUpdatesEnabled(true);
@@ -2919,15 +2919,15 @@ void KWView::viewTextMode()
             switch(m_zoomViewModeNormal.m_zoomMode)
             {
                 case KoZoomMode::ZOOM_WIDTH:
-                    m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+                    m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
                     QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
                     break;
                 case KoZoomMode::ZOOM_PAGE: // no break
                     m_zoomViewModeNormal.m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
                 case KoZoomMode::ZOOM_CONSTANT:
-                    m_doc->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+                    m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_CONSTANT);
                     showZoom( m_zoomViewModeNormal.m_zoom );
-                    setZoom( m_zoomViewModeNormal.m_zoom, false );
+                    setZoom( m_zoomViewModeNormal.m_zoom );
                     break;
             }
             m_doc->switchViewMode( "ModeText" );
@@ -2955,17 +2955,17 @@ void KWView::viewPageMode()
         switch(m_zoomViewModeNormal.m_zoomMode)
         {
             case KoZoomMode::ZOOM_WIDTH:
-                m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+                m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
                 QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
                 break;
             case KoZoomMode::ZOOM_PAGE:
-                m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
+                m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_PAGE);
                 QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
                 break;
             case KoZoomMode::ZOOM_CONSTANT:
-                m_doc->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+                m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_CONSTANT);
                 showZoom( m_zoomViewModeNormal.m_zoom );
-                setZoom( m_zoomViewModeNormal.m_zoom, false );
+                setZoom( m_zoomViewModeNormal.m_zoom );
                 break;
         }
         m_doc->switchViewMode( "ModeNormal" );
@@ -2983,17 +2983,17 @@ void KWView::viewPreviewMode()
         switch(m_zoomViewModePreview.m_zoomMode)
         {
             case KoZoomMode::ZOOM_WIDTH:
-                m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+                m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
                 QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
                 break;
             case KoZoomMode::ZOOM_PAGE:
-                m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
+                m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_PAGE);
                 QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
                 break;
             case KoZoomMode::ZOOM_CONSTANT:
-                m_doc->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+                m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_CONSTANT);
                 showZoom( m_zoomViewModePreview.m_zoom );
-                setZoom( m_zoomViewModePreview.m_zoom, false );
+                setZoom( m_zoomViewModePreview.m_zoom );
                 break;
         }
         m_doc->switchViewMode( "ModePreview" );
@@ -3202,12 +3202,11 @@ void KWView::updateZoom( ) {
 void KWView::viewZoom( const QString &s )
 {
     bool ok=false;
-    KWCanvas * canvas = m_gui->canvasWidget();
     int zoom = 0;
 
     if ( s == KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH) )
     {
-        m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+        m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
         zoom = qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_currentPage->width() ) ) - 1;
 
         if(zoom != m_doc->zoom() && !m_gui->m_canvasView->verticalScrollBar() ||
@@ -3219,7 +3218,7 @@ void KWView::viewZoom( const QString &s )
     }
     else if ( s == KoZoomMode::toString(KoZoomMode::ZOOM_PAGE) )
     {
-        m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
+        m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_PAGE);
         double height = m_doc->resolutionY() * m_currentPage->height();
         double width = m_doc->resolutionX() * m_currentPage->height();
         zoom = qMin( qRound( static_cast<double>(m_gui->visibleHeight() * 100 ) / height ),
@@ -3229,7 +3228,7 @@ void KWView::viewZoom( const QString &s )
     }
     else
     {
-        m_doc->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+        m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_CONSTANT);
         QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
         regexp.search(s);
         zoom=regexp.cap(1).toInt(&ok);
@@ -3248,7 +3247,7 @@ void KWView::viewZoom( const QString &s )
     //apply zoom if zoom!=m_doc->zoom()
     if( zoom != m_doc->zoom() )
     {
-        setZoom( zoom, true );
+        setZoom( zoom );
 
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
@@ -3259,19 +3258,21 @@ void KWView::viewZoom( const QString &s )
 
 }
 
-void KWView::setZoom( int zoom, bool updateViews )
+void KWView::setZoom( int zoom )
 {
-    m_doc->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
-    m_doc->newZoomAndResolution( updateViews, false );
-    m_doc->updateZoomRuler();
+    m_zoomHandler.setZoom( zoom );
+    m_doc->setZoom( zoom ); // for persistency reasons
+    getGUI()->getHorzRuler()->setZoom( m_zoomHandler.zoomedResolutionX() );
+    getGUI()->getVertRuler()->setZoom( m_zoomHandler.zoomedResolutionY() );
 
     if ( statusBar() )
         m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
 
     // Also set the zoom in KoView (for embedded views)
     kDebug() << "KWView::setZoom " << zoom << " setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
-    KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ );
     m_gui->canvasWidget()->updateSize();
+
+    update(); // schedule repaint
 }
 
 void KWView::insertPicture()
@@ -5400,7 +5401,7 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
         if (m_doc->isEmbedded() ) {
             // Get zoom level from KoView, i.e. from the parent view
             const int zoom = qRound( KoView::zoom() * 100 );
-            setZoom( zoom, true );
+            setZoom( zoom );
             showZoom( zoom );
         }
     }
@@ -7344,7 +7345,7 @@ void KWView::addPersonalExpression()
         type.appendChild( typeName );
         typeName.appendChild( doc.createTextNode(itPersonalExp.key()  ) );
         list=itPersonalExp.data();
-        for( uint i=0;i<list.count();i++ )
+        for( int i=0;i<list.count();i++ )
         {
             QDomElement expr = doc.createElement( "Expression" );
             type.appendChild( expr );

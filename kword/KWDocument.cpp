@@ -5313,16 +5313,16 @@ void KWDocument::updateGridButton()
 
 }
 
-unsigned int KWDocument::paperHeight(int pageNum) const {
-    return static_cast<unsigned int>(zoomItYOld( pageManager()->pageLayout(pageNum).ptHeight ));
+int KWDocument::paperHeight(int pageNum) const {
+    return pageManager()->pageLayout(pageNum).ptHeight;
 }
 
-unsigned int KWDocument::paperWidth(int pageNum) const {
-    return static_cast<unsigned int>(zoomItXOld( pageManager()->pageLayout(pageNum).ptWidth ));
+int KWDocument::paperWidth(int pageNum) const {
+    return pageManager()->pageLayout(pageNum).ptWidth;
 }
 
-unsigned int KWDocument::pageTop( int pgNum ) const {
-    return zoomItYOld( pageManager()->topOfPage( pgNum ) );
+int KWDocument::pageTop( int pgNum ) const {
+    return pageManager()->topOfPage( pgNum );
 }
 
 int KWDocument::pageCount() const {

@@ -249,12 +249,12 @@ public:
     void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
-    /// return the height of one page in pixels in the current zoom level (normal coord system)
-    unsigned int paperHeight(int pageNum) const;
-    /// return the width of one page in pixels in the current zoom level (normal coord system)
-    unsigned int paperWidth(int pageNum) const;
-    /// Top of the page number pgNum, in pixels (in the normal coord system)
-    unsigned int pageTop( int pgNum ) const;
+    /// return the height of one page in pt
+    int paperHeight(int pageNum) const;
+    /// return the width of one page in pt
+    int paperWidth(int pageNum) const;
+    /// Top of the page number pgNum, in pt
+    int pageTop( int pgNum ) const;
     double ptColumnWidth() const;
     double ptColumnSpacing() const { return m_pageColumns.ptColumnSpacing; }
     double ptFootnoteBodySpacing() const { return m_pageHeaderFooter.ptFootNoteBodySpacing; }

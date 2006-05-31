@@ -85,13 +85,6 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *d, KWGUI *lGui)
     m_frameInline = false;
     m_overwriteMode = false;
 
-
-// Test; so I can actually see something ;)
-KoRectangleShape *r = new KoRectangleShape();
-r->setBackground(QBrush(Qt::red));
-r->setPosition(QPointF(50, 50));
-m_shapeManager->add(r);
-
     //used by insert picture dialogbox
     m_picture.pictureInline = false;
     m_picture.keepRatio = true;
@@ -230,6 +223,7 @@ void KWCanvas::viewportResizeEvent( QResizeEvent * )
 
 void KWCanvas::print( QPainter *painter, KPrinter *printer )
 {
+#if 0
     // Prevent cursor drawing and editing
     if ( m_currentFrameSetEdit )
         m_currentFrameSetEdit->focusOutEvent();
@@ -270,6 +264,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         m_currentFrameSetEdit->focusInEvent();
     m_printing = false;
     delete viewMode;
+#endif
 }
 
 /*
@@ -380,11 +375,13 @@ void KWCanvas::switchViewMode( const QString& newViewMode )
 
 void KWCanvas::mpCreate( const QPoint& normalPoint, bool noGrid )
 {
+#if 0
     KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
     if ( m_doc->snapToGrid() && !noGrid )
         applyGrid( docPoint );
     m_insRect.setCoords( docPoint.x(), docPoint.y(), 0, 0 );
     m_deleteMovingRect = false;
+#endif
 }
 
 void KWCanvas::mpCreatePixmap( const QPoint& normalPoint, bool noGrid  )
@@ -686,6 +683,8 @@ void KWCanvas::applyGrid( KoPoint &p )
 
 void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
 {
+// TODO reenable this after converting to QPointF and using the zoomHandler
+#if 0
     // Grid-positioning makes no sense in text view mode
     if ( !m_viewMode->hasFrames() )
         return;
@@ -727,6 +726,7 @@ void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
     }
 
     p.setPen( oldPen );
+#endif
 }
 
 void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
@@ -794,8 +794,10 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
 
 void KWCanvas::drawMovingRect( QPainter & p )
 {
+#if 0
     p.setPen( Qt::black );
     p.drawRect( m_viewMode->normalToView( m_doc->zoomRectOld( m_insRect ) ) );
+#endif
 }
 
 void KWCanvas::deleteMovingRect()
@@ -2088,7 +2090,7 @@ void KWCanvas::updateCanvas(const QRectF& rc) {
 }
 
 KoViewConverter *KWCanvas::viewConverter() {
-    return static_cast<KoViewConverter*> (m_doc);
+    return m_gui->getView()->viewConverter();
 }
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e) {
@@ -2121,7 +2123,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect(ev->rect());
 
-    m_shapeManager->paint( painter, *m_doc, false );
+    m_shapeManager->paint( painter, *(viewConverter()), false );
     m_tool->paint( painter, *m_doc );
 
     painter.end();

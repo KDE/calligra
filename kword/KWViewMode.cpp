@@ -185,8 +185,10 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc, 
 
 QSize KWViewModeNormal::contentsSize()
 {
-    return QSize( m_doc->paperWidth(m_doc->startPage()),
-                  m_doc->zoomItYOld( m_doc->pageManager()->bottomOfPage(m_doc->lastPage()) ) );
+    QPointF size(m_doc->paperWidth(m_doc->startPage()),
+        m_doc->pageManager()->bottomOfPage(m_doc->lastPage()));
+    size = m_canvas->viewConverter()->normalToView(size);
+    return QSize(qRound(size.x()), qRound(size.y()));
 }
 
 QRect KWViewModeNormal::viewPageRect( int pgNum )
@@ -350,8 +352,11 @@ QSize KWViewModePreview::contentsSize()
     int pages = m_doc->pageCount();
     int rows = (pages-1) / m_pagesPerRow + 1;
     int hPages = rows > 1 ? m_pagesPerRow : pages;
-    return QSize( m_spacing + hPages * ( m_doc->paperWidth(m_doc->startPage()) + m_spacing ),
-                  m_spacing + rows * ( m_doc->paperHeight(m_doc->startPage()) + m_spacing ) /* bottom of last row */ );
+    QPointF page(m_doc->paperWidth(m_doc->startPage()), m_doc->paperHeight(m_doc->startPage()));
+    page = m_canvas->viewConverter()->normalToView(page);
+    QSize zoomedPage(qRound(page.x()), qRound(page.y()));
+    return QSize( m_spacing + hPages * ( zoomedPage.width() + m_spacing ),
+                  m_spacing + rows * ( zoomedPage.height() + m_spacing ) /* bottom of last row */ );
 }
 
 QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
