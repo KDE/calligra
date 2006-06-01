@@ -22,8 +22,6 @@
 #define __SVGEXPORT_H__
 
 #include <KoFilter.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class SvgExport : public KoFilter
 {

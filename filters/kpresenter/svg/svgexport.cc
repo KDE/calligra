@@ -20,8 +20,6 @@
 
 #include <q3picture.h>
 #include <QPainter>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kmessagebox.h>
 

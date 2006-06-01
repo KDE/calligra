@@ -27,8 +27,6 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QDir>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kzip.h>
 #include <karchive.h>

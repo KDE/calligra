@@ -28,8 +28,6 @@
 #include <kdebug.h>
 #include <q3sortedlist.h>
 #include <QColor>
-//Added by qt3to4:
-#include <Q3CString>
 
 typedef KGenericFactory<KprKword> KprKwordFactory;
 K_EXPORT_COMPONENT_FACTORY( libkprkword, KprKwordFactory( "kofficefilters" ) )
