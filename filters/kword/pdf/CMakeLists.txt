@@ -1,5 +1,5 @@
 
-include_directories(${CMAKE_SOURCE_DIR}/filters/kword/pdf/xpdf/xpdf ${CMAKE_SOURCE_DIR}/filters/kword/pdf/xpdf/goo)
+include_directories(${CMAKE_SOURCE_DIR}/filters/kword/pdf/xpdf/xpdf ${CMAKE_SOURCE_DIR}/filters/kword/pdf/xpdf/goo ${CMAKE_BINARY_DIR}/filters/)
 
 set(libxpdf_SRCS
 	${CMAKE_SOURCE_DIR}/filters/kword/pdf/xpdf/xpdf/Array.cc 

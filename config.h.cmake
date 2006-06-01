@@ -7,21 +7,6 @@
    */
 #cmakedefine HAVE_DIRENT_H 1
 
-/* Define to 1 if you have the `fabsl' function. */
-/* #undef HAVE_FABSL */
-
-/* Define to 1 if you have the `fseek64' function. */
-/* #undef HAVE_FSEEK64 */
-
-/* Define to 1 if fseeko (and presumably ftello) exists and is declared. */
-#define HAVE_FSEEKO 1
-
-/* Define to 1 if you have the `ftell64' function. */
-/* #undef HAVE_FTELL64 */
-
-/* Define to 1 if you have the <ieeefp.h> header file. */
-#cmakedefine HAVE_IEEEFP_H 1
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
 

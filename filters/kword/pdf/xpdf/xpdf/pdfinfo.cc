@@ -29,6 +29,7 @@
 #include "UnicodeMap.h"
 #include "Error.h"
 #include "config.h"
+#include <config-filters.h>
 
 static void printInfoString(Dict *infoDict, char *key, char *text,
 			    UnicodeMap *uMap);
