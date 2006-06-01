@@ -46,9 +46,21 @@
 #include <klocale.h>
 #include <kcolormimedata.h>
 
+// Uncomment the #define below to print lots of debug information about the view.
+// Or use the -DKARBON_DEBUG_CANVAS flag when using cmake, so the code stays the same.
+#define KARBON_DEBUG_CANVAS
+
+#ifdef KARBON_DEBUG_CANVAS
+#define debugCanvas(text) kDebug() << "KARBON_DEBUG_CANVAS: " << text << endl
+#else
+#define debugCanvas(text)
+#endif
+
 int
 VCanvas::pageOffsetX() const
 {
+	debugCanvas("VCanvas::pageOffsetX()");
+
 	double zoomedWidth = m_part->document().width() * m_view->zoom();
 	if( contentsWidth() < visibleWidth() )
 		return int( 0.5 * ( visibleWidth() - zoomedWidth ) );
@@ -59,6 +71,8 @@ VCanvas::pageOffsetX() const
 int
 VCanvas::pageOffsetY() const
 {
+	debugCanvas("VCanvas::pageOffsetY()");
+
 	double zoomedHeight = m_part->document().height() * m_view->zoom();
 	if( contentsHeight() < visibleHeight() )
 		return int( 0.5 * ( visibleHeight() - zoomedHeight ) );
@@ -68,6 +82,8 @@ VCanvas::pageOffsetY() const
 
 QPointF VCanvas::snapToGrid( const QPointF &point )
 {
+	debugCanvas(QString("VCanvas::snapToGrid(QPointF(%1, %2))").arg(point.x()).arg(point.y()));
+
 	if( !m_part->document().grid().isSnap )
 		return point;
 
@@ -106,6 +122,8 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
     : Q3ScrollView( parent, "canvas", Qt::WStaticContents/*WNorthWestGravity*/ | Qt::WResizeNoErase  |
 	  Qt::WNoAutoErase ), m_part( part ), m_view( view )
 {
+	debugCanvas("VCanvas::VCanvas(...)");
+
 	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
 	viewport()->setFocusPolicy( Qt::StrongFocus );
 
@@ -130,6 +148,8 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
 
 VCanvas::~VCanvas()
 {
+	debugCanvas("VCanvas::~VCanvas()");
+
 	delete m_pixmap;
 	m_view = 0L;
 	m_part = 0L;
@@ -138,6 +158,8 @@ VCanvas::~VCanvas()
 void
 VCanvas::setPos( const QPointF& p )
 {
+	debugCanvas(QString("VCanvas::setPos(QPointF(%1, %2))").arg(p.x()).arg(p.y()));
+
 	QPointF p2 = toViewport( p );
 	QCursor::setPos( mapToGlobal( p2.toPoint() ) );
 }
@@ -145,7 +167,10 @@ VCanvas::setPos( const QPointF& p )
 bool
 VCanvas::eventFilter( QObject* object, QEvent* event )
 {
-	Q3ScrollView::eventFilter( object, event );
+	debugCanvas("VCanvas::eventFilter(...)");
+
+	// TODO: the line below causes massive redraws.
+	// Q3ScrollView::eventFilter( object, event );
 
 	if( event->type() == QEvent::ShortcutOverride || event->type() == QEvent::Shortcut )
 		return Q3ScrollView::eventFilter( object, event );
@@ -169,11 +194,14 @@ VCanvas::eventFilter( QObject* object, QEvent* event )
 void
 VCanvas::focusInEvent( QFocusEvent * )
 {
+	debugCanvas("VCanvas::focusInEvent()");
 }
 
 QPointF
 VCanvas::toViewport( const QPointF &p ) const
 {
+	debugCanvas(QString("VCanvas::toViewport(QPointF(%1, %2))").arg(p.x()).arg(p.y()));
+
 	QPointF p2 = p;
 	p2.setX( ( p.x() * m_view->zoom() ) - contentsX() + pageOffsetX() );
 	if( contentsHeight() > height() )
@@ -186,6 +214,8 @@ VCanvas::toViewport( const QPointF &p ) const
 QPointF
 VCanvas::toContents( const QPointF &p ) const
 {
+	debugCanvas(QString("VCanvas::toContents(QPointF(%1, %2))").arg(p.x()).arg(p.y()));
+
 	QPointF p2 = p;
 	p2.setX( ( p.x() + contentsX() - pageOffsetX() ) / m_view->zoom() );
 	if( contentsHeight() > height() )
@@ -198,6 +228,8 @@ VCanvas::toContents( const QPointF &p ) const
 QRectF
 VCanvas::boundingBox() const
 {
+	debugCanvas("VCanvas::boundingBox()");
+
 	QPointF p1( 0, 0 );
 	QPointF p2( width(), height() );
 	if( !m_view->documentDeleted() )
@@ -211,6 +243,8 @@ VCanvas::boundingBox() const
 void
 VCanvas::setYMirroring( VPainter *p )
 {
+	debugCanvas("VCanvas::setYMirroring()");
+
 	QMatrix mat;
 
 	mat.scale( 1, -1 );
@@ -227,6 +261,8 @@ VCanvas::setYMirroring( VPainter *p )
 void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
+	debugCanvas("VCanvas::viewportPaintEvent()");
+
 	QRectF rect = e->rect();
 	
 	setYMirroring( m_view->painterFactory()->editpainter() );
@@ -280,6 +316,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 void
 VCanvas::setViewport( double centerX, double centerY )
 {
+	debugCanvas(QString("VCanvas::setViewport(%1, %2)").arg(centerX).arg(centerY));
+
 	setContentsPos( int( centerX * contentsWidth() - 0.5 * visibleWidth() ),
 					int( centerY * contentsHeight() - 0.5 * visibleHeight() ) );
 }
@@ -287,6 +325,8 @@ VCanvas::setViewport( double centerX, double centerY )
 void
 VCanvas::setViewportRect( const QRectF &r )
 {
+	debugCanvas(QString("VCanvas::setViewportRect(QRectF(%1, %2, %3, %4))").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height()));
+
 	viewport()->setUpdatesEnabled( false );
 	double zoomX = m_view->zoom() * ( ( visibleWidth() / m_view->zoom() ) / r.width() );
 	double zoomY = m_view->zoom() * ( ( visibleHeight() / m_view->zoom() ) / r.height() );
@@ -306,12 +346,16 @@ void
 VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 	int clipw, int cliph  )
 {
+	debugCanvas("VCanvas::drawContents(...)");
+
 	drawDocument( painter, QRectF( clipx, clipy, clipw, cliph ) );
 }
 
 void
 VCanvas::drawDocument( QPainter* /*painter*/, const QRectF&, bool drawVObjects )
 {
+	debugCanvas(QString("VCanvas::drawDocument(painter, QRectF, drawVObjects = %1").arg(drawVObjects));
+
 	setYMirroring( m_view->painterFactory()->editpainter() );
 
 	VPainter* p = m_view->painterFactory()->painter();
@@ -351,6 +395,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRectF&, bool drawVObjects )
 void
 VCanvas::repaintAll( bool drawVObjects )
 {
+	debugCanvas("VCanvas::repaintAll(...)");
+
 	drawDocument( 0, QRectF( 0, 0, width(), height() ), drawVObjects );
 }
 
@@ -358,12 +404,16 @@ VCanvas::repaintAll( bool drawVObjects )
 void
 VCanvas::repaintAll( const QRectF &r )
 {
+	debugCanvas("VCanvas::repaintAll(QRectF)");
+
 	drawDocument( 0, r );
 }
 
 void
 VCanvas::resizeEvent( QResizeEvent* event )
 {
+	debugCanvas("VCanvas::resizeEvent()");
+
 	double centerX = double( contentsX() + 0.5 * visibleWidth() ) / double( contentsWidth() );
 	double centerY = double( contentsY() + 0.5 * visibleHeight() ) / double( contentsHeight() );
 
@@ -398,18 +448,24 @@ VPainterFactory::painter (this=0x6100680073002f) at /home/kde4dev/kde/src/koffic
 void
 VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 {
+	debugCanvas("VCanvas::slotContentsMoving()");
+
 	emit viewportChanged();
 }
 
 void
 VCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
+	debugCanvas("VCanvas::dragEnterEvent()");
+
 	e->setAccepted( KarbonDrag::canDecode( e->mimeData() ) || KColorMimeData::canDecode( e->mimeData() ) );
 }
 
 void
 VCanvas::dropEvent( QDropEvent *e )
 {
+	debugCanvas("VCanvas::dropEvent()");
+
 	m_view->dropEvent( e );
 }
 
