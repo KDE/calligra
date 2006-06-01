@@ -23,19 +23,22 @@
 #include <KoView.h>
 
 class KivioCanvas;
-class QScrollBar;
+class KivioDocument;
 
 class KivioView : public KoView
 {
   Q_OBJECT
 
   public:
-    KivioView(KoDocument* document, QWidget* parent, const char* name);
+    KivioView(KivioDocument* document, QWidget* parent, const char* name);
     ~KivioView();
 
     /// Returns the canvas widget.
     KivioCanvas* canvasWidget() const;
     virtual QWidget* canvas() const;
+
+    /// Returns the document
+    KivioDocument* document() const;
 
     virtual void updateReadWrite(bool readwrite);
 
@@ -44,9 +47,8 @@ class KivioView : public KoView
     void initGUI();
 
   private:
+    KivioDocument* m_document;
     KivioCanvas* m_canvas;
-    QScrollBar* m_scrollBarX;
-    QScrollBar* m_scrollBarY;
 };
 
 #endif

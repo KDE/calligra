@@ -21,20 +21,26 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPalette>
+#include <QBrush>
 
 #include <KoZoomHandler.h>
 #include <KoPageLayout.h>
 
 #include "KivioView.h"
+#include "KivioDocument.h"
 
 KivioCanvas::KivioCanvas(KivioView* parent)
   : QWidget(parent)
 {
   m_zoomHandler = new KoZoomHandler;
 
-  setAttribute(Qt::WA_OpaquePaintEvent, true);
-  setAutoFillBackground(false);
   setMouseTracking(true);
+
+  QPalette newPalette = palette();
+  newPalette.setBrush(QPalette::Base, Qt::white); // TODO Make background a page property
+  setPalette(newPalette);
+  setBackgroundRole(QPalette::Base);
 
   updateSize();
 }
@@ -60,7 +66,7 @@ bool KivioCanvas::snapToGrid() const
 
 void KivioCanvas::addCommand(KCommand* command, bool execute)
 {
-  // TODO Implement this
+  m_view->document()->addCommand(command, execute);
 }
 
 KoShapeManager* KivioCanvas::shapeManager() const
@@ -105,7 +111,6 @@ void KivioCanvas::paintEvent(QPaintEvent* event)
 {
   QPainter painter(this);
   painter.setClipRect(event->rect());
-  painter.fillRect(event->rect(), Qt::white); // TODO Make the background color a page property
 
   painter.setRenderHint(QPainter::Antialiasing);
 }

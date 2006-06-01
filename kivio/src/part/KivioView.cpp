@@ -25,9 +25,10 @@
 #include <KoCanvasView.h>
 
 #include "KivioCanvas.h"
+#include "KivioDocument.h"
 
-KivioView::KivioView(KoDocument* document, QWidget* parent, const char* name)
-  : KoView(document, parent, name)
+KivioView::KivioView(KivioDocument* document, QWidget* parent, const char* name)
+  : KoView(document, parent, name), m_document(document)
 {
   initGUI();
 }
@@ -44,6 +45,11 @@ KivioCanvas* KivioView::canvasWidget() const
 QWidget* KivioView::canvas() const
 {
   return static_cast<QWidget*>(m_canvas);
+}
+
+KivioDocument* KivioView::document() const
+{
+  return m_document;
 }
 
 void KivioView::updateReadWrite(bool readwrite)

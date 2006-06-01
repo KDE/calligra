@@ -27,6 +27,9 @@ class QIODevice;
 class QPainter;
 class QRect;
 
+class KCommand;
+class KCommandHistory;
+
 class KoStore;
 class KoOasisStyle;
 class KoXmlWriter;
@@ -50,8 +53,20 @@ class KivioDocument : public KoDocument
 
     virtual bool saveOasis(KoStore* store, KoXmlWriter* manifestWriter);
 
+    virtual void addShell(KoMainWindow* shell);
+
+    /// Add @p command to the command history
+    void addCommand(KCommand* command, bool execute);
+
+  public slots:
+    void slotDocumentRestored();
+    void slotCommandExecuted();
+
   protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
+
+  private:
+    KCommandHistory* m_commandHistory;
 };
 
 #endif

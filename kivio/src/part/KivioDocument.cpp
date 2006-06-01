@@ -19,15 +19,26 @@
 
 #include "KivioDocument.h"
 
+#include <kcommand.h>
+
+#include <KoMainWindow.h>
+
 #include "KivioView.h"
 
 KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
   : KoDocument(parentWidget, parent, singleViewMode)
 {
+  m_commandHistory = new KCommandHistory(actionCollection(), true);
+  connect(m_commandHistory, SIGNAL(documentRestored()),
+          this, SLOT(slotDocumentRestored()));
+  connect(m_commandHistory, SIGNAL(commandExecuted(KCommand*)),
+          this, SLOT(slotCommandExecuted()));
 }
 
 KivioDocument::~KivioDocument()
 {
+  delete m_commandHistory;
+  m_commandHistory = 0;
 }
 
 void KivioDocument::paintContent(QPainter &painter, const QRect &rect, bool transparent,
@@ -70,6 +81,31 @@ bool KivioDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 KoView* KivioDocument::createViewInstance(QWidget* parent, const char* name)
 {
   return new KivioView(this, parent, name);
+}
+
+void KivioDocument::addCommand(KCommand* command, bool execute)
+{
+  if(!command) return;
+
+  m_commandHistory->addCommand(command, execute);
+}
+
+void KivioDocument::slotDocumentRestored()
+{
+  setModified(false);
+}
+
+void KivioDocument::slotCommandExecuted()
+{
+  setModified(true);
+}
+
+void KivioDocument::addShell(KoMainWindow* shell)
+{
+  connect(shell, SIGNAL(documentSaved()), m_commandHistory, SLOT(documentSaved()));
+  connect(shell, SIGNAL(saveDialogShown()), this, SLOT(saveDialogShown()));
+
+  KoDocument::addShell(shell);
 }
 
 #include "KivioDocument.moc"
