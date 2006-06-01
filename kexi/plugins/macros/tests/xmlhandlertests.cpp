@@ -44,10 +44,6 @@
 using namespace KUnitTest;
 using namespace KoMacroTest;
 
-// TODO QUESTIONS???
-// -Why is the debug-print always twice?
-// -Why can I call parseXML on a Macro??
-
 namespace KoMacroTest {
 
 	/**
@@ -164,6 +160,21 @@ void XMLHandlerTests::testParseXML()
 	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
 	macro->clearItems();
 	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+
+	// Test-XML-document with a missing Variable.
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+	//macro->clearItems();
+	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
 
 	// Test-XML-document with wrong macro-xmlversion.
 	xml = QString("<!DOCTYPE macros>"
@@ -282,31 +293,80 @@ void XMLHandlerTests::testParseXML()
 	domelement = d->doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 
+	// Test with a to big number.
+	// TODO Should this big number is parsen correct?
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" > 5555555555555555555555555555555555555555555555555 </variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" > %1 </variable>"
+				      "</item>"
+				    "</macro>").arg(DBL_MAX+1);
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
+	//TODO kdDebug() << macro->items.first().variable("testint")->variant() << endl;
 }
 
 // Compares a XML-Element with a Macro by value.
-// TODO Should I compare the types?
+// TODO Should I compare the types or is this done by QVariant?
 bool XMLHandlerTests::isMacroContentEqToXML(const KoMacro::Macro::Ptr macro, const QDomElement& domelement)
 {	
 	// Make an Iterator over the MacroItems of the Macro.
 	const QValueList<KoMacro::MacroItem::Ptr> macroitems = macro->items();
-	QValueList<KoMacro::MacroItem::Ptr>::ConstIterator mIt(macroitems.constBegin()), end(macroitems.constEnd());
+	QValueList<KoMacro::MacroItem::Ptr>::ConstIterator mit(macroitems.constBegin()), end(macroitems.constEnd());
 	if(macroitems.empty()) return false;
 
 	// Make an Iterator over the item-elements of the domelement.
 	QDomNode itemnode = domelement.firstChild();
 
-	while(mIt != end && ! itemnode.isNull()){
-		const KoMacro::MacroItem* macroitem = *mIt;
+	// Iterate over the MacroItems and item-elements.
+	while(mit != end && ! itemnode.isNull()){
+		const KoMacro::MacroItem* macroitem = *mit;
 		const QDomElement itemelem = itemnode.toElement();
 		//Is the Action-name equal?
 		if(macroitem->action()->name() != itemelem.attribute("action")) {
 			kdDebug() << "Action-name not equal: " << macroitem->action()->name() << " != " << itemelem.attribute("action") << endl;
 			return false;
 		}
-		mIt++;
+
+		/* Output for keys in Variable-map
+		QValueList<QString> keys = mvariables.keys();
+		QValueList<QString>::ConstIterator kit (keys.constBegin()), end(keys.constEnd());
+
+		while ( kit != end) {
+			//const QString* k = *kit;
+			kdDebug() << *kit << endl;
+			kit++;
+		}*/
+
+		// o down to MacroItem->Variable and item->variable and compare them.
+		QMap<QString, KSharedPtr<KoMacro::Variable> > mvariables = macroitem->variables();
+		QDomNode varnode = itemelem.firstChild();
+
+		while ( ! varnode.isNull()) {
+			const QDomElement varelem = varnode.toElement();
+			
+			const KoMacro::Variable* varitem = mvariables.find(varelem.attribute("name")).data();
+			//if ( ! *varitem ) kdDebug() << "BBBBBBBBBBBThere are more variable-elements in the XML: " << mvariables.find(varelem.attribute("name")).key() << endl;
+
+			// TODO Compare the contents.
+			//if ( varitem->variant != QVariant(varelem.text())) kdDebug() << "The content of the Variable is not equal." << endl;
+			mvariables.erase(varitem->name());
+			
+			// TODO Is it true that a Macroitem saves all parsen Variables also unknown???
+
+
+			varnode = varnode.nextSibling();
+		}
+		// TODO Should I compare here with the Variables of the TestAction??
+		// if ( ! mvariables.empty()) kdDebug() << "MMMMMMMThere are non-filled variable in the MacroItem: " << mvariables.count() <<endl;
+		
+		// Go to next MacroItem and next item-element.
+		mit++;
 		itemnode = itemnode.nextSibling();
-		// TODO go down to MacroItem->Variable and item->variable and compare them.
 	}
 
 	return true;
