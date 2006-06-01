@@ -21,8 +21,7 @@
 #define __VCANVAS_H__
 
 
-#include <q3scrollview.h>
-//Added by qt3to4:
+#include <QScrollArea>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QEvent>
@@ -30,16 +29,18 @@
 #include <QDropEvent>
 #include <QPaintEvent>
 #include <QFocusEvent>
+
 #include <koffice_export.h>
+
 class QPointF;
 class QRectF;
 class KarbonPart;
 class KarbonView;
 class VPainter;
 
-// The canvas is a QScrollView.
+// The canvas is a QScrollArea.
 
-class KARBONCOMMON_EXPORT VCanvas : public Q3ScrollView
+class KARBONCOMMON_EXPORT VCanvas : public QScrollArea
 {
 	Q_OBJECT
 public:
@@ -78,6 +79,16 @@ public:
 	int pageOffsetY() const;
 
 	QPointF snapToGrid( const QPointF & );
+
+	double contentsX();
+	double contentsY();
+	double contentsWidth();
+	double contentsHeight();
+
+	double visibleWidth();
+	double visibleHeight();
+
+	void resizeContents(int, int);
 
 protected:
 	virtual void dragEnterEvent( QDragEnterEvent * );

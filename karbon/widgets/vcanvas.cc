@@ -20,7 +20,6 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QDropEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
@@ -62,10 +61,13 @@ VCanvas::pageOffsetX() const
 	debugCanvas("VCanvas::pageOffsetX()");
 
 	double zoomedWidth = m_part->document().width() * m_view->zoom();
-	if( contentsWidth() < visibleWidth() )
-		return int( 0.5 * ( visibleWidth() - zoomedWidth ) );
+	double contentsWidth = contentsRect().width();
+	double visibleWidth = visibleRegion().boundingRect().width();
+
+	if( contentsWidth < visibleWidth )
+		return int( 0.5 * ( visibleWidth - zoomedWidth ) );
 	else
-		return int( 0.5 * ( contentsWidth() - zoomedWidth ) );
+		return int( 0.5 * ( contentsWidth - zoomedWidth ) );
 }
 
 int
@@ -74,10 +76,13 @@ VCanvas::pageOffsetY() const
 	debugCanvas("VCanvas::pageOffsetY()");
 
 	double zoomedHeight = m_part->document().height() * m_view->zoom();
-	if( contentsHeight() < visibleHeight() )
-		return int( 0.5 * ( visibleHeight() - zoomedHeight ) );
+	double contentsHeight = contentsRect().height();
+	double visibleHeight = visibleRegion().boundingRect().height();
+
+	if( contentsHeight < visibleHeight )
+		return int( 0.5 * ( visibleHeight - zoomedHeight ) );
 	else
-		return int( 0.5 * ( contentsHeight() - zoomedHeight ) );
+		return int( 0.5 * ( contentsHeight - zoomedHeight ) );
 }
 
 QPointF VCanvas::snapToGrid( const QPointF &point )
@@ -119,10 +124,14 @@ QPointF VCanvas::snapToGrid( const QPointF &point )
 
 
 VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
-    : Q3ScrollView( parent, "canvas", Qt::WStaticContents/*WNorthWestGravity*/ | Qt::WResizeNoErase  |
-	  Qt::WNoAutoErase ), m_part( part ), m_view( view )
+    : QScrollArea( parent /*, Qt::WStaticContents / * WNorthWestGravity * / | Qt::WResizeNoErase  |
+	  Qt::WNoAutoErase*/ ), m_part( part ), m_view( view )
 {
 	debugCanvas("VCanvas::VCanvas(...)");
+
+	setObjectName("canvas");
+
+	setWidget(new QWidget);
 
 	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
 	viewport()->setFocusPolicy( Qt::StrongFocus );
@@ -138,7 +147,7 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
 	//viewport()->setBackgroundMode( Qt::NoBackground );
 	viewport()->installEventFilter( this );
 
-	resizeContents( 800, 600 );
+	widget()->resize( 800, 600 );
 	m_pixmap = new QPixmap( 800, 600 );
 
 	setFocus();
@@ -173,7 +182,7 @@ VCanvas::eventFilter( QObject* object, QEvent* event )
 	// Q3ScrollView::eventFilter( object, event );
 
 	if( event->type() == QEvent::ShortcutOverride || event->type() == QEvent::Shortcut )
-		return Q3ScrollView::eventFilter( object, event );
+		return QScrollArea::eventFilter( object, event );
 
 	if( event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease )
 		return m_view->keyEvent( event );
@@ -203,9 +212,9 @@ VCanvas::toViewport( const QPointF &p ) const
 	debugCanvas(QString("VCanvas::toViewport(QPointF(%1, %2))").arg(p.x()).arg(p.y()));
 
 	QPointF p2 = p;
-	p2.setX( ( p.x() * m_view->zoom() ) - contentsX() + pageOffsetX() );
-	if( contentsHeight() > height() )
-		p2.setY( ( contentsHeight() - ( p.y() * m_view->zoom() + contentsY() + pageOffsetY() ) ) );
+	p2.setX( ( p.x() * m_view->zoom() ) - contentsRect().x() + pageOffsetX() );
+	if( contentsRect().height() > height() )
+		p2.setY( ( contentsRect().height() - ( p.y() * m_view->zoom() + contentsRect().y() + pageOffsetY() ) ) );
 	else
 		p2.setY( ( height() - p.y() * m_view->zoom() + pageOffsetY() ) );
 	return p2;
@@ -217,9 +226,9 @@ VCanvas::toContents( const QPointF &p ) const
 	debugCanvas(QString("VCanvas::toContents(QPointF(%1, %2))").arg(p.x()).arg(p.y()));
 
 	QPointF p2 = p;
-	p2.setX( ( p.x() + contentsX() - pageOffsetX() ) / m_view->zoom() );
-	if( contentsHeight() > height() )
-		p2.setY( ( contentsHeight() - ( p.y() + contentsY() + pageOffsetY()) ) / m_view->zoom() );
+	p2.setX( ( p.x() + contentsRect().x() - pageOffsetX() ) / m_view->zoom() );
+	if( contentsRect().height() > height() )
+		p2.setY( ( contentsRect().height() - ( p.y() + contentsRect().y() + pageOffsetY()) ) / m_view->zoom() );
 	else
 		p2.setY( ( height() - p.y() - pageOffsetY() ) / m_view->zoom() );
 	return p2;
@@ -250,10 +259,10 @@ VCanvas::setYMirroring( VPainter *p )
 	mat.scale( 1, -1 );
 	mat.translate( pageOffsetX(), pageOffsetY() );
 
-	if( contentsHeight() > visibleHeight() )
-		mat.translate( -contentsX(), contentsY() - contentsHeight() );
+	if( contentsRect().height() > visibleRegion().boundingRect().height() )
+		mat.translate( -contentsRect().x(), contentsRect().y() - contentsRect().height() );
 	else
-		mat.translate( 0, -visibleHeight() );
+		mat.translate( 0, -visibleRegion().boundingRect().height() );
 
 	p->setMatrix( mat );
 }
@@ -318,8 +327,8 @@ VCanvas::setViewport( double centerX, double centerY )
 {
 	debugCanvas(QString("VCanvas::setViewport(%1, %2)").arg(centerX).arg(centerY));
 
-	setContentsPos( int( centerX * contentsWidth() - 0.5 * visibleWidth() ),
-					int( centerY * contentsHeight() - 0.5 * visibleHeight() ) );
+	widget()->move( int( centerX * contentsRect().width() - 0.5 * visibleRegion().boundingRect().width() ),
+					int( centerY * contentsRect().height() - 0.5 * visibleRegion().boundingRect().height() ) );
 }
 
 void
@@ -328,15 +337,15 @@ VCanvas::setViewportRect( const QRectF &r )
 	debugCanvas(QString("VCanvas::setViewportRect(QRectF(%1, %2, %3, %4))").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height()));
 
 	viewport()->setUpdatesEnabled( false );
-	double zoomX = m_view->zoom() * ( ( visibleWidth() / m_view->zoom() ) / r.width() );
-	double zoomY = m_view->zoom() * ( ( visibleHeight() / m_view->zoom() ) / r.height() );
-	double pageOffX = ( contentsWidth() - ( m_part->document().width() * m_view->zoom() ) ) / 2.0;
-	double centerX = double( ( r.center().x() ) * m_view->zoom() + pageOffX ) / double( contentsWidth() );
-	double pageOffY = ( contentsHeight() - ( m_part->document().height() * m_view->zoom() ) ) / 2.0;
-	double centerY = double( ( r.center().y() ) * m_view->zoom() + pageOffY ) / double( contentsHeight() );
+	double zoomX = m_view->zoom() * ( ( visibleRegion().boundingRect().width() / m_view->zoom() ) / r.width() );
+	double zoomY = m_view->zoom() * ( ( visibleRegion().boundingRect().height() / m_view->zoom() ) / r.height() );
+	double pageOffX = ( contentsRect().width() - ( m_part->document().width() * m_view->zoom() ) ) / 2.0;
+	double centerX = double( ( r.center().x() ) * m_view->zoom() + pageOffX ) / double( contentsRect().width() );
+	double pageOffY = ( contentsRect().height() - ( m_part->document().height() * m_view->zoom() ) ) / 2.0;
+	double centerY = double( ( r.center().y() ) * m_view->zoom() + pageOffY ) / double( contentsRect().height() );
 	double zoom = zoomX < zoomY ? zoomX : zoomY;
-	resizeContents( int( ( zoom / m_view->zoom() ) * contentsWidth() ),
-					int( ( zoom / m_view->zoom() ) * contentsHeight() ) );
+	widget()->resize( int( ( zoom / m_view->zoom() ) * contentsRect().width() ),
+					int( ( zoom / m_view->zoom() ) * contentsRect().height() ) );
 	setViewport( centerX, 1.0 - centerY );
 	m_view->setZoomAt( zoom );
 	viewport()->setUpdatesEnabled( true );
@@ -414,10 +423,10 @@ VCanvas::resizeEvent( QResizeEvent* event )
 {
 	debugCanvas("VCanvas::resizeEvent()");
 
-	double centerX = double( contentsX() + 0.5 * visibleWidth() ) / double( contentsWidth() );
-	double centerY = double( contentsY() + 0.5 * visibleHeight() ) / double( contentsHeight() );
+	double centerX = double( contentsRect().x() + 0.5 * visibleRegion().boundingRect().width() ) / double( contentsRect().width() );
+	double centerY = double( contentsRect().y() + 0.5 * visibleRegion().boundingRect().height() ) / double( contentsRect().height() );
 
-	Q3ScrollView::resizeEvent( event );
+	QScrollArea::resizeEvent( event );
 	if( !m_pixmap )
 		m_pixmap = new QPixmap( width(), height() );
 	else
@@ -467,6 +476,41 @@ VCanvas::dropEvent( QDropEvent *e )
 	debugCanvas("VCanvas::dropEvent()");
 
 	m_view->dropEvent( e );
+}
+
+double VCanvas::contentsX()
+{
+	return contentsRect().x();
+}
+
+double VCanvas::contentsY()
+{
+	return contentsRect().y();
+}
+
+double VCanvas::contentsWidth()
+{
+	return contentsRect().width();
+}
+
+double VCanvas::contentsHeight()
+{
+	return contentsRect().height();
+}
+
+double VCanvas::visibleWidth()
+{
+	return visibleRegion().boundingRect().width();
+}
+
+double VCanvas::visibleHeight()
+{
+	return visibleRegion().boundingRect().height();
+}
+
+void VCanvas::resizeContents (int width, int height)
+{
+	widget()->resize(width, height);
 }
 
 #include "vcanvas.moc"
