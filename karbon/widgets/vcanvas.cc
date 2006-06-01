@@ -41,6 +41,10 @@
 #include "vtoolcontroller.h"
 #include "vtool.h"
 
+#include "KoZoomHandler.h"
+#include "KoShapeManager.h"
+#include "KoTool.h"
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcolormimedata.h>
@@ -54,6 +58,51 @@
 #else
 #define debugCanvas(text)
 #endif
+
+
+VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
+    : QScrollArea( parent /*, Qt::WStaticContents / * WNorthWestGravity * / | Qt::WResizeNoErase  |
+	  Qt::WNoAutoErase*/ ), KoCanvasBase(), m_part( part ), m_view( view )
+{
+	debugCanvas("VCanvas::VCanvas(...)");
+
+	setObjectName("canvas");
+
+	setWidget(new QWidget);
+
+	m_zoomHandler = new KoZoomHandler;
+	m_shapeManager = new KoShapeManager(this);
+
+	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
+	viewport()->setFocusPolicy( Qt::StrongFocus );
+
+	viewport()->setMouseTracking( true );
+	setMouseTracking( true );
+
+	QPalette p = viewport()->palette();
+	QBrush b(QColor("white"), Qt::NoBrush);
+	p.setBrush(QPalette::Window, b);
+	// TODO Check if the code above is ok when karbon actually runs.
+	//viewport()->setBackgroundColor( Qt::white );
+	//viewport()->setBackgroundMode( Qt::NoBackground );
+	viewport()->installEventFilter( this );
+
+	widget()->resize( 800, 600 );
+	m_pixmap = new QPixmap( 800, 600 );
+
+	setFocus();
+
+	setAcceptDrops( true );
+}
+
+VCanvas::~VCanvas()
+{
+	debugCanvas("VCanvas::~VCanvas()");
+
+	delete m_pixmap;
+	m_view = 0L;
+	m_part = 0L;
+}
 
 int
 VCanvas::pageOffsetX() const
@@ -120,48 +169,6 @@ QPointF VCanvas::snapToGrid( const QPointF &point )
 	}
 
 	return p;
-}
-
-
-VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
-    : QScrollArea( parent /*, Qt::WStaticContents / * WNorthWestGravity * / | Qt::WResizeNoErase  |
-	  Qt::WNoAutoErase*/ ), m_part( part ), m_view( view )
-{
-	debugCanvas("VCanvas::VCanvas(...)");
-
-	setObjectName("canvas");
-
-	setWidget(new QWidget);
-
-	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
-	viewport()->setFocusPolicy( Qt::StrongFocus );
-
-	viewport()->setMouseTracking( true );
-	setMouseTracking( true );
-
-	QPalette p = viewport()->palette();
-	QBrush b(QColor("white"), Qt::NoBrush);
-	p.setBrush(QPalette::Window, b);
-	// TODO Check if the code above is ok when karbon actually runs.
-	//viewport()->setBackgroundColor( Qt::white );
-	//viewport()->setBackgroundMode( Qt::NoBackground );
-	viewport()->installEventFilter( this );
-
-	widget()->resize( 800, 600 );
-	m_pixmap = new QPixmap( 800, 600 );
-
-	setFocus();
-
-	setAcceptDrops( true );
-}
-
-VCanvas::~VCanvas()
-{
-	debugCanvas("VCanvas::~VCanvas()");
-
-	delete m_pixmap;
-	m_view = 0L;
-	m_part = 0L;
 }
 
 void
@@ -516,6 +523,48 @@ void VCanvas::resizeContents (int width, int height)
 void VCanvas::scrollContentsBy(int dx, int dy)
 {
 	widget()->scroll(dx, dy);
+}
+
+void VCanvas::gridSize(double*, double*) const
+{
+	//TODO: Implement
+}
+
+bool VCanvas::snapToGrid() const
+{
+	//TODO: Implement
+	return false;
+}
+
+void VCanvas::addCommand(KCommand*, bool)
+{
+	//TODO: Implement
+}
+
+KoShapeManager* VCanvas::shapeManager() const
+{
+	return m_shapeManager;
+}
+
+void VCanvas::updateCanvas(const QRectF&)
+{
+	//TODO: Implement
+}
+
+KoTool* VCanvas::activeTool()
+{
+	// TODO: Implement
+	return 0;
+}
+
+KoViewConverter* VCanvas::viewConverter()
+{
+	return m_zoomHandler;
+}
+
+QWidget* VCanvas::canvasWidget()
+{
+	return widget();
 }
 
 #include "vcanvas.moc"

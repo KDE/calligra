@@ -31,16 +31,21 @@
 #include <QFocusEvent>
 
 #include <koffice_export.h>
+#include <KoCanvasBase.h>
 
 class QPointF;
 class QRectF;
 class KarbonPart;
 class KarbonView;
 class VPainter;
+class KoViewConverter;
+class KoZoomHandler;
+class KoShapeManager;
+class KoTool;
 
-// The canvas is a QScrollArea.
+// The canvas is a QScrollArea (for the scrollbar management) and a KoCanvasBase (for the object management)
 
-class KARBONCOMMON_EXPORT VCanvas : public QScrollArea
+class KARBONCOMMON_EXPORT VCanvas : public QScrollArea, public KoCanvasBase
 {
 	Q_OBJECT
 public:
@@ -91,6 +96,16 @@ public:
 	void resizeContents(int, int);
 	void scrollContentsBy(int, int);
 
+	void gridSize(double*, double*) const;
+	bool snapToGrid() const;
+	void addCommand(KCommand*, bool);
+	KoShapeManager* shapeManager() const;
+	void updateCanvas(const QRectF&);
+	KoTool* activeTool();
+	KoViewConverter* viewConverter();
+	QWidget* canvasWidget();
+
+
 protected:
 	virtual void dragEnterEvent( QDragEnterEvent * );
 	virtual void dropEvent( QDropEvent * );
@@ -116,6 +131,8 @@ private:
 	QPixmap *m_pixmap;
 	KarbonPart* m_part;
 	KarbonView* m_view;
+	KoShapeManager* m_shapeManager;
+	KoZoomHandler* m_zoomHandler;
 };
 
 #endif

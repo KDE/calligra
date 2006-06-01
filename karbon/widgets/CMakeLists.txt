@@ -1,4 +1,4 @@
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOPAINTER_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOPAINTER_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon )
 
 set(karbonwidgets_SRCS
     vcanvas.cc
@@ -21,6 +21,8 @@ kde4_automoc(${karbonwidgets_SRCS})
 kde4_add_library(karbonwidgets ${karbonwidgets_SRCS})
 
 kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbonwidgets )
+
+target_link_libraries(karbonwidgets flake) 
 
 install_targets(${LIB_INSTALL_DIR} karbonwidgets )
 
