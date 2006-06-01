@@ -89,6 +89,7 @@ public:
 	double visibleHeight();
 
 	void resizeContents(int, int);
+	void scrollContentsBy(int, int);
 
 protected:
 	virtual void dragEnterEvent( QDragEnterEvent * );

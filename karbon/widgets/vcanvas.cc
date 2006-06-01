@@ -513,5 +513,10 @@ void VCanvas::resizeContents (int width, int height)
 	widget()->resize(width, height);
 }
 
+void VCanvas::scrollContentsBy(int dx, int dy)
+{
+	widget()->scroll(dx, dy);
+}
+
 #include "vcanvas.moc"
 

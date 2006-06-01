@@ -136,7 +136,7 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 			double dx = m_lastPoint.x() - m_firstPoint.x();
 			double dy = m_lastPoint.y() - m_firstPoint.y();
 			scaleFactor /= m_view->zoom();
-			m_view->canvasWidget()->scrollBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
+			m_view->canvasWidget()->scrollContentsBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
 			m_firstPoint = m_lastPoint;
 			m_dragging = false;
 			update();
