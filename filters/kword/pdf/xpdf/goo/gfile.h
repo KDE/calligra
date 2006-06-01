@@ -10,7 +10,7 @@
 
 #ifndef GFILE_H
 #define GFILE_H
-
+#include <config-filters.h>
 #include <aconf.h>
 #include <stdio.h>
 #include <stdlib.h>

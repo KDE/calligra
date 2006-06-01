@@ -26,7 +26,7 @@
  * daniel@veillard.com
  */
 #include "xsltproc.h"
-
+#include <config-filters.h>
 #include <QFile>
 
 #ifdef HAVE_STRING_H

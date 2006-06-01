@@ -1,7 +1,7 @@
 
 
 include_directories(
-    ${KOFFICECORE_INCLUDES}
+    ${KOFFICECORE_INCLUDES} ${CMAKE_BINARY_DIR}/filters/ 
     )
 
 add_subdirectory( export )

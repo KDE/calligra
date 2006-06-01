@@ -7,7 +7,7 @@
 //========================================================================
 
 #include <aconf.h>
-
+#include <config-filters.h>
 #ifdef USE_GCC_PRAGMAS
 #pragma implementation
 #endif
