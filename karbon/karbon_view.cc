@@ -114,12 +114,24 @@
 // Only for debugging.
 #include <kdebug.h>
 
+// Uncomment the #define below to print lots of debug information about the view.
+// Or use the -DKARBON_DEBUG_VIEW flag when using cmake, so the code stays the same.
+// #define KARBON_DEBUG_VIEW
+
+#ifdef KARBON_DEBUG_VIEW
+#define debugView(text) kDebug() << "KARBON_DEBUG_VIEW: " << text << endl
+#else
+#define debugView(text)
+#endif
+
 const int rulerWidth = 20;  // vertical ruler width
 const int rulerHeight = 20; // horizontal ruler height
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
 {
+	debugView("KarbonView::KarbonView");
+
 	m_toolbox = 0L;
 	m_toolController = new VToolController( this );
 	m_toolController->init();
@@ -221,7 +233,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 KarbonView::~KarbonView()
 {
-	kDebug(38000) << "Handling KarbonView dtor" << endl;
+	//kDebug(38000) << "Handling KarbonView dtor" << endl;
+	debugView("KarbonView::~KarbonView()");
 
 	// widgets:
 	delete m_smallPreview;
@@ -239,6 +252,7 @@ KarbonView::~KarbonView()
 
 static Qt::ToolBarArea stringToDock( const QString& attrPosition )
 {
+	debugView(QString("Qt::ToolBarArea stringToDock(%1)").arg(attrPosition));
 	/* Port to KDE/Qt 4
 
 	KToolBar::Dock dock = KToolBar::DockTop;
@@ -267,6 +281,8 @@ static Qt::ToolBarArea stringToDock( const QString& attrPosition )
 QWidget *
 KarbonView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
 {
+	debugView(QString("KarbonView::createContainer(parent = QWidget, index = %1, element = %2, id = %3)").arg(index).arg(element.tagName()).arg(id));
+
 	if( element.attribute( "name" ) == "Tools" )
 	{
 		m_toolbox = new VToolBox( mainWindow(), "Tools", KarbonFactory::instance() );
@@ -312,6 +328,8 @@ void
 KarbonView::removeContainer( QWidget *container, QWidget *parent,
 							 QDomElement &element, int id )
 {
+	debugView(QString("KarbonView::removeContainer(container = QWidget, parent = QWidget, element = %1, id = %2)").arg(element.tagName()).arg(id));
+
 	if( container )
 		kDebug(38000) << container << endl;
 
@@ -335,6 +353,8 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 DCOPObject *
 KarbonView::dcopObject()
 {
+	debugView("KarbonView::dcopObject()");
+
 	if( !m_dcop )
 		m_dcop = new KarbonViewIface( this );
 
@@ -344,12 +364,16 @@ KarbonView::dcopObject()
 QWidget*
 KarbonView::canvas() const
 {
+	debugView("KarbonView::canvas()");
+
 	return m_canvas;
 }
 
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
+	debugView("KarbonView::resizeEvent()");
+
 	if(!m_showRulerAction)
 		return;
 
@@ -375,6 +399,8 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 void
 KarbonView::dropEvent( QDropEvent *e )
 {
+	debugView("KarbonView::dropEvent()");
+
 	//Accepts QColor - from Color Manager's KColorPatch
 	VColor realcolor;
 	VObjectList selection;
@@ -412,8 +438,10 @@ KarbonView::dropEvent( QDropEvent *e )
 void
 KarbonView::print( KPrinter &printer )
 {
+	debugView("KarbonView::print(KPrinter)");
+
 	// TODO : ultimately use plain QPainter here as that is better suited to print system
-	kDebug(38000) << "KarbonView::print" << endl;
+	//kDebug(38000) << "KarbonView::print" << endl;
 	
 	Q3PaintDeviceMetrics metrics( ( QPaintDevice * ) & printer );
 	printer.setFullPage( true );
@@ -457,6 +485,8 @@ KarbonView::print( KPrinter &printer )
 void
 KarbonView::fileImportGraphic()
 {
+	debugView("KarbonView::fileImportGraphic()");
+
 	QStringList filter;
 	filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
 	KFileDialog *dialog = new KFileDialog("foo", "", 0);
@@ -489,6 +519,8 @@ KarbonView::fileImportGraphic()
 void
 KarbonView::editCut()
 {
+	debugView("KarbonView::editCut()");
+
 	addSelectionToClipboard();
 	// remove selection
 	editDeleteSelection();
@@ -497,12 +529,16 @@ KarbonView::editCut()
 void
 KarbonView::editCopy()
 {
+	debugView("KarbonView::editCopy()");
+
 	addSelectionToClipboard();
 }
 
 void
 KarbonView::addSelectionToClipboard() const
 {
+	debugView("KarbonView::addSelectionToClipboard()");
+
 	if( part()->document().selection()->objects().count() <= 0 )
 		return;
 
@@ -514,6 +550,8 @@ KarbonView::addSelectionToClipboard() const
 void
 KarbonView::editPaste()
 {
+	debugView("KarbonView::editPaste()");
+
 	KarbonDrag kd;
 	VObjectList objects;
 
@@ -536,6 +574,8 @@ KarbonView::editPaste()
 void
 KarbonView::editSelectAll()
 {
+	debugView("KarbonView::editSelectAll()");
+
 	part()->document().selection()->append();
 
 	if( part()->document().selection()->objects().count() > 0 )
@@ -547,6 +587,8 @@ KarbonView::editSelectAll()
 void
 KarbonView::editDeselectAll()
 {
+	debugView("KarbonView::editDeselectAll()");
+
 	if( part()->document().selection()->objects().count() > 0 )
 	{
 		part()->document().selection()->clear();
@@ -559,7 +601,8 @@ KarbonView::editDeselectAll()
 void
 KarbonView::editDeleteSelection()
 {
-	kDebug(38000) << "*********" << endl;
+	debugView("KarbonView::editDeleteSelection()");
+	//kDebug(38000) << "*********" << endl;
 
 	if( part()->document().selection()->objects().count() > 0 )
 	{
@@ -572,6 +615,8 @@ KarbonView::editDeleteSelection()
 void
 KarbonView::editPurgeHistory()
 {
+	debugView("KarbonView::editPurgeHistory()");
+
 	// TODO: check for history size != 0
 
 	if( KMessageBox::warningContinueCancel( this,
@@ -592,12 +637,16 @@ KarbonView::editPurgeHistory()
 void
 KarbonView::selectionAlignHorizontalLeft()
 {
+	debugView("KarbonView::selectionAlignHorizontalLeft()");
+
 	part()->addCommand(
 		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_LEFT ), true );
 }
 void
 KarbonView::selectionAlignHorizontalCenter()
 {
+	debugView("KarbonView::selectionAlignHorizontalCenter()");
+
 	part()->addCommand(
 		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_CENTER ), true );
 }
@@ -605,6 +654,8 @@ KarbonView::selectionAlignHorizontalCenter()
 void
 KarbonView::selectionAlignHorizontalRight()
 {
+	debugView("KarbonView::selectionAlignHorizontalRight()");
+
 	part()->addCommand(
 		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_RIGHT ), true );
 }
@@ -612,6 +663,8 @@ KarbonView::selectionAlignHorizontalRight()
 void
 KarbonView::selectionAlignVerticalTop()
 {
+	debugView("KarbonView::selectionAlignVerticalTop()");
+
 	part()->addCommand(
 		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_TOP ), true );
 }
@@ -619,6 +672,8 @@ KarbonView::selectionAlignVerticalTop()
 void
 KarbonView::selectionAlignVerticalCenter()
 {
+	debugView("KarbonView::selectionAlignVerticalCenter()");
+
 	part()->addCommand(
 		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_CENTER ), true );
 }
@@ -626,6 +681,8 @@ KarbonView::selectionAlignVerticalCenter()
 void
 KarbonView::selectionAlignVerticalBottom()
 {
+	debugView("KarbonView::selectionAlignVerticalBottom()");
+
 	part()->addCommand(
 		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_BOTTOM ), true );
 }
@@ -633,6 +690,8 @@ KarbonView::selectionAlignVerticalBottom()
 void
 KarbonView::selectionDistributeHorizontalCenter()
 {
+	debugView("KarbonView::selectionDistributeHorizontalCenter()");
+
 	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_CENTER ), true );
 }
@@ -640,6 +699,8 @@ KarbonView::selectionDistributeHorizontalCenter()
 void
 KarbonView::selectionDistributeHorizontalGap()
 {
+	debugView("KarbonView::selectionDistributeHorizontalGap()");
+
 	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_GAP ), true );
 }
@@ -647,6 +708,8 @@ KarbonView::selectionDistributeHorizontalGap()
 void
 KarbonView::selectionDistributeHorizontalLeft()
 {
+	debugView("KarbonView::selectionDistributeHorizontalLeft()");
+
 	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_LEFT ), true );
 }
@@ -654,6 +717,8 @@ KarbonView::selectionDistributeHorizontalLeft()
 void
 KarbonView::selectionDistributeHorizontalRight()
 {
+	debugView("KarbonView::selectionDistributeHorizontalRight()");
+
 	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_HORIZONTAL_RIGHT ), true );
 }
@@ -661,6 +726,8 @@ KarbonView::selectionDistributeHorizontalRight()
 void
 KarbonView::selectionDistributeVerticalCenter()
 {
+	debugView("KarbonView::selectionDistributeVerticalCenter()");
+
 	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_CENTER ), true );
 }
@@ -668,6 +735,8 @@ KarbonView::selectionDistributeVerticalCenter()
 void
 KarbonView::selectionDistributeVerticalGap()
 {
+	debugView("KarbonView::selectionDistributeVerticalGap()");
+
 	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_GAP ), true );
 }
@@ -675,6 +744,8 @@ KarbonView::selectionDistributeVerticalGap()
 void
 KarbonView::selectionDistributeVerticalBottom()
 {
+	debugView("KarbonView::selectionDistributeVerticalBottom()");
+
 	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_BOTTOM ), true );
 }
@@ -682,6 +753,8 @@ KarbonView::selectionDistributeVerticalBottom()
 void
 KarbonView::selectionDistributeVerticalTop()
 {
+	debugView("KarbonView::selectionDistributeVerticalTop()");
+
 	part()->addCommand(
 		new VDistributeCmd( &part()->document(), VDistributeCmd::DISTRIBUTE_VERTICAL_TOP ), true );
 }
@@ -689,6 +762,8 @@ KarbonView::selectionDistributeVerticalTop()
 void
 KarbonView::selectionDuplicate()
 {
+	debugView("KarbonView::selectionDuplicate()");
+
 	if ( !part()->document().selection()->objects().count() )
 		return;
 
@@ -716,6 +791,8 @@ KarbonView::selectionDuplicate()
 void
 KarbonView::selectionBringToFront()
 {
+	debugView("KarbonView::selectionBringToFront()");
+
 	part()->addCommand(
 		new VZOrderCmd( &part()->document(), VZOrderCmd::bringToFront ), true );
 }
@@ -723,6 +800,8 @@ KarbonView::selectionBringToFront()
 void
 KarbonView::selectionMoveUp()
 {
+	debugView("KarbonView::selectionMoveUp()");
+
 	part()->addCommand(
 		new VZOrderCmd( &part()->document(), VZOrderCmd::up ), true );
 }
@@ -730,6 +809,8 @@ KarbonView::selectionMoveUp()
 void
 KarbonView::selectionMoveDown()
 {
+	debugView("KarbonView::selectionMoveDown()");
+
 	part()->addCommand(
 		new VZOrderCmd( &part()->document(), VZOrderCmd::down ), true );
 }
@@ -737,6 +818,8 @@ KarbonView::selectionMoveDown()
 void
 KarbonView::selectionSendToBack()
 {
+	debugView("KarbonView::selectionSendToBack()");
+
 	part()->addCommand(
 		new VZOrderCmd( &part()->document(), VZOrderCmd::sendToBack ), true );
 }
@@ -744,24 +827,32 @@ KarbonView::selectionSendToBack()
 void
 KarbonView::groupSelection()
 {
+	debugView("KarbonView::groupSelection()");
+
 	part()->addCommand( new VGroupCmd( &part()->document() ), true );
 }
 
 void
 KarbonView::ungroupSelection()
 {
+	debugView("KarbonView::ungroupSelection()");
+
 	part()->addCommand( new VUnGroupCmd( &part()->document() ), true );
 }
 
 void
 KarbonView::closePath()
 {
+	debugView("KarbonView::closePath()");
+
 	part()->addCommand( new VClosePathCmd( &part()->document() ), true );
 }
 
 void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
+	debugView(QString("KarbonView::slotActiveToolChanged(%1)").arg(tool->uiname()));
+
 	toolController()->setCurrentTool( tool );
 
 	m_canvas->repaintAll();
@@ -770,6 +861,8 @@ KarbonView::slotActiveToolChanged( VTool *tool )
 void
 KarbonView::viewModeChanged()
 {
+	debugView("KarbonView::viewModeChanged()");
+
 	canvasWidget()->pixmap()->fill();
 
 	if( m_viewAction->currentItem() == 1 )
@@ -783,6 +876,8 @@ KarbonView::viewModeChanged()
 void
 KarbonView::setZoomAt( double zoom, const QPointF &p )
 {
+	debugView(QString("KarbonView::setZoomAt(%1, QPointF(%2, %3)").arg(zoom).arg(p.x()).arg(p.y()));
+
 	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
 	QStringList stl = m_zoomAction->items();
 	if( stl.first() == "25%" )
@@ -802,18 +897,24 @@ KarbonView::setZoomAt( double zoom, const QPointF &p )
 void
 KarbonView::viewZoomIn()
 {
+	debugView("KarbonView::viewZoomIn()");
+
 	setZoomAt( zoom() * 1.50 );
 }
 
 void
 KarbonView::viewZoomOut()
 {
+	debugView("KarbonView::viewZoomOut()");
+
 	setZoomAt( zoom() * 0.75 );
 }
 
 void
 KarbonView::zoomChanged( const QPointF &p )
 {
+	debugView(QString("KarbonView::zoomChanged( QPointF(%1, %2) )").arg(p.x()).arg(p.y()));
+
 	double centerX;
 	double centerY;
 	double zoomFactor;
@@ -906,6 +1007,8 @@ KarbonView::zoomChanged( const QPointF &p )
 void
 KarbonView::setLineStyle( int style )
 {
+	debugView(QString("KarbonView::setLineStyle(%1)").arg(style));
+
 	Q3ValueList<float> dashes;
 	if( style == Qt::NoPen )
 		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 0 << 20 ), true );
@@ -924,6 +1027,8 @@ KarbonView::setLineStyle( int style )
 void
 KarbonView::slotStrokeChanged( const VStroke &c )
 {
+	debugView("KarbonView::slotStrokeChanged(VStroke)");
+
 	part()->document().selection()->setStroke( c );
 	selectionChanged();
 }
@@ -931,6 +1036,8 @@ KarbonView::slotStrokeChanged( const VStroke &c )
 void
 KarbonView::slotFillChanged( const VFill &f )
 {
+	debugView("KarbonView::slotFillChanged(VFill)");
+
 	part()->document().selection()->setFill( f );
 	selectionChanged();
 }
@@ -938,6 +1045,8 @@ KarbonView::slotFillChanged( const VFill &f )
 void
 KarbonView::setLineWidth()
 {
+	debugView("KarbonView::setLineWidth()");
+
 	setLineWidth( m_setLineWidth->value() );
 	selectionChanged();
 }
@@ -946,12 +1055,16 @@ KarbonView::setLineWidth()
 void
 KarbonView::setLineWidth( double val )
 {
+	debugView(QString("KarbonView::setLineWidth(%1)").arg(val));
+
 	part()->addCommand( new VStrokeCmd( &part()->document(), val ), true );
 }
 
 void
 KarbonView::initActions()
 {
+	debugView("KarbonView::initActions()");
+
 	// view ----->
 	m_viewAction = new KSelectAction(i18n("View &Mode"), actionCollection(), "view_mode");
 	connect(m_viewAction, SIGNAL(triggered()), this, SLOT(viewModeChanged()));
@@ -1142,12 +1255,14 @@ new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setL
 void
 KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/, bool /*transparent*/ )
 {
-	kDebug(38000) << "view->paintEverything()" << endl;
+	debugView("KarbonView::paintEverything(...)");
 }
 
 bool
 KarbonView::mouseEvent( QMouseEvent* event, const QPointF &p )
 {
+	debugView(QString("KarbonView::mouseEvent(event, QPointF(%1, %2))").arg(p.x()).arg(p.y()));
+
 	int mx = event->pos().x();
 	int my = event->pos().y();
 
@@ -1184,6 +1299,8 @@ KarbonView::mouseEvent( QMouseEvent* event, const QPointF &p )
 bool
 KarbonView::keyEvent( QEvent* event )
 {
+	debugView("KarbonView::keyEvent(event)");
+
 	if( toolController() )
 		return toolController()->keyEvent( event );
 	else
@@ -1193,6 +1310,8 @@ KarbonView::keyEvent( QEvent* event )
 void
 KarbonView::reorganizeGUI()
 {
+	debugView("KarbonView::reorganizeGUI()");
+
 	if( statusBar() )
 	{
 		if( part()->showStatusBar() )
@@ -1205,6 +1324,8 @@ KarbonView::reorganizeGUI()
 void
 KarbonView::setNumberOfRecentFiles( unsigned int number )
 {
+	debugView(QString("KarbonView::setNumberOfRecentFiles(%1)").arg(number));
+
 	if( shell() )	// 0L when embedded into konq !
 		shell()->setMaxRecentItems( number );
 }
@@ -1212,6 +1333,8 @@ KarbonView::setNumberOfRecentFiles( unsigned int number )
 void
 KarbonView::showRuler()
 {
+	debugView("KarbonView::showRuler()");
+
 	if( shell() && m_showRulerAction->isChecked() )
 	{
 		m_horizRuler->show();
@@ -1232,12 +1355,16 @@ KarbonView::showRuler()
 bool
 KarbonView::showPageMargins()
 {
+	debugView("KarbonView::showPageMargins()");
+
 	return ((KToggleAction*)actionCollection()->action("view_show_margins"))->isChecked();
 }
 
 void
 KarbonView::togglePageMargins(bool b)
 {
+	debugView(QString("KarbonView::togglePageMargins(%1)").arg(b));
+
 	((KToggleAction*)actionCollection()->action("view_show_margins"))->setChecked(b);
 	m_canvas->repaintAll();
 }
@@ -1245,6 +1372,8 @@ KarbonView::togglePageMargins(bool b)
 void
 KarbonView::updateRuler()
 {
+	debugView("KarbonView::updateRuler()");
+
 	if(!m_canvas->horizontalScrollBar()->isVisible())
 	{
 		if( (1 + m_canvas->pageOffsetX() - m_canvas->contentsX()) >= 0 )
@@ -1277,18 +1406,24 @@ KarbonView::updateRuler()
 void
 KarbonView::showGrid()
 {
+	debugView("KarbonView::showGrid()");
+
 	m_part->document().grid().isShow = m_showGridAction->isChecked();
 }
 
 void
 KarbonView::snapToGrid()
 {
+	debugView("KarbonView::snapToGrid()");
+
 	m_part->document().grid().isSnap = m_snapGridAction->isChecked();
 }
 
 void
 KarbonView::showSelectionPopupMenu( const QPoint &pos )
 {
+	debugView(QString("KarbonView::showSelectionPopupMenu(QPoint(%1, %2))").arg(pos.x()).arg(pos.y()));
+
 	QList<KAction*> actionList;
 	if( m_groupObjects->isEnabled() )
 		actionList.append( m_groupObjects );
@@ -1304,6 +1439,8 @@ KarbonView::showSelectionPopupMenu( const QPoint &pos )
 void
 KarbonView::configure()
 {
+	debugView("KarbonView::configure()");
+
 	VConfigureDlg dialog( this );
 	dialog.exec();
 }
@@ -1311,6 +1448,8 @@ KarbonView::configure()
 void
 KarbonView::pageLayout()
 {
+	debugView("KarbonView::pageLayout()");
+
 	KoHeadFoot hf;
 	KoPageLayout layout = part()->pageLayout();
 	KoUnit::Unit unit = part()->unit();
@@ -1330,6 +1469,8 @@ KarbonView::pageLayout()
 void
 KarbonView::canvasContentsMoving( int x, int y )
 {
+	debugView(QString("KarbonView::canvasContentsMoving(x = %1, y = %2)").arg(x).arg(y));
+
 	if( m_canvas->horizontalScrollBar()->isVisible() )
 	{
 		if( shell() && m_showRulerAction->isChecked() )
@@ -1368,6 +1509,8 @@ KarbonView::canvasContentsMoving( int x, int y )
 void
 KarbonView::selectionChanged()
 {
+	debugView("KarbonView::selectionChanged()");
+
 	int count = part()->document().selection()->objects().count();
 	m_groupObjects->setEnabled( false );
 	m_closePath->setEnabled( false );
@@ -1431,39 +1574,52 @@ KarbonView::selectionChanged()
 void
 KarbonView::setCursor( const QCursor &c )
 {
+	debugView("KarbonView::setCursor(QCursor)");
+
 	m_canvas->setCursor( c );
 }
 
 void
 KarbonView::repaintAll( const QRectF &r )
 {
+	debugView(QString("KarbonView::repaintAll(QRectF(%1, %2, %3, %4))").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height()));
+
 	m_canvas->repaintAll( r );
 }
 
 void
 KarbonView::repaintAll( bool repaint )
 {
+	debugView(QString("KarbonView::repaintAll(%1)").arg(repaint));
+
 	m_canvas->repaintAll( repaint );
 }
 void
 KarbonView::setPos( const QPointF& p )
 {
+	debugView(QString("KarbonView::setPos(QPointF(%1, %2))").arg(p.x()).arg(p.y()));
+
 	m_canvas->setPos( p );
 }
 
 void
 KarbonView::setViewportRect( const QRectF &rect )
 {
+	debugView(QString("KarbonView::setViewportRect(QRectF(%1, %2, %3, %4))").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
+
 	m_canvas->setViewportRect( rect );
 }
 
 void
 KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 {
+	debugView("KarbonView::setUnit(KoUnit::Unit)");
 }
 
 void KarbonView::createDocumentTabDock()
 {
+	debugView("KarbonView::createDocumentTabDock()");
+
 	m_DocumentTab = new VDocumentTab(this, this);
 	m_DocumentTab->setWindowTitle(i18n("Document"));
 	paletteManager()->addWidget(m_DocumentTab, "DocumentTabDock", "DocumentPanel");
@@ -1472,6 +1628,8 @@ void KarbonView::createDocumentTabDock()
 
 void KarbonView::createLayersTabDock()
 {
+	debugView("KarbonView::createLayersTabDock()");
+
 	m_LayersTab = new VLayersTab(this, this);
 	m_LayersTab->setWindowTitle(i18n("Layers"));
 	paletteManager()->addWidget(m_LayersTab, "LayersTabDock", "DocumentPanel");
@@ -1479,6 +1637,8 @@ void KarbonView::createLayersTabDock()
 
 void KarbonView::createHistoryTabDock()
 {
+	debugView("KarbonView::createHistoryTabDock()");
+
 	m_HistoryTab = new VHistoryTab(part(), this);
 	m_HistoryTab->setWindowTitle(i18n("History"));
 	paletteManager()->addWidget(m_HistoryTab, "HistoryTabDock", "DocumentPanel");
@@ -1486,6 +1646,8 @@ void KarbonView::createHistoryTabDock()
 
 void KarbonView::createStrokeDock()
 {
+	debugView("KarbonView::createStrokeDock()");
+
 	m_strokeDocker = new VStrokeDocker(part(), this);
 	m_strokeDocker->setWindowTitle(i18n("Stroke Properties"));
 	paletteManager()->addWidget(m_strokeDocker, "StrokeTabDock", "StrokePanel");
@@ -1495,6 +1657,8 @@ void KarbonView::createStrokeDock()
 
 void KarbonView::createColorDock()
 {
+	debugView("KarbonView::createColorDock()");
+
 	m_ColorManager = new VColorDocker(part(),this);
 	//m_ColorManager->setWindowTitle(i18n("Stroke Properties"));
 	paletteManager()->addWidget(m_ColorManager, "ColorTabDock", "ColorPanel");
@@ -1504,6 +1668,8 @@ void KarbonView::createColorDock()
 
 void KarbonView::createTransformDock()
 {
+	debugView("KarbonView::createTransformDock()");
+
 	m_TransformDocker = new VTransformDocker(part(), this);
 	m_TransformDocker->setWindowTitle(i18n("Transform"));
 	paletteManager()->addWidget(m_TransformDocker, "TransformTabDock", "TransformPanel");
@@ -1514,6 +1680,8 @@ void KarbonView::createTransformDock()
 
 void KarbonView::createResourceDock()
 {
+	debugView("KarbonView::createResourceDock()");
+
 	m_styleDocker = new VStyleDocker( part(), this );
 	m_styleDocker->setWindowTitle(i18n("Resources"));
 	paletteManager()->addWidget(m_styleDocker, "ResourceTabDock", "ResourcePanel");
@@ -1522,6 +1690,8 @@ void KarbonView::createResourceDock()
 VToolController *
 KarbonView::toolController()
 {
+	debugView("KarbonView::toolController()");
+
 	return m_toolController;
 }
 

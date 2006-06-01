@@ -32,6 +32,7 @@
 #include <kdebug.h>
 
 // Uncomment the #define below to print lots of debug information about the painter.
+// Or use the -DKARBON_DEBUG_PAINTER flag when using cmake, so the code stays the same.
 // #define KARBON_DEBUG_PAINTER
 
 #ifdef KARBON_DEBUG_PAINTER
