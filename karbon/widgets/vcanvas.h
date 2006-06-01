@@ -64,6 +64,7 @@ public:
 
 	QPointF toViewport( const QPointF & ) const;
 	QPointF toContents( const QPointF & ) const;
+
 	QRectF boundingBox() const;
 
 	/**
@@ -85,13 +86,13 @@ public:
 
 	QPointF snapToGrid( const QPointF & );
 
-	double contentsX();
-	double contentsY();
-	double contentsWidth();
-	double contentsHeight();
+	double contentsX() const;
+	double contentsY() const;
+	double contentsWidth() const;
+	double contentsHeight() const;
 
-	double visibleWidth();
-	double visibleHeight();
+	double visibleWidth() const;
+	double visibleHeight() const;
 
 	void resizeContents(int, int);
 	void scrollContentsBy(int, int);
