@@ -69,7 +69,7 @@
 
 <sect1 id="page-export">
 <title>Exporting a Page</title>
-<para>Individual pages can be exported as bitmap graphics files. To export the current page select <menuchoice><guimenu>File</guimenu> <guimenuitem>Export...</guimenuitem></menuchoice> or <menuchoice><guimenu>File</guimenu> <guimenuitem>Save As...</guimenuitem></menuchoice>. A standard &kde; file dialog box appears. The export format is determined by the name you give the file, it must end with one of the extensions listed below.</para>
+<para>Individual pages can be exported as bitmap graphics files. To export the current page select <menuchoice><guimenu>File</guimenu> <guimenuitem>Export...</guimenuitem></menuchoice> or <menuchoice><guimenu>File</guimenu> <guimenuitem>Save As...</guimenuitem></menuchoice>. A standard &kde; file dialog box appears. The export format is determined by the name extension you give the file, it must end with one of the extensions listed below.</para>
 <para>The following formats are supported:</para>
 
 <itemizedlist>

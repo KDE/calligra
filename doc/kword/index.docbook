@@ -46,7 +46,7 @@
 
 <book lang="&language;">
 <bookinfo>
-<title>The &kword; Users' Manual</title>
+<title>The &kword; Handbook</title>
 <authorgroup>
 <author>
 <firstname>Mike</firstname>
@@ -72,7 +72,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2006-1-24</date>
+<date>2006-04-23</date>
 <releaseinfo>1.5</releaseinfo>
 
 <abstract>
@@ -513,7 +513,7 @@ the title in the middle of the header (like a novel)?</title>
 <orderedlist>
 <listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Click on the <guilabel>Document</guilabel> tab.</para></listitem>
+<listitem><para>Click on the <guilabel>General</guilabel> tab.</para></listitem>
 <listitem><para>Click once in the text box labeled <guilabel>Title</guilabel> with the &LMB; and enter
 the desired document title.</para></listitem>
 <listitem><para>Click on the <guibutton>OK</guibutton> button.</para></listitem>
@@ -522,10 +522,10 @@ from the menubar.</para></listitem>
 <listitem><para>Click on the <guilabel>Header &amp; Footer</guilabel> tab.</para></listitem>
 <listitem><para>Select <guilabel>Different header for even and odd pages</guilabel>.</para></listitem>
 <listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
-<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Headers</guimenuitem></menuchoice>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Enable Document Headers</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
 <listitem><para>Move to an odd numbered page in your document, and click in the header box.</para></listitem>
-<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
 <listitem><para>The format paragraph dialog will appear.  Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
 <listitem><para>Click the <guibutton>New</guibutton> button.</para></listitem>
@@ -942,7 +942,7 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <informaltable>
 
 <tgroup cols="3">
-<thead><row><entry> </entry><entry>Import</entry><entry>Export</entry></row></thead>
+<thead><row><entry>Application</entry><entry>Import</entry><entry>Export</entry></row></thead>
 <tbody>
 <row><entry>Abiword</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>AmiPro</entry><entry>Yes</entry><entry>Yes</entry></row>

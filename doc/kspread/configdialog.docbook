@@ -158,10 +158,11 @@ range of options in the drop down selection box.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Pressing enter moves selection to:</guilabel></term>
-<listitem><para>When you have selected a cell then press the <keysym>Enter
-</keysym> key the selection will move one place to the left, right, up or 
-down as determined by the setting in this drop down selection box.
+<term><guilabel>Pressing enter moves cell cursor:</guilabel></term>
+<listitem><para>Select whether pressing the <keysym>Enter
+</keysym> key will move the cursor <guilabel>Down</guilabel>, <guilabel>Up</guilabel>, 
+<guilabel>Right</guilabel>, <guilabel>Left</guilabel> or <guilabel>Down, 
+First Column</guilabel> as determined by the setting in this drop down selection box.
 </para></listitem>
 </varlistentry>
 

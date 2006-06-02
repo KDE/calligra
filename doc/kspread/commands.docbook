@@ -328,8 +328,10 @@ selection.
 <guimenu>Edit</guimenu>
 <guimenuitem>Clear</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Clear text, Comment, Validity or Conditional Cell 
-Attributes from selected cell(s).</action>
+<listitem><para><action>Clear <guimenuitem>Text</guimenuitem>, 
+<guimenuitem>Comment</guimenuitem>, <guimenuitem>Validity</guimenuitem> or 
+<guimenuitem>Conditional Cell 
+Attributes</guimenuitem> from selected cell(s).</action>
 </para></listitem>
 </varlistentry>
 
@@ -382,7 +384,7 @@ Validity Checking</link> for more details.
 <listitem><para><action>To modify selected cell in-situ.</action>
 </para></listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
@@ -391,7 +393,7 @@ Validity Checking</link> for more details.
 <listitem><para><action>Rotate, scale or move the selected object.</action>
 </para></listitem>
 </varlistentry>
-
+-->
 </variablelist>
 </para>
 </sect1>
@@ -517,7 +519,8 @@ the spreadsheet. Range from 33% to 500%.
 <guimenu>Insert</guimenu>
 <guimenuitem>Cell Comment</guimenuitem>
 </menuchoice></term>
-<listitem><para><action><guilabel>Add/Modify Comment...</guilabel> or <guilabel>Remove Comment</guilabel>.</action>
+<listitem><para><action><guimenuitem>Add/Modify Comment...</guimenuitem> or 
+<guimenuitem>Remove Comment</guimenuitem>.</action>
 </para></listitem>
 </varlistentry>
 
@@ -583,9 +586,20 @@ See the section
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
+<guimenuitem>Picture</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the standard &kde; file dialog</action>
+to insert a picture.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
 <guimenuitem>External Data</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Insert data <guilabel>From Text File...</guilabel>, <guilabel>From Database...</guilabel> or <guilabel>From 
+<listitem><para><action>Insert data <guilabel>From Database...</guilabel>, 
+<guilabel>From Text File...</guilabel> or <guilabel>From 
 Clipboard...</guilabel>.</action> See the section <link linkend="insertdata">Inserting 
 External Data</link> for more details.
 </para></listitem>
@@ -610,6 +624,16 @@ External Data</link> for more details.
 <listitem><para><action>Format selected cell(s).</action> See the 
 <link linkend="formatspread">Spreadsheet Formatting</link> section for more 
 details.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Properties</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a dialog</action> to change the properties of 
+an inserted object or picture.
 </para></listitem>
 </varlistentry>
 
@@ -933,7 +957,6 @@ by &kspread;.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
-<guimenuitem>Protect Document</guimenuitem>
 <guimenuitem>Protect Sheet...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
@@ -944,8 +967,7 @@ by &kspread;.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
-<guimenuitem>Protect Document</guimenuitem>
-<guimenuitem>Protect Doc...</guimenuitem>
+<guimenuitem>Protect Document...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 <action>Protect the whole document with a password. A dialog pops up prompting

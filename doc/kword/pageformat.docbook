@@ -240,7 +240,7 @@ entry boxes (labeled <guilabel>Width:</guilabel> and
 </varlistentry>
 </variablelist>
 
-<para>Next to the paper format, in the combo box labeled
+<para>Next to the paper format, in the section labeled
 <guilabel>Orientation</guilabel> you can select either <link
 linkend="defportrait">Portrait</link> or <link
 linkend="deflandscape">Landscape</link> layout for
