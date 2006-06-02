@@ -83,7 +83,7 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
 	setMouseTracking( true );
 
 	// TODO: the line below disables double buffering, is that ok?
-	//m_contents->setAttribute(Qt::WA_NoSystemBackground, true);
+	// m_contents->setAttribute(Qt::WA_NoSystemBackground, true);
 
 	QPalette p = m_contents->palette();
 	p.setBrush(QPalette::Window, QBrush(QColor(255,255,255)));
@@ -285,7 +285,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	
 	setYMirroring( m_view->painterFactory()->editpainter() );
 	m_contents->setUpdatesEnabled( false );
-	VPainter *p = m_view->painterFactory()->painter();
+	VPainter *p = m_view->painterFactory()->painter(); // draws into m_pixmap
 
 	// TODO : only update ROIs
 	p->begin();
@@ -322,11 +322,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	if( m_view->toolController()->currentTool() )
 		m_view->toolController()->currentTool()->draw( &qpainter );
 
-	/* TODO: Replace bitBlt with these two lines when ported to qpainter
-	/*QPainter p2(m_contents);
-	p2.drawPixmap(rect.topLeft().toPoint(), p, rect.toRect());*/
-	
-	//bitBlt( m_contents, rect.topLeft().toPoint(), p->device(), rect.toRect() );
+	QPainter p2(m_contents);
+	p2.drawPixmap(rect.topLeft().toPoint(), *m_pixmap, rect.toRect());
 
 	m_contents->setUpdatesEnabled( true );
 }
@@ -384,7 +381,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRectF&, bool drawVObjects )
 
 	setYMirroring( m_view->painterFactory()->editpainter() );
 
-	VPainter* p = m_view->painterFactory()->painter();
+	VPainter* p = m_view->painterFactory()->painter(); // Draws into m_pixmap
 	if( drawVObjects )
 	{
 		p->begin();
@@ -411,11 +408,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRectF&, bool drawVObjects )
 	if( m_view->toolController()->currentTool() )
 		m_view->toolController()->currentTool()->draw( &qpainter );
 
-	/* TODO: Replace bitBlt with these two lines when ported to qpainter
 	QPainter p2(m_contents);
-	p2.drawPixmap(QPoint(0, 0), p, QRect(0, 0, width(), height()));
-	*/
-	//bitBlt( m_contents, 0, 0, p->device(), 0, 0, width(), height() );
+	p2.drawPixmap(QPoint(0, 0), *m_pixmap, QRect(0, 0, width(), height()));
 }
 
 void

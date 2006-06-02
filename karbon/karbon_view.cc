@@ -204,8 +204,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	// set up factory
 	m_painterFactory = new VPainterFactory;
-	m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
-	m_painterFactory->setEditPainter( canvasWidget()->viewport(), width(), height() );
+	m_painterFactory->setPainter( m_canvas->pixmap(), width(), height() );
+	m_painterFactory->setEditPainter( m_canvas->canvasWidget(), width(), height() );
 
 	if( shell() )
 	{
