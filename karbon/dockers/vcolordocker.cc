@@ -101,7 +101,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 
 	setLayout(mainWidgetLayout);
 
-	setMaximumHeight( 174 );
+	//setMaximumHeight( 174 );
 	setMinimumWidth( 194 );
 	
 }
