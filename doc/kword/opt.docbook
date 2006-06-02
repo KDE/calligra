@@ -27,8 +27,8 @@
 <indexterm><primary>keyboard key binding</primary><secondary>changing</secondary></indexterm>
 
 <para>To configure the keyboard shortcuts select <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Key
-Bindings</guimenuitem></menuchoice> from the menubar.</para>
+<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...
+</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>This will bring up a dialog box.</para>
 
@@ -93,7 +93,7 @@ which will trigger the desired action:  <guilabel>Primary shortcut:</guilabel> a
 
 <sect3 id="custom-keybinding-single"><title>Defining simple keyboard shortcuts</title>
 <para>Begin by deciding if you want to specify the <guilabel>Primary shortcut:</guilabel> or <guilabel>Alternate shortcut:</guilabel>
-shortcut, by placing a mark in the appropriate radiobutton.</para>
+, by placing a mark in the appropriate radiobutton.</para>
 
 <para>The <inlinemediaobject><imageobject><imagedata
 fileref="clearright.png" format="PNG"/></imageobject></inlinemediaobject> button will clear the current keyboard shortcut.</para>
@@ -527,7 +527,7 @@ values to their default values.</para>
 <imageobject><imagedata fileref="opt5.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>Use this dialog to format the appearance of forumlas in &kword;.  See the formula documentation for further details.</para>
+<para>Use this dialog to format the appearance of formulas in &kword;.  See the formula documentation for further details.</para>
 <para>When you are happy with the changes, simply click
 <guibutton>OK</guibutton>.</para>
 
@@ -631,6 +631,23 @@ lost.</para>
 <para>Clicking on the <guibutton>Defaults</guibutton> button restores all
 values to their default values.</para>
 </sect3>
+</sect2>
+
+<sect2 id="opt-path"><title>Configure path options</title>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt6.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Use this dialog to set the <guilabel>Backup Path</guilabel> and the directory 
+for your <guilabel>Personal Expression</guilabel> in &kword;.</para>
+</sect2>
+
+<sect2 id="opt-tts"><title>Configure Text-To-Speech options</title>
+
+<para>See the <link linkend="a11y-tts">Text-to-Speech</link> section 
+in the accessibility chapter for further details.</para>
 </sect2>
 
 </sect1>

@@ -79,8 +79,9 @@ will appear.  Select <guimenuitem>Frame/Frameset Properties...</guimenuitem>.</p
 tabs labeled <link linkend="format-frame-options">Options</link>,
 <link linkend="format-frame-tra">Text Run Around</link>,
 <link linkend="format-frame-connect">Connect Text Frames</link>,
-<link linkend="format-frame-geometry">Geometry</link> and
-<link linkend="format-frame-background">Background</link>.</para>
+<link linkend="format-frame-geometry">Geometry</link>,
+<link linkend="format-frame-background">Background</link> and
+<link linkend="format-frame-borders">Borders</link>.</para>
 
 <sect3 id="format-frame-options"><title>General Options</title>
 <indexterm><primary>frames</primary><secondary>configure automatic creation</secondary></indexterm>
@@ -274,10 +275,6 @@ clicking on the tab labeled <guilabel>Geometry</guilabel>.</para>
 <para>This dialog box allows you to specify <emphasis>exactly</emphasis>
 where the frame goes and how large it is.</para>
 
-<para>If you put a mark in the check box labeled <guilabel>Frame is inline</guilabel>, the frame size and position will
-be determined by the location of the placeholder in the text.  For a definition of inline frames, click
-<glossterm linkend="definlineframe">here</glossterm>. Selecting this option disables the <guilabel>Position</guilabel> spin boxes.</para>
-
 <para>If you put a mark in the check box labeled <guilabel>Protect size and position</guilabel>, the frame size and position will
 be fixed at their current location.  You will not be able to move the frame on the page until this box is unchecked.</para>
 
@@ -321,17 +318,35 @@ become 1 cm in size.</para>
 </mediaobject>
 </screenshot>
 
-<para>The right side of the dialog shows a preview of the current background.</para>
-
-<para>Begin by selecting the primary color of the background by clicking on the button labeled 
+<para>Select the color of the background by clicking on the button labeled 
 <guibutton>Background color:</guibutton>.  The color is selected using the
 <link linkend="select-colors">Color selection dialog</link>.</para>
 
-<para>Once the color is selected, you can select the fill style from the combo box labeled
-<guilabel>Background style:</guilabel>. Fill styles can be used to create diagonal lines,or reduce the relative density of color 
-applied to the background. After selecting your fill style, a sample will appear in the preview on the right. </para>
+</sect3>
+<sect3 id="format-frame-borders"><title>Frame Borders</title>
+<indexterm><primary>frames</primary><secondary>borders</secondary></indexterm>
 
-<para>Click <guibutton>OK</guibutton> to accept all of your changes.</para>
+<para>You can change the borders of the text frame by selecting the <guilabel>Borders</guilabel> tab.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="formframe6.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Select the <guilabel>Style:</guilabel> and <guilabel>Width:</guilabel> of the borders
+with the two drop down boxes on the left side of the dialog.</para>
+<para>Select the color of the borders by clicking on the button labeled 
+<guibutton>Color:</guibutton>.  The color is selected using the
+<link linkend="select-colors">Color selection dialog</link>.</para>
+<para>Use the four icons (border left, border right, border top and border bottom) below the color button
+to determine on which side of the frame you want to have a border.</para>
+<para>A <guilabel>Preview</guilabel> of the selected settings is shown on the right side of the dialog.
+</para>
+
+<para>Click <guibutton>OK</guibutton> to accept all of your changes and to close the dialog box.</para>
+<para>Click <guibutton>Apply</guibutton> to accept all of your changes without closing the dialog box.</para>
 <para>Click <guibutton>Cancel</guibutton> to forget all of your changes.</para>
 </sect3>
 </sect2>

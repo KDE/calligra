@@ -110,8 +110,9 @@ templates or load existing chart documents.
 </screenshot>
 <para>
 You can choose between various ways to startup &kchart;. On the left, you can
-see three options: Open Recent Documents, Charts templates and Open Existing
-Document. The first option lets you choose between
+see three options: <guilabel>Recent Documents</guilabel>, 
+<guilabel>Charts</guilabel> templates and <guilabel>Open Existing
+Document...</guilabel>. The first option lets you choose between
 recently opened charts, the second is for creating a
 new chart from various templates and the third is for opening an existing
 chart with a file dialog.
@@ -364,7 +365,8 @@ To get to the chart configuration dialog, select <menuchoice>
 <inlinemediaobject><imageobject>
 <imagedata fileref="cr22-action-options.png" format="PNG"/>
 </imageobject></inlinemediaobject> icon in the toolbar.
-</para>
+You might need to click on the right or left arrow at the top of the
+dialog to get all pages if the width of the dialog is too small.</para>
 <sect2 id="config-rowcol">
 <title>Row and Column Swapping</title>
 <screenshot>
@@ -462,8 +464,8 @@ Additionally you can set different colors in the Color box.
 <para>
 The Axes page holds configuration for the chart axes. This
 page highly depends on the chart type chosen. For the line
-chart you can set linear or logarithmic scales, turn the grid
-on and off and the line marker puts a square at every data value.
+chart you can set linear or logarithmic scales and turn the grid
+on and off.
 </para>
 </sect2>
 <sect2 id="config-colors">
@@ -520,7 +522,8 @@ different background colors or even a background picture.
 <para>
 This short overview of the configuration options gave you an
 introduction to the configuration possibilities of your chart,
-it is by no means complete. Different chart types have
+it is by no means complete. Different chart types like <guilabel>Bar</guilabel>,
+<guilabel>Line</guilabel> and <guilabel>Pie</guilabel>,have
 additional specialised configuration pages and you are welcome
 to look around, try different chart types and look at the
 configuration possibilities. Use the tooltips and read the
@@ -659,7 +662,7 @@ Start up the configuration dialog by clicking on the
   </mediaobject>
 </screenshot>
 <para>
-Let's start with labeling. Go to the <guimenu>Header/Footer</guimenu>
+Let's start with labeling. Go to the <guilabel>Header/Footer</guilabel>
 page and enter the text like in the above screenshot.
 </para>
 </sect3>
@@ -667,7 +670,7 @@ page and enter the text like in the above screenshot.
 <title>X-Axis Font Settings</title>
 <para>
 The next step is to make the font of the x axis a bit bigger. You
-can do this on the <guimenu>Font</guimenu> page.
+can do this on the <guilabel>Font</guilabel> page.
 </para>
 <screenshot>
 <screeninfo>Options - Fonts</screeninfo>
@@ -678,7 +681,7 @@ can do this on the <guimenu>Font</guimenu> page.
   </mediaobject>
 </screenshot>
 <para>
-Choose the <guimenu>X-Axis</guimenu> item and click on the
+Choose the <guilabel>X-Axis</guilabel> item and click on the
 <guimenu>Font...</guimenu> button. Choose a somewhat
 larger font like in the following screenshot.
 </para>
@@ -691,7 +694,7 @@ larger font like in the following screenshot.
   </mediaobject>
 </screenshot>
 <para>
-Note that the font is set to <guimenu>Relative</guimenu>.
+Note that the font is set to <guilabel>Relative</guilabel>.
 This means that the font is automatically scaled according
 to the overall chart size. This is quite usefull and most
 of the time what the average user expects.
@@ -700,9 +703,8 @@ of the time what the average user expects.
 <sect3>
 <title>Giving it a 3D Look</title>
 <para>
-The final configuration page is <guimenu>3D Parameters</guimenu>.
-You might need to click on the right arrow at the top to get
-to it if the width of the dialog too small.
+Some types of charts like <guilabel>Bar</guilabel> and <guilabel>Pie</guilabel>
+have an adiitional configuration page.
 </para>
 <screenshot>
 <screeninfo>Options - 3D Parameters</screeninfo>
@@ -713,8 +715,8 @@ to it if the width of the dialog too small.
   </mediaobject>
 </screenshot>
 <para>
-To get a 3D effect for the chart, simply activate
-<guimenu>3D bar</guimenu>.
+To get a 3D effect for this type of chart, go to the <guilabel>Bar</guilabel>
+page and simply activate <guilabel>3D bar</guilabel>.
 </para>
 <para>
 That's all what we need for a reasonable looking chart. Note
@@ -724,7 +726,7 @@ use. Experienced users will likely use the full option dialog
 we used in this example.
 </para>
 <para>
-Simply accept the settings by clicking on the <guimenu>OK</guimenu>
+Simply accept the settings by clicking on the <guibutton>OK</guibutton>
 button.
 </para>
 </sect3>
@@ -1012,7 +1014,7 @@ based on this document.
 </menuchoice></term>
 <listitem><para><action>Prints the document</action></para>
 <important><para>Make sure the proper print system is selected in the
-<quote>Print system currently used:</quote> section. This option can
+<guilabel>Print system currently used:</guilabel> section. This option can
 be seen after clicking on the <guimenu>Options &gt;&gt;</guimenu> button.</para></important></listitem>
 </varlistentry>
 

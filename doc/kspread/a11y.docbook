@@ -45,39 +45,38 @@ a general screen reader for the blind will be available in future versions of &k
 <sect2 id="a11y-theming">
 <title>Theming</title>
 <indexterm><primary>Theming</primary></indexterm>
-<para>For low-sighted or light alergic users, several features are available from 
-<menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem></menuchoice>. 
-Under <menuchoice><guimenu>Appearance &amp; Themes</guimenu><guimenuitem>Theme Manager</guimenuitem>
-</menuchoice>, you may select from several themes.  If you are light alergic, the
+<para>For low-sighted or light allergic users, several features are available in the &kcontrolcenter; 
+<menuchoice><guimenu>Appearance &amp; Themes</guimenu><guimenuitem>Theme Manager</guimenuitem></menuchoice>, 
+like high contrast color themes. If you are light allergic, the
 <guilabel>HighContrastDark</guilabel> or <guilabel>HighContrastLight</guilabel> themes
 may be helpful.  If you have difficulty reading small fonts or seeing small icons, the
-<guilabel>HighContrastDark-Big</guilabel> or <guilabel>HighContrastLight-Big</guilabel>
+<guilabel>HighContrastDark-big</guilabel> or <guilabel>HighContrastLight-big</guilabel>
 themes will increase the size of text, buttons, and icons.  You may also customize
-background, colors, fonts, and icons from the same screen.  A set of monochrome icons
+background, colors, fonts, and icons from the same dialog.  A set of monochrome icons
 is available.
 </para>
 
 <tip><para>If you choose one of the <guilabel>Big</guilabel> themes, you may discover that
-some screens are too large to fit your monitor.  Purchasing a larger monitor will be helpful.
-You can drag the portions of the screen not visible into the visable area by
-holding down the &Alt; key and dragging with the mouse anywhere
+some windows are too large to fit your monitor.  Purchasing a larger monitor will be helpful.
+You can drag the portions of the window not visible into the visible area by
+holding down the &Alt; key and dragging with the &LMB; anywhere
 within the screen.  If you have trouble operating a mouse, you can also move screens by pressing
 <keycombo action="simul">&Alt;<keycap>F3</keycap></keycombo>.  In 
 the dropdown Windows Operations Menu, choose 
 <menuchoice><guimenuitem>Move</guimenuitem></menuchoice>.
-Move the screen with the arrow keys and press <keycap>&Esc;</keycap>.
+Move the screen with the arrow keys and press &Esc; to finish the move.
 </para></tip>
 
 </sect2>
 
 <sect2 id="a11y-kmagnifier">
-<title>KMagnifier</title>
+<title>&kmagnifier;</title>
 <indexterm><primary>magnifier</primary></indexterm>
 <para>The <command>kdeaccessibility</command> module includes a screen magnifier
-application called <ulink url="help:kmag">KMagnifier</ulink>.
-If it is installed, you may run it from
+application called <ulink url="help:kmag">&kmagnifier;</ulink>.
+If it is installed, you can run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
-<guimenuitem>Accessibility</guimenuitem><guimenuitem>Screen Magnifier</guimenuitem></menuchoice>.
+<guimenuitem>KMag (Screen Magnifier)</guimenuitem></menuchoice>.
 </para>
 </sect2>
 
@@ -94,7 +93,7 @@ To turn on the TTS feature in &kspread;,
 select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
 &kspread;...</guimenuitem></menuchoice> from the menubar.
 This will display a dialog box.
-Clicking <guibutton>TTS</guibutton> will allow you to change
+Clicking on <guilabel>TTS</guilabel> will allow you to change
 the following.</para>
 
 <screenshot>
@@ -182,7 +181,7 @@ the items on the main menubar are not spoken.
 <para>If you can operate a mouse, but have trouble clicking, the
 <ulink url="help:kmag">KMouseTool</ulink> application may help.  Run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
-<guimenuitem>Accessibility</guimenuitem><guimenuitem>KMouseTool</guimenuitem></menuchoice>.
+<guimenuitem>KMouseTool (Automatik Mouse Click)</guimenuitem></menuchoice>.
 </para>
 </sect2>
 
@@ -206,7 +205,8 @@ press another key.  The result is as if you pressed both keys at once.
 Press the &Alt;, &Ctrl;, or &Shift; key again to turn off the sticky key.
 Activate this feature in 
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem>
-<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Modifier Keys</guimenuitem></menuchoice>.</para>
+<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Accessibility</guimenuitem>
+<guimenuitem>Modifier Keys</guimenuitem></menuchoice>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -216,7 +216,8 @@ accurately pressing keys.  It prevents
 inadvertent key presses by requiring that a key be held down for a minimum
 time before it is accepted.  Activate this feature in
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem>
-<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Keyboard Filters </guimenuitem></menuchoice>.</para>
+<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Accessibility</guimenuitem>
+<guimenuitem>Keyboard Filters</guimenuitem></menuchoice>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -225,7 +226,8 @@ time before it is accepted.  Activate this feature in
 inadvertent repeated key presses by preventing another keystroke for
 a certain amount of time.  Activate this feature in
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem>
-<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Keyboard  Filters</guimenuitem></menuchoice>.</para>
+<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Accessibility</guimenuitem>
+<guimenuitem>Keyboard Filters</guimenuitem></menuchoice>.</para>
 </listitem>
 </varlistentry>
 </variablelist>

@@ -114,8 +114,9 @@ toolbar will be inserted there.</para>
 sub-menu will appear.  Select
 <guimenuitem>Orientation</guimenuitem>. Another small submenu will
 appear.  Select <guimenuitem>Top</guimenuitem>,
-<guimenuitem>Bottom</guimenuitem>, <guimenuitem>Left</guimenuitem>, or
-<guimenuitem>Right</guimenuitem>.</para>
+<guimenuitem>Bottom</guimenuitem>, <guimenuitem>Left</guimenuitem>, 
+<guimenuitem>Right</guimenuitem>, <guimenuitem>Floating</guimenuitem> or
+<guimenuitem>Flat</guimenuitem>.</para>
 </listitem>
 </itemizedlist>
 
@@ -2229,7 +2230,7 @@ task for more details. </para>
 <sect1 id="paragraph-toolbar">
 <title>Paragraph Toolbar</title>
 
-<para>The Insert Toolbar consists of 9 buttons.  Each button performs
+<para>The Paragraph Toolbar consists of 9 buttons.  Each button performs
 a task from the menubar.</para>
 
 <screenshot>

@@ -142,8 +142,8 @@ like.</para>
 <link
 linkend="style-space">Indent &amp; Spacing</link>, <link
 linkend="style-align">General Layout</link>, <link
-linkend="style-borders">Borders</link>, <link
-linkend="style-numbering">Bullets/Numbering</link>, and <link
+linkend="style-borders">Decorations</link>, <link
+linkend="style-numbering">Bullets/Numbers</link>, and <link
 linkend="style-tabulators">Tabulators</link>, to format the text style.</para>
 
 <para>Click <guibutton>OK</guibutton> to create your new text style.</para>
@@ -189,7 +189,7 @@ all text formated with this text style.</para>
 <sect4 id="style-borders">
 <title>Changing Paragraph Borders</title>
 
-<para>The tab labeled <guilabel>Borders</guilabel> is used to define and configure graphical borders
+<para>The tab labeled <guilabel>Decorations</guilabel> is used to define and configure graphical borders
 around your paragraphs.</para>
 
 <para>This tab functions identically to the same tab in the <link linkend="para-borders">Format Paragraph</link> dialog.
@@ -317,8 +317,8 @@ will revert to <quote>Standard</quote>.</para>
 <link
 linkend="style-space">Indent and Spacing</link>, <link
 linkend="style-align">Aligns</link>, <link
-linkend="style-borders">Borders</link>, <link
-linkend="style-numbering">Bullets/Numbering</link>, and <link
+linkend="style-borders">Decorations</link>, <link
+linkend="style-numbering">Bullets/Numbers</link>, and <link
 linkend="style-tabulators">Tabulators</link> to alter the look of  the text style.</para>
 
 <para>Click <guibutton>OK</guibutton> to commit your changes.</para>

@@ -22,7 +22,7 @@ files that are compressed to reduce their space requirements. </para>
 <itemizedlist>
 <listitem><para><link linkend="kword-file-format-11">&kword; 1.1 and earlier</link>.</para></listitem>
 <listitem><para><link linkend="kword-file-format-12">&kword; 1.2</link>.</para></listitem>
-<listitem><para><link linkend="kword-file-format-13">&kword; 1.3 (current version)</link>.</para></listitem>
+<listitem><para><link linkend="kword-file-format-13">&kword; 1.3</link>.</para></listitem>
 
 </itemizedlist>
 

@@ -195,7 +195,7 @@ The change was wrong, now you want to back out of your changes.</para>
 
 <para>Each time a change is made to a document, &kword; remembers what
 the change was.  &kword; can
-<emphasis>Undo</emphasis> each change one at a a time. </para>
+<emphasis>Undo</emphasis> each change once a time. </para>
 
 <para>As an example, you are writing a business letter and type in the following sentence:</para>
 
@@ -831,7 +831,7 @@ or <guilabel>Simple Bold</guilabel> to modify your search.</para>
 <varlistentry>
 <term><guilabel>Vertical alignment:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Normal</guilabel>, <guilabel>Subrscript</guilabel> or
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Subscript</guilabel> or
 <guilabel>Superscript</guilabel> to determine what font alignment you want &kword; to search for.</para>
 </listitem>
 </varlistentry>

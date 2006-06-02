@@ -461,11 +461,11 @@ Handbook.</para>
 <title>Protection</title>
 
 <sect2 id="doc-protection">
-<title>Document protection</title>
+<title>Document Protection</title>
 <para>Protecting the document means that without the password a user cannot add
 or delete sheets. Document protection does not protect cells.</para>
 <para>Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document</guimenuitem><guimenuitem>Protect Doc...</guimenuitem></menuchoice>.
+Document</guimenuitem></menuchoice>.
 A dialog appears asking you for a password. The Password strength meter
 indicates if your password is secure enough. The longer the indicator is, the
 more secure your password.</para>
@@ -523,8 +523,7 @@ and objects on a sheet. Individual cells or a selection of cells can be
 unprotected within a protected sheet, see <link
 linkend="cell-protection">next section</link>.</para>
 <para>To protect a sheet, select
-<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.
 A  dialog appears asking you for a password. The Password strength meter
 indicates if your password is secure enough. The longer the indicator is, the
 more secure will be your password.</para>
@@ -607,8 +606,7 @@ cell to be effectively protected:</para>
 <itemizedlist>
 <listitem><para>
 Select
-<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.
 </para></listitem>
 <listitem><para>
 In the dialog that appears, provide a safe password, then confirm it by typing
@@ -646,8 +644,7 @@ dialog, click the Protection tab and select <guilabel>Hide formula</guilabel>.
 After you protect the sheet, the results of the formulae will be visible, but
 the formulae will not. </para>
 <para>You have now to protect the sheet: choose
-<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
 to display the Protect Sheet dialog box. Enter a safe password twice to prevent
 others from unprotecting the sheet. </para>
 <para>When <guilabel>Hide formula</guilabel> is enabled and
@@ -728,7 +725,8 @@ splitting &kspread;'s window into two or more views can help you work on it.
 This is done by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>
 Split View</guimenuitem></menuchoice> which will split the current view into 
 two parts. <menuchoice><guimenu>View</guimenu><guisubmenu>Splitter Orientation
-</guisubmenu></menuchoice> lets you choose between horizontal and vertical 
+</guisubmenu></menuchoice> lets you choose between 
+<guimenuitem>Horizontal</guimenuitem> and <guimenuitem>Vertical</guimenuitem> 
 splitting.</para>
 <para>This technique is particularly useful when you want to select an area 
 of the spreadsheet that is larger than can be shown in one view, perhaps to
@@ -781,16 +779,20 @@ the spreadsheet but which is not printed and not normally seen.</para>
 <para>To add a comment select the cell and choose <guimenuitem>Add/Modify 
 Comment...</guimenuitem> from the <mousebutton>right</mousebutton> mouse 
 button menu or from the <menuchoice><guimenu>Insert</guimenu><guisubmenu>
-Comment</guisubmenu></menuchoice> menu and type your comment into the 
+Cell Comment</guisubmenu></menuchoice> menu and type your comment into the 
 resulting <guilabel>Cell Comment</guilabel> dialog box.</para>
 <para>To see the comment hover the mouse pointer over the top right corner of 
 the cell. The comment will appear as if it were a Tooltip.
 </para>
 <para>If you check the <guilabel>Show comment indicator</guilabel> box of the 
-<guilabel>Misc</guilabel> page in the <menuchoice><guimenu>Settings</guimenu>
-<guimenuitem>Configure &kspread;...</guimenuitem></menuchoice> dialog, those 
+<guilabel>Sheet Properties</guilabel> dialog, those 
 cells containing comments will be highlighted by a small red triangle in the 
 top right corner.</para>
+<para>To open this dialog, click with the <mousebutton>right</mousebutton> mouse 
+button onto the sheet tab at the bottom of the main window and select 
+<guimenuitem>Sheet Properties</guimenuitem> from the popup menu. Or select it from the 
+<menuchoice><guimenu>Format</guimenu><guisubmenu>Sheet</guisubmenu></menuchoice> menu.</para>
+
 <para>To remove a comment from a cell, select <guimenuitem>Remove Comment
 </guimenuitem> from the <mousebutton>right</mousebutton> mouse button menu or 
 choose <menuchoice><guimenu>Edit</guimenu><guisubmenu>Clear</guisubmenu>

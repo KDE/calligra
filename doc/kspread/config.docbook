@@ -59,10 +59,11 @@ is configured.
 </textobject>
 </mediaobject>
 <para>
-You can also click on the <guibutton>Advanced</guibutton> button in the
+You can also click on the <guibutton>Advanced &gt;&gt;</guibutton> button in the
 <guilabel>Configure Shortcut</guilabel> dialog to get more options.
-There you can configure a primary shortcut and a secondary shortcut.
-You can even choose multi-key mode, which lets you add additional
+There you can configure a <guilabel>Primary shortcut:</guilabel> and a secondary 
+<guilabel>Alternate shortcut:</guilabel>.
+You can even choose <guilabel>Multi-key mode</guilabel>, which lets you add additional
 keys to the shortcut.
 </para>
 <para>
@@ -86,11 +87,14 @@ press the key that will choose that item from the menu.</para>
 
 <sect1 id="configtoolbars">
 <title>Toolbars</title>
-<para>&kspread; has five toolbars: File, Edit, Navigation, Format and Color/Border, 
+<para>&kspread; has five toolbars: <guilabel>File</guilabel>, 
+<guilabel>Edit</guilabel>, <guilabel>Navigation</guilabel>, 
+<guilabel>Format</guilabel> and <guilabel>Color/Border</guilabel>.
 each of which may or may not be shown depending on the choices made in the 
 <guimenu>Settings</guimenu> menu.</para>
-<para>You can choose whether a toolbar appears at the top, left, right or 
-bottom of &kspread;'s window by <mousebutton>right</mousebutton> clicking on 
+<para>You can choose whether a toolbar appears at the <guimenuitem>Top</guimenuitem>, 
+<guimenuitem>Left</guimenuitem>, <guimenuitem>Right</guimenuitem> or 
+<guimenuitem>Bottom</guimenuitem> of &kspread;'s window by <mousebutton>right</mousebutton> clicking on 
 the toolbar, which brings up the <guilabel>Toolbar Menu</guilabel>, and making 
 a selection from the <guisubmenu>Orientation</guisubmenu> sub menu. This 
 <guilabel>Toolbar Menu</guilabel> also has sub menus for choosing whether the 
