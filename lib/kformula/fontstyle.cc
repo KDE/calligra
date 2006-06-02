@@ -20,6 +20,7 @@
 #include <qpainter.h>
 #include <qpen.h>
 #include <qfontdatabase.h>
+#include <kstaticdeleter.h>
 
 #include "fontstyle.h"
 
@@ -35,23 +36,41 @@ void FontStyle::fillNameTable( SymbolTable::NameTable& names )
     }
 }
 
-static bool fontAvailable( const QString& fontName )
-{
-#if 0 // slloooww
-    if ( QFontInfo( QFont( fontName ) ).family().lower() == fontName.lower() )
-#endif
-    QFontDatabase db;
-    if ( db.families().findIndex( fontName ) != -1 ) // ## TODO remove foundry from families list?
-        return true;
-    else {
-        kdWarning(39001) << "Font '" << fontName << "' not found" << endl;
-        return false;
+// Cache the family list from QFontDatabase after fixing it up (no foundry, lowercase)
+class FontList {
+public:
+    FontList() {
+        QFontDatabase db;
+        const QStringList lst = db.families();
+        for ( QStringList::const_iterator it = lst.begin(), end = lst.end() ; it != end ; ++it ) {
+            const QString name = *it;
+            int i = name.find('[');
+            QString family = name;
+            // Remove foundry
+            if ( i > -1 ) {
+                const int li = name.findRev(']');
+                if (i < li) {
+                    if (name[i - 1] == ' ')
+                        i--;
+                    family = name.left(i);
+                }
+            }
+            m_fontNames.append( family.lower() );
+        }
     }
-}
-
+    bool hasFont( const QString& fontName ) const {
+        return m_fontNames.find( fontName ) != m_fontNames.end();
+    }
+    QStringList m_fontNames;
+};
+static FontList* s_fontList = 0;
+static KStaticDeleter<FontList> s_fontList_sd;
 
 void FontStyle::testFont( QStringList& missing, const QString& fontName ) {
-    if ( !fontAvailable( fontName ) ) {
+    if ( !s_fontList )
+        s_fontList_sd.setObject( s_fontList, new FontList() );
+    if ( !s_fontList->hasFont( fontName ) )  {
+        kdWarning(39001) << "Font '" << fontName << "' not found" << endl;
         missing.append( fontName );
     }
 }
