@@ -375,25 +375,34 @@ void KWFormulaFrameSetEdit::mousePressEvent( QMouseEvent* event,
                                              const QPoint&,
                                              const KoPoint& pos )
 {
+#warning "kde4: convert KoPoint to QFPoint"
+#if 0		
     // [Note that this method is called upon RMB and MMB as well, now]
     KoPoint tl = m_currentFrame->topLeft();
     formulaView->mousePressEvent( event, pos-tl );
+#endif	
 }
 
 void KWFormulaFrameSetEdit::mouseMoveEvent( QMouseEvent* event,
                                             const QPoint&,
                                             const KoPoint& pos )
 {
+#warning "kde4: convert KoPoint to QFPoint"
+#if 0		
     KoPoint tl = m_currentFrame->topLeft();
     formulaView->mouseMoveEvent( event, pos-tl );
+#endif	
 }
 
 void KWFormulaFrameSetEdit::mouseReleaseEvent( QMouseEvent* event,
                                                const QPoint&,
                                                const KoPoint& pos )
 {
-    KoPoint tl = m_currentFrame->topLeft();
+#warning "kde4: convert KoPoint to QFPoint"
+#if 0
+		KoPoint tl = m_currentFrame->topLeft();
     formulaView->mouseReleaseEvent( event, pos-tl );
+#endif	
 }
 
 void KWFormulaFrameSetEdit::focusInEvent()
