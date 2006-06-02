@@ -61,35 +61,38 @@
 
 
 VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
-    : QScrollArea( parent /*, Qt::WStaticContents / * WNorthWestGravity * / | Qt::WResizeNoErase  |
+    : QAbstractScrollArea( parent /*, Qt::WStaticContents / * WNorthWestGravity * / | Qt::WResizeNoErase  |
 	  Qt::WNoAutoErase*/ ), KoCanvasBase(), m_part( part ), m_view( view )
 {
 	debugCanvas("VCanvas::VCanvas(...)");
 
 	setObjectName("canvas");
 
-	if(!widget())
-		setWidget(new QWidget);
+	viewport()->setBackgroundRole(QPalette::NoRole);
+
+	m_contents = new QWidget(viewport());
+	m_contents->setAutoFillBackground(true);
 
 	m_zoomHandler = new KoZoomHandler;
 	m_shapeManager = new KoShapeManager(this);
 
-	// TODO: contentsMoving signal is gone. Check when the widget moved.
-	// connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
-	widget()->setFocusPolicy( Qt::StrongFocus );
+	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
+	m_contents->setFocusPolicy( Qt::StrongFocus );
 
-	widget()->setMouseTracking( true );
+	m_contents->setMouseTracking( true );
 	setMouseTracking( true );
 
-	QPalette p = widget()->palette();
-	p.setBrush(QPalette::Window, QBrush(QColor("white")));
-	widget()->setPalette(p);
 	// TODO: the line below disables double buffering, is that ok?
-	// widget()->setAttribute(Qt::WA_NoSystemBackground, true);
+	//m_contents->setAttribute(Qt::WA_NoSystemBackground, true);
 
-	widget()->installEventFilter( this );
+	QPalette p = m_contents->palette();
+	p.setBrush(QPalette::Window, QBrush(QColor(255,255,255)));
+	m_contents->setPalette(p);
 
-	widget()->resize( 800, 600 );
+	m_contents->installEventFilter( this );
+
+	// Set to 400 x 300 so I can see it in the viewport while testing things (tbscope)
+	m_contents->setGeometry( 0, 0, 400, 300 );
 
 	m_pixmap = new QPixmap( 800, 600 );
 
@@ -103,6 +106,7 @@ VCanvas::~VCanvas()
 	debugCanvas("VCanvas::~VCanvas()");
 
 	delete m_pixmap;
+	delete m_contents;
 	m_view = 0L;
 	m_part = 0L;
 }
@@ -184,10 +188,10 @@ VCanvas::eventFilter( QObject* object, QEvent* event )
 {
 	debugCanvas(QString("VCanvas::eventFilter(type = %1)").arg(event->type()));
 
-	QScrollArea::eventFilter( object, event );
+	QAbstractScrollArea::eventFilter( object, event );
 
 	if( event->type() == QEvent::ShortcutOverride || event->type() == QEvent::Shortcut )
-		return QScrollArea::eventFilter( object, event );
+		return QAbstractScrollArea::eventFilter( object, event );
 
 	if( event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease )
 		return m_view->keyEvent( event );
@@ -280,7 +284,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	QRectF rect = e->rect();
 	
 	setYMirroring( m_view->painterFactory()->editpainter() );
-	widget()->setUpdatesEnabled( false );
+	m_contents->setUpdatesEnabled( false );
 	VPainter *p = m_view->painterFactory()->painter();
 
 	// TODO : only update ROIs
@@ -319,12 +323,12 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		m_view->toolController()->currentTool()->draw( &qpainter );
 
 	/* TODO: Replace bitBlt with these two lines when ported to qpainter
-	QPainter p2(widget());
-	p2.drawPixmap(rect.topLeft().toPoint(), p, rect.toRect());
-	*/
-	bitBlt( widget(), rect.topLeft().toPoint(), p->device(), rect.toRect() );
+	/*QPainter p2(m_contents);
+	p2.drawPixmap(rect.topLeft().toPoint(), p, rect.toRect());*/
+	
+	//bitBlt( m_contents, rect.topLeft().toPoint(), p->device(), rect.toRect() );
 
-	widget()->setUpdatesEnabled( true );
+	m_contents->setUpdatesEnabled( true );
 }
 
 void
@@ -332,11 +336,7 @@ VCanvas::setViewport( double centerX, double centerY )
 {
 	debugCanvas(QString("VCanvas::setViewport(%1, %2)").arg(centerX).arg(centerY));
 
-	kDebug() << "#### contentsRect().width() = " << contentsRect().width() << endl;
-kDebug() << "#### widget().width() = " << widget()->width() << endl;
-kDebug() << "####  = " << visibleRegion().boundingRect().width() << endl;
-
-	widget()->move( int( centerX * contentsWidth() - 0.5 * visibleWidth() ),
+	m_contents->move( int( centerX * contentsWidth() - 0.5 * visibleWidth() ),
 					int( centerY * contentsHeight() - 0.5 * visibleHeight() ) );
 }
 
@@ -345,7 +345,7 @@ VCanvas::setViewportRect( const QRectF &r )
 {
 	debugCanvas(QString("VCanvas::setViewportRect(QRectF(%1, %2, %3, %4))").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height()));
 
-	widget()->setUpdatesEnabled( false );
+	m_contents->setUpdatesEnabled( false );
 	double zoomX = m_view->zoom() * ( ( visibleWidth() / m_view->zoom() ) / r.width() );
 	double zoomY = m_view->zoom() * ( ( visibleHeight() / m_view->zoom() ) / r.height() );
 	double pageOffX = ( contentsWidth() - ( m_part->document().width() * m_view->zoom() ) ) / 2.0;
@@ -353,11 +353,11 @@ VCanvas::setViewportRect( const QRectF &r )
 	double pageOffY = ( contentsHeight() - ( m_part->document().height() * m_view->zoom() ) ) / 2.0;
 	double centerY = double( ( r.center().y() ) * m_view->zoom() + pageOffY ) / double( contentsHeight() );
 	double zoom = zoomX < zoomY ? zoomX : zoomY;
-	widget()->resize( int( ( zoom / m_view->zoom() ) * contentsWidth() ),
+	m_contents->resize( int( ( zoom / m_view->zoom() ) * contentsWidth() ),
 					int( ( zoom / m_view->zoom() ) * contentsHeight() ) );
 	setViewport( centerX, 1.0 - centerY );
 	m_view->setZoomAt( zoom );
-	widget()->setUpdatesEnabled( true );
+	m_contents->setUpdatesEnabled( true );
 }
 
 void
@@ -404,10 +404,10 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRectF&, bool drawVObjects )
 		m_view->toolController()->currentTool()->draw( &qpainter );
 
 	/* TODO: Replace bitBlt with these two lines when ported to qpainter
-	QPainter p2(widget());
+	QPainter p2(m_contents);
 	p2.drawPixmap(QPoint(0, 0), p, QRect(0, 0, width(), height()));
 	*/
-	bitBlt( widget(), 0, 0, p->device(), 0, 0, width(), height() );
+	//bitBlt( m_contents, 0, 0, p->device(), 0, 0, width(), height() );
 }
 
 void
@@ -435,7 +435,7 @@ VCanvas::resizeEvent( QResizeEvent* event )
 	double centerX = double( contentsX() + 0.5 * visibleWidth() ) / double( contentsWidth() );
 	double centerY = double( contentsY() + 0.5 * visibleHeight() ) / double( contentsHeight() );
 
-	QScrollArea::resizeEvent( event );
+	QAbstractScrollArea::resizeEvent( event );
 	if( !m_pixmap )
 		m_pixmap = new QPixmap( width(), height() );
 	else
@@ -489,44 +489,44 @@ VCanvas::dropEvent( QDropEvent *e )
 
 double VCanvas::contentsX() const
 {
-	return widget()->x();
+	return m_contents->x();
 }
 
 double VCanvas::contentsY() const
 {
-	return widget()->y();
+	return m_contents->y();
 }
 
 double VCanvas::contentsWidth() const
 {
-	return widget()->width();
+	return m_contents->width();
 }
 
 double VCanvas::contentsHeight() const
 {
-	return widget()->height();
+	return m_contents->height();
 }
 
 double VCanvas::visibleWidth() const
 {
-	return visibleRegion().boundingRect().width();
+	return viewport()->width();
 }
 
 double VCanvas::visibleHeight() const
 {
-	return visibleRegion().boundingRect().height();
+	return viewport()->height();
 }
 
 void VCanvas::resizeContents (int width, int height)
 {
 	debugCanvas(QString("VCanvas::resizeContents(%1, %2)").arg(width).arg(height));
 
-	widget()->resize(width, height);
+	m_contents->resize(width, height);
 }
 
 void VCanvas::scrollContentsBy(int dx, int dy)
 {
-	widget()->scroll(dx, dy);
+	//m_contents->scroll(dx, dy);
 }
 
 void VCanvas::gridSize(double*, double*) const
@@ -568,7 +568,7 @@ KoViewConverter* VCanvas::viewConverter()
 
 QWidget* VCanvas::canvasWidget()
 {
-	return widget();
+	return m_contents;
 }
 
 #include "vcanvas.moc"

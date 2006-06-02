@@ -21,7 +21,7 @@
 #define __VCANVAS_H__
 
 
-#include <QScrollArea>
+#include <QAbstractScrollArea>
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QEvent>
@@ -29,6 +29,7 @@
 #include <QDropEvent>
 #include <QPaintEvent>
 #include <QFocusEvent>
+#include <QWidget>
 
 #include <koffice_export.h>
 #include <KoCanvasBase.h>
@@ -45,7 +46,7 @@ class KoTool;
 
 // The canvas is a QScrollArea (for the scrollbar management) and a KoCanvasBase (for the object management)
 
-class KARBONCOMMON_EXPORT VCanvas : public QScrollArea, public KoCanvasBase
+class KARBONCOMMON_EXPORT VCanvas : public QAbstractScrollArea, public KoCanvasBase
 {
 	Q_OBJECT
 public:
@@ -127,8 +128,10 @@ private slots:
 
 signals:
 	void viewportChanged();
+	void contentsMoving( int, int );
 
 private:
+	QWidget *m_contents;
 	QPixmap *m_pixmap;
 	KarbonPart* m_part;
 	KarbonView* m_view;

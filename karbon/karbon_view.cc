@@ -33,6 +33,7 @@
 #include <QEvent>
 #include <QDropEvent>
 #include <Q3PtrList>
+#include <QGridLayout>
 
 #include <kaction.h>
 #include <kcolormimedata.h>
@@ -179,9 +180,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	unsigned int max = part()->maxRecentFiles();
 	setNumberOfRecentFiles( max );
 
-	reorganizeGUI();
-
         connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( setUnit( KoUnit::Unit ) ) );
+
+	// layout:
+	QGridLayout *layout = new QGridLayout();
+	layout->setMargin(0);
 
 	// widgets:
 	m_horizRuler = new VRuler( Qt::Horizontal, this );
@@ -194,6 +197,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	m_canvas = new VCanvas( this, this, p );
 	connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
+
+	layout->addWidget(m_canvas, 0, 0);
 
 	m_canvas->show();
 
@@ -228,7 +233,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		m_vertRuler->installEventFilter(m_canvas);
 	}
 
+	setLayout(layout);
+
 	zoomChanged();
+	reorganizeGUI();
 }
 
 KarbonView::~KarbonView()
@@ -377,23 +385,11 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	if(!m_showRulerAction)
 		return;
 
-/* TODO: resizeEvent is triggered before widgets/objects are created, which obviously results in a crash.
-
-	if( shell() && m_showRulerAction->isChecked())
-	{
-		m_canvas->setGeometry( rulerWidth, rulerHeight, width() - rulerWidth, height() - rulerHeight );
-		updateRuler();
-	}
-	else
-	{
-		m_horizRuler->hide();
-		m_vertRuler->hide();
-		m_canvas->setGeometry( 0, 0, width(), height() );
-	}
+	if(!m_canvas)
+		return;
 
 	zoomChanged();
 	reorganizeGUI();
-*/
 }
 
 void
@@ -915,7 +911,7 @@ KarbonView::zoomChanged( const QPointF &p )
 {
 	debugView(QString("KarbonView::zoomChanged( QPointF(%1, %2) )").arg(p.x()).arg(p.y()));
 
-	double centerX;
+	/*double centerX;
 	double centerY;
 	double zoomFactor;
 
@@ -1001,7 +997,7 @@ KarbonView::zoomChanged( const QPointF &p )
 	}
 	m_canvas->viewport()->setFocus();
 
-	emit zoomChanged( zoomFactor );
+	emit zoomChanged( zoomFactor );*/
 }
 
 void
