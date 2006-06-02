@@ -299,7 +299,7 @@ public:
 
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
     /**
      * @returns the child at position i.
@@ -536,7 +536,7 @@ public:
      */
     static bool isValidSelection( FormulaCursor* cursor );
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
 
