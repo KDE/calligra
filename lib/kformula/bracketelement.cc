@@ -191,7 +191,7 @@ bool SingleContentElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
-void SingleContentElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
+void SingleContentElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     content->writeMathML( doc, parent, oasisFormat );
 }
@@ -456,7 +456,7 @@ QString BracketElement::formulaString()
     return "(" + getContent()->formulaString() + ")";
 }
 
-void BracketElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
+void BracketElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mfenced" : "mfenced" );
     if ( left->getType() != LeftRoundBracket ||
@@ -555,7 +555,7 @@ QString OverlineElement::formulaString()
     return getContent()->formulaString();
 }
 
-void OverlineElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
+void OverlineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mover" : "mover" );
     SingleContentElement::writeMathML( doc, de, oasisFormat );
@@ -655,7 +655,7 @@ QString UnderlineElement::formulaString()
     return getContent()->formulaString();
 }
 
-void UnderlineElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasisFormat )
+void UnderlineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:munder" : "munder" );
     SingleContentElement::writeMathML( doc, de, oasisFormat );
