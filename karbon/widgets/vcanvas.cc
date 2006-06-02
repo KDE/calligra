@@ -51,7 +51,7 @@
 
 // Uncomment the #define below to print lots of debug information about the view.
 // Or use the -DKARBON_DEBUG_CANVAS flag when using cmake, so the code stays the same.
-#define KARBON_DEBUG_CANVAS
+// #define KARBON_DEBUG_CANVAS
 
 #ifdef KARBON_DEBUG_CANVAS
 #define debugCanvas(text) kDebug() << "KARBON_DEBUG_CANVAS: " << text << endl
@@ -336,8 +336,15 @@ VCanvas::setViewport( double centerX, double centerY )
 {
 	debugCanvas(QString("VCanvas::setViewport(%1, %2)").arg(centerX).arg(centerY));
 
-	m_contents->move( int( centerX * contentsWidth() - 0.5 * visibleWidth() ),
-					int( centerY * contentsHeight() - 0.5 * visibleHeight() ) );
+kDebug() << endl << "##############################################" << endl;
+kDebug() << "centerX         = " << centerX << endl;
+kDebug() << "contentsWidth() = " << contentsWidth() << endl;
+kDebug() << "visibleWidth()  = " << visibleWidth() << endl;
+kDebug() << "-------------------------------" << endl;
+kDebug() << "0.5 * visibleWidth() - centerX * contentsWidth() = " << (0.5 * visibleWidth() - centerX * contentsWidth()) << endl;
+kDebug() << "##############################################" << endl << endl;
+	m_contents->move( int( 0.5 * visibleWidth() - centerX * contentsWidth() ),
+					int( 0.5 * visibleHeight() - centerY * contentsHeight() ) );
 }
 
 void
@@ -355,7 +362,8 @@ VCanvas::setViewportRect( const QRectF &r )
 	double zoom = zoomX < zoomY ? zoomX : zoomY;
 	m_contents->resize( int( ( zoom / m_view->zoom() ) * contentsWidth() ),
 					int( ( zoom / m_view->zoom() ) * contentsHeight() ) );
-	setViewport( centerX, 1.0 - centerY );
+	//setViewport( centerX, 1.0 - centerY );
+setViewport( 0.5, 0.5 );
 	m_view->setZoomAt( zoom );
 	m_contents->setUpdatesEnabled( true );
 }
@@ -432,8 +440,8 @@ VCanvas::resizeEvent( QResizeEvent* event )
 {
 	debugCanvas("VCanvas::resizeEvent()");
 
-	double centerX = double( contentsX() + 0.5 * visibleWidth() ) / double( contentsWidth() );
-	double centerY = double( contentsY() + 0.5 * visibleHeight() ) / double( contentsHeight() );
+	double centerX = 0.5; //double( contentsX() + 0.5 * visibleWidth() ) / double( contentsWidth() );
+	double centerY = 0.5; //double( contentsY() + 0.5 * visibleHeight() ) / double( contentsHeight() );
 
 	QAbstractScrollArea::resizeEvent( event );
 	if( !m_pixmap )

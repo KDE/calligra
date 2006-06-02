@@ -117,7 +117,7 @@
 
 // Uncomment the #define below to print lots of debug information about the view.
 // Or use the -DKARBON_DEBUG_VIEW flag when using cmake, so the code stays the same.
-#define KARBON_DEBUG_VIEW
+// #define KARBON_DEBUG_VIEW
 
 #ifdef KARBON_DEBUG_VIEW
 #define debugView(text) kDebug() << "KARBON_DEBUG_VIEW: " << text << endl
