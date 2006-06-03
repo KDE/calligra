@@ -26,6 +26,8 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kfilemetainfo.h>
+#include <kstringhandler.h>
 
 #include <QComboBox>
 #include <qradiobutton.h>
@@ -87,7 +89,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
     QLabel* wallpaperLA = new QLabel( i18n( "Background wallpaper:" ), this );
     center->addWidget( wallpaperLA );
-    
+
     wallCB = new QComboBox( false, this, "wallCombo" );
     wallpaperLA->setBuddy(wallCB);
     wallCB->setWhatsThis( i18n( "You can select a background image from "
@@ -99,13 +101,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     center->addWidget( wallCB );
     wallCB->insertItem( i18n("None") );
 
-    QStringList list = KGlobal::dirs()->findAllResources( "wallpaper" );
-
-    for( QStringList::ConstIterator it = list.begin(); it != list.end(); it++ )
-	wallCB->insertItem( ( (*it).at(0)=='/' ) ?        // if absolute path
-                            KUrl::fromPathOrUrl( *it ).fileName() :    // then only fileName
-                            (*it) );
-
+	loadWallpaperFilesList();
     QPushButton* browsePB = new QPushButton( i18n("&Browse..."), this );
     browsePB->setWhatsThis( i18n( "Click this button to select a background "
                                      "image not yet present in the list above. " ) );
@@ -182,7 +178,103 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     intensitySB->hide(); //the property doesn't work atm
 }
 
+//Code from kcontrol/background/bgdialog.cc
+void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
+{
+   // Wallpapers
+   // the following QMap is lower cased names mapped to cased names and URLs
+   // this way we get case insensitive sorting
+   QMap<QString, QPair<QString, QString> > papers;
 
+   //search for .desktop files before searching for images without .desktop files
+   QStringList lst =  KGlobal::dirs()->findAllResources("wallpaper", "*desktop", false, true);
+   QStringList files;
+   for (QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it)
+   {
+      KSimpleConfig fileConfig(*it);
+      fileConfig.setGroup("Wallpaper");
+
+      QString imageCaption = fileConfig.readEntry("Name");
+      QString fileName = fileConfig.readEntry("File");
+
+      if (imageCaption.isEmpty())
+      {
+         imageCaption = fileName;
+         imageCaption.replace('_', ' ');
+         imageCaption = KStringHandler::capwords(imageCaption);
+      }
+
+      // avoid name collisions
+      QString rs = imageCaption;
+      QString lrs = rs.lower();
+      for (int n = 1; papers.find(lrs) != papers.end(); ++n)
+      {
+         rs = imageCaption + " (" + QString::number(n) + ')';
+         lrs = rs.lower();
+      }
+      int slash = (*it).findRev('/') + 1;
+      QString directory = (*it).left(slash);
+      bool canLoadScaleable = false;
+#ifdef HAVE_LIBART
+      canLoadScaleable = true;
+#endif
+      if ( fileConfig.readEntry("ImageType") == "pixmap" || canLoadScaleable ) {
+	      papers[lrs] = qMakePair(rs, directory + fileName);
+	      files.append(directory + fileName);
+      }
+   }
+
+   //now find any wallpapers that don't have a .desktop file
+   lst =  KGlobal::dirs()->findAllResources("wallpaper", "*", false, true);
+   for (QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it)
+   {
+      if ( !(*it).endsWith(".desktop") && files.grep(*it).empty() ) {
+         // First try to see if we have a comment describing the image.  If we do
+         // just use the first line of said comment.
+         KFileMetaInfo metaInfo(*it);
+         QString imageCaption;
+
+         if (metaInfo.isValid() && metaInfo.item("Comment").isValid())
+            imageCaption = metaInfo.item("Comment").string().section('\n', 0, 0);
+
+         if (imageCaption.isEmpty())
+         {
+            int slash = (*it).findRev('/') + 1;
+            int endDot = (*it).findRev('.');
+
+            // strip the extension if it exists
+            if (endDot != -1 && endDot > slash)
+               imageCaption = (*it).mid(slash, endDot - slash);
+            else
+               imageCaption = (*it).mid(slash);
+
+            imageCaption.replace('_', ' ');
+            imageCaption = KStringHandler::capwords(imageCaption);
+         }
+
+         // avoid name collisions
+         QString rs = imageCaption;
+         QString lrs = rs.lower();
+         for (int n = 1; papers.find(lrs) != papers.end(); ++n)
+         {
+            rs = imageCaption + " (" + QString::number(n) + ')';
+            lrs = rs.lower();
+         }
+         papers[lrs] = qMakePair(rs, *it);
+      }
+   }
+
+   m_wallpaper.clear();
+   int i = 1;
+   for (QMap<QString, QPair<QString, QString> >::Iterator it = papers.begin();
+        it != papers.end();
+        ++it)
+   {
+      wallCB->insertItem(it.data().first);
+      m_wallpaper[it.data().second] = i;
+      i++;
+   }
+}
 
 void KChartBackgroundPixmapConfigPage::init()
 {
@@ -330,24 +422,34 @@ void KChartBackgroundPixmapConfigPage::apply()
 
 void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
 {
-    for( int i = 1; i < wallCB->count(); i++ )
-    {
-        if( fileName == wallCB->text( i ) )
-        {
-            wallCB->setCurrentItem( i );
-            loadWallPaper();
-            return;
-        }
-    }
+   wallCB->blockSignals(true);
 
-    if( !fileName.isEmpty() )
-    {
-        wallCB->insertItem( fileName );
-        wallCB->setCurrentItem( wallCB->count()-1 );
-    }
-    else
-        wallCB->setCurrentItem( 0 );
+   if (m_wallpaper.find(fileName) == m_wallpaper.end())
+   {
+      int i = wallCB->count();
+      QString imageCaption;
+      int slash = fileName.findRev('/') + 1;
+      int endDot = fileName.findRev('.');
 
+      // strip the extension if it exists
+      if (endDot != -1 && endDot > slash)
+         imageCaption = fileName.mid(slash, endDot - slash);
+      else
+         imageCaption = fileName.mid(slash);
+      if (wallCB->text(i-1) == imageCaption)
+      {
+         i--;
+         wallCB->removeItem(i);
+      }
+      wallCB->insertItem(imageCaption);
+      m_wallpaper[fileName] = i;
+      wallCB->setCurrentItem(i);
+   }
+   else
+   {
+      wallCB->setCurrentItem(m_wallpaper[fileName]);
+   }
+   wallCB->blockSignals(false);
     loadWallPaper();
 }
 
@@ -384,8 +486,17 @@ bool KChartBackgroundPixmapConfigPage::loadWallPaper()
 	wallPixmap.resize(0,0);
 	wallFile = "";
     } else {
-	wallFile = wallCB->text( i );
-	QString file = locate("wallpaper", wallFile);
+        for(QMap<QString,int>::ConstIterator it = m_wallpaper.begin();
+            it != m_wallpaper.end();
+            ++it)
+        {
+            if (it.data() == i)
+            {
+                wallFile = it.key();
+                break;
+            }
+        }
+        QString file = locate("wallpaper", wallFile);
 	if( file.isEmpty() ) {
             kWarning(35001) << "Couldn't locate wallpaper " << wallFile << endl;
             wallPixmap.resize(0,0);

@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <qpixmap.h>
-
+#include <QMap>
 class QSpinBox;
 class QRadioButton;
 class QComboBox;
@@ -47,13 +47,13 @@ public:
     void apply();
 
 private slots:
-    void showSettings( const QString& ); 
+    void showSettings( const QString& );
     void slotBrowse();
     void slotWallPaperChanged( int );
 
 private:
     bool loadWallPaper();
-
+    void loadWallpaperFilesList();
     KChartParams* _params;
     QComboBox* wallCB;
     QWidget* wallWidget;
@@ -69,6 +69,7 @@ private:
 #endif
     KColorButton* _backgroundCB;
     Q3GroupBox* right;
+	QMap<QString,int> m_wallpaper;
 };
 
 }  //KChart namespace
