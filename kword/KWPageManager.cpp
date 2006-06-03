@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,6 +17,7 @@
  */
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KoShape.h"
 #include "KoRect.h"
 
 //#define DEBUG_PAGES
@@ -26,6 +27,21 @@ KWPageManager::KWPageManager() {
     m_onlyAllowAppend = false;
     m_pageList.setAutoDelete(true);
     m_defaultPageLayout = KoPageLayout::standardLayout();
+}
+
+int KWPageManager::pageNumber(const KoShape *shape) const {
+    return pageNumber(shape->absolutePosition());
+}
+int KWPageManager::pageNumber(const QPointF &point) const {
+    int pageNumber=m_firstPage;
+    double startOfpage = 0.0;
+    foreach(KWPage *page, m_pageList) {
+        if(startOfpage >= point.y())
+            break;
+        startOfpage += page->height();
+        pageNumber++;
+    }
+    return pageNumber;
 }
 
 int KWPageManager::pageNumber(const KoRect &frame) const {
@@ -89,6 +105,9 @@ KWPage* KWPageManager::page(int pageNum) const {
     kDebug(31001) << kBacktrace();
 #endif
     return 0;
+}
+KWPage* KWPageManager::page(const KoShape *shape) const {
+    return page(pageNumber(shape));
 }
 KWPage* KWPageManager::page(const KoRect &frame) const {
     return page(pageNumber(frame));
@@ -211,7 +230,8 @@ void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
     //kDebug() << "setDefaultPage l:" << m_defaultPageLayout.ptLeft << ", r: " << m_defaultPageLayout.ptRight << ", a: " << m_defaultPageLayout.ptPageEdge << ", b: " << m_defaultPageLayout.ptBindingSide << endl;
 }
 
-KoPoint KWPageManager::clipToDocument(const KoPoint &point) {
+KoPoint KWPageManager::clipToDocument(const KoPoint &kpoint) {
+    QPointF point(kpoint.x(), kpoint.y());
     int page=m_firstPage;
     double startOfpage = 0.0;
     Q3PtrListIterator<KWPage> pages(m_pageList);
@@ -223,11 +243,11 @@ KoPoint KWPageManager::clipToDocument(const KoPoint &point) {
         ++pages;
     }
     page = qMin(page, lastPageNumber());
-    KoRect rect = this->page(page)->rect();
+    QRectF rect = this->page(page)->rect();
     if(rect.contains(point))
-        return point;
+        return kpoint;
 
-    KoPoint rc(point);
+    KoPoint rc(kpoint);
     if(rect.top() > rc.y())
         rc.setY(rect.top());
     else if(rect.bottom() < rc.y())

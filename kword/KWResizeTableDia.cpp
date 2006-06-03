@@ -41,6 +41,7 @@ KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWD
 }
 
 void KWResizeTableDia::setupTab1(int resizeColumn) {
+#if 0
     KVBox *page = makeVBoxMainWidget();
     QLabel *rc = new QLabel( i18n( "Column:" ), page );
     rc->resize( rc->sizeHint() );
@@ -53,10 +54,12 @@ void KWResizeTableDia::setupTab1(int resizeColumn) {
     m_position= new KoUnitDoubleSpinBox( page, 0.01, m_table->anchorFrameset()->isFloating() ? m_table->anchorFrameset()->frame(0)->width(): 9999, 1, 0.0, m_doc->unit(), m_doc->unit() );
     slotValueChanged( m_value->value());
     connect( m_value, SIGNAL( valueChanged ( int )), this, SLOT( slotValueChanged( int )));
+#endif
 }
 
 bool KWResizeTableDia::doResize()
 {
+#if 0
     unsigned int resize= m_value->value() - 1;
     KWFrame *frm = m_table->cell( 0, resize )->frame(0);
     if (frm) {
@@ -69,15 +72,18 @@ bool KWResizeTableDia::doResize()
         m_doc->addCommand( cmd );
     }
     return true;
+#endif
 }
 
 void KWResizeTableDia::slotValueChanged( int pos)
 {
+#if 0
     KWFrame *frm = m_table->cell( 0, pos-1 )->frame(0);
     if (frm) {
         m_position->setValue( KoUnit::toUserValue( qMax(0.00, frm->normalize().width()), m_doc->unit() ) );
         m_resetValue = m_position->value();
     }
+#endif
 }
 
 void KWResizeTableDia::slotUser1()

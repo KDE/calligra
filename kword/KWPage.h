@@ -108,7 +108,9 @@ public:
      */
     QRect zoomedRect(KoZoomHandler *zoomHandler);
     /// return a KoRect with the (pt) sizes of this page. Margins are ignored for this function.
-    const KoRect rect() const;
+    const KoRect rectOld() const;
+    /// return a QRectF with the (pt) sizes of this page. Margins are ignored for this function.
+    const QRectF rect() const;
 
 private:
     /** private constructor, only for our friends

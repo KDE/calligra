@@ -56,9 +56,11 @@ void KWFindReplace::emitNewCommand(KCommand *cmd)
 
 void KWFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdocument, KDialogBase* dialog)
 {
+#if 0
     KWTextDocument *textdoc=static_cast<KWTextDocument *>(textdocument);
     bool repaint = isReplace() ? options() & KReplaceDialog::PromptOnReplace : true;
     textdoc->textFrameSet()->highlightPortion( parag, index, length, m_canvas, repaint, dialog );
+#endif
 }
 
 #include "KWFindReplace.moc"

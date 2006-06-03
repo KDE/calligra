@@ -68,6 +68,7 @@ QList<KWFrame *> KWFrameList::framesOnTop() const {
 }
 
 void KWFrameList::setFrames(const Q3PtrList<KWFrame> &frames) {
+#if 0
     // kDebug(31001) << "KWFrameList::setFrames for " << m_frame->frameSet()->name() << endl;
     m_frames.clear();
     if ( m_doc->layoutViewMode() && !m_doc->layoutViewMode()->hasFrames() )
@@ -111,6 +112,7 @@ void KWFrameList::setFrames(const Q3PtrList<KWFrame> &frames) {
             m_frames.append( daFrame );
     }
     std::sort( m_frames.begin(), m_frames.end(), KWFrame::compareFrameZOrder );
+#endif
 }
 
 void KWFrameList::updateAfterMove(int oldPageNum) {

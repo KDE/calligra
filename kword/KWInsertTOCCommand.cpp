@@ -29,12 +29,13 @@
 #include <kdebug.h>
 
 KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs, KoTextParag *parag )
-    : KoTextDocCommand( fs->textDocument() ), m_paragId( parag->paragId() )
+    : KoTextDocCommand( 0 ), m_paragId( parag->paragId() )
 {
 }
 
 KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
 {
+#if 0
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * fs = textdoc->textFrameSet();
 
@@ -110,6 +111,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
     // The setParagLayout ruined it, so here it is again :)
     prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
     return c;
+#endif
 }
 
 KoTextCursor *KWInsertTOCCommand::unexecute( KoTextCursor *c )
@@ -124,6 +126,7 @@ KoTextCursor *KWInsertTOCCommand::unexecute( KoTextCursor *c )
 
 KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *cursor, KMacroCommand * /*macroCmd*/ )
 {
+#if 0
     KoTextDocument * textdoc = fs->textDocument();
     // Remove existing table of contents, based on the style
     KoTextCursor start( textdoc );
@@ -204,10 +207,12 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
     }
     // ### TODO propagate parag ID changes.
     return posOfTable;
+#endif
 }
 
 KoParagStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )
 {
+#if 0
     // Determine style name.
     QString name;
     QString displayName;
@@ -254,4 +259,5 @@ KoParagStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int
         fs->kWordDocument()->updateAllStyleLists();                 // show it in the UI
     }
     return style;
+#endif
 }

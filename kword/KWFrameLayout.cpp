@@ -35,11 +35,13 @@ KWFrameLayout::HeaderFooterFrameset::HeaderFooterFrameset( KWTextFrameSet* fs, i
     : m_frameset(fs), m_startAtPage(start), m_endAtPage(end), m_oddEvenAll(oea),
       m_spacing(spacing), m_minY( 0 ), m_positioned( false )
 {
+#if 0
     if ( fs->frameCount() > 0 )
         m_height = fs->frame(0)->height();
     else
         m_height = 20; // whatever. The text layout will resize it.
     Q_ASSERT( m_height > 0 );
+#endif
 }
 
 
@@ -132,6 +134,7 @@ int KWFrameLayout::HeaderFooterFrameset::frameNumberForPage( int page ) const
 void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                             int fromPage, int toPage, uint flags )
 {
+#if 0
     //kDebug(32002) << "KWFrameLayout::layout " << kBacktrace() << endl;
     // Just debug stuff
 #ifdef DEBUG_FRAMELAYOUT
@@ -514,10 +517,12 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
             }
         }
     }
+#endif
 }
 
 void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect )
 {
+#if 0
     if ( frameNumber < headerFooter->frameCount() ) {
         KWFrame* frame = headerFooter->frame( frameNumber );
         if ( *frame == rect )
@@ -547,6 +552,7 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
     // of the footnote frameset with 2 frames.
     headerFooter->updateFrames( 0 /*fast one*/ );
     m_framesetsToUpdate.insert( headerFooter, true );
+#endif
 }
 
 // Called at beginning and end of the layout for a given page,
@@ -555,15 +561,18 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
 // once for each footnote, so it can't detect the "no change" case.
 KoRect KWFrameLayout::firstColumnRect( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns ) const
 {
+#if 0
     uint frameNum = pageNum * numColumns /*+ col  0 here*/;
     if ( mainTextFrameSet && frameNum < mainTextFrameSet->frameCount() )
         return * mainTextFrameSet->frame( frameNum );
     else
         return KoRect();
+#endif
 }
 
 bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, HasFootNotes hasFootNotes )
 {
+#if 0
     if ( !mainTextFrameSet )
         return false;
     bool mainTextFrameResized = false;
@@ -610,10 +619,12 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
     }
     return mainTextFrameResized;
+#endif
 }
 
 void KWFrameLayout::checkFootNotes()
 {
+#if 0
     // We recalculate all footnotes pages, but we return true
     // if those on pageNum have changed.
     Q3PtrListIterator<HeaderFooterFrameset> it( m_footnotes );
@@ -646,4 +657,5 @@ void KWFrameLayout::checkFootNotes()
             }
         }
     }
+#endif
 }

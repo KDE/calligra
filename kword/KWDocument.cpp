@@ -132,6 +132,7 @@ void KWCommandHistory::redo()
 /******************************************************************/
 void KWDocument::clearUndoRedoInfos()
 {
+#if 0
     Q3PtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -139,6 +140,7 @@ void KWDocument::clearUndoRedoInfos()
         if ( fs )
             fs->clearUndoRedoInfo();
     }
+#endif
 }
 
 /**
@@ -238,8 +240,8 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     m_varColl = new KWVariableCollection( new KWVariableSettings(), m_varFormatCollection );
 
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
-    m_bgSpellCheck = new KWBgSpellCheck(this);
-    m_slDataBase = new KWMailMergeDataBase( this );
+    //m_bgSpellCheck = new KWBgSpellCheck(this); // TODO reenable
+    //m_slDataBase = new KWMailMergeDataBase( this );
     m_bookmarkList = new KoTextBookmarkList;
     slRecordNum = -1;
 
@@ -283,9 +285,11 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
 
 DCOPObject* KWDocument::dcopObject()
 {
+#if 0
     if ( !dcop )
         dcop = new KWordDocIface( this );
     return dcop;
+#endif
 }
 
 KWDocument::~KWDocument()
@@ -322,12 +326,14 @@ void KWDocument::initConfig()
   {
       config->setGroup( "KSpell kword" );
 
+#if 0
       // Default is false for spellcheck, but the spell-check config dialog
       // should write out "true" when the user configures spell checking.
       if ( isReadWrite() )
           m_bgSpellCheck->setEnabled(config->readEntry( "SpellCheck", false ));
       else
           m_bgSpellCheck->setEnabled( false );
+#endif
   }
 
   if(config->hasGroup("Interface" ) )
@@ -592,6 +598,7 @@ double KWDocument::ptColumnWidth() const
         / m_pageColumns.columns;
 }
 
+#if 0
 class KWFootNoteFrameSetList : public Q3PtrList<KWFootNoteFrameSet>
 {
 public:
@@ -617,10 +624,12 @@ protected:
 private:
     bool m_reversed;
 };
+#endif
 
 /* append headers and footers if needed, and create enough pages for all the existing frames */
 void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint flags )
 {
+#if 0
     fromPage = qMax(pageManager()->startPage(), fromPage);
     if ( m_lstFrameSet.isEmpty() )
         return;
@@ -921,6 +930,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
         KWFrameList::recalcFrames(this, fromPage, toPage);
     }
     kDebug(32002) << "            ~recalcFrames" << endl;
+#endif
 }
 
 bool KWDocument::loadChildren( KoStore *store )
@@ -1051,6 +1061,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     loadDefaultTableTemplates();
 
+#if 0
     if ( m_processingType == WP ) {
         // Create main frameset
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
@@ -1097,6 +1108,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 kWarning(32001) << "Unsupported tag in DTP loading:" << tag.tagName() << endl;
         }
     }
+#endif
 
     loadMasterPageStyle( m_loadingInfo->m_currentMasterPage, context );
 
@@ -1671,7 +1683,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         KWFrameSet *fs = fsit.current();
         for (Q3PtrListIterator<KWFrame> fit = fs->frameIterator(); fit.current() ; ++fit ) {
             KWFrame *frame = fit.current();
-            maxBottom = qMax(maxBottom, frame->bottom());
+            maxBottom = qMax(maxBottom, frame->boundingRect().bottom());
         }
     }
     KWPage *last = pageManager()->page(lastPage());
@@ -1705,6 +1717,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     // Where to insert the new frames: not at the end, since that breaks oasis-kword.sh
     uint newFramesetsIndex = m_lstFrameSet.isEmpty() ? 0 : 1;
 
+#if 0
     if ( !first_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Header" ) );
         //kDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
@@ -1867,14 +1880,17 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     }
 
     // Note that more stuff will happen in completeLoading
+#endif
 }
 
 void KWDocument::startBackgroundSpellCheck()
 {
+#if 0
     if ( backgroundSpellCheckEnabled() && isReadWrite() )
     {
         m_bgSpellCheck->start();
     }
+#endif
 }
 
 void KWDocument::loadEmbeddedObjects( QDomElement& word )
@@ -2235,6 +2251,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
 
     switch ( frameSetType ) {
     case FT_TEXT: {
+#if 0
         QString tableName = KWDocument::getAttribute( framesetElem, "grpMgr", "" );
         if ( !tableName.isEmpty() ) {
             // Text frameset belongs to a table -> find table by name
@@ -2287,6 +2304,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
                 return fs;
             }
         }
+#endif
     } break;
     case FT_CLIPART:
     {
@@ -2301,10 +2319,12 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         return fs;
     } break;
     case FT_FORMULA: {
+#if 0
         KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
         addFrameSet(fs, false);
         return fs;
+#endif
     } break;
     // Note that FT_PART cannot happen when loading from a file (part frames are saved into the SETTINGS tag)
     // and FT_TABLE can't happen either.
@@ -2430,6 +2450,7 @@ void KWDocument::processAnchorRequests()
 
 bool KWDocument::processFootNoteRequests()
 {
+#if 0
     bool ret = false;
     QMapIterator<QString, KWFootNoteVariable *> itvar(m_footnoteVarRequests);
     for ( ; itvar.hasNext(); itvar.next() )
@@ -2460,6 +2481,7 @@ bool KWDocument::processFootNoteRequests()
             static_cast<KWTextFrameSet *>(frameset)->renumberFootNotes( false /*no repaint*/ );
     }
     return ret;
+#endif
 }
 
 QString KWDocument::uniqueFramesetName( const QString& oldName )
@@ -2517,6 +2539,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
             switch ( frameSetType ) {
             case FT_TABLE: {
+#if 0
                 KWTableFrameSet *table = new KWTableFrameSet( this, newName );
                 table->fromXML( elem, true, false /*don't apply names*/ );
                 table->moveBy( 20.0, 20.0 );
@@ -2526,6 +2549,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
                     macroCmd->addCommand( new KWCreateTableCommand( QString::null, table ) );
                 fs = table;
                 break;
+#endif
             }
             case FT_PART:
             {
@@ -2714,6 +2738,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 // can't be const due to recalcVariables()
 bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag, const Q3ValueList<KWFrameView*> &selectedFrames, QString* plainText, KoPicture* picture, KWTextFrameSet* fs) {
+#if 0
     m_pictureCollection->assignUniqueIds();
     fixZOrders();
 
@@ -2911,6 +2936,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
         manifestWriter->addManifestEntry("settings.xml", "text/xml");
     }
     return true;
+#endif
 }
 
 // can't be const due to recalcVariables()
@@ -3029,6 +3055,7 @@ void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
 
 void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const
 {
+#if 0
     if ( saveFlag == SaveAll )
     {
         m_frameStyleColl->saveOasis( mainStyles, savingContext );
@@ -3232,6 +3259,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter->endElement(); // root element (office:document-styles)
     stylesWriter->endDocument();
     delete stylesWriter;
+#endif
 }
 
 void KWDocument::saveOasisCustomFied( KoXmlWriter &writer )const
@@ -3261,6 +3289,7 @@ void KWDocument::saveOasisCustomFied( KoXmlWriter &writer )const
 
 void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const
 {
+#if 0
     saveOasisCustomFied( writer );
     if ( m_processingType == WP ) {
 
@@ -3308,10 +3337,12 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
             }
         }
      }
+#endif
 }
 
 QDomDocument KWDocument::saveXML()
 {
+#if 0
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
     recalcVariables( VT_DATE );
     recalcVariables( VT_TIME ); // for "current time"
@@ -3510,6 +3541,7 @@ QDomDocument KWDocument::saveXML()
     // Save embedded objects
     saveEmbeddedObjects( kwdoc, children() );
     return doc;
+#endif
 }
 
 // KWord-1.3 format
@@ -3854,12 +3886,14 @@ void KWDocument::updateStyleListOrder( const QStringList &list )
 
 void KWDocument::applyStyleChange( KoStyleChangeDefMap changed )
 {
+#if 0
     Q3PtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
         frm->applyStyleChange( changed );
     }
+#endif
 }
 
 void KWDocument::updateAllFrameStyleLists()
@@ -3947,7 +3981,7 @@ KWPage* KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page
 #endif
         Q3PtrListIterator<KWFrame> frameIt( frames );
         for ( ; frameIt.current(); ++frameIt )
-            frameIt.current()->moveBy( 0, pageHeight );
+            frameIt.current()->moveBy(0.0, pageHeight );
     }
 
     KWPage *page = pageManager()->insertPage(afterPageNum+1);
@@ -3960,7 +3994,7 @@ KWPage* KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page
         KWFrame * frame = frameIt.current();
 
         KWFrame *newFrame = frame->getCopy();
-        newFrame->moveBy( 0, pageHeight );
+        newFrame->moveBy(0.0, pageHeight );
         frame->frameSet()->addFrame( newFrame );
 
         if ( frame->newFrameBehavior()==KWFrame::Copy )
@@ -4049,7 +4083,7 @@ void KWDocument::removePage( int pageNum )
 #endif
         Q3PtrListIterator<KWFrame> frameIt( frames );
         for ( ; frameIt.current(); ++frameIt )
-            frameIt.current()->moveBy( 0, pageManager()->page(0)->height() );
+            frameIt.current()->moveBy( 0.0, pageManager()->page(0)->height() );
     }
 
     pageManager()->removePage(pageNum);
@@ -4514,6 +4548,7 @@ void KWDocument::slotRepaintChanged( KWFrameSet * frameset )
 
 void KWDocument::deleteTable( KWTableFrameSet *table )
 {
+#if 0
     if ( !table )
         return;
     if ( table->isFloating() )
@@ -4528,10 +4563,12 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
         addCommand( cmd );
         cmd->execute();
     }
+#endif
 }
 
 void KWDocument::deleteFrame( KWFrame * frame )
 {
+#if 0
     KWFrameSet * fs = frame->frameSet();
     kDebug(32002) << "KWDocument::deleteFrame frame=" << frame << " fs=" << fs << endl;
     QString cmdName;
@@ -4573,6 +4610,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
         cmd->execute();
     }
     emit docStructureChanged(docItem);
+#endif
 }
 
 void KWDocument::reorganizeGUI()
@@ -4695,6 +4733,7 @@ void KWDocument::setGridX(double gridx) {
 
 Q3ValueList<KoTextObject *> KWDocument::visibleTextObjects(KWViewMode *viewmode) const
 {
+#if 0
     Q3ValueList<KoTextObject *> lst;
     Q3PtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
@@ -4707,6 +4746,7 @@ Q3ValueList<KoTextObject *> KWDocument::visibleTextObjects(KWViewMode *viewmode)
     }
 
     return lst;
+#endif
 }
 
 void KWDocument::refreshGUIButton()
@@ -4717,18 +4757,23 @@ void KWDocument::refreshGUIButton()
 
 void KWDocument::enableBackgroundSpellCheck( bool b )
 {
+#if 0
     m_bgSpellCheck->setEnabled(b);
     for( Q3ValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
         (*it)->updateBgSpellCheckingState();
+#endif
 }
 
 bool KWDocument::backgroundSpellCheckEnabled() const
 {
+#if 0
     return m_bgSpellCheck->enabled();
+#endif
 }
 
 void KWDocument::reactivateBgSpellChecking()
 {
+#if 0
     Q3PtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
     KWTextFrameSet *frm;
@@ -4737,6 +4782,7 @@ void KWDocument::reactivateBgSpellChecking()
     }
     repaintAllViews();
     startBackgroundSpellCheck();
+#endif
 }
 
 void KWDocument::slotChapterParagraphFormatted( KoTextParag* /*parag*/ )
@@ -4762,6 +4808,7 @@ void KWDocument::slotChapterParagraphFormatted( KoTextParag* /*parag*/ )
 
 QString KWDocument::checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet* frameset, int pageNum ) const
 {
+#if 0
     if ( parag->counter() && parag->counter()->numbering() == KoParagCounter::NUM_CHAPTER
          && parag->counter()->depth() == 0 )
     {
@@ -4785,10 +4832,12 @@ QString KWDocument::checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet
         return txt;
     }
     return QString::null;
+#endif
 }
 
 QString KWDocument::sectionTitle( int pageNum ) const
 {
+#if 0
     //kDebug(32001) << "KWDocument::sectionTitle(pageNum=" << pageNum << ") m_sectionTitles.size()=" << m_sectionTitles.size() << endl;
     // First look in the cache. If info is present, it's uptodate (see slotChapterParagraphFormatted)
     if ( (int)m_sectionTitles.size() > pageNum )
@@ -4852,14 +4901,17 @@ QString KWDocument::sectionTitle( int pageNum ) const
 
     // First page, no heading found
     return QString::null;
+#endif
 }
 
 
 void KWDocument::setSpellCheckIgnoreList( const QStringList& lst )
 {
+#if 0
     m_spellCheckIgnoreList = lst;
     m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList + m_spellCheckPersonalDict );
     setModified( true );
+#endif
 }
 
 void KWDocument::addSpellCheckIgnoreWord( const QString & word )
@@ -4901,6 +4953,7 @@ Q3PtrList<KWTextFrameSet> KWDocument::allTextFramesets(bool onlyReadWrite) const
 
 Q3ValueList<KoTextDocument *> KWDocument::allTextDocuments() const
 {
+#if 0
     Q3ValueList<KoTextDocument *> lst;
     const Q3PtrList<KWTextFrameSet> textFramesets = allTextFramesets(false);
     Q3PtrListIterator<KWTextFrameSet> fit( textFramesets );
@@ -4908,6 +4961,7 @@ Q3ValueList<KoTextDocument *> KWDocument::allTextDocuments() const
         lst.append( fit.current()->textObject()->textDocument() );
     }
     return lst;
+#endif
 }
 
 int KWDocument::numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite )
@@ -4930,6 +4984,7 @@ void KWDocument::updateTextFrameSetEdit()
 
 void KWDocument::displayFootNoteFieldCode()
 {
+#if 0
     Q3PtrListIterator<KoVariable> it( m_varColl->getVariables() );
     for ( ; it.current() ; ++it )
     {
@@ -4946,10 +5001,12 @@ void KWDocument::displayFootNoteFieldCode()
             }
         }
     }
+#endif
 }
 
 void KWDocument::changeFootNoteConfig()
 {
+#if 0
     QMap<KoTextDocument *, bool> modifiedTextDocuments; // Qt4: QSet
     Q3PtrListIterator<KoVariable> it( m_varColl->getVariables() );
     for ( ; it.current() ; ++it )
@@ -4978,11 +5035,13 @@ void KWDocument::changeFootNoteConfig()
         KWTextFrameSet * textfs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
         slotRepaintChanged( textfs );
     }
+#endif
 }
 
 
 void KWDocument::setTabStopValue ( double tabStop )
 {
+#if 0
     m_tabStop = tabStop;
     Q3PtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
@@ -4992,6 +5051,7 @@ void KWDocument::setTabStopValue ( double tabStop )
         frm->layout();
     }
     repaintAllViews();
+#endif
 }
 
 void KWDocument::setGlobalHyphenation( bool hyphen )
@@ -5151,6 +5211,7 @@ void KWDocument::paragraphModified(KoTextParag* /*parag*/, int /*KoTextParag::Pa
 
 void KWDocument::paragraphDeleted( KoTextParag *parag, KWFrameSet *frm )
 {
+#if 0
     KWTextFrameSet* textfs = dynamic_cast<KWTextFrameSet *>( frm );
     if ( textfs )
     {
@@ -5171,10 +5232,12 @@ void KWDocument::paragraphDeleted( KoTextParag *parag, KWFrameSet *frm )
                 book.setEndParag( parag->next() ? parag->next() : parag->prev() );
         }
     }
+#endif
 }
 
 void KWDocument::initBookmarkList()
 {
+#if 0
     Q_ASSERT( m_loadingInfo );
     if ( !m_loadingInfo )
         return;
@@ -5203,6 +5266,7 @@ void KWDocument::initBookmarkList()
             }
         }
     }
+#endif
 }
 
 QPixmap* KWDocument::doubleBufferPixmap( const QSize& s )
@@ -5259,7 +5323,8 @@ void KWDocument::saveDialogShown()
     // Grab first 50 chars from the main frameset's document
     // ### This is a somewhat slow method, if the document is huge - better iterate
     // over the first few parags until 50 chars have been collected.
-    QString first_row = textFrameSet(0)->textDocument()->plainText().left(50);
+// TODO Fix next line!
+    QString first_row = "empty"; //textFrameSet(0)->textDocument()->plainText().left(50);
     bool truncate = false;
     QChar ch;
     for (int i=0; i < (int)first_row.length(); i++)
@@ -5286,6 +5351,7 @@ void KWDocument::saveDialogShown()
 
 void KWDocument::addWordToDictionary( const QString& word )
 {
+#if 0
     if ( m_bgSpellCheck )
     {
         if( m_spellCheckPersonalDict.findIndex( word ) == -1 )
@@ -5295,6 +5361,7 @@ void KWDocument::addWordToDictionary( const QString& word )
             // Re-check everything to make this word normal again
             reactivateBgSpellChecking();
     }
+#endif
 }
 
 void KWDocument::setEmpty()

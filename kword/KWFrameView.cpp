@@ -78,6 +78,7 @@ bool KWFrameView::contains(const KoPoint &point, bool fuzzy) const {
 }
 
 bool KWFrameView::hit(const KoPoint &point, bool fuzzy , bool borderOnly) const {
+#if 0
     //kDebug() << "hit " << point << " " << fuzzy << ", " << borderOnly << endl;
     double hs = 0, vs =0;
     if(fuzzy) {
@@ -103,6 +104,7 @@ bool KWFrameView::hit(const KoPoint &point, bool fuzzy , bool borderOnly) const 
             return false;
     }
     return true;
+#endif
 }
 
 MouseMeaning KWFrameView::mouseMeaning( const KoPoint &point, int keyState ) {
@@ -135,6 +137,7 @@ void KWFrameView::showPopup( const KoPoint &point, KWView *view, const QPoint &p
 }
 
 void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KWViewMode *vm, KoZoomHandler *zh) {
+#if 0
     if( !m_selected )
         return;
 
@@ -177,6 +180,7 @@ void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KW
             }
         }
     }
+#endif
 }
 
 // *********** Policies *********
@@ -197,6 +201,7 @@ void FramePolicy::addFloatingAction(KWView *view, QList<KAction*> &actionList) {
     actionList.append(action);
 }
 MouseMeaning FramePolicy::mouseMeaningOnBorder( const KoPoint &point, int keyState ) {
+#if 0
     Q_UNUSED(keyState);
     double hs = HORIZONTAL_SNAP;
     KWFrame *frame = m_view->frame();
@@ -237,6 +242,7 @@ MouseMeaning FramePolicy::mouseMeaningOnBorder( const KoPoint &point, int keySta
         return MEANING_MOUSE_MOVE;
     }
     return MEANING_NONE;
+#endif
 }
 
 TableFramePolicy::TableFramePolicy(KWFrameView *view) : FramePolicy (view) {
@@ -261,6 +267,7 @@ QMenu* TableFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     return view->popupMenu("text_popup");
 }
 MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int keyState) {
+#if 0
     KWFrame *frame = m_view->frame();
     double hs = HORIZONTAL_SNAP; // horizontal snap zone (in pt)
     double vs = VERTICAL_SNAP; // vertical snap zone (in pt)
@@ -290,8 +297,10 @@ MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int ke
             && point.x() >= frame->x() && point.x() <= frame->right() )
         return MEANING_MOUSE_SELECT;
     return MEANING_NONE;
+#endif
 }
 void TableFramePolicy::setSelected(MouseMeaning selectPolicy) {
+#if 0
     KWFrameSet *fs = m_view->frame()->frameSet();
     if( selectPolicy == MEANING_SELECT_COLUMN ) {
         unsigned int column = static_cast<KWTableFrameSet::Cell *>(fs)->firstColumn();
@@ -316,6 +325,7 @@ void TableFramePolicy::setSelected(MouseMeaning selectPolicy) {
     else if( selectPolicy == MEANING_SELECT_RANGE ) {
 kDebug() << "not yet implemented; select table range\n"; // TODO
     }
+#endif
 }
 
 PartFramePolicy::PartFramePolicy(KWFrameView *view) : FramePolicy (view) {
@@ -353,6 +363,7 @@ QMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
 TextFramePolicy::TextFramePolicy(KWFrameView *view) : FramePolicy (view) {
 }
 MouseMeaning TextFramePolicy::mouseMeaning( const KoPoint &point, int keyState ) {
+#if 0
     if( (keyState & Qt::ControlModifier) == Qt::ControlModifier )
         return MEANING_MOUSE_SELECT;
     KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(m_view->frame()->frameSet());
@@ -369,6 +380,7 @@ MouseMeaning TextFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
             return MEANING_MOUSE_OVER_FOOTNOTE;
     }
     return MEANING_MOUSE_INSIDE_TEXT;
+#endif
 }
 QMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     KActionCollection *actionCollection = view->actionCollection();

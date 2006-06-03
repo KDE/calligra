@@ -23,9 +23,7 @@
 #define frame_h
 
 #include "defs.h"
-#include <KoRect.h>
-#include <QBrush>
-#include "KoBorder.h"
+#include <KoShape.h>
 #include <q3ptrlist.h>
 
 class KWCanvas;
@@ -40,8 +38,10 @@ class KoGenStyles;
 class KoOasisContext;
 class KoStyleStack;
 class KoXmlWriter;
+class KoViewConverter;
 
 class QDomElement;
+class QPainter;
 
 /**
  * small utility class representing a sortable (by z-order) list of frames
@@ -66,7 +66,7 @@ protected:
  * A frame is really just a square that is used to place the content
  * of a frameset.
  */
-class KWFrame : public KoRect
+class KWFrame : public KoShape
 {
 public:
     /** Runaround types
@@ -167,19 +167,9 @@ public:
     KWFrameList* frameStack() { return m_frameStack; }
     void setFrameStack(KWFrameList *fl) { m_frameStack = fl; }
 
-    /** All borders can be custom drawn with their own colors etc.
-     */
-    const KoBorder &leftBorder() const { return m_borderLeft; }
-    const KoBorder &rightBorder() const { return m_borderRight; }
-    const KoBorder &topBorder() const { return m_borderTop; }
-    const KoBorder &bottomBorder() const { return m_borderBottom; }
+    void paint(QPainter &painter, KoViewConverter &converter) { }
 
-
-    void setLeftBorder( KoBorder _brd ) { m_borderLeft = _brd; }
-    void setRightBorder( KoBorder _brd ) { m_borderRight = _brd; }
-    void setTopBorder( KoBorder _brd ) { m_borderTop = _brd; }
-    void setBottomBorder( KoBorder _brd ) { m_borderBottom = _brd; }
-
+#if 0
     /** Return the _zoomed_ rectangle for this frame, including the border - for drawing
      * @param viewMode needed to know if borders are visible or not
      */
@@ -196,11 +186,7 @@ public:
      */
     KoRect runAroundRect() const;
 
-    /** Return the rectangle for this frame.
-     * This method is just so that new code doesn't rely on "KWFrame inherits KoRect",
-     * which would be good to get rid of, at some point.
-     */
-    const KoRect& rect() const { return *this; }
+#endif
 
     /** Marks a frame to have changed position/borders.
       Make sure you call this when the frame borders changed so when its inline it will be moved.
@@ -208,11 +194,7 @@ public:
     void frameBordersChanged();
     void updateRulerHandles();
 
-    QBrush backgroundColor() const { return m_backgroundColor; }
-    void setBackgroundColor( const QBrush &_color );
-    bool isTransparent() const { return m_backgroundColor.style() != Qt::SolidPattern; }
-
-    KoRect innerRect() const;
+    QRectF innerRect() const;
 
     double innerWidth() const;
     double innerHeight() const;
@@ -299,6 +281,8 @@ public:
     void setDrawFootNoteLine( bool b ) { m_drawFootNoteLine = b; }
     bool drawFootNoteLine()const { return m_drawFootNoteLine; }
 
+    bool intersects(const KWFrame *frame) const;
+
 private:
     SheetSide m_sheetSide : 2;
     RunAround m_runAround : 2;
@@ -315,8 +299,7 @@ private:
     double m_internalY;
     int m_zOrder;
 
-    QBrush m_backgroundColor;
-    KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
+    //KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
 
     /** List of frames we have below and on top of us.
      * Frames on top we should never overwrite.  Frames below us needd for selection code &

@@ -164,6 +164,7 @@ void KWFrameSet::deleteAllCopies()
 
 void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
+#if 0
     KWPage *page = m_doc->pageManager()->page( frame(0) );
     if( !page ) {
         kWarning(31001) << "The first frame of '" << name() << "' is outside all pages!!" << endl;
@@ -187,10 +188,12 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
                 return; // Ok, we're far below the crect, abort.
         }
     }
+#endif
 }
 
 void KWFrameSet::drawPadding( KWFrame *frame, QPainter *p, const QRect &crect, const QColorGroup &, KWViewMode *viewMode )
 {
+#if 0
     QRect outerRect( viewMode->normalToView( frame->outerRect(viewMode) ) );
     //kDebug(32001) << "KWFrameSet::drawPadding frame: " << frameFromPtr( frame )
     //               << " outerRect: " << outerRect
@@ -236,11 +239,13 @@ void KWFrameSet::drawPadding( KWFrame *frame, QPainter *p, const QRect &crect, c
     }
     p->restore();
 
+#endif
 }
 
 
 void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode )
 {
+#if 0
     QRect outerRect( viewMode->normalToView( frame->outerRect( viewMode ) ) );
     //kDebug(32001) << "KWFrameSet::drawFrameBorder frame: " << frameFromPtr( frame )
     //               << " outerRect: " << outerRect << endl;
@@ -278,10 +283,12 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
                            settingsFrame->topBorder(), settingsFrame->bottomBorder(),
                            minBorder, viewSetting );
     painter->restore();
+#endif
 }
 
 void KWFrameSet::setFloating()
 {
+#if 0
     // Find main text frame
     Q3PtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -301,6 +308,7 @@ void KWFrameSet::setFloating()
         m_doc->frameChanged( m_frames.first() );
         return;
     }
+#endif
 }
 
 void KWFrameSet::setProtectSize( bool b)
@@ -310,10 +318,12 @@ void KWFrameSet::setProtectSize( bool b)
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */, bool repaint )
 {
+#if 0
     KWTextParag * parag = static_cast<KWTextParag *>( textfs->textDocument()->paragAt( paragId ) );
     Q_ASSERT( parag );
     if ( parag )
         setAnchored( textfs, parag, index, placeHolderExists, repaint );
+#endif
 }
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KoTextParag* parag, int index, bool placeHolderExists /* = false */, bool repaint )
@@ -347,6 +357,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 // (Especially, undo/redo of insert/delete can reuse an old anchor and forget a newer one etc.)
 KWAnchor * KWFrameSet::findAnchor( int frameNum )
 {
+#if 0
     Q_ASSERT( m_anchorTextFs );
     // Yes, a linear search, but only among all customitems of the correct textdoc,
     // whose number is assumed to be quite small.
@@ -361,6 +372,7 @@ KWAnchor * KWFrameSet::findAnchor( int frameNum )
     kWarning() << "KWFrameSet::findAnchor anchor not found (frameset='" << name()
                 << "' frameNum=" << frameNum << ")" << endl;
     return 0L;
+#endif
 }
 
 void KWFrameSet::setFixed()
@@ -388,6 +400,7 @@ KWAnchor * KWFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
 void KWFrameSet::createAnchors( KoTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/,
                                 bool repaint )
 {
+#if 0
     kDebug(32001) << "KWFrameSet::createAnchors" << endl;
     Q_ASSERT( m_anchorTextFs );
     Q3PtrListIterator<KWFrame> frameIt = frameIterator();
@@ -405,10 +418,12 @@ void KWFrameSet::createAnchors( KoTextParag * parag, int index, bool placeHolder
     parag->setChanged( true );
     if ( repaint )
         emit repaintChanged( m_anchorTextFs );
+#endif
 }
 
 void KWFrameSet::deleteAnchor( KWAnchor * anchor )
 {
+#if 0
     // Simple deletion, no undo/redo
     KoTextCursor c( m_anchorTextFs->textDocument() );
     c.setParag( anchor->paragraph() );
@@ -420,6 +435,7 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
     // We don't delete the anchor since it might be in a customitemmap in a text-insert command
     // TODO: refcount the anchors
     c.parag()->setChanged( true );
+#endif
 }
 
 void KWFrameSet::deleteAnchors()
@@ -447,6 +463,7 @@ void KWFrameSet::deleteAnchors()
 
 void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
+#if 0
     KWFrame * frame = m_frames.at( frameNum );
     Q_ASSERT( frame );
     if ( !frame ) return;
@@ -466,10 +483,12 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
             frame->frameStack()->updateAfterMove( oldPageNum );
     }
     invalidate();
+#endif
 }
 
 KoRect KWFrameSet::floatingFrameRect( int frameNum )
 {
+#if 0
     KWFrame * frame = m_frames.at( frameNum );
     Q_ASSERT( frame );
     Q_ASSERT( isFloating() );
@@ -482,13 +501,16 @@ KoRect KWFrameSet::floatingFrameRect( int frameNum )
 
     KoPoint topLeft( m_doc->layoutUnitToPixelX( x ), m_doc->layoutUnitToPixelY( y ) );
     return KoRect( topLeft, frame->outerKoRect().size() );
+#endif
 }
 
 KoSize KWFrameSet::floatingFrameSize( int frameNum )
 {
+#if 0
     KWFrame * frame = m_frames.at( frameNum );
     Q_ASSERT( frame );
     return frame->outerKoRect().size();
+#endif
 }
 
 KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )
@@ -507,12 +529,14 @@ KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
 
 KWFrame * KWFrameSet::frameAtPos( double x, double y ) const
 {
+#if 0
     KoPoint docPoint( x, y );
     Q3PtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         if ( frameIt.current()->contains( docPoint ) )
             return frameIt.current();
     return 0L;
+#endif
 }
 
 KWFrame *KWFrameSet::frame( unsigned int num ) const
@@ -545,6 +569,7 @@ KWFrame * KWFrameSet::settingsFrame( const KWFrame* frame )
 
 void KWFrameSet::updateFrames( int flags )
 {
+#if 0
     if ( m_frames.isEmpty() )
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
 
@@ -600,6 +625,7 @@ void KWFrameSet::updateFrames( int flags )
                 anchor->resize();
         }
     }
+#endif
 }
 
 bool KWFrameSet::isPaintedBy( KWFrameSet* fs ) const
@@ -687,6 +713,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
                                       KWFrameSetEdit *edit, KWViewMode *viewMode,
                                       KWFrame *settingsFrame, bool drawUnderlyingFrames )
 {
+#if 0
     if ( !frame->isValid() )
     {
         kDebug(32002) << "KWFrameSet::drawFrameAndBorders " << name() << " frame " << frameFromPtr( frame ) << " " << frame << " isn't valid" << endl;
@@ -754,6 +781,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             }
         }
     }
+#endif
 }
 
 void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &outerCRect,
@@ -761,6 +789,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
                             KWFrame *settingsFrame, const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit, KWViewMode* viewMode, bool drawUnderlyingFrames )
 {
+#if 0
     // In this method the painter is NOT translated yet. It's still in view coordinates.
     if ( outerCRect.isEmpty() )
         return;
@@ -772,7 +801,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
     QColorGroup frameColorGroup( cg );
     if ( settingsFrame ) // 0L in text viewmode
     {
-        QBrush bgBrush( settingsFrame->backgroundColor() );
+        QBrush bgBrush( settingsFrame->background() );
         bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
         frameColorGroup.setBrush( QColorGroup::Base, bgBrush );
     }
@@ -859,6 +888,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 
     drawFrameContents( frame, painter, fcrect, frameColorGroup, onlyChanged, resetChanged, edit, viewMode );
     painter->restore();
+#endif
 }
 
 void KWFrameSet::drawFrameContents( KWFrame *, QPainter *, const QRect &,
@@ -1082,6 +1112,7 @@ void KWFrameSet::finalize()
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
                                      KWViewMode * viewMode )
 {
+#if 0
 //    KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
 #ifdef DEBUG_DRAW
@@ -1126,6 +1157,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         return reg;
     }
     return QRegion();
+#endif
 }
 
 bool KWFrameSet::canRemovePage( int num )
@@ -1159,6 +1191,7 @@ void KWFrameSet::setNewFrameBehavior( KWFrame::NewFrameBehavior nfb ) {
 
 // ## this should pass the viewmode as argument, probably.
 bool KWFrameSet::isFrameAtPos( const KWFrame* frame, const QPoint& point, bool borderOfFrameOnly) const {
+#if 0
     QRect outerRect( frame->outerRect( m_doc->layoutViewMode() ) );
     // Give the user a bit of margin for clicking on it :)
     const int margin = 2;
@@ -1178,6 +1211,7 @@ bool KWFrameSet::isFrameAtPos( const KWFrame* frame, const QPoint& point, bool b
         return true;
     }
     return false;
+#endif
 }
 
 void KWFrameSet::setZOrder()
@@ -1200,6 +1234,7 @@ void KWFrameSet::setName( const QString &name )
 #include "KWView.h"
 void KWFrameSet::printDebug()
 {
+#if 0
     static const char * typeFrameset[] = { "base", "txt", "picture", "part", "formula", "clipart",
                                            "6", "7", "8", "9", "table",
                                            "ERROR" };
@@ -1269,6 +1304,7 @@ void KWFrameSet::printDebug()
         else
             kDebug() << "     Page "<< page << endl;
     }
+#endif
 }
 
 void KWFrameSet::printDebug( KWFrame * )

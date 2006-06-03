@@ -210,6 +210,7 @@ KWFrameDia::KWFrameDia( QWidget *parent, Q3PtrList<KWFrame> listOfFrames) : KDia
 }
 
 void KWFrameDia::init() {
+#if 0
 
     m_tab1 = m_tab2 = m_tab3 = m_tab4 = m_tab5 = m_tab6 = 0;
     m_sw = m_sh = 0L;
@@ -291,9 +292,11 @@ void KWFrameDia::init() {
         setupTab6();
     }
     setInitialSize( QSize(550, 400) );
+#endif
 }
 
 void KWFrameDia::setupTab1(){ // TAB Frame Options
+#if 0
     //kDebug() << "setup tab 1 Frame options"<<endl;
     m_tab1 = addPage( i18n("Options") );
     int columns = 0;
@@ -614,6 +617,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     for(int i=0;i < row;i++)
         m_grid1->setRowStretch( i, 0 );
     m_grid1->setRowStretch( row + 1, 1 );
+#endif
 }
 
 void KWFrameDia::setupTab2() { // TAB Text Runaround
@@ -1070,6 +1074,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
 void KWFrameDia::initGeometrySettings()
 {
+#if 0
     if ( m_frame ) {
         // is single frame dia. Fill position strings and checkboxes now.
 
@@ -1160,6 +1165,7 @@ void KWFrameDia::initGeometrySettings()
 #endif
         }
     }
+#endif
 }
 
 void KWFrameDia::setupTab5() { // Tab Background fill/color
@@ -1321,11 +1327,13 @@ void KWFrameDia::setupTab6() // Border style
 
 void KWFrameDia::initBorderSettings()
 {
+#if 0
     KWFrame *f = m_mainFrame ? m_mainFrame : ( m_frame ? m_frame : m_allFrames.first() );
     m_leftBorder = f->leftBorder();
     m_rightBorder = f->rightBorder();
     m_topBorder = f->topBorder();
     m_bottomBorder = f->bottomBorder();
+#endif
 }
 
 #define OFFSETX 15
@@ -1491,6 +1499,7 @@ void KWFrameDia::calcRatio()
 
 void KWFrameDia::initBrush()
 {
+#if 0
     bool allFramesSame=true;
     if ( m_frame )
         m_newBrushStyle = m_frame->backgroundColor();
@@ -1565,6 +1574,7 @@ void KWFrameDia::initBrush()
 
     QColor col = KWDocument::resolveBgColor( m_newBrushStyle.color(), 0 );
     m_brushColor->setColor( col );
+#endif
 }
 
 QBrush KWFrameDia::frameBrushStyle() const
@@ -1773,6 +1783,7 @@ void KWFrameDia::enableRunAround()
 
 bool KWFrameDia::applyChanges()
 {
+#if 0
     kDebug() << "KWFrameDia::applyChanges"<<endl;
     KWFrame *frameCopy = 0L;
     bool isNewFrame=false;
@@ -2335,6 +2346,7 @@ bool KWFrameDia::applyChanges()
 
     updateFrames();
     return true;
+#endif
 }
 
 void KWFrameDia::updateFrames()
@@ -2374,6 +2386,7 @@ void KWFrameDia::connectListSelected( Q3ListViewItem *item )
 }
 
 bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
+#if 0
     if(fs==0) return true;
     if(fs->frameCount() > 1) return true;
     KoTextParag * parag = fs->textDocument()->firstParag();
@@ -2390,6 +2403,7 @@ bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
             return false;
     }
     return true;
+#endif
 }
 
 KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* doc, const QString& title,

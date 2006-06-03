@@ -45,6 +45,7 @@
 
 
 #include <QLayout>
+#include <QPointF>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QList>
@@ -61,8 +62,8 @@ static bool orderFrameSetByPosition( const KWFrameSet* lhs, const KWFrameSet* rh
     if (!rhs) return false;
     KWFrame* frame2 = rhs->frame(0);
     if (!frame2) return false;
-    KoPoint p1 = frame1->topLeft();
-    KoPoint p2 = frame2->topLeft();
+    QPointF p1 = frame1->position();
+    QPointF p2 = frame2->position();
     return (p1.y() < p2.y() || (p1.y() == p2.y() && p1.x() < p2.x()));
 }
 
@@ -138,6 +139,7 @@ void KWDocStructParagItem::contextMenu(Q3ListViewItem* item, const QPoint& p, in
 
 void KWDocStructParagItem::selectItem()
 {
+#if 0
     KWTextFrameSet* fs = m_parag->kwTextDocument()->textFrameSet();
     QPoint iPoint = m_parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
     KoPoint dPoint;
@@ -145,6 +147,7 @@ void KWDocStructParagItem::selectItem()
     QPoint nPoint = fs->kWordDocument()->zoomPointOld(dPoint);
     gui()->canvasWidget()->scrollToOffset(fs->kWordDocument()->unzoomPointOld(nPoint));
 
+#endif
 }
 
 void KWDocStructParagItem::editItem()
@@ -154,6 +157,7 @@ void KWDocStructParagItem::editItem()
 
 void KWDocStructParagItem::deleteItem()
 {
+#if 0
     editItem();
     KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(gui()->canvasWidget()->currentFrameSetEdit());
     if (edit) {
@@ -163,6 +167,7 @@ void KWDocStructParagItem::deleteItem()
 #endif
         doc()->refreshDocStructure(TextFrames | Tables);
     }
+#endif
 }
 
 void KWDocStructParagItem::editProperties()
@@ -189,6 +194,7 @@ KWDocStructTextFrameItem::KWDocStructTextFrameItem(Q3ListViewItem* parent, Q3Lis
 
 void KWDocStructTextFrameItem::setupTextParags()
 {
+#if 0
     // Build a list of pointers to paragraphs.
     Q3PtrList<KWTextParag> paragPtrs;
     paragPtrs.setAutoDelete(false);
@@ -248,6 +254,7 @@ void KWDocStructTextFrameItem::setupTextParags()
         }
         after = child;
     }
+#endif
 }
 
 void KWDocStructTextFrameItem::contextMenu(Q3ListViewItem* item, const QPoint& p, int )
@@ -258,17 +265,21 @@ void KWDocStructTextFrameItem::contextMenu(Q3ListViewItem* item, const QPoint& p
 
 void KWDocStructTextFrameItem::selectItem()
 {
+#if 0
     gui()->canvasWidget()->scrollToOffset(m_frame->topLeft());
+#endif
 }
 
 void KWDocStructTextFrameItem::editItem()
 {
+#if 0
     KoTextParag* parag = 0L;
     int index = 0;
     // Get upperleft corner of the frame and get coordinates just inside it.
     KoPoint dPoint = m_frame->topLeft() + KoPoint(2,2);
     m_frameset->findPosition(dPoint, parag, index);
     gui()->canvasWidget()->editTextFrameSet(m_frameset, parag, 0);
+#endif
 }
 
 void KWDocStructTextFrameItem::deleteItem()
@@ -369,9 +380,11 @@ void KWDocStructTextFrameSetItem::contextMenu(Q3ListViewItem* item, const QPoint
 
 void KWDocStructTextFrameSetItem::selectItem()
 {
+#if 0
     KWFrame* frame = m_frameset->frame(0);
     if (!frame) return;
     gui()->canvasWidget()->scrollToOffset(frame->topLeft());
+#endif
 }
 
 void KWDocStructTextFrameSetItem::editItem()
@@ -423,6 +436,7 @@ KWDocStructTableItem::KWDocStructTableItem(Q3ListViewItem* parent, Q3ListViewIte
 
 void KWDocStructTableItem::setupCells()
 {
+#if 0
     // TODO: KWTableFrameSet::cell() method returns cells in screen order?
     // Build a list of cell pointers.
     Q3PtrList<KWTextFrameSet> cellPtrs;
@@ -467,6 +481,7 @@ void KWDocStructTableItem::setupCells()
             after = child;
         }
     }
+#endif
 }
 
 void KWDocStructTableItem::contextMenu(Q3ListViewItem* item, const QPoint& p, int )
@@ -477,14 +492,18 @@ void KWDocStructTableItem::contextMenu(Q3ListViewItem* item, const QPoint& p, in
 
 void KWDocStructTableItem::selectItem()
 {
+#if 0
     KWFrame* frame = m_table->cell( 0, 0 )->frame( 0 );
     gui()->canvasWidget()->scrollToOffset(frame->topLeft());
+#endif
 }
 
 void KWDocStructTableItem::editItem()
 {
+#if 0
     //activate the first cell
     gui()->canvasWidget()->editTextFrameSet(m_table->cell(0,0), 0L, 0);
+#endif
 }
 
 void KWDocStructTableItem::deleteItem()
@@ -534,9 +553,10 @@ void KWDocStructPictureItem::contextMenu(Q3ListViewItem* item, const QPoint& p, 
 
 void KWDocStructPictureItem::selectItem()
 {
+#if 0
     KWFrame *frame = m_pic->frame(0);
     gui()->canvasWidget()->scrollToOffset(frame->topLeft() );
-
+#endif
 }
 
 void KWDocStructPictureItem::editItem()
@@ -573,8 +593,10 @@ void KWDocStructFormulaItem::contextMenu(Q3ListViewItem* item, const QPoint& p, 
 
 void KWDocStructFormulaItem::selectItem()
 {
+#if 0
     KWFrame* frame = m_form->frame( 0 );
     gui()->canvasWidget()->scrollToOffset(frame->topLeft());
+#endif
 }
 
 void KWDocStructFormulaItem::editItem()
@@ -614,8 +636,10 @@ void KWDocStructPartItem::contextMenu(Q3ListViewItem* item, const QPoint& p, int
 
 void KWDocStructPartItem::selectItem()
 {
+#if 0
     KWFrame* frame = m_part->frame(0);
     gui()->canvasWidget()->scrollToOffset(frame->topLeft());
+#endif
 }
 
 void KWDocStructPartItem::editItem()
@@ -714,6 +738,7 @@ void KWDocStructRootItem::setupArrangement()
         frameset = dok->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->frameCount()>0)
         {
+#if 0
             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
             item = new KWDocStructTextFrameSetItem( this, frameset->name(), tmpParag);
             textdoc= tmpParag->textDocument();
@@ -743,6 +768,7 @@ void KWDocStructRootItem::setupArrangement()
                 }
                 parag = static_cast<KWTextParag *>(parag->next());
             }
+#endif
         }
     }
 
@@ -753,6 +779,7 @@ void KWDocStructRootItem::setupArrangement()
 
 void KWDocStructRootItem::setupTextFrameSets()
 {
+#if 0
 
     // Delete Empty item from list.
     Q3ListViewItem* lvItem = firstChild();
@@ -806,10 +833,12 @@ void KWDocStructRootItem::setupTextFrameSets()
 
     if ( childCount() == 0 )
         ( void )new K3ListViewItem( this, i18n( "Empty" ) );
+#endif
 }
 
 void KWDocStructRootItem::setupFormulaFrames()
 {
+#if 0
     deleteAllChildren();
 
     KWFrameSet* frameset = 0L;
@@ -830,6 +859,7 @@ void KWDocStructRootItem::setupFormulaFrames()
 
     if ( childCount() == 0 )
         ( void )new K3ListViewItem( this, i18n( "Empty" ) );
+#endif
 }
 
 void KWDocStructRootItem::setupTables()

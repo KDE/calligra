@@ -51,14 +51,14 @@ set(kwordprivate_LIB_SRCS
    KWTableFrameSet.cpp 
    KWCanvas.cpp 
    KWFrame.cpp 
-   KWFormulaFrameSet.cpp 
+   #KWFormulaFrameSet.cpp 
    KWFactory.cpp 
    KWDocument.cpp 
    KWView.cpp 
    KWViewMode.cpp 
    KWTextParag.cpp 
    KWTextDocument.cpp 
-   KWTextFrameSet.cpp 
+   #KWTextFrameSet.cpp 
    KWPartFrameSet.cpp 
    KWTextImage.cpp 
    KWAnchor.cpp 
@@ -87,23 +87,23 @@ set(kwordprivate_LIB_SRCS
    KWEditPersonnalExpression.cpp 
    KWSplitCellDia.cpp 
    KWInsertPicDia.cpp 
-   KWordDocIface.cpp 
-   KWordViewIface.cpp 
-   KWordTextFrameSetIface.cpp 
-   KWordTextFrameSetEditIface.cpp 
+   #KWordDocIface.cpp 
+   #KWordViewIface.cpp 
+   #KWordTextFrameSetIface.cpp 
+   #KWordTextFrameSetEditIface.cpp 
    KWordFrameSetIface.cpp 
-   KWordFormulaFrameSetIface.cpp 
-   KWordFormulaFrameSetEditIface.cpp 
+   #KWordFormulaFrameSetIface.cpp 
+   #KWordFormulaFrameSetEditIface.cpp 
    KWordPictureFrameSetIface.cpp 
-   KWordTableFrameSetIface.cpp 
-   KWordPartFrameSetIface.cpp 
-   KWBgSpellCheck.cpp 
+   #KWordTableFrameSetIface.cpp 
+   #KWordPartFrameSetIface.cpp 
+   #KWBgSpellCheck.cpp 
    KWResizeTableDia.cpp 
    KWFrameLayout.cpp 
    KWConfigFootNoteDia.cpp 
    KWCreateBookmarkDia.cpp 
    KWImportStyleDia.cpp 
-   KWordFootNoteFrameSetIface.cpp 
+   #KWordFootNoteFrameSetIface.cpp 
    KWSortDia.cpp 
    KWInsertPageDia.cpp 
    KWCollectFramesetsVisitor.cpp 
@@ -127,17 +127,18 @@ kde4_add_ui3_files(kwordprivate_LIB_SRCS KWCreateBookmarkDiaBase.ui KWSelectBook
 
 kde4_add_dcop_skels(kwordprivate_LIB_SRCS 
    KWordMailMergeDatabaseIface.h 
-   KWordDocIface.h 
-   KWordViewIface.h 
-   KWordTextFrameSetIface.h 
-   KWordTextFrameSetEditIface.h 
+   #KWordDocIface.h 
+   #KWordViewIface.h 
+   #KWordTextFrameSetIface.h 
+   #KWordTextFrameSetEditIface.h 
    KWordFrameSetIface.h 
-   KWordFormulaFrameSetIface.h 
-   KWordFormulaFrameSetEditIface.h 
+   #KWordFormulaFrameSetIface.h 
+   #KWordFormulaFrameSetEditIface.h 
    KWordPictureFrameSetIface.h 
-   KWordTableFrameSetIface.h 
-   KWordPartFrameSetIface.h 
-   KWordFootNoteFrameSetIface.h )
+   #KWordTableFrameSetIface.h 
+   #KWordPartFrameSetIface.h 
+   #KWordFootNoteFrameSetIface.h
+)
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 

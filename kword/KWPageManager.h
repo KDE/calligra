@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,8 +21,10 @@
 #include "KoPageLayout.h"
 
 #include <q3ptrlist.h>
+#include <QPointF>
 
 class KWPage;
+class KoShape;
 class KoPoint;
 class KoRect;
 
@@ -40,6 +42,9 @@ public:
     int pageNumber(const KoRect &rect) const;
     /// return pageNumber of @p point, pagenumbers for a normal document start at 1.
     int pageNumber(const KoPoint &point) const;
+    /// return pageNumber of @p point, pagenumbers for a normal document start at 1.
+    int pageNumber(const QPointF &point) const;
+    int pageNumber(const KoShape *shape) const;
     /** return pageNumber of page with document-offset (in the Y direction) of @p ptY,
      *  pagenumbers for a normal document start at 1.
      */
@@ -51,6 +56,7 @@ public:
     /// return the KWPage of a specific page number. Returns 0 if page does not exist.
     KWPage* page(int pageNumber) const;
     /// return the KWPage instance where the rect is on. Returns 0 if page does not exist.
+    KWPage* page(const KoShape *shape) const;
     KWPage* page(const KoRect &rect) const;
     /// return the KWPage instance where the rect or frame is on. Returns 0 if page does not exist.
     KWPage* page(const KoRect *frame) const;

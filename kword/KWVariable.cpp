@@ -279,6 +279,7 @@ void KWFootNoteVariable::setNumberingType( Numbering _type )
 
 void KWFootNoteVariable::loadOasis( const QDomElement& footNoteTag, KoOasisContext& context )
 {
+#if 0
     /*<text:note text:id="ftn0" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body>
       <text:p text:style-name="Footnote"></text:p></text:note-body></text:note> */
     const QString id = footNoteTag.attributeNS( KoXmlNS::text, "id", QString::null );
@@ -337,10 +338,12 @@ void KWFootNoteVariable::loadOasis( const QDomElement& footNoteTag, KoOasisConte
 
     // Load the body of the footnote
     m_frameset->loadOasisContent( bodyElement, context );
+#endif
 }
 
 void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
+#if 0
     //<text:note text:id="ftn0" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body><text:p text:style-name="Footnote"/></text:note-body></text:note>
     //<text:note text:id="ftn1" text:note-class="endnote"><text:note-citation>i</text:note-citation><text:note-body><text:p text:style-name="Endnote"/></text:note-body></text:note>
     //<text:note text:id="ftn2" text:note-class="footnote"><text:note-citation text:label="vv">vv</text:note-citation><text:note-body><text:p text:style-name="Footnote"/></text:note-body></text:note>
@@ -364,6 +367,7 @@ void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& contex
     writer.endElement();
 
     writer.endElement();
+#endif
 }
 
 void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
@@ -509,6 +513,7 @@ void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, in
 
 void KWFootNoteVariable::finalize()
 {
+#if 0
     Q_ASSERT( m_frameset );
     if (!m_frameset )
         return;
@@ -535,6 +540,7 @@ void KWFootNoteVariable::finalize()
         m_doc->delayedRecalcFrames( qMin( pageNum, framePage ) );
         m_doc->delayedRepaintAllViews();
     }
+#endif
 }
 
 void KWFootNoteVariable::resize()
@@ -562,6 +568,7 @@ void KWFootNoteVariable::resize()
 
 void KWFootNoteVariable::setDeleted( bool del )
 {
+#if 0
     kDebug() << "KWFootNoteVariable::setDeleted " << del << endl;
     if ( del )
     {
@@ -599,6 +606,7 @@ void KWFootNoteVariable::setDeleted( bool del )
     KoVariable::setDeleted( del );
     // Does this compress? Probably not.
     m_doc->delayedRepaintAllViews();
+#endif
 }
 
 int KWFootNoteVariable::pageNum() const
@@ -610,6 +618,7 @@ int KWFootNoteVariable::pageNum() const
 
 double KWFootNoteVariable::varY() const
 {
+#if 0
     // Find out the position of the footnote variable in document coordinates.
     int paragy = paragraph()->rect().y();
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
@@ -640,6 +649,7 @@ double KWFootNoteVariable::varY() const
         //kDebug(32001) << "KWFootNoteVariable::pageNum internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
         return 0;
     }
+#endif
 }
 
 

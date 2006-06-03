@@ -245,6 +245,7 @@ void KWTableDia::setupTab2(const QString & _templateName, int format )
 
 void KWTableDia::slotOk()
 {
+#if 0
     if ( m_useMode==NEW )
         /// ###### This should be done AFTER this dialog is closed.
         // Otherwise we have two modal dialogs fighting each other
@@ -293,9 +294,11 @@ void KWTableDia::slotOk()
             if ( colsDiff!=0 )
             {
                 double maxRightOffset;
-                if (table->isFloating())
+                if (table->isFloating()) {
                     // inline table: max offset of containing frame
-                    maxRightOffset = table->anchorFrameset()->frame(0)->right();
+                    KWFrame *frame = table->anchorFrameset()->frame(0);
+                    maxRightOffset = frame->position().x() + frame->size().width();
+                }
                 else { // non inline table: max offset of the page
                     KWPage *page = doc->pageManager()->page(table->cell(0,0)->frame(0));
                     maxRightOffset = page->width() - page->rightMargin();
@@ -335,6 +338,7 @@ void KWTableDia::slotOk()
         }
     }
     KDialogBase::slotOk();
+#endif
 }
 
 void KWTableDia::rowsChanged( int _rows )

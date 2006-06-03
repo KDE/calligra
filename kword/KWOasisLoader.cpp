@@ -41,6 +41,7 @@
 
 #include <q3valuelist.h>
 #include <qdom.h>
+#include <QPointF>
 
 KWOasisLoader::KWOasisLoader( KWDocument* doc )
     : m_doc( doc )
@@ -51,6 +52,7 @@ KWOasisLoader::KWOasisLoader( KWDocument* doc )
 // cursor is set when pasting into a textframesetedit (kwcommand), 0 otherwise.
 QList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* cursor )
 {
+#if 0
     QList<KWFrame *> frames;
     if ( store->bad() || !store->hasFile( "content.xml" ) )
     {
@@ -137,6 +139,7 @@ QList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* c
     m_doc->completeOasisPasting();
     m_doc->deleteLoadingInfo();
     return frames;
+#endif
 }
 
 void KWOasisLoader::loadOasisSettings( const QDomDocument& settingsDoc )
@@ -191,6 +194,7 @@ static KWFrameSet::Info headerTypeToFrameInfo( const QString& localName, bool /*
 
 void KWOasisLoader::loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context )
 {
+#if 0
     const QString localName = headerFooter.localName();
     bool isHeader = localName.startsWith( "header" );
 
@@ -220,6 +224,7 @@ void KWOasisLoader::loadOasisHeaderFooter( const QDomElement& headerFooter, bool
         m_doc->m_headerVisible = true;
     else
         m_doc->m_footerVisible = true;
+#endif
 }
 
 void KWOasisLoader::loadOasisIgnoreList( const KoOasisSettings& settings )
@@ -272,9 +277,9 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
             KWPageManager* pageManager = m_doc->pageManager();
             while ( pageNum > pageManager->lastPageNumber() )
                 pageManager->appendPage();
-            frame->moveTopLeft( KoPoint( x, y + pageManager->topOfPage(pageNum) ) );
+            frame->setPosition( QPointF( x, y + pageManager->topOfPage(pageNum) ) );
         }
-        frame->moveBy( offset.x(), offset.y() );
+        frame->setPosition(frame->position() + QPointF(offset.x(), offset.y()));
     }
     return frame;
 }
@@ -282,6 +287,7 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
 KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDomElement& tag,
                                           KoOasisContext& context )
 {
+#if 0
     // Text frame chains. When seeing frame 'B' is chained to this frame A when loading,
     // we store 'B' -> A, so that when loading B we can add it to A's frameset.
     // If we load B first, no problem: when loading A we can chain.
@@ -329,14 +335,17 @@ KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDo
         loadingInfo->storeNextFrame( frame, chainNextName );
     }
     return frame;
+#endif
 }
 
 KWTableFrameSet* KWOasisLoader::loadOasisTable( const QDomElement& tag,
                                                 KoOasisContext& context )
 {
+#if 0
     const QString name = tag.attributeNS( KoXmlNS::table, "name", i18n( "Unnamed Table" ) ); // ### check for unicity?
     KWTableFrameSet* table = new KWTableFrameSet( m_doc, name );
     table->loadOasis( tag, context );
     m_doc->addFrameSet(table, false);
     return table;
+#endif
 }

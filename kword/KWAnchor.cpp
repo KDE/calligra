@@ -48,6 +48,7 @@ void KWAnchor::setFormat( KoTextFormat* format )
 
 void KWAnchor::finalize()
 {
+#if 0
     if ( m_deleted )
         return;
 
@@ -67,10 +68,12 @@ void KWAnchor::finalize()
         // This can happen if the page hasn't been created yet
         kDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x()+paragx << ", " << y()+paragy << endl;
     }
+#endif
 }
 
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
+#if 0
     // (x,y) is the position of the inline item (in Layout Units)
     // (cx,cy,cw,ch) is the rectangle to be painted, in layout units too
 
@@ -152,7 +155,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
 
     // Same calculation as in internalToDocument, but we know the frame already
-    KoPoint topLeftParagPt( 0, 0 );
+    QPointF topLeftParagPt( 0, 0 );
     if ( containingFrame ) // 0 in the textviewmode
         topLeftParagPt = containingFrame->innerRect().topLeft();
 
@@ -161,7 +164,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( containingFrame ) // 0 in the textviewmode
         topLeftParagPt.ry() -= containingFrame->internalY();
 
-    QPoint topLeftParag = fs->currentViewMode()->normalToView( zh->zoomPointOld( topLeftParagPt ) );
+    QPoint topLeftParag = fs->currentViewMode()->normalToView( zh->normalToView( topLeftParagPt ).toPoint() );
 
     // Finally, make the painter go back to view coord system
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)
@@ -197,6 +200,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
 #ifdef DEBUG_DRAWING
     kDebug() << "KWAnchor::draw done" << endl;
+#endif
 #endif
 }
 

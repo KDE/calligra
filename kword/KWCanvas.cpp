@@ -94,6 +94,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *d, KWGUI *lGui)
     m_frameInlineType = FT_TABLE;
     m_viewMode = KWViewMode::create( viewMode, m_doc, this );
 
+#if 0
     // Default table parameters.
     m_table.rows = 3;
     m_table.cols = 2;
@@ -102,6 +103,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *d, KWGUI *lGui)
     m_table.floating = true;
     m_table.tableTemplateName=QString::null;
     m_table.format=31;
+#endif
 
     m_footEndNote.noteType = FootNote;
     m_footEndNote.numberingType = KWFootNoteVariable::Auto;
@@ -145,6 +147,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *d, KWGUI *lGui)
     m_mouseMode = MM_EDIT; // avoid UMR in setMouseMode
     setMouseMode( MM_EDIT );
 
+#if 0
     // Create the current frameset-edit last, to have everything ready for it
     KWFrameSet * fs = 0L;
     QString fsName = m_doc->initialFrameSet();
@@ -166,6 +169,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *d, KWGUI *lGui)
             }
         }
     }
+#endif
     m_doc->deleteInitialEditingInfo();
     updateSize();
 
@@ -640,6 +644,7 @@ bool KWCanvas::insertInlinePicture() // also called by DCOP
 
 bool KWCanvas::insertInlineTable()
 {
+#if 0
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
     if(edit)
     {
@@ -664,6 +669,7 @@ bool KWCanvas::insertInlineTable()
     m_gui->getView()->updateFrameStatusBarItem();
     m_frameInline = false;
     return true;
+#endif
 }
 
 void KWCanvas::applyGrid( KoPoint &p )
@@ -937,6 +943,7 @@ void KWCanvas::mrEditFrame() {
 
 KCommand *KWCanvas::createTextBox( const KoRect & rect )
 {
+#if 0
     if ( !m_doc->snapToGrid() || ( rect.width() > m_doc->gridX() && rect.height() > m_doc->gridY() ) ) {
         KWFrame *frame = new KWFrame(0L, rect.x(), rect.y(), rect.width(), rect.height() );
         frame->setNewFrameBehavior(KWFrame::Reconnect);
@@ -952,10 +959,12 @@ KCommand *KWCanvas::createTextBox( const KoRect & rect )
         return cmd;
     }
     return 0;
+#endif
 }
 
 void KWCanvas::mrCreateText()
 {
+#if 0
     m_insRect = m_insRect.normalize();
     if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
@@ -972,10 +981,12 @@ void KWCanvas::mrCreateText()
     m_doc->repaintAllViews();
     emit docStructChanged(TextFrames);
     emit currentFrameSetEditChanged();
+#endif
 }
 
 void KWCanvas::mrCreatePixmap()
 {
+#if 0
     // kDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
     Q_ASSERT(m_insRect.width() > 0 && m_insRect.height() > 0);
     // Make sure the pic is completely in document.
@@ -1012,10 +1023,12 @@ void KWCanvas::mrCreatePixmap()
         frameViewManager()->view(frame)->setSelected(true);
     }
     emit docStructChanged(Pictures);
+#endif
 }
 
 void KWCanvas::mrCreatePart() // mouse release, when creating part
 {
+#if 0
     m_insRect = m_insRect.normalize();
     if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         KWPartFrameSet *fs = m_doc->insertObject( m_insRect, m_partEntry, this );
@@ -1025,10 +1038,12 @@ Q_ASSERT(viewMode()->canvas());
     }
     setMouseMode( MM_EDIT );
     emit docStructChanged(Embedded);
+#endif
 }
 
 void KWCanvas::mrCreateFormula()
 {
+#if 0
     m_insRect = m_insRect.normalize();
     if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( m_doc, QString::null );
@@ -1042,10 +1057,12 @@ void KWCanvas::mrCreateFormula()
     }
     setMouseMode( MM_EDIT );
     emit docStructChanged(FormulaFrames);
+#endif
 }
 
 void KWCanvas::mrCreateTable()
 {
+#if 0
     m_insRect = m_insRect.normalize();
     if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         if ( m_table.cols * s_minFrameWidth + m_insRect.x() > m_doc->pageManager()->pageLayout(0).ptWidth )
@@ -1074,10 +1091,12 @@ void KWCanvas::mrCreateTable()
 
     }
     setMouseMode( MM_EDIT );
+#endif
 }
 
 KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to create the table
 {
+#if 0
     KWTableFrameSet *table = new KWTableFrameSet( m_doc, QString::null /*automatic name*/ );
     int pageNum = m_doc->pageManager()->pageNumber(m_insRect.topLeft());
 
@@ -1097,6 +1116,7 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
     if(m_frameInline) w=KWTableFrameSet::TblManual;
     table->setBoundingRect( m_insRect , w, static_cast<KWTableFrameSet::CellSize>( m_table.height ));
     return table;
+#endif
 }
 
 #if 0
@@ -1202,7 +1222,7 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
 }
 #endif
 
-void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
+void KWCanvas::setFrameBackgroundColor( const QBrush &backColor )
 {
     Q3ValueList<KWFrameView*> selectedFrames = m_frameViewManager->selectedFrames();
     if (selectedFrames.isEmpty())
@@ -1217,19 +1237,19 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
         FrameIndex *index=new FrameIndex( frame );
         frameindexList.append(index);
 
-        QBrush *_color=new QBrush(frame->backgroundColor());
+        QBrush *_color=new QBrush(frame->background());
         oldColor.append(_color);
 
-        if (frame->frameSet() && frame->frameSet()->type()!=FT_PICTURE && frame->frameSet()->type()!=FT_PART &&  _backColor!=frame->backgroundColor())
+        if (frame->frameSet() && frame->frameSet()->type()!=FT_PICTURE && frame->frameSet()->type()!=FT_PART &&  backColor!=frame->background())
         {
             colorChanged=true;
-            frame->setBackgroundColor(_backColor);
+            frame->setBackground(backColor);
         }
         ++framesIterator;
     }
     if(colorChanged)
     {
-        KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame Background Color"),frameindexList,oldColor,_backColor);
+        KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame Background Color"),frameindexList,oldColor,backColor);
         addCommand(cmd, false);
         m_doc->repaintAllViews();
     }
@@ -1299,6 +1319,7 @@ void KWCanvas::editFrameSet( KWFrameSet * frameSet, bool onlyText /*=false*/ )
 
 void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index )
 {
+#if 0
     selectAllFrames( false );
 
 #if 0
@@ -1333,6 +1354,7 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     if ( emitChanged )
         emit currentFrameSetEditChanged();
     emit updateRuler();
+#endif
 }
 
 void KWCanvas::ensureCursorVisible()
@@ -1345,6 +1367,7 @@ void KWCanvas::ensureCursorVisible()
 
 bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
 {
+#if 0
     bool emitChanged = false;
     if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
     {
@@ -1382,12 +1405,14 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
                 m_currentTable = static_cast<KWTextFrameSet *>(fs)->groupmanager();
             else
                 m_currentTable = 0L;
+#if 0
             if ( m_currentTable ) {
                 m_currentFrameSetEdit = m_currentTable->createFrameSetEdit( this );
                 static_cast<KWTableFrameSetEdit *>( m_currentFrameSetEdit )->setCurrentCell( fs );
             }
             else
                 m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+#endif
 
             if ( m_currentFrameSetEdit ) {
                 KWTextFrameSetEdit *edit = currentTextEdit();
@@ -1398,6 +1423,7 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
         emitChanged = true;
     }
     return emitChanged;
+#endif
 }
 
 void KWCanvas::terminateCurrentEdit()
@@ -1424,9 +1450,11 @@ void KWCanvas::terminateEditing( KWFrameSet *fs )
 
 KWTextFrameSetEdit* KWCanvas::currentTextEdit() const
 {
+#if 0
     if ( m_currentFrameSetEdit )
         return dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
     return 0;
+#endif
 }
 
 void KWCanvas::setMouseMode( MouseMode newMouseMode )
@@ -1959,14 +1987,17 @@ bool KWCanvas::focusNextPrevChild( bool next)
 
 void KWCanvas::updateCurrentFormat()
 {
+#if 0
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
     if ( edit )
         edit->updateUI( true, true );
+#endif
 }
 
 #ifndef NDEBUG
 void KWCanvas::printRTDebug( int info )
 {
+#if 0
     KWTextFrameSet * textfs = 0L;
     if ( m_currentFrameSetEdit ) {
         KWTextFrameSetEdit* edit = currentTextEdit();
@@ -1979,6 +2010,7 @@ void KWCanvas::printRTDebug( int info )
         textfs = dynamic_cast<KWTextFrameSet *>(m_doc->frameSet( 0 ));
     if ( textfs )
         textfs->textObject()->printRTDebug( info );
+#endif
 }
 #endif
 
@@ -2001,6 +2033,7 @@ void KWCanvas::inlinePictureStarted()
 
 int KWCanvas::currentTableRow() const
 {
+#if 0
     if ( !m_currentFrameSetEdit )
         return -1;
     KWTextFrameSetEdit *edit = currentTextEdit();
@@ -2010,10 +2043,12 @@ int KWCanvas::currentTableRow() const
     if ( textfs && textfs->groupmanager() )
         return static_cast<KWTableFrameSet::Cell *>(textfs)->firstRow();
     return -1;
+#endif
 }
 
 int KWCanvas::currentTableCol() const
 {
+#if 0
     if ( !m_currentFrameSetEdit )
         return -1;
     KWTextFrameSetEdit *edit = currentTextEdit();
@@ -2023,6 +2058,7 @@ int KWCanvas::currentTableCol() const
     if ( textfs && textfs->groupmanager() )
         return static_cast<KWTableFrameSet::Cell *>(textfs)->firstColumn();
     return -1;
+#endif
 }
 
 void KWCanvas::viewportScroll( bool up )

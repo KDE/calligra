@@ -382,7 +382,8 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
     }
     if(keyState == Qt::ControlModifier) {
         // show the border popup of the top most frame.
-        framesThatAreHit[0]->showPopup(framesThatAreHit[0]->frame()->topLeft(), view, popupPoint);
+// TODO reenable
+        //framesThatAreHit[0]->showPopup(framesThatAreHit[0]->frame()->position(), view, popupPoint);
         return;
     }
     Q3ValueVector<KWFrameView*>::iterator iter = framesThatAreHit.begin();

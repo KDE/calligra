@@ -44,6 +44,7 @@ KWInsertDia::KWInsertDia( KWView *parent, KWTableFrameSet *table, InsertType typ
 
 void KWInsertDia::setupTab1(int insertHint)
 {
+#if 0
     QWidget *tab1 = plainPage();
     Q3GridLayout *grid1 = new Q3GridLayout( tab1, 2, 2, 0, KDialog::spacingHint() );
 
@@ -72,6 +73,7 @@ void KWInsertDia::setupTab1(int insertHint)
     m_value->setValue( insertHint + 1 ); // +1 due to the fact that humans count starting at 1
 
     grid1->addWidget( m_value, 1, 1 );
+#endif
 }
 
 void KWInsertDia::slotOk()

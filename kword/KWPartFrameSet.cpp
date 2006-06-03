@@ -53,6 +53,7 @@ KWPartFrameSet::KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
                                 const QDomElement& objectTag, KoOasisContext& context )
     : KWFrameSet( doc ), m_child( 0 ), m_cmdMoveChild( 0 ), m_protectContent( false )
 {
+#if 0
     m_name = frameTag.attributeNS( KoXmlNS::draw, "name", QString::null );
     if ( doc->frameSetByName( m_name ) ) // already exists!
         m_name = doc->generateFramesetName( m_name + " %1" );
@@ -70,6 +71,7 @@ KWPartFrameSet::KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
 
     // This is what loads the KoDocument
     (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
+#endif
 }
 
 void KWPartFrameSet::setChild( KWDocumentChild* child )
@@ -87,10 +89,12 @@ KWPartFrameSet::~KWPartFrameSet()
 
 KWordFrameSetIface* KWPartFrameSet::dcopObject()
 {
+#if 0
     if ( !m_dcop )
         m_dcop = new KWordPartFrameSetIface( this );
 
     return m_dcop;
+#endif
 }
 
 
@@ -126,13 +130,16 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
 
 void KWPartFrameSet::updateChildGeometry()
 {
+#if 0
     if( m_frames.isEmpty() ) // Deleted frameset
         return;
         m_child->setGeometry( m_frames.first()->toQRect() );
+#endif
 }
 
 void KWPartFrameSet::slotChildChanged()
 {
+#if 0
     // This is called when the KoDocumentChild is resized (using the KoFrame)
     Q3PtrListIterator<KWFrame> listFrame = frameIterator();
     KWFrame *frame = listFrame.current();
@@ -149,6 +156,7 @@ void KWPartFrameSet::slotChildChanged()
     }
     else
         kDebug(32001) << "Frame not found!" << endl;
+#endif
 }
 
 QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
@@ -185,6 +193,7 @@ void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )
 
 void KWPartFrameSet::startEditing()
 {
+#if 0
     // Content is protected -> can't edit. Maybe we should open part in readonly mode?
     if ( m_protectContent )
         return;
@@ -198,6 +207,7 @@ void KWPartFrameSet::startEditing()
 
     if(!m_cmdMoveChild)
         m_cmdMoveChild=new KWFramePartMoveCommand( i18n("Move/Resize Frame"), index, tmpMove );
+#endif
 }
 
 void KWPartFrameSet::endEditing()
@@ -213,6 +223,7 @@ void KWPartFrameSet::endEditing()
 
 void KWPartFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
+#if 0
     //kDebug()<<k_funcinfo<<" frame no="<<frameNum<<" to pos="<<position.x()<<","<<position.y()<<endl;
     KWFrame * frame = m_frames.at( frameNum );
     if ( frame )
@@ -220,6 +231,7 @@ void KWPartFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
         KWFrameSet::moveFloatingFrame( frameNum, position );
         m_child->setGeometry( frame->toQRect(), true /* avoid circular events */ );
     }
+#endif
 }
 
 KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * /*canvas*/ )

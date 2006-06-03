@@ -64,34 +64,10 @@ k_dcop:
     virtual void setPtMarginTop(double val);
     virtual void setPtMarginBottom(double val);
 
-    virtual QColor leftBorderColor() const;
-    virtual QColor rightBorderColor() const;
-    virtual QColor topBorderColor() const;
-    virtual QColor bottomBorderColor() const;
-
     virtual bool isCopy()const;
     virtual bool isProtectSize()const;
     virtual void setProtectSize( bool _b );
     //it's for frame 0
-    QString bottomBorderStyle()const;
-    QString topBorderStyle()const;
-    QString leftBorderStyle()const;
-    QString rightBorderStyle()const;
-
-    double rightBorderWidth() const;
-    double topBorderWidth() const;
-    double bottomBorderWidth() const;
-    double leftBorderWidth() const;
-
-    void setBottomBorderWitdh( double _width );
-    void setTopBorderWitdh( double _width );
-    void setLeftBorderWitdh( double _width );
-    void setRightBorderWitdh( double _width );
-
-    void setBottomBorderStyle(const QString & _style);
-    void setTopBorderStyle(const QString & _style);
-    void setLeftBorderStyle(const QString & _style);
-    void setRightBorderStyle(const QString & _style);
 
     QString frameSetInfo() const;
     void setFrameSetInfo( const QString & _type);

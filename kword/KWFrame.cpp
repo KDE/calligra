@@ -68,7 +68,7 @@ KWFrame::KWFrame(KWFrame * frame)
 }
 
 KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround ra )
-    : KoRect( left, top, width, height ),
+    : KoShape(),
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
       m_sheetSide( AnySide ),
@@ -89,15 +89,13 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_minFrameHeight( 0 ),
       m_internalY( 0 ),
       m_zOrder( 0 ),
-      m_backgroundColor( (fs && (fs->type() == FT_PICTURE || fs->type() == FT_PART)) ? QBrush( QColor(), Qt::NoBrush) : QBrush( QColor() ) ), // valid brush with invalid color ( default )
-      m_borderLeft( QColor(), KoBorder::SOLID, 0 ),
-      m_borderRight( QColor(), KoBorder::SOLID, 0 ),
-      m_borderTop( QColor(), KoBorder::SOLID, 0 ),
-      m_borderBottom( QColor(), KoBorder::SOLID, 0 ),
       m_frameSet( fs )
 {
     //kDebug(32001) << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     m_frameStack = 0; // lazy initialisation.
+    setPosition(QPointF(left, top));
+    resize(QSizeF(width, height));
+    setBackground((fs && (fs->type() == FT_PICTURE || fs->type() == FT_PART)) ? QBrush( QColor(), Qt::NoBrush) : QBrush( QColor() ) ); // valid brush with invalid color ( default )
 }
 
 KWFrame::~KWFrame()
@@ -105,11 +103,6 @@ KWFrame::~KWFrame()
     //kDebug(32001) << "KWFrame::~KWFrame " << this << endl;
     delete m_frameStack;
     m_frameStack = 0;
-}
-
-void KWFrame::setBackgroundColor( const QBrush &color )
-{
-    m_backgroundColor = color;
 }
 
 
@@ -124,12 +117,12 @@ int KWFrame::pageNumber() const
         kWarning() << k_funcinfo << this << " is not a frame that is in use; misses a pageManager!" << endl;
         return -1;
     }
-    return frameSet()->pageManager()->pageNumber(this);
+    return frameSet()->pageManager()->pageNumber(absolutePosition());
 }
 
 int KWFrame::pageNumber( KWDocument* doc ) const
 {
-    return doc->pageManager()->pageNumber(this);
+    return doc->pageManager()->pageNumber(absolutePosition());
 }
 
 KWFrame *KWFrame::getCopy() {
@@ -139,8 +132,8 @@ KWFrame *KWFrame::getCopy() {
 
 void KWFrame::copySettings(KWFrame *frm)
 {
+    KoShape::copySettings(frm);
     setFrameSet( frm->frameSet() ); // do this first in case of debug output in the methods below
-    setRect(frm->x(), frm->y(), frm->width(), frm->height());
     // Keep order identical as member var order (and init in ctor)
     setSheetSide(frm->sheetSide());
     setRunAround(frm->runAround());
@@ -157,11 +150,6 @@ void KWFrame::copySettings(KWFrame *frm)
     setZOrder(frm->zOrder());
     setCopy(frm->isCopy());
     m_drawFootNoteLine = false; // recalculated
-    setBackgroundColor( frm->backgroundColor() );
-    setLeftBorder(frm->leftBorder());
-    setRightBorder(frm->rightBorder());
-    setTopBorder(frm->topBorder());
-    setBottomBorder(frm->bottomBorder());
 }
 
 void KWFrame::frameBordersChanged() {
@@ -182,6 +170,7 @@ void KWFrame::updateRulerHandles(){
 #endif
 }
 
+#if 0
 QRect KWFrame::outerRect( KWViewMode* viewMode ) const
 {
     KWDocument *doc = m_frameSet->kWordDocument();
@@ -218,15 +207,18 @@ KoRect KWFrame::runAroundRect() const
     raRect.rBottom() += m_runAroundBottom;
     return raRect;
 }
+#endif
 
 void KWFrame::save( QDomElement &frameElem )
 {
     // setAttribute( double ) uses a default precision of 6, and this seems
     // to be 6 digits, even like '123.123' !
-    frameElem.setAttribute( "left", QString::number( left(), 'g', DBL_DIG ) );
-    frameElem.setAttribute( "top", QString::number( top(), 'g', DBL_DIG ) );
-    frameElem.setAttribute( "right", QString::number( right(), 'g', DBL_DIG ) );
-    frameElem.setAttribute( "bottom", QString::number( bottom(), 'g', DBL_DIG ) );
+    QRectF rect(position(), size());
+    frameElem.setAttribute( "left", QString::number( rect.left(), 'g', DBL_DIG ) );
+    frameElem.setAttribute( "top", QString::number( rect.top(), 'g', DBL_DIG ) );
+
+    frameElem.setAttribute( "right", QString::number( rect.right(), 'g', DBL_DIG ) );
+    frameElem.setAttribute( "bottom", QString::number( rect.bottom(), 'g', DBL_DIG ) );
     if ( minimumFrameHeight() > 0 )
         frameElem.setAttribute( "min-height", QString::number( minimumFrameHeight(), 'g', DBL_DIG ) );
 
@@ -256,6 +248,7 @@ void KWFrame::save( QDomElement &frameElem )
         }
     }
 
+#if 0
     if(leftBorder().penWidth()!=0)
         frameElem.setAttribute( "lWidth", leftBorder().penWidth() );
 
@@ -302,13 +295,14 @@ void KWFrame::save( QDomElement &frameElem )
     }
     if(bottomBorder().getStyle() != KoBorder::SOLID)
         frameElem.setAttribute( "bStyle", static_cast<int>( bottomBorder().getStyle() ) );
+#endif
 
-    if(backgroundColor().color().isValid())
+    if(background().color().isValid())
     {
-        frameElem.setAttribute( "bkRed", backgroundColor().color().red() );
-        frameElem.setAttribute( "bkGreen", backgroundColor().color().green() );
-        frameElem.setAttribute( "bkBlue", backgroundColor().color().blue() );
-        frameElem.setAttribute( "bkStyle", (int)backgroundColor().style ());
+        frameElem.setAttribute( "bkRed", background().color().red() );
+        frameElem.setAttribute( "bkGreen", background().color().green() );
+        frameElem.setAttribute( "bkBlue", background().color().blue() );
+        frameElem.setAttribute( "bkStyle", (int)background().style ());
     }
     if(paddingLeft() != 0)
         frameElem.setAttribute( "bleftpt", paddingLeft() );
@@ -414,15 +408,12 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
         if(c==b.color && b.penWidth()==1 && b.getStyle()==0 )
             b.setPenWidth(0);
     }
-    m_borderLeft = l;
-    m_borderRight = r;
-    m_borderTop = t;
-    m_borderBottom = b;
-    m_backgroundColor = QBrush( c );
+    QBrush background = QBrush( c );
 
 
     if( frameElem.hasAttribute("bkStyle"))
-        m_backgroundColor.setStyle (static_cast<Qt::BrushStyle>(KWDocument::getAttribute( frameElem, "bkStyle", Qt::SolidPattern )));
+        background.setStyle (static_cast<Qt::BrushStyle>(KWDocument::getAttribute( frameElem, "bkStyle", Qt::SolidPattern )));
+    setBackground(background);
 
     m_paddingLeft = frameElem.attribute( "bleftpt" ).toDouble();
     m_paddingRight = frameElem.attribute( "brightpt" ).toDouble();
@@ -446,26 +437,29 @@ void KWFrame::loadBorderProperties( KoStyleStack& styleStack )
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
         QString color = styleStack.attributeNS( KoXmlNS::fo, "background-color" );
         if ( color == "transparent" )
-            m_backgroundColor = QBrush( QColor(), Qt::NoBrush );
+            setBackground(QBrush( QColor(), Qt::NoBrush ));
         else
         {
-            m_backgroundColor = QBrush( QColor( color ) /*, brush style is a dead feature, ignored */ );
+            setBackground(QBrush( QColor( color ) /*, brush style is a dead feature, ignored */ ));
         }
     }
     // OOo compatibility: it uses background-transparency=100% instead of background-color="transparent"
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-transparency" ) ) {
         QString transp = styleStack.attributeNS( KoXmlNS::fo, "background-transparency" );
-        if ( transp == "100%" )
-            m_backgroundColor.setStyle( Qt::NoBrush );
+        if ( transp == "100%" ) {
+            QBrush bg = background();
+            bg.setStyle( Qt::NoBrush );
+            setBackground(bg);
+        }
     }
 
     // borders (3.11.27)
     // can be none/hidden, solid and double. General form is the XSL/FO "width|style|color"
     {
-        m_borderLeft.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "left") );
-        m_borderRight.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "right") );
-        m_borderTop.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "top") );
-        m_borderBottom.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "bottom") );
+//       m_borderLeft.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "left") );
+//       m_borderRight.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "right") );
+//       m_borderTop.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "top") );
+//       m_borderBottom.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "bottom") );
     }
     // TODO more refined border spec for double borders (3.11.28)
 }
@@ -537,15 +531,15 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, con
     if ( !frameSet()->isFloating() )
     { // non-inline frame, anchored to page
         const int pgNum = pageNumber();
-        const double yInPage = top() - frameSet()->pageManager()->topOfPage(pgNum);
-        writer.addAttributePt( "svg:x", left() );
+        const double yInPage = position().x() - frameSet()->pageManager()->topOfPage(pgNum);
+        writer.addAttributePt( "svg:x", position().y() );
         writer.addAttributePt( "svg:y", yInPage );
         writer.addAttribute( "text:anchor-type", "page" );
         writer.addAttribute( "text:anchor-page-number", pgNum );
         writer.addAttribute( "draw:z-index", zOrder() );
     }
-    writer.addAttributePt( "svg:width", width() );
-    writer.addAttributePt( "svg:height", height() );
+    writer.addAttributePt( "svg:width", size().width() );
+    writer.addAttributePt( "svg:height", size().height() );
     if ( isCopy() )
         writer.addAttribute( "draw:copy-of", lastFrameName );
 }
@@ -554,6 +548,7 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, con
 // Only background, borders, padding.
 void KWFrame::saveBorderProperties( KoGenStyle& frameStyle ) const
 {
+#if 0
     // Background: color and transparency
     // OOo seems to use style:background-transparency="100%", but the schema allows background-color=transparent
     if ( m_backgroundColor.style() == Qt::NoBrush )
@@ -591,6 +586,7 @@ void KWFrame::saveBorderProperties( KoGenStyle& frameStyle ) const
         if ( m_paddingBottom != 0 )
             frameStyle.addPropertyPt( "fo:padding-bottom", m_paddingBottom );
     }
+#endif
 }
 
 void KWFrame::saveMarginAttributes( KoXmlWriter &writer ) const
@@ -700,23 +696,21 @@ bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) const {
     return frameSet()->isFrameAtPos( this, point, borderOfFrameOnly );
 }
 
-KoRect KWFrame::innerRect() const
+QRectF KWFrame::innerRect() const
 {
-    KoRect inner( this->normalize());
-    inner.moveBy( paddingLeft(), paddingTop() );
-    inner.setWidth( innerWidth() );
-    inner.setHeight( innerHeight() );
+    QRectF inner(position(), size());
+    inner.adjust(paddingLeft(), paddingTop(), paddingBottom(),paddingRight());
     return inner;
 }
 
 double KWFrame::innerWidth() const
 {
-    return qMax( 0.0, width() - m_paddingLeft - m_paddingRight );
+    return qMax( 0.0, size().width() - m_paddingLeft - m_paddingRight );
 }
 
 double KWFrame::innerHeight() const
 {
-    return qMax( 0.0, height() - m_paddingTop - m_paddingBottom );
+    return qMax( 0.0, size().height() - m_paddingTop - m_paddingBottom );
 }
 
 void KWFrame::setFramePadding( double left, double top, double right, double bottom)
@@ -727,7 +721,15 @@ void KWFrame::setFramePadding( double left, double top, double right, double bot
     m_paddingBottom = bottom;
 }
 
+bool KWFrame::intersects(const KWFrame *frame) const {
+    QRectF me = boundingRect();
+    QRectF him = frame->boundingRect();
+    return me.intersects(him);
+}
+
+// static
 bool KWFrame::compareFrameZOrder(KWFrame *f1, KWFrame *f2)
 {
     return f1->zOrder() < f2->zOrder();
 }
+

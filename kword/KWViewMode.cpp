@@ -131,7 +131,8 @@ QRect KWViewMode::rulerFrameRect()
     }
     if ( frame )
     {
-        QRect r = normalToView( m_doc->zoomRectOld( frame->innerRect() ) );
+        QRectF rf = m_canvas->viewConverter()->normalToView( frame->innerRect() );
+        QRect r = normalToView( rf.toRect() );
 
         // Calculate page corner (see pageCorner above)
         int pageNum = frame->pageNumber();
@@ -468,6 +469,7 @@ KWTextFrameSet * KWViewModeText::textFrameSet() const
 
 KWTextFrameSet * KWViewModeText::determineTextFrameSet( KWDocument* doc ) // static
 {
+#if 0
     KWTextFrameSet* fs = 0L;
 
     if(!doc->getAllViews().empty()) { // try the one that is selected
@@ -490,6 +492,7 @@ KWTextFrameSet * KWViewModeText::determineTextFrameSet( KWDocument* doc ) // sta
             fs = dynamic_cast<KWTextFrameSet *>( doc->frameSet( 0 ) );
 
     return fs;
+#endif
 }
 
 QPoint KWViewModeText::normalToView( const QPoint & nPoint )
@@ -508,6 +511,7 @@ QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
 
 QSize KWViewModeText::contentsSize()
 {
+#if 0
     textFrameSet(); // init.
 
     if (!m_textFrameSet)
@@ -523,6 +527,7 @@ QSize KWViewModeText::contentsSize()
                       m_doc->layoutUnitToPixelY( m_textFrameSet->textDocument()->height() ) );
     //kDebug() << "KWViewModeText::contentsSize " << width << "x" << height << endl;
     return QSize( width, height );
+#endif
 }
 
 QSize KWViewModeText::availableSizeForText( KWTextFrameSet* /*textfs*/ )

@@ -134,6 +134,10 @@ QRect KWPage::zoomedRect(KoZoomHandler *zoomHandler) {
                  zoomHandler->zoomItXOld(width()), zoomHandler->zoomItYOld(height()));
 }
 
-const KoRect KWPage::rect() const {
+const KoRect KWPage::rectOld() const {
     return KoRect(0, offsetInDocument(), width(), height());
+}
+
+const QRectF KWPage::rect() const {
+    return QRectF(0, offsetInDocument(), width(), height());
 }

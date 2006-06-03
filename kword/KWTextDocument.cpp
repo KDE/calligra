@@ -113,6 +113,7 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
                                        KoTextParag* & lastParagraph, KoStyleCollection* styleColl,
                                        KoTextParag* nextParagraph )
 {
+#if 0
     const QString localName( tag.localName() );
     // Non-inline frame (i.e. anchored to page)
     if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
@@ -149,6 +150,7 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
     }
 
     return false;
+#endif
 }
 
 void KWTextDocument::appendBookmark( KoTextParag* parag, int pos, KoTextParag* endParag, int endPos, const QString& name )
@@ -161,6 +163,7 @@ void KWTextDocument::appendBookmark( KoTextParag* parag, int pos, KoTextParag* e
 void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& context,
                                         KoTextCustomItem* & customItem )
 {
+#if 0
     const QString frameName( tag.attributeNS( KoXmlNS::text, "id", QString::null) );
     const QString localName( tag.localName() );
     const QDomElement citationElem = tag.namedItem( localName + "-citation" ).toElement();
@@ -181,12 +184,14 @@ void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& 
     // Parse contents into the frameset
     const QDomElement bodyElem = KoDom::namedItemNS( tag, KoXmlNS::text, QByteArray( localName.latin1() ) + "-body" ).toElement();
     fs->loadOasisContent( bodyElem, context );
+#endif
 }
 
 bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& context,
                                   KoTextParag* parag, uint pos,
                                   QString& textData, KoTextCustomItem* & customItem )
 {
+#if 0
     const QString localName( tag.localName() );
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
     kDebug(32500) << "KWTextDocument::loadSpanTag: " << localName << endl;
@@ -325,6 +330,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
         }
     }
     return false;
+#endif
 }
 
 #include "KWTextDocument.moc"

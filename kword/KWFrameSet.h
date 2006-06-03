@@ -22,6 +22,9 @@
 #define frame_set_h
 
 #include "KWFrame.h"
+#include "KoPoint.h"
+#include "KoSize.h"
+#include "KoRect.h"
 #include <q3ptrvector.h>
 #include <q3ptrlist.h>
 #include "qdom.h"

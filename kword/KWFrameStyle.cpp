@@ -94,11 +94,13 @@ KWFrameStyle::KWFrameStyle( const QString & name )
 KWFrameStyle::KWFrameStyle( const QString & name, KWFrame * frame )
     : KoUserStyle( name )
 {
+#if 0
     m_backgroundColor = frame->backgroundColor();
     m_borderLeft = frame->leftBorder();
     m_borderRight = frame->rightBorder();
     m_borderTop = frame->topBorder();
     m_borderBottom = frame->bottomBorder();
+#endif
 }
 
 KWFrameStyle::KWFrameStyle( QDomElement & parentElem, int /*docVersion=2*/ )

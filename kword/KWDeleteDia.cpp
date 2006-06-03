@@ -46,6 +46,7 @@ KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType typ
 }
 
 void KWDeleteDia::setupTab1() {
+#if 0
     QWidget *tab1 = plainPage();
     Q3GridLayout *grid1 = new Q3GridLayout( tab1, 4, 1, 0, spacingHint() );
     unsigned int count = m_toRemove.count();
@@ -80,6 +81,7 @@ void KWDeleteDia::setupTab1() {
     rc->resize( rc->sizeHint() );
     rc->setAlignment( Qt::AlignLeft | Qt::AlignBottom );
     grid1->addWidget( rc, 1, 0 );
+#endif
 }
 
 void KWDeleteDia::slotOk() {
