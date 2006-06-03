@@ -85,9 +85,15 @@ public:
 
 protected:
     void paintEvent(QPaintEvent * ev);
+    void wheelEvent(QWheelEvent *e);
+    void mouseEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void keyReleaseEvent (QKeyEvent *e);
+    void keyPressEvent (QKeyEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
 
 private:
-    QList<KoShape *> m_objects;
     QImage buffer;
 
     KoShapeManager* m_shapeManager;

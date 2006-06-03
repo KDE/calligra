@@ -49,6 +49,7 @@
 #include <QLinearGradient>
 #include "KoLineBorder.h"
 #include "KoShapeGroup.h"
+#include "KoGfxEvent.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -56,7 +57,6 @@
 
 KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
     : QWidget()
-    , m_objects(objects)
     , m_tool( "Default", 0, "Default", this )
     , m_zoomHandler()
     , m_viewConverter(&m_zoomHandler)
@@ -65,7 +65,7 @@ KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
 
-    m_shapeManager = new KoShapeManager(this, m_objects);
+    m_shapeManager = new KoShapeManager(this, objects);
     setMouseTracking(true);
 
     //connect( m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
@@ -87,6 +87,45 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     m_tool.paint( gc, m_viewConverter );
 
     gc.end();
+}
+
+void KarbonCanvas::wheelEvent(QWheelEvent *e)
+{
+    double steps = e->delta() / 240.0;
+    int zoom = qRound(m_zoomHandler.zoom() / (float) pow(2.0, steps));
+    //zoomChanged( qMax(10, qMin(1000, zoom)) );
+}
+
+void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
+{
+    KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
+
+    m_tool.mouseMoveEvent( &ev );
+    setCursor( m_tool.cursor( ev.point ) );
+}
+
+void KarbonCanvas::mousePressEvent(QMouseEvent *e)
+{
+    KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
+
+    m_tool.mousePressEvent( &ev );
+    setCursor( m_tool.cursor( ev.point ) );
+}
+
+void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
+{
+    KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
+
+    m_tool.mouseReleaseEvent( &ev );
+    setCursor( m_tool.cursor( ev.point ) );
+}
+
+void KarbonCanvas::keyReleaseEvent (QKeyEvent *e) {
+    m_tool.keyReleaseEvent(e);
+}
+
+void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
+    m_tool.keyPressEvent(e);
 }
 
 QPointF KarbonCanvas::ViewConverter::normalToView( const QPointF &normalPoint ) {

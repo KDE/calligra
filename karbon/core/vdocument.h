@@ -39,6 +39,7 @@ class QDomElement;
 class VSelection;
 class VLayer;
 class KoPageLayout;
+class KoShape;
 
 typedef Q3PtrList<VLayer> VLayerList;
 typedef Q3PtrListIterator<VLayer> VLayerListIterator;
@@ -217,6 +218,7 @@ public:
 	 * Returns the list of layers.
 	 */
 	const VLayerList& layers() const { return m_layers; }
+	const QList<KoShape*> objects() const { return m_objects; };
 
 	QDomDocument saveXML() const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
@@ -317,6 +319,7 @@ private:
 	 */
 	KoUnit::Unit m_unit;
 
+	QList<KoShape*> m_objects;
 	QMap<const VObject *, QString>	m_objectNames;
 
 	// TODO this flag is used nowhere, can we remove it?

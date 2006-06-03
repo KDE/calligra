@@ -32,6 +32,7 @@
 #include <KoStore.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
+#include <KoRectangleShape.h>
 
 #include <kdebug.h>
 
@@ -49,6 +50,12 @@ VDocument::VDocument()
 	m_activeLayer = m_layers.getLast();
 	m_activeLayer->setSelected( true );
 
+    KoShape * shape = new KoRectangleShape();
+    shape->setZIndex(2);
+    shape->setPosition( QPointF( 120, 120 ) );
+    shape->setBackground( Qt::green );
+	m_objects.append( shape );
+
 	m_saveAsPath = true;
 }
 
@@ -62,6 +69,8 @@ VDocument::VDocument( const VDocument& document )
 VDocument::~VDocument()
 {
 	delete( m_selection );
+	foreach( KoShape* shape, m_objects )
+		delete shape;
 }
 
 void

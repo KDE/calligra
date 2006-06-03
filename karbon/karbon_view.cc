@@ -196,11 +196,12 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_vertRuler->setUnit(p->unit());
 	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
 
-	m_canvas = new KarbonCanvas(QList<KoShape *>()); //, this, p );
+	m_canvas = new KarbonCanvas( p->document().objects() ); //, this, p );
 	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
 	KoCanvasView *cv1 = new KoCanvasView(this);
 	cv1->setCanvas(m_canvas);
+	cv1->centerCanvas( true );
 
 	layout->addWidget(cv1, 0, 0);
 
@@ -1585,6 +1586,7 @@ KarbonView::repaintAll( const QRectF &r )
 	debugView(QString("KarbonView::repaintAll(QRectF(%1, %2, %3, %4))").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height()));
 
 	// TODO: port: m_canvas->repaintAll( r );
+	m_canvas->updateCanvas( r );
 }
 
 void
