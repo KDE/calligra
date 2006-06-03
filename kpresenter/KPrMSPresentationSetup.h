@@ -32,6 +32,7 @@
 #include <Q3VBoxLayout>
 #include <QLabel>
 #include <QCloseEvent>
+#include <kvbox.h>
 
 
 class KPrDocument;
@@ -44,8 +45,8 @@ class KIntNumInput;
 class KLineEdit;
 class KComboBox;
 
-class Q3VBox;
-class Q3HBox;
+class KVBox;
+class KHBox;
 
 class Q3ListViewItem;
 class QCloseEvent;
@@ -157,7 +158,7 @@ protected:
     KProgressBar *progressBar;
     QLabel *step1, *step2, *step3;
     QPushButton *bDone;
-    Q3VBox *back;
+    KVBox *back;
 
 };
 #endif

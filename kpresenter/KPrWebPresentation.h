@@ -30,6 +30,7 @@
 #include <QResizeEvent>
 #include <QLabel>
 #include <QTextStream>
+#include <kvbox.h>
 
 
 class KPrDocument;
@@ -42,8 +43,8 @@ class KIntNumInput;
 class KLineEdit;
 class KComboBox;
 
-class Q3VBox;
-class Q3HBox;
+class KVBox;
+class KHBox;
 
 class Q3ListViewItem;
 class QCloseEvent;
@@ -176,7 +177,7 @@ protected:
     KPrView *view;
     KPrWebPresentation webPres;
 
-    Q3HBox *page1, *page2, *page3, *page4, *page5; // PAU
+    KHBox *page1, *page2, *page3, *page4, *page5; // PAU
     QCheckBox *writeHeader, *writeFooter, *loopSlides; // PAU
     KLineEdit *author, *title, *email;
     KColorButton *textColor, *titleColor, *backColor;
@@ -223,7 +224,7 @@ protected:
     KProgressBar *progressBar;
     QLabel *step1, *step2, *step3, *step4, *step5;    
     QPushButton *bDone, *bSave;
-    Q3VBox *back;
+    KVBox *back;
 
 protected slots:
     void saveConfig();

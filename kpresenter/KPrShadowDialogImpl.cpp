@@ -8,6 +8,7 @@
 
 #include <kcolorbutton.h>
 #include <klocale.h>
+#include <kvbox.h>
 
 #include "KPrShadowDialogImpl.h"
 #include "KPrTextPreview.h"

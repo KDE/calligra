@@ -34,8 +34,8 @@
 
 #include <QFile>
 #include <qtextstream.h>
-#include <q3vbox.h>
-#include <q3hbox.h>
+
+
 #include <QLabel>
 #include <QPushButton>
 #include <qfileinfo.h>
@@ -79,6 +79,7 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "KoDocumentInfo.h"
 
@@ -649,7 +650,7 @@ void KPrWebPresentationWizard::createWebPresentation( const QString &_config, KP
 
 void KPrWebPresentationWizard::setupPage1()
 {
-    page1 = new Q3HBox( this );
+    page1 = new KHBox( this );
     page1->setWhatsThis( i18n("This page allows you to specify some of the key"
                                  " values for how your presentation will be shown"
                                  " in HTML. Select individual items for more help"
@@ -748,7 +749,7 @@ void KPrWebPresentationWizard::setupPage1()
 
 void KPrWebPresentationWizard::setupPage2()
 {
-    page2 = new Q3HBox( this );
+    page2 = new KHBox( this );
     page2->setWhatsThis( i18n("This page allows you to specify how the HTML "
                                  "for your presentation will be displayed. Select "
                                  "individual items for more help on what they do.") );
@@ -837,7 +838,7 @@ void KPrWebPresentationWizard::setupPage2()
 
 void KPrWebPresentationWizard::setupPage3()
 {
-    page3 = new Q3HBox( this );
+    page3 = new KHBox( this );
     page3->setWhatsThis( i18n("This page allows you to specify the colors for "
                                  "your presentation display. Select individual "
                                  "items for more help on what they do.") );
@@ -895,7 +896,7 @@ void KPrWebPresentationWizard::setupPage3()
 
 void KPrWebPresentationWizard::setupPage4()
 {
-    page4 = new Q3HBox( this );
+    page4 = new KHBox( this );
     page4->setWhatsThis( i18n("This page allows you to modify the titles of "
                                  "each slide, if required. You normally do not need "
                                  "to do this, but it is available if required.") );
@@ -961,7 +962,7 @@ void KPrWebPresentationWizard::setupPage4()
 
 void KPrWebPresentationWizard::setupPage5()
 {
-    page5 = new Q3HBox( this );
+    page5 = new KHBox( this );
     page5->setWhatsThis( i18n("This page allows you to specify some options for "
                                  "presentations which run unattended, such as time "
                                  "elapsed before advancing to the next slide, looping "
@@ -1238,7 +1239,7 @@ void KPrWebPresentationCreateDialog::createMainPage()
 
 void KPrWebPresentationCreateDialog::setupGUI()
 {
-    back = new Q3VBox( this );
+    back = new KVBox( this );
     back->setMargin( KDialog::marginHint() );
 
     Q3Frame *line;

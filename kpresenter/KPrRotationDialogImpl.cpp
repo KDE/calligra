@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kvbox.h>
 
 #include "KPrRotationDialogImpl.h"
 #include "rotationpropertyui.h"

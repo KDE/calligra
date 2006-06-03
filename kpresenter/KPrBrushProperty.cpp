@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
+#include <kvbox.h>
 
 KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPrBrushCmd::Brush &brush )
     : QWidget( parent, name )

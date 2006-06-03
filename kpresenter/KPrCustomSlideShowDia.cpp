@@ -35,6 +35,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kvbox.h>
 
 #include "KPrPage.h"
 #include "KPrDocument.h"

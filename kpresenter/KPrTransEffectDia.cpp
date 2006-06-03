@@ -33,7 +33,7 @@
 #include <qsplitter.h>
 #include <q3header.h>
 #include <qmatrix.h>
-#include <q3vbox.h>
+
 #include <QLayout>
 #include <qimage.h>
 #include <QPushButton>
@@ -57,6 +57,7 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kvbox.h>
 
 
 KPrEffectPreview::KPrEffectPreview( QWidget *parent, KPrDocument *_doc, KPrView *_view )

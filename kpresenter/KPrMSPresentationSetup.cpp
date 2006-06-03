@@ -36,13 +36,13 @@
 #include <QDir>
 #include <q3frame.h>
 #include <qfileinfo.h>
-#include <q3hbox.h>
+
 #include <QLabel>
 #include <QLayout>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <QPushButton>
-#include <q3vbox.h>
+
 
 #include <Q3GroupBox>
 //Added by qt3to4:
@@ -64,6 +64,7 @@
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 #include <ktoolinvocation.h>
+#include <kvbox.h>
 
 KPrMSPresentation::KPrMSPresentation( KPrDocument *_doc, KPrView *_view )
 {
@@ -335,7 +336,7 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     titleLayout->addWidget( lable1 );
     titleLayout->addWidget( title );
 
-    Q3HBox *moreBox = new Q3HBox( this );
+    KHBox *moreBox = new KHBox( this );
     QPushButton *showColourButton = new QPushButton( i18n("&Set Colors"), moreBox );
     showColourButton->setToggleButton( true );
     connect( showColourButton, SIGNAL( toggled(bool) ), this, SLOT( showColourGroup(bool) ) );
@@ -355,20 +356,20 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
                            "the preliminary slides; it does not affect the "
                            "presentation in any way, and it is normal to "
                            "leave these set to the default.") );
-    Q3HBox *textColourLayout = new Q3HBox( colourGroup );
+    KHBox *textColourLayout = new KHBox( colourGroup );
     QLabel *lable3 = new QLabel( i18n("Text color:"), textColourLayout );
     lable3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     textColour = new KColorButton( msPres.getTextColour(), textColourLayout );
     lable3->setBuddy( textColour );
 
-    Q3HBox *backgroundColourLayout = new Q3HBox( colourGroup );
+    KHBox *backgroundColourLayout = new KHBox( colourGroup );
     QLabel *lable4 = new QLabel( i18n("Background color:"), backgroundColourLayout );
     lable4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     backColour = new KColorButton( msPres.getBackColour(), backgroundColourLayout );
     lable4->setBuddy( backColour );
     colourGroup->setHidden( true );
 
-    Q3HBox *buttonLayout = new Q3HBox( this );
+    KHBox *buttonLayout = new KHBox( this );
     KPushButton *helpButton = new KPushButton( KStdGuiItem::help(), buttonLayout );
     helpButton->setWhatsThis(
                      i18n( "Selecting this button will take you to the KPresenter "
@@ -587,7 +588,7 @@ void KPrMSPresentationCreateDialog::createIndexFile()
 
 void KPrMSPresentationCreateDialog::setupGUI()
 {
-    back = new Q3VBox( this );
+    back = new KVBox( this );
     back->setMargin( KDialog::marginHint() );
 
     Q3Frame *line;

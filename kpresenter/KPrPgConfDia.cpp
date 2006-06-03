@@ -26,8 +26,8 @@
 #include <q3buttongroup.h>
 #include <QCheckBox>
 #include <QComboBox>
-#include <q3hbox.h>
-#include <q3vbox.h>
+
+
 #include <q3groupbox.h>
 #include <q3header.h>
 #include <QLabel>
@@ -48,6 +48,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <qslider.h>
+#include <kvbox.h>
 
 KPrPgConfDia::KPrPgConfDia( QWidget* parent, KPrDocument* doc )
     : KDialogBase( KDialogBase::Tabbed, i18n("Configure Slide Show"),
@@ -156,7 +157,7 @@ void KPrPgConfDia::setupPageSlides()
 
     connect( m_customSlide, SIGNAL( clicked () ), this, SLOT( radioButtonClicked() ) );
 
-    Q3HBox *box = new Q3HBox( group );
+    KHBox *box = new KHBox( group );
 
     m_labelCustomSlide = new QLabel( i18n( "Custom slide:" ),box );
 
@@ -182,7 +183,7 @@ void KPrPgConfDia::setupPageSlides()
         item->setOn( page->isSlideSelected() );
     }
 
-    Q3HBox* buttonGroup = new Q3HBox( slidesPage );
+    KHBox* buttonGroup = new KHBox( slidesPage );
     buttonGroup->setSpacing( KDialog::spacingHint() );
 
     QPushButton* selectAllButton = new QPushButton( i18n( "Select &All" ), buttonGroup );

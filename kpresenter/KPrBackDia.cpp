@@ -30,7 +30,7 @@
 #include <qslider.h>
 #include <QLayout>
 #include <qtabwidget.h>
-#include <q3vbox.h>
+
 #include <QCheckBox>
 #include <qdatetime.h>
 //Added by qt3to4:
@@ -38,7 +38,7 @@
 #include <QShowEvent>
 #include <Q3Frame>
 #include <Q3VBoxLayout>
-#include <Q3VBox>
+#include <kvbox.h>
 
 #include <kcolorbutton.h>
 #include <klocale.h>
@@ -48,6 +48,7 @@
 #include <kurlrequester.h>
 
 #include <KoPicture.h>
+#include <kvbox.h>
 
 KPrBackPreview::KPrBackPreview( QWidget *parent, KPrPage *page )
     : Q3Frame( parent )
@@ -127,7 +128,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
 
     // color/gradient tab ---------------
 
-    Q3VBox *colorTab = new Q3VBox( tabWidget );
+    KVBox *colorTab = new KVBox( tabWidget );
     colorTab->setSpacing( KDialog::spacingHint() );
     colorTab->setMargin( 5 );
 
@@ -176,7 +177,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
 
     // picture tab ---------------------
 
-    Q3VBox *picTab = new Q3VBox( tabWidget );
+    KVBox *picTab = new KVBox( tabWidget );
     picTab->setSpacing( KDialog::spacingHint() );
     picTab->setMargin( 5 );
 
