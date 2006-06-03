@@ -31,6 +31,7 @@ public:
 
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    void setPixel(quint8 *dst, half red, half green, half blue, half alpha) const;
 };
 
 #endif // KIS_OPENEXR_IMPORT_H_

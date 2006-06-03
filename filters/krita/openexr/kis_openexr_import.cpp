@@ -141,8 +141,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
                 unmultipliedGreen /= rgba -> a;
                 unmultipliedBlue /= rgba -> a;
             }
-//XXX this breaks
-//            cs -> setPixel(it.rawData(), unmultipliedRed, unmultipliedGreen, unmultipliedBlue, rgba -> a);
+            setPixel(it.rawData(), unmultipliedRed, unmultipliedGreen, unmultipliedBlue, rgba -> a);
             ++it;
             ++rgba;
         }
@@ -154,6 +153,22 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     doc -> setModified(false);
 
     return KoFilter::OK;
+}
+
+void KisOpenEXRImport::setPixel(quint8 *dst, half red, half green, half blue, half alpha) const
+{
+    struct Pixel {
+        half blue;
+        half green;
+        half red;
+        half alpha;
+    };
+    Pixel *dstPixel = reinterpret_cast<Pixel *>(dst);
+
+    dstPixel->red = red;
+    dstPixel->green = green;
+    dstPixel->blue = blue;
+    dstPixel->alpha = alpha;
 }
 
 #include "kis_openexr_import.moc"
