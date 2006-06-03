@@ -65,7 +65,6 @@
 #include "kis_profile.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 

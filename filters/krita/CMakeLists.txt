@@ -27,7 +27,7 @@ if(OPENEXR_FOUND)
 endif(OPENEXR_FOUND)
 
 if(IMAGEMAGICK_FOUND)
-	add_subdirectory(magick)
+#	add_subdirectory(magick)
 endif(IMAGEMAGICK_FOUND)
 
 

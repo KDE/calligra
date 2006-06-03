@@ -31,7 +31,6 @@
 
 #include <kio/netaccess.h>
 
-#include <kis_abstract_colorspace.h>
 #include <kis_colorspace_factory_registry.h>
 #include <kis_doc.h>
 #include <kis_image.h>

@@ -44,7 +44,6 @@
 #include "kis_annotation.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_abstract_colorspace.h"
 #include "kis_rgb_f32_colorspace.h"
 #include "kis_rgb_f16half_colorspace.h"
 
@@ -99,7 +98,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
     int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-    KisRgbF16HalfColorSpace *cs = static_cast<KisRgbF16HalfColorSpace *>((KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBAF16HALF", ""),"")));
+    KisColorSpace *cs = static_cast<KisColorSpace *>((KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBAF16HALF", ""),"")));
 
     if (cs == 0) {
         return KoFilter::InternalError;
@@ -142,8 +141,8 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
                 unmultipliedGreen /= rgba -> a;
                 unmultipliedBlue /= rgba -> a;
             }
-
-            cs -> setPixel(it.rawData(), unmultipliedRed, unmultipliedGreen, unmultipliedBlue, rgba -> a);
+//XXX this breaks
+//            cs -> setPixel(it.rawData(), unmultipliedRed, unmultipliedGreen, unmultipliedBlue, rgba -> a);
             ++it;
             ++rgba;
         }
