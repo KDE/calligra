@@ -149,6 +149,16 @@
 # endif
 #endif
 
+#ifndef PIGMENT_EXPORT
+# ifdef MAKE_PIGMENT_LIB
+#  define PIGMENT_EXPORT KDE_EXPORT
+# elif KDE_MAKE_LIB
+#  define PIGMENT_EXPORT KDE_IMPORT
+# else
+#  define PIGMENT_EXPORT
+# endif
+#endif
+
 
 #define KPRESENTER_EXPORT KDE_EXPORT
 #define KCHART_EXPORT KDE_EXPORT
