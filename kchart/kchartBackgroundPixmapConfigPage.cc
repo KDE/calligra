@@ -258,9 +258,9 @@ void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
       }
    }
 
-   wallCB->clear();
    m_wallpaper.clear();
-   int i = 0;
+   //don't start to 0, we have None element
+   int i = 1;
    for (QMap<QString, QPair<QString, QString> >::Iterator it = papers.begin();
         it != papers.end();
         ++it)
