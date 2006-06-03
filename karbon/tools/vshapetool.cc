@@ -215,8 +215,8 @@ VShapeTool::recalc()
 	m_isSquare = shiftPressed();
 	m_isCentered = ctrlPressed();
 
-	QPointF _first = view()->canvasWidget()->snapToGrid( first() );
-	QPointF _last = view()->canvasWidget()->snapToGrid( last() );
+	QPointF _first = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( first() );
+	QPointF _last = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( last() );
 
 	// Calculate radius and angle:
 	if( m_isPolar )

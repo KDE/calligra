@@ -224,7 +224,7 @@ VPolylineTool::mouseMove()
 {
 	if( m_bezierPoints.count() != 0 )
 	{
-		QPointF _last = view()->canvasWidget()->snapToGrid( last() );
+		QPointF _last = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( last() );
 		draw();
 
 		m_bezierPoints.removeLast();
@@ -239,7 +239,7 @@ VPolylineTool::mouseMove()
 void
 VPolylineTool::mouseButtonPress()
 {
-	QPointF _last = view()->canvasWidget()->snapToGrid( last() );
+	QPointF _last = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( last() );
 	if( m_bezierPoints.count() != 0 )
 	{
 		draw();
@@ -259,7 +259,7 @@ VPolylineTool::mouseButtonPress()
 void
 VPolylineTool::mouseButtonRelease()
 {
-	QPointF _last = view()->canvasWidget()->snapToGrid( last() );
+	QPointF _last = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( last() );
 	if( m_bezierPoints.count() == 2 )
 	{
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
@@ -348,7 +348,7 @@ VPolylineTool::mouseButtonDblClick()
 void
 VPolylineTool::mouseDrag()
 {
-	QPointF _last = view()->canvasWidget()->snapToGrid( last() );
+	QPointF _last = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( last() );
 
 	if( m_bezierPoints.count() == 2 )
 	{

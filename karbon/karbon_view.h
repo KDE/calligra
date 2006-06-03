@@ -66,7 +66,7 @@ class VSmallPreview;
 class VStateButton;
 class VStroke;
 class VStrokeFillPreview;
-class VCanvas;
+class KarbonCanvas;
 class VStrokeFillPreview;
 class VTypeButtonBox;
 
@@ -95,7 +95,7 @@ public:
 
 	virtual QWidget* canvas() const;
 
-	VCanvas* canvasWidget() const { return m_canvas; }
+	KarbonCanvas* canvasWidget() const { return m_canvas; }
 
 	virtual VPainterFactory* painterFactory() const { return m_painterFactory; }
 
@@ -230,7 +230,7 @@ private:
 	void updateRuler();
 
 	KarbonPart		*m_part;
-	VCanvas			*m_canvas;
+	KarbonCanvas		*m_canvas;
 	VRuler			*m_horizRuler;
 	VRuler			*m_vertRuler;
 

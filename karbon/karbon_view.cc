@@ -106,6 +106,7 @@
 #include "vtypebuttonbox.h"
 #include "vstatebutton.h"
 #include "vcanvas.h"
+#include "KoCanvasView.h"
 #include "vtoolbox.h"
 #include "karbon_drag.h"
 // #include "vselectnodestool.h"
@@ -195,17 +196,20 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_vertRuler->setUnit(p->unit());
 	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
 
-	m_canvas = new VCanvas( this, this, p );
-	connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
+	m_canvas = new KarbonCanvas(QList<KoShape *>()); //, this, p );
+	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
-	layout->addWidget(m_canvas, 0, 0);
+	KoCanvasView *cv1 = new KoCanvasView(this);
+	cv1->setCanvas(m_canvas);
 
-	m_canvas->show();
+	layout->addWidget(cv1, 0, 0);
+
+	cv1->show();
 
 	// set up factory
 	m_painterFactory = new VPainterFactory;
-	m_painterFactory->setPainter( m_canvas->pixmap(), width(), height() );
-	m_painterFactory->setEditPainter( m_canvas->canvasWidget(), width(), height() );
+	//m_painterFactory->setPainter( m_canvas->pixmap(), m_canvas->contentsWidth(), m_canvas->contentsHeight() );
+	//m_painterFactory->setEditPainter( m_canvas->contents()->canvasWidget(), m_canvas->contentsWidth(), m_canvas->contentsHeight() );
 
 	if( shell() )
 	{
@@ -420,7 +424,7 @@ KarbonView::dropEvent( QDropEvent *e )
 	{
 		VObject *clipart = selection.first();
 		QPointF p( e->pos() );
-		p = m_canvas->toContents( p );
+		// TODO: port: p = m_canvas->toContents( p );
 		QMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
 
 		VTransformCmd trafo( 0L, mat );
@@ -851,7 +855,7 @@ KarbonView::slotActiveToolChanged( VTool *tool )
 
 	toolController()->setCurrentTool( tool );
 
-	m_canvas->repaintAll();
+	// TODO: port: m_canvas->repaintAll();
 }
 
 void
@@ -859,14 +863,14 @@ KarbonView::viewModeChanged()
 {
 	debugView("KarbonView::viewModeChanged()");
 
-	canvasWidget()->pixmap()->fill();
+	// TODO: port: canvasWidget()->pixmap()->fill();
 
-	if( m_viewAction->currentItem() == 1 )
+	/* TODO: port: if( m_viewAction->currentItem() == 1 )
 		m_painterFactory->setWireframePainter( canvasWidget()->pixmap(), width(), height() );
 	else
 		m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
 
-	m_canvas->repaintAll();
+	m_canvas->repaintAll();*/
 }
 
 void
@@ -1264,7 +1268,7 @@ KarbonView::mouseEvent( QMouseEvent* event, const QPointF &p )
 
 	int px;
 	int py;
-	if( m_canvas->horizontalScrollBar()->isVisible() && ((m_canvas->horizontalScrollBar()->value() - m_canvas->pageOffsetX()) > 0))
+	/* TODO: port: if( m_canvas->horizontalScrollBar()->isVisible() && ((m_canvas->horizontalScrollBar()->value() - m_canvas->pageOffsetX()) > 0))
 		px = mx;
 	else
 		px = (mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX());
@@ -1272,14 +1276,14 @@ KarbonView::mouseEvent( QMouseEvent* event, const QPointF &p )
 	if( m_canvas->verticalScrollBar()->isVisible() && ((m_canvas->verticalScrollBar()->value() - m_canvas->pageOffsetY()) > 0))
 		py = my;
 	else
-		py = (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY());
+		py = (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY());*/
 
 	m_horizRuler->updatePointer(px, py);
 	m_vertRuler->updatePointer(px, py);
 
 	QPointF xy;
-	xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
-	xy.setY( qRound(m_part->document().height()) - (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
+	// TODO: port: xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
+	// TODO: port: xy.setY( qRound(m_part->document().height()) - (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
 
 	xy.setX(KoUnit::toUserValue(xy.x(), part()->unit()));
 	xy.setY(KoUnit::toUserValue(xy.y(), part()->unit()));
@@ -1362,7 +1366,7 @@ KarbonView::togglePageMargins(bool b)
 	debugView(QString("KarbonView::togglePageMargins(%1)").arg(b));
 
 	((KToggleAction*)actionCollection()->action("view_show_margins"))->setChecked(b);
-	m_canvas->repaintAll();
+	// TODO: port: m_canvas->repaintAll();
 }
 
 void
@@ -1370,7 +1374,7 @@ KarbonView::updateRuler()
 {
 	debugView("KarbonView::updateRuler()");
 
-	if(!m_canvas->horizontalScrollBar()->isVisible())
+	/* TODO: port: if(!m_canvas->horizontalScrollBar()->isVisible())
 	{
 		if( (1 + m_canvas->pageOffsetX() - m_canvas->contentsX()) >= 0 )
 		{
@@ -1396,7 +1400,7 @@ KarbonView::updateRuler()
 			m_vertRuler->setGeometry( 0, 1 + rulerHeight, rulerWidth, 1 + qRound( part()->document().height() * zoom() ) + m_canvas->contentsY() - m_canvas->pageOffsetY() );
 			m_vertRuler->updateVisibleArea(0, (m_canvas->contentsY() - m_canvas->pageOffsetY()));
 		}
-	}
+	}*/
 }
 
 void
@@ -1454,8 +1458,8 @@ KarbonView::pageLayout()
 		part()->setPageLayout( layout, unit );
 		m_horizRuler->setUnit( unit );
 		m_vertRuler->setUnit( unit );
-		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
-								  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );
+		/* TODO: port: m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
+								  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );*/
 		part()->repaintAllViews();
 
 		emit pageLayoutChanged();
@@ -1467,7 +1471,7 @@ KarbonView::canvasContentsMoving( int x, int y )
 {
 	debugView(QString("KarbonView::canvasContentsMoving(x = %1, y = %2)").arg(x).arg(y));
 
-	if( m_canvas->horizontalScrollBar()->isVisible() )
+	/* TODO: port: if( m_canvas->horizontalScrollBar()->isVisible() )
 	{
 		if( shell() && m_showRulerAction->isChecked() )
 		{
@@ -1499,7 +1503,7 @@ KarbonView::canvasContentsMoving( int x, int y )
 				m_vertRuler->updateVisibleArea(0, (y - m_canvas->pageOffsetY()));
 			}
 		}
-	}
+	}*/
 }
 
 void
@@ -1580,7 +1584,7 @@ KarbonView::repaintAll( const QRectF &r )
 {
 	debugView(QString("KarbonView::repaintAll(QRectF(%1, %2, %3, %4))").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height()));
 
-	m_canvas->repaintAll( r );
+	// TODO: port: m_canvas->repaintAll( r );
 }
 
 void
@@ -1588,14 +1592,14 @@ KarbonView::repaintAll( bool repaint )
 {
 	debugView(QString("KarbonView::repaintAll(%1)").arg(repaint));
 
-	m_canvas->repaintAll( repaint );
+	// TODO: port: m_canvas->repaintAll( repaint );
 }
 void
 KarbonView::setPos( const QPointF& p )
 {
 	debugView(QString("KarbonView::setPos(QPointF(%1, %2))").arg(p.x()).arg(p.y()));
 
-	m_canvas->setPos( p );
+	// TODO: port: m_canvas->setPos( p );
 }
 
 void
@@ -1603,7 +1607,7 @@ KarbonView::setViewportRect( const QRectF &rect )
 {
 	debugView(QString("KarbonView::setViewportRect(QRectF(%1, %2, %3, %4))").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height()));
 
-	m_canvas->setViewportRect( rect );
+	// TODO: port: m_canvas->setViewportRect( rect );
 }
 
 void

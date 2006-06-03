@@ -501,14 +501,14 @@ VSelectTool::recalc()
 	else
 	{
 		VTransformCmd* cmd;
-		QPointF _first = view()->canvasWidget()->snapToGrid( first() );
-		QPointF _last = view()->canvasWidget()->snapToGrid( last() );
+		QPointF _first = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( first() );
+		QPointF _last = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( last() );
 		QRectF rect = view()->part()->document().selection()->boundingBox();
 
 		if( m_state == moving )
 		{
 			QPointF p( rect.x() + last().x() - first().x(), rect.bottom() + last().y() - first().y() );
-			p = view()->canvasWidget()->snapToGrid( p );
+			p = QPointF();// TODO: port: view()->canvasWidget()->snapToGrid( p );
 			m_distx = p.x() - rect.x();
 			m_disty = p.y() - rect.bottom();
 			if( m_lock )

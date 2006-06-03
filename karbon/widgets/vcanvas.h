@@ -30,9 +30,22 @@
 #include <QPaintEvent>
 #include <QFocusEvent>
 #include <QWidget>
+#include <QList>
 
 #include <koffice_export.h>
 #include <KoCanvasBase.h>
+#include <KoInteractionTool.h>
+#include <KoZoomHandler.h>
+#include <KoViewConverter.h>
+#include <KoShape.h>
+#include <kcommand.h>
+
+#include <KoShapeContainer.h>
+
+#include <QColor>
+#include <QRect>
+#include <QBrush>
+#include <QPainter>
 
 class QPointF;
 class QRectF;
@@ -40,103 +53,64 @@ class KarbonPart;
 class KarbonView;
 class VPainter;
 class KoViewConverter;
-class KoZoomHandler;
 class KoShapeManager;
 class KoTool;
 
-// The canvas is a QScrollArea (for the scrollbar management) and a KoCanvasBase (for the object management)
-
-class KARBONCOMMON_EXPORT VCanvas : public QAbstractScrollArea, public KoCanvasBase
+class KarbonCanvas: public QWidget, public KoCanvasBase
 {
-	Q_OBJECT
+    Q_OBJECT
+
 public:
-	VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part );
-	virtual ~VCanvas();
+    KarbonCanvas(const QList<KoShape*> &objects);
+    virtual ~KarbonCanvas();
 
-	void repaintAll( const QRectF & );
-	void repaintAll( bool drawVObjects = true );
+    void gridSize(double *horizontal, double *vertical) const;
+    bool snapToGrid() const { return m_snapToGrid; }
 
-	QPixmap *pixmap() { return m_pixmap; }
+    void addCommand(KCommand *command, bool execute = true);
 
-	/**
-	 * Sets mouse position to point p.
-	 */
-	void setPos( const QPointF& p );
+    KoShapeManager *shapeManager() const { return m_shapeManager; }
 
-	QPointF toViewport( const QPointF & ) const;
-	QPointF toContents( const QPointF & ) const;
+    /**
+     * Tell the canvas repaint the specified rectangle. The coordinates
+     * are document coordinates, not view coordinates.
+     */
+    void updateCanvas(const QRectF& rc);
 
-	QRectF boundingBox() const;
+    KoTool *activeTool() { return &m_tool; }
 
-	/**
-	 * Adjusts the viewport top-left position. This doesn't change the zoom level.
-	 * Note that centerX and centerY is a value between 0.0 and 1.0, indicating a
-	 * percentage of the total width/height. Thus centerX/centerY indicates the
-	 * center of the viewport.
-	 */
-	void setViewport( double centerX, double centerY );
+    KoViewConverter *viewConverter() { return &m_viewConverter; }
 
-	/**
-	 * Sets the canvas viewport rectangle to rect. The zoom level is adjusted for this, if
-	 * needed.
-	 */
-	void setViewportRect( const QRectF &rect );
-
-	int pageOffsetX() const;
-	int pageOffsetY() const;
-
-	QPointF snapToGrid( const QPointF & );
-
-	double contentsX() const;
-	double contentsY() const;
-	double contentsWidth() const;
-	double contentsHeight() const;
-
-	double visibleWidth() const;
-	double visibleHeight() const;
-
-	void resizeContents(int, int);
-	void scrollContentsBy(int, int);
-
-	void gridSize(double*, double*) const;
-	bool snapToGrid() const;
-	void addCommand(KCommand*, bool);
-	KoShapeManager* shapeManager() const;
-	void updateCanvas(const QRectF&);
-	KoTool* activeTool();
-	KoViewConverter* viewConverter();
-	QWidget* canvasWidget();
-
+    QWidget *canvasWidget() { return this; }
 
 protected:
-	virtual void dragEnterEvent( QDragEnterEvent * );
-	virtual void dropEvent( QDropEvent * );
-	virtual void focusInEvent( QFocusEvent * );
-	virtual void viewportPaintEvent( QPaintEvent* );
-	virtual void drawContents( QPainter* painter, int clipx, int clipy,
-		int clipw, int cliph  );
-	void drawDocument( QPainter* painter, const QRectF& rect, bool drawVObjects = true );
-
-	virtual void resizeEvent( QResizeEvent* event );
-
-	virtual bool eventFilter( QObject* object, QEvent* event );
-
-	void setYMirroring( VPainter * );
-
-private slots:
-	void slotContentsMoving( int , int );
-
-signals:
-	void viewportChanged();
-	void contentsMoving( int, int );
+    void paintEvent(QPaintEvent * ev);
 
 private:
-	QWidget *m_contents;
-	QPixmap *m_pixmap;
-	KarbonPart* m_part;
-	KarbonView* m_view;
-	KoShapeManager* m_shapeManager;
-	KoZoomHandler* m_zoomHandler;
+    QList<KoShape *> m_objects;
+    QImage buffer;
+
+    KoShapeManager* m_shapeManager;
+    KoZoomHandler m_zoomHandler;
+
+    class ViewConverter : public KoViewConverter {
+        public:
+            ViewConverter(KoZoomHandler *handler) { m_zoomHandler = handler; };
+            QPointF normalToView( const QPointF &normalPoint );
+            QPointF viewToNormal( const QPointF &viewPoint );
+            QRectF normalToView( const QRectF &normalPoint );
+            QRectF viewToNormal( const QRectF &viewPoint );
+            void zoom(double *zoomX, double *zoomY) const;
+        private:
+            KoZoomHandler *m_zoomHandler;
+    };
+
+    //KSillyCommandHistory *m_commandHistory;
+
+    ViewConverter m_viewConverter;
+    KoInteractionTool m_tool;
+
+    bool m_snapToGrid;
 };
 
 #endif

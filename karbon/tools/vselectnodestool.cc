@@ -357,7 +357,7 @@ VSelectNodesTool::recalc()
 	}
 	else if( m_state == moving || m_state == movingbezier1 || m_state == movingbezier2 )
 	{
-		QPointF _last = view()->canvasWidget()->snapToGrid( last() );
+		QPointF _last = QPointF(); // TODO: port: view()->canvasWidget()->snapToGrid( last() );
 		double distx = _last.x() - first().x();
 		double disty = _last.y() - first().y();
 		// move operation

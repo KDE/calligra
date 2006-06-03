@@ -115,7 +115,9 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		scaleFactor = ( height() - 4 ) / m_document->height();
 		xoffset = ( ( width() - 4 ) / scaleFactor - m_document->width() ) / 2;
 	}
-	QRectF rect = m_view->canvasWidget()->boundingBox();
+	// TODO: needs porting
+	// QRectF rect = m_view->canvasWidget()->boundingBox();
+QRectF rect = QRectF();
 
 	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 	if( event->type() == QEvent::MouseButtonPress )
@@ -136,7 +138,8 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 			double dx = m_lastPoint.x() - m_firstPoint.x();
 			double dy = m_lastPoint.y() - m_firstPoint.y();
 			scaleFactor /= m_view->zoom();
-			m_view->canvasWidget()->scrollContentsBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
+	// TODO: needs porting
+			// m_view->canvasWidget()->scrollContentsBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
 			m_firstPoint = m_lastPoint;
 			m_dragging = false;
 			update();
@@ -215,9 +218,11 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
 		double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
 		QPointF p1( dx / scaleFactor, dy / scaleFactor );
-		p1 = m_view->canvasWidget()->toContents( p1 );
+	// TODO: needs porting
+		// p1 = m_view->canvasWidget()->toContents( p1 );
 		QPointF p2( dx / scaleFactor + m_view->canvasWidget()->width(), dy / scaleFactor + m_view->canvasWidget()->height() );
-		p2 = m_view->canvasWidget()->toContents( p2 );
+	// TODO: needs porting
+		// p2 = m_view->canvasWidget()->toContents( p2 );
 		p.drawRect( int( p1.x() ), int( p1.y() ), int( p2.x() - p1.x() ), int( p2.y() - p1.y() ) );
 	}
 

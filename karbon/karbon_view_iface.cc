@@ -145,6 +145,6 @@ void KarbonViewIface::pathWhirlPinch()
 
 void KarbonViewIface::repaint()
 {
-	m_view->canvasWidget()->repaintAll();
+	// TODO: port: m_view->canvasWidget()->repaintAll();
 }
 

@@ -494,15 +494,19 @@ KarbonPart::clearHistory()
 void
 KarbonPart::repaintAllViews( bool repaint )
 {
+// TODO: needs porting
+/*
 	foreach ( KoView* view, views() )
-		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( repaint );
+		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( repaint );*/
 }
 
 void
 KarbonPart::repaintAllViews( const QRectF &rect )
 {
+// TODO: needs porting
+/*
 	foreach ( KoView* view, views() )
-		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( rect );
+		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( rect );*/
 }
 
 void
