@@ -28,7 +28,7 @@
 #include "KoLanguageTab.moc"
 
 
-KoLanguageTab::KoLanguageTab( KSpell2::Broker::Ptr broker, QWidget* parent, const char* name, WFlags fl ) 
+KoLanguageTab::KoLanguageTab( KSpell2::Broker::Ptr broker, QWidget* parent, const char* name, WFlags fl )
         : KoLanguageTabBase( parent, name, fl )
 {
     const QStringList langNames = KoGlobal::listOfLanguages();
@@ -47,7 +47,7 @@ KoLanguageTab::KoLanguageTab( KSpell2::Broker::Ptr broker, QWidget* parent, cons
         else
             languageKComboBox->insertItem( *itName );
     }
-    connect( languageKComboBox, SIGNAL( activated( int ) ), this, SIGNAL( languageChanged( int ) ) );
+    connect( languageKComboBox, SIGNAL( activated( int ) ), this, SIGNAL( languageChanged() ) );
 }
 
 KoLanguageTab::~KoLanguageTab()
@@ -56,10 +56,10 @@ KoLanguageTab::~KoLanguageTab()
 
 QString KoLanguageTab::getLanguage() const
 {
-    return languageKComboBox->currentText();
+    return KoGlobal::tagOfLanguage( languageKComboBox->currentText() );
 }
 
 void KoLanguageTab::setLanguage( const QString &item )
 {
-    languageKComboBox->setCurrentText( item );
+    languageKComboBox->setCurrentText( KoGlobal::languageFromTag( item ) );
 }
