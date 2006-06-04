@@ -172,6 +172,7 @@ private:
     QDateTime m_creationDate;
     QDateTime m_modificationDate;
     int m_editingCycles;
+    bool m_firstSave;
 };
 
 class KOFFICECORE_EXPORT KoDocumentInfoUserMetadata : public KoDocumentInfoPage
