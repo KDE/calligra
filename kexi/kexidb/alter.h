@@ -136,6 +136,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		typedef QIntDict<ActionDict> ActionDictDict; //!< for collecting groups of actions by field UID
 		typedef QAsciiDictIterator<ActionBase> ActionDictIterator;
 		typedef QIntDictIterator<ActionDict> ActionDictDictIterator;
+		typedef QPtrVector<ActionBase> ActionVector; //!< for collecting actions related to a single field
 
 		//! Defines a type for action list.
 		typedef QPtrList<ActionBase> ActionList;
@@ -173,6 +174,9 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual void simplifyActions(ActionDictDict &fieldActions);
 
 			private:
+				//! Performs physical execution of this action.
+				virtual tristate execute(Connection &conn, TableSchema &table) { return true; }
+
 				//! requirements for altering; used internally by AlterTableHandler object
 				int m_alteringRequirements;
 
@@ -209,9 +213,11 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				void setFieldName(const QString& fieldName) { m_fieldName = fieldName; }
 
 			protected:
-				QString m_fieldName;
+
 				//! field's unique identifier, @see uid()
 				int m_fieldUID;
+			private:
+				QString m_fieldName;
 		};
 
 		/*! Defines an action for changing a single property value of a table field.
@@ -239,6 +245,9 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 			protected:
 				virtual void updateAlteringRequirements();
 
+				//! Performs physical execution of this action.
+				virtual tristate execute(Connection &conn, TableSchema &table);
+
 				QString m_propertyName;
 				QVariant m_newValue;
 		};
@@ -256,17 +265,23 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 
 			protected:
 				virtual void updateAlteringRequirements();
+
+				//! Performs physical execution of this action.
+				virtual tristate execute(Connection &conn, TableSchema &table);
 		};
 
 		//! Defines an action for inserting a single table field.
 		class KEXI_DB_EXPORT InsertFieldAction : public FieldActionBase {
 			public:
 				InsertFieldAction(int fieldIndex, KexiDB::Field *newField, int uid);
+				//copy ctor
+				InsertFieldAction::InsertFieldAction(const InsertFieldAction& action);
 				InsertFieldAction(bool);
 				virtual ~InsertFieldAction();
 
 				int index() const { return m_index; }
 				KexiDB::Field& field() const { return *m_field; }
+				void setField(KexiDB::Field* field);
 				virtual QString debugString();
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
@@ -274,7 +289,12 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 			protected:
 				virtual void updateAlteringRequirements();
 
+				//! Performs physical execution of this action.
+				virtual tristate execute(Connection &conn, TableSchema &table);
+
 				int m_index;
+
+			private:
 				KexiDB::Field *m_field;
 		};
 
@@ -293,6 +313,9 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 
 			protected:
 				virtual void updateAlteringRequirements();
+
+				//! Performs physical execution of this action.
+				virtual tristate execute(Connection &conn, TableSchema &table);
 
 				int m_index;
 		};
@@ -334,8 +357,9 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		 Implement this!
 
 		 \return true on success, false on failure or when the above requirements are not met
-		 (then, you can detailed get error message from KexiDB::Object). */
-		bool execute(const QString& tableName, bool simulate = false);
+		 (then, you can detailed get error message from KexiDB::Object). 
+		 When the action has been cancelled (stopped), returns cancelled value. */
+		tristate execute(const QString& tableName, bool simulate = false);
 
 		void debug();
 

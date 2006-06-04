@@ -343,7 +343,7 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
 //js: moved from useDatabase():
-		QFileInfo file(dbName);
+		QFileInfo file(data()->dbPath()+QDir::separator()+dbName);
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
 				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.")
@@ -2288,11 +2288,18 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 
 	// Store extended schema information (see ExtendedTableSchemaInformation in Kexi Wiki)
 	if (extendedTableSchemaStringIsEmpty) {
+#ifdef KEXI_DEBUG_GUI
+		KexiUtils::addAlterTableActionDebug(QString("** Extended table schema REMOVED."));
+#endif
 		if (!removeDataBlock( tableSchema.id(), "extended_schema"))
 			return false;
 	}
 	else {
-		if (!storeDataBlock( tableSchema.id(), doc.toString(1), "extended_schema" ))
+		QString docString( doc.toString(1) );
+#ifdef KEXI_DEBUG_GUI
+		KexiUtils::addAlterTableActionDebug(QString("** Extended table schema set to:\n")+docString);
+#endif
+		if (!storeDataBlock( tableSchema.id(), docString, "extended_schema" ))
 			return false;
 	}
 	return true;

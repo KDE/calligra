@@ -87,9 +87,9 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	d->typeNames[Field::Integer]="Integer";
 	d->typeNames[Field::BigInteger]="BigInteger";
 	d->typeNames[Field::Boolean]="Boolean";
-	d->typeNames[Field::Date]="Date";
-	d->typeNames[Field::DateTime]="DateTime";
-	d->typeNames[Field::Time]="Time";
+	d->typeNames[Field::Date]="Date";         // In fact date/time types could be declared as datetext etc. 
+	d->typeNames[Field::DateTime]="DateTime"; // to force text affinity..., see http://sqlite.org/datatype3.html
+	d->typeNames[Field::Time]="Time";         //
 	d->typeNames[Field::Float]="Float";
 	d->typeNames[Field::Double]="Double";
 	d->typeNames[Field::Text]="Text";
