@@ -23,8 +23,7 @@
 
 #include <q3valuelist.h>
 #include <qvariant.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
@@ -139,7 +138,7 @@ namespace KexiDB
 		public:
 			//! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
 			//! using \a conn connection and \a name.
-			TableOrQuerySchema(Connection *conn, const Q3CString& name, bool table);
+			TableOrQuerySchema(Connection *conn, const QByteArray& name, bool table);
 
 			//! Creates a new TableOrQuerySchema variant object. \a tableOrQuery must be of 
 			//! class TableSchema or QuerySchema.
@@ -159,7 +158,7 @@ namespace KexiDB
 			TableSchema* table() const { return m_table; }
 
 			//! \return name of a query or table
-			Q3CString name() const;
+			QByteArray name() const;
 
 			//! \return caption (if present) or name of the table/query
 			QString captionOrName() const;
@@ -185,7 +184,7 @@ namespace KexiDB
 			void debug();
 
 		protected:
-			Q3CString m_name; //!< the name is kept here because m_table and m_table can be 0
+			QByteArray m_name; //!< the name is kept here because m_table and m_table can be 0
 			                 //! and we still want name() and acptionOrName() work.
 			TableSchema* m_table;
 			QuerySchema* m_query;
@@ -266,7 +265,7 @@ namespace KexiDB
 	KEXI_DB_EXPORT QString formatNumberForVisibleDecimalPlaces(double value, int decimalPlaces);
 
 	//! \return true if \a propertyName is an extended field property.
-	KEXI_DB_EXPORT bool isExtendedTableProperty( const QCString& propertyName );
+	KEXI_DB_EXPORT bool isExtendedTableProperty( const QByteArray& propertyName );
 
 	/*! \return type of field for integer value \a type. 
 	 If \a type cannot be casted to KexiDB::Field::Type, KexiDB::Field::InvalidType is returned.
@@ -278,14 +277,14 @@ namespace KexiDB
 	 Properties coming from extended schema are also supported.
 	 This function is used e.g. by AlterTableHandler when property information comes in form of text.
 	 */
-	KEXI_DB_EXPORT bool setFieldProperties( Field& field, const QMap<QCString, QVariant>& values );
+	KEXI_DB_EXPORT bool setFieldProperties( Field& field, const QMap<QByteArray, QVariant>& values );
 
 	/*! Sets property value for \a field. \return true if the property has been found and 
 	 the value is valid for this property. On failure contents of \a field is undefined.
 	 Properties coming from extended schema are also supported.
 	 This function is used e.g. by AlterTableHandler when property information comes in form of text.
 	 */
-	KEXI_DB_EXPORT bool setFieldProperty(Field& field, const QCString& propertyName, 
+	KEXI_DB_EXPORT bool setFieldProperty(Field& field, const QByteArray& propertyName, 
 		const QVariant& value);
 }
 

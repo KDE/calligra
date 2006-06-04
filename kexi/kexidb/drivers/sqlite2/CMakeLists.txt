@@ -13,7 +13,9 @@ set(kexidb_sqlite2driver_PART_SRCS
    ../sqlite/sqlitecursor.cpp 
    ../sqlite/sqlitekeywords.cpp 
    ../sqlite/sqlitepreparedstatement.cpp
-   ../sqlite/sqliteadmin.cpp )
+   ../sqlite/sqliteadmin.cpp
+   ../sqlite/sqlitealter.cpp
+ )
 
 kde4_automoc(${kexidb_sqlite2driver_PART_SRCS})
 

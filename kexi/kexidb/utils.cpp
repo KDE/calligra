@@ -24,8 +24,7 @@
 #include <qmap.h>
 #include <qthread.h>
 #include <QMutex>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QSet>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -187,16 +186,16 @@ int KexiDB::idForObjectName( Connection &conn, const QString& objName, int objTy
 
 //-----------------------------------------
 
-TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const Q3CString& name, bool table)
+TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QByteArray& name, bool table)
  : m_name(name)
  , m_table(table ? conn->tableSchema(QString(name)) : 0)
  , m_query(table ? 0 : conn->querySchema(QString(name)))
 {
 	if (table && !m_table)
-		kWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
+		kWarning() << "TableOrQuery(Connection *conn, const QByteArray& name, bool table) : "
 			"no table specified!" << endl;
 	if (!table && !m_query)
-		kWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
+		kWarning() << "TableOrQuery(Connection *conn, const QByteArray& name, bool table) : "
 			"no query specified!" << endl;
 }
 
@@ -246,7 +245,7 @@ const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
 	return QueryColumnInfo::Vector();
 }
 
-Q3CString TableOrQuerySchema::name() const
+QByteArray TableOrQuerySchema::name() const
 {
 	if (m_table)
 		return m_table->name().toLatin1();
@@ -619,9 +618,9 @@ static bool setIntToFieldType( Field& field, const QVariant& value )
 	return true;
 }
 
-bool KexiDB::setFieldProperties( Field& field, const QMap<QCString, QVariant>& values )
+bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>& values )
 {
-	QMapConstIterator<QCString, QVariant> it;
+	QMap<QByteArray, QVariant>::ConstIterator it;
 	if ( (it = values.find("type")) != values.constEnd() ) {
 		if (!setIntToFieldType(field, *it))
 			return false;
@@ -686,20 +685,20 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QCString, QVariant>& v
 }
 
 //! for isExtendedTableProperty()
-static KStaticDeleter< QAsciiDict<char> > KexiDB_extendedPropertiesDeleter;
-QAsciiDict<char>* KexiDB_extendedProperties = 0;
+static KStaticDeleter< QSet<QByteArray> > KexiDB_extendedPropertiesDeleter;
+QSet<QByteArray>* KexiDB_extendedProperties = 0;
 
-bool KexiDB::isExtendedTableProperty( const QCString& propertyName )
+bool KexiDB::isExtendedTableProperty( const QByteArray& propertyName )
 {
 	if (!KexiDB_extendedProperties) {
-		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QAsciiDict<char>(499) );
-#define ADD(name) KexiDB_extendedProperties->insert(name, (char*)1)
+		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QSet<QByteArray>() );
+#define ADD(name) KexiDB_extendedProperties->insert(name)
 		ADD("visibleDecimalPlaces");
 	}
-	return KexiDB_extendedProperties->find( propertyName );
+	return KexiDB_extendedProperties->contains( propertyName );
 }
 
-bool KexiDB::setFieldProperty( Field& field, const QCString& propertyName, const QVariant& value )
+bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, const QVariant& value )
 {
 #undef SET_BOOLEAN_FLAG
 #define SET_BOOLEAN_FLAG(flag, value) { \
