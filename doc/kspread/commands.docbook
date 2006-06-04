@@ -1055,8 +1055,9 @@ The Formula Bar can be used to edit the content of the selected cell.
 <guimenu>Settings</guimenu>
 <guimenuitem>Toolbars</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Show or hide the toolbars: File, Edit,
-Navigation, Format and Color/Border.</action>
+<listitem><para><action>Show or hide the toolbars: <guilabel>File</guilabel>,
+<guilabel>Edit</guilabel>, <guilabel>Navigation</guilabel>, 
+<guilabel>Format</guilabel> and <guilabel>Color/Border</guilabel>.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1270,7 +1271,6 @@ occupy the space left by the removed cell(s).</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data</guimenu>
 <guimenuitem>Insert Rows</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Insert new row(s) above selected row(s).
@@ -1280,7 +1280,6 @@ occupy the space left by the removed cell(s).</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data</guimenu>
 <guimenuitem>Delete Rows</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Delete selected row(s).</action>
@@ -1289,7 +1288,6 @@ occupy the space left by the removed cell(s).</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data</guimenu>
 <guimenuitem>Hide Rows</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Hides selected row(s).</action>
@@ -1298,7 +1296,6 @@ occupy the space left by the removed cell(s).</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data</guimenu>
 <guimenuitem>Show Rows</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Shows selected row(s).
@@ -1309,7 +1306,6 @@ includes the hidden rows.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data</guimenu>
 <guimenuitem>Insert Columns</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Insert new column(s) at left of selected column(s).
@@ -1319,7 +1315,6 @@ includes the hidden rows.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data</guimenu>
 <guimenuitem>Delete Columns</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Delete selected column(s).</action>
@@ -1328,7 +1323,6 @@ includes the hidden rows.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data</guimenu>
 <guimenuitem>Hide Columns</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Hides selected column(s).</action>
@@ -1337,7 +1331,6 @@ includes the hidden rows.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data</guimenu>
 <guimenuitem>Show Columns</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Shows selected column(s).
