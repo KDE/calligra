@@ -625,6 +625,7 @@ void KoDocumentInfoAuthor::setPosition( const QString& n )
 KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
     : KoDocumentInfoPage( info, "about" )
 {
+    m_firstSave = true;
     m_docInfo = info;
     m_editingCycles = 0;
     m_initialCreator = m_docInfo->creator();
@@ -634,9 +635,10 @@ KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
 void KoDocumentInfoAbout::saveParameters()
 {
     KoDocument* doc = dynamic_cast< KoDocument* >( m_docInfo->parent() );
-    if ( doc && !doc->isAutosaving() )
+    if ( m_firstSave && doc && !doc->isAutosaving() )
        m_editingCycles++;
     m_modificationDate = QDateTime::currentDateTime();
+    m_firstSave = false;
 }
 
 bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
