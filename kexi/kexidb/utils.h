@@ -265,6 +265,28 @@ namespace KexiDB
 	 @see KexiDB::Field::visibleDecimalPlaces() */
 	KEXI_DB_EXPORT QString formatNumberForVisibleDecimalPlaces(double value, int decimalPlaces);
 
+	//! \return true if \a propertyName is an extended field property.
+	KEXI_DB_EXPORT bool isExtendedTableProperty( const QCString& propertyName );
+
+	/*! \return type of field for integer value \a type. 
+	 If \a type cannot be casted to KexiDB::Field::Type, KexiDB::Field::InvalidType is returned.
+	 This can be used when type information is deserialized from a string or QVariant. */
+	KEXI_DB_EXPORT KexiDB::Field::Type intToFieldType( int type );
+
+	/*! Sets property values for \a field. \return true if all the values are valid and allowed.
+	 On failure contents of \a field is undefined.
+	 Properties coming from extended schema are also supported.
+	 This function is used e.g. by AlterTableHandler when property information comes in form of text.
+	 */
+	KEXI_DB_EXPORT bool setFieldProperties( Field& field, const QMap<QCString, QVariant>& values );
+
+	/*! Sets property value for \a field. \return true if the property has been found and 
+	 the value is valid for this property. On failure contents of \a field is undefined.
+	 Properties coming from extended schema are also supported.
+	 This function is used e.g. by AlterTableHandler when property information comes in form of text.
+	 */
+	KEXI_DB_EXPORT bool setFieldProperty(Field& field, const QCString& propertyName, 
+		const QVariant& value);
 }
 
 #endif

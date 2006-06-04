@@ -329,6 +329,7 @@ class KEXI_DB_EXPORT Field
 		 of 6 and a scale of 4. Integers can be considered to have a scale of zero. */
 		inline uint scale() const { return m_length; }
 
+//! @todo should we keep extended properties here or move them to a QVariant dictionary?
 		/*! \return number of decimal places that should be visible to the user, 
 		 e.g. within table view widget, form or printout. 
 		 Only meaningful if the field type is floating point or (in the future: decimal or currency).

@@ -13,7 +13,9 @@ set(kexidb_sqlite3driver_PART_SRCS
    sqlitekeywords.cpp 
    sqlitepreparedstatement.cpp
    sqliteadmin.cpp
-   sqlitevacuum.cpp )
+   sqlitevacuum.cpp
+   sqlitealter.cpp
+)
 
 kde4_automoc(${kexidb_sqlite3driver_PART_SRCS})
 

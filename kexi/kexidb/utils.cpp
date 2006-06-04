@@ -598,4 +598,186 @@ QString KexiDB::formatNumberForVisibleDecimalPlaces(double value, int decimalPla
 	return KGlobal::locale()->formatNumber(value, decimalPlaces);
 }
 
+KexiDB::Field::Type KexiDB::intToFieldType( int type )
+{
+	if (type<(int)KexiDB::Field::InvalidType || type>(int)KexiDB::Field::LastType) {
+		KexiDBWarn << "KexiDB::intToFieldType(): invalid type " << type << endl;
+		return KexiDB::Field::InvalidType;
+	}
+	return (KexiDB::Field::Type)type;
+}
+
+static bool setIntToFieldType( Field& field, const QVariant& value )
+{
+	bool ok;
+	const int intType = value.toInt(&ok);
+	if (!ok || KexiDB::Field::InvalidType == intToFieldType(intType)) {//for sanity
+		KexiDBWarn << "KexiDB::setFieldProperties(): invalid type" << endl;
+		return false;
+	}
+	field.setType((KexiDB::Field::Type)intType);
+	return true;
+}
+
+bool KexiDB::setFieldProperties( Field& field, const QMap<QCString, QVariant>& values )
+{
+	QMapConstIterator<QCString, QVariant> it;
+	if ( (it = values.find("type")) != values.constEnd() ) {
+		if (!setIntToFieldType(field, *it))
+			return false;
+	}
+
+#define SET_BOOLEAN_FLAG(flag, value) { \
+		constraints |= KexiDB::Field::flag; \
+		if (!value) \
+			constraints ^= KexiDB::Field::flag; \
+	}
+	
+	uint constraints = field.constraints();
+	bool ok;
+	if ( (it = values.find("primaryKey")) != values.constEnd() )
+		SET_BOOLEAN_FLAG(PrimaryKey, (*it).toBool());
+	if ( (it = values.find("autoIncrement")) != values.constEnd() 
+		&& KexiDB::Field::isAutoIncrementAllowed(field.type()) )
+		SET_BOOLEAN_FLAG(AutoInc, (*it).toBool());
+	if ( (it = values.find("unique")) != values.constEnd() )
+		SET_BOOLEAN_FLAG(Unique, (*it).toBool());
+	if ( (it = values.find("notNull")) != values.constEnd() )
+		SET_BOOLEAN_FLAG(NotNull, (*it).toBool());
+	if ( (it = values.find("allowEmpty")) != values.constEnd() )
+		SET_BOOLEAN_FLAG(NotEmpty, !(*it).toBool());
+	field.setConstraints( constraints );
+
+	uint options = 0;
+	if ( (it = values.find("unsigned")) != values.constEnd()) {
+		options |= KexiDB::Field::Unsigned;
+		if (!(*it).toBool())
+			options ^= KexiDB::Field::Unsigned;
+	}
+	field.setOptions( options );
+
+	if ( (it = values.find("name")) != values.constEnd())
+		field.setName( (*it).toString() );
+	if ( (it = values.find("caption")) != values.constEnd())
+		field.setName( (*it).toString() );
+	if ( (it = values.find("description")) != values.constEnd())
+		field.setDescription( (*it).toString() );
+	if ( (it = values.find("length")) != values.constEnd())
+		field.setLength( (*it).toUInt(&ok) );
+	if (!ok)
+		return false;
+	if ( (it = values.find("precision")) != values.constEnd())
+		field.setPrecision( (*it).toUInt(&ok) );
+	if (!ok)
+		return false;
+	if ( (it = values.find("defaultValue")) != values.constEnd())
+		field.setDefaultValue( *it );
+	if ( (it = values.find("width")) != values.constEnd())
+		field.setWidth( (*it).toUInt(&ok) );
+	if (!ok)
+		return false;
+	if ( (it = values.find("visibleDecimalPlaces")) != values.constEnd() 
+	  && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()) )
+		field.setVisibleDecimalPlaces( (*it).toUInt(&ok) );
+	if (!ok)
+		return false;
+
+	return true;
+}
+
+//! for isExtendedTableProperty()
+static KStaticDeleter< QAsciiDict<char> > KexiDB_extendedPropertiesDeleter;
+QAsciiDict<char>* KexiDB_extendedProperties = 0;
+
+bool KexiDB::isExtendedTableProperty( const QCString& propertyName )
+{
+	if (!KexiDB_extendedProperties) {
+		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QAsciiDict<char>(499) );
+#define ADD(name) KexiDB_extendedProperties->insert(name, (char*)1)
+		ADD("visibleDecimalPlaces");
+	}
+	return KexiDB_extendedProperties->find( propertyName );
+}
+
+bool KexiDB::setFieldProperty( Field& field, const QCString& propertyName, const QVariant& value )
+{
+#undef SET_BOOLEAN_FLAG
+#define SET_BOOLEAN_FLAG(flag, value) { \
+			constraints |= KexiDB::Field::flag; \
+			if (!value) \
+				constraints ^= KexiDB::Field::flag; \
+			field.setConstraints( constraints ); \
+			return true; \
+		}
+#define GET_INT(method) { \
+			const uint ival = value.toUInt(&ok); \
+			if (!ok) \
+				return false; \
+			field.method( ival ); \
+			return true; \
+		}
+
+	bool ok;
+	if (KexiDB::isExtendedTableProperty(propertyName)) {
+		//a little speedup: identify extended property in O(1)
+		if ( "visibleDecimalPlaces" == propertyName
+		  && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()) )
+			GET_INT( setVisibleDecimalPlaces );
+	}
+	else {//non-extended
+		if ( "type" == propertyName )
+			return setIntToFieldType(field, value);
+	
+		uint constraints = field.constraints();
+		if ( "primaryKey" == propertyName )
+			SET_BOOLEAN_FLAG(PrimaryKey, value.toBool());
+		if ( "autoIncrement" == propertyName
+			&& KexiDB::Field::isAutoIncrementAllowed(field.type()) )
+			SET_BOOLEAN_FLAG(AutoInc, value.toBool());
+		if ( "unique" == propertyName )
+			SET_BOOLEAN_FLAG(Unique, value.toBool());
+		if ( "notNull" == propertyName )
+			SET_BOOLEAN_FLAG(NotNull, value.toBool());
+		if ( "allowEmpty" == propertyName )
+			SET_BOOLEAN_FLAG(NotEmpty, !value.toBool());
+
+		uint options = 0;
+		if ( "unsigned" == propertyName ) {
+			options |= KexiDB::Field::Unsigned;
+			if (!value.toBool())
+				options ^= KexiDB::Field::Unsigned;
+			field.setOptions( options );
+			return true;
+		}
+
+		if ( "name" == propertyName ) {
+			if (value.toString().isEmpty())
+				return false;
+			field.setName( value.toString() );
+			return true;
+		}
+		if ( "caption" == propertyName ) {
+			field.setName( value.toString() );
+			return true;
+		}
+		if ( "description" == propertyName ) {
+			field.setDescription( value.toString() );
+			return true;
+		}
+		if ( "length" == propertyName )
+			GET_INT( setLength );
+		if ( "precision" == propertyName )
+			GET_INT( setPrecision );
+		if ( "defaultValue" == propertyName ) {
+			field.setDefaultValue( value );
+			return true;
+		}
+		if ( "width" == propertyName )
+			GET_INT( setWidth );
+	}
+
+	KexiDBWarn << "KexiDB::setFieldProperty() property \"" << propertyName << "\" not found!" << endl;
+	return false;
+}
+
 #include "utils_p.moc"

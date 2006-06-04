@@ -95,6 +95,11 @@ class SQLiteConnection : public Connection
 		virtual QString serverResultName();
 		virtual QString serverErrorMsg();
 		virtual void drv_clearServerResult();
+		virtual tristate drv_changeFieldProperty(TableSchema &table, Field& field, 
+			const QString& propertyName, const QVariant& value);
+
+		//! for drv_changeFieldProperty()
+		tristate changeFieldType(TableSchema &table, Field& field, Field::Type type);
 
 		SQLiteConnectionInternal* d;
 

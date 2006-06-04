@@ -51,6 +51,7 @@ class Cursor;
 class ConnectionPrivate;
 class RowEditBuffer;
 class DatabaseProperties;
+class AlterTableHandler;
 
 /*! @short Provides database connection, allowing queries and data modification.
 
@@ -1087,6 +1088,19 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return true on success */
 		bool storeExtendedTableSchemaData(TableSchema& tableSchema);
 
+		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		/* This is a part of alter table interface implementing lower-level operations 
+		 used to perform table schema altering. Used by AlterTableHandler.
+		
+		 Changes value of field property. 
+		 \return true on success, false on failure, cancelled if the action has been cancelled.
+
+		 Note for driver developers: implement this if the driver has to supprot the altering.
+		 */
+		virtual tristate drv_changeFieldProperty(TableSchema &table, Field& field, 
+			const QString& propertyName, const QVariant& value) { return cancelled; }
+
 		QPointer<ConnectionData> m_data;
 		QString m_name;
 		QString m_usedDatabase; //!< database name that is opened now
@@ -1108,6 +1122,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	friend class KexiDB::TableSchema; //!< for removeMe()
 	friend class KexiDB::DatabaseProperties; //!< for setError()
 	friend class ConnectionPrivate;
+	friend class KexiDB::AlterTableHandler;
 
 		ConnectionPrivate *d;
 	private:
