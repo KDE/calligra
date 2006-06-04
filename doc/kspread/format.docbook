@@ -413,9 +413,9 @@ can also add a diagonal strike-through line to the cell(s).</para>
 </para>
 <para>The cell background pattern and color can be selected from the 
 <guilabel>Background</guilabel> page.</para>
-<para>Simply choose a desired pattern, then select the pattern color
-and the background color.</para>
-<para>At the bottom of this page you can see a preview of the configured
+<para>Simply choose a desired <guilabel>Pattern</guilabel>, then select the pattern 
+<guilabel>Color</guilabel> and the <guilabel>Background color</guilabel>.</para>
+<para>At the bottom of this page you can see a <guilabel>Preview</guilabel> of the configured
 cell background.</para>
 </sect2>
 <sect2 id="formatprotection">
