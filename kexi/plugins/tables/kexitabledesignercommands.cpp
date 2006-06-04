@@ -110,6 +110,9 @@ void ChangeFieldPropertyCommand::unexecute()
 
 KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction()
 {
+	if (m_alterTableAction.propertyName()=="subType") {//skip these properties
+		return 0;
+	}
 	return new KexiDB::AlterTableHandler::ChangeFieldPropertyAction( m_alterTableAction );
 }
 

@@ -48,6 +48,7 @@ class Command : public KCommand
 		virtual ~Command();
 
 		//! Used to collect actions data for AlterTableHandler
+		//! Can return 0 if the action should not be passed to AlterTableHandler
 		virtual KexiDB::AlterTableHandler::ActionBase* createAction() { return 0; }
 
 		virtual QString debugString() { return name(); }
