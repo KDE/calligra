@@ -428,13 +428,17 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	//database filenames, shortcut filenames or db names on a server
 	if (args->count()>=1) {
 		QString prjName;
-		if (fileDriverSelected)
-			prjName = QFile::decodeName(args->arg(0));
-		else
+		QString fileName;
+		if (fileDriverSelected) {
+			fileName = QFile::decodeName(args->arg(0));
+		}
+		else {
 			prjName = QString::fromLocal8Bit(args->arg(0));
+		}
 		
 		if (fileDriverSelected) {
-			QFileInfo finfo(prjName);
+			QFileInfo finfo(fileName);
+			prjName = finfo.fileName(); //filename only, to avoid messy names like when Kexi is started with "../../db" arg
 			cdata.setFileName( finfo.absFilePath() );
 			projectFileExists = finfo.exists();
 
