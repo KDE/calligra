@@ -31,13 +31,13 @@
 
 #include <kio/netaccess.h>
 
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
-#include <kis_profile.h>
+#include <KoColorProfile.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 
@@ -218,7 +218,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     
     // Read image profile
     kDebug() << "Reading profile" << endl;
-    KisProfile* profile = 0;
+    KoColorProfile* profile = 0;
     DWORD EmbedLen;
     LPBYTE EmbedBuffer;
 
@@ -227,20 +227,20 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         QByteArray rawdata;
         rawdata.resize(EmbedLen);
         memcpy(rawdata.data(), EmbedBuffer, EmbedLen);
-        profile = new KisProfile(rawdata);
+        profile = new KoColorProfile(rawdata);
     } else {
         kDebug(41008) << "No Profile found" << endl;
     }
     
     // Retrieve a pointer to the colorspace
-    KisColorSpace* cs = 0;
+    KoColorSpace* cs = 0;
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
     }
     else
-        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName,""),"");
+        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName,""),"");
 
     if(cs == 0) {
         kDebug(41008) << "Colorspace " << csName << " is not available, please check your installation." << endl;
@@ -312,7 +312,13 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         m_img->blockSignals(true); // Don't send out signals while we're building the image
         if(profile)
         {
-            m_img -> addAnnotation( profile->annotation() );
+            KisAnnotationSP annotation;
+            // XXX we hardcode icc, this is correct for lcms?
+            // XXX productName(), or just "ICC Profile"?
+            if (!profile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+
+            m_img -> addAnnotation( annotation );
         }
     } else {
         if( m_img->width() < (qint32)width || m_img->height() < (qint32)height)

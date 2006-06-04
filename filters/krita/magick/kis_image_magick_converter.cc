@@ -44,10 +44,10 @@
 #include "kis_undo_adapter.h"
 #include "kis_image_magick_converter.h"
 #include "kis_meta_registry.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_colorspace.h"
-#include "kis_profile.h"
+#include "KoColorProfile.h"
 #include "kis_annotation.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
@@ -106,19 +106,19 @@ namespace {
 
     }
 
-    ColorspaceType getColorTypeforColorSpace( KisColorSpace * cs )
+    ColorspaceType getColorTypeforColorSpace( KoColorSpace * cs )
     {
-        if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") ) return GRAYColorspace;
-        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") ) return RGBColorspace;
-        if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYK16") ) return CMYKColorspace;
-        if ( cs->id() == KisID("LABA") ) return LABColorspace;
+        if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") ) return GRAYColorspace;
+        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") ) return RGBColorspace;
+        if ( cs->id() == KoID("CMYK") || cs->id() == KoID("CMYK16") ) return CMYKColorspace;
+        if ( cs->id() == KoID("LABA") ) return LABColorspace;
 
         kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return RGBColorspace;
 
     }
 
-    KisProfile * getProfileForProfileInfo(const Image * image)
+    KoColorProfile * getProfileForProfileInfo(const Image * image)
     {
 #ifndef HAVE_MAGICK6
         return 0;
@@ -130,7 +130,7 @@ namespace {
         const char *name;
         const StringInfo *profile;
 
-        KisProfile * p = 0;
+        KoColorProfile * p = 0;
 
         ResetImageProfileIterator(image);
         for (name = GetNextImageProfile(image); name != (char *) NULL; )
@@ -145,7 +145,7 @@ namespace {
                 rawdata.resize(profile->length);
                 memcpy(rawdata.data(), profile->datum, profile->length);
 
-                p = new KisProfile(rawdata);
+                p = new KoColorProfile(rawdata);
                 if (p == 0)
                     return 0;
             }
@@ -373,7 +373,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         kDebug(41008) << "Image depth: " << imageDepth << "\n";
 
         QString csName;
-        KisColorSpace * cs = 0;
+        KoColorSpace * cs = 0;
         ColorspaceType colorspaceType;
 
         // Determine image type -- rgb, grayscale or cmyk
@@ -391,14 +391,14 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
         kDebug(41008) << "image has " << csName << " colorspace\n";
         
-        KisProfile * profile = getProfileForProfileInfo(image);
+        KoColorProfile * profile = getProfileForProfileInfo(image);
         if (profile)
         {
             kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
             cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
         }
         else
-            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName,""),"");
+            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName,""),"");
 
         if (!cs) {
             kDebug(41008) << "Krita does not support colorspace " << image -> colorspace << "\n";

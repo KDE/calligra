@@ -158,6 +158,7 @@
 #  define PIGMENT_EXPORT
 # endif
 #endif
+#  define PIGMENT_EXPORT
 
 
 #define KPRESENTER_EXPORT KDE_EXPORT
@@ -217,6 +218,7 @@
 #endif
 #define EXAMPLE_EXPORT KDE_EXPORT
 #define FLAKE_EXPORT KDE_EXPORT
+#define PIGMENT_EXPORT KDE_EXPORT
 #endif /* not windows */
 
 #endif /* _KOFFICE_EXPORT_H */

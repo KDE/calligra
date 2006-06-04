@@ -35,14 +35,14 @@ extern "C" {
 
 #include <kio/netaccess.h>
 
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_meta_registry.h>
-#include <kis_profile.h>
+#include <KoColorProfile.h>
 
 #include <kis_exif_io.h>
 
@@ -58,17 +58,17 @@ extern "C" {
 
 namespace {
     
-    J_COLOR_SPACE getColorTypeforColorSpace( KisColorSpace * cs)
+    J_COLOR_SPACE getColorTypeforColorSpace( KoColorSpace * cs)
     {
-        if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") )
+        if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") )
         {
             return JCS_GRAYSCALE;
         }
-        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") )
+        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") )
         {
             return JCS_RGB;
         }
-        if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYK16") )
+        if ( cs->id() == KoID("CMYK") || cs->id() == KoID("CMYK16") )
         {
             return JCS_CMYK;
         }
@@ -142,7 +142,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
     uchar* profile_data;
     uint profile_len;
-    KisProfile* profile = 0;
+    KoColorProfile* profile = 0;
     QByteArray profile_rawdata;
     if( read_icc_profile (&cinfo, &profile_data, &profile_len))
     {
@@ -151,7 +151,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)profile_len);
 
         if (hProfile != (cmsHPROFILE) NULL) {
-            profile = new KisProfile( profile_rawdata);
+            profile = new KoColorProfile( profile_rawdata);
             Q_CHECK_PTR(profile);
             kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
             if(!profile->isSuitableForOutput())
@@ -162,14 +162,14 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
     
     // Retrieve a pointer to the colorspace
-    KisColorSpace* cs;
+    KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
     }
     else
-        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName,""),"");
+        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName,""),"");
 
     if(cs == 0)
     {

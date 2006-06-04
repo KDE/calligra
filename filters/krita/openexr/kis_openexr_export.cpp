@@ -92,7 +92,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     doc -> undoAdapter() -> setUndo(undo);
 
-    //KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
+    //KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KoColorSpaceRegistry::instance() -> get(KoID("RGBAF32", ""))));
     KisRgbF16HalfColorSpace *cs = dynamic_cast<KisRgbF16HalfColorSpace *>(layer->paintDevice()->colorSpace());
 
     if (cs == 0) {

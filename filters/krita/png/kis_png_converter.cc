@@ -32,13 +32,13 @@
 
 #include <kio/netaccess.h>
 
-#include <kis_colorspace_factory_registry.h>
+#include <KoColorSpaceFactoryRegistry.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
-#include <kis_profile.h>
+#include <KoColorProfile.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 
@@ -50,13 +50,13 @@ namespace {
     const quint8 PIXEL_ALPHA = 3;
 
     
-    int getColorTypeforColorSpace( KisColorSpace * cs , bool alpha)
+    int getColorTypeforColorSpace( KoColorSpace * cs , bool alpha)
     {
-        if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") )
+        if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") )
         {
             return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
         }
-        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") )
+        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") )
         {
             return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
         }
@@ -194,7 +194,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     int compression_type;
     png_uint_32 proflen;
     
-    KisProfile* profile = 0;
+    KoColorProfile* profile = 0;
     if(png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen))
     {
         QByteArray profile_rawdata;
@@ -202,7 +202,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
         if (QString::compare(profile_name, "icc") == 0) {
             profile_rawdata.resize(proflen);
             memcpy(profile_rawdata.data(), profile_data, proflen);
-            profile = new KisProfile(profile_rawdata);
+            profile = new KoColorProfile(profile_rawdata);
             Q_CHECK_PTR(profile);
             if (profile) {
                 kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
@@ -215,14 +215,14 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     }
 
     // Retrieve a pointer to the colorspace
-    KisColorSpace* cs;
+    KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
     }
     else
-        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName,""),"");
+        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName,""),"");
 
     if(cs == 0)
     {
@@ -306,7 +306,12 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
         Q_CHECK_PTR(m_img);
         if(profile && !profile->isSuitableForOutput())
         {
-            m_img -> addAnnotation( profile->annotation() );
+            KisAnnotationSP annotation;
+            // XXX we hardcode icc, this is correct for lcms?
+            // XXX productName(), or just "ICC Profile"?
+            if (!profile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", profile->productName(), profile->rawData());
+            m_img -> addAnnotation( annotation );
         }
     }
 

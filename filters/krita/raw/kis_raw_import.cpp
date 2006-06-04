@@ -62,8 +62,8 @@
 #include "kis_meta_registry.h"
 #include "kis_layer.h"
 #include "kis_annotation.h"
-#include "kis_profile.h"
-#include "kis_colorspace_factory_registry.h"
+#include "KoColorProfile.h"
+#include "KoColorSpaceFactoryRegistry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
@@ -199,12 +199,12 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             QImage img;
             img.loadFromData(*m_data);
 
-            KisColorSpace * cs = 0;
+            KoColorSpace * cs = 0;
             if (m_page->radioGray->isChecked()) {
-                cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("GRAYA"), profile() );
+                cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KoID("GRAYA"), profile() );
             }
             else {
-               cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA"), profile() );
+               cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KoID("RGBA"), profile() );
             }
             if (cs == 0) { kDebug() << "No CS\n"; return KoFilter::InternalError; }
 
@@ -237,12 +237,12 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
             char * data = m_data->data() + startOfImagedata;
 
-            KisColorSpace * cs = 0;
+            KoColorSpace * cs = 0;
             if (m_page->radioGray->isChecked()) {
-                cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("GRAYA16"), profile() );
+                cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KoID("GRAYA16"), profile() );
             }
             else {
-                cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
+                cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KoID("RGBA16"), profile() );
             }
             if (cs == 0) return KoFilter::InternalError;
 
@@ -345,12 +345,12 @@ void KisRawImport::slotUpdatePreview()
 
         char * data = m_data->data() + startOfImagedata;
 
-        KisColorSpace * cs = 0;
+        KoColorSpace * cs = 0;
         if (m_page->radioGray->isChecked()) {
-            cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("GRAYA16"), profile() );
+            cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KoID("GRAYA16"), profile() );
         }
         else {
-            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
+            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KoID("RGBA16"), profile() );
         }
         KisPaintDevice * dev = new KisPaintDevice(cs, "preview");
             // Copy the colordata to the pixels
@@ -524,7 +524,7 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     }
 
 
-    KisProfile * pf  = profile();
+    KoColorProfile * pf  = profile();
     if (m_page->chkProfile->isChecked()) {
         if (!pf->filename().isNull()) {
             // Use the user-set profile, if it's not an lcms internal
@@ -577,7 +577,7 @@ QSize KisRawImport::determineSize(quint32& startOfImageData)
 
 }
 
-KisProfile * KisRawImport::profile()
+KoColorProfile * KisRawImport::profile()
 {
     if (m_page->chkProfile->isChecked()) {
         return KisMetaRegistry::instance()->csRegistry()->getProfileByName(m_page->cmbProfile->currentText());
@@ -588,33 +588,33 @@ KisProfile * KisRawImport::profile()
 
 void KisRawImport::slotFillCmbProfiles()
 {
-    KisID s = getColorSpace();
+    KoID s = getColorSpace();
 
-    KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
+    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     m_page -> cmbProfile -> clear();
-    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
 
-    foreach (KisProfile *profile, profileList) {
+    foreach (KoColorProfile *profile, profileList) {
         m_page->cmbProfile->insertItem(profile->productName());
     }
 }
 
-KisID KisRawImport::getColorSpace()
+KoID KisRawImport::getColorSpace()
 {
     if (m_page->radioRGB->isChecked()) {
         if (m_page->radio16->isChecked()) {
-            return KisID( "RGBA16" );
+            return KoID( "RGBA16" );
         }
     }
     else {
         if (m_page->radio16->isChecked()) {
-            return KisID( "GRAYA16" );
+            return KoID( "GRAYA16" );
         }
         else {
-            return KisID( "GRAYA" );
+            return KoID( "GRAYA" );
         }
     }
-    return KisID("RGBA");
+    return KoID("RGBA");
 }
 
 #include "kis_raw_import.moc"

@@ -36,7 +36,7 @@ class WdgRawImport : public QWidget, public Ui::WdgRawImport
 class KProcess;
 class KDialogBase;
 class WdgRawImport;
-class KisProfile;
+class KoColorProfile;
 class Q3ProgressDialog;
 
 class KisRawImport : public KoFilter {
@@ -64,14 +64,14 @@ private:
     QStringList createArgumentList(bool forPreview = false);
     QSize determineSize(quint32& startOfImageData);
     void getImageData(QStringList arguments);
-    KisProfile * profile();
-    KisID getColorSpace();
+    KoColorProfile * profile();
+    KoID getColorSpace();
     
 private:
     QByteArray * m_data;
     KDialogBase * m_dialog;
     WdgRawImport * m_page;
-    KisProfile * m_monitorProfile;
+    KoColorProfile * m_monitorProfile;
     KProcess * m_process;
     Q3ProgressDialog* m_progress;
 };

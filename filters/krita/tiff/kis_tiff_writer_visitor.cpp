@@ -23,7 +23,7 @@
 #include <klocale.h>
 
 #include <kis_annotation.h>
-#include <kis_colorspace.h>
+#include <KoColorSpace.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
@@ -32,25 +32,25 @@
 #include "kis_tiff_converter.h"
 
 namespace {
-    bool writeColorSpaceInformation( TIFF* image, KisColorSpace * cs, uint16& color_type )
+    bool writeColorSpaceInformation( TIFF* image, KoColorSpace * cs, uint16& color_type )
     {
-        if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") )
+        if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") )
         {
             color_type = PHOTOMETRIC_MINISBLACK;
             return true;
         }
-        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") )
+        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") )
         {
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-        if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYKA16") )
+        if ( cs->id() == KoID("CMYK") || cs->id() == KoID("CMYKA16") )
         {
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
             return true;
         }
-        if ( cs->id() == KisID("LABA") )
+        if ( cs->id() == KoID("LABA") )
         {
             color_type = PHOTOMETRIC_CIELAB;
             return true;
@@ -149,10 +149,10 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     TIFFSetField(image(), TIFFTAG_ROWSPERSTRIP, 8);
 
     // Save profile
-    KisProfile* profile = pd->colorSpace()->getProfile();
+    KoColorProfile* profile = pd->colorSpace()->getProfile();
     if(profile)
     {
-        QByteArray ba = profile->annotation()->annotation();
+        QByteArray ba = profile->rawData();
         TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(),ba.data());
     }
     tsize_t stripsize = TIFFStripSize(image());
