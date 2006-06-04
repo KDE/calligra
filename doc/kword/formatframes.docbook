@@ -75,7 +75,7 @@ will appear.  Select <guimenuitem>Frame/Frameset Properties...</guimenuitem>.</p
 
 </itemizedlist>
 
-<para>The Properties dialog consists of one dialog box, with five index
+<para>The Properties dialog consists of one dialog box, with six index
 tabs labeled <link linkend="format-frame-options">Options</link>,
 <link linkend="format-frame-tra">Text Run Around</link>,
 <link linkend="format-frame-connect">Connect Text Frames</link>,

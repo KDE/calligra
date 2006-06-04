@@ -313,10 +313,10 @@ a new one with the new name).</para>
 will revert to <quote>Standard</quote>.</para>
 </warning>
 
-<para>Use the buttons labeled <link linkend="style-font">Font</link>,
+<para>Use the tabs labeled <link linkend="style-font">Font</link>,
 <link
-linkend="style-space">Indent and Spacing</link>, <link
-linkend="style-align">Aligns</link>, <link
+linkend="style-space">Indent &amp; Spacing</link>, <link
+linkend="style-align">General Layout</link>, <link
 linkend="style-borders">Decorations</link>, <link
 linkend="style-numbering">Bullets/Numbers</link>, and <link
 linkend="style-tabulators">Tabulators</link> to alter the look of  the text style.</para>
