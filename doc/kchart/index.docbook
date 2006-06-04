@@ -119,10 +119,10 @@ chart with a file dialog.
 </para>
 <para>
 For now we will start with the default template. Select
-<guimenu>Charts</guimenu> in the left area and then select
-<guimenu>Bar Chart</guimenu> in the main template area. Normally
+<guilabel>Charts</guilabel> in the left area and then select
+<guilabel>Bar Chart</guilabel> in the main template area. Normally
 this template should already be selected after choosing
-<guimenu>Charts</guimenu>. 
+<guilabel>Charts</guilabel>. 
 </para>
 <para>
 If you decide to always start &kchart; with a selected template as default
@@ -682,7 +682,7 @@ can do this on the <guilabel>Font</guilabel> page.
 </screenshot>
 <para>
 Choose the <guilabel>X-Axis</guilabel> item and click on the
-<guimenu>Font...</guimenu> button. Choose a somewhat
+<guibutton>Font...</guibutton> button. Choose a somewhat
 larger font like in the following screenshot.
 </para>
 <screenshot>
@@ -694,7 +694,7 @@ larger font like in the following screenshot.
   </mediaobject>
 </screenshot>
 <para>
-Note that the font is set to <guilabel>Relative</guilabel>.
+Note that the font size is set to <guilabel>Relative</guilabel>.
 This means that the font is automatically scaled according
 to the overall chart size. This is quite usefull and most
 of the time what the average user expects.
@@ -1015,7 +1015,7 @@ based on this document.
 <listitem><para><action>Prints the document</action></para>
 <important><para>Make sure the proper print system is selected in the
 <guilabel>Print system currently used:</guilabel> section. This option can
-be seen after clicking on the <guimenu>Options &gt;&gt;</guimenu> button.</para></important></listitem>
+be seen after clicking on the <guibutton>Options &gt;&gt;</guibutton> button.</para></important></listitem>
 </varlistentry>
 
 <varlistentry>
