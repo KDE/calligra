@@ -1148,7 +1148,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
 KexiTableItem *KexiDataAwareObjectInterface::insertEmptyRow(int row)
 {
 	if ( !acceptRowEdit() || !isEmptyRowInsertingEnabled() 
-		|| (row!=-1 && row >= (rows()+isInsertingEnabled()?1:0) ) )
+		|| (row!=-1 && row >= ((int)rows()+(isInsertingEnabled()?1:0) ) ) )
 		return 0;
 
 	KexiTableItem *newItem = m_data->createItem(); //new KexiTableItem(m_data->columns.count());
