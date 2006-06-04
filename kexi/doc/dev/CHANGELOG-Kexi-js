@@ -17,7 +17,69 @@ For bugfixes use CCMAIL:###-done@bugs.kde.org
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
 
-TODO: fix setting PK
+2006-06-05
+KoProperty
+- clear all properties and group names when using operator =
+1.0/2.0: ported
+KexiDB
+
+2006-06-02
+KexiDB
+- fixed setting database filename when relative path has been provided
+1.0/2.0: ported
+- minor utilities added usable for altering
+2.0: ported
+Table Designer
+- table altering improved for SQLite: changing data types will be possible soon
+2.0: ported
+
+2006-05-31
+KoProperty
+- methods in Set::Iterator are now const
+2.0: ported
+- added propertyValues(const Set& set) utility function
+2.0: ported
+
+2006-05-30
+Table View
+- spreadsheet mode: fixed inserting empty rows and deleting rows
+1.0/2.0: ported
+Table Designer
+- improved undo/redo actions: deleting and redoing actions fixed
+2.0: ported
+- added title to the context menu
+2.0: ported
+KexiDB
+- improved alter table machinery; now fields are identified by UIDs 
+  to avoid problems with multiple fields sharing the same name
+2.0: ported
+
+2006-05-29
+KoProperty
+- animate clicking on the group title's area
+2.0: ported
+- added a container widget that can be used to split information into hideable sections 
+2.0: ported
+Form Designer
+- data source pane splitted vertically into two sections for transparency
+2.0: ported
+Table Designer
+- clear PK when selecting non-integer type
+2.0: ported
+
+2006-05-27
+KoProperty
+- Possible fix for crash. Not sure this is the definitive fix for bug 124917.
+  Thanks to Jaime Torres
+2.0: ported
+- group items now have rather pretty appearance styled with KDE style
+2.0: ported
+- fixed groups order, API changed: now it's possible to get order of groups
+2.0: ported
+- sorting disabled when groups are present
+2.0: ported
+- icons can be defined and displayed within the group items
+2.0: ported
 
 2006-05-26
 KexiDB

@@ -276,6 +276,9 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - display autonumber indicator in autonumbered column(s)
 - reimplement header widget to better show sorting indicators
 - display tooltip over cells that are to small to display entire contents
+- Add icons for conditional formatting: http://blogs.msdn.com/excel/archive/2006/05/09/594200.aspx
+  (displaying icons is already possible using custom properties, BTW)
+- display [null]  values in boolean fields, e.g. as [?]
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -338,6 +341,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - frame widget:
 -- add such fancy frame: http://www.themaninblue.com/writing/perspective/2004/08/05/
 - tab widget: add color property for setting particular tab 
+- add a Scratchpad as in QtDesigner4, allows to drag&drop widgets between forms...
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -868,18 +872,27 @@ Forms TODO
 - add "navigationCaption" property to table and form, so "Records:" Label in the record nav. becomes e.g. "Bananas:"
   see: http://blogs.msdn.com/thirdoffive/archive/2006/04/06/560454.aspx
 
-TV TODO
-- display [null]  values in boolean fields, e.g. as [?]
-
 Forms TODO
 - Checkbox widget with focus policy set to Tab has problems with KexiDataAwareObjectInterface::acceptEditor() 
   because m_editor is set to _currently focused_ widget (problem where there are e.g. >1 checkboxes)
   Partially fixed by setting StrongFocus policy as default; 
  FIX THIS for other focus policies too...
 
-Table View TODO:
-- Add icons for conditional formatting: http://blogs.msdn.com/excel/archive/2006/05/09/594200.aspx
-  (displaying icons is already possible using custom properties, BTW)
+TODO:
+table designer: 
+ fix setting PK
+
+
+KDElibs4 TODO:
+- wizard
+- do not require .la in libltdl
+
+== April 1 2007 TODO ==
+- show the screenshot of kexi displaying yes/no/maybe-dialogs, as for the "Woman edition"
 
 TODO:
-table designer: clear PK when selecting non-integer type
+Kexi 1.1: Upgrade to SQLite 3.2.8 (but do not use ALTER TABLE ADD COLUMN, for compatibility with 3.0.7).
+THen, we can get RENAME TABLE command, so we can use it for recreating tables after schema altering.
+
+Kexi >2.0 (probably late 2007): Add SQLite >3.3 driver. Offer exporting similar to the one between 2.8->3.0.
+ Think about backporting the >3.3 driver to Kexi 1.1.
