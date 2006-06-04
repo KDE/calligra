@@ -96,8 +96,8 @@ AlterTableHandler::MoveFieldPositionAction& AlterTableHandler::ActionBase::toMov
 
 AlterTableHandler::FieldActionBase::FieldActionBase(const QString& fieldName, int uid)
  : ActionBase()
- , m_fieldName(fieldName)
  , m_fieldUID(uid)
+ , m_fieldName(fieldName)
 {
 }
 
@@ -539,7 +539,7 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
 				}
 				values.insert( changePropertyAction->propertyName().latin1(), changePropertyAction->newValue() );
 				//the subsequent "change property" action is no longer needed
-				actionsForThisField->remove(changePropertyAction->propertyName());
+				actionsForThisField->remove(changePropertyAction->propertyName().latin1());
 			}
 			else {
 				++it;

@@ -2869,7 +2869,7 @@ YYACCEPT;
 		val = (int)(yyvsp[(1) - (1)].integerValue);
 	else if ((yyvsp[(1) - (1)].integerValue) <= UINT_MAX && (yyvsp[(1) - (1)].integerValue) >= 0)
 		val = (uint)(yyvsp[(1) - (1)].integerValue);
-	else if ((yyvsp[(1) - (1)].integerValue) <= LLONG_MAX && (yyvsp[(1) - (1)].integerValue) >= LLONG_MIN)
+	else if ((yyvsp[(1) - (1)].integerValue) <= (Q_LLONG)LLONG_MAX && (yyvsp[(1) - (1)].integerValue) >= (Q_LLONG)LLONG_MIN)
 		val = (Q_LLONG)(yyvsp[(1) - (1)].integerValue);
 
 //	if ($1 < ULLONG_MAX)

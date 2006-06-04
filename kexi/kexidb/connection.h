@@ -1097,7 +1097,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note for driver developers: implement this if the driver has to supprot the altering.
 		 */
 		virtual tristate drv_changeFieldProperty(TableSchema &table, Field& field, 
-			const QString& propertyName, const QVariant& value) { return cancelled; }
+			const QString& propertyName, const QVariant& value) {
+			Q_UNUSED(table); Q_UNUSED(field); Q_UNUSED(propertyName); Q_UNUSED(value);
+			return cancelled; }
 
 		QGuardedPtr<ConnectionData> m_data;
 		QString m_name;

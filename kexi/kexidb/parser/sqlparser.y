@@ -964,7 +964,7 @@ aExpr9:
 		val = (int)$1;
 	else if ($1 <= UINT_MAX && $1 >= 0)
 		val = (uint)$1;
-	else if ($1 <= LLONG_MAX && $1 >= LLONG_MIN)
+	else if ($1 <= (Q_LLONG)LLONG_MAX && $1 >= (Q_LLONG)LLONG_MIN)
 		val = (Q_LLONG)$1;
 
 //	if ($1 < ULLONG_MAX)
