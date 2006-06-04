@@ -2506,7 +2506,7 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
 
     if ( theFrame->frameSet() == this ) // safety check
     {
-        //kdDebug() << "KWTextFrameSet::isFrameEmpty text bottom=(LU) " << bottom << " theFrame=" << theFrame << " " << *theFrame << " its internalY(LU)=" << m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) << endl;
+        kdDebug() << "KWTextFrameSet::isFrameEmpty text bottom=(LU) " << bottom << " theFrame=" << theFrame << " " << *theFrame << " its internalY(LU)=" << m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) << endl;
         return bottom < m_doc->ptToLayoutUnitPixY( theFrame->internalY() );
     }
 
@@ -2518,11 +2518,11 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
 
 bool KWTextFrameSet::canRemovePage( int num )
 {
-    //kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage " << num << endl;
+    kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage " << num << endl;
 
     // No frame on that page ? ok for us then
     if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage ) {
-        //kdDebug() << "No frame on that page. Number of frames: " << frameCount() << endl;
+        kdDebug() << "No frame on that page. Number of frames: " << frameCount() << endl;
         return true;
     }
 
@@ -2530,12 +2530,12 @@ bool KWTextFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * theFrame = frameIt.current();
-        //kdDebug() << "canRemovePage: looking at " << theFrame << " pageNum=" << theFrame->pageNumber() << endl;
+        kdDebug() << "canRemovePage: looking at " << theFrame << " pageNum=" << theFrame->pageNumber() << endl;
         Q_ASSERT( theFrame->pageNumber() == num );
         Q_ASSERT( theFrame->frameSet() == this );
         bool isEmpty = isFrameEmpty( theFrame );
-        //kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
-        //          << " found a frame on page " << num << " empty:" << isEmpty << endl;
+        kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
+                  << " found a frame on page " << num << " empty:" << isEmpty << endl;
         // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
         bool isCopy = theFrame->isCopy() && frameIt.current() != m_frames.first();
         if ( !isCopy && !isEmpty )

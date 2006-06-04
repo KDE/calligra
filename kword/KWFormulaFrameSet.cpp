@@ -17,33 +17,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qfile.h>
+
+#include "KWFormulaFrameSet.h"
+
 #include "KWDocument.h"
 #include "KWView.h"
 #include "KWViewMode.h"
 #include "KWCanvas.h"
 #include "KWFrame.h"
 #include "defs.h"
-#include "KWTextFrameSet.h"
-//#include "KWAnchor.h"
-#include <KoTextObject.h> // for customItemChar!
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
 #include <kformulaview.h>
+#include <KoOasisContext.h>
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
-#include <kcursor.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <float.h>
-#include "KWordFrameSetIface.h"
+#include <ktempfile.h>
 #include <dcopobject.h>
-#include "KWordTextFrameSetEditIface.h"
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordFormulaFrameSetEditIface.h"
-#include "KWordPictureFrameSetIface.h"
-
-#include "KWFormulaFrameSet.h"
 
 #include <assert.h>
 
@@ -58,11 +56,37 @@
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *doc, const QString & name )
     : KWFrameSet( doc ), m_changed( false ), m_edit( 0 )
 {
-    kdDebug() << k_funcinfo << endl;
+    if ( name.isEmpty() )
+        m_name = doc->generateFramesetName( i18n( "Formula %1" ) );
+    else
+        m_name = name;
 
+    init();
+}
+
+KWFormulaFrameSet::KWFormulaFrameSet( KWDocument* doc, const QDomElement& frameTag,
+                                      const QDomElement& mathTag, KoOasisContext& context )
+    : KWFrameSet( doc ), m_changed( false ), m_edit( 0 )
+{
+    m_name = frameTag.attributeNS( KoXmlNS::draw, "name", QString::null );
+    if ( doc->frameSetByName( m_name ) ) // already exists!
+        m_name = doc->generateFramesetName( m_name + " %1" );
+
+    init();
+
+    context.styleStack().save();
+    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name", "graphic" ); // get the style for the graphics element
+    /*KWFrame* frame =*/ loadOasisFrame( frameTag, context );
+    context.styleStack().restore();
+
+    formula->loadMathML( mathTag );
+}
+
+void KWFormulaFrameSet::init()
+{
     // The newly created formula is not yet part of the formula
     // document. It will be added when a frame is created.
-    formula = doc->formulaDocument()->createFormula( -1, false );
+    formula = m_doc->formulaDocument()->createFormula( -1, false );
 
     // With the new drawing scheme (drawFrame being called with translated painter)
     // there is no need to move the KFormulaContainer anymore, it remains at (0,0).
@@ -72,10 +96,6 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *doc, const QString & name )
              this, SLOT( slotFormulaChanged( double, double ) ) );
     connect( formula, SIGNAL( errorMsg( const QString& ) ),
              this, SLOT( slotErrorMessage( const QString& ) ) );
-    if ( name.isEmpty() )
-        m_name = doc->generateFramesetName( i18n( "Formula %1" ) );
-    else
-        m_name = name;
 
     /*
     if ( isFloating() ) {
@@ -239,9 +259,26 @@ QDomElement KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
     return framesetElem;
 }
 
-void KWFormulaFrameSet::saveOasis(KoXmlWriter&, KoSavingContext&, bool) const
+void KWFormulaFrameSet::saveOasis(KoXmlWriter& writer, KoSavingContext& context, bool) const
 {
-    // TODO
+    KWFrame *frame = m_frames.getFirst();
+    frame->startOasisFrame( writer, context.mainStyles(), name() );
+
+    KTempFile contentTmpFile;
+    contentTmpFile.setAutoDelete( true );
+    QFile* tmpFile = contentTmpFile.file();
+
+    QTextStream stream(tmpFile);
+    stream.setEncoding( QTextStream::UnicodeUTF8 );
+    formula->saveMathML( stream, true );
+    tmpFile->close();
+
+	writer.startElement( "draw:object" );
+	writer.startElement( "math:math" );
+    writer.addCompleteElement( tmpFile );
+	writer.endElement(); // math:math
+	writer.endElement(); // draw:object
+    writer.endElement(); // draw:frame
 }
 
 void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)

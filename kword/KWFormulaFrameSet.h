@@ -23,6 +23,7 @@
 #include "KWFrameSet.h"
 #include "KWFrameSetEdit.h"
 
+class DCOPObject;
 namespace KFormula {
     class FormulaCursor;
     class Container;
@@ -45,6 +46,9 @@ class KWFormulaFrameSet : public KWFrameSet
     Q_OBJECT
 public:
     KWFormulaFrameSet( KWDocument *doc, const QString & name );
+    /// Used for OASIS loading
+    KWFormulaFrameSet( KWDocument* doc, const QDomElement& frame,
+                       const QDomElement& objectTag, KoOasisContext& context );
     virtual ~KWFormulaFrameSet();
 
     virtual KWordFrameSetIface* dcopObject();
@@ -100,6 +104,7 @@ protected slots:
     void slotErrorMessage( const QString& msg );
 
 private:
+    void init();
 
     static QPixmap* doubleBufferPixmap( const QSize& s );
     static QPixmap* m_bufPixmap;
