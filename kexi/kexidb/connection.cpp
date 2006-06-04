@@ -340,7 +340,7 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
 //js: moved from useDatabase():
-		QFileInfo file(dbName);
+		QFileInfo file(data()->dbPath()+QDir::separator()+dbName);
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
 				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.")
