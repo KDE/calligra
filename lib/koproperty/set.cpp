@@ -238,6 +238,8 @@ Set::clear()
 {
 	aboutToBeCleared();
 	d->propertiesOfGroup.clear();
+	d->groupsDescription.clear()
+	d->groupForProperty.clear();
 	Property::DictIterator it(d->dict);
 	while (it.current())
 		removeProperty( it.current() );
@@ -251,10 +253,13 @@ Set::addToGroup(const QCString &group, Property *property)
 	if(!property)
 		return;
 
-	//do not add same property to the group twice
+	//do not add the same property to the group twice
 	if(d->groupForProperty.contains(property) && (d->groupForProperty[property] == group))
 		return;
 
+	for (StringListMap::ConstIterator it=d->propertiesOfGroup.constBegin();it!=d->propertiesOfGroup.constEnd();++it) {
+		kdDebug() << it.key() << " " << it.data() << endl;
+	}
 	if(!d->propertiesOfGroup.contains(group)) { // group doesn't exist
 		QValueList<QCString> l;
 		l.append(property->name());
@@ -354,9 +359,7 @@ Set::operator= (const Set &set)
 	if(&set == this)
 		return *this;
 
-	d->dict.clear();
-	d->propertiesOfGroup.clear();
-	d->groupForProperty.clear();
+	clear();
 
 	d->ownProperty = set.d->ownProperty;
 	d->prevSelection = set.d->prevSelection;
