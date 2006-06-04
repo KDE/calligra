@@ -244,9 +244,6 @@ Set::addToGroup(const QCString &group, Property *property)
 	if(d->groupForProperty.contains(property) && (d->groupForProperty[property] == group))
 		return;
 
-	for (StringListMap::ConstIterator it=d->propertiesOfGroup.constBegin();it!=d->propertiesOfGroup.constEnd();++it) {
-		kdDebug() << it.key() << " " << it.data() << endl;
-	}
 	if(!d->propertiesOfGroup.contains(group)) { // group doesn't exist
 		QValueList<QCString> l;
 		l.append(property->name());
