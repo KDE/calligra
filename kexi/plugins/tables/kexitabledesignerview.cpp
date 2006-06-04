@@ -32,6 +32,7 @@
 #include <kmessagebox.h>
 
 #include <koproperty/set.h>
+#include <koproperty/utils.h>
 
 #include <kexidb/cursor.h>
 #include <kexidb/tableschema.h>
@@ -745,9 +746,11 @@ void KexiTableDesignerView::slotRowUpdated(KexiTableItem *item)
 //todo: check uniqueness:
 		QString fieldName( KexiUtils::string2Identifier(fieldCaption) );
 
+		;
+
 		KexiDB::Field field( //tmp
 			fieldName,
-			(KexiDB::Field::Type)fieldType,
+			KexiDB::intToFieldType( fieldType ),
 			KexiDB::Field::NoConstraints,
 			KexiDB::Field::NoOptions,
 			/*length*/0,
@@ -989,6 +992,14 @@ void KexiTableDesignerView::slotAboutToDeleteRow(
 
 KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set )
 {
+	KexiDB::Field *field = new KexiDB::Field();
+	QMap<QCString, QVariant> values = KoProperty::propertyValues(set);
+	if (!KexiDB::setFieldProperties( *field, values )) {
+		delete field;
+		return 0;
+	}
+	return field;
+/*
 	kexipluginsdbg << set["subType"].value().toString() << endl;
 	QString subTypeString( set["subType"].value().toString() );
 	KexiDB::Field::Type type = KexiDB::Field::typeForString(subTypeString);
@@ -1029,7 +1040,7 @@ KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set )
 	if (KexiDB::supportsVisibleDecimalPlacesProperty(f->type()) && set.contains("visibleDecimalPlaces"))
 		f->setVisibleDecimalPlaces(set["visibleDecimalPlaces"].value().toInt());
 
-	return f;
+	return f;*/
 }
 
 tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema)
