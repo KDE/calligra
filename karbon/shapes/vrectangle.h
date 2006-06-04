@@ -20,36 +20,28 @@
 #ifndef __VRECTANGLE_H__
 #define __VRECTANGLE_H__
 
-#include "vcomposite.h"
+#include "KoRectangleShape.h"
 #include <koffice_export.h>
 
 #include <QPointF>
 
-class KARBONBASE_EXPORT VRectangle : public VPath
+class KoStore;
+class KoXmlWriter;
+class KoGenStyles;
+class KoOasisLoadingContext;
+class QDomElement;
+class KoShape;
+
+class KARBONBASE_EXPORT KarbonRectangle : public KoRectangleShape
 {
 public:
-	VRectangle( VObject* parent, VState state = edit );
-	VRectangle( VObject* parent,
-		const QPointF& topLeft, double width, double height, double rx = 0.0, double ry = 0.0 );
+    KarbonRectangle();
 
-	virtual QString name() const;
+    // Only (try to) save / load as an oasis format
+    virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const;
+    virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
 
-	virtual void save( QDomElement& element ) const;
-	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const;
-	virtual void load( const QDomElement& element );
-	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
-
-	virtual VPath* clone() const;
-
-protected:
-	void init();
-
-private:
-	QPointF m_topLeft;
-	double m_width;
-	double m_height;
-	double m_rx;
-	double m_ry;
+    virtual KoShape* clone() const;
 };
 
 #endif

@@ -30,77 +30,115 @@
 #include <vdocument.h>
 #include "vtransformcmd.h"
 
-VRectangle::VRectangle( VObject* parent, VState state )
-	: VPath( parent, state )
+KarbonRectangle::KarbonRectangle() : KoRectangleShape()
 {
 }
 
-VRectangle::VRectangle( VObject* parent,
-		const QPointF& topLeft, double width, double height, double rx, double ry )
-	: VPath( parent ), m_topLeft( topLeft ), m_width( width), m_height( height ), m_rx( rx ), m_ry( ry )
-{
-	setDrawCenterNode();
-
-	if( m_rx < 0.0 ) m_rx = 0.0;
-	if( m_ry < 0.0 ) m_ry = 0.0;
-	// Catch case, when radius is larger than width or height:
-	if( m_rx > m_width * 0.5 )
-		m_rx = m_width * 0.5;
-	if( m_ry > m_height * 0.5 )
-		m_ry = m_height * 0.5;
-
-	init();
-}
-
-void
-VRectangle::init()
-{
-	if( m_rx == 0 && m_ry == 0 )
-	{
-		moveTo( m_topLeft );
-		lineTo( QPointF( m_topLeft.x(), m_topLeft.y() - m_height ) );
-		lineTo( QPointF( m_topLeft.x() + m_width, m_topLeft.y() - m_height ) );
-		lineTo( QPointF( m_topLeft.x() + m_width, m_topLeft.y() ) );
-	}
-	else
-	{
-		double rx = m_rx;
-		double ry = m_ry;
-		double x = m_topLeft.x();
-		double y = m_topLeft.y();
-		moveTo( QPointF( x + rx, y ) );
-		curveTo( QPointF( x + rx * ( 1 - 0.552 ), y ),
-				 QPointF( x, y - ry * ( 1 - 0.552 ) ),
-				 QPointF( x, y - ry ) );
-		if( ry < m_height / 2 )
-		 	lineTo( QPointF( x, y - m_height + ry ) );
-		curveTo( QPointF( x, y - m_height + ry * ( 1 - 0.552 ) ),
-				 QPointF( x + rx * ( 1 - 0.552 ), y - m_height ),
-				 QPointF( x + rx, y - m_height ) );
-		if( rx < m_width / 2 )
-		 	lineTo( QPointF( x + m_width - rx, y - m_height ) );
-		curveTo( QPointF( x + m_width - rx * ( 1 - 0.552 ), y - m_height ),
-				 QPointF( x + m_width, y - m_height + ry * ( 1 - 0.552 ) ),
-				 QPointF( x + m_width, y - m_height + ry ) );
-		if( ry < m_height / 2 )
-			lineTo( QPointF( x + m_width, y - ry ) );
-		curveTo( QPointF( x + m_width, y - ry * ( 1 - 0.552 ) ),
-				 QPointF( x + m_width - rx * ( 1 - 0.552 ), y ),
-				 QPointF( x + m_width - rx, y ) );
-		if( rx < m_width / 2 )
-		 	lineTo( QPointF( x + rx, y ) );
-	}
-	close();
-}
-
-QString
+// TODO: might still be usefull/needed
+/*QString
 VRectangle::name() const
 {
 	QString result = VObject::name();
 	return !result.isEmpty() ? result : i18n( "Rectangle" );
+}*/
+
+void KarbonRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
+{
+#if 0
+	// different rx/ry is not supported by oasis, so act like it is a normal path
+	if( m_rx != 0. && m_ry != 0. && m_rx != m_ry )
+		return VPath::saveOasis( store, docWriter, mainStyles, index );
+
+	docWriter->startElement( "draw:rect" );
+
+	//save all into pt
+	docWriter->addAttributePt( "svg:x",      m_topLeft.x() );
+	docWriter->addAttributePt( "svg:y",      m_topLeft.y()-m_height );
+	docWriter->addAttributePt( "svg:width",  m_width );
+	docWriter->addAttributePt( "svg:height", m_height );
+
+	if( m_rx != 0. && m_ry != 0. && m_rx == m_ry )
+		docWriter->addAttributePt( "draw:corner-radius", m_rx );
+
+	VObject::saveOasis( store, docWriter, mainStyles, index );
+
+	QMatrix tmpMat;
+	tmpMat.scale( 1, -1 );
+	tmpMat.translate( 0, -document()->height() );
+	
+	QString transform = buildOasisTransform( m_matrix*tmpMat );
+	if( !transform.isEmpty() )
+		docWriter->addAttribute( "draw:transform", transform );
+
+	docWriter->endElement();
+#endif
 }
 
+bool KarbonRectangle::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+{
+#if 0
+	setState( normal );
+
+	m_width  = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ), 10.0 );
+	m_height = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ), 10.0 );
+
+	m_topLeft.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
+	m_topLeft.setY( m_height + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
+
+	m_rx = m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null ) );
+
+	init();
+
+	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+	if( !trafo.isEmpty() )
+		transformOasis( trafo );
+
+	return VObject::loadOasis( element, context );
+#endif
+}
+
+KoShape* KarbonRectangle::clone() const
+{
+    return new KarbonRectangle( *this );
+}
+
+
+
+// ------ old code ----------------------------------
+
+
+
+
+/*
 void
+VRectangle::load( const QDomElement& element )
+{
+	setState( normal );
+
+	QDomNodeList list = element.childNodes();
+	for( int i = 0; i < list.count(); ++i )
+		if( list.item( i ).isElement() )
+			VObject::load( list.item( i ).toElement() );
+
+	m_width  = KoUnit::parseValue( element.attribute( "width" ), 10.0 );
+	m_height = KoUnit::parseValue( element.attribute( "height" ), 10.0 );
+
+	m_topLeft.setX( KoUnit::parseValue( element.attribute( "x" ) ) );
+	m_topLeft.setY( KoUnit::parseValue( element.attribute( "y" ) ) );
+
+	m_rx  = KoUnit::parseValue( element.attribute( "rx" ) );
+	m_ry  = KoUnit::parseValue( element.attribute( "ry" ) );
+
+	init();
+
+	QString trafo = element.attribute( "transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
+}*/
+
+/*void
 VRectangle::save( QDomElement& element ) const
 {
 	VDocument *doc = document();
@@ -135,91 +173,4 @@ VRectangle::save( QDomElement& element ) const
 		if( !transform.isEmpty() )
 			me.setAttribute( "transform", transform );
 	}
-}
-
-void
-VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
-{
-	// different rx/ry is not supported by oasis, so act like it is a normal path
-	if( m_rx != 0. && m_ry != 0. && m_rx != m_ry )
-		return VPath::saveOasis( store, docWriter, mainStyles, index );
-
-	docWriter->startElement( "draw:rect" );
-
-	//save all into pt
-	docWriter->addAttributePt( "svg:x",      m_topLeft.x() );
-	docWriter->addAttributePt( "svg:y",      m_topLeft.y()-m_height );
-	docWriter->addAttributePt( "svg:width",  m_width );
-	docWriter->addAttributePt( "svg:height", m_height );
-
-	if( m_rx != 0. && m_ry != 0. && m_rx == m_ry )
-		docWriter->addAttributePt( "draw:corner-radius", m_rx );
-
-	VObject::saveOasis( store, docWriter, mainStyles, index );
-
-	QMatrix tmpMat;
-	tmpMat.scale( 1, -1 );
-	tmpMat.translate( 0, -document()->height() );
-	
-	QString transform = buildOasisTransform( m_matrix*tmpMat );
-	if( !transform.isEmpty() )
-		docWriter->addAttribute( "draw:transform", transform );
-
-	docWriter->endElement();
-}
-
-bool
-VRectangle::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
-{
-	setState( normal );
-
-	m_width  = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ), 10.0 );
-	m_height = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ), 10.0 );
-
-	m_topLeft.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
-	m_topLeft.setY( m_height + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
-
-	m_rx = m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null ) );
-
-	init();
-
-	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
-
-	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
-	if( !trafo.isEmpty() )
-		transformOasis( trafo );
-
-	return VObject::loadOasis( element, context );
-}
-
-void
-VRectangle::load( const QDomElement& element )
-{
-	setState( normal );
-
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
-		if( list.item( i ).isElement() )
-			VObject::load( list.item( i ).toElement() );
-
-	m_width  = KoUnit::parseValue( element.attribute( "width" ), 10.0 );
-	m_height = KoUnit::parseValue( element.attribute( "height" ), 10.0 );
-
-	m_topLeft.setX( KoUnit::parseValue( element.attribute( "x" ) ) );
-	m_topLeft.setY( KoUnit::parseValue( element.attribute( "y" ) ) );
-
-	m_rx  = KoUnit::parseValue( element.attribute( "rx" ) );
-	m_ry  = KoUnit::parseValue( element.attribute( "ry" ) );
-
-	init();
-
-	QString trafo = element.attribute( "transform" );
-	if( !trafo.isEmpty() )
-		transform( trafo );
-}
-
-VPath* 
-VRectangle::clone() const
-{
-	return new VRectangle( *this );
-}
+}*/

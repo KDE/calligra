@@ -191,6 +191,7 @@ VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyl
 bool
 VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
+#if 0
 	m_objects.setAutoDelete( true );
 	m_objects.clear();
 	m_objects.setAutoDelete( false );
@@ -251,13 +252,14 @@ VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 			context.styleStack().restore();
 		}
 	}
-
+#endif
 	return true;
 }
 
 void
 VGroup::load( const QDomElement& element )
 {
+#if 0
 	m_objects.setAutoDelete( true );
 	m_objects.clear();
 	m_objects.setAutoDelete( false );
@@ -347,6 +349,7 @@ VGroup::load( const QDomElement& element )
 			}
 		}
 	}
+#endif
 }
 
 void

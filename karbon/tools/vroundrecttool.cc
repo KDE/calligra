@@ -137,6 +137,7 @@ void VRoundRectTool::refreshUnit()
 VPath*
 VRoundRectTool::shape( bool interactive ) const
 {
+#if 0
 	if( interactive )
 	{
 		return
@@ -158,6 +159,7 @@ VRoundRectTool::shape( bool interactive ) const
 				m_optionsWidget->roundx(),
 				m_optionsWidget->roundy() );
 	}
+#endif
 }
 
 bool

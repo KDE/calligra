@@ -105,6 +105,7 @@ VRectangleTool::refreshUnit()
 VPath *
 VRectangleTool::shape( bool interactive ) const
 {
+#if 0
 	if( interactive )
 	{
 		return
@@ -121,6 +122,7 @@ VRectangleTool::shape( bool interactive ) const
 				m_p,
 				m_d1,
 				m_d2 );
+#endif
 }
 
 bool

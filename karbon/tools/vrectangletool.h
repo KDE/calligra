@@ -25,7 +25,8 @@
 #include <kdialogbase.h>
 
 #include "vshapetool.h"
-//Added by qt3to4:
+#include "KoTool.h"
+
 #include <QLabel>
 
 class KarbonView;

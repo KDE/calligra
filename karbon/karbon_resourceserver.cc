@@ -443,8 +443,11 @@ KarbonResourceServer::loadClipart( const QString& filename )
 							clipart = new VPolygon( 0L );
 						else if( e.tagName() == "POLYLINE" )
 							clipart = new VPolyline( 0L );
-						else if( e.tagName() == "RECT" )
-							clipart = new VRectangle( 0L );
+#if 0 
+for now	
+					else if( e.tagName() == "RECT" )
+							clipart = new KarbonRectangle;
+#endif
 						else if( e.tagName() == "SINUS" )
 							clipart = new VSinus( 0L );
 						else if( e.tagName() == "SPIRAL" )

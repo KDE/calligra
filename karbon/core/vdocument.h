@@ -44,7 +44,6 @@ class KoShape;
 typedef Q3PtrList<VLayer> VLayerList;
 typedef Q3PtrListIterator<VLayer> VLayerListIterator;
 
-
 /**
  * All non-visual, static doc info is in here.
  * The karbon part uses this class.
@@ -327,6 +326,35 @@ private:
 
 	KarbonGridData m_gridData;
 };
+
+/*
+class KARBONBASE_EXPORT KarbonDocument : public QObject, public KoShapeControllerInterface
+{
+    Q_OBJECT
+
+public:
+    FlakeDocument();
+    virtual ~FlakeDocument();
+    /// returns the list of objects
+    const QList<KoShape *> & objects() const { return m_objects; }
+
+    // inherited from KoShapeControllerInterface
+    virtual void addShape( KoShape* shape );
+    virtual void removeShape( KoShape* shape );
+
+    /// add a new view
+    void addView( KoCanvasBase* view );
+    /// remove a connected view
+    void removeView( KoCanvasBase* view );
+
+    KoShape* createShape(const QRectF &rect) const;
+
+private:
+    /// the list of the documents objects
+    QList<KoShape *> m_objects;
+    /// the list of the connected views
+    QList<KoCanvasBase*> m_views;
+};*/
 
 #endif
 

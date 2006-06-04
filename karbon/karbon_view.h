@@ -45,6 +45,7 @@ class KSelectAction;
 class KToggleAction;
 class KoContextHelpAction;
 class KoLineStyleAction;
+class KoCanvasView;
 
 class KoUnitDoubleSpinComboBox;
 class QRectF;
@@ -231,6 +232,7 @@ private:
 
 	KarbonPart		*m_part;
 	KarbonCanvas		*m_canvas;
+	KoCanvasView 		*m_canvasView;
 	VRuler			*m_horizRuler;
 	VRuler			*m_vertRuler;
 
