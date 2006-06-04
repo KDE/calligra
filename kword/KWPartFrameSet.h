@@ -33,7 +33,7 @@ public:
     KWPartFrameSet( KWDocument *_doc, KWDocumentChild *_child, const QString & name );
 
     /// Used for OASIS loading
-    KWPartFrameSet( KWDocument* doc, const QDomElement& frame,
+    KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
                     const QDomElement& objectTag, KoOasisContext& context );
 
     virtual ~KWPartFrameSet();

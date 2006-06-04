@@ -1327,7 +1327,14 @@ bool MathML2KFormulaPrivate::isSpaceLike( QDomNode node, bool oasisFormat )
 
 
 MathML2KFormula::MathML2KFormula( const QDomDocument& mmldoc, const ContextStyle &contextStyle, bool _oasisFormat )
-    : m_error( false ), origdoc( mmldoc ), oasisFormat( _oasisFormat ), context( contextStyle )
+    : m_error( false ), oasisFormat( _oasisFormat ), context( contextStyle )
+{
+    orig_element = mmldoc.documentElement();
+    done = false;
+}
+
+MathML2KFormula::MathML2KFormula( const QDomElement& mmlelm, const ContextStyle &contextStyle, bool _oasisFormat )
+    : m_error( false ), orig_element( mmlelm ), oasisFormat( _oasisFormat ), context( contextStyle )
 {
     done = false;
 }
@@ -1346,9 +1353,8 @@ void MathML2KFormula::startConversion()
     done = false;
     formuladoc = QDomDocument( "KFORMULA" );
     impl = new MathML2KFormulaPrivate( this, context, formuladoc );
-    QDomElement element = origdoc.documentElement();
-    if ( element.tagName() == "math" ) {
-        impl->math( element );
+    if ( orig_element.tagName() == "math" ) {
+        impl->math( orig_element );
         m_error = false;
     }
     else {

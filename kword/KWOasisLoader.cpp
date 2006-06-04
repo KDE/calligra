@@ -26,6 +26,7 @@
 #include "KWTableFrameSet.h"
 #include "KWPartFrameSet.h"
 #include "KWPageManager.h"
+#include "KWFormulaFrameSet.h"
 
 #include <KoStore.h>
 #include <KoOasisContext.h>
@@ -256,9 +257,24 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
             break;
         } else if ( localName == "object" )
         {
-            KWPartFrameSet* fs = new KWPartFrameSet( m_doc, frameTag, elem, context );
-            m_doc->addFrameSet( fs, false );
-            frame = fs->frame(0);
+            QDomElement mathElem; // will be set if we find <math:math>
+            QDomElement childElem;
+            forEachElement( childElem, elem )
+            {
+                if ( childElem.localName() == "math"
+                     && childElem.namespaceURI() == KoXmlNS::math ) {
+                    mathElem = childElem;
+                }
+            }
+            if ( !mathElem.isNull() ) {
+                KWFormulaFrameSet* fs = new KWFormulaFrameSet( m_doc, frameTag, mathElem, context );
+                m_doc->addFrameSet( fs, false );
+                frame = fs->frame(0);
+            } else {
+                KWPartFrameSet* fs = new KWPartFrameSet( m_doc, frameTag, elem, context );
+                m_doc->addFrameSet( fs, false );
+                frame = fs->frame(0);
+            }
             break;
         }
     }

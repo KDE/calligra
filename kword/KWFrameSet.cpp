@@ -1134,7 +1134,7 @@ bool KWFrameSet::canRemovePage( int num )
             // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame
             if ( ! ( frame->isCopy() && frameIt.current() != m_frames.first() ) )
             {
-                //kdDebug(32001) << "KWFrameSet::canRemovePage " << name() << " frame on page " << num << " -> false" << endl;
+                kdDebug(32001) << "KWFrameSet::canRemovePage " << name() << " frame on page " << num << " -> false" << endl;
                 return false;
             }
         }

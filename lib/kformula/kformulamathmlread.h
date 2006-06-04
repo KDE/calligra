@@ -50,6 +50,12 @@ public:
      */
     MathML2KFormula( const QDomDocument& mmldoc, const ContextStyle &contextStyle, bool oasisFormat = false );
 
+	/**
+	 * Build a MathML 2 KFormula converter.
+	 * A DOM Element is required instead of a full Document, useful for embedded MathML
+	 */ 
+    MathML2KFormula( const QDomElement& mmelm, const ContextStyle &contextStyle, bool oasisFormat = false );
+
     /*
      * Get the just created DOM.
      */
@@ -68,7 +74,7 @@ private:
     bool processElement( QDomNode node, QDomDocument& doc,
                          QDomNode docnode );
 
-    QDomDocument origdoc;
+    QDomElement orig_element;
     QDomDocument formuladoc;
     bool oasisFormat;
     const ContextStyle& context;
