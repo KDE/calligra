@@ -20,7 +20,7 @@
 #include <assert.h>
 #include "sqlite3.h"
 #include <ctype.h>
-#include <config-kexi.h>
+#include <kexi/config-kexi.h>
 #if !defined(_WIN32) && !defined(WIN32) && !defined(__MACOS__)
 # include <signal.h>
 # include <pwd.h>
