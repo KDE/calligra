@@ -44,6 +44,7 @@ class KexiProjectSelectorWidget;
 class KexiProjectSet;
 class KexiDBTitlePage;
 class KexiDBDriverComboBox;
+class KexiPrjTypeSelector;
 
 namespace Kexi
 {
@@ -124,7 +125,8 @@ private:
 	KexiDBTitlePage* m_dstTitlePage;
 
 	KComboBox *m_srcTypeCombo;
-	KexiDBDriverComboBox *m_dstTypeCombo;
+	KexiDBDriverComboBox *m_dstServerTypeCombo;
+	KexiPrjTypeSelector *m_dstPrjTypeSelector;
 
 	KexiConnSelectorWidget *m_srcConn, *m_dstConn;
 	KLineEdit *m_dstNewDBNameLineEdit;

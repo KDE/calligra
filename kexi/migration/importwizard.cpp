@@ -52,6 +52,7 @@
 #include <kexidbdrivercombobox.h>
 #include <kexitextmsghandler.h>
 #include <widget/kexicharencodingcombobox.h>
+#include <widget/kexiprjtypeselector.h>
 
 
 using namespace KexiMigration;
@@ -247,16 +248,24 @@ void ImportWizard::setupDstType()
 
 	QHBoxLayout *hbox = new QHBoxLayout(vbox);
 	QLabel *lbl = new QLabel(i18n("Destination database type:")+" ", m_dstTypePage);
+	lbl->setAlignment(Qt::AlignAuto|Qt::AlignTop);
 	hbox->addWidget(lbl);
-	m_dstTypeCombo = new KexiDBDriverComboBox(drvs, true, m_dstTypePage);
 
-	hbox->addWidget(m_dstTypeCombo);
+	m_dstPrjTypeSelector = new KexiPrjTypeSelector(m_dstTypePage);
+	hbox->addWidget(m_dstPrjTypeSelector);
+	m_dstPrjTypeSelector->option_file->setText(i18n("Database project stored in a file"));
+	m_dstPrjTypeSelector->option_server->setText(i18n("Database project stored on a server"));
+
+	QVBoxLayout *frame_server_vbox = new QVBoxLayout(m_dstPrjTypeSelector->frame_server, KDialog::spacingHint());
+	m_dstServerTypeCombo = new KexiDBDriverComboBox(m_dstPrjTypeSelector->frame_server, drvs, 
+		KexiDBDriverComboBox::ShowServerDrivers);
+	frame_server_vbox->addWidget(m_dstServerTypeCombo);
 	hbox->addStretch(1);
 	vbox->addStretch(1);
-	lbl->setBuddy(m_dstTypeCombo);
+	lbl->setBuddy(m_dstServerTypeCombo);
 
 //! @todo hardcoded: find a way to preselect default engine item
-	m_dstTypeCombo->setCurrentText("SQLite3");
+	//m_dstTypeCombo->setCurrentText("SQLite3");
 	addPage(m_dstTypePage, i18n("Select Destination Database Type"));
 }
 
@@ -581,11 +590,9 @@ bool ImportWizard::fileBasedSrcSelected() const
 
 bool ImportWizard::fileBasedDstSelected() const
 {
-	QString dstType(m_dstTypeCombo->currentText());
+//	QString dstType(m_dstServerTypeCombo->currentText());
 
-	//! @todo Use DriverManager to get dst type property
-	KexiDB::DriverManager manager;
-	return manager.driverInfo(dstType).fileBased;
+	return m_dstPrjTypeSelector->buttonGroup->selectedId() == 1;
 
 /*	if ((dstType == "PostgreSQL") || (dstType == "MySQL")) {
 		return false;
@@ -659,7 +666,8 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 	// Get a driver to the destination database
 	KexiDB::Driver *destDriver = manager.driver(
 		m_dstConn->selectedConnectionData() ? m_dstConn->selectedConnectionData()->driverName //server based
-		 : m_dstTypeCombo->currentText() //file based
+		 : KexiDB::Driver::defaultFileBasedDriverName()
+		// : m_dstTypeCombo->currentText() //file based
 	);
 	if (!destDriver || manager.error())
 	{
@@ -682,7 +690,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 			cdata = m_dstConn->selectedConnectionData();
 			dbname = m_dstNewDBNameLineEdit->text();
 		}
-		else if (m_dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName()) 
+		else // if (m_dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName()) 
 		{
 			//file-based project
 			kdDebug() << "File Destination..." << endl;
@@ -694,13 +702,13 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 			cdata->setFileName( dbname );
 			kdDebug() << "Current file name: " << dbname << endl;
 		}
-		else
+/*		else
 		{
 			//TODO This needs a better message
 			//KMessageBox::error(this, 
 			result.setStatus(i18n("No connection data is available. You did not select a destination filename."),"");
 			//return false;
-		}
+		} */
 	}
 
 	// Find a source (migration) driver name
