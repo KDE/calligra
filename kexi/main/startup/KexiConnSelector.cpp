@@ -25,7 +25,7 @@
 #include <kexi.h>
 #include "KexiConnSelectorBase.h"
 //#include "KexiOpenExistingFile.h"
-#include "KexiPrjTypeSelector.h"
+#include <widget/kexiprjtypeselector.h>
 #include <widget/kexidbconnectionwidget.h>
 
 #include <kapplication.h>
