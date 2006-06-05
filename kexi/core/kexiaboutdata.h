@@ -48,7 +48,7 @@ KAboutData *newKexiAboutData()
 		, description, 
 		KAboutData::License_LGPL_V2,
 		I18N_NOOP(	"(c) 2002-2006, Kexi Team\n"
-					"(c) 2003-2006, OpenOffice Polska Ltd.\n"),
+					"(c) 2003-2006, OpenOffice Polska LLC\n"),
 		I18N_NOOP(	"This software is developed by Kexi Team - an international group\n"
 					"of independent developers, with additional assistance and support\n"
 					"from the OpenOffice Polska company.\n\n"
