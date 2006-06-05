@@ -27,7 +27,10 @@ set(kexiextendedwidgets_LIB_SRCS
    kexismalltoolbutton.cpp 
    kexicustompropertyfactory.cpp 
    kexicustompropertyfactory_p.cpp 
-   kexicharencodingcombobox.cpp )
+   kexicharencodingcombobox.cpp
+   kexiprjtypeselector.cpp
+   kexiprjtypeselectorbase.ui
+)
 
 kde4_automoc(${kexiextendedwidgets_LIB_SRCS})
 

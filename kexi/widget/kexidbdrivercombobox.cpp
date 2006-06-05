@@ -23,19 +23,45 @@
 
 #include <kiconloader.h>
 
-KexiDBDriverComboBox::KexiDBDriverComboBox(const KexiDB::Driver::InfoMap& driversInfo, 
-	bool includeFileBasedDrivers, QWidget* parent, const char* name)
- : KComboBox(parent, name)
+KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent, const KexiDB::Driver::InfoMap& driversInfo, 
+	Options options)
+ : KComboBox(parent, "KexiDBDriverComboBox")
 {
+	//retrieve list of drivers and sort it: file-based first, then server-based
+	QStringList captionsForFileBasedDrivers, captionsForServerBasedDrivers;
+	QMap<QString,QString> fileBasedDriversDict, serverBasedDriversDict; //a map from caption to name
 	foreach(KexiDB::Driver::InfoMap::ConstIterator, it, driversInfo) {
-		if (!includeFileBasedDrivers && it.data().fileBased)
-			continue;
-		//! @todo change this if better icon is available
-		insertItem( SmallIcon("gear"), it.data().caption );
-		m_driversMap.insert(it.data().caption, it.data().name.lower());
+		if (it.data().fileBased) {
+			captionsForFileBasedDrivers += it.data().caption;
+			fileBasedDriversDict[it.data().caption] = it.data().name.lower();
+		}
+		else {
+			captionsForServerBasedDrivers += it.data().caption;
+			serverBasedDriversDict[it.data().caption] = it.data().name.lower();
+		}
 	}
-	if (listBox())
-		listBox()->sort();
+	captionsForFileBasedDrivers.sort();
+	captionsForServerBasedDrivers.sort();
+	//insert file-based
+	if (options & ShowFileDrivers) {
+		foreach(QStringList::ConstIterator, it, captionsForFileBasedDrivers) {
+			const KexiDB::Driver::Info& info = driversInfo[ fileBasedDriversDict[ *it ] ];
+			//! @todo change this if better icon is available
+			insertItem( SmallIcon("gear"), info.caption );
+			m_driversMap.insert(info.caption, info.name.lower());
+		}
+	}
+	//insert server-based
+	if (options & ShowServerDrivers) {
+		foreach(QStringList::ConstIterator, it, captionsForServerBasedDrivers) {
+			const KexiDB::Driver::Info& info = driversInfo[ serverBasedDriversDict[ *it ] ];
+			//! @todo change this if better icon is available
+			insertItem( SmallIcon("gear"), info.caption );
+			m_driversMap.insert(info.caption, info.name.lower());
+		}
+	}
+//	if (listBox())
+//		listBox()->sort();
 
 	// Build the names list after sorting
 	for (int i=0; i<count(); i++)
