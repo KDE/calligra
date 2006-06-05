@@ -8,18 +8,21 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>371</width>
-            <height>54</height>
+            <width>254</width>
+            <height>61</height>
         </rect>
     </property>
-    <grid>
+    <property name="caption">
+        <string>KexiPrjTypeSelectorBase</string>
+    </property>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QButtonGroup" row="0" column="0">
+        <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup</cstring>
             </property>
@@ -47,7 +50,7 @@
                 </property>
                 <widget class="QRadioButton" row="1" column="1">
                     <property name="name">
-                        <cstring>radioButton4</cstring>
+                        <cstring>option_server</cstring>
                     </property>
                     <property name="text">
                         <string>Projects stored on a database server</string>
@@ -56,26 +59,18 @@
                         <number>2</number>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="QRadioButton" row="0" column="1">
                     <property name="name">
-                        <cstring>icon_server</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                        <cstring>option_file</cstring>
                     </property>
                     <property name="text">
-                        <string></string>
+                        <string>Projects stored in a file</string>
                     </property>
-                    <property name="scaledContents">
+                    <property name="checked">
                         <bool>true</bool>
                     </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignLeft</set>
+                    <property name="buttonGroupId">
+                        <number>1</number>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -100,28 +95,69 @@
                         <set>AlignVCenter|AlignLeft</set>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="0" column="1">
+                <widget class="QLabel" row="1" column="0">
                     <property name="name">
-                        <cstring>radioButton3</cstring>
+                        <cstring>icon_server</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Projects stored in a file</string>
+                        <string></string>
                     </property>
-                    <property name="checked">
+                    <property name="scaledContents">
                         <bool>true</bool>
                     </property>
-                    <property name="buttonGroupId">
-                        <number>1</number>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignLeft</set>
+                    </property>
+                </widget>
+                <widget class="QFrame" row="2" column="1">
+                    <property name="name">
+                        <cstring>frame_server</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Plain</enum>
                     </property>
                 </widget>
             </grid>
         </widget>
-    </grid>
+    </vbox>
 </widget>
+<connections>
+    <connection>
+        <sender>buttonGroup</sender>
+        <signal>clicked(int)</signal>
+        <receiver>KexiPrjTypeSelectorBase</receiver>
+        <slot>slotSelectionChanged(int)</slot>
+    </connection>
+</connections>
 <tabstops>
-    <tabstop>radioButton3</tabstop>
-    <tabstop>radioButton4</tabstop>
+    <tabstop>option_file</tabstop>
+    <tabstop>option_server</tabstop>
 </tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">kexiprjtypeselectorbase.ui.h</include>
+</includes>
+<slots>
+    <slot access="protected" specifier="non virtual">slotSelectionChanged( int id )</slot>
+</slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
 </functions>

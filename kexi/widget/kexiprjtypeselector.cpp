@@ -17,14 +17,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KexiPrjTypeSelector.h"
+#include "kexiprjtypeselector.h"
 #include <qlabel.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
 #include <kexidb/driver.h>
 
-KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent,  const char* name, WFlags fl )
-	: KexiPrjTypeSelectorBase( parent, name, fl )
+KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent )
+	: KexiPrjTypeSelectorBase( parent, "KexiPrjTypeSelector" )
 {
 	QString none;
 	icon_file->setPixmap( 
@@ -41,4 +41,4 @@ KexiPrjTypeSelector::~KexiPrjTypeSelector()
 {
 }
 
-#include "KexiPrjTypeSelector.moc"
+#include "kexiprjtypeselector.moc"
