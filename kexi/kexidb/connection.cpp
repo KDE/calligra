@@ -1500,7 +1500,7 @@ tristate Connection::alterTable( TableSchema& tableSchema, TableSchema& newTable
 	return ok;
 }
 
-bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName, bool /*replace*/)
+bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName, bool replace)
 {
 	clearError();
 	if (&tableSchema!=m_tables[tableSchema.id()]) {
@@ -1511,25 +1511,13 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\"").arg(newName));
 		return false;
 	}
-	const QString& newTableName = newName.lower().stripWhiteSpace();
-	if (tableSchema.name().lower().stripWhiteSpace() == newTableName) {
+	const QString oldTableName = tableSchema.name();
+	const QString newTableName = newName.lower().stripWhiteSpace();
+	if (oldTableName.lower().stripWhiteSpace() == newTableName) {
 		setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.")
 			.arg(newTableName));
 		return false;
 	}
-	const bool res = drv_alterTableName(tableSchema, newTableName);
-	if (res) {
-		//update tableSchema:
-		m_tables_byname.take(tableSchema.name());
-		tableSchema.setName(newTableName);
-		m_tables_byname.insert(tableSchema.name(), &tableSchema);
-	}
-	return res;
-}
-
-bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& newName,
-	bool replace)
-{
 //TODO: alter table name for server DB backends!
 //TODO: what about objects (queries/forms) that use old name?
 //TODO
@@ -1541,67 +1529,70 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 		return false;
 	}
 
-//moved to beginAutoCommitTransaction()	//transaction could be already started (e.g. within KexiProject)
-//	//--if that's true: do not touch it (especially important for single-transactional drivers)
-//	const bool skipTransactions = d->default_trans.active();
+//helper:
+#define alterTableName_ERR \
+		tableSchema.setName(oldTableName) //restore old name
+
 	TransactionGuard tg;
-//moved to beginAutoCommitTransaction()	if (skipTransactions)
-//		trans = d->default_trans;
-//	else
 	if (!beginAutoCommitTransaction(tg))
 		return false;
 
-	//1. drop the table
-	if (destTableExists && !drv_dropTable( newName ))
+	if (!drv_alterTableName(tableSchema, newTableName)) {
+		alterTableName_ERR;
 		return false;
+	}
 
-	//2. create a copy of the table
-//TODO: move this code to drv_copyTable()
-	const QString& oldTableName = tableSchema.name();
+	// Update kexi__objects
+	//TODO
+	if (!executeSQL(QString::fromLatin1("UPDATE kexi__objects SET o_name=%1 WHERE o_id=%2")
+		.arg(m_driver->escapeString(tableSchema.name())).arg(tableSchema.id())))
+	{
+		alterTableName_ERR;
+		return false;
+	}
+//TODO what about caption?
+
+	//restore old name: it will be changed soon!
+	tableSchema.setName(oldTableName);
+
+	if (!commitAutoCommitTransaction(tg.transaction())) {
+		alterTableName_ERR;
+		return false;
+	}
+
+	//update tableSchema:
+	m_tables_byname.take(tableSchema.name());
+	tableSchema.setName(newTableName);
+	m_tables_byname.insert(tableSchema.name(), &tableSchema);
+	return true;
+}
+
+bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& newName, bool replace)
+{
+	const QString oldTableName = tableSchema.name();
+	const bool destTableExists = this->tableSchema( newName ) != 0;
+
+	// drop the table
+	if (destTableExists) {
+		if (!replace)
+			return false;
+		if (!drv_dropTable( newName ))
+			return false;
+	}
+
 	tableSchema.setName(newName);
 
 //helper:
 #define drv_alterTableName_ERR \
 		tableSchema.setName(oldTableName) //restore old name
 
-	if (!drv_createTable( tableSchema )) {
-		drv_alterTableName_ERR;
-		return false;
-	}
-
-//TODO indices, etc.???
-
-	// 3. copy all rows to the new table
-	if (!executeSQL(QString::fromLatin1("INSERT INTO %1 SELECT * FROM %2")
-		.arg(escapeIdentifier(tableSchema.name())).arg(escapeIdentifier(oldTableName))))
+	if (!executeSQL(QString::fromLatin1("ALTER TABLE %1 RENAME TO %2")
+		.arg(escapeIdentifier(oldTableName)).arg(escapeIdentifier(newName))))
 	{
 		drv_alterTableName_ERR;
 		return false;
 	}
-
-	// 4. drop old table.
-	if (!drv_dropTable( oldTableName )) {
-		drv_alterTableName_ERR;
-		return false;
-	}
-
-	// 5. Update kexi__objects
-	//TODO
-	if (!executeSQL(QString::fromLatin1("UPDATE kexi__objects SET o_name=%1 WHERE o_id=%2")
-		.arg(m_driver->escapeString(tableSchema.name())).arg(tableSchema.id())))
-	{
-		drv_alterTableName_ERR;
-		return false;
-	}
-
-	//restore old name: it will be changed in alterTableName()!
-	tableSchema.setName(oldTableName);
-
-//moved to commitAutoCommitTransaction()	if (skipTransactions) {
-//		tg.doNothing();
-//		return true;
-//	}
-	return commitAutoCommitTransaction(tg.transaction());
+	return true;
 }
 
 bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )

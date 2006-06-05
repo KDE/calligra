@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Daniel Molkentin <molkentin@kde.org>
-   Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -330,6 +330,8 @@ const KexiDB::Driver::InfoMap DriverManager::driversInfo()
 		info.fileBased = (ptr->property("X-Kexi-DriverType").toString().lower()=="file");
 		if (info.fileBased)
 			info.fileDBMimeType = ptr->property("X-Kexi-FileDBDriverMime").toString().lower();
+		QVariant v = ptr->property("X-Kexi-DoNotAllowProjectImportingTo");
+		info.allowImportingTo = v.isNull() ? true : !v.toBool();
 		d_int->m_driversInfo.insert(info.name.lower(), info);
 	}
 	return d_int->m_driversInfo;

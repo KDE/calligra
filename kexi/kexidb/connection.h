@@ -942,14 +942,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual bool drv_dropTable( const QString& name );
 
 		/*! Alters table's described \a tableSchema name to \a newName. 
-		 Default implementation is ineffective: 
-		 - creates a copy of the table
-		 - copies all rows
-		 - drops old table.
-		 All this is performed within single transaction. This is how SQLite driver work.
-		 \return true on success.
-		 More advanced server backends should reinplement this using "ALTER TABLE". 
-		*/
+		 This is the default implementation, using "ALTER TABLE <oldname> RENAME TO <newname>",
+		 what's supported by SQLite >= 3.2, PostgreSQL, MySQL.
+		 Backends lacking ALTER TABLE, for example SQLite2, reimplement this with by an inefficient 
+		 data copying to a new table. In any case, renaming is performed at the backend.
+		 It's food idea to keep the operation within a transaction. 
+		 \return true on success. */
 		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName, bool replace = false);
 
 		/*! Internal, for handling autocommited transactions:

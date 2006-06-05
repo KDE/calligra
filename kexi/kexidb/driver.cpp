@@ -57,7 +57,14 @@ DriverBehaviour::DriverBehaviour()
 	, SELECT_1_SUBQUERY_SUPPORTED(false)
 	, SQL_KEYWORDS(0)
 {
+}
 
+//---------------------------------------------
+
+Driver::Info::Info()
+ : fileBased(false)
+ , allowImportingTo(true)
+{
 }
 
 //---------------------------------------------
