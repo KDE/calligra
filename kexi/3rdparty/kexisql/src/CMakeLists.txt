@@ -44,7 +44,7 @@ kde4_add_library(kexisql2 SHARED ${kexisql2_LIB_SRCS})
 
 target_link_libraries(kexisql2  ${KDE4_KDECORE_LIBS} )
 
-set_target_properties(kexisql2 PROPERTIES VERSION 2.8.0 SOVERSION 2 )
+set_target_properties(kexisql2 PROPERTIES VERSION 2.8.15 SOVERSION 2 )
 install_targets(${LIB_INSTALL_DIR} kexisql2 )
 
 
