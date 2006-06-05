@@ -50,9 +50,9 @@ bool TestAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const Q
 	return true;
 }
 
-void TestAction::activate(KoMacro::Context::Ptr context)
+void TestAction::activate(KSharedPtr<KoMacro::Context> context)
 {
-	kdDebug() << "TestAction::activate(Context::Ptr)" << endl;
+	kdDebug() << "TestAction::activate(KSharedPtr<Context>)" << endl;
 	const QString teststring = context->variable("teststring")->variant().toString();
 	const int  testint = context->variable("testint")->variant().toInt();
 	const bool testbool = context->variable("testbool")->variant().toBool();

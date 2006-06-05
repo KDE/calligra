@@ -67,7 +67,7 @@ namespace KexiMacro {
 				setText(text);
 
 				// Publish this action.
-				KoMacro::Manager::self()->publishAction( Action::Ptr(this) );
+				KoMacro::Manager::self()->publishAction( KSharedPtr<Action>(this) );
 			}
 
 			/**

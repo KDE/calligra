@@ -83,7 +83,7 @@ namespace KoMacroTest {
 	};
 }
 
-typedef QValueList< KoMacro::MacroItem::Ptr >::size_type sizetype;
+typedef QValueList< KSharedPtr<KoMacro::MacroItem> >::size_type sizetype;
 
 
 MacroTests::MacroTests()
@@ -138,7 +138,7 @@ void MacroTests::testMacro()
 
 	QDomElement const domelement = d->doomdocument->documentElement();
 	
-	KoMacro::Macro::Ptr macro = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	//Is our XML parseable ?
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 
@@ -160,11 +160,11 @@ void MacroTests::testMacro()
 	 */
 	
 	//create list of KsharedPtr from the childs of the macro
-	QValueList< KoMacro::MacroItem::Ptr >& items = macro->items();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = macro->items();
 	//check that there is one
 	KOMACROTEST_ASSERT( items.count(), sizetype(1) );
 	//fetch the first one
-	KoMacro::Action::Ptr actionptr = items[0]->action();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 	//How do we know that an action exist ?	
 	//-> check that it is not null
 	KOMACROTEST_XASSERT(sizetype(actionptr.data()), sizetype(0));
@@ -174,7 +174,7 @@ void MacroTests::testMacro()
 	KOMACROTEST_ASSERT( actionptr->text(), QString("Test") );
 
 	//create another macro
-	KoMacro::Macro::Ptr yanMacro = KoMacro::Manager::self()->createMacro("testMacro2");
+	KSharedPtr<KoMacro::Macro> yanMacro = KoMacro::Manager::self()->createMacro("testMacro2");
 	
 	KOMACROTEST_ASSERT(yanMacro->parseXML(domelement),true);
 	

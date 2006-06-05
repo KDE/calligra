@@ -51,16 +51,11 @@ namespace KoMacro {
 		public:
 
 			/**
-			* Shared pointer to implement reference-counting.
-			*/
-			typedef KSharedPtr<Macro> Ptr;
-
-			/**
 			* A QMap of @a Macro instances accessible by there unique name. Each
 			* class should use this typemap rather then the QMap direct. That
 			* way we are more flexible on future changes.
 			*/
-			typedef QMap<QString, Macro::Ptr> Map;
+			typedef QMap<QString, KSharedPtr<Macro > > Map;
 
 			/**
 			* Constructor.

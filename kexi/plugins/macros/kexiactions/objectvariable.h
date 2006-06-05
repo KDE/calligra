@@ -64,7 +64,7 @@ namespace KexiMacro {
 						continue;
 
 					const QString name = info->objectName(); //info->groupName();
-					this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(name)) );
+					this->children().append( KSharedPtr<KoMacro::Variable>(new KoMacro::Variable(name)) );
 				}
 
 				if(! objectname.isNull())

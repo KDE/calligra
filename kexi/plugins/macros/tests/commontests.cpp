@@ -249,7 +249,7 @@ void CommonTests::testAction()
 	
 	//commontests.cpp: In member function 'void KoMacroTest::CommonTests::testAction()':
 	//commontests.cpp:249: error: call of overloaded 'setVariable(const char [8], int)' is ambiguous
-	//../lib/macroitem.h:131: note: candidates are: QStringList KoMacro::MacroItem::setVariable(const QString&, KoMacro::Variable::Ptr)
+	//../lib/macroitem.h:131: note: candidates are: QStringList KoMacro::MacroItem::setVariable(const QString&, KSharedPtr<KoMacro::Variable>)
 	//../lib/macroitem.h:137: note:                 QStringList KoMacro::MacroItem::setVariable(const QString&, const QVariant&)
 
 	macroitem->setVariable("testint",(int) 0);
@@ -285,7 +285,7 @@ void CommonTests::testXmlhandler()
 	kdDebug()<<"===================== testXmlhandler() ======================" << endl;
 
 	// Local Init
-	KoMacro::Macro::Ptr macro = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomElement domelement;
 
 	// Save old doomdocument
@@ -429,7 +429,7 @@ void CommonTests::testFunction()
 	));
 
 	//create an KomacroFunction  with our data, and put it into a KSharedPtr
-	KoMacro::Action::Ptr functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//cast KSharedPtr to KoMacro-"Function"
 	KoMacro::Function* func = dynamic_cast<KoMacro::Function*>( functionptr.data() );
 		//check that function is not null
@@ -449,12 +449,12 @@ void CommonTests::testFunction()
 	KOMACROTEST_ASSERT( QString(func->slot()), QString("myslot(const QString&,int)") );
 
 	//create KoMacro-MetaObject from receiverObject
-	KoMacro::MetaObject::Ptr receivermetaobject = func->receiverObject();
+	KSharedPtr<KoMacro::MetaObject> receivermetaobject = func->receiverObject();
 	//check that receivermetaobject.data is not null
 	KOMACROTEST_XASSERT((int) receivermetaobject.data(), 0);
 	
 	//create KoMacro-MetaMethod from receiverObject
-	KoMacro::MetaMethod::Ptr receivermetamethod = receivermetaobject->slot( func->slot().latin1() );
+	KSharedPtr<KoMacro::MetaMethod> receivermetamethod = receivermetaobject->slot( func->slot().latin1() );
 	//check that receivermetamethod.data is not null
 	KOMACROTEST_XASSERT((int) receivermetamethod.data(), 0);
 
@@ -469,7 +469,7 @@ void CommonTests::testFunction()
 		// firstrun we have a QString, secondrun we have an int
 		switch(i) {
 			case 0: { // returnvalue
-				KOMACROTEST_ASSERT(*it, KoMacro::Variable::Ptr(NULL));
+				KOMACROTEST_ASSERT(*it, KSharedPtr<KoMacro::Variable>(NULL));
 			} break;
 			case 1: { // first parameter
 				//check first variable of func is the same as argument1
@@ -491,10 +491,10 @@ void CommonTests::testFunction()
 	KOMACROTEST_ASSERT( funcvariables.count(), uint(3) );
 
 	// check that the first argument (the returnvalue) is empty
-	KOMACROTEST_ASSERT( funcvariables[0], KoMacro::Variable::Ptr(NULL) );
+	KOMACROTEST_ASSERT( funcvariables[0], KSharedPtr<KoMacro::Variable>(NULL) );
 	
 	//create a KoMacro-Variable-Ptr from first func argument
-	KoMacro::Variable::Ptr stringvar = funcvariables[1];
+	KSharedPtr<KoMacro::Variable> stringvar = funcvariables[1];
 	//check that it is not null
 	KOMACROTEST_XASSERT((int) stringvar.data(),0);
 	//check via QVariant type that stringvar is from Type Variant
@@ -505,7 +505,7 @@ void CommonTests::testFunction()
 	KOMACROTEST_ASSERT( stringvar->toString(), argument1 );
 
 	//create a KoMacro-Variable-Ptr from second func argument
-	KoMacro::Variable::Ptr intvar = funcvariables[2];
+	KSharedPtr<KoMacro::Variable> intvar = funcvariables[2];
 	//check that it is not null	
 	KOMACROTEST_XASSERT((int) intvar.data(), 0);
 	//check via QVariant type that stringvar is from Type Variant
@@ -516,7 +516,7 @@ void CommonTests::testFunction()
 	KOMACROTEST_ASSERT( intvar->toInt(), argument2 );
 
 	//returnvalue see testobject ....
-	KoMacro::Variable::Ptr funcreturnvalue = receivermetamethod->invoke( funcvariables );
+	KSharedPtr<KoMacro::Variable> funcreturnvalue = receivermetamethod->invoke( funcvariables );
 	kdDebug() << "CommonTests::testFunction() RETURNVALUE =====> " << funcreturnvalue->toString() << endl;
 	KOMACROTEST_ASSERT( funcreturnvalue->toInt(), argument2 );
 
@@ -544,7 +544,7 @@ void CommonTests::testIntFunction()
 	));
 
 	//create an KomacroFunction  with our data, and put it into a KSharedPtr
-	KoMacro::Action::Ptr functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//Cast data to function
 	KoMacro::Function* func = dynamic_cast<KoMacro::Function*>( functionptr.data() );
 		//check that it is not null
@@ -574,7 +574,7 @@ void CommonTests::testDoubleFunction()
 	));
 
 	//create an KomacroFunction  with our data, and put it into a KSharedPtr
-	KoMacro::Action::Ptr functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//Cast data to function
 	KoMacro::Function* func = dynamic_cast<KoMacro::Function*>( functionptr.data() );
 		//check that it is not null
@@ -603,7 +603,7 @@ void CommonTests::testQStringFunction()
 	));
 
 	//create an KomacroFunction with our data, and put it into a KSharedPtr
-	KoMacro::Action::Ptr functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//Cast data to function
 	KoMacro::Function* func = dynamic_cast<KoMacro::Function*>( functionptr.data() );
 		//check that it is not null
@@ -621,7 +621,7 @@ void CommonTests::testMacro()
 
 	QDomElement const domelement = d->doomdocument->documentElement();
 	
-	KoMacro::Macro::Ptr macro = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	//Is our XML parseable ?
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 
@@ -639,7 +639,7 @@ void CommonTests::testMacro()
 // 	));
 // 
 // 	//create Macro
-// // 	KoMacro::Action::Ptr macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+// // 	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 // 	//cast data to Macro
 // 	KoMacro::Macro* macro = dynamic_cast<KoMacro::Macro*>( macroptr.data() );
 	//check that it is not null
@@ -661,11 +661,11 @@ void CommonTests::testMacro()
 	 */
 	
 	//create list of KsharedPtr from the childs of the macro
-	QValueList< KoMacro::MacroItem::Ptr >& items = macro->items();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = macro->items();
 	//check that there is one
 	KOMACROTEST_ASSERT( items.count(), sizetype(1) );
 	//fetch the first one
-	KoMacro::Action::Ptr actionptr = items[0]->action();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 	//How do we know that an action exist ?	
 	//-> check that it is not null
 	KOMACROTEST_XASSERT(sizetype(actionptr.data()), sizetype(0));
@@ -677,7 +677,7 @@ void CommonTests::testMacro()
 //	KOMACROTEST_ASSERT( actionptr->comment(), QString("") );
 /*
 	//fetch the second one
-	KoMacro::Action::Ptr myfuncptr = children[1];
+	KSharedPtr<KoMacro::Action> myfuncptr = children[1];
 	//cast it to function
 	
                                                                                     KoMacro::Function* myfunc = dynamic_cast<KoMacro::Function*>( myfuncptr.data() );
@@ -700,12 +700,12 @@ void CommonTests::testMacro()
 	myfunc->activate();
 */	
 	//create another macro
-	KoMacro::Macro::Ptr yanMacro = KoMacro::Manager::self()->createMacro("testMacro2");
+	KSharedPtr<KoMacro::Macro> yanMacro = KoMacro::Manager::self()->createMacro("testMacro2");
 	
 	KOMACROTEST_ASSERT(yanMacro->parseXML(domelement),true);
 	//create two more macros
-	//KoMacro::Action::Ptr yanActionptr2 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
-	//KoMacro::Action::Ptr yanActionptr3 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	//KSharedPtr<KoMacro::Action> yanActionptr2 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	//KSharedPtr<KoMacro::Action> yanActionptr3 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	
 	//check that they aren?t null
 	KOMACROTEST_XASSERT(sizetype(yanMacro.data()), sizetype(0));
@@ -713,7 +713,7 @@ void CommonTests::testMacro()
 	//KOMACROTEST_XASSERT((int) yanActionptr3.data(), 0);
 	
 	//create a list of the children from yanMacro
-	//QValueList< KoMacro::Action::Ptr > yanChildren = yanMacro->children();
+	//QValueList< KSharedPtr<KoMacro::Action> > yanChildren = yanMacro->children();
 	//check that there are two
 	//KOMACROTEST_ASSERT(yanChildren.count(), uint(2));
 /*
@@ -769,7 +769,7 @@ void CommonTests::testDom() {
 		"</function>"
 	));
 	//create functiom
-	KoMacro::Action::Ptr macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//try to execute function and catch exception
 	KOMACROTEST_ASSERTEXCEPTION(KoMacro::Exception&, macroptr->activate());
 
@@ -853,21 +853,21 @@ void CommonTests::testVariables()
 	));
 
 	//create an macro
-	KoMacro::Action::Ptr macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//cast data to macro
 	KoMacro::Macro* macro = dynamic_cast<KoMacro::Macro*>( macroptr.data() );
 		//check that it is not null
 	KOMACROTEST_XASSERT((int) macro, 0);
 		
 	//create a list of its children
-	QValueList< KoMacro::Action::Ptr > children = macro->children();
+	QValueList< KSharedPtr<KoMacro::Action> > children = macro->children();
 	//Check that there are two children. The first child is always the returnvalue.
 	KOMACROTEST_ASSERT( children.count(), uint(2) );
 	//fetch the children
-	KoMacro::Action::Ptr func1ptr = children[1];
+	KSharedPtr<KoMacro::Action> func1ptr = children[1];
 
 	//create new context
-	KoMacro::Context::Ptr context = new KoMacro::Context(macroptr);
+	KSharedPtr<KoMacro::Context> context = new KoMacro::Context(macroptr);
 
 	{
 		//try to execute function with non-functional variable
@@ -882,7 +882,7 @@ void CommonTests::testVariables()
 		//execute function
 		func1ptr->activate(context);
 		//fetch return value
-		KoMacro::Variable::Ptr returnvariable = context->variable("$MyReturnVariable");
+		KSharedPtr<KoMacro::Variable> returnvariable = context->variable("$MyReturnVariable");
 		//check that it is not null
 		KOMACROTEST_XASSERT( (int) returnvariable.data(), 0);
 		//check that it is "Some String"
@@ -895,7 +895,7 @@ void CommonTests::testVariables()
 		//execute function
 		func1ptr->activate(context);
 		//fetch return value
-		KoMacro::Variable::Ptr returnvariable = context->variable("$MyReturnVariable");
+		KSharedPtr<KoMacro::Variable> returnvariable = context->variable("$MyReturnVariable");
 		//check that it is not null
 		KOMACROTEST_XASSERT( (int) returnvariable.data(), 0);
 		//check that it is 12345

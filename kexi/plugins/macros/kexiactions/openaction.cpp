@@ -64,7 +64,7 @@ namespace KexiMacro {
 					if(viewmodes & Kexi::TextViewMode)
 						namelist << TEXTVIEW;
 					for(QStringList::Iterator it = namelist.begin(); it != namelist.end(); ++it)
-						this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(*it)) );
+						this->children().append( KSharedPtr<KoMacro::Variable>(new KoMacro::Variable(*it)) );
 				}
 				const QString n =
 					namelist.contains(viewname)
@@ -82,13 +82,13 @@ OpenAction::OpenAction()
 {
 	const int conditions = ObjectVariable<OpenAction>::VisibleInNav;
 	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this, conditions);
-	setVariable(KoMacro::Variable::Ptr( objvar ));
+	setVariable(KSharedPtr<KoMacro::Variable>( objvar ));
 
-	setVariable(KoMacro::Variable::Ptr( new ObjectNameVariable<OpenAction>(this, objvar->variant().toString()) ));
-	setVariable(KoMacro::Variable::Ptr( new ViewVariable<OpenAction>(this, objvar->variant().toString()) ));
+	setVariable(KSharedPtr<KoMacro::Variable>( new ObjectNameVariable<OpenAction>(this, objvar->variant().toString()) ));
+	setVariable(KSharedPtr<KoMacro::Variable>( new ViewVariable<OpenAction>(this, objvar->variant().toString()) ));
 
 	/*TODO
-	KoMacro::Variable::Ptr activatevar = KoMacro::Variable::Ptr( new KexiVariable<OpenAction>(this, "activate", i18n("Activate")) );
+	KSharedPtr<KoMacro::Variable> activatevar = KSharedPtr<KoMacro::Variable>( new KexiVariable<OpenAction>(this, "activate", i18n("Activate")) );
 	activatevar->setVariant( QVariant(true,0) );
 	setVariable(activatevar);
 	*/
@@ -102,7 +102,7 @@ bool OpenAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const Q
 {
 	kdDebug()<<"OpenAction::notifyUpdated() name="<<name<<" macroitem.action="<<(macroitem->action() ? macroitem->action()->name() : "NOACTION")<<endl;
 
-	KoMacro::Variable::Ptr variable = macroitem->variable(name, true);
+	KSharedPtr<KoMacro::Variable> variable = macroitem->variable(name, true);
 	if(! variable) {
 		kdWarning()<<"OpenAction::notifyUpdated() No such variable="<<name<<" in macroitem."<<endl;
 		return false;
@@ -117,17 +117,17 @@ bool OpenAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const Q
 		kdDebug()<<"OpenAction::notifyUpdated() objectvalue="<<objectvalue<<" objectname="<<objectname<<" viewname="<<viewname<<endl;
 
 		variable->children().append(
-			KoMacro::Variable::Ptr(new ObjectNameVariable<OpenAction>(this, objectvalue, objectname))
+			KSharedPtr<KoMacro::Variable>(new ObjectNameVariable<OpenAction>(this, objectvalue, objectname))
 		);
 		variable->children().append(
-			KoMacro::Variable::Ptr(new ViewVariable<OpenAction>(this, objectvalue, viewname))
+			KSharedPtr<KoMacro::Variable>(new ViewVariable<OpenAction>(this, objectvalue, viewname))
 		);
 	}
 
 	return true;
 }
 
-void OpenAction::activate(KoMacro::Context::Ptr context)
+void OpenAction::activate(KSharedPtr<KoMacro::Context> context)
 {
 	if(! mainWin()->project()) {
 		throw KoMacro::Exception(i18n("No project loaded."), "OpenAction::activate");

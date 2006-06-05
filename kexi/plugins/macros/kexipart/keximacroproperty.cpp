@@ -72,14 +72,14 @@ void KexiMacroProperty::init()
 	Q_ASSERT( d->macroitem != 0 );
 	kdDebug() << "--------- KexiMacroProperty::set() macroitem=" << d->macroitem->name() << " name=" << d->name << endl;
 
-	KoMacro::Action::Ptr action = d->macroitem->action();
-	KoMacro::Variable::Ptr actionvariable = action->variable(d->name);
+	KSharedPtr<KoMacro::Action> action = d->macroitem->action();
+	KSharedPtr<KoMacro::Variable> actionvariable = action->variable(d->name);
 	if(! actionvariable.data()) {
 		kdDebug() << "KexiMacroProperty::createProperty() Skipped cause there exists no such action=" << d->name << endl;
 		return;
 	}
 
-	KoMacro::Variable::Ptr variable = d->macroitem->variable(d->name, true/*checkaction*/);
+	KSharedPtr<KoMacro::Variable> variable = d->macroitem->variable(d->name, true/*checkaction*/);
 	if(! variable.data()) {
 		kdDebug() << "KexiMacroProperty::createProperty() Skipped cause there exists no such variable=" << d->name << endl;
 		return;
@@ -121,7 +121,7 @@ void KexiMacroProperty::setValue(const QVariant &value, bool rememberOldValue)
 
 QVariant KexiMacroProperty::value() const
 {
-	KoMacro::Variable::Ptr variable = d->macroitem->variable(d->name, true);
+	KSharedPtr<KoMacro::Variable> variable = d->macroitem->variable(d->name, true);
 	Q_ASSERT( variable.data() != 0 );
 	return variable.data() ? variable->variant() : QVariant();
 }
@@ -184,7 +184,7 @@ KoProperty::CustomProperty* KexiMacroPropertyFactory::createCustomProperty(KoPro
 		return 0;
 	}
 
-	KoMacro::MacroItem::Ptr macroitem = parentcustomproperty->macroItem();
+	KSharedPtr<KoMacro::MacroItem> macroitem = parentcustomproperty->macroItem();
 	Q_ASSERT( macroitem.data() != 0 );
 	const QString name = parentcustomproperty->name();
 	Q_ASSERT(! name.isEmpty());
@@ -263,7 +263,7 @@ class EditListBoxItem : public ListBoxItem
 		}
 
 		virtual QString text() const {
-			KoMacro::Variable::Ptr variable = m_macroproperty->variable();
+			KSharedPtr<KoMacro::Variable> variable = m_macroproperty->variable();
 			Q_ASSERT( variable.data() );
 			//kdDebug()<<"EditListBoxItem::text() text="<<variable->toString()<<endl;
 			Q_ASSERT( variable->toString() != QString::null );
@@ -271,8 +271,8 @@ class EditListBoxItem : public ListBoxItem
 		}
 
 		KoProperty::Widget* widget() const { return m_widget; }
-		KoMacro::Variable::Ptr variable() const { return m_macroproperty->variable(); }
-		KoMacro::Action::Ptr action() const { return m_action; }
+		KSharedPtr<KoMacro::Variable> variable() const { return m_macroproperty->variable(); }
+		KSharedPtr<KoMacro::Action> action() const { return m_action; }
 
 	protected:
 		virtual void paint(QPainter* p) {
@@ -286,7 +286,7 @@ class EditListBoxItem : public ListBoxItem
 
 	private:
 		void init() {
-			KoMacro::MacroItem::Ptr macroitem = m_macroproperty->macroItem();
+			KSharedPtr<KoMacro::MacroItem> macroitem = m_macroproperty->macroItem();
 			Q_ASSERT( macroitem.data() );
 			m_action = m_macroproperty->macroItem()->action();
 			if(! m_action.data()) {
@@ -298,7 +298,7 @@ class EditListBoxItem : public ListBoxItem
 				kdWarning() << "EditListBoxItem::EditListBoxItem() No parentproperty defined" << endl;
 				return;
 			}
-			KoMacro::Variable::Ptr variable = m_macroproperty->variable();
+			KSharedPtr<KoMacro::Variable> variable = m_macroproperty->variable();
 			if(! variable.data()) {
 				kdWarning() << "EditListBoxItem::EditListBoxItem() No variable defined for property=" << parentproperty->name() << endl;
 				return;
@@ -306,7 +306,7 @@ class EditListBoxItem : public ListBoxItem
 
 			QVariant variant = variable->variant();
 
-			KoMacro::Variable::Ptr actionvariable = m_action->variable(m_macroproperty->name());
+			KSharedPtr<KoMacro::Variable> actionvariable = m_action->variable(m_macroproperty->name());
 			if(actionvariable.data()) {
 				QVariant actionvariant = actionvariable->variant();
 				Q_ASSERT( ! actionvariant.isNull() );
@@ -354,7 +354,7 @@ class EditListBoxItem : public ListBoxItem
 		KexiMacroProperty* m_macroproperty;
 		KoProperty::Property* m_prop;
 		KoProperty::Widget* m_widget;
-		KoMacro::Action::Ptr m_action;
+		KSharedPtr<KoMacro::Action> m_action;
 };
 
 /**
@@ -373,15 +373,15 @@ class ListBox : public QListBox
 			m_edititem = new EditListBoxItem(this, macroproperty);
 			Q_ASSERT( m_edititem->widget() != 0 );
 
-			KoMacro::Variable::Ptr variable = m_edititem->variable();
+			KSharedPtr<KoMacro::Variable> variable = m_edititem->variable();
 			if(variable.data()) {
 				// try to handle the children the variable has.
 				KoMacro::Variable::List children;
 
 				{ // let's first add the list of children inherited from the action.
-					KoMacro::Action::Ptr action = m_edititem->action();
+					KSharedPtr<KoMacro::Action> action = m_edititem->action();
 					if(action.data()) {
-						KoMacro::Variable::Ptr v = action->variable( macroproperty->name() );
+						KSharedPtr<KoMacro::Variable> v = action->variable( macroproperty->name() );
 							if(v.data())
 								children = v->children();
 					}

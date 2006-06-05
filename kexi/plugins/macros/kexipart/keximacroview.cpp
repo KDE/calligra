@@ -47,7 +47,7 @@ class KexiMacroView::Private
 		* The \a KoMacro::Manager instance used to access the
 		* Macro Framework.
 		*/
-		::KoMacro::Macro::Ptr macro;
+		KSharedPtr<KoMacro::Macro> macro;
 
 		/**
 		* Constructor.
@@ -55,14 +55,14 @@ class KexiMacroView::Private
 		* \param m The passed \a KoMacro::Manager instance our
 		*        \a manager points to.
 		*/
-		Private(::KoMacro::Macro* const m)
+		Private(KoMacro::Macro* const m)
 			: macro(m)
 		{
 		}
 
 };
 
-KexiMacroView::KexiMacroView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro, const char* name)
+KexiMacroView::KexiMacroView(KexiMainWindow *mainwin, QWidget *parent, KoMacro::Macro* const macro, const char* name)
 	: KexiViewBase(mainwin, parent, (name ? name : "KexiMacroView"))
 	, d( new Private(macro) )
 {
@@ -76,7 +76,7 @@ KexiMacroView::~KexiMacroView()
 	delete d;
 }
 
-KoMacro::Macro::Ptr KexiMacroView::macro() const
+KSharedPtr<KoMacro::Macro> KexiMacroView::macro() const
 {
 	return d->macro;
 }
@@ -161,7 +161,7 @@ tristate KexiMacroView::storeData(bool /*dontAsk*/)
 
 void KexiMacroView::execute(QObject* sender)
 {
-	KoMacro::Context::Ptr context = d->macro->execute(sender);
+	KSharedPtr<KoMacro::Context> context = d->macro->execute(sender);
 	if(context->hadException()) {
 		KexiMacroError* error = new KexiMacroError(
 			mainWin(), // The parent KexiMainWindow

@@ -32,7 +32,7 @@ namespace KoMacro {
 	class MacroItem::Private
 	{
 		public:
-			Action::Ptr action;
+			KSharedPtr<Action> action;
 			QString comment;
 			Variable::Map variables;
 	};
@@ -73,17 +73,17 @@ void MacroItem::setAction(KSharedPtr<Action> action)
 
 QVariant MacroItem::variant(const QString& name, bool checkaction) const
 {
-	Variable::Ptr v = variable(name, checkaction);
+	KSharedPtr<Variable> v = variable(name, checkaction);
 	return v.data() ? v->variant() : QVariant();
 }
 
-Variable::Ptr MacroItem::variable(const QString& name, bool checkaction) const
+KSharedPtr<Variable> MacroItem::variable(const QString& name, bool checkaction) const
 {
 	if(d->variables.contains(name))
 		return d->variables[name];
 	if(checkaction && d->action.data())
 		return d->action->variable(name);
-	return Variable::Ptr(0);
+	return KSharedPtr<Variable>(0);
 }
 
 Variable::Map MacroItem::variables() const
@@ -99,7 +99,7 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 
 	// Let's look if there is an action defined for the variable. If that's
 	// the case, we try to use that action to preserve the type of the variant.
-	Variable::Ptr actionvariable = d->action ? d->action->variable(name) : Variable::Ptr(0);
+	KSharedPtr<Variable> actionvariable = d->action ? d->action->variable(name) : KSharedPtr<Variable>(0);
 	if(actionvariable.data()) {
 		const QVariant var = actionvariable->variant();
 
@@ -127,12 +127,12 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 			v = variant; // ignore casting result
 	}
 
-	Variable::Ptr variable = d->variables[name];
+	KSharedPtr<Variable> variable = d->variables[name];
 	if(! variable.data()) {
 		// if there exists no such variable yet, create one.
 		kdDebug() << "MacroItem::setVariable() Creating new variable name=" << name << endl;
 
-		variable = Variable::Ptr( new Variable() );
+		variable = KSharedPtr<Variable>( new Variable() );
 		variable->setName(name);
 		d->variables.replace(name, variable);
 	}
@@ -155,10 +155,10 @@ bool MacroItem::setVariable(const QString& name, const QVariant& variant)
 	return setVariant(name, variant);
 }
 
-Variable::Ptr MacroItem::addVariable(const QString& name, const QVariant& value)
+KSharedPtr<Variable> MacroItem::addVariable(const QString& name, const QVariant& value)
 {
 	Q_ASSERT(! d->variables.contains(name) );
-	Variable::Ptr variable = Variable::Ptr( new Variable() );
+	KSharedPtr<Variable> variable = KSharedPtr<Variable>( new Variable() );
 	variable->setName(name);
 	d->variables.replace(name, variable);
 	this->setVariant(name, value);
@@ -166,7 +166,7 @@ Variable::Ptr MacroItem::addVariable(const QString& name, const QVariant& value)
 }
 
 #if 0
-QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
+QStringList MacroItem::setVariable(const QString& name, KSharedPtr<Variable> variable)
 {
 	// First try to find the matching in the action defined variable.
 	Variable* v = d->action ? d->action->variable(name).data() : 0;
@@ -212,7 +212,7 @@ QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 		//}
 
 		/*
-		Variable::Ptr v = d->variables[ (*it)->name() ];
+		KSharedPtr<Variable> v = d->variables[ (*it)->name() ];
 		if(v.data() && (*it)->type() == v->type() && ! v->variant().isNull()) {
 			(*it)->setVariant( v->variant().toString() );
 		}

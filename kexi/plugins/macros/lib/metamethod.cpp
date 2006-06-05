@@ -70,7 +70,7 @@ namespace KoMacro {
 			* if this @a MetaMethod doesn't belong to any @a MetaObject
 			* yet.
 			*/
-			MetaObject::Ptr object;
+			KSharedPtr<MetaObject> object;
 
 			/**
 			* The @a MetaMethod::Type this method provides access
@@ -144,7 +144,7 @@ MetaMethod::~MetaMethod()
 	delete d;
 }
 
-MetaObject::Ptr const MetaMethod::object() const
+KSharedPtr<MetaObject> const MetaMethod::object() const
 {
 	return d->object;
 }
@@ -192,8 +192,8 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 	uo[0] = QUObject(); // empty placeholder for the returnvalue.
 
 	for(uint i = 0; i < argsize; i++) {
-		MetaParameter::Ptr metaargument = d->arguments[i];
-		Variable::Ptr variable = arguments[i + 1];
+		KSharedPtr<MetaParameter> metaargument = d->arguments[i];
+		KSharedPtr<Variable> variable = arguments[i + 1];
 
 		if ( !variable ) {
 	 		throw Exception(
@@ -282,7 +282,7 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 	return uo;
 }
 
-Variable::Ptr MetaMethod::toVariable(QUObject* uo)
+KSharedPtr<Variable> MetaMethod::toVariable(QUObject* uo)
 {
 	const QString desc( uo->type->desc() );
 
@@ -334,16 +334,16 @@ Variable::List MetaMethod::toVariableList(QUObject* uo)
 	return list;
 }
 
-Variable::Ptr MetaMethod::invoke(Variable::List arguments)
+KSharedPtr<Variable> MetaMethod::invoke(Variable::List arguments)
 {
-	kdDebug() << "Variable::Ptr MetaMethod::invoke(Variable::List arguments)" << endl; 
+	kdDebug() << "KSharedPtr<Variable> MetaMethod::invoke(Variable::List arguments)" << endl; 
 
 	if(! d->object) {
 		throw Exception("MetaObject is undefined.", "KoMacro::MetaMethod::invoke(Variable::List)");
 	}
 
 	QObject* obj = d->object->object();
-	Variable::Ptr returnvalue;
+	KSharedPtr<Variable> returnvalue;
 	QUObject* qu = 0;
 
 	try {

@@ -61,7 +61,7 @@ namespace KexiMacro {
 					namelist << "";
 
 				for(QStringList::Iterator it = namelist.begin(); it != namelist.end(); ++it)
-					this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(*it)) );
+					this->children().append( KSharedPtr<KoMacro::Variable>(new KoMacro::Variable(*it)) );
 
 				this->setVariant( (name.isNull() || ! namelist.contains(name)) ? namelist[0] : name );
 			}

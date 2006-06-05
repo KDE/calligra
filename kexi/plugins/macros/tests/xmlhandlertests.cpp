@@ -122,7 +122,7 @@ void XMLHandlerTests::testParseXML()
 	kdDebug()<<"===================== testParseXML() ======================" << endl;
 
 	// Local Init
-	KoMacro::Macro::Ptr macro = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomElement domelement;
 
 	// Part 1: From XML to a Macro.
@@ -312,11 +312,11 @@ void XMLHandlerTests::testParseXML()
 
 // Compares a XML-Element with a Macro by value.
 // TODO Should I compare the types or is this done by QVariant?
-bool XMLHandlerTests::isMacroContentEqToXML(const KoMacro::Macro::Ptr macro, const QDomElement& domelement)
+bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement)
 {	
 	// Make an Iterator over the MacroItems of the Macro.
-	const QValueList<KoMacro::MacroItem::Ptr> macroitems = macro->items();
-	QValueList<KoMacro::MacroItem::Ptr>::ConstIterator mit(macroitems.constBegin()), end(macroitems.constEnd());
+	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems = macro->items();
+	QValueList<KSharedPtr<KoMacro::MacroItem > >::ConstIterator mit(macroitems.constBegin()), end(macroitems.constEnd());
 	if(macroitems.empty()) return false;
 
 	// Make an Iterator over the item-elements of the domelement.
@@ -343,7 +343,7 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KoMacro::Macro::Ptr macro, con
 		}*/
 
 		// o down to MacroItem->Variable and item->variable and compare them.
-		QMap<QString, KSharedPtr<KoMacro::Variable> > mvariables = macroitem->variables();
+		QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables = macroitem->variables();
 		QDomNode varnode = itemelem.firstChild();
 
 		while ( ! varnode.isNull()) {

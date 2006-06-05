@@ -137,7 +137,7 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 	QStringList actionnames = KoMacro::Manager::self()->actionNames();
 	QStringList::ConstIterator it, end( actionnames.constEnd() );
 	for( it = actionnames.constBegin(); it != end; ++it) {
-		KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(*it);
+		KSharedPtr<KoMacro::Action> action = KoMacro::Manager::self()->action(*it);
 		items.append( action->text() );
 	}
 
@@ -218,7 +218,7 @@ void KexiMacroDesignView::updateData()
 			d->tabledata->append(tableitem);
 		}
 		// Set the action-column.
-		::KoMacro::Action::Ptr action = (*it)->action();
+		KSharedPtr<KoMacro::Action> action = (*it)->action();
 		if(action.data()) {
 			int i = actionnames.findIndex( action->name() );
 			if(i >= 0) {
@@ -273,11 +273,11 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 	// If the rowindex doesn't exists yet, we need to append new
 	// items till we are able to access the item we like to use.
 	for(int i = macro()->items().count(); i <= rowindex; i++) {
-		macro()->addItem( KoMacro::MacroItem::Ptr( new KoMacro::MacroItem() ) );
+		macro()->addItem( KSharedPtr<KoMacro::MacroItem>( new KoMacro::MacroItem() ) );
 	}
 
 	// Get the matching MacroItem.
-	KoMacro::MacroItem::Ptr macroitem = macro()->items()[rowindex];
+	KSharedPtr<KoMacro::MacroItem> macroitem = macro()->items()[rowindex];
 	if(! macroitem.data()) {
 		kdWarning() << "KexiMacroDesignView::beforeCellChanged() Invalid item for rowindex=" << rowindex << endl;
 		return;
@@ -293,7 +293,7 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 				QStringList actionnames = KoMacro::Manager::self()->actionNames();
 				actionname = actionnames[ selectedindex - 1 ]; // first item is empty
 			}
-			KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(actionname);
+			KSharedPtr<KoMacro::Action> action = KoMacro::Manager::self()->action(actionname);
 			macroitem->setAction(action);
 			updateProperties(d->propertyset->currentRow(), d->propertyset->currentPropertySet(), macroitem);
 			propertySetReloaded(true);
@@ -329,7 +329,7 @@ void KexiMacroDesignView::rowInserted(KexiTableItem*, uint row, bool)
 		// need to do anything yet cause the new item will be handled on
 		// beforeCellChanged() anyway.
 		kdDebug() << "KexiMacroDesignView::rowInserted() Inserting new MacroItem" << endl;
-		KoMacro::MacroItem::Ptr macroitem = KoMacro::MacroItem::Ptr( new KoMacro::MacroItem() );
+		KSharedPtr<KoMacro::MacroItem> macroitem = KSharedPtr<KoMacro::MacroItem>( new KoMacro::MacroItem() );
 		KoMacro::MacroItem::List::Iterator it = macroitems.at(row);
 		macroitems.insert(it, macroitem);
 	}
@@ -347,7 +347,7 @@ void KexiMacroDesignView::rowDeleted()
 	macroitems.remove( macroitems.at(rowindex) );
 }
 
-bool KexiMacroDesignView::updateSet(KoProperty::Set* set, KoMacro::MacroItem::Ptr macroitem, const QString& variablename)
+bool KexiMacroDesignView::updateSet(KoProperty::Set* set, KSharedPtr<KoMacro::MacroItem> macroitem, const QString& variablename)
 {
 	kdDebug() << "KexiMacroDesignView::updateSet() variablename=" << variablename << endl;
 	KoProperty::Property* property = KexiMacroProperty::createProperty(macroitem, variablename);
@@ -357,7 +357,7 @@ bool KexiMacroDesignView::updateSet(KoProperty::Set* set, KoMacro::MacroItem::Pt
 	return true;
 }
 
-void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacro::MacroItem::Ptr macroitem)
+void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KSharedPtr<KoMacro::MacroItem> macroitem)
 {
 	kdDebug() << "KexiMacroDesignView::updateProperties() row=" << row << endl;
 
@@ -365,7 +365,7 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		return; // ignore invalid rows and avoid infinite recursion.
 	}
 
-	KoMacro::Action::Ptr action = macroitem->action();
+	KSharedPtr<KoMacro::Action> action = macroitem->action();
 	if(! action.data()) {
 		// don't display a propertyset if there is no action defined.
 		d->propertyset->remove(row);
@@ -395,7 +395,7 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 	QStringList varnames = action->variableNames();
 	for(QStringList::Iterator it = varnames.begin(); it != varnames.end(); ++it) {
 		if(updateSet(set, macroitem, *it)) {
-			KoMacro::Variable::Ptr variable = macroitem->variable(*it, true);
+			KSharedPtr<KoMacro::Variable> variable = macroitem->variable(*it, true);
 			kdDebug()<<"KexiMacroDesignView::updateProperties() name=" << *it << " variable=" << variable->variant().toString() << endl;
 #if 0
 			macroitem->setVariable(*it, variable);
@@ -430,9 +430,9 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Prop
 	d->reloadsProperties = true;
 
 	// The MacroItem which should be changed.
-	KoMacro::MacroItem::Ptr macroitem = macro()->items()[row];
+	KSharedPtr<KoMacro::MacroItem> macroitem = macro()->items()[row];
 	// The MacroItem may point to an action.
-	KoMacro::Action::Ptr action = macroitem->action();
+	KSharedPtr<KoMacro::Action> action = macroitem->action();
 
 	// Set the new value. MacroItem will take care of calling
 	// action->notifyUpdated().
@@ -446,11 +446,11 @@ bool dirty = true; bool reload = true;//dirtyvarnames.count()>0;
 
 #endif
 #if 0
-	QStringList dirtyvarnames = macroitem->setVariable(name, KoMacro::Variable::Ptr(pv));
+	QStringList dirtyvarnames = macroitem->setVariable(name, KSharedPtr<KoMacro::Variable>(pv));
 	bool dirty = false;
 	bool reload = false;
 	for(QStringList::Iterator it = dirtyvarnames.begin(); it != dirtyvarnames.end(); ++it) {
-		KoMacro::Variable::Ptr variable = macroitem->variable(*it);
+		KSharedPtr<KoMacro::Variable> variable = macroitem->variable(*it);
 		if(! variable.data()) {
 			kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << " it=" << *it << " skipped cause such a variable is not known." << endl;
 			continue;

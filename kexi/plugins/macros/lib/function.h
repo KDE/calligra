@@ -43,11 +43,6 @@ namespace KoMacro {
 		public:
 
 			/**
-			* Shared pointer to implement reference-counting.
-			*/
-			typedef KSharedPtr<Function> Ptr;
-
-			/**
 			* Constructor.
 			*
 			* @param name The name this @a Function has.
@@ -78,15 +73,15 @@ namespace KoMacro {
 			* @return the @a MetaObject receiver object or NULL if there
 			* is no receiver object defined.
 			*/
-			MetaObject::Ptr receiverObject();
+			KSharedPtr<MetaObject> receiverObject();
 
 			/**
 			* Set the receiver object to \p metaobject .
 			*/
-			void setReceiverObject(MetaObject::Ptr metaobject);
+			void setReceiverObject(KSharedPtr<MetaObject> metaobject);
 
-			//MetaMethod::Ptr receiverMethod();
-			//void setReceiverMethod(MetaMethod::Ptr);
+			//KSharedPtr<MetaMethod> receiverMethod();
+			//void setReceiverMethod(KSharedPtr<MetaMethod>);
 
 		public slots:
 
@@ -94,7 +89,7 @@ namespace KoMacro {
 			* Called if the @a Function should be executed within
 			* the context \p context .
 			*/
-			virtual void activate(Context::Ptr context);
+			virtual void activate(KSharedPtr<Context> context);
 
 		signals:
 			void activated();

@@ -71,7 +71,7 @@ namespace KoMacroTest {
 
 		QDomDocument* doomdocument;
 		
-		KoMacro::Macro::Ptr macro;
+		KSharedPtr<KoMacro::Macro> macro;
 
 		Private()
 			: xmlguiclient(0)
@@ -83,7 +83,7 @@ namespace KoMacroTest {
 	};
 }
 
-typedef QValueList< KoMacro::MacroItem::Ptr >::size_type sizetype;
+typedef QValueList< KSharedPtr<KoMacro::MacroItem> >::size_type sizetype;
 
 /******************************************************************************
 * This is an xtra big TODO: 
@@ -148,8 +148,8 @@ void ActionTests::testMacro()
 void ActionTests::testText()
 {
 	//R
-	QValueList< KoMacro::MacroItem::Ptr >& items = d->macro->items();
-	KoMacro::Action::Ptr actionptr = items[0]->action();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 
 	const QString leetSpeech = "']['3 $']['";
 	
@@ -165,8 +165,8 @@ void ActionTests::testText()
 void ActionTests::testName()
 {
 	//R
-	QValueList< KoMacro::MacroItem::Ptr >& items = d->macro->items();
-	KoMacro::Action::Ptr actionptr = items[0]->action();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 
 	//check name
 	KOMACROTEST_ASSERT(actionptr->name(),QString("testaction"));
@@ -179,8 +179,8 @@ void ActionTests::testName()
 void ActionTests::testComment()
 {
 	//R
-	QValueList< KoMacro::MacroItem::Ptr >& items = d->macro->items();
-	KoMacro::Action::Ptr actionptr = items[0]->action();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 
 	//check comment
 	KOMACROTEST_XASSERT(actionptr->comment(),QString("No Comment!"));
@@ -192,12 +192,12 @@ void ActionTests::testComment()
 
 void ActionTests::testVariableString() {
 	//R
-	QValueList< KoMacro::MacroItem::Ptr >& items = d->macro->items();	
-	KoMacro::Action::Ptr actionptr = items[0]->action();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();	
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 	
 	const QString testString = "teststring";	
 	//fetch the "teststring"-variable
-	KoMacro::Variable::Ptr variableptr = actionptr->variable(testString);	
+	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable(testString);	
 	//So there is a variable, does hasVariable() work ?
 	KOMACROTEST_ASSERT(actionptr->hasVariable(testString),true);
 	//check count of variables
@@ -226,13 +226,13 @@ void ActionTests::testVariableString() {
 
 void ActionTests::testVariableInt() {
 	//R
-	QValueList< KoMacro::MacroItem::Ptr >& items = d->macro->items();	
-	KoMacro::Action::Ptr actionptr = items[0]->action();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();	
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 	
 	const QString testInt = "testint";
 
 	//fetch the "testint"-variable
-	KoMacro::Variable::Ptr variableptr = actionptr->variable(testInt);	
+	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable(testInt);	
 	//check that it is not null
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	//check that it is 0
@@ -261,12 +261,12 @@ void ActionTests::testVariableInt() {
 
 void ActionTests::testVariableBool() {
 	//R
-	QValueList< KoMacro::MacroItem::Ptr >& items = d->macro->items();	
-	KoMacro::Action::Ptr actionptr = items[0]->action();	
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();	
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();	
 	
 	const QString testBool = "testbool";	
 	//fetch the "testbool"-variable
-	KoMacro::Variable::Ptr variableptr = actionptr->variable(testBool);	
+	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable(testBool);	
 	//check that it is not null
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	//check that it is " "
@@ -290,12 +290,12 @@ void ActionTests::testAction()
 	kdDebug()<<"===================== testAction() ======================" << endl;
 
 	//create list of KSharedPtr from the childs of the macro
-	QValueList< KoMacro::MacroItem::Ptr >& items = d->macro->items();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
 
 	//check that there is one
 	KOMACROTEST_ASSERT( items.count(), sizetype(3) );
 	//get it
-	KoMacro::Action::Ptr actionptr = items[0]->action();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 	//-> check that it is not null
 	KOMACROTEST_XASSERT(sizetype(actionptr.data()), sizetype(0));
 }
@@ -305,9 +305,9 @@ void ActionTests::testMacroItem()
 	//Redundant ...
 	const QString testString = "teststring";	
 	const QString testInt = "testint";		
-	QValueList< KoMacro::MacroItem::Ptr >& items = d->macro->items();
-	KoMacro::Action::Ptr actionptr = items[0]->action();
-	KoMacro::Variable::Ptr variableptr = actionptr->variable(testString);
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
+	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable(testString);
 	
 
 	//create new macroitem for testing

@@ -103,12 +103,12 @@ bool XMLHandler::parseXML(const QDomElement& element)
 			MacroItem* item = new MacroItem();
 
 			// Add the new item to our Macro.
-			d->macro->addItem( MacroItem::Ptr(item) );
+			d->macro->addItem( KSharedPtr<MacroItem>(item) );
 
 			// Each MacroItem may point to an Action instance. We
 			// try to determinate this action now and if it's defined
 			// and available, we set it.
-			Action::Ptr action = Manager::self()->action( itemelem.attribute("action") );
+			KSharedPtr<Action> action = Manager::self()->action( itemelem.attribute("action") );
 			if(action.data()) {
 				item->setAction(action);
 			}
@@ -130,7 +130,7 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					const QString value = childelem.text();
 
 					// Store the new variable in our macroitem.
-					Variable::Ptr variable = item->addVariable(name, value);
+					KSharedPtr<Variable> variable = item->addVariable(name, value);
 					Q_UNUSED(variable);
 				}
 			}
@@ -159,10 +159,10 @@ QDomElement XMLHandler::toXML()
 	//macroelem.setAttribute("name",d->macro->name());
 
 	// The list of MacroItem-children a Macro provides.
-	QValueList<MacroItem::Ptr> items = d->macro->items();
+	QValueList<KSharedPtr<MacroItem > > items = d->macro->items();
 
 	// Create an iterator...
-	QValueList<MacroItem::Ptr>::ConstIterator it(items.constBegin()), end(items.constEnd());
+	QValueList<KSharedPtr<MacroItem > >::ConstIterator it(items.constBegin()), end(items.constEnd());
 	// ...and iterate over the list of children the Macro provides.
 	for(;it != end; it++) {
 		// We are iterating over MacroItem instances.
@@ -189,7 +189,7 @@ QDomElement XMLHandler::toXML()
 
 			QStringList variablenames = action->variableNames();
 			for(QStringList::Iterator vit = variablenames.begin(); vit != variablenames.end(); ++vit) {
-				const Variable::Ptr v = item->variable(*vit);
+				const KSharedPtr<Variable> v = item->variable(*vit);
 				if(! v.data()) {
 					// skip if the variable is NULL.
 					continue;

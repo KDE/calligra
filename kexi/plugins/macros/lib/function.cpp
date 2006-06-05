@@ -60,7 +60,7 @@ namespace KoMacro {
 			* (aka got dirty), then the metaobject holds a valid pointer
 			* to the defined QObject instance.
 			*/
-			MetaObject::Ptr metaobject;
+			KSharedPtr<MetaObject> metaobject;
 	};
 
 }
@@ -127,7 +127,7 @@ const QString Function::slot() const
 	return d->slot;
 }
 
-MetaObject::Ptr Function::receiverObject()
+KSharedPtr<MetaObject> Function::receiverObject()
 {
 	if(! d->metaobject) {
 		QStringList list = QStringList::split("/", d->receiver);
@@ -152,14 +152,14 @@ MetaObject::Ptr Function::receiverObject()
 	return d->metaobject;
 }
 
-void Function::setReceiverObject(MetaObject::Ptr metaobject)
+void Function::setReceiverObject(KSharedPtr<MetaObject> metaobject)
 {
 	d->metaobject = metaobject;
 }
 
-void Function::activate(Context::Ptr context)
+void Function::activate(KSharedPtr<Context> context)
 {
-	kdDebug() << "Function::activate(Context::Ptr)" << endl;
+	kdDebug() << "Function::activate(KSharedPtr<Context>)" << endl;
 	try {
 		// First we build a list of variables passed to the invoke as arguments.
 		Variable::List variables;
@@ -167,7 +167,7 @@ void Function::activate(Context::Ptr context)
 		variables.append( varmap["0"] );
 
 		for(int i = 1; true; i++) {
-			Variable::Ptr var = varmap[ QString::number(i) ];
+			KSharedPtr<Variable> var = varmap[ QString::number(i) ];
 			if(! var.data())
 				break;
 
@@ -177,7 +177,7 @@ void Function::activate(Context::Ptr context)
 				if(s.startsWith("$") && context.data()) {
 					// If the content is a variable we try to read the
 					// variable from the context.
-					Variable::Ptr v = context->variable(s);
+					KSharedPtr<Variable> v = context->variable(s);
 					/*if(!v) {
 						 throw Exception(QString("No such variable: %1").arg(s), "Function::activate");
 					}*/
@@ -190,15 +190,15 @@ void Function::activate(Context::Ptr context)
 		}
 
 		// Now invoke the method.
-		MetaObject::Ptr metaobject = receiverObject();
-		//kdDebug() << "Function::activate(Context::Ptr) metaobject: " << metaobject.data() << endl;
-		Variable::Ptr returnvalue = metaobject->invokeMethod(
+		KSharedPtr<MetaObject> metaobject = receiverObject();
+		//kdDebug() << "Function::activate(KSharedPtr<Context>) metaobject: " << metaobject.data() << endl;
+		KSharedPtr<Variable> returnvalue = metaobject->invokeMethod(
 			metaobject->indexOfSlot( d->slot.isNull() ? "" : d->slot.latin1() ), // the index of the slot which should be invoked.
 			variables // the optional list of passed arguments
 		);
 
 		// Look if the returnvalue is a variable.
-		Variable::Ptr rv = this->variable("0");
+		KSharedPtr<Variable> rv = this->variable("0");
 		const QString rvvalue = rv ? rv->toString() : QString::null;
 		if(rvvalue.startsWith("$") && context.data()) {
 			// the returnvalue is a variable... so, just remember it in the context.
@@ -210,7 +210,7 @@ void Function::activate(Context::Ptr context)
 			this->setVariable(returnvalue);
 		}
 
-		kdDebug() << "Function::activate(Context::Ptr) return=" << rvvalue << " value=" << returnvalue->toString() << endl;
+		kdDebug() << "Function::activate(KSharedPtr<Context>) return=" << rvvalue << " value=" << returnvalue->toString() << endl;
 		emit activated(); // job done.
 	}
 	catch(Exception& e) {

@@ -80,7 +80,7 @@ namespace KoMacro {
 			void setSlots(QValueList<const char*> slotlist);
 			//void setSignals(QValueList<const char*> signallist);
 
-			//void connectMethod(MetaMethod::Ptr);
+			//void connectMethod(KSharedPtr<MetaMethod>);
 			//void connectSignal(QObject* sender, const char* signal);
 			//void disconnectSignal(QObject* sender, const char* signal);
 			//void connectSlot(QObject* receiver, const char* slot);

@@ -46,11 +46,6 @@ namespace KoMacro {
 		public:
 
 			/**
-			* Shared pointer to implement reference-counting.
-			*/
-			typedef KSharedPtr<Context> Ptr;
-
-			/**
 			* Constructor.
 			* 
 			* @param macro The @a Macro this @a Context belongs to.
@@ -72,7 +67,7 @@ namespace KoMacro {
 			* @return the @a Variable defined with name @p name or
 			* NULL if there exists no such variable.
 			*/
-			Variable::Ptr variable(const QString& name) const;
+			KSharedPtr<Variable> variable(const QString& name) const;
 
 			/**
 			* @return a map of all @a Variable instance that are defined
@@ -84,7 +79,7 @@ namespace KoMacro {
 			* Set the variable @p variable defined with name @p name . If
 			* there exists already a variable with that name replace it.
 			*/
-			void setVariable(const QString& name, Variable::Ptr variable);
+			void setVariable(const QString& name, KSharedPtr<Variable> variable);
 
 			/**
 			* @return the associated macro 
@@ -127,7 +122,7 @@ namespace KoMacro {
 			* @a Context @p context which will be used as
 			* parent context for this context.
 			*/
-			virtual void activate(Context::Ptr context);
+			virtual void activate(KSharedPtr<Context> context);
 
 			/**
 			* This slot continues execution.

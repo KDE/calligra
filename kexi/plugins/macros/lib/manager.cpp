@@ -41,10 +41,10 @@ namespace KoMacro {
 	{
 		public:
 			KXMLGUIClient* const xmlguiclient;
-			QMap<QString, Macro::Ptr> macros;
+			QMap<QString, KSharedPtr<Macro > > macros;
 
 			QStringList actionnames;
-			QMap<QString, Action::Ptr > actions;
+			QMap<QString, KSharedPtr<Action> > actions;
 
 			QMap<QString, QGuardedPtr<QObject> > objects;
 
@@ -108,12 +108,12 @@ bool Manager::hasMacro(const QString& macroname)
 	return d->macros.contains(macroname);
 }
 
-Macro::Ptr Manager::getMacro(const QString& macroname)
+KSharedPtr<Macro> Manager::getMacro(const QString& macroname)
 {
 	return d->macros[macroname];
 }
 
-void Manager::addMacro(const QString& macroname, Macro::Ptr macro)
+void Manager::addMacro(const QString& macroname, KSharedPtr<Macro> macro)
 {
 	d->macros.replace(macroname, macro);
 }
@@ -123,14 +123,14 @@ void Manager::removeMacro(const QString& macroname)
 	d->macros.remove(macroname);
 }
 
-Macro::Ptr Manager::createMacro(const QString& macroname)
+KSharedPtr<Macro> Manager::createMacro(const QString& macroname)
 {
-	Macro::Ptr macro = Macro::Ptr( new Macro(macroname) );
+	KSharedPtr<Macro> macro = KSharedPtr<Macro>( new Macro(macroname) );
 	return macro;
 }
 
 /*
-Action::Ptr Manager::createAction(const QDomElement& element)
+KSharedPtr<Action> Manager::createAction(const QDomElement& element)
 {
 	Action* action = 0;
 	QString tagname = element.tagName();
@@ -156,7 +156,7 @@ Action::Ptr Manager::createAction(const QDomElement& element)
 }
 */
 
-Action::Ptr Manager::action(const QString& name) const
+KSharedPtr<Action> Manager::action(const QString& name) const
 {
 	return d->actions[name];
 }
@@ -171,7 +171,7 @@ QStringList Manager::actionNames() const
 	return d->actionnames;
 }
 
-void Manager::publishAction(Action::Ptr action)
+void Manager::publishAction(KSharedPtr<Action> action)
 {
 	const QString name = action->name();
 	if(! d->actions.contains(name)) {

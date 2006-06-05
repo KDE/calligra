@@ -41,7 +41,7 @@ namespace KoMacro {
 	class MetaProxy::Private
 	{
 		public:
-			MetaObject::Ptr metaobject;
+			KSharedPtr<MetaObject> metaobject;
 			QValueList<const char*> slotlist;
 	};
 
@@ -161,7 +161,7 @@ bool MetaProxy::qt_invoke(int index, QUObject* uo)
 			d->metaobject = new MetaObject(this);
 		}
 
-		MetaMethod::Ptr metamethod = d->metaobject->method(index);
+		KSharedPtr<MetaMethod> metamethod = d->metaobject->method(index);
 
 //if(metamethod->signatureTag().startsWith("print")) return MetaProxyInterface::qt_invoke(index, uo);
 kdDebug() << "MetaProxy::qt_invoke(int,QUObject*) tag=" << metamethod->signatureTag() << endl;

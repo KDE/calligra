@@ -43,7 +43,7 @@ namespace KoMacro {
 			/**
 			* A list of @a MacroItem instances.
 			*/
-			QValueList<MacroItem::Ptr> itemlist;
+			QValueList<KSharedPtr<MacroItem > > itemlist;
 
 			/**
 			* The name the @a Macro has.
@@ -84,12 +84,12 @@ const QString Macro::toString() const
 	return QString("Macro:%1").arg(name());
 }
 
-QValueList<MacroItem::Ptr>& Macro::items() const
+QValueList<KSharedPtr<MacroItem > >& Macro::items() const
 {
 	return d->itemlist;
 }
 
-void Macro::addItem(MacroItem::Ptr item)
+void Macro::addItem(KSharedPtr<MacroItem> item)
 {
 	d->itemlist.append(item);
 }
@@ -113,12 +113,12 @@ void Macro::connectSignal(const QObject* sender, const char* signal)
 
 KSharedPtr<Context> Macro::execute(QObject* sender)
 {
-	kdDebug() << "Macro::execute(Context::Ptr)" << endl;
+	kdDebug() << "Macro::execute(KSharedPtr<Context>)" << endl;
 
-	Context::Ptr c = Context::Ptr( new Context(this) );
+	KSharedPtr<Context> c = KSharedPtr<Context>( new Context(this) );
 	if(sender) {
 		// set the sender-variable if we got a sender QObject.
-		c->setVariable("[sender]", Variable::Ptr( new Variable(sender) ));
+		c->setVariable("[sender]", KSharedPtr<Variable>( new Variable(sender) ));
 	}
 	//connect(context, SIGNAL(activated()), this, SIGNAL(activated()));
 	c->activate( c );

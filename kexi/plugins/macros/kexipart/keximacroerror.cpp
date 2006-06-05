@@ -34,7 +34,7 @@ class KexiMacroError::Private
 {
 	public:
 		KexiMainWindow* const mainwin;
-		KoMacro::Context::Ptr context;
+		KSharedPtr<KoMacro::Context> context;
 
 		Private(KexiMainWindow* const m, KoMacro::Context* const c)
 			: mainwin(m)
@@ -43,7 +43,7 @@ class KexiMacroError::Private
 		}
 };
 
-KexiMacroError::KexiMacroError(KexiMainWindow* mainwin, KoMacro::Context::Ptr context)
+KexiMacroError::KexiMacroError(KexiMainWindow* mainwin, KSharedPtr<KoMacro::Context> context)
 	: KexiMacroErrorBase(mainwin, "KexiMacroError" , /*WFlags*/ Qt::WDestructiveClose)
 	, d(new Private(mainwin, context))
 {
@@ -62,7 +62,7 @@ KexiMacroError::KexiMacroError(KexiMainWindow* mainwin, KoMacro::Context::Ptr co
 		KListViewItem* listviewitem = new KListViewItem(errorlist);
 		listviewitem->setText(0,QString("%1").arg(i++));
 		listviewitem->setText(1,i18n("Action"));
-		KoMacro::MacroItem::Ptr macroitem = *mit;
+		KSharedPtr<KoMacro::MacroItem> macroitem = *mit;
 
 		if (macroitem != 0 && macroitem->action() != 0)
 		{
@@ -103,7 +103,7 @@ void KexiMacroError::designbtnClicked()
 	}
 
 	// We need to determinate the KexiPart::Item which should be opened.
-	KoMacro::Macro::Ptr macro = d->context->macro();
+	KSharedPtr<KoMacro::Macro> macro = d->context->macro();
 	const QString name = macro->name();
 	KexiPart::Item* item = d->mainwin->project()->itemForMimeType("kexi/macro", name);
 	if(! item) {

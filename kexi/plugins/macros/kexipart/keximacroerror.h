@@ -59,7 +59,7 @@ class KexiMacroError : public KexiMacroErrorBase
 		* @param mainwin The parent @a KexiMainWindow instance.
 		* @param context The @a KoMacro::Context where the error happened.
 		*/
-		KexiMacroError(KexiMainWindow* mainwin, KoMacro::Context::Ptr context);
+		KexiMacroError(KexiMainWindow* mainwin, KSharedPtr<KoMacro::Context> context);
 		
 		/**
 		* Destructor.

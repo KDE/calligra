@@ -119,7 +119,7 @@ class TestAction : public KoMacro::Action
 
 			QStringList list;
 			list << "FirstItem" << "SecondItem" << "TheirdItem";
-			intvar->children().append( KoMacro::Variable::Ptr( new KoMacro::Variable(list, "@list") ) );
+			intvar->children().append( KSharedPtr<KoMacro::Variable>( new KoMacro::Variable(list, "@list") ) );
 			intvar->children().append(new KoMacro::Variable( "First Child","firstvar","First Var" ));
 			intvar->children().append(new KoMacro::Variable( QVariant(12345),"secondvar","Second Var" ));
 			intvar->children().append(new KoMacro::Variable( QVariant(true,0),"theirdvar","Theird Var" ));
@@ -139,13 +139,13 @@ class TestAction : public KoMacro::Action
 			setVariable(boolvar);
 */
 
-			KoMacro::Manager::self()->publishAction( Action::Ptr(this) );
+			KoMacro::Manager::self()->publishAction( KSharedPtr<Action>(this) );
 		}
 		virtual ~TestAction() {}
 		virtual bool notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name) {
 			kdDebug()<<"===================> TestAction::notifyUpdated() macroitem="<<macroitem->name()<<" variablename="<<name<<endl;
 			/*
-			KoMacro::Variable::Ptr iv = variable["int2var"];
+			KSharedPtr<KoMacro::Variable> iv = variable["int2var"];
 			if(iv)
 				iv->setEnabled(false);
 			else
@@ -184,7 +184,7 @@ KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog,
 	//kdDebug() << "KexiMacroPart::createView() itemname=" << itemname << endl;
 
 	if(! itemname.isNull()) {
-		KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro(itemname);
+		KSharedPtr<KoMacro::Macro> macro = ::KoMacro::Manager::self()->getMacro(itemname);
 		if(! macro) {
 			// If we don't have a macro with that name yet, create one.
 			macro = ::KoMacro::Manager::self()->createMacro(itemname);

@@ -43,11 +43,6 @@ namespace KoMacro {
 		public:
 
 			/**
-			* Shared pointer to implement reference-counting.
-			*/
-			typedef KSharedPtr<MetaObject> Ptr;
-
-			/**
 			* Constructor.
 			* 
 			* @param object The QObject instance this @a MetaObject provides

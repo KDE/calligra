@@ -42,9 +42,9 @@ MessageAction::~MessageAction()
 {
 }
 
-void MessageAction::activate(KoMacro::Context::Ptr context)
+void MessageAction::activate(KSharedPtr<KoMacro::Context> context)
 {
-	kdDebug() << "MessageAction::activate(Context::Ptr)" << endl;
+	kdDebug() << "MessageAction::activate(KSharedPtr<Context>)" << endl;
 	const QString caption = context->variable("caption")->variant().toString();
 	const QString message = context->variable("message")->variant().toString();
 	KMessageBox::information(mainWin(), message, caption);

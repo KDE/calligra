@@ -58,14 +58,9 @@ namespace KoMacro {
 		public:
 
 			/**
-			* Shared pointer to implement reference-counting.
-			*/
-			typedef KSharedPtr<MacroItem> Ptr;
-
-			/**
 			* A list of \a MacroItem instances.
 			*/
-			typedef QValueList<MacroItem::Ptr> List;
+			typedef QValueList<KSharedPtr<MacroItem > > List;
 
 			/**
 			* Constructor.
@@ -143,7 +138,7 @@ namespace KoMacro {
 			/**
 			* Add a new variable to our @a MacroItem instance.
 			*/
-			Variable::Ptr addVariable(const QString& name, const QVariant& value);
+			KSharedPtr<Variable> addVariable(const QString& name, const QVariant& value);
 
 			//bool isDirty() const;
 			//void setDirty(bool dirty);

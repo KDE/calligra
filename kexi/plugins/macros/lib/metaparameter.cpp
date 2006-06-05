@@ -140,7 +140,7 @@ void MetaParameter::setSignatureArgument(const QString& signatureargument)
 	}
 }
 
-bool MetaParameter::validVariable(Variable::Ptr variable) const
+bool MetaParameter::validVariable(KSharedPtr<Variable> variable) const
 {
 	if( type() != variable->type() ) {
 		return false;

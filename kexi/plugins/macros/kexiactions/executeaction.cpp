@@ -42,9 +42,9 @@ ExecuteAction::ExecuteAction()
 {
 	int conditions = ObjectVariable<ExecuteAction>::VisibleInNav | ObjectVariable<ExecuteAction>::Executable;
 	KoMacro::Variable* objvar = new ObjectVariable<ExecuteAction>(this, conditions);
-	setVariable(KoMacro::Variable::Ptr( objvar ));
+	setVariable(KSharedPtr<KoMacro::Variable>( objvar ));
 
-	setVariable(KoMacro::Variable::Ptr( new ObjectNameVariable<ExecuteAction>(this, objvar->variant().toString()) ));
+	setVariable(KSharedPtr<KoMacro::Variable>( new ObjectNameVariable<ExecuteAction>(this, objvar->variant().toString()) ));
 }
 
 ExecuteAction::~ExecuteAction() 
@@ -63,17 +63,17 @@ KoMacro::Variable::List ExecuteAction::notifyUpdated(const QString& variablename
 		const QString objectname = variablemap["object"]->variant().toString(); // e.g. "table" or "query"
 
 		const QString name = variablemap.contains("name") ? variablemap["name"]->variant().toString() : QString::null;
-		list.append( KoMacro::Variable::Ptr(new ObjectNameVariable<ExecuteAction>(this, objectname, name)) );
+		list.append( KSharedPtr<KoMacro::Variable>(new ObjectNameVariable<ExecuteAction>(this, objectname, name)) );
 	}
 
 	return list;
 }
 #endif
 
-void ExecuteAction::activate(KoMacro::Context::Ptr context)
+void ExecuteAction::activate(KSharedPtr<KoMacro::Context> context)
 {
 	if(! mainWin()->project()) {
-		kdWarning() << "ExecuteAction::activate(KoMacro::Context::Ptr) Invalid project" << endl;
+		kdWarning() << "ExecuteAction::activate(KSharedPtr<KoMacro::Context>) Invalid project" << endl;
 		return;
 	}
 

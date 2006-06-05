@@ -115,7 +115,7 @@ int MetaObject::indexOfSlot(const char* slot) const
 	return slotid;
 }
 
-MetaMethod::Ptr MetaObject::method(int index)
+KSharedPtr<MetaMethod> MetaObject::method(int index)
 {
 	QObject* obj = object();
 	MetaMethod::Type type = MetaMethod::Slot;
@@ -146,20 +146,20 @@ MetaMethod::Ptr MetaObject::method(int index)
 	return new MetaMethod(metadata->name, type, this);
 }
 
-MetaMethod::Ptr MetaObject::signal(const char* signal)
+KSharedPtr<MetaMethod> MetaObject::signal(const char* signal)
 {
 	return method( indexOfSignal(signal) );
 }
 
-MetaMethod::Ptr MetaObject::slot(const char* slot)
+KSharedPtr<MetaMethod> MetaObject::slot(const char* slot)
 {
 	return method( indexOfSlot(slot) );
 }
 
-Variable::Ptr MetaObject::invokeMethod(int index, Variable::List arguments)
+KSharedPtr<Variable> MetaObject::invokeMethod(int index, Variable::List arguments)
 {
 	// kdDebug() << "MetaObject::invokeMethod(int index, Variable::List arguments)" << endl;
-	MetaMethod::Ptr m = method(index);
+	KSharedPtr<MetaMethod> m = method(index);
 	// kdDebug() << "MetaObject::invokeMethod(int index, Variable::List arguments) return" << endl;
 	return m->invoke(arguments);
 }

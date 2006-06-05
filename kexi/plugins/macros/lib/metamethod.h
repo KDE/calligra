@@ -48,11 +48,6 @@ namespace KoMacro {
 		public:
 
 			/**
-			* Shared pointer to implement reference-counting.
-			*/
-			typedef KSharedPtr<MetaMethod> Ptr;
-
-			/**
 			* The type of method this @a MetaMethod provides
 			* access to.
 			*/

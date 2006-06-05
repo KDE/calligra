@@ -169,7 +169,7 @@ namespace KoMacro {
 
 			/**
 			* @return the @a Action which was published under the
-			* name @p name or returns an empty @a Action::Ptr object
+			* name @p name or returns an empty @a KSharedPtr<Action> object
 			* if there was no such @a Action published.
 			*/
 			KSharedPtr<Action> action(const QString& name) const;

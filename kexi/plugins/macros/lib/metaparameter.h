@@ -55,14 +55,9 @@ namespace KoMacro {
 		public:
 
 			/**
-			* Shared pointer to implement reference-counting.
-			*/
-			typedef KSharedPtr<MetaParameter> Ptr;
-
-			/**
 			* List of @a MetaParameter instances.
 			*/
-			typedef QValueList<MetaParameter::Ptr> List;
+			typedef QValueList<KSharedPtr <MetaParameter > > List;
 
 			/**
 			* Constructor.

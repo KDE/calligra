@@ -126,9 +126,9 @@ bool Action::hasVariable(const QString& name) const
 	return d->varmap.contains(name);
 }
 
-Variable::Ptr Action::variable(const QString& name) const
+KSharedPtr<Variable> Action::variable(const QString& name) const
 {
-	return d->varmap.contains(name) ? d->varmap[name] : Variable::Ptr(0);
+	return d->varmap.contains(name) ? d->varmap[name] : KSharedPtr<Variable>(0);
 }
 
 Variable::Map Action::variables() const
@@ -141,7 +141,7 @@ QStringList Action::variableNames() const
 	return d->varnames;
 }
 
-void Action::setVariable(Variable::Ptr variable)
+void Action::setVariable(KSharedPtr<Variable> variable)
 {
 	const QString name = variable->name();
 	if(! d->varmap.contains(name)) {
@@ -155,7 +155,7 @@ void Action::setVariable(const QString& name, const QString& text, const QVarian
 	Variable* variable = new Variable(variant);
 	variable->setName(name);
 	variable->setText(text);
-	setVariable( Variable::Ptr(variable) );
+	setVariable( KSharedPtr<Variable>(variable) );
 }
 
 void Action::removeVariable(const QString& name)
@@ -167,10 +167,10 @@ void Action::removeVariable(const QString& name)
 }
 
 /*
-void Action::activate(Context::Ptr context)
+void Action::activate(KSharedPtr<Context> context)
 {
 	Q_UNUSED(context);
-	kdDebug() << "Action::activate(Context::Ptr) name=" << name() << " text=" << text() << endl;
+	kdDebug() << "Action::activate(KSharedPtr<Context>) name=" << name() << " text=" << text() << endl;
 
 	QCString s = name().isNull() ? "" : name().latin1();
 	KAction* action = Manager::self()->guiClient()->action( s );
@@ -178,7 +178,7 @@ void Action::activate(Context::Ptr context)
 		action->activate();
 	}
 	else {
-		kdWarning() << QString("Action::activate(Context::Ptr) No such action \"%1\"").arg(name()) << endl;
+		kdWarning() << QString("Action::activate(KSharedPtr<Context>) No such action \"%1\"").arg(name()) << endl;
 	}
 
 	emit activated();

@@ -56,19 +56,14 @@ namespace KoMacro {
 		public:
 
 			/**
-			* Shared pointer to implement reference-counting.
-			*/
-			typedef KSharedPtr<Variable> Ptr;
-
-			/**
 			* A list of variables.
 			*/
-			typedef QValueList<Variable::Ptr> List;
+			typedef QValueList<KSharedPtr<Variable > > List;
 
 			/**
 			* A map of variables.
 			*/
-			typedef QMap<QString, Variable::Ptr> Map;
+			typedef QMap<QString, KSharedPtr<Variable > > Map;
 
 			/**
 			* Default constructor.

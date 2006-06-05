@@ -53,7 +53,7 @@ namespace KexiMacro {
 			{
 				QStringList list;
 				list << "first" << "previous" << "next" << "last" << "goto";
-				this->children().append( KoMacro::Variable::Ptr( new KoMacro::Variable(list, "@list") ) );
+				this->children().append( KSharedPtr<KoMacro::Variable>( new KoMacro::Variable(list, "@list") ) );
 
 				/*TODO should this actions belong to navigate? maybe it would be more wise to have
 				such kind of functionality in an own e.g. "Modify" action to outline, that
@@ -70,15 +70,15 @@ NavigateAction::NavigateAction()
 	: KexiAction("navigate", i18n("Navigate"))
 {
 	KoMacro::Variable* navvar = new NavigateVariable<NavigateAction>(this);
-	setVariable(KoMacro::Variable::Ptr( navvar ));
+	setVariable(KSharedPtr<KoMacro::Variable>( navvar ));
 
 	KoMacro::Variable* rowvar = new KexiVariable<NavigateAction>(this, "rownr", i18n("Row"));
 	rowvar->setVariant(0);
-	setVariable(KoMacro::Variable::Ptr(rowvar));
+	setVariable(KSharedPtr<KoMacro::Variable>(rowvar));
 
 	KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "colnr", i18n("Column"));
 	colvar->setVariant(0);
-	setVariable(KoMacro::Variable::Ptr(colvar));
+	setVariable(KSharedPtr<KoMacro::Variable>(colvar));
 }
 
 NavigateAction::~NavigateAction() 
@@ -100,14 +100,14 @@ bool NavigateAction::notifyUpdated(const QString& variablename, KoMacro::MacroIt
 			KoMacro::Variable* rowvar = new KexiVariable<NavigateAction>(this, "rownr", i18n("Row"));
 			const int rownr = variablemap.contains("rownr") ? variablemap["rownr"]->variant().toInt() : 0;
 			rowvar->setVariant(rownr);
-			list.append( KoMacro::Variable::Ptr(rowvar) );
-			setVariable(KoMacro::Variable::Ptr( rowvar ));
+			list.append( KSharedPtr<KoMacro::Variable>(rowvar) );
+			setVariable(KSharedPtr<KoMacro::Variable>( rowvar ));
 
 			KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "colnr", i18n("Column"));
 			const int colnr = variablemap.contains("colnr") ? variablemap["colnr"]->variant().toInt() : 0;
 			colvar->setVariant(colnr);
-			list.append( KoMacro::Variable::Ptr(colvar) );
-			setVariable(KoMacro::Variable::Ptr( colvar ));
+			list.append( KSharedPtr<KoMacro::Variable>(colvar) );
+			setVariable(KSharedPtr<KoMacro::Variable>( colvar ));
 		}
 		return list;
 	}
@@ -119,7 +119,7 @@ bool NavigateAction::notifyUpdated(const QString& variablename, KoMacro::MacroIt
 }
 #endif
 
-void NavigateAction::activate(KoMacro::Context::Ptr context)
+void NavigateAction::activate(KSharedPtr<KoMacro::Context> context)
 {
 	KexiDialogBase* dialog = dynamic_cast<KexiDialogBase*>( mainWin()->activeWindow() );
 	if(! dialog) {

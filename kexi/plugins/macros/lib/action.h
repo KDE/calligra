@@ -59,11 +59,6 @@ namespace KoMacro {
 			/**
 			* Shared pointer to implement reference-counting.
 			*/
-			typedef KSharedPtr<Action> Ptr;
-
-			/**
-			* Shared pointer to implement reference-counting.
-			*/
 			typedef QMap<QString, KSharedPtr<Action> > Map;
 
 			/**
@@ -126,7 +121,7 @@ namespace KoMacro {
 			* name @p name . If there exists no @a Variable with
 			* such a name, NULL is returned.
 			*/
-			Variable::Ptr variable(const QString& name) const;
+			KSharedPtr<Variable> variable(const QString& name) const;
 
 			/**
 			* @return the map of variables this @a Action provides.
@@ -142,7 +137,7 @@ namespace KoMacro {
 			 * Append the @a Variable @p variable to list of variables
 			 * this @a Action provides.
 			 */
-			void setVariable(Variable::Ptr variable);
+			void setVariable(KSharedPtr<Variable> variable);
 
 			/**
 			 * Set the variable.
@@ -182,7 +177,7 @@ namespace KoMacro {
 			* Called if the @a Action should be executed within the
 			* defined @p context .
 			*/
-			virtual void activate(Context::Ptr context) = 0;
+			virtual void activate(KSharedPtr<Context> context) = 0;
 
 		private:
 			/// @internal d-pointer class.
