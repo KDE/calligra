@@ -14,23 +14,24 @@
 ** This file contains functions for allocating memory, comparing
 ** strings, and stuff like that.
 **
+** $Id$
 */
 #include "sqliteInt.h"
 #include <stdarg.h>
 #include <ctype.h>
 
-#if SQLITE_DEBUG>2 && defined(__GLIBC__)
+#if SQLITE_MEMDEBUG>2 && defined(__GLIBC__)
 #include <execinfo.h>
 void print_stack_trace(){
   void *bt[30];
   int i;
   int n = backtrace(bt, 30);
 
-  sqlite3DebugPrintf("STACK: ");
+  fprintf(stderr, "STACK: ");
   for(i=0; i<n;i++){
-    sqlite3DebugPrintf("%p ", bt[i]);
+    fprintf(stderr, "%p ", bt[i]);
   }
-  sqlite3DebugPrintf("\n");
+  fprintf(stderr, "\n");
 }
 #else
 #define print_stack_trace()
@@ -43,26 +44,54 @@ void print_stack_trace(){
 int sqlite3_malloc_failed = 0;
 
 /*
-** If SQLITE_DEBUG is defined, then use versions of malloc() and
+** If SQLITE_MEMDEBUG is defined, then use versions of malloc() and
 ** free() that track memory usage and check for buffer overruns.
 */
-#ifdef SQLITE_DEBUG
+#ifdef SQLITE_MEMDEBUG
 
 /*
 ** For keeping track of the number of mallocs and frees.   This
-** is used to check for memory leaks.
+** is used to check for memory leaks.  The iMallocFail and iMallocReset
+** values are used to simulate malloc() failures during testing in 
+** order to verify that the library correctly handles an out-of-memory
+** condition.
 */
 int sqlite3_nMalloc;         /* Number of sqliteMalloc() calls */
 int sqlite3_nFree;           /* Number of sqliteFree() calls */
+int sqlite3_memUsed;         /* Total memory obtained from malloc */
+int sqlite3_memMax;          /* Mem usage high-water mark */
 int sqlite3_iMallocFail;     /* Fail sqliteMalloc() after this many calls */
-#if SQLITE_DEBUG>1
+int sqlite3_iMallocReset = -1; /* When iMallocFail reaches 0, set to this */
+#if SQLITE_MEMDEBUG>1
 static int memcnt = 0;
 #endif
 
 /*
-** Number of 32-bit guard words
+** Number of 32-bit guard words.  This should probably be a multiple of
+** 2 since on 64-bit machines we want the value returned by sqliteMalloc()
+** to be 8-byte aligned.
 */
-#define N_GUARD 1
+#define N_GUARD 2
+
+/*
+** Check for a simulated memory allocation failure.  Return true if
+** the failure should be simulated.  Return false to proceed as normal.
+*/
+static int simulatedMallocFailure(int n, char *zFile, int line){
+  if( sqlite3_iMallocFail>=0 ){
+    sqlite3_iMallocFail--;
+    if( sqlite3_iMallocFail==0 ){
+      sqlite3_malloc_failed++;
+#if SQLITE_MEMDEBUG>1
+      fprintf(stderr,"**** failed to allocate %d bytes at %s:%d\n",
+              n, zFile,line);
+#endif
+      sqlite3_iMallocFail = sqlite3_iMallocReset;
+      return 1;
+    }
+  }
+  return 0;
+}
 
 /*
 ** Allocate new memory and set it to zero.  Return NULL if
@@ -72,23 +101,18 @@ void *sqlite3Malloc_(int n, int bZero, char *zFile, int line){
   void *p;
   int *pi;
   int i, k;
-  if( sqlite3_iMallocFail>=0 ){
-    sqlite3_iMallocFail--;
-    if( sqlite3_iMallocFail==0 ){
-      sqlite3_malloc_failed++;
-#if SQLITE_DEBUG>1
-      fprintf(stderr,"**** failed to allocate %d bytes at %s:%d\n",
-              n, zFile,line);
-#endif
-      sqlite3_iMallocFail--;
-      return 0;
-    }
+  if( n==0 ){
+    return 0;
   }
-  if( n==0 ) return 0;
+  if( simulatedMallocFailure(n, zFile, line) ){
+    return 0;
+  }
+  sqlite3_memUsed += n;
+  if( sqlite3_memMax<sqlite3_memUsed ) sqlite3_memMax = sqlite3_memUsed;
   k = (n+sizeof(int)-1)/sizeof(int);
   pi = malloc( (N_GUARD*2+1+k)*sizeof(int));
   if( pi==0 ){
-    sqlite3_malloc_failed++;
+    if( n>0 ) sqlite3_malloc_failed++;
     return 0;
   }
   sqlite3_nMalloc++;
@@ -97,12 +121,19 @@ void *sqlite3Malloc_(int n, int bZero, char *zFile, int line){
   for(i=0; i<N_GUARD; i++) pi[k+1+N_GUARD+i] = 0xdead3344;
   p = &pi[N_GUARD+1];
   memset(p, bZero==0, n);
-#if SQLITE_DEBUG>1
+#if SQLITE_MEMDEBUG>1
   print_stack_trace();
   fprintf(stderr,"%06d malloc %d bytes at 0x%x from %s:%d\n",
       ++memcnt, n, (int)p, zFile,line);
 #endif
   return p;
+}
+
+/*
+** This version of malloc is always a real function, never a macro
+*/
+void *sqlite3MallocX(int n){
+  return sqlite3Malloc_(n, 0, __FILE__, __LINE__);
 }
 
 /*
@@ -143,6 +174,7 @@ void sqlite3Free_(void *p, char *zFile, int line){
       }
     }
     n = pi[N_GUARD];
+    sqlite3_memUsed -= n;
     k = (n+sizeof(int)-1)/sizeof(int);
     for(i=0; i<N_GUARD; i++){
       if( pi[k+N_GUARD+1+i]!=0xdead3344 ){
@@ -151,7 +183,7 @@ void sqlite3Free_(void *p, char *zFile, int line){
       }
     }
     memset(pi, 0xff, (k+N_GUARD*2+1)*sizeof(int));
-#if SQLITE_DEBUG>1
+#if SQLITE_MEMDEBUG>1
     fprintf(stderr,"%06d free %d bytes at 0x%x from %s:%d\n",
          ++memcnt, n, (int)p, zFile,line);
 #endif
@@ -174,6 +206,9 @@ void *sqlite3Realloc_(void *oldP, int n, char *zFile, int line){
     sqlite3Free_(oldP,zFile,line);
     return 0;
   }
+  if( simulatedMallocFailure(n, zFile, line) ){
+    return 0;
+  }
   oldPi = oldP;
   oldPi -= N_GUARD+1;
   if( oldPi[0]!=0xdead1122 ){
@@ -181,6 +216,7 @@ void *sqlite3Realloc_(void *oldP, int n, char *zFile, int line){
     return 0;
   }
   oldN = oldPi[N_GUARD];
+  sqlite3_memUsed -= oldN;
   oldK = (oldN+sizeof(int)-1)/sizeof(int);
   for(i=0; i<N_GUARD; i++){
     if( oldPi[oldK+N_GUARD+1+i]!=0xdead3344 ){
@@ -192,11 +228,13 @@ void *sqlite3Realloc_(void *oldP, int n, char *zFile, int line){
   k = (n + sizeof(int) - 1)/sizeof(int);
   pi = malloc( (k+N_GUARD*2+1)*sizeof(int) );
   if( pi==0 ){
-    sqlite3_malloc_failed++;
+    if( n>0 ) sqlite3_malloc_failed++;
     return 0;
   }
   for(i=0; i<N_GUARD; i++) pi[i] = 0xdead1122;
   pi[N_GUARD] = n;
+  sqlite3_memUsed += n;
+  if( sqlite3_memMax<sqlite3_memUsed ) sqlite3_memMax = sqlite3_memUsed;
   for(i=0; i<N_GUARD; i++) pi[k+N_GUARD+1+i] = 0xdead3344;
   p = &pi[N_GUARD+1];
   memcpy(p, oldP, n>oldN ? oldN : n);
@@ -205,34 +243,12 @@ void *sqlite3Realloc_(void *oldP, int n, char *zFile, int line){
   }
   memset(oldPi, 0xab, (oldK+N_GUARD+2)*sizeof(int));
   free(oldPi);
-#if SQLITE_DEBUG>1
+#if SQLITE_MEMDEBUG>1
   print_stack_trace();
   fprintf(stderr,"%06d realloc %d to %d bytes at 0x%x to 0x%x at %s:%d\n",
     ++memcnt, oldN, n, (int)oldP, (int)p, zFile, line);
 #endif
   return p;
-}
-
-/*
-** Make a duplicate of a string into memory obtained from malloc()
-** Free the original string using sqliteFree().
-**
-** This routine is called on all strings that are passed outside of
-** the SQLite library.  That way clients can free the string using free()
-** rather than having to call sqliteFree().
-*/
-void sqlite3StrRealloc(char **pz){
-  char *zNew;
-  if( pz==0 || *pz==0 ) return;
-  zNew = malloc( strlen(*pz) + 1 );
-  if( zNew==0 ){
-    sqlite3_malloc_failed++;
-    sqliteFree(*pz);
-    *pz = 0;
-  }
-  strcpy(zNew, *pz);
-  sqliteFree(*pz);
-  *pz = zNew;
 }
 
 /*
@@ -262,13 +278,13 @@ char *sqlite3StrNDup_(const char *z, int n, char *zFile, int line){
 void sqlite3FreeX(void *p){
   sqliteFree(p);
 }
-#endif /* SQLITE_DEBUG */
+#endif /* SQLITE_MEMDEBUG */
 
 /*
 ** The following versions of malloc() and free() are for use in a
 ** normal build.
 */
-#if !defined(SQLITE_DEBUG)
+#if !defined(SQLITE_MEMDEBUG)
 
 /*
 ** Allocate new memory and set it to zero.  Return NULL if
@@ -276,6 +292,7 @@ void sqlite3FreeX(void *p){
 */
 void *sqlite3Malloc(int n){
   void *p;
+  if( n==0 ) return 0;
   if( (p = malloc(n))==0 ){
     if( n>0 ) sqlite3_malloc_failed++;
   }else{
@@ -290,6 +307,7 @@ void *sqlite3Malloc(int n){
 */
 void *sqlite3MallocRaw(int n){
   void *p;
+  if( n==0 ) return 0;
   if( (p = malloc(n))==0 ){
     if( n>0 ) sqlite3_malloc_failed++;
   }
@@ -321,7 +339,7 @@ void *sqlite3Realloc(void *p, int n){
   }
   p2 = realloc(p, n);
   if( p2==0 ){
-    sqlite3_malloc_failed++;
+    if( n>0 ) sqlite3_malloc_failed++;
   }
   return p2;
 }
@@ -346,7 +364,20 @@ char *sqlite3StrNDup(const char *z, int n){
   }
   return zNew;
 }
-#endif /* !defined(SQLITE_DEBUG) */
+#endif /* !defined(SQLITE_MEMDEBUG) */
+
+/*
+** Reallocate a buffer to a different size.  This is similar to
+** sqliteRealloc() except that if the allocation fails the buffer
+** is freed.
+*/
+void sqlite3ReallocOrFree(void **ppBuf, int newSize){
+  void *pNew = sqliteRealloc(*ppBuf, newSize);
+  if( pNew==0 ){
+    sqliteFree(*ppBuf);
+  }
+  *ppBuf = pNew;
+}
 
 /*
 ** Create a string from the 2nd and subsequent arguments (up to the
@@ -355,15 +386,15 @@ char *sqlite3StrNDup(const char *z, int n){
 ** point to that string.  The 1st argument must either be NULL or 
 ** point to memory obtained from sqliteMalloc().
 */
-void sqlite3SetString(char **pz, const char *zFirst, ...){
+void sqlite3SetString(char **pz, ...){
   va_list ap;
   int nByte;
   const char *z;
   char *zResult;
 
   if( pz==0 ) return;
-  nByte = strlen(zFirst) + 1;
-  va_start(ap, zFirst);
+  nByte = 1;
+  va_start(ap, pz);
   while( (z = va_arg(ap, const char*))!=0 ){
     nByte += strlen(z);
   }
@@ -373,61 +404,18 @@ void sqlite3SetString(char **pz, const char *zFirst, ...){
   if( zResult==0 ){
     return;
   }
-  strcpy(zResult, zFirst);
-  zResult += strlen(zResult);
-  va_start(ap, zFirst);
+  *zResult = 0;
+  va_start(ap, pz);
   while( (z = va_arg(ap, const char*))!=0 ){
     strcpy(zResult, z);
     zResult += strlen(zResult);
   }
   va_end(ap);
-#ifdef SQLITE_DEBUG
-#if SQLITE_DEBUG>1
+#ifdef SQLITE_MEMDEBUG
+#if SQLITE_MEMDEBUG>1
   fprintf(stderr,"string at 0x%x is %s\n", (int)*pz, *pz);
 #endif
 #endif
-}
-
-/*
-** Works like sqlite3SetString, but each string is now followed by
-** a length integer which specifies how much of the source string 
-** to copy (in bytes).  -1 means use the whole string.  The 1st 
-** argument must either be NULL or point to memory obtained from 
-** sqliteMalloc().
-*/
-void sqlite3SetNString(char **pz, ...){
-  va_list ap;
-  int nByte;
-  const char *z;
-  char *zResult;
-  int n;
-
-  if( pz==0 ) return;
-  nByte = 0;
-  va_start(ap, pz);
-  while( (z = va_arg(ap, const char*))!=0 ){
-    n = va_arg(ap, int);
-    if( n<=0 ) n = strlen(z);
-    nByte += n;
-  }
-  va_end(ap);
-  sqliteFree(*pz);
-  *pz = zResult = sqliteMallocRaw( nByte + 1 );
-  if( zResult==0 ) return;
-  va_start(ap, pz);
-  while( (z = va_arg(ap, const char*))!=0 ){
-    n = va_arg(ap, int);
-    if( n<=0 ) n = strlen(z);
-    memcpy(zResult, z, n);
-    zResult += n;
-  }
-  *zResult = 0;
-#ifdef SQLITE_DEBUG
-#if SQLITE_DEBUG>1
-  fprintf(stderr,"string at 0x%x is %s\n", (int)*pz, *pz);
-#endif
-#endif
-  va_end(ap);
 }
 
 /*
@@ -447,7 +435,7 @@ void sqlite3SetNString(char **pz, ...){
 ** zFormat and any string tokens that follow it are assumed to be
 ** encoded in UTF-8.
 **
-** To clear the most recent error for slqite handle "db", sqlite3Error
+** To clear the most recent error for sqlite handle "db", sqlite3Error
 ** should be called with err_code set to SQLITE_OK and zFormat set
 ** to NULL.
 */
@@ -511,7 +499,8 @@ void sqlite3Dequote(char *z){
   switch( quote ){
     case '\'':  break;
     case '"':   break;
-    case '[':   quote = ']';  break;
+    case '`':   break;                /* For MySQL compatibility */
+    case '[':   quote = ']';  break;  /* For MS SqlServer compatibility */
     default:    return;
   }
   for(i=1, j=0; z[i]; i++){
@@ -550,20 +539,6 @@ const unsigned char sqlite3UpperToLower[] = {
     252,253,254,255
 };
 #define UpperToLower sqlite3UpperToLower
-
-/*
-** This function computes a hash on the name of a keyword.
-** Case is not significant.
-*/
-int sqlite3HashNoCase(const char *z, int n){
-  int h = 0;
-  if( n<=0 ) n = strlen(z);
-  while( n > 0  ){
-    h = (h<<3) ^ h ^ UpperToLower[(unsigned char)*z++];
-    n--;
-  }
-  return h & 0x7fffffff;
-}
 
 /*
 ** Some systems have stricmp().  Others have strcasecmp().  Because
@@ -630,8 +605,9 @@ int sqlite3IsNumber(const char *z, int *realnum, u8 enc){
 ** of "." depending on how locale is set.  But that would cause problems
 ** for SQL.  So this routine always uses "." regardless of locale.
 */
-double sqlite3AtoF(const char *z, const char **pzEnd){
+int sqlite3AtoF(const char *z, double *pResult){
   int sign = 1;
+  const char *zBegin = z;
   LONGDOUBLE_TYPE v1 = 0.0;
   if( *z=='-' ){
     sign = -1;
@@ -678,8 +654,8 @@ double sqlite3AtoF(const char *z, const char **pzEnd){
       v1 *= scale;
     }
   }
-  if( pzEnd ) *pzEnd = z;
-  return sign<0 ? -v1 : v1;
+  *pResult = sign<0 ? -v1 : v1;
+  return z - zBegin;
 }
 
 /*
@@ -785,7 +761,7 @@ int sqlite3SafetyOn(sqlite3 *db){
   if( db->magic==SQLITE_MAGIC_OPEN ){
     db->magic = SQLITE_MAGIC_BUSY;
     return 0;
-  }else if( db->magic==SQLITE_MAGIC_BUSY || db->magic==SQLITE_MAGIC_ERROR ){
+  }else if( db->magic==SQLITE_MAGIC_BUSY ){
     db->magic = SQLITE_MAGIC_ERROR;
     db->flags |= SQLITE_Interrupt;
   }
@@ -801,7 +777,7 @@ int sqlite3SafetyOff(sqlite3 *db){
   if( db->magic==SQLITE_MAGIC_BUSY ){
     db->magic = SQLITE_MAGIC_OPEN;
     return 0;
-  }else if( db->magic==SQLITE_MAGIC_OPEN || db->magic==SQLITE_MAGIC_ERROR ){
+  }else if( db->magic==SQLITE_MAGIC_OPEN ){
     db->magic = SQLITE_MAGIC_ERROR;
     db->flags |= SQLITE_Interrupt;
   }
@@ -809,19 +785,21 @@ int sqlite3SafetyOff(sqlite3 *db){
 }
 
 /*
-** Check to make sure we are not currently executing an sqlite3_exec().
-** If we are currently in an sqlite3_exec(), return true and set
-** sqlite.magic to SQLITE_MAGIC_ERROR.  This will cause a complete
-** shutdown of the database.
-**
-** This routine is used to try to detect when API routines are called
-** at the wrong time or in the wrong sequence.
+** Check to make sure we have a valid db pointer.  This test is not
+** foolproof but it does provide some measure of protection against
+** misuse of the interface such as passing in db pointers that are
+** NULL or which have been previously closed.  If this routine returns
+** TRUE it means that the db pointer is invalid and should not be
+** dereferenced for any reason.  The calling function should invoke
+** SQLITE_MISUSE immediately.
 */
 int sqlite3SafetyCheck(sqlite3 *db){
-  if( db->pVdbe!=0 ){
-    db->magic = SQLITE_MAGIC_ERROR;
-    return 1;
-  }
+  int magic;
+  if( db==0 ) return 1;
+  magic = db->magic;
+  if( magic!=SQLITE_MAGIC_CLOSED &&
+         magic!=SQLITE_MAGIC_OPEN &&
+         magic!=SQLITE_MAGIC_BUSY ) return 1;
   return 0;
 }
 
@@ -857,7 +835,7 @@ int sqlite3SafetyCheck(sqlite3 *db){
 int sqlite3PutVarint(unsigned char *p, u64 v){
   int i, j, n;
   u8 buf[10];
-  if( v & 0xff00000000000000 ){
+  if( v & (((u64)0xff000000)<<32) ){
     p[8] = v;
     v >>= 8;
     for(i=7; i>=0; i--){
@@ -929,16 +907,16 @@ int sqlite3GetVarint32(const unsigned char *p, u32 *v){
   u32 x;
   int n;
   unsigned char c;
-  if( ((c = p[0]) & 0x80)==0 ){
-    *v = c;
+  if( ((signed char*)p)[0]>=0 ){
+    *v = p[0];
     return 1;
   }
-  x = c & 0x7f;
-  if( ((c = p[1]) & 0x80)==0 ){
-    *v = (x<<7) | c;
+  x = p[0] & 0x7f;
+  if( ((signed char*)p)[1]>=0 ){
+    *v = (x<<7) | p[1];
     return 2;
   }
-  x = (x<<7) | (c & 0x7f);
+  x = (x<<7) | (p[1] & 0x7f);
   n = 2;
   do{
     x = (x<<7) | ((c = p[n++])&0x7f);
@@ -960,6 +938,8 @@ int sqlite3VarintLen(u64 v){
   return i;
 }
 
+#if !defined(SQLITE_OMIT_BLOB_LITERAL) || defined(SQLITE_HAS_CODEC) \
+    || defined(SQLITE_TEST)
 /*
 ** Translate a single byte of Hex into an integer.
 */
@@ -968,13 +948,14 @@ static int hexToInt(int h){
     return h - '0';
   }else if( h>='a' && h<='f' ){
     return h - 'a' + 10;
-  }else if( h>='A' && h<='F' ){
-    return h - 'A' + 10;
   }else{
-    return 0;
+    assert( h>='A' && h<='F' );
+    return h - 'A' + 10;
   }
 }
+#endif /* !SQLITE_OMIT_BLOB_LITERAL || SQLITE_HAS_CODEC || SQLITE_TEST */
 
+#if !defined(SQLITE_OMIT_BLOB_LITERAL) || defined(SQLITE_HAS_CODEC)
 /*
 ** Convert a BLOB literal of the form "x'hhhhhh'" into its binary
 ** value.  Return a pointer to its binary value.  Space to hold the
@@ -993,6 +974,7 @@ void *sqlite3HexToBlob(const char *z){
   }
   return zBlob;
 }
+#endif /* !SQLITE_OMIT_BLOB_LITERAL || SQLITE_HAS_CODEC */
 
 #if defined(SQLITE_TEST)
 /*

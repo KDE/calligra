@@ -12,6 +12,7 @@
 ** This file contains routines used to translate between UTF-8, 
 ** UTF-16, UTF-16BE, and UTF-16LE.
 **
+** $Id$
 **
 ** Notes on UTF-8:
 **
@@ -57,8 +58,8 @@
 ** sqlite3utf8LikeCompare()  - Do a LIKE match given two UTF8 char* strings.
 **
 */
-#include <assert.h>
 #include "sqliteInt.h"
+#include <assert.h>
 #include "vdbeInt.h"
 
 /*
@@ -231,6 +232,7 @@ int sqlite3ReadUtf8(const unsigned char *z){
 */ 
 /* #define TRANSLATE_TRACE 1 */
 
+#ifndef SQLITE_OMIT_UTF16
 /*
 ** This routine transforms the internal text encoding used by pMem to
 ** desiredEnc. It is an error if the string is already of the desired
@@ -250,7 +252,7 @@ int sqlite3VdbeMemTranslate(Mem *pMem, u8 desiredEnc){
   assert( pMem->enc!=0 );
   assert( pMem->n>=0 );
 
-#ifdef TRANSLATE_TRACE
+#if defined(TRANSLATE_TRACE) && defined(SQLITE_DEBUG)
   {
     char zBuf[100];
     sqlite3VdbeMemPrettyPrint(pMem, zBuf, 100);
@@ -323,17 +325,16 @@ int sqlite3VdbeMemTranslate(Mem *pMem, u8 desiredEnc){
         READ_UTF8(zIn, c); 
         WRITE_UTF16LE(z, c);
       }
-      WRITE_UTF16LE(z, 0);
-      pMem->n = (z-zOut)-2;
-    }else if( desiredEnc==SQLITE_UTF16BE ){
+    }else{
+      assert( desiredEnc==SQLITE_UTF16BE );
       /* UTF-8 -> UTF-16 Big-endian */
       while( zIn<zTerm ){
         READ_UTF8(zIn, c); 
         WRITE_UTF16BE(z, c);
       }
-      WRITE_UTF16BE(z, 0);
-      pMem->n = (z-zOut)-2;
     }
+    pMem->n = z - zOut;
+    *z++ = 0;
   }else{
     assert( desiredEnc==SQLITE_UTF8 );
     if( pMem->enc==SQLITE_UTF16LE ){
@@ -342,18 +343,16 @@ int sqlite3VdbeMemTranslate(Mem *pMem, u8 desiredEnc){
         READ_UTF16LE(zIn, c); 
         WRITE_UTF8(z, c);
       }
-      WRITE_UTF8(z, 0);
-      pMem->n = (z-zOut)-1;
     }else{
       /* UTF-16 Little-endian -> UTF-8 */
       while( zIn<zTerm ){
         READ_UTF16BE(zIn, c); 
         WRITE_UTF8(z, c);
       }
-      WRITE_UTF8(z, 0);
-      pMem->n = (z-zOut)-1;
     }
+    pMem->n = z - zOut;
   }
+  *z = 0;
   assert( (pMem->n+(desiredEnc==SQLITE_UTF8?1:2))<=len );
 
   sqlite3VdbeMemRelease(pMem);
@@ -369,7 +368,7 @@ int sqlite3VdbeMemTranslate(Mem *pMem, u8 desiredEnc){
   pMem->z = zOut;
 
 translate_out:
-#ifdef TRANSLATE_TRACE
+#if defined(TRANSLATE_TRACE) && defined(SQLITE_DEBUG)
   {
     char zBuf[100];
     sqlite3VdbeMemPrettyPrint(pMem, zBuf, 100);
@@ -425,6 +424,7 @@ int sqlite3VdbeMemHandleBom(Mem *pMem){
   }
   return rc;
 }
+#endif /* SQLITE_OMIT_UTF16 */
 
 /*
 ** pZ is a UTF-8 encoded unicode string. If nByte is less than zero,
@@ -449,6 +449,7 @@ int sqlite3utf8CharLen(const char *z, int nByte){
   return r;
 }
 
+#ifndef SQLITE_OMIT_UTF16
 /*
 ** pZ is a UTF-16 encoded unicode string. If nChar is less than zero,
 ** return the number of bytes up to (but not including), the first pair
@@ -565,4 +566,5 @@ void sqlite3utfSelfTest(){
     assert( (z-zBuf)==n );
   }
 }
-#endif
+#endif /* SQLITE_TEST */
+#endif /* SQLITE_OMIT_UTF16 */

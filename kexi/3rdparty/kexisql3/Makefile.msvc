@@ -29,34 +29,49 @@ MKDIR		=	mkdir
 
 ####### Files
 
-HEADERS =	
+HEADERS =	\
+  src/btree.h \
+  src/hash.h \
+  src/keywordhash.h \
+  src/opcodes.h \
+  src/os.h \
+  src/os_common.h \
+  src/pager.h \
+  src/parse.h \
+  src/sqlite3.h \
+  src/sqliteInt.h \
+  src/vdbe.h \
+  src/vdbeInt.h
+
 SOURCES =	\
+  src/alter.c \
+  src/analyze.c \
   src/attach.c \
   src/auth.c \
   src/btree.c \
-  src/btree.h \
   src/build.c \
+  src/callback.c \
+  src/complete.c \
   src/date.c \
   src/delete.c \
   src/expr.c \
   src/func.c \
   src/hash.c \
-  src/hash.h \
   src/insert.c \
   src/legacy.c \
   src/main.c \
   src/opcodes.c \
-  src/os_mac.c \
   src/os_unix.c \
   src/os_win.c \
   src/pager.c \
-  src/pager.h \
   src/parse.c \
   src/pragma.c \
+  src/prepare.c \
   src/printf.c \
   src/random.c \
   src/select.c \
   src/shell.c \
+  src/sqlite.h.in \
   src/sqliteInt.h \
   src/table.c \
   src/tclsqlite.c \
@@ -70,15 +85,20 @@ SOURCES =	\
   src/vdbe.h \
   src/vdbeapi.c \
   src/vdbeaux.c \
+  src/vdbefifo.c \
   src/vdbemem.c \
   src/vdbeInt.h \
   src/where.c
 
 OBJECTS =	\
+  obj/alter.obj \
+  obj/analyze.obj \
   obj/attach.obj \
   obj/auth.obj \
   obj/btree.obj \
   obj/build.obj \
+  obj/callback.obj \
+  obj/complete.obj \
   obj/date.obj \
   obj/delete.obj \
   obj/expr.obj \
@@ -88,12 +108,12 @@ OBJECTS =	\
   obj/legacy.obj \
   obj/main.obj \
   obj/opcodes.obj \
-  obj/os_mac.obj \
   obj/os_unix.obj \
   obj/os_win.obj \
   obj/pager.obj \
   obj/parse.obj \
   obj/pragma.obj \
+  obj/prepare.obj \
   obj/printf.obj \
   obj/random.obj \
   obj/select.obj \
@@ -109,6 +129,7 @@ OBJECTS =	\
   obj/vdbe.obj \
   obj/vdbeapi.obj \
   obj/vdbeaux.obj \
+  obj/vdbefifo.obj \
   obj/vdbemem.obj \
   obj/where.obj
 

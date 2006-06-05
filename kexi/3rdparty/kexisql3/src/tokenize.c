@@ -15,6 +15,7 @@
 ** individual tokens and sends those tokens one-by-one over to the
 ** parser for analysis.
 **
+** $Id$
 */
 #include "sqliteInt.h"
 #include "os.h"
@@ -22,170 +23,24 @@
 #include <stdlib.h>
 
 /*
-** All the keywords of the SQL language are stored as in a hash
-** table composed of instances of the following structure.
-*/
-typedef struct Keyword Keyword;
-struct Keyword {
-  char *zName;             /* The keyword name */
-  u8 tokenType;            /* Token value for this keyword */
-  u8 len;                  /* Length of this keyword */
-  u8 iNext;                /* Index in aKeywordTable[] of next with same hash */
-};
-
-/*
-** These are the keywords
-*/
-static Keyword aKeywordTable[] = {
-  { "ABORT",             TK_ABORT,        },
-  { "AFTER",             TK_AFTER,        },
-  { "ALL",               TK_ALL,          },
-  { "AND",               TK_AND,          },
-  { "AS",                TK_AS,           },
-  { "ASC",               TK_ASC,          },
-  { "ATTACH",            TK_ATTACH,       },
-  { "BEFORE",            TK_BEFORE,       },
-  { "BEGIN",             TK_BEGIN,        },
-  { "BETWEEN",           TK_BETWEEN,      },
-  { "BY",                TK_BY,           },
-  { "CASCADE",           TK_CASCADE,      },
-  { "CASE",              TK_CASE,         },
-  { "CHECK",             TK_CHECK,        },
-  { "CLUSTER",           TK_CLUSTER,      },
-  { "COLLATE",           TK_COLLATE,      },
-  { "COMMIT",            TK_COMMIT,       },
-  { "CONFLICT",          TK_CONFLICT,     },
-  { "CONSTRAINT",        TK_CONSTRAINT,   },
-  { "CREATE",            TK_CREATE,       },
-  { "CROSS",             TK_JOIN_KW,      },
-  { "DATABASE",          TK_DATABASE,     },
-  { "DEFAULT",           TK_DEFAULT,      },
-  { "DEFERRED",          TK_DEFERRED,     },
-  { "DEFERRABLE",        TK_DEFERRABLE,   },
-  { "DELETE",            TK_DELETE,       },
-  { "DESC",              TK_DESC,         },
-  { "DETACH",            TK_DETACH,       },
-  { "DISTINCT",          TK_DISTINCT,     },
-  { "DROP",              TK_DROP,         },
-  { "END",               TK_END,          },
-  { "EACH",              TK_EACH,         },
-  { "ELSE",              TK_ELSE,         },
-  { "EXCEPT",            TK_EXCEPT,       },
-  { "EXPLAIN",           TK_EXPLAIN,      },
-  { "FAIL",              TK_FAIL,         },
-  { "FOR",               TK_FOR,          },
-  { "FOREIGN",           TK_FOREIGN,      },
-  { "FROM",              TK_FROM,         },
-  { "FULL",              TK_JOIN_KW,      },
-  { "GLOB",              TK_GLOB,         },
-  { "GROUP",             TK_GROUP,        },
-  { "HAVING",            TK_HAVING,       },
-  { "IGNORE",            TK_IGNORE,       },
-  { "IMMEDIATE",         TK_IMMEDIATE,    },
-  { "IN",                TK_IN,           },
-  { "INDEX",             TK_INDEX,        },
-  { "INITIALLY",         TK_INITIALLY,    },
-  { "INNER",             TK_JOIN_KW,      },
-  { "INSERT",            TK_INSERT,       },
-  { "INSTEAD",           TK_INSTEAD,      },
-  { "INTERSECT",         TK_INTERSECT,    },
-  { "INTO",              TK_INTO,         },
-  { "IS",                TK_IS,           },
-  { "ISNULL",            TK_ISNULL,       },
-  { "JOIN",              TK_JOIN,         },
-  { "KEY",               TK_KEY,          },
-  { "LEFT",              TK_JOIN_KW,      },
-  { "LIKE",              TK_LIKE,         },
-  { "LIMIT",             TK_LIMIT,        },
-  { "MATCH",             TK_MATCH,        },
-  { "NATURAL",           TK_JOIN_KW,      },
-  { "NOT",               TK_NOT,          },
-  { "NOTNULL",           TK_NOTNULL,      },
-  { "NULL",              TK_NULL,         },
-  { "OF",                TK_OF,           },
-  { "OFFSET",            TK_OFFSET,       },
-  { "ON",                TK_ON,           },
-  { "OR",                TK_OR,           },
-  { "ORDER",             TK_ORDER,        },
-  { "OUTER",             TK_JOIN_KW,      },
-  { "PRAGMA",            TK_PRAGMA,       },
-  { "PRIMARY",           TK_PRIMARY,      },
-  { "RAISE",             TK_RAISE,        },
-  { "REFERENCES",        TK_REFERENCES,   },
-  { "REPLACE",           TK_REPLACE,      },
-  { "RESTRICT",          TK_RESTRICT,     },
-  { "RIGHT",             TK_JOIN_KW,      },
-  { "ROLLBACK",          TK_ROLLBACK,     },
-  { "ROW",               TK_ROW,          },
-  { "SELECT",            TK_SELECT,       },
-  { "SET",               TK_SET,          },
-  { "STATEMENT",         TK_STATEMENT,    },
-  { "TABLE",             TK_TABLE,        },
-  { "TEMP",              TK_TEMP,         },
-  { "TEMPORARY",         TK_TEMP,         },
-  { "THEN",              TK_THEN,         },
-  { "TRANSACTION",       TK_TRANSACTION,  },
-  { "TRIGGER",           TK_TRIGGER,      },
-  { "UNION",             TK_UNION,        },
-  { "UNIQUE",            TK_UNIQUE,       },
-  { "UPDATE",            TK_UPDATE,       },
-  { "USING",             TK_USING,        },
-  { "VACUUM",            TK_VACUUM,       },
-  { "VALUES",            TK_VALUES,       },
-  { "VIEW",              TK_VIEW,         },
-  { "WHEN",              TK_WHEN,         },
-  { "WHERE",             TK_WHERE,        },
-};
-
-/*
-** This is the hash table
-*/
-#define KEY_HASH_SIZE 101
-static u8 aiHashTable[KEY_HASH_SIZE];
-
-
-/*
-** This function looks up an identifier to determine if it is a
-** keyword.  If it is a keyword, the token code of that keyword is 
+** The sqlite3KeywordCode function looks up an identifier to determine if
+** it is a keyword.  If it is a keyword, the token code of that keyword is 
 ** returned.  If the input is not a keyword, TK_ID is returned.
+**
+** The implementation of this routine was generated by a program,
+** mkkeywordhash.h, located in the tool subdirectory of the distribution.
+** The output of the mkkeywordhash.c program is written into a file
+** named keywordhash.h and then included into this source file by
+** the #include below.
 */
-int sqlite3KeywordCode(const char *z, int n){
-  int h, i;
-  Keyword *p;
-  static char needInit = 1;
-  if( needInit ){
-    /* Initialize the keyword hash table */
-    sqlite3OsEnterMutex();
-    if( needInit ){
-      int nk;
-      nk = sizeof(aKeywordTable)/sizeof(aKeywordTable[0]);
-      for(i=0; i<nk; i++){
-        aKeywordTable[i].len = strlen(aKeywordTable[i].zName);
-        h = sqlite3HashNoCase(aKeywordTable[i].zName, aKeywordTable[i].len);
-        h %= KEY_HASH_SIZE;
-        aKeywordTable[i].iNext = aiHashTable[h];
-        aiHashTable[h] = i+1;
-      }
-      needInit = 0;
-    }
-    sqlite3OsLeaveMutex();
-  }
-  h = sqlite3HashNoCase(z, n) % KEY_HASH_SIZE;
-  for(i=aiHashTable[h]; i; i=p->iNext){
-    p = &aKeywordTable[i-1];
-    if( p->len==n && sqlite3StrNICmp(p->zName, z, n)==0 ){
-      return p->tokenType;
-    }
-  }
-  return TK_ID;
-}
+#include "keywordhash.h"
 
 
 /*
 ** If X is a character that can be used in an identifier and
-** X&0x80==0 then isIdChar[X] will be 1.  If X&0x80==0x80 then
+** X&0x80==0 then sqlite3IsIdChar[X] will be 1.  If X&0x80==0x80 then
 ** X is always an identifier character.  (Hence all UTF-8
-** characters can be part of an identifier).  isIdChar[X] will
+** characters can be part of an identifier).  sqlite3IsIdChar[X] will
 ** be 0 for every character in the lower 128 ASCII characters
 ** that cannot be used as part of an identifier.
 **
@@ -194,12 +49,15 @@ int sqlite3KeywordCode(const char *z, int n){
 ** with the high-order bit set.  The latter rule means that
 ** any sequence of UTF-8 characters or characters taken from
 ** an extended ISO8859 character set can form an identifier.
+**
+** Ticket #1066.  the SQL standard does not allow '$' in the
+** middle of identfiers.  But many SQL implementations do. 
+** SQLite will allow '$' in identifiers for compatibility.
+** But the feature is undocumented.
 */
-static const char isIdChar[] = {
+const char sqlite3IsIdChar[] = {
 /* x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 xA xB xC xD xE xF */
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 0x */
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 1x */
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 2x */
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  /* 2x */
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,  /* 3x */
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  /* 4x */
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,  /* 5x */
@@ -207,13 +65,14 @@ static const char isIdChar[] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,  /* 7x */
 };
 
+#define IdChar(C)  (((c=C)&0x80)!=0 || (c>0x1f && sqlite3IsIdChar[c-0x20]))
 
 /*
 ** Return the length of the token that begins at z[0]. 
 ** Store the token type in *tokenType before returning.
 */
-static int sqliteGetToken(const unsigned char *z, int *tokenType){
-  int i;
+static int getToken(const unsigned char *z, int *tokenType){
+  int i, c;
   switch( *z ){
     case ' ': case '\t': case '\n': case '\f': case '\r': {
       for(i=1; isspace(z[i]); i++){}
@@ -222,7 +81,7 @@ static int sqliteGetToken(const unsigned char *z, int *tokenType){
     }
     case '-': {
       if( z[1]=='-' ){
-        for(i=2; z[i] && z[i]!='\n'; i++){}
+        for(i=2; (c=z[i])!=0 && c!='\n'; i++){}
         *tokenType = TK_COMMENT;
         return i;
       }
@@ -254,8 +113,8 @@ static int sqliteGetToken(const unsigned char *z, int *tokenType){
         *tokenType = TK_SLASH;
         return 1;
       }
-      for(i=3; z[i] && (z[i]!='/' || z[i-1]!='*'); i++){}
-      if( z[i] ) i++;
+      for(i=3, c=z[2]; (c!='*' || z[i]!='/') && (c=z[i])!=0; i++){}
+      if( c ) i++;
       *tokenType = TK_COMMENT;
       return i;
     }
@@ -268,13 +127,13 @@ static int sqliteGetToken(const unsigned char *z, int *tokenType){
       return 1 + (z[1]=='=');
     }
     case '<': {
-      if( z[1]=='=' ){
+      if( (c=z[1])=='=' ){
         *tokenType = TK_LE;
         return 2;
-      }else if( z[1]=='>' ){
+      }else if( c=='>' ){
         *tokenType = TK_NE;
         return 2;
-      }else if( z[1]=='<' ){
+      }else if( c=='<' ){
         *tokenType = TK_LSHIFT;
         return 2;
       }else{
@@ -283,10 +142,10 @@ static int sqliteGetToken(const unsigned char *z, int *tokenType){
       }
     }
     case '>': {
-      if( z[1]=='=' ){
+      if( (c=z[1])=='=' ){
         *tokenType = TK_GE;
         return 2;
-      }else if( z[1]=='>' ){
+      }else if( c=='>' ){
         *tokenType = TK_RSHIFT;
         return 2;
       }else{
@@ -324,10 +183,12 @@ static int sqliteGetToken(const unsigned char *z, int *tokenType){
       *tokenType = TK_BITNOT;
       return 1;
     }
-    case '\'': case '"': {
+    case '`':
+    case '\'':
+    case '"': {
       int delim = z[0];
-      for(i=1; z[i]; i++){
-        if( z[i]==delim ){
+      for(i=1; (c=z[i])!=0; i++){
+        if( c==delim ){
           if( z[i+1]==delim ){
             i++;
           }else{
@@ -335,20 +196,28 @@ static int sqliteGetToken(const unsigned char *z, int *tokenType){
           }
         }
       }
-      if( z[i] ) i++;
+      if( c ) i++;
       *tokenType = TK_STRING;
       return i;
     }
     case '.': {
-      *tokenType = TK_DOT;
-      return 1;
+#ifndef SQLITE_OMIT_FLOATING_POINT
+      if( !isdigit(z[1]) )
+#endif
+      {
+        *tokenType = TK_DOT;
+        return 1;
+      }
+      /* If the next character is a digit, this is a floating point
+      ** number that begins with ".".  Fall thru into the next case */
     }
     case '0': case '1': case '2': case '3': case '4':
     case '5': case '6': case '7': case '8': case '9': {
       *tokenType = TK_INTEGER;
-      for(i=1; isdigit(z[i]); i++){}
-      if( z[i]=='.' && isdigit(z[i+1]) ){
-        i += 2;
+      for(i=0; isdigit(z[i]); i++){}
+#ifndef SQLITE_OMIT_FLOATING_POINT
+      if( z[i]=='.' ){
+        i++;
         while( isdigit(z[i]) ){ i++; }
         *tokenType = TK_FLOAT;
       }
@@ -361,10 +230,11 @@ static int sqliteGetToken(const unsigned char *z, int *tokenType){
         while( isdigit(z[i]) ){ i++; }
         *tokenType = TK_FLOAT;
       }
+#endif
       return i;
     }
     case '[': {
-      for(i=1; z[i] && z[i-1]!=']'; i++){}
+      for(i=1, c=z[0]; c!=']' && (c=z[i])!=0; i++){}
       *tokenType = TK_ID;
       return i;
     }
@@ -373,79 +243,82 @@ static int sqliteGetToken(const unsigned char *z, int *tokenType){
       for(i=1; isdigit(z[i]); i++){}
       return i;
     }
-    case ':': {
-      for(i=1; (z[i]&0x80)!=0 || isIdChar[z[i]]; i++){}
-      *tokenType = i>1 ? TK_VARIABLE : TK_ILLEGAL;
-      return i;
+    case '#': {
+      for(i=1; isdigit(z[i]); i++){}
+      if( i>1 ){
+        /* Parameters of the form #NNN (where NNN is a number) are used
+        ** internally by sqlite3NestedParse.  */
+        *tokenType = TK_REGISTER;
+        return i;
+      }
+      /* Fall through into the next case if the '#' is not followed by
+      ** a digit. Try to match #AAAA where AAAA is a parameter name. */
     }
-    case '$': {
-      int c;
+#ifndef SQLITE_OMIT_TCL_VARIABLE
+    case '$':
+#endif
+    case ':': {
+      int n = 0;
       *tokenType = TK_VARIABLE;
-      if( z[1]=='{' ){
-        int nBrace = 1;
-        for(i=2; (c=z[i])!=0 && nBrace; i++){
-          if( c=='{' ){
-            nBrace++;
-          }else if( c=='}' ){
-            nBrace--;
-          }
-        }
-        if( c==0 ) *tokenType = TK_ILLEGAL;
-      }else{
-        int n = 0;
-        for(i=1; (c=z[i])!=0; i++){
-          if( isalnum(c) || c=='_' ){
-            n++;
-          }else if( c=='(' && n>0 ){
-            do{
-              i++;
-            }while( (c=z[i])!=0 && !isspace(c) && c!=')' );
-            if( c==')' ){
-              i++;
-            }else{
-              *tokenType = TK_ILLEGAL;
-            }
-            break;
-          }else if( c==':' && z[i+1]==':' ){
+      for(i=1; (c=z[i])!=0; i++){
+        if( IdChar(c) ){
+          n++;
+#ifndef SQLITE_OMIT_TCL_VARIABLE
+        }else if( c=='(' && n>0 ){
+          do{
+            i++;
+          }while( (c=z[i])!=0 && !isspace(c) && c!=')' );
+          if( c==')' ){
             i++;
           }else{
-            break;
+            *tokenType = TK_ILLEGAL;
           }
+          break;
+        }else if( c==':' && z[i+1]==':' ){
+          i++;
+#endif
+        }else{
+          break;
         }
-        if( n==0 ) *tokenType = TK_ILLEGAL;
       }
+      if( n==0 ) *tokenType = TK_ILLEGAL;
       return i;
-    } 
+    }
+#ifndef SQLITE_OMIT_BLOB_LITERAL
     case 'x': case 'X': {
-      if( z[1]=='\'' || z[1]=='"' ){
-        int delim = z[1];
+      if( (c=z[1])=='\'' || c=='"' ){
+        int delim = c;
         *tokenType = TK_BLOB;
-        for(i=2; z[i]; i++){
-          if( z[i]==delim ){
+        for(i=2; (c=z[i])!=0; i++){
+          if( c==delim ){
             if( i%2 ) *tokenType = TK_ILLEGAL;
             break;
           }
-          if( !isxdigit(z[i]) ){
+          if( !isxdigit(c) ){
             *tokenType = TK_ILLEGAL;
             return i;
           }
         }
-        if( z[i] ) i++;
+        if( c ) i++;
         return i;
       }
       /* Otherwise fall through to the next case */
     }
+#endif
     default: {
-      if( (*z&0x80)==0 && !isIdChar[*z] ){
+      if( !IdChar(*z) ){
         break;
       }
-      for(i=1; (z[i]&0x80)!=0 || isIdChar[z[i]]; i++){}
-      *tokenType = sqlite3KeywordCode((char*)z, i);
+      for(i=1; IdChar(z[i]); i++){}
+      *tokenType = keywordCode((char*)z, i);
       return i;
     }
   }
   *tokenType = TK_ILLEGAL;
   return 1;
+}
+int sqlite3GetToken(const unsigned char *z, int *tokenType){
+  return getToken(z, tokenType);
 }
 
 /*
@@ -469,10 +342,10 @@ int sqlite3RunParser(Parse *pParse, const char *zSql, char **pzErrMsg){
   db->flags &= ~SQLITE_Interrupt;
   pParse->rc = SQLITE_OK;
   i = 0;
-  pEngine = sqlite3ParserAlloc((void*(*)(int))malloc);
+  pEngine = sqlite3ParserAlloc((void*(*)(int))sqlite3MallocX);
   if( pEngine==0 ){
     sqlite3SetString(pzErrMsg, "out of memory", (char*)0);
-    return 1;
+    return SQLITE_NOMEM;
   }
   assert( pParse->sLastToken.dyn==0 );
   assert( pParse->pNewTable==0 );
@@ -486,7 +359,7 @@ int sqlite3RunParser(Parse *pParse, const char *zSql, char **pzErrMsg){
     assert( i>=0 );
     pParse->sLastToken.z = &zSql[i];
     assert( pParse->sLastToken.dyn==0 );
-    pParse->sLastToken.n = sqliteGetToken((unsigned char*)&zSql[i], &tokenType);
+    pParse->sLastToken.n = getToken((unsigned char*)&zSql[i],&tokenType);
     i += pParse->sLastToken.n;
     switch( tokenType ){
       case TK_SPACE:
@@ -499,8 +372,11 @@ int sqlite3RunParser(Parse *pParse, const char *zSql, char **pzErrMsg){
         break;
       }
       case TK_ILLEGAL: {
-        sqlite3SetNString(pzErrMsg, "unrecognized token: \"", -1, 
-           pParse->sLastToken.z, pParse->sLastToken.n, "\"", 1, (char*)0);
+        if( pzErrMsg ){
+          sqliteFree(*pzErrMsg);
+          *pzErrMsg = sqlite3MPrintf("unrecognized token: \"%T\"",
+                          &pParse->sLastToken);
+        }
         nErr++;
         goto abort_parse;
       }
@@ -526,7 +402,7 @@ abort_parse:
     }
     sqlite3Parser(pEngine, 0, pParse->sLastToken, pParse);
   }
-  sqlite3ParserFree(pEngine, free);
+  sqlite3ParserFree(pEngine, sqlite3FreeX);
   if( sqlite3_malloc_failed ){
     pParse->rc = SQLITE_NOMEM;
   }
@@ -543,7 +419,7 @@ abort_parse:
     pParse->zErrMsg = 0;
     if( !nErr ) nErr++;
   }
-  if( pParse->pVdbe && pParse->nErr>0 ){
+  if( pParse->pVdbe && pParse->nErr>0 && pParse->nested==0 ){
     sqlite3VdbeDelete(pParse->pVdbe);
     pParse->pVdbe = 0;
   }
@@ -554,210 +430,4 @@ abort_parse:
     pParse->rc = SQLITE_ERROR;
   }
   return nErr;
-}
-
-/*
-** Token types used by the sqlite3_complete() routine.  See the header
-** comments on that procedure for additional information.
-*/
-#define tkEXPLAIN 0
-#define tkCREATE  1
-#define tkTEMP    2
-#define tkTRIGGER 3
-#define tkEND     4
-#define tkSEMI    5
-#define tkWS      6
-#define tkOTHER   7
-
-/*
-** Return TRUE if the given SQL string ends in a semicolon.
-**
-** Special handling is require for CREATE TRIGGER statements.
-** Whenever the CREATE TRIGGER keywords are seen, the statement
-** must end with ";END;".
-**
-** This implementation uses a state machine with 7 states:
-**
-**   (0) START     At the beginning or end of an SQL statement.  This routine
-**                 returns 1 if it ends in the START state and 0 if it ends
-**                 in any other state.
-**
-**   (1) EXPLAIN   The keyword EXPLAIN has been seen at the beginning of 
-**                 a statement.
-**
-**   (2) CREATE    The keyword CREATE has been seen at the beginning of a
-**                 statement, possibly preceeded by EXPLAIN and/or followed by
-**                 TEMP or TEMPORARY
-**
-**   (3) NORMAL    We are in the middle of statement which ends with a single
-**                 semicolon.
-**
-**   (4) TRIGGER   We are in the middle of a trigger definition that must be
-**                 ended by a semicolon, the keyword END, and another semicolon.
-**
-**   (5) SEMI      We've seen the first semicolon in the ";END;" that occurs at
-**                 the end of a trigger definition.
-**
-**   (6) END       We've seen the ";END" of the ";END;" that occurs at the end
-**                 of a trigger difinition.
-**
-** Transitions between states above are determined by tokens extracted
-** from the input.  The following tokens are significant:
-**
-**   (0) tkEXPLAIN   The "explain" keyword.
-**   (1) tkCREATE    The "create" keyword.
-**   (2) tkTEMP      The "temp" or "temporary" keyword.
-**   (3) tkTRIGGER   The "trigger" keyword.
-**   (4) tkEND       The "end" keyword.
-**   (5) tkSEMI      A semicolon.
-**   (6) tkWS        Whitespace
-**   (7) tkOTHER     Any other SQL token.
-**
-** Whitespace never causes a state transition and is always ignored.
-*/
-int sqlite3_complete(const char *zSql){
-  u8 state = 0;   /* Current state, using numbers defined in header comment */
-  u8 token;       /* Value of the next token */
-
-  /* The following matrix defines the transition from one state to another
-  ** according to what token is seen.  trans[state][token] returns the
-  ** next state.
-  */
-  static const u8 trans[7][8] = {
-                     /* Token:                                                */
-     /* State:       **  EXPLAIN  CREATE  TEMP  TRIGGER  END  SEMI  WS  OTHER */
-     /* 0   START: */ {       1,      2,    3,       3,   3,    0,  0,     3, },
-     /* 1 EXPLAIN: */ {       3,      2,    3,       3,   3,    0,  1,     3, },
-     /* 2  CREATE: */ {       3,      3,    2,       4,   3,    0,  2,     3, },
-     /* 3  NORMAL: */ {       3,      3,    3,       3,   3,    0,  3,     3, },
-     /* 4 TRIGGER: */ {       4,      4,    4,       4,   4,    5,  4,     4, },
-     /* 5    SEMI: */ {       4,      4,    4,       4,   6,    5,  5,     4, },
-     /* 6     END: */ {       4,      4,    4,       4,   4,    0,  6,     4, },
-  };
-
-  while( *zSql ){
-    switch( *zSql ){
-      case ';': {  /* A semicolon */
-        token = tkSEMI;
-        break;
-      }
-      case ' ':
-      case '\r':
-      case '\t':
-      case '\n':
-      case '\f': {  /* White space is ignored */
-        token = tkWS;
-        break;
-      }
-      case '/': {   /* C-style comments */
-        if( zSql[1]!='*' ){
-          token = tkOTHER;
-          break;
-        }
-        zSql += 2;
-        while( zSql[0] && (zSql[0]!='*' || zSql[1]!='/') ){ zSql++; }
-        if( zSql[0]==0 ) return 0;
-        zSql++;
-        token = tkWS;
-        break;
-      }
-      case '-': {   /* SQL-style comments from "--" to end of line */
-        if( zSql[1]!='-' ){
-          token = tkOTHER;
-          break;
-        }
-        while( *zSql && *zSql!='\n' ){ zSql++; }
-        if( *zSql==0 ) return state==0;
-        token = tkWS;
-        break;
-      }
-      case '[': {   /* Microsoft-style identifiers in [...] */
-        zSql++;
-        while( *zSql && *zSql!=']' ){ zSql++; }
-        if( *zSql==0 ) return 0;
-        token = tkOTHER;
-        break;
-      }
-      case '"':     /* single- and double-quoted strings */
-      case '\'': {
-        int c = *zSql;
-        zSql++;
-        while( *zSql && *zSql!=c ){ zSql++; }
-        if( *zSql==0 ) return 0;
-        token = tkOTHER;
-        break;
-      }
-      default: {
-        if( isIdChar[(u8)*zSql] ){
-          /* Keywords and unquoted identifiers */
-          int nId;
-          for(nId=1; isIdChar[(u8)zSql[nId]]; nId++){}
-          switch( *zSql ){
-            case 'c': case 'C': {
-              if( nId==6 && sqlite3StrNICmp(zSql, "create", 6)==0 ){
-                token = tkCREATE;
-              }else{
-                token = tkOTHER;
-              }
-              break;
-            }
-            case 't': case 'T': {
-              if( nId==7 && sqlite3StrNICmp(zSql, "trigger", 7)==0 ){
-                token = tkTRIGGER;
-              }else if( nId==4 && sqlite3StrNICmp(zSql, "temp", 4)==0 ){
-                token = tkTEMP;
-              }else if( nId==9 && sqlite3StrNICmp(zSql, "temporary", 9)==0 ){
-                token = tkTEMP;
-              }else{
-                token = tkOTHER;
-              }
-              break;
-            }
-            case 'e':  case 'E': {
-              if( nId==3 && sqlite3StrNICmp(zSql, "end", 3)==0 ){
-                token = tkEND;
-              }else if( nId==7 && sqlite3StrNICmp(zSql, "explain", 7)==0 ){
-                token = tkEXPLAIN;
-              }else{
-                token = tkOTHER;
-              }
-              break;
-            }
-            default: {
-              token = tkOTHER;
-              break;
-            }
-          }
-          zSql += nId-1;
-        }else{
-          /* Operators and special symbols */
-          token = tkOTHER;
-        }
-        break;
-      }
-    }
-    state = trans[state][token];
-    zSql++;
-  }
-  return state==0;
-}
-
-/*
-** This routine is the same as the sqlite3_complete() routine described
-** above, except that the parameter is required to be UTF-16 encoded, not
-** UTF-8.
-*/
-int sqlite3_complete16(const void *zSql){
-  sqlite3_value *pVal;
-  char const *zSql8;
-  int rc = 0;
-
-  pVal = sqlite3ValueNew();
-  sqlite3ValueSetStr(pVal, -1, zSql, SQLITE_UTF16NATIVE, SQLITE_STATIC);
-  zSql8 = sqlite3ValueText(pVal, SQLITE_UTF8);
-  if( zSql8 ){
-    rc = sqlite3_complete(zSql8);
-  }
-  sqlite3ValueFree(pVal);
-  return rc;
 }

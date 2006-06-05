@@ -11,9 +11,44 @@
 *************************************************************************
 ** Internal interface definitions for SQLite.
 **
+** @(#) $Id$
 */
 #ifndef _SQLITEINT_H_
 #define _SQLITEINT_H_
+
+/*
+** Many people are failing to set -DNDEBUG=1 when compiling SQLite.
+** Setting NDEBUG makes the code smaller and run faster.  So the following
+** lines are added to automatically set NDEBUG unless the -DSQLITE_DEBUG=1
+** option is set.  Thus NDEBUG becomes an opt-in rather than an opt-out
+** feature.
+*/
+#if !defined(NDEBUG) && !defined(SQLITE_DEBUG)
+# define NDEBUG 1
+#endif
+
+/*
+** These #defines should enable >2GB file support on Posix if the
+** underlying operating system supports it.  If the OS lacks
+** large file support, or if the OS is windows, these should be no-ops.
+**
+** Large file support can be disabled using the -DSQLITE_DISABLE_LFS switch
+** on the compiler command line.  This is necessary if you are compiling
+** on a recent machine (ex: RedHat 7.2) but you want your code to work
+** on an older machine (ex: RedHat 6.0).  If you compile on RedHat 7.2
+** without this option, LFS is enable.  But LFS does not exist in the kernel
+** in RedHat 6.0, so the code won't work.  Hence, for maximum binary
+** portability you should omit LFS.
+**
+** Similar is true for MacOS.  LFS is only supported on MacOS 9 and later.
+*/
+#ifndef SQLITE_DISABLE_LFS
+# define _LARGE_FILE       1
+# ifndef _FILE_OFFSET_BITS
+#   define _FILE_OFFSET_BITS 64
+# endif
+# define _LARGEFILE_SOURCE 1
+#endif
 
 #include "sqliteconfig.h"
 #include "sqlite3.h"
@@ -23,13 +58,36 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <stddef.h>
 
 /*
 ** The maximum number of in-memory pages to use for the main database
-** table and for temporary tables.
+** table and for temporary tables. Internally, the MAX_PAGES and 
+** TEMP_PAGES macros are used. To override the default values at
+** compilation time, the SQLITE_DEFAULT_CACHE_SIZE and 
+** SQLITE_DEFAULT_TEMP_CACHE_SIZE macros should be set.
 */
-#define MAX_PAGES   2000
-#define TEMP_PAGES   500
+#ifdef SQLITE_DEFAULT_CACHE_SIZE
+# define MAX_PAGES SQLITE_DEFAULT_CACHE_SIZE
+#else
+# define MAX_PAGES   2000
+#endif
+#ifdef SQLITE_DEFAULT_TEMP_CACHE_SIZE
+# define TEMP_PAGES SQLITE_DEFAULT_TEMP_CACHE_SIZE
+#else
+# define TEMP_PAGES   500
+#endif
+
+/*
+** OMIT_TEMPDB is set to 1 if SQLITE_OMIT_TEMPDB is defined, or 0
+** afterward. Having this macro allows us to cause the C compiler 
+** to omit code used by TEMP tables without messy #ifndef statements.
+*/
+#ifdef SQLITE_OMIT_TEMPDB
+#define OMIT_TEMPDB 1
+#else
+#define OMIT_TEMPDB 0
+#endif
 
 /*
 ** If the following macro is set to 1, then NULL values are considered
@@ -78,10 +136,28 @@
 ** a minimum.
 */
 /* #define SQLITE_OMIT_AUTHORIZATION  1 */
-/* #define SQLITE_OMIT_INMEMORYDB     1 */
+/* #define SQLITE_OMIT_MEMORYDB     1 */
 /* #define SQLITE_OMIT_VACUUM         1 */
 /* #define SQLITE_OMIT_DATETIME_FUNCS 1 */
 /* #define SQLITE_OMIT_PROGRESS_CALLBACK 1 */
+/* #define SQLITE_OMIT_AUTOVACUUM */
+/* #define SQLITE_OMIT_ALTERTABLE */
+
+/*
+** Provide a default value for TEMP_STORE in case it is not specified
+** on the command-line
+*/
+#ifndef TEMP_STORE
+# define TEMP_STORE 1
+#endif
+
+/*
+** GCC does not define the offsetof() macro so we'll have to do it
+** ourselves.
+*/
+#ifndef offsetof
+#define offsetof(STRUCTURE,FIELD) ((int)((char*)&((STRUCTURE*)0)->FIELD))
+#endif
 
 /*
 ** Integers of known sizes.  These typedefs might change for architectures
@@ -115,20 +191,6 @@
 #ifndef LONGDOUBLE_TYPE
 # define LONGDOUBLE_TYPE long double
 #endif
-#ifndef INTPTR_TYPE
-# if SQLITE_PTR_SZ==4
-#   define INTPTR_TYPE int
-# else
-#   define INTPTR_TYPE sqlite_int64
-# endif
-#endif
-#ifndef UINTPTR_TYPE
-# if SQLITE_PTR_SZ==4
-#   define UINTPTR_TYPE unsigned int
-# else
-#   define UINTPTR_TYPE sqlite_uint64
-# endif
-#endif
 typedef sqlite_int64 i64;          /* 8-byte signed integer */
 typedef UINT64_TYPE u64;           /* 8-byte unsigned integer */
 typedef UINT32_TYPE u32;           /* 4-byte unsigned integer */
@@ -136,8 +198,6 @@ typedef UINT16_TYPE u16;           /* 2-byte unsigned integer */
 typedef INT16_TYPE i16;            /* 2-byte signed integer */
 typedef UINT8_TYPE u8;             /* 1-byte unsigned integer */
 typedef UINT8_TYPE i8;             /* 1-byte signed integer */
-typedef INTPTR_TYPE ptr;           /* Big enough to hold a pointer */
-typedef UINTPTR_TYPE uptr;         /* Big enough to hold a pointer */
 
 /*
 ** Macros to determine whether the machine is big or little endian,
@@ -160,6 +220,7 @@ typedef struct BusyHandler BusyHandler;
 struct BusyHandler {
   int (*xFunc)(void *,int);  /* The busy callback */
   void *pArg;                /* First arg to busy callback */
+  int nBusy;                 /* Incremented with each busy call */
 };
 
 /*
@@ -189,23 +250,20 @@ struct BusyHandler {
 ** each malloc() and free().  This output can be analyzed
 ** by an AWK script to determine if there are any leaks.
 */
-#ifdef SQLITE_DEBUG
+#ifdef SQLITE_MEMDEBUG
 # define sqliteMalloc(X)    sqlite3Malloc_(X,1,__FILE__,__LINE__)
 # define sqliteMallocRaw(X) sqlite3Malloc_(X,0,__FILE__,__LINE__)
 # define sqliteFree(X)      sqlite3Free_(X,__FILE__,__LINE__)
 # define sqliteRealloc(X,Y) sqlite3Realloc_(X,Y,__FILE__,__LINE__)
 # define sqliteStrDup(X)    sqlite3StrDup_(X,__FILE__,__LINE__)
 # define sqliteStrNDup(X,Y) sqlite3StrNDup_(X,Y,__FILE__,__LINE__)
-  void sqlite3StrRealloc(char**);
 #else
 # define sqliteFree          sqlite3FreeX
 # define sqliteMalloc        sqlite3Malloc
 # define sqliteMallocRaw     sqlite3MallocRaw
 # define sqliteRealloc       sqlite3Realloc
-/* # define sqliteRealloc_(X,Y) sqlite3Realloc(X,Y) */
-# define sqlite3StrRealloc(X)
-# define sqliteStrDup         sqlite3StrDup
-# define sqliteStrNDup        sqlite3StrNDup
+# define sqliteStrDup        sqlite3StrDup
+# define sqliteStrNDup       sqlite3StrNDup
 #endif
 
 /*
@@ -218,10 +276,11 @@ extern int sqlite3_malloc_failed;
 ** The following global variables are used for testing and debugging
 ** only.  They only work if SQLITE_DEBUG is defined.
 */
-#ifdef SQLITE_DEBUG
-extern int sqlite3_nMalloc;       /* Number of sqliteMalloc() calls */
-extern int sqlite3_nFree;         /* Number of sqliteFree() calls */
-extern int sqlite3_iMallocFail;   /* Fail sqliteMalloc() after this many calls */
+#ifdef SQLITE_MEMDEBUG
+extern int sqlite3_nMalloc;      /* Number of sqliteMalloc() calls */
+extern int sqlite3_nFree;        /* Number of sqliteFree() calls */
+extern int sqlite3_iMallocFail;  /* Fail sqliteMalloc() after this many calls */
+extern int sqlite3_iMallocReset; /* Set iMallocFail to this when it reaches 0 */
 #endif
 
 /*
@@ -240,7 +299,7 @@ extern int sqlite3_iMallocFail;   /* Fail sqliteMalloc() after this many calls *
 /*
 ** The name of the schema table.
 */
-#define SCHEMA_TABLE(x)  (x==1?TEMP_MASTER_NAME:MASTER_NAME)
+#define SCHEMA_TABLE(x)  ((!OMIT_TEMPDB)&&(x==1)?TEMP_MASTER_NAME:MASTER_NAME)
 
 /*
 ** A convenience macro that returns the number of elements in
@@ -251,30 +310,30 @@ extern int sqlite3_iMallocFail;   /* Fail sqliteMalloc() after this many calls *
 /*
 ** Forward references to structures
 */
+typedef struct AggInfo AggInfo;
+typedef struct AuthContext AuthContext;
+typedef struct CollSeq CollSeq;
 typedef struct Column Column;
-typedef struct Table Table;
-typedef struct Index Index;
-typedef struct Instruction Instruction;
+typedef struct Db Db;
 typedef struct Expr Expr;
 typedef struct ExprList ExprList;
-typedef struct Parse Parse;
-typedef struct Token Token;
+typedef struct FKey FKey;
+typedef struct FuncDef FuncDef;
 typedef struct IdList IdList;
+typedef struct Index Index;
+typedef struct KeyClass KeyClass;
+typedef struct KeyInfo KeyInfo;
+typedef struct NameContext NameContext;
+typedef struct Parse Parse;
+typedef struct Select Select;
 typedef struct SrcList SrcList;
+typedef struct Table Table;
+typedef struct Token Token;
+typedef struct TriggerStack TriggerStack;
+typedef struct TriggerStep TriggerStep;
+typedef struct Trigger Trigger;
 typedef struct WhereInfo WhereInfo;
 typedef struct WhereLevel WhereLevel;
-typedef struct Select Select;
-typedef struct AggExpr AggExpr;
-typedef struct FuncDef FuncDef;
-typedef struct Trigger Trigger;
-typedef struct TriggerStep TriggerStep;
-typedef struct TriggerStack TriggerStack;
-typedef struct FKey FKey;
-typedef struct Db Db;
-typedef struct AuthContext AuthContext;
-typedef struct KeyClass KeyClass;
-typedef struct CollSeq CollSeq;
-typedef struct KeyInfo KeyInfo;
 
 /*
 ** Each database file to be accessed by the system is an instance
@@ -295,7 +354,8 @@ struct Db {
   u8 inTrans;          /* 0: not writable.  1: Transaction.  2: Checkpoint */
   u8 safety_level;     /* How aggressive at synching data to disk */
   int cache_size;      /* Number of pages to use in the cache */
-  void *pAux;          /* Auxiliary data.  Usually NULL */
+  Table *pSeqTab;      /* The sqlite_sequence table used by AUTOINCREMENT */
+  void *pAux;               /* Auxiliary data.  Usually NULL */
   void (*xFreeAux)(void*);  /* Routine to free pAux */
 };
 
@@ -352,16 +412,13 @@ struct Db {
 struct sqlite3 {
   int nDb;                      /* Number of backends currently in use */
   Db *aDb;                      /* All backends */
-  Db aDbStatic[2];              /* Static space for the 2 default backends */
   int flags;                    /* Miscellanous flags. See below */
+  int errCode;                  /* Most recent error code (SQLITE_*) */
+  u8 enc;                       /* Text encoding for this database. */
+  u8 autoCommit;                /* The auto-commit flag. */
   u8 file_format;               /* What file format version is this database? */
   u8 temp_store;                /* 1: file 2: memory 0: default */
   int nTable;                   /* Number of tables in the database */
-  BusyHandler busyHandler;      /* Busy callback */
-  void *pCommitArg;             /* Argument to xCommitCallback() */   
-  int (*xCommitCallback)(void*);/* Invoked at every commit. */
-  Hash aFunc;                   /* All functions that can be in SQL exprs */
-  Hash aCollSeq;                /* All collating sequences */
   CollSeq *pDfltColl;           /* The default collating sequence (BINARY) */
   i64 lastRowid;                /* ROWID of most recent insert (see above) */
   i64 priorNewRowid;            /* Last randomly generated ROWID */
@@ -375,8 +432,19 @@ struct sqlite3 {
   } init;
   struct Vdbe *pVdbe;           /* List of active virtual machines */
   int activeVdbeCnt;            /* Number of vdbes currently executing */
-  void (*xTrace)(void*,const char*);     /* Trace function */
-  void *pTraceArg;                       /* Argument to the trace function */
+  void (*xTrace)(void*,const char*);        /* Trace function */
+  void *pTraceArg;                          /* Argument to the trace function */
+  void (*xProfile)(void*,const char*,u64);  /* Profiling function */
+  void *pProfileArg;                        /* Argument to profile function */
+  void *pCommitArg;             /* Argument to xCommitCallback() */   
+  int (*xCommitCallback)(void*);/* Invoked at every commit. */
+  void(*xCollNeeded)(void*,sqlite3*,int eTextRep,const char*);
+  void(*xCollNeeded16)(void*,sqlite3*,int eTextRep,const void*);
+  void *pCollNeededArg;
+  sqlite3_value *pValue;        /* Value used for transient conversions */
+  sqlite3_value *pErr;          /* Most recent error message */
+  char *zErrMsg;                /* Most recent error message (UTF-8 encoded) */
+  char *zErrMsg16;              /* Most recent error message (UTF-16 encoded) */
 #ifndef SQLITE_OMIT_AUTHORIZATION
   int (*xAuth)(void*,int,const char*,const char*,const char*,const char*);
                                 /* Access authorization function */
@@ -387,18 +455,17 @@ struct sqlite3 {
   void *pProgressArg;           /* Argument to the progress callback */
   int nProgressOps;             /* Number of opcodes for progress callback */
 #endif
-
-  int errCode;                  /* Most recent error code (SQLITE_*) */
-  u8 enc;                       /* Text encoding for this database. */
-  u8 autoCommit;                /* The auto-commit flag. */
-  void(*xCollNeeded)(void*,sqlite3*,int eTextRep,const char*);
-  void(*xCollNeeded16)(void*,sqlite3*,int eTextRep,const void*);
-  void *pCollNeededArg;
-  sqlite3_value *pValue;        /* Value used for transient conversions */
-  sqlite3_value *pErr;          /* Most recent error message */
-
-  char *zErrMsg;                /* Most recent error message (UTF-8 encoded) */
-  char *zErrMsg16;              /* Most recent error message (UTF-8 encoded) */
+#ifndef SQLITE_OMIT_GLOBALRECOVER
+  sqlite3 *pNext;               /* Linked list of open db handles. */
+#endif
+  Hash aFunc;                   /* All functions that can be in SQL exprs */
+  Hash aCollSeq;                /* All collating sequences */
+  BusyHandler busyHandler;      /* Busy callback */
+  int busyTimeout;             /* Busy handler timeout, in msec */
+  Db aDbStatic[2];              /* Static space for the 2 default backends */
+#ifdef SQLITE_SSE
+  sqlite3_stmt *pFetch;         /* Used by SSE to fetch stored statements */
+#endif
 };
 
 /*
@@ -422,6 +489,9 @@ struct sqlite3 {
                                           /*   result set is empty */
 #define SQLITE_SqlTrace       0x00000200  /* Debug print SQL as it executes */
 #define SQLITE_VdbeListing    0x00000400  /* Debug listings of VDBE programs */
+#define SQLITE_WriteSchema    0x00000800  /* OK to update SQLITE_MASTER */
+#define SQLITE_NoReadlock     0x00001000  /* Readlocks are omitted when 
+                                          ** accessing read-only databases */
 
 /*
 ** Possible values for the sqlite.magic field.
@@ -440,16 +510,23 @@ struct sqlite3 {
 ** points to a linked list of these structures.
 */
 struct FuncDef {
-  char *zName;         /* SQL name of the function */
-  int nArg;            /* Number of arguments.  -1 means unlimited */
+  i16 nArg;            /* Number of arguments.  -1 means unlimited */
   u8 iPrefEnc;         /* Preferred text encoding (SQLITE_UTF8, 16LE, 16BE) */
+  u8 needCollSeq;      /* True if sqlite3GetFuncCollSeq() might be called */
+  u8 flags;            /* Some combination of SQLITE_FUNC_* */
   void *pUserData;     /* User data parameter */
   FuncDef *pNext;      /* Next function with same name */
   void (*xFunc)(sqlite3_context*,int,sqlite3_value**); /* Regular function */
   void (*xStep)(sqlite3_context*,int,sqlite3_value**); /* Aggregate step */
   void (*xFinalize)(sqlite3_context*);                /* Aggregate finializer */
-  u8 needCollSeq;      /* True if sqlite3GetFuncCollSeq() might be called */
+  char zName[1];       /* SQL name of the function.  MUST BE LAST */
 };
+
+/*
+** Possible values for FuncDef.flags
+*/
+#define SQLITE_FUNC_LIKE   0x01  /* Candidate for the LIKE optimization */
+#define SQLITE_FUNC_CASE   0x02  /* Case-sensitive LIKE-type function */
 
 /*
 ** information about each column of an SQL table is held in an instance
@@ -457,7 +534,7 @@ struct FuncDef {
 */
 struct Column {
   char *zName;     /* Name of this column */
-  char *zDflt;     /* Default value of this column */
+  Expr *pDflt;     /* Default value of this column */
   char *zType;     /* Data type for this column */
   CollSeq *pColl;  /* Collating sequence.  If NULL, use the default */
   u8 notNull;      /* True if there is a NOT NULL constraint */
@@ -489,9 +566,18 @@ struct Column {
 struct CollSeq {
   char *zName;         /* Name of the collating sequence, UTF-8 encoded */
   u8 enc;              /* Text encoding handled by xCmp() */
+  u8 type;             /* One of the SQLITE_COLL_... values below */
   void *pUser;         /* First argument to xCmp() */
   int (*xCmp)(void*,int, const void*, int, const void*);
 };
+
+/*
+** Allowed values of CollSeq flags:
+*/
+#define SQLITE_COLL_BINARY  1  /* The default memcmp() collating sequence */
+#define SQLITE_COLL_NOCASE  2  /* The built-in NOCASE collating sequence */
+#define SQLITE_COLL_REVERSE 3  /* The built-in REVERSE collating sequence */
+#define SQLITE_COLL_USER    0  /* Any other user-defined collating sequence */
 
 /*
 ** A sort order can be either ASC or DESC.
@@ -551,9 +637,14 @@ struct Table {
   u8 isTransient;  /* True if automatically deleted when VDBE finishes */
   u8 hasPrimKey;   /* True if there exists a primary key */
   u8 keyConf;      /* What to do in case of uniqueness conflict on iPKey */
+  u8 autoInc;      /* True if the integer primary key is autoincrement */
+  int nRef;          /* Number of pointers to this Table */
   Trigger *pTrigger; /* List of SQL triggers on this table */
   FKey *pFKey;       /* Linked list of all foreign keys in this table */
   char *zColAff;     /* String defining the affinity of each column */
+#ifndef SQLITE_OMIT_ALTERTABLE
+  int addColOffset;  /* Offset in CREATE TABLE statement to add a new column */
+#endif
 };
 
 /*
@@ -643,7 +734,8 @@ struct FKey {
 ** comparison of the two index keys.
 **
 ** If the KeyInfo.incrKey value is true and the comparison would
-** otherwise be equal, then return a result as if the second key larger.
+** otherwise be equal, then return a result as if the second key
+** were larger.
 */
 struct KeyInfo {
   u8 enc;             /* Text encoding - one of the TEXT_Utf* values */
@@ -683,6 +775,7 @@ struct Index {
   char *zName;     /* Name of this index */
   int nColumn;     /* Number of columns in the table used by this index */
   int *aiColumn;   /* Which columns are used by this index.  1st is 0 */
+  unsigned *aiRowEst; /* Result of ANALYZE: Est. rows selected by each column */
   Table *pTable;   /* The SQL table being indexed */
   int tnum;        /* Page containing root of this index in database file */
   u8 onError;      /* OE_Abort, OE_Ignore, OE_Replace, or OE_None */
@@ -705,6 +798,49 @@ struct Token {
   const unsigned char *z; /* Text of the token.  Not NULL-terminated! */
   unsigned dyn  : 1;      /* True for malloced memory, false for static */
   unsigned n    : 31;     /* Number of characters in this token */
+};
+
+/*
+** An instance of this structure contains information needed to generate
+** code for a SELECT that contains aggregate functions.
+**
+** If Expr.op==TK_AGG_COLUMN or TK_AGG_FUNCTION then Expr.pAggInfo is a
+** pointer to this structure.  The Expr.iColumn field is the index in
+** AggInfo.aCol[] or AggInfo.aFunc[] of information needed to generate
+** code for that node.
+**
+** AggInfo.pGroupBy and AggInfo.aFunc.pExpr point to fields within the
+** original Select structure that describes the SELECT statement.  These
+** fields do not need to be freed when deallocating the AggInfo structure.
+*/
+struct AggInfo {
+  u8 directMode;          /* Direct rendering mode means take data directly
+                          ** from source tables rather than from accumulators */
+  u8 useSortingIdx;       /* In direct mode, reference the sorting index rather
+                          ** than the source table */
+  int sortingIdx;         /* Cursor number of the sorting index */
+  ExprList *pGroupBy;     /* The group by clause */
+  int nSortingColumn;     /* Number of columns in the sorting index */
+  struct AggInfo_col {    /* For each column used in source tables */
+    int iTable;              /* Cursor number of the source table */
+    int iColumn;             /* Column number within the source table */
+    int iSorterColumn;       /* Column number in the sorting index */
+    int iMem;                /* Memory location that acts as accumulator */
+    Expr *pExpr;             /* The original expression */
+  } *aCol;
+  int nColumn;            /* Number of used entries in aCol[] */
+  int nColumnAlloc;       /* Number of slots allocated for aCol[] */
+  int nAccumulator;       /* Number of columns that show through to the output.
+                          ** Additional columns are used only as parameters to
+                          ** aggregate functions */
+  struct AggInfo_func {   /* For each aggregate function */
+    Expr *pExpr;             /* Expression encoding the function */
+    FuncDef *pFunc;          /* The aggregate function implementation */
+    int iMem;                /* Memory location that acts as accumulator */
+    int iDistinct;           /* Virtual table used to enforce DISTINCT */
+  } *aFunc;
+  int nFunc;              /* Number of entries in aFunc[] */
+  int nFuncAlloc;         /* Number of slots allocated for aFunc[] */
 };
 
 /*
@@ -738,17 +874,27 @@ struct Token {
 ** marker (a question mark character '?' in the original SQL) then the
 ** Expr.iTable holds the index number for that variable.
 **
+** If the expression is a subquery then Expr.iColumn holds an integer
+** register number containing the result of the subquery.  If the
+** subquery gives a constant result, then iTable is -1.  If the subquery
+** gives a different answer at different times during statement processing
+** then iTable is the address of a subroutine that computes the subquery.
+**
 ** The Expr.pSelect field points to a SELECT statement.  The SELECT might
 ** be the right operand of an IN operator.  Or, if a scalar SELECT appears
 ** in an expression the opcode is TK_SELECT and Expr.pSelect is the only
 ** operand.
+**
+** If the Expr is of type OP_Column, and the table it is selecting from
+** is a disk table or the "old.*" pseudo-table, then pTab points to the
+** corresponding table definition.
 */
 struct Expr {
   u8 op;                 /* Operation performed by this node */
   char affinity;         /* The affinity of the column or 0 if not a column */
-  CollSeq *pColl;        /* The collation type of the column or 0 */
   u8 iDb;                /* Database referenced by this expression */
   u8 flags;              /* Various flags.  See below */
+  CollSeq *pColl;        /* The collation type of the column or 0 */
   Expr *pLeft, *pRight;  /* Left and right subnodes */
   ExprList *pList;       /* A list of expressions used as function arguments
                          ** or in "<expr> IN (<expr-list)" */
@@ -756,16 +902,24 @@ struct Expr {
   Token span;            /* Complete text of the expression */
   int iTable, iColumn;   /* When op==TK_COLUMN, then this expr node means the
                          ** iColumn-th field of the iTable-th table. */
-  int iAgg;              /* When op==TK_COLUMN and pParse->useAgg==TRUE, pull
-                         ** result from the iAgg-th element of the aggregator */
+  AggInfo *pAggInfo;     /* Used by TK_AGG_COLUMN and TK_AGG_FUNCTION */
+  int iAgg;              /* Which entry in pAggInfo->aCol[] or ->aFunc[] */
+  int iRightJoinTable;   /* If EP_FromJoin, the right table of the join */
   Select *pSelect;       /* When the expression is a sub-select.  Also the
                          ** right side of "<expr> IN (<select>)" */
+  Table *pTab;           /* Table for OP_Column expressions. */
 };
 
 /*
 ** The following are the meanings of bits in the Expr.flags field.
 */
-#define EP_FromJoin     0x0001  /* Originated in ON or USING clause of a join */
+#define EP_FromJoin     0x01  /* Originated in ON or USING clause of a join */
+#define EP_Agg          0x02  /* Contains one or more aggregate functions */
+#define EP_Resolved     0x04  /* IDs have been resolved to COLUMNs */
+#define EP_Error        0x08  /* Expression contains one or more errors */
+#define EP_Distinct     0x10  /* Aggregate function with DISTINCT keyword */
+#define EP_VarSelect    0x20  /* pSelect is correlated, not constant */
+#define EP_Dequoted     0x40  /* True if the string has been dequoted */
 
 /*
 ** These macros can be used to test, set, or clear bits in the 
@@ -787,6 +941,7 @@ struct Expr {
 struct ExprList {
   int nExpr;             /* Number of expressions on the list */
   int nAlloc;            /* Number of entries allocated below */
+  int iECursor;          /* VDBE Cursor associated with this ExprList */
   struct ExprList_item {
     Expr *pExpr;           /* The list of expressions */
     char *zName;           /* Token associated with this expression */
@@ -812,13 +967,18 @@ struct ExprList {
 ** If "a" is the k-th column of table "t", then IdList.a[0].idx==k.
 */
 struct IdList {
-  int nId;         /* Number of identifiers on the list */
-  int nAlloc;      /* Number of entries allocated for a[] below */
   struct IdList_item {
     char *zName;      /* Name of the identifier */
     int idx;          /* Index in some Table.aCol[] of a column named zName */
   } *a;
+  int nId;         /* Number of identifiers on the list */
+  int nAlloc;      /* Number of entries allocated for a[] below */
 };
+
+/*
+** The bitmask datatype defined below is used for various optimizations.
+*/
+typedef unsigned int Bitmask;
 
 /*
 ** The following structure describes the FROM clause of a SELECT statement.
@@ -840,10 +1000,11 @@ struct SrcList {
     char *zAlias;     /* The "B" part of a "A AS B" phrase.  zName is the "A" */
     Table *pTab;      /* An SQL table corresponding to zName */
     Select *pSelect;  /* A SELECT statement used in place of a table name */
-    int jointype;     /* Type of join between this table and the next */
-    int iCursor;      /* The VDBE cursor number used to access this table */
+    u8 jointype;      /* Type of join between this table and the next */
+    i16 iCursor;      /* The VDBE cursor number used to access this table */
     Expr *pOn;        /* The ON clause of a join */
     IdList *pUsing;   /* The USING clause of a join */
+    Bitmask colUsed;  /* Bit N (1<<N) set if column N or pTab is used */
   } a[1];             /* One entry for each identifier on the list */
 };
 
@@ -851,11 +1012,12 @@ struct SrcList {
 ** Permitted values of the SrcList.a.jointype field
 */
 #define JT_INNER     0x0001    /* Any kind of inner or cross join */
-#define JT_NATURAL   0x0002    /* True for a "natural" join */
-#define JT_LEFT      0x0004    /* Left outer join */
-#define JT_RIGHT     0x0008    /* Right outer join */
-#define JT_OUTER     0x0010    /* The "OUTER" keyword is present */
-#define JT_ERROR     0x0020    /* unknown or unsupported join type */
+#define JT_CROSS     0x0002    /* Explicit use of the CROSS keyword */
+#define JT_NATURAL   0x0004    /* True for a "natural" join */
+#define JT_LEFT      0x0008    /* Left outer join */
+#define JT_RIGHT     0x0010    /* Right outer join */
+#define JT_OUTER     0x0020    /* The "OUTER" keyword is present */
+#define JT_ERROR     0x0040    /* unknown or unsupported join type */
 
 /*
 ** For each nested loop in a WHERE clause implementation, the WhereInfo
@@ -864,17 +1026,20 @@ struct SrcList {
 ** access or modified by other modules.
 */
 struct WhereLevel {
-  int iMem;            /* Memory cell used by this level */
-  Index *pIdx;         /* Index used */
-  int iCur;            /* Cursor number used for this index */
-  int score;           /* How well this indexed scored */
-  int brk;             /* Jump here to break out of the loop */
-  int cont;            /* Jump here to continue with the next loop cycle */
-  int op, p1, p2;      /* Opcode used to terminate the loop */
-  int iLeftJoin;       /* Memory cell used to implement LEFT OUTER JOIN */
-  int top;             /* First instruction of interior of the loop */
-  int inOp, inP1, inP2;/* Opcode used to implement an IN operator */
-  int bRev;            /* Do the scan in the reverse direction */
+  int iFrom;            /* Which entry in the FROM clause */
+  int flags;            /* Flags associated with this level */
+  int iMem;             /* First memory cell used by this level */
+  int iLeftJoin;        /* Memory cell used to implement LEFT OUTER JOIN */
+  Index *pIdx;          /* Index used.  NULL if no index */
+  int iTabCur;          /* The VDBE cursor used to access the table */
+  int iIdxCur;          /* The VDBE cursor used to acesss pIdx */
+  int brk;              /* Jump here to break out of the loop */
+  int cont;             /* Jump here to continue with the next loop cycle */
+  int top;              /* First instruction of interior of the loop */
+  int op, p1, p2;       /* Opcode used to terminate the loop */
+  int nEq;              /* Number of == or IN constraints on this loop */
+  int nIn;              /* Number of IN operators constraining this loop */
+  int *aInLoop;         /* Loop terminators for IN operators */
 };
 
 /*
@@ -887,6 +1052,7 @@ struct WhereLevel {
 struct WhereInfo {
   Parse *pParse;
   SrcList *pTabList;   /* List of tables in the join */
+  int iTop;            /* The very beginning of the WHERE loop */
   int iContinue;       /* Jump here to continue with next record */
   int iBreak;          /* Jump here to break out of the loop */
   int nLevel;          /* Number of nested loop */
@@ -894,117 +1060,143 @@ struct WhereInfo {
 };
 
 /*
+** A NameContext defines a context in which to resolve table and column
+** names.  The context consists of a list of tables (the pSrcList) field and
+** a list of named expression (pEList).  The named expression list may
+** be NULL.  The pSrc corresponds to the FROM clause of a SELECT or
+** to the table being operated on by INSERT, UPDATE, or DELETE.  The
+** pEList corresponds to the result set of a SELECT and is NULL for
+** other statements.
+**
+** NameContexts can be nested.  When resolving names, the inner-most 
+** context is searched first.  If no match is found, the next outer
+** context is checked.  If there is still no match, the next context
+** is checked.  This process continues until either a match is found
+** or all contexts are check.  When a match is found, the nRef member of
+** the context containing the match is incremented. 
+**
+** Each subquery gets a new NameContext.  The pNext field points to the
+** NameContext in the parent query.  Thus the process of scanning the
+** NameContext list corresponds to searching through successively outer
+** subqueries looking for a match.
+*/
+struct NameContext {
+  Parse *pParse;       /* The parser */
+  SrcList *pSrcList;   /* One or more tables used to resolve names */
+  ExprList *pEList;    /* Optional list of named expressions */
+  int nRef;            /* Number of names resolved by this context */
+  int nErr;            /* Number of errors encountered while resolving names */
+  u8 allowAgg;         /* Aggregate functions allowed here */
+  u8 hasAgg;           /* True if aggregates are seen */
+  int nDepth;          /* Depth of subquery recursion. 1 for no recursion */
+  AggInfo *pAggInfo;   /* Information about aggregates at this level */
+  NameContext *pNext;  /* Next outer name context.  NULL for outermost */
+};
+
+/*
 ** An instance of the following structure contains all information
 ** needed to generate code for a single SELECT statement.
-**
-** The zSelect field is used when the Select structure must be persistent.
-** Normally, the expression tree points to tokens in the original input
-** string that encodes the select.  But if the Select structure must live
-** longer than its input string (for example when it is used to describe
-** a VIEW) we have to make a copy of the input string so that the nodes
-** of the expression tree will have something to point to.  zSelect is used
-** to hold that copy.
 **
 ** nLimit is set to -1 if there is no LIMIT clause.  nOffset is set to 0.
 ** If there is a LIMIT clause, the parser sets nLimit to the value of the
 ** limit and nOffset to the value of the offset (or 0 if there is not
 ** offset).  But later on, nLimit and nOffset become the memory locations
 ** in the VDBE that record the limit and offset counters.
+**
+** addrOpenVirt[] entries contain the address of OP_OpenVirtual opcodes.
+** These addresses must be stored so that we can go back and fill in
+** the P3_KEYINFO and P2 parameters later.  Neither the KeyInfo nor
+** the number of columns in P2 can be computed at the same time
+** as the OP_OpenVirtual instruction is coded because not
+** enough information about the compound query is known at that point.
+** The KeyInfo for addrOpenVirt[0] and [1] contains collating sequences
+** for the result set.  The KeyInfo for addrOpenVirt[2] contains collating
+** sequences for the ORDER BY clause.
 */
 struct Select {
   ExprList *pEList;      /* The fields of the result */
   u8 op;                 /* One of: TK_UNION TK_ALL TK_INTERSECT TK_EXCEPT */
   u8 isDistinct;         /* True if the DISTINCT keyword is present */
+  u8 isResolved;         /* True once sqlite3SelectResolve() has run. */
+  u8 isAgg;              /* True if this is an aggregate query */
+  u8 usesVirt;           /* True if uses an OpenVirtual opcode */
+  u8 disallowOrderBy;    /* Do not allow an ORDER BY to be attached if TRUE */
   SrcList *pSrc;         /* The FROM clause */
   Expr *pWhere;          /* The WHERE clause */
   ExprList *pGroupBy;    /* The GROUP BY clause */
   Expr *pHaving;         /* The HAVING clause */
   ExprList *pOrderBy;    /* The ORDER BY clause */
   Select *pPrior;        /* Prior select in a compound select statement */
-  int nLimit, nOffset;   /* LIMIT and OFFSET values.  -1 means not used */
+  Select *pRightmost;    /* Right-most select in a compound select statement */
+  Expr *pLimit;          /* LIMIT expression. NULL means not used. */
+  Expr *pOffset;         /* OFFSET expression. NULL means not used. */
   int iLimit, iOffset;   /* Memory registers holding LIMIT & OFFSET counters */
-  char *zSelect;         /* Complete text of the SELECT command */
-  IdList **ppOpenTemp;   /* OP_OpenTemp addresses used by multi-selects */
+  int addrOpenVirt[3];   /* OP_OpenVirtual opcodes related to this select */
 };
 
 /*
 ** The results of a select can be distributed in several ways.
 */
-#define SRT_Callback     1  /* Invoke a callback with each row of result */
-#define SRT_Mem          2  /* Store result in a memory cell */
-#define SRT_Set          3  /* Store result as unique keys in a table */
-#define SRT_Union        5  /* Store result as keys in a table */
-#define SRT_Except       6  /* Remove result from a UNION table */
-#define SRT_Table        7  /* Store result as data with a unique key */
-#define SRT_TempTable    8  /* Store result in a trasient table */
-#define SRT_Discard      9  /* Do not save the results anywhere */
-#define SRT_Sorter      10  /* Store results in the sorter */
-#define SRT_Subroutine  11  /* Call a subroutine to handle results */
+#define SRT_Union        1  /* Store result as keys in an index */
+#define SRT_Except       2  /* Remove result from a UNION index */
+#define SRT_Discard      3  /* Do not save the results anywhere */
 
-/*
-** When a SELECT uses aggregate functions (like "count(*)" or "avg(f1)")
-** we have to do some additional analysis of expressions.  An instance
-** of the following structure holds information about a single subexpression
-** somewhere in the SELECT statement.  An array of these structures holds
-** all the information we need to generate code for aggregate
-** expressions.
-**
-** Note that when analyzing a SELECT containing aggregates, both
-** non-aggregate field variables and aggregate functions are stored
-** in the AggExpr array of the Parser structure.
-**
-** The pExpr field points to an expression that is part of either the
-** field list, the GROUP BY clause, the HAVING clause or the ORDER BY
-** clause.  The expression will be freed when those clauses are cleaned
-** up.  Do not try to delete the expression attached to AggExpr.pExpr.
-**
-** If AggExpr.pExpr==0, that means the expression is "count(*)".
-*/
-struct AggExpr {
-  int isAgg;        /* if TRUE contains an aggregate function */
-  Expr *pExpr;      /* The expression */
-  FuncDef *pFunc;   /* Information about the aggregate function */
-};
+/* The ORDER BY clause is ignored for all of the above */
+#define IgnorableOrderby(X) (X<=SRT_Discard)
+
+#define SRT_Callback     4  /* Invoke a callback with each row of result */
+#define SRT_Mem          5  /* Store result in a memory cell */
+#define SRT_Set          6  /* Store non-null results as keys in an index */
+#define SRT_Table        7  /* Store result as data with an automatic rowid */
+#define SRT_VirtualTab   8  /* Create virtual table and store like SRT_Table */
+#define SRT_Subroutine   9  /* Call a subroutine to handle results */
+#define SRT_Exists      10  /* Put 0 or 1 in a memory cell */
 
 /*
 ** An SQL parser context.  A copy of this structure is passed through
 ** the parser and down into all the parser action routine in order to
 ** carry around information that is global to the entire parse.
+**
+** The structure is divided into two parts.  When the parser and code
+** generate call themselves recursively, the first part of the structure
+** is constant but the second part is reset at the beginning and end of
+** each recursion.
 */
 struct Parse {
   sqlite3 *db;         /* The main database structure */
   int rc;              /* Return code from execution */
   char *zErrMsg;       /* An error message */
+  Vdbe *pVdbe;         /* An engine for executing database bytecode */
+  u8 colNamesSet;      /* TRUE after OP_ColumnName has been issued to pVdbe */
+  u8 nameClash;        /* A permanent table name clashes with temp table name */
+  u8 checkSchema;      /* Causes schema cookie check after an error */
+  u8 nested;           /* Number of nested calls to the parser/code generator */
+  int nErr;            /* Number of errors seen */
+  int nTab;            /* Number of previously allocated VDBE cursors */
+  int nMem;            /* Number of memory cells used so far */
+  int nSet;            /* Number of sets used so far */
+  u32 writeMask;       /* Start a write transaction on these databases */
+  u32 cookieMask;      /* Bitmask of schema verified databases */
+  int cookieGoto;      /* Address of OP_Goto to cookie verifier subroutine */
+  int cookieValue[MAX_ATTACHED+2];  /* Values of cookies to verify */
+
+  /* Above is constant between recursions.  Below is reset before and after
+  ** each recursion */
+
+  int nVar;            /* Number of '?' variables seen in the SQL so far */
+  int nVarExpr;        /* Number of used slots in apVarExpr[] */
+  int nVarExprAlloc;   /* Number of allocated slots in apVarExpr[] */
+  Expr **apVarExpr;    /* Pointers to :aaa and $aaaa wildcard expressions */
+  u8 explain;          /* True if the EXPLAIN flag is found on the query */
   Token sErrToken;     /* The token at which the error occurred */
   Token sNameToken;    /* Token with unqualified schema object name */
   Token sLastToken;    /* The last token parsed */
   const char *zSql;    /* All SQL text */
   const char *zTail;   /* All SQL text past the last semicolon parsed */
   Table *pNewTable;    /* A table being constructed by CREATE TABLE */
-  Vdbe *pVdbe;         /* An engine for executing database bytecode */
-  u8 colNamesSet;      /* TRUE after OP_ColumnName has been issued to pVdbe */
-  u8 explain;          /* True if the EXPLAIN flag is found on the query */
-  u8 nameClash;        /* A permanent table name clashes with temp table name */
-  u8 useAgg;           /* If true, extract field values from the aggregator
-                       ** while generating expressions.  Normally false */
-  u8 checkSchema;      /* Causes schema cookie check after an error */
-  int nErr;            /* Number of errors seen */
-  int nTab;            /* Number of previously allocated VDBE cursors */
-  int nMem;            /* Number of memory cells used so far */
-  int nSet;            /* Number of sets used so far */
-  int nAgg;            /* Number of aggregate expressions */
-  int nVar;            /* Number of '?' variables seen in the SQL so far */
-  int nVarExpr;        /* Number of used slots in apVarExpr[] */
-  int nVarExprAlloc;   /* Number of allocated slots in apVarExpr[] */
-  Expr **apVarExpr;    /* Pointers to :aaa and $aaaa wildcard expressions */
-  AggExpr *aAgg;       /* An array of aggregate expressions */
-  const char *zAuthContext; /* The 6th parameter to db->xAuth callbacks */
   Trigger *pNewTrigger;     /* Trigger under construct by a CREATE TRIGGER */
   TriggerStack *trigStack;  /* Trigger actions being coded */
-  u32 cookieMask;      /* Bitmask of schema verified databases */
-  int cookieValue[MAX_ATTACHED+2];  /* Values of cookies to verify */
-  int cookieGoto;      /* Address of OP_Goto to cookie verifier subroutine */
-  u32 writeMask;       /* Start a write transaction on these databases */
+  const char *zAuthContext; /* The 6th parameter to db->xAuth callbacks */
 };
 
 /*
@@ -1017,7 +1209,7 @@ struct AuthContext {
 };
 
 /*
-** Bitfield flags for P2 value in OP_PutIntKey and OP_Delete
+** Bitfield flags for P2 value in OP_Insert and OP_Delete
 */
 #define OPFLAG_NCHANGE   1    /* Set to update db->nChange */
 #define OPFLAG_LASTROWID 2    /* Set to update db->lastRowid */
@@ -1043,7 +1235,7 @@ struct Trigger {
   u8 iDb;                 /* Database containing this trigger               */
   u8 iTabDb;              /* Database containing Trigger.table              */
   u8 op;                  /* One of TK_DELETE, TK_UPDATE, TK_INSERT         */
-  u8 tr_tm;               /* One of TK_BEFORE, TK_AFTER */
+  u8 tr_tm;               /* One of TRIGGER_BEFORE, TRIGGER_AFTER */
   Expr *pWhen;            /* The WHEN clause of the expresion (may be NULL) */
   IdList *pColumns;       /* If this is an UPDATE OF <column-list> trigger,
                              the <column-list> is stored here */
@@ -1053,6 +1245,16 @@ struct Trigger {
   TriggerStep *step_list; /* Link list of trigger program steps             */
   Trigger *pNext;         /* Next trigger associated with the table */
 };
+
+/*
+** A trigger is either a BEFORE or an AFTER trigger.  The following constants
+** determine which. 
+**
+** If there are multiple triggers, you might of some BEFORE and some AFTER.
+** In that cases, the constants below can be ORed together.
+*/
+#define TRIGGER_BEFORE  1
+#define TRIGGER_AFTER   2
 
 /*
  * An instance of struct TriggerStep is used to store a single SQL statement
@@ -1167,13 +1369,25 @@ typedef struct {
   char **pzErrMsg;    /* Error message stored here */
 } InitData;
 
-
 /*
  * This global flag is set for performance testing of triggers. When it is set
  * SQLite will perform the overhead of building new and old trigger references 
  * even when no triggers exist
  */
 extern int sqlite3_always_code_trigger_setup;
+
+/*
+** The SQLITE_CORRUPT_BKPT macro can be either a constant (for production
+** builds) or a function call (for debugging).  If it is a function call,
+** it allows the operator to set a breakpoint at the spot where database
+** corruption is first detected.
+*/
+#ifdef SQLITE_DEBUG
+  extern int sqlite3Corrupt(void);
+# define SQLITE_CORRUPT_BKPT sqlite3Corrupt()
+#else
+# define SQLITE_CORRUPT_BKPT SQLITE_CORRUPT
+#endif
 
 /*
 ** Internal function prototypes
@@ -1185,7 +1399,7 @@ int sqlite3IsNumber(const char*, int*, u8);
 int sqlite3Compare(const char *, const char *);
 int sqlite3SortCompare(const char *, const char *);
 void sqlite3RealToSortable(double r, char *);
-#ifdef SQLITE_DEBUG
+#ifdef SQLITE_MEMDEBUG
   void *sqlite3Malloc_(int,int,char*,int);
   void sqlite3Free_(void*,char*,int);
   void *sqlite3Realloc_(void*,int,char*,int);
@@ -1200,20 +1414,24 @@ void sqlite3RealToSortable(double r, char *);
   char *sqlite3StrDup(const char*);
   char *sqlite3StrNDup(const char*, int);
 # define sqlite3CheckMemory(a,b)
+# define sqlite3MallocX sqlite3Malloc
 #endif
+void sqlite3ReallocOrFree(void**,int);
 void sqlite3FreeX(void*);
+void *sqlite3MallocX(int);
 char *sqlite3MPrintf(const char*, ...);
 char *sqlite3VMPrintf(const char*, va_list);
 void sqlite3DebugPrintf(const char*, ...);
 void *sqlite3TextToPtr(const char*);
-void sqlite3SetString(char **, const char *, ...);
-void sqlite3SetNString(char **, ...);
+void sqlite3SetString(char **, ...);
 void sqlite3ErrorMsg(Parse*, const char*, ...);
 void sqlite3Dequote(char*);
+void sqlite3DequoteExpr(Expr*);
 int sqlite3KeywordCode(const char*, int);
 int sqlite3RunParser(Parse*, const char*, char **);
 void sqlite3FinishCoding(Parse*);
-Expr *sqlite3Expr(int, Expr*, Expr*, Token*);
+Expr *sqlite3Expr(int, Expr*, Expr*, const Token*);
+Expr *sqlite3RegisterExpr(Parse*,Token*);
 Expr *sqlite3ExprAnd(Expr*, Expr*);
 void sqlite3ExprSpan(Expr*,Token*,Token*);
 Expr *sqlite3ExprFunction(ExprList*, Token*);
@@ -1233,16 +1451,23 @@ void sqlite3OpenMasterTable(Vdbe *v, int);
 void sqlite3StartTable(Parse*,Token*,Token*,Token*,int,int);
 void sqlite3AddColumn(Parse*,Token*);
 void sqlite3AddNotNull(Parse*, int);
-void sqlite3AddPrimaryKey(Parse*, ExprList*, int);
-void sqlite3AddColumnType(Parse*,Token*,Token*);
-void sqlite3AddDefaultValue(Parse*,Token*,int);
+void sqlite3AddPrimaryKey(Parse*, ExprList*, int, int);
+void sqlite3AddColumnType(Parse*,Token*);
+void sqlite3AddDefaultValue(Parse*,Expr*);
 void sqlite3AddCollateType(Parse*, const char*, int);
-void sqlite3EndTable(Parse*,Token*,Select*);
-void sqlite3CreateView(Parse*,Token*,Token*,Token*,Select*,int);
-int sqlite3ViewGetColumnNames(Parse*,Table*);
+void sqlite3EndTable(Parse*,Token*,Token*,Select*);
+
+#ifndef SQLITE_OMIT_VIEW
+  void sqlite3CreateView(Parse*,Token*,Token*,Token*,Select*,int);
+  int sqlite3ViewGetColumnNames(Parse*,Table*);
+#else
+# define sqlite3ViewGetColumnNames(A,B) 0
+#endif
+
 void sqlite3DropTable(Parse*, SrcList*, int);
 void sqlite3DeleteTable(sqlite3*, Table*);
 void sqlite3Insert(Parse*, SrcList*, ExprList*, Select*, IdList*, int);
+int sqlite3ArrayAllocate(void**,int,int);
 IdList *sqlite3IdListAppend(IdList*, Token*);
 int sqlite3IdListIndex(IdList*,const char*);
 SrcList *sqlite3SrcListAppend(SrcList*, Token*, Token*);
@@ -1257,42 +1482,46 @@ void sqlite3AddKeyType(Vdbe*, ExprList*);
 void sqlite3AddIdxKeyType(Vdbe*, Index*);
 int sqlite3Select(Parse*, Select*, int, int, Select*, int, int*, char *aff);
 Select *sqlite3SelectNew(ExprList*,SrcList*,Expr*,ExprList*,Expr*,ExprList*,
-                        int,int,int);
+                        int,Expr*,Expr*);
 void sqlite3SelectDelete(Select*);
 void sqlite3SelectUnbind(Select*);
 Table *sqlite3SrcListLookup(Parse*, SrcList*);
 int sqlite3IsReadOnly(Parse*, Table*, int);
+void sqlite3OpenTableForReading(Vdbe*, int iCur, Table*);
+void sqlite3OpenTable(Vdbe*, int iCur, Table*, int);
 void sqlite3DeleteFrom(Parse*, SrcList*, Expr*);
 void sqlite3Update(Parse*, SrcList*, ExprList*, Expr*, int);
-WhereInfo *sqlite3WhereBegin(Parse*, SrcList*, Expr*, int, ExprList**);
+WhereInfo *sqlite3WhereBegin(Parse*, SrcList*, Expr*, ExprList**);
 void sqlite3WhereEnd(WhereInfo*);
 void sqlite3ExprCode(Parse*, Expr*);
+void sqlite3ExprCodeAndCache(Parse*, Expr*);
 int sqlite3ExprCodeExprList(Parse*, ExprList*);
 void sqlite3ExprIfTrue(Parse*, Expr*, int, int);
 void sqlite3ExprIfFalse(Parse*, Expr*, int, int);
+void sqlite3NextedParse(Parse*, const char*, ...);
 Table *sqlite3FindTable(sqlite3*,const char*, const char*);
 Table *sqlite3LocateTable(Parse*,const char*, const char*);
 Index *sqlite3FindIndex(sqlite3*,const char*, const char*);
 void sqlite3UnlinkAndDeleteTable(sqlite3*,int,const char*);
 void sqlite3UnlinkAndDeleteIndex(sqlite3*,int,const char*);
-void sqlite3UnlinkAndDeleteTrigger(sqlite3*,int,const char*);
 void sqlite3Vacuum(Parse*, Token*);
 int sqlite3RunVacuum(char**, sqlite3*);
 char *sqlite3NameFromToken(Token*);
 int sqlite3ExprCheck(Parse*, Expr*, int, int*);
 int sqlite3ExprCompare(Expr*, Expr*);
 int sqliteFuncId(Token*);
-int sqlite3ExprResolveIds(Parse*, SrcList*, ExprList*, Expr*);
-int sqlite3ExprResolveAndCheck(Parse*,SrcList*,ExprList*,Expr*,int,int*);
-int sqlite3ExprAnalyzeAggregates(Parse*, Expr*);
+int sqlite3ExprResolveNames(NameContext *, Expr *);
+int sqlite3ExprAnalyzeAggregates(NameContext*, Expr*);
+int sqlite3ExprAnalyzeAggList(NameContext*,ExprList*);
 Vdbe *sqlite3GetVdbe(Parse*);
 void sqlite3Randomness(int, void*);
 void sqlite3RollbackAll(sqlite3*);
 void sqlite3CodeVerifySchema(Parse*, int);
-void sqlite3BeginTransaction(Parse*);
+void sqlite3BeginTransaction(Parse*, int);
 void sqlite3CommitTransaction(Parse*);
 void sqlite3RollbackTransaction(Parse*);
 int sqlite3ExprIsConstant(Expr*);
+int sqlite3ExprIsConstantOrFunction(Expr*);
 int sqlite3ExprIsInteger(Expr*, int*);
 int sqlite3IsRowid(const char*);
 void sqlite3GenerateRowDelete(sqlite3*, Vdbe*, Table*, int, int);
@@ -1302,7 +1531,6 @@ void sqlite3GenerateConstraintChecks(Parse*,Table*,int,char*,int,int,int,int);
 void sqlite3CompleteInsertion(Parse*, Table*, int, char*, int, int, int);
 void sqlite3OpenTableAndIndices(Parse*, Table*, int, int);
 void sqlite3BeginWriteOperation(Parse*, int, int);
-void sqlite3EndWriteOperation(Parse*);
 Expr *sqlite3ExprDup(Expr*);
 void sqlite3TokenCopy(Token*, Token*);
 ExprList *sqlite3ExprListDup(ExprList*);
@@ -1316,21 +1544,32 @@ int sqlite3SafetyOn(sqlite3*);
 int sqlite3SafetyOff(sqlite3*);
 int sqlite3SafetyCheck(sqlite3*);
 void sqlite3ChangeCookie(sqlite3*, Vdbe*, int);
-void sqlite3BeginTrigger(Parse*, Token*,Token*,int,int,IdList*,SrcList*,
-                         int,Expr*,int);
-void sqlite3FinishTrigger(Parse*, TriggerStep*, Token*);
-void sqlite3DropTrigger(Parse*, SrcList*);
-void sqlite3DropTriggerPtr(Parse*, Trigger*, int);
-int sqlite3TriggersExist(Parse* , Trigger* , int , int , int, ExprList*);
-int sqlite3CodeRowTrigger(Parse*, int, ExprList*, int, Table *, int, int, 
-                         int, int);
-void sqliteViewTriggers(Parse*, Table*, Expr*, int, ExprList*);
-void sqlite3DeleteTriggerStep(TriggerStep*);
-TriggerStep *sqlite3TriggerSelectStep(Select*);
-TriggerStep *sqlite3TriggerInsertStep(Token*, IdList*, ExprList*, Select*, int);
-TriggerStep *sqlite3TriggerUpdateStep(Token*, ExprList*, Expr*, int);
-TriggerStep *sqlite3TriggerDeleteStep(Token*, Expr*);
-void sqlite3DeleteTrigger(Trigger*);
+
+#ifndef SQLITE_OMIT_TRIGGER
+  void sqlite3BeginTrigger(Parse*, Token*,Token*,int,int,IdList*,SrcList*,
+                           int,Expr*,int);
+  void sqlite3FinishTrigger(Parse*, TriggerStep*, Token*);
+  void sqlite3DropTrigger(Parse*, SrcList*);
+  void sqlite3DropTriggerPtr(Parse*, Trigger*, int);
+  int sqlite3TriggersExist(Parse*, Table*, int, ExprList*);
+  int sqlite3CodeRowTrigger(Parse*, int, ExprList*, int, Table *, int, int, 
+                           int, int);
+  void sqliteViewTriggers(Parse*, Table*, Expr*, int, ExprList*);
+  void sqlite3DeleteTriggerStep(TriggerStep*);
+  TriggerStep *sqlite3TriggerSelectStep(Select*);
+  TriggerStep *sqlite3TriggerInsertStep(Token*, IdList*, ExprList*,Select*,int);
+  TriggerStep *sqlite3TriggerUpdateStep(Token*, ExprList*, Expr*, int);
+  TriggerStep *sqlite3TriggerDeleteStep(Token*, Expr*);
+  void sqlite3DeleteTrigger(Trigger*);
+  void sqlite3UnlinkAndDeleteTrigger(sqlite3*,int,const char*);
+#else
+# define sqlite3TriggersExist(A,B,C,D,E,F) 0
+# define sqlite3DeleteTrigger(A)
+# define sqlite3DropTriggerPtr(A,B,C)
+# define sqlite3UnlinkAndDeleteTrigger(A,B,C)
+# define sqlite3CodeRowTrigger(A,B,C,D,E,F,G,H,I) 0
+#endif
+
 int sqlite3JoinType(Parse*, Token*, Token*, Token*);
 void sqlite3CreateForeignKey(Parse*, ExprList*, Token*, ExprList*, int);
 void sqlite3DeferForeignKey(Parse*, int);
@@ -1356,7 +1595,7 @@ int sqlite3FixSelect(DbFixer*, Select*);
 int sqlite3FixExpr(DbFixer*, Expr*);
 int sqlite3FixExprList(DbFixer*, ExprList*);
 int sqlite3FixTriggerStep(DbFixer*, TriggerStep*);
-double sqlite3AtoF(const char *z, const char **);
+int sqlite3AtoF(const char *z, double*);
 char *sqlite3_snprintf(int,char*,const char*,...);
 int sqlite3GetInt32(const char *, int*);
 int sqlite3FitsIn64Bits(const char *);
@@ -1367,11 +1606,9 @@ int sqlite3PutVarint(unsigned char *, u64);
 int sqlite3GetVarint(const unsigned char *, u64 *);
 int sqlite3GetVarint32(const unsigned char *, u32 *);
 int sqlite3VarintLen(u64 v);
-char sqlite3AffinityType(const char *, int);
 void sqlite3IndexAffinityStr(Vdbe *, Index *);
 void sqlite3TableAffinityStr(Vdbe *, Table *);
 char sqlite3CompareAffinity(Expr *pExpr, char aff2);
-char const *sqlite3AffinityString(char affinity);
 int sqlite3IndexAffinityOk(Expr *pExpr, char idx_affinity);
 char sqlite3ExprAffinity(Expr *pExpr);
 int sqlite3atoi64(const char*, i64*);
@@ -1394,8 +1631,36 @@ const void *sqlite3ValueText(sqlite3_value*, u8);
 int sqlite3ValueBytes(sqlite3_value*, u8);
 void sqlite3ValueSetStr(sqlite3_value*, int, const void *,u8, void(*)(void*));
 void sqlite3ValueFree(sqlite3_value*);
-sqlite3_value *sqlite3ValueNew();
+sqlite3_value *sqlite3ValueNew(void);
 sqlite3_value *sqlite3GetTransientValue(sqlite3*db);
+int sqlite3ValueFromExpr(Expr *, u8, u8, sqlite3_value **);
+void sqlite3ValueApplyAffinity(sqlite3_value *, u8, u8);
 extern const unsigned char sqlite3UpperToLower[];
+void sqlite3RootPageMoved(Db*, int, int);
+void sqlite3Reindex(Parse*, Token*, Token*);
+void sqlite3AlterFunctions(sqlite3*);
+void sqlite3AlterRenameTable(Parse*, SrcList*, Token*);
+int sqlite3GetToken(const unsigned char *, int *);
+void sqlite3NestedParse(Parse*, const char*, ...);
+void sqlite3ExpirePreparedStatements(sqlite3*);
+void sqlite3CodeSubselect(Parse *, Expr *);
+int sqlite3SelectResolve(Parse *, Select *, NameContext *);
+void sqlite3ColumnDefault(Vdbe *, Table *, int);
+void sqlite3AlterFinishAddColumn(Parse *, Token *);
+void sqlite3AlterBeginAddColumn(Parse *, SrcList *);
+const char *sqlite3TestErrorName(int);
+CollSeq *sqlite3GetCollSeq(sqlite3*, CollSeq *, const char *, int);
+char sqlite3AffinityType(const Token*);
+void sqlite3Analyze(Parse*, Token*, Token*);
+int sqlite3InvokeBusyHandler(BusyHandler*);
+int sqlite3FindDb(sqlite3*, Token*);
+void sqlite3AnalysisLoad(sqlite3*,int iDB);
+void sqlite3DefaultRowEst(Index*);
+void sqlite3RegisterLikeFunctions(sqlite3*, int);
+int sqlite3IsLikeFunction(sqlite3*,Expr*,int*,char*);
+
+#ifdef SQLITE_SSE
+#include "sseInt.h"
+#endif
 
 #endif

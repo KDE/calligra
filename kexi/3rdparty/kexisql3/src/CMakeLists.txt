@@ -6,11 +6,15 @@
 ########### next target ###############
 
 set(kexisql3_LIB_SRCS 
+   alter.c 
+   analyze.c 
    attach.c 
    auth.c 
    btree.c 
    btree.h 
    build.c 
+   callback.c 
+   complete.c 
    date.c 
    delete.c 
    expr.c 
@@ -20,12 +24,11 @@ set(kexisql3_LIB_SRCS
    legacy.c 
    main.c 
    opcodes.c 
-   os_mac.c 
    os_unix.c 
-   os_win.c 
    pager.c 
    parse.c 
    pragma.c 
+   prepare.c 
    printf.c 
    random.c 
    select.c 
@@ -39,6 +42,7 @@ set(kexisql3_LIB_SRCS
    vdbe.c 
    vdbeapi.c 
    vdbeaux.c 
+   vdbefifo.c
    vdbemem.c 
    where.c )
 
@@ -48,7 +52,7 @@ kde4_add_library(kexisql3 SHARED ${kexisql3_LIB_SRCS})
 
 target_link_libraries(kexisql3  ${KDE4_KDECORE_LIBS} )
 
-set_target_properties(kexisql3 PROPERTIES VERSION 3.0.0 SOVERSION 3 )
+set_target_properties(kexisql3 PROPERTIES VERSION 3.2.8 SOVERSION 3 )
 install_targets(${LIB_INSTALL_DIR} kexisql3 )
 
 
