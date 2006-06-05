@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +49,12 @@ class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 	Q_OBJECT
 
 	public:
+		enum Options {
+			ShowFileDrivers = 1,
+			ShowServerDrivers = 2,
+			ShowAll = ShowFileDrivers|ShowServerDrivers
+		};
+
 		/*! Constructs a KexiDBDriverComboBox object.
 
 		    The combobox is populated with the names of the drivers in 
@@ -57,11 +63,10 @@ class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 
 		    If \a includeFileBasedDrivers is set to false, then only those drivers
 		    that are for database servers (those which have X-Kexi-DriverType=Network
-		    in their .desktop file) are shown.
-		 */
+		    in their .desktop file) are shown. */
+		KexiDBDriverComboBox(QWidget* parent, const KexiDB::Driver::InfoMap& driversInfo, 
+			Options options = ShowAll );
 
-		KexiDBDriverComboBox(const KexiDB::Driver::InfoMap& driversInfo, 
-			bool includeFileBasedDrivers = true, QWidget* parent = 0, const char* name = 0);
 		~KexiDBDriverComboBox();
 
 		/*! Gets a list of the names of all drivers.

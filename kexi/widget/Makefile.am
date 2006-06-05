@@ -11,7 +11,8 @@ libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
 	kexifieldlistview.cpp kexifieldcombobox.cpp kexidatasourcecombobox.cpp \
 	kexipropertyeditorview.cpp kexismalltoolbutton.cpp \
 	kexicustompropertyfactory.cpp kexicustompropertyfactory_p.cpp \
-	kexicharencodingcombobox.cpp
+	kexicharencodingcombobox.cpp \
+	kexiprjtypeselectorbase.ui kexiprjtypeselector.cpp
 
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor

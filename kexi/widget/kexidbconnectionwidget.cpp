@@ -71,8 +71,8 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 	iconLabel->setPixmap(DesktopIcon("network"));
 
 	QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
-	m_driversCombo = new KexiDBDriverComboBox(Kexi::driverManager().driversInfo(), false,
-		frmEngine, "drivers combo");
+	m_driversCombo = new KexiDBDriverComboBox(frmEngine, Kexi::driverManager().driversInfo(), 
+		KexiDBDriverComboBox::ShowServerDrivers);
 	lblEngine->setBuddy( m_driversCombo );
 	lblEngine->setFocusProxy( m_driversCombo );
 	driversComboLyr->addWidget( m_driversCombo );

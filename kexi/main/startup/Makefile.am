@@ -4,13 +4,13 @@ noinst_LTLIBRARIES = libkeximainstartup.la
 
 libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
 	KexiOpenExistingFile.ui \
-	KexiNewPrjTypeSelector.ui KexiPrjTypeSelectorBase.ui KexiDBTitlePageBase.ui \
+	KexiNewPrjTypeSelector.ui KexiDBTitlePageBase.ui \
 	KexiServerDBNamePage.ui \
 	KexiDBTitlePage.cpp \
 	KexiConnSelector.cpp KexiProjectSelector.cpp \
 	KexiStartupDialog.cpp \
 	KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
-	KexiStartup.cpp KexiStartup_p.cpp KexiPrjTypeSelector.cpp
+	KexiStartup.cpp KexiStartup_p.cpp
 
 noinst_HEADERS = KexiStartup_p.h
 
