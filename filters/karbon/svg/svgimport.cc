@@ -1289,7 +1289,9 @@ void SvgImport::createObject( VGroup *grp, const QDomElement &b, const VObject::
 		double y		= parseUnit( b.attribute( "y" ), false, true, m_outerRect );
 		double width	= parseUnit( b.attribute( "width" ), true, false, m_outerRect );
 		double height	= parseUnit( b.attribute( "height" ), false, true, m_outerRect );
-		obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
+		double rx       = parseUnit( b.attribute( "rx" ) );
+		double ry       = parseUnit( b.attribute( "ry" ) );
+		obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height, rx, ry );
 	}
 	else if( b.tagName() == "ellipse" )
 	{
