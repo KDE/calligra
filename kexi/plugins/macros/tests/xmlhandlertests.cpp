@@ -144,6 +144,8 @@ void XMLHandlerTests::testParseXML()
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	// Is the parsen content in the Macro correct ?
 	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	macro->items().first()->variable("teststring")->setVariant("bla");
+	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
 
 	// Test-XML-document with bad root element.
 	xml = QString("<!DOCTYPE macros>"
@@ -351,9 +353,9 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> mac
 			
 			const KoMacro::Variable* varitem = mvariables.find(varelem.attribute("name")).data();
 			//if ( ! *varitem ) kdDebug() << "BBBBBBBBBBBThere are more variable-elements in the XML: " << mvariables.find(varelem.attribute("name")).key() << endl;
-
+			
 			// TODO Compare the contents.
-			//if ( varitem->variant != QVariant(varelem.text())) kdDebug() << "The content of the Variable is not equal." << endl;
+			//if ( varitem->variant() != QVariant(varelem.text())) kdDebug() << "The content of the Variable is not equal." << endl;
 			mvariables.erase(varitem->name());
 			
 			// TODO Is it true that a Macroitem saves all parsen Variables also unknown???

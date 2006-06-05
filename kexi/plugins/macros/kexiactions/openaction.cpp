@@ -41,6 +41,10 @@ namespace KexiMacro {
 	static const QString DATAVIEW = "data";
 	static const QString DESIGNVIEW = "design";
 	static const QString TEXTVIEW = "text";
+	
+	static const QString OBJECT = "object";
+	static const QString NAME = "name";
+	static const QString VIEW = "view";
 
 	/**
 	* The ViewVariable class provide a list of viewmodes supported
@@ -51,7 +55,7 @@ namespace KexiMacro {
 	{
 		public:
 			ViewVariable(ACTIONIMPL* actionimpl, const QString& objectname = QString::null, const QString& viewname = QString::null)
-				: KexiVariable<ACTIONIMPL>(actionimpl, "view", i18n("View"))
+				: KexiVariable<ACTIONIMPL>(actionimpl, VIEW, i18n("View"))
 			{
 				QStringList namelist;
 				KexiPart::Part* part = Kexi::partManager().partForMimeType( QString("kexi/%1").arg(objectname) );
@@ -109,10 +113,10 @@ bool OpenAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const Q
 	}
 
 	variable->children().clear();
-	if(name == "object") {
-		const QString objectvalue = macroitem->variant("object", true).toString(); // e.g. "table" or "query"
-		const QString objectname = macroitem->variant("name", true).toString();
-		const QString viewname = macroitem->variant("view", true).toString();
+	if(name == OBJECT) {
+		const QString objectvalue = macroitem->variant(OBJECT, true).toString(); // e.g. "table" or "query"
+		const QString objectname = macroitem->variant(NAME, true).toString();
+		const QString viewname = macroitem->variant(VIEW, true).toString();
 
 		kdDebug()<<"OpenAction::notifyUpdated() objectvalue="<<objectvalue<<" objectname="<<objectname<<" viewname="<<viewname<<endl;
 
@@ -133,15 +137,15 @@ void OpenAction::activate(KSharedPtr<KoMacro::Context> context)
 		throw KoMacro::Exception(i18n("No project loaded."), "OpenAction::activate");
 	}
 
-	const QString objectname = context->variable("object")->variant().toString();
-	const QString name = context->variable("name")->variant().toString();
+	const QString objectname = context->variable(OBJECT)->variant().toString();
+	const QString name = context->variable(NAME)->variant().toString();
 	KexiPart::Item* item = mainWin()->project()->itemForMimeType( QString("kexi/%1").arg(objectname).latin1(), name );
 	if(! item) {
 		throw KoMacro::Exception(i18n("No such object \"%1.%2\".").arg(objectname).arg(name), "OpenAction::activate");
 	}
 
 	// Determinate the viewmode.
-	const QString view = context->variable("view")->variant().toString();
+	const QString view = context->variable(VIEW)->variant().toString();
 	int viewmode;
 	if(view == DATAVIEW)
 		viewmode = Kexi::DataViewMode;

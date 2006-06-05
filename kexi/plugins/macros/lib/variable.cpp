@@ -155,8 +155,8 @@ void Variable::setText(const QString& text)
 
 const QVariant Variable::variant() const
 {
-	Q_ASSERT( type() == MetaParameter::TypeVariant );
-	Q_ASSERT( variantType() != QVariant::Invalid );
+	//Q_ASSERT( type() == MetaParameter::TypeVariant );
+	//Q_ASSERT( variantType() != QVariant::Invalid );
 	//if(variantType() == QVariant::Invalid) return QVariant();
 	return d->variant;
 }

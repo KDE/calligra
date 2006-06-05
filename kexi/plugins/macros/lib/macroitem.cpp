@@ -112,17 +112,35 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 				ok = (s == "true" || s == "false" || s == "0" || s == "1" || s == "-1");
 				v = variant.toBool();
 			} break;
-			case QVariant::Int: v = variant.toInt(&ok); break;
-			case QVariant::UInt: v = variant.toUInt(&ok); break;
-			case QVariant::LongLong: v = variant.toLongLong(&ok); break;
-			case QVariant::ULongLong: v = variant.toULongLong(&ok); break;
-			case QVariant::Double: v = variant.toDouble(&ok); break;
-			case QVariant::String: v = variant.toString(); break;
+			case QVariant::Int: {
+				v = variant.toInt(&ok);
+				Q_ASSERT(!ok || v.toString() == variant.toString());
+			} break;
+			case QVariant::UInt: 
+				v = variant.toUInt(&ok); 
+				Q_ASSERT(!ok || v.toString() == variant.toString());
+				break;
+			case QVariant::LongLong: 
+				v = variant.toLongLong(&ok); 
+				Q_ASSERT(!ok || v.toString() == variant.toString());
+				break;
+			case QVariant::ULongLong: 
+				v = variant.toULongLong(&ok); 
+				Q_ASSERT(!ok || v.toString() == variant.toString());
+				break;
+			case QVariant::Double: 
+				v = variant.toDouble(&ok);
+				Q_ASSERT(!ok || v.toString() == variant.toString());
+				break;
+			case QVariant::String: 
+				v = variant.toString();
+				break;
 			default: {
 				ok = v.cast( var.type() );
 				kdWarning()<<"MacroItem::setVariable() Unhandled type="<<var.type()<<" value="<<v<<endl;
 			} break;
 		}
+kdDebug()<<"=======================> v="<<v<<" variant="<<variant<<" ok="<<ok<<endl;
 		if(! ok)
 			v = variant; // ignore casting result
 	}
