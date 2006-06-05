@@ -578,10 +578,12 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	row = column = 1;
 	maxColumn = 0;
 	QChar x;
+	const bool hadInputStream = m_inputStream!=0;
 	delete m_inputStream;
 	if ( m_mode == Clipboard ) {
 		m_inputStream = new QTextStream(m_clipboardData, IO_ReadOnly);
-		m_delimiterWidget->setDelimiter(KEXICSV_DEFAULT_CLIPBOARD_DELIMITER);
+		if (!hadInputStream)
+			m_delimiterWidget->setDelimiter(KEXICSV_DEFAULT_CLIPBOARD_DELIMITER);
 	}
 	else {
 		m_file->at(0); //always seek at 0 because loadRows() is called many times
