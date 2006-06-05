@@ -238,7 +238,7 @@ Set::clear()
 {
 	aboutToBeCleared();
 	d->propertiesOfGroup.clear();
-	d->groupsDescription.clear()
+	d->groupsDescription.clear();
 	d->groupForProperty.clear();
 	Property::DictIterator it(d->dict);
 	while (it.current())
