@@ -111,6 +111,7 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 				const QString s = variant.toString();
 				ok = (s == "true" || s == "false" || s == "0" || s == "1" || s == "-1");
 				v = variant.toBool();
+				kdDebug() << "parse an BOOOOOOOOOOOOOLL       " << v << endl;
 			} break;
 			case QVariant::Int: {
 				v = variant.toInt(&ok);

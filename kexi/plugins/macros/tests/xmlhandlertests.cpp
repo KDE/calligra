@@ -344,7 +344,7 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> mac
 			kit++;
 		}*/
 
-		// o down to MacroItem->Variable and item->variable and compare them.
+		// Go down to MacroItem->Variable and item->variable and compare them.
 		QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables = macroitem->variables();
 		QDomNode varnode = itemelem.firstChild();
 
@@ -355,7 +355,16 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> mac
 			//if ( ! *varitem ) kdDebug() << "BBBBBBBBBBBThere are more variable-elements in the XML: " << mvariables.find(varelem.attribute("name")).key() << endl;
 			
 			// TODO Compare the contents.
-			//if ( varitem->variant() != QVariant(varelem.text())) kdDebug() << "The content of the Variable is not equal." << endl;
+			QVariant t = varitem->variant();
+			kdDebug() << "TYYYYYYYYYYYYYYYYYYYPPPPPPPPPPE" << t << endl;
+			//if ( varitem->variant().type() == QVariant::Bool) ) kdDebug() << "BLAAAAAAAAAAAAAA" << endl;
+			//kdDebug() << varitem->type() << endl;
+			//kdDebug() << QVariant::Bool << endl;
+			if ( varitem->variant() != QVariant(varelem.text()) ) {
+				kdDebug() << "The content of the Variable is not equal." << varitem->variant() << "!=" << varelem.text() << endl;
+				return false;
+			}
+			// else if ( varitem->variant() == QVariant( varelem.text()) ) kdDebug() << "The content of the Variable is equal: " << varitem->variant() << "==" << varelem.text() << endl;
 			mvariables.erase(varitem->name());
 			
 			// TODO Is it true that a Macroitem saves all parsen Variables also unknown???
@@ -364,7 +373,10 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> mac
 			varnode = varnode.nextSibling();
 		}
 		// TODO Should I compare here with the Variables of the TestAction??
-		// if ( ! mvariables.empty()) kdDebug() << "MMMMMMMThere are non-filled variable in the MacroItem: " << mvariables.count() <<endl;
+		if ( ! mvariables.empty()) {
+			kdDebug() << "MMMMMMMThere are non-filled variable in the MacroItem: " << mvariables.count() <<endl;
+			return false;
+		}
 		
 		// Go to next MacroItem and next item-element.
 		mit++;
@@ -381,6 +393,12 @@ void XMLHandlerTests::testToXML()
 {	
 	kdDebug()<<"===================== testToXML() ======================" << endl;
 	// TODO Part 2: From a Macro to XML.
+	
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::MacroItem> macroitem = new KoMacro::MacroItem();
+	KSharedPtr<KoMacro::Action> testaction = new TestAction();
+	macroitem->setAction(testaction);
+	macro->addItem(macroitem);
 
 }
 #include "xmlhandlertests.moc"
