@@ -148,7 +148,7 @@ InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
     return d->interpreterinfos[interpretername];
 }
 
-const QString& Manager::getInterpreternameForFile(const QString& file)
+const QString Manager::getInterpreternameForFile(const QString& file)
 {
     QRegExp rx;
     rx.setWildcard(true);
