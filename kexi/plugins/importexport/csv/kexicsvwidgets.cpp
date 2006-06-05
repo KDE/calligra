@@ -82,14 +82,20 @@ void KexiCSVDelimiterWidget::slotDelimiterChanged(int index)
 
 void KexiCSVDelimiterWidget::slotDelimiterChangedInternal(int index)
 {
+	bool changed = false;
 	if (index > KEXICSV_OTHER_DELIMITER_INDEX)
 		return;
-	else if (index == KEXICSV_OTHER_DELIMITER_INDEX)
+	else if (index == KEXICSV_OTHER_DELIMITER_INDEX) {
+		changed = m_delimiter != m_delimiterEdit->text();
 		m_delimiter = m_delimiterEdit->text();
-	else
+	}
+	else {
+		changed = m_delimiter != m_availableDelimiters[index];
 		m_delimiter = m_availableDelimiters[index];
+	}
 	m_delimiterEdit->setEnabled(index == KEXICSV_OTHER_DELIMITER_INDEX);
-	emit delimiterChanged(m_delimiter);
+	if (changed)
+		emit delimiterChanged(m_delimiter);
 }
 
 void KexiCSVDelimiterWidget::slotDelimiterLineEditReturnPressed()
