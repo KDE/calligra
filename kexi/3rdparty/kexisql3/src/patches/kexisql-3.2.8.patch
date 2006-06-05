@@ -1,0 +1,664 @@
+diff -u ../../sqlite-3.2.8.orig/attach.c ./attach.c
+--- ../../sqlite-3.2.8.orig/attach.c	2005-12-19 10:37:50.000000000 +0100
++++ ./attach.c	2006-06-05 11:10:38.734375000 +0200
+@@ -101,7 +101,7 @@
+   aNew->zName = zName;
+   zName = 0;
+   aNew->safety_level = 3;
+-  rc = sqlite3BtreeFactory(db, zFile, 0, MAX_PAGES, &aNew->pBt);
++  rc = sqlite3BtreeFactory(db, zFile, 0, MAX_PAGES, &aNew->pBt, 0 /*!exclusive*/, 1/*allowReadonly*/);
+   if( rc ){
+     sqlite3ErrorMsg(pParse, "unable to open database: %s", zFile);
+   }
+diff -u ../../sqlite-3.2.8.orig/btree.c ./btree.c
+--- ../../sqlite-3.2.8.orig/btree.c	2005-12-19 10:37:50.000000000 +0100
++++ ./btree.c	2006-06-05 11:20:46.015625000 +0200
+@@ -1213,7 +1213,9 @@
+ int sqlite3BtreeOpen(
+   const char *zFilename,  /* Name of the file containing the BTree database */
+   Btree **ppBtree,        /* Pointer to new Btree object written here */
+-  int flags               /* Options */
++  int flags,              /* Options */
++  int exclusiveFlag,      /* as in sqlite3OsOpenReadWrite() */
++  int allowReadonly       /* as in sqlite3OsOpenReadWrite() */
+ ){
+   Btree *pBt;
+   int rc;
+@@ -1236,7 +1238,8 @@
+     *ppBtree = 0;
+     return SQLITE_NOMEM;
+   }
+-  rc = sqlite3pager_open(&pBt->pPager, zFilename, EXTRA_SIZE, flags);
++  rc = sqlite3pager_open(&pBt->pPager, zFilename, EXTRA_SIZE, flags,
++                         exclusiveFlag, allowReadonly);
+   if( rc!=SQLITE_OK ){
+     if( pBt->pPager ) sqlite3pager_close(pBt->pPager);
+     sqliteFree(pBt);
+@@ -5831,3 +5834,8 @@
+   return sqlite3pager_reset(pBt->pPager);
+ }
+ #endif
++
++/* js */
++int sqlite3_is_readonly(sqlite3* db) {
++  return db->aDb->pBt->readOnly;
++}
+diff -u ../../sqlite-3.2.8.orig/btree.h ./btree.h
+--- ../../sqlite-3.2.8.orig/btree.h	2005-12-19 10:37:50.000000000 +0100
++++ ./btree.h	2006-06-05 11:10:38.765625000 +0200
+@@ -41,7 +41,9 @@
+ int sqlite3BtreeOpen(
+   const char *zFilename,   /* Name of database file to open */
+   Btree **,                /* Return open Btree* here */
+-  int flags                /* Flags */
++  int flags,               /* Flags */
++  int exclusiveFlag,       /* as in sqlite3OsOpenReadWrite() */
++  int allowReadonly        /* as in sqlite3OsOpenReadWrite() */
+ );
+ 
+ /* The flags parameter to sqlite3BtreeOpen can be the bitwise or of the
+diff -u ../../sqlite-3.2.8.orig/build.c ./build.c
+--- ../../sqlite-3.2.8.orig/build.c	2005-12-19 10:37:50.000000000 +0100
++++ ./build.c	2006-06-05 11:10:38.781250000 +0200
+@@ -2721,7 +2721,7 @@
+ static int sqlite3OpenTempDatabase(Parse *pParse){
+   sqlite3 *db = pParse->db;
+   if( db->aDb[1].pBt==0 && !pParse->explain ){
+-    int rc = sqlite3BtreeFactory(db, 0, 0, MAX_PAGES, &db->aDb[1].pBt);
++    int rc = sqlite3BtreeFactory(db, 0, 0, MAX_PAGES, &db->aDb[1].pBt, 0 /*!exclusive*/, 1/*allowReadonly*/);
+     if( rc!=SQLITE_OK ){
+       sqlite3ErrorMsg(pParse, "unable to open a temporary database "
+         "file for storing temporary tables");
+diff -u ../../sqlite-3.2.8.orig/main.c ./main.c
+--- ../../sqlite-3.2.8.orig/main.c	2005-12-19 10:37:50.000000000 +0100
++++ ./main.c	2006-06-05 11:10:38.828125000 +0200
+@@ -20,6 +20,12 @@
+ #include "os.h"
+ #include <ctype.h>
+ 
++/* (jstaniek) used by sqlite_set_verbose_vacuum and in vacuum.c */
++int g_verbose_vacuum = 0;
++void sqlite_set_verbose_vacuum(int set){
++  g_verbose_vacuum=set;
++}
++
+ /*
+ ** The following constant value is used by the SQLITE_BIGENDIAN and
+ ** SQLITE_LITTLEENDIAN macros.
+@@ -256,6 +262,11 @@
+     case SQLITE_FORMAT:     z = "auxiliary database format error";       break;
+     case SQLITE_RANGE:      z = "bind or column index out of range";     break;
+     case SQLITE_NOTADB:     z = "file is encrypted or is not a database";break;
++ /* js */
++    case SQLITE_CANTOPEN_WITH_LOCKED_READWRITE:
++                            z = "unable to open with locked read/write access"; break;
++    case SQLITE_CANTOPEN_WITH_LOCKED_WRITE:
++                            z = "unable to open with locked write access"; break;
+     default:                z = "unknown error";                         break;
+   }
+   return z;
+@@ -592,7 +603,9 @@
+   const char *zFilename,    /* Name of the file containing the BTree database */
+   int omitJournal,          /* if TRUE then do not journal this file */
+   int nCache,               /* How many pages in the page cache */
+-  Btree **ppBtree           /* Pointer to new Btree object written here */
++  Btree **ppBtree,          /* Pointer to new Btree object written here */
++  int exclusiveFlag,        /* as in sqlite3OsOpenReadWrite() */
++  int allowReadonly         /* as in sqlite3OsOpenReadWrite() */
+ ){
+   int btree_flags = 0;
+   int rc;
+@@ -621,7 +634,7 @@
+ #endif /* SQLITE_OMIT_MEMORYDB */
+   }
+ 
+-  rc = sqlite3BtreeOpen(zFilename, ppBtree, btree_flags);
++  rc = sqlite3BtreeOpen(zFilename, ppBtree, btree_flags, exclusiveFlag, allowReadonly);
+   if( rc==SQLITE_OK ){
+     sqlite3BtreeSetBusyHandler(*ppBtree, (void*)&db->busyHandler);
+     sqlite3BtreeSetCacheSize(*ppBtree, nCache);
+@@ -710,7 +723,9 @@
+ */
+ static int openDatabase(
+   const char *zFilename, /* Database filename UTF-8 encoded */
+-  sqlite3 **ppDb         /* OUT: Returned database handle */
++  sqlite3 **ppDb,        /* OUT: Returned database handle */
++  int exclusiveFlag,     /* as in sqlite3OsOpenReadWrite() */
++  int allowReadonly      /* as in sqlite3OsOpenReadWrite() */
+ ){
+   sqlite3 *db;
+   int rc, i;
+@@ -759,7 +774,7 @@
+   }
+ 
+   /* Open the backend database driver */
+-  rc = sqlite3BtreeFactory(db, zFilename, 0, MAX_PAGES, &db->aDb[0].pBt);
++  rc = sqlite3BtreeFactory(db, zFilename, 0, MAX_PAGES, &db->aDb[0].pBt, exclusiveFlag, allowReadonly);
+   if( rc!=SQLITE_OK ){
+     sqlite3Error(db, rc, 0);
+     db->magic = SQLITE_MAGIC_CLOSED;
+@@ -806,9 +821,11 @@
+ */
+ int sqlite3_open(
+   const char *zFilename, 
+-  sqlite3 **ppDb 
++  sqlite3 **ppDb,
++  int exclusiveFlag,     /* as in sqlite3OsOpenReadWrite() */
++  int allowReadonly      /* as in sqlite3OsOpenReadWrite() */
+ ){
+-  return openDatabase(zFilename, ppDb);
++  return openDatabase(zFilename, ppDb, exclusiveFlag, allowReadonly);
+ }
+ 
+ #ifndef SQLITE_OMIT_UTF16
+@@ -817,7 +834,9 @@
+ */
+ int sqlite3_open16(
+   const void *zFilename, 
+-  sqlite3 **ppDb
++  sqlite3 **ppDb,
++  int exclusiveFlag,     /* as in sqlite3OsOpenReadWrite() */
++  int allowReadonly      /* as in sqlite3OsOpenReadWrite() */
+ ){
+   char const *zFilename8;   /* zFilename encoded in UTF-8 instead of UTF-16 */
+   int rc = SQLITE_NOMEM;
+@@ -829,7 +848,7 @@
+   sqlite3ValueSetStr(pVal, -1, zFilename, SQLITE_UTF16NATIVE, SQLITE_STATIC);
+   zFilename8 = sqlite3ValueText(pVal, SQLITE_UTF8);
+   if( zFilename8 ){
+-    rc = openDatabase(zFilename8, ppDb);
++    rc = openDatabase(zFilename8, ppDb, exclusiveFlag, allowReadonly);
+     if( rc==SQLITE_OK && *ppDb ){
+       sqlite3_exec(*ppDb, "PRAGMA encoding = 'UTF-16'", 0, 0, 0);
+     }
+diff -u ../../sqlite-3.2.8.orig/os.h ./os.h
+--- ../../sqlite-3.2.8.orig/os.h	2005-12-19 10:37:50.000000000 +0100
++++ ./os.h	2006-06-05 11:10:38.843750000 +0200
+@@ -175,7 +175,8 @@
+ 
+ int sqlite3OsDelete(const char*);
+ int sqlite3OsFileExists(const char*);
+-int sqlite3OsOpenReadWrite(const char*, OsFile*, int*);
++/* js: extended */
++int sqlite3OsOpenReadWrite(const char*, OsFile*, int*, int, int);
+ int sqlite3OsOpenExclusive(const char*, OsFile*, int);
+ int sqlite3OsOpenReadOnly(const char*, OsFile*);
+ int sqlite3OsOpenDirectory(const char*, OsFile*);
+diff -u ../../sqlite-3.2.8.orig/os_unix.c ./os_unix.c
+--- ../../sqlite-3.2.8.orig/os_unix.c	2005-12-19 10:37:50.000000000 +0100
++++ ./os_unix.c	2006-06-05 11:10:38.859375000 +0200
+@@ -509,7 +509,9 @@
+ int sqlite3OsOpenReadWrite(
+   const char *zFilename,
+   OsFile *id,
+-  int *pReadonly
++  int *pReadonly,
++  int exclusiveFlag,
++  int allowReadonly
+ ){
+   int rc;
+   assert( !id->isOpen );
+diff -u ../../sqlite-3.2.8.orig/os_win.c ./os_win.c
+--- ../../sqlite-3.2.8.orig/os_win.c	2005-12-19 10:37:50.000000000 +0100
++++ ./os_win.c	2006-06-05 11:55:14.062500000 +0200
+@@ -155,26 +155,37 @@
+ 
+ /*
+ ** Attempt to open a file for both reading and writing.  If that
+-** fails, try opening it read-only.  If the file does not exist,
+-** try to create it.
++** fails, and allowReadonly is 1, try opening it read-only.  
++** If the file does not exist, try to create it.
++**
++** Exclusive write access is required if exclusiveFlag is 1. 
++** Exclusive read/write access is required if exclusiveFlag is 2. 
++** In this case, if allowReadonly is also 1, only shared writing is locked.
+ **
+ ** On success, a handle for the open file is written to *id
+ ** and *pReadonly is set to 0 if the file was opened for reading and
+ ** writing or 1 if the file was opened read-only.  The function returns
+ ** SQLITE_OK.
+ **
+-** On failure, the function returns SQLITE_CANTOPEN and leaves
+-** *id and *pReadonly unchanged.
++** On failure the function leaves *id and *pReadonly unchanged, and returns:
++** - SQLITE_CANTOPEN_WITH_LOCKED_READWRITE if it was unable to lock the file 
++**   for read/write access.
++** - SQLITE_CANTOPEN_WITH_LOCKED_WRITE if it was unable to lock the file 
++**   for write access.
++** - SQLITE_CANTOPEN in any other case.
+ */
+ int sqlite3OsOpenReadWrite(
+   const char *zFilename,
+   OsFile *id,
+-  int *pReadonly
++  int *pReadonly,
++  int exclusiveFlag,
++  int allowReadonly
+ ){
+   HANDLE h;
++  int access;
+   WCHAR *zWide = utf8ToUnicode(zFilename);
+   assert( !id->isOpen );
+-  if( zWide ){
++/*  if( zWide ){
+     h = CreateFileW(zWide,
+        GENERIC_READ | GENERIC_WRITE,
+        FILE_SHARE_READ | FILE_SHARE_WRITE,
+@@ -201,31 +212,84 @@
+       *pReadonly = 0;
+     }
+     sqliteFree(zWide);
+-  }else{
+-    h = CreateFileA(zFilename,
+-       GENERIC_READ | GENERIC_WRITE,
+-       FILE_SHARE_READ | FILE_SHARE_WRITE,
+-       NULL,
+-       OPEN_ALWAYS,
+-       FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
+-       NULL
+-    );
+-    if( h==INVALID_HANDLE_VALUE ){
+-      h = CreateFileA(zFilename,
+-         GENERIC_READ,
+-         FILE_SHARE_READ,
+-         NULL,
+-         OPEN_ALWAYS,
+-         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
+-         NULL
+-      );
+-      if( h==INVALID_HANDLE_VALUE ){
++  }else*/{
++    /* js */
++    if (exclusiveFlag!=SQLITE_OPEN_READONLY) {
++      if (exclusiveFlag==SQLITE_OPEN_NO_LOCKED)
++         access = FILE_SHARE_READ | FILE_SHARE_WRITE;
++      else if (exclusiveFlag==SQLITE_OPEN_WRITE_LOCKED)
++         access = FILE_SHARE_READ;
++      else /* SQLITE_OPEN_READ_WRITE_LOCKED */
++         access = 0;
++      if( zWide ){
++        h = CreateFileW(zWide,
++          GENERIC_READ | GENERIC_WRITE,
++          access,
++          NULL,
++          OPEN_ALWAYS,
++          FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
++          NULL
++        );
++      }
++      else {
++        h = CreateFileA(zFilename,
++          GENERIC_READ | GENERIC_WRITE,
++          access,
++          NULL,
++          OPEN_ALWAYS,
++          FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
++          NULL
++        );
++      }
++      if (!allowReadonly && GetLastError()==ERROR_SHARING_VIOLATION) {
++        sqliteFree(zWide);
++        if (exclusiveFlag==SQLITE_OPEN_NO_LOCKED)
++          return SQLITE_CANTOPEN;
++        return exclusiveFlag==SQLITE_OPEN_READ_WRITE_LOCKED 
++               ? SQLITE_CANTOPEN_WITH_LOCKED_READWRITE
++               : SQLITE_CANTOPEN_WITH_LOCKED_WRITE;
++      }
++    }
++    if( exclusiveFlag==SQLITE_OPEN_READONLY || (allowReadonly && h==INVALID_HANDLE_VALUE) ){
++     /* open read only */
++     /*	  if (exclusiveFlag==0) */
++      access = FILE_SHARE_READ | FILE_SHARE_WRITE;
++   /*		else
++   			 access = FILE_SHARE_READ;*/
++      if( zWide ){
++        h = CreateFileW(zWide,
++          GENERIC_READ | GENERIC_WRITE,
++          access,
++          NULL,
++          OPEN_ALWAYS,
++          FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
++          NULL
++        );
++      }
++      else {
++        h = CreateFileA(zFilename,
++          GENERIC_READ | GENERIC_WRITE,
++          access,
++          NULL,
++          OPEN_ALWAYS,
++          FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
++          NULL
++        );
++      }
++      if (GetLastError()==ERROR_SHARING_VIOLATION) {
++        sqliteFree(zWide);
+         return SQLITE_CANTOPEN;
+       }
+-      *pReadonly = 1;
++      if( h!=INVALID_HANDLE_VALUE ){
++        *pReadonly = 1;
++      }
+     }else{
+       *pReadonly = 0;
+     }
++    sqliteFree(zWide);
++    if( h==INVALID_HANDLE_VALUE ){
++      return SQLITE_CANTOPEN;
++    }
+   }
+   id->h = h;
+   id->locktype = NO_LOCK;
+diff -u ../../sqlite-3.2.8.orig/pager.c ./pager.c
+--- ../../sqlite-3.2.8.orig/pager.c	2005-12-19 10:37:50.000000000 +0100
++++ ./pager.c	2006-06-05 11:54:53.484375000 +0200
+@@ -1590,7 +1590,9 @@
+   Pager **ppPager,         /* Return the Pager structure here */
+   const char *zFilename,   /* Name of the database file to open */
+   int nExtra,              /* Extra bytes append to each in-memory page */
+-  int flags                /* flags controlling this file */
++  int flags,               /* flags controlling this file */
++  int exclusiveFlag,       /* as in sqlite3OsOpenReadWrite() */
++  int allowReadonly        /* as in sqlite3OsOpenReadWrite() */
+ ){
+   Pager *pPager;
+   char *zFullPathname = 0;
+@@ -1621,7 +1623,7 @@
+     {
+       zFullPathname = sqlite3OsFullPathname(zFilename);
+       if( zFullPathname ){
+-        rc = sqlite3OsOpenReadWrite(zFullPathname, &fd, &readOnly);
++        rc = sqlite3OsOpenReadWrite(zFullPathname, &fd, &readOnly, exclusiveFlag, allowReadonly);
+       }
+     }
+   }else{
+diff -u ../../sqlite-3.2.8.orig/pager.h ./pager.h
+--- ../../sqlite-3.2.8.orig/pager.h	2005-12-19 10:37:50.000000000 +0100
++++ ./pager.h	2006-06-05 11:43:24.921875000 +0200
+@@ -67,7 +67,7 @@
+ ** routines:
+ */
+ int sqlite3pager_open(Pager **ppPager, const char *zFilename,
+-                     int nExtra, int flags);
++                     int nExtra, int flags, int exclusiveFlag, int allowReadonly);
+ void sqlite3pager_set_busyhandler(Pager*, BusyHandler *pBusyHandler);
+ void sqlite3pager_set_destructor(Pager*, void(*)(void*,int));
+ void sqlite3pager_set_reiniter(Pager*, void(*)(void*,int));
+diff -u ../../sqlite-3.2.8.orig/shell.c ./shell.c
+--- ../../sqlite-3.2.8.orig/shell.c	2006-06-05 11:12:30.875000000 +0200
++++ ./shell.c	2006-06-05 11:12:18.781250000 +0200
+@@ -28,6 +28,10 @@
+ # include <sys/types.h>
+ #endif
+ 
++#ifdef _WIN32
++# include <io.h>
++#endif
++
+ #ifdef __MACOS__
+ # include <console.h>
+ # include <signal.h>
+@@ -77,7 +81,6 @@
+ static char mainPrompt[20];     /* First line prompt. default: "sqlite> "*/
+ static char continuePrompt[20]; /* Continuation prompt. default: "   ...> " */
+ 
+-
+ /*
+ ** Determines if a string is a number of not.
+ */
+@@ -793,7 +796,7 @@
+ */
+ static void open_db(struct callback_data *p){
+   if( p->db==0 ){
+-    sqlite3_open(p->zDbFilename, &p->db);
++    sqlite3_open(p->zDbFilename, &p->db, 0/*!exclusive*/, 1/*allowReadonly*/);
+     db = p->db;
+ #ifdef SQLITE_HAS_CODEC
+     sqlite3_key(p->db, p->zKey, p->zKey ? strlen(p->zKey) : 0);
+@@ -1626,6 +1629,9 @@
+   "   -list                set output mode to 'list'\n"
+   "   -separator 'x'       set output field separator (|)\n"
+   "   -nullvalue 'text'    set text string for NULL values\n"
++  "   -verbose-vacuum      set VACUUM to verbose, interactive mode\n"
++  "                         so it is possible to get progress info\n"
++  "                         and abort the process\n"
+   "   -version             show SQLite version\n"
+   "   -help                show this text, also show dot-commands\n"
+ ;
+@@ -1753,6 +1759,8 @@
+       data.showHeader = 0;
+     }else if( strcmp(z,"-echo")==0 ){
+       data.echoOn = 1;
++    }else if( strcmp(z,"-verbose-vacuum")==0 ){ /*(jstaniek)*/
++      sqlite_set_verbose_vacuum(1);
+     }else if( strcmp(z,"-version")==0 ){
+       printf("%s\n", sqlite3_libversion());
+       return 1;
+@@ -1787,7 +1795,7 @@
+       char *zHome;
+       char *zHistory = 0;
+       printf(
+-        "SQLite version %s\n"
++        "SQLite version %s (customized, bundled with Kexi)\n"
+         "Enter \".help\" for instructions\n",
+         sqlite3_libversion()
+       );
+diff -u ../../sqlite-3.2.8.orig/sqlite3.h ./sqlite3.h
+--- ../../sqlite-3.2.8.orig/sqlite3.h	2005-12-19 10:37:50.000000000 +0100
++++ ./sqlite3.h	2006-06-05 11:10:53.343750000 +0200
+@@ -186,6 +186,10 @@
+ #define SQLITE_ROW         100  /* sqlite3_step() has another row ready */
+ #define SQLITE_DONE        101  /* sqlite3_step() has finished executing */
+ 
++/* js: Used in sqlite3OsOpenReadWrite() */
++#define SQLITE_CANTOPEN_WITH_LOCKED_READWRITE 0x1001 /* Cannot open with locked read/write access */
++#define SQLITE_CANTOPEN_WITH_LOCKED_WRITE     0x1002 /* Cannot open with locked write access */
++
+ /*
+ ** Each entry in an SQLite table has a unique integer key.  (The key is
+ ** the value of the INTEGER PRIMARY KEY column if there is such a column,
+@@ -538,13 +542,30 @@
+ ** with the sqlite3* handle should be released by passing it to
+ ** sqlite3_close() when it is no longer required.
+ */
++#define SQLITE_OPEN_READONLY 3
++#define SQLITE_OPEN_READ_WRITE_LOCKED 2
++#define SQLITE_OPEN_WRITE_LOCKED 1
++#define SQLITE_OPEN_NO_LOCKED 0
+ int sqlite3_open(
+   const char *filename,   /* Database filename (UTF-8) */
+-  sqlite3 **ppDb          /* OUT: SQLite db handle */
++  sqlite3 **ppDb,         /* OUT: SQLite db handle */
++  int exclusiveFlag,      /* If SQLITE_OPEN_READONLY, readonly mode is used, */
++                          /* If SQLITE_OPEN_READ_WRITE_LOCKED, exclusive read/write access is required, */
++                          /* If SQLITE_OPEN_WRITE_LOCKED, exclusive write access is required, 
++                             If SQLITE_OPEN_NO_LOCKED, no locking is performed. */
++  int allowReadonly       /* If 1 and read/write opening fails, 
++                             try opening in read-only mode */
+ );
++
+ int sqlite3_open16(
+   const void *filename,   /* Database filename (UTF-16) */
+-  sqlite3 **ppDb          /* OUT: SQLite db handle */
++  sqlite3 **ppDb,         /* OUT: SQLite db handle */
++  int exclusiveFlag,      /* If SQLITE_OPEN_READONLY, readonly mode is used, */
++                          /* If SQLITE_OPEN_READ_WRITE_LOCKED, exclusive read/write access is required, */
++                          /* If SQLITE_OPEN_WRITE_LOCKED, exclusive write access is required, 
++                             If SQLITE_OPEN_NO_LOCKED, no locking is performed. */
++  int allowReadonly       /* If 1 and read/write opening fails, 
++                             try opening in read-only mode */
+ );
+ 
+ /*
+@@ -1269,6 +1290,12 @@
+ */
+ sqlite3 *sqlite3_db_handle(sqlite3_stmt*);
+ 
++/* (jstaniek) used in vacuum.c, set==1 sets VACUUM to verbose, 
++** interactive mode, so it is possible to get progress info and abort 
++** the process. Usable for GUI apps.
++*/
++void sqlite_set_verbose_vacuum(int set);
++
+ #ifdef __cplusplus
+ }  /* End of the 'extern "C"' block */
+ #endif
+diff -u ../../sqlite-3.2.8.orig/sqliteInt.h ./sqliteInt.h
+--- ../../sqlite-3.2.8.orig/sqliteInt.h	2005-12-19 10:37:50.000000000 +0100
++++ ./sqliteInt.h	2006-06-05 11:45:44.859375000 +0200
+@@ -50,6 +50,7 @@
+ # define _LARGEFILE_SOURCE 1
+ #endif
+ 
++#include "sqliteconfig.h"
+ #include "sqlite3.h"
+ #include "hash.h"
+ #include "parse.h"
+@@ -1586,7 +1587,8 @@
+ void sqlite3Attach(Parse*, Token*, Token*, int, Token*);
+ void sqlite3Detach(Parse*, Token*);
+ int sqlite3BtreeFactory(const sqlite3 *db, const char *zFilename,
+-                       int omitJournal, int nCache, Btree **ppBtree);
++                       int omitJournal, int nCache, Btree **ppBtree,
++                       int exclusiveFlag, int allowReadonly);
+ int sqlite3FixInit(DbFixer*, Parse*, int, const char*, const Token*);
+ int sqlite3FixSrcList(DbFixer*, SrcList*);
+ int sqlite3FixSelect(DbFixer*, Select*);
+diff -u ../../sqlite-3.2.8.orig/vacuum.c ./vacuum.c
+--- ../../sqlite-3.2.8.orig/vacuum.c	2005-12-19 10:37:50.000000000 +0100
++++ ./vacuum.c	2006-06-05 11:50:09.671875000 +0200
+@@ -46,18 +46,37 @@
+   return sqlite3_finalize(pStmt);
+ }
+ 
++/* (jstaniek) */
++extern int g_verbose_vacuum;
++
+ /*
+ ** Execute zSql on database db. The statement returns exactly
+ ** one column. Execute this as SQL on the same database.
++**
++** (js: extension): if count > 0, "VACUUM: X%" string will 
++**                  be printed to stdout, so user (a human or calling application) 
++**                  can know the overall progress of the operation.
++**                  and the program will wait for a key press (followed by RETURN);
++**                  'q' key aborts the execution and any other key allows to proceed.
+ */
+-static int execExecSql(sqlite3 *db, const char *zSql){
++static int execExecSql(sqlite3 *db, const char *zSql, int count){
+   sqlite3_stmt *pStmt;
+-  int rc;
++  int rc, i;
++  char ch;
+ 
+   rc = sqlite3_prepare(db, zSql, -1, &pStmt, 0);
+   if( rc!=SQLITE_OK ) return rc;
+ 
+-  while( SQLITE_ROW==sqlite3_step(pStmt) ){
++  for( i=0; SQLITE_ROW==sqlite3_step(pStmt); i++ ){
++    if (g_verbose_vacuum!=0 && count>0) {
++      fprintf(stdout, "VACUUM: %d%%\n", 100*(i+1)/count);
++      fflush(stdout);
++      fscanf(stdin, "%c", &ch);
++      if ('q'==ch) { /* quit */
++        sqlite3_finalize(pStmt);
++        return SQLITE_ABORT;
++      }
++    }
+     rc = execSql(db, sqlite3_column_text(pStmt, 0));
+     if( rc!=SQLITE_OK ){
+       sqlite3_finalize(pStmt);
+@@ -93,6 +112,8 @@
+ */
+ int sqlite3RunVacuum(char **pzErrMsg, sqlite3 *db){
+   int rc = SQLITE_OK;     /* Return code from service routines */
++  sqlite3_stmt *pStmt = 0;
++  int tables_count = 0;
+ #ifndef SQLITE_OMIT_VACUUM
+   const char *zFilename;  /* full pathname of the database file */
+   int nFilename;          /* number of characters  in zFilename[] */
+@@ -184,22 +205,29 @@
+   */
+   rc = execExecSql(db, 
+       "SELECT 'CREATE TABLE vacuum_db.' || substr(sql,14,100000000) "
+-      "  FROM sqlite_master WHERE type='table' AND name!='sqlite_sequence'");
++      "  FROM sqlite_master WHERE type='table' AND name!='sqlite_sequence'", 0);
+   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+   rc = execExecSql(db, 
+       "SELECT 'CREATE INDEX vacuum_db.' || substr(sql,14,100000000)"
+-      "  FROM sqlite_master WHERE sql LIKE 'CREATE INDEX %' ");
++      "  FROM sqlite_master WHERE sql LIKE 'CREATE INDEX %' ", 0);
+   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+   rc = execExecSql(db, 
+       "SELECT 'CREATE UNIQUE INDEX vacuum_db.' || substr(sql,21,100000000) "
+-      "  FROM sqlite_master WHERE sql LIKE 'CREATE UNIQUE INDEX %'");
++      "  FROM sqlite_master WHERE sql LIKE 'CREATE UNIQUE INDEX %'", 0);
+   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+   rc = execExecSql(db, 
+       "SELECT 'CREATE VIEW vacuum_db.' || substr(sql,13,100000000) "
+-      "  FROM sqlite_master WHERE type='view'"
++      "  FROM sqlite_master WHERE type='view'", 0
+   );
+   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+ 
++  /* (js) get # of tables so we can output progress.
++  */
++  rc = sqlite3_prepare(db, "SELECT count(name) FROM sqlite_master "
++      "WHERE type = 'table';", -1, &pStmt, 0);
++  if( rc!=SQLITE_OK || SQLITE_ROW!=sqlite3_step(pStmt)) goto end_of_vacuum;
++  tables_count = atoi( sqlite3_column_text(pStmt, 0) );
++
+   /* Loop through the tables in the main database. For each, do
+   ** an "INSERT INTO vacuum_db.xxx SELECT * FROM xxx;" to copy
+   ** the contents to the temporary database.
+@@ -208,7 +236,7 @@
+       "SELECT 'INSERT INTO vacuum_db.' || quote(name) "
+       "|| ' SELECT * FROM ' || quote(name) || ';'"
+       "FROM sqlite_master "
+-      "WHERE type = 'table' AND name!='sqlite_sequence';"
++      "WHERE type = 'table' AND name!='sqlite_sequence';", tables_count
+   );
+   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+ 
+@@ -216,13 +244,13 @@
+   */
+   rc = execExecSql(db, 
+       "SELECT 'DELETE FROM vacuum_db.' || quote(name) || ';' "
+-      "FROM vacuum_db.sqlite_master WHERE name='sqlite_sequence' "
++      "FROM vacuum_db.sqlite_master WHERE name='sqlite_sequence' ", 0
+   );
+   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+   rc = execExecSql(db, 
+       "SELECT 'INSERT INTO vacuum_db.' || quote(name) "
+       "|| ' SELECT * FROM ' || quote(name) || ';' "
+-      "FROM vacuum_db.sqlite_master WHERE name=='sqlite_sequence';"
++      "FROM vacuum_db.sqlite_master WHERE name=='sqlite_sequence';", 0
+   );
+   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+ 
+@@ -234,11 +262,10 @@
+   */
+   rc = execExecSql(db, 
+       "SELECT 'CREATE TRIGGER  vacuum_db.' || substr(sql, 16, 1000000) "
+-      "FROM sqlite_master WHERE type='trigger'"
++      "FROM sqlite_master WHERE type='trigger'", 0
+   );
+   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+ 
+-
+   /* At this point, unless the main db was completely empty, there is now a
+   ** transaction open on the vacuum database, but not on the main database.
+   ** Open a btree level transaction on the main database. This allows a
+diff -u ../../sqlite-3.2.8.orig/vdbe.c ./vdbe.c
+--- ../../sqlite-3.2.8.orig/vdbe.c	2005-12-19 10:37:50.000000000 +0100
++++ ./vdbe.c	2006-06-05 11:10:53.421875000 +0200
+@@ -2593,7 +2593,7 @@
+   pCx = allocateCursor(p, i);
+   if( pCx==0 ) goto no_mem;
+   pCx->nullRow = 1;
+-  rc = sqlite3BtreeFactory(db, 0, 1, TEMP_PAGES, &pCx->pBt);
++  rc = sqlite3BtreeFactory(db, 0, 1, TEMP_PAGES, &pCx->pBt, 0 /*!exclusive*/, 1/*allowReadonly*/);
+   if( rc==SQLITE_OK ){
+     rc = sqlite3BtreeBeginTrans(pCx->pBt, 1);
+   }

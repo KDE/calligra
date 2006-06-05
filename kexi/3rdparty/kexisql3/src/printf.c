@@ -90,8 +90,8 @@ typedef struct et_info {   /* Information about each format field */
   etByte base;             /* The base for radix conversion */
   etByte flags;            /* One or more of FLAG_ constants below */
   etByte type;             /* Conversion paradigm */
-  char *charset;           /* The character set for conversion */
-  char *prefix;            /* Prefix on non-zero values in alt format */
+  etByte charset;          /* Offset into aDigits[] of the digits string */
+  etByte prefix;           /* Offset into aPrefix[] of the prefix string */
 } et_info;
 
 /*
@@ -99,34 +99,37 @@ typedef struct et_info {   /* Information about each format field */
 */
 #define FLAG_SIGNED  1     /* True if the value to convert is signed */
 #define FLAG_INTERN  2     /* True if for internal use only */
+#define FLAG_STRING  4     /* Allow infinity precision */
 
 
 /*
 ** The following table is searched linearly, so it is good to put the
 ** most frequently used conversion types first.
 */
-static et_info fmtinfo[] = {
-  {  'd', 10, 1, etRADIX,      "0123456789",       0    },
-  {  's',  0, 0, etSTRING,     0,                  0    },
-  {  'z',  0, 2, etDYNSTRING,  0,                  0    },
-  {  'q',  0, 0, etSQLESCAPE,  0,                  0    },
-  {  'Q',  0, 0, etSQLESCAPE2, 0,                  0    },
-  {  'c',  0, 0, etCHARX,      0,                  0    },
-  {  'o',  8, 0, etRADIX,      "01234567",         "0"  },
-  {  'u', 10, 0, etRADIX,      "0123456789",       0    },
-  {  'x', 16, 0, etRADIX,      "0123456789abcdef", "x0" },
-  {  'X', 16, 0, etRADIX,      "0123456789ABCDEF", "X0" },
-  {  'f',  0, 1, etFLOAT,      0,                  0    },
-  {  'e',  0, 1, etEXP,        "e",                0    },
-  {  'E',  0, 1, etEXP,        "E",                0    },
-  {  'g',  0, 1, etGENERIC,    "e",                0    },
-  {  'G',  0, 1, etGENERIC,    "E",                0    },
-  {  'i', 10, 1, etRADIX,      "0123456789",       0    },
-  {  'n',  0, 0, etSIZE,       0,                  0    },
-  {  '%',  0, 0, etPERCENT,    0,                  0    },
-  {  'p', 16, 0, etPOINTER,    "0123456789abcdef", "x0" },
-  {  'T',  0, 2, etTOKEN,      0,                  0    },
-  {  'S',  0, 2, etSRCLIST,    0,                  0    },
+static const char aDigits[] = "0123456789ABCDEF0123456789abcdef";
+static const char aPrefix[] = "-x0\000X0";
+static const et_info fmtinfo[] = {
+  {  'd', 10, 1, etRADIX,      0,  0 },
+  {  's',  0, 4, etSTRING,     0,  0 },
+  {  'g',  0, 1, etGENERIC,    30, 0 },
+  {  'z',  0, 6, etDYNSTRING,  0,  0 },
+  {  'q',  0, 4, etSQLESCAPE,  0,  0 },
+  {  'Q',  0, 4, etSQLESCAPE2, 0,  0 },
+  {  'c',  0, 0, etCHARX,      0,  0 },
+  {  'o',  8, 0, etRADIX,      0,  2 },
+  {  'u', 10, 0, etRADIX,      0,  0 },
+  {  'x', 16, 0, etRADIX,      16, 1 },
+  {  'X', 16, 0, etRADIX,      0,  4 },
+  {  'f',  0, 1, etFLOAT,      0,  0 },
+  {  'e',  0, 1, etEXP,        30, 0 },
+  {  'E',  0, 1, etEXP,        14, 0 },
+  {  'G',  0, 1, etGENERIC,    14, 0 },
+  {  'i', 10, 1, etRADIX,      0,  0 },
+  {  'n',  0, 0, etSIZE,       0,  0 },
+  {  '%',  0, 0, etPERCENT,    0,  0 },
+  {  'p', 16, 0, etPOINTER,    0,  1 },
+  {  'T',  0, 2, etTOKEN,      0,  0 },
+  {  'S',  0, 2, etSRCLIST,    0,  0 },
 };
 #define etNINFO  (sizeof(fmtinfo)/sizeof(fmtinfo[0]))
 
@@ -160,7 +163,15 @@ static int et_getdigit(LONGDOUBLE_TYPE *val, int *cnt){
 }
 #endif
 
-#define etBUFSIZE 1000  /* Size of the output buffer */
+/*
+** On machines with a small stack size, you can redefine the
+** SQLITE_PRINT_BUF_SIZE to be less than 350.  But beware - for
+** smaller values some %f conversions may go into an infinite loop.
+*/
+#ifndef SQLITE_PRINT_BUF_SIZE
+# define SQLITE_PRINT_BUF_SIZE 350
+#endif
+#define etBUFSIZE SQLITE_PRINT_BUF_SIZE  /* Size of the output buffer */
 
 /*
 ** The root program.  All variations call this core.
@@ -207,21 +218,24 @@ static int vxprintf(
   etByte flag_plussign;      /* True if "+" flag is present */
   etByte flag_blanksign;     /* True if " " flag is present */
   etByte flag_alternateform; /* True if "#" flag is present */
+  etByte flag_altform2;      /* True if "!" flag is present */
   etByte flag_zeropad;       /* True if field width constant starts with zero */
   etByte flag_long;          /* True if "l" flag is present */
   etByte flag_longlong;      /* True if the "ll" flag is present */
+  etByte done;               /* Loop termination flag */
   UINT64_TYPE longvalue;     /* Value for integer types */
   LONGDOUBLE_TYPE realvalue; /* Value for real types */
-  et_info *infop;            /* Pointer to the appropriate info structure */
+  const et_info *infop;      /* Pointer to the appropriate info structure */
   char buf[etBUFSIZE];       /* Conversion buffer */
   char prefix;               /* Prefix character.  "+" or "-" or " " or '\0'. */
   etByte errorflag = 0;      /* True if an error is encountered */
   etByte xtype;              /* Conversion paradigm */
   char *zExtra;              /* Extra memory used for etTCLESCAPE conversions */
-  static char spaces[] = "                                                  ";
+  static const char spaces[] =
+   "                                                                         ";
 #define etSPACESIZE (sizeof(spaces)-1)
 #ifndef etNOFLOATINGPOINT
-  int  exp;                  /* exponent of real numbers */
+  int  exp, e2;              /* exponent of real numbers */
   double rounder;            /* Used for rounding floating point values */
   etByte flag_dp;            /* True if decimal point should be shown */
   etByte flag_rtz;           /* True if trailing zeros should be removed */
@@ -250,17 +264,19 @@ static int vxprintf(
     }
     /* Find out what flags are present */
     flag_leftjustify = flag_plussign = flag_blanksign = 
-     flag_alternateform = flag_zeropad = 0;
+     flag_alternateform = flag_altform2 = flag_zeropad = 0;
+    done = 0;
     do{
       switch( c ){
-        case '-':   flag_leftjustify = 1;     c = 0;   break;
-        case '+':   flag_plussign = 1;        c = 0;   break;
-        case ' ':   flag_blanksign = 1;       c = 0;   break;
-        case '#':   flag_alternateform = 1;   c = 0;   break;
-        case '0':   flag_zeropad = 1;         c = 0;   break;
-        default:                                       break;
+        case '-':   flag_leftjustify = 1;     break;
+        case '+':   flag_plussign = 1;        break;
+        case ' ':   flag_blanksign = 1;       break;
+        case '#':   flag_alternateform = 1;   break;
+        case '!':   flag_altform2 = 1;        break;
+        case '0':   flag_zeropad = 1;         break;
+        default:    done = 1;                 break;
       }
-    }while( c==0 && (c=(*++fmt))!=0 );
+    }while( !done && (c=(*++fmt))!=0 );
     /* Get the field width */
     width = 0;
     if( c=='*' ){
@@ -293,8 +309,6 @@ static int vxprintf(
           c = *++fmt;
         }
       }
-      /* Limit the precision to prevent overflowing buf[] during conversion */
-      if( precision>etBUFSIZE-40 ) precision = etBUFSIZE-40;
     }else{
       precision = -1;
     }
@@ -325,10 +339,16 @@ static int vxprintf(
     }
     zExtra = 0;
 
+    /* Limit the precision to prevent overflowing buf[] during conversion */
+    if( precision>etBUFSIZE-40 && (infop->flags & FLAG_STRING)==0 ){
+      precision = etBUFSIZE-40;
+    }
+
     /*
     ** At this point, variables are initialized as follows:
     **
     **   flag_alternateform          TRUE if a '#' is present.
+    **   flag_altform2               TRUE if a '!' is present.
     **   flag_plussign               TRUE if a '+' is present.
     **   flag_leftjustify            TRUE if a '-' is present or if the
     **                               field width was negative.
@@ -377,9 +397,9 @@ static int vxprintf(
         }
         bufpt = &buf[etBUFSIZE-1];
         {
-          register char *cset;      /* Use registers for speed */
+          register const char *cset;      /* Use registers for speed */
           register int base;
-          cset = infop->charset;
+          cset = &aDigits[infop->charset];
           base = infop->base;
           do{                                           /* Convert to ascii */
             *(--bufpt) = cset[longvalue%base];
@@ -392,10 +412,11 @@ static int vxprintf(
         }
         if( prefix ) *(--bufpt) = prefix;               /* Add sign */
         if( flag_alternateform && infop->prefix ){      /* Add "0" or "0x" */
-          char *pre, x;
-          pre = infop->prefix;
+          const char *pre;
+          char x;
+          pre = &aPrefix[infop->prefix];
           if( *bufpt!=pre[0] ){
-            for(pre=infop->prefix; (x=(*pre))!=0; pre++) *(--bufpt) = x;
+            for(; (x=(*pre))!=0; pre++) *(--bufpt) = x;
           }
         }
         length = &buf[etBUFSIZE-1]-bufpt;
@@ -406,7 +427,7 @@ static int vxprintf(
         realvalue = va_arg(ap,double);
 #ifndef etNOFLOATINGPOINT
         if( precision<0 ) precision = 6;         /* Set default precision */
-        if( precision>etBUFSIZE-10 ) precision = etBUFSIZE-10;
+        if( precision>etBUFSIZE/2-10 ) precision = etBUFSIZE/2-10;
         if( realvalue<0.0 ){
           realvalue = -realvalue;
           prefix = '-';
@@ -415,8 +436,7 @@ static int vxprintf(
           else if( flag_blanksign )    prefix = ' ';
           else                         prefix = 0;
         }
-        if( infop->type==etGENERIC && precision>0 ) precision--;
-        rounder = 0.0;
+        if( xtype==etGENERIC && precision>0 ) precision--;
 #if 0
         /* Rounding works like BSD when the constant 0.4999 is used.  Wierd! */
         for(idx=precision, rounder=0.4999; idx>0; idx--, rounder*=0.1);
@@ -424,10 +444,11 @@ static int vxprintf(
         /* It makes more sense to use 0.5 */
         for(idx=precision, rounder=0.5; idx>0; idx--, rounder*=0.1);
 #endif
-        if( infop->type==etFLOAT ) realvalue += rounder;
+        if( xtype==etFLOAT ) realvalue += rounder;
         /* Normalize realvalue to within 10.0 > realvalue >= 1.0 */
         exp = 0;
         if( realvalue>0.0 ){
+          while( realvalue>=1e32 && exp<=350 ){ realvalue *= 1e-32; exp+=32; }
           while( realvalue>=1e8 && exp<=350 ){ realvalue *= 1e-8; exp+=8; }
           while( realvalue>=10.0 && exp<=350 ){ realvalue *= 0.1; exp++; }
           while( realvalue<1e-8 && exp>=-350 ){ realvalue *= 1e8; exp-=8; }
@@ -459,51 +480,67 @@ static int vxprintf(
         }else{
           flag_rtz = 0;
         }
-        /*
-        ** The "exp+precision" test causes output to be of type etEXP if
-        ** the precision is too large to fit in buf[].
-        */
+        if( xtype==etEXP ){
+          e2 = 0;
+        }else{
+          e2 = exp;
+        }
         nsd = 0;
-        if( xtype==etFLOAT && exp+precision<etBUFSIZE-30 ){
-          flag_dp = (precision>0 || flag_alternateform);
-          if( prefix ) *(bufpt++) = prefix;         /* Sign */
-          if( exp<0 )  *(bufpt++) = '0';            /* Digits before "." */
-          else for(; exp>=0; exp--) *(bufpt++) = et_getdigit(&realvalue,&nsd);
-          if( flag_dp ) *(bufpt++) = '.';           /* The decimal point */
-          for(exp++; exp<0 && precision>0; precision--, exp++){
-            *(bufpt++) = '0';
-          }
-          while( (precision--)>0 ) *(bufpt++) = et_getdigit(&realvalue,&nsd);
-          *(bufpt--) = 0;                           /* Null terminate */
-          if( flag_rtz && flag_dp ){     /* Remove trailing zeros and "." */
-            while( bufpt>=buf && *bufpt=='0' ) *(bufpt--) = 0;
-            if( bufpt>=buf && *bufpt=='.' ) *(bufpt--) = 0;
-          }
-          bufpt++;                            /* point to next free slot */
-        }else{    /* etEXP or etGENERIC */
-          flag_dp = (precision>0 || flag_alternateform);
-          if( prefix ) *(bufpt++) = prefix;   /* Sign */
-          *(bufpt++) = et_getdigit(&realvalue,&nsd);  /* First digit */
-          if( flag_dp ) *(bufpt++) = '.';     /* Decimal point */
-          while( (precision--)>0 ) *(bufpt++) = et_getdigit(&realvalue,&nsd);
-          bufpt--;                            /* point to last digit */
-          if( flag_rtz && flag_dp ){          /* Remove tail zeros */
-            while( bufpt>=buf && *bufpt=='0' ) *(bufpt--) = 0;
-            if( bufpt>=buf && *bufpt=='.' ) *(bufpt--) = 0;
-          }
-          bufpt++;                            /* point to next free slot */
-          if( exp || flag_exp ){
-            *(bufpt++) = infop->charset[0];
-            if( exp<0 ){ *(bufpt++) = '-'; exp = -exp; } /* sign of exp */
-            else       { *(bufpt++) = '+'; }
-            if( exp>=100 ){
-              *(bufpt++) = (exp/100)+'0';                /* 100's digit */
-              exp %= 100;
-            }
-            *(bufpt++) = exp/10+'0';                     /* 10's digit */
-            *(bufpt++) = exp%10+'0';                     /* 1's digit */
+        flag_dp = (precision>0) | flag_alternateform | flag_altform2;
+        /* The sign in front of the number */
+        if( prefix ){
+          *(bufpt++) = prefix;
+        }
+        /* Digits prior to the decimal point */
+        if( e2<0 ){
+          *(bufpt++) = '0';
+        }else{
+          for(; e2>=0; e2--){
+            *(bufpt++) = et_getdigit(&realvalue,&nsd);
           }
         }
+        /* The decimal point */
+        if( flag_dp ){
+          *(bufpt++) = '.';
+        }
+        /* "0" digits after the decimal point but before the first
+        ** significant digit of the number */
+        for(e2++; e2<0 && precision>0; precision--, e2++){
+          *(bufpt++) = '0';
+        }
+        /* Significant digits after the decimal point */
+        while( (precision--)>0 ){
+          *(bufpt++) = et_getdigit(&realvalue,&nsd);
+        }
+        /* Remove trailing zeros and the "." if no digits follow the "." */
+        if( flag_rtz && flag_dp ){
+          while( bufpt[-1]=='0' ) *(--bufpt) = 0;
+          assert( bufpt>buf );
+          if( bufpt[-1]=='.' ){
+            if( flag_altform2 ){
+              *(bufpt++) = '0';
+            }else{
+              *(--bufpt) = 0;
+            }
+          }
+        }
+        /* Add the "eNNN" suffix */
+        if( flag_exp || (xtype==etEXP && exp) ){
+          *(bufpt++) = aDigits[infop->charset];
+          if( exp<0 ){
+            *(bufpt++) = '-'; exp = -exp;
+          }else{
+            *(bufpt++) = '+';
+          }
+          if( exp>=100 ){
+            *(bufpt++) = (exp/100)+'0';                /* 100's digit */
+            exp %= 100;
+          }
+          *(bufpt++) = exp/10+'0';                     /* 10's digit */
+          *(bufpt++) = exp%10+'0';                     /* 1's digit */
+        }
+        *bufpt = 0;
+
         /* The converted number is in buf[] and zero terminated. Output it.
         ** Note that the number is in the usual order, not reversed as with
         ** integer conversions. */
@@ -556,37 +593,40 @@ static int vxprintf(
         if( precision>=0 && precision<length ) length = precision;
         break;
       case etSQLESCAPE:
-      case etSQLESCAPE2:
-        {
-          int i, j, n, c, isnull;
-          char *arg = va_arg(ap,char*);
-          isnull = arg==0;
-          if( isnull ) arg = (xtype==etSQLESCAPE2 ? "NULL" : "(NULL)");
-          for(i=n=0; (c=arg[i])!=0; i++){
-            if( c=='\'' )  n++;
-          }
-          n += i + 1 + ((!isnull && xtype==etSQLESCAPE2) ? 2 : 0);
-          if( n>etBUFSIZE ){
-            bufpt = zExtra = sqliteMalloc( n );
-            if( bufpt==0 ) return -1;
-          }else{
-            bufpt = buf;
-          }
-          j = 0;
-          if( !isnull && xtype==etSQLESCAPE2 ) bufpt[j++] = '\'';
-          for(i=0; (c=arg[i])!=0; i++){
-            bufpt[j++] = c;
-            if( c=='\'' ) bufpt[j++] = c;
-          }
-          if( !isnull && xtype==etSQLESCAPE2 ) bufpt[j++] = '\'';
-          bufpt[j] = 0;
-          length = j;
-          if( precision>=0 && precision<length ) length = precision;
+      case etSQLESCAPE2: {
+        int i, j, n, c, isnull;
+        int needQuote;
+        char *arg = va_arg(ap,char*);
+        isnull = arg==0;
+        if( isnull ) arg = (xtype==etSQLESCAPE2 ? "NULL" : "(NULL)");
+        for(i=n=0; (c=arg[i])!=0; i++){
+          if( c=='\'' )  n++;
         }
+        needQuote = !isnull && xtype==etSQLESCAPE2;
+        n += i + 1 + needQuote*2;
+        if( n>etBUFSIZE ){
+          bufpt = zExtra = sqliteMalloc( n );
+          if( bufpt==0 ) return -1;
+        }else{
+          bufpt = buf;
+        }
+        j = 0;
+        if( needQuote ) bufpt[j++] = '\'';
+        for(i=0; (c=arg[i])!=0; i++){
+          bufpt[j++] = c;
+          if( c=='\'' ) bufpt[j++] = c;
+        }
+        if( needQuote ) bufpt[j++] = '\'';
+        bufpt[j] = 0;
+        length = j;
+        if( precision>=0 && precision<length ) length = precision;
         break;
+      }
       case etTOKEN: {
         Token *pToken = va_arg(ap, Token*);
-        (*func)(arg, pToken->z, pToken->n);
+        if( pToken && pToken->z ){
+          (*func)(arg, pToken->z, pToken->n);
+        }
         length = width = 0;
         break;
       }
@@ -686,7 +726,11 @@ static void mout(void *arg, const char *zNewText, int nNewChar){
           memcpy(pM->zText, pM->zBase, pM->nChar);
         }
       }else{
-        pM->zText = pM->xRealloc(pM->zText, pM->nAlloc);
+        char *zNew;
+        zNew = pM->xRealloc(pM->zText, pM->nAlloc);
+        if( zNew ){
+          pM->zText = zNew;
+        }
       }
     }
   }
@@ -724,7 +768,10 @@ static char *base_vprintf(
         memcpy(sM.zText, sM.zBase, sM.nChar+1);
       }
     }else if( sM.nAlloc>sM.nChar+10 ){
-      sM.zText = xRealloc(sM.zText, sM.nChar+1);
+      char *zNew = xRealloc(sM.zText, sM.nChar+1);
+      if( zNew ){
+        sM.zText = zNew;
+      }
     }
   }
   return sM.zText;
@@ -742,7 +789,7 @@ static void *printf_realloc(void *old, int size){
 ** %-conversion extensions.
 */
 char *sqlite3VMPrintf(const char *zFormat, va_list ap){
-  char zBase[1000];
+  char zBase[SQLITE_PRINT_BUF_SIZE];
   return base_vprintf(printf_realloc, 1, zBase, sizeof(zBase), zFormat, ap);
 }
 
@@ -753,7 +800,7 @@ char *sqlite3VMPrintf(const char *zFormat, va_list ap){
 char *sqlite3MPrintf(const char *zFormat, ...){
   va_list ap;
   char *z;
-  char zBase[1000];
+  char zBase[SQLITE_PRINT_BUF_SIZE];
   va_start(ap, zFormat);
   z = base_vprintf(printf_realloc, 1, zBase, sizeof(zBase), zFormat, ap);
   va_end(ap);
@@ -807,12 +854,13 @@ char *sqlite3_snprintf(int n, char *zBuf, const char *zFormat, ...){
 ** and segfaults if you give it a long long int.
 */
 void sqlite3DebugPrintf(const char *zFormat, ...){
+  extern int getpid(void);
   va_list ap;
   char zBuf[500];
   va_start(ap, zFormat);
   base_vprintf(0, 0, zBuf, sizeof(zBuf), zFormat, ap);
   va_end(ap);
-  fprintf(stdout,"%s", zBuf);
+  fprintf(stdout,"%d: %s", getpid(), zBuf);
   fflush(stdout);
 }
 #endif

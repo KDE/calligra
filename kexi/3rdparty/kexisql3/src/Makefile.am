@@ -53,5 +53,5 @@ ksqlite_SOURCES = shell.c
 ksqlite_LDADD = libkexisql3.la $(LIBREADLINE)
 
 libkexisql3_la_LIBADD =
-libkexisql3_la_LDFLAGS = -version-info 3:0 $(all_libraries) --no-undefined
+libkexisql3_la_LDFLAGS = -version-info 3:2 $(all_libraries) --no-undefined
 
