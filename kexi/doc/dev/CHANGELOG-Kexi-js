@@ -17,11 +17,29 @@ For bugfixes use CCMAIL:###-done@bugs.kde.org
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
 
+2006-06-06
+CSV Import Dialog
+- fixed recursion when importing clipboard data 
+1.0/2.0: ported
+- allow to change the delimiter when importing clipboard data 
+1.0/2.0: ported
+Migration
+- improved usability for selecting type of destination database
+  (no mention of SQLite for now)
+
 2006-06-05
 KoProperty
 - clear all properties and group names when using operator =
 1.0/2.0: ported
 KexiDB
+- SQLite library upgraded from 3.0.7 to 3.2.8 (backward compatible),
+  to get "table renaming" function.
+2.0: ported
+- optimization: "rename table" action now uses "ALTER TABLE RENAME TO" 
+  SQL statement, O(1).
+2.0: ported
+- X-Kexi-DoNotAllowProjectImportingTo KexiDB driver propery added, false by defaut
+2.0: ported
 
 2006-06-02
 KexiDB
@@ -29,7 +47,6 @@ KexiDB
 1.0/2.0: ported
 - minor utilities added usable for altering
 2.0: ported
-Table Designer
 - table altering improved for SQLite: changing data types will be possible soon
 2.0: ported
 

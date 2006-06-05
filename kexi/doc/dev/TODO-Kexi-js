@@ -896,3 +896,19 @@ THen, we can get RENAME TABLE command, so we can use it for recreating tables af
 
 Kexi >2.0 (probably late 2007): Add SQLite >3.3 driver. Offer exporting similar to the one between 2.8->3.0.
  Think about backporting the >3.3 driver to Kexi 1.1.
+
+
+
+- for table t1(a,b,c) delete column t1.c:
+
+CREATE TEMPORARY TABLE t1_backup(a,b);
+INSERT INTO t1_backup SELECT a,b FROM t1;
+DROP TABLE t1;
+ALTER TABLE t1_backup RENAME TO t1;
+
+- for table t1(a,b,c) rename column t1.c to t1.d:
+
+CREATE TEMPORARY TABLE t1_backup(a,b,d);
+INSERT INTO t1_backup SELECT a,b,c FROM t1;
+DROP TABLE t1;
+ALTER TABLE t1_backup RENAME TO t1;
