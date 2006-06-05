@@ -5,4 +5,4 @@
 /* #undef KEXI_SCRIPTS_SUPPORT */
 
 /* define if you have libreadline available */
-#define HAVE_READLINE 1
+/* TODO: detect #define HAVE_READLINE 1 */
