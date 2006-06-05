@@ -5,6 +5,9 @@
 * Integrated ProxyFunction's.
 * Python: Added unittest.
 
+1.5.2
+* API: Fix possible crash in Manager::getInterpreternameForFile()
+
 1.5.1
 * Python: Fix compile with gcc 3.3.6
 
