@@ -74,9 +74,14 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 KexiDB::DriverManager::driversInfo() without loading driver libraries. */
 		class Info {
 			public:
-			Info() : fileBased(false) {}
+			Info();
 			QString name, caption, comment, fileDBMimeType;
+			//! true is the driver is for file-based database backend
 			bool fileBased : 1;
+			/*! true is the driver is for a backend that allows importing.
+			 Defined by X-Kexi-DoNotAllowProjectImportingTo in "kexidb_driver" service type.
+			 Used for migration. */
+			bool allowImportingTo : 1;
 		};
 		typedef QMap<QString,Info> InfoMap;
 		

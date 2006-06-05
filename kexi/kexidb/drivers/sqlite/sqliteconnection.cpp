@@ -347,4 +347,50 @@ bool SQLiteConnection::isReadOnly() const
 #endif
 }
 
+#ifdef SQLITE2
+bool SQLiteConnection::drv_alterTableName(TableSchema& tableSchema, const QString& newName, bool replace)
+{
+	const QString oldTableName = tableSchema.name();
+	const bool destTableExists = this->tableSchema( newName ) != 0;
+
+	//1. drop the table
+	if (destTableExists) {
+		if (!replace)
+			return false;
+		if (!drv_dropTable( newName ))
+			return false;
+	}
+
+	//2. create a copy of the table
+//TODO: move this code to drv_copyTable()
+	tableSchema.setName(newName);
+
+//helper:
+#define drv_alterTableName_ERR \
+		tableSchema.setName(oldTableName) //restore old name
+
+	if (!drv_createTable( tableSchema )) {
+		drv_alterTableName_ERR;
+		return false;
+	}
+
+//TODO indices, etc.???
+
+	// 3. copy all rows to the new table
+	if (!executeSQL(QString::fromLatin1("INSERT INTO %1 SELECT * FROM %2")
+		.arg(escapeIdentifier(tableSchema.name())).arg(escapeIdentifier(oldTableName))))
+	{
+		drv_alterTableName_ERR;
+		return false;
+	}
+
+	// 4. drop old table.
+	if (!drv_dropTable( oldTableName )) {
+		drv_alterTableName_ERR;
+		return false;
+	}
+	return true;
+}
+#endif
+
 #include "sqliteconnection.moc"
