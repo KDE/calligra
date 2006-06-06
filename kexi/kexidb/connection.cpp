@@ -1197,6 +1197,71 @@ quint64 Connection::lastInsertedAutoIncValue(const QString& aiFieldName,
 	return lastInsertedAutoIncValue(aiFieldName,table.name(), ROWID);
 }
 
+//! Creates a Field list for kexi__fields, for sanity. Used by createTable()
+static FieldList* createFieldListForKexi__Fields(TableSchema *kexi__fieldsSchema)
+{
+	if (!kexi__fieldsSchema)
+		return 0;
+	return kexi__fieldsSchema->subList(
+		"t_id",
+		"f_type",
+		"f_name",
+		"f_length",
+		"f_precision",
+		"f_constraints",
+		"f_options",
+		"f_default",
+		"f_order",
+		"f_caption",
+		"f_help"
+	);
+}
+
+//! builds a list of values for field's \a f properties. Used by createTable().
+void buildValuesForKexi__Fields(Q3ValueList<QVariant>& vals, Field* f)
+{
+	vals.clear();
+	vals
+	<< QVariant(f->table()->id())
+	<< QVariant(f->type())
+	<< QVariant(f->name())
+	<< QVariant(f->isFPNumericType() ? f->scale() : f->length())
+	<< QVariant(f->isFPNumericType() ? f->precision() : 0)
+	<< QVariant(f->constraints())
+	<< QVariant(f->options())
+	<< QVariant(f->defaultValue())
+	<< QVariant(f->order())
+	<< QVariant(f->caption())
+	<< QVariant(f->description());
+}
+
+bool Connection::storeMainFieldSchema(Field *field)
+{
+	if (!field || !field->table())
+		return false;
+	FieldList *fl = createFieldListForKexi__Fields(m_tables_byname["kexi__fields"]);
+	if (!fl)
+		return false;
+
+	Q3ValueList<QVariant> vals;
+	buildValuesForKexi__Fields(vals, field);
+	Q3ValueList<QVariant>::ConstIterator valsIt = vals.constBegin();
+	Field *f;
+	bool first = true;
+	QString sql = "UPDATE kexi__fields SET ";
+	for (Field::ListIterator it( fl->fieldsIterator() ); (f = it.current()); ++it, ++valsIt) {
+		sql.append( (first ? QString::null : QString(", ")) +
+			f->name() + "=" + m_driver->valueToSQL( f, *valsIt ) );
+		if (first)
+			first = false;
+	}
+	delete fl;
+	
+	sql.append(QString(" WHERE t_id=") + QString::number( field->table()->id() )
+		+ " AND f_name=" + m_driver->valueToSQL( Field::Text, field->name() ) );
+	return executeSQL( sql );
+}
+
 #define createTable_ERR \
 	{ KexiDBDbg << "Connection::createTable(): ERROR!" <<endl; \
 	  setError(this, i18n("Creating table failed.")); \
@@ -1296,43 +1361,19 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		TableSchema *ts = m_tables_byname["kexi__fields"];
 		if (!ts)
 			return false;
-		//for sanity: remove field info is any for this table id
+		//for sanity: remove field info (if any) for this table id
 		if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id()))
 			return false;
 
-		FieldList *fl = ts->subList(
-			"t_id",
-			"f_type",
-			"f_name",
-			"f_length",
-			"f_precision",
-			"f_constraints",
-			"f_options",
-			"f_default",
-			"f_order",
-			"f_caption",
-			"f_help"
-		);
+		FieldList *fl = createFieldListForKexi__Fields(m_tables_byname["kexi__fields"]);
 		if (!fl)
 			return false;
 
-		int order = 0;
+//		int order = 0;
 		Field *f;
-		for (Field::ListIterator it( *tableSchema->fields() ); (f = it.current()); ++it, order++) {
+		for (Field::ListIterator it( *tableSchema->fields() ); (f = it.current()); ++it/*, order++*/) {
 			Q3ValueList<QVariant> vals;
-			vals
-			<< QVariant(tableSchema->id())//obj_id)
-			<< QVariant(f->type())
-			<< QVariant(f->name())
-			<< QVariant(f->isFPNumericType() ? f->scale() : f->length())
-			<< QVariant(f->isFPNumericType() ? f->precision() : 0)
-			<< QVariant(f->constraints())
-			<< QVariant(f->options())
-			<< QVariant(f->defaultValue())
-			<< QVariant(f->order())
-			<< QVariant(f->caption())
-			<< QVariant(f->description());
-
+			buildValuesForKexi__Fields(vals, f);
 			if (!insertRecord(*fl, vals ))
 				createTable_ERR;
 		}
@@ -1540,7 +1581,7 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 	if (!beginAutoCommitTransaction(tg))
 		return false;
 
-	if (!drv_alterTableName(tableSchema, newTableName)) {
+	if (!drv_alterTableName(tableSchema, newTableName, replace)) {
 		alterTableName_ERR;
 		return false;
 	}

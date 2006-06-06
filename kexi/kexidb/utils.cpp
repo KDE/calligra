@@ -658,7 +658,7 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>&
 	if ( (it = values.find("name")) != values.constEnd())
 		field.setName( (*it).toString() );
 	if ( (it = values.find("caption")) != values.constEnd())
-		field.setName( (*it).toString() );
+		field.setCaption( (*it).toString() );
 	if ( (it = values.find("description")) != values.constEnd())
 		field.setDescription( (*it).toString() );
 	if ( (it = values.find("length")) != values.constEnd())
@@ -756,7 +756,7 @@ bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, con
 			return true;
 		}
 		if ( "caption" == propertyName ) {
-			field.setName( value.toString() );
+			field.setCaption( value.toString() );
 			return true;
 		}
 		if ( "description" == propertyName ) {

@@ -1086,6 +1086,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return true on success */
 		bool storeExtendedTableSchemaData(TableSchema& tableSchema);
 
+		/*! @internal
+		 Stores main field's schema information for field \a field.
+		 Used in table altering code when information in kexi__fields has to be updated. 
+		 \return true on success and false on failure. */
+		bool storeMainFieldSchema(Field *field);
+
 		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 		/* This is a part of alter table interface implementing lower-level operations 

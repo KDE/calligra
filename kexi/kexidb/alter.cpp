@@ -25,6 +25,8 @@
 
 #include <kstaticdeleter.h>
 
+#include <stdlib.h>
+
 namespace KexiDB {
 class AlterTableHandler::Private
 {
@@ -132,22 +134,22 @@ static int alteringTypeForProperty(const QCString& propertyName)
 	*/
 		// ExtendedSchemaAlteringRequired is here because when the field is renamed, 
 		// we need to do the same rename in extended table schema: <field name="...">
-		I2("name", PhysicalAlteringRequired, ExtendedSchemaAlteringRequired);
+		I2("name", PhysicalAlteringRequired, MainSchemaAlteringRequired);
 		I2("type", PhysicalAlteringRequired, DataConversionRequired);
-		I("caption", ExtendedSchemaAlteringRequired);
-		I("description", ExtendedSchemaAlteringRequired);
+		I("caption", MainSchemaAlteringRequired);
+		I("description", MainSchemaAlteringRequired);
 		I2("unsigned", PhysicalAlteringRequired, DataConversionRequired); // always?
 		I2("length", PhysicalAlteringRequired, DataConversionRequired); // always?
 		I2("precision", PhysicalAlteringRequired, DataConversionRequired); // always?
-		I("width", ExtendedSchemaAlteringRequired);
+		I("width", MainSchemaAlteringRequired);
 		// defaultValue: depends on backend, for mysql it can only by a constant or now()...
 		// -- should we look at Driver here?
-		I2("defaultValue", PhysicalAlteringRequired, ExtendedSchemaAlteringRequired);
+		I2("defaultValue", PhysicalAlteringRequired, MainSchemaAlteringRequired);
 		I2("primaryKey", PhysicalAlteringRequired, DataConversionRequired);
 		I2("unique", PhysicalAlteringRequired, DataConversionRequired); // we may want to add an Index here
 		I2("notNull", PhysicalAlteringRequired, DataConversionRequired); // we may want to add an Index here
 		// allowEmpty: only support it just at kexi level? maybe there is a backend that supports this?
-		I2("allowEmpty", PhysicalAlteringRequired, ExtendedSchemaAlteringRequired); 
+		I2("allowEmpty", PhysicalAlteringRequired, MainSchemaAlteringRequired); 
 		I2("autoIncrement", PhysicalAlteringRequired, DataConversionRequired); // data conversion may be hard here
 		I2("indexed", PhysicalAlteringRequired, DataConversionRequired); // we may want to add an Index here
 
@@ -339,6 +341,27 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 	}
 }
 
+
+tristate AlterTableHandler::ChangeFieldPropertyAction::updateTableSchema(TableSchema &table, Field* field,
+	QMap<QString, QString>& fieldMap)
+{
+	//1. Simpler cases first: changes that do not affect table schema at all
+	// "caption", "description", "width", "visibleDecimalPlaces"
+	if (SchemaAlteringRequired & alteringTypeForProperty(m_propertyName.latin1())) {
+		bool result = KexiDB::setFieldProperty(*field, m_propertyName.latin1(), newValue());
+		return result;
+	}
+
+	if (m_propertyName=="name") {
+		if (fieldMap[ field->name() ] == field->name())
+			fieldMap.remove( field->name() );
+		fieldMap.insert( newValue().toString(), field->name() );
+		table.renameField(field, newValue().toString());
+		return true;
+	}
+	return cancelled;
+}
+
 /*! Many of the properties must be applied using a separate algorithm.
 */
 tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn, TableSchema &table)
@@ -351,7 +374,7 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn,
 	bool result;
 	//1. Simpler cases first: changes that do not affect table schema at all
 	// "caption", "description", "width", "visibleDecimalPlaces"
-	if (ExtendedSchemaAlteringRequired == alteringTypeForProperty(m_propertyName.latin1())) {
+	if (SchemaAlteringRequired & alteringTypeForProperty(m_propertyName.latin1())) {
 		result = KexiDB::setFieldProperty(*field, m_propertyName.latin1(), newValue());
 		return result;
 	}
@@ -443,6 +466,14 @@ void AlterTableHandler::RemoveFieldAction::simplifyActions(ActionDictDict &field
 	if (!actionsLikeThis)
 		actionsLikeThis = createActionDict( fieldActions, uid() ); //fieldName() );
 	actionsLikeThis->insert( ":remove:", newAction ); //special
+}
+
+tristate AlterTableHandler::RemoveFieldAction::updateTableSchema(TableSchema &table, Field* field,
+	QMap<QString, QString>& fieldMap)
+{
+	fieldMap.remove( field->name() );
+	table.removeField(field);
+	return true;
 }
 
 tristate AlterTableHandler::RemoveFieldAction::execute(Connection &conn, TableSchema &table)
@@ -569,6 +600,18 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
 	actionsForThisField->insert( ":insert:", newAction ); //special
 }
 
+tristate AlterTableHandler::InsertFieldAction::updateTableSchema(TableSchema &table, Field* field,
+	QMap<QString, QString>& fieldMap)
+{
+	//in most cases we won't add the field to fieldMap
+	Q_UNUSED(fieldMap);
+	Q_UNUSED(field);
+//! @todo add it only when there should be fixed value (e.g .default) set for this new field...
+	fieldMap.remove( this->field().name() );
+	table.insertField(index(), new Field(this->field()));
+	return true;
+}
+
 tristate AlterTableHandler::InsertFieldAction::execute(Connection &conn, TableSchema &table)
 {
 	//! @todo
@@ -595,7 +638,7 @@ AlterTableHandler::MoveFieldPositionAction::~MoveFieldPositionAction()
 
 void AlterTableHandler::MoveFieldPositionAction::updateAlteringRequirements()
 {
-	setAlteringRequirements( ExtendedSchemaAlteringRequired );
+	setAlteringRequirements( MainSchemaAlteringRequired );
 	//! @todo
 }
 
@@ -669,24 +712,25 @@ void AlterTableHandler::debug()
 		it.current()->debug();
 }
 
-tristate AlterTableHandler::execute(const QString& tableName, bool simulate)
+TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &result, bool simulate)
 {
+	result = false;
 	if (!d->conn) {
 		//err msg?
-		return false;
+		return 0;
 	}
 	if (d->conn->isReadOnly()) {
 		//err msg?
-		return false;
+		return 0;
 	}
 	if (!d->conn->isDatabaseUsed()) {
 		//err msg?
-		return false;
+		return 0;
 	}
-	TableSchema *table = d->conn->tableSchema(tableName);
-	if (!table) {
+	TableSchema *oldTable = d->conn->tableSchema(tableName);
+	if (!oldTable) {
 		//err msg?
-		return false;
+		return 0;
 	}
 
 	debug();
@@ -744,16 +788,26 @@ tristate AlterTableHandler::execute(const QString& tableName, bool simulate)
 	ActionVector actionsVector(allActionsCount);
 	int currentActionsCount = 0; //some actions may be removed
 	int requirements = 0;
+	QDict<char> fieldsWithChangedMainSchema(997); // Used to collect fields with changed main schema.
+	                                              // This will be used when recreateTable is false to update kexi__fields
 	for (ActionDictDictIterator it(fieldActions); it.current(); ++it) {
 		for (AlterTableHandler::ActionDictIterator it2(*it.current());it2.current(); ++it2, currentActionsCount++) {
 			actionsVector.insert( it2.current()->m_order, it2.current() );
 			// a sum of requirements...
-			requirements |= it2.current()->alteringRequirements();
+			const int r = it2.current()->alteringRequirements();
+			requirements |= r;
+			if (r & MainSchemaAlteringRequired && dynamic_cast<ChangeFieldPropertyAction*>(it2.current())) {
+				// Remember, this will be used when recreateTable is false to update kexi__fields, below.
+				fieldsWithChangedMainSchema.insert( 
+					dynamic_cast<ChangeFieldPropertyAction*>(it2.current())->fieldName(), (char*)1 );
+			}
 		}
 	}
 	// - Debug
 	QString dbg = QString("** Overall altering requirements: %1").arg(requirements);
 	KexiDBDbg << dbg << endl;
+	const bool recreateTable = (requirements & PhysicalAlteringRequired);
+
 #ifdef KEXI_DEBUG_GUI
 	if (simulate)
 		KexiUtils::addAlterTableActionDebug(dbg, 0);
@@ -768,28 +822,164 @@ tristate AlterTableHandler::execute(const QString& tableName, bool simulate)
 		debugAction(actionsVector[i], 1, simulate, QString("%1: ").arg(i+1));
 	}
 
-	if (requirements == 0) //nothing to do
-		return true;
-	if (simulate) //do not execute
-		return true;
-
+	if (requirements == 0) {//nothing to do
+		result = true;
+		return oldTable;
+	}
+	if (simulate) {//do not execute
+		result = true;
+		return oldTable;
+	}
 // @todo transaction!
 
+	// Create new TableSchema
+	TableSchema *newTable = recreateTable ? new TableSchema(*oldTable, false/*!copy id*/) : oldTable;
+	// find nonexisting temp name for new table schema
+	if (recreateTable) {
+		QString tempDestTableName;
+		while (true) {
+			tempDestTableName = QString("%1_temp%2%3").arg(newTable->name()).arg(QString::number(rand(), 16)).arg(QString::number(rand(), 16));
+			if (!d->conn->tableSchema(tempDestTableName))
+				break;
+		}
+		newTable->setName( tempDestTableName );
+	}
+	oldTable->debug();
+	if (recreateTable)
+		newTable->debug();
+
+	// Update table schema in memory ----
+	int lastUID = -1;
+	Field *currentField = 0;
+	QMap<QString, QString> fieldMap; // a map from new value to old value
+	foreach_list( Field::ListIterator, it, newTable->fieldsIterator() ) {
+		fieldMap.insert( it.current()->name(), it.current()->name() );
+	}
+	for (int i=0; i<allActionsCount; i++) {
+		action = actionsVector[i];
+		if (!action)
+			continue;
+		//remember the current Field object because soon we may be unable to find it by name:
+		FieldActionBase *fieldAction = dynamic_cast<FieldActionBase*>(action);
+		if (!fieldAction)
+			currentField = 0;
+		else {
+			if (lastUID != fieldAction->uid()) {
+				currentField = newTable->field( fieldAction->fieldName() );
+				lastUID = currentField ? fieldAction->uid() : -1;
+			}
+		}
+		result = action->updateTableSchema(*newTable, currentField, fieldMap);
+		if (!result || ~result) {
+			if (recreateTable)
+				delete newTable;
+			return 0;
+		}
+	}
+
+	if (recreateTable) {
+		// Create the destination table with temporary name
+		if (!d->conn->createTable( newTable, false )) {
+			setError(d->conn);
+			delete newTable;
+			result = false;
+			return 0;
+		}
+	}
+
+#if 0//todo
 	// Execute actions ----
 	for (int i=0; i<allActionsCount; i++) {
 		action = actionsVector[i];
 		if (!action)
 			continue;
-		tristate res = action->execute(*d->conn, *table);
-		if (!res || ~res)
-			return res;
+		result = action->execute(*d->conn, *newTable);
+		if (!result || ~result) {
+//! @todo delete newTable...
+			result = false;
+			return 0;
+		}
 	}
-	// save extended table schema
-	if (!d->conn->storeExtendedTableSchemaData(*table)) {
+#endif
+
+	// update extended table schema after executing the actions
+	if (!d->conn->storeExtendedTableSchemaData(*newTable)) {
 //! @todo better errmsg?
 		setError(d->conn);
-		return false;
+//! @todo delete newTable...
+		result = false;
+		return 0;
 	}
 
-	return true;
+	if (recreateTable) {
+		// Copy the data:
+		// Build "INSERT INTO ... SELECT FROM ..." SQL statement
+		// The order is based on the order of the source table fields.
+		// Notes:
+		// -Some source fields can be skipped in case when there are deleted fields.
+		// -Some destination fields can be skipped in case when there are new empty fields without fixed/default value.
+		QString sql = QString("INSERT INTO %1 (").arg(d->conn->escapeIdentifier(newTable->name()));
+		//insert list of dest. fields
+		bool first = true;
+		QString sourceFields;
+		foreach_list( Field::ListIterator, it, newTable->fieldsIterator() ) {
+			QString renamedFieldName( fieldMap[ it.current()->name() ] );
+			if (!renamedFieldName.isEmpty()) {
+				if (first) {
+					first = false;
+				}
+				else {
+					sql.append( ", " );
+					sourceFields.append( ", " );
+				}
+				sql.append( d->conn->escapeIdentifier( it.current()->name() ) );
+				sourceFields.append( d->conn->escapeIdentifier(renamedFieldName) );
+			}
+		}
+		sql.append(QString(") SELECT ") + sourceFields + " FROM " + oldTable->name());
+		KexiDBDbg << " ** " << sql << endl;
+		if (!d->conn->executeSQL( sql )) {
+			setError(d->conn);
+//! @todo delete newTable...
+			result = false;
+			return 0;
+		}
+
+		const QString oldTableName = oldTable->name();
+		result = d->conn->dropTable( oldTable );
+		if (!result || ~result) {
+			setError(d->conn);
+//! @todo delete newTable...
+			return 0;
+		}
+		oldTable = 0;
+
+		// Replace the old table with the new one
+		if (!d->conn->alterTableName(*newTable, oldTableName, false /*!replace*/)) {
+			setError(d->conn);
+//! @todo delete newTable...
+			result = false;
+			return 0;
+		}
+	}
+
+	if (!recreateTable) {
+		if ((MainSchemaAlteringRequired & requirements) && !fieldsWithChangedMainSchema.isEmpty()) {
+			//update main schema (kexi__fields) for changed fields
+			foreach_list(QDictIterator<char>, it, fieldsWithChangedMainSchema) {
+				Field *f = newTable->field( it.currentKey() );
+				if (f) {
+					if (d->conn->storeMainFieldSchema(f)) {
+						setError(d->conn);
+			//! @todo delete newTable...
+						result = false;
+						return 0;
+					}
+				}
+			}
+		}
+	}
+
+	result = true;
+	return newTable;
 }

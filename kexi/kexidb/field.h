@@ -89,7 +89,6 @@ class KEXI_DB_EXPORT Field
 			ShortInteger = 2,/*!< 2 bytes, signed or unsigned */
 			Integer = 3,     /*!< 4 bytes, signed or unsigned */
 			BigInteger = 4,  /*!< 8 bytes, signed or unsigned */
-//			AutoIncrement,/* 4 bytes, like LongInteger, used for keys */
 			Boolean = 5,     /*!< 0 or 1 */
 			Date = 6,        /*!< */
 			DateTime = 7,	   /*!< */

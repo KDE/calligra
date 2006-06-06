@@ -72,7 +72,7 @@ TableSchema::TableSchema()
 	init();
 }
 
-TableSchema::TableSchema(const TableSchema& ts)
+TableSchema::TableSchema(const TableSchema& ts, bool copyId)
 	: FieldList(static_cast<const FieldList&>(ts))
 	, SchemaData(static_cast<const SchemaData&>(ts))
 	, m_conn( ts.m_conn )
@@ -83,6 +83,8 @@ TableSchema::TableSchema(const TableSchema& ts)
 	m_name = ts.m_name;
 	m_indices.setAutoDelete( true );
 	m_pkey = 0; //will be copied
+	if (!copyId)
+		m_id = -1;
 
 	//deep copy all members
 	IndexSchema::ListIterator idx_it(ts.m_indices);

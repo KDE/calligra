@@ -285,6 +285,9 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		QHBoxLayout *hbox = new QHBoxLayout(page);
 		vbox->addLayout(hbox);
 		hbox->addStretch(1);
+		KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "filesave"), page);
+		btn_exec->setName("executeRealAlterTable");
+		hbox->addWidget(btn_exec);
 		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
 		hbox->addWidget(btn_clear);
 		KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "exec"), page);
