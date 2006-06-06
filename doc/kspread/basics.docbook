@@ -24,10 +24,10 @@ of the &kspread; configuration dialog (obtained by selecting
 </guilabel> in the <guisubmenu>Misc</guisubmenu> page, which should be set to
 <guimenuitem>None</guimenuitem>.
 </para>
-<para>You may also find it helpful to globally enable Tooltips in &kcontrolcenter;
-in <menuchoice><guimenu>Appearance &amp;
+<para>You may also find it helpful to globally <guilabel>Enable tooltips</guilabel> 
+in &kcontrolcenter; in <menuchoice><guimenu>Appearance &amp;
 Themes</guimenu><guimenuitem>Style</guimenuitem></menuchoice>
-dialog box. </para></note>
+on the <guilabel>Style</guilabel> page. </para></note>
 
 <sect1 id="starting">
 <title>Spreadsheets for Beginners</title>
