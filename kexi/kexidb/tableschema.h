@@ -49,8 +49,10 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		TableSchema(const SchemaData& sdata);
 		TableSchema();
 
-		/*! Copy constructor. */
-		TableSchema(const TableSchema& ts);
+		/*! Copy constructor. 
+		 if \a copyId is true, it's copied as well, otherwise the table id becomes -1. 
+		 This is usable when we want to store the copy as an independent table. */
+		TableSchema(const TableSchema& ts, bool copyId = true);
 		
 		virtual ~TableSchema();
 		

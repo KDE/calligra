@@ -125,10 +125,18 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 			 values to string after changing column type from integer to text. */
 			DataConversionRequired = 2,
 
-			/* Only changes to extended table schema (or kexi__fields) required,
+			/* Changes to the main table schema (in kexi__fields) required,
+			 this does not require physical changes for the table; 
+			 e.g. changing value of the "caption" or "description" property. */
+			MainSchemaAlteringRequired = 4,
+
+			/* Only changes to extended table schema required,
 			 this does not require physical changes for the table; 
 			 e.g. changing value of the "visibleDecimalPlaces" property. */
-			ExtendedSchemaAlteringRequired = 4
+			ExtendedSchemaAlteringRequired = 8,
+
+			/*! Convenience flag, changes to the main or extended schema is required. */
+			SchemaAlteringRequired = ExtendedSchemaAlteringRequired | MainSchemaAlteringRequired
 		};
 
 		class ActionBase;
@@ -172,6 +180,10 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual void updateAlteringRequirements() {};
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
+
+				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
+					QMap<QString, QString>& fieldMap) 
+					{ Q_UNUSED(table); Q_UNUSED(field); Q_UNUSED(fieldMap); return true; }
 
 			private:
 				//! Performs physical execution of this action.
@@ -242,6 +254,9 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
 
+				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
+					QMap<QString, QString>& fieldMap);
+
 			protected:
 				virtual void updateAlteringRequirements();
 
@@ -262,6 +277,9 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual QString debugString();
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
+
+				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
+					QMap<QString, QString>& fieldMap);
 
 			protected:
 				virtual void updateAlteringRequirements();
@@ -285,6 +303,9 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual QString debugString();
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
+
+				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
+					QMap<QString, QString>& fieldMap);
 
 			protected:
 				virtual void updateAlteringRequirements();
@@ -356,10 +377,13 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		 to refresh all objects depending on it.
 		 Implement this!
 
-		 \return true on success, false on failure or when the above requirements are not met
+		 Sets \a result to true on success, to false on failure or when the above requirements are not met
 		 (then, you can detailed get error message from KexiDB::Object). 
-		 When the action has been cancelled (stopped), returns cancelled value. */
-		tristate execute(const QString& tableName, bool simulate = false);
+		 When the action has been cancelled (stopped), \a result is set to cancelled value. 
+		 \return the new table schema object created as a result of schema altering.
+		 The old table is returned if recreating table schema was not necessary or \a simulate is true. 
+		 0 is returned if \a result is not true. */
+		TableSchema* execute(const QString& tableName, tristate& result, bool simulate = false );
 
 		void debug();
 

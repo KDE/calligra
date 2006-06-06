@@ -82,6 +82,24 @@ FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
 	return *this;
 }
 
+void FieldList::renameField(const QString& oldName, const QString& newName)
+{
+	renameField( m_fields_by_name[ oldName ], newName );
+}
+
+void FieldList::renameField(KexiDB::Field *field, const QString& newName)
+{
+	if (!field || field != m_fields_by_name[ field->name() ]) {
+		KexiDBWarn << "FieldList::renameField() no field found " 
+			<< (field ? QString("\"%1\"").arg(field->name()) : QString::null) << endl;
+		return;
+	}
+	m_fields_by_name.take( field->name() );
+	field->setName( newName );
+	m_fields_by_name.insert( field->name(), field );
+}
+
+
 FieldList& FieldList::addField(KexiDB::Field *field)
 {
 	return insertField(m_fields.count(), field);

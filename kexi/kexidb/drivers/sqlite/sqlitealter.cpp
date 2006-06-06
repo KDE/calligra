@@ -22,7 +22,42 @@
 #include "sqliteconnection.h"
 #include <kexidb/utils.h>
 
+#include <kstaticdeleter.h>
+
+#include <qmap.h>
+
 using namespace KexiDB;
+
+enum SQLiteTypeAffinity { //as defined here: 2.1 Determination Of Column Affinity (http://sqlite.org/datatype3.html)
+	NoAffinity = 0, IntAffinity = 1, TextAffinity = 2, BLOBAffinity = 3
+};
+
+//! helper for affinityForType()
+static KStaticDeleter< QMap<int,int> > KexiDB_SQLite_affinityForType_deleter;
+QMap<int,int> *KexiDB_SQLite_affinityForType = 0;
+
+//! \return SQLite type affinity for \a type
+//! See doc/dev/alter_table_type_conversions.ods, page 2 for more info
+static SQLiteTypeAffinity affinityForType(Field::Type type)
+{
+	if (!KexiDB_SQLite_affinityForType) {
+		KexiDB_SQLite_affinityForType_deleter.setObject( KexiDB_SQLite_affinityForType, new QMap<int,int>() );
+		KexiDB_SQLite_affinityForType->insert(Field::Byte, IntAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::ShortInteger, IntAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::Integer, IntAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::BigInteger, IntAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::Boolean, IntAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::Date, TextAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::DateTime, TextAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::Time, TextAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::Float, IntAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::Double, IntAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::Text, TextAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::LongText, TextAffinity);
+		KexiDB_SQLite_affinityForType->insert(Field::BLOB, BLOBAffinity);
+	}
+	return static_cast<SQLiteTypeAffinity>((*KexiDB_SQLite_affinityForType)[(int)type]);
+}
 
 tristate SQLiteConnection::drv_changeFieldProperty(TableSchema &table, Field& field, 
 	const QString& propertyName, const QVariant& value)
@@ -44,7 +79,6 @@ tristate SQLiteConnection::drv_changeFieldProperty(TableSchema &table, Field& fi
 }
 
 /*! 
-
  From http://sqlite.org/datatype3.html :
  Version 3 enhances provides the ability to store integer and real numbers in a more compact 
  format and the capability to store BLOB data.
@@ -68,7 +102,12 @@ tristate SQLiteConnection::drv_changeFieldProperty(TableSchema &table, Field& fi
 tristate SQLiteConnection::changeFieldType(TableSchema &table, Field& field, 
 	Field::Type type)
 {
-	Field::Type oldType = field.type();
+	const Field::Type oldType = field.type();
+	const SQLiteTypeAffinity oldAffinity = affinityForType(oldType);
+	const SQLiteTypeAffinity newAffinity = affinityForType(type);
+	if (oldAffinity!=newAffinity) {
+		//type affinity will be changed
+	}
 
 	return cancelled;
 }

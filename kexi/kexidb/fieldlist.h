@@ -137,9 +137,17 @@ class KEXI_DB_EXPORT FieldList
 		/*! Like above, but thsi is convenient static function, so you can pass any \a list here. */
 		static QString sqlFieldsList(Field::List* list, Driver *driver);
 
+		/*! @internal Renames field \a oldName to \a newName. 
+		 Do not use this for physical renaming columns. Use AlterTableHandler instead. */
+		void renameField(const QString& oldName, const QString& newName);
+
+		/*! @internal 
+		 \overload void renameField(const QString& oldName, const QString& newName) */
+		void renameField(KexiDB::Field *field, const QString& newName);
+
 	protected:
 		Field::List m_fields;
-		QDict<Field> m_fields_by_name; //!< Fields collected by name. Unused by QuerySchema.
+		QDict<Field> m_fields_by_name; //!< Fields collected by name. Not used by QuerySchema.
 		Field::List *m_autoinc_fields;
 	
 	private:
