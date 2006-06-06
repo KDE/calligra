@@ -98,6 +98,7 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(KexiTableDesignerView
  , addHistoryCommand_in_slotAboutToDeleteRow_enabled(true)
  , addHistoryCommand_in_slotRowInserted_enabled(true)
  , slotBeforeCellChanged_enabled(true)
+ , tempStoreDataUsingRealAlterTable(false)
 {
 	historyActionCollection = new KActionCollection((QWidget*)0,"");
 	history = new CommandHistory(historyActionCollection, true);

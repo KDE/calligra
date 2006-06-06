@@ -145,6 +145,9 @@ class KexiTableDesignerView : public KexiDataTable
 		/*! Simulates real execution of the Alter Table. For debugging. */
 		void slotSimulateAlterTableExecution();
 
+		/*! Real execution of the Alter Table. For debugging the real alter table. */
+		void slotExecuteRealAlterTable();
+
 	protected:
 		virtual void updateActions(bool activated);
 
