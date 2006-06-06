@@ -1352,7 +1352,7 @@ includes the hidden columns.</action>
 <guimenuitem>Selection List...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Lets you select and paste text from any
-other cell of the current column into the selected cell.</action>
+cell of the current selection of cells into the selected cell.</action>
 </para></listitem>
 </varlistentry>
 
