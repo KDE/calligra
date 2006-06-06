@@ -26,6 +26,22 @@ CSV Import Dialog
 Migration
 - improved usability for selecting type of destination database
   (no mention of SQLite for now)
+2.0: ported
+KexiDB
+- renaming table fields works, table schema is recreated when needed,
+  and just altered in-place when it's enough to do so
+2.0: ported
+Table View
+- cell editor: the contents are marked as changed only when the original 
+  value differs from the current
+1.0/2.0: ported
+Table Designer
+- changing field's description is supported by undo/redo commands 
+  and by alter table actions.
+2.0: ported
+- Internal Debugger: added "Real alter table" button, 
+  for s convenience, "save" action now uses the old alter table code
+2.0: ported
 
 2006-06-05
 KoProperty

@@ -901,14 +901,14 @@ Kexi >2.0 (probably late 2007): Add SQLite >3.3 driver. Offer exporting similar 
 
 - for table t1(a,b,c) delete column t1.c:
 
-CREATE TEMPORARY TABLE t1_backup(a,b);
-INSERT INTO t1_backup SELECT a,b FROM t1;
+CREATE TABLE t1_new(a,b);
+INSERT INTO t1_new SELECT a,b FROM t1;
 DROP TABLE t1;
-ALTER TABLE t1_backup RENAME TO t1;
+ALTER TABLE t1_new RENAME TO t1;
 
 - for table t1(a,b,c) rename column t1.c to t1.d:
 
-CREATE TEMPORARY TABLE t1_backup(a,b,d);
-INSERT INTO t1_backup SELECT a,b,c FROM t1;
+CREATE TABLE t1_new(a,b,d);
+INSERT INTO t1_new SELECT a,b,c FROM t1;
 DROP TABLE t1;
-ALTER TABLE t1_backup RENAME TO t1;
+ALTER TABLE t1_new RENAME TO t1;
