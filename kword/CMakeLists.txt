@@ -144,7 +144,7 @@ kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
 target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake kofficeui kotext kformulalib kwmailmerge_interface )
 
-set_target_properties(kwordprivate PROPERTIES VERSION 4.0.0 SOVERSION 4 )
+set_target_properties(kwordprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kwordprivate )
 
 
