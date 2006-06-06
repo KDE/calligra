@@ -146,6 +146,11 @@ class KexiTableDesignerViewPrivate
 		//! used to disable slotBeforeCellChanged()
 		bool slotBeforeCellChanged_enabled : 1;
 
+//! @tood temp; remove this:
+		//! Temporary flag, used for testingu the Alter Table machinery. Affects storeData()
+		//! Used in slotExecuteRealAlterTable() to switch on real alter table for a while.
+		bool tempStoreDataUsingRealAlterTable;
+
 		KActionCollection* historyActionCollection;
 		CommandHistory* history;
 };

@@ -157,6 +157,8 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 	KexiUtils::addAlterTableActionDebug(QString::null); //to create the tab
 	KexiUtils::connectPushButtonActionForDebugWindow( 
 		"simulateAlterTableExecution", this, SLOT(slotSimulateAlterTableExecution()));
+	KexiUtils::connectPushButtonActionForDebugWindow( 
+		"executeRealAlterTable", this, SLOT(slotExecuteRealAlterTable()));
 #endif
 }
 
@@ -563,7 +565,6 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 		}
 
 		KoProperty::Set *propertySetForItem = d->sets->findPropertySetForItem(*item);
-
 		if (propertySetForItem) {
 			d->addHistoryCommand_in_slotPropertyChanged_enabled = false; //because we'll add the two changes as one KMacroCommand
 				QString oldName( propertySetForItem->property("name").value().toString() );
@@ -701,12 +702,17 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 	}
 	else if (colnum==COLUMN_ID_DESC) {//'description'
 		KoProperty::Set *propertySetForItem = d->sets->findPropertySetForItem(*item);
-		if (propertySetForItem) //!propertySet())
+		if (!propertySetForItem)
 			return;
-
 		//update field desc.
-		KoProperty::Set &set = *propertySetForItem;//propertySet();
-		set["description"] = newValue; //item->at(COLUMN_ID_DESC);
+		QVariant oldValue((*propertySetForItem)["description"]);
+		(*propertySetForItem)["description"] = newValue;
+
+/*		addHistoryCommand( 
+			new ChangeFieldPropertyCommand( this, *propertySetForItem,
+				"description", oldValue, newValue ), 
+			false
+		);*/
 	}
 }
 
@@ -1075,7 +1081,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema)
 					if ((*set)["name"].value().toString()
 						== pkFieldName.arg(idIndex==1?QString::null : QString::number(idIndex))
 					|| (*set)["caption"].value().toString()
-					== pkFieldCaption.arg(idIndex==1?QString::null : QString::number(idIndex)))
+						== pkFieldCaption.arg(idIndex==1?QString::null : QString::number(idIndex)))
 					{
 						//try next id index
 						i = 0;
@@ -1229,7 +1235,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 		return 0;
 
 	tristate res = true;
-	if (!d->dontAskOnStoreData && !dontAsk) {
+	if (!d->tempStoreDataUsingRealAlterTable && !d->dontAskOnStoreData && !dontAsk) {
 		bool emptyTable;
 		const QString msg = d->messageForSavingChanges(emptyTable);
 		if (!emptyTable) {
@@ -1245,23 +1251,25 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 
-
-#ifdef KEXI_NO_UNDOREDO_ALTERTABLE
-	//keep old behaviour
-	KexiDB::TableSchema *newTable = new KexiDB::TableSchema();
-	//copy schema data
-	static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
-	res = buildSchema(*newTable);
-
-	kexipluginsdbg << "KexiTableDesignerView::storeData() : BUILD SCHEMA:" << endl;
-	newTable->debug();
-#else
-	KexiDB::AlterTableHandler::ActionList actions;
-	res = buildAlterTableActions( actions );
-//todo: result?
-	KexiDB::AlterTableHandler alterTableHandler( *conn );
-	alterTableHandler.setActions(actions);
-#endif
+	KexiDB::AlterTableHandler *alterTableHandler = 0;
+	KexiDB::TableSchema *newTable = 0;
+	if (d->tempStoreDataUsingRealAlterTable) {
+		KexiDB::AlterTableHandler::ActionList actions;
+		res = buildAlterTableActions( actions );
+	//todo: result?
+		alterTableHandler = new KexiDB::AlterTableHandler( *conn );
+		alterTableHandler->setActions(actions);
+	}
+	else {
+//! @todo temp; remove this:
+		//keep old behaviour
+		newTable = new KexiDB::TableSchema();
+		//copy schema data
+		static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
+		res = buildSchema(*newTable);
+		kexipluginsdbg << "KexiTableDesignerView::storeData() : BUILD SCHEMA:" << endl;
+		newTable->debug();
+	}
 
 	if (res) {
 		res = KexiTablePart::askForClosingObjectsUsingTableSchema(
@@ -1271,11 +1279,20 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 			.arg(tempData()->table->name()));
 	}
 	if (res) {
-#ifdef KEXI_NO_UNDOREDO_ALTERTABLE
-		//keep old behaviour
-		res = conn->alterTable(*tempData()->table, *newTable);
-		if (!res)
-			parentDialog()->setStatus(conn, "");
+		if (d->tempStoreDataUsingRealAlterTable) {
+			newTable = alterTableHandler->execute(tempData()->table->name(), res);
+			kexipluginsdbg << "KexiTableDesignerView::storeData() : ALTER TABLE EXECUTE:" << res << endl;
+			if (!res)
+				parentDialog()->setStatus(alterTableHandler, "");
+		//! @todo: result?
+		}
+		else {
+//! @tood temp; remove this:
+			//keep old behaviour
+			res = conn->alterTable(*tempData()->table, *newTable);
+			if (!res)
+				parentDialog()->setStatus(conn, "");
+		}
 		if (res) {
 			//change current schema
 			tempData()->table = newTable;
@@ -1284,13 +1301,8 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 		else {
 			delete newTable;
 		}
-#else
-		res = alterTableHandler.execute(tempData()->table->name());
-		if (!res)
-			parentDialog()->setStatus(&alterTableHandler, "");
-//todo: result?
-#endif
 	}
+	delete alterTableHandler;
 	return res;
 }
 
@@ -1309,9 +1321,18 @@ void KexiTableDesignerView::slotSimulateAlterTableExecution()
 	KexiDB::AlterTableHandler alterTableHandler( *conn );
 	alterTableHandler.setActions(actions);
 
-	res = alterTableHandler.execute(tempData()->table->name(), /*simulate*/true);
+	(void)alterTableHandler.execute(tempData()->table->name(), res, /*simulate*/true);
 # endif
 #endif
+}
+
+void KexiTableDesignerView::slotExecuteRealAlterTable()
+{
+	QSignal signal;
+	signal.connect( mainWin(), SLOT(slotProjectSave()) );
+	d->tempStoreDataUsingRealAlterTable = true;
+	signal.activate(); //will call KexiMainWindowImpl::slotProjectSaveAs() and thus storeData()
+	d->tempStoreDataUsingRealAlterTable = false;
 }
 
 KexiTablePart::TempData* KexiTableDesignerView::tempData() const
