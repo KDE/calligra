@@ -18,7 +18,7 @@ kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 
 target_link_libraries(kivioprivate  ${KDE4_KDECORE_LIBS} kofficeui flake)
 
-set_target_properties(kivioprivate PROPERTIES VERSION 2.0.0 SOVERSION 2 )
+set_target_properties(kivioprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kivioprivate )
 
 ### kiviopart ###

@@ -40,7 +40,7 @@ kde4_add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
 target_link_libraries(kexicore  ${KDE4_KDECORE_LIBS} kexiutils kexidb kexidbparser koproperty )
 
-set_target_properties(kexicore PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(kexicore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kexicore )
 
 

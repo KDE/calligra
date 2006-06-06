@@ -158,7 +158,7 @@ kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
 target_link_libraries(kpresenterprivate  ${KDE4_KDE3SUPPORT_LIBS} kofficeui kotext kopainter )
 
-set_target_properties(kpresenterprivate PROPERTIES VERSION 4.0.0 SOVERSION 4 )
+set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kpresenterprivate )
 
 

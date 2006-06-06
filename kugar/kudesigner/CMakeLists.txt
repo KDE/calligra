@@ -22,7 +22,7 @@ kde4_add_library(kudesignercore SHARED ${kudesignercore_LIB_SRCS})
 
 target_link_libraries(kudesignercore  ${KDE4_KDEUI_LIBS} kofficeui ${KDE4_KPARTS_LIBS} kofficecore koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
 
-set_target_properties(kudesignercore PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(kudesignercore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kudesignercore )
 
 

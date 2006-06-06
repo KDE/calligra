@@ -41,7 +41,7 @@ kde4_add_library(kwmailmerge_interface SHARED ${kwmailmerge_interface_LIB_SRCS})
 
 target_link_libraries(kwmailmerge_interface  ${KDE4_KDECORE_LIBS} DCOP )
 
-set_target_properties(kwmailmerge_interface PROPERTIES VERSION 4.0.0 SOVERSION 4 )
+set_target_properties(kwmailmerge_interface PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kwmailmerge_interface )
 
 

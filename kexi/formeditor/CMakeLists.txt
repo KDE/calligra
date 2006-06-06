@@ -35,7 +35,7 @@ kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 
 target_link_libraries(kformdesigner  ${KDE4_KDECORE_LIBS} kexiextendedwidgets kexiguiutils kexidatatable koproperty ${KDE4_KPARTS_LIBS} )
 
-set_target_properties(kformdesigner PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(kformdesigner PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kformdesigner )
 
 
