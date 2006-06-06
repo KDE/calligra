@@ -56,8 +56,9 @@ int main(int argc, char** argv)
   QWidget* vbox = new QWidget();
   QVBoxLayout* vbLayout = new QVBoxLayout(vbox);
 
-  KexiDBDriverComboBox* all = new KexiDBDriverComboBox(drvs, true, vbox);
-  KexiDBDriverComboBox* srvOnly = new KexiDBDriverComboBox(drvs, false, vbox);
+  KexiDBDriverComboBox* all = new KexiDBDriverComboBox(vbox, drvs);
+  KexiDBDriverComboBox* srvOnly = new KexiDBDriverComboBox(vbox, drvs,
+  	KexiDBDriverComboBox::ShowServerDrivers);
 
   QPushButton* quit = new QPushButton("Quit", vbox);
 
