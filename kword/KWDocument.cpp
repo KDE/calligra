@@ -71,6 +71,7 @@
 #include <KoOasisStyles.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
+#include <KoToolManager.h>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -281,6 +282,8 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
 
     if ( !objectName().isEmpty() )
         dcopObject();
+
+    KoToolManager::instance()->createToolBox()->show();
 }
 
 DCOPObject* KWDocument::dcopObject()
