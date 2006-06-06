@@ -227,7 +227,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 //	setFocusProxy(m_lineedit);
 
 	//orig. editor's text
-	m_origText = m_lineedit->text();
+//not needed	m_origText = m_lineedit->text();
 }
 
 void KexiInputTableEdit::paintEvent ( QPaintEvent * /*e*/ )
@@ -270,8 +270,8 @@ KexiInputTableEdit::completed(const QString &s)
 
 bool KexiInputTableEdit::valueChanged()
 {
-	if (m_lineedit->text()!=m_origText)
-		return true;
+	//not needed? if (m_lineedit->text()!=m_origValue.toString())
+	//not needed? 	return true;
 	return KexiTableEdit::valueChanged();
 }
 
