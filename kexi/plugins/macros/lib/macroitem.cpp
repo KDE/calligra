@@ -110,7 +110,7 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 			case QVariant::Bool: {
 				const QString s = variant.toString();
 				ok = (s == "true" || s == "false" || s == "0" || s == "1" || s == "-1");
-				v = variant.toBool();
+				v = QVariant( variant.toBool(), 0 );
 				// kdDebug() << "parse an bool " << v << endl;
 			} break;
 			case QVariant::Int: {
@@ -141,9 +141,9 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 				kdWarning()<<"MacroItem::setVariable() Unhandled type="<<var.type()<<" value="<<v<<endl;
 			} break;
 		}
-		// kdDebug()<<"=======================> v="<<v<<" variant="<<variant<<" ok="<<ok<<endl;
+		// If cast fails, the variant will be automatically handled as QString.
 		if(! ok)
-			v = variant; // ignore casting result
+			v = variant;
 	}
 
 	KSharedPtr<Variable> variable = d->variables[name];
