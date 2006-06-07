@@ -283,7 +283,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     if ( !objectName().isEmpty() )
         dcopObject();
 
-    KoToolManager::instance()->createToolBox()->show();
+    KoToolManager::instance()->toolBox()->show();
 }
 
 DCOPObject* KWDocument::dcopObject()

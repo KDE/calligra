@@ -26,6 +26,7 @@
 
 #include <KoTabChooser.h>
 #include <KoCanvasView.h>
+#include <KoToolManager.h>
 
 #include <QGridLayout>
 #include <QSplitter>
@@ -61,6 +62,7 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     m_canvas = new KWCanvas( viewMode, doc, this );
     m_canvasView = new KoCanvasView(m_right);
     m_canvasView->setCanvas(m_canvas);
+    KoToolManager::instance()->addCanvasView(m_canvasView);
     gridLayout->addWidget( m_canvasView, 1, 1 );
 
     QList<int> l;

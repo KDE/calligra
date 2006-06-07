@@ -3221,8 +3221,7 @@ void KWView::setZoom( int zoom )
 
 void KWView::insertPicture()
 {
-    m_gui->canvasWidget()->startCreateTool();
-/*
+#if 0
     if ( m_actionToolsCreatePix->isChecked() )
     {
         KWInsertPicDia dia( this,m_gui->canvasWidget()->pictureInline(),m_gui->canvasWidget()->pictureKeepRatio(),m_doc );
@@ -3240,7 +3239,7 @@ void KWView::insertPicture()
         // clicked on the already active tool -> abort
         m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     }
-*/
+#endif
 }
 
 

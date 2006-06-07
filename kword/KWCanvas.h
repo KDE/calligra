@@ -220,15 +220,14 @@ public:
     bool insertInlinePicture();
     void updateSize();
 
-    void startCreateTool();
-
     // KoCanvasBase interface methods.
     void gridSize(double *horizontal, double *vertical) const;
     bool snapToGrid() const;
     void addCommand(KCommand *command, bool execute = true);
     KoShapeManager *shapeManager() const { return m_shapeManager; }
     void updateCanvas(const QRectF& rc);
-    KoTool* activeTool() { return m_tool; }
+    KoTool* tool() { return m_tool; }
+    void setTool(KoTool *tool) { m_tool = tool; }
     KoViewConverter *viewConverter();
     QWidget* canvasWidget() { return this; }
 
@@ -362,7 +361,7 @@ private:
     KWTableFrameSet *m_currentTable;
 
     KoShapeManager *m_shapeManager;
-    KoInteractionTool *m_tool;
+    KoTool *m_tool;
 
     struct
     {

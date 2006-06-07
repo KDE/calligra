@@ -69,15 +69,18 @@
 #include <kprinter.h>
 
 #include <KoRectangleShape.h>
+#include <QBrush>
 
 KWCanvas::KWCanvas(const QString& viewMode, KWDocument *d, KWGUI *lGui)
     : QWidget(), m_doc( d )
 {
     m_frameViewManager = new KWFrameViewManager(d);
-    m_tool = new KoInteractionTool(this);
-
+    m_tool = 0;
     m_gui = lGui;
     m_shapeManager = new KoShapeManager(this);
+KoRectangleShape *rs = new KoRectangleShape();
+rs->setBackground(QBrush(Qt::red));
+m_shapeManager->add(rs);
     m_currentFrameSetEdit = 0L;
     m_mouseMeaning = MEANING_NONE;
     m_mousePressed = false;
@@ -2168,17 +2171,6 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
 void KWCanvas::updateSize() {
     QSize size = viewMode()->contentsSize();
     setMinimumSize(size.width(), size.height());
-}
-
-void KWCanvas::startCreateTool() {
-    KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>(m_tool);
-    if(createTool) {
-        //createTool->shapesController->setFactoryType(KWShapeController::TextFrameType);
-        return;
-    }
-    delete m_tool;
-    m_tool = new KoCreateShapesTool(this, new KWShapeController(m_doc));
-    // TODO; this causes a leak due to the not deleted shapeController!
 }
 
 // ************* KWShapeController ***************
