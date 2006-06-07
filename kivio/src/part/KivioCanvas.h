@@ -27,6 +27,7 @@
 class QPaintEvent;
 class KoZoomHandler;
 class KivioView;
+class KoTool;
 
 class KivioCanvas : public QWidget, public KoCanvasBase
 {
@@ -80,7 +81,13 @@ class KivioCanvas : public QWidget, public KoCanvasBase
      * Return the curently active tool, or 0 if non active.
      * @return the curently active tool, or 0 if non active.
      */
-    virtual KoTool* activeTool();
+    KoTool* tool() { return m_tool; }
+
+    /**
+     * Set the new ative tool.
+     * @param tool the new tool to be used on the canvas.
+     */
+    void setTool(KoTool* tool) { m_tool = tool; }
 
     /**
      * Return the viewConverter for this view.
@@ -102,6 +109,8 @@ class KivioCanvas : public QWidget, public KoCanvasBase
 
   private:
     KivioView* m_view;
+
+    KoTool *m_tool;
 
     KoZoomHandler* m_zoomHandler;
 };

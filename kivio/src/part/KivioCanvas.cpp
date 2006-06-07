@@ -82,12 +82,6 @@ void KivioCanvas::updateCanvas(const QRectF& rc)
   update(clipRect);
 }
 
-KoTool* KivioCanvas::activeTool()
-{
-  // TODO Implement this
-  return 0;
-}
-
 KoViewConverter* KivioCanvas::viewConverter()
 {
   return m_zoomHandler;
