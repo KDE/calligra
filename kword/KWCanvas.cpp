@@ -53,7 +53,7 @@
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 #include <KoPictureCollection.h>
-#include <KoGfxEvent.h>
+#include <KoPointerEvent.h>
 #include <KoShapeManager.h>
 #include <KoCreateShapesTool.h>
 
@@ -2133,21 +2133,21 @@ KoViewConverter *KWCanvas::viewConverter() {
 }
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e) {
-    KoGfxEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
 
     m_tool->mouseMoveEvent( &ev );
     setCursor( m_tool->cursor( ev.point ) );
 }
 
 void KWCanvas::mousePressEvent(QMouseEvent *e) {
-    KoGfxEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
 
     m_tool->mousePressEvent( &ev );
     setCursor( m_tool->cursor( ev.point ) );
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e) {
-    KoGfxEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
 
     m_tool->mouseReleaseEvent( &ev );
     setCursor( m_tool->cursor( ev.point ) );

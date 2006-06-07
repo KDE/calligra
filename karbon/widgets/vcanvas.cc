@@ -49,7 +49,7 @@
 #include <QLinearGradient>
 #include "KoLineBorder.h"
 #include "KoShapeGroup.h"
-#include "KoGfxEvent.h"
+#include "KoPointerEvent.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -98,7 +98,7 @@ void KarbonCanvas::wheelEvent(QWheelEvent *e)
 
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
 
     m_tool->mouseMoveEvent( &ev );
     setCursor( m_tool->cursor( ev.point ) );
@@ -106,7 +106,7 @@ void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 
 void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
-    KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
 
     m_tool->mousePressEvent( &ev );
     setCursor( m_tool->cursor( ev.point ) );
@@ -114,7 +114,7 @@ void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 
 void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
+    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
 
     m_tool->mouseReleaseEvent( &ev );
     setCursor( m_tool->cursor( ev.point ) );
