@@ -57,6 +57,7 @@
 #include <KoPageLayoutDia.h>
 #include <vruler.h>
 #include <Kolinestyleaction.h>
+#include <KoToolManager.h>
 
 // Commands.
 #include "valigncmd.h"
@@ -222,6 +223,13 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		createLayersTabDock();
 		createHistoryTabDock();
 		createResourceDock();
+
+		// TODO: proper use of the toolbox once it is ready
+		// plug the toolbox as a docker for now to have something
+		KoToolManager::instance()->addCanvasView( m_canvasView );
+		QWidget *tb = KoToolManager::instance()->toolBox();
+		tb->setCaption( "Toolbox" );
+		paletteManager()->addWidget( tb, "ToolBox", "ToolBox" );
 
 		if( m_showRulerAction->isChecked() )
 		{
