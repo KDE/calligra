@@ -293,7 +293,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 			public:
 				InsertFieldAction(int fieldIndex, KexiDB::Field *newField, int uid);
 				//copy ctor
-				InsertFieldAction::InsertFieldAction(const InsertFieldAction& action);
+				InsertFieldAction(const InsertFieldAction& action);
 				InsertFieldAction(bool);
 				virtual ~InsertFieldAction();
 
