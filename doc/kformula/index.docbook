@@ -1188,6 +1188,10 @@ Pressing <keycombo action="simul">&Ctrl; &Alt; <keycap>Backspace</keycap>
 If unsure, do a complete reboot.
 </para>
 
+<note><para>
+The bakoma Tex fonts are included in the source package of &kformula;, you find them in
+<filename class="directory">$KDEDIR/share/apps/kformula/fonts/</filename>.
+</para></note>
 
 <para>
 You can also use the Esstix fonts. Only try the Esstix fonts
