@@ -1190,7 +1190,7 @@ If unsure, do a complete reboot.
 
 <note><para>
 The bakoma Tex fonts are included in the source package of &kformula;, you find them in
-<filename class="directory">$KDEDIR/share/apps/kformula/fonts/</filename>.
+<filename class="directory">$<envar>KDEDIR</envar>/share/apps/kformula/fonts/</filename>.
 </para></note>
 
 <para>
