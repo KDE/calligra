@@ -34,7 +34,6 @@
 
 #include <koffice_export.h>
 #include <KoCanvasBase.h>
-#include <KoInteractionTool.h>
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoShape.h>
@@ -77,7 +76,8 @@ public:
      */
     void updateCanvas(const QRectF& rc);
 
-    KoTool *activeTool() { return &m_tool; }
+    KoTool *tool() { return m_tool; }
+    void setTool(KoTool *tool) { m_tool = tool; }
 
     KoViewConverter *viewConverter() { return &m_viewConverter; }
 
@@ -114,7 +114,7 @@ private:
     //KSillyCommandHistory *m_commandHistory;
 
     ViewConverter m_viewConverter;
-    KoInteractionTool m_tool;
+    KoTool *m_tool;
 
     bool m_snapToGrid;
 };

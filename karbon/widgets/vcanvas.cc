@@ -57,7 +57,7 @@
 
 KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
     : QWidget()
-    , m_tool( "Default", 0, "Default", this )
+    , m_tool(0)
     , m_zoomHandler()
     , m_viewConverter(&m_zoomHandler)
     , m_snapToGrid(false)
@@ -84,7 +84,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     gc.setClipRect(ev->rect());
 
     m_shapeManager->paint( gc, m_viewConverter, false );
-    m_tool.paint( gc, m_viewConverter );
+    m_tool->paint( gc, m_viewConverter );
 
     gc.end();
 }
@@ -100,32 +100,32 @@ void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
     KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
 
-    m_tool.mouseMoveEvent( &ev );
-    setCursor( m_tool.cursor( ev.point ) );
+    m_tool->mouseMoveEvent( &ev );
+    setCursor( m_tool->cursor( ev.point ) );
 }
 
 void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
     KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
 
-    m_tool.mousePressEvent( &ev );
-    setCursor( m_tool.cursor( ev.point ) );
+    m_tool->mousePressEvent( &ev );
+    setCursor( m_tool->cursor( ev.point ) );
 }
 
 void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
     KoGfxEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
 
-    m_tool.mouseReleaseEvent( &ev );
-    setCursor( m_tool.cursor( ev.point ) );
+    m_tool->mouseReleaseEvent( &ev );
+    setCursor( m_tool->cursor( ev.point ) );
 }
 
 void KarbonCanvas::keyReleaseEvent (QKeyEvent *e) {
-    m_tool.keyReleaseEvent(e);
+    m_tool->keyReleaseEvent(e);
 }
 
 void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
-    m_tool.keyPressEvent(e);
+    m_tool->keyPressEvent(e);
 }
 
 QPointF KarbonCanvas::ViewConverter::normalToView( const QPointF &normalPoint ) {
