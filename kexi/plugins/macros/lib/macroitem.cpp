@@ -111,7 +111,7 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 				const QString s = variant.toString();
 				ok = (s == "true" || s == "false" || s == "0" || s == "1" || s == "-1");
 				v = variant.toBool();
-				kdDebug() << "parse an BOOOOOOOOOOOOOLL       " << v << endl;
+				// kdDebug() << "parse an bool " << v << endl;
 			} break;
 			case QVariant::Int: {
 				v = variant.toInt(&ok);
@@ -141,7 +141,7 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 				kdWarning()<<"MacroItem::setVariable() Unhandled type="<<var.type()<<" value="<<v<<endl;
 			} break;
 		}
-kdDebug()<<"=======================> v="<<v<<" variant="<<variant<<" ok="<<ok<<endl;
+		// kdDebug()<<"=======================> v="<<v<<" variant="<<variant<<" ok="<<ok<<endl;
 		if(! ok)
 			v = variant; // ignore casting result
 	}

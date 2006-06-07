@@ -75,6 +75,8 @@ namespace KoMacroTest {
 			Private* const d;
 			// Compares a XML-Element with a Macro.
 			bool isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement);
+			// Prints a QMap of Variables to kdDebug().
+			void printMvariables(QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, QString s);
 	};
 
 }

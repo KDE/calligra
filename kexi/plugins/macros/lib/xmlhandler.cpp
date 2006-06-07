@@ -70,6 +70,9 @@ XMLHandler::~XMLHandler()
 
 bool XMLHandler::parseXML(const QDomElement& element)
 {
+	// Remove old items. We should clear first.
+	d->macro->clearItems();
+
 	// We expect a <macro> element. Do we really need to be such strict or
 	// would it be more wise to trust the application in that case?
 	if(element.tagName() != "macro") {
@@ -84,9 +87,6 @@ bool XMLHandler::parseXML(const QDomElement& element)
 		kdDebug() << QString("XMLHandler::parseXML() Invalid xml-version \"%1\"").arg(element.attribute("xmlversion")) << endl;
 		return false;
 	}
-	
-	// Remove old items.
-	d->macro->clearItems();
 
 	// Do we need to load the macro's name?
 	// d->macro->setName(element.attribute("name"));
