@@ -16,9 +16,12 @@
 </screenshot>
 
 <para>
-The image above is the image we will work with. Save it to disk (by
-right-clicking on it and choosing <guilabel>Save Image As...</guilabel>) and
-then open it in &krita; &mdash; your screen will look a bit like this (we have
+The image above is the image we will work with. Start krita with this 
+image (in the documentation folder
+<filename>$<envar>KDEDIR</envar>/share/doc/HTML/en/krita/tutorial-select-layer-sample.png</filename>) 
+and save it to your Home folder (by choosing <guilabel>Save Image As...</guilabel>).
+
+Then open it in &krita; &mdash; your screen will look a bit like this (we have
 zoomed in):
 </para>
 

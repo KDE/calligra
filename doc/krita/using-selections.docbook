@@ -25,8 +25,8 @@ even inside the red border you can possibly see the blueish tint on some pixels.
 A whole range of tools exist to make selections. From rectangles, ellipses
 and freehand to the more exotic like color range select. When you make
 several selections they add up. So a rectangle select followed by an
-ellipse select select both areas. Later you can subtract from the selection
-with say the select-eraser.
+ellipse select select both areas. Later on, you can subtract areas from
+the selection by using, for example, the Erase Selection tool.
 </para><para>
 To get back to normal (no active selection), choose
 <menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem>

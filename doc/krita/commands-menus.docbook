@@ -1109,7 +1109,7 @@ vertically.</action></para></listitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
 linkend="commands-dialogs-layers-layerproperties"><guilabel>Layer
-Properties</guilabel>dialog</link>.</action> You can change the name,
+Properties</guilabel> dialog</link>.</action> You can change the name,
 colorspace, opacity, composite mode and position of the current layer
 here.</para></listitem>
 </varlistentry>

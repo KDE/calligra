@@ -745,7 +745,7 @@ sets the color saturation of the tiles.
 <screeninfo>The Custom Convolution filter</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="filters-customconvolution.png" format="PNG" />
+<imagedata fileref="dialogs-customconvolution.png" format="PNG" />
 </imageobject>
 <textobject>
 <phrase>The Custom Convolution filter</phrase>
@@ -836,7 +836,7 @@ See the description of the respective filter for details.
 <screeninfo>The Image Restauration dialog</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="" format="PNG" />
+<imagedata fileref="dialogs-imagerestoration.png" format="PNG" />
 </imageobject>
 <textobject>
 <phrase>The Image Restauration dialog</phrase>

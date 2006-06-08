@@ -63,7 +63,7 @@ painting tools (brush, ellipse, line, etc.) can paint aliased, anti-aliased,
 erase, airbrush and more.</para></listitem>
 
 <listitem><para>Filters: &krita; can multithread the operation of some
-filters. Flters can be previewed in the filter gallery. Available filters
+filters. Filters can be previewed in the filter gallery. Available filters
 include color adjustment, sharpen or blur, emboss, raindrops, and
 more.</para></listitem>
 
