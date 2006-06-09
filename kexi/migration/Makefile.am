@@ -6,6 +6,7 @@ INCLUDES = \
 	-I$(top_srcdir)/kexi \
 	-I$(top_srcdir)/kexi/core \
 	-I$(top_srcdir)/kexi/widget \
+	-I$(top_builddir)/kexi/widget \
 	-I$(top_srcdir)/kexi/main/startup \
 	-I$(top_builddir)/kexi/main/startup \
 	$(all_includes)
