@@ -2136,21 +2136,18 @@ void KWCanvas::mouseMoveEvent(QMouseEvent *e) {
     KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
 
     m_tool->mouseMoveEvent( &ev );
-    setCursor( m_tool->cursor( ev.point ) );
 }
 
 void KWCanvas::mousePressEvent(QMouseEvent *e) {
     KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
 
     m_tool->mousePressEvent( &ev );
-    setCursor( m_tool->cursor( ev.point ) );
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e) {
     KoPointerEvent ev(e, QPointF( viewConverter()->viewToNormal(e->pos()) ));
 
     m_tool->mouseReleaseEvent( &ev );
-    setCursor( m_tool->cursor( ev.point ) );
 }
 
 void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
