@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcursor.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <QDropEvent>
@@ -104,7 +103,6 @@ void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
     if( m_tool )
     {
         m_tool->mouseMoveEvent( &ev );
-        setCursor( m_tool->cursor( ev.point ) );
     }
 }
 
@@ -115,7 +113,6 @@ void KarbonCanvas::mousePressEvent(QMouseEvent *e)
     if( m_tool )
     {
         m_tool->mousePressEvent( &ev );
-        setCursor( m_tool->cursor( ev.point ) );
     }
 }
 
@@ -126,7 +123,6 @@ void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
     if( m_tool )
     {
         m_tool->mouseReleaseEvent( &ev );
-        setCursor( m_tool->cursor( ev.point ) );
     }
 }
 
