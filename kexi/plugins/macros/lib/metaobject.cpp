@@ -69,10 +69,7 @@ MetaObject::~MetaObject()
 QObject* const MetaObject::object() const
 {
 	if(! d->object) {
-		throw Exception(
-			QString("Object is undefined."),
-			"KoMacro::MetaObject::object()"
-		);
+		throw Exception(QString("Object is undefined."));
 	}
 	return d->object;
 }
@@ -94,10 +91,7 @@ int MetaObject::indexOfSignal(const char* signal) const
 	QMetaObject* metaobject = object()->metaObject();
 	int signalid = metaobject->findSignal(signal, false);
 	if(signalid < 0) {
-		throw Exception(
-			QString("Invalid signal \"%1\"").arg(signal),
-			"KoMacro::MetaObject::indexOfSignal()"
-		);
+		throw Exception(QString("Invalid signal \"%1\"").arg(signal));
 	}
 	return signalid;
 }
@@ -107,10 +101,7 @@ int MetaObject::indexOfSlot(const char* slot) const
 	QMetaObject* metaobject = object()->metaObject();
 	int slotid = metaobject->findSlot(slot, false);
 	if(slotid < 0) {
-		throw Exception(
-			QString("Invalid slot \"%1\"").arg(slot),
-			"KoMacro::MetaObject::indexOfSlot()"
-		);
+		throw Exception(QString("Invalid slot \"%1\"").arg(slot));
 	}
 	return slotid;
 }
@@ -128,19 +119,13 @@ KSharedPtr<MetaMethod> MetaObject::method(int index)
 
 		metadata = metaobject->signal(index, true);
 		if(! metadata) {
-			throw Exception(
-				QString("Invalid method index \"%1\" in object \"%2\"").arg(index).arg(obj->name()),
-				"KoMacro::MetaObject::method()"
-			);
+			throw Exception(QString("Invalid method index \"%1\" in object \"%2\"").arg(index).arg(obj->name()));
 		}
 		type = MetaMethod::Signal;
 	}
 
 	if(metadata->access != QMetaData::Public) {
-		throw Exception(
-			QString("Not allowed to access method \"%1\" in object \"%2\"").arg(metadata->name).arg(obj->name()),
-			"KoMacro::MetaObject::method()"
-		);
+		throw Exception(QString("Not allowed to access method \"%1\" in object \"%2\"").arg(metadata->name).arg(obj->name()));
 	}
 
 	return new MetaMethod(metadata->name, type, this);

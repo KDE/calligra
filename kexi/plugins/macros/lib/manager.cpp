@@ -69,7 +69,7 @@ void Manager::init(KXMLGUIClient* xmlguiclient)
 		_manager.setObject(_self, manager);
 	}
 	else {
-		throw Exception("Already initialized.", "KoMacro::Manager::init()");
+		throw Exception("Already initialized.");
 	}
 }
 

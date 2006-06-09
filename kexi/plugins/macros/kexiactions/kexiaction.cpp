@@ -18,36 +18,36 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#include "messageaction.h"
+#include "kexiaction.h"
 
-#include "../lib/action.h"
-#include "../lib/context.h"
+#include "../lib/manager.h"
+#include "../lib/exception.h"
+#include "../lib/variable.h"
 
-#include <core/keximainwindow.h>
-
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
+#include <ksharedptr.h>
 
 using namespace KexiMacro;
 
-MessageAction::MessageAction()
-	: KexiAction("message", i18n("Message"))
+KexiAction::KexiAction(const QString& name, const QString& text)
+	: KoMacro::Action(name)
 {
-	setVariable("caption", i18n("Caption"), QString(""));
-	setVariable("message", i18n("Message"), QString(""));
+	m_mainwin = dynamic_cast< KexiMainWindow* >( KoMacro::Manager::self()->guiClient() );
+	if(! m_mainwin) {
+		throw KoMacro::Exception("Invalid KexiMainWindow instance.");
+	}
+
+	// Set the caption this action has.
+	setText(text);
+
+	// Publish this action.
+	KoMacro::Manager::self()->publishAction( KSharedPtr<Action>(this) );
 }
 
-MessageAction::~MessageAction() 
+KexiAction::~KexiAction()
 {
 }
 
-void MessageAction::activate(KSharedPtr<KoMacro::Context> context)
+KexiMainWindow* KexiAction::mainWin() const
 {
-	kdDebug() << "MessageAction::activate(KSharedPtr<Context>)" << endl;
-	const QString caption = context->variable("caption")->variant().toString();
-	const QString message = context->variable("message")->variant().toString();
-	KMessageBox::information(mainWin(), message, caption);
+	return m_mainwin;
 }
-
-//#include "messageaction.moc"

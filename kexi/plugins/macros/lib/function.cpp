@@ -141,10 +141,7 @@ KSharedPtr<MetaObject> Function::receiverObject()
 			object = object->child( (*it).latin1() );
 		}
 		if(! object) {
-			throw Exception(
-				QString("Invalid receiver \"%1\"").arg(d->receiver),
-				"KoMacro::Function::activate()"
-			);
+			throw Exception(QString("Invalid receiver \"%1\"").arg(d->receiver));
 		}
 
 		d->metaobject = new MetaObject(object);
@@ -179,7 +176,7 @@ void Function::activate(KSharedPtr<Context> context)
 					// variable from the context.
 					KSharedPtr<Variable> v = context->variable(s);
 					/*if(!v) {
-						 throw Exception(QString("No such variable: %1").arg(s), "Function::activate");
+						 throw Exception(QString("No such variable: %1").arg(s));
 					}*/
 					variables.append(v);
 					continue; // variable successfully handled.
@@ -215,7 +212,6 @@ void Function::activate(KSharedPtr<Context> context)
 	}
 	catch(Exception& e) {
 		kdWarning() << QString("Function::activate() EXCEPTION: %1").arg(e.errorMessage()) << endl;
-		e.addTraceMessage("KoMacro::Function::activate()");
 		throw Exception(e); // re-throw exception
 	}
 }

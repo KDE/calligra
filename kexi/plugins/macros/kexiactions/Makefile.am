@@ -3,6 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 noinst_LTLIBRARIES = libkeximacroactions.la
 
 libkeximacroactions_la_SOURCES = \
+    kexiaction.cpp \
     openaction.cpp \
     executeaction.cpp \
     navigateaction.cpp \

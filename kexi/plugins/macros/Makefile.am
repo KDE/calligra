@@ -5,4 +5,5 @@ if include_kunittest
 
 endif
 
-SUBDIRS = lib kexiactions kexipart .
+METASOURCES = AUTO
+SUBDIRS = lib kexiactions kexipart

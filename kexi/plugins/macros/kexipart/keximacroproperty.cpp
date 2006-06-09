@@ -85,8 +85,8 @@ void KexiMacroProperty::init()
 		return;
 	}
 
-//TESTCASE!!!!!!!!!!!!!!!!!!!!!!
-//if(! variable->isEnabled()) qFatal( QString("############## VARIABLE=%1").arg(variable->name()).latin1() );
+	//TESTCASE!!!!!!!!!!!!!!!!!!!!!!
+	//if(! variable->isEnabled()) qFatal( QString("############## VARIABLE=%1").arg(variable->name()).latin1() );
 
 	Q_ASSERT(! d->name.isNull());
 	m_property->setName( d->name.latin1() );

@@ -42,6 +42,7 @@ namespace KexiMacro {
 	class OpenAction : public KexiAction
 	{
 			Q_OBJECT
+
 		public:
 
 			/**

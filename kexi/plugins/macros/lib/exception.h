@@ -38,12 +38,10 @@ namespace KoMacro {
 			/**
 			* Constructor.
 			*
-			* @param tracemessage The initial tracemessage. More messages
-			* may be added later with the @a traceMessages() method.
 			* @param errormessage A describing errormessage why the
 			* exception got thrown.
 			*/
-			explicit Exception(const QString& errormessage, const QString& tracemessage = QString::null);
+			explicit Exception(const QString& errormessage);
 
 			/**
 			* Copy-constructor.

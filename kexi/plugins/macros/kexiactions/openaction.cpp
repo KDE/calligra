@@ -134,14 +134,14 @@ bool OpenAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const Q
 void OpenAction::activate(KSharedPtr<KoMacro::Context> context)
 {
 	if(! mainWin()->project()) {
-		throw KoMacro::Exception(i18n("No project loaded."), "OpenAction::activate");
+		throw KoMacro::Exception(i18n("No project loaded."));
 	}
 
 	const QString objectname = context->variable(OBJECT)->variant().toString();
 	const QString name = context->variable(NAME)->variant().toString();
 	KexiPart::Item* item = mainWin()->project()->itemForMimeType( QString("kexi/%1").arg(objectname).latin1(), name );
 	if(! item) {
-		throw KoMacro::Exception(i18n("No such object \"%1.%2\".").arg(objectname).arg(name), "OpenAction::activate");
+		throw KoMacro::Exception(i18n("No such object \"%1.%2\".").arg(objectname).arg(name));
 	}
 
 	// Determinate the viewmode.
@@ -154,16 +154,16 @@ void OpenAction::activate(KSharedPtr<KoMacro::Context> context)
 	else if(view == TEXTVIEW)
 		viewmode = Kexi::TextViewMode;
 	else {
-		throw KoMacro::Exception(i18n("No such viewmode \"%1\" in object \"%2.%3\".").arg(view).arg(objectname).arg(name), "OpenAction::activate");
+		throw KoMacro::Exception(i18n("No such viewmode \"%1\" in object \"%2.%3\".").arg(view).arg(objectname).arg(name));
 	}
 
 	// Try to open the object now.
 	bool openingCancelled;
 	if(! mainWin()->openObject(item, viewmode, openingCancelled)) {
 		if(! openingCancelled) {
-			throw KoMacro::Exception(i18n("Failed to open object \"%1.%2\".").arg(objectname).arg(name), "OpenAction::activate");
+			throw KoMacro::Exception(i18n("Failed to open object \"%1.%2\".").arg(objectname).arg(name));
 		}
 	}
 }
 
-#include "openaction.moc"
+//#include "openaction.moc"

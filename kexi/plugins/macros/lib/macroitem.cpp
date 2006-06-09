@@ -172,7 +172,7 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 	// Set the variable.
 	variable->setVariant(v);
 
-	// Not we inform the referenced action that a variable changed. If
+	// Now we inform the referenced action that a variable changed. If
 	// notifyUpdated() returns false, the action rejects the new variable
 	// and we need to restore the previous value.
 	if(! d->action->notifyUpdated(this, name)) {
@@ -181,7 +181,8 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 		return false; // the action rejected the changed variable whyever...
 	}
 
-	return true; // job done successfully.
+	// Job done successfully. The variable is changed to the new value.
+	return true;
 }
 
 bool MacroItem::setVariable(const QString& name, const QVariant& variant)
@@ -202,7 +203,6 @@ KSharedPtr<Variable> MacroItem::addVariable(const QString& name, const QVariant&
 #if 0
 QStringList MacroItem::setVariable(const QString& name, KSharedPtr<Variable> variable)
 {
-	// First try to find the matching in the action defined variable.
 	Variable* v = d->action ? d->action->variable(name).data() : 0;
 	if(! v) {
 		/*
@@ -214,43 +214,31 @@ QStringList MacroItem::setVariable(const QString& name, KSharedPtr<Variable> var
 		return QStringList();
 	}
 
-	// Check if the variable is valid.
 	if(! v->validVariable(variable)) {
 		kdWarning() << QString("MacroItem::setVariable() update for variable \"%1\" failed.").arg(name) 	<< endl;
 		return QStringList();
 	}
 	kdDebug() << "MacroItem::setVariable() name=" << name << " variable=" << variable->variant().toString() << endl;
 
-//TODO
-	// remember the new variable.
 	d->variables.replace(name, variable);
-
-	// notify the action that we updated a variable.
 	return d->action->notifyUpdated(name, this);
-
-	// Notify the variable, that we updated it.
 	//v->updated(this);
 
-	// set depending variables by asking the own action.
 	QStringList sl;
 	Variable::List list = d->action->notifyUpdated(name, d->variables);
 	Variable::List::Iterator it(list.begin()), end(list.end());
 	for (; it != end; ++it) {
 		const QString n = (*it)->name();;
 		sl << n;
-
 		//if( ! d->variables.contains(n) ) {
 		kdDebug()<<"    name=" << n << " value=" << (*it)->variant().toString() << endl;
 		//setVariable(n, *it);
 		d->variables.replace(n, *it);
 		//}
-
-		/*
-		KSharedPtr<Variable> v = d->variables[ (*it)->name() ];
+		/* KSharedPtr<Variable> v = d->variables[ (*it)->name() ];
 		if(v.data() && (*it)->type() == v->type() && ! v->variant().isNull()) {
 			(*it)->setVariant( v->variant().toString() );
-		}
-		*/
+		} */
 	}
 	return sl;
 }

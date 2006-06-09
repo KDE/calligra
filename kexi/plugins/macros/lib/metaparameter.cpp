@@ -122,10 +122,7 @@ void MetaParameter::setSignatureArgument(const QString& signatureargument)
 	}
 
 	if(argument.isEmpty()) {
-		throw Exception(
-			QString("Empty signature argument passed."),
-			"KoMacro::MetaParameter::setSignatureArgument"
-		);
+		throw Exception(QString("Empty signature argument passed."));
 	}
 	if(argument == "QVariant") {
 		setVariantType( QVariant::Invalid );

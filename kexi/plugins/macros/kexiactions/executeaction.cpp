@@ -82,15 +82,15 @@ void ExecuteAction::activate(KSharedPtr<KoMacro::Context> context)
 
 	KexiPart::Part* part = Kexi::partManager().partForMimeType(mimetype);
 	if(! part) {
-		throw KoMacro::Exception(i18n("No such mimetype \"%1\"").arg(mimetype), "ExecuteAction::activate");
+		throw KoMacro::Exception(i18n("No such mimetype \"%1\"").arg(mimetype));
 	}
 
 	KexiPart::Item* item = mainWin()->project()->item(part->info(), name);
 	if(! item) {
-		throw KoMacro::Exception(i18n("Failed to open part \"%1\" for mimetype \"%2\"").arg(name).arg(mimetype), "ExecuteAction::activate");
+		throw KoMacro::Exception(i18n("Failed to open part \"%1\" for mimetype \"%2\"").arg(name).arg(mimetype));
 	}
 
 	part->execute(item);
 }
 
-#include "executeaction.moc"
+//#include "executeaction.moc"

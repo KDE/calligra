@@ -113,7 +113,7 @@ KSharedPtr<Variable> Context::variable(const QString& name) const
 			return v;
 		}
 	}
-	throw Exception(QString("Variable name='%1' does not exist.").arg(name), QString("Komacro::Context::variable"));
+	throw Exception(QString("Variable name='%1' does not exist.").arg(name));
 }
 
 //return a map of our variables

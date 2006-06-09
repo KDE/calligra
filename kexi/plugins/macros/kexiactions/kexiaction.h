@@ -21,18 +21,9 @@
 #ifndef KEXIMACRO_KEXIACTION_H
 #define KEXIMACRO_KEXIACTION_H
 
-#include "../lib/manager.h"
-#include "../lib/exception.h"
 #include "../lib/action.h"
-#include "../lib/variable.h"
 
 #include <core/keximainwindow.h>
-
-#include <ksharedptr.h>
-
-namespace KoMacro {
-	class Context;
-}
 
 namespace KexiMacro {
 
@@ -55,26 +46,18 @@ namespace KexiMacro {
 			* name will be used to identify the action.
 			* @param text The i18n-caption text used for display purposes.
 			*/
-			KexiAction(const QString& name, const QString& text)
-				: KoMacro::Action(name)
-			{
-				m_mainwin = dynamic_cast< KexiMainWindow* >( KoMacro::Manager::self()->guiClient() );
-				if(! m_mainwin) {
-					throw KoMacro::Exception("Invalid KexiMainWindow instance.", "KexiMacro::KexiAction::KexiAction()");
-				}
+			KexiAction(const QString& name, const QString& text);
 
-				// Set the caption this action has.
-				setText(text);
-
-				// Publish this action.
-				KoMacro::Manager::self()->publishAction( KSharedPtr<Action>(this) );
-			}
+			/**
+			* Destructor.
+			*/
+			virtual ~KexiAction();
 
 			/**
 			* @return the @a KexiMainWindow instance we are
 			* running in.
 			*/
-			KexiMainWindow* mainWin() { return m_mainwin; }
+			KexiMainWindow* mainWin() const;
 
 		private:
 

@@ -92,18 +92,12 @@ MetaMethod::MetaMethod(const QString& signature, Type type, KSharedPtr<MetaObjec
 	int startpos = d->signature.find("(");
 	int endpos = d->signature.findRev(")");
 	if(startpos < 0 || startpos > endpos) {
-		throw Exception(
-			QString("Invalid signature \"%1\"").arg(d->signature),
-			"KoMacro::MetaMethod"
-		);
+		throw Exception(QString("Invalid signature \"%1\"").arg(d->signature));
 	}
 
 	d->signaturetag = d->signature.left(startpos).stripWhiteSpace();
 	if(d->signaturetag.isEmpty()) {
-		throw Exception(
-			QString("Invalid tagname in signature \"%1\"").arg(d->signature),
-			"KoMacro::MetaMethod"
-		);
+		throw Exception(QString("Invalid tagname in signature \"%1\"").arg(d->signature));
 	}
 
 	d->signaturearguments = d->signature.mid(startpos + 1, endpos - startpos - 1).stripWhiteSpace();
@@ -114,10 +108,7 @@ MetaMethod::MetaMethod(const QString& signature, Type type, KSharedPtr<MetaObjec
 		if(starttemplatepos >= 0 && (commapos < 0 || starttemplatepos < commapos)) {
 			int endtemplatepos = d->signaturearguments.find(">", starttemplatepos);
 			if(endtemplatepos <= 0) {
-				throw Exception(
-					QString("No closing template-definiton in signature \"%1\"").arg(d->signature),
-					"KoMacro::MetaMethod"
-				);
+				throw Exception(QString("No closing template-definiton in signature \"%1\"").arg(d->signature));
 			}
 			commapos = d->signaturearguments.find(",", endtemplatepos);
 		}
@@ -179,10 +170,7 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 	uint argsize = d->arguments.size();
 
 	if(arguments.size() <= argsize) {
-		throw Exception(
-			QString("To less arguments for slot with siganture \"%1\"").arg(d->signature),
-			"KoMacro::MetaMethod::quobject"
-		);
+		throw Exception(QString("To less arguments for slot with siganture \"%1\"").arg(d->signature));
 	}
 
 	// The first item in the QUObject-array is for the returnvalue
@@ -196,17 +184,11 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 		KSharedPtr<Variable> variable = arguments[i + 1];
 
 		if ( !variable ) {
-	 		throw Exception(
-				QString("Variable is undefined !"),
-				"KoMacro::MetaMethod::quobject"
-			);
+	 		throw Exception(QString("Variable is undefined !"));
 		}
 	
 		if(metaargument->type() != variable->type()) {
-			throw Exception(
-				QString("Wrong variable type in method \"%1\". Expected \"%2\" but got \"%3\"").arg(d->signature).arg(metaargument->type()).arg(variable->type()),
-				"KoMacro::MetaMethod::quobject"
-			);
+			throw Exception(QString("Wrong variable type in method \"%1\". Expected \"%2\" but got \"%3\"").arg(d->signature).arg(metaargument->type()).arg(variable->type()));
 		}
 
 		switch(metaargument->type()) {
@@ -247,11 +229,7 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 					*/
 
 					default: {
-						throw Exception(
-							//QString("Invalid parameter \"%1\" in slot siganture \"%2\"").arg(p).arg(d->signature),
-							QString("Invalid parameter !!!!!!!!!!!!!!!!!!!!!!!"),
-							"KoMacro::MetaMethod::quobject"
-						);
+						throw Exception(QString("Invalid parameter !!!!!!!!!!!!!!!!!!!!!!!"));
 					} break;
 				}
 			} break;
@@ -261,19 +239,13 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 
 				const QObject* obj = arguments[i + 1]->object();
 				if(! obj) { //FIXME: move check to MetaParameter?!
-					throw Exception(
-						QString("No QObject !"),
-						"KoMacro::MetaMethod::quobject"
-					);
+					throw Exception(QString("No QObject !"));
 				}
 				static_QUType_ptr.set( &(uo[i + 1]), obj );
 			} break;
 
 			default:  {
-				throw Exception(
-					QString("Invalid variable type"),
-					"KoMacro::MetaMethod::quobject"
-				);
+				throw Exception(QString("Invalid variable type"));
 			} break;
 		}
 
@@ -315,10 +287,7 @@ KSharedPtr<Variable> MetaMethod::toVariable(QUObject* uo)
 		return new Variable(v);
 	}
 
-	throw Exception(
-		QString("Invalid parameter '%1'").arg(desc),
-		"KoMacro::MetaMethod::toVariable"
-	);
+	throw Exception(QString("Invalid parameter '%1'").arg(desc));
 }
 
 Variable::List MetaMethod::toVariableList(QUObject* uo)
@@ -339,7 +308,7 @@ KSharedPtr<Variable> MetaMethod::invoke(Variable::List arguments)
 	kdDebug() << "KSharedPtr<Variable> MetaMethod::invoke(Variable::List arguments)" << endl; 
 
 	if(! d->object) {
-		throw Exception("MetaObject is undefined.", "KoMacro::MetaMethod::invoke(Variable::List)");
+		throw Exception("MetaObject is undefined.");
 	}
 
 	QObject* obj = d->object->object();
@@ -359,7 +328,7 @@ KSharedPtr<Variable> MetaMethod::invoke(Variable::List arguments)
 				obj->qt_invoke(index, qu);
 			} break;
 			default: {
-				throw Exception("Unknown type.", "KoMacro::MetaMethod::invoke(Variable::List)");
+				throw Exception("Unknown type.");
 			} break;
 		}
 		returnvalue = toVariable( &qu[0] );
@@ -367,8 +336,7 @@ KSharedPtr<Variable> MetaMethod::invoke(Variable::List arguments)
 	catch(Exception& e) {
 		delete [] qu; // free the QUObject array and
 		kdDebug() << "EXCEPTION in KoMacro::MetaMethod::invoke(Variable::List)" << endl;
-		e.addTraceMessage("KoMacro::MetaMethod::invoke(Variable::List)");
-		throw e; // re-throw the exception
+		throw Exception(e); // re-throw exception
 	}
 
 	delete [] qu;
