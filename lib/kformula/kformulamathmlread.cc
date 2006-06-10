@@ -1395,10 +1395,10 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
 	    type = TOKEN;
             impl->ms( element, docnode );
 	}
-        else if ( tag == "mspace" ) {
-            type = TOKEN;
-            impl->mspace( element, docnode );
-        }
+    else if ( tag == "mspace" ) {
+        type = TOKEN;
+        impl->mspace( element, docnode );
+    }
 	else if ( tag == "mrow" ) {
 	    type = LAYOUT;
             impl->mrow( element, docnode );
@@ -1409,55 +1409,51 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
 	}
 	else if ( tag == "mroot" ) {
 	    type = LAYOUT;
-            impl->mroot( element, docnode );
+        impl->mroot( element, docnode );
 	}
 	else if ( tag == "msqrt" ) {
 	    type = LAYOUT;
-            impl->msqrt( element, docnode );
+        impl->msqrt( element, docnode );
 	}
-        else if ( tag == "mstyle" ) {
-            type = LAYOUT;
-            impl->mstyle( element, docnode );
-        }
-
-        else if ( tag == "mfenced" ) {
+    else if ( tag == "mstyle" ) {
+        type = LAYOUT;
+        impl->mstyle( element, docnode );
+    }
+    else if ( tag == "mfenced" ) {
 	    type = LAYOUT;
-            impl->mfenced( element, docnode );
-        }
-
+        impl->mfenced( element, docnode );
+    }
 	else if ( tag == "mtable" ) {
 	    type = TABLE;
-            impl->mtable( element, docnode );
+        impl->mtable( element, docnode );
 	}
-
 	else if ( tag == "msub"  || tag == "msup" ) {
 	    type = SCRIPT;
-            impl->msub_msup( element, docnode );
+        impl->msub_msup( element, docnode );
 	}
-
 	else if ( tag == "munder" ) {
 	    type = SCRIPT;
-            impl->munder( element, docnode,oasisFormat );
+        impl->munder( element, docnode,oasisFormat );
 	}
-        else if ( tag == "mover" ) {
+    else if ( tag == "mover" ) {
 	    type = SCRIPT;
-            impl->mover( element, docnode,oasisFormat );
+        impl->mover( element, docnode,oasisFormat );
 	}
-        else if ( tag == "munderover" ) {
-            type = SCRIPT;
-            impl->munderover( element, docnode, oasisFormat );
-        }
+    else if ( tag == "munderover" ) {
+        type = SCRIPT;
+        impl->munderover( element, docnode, oasisFormat );
+    }
 	else if ( tag == "msubsup" ) {
 	    type = SCRIPT;
-            impl->msubsup( element, docnode );
+        impl->msubsup( element, docnode );
 	}
 
-        // content markup (not yet complete)
-        else if ( tag == "apply" ) {
-            type = CONTENT;
-            QDomNode n = element.firstChild();
-            QDomElement op = n.toElement();
-                uint count = element.childNodes().count();
+    // content markup (not yet complete)
+    else if ( tag == "apply" ) {
+        type = CONTENT;
+        QDomNode n = element.firstChild();
+        QDomElement op = n.toElement();
+        uint count = element.childNodes().count();
 		//adding explicit brackets to replace "apply"s implicit ones
 		QDomElement brackets = doc.createElement("BRACKET");
 		brackets.setAttribute("RIGHT", "41");
