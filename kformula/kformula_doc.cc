@@ -97,7 +97,6 @@ bool KFormulaDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
     QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile, 1 );
 
     //todo save content
     QTextStream stream(tmpFile);
