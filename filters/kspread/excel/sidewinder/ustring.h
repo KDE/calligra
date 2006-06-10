@@ -1,7 +1,7 @@
-// -*- c-basic-offset: 2 -*-
 /*
  *  This file is part of the KDE libraries
  *  Copyright (C) 1999-2000 Harri Porten (porten@kde.org)
+ *  Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -16,21 +16,13 @@
  *  You should have received a copy of the GNU Library General Public License
  *  along with this library; see the file COPYING.LIB.  If not, write to
  *  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  Boston, MA 02110-1301, USA.
  */
 
 #ifndef SWINDER_USTRING_H_
 #define SWINDER_USTRING_H_
 
 namespace Swinder {
-
-  /**
-   * @return True if d is not a number (platform support required).
-   */
-  bool isNaN(double d);
-
-  bool isPosInf(double d);
-  bool isNegInf(double d);
 
   class UCharReference;
   class UString;
@@ -59,6 +51,11 @@ namespace Swinder {
      * @param u 16 bit Unicode value
      */
     UChar(unsigned short u);
+
+    UChar(unsigned char u);
+    UChar(char u);
+    UChar(unsigned int u);
+
     UChar(const UCharReference &c);
     /**
      * @return The higher byte of the character.
@@ -73,14 +70,6 @@ namespace Swinder {
      */
     unsigned short unicode() const { return uc; }
   public:
-    /**
-     * @return The character converted to lower case.
-     */
-    UChar toLower() const;
-    /**
-     * @return The character converted to upper case.
-     */
-    UChar toUpper() const;
     /**
      * A static instance of UChar(0).
      */
@@ -98,20 +87,23 @@ namespace Swinder {
   inline UChar::UChar() : uc(0) { }
   inline UChar::UChar(unsigned char h , unsigned char l) : uc(h << 8 | l) { }
   inline UChar::UChar(unsigned short u) : uc(u) { }
+  inline UChar::UChar(unsigned int u) : uc(u) { }
+  inline UChar::UChar(unsigned char u) : uc(u) { }
+  inline UChar::UChar(char u) : uc((unsigned char)u) { }
 
   /**
    * @short Dynamic reference to a string character.
    *
-   * UCharReference is the dynamic counterpart of @ref UChar. It's used when
-   * characters retrieved via index from a @ref UString are used in an
+   * UCharReference is the dynamic counterpart of UChar. It's used when
+   * characters retrieved via index from a UString are used in an
    * assignment expression (and therefore can't be treated as being const):
-   * <pre>
+   * \code
    * UString s("hello world");
    * s[0] = 'H';
-   * </pre>
+   * \endcode
    *
    * If that sounds confusing your best bet is to simply forget about the
-   * existance of this class and treat is as being identical to @ref UChar.
+   * existence of this class and treat is as being identical to UChar.
    */
   class UCharReference {
     friend class UString;
@@ -128,7 +120,7 @@ namespace Swinder {
     /**
      * @return Unicode value.
      */
-    unsigned short unicode() const { return ref().unicode(); }
+    unsigned short unicode() const { return ref().uc; }
     /**
      * @return Lower byte.
      */
@@ -137,14 +129,6 @@ namespace Swinder {
      * @return Higher byte.
      */
     unsigned char high() const { return ref().uc >> 8; }
-    /**
-     * @return Character converted to lower case.
-     */
-    UChar toLower() const { return ref().toLower(); }
-    /**
-     * @return Character converted to upper case.
-     */
-    UChar toUpper() const  { return ref().toUpper(); }
   private:
     // not implemented, can only be constructed from UString
     UCharReference();
@@ -154,27 +138,6 @@ namespace Swinder {
     int offset;
   };
 
-  /**
-   * @short 8 bit char based string class
-   */
-  class CString {
-  public:
-    CString() : data(0L) { }
-    explicit CString(const char *c);
-    CString(const CString &);
-
-    ~CString();
-
-    CString &append(const CString &);
-    CString &operator=(const char *c);
-    CString &operator=(const CString &);
-    CString &operator+=(const CString &);
-
-    int length() const;
-    const char *c_str() const { return data; }
-  private:
-    char *data;
-  };
 
   /**
    * @short Unicode string class
@@ -190,8 +153,10 @@ namespace Swinder {
       friend class UString;
       friend bool operator==(const UString&, const UString&);
       static Rep *create(UChar *d, int l);
+      static Rep *create(UChar *d, int l, int c);
       inline UChar *data() const { return dat; }
       inline int length() const { return len; }
+      inline int capacity() const { return cap; }
 
       inline void ref() { rc++; }
       inline int deref() { return --rc; }
@@ -199,6 +164,7 @@ namespace Swinder {
       UChar *dat;
       int len;
       int rc;
+      int cap;
       static Rep null;
     };
 
@@ -243,25 +209,50 @@ namespace Swinder {
     /**
      * Constructs a string from an int.
      */
-    static UString from(int i);
+    static UString number(int i);
     /**
      * Constructs a string from an unsigned int.
      */
-    static UString from(unsigned int u);
+    static UString number(unsigned int u);
     /**
-     * Constructs a string from a double.
+     * Constructs a string from a floating-point value
      */
-    static UString from(double d);
+    static UString number(double d);
 
     /**
      * Append another string.
      */
     UString &append(const UString &);
-
     /**
-     * @return The string converted to the 8-bit string type @ref CString().
+     * Append a character
      */
-    CString cstring() const;
+    UString &append(UChar c);
+    /**
+     * Append zero-terminated string.
+     */
+    UString &append(const char*);
+    /**
+     * Append a single character
+     */
+    UString &append(char c);
+    
+    /**
+     * Prepend another string.
+     */
+    UString &prepend(const UString &);
+    /**
+     * Prepend a character
+     */
+    UString &prepend(UChar c);
+    /**
+     * Prepend zero-terminated string.
+     */
+    UString &prepend(const char*);
+    /**
+     * Prepend a single character
+     */
+    UString &prepend(char c);
+    
     /**
      * Convert the Unicode string to plain ASCII chars chopping of any higher
      * bytes. This method should only be used for *debugging* purposes as it
@@ -299,7 +290,7 @@ namespace Swinder {
     /**
      * Use this if you want to make sure that this string is a plain ASCII
      * string. For example, if you don't want to lose any information when
-     * using @ref cstring() or @ref ascii().
+     * using ascii().
      *
      * @return True if the string doesn't contain any non-ASCII characters.
      */
@@ -308,6 +299,21 @@ namespace Swinder {
      * @return The length of the string.
      */
     int length() const { return rep->length(); }
+    
+    /**
+     * Truncates the string to n. Nothing happens if n > length().
+     */
+    void truncate(int n);
+    
+    /**
+     * @return The reserved capacity of the string.
+     */
+    int capacity() const { return rep->capacity(); }
+    /**
+     * Reserves room for the string, useful to speed up append().
+     */
+    void reserve(int r);
+    
     /**
      * Const character at specified position.
      */
@@ -317,40 +323,25 @@ namespace Swinder {
      */
     UCharReference operator[](int pos);
 
+
     /**
-     * Attempts an conversion to a number. Apart from floating point numbers,
-     * the algorithm will recognize hexadecimal representations (as
-     * indicated by a 0x or 0X prefix) and +/- Infinity.
-     * Returns NaN if the conversion failed.
-     * @param tolerant if true, toDouble can tolerate garbage after the number.
+     * @return The sub string starting at position pos and length len.
      */
-    double toDouble(bool tolerant=false) const;
-    /**
-     * Attempts an conversion to an unsigned long integer. ok will be set
-     * according to the success.
-     */
-    unsigned long toULong(bool *ok = 0L) const;
+    UString substr(int pos = 0, int len = -1) const;
+
     /**
      * @return Position of first occurence of f starting at position pos.
      * -1 if the search was not successful.
      */
     int find(const UString &f, int pos = 0) const;
-    /**
-     * @return Position of first occurence of f searching backwards from
-     * position pos.
-     * -1 if the search was not successful.
-     */
-    int rfind(const UString &f, int pos) const;
-    /**
-     * @return The sub string starting at position pos and length len.
-     */
-    UString substr(int pos = 0, int len = -1) const;
+
     /**
      * Static instance of a null string.
      */
     static UString null;
 
   private:
+    UString(Rep* r);
     void attach(Rep *r);
     void detach();
     void release();
@@ -378,7 +369,6 @@ namespace Swinder {
   inline bool operator!=(const char *s1, const UString& s2) {
     return !Swinder::operator==(s1, s2);
   }
-  bool operator==(const CString& s1, const CString& s2);
   UString operator+(const UString& s1, const UString& s2);
 
 

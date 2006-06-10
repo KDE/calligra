@@ -197,7 +197,7 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const Doc* ksdoc )
 
   QDomElement data = meta.createElement( "meta:generator" );
   QString app( "KSpread " );
-  app += version;
+  app += KSpread::version;
   data.appendChild( meta.createTextNode( app ) );
   officeMeta.appendChild( data );
 

@@ -30,6 +30,9 @@ namespace Swinder
 class Workbook;
 class Sheet;
 
+// don't export this private class
+class CellPrivate;
+
 class Cell
 {
 public:
@@ -52,17 +55,21 @@ public:
   
   static UString columnLabel( unsigned column );
   
-  Value value() const;
+  const Value& value() const;
   
   void setValue( const Value& value );
   
-  UString formula() const;
+  const UString& formula() const;
   
   void setFormula( const UString& formula );
   
   Format format() const;
   
   void setFormat( const Format& format );
+  
+  void setFormatIndex( int index );
+  
+  int formatIndex() const;
   
   unsigned columnSpan() const;
   
@@ -77,9 +84,7 @@ private:
   Cell( const Cell& );
   Cell& operator=( const Cell& );
   
-  class Private;
-  Private* d;
-
+  CellPrivate *d;
 };
 
 } // namespace Swinder

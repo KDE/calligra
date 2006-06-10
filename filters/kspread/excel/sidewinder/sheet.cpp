@@ -305,6 +305,7 @@ public:
   double width;
   Format format;
   bool visible;
+  int formatIndex;
 };
 
 Column::Column( Sheet* sheet, unsigned index )
@@ -314,6 +315,7 @@ Column::Column( Sheet* sheet, unsigned index )
   d->index   = index;
   d->width   = 10;
   d->visible = true;
+  d->formatIndex = -1;
 }
 
 Column::~Column()
@@ -340,6 +342,17 @@ void Column::setWidth( double w )
 {
   d->width = w;
 }
+
+int Column::formatIndex() const
+{
+  return d->formatIndex;
+}
+
+void Column::setFormatIndex( int index )
+{
+  d->formatIndex = index;
+}
+
 
 const Format& Column::format() const
 {
@@ -369,6 +382,7 @@ public:
   double height;
   Format format;
   bool visible;
+  int formatIndex;
 };
 
 Row::Row( Sheet* sheet, unsigned index )
@@ -403,6 +417,16 @@ double Row::height() const
 void Row::setHeight( double w )
 {
   d->height = w;
+}
+
+int Row::formatIndex() const
+{
+  return d->formatIndex;
+}
+
+void Row::setFormatIndex( int index )
+{
+  d->formatIndex = index;
 }
 
 const Format& Row::format() const

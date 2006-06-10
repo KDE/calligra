@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <sstream>
-
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kgenericfactory.h>

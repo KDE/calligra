@@ -1,5 +1,5 @@
 /* Swinder - Portable library for spreadsheet
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -168,17 +168,24 @@ public:
   const char* functionName() const;  // for non external function
   unsigned functionParams() const;
   
-  // only when id is Ref
+  // only when id is Ref or Ref3d
   UString ref( unsigned row, unsigned col ) const;
 
-  // only when id is Area
+  // only when id is Area or Area3d
   UString area( unsigned row, unsigned col ) const;
+
+  // only when id is Ref3d or Area3d
+  unsigned externSheetRef() const;
 
   // only when id is Attr
   unsigned attr() const;
 
   // only when id is NameX
   unsigned nameIndex() const;
+
+  // only when id is Matrix
+  unsigned refRow() const;
+  unsigned refColumn() const;
 
 private:
   class Private;
@@ -1141,6 +1148,43 @@ private:
    Private *d;
 };
 
+class ExternSheetRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  unsigned int rtti(){
+    return this->id;
+  }
+
+  ExternSheetRecord();
+
+  ~ExternSheetRecord();
+
+  unsigned count() const;
+
+  unsigned refIndex(unsigned i) const;
+  unsigned firstSheet(unsigned i) const;
+  unsigned lastSheet(unsigned i) const;
+
+  UString refName() const;
+
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  virtual const char* name(){ return "EXTERNSHEET"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   ExternSheetRecord( const ExternNameRecord& );
+   ExternSheetRecord& operator=( const ExternNameRecord& );
+   
+   class Private;
+   Private *d;
+};
+
 
 /**
   \brief End of record set.
@@ -1544,6 +1588,7 @@ class FormulaRecord : public Record, public CellInfo
 public:
 
   static const unsigned int id;
+  static const unsigned int idOld; // for Pocket Excel support
 
   unsigned int rtti(){
 	  return this->id;
@@ -2527,6 +2572,64 @@ private:
 };
 
 /**
+  Class SupbookRecord stores references to external workbook.
+  
+ */
+class SupbookRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  typedef enum 
+  {
+	  UnknownRef,
+	  ExternalRef,
+	  InternalRef,
+	  AddInRef,
+	  ObjectLink
+  } ReferenceType;
+
+  unsigned int rtti(){
+	  return this->id;
+  }
+
+  /**
+   * Creates a new Supbook record.
+   */
+  SupbookRecord();
+
+  /**
+   * Destroy the record.
+   */
+  ~SupbookRecord();
+
+  /**
+   * Returns the type of the reference.
+   */
+  ReferenceType referenceType() const;
+
+  /**
+   * Sets the type of the reference.
+   */
+  void setReferenceType(ReferenceType type);
+
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  virtual const char* name(){ return "SUPBOOK"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  SupbookRecord( const SupbookRecord& );
+  SupbookRecord& operator=( const SupbookRecord& );
+
+  class Private;
+  Private* d;
+};
+
+/**
   Class TopMarginRecord holds information about top margin.
   
  */
@@ -3072,6 +3175,8 @@ private:
   Private* d;
 };
 
+typedef std::vector<UString> UStringStack;
+
 
 class ExcelReader
 {
@@ -3094,6 +3199,7 @@ private:
   void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
   void handleExternName( ExternNameRecord* record );
+  void handleExternSheet( ExternSheetRecord* record );
   void handleFilepass( FilepassRecord* record );
   void handleFormat( FormatRecord* record );
   void handleFormula( FormulaRecord* record );
@@ -3115,13 +3221,18 @@ private:
   void handleRow( RowRecord* record );
   void handleSST( SSTRecord* record );
   void handleString( StringRecord* record );
+  void handleSupbook( SupbookRecord* record );
   void handleTopMargin( TopMarginRecord* record );
   void handleXF( XFRecord* record );    
   
   Color convertColor( unsigned colorIndex );
   FormatFont convertFont( unsigned fontIndex );
   Format convertFormat( unsigned xfIndex );
-  UString decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens );
+  UString decodeFormula( unsigned row, unsigned col, 
+    const FormulaTokens& tokens, bool openDocumentFormat=false );
+  
+  void mergeTokens( UStringStack* stack, int count, char mergeChar );
+  void mergeTokens( UStringStack* stack, int count, const char* mergeString );
   
   // no copy or assign
   ExcelReader( const ExcelReader& );

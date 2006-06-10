@@ -38,13 +38,17 @@ public:
   UString fontFamily;
   double fontSize;
   Color color;
+
+  static UString defaultFont;
 };
+
+UString FormatFont::Private::defaultFont("Arial");
 
 FormatFont::FormatFont()
 {
   d = new FormatFont::Private();
   d->null        = true;
-  d->fontFamily  = "Arial";
+  d->fontFamily  = Private::defaultFont;
   d->fontSize    = 11;
   d->bold        = false;
   d->italic      = false;
@@ -91,7 +95,7 @@ bool FormatFont::isNull() const
   return d->null;
 }
 
-UString FormatFont::fontFamily() const
+const UString& FormatFont::fontFamily() const
 {
   return d->fontFamily;
 }
@@ -277,6 +281,11 @@ FormatAlignment& FormatAlignment::assign( const FormatAlignment& align )
   d->indentLevel   = align.indentLevel();
   d->rotationAngle = align.rotationAngle();
   return *this;
+}
+
+bool FormatAlignment::isNull() const
+{
+  return d->null;
 }
 
 unsigned FormatAlignment::alignX() const
@@ -615,11 +624,6 @@ Format& Format::assign( const Format& f )
   return *this;
 }
 
-bool FormatAlignment::isNull() const
-{
-  return d->null;
-}
-
 bool Format::isNull() const
 {
   return d->font.isNull() && d->alignment.isNull() && d->borders.isNull();
@@ -665,7 +669,7 @@ void Format::setBackground( const FormatBackground& background )
   d->background = background;
 }
 
-UString Format::valueFormat() const
+const UString& Format::valueFormat() const
 {
   return d->valueFormat;
 }

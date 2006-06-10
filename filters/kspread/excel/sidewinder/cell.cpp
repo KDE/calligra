@@ -28,32 +28,40 @@
 namespace Swinder
 {
 
-class Cell::Private
+class CellPrivate
 {
 public:
   Sheet* sheet;
-  unsigned row;     
   unsigned column;  
-  Value value;
+  unsigned row;     
   UString formula;
-  Format format;
+  Value value;
+  Format* format;
+  int formatIndex;
   unsigned columnSpan;
   unsigned rowSpan;
+
+  static UString columnNames[256];
+
+  CellPrivate(Sheet* s, unsigned column, unsigned row);  
+  ~CellPrivate() { delete format; }
 };
 
 }
 
 using namespace Swinder;
 
+UString CellPrivate::columnNames[256];
+
+  
+CellPrivate::CellPrivate(Sheet* s, unsigned c, unsigned r):
+sheet(s), column(c), row(r), format(0), formatIndex(-1), columnSpan(0), rowSpan(0)
+{
+}
+
 Cell::Cell( Sheet* sheet, unsigned column, unsigned row )
 {
-  d = new Cell::Private();
-  d->sheet      = sheet;
-  d->column     = column;
-  d->row        = row;
-  d->value      = Value::empty();
-  d->columnSpan = 1;
-  d->rowSpan    = 1;
+  d = new CellPrivate(sheet, column, row);
 }
 
 Cell::~Cell()
@@ -83,7 +91,8 @@ UString Cell::name() const
 
 UString Cell::name( unsigned column, unsigned row )
 {
-  return columnLabel( column ) + UString::from( row );  
+	// column=0, row=0 is "A1"
+  return columnLabel( column ) + UString::number( row + 1 );  
 }
 
 UString Cell::columnLabel() const
@@ -91,23 +100,58 @@ UString Cell::columnLabel() const
   return columnLabel( column() );
 }
 
-// FIXME be careful for integer overflow
+
 UString Cell::columnLabel( unsigned column )
 {
-  UString str;
-  unsigned digits = 1;
-  unsigned offset = 0;
+  UString label;
   
-  for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
-    offset += limit;
+  // Excel has only up to 256 columns, so we cache those
+  if(column < 256 )
+  {
+    label = CellPrivate::columnNames[column];
+
+    // cache is not ready, so construct it first
+    if(label.isEmpty())
+    {
+      for(unsigned c = 0; c < 26; c++)
+        CellPrivate::columnNames[c] = UString(UChar((char)'A'+c));
+      for(unsigned d = 0; d < 256-26; d++)
+      {
+        char buf[3] = { 'A'+(d/26), 'A'+(d%26), 0};
+        CellPrivate::columnNames[d+26] = UString(buf);
+      }
       
-  for( unsigned c = column - offset; digits; --digits, c/=26 )
-    str = UString( UChar( 'A' + (c%26) ) ) + str;
-    
-  return str;
+      label = CellPrivate::columnNames[column];
+    }
+  }
+  else
+  {
+    // otherwise, find with slower method
+      
+    // how many characters for the column name?  
+    unsigned digits = 1;
+    unsigned offset = 0;
+    for( unsigned limit = 26; column-offset >= limit; limit *= 26, digits++ )
+	    offset += limit;
+
+    // extreme case e.g. column 4294967295 is "AATYHWUR" (8 characters)
+    if(digits < 9)
+    {
+      char ref[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+      
+      // from the last character
+      char* colp = ref + 9 - 1;
+      for( unsigned c = column - offset; digits; --digits, c/=26, colp-- )
+        *colp = char('A' + (c%26));
+      
+      label = UString((const char*)(colp+1));
+    }
+  }
+  
+  return label;
 }
 
-Value Cell::value() const
+const Value& Cell::value() const
 {
   return d->value;
 }
@@ -117,7 +161,7 @@ void Cell::setValue( const Value& value )
   d->value = value;
 }
 
-UString Cell::formula() const
+const UString& Cell::formula() const
 {
   return d->formula;
 }
@@ -127,14 +171,30 @@ void Cell::setFormula( const UString& formula )
   d->formula = formula;
 }
 
+int Cell::formatIndex() const
+{
+  return d->formatIndex;
+}
+
+void Cell::setFormatIndex( int index )
+{
+  d->formatIndex = index;
+}
+
 Format Cell::format() const
 {
-  return d->format;
+  if(!d->format)
+    d->format = new Format();
+    
+  return Format(*d->format);
 }
 
 void Cell::setFormat( const Format& format )
 {
-  d->format = format;
+  if(!d->format)
+    d->format = new Format();
+    
+  (*d->format) = format;
 }
 
 unsigned Cell::columnSpan() const

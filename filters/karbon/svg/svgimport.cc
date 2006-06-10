@@ -37,6 +37,7 @@
 #include <core/vlayer.h>
 #include <qcolor.h>
 #include <qfile.h>
+#include <qregexp.h>
 #include <kfilterdev.h>
 
 typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
@@ -786,7 +787,9 @@ void SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &co
 		QValueList<float> array;
 		if(params != "none")
 		{
-			QStringList dashes = QStringList::split( ' ', params );
+			// with "stroke-dasharray", the separator is a white space
+			// inside style attribute, stroke-dasharray is separated by comma (,)
+			QStringList dashes = QStringList::split( QRegExp("[\\s,]"), params );
 		    for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
 				array.append( (*it).toFloat() );
 		}
@@ -1289,7 +1292,9 @@ void SvgImport::createObject( VGroup *grp, const QDomElement &b, const VObject::
 		double y		= parseUnit( b.attribute( "y" ), false, true, m_outerRect );
 		double width	= parseUnit( b.attribute( "width" ), true, false, m_outerRect );
 		double height	= parseUnit( b.attribute( "height" ), false, true, m_outerRect );
-		obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
+		double rx       = parseUnit( b.attribute( "rx" ) );
+		double ry       = parseUnit( b.attribute( "ry" ) );
+		obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height, rx, ry );
 	}
 	else if( b.tagName() == "ellipse" )
 	{
