@@ -59,20 +59,22 @@ sub createConf() {
             chomp($sect);
             $sect=~s/^\.\///;
             $sect=~s/\/Mainpage.dox//;
-#print "-> '$name/$dir'\n";
-#print "   '$sect'\n";
-           if($sect ne $name && $sect=~m/$name\/$dir/) {
-                #print "  skipping, '$sect' is in the start of '$name/$dir'\n";
+            $target="$name/$dir";
+            #print "name: '$name', target: '$target', sect: '$sect'\n";
+            if($sect ne $name && $target=~m/$sect/ && !($name=~m/^$sect/)) {
+                #print "  skipping, '$sect' is in the start of '$target'\n";
                 next dirs;
-           }
+            }
         }
-#print "   ** '$dir'\n";
+        #print "USING '$dir'\n";
         print FILE "$dir ";
     }
     print FILE "\n";
     print FILE "PROJECT_NAME=$name\n";
     print FILE "PROJECT_NUMBER=\n";
-    print FILE "OUTPUT_DIRECTORY=$basedir$name\n";
+    my $output="$name";
+    $output=~s/\//-/g;
+    print FILE "OUTPUT_DIRECTORY=$basedir$output\n";
     print FILE "CREATE_SUBDIRS=YES\n";
     print FILE "OUTPUT_LANGUAGE=English\n";
     print FILE "USE_WINDOWS_ENCODING=NO\n";
