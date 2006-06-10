@@ -297,10 +297,12 @@ void MathML2KFormulaPrivate::math( QDomElement element )
 void MathML2KFormulaPrivate::mi( QDomElement element, QDomNode docnode )
 {
     MathStyle previousStyle( style );
-    //style.mathvariant = italic;
-    style.readStyles( element );
-
     QString text = element.text().stripWhiteSpace();
+    if ( text.length() == 1 ) { // Default italic, only when content is one char
+        style.mathvariant = italic;
+        style.useVariant = true;
+    }
+    style.readStyles( element );
     createTextElements( text, docnode );
 
     style = previousStyle;
