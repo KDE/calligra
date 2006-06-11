@@ -1,0 +1,8 @@
+/**
+ * \mainpage
+ * KSpread is a scriptable spreadsheet program which provides both
+ * table-oriented sheets and support for complex mathematical formulas
+ * and statistics.
+ * \todo major classes
+ * \todo code examples
+ */
