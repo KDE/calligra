@@ -103,7 +103,7 @@ print FILE "<html><body>\n";
 foreach $section (@sections) {
     $sect=$section;
     $sect=~s/\//-/;
-    print FILE "<li><a href=\"$sect/annotated.html\">$section</a></li>\n";
+    print FILE "<li><a href=\"$sect/annotated.html\">$section</a>&nbsp;&nbsp;<font size=\"-2\">(<a href=\"$sect/annotated.html\" target=\"_top\">NoFrames</a>)</font></li>\n";
 }
 print FILE "</body></html>\n";
 close (FILE);
