@@ -62,7 +62,8 @@ class Sheet;
 
 
 /**
- * Manipulator
+ * \class Manipulator
+ * \brief Abstract base class for all region related operations.
  */
 class Manipulator : public Region, public KCommand
 {
@@ -116,7 +117,8 @@ private:
 
 
 /**
- * FormatManipulator
+ * \class FormatManipulator
+ * \brief Manipulates the formatting of a cell region.
  */
 class FormatManipulator : public Manipulator
 {
@@ -248,7 +250,8 @@ private:
 
 
 /**
- * ResizeColumnManipulator
+ * \class ResizeColumnManipulator
+ * \brief Resize column operation.
  */
 class ResizeColumnManipulator : public Manipulator
 {
@@ -272,7 +275,8 @@ private:
 
 
 /**
- * ResizeRowManipulator
+ * \class ResizeRowManipulator
+ * \brief Resize row operation.
  */
 class ResizeRowManipulator : public Manipulator
 {
@@ -296,7 +300,8 @@ private:
 
 
 /**
- * BorderManipulator
+ * \class BorderManipulator
+ * \brief Manipulates the border of a cell region.
  */
 class BorderManipulator : public FormatManipulator
 {
@@ -313,7 +318,8 @@ private:
 
 
 /**
- * class BackgroundColorManipulator
+ * \class BackgroundColorManipulator
+ * \brief Manipulates the background of a cell region.
  */
 class BackgroundColorManipulator : public FormatManipulator
 {
@@ -330,7 +336,8 @@ private:
 
 
 /**
- * class FontColorManipulator
+ * \class FontColorManipulator
+ * \brief Manipulates the font color of a cell region.
  */
 class FontColorManipulator : public FormatManipulator
 {
@@ -347,7 +354,8 @@ private:
 
 
 /**
- * class FontManipulator
+ * \class FontManipulator
+ * \brief Manipulates the font of a cell region.
  */
 class FontManipulator : public FormatManipulator
 {
@@ -364,7 +372,8 @@ private:
 
 
 /**
- * class AngleManipulator
+ * \class AngleManipulator
+ * \brief Manipulates the text angle of a cell region.
  */
 class AngleManipulator : public FormatManipulator
 {
@@ -381,7 +390,8 @@ class AngleManipulator : public FormatManipulator
 
 
 /**
- * class HorAlignManipulator
+ * \class HorAlignManipulator
+ * \brief Manipulates the horizontal text alignment of a cell region.
  */
 class HorAlignManipulator : public FormatManipulator
 {
@@ -398,7 +408,8 @@ class HorAlignManipulator : public FormatManipulator
 
 
 /**
- * class VerAlignManipulator
+ * \class VerAlignManipulator
+ * \brief Manipulates the vertical text alignment of a cell region.
  */
 class VerAlignManipulator : public FormatManipulator
 {
@@ -416,7 +427,8 @@ class VerAlignManipulator : public FormatManipulator
 
 
 /**
- * MergeManipulator
+ * \class MergeManipulator
+ * \brief Merges and splits the cells of a cell region.
  */
 class MergeManipulator : public Manipulator
 {
@@ -447,7 +459,8 @@ private:
 
 
 /**
- * DilationManipulator
+ * \class DilationManipulator
+ * \brief Dilates a cell region by one cell in each direction.
  */
 class DilationManipulator : public Manipulator
 {
@@ -467,7 +480,8 @@ private:
 
 
 /**
- * AdjustColumnRowManipulator
+ * \class AdjustColumnRowManipulator
+ * \brief Optimizes the height and the width of rows and columns, respectively.
  */
 class AdjustColumnRowManipulator : public Manipulator
 {
@@ -499,7 +513,8 @@ private:
 
 
 /**
- * HideShowManipulator
+ * \class HideShowManipulator
+ * \brief Hides and shows columns and rows.
  */
 class HideShowManipulator : public Manipulator
 {
@@ -525,7 +540,8 @@ private:
 
 
 /**
- * InsertDeleteManipulator
+ * \class InsertDeleteManipulator
+ * \brief Inserts and deletes columns and rows.
  */
 class InsertDeleteManipulator : public Manipulator
 {
@@ -543,7 +559,8 @@ private:
 
 
 /**
- * RemovalManipulator
+ * \class RemovalManipulator
+ * \brief Abstract class for removing cell attributes.
  */
 class RemovalManipulator : public Manipulator
 {
@@ -565,7 +582,8 @@ private:
 };
 
 /**
- * TextRemovalManipulator
+ * \class TextRemovalManipulator
+ * \brief Removes the texts of a cell region.
  */
 class TextRemovalManipulator : public RemovalManipulator
 {
@@ -579,7 +597,8 @@ private:
 };
 
 /**
- * CommentRemovalManipulator
+ * \class CommentRemovalManipulator
+ * \brief Removes the comments of a cell region.
  */
 class CommentRemovalManipulator : public RemovalManipulator
 {
@@ -593,7 +612,8 @@ private:
 };
 
 /**
- * ConditionRemovalManipulator
+ * \class ConditionRemovalManipulator
+ * \brief Removes the conditional formattings of a cell region.
  */
 class ConditionRemovalManipulator : public RemovalManipulator
 {
@@ -607,7 +627,8 @@ private:
 };
 
 /**
- * ValidityRemovalManipulator
+ * \class ValidityRemovalManipulator
+ * \brief Removes the validity checks of a cell region.
  */
 class ValidityRemovalManipulator : public RemovalManipulator
 {
@@ -624,7 +645,8 @@ private:
 
 
 /**
- * ManipulatorManager
+ * \class ManipulatorManager
+ * \todo To implement of not to implement. That's the question.
  */
 class ManipulatorManager
 {

@@ -37,9 +37,10 @@ class Sheet;
 class View;
 
 /**
- * The one for all class for points and ranges.
- * @author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
- * @since 1.5
+ * \class Region
+ * \brief The one for all class for points and ranges.
+ * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * \since 1.5
  */
 class KSPREAD_EXPORT Region
 {

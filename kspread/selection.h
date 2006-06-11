@@ -34,8 +34,12 @@ namespace KSpread
 class View;
 
 /**
- * @author Torben Weis <weis@kde.org>
- * @author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * \class Selection
+ * \brief Manages the selection of cells.
+ * Represents cell selections for general operations and for cell references
+ * used in formulaes.
+ * \author Torben Weis <weis@kde.org>
+ * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
 class KSPREAD_EXPORT Selection : public QObject, public Region
 {
