@@ -49,9 +49,11 @@ VShapeCmd::execute()
 		m_shape->setStroke( *( document()->selection()->stroke() ) );
 
 		// Add path:
+		/*TODO: porting to flake
 		document()->append( m_shape );
 		document()->selection()->clear();
 		document()->selection()->append( m_shape );
+		*/
 	}
 
 	setSuccess( true );

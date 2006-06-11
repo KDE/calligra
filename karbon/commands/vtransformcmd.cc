@@ -87,10 +87,12 @@ VTransformCmd::execute()
 		{
 			copy = itr.current()->clone();
 			visit( *copy );
+			/* TODO: porting to flake
 			document()->append( copy );
 			document()->selection()->take( *itr.current() );
 			document()->selection()->append( copy );
 			m_duplicates.append( copy );
+			*/
 		}
 	}
 	else

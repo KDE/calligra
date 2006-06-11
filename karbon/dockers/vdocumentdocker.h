@@ -35,7 +35,8 @@ class QPixmap;
 class QCheckBox;
 
 class VDocument;
-class VLayer;
+class KoShape;
+class KoShapeContainer;
 class KarbonView;
 
 /*************************************************************************
@@ -97,10 +98,10 @@ class VDocumentTab : public QWidget
 class VLayerListViewItem : public Q3CheckListItem
 {
 public:
-	VLayerListViewItem( Q3ListView* parent, VLayer* layer, VDocument *doc, Q3PtrDict<VLayerListViewItem> *map );
+	VLayerListViewItem( Q3ListView* parent, KoLayerShape* layer, VDocument *doc, Q3PtrDict<VLayerListViewItem> *map );
 	virtual ~VLayerListViewItem();
 
-	VLayer* layer() { return m_layer; }
+	KoLayerShape* layer() { return m_layer; }
 	int pos();
 	void update();
 	virtual QString key( int column, bool ascending ) const;
@@ -111,25 +112,25 @@ protected:
 	virtual void stateChange( bool on );
 
 private:
-	VLayer		*m_layer;
-	VDocument	*m_document;
-	uint		 m_key;
+	KoLayerShape *m_layer;
+	VDocument	 *m_document;
+	uint		  m_key;
 	Q3PtrDict<VLayerListViewItem> *m_map;
 }; // VLayerListViewItem
 
 class VObjectListViewItem : public Q3ListViewItem
 {
 public:
-	VObjectListViewItem( Q3ListViewItem* parent, VObject* object, VDocument *doc, uint key, Q3PtrDict<VObjectListViewItem> *map );
+	VObjectListViewItem( Q3ListViewItem* parent, KoShape* object, VDocument *doc, uint key, Q3PtrDict<VObjectListViewItem> *map );
 	virtual ~VObjectListViewItem();
 
-	VObject* object() { return m_object; }
+	KoShape* object() { return m_object; }
 	void update();
 	virtual QString key( int column, bool ascending ) const;
 	virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
 	void setKey( uint key ) { m_key = key; }
 private:
-	VObject		*m_object;
+	KoShape		*m_object;
 	VDocument	*m_document;
 	uint		 m_key;
 	Q3PtrDict<VObjectListViewItem> *m_map;
@@ -161,11 +162,11 @@ private slots:
 	void slotButtonClicked( int ID );
 	void removeDeletedObjectsFromList();
 	void updateChildItems( Q3ListViewItem *item );
-	void toggleState( VObject *obj, int col );
+	void toggleState( KoShape *obj, int col );
 
 protected:
 	VLayerListViewItem* listItem( int pos );
-	void updateObjects( VObject *object, Q3ListViewItem *item );
+	void updateObjects( KoShapeContainer *object, Q3ListViewItem *item );
 	void resetSelection();
 	void selectActiveLayer();
 

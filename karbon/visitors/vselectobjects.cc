@@ -205,6 +205,7 @@ VSelectObjects::visitVObject( VObject& object )
 void
 VSelectObjects::visitVLayer( VLayer& layer )
 {
+	/* TODO: porting to flake 
 	VDocument* doc = (VDocument*)layer.parent();
 	if ( ( layer.state() != VObject::deleted ) &&
 	     ( ( doc->selectionMode() == VDocument::AllLayers ) ||
@@ -216,6 +217,7 @@ VSelectObjects::visitVLayer( VLayer& layer )
 		for( ; itr.current(); ++itr )
 			itr.current()->accept( *this );
 	}
+	*/
 }
 
 void 

@@ -98,9 +98,11 @@ VImageTool::VInsertImageCmd::execute()
 	{
 		m_image->setState( VObject::normal );
 		m_image->transform( QMatrix().translate( m_pos.x(), m_pos.y() ) );
+		/* TODO: porting to flake
 		document()->append( m_image );
 		document()->selection()->clear();
 		document()->selection()->append( m_image );
+		*/
 	}
 															
 	setSuccess( true );

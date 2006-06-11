@@ -197,7 +197,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_vertRuler->setUnit(p->unit());
 	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
 
-	m_canvas = new KarbonCanvas( p->document().objects() ); //, this, p );
+	m_canvas = new KarbonCanvas( p->document().layers() ); //, this, p );
 	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
 	m_canvasView = new KoCanvasView(this);
@@ -226,7 +226,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 		// TODO: proper use of the toolbox once it is ready
 		// plug the toolbox as a docker for now to have something
-		KoToolManager::instance()->addCanvasView( m_canvasView );
+		KoToolManager::instance()->addControllers( m_canvasView, &p->document() );
 		QWidget *tb = KoToolManager::instance()->toolBox();
 		tb->setCaption( "Toolbox" );
 		paletteManager()->addWidget( tb, "ToolBox", "ToolBox" );

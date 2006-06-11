@@ -23,7 +23,7 @@
 #include "vlayer.h"
 #include "vlayer_iface.h"
 
-
+/*
 VLayerIface::VLayerIface( VLayer* layer )
 	: VGroupIface( layer ), m_layer( layer )
 {
@@ -52,4 +52,4 @@ VLayerIface::selected() const
 {
 	return m_layer->selected();
 }
-
+*/

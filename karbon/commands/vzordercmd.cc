@@ -47,6 +47,7 @@ VZOrderCmd::~VZOrderCmd()
 void
 VZOrderCmd::execute()
 {
+	/* TODO: porting to flake 
 	if( m_state == sendToBack )
 	{
 		VObjectListIterator itr( document()->selection()->objects() );
@@ -138,11 +139,13 @@ VZOrderCmd::execute()
 		}
 	}
 	setSuccess( true );
+	*/
 }
 
 void
 VZOrderCmd::unexecute()
 {
+	/* TODO: porting to flake 
 	if( m_state == sendToBack )
 	{
 		m_state = bringToFront;
@@ -168,5 +171,6 @@ VZOrderCmd::unexecute()
 		m_state = down;
 	}
 	setSuccess( false );
+	*/
 }
 

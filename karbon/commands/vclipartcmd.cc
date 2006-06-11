@@ -38,9 +38,11 @@ VClipartCmd::execute()
 	else
 	{
 		m_clipart->setState( VObject::normal );
+		/* TODO: porting to flake
 		document()->append( m_clipart );
 		document()->selection()->clear();
 		document()->selection()->append( m_clipart );
+		*/
 	}
 
 	m_executed = true;

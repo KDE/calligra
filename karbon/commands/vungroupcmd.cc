@@ -20,7 +20,6 @@
 
 #include <klocale.h>
 
-#include "vgroup.h"
 #include "vungroupcmd.h"
 #include "vselection.h"
 #include "vdocument.h"
@@ -78,6 +77,8 @@ VUnGroupCmd::execute()
 void
 VUnGroupCmd::unexecute()
 {
+	/* TODO: porting to flake 
+
 	if( !m_group )
 		return;
 
@@ -95,5 +96,6 @@ VUnGroupCmd::unexecute()
 	document()->selection()->append( m_group );
 	
 	setSuccess( false );
+	*/
 }
 

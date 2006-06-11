@@ -454,7 +454,8 @@ KarbonPart::insertObject( VObject* object )
 {
 	// don't repaint here explicitly. some commands might want to insert many
 	// objects.
-	m_doc.append( object );
+	// TODO: porting to flake
+	//m_doc.append( object );
 	setModified( true );
 }
 
@@ -541,13 +542,14 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	p->setMatrix( mat );
 
 	m_doc.selection()->clear();
+	/*
 	Q3PtrListIterator<VLayer> itr( m_doc.layers() );
 
 	for( ; itr.current(); ++itr )
 	{
 		itr.current()->draw( p, &r );
 	}
-
+	*/
 	p->end();
 	delete painterFactory;
 }

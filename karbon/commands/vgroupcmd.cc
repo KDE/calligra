@@ -42,6 +42,7 @@ VGroupCmd::~VGroupCmd()
 void
 VGroupCmd::execute()
 {
+	/* TODO: porting to flake
 	m_group = new VGroup( document()->activeLayer() );
 
 	VObjectListIterator itr( m_selection->objects() );
@@ -60,6 +61,7 @@ VGroupCmd::execute()
 	document()->selection()->append( m_group );
 
 	setSuccess( true );
+	*/
 }
 
 void

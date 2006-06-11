@@ -40,12 +40,8 @@ VVisitor::visit( VObject& object )
 void
 VVisitor::visitVDocument( VDocument& document )
 {
-	VLayerListIterator itr( document.layers() );
-
-	for( ; itr.current(); ++itr )
-	{
-		itr.current()->accept( *this );
-	}
+	foreach( KoShape* layer, document.layers() )
+		((KoLayerShape*)layer)->accept( *this );
 }
 
 void
@@ -60,14 +56,12 @@ VVisitor::visitVGroup( VGroup& group )
 }
 
 void
-VVisitor::visitVLayer( VLayer& layer )
+VVisitor::visitVLayer( KoLayerShape& layer )
 {
-	VObjectListIterator itr( layer.objects() );
-
-	for( ; itr.current(); ++itr )
-	{
-		itr.current()->accept( *this );
-	}
+	/* TODO: do we still want that ?
+	foreach( KoShape *shape, layer.iterator() )
+		shape->accept( *this );
+	*/
 }
 
 void

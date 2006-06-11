@@ -18,164 +18,130 @@
 */
 
 #include <qdom.h>
-
 #include <klocale.h>
-
-#include "vcomposite.h"
-#include "vdocument.h"
-#include "vgroup.h"
-#include "vlayer.h"
-#include "vobject.h"
-#include "vtext.h"
-#include "vvisitor.h"
-#include "vlayer_iface.h"
 #include <kdebug.h>
-#include "vclipgroup.h"
-#include "vfill.h"
-#include "vstroke.h"
+#include "vlayer.h"
+#include "vvisitor.h"
 
-VLayer::VLayer( VObject* parent, VState state )
-	: VGroup( parent, state )
+#include <KoStore.h>
+#include <KoGenStyles.h>
+#include <KoStyleStack.h>
+#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <KoOasisLoadingContext.h>
+#include <KoOasisStyles.h>
+
+#include <KoRectangleShape.h>
+
+KoLayerShape::KoLayerShape()
+: KoShapeContainer(new LayerMembers())
 {
-	setName( "Layer" );
-	// HACK : vlayer just shouldn't have fill/stroke at all
-	delete m_fill;
-	m_fill = 0L;
-	delete m_stroke;
-	m_stroke = 0L;
-}
-
-VLayer::VLayer( const VLayer& layer )
-	: VGroup( layer )
-{
-}
-
-VLayer::~VLayer()
-{
-}
-
-DCOPObject* VLayer::dcopObject()
-{
-    if ( !m_dcop )
-		m_dcop = new VLayerIface( this );
-
-    return m_dcop;
 }
 
 void
-VLayer::draw( VPainter* painter, const QRectF* rect ) const
+KoLayerShape::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
-	if(
-		state() == deleted ||
-		state() == hidden ||
-		state() == hidden_locked )
-	{
-		return;
-	}
-
-	VObjectListIterator itr = m_objects;
-
-	for ( ; itr.current(); ++itr )
-		itr.current()->draw( painter, rect );
-}
-
-void
-VLayer::bringToFront( const VObject& object )
-{
-	if( m_objects.getLast() == &object ) return;
-
-	m_objects.remove( &object );
-
-	m_objects.append( &object );
-}
-
-void
-VLayer::upwards( const VObject& object )
-{
-	if( m_objects.getLast() == &object ) return;
-
-	m_objects.remove( &object );
-
-	if( m_objects.current() != m_objects.getLast() )
-	{
-		m_objects.next();
-		m_objects.insert( m_objects.at(), &object );
-	}
-	else
-		m_objects.append( &object );
-}
-
-void
-VLayer::downwards( const VObject& object )
-{
-	if( m_objects.getFirst() == &object ) return;
-
-	int index = m_objects.find( &object );
-	bool bLast = m_objects.getLast() == &object;
-	m_objects.remove( index );
-
-	if( !bLast ) m_objects.prev();
-
-	m_objects.insert( m_objects.at(), &object );
-}
-
-void
-VLayer::sendToBack( const VObject& object )
-{
-	if( m_objects.getFirst() == &object ) return;
-
-	m_objects.remove( &object );
-
-	m_objects.prepend( &object );
-}
-
-void
-VLayer::save( QDomElement& element ) const
-{
-	if( state() != deleted )
-	{
-		QDomElement me = element.ownerDocument().createElement( "LAYER" );
-		element.appendChild( me );
-
-		if( state() == normal || state() == normal_locked || state() == VObject::selected )
-			me.setAttribute( "visible", 1 );
-
-		// save objects:
-		VObjectListIterator itr = m_objects;
-		for ( ; itr.current(); ++itr )
-			itr.current()->save( me );
-
-		VObject::save( me );
-	}
-}
-
-void
-VLayer::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
-{
+	/*
 	// save objects:
 	VObjectListIterator itr = m_objects;
 
 	for ( ; itr.current(); ++itr )
 		itr.current()->saveOasis( store, docWriter, mainStyles, ++index );
+	*/
+}
+void
+KoLayerShape::load( const QDomElement& element )
+{
+	setVisible( element.attribute( "visible" ) == 0 ? false : true );
+	// TODO: porting to flake
+	//VGroup::load( element );
+	resize( QSizeF( 300, 300 ) );
+	setAbsolutePosition( QPointF( 0, 0 ) );
+
+    KoShape * shape = new KoRectangleShape();
+    shape->setZIndex(2);
+    shape->setPosition( QPointF( 12, 12 ) );
+    shape->setBackground( Qt::green );
+	shape->setVisible( true );
+    addChild( shape );
+	
+    shape = new KoRectangleShape();
+    shape->setZIndex(1);
+    shape->setPosition( QPointF( 200, 200 ) );
+    shape->setBackground( Qt::red );
+	shape->setVisible( true );
+    addChild( shape );
+}
+
+bool
+KoLayerShape::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+{
+	return true;
 }
 
 void
-VLayer::load( const QDomElement& element )
-{
-	setState( element.attribute( "visible" ) == 0 ? hidden : normal );
-	VGroup::load( element );
-}
-
-
-VLayer*
-VLayer::clone() const
-{
-	return new VLayer( *this );
-}
-
-void
-VLayer::accept( VVisitor& visitor )
+KoLayerShape::accept( VVisitor& visitor )
 {
 	visitor.visitVLayer( *this );
 }
 
+bool
+KoLayerShape::hitTest( const QPointF &position ) const 
+{
+    Q_UNUSED(position);
+    return false;
+}
+
+//  ############# LayerMembers #############
+KoLayerShape::LayerMembers::LayerMembers() 
+{
+}
+
+KoLayerShape::LayerMembers::~LayerMembers() 
+{
+}
+
+void 
+KoLayerShape::LayerMembers::add(KoShape *child) 
+{
+    if(m_layerMembers.contains(child))
+        return;
+    m_layerMembers.append(child);
+}
+
+void 
+KoLayerShape::LayerMembers::remove(KoShape *child) 
+{
+    m_layerMembers.removeAll(child);
+}
+
+int 
+KoLayerShape::LayerMembers::count() const 
+{
+    return m_layerMembers.count();
+}
+
+QList<KoShape*> 
+KoLayerShape::LayerMembers::iterator() const 
+{
+    return QList<KoShape*>(m_layerMembers);
+}
+
+void 
+KoLayerShape::LayerMembers::containerChanged(KoShapeContainer *container) 
+{
+    Q_UNUSED(container);
+}
+
+void 
+KoLayerShape::LayerMembers::setClipping(const KoShape *child, bool clipping) 
+{
+    Q_UNUSED(child);
+    Q_UNUSED(clipping);
+}
+
+bool KoLayerShape::LayerMembers::childClipped(const KoShape *child) const 
+{
+    Q_UNUSED(child);
+    return false;
+}

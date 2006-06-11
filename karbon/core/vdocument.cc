@@ -32,44 +32,38 @@
 #include <KoStore.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
-#include <KoRectangleShape.h>
 
 #include <kdebug.h>
 
 VDocument::VDocument()
-	: VObject( 0L ),
-	  m_width(0.), m_height(0.),
-	  m_selectionMode( VDocument::ActiveLayer ),
-	  m_unit( KoUnit::U_MM )
+: VObject( 0L )
+, m_width(0.)
+, m_height(0.)
+, m_selectionMode( VDocument::ActiveLayer )
+, m_unit( KoUnit::U_MM )
+, m_saveAsPath(true)
 {
 	m_selection = new VSelection( this );
 
 	// create a layer. we need at least one:
-	m_layers.setAutoDelete( true );
-	m_layers.append( new VLayer( this ) );
-	m_activeLayer = m_layers.getLast();
-	m_activeLayer->setSelected( true );
-
-    KoShape * shape = new KoRectangleShape();
-    shape->setZIndex(2);
-    shape->setPosition( QPointF( 120, 120 ) );
-    shape->setBackground( Qt::green );
-	m_objects.append( shape );
-
-	m_saveAsPath = true;
+	m_activeLayer = new KoLayerShape();
+	m_layers.append( m_activeLayer );
+	// TODO: porting to flake
+	//m_activeLayer->setSelected( true );
 }
 
 VDocument::VDocument( const VDocument& document )
 	: VObject( document ), m_width(0), m_height(0)
 {
 	m_selection = new VSelection( this );
+	m_layers = document.m_layers;
 // TODO
 }
 
 VDocument::~VDocument()
 {
 	delete( m_selection );
-	foreach( KoShape* shape, m_objects )
+	foreach( KoShape* shape, m_layers )
 		delete shape;
 }
 
@@ -135,82 +129,78 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 void
 VDocument::draw( VPainter *painter, const QRectF* rect ) const
 {
+	/*
 	Q3PtrListIterator<VLayer> itr = m_layers;
 
 	for ( ; itr.current(); ++itr )
 	{
 		itr.current()->draw( painter, rect );
 	}
+	*/
 }
 
 void
-VDocument::insertLayer( VLayer* layer )
+VDocument::insertLayer( KoLayerShape* layer )
 {
 //	if ( pos == -1 || !m_layers.insert( layer, pos ))
-		m_layers.append( layer );
+	m_layers.append( layer );
 	m_activeLayer = layer;
 } // VDocument::insertLayer
 
 void
-VDocument::removeLayer( VLayer* layer )
+VDocument::removeLayer( KoLayerShape* layer )
 {
-	m_layers.remove( layer );
+	m_layers.removeAt( m_layers.indexOf( layer ) );
 	if ( m_layers.count() == 0 )
-		m_layers.append( new VLayer( this ) );
-	m_activeLayer = m_layers.getLast();
+		m_layers.append( new KoLayerShape() );
+	m_activeLayer = (KoLayerShape*)m_layers.last();
 } // VDocument::removeLayer
 
-bool VDocument::canRaiseLayer( VLayer* layer )
+bool VDocument::canRaiseLayer( KoLayerShape* layer )
 {
-    int pos = m_layers.find( layer );
+    int pos = m_layers.indexOf( layer );
     return (pos != int( m_layers.count() ) - 1 && pos >= 0 );
 }
 
-bool VDocument::canLowerLayer( VLayer* layer )
+bool VDocument::canLowerLayer( KoLayerShape* layer )
 {
-    int pos = m_layers.find( layer );
+    int pos = m_layers.indexOf( layer );
     return (pos>0);
 }
 
 void
-VDocument::raiseLayer( VLayer* layer )
+VDocument::raiseLayer( KoLayerShape* layer )
 {
-	int pos = m_layers.find( layer );
+	int pos = m_layers.indexOf( layer );
 	if( pos != int( m_layers.count() ) - 1 && pos >= 0 )
-	{
-		VLayer* layer = m_layers.take( pos );
-		m_layers.insert( pos + 1, layer );
-	}
+		m_layers.move( pos, pos + 1 );
 } // VDocument::raiseLayer
 
 void
-VDocument::lowerLayer( VLayer* layer )
+VDocument::lowerLayer( KoLayerShape* layer )
 {
-	int pos = m_layers.find( layer );
+	int pos = m_layers.indexOf( layer );
 	if ( pos > 0 )
-	{
-		VLayer* layer = m_layers.take( pos );
-		m_layers.insert( pos - 1, layer );
-	}
+		m_layers.move( pos, pos - 1 );
 } // VDocument::lowerLayer
 
 int
-VDocument::layerPos( VLayer* layer )
+VDocument::layerPos( KoLayerShape* layer )
 {
-	return m_layers.find( layer );
+	return m_layers.indexOf( layer );
 } // VDocument::layerPos
 
 void
-VDocument::setActiveLayer( VLayer* layer )
+VDocument::setActiveLayer( KoLayerShape* layer )
 {
-	if ( m_layers.find( layer ) != -1 )
+	if ( m_layers.indexOf( layer ) != -1 )
 		m_activeLayer = layer;
 } // VDocument::setActiveLayer
 
 void
-VDocument::append( VObject* object )
+VDocument::append( KoShape* object )
 {
-	m_activeLayer->append( object );
+	m_activeLayer->addChild( object );
 }
 
 QDomDocument
@@ -221,7 +211,7 @@ VDocument::saveXML() const
 	doc.appendChild( me );
 	save( me );
 	return doc;
-}
+ }
 
 void
 VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
@@ -232,11 +222,9 @@ VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainS
 	docWriter->addAttribute( "draw:master-page-name", "Default");
 
 	// save objects:
-	VLayerListIterator itr( m_layers );
-
 	int index = 0;
-	for ( ; itr.current(); ++itr )
-		itr.current()->saveOasis( store, docWriter, mainStyles, ++index );
+	foreach( KoShape* layer, m_layers )
+		((KoLayerShape*)layer)->saveOasis( store, docWriter, mainStyles, ++index );
 
 	docWriter->endElement(); // draw:page
 }
@@ -249,18 +237,19 @@ VDocument::save( QDomElement& me ) const
 	me.setAttribute( "editor", "Karbon14" );
 	me.setAttribute( "syntaxVersion", "0.1" );
 	if( m_width > 0. )
-		me.setAttribute( "width", m_width );
+			me.setAttribute( "width", m_width );
 	if( m_height > 0. )
-		me.setAttribute( "height", m_height );
+			me.setAttribute( "height", m_height );
 	me.setAttribute( "unit", KoUnit::unitName( m_unit ) );
 
 	// save objects:
+	/* TODO: porting to flake
 	VLayerListIterator itr( m_layers );
 
 	for ( ; itr.current(); ++itr )
-		itr.current()->save( me );
+			itr.current()->save( me );
+	*/
 }
-
 
 VDocument*
 VDocument::clone() const
@@ -283,6 +272,7 @@ VDocument::loadXML( const QDomElement& doc )
 		return false;
 	}
 
+	qDeleteAll(m_layers);
 	m_layers.clear();
 
 	m_width  = doc.attribute( "width", "800.0" ).toDouble();
@@ -306,7 +296,7 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 
 			if( e.tagName() == "LAYER" )
 			{
-				VLayer* layer = new VLayer( this );
+				KoLayerShape* layer = new KoLayerShape();
 				layer->load( e );
 				insertLayer( layer );
 			}
@@ -317,7 +307,7 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 bool
 VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
-	return m_layers.current()->loadOasis( element, context );
+	return ((KoLayerShape*)m_layers.first())->loadOasis( element, context );
 }
 
 void
@@ -327,8 +317,20 @@ VDocument::accept( VVisitor& visitor )
 }
 
 QString
-VDocument::objectName( const VObject *obj ) const
+VDocument::objectName( const KoShape *obj ) const
 {
-	QMap<const VObject *, QString>::ConstIterator it = m_objectNames.find( obj );
+	QMap<const KoShape *, QString>::ConstIterator it = m_objectNames.find( obj );
 	return it == m_objectNames.end() ? 0L : it.value();
+}
+
+void
+VDocument::addShape( KoShape* shape )
+{
+	m_activeLayer->addChild( shape );
+}
+
+void
+VDocument::removeShape( KoShape* shape )
+{
+	m_activeLayer->removeChild( shape );
 }

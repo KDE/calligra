@@ -44,8 +44,10 @@ VCleanUpCmd::unexecute()
 }
 
 void
-VCleanUpCmd::visitVLayer( VLayer& layer )
+VCleanUpCmd::visitVLayer( KoLayerShape& layer )
 {
+	// TODO: is that absolete now?
+	/*
 	VObjectListIterator itr( layer.objects() );
 	for( ; itr.current(); ++itr )
 	{
@@ -55,4 +57,5 @@ VCleanUpCmd::visitVLayer( VLayer& layer )
 			layer.take( *itr.current() );
 		}
 	}
+	*/
 }

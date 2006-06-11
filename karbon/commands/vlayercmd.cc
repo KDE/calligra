@@ -22,21 +22,22 @@
 #include "vlayercmd.h"
 #include "vdocument.h"
 
-VLayerCmd::VLayerCmd( VDocument* doc, const QString& name, VLayer* layer, VLayerCmdType order )
+VLayerCmd::VLayerCmd( VDocument* doc, const QString& name, KoLayerShape* layer, VLayerCmdType order )
 	: VCommand( doc, name, "14_layers" ), m_layer( layer ), m_cmdType( order )
 {
 	if( order == addLayer )
 	{
-		layer->setState( VObject::deleted );
 		document()->insertLayer( layer );
 	}
 
-	m_oldState = layer->state();
+	m_wasVisible = layer->isVisible();
+	m_wasLocked = layer->isLocked();
 }
 
 void
 VLayerCmd::execute()
 {
+	/* TODO: porting to flake 
 	switch( m_cmdType )
 	{
 		case addLayer:
@@ -57,11 +58,13 @@ VLayerCmd::execute()
 	}
 
 	setSuccess( true );
+	*/
 }
 
 void
 VLayerCmd::unexecute()
 {
+	/* TODO: porting to flake 
 	switch ( m_cmdType )
 	{
 		case addLayer:
@@ -82,5 +85,6 @@ VLayerCmd::unexecute()
 	}
 
 	setSuccess( false );
+	*/
 }
 

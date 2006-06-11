@@ -55,6 +55,7 @@ VObject::VObject( const VObject& obj )
 	invalidateBoundingBox();
 	m_dcop = 0L;
 
+	/* TODO: porting to flake
 	VDocument *srcDoc = obj.document();
 	if( srcDoc && !srcDoc->objectName( &obj ).isEmpty() )
 	{
@@ -62,6 +63,7 @@ VObject::VObject( const VObject& obj )
 		if( dstDoc )
 			dstDoc->setObjectName( this, srcDoc->objectName( &obj ) );
 	}
+	*/
 }
 
 VObject::~VObject()
@@ -107,9 +109,11 @@ VObject::save( QDomElement& element ) const
 	if( m_fill )
 		m_fill->save( element );
 
+	/* TODO: porting to flake
 	VDocument *doc = document();
 	if( doc && !doc->objectName( this ).isEmpty() )
 		element.setAttribute( "ID", QString( doc->objectName( this ) ) );
+	*/
 }
 
 void
@@ -172,9 +176,11 @@ VObject::load( const QDomElement& element )
 		m_fill->load( element );
 	}
 
+	/* TODO: porting to flake
 	VDocument *doc = document();
 	if( doc && !element.attribute( "ID" ).isEmpty() )
 		doc->setObjectName( this, element.attribute( "ID" ) );
+	*/
 }
 
 bool
@@ -224,13 +230,18 @@ VObject::document() const
 QString
 VObject::name() const
 {
-	return document() ? document()->objectName( this ) : QString();
+	return QString();
+	// TODO: porting to flake
+	//return document() ? document()->objectName( this ) : QString();
 }
 
 void
 VObject::setName( const QString &s )
 {
+	// TODO: porting to flake
+	/*
 	if( document() )
 		document()->setObjectName( this, s );
+	*/
 }
 

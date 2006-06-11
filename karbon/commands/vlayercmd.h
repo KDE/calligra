@@ -26,7 +26,7 @@
 
 
 class VDocument;
-class VLayer;
+class KoLayerShape;
 
 
 class VLayerCmd : public VCommand
@@ -43,16 +43,17 @@ public:
 		deleteLayer
 	};
 
-	VLayerCmd( VDocument* doc, const QString& name, VLayer* layer, VLayerCmdType order );
+	VLayerCmd( VDocument* doc, const QString& name, KoLayerShape* layer, VLayerCmdType order );
 	virtual ~VLayerCmd() {}
 	
 	virtual void execute();
 	virtual void unexecute();
 
 protected:
-	VLayer* m_layer;
+	KoLayerShape* m_layer;
 	VLayerCmdType m_cmdType;
-	VObject::VState m_oldState;
+	bool m_wasVisible;
+	bool m_wasLocked;
 };
 
 #endif

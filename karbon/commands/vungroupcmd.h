@@ -22,10 +22,8 @@
 #define __VUNGROUPCMD_H__
 
 #include "vcommand.h"
-
+#include "vgroup.h"
 // Group object(s)
-
-class VGroup;
 
 class VUnGroupCmd : public VCommand
 {

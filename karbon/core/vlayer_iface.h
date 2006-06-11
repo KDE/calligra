@@ -23,6 +23,7 @@
 #include "vgroup_iface.h"
 #include <QString>
 
+/*
 class VLayer;
 
 class VLayerIface : public VGroupIface
@@ -42,6 +43,6 @@ k_dcop:
 private:
 	VLayer* m_layer;
 };
-
+*/
 #endif
 

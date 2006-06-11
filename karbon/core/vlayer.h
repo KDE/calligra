@@ -20,14 +20,18 @@
 #ifndef __VLAYER_H__
 #define __VLAYER_H__
 
-#include "vgroup.h"
+#include <KoShapeContainer.h>
 #include <koffice_export.h>
 
 #include <QRectF>
 
 class QDomElement;
 class DCOPObject;
-
+class KoStore;
+class KoXmlWriter;
+class KoGenStyles;
+class KoOasisLoadingContext;
+class VVisitor;
 
 /**
  * VLayer manages a set of vobjects. It keeps the objects from bottom to top
@@ -36,86 +40,33 @@ class DCOPObject;
  * in other layers.
  */
 
-class KARBONBASE_EXPORT VLayer : public VGroup
+class KARBONBASE_EXPORT KoLayerShape : public KoShapeContainer
 {
 public:
-	/**
-	 * Constructs a new layer object that is child of parent and has the given state.
-	 *
-	 * @param parent the new object's parent
-	 * @param state the new object's state
-	 */
-	VLayer( VObject* parent, VState state = normal );
-
-	/**
-	 * Copy constructor.
-	 *
-	 * @param layer the layer to copy properties from
-	 */
-	VLayer( const VLayer& layer );
-
-	virtual ~VLayer();
-	virtual DCOPObject* dcopObject();
-
-	virtual void draw( VPainter *painter, const QRectF* rect = 0L ) const;
-
-	virtual void save( QDomElement& element ) const;
+	KoLayerShape();
+    virtual void paintComponent(QPainter &, KoViewConverter &) {};
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const;
-	virtual void load( const QDomElement& element );
+	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
+	void load( const QDomElement& element );
+	void accept( VVisitor& visitor );
 
-	virtual VLayer* clone() const;
+    bool hitTest( const QPointF &position ) const;
+private:
+    class LayerMembers: public KoGraphicsContainerModel {
+        public:
+            LayerMembers();
+            ~LayerMembers();
+            void add(KoShape *child);
+            void setClipping(const KoShape *child, bool clipping);
+            bool childClipped(const KoShape *child) const;
+            void remove(KoShape *child);
+            int count() const;
+            QList<KoShape*> iterator() const;
+            void containerChanged(KoShapeContainer *container);
 
-	virtual void accept( VVisitor& visitor );
-
-	/**
-	 * Moves the object to the top of the list.
-	 *
-	 * When the object is at the top this method has no effect.
-	 *
-	 * @param object the object to move
-	 */
-	void bringToFront( const VObject& object );
-
-	/** 
-	 * Moves the object one step up the list.
-	 *
-	 * When the object is at the top this method has no effect.
-	 *
-	 * @param object the object to move
-	 */
-	void upwards( const VObject& object );
-
-	/** 
-	 * Moves the object one step down the list.
-	 *
-	 * When the object is at the bottom this method has no effect.
-	 *
-	 * @param object the object to move
-	 */
-	void downwards( const VObject& object );
-
-	/** 
-	 * Moves the object to the end of the list.
-	 *
-	 * When the object is at the bottom this method has no effect.
-	 *
-	 * @param object the object to move
-	 */
-	void sendToBack( const VObject& object );
-
-	/**
-	 * Selects or unselects the layer 
-	 *
-	 * @param state the new selection state
-	 */
-	void setSelected( bool state ) { setState( state ? VObject::selected : VObject::normal ); }
-
-	/**
-	 * Returns the selection state of the layer
-	 *
-	 * @return the actual selection state
-	 */
-	bool selected() { return state() == VObject::selected; }
+        private: // members
+            QList <KoShape *> m_layerMembers;
+    };
 };
 
 #endif

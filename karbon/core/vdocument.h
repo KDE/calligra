@@ -33,16 +33,17 @@
 
 #include "karbon_grid_data.h"
 #include <koffice_export.h>
+#include <KoShapeControllerBase.h>
 
 class QDomDocument;
 class QDomElement;
 class VSelection;
-class VLayer;
 class KoPageLayout;
 class KoShape;
 
-typedef Q3PtrList<VLayer> VLayerList;
-typedef Q3PtrListIterator<VLayer> VLayerListIterator;
+class KoLayerShape;
+
+typedef QList<KoShape*> VLayerList;
 
 /**
  * All non-visual, static doc info is in here.
@@ -51,7 +52,7 @@ typedef Q3PtrListIterator<VLayer> VLayerListIterator;
  * the visually oriented karbon part.
  */
 
-class KARBONBASE_EXPORT VDocument : public VObject
+class KARBONBASE_EXPORT VDocument : public VObject, public KoShapeControllerBase
 {
 public:
 	/** The different selection modes */
@@ -144,7 +145,7 @@ public:
 	 * @param layer the layer to check
 	 * @return true if layer can be raised, else false
 	 */
-	bool canRaiseLayer( VLayer* layer );
+	bool canRaiseLayer( KoLayerShape* layer );
 
 	/**
 	 * Checks if specified layer can be lowered. 
@@ -155,21 +156,21 @@ public:
 	 * @param layer the layer to check
 	 * @return true if layer can be lowered, else false
 	 */
-	bool canLowerLayer( VLayer* layer );
+	bool canLowerLayer( KoLayerShape* layer );
 
 	/**
 	 * Raises the layer.
 	 * 
 	 * @param layer the layer to raise
 	 */
-	void raiseLayer( VLayer* layer );
+	void raiseLayer( KoLayerShape* layer );
 
 	/**
 	 * Lowers the layer.
 	 * 
 	 * @param layer the layer to lower
 	 */
-	void lowerLayer( VLayer* layer );
+	void lowerLayer( KoLayerShape* layer );
 
 	/**
 	 * Returns the position of the specified layer.
@@ -177,7 +178,7 @@ public:
 	 * @param layer the layer to retrieve the position for
 	 * @return the layer position
 	 */
-	int layerPos( VLayer* layer );
+	int layerPos( KoLayerShape* layer );
 
 	/**
 	 * Inserts a new layer.
@@ -186,7 +187,7 @@ public:
 	 *
 	 * @param layer the layer to insert
 	 */
-	void insertLayer( VLayer* layer );
+	void insertLayer( KoLayerShape* layer );
 
 	/**
 	 * Removes the layer.
@@ -195,7 +196,7 @@ public:
 	 *
 	 * @param layer the layer to remove
 	 */
-	void removeLayer( VLayer* layer );
+	void removeLayer( KoLayerShape* layer );
 
 	/**
 	 * Sets the active layer.
@@ -204,20 +205,19 @@ public:
 	 *
 	 * @param layer the layer to set active
 	 */
-	void setActiveLayer( VLayer* layer );
+	void setActiveLayer( KoLayerShape* layer );
 
 	/**
 	 * Returns a pointer to the active layer.
 	 *
 	 * @return the currently active layer
 	 */
-	VLayer* activeLayer() const { return m_activeLayer; }
+	KoLayerShape* activeLayer() const { return m_activeLayer; }
 
 	/**
 	 * Returns the list of layers.
 	 */
 	const VLayerList& layers() const { return m_layers; }
-	const QList<KoShape*> objects() const { return m_objects; };
 
 	QDomDocument saveXML() const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
@@ -246,21 +246,23 @@ public:
 	 * 
 	 * @return the actual selection mode
 	 */
-	VSelectionMode selectionMode() { return m_selectionMode; }
+	VSelectionMode selectionMode() 
+		{ return m_selectionMode; }
 
 	/**
 	 * Sets the selection mode.
 	 *
 	 * @param mode the new selection mode
 	 */
-	void setSelectionMode( VSelectionMode mode ) { m_selectionMode = mode; }
+	void setSelectionMode( VSelectionMode mode ) 
+		{ m_selectionMode = mode; }
 
 	/**
 	 * Appends a new object to the active layer.
 	 *
 	 * @param object the object to append
 	 */
-	void append( VObject* object );
+	void append( KoShape* object );
 
 	/**
 	 * Returns custom name of specified object.
@@ -268,7 +270,7 @@ public:
 	 * @param obj the object to retrieve name for
 	 * @return the custom name of the object or an empty string if no custom name is set
 	 */
-	QString objectName( const VObject *obj ) const;
+	QString objectName( const KoShape *obj ) const;
 
 	/**
 	 * Sets custom name of specified object.
@@ -279,7 +281,8 @@ public:
 	 * @param obj the object to set custom name for
 	 * @param name the the custom name to set
 	 */
-	void setObjectName( const VObject *obj, const QString name ) { m_objectNames.insert( obj, name ); }
+	void setObjectName( const KoShape *obj, const QString name ) 
+		{ m_objectNames.insert( obj, name ); }
 
 	bool saveAsPath() const { return m_saveAsPath; }
 	void saveAsPath( bool b ) { m_saveAsPath = b; }
@@ -290,6 +293,10 @@ public:
 	 * @return the doument's grid 
 	 */
 	KarbonGridData &grid() { return m_gridData; }
+
+
+    virtual void addShape( KoShape* shape );
+    virtual void removeShape( KoShape* shape );
 
 private:
 	/**
@@ -306,7 +313,7 @@ private:
 	/// The layers in this document.
 	VLayerList m_layers;
 	/// The active layer.
-	VLayer* m_activeLayer;
+	KoLayerShape* m_activeLayer;
 
 	/// The selection. A list of selected objects.
 	VSelection* m_selection;
@@ -318,8 +325,7 @@ private:
 	 */
 	KoUnit::Unit m_unit;
 
-	QList<KoShape*> m_objects;
-	QMap<const VObject *, QString>	m_objectNames;
+	QMap<const KoShape *, QString>	m_objectNames;
 
 	// TODO this flag is used nowhere, can we remove it?
 	bool m_saveAsPath;

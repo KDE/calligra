@@ -1013,9 +1013,11 @@ VTextTool::VTextCmd::execute()
 		else
 		{
 			m_text->setState( VObject::normal );
+			/* TODO: porting to flake
 			document()->append( m_text );
 			document()->selection()->clear();
 			document()->selection()->append( m_text );
+			*/
 		}
 	}
 	else
@@ -1092,8 +1094,10 @@ VTextTool::VTextToCompositeCmd::execute()
 
 	if( !m_group )
 	{
+		/* TODO: porting to flake
 		m_group = m_text->toVGroup();
 		document()->append( m_group );
+		*/
 	}
 
 	m_text->setState( VObject::deleted );

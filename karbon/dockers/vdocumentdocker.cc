@@ -329,7 +329,7 @@ VDocumentTab::slotCommandExecuted()
  *  Layers tab                                                           *
  *************************************************************************/
 
-VObjectListViewItem::VObjectListViewItem( Q3ListViewItem* parent, VObject* object, VDocument *doc, uint key, Q3PtrDict<VObjectListViewItem> *map )
+VObjectListViewItem::VObjectListViewItem( Q3ListViewItem* parent, KoShape* object, VDocument *doc, uint key, Q3PtrDict<VObjectListViewItem> *map )
 	: Q3ListViewItem( parent, 0L ), m_object( object ), m_document( doc ), m_key( key ), m_map( map )
 {
 	update();
@@ -353,9 +353,11 @@ void
 VObjectListViewItem::update()
 {
 	// text description
+	/* TODO: porting to flake
 	VSelectionDescription selectionDesc;
 	selectionDesc.visit( *m_object );
 	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
+	*/
 
 	// draw thumb preview (16x16)
 	QPixmap preview( 16, 16 );
@@ -363,7 +365,7 @@ VObjectListViewItem::update()
 	// Y mirroring
 	QMatrix mat;
 	mat.scale( 1, -1 );
-	QRectF bbox = m_object->boundingBox();
+	QRectF bbox = m_object->boundingRect();
 	mat.translate( 0, -16 );
 	double factor = 16. / qMax( bbox.width(), bbox.height() );
 	mat.translate( -bbox.x() * factor, -bbox.y() * factor );
@@ -371,7 +373,8 @@ VObjectListViewItem::update()
 
 	// TODO: When the document will support page size, change the following line.
 	p.setZoomFactor( factor );
-	m_object->draw( &p );
+	// TODO: porting to flake
+	//m_object->draw( &p );
 	p.setZoomFactor( 1 );
 	p.setMatrix( QMatrix() );
 	p.setPen( QColor( "black" ) );
@@ -381,9 +384,9 @@ VObjectListViewItem::update()
 
 	// set thumb preview, lock and visible pixmaps
 	setPixmap( 0, preview );
-	QString s = ( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked ) ? "locked" : "unlocked";
+	QString s = m_object->isLocked() ? "locked" : "unlocked";
 	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, K3Icon::Small ) );
-	s = ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ) ? "14_layer_novisible" : "14_layer_visible";
+	s = m_object->isVisible() ? "14_layer_visible" : "14_layer_novisible";
 	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, K3Icon::Small ) );
 }
 
@@ -395,7 +398,7 @@ VObjectListViewItem::compare( Q3ListViewItem *i, int /*col*/, bool /*ascending*/
 	return m_key < objectItem->m_key ? -1 : 1;
 }
 
-VLayerListViewItem::VLayerListViewItem( Q3ListView* parent, VLayer* layer, VDocument *doc, Q3PtrDict<VLayerListViewItem> *map )
+VLayerListViewItem::VLayerListViewItem( Q3ListView* parent, KoLayerShape* layer, VDocument *doc, Q3PtrDict<VLayerListViewItem> *map )
 	: Q3CheckListItem( parent, 0L, CheckBox ), m_layer( layer ), m_document( doc), m_map( map )
 {
 	update();
@@ -423,7 +426,7 @@ VLayerListViewItem::update()
 
 	// TODO: When the document will support page size, change the following line.
 	p.setZoomFactor( 16. / 800. );
-	m_layer->draw( &p );
+	//m_layer->draw( &p );
 	p.setZoomFactor( 1 );
 	p.setMatrix( QMatrix() );
 	p.setPen( QColor( "black" ) );
@@ -431,22 +434,23 @@ VLayerListViewItem::update()
 	p.drawRect( QRectF( 0, 0, 16, 16 ) );
 	p.end();
 
+	// TODO: porting
 	// text description
-	setOn( m_layer->selected() );
-	setText( 0, m_layer->name() );
+	//setOn( m_layer->selected() );
+	//setText( 0, m_layer->name() );
 
 	// set thumb preview, lock and visible pixmaps
 	setPixmap( 0, preview );
-	QString s = ( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked ) ? "locked" : "unlocked";
+	QString s = m_layer->isLocked() ? "locked" : "unlocked";
 	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, K3Icon::Small ) );
-	s = ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ) ? "14_layer_visible" : "14_layer_novisible";
+	s = m_layer->isVisible() ? "14_layer_visible" : "14_layer_novisible";
 	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, K3Icon::Small ) );
 } // VLayerListViewItem::update
 
 void
 VLayerListViewItem::stateChange( bool on )
 {
-	m_layer->setSelected( on );
+	//m_layer->setSelected( on );
 } // VLayerListViewItem::stateChange
 
 int
@@ -565,6 +569,7 @@ VLayersTab::resetSelection()
 void 
 VLayersTab::selectActiveLayer()
 {
+	/* TODO: porting to flake
 	if( ! m_layers[ m_document->activeLayer() ] )
 	{
 		Q3PtrVector<VLayer> vector;
@@ -593,11 +598,13 @@ VLayersTab::selectActiveLayer()
 		layerItem->repaint();
 		kDebug(38000) << "selecting active layer: " << layerItem->text() << endl;
 	}
+	*/
 }
 
 void
 VLayersTab::selectionChangedFromTool()
 {
+	/* TODO: porting to flake
 	resetSelection();
 	removeDeletedObjectsFromList();
 
@@ -630,6 +637,7 @@ VLayersTab::selectionChangedFromTool()
 			item->update();
 		}
 	selectActiveLayer();	
+	*/
 }
 
 void 
@@ -643,7 +651,7 @@ VLayersTab::updateChildItems( Q3ListViewItem *item )
 		VObjectListViewItem *objectItem = dynamic_cast<VObjectListViewItem *>( it.current() );
 		if( ! objectItem ) continue;
 		
-		if( dynamic_cast<VGroup*>( objectItem->object() ) )
+		if( dynamic_cast<KoLayerShape*>( objectItem->object() ) )
 			updateChildItems( objectItem );
 
 		objectItem->update();
@@ -652,37 +660,25 @@ VLayersTab::updateChildItems( Q3ListViewItem *item )
 }
 
 void 
-VLayersTab::toggleState( VObject *obj, int col )
+VLayersTab::toggleState( KoShape *obj, int col )
 {
 	switch( col )
 	{
-		case 1: // toggle visibility
-			if( obj->state() == VObject::hidden_locked )
-				obj->setState( VObject::hidden );
-			else if( obj->state() == VObject::normal_locked )
-				obj->setState( VObject::selected );
-			else if( obj->state() == VObject::normal || obj->state() >= VObject::selected )
-				obj->setState( VObject::normal_locked );
-			else if( obj->state() == VObject::hidden )
-				obj->setState( VObject::hidden_locked );
+		case 1: // toggle locking
+			obj->setLocked( ! obj->isLocked() );
 		break;
-		case 2: // toggle locking
-			if( obj->state() == VObject::hidden_locked )
-				obj->setState( VObject::normal_locked );
-			else if( obj->state() == VObject::normal_locked )
-				obj->setState( VObject::hidden_locked );
-			else if( obj->state() == VObject::normal || obj->state() >= VObject::selected )
-				obj->setState( VObject::hidden );
-			else if( obj->state() == VObject::hidden )
-				obj->setState( VObject::selected );
+		case 2: // toggle visibility	
+			obj->setVisible( ! obj->isVisible() );
 		break;
 		default: return;
 	}
 
+	/* TODO: porting to flake 
 	if( obj->state() < VObject::selected )
 		m_document->selection()->take( *obj );
 	else
 		m_document->selection()->append( obj );
+	*/
 }
 
 void
@@ -716,23 +712,26 @@ VLayersTab::itemClicked( Q3ListViewItem* item, const QPoint &, int col )
 
 			if( col == 0 )
 			{
-				VObject *obj = objectItem->object();
-				if( obj->state() == VObject::normal )
+				KoShape *obj = objectItem->object();
+				/*TODO: porting to flake
+				if( obj->isVisible() && ! obj->Locked() )
 					obj->setState( VObject::selected );
+				*/
 			}
 			if( col > 0 ) 
 			{
 				toggleState( objectItem->object(), col );
 				
+				/* TODO: porting to flake
 				if( objectItem->object()->state() == VObject::selected )
 					objectItem->setSelected( true );
 				else
 					objectItem->setSelected( false );
-
+				*/
 				objectItem->update();
 				objectItem->repaint();
 
-				if( dynamic_cast<VGroup*>( objectItem->object() ) )
+				if( dynamic_cast<KoLayerShape*>( objectItem->object() ) )
 					updateChildItems( objectItem );
 
 				m_view->part()->repaintAllViews();
@@ -755,6 +754,7 @@ VLayersTab::selectionChangedFromList()
 		VObjectListViewItem *objectItem = dynamic_cast<VObjectListViewItem *>( it.current() );
 		if( ! objectItem ) continue;
 
+		/* TODO: porting to flake
 		VObject::VState state = objectItem->object()->state();
 		
 		if( state == VObject::deleted ) 
@@ -769,6 +769,7 @@ VLayersTab::selectionChangedFromList()
 			m_document->selection()->append( objectItem->object() );
 			objectItem->repaint();
 		}
+		*/
 	}
 	
 	m_view->selectionChanged();
@@ -778,15 +779,16 @@ VLayersTab::selectionChangedFromList()
 void
 VLayersTab::renameItem( Q3ListViewItem* item, const QPoint&, int col )
 {
+	/* TODO: porting to flake
 	if ( ( item ) && col == 0 )
 	{
 		bool ok = true;
 		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( item );
 
-	        VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( item );
-		if( !layerItem  && objectItem)
+		VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( item );
+		if( !layerItem  && objectItem )
 		{
-			VObject *obj = objectItem->object();
+			KoShape *obj = objectItem->object();
 			QString name = KInputDialog::getText( i18n( "Current Object" ), i18n( "Change the name of the object:" ),
 												  obj->name(), &ok, this );
 			if( ok )
@@ -806,6 +808,7 @@ VLayersTab::renameItem( Q3ListViewItem* item, const QPoint&, int col )
 			}
 		}
 	}
+	*/
 } // VLayersTab::renameItem
 
 void
@@ -816,18 +819,22 @@ VLayersTab::addLayer()
 										  i18n( "New layer" ), &ok, this );
 	if( ok )
 	{
-		VLayer* layer = new VLayer( m_document );
+		KoLayerShape* layer = new KoLayerShape();
+		/*TODO: porting to flake
 		layer->setName( name );
 		VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Add Layer" ),
 				layer, VLayerCmd::addLayer );
 		m_view->part()->addCommand( cmd, true );
 		updateLayers();
+		*/
+		m_document->insertLayer( layer );
 	}
 } // VLayersTab::addLayer
 
 void
 VLayersTab::raiseItem()
 {
+	/* TODO: porting to flake
 	VCommand *cmd = 0L;
 	//QListViewItem *newselection = 0L;
 	Q3ListViewItemIterator it( m_layersListView );
@@ -864,11 +871,13 @@ VLayersTab::raiseItem()
 		}
 	}
 	if( cmd ) updatePreviews();
+	*/
 } // VLayersTab::raiseItem
 
 void
 VLayersTab::lowerItem()
 {
+	/* TODO: porting to flake
 	VCommand *cmd = 0L;
 	Q3ListViewItemIterator it( m_layersListView );
 
@@ -895,11 +904,13 @@ VLayersTab::lowerItem()
 		}
 	}
 	if( cmd ) updatePreviews();
+	*/
 } // VLayersTab::lowerItem
 
 void
 VLayersTab::deleteItem()
 {
+	/* TODO: porting to flake
 	VCommand *cmd = 0L;
 	Q3ListViewItemIterator it( m_layersListView );
 
@@ -960,6 +971,7 @@ VLayersTab::deleteItem()
 		updatePreviews();
 		m_view->part()->repaintAllViews();
 	}
+	*/
 } // VLayersTab::deleteItem
 
 void
@@ -974,6 +986,24 @@ VLayersTab::updateLayers()
 {
 	removeDeletedObjectsFromList();	
 
+	VLayerListViewItem* item = 0L;
+	
+	int layerCnt = m_document->layers().size();
+
+	m_layersListView->clear();
+	
+	const VLayerList &l = m_document->layers();
+
+	for( int i = layerCnt-1; i >= 0; --i )
+	{
+		KoLayerShape *layer = (KoLayerShape*)l.at( i );
+		item = new VLayerListViewItem( m_layersListView, layer, m_document, &m_layers );
+		item->setOpen( true );
+		item->setKey(i);
+
+		updateObjects( layer, item );
+	}
+	/*
 	Q3PtrVector<VLayer> vector;
 	m_document->layers().toVector( &vector );
 	VLayerListViewItem* item = 0L;
@@ -994,14 +1024,23 @@ VLayersTab::updateLayers()
 			updateObjects( vector[i], item );
 		}
 	}
-
+	*/
 	selectActiveLayer();
 	m_layersListView->sort();
 } // VLayersTab::updateLayers
 
 void
-VLayersTab::updateObjects( VObject *object, Q3ListViewItem *item )
+VLayersTab::updateObjects( KoShapeContainer *object, Q3ListViewItem *item )
 {
+	uint key = 0;
+	foreach( KoShape* shape, object->iterator() )
+	{
+		VObjectListViewItem *objectItem = new VObjectListViewItem( item, shape, m_document, key++, &m_objects );
+		objectItem->setKey( key );
+	}
+	item->sort();
+
+	/* TODO: porting to flake
 	VObjectListIterator itr = dynamic_cast<VGroup *>( object )->objects();
 
 	for( uint objcount = 1; itr.current(); ++itr, objcount++ )
@@ -1028,11 +1067,13 @@ VLayersTab::updateObjects( VObject *object, Q3ListViewItem *item )
 		}
 
 	item->sort();
+	*/
 }
 
 void
 VLayersTab::removeDeletedObjectsFromList()
 {
+	/* TODO: porting to flake
 	Q3PtrDictIterator<VObjectListViewItem> it( m_objects );
 
 	// iterate over all object items and delete the following items:
@@ -1098,6 +1139,7 @@ VLayersTab::removeDeletedObjectsFromList()
 		}
 		++itr;
 	}
+	*/
 }
 
 

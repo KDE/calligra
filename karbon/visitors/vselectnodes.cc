@@ -86,6 +86,8 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 void
 VSelectNodes::visitVLayer( VLayer& layer )
 {
+	/* TODO: porting to flake 
+
 	VDocument* doc = (VDocument*)layer.parent();
 	if ( ( layer.state() != VObject::deleted ) &&
 	     ( ( doc->selectionMode() == VDocument::AllLayers ) ||
@@ -97,6 +99,7 @@ VSelectNodes::visitVLayer( VLayer& layer )
 		for( ; itr.current(); ++itr )
 			itr.current()->accept( *this );
 	}
+	*/
 }
 
 void
@@ -121,6 +124,7 @@ VTestNodes::visitVSubpath( VSubpath& path )
 void
 VTestNodes::visitVLayer( VLayer& layer )
 {
+	/* TODO: porting to flake 
 	VDocument* doc = (VDocument*)layer.parent();
 	if ( ( layer.state() != VObject::deleted ) &&
 	     ( ( doc->selectionMode() == VDocument::AllLayers ) ||
@@ -132,5 +136,6 @@ VTestNodes::visitVLayer( VLayer& layer )
 		for( ; itr.current(); ++itr )
 			itr.current()->accept( *this );
 	}
+	*/
 }
 

@@ -279,7 +279,8 @@ ClipartWidget::importClipart()
 			return;
 	}
 	m_part->document().selection()->clear();
-	m_part->document().selection()->append( m_part->document().activeLayer()->objects() );
+	// TODO: porting to flake
+	//m_part->document().selection()->append( m_part->document().activeLayer()->objects() );
 	addClipart();
 	m_part->document().selection()->clear();
 	m_part->document().removeLayer( m_part->document().activeLayer() );

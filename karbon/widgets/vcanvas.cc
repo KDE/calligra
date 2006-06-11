@@ -53,6 +53,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcolormimedata.h>
+#include "vlayer.h"
 
 KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
     : QWidget()

@@ -53,7 +53,8 @@ VInsertCmd::execute()
 			object->setState( VObject::normal );
 		}
 		else {
-			document()->append( object );
+			// TODO: porting to flake
+			//document()->append( object );
 
 			if ( m_offset != 0.0 ) {
 				VTranslateCmd  cmd( 0L, m_offset, -m_offset );

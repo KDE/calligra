@@ -108,6 +108,7 @@ int KarbonPartIface::nbLayer() const
 	return m_part->document().layers().count();
 }
 
+/* TODO: porting to flake
 DCOPRef KarbonPartIface::activeLayer()
 {
 	if( !m_part->document().activeLayer() )
@@ -116,4 +117,4 @@ DCOPRef KarbonPartIface::activeLayer()
 	return DCOPRef( kapp->dcopClient()->appId(),
 					m_part->document().activeLayer()->dcopObject()->objId() );
 }
-
+*/

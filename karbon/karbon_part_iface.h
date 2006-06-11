@@ -53,7 +53,7 @@ k_dcop:
 	double height();
 
 	int nbLayer() const;
-	DCOPRef activeLayer();
+	//DCOPRef activeLayer();
 
 private:
 	KarbonPart* m_part;
