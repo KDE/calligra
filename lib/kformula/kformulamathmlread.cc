@@ -83,6 +83,7 @@ public:
 
 protected:
     void createTextElements( QString text, QDomNode docnode );
+    void createNameSequence( QString text, QDomNode docnode );
     double convertToPoint( QString value, bool* ok );
     bool isEmbellishedOperator( QDomNode node, QDomElement* mo, bool oasisFormat );
     bool isSpaceLike( QDomNode node, bool oasisFormat );
@@ -301,10 +302,12 @@ void MathML2KFormulaPrivate::mi( QDomElement element, QDomNode docnode )
     if ( text.length() == 1 ) { // Default italic, only when content is one char
         style.mathvariant = italic;
         style.useVariant = true;
+        style.readStyles( element );
+        createTextElements( text, docnode );
+    } else { // If length is 0 or >1, it should be a text sequence
+        style.readStyles( element );
+        createNameSequence( text, docnode );
     }
-    style.readStyles( element );
-    createTextElements( text, docnode );
-
     style = previousStyle;
 }
 
@@ -1200,6 +1203,22 @@ void MathML2KFormulaPrivate::createTextElements( QString text, QDomNode docnode 
         }
         docnode.appendChild( textelement );
     }
+}
+
+void MathML2KFormulaPrivate::createNameSequence( QString text, QDomNode docnode )
+{
+    QDomElement namesequence = doc.createElement( "NAMESEQUENCE" );
+    for ( uint i = 0; i < text.length(); ++i ) {
+        QDomElement textelement = doc.createElement( "TEXT" );
+        textelement.setAttribute( "CHAR", QString( text.at( i ) ) );
+        style.setStyles( textelement );
+        if ( context.symbolTable().inTable( text.at( i ) ) ) {
+            // The element is a symbol.
+            textelement.setAttribute( "SYMBOL", "3" );
+        }
+        namesequence.appendChild( textelement );
+    }
+    docnode.appendChild( namesequence );
 }
 
 double MathML2KFormulaPrivate::convertToPoint( QString value, bool* ok )
