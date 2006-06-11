@@ -84,6 +84,11 @@ namespace KSpell2 {
 /* Class: KWView                                                  */
 /******************************************************************/
 
+/**
+ * KWords view class. Following the broad model-view-controller idea this class
+ * shows you one view on the document. There can be multiple views of the same document each
+ * in with independent settings for viewMode and zoom etc.
+ */
 class KWORD_EXPORT KWView : public KoView
 {
     Q_OBJECT
