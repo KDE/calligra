@@ -78,12 +78,17 @@ foreach $section (@sections) {
     foreach $line (<INPUT>) {
         if($line=~/compound kind=\"class\"/) { $class="Class"; }
         elsif($line=~/compound kind=\"struct\"/) { $class="Struct"; }
+        elsif($line=~/compound kind=\"namespace\"/) { $class="Namespace"; }
         elsif($class ne "" && $line=~/name\>(.*)\<\/name/) {
             $className=$1;
         }
         elsif($class ne "" && $line=~/filename\>(.*)\<\/filename/) {
             $filename=$1;
-            print FILE "<a href=\"$sect/$filename\" title=\"Class in $section\" target=\"main\">$className</a><br>\n";
+            print FILE "<a href=\"$sect/$filename\" title=\"$class in $section\" target=\"main\">";
+            if($class eq "Namespace") { print FILE "<i>"; print "$className\n"; }
+            print FILE "$className";
+            if($class eq "Namespace") { print FILE "</i>"; }
+            print FILE "</a><br>\n";
             $class="";
         }
     }
