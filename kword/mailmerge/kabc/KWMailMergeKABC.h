@@ -55,7 +55,7 @@ public:
        
        If @p record equals -1, @p name is returned.
      */
-    virtual class QString getValue( const class QString &name, int record = -1 ) const;
+    virtual class QString getValue( const QString &name, int record = -1 ) const;
 
     /**
        @return	The number of available contacts in mail merge list.

@@ -147,6 +147,12 @@
         <receiver>QtSqlDataSourceEditor</receiver>
         <slot>filterCheckBox_toggled(bool)</slot>
     </connection>
+    <connection>
+        <sender>filterCheckBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>editFilter</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">qtsqldatasourceeditor.ui.h</include>

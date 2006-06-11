@@ -174,7 +174,7 @@ int KWMailMergeKSpread::columns() const
   return col;
 }
 
-QString KWMailMergeKSpread::cellText( const Cell *cell ) const
+QString KWMailMergeKSpread::cellText( const KSpread::Cell *cell ) const
 {
   QString text = QString::null;
 

@@ -2,3 +2,4 @@
  * \mainpage
  * KWord
  */
+EXCLUDE=KWFormulaFrameSet.cpp KWTextFrameSet.cpp KWPartFrameSet.cpp

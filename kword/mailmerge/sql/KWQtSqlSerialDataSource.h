@@ -41,7 +41,7 @@ class KWQtSqlSerialDataSource: public KWQtSqlSerialDataSourceBase
 
     virtual void save( QDomDocument &doc,QDomElement&);
     virtual void load( QDomElement& elem );
-    virtual class QString getValue( const class QString &name, int record = -1 ) const;
+    virtual class QString getValue( const QString &name, int record = -1 ) const;
     virtual int getNumRecords() const {
         return (myquery?((myquery->size()<0)?0:myquery->size()):0);
     }
