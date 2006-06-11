@@ -31,9 +31,9 @@ foreach $section (@output) {
 @output="";
 
 # for each section
-print "$#sections found";
+print $#sections+1 ." found";
 $i=1;
-$totalSteps=$#sections*3;
+$totalSteps=$#sections*3 + 4;
 foreach $section (@sections) {
     print "\n". $i++ ."/$totalSteps) Indexing section: '$section' ";
 
@@ -60,6 +60,57 @@ foreach $section (@sections) {
     chdir $rootdir;
 }
 
+#Create linking page
+print "\n". $i ."/$totalSteps) Creating wrapper pages";
+open(FILE, ">$rootdir/doc/api/allClasses.html");
+print FILE "<html><body>\n";
+print FILE "<style>.FrameItemFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif }</style>\n";
+print FILE "<table border=\"0\" width=\"100%\"><tr><td nowrap><font class=\"FrameItemFont\">\n";
+print FILE "<b>All Classes</b></br></br>\n";
+foreach $section (@sections) {
+    $sect=$section;
+    $sect=~s/\//-/;
+    chdir "$rootdir/doc/api/$sect";
+    $tagfile="$section\_TAGS";
+    $tagfile=~s/\//_/g;
+    open(INPUT, "$tagfile");
+    $class="";
+    foreach $line (<INPUT>) {
+        if($line=~/compound kind=\"class\"/) { $class="Class"; }
+        elsif($line=~/compound kind=\"struct\"/) { $class="Struct"; }
+        elsif($class ne "" && $line=~/name\>(.*)\<\/name/) {
+            $className=$1;
+        }
+        elsif($class ne "" && $line=~/filename\>(.*)\<\/filename/) {
+            $filename=$1;
+            print FILE "<a href=\"$sect/$filename\" title=\"Class in $section\" target=\"main\">$className</a><br>\n";
+            $class="";
+        }
+    }
+    close INPUT;
+}
+print FILE "</font></td></tr></body></html>\n";
+close FILE;
+
+# generate simple static index.html
+open (FILE,">$rootdir/doc/api/index.html");
+print FILE "<html><frameset cols=\"20%,80%\"><frame src=\"allClasses.html\"><frame src=\"sections.html\" name=\"main\"></frameset>\n</html>";
+close (FILE);
+
+# generate sections.html
+open (FILE,">$rootdir/doc/api/sections.html");
+print FILE "<html><body>\n";
+foreach $section (@sections) {
+    $sect=$section;
+    $sect=~s/\//-/;
+    print FILE "<li><a href=\"$sect/annotated.html\">$section</a></li>\n";
+}
+print FILE "</body></html>\n";
+close (FILE);
+print "\n";
+
+
+##############
 sub alterConf() {
     open(INPUT, "$doxygenconftmp") || die "internal error: $doxygenconftmp missing!";
     open(FILE, ">$doxygenconftmp.2");
@@ -74,7 +125,6 @@ sub alterConf() {
     close INPUT;
     close FILE;
 }
-print "\n";
 
 sub createConf() {
     my $name = shift(@_);
