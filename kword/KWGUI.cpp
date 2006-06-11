@@ -62,7 +62,9 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     m_canvas = new KWCanvas( viewMode, doc, this );
     m_canvasView = new KoCanvasView(m_right);
     m_canvasView->setCanvas(m_canvas);
-    KoToolManager::instance()->addCanvasView(m_canvasView);
+    KoToolManager::instance()->addControllers(m_canvasView, doc);
+KoToolManager::instance()->shapeCreatorTool(m_canvas)->setShapeId("rectangleShape");
+
     gridLayout->addWidget( m_canvasView, 1, 1 );
 
     QList<int> l;
@@ -77,13 +79,13 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     gridLayout->addWidget( m_tabChooser, 0, 0 );
 
     m_horRuler = new KoRuler( m_right, m_canvas, Qt::Horizontal, layout,
-			      KoRuler::F_INDENTS | KoRuler::F_TABS,
-			      doc->unit(), m_tabChooser );
+            KoRuler::F_INDENTS | KoRuler::F_TABS,
+            doc->unit(), m_tabChooser );
     m_horRuler->setReadWrite(doc->isReadWrite());
     gridLayout->addWidget( m_horRuler, 0, 1 );
 
     m_vertRuler = new KoRuler( m_right, m_canvas, Qt::Vertical, layout,
-			       0, doc->unit() );
+            0, doc->unit() );
     m_vertRuler->setReadWrite(doc->isReadWrite());
     gridLayout->addWidget( m_vertRuler, 1, 0 );
 

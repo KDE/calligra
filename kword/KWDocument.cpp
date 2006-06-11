@@ -72,6 +72,7 @@
 #include <KoXmlNS.h>
 #include <KoDom.h>
 #include <KoToolManager.h>
+#include <KoShapeManager.h>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -5453,6 +5454,22 @@ void KWDocument::FramesChangedHandler::execute() {
     //m_parent->repaintAllViewsExcept( 0 );
     m_parent->repaintAllViews();
     m_parent->updateRulerFrameStartEnd();
+}
+
+void KWDocument::addShape (KoShape *shape) {
+    foreach(KWView *view, m_lstViews) {
+        KWCanvas *canvas = view->getGUI()->canvasWidget();
+        canvas->shapeManager()->add(shape);
+        canvas->update();
+    }
+}
+
+void KWDocument::removeShape (KoShape *shape) {
+    foreach(KWView *view, m_lstViews) {
+        KWCanvas *canvas = view->getGUI()->canvasWidget();
+        canvas->shapeManager()->remove(shape);
+        canvas->update();
+    }
 }
 
 #include "KWDocument.moc"

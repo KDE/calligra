@@ -88,6 +88,7 @@ class KoOasisSettings;
 #include <KoDocument.h>
 #include <KoTextZoomHandler.h>
 #include <KoPictureKey.h>
+#include <KoShapeControllerBase.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 
 #include <QPixmap>
@@ -102,7 +103,7 @@ class KoOasisSettings;
 /* Class: KWDocument                                           */
 /******************************************************************/
 
-class KWORD_EXPORT KWDocument : public KoDocument, public KoTextZoomHandler
+class KWORD_EXPORT KWDocument : public KoDocument, public KoTextZoomHandler, public KoShapeControllerBase
 {
     Q_OBJECT
     Q_PROPERTY( double ptColumnWidth READ ptColumnWidth )
@@ -774,6 +775,9 @@ public:
 
     /// Load the given page layout; public for KWTextParag
     bool loadOasisPageLayout( const QString& masterPageName, KoOasisContext& context );
+
+    void addShape (KoShape *shape);
+    void removeShape (KoShape *shape);
 
     // end of public methods
 signals:
