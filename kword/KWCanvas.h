@@ -31,7 +31,6 @@
 #include <KoPoint.h>
 #include <KoCanvasBase.h>
 #include <KoInteractionTool.h>
-#include <KoShapeControllerInterface.h>
 
 #include <QWidget>
 #include <QMimeData>
@@ -374,21 +373,6 @@ private:
         bool pictureInline;
         bool keepRatio;
     }m_picture;
-};
-
-class KWShapeController : public KoShapeControllerInterface {
-public:
-    enum FrameType { TextFrameType };
-    KWShapeController(KWDocument *document);
-    ~KWShapeController() {};
-    void addShape(KoShape* shape);
-    void removeShape(KoShape* shape);
-    KoShape* createShape(const QRectF &outline) const;
-    void setFactoryType(FrameType frameType) { m_type = frameType; }
-
-private:
-    KWDocument *m_document;
-    FrameType m_type;
 };
 
 #endif

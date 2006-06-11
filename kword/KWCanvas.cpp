@@ -2170,30 +2170,4 @@ void KWCanvas::updateSize() {
     setMinimumSize(size.width(), size.height());
 }
 
-// ************* KWShapeController ***************
-KWShapeController::KWShapeController(KWDocument *document)
-: m_document(document)
-{
-    m_type = TextFrameType;
-}
-
-void KWShapeController::addShape( KoShape* shape ) {
-kDebug() << "KWShapeController::addShape" << endl;
-    foreach(KWView *view, m_document->getAllViews())
-        view->getGUI()->canvasWidget()->shapeManager()->add(shape);
-}
-
-void KWShapeController::removeShape( KoShape* shape ) {
-    foreach(KWView *view, m_document->getAllViews())
-        view->getGUI()->canvasWidget()->shapeManager()->remove(shape);
-}
-
-KoShape* KWShapeController::createShape(const QRectF &outline) const {
-    KoShape *rect = new KoRectangleShape();
-    rect->setBackground(QColor(Qt::blue));
-    rect->setPosition(outline.topLeft());
-    rect->resize(outline.size());
-    return rect;
-}
-
 #include "KWCanvas.moc"
