@@ -62,11 +62,7 @@ foreach $section (@sections) {
 
 #Create linking page
 print "\n". $i ."/$totalSteps) Creating wrapper pages";
-open(FILE, ">$rootdir/doc/api/allClasses.html");
-print FILE "<html><body>\n";
-print FILE "<style>.FrameItemFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif }</style>\n";
-print FILE "<table border=\"0\" width=\"100%\"><tr><td nowrap><font class=\"FrameItemFont\">\n";
-print FILE "<b>All Classes</b></br></br>\n";
+my %classes;
 foreach $section (@sections) {
     $sect=$section;
     $sect=~s/\//-/;
@@ -84,15 +80,27 @@ foreach $section (@sections) {
         }
         elsif($class ne "" && $line=~/filename\>(.*)\<\/filename/) {
             $filename=$1;
-            print FILE "<a href=\"$sect/$filename\" title=\"$class in $section\" target=\"main\">";
-            if($class eq "Namespace") { print FILE "<i>"; print "$className\n"; }
-            print FILE "$className";
-            if($class eq "Namespace") { print FILE "</i>"; }
-            print FILE "</a><br>\n";
+            my $string = "<a href=\"$sect/$filename\" title=\"$class in $section\" target=\"main\">";
+            if($class eq "Namespace") { $string .="<i>"; }
+            $string .= $className;
+            if($class eq "Namespace") { $string .= "</i>"; }
+            $string .= "</a><br>\n";
             $class="";
+
+            $classes{$className}=$string;
         }
     }
     close INPUT;
+}
+
+# sort and print
+open(FILE, ">$rootdir/doc/api/allClasses.html");
+print FILE "<html><body>\n";
+print FILE "<style>.FrameItemFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif }</style>\n";
+print FILE "<table border=\"0\" width=\"100%\"><tr><td nowrap><font class=\"FrameItemFont\">\n";
+print FILE "<b>All Classes</b></br></br>\n";
+foreach $key (sort {uc($a) cmp uc($b)} keys %classes) {
+    print FILE $classes{$key};
 }
 print FILE "</font></td></tr></body></html>\n";
 close FILE;
