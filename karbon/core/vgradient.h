@@ -28,6 +28,7 @@
 
 #include "vcolor.h"
 
+class QMatrix;
 class QDomElement;
 class KoGenStyle;
 class KoGenStyles;
