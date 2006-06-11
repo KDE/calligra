@@ -50,26 +50,25 @@ foreach $section (@sections) {
     print "\n". $i++ ."/$totalSteps) Creating docs for section: '$section' ";
     chdir $section;
     &alterConf();
-    symlink "Mainpage.dox", "92sdlkfjsdlkjf.h";
     $sect=$section;
     $sect=~s/\//-/;
     system "/usr/bin/doxygen $doxygenconftmp.2 >/dev/null 2>$basedir$sect/err.log";
     unlink "$doxygenconftmp";
     unlink "$doxygenconftmp.2";
-    unlink "92sdlkfjsdlkjf.h";
     chdir $rootdir;
 }
 
 #Create linking page
 print "\n". $i ."/$totalSteps) Creating wrapper pages";
 my %classes;
+chdir "$rootdir/doc/api";
 foreach $section (@sections) {
     $sect=$section;
     $sect=~s/\//-/;
-    chdir "$rootdir/doc/api/$sect";
+    # read from TAGS
     $tagfile="$section\_TAGS";
     $tagfile=~s/\//_/g;
-    open(INPUT, "$tagfile");
+    open(INPUT, "$sect/$tagfile");
     $class="";
     foreach $line (<INPUT>) {
         if($line=~/compound kind=\"class\"/) { $class="Class"; }
@@ -79,36 +78,28 @@ foreach $section (@sections) {
             $className=$1;
         }
         elsif($class ne "" && $line=~/filename\>(.*)\<\/filename/) {
-            $filename=$1;
-            $subsection=$section;
-            if($class eq "Class" && $className=~/^(.*)::/) {
-                $subsection.="/$1";
-                $className=~s/^.*:://;
-            }
-            my $string = "<a href=\"$sect/$filename\" title=\"$class in $subsection\" target=\"main\">";
-            if($class eq "Namespace") { $string .="<i>"; }
-            $string .= $className;
-            if($class eq "Namespace") { $string .= "</i>"; }
-            $string .= "</a><br>\n";
-            $class="";
-
-            $classes{$className}=$string;
+            &addClass($1, $section, $className, $class);
         }
     }
     close INPUT;
+
+    # read undocumented from err.log
+    &parseErrorLog("$sect", "err.log");
 }
+chdir $rootdir;
 
 # sort and print
 open(FILE, ">$rootdir/doc/api/allClasses.html");
 print FILE "<html><body>\n";
 print FILE "<style>.FrameItemFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif }</style>\n";
 print FILE "<table border=\"0\" width=\"100%\"><tr><td nowrap><font class=\"FrameItemFont\">\n";
-print FILE "<b>All Classes</b></br></br>\n";
+print FILE "<b><a href=\"allClasses.html\">All Classes</a> / <a href=\"allClasses-light.html\">Most Classes</a></b></br></br>\n";
 foreach $key (sort {uc($a) cmp uc($b)} keys %classes) {
     print FILE $classes{$key};
 }
 print FILE "</font></td></tr></body></html>\n";
 close FILE;
+system "grep -v '/undocumented.html' $rootdir/doc/api/allClasses.html > $rootdir/doc/api/allClasses-light.html";
 
 # generate simple static index.html
 open (FILE,">$rootdir/doc/api/index.html");
@@ -117,13 +108,22 @@ close (FILE);
 
 # generate sections.html
 open (FILE,">$rootdir/doc/api/sections.html");
-print FILE "<html><body>\n";
+print FILE "<html><body><ul>\n";
 foreach $section (@sections) {
     $sect=$section;
     $sect=~s/\//-/;
-    print FILE "<li><a href=\"$sect/annotated.html\">$section</a>&nbsp;&nbsp;<font size=\"-2\">(<a href=\"$sect/annotated.html\" target=\"_top\">NoFrames</a>)</font></li>\n";
+    # find out errorcount;
+    &parseErrorLog("$rootdir/doc/api/$sect", "err.log");
+    print FILE "<li><a href=\"$sect/annotated.html\">$section</a>&nbsp;&nbsp;<font size=\"-2\">(<a href=\"$sect/annotated.html\" target=\"_top\">NoFrames</a>)  ";
+    if($error > 0) {
+        print FILE "[<a href=\"$sect/errors.html\">$error errors</a>] ";
+    }
+    if($undocumented > 0) {
+        print FILE "[<a href=\"$sect/undocumented.html\">$undocumented undocumented</a>]";
+    }
+    print FILE "</font></li>\n";
 }
-print FILE "</body></html>\n";
+print FILE "</ul></body></html>\n";
 close (FILE);
 print "\n";
 
@@ -147,6 +147,17 @@ sub alterConf() {
 sub createConf() {
     my $name = shift(@_);
     open FILE, ">$doxygenconftmp";
+
+    # copy arguments from Mainpage.dox
+    open INPUT, "Mainpage.dox";
+    my $comment=0;
+    foreach $in (<INPUT>) {
+        if($in=~/\/\*/) { $comment=1; }
+        if($in=~/\*\//) {$comment=0; next; }
+        if($comment == 1) { next; }
+        print FILE $in;
+    }
+
     print FILE "INPUT=";
     dirs: foreach $dir (@_) {
         chomp($dir);
@@ -234,7 +245,7 @@ sub createConf() {
     #print FILE "EXAMPLE_PATH=\n";
     #print FILE "EXAMPLE_PATTERNS=\n";
     #print FILE "EXAMPLE_RECURSIVE=NO\n";
-    #print FILE "IMAGE_PATH=\n";
+    print FILE "IMAGE_PATH=$basedir\n";
     #print FILE "INPUT_FILTER=\n";
     #print FILE "FILTER_PATTERNS=\n";
     #print FILE "FILTER_SOURCE_FILES=NO\n";
@@ -323,4 +334,110 @@ sub createConf() {
     #print FILE "DOT_CLEANUP=YES\n";
     #print FILE "SEARCHENGINE=NO\n";
     close FILE;
+}
+
+sub parseErrorLog() {
+    my $dir = shift(@_);
+    my $logfile = shift(@_);
+    $undocumented=0;
+    $error=0;
+    my $liOpen=0;
+    open INPUT,"$dir/$logfile" || die "Can't read logfile '$dir/$logfile'\n";
+    open UNDOC, ">$dir/undocumented.html";
+    print UNDOC "<html><body><h1>Undocumented constructs found</h1><ul>Please consider typing some docs as soon as you find out what these items do or mean. Thanks!\n";
+    open ERRORS, ">$dir/errors.html";
+    foreach $line (<INPUT>) {
+        if($line=~/^\S*$/) { next; }
+        chomp($line);
+        if($line=~m/^(.*):(\d+): (.*)$/) {
+            my $file=$1;
+            my $lineNumber=$2;
+            my $message=$3;
+            if($message=~m/Warning: (Compound|Member) (.*) is not documented/) {
+                $undocumented++;
+                print UNDOC &printFile(1, $file);
+                print UNDOC "<li>$lineNumber: $1 $2</li>\n";
+                if($1 eq "Compound") {
+                    &addClass("", $dir, $2, "Class");
+                }
+                next;
+            }
+            if($message=~m/Warning: The following parameters of (.*) are not documented:(.*)/) {
+                $undocumented++;
+                print UNDOC "<li>$lineNumber: parameters $1 of $2</li>\n";
+                next;
+            }
+            if($message=~m/Warning: argument `(.*)' of command \@param is not found in the argument list of /) {
+                $error++;
+                print ERRORS &printFile(2, $file);
+                print ERRORS "<li>$lineNumber: argument $1 is not present in argument list</li>\n";
+                next;
+            }
+            if($message=~m/Warning: Internal inconsistency: /) {
+                # ignore.
+                next;
+            }
+            if($liOpen==1) {
+                print ERRORS "<\li>\n";
+            }
+            print ERRORS &printFile(2, $file);
+            print ERRORS "<li>$lineNumber: $message\n";
+            next;
+        }
+        $error++;
+        print ERRORS "$line<br>\n";
+    }
+    close ERRORS;
+    if($error == 0) {
+        unlink "$dir/errors.html";
+    }
+    close UNDOC;
+    #if($undocumented == 0) {
+        #unlink "$dir/undocumented.html";
+    #}
+    close INPUT;
+}
+
+sub printFile() {
+    my $type = shift(@_);
+    my $filename = shift(@_);
+    if($filename eq ($type==1?$lastfile:$lasterrorfile)) {
+        return "";
+    }
+    if($type==1) {
+        $lastfile = $filename;
+    } else {
+        $lasterrorfile = $filename;
+    }
+    return $string."</ul><b>$filename</b><ul>";
+}
+
+sub addClass() {
+    my $filename=shift(@_);
+    my $section=shift(@_);
+    my $className=shift(@_);
+    my $classType = shift(@_);
+
+    my $subsection=$section;
+
+    if($classType eq "Class" && $className=~/^(.*)::/) {
+        $subsection.="/$1";
+        $className=~s/^.*:://;
+    }
+    my $string;
+    my $target;
+    if($filename eq "") {
+        $string = "<a href=\"$section/undocumented.html\" title=\"$classType in $subsection\" target=\"main\"><font color=\"red\" target=\"main\">"
+    } else {
+        $string = "<a href=\"$section/$filename\" title=\"$classType in $subsection\" target=\"main\">";
+    }
+    if($classType eq "Namespace") { $string .="<i>"; }
+    $string .= $className;
+    if($classType eq "Namespace") { $string .= "</i>"; }
+    if($filename eq "") {
+        $string .="</font>"
+    }
+    $string .= "</a><br>\n";
+
+    $classes{$className}=$string;
 }
