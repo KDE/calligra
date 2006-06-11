@@ -419,6 +419,7 @@ sub addClass() {
     my $classType = shift(@_);
 
     my $subsection=$section;
+    $section=~s/\//-/g;
 
     if($classType eq "Class" && $className=~/^(.*)::/) {
         $subsection.="/$1";
