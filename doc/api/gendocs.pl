@@ -80,7 +80,12 @@ foreach $section (@sections) {
         }
         elsif($class ne "" && $line=~/filename\>(.*)\<\/filename/) {
             $filename=$1;
-            my $string = "<a href=\"$sect/$filename\" title=\"$class in $section\" target=\"main\">";
+            $subsection=$section;
+            if($class eq "Class" && $className=~/^(.*)::/) {
+                $subsection.="/$1";
+                $className=~s/^.*:://;
+            }
+            my $string = "<a href=\"$sect/$filename\" title=\"$class in $subsection\" target=\"main\">";
             if($class eq "Namespace") { $string .="<i>"; }
             $string .= $className;
             if($class eq "Namespace") { $string .= "</i>"; }
