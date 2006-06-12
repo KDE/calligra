@@ -77,6 +77,37 @@ namespace KoMacroTest {
 			bool isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement);
 			// Prints a QMap of Variables to kdDebug().
 			void printMvariables(QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, QString s);
+
+			/** 
+			* Sub-methods of testParseXML(). 
+			* Test the correct parsing of a QDomElement into a Macro
+			* respectively expected failure of parsing.
+			*/
+			// 1.Test - Correct DomElement.
+			void tpxTestCorrectDomElement();
+			// 2.Test - XML-document with bad root element.
+			void tpxTestBadRoot();
+			// 3.Test - XML-document with a missing Variable.
+			void tpxTestMissingVariable();
+			// 4.Test - One more Variable in XML-Document.
+			void tpxTestMoreVariables();
+			// 5.Test - XML-document with wrong macro-xmlversion..
+			void tpxTestWrongVersion();
+			// 6.Test - XML-document if it has a wrong structure like 
+			// wrong parathesis	or missing end tag.
+			void tpxTestWrongXMLStruct();
+			// 7.Test - XML-document with wrong item- and variable-tags.
+			void tpxTestWrongItemVarTags();
+			// 8.Test-XML-document with maximum field-size.
+			void tpxTestMaxNum();
+			// 9.Test-XML-document with maximum +1 field-size.
+			void tpxTestMaxNum2();
+			// 10.Test-XML-document with minimum field-size.
+			void tpxTestMinNum();
+			// 11.Test-XML-document with minimum field-size.
+			void tpxTestMinNum2();
+			// 12.Test - With a to big number.
+			void tpxTestBigNumber();
 	};
 
 }

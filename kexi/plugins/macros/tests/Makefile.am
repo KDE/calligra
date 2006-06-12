@@ -1,5 +1,5 @@
 if include_kunittestgui
-  GUIBINPROGRAM = komacrotestgui
+#  GUIBINPROGRAM = komacrotestgui
 else
   GUIBINPROGRAM =
 endif
