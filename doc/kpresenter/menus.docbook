@@ -1209,7 +1209,7 @@ press the &Esc; key to cancel, or use
 </menuchoice>
 </term>
 <listitem>
-<para>Allow you to zoom in or out in the current slide. You can see the zoom factor in the Edit toolbar, in the zoom indicator.</para>
+<para>Allow you to zoom in or out in the current slide. You can see the zoom factor in the <guilabel>Edit</guilabel> toolbar, in the zoom indicator.</para>
 <screenshot>
 <screeninfo>The <guilabel>zoom factor</guilabel> indicator</screeninfo>
 <mediaobject>
@@ -1939,7 +1939,7 @@ linkend="configure-autocorrection">Configure Autocorrection</link> section for a
 </menuchoice>
 </term>
 <listitem>
-<para>Autocompletion allows you to type the first few letters of a commonly used word (often technical or job specific), and tells KPresenter to finish typing the word for you.</para>
+<para>Autocompletion allows you to type the first few letters of a commonly used word (often technical or job specific), and tells &kpresenter; to finish typing the word for you.</para>
 
 <para>Please see the <link
 linkend="configure-completion">Configure Completion</link> section for a complete explanation.</para>
@@ -1977,7 +1977,7 @@ give you a warning message. Highlight what you want to do (in the
 picture, I have chosen to make a keyboard shortcut to <guilabel>About
 KDE</guilabel>).</para>
 
-<para>Click the radio button to the Custom Key setting and type the
+<para>Click the radio button to the <guilabel>Custom</guilabel> key setting and type the
 key you want to use. I assigned <keycap>Control</keycap> key and
 <keycap>Y</keycap> to bring up the <quote>About KDE</quote> dialog
 box.</para>
@@ -2016,18 +2016,21 @@ the toolbars.</para>
 
 
 
-<para>At the top is a Drop Down box to enable you to choose which
-toolbar you want to modify. In the picture Koffice Shell is
-selected. If I want to add the <guiicon>About KDE</guiicon> icon to
+<para>At the top is a drop down box to enable you to choose which
+toolbar you want to modify. In the picture the <guilabel>Format</guilabel> toolbar is
+selected. If I want to add the <guiicon>Spelling</guiicon> icon to
 that toolbar, I click the entry in the left window. The arrow pointing
-right becomes available, if I click the arrow the <guiicon>About
-KDE</guiicon> entry is added to the selected toolbar. the left arrow
+right becomes available, if I click the arrow the <guiicon>Spelling</guiicon> 
+entry is added to the selected toolbar. The left arrow
 is available when you click in the right side window. It allows you to
 remove an icon from a toolbar. The up and down arrows become active
-when items on both sides are selected. You can move the highlight in
-the right side window up and down with the keyboard arrow keys or by
-clicking on the arrows with the mouse. The Configure &kpresenter; menu
-entry gives two menu boxes.</para>
+when an item on the wright side is selected. You can also move the highlight in
+the right side window up and down with the keyboard arrow keys. By
+clicking on the arrows with the mouse you can change the order of the entries 
+in the menu. 
+<!--The <guimenuitem>Configure 
+&kpresenter;...</guimenuitem> menu entry gives two menu boxes. -->
+</para>
 </listitem>
 </varlistentry>
 

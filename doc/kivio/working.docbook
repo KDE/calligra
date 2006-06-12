@@ -24,7 +24,7 @@
 <sect1 id="saving">
 <title>Saving a Document</title>
 <para>To save the current document select <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> or <menuchoice><guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice> to give an existing file a different name.</para>
-<note><para>It is possible to save the document in a format that can be opened by earlier versions of &kivio;. Select the version you require from the <guilabel>Filter:</guilabel> combo box in the Save file dialog.</para></note>
+<note><para>It is possible to save the document in a format that can be opened by earlier versions of &kivio;. Select the version you require from the <guilabel>Filter:</guilabel> combo box in the save file dialog.</para></note>
 </sect1>
 
 <sect1 id="printing">
@@ -158,7 +158,7 @@ Each page of the document has its own set of layers.</para>
 
 <sect2>
 <title>Adding Layers</title>
-<para>Using the layer docker you can add new layers by clicking the <guibutton>New Layer</guibutton> button, the first from the left. Layers can be deleted by clicking the second button, <guibutton>Remove Layer</guibutton>. &kivio; numbers the layers consecutively, to rename a layer select it in the list and click <guibutton>Rename Layer</guibutton>.</para>
+<para>Using the <guilabel>Layers</guilabel> docker you can add new layers by clicking the <guibutton>New Layer</guibutton> button, the first from the left. Layers can be deleted by clicking the second button, <guibutton>Remove Layer</guibutton>. &kivio; numbers the layers consecutively, to rename a layer select it in the list and click <guibutton>Rename Layer</guibutton>.</para>
 </sect2>
 
 <sect2>
@@ -201,12 +201,12 @@ layers with this icon.</para></listitem>
 
 <sect2>
 <title>The Align Tool</title>
-<para>The Align tool rearranges a group of stencils so that they are aligned on one edge or on an invisible centerline. To use the tool select several stencils, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice>. If the stencils are arranged in a horizontal row you the choice of aligning along the top or bottom edges or the centerline. For stencils that are arranged in a vertical row the choice is left or right edge or the centerline.</para>
+<para>The <guilabel>Align</guilabel> tool rearranges a group of stencils so that they are aligned on one edge or on an invisible centerline. To use the tool select several stencils, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice>. If the stencils are arranged in a horizontal row you the choice of aligning along the top or bottom edges or the centerline. For stencils that are arranged in a vertical row the choice is left or right edge or the centerline.</para>
 </sect2>
 
 <sect2>
 <title>The Distribute Tool</title>
-<para>The distribute tool arranges a group of stencils so that there is an even amount of spacing between each stencil.</para>
+<para>The <guilabel>Distribute</guilabel> tool arranges a group of stencils so that there is an even amount of spacing between each stencil.</para>
 <para>First select the stencils you want to rearrange, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice> and click on the <guilabel>Distribute</guilabel> tab in the tabbed window that appears.</para>
 <para>You can choose whether the items should be spaced so that there is equal spacing between two edges, for example, the distance between the lefthand edge of each stencil should be the same. Or, whether the gap between each item should be identical. Choose the <guilabel>Spacing</guilabel> option if you desire this.</para>
 <para>The second choice is whether the spacing should use the entire extent of the page or just the extent of the selection. If the latter is chosen the stencils will not occupy any more space than they did originally.</para>
