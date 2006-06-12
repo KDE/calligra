@@ -92,12 +92,12 @@ bool KugarPart::openFile()
                 ok = true;
         }
         else
-            KMessageBox::sorry( this, i18n( "Invalid data file: %1" ).arg( m_file ) );
+            KMessageBox::sorry( this, i18n( "Invalid data file: %1" , m_file ) );
 
         f.close();
     }
     else
-        KMessageBox::sorry( this, i18n( "Unable to open data file: %1" ).arg( m_file ) );
+        KMessageBox::sorry( this, i18n( "Unable to open data file: %1" , m_file ) );
 
     return ok;
 }

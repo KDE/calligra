@@ -390,7 +390,7 @@ void KWFrameStyleManager::addStyle()
 {
     save();
 
-    QString str = i18n( "New Framestyle Template (%1)" ).arg(numFrameStyles++);
+    QString str = i18n( "New Framestyle Template (%1)" ,numFrameStyles++);
     if ( m_currentFrameStyle )
     {
         m_currentFrameStyle = new KWFrameStyle( *m_currentFrameStyle ); // Create a new style, initializing from the current one

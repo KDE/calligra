@@ -258,6 +258,7 @@ void KOfficePlugin::getEditingTime(KFileMetaInfoGroup group1,
 		pos++;
 	}
 	hours += days * 24;
+#warning "kde4: fix to new i18n api"	
 	appendItem(group1, labelid,
 		   i18n("%1:%2.%3").arg(hours).arg(minutes, 2).arg(seconds,2 ));
 }

@@ -4708,7 +4708,7 @@ void View::print( KPrinter &prt )
         Sheet* sheet = doc()->map()->findSheet(*sheetlistiterator);
         if (sheet == 0)
         {
-          kWarning() << i18n("Sheet %1 could not be found for printing").arg(*sheetlistiterator) << endl;
+          kWarning() << i18n("Sheet %1 could not be found for printing",*sheetlistiterator) << endl;
           continue;
         }
 
@@ -4772,7 +4772,7 @@ void View::print( KPrinter &prt )
             if( !prt.previewOnly() )
             {
                 KMessageBox::information( 0,
-                i18n("Nothing to print for sheet %1.").arg(
+                i18n("Nothing to print for sheet %1.",
                 d->activeSheet->sheetName()) );
                 //@todo: make sure we really can comment this out,
                 //       what to do with partially broken printouts?

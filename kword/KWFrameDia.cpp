@@ -111,7 +111,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame)
         kDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
     }
-    setCaption( i18n( "Frame Properties for %1" ).arg( m_frame->frameSet()->name() ) );
+    setCaption( i18n( "Frame Properties for %1" , m_frame->frameSet()->name() ) );
     KWFrameSet *fs = m_frame->frameSet()->groupmanager();
     if(fs==0L) fs=m_frame->frameSet();
     m_frameType = fs->type();
@@ -158,7 +158,7 @@ KWFrameDia::KWFrameDia( QWidget *parent, Q3PtrList<KWFrame> listOfFrames) : KDia
         return;
     }
     if ( listOfFrames.count() == 1 )
-        setCaption( i18n( "Frame Settings for %1" ).arg( f->frameSet()->name() ) );
+        setCaption( i18n( "Frame Settings for %1" , f->frameSet()->name() ) );
 
     KWFrameSet *fs = f->frameSet()->groupmanager();
     if(fs==0L) fs=f->frameSet();
@@ -530,13 +530,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         m_grid1->addWidget(m_sideHeads, row, 0);
 
         m_sideGrid = new Q3GridLayout( m_sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
-        sideTitle1 = new QLabel ( i18n("Size (%1):").arg(m_doc->unitName()),m_sideHeads);
+        sideTitle1 = new QLabel ( i18n("Size (%1):",m_doc->unitName()),m_sideHeads);
         sideTitle1->resize(sideTitle1->sizeHint());
         m_sideGrid->addWidget(sideTitle1,1,0);
         m_sideWidth= new QLineEdit(m_sideHeads,"");
         m_sideWidth->setMaxLength(6);
         m_sideGrid->addWidget(m_sideWidth,1,1);
-        sideTitle2 = new QLabel( i18n("Gap size (%1):").arg(m_doc->unitName()),m_sideHeads);
+        sideTitle2 = new QLabel( i18n("Gap size (%1):",m_doc->unitName()),m_sideHeads);
         sideTitle2->resize(sideTitle2->sizeHint());
         m_sideGrid->addWidget(sideTitle2,2,0);
         m_sideGap = new QLineEdit(m_sideHeads,"");
@@ -1878,11 +1878,11 @@ bool KWFrameDia::applyChanges()
                                             i18n( "A new frameset with the name '%1' "
                                                   "can not be made because a frameset with that name "
                                                   "already exists. Please enter another name or select "
-                                                  "an existing frameset from the list.").arg(name));
+                                                  "an existing frameset from the list.",name));
                     else
                         KMessageBox::sorry( this,
                                             i18n( "A frameset with the name '%1' "
-                                                  "already exists. Please enter another name." ).arg(name) );
+                                                  "already exists. Please enter another name.", name) );
                     m_eFrameSetName->setText(m_oldFrameSetName);
                     return false;
                 }

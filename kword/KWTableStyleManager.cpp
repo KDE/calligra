@@ -417,7 +417,7 @@ void KWTableStyleManager::addStyle()
     save();
     KWTableStyleCollection* collection = m_doc->tableStyleCollection();
 
-    QString str = i18n( "New Tablestyle Template (%1)" ).arg(numTableStyles++);
+    QString str = i18n( "New Tablestyle Template (%1)" ,numTableStyles++);
     if ( m_currentTableStyle )
     {
         m_currentTableStyle = new KWTableStyle( *m_currentTableStyle );

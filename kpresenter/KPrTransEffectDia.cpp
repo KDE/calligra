@@ -391,7 +391,7 @@ static QString getSoundFileFilter()
         if ( comma )
             str += '\n';
         comma = true;
-        str += QString( i18n( "*.%1|%2 Files" ) ).arg( *it ).arg( (*it).upper() );
+        str +=  i18n( "*.%1|%2 Files" , *it , (*it).upper() );
 
         full += QString( "*.") + (*it) + ' ';
     }

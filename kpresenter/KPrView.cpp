@@ -793,18 +793,18 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
                             if ( !KIO::NetAccess::upload( tempFile.name(), url, this ) )
                             {
                                 KMessageBox::sorry( this, i18n(
-                                   "Unable to save the file to '%1'. %2.").arg( url.prettyUrl() ).arg( KIO::NetAccess::lastErrorString() ),
+                                   "Unable to save the file to '%1'. %2.", url.prettyUrl() , KIO::NetAccess::lastErrorString() ),
                                    i18n("Save Failed") );
                             }
                         }
                         else
                             KMessageBox::error(this,
-                                   i18n("Error during saving: could not open '%1' temporary file for writing.").arg ( file.name() ),
+                                   i18n("Error during saving: could not open '%1' temporary file for writing.", file.name() ),
                                    i18n("Save Picture"));
                     }
                     else
                         KMessageBox::sorry( this, i18n(
-                            "Error during saving: could not create temporary file: %1.").arg( strerror( tempFile.status() ) ),
+                            "Error during saving: could not create temporary file: %1.", strerror( tempFile.status() ) ),
                             i18n("Save Picture") );
                 }
             }
@@ -2523,7 +2523,7 @@ void KPrView::setupActions()
         // This approach allows to edit toolbars and extract separate actions from this menu
         KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
                                                 0, this, SLOT( slotCounterStyleSelected() ),
-                                                actionCollection(), QString("counterstyle_%1").arg( styleIt.current()->style() ).toLatin1() );
+                                                actionCollection(), QString("counterstyle_%1", styleIt.current()->style() ).toLatin1() );
         act->setActionGroup( counterGroup);
         // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
         if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
@@ -4028,7 +4028,7 @@ void KPrView::updatePageInfo()
 {
     if (m_sbPageLabel)
         m_sbPageLabel->setText( QString(" ") +
-                                i18n("Slide %1/%2").arg(getCurrPgNum()).arg(m_pKPresenterDoc->getPageNums())+
+                                i18n("Slide %1/%2",getCurrPgNum(),m_pKPresenterDoc->getPageNums())+
                                 QString(" ") );
 }
 
@@ -5166,22 +5166,22 @@ void KPrView::changeZoomMenu( int zoom )
         qHeapSort( list );
 
         for (Q3ValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
-            lst.append( i18n("%1%").arg(*it) );
+            lst.append( i18n("%1%",*it) );
     }
     else
     {
-        lst << i18n("%1%").arg("33");
-        lst << i18n("%1%").arg("50");
-        lst << i18n("%1%").arg("75");
-        lst << i18n("%1%").arg("100");
-        lst << i18n("%1%").arg("125");
-        lst << i18n("%1%").arg("150");
-        lst << i18n("%1%").arg("200");
-        lst << i18n("%1%").arg("250");
-        lst << i18n("%1%").arg("350");
-        lst << i18n("%1%").arg("400");
-        lst << i18n("%1%").arg("450");
-        lst << i18n("%1%").arg("500");
+        lst << i18n("%1%","33");
+        lst << i18n("%1%","50");
+        lst << i18n("%1%","75");
+        lst << i18n("%1%","100");
+        lst << i18n("%1%","125");
+        lst << i18n("%1%","150");
+        lst << i18n("%1%","200");
+        lst << i18n("%1%","250");
+        lst << i18n("%1%","350");
+        lst << i18n("%1%","400");
+        lst << i18n("%1%","450");
+        lst << i18n("%1%""500");
     }
     actionViewZoom->setItems( lst );
 }
@@ -5189,7 +5189,7 @@ void KPrView::changeZoomMenu( int zoom )
 void KPrView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
-    QString zoomStr( i18n("%1%").arg( zoom ) );
+    QString zoomStr( i18n("%1%", zoom ) );
     int pos = list.findIndex(zoomStr);
     if( pos == -1)
     {

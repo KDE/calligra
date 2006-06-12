@@ -347,7 +347,7 @@ void SortDialog::init()
     for (int i = r.left(); i <= right; ++i)
     {
 	    QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
-	    QString colName=i18n(" (Column %1)").arg(Cell::columnName(i));
+	    QString colName=i18n(" (Column %1)",Cell::columnName(i));
 
 	    if (!guessName.isEmpty())
 	    {
@@ -361,7 +361,7 @@ void SortDialog::init()
 		  selectionMayHaveHeader=false;
             }
     }
-     // m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
+     // m_listColumn += i18n("Column %1",Cell::columnName(i));
   }
   // Entire rows selected ?
   else if ( util_isRowSelected(r) )

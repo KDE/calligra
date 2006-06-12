@@ -1004,7 +1004,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         if ( localName.isEmpty() )
             setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
         else
-            setErrorMessage( i18n( "This is not a word processing document, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+            setErrorMessage( i18n( "This is not a word processing document, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType( localName ) ) );
         return false;
     }
 
@@ -1167,7 +1167,7 @@ bool KWDocument::loadOasisPageLayout( const QString& masterPageName, KoOasisCont
             if ( properties.hasAttributeNS( "http://www.w3.org/1999/XSL/Format", "page-width" ) )
                 setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document is not OASIS-compliant." ) );
             else
-                setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
+                setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" , m_pageLayout.ptWidth , m_pageLayout.ptHeight ) );
             return false;
         }
         pageManager()->setDefaultPage(m_pageLayout);
@@ -1424,7 +1424,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     else if ( value != "application/x-kword" && value != "application/vnd.kde.kword" )
     {
         kError(32001) << "Unknown mime type " << value << endl;
-        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kword or application/vnd.kde.kword, got %1" ).arg( value ) );
+        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kword or application/vnd.kde.kword, got %1" , value ) );
         return false;
     }
     m_syntaxVersion = KWDocument::getAttribute( word, "syntaxVersion", 0 );
@@ -1432,7 +1432,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     {
         int ret = KMessageBox::warningContinueCancel(
             0, i18n("This document was created with a newer version of KWord (syntax version: %1)\n"
-                    "Opening it in this version of KWord will lose some information.").arg(m_syntaxVersion),
+                    "Opening it in this version of KWord will lose some information.",m_syntaxVersion),
             i18n("File Format Mismatch"), KStdGuiItem::cont() );
         if ( ret == KMessageBox::Cancel )
         {
@@ -1474,8 +1474,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             // Still wrong?
             if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
             {
-                setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" )
-                    .arg( pgLayout.ptWidth ).arg( pgLayout.ptHeight ) );
+                setErrorMessage( i18n( "Invalid document. Paper size: %1x%2",pgLayout.ptWidth ,pgLayout.ptHeight ) );
                 return false;
             }
         }
@@ -2495,13 +2494,13 @@ QString KWDocument::uniqueFramesetName( const QString& oldName )
     {
         // make up a new name for the frameset, use Copy[digits]-[oldname] as template.
         // Fully translatable naturally :)
-        QString searchString( "^(" + i18n("Copy%1-%2").arg("\\d*").arg("){0,1}") );
+        QString searchString( "^(" + i18n("Copy%1-%2","\\d*","){0,1}") );
         searchString = searchString.replace(QRegExp("\\-"), "\\-"); // escape the '-'
         QRegExp searcher(searchString);
         int count=0;
         do {
             newName=oldName;
-            newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):"").arg(""));
+            newName.replace(searcher,i18n("Copy%1-%2",count > 0? QString("%1").arg(count):"").arg(""));
             count++;
         } while ( frameSetByName( newName ) );
     }
