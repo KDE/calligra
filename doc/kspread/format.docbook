@@ -55,26 +55,28 @@ which has several tabbed pages:</para>
 <imagedata fileref="cellformat1.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>Data Format page.</phrase>
+<phrase><guilabel>Data Format</guilabel> page.</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para>The <guilabel>Data Format</guilabel> page of the Cell Format dialog box 
+<para>The <guilabel>Data Format</guilabel> page of the <guilabel>Cell Format</guilabel> dialog box 
 lets you control how the values of cells are displayed.</para>
 <para>The top part of this page lets you select the format to be used when 
 displaying numeric values, dates or times. A <guilabel>Preview</guilabel> pane
 allows you to see the effect of the new format.
 </para>
 <para>You can set the same data format for a row or a column by selecting the
-row or column and calling the Cell Format dialog with the &RMB;.</para>
-<note><para>You can increase the precision decimal for any number in Generic,
-Number, Percent, Money or Scientific formats using the Increase decimal
-precision icon in the Format Toolbar: <inlinemediaobject><imageobject>
+row or column and calling the <guilabel>Cell Format</guilabel> dialog with the &RMB;.</para>
+<note><para>You can increase the precision decimal for any number in <guilabel>Generic</guilabel>,
+<guilabel>Number</guilabel>, <guilabel>Percent</guilabel>, <guilabel>Money</guilabel> or 
+<guilabel>Scientific</guilabel> formats using the <guiicon>Increase decimal
+precision</guiicon> icon in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
 <imagedata fileref="increasedecimal.png" format="PNG"/>
 </imageobject></inlinemediaobject></para>
-<para>You can decrease the precision decimal for any number in Generic, Number,
-Percent, Money or Scientific formats using the Decrease decimal precision icon
-in the Format Toolbar: <inlinemediaobject><imageobject>
+<para>You can decrease the precision decimal for any number in <guilabel>Generic</guilabel>, 
+<guilabel>Number</guilabel>, <guilabel>Percent</guilabel>, <guilabel>Money</guilabel> or 
+<guilabel>Scientific</guilabel> formats using the <guiicon>Decrease decimal precision</guiicon> icon
+in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
 <imagedata fileref="decreasedecimal.png" format="PNG"/>
 </imageobject></inlinemediaobject></para>
 </note>
@@ -86,7 +88,7 @@ actual
 data type depending on the current cell data. By default, &kspread; right
 justifies numbers, dates and times within a cell and left justifies anything
 else.</para>
-<para>If the Generic format does not suit you, you can change to a specific
+<para>If the <guilabel>Generic</guilabel> format does not suit you, you can change to a specific
 format among the choices below.</para>
 </listitem>
 </varlistentry>
@@ -101,12 +103,12 @@ Numbers are right justified by default.</para>
 <varlistentry>
 <term><guilabel>Percent</guilabel></term>
 <listitem><para>When you have a number in the current cell and you switch the
-cel  format from Generic to Percent, the current cell number will be multiplied
+cell format from <guilabel>Generic</guilabel> to <guilabel>Percent</guilabel>, the current cell number will be multiplied
 by 100%.</para>
-<para>For example if you enter 2 and set the cell format to Percent, the number
-will then be 200 %. Switching back to Generic cell format will bring it back to
+<para>For example if you enter 2 and set the cell format to <guilabel>Percent</guilabel>, the number
+will then be 200 %. Switching back to <guilabel>Generic</guilabel> cell format will bring it back to
 2.</para>
-<para>You can also use the Percent icon in the Format
+<para>You can also use the <guiicon>Percent</guiicon> icon in the <guilabel>Format</guilabel>
 Toolbar: <inlinemediaobject><imageobject>
 <imagedata fileref="percent.png" format="PNG"/>
 </imageobject></inlinemediaobject></para>
@@ -114,12 +116,12 @@ Toolbar: <inlinemediaobject><imageobject>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Money</guilabel></term>
-<listitem><para>The Money format converts your number into money notation using
+<listitem><para>The <guilabel>Money</guilabel> format converts your number into money notation using
 the settings globally fixed in &kcontrolcenter; in <menuchoice><guimenu>Regional
 &amp; Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Money</guimenuitem></menuchoice>. The
 currency symbol will be displayed and the precision will be the one set in
 &kcontrolcenter;.</para>
-<para>You can also use the Currency icon in the Format Toolbar to set the
+<para>You can also use the <guiicon>Currency</guiicon> icon in the <guilabel>Format</guilabel> toolbar to set the
 cell formatting to look like your current currency:
 <inlinemediaobject><imageobject>
 <imagedata fileref="currency.png" format="PNG"/>
@@ -128,16 +130,16 @@ cell formatting to look like your current currency:
 </varlistentry>
 <varlistentry>
 <term><guilabel>Scientific</guilabel></term>
-<listitem><para>The scientific format changes your number using the scientific
+<listitem><para>The <guilabel>Scientific</guilabel> format changes your number using the scientific
 notation. For example, 0.0012 will be changed to 1.2E-03. Going back using
-Generic cell format will display 0.0012 again. The Generic cell data format does
+<guilabel>Generic</guilabel> cell format will display 0.0012 again. The <guilabel>Generic</guilabel> cell data format does
 not keep scientific notation so if you want this notation, you have to specify
 it using this menu item.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Fraction</guilabel></term>
-<listitem><para>The fraction format changes your number into a fraction. For
+<listitem><para>The <guilabel>Fraction</guilabel> format changes your number into a fraction. For
 example, 0.1 can be changed to 1/8, 2/16, 1/10, &etc;. You define the type of
 fraction by choosing it in the field on the right. If the exact fraction is not
 possible in the fraction mode you choose, the nearest closest match is chosen. 
@@ -154,7 +156,7 @@ fraction.</para>
 <listitem><para>To enter a date, you should enter it in one of the formats set
 in &kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
 Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Time &amp;
-Dates</guimenuitem></menuchoice>.There are two formats set here: the date format
+Dates</guimenuitem></menuchoice>. There are two formats set here: the date format
 and the short date format.</para>
 <para>A random natural number NN will be transformed in the date from 30st
 December 1899 (which is 0) with the number of days NN added. For example if you
@@ -165,7 +167,7 @@ in Excel in order to keep compatibility. Few people will need to calculate from
 1st January 1900 anyway and adding 9 days to 1st November 2000 for example will
 give you 10th November 2000 so all normal calculations on dates are
 correct.</para>
-<note><para>When a cell is in the date format, you can drag this cell down as
+<note><para>When a cell is in the <guilabel>Date format</guilabel>, you can drag this cell down as
 you do with numbers and the next cells will also get
 dates, each date being increased by one day.</para></note><!--TODO explain that
 better-->
@@ -222,11 +224,11 @@ negative values are shown in red.
 </textobject>
 </mediaobject>
 </para>
-<para>The <guilabel>Font</guilabel> page lets you select the font family, style,
-size 
-and color for the current cell, including some additional options like
+<para>The <guilabel>Font</guilabel> page lets you select the font family, <guilabel>Style:</guilabel>,
+<guilabel>Size:</guilabel>,  <guilabel>Weight:</guilabel>
+and <guilabel>Color:</guilabel> for the current cell, including some additional options like
 underlined or striked out text.
-The lower part of the page gives a preview of the selected text format.</para>
+The lower part of the page gives a <guilabel>Preview</guilabel> of the selected text format.</para>
 <para>The default font is set for all cells in the
 <menuchoice><guimenu>Format</guimenu><guimenuitem>Style
 Manager</guimenuitem></menuchoice> menu with the currently used style.</para>
@@ -270,7 +272,7 @@ weight to <guilabel>Bold</guilabel>.</para>
 <varlistentry>
 <term><guilabel>Color:</guilabel></term>
 <listitem><para>Choose the color for the currently selected cells' text.
-Clicking on the color bar will bring you the standard KDE Select Color dialog
+Clicking on the color bar will bring you the standard KDE <guilabel>Select Color</guilabel> dialog
 where you will be able to choose the new color. </para>
 </listitem>
 </varlistentry>
@@ -313,28 +315,28 @@ appear vertically rather than horizontally, or even at an angle.</para>
 <varlistentry>
 <term><guilabel>Horizontal</guilabel></term>
 <listitem><para>Set the content position horizontally in the cell. 
-Standard is default and is set from the data format you choose. 
-Left means the content will be displayed on the left of the cell.
-Center means the content will be in the center horizontally in the cell.
-Right means the content of the cell will be displayed on the right of the
+<guilabel>Standard</guilabel> is default and is set from the data format you choose. 
+<guilabel>Left</guilabel> means the content will be displayed on the left of the cell.
+<guilabel>Center</guilabel> means the content will be in the center horizontally in the cell.
+<guilabel>Right</guilabel> means the content of the cell will be displayed on the right of the
 cell.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Vertical</guilabel></term>
 <listitem><para>Set the content position vertically in the cell. 
-Top means the content will be displayed on top of the cell.
-Middle means the content will be in the middle vertically in the cell.
-Bottom means the content of the cell will be displayed at the bottom of the
+<guilabel>Top</guilabel> means the content will be displayed on top of the cell.
+<guilabel>Middle</guilabel> means the content will be in the middle vertically in the cell.
+<guilabel>Bottom</guilabel> means the content of the cell will be displayed at the bottom of the
 cell.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Text Option</guilabel></term>
 <listitem><para>This is only available when the rotation is 0°. 
-Wrap text wraps the text so it fits in the previous cell size. If this is not
+<guilabel>Wrap text</guilabel> wraps the text so it fits in the previous cell size. If this is not
 checked, the text will stay on one line.</para>
-<para>Vertical text puts your text vertically.</para>
+<para><guilabel>Vertical text</guilabel> puts your text vertically.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -461,8 +463,8 @@ cell itself is protected or not does not matter.</para>
 </textobject>
 </mediaobject>
 </para>
-<para>When <guilabel>Hide
-all</guilabel> is selected, Protected and Hide formula are disabled as when the
+<para>When <guilabel>Hide all</guilabel> is selected, <guilabel>Protected</guilabel> 
+and <guilabel>Hide formula</guilabel> are disabled as when the
 sheet is protected <guilabel>Hide all</guilabel> hides the cell content and the
 formula and thus masks and protects the cell content.</para>
 </listitem>
@@ -480,7 +482,7 @@ content cannot be changed.</para>
 <varlistentry>
 <term><guilabel>Hide formula</guilabel></term>
 <listitem><para>When this is checked, the cell is still visible. However,
-its contents do not appear in the Formula bar. Hiding formula is only working
+its contents do not appear in the <guilabel>Formula</guilabel> bar. Hiding formula is only working
 for cells that contain formulae so the user cannot view the formula. And the
 sheet must be protected for this to work.</para>
 </listitem>
@@ -610,7 +612,7 @@ and <guibutton>Defaults</guibutton> will bring back the default settings.</para>
 <varlistentry>
 <term><guilabel>Layout direction:</guilabel></term>
 <listitem><para>Let you choose the sheet orientation. Default is that the first
-column of the sheet is on the left. If you choose Right to Left, then the first
+column of the sheet is on the left. If you choose <guilabel>Right to Left</guilabel>, then the first
 column will be on the right and the others added from right to left.</para>
 </listitem>
 </varlistentry>

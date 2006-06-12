@@ -50,7 +50,7 @@ from the K menu.</para>
 <imagedata fileref="newdocument.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>KSpread at first run</phrase>
+<phrase>&kspread; at first run</phrase>
 </textobject>
 </mediaobject>
 When it has started you will be given the choice of opening a recent
