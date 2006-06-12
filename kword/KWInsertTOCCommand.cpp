@@ -218,8 +218,8 @@ KoParagStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int
     QString displayName;
     if ( depth >= 0 ) {
         // Don't add i18n to this one, those are internal names and must have no spaces.
-        name = QString( "Contents_Head_%1" ).arg( depth+1 );
-        displayName = i18n( "Contents Head %1" ).arg( depth+1 );
+        name = QString( "Contents_Head_%1" , depth+1 );
+        displayName = i18n( "Contents Head %1" ,depth+1 );
     } else {
         name = "Contents_Title";
         displayName = i18n( "Contents Title" );
