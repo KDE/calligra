@@ -47,24 +47,6 @@ class kchartDataSpinBox : public QSpinBox
 public:
     kchartDataSpinBox(QWidget *);
     ~kchartDataSpinBox();
-
-public slots:
-    // The user pressed the Up-button
-    void stepUp();
-    // The user pressed the Down-button
-    void stepDown();
-
-protected:
-    void interpretText(){;};
-    bool eventFilter( QObject *obj, QEvent *ev );
-
-signals:
-    // the value is changed (stepUp/stepDown was called or the focus is lost)
-    void valueChangedSpecial(int);
-
-private:
-    // True if we should ignore the next value change (see above).
-    bool  m_ignore;
 };
 
 // ----------------------------------------------------------------

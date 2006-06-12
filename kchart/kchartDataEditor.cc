@@ -39,59 +39,12 @@ namespace KChart
 kchartDataSpinBox::kchartDataSpinBox(QWidget *parent)
     : QSpinBox(parent)
 {
-    m_ignore = false;
+    lineEdit()->setReadOnly( true );
 }
 
 
 kchartDataSpinBox::~kchartDataSpinBox()
 {
-}
-
-
-void kchartDataSpinBox::stepUp()
-{
-    m_ignore = true;
-    uint const new_value = value() + 1;
-
-    QSpinBox::stepUp();
-    setValue(new_value);
-
-    emit valueChangedSpecial( value() );
-    m_ignore = false;
-}
-
-
-void kchartDataSpinBox::stepDown()
-{
-    m_ignore = true;
-
-    uint const new_value = value() - 1;
-    QSpinBox::stepDown();
-    setValue(new_value);
-
-    emit valueChangedSpecial( value() );
-    m_ignore = false;
-}
-
-
-bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
-{
-#warning "kde4 : port it :!!!!"
-#if 0
-    if ( obj == editor() ) {
-        if ( ev->type() == QEvent::FocusOut ) {
-            //kDebug() << "Focus out" << endl;
-            setValue(editor()->text().toInt());
-
-            // Don't emit valueChangedSpecial(int) twice when
-            // stepUp/stepDown has been called
-            if (!m_ignore)
-                emit valueChangedSpecial( value() );
-        }
-    }
-#endif
-    // Pass the event on to the parent class.
-    return QSpinBox::eventFilter( obj, ev );
 }
 
 
@@ -261,9 +214,9 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     topLayout->setStretchFactor(insertRemoveLayout,1);
 
     // Connect signals from the spin boxes.
-    connect(m_rowsSB, SIGNAL(valueChangedSpecial(int)), 
+    connect(m_rowsSB, SIGNAL(valueChanged(int)), 
 	    this,     SLOT(setRows(int)));
-    connect(m_colsSB, SIGNAL(valueChangedSpecial(int)), 
+    connect(m_colsSB, SIGNAL(valueChanged(int)), 
 	    this,     SLOT(setCols(int)));
 
 
@@ -490,11 +443,10 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 	rowHeader->setLabel(row, rowLabels[row]);
     }
 #endif
-
-    for (unsigned int i=0; i < rowLabels.count(); i++) {
-        m_table->setText(i + headerRows(), 0, rowLabels[i]);    
+    int max = m_table->numRows() - headerRows();
+    for (unsigned int i=0; i < max; i++) {
+        m_table->setText(i + headerRows(), 0, rowLabels[i] );
     }
-    
     updateRowHeaders();
 }
 
@@ -550,12 +502,11 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 	colHeader->setLabel(col, colLabels[col]);
     }
 #endif
-
-    for (unsigned int i = 0; i < colLabels.count(); i++)
+    int max = m_table->numRows() - headerCols();
+    for (unsigned int i = 0; i < max; i++)
     {
         m_table->setText(0,i+headerCols(),colLabels[i]);
     }
-    
     updateColHeaders();
 }
 
