@@ -22,7 +22,7 @@
 #include <QGridLayout>
 #include <QScrollBar>
 
-#include <KoCanvasView.h>
+#include <KoCanvasController.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
@@ -66,10 +66,10 @@ void KivioView::initGUI()
 
   m_canvas = new KivioCanvas(this);
 
-  KoCanvasView* canvasView = new KoCanvasView(this);
-  canvasView->setCanvas(m_canvas);
+  KoCanvasController* canvasController = new KoCanvasController(this);
+  canvasController->setCanvas(m_canvas);
 
-  layout->addWidget(canvasView, 0, 0);
+  layout->addWidget(canvasController, 0, 0);
 }
 
 #include "KivioView.moc"

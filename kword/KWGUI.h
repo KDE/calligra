@@ -29,7 +29,7 @@ class KWCanvas;
 class KWDocument;
 
 class KoRuler;
-class KoCanvasView;
+class KoCanvasController;
 class KoTabChooser;
 
 class QSplitter;
@@ -81,7 +81,7 @@ protected:
     KWCanvas        *m_canvas;
 
     QSplitter       *m_panner;
-    KoCanvasView    *m_canvasView;
+    KoCanvasController    *m_canvasView;
 };
 
 #endif

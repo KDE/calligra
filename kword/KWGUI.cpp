@@ -25,7 +25,7 @@
 #include "KWView.h"
 
 #include <KoTabChooser.h>
-#include <KoCanvasView.h>
+#include <KoCanvasController.h>
 #include <KoToolManager.h>
 
 #include <QGridLayout>
@@ -60,7 +60,7 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     gridLayout->setMargin(0);
     gridLayout->setSpacing(0);
     m_canvas = new KWCanvas( viewMode, doc, this );
-    m_canvasView = new KoCanvasView(m_right);
+    m_canvasView = new KoCanvasController(m_right);
     m_canvasView->setCanvas(m_canvas);
     KoToolManager::instance()->addControllers(m_canvasView, doc);
 KoToolManager::instance()->shapeCreatorTool(m_canvas)->setShapeId("rectangleShape");

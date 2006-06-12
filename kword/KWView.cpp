@@ -80,7 +80,7 @@
 #include <KoMainWindow.h>
 #include <KoParagDia.h>
 #include <KoPartSelectAction.h>
-#include <KoCanvasView.h>
+#include <KoCanvasController.h>
 #include <KoPageLayoutDia.h>
 #include <KoSearchDia.h>
 #include <KoStore.h>
