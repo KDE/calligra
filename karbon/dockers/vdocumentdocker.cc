@@ -804,37 +804,31 @@ VLayersTab::raiseItem()
 	//QListViewItem *newselection = 0L;
 	QListViewItemIterator it( m_layersListView );
 
-	for(; it.current(); ++it )
+	if( m_document->selection()->objects().count() )
 	{
-		if( ! it.current()->isSelected() ) continue;
-
-		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( it.current() );
-		if( layerItem )
+		cmd = new VZOrderCmd( m_document, VZOrderCmd::up );
+		m_view->part()->addCommand( cmd, true );
+	}
+	else
+	{
+		for(; it.current(); ++it )
 		{
-			VLayer *layer = layerItem->layer();
-			if( layer && m_document->canRaiseLayer( layer ) )
+			if( ! it.current()->isSelected() ) continue;
+	
+			VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( it.current() );
+			if( layerItem )
 			{
-				cmd = new VLayerCmd( m_document, i18n( "Raise Layer" ),
-								layerItem->layer(), VLayerCmd::raiseLayer );
-				//newselection = layerItem;
+				VLayer *layer = layerItem->layer();
+				if( layer && m_document->canRaiseLayer( layer ) )
+				{
+					cmd = new VLayerCmd( m_document, i18n( "Raise Layer" ),
+									layerItem->layer(), VLayerCmd::raiseLayer );
+					m_view->part()->addCommand( cmd, true );
+				}
 			}
-		}
-		else
-		{
-			VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( it.current() );
-			if( item )
-			{
-				cmd = new VZOrderCmd( m_document, item->object(), VZOrderCmd::up );
-				//newselection = item;
-			}
-		}
-		if( cmd )
-		{
-			m_view->part()->addCommand( cmd, true );
-			//if( newselection )
-			//	m_layersListView->setSelected( newselection, true );
 		}
 	}
+
 	if( cmd ) updatePreviews();
 } // VLayersTab::raiseItem
 
@@ -844,28 +838,30 @@ VLayersTab::lowerItem()
 	VCommand *cmd = 0L;
 	QListViewItemIterator it( m_layersListView );
 
-	for(; it.current(); ++it )
+	if( m_document->selection()->objects().count() )
 	{
-		if( ! it.current()->isSelected() ) continue;
-		
-		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( it.current() );
-		if( layerItem )
+		cmd = new VZOrderCmd( m_document, VZOrderCmd::down );
+		m_view->part()->addCommand( cmd, true );
+	}
+	else
+	{
+		for(; it.current(); ++it )
 		{
-			VLayer *layer = layerItem->layer();
-			if( layer && m_document->canLowerLayer( layer ) )
-				cmd = new VLayerCmd( m_document, i18n( "Lower Layer" ), layer, VLayerCmd::lowerLayer );
-		}
-		else
-		{
-			VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( it.current() );
-			if( item )
-				cmd = new VZOrderCmd( m_document, item->object(), VZOrderCmd::down );
-		}
-		if( cmd )
-		{
-			m_view->part()->addCommand( cmd, true );
+			if( ! it.current()->isSelected() ) continue;
+			
+			VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( it.current() );
+			if( layerItem )
+			{
+				VLayer *layer = layerItem->layer();
+				if( layer && m_document->canLowerLayer( layer ) )
+				{
+					cmd = new VLayerCmd( m_document, i18n( "Lower Layer" ), layer, VLayerCmd::lowerLayer );
+					m_view->part()->addCommand( cmd, true );
+				}
+			}
 		}
 	}
+
 	if( cmd ) updatePreviews();
 } // VLayersTab::lowerItem
 

@@ -92,9 +92,6 @@ VZOrderCmd::execute()
 	else if( m_state == up || m_state == down )
 	{
 		VSelection selection = *m_selection;
-
-		VObjectList objects;
-
 		// TODO : this doesn't work for objects inside groups!
 		VLayerListIterator litr( document()->layers() );
 		while( !selection.objects().isEmpty() && litr.current() )
@@ -103,34 +100,39 @@ VZOrderCmd::execute()
 			{
 				if( litr.current()->state() == VObject::deleted )
 					continue;
+				VObjectList objects = litr.current()->objects();
 				VObjectList todo;
-				VObjectListIterator itr( selection.objects() );
-				for ( ; itr.current() ; ++itr )
+				VObjectListIterator objectItr( objects );
+				// find all selected VObjects that are in the current layer
+				for ( ; objectItr.current(); ++objectItr )
 				{
-					objects = litr.current()->objects();
-					VObjectListIterator itr2( objects );
-					// find all selected VObjects that are in the current layer
-					for ( ; itr2.current(); ++itr2 )
+					VObjectListIterator selectionItr( selection.objects() );
+					for ( ; selectionItr.current() ; ++selectionItr )
 					{
-						if( itr2.current() == itr.current() )
+						if( objectItr.current() == selectionItr.current() )
 						{
-							todo.append( itr.current() );
-							// remove from selection
-							selection.take( *itr.current() );
+							if( m_state == up )
+								todo.prepend( objectItr.current() );
+							else
+								todo.append( objectItr.current() );
 						}
 					}
 				}
+
 				kdDebug(38000) << "todo.count() : " << todo.count() << endl;
 
 				// we have found the affected vobjects in this vlayer
-				VObjectListIterator itr3( todo );
-				for ( ; itr3.current(); ++itr3 )
+				VObjectListIterator todoItr( todo );
+				for ( ; todoItr.current(); ++todoItr )
 				{
 					if( m_state == up )
-						litr.current()->upwards( *itr3.current() );
+						litr.current()->upwards( *todoItr.current() );
 					else
-						litr.current()->downwards( *itr3.current() );
-					itr3.current()->setState( VObject::selected );
+						litr.current()->downwards( *todoItr.current() );
+					// remove from selection
+					selection.take( *todoItr.current() );
+					// make sure object stays selected
+					todoItr.current()->setState( VObject::selected );
 				}
 			}
 		}
