@@ -829,11 +829,11 @@ print preview.
 
 <itemizedlist>
 <listitem><para>
-Click on the <guibutton>Custom</guibutton> button.
+Click on <guilabel>Custom</guilabel>.
 </para></listitem>
 
 <listitem><para>
-Next click on the buttons <guibutton>Advanced &gt;&gt;</guibutton> and then <guibutton>Primary shortcut:</guibutton>.
+Next click on the button <guibutton>Advanced &gt;&gt;</guibutton> and then <guilabel>Primary shortcut:</guilabel>.
 </para></listitem>
 
 <listitem><para>
@@ -878,7 +878,7 @@ is used to add additional buttons to the toolbars.</para>
 <itemizedlist>
 
 <listitem>
-<para>To add a button to the File toolbar, 
+<para>To add a button to the <guilabel>File</guilabel> toolbar, 
 </para>
 
 <screenshot>
@@ -900,7 +900,7 @@ highlighted to show that it has been selected.
 </para></listitem>
 
 <listitem><para>
-Next click on the <keysym>Right arrow</keysym> button to place it in
+Next click on the <guiicon>Right arrow</guiicon> button to place it in
 the right pane.
 </para></listitem>
 
@@ -946,7 +946,7 @@ and font highlight colors.</para>
 <guimenu>Help</guimenu>
 <guimenuitem>Tip of the Day</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the Tip of the Day dialog which displays a random tip about &kformula;.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Tip of the Day</guilabel> dialog which displays a random tip about &kformula;.</action></para></listitem>
 </varlistentry>
  </variablelist>
 &help.menu.documentation;
@@ -1041,7 +1041,7 @@ shown below:</para>
 	</mediaobject>
 </screenshot>
 
-<para>If you click on <guilabel>OK</guilabel>, the editor will complain about aborted parsing. It cannot
+<para>If you click on <guibutton>OK</guibutton>, the editor will complain about aborted parsing. It cannot
 recognize one of the symbols in the formula. The displayed formula would show that the Pi symbol is
 not correctly rendered. This means that the <literal>%</literal> must be deleted. Do this and &kformula; will 
 render the mathematical font properly, as shown below.</para>
@@ -1087,7 +1087,7 @@ First copy and paste the bottom expression into the formula editor.</para>
 	</mediaobject>
 </screenshot>
 
-<para>Now click OK and place the cursor by a <literal>y</literal> and delete it. Insert the appropriate symbols as
+<para>Now click <guibutton>OK</guibutton> and place the cursor by a <literal>y</literal> and delete it. Insert the appropriate symbols as
 shown below.</para>
 
 <screenshot>

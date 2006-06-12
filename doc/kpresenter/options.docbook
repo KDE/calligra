@@ -839,7 +839,7 @@ two names? -->
 <sect2 id="configure-tools">
 <title><guilabel>Tools</guilabel></title>
 
-<para>This dialog sets the default tools settings. There are 6 tabs in this dialog.</para>
+<para>This dialog sets the default tools settings. There are 5 tabs in this dialog.</para>
 
 <sect3 id="outline">
 <title>Outline</title>
@@ -859,11 +859,11 @@ two names? -->
 <variablelist>
 <varlistentry>
 <term><guilabel>Color:</guilabel></term>
-<listitem><para>Set the color of the line. Clicking on the color will bring the standard KDE Select Color dialog.</para></listitem>
+<listitem><para>Set the color of the line. Clicking on the color will bring the standard KDE <guilabel>Select Color</guilabel> dialog.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Style:</guilabel></term>
-<listitem><para>Choose the line style from No Outline which will not draw any line to dotted lines and plain line.</para></listitem>
+<listitem><para>Choose the line style from <guilabel>No Outline</guilabel> which will not draw any line to dotted lines and plain line.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Width:</guilabel></term>
@@ -901,7 +901,7 @@ two names? -->
 </varlistentry>
 <varlistentry>
 <term><guilabel>Color:</guilabel></term>
-<listitem><para>Choose the color. White is the default one. Clicking on the color will bring you the standard KDE color chooser dialog.</para></listitem>
+<listitem><para>Choose the color. White is the default one. Clicking on the color will bring you the standard KDE <guilabel>Select Color</guilabel> dialog.</para></listitem>
 </varlistentry>
 </variablelist>
 <para>The last field displays a preview of your settings, provided the color is not white!</para>
@@ -988,7 +988,7 @@ two names? -->
 <variablelist>
 <varlistentry>
 <term><guilabel>Type:</guilabel></term>
-<listitem><para>You can choose among three options in the dropdown box: Pie, Arc or Chord.</para></listitem>
+<listitem><para>You can choose among three options in the dropdown box: <guilabel>Pie</guilabel>, <guilabel>Arc</guilabel> or <guilabel>Chord</guilabel>.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Start position:</guilabel></term>
@@ -1016,9 +1016,16 @@ two names? -->
 <textobject><phrase>Paths</phrase></textobject>
 </mediaobject>
 </screenshot>
-<para>There are two paths that are set here, the Backup Path and the Picture Path. The Backup path is the directory where your backup files are saved and the Picture Path is the directory where your pictures are saved. Highlight a path in order to modify it and click on <guilabel>Modify Path...</guilabel>. A small dialog appears and if you uncheck <guilabel>Default path</guilabel>, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.</para>
+<para>There are two paths that are set here, the <guilabel>Backup Path</guilabel> and the <guilabel>Picture Path</guilabel>. The <guilabel>Backup Path</guilabel> is the directory where your backup files are saved and the <guilabel>Picture Path</guilabel> is the directory where your pictures are saved. Highlight a path in order to modify it and click on <guilabel>Modify Path...</guilabel>. A small dialog appears and if you uncheck <guilabel>Default path</guilabel>, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.</para>
 
 </sect2>
+
+<sect2 id="opt-tts"><title>TTS</title>
+
+<para>See the <link linkend="a11y-tts">Text-to-Speech</link> section 
+in the accessibility chapter for further details.</para>
+</sect2>
+
 
 </sect1>
 

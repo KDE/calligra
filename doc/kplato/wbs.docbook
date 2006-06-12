@@ -35,11 +35,11 @@ The WBS is defined as a tree structure.
 <para>You can configure the way you want the WBS to look in your project. To do
 so, you can use the <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Define WBS Pattern...
-</guimenuitem></menuchoice> menu. This displays the WBS Definition Dialog.
+</guimenuitem></menuchoice> menu. This displays the <guilabel>WBS Definition</guilabel> Dialog.
 </para>
 
 <sect1 id="define-wbs">
-<title>The <guilabel>WBS Definition</guilabel> Dialog</title>
+<title>The WBS Definition Dialog</title>
 
 <screenshot>
 <screeninfo>WBS Definition Dialog</screeninfo>

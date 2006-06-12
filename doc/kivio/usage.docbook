@@ -94,16 +94,16 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Adjusting the Line Thickness</title>
-<para>The width of a stencil's border can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils &amp; Connectors</guimenuitem></menuchoice>. The line width can be entered in centimeters or increased/decreased using the arrows of the spin box. Or use the <guibutton>Line Width</guibutton> button on the Format toolbar. Select a width from the drop down box or select <guilabel>Custom...</guilabel> to open enter the width in the spin box.</para>
+<para>The width of a stencil's border can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils &amp; Connectors</guimenuitem></menuchoice>. The line width can be entered in centimeters or increased/decreased using the arrows of the spin box. Or use the <guibutton>Line Width</guibutton> button on the <guilabel>Format</guilabel> toolbar. Select a width from the drop down box or select <guilabel>Custom...</guilabel> to open enter the width in the spin box.</para>
 </sect2>
 
 <sect2>
 <title>Connecting Shapes Together</title>
 <para>&kivio;'s connector tool allows lines to be drawn between shapes. The lines remain connected to the shapes even when the shapes are moved to new positions on the page.</para>
-<para>The Connector tool is available from the Tools toolbar; by default shown on the left-hand side of the window. Click on this tool to begin using it; the mouse pointer will change shape.</para>
+<para>The Connector tool is available from the <guilabel>Tools</guilabel> toolbar; by default shown on the left-hand side of the window. Click on this tool to begin using it; the mouse pointer will change shape.</para>
 <para>Notice that all stencils have little blue crosses around their edges. These crosses mark points where connectors can be attached.</para>
 <para>To connect two stencils move to one of the connection points on the first stencil, hold down the &LMB; and drag a line to one of the connection points on the second stencil. The green square at the end of the line will change to red when it is over a connection point indicating that the line is attached to a stencil. </para>
-<para>When you have finished using the connector tool, click on the Arrow tool to regain normal selection functionality.</para>
+<para>When you have finished using the connector tool, click on the <guiicon>Arrow</guiicon> tool to regain normal selection functionality.</para>
 <note><para>A stencil can have multiple connectors attached to it, even at the same connection point.</para></note>
 <para>Various properties of the connector can be adjusted including line thickness and color, this is done in the same way as for stencils.</para>
 <para>Connectors may also be labeled with text. To add text to a connector simply double-click on it and enter the text in the dialog that appears. The text will be shown with a green handle next to it. Use this to modify the position of the text.</para>
@@ -146,19 +146,19 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Zooming In and Out</title>
 <para>To adjust the zoom level select <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom Level</guimenuitem></menuchoice>. This submenu contains a list of percentages from 33% to 500%; selecting one of these magnify the document by that percentage.</para>
-<para>There is also a list of zoom levels in a spin box on the Edit toolbar, by default shown at the top of the screen.</para>
+<para>There is also a list of zoom levels in a spin box on the <guilabel>Edit</guilabel> toolbar, by default shown at the top of the screen.</para>
 <para>A second method of controlling the magnification is to use the zoom tool. This is available on the <guilabel>Tools</guilabel> toolbar. This tool can be used in two ways. Clicking on the document with the zoom tool active will increase the magnification. Holding down the &Shift; key whilst clicking will decrease the magnification, &ie; zoom out.</para>
 <para>Alternatively, holding down the &LMB; and dragging out a box then releasing the mouse button will increase the magnification so that that portion of the document fills the available space.</para>
 </sect2>
 
 <sect2>
 <title>Panning the Document</title>
-<para>The pan tool lets you move the document around, adjusting the portion that is visible. This is very useful when working at high magnifications where the entire document is not completely visible. The pan tool shares a button with the zoom tool on the Tools toolbar. Once activated the mouse pointer turns into a hand. To move the document move the mouse over the currently visible portion, hold down the &LMB; and drag.</para>
+<para>The <guiicon>Pan</guiicon> tool lets you move the document around, adjusting the portion that is visible. This is very useful when working at high magnifications where the entire document is not completely visible. The <guiicon>Pan</guiicon> tool shares a button with the zoom tool on the <guilabel>Tools</guilabel> toolbar. Once activated the mouse pointer turns into a hand. To move the document move the mouse over the currently visible portion, hold down the &LMB; and drag.</para>
 </sect2>
 
 <sect2>
 <title>The Overview</title>
-<para>The overview palette provides a quick way of adjusting the zoom level and moving around the document. To enable it select <menuchoice><guimenu>View</guimenu><guisubmenu>Palettes</guisubmenu><guimenuitem>Overview</guimenuitem></menuchoice>.</para>
+<para>The <guilabel>Overview</guilabel> palette provides a quick way of adjusting the zoom level and moving around the document. To enable it select <menuchoice><guimenu>View</guimenu><guisubmenu>Palettes</guisubmenu><guimenuitem>Overview</guimenuitem></menuchoice>.</para>
 <para>A miniature representation of the document itself is shown underneath. A red rectangle indicates the portion that is currently visible. Clicking anywhere on this representation pans the view to that area. The rectangle can also be dragged.</para>
 <para>At the bottom of the docker there is a slider and a spin box for adjusting the zoom level.</para>
 </sect2>
@@ -171,7 +171,7 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Multiple Views</title>
 <para>It is possible to have multiple views of the same document displayed simultaneously.</para>
-<para>Select New View from the View menu and a new &kivio; window showing the same document will appear. This is very useful for multiple monitor setups.</para>
+<para>Select <guimenuitem>New View</guimenuitem> from the <guimenu>View</guimenu> menu and a new &kivio; window showing the same document will appear. This is very useful for multiple monitor setups.</para>
 <para>The additional windows can be closed and &kivio; will only prompt you to save the document when the last window is closed. All windows pertaining to a particular document can be closed simultaneously by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice>.</para>
 </sect2>
 

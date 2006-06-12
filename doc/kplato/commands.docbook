@@ -507,8 +507,8 @@ new resources groups and new resources names and properties.
 <guimenu>Settings</guimenu>
 <guimenuitem>Toolbars</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Show or hide the toolbars: File, Report,
-View and Project.</action>
+<listitem><para><action>Show or hide the toolbars: <guilabel>File</guilabel>, <guilabel>Report</guilabel>,
+<guilabel>View</guilabel> and <guilabel>Project</guilabel>.</action>
 </para></listitem>
 </varlistentry>
 

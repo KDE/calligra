@@ -163,9 +163,9 @@ when you click on the calendar name.</para>
 </mediaobject>
 </screenshot>
 
-<para>You can set Working or Non-working days. Click on the days you want
-as Working days for example for your project and choose Working instead
-of Undefined. Set then the work interval by choosing the start and end
+<para>You can set <guilabel>Working</guilabel> or <guilabel>Non-working</guilabel> days. Click on the days you want
+as Working days for example for your project and choose <guilabel>Working</guilabel> instead
+of <guilabel>Undefined</guilabel>. Set then the work interval by choosing the start and end
 times and click the <guibutton>Add interval</guibutton> button to add the
 working time. Click the <guibutton>Apply</guibutton> button to validate your
 choice.</para>
@@ -253,7 +253,7 @@ You can access this dialog using the
 <guibutton>New</guibutton> button in the resource group area. Click on
 this group name and add a new resource by clicking the
 <guibutton>New</guibutton> button in the resource area. This will display
-the Resource Settings dialog.</para>
+the <guilabel>Resource Settings</guilabel> dialog.</para>
 
 <screenshot>
 <screeninfo>The Resources Settings dialog</screeninfo>

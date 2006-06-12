@@ -188,7 +188,7 @@ window the component uses when run as a stand-alone application. </para>
 <para>Each new component is opened in a new tab. Using the &RMB; on each tab title, you can save the document in that tab or close that tab. The small button on the right bottom with a red cross also allows you to close the current tab.</para>
 
 <para>A special action common to all components is the
- <menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem> </menuchoice> action in &koshell; menubar. It opens the Insert Object dialog which starts the &koffice; component as if it was a stand-alone application.</para>
+ <menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem> </menuchoice> action in &koshell; menubar. It opens the <guilabel>Insert Object</guilabel> dialog which starts the &koffice; component as if it was a stand-alone application.</para>
 
 <screenshot>
 <screeninfo>&koshell; Insert Object dialog</screeninfo>
@@ -226,7 +226,7 @@ window the component uses when run as a stand-alone application. </para>
 <guimenu>File</guimenu>
 <guimenuitem>New</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Open</action> the Insert Object dialog which lists all possible new documents you can open.</para></listitem>
+<listitem><para><action>Open</action> the <guilabel>Insert Object</guilabel> dialog which lists all possible new documents you can open.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -375,7 +375,7 @@ author.</action></para>
 <guimenu>Settings</guimenu>
 <guimenuitem>Hide/Show Toolbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Toggle</action> the Main Toolbar.</para></listitem>
+<listitem><para><action>Toggle</action> the <guilabel>Main</guilabel> Toolbar.</para></listitem>
 </varlistentry>
 
 

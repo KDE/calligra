@@ -295,7 +295,7 @@ change various things or simply dismiss all options from the
 wizard by choosing <guibutton>Cancel</guibutton>.
 </para>
 <para>
-If you choose Finish all your choices in the wizard will
+If you choose <guibutton>Finish</guibutton> all your choices in the wizard will
 be integrated in the chart and you can continue to enter
 some data and do some fine tuning of various options.
 </para>
@@ -440,15 +440,15 @@ The legend contains the names for all data sets with the respective
 colors, this is important to identify the data on the chart.
 </para>
 <para>
-The General box holds the title of the legend, which is displayed
+The <guilabel>General</guilabel> box holds the title of the legend, which is displayed
 at the top of the legend box.
-The Position box can be used to place the legend at various locations
+The <guilabel>Position</guilabel> box can be used to place the legend at various locations
 on the chart. Use the central button to hide the legend.
 </para>
 <para>
-The Font box can be used to set
+The <guilabel>Font</guilabel> box can be used to set
 different fonts for the legend title and the individual entries.
-Additionally you can set different colors in the Color box.
+Additionally you can set different colors in the <guilabel>Color</guilabel> box.
 </para>
 </sect2>
 <sect2 id="config-axes">
@@ -462,7 +462,7 @@ Additionally you can set different colors in the Color box.
   </mediaobject>
 </screenshot>
 <para>
-The Axes page holds configuration for the chart axes. This
+The <guilabel>Axes</guilabel> page holds configuration for the chart axes. This
 page highly depends on the chart type chosen. For the line
 chart you can set linear or logarithmic scales and turn the grid
 on and off.
@@ -479,9 +479,9 @@ on and off.
   </mediaobject>
 </screenshot>
 <para>
-On the colors page you can choose the colors for the individual
-data sets. You can also set colors for some general chart parts
-like axes line color and grid color.
+On the <guilabel>Colors</guilabel> page you can choose the <guilabel>Colors</guilabel> for the individual
+data sets. You can also set <guilabel>Colors</guilabel> for some general chart parts
+like axes <guilabel>Line color</guilabel> and <guilabel>Grid color</guilabel>.
 </para>
 </sect2>
 <sect2 id="config-font">
@@ -495,7 +495,7 @@ like axes line color and grid color.
   </mediaobject>
 </screenshot>
 <para>
-The font page can be used to configure various fonts like
+The <guilabel>Font</guilabel> page can be used to configure various fonts like
 titles, axes labels and so on. Some of these fonts can
 be set on other pages as well, but on the font page you
 have them all in one place.
@@ -512,7 +512,7 @@ have them all in one place.
   </mediaobject>
 </screenshot>
 <para>
-On the background page you will find various options for tweaking
+On the <guilabel>Background</guilabel> page you will find various options for tweaking
 the background settings of the chart. You can either choose
 different background colors or even a background picture.
 </para>
@@ -523,7 +523,7 @@ different background colors or even a background picture.
 This short overview of the configuration options gave you an
 introduction to the configuration possibilities of your chart,
 it is by no means complete. Different chart types like <guilabel>Bar</guilabel>,
-<guilabel>Line</guilabel> and <guilabel>Pie</guilabel>,have
+<guilabel>Line</guilabel> and <guilabel>Pie</guilabel>, have
 additional specialised configuration pages and you are welcome
 to look around, try different chart types and look at the
 configuration possibilities. Use the tooltips and read the
@@ -624,7 +624,7 @@ clicking on them.
   </mediaobject>
 </screenshot>
 <para>
-Simply click the OK button when you are done. This will present
+Simply click the <guibutton>OK</guibutton> button when you are done. This will present
 to you a simple bar chart.
 </para>
 <screenshot>
@@ -704,7 +704,7 @@ of the time what the average user expects.
 <title>Giving it a 3D Look</title>
 <para>
 Some types of charts like <guilabel>Bar</guilabel> and <guilabel>Pie</guilabel>
-have an adiitional configuration page.
+have an additional configuration page.
 </para>
 <screenshot>
 <screeninfo>Options - 3D Parameters</screeninfo>
@@ -989,7 +989,7 @@ among many image formats like PNG, SVG, &krita;, Gimp or JPG.
 <guimenuitem>Import Data...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Imports values from a CSV (Comma Separated Values) file, much like
-the CSV import in K&kspread;. Note that you can specify various
+the CSV import in &kspread;. Note that you can specify various
 options and different separators (not just commas).</action>
 </para></listitem>
 </varlistentry>
@@ -1234,11 +1234,11 @@ the chart wizard.</para>
 
 <itemizedlist>
 <listitem><para>
-Click on the <guilabel>Custom</guilabel> button.
+Click on <guilabel>Custom</guilabel>.
 </para></listitem>
 
 <listitem><para>
-Next click on the <guilabel>Primary shortcut:</guilabel> button.
+Next click on <guilabel>Primary shortcut:</guilabel>.
 </para></listitem>
 
 <listitem><para>
@@ -1272,7 +1272,7 @@ is used to add additional buttons to the toolbars.</para>
 <itemizedlist>
 
 <listitem>
-<para>To add a button to the File toolbar, 
+<para>To add a button to the <guilabel>File</guilabel> toolbar, 
 </para>
 
 <screenshot>
@@ -1294,7 +1294,7 @@ highlighted showing that it has been selected.
 </para></listitem>
 
 <listitem><para>
-Next click on the <keysym>Right arrow</keysym> button to place it in
+Next click on the <guiicon>Right arrow</guiicon> button to place it in
 the right pane.
 </para></listitem>
 
