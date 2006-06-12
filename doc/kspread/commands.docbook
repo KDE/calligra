@@ -569,7 +569,7 @@ See the section
 <guimenu>Insert</guimenu>
 <guimenuitem>Object...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Embed another KOffice document into the sheet.</action>
+<listitem><para><action>Embed another &koffice; document into the sheet.</action>
 </para></listitem>
 </varlistentry>
 
@@ -960,7 +960,7 @@ by &kspread;.</action>
 <guimenuitem>Protect Sheet...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
-<action>Protect the sheet with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the sheet. Protecting a sheet means protecting all cells in the sheet. In a protected sheet, the cells cannot be reformated or overwritten.</action>
+<action>Protect the sheet with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the sheet. Protecting a sheet means protecting all cells in the sheet. In a protected sheet, the cells cannot be reformatted or overwritten.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1360,7 +1360,7 @@ cell of the current selection of cells into the selected cell.</action>
 <term><menuchoice>
 <guimenuitem>Show Related Words</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the Related Words dialog box.</action> 
+<listitem><para><action>Opens the <guilabel>Related Words</guilabel> dialog box.</action> 
 </para></listitem>
 </varlistentry>
 

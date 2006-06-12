@@ -1,4 +1,4 @@
-<chapter id="hardsums">
+	<chapter id="hardsums">
 <chapterinfo>
 <authorgroup>
 <author>
@@ -465,8 +465,8 @@ Handbook.</para>
 <para>Protecting the document means that without the password a user cannot add
 or delete sheets. Document protection does not protect cells.</para>
 <para>Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document</guimenuitem></menuchoice>.
-A dialog appears asking you for a password. The Password strength meter
+Document...</guimenuitem></menuchoice>.
+A dialog appears asking you for a password. The <guilabel>Password:</guilabel> strength meter
 indicates if your password is secure enough. The longer the indicator is, the
 more secure your password.</para>
 <para>
@@ -524,7 +524,7 @@ unprotected within a protected sheet, see <link
 linkend="cell-protection">next section</link>.</para>
 <para>To protect a sheet, select
 <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.
-A  dialog appears asking you for a password. The Password strength meter
+A  dialog appears asking you for a password. The <guilabel>Password</guilabel> strength meter
 indicates if your password is secure enough. The longer the indicator is, the
 more secure will be your password.</para>
 <para>That password will then be required to unprotect the sheet.</para>
@@ -573,7 +573,7 @@ In the menubar, select <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
 Format...</guimenuitem></menuchoice>. 
 </para></listitem>
 <listitem><para>
-In the dialog that appears, go to the Cell Protection tab.
+In the dialog that appears, go to the <guilabel>Cell Protection</guilabel> tab.
 </para></listitem>
 <listitem><para>
 Check <guilabel>Hide all</guilabel> and uncheck <guilabel>Protected</guilabel>
@@ -593,7 +593,7 @@ the <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
 Format...</guimenuitem></menuchoice> menu.
 </para></listitem>
 <listitem><para>
-In the dialog that appears, go to the Cell Protection tab.
+In the dialog that appears, go to the <guilabel>Cell Protection</guilabel> tab.
 </para></listitem>
 <listitem><para>
 Click on the box next to <guilabel>Protected</guilabel> then click
@@ -640,12 +640,12 @@ protected.</para>
 non-contiguous cells with <keycombo action="simul">&Ctrl;</keycombo> and
 then choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
 Format...</guimenuitem></menuchoice> menu. In the Cell format
-dialog, click the Protection tab and select <guilabel>Hide formula</guilabel>.
+dialog, click the <guilabel>Cell Protection</guilabel> tab and select <guilabel>Hide formula</guilabel>.
 After you protect the sheet, the results of the formulae will be visible, but
 the formulae will not. </para>
 <para>You have now to protect the sheet: choose
 <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
-to display the Protect Sheet dialog box. Enter a safe password twice to prevent
+to display the <guilabel>Protect Sheet</guilabel> dialog box. Enter a safe password twice to prevent
 others from unprotecting the sheet. </para>
 <para>When <guilabel>Hide formula</guilabel> is enabled and
 <guilabel>Protected</guilabel> is disabled, the formula is hidden after
@@ -656,7 +656,7 @@ protecting the sheet but the cell content can be changed.</para>
 <imagedata fileref="hideformula5.png" format="PNG"/>
 </imageobject>    
 <textobject>
-<phrase>Hide formula is enabled but the cell is not protected and the
+<phrase><guilabel>Hide formula</guilabel> is enabled but the cell is not protected and the
 sheet is protected</phrase>
 </textobject>
 </mediaobject>
@@ -670,7 +670,7 @@ content cannot be changed.</para>
 <imagedata fileref="hideformula2.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>Hide formula and Protected are enabled in Cell Protection and the
+<phrase><guilabel>Hide formula</guilabel> and <guilabel>Protected</guilabel> are enabled in <guilabel>Cell Protection</guilabel> and the
 sheet is protected</phrase>
 </textobject>
 </mediaobject>

@@ -120,7 +120,7 @@ at the bottom of the worksheet.
 
 <varlistentry>
 <term><guilabel>Show formula toolbar</guilabel></term>
-<listitem><para>Here is where you can choose to show or hide the Formula bar.
+<listitem><para>Here is where you can choose to show or hide the <guilabel>Formula</guilabel> bar.
 </para></listitem>
 </varlistentry>
 
@@ -159,8 +159,8 @@ range of options in the drop down selection box.
 
 <varlistentry>
 <term><guilabel>Pressing enter moves cell cursor:</guilabel></term>
-<listitem><para>Select whether pressing the <keysym>Enter
-</keysym> key will move the cursor <guilabel>Down</guilabel>, <guilabel>Up</guilabel>, 
+<listitem><para>Select whether pressing the <keysym>Enter</keysym> 
+key will move the cursor <guilabel>Down</guilabel>, <guilabel>Up</guilabel>, 
 <guilabel>Right</guilabel>, <guilabel>Left</guilabel> or <guilabel>Down, 
 First Column</guilabel> as determined by the setting in this drop down selection box.
 </para></listitem>
@@ -222,7 +222,7 @@ the <menuchoice><guimenu>Format</guimenu><guimenuitem>Sheet</guimenuitem><guimen
 <para>This page also lets you select the color of the lines used to indicate 
 the printed page borders when the <guimenuitem>Show Page Borders</guimenuitem> 
 box in the <guimenu>View</guimenu> menu is checked.</para>
-<para>Click on the current color to display the standard KDE Select Color dialog.</para>
+<para>Click on the current color to display the standard KDE <guilabel>Select Color</guilabel> dialog.</para>
 
 <para><variablelist>
 
