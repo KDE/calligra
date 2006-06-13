@@ -17,7 +17,7 @@ $doxygenconftmp=".doxygen.conf.tmp";
 
 #init
 print "Finding all sections...";
-@output=`find . -name Mainpage.dox -type f`;
+@output=`find . -name Mainpage.dox -type f | grep -v _darcs`;
 foreach $section (@output) {
     chomp($section);
     $section=~s/^\.\///;
