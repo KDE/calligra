@@ -50,7 +50,9 @@ namespace KoMacroTest {
 	* Register KoMacroTest::CommonTests as TestSuite.
 	*/
 	
+	KUNITTEST_SUITE("KoMacroTestSuite");
 	KUNITTEST_REGISTER_TESTER(ActionTests);
+	
 
 	class ActionTests::Private
 	{

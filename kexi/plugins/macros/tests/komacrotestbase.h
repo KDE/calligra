@@ -72,10 +72,4 @@
 		return; \
 	}
 
-
-
-namespace KoMacroTest {
-	KUNITTEST_SUITE("KoMacroTestSuite");
-}
-
 #endif
