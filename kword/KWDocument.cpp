@@ -2494,7 +2494,8 @@ QString KWDocument::uniqueFramesetName( const QString& oldName )
     {
         // make up a new name for the frameset, use Copy[digits]-[oldname] as template.
         // Fully translatable naturally :)
-        QString searchString( "^(" + i18n("Copy%1-%2","\\d*","){0,1}") );
+        KLocalizedString localizedString = ki18n("Copy%1-%2");
+        QString searchString = localizedString.subs("\\d*").subs("){0,1}").toString();
         searchString = searchString.replace(QRegExp("\\-"), "\\-"); // escape the '-'
         QRegExp searcher(searchString);
         int count=0;
