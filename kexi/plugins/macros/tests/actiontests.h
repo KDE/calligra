@@ -58,18 +58,27 @@ namespace KoMacroTest {
 			void tearDown();
 
 			/**
-			* Test the @a KoMacro::Action functionality.
-			*/
-			void testAction();
-			
-			/**
 			* Subtest for the @a KoMacro::Action functionality.
 			*/
 			void testMacro();
+
+			/**
+			* Test the @a KoMacro::Action functionality.
+			*/
+			void testAction();
+
 			/**
 			* Subtest for the @a KoMacro::Action functionality.
 			*/
-			void testMacroItem();
+			void testMacroItemString();
+			/**
+			* Subtest for the @a KoMacro::Action functionality.
+			*/
+			void testMacroItemInt();
+			/**
+			* Subtest for the @a KoMacro::Action functionality.
+			*/
+			void testMacroItemBool();
 			/**
 			* Subtest for the @a KoMacro::Action functionality.
 			*/			

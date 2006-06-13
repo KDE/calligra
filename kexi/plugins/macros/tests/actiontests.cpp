@@ -127,6 +127,8 @@ void ActionTests::setUp()
 	
 	d->doomdocument->setContent(xml);
 	d->macro = KoMacro::Manager::self()->createMacro("testMacro");
+	d->macro->parseXML(d->doomdocument->documentElement());
+	d->macro->execute(this);
 }
 
 void ActionTests::tearDown()
@@ -140,14 +142,135 @@ void ActionTests::tearDown()
 void ActionTests::testMacro()
 {
 	kdDebug()<<"===================== testMacro() ======================" << endl;
-	//Is our XML parseable ?
-	KOMACROTEST_ASSERT(d->macro->parseXML(d->doomdocument->documentElement()),true);
-	d->macro->execute(this);
+	
+	//fetch Items and ..
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+
+	//... check that there is one
+	KOMACROTEST_XASSERT( items.count(), sizetype(0) );
+}
+
+void ActionTests::testAction()
+{
+	const QString testString = "teststring";
+	const QString testInt = "testint";
+	const QString testBool = "testbool";
+	
+	kdDebug()<<"===================== testAction() ======================" << endl;
+
+	//create list of KSharedPtr from the childs of the macro
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+
+	//check that there is one
+	KOMACROTEST_XASSERT( items.count(), sizetype(0) );
+	//get it
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
+	//-> check that it is not null
+	KOMACROTEST_XASSERT(sizetype(actionptr.data()), sizetype(0));
+}
+
+void ActionTests::testMacroItemString()
+{
+	const QString testString = "teststring";
+
+	kdDebug()<<"===================== testMacroItemString() ======================" << endl;	
+	
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
+	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable(testString);
+	
+	//create new macroitem for testing
+	KoMacro::MacroItem* macroitem = new KoMacro::MacroItem();
+	//set the action
+	macroitem->setAction(d->testaction);
+	
+	//append the macroitem to testitems	
+	items.append(macroitem);
+	
+	//increased ??
+	KOMACROTEST_ASSERT( items.count(), sizetype(2) );
+		
+	//Manipulate the macroitem
+	macroitem->setVariable(testString, "TeStString");
+	variableptr = macroitem->variable(testString);
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	KOMACROTEST_ASSERT(variableptr->variant().toString(),QString("TeStString"));
+		
+	
+	//secondway for appending an macroitem
+	//add the manipulated macroitem
+	d->macro->addItem(macroitem);
+
+	//increased ??
+	KOMACROTEST_ASSERT( items.count(), sizetype(3));
+	
+}
+
+void ActionTests::testMacroItemInt()
+{
+	const QString testInt = "testint";
+
+	kdDebug()<<"===================== testMacroItemInt() ======================" << endl;	
+
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();	
+	
+	//create new macroitem for testing
+	KoMacro::MacroItem* macroitem = new KoMacro::MacroItem();
+	//set the action
+	macroitem->setAction(d->testaction);
+	items.append(macroitem);
+
+	macroitem->setVariable(testInt,INT_MIN);
+	KSharedPtr<KoMacro::Variable> variableptr = macroitem->variable(testInt);
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(INT_MIN));
+	
+	macroitem->setVariable(testInt,-1);
+	variableptr = macroitem->variable(testInt);
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(-1));
+	
+	macroitem->setVariable(testInt,QVariant(0));
+	variableptr = macroitem->variable(testInt);
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(0));
+	
+	macroitem->setVariable(testInt,1);
+	variableptr = macroitem->variable(testInt);
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(1));
+	
+	macroitem->setVariable(testInt,INT_MAX);
+	variableptr = macroitem->variable(testInt);
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(INT_MAX));	
+}
+
+void ActionTests::testMacroItemBool()
+{
+	const QString testBool = "testbool";	
+
+	kdDebug()<<"===================== testMacroItemBool() ======================" << endl;	
+
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();	
+	
+	//create new macroitem for testing
+	KoMacro::MacroItem* macroitem = new KoMacro::MacroItem();
+	//set the action
+	macroitem->setAction(d->testaction);	
+	items.append(macroitem);
+
+	macroitem->setVariable(testBool,"false");
+	KSharedPtr<KoMacro::Variable> variableptr = macroitem->variable(testBool);
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	KOMACROTEST_ASSERT(variableptr->variant().toBool(),false);
 }
 
 void ActionTests::testText()
 {
-	//
+	kdDebug()<<"===================== testText() ======================" << endl;		
 	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
 	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 
@@ -164,7 +287,7 @@ void ActionTests::testText()
 
 void ActionTests::testName()
 {
-	//R
+	kdDebug()<<"===================== testName() ======================" << endl;			
 	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
 	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 
@@ -178,7 +301,7 @@ void ActionTests::testName()
 
 void ActionTests::testComment()
 {
-	//R
+	kdDebug()<<"===================== testComment() ======================" << endl;			
 	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
 	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 
@@ -191,7 +314,7 @@ void ActionTests::testComment()
 }
 
 void ActionTests::testVariableString() {
-	//R
+	kdDebug()<<"===================== testVariableString() ======================" << endl;			
 	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();	
 	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 	
@@ -225,7 +348,7 @@ void ActionTests::testVariableString() {
 }
 
 void ActionTests::testVariableInt() {
-	//R
+	kdDebug()<<"===================== testVariableInt() ======================" << endl;			
 	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();	
 	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 	
@@ -260,7 +383,7 @@ void ActionTests::testVariableInt() {
 }
 
 void ActionTests::testVariableBool() {
-	//R
+	kdDebug()<<"===================== testVariableBool() ======================" << endl;			
 	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();	
 	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();	
 	
@@ -276,95 +399,5 @@ void ActionTests::testVariableBool() {
 	variableptr = actionptr->variable("testbool");
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	KOMACROTEST_ASSERT(variableptr->variant().toBool(),false);	
-}
-
-void ActionTests::testAction()
-{
-	const QString testString = "teststring";
-	const QString testInt = "testint";
-	const QString testBool = "testbool";
-	
-	//TODO: CLEANUP!!!!!!	
-	//TODO: test manipulation of action and macroitem and context.
-	
-	kdDebug()<<"===================== testAction() ======================" << endl;
-
-	//create list of KSharedPtr from the childs of the macro
-	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
-
-	//check that there is one
-	KOMACROTEST_ASSERT( items.count(), sizetype(3) );
-	//get it
-	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
-	//-> check that it is not null
-	KOMACROTEST_XASSERT(sizetype(actionptr.data()), sizetype(0));
-}
-	
-void ActionTests::testMacroItem()
-{
-	//Redundant ...
-	const QString testString = "teststring";	
-	const QString testInt = "testint";		
-	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
-	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
-	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable(testString);
-	
-
-	//create new macroitem for testing
-	KoMacro::MacroItem* macroitem = new KoMacro::MacroItem();
-	//set the action
-	macroitem->setAction(d->testaction);
-	
-	//append the macroitem to testitems	
-	items.append(macroitem);
-	
-	//increased ??
-	KOMACROTEST_ASSERT( items.count(), sizetype(2) );
-		
-	//Manipulate the macroitem
-	macroitem->setVariable("teststring", "TeStString");
-	variableptr = macroitem->variable("teststring");
-	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
-	KOMACROTEST_ASSERT(variableptr->variant().toString(),QString("TeStString"));
-		
-	macroitem->setVariable(testInt,INT_MIN);
-	variableptr = macroitem->variable(testInt);
-	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
-	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(INT_MIN));
-	
-	macroitem->setVariable(testInt,-1);
-	variableptr = macroitem->variable(testInt);
-	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
-	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(-1));
-	
-	macroitem->setVariable(testInt,QVariant(0));
-	variableptr = macroitem->variable(testInt);
-	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
-	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(0));
-	
-	
-	macroitem->setVariable(testInt,1);
-	variableptr = macroitem->variable(testInt);
-	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
-	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(1));
-	
-	macroitem->setVariable(testInt,INT_MAX);
-	variableptr = macroitem->variable(testInt);
-	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
-	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(INT_MAX));
-	
-	macroitem->setVariable("testbool","false");
-	variableptr = macroitem->variable("testbool");
-	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
-	KOMACROTEST_ASSERT(variableptr->variant().toBool(),false);
-	
-	//secondway for appending an macroitem
-	//add the manipulated macroitem
-	d->macro->addItem(macroitem);
-
-
-	//increased ??
-	KOMACROTEST_ASSERT( items.count(), sizetype(3));
-	
 }
 #include "actiontests.moc"
