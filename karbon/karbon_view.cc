@@ -107,7 +107,7 @@
 #include "vtypebuttonbox.h"
 #include "vstatebutton.h"
 #include "vcanvas.h"
-#include "KoCanvasView.h"
+#include "KoCanvasController.h"
 #include "vtoolbox.h"
 #include "karbon_drag.h"
 // #include "vselectnodestool.h"
@@ -200,7 +200,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_canvas = new KarbonCanvas( p->document().layers() ); //, this, p );
 	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
-	m_canvasView = new KoCanvasView(this);
+	m_canvasView = new KoCanvasController(this);
 	m_canvasView->setCanvas(m_canvas);
 	m_canvasView->centerCanvas( true );
 
