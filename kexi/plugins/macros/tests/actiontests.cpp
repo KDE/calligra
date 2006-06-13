@@ -49,7 +49,7 @@ namespace KoMacroTest {
 	/**
 	* Register KoMacroTest::CommonTests as TestSuite.
 	*/
-	KUNITTEST_SUITE("KoMacroTestSuite")
+	
 	KUNITTEST_REGISTER_TESTER(ActionTests);
 
 	class ActionTests::Private
@@ -90,7 +90,6 @@ typedef QValueList< KSharedPtr<KoMacro::MacroItem> >::size_type sizetype;
 * - get rid of all double declarations
 * - create xtra-class for Variable/Macroitem tests 
 * - add comments
-* - exit in Setup ?
 ******************************************************************************/
 ActionTests::ActionTests()
 	: KUnitTest::SlotTester()
@@ -109,7 +108,6 @@ void ActionTests::setUp()
 {
 	d->xmlguiclient = new KXMLGUIClient();
 	
-	//Singelton more or less ...
 	if (::KoMacro::Manager::self() == 0) {	
 		::KoMacro::Manager::init( d->xmlguiclient );
 	}
@@ -147,7 +145,7 @@ void ActionTests::testMacro()
 
 void ActionTests::testText()
 {
-	//R
+	//
 	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = d->macro->items();
 	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
 

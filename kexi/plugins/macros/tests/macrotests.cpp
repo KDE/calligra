@@ -49,7 +49,7 @@ namespace KoMacroTest {
 	/**
 	* Register KoMacroTest::CommonTests as TestSuite.
 	*/
-	KUNITTEST_SUITE("KoMacroTestSuite")
+	//KUNITTEST_SUITE("KoMacroTestSuite")
 	KUNITTEST_REGISTER_TESTER(MacroTests);
 
 	class MacroTests::Private
