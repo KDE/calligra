@@ -218,7 +218,10 @@
                 <string>&amp;Address Book</string>
             </property>
             <property name="alignment">
-                <set>WordBreak|AlignCenter</set>
+                <set>AlignCenter</set>
+            </property>
+            <property name="wordWrap">
+                <bool>true</bool>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>mAvailableView</cstring>
@@ -237,7 +240,10 @@
                 <string>&amp;Selected Addresses</string>
             </property>
             <property name="alignment">
-                <set>WordBreak|AlignCenter</set>
+                <set>AlignCenter</set>
+            </property>
+            <property name="wordWrap">
+                <bool>true</bool>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>mSelectedView</cstring>
