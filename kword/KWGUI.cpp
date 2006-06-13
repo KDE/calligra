@@ -63,7 +63,7 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     m_canvasView = new KoCanvasController(m_right);
     m_canvasView->setCanvas(m_canvas);
     KoToolManager::instance()->addControllers(m_canvasView, doc);
-KoToolManager::instance()->shapeCreatorTool(m_canvas)->setShapeId("rectangleShape");
+KoToolManager::instance()->shapeCreatorTool(m_canvas)->setShapeId(43751);
 
     gridLayout->addWidget( m_canvasView, 1, 1 );
 
