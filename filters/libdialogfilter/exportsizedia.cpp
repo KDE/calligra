@@ -38,11 +38,12 @@
 #include "exportsizedia.h"
 
 
-ExportSizeDia::ExportSizeDia( int width, int height, 
+ExportSizeDia::ExportSizeDia( int width, int height,
 			    QWidget *parent )
-    : KDialog( parent,
-		   i18n("Export Filter Parameters" ), KDialog::Ok|KDialog::Cancel )
+    : KDialog( parent)
 {
+    setCaption( i18n("Export Filter Parameters" ) );
+    setButtons( KDialog::Ok|KDialog::Cancel );
     kapp->restoreOverrideCursor();
 
     setupGUI();
@@ -72,12 +73,12 @@ void ExportSizeDia::setupGUI()
     setMainWidget(page);
 
 #if 0
-    Q3BoxLayout* mainLayout = new Q3VBoxLayout( page, 
-					      KDialog::marginHint(), 
+    Q3BoxLayout* mainLayout = new Q3VBoxLayout( page,
+					      KDialog::marginHint(),
 					      KDialog::spacingHint() );
 #else
     Q3GridLayout *mainLayout = new Q3GridLayout( page, 5, 2,
-					       KDialog::marginHint(), 
+					       KDialog::marginHint(),
 					       KDialog::spacingHint() );
 #endif
     m_proportional = new QCheckBox( page, "proportional" );
@@ -143,7 +144,7 @@ void ExportSizeDia::widthChanged( int width )
     disconnectAll();
     width = qMin( width, m_realWidth * 10 );
     width = qMax( width, m_realWidth / 10 );
-    double percent = (100.0 * static_cast<double>( width ) 
+    double percent = (100.0 * static_cast<double>( width )
 		      / static_cast<double>( m_realWidth ));
     m_percWidthEdit->setValue(  percent  );
     if ( m_proportional->isChecked() ) {
