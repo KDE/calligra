@@ -32,11 +32,15 @@ namespace KPlato
 {
 
 MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialogBase( parent),
       project(p)
 {
+    setCaption( i18n("Project Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     panel = new MainProjectPanel(project, this);
-    
+
     setMainWidget(panel);
     enableButtonOK(false);
     resize( QSize(500, 410).expandedTo(minimumSizeHint()));
@@ -47,7 +51,7 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char *na
 void MainProjectDialog::slotOk() {
     if (!panel->ok())
         return;
-    
+
     accept();
 }
 

@@ -34,23 +34,31 @@ namespace KPlato
 {
 
 TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime, bool baseline, QWidget *p)
-    : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, "Task Settings Dialog", true, true)
+    : KPageDialog(p)
 {
+    setCaption( i18n("Task Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    setFaceType( KPageDialog::Tabbed );
+    enableButtonSeparator( true );
     KVBox *page;
-    
+
     // Create all the tabs.
-    page = addVBoxPage(i18n("&General"));
+    page =  new KVBox();
+    addPage(page, i18n("&General"));
     m_generalTab = new TaskGeneralPanel(task, workTime, baseline, page);
 
-    page = addVBoxPage(i18n("&Resources"));
+    page =  new KVBox();
+
+    addPage(page, i18n("&Resources"));
     m_resourcesTab = new RequestResourcesPanel(page, task, baseline);
-    
-    page = addVBoxPage(i18n("&Cost"));
+    page =  new KVBox();
+    addPage(page, i18n("&Cost"));
     m_costTab = new TaskCostPanel(task, accounts, page);
-    
+
     // Set the state of all the child widgets.
     enableButtonOK(false);
-    
+
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
@@ -87,7 +95,7 @@ void TaskDialog::slotOk() {
         return;
     if (!m_resourcesTab->ok())
         return;
-    
+
     accept();
 }
 

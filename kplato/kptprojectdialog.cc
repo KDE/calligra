@@ -45,9 +45,13 @@ namespace KPlato
 {
 
 ProjectDialog::ProjectDialog(Project &p, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialog( parent),
       project(p)
 {
+    setCaption( i18n("Project Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     dia = new ProjectDialogImpl(this);
     resourcesTab = new ResourcesPanel(dia, &project);
     dia->daTabs->insertTab(resourcesTab, i18n("Resources"), 1);

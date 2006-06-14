@@ -20,7 +20,7 @@
 #ifndef KPTMILESTONEPROGRESSDIALOG_H
 #define KPTMILESTONEPROGRESSDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KCommand;
 
@@ -31,7 +31,7 @@ class MilestoneProgressPanel;
 class Task;
 class Part;
 
-class MilestoneProgressDialog : public KDialogBase {
+class MilestoneProgressDialog : public KDialog {
     Q_OBJECT
 public:
     MilestoneProgressDialog(Task &task, QWidget *parent=0);

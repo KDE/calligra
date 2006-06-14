@@ -24,7 +24,7 @@
 #include "kptprojectdialogbase.h"
 //#include "kptresourcespanel.h"
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <QString>
 
@@ -50,7 +50,7 @@ signals:
     void schedulingTypeChanged(int activated);
 };
 
-class ProjectDialog : public KDialogBase {
+class ProjectDialog : public KDialog {
     Q_OBJECT
 public:
     ProjectDialog(Project &project, QWidget *parent=0,

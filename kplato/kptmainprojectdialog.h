@@ -20,7 +20,7 @@
 #ifndef KPTMAINPROJECTDIALOG_H
 #define KPTMAINPROJECTDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KCommand;
 
@@ -32,7 +32,7 @@ class MainProjectPanel;
 class Part;
 
 
-class MainProjectDialog : public KDialogBase {
+class MainProjectDialog : public KDialog {
     Q_OBJECT
 public:
     MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);

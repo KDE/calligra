@@ -29,14 +29,18 @@ namespace KPlato
 {
 
 MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
-    : KDialogBase(Swallow, i18n("Milestone Progress"), Ok|Cancel, Ok, p, "Milestone Progress Dialog", true, true)
+    : KDialog(p)
 {
+    setCaption( i18n("Milestone Progress") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     m_panel = new MilestoneProgressPanel(task, this);
 
     setMainWidget(m_panel);
-    
+
     enableButtonOK(false);
-    
+
     connect(m_panel, SIGNAL(changed()), SLOT(slotChanged()));
 }
 

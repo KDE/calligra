@@ -27,11 +27,15 @@ namespace KPlato
 {
 
 AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
-    : KDialogBase(Swallow, i18n("Edit Accounts"), Ok|Cancel, Ok, p, n, true, true)
+    : KDialog(p)
 {
+    setCaption( i18n("Edit Accounts") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     m_panel = new AccountsPanel(acc, this);
     setMainWidget(m_panel);
-    
+
     enableButtonOK(false);
     connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOK(bool)));
 }

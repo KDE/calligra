@@ -21,7 +21,7 @@
 #ifndef KPTTASKDIALOG_H
 #define KPTTASKDIALOG_H
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 class Duration;
 
@@ -54,7 +54,7 @@ class StandardWorktime;
 /**
  * The dialog that shows and allows you to alter any task.
  */
-class TaskDialog : public KDialogBase {
+class TaskDialog : public KPageDialog {
     Q_OBJECT
 public:
     /**

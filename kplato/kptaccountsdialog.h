@@ -20,7 +20,7 @@
 #ifndef KPTACCOUNTSDIALOG_H
 #define KPTACCOUNTSDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QWidget;
 
@@ -33,7 +33,7 @@ class Accounts;
 class AccountsPanel;
 class Part;
 
-class AccountsDialog : public KDialogBase {
+class AccountsDialog : public KDialog {
     Q_OBJECT
 public:
     AccountsDialog(Accounts &acc, QWidget *parent=0, const char *name=0);
