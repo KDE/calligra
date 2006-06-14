@@ -118,17 +118,22 @@ namespace PDFImport
 {
 
 Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
-    : KDialogBase(Plain, i18n("KWord's PDF Import Filter"), Ok|Cancel, Ok,
-                  widget, "pdf_import_dialog"), _nbPages(nbPages)
+    : KDialog(widget), _nbPages(nbPages)
 {
+    setCaption( i18n("KWord's PDF Import Filter") );
+    setButtons(  Ok|Cancel );
+    setDefaultButton(Ok);
+    setObjectName( "pdf_import_dialog" );
+
     QApplication::restoreOverrideCursor();
 
-    Q3VBoxLayout *top = new Q3VBoxLayout(plainPage(), KDialogBase::marginHint(),
-                                       KDialogBase::spacingHint());
+    QWidget *page = new QWidget();
+    Q3VBoxLayout *top = new Q3VBoxLayout(page, KDialog::marginHint(),
+                                       KDialog::spacingHint());
 
     // page selection
-    Q3GroupBox *gbox = new Q3GroupBox(1, Qt::Horizontal,i18n("Page Selection"), plainPage());
-    gbox->setInsideSpacing(KDialogBase::spacingHint());
+    Q3GroupBox *gbox = new Q3GroupBox(1, Qt::Horizontal,i18n("Page Selection"), page);
+    gbox->setInsideSpacing(KDialog::spacingHint());
     top->addWidget(gbox);
     _group = new Q3ButtonGroup;
     _allButton = new QRadioButton(i18n("All (%1 pages)", nbPages), gbox);
@@ -143,10 +148,10 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
             SLOT(rangeChanged(const QString &)));
 
     // options
-    _images = new QCheckBox(i18n("Import images"), plainPage());
+    _images = new QCheckBox(i18n("Import images"), page);
     _images->setChecked(true);
     top->addWidget(_images);
-    _smart = new QCheckBox(i18n("\"Smart\" mode"), plainPage());
+    _smart = new QCheckBox(i18n("\"Smart\" mode"), page);
     _smart->setChecked(true);
     _smart->setWhatsThis(
                     i18n("Removes returns and hyphens at end of line. "
@@ -156,10 +161,10 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     top->addWidget(_smart);
 
     // passwords
-    gbox = new Q3GroupBox(1, Qt::Horizontal,i18n("Passwords"), plainPage());
+    gbox = new Q3GroupBox(1, Qt::Horizontal,i18n("Passwords"), page);
     top->addWidget(gbox);
     Q3Grid *grid = new Q3Grid(2, gbox);
-    grid->setSpacing(KDialogBase::spacingHint());
+    grid->setSpacing(KDialog::spacingHint());
     (void)new QLabel(i18n("Owner:"), grid);
     _owner = new KLineEdit(grid);
     _owner->setEchoMode(QLineEdit::Password);

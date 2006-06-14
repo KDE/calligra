@@ -14,7 +14,7 @@ set(kspreadlatexexport_PART_SRCS
    format.cc 
    kspreadlatexexportdiaImpl.cc 
    latexexport.cc 
-   latexexportIface.cc 
+   latexexportAdaptor.cc 
    map.cc 
    pen.cc 
    row.cc 
@@ -25,8 +25,6 @@ set(kspreadlatexexport_PART_SRCS
 kde4_automoc(${kspreadlatexexport_PART_SRCS})
 
 kde4_add_ui3_files(kspreadlatexexport_PART_SRCS latexexportdia.ui )
-
-kde4_add_dcop_skels(kspreadlatexexport_PART_SRCS latexexportIface.h )
 
 kde4_add_plugin(kspreadlatexexport WITH_PREFIX ${kspreadlatexexport_PART_SRCS})
 

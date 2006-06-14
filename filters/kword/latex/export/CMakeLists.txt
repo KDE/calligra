@@ -17,7 +17,7 @@ set(kwordlatexexport_PART_SRCS
    key.cc 
    kwordlatexexportdia.cc 
    latexexport.cc 
-   latexexportIface.cc 
+   latexexportAdaptor.cc 
    layout.cc 
    listtable.cc 
    para.cc 
@@ -35,7 +35,6 @@ kde4_automoc(${kwordlatexexport_PART_SRCS})
 
 kde4_add_ui3_files(kwordlatexexport_PART_SRCS latexexportdia.ui )
 
-kde4_add_dcop_skels(kwordlatexexport_PART_SRCS latexexportIface.h )
 
 kde4_add_plugin(kwordlatexexport WITH_PREFIX ${kwordlatexexport_PART_SRCS})
 

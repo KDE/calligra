@@ -34,9 +34,11 @@
 #include <ExportDialog.h>
 
 AsciiExportDialog :: AsciiExportDialog(QWidget* parent)
-    : KDialog(parent, i18n("KWord's Plain Text Export Filter"), KDialog::Ok|KDialog::Cancel),
+    : KDialog(parent),
       m_dialog(new ExportDialogUI(this))
 {
+    setButtons( Ok|Cancel );
+    setCaption( i18n("KWord's Plain Text Export Filter") );
 	setDefaultButton(KDialog::No);
     kapp->restoreOverrideCursor();
 

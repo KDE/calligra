@@ -33,8 +33,10 @@
 #include <exportwidget.h>
 
 ExportDialog::ExportDialog( QWidget *parent )
-  : KDialog( parent, i18n("Export Sheet to HTML"), KDialog::Ok|KDialog::Cancel ), m_mainwidget( new ExportWidget( this ) )
+  : KDialog( parent ), m_mainwidget( new ExportWidget( this ) )
 {
+  setCaption( i18n("Export Sheet to HTML") );
+  setButtons( Ok|Cancel );
   setDefaultButton(KDialog::No);
   kapp->restoreOverrideCursor();
 

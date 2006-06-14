@@ -40,7 +40,7 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 
-#include <dcopclient.h>
+#include "latexexportAdaptor.h"
 
 #include "document.h"
 
@@ -81,12 +81,9 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 		i = i + 1;
 	}
 
-	_iface = new LatexExportIface(this);
-	if(!kapp->dcopClient()->isRegistered() )
-	{
-		kapp->dcopClient()->registerAs("FilterConfigDia");
-		kapp->dcopClient()->setDefaultObject(_iface->objId());
-	}
+	new LatexExportAdaptor(this);
+    QDBus::sessionBus().registerObject("/filter/latex", this);
+
 	
 	/* All these items inserted must not be translated so they are inserted here 
 	 * without i18n() method. */

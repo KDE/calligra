@@ -23,7 +23,7 @@
 #include <q3valuevector.h>
 #include <QPair>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class Q3ButtonGroup;
 class QRadioButton;
@@ -77,7 +77,7 @@ public:
     bool           importImages, smart;
 };
 
-class Dialog : public KDialogBase
+class Dialog : public KDialog
 {
 Q_OBJECT
 public:

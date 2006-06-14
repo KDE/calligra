@@ -36,9 +36,11 @@
 #include <QCheckBox>
 
 MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
-    : KDialog(parent,  i18n("KWord's MS Write Import Filter"), KDialog::Ok|KDialog::Cancel),
+    : KDialog(parent),
       m_dialog(new ImportDialogUI(this))
 {
+    setCaption( i18n("KWord's MS Write Import Filter") );
+    setButtons( Ok|Cancel );
  	setDefaultButton(KDialog::No);
 	kapp->restoreOverrideCursor();
 

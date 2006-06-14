@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 Robert JACOLIN <rjacolin@ifrance.com>
+   Copyright (C) 2003 Robert JACOLIN <rjacolin@ifrance.com>
+   Copyright (C) 2006 Fredrik Edemar <f_edemar@linux.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,39 +16,27 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
+   This file use code from koTemplateOpenDia for the method chooseSlot.
 */
 
-#ifndef __KSPREADLATEXEXPORTDIA_H__
-#define __KSPREADLATEXEXPORTDIA_H__
+#include <latexexportAdaptor.h>
+#include "kwordlatexexportdia.h"
 
-#include <latexexportdia.h>
-#include <QStringList>
-#include <kurl.h>
-
-class KoStore;
-class KConfig;
-
-class KSpreadLatexExportDiaImpl : public LatexExportDia
+LatexExportAdaptor::LatexExportAdaptor(KWordLatexExportDia* dia)
+    : QDBusAbstractAdaptor(dia)
 {
-    Q_OBJECT
+    // constructor
+    setAutoRelaySignals(true);
+	_dialog = dia;
+}
 
-	private:
-    QString _fileOut;
-    KoStore* _in;
-    KConfig* _config;
+LatexExportAdaptor::~LatexExportAdaptor()
+{
+}
 
-	public:
-    KSpreadLatexExportDiaImpl( KoStore*, QWidget* parent = 0,
-				const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
-    virtual ~KSpreadLatexExportDiaImpl();
+void LatexExportAdaptor::useDefaultConfig()
+{
+	_dialog->accept();
+}
 
-    void setOutputFile(QString file) { _fileOut = file; }
-	
-	public slots:
-    virtual void reject();
-    virtual void accept();
-    virtual void addLanguage();
-    virtual void removeLanguage();
-};
-
-#endif /* __KSPREADLATEXEXPORTDIA_H__ */
+#include "latexexportAdaptor.moc"

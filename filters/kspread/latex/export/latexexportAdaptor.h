@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 Robert JACOLIN <rjacolin@ifrance.com>
+   Copyright (C) 2003 Robert JACOLIN <rjacolin@ifrance.com>
+   Copyright (C) 2006 Fredrik Edemar <f_edemar@linux.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,37 +18,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KSPREADLATEXEXPORTDIA_H__
-#define __KSPREADLATEXEXPORTDIA_H__
+#ifndef __LATEXEXPORTADAPTOR_H__
+#define __LATEXEXPORTADAPTOR_H__
 
-#include <latexexportdia.h>
-#include <QStringList>
-#include <kurl.h>
+#include <QtCore/QObject>
+#include <dbus/qdbus.h>
 
-class KoStore;
-class KConfig;
+class KSpreadLatexExportDiaImpl;
 
-class KSpreadLatexExportDiaImpl : public LatexExportDia
+class LatexExportAdaptor: public QDBusAbstractAdaptor
 {
-    Q_OBJECT
-
-	private:
-    QString _fileOut;
-    KoStore* _in;
-    KConfig* _config;
+  Q_OBJECT
+  Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.filter.kspread.latex")
 
 	public:
-    KSpreadLatexExportDiaImpl( KoStore*, QWidget* parent = 0,
-				const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
-    virtual ~KSpreadLatexExportDiaImpl();
+    LatexExportAdaptor(KSpreadLatexExportDiaImpl* dia);
+		
+    ~LatexExportAdaptor();
 
-    void setOutputFile(QString file) { _fileOut = file; }
-	
-	public slots:
-    virtual void reject();
-    virtual void accept();
-    virtual void addLanguage();
-    virtual void removeLanguage();
+public Q_SLOTS: // METHODS
+	Q_SCRIPTABLE void useDefaultConfig();
+
+	private:
+		KSpreadLatexExportDiaImpl* _dialog;
 };
 
-#endif /* __KSPREADLATEXEXPORTDIA_H__ */
+#endif /* __LATEXEXPORTADAPTOR_H__ */

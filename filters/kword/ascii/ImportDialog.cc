@@ -34,9 +34,11 @@
 #include <ImportDialog.h>
 
 AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
-    : KDialog(parent,i18n("KWord's Plain Text Import Filter"), KDialog::Ok|KDialog::Cancel),
+    : KDialog(parent),
       m_dialog(new ImportDialogUI(this))
 {
+    setButtons( Ok|Cancel);
+    setCaption( i18n("KWord's Plain Text Import Filter") );
 	setDefaultButton(KDialog::No);
     kapp->restoreOverrideCursor();
 
