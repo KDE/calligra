@@ -30,12 +30,16 @@ namespace KPlato
 {
 
 WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p, const char *n)
-    : KDialogBase(Swallow, i18n("WBS Definition"), Ok|Cancel, Ok, p, n, true, true)
+    : KDialog(p)
 {
-    
+    setCaption( i18n("WBS Definition") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
+
     m_panel = new WBSDefinitionPanel(def, this);
     setMainWidget(m_panel);
-    
+
     enableButtonOK(false);
     connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOK(bool)));
 }

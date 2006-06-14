@@ -3,7 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; 
+   License as published by the Free Software Foundation;
    version 2 of the License.
 
    This library is distributed in the hope that it will be useful,
@@ -49,21 +49,25 @@ static inline QPixmap loadIcon( const char * name ) {
 
 
 ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, const char *)
-    : KDialogBase(KDialogBase::IconList, i18n("Configure KPlato"),
-                  KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
-                  KDialogBase::Ok, parent),
+    : KPageDialog(parent),
       m_config(config)
 {
+    setCaption( i18n("Configure KPlato") );
+    setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel| KDialog::Default );
+    setDefaultButton( Ok );
+    setTypeFace( KPageDialog::List );
 
 /*    QVBox *page = addVBoxPage(i18n("Behavior"), i18n("Behavior"), loadIcon("misc"));
     m_behaviorPage = new ConfigBehaviorPanel(config.behavior(), page);*/
-    
-    KVBox *page = addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
+
+    KVBox *page = new KVBox();
+    addPage( page, i18n("Task Defaults") );
+    //addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
     m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), project.standardWorktime(), page);
-    
+
     enableButtonOK(false);
     enableButtonApply(false);
-    
+
 //    connect(m_behaviorPage, SIGNAL(changed()), SLOT(slotChanged()));
     connect(m_taskDefaultPage, SIGNAL(changed()), SLOT(slotChanged()));
 }
@@ -90,7 +94,7 @@ void ConfigDialog::slotDefault() {
     kDebug()<<k_funcinfo<<endl;
     m_taskDefaultPage->setStartValues(m_config.taskDefaults());
 //    m_behaviorPage->setStartValues();
-    
+
     enableButtonOK(false);
     enableButtonApply(false);
 }

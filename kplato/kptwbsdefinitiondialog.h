@@ -20,7 +20,7 @@
 #ifndef KPTWBSDEFINITIONDIALOG_H
 #define KPTWBSDEFINITIONDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KMacroCommand;
 
@@ -31,7 +31,7 @@ class WBSDefinitionPanel;
 class WBSDefinition;
 class Part;
 
-class WBSDefinitionDialog : public KDialogBase {
+class WBSDefinitionDialog : public KDialog {
     Q_OBJECT
 public:
     WBSDefinitionDialog(WBSDefinition &def, QWidget *parent=0, const char *name=0);

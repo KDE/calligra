@@ -20,7 +20,7 @@
 #ifndef KPTCONFIGDIALOG_H
 #define KPTCONFIGDIALOG_H
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 class QWidget;
 
@@ -32,7 +32,7 @@ class TaskDefaultPanel;
 //class ConfigBehaviorPanel;
 class Config;
 
-class ConfigDialog : public KDialogBase {
+class ConfigDialog : public KPageDialog {
     Q_OBJECT
 public:
     ConfigDialog(Config &config, Project &project, QWidget *parent=0, const char *name=0);
