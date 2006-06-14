@@ -140,6 +140,8 @@ bool AbstractDFManipulator::process (Element* element)
           f = newFormat (element, col, row);
           cell->format()->copy (f);
         }
+        cell->setLayoutDirtyFlag();
+        cell->setDisplayDirtyFlag();
       }
     }
   }
