@@ -21,7 +21,7 @@
 #ifndef KPTSUMMARYSUMMARYTASKDIALOG_H
 #define KPTSUMMARYSUMMARYTASKDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class Duration;
 
@@ -48,7 +48,7 @@ class Task;
 /**
  * The dialog that shows and allows you to alter summary tasks.
  */
-class SummaryTaskDialog : public KDialogBase {
+class SummaryTaskDialog : public KDialog {
     Q_OBJECT
 public:
     /**

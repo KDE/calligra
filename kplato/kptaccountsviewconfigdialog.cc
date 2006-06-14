@@ -34,18 +34,22 @@ namespace KPlato
 {
 
 AccountsviewConfigDialog::AccountsviewConfigDialog(const QDate &date, int period,  const QStringList &periodTexts, bool cumulative, QWidget *p)
-    : KDialogBase(Swallow, i18n("Settings"), Ok|Cancel, Ok, p, "Accountsview Settings Dialog", true, true)
+    : KDialog(p)
 {
+    setCaption( i18n("Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     m_panel = new AccountsviewConfigPanel(this);
     m_panel->dateEdit->setDate(date);
     m_panel->periodBox->insertStringList(periodTexts);
     m_panel->periodBox->setCurrentItem(period);
     m_panel->cumulative->setChecked(cumulative);
     setMainWidget(m_panel);
-    
+
     enableButtonOK(false);
-    
-    connect(m_panel, SIGNAL(changed(bool)), SLOT( enableButtonOK(bool)));    
+
+    connect(m_panel, SIGNAL(changed(bool)), SLOT( enableButtonOK(bool)));
 }
 
 
@@ -69,7 +73,7 @@ bool AccountsviewConfigDialog::isCumulative() {
 //----------------------------
 AccountsviewConfigPanel::AccountsviewConfigPanel(QWidget *parent)
     : AccountsviewConfigurePanelBase(parent) {
-    
+
     connect(dateEdit, SIGNAL(changed(QDate)), SLOT(slotChanged()));
     connect(periodBox, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(cumulative, SIGNAL(clicked()), SLOT(slotChanged()));

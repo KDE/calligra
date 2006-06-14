@@ -31,12 +31,16 @@ namespace KPlato
 {
 
 SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
-    : KDialogBase(Swallow, i18n("Summary Task Settings"), Ok|Cancel, Ok, p, "Summary Task Settings Dialog", true, true)
+    : KDialog(p)
 {
+    setCaption( i18n("Summary Task Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     m_generalTab = new SummaryTaskGeneralPanel(task, this);
     setMainWidget(m_generalTab);
     enableButtonOK(false);
-    
+
     connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOK(bool)));
 }
 
@@ -59,7 +63,7 @@ KCommand *SummaryTaskDialog::buildCommand(Part *part) {
 void SummaryTaskDialog::slotOk() {
     if (!m_generalTab->ok())
         return;
-    
+
     accept();
 }
 

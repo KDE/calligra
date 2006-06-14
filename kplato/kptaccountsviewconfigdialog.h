@@ -21,7 +21,7 @@
 #define KPTACCOUNTSVIEWCONFIGDIALOG_H
 
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "kptaccountsviewconfigurepanelbase.h"
 
 class QDate;
@@ -33,7 +33,7 @@ namespace KPlato
 
 class AccountsviewConfigPanel;
 
-class AccountsviewConfigDialog : public KDialogBase {
+class AccountsviewConfigDialog : public KDialog {
     Q_OBJECT
 public:
     AccountsviewConfigDialog(const QDate &date, int period, const QStringList &periodTexts, bool cumulative, QWidget *parent);
