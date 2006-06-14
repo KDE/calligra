@@ -69,8 +69,9 @@ K_EXPORT_COMPONENT_FACTORY( libthesaurustool, ThesaurusFactory("thesaurus_tool")
 Thesaurus::Thesaurus(QObject* parent, const QStringList &)
     : KDataTool(parent)
 {
-    m_dialog = new KDialogBase(KJanusWidget::Plain, QString::null,
-        KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
+    m_dialog = new KDialog(0);
+    m_dialog->setButtons( KDialog::Help|KDialog::Ok|KDialog::Cancel );
+    m_dialog->setDefaultButton( KDialog::Ok );
     m_dialog->setHelp(QString::null, "thesaurus");
     m_dialog->resize(600, 400);
 
@@ -86,8 +87,8 @@ Thesaurus::Thesaurus(QObject* parent, const QStringList &)
 
     m_replacement = false;
     m_history_pos = 1;
-
-    m_page = m_dialog->plainPage();
+    m_page = new QFrame( 0L );
+    m_dialog->setMainWidget(m_page);
     QVBoxLayout *m_top_layout = new QVBoxLayout(m_page/*, KDialog::marginHint(), KDialog::spacingHint()*/);
     m_top_layout->setMargin( KDialog::marginHint() );
     m_top_layout->setSpacing( KDialog::spacingHint() );

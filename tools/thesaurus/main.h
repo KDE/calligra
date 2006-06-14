@@ -47,7 +47,7 @@
 #include <kcursor.h>
 #include <kdatatool.h>
 #include <kdebug.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klineedit.h>
@@ -132,7 +132,7 @@ protected:
     QFrame *m_page;
     QVBoxLayout *m_top_layout;
 
-    KDialogBase *m_dialog;
+    KDialog *m_dialog;
     QTabWidget *m_tab;
     QWidget *vbox;
     QWidget *vbox2;
