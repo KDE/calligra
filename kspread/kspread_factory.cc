@@ -23,14 +23,14 @@
 
 #include "kspread_aboutdata.h"
 #include "kspread_doc.h"
-#include "KSpreadAppIface.h"
+// #include "KSpreadAppIface.h"
 
 #include "kspread_factory.h"
 
 using namespace KSpread;
 
 KInstance* Factory::s_global = 0;
-DCOPObject* Factory::s_dcopObject = 0;
+// DCOPObject* Factory::s_dcopObject = 0;
 KAboutData* Factory::s_aboutData = 0;
 
 Factory::Factory( QObject* parent, const char* name )
@@ -40,7 +40,7 @@ Factory::Factory( QObject* parent, const char* name )
   // Create our instance, so that it becomes KGlobal::instance if the
   // main app is KSpread.
   (void)global();
-  (void)dcopObject();
+//   (void)dcopObject();
 }
 
 Factory::~Factory()
@@ -50,8 +50,8 @@ Factory::~Factory()
   s_aboutData=0;
   delete s_global;
   s_global = 0;
-  delete s_dcopObject;
-  s_dcopObject = 0;
+//   delete s_dcopObject;
+//   s_dcopObject = 0;
 }
 
 KParts::Part* Factory::createPartObject( QWidget *parentWidget, QObject* parent, const char* classname, const QStringList & )
@@ -92,11 +92,11 @@ KInstance* Factory::global()
     return s_global;
 }
 
-DCOPObject* Factory::dcopObject()
-{
-    if ( !s_dcopObject )
-        s_dcopObject = new AppIface;
-    return s_dcopObject;
-}
+// DCOPObject* Factory::dcopObject()
+// {
+//     if ( !s_dcopObject )
+//         s_dcopObject = new AppIface;
+//     return s_dcopObject;
+// }
 
 #include "kspread_factory.moc"

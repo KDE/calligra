@@ -105,6 +105,7 @@ set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS} ${libtests_SRCS}
    kspread_handler.cc
    kspread_locale.cc
    kspread_map.cc
+   KSpreadMapAdaptor.cc 
    kspread_numformat.cc
    kspread_object.cc
    kspread_style.cc
@@ -112,7 +113,9 @@ set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS} ${libtests_SRCS}
    kspread_undo.cc
    kspread_value.cc
    kspread_view.cc
+   KSpreadViewAdaptor.cc 
    kspread_sheet.cc
+   KSpreadSheetAdaptor.cc
    kspread_sheetprint.cc
    kspread_util.cc
    kspread_toolbox.cc
@@ -120,15 +123,6 @@ set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS} ${libtests_SRCS}
    valueconverter.cc
    valueformatter.cc
    valueparser.cc
-   KSpreadAppIface.cc
-   KSpreadCellIface.cc
-   KSpreadColumnIface.cc
-   KSpreadDocIface.cc
-   KSpreadLayoutIface.cc
-   KSpreadMapIface.cc
-   KSpreadRowIface.cc
-   KSpreadTableIface.cc
-   KSpreadViewIface.cc
    kspread_genvalidationstyle.cc
    region.cc
    selection.cc
@@ -140,17 +134,6 @@ set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS} ${libtests_SRCS}
 )
 
 kde4_automoc(${kspreadcommon_LIB_SRCS})
-
-kde4_add_dcop_skels(kspreadcommon_LIB_SRCS
-   KSpreadAppIface.h
-   KSpreadCellIface.h
-   KSpreadColumnIface.h
-   KSpreadDocIface.h
-   KSpreadLayoutIface.h
-   KSpreadMapIface.h
-   KSpreadRowIface.h
-   KSpreadTableIface.h
-   KSpreadViewIface.h )
 
 kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 

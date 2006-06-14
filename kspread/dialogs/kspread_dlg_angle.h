@@ -24,7 +24,7 @@
 #ifndef __kspread_dlg_angle__
 #define __kspread_dlg_angle__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KIntNumInput;
 
@@ -32,7 +32,7 @@ namespace KSpread
 {
 class View;
 
-class AngleDialog : public KDialogBase
+class AngleDialog : public KDialog
 {
   Q_OBJECT
 public:

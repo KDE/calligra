@@ -38,11 +38,14 @@
 using namespace KSpread;
 
 SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection )
-  : KDialog( parent, i18n( "Subtotals" ), Ok|Cancel|User1, 0, KGuiItem(i18n( "Remove All" )) ),
+  : KDialog( parent ),
     m_pView( parent ),
     m_pSheet( m_pView->activeSheet() ),
     m_selection( selection )
 {
+  setCaption( i18n( "Subtotals" ) );
+  setButtons( Ok|Cancel|User1 );
+  setButtonGuiItem( User1, i18n( "Remove All" ) );
   setButtonsOrientation( Qt::Vertical );
 
   QWidget* widget = new QWidget( this );

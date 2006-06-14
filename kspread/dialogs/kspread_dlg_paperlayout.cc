@@ -73,8 +73,9 @@ void PaperLayout::initTab()
 {
     SheetPrint* print = m_pSheet->print();
 
-    QWidget* tab =  new QWidget(this);
-    addPage( tab, i18n( "Options" ) );
+    QWidget *tab = new QWidget();
+    addPage(tab, i18n( "Options" ));
+
     QVBoxLayout *vbox = new QVBoxLayout( tab );
     vbox->setMargin(KDialog::marginHint());
     vbox->setSpacing(KDialog::spacingHint());

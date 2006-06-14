@@ -22,7 +22,7 @@
 #ifndef __kspread_dlg_list__
 #define __kspread_dlg_list__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class Q3ListBox;
 class Q3ListBoxItem;
@@ -35,7 +35,7 @@ class KConfig;
 namespace KSpread
 {
 
-class ListDialog: public KDialogBase
+class ListDialog: public KDialog
 {
   Q_OBJECT
 

@@ -33,7 +33,7 @@
 #include <Q3ListBoxItem>
 
 #include <kcompletion.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QComboBox;
 class QLabel;
@@ -50,7 +50,7 @@ class FunctionDescription;
 class Sheet;
 class View;
 
-class FormulaDialog : public KDialogBase
+class FormulaDialog : public KDialog
 {
     Q_OBJECT
 public:

@@ -26,7 +26,7 @@
 #include <QTextEdit>
 
 #include <kcombobox.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kpushbutton.h>
 
 #include "tester.h"
@@ -52,12 +52,15 @@ using namespace KSpread;
 
 
 TestRunner::TestRunner():
-  KDialogBase( KDialogBase::Plain, "Internal Tests", KDialogBase::Close,
-  KDialogBase::Close )
+  KDialog( )
 {
+  setCaption( "Internal Tests" );
+  setButtons( Close );
+  setDefaultButton( Close );
   d = new Private;
 
-  QFrame* mainWidget = plainPage();
+  QFrame *mainWidget = new QFrame();
+  setMainWidget( mainWidget );
   QGridLayout* layout = new QGridLayout( mainWidget );
   layout->setMargin(KDialog::marginHint());
   layout->setSpacing(KDialog::spacingHint());

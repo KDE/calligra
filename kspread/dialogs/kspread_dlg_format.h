@@ -26,7 +26,7 @@
 #ifndef KSPREAD_DLG_FORMAT
 #define KSPREAD_DLG_FORMAT
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QString>
 #include <QList>
 #include <QColor>
@@ -48,7 +48,7 @@ class View;
 /**
  * Dialog for the "AutoFormat..." action
  */
-class FormatDialog : public KDialogBase
+class FormatDialog : public KDialog
 {
     Q_OBJECT
 public:

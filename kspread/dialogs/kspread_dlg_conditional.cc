@@ -276,8 +276,8 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
     m_dlg( new ConditionalWidget( this ) ),
     m_marker( marker )
 {
-  setCaption(i18n( "Conditional Cell Attributes" ));
-  setButtons(KDialog::Ok|KDialog::Cancel);
+  setButtons( KDialog::Ok|KDialog::Cancel );
+  setCaption( i18n( "Conditional Cell Attributes") );
 
   QStringList list( m_view->doc()->styleManager()->styleNames() );
 

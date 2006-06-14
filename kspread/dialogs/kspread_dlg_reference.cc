@@ -250,15 +250,21 @@ void reference::slotCancel()
 EditAreaName::EditAreaName( View * parent,
                                           const char * name,
                                           QString const & areaname )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name ,true,i18n( "Edit Area" ) , Ok|Cancel )
+  : KDialog( parent )
 {
+  setCaption( i18n("Edit Area") );
+  setObjectName( name );
+  setModal( true );
+  setButtons( Ok|Cancel );
+
   m_pView = parent;
 
   resize( 350, 142 );
   setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5,
                               (QSizePolicy::SizeType)4 ) );
 
-  QWidget * page = plainPage();
+  QWidget *page = new QWidget();
+  setMainWidget( page );
 
   QGridLayout * EditAreaNameLayout = new QGridLayout( page);
   EditAreaNameLayout->setMargin(KDialog::marginHint());

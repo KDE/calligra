@@ -23,7 +23,7 @@
 #ifndef CSVDIALOG_H
 #define CSVDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -52,7 +52,7 @@ class View;
  * using mode, which can be Column, File, or Clipboard respectively.
  *
 */
-class CSVDialog : public KDialogBase
+class CSVDialog : public KDialog
 {
   Q_OBJECT
 

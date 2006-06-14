@@ -18,7 +18,7 @@
 */
 
 #include <kcombobox.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klocale.h>
 #include <kvbox.h>
 
@@ -29,11 +29,15 @@
 using namespace KSpread;
 
 SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
-    KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, "sheetPropertiesDialog", true,
-  i18n("Sheet Properties"),
-  KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Default )
+    KDialog( parent )
 {
-  KVBox* mainWidget = makeVBoxMainWidget();
+  setCaption( i18n("Sheet Properties") );
+  setObjectName( "sheetPropertiesDialog" );
+  setModal( true );
+  setButtons( Ok|Cancel|Default );
+
+  KVBox* mainWidget = new KVBox();//makeVBoxMainWidget();
+  setMainWidget( mainWidget );
   m_widget = new SheetPropertiesWidget( mainWidget );
   QWidget* spacer = new QWidget( mainWidget );
   spacer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );

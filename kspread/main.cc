@@ -20,7 +20,7 @@
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 
-#include <dcopclient.h>
+// #include <dcopclient.h>
 #include "kspread_aboutdata.h"
 
 using namespace KSpread;

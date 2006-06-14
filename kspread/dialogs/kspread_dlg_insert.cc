@@ -43,16 +43,22 @@
 using namespace KSpread;
 
 InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mode _mode)
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true,"",Ok|Cancel )
+  : KDialog( parent )
 {
+  setCaption( "");
+  setObjectName( name );
+  setButtons( Ok|Cancel );
+  setModal( true );
+
   m_pView = parent;
   rect=_rect;
   insRem=_mode;
 
-  QWidget *page = plainPage();
+  QWidget *page = new QWidget();
+  setMainWidget( page );
   QVBoxLayout *lay1 = new QVBoxLayout( page );
-  lay1->setMargin(KDialogBase::marginHint());
-  lay1->setSpacing(KDialogBase::spacingHint());
+  lay1->setMargin(KDialog::marginHint());
+  lay1->setSpacing(KDialog::spacingHint());
 
   Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Insert"),page);
   grp->setRadioButtonExclusive( true );

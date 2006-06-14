@@ -25,12 +25,12 @@
 #ifndef LINK_DIALOG
 #define LINK_DIALOG
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 namespace KSpread
 {
 
-class LinkDialog : public KDialogBase
+class LinkDialog : public KPageDialog
 {
     Q_OBJECT
 

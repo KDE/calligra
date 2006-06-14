@@ -70,22 +70,23 @@ StyleWidget::~StyleWidget()
 
 
 StyleDialog::StyleDialog( View * parent, StyleManager * manager )
-  : KDialog( parent, i18n( "Style Manager" ),
-             Ok|User1|User2|User3|Close, 0,
-             KGuiItem( i18n( "&New..." ) ),
-             KGuiItem( i18n( "&Modify..." ) ),
-             KGuiItem( i18n( "&Delete" ) ) ),
+  : KDialog( parent ),
     m_view( parent ),
     m_styleManager( manager ),
     m_dlg( new StyleWidget( this ) )
 {
+  setCaption( i18n( "Style Manager" ) );
+  setButtons( Ok|User1|User2|User3|Close );
+  setButtonGuiItem( User1, i18n( "&New..." ) );
+  setButtonGuiItem( User2, i18n( "&Modify..." ) );
+  setButtonGuiItem( User3, i18n( "&Delete..." ) );
   setButtonsOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 
   slotDisplayMode( 0 );
-  enableButton( KDialogBase::User1, true );
-  enableButton( KDialogBase::User2, true );
-  enableButton( KDialogBase::User3, false );
+  enableButton( KDialog::User1, true );
+  enableButton( KDialog::User2, true );
+  enableButton( KDialog::User3, false );
 
   connect( m_dlg->m_styleList, SIGNAL( selectionChanged( Q3ListViewItem * ) ),
            this, SLOT( slotSelectionChanged( Q3ListViewItem * ) ) );
@@ -325,14 +326,14 @@ void StyleDialog::slotSelectionChanged( Q3ListViewItem * item )
     style = m_styleManager->style( name );
   if ( !style )
   {
-    enableButton( KDialogBase::User3, false );
+    enableButton( KDialog::User3, false );
     return;
   }
 
   if ( style->type() == Style::BUILTIN )
-    enableButton( KDialogBase::User3, false );
+    enableButton( KDialog::User3, false );
   else
-    enableButton( KDialogBase::User3, true );
+    enableButton( KDialog::User3, true );
 }
 
 

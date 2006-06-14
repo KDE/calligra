@@ -40,7 +40,7 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -57,7 +57,7 @@
 using namespace KSpread;
 
 CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode mode)
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, QString::null, Ok|Cancel ),
+  : KDialog( parent ),
     m_pView( parent ),
     m_cancelled( false ),
     m_adjustRows( 0 ),
@@ -67,12 +67,16 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
     m_targetRect( rect ),
     m_mode( mode )
 {
+  setModal( true );
+  setButtons( Ok|Cancel );
+
   if ( !name )
     setObjectName( "CSV" );
 
   setSizeGripEnabled( true );
 
-  QWidget* page = plainPage();
+  QWidget *page = new QWidget();
+  setMainWidget( page );
   MyDialogLayout = new QGridLayout( page );
   MyDialogLayout->setMargin( KDialog::marginHint() );
   MyDialogLayout->setSpacing( KDialog::spacingHint() );

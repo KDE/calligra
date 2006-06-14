@@ -44,7 +44,6 @@
 class QWidget;
 class QPainter;
 class QDomElement;
-class DCOPObject;
 class KPrinter;
 class KoDocumentEntry;
 class KoStyleStack;
@@ -80,6 +79,7 @@ class UndoInsertRemoveAction;
 class View;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
+class SheetAdaptor;
 
 /********************************************************************
  *
@@ -1064,7 +1064,7 @@ public:
 
     void enableScrollBarUpdates( bool _enable );
 
-    virtual DCOPObject* dcopObject();
+    virtual SheetAdaptor* dbusObject();
 
     static Sheet* find( int _id );
 

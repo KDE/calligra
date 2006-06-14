@@ -26,7 +26,7 @@
 #ifndef __kspread_dlg_resize2__
 #define __kspread_dlg_resize2__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KDoubleNumInput;
 class KoUnitDoubleSpinBox;
@@ -35,7 +35,7 @@ namespace KSpread
 {
 class View;
 
-class ResizeRow: public KDialogBase
+class ResizeRow: public KDialog
 {
   Q_OBJECT
 
@@ -52,7 +52,7 @@ protected:
   KoUnitDoubleSpinBox *m_pHeight;
 };
 
-class ResizeColumn: public KDialogBase
+class ResizeColumn: public KDialog
 {
   Q_OBJECT
 

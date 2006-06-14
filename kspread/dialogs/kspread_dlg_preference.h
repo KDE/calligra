@@ -27,7 +27,7 @@
 #ifndef __kspread_dlg_preference__
 #define __kspread_dlg_preference__
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 //Added by qt3to4:
 #include <QLabel>
 #include <kvbox.h>
@@ -198,7 +198,7 @@ private:
   KIntNumInput* m_iniPollingInterval;
 };
 
-class PreferenceDialog : public KDialogBase
+class PreferenceDialog : public KPageDialog
 {
   Q_OBJECT
 public:
@@ -217,6 +217,7 @@ private :
   configureLayoutPage *_layoutPage;
   configureSpellPage *_spellPage;
   parameterLocale *_localePage;
+ KPageWidgetItem *p2, *p3, *p4, *p5, *p6, *p7;
 };
 
 } // namespace KSpread

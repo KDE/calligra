@@ -41,10 +41,16 @@
 using namespace KSpread;
 
 ShowDialog::ShowDialog( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name,true,i18n("Show Sheet"),Ok|Cancel )
+  : KDialog( parent )
 {
+  setCaption( i18n("Show Sheet") );
+  setModal( true );
+  setButtons( Ok|Cancel );
+  setObjectName( name );
+
   m_pView = parent;
-  QWidget *page = plainPage();
+  QWidget *page = new QWidget(this);
+  setMainWidget( page );
   QVBoxLayout *lay1 = new QVBoxLayout( page );
   lay1->setMargin(0);
   lay1->setSpacing(spacingHint());

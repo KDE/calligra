@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <dcopobject.h>
+// #include <dcopobject.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -41,9 +41,9 @@
 #include "kspread_sheetprint.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
-#include "KSpreadColumnIface.h"
-#include "KSpreadLayoutIface.h"
-#include "KSpreadRowIface.h"
+// #include "KSpreadColumnIface.h"
+// #include "KSpreadLayoutIface.h"
+// #include "KSpreadRowIface.h"
 
 #include "kspread_format.h"
 
@@ -2496,7 +2496,7 @@ RowFormat::RowFormat( Sheet * _sheet, int _row )
     m_iRow     = _row;
     m_bDefault = false;
     m_bHide    = false;
-    m_dcop     = 0;
+//     m_dcop     = 0;
 }
 
 RowFormat::~RowFormat()
@@ -2505,15 +2505,15 @@ RowFormat::~RowFormat()
 	m_next->setPrevious( m_prev );
     if ( m_prev )
 	m_prev->setNext( m_next );
-    delete m_dcop;
+//     delete m_dcop;
 }
 
-DCOPObject * RowFormat::dcopObject()
-{
-    if ( !m_dcop )
-	m_dcop = new RowIface( this );
-    return m_dcop;
-}
+// DCOPObject * RowFormat::dcopObject()
+// {
+//     if ( !m_dcop )
+// 	m_dcop = new RowIface( this );
+//     return m_dcop;
+// }
 
 
 void RowFormat::setMMHeight( double _h )
@@ -2746,7 +2746,7 @@ ColumnFormat::ColumnFormat( Sheet * _sheet, int _column )
   m_bHide=false;
   m_prev = 0;
   m_next = 0;
-  m_dcop = 0;
+//   m_dcop = 0;
 }
 
 ColumnFormat::~ColumnFormat()
@@ -2755,15 +2755,15 @@ ColumnFormat::~ColumnFormat()
 	m_next->setPrevious( m_prev );
     if ( m_prev )
 	m_prev->setNext( m_next );
-    delete m_dcop;
+//     delete m_dcop;
 }
 
-DCOPObject * ColumnFormat::dcopObject()
-{
-    if ( !m_dcop )
-        m_dcop = new ColumnIface( this );
-    return m_dcop;
-}
+// DCOPObject * ColumnFormat::dcopObject()
+// {
+//     if ( !m_dcop )
+//         m_dcop = new ColumnIface( this );
+//     return m_dcop;
+// }
 
 void ColumnFormat::setMMWidth( double _w )
 {

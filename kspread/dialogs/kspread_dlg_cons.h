@@ -32,7 +32,7 @@
 #include <QStringList>
 //Added by qt3to4:
 #include <QCloseEvent>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QLineEdit;
 class QPushButton;
@@ -45,7 +45,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class ConsolidateDialog : public KDialogBase
+class ConsolidateDialog : public KDialog
 {
   Q_OBJECT
 public:

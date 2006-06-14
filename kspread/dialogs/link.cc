@@ -30,7 +30,7 @@
 #include <QVBoxLayout>
 
 #include <kdesktopfile.h>
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
@@ -44,30 +44,34 @@ class LinkDialog::Private
 {
 public:
     QString text;
-    QFrame* internetPage;
+    QWidget* internetPage;
     KLineEdit* internetText;
     KLineEdit* internetLink;
-    QFrame* mailPage;
+    QWidget* mailPage;
     KLineEdit* mailText;
     KLineEdit* mailLink;
-    QFrame* filePage;
+    QWidget* filePage;
     KLineEdit* fileText;
     KUrlRequester* fileLink;
-    QFrame* cellPage;
+    QWidget* cellPage;
     KLineEdit* cellText;
     KLineEdit* cellLink;
+    KPageWidgetItem* p1, *p2, *p3, *p4;
 };
 
 LinkDialog::LinkDialog( QWidget*, const char* )
-  :  KDialogBase( KDialogBase::IconList,i18n( "Insert Link") ,
-                  KDialogBase::Ok | KDialogBase::Cancel,
-                  KDialogBase::Ok )
+  :  KPageDialog( )
 {
+    setCaption( i18n("Insert Link") );
+    setButtons( Ok | Cancel );
+    setFaceType( List );
+
     d = new Private;
 
     // link for web or ftp
-    d->internetPage = addPage( i18n( "Internet" ), QString::null,
-        BarIcon( "html",K3Icon::SizeMedium ) );
+    d->internetPage = new QWidget();
+    d->p1 = addPage( d->internetPage, i18n( "Internet" ) );
+    d->p1->setIcon( BarIcon( "html",K3Icon::SizeMedium ) );
     QVBoxLayout* iLayout = new QVBoxLayout( d->internetPage );
     iLayout->setMargin( marginHint() );
     iLayout->setSpacing( spacingHint() );
@@ -82,8 +86,9 @@ LinkDialog::LinkDialog( QWidget*, const char* )
         SLOT( setText( const QString& ) ) );
 
     // link for e-mail
-    d->mailPage = addPage( i18n( "Mail" ), QString::null,
-        BarIcon( "mail_generic",K3Icon::SizeMedium ) );
+    d->mailPage = new QWidget();
+    d->p2 = addPage( d->mailPage, i18n( "Mail" ) );
+    d->p2->setIcon( BarIcon( "mail_generic",K3Icon::SizeMedium ) );
     QVBoxLayout* mLayout = new QVBoxLayout( d->mailPage );
     mLayout->setMargin( marginHint() );
     mLayout->setSpacing( spacingHint() );
@@ -98,8 +103,9 @@ LinkDialog::LinkDialog( QWidget*, const char* )
         SLOT( setText( const QString& ) ) );
 
     // link for external file
-    d->filePage = addPage( i18n( "File" ), QString::null,
-        BarIcon( "filenew",K3Icon::SizeMedium ) );
+    d->filePage = new QWidget();
+    d->p3 = addPage( d->filePage, i18n( "File" ) );
+    d->p3->setIcon( BarIcon( "filenew",K3Icon::SizeMedium ) );
     QVBoxLayout* fLayout = new QVBoxLayout( d->filePage );
     fLayout->setMargin( marginHint() );
     fLayout->setSpacing( spacingHint() );
@@ -136,8 +142,9 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     }
 
     // link to another cell
-    d->cellPage =  addPage( i18n( "Cell" ), QString::null,
-        BarIcon( "misc",K3Icon::SizeMedium ) );
+    d->cellPage = new QWidget();
+    d->p4 = addPage( d->cellPage, i18n( "Cell" ) );
+    d->p4->setIcon( BarIcon( "misc",K3Icon::SizeMedium ) );
     QVBoxLayout* cLayout = new QVBoxLayout( d->cellPage );
     cLayout->setSpacing( spacingHint() );
     cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->cellPage ) );
@@ -168,37 +175,38 @@ QString LinkDialog::text() const
 QString LinkDialog::link() const
 {
     QString str;
-    switch( activePageIndex() )
+    if ( currentPage() == d->p1 )
     {
-        case 0:
-          str = d->internetLink->text();
-          if( !str.isEmpty() )
-          if( str.indexOf( "http://" )==-1 )
+      str = d->internetLink->text();
+      if( !str.isEmpty() )
+        if( str.indexOf( "http://" )==-1 )
           if( str.indexOf( "https://" )==-1 )
-          if( str.indexOf( "ftp://" )==-1 )
+            if( str.indexOf( "ftp://" )==-1 )
               str.prepend( "http://" );
-          break;
-
-        case 1:
-           str = d->mailLink->text();
-           if( !str.isEmpty() )
-           if( str.indexOf( "mailto:" )==-1 )
-               str.prepend( "mailto:" );
-           break;
-
-        case 2:
-           str = d->fileLink->lineEdit()->text();
-           if( !str.isEmpty() )
-           if( str.indexOf( "file:/" )==-1 )
-               str.prepend( "file://" );
-           break;
-
-        case 3:
-            str = d->cellLink->text();
-            break;
-
-        break;
     }
+    else if ( currentPage() == d->p2 )
+    {
+      str = d->mailLink->text();
+      if( !str.isEmpty() )
+        if( str.indexOf( "mailto:" )==-1 )
+          str.prepend( "mailto:" );
+      str = d->fileLink->lineEdit()->text();
+      if( !str.isEmpty() )
+        if( str.indexOf( "file:/" )==-1 )
+          str.prepend( "file://" );
+    }
+    else if ( currentPage() == d->p3 )
+    {
+      str = d->fileLink->lineEdit()->text();
+      if( !str.isEmpty() )
+        if( str.indexOf( "file:/" )==-1 )
+          str.prepend( "file://" );
+    }
+    else if ( currentPage() == d->p4 )
+    {
+      str = d->cellLink->text();
+    }
+
     return str;
 }
 
@@ -230,28 +238,28 @@ void LinkDialog::setLink( const QString& link )
     if( link.startsWith( "https://" ) )
     {
       d->internetLink->setText( link.mid( QString("https://").length() ) );
-      showPage( 0 );
+      setCurrentPage( d->p1 );
       return;
     }
 
     if( link.startsWith( "http://" ) )
     {
       d->internetLink->setText( link.mid( QString("http://").length() ) );
-      showPage( 0 );
+      setCurrentPage( d->p1 );
       return;
     }
 
     if( link.startsWith( "ftp://" ) )
     {
       d->internetLink->setText( link.mid( QString("ftp://").length() ) );
-      showPage( 0 );
+      setCurrentPage( d->p1 );
       return;
     }
 
     if( link.startsWith( "mailto:" ) )
     {
       d->mailLink->setText( link.mid( QString("mailto:").length() ) );
-      showPage( 1 );
+      setCurrentPage( d->p1 );
       return;
     }
 
@@ -260,26 +268,27 @@ void LinkDialog::setLink( const QString& link )
       QString s = link.mid( QString("file:/").length() );
       while(s.startsWith("//")) s.remove(0,1);
       d->fileLink->lineEdit()->setText(s);
-      showPage( 2 );
+      setCurrentPage( d->p2 );
       return;
     }
 
     // assume cell reference
     d->cellLink->setText( link );
-    showPage( 3 );
+    setCurrentPage( d->p4 );
 }
 
 void LinkDialog::slotOk()
 {
     QString str;
-    switch( activePageIndex() )
-    {
-        case 0:  str = i18n( "Internet address is empty" );  break;
-        case 1:  str = i18n( "Mail address is empty" ); break;
-        case 2:  str = i18n( "File name is empty" ); break;
-        case 3:  str = i18n( "Destination cell is empty" ); break;
-        break;
-    }
+
+    if ( currentPage() == d->p1 )
+      str = i18n( "Internet address is empty" );
+    else if ( currentPage() == d->p2 )
+      str = i18n( "Mail address is empty" );
+    else if ( currentPage() == d->p3 )
+      str = i18n( "File name is empty" );
+    else if ( currentPage() == d->p4)
+      i18n( "Destination cell is empty" );
 
     if( link().isEmpty() )
     {

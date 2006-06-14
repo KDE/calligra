@@ -51,15 +51,20 @@
 using namespace KSpread;
 
 ResizeRow::ResizeRow( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n("Resize Row"), Ok|Cancel|Default )
+  : KDialog( parent )
 {
+    setCaption( i18n("Resize Row") );
+    setObjectName( name );
+    setModal( true );
+    setButtons( Ok|Cancel|Default );
     m_pView = parent;
 
-    QWidget *page = plainPage();
+    QWidget *page = new QWidget();
+    setMainWidget( page );
 
     QVBoxLayout *vLay = new QVBoxLayout( page );
-    vLay->setMargin(KDialogBase::marginHint());
-    vLay->setSpacing(KDialogBase::spacingHint());
+    vLay->setMargin(KDialog::marginHint());
+    vLay->setSpacing(KDialog::spacingHint());
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
     QRect selection( m_pView->selectionInfo()->selection() );
@@ -118,15 +123,20 @@ void ResizeRow::slotDefault()
 }
 
 ResizeColumn::ResizeColumn( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n("Resize Column"), Ok|Cancel|Default )
+  : KDialog( parent )
 {
+    setCaption( i18n("Resize Column") );
+    setObjectName( name );
+    setModal( true );
+    setButtons( Ok|Cancel|Default );
     m_pView = parent;
 
-    QWidget *page = plainPage();
+    QWidget *page = new QWidget();
+    setMainWidget( page );
 
     QVBoxLayout *vLay = new QVBoxLayout( page );
-    vLay->setMargin(KDialogBase::marginHint());
-    vLay->setSpacing(KDialogBase::spacingHint());
+    vLay->setMargin(KDialog::marginHint());
+    vLay->setSpacing(KDialog::spacingHint());
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
     QRect selection( m_pView->selectionInfo()->selection() );

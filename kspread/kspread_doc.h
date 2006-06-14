@@ -44,7 +44,7 @@ class QDomDocument;
 class QObject;
 class QPainter;
 
-class DCOPObject;
+// class DCOPObject;
 class KCommand;
 class KCommandHistory;
 class KCompletion;
@@ -612,7 +612,7 @@ public:
                      Sheet * sheet, bool drawCursor = true );
 
 
-  virtual DCOPObject* dcopObject();
+//   virtual DCOPObject* dcopObject();
 
   void addAreaName(const QRect &_rect,const QString & name,const QString & sheetName);
   const QList<Reference>  & listArea();

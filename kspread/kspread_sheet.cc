@@ -82,7 +82,11 @@
 #include "kspread_view.h"
 #include "manipulator.h"
 #include "manipulator_data.h"
-#include "KSpreadTableIface.h"
+
+
+#include "KSpreadSheetAdaptor.h"
+#include <dbus/qdbus.h>
+
 
 #include "kspread_sheet.h"
 #include "kspread_sheet.moc"
@@ -204,7 +208,7 @@ public:
 
   Map* workbook;
 
-  DCOPObject* dcop;
+  SheetAdaptor* dbus;
 
   QString name;
   int id;
@@ -307,10 +311,11 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
 
   d->defaultFormat = new Format (this, d->workbook->doc()->styleManager()->defaultStyle());
   d->emptyPen.setStyle( Qt::NoPen );
-  d->dcop = 0;
+  d->dbus = 0;
   d->name = sheetName;
 
-  dcopObject();
+  d->dbus = new SheetAdaptor(this);
+  QDBus::sessionBus().registerObject( "/"+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName(), this);
 
   d->cells.setAutoDelete( true );
   d->rows.setAutoDelete( true );
@@ -7449,7 +7454,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
     kDebug(36001)<<"Sheet::loadXML: table name="<<d->name<<endl;
     setObjectName(d->name.toUtf8());
-    (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
+//     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     if( sheet.hasAttribute( "grid" ) )
     {
@@ -8086,7 +8091,6 @@ Sheet::~Sheet()
     delete d->defaultRowFormat;
     delete d->defaultColumnFormat;
     delete d->print;
-    delete d->dcop;
 
     delete d->dependencies;
 
@@ -8120,12 +8124,9 @@ void Sheet::enableScrollBarUpdates( bool _enable )
   d->scrollBarUpdates = _enable;
 }
 
-DCOPObject* Sheet::dcopObject()
+SheetAdaptor* Sheet::dbusObject()
 {
-    if ( !d->dcop )
-        d->dcop = new SheetIface( this );
-
-    return d->dcop;
+    return d->dbus;
 }
 
 void Sheet::hideSheet(bool _hide)
@@ -8168,7 +8169,7 @@ bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
     emit sig_nameChanged( this, old_name );
 
     setObjectName(name.toUtf8());
-    (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
+//     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     return true;
 }

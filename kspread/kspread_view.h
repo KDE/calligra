@@ -65,6 +65,7 @@ class View;
 class ComboboxLocationEditWidget;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
+class ViewAdaptor;
 
 
 /** @class View
@@ -190,7 +191,7 @@ public:
      */
     void deleteEditor( bool saveChanges = true );
     void closeEditor();
-    virtual DCOPObject* dcopObject();
+    virtual ViewAdaptor* dbusObject();
 
     virtual QWidget *canvas() const;
     virtual int canvasXOffset() const;

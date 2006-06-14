@@ -20,14 +20,14 @@
 #ifndef KSPREAD_TEST_RUNNER
 #define KSPREAD_TEST_RUNNER
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 namespace KSpread
 {
 
 class Tester;
 
-class TestRunner : public KDialogBase
+class TestRunner : public KDialog
 {
 Q_OBJECT
 

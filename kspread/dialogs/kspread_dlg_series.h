@@ -26,7 +26,7 @@
 #ifndef __kspread_dlg_series__
 #define __kspread_dlg_series__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QRadioButton;
 class QCheckBox;
@@ -37,7 +37,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class SeriesDlg : public KDialogBase
+class SeriesDlg : public KDialog
 {
     Q_OBJECT
 public:

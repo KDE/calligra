@@ -38,7 +38,9 @@
 #include "kspread_sheet.h"
 #include "kspread_style_manager.h"
 #include "kspread_view.h"
-#include "KSpreadMapIface.h"
+
+#include "KSpreadMapAdaptor.h"
+#include <dbus/qdbus.h>
 
 #include "kspread_map.h"
 
@@ -54,16 +56,17 @@ Map::Map ( Doc* doc, const char* name)
     m_initialMarkerRow( 0 ),
     m_initialXOffset(0.0),
     m_initialYOffset(0.0),
-    tableId (1),
-    m_dcop( 0 )
+    tableId (1)
 {
   setObjectName( name ); // ### necessary for DCOP/Scripting?
+  m_dbus = new MapAdaptor(this);
+  QDBus::sessionBus().registerObject( "/"+doc->objectName() + '/' + objectName(), this);
+ 
 }
 
 Map::~Map()
 {
   qDeleteAll( m_lstSheets );
-  delete m_dcop;
 }
 
 Doc* Map::doc() const
@@ -454,12 +457,9 @@ bool Map::loadChildren( KoStore * _store )
   return true;
 }
 
-DCOPObject * Map::dcopObject()
+MapAdaptor * Map::dbusObject()
 {
-    if ( !m_dcop )
-        m_dcop = new MapIface( this );
-
-    return m_dcop;
+    return m_dbus;
 }
 
 void Map::takeSheet( Sheet * sheet )

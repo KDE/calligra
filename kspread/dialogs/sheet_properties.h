@@ -22,7 +22,7 @@
 
 #include <QWidget>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "kspread_sheet.h"
 #include "ui_sheet_properties_base.h"
@@ -36,7 +36,7 @@ class SheetPropertiesWidget : public QWidget, public Ui::SheetPropertiesWidget
   SheetPropertiesWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
 };
 
-class SheetPropertiesDialog : public KDialogBase
+class SheetPropertiesDialog : public KDialog
 {
     Q_OBJECT
 

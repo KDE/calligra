@@ -20,13 +20,13 @@
 #ifndef KSPREAD_INSPECTOR
 #define KSPREAD_INSPECTOR
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 namespace KSpread
 {
 class Cell;
 
-class Inspector : public KDialogBase
+class Inspector : public KPageDialog
 {
 Q_OBJECT
 

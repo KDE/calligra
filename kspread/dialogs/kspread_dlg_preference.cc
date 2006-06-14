@@ -56,32 +56,47 @@
 using namespace KSpread;
 
 PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
-  : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
-		KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
-		KDialogBase::Ok)
+  : KPageDialog( )
 
 {
+  setFaceType( List );
+  setCaption( i18n("Configure KSpread") );
+  setButtons( Ok|Cancel|Default );
+  setDefaultButton( Ok );
+
   m_pView=parent;
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-  KVBox *page2=addVBoxPage(i18n("Locale Settings"), QString::null,BarIcon("gohome",K3Icon::SizeMedium));
+  KVBox *page2 = new KVBox();
+  p2 = addPage(page2, i18n("Locale Settings"));
+  p2->setIcon( BarIcon("gohome",K3Icon::SizeMedium) );
  _localePage=new parameterLocale(parent,page2 );
 
-  KVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", K3Icon::SizeMedium) );
+  KVBox *page3 = new KVBox();
+  p3 = addPage(page3, i18n("Interface"));
+  p3->setIcon( BarIcon("signature",K3Icon::SizeMedium) );
   _configure = new  configure(parent,page3 );
 
-  KVBox * page4=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",K3Icon::SizeMedium) );
+  KVBox *page4 = new KVBox();
+  p4 = addPage(page4, i18n("Misc"));
+  p4->setIcon( BarIcon("misc",K3Icon::SizeMedium) );
   _miscParameter = new  miscParameters(parent,page4 );
 
-  KVBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",K3Icon::SizeMedium) );
+  KVBox *page5 = new KVBox();
+  p5 = addPage(page5, i18n("Color"));
+  p5->setIcon( BarIcon("colorize",K3Icon::SizeMedium) );
   _colorParameter=new colorParameters(parent,page5 );
 
-  KVBox *page6=addVBoxPage(i18n("Page Layout"), QString::null,BarIcon("edit",K3Icon::SizeMedium) );
+  KVBox *page6 = new KVBox();
+  p6 = addPage(page6, i18n("Page Layout"));
+  p6->setIcon( BarIcon("edit",K3Icon::SizeMedium) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
-  KVBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
-                          BarIcon("spellcheck", K3Icon::SizeMedium) );
+  KVBox *page7 = new KVBox();
+  p7 = addPage(page7,  i18n("Spelling") );
+  p7->setIcon( BarIcon("spellcheck",K3Icon::SizeMedium) );
+  p7->setHeader( i18n("Spell Checker Behavior") );
   _spellPage=new configureSpellPage(parent,page7);
 
 }
@@ -89,17 +104,17 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 void PreferenceDialog::openPage(int flags)
 {
     if(flags & KS_LOCALE)
-        showPage( 0 );
+        setCurrentPage( p2 );
     else if(flags & KS_INTERFACE)
-        showPage( 1 );
+        setCurrentPage( p3 );
     else if(flags & KS_MISC)
-        showPage( 2 );
+        setCurrentPage( p4 );
     else if(flags & KS_COLOR)
-        showPage( 3 );
+        setCurrentPage( p5 );
     else if(flags & KS_LAYOUT)
-        showPage( 4 );
+        setCurrentPage( p6 );
     else if(flags & KS_SPELLING)
-        showPage( 5 );
+        setCurrentPage( p7 );
 }
 
 void PreferenceDialog::slotApply()
@@ -117,26 +132,16 @@ void PreferenceDialog::slotApply()
 
 void PreferenceDialog::slotDefault()
 {
-    switch(activePageIndex())
-    {
-        case 1:
-            _configure->slotDefault();
-            break;
-        case 2:
-            _miscParameter->slotDefault();
-            break;
-        case 3:
-            _colorParameter->slotDefault();
-            break;
-        case 4:
-            _layoutPage->slotDefault();
-            break;
-        case 5:
-            _spellPage->slotDefault();
-            break;
-        default:
-            break;
-    }
+    if ( currentPage() == p2 )
+      _configure->slotDefault();
+    else if ( currentPage() == p3 )
+      _miscParameter->slotDefault();
+    else if ( currentPage() == p4 )
+      _colorParameter->slotDefault();
+    else if ( currentPage() == p5 )
+      _layoutPage->slotDefault();
+    else if ( currentPage() == p6 )
+      _spellPage->slotDefault();
 }
 
 

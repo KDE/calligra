@@ -57,8 +57,6 @@
 #include <Q3ValueList>
 
 // KDE includes
-#include <dcopclient.h>
-#include <dcopref.h>
 #include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -161,7 +159,8 @@
 #include "dialogs/SheetSelectPage.h"
 
 // KSpread DCOP
-#include "KSpreadViewIface.h"
+#include "KSpreadViewAdaptor.h"
+#include <dbus/qdbus.h>
 
 #include "kspread_view.h"
 
@@ -174,7 +173,7 @@ class View::Private
 public:
     View* view;
     Doc* doc;
-    DCOPObject* dcop;
+    ViewAdaptor* dbus;
 
     // the active sheet, may be 0
     // this is the sheet which has the input focus
@@ -1481,7 +1480,7 @@ View::View( QWidget *_parent, const char *_name,
     d->view = this;
     d->doc = _doc;
 
-    d->dcop = 0;
+    d->dbus = new ViewAdaptor(this);
 
     d->activeSheet = 0;
 
@@ -1535,7 +1534,7 @@ View::View( QWidget *_parent, const char *_name,
       setXMLFile( "kspread_readonly.rc" );
 
     // build the DCOP object
-    dcopObject();
+//     dcopObject();
 
     connect( doc()->commandHistory(), SIGNAL( commandExecuted(KCommand *) ),
         this, SLOT( commandExecuted() ) );
@@ -1628,7 +1627,7 @@ View::~View()
     delete d->popupChild;
     delete d->popupListChoose;
     delete d->calcLabel;
-    delete d->dcop;
+//     delete d->dcop;
 
     delete d->insertHandler;
     d->insertHandler = 0;
@@ -4478,15 +4477,15 @@ void View::replace()
 void View::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/ )
 {
     d->selection->initialize( d->findPos );
-    KDialogBase *baseDialog=0;
+    KDialog *dialog=0;
     if ( d->find )
-        baseDialog = d->find->findNextDialog();
+        dialog = d->find->findNextDialog();
     else
-        baseDialog = d->replace->replaceNextDialog();
-    kDebug()<<" baseDialog :"<<baseDialog<<endl;
+        dialog = d->replace->replaceNextDialog();
+    kDebug()<<" baseDialog :"<<dialog<<endl;
     QRect globalRect( d->findPos, d->findEnd );
     globalRect.moveTopLeft( canvasWidget()->mapToGlobal( globalRect.topLeft() ) );
-    KDialog::avoidArea( baseDialog, QRect( d->findPos, d->findEnd ));
+    KDialog::avoidArea( dialog, QRect( d->findPos, d->findEnd ));
 }
 
 void View::slotReplace( const QString &newText, int, int, int )
@@ -6988,12 +6987,9 @@ void View::deleteEditor( bool saveChanges )
     doc()->emitEndOperation();
 }
 
-DCOPObject * View::dcopObject()
+ViewAdaptor * View::dbusObject()
 {
-  if ( !d->dcop )
-    d->dcop = new ViewIface( this );
-
-  return d->dcop;
+  return d->dbus;
 }
 
 QWidget * View::canvas() const

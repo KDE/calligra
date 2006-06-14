@@ -24,7 +24,7 @@
 #ifndef __kspread_dlg_comment__
 #define __kspread_dlg_comment__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QPushButton;
 class Q3MultiLineEdit;
@@ -34,7 +34,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class CommentDialog : public KDialogBase
+class CommentDialog : public KDialog
 {
   Q_OBJECT
 public:

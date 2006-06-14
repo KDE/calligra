@@ -25,7 +25,7 @@
 #ifndef __kspread_dlg_goto__
 #define __kspread_dlg_goto__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KLineEdit;
 
@@ -34,7 +34,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class GotoDialog : public KDialogBase
+class GotoDialog : public KDialog
 {
   Q_OBJECT
 public:

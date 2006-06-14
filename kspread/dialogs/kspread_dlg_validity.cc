@@ -48,15 +48,25 @@
 using namespace KSpread;
 
 DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
-  :KDialogBase(KDialogBase::Tabbed, i18n("Validity"),User2|User1|Cancel, User1, parent, name,true,false,KStdGuiItem::ok(),i18n("Clear &All"))
+  :KPageDialog(parent)
 
 {
+  setFaceType( Tabbed );
+  setCaption( i18n("Validity") );
+  setObjectName( name );
+  setModal( true );
+  setButtons( User2|User1|Cancel );
+  setDefaultButton( User1 );
+  setButtonGuiItem( User1, KStdGuiItem::ok() );
+  setButtonGuiItem( User2, i18n("Clear &All") );
+
   m_pView=parent;
   marker=_marker;
-  QFrame *page1 = addPage(i18n("&Values"));
+  QFrame *page1 = new QFrame();
+  addPage(page1, i18n("&Values"));
   QVBoxLayout *lay1 = new QVBoxLayout( page1 );
-  lay1->setMargin(KDialogBase::marginHint());
-  lay1->setSpacing(KDialogBase::spacingHint());
+  lay1->setMargin(KDialog::marginHint());
+  lay1->setSpacing(KDialog::spacingHint());
 
   QGroupBox* tmpQButtonGroup = new QGroupBox( i18n("Validity Criteria"), page1 );
 /*  tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
@@ -148,11 +158,12 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   validityLabelList->setText(i18n("Entries:" ));
   grid1->addWidget(validityLabelList,2,0);
 
-  QFrame *page2 = addPage(i18n("&Error Alert"));
+  QFrame *page2 = new QFrame();
+  addPage(page2, i18n("&Error Alert"));
 
   lay1 = new QVBoxLayout( page2 );
-  lay1->setMargin(KDialogBase::marginHint());
-  lay1->setSpacing(KDialogBase::spacingHint());
+  lay1->setMargin(KDialog::marginHint());
+  lay1->setSpacing(KDialog::spacingHint());
 
   tmpQButtonGroup = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Contents"), page2, "ButtonGroup_2" );
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
@@ -191,10 +202,11 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   lay1->addWidget(tmpQButtonGroup);
   message->setTextFormat( Qt::PlainText );
 
-  QFrame *page3 = addPage(i18n("Input Help"));
+  QFrame *page3 = new QFrame();
+  addPage(page3, i18n("Input Help"));
   lay1 = new QVBoxLayout( page3 );
-  lay1->setMargin(KDialogBase::marginHint());
-  lay1->setSpacing(KDialogBase::spacingHint());
+  lay1->setMargin(KDialog::marginHint());
+  lay1->setSpacing(KDialog::spacingHint());
 
   tmpQButtonGroup = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Contents"), page3, "ButtonGroup_2" );
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());

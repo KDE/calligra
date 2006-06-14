@@ -29,7 +29,7 @@
 #define __kspread_dlg_sort__
 
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QStringList>
 //Added by qt3to4:
 #include <QLabel>
@@ -48,7 +48,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class SortDialog : public KDialogBase
+class SortDialog : public KDialog
 {
   Q_OBJECT
 

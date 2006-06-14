@@ -62,9 +62,14 @@ using namespace KSpread;
 
 SortDialog::SortDialog( View * parent,  const char * name,
                                 bool modal )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, modal,"Sort",Ok|Cancel ),
+  : KDialog( parent ),
     m_pView( parent )
 {
+  setCaption( i18n("Sort") );
+  setObjectName( name );
+  setModal( modal );
+  setButtons( Ok|Cancel );
+
   if ( !name )
     setObjectName( "SortDialog" );
 
@@ -72,7 +77,8 @@ SortDialog::SortDialog( View * parent,  const char * name,
   setWindowTitle( i18n( "Sorting" ) );
   //setSizeGripEnabled( true );
 
-  KVBox *page = makeVBoxMainWidget();
+  KVBox *page = new KVBox();
+  setMainWidget( page );
 
   m_tabWidget = new QTabWidget( page );
 

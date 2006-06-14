@@ -23,7 +23,7 @@
 #ifndef __kspread_dlg_pasteinsert__
 #define __kspread_dlg_pasteinsert__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QCheckBox;
 class QRadioButton;
@@ -33,7 +33,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class PasteInsertDialog : public KDialogBase
+class PasteInsertDialog : public KDialog
 {
     Q_OBJECT
 public:

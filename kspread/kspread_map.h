@@ -31,8 +31,6 @@ class KoStore;
 class KoOasisLoadingContext;
 class KoOasisStyles;
 
-class DCOPObject;
-
 class QDomElement;
 class QDomDocument;
 class KoXmlWriter;
@@ -47,6 +45,7 @@ class Doc;
 class Sheet;
 class GenValidationStyles;
 class Style;
+class MapAdaptor;
 
 /**
  * A map is a simple container for all sheets. Usually a complete map
@@ -179,7 +178,7 @@ public:
 
   void update();
 
-  virtual DCOPObject* dcopObject();
+  virtual MapAdaptor* dbusObject();
 
   void takeSheet( Sheet * sheet );
   void insertSheet( Sheet * sheet );
@@ -221,7 +220,7 @@ private:
   // used to give every Sheet a unique default name.
   int tableId;
 
-  DCOPObject* m_dcop;
+  MapAdaptor* m_dbus;
 };
 
 } // namespace KSpread

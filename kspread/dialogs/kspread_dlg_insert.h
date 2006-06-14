@@ -27,7 +27,7 @@
 #ifndef __kspread_dlg_insert__
 #define __kspread_dlg_insert__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class QCheckBox;
 class QRadioButton;
@@ -38,7 +38,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class InsertDialog : public KDialogBase
+class InsertDialog : public KDialog
 {
     Q_OBJECT
 public:

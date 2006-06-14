@@ -25,7 +25,7 @@
 
 #include <QList>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class Q3ListBox;
 
@@ -33,7 +33,7 @@ namespace KSpread
 {
 class View;
 
-class ShowColRow: public KDialogBase
+class ShowColRow: public KDialog
 {
   Q_OBJECT
 public:

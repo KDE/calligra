@@ -42,12 +42,18 @@
 using namespace KSpread;
 
 AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name,true,i18n("Change Angle" ), Ok|Cancel|Default )
+  : KDialog( parent )
 {
+  setCaption( i18n("Change Angle") );
+  setObjectName( name );
+  setModal( true );
+  setButtons( Ok|Cancel|Default );
+
   m_pView=parent;
   marker=_marker;
 
-  QWidget *page = plainPage();
+  QWidget *page = new QWidget();
+  setMainWidget( page );
 
   QVBoxLayout *lay = new QVBoxLayout( page );
   lay->setMargin(0);

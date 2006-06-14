@@ -24,7 +24,7 @@
 #ifndef __kspread_dlg_validity__
 #define __kspread_dlg_validity__
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 #include "kspread_cell.h"
 //Added by qt3to4:
@@ -42,7 +42,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class DlgValidity : public KDialogBase
+class DlgValidity : public KPageDialog
 {
   Q_OBJECT
 public:

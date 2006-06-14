@@ -40,15 +40,21 @@
 using namespace KSpread;
 
 AreaDialog::AreaDialog( View * parent, const char * name, const QPoint & _marker )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n("Area Name"), Ok | Cancel )
+  : KDialog( parent )
 {
+  setCaption( i18n("Area Name") );
+  setObjectName( name );
+  setButtons( Ok | Cancel );
+  setModal( true );
+
   m_pView  = parent;
   m_marker = _marker;
 
-  QWidget * page = plainPage();
+  QWidget * page = new QWidget();
+  setMainWidget( page );
   QVBoxLayout * lay1 = new QVBoxLayout( page );
-  lay1->setMargin(KDialogBase::marginHint());
-  lay1->setSpacing(KDialogBase::spacingHint());
+  lay1->setMargin(KDialog::marginHint());
+  lay1->setSpacing(KDialog::spacingHint());
 
   QLabel * label = new QLabel( i18n("Enter the area name:"), page );
   lay1->addWidget( label );

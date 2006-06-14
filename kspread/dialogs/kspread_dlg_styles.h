@@ -21,7 +21,7 @@
 #ifndef __kspread_dlg_styles__
 #define __kspread_dlg_styles__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QWidget>
 
 class KComboBox;

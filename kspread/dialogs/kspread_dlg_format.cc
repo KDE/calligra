@@ -52,8 +52,13 @@
 using namespace KSpread;
 
 FormatDialog::FormatDialog( View* view, const char* name )
-    : KDialogBase( view, name, true,i18n("Sheet Style"),Ok|Cancel )
+    : KDialog( view )
 {
+    setCaption( i18n("Sheet Style") );
+    setObjectName( name );
+    setModal( true );
+    setButtons( Ok|Cancel );
+
     for( int i = 0; i < 16; ++i )
 	m_cells[ i ] = 0;
 
@@ -61,8 +66,8 @@ FormatDialog::FormatDialog( View* view, const char* name )
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     QVBoxLayout *vbox = new QVBoxLayout( page );
-    vbox->setMargin(KDialogBase::marginHint());
-    vbox->setSpacing(KDialogBase::spacingHint());
+    vbox->setMargin(KDialog::marginHint());
+    vbox->setSpacing(KDialog::spacingHint());
 
     QLabel *toplabel = new QLabel( i18n("Select the sheet style to apply:"), page );
     m_combo = new QComboBox( page );

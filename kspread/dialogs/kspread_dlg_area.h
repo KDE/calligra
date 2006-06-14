@@ -24,7 +24,7 @@
 #ifndef __kspread_dlg_area__
 #define __kspread_dlg_area__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 //Added by qt3to4:
 #include <QLabel>
 
@@ -36,7 +36,7 @@ namespace KSpread
 {
 class View;
 
-class AreaDialog : public KDialogBase
+class AreaDialog : public KDialog
 {
   Q_OBJECT
 public:

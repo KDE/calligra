@@ -26,7 +26,7 @@
 #ifndef __kspread_dlg_reference__
 #define __kspread_dlg_reference__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 //Added by qt3to4:
 #include <QLabel>
 
@@ -69,7 +69,7 @@ private:
   void displayAreaValues(QString const & areaName);
 };
 
-class EditAreaName : public KDialogBase
+class EditAreaName : public KDialog
 {
     Q_OBJECT
 

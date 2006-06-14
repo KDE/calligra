@@ -36,9 +36,11 @@
 using namespace KSpread;
 
 SpecialPasteDialog::SpecialPasteDialog( View* parent )
-  : KDialog( parent, i18n( "Special Paste" ), Ok|Cancel ),
+  : KDialog( parent ),
     m_pView( parent )
 {
+  setButtons( Ok|Cancel );
+  setCaption( i18n( "Special Paste" ) );
   QWidget* widget = new QWidget( this );
   setupUi( widget );
   setMainWidget( widget );

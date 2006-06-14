@@ -38,15 +38,19 @@
 using namespace KSpread;
 
 ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name,true,"",Ok|Cancel )
+  : KDialog( parent )
 {
+  setModal( true );
+  setButtons( Ok|Cancel );
+  setObjectName( name );
   m_pView = parent;
   typeShow=_type;
 
-  QWidget *page = plainPage();
+  QWidget *page = new QWidget();
+  setMainWidget( page );
   QVBoxLayout *lay1 = new QVBoxLayout( page );
-  lay1->setMargin(KDialogBase::marginHint());
-  lay1->setSpacing(KDialogBase::spacingHint());
+  lay1->setMargin(KDialog::marginHint());
+  lay1->setSpacing(KDialog::spacingHint());
 
   QLabel *label = new QLabel( page );
 

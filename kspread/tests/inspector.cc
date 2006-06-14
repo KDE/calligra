@@ -26,7 +26,7 @@
 //Added by qt3to4:
 #include <QVBoxLayout>
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 #include "kspread_cell.h"
 #include "kspread_style.h"
@@ -168,46 +168,53 @@ void Inspector::Private::handleDep()
 }
 
 Inspector::Inspector( Cell* cell ):
-  KDialogBase( KDialogBase::Tabbed, "Inspector", KDialogBase::Close,
-  KDialogBase::Close )
+  KPageDialog()
 {
+  setFaceType( Tabbed );
+  setCaption( "Inspector" );
+  setButtons( Close );
+  setDefaultButton( Close );
   d = new Private;
 
   d->cell = cell;
   d->format = cell->format();
   d->sheet = cell->sheet();
 
-  QFrame* cellPage = addPage( QString("Cell") );
+  QFrame* cellPage = new QFrame();
+  addPage( cellPage, QString("Cell") );
   QVBoxLayout* cellLayout = new QVBoxLayout( cellPage );
-  cellLayout->setMargin(KDialogBase::marginHint());
-  cellLayout->setSpacing(KDialogBase::spacingHint());
+  cellLayout->setMargin(KDialog::marginHint());
+  cellLayout->setSpacing(KDialog::spacingHint());
   d->cellView = new Q3ListView( cellPage );
   cellLayout->addWidget( d->cellView );
   d->cellView->addColumn( "Key", 150 );
   d->cellView->addColumn( "Value" );
 
-  QFrame* formatPage = addPage( QString("Format") );
+  QFrame* formatPage = new QFrame();
+  addPage(formatPage,  QString("Format") );
   QVBoxLayout* formatLayout = new QVBoxLayout( formatPage );
-  formatLayout->setMargin(KDialogBase::marginHint());
-  formatLayout->setSpacing(KDialogBase::spacingHint());
+  formatLayout->setMargin(KDialog::marginHint());
+  formatLayout->setSpacing(KDialog::spacingHint());
   d->formatView = new Q3ListView( formatPage );
   formatLayout->addWidget( d->formatView );
   d->formatView->addColumn( "Key", 150 );
   d->formatView->addColumn( "Value" );
 
-  QFrame* sheetPage = addPage( QString("Sheet") );
+  QFrame* sheetPage = new QFrame();
+  addPage(sheetPage,  QString("Sheet") );
   QVBoxLayout* sheetLayout = new QVBoxLayout( sheetPage );
-  sheetLayout->setMargin(KDialogBase::marginHint());
-  sheetLayout->setSpacing(KDialogBase::spacingHint());
+  sheetLayout->setMargin(KDialog::marginHint());
+  sheetLayout->setSpacing(KDialog::spacingHint());
   d->sheetView = new Q3ListView( sheetPage );
   sheetLayout->addWidget( d->sheetView );
   d->sheetView->addColumn( "Key", 150 );
   d->sheetView->addColumn( "Value" );
 
-  QFrame* depPage = addPage( QString("Dependencies") );
+  QFrame* depPage = new QFrame();
+  addPage(depPage,  QString("Dependencies") );
   QVBoxLayout* depLayout = new QVBoxLayout( depPage );
-  depLayout->setMargin(KDialogBase::marginHint());
-  depLayout->setSpacing(KDialogBase::spacingHint());
+  depLayout->setMargin(KDialog::marginHint());
+  depLayout->setSpacing(KDialog::spacingHint());
   d->depView = new Q3ListView( depPage );
   depLayout->addWidget( d->depView );
   d->depView->addColumn( "Cell", 150 );

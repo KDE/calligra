@@ -23,7 +23,7 @@
 #ifndef __kspread_dlg_paperlayout__
 #define __kspread_dlg_paperlayout__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoPageLayoutDia.h>
 //Added by qt3to4:
 #include <QVBoxLayout>

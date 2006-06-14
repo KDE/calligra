@@ -82,7 +82,7 @@
 #include "valueformatter.h"
 #include "valueparser.h"
 
-#include "KSpreadDocIface.h"
+// #include "KSpreadDocIface.h"
 
 #include "kspread_doc.h"
 
@@ -112,7 +112,7 @@ public:
   static QList<Doc*> s_docs;
   static int s_docId;
 
-  DCOPObject* dcop;
+//   DCOPObject* dcop;
 
   // URL of the this part. This variable is only set if the load() function
   // had been called with an URL as argument.
@@ -205,7 +205,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   setInstance( Factory::global(), false );
   setTemplateType( "kspread_template" );
 
-  d->dcop = 0;
+//   d->dcop = 0;
   d->isLoading = false;
   d->numOperations = 1; // don't start repainting before the GUI is done...
 
@@ -223,7 +223,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   //             Let's set one for dcop.
   QString tmp = QString( "Document%1" ).arg( d->s_docId++ );
   setObjectName( tmp.toLocal8Bit());//tmp.toLatin1() );
-  dcopObject();
+//   dcopObject();
 
   // default document properties
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;
@@ -251,8 +251,8 @@ Doc::~Doc()
   if(isReadWrite())
     saveConfig();
 
-  delete d->dcop;
-  d->s_docs.removeAll( this );
+//   delete d->dcop;
+//   d->s_docs.removeAll( this );
 
   kDebug(36001) << "alive 1" << endl;
 
@@ -1715,13 +1715,13 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
 }
 
 
-DCOPObject* Doc::dcopObject()
-{
-    if ( !d->dcop )
-        d->dcop = new DocIface( this );
-
-    return d->dcop;
-}
+// DCOPObject* Doc::dcopObject()
+// {
+//     if ( !d->dcop )
+//         d->dcop = new DocIface( this );
+// 
+//     return d->dcop;
+// }
 
 void Doc::addAreaName(const QRect &_rect,const QString & name,const QString & sheetName)
 {

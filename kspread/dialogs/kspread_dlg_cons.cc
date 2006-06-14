@@ -40,7 +40,7 @@
 
 #include <kpushbutton.h>
 #include <kdebug.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kmessagebox.h>
 
 #include <kspread_canvas.h>
@@ -60,11 +60,16 @@
 using namespace KSpread;
 
 ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, false, i18n("Consolidate"), Ok|Cancel )
+  : KDialog( parent )
 {
+  setCaption( i18n("Consolidate") );
+  setObjectName( name );
+  setModal( false );
+  setButtons( Ok|Cancel);
   m_pView = parent;
 
-  QWidget* page = plainPage();
+  QWidget *page = new QWidget();
+  setMainWidget( page );
 
   QGridLayout *grid1 = new QGridLayout( page );
 
