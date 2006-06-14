@@ -40,8 +40,12 @@ namespace KPlato
 {
 
 AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption, int buttons, const char *n)
-    : KDialogBase(Swallow, caption, buttons, Ok, p, n, true, true)
+    : KDialogBase(p)
 {
+    setCaption( caption );
+    setButton( button );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     if (caption.isEmpty())
         setCaption(i18n("Add Relationship"));
     m_relation = rel;

@@ -40,9 +40,13 @@ namespace KPlato
 {
 
 StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Standard Worktime"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialog(parent),
       project(p)
 {
+    setCaption( i18n("Standard Worktime") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     //kDebug()<<k_funcinfo<<&p<<endl;
     m_original = p.standardWorktime();
     dia = new StandardWorktimeDialogImpl(m_original, this);
@@ -75,7 +79,7 @@ KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
         cmd->addCommand(new ModifyStandardWorktimeDayCmd(part, m_original, m_original->day(), dia->inDay()));
     }
     return cmd;
-    
+
 }
 
 void StandardWorktimeDialog::slotOk() {
@@ -83,7 +87,7 @@ void StandardWorktimeDialog::slotOk() {
 }
 
 
-StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QWidget *parent) 
+StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QWidget *parent)
     : StandardWorktimeDialogBase(parent),
       m_std(std) {
     if (!std) {
@@ -93,7 +97,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     m_month = m_std->month();
     m_week = m_std->week();
     m_day = m_std->day();
-    
+
     year->setValue(m_year);
     month->setValue(m_month);
     week->setValue(m_week);
@@ -103,7 +107,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     connect(month, SIGNAL(valueChanged(double)), SLOT(slotMonthChanged(double)));
     connect(week, SIGNAL(valueChanged(double)), SLOT(slotWeekChanged(double)));
     connect(day, SIGNAL(valueChanged(double)), SLOT(slotDayChanged(double)));
-    
+
 }
 
 

@@ -21,7 +21,7 @@
 #ifndef KPTRELATIONDIALOG_H
 #define KPTRELATIONDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class Q3ButtonGroup;
 class KCommand;
@@ -37,7 +37,7 @@ class Relation;
 class Part;
 class ModifyRelationTypeCmd;
 
-class AddRelationDialog : public KDialogBase 
+class AddRelationDialog : public KDialog
 {
     Q_OBJECT
 public:

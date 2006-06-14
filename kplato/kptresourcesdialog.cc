@@ -33,11 +33,15 @@ namespace KPlato
 {
 
 ResourcesDialog::ResourcesDialog(Project &p, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Resources"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialogBase( parent),
       project(p)
 {
+    setCaption( i18n("Resources") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     panel = new ResourcesPanel(this, &project);
-    
+
     setMainWidget(panel);
     enableButtonOK(false);
 

@@ -20,7 +20,7 @@
 #ifndef KPTTASKPROGRESSDIALOG_H
 #define KPTTASKPROGRESSDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KCommand;
 
@@ -32,7 +32,7 @@ class Task;
 class Part;
 class StandardWorktime;
 
-class TaskProgressDialog : public KDialogBase {
+class TaskProgressDialog : public KDialog {
     Q_OBJECT
 public:
     TaskProgressDialog(Task &task, StandardWorktime *workTime, QWidget *parent=0);

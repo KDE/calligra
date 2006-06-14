@@ -65,7 +65,7 @@ public:
     enum State { None=0, New=1, Modified=2, Deleted=4 };
 
     void setState(State s) { state |= s; }
-    
+
     Calendar *baseCalendar() {
         if (state & Deleted) return 0;
         return original ? original : calendar;
@@ -94,7 +94,7 @@ public:
                 macro->addCommand(new CalendarModifyParentCmd(part, original, c));
                 //kDebug()<<k_funcinfo<<"Base modified: "<<c->name()<<endl;
             }
-            
+
             //kDebug()<<k_funcinfo<<"Check for days deleted: "<<calendar->name()<<endl;
             Q3PtrListIterator<CalendarDay> oit = original->days();
             for (; oit.current(); ++oit) {
@@ -104,7 +104,7 @@ public:
                     //kDebug()<<k_funcinfo<<"Removed day"<<endl;
                 }
             }
-        
+
             //kDebug()<<k_funcinfo<<"Check for days added or modified: "<<calendar->name()<<endl;
             Q3PtrListIterator<CalendarDay> cit = calendar->days();
             for (; cit.current(); ++cit) {
@@ -149,7 +149,7 @@ public:
     CalendarListViewItem* base;
     CalendarListDialogImpl &panel;
     QString oldText;
-    
+
 protected:
     virtual void cancelRename(int col) {
         //kDebug()<<k_funcinfo<<endl;
@@ -166,9 +166,13 @@ private:
 
 //----------------------------------------------------
 CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Calendar's Settings"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialog( parent),
       project(p)
 {
+    setCaption( i18n("Calendar's Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     //kDebug()<<k_funcinfo<<&p<<endl;
     dia = new CalendarListDialogImpl(p, this);
     Q3PtrList<Calendar> list = p.calendars();
@@ -179,7 +183,7 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
         new CalendarListViewItem(*dia, dia->calendarList, c, it.current());
     }
     dia->setBaseCalendars();
-    
+
     Q3ListViewItem *f = dia->calendarList->firstChild();
     if (f) {
         dia->calendarList->setSelected(f, true);
@@ -226,7 +230,7 @@ void CalendarListDialog::slotOk() {
 }
 
 //--------------------------------------------------
-CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent) 
+CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent)
     : CalendarListDialogBase(parent),
       project(p),
       m_renameItem(0) {
@@ -251,7 +255,7 @@ CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent)
     connect(calendarList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
     connect(calendarList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), SLOT(slotListDoubleClicked(Q3ListViewItem*, const QPoint&, int)));
     connect(calendarList, SIGNAL(itemRenamed(Q3ListViewItem*, int)), SLOT(slotItemRenamed(Q3ListViewItem*, int)));
-    
+
     connect (baseCalendar, SIGNAL(activated(int)), SLOT(slotBaseCalendarActivated(int)));
 
     // Internal rename stuff
@@ -324,10 +328,10 @@ void CalendarListDialogImpl::slotSelectionChanged(Q3ListViewItem *listItem) {
     calendar->clear();
 }
 void CalendarListDialogImpl::setCalendar(Calendar *cal) {
-    calendar->setCalendar(cal); 
-    calendar->setEnabled(true); 
+    calendar->setCalendar(cal);
+    calendar->setEnabled(true);
 }
- 
+
 void CalendarListDialogImpl::slotCalendarModified() {
     CalendarListViewItem *item = dynamic_cast<CalendarListViewItem*>(calendarList->currentItem());
     if (item) {
@@ -353,9 +357,9 @@ void CalendarListDialogImpl::slotAddClicked() {
     cal->setProject(&project);
     CalendarListViewItem *item = new CalendarListViewItem(*this, calendarList, cal);
     item->setState(CalendarListViewItem::New);
-    
+
     slotListDoubleClicked(item, QPoint(), 0);
-    
+
 }
 
 Q3PtrList<CalendarListViewItem> &CalendarListDialogImpl::deletedItems() {
@@ -426,7 +430,7 @@ void CalendarListDialogImpl::slotStartRename(Q3ListViewItem *item, int col) {
     item->setRenameEnabled(col, true);
     item->startRename(col);
     m_renameItem = item;
-    
+
     emit renameStarted(item, col);
 }
 

@@ -20,7 +20,7 @@
 #ifndef KPTRESOURCESDIALOG_H
 #define KPTRESOURCESDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KCommand;
 
@@ -32,7 +32,7 @@ class ResourcesPanel;
 class Part;
 
 
-class ResourcesDialog : public KDialogBase {
+class ResourcesDialog : public KDialog {
     Q_OBJECT
 public:
     ResourcesDialog(Project &project, QWidget *parent=0, const char *name=0);

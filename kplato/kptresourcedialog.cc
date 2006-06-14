@@ -65,7 +65,7 @@ ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
     connect(overtimeEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
 
     connect(chooseBtn, SIGNAL(clicked()), SLOT(slotChooseResource()));
-    
+
     connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotChanged()));
     connect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotChanged()));
     connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
@@ -119,11 +119,15 @@ void ResourceDialogImpl::slotChooseResource()
 //////////////////  ResourceDialog  ////////////////////////
 
 ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Resource Settings"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialogBase( parent),
       m_original(resource),
       m_resource(resource),
       m_calculationNeeded(false)
 {
+    setCaption( i18n("Resource Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     dia = new ResourceDialogImpl(this);
     setMainWidget(dia);
     enableButtonOK(false);
@@ -140,7 +144,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
 
     int cal = 0;
     dia->calendarList->insertItem(i18n("None"));
-    m_calendars.insert(0, 0);      
+    m_calendars.insert(0, 0);
     Q3PtrList<Calendar> list = project.calendars();
     Q3PtrListIterator<Calendar> cit = list;
     for(int i=1; cit.current(); ++cit, ++i) {
@@ -154,7 +158,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
-    
+
 }
 
 
@@ -182,7 +186,7 @@ void ResourceDialog::slotOk() {
 }
 
 void ResourceDialog::slotCalendarChanged(int /*cal*/) {
-    
+
 }
 
 KCommand *ResourceDialog::buildCommand(Part *part) {

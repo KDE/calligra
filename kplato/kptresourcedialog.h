@@ -23,7 +23,7 @@
 #include "resourcedialogbase.h"
 #include "kptresource.h"
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <QMap>
 #include <QComboBox>
@@ -60,7 +60,7 @@ protected slots:
     void slotAvailableUntilChanged(const QDateTime& dt);
 };
 
-class ResourceDialog : public KDialogBase {
+class ResourceDialog : public KDialog {
     Q_OBJECT
 public:
     ResourceDialog(Project &project, Resource *resource, QWidget *parent=0, const char *name=0);

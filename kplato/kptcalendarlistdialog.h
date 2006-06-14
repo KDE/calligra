@@ -24,7 +24,7 @@
 #include "kptcalendaredit.h"
 #include "kptcalendar.h"
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <QString>
 //Added by qt3to4:
@@ -89,7 +89,7 @@ private:
     Q3ListViewItem *m_renameItem;
 };
 
-class CalendarListDialog : public KDialogBase {
+class CalendarListDialog : public KDialog {
     Q_OBJECT
 public:
     CalendarListDialog(Project &project, QWidget *parent=0, const char *name=0);

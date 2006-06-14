@@ -23,7 +23,7 @@
 #include "standardworktimedialogbase.h"
 #include "kptcalendar.h"
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <QString>
 
@@ -67,7 +67,7 @@ private:
     double m_day;
 };
 
-class StandardWorktimeDialog : public KDialogBase {
+class StandardWorktimeDialog : public KDialog {
     Q_OBJECT
 public:
     StandardWorktimeDialog(Project &project, QWidget *parent=0, const char *name=0);
