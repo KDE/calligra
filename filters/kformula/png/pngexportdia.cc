@@ -43,9 +43,11 @@
 #include <kglobal.h>
 
 PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent )
-    : KDialog( parent, i18n("PNG Export Filter Parameters" ), KDialog::Ok|KDialog::Cancel ),
+    : KDialog( parent),
       _fileOut( outFile )
 {
+    setCaption( i18n("PNG Export Filter Parameters" ) );
+    setButtons( KDialog::Ok|KDialog::Cancel );
     kapp->restoreOverrideCursor();
     wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
     KFormula::Document* doc = new KFormula::Document;
