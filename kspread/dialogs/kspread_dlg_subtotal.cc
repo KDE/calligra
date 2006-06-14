@@ -43,7 +43,7 @@ SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection )
     m_pSheet( m_pView->activeSheet() ),
     m_selection( selection )
 {
-  setButtonBoxOrientation( Qt::Vertical );
+  setButtonsOrientation( Qt::Vertical );
 
   QWidget* widget = new QWidget( this );
   setupUi( widget );

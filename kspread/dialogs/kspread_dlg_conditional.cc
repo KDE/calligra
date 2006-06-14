@@ -271,19 +271,21 @@ void ConditionalWidget::slotTextChanged3( const QString & text )
  */
 ConditionalDialog::ConditionalDialog( View * parent, const char * name,
                                               const QRect & marker )
-  : KDialog( parent, i18n( "Conditional Cell Attributes" ),
-             KDialog::Ok|KDialog::Cancel ),
+  : KDialog( parent ),
     m_view( parent ),
     m_dlg( new ConditionalWidget( this ) ),
     m_marker( marker )
 {
+  setCaption(i18n( "Conditional Cell Attributes" ));
+  setButtons(KDialog::Ok|KDialog::Cancel);
+
   QStringList list( m_view->doc()->styleManager()->styleNames() );
 
   m_dlg->m_style_1->insertItems( 0, list );
   m_dlg->m_style_2->insertItems( 0, list );
   m_dlg->m_style_3->insertItems( 0, list );
 
-  setButtonBoxOrientation( Qt::Vertical );
+  setButtonsOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 
   init();

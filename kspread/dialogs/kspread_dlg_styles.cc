@@ -79,7 +79,7 @@ StyleDialog::StyleDialog( View * parent, StyleManager * manager )
     m_styleManager( manager ),
     m_dlg( new StyleWidget( this ) )
 {
-  setButtonBoxOrientation( Qt::Vertical );
+  setButtonsOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 
   slotDisplayMode( 0 );

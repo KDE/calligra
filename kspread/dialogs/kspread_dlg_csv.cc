@@ -216,7 +216,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
     //cancel action !
     if ( file.isEmpty() )
     {
-        actionButton( Ok )->setEnabled( false );
+        enableButton( Ok, false );
         m_cancelled = true;
         return;
     }
@@ -225,7 +225,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
     {
       KMessageBox::sorry( this, i18n("Cannot open input file.") );
       in.close();
-      actionButton( Ok )->setEnabled( false );
+      enableButton( Ok, false );
       m_cancelled = true;
       return;
     }

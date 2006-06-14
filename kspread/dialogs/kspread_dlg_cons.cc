@@ -622,7 +622,7 @@ void ConsolidateDialog::slotRemove()
   m_pRefs->removeItem( i );
 
   if ( m_pRefs->count() == 0 )
-    actionButton( Ok )->setEnabled( false );
+    enableButton( Ok, false );
 }
 
 QStringList ConsolidateDialog::refs()
@@ -663,7 +663,7 @@ void ConsolidateDialog::slotReturnPressed()
   if ( !txt.isEmpty() )
   {
     m_pRefs->insertItem( txt );
-    actionButton( Ok )->setEnabled( true );
+    enableButton( Ok, true );
   }
 }
 

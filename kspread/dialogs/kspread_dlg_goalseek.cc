@@ -61,7 +61,7 @@ using namespace KSpread;
 
 GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
                                         const char * name, bool, Qt::WFlags fl )
-  : KDialog( parent, name, false, fl ),
+  : KDialog( parent, fl ),
     m_pView( parent ),
     m_maxIter( 1000 ),
     m_restored( true ),
@@ -70,6 +70,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
     m_selection( m_pView->selectionInfo()->selection() )
 {
   //setWFlags( Qt::WDestructiveClose );
+  setModal( false );
 
   if ( !name )
     setObjectName( "GoalSeekDialog" );
