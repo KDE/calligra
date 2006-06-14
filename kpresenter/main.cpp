@@ -21,7 +21,6 @@
 
 #include <KoApplication.h>
 
-#include <dcopclient.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
