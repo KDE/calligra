@@ -1464,7 +1464,7 @@ void KPrTextObject::removeHighlight ()
     m_textobj->removeHighlight( true /*repaint*/ );
 }
 
-void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* canvas, bool repaint, KDialogBase* dialog )
+void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* canvas, bool repaint, KDialog* dialog )
 {
     m_textobj->highlightPortion( parag, index, length, repaint );
     if ( repaint )
@@ -2387,9 +2387,9 @@ Q3DragObject * KPrTextView::newDrag( QWidget * parent )
     KoOasisStore oasisStore( store );
 
     //KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
-    
+
     KPrDocument * doc = kpTextObject()->kPresenterDocument();
-    
+
     doc->getVariableCollection()->variableSetting()->setModificationDate( QDateTime::currentDateTime() );
     doc->recalcVariables( VT_DATE );
     doc->recalcVariables( VT_TIME );

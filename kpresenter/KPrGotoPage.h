@@ -21,7 +21,7 @@
 #ifndef gotopage_h
 #define gotopage_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3valuelist.h>
 //Added by qt3to4:
 #include <QResizeEvent>
@@ -32,7 +32,7 @@ class QResizeEvent;
 class Q3ListBox;
 class KPrDocument;
 
-class KPrGotoPage : public KDialogBase
+class KPrGotoPage : public KDialog
 {
 public:
     KPrGotoPage( const KPrDocument *doc,

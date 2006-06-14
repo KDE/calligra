@@ -38,9 +38,12 @@
 KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
                         const Q3ValueList<int> &slides, int start,
                         QWidget *parent, const char *name )
-    : KDialogBase( parent, name, true, i18n("Goto Slide..."), Ok|Cancel),
+    : KDialog( parent),
       oldPage(start)
 {
+
+    setCaption( i18n("Goto Slide...") );
+    setButtons( Ok|Cancel );
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
