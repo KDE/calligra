@@ -149,18 +149,18 @@ void ChartBinding::cellChanged( Cell* /*changedCell*/ )
     if ( m_bIgnoreChanges )
         return;
 
-	//Ensure display gets updated by marking all cells underneath the chart as
-	//dirty
+  //Ensure display gets updated by marking all cells underneath the chart as
+  //dirty
 
-	const QRect chartGeometry = m_child->geometry().toQRect();
+  const QRect chartGeometry = m_child->geometry().toQRect();
 
-	double tmp;
-  	int left = sheet()->leftColumn( chartGeometry.left() , tmp );
-  	int top = sheet()->topRow( chartGeometry.top() , tmp );
-	int right = sheet()->rightColumn( chartGeometry.right() );
-	int bottom = sheet()->bottomRow( chartGeometry.bottom() );
+  double tmp;
+    int left = sheet()->leftColumn( chartGeometry.left() , tmp );
+    int top = sheet()->topRow( chartGeometry.top() , tmp );
+  int right = sheet()->rightColumn( chartGeometry.right() );
+  int bottom = sheet()->bottomRow( chartGeometry.bottom() );
 
-	sheet()->setRegionPaintDirty( QRect(left,top,right-left,bottom-top) );
+  sheet()->setRegionPaintDirty( QRect(left,top,right-left,bottom-top) );
 
     //kDebug(36001) << m_rctDataArea << endl;
 
@@ -178,13 +178,13 @@ void ChartBinding::cellChanged( Cell* /*changedCell*/ )
     for ( int row = 0; row < m_rctDataArea.height(); row++ ) {
         for ( int col = 0; col < m_rctDataArea.width(); col++ ) {
             cell = m_pSheet->cellAt( m_rctDataArea.left() + col,
-				     m_rctDataArea.top() + row );
+             m_rctDataArea.top() + row );
             if ( cell && cell->value().isNumber() )
-		chart->setCellData( row, col, cell->value().asFloat() );
+    chart->setCellData( row, col, cell->value().asFloat() );
             else if ( cell )
-	        chart->setCellData( row, col, cell->value().asString() );
+          chart->setCellData( row, col, cell->value().asString() );
             else
-	        chart->setCellData( row, col, KoChart::Value() );
+          chart->setCellData( row, col, KoChart::Value() );
         }
     }
     chart->analyzeHeaders( );
@@ -3040,6 +3040,8 @@ void Sheet::checkCellContent(Cell * cell1, Cell * cell2, int & ret)
   ret = 0;
 }
 
+// (Tomas) next about 700 lines contain just sorting - to be removed soon,
+// we'll use SortManipulator instead
 void Sheet::sortByRow( const QRect &area, int key1, int key2, int key3,
                               SortingOrder order1, SortingOrder order2,
                               SortingOrder order3,
@@ -5510,7 +5512,7 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
     }
     else
     {
-	setRegionPaintDirty( range );
+  setRegionPaintDirty( range );
         deleteCells( range );
     }
   }
@@ -6571,8 +6573,8 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
         QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
         kDebug()<<" default-cell-style-name:"<<str<<" for column " << indexCol <<endl;
 
-	//TODO - Code to look up the style in styleMap and store a reference to it in some map
-	// between column indicies and Style instances.  This can then be used when rendering cells
+  //TODO - Code to look up the style in styleMap and store a reference to it in some map
+  // between column indicies and Style instances.  This can then be used when rendering cells
 
     }
 
@@ -6582,12 +6584,12 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
         QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
         const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
         if (style)
-	{
-		styleStack.push( *style );
-	/*	FIX_BEFORE_COMMIT
-	 	layout.loadOasisStyleProperties( styleStack , oasisStyles );
-		styleStack.pop();*/
-	}
+  {
+    styleStack.push( *style );
+  /*  FIX_BEFORE_COMMIT
+    layout.loadOasisStyleProperties( styleStack , oasisStyles );
+    styleStack.pop();*/
+  }
 
         kDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
@@ -6658,11 +6660,11 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
 
     if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
     {
-	    QString str = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
+      QString str = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
 
-	    //TODO - Code to look up this style name in the style map and store it in a map somewhere between
-	    //row indicies and Style instances for use when rendering cells later on.
-	    //	    defaultRowCellStyle = styleMap[str];
+      //TODO - Code to look up this style name in the style map and store it in a map somewhere between
+      //row indicies and Style instances for use when rendering cells later on.
+      //      defaultRowCellStyle = styleMap[str];
     }
 
     layout.loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
@@ -6738,28 +6740,28 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
             columnIndex++;
             QString localName = cellElement.localName();
 
-	    if( ((localName == "table-cell") || (localName == "covered-table-cell")) && cellElement.namespaceURI() == KoXmlNS::table)
+      if( ((localName == "table-cell") || (localName == "covered-table-cell")) && cellElement.namespaceURI() == KoXmlNS::table)
             {
-	//	kDebug() << "Loading cell #" << cellCount << endl;
+  //  kDebug() << "Loading cell #" << cellCount << endl;
 
                 Cell* cell = nonDefaultCell( columnIndex, backupRow );
-		bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
+    bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
 
-		Style* style = 0;
+    Style* style = 0;
 
-		if ( cellHasStyle )
-		{
-			style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];
-		}
+    if ( cellHasStyle )
+    {
+      style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];
+    }
 
                 cell->loadOasis( cellElement, oasisContext, style );
 
 
-		bool haveStyle = cellHasStyle;
+    bool haveStyle = cellHasStyle;
                 int cols = 1;
 
-		//Copy this cell across & down if it has repeated rows or columns, but only
-		//if the cell has some content or a style associated with it.
+    //Copy this cell across & down if it has repeated rows or columns, but only
+    //if the cell has some content or a style associated with it.
                 if( (number > 1) || cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
@@ -6771,7 +6773,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
                       // FIXME POSSIBLE DATA LOSS!
                       cols = qMin( n, KS_colMax - columnIndex + 1 );
 
-		    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
+        if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
                         //just increment it
                         columnIndex +=cols - 1;
@@ -6780,19 +6782,19 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
                     {
                             for(int k = cols ; k ; --k )
                             {
-				if (k != cols)
-					columnIndex++;
+        if (k != cols)
+          columnIndex++;
 
-				Style* targetStyle = style;
+        Style* targetStyle = style;
 
-				for ( int newRow = backupRow; newRow < endRow;++newRow )
-				{
-                                    	Cell* target = nonDefaultCell( columnIndex, newRow );
+        for ( int newRow = backupRow; newRow < endRow;++newRow )
+        {
+                                      Cell* target = nonDefaultCell( columnIndex, newRow );
 
-					if (cell != target)
-						target->copyAll( cell );
+          if (cell != target)
+            target->copyAll( cell );
                                 }
-			    }
+          }
                     }
                 }
             }
@@ -7935,7 +7937,7 @@ bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
 {
 
     if (picture.isNull())
-	    return false;
+      return false;
 
     KoPictureKey key = picture.getKey();
 
@@ -7972,22 +7974,22 @@ bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
 
 bool Sheet::insertPicture( const KoPoint& point, const QPixmap& pixmap  )
 {
-	QByteArray data;
-	QBuffer buffer( &data );
+  QByteArray data;
+  QBuffer buffer( &data );
 
-	buffer.open( QIODevice::ReadWrite );
-	pixmap.save( &buffer , "PNG" );
+  buffer.open( QIODevice::ReadWrite );
+  pixmap.save( &buffer , "PNG" );
 
-	//Reset the buffer so that KoPicture reads the whole file from the beginning
-	//(at the moment the read/write position is at the end)
-	buffer.reset();
+  //Reset the buffer so that KoPicture reads the whole file from the beginning
+  //(at the moment the read/write position is at the end)
+  buffer.reset();
 
-	KoPicture picture;
-	picture.load( &buffer , "PNG" );
+  KoPicture picture;
+  picture.load( &buffer , "PNG" );
 
-	doc()->pictureCollection()->insertPicture(picture);
+  doc()->pictureCollection()->insertPicture(picture);
 
-	return insertPicture( point , picture );
+  return insertPicture( point , picture );
 }
 
 void Sheet::insertObject( EmbeddedObject *_obj )

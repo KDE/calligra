@@ -315,6 +315,7 @@ bool FormatManipulator::process (Element *element)
     int right  = range.right();
 
     // create cells in rows if complete columns selected
+    // TODO: Tomas says: this sounds like a bad idea
     Cell * cell;
     if ( element->isColumn() )
     {
@@ -445,16 +446,6 @@ void FormatManipulator::copyFormat(QLinkedList<layoutCell> & list,
 
     if ( (*it)->isColumn() )
     {
-      /* Don't need to go through the loop twice...
-        for (int i = range.left(); i <= right; ++i)
-        {
-        layoutColumn tmplayout;
-        tmplayout.col = i;
-        tmplayout.l = new ColumnFormat( m_sheet, i );
-        tmplayout.l->copy( *(m_sheet->columnFormat( i )) );
-        listCol.append(tmplayout);
-        }
-      */
       for ( int col = range.left(); col <= right; ++col )
       {
         layoutColumn tmplayout;

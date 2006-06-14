@@ -103,7 +103,22 @@ class ValueCalc {
   /** numerical comparison */
   bool lower (const Value &a, const Value &b);
   /** string comparison */
-  bool strEqual (const Value &a, const Value &b);
+  bool strEqual (const Value &a, const Value &b, bool CS = true);
+  /** string comparison */
+  bool strGreater (const Value &a, const Value &b, bool CS = true);
+  /** string comparison - greater or equal */
+  bool strGequal (const Value &a, const Value &b, bool CS = true);
+  /** string comparison */
+  bool strLower (const Value &a, const Value &b, bool CS = true);
+  /** string or numerical comparison */
+  bool naturalEqual (const Value &a, const Value &b, bool CS = true);
+  /** string or numerical comparison */
+  bool naturalGreater (const Value &a, const Value &b, bool CS = true);
+  /** string or numerical comparison - greater or equal */
+  bool naturalGequal (const Value &a, const Value &b, bool CS = true);
+  /** string or numerical comparison */
+  bool naturalLower (const Value &a, const Value &b, bool CS = true);
+  
   int sign (const Value &a);
 
   /** rounding */

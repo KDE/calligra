@@ -23,8 +23,12 @@
 
 #include "manipulator.h"
 #include "kspread_global.h"
+#include "kspread_format.h"
 #include "kspread_value.h"
 #include <koffice_export.h>
+
+#include <QList>
+#include <QStringList>
 
 namespace KSpread {
 
@@ -40,13 +44,19 @@ struct ADMStorage {
   FormatType format;
 };
 
+// the purpose of this class is to allow keeping a Format in a QMap without
+// having to use Format* (I'm lazy to write the memory-freeing code)
+struct FormatStorage {
+  FormatStorage () : format (0, 0) {};
+  FormatStorage (Sheet *s) : format (s, 0) {};
+  Format format;
+};
+
 class AbstractDataManipulator : public Manipulator {
   public:
     AbstractDataManipulator ();
     virtual ~AbstractDataManipulator ();
     virtual bool process (Element* element);
-    /** this abstract method should return a value that will be set
-    for a given cell */
   protected:
     /** Return new value. row/col are relative to sheet, not element.
     If the function sets *parse to true, the value will be treated as an
@@ -56,6 +66,31 @@ class AbstractDataManipulator : public Manipulator {
     /** preProcessing will store the old cell's data */
     virtual bool preProcessing ();
     QMap<int, QMap<int, ADMStorage> > oldData;
+};
+
+/**
+AbstractDFManipulator: AbstractDataManipulator with the option of copying
+entire cell formats.
+*/
+class AbstractDFManipulator : public AbstractDataManipulator {
+  public:
+    AbstractDFManipulator ();
+    virtual ~AbstractDFManipulator ();
+    virtual bool process (Element* element);
+    
+    /** returns whether this manipulator changes formats */
+    bool changeFormat () { return m_changeformat; };
+    /** set whether this manipulator changes formats */
+    void setChangeFormat (bool chf) { m_changeformat = chf; };
+  protected:
+    /** this method should return new format for a given cell */
+    virtual Format newFormat (Element *element, int col, int row) = 0;
+
+    /** preProcessing will store the old cell's data */
+    virtual bool preProcessing ();
+    
+    QMap<int, QMap<int, FormatStorage> > formats;
+    bool m_changeformat;
 };
 
 
@@ -84,7 +119,7 @@ class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator {
     bool m_parsing : 1;
 };
 
-class ArrayFormulaManipulator : public AbstractDataManipulator {
+class KSPREAD_EXPORT ArrayFormulaManipulator : public AbstractDataManipulator {
   public:
     ArrayFormulaManipulator ();
     virtual ~ArrayFormulaManipulator ();
@@ -94,7 +129,6 @@ class ArrayFormulaManipulator : public AbstractDataManipulator {
         FormatType *);
     QString cellRef, m_text;
 };
-
 
 /** class ProtectedCheck can be used to check, whether a particular
   range is protected or not */

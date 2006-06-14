@@ -433,11 +433,6 @@ bool ValueCalc::approxEqual (const Value &a, const Value &b)
   return (x < 0.0 ? -x : x)  <  ((aa < 0.0 ? -aa : aa) * DBL_EPSILON);
 }
 
-bool ValueCalc::strEqual (const Value &a, const Value &b)
-{
-  return (converter->asString (a).asString() == converter->asString (b).asString());
-}
-
 bool ValueCalc::greater (const Value &a, const Value &b)
 {
   double aa = converter->asFloat (a).asFloat();
@@ -453,6 +448,80 @@ bool ValueCalc::gequal (const Value &a, const Value &b)
 bool ValueCalc::lower (const Value &a, const Value &b)
 {
   return greater (b, a);
+}
+
+bool ValueCalc::strEqual (const Value &a, const Value &b, bool CS)
+{
+  QString aa = converter->asString (a).asString();
+  QString bb = converter->asString (b).asString();
+  if (!CS) {
+    aa = aa.toLower();
+    bb = bb.toLower();
+  }
+  return (aa == bb);
+}
+
+bool ValueCalc::strGreater (const Value &a, const Value &b, bool CS)
+{
+  QString aa = converter->asString (a).asString();
+  QString bb = converter->asString (b).asString();
+  if (!CS) {
+    aa = aa.toLower();
+    bb = bb.toLower();
+  }
+  return (aa > bb);
+}
+
+bool ValueCalc::strGequal (const Value &a, const Value &b, bool CS)
+{
+  QString aa = converter->asString (a).asString();
+  QString bb = converter->asString (b).asString();
+  if (!CS) {
+    aa = aa.toLower();
+    bb = bb.toLower();
+  }
+  return (aa >= bb);
+}
+
+bool ValueCalc::strLower (const Value &a, const Value &b, bool CS)
+{
+  return strGreater (b, a, CS);
+}
+
+bool ValueCalc::naturalEqual (const Value &a, const Value &b, bool CS)
+{
+  Value aa = a;
+  Value bb = b;
+  if (!CS) {
+    // not case sensitive -> convert strings to lowercase
+    if (aa.isString()) aa = Value (aa.asString().toLower());
+    if (bb.isString()) bb = Value (aa.asString().toLower());
+  }
+  if (aa.allowComparison (bb)) return aa.equal (bb);
+  return strEqual (aa, bb, CS);
+}
+
+bool ValueCalc::naturalGreater (const Value &a, const Value &b, bool CS)
+{
+  Value aa = a;
+  Value bb = b;
+  if (!CS) {
+    // not case sensitive -> convert strings to lowercase
+    if (aa.isString()) aa = Value (aa.asString().toLower());
+    if (bb.isString()) bb = Value (aa.asString().toLower());
+  }
+  if (aa.allowComparison (bb)) return aa.greater (bb);
+  return strEqual (aa, bb, CS);
+}
+
+bool ValueCalc::naturalGequal (const Value &a, const Value &b, bool CS)
+{
+  return (naturalGreater (a, b, CS) || naturalEqual (a, b, CS));
+}
+
+bool ValueCalc::naturalLower (const Value &a, const Value &b, bool CS)
+{
+  return naturalGreater (b, a, CS);
 }
 
 Value ValueCalc::roundDown (const Value &a,
@@ -1929,7 +1998,7 @@ void ValueCalc::getCond (Condition &cond, Value val)
 bool ValueCalc::matches (const Condition &cond, Value val)
 {
   if (val.isEmpty())
-	return false;
+  return false;
   if (cond.type == numeric) {
     double d = converter->asFloat (val).asFloat();
     switch ( cond.comp )

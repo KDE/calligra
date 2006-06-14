@@ -105,6 +105,73 @@ bool AbstractDataManipulator::preProcessing ()
   return true;
 }
 
+AbstractDFManipulator::AbstractDFManipulator ()
+{
+  m_changeformat = true;
+}
+
+AbstractDFManipulator::~AbstractDFManipulator ()
+{
+  formats.clear ();
+}
+
+bool AbstractDFManipulator::process (Element* element)
+{
+  // let parent class process it first
+  AbstractDataManipulator::process (element);
+
+  // don't continue if we have to change formatting
+  if (!m_changeformat) return true;
+
+  QRect range = element->rect();
+  for (int col = range.left(); col <= range.right(); ++col)
+  {
+    for (int row = range.top(); row <= range.bottom(); ++row) {
+      Cell *cell = m_sheet->cellAt (col, row);
+      // only non-default cells will be formatted
+      // TODO: is this really correct ?
+      if (!cell->isDefault())
+      {
+        if (m_reverse) {
+          cell->format()->copy (formats[col][row].format);
+        }
+        else {
+          Format f (m_sheet, 0);
+          f = newFormat (element, col, row);
+          cell->format()->copy (f);
+        }
+      }
+    }
+  }
+  return true;
+}
+
+bool AbstractDFManipulator::preProcessing ()
+{
+  // not the first run - data already stored ...
+  if (!m_firstrun) return true;
+
+  Region::Iterator endOfList(cells().end());
+  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect();
+    for (int col = range.left(); col <= range.right(); ++col)
+      for (int row = range.top(); row <= range.bottom(); ++row)
+      {
+        Cell* cell = m_sheet->cellAt(col, row);
+        if (cell != m_sheet->defaultCell())  // non-default cell - remember it
+        {
+          ADMStorage st;
+  
+          FormatStorage f (m_sheet);
+          f.format.copy (*cell->format());
+          formats[col][row] = f;
+        }
+      }
+  }
+  return true;
+}
+
 DataManipulator::DataManipulator ()
   : m_format (No_format),
   m_parsing (false)

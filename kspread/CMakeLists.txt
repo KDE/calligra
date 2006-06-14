@@ -134,6 +134,7 @@ set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS} ${libtests_SRCS}
    selection.cc
    manipulator.cc
    manipulator_data.cc
+   manipulator_sort.cc
    kspread_generalProperty.cpp
    kspread_propertyEditor.cpp
 )
