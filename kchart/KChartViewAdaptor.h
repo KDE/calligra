@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 2001,2002,2003,2004 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,41 +17,47 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTPAGELAYOUT__
-#define __KCHARTPAGELAYOUT__
+#ifndef KCHART_VIEW_ADAPTOR_H
+#define KCHART_VIEW_ADAPTOR_H
 
-#include <kdialog.h>
+#include <dbus/qdbus.h>
 
-class QLineEdit;
+#include <QString>
 
 namespace KChart
 {
 
 class KChartView;
-class KChartParams;
-class KChartPageLayout : public KDialog
+
+class ViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.chart.view")
 public:
-    KChartPageLayout( KChartParams* _params, QWidget* parent);
-public slots:
-    void slotOk();
-    void slotApply();
-    void slotReset();
-protected:
-    void init();
+    ViewAdaptor( KChartView *view_ );
+
+public Q_SLOTS: // METHODS
+    virtual void wizard();
+    virtual void editData();
+    virtual void configureChart();
+
+    virtual void configureBackground();
+
+    virtual void configureFont();
+    virtual void configureColor();
+    virtual void configureLegend();
+    virtual void configSubTypeChart();
+    virtual void configHeaderFooter();
+
+    virtual void updateGuiTypeOfChart();
+
+    virtual void saveConfig();
+    virtual void loadConfig();
+    virtual void defaultConfig();
+
 private:
-    QLineEdit *leftBorder;
-    QLineEdit *rightBorder;
-    QLineEdit *topBorder;
-    QLineEdit *bottomBorder;
-    KChartParams* params;
-    int oldGlobalLeadingRight;
-    int oldGlobalLeadingLeft;
-    int oldGlobalLeadingTop;
-    int oldGlobalLeadingBottom;
-signals:
-    void dataChanged();
+    KChartView *view;
+
 };
 
 }  //KChart namespace

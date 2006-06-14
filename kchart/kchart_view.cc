@@ -21,7 +21,7 @@
 #include <kprinter.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-#include <dcopobject.h>
+// #include <dcopobject.h>
 #include <kinstance.h>
 #include <kxmlguifactory.h>
 #include <kfiledialog.h>
@@ -38,7 +38,9 @@
 #include "kchartWizard.h"
 #include "kchartDataEditor.h"
 #include "kchartConfigDialog.h"
-#include "KChartViewIface.h"
+// #include "KChartViewIface.h"
+#include "KChartViewAdaptor.h"
+#include <KoViewAdaptor.h>
 #include "kchartPageLayout.h"
 #include "kchartPrinterDlg.h"
 #include "csvimportdialog.h"
@@ -65,8 +67,10 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
         setXMLFile( "kchart.rc" );
     else
         setXMLFile( "kchart_readonly.rc" );
-    m_dcop = 0;
-    dcopObject(); // build it
+//     m_dcop = 0;
+//     dcopObject(); // build it
+
+    new ViewAdaptor(this);
 
     m_importData = new KAction( i18n( "Import Data..." ), 0,
 				this, SLOT( importData() ),
@@ -180,17 +184,17 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 
 KChartView::~KChartView()
 {
-    delete m_dcop;
+//     delete m_dcop;
 }
 
 
-DCOPObject* KChartView::dcopObject()
-{
-    if ( !m_dcop )
-	m_dcop = new KChartViewIface( this );
-
-    return m_dcop;
-}
+// DCOPObject* KChartView::dcopObject()
+// {
+//     if ( !m_dcop )
+// 	m_dcop = new KChartViewIface( this );
+// 
+//     return m_dcop;
+// }
 
 
 void KChartView::paintEvent( QPaintEvent* /*ev*/ )

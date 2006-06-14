@@ -23,7 +23,7 @@
 
 #include <qstringlist.h>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class DialogUI;
 

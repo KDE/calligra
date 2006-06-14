@@ -42,7 +42,7 @@
 
 
 CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
-    : KDialog(parent, QString::null, KDialog::Ok|KDialog::Cancel),
+    : KDialog(parent),
       m_dialog(new DialogUI(this)),
       m_adjustRows(false),
       m_adjustCols(false),
@@ -56,6 +56,8 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
       m_fileArray(fileArray),
       m_codec( QTextCodec::codecForName( "UTF-8" ) )
 {
+    setButtons(  KDialog::Ok|KDialog::Cancel );
+
 	setDefaultButton(KDialog::No);
     setCaption( i18n( "Import Data" ) );
     kapp->restoreOverrideCursor();

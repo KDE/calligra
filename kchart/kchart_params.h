@@ -27,7 +27,7 @@ class KoGenStyles;
 class KoOasisLoadingContext;
 class KoStore;
 class KDChartParams;
-class DCOPObject;
+// class DCOPObject;
 
 
 #include "kdchart/KDChartParams.h"
@@ -104,7 +104,7 @@ public slots:
 
  public:
 
-    DCOPObject  *dcopObject();
+//     DCOPObject  *dcopObject();
 
     bool loadOasis( const QDomElement     &chartElem,
 		    KoOasisLoadingContext &loadingContext,
@@ -142,7 +142,7 @@ public slots:
     // Extensions to support OpenDocument
     int            m_barNumLines; // Number of lines in a bar chart.
 
-    DCOPObject    *m_dcop;
+//     DCOPObject    *m_dcop;
 };
 
 }  //KChart namespace

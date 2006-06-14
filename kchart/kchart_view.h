@@ -17,7 +17,7 @@ class KAction;
 class KToggleAction;
 class QPaintEvent;
 
-class DCOPObject;
+// class DCOPObject;
 
 namespace KChart
 {
@@ -33,7 +33,7 @@ public:
     ~KChartView();
 
     void updateGuiTypeOfChart();
-    virtual DCOPObject* dcopObject();
+//     virtual DCOPObject* dcopObject();
 
     void config(int flag);
 
@@ -104,7 +104,7 @@ private:
     KToggleAction  *m_chartpolar;
     KToggleAction  *m_chartbw;
 
-    DCOPObject  *m_dcop;
+//     DCOPObject  *m_dcop;
 
     // This is used for a workaround for a bug in the kdchart code, see #101490.
     bool m_logarithmicScale;

@@ -17,6 +17,7 @@ include_directories(
 set(kchartcommon_LIB_SRCS 
    kchart_part.cc 
    kchart_view.cc 
+   KChartViewAdaptor.cc 
    kchart_factory.cc 
    kchartColorConfigPage.cc 
    kchartParameterConfigPage.cc 
@@ -38,10 +39,9 @@ set(kchartcommon_LIB_SRCS
    kchartWizardSetupDataPage.cc 
    kchartWizardSelectDataFormatPage.cc 
    kchartDataEditor.cc 
-   KChartViewIface.cc 
    kchartLegendConfigPage.cc 
    kchart_params.cc 
-   KChartParamsIface.cc 
+   KChartParamsAdaptor.cc 
    kchartHeaderFooterConfigPage.cc 
    kchartLine3dConfigPage.cc 
    kchartParameterPolarConfigPage.cc 
@@ -53,7 +53,7 @@ kde4_automoc(${kchartcommon_LIB_SRCS})
 
 kde4_add_ui3_files(kchartcommon_LIB_SRCS csvimportdialogui.ui )
 
-kde4_add_dcop_skels(kchartcommon_LIB_SRCS KChartViewIface.h KChartParamsIface.h )
+# kde4_add_dcop_skels(kchartcommon_LIB_SRCS KChartViewIface.h KChartParamsIface.h )
 
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 

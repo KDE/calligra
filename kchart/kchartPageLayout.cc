@@ -18,30 +18,31 @@
 
 
 #include "kchartPageLayout.h"
-#include "kchartPageLayout.moc"
 #include "kchart_params.h"
 #include <knumvalidator.h>
+#include <QGroupBox>
 #include <QLineEdit>
 #include <QLayout>
 //Added by qt3to4:
-#include <Q3GridLayout>
 #include <klocale.h>
 #include <QLabel>
-#include <q3groupbox.h>
 
 namespace KChart
 {
 
 KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent)
-	: KDialog( parent,i18n("Page Layout"),KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Apply  )
+	: KDialog( parent )
 {
+    setButtons( Ok | Cancel | User1 | Apply );
+    setCaption( i18n( "Page Layout" ) );
+
     params=_params;
 #if 0
     QWidget *page = new QWidget( this );
 #else
-    Q3GroupBox* page = new Q3GroupBox( 2, Qt::Horizontal, i18n("Margins"),
-				     this );
+//      QGroupBox* page = new QGroupBox( i18n("Margins"), this );
 #endif
+    QWidget *page = new QWidget( this );
     setMainWidget(page);
 
     // FIXME: The following code is strange, since it is written to
@@ -50,10 +51,9 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent)
     // is no immediate need for rewriting.  In the sake of clarity, it
     // should be done though, and we should use the layout
     // capabilities of the groupbox instead..
-
     setButtonText( KDialog::User1, i18n("&Reset") );
 
-    Q3GridLayout *grid = new Q3GridLayout(page, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid = new QGridLayout(page, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *lab=new QLabel(i18n("Left:"),page);
     grid->addWidget(lab,0,0);
@@ -84,10 +84,10 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent)
     grid->addWidget(bottomBorder,3,1);
 
     init();
+
     connect( this, SIGNAL( okClicked() ),    this, SLOT( slotOk() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotReset() ));
-
 }
 
 void KChartPageLayout::init()
@@ -120,3 +120,5 @@ void KChartPageLayout::slotReset()
 }
 
 }  //KChart namespace
+
+#include "kchartPageLayout.moc"

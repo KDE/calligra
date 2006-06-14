@@ -122,9 +122,12 @@ bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
 #define COLUMNWIDTH  80
 
 kchartDataEditor::kchartDataEditor(QWidget* parent) :
-    KDialog(parent, i18n("KChart Data Editor"), 
-		KDialog::Ok | KDialog::Cancel | KDialog::Apply)
+    KDialog(parent)
 {
+
+    setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
+    setCaption(i18n("KChart Data Editor") );
+
     QWidget      *page = new QWidget( this );
     setMainWidget(page);
 

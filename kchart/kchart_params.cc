@@ -25,7 +25,7 @@ using std::cout;
 using std::cerr;
 
 
-#include <dcopobject.h>
+// #include <dcopobject.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -41,7 +41,8 @@ using std::cerr;
 
 #include "kchart_params.h"
 #include "kchart_part.h"
-#include "KChartParamsIface.h"
+#include "KChartParamsAdaptor.h"
+#include <dbus/qdbus.h>
 
 
 namespace KChart
@@ -59,14 +60,17 @@ KChartParams::KChartParams( KChartPart *_part )
     // Default values for OpenDocument extensions.
     m_barNumLines     = 0;
 
-    m_dcop = 0;
+//     m_dcop = 0;
     //dcopObject(); // build it
+
+    new KChartParamsAdaptor(this);
+    QDBus::sessionBus().registerObject( "/params", this);
 }
 
 
 KChartParams::~KChartParams()
 {
-    delete m_dcop;
+//     delete m_dcop;
 }
 
 
@@ -113,12 +117,12 @@ void KChartParams::setFirstColAsLabel( bool _val )
 }
 
 
-DCOPObject* KChartParams::dcopObject()
-{
-    if ( !m_dcop )
-	m_dcop = new KChartParamsIface( this );
-    return m_dcop;
-}
+// DCOPObject* KChartParams::dcopObject()
+// {
+//     if ( !m_dcop )
+// 	m_dcop = new KChartParamsIface( this );
+//     return m_dcop;
+// }
 
 
 // ================================================================
