@@ -48,11 +48,12 @@
 using namespace KSpread;
 
 CSVExportDialog::CSVExportDialog( QWidget * parent )
-  : KDialog( parent, QString::null, KDialog::Ok | KDialog::Cancel ),
+  : KDialog( parent),
     m_dialog( new ExportDialogUI( this ) ),
     m_delimiter( "," ),
     m_textquote('"')
 {
+    setButtons( KDialog::Ok | KDialog::Cancel );
   setDefaultButton(KDialog::No);
   kapp->restoreOverrideCursor();
 
@@ -68,7 +69,7 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
 
   m_dialog->comboBoxEncoding->insertStringList(encodings);
 
-  setButtonBoxOrientation ( Qt::Vertical );
+  setButtonsOrientation ( Qt::Vertical );
 
   setMainWidget(m_dialog);
 
@@ -184,11 +185,11 @@ void CSVExportDialog::delimiterClicked( int id )
 {
   enableButtonOK( true );
 
-  //Erase "Other Delimiter" text box if the user has selected one of 
+  //Erase "Other Delimiter" text box if the user has selected one of
   //the standard options instead (comma, semicolon, tab or space)
   if (id != 4)
   	m_dialog->m_delimiterEdit->setText("");
-  
+
   switch (id)
   {
     case 0: // comma
