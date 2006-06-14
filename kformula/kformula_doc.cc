@@ -76,7 +76,7 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, QObject* parent, bool singleView
     // the modify flag
     connect(history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));
     connect(history, SIGNAL(documentRestored()), this, SLOT(documentRestored()));
-    dcopObject();
+//     dcopObject();
 }
 
 

@@ -10,16 +10,14 @@ include_directories(${KFORMULA_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES
 set(kformulapart_PART_SRCS 
    kformula_doc.cc 
    kformula_view.cc 
+   kformula_view_adaptor.cc
    kformula_factory.cc 
    kformulawidget.cc 
    kfconfig.cc 
-   kformula_view_iface.cc 
    formulastring.cc 
    fsparser.cc )
 
 kde4_automoc(${kformulapart_PART_SRCS})
-
-kde4_add_dcop_skels(kformulapart_PART_SRCS kformula_view_iface.h )
 
 kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 

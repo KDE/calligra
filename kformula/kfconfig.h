@@ -21,7 +21,7 @@
 #ifndef kfconfig_h
 #define kfconfig_h
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 #include <kformulaconfigpage.h>
 
@@ -31,7 +31,7 @@ class KFormulaPartView;
 /**
  * The big config dialog.
  */
-class KFConfig : public KDialogBase
+class KFConfig : public KPageDialog
 {
     Q_OBJECT
 public:
@@ -43,6 +43,7 @@ public slots:
 
 private:
     KFormula::ConfigurePage* _page;
+    KPageWidgetItem *p1;
 //     KFormula::MathFontsConfigurePage* _mathFontPage;
 };
 

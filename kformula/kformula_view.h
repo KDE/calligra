@@ -34,7 +34,7 @@ class KFormulaWidget;
 class KSelectAction;
 class QPaintEvent;
 class QScrollArea;
-class DCOPObject;
+// class DCOPObject;
 
 namespace KFormula {
     class View;
@@ -65,9 +65,9 @@ class KFormulaPartView : public KoView
 
     /**
      * Use this function to obtain the DCOPObject
-     * @¦retur na pointer to the DCOPObject
+     * @retur na pointer to the DCOPObject
      */
-    virtual DCOPObject* dcopObject();
+//     virtual DCOPObject* dcopObject();
 
     /**
      * Setup the printer to use
@@ -151,7 +151,7 @@ private:
 
     static bool first_window;
 
-    DCOPObject *m_dcop;
+//     DCOPObject *m_dcop;
 };
 
 #endif

@@ -21,7 +21,6 @@
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <dcopclient.h>
 
 #include "kformula_aboutdata.h"
 

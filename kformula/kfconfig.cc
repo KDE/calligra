@@ -30,13 +30,17 @@
 
 
 KFConfig::KFConfig( KFormulaPartView* parent )
-    : KDialogBase( KDialogBase::IconList, i18n( "Configure KFormula" ),
-                   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel | KDialogBase::Default,
-                   KDialogBase::Ok, parent )
+    : KPageDialog( parent )
 {
+    setFaceType( List );
+    setCaption( i18n( "Configure KFormula") );
+    setButtons( Ok | Apply | Cancel | Default );
+    setDefaultButton( Ok );
     //kDebug( 40000 ) << "KFConfig::KFConfig" << endl;
-    KVBox* page1 = addVBoxPage( i18n( "Formula" ), i18n( "Formula Settings" ),
-                               BarIcon( "kformula", K3Icon::SizeMedium ) );
+    KVBox* page1 = new KVBox();
+    p1 = addPage( page1, i18n( "Formula" ) );
+    p1->setHeader(  i18n( "Formula Settings" ) );
+    p1->setIcon( BarIcon( "kformula", K3Icon::SizeMedium ) );
     _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page1 );
@@ -60,17 +64,8 @@ void KFConfig::slotApply()
 
 void KFConfig::slotDefault()
 {
-    switch(activePageIndex())
-    {
-    case 0:
+    if ( currentPage() == p1 )
         _page->slotDefault();
-        break;
-//     case 1:
-//         _mathFontPage->slotDefault();
-//         break;
-    default:
-        break;
-    }
 }
 
 #include "kfconfig.moc"

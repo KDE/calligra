@@ -46,7 +46,8 @@ class KPrinter;
 #include "kformula_doc.h"
 #include "kformula_factory.h"
 #include "kformula_view.h"
-#include "kformula_view_iface.h"
+
+#include "kformula_view_adaptor.h"
 #include "kformulawidget.h"
 #include <kfontsizeaction.h>
 #include <ktoggleaction.h>
@@ -63,8 +64,9 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     else
         setXMLFile("kformula.rc");
 
-    m_dcop = 0;
-    dcopObject(); // build it
+//     m_dcop = 0;
+//     dcopObject(); // build it
+    new KformulaViewAdaptor(this);
 
     formulaWidget = new KFormulaWidget( _doc->getFormula(), this, "formulaWidget" );
 
@@ -164,16 +166,16 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
 KFormulaPartView::~KFormulaPartView()
 {
-    delete m_dcop;
+//     delete m_dcop;
 }
 
-DCOPObject* KFormulaPartView::dcopObject()
-{
-    if ( !m_dcop )
-	m_dcop = new KformulaViewIface( this );
-
-    return m_dcop;
-}
+// DCOPObject* KFormulaPartView::dcopObject()
+// {
+//     if ( !m_dcop )
+// 	m_dcop = new KformulaViewIface( this );
+// 
+//     return m_dcop;
+// }
 
 
 void KFormulaPartView::focusInEvent(QFocusEvent*)
