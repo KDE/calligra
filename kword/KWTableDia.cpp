@@ -75,8 +75,12 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 
 KWTableDia::KWTableDia( QWidget* parent, const char* name, UseMode _useMode, KWCanvas *_canvas, KWDocument *_doc,
         int rows, int cols, CellSize wid, CellSize hei, bool floating , const QString & _templateName, int format)
-    : KDialogBase( Tabbed, i18n("Table Settings"), Ok | Cancel, Ok, parent, name, true)
+    : KPageDialog( parent )
 {
+    setCaption( i18n("Table Settings") );
+    setButtons( Ok | Cancel );
+    setDefaultButton( Ok );
+    setFaceType( KPageDialog::Tabbed );
     m_useMode = _useMode;
     canvas = _canvas;
     doc = _doc;
@@ -99,7 +103,8 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, UseMode _useMode, KWC
 
 void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating )
 {
-    tab1 = addPage( i18n( "Geometry" ) );
+    tab1 = new QWidget();
+    addPage( tab1, i18n( "Geometry" ) );
 
     Q3GridLayout *grid = new Q3GridLayout( tab1, 9, 2, 0, KDialog::spacingHint() );
 
@@ -223,7 +228,8 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
 
 void KWTableDia::setupTab2(const QString & _templateName, int format )
 {
-    QWidget *tab2 = addPage( i18n("Templates"));
+    QWidget *tab2 = new QWidget();
+    addPage( tab2, i18n("Templates"));
 
     Q3GridLayout *grid = new Q3GridLayout( tab2, 2, 1, 0, KDialog::spacingHint() );
 

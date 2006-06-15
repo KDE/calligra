@@ -170,8 +170,11 @@ void KWImportStyleDia::loadFile()
 }
 
 KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const QStringList &_list, StyleType _type, QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent)
 {
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     setCaption( i18n("Import Style") );
     m_doc=_doc;
     m_typeStyle = _type;

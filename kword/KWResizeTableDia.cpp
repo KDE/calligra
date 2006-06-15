@@ -29,11 +29,12 @@
 #include <kvbox.h>
 
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWDocument *doc, int resizeColumn )
-    : KDialogBase( parent, "resize column dialog" , true, "", Ok | Cancel | User1 | Apply )
+    : KDialog( parent)
 {
     setButtonText( KDialogBase::User1, i18n("Reset") );
     setCaption( i18n( "Resize Column" ) );
-
+    setButtons( Ok | Cancel | User1 | Apply );
+    setDefaultButton( Ok );
     m_table = table;
     m_doc = doc;
 

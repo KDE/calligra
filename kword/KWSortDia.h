@@ -19,11 +19,11 @@
 #ifndef __sortdia__
 #define __sortdia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "defs.h"
 class QRadioButton;
 
-class KWSortDia : public KDialogBase
+class KWSortDia : public KDialog
 {
     Q_OBJECT
 public:

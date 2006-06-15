@@ -30,12 +30,12 @@ class QLabel;
 #include <Q3Frame>
 
 #include <defs.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 /**
  * A class that calculates and show the statistics for a certain KWDocument
  */
-class KWStatisticsDialog : public KDialogBase
+class KWStatisticsDialog : public KDialog
 {
     Q_OBJECT
 

@@ -20,7 +20,7 @@
 #ifndef tabledia_h
 #define tabledia_h
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QLabel>
@@ -69,7 +69,7 @@ protected:
 /* Class: KWTableDia                                              */
 /******************************************************************/
 
-class KWTableDia : public KDialogBase
+class KWTableDia : public KPageDialog
 {
     Q_OBJECT
 

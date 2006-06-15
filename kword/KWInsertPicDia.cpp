@@ -87,9 +87,13 @@ private:
 //////////////
 
 KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, KWDocument *_doc, const char *name )
-    : KDialogBase( Plain, i18n("Insert Picture"), Ok|Cancel, Ok, parent, name, true ),
+    : KDialog( parent),
     m_bFirst ( true ), m_doc ( _doc )
 {
+    setCaption( i18n("Insert Picture") );
+    setButtons( Ok|Cancel );
+    setDefaultButton(  Ok );
+    enableButtonSeparator( true );
     setInitialSize( QSize(400, 300) );
     QWidget *page = plainPage();
     Q3GridLayout *grid = new Q3GridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );

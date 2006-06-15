@@ -21,7 +21,7 @@
 #ifndef resizetabledia_h
 #define resizetabledia_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KWTableFrameSet;
 class KWDocument;
@@ -32,7 +32,7 @@ class KoUnitDoubleSpinBox;
 /**
  * A dialog that can be used to resize columns of a table using numeric input.
  */
-class KWResizeTableDia : public KDialogBase
+class KWResizeTableDia : public KDialog
 {
     Q_OBJECT
 public:

@@ -19,11 +19,11 @@
 #ifndef __insertpagedia__
 #define __insertpagedia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "defs.h"
 class QRadioButton;
 
-class KWInsertPageDia : public KDialogBase
+class KWInsertPageDia : public KDialog
 {
     Q_OBJECT
 public:

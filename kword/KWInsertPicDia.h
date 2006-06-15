@@ -20,13 +20,13 @@
 #ifndef kwinsertpicdia_h
 #define kwinsertpicdia_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 class QCheckBox;
 class KWInsertPicPreview;
 class KFileDialog;
 class KWDocument;
 
-class KWInsertPicDia : public KDialogBase
+class KWInsertPicDia : public KDialog
 {
     Q_OBJECT
 public:

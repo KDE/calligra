@@ -28,8 +28,12 @@
 #include <kvbox.h>
 
 KWSortDia::KWSortDia( QWidget *parent, const char* name )
-    : KDialogBase( parent, name, true, i18n("Sort Text"), Ok|Cancel )
+    : KDialog( parent)
 {
+    setCaption( i18n("Sort Text") );
+    setButtons(  Ok|Cancel );
+    setDefaultButton( Ok );
+
     KVBox *page = makeVBoxMainWidget();
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Sort" ),page );

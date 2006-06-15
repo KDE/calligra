@@ -33,8 +33,11 @@
 #include <Q3GroupBox>
 
 KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
-    : KDialogBase(parent, "statistics", true, i18n("Statistics"),KDialogBase::Ok, KDialogBase::Ok, false )
+    : KDialog(parent)
 {
+    setCaption( i18n("Statistics") );
+    setButtons( KDialog::Ok );
+    setDefaultButton( KDialog::Ok );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     Q3VBoxLayout *topLayout = new Q3VBoxLayout( page, 0, KDialog::spacingHint() );

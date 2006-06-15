@@ -188,10 +188,11 @@ void KWTableStyleListItem::apply()
 // Proof reader comment: stylist sounds like a hair dresser
 
 KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc )
-    : KDialogBase( _parent, "Tablestylist", true,
-                   i18n("Table Style Manager"),
-                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply | KDialogBase::User1 )
+    : KDialog( _parent )
 {
+    setCaption( i18n("Table Style Manager") );
+    setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::User1 );
+    setDefaultButton( KDialogBase::Ok ):
     m_doc = _doc;
 
     m_currentTableStyle = 0L;

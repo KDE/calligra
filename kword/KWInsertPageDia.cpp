@@ -29,9 +29,13 @@
 #include <QLayout>
 
 KWInsertPageDia::KWInsertPageDia( QWidget *parent, const char* name )
-    : KDialogBase( parent, name, true, i18n("Insert Page"), Ok|Cancel )
+    : KDialog( parent)
 {
-    KVBox *page = makeVBoxMainWidget();
+    setCaption( i18n("Insert Page") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 
     QGroupBox *grp = new QGroupBox( i18n( "Insert Page" ), page );
     QHBoxLayout* grpLayout = new QHBoxLayout( grp );

@@ -23,7 +23,7 @@
 #include "KWFrameStyle.h"
 #include "KWTableStyle.h"
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3groupbox.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:
@@ -96,7 +96,7 @@ class KWTableStyleListItem
 /******************************************************************/
 /* Class: KWTableStyleManager                                     */
 /******************************************************************/
-class KWTableStyleManager : public KDialogBase
+class KWTableStyleManager : public KDialog
 {
     Q_OBJECT
 

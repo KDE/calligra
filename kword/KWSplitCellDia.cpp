@@ -30,8 +30,12 @@
 #include <klocale.h>
 
 KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int columns, unsigned int rows)
-    : KDialogBase( Plain, i18n("Split Cell"), Ok | Cancel, Ok, parent, name, true)
+    : KDialog( parent )
 {
+    setCaption( i18n("Split Cell") );
+    setButtons(  Ok | Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     m_cols = columns;
     m_rows = rows;
 

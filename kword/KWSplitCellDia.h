@@ -20,7 +20,7 @@
 #ifndef splitcelldia_h
 #define splitcelldia_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QLabel>
@@ -34,7 +34,7 @@ class QCheckBox;
 class QSpinBox;
 class KWTablePreview;
 
-class KWSplitCellDia : public KDialogBase {
+class KWSplitCellDia : public KDialog {
     Q_OBJECT
 
 public:
