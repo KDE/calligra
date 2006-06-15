@@ -78,10 +78,11 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
                   const KoPicture &backPic,
                   BackView backPicView, bool _unbalanced,
                   int _xfactor, int _yfactor, KPrPage *_page )
-    : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|
-                   KDialogBase::User1|KDialogBase::User2 ),
+    : KDialog( parent ),
       m_useMasterBackground( 0 ), m_picture(backPic),m_oldpicture(backPic), m_page( _page )
 {
+    KDialog::setButtons(Ok|Apply|Cancel|User1|User2);
+
     lockUpdate = true;
 
     oldUseMasterBackground=m_page->useMasterBackground();
@@ -228,8 +229,8 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
 
     connect( this, SIGNAL( okClicked() ),
              this, SLOT( accept() ) );
-    setButtonText(KDialogBase::User1,i18n( "Apply &Global" ));
-    setButtonText(KDialogBase::User2,i18n( "&Reset" ));
+    setButtonText(KDialog::User1,i18n( "Apply &Global" ));
+    setButtonText(KDialog::User2,i18n( "&Reset" ));
     picChanged = true;
     lockUpdate = false;
     updateConfiguration();

@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include <QLabel>
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 class KPrDocument;
 
@@ -44,7 +44,7 @@ class QSpinBox;
 class KColorButton;
 class QSlider;
 
-class KPrPgConfDia : public KDialogBase
+class KPrPgConfDia : public KPageDialog
 {
     Q_OBJECT
 

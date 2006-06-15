@@ -55,7 +55,7 @@
 
 KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<KPrObject>& _objs,
                       KPrView *_view )
-    : KDialogBase( parent, name, true ), objs( _objs )
+    : KDialog( parent ), objs( _objs )
 {
     view = _view;
     KPrObject *obj = objs.at( 0 );
@@ -248,7 +248,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     cDisappearSpeed->insertItem( i18n( "Fast" ) );
     cDisappearSpeed->setCurrentItem( static_cast<int>( obj->getDisappearSpeed() ) );
     lowerRow->addWidget(cDisappearSpeed, 2, 1);
-    
+
     //appearEffectChanged( cEffect->currentItem() );
 
     QLabel *lTimerOfDisappear = new QLabel( i18n( "Timer of the object:" ), grp2 );

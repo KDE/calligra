@@ -39,8 +39,8 @@
 #include <KoStyleCollection.h>
 #include <KoTextFormatter.h>
 #include <KoTextZoomHandler.h>
-#include "KPrTextViewIface.h"
-#include "KPrTextObjectIface.h"
+#include "KPrTextViewAdaptor.h"
+#include "KPrTextObjectAdaptor.h"
 #include <KoOasisContext.h>
 #include <KoStyleStack.h>
 #include <ktempfile.h>
@@ -167,11 +167,9 @@ KPrTextObject::~KPrTextObject()
     m_doc = 0L;
 }
 
-DCOPObject* KPrTextObject::dcopObject()
+KoTextViewAdaptor* KPrTextObject::dcopObject()
 {
-    if ( !dcop )
-        dcop = new KPrTextObjectIface( this );
-    return dcop;
+    return dbus;
 }
 
 void KPrTextObject::slotParagraphDeleted(KoTextParag*_parag)

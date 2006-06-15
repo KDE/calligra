@@ -41,9 +41,13 @@
 #include "KPrTextPreview.h"
 
 KPrRotationDialogImpl::KPrRotationDialogImpl( QWidget *parent, const char* name )
-: KDialogBase( parent, name, true, i18n( "Rotation"), Ok|Cancel|Apply, Ok, true )
+: KDialog( parent )
 , m_dialog( new RotationPropertyUI( this, name ) )
 {
+    setCaption(i18n( "Rotation"));
+    setButtons(Ok|Cancel|Apply);
+    enableSeparator(true);
+
     noSignals = false;
     m_preview = new KPrTextPreview( m_dialog->previewPanel );
     Q3HBoxLayout *lay = new Q3HBoxLayout( m_dialog->previewPanel, m_dialog->previewPanel->lineWidth(), 0 );

@@ -36,8 +36,11 @@
 #include <KoUnitWidgets.h>
 
 KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const char *name)
-    : KDialogBase( parent, name, true, "", Ok | Cancel, Ok, true )
+    : KDialog( parent )
 {
+    setButtons(Ok | Cancel);
+    enableSeparator(true);
+
     m_doc=_doc;
     KoUnit::Unit unit = m_doc->unit();
 

@@ -21,7 +21,7 @@
 #ifndef BACKDIA_H
 #define BACKDIA_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3frame.h>
 #include <qdatetime.h>
 //Added by qt3to4:
@@ -65,7 +65,7 @@ private:
 
 };
 
-class KPrBackDialog : public KDialogBase
+class KPrBackDialog : public KDialog
 {
     Q_OBJECT
 

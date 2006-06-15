@@ -55,7 +55,7 @@ void KPrFindReplace::emitNewCommand(KCommand *cmd)
     m_canvas->getView()->kPresenterDoc()->addCommand(cmd);
 }
 
-void KPrFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *_textdoc, KDialogBase* dialog)
+void KPrFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *_textdoc, KDialog* dialog)
 {
     bool repaint = isReplace() ? options() & KReplaceDialog::PromptOnReplace : true;
     KPrTextDocument *textdoc = static_cast<KPrTextDocument *>(_textdoc);

@@ -56,6 +56,7 @@ class KPrTextDocument;
 class DCOPObject;
 class KPrPage;
 class KoParagStyle;
+class KoTextViewAdaptor;
 
 class KPrTextObject :  public QObject, public KPr2DObject, public KoTextFlow
 {
@@ -241,7 +242,7 @@ public:
     KPrTextView( KPrTextObject * txtObj, KPrCanvas *_canvas, bool temp=false );
     virtual ~KPrTextView();
 
-    virtual KoTextViewIface* dcopObject();
+    virtual KoTextViewAdaptor* dcopObject();
 
     KoTextView * textView() { return this; }
     KPrTextObject * kpTextObject() const { return m_kptextobj; }

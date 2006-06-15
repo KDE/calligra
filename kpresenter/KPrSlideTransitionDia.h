@@ -27,7 +27,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "global.h"
 
@@ -37,7 +37,7 @@ class KPrSoundPlayer;
 class KUrlRequester;
 class SlideTransitionWidget;
 
-class KPrSlideTransitionDia : public KDialogBase
+class KPrSlideTransitionDia : public KDialog
 {
     Q_OBJECT
 public:
@@ -48,11 +48,11 @@ protected:
     void apply( bool global );
     // TODO reuse
     QString getSoundFileFilter();
-    
-    SlideTransitionWidget *m_dialog;      
+
+    SlideTransitionWidget *m_dialog;
     KPrView *m_view;
     KPrSoundPlayer *m_soundPlayer;
-    
+
     PageEffect m_effect;
     EffectSpeed m_effectSpeed;
     bool m_soundEffect;
@@ -63,8 +63,8 @@ protected:
     QTimer m_pageEffectTimer;
     QPixmap m_pixmap;
     QPixmap m_target;
-    
-protected slots:    
+
+protected slots:
     void effectChanged( int );
     void playSound();
     void stopSound();

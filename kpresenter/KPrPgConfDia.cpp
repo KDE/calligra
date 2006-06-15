@@ -51,10 +51,13 @@
 #include <kvbox.h>
 
 KPrPgConfDia::KPrPgConfDia( QWidget* parent, KPrDocument* doc )
-    : KDialogBase( KDialogBase::Tabbed, i18n("Configure Slide Show"),
-                   Ok|Cancel, Ok, parent, "pgConfDia", true ),
+    : KPageBase( parent ),
       m_doc( doc )
 {
+    setFaceType(Tabbed);
+    setButtons(Ok|Cancel);
+    setCaption(i18n("Configure Slide Show"));
+    enableSeparator(true);
     setupPageGeneral();
     setupPageSlides();
 

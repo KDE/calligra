@@ -45,7 +45,7 @@
 
 
 KPrCustomSlideShowDia::KPrCustomSlideShowDia( KPrView* _view, KPrDocument *_doc, const char* name )
-    : KDialogBase( _view, name, true, i18n("Custom Slide Show"), Ok|Cancel ), m_doc( _doc ), m_view( _view )
+    : KDialog( _view, name, true, i18n("Custom Slide Show"), Ok|Cancel ), m_doc( _doc ), m_view( _view )
     , m_customSlideShowMap( m_doc->customSlideShows() )
 {
   QWidget* page = new QWidget( this );
@@ -151,7 +151,7 @@ void KPrCustomSlideShowDia::slotAdd()
 {
     QStringList listCustomName;
     CustomSlideShowMap::Iterator it( m_customSlideShowMap.begin() ) ;
-    for ( ; it != m_customSlideShowMap.end(); ++it ) 
+    for ( ; it != m_customSlideShowMap.end(); ++it )
     {
         listCustomName.append( it.key() );
     }
@@ -197,7 +197,7 @@ void KPrCustomSlideShowDia::slotModify()
                 listCustomName.append( it.key() );
         }
 
-        KPrDefineCustomSlideShow * dlg = new KPrDefineCustomSlideShow( this, item->text(), listCustomName, 
+        KPrDefineCustomSlideShow * dlg = new KPrDefineCustomSlideShow( this, item->text(), listCustomName,
                                                                        m_doc->getPageList(), m_customSlideShowMap[item->text()]);
         if ( dlg->exec() )
         {
@@ -245,25 +245,25 @@ bool KPrCustomSlideShowDia::uniqueName( int val, const QString & name ) const
 
 KPrCustomSlideShowItem::KPrCustomSlideShowItem( Q3ListBox * listbox, KPrPage * page )
 : Q3ListBoxText( listbox, page->pageTitle() )
-, m_page( page )    
+, m_page( page )
 {
 }
 
 KPrCustomSlideShowItem::KPrCustomSlideShowItem( KPrPage * page )
 : Q3ListBoxText( page->pageTitle() )
-, m_page( page )    
+, m_page( page )
 {
 }
 
 KPrCustomSlideShowItem::KPrCustomSlideShowItem( Q3ListBox * listbox, KPrPage * page, Q3ListBoxItem * after )
 : Q3ListBoxText( listbox, page->pageTitle(), after )
-, m_page( page )    
+, m_page( page )
 {
 }
 
-KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, 
+KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow,
                                                     const Q3PtrList<KPrPage> &pages, const char *name )
-: KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
+: KDialog( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
 , listNameCustomSlideShow( _listNameSlideShow )
 {
     init();
@@ -273,11 +273,13 @@ KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, QStringList
     }
 }
 
-KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, 
+KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow,
                                                     const Q3PtrList<KPrPage> &pages, Q3ValueList<KPrPage *> &customPages, const char* name )
-: KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
+: KDialog( parent )
 , listNameCustomSlideShow( _listNameSlideShow )
 {
+    setCaption(i18n("Define Custom Slide Show"));
+    setButtons(Ok|Cancel);
     init();
     m_name->setText( _customName );
     for ( Q3PtrList<KPrPage>::ConstIterator it = pages.begin(); it != pages.end(); ++it )
@@ -433,7 +435,7 @@ Q3ValueList<KPrPage *> KPrDefineCustomSlideShow::customSlides()
 {
     Q3ValueList<KPrPage *> pages;
     Q3ListBoxItem *item = listSlideShow->firstItem();
-    while ( item ) 
+    while ( item )
     {
         KPrCustomSlideShowItem * i = dynamic_cast<KPrCustomSlideShowItem *>( item );
         if ( i )

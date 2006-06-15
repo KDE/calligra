@@ -36,8 +36,10 @@
 #include "KPrImageEffectDia.h"
 
 KPrImageEffectDia::KPrImageEffectDia(QWidget * parent, const char * name):
-    KDialogBase(parent, name, true, i18n("Image Effect"), Ok|Cancel, Ok)
+    KDialog(parent)
 {
+    setCaption(i18n("Image Effect"));
+    setButtons(Ok|Cancel);
     m_pix = QPixmap();
 
     m_effect = IE_NONE;
@@ -331,7 +333,7 @@ void KPrImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVa
 
 void KPrImageEffectDia::showEvent(QShowEvent * e)
 {
-    KDialogBase::showEvent(e);
+    KDialog::showEvent(e);
     effectChanged((int)m_effect);
 }
 

@@ -21,7 +21,7 @@
 #ifndef kprstylemanager_h
 #define kprstylemanager_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <qstringlist.h>
 #include <KoStyleManager.h>
 

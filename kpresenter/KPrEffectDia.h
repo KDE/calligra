@@ -21,7 +21,7 @@
 #ifndef EFFECTDIA_H
 #define EFFECTDIA_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QResizeEvent>
@@ -42,7 +42,7 @@ class KUrlRequester;
 class KPrSoundPlayer;
 class QSpinBox;
 
-class KPrEffectDia : public KDialogBase
+class KPrEffectDia : public KDialog
 {
     Q_OBJECT
 

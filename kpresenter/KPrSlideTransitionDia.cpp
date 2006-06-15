@@ -44,13 +44,17 @@
 #include "slidetransitionwidget.h"
 
 KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name, KPrView *view )
-: KDialogBase( parent, name, true, i18n( "Slide Transition" ), User1|Ok|Cancel, Ok, true )
+: KDialog( parent )
 , m_dialog( new SlideTransitionWidget( this ) ), m_view( view ), m_soundPlayer(0), m_pageEffect( 0 )
 {
+    setCaption(i18n( "Slide Transition" ));
+    setButtons(User1|Ok|Cancel);
+    enableSeparator(true);
+
     int pgnum = m_view->getCurrPgNum() - 1;
     KPrPage *page = m_view->kPresenterDoc()->pageList().at( pgnum );
     m_effect = page->getPageEffect();
-    m_effectSpeed = page->getPageEffectSpeed();  
+    m_effectSpeed = page->getPageEffectSpeed();
     m_soundEffect = page->getPageSoundEffect();
     m_soundFileName = page->getPageSoundFileName();
     m_slideTime = page->getPageTimer();
@@ -130,7 +134,7 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
         m_dialog->effectCombo->setCurrentItem( m_dialog->effectCombo->count()-1 );
 
     connect( m_dialog->effectCombo, SIGNAL( activated( int ) ), this, SLOT( effectChanged( int ) ) );
-    
+
     // setup speed combo
     m_dialog->speedCombo->insertItem( i18n("Slow") );
     m_dialog->speedCombo->insertItem( i18n("Medium") );
@@ -160,11 +164,11 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     // set up preview button
     connect( m_dialog->previewButton, SIGNAL( clicked() ), this, SLOT( preview() ) );
 
-    setButtonText(KDialogBase::User1,i18n( "Apply &Global" ));
+    setButtonText(KDialog::User1,i18n( "Apply &Global" ));
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotUser1() ) );
-    
+
     setMainWidget( m_dialog );
 }
 
@@ -188,7 +192,7 @@ void KPrSlideTransitionDia::preview()
         effect = PEF_RANDOM;
 
     EffectSpeed effectSpeed = static_cast<EffectSpeed>( m_dialog->speedCombo->currentItem() );
-  
+
     if ( m_pageEffect )
     {
         m_pageEffectTimer.stop();
@@ -330,7 +334,7 @@ void KPrSlideTransitionDia::apply( bool global )
     bool soundEffect = m_dialog->soundCheckBox->isChecked();
     QString soundFileName = m_dialog->soundRequester->url();
     int slideTime = m_dialog->automaticTransitionInput->value();
-    
+
     if ( effect != m_effect ||
          effectSpeed != m_effectSpeed ||
          soundEffect != m_soundEffect ||
@@ -338,7 +342,7 @@ void KPrSlideTransitionDia::apply( bool global )
          slideTime != m_slideTime )
     {
         KPrTransEffectCmd::PageEffectSettings newSettings;
-    
+
         newSettings.pageEffect = effect;
         newSettings.effectSpeed = effectSpeed;
         newSettings.soundEffect = soundEffect;

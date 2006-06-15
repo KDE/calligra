@@ -25,12 +25,12 @@
 //Added by qt3to4:
 #include <QShowEvent>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "imageEffectBase.h"
 #include "global.h"
 
-class KPrImageEffectDia: public KDialogBase {
+class KPrImageEffectDia: public KDialog {
     Q_OBJECT
 
 public:

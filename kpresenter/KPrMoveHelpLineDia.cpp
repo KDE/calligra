@@ -36,12 +36,15 @@
 
 KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom,
                                         KPrDocument *_doc, const char *name)
-    : KDialogBase( parent, name , true, "", Ok | Cancel | User1, Ok, true )
+    : KDialog( parent )
 {
+    setButtons(Ok | Cancel | User1);
+    enableSeparator(true);
+
     m_doc=_doc;
     m_bRemoveLine = false;
 
-    setButtonText( KDialogBase::User1, i18n("Remove") );
+    setButtonText( KDialog::User1, i18n("Remove") );
     setCaption( i18n("Change Help Line Position") );
     KVBox *page = makeVBoxMainWidget();
     new QLabel(i18n("Position:"), page);
@@ -55,7 +58,7 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
 void KPrMoveHelpLineDia::slotRemoveHelpLine()
 {
     m_bRemoveLine = true;
-    KDialogBase::slotOk();
+    KDialog::slotOk();
 }
 
 double KPrMoveHelpLineDia::newPosition() const
@@ -66,8 +69,11 @@ double KPrMoveHelpLineDia::newPosition() const
 
 KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pageRect,
                                             KPrDocument *_doc, const char *name)
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent )
 {
+    setButtons(Ok|Cancel);
+    enableSeparator(true);
+
     limitOfPage=_pageRect;
     m_doc=_doc;
     setCaption( i18n("Add New Help Line") );
@@ -115,12 +121,14 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
 
 KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _pageRect,
                                               KPrDocument *_doc, double posX, double posY, const char *name)
-    : KDialogBase( parent, name , true, "", Ok|Cancel| User1, Ok, true ),
+    : KDialog( parent ),
       m_bRemovePoint( false )
 {
+    setButtons(Ok|Cancel| User1);
+    enableSeparator(true);
     limitOfPage=_pageRect;
     m_doc=_doc;
-    setButtonText( KDialogBase::User1, i18n("Remove") );
+    setButtonText( KDialog::User1, i18n("Remove") );
     setCaption( i18n("Add New Help Point") );
     KVBox *page = makeVBoxMainWidget();
     QLabel *lab=new QLabel(i18n("X position:"), page);
@@ -132,7 +140,7 @@ KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _p
     positionY= new KoUnitDoubleSpinBox( page, qMax(0.00, limitOfPage.top()),qMax(0.00, limitOfPage.bottom()),1,  qMax(0.00, posY) );
     positionY->setUnit( m_doc->unit() );
 
-    showButton( KDialogBase::User1, (posX!=0.0 || posY!=0.0) );
+    showButton( KDialog::User1, (posX!=0.0 || posY!=0.0) );
 
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotRemoveHelpPoint() ));
 
@@ -148,7 +156,7 @@ KoPoint KPrInsertHelpPointDia::newPosition() const
 void KPrInsertHelpPointDia::slotRemoveHelpPoint()
 {
     m_bRemovePoint = true;
-    KDialogBase::slotOk();
+    KDialog::slotOk();
 }
 
 #include "KPrMoveHelpLineDia.moc"

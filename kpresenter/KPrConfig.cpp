@@ -26,7 +26,7 @@
 #include <KoUnitWidgets.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kiconloader.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
@@ -81,11 +81,13 @@
 using namespace KSpell2;
 
 KPrConfig::KPrConfig( KPrView* parent )
-    : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
-                  KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
-                  KDialogBase::Ok, parent)
+    : KPageDialog( parent )
 
 {
+    setFaceType(IconList);
+    setCaption(i18n("Configure KPresenter"));
+    setButtons(Ok|Apply|Cancel|Default);
+
     m_doc = parent->kPresenterDoc();
     KVBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
                                BarIcon("misc", K3Icon::SizeMedium) );

@@ -35,9 +35,12 @@
 KPrPresDurationDia::KPrPresDurationDia( QWidget *parent, const char *name,
                                       KPrDocument *_doc, QStringList _durationListString,
                                       const QString &_durationString )
-    : KDialogBase( parent, name, false, "", KDialogBase::Close ),
+    : KDialog( parent ),
       doc( _doc )
 {
+    setModal(false);
+    setButtons(Close);
+
     m_durationListString = _durationListString;
     m_durationString = _durationString;
 

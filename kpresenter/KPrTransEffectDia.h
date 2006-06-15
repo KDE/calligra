@@ -23,7 +23,7 @@
 #ifndef __TRANSEFFECTDIA_H
 #define __TRANSEFFECTDIA_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QLabel>
 #include <qtimer.h>
 //Added by qt3to4:
@@ -73,7 +73,7 @@ protected slots:
 };
 
 
-class KPrTransEffectDia: public KDialogBase
+class KPrTransEffectDia: public KDialog
 {
     Q_OBJECT
 

@@ -21,7 +21,7 @@
 #ifndef __kprhelplinedia__
 #define __kprhelplinedia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoRect.h>
 
 class QRadioButton;
@@ -30,7 +30,7 @@ class KLineEdit;
 class KFloatValidator;
 class KoUnitDoubleSpinBox;
 
-class KPrMoveHelpLineDia : public KDialogBase
+class KPrMoveHelpLineDia : public KDialog
 {
     Q_OBJECT
 public:
@@ -49,7 +49,7 @@ protected:
     bool m_bRemoveLine;
 };
 
-class KPrInsertHelpLineDia : public KDialogBase
+class KPrInsertHelpLineDia : public KDialog
 {
     Q_OBJECT
 public:
@@ -71,7 +71,7 @@ protected:
 };
 
 
-class KPrInsertHelpPointDia : public KDialogBase
+class KPrInsertHelpPointDia : public KDialog
 {
     Q_OBJECT
 public:

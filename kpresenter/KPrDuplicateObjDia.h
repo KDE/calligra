@@ -21,7 +21,7 @@
 #ifndef __kprduplicateobjdia__
 #define __kprduplicateobjdia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoRect.h>
 
 class KIntNumInput;
@@ -29,7 +29,7 @@ class KDoubleNumInput;
 class KPrDocument;
 class KoUnitDoubleSpinBox;
 
-class KPrDuplicatObjDia : public KDialogBase
+class KPrDuplicatObjDia : public KDialog
 {
     Q_OBJECT
 public:

@@ -21,7 +21,7 @@
 #ifndef __KPRImportStyleDia__
 #define __KPRImportStyleDia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoImportStyleDia.h>
 #include <qstringlist.h>
 class QLineEdit;

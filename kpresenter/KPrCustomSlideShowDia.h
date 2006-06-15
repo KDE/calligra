@@ -20,7 +20,7 @@
 #ifndef __CUSTOM_SLIDE_SHOW__
 #define __CUSTOM_SLIDE_SHOW__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <QHideEvent>
@@ -35,7 +35,7 @@ class QToolButton;
 class KPrView;
 class KPrPage;
 
-class KPrCustomSlideShowDia : public KDialogBase
+class KPrCustomSlideShowDia : public KDialog
 {
     Q_OBJECT
 
@@ -85,12 +85,12 @@ private:
     KPrPage * m_page;
 };
 
-class KPrDefineCustomSlideShow : public KDialogBase
+class KPrDefineCustomSlideShow : public KDialog
 {
     Q_OBJECT
 public:
     KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, const Q3PtrList<KPrPage> &pages, const char *name = 0L);
-    KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, 
+    KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow,
                               const Q3PtrList<KPrPage> &pages, Q3ValueList<KPrPage *> &customPages, const char* name = 0L );
 
     QString customSlideShowName() const;

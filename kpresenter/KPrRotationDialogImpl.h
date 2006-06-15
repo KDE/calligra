@@ -26,7 +26,7 @@
 #include <QEvent>
 #include <Q3PtrList>
 #include <QPixmap>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KPrTextPreview;
 class RotationPropertyUI;
@@ -37,7 +37,7 @@ class KPrCircleGroup;
 /**
   * A dialog that lets the user interactively choose an angle for rotation.
   */
-class KPrRotationDialogImpl : public KDialogBase
+class KPrRotationDialogImpl : public KDialog
 {
     Q_OBJECT
 

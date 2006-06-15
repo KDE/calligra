@@ -149,10 +149,11 @@ void KPrEffectPreview::slotDoPageEffect()
 
 KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
                                     KPrDocument *_doc, KPrView *_view )
-    : KDialogBase( parent, name, true, "", KDialogBase::User1|Ok|Cancel ),
+    : KDialog( parent ),
       doc( _doc ), view( _view ), soundPlayer( 0 )
 {
     enableButtonSeparator( true );
+    setButtons(User1|Ok|Cancel);
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
@@ -307,7 +308,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     connect( buttonTestStopSoundEffect, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
 
     soundEffect = pg->getPageSoundEffect();
-    setButtonText(KDialogBase::User1,i18n( "Apply &Global" ));
+    setButtonText(KDialog::User1,i18n( "Apply &Global" ));
 
     slideTime = pg->getPageTimer();
 
