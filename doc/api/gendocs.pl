@@ -103,7 +103,10 @@ system "grep -v '/undocumented.html' $rootdir/doc/api/allClasses.html > $rootdir
 
 # generate simple static index.html
 open (FILE,">$rootdir/doc/api/index.html");
-print FILE "<html><frameset cols=\"20%,80%\"><frame src=\"allClasses.html\"><frame src=\"sections.html\" name=\"main\"></frameset>\n</html>";
+if($rootdir=~/.*\/(.*)$/) {
+    $project=$1;
+}
+print FILE "<html><head><title>$project API docs</title><frameset cols=\"20%,80%\"><frame src=\"allClasses.html\"><frame src=\"sections.html\" name=\"main\"></frameset>\n</head></html>";
 close (FILE);
 
 # generate sections.html
@@ -155,6 +158,7 @@ sub createConf() {
         if($in=~/\/\*/) { $comment=1; }
         if($in=~/\*\//) {$comment=0; next; }
         if($comment == 1) { next; }
+        $in=~s/^\/\/\s*//;
         print FILE $in;
     }
 
@@ -162,6 +166,7 @@ sub createConf() {
     dirs: foreach $dir (@_) {
         chomp($dir);
         $dir=~s/^\.\///;
+        if($dir=~/tests$/) { next; }
         foreach $sect (@sections) {
             # if another section is a subdir of this one; don't include its dirs.
             $target="$name/$dir";
@@ -188,8 +193,8 @@ sub createConf() {
     #print FILE "ABBREVIATE_BRIEF=\n";
     #print FILE "ALWAYS_DETAILED_SEC=NO\n";
     #print FILE "INLINE_INHERITED_MEMB=NO\n";
-    #print FILE "FULL_PATH_NAMES=YES\n";
-    #print FILE "STRIP_FROM_PATH=\n";
+    print FILE "FULL_PATH_NAMES=YES\n";
+    print FILE "STRIP_FROM_PATH=$rootdir\n";
     #print FILE "STRIP_FROM_INC_PATH=\n";
     #print FILE "SHORT_NAMES=NO\n";
     print FILE "JAVADOC_AUTOBRIEF=YES\n";
@@ -207,7 +212,7 @@ sub createConf() {
     #print FILE "EXTRACT_ALL=NO\n";
     #print FILE "EXTRACT_PRIVATE=NO\n";
     #print FILE "EXTRACT_STATIC=NO\n";
-    #print FILE "EXTRACT_LOCAL_CLASSES=YES\n";
+    print FILE "EXTRACT_LOCAL_CLASSES=NO\n";
     #print FILE "EXTRACT_LOCAL_METHODS=NO\n";
     #print FILE "HIDE_UNDOC_MEMBERS=NO\n";
     #print FILE "HIDE_UNDOC_CLASSES=NO\n";
@@ -227,7 +232,7 @@ sub createConf() {
     #print FILE "GENERATE_DEPRECATEDLIST=YES\n";
     #print FILE "ENABLED_SECTIONS= \n";
     #print FILE "MAX_INITIALIZER_LINES=30\n";
-    print FILE "SHOW_USED_FILES=NO\n";
+    #print FILE "SHOW_USED_FILES=YES\n";
     #print FILE "SHOW_DIRECTORIES=NO\n";
     #print FILE "FILE_VERSION_FILTER=\n";
     #print FILE "QUIET=YES\n";
@@ -344,7 +349,7 @@ sub parseErrorLog() {
     my $liOpen=0;
     open INPUT,"$dir/$logfile" || die "Can't read logfile '$dir/$logfile'\n";
     open UNDOC, ">$dir/undocumented.html";
-    print UNDOC "<html><body><h1>Undocumented constructs found</h1><ul>Please consider typing some docs as soon as you find out what these items do or mean. Thanks!\n";
+    print UNDOC "<html><body><h2>Undocumented constructs found</h2><ul>Please consider typing some docs, or adding a \\internal tag to the headerfile as soon as you find out what these items do or mean. Thanks!\n";
     open ERRORS, ">$dir/errors.html";
     foreach $line (<INPUT>) {
         if($line=~/^\S*$/) { next; }
