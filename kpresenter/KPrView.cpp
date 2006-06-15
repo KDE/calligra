@@ -166,9 +166,9 @@
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 
-#include <kspell2/broker.h>
 #include <kspell2/defaultdictionary.h>
 #include <kspell2/dialog.h>
+#include <kspell2/broker.h>
 #include <q3tl.h>
 #include "KoSpell.h"
 #include "KPrPrinterDlg.h"
@@ -274,7 +274,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     m_spell.textIterator = 0L;
     m_spell.macroCmdSpellCheck = 0L;
     m_spell.dlg = 0;
-    m_broker = KSpell2::Loader::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) );
+    m_broker = Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) );
 
     m_autoPresTimerConnected = false;
 #warning "kde4: delete it"
@@ -2520,7 +2520,7 @@ void KPrView::setupActions()
         // This approach allows to edit toolbars and extract separate actions from this menu
         KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
                                                 0, this, SLOT( slotCounterStyleSelected() ),
-                                                actionCollection(), QString("counterstyle_%1", styleIt.current()->style() ).toLatin1() );
+                                                actionCollection(), QString("counterstyle_%1").arg(styleIt.current()->style() ).toLatin1() );
         act->setActionGroup( counterGroup);
         // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
         if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {

@@ -39,7 +39,7 @@
 #include <KoStyleCollection.h>
 #include <KoTextFormatter.h>
 #include <KoTextZoomHandler.h>
-#include "KPrTextViewAdaptor.h"
+// #include "KPrTextViewAdaptor.h"
 #include "KPrTextObjectAdaptor.h"
 #include <KoOasisContext.h>
 #include <KoStyleStack.h>
@@ -1795,7 +1795,7 @@ KPrTextView::KPrTextView( KPrTextObject * txtObj, KPrCanvas *_canvas, bool temp 
 
     txtObj->setEditingTextObj( true );
 
-    dbus = new KPrTextViewAdaptor(this);
+//     dbus = new KPrTextViewAdaptor(this);
 
 }
 
@@ -1803,10 +1803,10 @@ KPrTextView::~KPrTextView()
 {
 }
 
-KoTextViewAdaptor* KPrTextView::dbusObject()
-{
-    return dbus;
-}
+// KoTextViewAdaptor* KPrTextView::dbusObject()
+// {
+//     return dbus;
+// }
 
 void KPrTextView::terminate(bool removeSelection)
 {
