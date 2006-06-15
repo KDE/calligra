@@ -21,7 +21,7 @@
 #include "KPrPieObject.h"
 #include "KPrGradient.h"
 #include "KPrUtils.h"
-#include "KPrPieObjectIface.h"
+#include "KPrPieObjectAdaptor.h"
 
 #include <KoTextZoomHandler.h>
 #include <KoOasisContext.h>
@@ -59,11 +59,11 @@ KPrPieObject::KPrPieObject( const KoPen &_pen, const QBrush &_brush, FillType _f
     p_len = _p_len;
 }
 
-DCOPObject* KPrPieObject::dcopObject()
+KPrObjectAdaptor* KPrPieObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrPieObjectIface( this );
-    return dcop;
+    if ( !dbus )
+        dbus = new KPrPieObjectAdaptor( this );
+    return dbus;
 }
 
 KPrPieObject &KPrPieObject::operator=( const KPrPieObject & )
@@ -205,7 +205,7 @@ void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
-#warning "kde4: port it"		
+#warning "kde4: port it"
         //_painter->setRasterOp( Qt::NotXorROP );
     }
     else {

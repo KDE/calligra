@@ -22,7 +22,7 @@
 #ifndef __kpresenter_dlg_config__
 #define __kpresenter_dlg_config__
 
-#include <kdialog.h>
+#include <kpagedialog.h>
 //Added by qt3to4:
 #include <QLabel>
 #include <Q3ListViewItem>
@@ -206,7 +206,7 @@ private:
 };
 #endif
 
-class KPrConfig : public KDialog
+class KPrConfig : public KPageDialog
 {
     Q_OBJECT
 public:

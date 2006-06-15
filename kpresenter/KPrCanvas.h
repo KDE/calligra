@@ -223,7 +223,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 \endverbatim
      \returns True if the file was written successfully.
 
-     \sa drawPageInPix, KPrViewIface::exportPage
+     \sa drawPageInPix, KPrViewAdaptor::exportPage
      */
     bool exportPage( int nPage, int nWidth, int nHeight,
                      const KUrl& fileURL,

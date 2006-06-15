@@ -81,7 +81,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     : KDialog( parent ),
       m_useMasterBackground( 0 ), m_picture(backPic),m_oldpicture(backPic), m_page( _page )
 {
-    KDialog::setButtons(Ok|Apply|Cancel|User1|User2);
+    setButtons(Ok|Apply|Cancel|User1|User2);
 
     lockUpdate = true;
 
@@ -218,11 +218,11 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     // ------------------------ buttons
 
     connect( this, SIGNAL( okClicked() ),
-             this, SLOT( Ok() ) );
+             this, SLOT( ok() ) );
     connect( this, SIGNAL( applyClicked() ),
-             this, SLOT( Apply() ) );
+             this, SLOT( apply() ) );
     connect( this, SIGNAL(  user1Clicked() ),
-             this, SLOT( ApplyGlobal() ) );
+             this, SLOT( applyGlobal() ) );
 
     connect( this, SIGNAL(  user2Clicked() ),
              this, SLOT( slotReset() ) );

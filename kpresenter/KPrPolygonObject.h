@@ -28,7 +28,7 @@
 
 class KPrGradient;
 class QPainter;
-class DCOPObject;
+class KPrObjectAdaptor;
 class KoPen;
 
 class KPrPolygonObject : public KPr2DObject
@@ -41,7 +41,7 @@ public:
                      bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
     virtual ~KPrPolygonObject() {}
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     KPrPolygonObject &operator=( const KPrPolygonObject & );
 

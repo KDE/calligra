@@ -20,8 +20,8 @@
 */
 
 #include "KPrBezierCurveObject.h"
-#include "KPrCubicBezierCurveObjectIface.h"
-#include "KPrQuadricBezierCurveObjectIface.h"
+#include "KPrCubicBezierCurveObjectAdaptor.h"
+#include "KPrQuadricBezierCurveObjectAdaptor.h"
 #include "KPrUtils.h"
 #include <KoTextZoomHandler.h>
 #include <qpainter.h>
@@ -88,7 +88,7 @@ bool KPrBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) c
     }
 
     sc.xmlWriter.addAttribute( "svg:d", d );
-    
+
     return true;
 }
 
@@ -156,11 +156,11 @@ KoPointArray KPrBezierCurveObject::bezier2polyline( const KoPointArray &bezierPo
         _allPoints = _points;
     }
     else // cubic bezier curve
-    { 
+    {
         KoPointArray tmpPointArray;
         unsigned int _tmpIndex = 0;
         unsigned int count = 0;
-        while ( count < pointCount ) 
+        while ( count < pointCount )
         {
             if ( pointCount >= ( count + 4 ) ) // for cubic bezier curve
             {
@@ -182,7 +182,7 @@ KoPointArray KPrBezierCurveObject::bezier2polyline( const KoPointArray &bezierPo
                 bezierPoint = bezierPoint.cubicBezier();
 
                 KoPointArray::ConstIterator it;
-                for ( it = bezierPoint.begin(); it != bezierPoint.end(); ++it ) 
+                for ( it = bezierPoint.begin(); it != bezierPoint.end(); ++it )
                 {
                     KoPoint _point = (*it);
                     tmpPointArray.putPoints( _tmpIndex, 1, _point.x(), _point.y() );
@@ -262,20 +262,20 @@ KPrCubicBezierCurveObject::KPrCubicBezierCurveObject()
 }
 
 
-KPrCubicBezierCurveObject::KPrCubicBezierCurveObject( const KoPointArray &_controlPoints, 
-                                                      const KoPointArray &_allPoints, 
-                                                      const KoSize & _size, const KoPen &_pen, 
+KPrCubicBezierCurveObject::KPrCubicBezierCurveObject( const KoPointArray &_controlPoints,
+                                                      const KoPointArray &_allPoints,
+                                                      const KoSize & _size, const KoPen &_pen,
                                                       LineEnd _lineBegin, LineEnd _lineEnd )
 : KPrBezierCurveObject( _controlPoints, _allPoints, _size, _pen, _lineBegin, _lineEnd )
 {
 }
 
 
-DCOPObject* KPrCubicBezierCurveObject::dcopObject()
+KPrObjectAdaptor* KPrCubicBezierCurveObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrCubicBezierCurveObjectIface( this );
-    return dcop;
+    if ( !dbus )
+        dbus = new KPrCubicBezierCurveObjectAdaptor( this );
+    return dbus;
 }
 
 
@@ -285,18 +285,18 @@ KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject()
 }
 
 
-KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject( const KoPointArray &_controlPoints, 
-                                                          const KoPointArray &_allPoints, 
-                                                          const KoSize & _size, const KoPen &_pen, 
+KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject( const KoPointArray &_controlPoints,
+                                                          const KoPointArray &_allPoints,
+                                                          const KoSize & _size, const KoPen &_pen,
                                                           LineEnd _lineBegin, LineEnd _lineEnd )
 : KPrBezierCurveObject( _controlPoints, _allPoints, _size, _pen, _lineBegin, _lineEnd )
 {
 }
 
 
-DCOPObject* KPrQuadricBezierCurveObject::dcopObject()
+KPrObjectAdaptor* KPrQuadricBezierCurveObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrQuadricBezierCurveObjectIface( this );
-    return dcop;
+    if ( !dbus )
+        dbus = new KPrQuadricBezierCurveObjectAdaptor( this );
+    return dbus;
 }

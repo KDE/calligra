@@ -57,7 +57,7 @@ KPrPgConfDia::KPrPgConfDia( QWidget* parent, KPrDocument* doc )
     setFaceType(Tabbed);
     setButtons(Ok|Cancel);
     setCaption(i18n("Configure Slide Show"));
-    enableSeparator(true);
+    enableButtonSeparator(true);
     setupPageGeneral();
     setupPageSlides();
 

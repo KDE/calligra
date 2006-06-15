@@ -23,7 +23,7 @@
 
 #include "KPrPage.h"
 #include "KPrView.h"
-#include "KPrPageIface.h"
+#include "KPrPageAdaptor.h"
 
 #include "KPrBackground.h"
 #include "KPrLineObject.h"
@@ -80,7 +80,7 @@ typedef QMap<int, Q3PtrList<listAnimation> > lstMap;
 KPrPage::KPrPage(KPrDocument *_doc, KPrPage *masterPage )
     : m_doc( _doc )
     , m_masterPage( masterPage )
-    , m_dcop( 0 )
+    , m_dbus( 0 )
     , m_selectedSlides( true )
     , m_bHasHeader( false )
     , m_bHasFooter( false )
@@ -98,8 +98,8 @@ KPrPage::KPrPage(KPrDocument *_doc, KPrPage *masterPage )
 
     m_kpbackground= new KPrBackGround( this );
 
-    //don't create dcopobject by default
-    //dcopObject();
+    //don't create dbusobject by default
+    //dbusObject();
 }
 
 KPrPage::~KPrPage()
@@ -109,19 +109,18 @@ KPrPage::~KPrPage()
     m_objectList.setAutoDelete( true );
     m_objectList.clear();
     delete m_kpbackground;
-    delete m_dcop;
 }
 
-DCOPObject* KPrPage::dcopObject()
+KPrPageAdaptor* KPrPage::dbusObject()
 {
-    if ( !m_dcop ) {
-        // 0-based. 1-based would be nicer for the dcop user, but well, docs and views are 0-based,
-	// and the page(int) DCOP call is 0-based.
+    if ( !m_dbus ) {
+        // 0-based. 1-based would be nicer for the D-Bus user, but well,
+        // docs and views are 0-based, and the page(int) D-Bus call is 0-based.
         int pgnum = m_doc->pageList().findRef( this );
-        m_dcop = new KPrPageIface( this, pgnum );
+        m_dbus = new KPrPageAdaptor( this, pgnum );
     }
 
-    return m_dcop;
+    return m_dbus;
 }
 
 
@@ -409,14 +408,14 @@ void KPrPage::loadOasis(KoOasisContext & context )
                 else
                     pef=PEF_STRIPS_RIGHT_UP;
             }
-            else if (effect=="fade-from-lowerright") 
+            else if (effect=="fade-from-lowerright")
             {   // PEF_COVER_LEFT_UP
                 if ( additionalEffect.isEmpty() )
                     pef=PEF_COVER_LEFT_UP;
                 else
                     pef=PEF_STRIPS_LEFT_UP;
             }
-            else if (effect=="fade-from-upperleft") 
+            else if (effect=="fade-from-upperleft")
             {   // PEF_COVER_RIGHT_DOWN
                 if ( additionalEffect.isEmpty() )
                     pef=PEF_COVER_RIGHT_DOWN;
@@ -532,7 +531,7 @@ QString KPrPage::oasisNamePage( int posPage ) const
     return  ( m_manualTitle.isEmpty() ?  QString( "page%1" ).arg( posPage ) : m_manualTitle );
 }
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, 
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context,
                              int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter, QMap<QString, int> &pageNames ) const
 {
     if ( isMasterPage() )
@@ -606,7 +605,7 @@ QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
             QString additionalTransition = saveOasisAdditionalPageEffect();
             if ( !additionalTransition.isEmpty() )
             {
-                stylepageauto.addProperty( "koffice:additional-transition-style", additionalTransition );    
+                stylepageauto.addProperty( "koffice:additional-transition-style", additionalTransition );
             }
         }
         stylepageauto.addProperty( "presentation:display-header", hasHeader());
@@ -901,14 +900,14 @@ void KPrPage::appendObjects( const Q3ValueList<KPrObject *> &objects )
 {
     QMap <QString, int> usedPageNames;
     Q3PtrListIterator<KPrObject> it( m_objectList );
-    // find the biggest number 
+    // find the biggest number
     for ( ; it.current() ; ++it )
     {
         QString objectName( it.current()->getObjectName() );
 
         QRegExp rx( "(.*) \\((\\d{1,})\\)$" );
         rx.setMinimal( true );
-        if ( rx.search( objectName ) != -1 && rx.numCaptures() == 2 ) 
+        if ( rx.search( objectName ) != -1 && rx.numCaptures() == 2 )
         {
             int id = rx.cap( 2 ).toInt();
             if ( usedPageNames[rx.cap( 1 )] < id )
@@ -927,7 +926,7 @@ void KPrPage::appendObjects( const Q3ValueList<KPrObject *> &objects )
     {
         QString objectName( ( *oIt )->getObjectName() );
         QRegExp rx( " \\(\\d{1,}\\)$" );
-        if ( rx.search( objectName ) != -1 ) 
+        if ( rx.search( objectName ) != -1 )
         {
             objectName.remove( rx );
         }
@@ -2339,12 +2338,12 @@ KPrObject* KPrPage::getObjectAt( const KoPoint &pos, bool withoutProtected ) con
     {
         o = it.toLast();
         while ( o ) {
-            if ( o != m_doc->footer() || 
-                 o != m_doc->header() || 
-                 ( m_bHasFooter && o == m_doc->footer() ) || 
+            if ( o != m_doc->footer() ||
+                 o != m_doc->header() ||
+                 ( m_bHasFooter && o == m_doc->footer() ) ||
                  ( m_bHasHeader && o == m_doc->header() ) )
             {
-                if ( ( o->isSelected() || i > 0 ) && 
+                if ( ( o->isSelected() || i > 0 ) &&
                        o->contains( pos ) && !( o->isProtect() && withoutProtected ) )
                     return o;
             }

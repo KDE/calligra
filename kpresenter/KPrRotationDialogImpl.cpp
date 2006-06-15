@@ -46,7 +46,7 @@ KPrRotationDialogImpl::KPrRotationDialogImpl( QWidget *parent, const char* name 
 {
     setCaption(i18n( "Rotation"));
     setButtons(Ok|Cancel|Apply);
-    enableSeparator(true);
+    enableButtonSeparator(true);
 
     noSignals = false;
     m_preview = new KPrTextPreview( m_dialog->previewPanel );

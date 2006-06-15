@@ -49,7 +49,7 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
 {
     setCaption(i18n( "Slide Transition" ));
     setButtons(User1|Ok|Cancel);
-    enableSeparator(true);
+    enableButtonSeparator(true);
 
     int pgnum = m_view->getCurrPgNum() - 1;
     KPrPage *page = m_view->kPresenterDoc()->pageList().at( pgnum );

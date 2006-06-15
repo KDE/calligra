@@ -78,7 +78,6 @@
 #include <KoPictureFilePreview.h>
 #include <KoCreateStyleDia.h>
 
-#include <dcopclient.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kstdaction.h>
@@ -121,7 +120,7 @@
 
 #include <kstandarddirs.h>
 
-#include "KPrViewIface.h"
+#include "KPrViewAdaptor.h"
 #include "KPrConfig.h"
 
 #include <KoTextParag.h>
@@ -225,8 +224,8 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     else
         setXMLFile( "kpresenter.rc" );
 
-    dcop = 0;
-    dcopObject(); // build it
+    dbus = 0;
+    dbusObject(); // build it
 
     m_bDisplayFieldCode=false;
     // init
@@ -392,12 +391,12 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     setAcceptDrops( true );
 }
 
-DCOPObject* KPrView::dcopObject()
+KPrViewAdaptor* KPrView::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrViewIface( this );
+    if ( !dbus )
+        dbus = new KPrViewAdaptor( this );
 
-    return dcop;
+    return dbus;
 }
 
 KPrView::~KPrView()
@@ -418,7 +417,7 @@ KPrView::~KPrView()
 
     delete rb_lbegin;
     delete rb_lend;
-    delete dcop;
+    delete dbus;
 
     delete m_sbPageLabel;
     delete m_sbObjectLabel;
@@ -1460,25 +1459,18 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
     m_canvas->setToolEditMode( TEM_MOUSE );
 
     if ( m_canvas && !presStarted ) {
-        QByteArray data;
-        QByteArray replyData;
-        DCOPCString replyType;
         m_screenSaverWasEnabled = false;
         // is screensaver enabled?
-        if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
-            && replyType=="bool")
+        QDBusInterfacePtr screensaver("org.kde.kdesktop", "/", "org.kde.kdesktop.KScreensaver");
+        QDBusReply<bool> reply = screensaver->call("isEnabled");
+        if (reply.isSuccess() )
         {
-            QDataStream replyArg( &replyData,QIODevice::ReadOnly);
-            replyArg.setVersion(QDataStream::Qt_3_1);
-            replyArg >> m_screenSaverWasEnabled;
-            if ( m_screenSaverWasEnabled )
+            if ( reply.value() )
             {
                 // disable screensaver
-                QDataStream arg( &data,QIODevice::WriteOnly);
-                arg.setVersion(QDataStream::Qt_3_1);
-                arg << false;
-                if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
-                    kWarning(33001) << "Couldn't disable screensaver (using dcop to kdesktop)!" << endl;
+                reply = screensaver->callWithArgs("enable", false);
+                if (reply.isError() || !reply.value())
+                    kWarning(33001) << "Couldn't disable screensaver (using dbus to kdesktop)!" << endl;
                 else
                     kDebug(33001) << "Screensaver successfully disabled" << endl;
             }
@@ -1570,12 +1562,11 @@ void KPrView::screenStop()
         if ( m_screenSaverWasEnabled )
         {
             // start screensaver again
-            QByteArray data;
-            QDataStream arg( &data,QIODevice::WriteOnly);
-            arg.setVersion(QDataStream::Qt_3_1);
-            arg << true;
-            if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
-                kWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
+            QDBusInterfacePtr screensaver("org.kde.kdesktop", "/",
+                                          "org.kde.kdesktop.KScreensaver");
+            QDBusReply<bool> reply = screensaver->callWithArgs("enable", true);
+            if (reply.isError() || !reply.value())
+                kWarning(33001) << "Couldn't re-enabled screensaver (using dbus to kdesktop)" << endl;
         }
 
         actionScreenStart->setEnabled( true );
@@ -1749,15 +1740,15 @@ void KPrView::textInsertPageNum()
 
 void KPrView::mtextFont()
 {
-    KoTextFormatInterface* textIface = m_canvas->applicableTextInterfaces().first();
+    KoTextFormatInterface* textAdaptor = m_canvas->applicableTextInterfaces().first();
     QColor col;
-    if (textIface)
-        col = textIface->textBackgroundColor();
+    if (textAdaptor)
+        col = textAdaptor->textBackgroundColor();
     col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 
     delete m_fontDlg;
 
-    m_fontDlg = new KoFontDia( *textIface->currentFormat()
+    m_fontDlg = new KoFontDia( *textAdaptor->currentFormat()
                                , m_broker
                                , this, 0 );
 
@@ -2560,9 +2551,9 @@ void KPrView::setupActions()
                                          this, SLOT( extraProperties() ),
                                          actionCollection(), "extra_properties" );
 
-    actionExtraArrangePopup = new KActionMenu( KIcon("arrange"),i18n( "Arra&nge Objects" ), 
+    actionExtraArrangePopup = new KActionMenu( KIcon("arrange"),i18n( "Arra&nge Objects" ),
                                                actionCollection(), "extra_arrangepopup" );
-    actionExtraArrangePopup->setDelayed( false ); 
+    actionExtraArrangePopup->setDelayed( false );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise Objects" ), "raise",
                                     Qt::CTRL+Qt::SHIFT+Qt::Key_R, this, SLOT( extraRaise() ),
@@ -2684,12 +2675,12 @@ void KPrView::setupActions()
     connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit::Unit ) ),
              actionExtraPenWidth, SLOT( setUnit( KoUnit::Unit ) ) );
 #endif
-    actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 
+    actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group",
                                     QKeySequence( "Ctrl+G" ),
                                     this, SLOT( extraGroup() ),
                                     actionCollection(), "extra_group" );
 
-    actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ), "ungroup", 
+    actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ), "ungroup",
                                       QKeySequence( "Ctrl+Shift+G" ),
                                       this, SLOT( extraUnGroup() ),
                                       actionCollection(), "extra_ungroup" );
@@ -3134,7 +3125,7 @@ void KPrView::increaseFontSize()
 
 void KPrView::objectSelectedChanged()
 {
-    
+
     bool state=m_canvas->isOneObjectSelected();
     bool headerfooterselected=false;
 
@@ -3154,9 +3145,9 @@ void KPrView::objectSelectedChanged()
     KPrObjectProperties objectProperties( m_canvas->activePage()->getSelectedObjects() );
     int flags = objectProperties.getPropertyFlags();
     // only button when object support them or none object is selected
-    actionBrushColor->setEnabled( !state || ( flags & KPrObjectProperties::PtBrush ) ); 
-    actionExtraLineBegin->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) ); 
-    actionExtraLineEnd->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) ); 
+    actionBrushColor->setEnabled( !state || ( flags & KPrObjectProperties::PtBrush ) );
+    actionExtraLineBegin->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) );
+    actionExtraLineEnd->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) );
     //actionExtraPenWidth->setEnabled( !state || ( flags & KPrObjectProperties::PtPenWidth ) );
 
     actionExtraProperties->setEnabled(state && !headerfooterselected);
@@ -4047,11 +4038,11 @@ void KPrView::updateObjectStatusBarItem()
             KoSize size = obj->getSize();
             m_sbObjectLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" ,
                      /*frame->frameSet()->name()*/obj->getObjectName()
-                    ,KoUnit::toUserStringValue( obj->getOrig().x(), unit ) 
-                    , KoUnit::toUserStringValue( obj->getOrig().y() , unit) 
-                    , KoUnit::toUserStringValue( obj->getOrig().x() + size.width(), unit ) 
-                    , KoUnit::toUserStringValue( obj->getOrig().y() + size.height(), unit ) 
-                    , KoUnit::toUserStringValue( size.width(), unit ) 
+                    ,KoUnit::toUserStringValue( obj->getOrig().x(), unit )
+                    , KoUnit::toUserStringValue( obj->getOrig().y() , unit)
+                    , KoUnit::toUserStringValue( obj->getOrig().x() + size.width(), unit )
+                    , KoUnit::toUserStringValue( obj->getOrig().y() + size.height(), unit )
+                    , KoUnit::toUserStringValue( size.width(), unit )
                     , KoUnit::toUserStringValue( size.height(), unit ) ) );
         }
         else
@@ -4778,7 +4769,7 @@ void KPrView::refreshCustomMenu()
    for (int actNdx = 0; actNdx < actions.count(); ++actNdx) {
 		shortCuts.insert((actions[actNdx])->text(), (actions[actNdx])->shortcut());
         delete actions[actNdx];
-    } 
+    }
 
     delete actionInsertCustom;
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
@@ -5181,7 +5172,7 @@ void KPrView::changeZoomMenu( int zoom )
         lst << i18n("%1%","350");
         lst << i18n("%1%","400");
         lst << i18n("%1%","450");
-        lst << i18n("%1%""500");
+        lst << i18n("%1%","500");
     }
     actionViewZoom->setItems( lst );
 }
@@ -5411,7 +5402,7 @@ void KPrView::updateStyleList()
                                      actionCollection(), name.toUtf8() );
             //act->setGroup( "styleList" );
             act->setActionGroup(styleGroup);
-            
+
 			act->setToolTip( i18n( "Apply a paragraph style" ) );
             actionFormatStyleMenu->insert( act );
         }

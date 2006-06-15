@@ -34,6 +34,7 @@
 #include <KoSize.h>
 
 class QPixmap;
+class KPrObjectAdaptor;
 
 // ### TODO rename the class (and the related files/classes) to a better name (for example KPPictureObject)
 
@@ -47,7 +48,7 @@ public:
 
     KPrPixmapObject &operator=( const KPrPixmapObject & );
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     /**
      * Only used as a default value in the filedialog, in changePicture

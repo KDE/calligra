@@ -28,7 +28,6 @@
 
 class KPrGradient;
 class QPainter;
-class DCOPObject;
 class KPrPointObject;
 
 class KPrClosedLineObject : public KPr2DObject
@@ -49,7 +48,6 @@ public:
     KPrClosedLineObject( const KPrPointObject &object );
 
     virtual ~KPrClosedLineObject() {}
-    //virtual DCOPObject* dcopObject();
 
     KPrClosedLineObject &operator=( const KPrClosedLineObject & );
 

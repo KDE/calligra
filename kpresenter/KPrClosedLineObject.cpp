@@ -78,25 +78,16 @@ KPrClosedLineObject::KPrClosedLineObject( const KPrPointObject &object )
         case OT_QUADRICBEZIERCURVE:
             typeString = i18n( "Closed Quadric Bezier Curve" );
             break;
-        default:    
+        default:
             break;
     }
-            
+
 }
 
 KPrClosedLineObject &KPrClosedLineObject::operator=( const KPrClosedLineObject & )
 {
     return *this;
 }
-
-#if 0
-DCOPObject* KPrClosedLineObject::dcopObject()
-{
-    if ( !dcop )
-        dcop = new KPClosedLineObjectIface( this );
-    return dcop;
-}
-#endif
 
 QDomDocumentFragment KPrClosedLineObject::save( QDomDocument& doc, double offset )
 {
@@ -205,7 +196,7 @@ void KPrClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandl
         Q3PointArray pointArray2 = points.zoomPointArray( _zoomHandler );
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
-#warning "kde4: port it"		
+#warning "kde4: port it"
         //_painter->setRasterOp( Qt::NotXorROP );
         _painter->drawPolygon( pointArray2 );
         return;

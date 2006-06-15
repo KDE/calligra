@@ -18,7 +18,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "KPrObject2DIface.h"
+#include "KPrObject2DAdaptor.h"
 #include "KPrEllipseObject.h"
 #include "KPrGradient.h"
 
@@ -50,11 +50,11 @@ KPrEllipseObject &KPrEllipseObject::operator=( const KPrEllipseObject & )
     return *this;
 }
 
-DCOPObject* KPrEllipseObject::dcopObject()
+KPrObjectAdaptor* KPrEllipseObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrObject2DIface( this );
-    return dcop;
+    if ( !dbus )
+        dbus = new KPrObject2DAdaptor( this );
+    return dbus;
 }
 
 void KPrEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler,
@@ -67,7 +67,7 @@ void KPrEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandle
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
-#warning "kde4: port it"		
+#warning "kde4: port it"
         //_painter->setRasterOp( Qt::NotXorROP );
         _painter->drawEllipse( 0, 0, ow, oh );
         return;

@@ -18,7 +18,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "KPrFreehandObjectIface.h"
+#include "KPrFreehandObjectAdaptor.h"
 #include "KPrFreehandObject.h"
 #include "KPrUtils.h"
 #include <KoTextZoomHandler.h>
@@ -48,11 +48,11 @@ KPrFreehandObject &KPrFreehandObject::operator=( const KPrFreehandObject & )
     return *this;
 }
 
-DCOPObject* KPrFreehandObject::dcopObject()
+KPrObjectAdaptor* KPrFreehandObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrFreehandObjectIface( this );
-    return dcop;
+    if ( !dbus )
+        dbus = new KPrFreehandObjectAdaptor( this );
+    return dbus;
 }
 
 bool KPrFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const

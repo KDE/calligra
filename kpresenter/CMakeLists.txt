@@ -1,10 +1,10 @@
 
 
 project(kpresenter)
-include_directories( 
-		${KOTEXT_INCLUDES} 
-		${CMAKE_SOURCE_DIR}/libs/kformula 
-		${KOFFICEUI_INCLUDES} 
+include_directories(
+		${KOTEXT_INCLUDES}
+		${CMAKE_SOURCE_DIR}/libs/kformula
+		${KOFFICEUI_INCLUDES}
 		${KOPAINTER_INCLUDES})
 
 add_subdirectory( autoformEdit )
@@ -19,140 +19,104 @@ add_subdirectory( toolbar )
 
 
 ########### next target ###############
-set(libaf_SRCS 
-		autoformEdit/ATFInterpreter.cpp 
+set(libaf_SRCS
+		autoformEdit/ATFInterpreter.cpp
 		autoformEdit/AFChoose.cpp
 		)
 
 
 set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
-   KoPointArray.cpp 
-   KPrCanvas.cpp 
-   KPrPage.cpp 
-   KPrFindReplace.cpp 
-   KPrBackDia.cpp 
-   KPrWebPresentation.cpp 
-   KPrView.cpp 
-   KPrMSPresentationSetup.cpp 
-   KPrBrush.cpp 
-   KPrDocument.cpp 
-   KPrSoundPlayer.cpp 
-   KPrPgConfDia.cpp 
-   KPrEffectDia.cpp 
-   KPrCommand.cpp 
-   KPrUtils.cpp 
-   KPrEffectHandler.cpp 
-   KPrPageEffects.cpp 
-   KPrTransEffectDia.cpp 
-   KPrObject.cpp 
-   KPrLineObject.cpp 
-   KPrRectObject.cpp 
-   KPrEllipseObject.cpp 
-   KPrAutoformObject.cpp 
-   KPrTextObject.cpp 
-   KPrPixmapObject.cpp 
-   KPrPieObject.cpp 
-   KPrPartObject.cpp 
-   KPrGroupObject.cpp 
-   KPrBackground.cpp 
-   KPrGradient.cpp 
-   KPrGradientCollection.cpp 
-   KPrGotoPage.cpp 
-   KPrFactory.cpp 
-   KPrDocumentIface.cpp 
-   KPrViewIface.cpp 
-   KPrObjectIface.cpp 
-   KPrPageIface.cpp 
-   KPrSideBar.cpp 
-   KPrConfig.cpp 
-   KPrVariableCollection.cpp 
-   KPrTextDocument.cpp 
-   KPrPointObject.cpp 
-   KPrFreehandObject.cpp 
-   KPrPolylineObject.cpp 
-   KPrBezierCurveObject.cpp 
-   KPrPolygonObject.cpp 
-   KPrNoteBar.cpp 
-   KPrTextObjectIface.cpp 
-   KPrTextViewIface.cpp 
-   KPrPresDurationDia.cpp 
-   KPrPieObjectIface.cpp 
-   KPrPolygonObjectIface.cpp 
-   KPrRectObjectIface.cpp 
-   KPrPixmapObjectIface.cpp 
-   KPrAutoFormObjectIface.cpp 
-   KPrObject2DIface.cpp 
-   KPrLineObjectIface.cpp 
-   KPrQuadricBezierCurveObjectIface.cpp 
-   KPrCubicBezierCurveObjectIface.cpp 
-   KPrSVGPathParser.cpp 
-   KPrShadowDialogImpl.cpp 
-   KPrTextPreview.cpp 
-   KPrRotationDialogImpl.cpp 
-   KPrFreehandObjectIface.cpp 
-   KPrStyleManager.cpp 
-   KPrBgSpellCheck.cpp 
-   KPrMoveHelpLineDia.cpp 
-   KPrPolyLineObjectIface.cpp 
-   KPrDuplicateObjDia.cpp 
-   KPrClosedLineObject.cpp 
-   KPrImportStyleDia.cpp 
-   KPrImageEffectDia.cpp 
-   KPrCustomSlideShowDia.cpp 
-   KPrPBPreview.cpp 
-   KPrPenStyleWidget.cpp 
-   KPrRectPreview.cpp 
-   KPrRectProperty.cpp 
-   KPrPiePreview.cpp 
-   KPrPolygonPreview.cpp 
-   KPrPicturePreview.cpp 
-   KPrBrushProperty.cpp 
-   KPrGeneralProperty.cpp 
-   KPrPolygonProperty.cpp 
-   KPrPieProperty.cpp 
-   KPrPictureProperty.cpp 
-   KPrMarginWidget.cpp 
-   KPrTextProperty.cpp 
-   KPrObjectProperties.cpp 
-   KPrPropertyEditor.cpp 
-   KPrSlideTransitionDia.cpp 
+   KoPointArray.cpp
+   KPrCanvas.cpp
+   KPrPage.cpp
+   KPrFindReplace.cpp
+   KPrBackDia.cpp
+   KPrWebPresentation.cpp
+   KPrView.cpp
+   KPrMSPresentationSetup.cpp
+   KPrBrush.cpp
+   KPrDocument.cpp
+   KPrSoundPlayer.cpp
+   KPrPgConfDia.cpp
+   KPrEffectDia.cpp
+   KPrCommand.cpp
+   KPrUtils.cpp
+   KPrEffectHandler.cpp
+   KPrPageEffects.cpp
+   KPrTransEffectDia.cpp
+   KPrObject.cpp
+   KPrLineObject.cpp
+   KPrRectObject.cpp
+   KPrEllipseObject.cpp
+   KPrAutoformObject.cpp
+   KPrTextObject.cpp
+   KPrPixmapObject.cpp
+   KPrPieObject.cpp
+   KPrPartObject.cpp
+   KPrGroupObject.cpp
+   KPrBackground.cpp
+   KPrGradient.cpp
+   KPrGradientCollection.cpp
+   KPrGotoPage.cpp
+   KPrFactory.cpp
+   KPrSideBar.cpp
+   KPrConfig.cpp
+   KPrVariableCollection.cpp
+   KPrTextDocument.cpp
+   KPrPointObject.cpp
+   KPrFreehandObject.cpp
+   KPrPolylineObject.cpp
+   KPrBezierCurveObject.cpp
+   KPrPolygonObject.cpp
+   KPrNoteBar.cpp
+   KPrPresDurationDia.cpp
+   KPrSVGPathParser.cpp
+   KPrShadowDialogImpl.cpp
+   KPrTextPreview.cpp
+   KPrRotationDialogImpl.cpp
+   KPrStyleManager.cpp
+   KPrBgSpellCheck.cpp
+   KPrMoveHelpLineDia.cpp
+   KPrDuplicateObjDia.cpp
+   KPrClosedLineObject.cpp
+   KPrImportStyleDia.cpp
+   KPrImageEffectDia.cpp
+   KPrCustomSlideShowDia.cpp
+   KPrPBPreview.cpp
+   KPrPenStyleWidget.cpp
+   KPrRectPreview.cpp
+   KPrRectProperty.cpp
+   KPrPiePreview.cpp
+   KPrPolygonPreview.cpp
+   KPrPicturePreview.cpp
+   KPrBrushProperty.cpp
+   KPrGeneralProperty.cpp
+   KPrPolygonProperty.cpp
+   KPrPieProperty.cpp
+   KPrPictureProperty.cpp
+   KPrMarginWidget.cpp
+   KPrTextProperty.cpp
+   KPrObjectProperties.cpp
+   KPrPropertyEditor.cpp
+   KPrSlideTransitionDia.cpp
    KPrPrinterDlg.cpp )
 
 kde4_automoc(${kpresenterprivate_LIB_SRCS})
 
-kde4_add_ui3_files(kpresenterprivate_LIB_SRCS 
-   insertpagedia.ui 
-   shadowdialog.ui 
-   rotationpropertyui.ui 
-   imageEffectBase.ui 
-   penstyle.ui 
-   rectpropertyui.ui 
-   brushpropertyui.ui 
-   gradientpropertyui.ui 
-   polygonpropertyui.ui 
-   piepropertyui.ui 
-   picturepropertyui.ui 
-   marginui.ui 
+kde4_add_ui3_files(kpresenterprivate_LIB_SRCS
+   insertpagedia.ui
+   shadowdialog.ui
+   rotationpropertyui.ui
+   imageEffectBase.ui
+   penstyle.ui
+   rectpropertyui.ui
+   brushpropertyui.ui
+   gradientpropertyui.ui
+   polygonpropertyui.ui
+   piepropertyui.ui
+   picturepropertyui.ui
+   marginui.ui
    slidetransitionwidget.ui )
-
-kde4_add_dcop_skels(kpresenterprivate_LIB_SRCS 
-   KPrDocumentIface.h 
-   KPrViewIface.h 
-   KPrObjectIface.h 
-   KPrPageIface.h 
-   KPrTextObjectIface.h 
-   KPrTextViewIface.h 
-   KPrPieObjectIface.h 
-   KPrPolygonObjectIface.h 
-   KPrRectObjectIface.h 
-   KPrPixmapObjectIface.h 
-   KPrAutoFormObjectIface.h 
-   KPrObject2DIface.h 
-   KPrLineObjectIface.h 
-   KPrQuadricBezierCurveObjectIface.h 
-   KPrCubicBezierCurveObjectIface.h 
-   KPrFreehandObjectIface.h 
-   KPrPolyLineObjectIface.h )
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 

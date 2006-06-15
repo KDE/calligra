@@ -46,7 +46,7 @@ class KoDocumentEntry;
 class KoPageLayout;
 class KCommand;
 class KoPointArray;
-class DCOPObject;
+class KPrPageAdaptor;
 class KPrTextObject;
 class KoTextObject;
 class KPrPixmapObject;
@@ -75,12 +75,12 @@ public:
     virtual ~KPrPage();
 
     /**
-     * @brief Return a DCOP interface for this page
+     * @brief Return a DBUS interface for this page
      */
-    virtual DCOPObject* dcopObject();
+    virtual KPrPageAdaptor* dbusObject();
 
     /**
-     * @brief Return a DCOP interface for this page
+     * @brief Return a DBUS interface for this page
      */
     KPrDocument * kPresenterDoc() const {return m_doc; }
 
@@ -271,7 +271,7 @@ public:
     /**
      * @brief Get the number of text objects
      *
-     * The functions in only used by KPrPageIface.
+     * The functions in only used by KPrPageAdaptor.
      *
      * @return the number os text object on the page
      */
@@ -279,7 +279,7 @@ public:
     /**
      * @brief Get the text object
      *
-     * The functions in only used by KPrPageIface.
+     * The functions in only used by KPrPageAdaptor.
      *
      * @param num the number of the text object to get
      *
@@ -537,7 +537,7 @@ public:
 
     QDomElement save( QDomDocument &doc );
 
-    bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, 
+    bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context,
                        int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter, QMap<QString, int> &pageNames ) const;
     QString saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const;
     QString saveOasisPageEffect() const;
@@ -571,7 +571,7 @@ private:
     KPrBackGround *m_kpbackground;
     QString m_manualTitle;
     QString m_noteText;
-    DCOPObject *m_dcop;
+    KPrPageAdaptor *m_dbus;
     bool m_selectedSlides;
 
     QString m_pictureFile;

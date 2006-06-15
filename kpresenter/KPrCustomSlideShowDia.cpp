@@ -45,9 +45,13 @@
 
 
 KPrCustomSlideShowDia::KPrCustomSlideShowDia( KPrView* _view, KPrDocument *_doc, const char* name )
-    : KDialog( _view, name, true, i18n("Custom Slide Show"), Ok|Cancel ), m_doc( _doc ), m_view( _view )
-    , m_customSlideShowMap( m_doc->customSlideShows() )
+  : KDialog( _view ),
+    m_doc( _doc ),
+    m_view( _view ),
+    m_customSlideShowMap( m_doc->customSlideShows() )
 {
+  setCaption( i18n("Custom Slide Show") );
+  setButtons(Ok|Cancel);
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
@@ -263,9 +267,11 @@ KPrCustomSlideShowItem::KPrCustomSlideShowItem( Q3ListBox * listbox, KPrPage * p
 
 KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow,
                                                     const Q3PtrList<KPrPage> &pages, const char *name )
-: KDialog( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
+: KDialog( parent )
 , listNameCustomSlideShow( _listNameSlideShow )
 {
+    setCaption(i18n("Define Custom Slide Show"));
+    setButtons(Ok|Cancel);
     init();
     for ( Q3PtrList<KPrPage>::ConstIterator it = pages.begin(); it != pages.end(); ++it )
     {

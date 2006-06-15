@@ -25,8 +25,9 @@
 #include "KPrPointObject.h"
 
 class QPainter;
-class DCOPObject;
+class KPrFreehandObjectAdaptor;
 class KoXmlWriter;
+class KPrObjectAdaptor;
 
 class KPrFreehandObject : public KPrPointObject
 {
@@ -35,7 +36,7 @@ public:
     KPrFreehandObject( const KoPointArray &_points, const KoSize &_size, const KoPen &_pen,
                       LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrFreehandObject() {}
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     KPrFreehandObject &operator=( const KPrFreehandObject & );
 
@@ -46,7 +47,7 @@ public:
     virtual double load( const QDomElement &element );
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo* info );
 
-protected:    
+protected:
     virtual const char * getOasisElementName() const;
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
 };

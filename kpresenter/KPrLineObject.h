@@ -26,7 +26,7 @@
 #include <KoStyleStack.h>
 
 class QPainter;
-class DCOPObject;
+class KPrObjectAdaptor;
 class KoXmlWriter;
 
 class KPrLineObject : public KPrShadowObject, public KPrStartEndLine
@@ -38,7 +38,7 @@ public:
     virtual ~KPrLineObject()
         {}
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     KPrLineObject &operator=( const KPrLineObject & );
 

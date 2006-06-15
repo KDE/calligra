@@ -47,7 +47,7 @@
 
 class KoSavingContext;
 class QPainter;
-class DCOPObject;
+class KPrObjectAdaptor;
 class QDomDocumentFragment;
 class QDomDocument;
 class QDomElement;
@@ -67,7 +67,7 @@ public:
     virtual ~KPrObject();
 
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     virtual void setSelected( bool _selected )
         { selected = _selected; }
@@ -146,11 +146,11 @@ public:
         KPOasisSaveContext( KoXmlWriter &_xmlWriter, KoSavingContext &_context,
                             int &_indexObj, int &_partIndexObj, bool _onMaster )
             : xmlWriter( _xmlWriter )
-            , context( _context ) 
+            , context( _context )
             , indexObj( _indexObj )
             , partIndexObj( _partIndexObj )
             , onMaster( _onMaster ) {};
-            
+
         KoXmlWriter &xmlWriter;
         KoSavingContext &context;
         int &indexObj;
@@ -194,7 +194,7 @@ public:
     /**
      * @brief Get the rect which has to be repainted
      *
-     * This also contains the shadow. 
+     * This also contains the shadow.
      */
     KoRect getRepaintRect() const;
 
@@ -385,7 +385,7 @@ protected:
     int subPresStep;
     int cmds;
 
-    DCOPObject *dcop;
+    KPrObjectAdaptor *dbus;
 
     static const QString &tagORIG, &attrX, &attrY,
         &tagSIZE, &attrWidth, &attrHeight, &tagSHADOW,
@@ -445,10 +445,10 @@ protected:
     /**
      * @brief Apply the svg:viewBox attribute to the points.
      *
-     * This calculates the points of the object. It uses the size of the object and the 
+     * This calculates the points of the object. It uses the size of the object and the
      * viewBox attribute to calculate the object points.
-     * When no svg:viewBox is  specified it is calculated form the supplied 
-     * points. 
+     * When no svg:viewBox is  specified it is calculated form the supplied
+     * points.
      *
      * @param element the xml element from which the viewBox attribute should be read.
      * @param points which should be updated.

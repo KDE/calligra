@@ -30,7 +30,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <Q3PointArray>
-#include "KPrPolygonObjectIface.h"
+#include "KPrPolygonObjectAdaptor.h"
 #include <KoUnit.h>
 #include <KoOasisContext.h>
 #include <math.h>
@@ -64,11 +64,11 @@ KPrPolygonObject &KPrPolygonObject::operator=( const KPrPolygonObject & )
     return *this;
 }
 
-DCOPObject* KPrPolygonObject::dcopObject()
+KPrObjectAdaptor* KPrPolygonObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrPolygonObjectIface( this );
-    return dcop;
+    if ( !dbus )
+        dbus = new KPrPolygonObjectAdaptor( this );
+    return dbus;
 }
 
 bool KPrPolygonObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
@@ -212,7 +212,7 @@ void KPrPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
         Q3PointArray pointArray2 = points.zoomPointArray( _zoomHandler );
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
-#warning "kde4: port it"		
+#warning "kde4: port it"
         //_painter->setRasterOp( Qt::NotXorROP );
         _painter->drawPolygon( pointArray2 );
         return;

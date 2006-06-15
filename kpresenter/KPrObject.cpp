@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrObjectIface.h"
+#include "KPrObjectAdaptor.h"
 
 #include "KPrObject.h"
 #include "KPrDocument.h"
@@ -252,12 +252,11 @@ KPrObject::KPrObject()
     resize = false;
     protect = false;
     keepRatio = false;
-    dcop = 0;
+    dbus= new KPrObjectAdaptor( this );
 }
 
 KPrObject::~KPrObject()
 {
-    delete dcop;
 }
 
 QDomDocumentFragment KPrObject::save( QDomDocument& doc, double offset )
@@ -415,8 +414,8 @@ bool KPrObject::saveOasisObjectAttributes( KPOasisSaveContext &/* sc */ ) const
 
 bool KPrObject::hasAnimation() const
 {
-    return effect != EF_NONE || appearTimer != 0 || 
-           effect3 != EF3_NONE || disappear || 
+    return effect != EF_NONE || appearTimer != 0 ||
+           effect3 != EF3_NONE || disappear ||
            !a_fileName.isEmpty() || ! d_fileName.isEmpty() ||
            appearTimer != 1;
 }
@@ -1474,18 +1473,15 @@ void KPrObject::doDelete()
         delete this;
 }
 
-DCOPObject* KPrObject::dcopObject()
+KPrObjectAdaptor* KPrObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrObjectIface( this );
-
-    return dcop;
+    return dbus;
 }
 
 void KPrObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
 {
-#warning "kde4: port it"		
-#if 0		
+#warning "kde4: port it"
+#if 0
     QRegion region = painter->clipRegion( QPainter::CoordPainter );
     if ( region.isEmpty() )
         region = clipRegion;
@@ -1493,7 +1489,7 @@ void KPrObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
         region.unite( clipRegion );
 
     painter->setClipRegion( region, QPainter::CoordPainter );
-#endif	
+#endif
 }
 
 QDomElement KPrObject::createValueElement(const QString &tag, int value, QDomDocument &doc) {
@@ -1791,7 +1787,7 @@ bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPoint
         viewBox.setTop( ( *it++ ).toInt() );
         viewBox.setRight( ( *it++ ).toInt() );
         viewBox.setBottom( ( *it ).toInt() );
-        
+
         kDebug(33001) << "viewBox supplied = " << viewBox << endl;
     }
     else

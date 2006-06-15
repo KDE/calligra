@@ -29,7 +29,7 @@
 
 class KPrGradient;
 class QPainter;
-class DCOPObject;
+class KPrEllipseObjectAdaptor;
 
 class KPrEllipseObject : public KPr2DObject
 {
@@ -40,7 +40,7 @@ public:
                      bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPrEllipseObject() {}
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
 
     KPrEllipseObject &operator=( const KPrEllipseObject & );

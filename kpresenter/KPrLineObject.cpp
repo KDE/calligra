@@ -22,7 +22,7 @@
 #include "KPrLineObject.h"
 #include "KPrUtils.h"
 #include "KPrDocument.h"
-#include "KPrLineObjectIface.h"
+#include "KPrLineObjectAdaptor.h"
 #include "KoPointArray.h"
 #include <KoStyleStack.h>
 #include <KoOasisContext.h>
@@ -57,11 +57,11 @@ KPrLineObject &KPrLineObject::operator=( const KPrLineObject & )
     return *this;
 }
 
-DCOPObject* KPrLineObject::dcopObject()
+KPrObjectAdaptor* KPrLineObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrLineObjectIface( this );
-    return dcop;
+    if ( !dbus )
+        dbus = new KPrLineObjectAdaptor( this );
+    return dbus;
 }
 
 
@@ -126,7 +126,7 @@ void KPrLineObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) c
         x2 = transX2;
         y2 = transY2;
     }
-    
+
     x1 += orig.x() + center.x();
     y1 += orig.y() + center.y();
     x2 += orig.x() + center.x();
@@ -224,7 +224,7 @@ void KPrLineObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     QPen pen2;
     if ( drawContour ) {
         pen2 = QPen( Qt::black, 1, Qt::DotLine );
-#warning "kde4: port it"		
+#warning "kde4: port it"
         //_painter->setRasterOp( Qt::NotXorROP );
     }
     else {

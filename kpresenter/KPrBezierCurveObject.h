@@ -25,7 +25,8 @@
 #include "KPrPointObject.h"
 
 class QPainter;
-class DCOPObject;
+class KPrBezierCurveObject;
+class KPrObjectAdaptor;
 
 class KPrBezierCurveObject : public KPrPointObject
 {
@@ -67,7 +68,7 @@ public:
                                const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrCubicBezierCurveObject() {}
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     virtual ObjType getType() const { return OT_CUBICBEZIERCURVE; }
     virtual QString getTypeString() const { return i18n( "Cubic Bezier Curve" ); }
@@ -81,7 +82,7 @@ public:
                                  const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrQuadricBezierCurveObject() {}
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     virtual ObjType getType() const { return OT_CUBICBEZIERCURVE; }
     virtual QString getTypeString() const { return i18n( "Quadric Bezier Curve" ); }

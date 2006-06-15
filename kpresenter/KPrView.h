@@ -52,7 +52,7 @@
 class Q3PopupMenu;
 class QSplitter;
 class QLabel;
-class DCOPObject;
+class KPrViewAdaptor;
 class KPrView;
 class KPrBackDialog;
 class KoRuler;
@@ -108,6 +108,7 @@ class KoTextIterator;
 class KStatusBarLabel;
 
 class KoSpell;
+#include <kspell2/broker.h>
 #include <kspell2/loader.h>
 namespace KSpell2 {
     class Dialog;
@@ -135,9 +136,9 @@ public:
     ~KPrView();
 
     void initGui();
-    virtual DCOPObject* dcopObject();
+    virtual KPrViewAdaptor* dbusObject();
 
-    // for dcop interface
+    // for D-Bus interface
     int getCurrentPresPage() const;
     int getCurrentPresStep() const;
     int getPresStepsOfPage() const;
@@ -1071,7 +1072,7 @@ private:
 
     KAction *actionImportStyle;
 
-    DCOPObject *dcop;
+    KPrViewAdaptor *dbus;
 
     QToolButton *pgNext, *pgPrev;
     KPrSideBar *sidebar;

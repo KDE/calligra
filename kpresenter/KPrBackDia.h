@@ -123,9 +123,9 @@ private slots:
     void afterSelectPic( const QString & );
     void updateConfiguration();
 
-    void Ok() { emit backOk( this, false ); }
-    void Apply() { emit backOk( this, false ); }
-    void ApplyGlobal() { emit backOk( this, true ); }
+    void ok() { emit backOk( this, false ); }
+    void apply() { emit backOk( this, false ); }
+    void applyGlobal() { emit backOk( this, true ); }
 
     void changeComboText(int _p);
     void slotReset();

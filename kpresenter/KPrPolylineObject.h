@@ -27,7 +27,7 @@
 #define RAD_FACTOR 180.0 / M_PI
 
 class QPainter;
-class DCOPObject;
+class KPrPolylineObjectAdaptor;
 
 class KPrPolylineObject : public KPrPointObject
 {
@@ -37,7 +37,7 @@ public:
                       const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrPolylineObject() {}
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     KPrPolylineObject &operator=( const KPrPolylineObject & );
 

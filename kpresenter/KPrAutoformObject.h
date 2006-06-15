@@ -30,7 +30,7 @@
 #include "autoformEdit/ATFInterpreter.h"
 
 class KPrGradient;
-class DCOPObject;
+class KPrAutoformObjectAdaptor;
 
 class KPrAutoformObject : public KPr2DObject, public KPrStartEndLine
 {
@@ -43,7 +43,7 @@ public:
 
     KPrAutoformObject &operator=( const KPrAutoformObject & );
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     virtual void setFileName( const QString &_filename );
     virtual void setLineBegin( LineEnd _lineBegin )

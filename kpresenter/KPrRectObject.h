@@ -29,7 +29,6 @@
 #include <Q3PointArray>
 
 class KPrGradient;
-class DCOPObject;
 
 class KPrRectObject : public KPr2DObject
 {
@@ -40,7 +39,7 @@ public:
                   BCType _gType, int _xRnd, int _yRnd,
                   bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPrRectObject() {}
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
 
     KPrRectObject &operator=( const KPrRectObject & );
 

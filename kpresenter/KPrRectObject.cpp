@@ -21,7 +21,8 @@
 
 #include "KPrRectObject.h"
 #include "KPrGradient.h"
-#include "KPrRectObjectIface.h"
+#include "KPrRectObjectAdaptor.h"
+#include "KPrObjectAdaptor.h"
 
 #include <KoTextZoomHandler.h>
 #include <KoUnit.h>
@@ -41,13 +42,12 @@ KPrRectObject::KPrRectObject()
 {
     xRnd = 0;
     yRnd = 0;
+    dbus = new KPrRectObjectAdaptor( this );
 }
 
-DCOPObject* KPrRectObject::dcopObject()
+KPrObjectAdaptor* KPrRectObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrRectObjectIface( this );
-    return dcop;
+    return dbus;
 }
 
 KPrRectObject::KPrRectObject( const KoPen &_pen, const QBrush &_brush, FillType _fillType,
@@ -82,8 +82,8 @@ bool KPrRectObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
     if ( xRnd > 0 && yRnd > 0 )
     {
-        double cornerRadiusX = ext.width() / 200.0 * xRnd; 
-        double cornerRadiusY = ext.height() / 200.0 * yRnd; 
+        double cornerRadiusX = ext.width() / 200.0 * xRnd;
+        double cornerRadiusY = ext.height() / 200.0 * yRnd;
         double cornerRadius = qMin( cornerRadiusX, cornerRadiusY );
         sc.xmlWriter.addAttributePt( "draw:corner-radius", cornerRadius );
         if ( cornerRadiusX != cornerRadiusY )
@@ -105,19 +105,19 @@ const char * KPrRectObject::getOasisElementName() const
 void KPrRectObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPrLoadingInfo *info)
 {
     KPr2DObject::loadOasis(element, context, info);
-    if ( element.hasAttributeNS( KoXmlNS::koffice, "corner-radius-x" ) && 
+    if ( element.hasAttributeNS( KoXmlNS::koffice, "corner-radius-x" ) &&
          element.hasAttributeNS( KoXmlNS::koffice, "corner-radius-y" ) )
     {
-        xRnd = int( KoUnit::parseValue( 
+        xRnd = int( KoUnit::parseValue(
                       element.attributeNS( KoXmlNS::koffice, "corner-radius-x", QString::null )
                     ) * 200.0 / ext.width() );
-        yRnd = int( KoUnit::parseValue( 
+        yRnd = int( KoUnit::parseValue(
                       element.attributeNS( KoXmlNS::koffice, "corner-radius-y", QString::null )
                     ) * 200.0 / ext.height() );
     }
     else if ( element.hasAttributeNS( KoXmlNS::draw, "corner-radius" ) )
     {
-        xRnd = int( KoUnit::parseValue( 
+        xRnd = int( KoUnit::parseValue(
                       element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null )
                     ) * 200.0 / ext.width() );
         yRnd = xRnd;
@@ -181,7 +181,7 @@ void KPrRectObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
-#warning "kde4: port it"		
+#warning "kde4: port it"
         //_painter->setRasterOp( Qt::NotXorROP );
 
         _painter->drawRoundRect( 0, 0, ow, oh, xRnd, yRnd );

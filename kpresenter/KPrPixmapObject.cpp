@@ -46,7 +46,7 @@
 
 #include "KPrPixmapObject.h"
 #include "KPrGradient.h"
-#include "KPrPixmapObjectIface.h"
+#include "KPrPixmapObjectAdaptor.h"
 
 
 KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection )
@@ -67,6 +67,7 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection )
 #warning "kde4: port it"
 	//m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
     keepRatio = true;
+    dbus = new KPrPixmapObjectAdaptor( this );
 }
 
 KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key )
@@ -90,13 +91,12 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection, const K
 	//m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 
     setPicture( key );
+    dbus = new KPrPixmapObjectAdaptor( this );
 }
 
-DCOPObject* KPrPixmapObject::dcopObject()
+KPrObjectAdaptor* KPrPixmapObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrPixmapObjectIface( this );
-    return dcop;
+    return dbus;
 }
 
 QString KPrPixmapObject::convertValueToPercent( int val ) const
@@ -582,7 +582,7 @@ QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 
     image.setAlphaBuffer(true);
     QBitmap tmpMask;
-#warning "kde4: port it"	
+#warning "kde4: port it"
     //tmpMask = image.createAlphaMask().scale(size);
     pixmap.setMask(tmpMask);
 
@@ -688,7 +688,7 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     QPen pen2;
     if ( drawContour ) {
         pen2 = QPen( Qt::black, 1, Qt::DotLine );
-#warning "kde4: port it"		
+#warning "kde4: port it"
         //_painter->setRasterOp( Qt::NotXorROP );
     }
     else {

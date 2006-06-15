@@ -31,7 +31,7 @@
 
 class KoGenStyles;
 class KPrView;
-class DCOPObject;
+class KPrDocumentAdaptor;
 class KCommand;
 class KMacroCommand;
 class KoCommandHistory;
@@ -79,6 +79,7 @@ class KPrPartObject;
 class KPrPage;
 class KPrObject;
 class KPrDocument;
+class KPrDocumentAdaptor;
 
 class KoParagStyle;
 class KoStyleCollection;
@@ -142,7 +143,7 @@ class KPrDocument : public KoDocument
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
     enum SaveFlag { SaveAll, SaveSelected, SavePage };
-    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles, 
+    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles,
                                   KoSavingContext & savingContext, SaveFlag saveFlag = SaveAll ) const;
     enum { STYLE_BACKGROUNDPAGE = 20, STYLE_BACKGROUNDPAGEAUTO, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER, STYLE_PICTURE, STYLE_PRESENTATIONSTICKYOBJECT };
 
@@ -289,7 +290,7 @@ class KPrDocument : public KoDocument
     Q3ValueList<int> selectedSlides();
     QString selectedForPrinting();
 
-    virtual DCOPObject* dcopObject();
+    virtual KPrDocumentAdaptor* dbusObject();
 
     void initConfig();
     void saveConfig();
@@ -644,7 +645,7 @@ protected:
     Q3ValueList<KoPictureKey> usedPictures;
     QStringList usedSoundFile, haveNotOwnDiskSoundFile;
     Q3PtrList<KTempFile> tmpSoundFileList;
-    DCOPObject *dcop;
+    KPrDocumentAdaptor *dbus;
 
     int saveOnlyPage;
     QString m_tempFileInClipboard;

@@ -167,7 +167,7 @@ KPrTextObject::~KPrTextObject()
     m_doc = 0L;
 }
 
-KoTextViewAdaptor* KPrTextObject::dcopObject()
+KPrObjectAdaptor* KPrTextObject::dbusObject()
 {
     return dbus;
 }
@@ -1794,18 +1794,18 @@ KPrTextView::KPrTextView( KPrTextObject * txtObj, KPrCanvas *_canvas, bool temp 
     updateUI( true, true );
 
     txtObj->setEditingTextObj( true );
+
+    dbus = new KPrTextViewAdaptor(this);
+
 }
 
 KPrTextView::~KPrTextView()
 {
 }
 
-KoTextViewIface* KPrTextView::dcopObject()
+KoTextViewAdaptor* KPrTextView::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrTextViewIface( this );
-
-    return dcop;
+    return dbus;
 }
 
 void KPrTextView::terminate(bool removeSelection)

@@ -94,7 +94,7 @@
 #include <KoTextZoomHandler.h>
 #include <KoStyleCollection.h>
 #include <kcommand.h>
-#include "KPrDocumentIface.h"
+#include "KPrDocumentAdaptor.h"
 
 #include <kspell2/settings.h>
 
@@ -199,7 +199,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl = new KPrVariableCollection( new KoVariableSettings(), m_varFormatCollection );
     m_bgSpellCheck = new KPrBgSpellCheck(this);
-    dcop = 0;
+    dbus = 0;
     m_initialActivePage=0;
     m_bShowStatusBar = true;
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection);
@@ -284,7 +284,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     connect( m_commandHistory, SIGNAL( commandExecuted(KCommand *) ), this, SLOT( slotCommandExecuted() ) );
 
-    dcopObject();
+    dbusObject();
 }
 
 void KPrDocument::refreshMenuCustomVariable()
@@ -399,12 +399,12 @@ void KPrDocument::initConfig()
     newZoomAndResolution(false,false);
 }
 
-DCOPObject* KPrDocument::dcopObject()
+KPrDocumentAdaptor* KPrDocument::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrDocumentIface( this );
+    if ( !dbus )
+        dbus = new KPrDocumentAdaptor( this );
 
-    return dcop;
+    return dbus;
 }
 
 KPrDocument::~KPrDocument()
@@ -423,7 +423,6 @@ KPrDocument::~KPrDocument()
     delete m_autoFormat;
     delete m_varColl;
     delete m_varFormatCollection;
-    delete dcop;
     delete m_masterPage;
     delete m_bgSpellCheck;
     delete m_styleColl;
@@ -2239,7 +2238,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
             kError (33001) << "Parsing Error! Aborting! (in KPrDocument::loadXML)" << endl
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
-            setErrorMessage( i18n( "parsing error in the main document (converted from an old KPresenter format) at line %1, column %2\nError message: %3" 
+            setErrorMessage( i18n( "parsing error in the main document (converted from an old KPresenter format) at line %1, column %2\nError message: %3"
                              ,errorLine, errorColumn, i18n ( errorMsg.toUtf8()  )));
             return false;
         }

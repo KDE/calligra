@@ -21,7 +21,7 @@
 
 #include "KPrPolylineObject.h"
 #include "KPrUtils.h"
-#include "KPrPolyLineObjectIface.h"
+#include "KPrPolyLineObjectAdaptor.h"
 
 #include <qpainter.h>
 #include <qmatrix.h>
@@ -38,13 +38,12 @@ using namespace std;
 KPrPolylineObject::KPrPolylineObject()
     : KPrPointObject()
 {
+    dbus = new KPrPolyLineObjectAdaptor( this );
 }
 
-DCOPObject* KPrPolylineObject::dcopObject()
+KPrObjectAdaptor* KPrPolylineObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrPolyLineObjectIface( this );
-    return dcop;
+    return dbus;
 }
 
 KPrPolylineObject::KPrPolylineObject(  const KoPointArray &_points, const KoSize &_size,

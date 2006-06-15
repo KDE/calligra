@@ -20,7 +20,7 @@
 */
 
 #include "KPrAutoformObject.h"
-#include "KPrAutoFormObjectIface.h"
+#include "KPrAutoFormObjectAdaptor.h"
 #include "KPrUtils.h"
 #include "KPrGradient.h"
 
@@ -64,11 +64,11 @@ KPrAutoformObject &KPrAutoformObject::operator=( const KPrAutoformObject & )
     return *this;
 }
 
-DCOPObject* KPrAutoformObject::dcopObject()
+KPrObjectAdaptor* KPrAutoformObject::dbusObject()
 {
-    if ( !dcop )
-        dcop = new KPrAutoFormObjectIface( this );
-    return dcop;
+    if ( !dbus )
+        dbus = new KPrAutoFormObjectAdaptor( this );
+    return dbus;
 }
 
 void KPrAutoformObject::setFileName( const QString & _filename )
@@ -275,7 +275,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
 
                         QPainter p;
                         p.begin( &m_gradientPix );
-#warning "kde4: port it"						
+#warning "kde4: port it"
                         //p.setClipRegion( clipregion , QPainter::CoordPainter);
                         p.drawPixmap( 0, 0, gradient->pixmap() );
                         p.end();

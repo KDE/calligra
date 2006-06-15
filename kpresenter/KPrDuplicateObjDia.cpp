@@ -39,7 +39,7 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const
     : KDialog( parent )
 {
     setButtons(Ok | Cancel);
-    enableSeparator(true);
+    enableButtonSeparator(true);
 
     m_doc=_doc;
     KoUnit::Unit unit = m_doc->unit();
@@ -48,37 +48,52 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const
 
     setCaption( i18n("Duplicate Object") );
 
-    KVBox *page = makeVBoxMainWidget();
+    QWidget *page = mainWidget();
+    QVBoxLayout* layout = new QVBoxLayout( page );
+
     QLabel *lab=new QLabel(i18n("Number of copies:"), page);
+    layout->addWidget(lab);
 
     m_nbCopy = new KIntNumInput( 1, page );
     m_nbCopy->setRange( 1 , 10, 1);
+    layout->addWidget(m_nbCopy);
 
     KSeparator *tmp=new KSeparator(page);
+    layout->addWidget(tmp);
     lab=new QLabel(i18n("Rotation angle:"), page);
+    layout->addWidget(lab);
 
     m_rotation = new KDoubleNumInput( page );
     m_rotation->setRange(0.0, 360, 1, false);
+    layout->addWidget(m_rotation);
 
     tmp=new KSeparator(page);
+    layout->addWidget(tmp);
 
     lab=new QLabel(i18n("Increase width:"), page);
+    layout->addWidget(lab);
     m_increaseX= new KoUnitDoubleSpinBox( page );
+    layout->addWidget(m_increaseX);
     m_increaseX->setMinValue(0.0);
     m_increaseX->setMaxValue(pageRect.width());
     m_increaseX->changeValue( 1 );
     m_increaseX->setUnit(unit);
 
     lab=new QLabel(i18n("Increase height:"), page);
+    layout->addWidget(lab);
     m_increaseY= new KoUnitDoubleSpinBox( page );
+    layout->addWidget(m_increaseY);
     m_increaseY->setMinValue(0.0);
     m_increaseY->setMaxValue(pageRect.height());
     m_increaseY->changeValue( 1 );
     m_increaseY->setUnit(unit);
 
     tmp=new KSeparator(page);
+    layout->addWidget(tmp);
     lab=new QLabel(i18n("Move X:"), page);
+    layout->addWidget(lab);
     m_moveX= new KoUnitDoubleSpinBox( page );
+    layout->addWidget(m_moveX);
     m_moveX->setMinValue(0.0);
     m_moveX->setMaxValue(pageRect.width());
     m_moveX->changeValue( 20.0 );
@@ -86,7 +101,9 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const
 
 
     lab=new QLabel(i18n("Move Y:"), page);
+    layout->addWidget(lab);
     m_moveY= new KoUnitDoubleSpinBox( page );
+    layout->addWidget(m_moveY);
     m_moveY->setMinValue(0.0);
     m_moveY->setMaxValue(pageRect.height());
     m_moveY->changeValue( 20.0 );

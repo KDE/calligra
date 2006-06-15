@@ -26,7 +26,7 @@
 #include <KoStyleStack.h>
 
 class KPrGradient;
-class DCOPObject;
+class KPrPieObjectAdaptor;
 
 class KPrPieObject : public KPr2DObject, public KPrStartEndLine
 {
@@ -37,7 +37,7 @@ public:
                  int _p_angle, int _p_len, LineEnd _lineBegin, LineEnd _lineEnd,
                  bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPrPieObject() {}
-    virtual DCOPObject* dcopObject();
+    virtual KPrObjectAdaptor* dbusObject();
     KPrPieObject &operator=( const KPrPieObject & );
 
     virtual void setPieType( PieType _pieType )
