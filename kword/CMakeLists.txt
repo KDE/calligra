@@ -35,11 +35,10 @@ set(kwmailmerge_interface_LIB_SRCS KWMailMergeDataSource.cpp )
 
 kde4_automoc(${kwmailmerge_interface_LIB_SRCS})
 
-kde4_add_dcop_skels(kwmailmerge_interface_LIB_SRCS KWMailMergeDataSource.h )
 
 kde4_add_library(kwmailmerge_interface SHARED ${kwmailmerge_interface_LIB_SRCS})
 
-target_link_libraries(kwmailmerge_interface  ${KDE4_KDECORE_LIBS} DCOP )
+target_link_libraries(kwmailmerge_interface  ${KDE4_KDECORE_LIBS} )
 
 set_target_properties(kwmailmerge_interface PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kwmailmerge_interface )
