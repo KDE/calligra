@@ -29,7 +29,7 @@
 #include <dcopclient.h>
 
 KPrViewAdaptor::KPrViewAdaptor( KPrView *view_ )
-    : KoViewIface( view_ )
+    : KoViewAdaptor( view_ )
 {
     view = view_;
 }

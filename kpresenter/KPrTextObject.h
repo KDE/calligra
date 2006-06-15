@@ -58,7 +58,7 @@ class KoParagStyle;
 // class KoTextViewAdaptor;
 class KPrObjectAdaptor;
 
-class KPrTextObject :  public QObject, public KPr2DObject, public KoTextFlow
+class KPrTextObject : public KPr2DObject, public KoTextFlow
 {
     Q_OBJECT
 public:

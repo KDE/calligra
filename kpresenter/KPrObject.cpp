@@ -222,7 +222,7 @@ QString KPrStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, const Li
 }
 
 KPrObject::KPrObject()
-    : orig(), ext(), shadowColor( Qt::gray )
+  : QObject(), orig(), ext(), shadowColor( Qt::gray )
 {
     appearStep = 0;
     disappearStep = 1;

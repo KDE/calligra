@@ -1,6 +1,5 @@
-
-
 project(kpresenter)
+
 include_directories(
 		${KOTEXT_INCLUDES}
 		${CMAKE_SOURCE_DIR}/libs/kformula
@@ -99,7 +98,24 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrObjectProperties.cpp
    KPrPropertyEditor.cpp
    KPrSlideTransitionDia.cpp
-   KPrPrinterDlg.cpp )
+   KPrPrinterDlg.cpp
+   KPrAutoFormObjectAdaptor.cpp
+   KPrFreehandObjectAdaptor.cpp
+   KPrObjectAdaptor.cpp
+   KPrPixmapObjectAdaptor.cpp
+   KPrQuadricBezierCurveObjectAdaptor.cpp
+   KPrCubicBezierCurveObjectAdaptor.cpp
+   KPrLineObjectAdaptor.cpp
+   KPrPageAdaptor.cpp
+   KPrPolygonObjectAdaptor.cpp
+   KPrRectObjectAdaptor.cpp
+   KPrViewAdaptor.cpp
+   KPrDocumentAdaptor.cpp
+   KPrObject2DAdaptor.cpp
+   KPrPieObjectAdaptor.cpp
+   KPrPolyLineObjectAdaptor.cpp
+   KPrTextObjectAdaptor.cpp
+)
 
 kde4_automoc(${kpresenterprivate_LIB_SRCS})
 

@@ -60,7 +60,7 @@ class KoOasisContext;
 #define RAD_FACTOR 180.0 / M_PI
 #define MIN_SIZE 10
 
-class KPrObject
+class KPrObject : public QObject
 {
 public:
     KPrObject();

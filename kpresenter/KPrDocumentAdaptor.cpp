@@ -19,6 +19,8 @@
 */
 
 #include "KPrDocumentAdaptor.h"
+#include "KPrPageAdaptor.h"
+#include "KPrObjectAdaptor.h"
 #include "KPrTextObject.h"
 #include "KPrDocument.h"
 #include "KPrView.h"

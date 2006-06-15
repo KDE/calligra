@@ -27,9 +27,11 @@
 #include <QColor>
 #include "global.h"
 #include <QRect>
+#include <dbus/qdbus.h>
+
 class KPrPage;
 
-class KPrPageAdaptor
+class KPrPageAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.page")

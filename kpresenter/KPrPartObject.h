@@ -28,7 +28,7 @@ class KPrChild;
 class KoXmlWriter;
 class KoStore;
 
-class KPrPartObject : public QObject, public KPr2DObject
+class KPrPartObject : public KPr2DObject
 {
     Q_OBJECT
 public:

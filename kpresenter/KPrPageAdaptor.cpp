@@ -18,6 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <dbus/qdbus.h>
+
+#include "KPrDocumentAdaptor.h"
+#include "KPrObjectAdaptor.h"
 #include "KPrPageAdaptor.h"
 
 #include "KPrPage.h"
@@ -36,6 +40,7 @@
 #include <Q3CString>
 
 KPrPageAdaptor::KPrPageAdaptor( KPrPage *_page, int pgnum )
+  : QDBusAbstractAdaptor( _page )
 {
     m_page = _page;
     // Make up a nice D-Bus object path name like "Document/0/Page/1".
@@ -49,7 +54,7 @@ QString KPrPageAdaptor::textObject( int num )
 {
     KPrTextObject * textObj=m_page->textFrameSet(num);
     if(textObj)
-        return textObj->dbusObject()->objectName();
+        return textObj->objectName();
     return QString();
 }
 
@@ -58,7 +63,7 @@ QString KPrPageAdaptor::selectedObject( )
 {
     KPrObject * obj=m_page->getSelectedObj();
     if(obj)
-        return obj->dbusObject()->objectName();
+        return obj->objectName();
     return QString();
 }
 
@@ -72,7 +77,7 @@ QString KPrPageAdaptor::object( int num )
 {
     if( num >= (int)m_page->objNums())
         return QString();
-    return m_page->getObject(num)->dbusObject()->objectName();
+    return m_page->getObject(num)->dbusObject()->object()->objectName();
 }
 
 QString KPrPageAdaptor::manualTitle()const

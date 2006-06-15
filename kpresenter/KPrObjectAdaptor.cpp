@@ -26,6 +26,7 @@
 #include <kapplication.h>
 
 KPrObjectAdaptor::KPrObjectAdaptor( KPrObject *obj_ )
+  : QDBusAbstractAdaptor( obj_ )
 {
     obj = obj_;
 }

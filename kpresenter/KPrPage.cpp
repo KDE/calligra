@@ -78,7 +78,8 @@ typedef QMap<int, Q3PtrList<listAnimation> > lstMap;
 
 
 KPrPage::KPrPage(KPrDocument *_doc, KPrPage *masterPage )
-    : m_doc( _doc )
+    : QObject( _doc )
+    , m_doc( _doc )
     , m_masterPage( masterPage )
     , m_dbus( 0 )
     , m_selectedSlides( true )

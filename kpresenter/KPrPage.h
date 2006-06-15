@@ -58,7 +58,7 @@ class KoGenStyles;
 class KoPen;
 
 
-class KPrPage
+class KPrPage : public QObject
 {
 public:
     /**
