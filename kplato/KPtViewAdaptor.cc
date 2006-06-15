@@ -22,8 +22,6 @@
 #include "kptview.h"
 
 #include <kapplication.h>
-#include <dcopclient.h>
-#include <dcopref.h>
 
 namespace KPlato
 {
@@ -37,6 +35,7 @@ namespace KPlato
 ViewAdaptor::ViewAdaptor( View* t )
     : KoViewAdaptor( t )
 {
+    setAutoRelaySignals(true);
     m_view = t;
 }
 

@@ -42,18 +42,18 @@ public:
     virtual ~ViewAdaptor();
 
 public Q_SLOTS:
-    void slotEditResource();
-    void slotEditCut();
-    void slotEditCopy();
-    void slotEditPaste();
-    void slotViewGantt();
-    void slotViewPert();
-    void slotViewResources();
-    void slotAddTask();
-    void slotAddSubTask();
-    void slotAddMilestone();
-    void slotProjectEdit();
-    void slotConfigure();
+    Q_SCRIPTABLE void slotEditResource();
+    Q_SCRIPTABLE void slotEditCut();
+    Q_SCRIPTABLE void slotEditCopy();
+    Q_SCRIPTABLE void slotEditPaste();
+    Q_SCRIPTABLE void slotViewGantt();
+    Q_SCRIPTABLE void slotViewPert();
+    Q_SCRIPTABLE void slotViewResources();
+    Q_SCRIPTABLE void slotAddTask();
+    Q_SCRIPTABLE void slotAddSubTask();
+    Q_SCRIPTABLE void slotAddMilestone();
+    Q_SCRIPTABLE void slotProjectEdit();
+    Q_SCRIPTABLE void slotConfigure();
 
 private:
     View* m_view;
