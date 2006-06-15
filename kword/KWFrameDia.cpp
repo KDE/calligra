@@ -102,8 +102,11 @@ void KWBrushStylePreview::drawContents( QPainter* painter )
  ******************************************************************/
 
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame)
-    : KDialogBase( Tabbed, QString::null, Ok | Apply| Cancel, Ok, parent, "framedialog", true)
+    : KDialog( parent)
 {
+    setButtons( Ok | Apply| Cancel );
+    setDefaultButton( Ok );
+    setFaceType( KPageDialog::Tabbed );
     m_noSignal=false;
     m_frame = frame;
     m_mainFrame = 0;
@@ -128,8 +131,12 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame)
 
 /* Contructor when the dialog is used on creation of frame */
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame, KWDocument *doc, FrameSetType ft )
-    : KDialogBase( Tabbed, i18n("Frame Properties for New Frame"), Ok | Cancel, Ok, parent, "framedialog", true)
+    : KPageDialog(parent)
 {
+    setCaption( i18n("Frame Properties for New Frame") );
+    setButtons(  Ok | Cancel );
+    setDefaultButton( Ok );
+    setFaceType( KPageDialog::Tabbed );
     m_noSignal=false;
     m_frameType=ft;
     m_doc = doc;
@@ -146,7 +153,12 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame, KWDocument *doc, FrameS
     init();
 }
 
-KWFrameDia::KWFrameDia( QWidget *parent, Q3PtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frames Properties"), Ok | Apply | Cancel, Ok, parent, "framedialog", true) , m_allFrames() {
+KWFrameDia::KWFrameDia( QWidget *parent, Q3PtrList<KWFrame> listOfFrames)
+    : KDialogBase( parent) , m_allFrames() {
+    setCaption( i18n("Frames Properties") );
+    setButtons( Ok | Apply | Cancel );
+    setDefaultButton( Ok );
+    setFaceType( KPageDialog::Tabbed );
     m_noSignal=false;
 
     m_mainFrame = m_frame = 0L;
@@ -621,7 +633,9 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 }
 
 void KWFrameDia::setupTab2() { // TAB Text Runaround
-    m_tab2 = addPage( i18n( "Text Run Around" ) );
+    m_tab2 = new QWidget();
+
+    addPage( m_tab2, i18n( "Text Run Around" ) );
 
     Q3VBoxLayout *tabLayout = new Q3VBoxLayout( m_tab2, 0, KDialog::spacingHint(), "tabLayout");
 
@@ -804,7 +818,8 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
      * then the new connection should be made.
      */
     //kDebug() << "setup tab 3 frameSet"<<endl;
-    m_tab3 = addPage( i18n( "Connect Text Frames" ) );
+    m_tab3 = new QWidget();
+    addPage(m_tab3, i18n( "Connect Text Frames" ) );
 
     Q3VBoxLayout *tabLayout = new Q3VBoxLayout( m_tab3, 0, KDialog::spacingHint());
 
@@ -937,8 +952,9 @@ void KWFrameDia::textNameFrameChanged ( const QString &text )
 
 void KWFrameDia::setupTab4() { // TAB Geometry
     m_noSignal = true;
+    m_tab4 = new QWidget();
 
-    m_tab4 = addPage( i18n( "Geometry" ) );
+    addPage(m_tab4, i18n( "Geometry" ) );
     Q3GridLayout* grid4 = new Q3GridLayout( m_tab4, 5, 1, 0, KDialog::spacingHint() );
 
     m_floating = new QCheckBox( i18n("Frame is inline"), m_tab4 );
@@ -1169,7 +1185,9 @@ void KWFrameDia::initGeometrySettings()
 }
 
 void KWFrameDia::setupTab5() { // Tab Background fill/color
-    m_tab5 = addPage( i18n("Background") );
+    m_tab5 = new QWidget();
+
+    addPage(m_tab5, i18n("Background") );
     Q3GridLayout* grid5 = new Q3GridLayout( m_tab5, 0 /*auto*/, 2, 0, KDialog::spacingHint() );
 
     int row = 0;
@@ -1245,7 +1263,9 @@ void KWFrameDia::setupTab5() { // Tab Background fill/color
 
 void KWFrameDia::setupTab6() // Border style
 {
-    m_tab6 = addPage( i18n("&Borders") );
+    m_tab6 = new QWidget();
+
+    addPage(m_tab6, i18n("&Borders") );
 
     Q3GridLayout *grid = new Q3GridLayout( m_tab6, 8, 2, 0, KDialog::spacingHint() );
 

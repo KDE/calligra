@@ -23,7 +23,7 @@
 
 #include "defs.h"
 #include "KWTextFrameSet.h"
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <KoUnit.h>
 #include <KoUnitWidgets.h>
 #include <q3groupbox.h>
@@ -102,7 +102,7 @@ private:
 /******************************************************************/
 /* Class: KWFrameDia                                              */
 /******************************************************************/
-class KWFrameDia : public KDialogBase
+class KWFrameDia : public KPageDialog
 {
     Q_OBJECT
 public:

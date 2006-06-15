@@ -23,9 +23,9 @@
 #include <q3cstring.h>
 #include <qdom.h>
 #include <kinstance.h>
+
 #include <QMap>
 #include <QObject>
-#include <dcopobject.h>
 #include <koffice_export.h>
 typedef QMap<QString,QString> DbRecord;
 #define KWSLUnspecified 0
@@ -43,10 +43,10 @@ typedef QMap<QString,QString> DbRecord;
  *
  ******************************************************************/
 
-class KWORD_EXPORT KWMailMergeDataSource: public QObject, public DCOPObject
+class KWORD_EXPORT KWMailMergeDataSource: public QObject
 {
     Q_OBJECT
-    K_DCOP
+    //Q_CLASSINFO("D-Bus Interface", "org.kde.kword.mailmerge")
     public:
     KWMailMergeDataSource(KInstance* inst,QObject *parent);
     virtual ~KWMailMergeDataSource(){;}
@@ -66,8 +66,10 @@ class KWORD_EXPORT KWMailMergeDataSource: public QObject, public DCOPObject
     DbRecord sampleRecord;
     private:
     KInstance *m_instance;
-k_dcop:
-    virtual  int getNumRecords() const =0;
+/*	
+public Q_SLOTS:
+    Q_SCRIPTABLE virtual  int getNumRecords() const =0;
+*/	
 };
 
 
