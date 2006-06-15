@@ -26,7 +26,7 @@
 #include <KoUnitWidgets.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kdialog.h>
+#include <kpagedialog.h>
 #include <kiconloader.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
@@ -84,38 +84,52 @@ KPrConfig::KPrConfig( KPrView* parent )
     : KPageDialog( parent )
 
 {
-    setFaceType(IconList);
+    setFaceType(List);
     setCaption(i18n("Configure KPresenter"));
     setButtons(Ok|Apply|Cancel|Default);
 
     m_doc = parent->kPresenterDoc();
-    KVBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
-                               BarIcon("misc", K3Icon::SizeMedium) );
+    KVBox *page = new KVBox();
+    m_p1 = addPage( page, i18n("Interface") );
+    m_p1->setHeader( i18n("Interface") );
+    m_p1->setIcon( BarIcon("misc", K3Icon::SizeMedium) );
     _interfacePage=new KPrConfigureInterfacePage( parent, page );
-    page = addVBoxPage( i18n("Color"), i18n("Color"),
-                        BarIcon("colorize", K3Icon::SizeMedium) );
+    page = new KVBox();
+    m_p2 = addPage( page, i18n("Color") );
+    m_p2->setHeader( i18n("Color") );
+    m_p2->setIcon( BarIcon("colorize", K3Icon::SizeMedium) );
     _colorBackground = new KPrConfigureColorBackground( parent, page );
 
-    page = addVBoxPage( i18n("Spelling"), i18n("Spellchecker Behavior"),
-                        BarIcon("spellcheck", K3Icon::SizeMedium) );
+    page = new KVBox();
+    m_p3 = addPage( page, i18n("Spelling") );
+    m_p3->setHeader( i18n("Color") );
+    m_p3->setIcon( BarIcon("colorize", K3Icon::SizeMedium) );
     _spellPage=new KPrConfigureSpellPage(parent, page);
 
-    page = addVBoxPage( i18n("Misc"), i18n("Misc"),
-                        BarIcon("misc", K3Icon::SizeMedium) );
+    page = new KVBox();
+    m_p4 = addPage( page, i18n("Misc") );
+    m_p4->setHeader( i18n("Misc") );
+    m_p4->setIcon( BarIcon("misc", K3Icon::SizeMedium) );
     _miscPage=new KPrConfigureMiscPage(parent, page);
 
-    page = addVBoxPage( i18n("Document"), i18n("Document Settings"),
-                        BarIcon("kpresenter_kpr", K3Icon::SizeMedium) );
+    page = new KVBox();
+    m_p5 = addPage( page, i18n("Document") );
+    m_p5->setHeader( i18n("Document Settings") );
+    m_p5->setIcon( BarIcon("kpresenter_kpr", K3Icon::SizeMedium) );
 
     _defaultDocPage=new KPrConfigureDefaultDocPage(parent, page);
 
-    page = addVBoxPage( i18n("Tools"), i18n("Default Tools Settings"),
-                        BarIcon("configure", K3Icon::SizeMedium) );
+    page = new KVBox();
+    m_p6 = addPage( page, i18n("Tools") );
+    m_p6->setHeader( i18n("Default Tools Settings") );
+    m_p6->setIcon( BarIcon("configure", K3Icon::SizeMedium) );
 
     _toolsPage=new KPrConfigureToolsPage(parent, page);
 
-    page = addVBoxPage( i18n("Paths"), i18n("Path Settings"),
-                        BarIcon("path") );
+    page = new KVBox();
+    m_p7 = addPage( page, i18n("Paths") );
+    m_p7->setHeader( i18n("Path Settings") );
+    m_p7->setIcon( BarIcon("path", K3Icon::SizeMedium) );
 
     m_pathPage=new KPrConfigurePathPage(parent, page);
 
@@ -125,19 +139,19 @@ KPrConfig::KPrConfig( KPrView* parent )
 void KPrConfig::openPage(int flags)
 {
     if(flags & KP_INTERFACE)
-        showPage( 0 );
+        setCurrentPage( m_p1 );
     else if(flags & KP_COLOR)
-        showPage(1 );
+        setCurrentPage( m_p2 );
     else if(flags & KP_KSPELL)
-        showPage(2);
+        setCurrentPage( m_p3);
     else if(flags & KP_MISC)
-        showPage(3 );
+        setCurrentPage( m_p4 );
     else if(flags & KP_DOC)
-        showPage(4 );
+        setCurrentPage( m_p5 );
     else if(flags & KP_TOOLS)
-        showPage(5);
+        setCurrentPage( m_p6);
     else if(flags & KP_PATH)
-        showPage(6);
+        setCurrentPage( m_p7);
 }
 
 void KPrConfig::slotApply()
@@ -170,31 +184,22 @@ void KPrConfig::slotApply()
 
 void KPrConfig::slotDefault()
 {
-    switch( activePageIndex() ) {
-    case 0:
+    if ( currentPage() == m_p1 )
         _interfacePage->slotDefault();
-        break;
-    case 1:
-        _colorBackground->slotDefault();
-        break;
-    case 2:
-        if (_spellPage) _spellPage->slotDefault();
-        break;
-    case 3:
-        _miscPage->slotDefault();
-        break;
-    case 4:
-        _defaultDocPage->slotDefault();
-        break;
-    case 5:
-        _toolsPage->slotDefault();
-        break;
-    case 6:
-        m_pathPage->slotDefault();
-        break;
-    default:
-        break;
+    else if ( currentPage() == m_p2 )
+      _colorBackground->slotDefault();
+    else if ( currentPage() == m_p3 )
+    {
+      if (_spellPage)
+        _spellPage->slotDefault();
     }
+    else if ( currentPage() == m_p4 )
+      _miscPage->slotDefault();
+    else if ( currentPage() == m_p5 )
+      _defaultDocPage->slotDefault();
+    else
+      m_pathPage->slotDefault();
+
 }
 
 KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *parent , char *name )
@@ -381,7 +386,7 @@ KPrConfigureSpellPage::KPrConfigureSpellPage( KPrView *_view, QWidget *parent, c
 {
     m_pView=_view;
     config = KPrFactory::global()->config();
-    m_spellConfigWidget = new ConfigWidget( _view->broker(), parent );
+    m_spellConfigWidget = new ConfigWidget( _view->loader(), parent );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
 }
 
@@ -393,9 +398,9 @@ void KPrConfigureSpellPage::apply()
 
 
     m_pView->kPresenterDoc()->setSpellCheckIgnoreList(
-        m_pView->broker()->settings()->currentIgnoreList() );
+        m_pView->loader()->settings()->currentIgnoreList() );
     //FIXME reactivate just if there are changes.
-    doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );
+    doc->enableBackgroundSpellCheck( m_pView->loader()->settings()->backgroundCheckerEnabled() );
     doc->reactivateBgSpellChecking();
 }
 

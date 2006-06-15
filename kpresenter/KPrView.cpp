@@ -274,7 +274,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     m_spell.textIterator = 0L;
     m_spell.macroCmdSpellCheck = 0L;
     m_spell.dlg = 0;
-    m_broker = KSpell2::Loader::openLoader( KSharedConfig::openConfig( "kpresenterrc" ) );
+    m_loader = KSpell2::Loader::openLoader( KSharedConfig::openConfig( "kpresenterrc" ) );
 
     m_autoPresTimerConnected = false;
 #warning "kde4: delete it"
@@ -1755,7 +1755,7 @@ void KPrView::mtextFont()
     delete m_fontDlg;
 
     m_fontDlg = new KoFontDia( *textAdaptor->currentFormat()
-                               , m_broker
+                               , m_loader
                                , this, 0 );
 
     connect( m_fontDlg, SIGNAL( applyFont() ),
@@ -4510,7 +4510,7 @@ void KPrView::startKSpell()
 {
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if ( !m_spell.kospell )
-        m_spell.kospell = new KoSpell( m_broker, this  );
+        m_spell.kospell = new KoSpell( m_loader, this  );
     m_spell.kospell->check( m_spell.textIterator, true );
 
     delete m_spell.dlg;
@@ -6282,7 +6282,7 @@ void KPrView::spellAddAutoCorrect (const QString & originalword, const QString &
 QList<KAction*> KPrView::listOfResultOfCheckWord( const QString &word )
 {
     QList<KAction*> listAction;
-    DefaultDictionary *dict = m_broker->defaultDictionary();
+    DefaultDictionary *dict = m_loader->defaultDictionary();
     QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ))
     {
@@ -6356,9 +6356,9 @@ void KPrView::slotChildActivated(bool a)
   KoView::slotChildActivated( a );
 }
 
-KSpell2::Loader::Ptr KPrView::broker() const
+KSpell2::Loader::Ptr KPrView::loader() const
 {
-    return m_broker;
+    return m_loader;
 }
 
 void KPrView::slotUnitChanged( KoUnit::Unit unit )

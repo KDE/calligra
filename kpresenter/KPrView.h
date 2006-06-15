@@ -184,9 +184,9 @@ public:
     QList<KAction*> listOfResultOfCheckWord( const QString &word );
 
     /**
-     * Returns the KPresenter global KSpell2 Broker object.
+     * Returns the KPresenter global KSpell2 Loader object.
      */
-	KSpell2::Loader::Ptr broker() const;
+	KSpell2::Loader::Ptr loader() const;
     bool editMaster() const { return m_editMaster;}
 
 signals:
@@ -1211,7 +1211,7 @@ private:
         KSpell2::Dialog *dlg;
     } m_spell;
 
-    KSpell2::Loader::Ptr m_broker;
+    KSpell2::Loader::Ptr m_loader;
 
 
 
