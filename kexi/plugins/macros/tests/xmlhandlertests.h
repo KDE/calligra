@@ -73,14 +73,14 @@ namespace KoMacroTest {
 			class Private;
 			/// @internal d-pointer instance.
 			Private* const d;
-			// Compares a XML-Element with a Macro.
-			bool isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement);
+			// Compares a XML-Element with a Macro. Call sub-asserts.
+			void assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement);
 			// Prints a QMap of Variables to kdDebug().
 			void printMvariables(QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, QString s);
 
 			/** 
-			* Sub-methods of testParseXML(). 
-			* Test the correct parsing of a QDomElement into a Macro
+			* Sub-methods of testParseXML().
+			* Test the correct parsing of a @a QDomElement into a @a Macro
 			* respectively expected failure of parsing.
 			*/
 			// 1.Test - Correct DomElement.
@@ -108,6 +108,13 @@ namespace KoMacroTest {
 			void tpxTestMinNum2();
 			// 12.Test - With a to big number.
 			void tpxTestBigNumber();
+
+			/** 
+			* Sub-methods of assertMacroContentEqToXML().
+			* Compare the parsen @a Macro -tree and the given @a QDomElement -tree.
+			*/
+			//1. comparison - Is the MacroItem-list empty?
+			void assertItemsNotEmpty(const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems, bool expect, bool proceed);
 	};
 
 }

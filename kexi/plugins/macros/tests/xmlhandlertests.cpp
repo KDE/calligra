@@ -159,10 +159,14 @@ void XMLHandlerTests::tpxTestCorrectDomElement()
 	// Is our XML parseable ?
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	// Is the parsen content in the Macro correct ?
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
 	// Test the Compare-method when a Variable will change, it must fail.
 	macro->items().first()->variable("teststring")->setVariant("bla");
-	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument; // TODO delete domelement; ??
 }
 
 // 2.Test - XML-document with bad root element.
@@ -184,7 +188,10 @@ void XMLHandlerTests::tpxTestBadRoot()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 
 // 3.Test - XML-document with a missing Variable.
@@ -205,7 +212,10 @@ void XMLHandlerTests::tpxTestMissingVariable()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 
 // 4.Test - One more Variable in XML-Document.
@@ -228,7 +238,10 @@ void XMLHandlerTests::tpxTestMoreVariables()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 
 // 5.Test - XML-document with wrong macro-xmlversion.
@@ -250,7 +263,10 @@ void XMLHandlerTests::tpxTestWrongVersion()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 
 // 6.Test - XML-document if it has a wrong structure like wrong parathesis
@@ -270,9 +286,12 @@ void XMLHandlerTests::tpxTestWrongXMLStruct()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
 	KOMACROTEST_ASSERT(doomdocument->isDocument(),true);
 	KOMACROTEST_ASSERT(domelement.isElement(),true);
+
+	delete doomdocument;
 }
 
 // 7.Test - XML-document with wrong item- and variable-tags.
@@ -296,6 +315,8 @@ void XMLHandlerTests::tpxTestWrongItemVarTags()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_XASSERT(macro->parseXML(domelement),true); 
+
+	delete doomdocument;
 }
 
 // 8.Test-XML-document with maximum field-size.
@@ -317,7 +338,10 @@ void XMLHandlerTests::tpxTestMaxNum()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 
 // 9.Test-XML-document with maximum+1 field-size.
@@ -339,7 +363,10 @@ void XMLHandlerTests::tpxTestMaxNum2()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 
 // 10.Test-XML-document with minimum field-size.
@@ -361,7 +388,10 @@ void XMLHandlerTests::tpxTestMinNum()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 
 // 11.Test-XML-document with minimum+1 field-size.
@@ -383,7 +413,10 @@ void XMLHandlerTests::tpxTestMinNum2()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 
 // 12.Test - With a to big number.
@@ -405,21 +438,31 @@ void XMLHandlerTests::tpxTestBigNumber()
 	doomdocument->setContent(xml);
 	domelement = doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	assertMacroContentEqToXML(macro,domelement);
+
+	delete doomdocument;
 }
 /***************************************************************************
 * End of Sub-methos of testParseXML().
 ***************************************************************************/
 
 // Compares a XML-Element with a Macro by value.
-bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement)
+void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement)
 {	
+	// To handle control flow.
+	// TODO: We should also can do this by return-statement of the sub-asserts.
+	bool proceed = true;
+
 	// Make an Iterator over the MacroItems of the Macro.
 	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems = macro->items();
 	QValueList<KSharedPtr<KoMacro::MacroItem > >::ConstIterator 
 		mit(macroitems.constBegin()), end(macroitems.constEnd());
-	if(macroitems.empty()) return false;
-
+	//1. comparison - Is the MacroItem-list empty?
+{
+	assertItemsNotEmpty(macroitems, true, & proceed);
+	if( ! proceed) return;
+}
 	// Got to the first item-elements of the domelement (there is only one in the tests).
 	QDomNode itemnode = domelement.firstChild();
 
@@ -432,7 +475,7 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> mac
 			kdDebug() 	<< "Action-name not equal: " 
 						<< macroitem->action()->name()
 						<< " != " << itemelem.attribute("action") << endl;
-			return false;
+			return; //return false;
 		}
 
 		// Go down to MacroItem->Variable and item->variable and compare them.
@@ -452,11 +495,11 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> mac
 							<< " is not equal." << varitem->variant()
 							<< "!=" << varelem.text() << endl;
 				// TODO Leave test the type bool because of parsing problems.
-				if(varitem->name() == "testbool") {
-					kdDebug() << "It's a bool, left checking of it. " 
-							<< QVariant(varitem->variant()) << endl;
-				}
-				else return false;
+				//if(varitem->name() == "testbool") {
+				//	kdDebug() << "It's a bool, left checking of it. " 
+				//			<< QVariant(varitem->variant()) << endl;
+				//}
+				return; // return false;
 			}
 			//printMvariables(mvariables,"doing");
 			mvariables.erase(varitem->name());
@@ -466,7 +509,7 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> mac
 		// TODO Should I compare here with the Variables of the TestAction??
 		if ( ! mvariables.empty()) {
 			kdDebug() << "There are non-filled variable in the MacroItem: " << mvariables.count() <<endl;
-			return false;
+			return; //return false;
 		}
 		//printMvariables(mvariables,"after");
 		
@@ -475,7 +518,14 @@ bool XMLHandlerTests::isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> mac
 		itemnode = itemnode.nextSibling();
 	}
 
-	return true;
+	//return true;
+}
+
+//1. comparison - Is the MacroItem-list empty?
+void XMLHandlerTests::assertItemsNotEmpty(const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems, bool expect, bool proceed)
+{
+	KOMACROTEST_ASSERT(macroitems.empty(),expect);
+	proceed != macroitems.empty();
 }
 
 // Prints a QMap of Variables to kdDebug().
@@ -507,6 +557,6 @@ void XMLHandlerTests::testToXML()
 
 	// First Test.
 	QDomElement domelement = macro->toXML();
-	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
 }
 #include "xmlhandlertests.moc"
