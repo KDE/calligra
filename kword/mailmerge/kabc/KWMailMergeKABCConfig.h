@@ -21,7 +21,7 @@
 #ifndef _KWMAILMERGE_KABC_CONFIG_H_
 #define _KWMAILMERGE_KABC_CONFIG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <k3listview.h>
 #include <kabc/stdaddressbook.h>
 
@@ -31,7 +31,7 @@
 class AddressPickerUI;
 class KWMailMergeKABC;
 
-class KWMailMergeKABCConfig: public KDialogBase
+class KWMailMergeKABCConfig: public KDialog
 {
     Q_OBJECT
 public:

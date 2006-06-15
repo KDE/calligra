@@ -38,7 +38,6 @@ class KWTextFrameSet;
 class KWTextFrameSetEdit;
 class KWTextParag;
 class KWView;
-class KWordFrameSetIface;
 class KWFrameViewManager;
 
 class KoSavingContext;
@@ -70,7 +69,6 @@ public:
     /// destructor
     virtual ~KWFrameSet();
 
-    virtual KWordFrameSetIface* dcopObject();
 
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
@@ -500,7 +498,6 @@ protected:
     bool m_protectSize;
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;
-    KWordFrameSetIface *m_dcop;
     KWPageManager *m_pageManager;
 };
 

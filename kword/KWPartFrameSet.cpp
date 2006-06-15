@@ -86,15 +86,6 @@ KWPartFrameSet::~KWPartFrameSet()
 {
 }
 
-KWordFrameSetIface* KWPartFrameSet::dcopObject()
-{
-#if 0
-    if ( !m_dcop )
-        m_dcop = new KWordPartFrameSetIface( this );
-
-    return m_dcop;
-#endif
-}
 
 
 void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, const QRect & /*crect TODO*/,

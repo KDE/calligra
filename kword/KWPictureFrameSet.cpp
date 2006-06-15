@@ -20,7 +20,6 @@
 
 #include "KWPictureFrameSet.h"
 #include "KWDocument.h"
-#include "KWordPictureFrameSetIface.h"
 #include <KoStoreDevice.h>
 #include <KoOasisContext.h>
 #include <KoPictureCollection.h>
@@ -53,13 +52,6 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument* doc, const QDomElement& frame,
 KWPictureFrameSet::~KWPictureFrameSet() {
 }
 
-KWordFrameSetIface* KWPictureFrameSet::dcopObject()
-{
-    if ( !m_dcop )
-        m_dcop = new KWordPictureFrameSetIface( this );
-
-    return m_dcop;
-}
 
 void KWPictureFrameSet::loadPicture( const QString & fileName )
 {

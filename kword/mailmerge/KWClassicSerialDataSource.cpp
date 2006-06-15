@@ -334,9 +334,14 @@ void KWClassicMailMergeEditorList::displayRecord( int i )
  ******************************************************************/
 
 KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSerialDataSource *db_ )
-    : KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
+    : KDialog( parent), db( db_ )
 {
-    back = plainPage();
+    setCaption( i18n( "Mail Merge - Editor" ) );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+
+    back = new QWidget( this );
+    setMainWidget( back );
 
     Q3VBoxLayout *l = new Q3VBoxLayout( back );
     l->setAutoAdd(true);
@@ -457,7 +462,7 @@ void KWClassicMailMergeEditor::updateButton()
 
 void KWClassicMailMergeEditor::resizeEvent( QResizeEvent *e )
 {
-    KDialogBase::resizeEvent( e );
+    KDialog::resizeEvent( e );
 //    back->resize( size() );
 }
 

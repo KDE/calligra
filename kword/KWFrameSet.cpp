@@ -26,7 +26,6 @@
 #include "KWTextFrameSet.h"
 #include "KWTableFrameSet.h"
 #include "KWAnchor.h"
-#include "KWordFrameSetIface.h"
 #include "KWFrameList.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
@@ -52,7 +51,7 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
       m_info( FI_BODY ),
       m_groupmanager( 0L ), m_visible( true ),
       m_protectSize( false ),
-      m_anchorTextFs( 0L ), m_dcop( 0L ), m_pageManager( 0 )
+      m_anchorTextFs( 0L ), m_pageManager( 0 )
 {
     // Send our "repaintChanged" signals to the document.
     setName("KWFrameSet");
@@ -65,18 +64,9 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
     m_framesInPage.setAutoDelete( true ); // autodelete the lists in the array (not the frames;)
 }
 
-KWordFrameSetIface* KWFrameSet::dcopObject()
- {
-    if ( !m_dcop )
-        m_dcop = new KWordFrameSetIface( this );
-
-    return m_dcop;
-}
-
 
 KWFrameSet::~KWFrameSet()
 {
-    delete m_dcop;
 }
 
 void KWFrameSet::addFrame( KWFrame *frame, bool recalc )

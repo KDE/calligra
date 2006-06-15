@@ -179,7 +179,8 @@ KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const 
     m_doc=_doc;
     m_typeStyle = _type;
     m_list =_list;
-    KVBox *page = makeVBoxMainWidget();
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
     new QLabel(i18n("Select style to import:"), page);
     m_listStyleName = new Q3ListBox( page );
     m_listStyleName->setSelectionMode( Q3ListBox::Multi );
@@ -345,6 +346,6 @@ void KWImportFrameTableStyleDia::slotOk()
             }
         }
     }
-    KDialogBase::slotOk();
+    KDialog::accept();
 }
 #include "KWImportStyleDia.moc"

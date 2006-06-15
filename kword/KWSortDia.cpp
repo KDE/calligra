@@ -34,7 +34,8 @@ KWSortDia::KWSortDia( QWidget *parent, const char* name )
     setButtons(  Ok|Cancel );
     setDefaultButton( Ok );
 
-    KVBox *page = makeVBoxMainWidget();
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Sort" ),page );
     grp->setRadioButtonExclusive( true );

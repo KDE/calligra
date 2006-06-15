@@ -38,10 +38,12 @@
 using namespace KSpread;
 
 KWMailMergeKSpreadConfig::KWMailMergeKSpreadConfig( QWidget *parent, KWMailMergeKSpread *object )
-  : KDialogBase( Plain, i18n( "Mail Merge - Editor" ),
-                 Ok | Cancel, Ok, parent, "", true ),
+  : KDialog( 0),
     _document( 0 ), _initialPage( 1 )
 {
+    setCaption( i18n( "Mail Merge - Editor" ) );
+    setButtons( Ok | Cancel );
+    setDefaultButton( Ok );
   _object = object;
 
   initGUI();
@@ -66,7 +68,7 @@ void KWMailMergeKSpreadConfig::slotOk()
   _object->setURL( _urlRequester->url() );
   _object->setSpreadSheetNumber( _pageNumber->currentText().toInt() );
 
-  KDialogBase::slotOk();
+  KDialog::accept();
 }
 
 void KWMailMergeKSpreadConfig::loadDocument()
@@ -104,7 +106,8 @@ void KWMailMergeKSpreadConfig::documentLoaded()
 
 void KWMailMergeKSpreadConfig::initGUI()
 {
-  QFrame *page = plainPage();
+  QFrame *page = new QFrame( this );
+  setMainWidget( page );
 
   Q3GridLayout *layout = new Q3GridLayout( page, 2, 2, marginHint(), spacingHint() );
 

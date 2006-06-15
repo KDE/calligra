@@ -21,7 +21,7 @@
 #ifndef _KWMAILMERGE_KSPREAD_CONFIG_H_
 #define _KWMAILMERGE_KSPREAD_CONFIG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "kwmailmerge_kspread.h"
 
@@ -30,7 +30,7 @@ class KUrlRequester;
 
 class KWMailMergeKSpread;
 
-class KWMailMergeKSpreadConfig: public KDialogBase
+class KWMailMergeKSpreadConfig: public KDialog
 {
   Q_OBJECT
 

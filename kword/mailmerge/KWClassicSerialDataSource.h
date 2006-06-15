@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <Q3ValueList>
 #include <QResizeEvent>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoCustomVariablesDia.h>
 #include "KWMailMergeDataSource.h"
 #include <QSpinBox>
@@ -137,7 +137,7 @@ protected:
  *
  ******************************************************************/
 
-class KWClassicMailMergeEditor : public KDialogBase
+class KWClassicMailMergeEditor : public KDialog
 {
     Q_OBJECT
 

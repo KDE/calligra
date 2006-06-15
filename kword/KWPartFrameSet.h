@@ -38,8 +38,6 @@ public:
 
     virtual ~KWPartFrameSet();
 
-    virtual KWordFrameSetIface* dcopObject();
-
 
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.

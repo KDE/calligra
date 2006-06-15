@@ -73,7 +73,7 @@ void KWCreateBookmarkDia::slotOk()
         KMessageBox::error(this, i18n("That name already exists, please choose another name."));
     }
     else
-        KDialogBase::slotOk();
+        KDialog::accept();
 }
 
 QString KWCreateBookmarkDia::bookmarkName()const
@@ -89,8 +89,10 @@ void KWCreateBookmarkDia::nameChanged( const QString &text)
 
 /* ****************************  */
 KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, KWDocument *_doc, QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent )
 {
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
     m_doc=_doc;
     setCaption( i18n("Select Bookmark") );
     QWidget *page = new QWidget( this );

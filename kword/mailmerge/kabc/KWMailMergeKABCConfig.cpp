@@ -43,13 +43,16 @@
 
 
 KWMailMergeKABCConfig::KWMailMergeKABCConfig( QWidget *parent, KWMailMergeKABC *db_)
-        :KDialogBase( Plain, i18n( "Mail Merge - Editor" ),
-                      Ok | Cancel, Ok, parent, "", true)
+        :KDialog( parent)
 {
+    setCaption( i18n( "Mail Merge - Editor" ) );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
     _db = db_;
-
-    (new Q3VBoxLayout(plainPage()))->setAutoAdd(true);
-    setMainWidget( _ui=new AddressPickerUI( plainPage() ) );
+    QWidget*page = new QWidget( this );
+    setMainWidget( page );
+    (new Q3VBoxLayout(page))->setAutoAdd(true);
+    setMainWidget( _ui=new AddressPickerUI( page ) );
 
     updateAvailable();
     initSelectedAddressees();

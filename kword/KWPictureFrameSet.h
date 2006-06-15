@@ -32,7 +32,6 @@ public:
     KWPictureFrameSet( KWDocument* doc, const QDomElement& frame, const QDomElement& imageTag, KoOasisContext& context );
     virtual ~KWPictureFrameSet();
 
-    virtual KWordFrameSetIface* dcopObject();
 
     /**
      * The type of frameset. Use this to differentiate between different instantiations of
