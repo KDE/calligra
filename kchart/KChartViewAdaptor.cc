@@ -21,7 +21,6 @@
 
 #include "kchart_view.h"
 
-// #include <dcopclient.h>
 
 namespace KChart
 {

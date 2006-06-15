@@ -17,14 +17,13 @@ class KAction;
 class KToggleAction;
 class QPaintEvent;
 
-// class DCOPObject;
 
 namespace KChart
 {
 
 class KChartPart;
 class kchartDataEditor;
-
+ class ViewAdaptor;
 class KChartView : public KoView
 {
     Q_OBJECT
@@ -33,8 +32,7 @@ public:
     ~KChartView();
 
     void updateGuiTypeOfChart();
-//     virtual DCOPObject* dcopObject();
-
+    virtual ViewAdaptor* dbusObject();
     void config(int flag);
 
 public slots:
@@ -103,8 +101,7 @@ private:
     KToggleAction  *m_chartring;
     KToggleAction  *m_chartpolar;
     KToggleAction  *m_chartbw;
-
-//     DCOPObject  *m_dcop;
+    ViewAdaptor *m_dbus;
 
     // This is used for a workaround for a bug in the kdchart code, see #101490.
     bool m_logarithmicScale;

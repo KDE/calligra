@@ -21,7 +21,6 @@
 #include <kprinter.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-// #include <dcopobject.h>
 #include <kinstance.h>
 #include <kxmlguifactory.h>
 #include <kfiledialog.h>
@@ -38,7 +37,6 @@
 #include "kchartWizard.h"
 #include "kchartDataEditor.h"
 #include "kchartConfigDialog.h"
-// #include "KChartViewIface.h"
 #include "KChartViewAdaptor.h"
 #include <KoViewAdaptor.h>
 #include "kchartPageLayout.h"
@@ -67,10 +65,8 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
         setXMLFile( "kchart.rc" );
     else
         setXMLFile( "kchart_readonly.rc" );
-//     m_dcop = 0;
-//     dcopObject(); // build it
 
-    new ViewAdaptor(this);
+    m_dbus = new ViewAdaptor(this);
 
     m_importData = new KAction( i18n( "Import Data..." ), 0,
 				this, SLOT( importData() ),
@@ -105,22 +101,22 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      SLOT( lineChart() ), actionCollection(),
                                      "linechart");
 	charttypes->addAction(m_chartline);
-	
+
     m_chartareas = new KToggleAction( i18n("&Area"), "chart_area", 0, this,
                                       SLOT( areasChart() ), actionCollection(),
                                       "areaschart");
 	charttypes->addAction(m_chartareas);
-	
+
     m_charthilo = new KToggleAction( i18n("&HiLo"), "chart_hilo", 0, this,
                                      SLOT( hiLoChart() ), actionCollection(),
                                      "hilochart");
 	charttypes->addAction(m_charthilo);
-	
+
     m_chartbw = new KToggleAction( i18n("Bo&x && Whiskers"), "chart_boxwhisker", 0, this,
                                      SLOT( bwChart() ), actionCollection(),
                                      "bwchart");
 	charttypes->addAction(m_chartbw);
-	
+
     m_chartpie = new KToggleAction( i18n("&Pie"), "chart_pie", 0, this,
                                     SLOT( pieChart() ), actionCollection(),
                                     "piechart");
@@ -130,7 +126,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      SLOT( ringChart() ), actionCollection(),
                                      "ringchart");
 	charttypes->addAction(m_chartring);
-    
+
 	m_chartpolar = new KToggleAction( i18n("&Polar"), "chart_polar", 0, this,
                                      SLOT( polarChart() ), actionCollection(),
                                      "polarchart");
@@ -188,13 +184,10 @@ KChartView::~KChartView()
 }
 
 
-// DCOPObject* KChartView::dcopObject()
-// {
-//     if ( !m_dcop )
-// 	m_dcop = new KChartViewIface( this );
-// 
-//     return m_dcop;
-// }
+ViewAdaptor* KChartView::dbusObject()
+{
+    return m_dbus;
+}
 
 
 void KChartView::paintEvent( QPaintEvent* /*ev*/ )
@@ -266,7 +259,7 @@ void KChartView::applyEdit(kchartDataEditor *ed)
     if (!ed->modified())
 	return;
 
-    ed->getData( ((KChartPart*)koDocument())->params(), 
+    ed->getData( ((KChartPart*)koDocument())->params(),
 		 ((KChartPart*)koDocument())->data() );
     ed->getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed->getColLabels(((KChartPart*)koDocument())->colLabelTexts());
