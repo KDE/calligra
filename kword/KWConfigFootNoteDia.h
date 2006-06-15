@@ -20,7 +20,7 @@
 #ifndef configfootnotedia_h
 #define configfootnotedia_h
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
 class KWDocument;
 class QWidget;
@@ -30,7 +30,7 @@ class KIntNumInput;
 class QComboBox;
 class KoUnitDoubleSpinBox;
 
-class KWConfigFootNoteDia : public KDialogBase
+class KWConfigFootNoteDia : public KPageDialog
 {
     Q_OBJECT
 public:

@@ -34,16 +34,22 @@
 #include "KWFrameSet.h"
 
 KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent)
 {
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     setCaption( i18n("Create New Bookmark") );
     listBookMark = _list;
     init();
 }
 
 KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, const QString & _name, QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialog( parent)
 {
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    enableButtonSeparator( true );
     setCaption( i18n("Rename Bookmark...") );
     listBookMark = _list;
     init();

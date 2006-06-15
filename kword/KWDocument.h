@@ -677,7 +677,6 @@ public:
     static QColor defaultBgColor( QPainter * painter );
 
 
-    virtual DCOPObject* dcopObject();
 
     int undoRedoLimit() const;
     void setUndoRedoLimit(int val);
@@ -919,7 +918,6 @@ private:
     ProcessingType m_processingType;
     double m_gridX, m_gridY;
 
-    DCOPObject *dcop;
 
     KCommandHistory * m_commandHistory;
     KoAutoFormat * m_autoFormat;

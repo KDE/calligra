@@ -73,7 +73,7 @@ class KFontAction;
 
 class QResizeEvent;
 
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 #include <kvbox.h>
 namespace KSpell2 {
     class Dialog;
@@ -97,7 +97,6 @@ public:
     KWView( const QString& viewMode, QWidget *parent, const char *name, KWDocument *doc );
     virtual ~KWView();
 
-    virtual DCOPObject* dcopObject();
 
     // Those methods update the UI (from the given formatting info)
     // They do NOT do anything to the text
@@ -125,9 +124,9 @@ public:
     void setViewFrameBorders(bool b);
 
     /**
-     * Returns the KWord global KSpell2 Broker object.
+     * Returns the KWord global KSpell2 Loader object.
      */
-    KSpell2::Broker::Ptr broker() const;
+    KSpell2::Loader::Ptr loader() const;
 
     void setNoteType(NoteType nt, bool change=true);
 
@@ -768,7 +767,6 @@ private: // variables
 
     KWGUI *m_gui;
 
-    DCOPObject *m_dcop;
 
     KoSearchContext *m_searchEntry, *m_replaceEntry;
     KWFindReplace *m_findReplace;
@@ -805,7 +803,7 @@ private: // variables
         KoTextIterator * textIterator;
         KSpell2::Dialog *dlg;
      } m_spell;
-    KSpell2::Broker::Ptr m_broker;
+    KSpell2::Loader::Ptr m_loader;
 
 
     KWFrameSet *m_fsInline;

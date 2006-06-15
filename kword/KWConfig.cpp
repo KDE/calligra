@@ -86,11 +86,13 @@ static inline QPixmap loadIcon( const char * name ) {
 }
 
 KWConfig::KWConfig( KWView* parent )
-  : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
-          KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
-          KDialogBase::Ok, parent)
+  : KPageDialog(parent)
 
 {
+    setCaption( i18n("Configure KWord") );
+    setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel| KDialog::Default );
+    setDefaultButton( KDialog::Ok );
+    setFaceType( KPageDialog::List );
   KVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface Settings"),
                               loadIcon("configure") );
   m_interfacePage=new ConfigureInterfacePage(parent, page2);

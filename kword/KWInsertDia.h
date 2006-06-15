@@ -21,14 +21,14 @@
 #ifndef insdia_h
 #define insdia_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class KWTableFrameSet;
 class QRadioButton;
 class QSpinBox;
 class KWView;
 
-class KWInsertDia : public KDialogBase
+class KWInsertDia : public KDialog
 {
     Q_OBJECT
 

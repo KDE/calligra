@@ -37,11 +37,6 @@
 #include <kdebug.h>
 #include <float.h>
 #include "KWordFrameSetIface.h"
-#include <dcopobject.h>
-#include "KWordTextFrameSetEditIface.h"
-#include "KWordFormulaFrameSetIface.h"
-#include "KWordFormulaFrameSetEditIface.h"
-#include "KWordPictureFrameSetIface.h"
 
 #include "KWFormulaFrameSet.h"
 
@@ -97,13 +92,6 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *doc, const QString & name )
     slotFormulaChanged(rect.width(), rect.height());
 }
 
-KWordFrameSetIface* KWFormulaFrameSet::dcopObject()
-{
-    if ( !m_dcop )
-        m_dcop = new KWordFormulaFrameSetIface( this );
-
-    return m_dcop;
-}
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
@@ -338,15 +326,8 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
 
     m_canvas->gui()->getView()->showFormulaToolbar(true);
     focusInEvent();
-    dcop=0;
 }
 
-DCOPObject* KWFormulaFrameSetEdit::dcopObject()
-{
-    if ( !dcop )
-        dcop = new KWordFormulaFrameSetEditIface( this );
-    return dcop;
-}
 
 KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
 {
@@ -359,7 +340,6 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
     formulaFrameSet()->getFormula()->startEvaluation();
     formulaFrameSet()->setChanged();
     m_canvas->repaintChanged( formulaFrameSet(), true );
-    delete dcop;
 }
 
 const KFormula::View* KWFormulaFrameSetEdit::getFormulaView() const { return formulaView; }

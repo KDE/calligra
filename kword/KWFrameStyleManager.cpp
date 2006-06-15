@@ -136,10 +136,11 @@ void KWFrameStyleListItem::apply()
 
 KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc,
                                           const QString & activeStyleName )
-    : KDialogBase( _parent, "", true,
-                   i18n("Frame Style Manager"),
-                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply| KDialogBase::User1 )
+    : KDialog( _parent)
 {
+    setCaption( i18n("Frame Style Manager") );
+    setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply| KDialog::User1 );
+    setDefaultButton( Ok );
     m_doc = _doc;
 
     m_currentFrameStyle = 0;

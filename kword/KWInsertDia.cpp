@@ -33,8 +33,11 @@
 #include <Q3GridLayout>
 
 KWInsertDia::KWInsertDia( KWView *parent, KWTableFrameSet *table, InsertType type, int insertHint)
-    : KDialogBase( Plain, (type==insertRow?i18n("Insert Row") : i18n("Insert Column")), Ok | Cancel, Ok, parent, "Insert Table items dialog", true )
+    : KDialogBase( parent)
 {
+    setCaption( (type==insertRow?i18n("Insert Row") : i18n("Insert Column")) );
+    setButtons(  Ok | Cancel );
+    setDefaultButton(  Ok );
     m_type = type;
     m_table = table;
     m_view = parent;

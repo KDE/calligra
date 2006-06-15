@@ -20,7 +20,7 @@
 #ifndef __KWImportStyleDia__
 #define __KWImportStyleDia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <KoImportStyleDia.h>
 #include <QStringList>
 //Added by qt3to4:
@@ -50,7 +50,7 @@ private:
 };
 
 
-class KWImportFrameTableStyleDia : public KDialogBase
+class KWImportFrameTableStyleDia : public KDialog
 {
     Q_OBJECT
 public:

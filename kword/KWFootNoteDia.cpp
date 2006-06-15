@@ -37,14 +37,18 @@
 /******************************************************************/
 
 KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, const QString & _manualString, QWidget *parent, KWDocument *_doc, const char *name )
-    : KDialogBase( parent, name, true, QString::null, Ok|Cancel|User1, Ok, true )
+    : KDialogBase( parent)
 {
+    setButtons( Ok|Cancel|User1 );
+    setDefaultButton( Ok );
+
     m_doc =_doc;
     //setButtonOK(i18n("&Insert"));
 
     setCaption( i18n("Insert Footnote/Endnote") );
 
-    KVBox *page = makeVBoxMainWidget();
+    KVBox *page = new KVBox( this );
+    setMainWidget( page );
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( i18n("Numbering"), page );
     Q3GridLayout *grid = new Q3GridLayout( grp, 9, 4, KDialog::marginHint(), KDialog::spacingHint());

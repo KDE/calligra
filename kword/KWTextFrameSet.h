@@ -80,7 +80,6 @@ public:
     KWFootNoteFrameSet( KWDocument *doc, const QString & name )
         : KWTextFrameSet( doc, name ) {}
 
-    virtual KWordFrameSetIface* dcopObject();
 
 };
 #endif

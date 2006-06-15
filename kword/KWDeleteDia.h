@@ -21,7 +21,7 @@
 #ifndef deldia_h
 #define deldia_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -32,7 +32,7 @@ class KWView;
 /* Class: KWDeleteDia                                             */
 /******************************************************************/
 
-class KWDeleteDia : public KDialogBase
+class KWDeleteDia : public KDialog
 {
     Q_OBJECT
 

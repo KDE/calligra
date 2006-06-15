@@ -22,7 +22,7 @@
 
 #include "KWFrameStyle.h"
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -101,7 +101,7 @@ class KWFrameStyleListItem
 /******************************************************************/
 /* Class: KWFrameStyleManager                                     */
 /******************************************************************/
-class KWFrameStyleManager : public KDialogBase
+class KWFrameStyleManager : public KDialog
 {
     Q_OBJECT
 

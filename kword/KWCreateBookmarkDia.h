@@ -20,14 +20,14 @@
 #ifndef __KWCreateBookmarkDia__
 #define __KWCreateBookmarkDia__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QStringList>
 class QLineEdit;
 class Q3ListBox;
 class KWDocument;
 class QPushButton;
 
-class KWCreateBookmarkDia : public KDialogBase
+class KWCreateBookmarkDia : public KDialog
 {
     Q_OBJECT
 public:
@@ -45,7 +45,7 @@ protected:
     QLineEdit *m_bookmarkName;
 };
 
-class KWSelectBookmarkDia : public KDialogBase
+class KWSelectBookmarkDia : public KDialog
 {
     Q_OBJECT
 public:

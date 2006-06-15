@@ -90,10 +90,10 @@ set(kwordprivate_LIB_SRCS
    #KWordViewIface.cpp 
    #KWordTextFrameSetIface.cpp 
    #KWordTextFrameSetEditIface.cpp 
-   KWordFrameSetIface.cpp 
+   #KWordFrameSetIface.cpp 
    #KWordFormulaFrameSetIface.cpp 
    #KWordFormulaFrameSetEditIface.cpp 
-   KWordPictureFrameSetIface.cpp 
+    #KWordPictureFrameSetIface.cpp 
    #KWordTableFrameSetIface.cpp 
    #KWordPartFrameSetIface.cpp 
    #KWBgSpellCheck.cpp 
@@ -124,20 +124,6 @@ kde4_automoc(${kwordprivate_LIB_SRCS})
 
 kde4_add_ui3_files(kwordprivate_LIB_SRCS KWCreateBookmarkDiaBase.ui KWSelectBookmarkDiaBase.ui KWStartupWidgetBase.ui )
 
-kde4_add_dcop_skels(kwordprivate_LIB_SRCS 
-   KWordMailMergeDatabaseIface.h 
-   #KWordDocIface.h 
-   #KWordViewIface.h 
-   #KWordTextFrameSetIface.h 
-   #KWordTextFrameSetEditIface.h 
-   KWordFrameSetIface.h 
-   #KWordFormulaFrameSetIface.h 
-   #KWordFormulaFrameSetEditIface.h 
-   KWordPictureFrameSetIface.h 
-   #KWordTableFrameSetIface.h 
-   #KWordPartFrameSetIface.h 
-   #KWordFootNoteFrameSetIface.h
-)
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 

@@ -22,7 +22,6 @@
 // kword includes
 #include "KWView.h"
 #include "KWFrameSet.h"
-#include "KWordViewIface.h"
 #include "KWConfigFootNoteDia.h"
 #include "KWDeleteDia.h"
 #include "KWDocStruct.h"
@@ -138,12 +137,10 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_doc = doc;
     m_gui = 0;
 
-    m_dcop = 0;
-    dcopObject(); // build it
     m_fsInline=0;
     m_spell.kospell = 0;
     m_spell.dlg = 0;
-    m_broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) );
+    m_loader = Loader::openLoader( KSharedConfig::openConfig( "kwordrc" ) );
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
     m_currentPage = m_doc->pageManager()->page(m_doc->startPage());
@@ -341,19 +338,8 @@ KWView::~KWView()
     delete m_sbPageLabel;
     delete m_sbFramesLabel;
     delete m_fsInline;
-    delete m_dcop;
     delete m_fontDlg;
     delete m_paragDlg;
-}
-
-DCOPObject* KWView::dcopObject()
-{
-#if 0
-    if ( !m_dcop )
-        m_dcop = new KWordViewIface( this );
-
-    return m_dcop;
-#endif
 }
 
 void KWView::slotChangeCutState(bool b)
@@ -3592,7 +3578,7 @@ void KWView::formatFont()
 
     delete m_fontDlg;
     m_fontDlg = new KoFontDia( *textIface->currentFormat()
-                               , m_broker
+                               , m_loader
                                , this, "" );
 
     connect( m_fontDlg, SIGNAL( applyFont() ),
@@ -5562,7 +5548,7 @@ QMenu * KWView::popupMenu( const QString& name )
 void KWView::startKSpell()
 {
     if ( !m_spell.kospell )
-        m_spell.kospell = new KoSpell( m_broker, this  );
+        m_spell.kospell = new KoSpell( m_loader, this  );
 
     // Spell-check the next paragraph
     Q_ASSERT( m_spell.textIterator );
@@ -7471,7 +7457,7 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
 QList<KAction*> KWView::listOfResultOfCheckWord( const QString &word )
 {
     QList<KAction*> listAction;
-    DefaultDictionary *dict = m_broker->defaultDictionary();
+    DefaultDictionary *dict = m_loader->defaultDictionary();
     const QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ) )
     {
@@ -7520,9 +7506,9 @@ void KWView::slotChildActivated( bool a )
   KoView::slotChildActivated( a );
 }
 
-KSpell2::Broker::Ptr KWView::broker() const
+KSpell2::Loader::Ptr KWView::loader() const
 {
-    return m_broker;
+    return m_loader;
 }
 
 void KWView::slotUnitChanged( KoUnit::Unit unit )

@@ -37,8 +37,12 @@
 #include <QDomDocument>
 
 KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, i18n("Edit Personal Expression"), Ok|Cancel, Ok, true )
+    : KDialog( parent)
 {
+    setCaption( i18n("Edit Personal Expression") );
+    setButtons(  Ok|Cancel );
+    setDefaultButton(  Ok );
+    enableButtonSeparator( true );
     resize( 412, 339 );
     QWidget *page = new QWidget( this );
     setMainWidget(page);

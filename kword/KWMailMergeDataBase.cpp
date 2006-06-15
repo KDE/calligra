@@ -335,9 +335,11 @@ int KWMailMergeDataBase::version() {
  ******************************************************************/
 
 KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KService::List offers )
-    : KDialogBase( Plain, i18n( "Mail Merge Setup" ), Ok | Cancel, Ok,
-      /*parent*/ 0, "", true ), pluginOffers( offers )
+    : KDialog( 0 ), pluginOffers( offers )
 {
+    setCaption( i18n( "Mail Merge Setup" ) );
+    setButtons( Ok | Cancel );
+    setDefaultButton( Ok );
   QWidget *back = plainPage();
   Q3VBoxLayout *layout = new Q3VBoxLayout( back, 0, spacingHint() );
 
@@ -393,10 +395,15 @@ void KWMailMergeChoosePluginDialog::pluginChanged( int pos )
  ******************************************************************/
 
 KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeDataBase *db)
-    : KDialogBase(Plain, i18n( "Mail Merge Setup" ), Close, Close, parent, "", true )
+    : KDialog(parent)
 {
+    setCaption( i18n( "Mail Merge Setup" ) );
+    setButtons( Close );
+    setDefaultButton( Close );
+
     db_=db;
-    QWidget *back = plainPage();
+    QWidget *back = new QWidget( this );
+    setMainWidget( back );
     Q3VBoxLayout *layout=new Q3VBoxLayout(back);
 //    QVBox *back = new QVBox( page );
     layout->setSpacing( KDialog::spacingHint() );
@@ -520,12 +527,15 @@ KWMailMergeConfigDialog::~KWMailMergeConfigDialog()
  ******************************************************************/
 
 KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWMailMergeDataBase *db )
-  : KDialogBase( Plain, i18n( "Mail Merge - Variable Name" ),
-                 Ok | Cancel, Ok, parent, "", true )
+  : KDialog( parent)
 {
-  m_db=db;
-  QWidget *page = plainPage();
+    setCaption( i18n( "Mail Merge - Variable Name" ) );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
 
+  m_db=db;
+  QWidget *page = new QWidget( this );
+  setMainWidget( page );
   Q3VBoxLayout *layout = new Q3VBoxLayout( page, marginHint(), spacingHint() );
   layout->setAutoAdd( true );
 

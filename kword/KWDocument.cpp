@@ -21,7 +21,6 @@
 
 #include "KWDocument.h"
 
-#include "KWordDocIface.h"
 #include "KWBgSpellCheck.h"
 #include "KoTextBookmark.h"
 #include "KWCanvas.h"
@@ -163,7 +162,6 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
       m_urlIntern()
 {
     KWStatisticVariable::setExtendedType(  true );
-    dcop = 0;
     m_framesChangedHandler = 0;
     m_pageManager = new KWPageManager();
     m_pageManager->appendPage();
@@ -281,20 +279,10 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     //kDebug() << "Default font: requested family: " << m_defaultFont.family() << endl;
     //kDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
 
-    if ( !objectName().isEmpty() )
-        dcopObject();
 
     KoToolManager::instance()->toolBox()->show();
 }
 
-DCOPObject* KWDocument::dcopObject()
-{
-#if 0
-    if ( !dcop )
-        dcop = new KWordDocIface( this );
-    return dcop;
-#endif
-}
 
 KWDocument::~KWDocument()
 {
@@ -310,7 +298,6 @@ KWDocument::~KWDocument()
     delete m_varColl;
     delete m_varFormatCollection;
     delete m_slDataBase;
-    delete dcop;
     delete m_bgSpellCheck;
     delete m_styleColl;
     delete m_frameStyleColl;

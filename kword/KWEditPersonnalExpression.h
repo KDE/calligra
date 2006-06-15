@@ -20,7 +20,7 @@
 #ifndef __KWEditPersonnalExpression__
 #define __KWEditPersonnalExpression__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QMap>
 #include <Q3ListBox>
 
@@ -28,7 +28,7 @@ class QPushButton;
 class QComboBox;
 class QLineEdit;
 
-class KWEditPersonnalExpression : public KDialogBase
+class KWEditPersonnalExpression : public KDialog
 {
     Q_OBJECT
 public:

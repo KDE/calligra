@@ -205,13 +205,6 @@ void KWTextFrameSet::slotParagraphDeleted(KoTextParag*_parag)
     kWordDocument()->paragraphDeleted( _parag, this);
 }
 
-KWordFrameSetIface* KWTextFrameSet::dcopObject()
-{
-    if ( !m_dcop )
-        m_dcop = new KWordTextFrameSetIface( this );
-
-    return m_dcop;
-}
 
 KWFrameSetEdit * KWTextFrameSet::createFrameSetEdit( KWCanvas * canvas )
 {
@@ -3135,13 +3128,6 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
     //m_canvas->gui()->getHorzRuler()->changeFlags(0);
 }
 
-KoTextViewIface* KWTextFrameSetEdit::dcopObject()
-{
-    if ( !dcop )
-        dcop = new KWordTextFrameSetEditIface( this );
-
-    return dcop;
-}
 
 void KWTextFrameSetEdit::terminate(bool removeSelection)
 {
@@ -4151,12 +4137,5 @@ void KWFootNoteFrameSet::setCounterText( const QString& text )
     }
 }
 
-KWordFrameSetIface* KWFootNoteFrameSet::dcopObject()
-{
-    if ( !m_dcop )
-        m_dcop = new KWFootNoteFrameSetIface( this );
-
-    return m_dcop;
-}
 
 #include "KWTextFrameSet.moc"

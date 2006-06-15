@@ -30,8 +30,11 @@
 #include <Q3ValueList>
 
 KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType type, Q3ValueList<uint> remove)
-    : KDialogBase( Plain, (type==deleteRow?i18n("Delete Row") : i18n("Delete Column")), Ok | Cancel, Ok, parent, "Delete Table items dialog", true )
+    : KDialog( parent)
 {
+    setCaption( (type==deleteRow?i18n("Delete Row") : i18n("Delete Column")) );
+    setButtons(  Ok | Cancel );
+    setDefaultButton( Ok );
     Q_ASSERT(type == deleteRow || type == deleteColumn);
     m_type = type;
     m_table = table;

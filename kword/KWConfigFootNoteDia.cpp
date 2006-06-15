@@ -44,8 +44,11 @@
 
 
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *doc )
-    : KDialogBase(Tabbed, QString::null, Ok | Cancel , Ok, parent, name, true)
+    : KPageDialog(parent)
 {
+    setButtons( Ok | Cancel );
+    setDefaultButton( Ok );
+    setFaceType( KPageDialog::Tabbed );
     setCaption( i18n("Configure Endnote/Footnote") );
     m_doc = doc;
 
@@ -57,7 +60,8 @@ KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWD
 
 void KWConfigFootNoteDia::setupTab1()
 {
-    KVBox * page = addVBoxPage( i18n( "Footnotes" ) );
+    KVBox * page = new KVBox();
+    addPage( page, i18n( "Footnotes" ) );
     m_footNoteConfig = new KoCounterStyleWidget( false, true, false, page );
     //m_footNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
     m_footNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->variableCollection()->variableSetting())->footNoteCounter() );
@@ -65,7 +69,8 @@ void KWConfigFootNoteDia::setupTab1()
 
 void KWConfigFootNoteDia::setupTab2()
 {
-    KVBox * page = addVBoxPage( i18n( "Endnotes" ) );
+    KVBox * page = new KVBox();
+    addPage(page, i18n( "Endnotes" ) );
     m_endNoteConfig = new KoCounterStyleWidget( false, true/*onlyStyleLetter*/,false, page );
     //m_endNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
     m_endNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->variableCollection()->variableSetting())->endNoteCounter() );
@@ -74,7 +79,8 @@ void KWConfigFootNoteDia::setupTab2()
 
 void KWConfigFootNoteDia::setupTab3()
 {
-    QFrame * page = addPage( i18n( "Separator Line" ) );
+    QFrame * page = new QFrame();
+    addPage( page, i18n( "Separator Line" ) );
     QString comment= i18n ("Configure the separator line. The separator line "
         "is drawn directly above the frame for the footnotes.");
     page->setWhatsThis( comment);

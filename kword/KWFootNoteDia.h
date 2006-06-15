@@ -20,7 +20,7 @@
 #ifndef footnotedia_h
 #define footnotedia_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "defs.h" // for NoteType
 #include "KWVariable.h"
 //Added by qt3to4:
@@ -32,7 +32,7 @@ class KWDocument;
 /* Class: KWFootNoteDia                                           */
 /******************************************************************/
 
-class KWFootNoteDia : public KDialogBase
+class KWFootNoteDia : public KDialog
 {
     Q_OBJECT
 

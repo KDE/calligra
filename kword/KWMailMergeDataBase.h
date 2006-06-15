@@ -22,7 +22,7 @@
 #ifndef mailmerge_h
 #define mailmerge_h
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
 #include <QMap>
@@ -35,7 +35,6 @@
 #include <kservicetypetrader.h>
 
 #include "KWMailMergeDataSource.h"
-#include "KWordMailMergeDatabaseIface.h"
 #include <koffice_export.h>
 #include <kvbox.h>
 
@@ -57,7 +56,7 @@ class KVBox;
  *
  ******************************************************************/
 
-class KWORD_EXPORT KWMailMergeDataBase: public QObject,KWordMailMergeDatabaseIface
+class KWORD_EXPORT KWMailMergeDataBase: public QObject/*,KWordMailMergeDatabaseIface*/
 {
 Q_OBJECT
 
@@ -96,7 +95,7 @@ protected:
 };
 
 
-class KWMailMergeChoosePluginDialog : public KDialogBase
+class KWMailMergeChoosePluginDialog : public KDialog
 {
   Q_OBJECT
 
@@ -115,7 +114,7 @@ class KWMailMergeChoosePluginDialog : public KDialogBase
 	KService::List pluginOffers;
 };
 
-class KWMailMergeConfigDialog : public KDialogBase
+class KWMailMergeConfigDialog : public KDialog
 {
     Q_OBJECT
 
@@ -146,7 +145,7 @@ protected slots:
  *
  ******************************************************************/
 
-class KWMailMergeVariableInsertDia : public KDialogBase
+class KWMailMergeVariableInsertDia : public KDialog
 {
   Q_OBJECT
 

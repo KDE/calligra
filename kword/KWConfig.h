@@ -20,7 +20,7 @@
 #ifndef __kwconfig__
 #define __kwconfig__
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 //Added by qt3to4:
 #include <QLabel>
 #include <kvbox.h>
@@ -157,7 +157,7 @@ private:
     QPushButton *m_modifyPath;
 };
 
-class KWConfig : public KDialogBase
+class KWConfig : public KPageDialog
 {
     Q_OBJECT
 public:
