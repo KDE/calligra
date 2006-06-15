@@ -22,7 +22,6 @@
 #include <KoMainWindow.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <dcopclient.h>
 #include "kudesigner_aboutdata.h"
 
 

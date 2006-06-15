@@ -17,7 +17,6 @@
 
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
-#include <dcopclient.h>
 
 #include "kugar_about.h"
 
