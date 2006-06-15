@@ -192,7 +192,7 @@ KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc )
 {
     setCaption( i18n("Table Style Manager") );
     setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply | KDialog::User1 );
-    setDefaultButton( KDialogBase::Ok ):
+    setDefaultButton( KDialog::Ok );
     m_doc = _doc;
 
     m_currentTableStyle = 0L;
@@ -206,7 +206,7 @@ KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc )
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 450, 450 ) );
-    setButtonText( KDialogBase::User1, i18n("Import From File...") );
+    setButtonText( KDialog::User1, i18n("Import From File...") );
     connect(this, SIGNAL(user1Clicked()), this, SLOT(importFromFile()));
 
 }
@@ -219,7 +219,8 @@ KWTableStyleManager::~KWTableStyleManager()
 
 void KWTableStyleManager::setupWidget()
 {
-    QFrame * frame1 = makeMainWidget();
+    QFrame * frame1 = new QFrame( this );
+    setMainWidget( frame1 );
     Q3GridLayout *frame1Layout = new Q3GridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
 
@@ -555,13 +556,14 @@ void KWTableStyleManager::moveDownStyle()
 void KWTableStyleManager::slotOk() {
     save();
     apply();
-    KDialogBase::slotOk();
+    KDialog::accept();
 }
 
 void KWTableStyleManager::slotApply() {
     save();
     apply();
-    KDialogBase::slotApply();
+#warning "kde4 port it"
+    //KDialog::slotApply();
 }
 
 void KWTableStyleManager::apply() {
@@ -610,7 +612,7 @@ void KWTableStyleManager::renameStyle(const QString &theText) {
     bool state=!theText.isEmpty() && (synonyms == 1);
     enableButtonOK(state );
     enableButtonApply(state);
-    enableButton( KDialogBase::User1, state );
+    enableButton( KDialog::User1, state );
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
     m_stylesList->setEnabled( state );

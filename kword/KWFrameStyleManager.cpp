@@ -165,7 +165,7 @@ KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc,
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 600, 370 ) );
-    setButtonText( KDialogBase::User1, i18n("Import From File...") );
+    setButtonText( KDialog::User1, i18n("Import From File...") );
     connect(this, SIGNAL(user1Clicked()), this, SLOT(importFromFile()));
 }
 
@@ -183,7 +183,8 @@ void KWFrameStyleManager::addTab( KWFrameStyleManagerTab * tab )
 
 void KWFrameStyleManager::setupWidget()
 {
-    QFrame * frame1 = makeMainWidget();
+    QFrame * frame1 = new QFrame( this );
+    setMainWidget( frame1 );
     Q3GridLayout *frame1Layout = new Q3GridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
     KWFrameStyleCollection* collection = m_doc->frameStyleCollection();
@@ -486,14 +487,15 @@ void KWFrameStyleManager::slotOk()
 {
     save();
     apply();
-    KDialogBase::slotOk();
+    KDialog::accept();
 }
 
 void KWFrameStyleManager::slotApply()
 {
     save();
     apply();
-    KDialogBase::slotApply();
+#warning "kde4: port it"
+    //KDialog::slotApply();
 }
 
 void KWFrameStyleManager::apply()
@@ -554,7 +556,7 @@ void KWFrameStyleManager::renameStyle(const QString &theText) {
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
     m_newButton->setEnabled(state);
     m_stylesList->setEnabled( state );
-    enableButton( KDialogBase::User1, state );
+    enableButton( KDialog::User1, state );
 
     if ( state )
     {

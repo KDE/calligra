@@ -37,7 +37,7 @@
 /******************************************************************/
 
 KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering _numberingType, const QString & _manualString, QWidget *parent, KWDocument *_doc, const char *name )
-    : KDialogBase( parent)
+    : KDialog( parent)
 {
     setButtons( Ok|Cancel|User1 );
     setDefaultButton( Ok );
@@ -84,7 +84,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
         m_rbEndNote->setChecked( true );
 
     footNoteTypeChanged();
-    setButtonText( KDialogBase::User1, i18n("C&onfigure...") );
+    setButtonText( KDialog::User1, i18n("C&onfigure...") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotConfigurate()));
 }
 

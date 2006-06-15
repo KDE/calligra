@@ -21,7 +21,6 @@
 #include "KWPartFrameSet.h"
 #include "KWDocument.h"
 #include "KWCommand.h"
-#include "KWordPartFrameSetIface.h"
 #include "KWFrameViewManager.h"
 #include "KWFrameView.h"
 #include "KWViewMode.h"

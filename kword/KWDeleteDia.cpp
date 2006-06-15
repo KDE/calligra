@@ -42,7 +42,7 @@ KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType typ
     m_view = parent;
 
     setupTab1();
-    setButtonOK( KGuiItem(
+    setButtonGuiItem( Ok, KGuiItem(
         i18n("&Delete"), "editdelete", type == deleteRow ?
         i18n("Delete the row from the table.") :
         i18n("Delete the column from the table.")) );
@@ -92,7 +92,7 @@ void KWDeleteDia::slotOk() {
         m_view->tableDeleteRow(m_toRemove);
     else
         m_view->tableDeleteCol(m_toRemove);
-    KDialogBase::slotOk();
+    KDialog::accept();
 }
 
 #include "KWDeleteDia.moc"

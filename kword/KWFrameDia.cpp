@@ -102,7 +102,7 @@ void KWBrushStylePreview::drawContents( QPainter* painter )
  ******************************************************************/
 
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame)
-    : KDialog( parent)
+    : KPageDialog( parent)
 {
     setButtons( Ok | Apply| Cancel );
     setDefaultButton( Ok );
@@ -154,7 +154,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame, KWDocument *doc, FrameS
 }
 
 KWFrameDia::KWFrameDia( QWidget *parent, Q3PtrList<KWFrame> listOfFrames)
-    : KDialogBase( parent) , m_allFrames() {
+    : KPageDialog( parent) , m_allFrames() {
     setCaption( i18n("Frames Properties") );
     setButtons( Ok | Apply | Cancel );
     setDefaultButton( Ok );
@@ -2389,7 +2389,7 @@ void KWFrameDia::slotOk()
 {
     if (applyChanges())
     {
-        KDialogBase::slotOk();
+        KDialog::accept();
     }
 }
 

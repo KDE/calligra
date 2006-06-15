@@ -93,30 +93,53 @@ KWConfig::KWConfig( KWView* parent )
     setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel| KDialog::Default );
     setDefaultButton( KDialog::Ok );
     setFaceType( KPageDialog::List );
-  KVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface Settings"),
-                              loadIcon("configure") );
+    KVBox *page2 = new KVBox();
+    KPageWidgetItem *pageItem = new KPageWidgetItem( page2, i18n("Interface") );
+    pageItem->setHeader( i18n("Interface Settings") );
+    pageItem->setIcon( loadIcon("configure") );
+    addPage( pageItem );
+
   m_interfacePage=new ConfigureInterfacePage(parent, page2);
 
-  KVBox *page4 = addVBoxPage( i18n("Document"), i18n("Document Settings"),
-                              loadIcon("kword_kwd") );
+  KVBox *page4 = new KVBox();
+  pageItem = new KPageWidgetItem( page4, i18n("Document") );
+  pageItem->setHeader( i18n("Document Settings") );
+  pageItem->setIcon( loadIcon("kword_kwd") );
+  addPage( pageItem );
+
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
 
-  KVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
-                        loadIcon("spellcheck") );
+  KVBox *page = new KVBox();
+  pageItem = new KPageWidgetItem( page, i18n("Spelling") );
+  pageItem->setHeader( i18n("Spell Checker Behavior") );
+  pageItem->setIcon( loadIcon("spellcheck") );
+  addPage( pageItem );
+
   m_spellPage = new ConfigureSpellPage(parent, page);
 
-  KVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
-                              loadIcon("kformula") );
+  KVBox *page5 = new KVBox();
+  pageItem = new KPageWidgetItem( page5, i18n("Formula") );
+  pageItem->setHeader( i18n("Formula Defaults") );
+  pageItem->setIcon( loadIcon("kformula") );
+  addPage( pageItem );
   m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->formulaDocument( false ),
                                              this, KWFactory::instance()->config(), page5 );
 
-  KVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
-                              loadIcon("misc") );
+  KVBox *page3 = new KVBox();
+  pageItem = new KPageWidgetItem( page3, i18n("Misc") );
+  pageItem->setHeader( i18n("Misc Settings") );
+  pageItem->setIcon( loadIcon("misc") );
+  addPage( pageItem );
+
   m_miscPage=new ConfigureMiscPage(parent, page3);
 
-  KVBox *page6 = addVBoxPage( i18n("Path"), i18n("Path Settings"),
-                              loadIcon("path") );
+  KVBox *page6 = new KVBox();
+  pageItem = new KPageWidgetItem( page6, i18n("Path") );
+  pageItem->setHeader( i18n("Path Settings") );
+  pageItem->setIcon( loadIcon("path") );
+  addPage( pageItem );
+
   m_pathPage=new ConfigurePathPage(parent, page6);
 
   m_doc = parent->kWordDocument();
@@ -139,6 +162,8 @@ void KWConfig::unitChanged( int u )
 
 void KWConfig::openPage(int flags)
 {
+#warning "kde4: port it"
+#if 0
     if(flags & KW_KSPELL)
         showPage( 2 );
     else if(flags & KP_INTERFACE)
@@ -151,6 +176,7 @@ void KWConfig::openPage(int flags)
         showPage(3);
     else if ( flags & KP_PATH )
         showPage(4);
+#endif
 }
 
 void KWConfig::slotApply()
@@ -183,6 +209,8 @@ void KWConfig::slotApply()
 
 void KWConfig::slotDefault()
 {
+#warning "kde4: port it"
+#if 0
     switch(activePageIndex())
     {
     case 0:
@@ -206,6 +234,7 @@ void KWConfig::slotDefault()
     default:
         break;
     }
+#endif
 }
 
 ////
@@ -215,7 +244,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *view, KVBox *box, char *name )
 {
     m_pView=view;
     config = KWFactory::instance()->config();
-    m_spellConfigWidget = new ConfigWidget( view->broker(), box );
+    m_spellConfigWidget = new ConfigWidget( view->loader(), box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
     m_spellConfigWidget->layout()->setMargin( 0 );
 }
@@ -227,9 +256,9 @@ void ConfigureSpellPage::apply()
   m_spellConfigWidget->save();
 
   m_pView->kWordDocument()->setSpellCheckIgnoreList(
-      m_pView->broker()->settings()->currentIgnoreList() );
+      m_pView->loader()->settings()->currentIgnoreList() );
   //FIXME reactivate just if there are changes.
-  doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );
+  doc->enableBackgroundSpellCheck( m_pView->loader()->settings()->backgroundCheckerEnabled() );
   doc->reactivateBgSpellChecking();
 }
 

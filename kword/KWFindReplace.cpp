@@ -54,7 +54,7 @@ void KWFindReplace::emitNewCommand(KCommand *cmd)
     m_canvas->kWordDocument()->addCommand(cmd);
 }
 
-void KWFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdocument, KDialogBase* dialog)
+void KWFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdocument, KDialog* dialog)
 {
 #if 0
     KWTextDocument *textdoc=static_cast<KWTextDocument *>(textdocument);

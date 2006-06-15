@@ -83,12 +83,12 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
             return;
         if ( !calcStats( m_resultLabelAll, false,false ) )
             return;
-        showPage( 2 );
+        //showPage( 2 );
     } else {
         // assign results
         if ( !calcStats( m_resultLabelAll, false, false ) )
             return;
-        showPage( 1 );
+        //showPage( 1 );
     }
     topLayout->addWidget( tab );
     m_canceled = false;
