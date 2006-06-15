@@ -26,7 +26,6 @@
 #include "KPrDocument.h"
 
 #include <kapplication.h>
-#include <dcopclient.h>
 
 KPrViewAdaptor::KPrViewAdaptor( KPrView *view_ )
     : KoViewAdaptor( view_ )
