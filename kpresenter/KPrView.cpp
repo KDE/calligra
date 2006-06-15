@@ -272,7 +272,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     m_spell.textIterator = 0L;
     m_spell.macroCmdSpellCheck = 0L;
     m_spell.dlg = 0;
-    m_broker = Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) );
+    m_broker = KSpell2::Loader::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) );
 
     m_autoPresTimerConnected = false;
 #warning "kde4: delete it"
@@ -5161,18 +5161,18 @@ void KPrView::changeZoomMenu( int zoom )
     }
     else
     {
-        lst << i18n("%1%","33");
-        lst << i18n("%1%","50");
-        lst << i18n("%1%","75");
-        lst << i18n("%1%","100");
-        lst << i18n("%1%","125");
-        lst << i18n("%1%","150");
-        lst << i18n("%1%","200");
-        lst << i18n("%1%","250");
-        lst << i18n("%1%","350");
-        lst << i18n("%1%","400");
-        lst << i18n("%1%","450");
-        lst << i18n("%1%","500");
+        lst << i18n("%1%",QString("33"));
+        lst << i18n("%1%",QString("50"));
+        lst << i18n("%1%",QString("75"));
+        lst << i18n("%1%",QString("100"));
+        lst << i18n("%1%",QString("125"));
+        lst << i18n("%1%",QString("150"));
+        lst << i18n("%1%",QString("200"));
+        lst << i18n("%1%",QString("250"));
+        lst << i18n("%1%",QString("350"));
+        lst << i18n("%1%",QString("400"));
+        lst << i18n("%1%",QString("450"));
+        lst << i18n("%1%",QString("500"));
     }
     actionViewZoom->setItems( lst );
 }
@@ -6350,7 +6350,7 @@ void KPrView::slotChildActivated(bool a)
   KoView::slotChildActivated( a );
 }
 
-KSpell2::Broker::Ptr KPrView::broker() const
+KSpell2::Loader::Ptr KPrView::broker() const
 {
     return m_broker;
 }

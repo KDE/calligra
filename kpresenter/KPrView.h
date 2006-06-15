@@ -108,7 +108,6 @@ class KoTextIterator;
 class KStatusBarLabel;
 
 class KoSpell;
-#include <kspell2/broker.h>
 #include <kspell2/loader.h>
 namespace KSpell2 {
     class Dialog;
@@ -187,7 +186,7 @@ public:
     /**
      * Returns the KPresenter global KSpell2 Broker object.
      */
-	KSpell2::Broker::Ptr broker() const;
+	KSpell2::Loader::Ptr broker() const;
     bool editMaster() const { return m_editMaster;}
 
 signals:
@@ -1212,7 +1211,7 @@ private:
         KSpell2::Dialog *dlg;
     } m_spell;
 
-    KSpell2::Broker::Ptr m_broker;
+    KSpell2::Loader::Ptr m_broker;
 
 
 
