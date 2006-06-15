@@ -5587,7 +5587,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         oasisFormula = Oasis::decodeFormula( oasisFormula, locale() );
         setCellText( oasisFormula );
     }
-    else if ( d->strText.at(0) == '=' ) //prepend ' to the text to avoid = to be painted
+    else if ( !d->strText.isEmpty() && d->strText.at(0) == '=' ) //prepend ' to the text to avoid = to be painted
         d->strText.prepend('\'');
 
     //
