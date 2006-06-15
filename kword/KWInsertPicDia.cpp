@@ -95,7 +95,8 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, 
     setDefaultButton(  Ok );
     enableButtonSeparator( true );
     setInitialSize( QSize(400, 300) );
-    QWidget *page = plainPage();
+    QWidget *page = new QWidget( this );
+    setMainWidget( page );
     Q3GridLayout *grid = new Q3GridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QPushButton *pbImage = new QPushButton( i18n( "Choose &Picture..." ), page );

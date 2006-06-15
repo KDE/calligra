@@ -31,7 +31,7 @@
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWDocument *doc, int resizeColumn )
     : KDialog( parent)
 {
-    setButtonText( KDialogBase::User1, i18n("Reset") );
+    setButtonText( KDialog::User1, i18n("Reset") );
     setCaption( i18n( "Resize Column" ) );
     setButtons( Ok | Cancel | User1 | Apply );
     setDefaultButton( Ok );
@@ -102,7 +102,7 @@ void KWResizeTableDia::slotOk()
 {
    if (doResize())
    {
-      KDialogBase::slotOk();
+      KDialog::accept();
    }
 }
 

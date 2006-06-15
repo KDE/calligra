@@ -80,7 +80,6 @@ set(kwordprivate_LIB_SRCS
    KWFindReplace.cpp 
    KWCommand.cpp 
    KWStatisticsDialog.cpp 
-   kwordmailmergedatabaseiface.cpp 
    KWMailMergeDataBase.cpp 
    KWMailMergeLabelAction.cpp 
    KWEditPersonnalExpression.cpp 

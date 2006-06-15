@@ -54,8 +54,9 @@
  ******************************************************************/
 
 KWMailMergeDataBase::KWMailMergeDataBase( KWDocument *doc_ )
-    : QObject(doc_,doc_->dcopObject()->objId()+".MailMergeDataBase"),
-    KWordMailMergeDatabaseIface(DCOPCString(doc_->dcopObject()->objId()+".MailMergeDataBase")),
+    : QObject(doc_/*,doc_->dcopObject()->objId()+".MailMergeDataBase"*/)
+		/*
+    KWordMailMergeDatabaseIface(DCOPCString(doc_->dcopObject()->objId()+".MailMergeDataBase"))*/,
       m_version(0),
       doc( doc_ )
 {
@@ -225,9 +226,12 @@ const QMap< QString, QString > &KWMailMergeDataBase::getRecordEntries() const
 
 int KWMailMergeDataBase::getNumRecords() const
 {
+#warning "kde4: port it"
+#if 0
     if (plugin)
         return plugin->getNumRecords();
     else
+#endif
         return 0;
 
 }
@@ -276,7 +280,7 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
             return false;
         }
     }
-    tmpPlugin->setObjId(DCOPCString(objId()+".MailMergePlugin"));
+    //tmpPlugin->setObjId(DCOPCString(objId()+".MailMergePlugin"));
     return true;
 }
 
@@ -340,7 +344,8 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KService::List off
     setCaption( i18n( "Mail Merge Setup" ) );
     setButtons( Ok | Cancel );
     setDefaultButton( Ok );
-  QWidget *back = plainPage();
+  QWidget *back = new QWidget(this);
+  setMainWidget( back );
   Q3VBoxLayout *layout = new Q3VBoxLayout( back, 0, spacingHint() );
 
   QLabel *label = new QLabel( i18n( "&Available sources:" ), back );

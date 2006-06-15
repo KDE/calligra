@@ -225,5 +225,5 @@ void KWConfigFootNoteDia::slotOk()
         m_doc->addCommand( macro );
     }
 
-    KDialogBase::slotOk();
+    KDialog::accept();
 }

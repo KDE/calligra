@@ -41,7 +41,8 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int 
 
     setInitialSize( QSize(400, 300) );
 
-    QWidget *page = plainPage();
+    QWidget *page = new QWidget( this );
+    setMainWidget( page );
     Q3GridLayout *grid = new Q3GridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lRows = new QLabel( i18n( "Number of rows:" ), page );

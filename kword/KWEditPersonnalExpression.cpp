@@ -250,7 +250,7 @@ void KWEditPersonnalExpression::slotOk()
 {
     if( m_bChanged)
         saveFile();
-    KDialogBase::slotOk();
+    KDialog::accept();
 }
 
 void KWEditPersonnalExpression::slotAddExpression() {
