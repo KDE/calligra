@@ -27,7 +27,7 @@
 #include "KoTextIterator.h"
 #include "KoTextObject.h"
 
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 using namespace KSpell2;
@@ -37,7 +37,7 @@ using namespace KSpell2;
 #include <klocale.h>
 
 KPrBgSpellCheck::KPrBgSpellCheck(KPrDocument *_doc)
-    : KoBgSpellCheck(Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) ), _doc )
+  : KoBgSpellCheck(KSpell2::Loader::openLoader( KSharedConfig::openConfig( "kpresenterrc" ) ), _doc )
 {
     m_doc=_doc;
     m_currentObj=0L;

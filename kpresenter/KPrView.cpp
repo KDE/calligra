@@ -168,7 +168,7 @@
 
 #include <kspell2/defaultdictionary.h>
 #include <kspell2/dialog.h>
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 #include <q3tl.h>
 #include "KoSpell.h"
 #include "KPrPrinterDlg.h"
@@ -274,7 +274,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     m_spell.textIterator = 0L;
     m_spell.macroCmdSpellCheck = 0L;
     m_spell.dlg = 0;
-    m_broker = Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) );
+    m_broker = KSpell2::Loader::openLoader( KSharedConfig::openConfig( "kpresenterrc" ) );
 
     m_autoPresTimerConnected = false;
 #warning "kde4: delete it"

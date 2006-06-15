@@ -77,7 +77,7 @@
 
 #include <kspell2/configwidget.h>
 #include <kspell2/settings.h>
-#include <kspell2/broker.h>
+#include <kspell2/loader.h>
 using namespace KSpell2;
 
 KPrConfig::KPrConfig( KPrView* parent )
