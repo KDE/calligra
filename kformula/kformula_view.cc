@@ -46,18 +46,21 @@ class KPrinter;
 #include "kformula_doc.h"
 #include "kformula_factory.h"
 #include "kformula_view.h"
+#include "kformula_view_adaptor.h"
 
 #include "kformula_view_adaptor.h"
 #include "kformulawidget.h"
 #include <kfontsizeaction.h>
 #include <ktoggleaction.h>
 
-
 bool KFormulaPartView::first_window = true;
 
 KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const char* _name)
         : KoView( _doc, _parent, _name ), m_pDoc(_doc)
 {
+    m_dbus = new KformulaViewAdaptor(this);
+    QDBus::sessionBus().registerObject( "/" + objectName(), this);
+
     setInstance(KFormulaFactory::global());
     if ( !_doc->isReadWrite() )
         setXMLFile("kformula_readonly.rc");
@@ -166,16 +169,13 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
 KFormulaPartView::~KFormulaPartView()
 {
-//     delete m_dcop;
+    //delete m_bus;
 }
 
-// DCOPObject* KFormulaPartView::dcopObject()
-// {
-//     if ( !m_dcop )
-// 	m_dcop = new KformulaViewIface( this );
-// 
-//     return m_dcop;
-// }
+KformulaViewAdaptor* KFormulaPartView::dbusObject()
+{
+    return m_dbus;
+}
 
 
 void KFormulaPartView::focusInEvent(QFocusEvent*)

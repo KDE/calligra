@@ -36,60 +36,60 @@ public:
 
    KformulaViewAdaptor( KFormulaPartView *view_ );
 public Q_SLOTS: // METHODS
-    void addThinSpace();
-    void addMediumSpace();
-    void addThickSpace();
-    void addQuadSpace();
-    void addBracket( int left, int right );
-    void addParenthesis();
-    void addSquareBracket();
-    void addCurlyBracket();
-    void addLineBracket();
-    void addFraction();
-    void addRoot();
-    void addIntegral();
-    void addProduct();
-    void addSum();
-    void addMatrix();
-    void addMatrix( uint rows, uint columns );
-    void addOneByTwoMatrix();
-    void addNameSequence();
+    Q_SCRIPTABLE void addThinSpace();
+    Q_SCRIPTABLE void addMediumSpace();
+    Q_SCRIPTABLE void addThickSpace();
+    Q_SCRIPTABLE void addQuadSpace();
+    Q_SCRIPTABLE void addBracket( int left, int right );
+    Q_SCRIPTABLE void addParenthesis();
+    Q_SCRIPTABLE void addSquareBracket();
+    Q_SCRIPTABLE void addCurlyBracket();
+    Q_SCRIPTABLE void addLineBracket();
+    Q_SCRIPTABLE void addFraction();
+    Q_SCRIPTABLE void addRoot();
+    Q_SCRIPTABLE void addIntegral();
+    Q_SCRIPTABLE void addProduct();
+    Q_SCRIPTABLE void addSum();
+    Q_SCRIPTABLE void addMatrix();
+    Q_SCRIPTABLE void addMatrix( uint rows, uint columns );
+    Q_SCRIPTABLE void addOneByTwoMatrix();
+    Q_SCRIPTABLE void addNameSequence();
 
-    void addLowerLeftIndex();
-    void addUpperLeftIndex();
-    void addLowerRightIndex();
-    void addUpperRightIndex();
-    void addGenericLowerIndex();
-    void addGenericUpperIndex();
-    void removeEnclosing();
-    void makeGreek();
-    void insertSymbol( QString name );
+    Q_SCRIPTABLE void addLowerLeftIndex();
+    Q_SCRIPTABLE void addUpperLeftIndex();
+    Q_SCRIPTABLE void addLowerRightIndex();
+    Q_SCRIPTABLE void addUpperRightIndex();
+    Q_SCRIPTABLE void addGenericLowerIndex();
+    Q_SCRIPTABLE void addGenericUpperIndex();
+    Q_SCRIPTABLE void removeEnclosing();
+    Q_SCRIPTABLE void makeGreek();
+    Q_SCRIPTABLE void insertSymbol( QString name );
 
-    void appendColumn();
-    void insertColumn();
-    void removeColumn();
-    void appendRow();
-    void insertRow();
-    void removeRow();
+    Q_SCRIPTABLE void appendColumn();
+    Q_SCRIPTABLE void insertColumn();
+    Q_SCRIPTABLE void removeColumn();
+    Q_SCRIPTABLE void appendRow();
+    Q_SCRIPTABLE void insertRow();
+    Q_SCRIPTABLE void removeRow();
 
-    void moveLeft( int flag );
-    void moveRight( int flag );
-    void moveUp( int flag );
-    void moveDown( int flag );
+    Q_SCRIPTABLE void moveLeft( int flag );
+    Q_SCRIPTABLE void moveRight( int flag );
+    Q_SCRIPTABLE void moveUp( int flag );
+    Q_SCRIPTABLE void moveDown( int flag );
 
-    void moveHome( int flag );
-    void moveEnd( int flag );
+    Q_SCRIPTABLE void moveHome( int flag );
+    Q_SCRIPTABLE void moveEnd( int flag );
 
     /** @returns whether the cursor is at the first position. */
-    bool isHome() const;
+    Q_SCRIPTABLE bool isHome() const;
 
     /** @returns whether the cursor is at the last position. */
-    bool isEnd() const;
+    Q_SCRIPTABLE bool isEnd() const;
 
-    void eraseSelection( int direction );
-    void addText( QString str );
+    Q_SCRIPTABLE void eraseSelection( int direction );
+    Q_SCRIPTABLE void addText( QString str );
 
-    QStringList readFormulaString( QString text );
+    Q_SCRIPTABLE QStringList readFormulaString( QString text );
 
 private:
     KFormulaPartView *m_view;
