@@ -42,7 +42,7 @@ foreach $section (@sections) {
     print "\n". $i++ ."/$totalSteps) Creating tags ";
     &createConf($section, @dirs);
     system "mkdir -p \"$basedir$section\"";
-    system "/usr/bin/doxygen $doxygenconftmp >/dev/null 2>/dev/null";
+    system "doxygen $doxygenconftmp >/dev/null 2>/dev/null";
     chdir $rootdir;
 }
 
@@ -52,7 +52,7 @@ foreach $section (@sections) {
     &alterConf();
     $sect=$section;
     $sect=~s/\//-/;
-    system "/usr/bin/doxygen $doxygenconftmp.2 >/dev/null 2>$basedir$sect/err.log";
+    system "doxygen $doxygenconftmp.2 >/dev/null 2>$basedir$sect/err.log";
     unlink "$doxygenconftmp";
     unlink "$doxygenconftmp.2";
     chdir $rootdir;
