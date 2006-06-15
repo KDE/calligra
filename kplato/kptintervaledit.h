@@ -22,7 +22,7 @@
 
 #include "kptintervaleditbase.h"
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <QString>
 #include <q3ptrlist.h>
@@ -35,29 +35,29 @@ class IntervalEditImpl : public IntervalEditBase {
     Q_OBJECT
 public:
     IntervalEditImpl(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent);
-    
+
     Q3PtrList<QPair<QTime, QTime> > intervals() const;
-    
+
 private slots:
     void slotCheckAllFieldsFilled();
     void slotEnableButtonOk(bool on);
-    
+
     void slotClearClicked();
     void slotAddIntervalClicked();
     void slotIntervalSelectionChanged(Q3ListViewItem *item);
 signals:
     void obligatedFieldsFilled(bool yes);
     void enableButtonOk(bool);
-    
+
 };
 
-class IntervalEdit : public KDialogBase {
+class IntervalEdit : public KDialog {
     Q_OBJECT
 public:
     IntervalEdit(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent=0, const char *name=0);
-    
+
     Q3PtrList<QPair<QTime, QTime> > intervals() const;
-    
+
 private:
     IntervalEditImpl *dia;
 };

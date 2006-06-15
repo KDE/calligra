@@ -41,8 +41,8 @@ class AddRelationDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AddRelationDialog(Relation *rel, QWidget *p, QString caption=QString::null, int buttons=Ok|Cancel, const char *n=0);
-    
+    AddRelationDialog(Relation *rel, QWidget *p, QString caption=QString::null, ButtonCodes buttons=Ok|Cancel, const char *n=0);
+
     virtual KCommand *buildCommand(Part *part);
 
 protected slots:
@@ -58,7 +58,7 @@ protected:
 };
 
 
-class ModifyRelationDialog : public AddRelationDialog 
+class ModifyRelationDialog : public AddRelationDialog
 {
     Q_OBJECT
 public:
@@ -66,7 +66,7 @@ public:
 
     virtual KCommand *buildCommand(Part *part);
     bool relationIsDeleted() { return m_deleted; }
-    
+
 protected slots:
     void slotUser1();
 

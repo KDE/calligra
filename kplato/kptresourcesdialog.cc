@@ -33,7 +33,7 @@ namespace KPlato
 {
 
 ResourcesDialog::ResourcesDialog(Project &p, QWidget *parent, const char *name)
-    : KDialogBase( parent),
+    : KDialog( parent),
       project(p)
 {
     setCaption( i18n("Resources") );

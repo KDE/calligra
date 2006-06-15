@@ -119,7 +119,7 @@ void ResourceDialogImpl::slotChooseResource()
 //////////////////  ResourceDialog  ////////////////////////
 
 ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *parent, const char *name)
-    : KDialogBase( parent),
+    : KDialog(parent),
       m_original(resource),
       m_resource(resource),
       m_calculationNeeded(false)

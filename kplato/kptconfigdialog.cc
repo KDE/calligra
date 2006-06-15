@@ -55,7 +55,7 @@ ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, co
     setCaption( i18n("Configure KPlato") );
     setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel| KDialog::Default );
     setDefaultButton( Ok );
-    setTypeFace( KPageDialog::List );
+    setFaceType( KPageDialog::List );
 
 /*    QVBox *page = addVBoxPage(i18n("Behavior"), i18n("Behavior"), loadIcon("misc"));
     m_behaviorPage = new ConfigBehaviorPanel(config.behavior(), page);*/

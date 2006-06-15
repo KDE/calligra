@@ -39,11 +39,11 @@
 namespace KPlato
 {
 
-AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption, int buttons, const char *n)
-    : KDialogBase(p)
+AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption, ButtonCodes buttons, const char *n)
+    : KDialog(p)
 {
     setCaption( caption );
-    setButton( button );
+    setButtons( buttons );
     setDefaultButton( Ok );
     enableButtonSeparator( true );
     if (caption.isEmpty())
@@ -95,7 +95,7 @@ void AddRelationDialog::typeClicked(int id) {
 ModifyRelationDialog::ModifyRelationDialog(Relation *rel, QWidget *p, const char *n)
     : AddRelationDialog(rel, p, i18n("Edit Relationship"), Ok|Cancel|User1, n)
 {
-    setButtonText( KDialogBase::User1, i18n("Delete") );
+    setButtonText( KDialog::User1, i18n("Delete") );
     m_deleted = false;
     enableButtonOK(false);
 }
