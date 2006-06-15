@@ -27,6 +27,7 @@
 #include <KoTabChooser.h>
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
+#include <KoShapeSelector.h>
 
 #include <QGridLayout>
 #include <QSplitter>
@@ -60,12 +61,16 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     gridLayout->setMargin(0);
     gridLayout->setSpacing(0);
     m_canvas = new KWCanvas( viewMode, doc, this );
-    m_canvasView = new KoCanvasController(m_right);
-    m_canvasView->setCanvas(m_canvas);
-    KoToolManager::instance()->addControllers(m_canvasView, doc);
+    m_canvasController = new KoCanvasController(m_right);
+    m_canvasController->setCanvas(m_canvas);
+    KoToolManager::instance()->addControllers(m_canvasController, doc);
 KoToolManager::instance()->shapeCreatorTool(m_canvas)->setShapeId("TextShape");
 
-    gridLayout->addWidget( m_canvasView, 1, 1 );
+KoShapeSelector *selector = new KoShapeSelector(0, m_canvasController, ".*");
+selector->show();
+
+
+    gridLayout->addWidget( m_canvasController, 1, 1 );
 
     QList<int> l;
     l << 10;
@@ -189,11 +194,11 @@ void KWGUI::unitChanged( KoUnit::Unit u )
 }
 
 int KWGUI::visibleWidth() const {
-    return m_canvasView->visibleWidth();
+    return m_canvasController->visibleWidth();
 }
 
 int KWGUI::visibleHeight() const {
-    return m_canvasView->visibleHeight();
+    return m_canvasController->visibleHeight();
 }
 
 #include "KWGUI.moc"

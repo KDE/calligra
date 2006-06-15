@@ -81,7 +81,7 @@ protected:
     KWCanvas        *m_canvas;
 
     QSplitter       *m_panner;
-    KoCanvasController    *m_canvasView;
+    KoCanvasController    *m_canvasController;
 };
 
 #endif

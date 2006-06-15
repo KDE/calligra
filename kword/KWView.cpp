@@ -3153,8 +3153,8 @@ void KWView::viewZoom( const QString &s )
         m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
         zoom = qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_currentPage->width() ) ) - 1;
 
-        if(zoom != m_doc->zoom() && !m_gui->m_canvasView->verticalScrollBar() ||
-                !m_gui->m_canvasView->verticalScrollBar()->isVisible()) { // has no vertical scrollbar
+        if(zoom != m_doc->zoom() && !m_gui->m_canvasController->verticalScrollBar() ||
+                !m_gui->m_canvasController->verticalScrollBar()->isVisible()) { // has no vertical scrollbar
             // we have to do this twice to take into account a possibly appearing vertical scrollbar
             QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
         }
@@ -6065,12 +6065,12 @@ QWidget* KWView::canvas() const
 
 int KWView::canvasXOffset() const
 {
-    return m_gui->m_canvasView->canvasOffsetX();
+    return m_gui->m_canvasController->canvasOffsetX();
 }
 
 int KWView::canvasYOffset() const
 {
-    return m_gui->m_canvasView->canvasOffsetY();
+    return m_gui->m_canvasController->canvasOffsetY();
 }
 
 void KWView::canvasAddChild( KoViewChild * child )
