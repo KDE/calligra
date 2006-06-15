@@ -57,6 +57,7 @@ class Node;
 class Project;
 class Relation;
 class Context;
+class ViewAdaptor;
 
 class View : public KoView {
     Q_OBJECT
@@ -80,14 +81,14 @@ public:
 
     void projectCalculate();
 
-    virtual DCOPObject* dcopObject();
-   
+    virtual ViewAdaptor* dbusObject();
+
     virtual bool setContext(Context &context);
     virtual void getContext(Context &context) const;
 
     void setTaskActionsEnabled(QWidget *w, bool on);
     void setScheduleActionsEnabled();
-    
+
 public slots:
     void slotUpdate(bool calculate);
     void slotEditResource();
@@ -98,7 +99,7 @@ public slots:
     void slotViewExpected();
     void slotViewOptimistic();
     void slotViewPessimistic();
-    
+
     void slotViewGanttResources();
     void slotViewGanttTaskName();
     void slotViewGanttTaskLinks();
@@ -123,16 +124,16 @@ public slots:
     void slotModifyRelation(Relation *rel);
     void slotAddRelation(Node *par, Node *child, int linkType);
     void slotModifyRelation(Relation *rel, int linkType);
-  
+
     void setBaselineMode(bool on);
-    
+
     void slotExportGantt(); // testing
     void setTaskActionsEnabled(bool on);
-    
+
     void slotRenameNode(Node *node, const QString& name);
-    
+
     void slotPopupMenu(const QString& menuname, const QPoint & pos);
-    
+
 protected slots:
     void slotProjectCalendar();
     void slotProjectWorktime();
@@ -188,19 +189,19 @@ private:
     Q3PtrList<QString> m_reportTemplateFiles;
 
     bool m_baselineMode;
-    
+
     int m_viewGrp;
     int m_defaultFontSize;
     int m_currentEstimateType;
-    
+
     bool m_updateGanttview;
     bool m_updateResourceview;
     bool m_updateAccountsview;
 
     KStatusBarLabel *m_estlabel;
 
-    DCOPObject* m_dcop;
-    
+    ViewAdaptor* m_dbus;
+
     // ------ Edit
     KAction *actionCut;
     KAction *actionCopy;
@@ -210,13 +211,13 @@ private:
     KAction *actionUnindentTask;
     KAction *actionMoveTaskUp;
     KAction *actionMoveTaskDown;
-    
+
     // ------ View
     KAction *actionViewGantt;
     KToggleAction *actionViewExpected;
     KToggleAction *actionViewOptimistic;
     KToggleAction *actionViewPessimistic;
-    
+
     KToggleAction *actionViewGanttResources;
     KToggleAction *actionViewGanttTaskName;
     KToggleAction *actionViewGanttTaskLinks;
@@ -231,12 +232,12 @@ private:
     KToggleAction *actionViewResourceAppointments;
     KAction *actionViewAccounts;
     KAction *actionViewReports;
-    
+
     // ------ Insert
     KAction *actionAddTask;
     KAction *actionAddSubtask;
     KAction *actionAddMilestone;
-    
+
     // ------ Project
     KAction *actionEditMainProject;
     KAction *actionEditStandardWorktime;
@@ -252,14 +253,14 @@ private:
     KAction *actionPriorpage;
     KAction *actionNextpage;
     KAction *actionLastpage;
-    
+
     // ------ Tools
     KAction *actionDefineWBS;
     KAction *actionGenerateWBS;
-    
+
     // ------ Export (testing)
     KAction *actionExportGantt;
-    
+
     // ------ Settings
     KAction *actionConfigure;
 

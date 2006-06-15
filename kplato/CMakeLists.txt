@@ -10,84 +10,82 @@ add_subdirectory( tests )
 include_directories(${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/kdgantt ${CMAKE_SOURCE_DIR}/kugar/lib   )
 
 
-set(libkplatopart_SRCS 
-    kptsummarytaskdialog.cc 
-    kptsummarytaskgeneralpanel.cc 
-    kptschedule.cc 
-    kptappointment.cc 
-    kptresourceappointmentsview.cc 
-    kpttaskappointmentsview.cc 
-    kptdoublelistviewbase.cc 
-    kptaccountsviewconfigdialog.cc 
-    kptaccountsview.cc 
-    kpttaskcostpanel.cc 
-    kptmilestoneprogresspanel.cc 
-    kptmilestoneprogressdialog.cc 
-    kptaccount.cc 
-    kptaccountsdialog.cc 
-    kptaccountspanel.cc 
-    kptnode.cc 
-    kptproject.cc 
-    kptrelation.cc 
-    kptresource.cc 
-    kpttask.cc 
-    kptduration.cc 
-    kptfactory.cc 
-    kptpart.cc 
-    kptview.cc 
-    kptprojectdialog.cc 
-    kpttaskdialog.cc  
-    kptmainprojectdialog.cc 
-    kptmainprojectpanel.cc 
-    kptganttview.cc 
-    kptresourcespanel.cc 
-    kptpertview.cc 
-    kptpertcanvas.cc 
-    kptrelationdialog.cc 
-    kptcanvasitem.cc 
-    kptresourceview.cc 
-    kptrequestresourcespanel.cc 
-    kptresourcedialog.cc 
-    kptdatetime.cc 
-    kptcalendar.cc 
-    kptcalendaredit.cc 
-    kptcalendarlistdialog.cc 
-    kptcalendarpanel.cc 
-    kptdatetable.cc 
-    kptcalendarlistdialogbase.cc 
-    kptcalendareditbase.cc 
-    kptcommand.cc 
-    kptstandardworktimedialog.cc 
-    kptintervaledit.cc 
-    kpttaskgeneralpanel.cc 
-    kpttaskdefaultpanel.cc 
-    kptconfigdialog.cc 
-    kpttaskprogresspanel.cc 
-    kpttaskprogressdialog.cc 
-    kptconfig.cc 
-    kptcontext.cc 
-    kptresourcesdialog.cc 
-    kptwbsdefinitiondialog.cc 
-    kptwbsdefinitionpanel.cc 
+set(libkplatopart_SRCS
+    kptsummarytaskdialog.cc
+    kptsummarytaskgeneralpanel.cc
+    kptschedule.cc
+    kptappointment.cc
+    kptresourceappointmentsview.cc
+    kpttaskappointmentsview.cc
+    kptdoublelistviewbase.cc
+    kptaccountsviewconfigdialog.cc
+    kptaccountsview.cc
+    kpttaskcostpanel.cc
+    kptmilestoneprogresspanel.cc
+    kptmilestoneprogressdialog.cc
+    kptaccount.cc
+    kptaccountsdialog.cc
+    kptaccountspanel.cc
+    kptnode.cc
+    kptproject.cc
+    kptrelation.cc
+    kptresource.cc
+    kpttask.cc
+    kptduration.cc
+    kptfactory.cc
+    kptpart.cc
+    kptview.cc
+    kptprojectdialog.cc
+    kpttaskdialog.cc
+    kptmainprojectdialog.cc
+    kptmainprojectpanel.cc
+    kptganttview.cc
+    kptresourcespanel.cc
+    kptpertview.cc
+    kptpertcanvas.cc
+    kptrelationdialog.cc
+    kptcanvasitem.cc
+    kptresourceview.cc
+    kptrequestresourcespanel.cc
+    kptresourcedialog.cc
+    kptdatetime.cc
+    kptcalendar.cc
+    kptcalendaredit.cc
+    kptcalendarlistdialog.cc
+    kptcalendarpanel.cc
+    kptdatetable.cc
+    kptcalendarlistdialogbase.cc
+    kptcalendareditbase.cc
+    kptcommand.cc
+    kptstandardworktimedialog.cc
+    kptintervaledit.cc
+    kpttaskgeneralpanel.cc
+    kpttaskdefaultpanel.cc
+    kptconfigdialog.cc
+    kpttaskprogresspanel.cc
+    kpttaskprogressdialog.cc
+    kptconfig.cc
+    kptcontext.cc
+    kptresourcesdialog.cc
+    kptwbsdefinitiondialog.cc
+    kptwbsdefinitionpanel.cc
     kptwbsdefinition.cc
-    KPtViewIface.cc
+    KPtViewAdaptor.cc
 )
 
-kde4_add_dcop_skels(libkplatopart_SRCS KPtViewIface.h )
-
 kde4_add_ui3_files(libkplatopart_SRCS
-    kpttaskcostpanelbase.ui 
-    kptsummarytaskgeneralpanelbase.ui 
-    kptcalendarlistpanel.ui 
+    kpttaskcostpanelbase.ui
+    kptsummarytaskgeneralpanelbase.ui
+    kptcalendarlistpanel.ui
     kptaccountsviewconfigurepanelbase.ui
     kptmilestoneprogresspanelbase.ui
     kptaccountspanelbase.ui
-    kptdurationwidget.ui 
+    kptdurationwidget.ui
     kptmainprojectpanelbase.ui
     relationpanel.ui
     resourcedialogbase.ui
-    kpttaskresourcespanelbase.ui 
-    resourcespanelbase.ui 
+    kpttaskresourcespanelbase.ui
+    resourcespanelbase.ui
     kptprojectdialogbase.ui
     kpttasknotespanelbase.ui
     kpttaskgeneralpanelbase.ui
@@ -197,7 +195,7 @@ install_files( ${XDG_APPS_DIR} FILES  kplato.desktop )
 #    kptwbsdefinitiondialog.cc kptwbsdefinitionpanel.cc kptwbsdefinitionpanelbase.ui \
 #    kptwbsdefinition.cc
 ###    kptconfigbehaviorpanel.cc kptconfigbehaviorpanelbase.ui \
-###    kptreportview.cc 
+###    kptreportview.cc
 #
 ## (this is not used)
 #noinst_HEADERS = \
@@ -242,7 +240,7 @@ install_files( ${XDG_APPS_DIR} FILES  kplato.desktop )
 ###    kptreportview.h
 #
 ### The part
-#lib_LTLIBRARIES = 
+#lib_LTLIBRARIES =
 #kde_module_LTLIBRARIES = libkplatopart.la
 #libkplatopart_la_LDFLAGS = $(KDE_LDFLAGS) $(KDE_PLUGIN)
 #libkplatopart_la_LIBADD = $(LIB_KABC) $(LIB_KOFFICEUI) \

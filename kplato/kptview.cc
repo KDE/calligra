@@ -98,7 +98,7 @@
 
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
-#include "KPtViewIface.h"
+#include "KPtViewAdaptor.h"
 #include <kactionmenu.h>
 
 namespace KPlato
@@ -122,9 +122,9 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
         setXMLFile("kplato_readonly.rc");
     else
         setXMLFile("kplato.rc");
-    m_dcop = 0L;
-    // build the DCOP object
-    dcopObject();
+
+    m_dbus = new ViewAdaptor(this);
+    QDBus::sessionBus().registerObject( "/" + objectName(), this);
 
     m_tab = new Q3WidgetStack(this);
     Q3VBoxLayout *layout = new Q3VBoxLayout(this);
@@ -318,17 +318,13 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
 View::~View()
 {
-    delete m_dcop;
     removeStatusBarItem(m_estlabel);
     delete m_estlabel;
 }
 
-DCOPObject * View::dcopObject()
+ViewAdaptor* View::dbusObject()
 {
-  if ( !m_dcop )
-    m_dcop = new ViewIface( this );
-
-  return m_dcop;
+  return m_dbus;
 }
 
 
