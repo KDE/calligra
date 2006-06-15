@@ -61,7 +61,7 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
 void KPrMoveHelpLineDia::slotRemoveHelpLine()
 {
     m_bRemoveLine = true;
-    KDialog::slotOk();
+    accept();
 }
 
 double KPrMoveHelpLineDia::newPosition() const
@@ -169,7 +169,7 @@ KoPoint KPrInsertHelpPointDia::newPosition() const
 void KPrInsertHelpPointDia::slotRemoveHelpPoint()
 {
     m_bRemovePoint = true;
-    KDialog::slotOk();
+    accept();
 }
 
 #include "KPrMoveHelpLineDia.moc"

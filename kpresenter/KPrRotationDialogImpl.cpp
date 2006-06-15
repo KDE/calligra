@@ -91,7 +91,7 @@ KPrRotationDialogImpl::KPrRotationDialogImpl( QWidget *parent, const char* name 
 
 void KPrRotationDialogImpl::slotOk()
 {
-    emit apply();
+    emit applyClicked();
     accept();
 }
 

@@ -47,6 +47,8 @@
 #include <qradiobutton.h>
 #include <q3dragobject.h>
 #include <QFile>
+#include <dbus/qdbus.h>
+
 #include <kactioncollection.h>
 #include <kfontaction.h>
 #include <kseparatoraction.h>
@@ -1215,7 +1217,7 @@ void KPrView::extraRotate()
     if ( m_canvas->numberOfObjectSelected() > 0 ) {
         if ( !rotateDia ) {
             rotateDia = new KPrRotationDialogImpl( this );
-            connect( rotateDia, SIGNAL( apply() ), this, SLOT( rotateOk() ) );
+            connect( rotateDia, SIGNAL( applyClicked() ), this, SLOT( rotateOk() ) );
         }
         rotateDia->setAngle( m_canvas->getSelectedObj()->getAngle() );
         m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1230,7 +1232,7 @@ void KPrView::extraShadow()
         if ( !shadowDia ) {
             shadowDia = new KPrShadowDialogImpl( this );
             shadowDia->resize( shadowDia->minimumSize() );
-            connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
+            connect( shadowDia, SIGNAL( applyClicked() ), this, SLOT( shadowOk() ) );
         }
 
         KPrObject *object=m_canvas->getSelectedObj();
@@ -1468,7 +1470,9 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
             if ( reply.value() )
             {
                 // disable screensaver
-                reply = screensaver->callWithArgs("enable", false);
+                QList<QVariant> args;
+                args << false;
+                reply = screensaver->callWithArgs("enable", args);
                 if (reply.isError() || !reply.value())
                     kWarning(33001) << "Couldn't disable screensaver (using dbus to kdesktop)!" << endl;
                 else
@@ -1564,7 +1568,9 @@ void KPrView::screenStop()
             // start screensaver again
             QDBusInterfacePtr screensaver("org.kde.kdesktop", "/",
                                           "org.kde.kdesktop.KScreensaver");
-            QDBusReply<bool> reply = screensaver->callWithArgs("enable", true);
+            QList<QVariant> args;
+            args << true;
+            QDBusReply<bool> reply = screensaver->callWithArgs("enable", args);
             if (reply.isError() || !reply.value())
                 kWarning(33001) << "Couldn't re-enabled screensaver (using dbus to kdesktop)" << endl;
         }
