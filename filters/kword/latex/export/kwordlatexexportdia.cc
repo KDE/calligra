@@ -40,7 +40,6 @@
 #include <kcombobox.h>
 #include <knuminput.h>
 
-#include <dcopclient.h>
 #include <latexexportAdaptor.h>
 
 #include "xml2latexparser.h"
