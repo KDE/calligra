@@ -42,3 +42,5 @@ void KPrPolyLineObjectAdaptor::verticalFlip()
     //todo repaint it
     obj->flip( false );
 }
+
+#include <KPrPolyLineObjectAdaptor.moc>

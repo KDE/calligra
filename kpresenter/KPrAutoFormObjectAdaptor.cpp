@@ -51,3 +51,5 @@ void KPrAutoFormObjectAdaptor::setLineEnd( const QString & type)
 {
     obj->setLineEnd(lineEndBeginFromString( type ));
 }
+
+#include <KPrAutoFormObjectAdaptor.moc>

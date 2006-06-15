@@ -59,3 +59,5 @@ bool KPrPolygonObjectAdaptor::checkConcavePolygon()const
 {
     return obj->getCheckConcavePolygon();
 }
+
+#include <KPrPolygonObjectAdaptor.moc>

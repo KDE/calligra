@@ -121,3 +121,5 @@ void KPrObject2DAdaptor::setGradientColor2( const QColor &col )
 {
     obj->setGColor2( col );
 }
+
+#include <KPrObject2DAdaptor.moc>

@@ -80,3 +80,5 @@ void KPrPieObjectAdaptor::verticalFlip()
 {
     obj->flip( false );
 }
+
+#include <KPrPieObjectAdaptor.moc>

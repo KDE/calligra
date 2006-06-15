@@ -63,3 +63,5 @@ void KPrQuadricBezierCurveObjectAdaptor::verticalFlip()
 {
     obj->flip( false );
 }
+
+#include <KPrQuadricBezierCurveObjectAdaptor.moc>

@@ -702,3 +702,5 @@ bool KPrPageAdaptor::displayBackground() const
 {
     return m_page->displayBackground();
 }
+
+#include <KPrPageAdaptor.moc>

@@ -64,3 +64,5 @@ void KPrFreehandObjectAdaptor::verticalFlip()
     //todo repaint it
     obj->flip( false );
 }
+
+#include <KPrFreehandObjectAdaptor.moc>

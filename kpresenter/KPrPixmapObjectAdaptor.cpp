@@ -98,3 +98,5 @@ void KPrPixmapObjectAdaptor::setPictureMirrorType(const QString & _mirror)
     else
         kDebug(33001)<<" Error in setPictureMirrorType :"<<_mirror<<endl;
 }
+
+#include <KPrPixmapObjectAdaptor.moc>

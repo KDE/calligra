@@ -285,3 +285,5 @@ void KPrObjectAdaptor::resize( double width, double height )
 {
     obj->setSize( width, height );
 }
+
+#include <KPrObjectAdaptor.moc>

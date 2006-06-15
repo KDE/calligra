@@ -49,3 +49,5 @@ int KPrRectObjectAdaptor::yRnd() const
     obj->getRnds( _xRnd, _yRnd );
     return _yRnd;
 }
+
+#include <KPrRectObjectAdaptor.moc>

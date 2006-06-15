@@ -20,7 +20,6 @@
 
 #include "KPrTextObjectAdaptor.h"
 #include "KPrTextObject.h"
-#include <KoTextViewAdaptor.h>
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include <KoTextObject.h>
@@ -40,7 +39,7 @@ QString KPrTextObjectAdaptor::startEditing()
     KPrDocument *doc=m_textobject->kPresenterDocument();
     KPrView *view=doc->firstView();
     view->getCanvas()->createEditing( m_textobject);
-    return view->getCanvas()->currentTextObjectView()->dbusObject()->objectName();
+    return view->getCanvas()->currentTextObjectView()->objectName();
 }
 
 bool KPrTextObjectAdaptor::hasSelection() const
@@ -362,3 +361,5 @@ QString KPrTextObjectAdaptor::strikeOutLineStyle()const
 {
     return KoTextFormat::strikeOutStyleToString( m_textobject->textObject()->strikeOutStyle() );
 }
+
+#include <KPrTextObjectAdaptor.moc>

@@ -63,3 +63,5 @@ void KPrLineObjectAdaptor::verticalFlip()
 {
     obj->flip( false );
 }
+
+#include <KPrLineObjectAdaptor.moc>

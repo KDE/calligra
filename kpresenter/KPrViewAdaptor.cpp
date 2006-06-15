@@ -716,3 +716,5 @@ void KPrViewAdaptor::flipVertical()
 {
     view->flipVertical();
 }
+
+#include <KPrViewAdaptor.moc>

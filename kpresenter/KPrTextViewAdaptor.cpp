@@ -119,3 +119,5 @@ void KPrTextViewAdaptor::insertNote(const QString &_note)
 {
     m_textview->insertComment(_note);
 }
+
+#include <KPrTextViewAdaptor.moc>

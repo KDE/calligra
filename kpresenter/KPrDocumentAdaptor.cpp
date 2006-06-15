@@ -566,3 +566,5 @@ bool KPrDocumentAdaptor::configToolTipCompletion() const
 {
     return doc->getAutoFormat()->getConfigToolTipCompletion();
 }
+
+#include <KPrDocumentAdaptor.moc>
