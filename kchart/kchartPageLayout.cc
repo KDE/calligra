@@ -34,6 +34,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent)
 	: KDialog( parent )
 {
     setButtons( Ok | Cancel | User1 | Apply );
+    setDefaultButton( Ok );
     setCaption( i18n( "Page Layout" ) );
 
     params=_params;
