@@ -2737,6 +2737,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   // there.  It's also responsible to paint the right and bottom, if
   // it is the last cell on a print out.
 
+  const bool isMergedOrObscured = isPartOfMerged() || isObscured();
   bool paintTop;
   bool paintLeft;
   bool paintBottom=false;
@@ -2745,22 +2746,26 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   paintLeft   = ( (paintBorder & LeftBorder) &&
                   leftPen.style() == Qt::NoPen &&
                   sheet()->getShowGrid() &&
-                  sheetDir == Sheet::LeftToRight );
+                  sheetDir == Sheet::LeftToRight &&
+                  !isMergedOrObscured );
   paintRight  = ( (paintBorder & RightBorder) &&
                   rightPen.style() == Qt::NoPen &&
                   sheet()->getShowGrid() &&
-                  sheetDir == Sheet::RightToLeft );
+                  sheetDir == Sheet::RightToLeft &&
+                  !isMergedOrObscured );
   paintTop    = ( (paintBorder & TopBorder) &&
                   topPen.style() == Qt::NoPen &&
-                  sheet()->getShowGrid() );
+                  sheet()->getShowGrid() &&
+                  !isMergedOrObscured );
 //  paintBottom = ( (paintBorder & BottomBorder) &&
 //                  sheet()->getShowGrid() &&
 //                  bottomPen.style() == Qt::NoPen );
 
-
    //Set the single-pixel with pen for drawing the borders with.
    painter.setPen( QPen( sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
+
+#if 0 // FIXME Stefan: I think this part is superfluous with the merge check above
   // If there are extra cells, there might be more conditions.
   if (d->hasExtra()) {
     QList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
@@ -2782,9 +2787,10 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
       }
     }
   }
+#endif
 
   // The left border.
-  if ( paintBorder & LeftBorder )
+  if ( paintLeft )
   {
     int dt = 0;
     int db = 0;
