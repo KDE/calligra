@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <config.h>
@@ -36,8 +36,8 @@ K_EXPORT_COMPONENT_FACTORY( libwpimport, WPImportFactory( "kofficefilters" ) )
 
 #include <libwpd/libwpd.h>
 #include <libwpd/WPXStream.h>
-#include <libwpd/WPXHLListenerImpl.h>
-
+#include "DocumentHandler.hxx"
+#include "WordPerfectCollector.hxx"
 
 class WPXMemoryInputStream : public WPXInputStream
 {
@@ -129,137 +129,90 @@ bool WPXMemoryInputStream::atEOS()
 	return false;
 }
 
-
-class KWordListener : public WPXHLListenerImpl
+class KWordHandler : public DocumentHandler
 {
 public:
-	KWordListener();
-	virtual ~KWordListener();
-
- 	virtual void setDocumentMetaData(const WPXPropertyList &propList) {}
-
-	virtual void startDocument() ;
-	virtual void endDocument() ;
-
-	virtual void openPageSpan(const WPXPropertyList &propList) {}
-	virtual void closePageSpan() {}
-	virtual void openHeader(const WPXPropertyList &propList) {}
-	virtual void closeHeader() {}
-	virtual void openFooter(const WPXPropertyList &propList) {}
-	virtual void closeFooter() {}
-
-	virtual void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns) {}
-	virtual void closeSection() {}
-	virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
-	virtual void closeParagraph();
-	virtual void openSpan(const WPXPropertyList &propList) ;
-	virtual void closeSpan() ;
-
-	virtual void insertTab();
-	virtual void insertText(const WPXString &text);
-	virtual void insertLineBreak();
-
-	virtual void defineOrderedListLevel(const WPXPropertyList &propList) {}
-	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) {}
-	virtual void openOrderedListLevel(const WPXPropertyList &propList) {}
-	virtual void openUnorderedListLevel(const WPXPropertyList &propList) {}
-	virtual void closeOrderedListLevel() {}
-	virtual void closeUnorderedListLevel() {}
-	virtual void openListElement(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops) {}
-	virtual void closeListElement() {}
-
-	virtual void openFootnote(const WPXPropertyList &propList) {}
-	virtual void closeFootnote() {}
-	virtual void openEndnote(const WPXPropertyList &propList) {}
-	virtual void closeEndnote() {}
-
-	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns) {}
-	virtual void openTableRow(const WPXPropertyList &propList) {}
-	virtual void closeTableRow() {}
-	virtual void openTableCell(const WPXPropertyList &propList) {}
-	virtual void closeTableCell() {}
-	virtual void insertCoveredTableCell(const WPXPropertyList &propList) {}
-	virtual void closeTable() {}
-    
-    QString root;
-
+        KWordHandler();
+	virtual ~KWordHandler() {};
+	void startDocument();
+        void endDocument();
+        void startElement(const char *psName, const WPXPropertyList &xPropList);
+        void endElement(const char *psName);
+        void characters(const WPXString &sCharacters);
+	WPXString documentstring;
 private:
-	unsigned int m_currentListLevel;
+	bool isTagOpened;
+	WPXString openedTagName;
 };
 
-
-
-KWordListener::KWordListener()
+KWordHandler::KWordHandler() :
+	isTagOpened(false)
 {
 }
 
-KWordListener::~KWordListener()
+void KWordHandler::startDocument()
 {
+  documentstring.clear();
 }
 
-void KWordListener::startDocument()
+void KWordHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
-  root = "<!DOCTYPE DOC>\n";
-  root.append( "<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
-
-  // paper definition
-  root.append( "<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n" );
-  root.append( "<PAPERBORDERS right=\"28\" left=\"28\" bottom=\"42\" top=\"42\" />" );
-  root.append( "</PAPER>\n" );
-
-  root.append( "<ATTRIBUTES standardpage=\"1\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n" );
-
-  root.append( "<FRAMESETS>\n" );
-  root.append( "<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" autoCreateNewFrame=\"1\">\n" );
-  root.append( "<FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n" );
+	if (isTagOpened)
+	{
+		documentstring.append( ">" );
+		isTagOpened = false;
+	}
+	WPXString tempString;
+        tempString.sprintf("<%s", psName);
+	documentstring.append( tempString );
+        WPXPropertyList::Iter i(xPropList);
+        for (i.rewind(); i.next(); )
+        {
+                // filter out libwpd elements
+                if (strlen(i.key()) > 6 && strncmp(i.key(), "libwpd", 6) != 0)
+		{
+			tempString.sprintf(" %s=\"%s\"", i.key(), i()->getStr().cstr());
+                        documentstring.append( tempString );
+        	}
+	}
+	isTagOpened = true;
+	openedTagName.sprintf("%s", psName);
 }
 
-void KWordListener::endDocument()
+void KWordHandler::endElement(const char *psName)
 {
-  root.append( "</FRAMESET>\n" );
-  root.append( "</FRAMESETS>\n" );
-
-  root.append( "</DOC>\n" );
+	if ((isTagOpened) && (openedTagName == psName))
+		documentstring.append( " />" );
+	else
+	{
+		WPXString tempString;
+		tempString.sprintf("</%s>", psName);
+	        documentstring.append( tempString );
+	}
+	isTagOpened = false;
 }
 
-void KWordListener::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
+void KWordHandler::characters(const WPXString &sCharacters)
 {
-  root.append( "<PARAGRAPH>\n" );
-  root.append( "<TEXT>" );
-}
-
-void KWordListener::closeParagraph()
-{
-  root.append( "</TEXT>\n" );
-  root.append( "<LAYOUT>\n");
-  root.append( "<NAME value=\"Standard\" />\n");
-  root.append( "<FLOW align=\"left\" />\n");
-  root.append( "<FORMAT/>\n");
-  root.append( "</LAYOUT>\n");
-  root.append( "</PARAGRAPH>\n" );
-}
-
-void KWordListener::insertTab()
-{
-}
-
-void KWordListener::insertText(const WPXString &text)
-{
-  root.append( QString::fromUtf8( text.cstr()) );
-}
-
-void KWordListener::openSpan(const WPXPropertyList &propList)
-{
+	if (isTagOpened)
+	{
+		documentstring.append( ">" );
+		isTagOpened = false;
+	}
+        documentstring.append( WPXString(sCharacters, true) );
 }
 
 
-void KWordListener::closeSpan()
+void KWordHandler::endDocument()
 {
+	if (isTagOpened)
+	{
+		documentstring.append( ">" );
+		isTagOpened = false;
+	}
 }
+	
 
-void KWordListener::insertLineBreak()
-{
-}
 
 WPImport::WPImport( KoFilter *, const char *, const QStringList& ):  KoFilter()
 {
@@ -268,7 +221,7 @@ WPImport::WPImport( KoFilter *, const char *, const QStringList& ):  KoFilter()
 KoFilter::ConversionStatus WPImport::convert( const QCString& from, const QCString& to )
 {
   // check for proper conversion
-  if( to!= "application/x-kword" || from != "application/wordperfect" )
+  if(to!= "application/vnd.sun.xml.writer" || from != "application/wordperfect" )
      return KoFilter::NotImplemented;
 
   // open input file
@@ -286,31 +239,112 @@ KoFilter::ConversionStatus WPImport::convert( const QCString& from, const QCStri
   fclose( f );
   
   // instream now owns buf, no need to delete buf later
-  WPXMemoryInputStream* instream = new WPXMemoryInputStream( buf, fsize );
-     
-  // open and parse the file   	
-  KWordListener listener;
-  WPDResult error = WPDocument::parse( instream, static_cast<WPXHLListenerImpl *>(&listener));
-  delete instream;
+  WPXMemoryInputStream instream = WPXMemoryInputStream( buf, fsize );
 
-  if( error != WPD_OK )  
+  WPDConfidence confidence = WPDocument::isFileFormatSupported(&instream, false);
+  if( confidence == WPD_CONFIDENCE_NONE )
+  {
+    fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid WordPerfect document.\n");
     return KoFilter::StupidError;
-     
-  QString root = listener.root;
+  }
+  instream.seek(0, WPX_SEEK_SET);
 
+  // open and parse the file   	
+  KWordHandler handler;
+        
+  WordPerfectCollector collector(&instream, &handler);
   
-  if( root.isEmpty() ) return KoFilter::StupidError;
-
+  if ( !collector.filter() ) return KoFilter::StupidError;
+  
   // prepare storage
-  KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
+  KoStoreDevice* manifest = m_chain->storageFile( "META-INF/manifest.xml", KoStore::Write );
+  if ( manifest )
+    {
+      QCString manifeststring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
+<!DOCTYPE manifest:manifest PUBLIC \"-//OpenOffice.org//DTD Manifest 1.0//EN\" \"Manifest.dtd\">\n\
+<manifest:manifest xmlns:manifest=\"http://openoffice.org/2001/manifest\">\n\
+<manifest:file-entry manifest:media-type=\"application/vnd.sun.xml.writer\" manifest:full-path=\"/\"/>\n\
+<manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>\n\
+<manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>\n\
+</manifest:manifest>\n";
+      manifest->writeBlock( (const char*) manifeststring, manifeststring.length() );
+    }
+    
+  KoStoreDevice* styles = m_chain->storageFile( "styles.xml", KoStore::Write );
+  if ( styles )
+    {
+      QCString stylesstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+<!DOCTYPE office:document-styles PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">\
+<office:document-styles xmlns:office=\"http://openoffice.org/2000/office\" xmlns:style=\"http://openoffice.org/2000/style\"\
+ xmlns:text=\"http://openoffice.org/2000/text\" xmlns:table=\"http://openoffice.org/2000/table\"\
+ xmlns:draw=\"http://openoffice.org/2000/drawing\" xmlns:fo=\"http://www.w3.org/1999/XSL/Format\"\
+ xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:number=\"http://openoffice.org/2000/datastyle\"\
+ xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:chart=\"http://openoffice.org/2000/chart\" xmlns:dr3d=\"http://openoffice.org/2000/dr3d\"\
+ xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:form=\"http://openoffice.org/2000/form\"\
+ xmlns:script=\"http://openoffice.org/2000/script\" office:version=\"1.0\">\
+<office:styles>\
+<style:default-style style:family=\"paragraph\">\
+<style:properties style:use-window-font-color=\"true\" style:text-autospace=\"ideograph-alpha\"\
+ style:punctuation-wrap=\"hanging\" style:line-break=\"strict\" style:writing-mode=\"page\"/>\
+</style:default-style>\
+<style:default-style style:family=\"table\"/>\
+<style:default-style style:family=\"table-row\"/>\
+<style:default-style style:family=\"table-column\"/>\
+<style:style style:name=\"Standard\" style:family=\"paragraph\" style:class=\"text\"/>\
+<style:style style:name=\"Text body\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"text\"/>\
+<style:style style:name=\"List\" style:family=\"paragraph\" style:parent-style-name=\"Text body\" style:class=\"list\"/>\
+<style:style style:name=\"Header\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>\
+<style:style style:name=\"Footer\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>\
+<style:style style:name=\"Caption\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>\
+<style:style style:name=\"Footnote\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>\
+<style:style style:name=\"Endnote\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>\
+<style:style style:name=\"Index\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"index\"/>\
+<style:style style:name=\"Footnote Symbol\" style:family=\"text\">\
+<style:properties style:text-position=\"super 58%\"/>\
+</style:style>\
+<style:style style:name=\"Endnote Symbol\" style:family=\"text\">\
+<style:properties style:text-position=\"super 58%\"/>\
+</style:style>\
+<style:style style:name=\"Footnote anchor\" style:family=\"text\">\
+<style:properties style:text-position=\"super 58%\"/>\
+</style:style>\
+<style:style style:name=\"Endnote anchor\" style:family=\"text\">\
+<style:properties style:text-position=\"super 58%\"/>\
+</style:style>\
+<text:footnotes-configuration text:citation-style-name=\"Footnote Symbol\" text:citation-body-style-name=\"Footnote anchor\"\
+ style:num-format=\"1\" text:start-value=\"0\" text:footnotes-position=\"page\" text:start-numbering-at=\"document\"/>\
+<text:endnotes-configuration text:citation-style-name=\"Endnote Symbol\" text:citation-body-style-name=\"Endnote anchor\"\
+ text:master-page-name=\"Endnote\" style:num-format=\"i\" text:start-value=\"0\"/>\
+<text:linenumbering-configuration text:number-lines=\"false\" text:offset=\"0.1965inch\" style:num-format=\"1\"\
+ text:number-position=\"left\" text:increment=\"5\"/>\
+</office:styles>\
+<office:automatic-styles>\
+<style:page-master style:name=\"PM0\">\
+<style:properties fo:margin-bottom=\"1.0000inch\" fo:margin-left=\"1.0000inch\" fo:margin-right=\"1.0000inch\" fo:margin-top=\"1.0000inch\"\
+ fo:page-height=\"11.0000inch\" fo:page-width=\"8.5000inch\" style:print-orientation=\"portrait\">\
+<style:footnote-sep style:adjustment=\"left\" style:color=\"#000000\" style:distance-after-sep=\"0.0398inch\"\
+ style:distance-before-sep=\"0.0398inch\" style:rel-width=\"25%\" style:width=\"0.0071inch\"/>\
+</style:properties>\
+</style:page-master>\
+<style:page-master style:name=\"PM1\">\
+<style:properties fo:margin-bottom=\"1.0000inch\" fo:margin-left=\"1.0000inch\" fo:margin-right=\"1.0000inch\" fo:margin-top=\"1.0000inch\"\
+ fo:page-height=\"11.0000inch\" fo:page-width=\"8.5000inch\" style:print-orientation=\"portrait\">\
+<style:footnote-sep style:adjustment=\"left\" style:color=\"#000000\" style:rel-width=\"25%\"/>\
+</style:properties>\
+</style:page-master>\
+</office:automatic-styles>\
+<office:master-styles>\
+<style:master-page style:name=\"Standard\" style:page-master-name=\"PM0\"/>\
+<style:master-page style:name=\"Endnote\" style:page-master-name=\"PM1\"/>\
+</office:master-styles>\
+</office:document-styles>";
+      styles->writeBlock( (const char*) stylesstring, stylesstring.length() );
+    }
+  
+  KoStoreDevice* out = m_chain->storageFile( "content.xml", KoStore::Write );
 
   if( out )
-    {
-      QCString cstring = root.utf8();
-      cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-      //qDebug("RESULT:\n%s", (const char*)cstring );
-      out->writeBlock( (const char*) cstring, cstring.length() );
-    }
+      out->writeBlock( (const char*) handler.documentstring.cstr(), strlen(handler.documentstring.cstr()) );
 
   return KoFilter::OK;
 }
