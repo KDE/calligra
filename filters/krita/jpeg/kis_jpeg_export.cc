@@ -23,7 +23,7 @@
 #include <QSlider>
 
 #include <kapplication.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kgenericfactory.h>
 
 #include <KoFilterChain.h>
@@ -93,7 +93,9 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
         return KoFilter::NotImplemented;
 
 
-    KDialogBase* kdb = new KDialogBase(0, "", false, i18n("JPEG Export Options"), KDialogBase::Ok | KDialogBase::Cancel);
+    KDialog* kdb = new KDialog(0);
+    kdb->setWindowTitle( i18n("JPEG Export Options") );
+    kdb->setButtons( KDialog::Ok | KDialog::Cancel );
 
     KisWdgOptionsJPEG* wdg = new KisWdgOptionsJPEG(kdb);
     kdb->setMainWidget(wdg);
