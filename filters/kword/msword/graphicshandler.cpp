@@ -55,7 +55,7 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
     if ( !dev )
         return; // ouch
 
-#define IMG_BUF_SIZE 2048
+#define IMG_BUF_SIZE 2048L
     wvWare::U8 buf[IMG_BUF_SIZE];
     Q_LONG len = reader.size();
     while ( len > 0 )  {
