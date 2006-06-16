@@ -21,7 +21,6 @@
 #include <iostream>
 
 #include <QPainter>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QFocusEvent>
 #include <QKeyEvent>
@@ -51,7 +50,7 @@ KFormulaWidget::KFormulaWidget(KFormula::Container* doc,
     setFocusPolicy(Qt::StrongFocus);
     setBackgroundRole( QPalette::NoRole );
 
-    QRect rect = doc->boundingRect();
+    QRectF rect = doc->boundingRect();
     slotFormulaChanged(rect.width(), rect.height());
 }
 
@@ -122,13 +121,13 @@ void KFormulaWidget::mouseMoveEvent(QMouseEvent* event)
     formulaView.mouseMoveEvent(event);
 }
 
-void KFormulaWidget::slotFormulaChanged(int width, int height)
+void KFormulaWidget::slotFormulaChanged( double width, double height )
 {
-    // Magic numbers just to see the cursor.
-    resize(width + 5, height + 5);
-    buffer = QPixmap( width + 5, height + 5 );
+    int tmpWidth = width;
+    int  tmpHeight = height;
+    resize( tmpWidth + 5, tmpHeight + 5);
+    buffer = QPixmap( tmpWidth + 5, tmpHeight + 5 );
     update();
-    //kDebug( 40000 ) << "KFormulaWidget::slotFormulaChanged" << endl;
 }
 
 /**

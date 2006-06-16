@@ -25,7 +25,6 @@ class KPrinter;
 #include <q3textedit.h>
 #include <QTimer>
 #include <QScrollArea>
-//Added by qt3to4:
 #include <QFocusEvent>
 #include <QResizeEvent>
 
@@ -259,9 +258,10 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
 
 void KFormulaPartView::formulaString()
 {
-    FormulaString dia( this );
-    dia.setEditText( document()->getFormula()->formulaString() );
-    dia.exec();
+#warning diabled FormulaString dialog as KOffice 2 should support MathML tree editing instead
+//    FormulaString dia( this );
+//    dia.setEditText( document()->getFormula()->formulaString() );
+//    dia.exec();
 }
 
 void KFormulaPartView::sizeSelected( int size )

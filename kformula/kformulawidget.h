@@ -82,7 +82,7 @@ protected slots:
     /**
      * The formula has changed and needs to be redrawn.
      */
-    void slotFormulaChanged(int width, int height);
+    void slotFormulaChanged( double width, double height );
 
     void slotCursorChanged(bool visible, bool selecting);
 
