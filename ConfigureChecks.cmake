@@ -13,16 +13,7 @@ set(CMAKE_REQUIRED_DEFINITIONS ${_KDE4_PLATFORM_DEFINITIONS})
 #check for libz using the cmake supplied FindZLIB.cmake
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 macro_bool_to_01(PYTHON_INCLUDE_PATH HAVE_PYTHON)
-if(BZIP2_FOUND)
-   set(HAVE_BZIP2_SUPPORT 1)
-   if(BZIP2_NEED_PREFIX)
-      set(NEED_BZ2_PREFIX 1)
-   endif(BZIP2_NEED_PREFIX)
-else(BZIP2_FOUND)
-   set(HAVE_BZIP2_SUPPORT 0)
-endif(BZIP2_FOUND)
 
-#now check for dlfcn.h using the cmake supplied CHECK_include_FILE() macro
 # If definitions like -D_GNU_SOURCE are needed for these checks they
 # should be added to _KDE4_PLATFORM_DEFINITIONS when it is originally
 # defined outside this file.  Here we include these definitions in
@@ -45,13 +36,7 @@ check_include_files(ndir.h HAVE_NDIR_H)
 check_include_files(sys/dir.h HAVE_SYS_NDIR_H)
 check_include_files(sys/ndir.h HAVE_SYS_NDIR_H)
 check_include_files(dirent.h HAVE_DIRENT_H)
-check_function_exists(initgroups HAVE_INITGROUPS)
-check_function_exists(setenv     HAVE_SETENV)
-check_function_exists(unsetenv   HAVE_UNSETENV)
 
-check_prototype_exists(initgroups "unistd.h;sys/types.h;unistd.h;grp.h" HAVE_INITGROUPS_PROTO)
-check_prototype_exists(setenv stdlib.h HAVE_SETENV_PROTO)
-check_prototype_exists(unsetenv stdlib.h HAVE_UNSETENV_PROTO)
 
 check_type_size("int" SIZEOF_INT)
 check_type_size("char *"  SIZEOF_CHAR_P)
