@@ -20,18 +20,18 @@
 #ifndef KIS_DLG_OPTIONS_TIFF_H
 #define KIS_DLG_OPTIONS_TIFF_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kis_tiff_converter.h>
 
 class KisWdgOptionsTIFF;
 /**
 	@author Cyrille Berger <cberger@cberger.net>
 */
-class KisDlgOptionsTIFF : public KDialogBase
+class KisDlgOptionsTIFF : public KDialog
 {
     Q_OBJECT
     public:
-        KisDlgOptionsTIFF(QWidget *parent=0, const char *name=0);
+        KisDlgOptionsTIFF(QWidget *parent=0);
         ~KisDlgOptionsTIFF();
     public slots:
         void activated ( int index );

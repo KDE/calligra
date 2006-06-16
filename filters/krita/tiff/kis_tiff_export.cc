@@ -23,7 +23,6 @@
 #include <QSlider>
 
 #include <kapplication.h>
-#include <kdialogbase.h>
 #include <kgenericfactory.h>
 
 #include <KoFilterChain.h>
@@ -57,11 +56,12 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
         return KoFilter::NotImplemented;
 
 
-    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0, "options dialog for tiff");
+    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
+    kdb->setObjectName( "options dialog for tiff" );
 
     if(kdb->exec() == QDialog::Rejected)
     {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        return KoFilter::UserCancelled;
     }
 
     KisTIFFOptions options = kdb->options();

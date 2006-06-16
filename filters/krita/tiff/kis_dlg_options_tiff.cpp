@@ -30,9 +30,11 @@
 
 #include "kis_wdg_options_tiff.h"
 
-KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent, const char *name)
-    : KDialogBase(parent, name, false, i18n("TIFF Export Options"), KDialogBase::Ok | KDialogBase::Cancel)
+KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
+    : KDialog(parent)
 {
+    setWindowTitle( i18n("TIFF Export Options") );
+    setButtons( KDialog::Ok | KDialog::Cancel );
     optionswdg = new KisWdgOptionsTIFF(this);
     activated(0);
     connect(optionswdg->kComboBoxCompressionType, SIGNAL(activated ( int )), this, SLOT(activated ( int ) ));
@@ -125,7 +127,7 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
     options.deflateCompress = optionswdg->compressionLevelDeflate->value();
     options.faxMode = optionswdg->kComboBoxFaxMode->currentItem() + 1;
     options.pixarLogCompress = optionswdg->compressionLevelPixarLog->value();
-    
+
     return options;
 }
 
