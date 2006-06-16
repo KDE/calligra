@@ -2170,7 +2170,15 @@ QCString KoDocument::nativeFormatMimeType() const
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
         return QCString();
-    return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
+    QCString nativeMimeType = service->property( "X-KDE-NativeMimeType" ).toString().latin1();
+    if ( nativeMimeType.isEmpty() ) {
+        // shouldn't happen, let's find out why it happened
+        if ( !service->serviceTypes().contains( "KOfficePart" ) )
+            kdWarning(30003) << "Wrong desktop file, KOfficePart isn't mentionned" << endl;
+        else if ( !KServiceType::serviceType( "KOfficePart" ) )
+            kdWarning(30003) << "The KOfficePart service type isn't installed!" << endl;
+    }
+    return nativeMimeType;
 }
 
 QCString KoDocument::nativeOasisMimeType() const
