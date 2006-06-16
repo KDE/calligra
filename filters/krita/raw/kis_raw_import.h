@@ -34,7 +34,7 @@ class WdgRawImport : public QWidget, public Ui::WdgRawImport
 };
 
 class KProcess;
-class KDialogBase;
+class KDialog;
 class WdgRawImport;
 class KoColorProfile;
 class Q3ProgressDialog;
@@ -69,7 +69,7 @@ private:
     
 private:
     QByteArray * m_data;
-    KDialogBase * m_dialog;
+    KDialog * m_dialog;
     WdgRawImport * m_page;
     KoColorProfile * m_monitorProfile;
     KProcess * m_process;

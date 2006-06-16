@@ -54,8 +54,10 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         return KoFilter::NotImplemented;
 
 
-    KDialog* kdb = new KDialog(0, i18n("PNG Export Options"), KDialog::Ok | KDialog::Cancel);
-
+    KDialog* kdb = new KDialog(0);
+    kdb->setCaption(i18n("PNG Export Options"));
+    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
+    kdb->setDefaultButton(KDialog::Ok);
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();

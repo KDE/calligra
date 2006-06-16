@@ -44,7 +44,6 @@
 #include <kconfig.h>
 #include <knuminput.h>
 #include <kgenericfactory.h>
-#include <kdialogbase.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -77,7 +76,7 @@ KisRawImport::KisRawImport(QObject *parent, const QStringList&)
     , m_process(0)
     , m_progress(0)
 {
-    m_dialog = new KDialogBase();
+    m_dialog = new KDialog();
     m_dialog->enableButtonApply(false);
     m_page = new WdgRawImport(m_dialog);
     m_dialog -> setMainWidget(m_page);
