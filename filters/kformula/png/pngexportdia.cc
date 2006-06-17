@@ -59,11 +59,11 @@ PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWi
 
     setupGUI();
 
-    QRect rect = formula->boundingRect();
+    QRect rect = formula->boundingRect().toRect();
     realWidth = rect.width();
     realHeight = rect.height();
-    widthEdit->setValue(  realWidth );
-    heightEdit->setValue(  realHeight  );
+    widthEdit->setValue( realWidth );
+    heightEdit->setValue( realHeight  );
     percWidthEdit->setValue( 100 );
     percHeightEdit->setValue( 100 );
 

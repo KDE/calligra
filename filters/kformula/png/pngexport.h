@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <QByteArray>
 /* This file is part of the KDE project
    Copyright (C) 2002 Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
 
