@@ -78,13 +78,15 @@ foreach $section (@sections) {
             $className=$1;
         }
         elsif($class ne "" && $line=~/filename\>(.*)\<\/filename/) {
-            &addClass($1, $section, $className, $class);
+            my $file = $1;
+            $file=~s/^$rootdir/$project/;
+            &addClass($file, $section, $className, $class);
         }
     }
     close INPUT;
 
     # read undocumented from err.log
-    &parseErrorLog("$sect", "err.log");
+    &parseErrorLog("$sect", "err.log", $section);
 }
 chdir $rootdir;
 
@@ -116,7 +118,7 @@ foreach $section (@sections) {
     $sect=$section;
     $sect=~s/\//-/;
     # find out errorcount;
-    &parseErrorLog("$rootdir/doc/api/$sect", "err.log");
+    &parseErrorLog("$rootdir/doc/api/$sect", "err.log", $section);
     print FILE "<li><a href=\"$sect/annotated.html\">$section</a>&nbsp;&nbsp;<font size=\"-2\">(<a href=\"$sect/annotated.html\" target=\"_top\">NoFrames</a>)  ";
     if($error > 0) {
         print FILE "[<a href=\"$sect/errors.html\">$error errors</a>] ";
@@ -341,15 +343,17 @@ sub createConf() {
     close FILE;
 }
 
+# writes the undocumented and error pages
 sub parseErrorLog() {
     my $dir = shift(@_);
     my $logfile = shift(@_);
+    my $section = shift(@_);
     $undocumented=0;
     $error=0;
     my $liOpen=0;
     open INPUT,"$dir/$logfile" || die "Can't read logfile '$dir/$logfile'\n";
     open UNDOC, ">$dir/undocumented.html";
-    print UNDOC "<html><body><h2>Undocumented constructs found</h2><ul>Please consider typing some docs, or adding a \\internal tag to the headerfile as soon as you find out what these items do or mean. Thanks!\n";
+    print UNDOC "<html><body><h2>$section: undocumented constructs found</h2><ul>Please consider typing some docs, or adding a \\internal tag to the headerfile as soon as you find out what these items do or mean. Thanks!\n";
     open ERRORS, ">$dir/errors.html";
     foreach $line (<INPUT>) {
         if($line=~/^\S*$/) { next; }
@@ -358,6 +362,7 @@ sub parseErrorLog() {
             my $file=$1;
             my $lineNumber=$2;
             my $message=$3;
+            $file=~s/^$rootdir/$project/;
             if($message=~m/Warning: (Compound|Member) (.*) is not documented/) {
                 $undocumented++;
                 print UNDOC &printFile(1, $file);
@@ -397,9 +402,9 @@ sub parseErrorLog() {
         unlink "$dir/errors.html";
     }
     close UNDOC;
-    #if($undocumented == 0) {
-        #unlink "$dir/undocumented.html";
-    #}
+    if($undocumented == 0) {
+        unlink "$dir/undocumented.html";
+    }
     close INPUT;
 }
 
