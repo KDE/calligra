@@ -64,7 +64,7 @@ KexiAppModule::KexiAppModule(Kross::Api::Manager* manager)
 
     d->manager = manager;
 
-    Kross::Api::Object::Ptr mainwinobject = dynamic_cast< Kross::Api::Object* >(manager)->getChild("KexiMainWindow");
+    Kross::Api::Object::Ptr mainwinobject = manager->getChild("KexiMainWindow");
     if(mainwinobject) {
         Kross::Api::QtObject* mainwinqtobject = dynamic_cast< Kross::Api::QtObject* >( mainwinobject.data() );
         if(mainwinqtobject) {

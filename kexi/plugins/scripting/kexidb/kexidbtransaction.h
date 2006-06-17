@@ -39,12 +39,10 @@ namespace Kross { namespace KexiDB {
             /**
              * Constructor.
              *
-             * \param connection The \a KexiDBConnection object this
-             *        transaction belongs to.
              * \param transaction The \a ::KexiDB::Transaction instance
              *        this object wraps.
              */
-            KexiDBTransaction(KexiDBConnection* connection, ::KexiDB::Transaction& transaction);
+            KexiDBTransaction(::KexiDB::Transaction& transaction);
 
             /**
              * Destructor.
@@ -54,13 +52,11 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
+            /// Return the ::KexiDB::Transaction instance.
             ::KexiDB::Transaction& transaction();
 
         private:
             ::KexiDB::Transaction& m_transaction;
-
-            /// Return the KexiDBConnection object this KexiDBTransaction belongs to.
-            Kross::Api::Object::Ptr connection(Kross::Api::List::Ptr);
 
             /// Return true if the transaction is avtive (ie. started).
             Kross::Api::Object::Ptr isActive(Kross::Api::List::Ptr);

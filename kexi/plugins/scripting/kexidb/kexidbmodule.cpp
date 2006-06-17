@@ -50,7 +50,7 @@ KexiDBModule::KexiDBModule(Kross::Api::Manager* /*manager*/)
 {
     //kdDebug() << "Kross::KexiDB::KexiDBModule Ctor" << endl;
     addChild( new Kross::Api::Variant(KROSS_KEXIDB_VERSION), "version" );
-    addChild( KexiDBDriverManager::self() );
+    addChild( new KexiDBDriverManager() );
 }
 
 KexiDBModule::~KexiDBModule()

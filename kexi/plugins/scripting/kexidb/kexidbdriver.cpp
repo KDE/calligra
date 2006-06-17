@@ -29,7 +29,7 @@
 using namespace Kross::KexiDB;
 
 KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
-    : Kross::Api::Class<KexiDBDriver>("KexiDBDriver", KexiDBDriverManager::self())
+    : Kross::Api::Class<KexiDBDriver>("KexiDBDriver")
     , m_driver(driver)
 {
     this->addProxyFunction<Kross::Api::Variant>("isValid", this, &KexiDBDriver::isValid );

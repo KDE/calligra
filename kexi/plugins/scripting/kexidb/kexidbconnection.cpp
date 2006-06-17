@@ -36,9 +36,10 @@
 using namespace Kross::KexiDB;
 
 KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver, KexiDBConnectionData* connectiondata)
-    : Kross::Api::Class<KexiDBConnection>("KexiDBConnection", driver ? driver : new KexiDBDriver(connection->driver()))
+    : Kross::Api::Class<KexiDBConnection>("KexiDBConnection")
     , m_connection(connection)
     , m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(connection->data()))
+    , m_driver(driver ? driver : new KexiDBDriver(connection->driver()))
 {
     addFunction("hadError", &KexiDBConnection::hadError);
     addFunction("lastError", &KexiDBConnection::lastError);
@@ -151,14 +152,12 @@ Kross::Api::Object::Ptr KexiDBConnection::lastError(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr KexiDBConnection::data(Kross::Api::List::Ptr)
 {
-    return m_connectiondata;
+    return Kross::Api::Object::Ptr( m_connectiondata.data() );
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::driver(Kross::Api::List::Ptr)
 {
-    if(! getParent()) // We don't check getParent()->driver() here!
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid driver - KexiDBConnection::driver() is NULL.")) );
-    return getParent(); // the parent object is our KexiDBDriver* instance
+    return Kross::Api::Object::Ptr( m_driver.data() );
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::connect(Kross::Api::List::Ptr)
@@ -246,7 +245,7 @@ Kross::Api::Object::Ptr KexiDBConnection::executeQueryString(Kross::Api::List::P
     ::KexiDB::Cursor* cursor = connection()->executeQuery(querystatement);
     if(! cursor)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to execute querystring.")) );
-    return new KexiDBCursor(this, cursor);
+    return new KexiDBCursor(cursor);
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::executeQuerySchema(Kross::Api::List::Ptr args)
@@ -256,7 +255,7 @@ Kross::Api::Object::Ptr KexiDBConnection::executeQuerySchema(Kross::Api::List::P
     );
     if(! cursor)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to execute queryschema.")) );
-    return new KexiDBCursor(this, cursor);
+    return new KexiDBCursor(cursor);
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::querySingleString(Kross::Api::List::Ptr args)
@@ -404,7 +403,7 @@ Kross::Api::Object::Ptr KexiDBConnection::setAutoCommit(Kross::Api::List::Ptr ar
 Kross::Api::Object::Ptr KexiDBConnection::beginTransaction(Kross::Api::List::Ptr)
 {
     ::KexiDB::Transaction t = connection()->beginTransaction();
-    return new KexiDBTransaction(this, t);
+    return new KexiDBTransaction(t);
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::commitTransaction(Kross::Api::List::Ptr args)
@@ -425,7 +424,7 @@ Kross::Api::Object::Ptr KexiDBConnection::rollbackTransaction(Kross::Api::List::
 
 Kross::Api::Object::Ptr KexiDBConnection::defaultTransaction(Kross::Api::List::Ptr)
 {
-    return new KexiDBTransaction(this, connection()->defaultTransaction());
+    return new KexiDBTransaction(connection()->defaultTransaction());
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::setDefaultTransaction(Kross::Api::List::Ptr args)
@@ -442,7 +441,7 @@ Kross::Api::Object::Ptr KexiDBConnection::transactions(Kross::Api::List::Ptr)
     QValueList< ::KexiDB::Transaction > list = connection()->transactions();
     QValueList< ::KexiDB::Transaction >::Iterator it, end( list.end() );
     for( it = list.begin(); it != end; ++it)
-        l.append( new KexiDBTransaction(this, *it) );
+        l.append( new KexiDBTransaction(*it) );
     return new Kross::Api::List(l);
 }
 

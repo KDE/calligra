@@ -21,6 +21,7 @@
 #define KROSS_KEXIDB_KEXIDBCONNECTION_H
 
 #include <qstring.h>
+#include <ksharedptr.h>
 
 #include <api/object.h>
 #include <api/variant.h>
@@ -70,7 +71,8 @@ namespace Kross { namespace KexiDB {
             ::KexiDB::Connection* connection();
             ::KexiDB::Connection* m_connection;
 
-            KexiDBConnectionData* m_connectiondata;
+            KSharedPtr<KexiDBConnectionData> m_connectiondata;
+            KSharedPtr<KexiDBDriver> m_driver;
 
             /// Initialize the class instance.
             void initialize();
