@@ -50,7 +50,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            EventSignal(const QString& name, Object::Ptr parent, QObject* sender, QCString signal);
+            EventSignal(const QString& name, QObject* sender, QCString signal);
 
             /**
              * Destructor.

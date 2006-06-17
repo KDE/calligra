@@ -48,13 +48,11 @@ namespace Kross { namespace Api {
              * \param name The name of the EventSlot. The EventSlot
              *       will be accessible by that unique name via
              *       it's parent.
-             * \param parent The parent object this EventSlot is
-             *       child of.
              * \param receiver The receiver of the event.
              * \param slot The slot of the receiver which this
              *       EventSlot points to.
              */
-            EventSlot(const QString& name, Object::Ptr parent, QObject* receiver, QCString slot);
+            EventSlot(const QString& name, QObject* receiver, QCString slot);
 
             /**
              * Destructor.

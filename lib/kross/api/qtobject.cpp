@@ -35,8 +35,8 @@
 
 using namespace Kross::Api;
 
-QtObject::QtObject(Object::Ptr parent, QObject* object, const QString& name)
-    : Kross::Api::Class<QtObject>(name.isEmpty() ? object->name() : name, parent)
+QtObject::QtObject(QObject* object, const QString& name)
+    : Kross::Api::Class<QtObject>(name.isEmpty() ? object->name() : name)
     , m_object(object)
 {
     // Walk through the signals and slots the QObject has
@@ -45,13 +45,13 @@ QtObject::QtObject(Object::Ptr parent, QObject* object, const QString& name)
     QStrList slotnames = m_object->metaObject()->slotNames(false);
     for(char* c = slotnames.first(); c; c = slotnames.next()) {
         QCString s = c;
-        addChild( new EventSlot(s, this, object, s) );
+        addChild( new EventSlot(s, object, s) );
     }
 
     QStrList signalnames = m_object->metaObject()->signalNames(false);
     for(char* c = signalnames.first(); c; c = signalnames.next()) {
         QCString s = c;
-        addChild( new EventSignal(s, this, object, s) );
+        addChild( new EventSignal(s, object, s) );
     }
 
     // Add functions to wrap QObject methods into callable

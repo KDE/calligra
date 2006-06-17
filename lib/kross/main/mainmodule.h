@@ -95,12 +95,14 @@ namespace Kross { namespace Api {
              */
             void setException(Exception::Ptr exception);
 
+#if 0
             /**
              * Returns if the defined child is avaible.
              *
              * \return true if child exists else false.
              */
             bool hasChild(const QString& name) const;
+#endif
 
             /**
              * Add a Qt signal to the \a Module by creating

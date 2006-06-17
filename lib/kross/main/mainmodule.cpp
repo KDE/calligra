@@ -68,14 +68,16 @@ void MainModule::setException(Exception::Ptr exception)
     d->exception = exception;
 }
 
+#if 0
 bool MainModule::hasChild(const QString& name) const
 {
-    return Object::hasChild(name);
+    return Callable::hasChild(name);
 }
+#endif
 
 EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCString signal)
 {
-    EventSignal* event = new EventSignal(name, this, sender, signal);
+    EventSignal* event = new EventSignal(name, sender, signal);
     if(! addChild(event)) {
         krosswarning( QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) );
         return 0;
@@ -85,10 +87,9 @@ EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCS
 
 EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCString slot)
 {
-    EventSlot* event = new EventSlot(name, this, receiver, slot);
+    EventSlot* event = new EventSlot(name, receiver, slot);
     if(! addChild(event)) {
         krosswarning( QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) );
-        delete event;
         return 0;
     }
     return event;
@@ -96,10 +97,9 @@ EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCStr
 
 QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
-    QtObject* qtobject = new QtObject(this, object, name);
+    QtObject* qtobject = new QtObject(object, name);
     if(! addChild(qtobject)) {
         krosswarning( QString("Failed to add QObject name='%1'").arg(object->name()) );
-        delete qtobject;
         return 0;
     }
     return qtobject;
@@ -107,10 +107,9 @@ QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 
 EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
-    EventAction* event = new EventAction(name, this, action);
+    EventAction* event = new EventAction(name, action);
     if(! addChild(event)) {
         krosswarning( QString("Failed to add KAction name='%1'").arg(action->name()) );
-        delete event;
         return 0;
     }
     return event;

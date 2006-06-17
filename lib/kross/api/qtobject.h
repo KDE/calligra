@@ -54,15 +54,13 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
-             * \param parent The \a QObject instance this
-             *        class is children of.
              * \param object The \a QObject instance this
              *        class wraps.
              * \param name The unique name this \a QtObject
              *       instance has. If not defined then the
              *       \a QObject::name() will be used.
              */
-            QtObject(Object::Ptr parent, QObject* object, const QString& name = QString::null);
+            QtObject(QObject* object, const QString& name = QString::null);
 
             /**
              * Destructor.

@@ -27,8 +27,8 @@
 
 using namespace Kross::Api;
 
-EventSlot::EventSlot(const QString& name, Object::Ptr parent, QObject* receiver, QCString slot)
-    : Event<EventSlot>(name, parent)
+EventSlot::EventSlot(const QString& name, QObject* receiver, QCString slot)
+    : Event<EventSlot>(name)
     , m_receiver(receiver)
     , m_slot(slot) //QObject::normalizeSignalSlot(slot)
 {
@@ -46,7 +46,7 @@ const QString EventSlot::getClassName() const
 Object::Ptr EventSlot::call(const QString& /*name*/, List::Ptr arguments)
 {
 #ifdef KROSS_API_EVENTSLOT_CALL_DEBUG
-    krossdebug( QString("EventSlot::call() name=%1 m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) );
+    krossdebug( QString("EventSlot::call() m_slot=%1 arguments=%2").arg(m_slot).arg(arguments->toString()) );
 #endif
 
     QString n = m_slot; //TODO name; //Variant::toString(args->item(0));

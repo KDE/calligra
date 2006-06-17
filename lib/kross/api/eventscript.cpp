@@ -24,8 +24,8 @@
 
 using namespace Kross::Api;
 
-EventScript::EventScript(const QString& name, Object::Ptr parent)
-    : Event<EventScript>(name, parent)
+EventScript::EventScript(const QString& name)
+    : Event<EventScript>(name)
 {
 }
 
