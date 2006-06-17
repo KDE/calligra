@@ -43,7 +43,7 @@ extern "C"
 
 using namespace Kross::KSpreadCore;
 
-KSpreadCoreFactory::KSpreadCoreFactory() : Kross::Api::Event<KSpreadCoreFactory>("KSpreadCoreFactory", 0)
+KSpreadCoreFactory::KSpreadCoreFactory() : Kross::Api::Event<KSpreadCoreFactory>("KSpreadCoreFactory")
 {
     addFunction("newRGBColor", &KSpreadCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
 }
@@ -65,11 +65,11 @@ KSpreadCoreModule::KSpreadCoreModule(Kross::Api::Manager* manager)
     }
 
     // Wrap doc
-    Kross::Api::Object::Ptr kspreaddocument = ((Kross::Api::Object*)manager)->getChild("KSpreadDocument");
+    Kross::Api::Object::Ptr kspreaddocument = manager->getChild("KSpreadDocument");
     if(kspreaddocument) {
-        Kross::Api::QtObject* kspreaddocumentqt = (Kross::Api::QtObject*)( kspreaddocument.data() );
+        Kross::Api::QtObject* kspreaddocumentqt = dynamic_cast< Kross::Api::QtObject* >( kspreaddocument.data() );
         if(kspreaddocumentqt) {
-            KSpread::Doc* document = (::KSpread::Doc*)( kspreaddocumentqt->getObject() );
+            KSpread::Doc* document = dynamic_cast< ::KSpread::Doc* >( kspreaddocumentqt->getObject() );
             if(document) {
                 addChild( new Doc(document) );
             } else {

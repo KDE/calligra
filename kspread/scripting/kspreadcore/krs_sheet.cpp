@@ -28,7 +28,7 @@
 
 namespace Kross { namespace KSpreadCore {
 
-Sheet::Sheet(KSpread::Sheet* sheet, KSpread::Doc *doc) : Kross::Api::Class<Sheet>("KSpreadSheet", 0 ), m_sheet(sheet), m_doc(doc) {
+Sheet::Sheet(KSpread::Sheet* sheet, KSpread::Doc *doc) : Kross::Api::Class<Sheet>("KSpreadSheet"), m_sheet(sheet), m_doc(doc) {
     addFunction("getName", &Sheet::getName);
     addFunction("setName", &Sheet::setName);
     addFunction("cell", &Sheet::cell, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );

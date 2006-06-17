@@ -29,7 +29,7 @@
 
 namespace Kross { namespace KSpreadCore {
 
-Cell::Cell(KSpread::Cell* cell, KSpread::Sheet* sheet, uint col, uint row) : Kross::Api::Class<Cell>("KSpreadCell", 0 ), m_cell(cell), m_sheet(sheet), m_col(col), m_row(row) {
+Cell::Cell(KSpread::Cell* cell, KSpread::Sheet* sheet, uint col, uint row) : Kross::Api::Class<Cell>("KSpreadCell"), m_cell(cell), m_sheet(sheet), m_col(col), m_row(row) {
     addFunction("value", &Cell::value);
     addFunction("text", &Cell::text);
     addFunction("setText", &Cell::setText, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") );
