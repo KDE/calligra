@@ -26,11 +26,10 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBTransaction::KexiDBTransaction(KexiDBConnection* connection, ::KexiDB::Transaction& transaction)
-    : Kross::Api::Class<KexiDBTransaction>("KexiDBTransaction", connection)
+KexiDBTransaction::KexiDBTransaction(::KexiDB::Transaction& transaction)
+    : Kross::Api::Class<KexiDBTransaction>("KexiDBTransaction")
     , m_transaction(transaction)
 {
-    addFunction("connection", &KexiDBTransaction::connection);
     addFunction("isActive", &KexiDBTransaction::isActive);
     addFunction("isNull", &KexiDBTransaction::isNull);
 }
@@ -47,11 +46,6 @@ const QString KexiDBTransaction::getClassName() const
 ::KexiDB::Transaction& KexiDBTransaction::transaction()
 {
     return m_transaction;
-}
-
-Kross::Api::Object::Ptr KexiDBTransaction::connection(Kross::Api::List::Ptr)
-{
-    return Kross::Api::Object::fromObject<KexiDBConnection>( getParent() );
 }
 
 Kross::Api::Object::Ptr KexiDBTransaction::isActive(Kross::Api::List::Ptr)

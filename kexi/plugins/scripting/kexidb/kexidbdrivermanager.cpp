@@ -40,6 +40,8 @@ using namespace Kross::KexiDB;
 KexiDBDriverManager::KexiDBDriverManager()
     : Kross::Api::Class<KexiDBDriverManager>("DriverManager")
 {
+    krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::KexiDBDriverManager()") );
+
     addFunction("driverNames", &KexiDBDriverManager::driverNames);
     addFunction("driver", &KexiDBDriverManager::driver,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
@@ -59,6 +61,7 @@ KexiDBDriverManager::KexiDBDriverManager()
 
 KexiDBDriverManager::~KexiDBDriverManager()
 {
+    krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::~KexiDBDriverManager()") );
 }
 
 const QString KexiDBDriverManager::getClassName() const

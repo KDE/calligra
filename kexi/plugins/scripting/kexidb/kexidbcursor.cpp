@@ -24,8 +24,8 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBCursor::KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* cursor)
-    : Kross::Api::Class<KexiDBCursor>("KexiDBCursor", connection)
+KexiDBCursor::KexiDBCursor(::KexiDB::Cursor* cursor)
+    : Kross::Api::Class<KexiDBCursor>("KexiDBCursor")
     , m_cursor(cursor)
 {
     // Opens the cursor.

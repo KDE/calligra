@@ -46,12 +46,10 @@ namespace Kross { namespace KexiDB {
             /**
              * Constructor.
              *
-             * \param connection The parent \a KexiDBConnection
-             *        instance this KexiDBCursor belongs to.
              * \param cursor The \a ::KexiDB::Cursor this class
              *        wraps.
              */
-            KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* cursor);
+            KexiDBCursor(::KexiDB::Cursor* cursor);
 
             /**
              * Destructor.
