@@ -105,8 +105,9 @@ protected:
 /**
  * Class MergeCellCommand implements a command for merging two or more cells
  * into one cell.
+ * \deprecated Use MergeManipulator
  */
-class MergeCellCommand : public KCommand
+class KDE_DEPRECATED MergeCellCommand : public KCommand
 {
 public:
   MergeCellCommand( Cell* cell, int colSpan, int rowSpan );
@@ -127,8 +128,9 @@ protected:
 
 /**
  * Class DissociateCellCommand implements a command for breaking merged cells.
+ * \deprecated Use MergeManipulator
  */
-class DissociateCellCommand : public KCommand
+class KDE_DEPRECATED DissociateCellCommand : public KCommand
 {
 public:
   DissociateCellCommand( Cell* cell );
