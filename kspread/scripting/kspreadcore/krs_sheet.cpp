@@ -29,13 +29,17 @@
 namespace Kross { namespace KSpreadCore {
 
 Sheet::Sheet(KSpread::Sheet* sheet, KSpread::Doc *doc) : Kross::Api::Class<Sheet>("KSpreadSheet"), m_sheet(sheet), m_doc(doc) {
-    addFunction("getName", &Sheet::getName);
-    addFunction("setName", &Sheet::setName);
-    addFunction("cell", &Sheet::cell, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("insertRow", &Sheet::insertRow, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("insertColumn", &Sheet::insertColumn, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("removeRow", &Sheet::removeRow, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("removeColumn", &Sheet::removeColumn, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") );
+
+    this->addFunction0< Kross::Api::Variant >("getName", this, &Sheet::getName);
+    this->addFunction1< void, Kross::Api::Variant >("setName", this, &Sheet::setName);
+
+    this->addFunction2< Cell, Kross::Api::Variant, Kross::Api::Variant >("cell", this, &Sheet::cell);
+
+    this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("insertRow", this, &Sheet::insertRow);
+    this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("insertColumn", this, &Sheet::insertColumn);
+
+    this->addFunction1< void, Kross::Api::Variant >("removeRow", this, &Sheet::removeRow);
+    this->addFunction1< void, Kross::Api::Variant >("removeColumn", this, &Sheet::removeColumn);
 }
 
 Sheet::~Sheet() {
@@ -45,44 +49,36 @@ const QString Sheet::getClassName() const {
     return "Kross::KSpreadCore::Sheet";
 }
 
-Kross::Api::Object::Ptr Sheet::getName(Kross::Api::List::Ptr)
+const QString Sheet::getName() const
 {
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_sheet->sheetName()));
+    return m_sheet->sheetName();
 }
 
-Kross::Api::Object::Ptr Sheet::setName(Kross::Api::List::Ptr args)
+void Sheet::setName(const QString& name)
 {
-    QString name = Kross::Api::Variant::toString(args->item(0));
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_sheet->setSheetName(name)));
+    m_sheet->setSheetName(name);
 }
 
-Kross::Api::Object::Ptr Sheet::cell(Kross::Api::List::Ptr args) {
-    uint col = qMax(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
-    uint row = qMax(uint(1), Kross::Api::Variant::toUInt(args->item(1)));
-
-    return Kross::Api::Object::Ptr(new Cell(m_sheet->cellAt(col,row),m_sheet,col,row));
+Cell* Sheet::cell(uint col, uint row) {
+    uint c = qMax(uint(1), col);
+    uint r = qMax(uint(1), row);
+    return new Cell(m_sheet->cellAt(c,r),m_sheet,c,r);
 }
 
-Kross::Api::Object::Ptr Sheet::insertRow(Kross::Api::List::Ptr args) {
-    uint row = Kross::Api::Variant::toUInt(args->item(0));
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_sheet->insertRow(row)));
+bool Sheet::insertRow(uint row) {
+    return m_sheet->insertRow(row);
 }
 
-Kross::Api::Object::Ptr Sheet::insertColumn(Kross::Api::List::Ptr args) {
-    uint col = Kross::Api::Variant::toUInt(args->item(0));
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_sheet->insertColumn(col)));
+bool Sheet::insertColumn(uint col) {
+    return m_sheet->insertColumn(col);
 }
 
-Kross::Api::Object::Ptr Sheet::removeRow(Kross::Api::List::Ptr args) {
-    uint row = qMax(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
-    m_sheet->removeRow(row);
-    return Kross::Api::Object::Ptr();
+void Sheet::removeRow(uint row) {
+    m_sheet->removeRow( qMax(uint(1), row) );
 }
 
-Kross::Api::Object::Ptr Sheet::removeColumn(Kross::Api::List::Ptr args) {
-    uint col = qMax(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
-    m_sheet->removeColumn(col);
-    return Kross::Api::Object::Ptr();
+void Sheet::removeColumn(uint col) {
+    m_sheet->removeColumn( qMax(uint(1), col) );
 }
 
 }

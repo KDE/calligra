@@ -45,7 +45,7 @@ using namespace Kross::KSpreadCore;
 
 KSpreadCoreFactory::KSpreadCoreFactory() : Kross::Api::Event<KSpreadCoreFactory>("KSpreadCoreFactory")
 {
-    addFunction("newRGBColor", &KSpreadCoreFactory::newRGBColor, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") << Kross::Api::Argument("Kross::Api::Variant::UInt") );
+    addFunction("newRGBColor", &KSpreadCoreFactory::newRGBColor);
 }
 
 Kross::Api::Object::Ptr KSpreadCoreFactory::newRGBColor(Kross::Api::List::Ptr args)

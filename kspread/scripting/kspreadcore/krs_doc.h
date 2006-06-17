@@ -26,6 +26,8 @@
 
 namespace Kross { namespace KSpreadCore {
 
+class Sheet;
+
 class Doc : public Kross::Api::Class<Doc>
 {
     public:
@@ -42,7 +44,7 @@ class Doc : public Kross::Api::Class<Doc>
 	 * sheet = doc.currentSheet()
 	 * @endcode
 	 */
-        Kross::Api::Object::Ptr currentSheet(Kross::Api::List::Ptr);
+        Sheet* currentSheet();
 	/**
 	 * This function return a Sheet by name.
 	 *
@@ -52,12 +54,12 @@ class Doc : public Kross::Api::Class<Doc>
 	 * sheet = doc.sheetByName("foosheet")
 	 * @endcode
 	 */
-        Kross::Api::Object::Ptr sheetByName(Kross::Api::List::Ptr);
+        Sheet* sheetByName(const QString& name);
 	/**
 	 * This function returns an array with the sheet names
 	 * Example (in Ruby) : TODO
 	 */
-        Kross::Api::Object::Ptr sheetNames(Kross::Api::List::Ptr);
+        QStringList sheetNames();
     private:
 	KSpread::Doc* m_doc;
 };

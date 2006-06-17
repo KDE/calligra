@@ -43,19 +43,14 @@ KexiDBDriverManager::KexiDBDriverManager()
     krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::KexiDBDriverManager()") );
 
     addFunction("driverNames", &KexiDBDriverManager::driverNames);
-    addFunction("driver", &KexiDBDriverManager::driver,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("lookupByMime", &KexiDBDriverManager::lookupByMime,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("mimeForFile", &KexiDBDriverManager::mimeForFile,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("driver", &KexiDBDriverManager::driver);
+    addFunction("lookupByMime", &KexiDBDriverManager::lookupByMime);
+    addFunction("mimeForFile", &KexiDBDriverManager::mimeForFile);
 
     addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData);
-    addFunction("createConnectionDataByFile", &KexiDBDriverManager::createConnectionDataByFile,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("createConnectionDataByFile", &KexiDBDriverManager::createConnectionDataByFile);
     addFunction("field", &KexiDBDriverManager::field);
-    addFunction("tableSchema", &KexiDBDriverManager::tableSchema,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("tableSchema", &KexiDBDriverManager::tableSchema);
     addFunction("querySchema", &KexiDBDriverManager::querySchema);
 }
 

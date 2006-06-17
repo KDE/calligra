@@ -59,6 +59,35 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
+            /// Opens the cursor.
+            bool open();
+            /// Returns true if the cursor is opened else false.
+            bool isOpened();
+            /// Closes and then opens again the same cursor.
+            bool reopen();
+            /// Closes previously opened cursor.
+            bool close();
+            /// Moves current position to the first record and retrieves it.
+            bool moveFirst();
+            /// Moves current position to the last record and retrieves it.
+            bool moveLast();
+            /// Moves current position to the previous record and retrieves it.
+            bool movePrev();
+            /// Moves current position to the next record and retrieves it.
+            bool moveNext();
+            /// Returns true if current position is before first record.
+            bool bof();
+            /// Returns true if current position is after last record.
+            bool eof();
+            /// Returns current internal position of the cursor's query. Records 
+            /// are numbered from 0; the value -1 means that the cursor does not 
+            /// point to a valid record.
+            Q_LLONG at();
+            /// Returns the number of fields available for this cursor.
+            uint fieldCount();
+            /// Returns the value stored in the passed column number (counting from 0).
+            QVariant value(uint index);
+
         private:
             ::KexiDB::Cursor* m_cursor;
     };

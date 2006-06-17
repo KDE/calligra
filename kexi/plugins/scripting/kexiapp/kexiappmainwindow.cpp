@@ -55,11 +55,11 @@ KexiAppMainWindow::KexiAppMainWindow(KexiMainWindow* mainwindow)
 {
     d->mainwindow = mainwindow;
 
-    addFunction("isConnected", &KexiAppMainWindow::isConnected);
-    addFunction("getConnection", &KexiAppMainWindow::getConnection);
+    this->addFunction0<Kross::Api::Variant>("isConnected", this, &KexiAppMainWindow::isConnected);
+    this->addFunction0<Kross::Api::Object>("getConnection", this, &KexiAppMainWindow::getConnection);
 
-    addFunction("getPartItems", &KexiAppMainWindow::getPartItems);
-    addFunction("openPartItem", &KexiAppMainWindow::openPartItem);
+    this->addFunction1<Kross::Api::List, Kross::Api::Variant>("getPartItems", this, &KexiAppMainWindow::getPartItems);
+    this->addFunction1<Kross::Api::Variant, KexiAppPartItem>("openPartItem", this, &KexiAppMainWindow::openPartItem);
 
     //addFunction("hasObject", &KexiAppMainWindow::hasObject);
     //addFunction("getObject", &KexiAppMainWindow::getObject);
@@ -78,12 +78,12 @@ const QString KexiAppMainWindow::getClassName() const
     return "Kross::KexiApp::KexiAppMainWindow";
 }
 
-Kross::Api::Object::Ptr KexiAppMainWindow::isConnected(Kross::Api::List::Ptr)
+bool KexiAppMainWindow::isConnected()
 {
-    return new Kross::Api::Variant( QVariant(d->project()->isConnected(), 0) );
+    return d->project()->isConnected();
 }
 
-Kross::Api::Object::Ptr KexiAppMainWindow::getConnection(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr KexiAppMainWindow::getConnection()
 {
     ::KexiDB::Connection* connection = d->project()->dbConnection();
     if(! connection)
@@ -94,21 +94,19 @@ Kross::Api::Object::Ptr KexiAppMainWindow::getConnection(Kross::Api::List::Ptr)
     return module->get("KexiDBConnection", connection);
 }
 
-Kross::Api::Object::Ptr KexiAppMainWindow::getPartItems(Kross::Api::List::Ptr args)
+Kross::Api::List* KexiAppMainWindow::getPartItems(const QString& mimetype)
 {
-    QString mimetype = Kross::Api::Variant::toString(args->item(0));
     if(mimetype.isNull()) return 0; // just to be sure...
     KexiPart::ItemDict* items = d->project()->itemsForMimeType( mimetype.latin1() );
     if(! items) return 0;
-    return new Kross::Api::ListT<Kross::KexiApp::KexiAppPartItem, ::KexiPart::Item>( *items );
+    return new Kross::Api::ListT<KexiAppPartItem>( *items );
 }
 
-Kross::Api::Object::Ptr KexiAppMainWindow::openPartItem(Kross::Api::List::Ptr args)
+bool KexiAppMainWindow::openPartItem(KexiAppPartItem* partitem)
 {
-    KexiAppPartItem* partitem = Kross::Api::Object::fromObject<KexiAppPartItem>(args->item(0));
     bool openingCancelled;
-    KexiDialogBase* dialog = partitem ? d->mainwindow->openObject( partitem->item(),
-        Kexi::DataViewMode, openingCancelled ) : 0;
-    return new Kross::Api::Variant( QVariant(dialog != 0, 0) );
+    KexiDialogBase* dialog = partitem
+        ? d->mainwindow->openObject(partitem->item(), Kexi::DataViewMode, openingCancelled)
+        : 0;
+    return (dialog != 0 && ! openingCancelled);
 }
-

@@ -28,59 +28,19 @@ KexiDBCursor::KexiDBCursor(::KexiDB::Cursor* cursor)
     : Kross::Api::Class<KexiDBCursor>("KexiDBCursor")
     , m_cursor(cursor)
 {
-    // Opens the cursor.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("open", m_cursor, &::KexiDB::Cursor::open );
-
-    // Returns true if the cursor is opened else false.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("isOpened", m_cursor, &::KexiDB::Cursor::isOpened );
-
-    // Closes and then opens again the same cursor.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("reopen", m_cursor, &::KexiDB::Cursor::reopen );
-
-    // Closes previously opened cursor.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("close", m_cursor, &::KexiDB::Cursor::close );
-
-    // Moves current position to the first record and retrieves it.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("moveFirst", m_cursor, &::KexiDB::Cursor::moveFirst );
-
-    // Moves current position to the last record and retrieves it.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("moveLast", m_cursor, &::KexiDB::Cursor::moveLast );
-
-    // Moves current position to the previous record and retrieves it.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("movePrev", m_cursor, &::KexiDB::Cursor::movePrev );
-
-    // Moves current position to the next record and retrieves it.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("moveNext", m_cursor, &::KexiDB::Cursor::moveNext );
-
-    // Returns true if current position is before first record.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("bof", m_cursor, &::KexiDB::Cursor::bof );
-
-    // Returns true if current position is after last record.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
-        ("eof", m_cursor, &::KexiDB::Cursor::eof );
-
-    // Returns current internal position of the cursor's query. Records 
-    // are numbered from 0; the value -1 means that the cursor does not 
-    // point to a valid record.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,qint64> >
-        ("at", m_cursor, &::KexiDB::Cursor::at );
-
-    // Returns the number of fields available for this cursor.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,uint> >
-        ("fieldCount", m_cursor, &::KexiDB::Cursor::fieldCount );
-
-    // Returns the value stored in the passed column number (counting from 0).
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QVariant>, Kross::Api::ProxyValue<Kross::Api::Variant,uint> >
-        ("value", m_cursor, &::KexiDB::Cursor::value );
+    this->addFunction0<Kross::Api::Variant>("open", this, &KexiDBCursor::open );
+    this->addFunction0<Kross::Api::Variant>("isOpened", this, &KexiDBCursor::isOpened );
+    this->addFunction0<Kross::Api::Variant>("reopen", this, &KexiDBCursor::reopen );
+    this->addFunction0<Kross::Api::Variant>("close", this, &KexiDBCursor::close );
+    this->addFunction0<Kross::Api::Variant>("moveFirst", this, &KexiDBCursor::moveFirst );
+    this->addFunction0<Kross::Api::Variant>("moveLast", this, &KexiDBCursor::moveLast );
+    this->addFunction0<Kross::Api::Variant>("movePrev", this, &KexiDBCursor::movePrev );
+    this->addFunction0<Kross::Api::Variant>("moveNext", this, &KexiDBCursor::moveNext );
+    this->addFunction0<Kross::Api::Variant>("bof", this, &KexiDBCursor::bof );
+    this->addFunction0<Kross::Api::Variant>("eof", this, &KexiDBCursor::eof );
+    this->addFunction0<Kross::Api::Variant>("at", this, &KexiDBCursor::at );
+    this->addFunction0<Kross::Api::Variant>("fieldCount", this, &KexiDBCursor::fieldCount );
+    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("value", this, &KexiDBCursor::value );
 }
 
 KexiDBCursor::~KexiDBCursor()
@@ -94,3 +54,16 @@ const QString KexiDBCursor::getClassName() const
     return "Kross::KexiDB::KexiDBCursor";
 }
 
+bool KexiDBCursor::open() { return m_cursor->open(); }
+bool KexiDBCursor::isOpened() { return m_cursor->isOpened(); }
+bool KexiDBCursor::reopen() { return m_cursor->reopen(); }
+bool KexiDBCursor::close() { return m_cursor->close(); }
+bool KexiDBCursor::moveFirst() { return m_cursor->moveFirst(); }
+bool KexiDBCursor::moveLast() { return m_cursor->moveLast(); }
+bool KexiDBCursor::movePrev() { return m_cursor->movePrev(); }
+bool KexiDBCursor::moveNext() { return m_cursor->moveNext(); }
+bool KexiDBCursor::bof() { return m_cursor->bof(); }
+bool KexiDBCursor::eof() { return m_cursor->eof(); }
+Q_LLONG KexiDBCursor::at() { return m_cursor->at(); }
+uint KexiDBCursor::fieldCount() { return m_cursor->fieldCount(); }
+QVariant KexiDBCursor::value(uint index) { return m_cursor->value(index); }

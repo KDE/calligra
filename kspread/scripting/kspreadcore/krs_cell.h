@@ -38,16 +38,20 @@ class Cell : public Kross::Api::Class<Cell>
 	/**
 	 * Return the value of the cell
 	 */
-	Kross::Api::Object::Ptr value(Kross::Api::List::Ptr);
+	QVariant value();
 	/**
 	 * Return the text of the cell (the formula if there is one,
 	 * the value otherwise)
 	 */
-	Kross::Api::Object::Ptr text(Kross::Api::List::Ptr);
+	const QString text() const;
 	/**
-	 * Set the text of the cell
+	 * Set the text of the cell. If asString is true, the text
+	 * will be handled as string else we try to parse the
+	 * string to the expected value.
 	 */
-	Kross::Api::Object::Ptr setText(Kross::Api::List::Ptr);
+	bool setText(const QString& text, bool asString = false);
+
+#if 0
 	/**
 	 * Set the text color of the cell
 	 */
@@ -56,6 +60,8 @@ class Cell : public Kross::Api::Class<Cell>
 	 * Set the background color of the cell
 	 */
 	Kross::Api::Object::Ptr setBackgroundColor(Kross::Api::List::Ptr);
+#endif
+
     private:
 	KSpread::Cell* m_cell;
 	KSpread::Sheet* m_sheet;

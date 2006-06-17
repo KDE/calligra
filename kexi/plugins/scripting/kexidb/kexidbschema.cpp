@@ -39,16 +39,13 @@ KexiDBSchema<T>::KexiDBSchema(const QString& name, ::KexiDB::SchemaData* schema,
     , m_fieldlist(fieldlist)
 {
     addFunction("name", &KexiDBSchema<T>::name);
-    addFunction("setName", &KexiDBSchema<T>::setName,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setName", &KexiDBSchema<T>::setName);
 
     addFunction("caption", &KexiDBSchema<T>::caption);
-    addFunction("setCaption", &KexiDBSchema<T>::setCaption,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setCaption", &KexiDBSchema<T>::setCaption);
 
     addFunction("description", &KexiDBSchema<T>::description);
-    addFunction("setDescription", &KexiDBSchema<T>::setDescription,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setDescription", &KexiDBSchema<T>::setDescription);
 
     addFunction("fieldlist", &KexiDBSchema<T>::fieldlist);
 }

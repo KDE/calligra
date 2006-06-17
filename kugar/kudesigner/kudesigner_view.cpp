@@ -255,7 +255,7 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void KudesignerView::populateProperties( Buffer *buf )
 {
-    connect( buf, SIGNAL( propertyChanged() ), m_doc->canvas(), SLOT( changed() ) );
+    connect( buf, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ), m_doc->canvas(), SLOT( changed() ) );
     m_propertyEditor->changeSet( buf );
 }
 

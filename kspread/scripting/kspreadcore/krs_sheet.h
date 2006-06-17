@@ -27,6 +27,8 @@
 
 namespace Kross { namespace KSpreadCore {
 
+class Cell;
+
 class Sheet : public Kross::Api::Class<Sheet>
 {
     public:
@@ -34,34 +36,36 @@ class Sheet : public Kross::Api::Class<Sheet>
         virtual ~Sheet();
         virtual const QString getClassName() const;
     private:
+
 	/**
 	 * Return the name of the sheet
 	 */
-	Kross::Api::Object::Ptr getName(Kross::Api::List::Ptr);
+	const QString getName() const;
 	/**
 	 * Set the name of the sheet
 	 */
-	Kross::Api::Object::Ptr setName(Kross::Api::List::Ptr);
+	void setName(const QString& name);
 	/**
 	 * Return a given cell
 	 */
-	Kross::Api::Object::Ptr cell(Kross::Api::List::Ptr);
+	Cell* cell(uint col, uint row);
 	/**
 	 * Add a new row
 	 */
-	Kross::Api::Object::Ptr insertRow(Kross::Api::List::Ptr);
+	bool insertRow(uint row);
 	/**
 	 * Add a new column
 	 */
-	Kross::Api::Object::Ptr insertColumn(Kross::Api::List::Ptr);
+	bool insertColumn(uint col);
 	/**
 	 * Remove a row
 	 */
-	Kross::Api::Object::Ptr removeRow(Kross::Api::List::Ptr);
+	void removeRow(uint row);
 	/**
 	 * Remove a column
 	 */
-	Kross::Api::Object::Ptr removeColumn(Kross::Api::List::Ptr);
+	void removeColumn(uint col);
+
     private:
 	KSpread::Sheet* m_sheet;
 	KSpread::Doc* m_doc;

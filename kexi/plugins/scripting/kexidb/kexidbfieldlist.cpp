@@ -34,21 +34,14 @@ KexiDBFieldList::KexiDBFieldList(::KexiDB::FieldList* fieldlist)
     , m_fieldlist(fieldlist)
 {
     addFunction("fieldCount", &KexiDBFieldList::fieldCount);
-    addFunction("field", &KexiDBFieldList::field,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant"));
+    addFunction("field", &KexiDBFieldList::field);
     addFunction("fields", &KexiDBFieldList::fields);
-    addFunction("hasField", &KexiDBFieldList::hasField,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"));
+    addFunction("hasField", &KexiDBFieldList::hasField);
     addFunction("names", &KexiDBFieldList::names);
 
-    addFunction("addField", &KexiDBFieldList::addField,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"));
-    addFunction("insertField", &KexiDBFieldList::insertField,
-        Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::Api::Variant::UInt")
-            << Kross::Api::Argument("Kross::KexiDB::KexiDBField"));
-    addFunction("removeField", &KexiDBFieldList::removeField,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"));
+    addFunction("addField", &KexiDBFieldList::addField);
+    addFunction("insertField", &KexiDBFieldList::insertField);
+    addFunction("removeField", &KexiDBFieldList::removeField);
     addFunction("clear", &KexiDBFieldList::clear);
     addFunction("setFields", &KexiDBFieldList::setFields);
 

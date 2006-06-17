@@ -30,11 +30,14 @@
 namespace Kross { namespace KSpreadCore {
 
 Cell::Cell(KSpread::Cell* cell, KSpread::Sheet* sheet, uint col, uint row) : Kross::Api::Class<Cell>("KSpreadCell"), m_cell(cell), m_sheet(sheet), m_col(col), m_row(row) {
-    addFunction("value", &Cell::value);
-    addFunction("text", &Cell::text);
-    addFunction("setText", &Cell::setText, Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant") );
-    addFunction("setTextColor", &Cell::setTextColor, Kross::Api::ArgumentList() << Kross::Api::Argument("KSpreadColor") );
-    addFunction("setBackgroundColor", &Cell::setBackgroundColor, Kross::Api::ArgumentList() << Kross::Api::Argument("KSpreadColor") );
+
+    this->addFunction0< Kross::Api::Variant >("value", this, &Cell::value);
+    this->addFunction0< Kross::Api::Variant >("text", this, &Cell::text);
+    this->addFunction1< void, Kross::Api::Variant >("setText", this, &Cell::setText);
+
+    //TODO
+    //this->addFunction0< void, Kross::Api::Variant >("setTextColor", this, &Cell::setTextColor);
+    //this->addFunction0< void, Kross::Api::Variant >("setBackgroundColor", this, &Cell::setBackgroundColor);
 }
 
 Cell::~Cell() {
@@ -44,19 +47,19 @@ const QString Cell::getClassName() const {
     return "Kross::KSpreadCore::Cell";
 }
 
-Kross::Api::Object::Ptr Cell::value(Kross::Api::List::Ptr) {
+QVariant Cell::value() {
     KSpread::Value value = m_cell->value();
     switch(value.type()) {
 	case KSpread::Value::Empty:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant(QVariant(), "empty"));
+            return QVariant();
 	case KSpread::Value::Boolean:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant(value.asBoolean()));
+            return QVariant(value.asBoolean(),0);
 	case KSpread::Value::Integer:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant(static_cast<qint64>(value.asInteger())));
+            return static_cast<qint64>(value.asInteger());
 	case KSpread::Value::Float:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant((float)value.asFloat()));
+            return (float)value.asFloat();
 	case KSpread::Value::String:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant(value.asString()));
+            return value.asString();
 	case KSpread::Value::Array:
 	    //FIXME
 	    /*
@@ -75,33 +78,28 @@ Kross::Api::Object::Ptr Cell::value(Kross::Api::List::Ptr) {
 	    */
 	case KSpread::Value::CellRange:
 	    //FIXME: not yet used
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant(QVariant(), "cellrange"));
+            return QVariant();
 	case KSpread::Value::Error:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant(QVariant(), "error"));
+            return QVariant();
     }
-    return Kross::Api::Object::Ptr();
+    return QVariant();
 }
 
-Kross::Api::Object::Ptr Cell::text(Kross::Api::List::Ptr) {
-    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_cell->text()));
+const QString Cell::text() const {
+    return m_cell->text();
 }
 
-Kross::Api::Object::Ptr Cell::setText(Kross::Api::List::Ptr args) {
-    QString text = Kross::Api::Variant::toString(args->item(0));
-    bool asString = false;
+bool Cell::setText(const QString& text, bool asString) {
+
     //FIXME: there is some problem with asString parameter, when it's set
     //to true KSpread says: ASSERT: "f" in dependencies.cc (621)
     //kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
-    if(args->count() > 1) {
-    	asString= Kross::Api::Variant::toBool(args->item(1));
-	kDebug() << "asString" << endl;
-    }
 
     KSpread::ProtectedCheck prot;
     prot.setSheet (m_sheet);
     prot.add (QPoint (m_col, m_row));
     if (prot.check())
-        return Kross::Api::Object::Ptr(new Kross::Api::Variant(1));
+        return false;
 
     KSpread::DataManipulator *dm = new KSpread::DataManipulator ();
     dm->setSheet (m_sheet);
@@ -110,26 +108,22 @@ Kross::Api::Object::Ptr Cell::setText(Kross::Api::List::Ptr args) {
     dm->add (QPoint (m_col, m_row));
     dm->execute ();
 
-    return Kross::Api::Object::Ptr();
+    return true;
 }
 
+#if 0
 Kross::Api::Object::Ptr Cell::setTextColor(Kross::Api::List::Ptr args) {
-#warning "kde4: port it"
-#if 0		
-		Color* c = (Color*)args->item(0).data();
+    Color* c = (Color*)args->item(0).data();
     m_cell->format()->setTextColor(c->toQColor());
-#endif
     return Kross::Api::Object::Ptr();
 }
 
 Kross::Api::Object::Ptr Cell::setBackgroundColor(Kross::Api::List::Ptr args) {
-#warning "kde4: port it"
-#if 0
-	Color* c = (Color*)args->item(0).data();
+    Color* c = (Color*)args->item(0).data();
     m_cell->format()->setBgColor(c->toQColor());
-#endif    
-	return Kross::Api::Object::Ptr();
+    return Kross::Api::Object::Ptr();
 }
+#endif
 
 }
 }

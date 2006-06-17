@@ -30,28 +30,28 @@ using namespace Kross::KexiApp;
 KexiAppPartItem::KexiAppPartItem(KexiPart::Item* item)
     : Kross::Api::Class<KexiAppPartItem>("KexiAppPartItem")
 {
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,int> >
+    this->addFunction0< Kross::Api::ProxyValue<Kross::Api::Variant,int> >
         ("identifier", item, &::KexiPart::Item::identifier );
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,int> >
+    this->addFunction1< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,int> >
         ("setIdentifier", item, &::KexiPart::Item::setIdentifier );
 
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,Q3CString> >
+    this->addFunction0< Kross::Api::ProxyValue<Kross::Api::Variant,Q3CString> >
         ("mimeType", item, &::KexiPart::Item::mimeType );
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,Q3CString> >
+    this->addFunction1< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,Q3CString> >
         ("setMimeType", item, &::KexiPart::Item::setMimeType );
 
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
+    this->addFunction0< Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
         ("name", item, &::KexiPart::Item::name );
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
+    this->addFunction1< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
         ("setName", item, &::KexiPart::Item::setName );
 
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
+    this->addFunction0< Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
         ("caption", item, &::KexiPart::Item::caption );
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
+    this->addFunction1< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
         ("setCaption", item, &::KexiPart::Item::setCaption );
 
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
+    this->addFunction0< Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
         ("description", item, &::KexiPart::Item::description );
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
+    this->addFunction1< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
         ("setDescription", item, &::KexiPart::Item::setDescription );
 }

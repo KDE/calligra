@@ -29,9 +29,9 @@
 namespace Kross { namespace KSpreadCore {
 
 Doc::Doc(KSpread::Doc* doc) : Kross::Api::Class<Doc>("KSpreadDocument"), m_doc(doc) {
-    addFunction("currentSheet", &Doc::currentSheet);
-    addFunction("sheetByName", &Doc::sheetByName);
-    addFunction("sheetNames", &Doc::sheetNames);
+    this->addFunction0< Sheet >("getName", this, &Doc::currentSheet);
+    this->addFunction1< Sheet, Kross::Api::Variant >("sheetByName", this, &Doc::sheetByName);
+    this->addFunction0< Kross::Api::Variant >("sheetNames", this, &Doc::sheetNames);
 }
 
 Doc::~Doc() {
@@ -42,30 +42,29 @@ const QString Doc::getClassName() const {
     return "Kross::KSpreadCore::Doc";
 }
 
-Kross::Api::Object::Ptr Doc::currentSheet(Kross::Api::List::Ptr)
+Sheet* Doc::currentSheet()
 {
-    return Kross::Api::Object::Ptr(new Sheet(m_doc->displaySheet(), m_doc));
+    return new Sheet(m_doc->displaySheet(), m_doc);
 }
 
-Kross::Api::Object::Ptr Doc::sheetByName(Kross::Api::List::Ptr args)
+Sheet* Doc::sheetByName(const QString& name)
 {
-    QString name = Kross::Api::Variant::toString(args->item(0));
     foreach ( KSpread::Sheet* sheet, m_doc->map()->sheetList() )
     {
         if(sheet->sheetName() == name)
-            return Kross::Api::Object::Ptr(new Sheet(sheet, m_doc));
+            return new Sheet(sheet, m_doc);
     }
-    return Kross::Api::Object::Ptr();
+    return 0;
 }
 
-Kross::Api::Object::Ptr Doc::sheetNames(Kross::Api::List::Ptr)
+QStringList Doc::sheetNames()
 {
-    Kross::Api::List* array = new Kross::Api::List;
+    QStringList names;
     foreach ( KSpread::Sheet* sheet, m_doc->map()->sheetList() )
     {
-        array->append(Kross::Api::Object::Ptr(new Kross::Api::Variant(sheet->sheetName())));
+        names.append( sheet->sheetName() );
     }
-    return Kross::Api::Object::Ptr(array);
+    return names;
 }
 
 }
