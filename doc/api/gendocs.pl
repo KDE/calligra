@@ -350,14 +350,24 @@ sub parseErrorLog() {
     my $section = shift(@_);
     $undocumented=0;
     $error=0;
-    my $liOpen=0;
     open INPUT,"$dir/$logfile" || die "Can't read logfile '$dir/$logfile'\n";
     open UNDOC, ">$dir/undocumented.html";
     print UNDOC "<html><body><h2>$section: undocumented constructs found</h2><ul>Please consider typing some docs, or adding a \\internal tag to the headerfile as soon as you find out what these items do or mean. Thanks!\n";
     open ERRORS, ">$dir/errors.html";
+    $inParameters=0;
     foreach $line (<INPUT>) {
-        if($line=~/^\S*$/) { next; }
+        if($line=~/^\S*$/) {
+            if($inParameters == 1) {
+                print UNDOC "</ul></li>\n";
+                $inParameters = 0;
+            }
+            next;
+        }
         chomp($line);
+        if($inParameters == 1) {
+            print UNDOC "<li>$line</li>\n";
+            next;
+        }
         if($line=~m/^(.*):(\d+): (.*)$/) {
             my $file=$1;
             my $lineNumber=$2;
@@ -372,9 +382,10 @@ sub parseErrorLog() {
                 }
                 next;
             }
-            if($message=~m/Warning: The following parameters of (.*) are not documented:(.*)/) {
+            if($message=~m/Warning: The following parameters of (.*) are not documented:/) {
+                $inParameters = 1;
                 $undocumented++;
-                print UNDOC "<li>$lineNumber: parameters $1 of $2</li>\n";
+                print UNDOC "<li>$lineNumber: parameters of $1<ul>\n";
                 next;
             }
             if($message=~m/Warning: argument `(.*)' of command \@param is not found in the argument list of /) {
@@ -387,9 +398,7 @@ sub parseErrorLog() {
                 # ignore.
                 next;
             }
-            if($liOpen==1) {
-                print ERRORS "<\li>\n";
-            }
+            $error++;
             print ERRORS &printFile(2, $file);
             print ERRORS "<li>$lineNumber: $message\n";
             next;
