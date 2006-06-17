@@ -28,19 +28,19 @@ KexiDBCursor::KexiDBCursor(::KexiDB::Cursor* cursor)
     : Kross::Api::Class<KexiDBCursor>("KexiDBCursor")
     , m_cursor(cursor)
 {
-    this->addProxyFunction<Kross::Api::Variant>("open", this, &KexiDBCursor::open );
-    this->addProxyFunction<Kross::Api::Variant>("isOpened", this, &KexiDBCursor::isOpened );
-    this->addProxyFunction<Kross::Api::Variant>("reopen", this, &KexiDBCursor::reopen );
-    this->addProxyFunction<Kross::Api::Variant>("close", this, &KexiDBCursor::close );
-    this->addProxyFunction<Kross::Api::Variant>("moveFirst", this, &KexiDBCursor::moveFirst );
-    this->addProxyFunction<Kross::Api::Variant>("moveLast", this, &KexiDBCursor::moveLast );
-    this->addProxyFunction<Kross::Api::Variant>("movePrev", this, &KexiDBCursor::movePrev );
-    this->addProxyFunction<Kross::Api::Variant>("moveNext", this, &KexiDBCursor::moveNext );
-    this->addProxyFunction<Kross::Api::Variant>("bof", this, &KexiDBCursor::bof );
-    this->addProxyFunction<Kross::Api::Variant>("eof", this, &KexiDBCursor::eof );
-    this->addProxyFunction<Kross::Api::Variant>("at", this, &KexiDBCursor::at );
-    this->addProxyFunction<Kross::Api::Variant>("fieldCount", this, &KexiDBCursor::fieldCount );
-    this->addProxyFunction<Kross::Api::Variant, Kross::Api::Variant>("value", this, &KexiDBCursor::value );
+    this->addFunction0<Kross::Api::Variant>("open", this, &KexiDBCursor::open );
+    this->addFunction0<Kross::Api::Variant>("isOpened", this, &KexiDBCursor::isOpened );
+    this->addFunction0<Kross::Api::Variant>("reopen", this, &KexiDBCursor::reopen );
+    this->addFunction0<Kross::Api::Variant>("close", this, &KexiDBCursor::close );
+    this->addFunction0<Kross::Api::Variant>("moveFirst", this, &KexiDBCursor::moveFirst );
+    this->addFunction0<Kross::Api::Variant>("moveLast", this, &KexiDBCursor::moveLast );
+    this->addFunction0<Kross::Api::Variant>("movePrev", this, &KexiDBCursor::movePrev );
+    this->addFunction0<Kross::Api::Variant>("moveNext", this, &KexiDBCursor::moveNext );
+    this->addFunction0<Kross::Api::Variant>("bof", this, &KexiDBCursor::bof );
+    this->addFunction0<Kross::Api::Variant>("eof", this, &KexiDBCursor::eof );
+    this->addFunction0<Kross::Api::Variant>("at", this, &KexiDBCursor::at );
+    this->addFunction0<Kross::Api::Variant>("fieldCount", this, &KexiDBCursor::fieldCount );
+    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("value", this, &KexiDBCursor::value );
 }
 
 KexiDBCursor::~KexiDBCursor()

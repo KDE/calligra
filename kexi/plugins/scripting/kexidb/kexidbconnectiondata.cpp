@@ -28,16 +28,13 @@ KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
     , m_data(data)
 {
     addFunction("caption", &KexiDBConnectionData::caption);
-    addFunction("setCaption", &KexiDBConnectionData::setCaption,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setCaption", &KexiDBConnectionData::setCaption);
 
     addFunction("description", &KexiDBConnectionData::description);
-    addFunction("setDescription", &KexiDBConnectionData::setDescription,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setDescription", &KexiDBConnectionData::setDescription);
 
     addFunction("driverName", &KexiDBConnectionData::driverName);
-    addFunction("setDriverName", &KexiDBConnectionData::setDriverName,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setDriverName", &KexiDBConnectionData::setDriverName);
 
     addFunction("localSocketFileUsed", &KexiDBConnectionData::localSocketFileUsed);
     addFunction("setLocalSocketFileUsed", &KexiDBConnectionData::setLocalSocketFileUsed);
@@ -46,28 +43,22 @@ KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
     addFunction("setLocalSocketFileName", &KexiDBConnectionData::setLocalSocketFileName);
 
     addFunction("databaseName", &KexiDBConnectionData::databaseName);
-    addFunction("setDatabaseName", &KexiDBConnectionData::setDatabaseName,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setDatabaseName", &KexiDBConnectionData::setDatabaseName);
 
     addFunction("hostName", &KexiDBConnectionData::hostName);
-    addFunction("setHostName", &KexiDBConnectionData::setHostName,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setHostName", &KexiDBConnectionData::setHostName);
 
     addFunction("port", &KexiDBConnectionData::port);
-    addFunction("setPort", &KexiDBConnectionData::setPort,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"));
+    addFunction("setPort", &KexiDBConnectionData::setPort);
 
     addFunction("password", &KexiDBConnectionData::password);
-    addFunction("setPassword", &KexiDBConnectionData::setPassword,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setPassword", &KexiDBConnectionData::setPassword);
 
     addFunction("userName", &KexiDBConnectionData::userName);
-    addFunction("setUserName", &KexiDBConnectionData::setUserName,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setUserName", &KexiDBConnectionData::setUserName);
 
     addFunction("fileName", &KexiDBConnectionData::fileName);
-    addFunction("setFileName", &KexiDBConnectionData::setFileName,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setFileName", &KexiDBConnectionData::setFileName);
 
     addFunction("dbPath", &KexiDBConnectionData::dbPath);
     addFunction("dbFileName", &KexiDBConnectionData::dbFileName);

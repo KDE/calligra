@@ -28,19 +28,19 @@ using namespace Kross::KexiApp;
 KexiAppPartItem::KexiAppPartItem(KexiPart::Item* item)
     : Kross::Api::Class<KexiAppPartItem>("KexiAppPartItem")
 {
-    this->addProxyFunction<Kross::Api::Variant>("identifier", item, &::KexiPart::Item::identifier );
+    this->addFunction0<Kross::Api::Variant>("identifier", item, &::KexiPart::Item::identifier );
 
-    this->addProxyFunction<void, Kross::Api::Variant>("setIdentifier", item, &::KexiPart::Item::setIdentifier );
+    this->addFunction1<void, Kross::Api::Variant>("setIdentifier", item, &::KexiPart::Item::setIdentifier );
 
-    this->addProxyFunction<Kross::Api::Variant>("mimeType", item, &::KexiPart::Item::mimeType );
-    this->addProxyFunction<void, Kross::Api::Variant>("setMimeType", item, &::KexiPart::Item::setMimeType );
+    this->addFunction0<Kross::Api::Variant>("mimeType", item, &::KexiPart::Item::mimeType );
+    this->addFunction1<void, Kross::Api::Variant>("setMimeType", item, &::KexiPart::Item::setMimeType );
 
-    this->addProxyFunction<Kross::Api::Variant>("name", item, &::KexiPart::Item::name );
-    this->addProxyFunction<void, Kross::Api::Variant>("setName", item, &::KexiPart::Item::setName );
+    this->addFunction0<Kross::Api::Variant>("name", item, &::KexiPart::Item::name );
+    this->addFunction1<void, Kross::Api::Variant>("setName", item, &::KexiPart::Item::setName );
 
-    this->addProxyFunction<Kross::Api::Variant>("caption", item, &::KexiPart::Item::caption );
-    this->addProxyFunction<void, Kross::Api::Variant>("setCaption", item, &::KexiPart::Item::setCaption );
+    this->addFunction0<Kross::Api::Variant>("caption", item, &::KexiPart::Item::caption );
+    this->addFunction1<void, Kross::Api::Variant>("setCaption", item, &::KexiPart::Item::setCaption );
 
-    this->addProxyFunction<Kross::Api::Variant>("description", item, &::KexiPart::Item::description );
-    this->addProxyFunction<void, Kross::Api::Variant>("setDescription", item, &::KexiPart::Item::setDescription );
+    this->addFunction0<Kross::Api::Variant>("description", item, &::KexiPart::Item::description );
+    this->addFunction1<void, Kross::Api::Variant>("setDescription", item, &::KexiPart::Item::setDescription );
 }

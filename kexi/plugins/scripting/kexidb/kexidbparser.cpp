@@ -31,8 +31,7 @@ KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parse
     , m_connection(connection)
     , m_parser(parser)
 {
-    addFunction("parse", &KexiDBParser::parse,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("parse", &KexiDBParser::parse);
     addFunction("clear", &KexiDBParser::clear);
     addFunction("operation", &KexiDBParser::operation);
 

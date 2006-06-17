@@ -55,19 +55,11 @@ KexiAppMainWindow::KexiAppMainWindow(KexiMainWindow* mainwindow)
 {
     d->mainwindow = mainwindow;
 
-    this->addProxyFunction<Kross::Api::Variant>("isConnected", this, &KexiAppMainWindow::isConnected);
-    this->addProxyFunction<Kross::Api::Object>("getConnection", this, &KexiAppMainWindow::getConnection);
+    this->addFunction0<Kross::Api::Variant>("isConnected", this, &KexiAppMainWindow::isConnected);
+    this->addFunction0<Kross::Api::Object>("getConnection", this, &KexiAppMainWindow::getConnection);
 
-    this->addProxyFunction<Kross::Api::List, Kross::Api::Variant>("getPartItems", this, &KexiAppMainWindow::getPartItems);
-
-    this->addFunction("openPartItem",
-        new Kross::Api::ProxyFunction<
-            KexiAppMainWindow, // instance
-            //KexiDBConnection* (KexiDBDriver::*)(KexiDBConnectionData*), // method
-            bool (KexiAppMainWindow::*)(KexiAppPartItem*), // method
-            Kross::Api::Variant, // return-value
-            KexiAppPartItem // argument-value
-        >(this, &KexiAppMainWindow::openPartItem) );
+    this->addFunction1<Kross::Api::List, Kross::Api::Variant>("getPartItems", this, &KexiAppMainWindow::getPartItems);
+    this->addFunction1<Kross::Api::Variant, KexiAppPartItem>("openPartItem", this, &KexiAppMainWindow::openPartItem);
 }
 
 KexiAppMainWindow::~KexiAppMainWindow()

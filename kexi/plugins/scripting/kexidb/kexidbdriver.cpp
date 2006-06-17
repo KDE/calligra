@@ -32,26 +32,19 @@ KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
     : Kross::Api::Class<KexiDBDriver>("KexiDBDriver")
     , m_driver(driver)
 {
-    this->addProxyFunction<Kross::Api::Variant>("isValid", this, &KexiDBDriver::isValid );
-    this->addProxyFunction<Kross::Api::Variant>("versionMajor", this, &KexiDBDriver::versionMajor );
-    this->addProxyFunction<Kross::Api::Variant>("versionMinor", this, &KexiDBDriver::versionMinor );
-    this->addProxyFunction<Kross::Api::Variant, Kross::Api::Variant>("escapeString", this, &KexiDBDriver::escapeString);
-    this->addProxyFunction<Kross::Api::Variant>("isFileDriver", this, &KexiDBDriver::isFileDriver );
-    this->addProxyFunction<Kross::Api::Variant>("fileDBDriverMimeType", this, &KexiDBDriver::fileDBDriverMimeType );
-    this->addProxyFunction<Kross::Api::Variant, Kross::Api::Variant>("isSystemObjectName", this, &KexiDBDriver::isSystemObjectName );
-    this->addProxyFunction<Kross::Api::Variant, Kross::Api::Variant>("isSystemDatabaseName", this, &KexiDBDriver::isSystemDatabaseName );
-    this->addProxyFunction<Kross::Api::Variant, Kross::Api::Variant>("isSystemFieldName", this, &KexiDBDriver::isSystemFieldName );
-    this->addProxyFunction<Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant> ("valueToSQL", this, &KexiDBDriver::valueToSQL );
+    this->addFunction0<Kross::Api::Variant>("isValid", this, &KexiDBDriver::isValid );
+    this->addFunction0<Kross::Api::Variant>("versionMajor", this, &KexiDBDriver::versionMajor );
+    this->addFunction0<Kross::Api::Variant>("versionMinor", this, &KexiDBDriver::versionMinor );
+    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("escapeString", this, &KexiDBDriver::escapeString);
+    this->addFunction0<Kross::Api::Variant>("isFileDriver", this, &KexiDBDriver::isFileDriver );
+    this->addFunction0<Kross::Api::Variant>("fileDBDriverMimeType", this, &KexiDBDriver::fileDBDriverMimeType );
+    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("isSystemObjectName", this, &KexiDBDriver::isSystemObjectName );
+    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("isSystemDatabaseName", this, &KexiDBDriver::isSystemDatabaseName );
+    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("isSystemFieldName", this, &KexiDBDriver::isSystemFieldName );
+    this->addFunction2<Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant> ("valueToSQL", this, &KexiDBDriver::valueToSQL );
 
-    this->addFunction("createConnection",
-        new Kross::Api::ProxyFunction<
-            KexiDBDriver, // instance
-            KexiDBConnection* (KexiDBDriver::*)(KexiDBConnectionData*), // method
-            KexiDBConnection, // return-value
-            KexiDBConnectionData // argument-value
-        >(this, &KexiDBDriver::createConnection) );
-
-    this->addProxyFunction< Kross::Api::ListT< KexiDBConnection > >("connectionsList", this, &KexiDBDriver::connectionsList);
+    this->addFunction1<KexiDBConnection, KexiDBConnectionData>("createConnection", this, &KexiDBDriver::createConnection);
+    this->addFunction0< Kross::Api::ListT< KexiDBConnection > >("connectionsList", this, &KexiDBDriver::connectionsList);
 }
 
 KexiDBDriver::~KexiDBDriver()

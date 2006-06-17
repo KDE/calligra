@@ -29,77 +29,60 @@ KexiDBField::KexiDBField(::KexiDB::Field* field)
     , m_field(field)
 {
     addFunction("type", &KexiDBField::type);
-    addFunction("setType", &KexiDBField::setType,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setType", &KexiDBField::setType);
 
     addFunction("variantType", &KexiDBField::variantType);
-    addFunction("setVariantType", &KexiDBField::setVariantType,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setVariantType", &KexiDBField::setVariantType);
 
     addFunction("subType", &KexiDBField::subType);
-    addFunction("setSubType", &KexiDBField::setSubType,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setSubType", &KexiDBField::setSubType);
 
     addFunction("typeGroup", &KexiDBField::typeGroup);
 
     addFunction("isAutoInc", &KexiDBField::isAutoInc);
-    addFunction("setAutoInc", &KexiDBField::setAutoInc,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setAutoInc", &KexiDBField::setAutoInc);
 
     addFunction("isUniqueKey", &KexiDBField::isUniqueKey);
-    addFunction("setUniqueKey", &KexiDBField::setUniqueKey,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setUniqueKey", &KexiDBField::setUniqueKey);
 
     addFunction("isPrimaryKey", &KexiDBField::isPrimaryKey);
-    addFunction("setPrimaryKey", &KexiDBField::setPrimaryKey,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setPrimaryKey", &KexiDBField::setPrimaryKey);
 
     addFunction("isForeignKey", &KexiDBField::isForeignKey);
-    addFunction("setForeignKey", &KexiDBField::setForeignKey,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setForeignKey", &KexiDBField::setForeignKey);
 
     addFunction("isNotNull", &KexiDBField::isNotNull);
-    addFunction("setNotNull", &KexiDBField::setNotNull,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setNotNull", &KexiDBField::setNotNull);
 
     addFunction("isNotEmpty", &KexiDBField::isNotEmpty);
-    addFunction("setNotEmpty", &KexiDBField::setNotEmpty,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setNotEmpty", &KexiDBField::setNotEmpty);
 
     addFunction("isIndexed", &KexiDBField::isIndexed);
     addFunction("setIndexed", &KexiDBField::setIndexed);
 
     addFunction("isUnsigned", &KexiDBField::isUnsigned);
-    addFunction("setUnsigned", &KexiDBField::setUnsigned,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setUnsigned", &KexiDBField::setUnsigned);
 
     addFunction("name", &KexiDBField::name);
-    addFunction("setName", &KexiDBField::setName,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setName", &KexiDBField::setName);
 
     addFunction("caption", &KexiDBField::caption);
-    addFunction("setCaption", &KexiDBField::setCaption,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setCaption", &KexiDBField::setCaption);
 
     addFunction("description", &KexiDBField::description);
-    addFunction("setDescription", &KexiDBField::setDescription,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setDescription", &KexiDBField::setDescription);
 
     addFunction("length", &KexiDBField::length);
-    addFunction("setLength", &KexiDBField::setLength,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"));
+    addFunction("setLength", &KexiDBField::setLength);
 
     addFunction("precision", &KexiDBField::precision);
-    addFunction("setPrecision", &KexiDBField::setPrecision,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"));
+    addFunction("setPrecision", &KexiDBField::setPrecision);
 
     addFunction("width", &KexiDBField::width);
-    addFunction("setWidth", &KexiDBField::setWidth,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"));
+    addFunction("setWidth", &KexiDBField::setWidth);
 
     addFunction("defaultValue", &KexiDBField::defaultValue);
-    addFunction("setDefaultValue", &KexiDBField::setDefaultValue,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant"));
+    addFunction("setDefaultValue", &KexiDBField::setDefaultValue);
 }
 
 KexiDBField::~KexiDBField()

@@ -51,72 +51,45 @@ KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDrive
     addFunction("isConnected", &KexiDBConnection::isConnected);
     addFunction("disconnect", &KexiDBConnection::disconnect);
 
-    addFunction("databaseExists", &KexiDBConnection::databaseExists,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("databaseExists", &KexiDBConnection::databaseExists);
     addFunction("currentDatabase", &KexiDBConnection::currentDatabase);
     addFunction("databaseNames", &KexiDBConnection::databaseNames);
     addFunction("isDatabaseUsed", &KexiDBConnection::isDatabaseUsed);
     addFunction("isReadOnly", &KexiDBConnection::isReadOnly);
 
-    addFunction("useDatabase", &KexiDBConnection::useDatabase,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("useDatabase", &KexiDBConnection::useDatabase);
     addFunction("closeDatabase", &KexiDBConnection::closeDatabase);
 
     addFunction("tableNames", &KexiDBConnection::tableNames);
     addFunction("queryNames", &KexiDBConnection::queryNames);
 
-    addFunction("executeQueryString", &KexiDBConnection::executeQueryString,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("executeQuerySchema", &KexiDBConnection::executeQuerySchema,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBQuerySchema"));
-    addFunction("querySingleString", &KexiDBConnection::querySingleString,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("queryStringList", &KexiDBConnection::queryStringList,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("querySingleRecord", &KexiDBConnection::querySingleRecord,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("executeQueryString", &KexiDBConnection::executeQueryString);
+    addFunction("executeQuerySchema", &KexiDBConnection::executeQuerySchema);
+    addFunction("querySingleString", &KexiDBConnection::querySingleString);
+    addFunction("queryStringList", &KexiDBConnection::queryStringList);
+    addFunction("querySingleRecord", &KexiDBConnection::querySingleRecord);
 
-    addFunction("insertRecord", &KexiDBConnection::insertRecord,
-        Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema")
-            << Kross::Api::Argument("Kross::Api::List"));
+    addFunction("insertRecord", &KexiDBConnection::insertRecord);
 
-    addFunction("createDatabase", &KexiDBConnection::createDatabase,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("dropDatabase", &KexiDBConnection::dropDatabase,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("createDatabase", &KexiDBConnection::createDatabase);
+    addFunction("dropDatabase", &KexiDBConnection::dropDatabase);
 
-    addFunction("createTable", &KexiDBConnection::createTable,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema"));
-    addFunction("dropTable", &KexiDBConnection::dropTable,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("alterTable", &KexiDBConnection::alterTable,
-        Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema")
-            << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema"));
-    addFunction("alterTableName", &KexiDBConnection::alterTableName,
-        Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema")
-            << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("tableSchema", &KexiDBConnection::tableSchema,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("isEmptyTable", &KexiDBConnection::isEmptyTable,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTableSchema"));
+    addFunction("createTable", &KexiDBConnection::createTable);
+    addFunction("dropTable", &KexiDBConnection::dropTable);
+    addFunction("alterTable", &KexiDBConnection::alterTable);
+    addFunction("alterTableName", &KexiDBConnection::alterTableName);
+    addFunction("tableSchema", &KexiDBConnection::tableSchema);
+    addFunction("isEmptyTable", &KexiDBConnection::isEmptyTable);
 
-    addFunction("querySchema", &KexiDBConnection::querySchema,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("querySchema", &KexiDBConnection::querySchema);
 
     addFunction("autoCommit", &KexiDBConnection::autoCommit);
-    addFunction("setAutoCommit", &KexiDBConnection::setAutoCommit,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setAutoCommit", &KexiDBConnection::setAutoCommit);
     addFunction("beginTransaction", &KexiDBConnection::beginTransaction);
-    addFunction("commitTransaction", &KexiDBConnection::commitTransaction,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"));
-    addFunction("rollbackTransaction", &KexiDBConnection::rollbackTransaction,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"));
+    addFunction("commitTransaction", &KexiDBConnection::commitTransaction);
+    addFunction("rollbackTransaction", &KexiDBConnection::rollbackTransaction);
     addFunction("defaultTransaction", &KexiDBConnection::defaultTransaction);
-    addFunction("setDefaultTransaction", &KexiDBConnection::setDefaultTransaction,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBTransaction"));
+    addFunction("setDefaultTransaction", &KexiDBConnection::setDefaultTransaction);
     addFunction("transactions", &KexiDBConnection::transactions);
 
     addFunction("parser", &KexiDBConnection::parser);
