@@ -81,14 +81,15 @@ Value SortManipulator::newValue (Element *element, int col, int row,
   else
     colidx = sorted[colidx];
 
-  Cell* cell = m_sheet->cellAt (range.left() + col, range.top() + row);
-  if (cell->isFormula())
-  {
-    *parse = true;
-    return Value (cell->text());
-  }
+  // have to return stored value, to avoid earlier calls disrupting latter ones
+  Value val = oldData[col][row].val;
+  QString text = oldData[col][row].text;
   *parse = false;
-  return cell->value ();
+  if (!text.isEmpty()) {
+    val = Value (text);
+    *parse = true;
+  }
+  return val;
 }
 
 Format SortManipulator::newFormat (Element *element, int col, int row)
@@ -102,9 +103,9 @@ Format SortManipulator::newFormat (Element *element, int col, int row)
     else
       colidx = sorted[colidx];
   }
-  
-  Cell* cell = m_sheet->cellAt (range.left() + col, range.top() + row);
-  return *(cell->format());
+ 
+  // have to return stored format, to avoid earlier calls disrupting latter ones
+  return formats[colidx][rowidx].format;
 }
 
 void SortManipulator::sort (Element *element)

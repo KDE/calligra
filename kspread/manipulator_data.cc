@@ -52,7 +52,7 @@ bool AbstractDataManipulator::process (Element* element)
           val = oldData[col][row].val;
           text = oldData[col][row].text;
           fmtType = oldData[col][row].format;
-          parse = false;
+          parse = (!text.isEmpty());   // parse if text not empty
         }
       } else {
         val = newValue (element, col, row, &parse, &fmtType);
@@ -163,8 +163,6 @@ bool AbstractDFManipulator::preProcessing ()
         Cell* cell = m_sheet->cellAt(col, row);
         if (cell != m_sheet->defaultCell())  // non-default cell - remember it
         {
-          ADMStorage st;
-  
           FormatStorage f (m_sheet);
           f.format.copy (*cell->format());
           formats[col][row] = f;
