@@ -30,12 +30,10 @@ EventAction::EventAction(const QString& name, KAction* action)
     , m_action(action)
 {
     addFunction("getText", &EventAction::getText);
-    addFunction("setText", &EventAction::setText,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setText", &EventAction::setText);
 
     addFunction("isEnabled", &EventAction::isEnabled);
-    addFunction("setEnabled", &EventAction::setEnabled,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool"));
+    addFunction("setEnabled", &EventAction::setEnabled);
 
     addFunction("activate", &EventAction::activate);
 }

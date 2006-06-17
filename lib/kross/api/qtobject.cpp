@@ -58,34 +58,20 @@ QtObject::QtObject(QObject* object, const QString& name)
     // Kross objects.
 
     addFunction("propertyNames", &QtObject::propertyNames);
-    addFunction("hasProperty", &QtObject::hasProperty,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("getProperty", &QtObject::getProperty,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("setProperty", &QtObject::setProperty,
-        Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant"));
+    addFunction("hasProperty", &QtObject::hasProperty);
+    addFunction("getProperty", &QtObject::getProperty);
+    addFunction("setProperty", &QtObject::setProperty);
 
     addFunction("slotNames", &QtObject::slotNames);
-    addFunction("hasSlot", &QtObject::hasSlot,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("slot", &QtObject::callSlot,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("hasSlot", &QtObject::hasSlot);
+    addFunction("slot", &QtObject::callSlot);
 
     addFunction("signalNames", &QtObject::signalNames);
-    addFunction("hasSignal", &QtObject::hasSignal,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("signal", &QtObject::emitSignal,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("hasSignal", &QtObject::hasSignal);
+    addFunction("signal", &QtObject::emitSignal);
 
-    addFunction("connect", &QtObject::connectSignal,
-        Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::QtObject")
-            << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("disconnect", &QtObject::disconnectSignal,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("connect", &QtObject::connectSignal);
+    addFunction("disconnect", &QtObject::disconnectSignal);
 }
 
 QtObject::~QtObject()

@@ -2,7 +2,6 @@ include $(top_srcdir)/lib/kross/Makefile.global
 apiincludedir=$(includedir)/kross/api
 
 apiinclude_HEADERS = \
-    argument.h \
     callable.h \
     class.h \
     dict.h \
@@ -32,7 +31,6 @@ libkrossapi_la_SOURCES = \
     dict.cpp \
     exception.cpp \
     callable.cpp \
-    argument.cpp \
     eventaction.cpp \
     eventsignal.cpp \
     eventslot.cpp \
