@@ -23,6 +23,7 @@
 #include "kspread_doc.h"
 #include "kspread_sheet.h"
 #include "valuecalc.h"
+#include "valueconverter.h"
 
 #include <klocale.h>
 
@@ -143,6 +144,7 @@ bool SortManipulator::shouldReorder (Element *element, int first, int second)
   // indexes are real indexes, we don't use the sorted array here
 
   ValueCalc *calc = m_sheet->doc()->calc();
+  ValueConverter *conv = m_sheet->doc()->converter();
 
   QRect range = element->rect();
   int firstrow = range.top();
@@ -164,6 +166,27 @@ bool SortManipulator::shouldReorder (Element *element, int first, int second)
     // first one is not, we don't need to reorder
     if ((!val1.isEmpty()) && val2.isEmpty())
       return false;
+    
+    // custom list ?
+    if (m_usecustomlist) {
+      QString s1 = conv->asString (val1).asString().toLower();
+      QString s2 = conv->asString (val2).asString().toLower();
+      QStringList::iterator it;
+      int pos1 = -1, pos2 = -1;
+      int pos = 0;
+      // Try to locate our two strings in the list. If both are there, assume
+      // ordering as specified by the list.
+      for (it = m_customlist.begin(); it != m_customlist.end(); ++it) {
+        if ((pos1 == -1) && ((*it).toLower() == s1))
+          pos1 = pos;
+        if ((pos2 == -1) && ((*it).toLower() == s2))
+          pos2 = pos;
+        pos++;
+      }
+      if ((pos1 >= 0) && (pos2 >= 0) && (pos1 != pos2))
+        // both are in the list, not the same
+        return (pos1 > pos2);
+    }
     
     if (calc->naturalGreater (val1, val2, m_cs))
       // first one greater - must reorder if ascending, don't reorder if not

@@ -283,27 +283,16 @@ SortDialog::~SortDialog()
 
 void SortDialog::init()
 {
-    QStringList lst;
-    lst<<i18n("January");
-    lst<<i18n("February");
-    lst<<i18n("March");
-    lst<<i18n("April");
-    lst<<i18n("May");
-    lst<<i18n("June");
-    lst<<i18n("July");
-    lst<<i18n("August");
-    lst<<i18n("September");
-    lst<<i18n("October");
-    lst<<i18n("November");
-    lst<<i18n("December");
+  QStringList lst;
+  lst << i18n("January") + "," + i18n("February") + "," + i18n("March") +
+      "," + i18n("April") + "," + i18n("May") + "," + i18n("June") +
+      "," + i18n ("July") + "," + i18n("August") + "," + i18n("September") +
+      "," + i18n("October") + "," + i18n("November") +
+      "," + i18n("December");
 
-    lst<<i18n("Monday");
-    lst<<i18n("Tuesday");
-    lst<<i18n("Wednesday");
-    lst<<i18n("Thursday");
-    lst<<i18n("Friday");
-    lst<<i18n("Saturday");
-    lst<<i18n("Sunday");
+  lst << i18n("Monday") + "," + i18n("Tuesday") + "," + i18n("Wednesday") +
+  "," + i18n("Thursday") + "," + i18n("Friday") + "," + i18n("Saturday") +
+  "," + i18n("Sunday");
 
   KConfig * config = Factory::global()->config();
   config->setGroup( "Parameters" );
@@ -352,19 +341,19 @@ void SortDialog::init()
     int right = r.right();
     for (int i = r.left(); i <= right; ++i)
     {
-	    QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
-	    QString colName=i18n(" (Column %1)",Cell::columnName(i));
+      QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
+      QString colName=i18n(" (Column %1)",Cell::columnName(i));
 
-	    if (!guessName.isEmpty())
-	    {
-	    	m_listColumn += guessName + colName;
-	    }
-	    else
-	    {
-		m_listColumn += i18n("Column %1",Cell::columnName(i));
+      if (!guessName.isEmpty())
+      {
+        m_listColumn += guessName + colName;
+      }
+      else
+      {
+    m_listColumn += i18n("Column %1",Cell::columnName(i));
 
-		if ( i == r.left() )
-		  selectionMayHaveHeader=false;
+    if ( i == r.left() )
+      selectionMayHaveHeader=false;
             }
     }
      // m_listColumn += i18n("Column %1",Cell::columnName(i));
@@ -378,19 +367,19 @@ void SortDialog::init()
     int bottom = r.bottom();
     for (int i = r.top(); i <= bottom; ++i)
     {
-	    QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
-	    QString rowName=i18n(" (Row %1)",i);
+      QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
+      QString rowName=i18n(" (Row %1)",i);
 
-	    if (!guessName.isEmpty())
-	    {
-	    	m_listRow += guessName + rowName;
-	    }
-	    else
-	    {
-		m_listRow += i18n("Row %1",i);
+      if (!guessName.isEmpty())
+      {
+        m_listRow += guessName + rowName;
+      }
+      else
+      {
+    m_listRow += i18n("Row %1",i);
 
-		if ( i == r.top() )
-		  selectionMayHaveHeader=false;
+    if ( i == r.top() )
+      selectionMayHaveHeader=false;
             }
     }
   }
@@ -420,33 +409,33 @@ void SortDialog::init()
     int bottom = r.bottom();
     for (int i = r.left(); i <= right; ++i)
     {
-	    QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
-	    QString colName=i18n(" (Column %1)",Cell::columnName(i));
+      QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
+      QString colName=i18n(" (Column %1)",Cell::columnName(i));
 
-	    if (!guessName.isEmpty())
-		    m_listColumn += guessName + colName;
-	    else
-	    {
-		    m_listColumn += i18n("Column %1",Cell::columnName(i));
+      if (!guessName.isEmpty())
+        m_listColumn += guessName + colName;
+      else
+      {
+        m_listColumn += i18n("Column %1",Cell::columnName(i));
 
-		    if (i == r.left())
-		      selectionMayHaveHeader=false;
+        if (i == r.left())
+          selectionMayHaveHeader=false;
             }
     }
 
     for (int i = r.top(); i <= bottom; ++i)
     {
-	    QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
-	    QString rowName=i18n(" (Row %1)",i);
+      QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
+      QString rowName=i18n(" (Row %1)",i);
 
-	    if (!guessName.isEmpty())
-		    m_listRow += guessName + rowName;
-	    else
-	    {
-		    m_listRow += i18n("Row %1",i);
+      if (!guessName.isEmpty())
+        m_listRow += guessName + rowName;
+      else
+      {
+        m_listRow += i18n("Row %1",i);
 
-		    if (i == r.top())
-		      selectionMayHaveHeader=false;
+        if (i == r.top())
+          selectionMayHaveHeader=false;
             }
     }
   }
