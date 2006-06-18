@@ -304,7 +304,7 @@ Now you can make the changes you want to this text style.</para>
 like.</para>
 
 <warning>
-<para>Do not change the name of your template.</para>
+<para>Do not change the name of your text style.</para>
 
 <para>Doing so will delete your current text style from the list (and create
 a new one with the new name).</para>

@@ -51,7 +51,7 @@ converted to a <emphasis>non-inline</emphasis> frame later.</para></listitem>
 <para>By default, formula frames are created as <glossterm linkend="definlineframe">inline</glossterm> frames by default.  The formula frame
 will move with the text as any other inline frame would.</para>
 <para>If you want to have more control over where the formula is placed, you can convert it to a framed formula by clicking on the 
-frame surrounding the formula with the &RMB;.  A submenu will appear.  Simply select <guilabel>Inline Frame</guilabel> and the formula will 
+frame surrounding the formula with the &RMB;.  A popup menu will appear.  Simply select <guilabel>Inline Frame</guilabel> and the formula will 
 now be a freely movable frame. </para>
 <para>Once converted to a freely movable frame, you can <link linkend="move-frame">move the frame</link> 
 just like any other frame in &kword;.</para>

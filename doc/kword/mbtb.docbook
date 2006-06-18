@@ -111,8 +111,8 @@ toolbar will be inserted there.</para>
 
 <listitem>
 <para>Click on the toolbar with the &RMB;. A
-sub-menu will appear.  Select
-<guimenuitem>Orientation</guimenuitem>. Another small submenu will
+popup menu will appear.  Select
+<guimenuitem>Orientation</guimenuitem>. A small submenu will
 appear.  Select <guimenuitem>Top</guimenuitem>,
 <guimenuitem>Bottom</guimenuitem>, <guimenuitem>Left</guimenuitem>, 
 <guimenuitem>Right</guimenuitem>, <guimenuitem>Floating</guimenuitem> or
@@ -175,7 +175,7 @@ select your preference from the list.</para>
 <indexterm><primary>toolbars</primary><secondary>changing size</secondary></indexterm>
 
 <para>You can also select the size of the icons by clicking on the
-toolbar with the &RMB;.  A small submenu will appear.  Select
+toolbar with the &RMB;.  A small popup menu will appear.  Select
 <guimenuitem>Icon Size</guimenuitem> and then your preferred icon
 size.</para>
 
@@ -486,7 +486,7 @@ using the menubar. </para>
 </sect2>
 
 <sect2 id="edit">
-<title>Edit Menu</title>
+<title><guimenu>Edit</guimenu> Menu</title>
 
 <para>By clicking on the <guimenu>Edit</guimenu> menu, you can
 cut/copy/paste text, undo or redo edits and perform searches and text
@@ -738,7 +738,7 @@ using the menubar.</para></listitem>
 </sect2>
 
 <sect2 id="view">
-<title>View Menu</title><variablelist>
+<title><guimenu>View</guimenu> Menu</title><variablelist>
 
 <varlistentry>
 <term>
@@ -939,7 +939,7 @@ documents.</para>
 </sect2>
 
 <sect2 id="insert">
-<title>Insert Menu</title>
+<title><guimenu>Insert</guimenu> Menu</title>
 <variablelist>
 <varlistentry>
 <term id="menu-insert-special-character">
@@ -1234,7 +1234,7 @@ the section entitled <link linkend="scan-graphics">Using a picture from a scanne
 </sect2>
 
 <sect2 id="format">
-<title>Format Menu</title><variablelist>
+<title><guimenu>Format</guimenu> Menu</title><variablelist>
 
 <varlistentry>
 <term id="format-default">
@@ -1421,7 +1421,7 @@ linkend="headers-and-footers">Headers and Footers</link>.</para>
 </sect2>
 
 <sect2 id="menu-frames">
-<title>Frames Menu</title>
+<title><guimenu>Frames</guimenu> Menu</title>
 
 <variablelist>
 <varlistentry>
@@ -1598,7 +1598,7 @@ appear with all available border styles.  Select the correct style and the borde
 </sect2>
 
 <sect2 id="table">
-<title>Table Menu</title>
+<title><guimenu>Table</guimenu> Menu</title>
 
 <variablelist>
 
@@ -1787,7 +1787,7 @@ find more about tables in the section entitled <link linkend="tablestyle">Using 
 </sect2>
 
 <sect2 id="tools">
-<title>Tools Menu</title>
+<title><guimenu>Tools</guimenu> Menu</title>
 
 <variablelist>
 
@@ -1929,7 +1929,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 </sect2>
 
 <sect2 id="settings">
-<title>Settings Menu</title>
+<title><guimenu>Settings</guimenu> Menu</title>
 
 <variablelist>
 
@@ -2026,7 +2026,7 @@ options.For details, click <link linkend="options-kword">here</link>.</para>
 </sect2>
 
 <sect2 id="help">
-<title>Help Menu</title>
+<title><guimenu>Help</guimenu> Menu</title>
 
 &help.menu.documentation;
 
@@ -2035,9 +2035,9 @@ options.For details, click <link linkend="options-kword">here</link>.</para>
 
 
 <sect1 id="file-toolbar">
-<title>File Toolbar</title>
+<title><guilabel>File</guilabel> Toolbar</title>
 
-<para>The File Toolbar consists of 5 buttons.  Each button performs a
+<para>The <guilabel>File</guilabel> toolbar consists of 5 buttons.  Each button performs a
 task from the menubar.  Click on that task for more details. </para>
 
 <screenshot>
@@ -2082,9 +2082,9 @@ task from the menubar.  Click on that task for more details. </para>
 </sect1>
 
 <sect1 id="char-format-toolbar">
-<title>Format ToolBar</title>
+<title><guilabel>Format</guilabel> ToolBar</title>
 
-<para>The Format Toolbar consists of 9 buttons.  Each button
+<para>The <guilabel>Format</guilabel> toolbar consists of 9 buttons.  Each button
 performs a task from the <link linkend="change-font-dialog">format
 character dialog</link>.</para>
 
@@ -2103,11 +2103,11 @@ character dialog</link>.</para>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Font Face</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Character Size</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Bold Text</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Italics Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Underline Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Strikeout Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Superscript Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Subscript Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Italics</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Underline</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Strikeout</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Superscript Text</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Subscript Text</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry><para>Change Font Color</para>
 <para>Clicking on the letter changes the selected text to the color previewed in the underline.  Clicking the arrow to the right of the letter will let you select a new color.</para></entry></row>
 </tbody></tgroup>
@@ -2116,9 +2116,9 @@ character dialog</link>.</para>
 
 
 <sect1 id="insert-toolbar">
-<title>Insert Toolbar</title>
+<title><guilabel>Insert</guilabel> Toolbar</title>
 
-<para>The Insert Toolbar consists of 5 buttons.  Each button performs a
+<para>The <guilabel>Insert</guilabel> toolbar consists of 5 buttons.  Each button performs a
 task from the menubar.  Click on that task for more details. </para>
 
 <screenshot>
@@ -2163,9 +2163,9 @@ task from the menubar.  Click on that task for more details. </para>
 </sect1>
 
 <sect1 id="basic-edit-toolbar">
-<title>Edit Toolbar</title>
+<title><guilabel>Edit</guilabel> Toolbar</title>
 
-<para>The Basic Editing Toolbar consists of 8 buttons.  Each 
+<para>The <guilabel>Edit</guilabel> toolbar consists of 8 buttons.  Each 
 button performs a task from the menubar.  Click on that
 task for more details. </para>
 
@@ -2228,9 +2228,9 @@ task for more details. </para>
 </sect1>
 
 <sect1 id="paragraph-toolbar">
-<title>Paragraph Toolbar</title>
+<title><guilabel>Paragraph</guilabel> Toolbar</title>
 
-<para>The Paragraph Toolbar consists of 9 buttons.  Each button performs
+<para>The <guilabel>Paragraph</guilabel> toolbar consists of 9 buttons.  Each button performs
 a task from the menubar.</para>
 
 <screenshot>
@@ -2247,10 +2247,10 @@ a task from the menubar.</para>
 </thead>
 <tbody>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Character Style</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Left Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignCenter.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Center Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Right Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Justify Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Left Text Align</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignCenter.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Center Text Align</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Right Text Align</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Justify Text</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="numtxtbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Numbered Text paragraphs</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="bullist.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Bulleted Text paragraphs</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="decindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Reduce paragraph indent</entry></row>
@@ -2260,9 +2260,9 @@ a task from the menubar.</para>
 </sect1>
 
 <sect1 id="table-edit-toolbar">
-<title>Table Toolbar</title>
+<title><guilabel>Table</guilabel> Toolbar</title>
 
-<para>The Table Edit Toolbar consists of 5 buttons.  Each button
+<para>The <guilabel>Table</guilabel> toolbar consists of 5 buttons.  Each button
 performs a task from the menubar.  Click on that task for more
 details. </para>
 
@@ -2309,9 +2309,9 @@ details. </para>
 </sect1>
 
 <sect1 id="border-toolbar">
-<title>Border Toolbar</title>
+<title><guilabel>Border</guilabel> Toolbar</title>
 
-<para>The Border Toolbar consists of 10 buttons.  Each button performs a
+<para>The <guilabel>Border</guilabel> toolbar consists of 10 buttons.  Each button performs a
 task from the menubar.  Click on that task for more details. </para>
 
 <screenshot>
@@ -2342,9 +2342,9 @@ task from the menubar.  Click on that task for more details. </para>
 </sect1>
 
 <sect1 id="formula-toolbar">
-<title>Formula Toolbar</title>
+<title><guilabel>Formula</guilabel> Toolbar</title>
 
-<para>The Formula Toolbar consists of 26 buttons.</para>
+<para>The <guilabel>Formula</guilabel> toolbar consists of 26 buttons.</para>
 
 <screenshot>
 <mediaobject>
@@ -2389,7 +2389,7 @@ task from the menubar.  Click on that task for more details. </para>
 </sect1>
 
 <sect1 id="select-colors">
-<title>Selecting Colors from a Color dialog</title>
+<title>Selecting Colors from a <guilabel>Select Color</guilabel> dialog</title>
 <indexterm><primary>selecting a color</primary></indexterm>
 
 <para>&kword; uses a common dialog box any time the user needs to select a color for an object (text, backgrounds, borders, etc.).</para>
@@ -2502,16 +2502,16 @@ that folder and the dialog box will update the file list.</para>
 <para>In the upper left corner, is a blue arrow pointed up.  This
 arrow will take you up one level in the folder structure.</para>
 
-<para>The next two buttons are backwards and forward buttons.  These
-buttons work just like an Internet browser. You can use the back
-button to travel to the previous folder, and the forward button to
+<para>The next two buttons are back and forward buttons.  These
+buttons work just like those in an Internet browser. You can use the <guiicon>Back</guiicon>
+button to travel to the previous folder, and the <guiicon>Forward</guiicon> button to
 advance into a folder you just came from.</para>
 
-<para>Next to the arrow buttons, is a reload button.  Clicking this
+<para>Next to the arrow buttons, is a <guiicon>Reload</guiicon> button.  Clicking this
 button, causes &kword; to reload the current folder if new files have been
 added or deleted.</para>
 
-<para>To the right of the reload button, is a blue file folder with a starburst.  This button
+<para>To the right of the <guiicon>Reload</guiicon> button, is a blue file folder with a starburst.  This button
 will let you create a new folder and name it.</para>
 
 <para>Next to the new folder button, is a button with a star on it.
@@ -2543,7 +2543,7 @@ folders should be listed before files, or mixed within the files.</para>
 <varlistentry>
 <term><guimenuitem>Detailed View</guimenuitem></term>
 <listitem>
-<para>If tis option is selected, the names, sizes, dates, permisions, file owners and group ownerships are shown.</para>
+<para>If this option is selected, the names, sizes, dates, permisions, file owners and group ownerships are shown.</para>
 <para>Compare this to short view.</para>
 </listitem>
 </varlistentry>
@@ -2588,7 +2588,7 @@ another subfolder. If you click on an icon, you will be immediately
 moved to that location.</para>
 
 <para>You can add/edit or delete entries from the Location Bar.
-Simply click with the &RMB; and a small submenu will appear.</para>
+Simply click with the &RMB; and a small popup menu will appear.</para>
 
 <para><emphasis>File Name and Filters</emphasis></para>
 

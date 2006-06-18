@@ -110,8 +110,8 @@ into the atmosphere.</para>
 <sect1 id="selecting">
 <title>Selecting Cells</title>
 <para>You can select a single cell or a rectangular area of cells in the 
-spreadsheet. The selected cell(s) are displayed with a thick black border
-and a colored background.</para>
+spreadsheet. The selected cell(s) are displayed with a thick black border.
+</para>
 <itemizedlist>
 <title>You can select a single cell in one of the following ways</title>
 <listitem><para><mousebutton>left</mousebutton> click on it</para></listitem>

@@ -147,8 +147,8 @@ usually want to save this to a file on your hard drive.</para>
 
 <sect2 id="command-save">
 
-<title>The Save Command</title>
-<para>The Save command can be invoked 3 ways:</para>
+<title>The <guimenuitem>Save</guimenuitem> Command</title>
+<para>The <guimenuitem>Save</guimenuitem> command can be invoked 3 ways:</para>
 
 <itemizedlist>
 <listitem>
@@ -216,11 +216,11 @@ problem with the save, an error box will appear.</para>
 </sect2>
 
 <sect2 id="command-save-as">
-<title>The Save As.. Command</title>
+<title>The <guimenuitem>Save As...</guimenuitem> Command</title>
 <indexterm><primary>saving a document with new name</primary></indexterm>
 <sect3 id="command-save-as-general">
 <title>General</title>
-<para>The Save As... command can be invoked 2
+<para>The <guimenuitem>Save As...</guimenuitem> command can be invoked 2
 ways:</para>
 
 <itemizedlist>
@@ -309,7 +309,7 @@ to save outside that area, &kword; will report an error.</para>
 <title>Retrieving a Saved Document</title>
 <indexterm><primary>loading a &kword; file</primary></indexterm>
 <para>
-The Open command can be invoked 4 ways:
+The <guimenuitem>Open...</guimenuitem> command can be invoked 4 ways:
 </para>
 
 <itemizedlist>
@@ -363,7 +363,7 @@ button, the load will be aborted.</para>
 <sect1 id="printing">
 <title>Printing A Document</title>
 <indexterm><primary>printing a document</primary></indexterm>
-<para>The Print command can be invoked 3 ways:</para>
+<para>The <guimenuitem>Print...</guimenuitem> command can be invoked 3 ways:</para>
 
 <itemizedlist>
 <listitem>

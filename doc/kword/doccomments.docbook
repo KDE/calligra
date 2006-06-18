@@ -30,13 +30,13 @@ dialog or the name will not be included.</para></note>
 
 <sect2 id="comments-edit"><title>Adding to or changing the comment in a document</title>
 <para>To add more comments or change previous comments place the mouse pointer over the comment you
-want to edit.  Click once with the &RMB;.  A submenu will appear.  Select <guilabel>Edit Comment...</guilabel>.</para>
+want to edit.  Click once with the &RMB;.  A popup menu will appear.  Select <guilabel>Edit Comment...</guilabel>.</para>
 <para>You can now make your changes to the comment.</para>
 </sect2>
 
 <sect2 id="comments-delete"><title>Deleting a comment from a document</title>
 <para>To delete a comment, place the mouse pointer over the comment you
-want to edit.  Click once with the &RMB;.  A submenu will appear.  Select <guilabel>Remove Comment</guilabel>.</para>
+want to edit.  Click once with the &RMB;.  A popup menu will appear.  Select <guilabel>Remove Comment</guilabel>.</para>
 <para>The comment is immediately deleted.</para>
 </sect2>
 
@@ -54,7 +54,7 @@ want to edit.  Click once with the &RMB;.  A submenu will appear.  Select <guila
 </mediaobject>
 </screenshot>
 
-<para>Click on the <guilabel>Misc</guilabel> icon.</para>
+<para>Click on <guilabel>Misc</guilabel>.</para>
 
 <screenshot>
 <mediaobject>

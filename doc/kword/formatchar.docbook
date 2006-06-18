@@ -57,7 +57,7 @@ blocks of characters including:</para>
 common changes to character formatting. After selecting the text, you
 can use these key combinations to toggle each attribute.</para>
 
-<para>The Basic Formatting toolbar also has buttons which you can use to
+<para>The <guilabel>Format</guilabel> toolbar also has buttons which you can use to
 toggle these same attributes.  </para>
 
 <para>The following table details each attribute, the toolbar buttons
@@ -95,7 +95,7 @@ box</link>.</para>
 <para>If you have many changes to make, you can also use a dialog box to
 set these same attributes.</para>
 
-<para>You can open the Character Formatting Dialog box in one of three
+<para>You can open the <guilabel>Select Font</guilabel> dialog box in one of three
 ways:</para>
 
 <itemizedlist>
@@ -149,7 +149,8 @@ open this dialog.</para>
 
 <para>The subsection labeled <guilabel>Underlining:</guilabel> has two combo boxes and a color selector box. 
 In the left most combo box select between
-no underline (None), Single, Simple Bold, Double or Wave underlining.  </para>
+no underline (<guilabel>None</guilabel>), <guilabel>Single</guilabel>, <guilabel>Simple Bold</guilabel>, 
+<guilabel>Double</guilabel> or <guilabel>Wave</guilabel> underlining.  </para>
 
 <screenshot>
 <mediaobject>
@@ -165,7 +166,8 @@ no underline (None), Single, Simple Bold, Double or Wave underlining.  </para>
 
 <para>The subsection labeled <guilabel>Strikethrough:</guilabel> has two combo boxes.
 Use the left combo box to select between
-no strikethrough (None), Single, Double ore Simple Bold strikethrough.  Use the right combo box to select the line style.</para>
+no strikethrough (<guilabel>None</guilabel>), <guilabel>Single</guilabel>, <guilabel>Double</guilabel> or 
+<guilabel>Simple Bold</guilabel> strikethrough.  Use the right combo box to select the line style.</para>
 
 <screenshot>
 <mediaobject>

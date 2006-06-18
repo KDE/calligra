@@ -37,7 +37,7 @@ paragraphs are converted into a bulleted list of that style.</para>
 </sect2>
 
 <sect2 id="list-complex"><title>Complex lists</title>
-<para>All complex list formatting is done through the Paragraph Formatting dialog.  To get to the paragraph formatting dialog you can:</para>
+<para>All complex list formatting is done through the <guilabel>Paragraph Settings</guilabel> dialog.  To get to the <guilabel>Paragraph Settings</guilabel> dialog you can:</para>
 
 <itemizedlist>
 <listitem>

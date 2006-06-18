@@ -8,7 +8,7 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </sect1info>
-<title>Document Structure</title>
+<title><guilabel>Document Structure</guilabel></title>
 <indexterm><primary>document structure</primary></indexterm>
 
 <para>Sometimes, when editing a complicated document, it can be helpful to look at an organized view of your document.</para>
@@ -17,14 +17,14 @@ frames, select picture frames, change frame properties, delete frames,
  or simply review your document.</para>
 
 <sect2 id="doc-structure-view">
-<title>Show and hide document structure area</title>
-<para>Because simple documents do not need the information provided in the document structure window, &kword; 
-has the ability to toggle the document structure window on and off.</para>
-<para>To toggle the document structure window on and off, select <menuchoice>
+<title>Show and hide <guilabel>Document Structure</guilabel> area</title>
+<para>Because simple documents do not need the information provided in the <guilabel>Document Structure</guilabel> area, &kword; 
+has the ability to toggle the <guilabel>Document Structure</guilabel> area on and off.</para>
+<para>To toggle the <guilabel>Document Structure</guilabel> area on and off, select <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Show Doc Structure</guimenuitem>
-</menuchoice> from the menubar to make the document structure window visible.  Select <menuchoice>
+</menuchoice> from the menubar to make the <guilabel>Document Structure</guilabel> area visible.  Select <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Hide Doc Structure</guimenuitem>
-</menuchoice> from the menubar to make the document structure window disappear.</para>
+</menuchoice> from the menubar to make the <guilabel>Document Structure</guilabel> area disappear.</para>
 
 <para>You can move focus to the document structure area by pressing
 <keycombo>&Alt;<keycap>1</keycap></keycombo>.  You can move focus to the main document panel by pressing
@@ -34,7 +34,7 @@ has the ability to toggle the document structure window on and off.</para>
 
 <sect2 id="doc-structure-navigate">
 <title>Navigating the document structure area</title>
-<para>Lets examine a sample document structure window.</para>
+<para>Lets examine a sample <guilabel>Document Structure</guilabel> area.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -88,7 +88,7 @@ Double click on a category to expand or collapse the category,
 or press the right or left arrow keys.</para>
 
 <note><para>Depending on your document, you may not have all categories in your
-document structure window.  The category only 
+<guilabel>Document Structure</guilabel> area.  The category only 
 appears when there is <emphasis>at least one</emphasis> frame in the
 category.</para></note>
 

@@ -46,7 +46,7 @@ drive or network.</emphasis></para>
 
 </itemizedlist>
 
-<para>Step 1: Click on the <guilabel>Page Layout</guilabel> icon.</para>
+<para>Step 1: Click on <guilabel>Page Layout</guilabel>.</para>
 
 <mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut1.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
@@ -128,7 +128,7 @@ background.  When all the text has been selected, release the &LMB;.</para>
 fileref="Tut7.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 <para><emphasis>This defines what text is going to be altered with Step 8.</emphasis></para>
-<para>Step 8: Click inside the text size combo box.  Change this
+<para>Step 8: Click inside the <guilabel>Text Size</guilabel> combo box.  Change this
 number to 26.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -154,10 +154,10 @@ once with the &LMB;.</para>
 re-shaped.</emphasis></para>
 
 <para><emphasis>You will now notice the frame is outlined in black, with
-8 yellow squares on the outline.  These squares are used for re-sizing the
+8 squares on the outline.  These squares are used for re-sizing the
 frame.</emphasis></para>
 
-<para>Step 10: Place the mouse pointer over the grey square in the lower
+<para>Step 10: Place the mouse pointer over the square in the lower
 right corner of the frame. Click with the &LMB; and hold it
 down. Drag the mouse up and to the right.</para>
 
@@ -189,7 +189,7 @@ not on any of the squares).</para>
 indicates &kword; is ready to move the frame on the
 page.</emphasis></para>
 
-<para>Step 12: Click and hold with the left mouse button. Drag the
+<para>Step 12: Click and hold with the &LMB;. Drag the
 mouse, and the frame will follow it.  Position the frame in the center
 of the page near the top. When you are satisfied with its final
 location, release the mouse button.</para>

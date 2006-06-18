@@ -340,7 +340,8 @@ with the two drop down boxes on the left side of the dialog.</para>
 <para>Select the color of the borders by clicking on the button labeled 
 <guibutton>Color:</guibutton>.  The color is selected using the
 <link linkend="select-colors">Color selection dialog</link>.</para>
-<para>Use the four icons (border left, border right, border top and border bottom) below the color button
+<para>Use the four icons (<guiicon>Border Left</guiicon>, <guiicon>Border Right</guiicon>, <guiicon>Border Top</guiicon> 
+and <guiicon>Border Bottom</guiicon>) below the <guibutton>Color</guibutton> button
 to determine on which side of the frame you want to have a border.</para>
 <para>A <guilabel>Preview</guilabel> of the selected settings is shown on the right side of the dialog.
 </para>
