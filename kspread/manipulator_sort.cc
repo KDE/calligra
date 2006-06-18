@@ -31,6 +31,7 @@ using namespace KSpread;
 
 SortManipulator::SortManipulator ()
 {
+  m_changeformat = false;
   m_rows = true;
   m_skipfirst = false;
   m_cs = false;
@@ -83,8 +84,8 @@ Value SortManipulator::newValue (Element *element, int col, int row,
     colidx = sorted[colidx];
 
   // have to return stored value, to avoid earlier calls disrupting latter ones
-  Value val = oldData[col][row].val;
-  QString text = oldData[col][row].text;
+  Value val = oldData[colidx][rowidx].val;
+  QString text = oldData[colidx][rowidx].text;
   *parse = false;
   if (!text.isEmpty()) {
     val = Value (text);
@@ -124,7 +125,7 @@ void SortManipulator::sort (Element *element)
   // for each position, find the lowest value and move it there
   int start = m_skipfirst ? 1 : 0;
   for (int i = start; i < count - 1; ++i) {
-    int lowest = 0;
+    int lowest = i;
     for (int j = i+1; j < count; ++j)
       if (shouldReorder (element, sorted[lowest], sorted[j]))
         lowest = j;
@@ -156,10 +157,10 @@ bool SortManipulator::shouldReorder (Element *element, int first, int second)
     int which = *it;
     int ascending = *it2;
     // figure out coordinates of the cells
-    int row1 = firstrow + (m_rows ? which : first);
-    int row2 = firstrow + (m_rows ? which : second);
-    int col1 = firstcol + (m_rows ? first : which);
-    int col2 = firstcol + (m_rows ? second : which);
+    int row1 = firstrow + (m_rows ? first : which);
+    int row2 = firstrow + (m_rows ? second : which);
+    int col1 = firstcol + (m_rows ? which : first);
+    int col2 = firstcol + (m_rows ? which : second);
     Value val1 = m_sheet->value (col1, row1);
     Value val2 = m_sheet->value (col2, row2);
     // empty values always go to the end, so if second value is empty and

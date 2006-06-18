@@ -1049,18 +1049,6 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
   dm->add (QPoint (_column, _row));
   dm->execute ();
 
-  /* PRE-MANIPULATOR CODE looked like this:
-  TODO remove this after the new code works
-  if ( !doc()->undoLocked() )
-  {
-      UndoSetText *undo = new UndoSetText( doc(), this, cell->text(), _column, _row,cell->formatType() );
-      doc()->addCommand( undo );
-  }
-
-  // The cell will force a display refresh itself, so we dont have to care here.
-  cell->setCellText( _text, asString );
-  */
-
   //refresh anchor
   if(_text.at(0)=='!')
     emit sig_updateView( this, Region(_column,_row,_column,_row) );
@@ -1081,32 +1069,6 @@ void Sheet::setArrayFormula (Selection *selectionInfo, const QString &_text)
   afm->setText (_text);
   afm->add (*selectionInfo);
   afm->execute ();
-
-  /* PRE-MANIPULATOR CODE LOOKED LIKE THIS
-  TODO remove this when the above code works
-  // add undo
-  if ( !doc()->undoLocked() )
-  {
-    UndoChangeAreaTextCell *undo =
-        new UndoChangeAreaTextCell (doc(), this,
-        QRect (_column, _row, cols, rows));
-    doc()->addCommand( undo );
-  }
-
-  // fill in the cells ... top-left one gets the formula, the rest gets =INDEX
-  // TODO: also fill in information about cells being a part of a range
-  Cell *cell = nonDefaultCell (_column, _row);
-  cell->setCellText (_text, false);
-  QString cellRef = cell->name();
-  for (int row = 0; row < rows; ++row)
-    for (int col = 0; col < cols; col++)
-      if (col || row)
-      {
-        Cell *cell = nonDefaultCell (_column + col, _row + row);
-        cell->setCellText ("=INDEX(" + cellRef + ';' + QString::number (row+1)
-            + ';' + QString::number (col+1) + ')', false);
-      }
-  */
 }
 
 void Sheet::setLayoutDirtyFlag()

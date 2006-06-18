@@ -44,14 +44,16 @@ bool AbstractDataManipulator::process (Element* element)
     for (int row = range.top(); row <= range.bottom(); ++row) {
       Value val;
       QString text;
+      int colidx = col - range.left();
+      int rowidx = row - range.top();
       bool parse = false;
       FormatType fmtType = No_format;
       if (m_reverse) {
         // reverse - use the stored value
-        if (oldData.contains (col) && oldData[col].contains (row)) {
-          val = oldData[col][row].val;
-          text = oldData[col][row].text;
-          fmtType = oldData[col][row].format;
+        if (oldData.contains (colidx) && oldData[colidx].contains (rowidx)) {
+          val = oldData[colidx][rowidx].val;
+          text = oldData[colidx][rowidx].text;
+          fmtType = oldData[colidx][rowidx].format;
           parse = (!text.isEmpty());   // parse if text not empty
         }
       } else {
@@ -94,11 +96,14 @@ bool AbstractDataManipulator::preProcessing ()
         {
           ADMStorage st;
 
+          int colidx = col - range.left();
+          int rowidx = row - range.top();
+
           if (cell->isFormula())
             st.text = cell->text();
           st.val = m_sheet->value (col, row);
           st.format = cell->formatType();
-          oldData[col][row] = st;
+          oldData[colidx][rowidx] = st;
         }
       }
   }
@@ -128,12 +133,14 @@ bool AbstractDFManipulator::process (Element* element)
   {
     for (int row = range.top(); row <= range.bottom(); ++row) {
       Cell *cell = m_sheet->cellAt (col, row);
+      int colidx = col - range.left();
+      int rowidx = row - range.top();
       // only non-default cells will be formatted
       // TODO: is this really correct ?
       if (!cell->isDefault())
       {
         if (m_reverse) {
-          cell->format()->copy (formats[col][row].format);
+          cell->format()->copy (formats[colidx][rowidx].format);
         }
         else {
           Format f (m_sheet, 0);
@@ -153,6 +160,8 @@ bool AbstractDFManipulator::preProcessing ()
   // not the first run - data already stored ...
   if (!m_firstrun) return true;
 
+  AbstractDataManipulator::preProcessing ();
+
   Region::Iterator endOfList(cells().end());
   for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
   {
@@ -163,9 +172,11 @@ bool AbstractDFManipulator::preProcessing ()
         Cell* cell = m_sheet->cellAt(col, row);
         if (cell != m_sheet->defaultCell())  // non-default cell - remember it
         {
+          int colidx = col - range.left();
+          int rowidx = row - range.top();
           FormatStorage f (m_sheet);
           f.format.copy (*cell->format());
-          formats[col][row] = f;
+          formats[colidx][rowidx] = f;
         }
       }
   }
@@ -191,8 +202,8 @@ Value DataManipulator::newValue (Element *element, int col, int row,
   if (m_format != No_format)
     *formatType = m_format;
   QRect range = element->rect();
-  int colidx = range.left() - col;
-  int rowidx = range.top() - row;
+  int colidx = col - range.left();
+  int rowidx = row - range.top();
   return data.element (colidx, rowidx);
 }
 

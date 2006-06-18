@@ -76,13 +76,13 @@ Format::Format( Sheet * _sheet, Style * _style )
 
 Format::~Format()
 {
-	if ( m_pStyle->release() )
-		delete m_pStyle;
+  if ( m_pStyle && m_pStyle->release() )
+    delete m_pStyle;
 }
 
 void Format::defaultStyleFormat()
 {
-  if ( m_pStyle->release() )
+  if ( m_pStyle && m_pStyle->release() )
     delete m_pStyle;
 
   if ( m_pSheet )
@@ -140,10 +140,13 @@ void Format::setStyle( Style * style )
 
   m_bNoFallBack = 0;
   m_pStyle = style;
-  m_pStyle->addRef();
+  if (m_pStyle)
+    m_pStyle->addRef();
   formatChanged();
+  if (!style) return;
+
  // kDebug() << "Newly assigned style: " << m_pStyle << ", type: " << m_pStyle->type() << endl;
-  if ( style->type() == Style::BUILTIN || style->type() == Style::CUSTOM )
+  if (  style->type() == Style::BUILTIN || style->type() == Style::CUSTOM )
     kDebug() << "Style name: " << ((CustomStyle *) m_pStyle)->name() << endl;
 }
 
@@ -178,7 +181,7 @@ void Format::clearProperty( Style::FlagsSet p )
 
 bool Format::hasProperty( Style::FlagsSet p, bool withoutParent ) const
 {
-    if ( m_pStyle->hasFeature( (Style::FlagsSet) p, withoutParent ) )
+    if ( m_pStyle && m_pStyle->hasFeature( (Style::FlagsSet) p, withoutParent ) )
         return true;
 
     return ( m_mask & (uint)p );
@@ -1631,7 +1634,8 @@ void Format::setFormatType( FormatType _format )
     clearNoFallBackProperties( Style::SFormatType);
   }
 
-  m_pStyle = m_pStyle->setFormatType( _format );
+  if (m_pStyle)
+    m_pStyle = m_pStyle->setFormatType( _format );
   formatChanged();
 }
 
