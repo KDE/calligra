@@ -374,7 +374,7 @@ into an individual frame.  You can then move these frames around independently o
 <guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice>
 from the menubar or hold down the &Ctrl; button, click in the cell once with the &RMB; and select
 <menuchoice> <guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice> 
-from the submenu.</para>
+from the popup menu.</para>
 <para>You will not be able to change the contents or formatting of that cell.</para>
 
 <note><para>To disable the protection, simply repeat the steps above, and the cells will no longer be protected.</para></note>
@@ -616,8 +616,8 @@ from the menubar. A dialog box will appear.</para>
 </screenshot>
 <para>The order the table styles are listed in the menu is determined by the order of the table styles in the list on the left.</para>
 <para>Select the table style you want to move from the list at the left by clicking once with the &LMB;.</para>
-<para>Now click on the up and down arrows located at the bottom of the list of table styles.  This will move the
-selected table style up or down in the list of table styles.</para>
+<para>Now click on the <guiicon>Up Arrow</guiicon> and <guiicon>Down Arrow</guiicon> located at the bottom of the list of table styles.  
+This will move theselected table style up or down in the list of table styles.</para>
 <para>When you are satisfied with the order of the list, select <guibutton>OK</guibutton>.</para>
 </sect3>
 

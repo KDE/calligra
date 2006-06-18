@@ -527,7 +527,7 @@ from the menubar.</para></listitem>
 <listitem><para>Move to an odd numbered page in your document, and click in the header box.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>The format paragraph dialog will appear.  Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
+<listitem><para>The <guilabel>Paragraph Settings</guilabel> dialog will appear. Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
 <listitem><para>Click the <guibutton>New</guibutton> button.</para></listitem>
 <listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is exactly 1/2 the frame width.  The frame width is
  listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
@@ -540,18 +540,18 @@ from the menubar.</para></listitem>
 
 <listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
 <listitem><para>Click in the header again with the &LMB;.</para></listitem>
-<listitem><para>Type the Tab Key.  This will move the cursor to the center of the header.</para></listitem>
+<listitem><para>Type the &Tab; key.  This will move the cursor to the center of the header.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
 <guimenuitem>Document Information</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Type the Tab key again.  This will move the cursor near the right margin of the header.</para></listitem>
+<listitem><para>Type the &Tab; key again.  This will move the cursor near the right margin of the header.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
-<guimenuitem>Page</guimenuitem><guimenuitem>Page Number</guimenuitem></menuchoice>
+<guimenuitem>Page</guimenuitem><guimenuitem>Pa	ge Number</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
 <listitem><para>Move to an even numbered page in your document, and click in the header box.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>The format paragraph dialog will appear.  Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
+<listitem><para>The <guilabel>Paragraph Settings</guilabel> dialog will appear. Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
 <listitem><para>Click the <guibutton>New</guibutton> button.</para></listitem>
 <listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is exactly 1/2 the frame width.  The frame width is
  listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
@@ -561,7 +561,7 @@ from the menubar.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
 <guimenuitem>Page</guimenuitem><guimenuitem>Page Number</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Type the Tab key.  This will move the cursor to the center of the header.</para></listitem>
+<listitem><para>Type the &Tab; key.  This will move the cursor to the center of the header.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
 <guimenuitem>Document Information</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
@@ -585,7 +585,7 @@ headers in your document.</para>
 <orderedlist>
 <listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>
 from the menubar.</para>
-<para>This will bring up the print dialog.</para></listitem>
+<para>This will bring up the <guilabel>Print</guilabel> dialog.</para></listitem>
 <listitem><para>In the combo box labeled <guilabel>Name</guilabel>, select <guilabel>Print to File (PDF)</guilabel></para></listitem>
 <listitem><para>Enter your desired filename in the <guilabel>Output file:</guilabel> text box.</para></listitem>
 <listitem><para>If you wish to make any changes to the PDF formatting, select <guibutton>Properties</guibutton>.</para>
@@ -601,7 +601,7 @@ onto any website.</para>
 <sect1 id="qd-template-remove">
 <title>How do I remove template categories from the open dialog.</title>
 
-<para>Templates can only be removed using the template creation dialog. For instructions, click
+<para>Templates can only be removed using the <guilabel>Create Template</guilabel> dialog. For instructions, click
 <link linkend="template-delete-group">Removing template group</link>.</para>
 </sect1>
 
@@ -955,8 +955,8 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <row><entry>&Microsoft; Word</entry><entry>Yes</entry><entry>No</entry></row>
 <row><entry>&Microsoft; Write</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>Oasis OpenDocument</entry><entry>Yes</entry><entry>Yes</entry></row>
-<row><entry>Openoffice Presentation</entry><entry>Yes</entry><entry>No</entry></row>
-<row><entry>Openoffice Text Document</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Openoffice.org Presentation</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Openoffice.org Text Document</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>Palm Document</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>PDF</entry><entry>Yes</entry><entry>No</entry></row>
 <row><entry>Plain Text</entry><entry>Yes</entry><entry>Yes</entry></row>
@@ -1522,7 +1522,7 @@ files which are not filtered out by the mask. (That is to say &kword;
 only shows the files that fit through the strainer).  This can be
 helpful if you have many files from many different applications. The
 file mask is incorporated in the <guilabel>Filter:</guilabel> line of
-the save and load dialog boxes.</para>
+the <guilabel>Save Document</guilabel> and <guilabel>Open Document</guilabel> dialog boxes.</para>
 <para>As an example. If you use a file mask for &kword; files, the file
 mask will try to filter out all files that are not for
 &kword;.</para></glossdef>

@@ -261,7 +261,7 @@ the following.</para>
 
 <varlistentry>
 <term><guilabel>PageUp/PageDown moves the caret</guilabel></term>
-<listitem><para>If this check box has a mark, then when you press the PageUp and PageDown buttons
+<listitem><para>If this check box has a mark, then when you press the <keycap>PageUp</keycap> and <keycap>PageDown</keycap> keys
 on the keyboard, &kword; moves the text cursor (the caret) down one page.  If there is no mark in this check box 
 then &kword; moves the view, but does not change the position of the text cursor. </para></listitem>
 </varlistentry>

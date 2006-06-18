@@ -287,7 +287,7 @@ box</link>.</para>
 <row>
 <entry><inlinemediaobject><imageobject><imagedata fileref="borbutL.png"
 format="PNG" align="right"/></imageobject></inlinemediaobject></entry>
-<entry valign="middle">Select/Unselect Left Border.  Clicking this
+<entry valign="middle">Select/Unselect <guiicon>Left Border</guiicon>.  Clicking this
 button will apply the current options to the left paragraph border.
 Clicking a second time will remove the left paragraph border.</entry>
 </row>
@@ -295,7 +295,7 @@ Clicking a second time will remove the left paragraph border.</entry>
 <row>
 <entry><inlinemediaobject><imageobject><imagedata fileref="borbutR.png"
 format="PNG" align="right"/></imageobject></inlinemediaobject></entry>
-<entry valign="middle">Select/Unselect Right Border.  Clicking this
+<entry valign="middle">Select/Unselect <guiicon>Right Border</guiicon>.  Clicking this
 button will apply the current options to the right paragraph border.
 Clicking a second time will remove the right paragraph border.</entry>
 </row>
@@ -303,7 +303,7 @@ Clicking a second time will remove the right paragraph border.</entry>
 <row>
 <entry><inlinemediaobject><imageobject><imagedata fileref="borbutT.png"
 format="PNG" align="right"/></imageobject></inlinemediaobject></entry>
-<entry valign="middle">Select/Unselect Top Border.  Clicking this button
+<entry valign="middle">Select/Unselect <guiicon>Top Border</guiicon>.  Clicking this button
 will apply the current options to the top paragraph border.  Clicking a
 second time will remove the top paragraph border.</entry>
 </row>
@@ -311,7 +311,7 @@ second time will remove the top paragraph border.</entry>
 <row>
 <entry><inlinemediaobject><imageobject><imagedata fileref="borbutB.png"
 format="PNG" align="right"/></imageobject></inlinemediaobject></entry>
-<entry valign="middle">Select/Unselect Bottom Border.  Clicking this
+<entry valign="middle">Select/Unselect <guiicon>Bottom Border</guiicon>.  Clicking this
 button will apply the current options to the bottom paragraph border.
 Clicking a second time will remove the bottom paragraph border.</entry>
 </row>

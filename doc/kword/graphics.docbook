@@ -206,7 +206,7 @@ is causing problems, the picture can always be <link linkend="switch-graphics">c
 <indexterm><primary>graphics</primary><secondary>saving in a separate file</secondary></indexterm>
 
 <para>You can save a picture or graph to a separate file (for use in another document or to archive the graphic).</para>
-<para>Simply click once on the graphic with the &RMB;.  A submenu will appear.  Select <guilabel>Save Picture...</guilabel>. 
+<para>Simply click once on the graphic with the &RMB;.  A popup menu will appear.  Select <guilabel>Save Picture...</guilabel>. 
 A dialog will appear that will allow you to specify where to save the graphic.</para>
 <note><para>This does not remove the picture from the &kword; document file.  It is simply a way to extract a picture from a 
 document so it can be archived or used in another application.</para></note>
@@ -219,7 +219,7 @@ document so it can be archived or used in another application.</para></note>
 <sect3 id="inline-to-frame"><title>Change an inline picture to a framed picture</title>
 <para>To change in inline picture to a framed picture, click on the desired picture with the &LMB; once.  This selects the frame
 of the picture.</para>
-<para>Now click and hold with the &RMB; and a submenu will appear.  In the submenu, is a menu item labeled
+<para>Now click and hold with the &RMB; and a popup menu will appear.  In this menu, is an item labeled
 <guilabel>Inline Frame</guilabel>, with a mark in front of it.  Select this option by clicking with the &LMB;.</para>
 <para>The frame is now
 an independent and can be moved around freely.</para>
@@ -227,7 +227,7 @@ an independent and can be moved around freely.</para>
 <sect3 id="frame-to-inline"><title>Change a framed picture to an inline picture</title>
 <para>To change a framed picture into an inline picture, click on the desired picture with the &LMB; once.  This selects the frame
 of the picture.</para>
-<para>Now click and hold with the &RMB; and a submenu will appear.  In the submenu, is a menu item labeled
+<para>Now click and hold with the &RMB; and a popup menu will appear.  In this menu, is an item labeled
 <guilabel>Inline Frame</guilabel>.  Select this option by clicking with the &LMB;.</para>
 <para>&kword; has now converted this to an inline frame.</para>
 <note><para>&kword; tries to make a reasonable estimation of where in the text the inline image should be inserted.</para>

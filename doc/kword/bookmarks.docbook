@@ -46,7 +46,7 @@ the location in the document that is attached to that bookmark. </para>
 <para>To rename a bookmark, select
 <menuchoice><guimenu>Tools</guimenu><guimenuitem>Select Bookmark...</guimenuitem></menuchoice> from
 the menubar.</para>
-<para>A small dialog will appear.  Click on the desired bookmark with the &LMB;.  Now select <guibutton>Rename Bookmark</guibutton>.
+<para>A small dialog will appear.  Click on the desired bookmark with the &LMB;.  Now click <guibutton>Rename Bookmark</guibutton>.
 A small dialog will appear.  Enter the new name for your bookmark.  Click <guibutton>OK</guibutton>.  The
 bookmark is renamed immediately.
 </para></sect2>

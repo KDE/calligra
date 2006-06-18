@@ -68,7 +68,7 @@ entitled: <link linkend="basic-menubar">The Menubar</link>.</para>
 
 <varlistentry>
 <term><emphasis><anchor id="kde-docstruct"/>Document Structure Area</emphasis></term>
-<listitem><para>The Document Structure Area places individual types of data into useful groups 
+<listitem><para>The <guilabel>Document Structure</guilabel> area places individual types of data into useful groups 
 (pictures, tables, text, etc) to help you find the correct data in a complicated document.  For 
 more information, see the section on <link linkend="doc-structure">Document Structure</link>.</para>
 </listitem>
@@ -156,9 +156,9 @@ the new frame's settings.</para>
 
 <para>To change the units of the ruler, place the mouse cursor over one
 of the rulers (either one), and click with the
-<mousebutton>right</mousebutton> button on your mouse.</para>
+&RMB;.</para>
 
-<para>Select the units you want to use from the sub-menu.  You will notice both rulers
+<para>Select the units you want to use from the popup menu.  You will notice both rulers
 change to the new unit of measure.</para>
 
 <para>You may also notice two vertical arrows (one pointed up, the other

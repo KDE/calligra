@@ -37,12 +37,12 @@ file location you want the comment to be linked with (for example:  http://www.k
 <para>Click <guibutton>OK</guibutton>.</para>
 <note><para>By default, &kword; displays links underlined (as in most browsers).  You can turn this behavior on and off by
 selecting <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
-&kword;...</guimenuitem></menuchoice> from the menubar and selecting the <guilabel>Misc</guilabel> icon.  More information can be found
+&kword;...</guimenuitem></menuchoice> from the menubar and selecting the <guilabel>Misc</guilabel> page.  More information can be found
 <link linkend="opt-misc">here</link>.</para></note>
 </sect2>
 <sect2 id="links-open"><title>Opening a document link</title>
 <para>You an use a document link from within &kword;.</para>
-<para>Simply click once on the document link with the &RMB;.  A submenu will appear.  Select <guilabel>Open Link</guilabel>.</para>
+<para>Simply click once on the document link with the &RMB;.  A popup menu will appear.  Select <guilabel>Open Link</guilabel>.</para>
 <para>A document link to a web site will open a new browser window and take you directly to that web site.  A document link to an
 email address, will open a new message in your email program.  A document link to a file will open the appropriate viewer or editor for 
 that file type.</para>
@@ -50,13 +50,13 @@ that file type.</para>
 
 <sect2 id="links-copy"><title>Copy a document link</title>
 <para>You an use a document link in another application, by copying it from a &kword; document.</para>
-<para>Simply click once on the document link with the &RMB;.  A submenu will appear.  Select <guilabel>Copy Link</guilabel>.</para>
+<para>Simply click once on the document link with the &RMB;.  A popup menu will appear.  Select <guilabel>Copy Link</guilabel>.</para>
 <para>The link address has now been inserted into the clipboard.  You can paste your clipboard entry into any other application.</para>
 </sect2>
 <sect2 id="links-edit"><title>Changing a document link</title>
 <para>To change the details of a document link Simply click 
-once on the document link with the &RMB;.  A submenu will appear.  Select <guilabel>Change Link...</guilabel>.</para>
-<para>The document link dialog box will appear, with the current settings of the link displayed.</para>
+once on the document link with the &RMB;.  A popup menu will appear.  Select <guilabel>Change Link...</guilabel>.</para>
+<para>The <guilabel>Insert Link</guilabel> dialog box will appear, with the current settings of the link displayed.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -72,7 +72,7 @@ once on the document link with the &RMB;.  A submenu will appear.  Select <guila
 the cursor at the beginning of the document link and press <keycap>Delete</keycap> on the keyboard. The document link is deleted in its entirety.</para>
 </sect2>
 <sect2 id="links-remove"><title>Converting a document link to text</title>
-<para>If a document link is no longer needed as a link, but you want to preserve the text that is the link, click once on the document link with the &RMB;.  A submenu will appear.  Select <guilabel>Remove Link...</guilabel>.  The linked text will now become plain text, and the link will be deleted.</para>
+<para>If a document link is no longer needed as a link, but you want to preserve the text that is the link, click once on the document link with the &RMB;.  A popup menu will appear.  Select <guilabel>Remove Link...</guilabel>.  The linked text will now become plain text, and the link will be deleted.</para>
 
 </sect2>
 

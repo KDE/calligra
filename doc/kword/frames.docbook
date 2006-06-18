@@ -78,7 +78,7 @@ rearranged as you type.</para>
 to select. </para></listitem>
 <listitem><para>By holding down the &Ctrl; key and clicking anywhere within the frame.</para></listitem>
 </itemizedlist>
-<para>There should now be 8 yellow squares around the edges of the frame.</para>
+<para>There should now be 8 squares around the edges of the frame.</para>
 
 </sect2>
 <sect2 id="add-text-frame">
@@ -197,7 +197,7 @@ possible.</para>
 to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)</para>
 
-<para>There are now 8 yellow squares on the edges of the frame.</para>
+<para>There are now 8 squares on the edges of the frame.</para>
 
 <para>If this is the frame you want to delete, you can do so by:</para>
 
@@ -232,7 +232,7 @@ Frame</guimenuitem>.</para>
 to move. (Or holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)</para>
 
-<para>There are now 8 yellow squares on the edges of the frame.</para>
+<para>There are now 8 squares on the edges of the frame.</para>
 
 <para>Click and hold the &LMB; on the border again and drag the cursor in the direction you want to move the
 frame.</para>
@@ -259,7 +259,7 @@ to change. (Or holding down the &Ctrl; key and clicking inside the frame with th
 &LMB;.)  This selects
 this frame as the current frame.</para>
 
-<para>There are now 8 yellow squares on the edges of the frame. By moving
+<para>There are now 8 squares on the edges of the frame. By moving
 these squares, you will be able to drag the frame border(s) to a new
 location.</para>
 
@@ -310,7 +310,7 @@ selecting <menuchoice>
 from the menubar</para>
 
 <tip><para>You can also accomplish this by clicking on the frame border once with the &RMB;, and selecting
-<guilabel>Frame/Frameset Properties...</guilabel> from the submenu.</para></tip>
+<guilabel>Frame/Frameset Properties...</guilabel> from the popup menu.</para></tip>
 
 <para>This will bring up a dialog box with five tabs.  Select the tab
 labeled <guilabel>Connect Text Frames</guilabel>.</para>

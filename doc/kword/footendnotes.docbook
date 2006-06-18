@@ -54,7 +54,7 @@ entry, and place the cursor at the beginning of the entry for you to enter the d
 Type your reference information in the space provided.  </para>
 
 <para>When you have finished entering your footnote or endnote reference information, simply move your cursor over the footnote or endnote 
-number.  Click with the &RMB;.  A submenu will appear.  Select <guilabel>Go to Footnote</guilabel> and &kword; will move the cursor back to the text 
+number.  Click with the &RMB;.  A popup menu will appear.  Select <guilabel>Go to Footnote</guilabel> and &kword; will move the cursor back to the text 
 where the reference was made.</para>
 </sect2>
 
@@ -66,7 +66,7 @@ where the reference was made.</para>
 <para>There are two ways to change reference information for a footnote:</para>
 <itemizedlist>
 <listitem><para>Place the mouse pointer over the footnote you want to change, and click once with the &RMB;.  
-A submenu will appear.  Select <guimenuitem>Edit Footnote</guimenuitem>.  &kword; will immediately move your 
+A popup menu will appear.  Select <guimenuitem>Edit Footnote</guimenuitem>.  &kword; will immediately move your 
 cursor to the appropriate footnote reference.</para></listitem>
 <listitem><para>Simply move to the bottom of the page (if it is a footnote) or the end of the document 
 (if it is an endnote).  Locate the footnote or endnote reference, and click once with the &LMB;.</para>

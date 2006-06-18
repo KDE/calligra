@@ -181,7 +181,7 @@ the items on the main menubar are not spoken.  The text of the
 <sect2 id="a11y-kmousetool">
 <title>KMouseTool</title>
 <para>If you can operate a mouse, but have trouble clicking, the
-<ulink url="help:kmag">KMouseTool</ulink> application may help.  Run it from
+<ulink url="help:kmousetool">KMouseTool</ulink> application may help.  Run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
 <guimenuitem>KMouseTool (Automatik Mouse Click)</guimenuitem></menuchoice>.
 </para>
@@ -198,11 +198,11 @@ the items on the main menubar are not spoken.  The text of the
 They include:</para>
 <variablelist>
 <varlistentry>
-<term>Sticky Keys</term>
+<term><guilabel>Sticky Keys</guilabel></term>
 <listitem><para>This feature permits operation of meta keys, such as
 &Alt;, &Ctrl;, and &Shift; without having to hold the keys down.  It is useful
 when you can only use one finger or one hand to operate the keyboard.
-With Sticky Keys on, press and release a &Alt;, &Ctrl;, or &Shift; key, then
+With <guilabel>Sticky Keys</guilabel> on, press and release a &Alt;, &Ctrl;, or &Shift; key, then
 press another key.  The result is as if you pressed both keys at once.
 Press the &Alt;, &Ctrl;, or &Shift; key again to turn off the sticky key.
 Activate this feature in 
@@ -283,9 +283,9 @@ details.  In addition, the following tips will be useful:
 <listitem><para>
 Several of the functions that can only be performed with the mouse in the
 main document panel can be performed with the keyboard in the
-Document Structure Area.  See <xref linkend="doc-structure"/>.
+<guilabel>Document Structure</guilabel> area.  See <xref linkend="doc-structure"/>.
 You can switch from the document panel
-to the <guilabel>Document Structure Area</guilabel> by pressing <keycombo action="simul">
+to the <guilabel>Document Structure</guilabel> area by pressing <keycombo action="simul">
 &Alt;<keycap>1</keycap></keycombo>.  Switch to the
 document panel by pressing 
 <keycombo action="simul">&Alt;<keycap>2</keycap></keycombo>.
@@ -308,7 +308,7 @@ In order to change the properties of a frame or delete a frame, you must first s
 To do so without using the mouse, position the text caret anywhere inside the frame and
 choose <menuchoice><guimenu>Edit</guimenu><guimenuitem>Select Frame</guimenuitem></menuchoice>
 from the main menubar.  Alternatively, press <keycombo action="simul">&Alt;<keycap>1</keycap></keycombo> to
-go to the <guilabel>Document Structure Area</guilabel>,
+go to the <guilabel>Document Structure</guilabel> area,
 scroll to the desired frame, press the <keycap>Menu</keycap> key to pop up the context
 menu and choose 
 <menuchoice><guimenuitem>Properties</guimenuitem></menuchoice>
@@ -317,7 +317,7 @@ or <menuchoice><guimenuitem>Delete Frame</guimenuitem></menuchoice>.
 <listitem><para>You cannot use the arrow keys to move the text caret into some
 frames within the document panel.  To move the caret inside the frame,
 press <keycombo action="simul">&Alt;<keycap>1</keycap></keycombo> to
-go to the <guilabel>Document Structure Area</guilabel>,
+go to the <guilabel>Document Structure</guilabel> area,
 scroll to the desired frame, press the <keycap>Menu</keycap> key to pop up the context
 menu and choose <menuchoice><guimenuitem>Edit Text</guimenuitem></menuchoice>.
 </para></listitem>
@@ -328,7 +328,7 @@ menu and choose <menuchoice><guimenuitem>Edit Text</guimenuitem></menuchoice>.
 <sect2 id="a11y-motor-panel-sizing">
 <title>Resizing panels</title>
 
-<para>You can move the sizing bar between the <guilabel>Document Structure Area</guilabel>
+<para>You can move the sizing bar between the <guilabel>Document Structure</guilabel> area
 and the main document panel by pressing <keycap>F8</keycap>.  A sizing icon appears
 overtop the sizing bar.  Use the arrow keys to move the bar left or right.
 Press <keycap>F8</keycap> again or &Esc; when finished sizing.

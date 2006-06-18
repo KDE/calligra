@@ -85,7 +85,7 @@ stops.</para>
 use.</para>
 
 <para>Place the mouse cursor over the current tab character (located
-directly to the left of the top ruler).  Click once with the &RMB;.  A small submenu
+directly to the left of the top ruler).  Click once with the &RMB;.  A small popup menu
 will appear.  You can select the tab stop you want from the sub
 menu.</para>
 
@@ -262,8 +262,8 @@ desired tab stop.  The mouse pointer will change to a double
 arrow.</para>
 </listitem>
 <listitem>
-<para>Click and hold down the <mousebutton>right</mousebutton> button on
-the mouse. A submenu will appear.  Select <guimenuitem>Remove Tabulator</guimenuitem>.</para>
+<para>Click and hold down the &RMB; on
+the mouse. A popup menu will appear.  Select <guimenuitem>Remove Tabulator</guimenuitem>.</para>
 </listitem>
 </orderedlist>
 </sect3>

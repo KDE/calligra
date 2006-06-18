@@ -179,7 +179,7 @@ the items on the main menubar are not spoken.
 <sect2 id="a11y-kmousetool">
 <title>KMouseTool</title>
 <para>If you can operate a mouse, but have trouble clicking, the
-<ulink url="help:kmag">KMouseTool</ulink> application may help.  Run it from
+<ulink url="help:kmousetool">KMouseTool</ulink> application may help.  Run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
 <guimenuitem>KMouseTool (Automatik Mouse Click)</guimenuitem></menuchoice>.
 </para>

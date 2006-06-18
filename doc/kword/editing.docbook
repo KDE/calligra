@@ -299,7 +299,7 @@ from the menubar.</para>
 The clipboard can contain tables, pictures, spreadsheets or any other type of information.</para>
 <sect2 id="local-copy">
 
-<title>The Copy Command</title>
+<title>The <guimenuitem>Copy</guimenuitem> Command</title>
 <indexterm><primary>clipboard</primary><secondary>copying text to</secondary></indexterm>
 <para>The <guimenuitem>Copy</guimenuitem> command can be invoked 4 ways:</para>
 
@@ -325,7 +325,7 @@ action="simul">&Ctrl;<keycap>Insert</keycap></keycombo></para>
 
 <listitem>
 <para>After the text is selected, click once with the &RMB; and hold the button down. 
-A small submenu will appear.  Simply select <guilabel>Copy</guilabel></para>
+A small popup menu will appear.  Simply select <guilabel>Copy</guilabel></para>
 </listitem>
 
 </itemizedlist>
@@ -337,7 +337,7 @@ unaffected.</emphasis></para>
 </sect2>
 
 <sect2 id="local-cut">
-<title>The Cut Command</title>
+<title>The <guimenuitem>Cut</guimenuitem> Command</title>
 <indexterm><primary>clipboard</primary><secondary>moving text to</secondary></indexterm>
 <para>The <guimenuitem>Cut</guimenuitem> command can be invoked 4 ways:</para>
 
@@ -362,7 +362,7 @@ action="simul">&Shift;<keycap>Delete</keycap></keycombo></para>
 </listitem>
 <listitem>
 <para>After the text is selected, click once with the &RMB; and hold the button down. 
-A small submenu will appear.  Simply select <guilabel>Cut</guilabel></para>
+A small popup menu will appear.  Simply select <guilabel>Cut</guilabel></para>
 </listitem></itemizedlist>
 
 <para>The <guimenuitem>Cut</guimenuitem> command moves a copy of the selected data
@@ -372,7 +372,7 @@ document.</emphasis></para>
 </sect2>
 
 <sect2 id="local-paste">
-<title>The Paste Command</title>
+<title>The <guimenuitem>Paste</guimenuitem> Command</title>
 <indexterm><primary>clipboard</primary><secondary>moving text from</secondary></indexterm>
 <para>The <guimenuitem>Paste</guimenuitem> command can be invoked 4 ways:</para>
 
@@ -399,7 +399,7 @@ action="simul">&Shift;<keycap>Insert</keycap></keycombo></para>
 <listitem>
 <para>Place the cursor where the contents of the clipboard
 should be inserted. Click once with the &RMB; and hold the button down. A small
-submenu will appear.  Simply select <guilabel>Paste</guilabel></para>
+popup menu will appear.  Simply select <guilabel>Paste</guilabel></para>
 </listitem>
 
 </itemizedlist>
@@ -431,7 +431,7 @@ into another open document, or another application entirely.</para></tip>
 <title>Finding and Replacing Text</title>
 
 <sect2 id="find">
-<title>The Find Command</title>
+<title>The <guimenuitem>Find</guimenuitem> Command</title>
 <indexterm><primary>searching for text</primary></indexterm>
 <indexterm><primary>finding text in a document</primary></indexterm>
 
@@ -687,10 +687,10 @@ is, by default forward in the document, but can be changed with the
 </sect2>
 
 <sect2 id="replace">
-<title>The Replace Command</title>
+<title>The <guimenuitem>Replace</guimenuitem> Command</title>
 
-<para>The replace command is an extension of the find command. If you
-are familiar with the find command, you will see many
+<para>The <guimenuitem>Replace</guimenuitem> command is an extension of the <guimenuitem>Find</guimenuitem> command. If you
+are familiar with the <guimenuitem>Find</guimenuitem> command, you will see many
 similarities.</para>
 
 <para>The <guilabel>Replace</guilabel> command can be invoked 2
@@ -1053,7 +1053,7 @@ to use shadow text and/or word by word underlining and strikethrough in the repl
 <title>Using placeholders</title>
 <para>Placeholders are useful when you want to add text to complex search strings.  Currently &kword; has only one placeholder:  
 <emphasis>Complete text string</emphasis>.</para>
-<para>This placeholder will contain the entire text string matched by the find command.</para>
+<para>This placeholder will contain the entire text string matched by the <guimenuitem>Find</guimenuitem> command.</para>
 <para>For example:</para>
 <para>You create a search string, using regular expressions:  <emphasis>Reference \d</emphasis></para>
 <note><para>In order for this string example to work, a mark must be placed in the check box labeled 
@@ -1305,7 +1305,7 @@ from the menubar you can toggle autospellchecking on and off. </para>
 <para>You can invoke the thesaurus two ways:  </para>
 
 <itemizedlist>
-<listitem><para>Simply click on the desired word with the &RMB;.  A submenu will appear.  Select
+<listitem><para>Simply click on the desired word with the &RMB;.  A popup menu will appear.  Select
 <guimenuitem>Show Related Words</guimenuitem> from the menu and a dialog will appear.</para></listitem>
 <listitem><para>By selecting <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Show Related Words</guimenuitem></menuchoice>
