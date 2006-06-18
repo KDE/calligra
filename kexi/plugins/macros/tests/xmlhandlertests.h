@@ -74,9 +74,9 @@ namespace KoMacroTest {
 			/// @internal d-pointer instance.
 			Private* const d;
 			// Compares a XML-Element with a Macro. Call sub-asserts.
-			void assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, 
-				const QDomElement& domelement, 
-				bool isitemsempty, bool isactionset, QMap<QString, bool isvariableok);
+			void assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
+				const QDomElement& domelement,
+				bool isitemsempty, bool isactionset, QMap<QString, bool> isvariableok);
 			// Prints a QMap of Variables to kdDebug().
 			void printMvariables(QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, QString s);
 

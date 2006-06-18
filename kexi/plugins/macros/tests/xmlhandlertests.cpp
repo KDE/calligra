@@ -79,6 +79,20 @@ namespace KoMacroTest {
 
 // TODO: 	- test correct XML-tags once
 //			- look at const
+//			- compile error, begins with:
+/*In file included from /usr/lib/qt3/include/qconnection.h:74,
+                 from /usr/lib/qt3/include/qmetaobject.h:42,
+                 from /home/bernd/swp/koffice/kexi/plugins/macros/tests/xmlhandlertests.moc:12,
+                 from /home/bernd/swp/koffice/kexi/plugins/macros/tests/xmlhandlertests.cpp:593:
+/usr/lib/qt3/include/qwinexport.h:221:1: error: unterminated argument list invoking macro "KOMACROTEST_ASSERT"
+/usr/lib/qt3/include/qwinexport.h: In member function ‘void KoMacroTest::XMLHandlerTests::assertMacroContentEqToXML(KSharedPtr<KoMacro::Macro>, const QDomElement&, bool, bool, QMap<QString, bool>)’:
+/usr/lib/qt3/include/qwinexport.h:1: error: ‘KOMACROTEST_ASSERT’ was not declared in this scope
+/usr/lib/qt3/include/qmetaobject.h:50: error: expected `;' before ‘class’
+/usr/lib/qt3/include/qmetaobject.h:129: error: a function-definition is not allowed here before ‘{’ token
+/usr/lib/qt3/include/qmetaobject.h:258: error: a function-definition is not allowed here before �{’ token
+/usr/lib/qt3/include/qmetaobject.h:261: error: a function-definition is not allowed here before ‘{’ token
+/usr/lib/qt3/include/qmetaobject.h:265: error: a function-definition is not allowed here before ‘{’ token
+*/
 
 XMLHandlerTests::XMLHandlerTests()
 	: KUnitTest::SlotTester()
@@ -132,7 +146,7 @@ void XMLHandlerTests::testParseXML()
 	testMinNum();
 	testMinNum2();
 	testBigNumber();
-	testTwoMacroItems
+	testTwoMacroItems();
 }
 
 /***************************************************************************
@@ -170,7 +184,7 @@ void XMLHandlerTests::testCorrectDomElement()
 	isvariableok["testint"] = true;
 	isvariableok["testbool"] = true;
 	isvariableok["testdouble"] = true;
-	assertMacroContentEqToXML(macro,domelement,false,true,);
+	assertMacroContentEqToXML(macro,domelement,false,true,isvariableok);
 	// Test the Compare-method when a Variable will change, it must fail.
 	macro->items().first()->variable("teststring")->setVariant("bla");
 	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
@@ -488,7 +502,7 @@ void XMLHandlerTests::testToXML()
 // Compares a XML-Element with a Macro by value.
 void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
 	const QDomElement& domelement,
-	bool isitemsempty, bool isactionset, QMap<QString, bool isvariableok)
+	bool isitemsempty, bool isactionset, QMap<QString, bool> isvariableok)
 {	
 	// Make an Iterator over the MacroItems of the Macro.
 	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems = macro->items();
@@ -517,7 +531,7 @@ void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro>
 		
 		//2.comparison - Is the Action-name equal?
 		{
-			if( ! isaction) {
+			if( ! isactionset) {
 				KOMACROTEST_XASSERT(macroitem->action()->name() == itemelem.attribute("action"),true);
 				kdDebug() 	<< "Action-name not equal: " 
 							<< macroitem->action()->name()
