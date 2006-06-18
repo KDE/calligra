@@ -134,6 +134,7 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					Q_UNUSED(variable);
 				}
 			}
+			delete item; // TODO It should be done or?
 		}
 	}
 
@@ -220,6 +221,8 @@ QDomElement XMLHandler::toXML()
 		if(append) {
 			macroelem.appendChild(itemelem);
 		}
+
+		delete item; // TODO It should be done or?
 	}
 
 	// Job done. Return the macro's element.

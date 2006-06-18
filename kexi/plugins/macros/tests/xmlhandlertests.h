@@ -74,7 +74,9 @@ namespace KoMacroTest {
 			/// @internal d-pointer instance.
 			Private* const d;
 			// Compares a XML-Element with a Macro. Call sub-asserts.
-			void assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement);
+			void assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, 
+				const QDomElement& domelement, 
+				bool isitemsempty, bool isactionset, QMap<QString, bool isvariableok);
 			// Prints a QMap of Variables to kdDebug().
 			void printMvariables(QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, QString s);
 
@@ -84,37 +86,32 @@ namespace KoMacroTest {
 			* respectively expected failure of parsing.
 			*/
 			// 1.Test - Correct DomElement.
-			void tpxTestCorrectDomElement();
+			void testCorrectDomElement();
 			// 2.Test - XML-document with bad root element.
-			void tpxTestBadRoot();
+			void testBadRoot();
 			// 3.Test - XML-document with a missing Variable.
-			void tpxTestMissingVariable();
+			void testMissingVariable();
 			// 4.Test - One more Variable in XML-Document.
-			void tpxTestMoreVariables();
-			// 5.Test - XML-document with wrong macro-xmlversion..
-			void tpxTestWrongVersion();
-			// 6.Test - XML-document if it has a wrong structure like 
+			void testMoreVariables();
+			// 5.Test - XML-document with wrong macro-xmlversion.
+			void testWrongVersion();
+			// 6.Test - XML-document if it has a wrong structure like
 			// wrong parathesis	or missing end tag.
-			void tpxTestWrongXMLStruct();
+			void testWrongXMLStruct();
 			// 7.Test - XML-document with wrong item- and variable-tags.
-			void tpxTestWrongItemVarTags();
+			void testWrongItemVarTags();
 			// 8.Test-XML-document with maximum field-size.
-			void tpxTestMaxNum();
+			void testMaxNum();
 			// 9.Test-XML-document with maximum +1 field-size.
-			void tpxTestMaxNum2();
+			void testMaxNum2();
 			// 10.Test-XML-document with minimum field-size.
-			void tpxTestMinNum();
+			void testMinNum();
 			// 11.Test-XML-document with minimum field-size.
-			void tpxTestMinNum2();
+			void testMinNum2();
 			// 12.Test - With a to big number.
-			void tpxTestBigNumber();
-
-			/** 
-			* Sub-methods of assertMacroContentEqToXML().
-			* Compare the parsen @a Macro -tree and the given @a QDomElement -tree.
-			*/
-			//1. comparison - Is the MacroItem-list empty?
-			void assertItemsNotEmpty(const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems, bool expect, bool proceed);
+			void testBigNumber();
+			// 13.Test - With two MacroItems.
+			void testTwoMacroItems();
 	};
 
 }

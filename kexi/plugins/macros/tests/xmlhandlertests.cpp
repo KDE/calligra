@@ -77,6 +77,9 @@ namespace KoMacroTest {
 	};
 }
 
+// TODO: 	- test correct XML-tags once
+//			- look at const
+
 XMLHandlerTests::XMLHandlerTests()
 	: KUnitTest::SlotTester()
 	, d( new Private() ) // create the private d-pointer instance.
@@ -116,30 +119,32 @@ void XMLHandlerTests::testParseXML()
 {
 	kdDebug()<<"===================== testParseXML() ======================" << endl;
 
-	tpxTestCorrectDomElement();
-	tpxTestBadRoot();
-	tpxTestMissingVariable();
-	tpxTestMoreVariables();
-	tpxTestWrongVersion();
-	//tpxTestWrongXMLStruct();
-	//tpxTestWrongItemVarTags();
-	tpxTestMaxNum();
-	tpxTestMaxNum2();
-	tpxTestMinNum();
-	tpxTestMinNum2();
-	tpxTestBigNumber();
+	// 1.Test - Correct DomElement 	- PASS.
+	testCorrectDomElement();		
+	testBadRoot();
+	testMissingVariable();
+	testMoreVariables();
+	testWrongVersion();
+	//testWrongXMLStruct();
+	//testWrongItemVarTags();
+	testMaxNum();
+	testMaxNum2();
+	testMinNum();
+	testMinNum2();
+	testBigNumber();
+	testTwoMacroItems
 }
 
 /***************************************************************************
 * Begin of Sub-methos of testParseXML().
 ***************************************************************************/
 
-// 1.Test - Correct DomElement.
-void XMLHandlerTests::tpxTestCorrectDomElement()
+// 1.Test - Correct DomElement	- PASS.
+void XMLHandlerTests::testCorrectDomElement()
 {
 	// Local Init
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	// Part 1: From XML to a Macro.
@@ -154,26 +159,29 @@ void XMLHandlerTests::tpxTestCorrectDomElement()
 				      "</item>"
 				    "</macro>");
 	// Set the XML-document with the above string.
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	// Is our XML parseable ?
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	// Is the parsen content in the Macro correct ?
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
+	QMap<QString,bool> isvariableok;
+	isvariableok["teststring"] = true;	// TODO nicer?
+	isvariableok["testint"] = true;
+	isvariableok["testbool"] = true;
+	isvariableok["testdouble"] = true;
+	assertMacroContentEqToXML(macro,domelement,false,true,);
 	// Test the Compare-method when a Variable will change, it must fail.
 	macro->items().first()->variable("teststring")->setVariant("bla");
 	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument; // TODO delete domelement; ??
+	//assertMacroContentEqToXML(macro,domelement,false,true,true);
 }
 
 // 2.Test - XML-document with bad root element.
-void XMLHandlerTests::tpxTestBadRoot()
+void XMLHandlerTests::testBadRoot()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -185,20 +193,18 @@ void XMLHandlerTests::tpxTestBadRoot()
 						"<variable name=\"testdouble\" >0.6</variable>"
 				      "</item>"
 				    "</maro>");
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument;
+	//assertMacroContentEqToXML(macro,domelement);
 }
 
 // 3.Test - XML-document with a missing Variable.
-void XMLHandlerTests::tpxTestMissingVariable()
+void XMLHandlerTests::testMissingVariable()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -209,20 +215,18 @@ void XMLHandlerTests::tpxTestMissingVariable()
 						"<variable name=\"testdouble\" >0.6</variable>"
 				      "</item>"
 				    "</macro>");
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument;
+	//assertMacroContentEqToXML(macro,domelement);
 }
 
 // 4.Test - One more Variable in XML-Document.
-void XMLHandlerTests::tpxTestMoreVariables()
+void XMLHandlerTests::testMoreVariables()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -235,20 +239,18 @@ void XMLHandlerTests::tpxTestMoreVariables()
 						"<variable name=\"testbla\" >somethingwrong</variable>"
 				      "</item>"
 				    "</macro>");
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument;
+	//assertMacroContentEqToXML(macro,domelement);
 }
 
 // 5.Test - XML-document with wrong macro-xmlversion.
-void XMLHandlerTests::tpxTestWrongVersion()
+void XMLHandlerTests::testWrongVersion()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -260,21 +262,19 @@ void XMLHandlerTests::tpxTestWrongVersion()
 						"<variable name=\"testdouble\" >0.6</variable>"
 				      "</item>"
 				    "</macro>");
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument;
+	//assertMacroContentEqToXML(macro,domelement);
 }
 
 // 6.Test - XML-document if it has a wrong structure like wrong parathesis
 // 	or missing end tag. TODO is this critical??
-void XMLHandlerTests::tpxTestWrongXMLStruct()
+void XMLHandlerTests::testWrongXMLStruct()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -283,24 +283,23 @@ void XMLHandlerTests::tpxTestWrongXMLStruct()
     					"<variable name=\"teststring\" >testString</variable>"
 						"<variable name=\"testint\" >0</variable>"
 				    "</macro>");
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	// Test setting of the QDomDocument, but we get a QDomElement...
+	KOMACROTEST_XASSERT(doomdocument.setContent(xml),true);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-	KOMACROTEST_ASSERT(doomdocument->isDocument(),true);
+	//assertMacroContentEqToXML(macro,domelement);
+	KOMACROTEST_ASSERT(doomdocument.isDocument(),true);
 	KOMACROTEST_ASSERT(domelement.isElement(),true);
-
-	delete doomdocument;
 }
 
 // 7.Test - XML-document with wrong item- and variable-tags.
 // 	TODO Could this happen?? It could, but concerning to high performance
 // 	we accept that the tags maybe wrong.
-void XMLHandlerTests::tpxTestWrongItemVarTags()
+void XMLHandlerTests::testWrongItemVarTags()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -310,20 +309,18 @@ void XMLHandlerTests::tpxTestWrongItemVarTags()
 						"<v name=\"testint\" >0</variable>"
 						"<variable name=\"testbool\" >true</variable>"
 						"<variable name=\"testdouble\" >0.6</variable>"
-				      "</item>"
+				      "</iem>"
 				    "</macro>");
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
-	KOMACROTEST_XASSERT(macro->parseXML(domelement),true); 
-
-	delete doomdocument;
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
+	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
 }
 
 // 8.Test-XML-document with maximum field-size.
-void XMLHandlerTests::tpxTestMaxNum()
+void XMLHandlerTests::testMaxNum()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -335,20 +332,18 @@ void XMLHandlerTests::tpxTestMaxNum()
 						"<variable name=\"testdouble\" > %2 </variable>"
 				      "</item>"
 				    "</macro>").arg(INT_MAX).arg(DBL_MAX);
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument;
+	//assertMacroContentEqToXML(macro,domelement);
 }
 
 // 9.Test-XML-document with maximum+1 field-size.
-void XMLHandlerTests::tpxTestMaxNum2()
+void XMLHandlerTests::testMaxNum2()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -360,20 +355,18 @@ void XMLHandlerTests::tpxTestMaxNum2()
 						"<variable name=\"testdouble\" > %2 </variable>"
 				      "</item>"
 				    "</macro>").arg(INT_MAX+1).arg(DBL_MAX+1);
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument;
+	//assertMacroContentEqToXML(macro,domelement);
 }
 
 // 10.Test-XML-document with minimum field-size.
-void XMLHandlerTests::tpxTestMinNum()
+void XMLHandlerTests::testMinNum()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -385,20 +378,18 @@ void XMLHandlerTests::tpxTestMinNum()
 						"<variable name=\"testdouble\" > %2 </variable>"
 				      "</item>"
 				    "</macro>").arg(INT_MIN).arg(DBL_MIN);
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument;
+	//assertMacroContentEqToXML(macro,domelement);
 }
 
 // 11.Test-XML-document with minimum+1 field-size.
-void XMLHandlerTests::tpxTestMinNum2()
+void XMLHandlerTests::testMinNum2()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -410,20 +401,18 @@ void XMLHandlerTests::tpxTestMinNum2()
 						"<variable name=\"testdouble\" > %2 </variable>"
 				      "</item>"
 				    "</macro>").arg(INT_MIN+1).arg(DBL_MIN+1);
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
-
-	delete doomdocument;
+	//assertMacroContentEqToXML(macro,domelement);
 }
 
 // 12.Test - With a to big number.
-void XMLHandlerTests::tpxTestBigNumber()
+void XMLHandlerTests::testBigNumber()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument* doomdocument = new QDomDocument();
+	QDomDocument doomdocument;
 	QDomElement domelement;
 
 	QString xml = QString("<!DOCTYPE macros>"
@@ -435,81 +424,149 @@ void XMLHandlerTests::tpxTestBigNumber()
 						"<variable name=\"testdouble\" > %1 </variable>"
 				      "</item>"
 				    "</macro>").arg(DBL_MAX+1);
-	doomdocument->setContent(xml);
-	domelement = doomdocument->documentElement();
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	assertMacroContentEqToXML(macro,domelement);
+	////assertMacroContentEqToXML(macro,domelement);
+}
 
-	delete doomdocument;
+// 13.Test - With two MacroItems.
+void XMLHandlerTests::testTwoMacroItems()
+{
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	QDomDocument doomdocument;
+	QDomElement domelement;
+
+	QString xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
+						"<variable name=\"testbla\" >somethingwrong</variable>"
+				      "</item>"
+					"<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString2</variable>"
+						"<variable name=\"testint\" >4</variable>"
+						"<variable name=\"testbool\" >false</variable>"
+						"<variable name=\"testdouble\" >0.7</variable>"
+						"<variable name=\"testbla\" >somethingwrong2</variable>"
+				      "</item>"
+				    "</macro>");
+	doomdocument.setContent(xml);
+	domelement = doomdocument.documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+	//assertMacroContentEqToXML(macro,domelement);
 }
 /***************************************************************************
 * End of Sub-methos of testParseXML().
 ***************************************************************************/
 
-// Compares a XML-Element with a Macro by value.
-void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement)
+/**
+* Test the @a KoMacro::XMLHandler toXML()-function.
+*/
+void XMLHandlerTests::testToXML()
 {	
-	// To handle control flow.
-	// TODO: We should also can do this by return-statement of the sub-asserts.
-	bool proceed = true;
+	kdDebug()<<"===================== testToXML() ======================" << endl;
+	// TODO Part 2: From a Macro to XML. Some little tests.
+	
+	// Init requiered testobject.
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::MacroItem> macroitem = new KoMacro::MacroItem();
+	KSharedPtr<KoMacro::Action> testaction = new TestAction();
+	macroitem->setAction(testaction);
+	macro->addItem(macroitem);
 
+	// First Test.
+	QDomElement domelement = macro->toXML();
+	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
+}
+
+// Compares a XML-Element with a Macro by value.
+void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
+	const QDomElement& domelement,
+	bool isitemsempty, bool isactionset, QMap<QString, bool isvariableok)
+{	
 	// Make an Iterator over the MacroItems of the Macro.
 	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems = macro->items();
 	QValueList<KSharedPtr<KoMacro::MacroItem > >::ConstIterator 
 		mit(macroitems.constBegin()), end(macroitems.constEnd());
-	//1. comparison - Is the MacroItem-list empty?
-{
-	assertItemsNotEmpty(macroitems, true, & proceed);
-	if( ! proceed) return;
-}
+
+	//1.comparison - Is the MacroItem-list empty?
+	{
+		if( isitemsempty ) {
+			KOMACROTEST_XASSERT(macroitems.empty(),false);
+			kdDebug() << "There is no correct MacroItem parsen." << endl;
+			return;
+		}
+		else {
+			KOMACROTEST_ASSERT(macroitems.empty(),false);
+		}
+	}
+
 	// Got to the first item-elements of the domelement (there is only one in the tests).
 	QDomNode itemnode = domelement.firstChild();
 
 	// Iterate over the MacroItems and item-elements.
-	while(mit != end && ! itemnode.isNull()){
-		const KoMacro::MacroItem* macroitem = *mit;
+	while(mit != end && ! itemnode.isNull()) {
+		const KSharedPtr<KoMacro::MacroItem> macroitem = *mit;
 		const QDomElement itemelem = itemnode.toElement();
-		//Is the Action-name equal?
-		if(macroitem->action()->name() != itemelem.attribute("action")) {
-			kdDebug() 	<< "Action-name not equal: " 
-						<< macroitem->action()->name()
-						<< " != " << itemelem.attribute("action") << endl;
-			return; //return false;
+		
+		//2.comparison - Is the Action-name equal?
+		{
+			if( ! isaction) {
+				KOMACROTEST_XASSERT(macroitem->action()->name() == itemelem.attribute("action"),true);
+				kdDebug() 	<< "Action-name not equal: " 
+							<< macroitem->action()->name()
+							<< " != " << itemelem.attribute("action") << endl;
+				return;
+			}
+			else {
+				KOMACROTEST_ASSERT((macroitem->action()->name() == itemelem.attribute("action"),true);
+			}
 		}
 
 		// Go down to MacroItem->Variable and item->variable and compare them.
 		QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables = macroitem->variables();
-		//printMvariables(mvariables,"before");
 		QDomNode varnode = itemelem.firstChild();
+
+		//printMvariables(mvariables,"before");
 
 		while ( ! varnode.isNull()) {
 			const QDomElement varelem = varnode.toElement();
+			const KSharedPtr<KoMacro::Variable> varitem = mvariables.find(varelem.attribute("name")).data();
 			
-			const KoMacro::Variable* varitem = mvariables.find(varelem.attribute("name")).data();
-			
-			if(varitem->name() == "testint") kdDebug() << "var-int: " << varitem->variant() << endl;
-			// Compare the contents.
-			if ( varitem->variant() != QVariant(varelem.text()) ) {
-				kdDebug() 	<< "The content of the Variable: " << varitem->name() 
-							<< " is not equal." << varitem->variant()
-							<< "!=" << varelem.text() << endl;
-				// TODO Leave test the type bool because of parsing problems.
-				//if(varitem->name() == "testbool") {
-				//	kdDebug() << "It's a bool, left checking of it. " 
-				//			<< QVariant(varitem->variant()) << endl;
-				//}
-				return; // return false;
+			//3.comparison - Is the content of the Variable
+			// in the MacroItem and and item equal?
+			{
+				if( ! isvariableok ) {
+					KOMACROTEST_XASSERT(varitem->variant() == QVariant(varelem.text()),
+						isvariableok.find(varelem.attribute("name")));
+					kdDebug() 	<< "The content of the Variable: " << varitem->name() 
+								<< " is not equal." << varitem->variant()
+								<< "!=" << varelem.text() << endl;
+					return;
+				}
+				else {
+					KOMACRO_ASSERT(varitem->variant() == QVariant(varelem.text()),
+						isvariableok.find(varelem.attribute("name")));
+				}
 			}
 			//printMvariables(mvariables,"doing");
-			mvariables.erase(varitem->name());
 
+			// Erase the MacroItem from the map, because it is parsen correctly.
+			mvariables.erase(varitem->name());
+			// Go to next Variable in node-tree.
 			varnode = varnode.nextSibling();
 		}
-		// TODO Should I compare here with the Variables of the TestAction??
-		if ( ! mvariables.empty()) {
+
+		//4.comparison - Is every MacroItem parsen?
+		{
+			KOMACROTEST_ASSERT(mvariables.empty(),true);
 			kdDebug() << "There are non-filled variable in the MacroItem: " << mvariables.count() <<endl;
-			return; //return false;
 		}
 		//printMvariables(mvariables,"after");
 		
@@ -519,13 +576,6 @@ void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro>
 	}
 
 	//return true;
-}
-
-//1. comparison - Is the MacroItem-list empty?
-void XMLHandlerTests::assertItemsNotEmpty(const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems, bool expect, bool proceed)
-{
-	KOMACROTEST_ASSERT(macroitems.empty(),expect);
-	proceed != macroitems.empty();
 }
 
 // Prints a QMap of Variables to kdDebug().
@@ -540,23 +590,4 @@ void XMLHandlerTests::printMvariables(QMap<QString, KSharedPtr<KoMacro::Variable
 	}
 }
 
-/**
-* Test the @a KoMacro::XMLHandler toXML()-function.
-*/
-void XMLHandlerTests::testToXML()
-{	
-	kdDebug()<<"===================== testToXML() ======================" << endl;
-	// TODO Part 2: From a Macro to XML.
-	
-	// Init requiered testobject.
-	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	KSharedPtr<KoMacro::MacroItem> macroitem = new KoMacro::MacroItem();
-	KSharedPtr<KoMacro::Action> testaction = new TestAction();
-	macroitem->setAction(testaction);
-	macro->addItem(macroitem);
-
-	// First Test.
-	QDomElement domelement = macro->toXML();
-	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-}
 #include "xmlhandlertests.moc"
