@@ -4383,7 +4383,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
                               *         *                   *         *
                               *         *                   *         *
     */
-    int l = 1;
+    int l = 0;
 
     if ( paintTop )
     {
@@ -4417,7 +4417,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
         if ( paintBottom )
         {
           painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,  d->view->doc()->zoomItYOld( bottom ),
-                            d->view->doc()->zoomItXOld( right ) + l + 1, d->view->doc()->zoomItYOld( bottom ));
+                            d->view->doc()->zoomItXOld( right ) + l, d->view->doc()->zoomItYOld( bottom ));
         }
       }
     }
@@ -4448,7 +4448,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
         if ( paintBottom )
         {
           painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,  d->view->doc()->zoomItYOld( bottom ),
-                            d->view->doc()->zoomItXOld( right ) + l + 1, d->view->doc()->zoomItYOld( bottom ) );
+                            d->view->doc()->zoomItXOld( right ) + l, d->view->doc()->zoomItYOld( bottom ) );
         }
       }
     }
