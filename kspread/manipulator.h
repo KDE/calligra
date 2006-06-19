@@ -122,7 +122,7 @@ public:
    * Sets the name to \p name . The name is used for the undo/redo
    * functionality.
    */
-  virtual void setName (const QString& name) { m_name = n; }
+  virtual void setName (const QString& name) { m_name = name; }
   /**
    * \return the manipulator's name
    */
@@ -138,11 +138,11 @@ protected:
   /**
    * Processes \p cell .
    */
-  virtual bool process(Cell* cell) { return true; }
+  virtual bool process(Cell* cell) { Q_UNUSED(cell); return true; }
   /**
    * Processes \p format , a row or column format.
    */
-  virtual bool process(Format* format) { return true; }
+  virtual bool process(Format* format) { Q_UNUSED(format); return true; }
 
   /**
    * Preprocessing the region.
