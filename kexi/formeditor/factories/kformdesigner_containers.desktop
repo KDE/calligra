@@ -37,6 +37,7 @@ Name[ta]=கொள்கலன் சாளர உருக்கள்
 Name[tr]= Containers
 Name[uk]=Віджети контейнера
 Name[zh_CN]=容器部件
+Name[zh_TW]=容器視窗元件
 
 X-KDE-Library=kformdesigner_containers
 X-KFormDesigner-FactoryGroup=

@@ -43,6 +43,7 @@ Name[uk]=Фільтр імпорту PDF для KWord
 Name[uz]=KWord PDF импорт филтери
 Name[wa]=Passete PDF d' intrêye po KWord
 Name[zh_CN]=KWord PDF 导入过滤器
+Name[zh_TW]=KWord PDF 匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/pdf
 X-KDE-Weight=1

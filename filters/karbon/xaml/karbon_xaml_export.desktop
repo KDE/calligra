@@ -29,6 +29,7 @@ Name[sv]=Karbon14 WVG-exportfilter
 Name[uk]=Фільтр експорту WVG для Karbon14
 Name[uz]=Karbon14 WVG экспорт филтери
 Name[zh_CN]=Karbon14 WVG 导出过滤器
+Name[zh_TW]=Karbon14 WVG 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/wvg+xml

@@ -51,6 +51,7 @@ Name[uk]=Фільтр експорту LATEX для KSpread
 Name[uz]=KSpread учун LaTeX экспорт филтери
 Name[wa]=Passete LaTeX di rexhowe po KSpread
 Name[zh_CN]=KSpread LATEX 导出过滤器
+Name[zh_TW]=KSpread LATEX 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libkspreadlatexexport

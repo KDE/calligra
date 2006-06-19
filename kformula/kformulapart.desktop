@@ -34,6 +34,7 @@ Name[uk]=Компонент формул KOffice
 Name[uz]=KOffice формула компоненти
 Name[wa]=Componint formule matematike di KOffice
 Name[zh_CN]=KOffice 公式组件
+Name[zh_TW]=KOffice Formula 元件
 X-KDE-Library=libkformulapart
 MimeType=application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;application/x-kformula
 Type=Service

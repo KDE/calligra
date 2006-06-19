@@ -40,6 +40,7 @@ Name[tr]=KWord için OpenOffice.org Writer Alma Filtresi
 Name[uk]=Фільтр експорту OpenOffice.org Writer для KWord
 Name[uz]=KWord учун OpenOffice.org Writer экспорт филтери
 Name[zh_CN]=KWord 的 OpenOffice.org Writer 导入过滤器
+Name[zh_TW]=KWord 的 OpenOffice.org Writer 匯出過濾程式
 X-KDE-Export=application/vnd.sun.xml.writer
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1

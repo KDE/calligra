@@ -40,6 +40,7 @@ GenericName[uk]=Керування проектами
 GenericName[uz]=Лойиҳа бошқаруви
 GenericName[wa]=Manaedjaedje di prodjet
 GenericName[zh_CN]=项目管理
+GenericName[zh_TW]=專案管理
 Exec=kplato %u
 MimeType=application/x-vnd.kde.kplato
 Type=Application

@@ -35,6 +35,7 @@ Name[sv]=Kexi-rapportkomponenter
 Name[uk]=Віджети звітів Kexi
 Name[uz]=Kexi ҳисобот виджетлари
 Name[zh_CN]=Kexi 报表部件
+Name[zh_TW]=Kexi 報告視窗元件
 
 X-KDE-Library=kformdesigner_kexireportwidgets
 X-KFormDesigner-FactoryGroup=kexi-report

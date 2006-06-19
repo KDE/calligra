@@ -47,6 +47,7 @@ Name[tr]=KSpread Excel Aktarma Filtresi
 Name[uk]=Фільтр експорту Microsoft Excel для KSpread
 Name[uz]=KSpread учун Excel экспорт филтери
 Name[zh_CN]=KSpread 的 Excel 导出过滤器
+Name[zh_TW]=KSpread 的 Excel 匯出過濾程式
 #X-KDE-Export=application/msexcel
 #X-KDE-Import=application/x-kspread
 #X-KDE-Weight=1

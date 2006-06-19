@@ -25,6 +25,7 @@ Name[sr@Latn]=KOffice-ova komponenta za pojednostavljenu obradu teksta
 Name[sv]=Koffice-förenklad ordbehandlingskomponent
 Name[uk]=Компонент спрощеного текстового процесора KOffice
 Name[zh_CN]=KOffice 简化的字处理组件
+Name[zh_TW]=KOffice 簡易文書處理文件
 X-KDE-Library=libwriteup_part
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.text
@@ -59,6 +60,7 @@ GenericName[sv]=Textdokument
 GenericName[uk]=Текстові документи
 GenericName[uz]=Матн ҳужжатлари
 GenericName[zh_CN]=文本文档
+GenericName[zh_TW]=文字文件
 Icon=writeup
 
 ###### Don't appear in koshell yet

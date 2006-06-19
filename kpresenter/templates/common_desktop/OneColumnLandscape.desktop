@@ -84,6 +84,7 @@ Comment[sr]=Презентација са насловом стране и је�
 Comment[sr@Latn]=Prezentacija sa naslovom strane i jednim velikim područjem za tekst
 Comment[sv]=Presentation med sidrubrik och ett enda stort textområde
 Comment[uk]=Презентація з заголовком сторінки і великою ділянкою для тексту
+Comment[zh_TW]=有頁面標題及一個大型文字區域的展示
 Type=Link
 URL=.source/OneColumnLandscape.kpt
 X-KDE-Hidden=false

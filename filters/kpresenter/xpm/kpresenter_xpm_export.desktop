@@ -28,6 +28,7 @@ Name[sv]=Kpresenter XPM-exportfilter
 Name[uk]=Фільтр експорту XPM для KPresenter
 Name[uz]=KPresenter XPM экспорт филтери
 Name[zh_CN]=KPresenter XPM 导出过滤器
+Name[zh_TW]=KPresenter XPM 匯出過濾程式
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-xpm
 X-KDE-Weight=1

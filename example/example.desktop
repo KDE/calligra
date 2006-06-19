@@ -44,6 +44,7 @@ Name[uk]=Приклад програми KOffice
 Name[uz]=KOffice намуна дастури
 Name[wa]=Programe di mostraedje di KOffice
 Name[zh_CN]=KOffice 应用程序范例
+Name[zh_TW]=KOffice 範例應用程式
 Exec=example
 MimeType=application/x-example
 Type=Application

@@ -44,6 +44,7 @@ Name[uk]=Втулок адресної книги KDE
 Name[uz]=KDE манзиллар дафтари плагини
 Name[wa]=Tchôke-divins calpin d' adresses KDE
 Name[zh_CN]=KDE 地址簿插件
+Name[zh_TW]=KDE 通訊錄外掛程式
 Comment=This datasource type lets you use your KDE Address Book entries.
 Comment[bg]=Източник на данни за адресната книга на КДЕ.
 Comment[ca]=Aquest tipus de font de dades permet usar les entrades de la teva llibreta d'adreces KDE
@@ -82,6 +83,7 @@ Comment[tg]=Ин намуди манбаъи маълумот гузоштани
 Comment[tr]=Bu veri kaynağı biçimi KDE Adres Defteri girdilerini kullanmanızı sağlar.
 Comment[uk]=Цей тип джерела даних дає доступ до записів адресної книги KDE.
 Comment[zh_CN]=该数据源类型允许您使用您的 KDE 地址簿条目。
+Comment[zh_TW]=這個資料來源類別讓您使用您的 KDE 通訊錄項目。
 
 X-KDE-Library=kwmailmerge_kabc
 X-KDE-Capabilities=open

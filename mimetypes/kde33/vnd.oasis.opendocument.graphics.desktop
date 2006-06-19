@@ -39,6 +39,7 @@ Comment[sv]=OASIS OpenDocument grafik
 Comment[uk]=Графіка OASIS OpenDocument
 Comment[uz]=OASIS OpenDocument графика
 Comment[zh_CN]=OASIS OpenDocument 绘图
+Comment[zh_TW]=OASIS 開放文件圖片
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.odg

@@ -28,6 +28,7 @@ Name[sv]=Kpresenter XBM-exportfilter
 Name[uk]=Фільтр експорту XBM для KPresenter
 Name[uz]=KPresenter XBM экспорт филтери
 Name[zh_CN]=KPresenter XBM 导出过滤器
+Name[zh_TW]=KPresenter XBM 匯出過濾程式
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-xbm
 X-KDE-Weight=1

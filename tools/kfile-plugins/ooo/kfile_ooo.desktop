@@ -40,6 +40,7 @@ Name[uk]=Інформація про OpenOffice.org
 Name[uz]=OpenOffice.org маълумот
 Name[wa]=Informåcion OpenOffice.org
 Name[zh_CN]=OpenOffice.org 信息
+Name[zh_TW]=OpenOffice.org 資訊
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_ooo
 MimeType=application/vnd.sun.xml.calc;application/vnd.sun.xml.calc.template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/vnd.sun.xml.writer;application/vnd.sun.xml.writer.global;application/vnd.sun.xml.writer.math;application/vnd.sun.xml.writer.template

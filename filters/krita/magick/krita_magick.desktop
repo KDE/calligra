@@ -35,6 +35,7 @@ GenericName[sv]=Målnings- och bildredigeringsprogram
 GenericName[uk]=Програма для малювання і редагування зображень
 GenericName[uz]=Расмлар билан ишлайдиган дастур
 GenericName[zh_CN]=绘图和图像编辑应用程序
+GenericName[zh_TW]=繪圖與影像處理程式
 MimeType=image/x-xcf-gimp;image/gif;image/cgm;image/x-bmp;image/x-ico;image/x-pcx;image/x-portable-pixmap;image/x-targa;image/x-xbm;image/x-xcf;image/x-xpm;image/x-vnd.adobe.photoshop;image/x-rgb
 Type=Application
 Icon=krita

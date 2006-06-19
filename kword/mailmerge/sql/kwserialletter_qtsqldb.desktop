@@ -34,6 +34,7 @@ Name[sv]=QT-SQL-källa (enkel tabell)
 Name[uk]=Джерело Qt-SQL (одна таблиця)
 Name[uz]=Qt-SQL манбаси (битта жадвал)
 Name[zh_CN]=Qt-SQL 源(单表)
+Name[zh_TW]=Qt-SQL 來源 (單一表格)
 Comment=This datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).
 Comment[ar]=هذا النّوع من المصادر البيانيّة يتيح لك إمكانية استخدام جداول قاعدة بيانيّة SQL مُخَزَّنة على خادم SQL. بحسب تهيئة نظامك، فإنّ MySQL، PostgreSQL و UnixODBC تُعتبر من بين ما هو مدعوم من وُجهات خلفيّة للقواعد البيانيّة. يمكن حتى أن يتواجد المزيد (Oracle في إصدارات Qt التِّجاريّة أو الوُجهات الخلفيّة المملوكة لطرف ثالث).
 Comment[az]=Bu mənbə sizə SQL verilənlər bazasını istifadə etməyə imkan verir. Sistem qurğularınızdan asılı olaraq : MySQL,Postgres,(Oracle, lisenziyalı QT buraxılışını işlədirsinizsə),....

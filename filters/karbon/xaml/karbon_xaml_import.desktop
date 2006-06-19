@@ -29,6 +29,7 @@ Name[sv]=Karbon XAML-importfilter
 Name[uk]=Фільтр імпорту XAML для Karbon
 Name[uz]=Karbon XAML импорт филтери
 Name[zh_CN]=Karbon XAML 导入过滤器
+Name[zh_TW]=Karbon XAML 匯入過濾程式
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/wvg+xml
 X-KDE-Weight=1

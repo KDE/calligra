@@ -28,6 +28,7 @@ Name[sv]=Krita RAW-importfilter
 Name[uk]=Фільтр імпорту RAW для Krita
 Name[uz]=Krita RAW импорт филтери
 Name[zh_CN]=Krita RAW 导入过滤器
+Name[zh_TW]=Krita RAW 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-raw
 X-KDE-Weight=1

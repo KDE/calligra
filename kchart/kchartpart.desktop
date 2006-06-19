@@ -37,6 +37,7 @@ Name[uk]=Компонент діаграм KOffice
 Name[uz]=KOffice диаграмма компоненти
 Name[wa]=Componint grafike di statistike di KOffice
 Name[zh_CN]=KOffice 图表组件
+Name[zh_TW]=KOffice Chart 元件
 X-KDE-Library=libkchartpart
 Type=Service
 MimeType=application/x-kchart;application/vnd.oasis.opendocument.chart,application/vnd.oasis.opendocument.chart-template

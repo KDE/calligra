@@ -28,6 +28,7 @@ Name[sv]=Kchart BMP-exportfilter
 Name[uk]=Фільтр експорту BMP для KChart
 Name[uz]=KChart BMP экспорт филтери
 Name[zh_CN]=KChart BMP 导出过滤器
+Name[zh_TW]=KChart BMP 匯出過濾程式
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-bmp
 X-KDE-Weight=1

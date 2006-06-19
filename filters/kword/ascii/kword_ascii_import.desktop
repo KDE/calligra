@@ -36,6 +36,7 @@ Name[sv]=Kword ASCII-importfilter
 Name[uk]=Фільтр імпорту ASCII для KWord
 Name[uz]=KWord ASCII импорт филтери
 Name[zh_CN]=KWord ASCII 导入过滤器
+Name[zh_TW]=KWord ASCII 匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=text/plain
 X-KDE-Weight=1

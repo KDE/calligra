@@ -48,6 +48,7 @@ Name[uz]=KPresenter учун Magicpoint импорт филтери
 Name[wa]=Passete Magicpoint d' intrêye po KPresenter
 Name[xh]=Isihluzi Sokurhweba ngaphakathi kwi Magicpoint ye KPresenter
 Name[zh_CN]=KPresenter 的 Magicpoint 导入过滤器
+Name[zh_TW]=KPresenter 的 Magicpoint Import 匯入過濾程式
 X-KDE-Wrapper-Export=application/x-kpresenter
 X-KDE-Wrapper-Import=application/x-magicpoint
 ServiceTypes=KOfficeGenericFilter

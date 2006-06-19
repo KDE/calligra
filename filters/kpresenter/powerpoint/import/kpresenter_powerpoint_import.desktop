@@ -29,6 +29,7 @@ Name[sv]=Microsoft PowerPoint-importfilter för Kpresenter
 Name[uk]=Фільтр імпорту Microsoft PowerPoint для KPresenter
 Name[uz]=KPresenter MS PowerPoint импорт филтери
 Name[zh_CN]=KPresenter 的 Microsoft PowerPoint 导入过滤器
+Name[zh_TW]=KPresenter 的 Microsoft PowerPoint 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/mspowerpoint
 X-KDE-Weight=1

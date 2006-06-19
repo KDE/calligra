@@ -35,6 +35,7 @@ Name[uk]=Компонент створення звітів KOffice
 Name[uz]=KOffice ҳисобот тузиш компоненти
 Name[wa]=Componint djenerateu d' rapoirts di KOffice
 Name[zh_CN]=KOffice 报告生成组件
+Name[zh_TW]=KOffice 報告產生元件
 MimeType=application/x-kugar;application/x-vnd.kde.kugar.mixed
 Type=Service
 Terminal=false

@@ -46,6 +46,7 @@ Name[uk]=Фільтр експорту MS Word Write для KWord
 Name[uz]=KWord Microsoft Write экспорт филтери
 Name[wa]=Passete MS-Write di rexhowe po KWord
 Name[zh_CN]=KWord Microsoft 书写器导出过滤器
+Name[zh_TW]=KWord Microsoft Write 匯出過濾程式
 X-KDE-Export=application/x-mswrite
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1

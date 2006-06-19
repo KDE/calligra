@@ -42,6 +42,7 @@ Name[uk]=Фільтр імпорту Microsoft Excel для KSpread
 Name[uz]=KSpread Microsoft Excel импорт филтери
 Name[wa]=Passete MS-Excel d' intrêye po KSpread
 Name[zh_CN]=KSpread Microsoft Excel 导入过滤器
+Name[zh_TW]=KSpread Microsoft Excel 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=application/msexcel
 X-KDE-Weight=1

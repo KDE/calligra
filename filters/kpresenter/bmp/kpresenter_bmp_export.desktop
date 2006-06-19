@@ -29,6 +29,7 @@ Name[sv]=Kpresenter BMP-exportfilter
 Name[uk]=Фільтр експорту BMP для KPresenter
 Name[uz]=KPresenter BMP экспорт филтери
 Name[zh_CN]=KPresenter BMP 导出过滤器
+Name[zh_TW]=KPresenter BMP 匯出過濾程式
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-bmp
 X-KDE-Weight=1

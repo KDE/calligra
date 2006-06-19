@@ -42,6 +42,7 @@ GenericName[sv]=Formulärkonstruktion
 GenericName[uk]=Дизайнер форм
 GenericName[uz]=Шакл дизайнери
 GenericName[zh_CN]=表单设计器
+GenericName[zh_TW]=表單設計師
 MimeType=application/x-designer;
 Terminal=false
 Categories=Qt;KDE;Development;

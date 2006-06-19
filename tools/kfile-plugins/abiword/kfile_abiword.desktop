@@ -28,6 +28,7 @@ Name[sv]=Abiword-information
 Name[uk]=Інформація Abiword
 Name[uz]=Abiword ҳужжати ҳақида маълумот
 Name[zh_CN]=Abiword 信息
+Name[zh_TW]=Abiword 資訊
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_abiword
 MimeType=application/x-abiword

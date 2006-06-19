@@ -28,6 +28,7 @@ Name[sv]=Krita PNG-importfilter
 Name[uk]=Фільтр імпорту PNG для Krita
 Name[uz]=Krita PNG импорт филтери
 Name[zh_CN]=Krita PNG 导入过滤器
+Name[zh_TW]=Krita PNG 匯入過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita

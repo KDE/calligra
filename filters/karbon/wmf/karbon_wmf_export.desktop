@@ -43,6 +43,7 @@ Name[tr]=Karbon14 WMF Aktarma Filtresi
 Name[uk]=Фільтр експорту WMF для Karbon14
 Name[uz]=Karbon14 WMF экспорт филтери
 Name[zh_CN]=Karbon14 WMF 导出过滤器
+Name[zh_TW]=Karbon14 WMF 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/x-wmf

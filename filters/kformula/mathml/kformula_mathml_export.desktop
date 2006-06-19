@@ -50,6 +50,7 @@ Name[tr]=KFormula MathML Aktarma Filtresi
 Name[uk]=Фільтр експорту MathML для KFormula
 Name[uz]=KFormula MathML экспорт филтери
 Name[zh_CN]=KFormula MathML 导出过滤器
+Name[zh_TW]=KFormula MathML 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libkfomathmlexport

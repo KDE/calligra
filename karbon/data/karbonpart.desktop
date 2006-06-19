@@ -36,6 +36,7 @@ Name[tr]=KOffice Oranlanabilir Grafik Bileşeni
 Name[uk]=Компонент векторної графіки KOffice
 Name[wa]=Componint grafikes schålåves di Koffice
 Name[zh_CN]=KOffice 可缩放图像组件
+Name[zh_TW]=KOffice 可縮放圖片元件
 X-KDE-Library=libkarbonpart
 MimeType=application/x-karbon;application/illustrator;image/x-eps;application/postscript;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template
 # kghostview has 6 for application/postscript, we need to be under that...

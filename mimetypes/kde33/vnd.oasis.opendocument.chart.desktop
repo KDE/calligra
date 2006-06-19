@@ -39,6 +39,7 @@ Comment[sv]=OASIS OpenDocument diagram
 Comment[uk]=Діаграма OASIS OpenDocument
 Comment[uz]=OASIS OpenDocument диаграммаси
 Comment[zh_CN]=OASIS OpenDocument 图表
+Comment[zh_TW]=OASIS 開放文件圖表
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.odc

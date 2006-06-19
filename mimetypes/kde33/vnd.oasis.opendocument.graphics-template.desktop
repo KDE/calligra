@@ -39,6 +39,7 @@ Comment[sv]=OASIS OpenDocument grafikmall
 Comment[uk]=Шаблон графічного зображення OASIS OpenDocument
 Comment[uz]=OASIS OpenDocument графика намунаси
 Comment[zh_CN]=OASIS OpenDocument 绘图模板
+Comment[zh_TW]=OASIS 開放文件圖片範本
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.otg

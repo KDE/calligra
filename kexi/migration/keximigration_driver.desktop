@@ -31,6 +31,7 @@ Comment[sr@Latn]=Drajver Kexi-ja za migraciju podataka
 Comment[sv]=Kexi dataövergångsdrivrutin
 Comment[uk]=Драйвер міграції даних для Kexi
 Comment[zh_CN]=Kexi 数据升迁驱动程序
+Comment[zh_TW]=Kexi 資料轉移驅動程式
 
 [PropertyDef::X-Kexi-FileMigrationDriverMime]
 Type=QString

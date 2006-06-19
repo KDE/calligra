@@ -28,6 +28,7 @@ Name[sv]=Gnumeric-information
 Name[uk]=Інформація Gnumeric
 Name[uz]=Gnumeric ҳужжати ҳақида маълумот
 Name[zh_CN]=Gnumeric 信息
+Name[zh_TW]=Gnumeric 資訊
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_gnumeric
 MimeType=application/x-gnumeric

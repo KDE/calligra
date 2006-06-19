@@ -40,6 +40,7 @@ Name[tr]=KSpread Tablo Kaynağı
 Name[uk]=Джерело таблиць KSpread
 Name[uz]=KSpread жадвали манбаси
 Name[zh_CN]=KSpread 表源
+Name[zh_TW]=KSpread 表格來源
 Comment=This datasource type lets you use your entries from a kspread file.
 Comment[bg]=Източник на данни за от файл на KSpread.
 Comment[ca]=Aquest tipus de font de dades permet usar les entrades d'un fitxer kspread
@@ -74,6 +75,7 @@ Comment[tg]=Ин намуди манбаъи маълумот гузоштани
 Comment[tr]=Bu veri kaynağı biçimi bir kspread dosyasındaki girdileri kullanmanızı sağlar.
 Comment[uk]=Цей тип джерела даних дає доступ до записів файла kspread.
 Comment[zh_CN]=该数据源类型允许您从 kspead 文件中使用您的条目。
+Comment[zh_TW]=這個資料來源類別讓您可以使用 kspread 檔案的項目。
 
 X-KDE-Library=kwmailmerge_kspread
 X-KDE-Capabilities=open

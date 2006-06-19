@@ -34,6 +34,7 @@ Name[sv]=Krita Magick-exportfilter
 Name[uk]=Фільтр експорту Magick для Krita
 Name[uz]=Krita Magick экспорт филтери
 Name[zh_CN]=Krita Magick 导出过滤器
+Name[zh_TW]=Krita Magick 匯出過濾程式
 X-KDE-Export=image/gif,image/cgm,image/x-ico,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xpm,image/x-rgb
 ServiceTypes=KOfficeFilter
 Type=Service

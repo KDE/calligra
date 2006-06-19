@@ -39,6 +39,7 @@ Comment[sv]=OASIS OpenDocument presentationsmall
 Comment[uk]=Шаблон презентації OASIS OpenDocument
 Comment[uz]=OASIS OpenDocument намойиш намунаси
 Comment[zh_CN]=OASIS OpenDocument 演示文稿模板
+Comment[zh_TW]=OASIS 開放文件簡報範本
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.otp

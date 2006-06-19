@@ -28,6 +28,7 @@ Name[sv]=Kpresenter JPEG-exportfilter
 Name[uk]=Фільтр експорту JPEG для KPresenter
 Name[uz]=KPresenter JPEG экспорт филтери
 Name[zh_CN]=KPresenter JPEG 导出过滤器
+Name[zh_TW]=KPresenter JPEG 匯出過濾程式
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/jpeg
 X-KDE-Weight=1

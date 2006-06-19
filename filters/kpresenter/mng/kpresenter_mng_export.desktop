@@ -28,6 +28,7 @@ Name[sv]=Kpresenter MNG-exportfilter
 Name[uk]=Фільтр експорту MNG для KPresenter
 Name[uz]=KPresenter MNG экспорт филтери
 Name[zh_CN]=KPresenter MNG 导出过滤器
+Name[zh_TW]=KPresenter MNG 匯出過濾程式
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=video/x-mng
 X-KDE-Weight=1
