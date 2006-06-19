@@ -19,7 +19,6 @@
 
 #include "action.h"
 #include "manager.h"
-#include "exception.h"
 
 #include <qstringlist.h>
 #include <kdebug.h>
@@ -165,24 +164,5 @@ void Action::removeVariable(const QString& name)
 		d->varnames.remove(name);
 	}
 }
-
-/*
-void Action::activate(KSharedPtr<Context> context)
-{
-	Q_UNUSED(context);
-	kdDebug() << "Action::activate(KSharedPtr<Context>) name=" << name() << " text=" << text() << endl;
-
-	QCString s = name().isNull() ? "" : name().latin1();
-	KAction* action = Manager::self()->guiClient()->action( s );
-	if(action) {
-		action->activate();
-	}
-	else {
-		kdWarning() << QString("Action::activate(KSharedPtr<Context>) No such action \"%1\"").arg(name()) << endl;
-	}
-
-	emit activated();
-}
-*/
 
 #include "action.moc"

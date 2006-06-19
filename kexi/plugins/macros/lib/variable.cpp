@@ -201,7 +201,7 @@ const QString Variable::toString() const
 			return QString("[%1]").arg( object()->name() );
 		} break;
 		default: {
-			//throw Exception("Type is undefined.", "KoMacro::Variable::toString()");
+			throw Exception("Type is undefined.");
 		} break;
 	}
 	return QString::null;

@@ -129,33 +129,6 @@ KSharedPtr<Macro> Manager::createMacro(const QString& macroname)
 	return macro;
 }
 
-/*
-KSharedPtr<Action> Manager::createAction(const QDomElement& element)
-{
-	Action* action = 0;
-	QString tagname = element.tagName();
-
-	kdDebug() << QString("Manager::createAction() tagname=\"%1\"").arg(tagname) << endl;
-
-	if(tagname == "action") {
-		action = new Action("_action_");
-	}
-	else if(tagname == "function") {
-		action = new Function("_function_");
-	}
-	else if(tagname == "macro") {
-		action = new Macro("_macro_");
-	}
-	else {
-		QString s = QString("Manager::createAction() Invalid tagname \"%1\"").arg(tagname);
-		kdWarning() << s << endl;
-		throw Exception(s, "KoMacro::Manager::createAction(const QDomElement&)");
-	}
-
-	return action;
-}
-*/
-
 KSharedPtr<Action> Manager::action(const QString& name) const
 {
 	return d->actions[name];

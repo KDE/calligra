@@ -17,19 +17,13 @@
  ***************************************************************************/
 
 #include "xmlhandlertests.h"
-#include "testobject.h"
 #include "testaction.h"
 #include "komacrotestbase.h"
 
 #include "../lib/action.h"
-#include "../lib/function.h"
 #include "../lib/manager.h"
 #include "../lib/macro.h"
 #include "../lib/variable.h"
-#include "../lib/metaobject.h"
-#include "../lib/metamethod.h"
-#include "../lib/metaparameter.h"
-#include "../lib/exception.h"
 #include "../lib/macroitem.h"
 
 #include <ostream>
@@ -79,20 +73,7 @@ namespace KoMacroTest {
 
 // TODO: 	- test correct XML-tags once
 //			- look at const
-//			- compile error, begins with:
-/*In file included from /usr/lib/qt3/include/qconnection.h:74,
-                 from /usr/lib/qt3/include/qmetaobject.h:42,
-                 from /home/bernd/swp/koffice/kexi/plugins/macros/tests/xmlhandlertests.moc:12,
-                 from /home/bernd/swp/koffice/kexi/plugins/macros/tests/xmlhandlertests.cpp:593:
-/usr/lib/qt3/include/qwinexport.h:221:1: error: unterminated argument list invoking macro "KOMACROTEST_ASSERT"
-/usr/lib/qt3/include/qwinexport.h: In member function ‘void KoMacroTest::XMLHandlerTests::assertMacroContentEqToXML(KSharedPtr<KoMacro::Macro>, const QDomElement&, bool, bool, QMap<QString, bool>)’:
-/usr/lib/qt3/include/qwinexport.h:1: error: ‘KOMACROTEST_ASSERT’ was not declared in this scope
-/usr/lib/qt3/include/qmetaobject.h:50: error: expected `;' before ‘class’
-/usr/lib/qt3/include/qmetaobject.h:129: error: a function-definition is not allowed here before ‘{’ token
-/usr/lib/qt3/include/qmetaobject.h:258: error: a function-definition is not allowed here before �{’ token
-/usr/lib/qt3/include/qmetaobject.h:261: error: a function-definition is not allowed here before ‘{’ token
-/usr/lib/qt3/include/qmetaobject.h:265: error: a function-definition is not allowed here before ‘{’ token
-*/
+//			- mv assertIsEmpty() up
 
 XMLHandlerTests::XMLHandlerTests()
 	: KUnitTest::SlotTester()
@@ -177,18 +158,21 @@ void XMLHandlerTests::testCorrectDomElement()
 	domelement = doomdocument.documentElement();
 	// Is our XML parseable ?
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+	
 	// Is the parsen content in the Macro correct ?
-	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
 	QMap<QString,bool> isvariableok;
 	isvariableok["teststring"] = true;	// TODO nicer?
 	isvariableok["testint"] = true;
 	isvariableok["testbool"] = true;
 	isvariableok["testdouble"] = true;
 	assertMacroContentEqToXML(macro,domelement,false,true,isvariableok);
+	
 	// Test the Compare-method when a Variable will change, it must fail.
 	macro->items().first()->variable("teststring")->setVariant("bla");
-	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
-	//assertMacroContentEqToXML(macro,domelement,false,true,true);
+	isvariableok.replace("teststring",false);
+	assertMacroContentEqToXML(macro,domelement,false,true,isvariableok);
+
+	// KOMACROTEST_XASSERT(macro->items().empty(),false);
 }
 
 // 2.Test - XML-document with bad root element.
@@ -210,8 +194,8 @@ void XMLHandlerTests::testBadRoot()
 	doomdocument.setContent(xml);
 	domelement = doomdocument.documentElement();
 	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
-	//KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
-	//assertMacroContentEqToXML(macro,domelement);
+	//no assertMacroContentEqToXML(), because parsing failed.
+	assertMacroContentEqToXML(macro,domelement,true,false,QMap<QString,bool>());
 }
 
 // 3.Test - XML-document with a missing Variable.
@@ -231,9 +215,14 @@ void XMLHandlerTests::testMissingVariable()
 				    "</macro>");
 	doomdocument.setContent(xml);
 	domelement = doomdocument.documentElement();
+	
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
-	//assertMacroContentEqToXML(macro,domelement);
+
+	QMap<QString,bool> isvariableok;
+	isvariableok["teststring"] = true;
+	isvariableok["testint"] = true;
+	isvariableok["testdouble"] = true;
+	assertMacroContentEqToXML(macro,domelement,false,true,isvariableok);
 }
 
 // 4.Test - One more Variable in XML-Document.
@@ -499,11 +488,14 @@ void XMLHandlerTests::testToXML()
 	//KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
 }
 
+
 // Compares a XML-Element with a Macro by value.
 void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
 	const QDomElement& domelement,
-	bool isitemsempty, bool isactionset, QMap<QString, bool> isvariableok)
-{	
+	bool isitemsempty,
+	bool isactionset,
+	QMap<QString, bool> isvariableok)
+{
 	// Make an Iterator over the MacroItems of the Macro.
 	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems = macro->items();
 	QValueList<KSharedPtr<KoMacro::MacroItem > >::ConstIterator 
@@ -547,8 +539,6 @@ void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro>
 		QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables = macroitem->variables();
 		QDomNode varnode = itemelem.firstChild();
 
-		//printMvariables(mvariables,"before");
-
 		while ( ! varnode.isNull()) {
 			const QDomElement varelem = varnode.toElement();
 			const KSharedPtr<KoMacro::Variable> varitem = mvariables.find(varelem.attribute("name")).data();
@@ -556,22 +546,18 @@ void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro>
 			//3.comparison - Is the content of the Variable
 			// in the MacroItem and and item equal?
 			{
-#if 0
-				if( ! isvariableok ) {
-					KOMACROTEST_XASSERT(varitem->variant() == QVariant(varelem.text()),
-						isvariableok.find(varelem.attribute("name")));
+				const bool var = *isvariableok.find(varelem.attribute("name"));
+				if( ! var ) {
+					KOMACROTEST_XASSERT(varitem->variant() == QVariant(varelem.text()), !var);
 					kdDebug() 	<< "The content of the Variable: " << varitem->name() 
 								<< " is not equal." << varitem->variant()
 								<< "!=" << varelem.text() << endl;
-					return;
 				}
 				else {
-					KOMACRO_ASSERT(varitem->variant() == QVariant(varelem.text()),
-						isvariableok.find(varelem.attribute("name")));
+					KOMACROTEST_ASSERT(varitem->variant() == QVariant(varelem.text()), var);
 				}
-#endif
+
 			}
-			//printMvariables(mvariables,"doing");
 
 			// Erase the MacroItem from the map, because it is parsen correctly.
 			mvariables.erase(varitem->name());
@@ -584,14 +570,11 @@ void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro>
 			KOMACROTEST_ASSERT(mvariables.empty(),true);
 			kdDebug() << "There are non-filled variable in the MacroItem: " << mvariables.count() <<endl;
 		}
-		//printMvariables(mvariables,"after");
-		
+
 		// Go to next MacroItem and next item-element.
 		mit++;
 		itemnode = itemnode.nextSibling();
 	}
-
-	//return true;
 }
 
 // Prints a QMap of Variables to kdDebug().

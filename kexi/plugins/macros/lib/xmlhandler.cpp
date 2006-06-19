@@ -100,10 +100,10 @@ bool XMLHandler::parseXML(const QDomElement& element)
 			const QDomElement itemelem = itemnode.toElement();
 
 			// Create a new MacroItem
-			MacroItem* item = new MacroItem();
+			KSharedPtr<MacroItem> item = new MacroItem();
 
 			// Add the new item to our Macro.
-			d->macro->addItem( KSharedPtr<MacroItem>(item) );
+			d->macro->addItem( item );
 
 			// Each MacroItem may point to an Action instance. We
 			// try to determinate this action now and if it's defined
@@ -134,7 +134,6 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					Q_UNUSED(variable);
 				}
 			}
-			delete item; // TODO It should be done or?
 		}
 	}
 
@@ -177,8 +176,8 @@ QDomElement XMLHandler::toXML()
 		QDomElement itemelem = document.createElement("item");
 
 		// Each MacroItem could point to an Action provided by the Manager.
-		const KoMacro::Action* action = item->action().data();
-		if(action) {
+		const Action* action = item->action().data();
+		if( action ) {
 			append = true;
 
 			// Remember the name of the action.
@@ -222,7 +221,6 @@ QDomElement XMLHandler::toXML()
 			macroelem.appendChild(itemelem);
 		}
 
-		delete item; // TODO It should be done or?
 	}
 
 	// Job done. Return the macro's element.
