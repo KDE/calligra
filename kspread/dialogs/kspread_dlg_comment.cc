@@ -76,7 +76,7 @@ CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_mark
 
 void CommentDialog::slotTextChanged()
 {
-    enableButtonOK( !multiLine->text().isEmpty());
+    enableButtonOk( !multiLine->text().isEmpty());
 }
 
 void CommentDialog::slotOk()

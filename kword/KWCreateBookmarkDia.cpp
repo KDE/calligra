@@ -60,7 +60,7 @@ void KWCreateBookmarkDia::init()
 {
     KWCreateBookmarkDiaBase *dia = new KWCreateBookmarkDiaBase( this );
     m_bookmarkName = dia->m_bookmarkName;
-    enableButtonOK( false );
+    enableButtonOk( false );
     connect( m_bookmarkName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
     setMainWidget( dia );
     m_bookmarkName->setFocus();
@@ -83,7 +83,7 @@ QString KWCreateBookmarkDia::bookmarkName()const
 
 void KWCreateBookmarkDia::nameChanged( const QString &text)
 {
-    enableButtonOK( !text.isEmpty() );
+    enableButtonOk( !text.isEmpty() );
 }
 
 
@@ -157,7 +157,7 @@ QString KWSelectBookmarkDia::bookmarkSelected()const
 void KWSelectBookmarkDia::slotSelectionChanged()
 {
     bool state =!m_bookmarkList->currentText().isEmpty();
-    enableButtonOK( state );
+    enableButtonOk( state );
     m_pbRename->setEnabled( state);
     m_pbDelete->setEnabled( state && m_doc->isReadWrite());
 }

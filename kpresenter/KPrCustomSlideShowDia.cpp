@@ -372,7 +372,7 @@ void KPrDefineCustomSlideShow::init()
 
 void KPrDefineCustomSlideShow::slideNameChanged( const QString & _name)
 {
-     enableButtonOK( !_name.isEmpty() );
+     enableButtonOk( !_name.isEmpty() );
 }
 
 void KPrDefineCustomSlideShow::updateButton()

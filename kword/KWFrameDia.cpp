@@ -945,9 +945,9 @@ void KWFrameDia::textNameFrameChanged ( const QString &text )
         item->setText(1, text );
     }
     if(m_rNewFrameset->isChecked() || m_rExistingFrameset->isChecked()) //when one of both is clicked.
-        enableButtonOK( !text.isEmpty() );
+        enableButtonOk( !text.isEmpty() );
     else
-        enableButtonOK( true );
+        enableButtonOk( true );
 }
 
 void KWFrameDia::setupTab4() { // TAB Geometry
@@ -1506,7 +1506,7 @@ void KWFrameDia::slotKeepRatioToggled(bool on)
 }
 void KWFrameDia::ensureValidFramesetSelected()
 {
-    enableButtonOK( m_rNewFrameset->isChecked() || m_rExistingFrameset->isChecked() && m_lFrameSList->selectedItem() != NULL);
+    enableButtonOk( m_rNewFrameset->isChecked() || m_rExistingFrameset->isChecked() && m_lFrameSList->selectedItem() != NULL);
 }
 
 void KWFrameDia::calcRatio()

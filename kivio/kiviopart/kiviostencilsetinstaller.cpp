@@ -62,7 +62,7 @@ namespace Kivio {
 
     void StencilSetInstaller::slotUrlChanged( const QString &text )
     {
-        enableButtonOK( !text.isEmpty() );
+        enableButtonOk( !text.isEmpty() );
     }
 
   void StencilSetInstaller::install(const QString& urlString)

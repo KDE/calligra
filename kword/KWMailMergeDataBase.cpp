@@ -559,12 +559,12 @@ KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWM
            this, SLOT( slotOk() ) );
 
   setFocus();
-  enableButtonOK( names->currentItem() != -1 );
+  enableButtonOk( names->currentItem() != -1 );
 }
 
 void KWMailMergeVariableInsertDia::slotSelectionChanged()
 {
-  enableButtonOK( names->currentItem() != -1 );
+  enableButtonOk( names->currentItem() != -1 );
 }
 
 QString KWMailMergeVariableInsertDia::getName() const

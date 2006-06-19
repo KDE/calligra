@@ -66,13 +66,13 @@ AreaDialog::AreaDialog( View * parent, const char * name, const QPoint & _marker
   m_areaName->setFocus();
   connect ( m_areaName, SIGNAL(textChanged ( const QString & )), this, SLOT(slotAreaNamechanged( const QString &)));
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  enableButtonOK(!m_areaName->text().isEmpty());
+  enableButtonOk(!m_areaName->text().isEmpty());
 
 }
 
 void AreaDialog::slotAreaNamechanged( const QString & text)
 {
-  enableButtonOK(!text.isEmpty());
+  enableButtonOk(!text.isEmpty());
 }
 
 void AreaDialog::slotOk()

@@ -128,7 +128,7 @@ void KWMailMergeKSpreadConfig::initGUI()
 
 void KWMailMergeKSpreadConfig::slotTextChanged( const QString & _text )
 {
-    enableButtonOK( !_text.isEmpty() );
+    enableButtonOk( !_text.isEmpty() );
 }
 
 #include "kwmailmerge_kspread_config.moc"

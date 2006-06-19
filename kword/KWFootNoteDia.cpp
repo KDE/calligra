@@ -92,12 +92,12 @@ void KWFootNoteDia::footNoteTypeChanged()
 {
     if ( m_rbManual->isChecked())
     {
-        enableButtonOK( !m_footLine->text().isEmpty() );
+        enableButtonOk( !m_footLine->text().isEmpty() );
         m_footLine->setFocus();
     }
     else
     {
-        enableButtonOK(true);
+        enableButtonOk(true);
         setFocus();
     }
 }
@@ -106,9 +106,9 @@ void KWFootNoteDia::footLineChanged( const QString &text )
 {
     m_rbManual->setChecked( true );
     if ( text.isEmpty() || footNoteAlreadyExists(text) )
-        enableButtonOK( false );
+        enableButtonOk( false );
     else
-        enableButtonOK( true );
+        enableButtonOk( true );
 }
 
 NoteType KWFootNoteDia::noteType() const

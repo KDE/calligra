@@ -83,7 +83,7 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int 
     grid->setColumnStretch( 1, 1 );
 
     grid->activate();
-    enableButtonOK( !(m_rows==1 && m_cols==1) );
+    enableButtonOk( !(m_rows==1 && m_cols==1) );
 
     connect( nRows, SIGNAL( valueChanged( int ) ), this, SLOT( rowsChanged( int ) ) );
     connect( nCols, SIGNAL( valueChanged( int ) ), this, SLOT( colsChanged( int ) ) );
@@ -93,12 +93,12 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int 
 void KWSplitCellDia::rowsChanged( int rows ) {
     m_rows=rows;
     preview->setRows( m_rows );
-    enableButtonOK( !(m_rows==1 && m_cols==1) );
+    enableButtonOk( !(m_rows==1 && m_cols==1) );
 }
 
 void KWSplitCellDia::colsChanged( int cols ) {
     m_cols=cols;
     preview->setCols( m_cols );
-    enableButtonOK( !(m_rows==1 && m_cols==1) );
+    enableButtonOk( !(m_rows==1 && m_cols==1) );
 }
 

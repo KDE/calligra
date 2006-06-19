@@ -121,7 +121,7 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, 
     grid->setColumnStretch( 1, 10 );
     m_cbKeepRatio->setChecked(_keepRatio);
     m_cbInline->setChecked( _inline );
-    enableButtonOK( false );
+    enableButtonOk( false );
     setFocus();
     slotChooseImage(); // save the user time, directly open the dialog
 }
@@ -148,7 +148,7 @@ void KWInsertPicDia::slotChooseImage()
         QTimer::singleShot( 0, this, SLOT( cancel() ) );
         return;
     }
-    enableButtonOK ( m_preview->setPicture( m_picture ) );
+    enableButtonOk ( m_preview->setPicture( m_picture ) );
     m_bFirst = false;
 }
 

@@ -71,7 +71,7 @@ ShowDialog::ShowDialog( View* parent, const char* name )
     	list->insertItem(text);
     	}
   if(!list->count())
-  	enableButtonOK(false);
+  	enableButtonOk(false);
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
   resize( 200, 150 );

@@ -173,7 +173,7 @@ void CSVExportDialog::textChanged ( const QString & )
 
   if ( m_dialog->m_delimiterEdit->text().isEmpty() )
   {
-    enableButtonOK( ! m_dialog->m_radioOther->isChecked() );
+    enableButtonOk( ! m_dialog->m_radioOther->isChecked() );
     return;
   }
 
@@ -183,7 +183,7 @@ void CSVExportDialog::textChanged ( const QString & )
 
 void CSVExportDialog::delimiterClicked( int id )
 {
-  enableButtonOK( true );
+  enableButtonOk( true );
 
   //Erase "Other Delimiter" text box if the user has selected one of
   //the standard options instead (comma, semicolon, tab or space)
@@ -205,7 +205,7 @@ void CSVExportDialog::delimiterClicked( int id )
       m_delimiter = " ";
       break;
     case 4: // other
-      enableButtonOK( ! m_dialog->m_delimiterEdit->text().isEmpty() );
+      enableButtonOk( ! m_dialog->m_delimiterEdit->text().isEmpty() );
       m_delimiter = m_dialog->m_delimiterEdit->text();
       break;
   }

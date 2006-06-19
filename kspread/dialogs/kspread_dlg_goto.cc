@@ -62,7 +62,7 @@ GotoDialog::GotoDialog( View* parent, const char* name )
   lay1->addWidget(m_nameCell);
 
   m_nameCell->setFocus();
-  enableButtonOK( false );
+  enableButtonOk( false );
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( m_nameCell, SIGNAL(textChanged ( const QString & )),
@@ -71,7 +71,7 @@ GotoDialog::GotoDialog( View* parent, const char* name )
 
 void GotoDialog::textChanged ( const QString &_text )
 {
-    enableButtonOK(!_text.isEmpty());
+    enableButtonOk(!_text.isEmpty());
 }
 
 void GotoDialog::slotOk()

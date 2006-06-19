@@ -112,7 +112,7 @@ FormatDialog::~FormatDialog()
 
 void FormatDialog::slotActivated( int index )
 {
-	enableButtonOK(true);
+	enableButtonOk(true);
 
     QString img = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
@@ -121,7 +121,7 @@ void FormatDialog::slotActivated( int index )
 	str = str.arg( m_entries[ index ].image );
 	KMessageBox::error( this, str );
 
-	enableButtonOK(false);
+	enableButtonOk(false);
 
 	return;
     }
@@ -133,7 +133,7 @@ void FormatDialog::slotActivated( int index )
 	str = str.arg( img );
 	KMessageBox::error( this,str );
 
-	enableButtonOK(false);
+	enableButtonOk(false);
 
 	return;
     }

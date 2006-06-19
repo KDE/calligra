@@ -111,7 +111,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
         }
 
   if(!list->count())
-      enableButtonOK(false);
+      enableButtonOk(false);
 
   //selection multiple
   list->setSelectionMode(Q3ListBox::Multi);
