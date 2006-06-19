@@ -130,7 +130,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     enableButtonSeparator( true );
     dia = new ResourceDialogImpl(this);
     setMainWidget(dia);
-    enableButtonOk(false);
+	KDialog::enableButtonOk(false);
 
     dia->nameEdit->setText(resource->name());
     dia->initialsEdit->setText(resource->initials());
@@ -163,7 +163,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
 
 
 void ResourceDialog::enableButtonOk() {
-    enableButtonOk(true);
+		KDialog::enableButtonOk(true);
 }
 
 void ResourceDialog::slotCalculationNeeded() {
