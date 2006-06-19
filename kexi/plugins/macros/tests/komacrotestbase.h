@@ -25,12 +25,14 @@
 * @param expected The expected value.
 */
 #define KOMACROTEST_ASSERT(actual, expected) \
-	std::cout << QString("Testing: %1 == %2").arg(#actual).arg(#expected).latin1() << std::endl; \
-	check( __FILE__, __LINE__, #actual, actual, expected, false ); \
-	if(actual != expected) \
 	{ \
-		kdWarning() << QString("==============> FAILED") << endl; \
-		return; \
+		std::cout << QString("Testing: %1 == %2").arg(#actual).arg(#expected).latin1() << std::endl; \
+		check( __FILE__, __LINE__, #actual, actual, expected, false ); \
+		if(actual != expected) \
+		{ \
+			kdWarning() << QString("==============> FAILED") << endl; \
+			return; \
+		} \
 	}
 
 /**
@@ -40,12 +42,14 @@
 * @param notexpected The not expected value.
 */
 #define KOMACROTEST_XASSERT(actual, notexpected) \
-	std::cout << QString("Testing: %1 != %2").arg(#actual).arg(#notexpected).latin1() << std::endl; \
-	check( __FILE__, __LINE__, #actual, actual, notexpected, true ); \
-	if(actual == notexpected) \
 	{ \
-		kdWarning() << QString("==============> FAILED") << endl; \
-		return; \
+		std::cout << QString("Testing: %1 != %2").arg(#actual).arg(#notexpected).latin1() << std::endl; \
+		check( __FILE__, __LINE__, #actual, actual, notexpected, true ); \
+		if(actual == notexpected) \
+		{ \
+			kdWarning() << QString("==============> FAILED") << endl; \
+			return; \
+		} \
 	}
 
 /**
@@ -57,19 +61,21 @@
 * check for the @p exceptionCatch .
 */
 #define KOMACROTEST_ASSERTEXCEPTION(exceptionCatch, expression) \
-	try { \
-		expression; \
-	} \
-	catch(exceptionCatch) { \
-		setExceptionRaised(true); \
-	} \
-	if(exceptionRaised()) { \
-		success(QString(__FILE__) + "[" + QString::number(__LINE__) + "]: passed " + #expression); \
-		setExceptionRaised(false); \
-	} \
-	else { \
-		failure(QString(__FILE__) + "[" + QString::number(__LINE__) + QString("]: failed to throw an exception on: ") + #expression); \
-		return; \
+	{ \
+		try { \
+			expression; \
+		} \
+		catch(exceptionCatch) { \
+			setExceptionRaised(true); \
+		} \
+		if(exceptionRaised()) { \
+			success(QString(__FILE__) + "[" + QString::number(__LINE__) + "]: passed " + #expression); \
+			setExceptionRaised(false); \
+		} \
+		else { \
+			failure(QString(__FILE__) + "[" + QString::number(__LINE__) + QString("]: failed to throw an exception on: ") + #expression); \
+			return; \
+		} \
 	}
 
 #endif
