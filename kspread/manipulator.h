@@ -71,10 +71,22 @@ public:
   Manipulator();
   virtual ~Manipulator();
 
+  /**
+   * \return the Sheet this Manipulator works on
+   */
   Sheet* sheet() const { return m_sheet; }
+  /**
+   * Sets \p sheet to be the Sheet to work on.
+   */
   void setSheet(Sheet* sheet) { m_sheet = sheet; }
 
+  /**
+   * \return \c true if cells are created, if it is necessary
+   */
   bool creation() { return m_creation; }
+  /**
+   * Sets cell creatioin for regions containing default cells to \p creation .
+   */
   void setCreation(bool creation) { m_creation = creation; }
 
   /** Is this a formatting manipulator ? If so, execute will call
@@ -83,24 +95,66 @@ public:
   bool format() { return m_format; };
   void setFormat (bool f) { m_format = f; };
 
+  /**
+   * Executes the actual operation.
+   */
   virtual void execute();
+  /**
+   * Executes the actual operation in reverse order.
+   */
   virtual void unexecute();
 
   virtual void setArgument(const QString& /*arg*/, const QString& /*val*/) {};
 
+  /**
+   * Sets reverse mode to \b reverse .
+   * \see execute
+   * \see unexecute
+   */
   virtual void setReverse(bool reverse) { m_reverse = reverse; }
+  /**
+   * If \p registerUndo is \c true , this manipulator registers an
+   * undo operation for the document.
+   */
   void setRegisterUndo(bool registerUndo) { m_register = registerUndo; }
 
-  virtual void setName (const QString &n) { m_name = n; }
+  /**
+   * Sets the name to \p name . The name is used for the undo/redo
+   * functionality.
+   */
+  virtual void setName (const QString& name) { m_name = n; }
+  /**
+   * \return the manipulator's name
+   */
   virtual QString name() const { return m_name; };
 
 protected:
-  virtual bool process(Element*);
-  virtual bool process(Cell*) { return true; }
-  virtual bool process(Format*) { return true; }
+  /**
+   * Processes \p element , a Region::Point or a Region::Range .
+   * Invoked by mainProcessing() .
+   * Calls process(Cell*) or process(Format*) depending on \p element .
+   */
+  virtual bool process(Element* element);
+  /**
+   * Processes \p cell .
+   */
+  virtual bool process(Cell* cell) { return true; }
+  /**
+   * Processes \p format , a row or column format.
+   */
+  virtual bool process(Format* format) { return true; }
 
+  /**
+   * Preprocessing the region.
+   */
   virtual bool preProcessing() { return true; }
+  /**
+   * Processes the region. Calls process(Element*).
+   */
   virtual bool mainProcessing();
+  /**
+   * Postprocessing the region.
+   */
   virtual bool postProcessing() { return true; }
 
 
