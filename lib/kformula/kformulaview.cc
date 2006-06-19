@@ -153,7 +153,7 @@ void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 //                      << rect.width() << " " << rect.height() << endl;
     container()->draw( painter, rect, cg, true );
     if ( cursorVisible() ) {
-        cursor()->draw( painter, contextStyle(), smallCursor(), activeCursor() );
+        cursor()->draw( painter, contextStyle(), 1.0, smallCursor(), activeCursor() );
     }
 }
 
@@ -161,7 +161,7 @@ void View::draw(QPainter& painter, const QRect& rect)
 {
     container()->draw( painter, rect, true );
     if ( cursorVisible() ) {
-        cursor()->draw( painter, contextStyle(), smallCursor(), activeCursor() );
+        cursor()->draw( painter, contextStyle(), 1.0, smallCursor(), activeCursor() );
     }
 }
 

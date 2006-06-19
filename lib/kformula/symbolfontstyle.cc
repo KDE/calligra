@@ -87,10 +87,11 @@ inline bool doSimpleCurlyBracket( luPt height, luPt baseHeight )
 
 void SymbolArtwork::calcSizes( const ContextStyle& style,
                                ContextStyle::TextStyle tstyle,
+                               double factor,
                                luPt parentSize )
 {
     setBaseline( -1 );
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     switch (getType()) {
     case LeftSquareBracket:
         if ( doSimpleSquareBracket( parentSize, mySize ) ) {
@@ -180,9 +181,10 @@ void SymbolArtwork::calcSizes( const ContextStyle& style,
 
 void SymbolArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                          const ContextStyle& style, ContextStyle::TextStyle tstyle,
+                         double factor,
                          luPt parentSize, const LuPixelPoint& origin)
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
     /*

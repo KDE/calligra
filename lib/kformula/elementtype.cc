@@ -101,83 +101,94 @@ QString ElementType::text( SequenceElement* seq ) const
 
 
 luPt ElementType::getSpaceBefore( const ContextStyle&,
-                                ContextStyle::TextStyle )
+                                  ContextStyle::TextStyle,
+                                  double )
 {
     return 0;
 }
 
 luPt ElementType::getSpaceAfter( MultiElementType*,
-                               const ContextStyle&,
-                               ContextStyle::TextStyle )
+                                 const ContextStyle&,
+                                 ContextStyle::TextStyle,
+                                 double )
 {
     return 0;
 }
 
 luPt ElementType::getSpaceAfter( OperatorType*,
-                               const ContextStyle&,
-                               ContextStyle::TextStyle )
+                                 const ContextStyle&,
+                                 ContextStyle::TextStyle,
+                                 double )
 {
     return 0;
 }
 
 luPt ElementType::getSpaceAfter( RelationType*,
-                               const ContextStyle&,
-                               ContextStyle::TextStyle )
+                                 const ContextStyle&,
+                                 ContextStyle::TextStyle,
+                                 double )
 {
     return 0;
 }
 
 luPt ElementType::getSpaceAfter( PunctuationType*,
-                               const ContextStyle&,
-                               ContextStyle::TextStyle )
+                                 const ContextStyle&,
+                                 ContextStyle::TextStyle,
+                                 double )
 {
     return 0;
 }
 
 luPt ElementType::getSpaceAfter( BracketType*,
-                               const ContextStyle&,
-                               ContextStyle::TextStyle )
+                                 const ContextStyle&,
+                                 ContextStyle::TextStyle,
+                                 double )
 {
     return 0;
 }
 
 luPt ElementType::getSpaceAfter( ComplexElementType*,
-                               const ContextStyle&,
-                               ContextStyle::TextStyle )
+                                 const ContextStyle&,
+                                 ContextStyle::TextStyle,
+                                 double )
 {
     return 0;
 }
 
 luPt ElementType::getSpaceAfter( InnerElementType*,
-                               const ContextStyle&,
-                               ContextStyle::TextStyle )
+                                 const ContextStyle&,
+                                 ContextStyle::TextStyle,
+                                 double )
 {
     return 0;
 }
 
 luPt ElementType::thinSpaceIfNotScript( const ContextStyle& context,
-                                      ContextStyle::TextStyle tstyle )
+                                        ContextStyle::TextStyle tstyle,
+                                        double factor )
 {
     if ( !context.isScript( tstyle ) ) {
-        return context.getThinSpace( tstyle );
+        return context.getThinSpace( tstyle, factor );
     }
     return 0;
 }
 
 luPt ElementType::mediumSpaceIfNotScript( const ContextStyle& context,
-                                        ContextStyle::TextStyle tstyle )
+                                          ContextStyle::TextStyle tstyle,
+                                          double factor )
 {
     if ( !context.isScript( tstyle ) ) {
-        return context.getMediumSpace( tstyle );
+        return context.getMediumSpace( tstyle, factor );
     }
     return 0;
 }
 
 luPt ElementType::thickSpaceIfNotScript( const ContextStyle& context,
-                                       ContextStyle::TextStyle tstyle )
+                                         ContextStyle::TextStyle tstyle,
+                                         double factor )
 {
     if ( !context.isScript( tstyle ) ) {
-        return context.getThickSpace( tstyle );
+        return context.getThickSpace( tstyle, factor );
     }
     return 0;
 }
@@ -254,33 +265,37 @@ MultiElementType::MultiElementType( SequenceParser* parser )
 
 
 luPt MultiElementType::getSpaceBefore( const ContextStyle& context,
-                                     ContextStyle::TextStyle tstyle )
+                                       ContextStyle::TextStyle tstyle,
+                                       double factor )
 {
     if ( getPrev() != 0 ) {
-        return getPrev()->getSpaceAfter( this, context, tstyle );
+        return getPrev()->getSpaceAfter( this, context, tstyle, factor );
     }
     return 0;
 }
 
 luPt MultiElementType::getSpaceAfter( OperatorType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return mediumSpaceIfNotScript( context, tstyle );
+    return mediumSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt MultiElementType::getSpaceAfter( RelationType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt MultiElementType::getSpaceAfter( InnerElementType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 
@@ -409,40 +424,45 @@ OperatorType::OperatorType( SequenceParser* parser )
 }
 
 luPt OperatorType::getSpaceBefore( const ContextStyle& context,
-                                 ContextStyle::TextStyle tstyle )
+                                   ContextStyle::TextStyle tstyle,
+                                   double factor )
 {
     if ( getPrev() != 0 ) {
-        return getPrev()->getSpaceAfter( this, context, tstyle );
+        return getPrev()->getSpaceAfter( this, context, tstyle, factor );
     }
     return 0;
 }
 
 luPt OperatorType::getSpaceAfter( MultiElementType*,
-                                const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
-    return mediumSpaceIfNotScript( context, tstyle );
+    return mediumSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt OperatorType::getSpaceAfter( BracketType*,
-                                const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
-    return mediumSpaceIfNotScript( context, tstyle );
+    return mediumSpaceIfNotScript( context, tstyle, factor  );
 }
 
 luPt OperatorType::getSpaceAfter( ComplexElementType*,
-                                const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
-    return mediumSpaceIfNotScript( context, tstyle );
+    return mediumSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt OperatorType::getSpaceAfter( InnerElementType*,
-                                const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
-    return mediumSpaceIfNotScript( context, tstyle );
+    return mediumSpaceIfNotScript( context, tstyle, factor );
 }
 
 
@@ -463,40 +483,45 @@ RelationType::RelationType( SequenceParser* parser )
 }
 
 luPt RelationType::getSpaceBefore( const ContextStyle& context,
-                                 ContextStyle::TextStyle tstyle )
+                                   ContextStyle::TextStyle tstyle,
+                                   double factor )
 {
     if ( getPrev() != 0 ) {
-        return getPrev()->getSpaceAfter( this, context, tstyle );
+        return getPrev()->getSpaceAfter( this, context, tstyle, factor );
     }
     return 0;
 }
 
 luPt RelationType::getSpaceAfter( MultiElementType*,
-                                const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt RelationType::getSpaceAfter( BracketType*,
-                                const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt RelationType::getSpaceAfter( ComplexElementType*,
-                                const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt RelationType::getSpaceAfter( InnerElementType*,
-                                const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  const ContextStyle& context,
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 QFont RelationType::getFont( const ContextStyle& context )
@@ -517,54 +542,61 @@ PunctuationType::PunctuationType( SequenceParser* parser )
 }
 
 luPt PunctuationType::getSpaceBefore( const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
     if ( getPrev() != 0 ) {
-        return getPrev()->getSpaceAfter( this, context, tstyle );
+        return getPrev()->getSpaceAfter( this, context, tstyle, factor );
     }
     return 0;
 }
 
 luPt PunctuationType::getSpaceAfter( MultiElementType*,
-                                   const ContextStyle& context,
-                                   ContextStyle::TextStyle tstyle )
+                                     const ContextStyle& context,
+                                     ContextStyle::TextStyle tstyle,
+                                     double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt PunctuationType::getSpaceAfter( RelationType*,
-                                   const ContextStyle& context,
-                                   ContextStyle::TextStyle tstyle )
+                                     const ContextStyle& context,
+                                     ContextStyle::TextStyle tstyle,
+                                     double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt PunctuationType::getSpaceAfter( PunctuationType*,
-                                   const ContextStyle& context,
-                                   ContextStyle::TextStyle tstyle )
+                                     const ContextStyle& context,
+                                     ContextStyle::TextStyle tstyle,
+                                     double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt PunctuationType::getSpaceAfter( BracketType*,
-                                   const ContextStyle& context,
-                                   ContextStyle::TextStyle tstyle )
+                                     const ContextStyle& context,
+                                     ContextStyle::TextStyle tstyle,
+                                     double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt PunctuationType::getSpaceAfter( ComplexElementType*,
-                                   const ContextStyle& context,
-                                   ContextStyle::TextStyle tstyle )
+                                     const ContextStyle& context,
+                                     ContextStyle::TextStyle tstyle,
+                                     double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt PunctuationType::getSpaceAfter( InnerElementType*,
-                                   const ContextStyle& context,
-                                   ContextStyle::TextStyle tstyle )
+                                     const ContextStyle& context,
+                                     ContextStyle::TextStyle tstyle,
+                                     double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 QFont PunctuationType::getFont( const ContextStyle& context )
@@ -584,33 +616,37 @@ BracketType::BracketType( SequenceParser* parser )
 }
 
 luPt BracketType::getSpaceBefore( const ContextStyle& context,
-                                ContextStyle::TextStyle tstyle )
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
 {
     if ( getPrev() != 0 ) {
-        return getPrev()->getSpaceAfter( this, context, tstyle );
+        return getPrev()->getSpaceAfter( this, context, tstyle, factor );
     }
     return 0;
 }
 
 luPt BracketType::getSpaceAfter( OperatorType*,
-                               const ContextStyle& context,
-                               ContextStyle::TextStyle tstyle )
+                                 const ContextStyle& context,
+                                 ContextStyle::TextStyle tstyle,
+                                 double factor )
 {
-    return mediumSpaceIfNotScript( context, tstyle );
+    return mediumSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt BracketType::getSpaceAfter( RelationType*,
-                               const ContextStyle& context,
-                               ContextStyle::TextStyle tstyle )
+                                 const ContextStyle& context,
+                                 ContextStyle::TextStyle tstyle,
+                                 double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt BracketType::getSpaceAfter( InnerElementType*,
-                               const ContextStyle& context,
-                               ContextStyle::TextStyle tstyle )
+                                 const ContextStyle& context,
+                                 ContextStyle::TextStyle tstyle,
+                                 double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 
@@ -620,33 +656,37 @@ ComplexElementType::ComplexElementType( SequenceParser* parser )
 }
 
 luPt ComplexElementType::getSpaceBefore( const ContextStyle& context,
-                                       ContextStyle::TextStyle tstyle )
+                                         ContextStyle::TextStyle tstyle,
+                                         double factor )
 {
     if ( getPrev() != 0 ) {
-        return getPrev()->getSpaceAfter( this, context, tstyle );
+        return getPrev()->getSpaceAfter( this, context, tstyle, factor );
     }
     return 0;
 }
 
 luPt ComplexElementType::getSpaceAfter( OperatorType*,
-                                      const ContextStyle& context,
-                                      ContextStyle::TextStyle tstyle )
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle,
+                                        double factor )
 {
-    return mediumSpaceIfNotScript( context, tstyle );
+    return mediumSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt ComplexElementType::getSpaceAfter( RelationType*,
-                                      const ContextStyle& context,
-                                      ContextStyle::TextStyle tstyle )
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle,
+                                        double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt ComplexElementType::getSpaceAfter( InnerElementType*,
-                                      const ContextStyle& context,
-                                      ContextStyle::TextStyle tstyle )
+                                        const ContextStyle& context,
+                                        ContextStyle::TextStyle tstyle,
+                                        double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 
@@ -656,61 +696,69 @@ InnerElementType::InnerElementType( SequenceParser* parser )
 }
 
 luPt InnerElementType::getSpaceBefore( const ContextStyle& context,
-                                     ContextStyle::TextStyle tstyle )
+                                       ContextStyle::TextStyle tstyle,
+                                       double factor )
 {
     if ( getPrev() != 0 ) {
-        return getPrev()->getSpaceAfter( this, context, tstyle );
+        return getPrev()->getSpaceAfter( this, context, tstyle, factor );
     }
     return 0;
 }
 
 luPt InnerElementType::getSpaceAfter( MultiElementType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt InnerElementType::getSpaceAfter( OperatorType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return mediumSpaceIfNotScript( context, tstyle );
+    return mediumSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt InnerElementType::getSpaceAfter( RelationType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return thickSpaceIfNotScript( context, tstyle );
+    return thickSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt InnerElementType::getSpaceAfter( PunctuationType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt InnerElementType::getSpaceAfter( BracketType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt InnerElementType::getSpaceAfter( ComplexElementType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 luPt InnerElementType::getSpaceAfter( InnerElementType*,
-                                    const ContextStyle& context,
-                                    ContextStyle::TextStyle tstyle )
+                                      const ContextStyle& context,
+                                      ContextStyle::TextStyle tstyle,
+                                      double factor )
 {
-    return thinSpaceIfNotScript( context, tstyle );
+    return thinSpaceIfNotScript( context, tstyle, factor );
 }
 
 

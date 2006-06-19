@@ -202,11 +202,12 @@ EsstixArtwork::EsstixArtwork( SymbolType t )
 
 void EsstixArtwork::calcSizes( const ContextStyle& style,
                                ContextStyle::TextStyle tstyle,
+                               double factor,
                                luPt parentSize )
 {
     setBaseline( -1 );
     esstixChar = -1;
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     //const SymbolTable& symbolTable = style.symbolTable();
     switch (getType()) {
     case LeftSquareBracket:
@@ -305,9 +306,10 @@ void EsstixArtwork::calcSizes( const ContextStyle& style,
 
 void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                          const ContextStyle& style, ContextStyle::TextStyle tstyle,
+                         double factor,
                          luPt /*parentSize*/, const LuPixelPoint& origin)
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
     /*

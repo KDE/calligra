@@ -550,6 +550,7 @@ bool Container::loadMathML( const QDomDocument &doc, bool oasisFormat )
     return loadMathML( doc.documentElement(), oasisFormat );
 }
 
+/*
 bool Container::loadMathML( const QDomElement &element, bool oasisFormat )
 {
     const ContextStyle& context = document()->getContextStyle();
@@ -562,6 +563,31 @@ bool Container::loadMathML( const QDomElement &element, bool oasisFormat )
     if ( load( filter.getKFormulaDom().documentElement() ) ) {
         getHistory()->clear();
         return true;
+    }
+    return false;
+}
+*/
+
+bool Container::loadMathML( const QDomElement &fe, bool /*oasisFormat*/ )
+{
+    kdDebug( DEBUGID ) << "loadMathML" << endl;
+    if (!fe.isNull()) {
+        FormulaElement* root = createMainSequence();
+        if (root->buildFromMathMLDom(fe)) {
+            delete impl->rootElement;
+            impl->rootElement = root;
+            emit formulaLoaded(rootElement());
+
+            recalc();
+            return true;
+        }
+        else {
+            delete root;
+            kdWarning( DEBUGID ) << "Error constructing element tree." << endl;
+        }
+    }
+    else {
+        kdWarning( DEBUGID ) << "Empty element." << endl;
     }
     return false;
 }

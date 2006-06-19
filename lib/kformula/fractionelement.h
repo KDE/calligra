@@ -72,7 +72,10 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+    virtual void calcSizes( const ContextStyle& style,
+						    ContextStyle::TextStyle tstyle,
+						    ContextStyle::IndexStyle istyle,
+							double factor );
 
     /**
      * Draws the whole element including its children.
@@ -83,6 +86,7 @@ public:
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
+					   double factor,
                        const LuPixelPoint& parentOrigin );
 
     /**

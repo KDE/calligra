@@ -52,9 +52,10 @@ bool SpaceElement::accept( ElementVisitor* visitor )
 
 void SpaceElement::calcSizes( const ContextStyle& style,
                               ContextStyle::TextStyle tstyle,
-                              ContextStyle::IndexStyle /*istyle*/ )
+                              ContextStyle::IndexStyle /*istyle*/,
+                              double factor )
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
 
     QFont font = style.getDefaultFont();
     font.setPointSize( mySize );
@@ -63,7 +64,7 @@ void SpaceElement::calcSizes( const ContextStyle& style,
     QChar ch = 'x';
     LuPixelRect bound = fm.boundingRect( ch );
 
-    setWidth( style.getSpace( tstyle, spaceWidth ) );
+    setWidth( style.getSpace( tstyle, spaceWidth, factor ) );
     setHeight( bound.height() );
     setBaseline( -bound.top() );
     //setMidline( getBaseline() - fm.strikeOutPos() );
@@ -77,6 +78,7 @@ void SpaceElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                          const ContextStyle& style,
                          ContextStyle::TextStyle /*tstyle*/,
                          ContextStyle::IndexStyle /*istyle*/,
+                         double /*factor*/,
                          const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());

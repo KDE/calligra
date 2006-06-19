@@ -114,22 +114,25 @@ BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+void FractionElement::calcSizes( const ContextStyle& style, 
+                                 ContextStyle::TextStyle tstyle,
+                                 ContextStyle::IndexStyle istyle,
+                                 double factor )
 {
     ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction( tstyle );
     ContextStyle::IndexStyle u_istyle = style.convertIndexStyleUpper( istyle );
     ContextStyle::IndexStyle l_istyle = style.convertIndexStyleLower( istyle );
 
-    numerator->calcSizes( style, i_tstyle, u_istyle );
-    denominator->calcSizes( style, i_tstyle, l_istyle );
+    numerator->calcSizes( style, i_tstyle, u_istyle, factor );
+    denominator->calcSizes( style, i_tstyle, l_istyle, factor );
 
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
 
     setWidth( QMAX( numerator->getWidth(), denominator->getWidth() ) );
     setHeight( numerator->getHeight() + denominator->getHeight() +
-               2*distY + style.getLineWidth() );
-    setBaseline( qRound( numerator->getHeight() + distY + .5*style.getLineWidth() +
-                 style.axisHeight( tstyle ) ) );
+               2*distY + style.getLineWidth( factor ) );
+    setBaseline( qRound( numerator->getHeight() + distY + .5*style.getLineWidth( factor ) 
+                         + style.axisHeight( tstyle, factor ) ) );
 
     numerator->setX( ( getWidth() - numerator->getWidth() ) / 2 );
     denominator->setX( ( getWidth() - denominator->getWidth() ) / 2 );
@@ -148,28 +151,30 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
                             const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,
                             ContextStyle::IndexStyle istyle,
+                            double factor,
                             const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    numerator->draw(painter, r, style,
-		    style.convertTextStyleFraction( tstyle ),
-		    style.convertIndexStyleUpper( istyle ), myPos);
+    numerator->draw( painter, r, style,
+                     style.convertTextStyleFraction( tstyle ),
+                     style.convertIndexStyleUpper( istyle ), factor, myPos);
     if (denominator) { // Can be temporarily 0 see FractionElement::remove
-        denominator->draw(painter, r, style,
-		      style.convertTextStyleFraction( tstyle ),
-		      style.convertIndexStyleLower( istyle ), myPos);
+        denominator->draw( painter, r, style,
+                           style.convertTextStyleFraction( tstyle ),
+                           style.convertIndexStyleLower( istyle ), factor,
+                           myPos);
     }
 
     if ( withLine ) {
         painter.setPen( QPen( style.getDefaultColor(),
-                              style.layoutUnitToPixelY( style.getLineWidth() ) ) );
+                              style.layoutUnitToPixelY( style.getLineWidth( factor ) ) ) );
         painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle ) ),
+                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle, factor ) ),
                           style.layoutUnitToPixelX( myPos.x() + getWidth() ),
-                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle ) ) );
+                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle, factor ) ) );
     }
 }
 

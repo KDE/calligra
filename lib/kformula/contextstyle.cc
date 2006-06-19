@@ -266,47 +266,60 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
     return textStyleValues[ tstyle ].reductionFactor;
 }
 
-luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
+luPt ContextStyle::getAdjustedSize( TextStyle tstyle, double factor ) const
 {
-    return qRound( ptToLayoutUnitPt( m_sizeFactor*m_baseSize*getReductionFactor( tstyle ) ) );
+    return qRound( ptToLayoutUnitPt( m_sizeFactor 
+                                     * m_baseSize 
+                                     * getReductionFactor( tstyle )
+                                     * factor ) );
 }
 
-luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
+luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space, double factor ) const
 {
     switch ( space ) {
-    case NEGTHIN: return -getThinSpace( tstyle );
-    case THIN:    return getThinSpace( tstyle );
-    case MEDIUM:  return getMediumSpace( tstyle );
-    case THICK:   return getThickSpace( tstyle );
-    case QUAD:    return getQuadSpace( tstyle );
+    case NEGTHIN: return -getThinSpace( tstyle, factor );
+    case THIN:    return getThinSpace( tstyle, factor );
+    case MEDIUM:  return getMediumSpace( tstyle, factor );
+    case THICK:   return getThickSpace( tstyle, factor );
+    case QUAD:    return getQuadSpace( tstyle, factor );
     }
     return 0;
 }
 
-luPixel ContextStyle::getThinSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getThinSpace( TextStyle tstyle, double factor ) const
 {
-    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].thinSpace( quad ) );
+    return ptToPixelX( m_sizeFactor
+                       * textStyleValues[ tstyle ].thinSpace( quad )
+                       * factor );
 }
 
-luPixel ContextStyle::getMediumSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getMediumSpace( TextStyle tstyle, double factor ) const
 {
-    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].mediumSpace( quad ) );
+    return ptToPixelX( m_sizeFactor
+                       * textStyleValues[ tstyle ].mediumSpace( quad ) 
+                       * factor );
 }
 
-luPixel ContextStyle::getThickSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getThickSpace( TextStyle tstyle, double factor ) const
 {
-    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].thickSpace( quad ) );
+    return ptToPixelX( m_sizeFactor
+                       * textStyleValues[ tstyle ].thickSpace( quad ) 
+                       * factor );
 }
 
-luPixel ContextStyle::getQuadSpace( TextStyle tstyle ) const
+luPixel ContextStyle::getQuadSpace( TextStyle tstyle, double factor ) const
 {
-    return ptToPixelX( m_sizeFactor*textStyleValues[ tstyle ].quadSpace( quad ) );
+    return ptToPixelX( m_sizeFactor
+                       * textStyleValues[ tstyle ].quadSpace( quad ) 
+                       * factor );
 }
 
-luPixel ContextStyle::axisHeight( TextStyle tstyle ) const
+luPixel ContextStyle::axisHeight( TextStyle tstyle, double factor ) const
 {
     //return ptToPixelY( textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
-    return static_cast<luPixel>( m_sizeFactor*textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
+    return static_cast<luPixel>( m_sizeFactor
+                                 * textStyleValues[ tstyle ].axisHeight( m_axisHeight ) 
+                                 * factor );
 }
 
 luPt ContextStyle::getBaseSize() const
@@ -329,19 +342,19 @@ void ContextStyle::setSizeFactor( double factor )
 }
 
 
-luPixel ContextStyle::getLineWidth() const
+luPixel ContextStyle::getLineWidth( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*lineWidth );
+    return ptToLayoutUnitPixX( m_sizeFactor*lineWidth*factor );
 }
 
-luPixel ContextStyle::getEmptyRectWidth() const
+luPixel ContextStyle::getEmptyRectWidth( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize/1.8 );
+    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize*factor/1.8 );
 }
 
-luPixel ContextStyle::getEmptyRectHeight() const
+luPixel ContextStyle::getEmptyRectHeight( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize/1.8 );
+    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize*factor/1.8 );
 }
 
 

@@ -68,11 +68,13 @@ public:
 
     virtual void calcSizes( const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,
+							double factor,
                             luPt parentSize );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
+					   double factor,
                        luPt parentSize, const LuPixelPoint& origin );
 
     virtual bool isNormalChar() const;

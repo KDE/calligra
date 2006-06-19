@@ -331,9 +331,12 @@ void IndexElement::setMiddleX(int xOffset, int middleWidth)
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+void IndexElement::calcSizes(const ContextStyle& style, 
+							 ContextStyle::TextStyle tstyle,
+							 ContextStyle::IndexStyle istyle,
+							 double factor )
 {
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
 
     ContextStyle::TextStyle i_tstyle = style.convertTextStyleIndex(tstyle);
     ContextStyle::IndexStyle u_istyle = style.convertIndexStyleUpper( istyle );
@@ -342,56 +345,56 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
     // get the indexes size
     luPixel ulWidth = 0, ulHeight = 0, ulMidline = 0;
     if (hasUpperLeft()) {
-        upperLeft->calcSizes( style, i_tstyle, u_istyle );
+	  upperLeft->calcSizes( style, i_tstyle, u_istyle, factor );
         ulWidth = upperLeft->getWidth();
         ulHeight = upperLeft->getHeight();
-        ulMidline = upperLeft->axis( style, i_tstyle );
+        ulMidline = upperLeft->axis( style, i_tstyle, factor );
     }
 
     luPixel umWidth = 0, umHeight = 0, umMidline = 0;
     if (hasUpperMiddle()) {
-	upperMiddle->calcSizes( style, i_tstyle, u_istyle );
+        upperMiddle->calcSizes( style, i_tstyle, u_istyle, factor );
         umWidth = upperMiddle->getWidth();
         umHeight = upperMiddle->getHeight() + distY;
-        umMidline = upperMiddle->axis( style, i_tstyle );
+        umMidline = upperMiddle->axis( style, i_tstyle, factor );
     }
 
     luPixel urWidth = 0, urHeight = 0, urMidline = 0;
     if (hasUpperRight()) {
-        upperRight->calcSizes( style, i_tstyle, u_istyle );
+        upperRight->calcSizes( style, i_tstyle, u_istyle, factor );
         urWidth = upperRight->getWidth();
         urHeight = upperRight->getHeight();
-        urMidline = upperRight->axis( style, i_tstyle );
+        urMidline = upperRight->axis( style, i_tstyle, factor );
     }
 
     luPixel llWidth = 0, llHeight = 0, llMidline = 0;
     if (hasLowerLeft()) {
-        lowerLeft->calcSizes( style, i_tstyle, l_istyle );
+        lowerLeft->calcSizes( style, i_tstyle, l_istyle, factor );
         llWidth = lowerLeft->getWidth();
         llHeight = lowerLeft->getHeight();
-        llMidline = lowerLeft->axis( style, i_tstyle );
+        llMidline = lowerLeft->axis( style, i_tstyle, factor );
     }
 
     luPixel lmWidth = 0, lmHeight = 0, lmMidline = 0;
     if (hasLowerMiddle()) {
-        lowerMiddle->calcSizes( style, i_tstyle, l_istyle );
+        lowerMiddle->calcSizes( style, i_tstyle, l_istyle, factor );
         lmWidth = lowerMiddle->getWidth();
         lmHeight = lowerMiddle->getHeight() + distY;
-        lmMidline = lowerMiddle->axis( style, i_tstyle );
+        lmMidline = lowerMiddle->axis( style, i_tstyle, factor );
     }
 
     luPixel lrWidth = 0, lrHeight = 0, lrMidline = 0;
     if (hasLowerRight()) {
-        lowerRight->calcSizes( style, i_tstyle, l_istyle );
+        lowerRight->calcSizes( style, i_tstyle, l_istyle, factor );
         lrWidth = lowerRight->getWidth();
         lrHeight = lowerRight->getHeight();
-        lrMidline = lowerRight->axis( style, i_tstyle );
+        lrMidline = lowerRight->axis( style, i_tstyle, factor );
     }
 
     // get the contents size
-    content->calcSizes(style, tstyle, istyle);
+    content->calcSizes( style, tstyle, istyle, factor );
     luPixel width = QMAX(content->getWidth(), QMAX(umWidth, lmWidth));
-    luPixel toMidline = content->axis( style, tstyle );
+    luPixel toMidline = content->axis( style, tstyle, factor );
     luPixel fromMidline = content->getHeight() - toMidline;
 
     // calculate the x offsets
@@ -428,7 +431,7 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
     luPixel llOffset = 0;
     luPixel lrOffset = 0;
     if (content->isTextOnly()) {
-        luPt mySize = style.getAdjustedSize( tstyle );
+        luPt mySize = style.getAdjustedSize( tstyle, factor );
         QFont font = style.getDefaultFont();
         font.setPointSizeFloat( style.layoutUnitPtToPt( mySize ) );
 
@@ -504,6 +507,7 @@ void IndexElement::draw( QPainter& painter, const LuPixelRect& r,
                          const ContextStyle& style,
                          ContextStyle::TextStyle tstyle,
                          ContextStyle::IndexStyle istyle,
+                         double factor,
                          const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
@@ -514,24 +518,24 @@ void IndexElement::draw( QPainter& painter, const LuPixelRect& r,
     ContextStyle::IndexStyle u_istyle = style.convertIndexStyleUpper( istyle );
     ContextStyle::IndexStyle l_istyle = style.convertIndexStyleLower( istyle );
 
-    content->draw(painter, r, style, tstyle, istyle, myPos);
+    content->draw(painter, r, style, tstyle, istyle, factor, myPos);
     if (hasUpperLeft()) {
-        upperLeft->draw(painter, r, style, i_tstyle, u_istyle, myPos);
+        upperLeft->draw(painter, r, style, i_tstyle, u_istyle, factor, myPos);
     }
     if (hasUpperMiddle()) {
-        upperMiddle->draw(painter, r, style, i_tstyle, u_istyle, myPos);
+        upperMiddle->draw(painter, r, style, i_tstyle, u_istyle, factor, myPos);
     }
     if (hasUpperRight()) {
-        upperRight->draw(painter, r, style, i_tstyle, u_istyle, myPos);
+        upperRight->draw(painter, r, style, i_tstyle, u_istyle, factor, myPos);
     }
     if (hasLowerLeft()) {
-        lowerLeft->draw(painter, r, style, i_tstyle, l_istyle, myPos);
+        lowerLeft->draw(painter, r, style, i_tstyle, l_istyle, factor, myPos);
     }
     if (hasLowerMiddle()) {
-        lowerMiddle->draw(painter, r, style, i_tstyle, l_istyle, myPos);
+        lowerMiddle->draw(painter, r, style, i_tstyle, l_istyle, factor, myPos);
     }
     if (hasLowerRight()) {
-        lowerRight->draw(painter, r, style, i_tstyle, l_istyle, myPos);
+        lowerRight->draw(painter, r, style, i_tstyle, l_istyle, factor, myPos);
     }
 
     // Debug

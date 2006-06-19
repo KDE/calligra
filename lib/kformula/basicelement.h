@@ -46,6 +46,7 @@ class FontCommand;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
+class StyleElement;
 
 
 /**
@@ -159,7 +160,10 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle) = 0;
+    virtual void calcSizes( const ContextStyle& context,
+							ContextStyle::TextStyle tstyle,
+							ContextStyle::IndexStyle istyle,
+							double factor ) = 0;
 
     /**
      * Draws the whole element including its children.
@@ -170,6 +174,7 @@ public:
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
+					   double factor,
                        const LuPixelPoint& parentOrigin ) = 0;
 
 
@@ -356,8 +361,10 @@ public:
     luPixel getBaseline() const { return m_baseline; }
     void setBaseline( luPixel line ) { m_baseline = line; }
 
-    luPixel axis( const ContextStyle& style, ContextStyle::TextStyle tstyle ) const {
-        return getBaseline() - style.axisHeight( tstyle ); }
+    luPixel axis( const ContextStyle& style,
+                  ContextStyle::TextStyle tstyle,
+                  double factor ) const {
+        return getBaseline() - style.axisHeight( tstyle, factor ); }
 
     /**
      * @return a QDomElement that contain as DomChildren the
@@ -380,7 +387,7 @@ public:
     /**
      * Heiner's test method. Should read MathML...
      */
-    //bool buildFromMathMLDom( QDomElement& element );
+	bool buildFromMathMLDom( QDomElement element );
 
     // debug
     static int getEvilDestructionCount() { return evilDestructionCount; }
@@ -395,6 +402,8 @@ public:
      * Sets a new type. This is done during parsing.
      */
     virtual void setElementType(ElementType* t) { elementType = t; }
+
+	virtual void setStyle(StyleElement*) {}
 
 protected:
 
@@ -422,6 +431,19 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
+
+    /**
+     * Reads our attributes from the MathML element.
+     * Returns false if it failed.
+     */
+	virtual bool readAttributesFromMathMLDom(const QDomElement& element);
+
+    /**
+     * Reads our content from the MathML node. Sets the node to the next node
+     * that needs to be read.
+     * Returns false if it failed.
+     */
+	virtual bool readContentFromMathMLDom(QDomNode& node);
 
 
     /**

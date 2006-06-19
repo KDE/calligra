@@ -194,11 +194,14 @@ BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle )
+void SymbolElement::calcSizes( const ContextStyle& style,
+                               ContextStyle::TextStyle tstyle,
+                               ContextStyle::IndexStyle istyle,
+                               double factor )
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
-    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
+    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle, factor ) );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
 
     //if ( symbol == 0 ) {
     delete symbol;
@@ -206,15 +209,15 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     //}
 
     symbol->calcSizes(style, tstyle, mySize);
-    content->calcSizes(style, tstyle, istyle);
+    content->calcSizes( style, tstyle, istyle, factor );
 
     //symbol->scale(((double)parentSize)/symbol->getHeight()*2);
 
     luPixel upperWidth = 0;
     luPixel upperHeight = 0;
     if (hasUpper()) {
-        upper->calcSizes(style, style.convertTextStyleIndex( tstyle ),
-			 style.convertIndexStyleUpper( istyle ) );
+        upper->calcSizes( style, style.convertTextStyleIndex( tstyle ),
+                          style.convertIndexStyleUpper( istyle ), factor );
         upperWidth = upper->getWidth();
         upperHeight = upper->getHeight() + distY;
     }
@@ -222,8 +225,8 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     luPixel lowerWidth = 0;
     luPixel lowerHeight = 0;
     if (hasLower()) {
-        lower->calcSizes(style, style.convertTextStyleIndex( tstyle ),
-			 style.convertIndexStyleLower( istyle ) );
+        lower->calcSizes( style, style.convertTextStyleIndex( tstyle ),
+                          style.convertIndexStyleLower( istyle ), factor );
         lowerWidth = lower->getWidth();
         lowerHeight = lower->getHeight() + distY;
     }
@@ -246,17 +249,17 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 
     // heights
     //int toMidline = QMAX(content->getHeight() / 2,
-    luPixel toMidline = QMAX(content->axis( style, tstyle ),
+    luPixel toMidline = QMAX(content->axis( style, tstyle, factor ),
                              upperHeight + symbol->getHeight()/2);
     //int fromMidline = QMAX(content->getHeight() / 2,
-    luPixel fromMidline = QMAX(content->getHeight() - content->axis( style, tstyle ),
+    luPixel fromMidline = QMAX(content->getHeight() - content->axis( style, tstyle, factor ),
                                lowerHeight + symbol->getHeight()/2);
     setHeight(toMidline + fromMidline);
     //setMidline(toMidline);
 
     symbol->setY(toMidline - symbol->getHeight()/2);
     //content->setY(toMidline - content->getHeight()/2);
-    content->setY(toMidline - content->axis( style, tstyle ));
+    content->setY(toMidline - content->axis( style, tstyle, factor ));
 
     if (hasUpper()) {
         luPixel slant =
@@ -303,22 +306,23 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
                           const ContextStyle& style,
                           ContextStyle::TextStyle tstyle,
                           ContextStyle::IndexStyle istyle,
+                          double factor,
                           const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     symbol->draw( painter, r, style, tstyle, mySize, myPos );
-    content->draw( painter, r, style, tstyle, istyle, myPos );
+    content->draw( painter, r, style, tstyle, istyle, factor, myPos );
     if ( hasUpper() ) {
         upper->draw( painter, r, style, style.convertTextStyleIndex( tstyle ),
-                     style.convertIndexStyleUpper( istyle ), myPos );
+                     style.convertIndexStyleUpper( istyle ), factor, myPos );
     }
     if ( hasLower() ) {
         lower->draw( painter, r, style, style.convertTextStyleIndex( tstyle ),
-                     style.convertIndexStyleLower( istyle ), myPos );
+                     style.convertIndexStyleLower( istyle ), factor, myPos );
     }
 
     // Debug

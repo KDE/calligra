@@ -166,26 +166,26 @@ public:
     /**
      * TeX like spacings.
      */
-    luPixel getSpace( TextStyle tstyle, SpaceWidth space ) const;
-    luPixel getThinSpace( TextStyle tstyle ) const;
-    luPixel getMediumSpace( TextStyle tstyle ) const;
-    luPixel getThickSpace( TextStyle tstyle ) const;
-    luPixel getQuadSpace( TextStyle tstyle ) const;
+    luPixel getSpace( TextStyle tstyle, SpaceWidth space, double factor ) const;
+    luPixel getThinSpace( TextStyle tstyle, double factor ) const;
+    luPixel getMediumSpace( TextStyle tstyle, double factor ) const;
+    luPixel getThickSpace( TextStyle tstyle, double factor ) const;
+    luPixel getQuadSpace( TextStyle tstyle, double factor ) const;
 
-    luPixel axisHeight( TextStyle tstyle ) const;
+    luPixel axisHeight( TextStyle tstyle, double factor ) const;
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
      */
-    luPt getAdjustedSize( TextStyle tstyle ) const;
+    luPt getAdjustedSize( TextStyle tstyle, double factor ) const;
 
     /**
      * All simple lines like the one that makes up a fraction.
      */
-    luPixel getLineWidth() const;
+    luPixel getLineWidth( double factor ) const;
 
-    luPixel getEmptyRectWidth() const;
-    luPixel getEmptyRectHeight() const;
+    luPixel getEmptyRectWidth( double factor ) const;
+    luPixel getEmptyRectHeight( double factor ) const;
 
     Alignment getMatrixAlignment() const { return center; }
 

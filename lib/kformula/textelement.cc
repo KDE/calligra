@@ -108,10 +108,13 @@ bool TextElement::isInvisible() const
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle /*istyle*/)
+void TextElement::calcSizes( const ContextStyle& context, 
+                             ContextStyle::TextStyle tstyle, 
+                             ContextStyle::IndexStyle /*istyle*/,
+                             double factor )
 {
-    luPt mySize = context.getAdjustedSize( tstyle );
-    //kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
+    kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = getFont( context );
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
@@ -132,13 +135,13 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
         }
     }
     else {
-        setWidth( qRound( context.getEmptyRectWidth() * 2./3. ) );
-        setHeight( qRound( context.getEmptyRectHeight() * 2./3. ) );
+        setWidth( qRound( context.getEmptyRectWidth( factor ) * 2./3. ) );
+        setHeight( qRound( context.getEmptyRectHeight( factor ) * 2./3. ) );
         setBaseline( getHeight() );
     }
 
-    //kdDebug( DEBUGID ) << "height: " << getHeight() << endl;
-    //kdDebug( DEBUGID ) << "width: " << getWidth() << endl;
+    kdDebug( DEBUGID ) << "height: " << getHeight() << endl;
+    kdDebug( DEBUGID ) << "width: " << getWidth() << endl;
 }
 
 /**
@@ -150,6 +153,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                         const ContextStyle& context,
                         ContextStyle::TextStyle tstyle,
                         ContextStyle::IndexStyle /*istyle*/,
+                        double factor,
                         const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
@@ -158,7 +162,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 
     setUpPainter( context, painter );
 
-    luPt mySize = context.getAdjustedSize( tstyle );
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
     QFont font = getFont( context );
     font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
     painter.setFont( font );
@@ -191,7 +195,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                 // meant to be. You shouldn't calculate a lot in
                 // draw. But I don't see how else to deal with
                 // baseline==0 glyphs without yet another flag.
-                bl = -( getHeight()/2 + context.axisHeight( tstyle ) );
+                bl = -( getHeight()/2 + context.axisHeight( tstyle, factor ) );
             }
             painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                               context.layoutUnitToPixelY( myPos.y()+bl ),
@@ -199,7 +203,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
         }
         else {
             painter.setPen( QPen( context.getErrorColor(),
-                                  context.layoutUnitToPixelX( context.getLineWidth() ) ) );
+                                  context.layoutUnitToPixelX( context.getLineWidth( factor ) ) ) );
             painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
                               context.layoutUnitToPixelY( myPos.y() ),
                               context.layoutUnitToPixelX( getWidth() ),
@@ -229,12 +233,14 @@ void TextElement::dispatchFontCommand( FontCommand* cmd )
 
 void TextElement::setCharStyle( CharStyle cs )
 {
+    kdDebug( DEBUGID ) << "Changing Char Style to: " << cs << endl;
     charStyle( cs );
     formula()->changed();
 }
 
 void TextElement::setCharFamily( CharFamily cf )
 {
+    kdDebug( DEBUGID ) << "Changing Char Family to: " << cf << endl;
     charFamily( cf );
     formula()->changed();
 }
@@ -280,8 +286,11 @@ QFont TextElement::getFont(const ContextStyle& context)
         else {
             font = context.getDefaultFont();
         }
+        kdDebug( DEBUGID ) << "TextElement, charStyle(): " << charStyle() << endl;
         switch ( charStyle() ) {
         case anyChar:
+            font.setItalic( false );
+            font.setBold( false );
             break;
         case normalChar:
             font.setItalic( false );
@@ -486,9 +495,10 @@ bool EmptyElement::accept( ElementVisitor* visitor )
 
 void EmptyElement::calcSizes( const ContextStyle& context,
                               ContextStyle::TextStyle tstyle,
-                              ContextStyle::IndexStyle /*istyle*/ )
+                              ContextStyle::IndexStyle /*istyle*/,
+                              double factor )
 {
-    luPt mySize = context.getAdjustedSize( tstyle );
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
     //kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = context.getDefaultFont();
@@ -506,6 +516,7 @@ void EmptyElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                          const ContextStyle& context,
                          ContextStyle::TextStyle /*tstyle*/,
                          ContextStyle::IndexStyle /*istyle*/,
+                         double ,
                          const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );

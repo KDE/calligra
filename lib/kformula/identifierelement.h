@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Ulrich Kuettler <ulrich.kuettler@gmx.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,48 +17,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef SYMBOLFONTSTYLE_H
-#define SYMBOLFONTSTYLE_H
+#ifndef IDENTIFIERELEMENT_H
+#define IDENTIFIERELEMENT_H
 
-#include "fontstyle.h"
+#include "tokenelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-
-/**
- * The style of the standard symbol font.
- */
-class SymbolFontStyle : public FontStyle {
+class IdentifierElement : public TokenElement {
+    typedef TokenElement inherited;
 public:
-
-    /**
-     * lazy init support. Needs to be run before anything else.
-     * @param install if true fonts may be installed if needed
-     */
-    virtual bool init( ContextStyle* context, bool install = true );
-
-    virtual Artwork* createArtwork( SymbolType type = EmptyBracket ) const;
-
-    static QStringList missingFonts();
-};
-
-
-class SymbolArtwork : public Artwork {
-public:
-    SymbolArtwork( SymbolType t ) : Artwork( t ) {}
+    IdentifierElement( BasicElement* parent = 0 );
 
     virtual void calcSizes( const ContextStyle& style,
-                            ContextStyle::TextStyle tstyle,
-							double factor,
-                            luPt parentSize );
+						    ContextStyle::TextStyle tstyle,
+						    ContextStyle::IndexStyle istyle,
+							double factor );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
 					   double factor,
-                       luPt parentSize, const LuPixelPoint& origin );
+                       const LuPixelPoint& parentOrigin );
 };
 
 KFORMULA_NAMESPACE_END
 
-#endif
+#endif // IDENTIFIERELEMENT_H

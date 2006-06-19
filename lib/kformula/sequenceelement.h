@@ -94,9 +94,10 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(const ContextStyle& context,
-                           ContextStyle::TextStyle tstyle,
-                           ContextStyle::IndexStyle istyle);
+    virtual void calcSizes( const ContextStyle& style,
+						    ContextStyle::TextStyle tstyle,
+						    ContextStyle::IndexStyle istyle,
+							double factor );
 
     /**
      * Draws the whole element including its children.
@@ -107,6 +108,7 @@ public:
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
+					   double factor,
                        const LuPixelPoint& parentOrigin );
 
     /**
@@ -115,7 +117,7 @@ public:
     virtual void dispatchFontCommand( FontCommand* cmd );
 
     virtual void drawEmptyRect( QPainter& painter, const ContextStyle& context,
-                                const LuPixelPoint& upperLeft );
+								double factor, const LuPixelPoint& upperLeft );
 
     virtual void calcCursorSize( const ContextStyle& context,
                                  FormulaCursor* cursor, bool smallCursor );
@@ -124,8 +126,8 @@ public:
      * If the cursor is inside a sequence it needs to be drawn.
      */
     virtual void drawCursor( QPainter& painter, const ContextStyle& context,
-                             FormulaCursor* cursor, bool smallCursor,
-                             bool activeCursor );
+							 double factor, FormulaCursor* cursor,
+							 bool smallCursor, bool activeCursor );
 
     // navigation
     //
@@ -356,6 +358,9 @@ public:
 
     static void setCreationStrategy( ElementCreationStrategy* strategy );
 
+	virtual void setStyle(StyleElement *style);
+	virtual bool buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
+	bool readContentFromMathMLDom(QDomNode& node);
 protected:
 
     //Save/load support
@@ -411,6 +416,7 @@ protected:
      */
     virtual bool isFirstOfToken( BasicElement* child );
 
+
 private:
 
     /**
@@ -438,6 +444,8 @@ private:
     static ElementCreationStrategy* creationStrategy;
     
     bool singlePipe; //The key '|' produces one '|' not '| |', '||' produces '| |'
+
+	StyleElement *style;
 };
 
 
@@ -487,8 +495,8 @@ public:
      * If the cursor is inside a sequence it needs to be drawn.
      */
     virtual void drawCursor( QPainter& painter, const ContextStyle& context,
-                             FormulaCursor* cursor, bool smallCursor,
-                             bool activeCursor );
+							 double factor, FormulaCursor* cursor, 
+							 bool smallCursor, bool activeCursor );
 
     /**
      * Moves to the beginning of this word or if we are there already

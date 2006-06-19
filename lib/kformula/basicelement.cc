@@ -193,6 +193,19 @@ bool BasicElement::buildFromDom(QDomElement element)
     return readContentFromDom(node);
 }
 
+bool BasicElement::buildFromMathMLDom(QDomElement element)
+{/*
+    if (element.tagName() != getTagName()) {
+        kdWarning( DEBUGID ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
+        return false;
+		}*/
+    if (!readAttributesFromMathMLDom(element)) {
+        return false;
+        }
+    QDomNode node = element.firstChild();
+    return readContentFromMathMLDom(node);
+}
+
 /**
  * Appends our attributes to the dom element.
  */
@@ -215,6 +228,25 @@ bool BasicElement::readAttributesFromDom(QDomElement)
  * Returns false if it failed.
  */
 bool BasicElement::readContentFromDom(QDomNode&)
+{
+    return true;
+}
+
+/**
+ * Reads our attributes from the MathML element.
+ * Returns false if it failed.
+ */
+bool BasicElement::readAttributesFromMathMLDom(const QDomElement& )
+{
+    return true;
+}
+
+/**
+ * Reads our content from the MathML node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool BasicElement::readContentFromMathMLDom(QDomNode&)
 {
     return true;
 }

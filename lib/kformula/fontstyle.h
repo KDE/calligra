@@ -136,17 +136,21 @@ public:
 
     virtual void calcSizes( const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,
+							double factor,
                             luPt parentSize ) = 0;
     virtual void calcSizes( const ContextStyle& style,
-                            ContextStyle::TextStyle tstyle );
+                            ContextStyle::TextStyle tstyle,
+							double factor );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
+					   double factor,
                        luPt parentSize, const LuPixelPoint& origin ) = 0;
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
+					   double factor,
                        const LuPixelPoint& parentOrigin );
 
     luPixel getWidth() const { return size.width(); }

@@ -253,11 +253,12 @@ CMArtwork::CMArtwork( SymbolType t )
 
 void CMArtwork::calcSizes( const ContextStyle& style,
                            ContextStyle::TextStyle tstyle,
+                           double factor,
                            luPt parentSize )
 {
     setBaseline( -1 );
     cmChar = -1;
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     switch (getType()) {
     case LeftSquareBracket:
         if ( calcCMDelimiterSize( style, cmex_LeftSquareBracket,
@@ -356,16 +357,17 @@ void CMArtwork::calcSizes( const ContextStyle& style,
 
 
 void CMArtwork::calcSizes( const ContextStyle& style,
-                           ContextStyle::TextStyle tstyle )
+                           ContextStyle::TextStyle tstyle,
+                           double factor )
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     switch (getType()) {
     case LeftLineBracket:
     case RightLineBracket:
         calcCharSize(style, mySize, 0x2223);
         break;
     default:
-        Artwork::calcSizes( style, tstyle );
+        Artwork::calcSizes( style, tstyle, factor );
         break;
     }
 }
@@ -374,9 +376,10 @@ void CMArtwork::calcSizes( const ContextStyle& style,
 void CMArtwork::draw( QPainter& painter, const LuPixelRect& r,
                       const ContextStyle& style,
                       ContextStyle::TextStyle tstyle,
+                      double factor,
                       const LuPixelPoint& parentOrigin )
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     luPixel myX = parentOrigin.x() + getX();
     luPixel myY = parentOrigin.y() + getY();
     /*
@@ -392,17 +395,17 @@ void CMArtwork::draw( QPainter& painter, const LuPixelRect& r,
         drawCharacter(painter, style, myX, myY, mySize, 0x2223);
         break;
     default:
-        Artwork::draw( painter, r, style, tstyle, parentOrigin );
+        Artwork::draw( painter, r, style, tstyle, factor, parentOrigin );
         break;
     }
 }
 
 
-void CMArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
+void CMArtwork::draw(QPainter& painter, const LuPixelRect& ,
                      const ContextStyle& style, ContextStyle::TextStyle tstyle,
-                     luPt /*parentSize*/, const LuPixelPoint& origin)
+                     double factor, luPt , const LuPixelPoint& origin)
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
     /*

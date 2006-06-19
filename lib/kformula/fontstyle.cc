@@ -132,9 +132,10 @@ Artwork::Artwork(SymbolType t)
 
 
 void Artwork::calcSizes( const ContextStyle& style,
-                         ContextStyle::TextStyle tstyle )
+                         ContextStyle::TextStyle tstyle,
+                         double factor )
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     switch (type) {
     case LeftSquareBracket:
         calcCharSize(style, mySize, leftSquareBracketChar);
@@ -186,9 +187,9 @@ void Artwork::calcSizes( const ContextStyle& style,
 
 void Artwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                    const ContextStyle& style, ContextStyle::TextStyle tstyle,
-                   const LuPixelPoint& parentOrigin)
+                   double factor, const LuPixelPoint& parentOrigin)
 {
-    luPt mySize = style.getAdjustedSize( tstyle );
+    luPt mySize = style.getAdjustedSize( tstyle, factor );
     luPixel myX = parentOrigin.x() + getX();
     luPixel myY = parentOrigin.y() + getY();
     /*
