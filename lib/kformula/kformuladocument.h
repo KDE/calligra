@@ -41,6 +41,7 @@ class ContextStyle;
 class SymbolAction;
 class SymbolTable;
 class DocumentWrapper;
+class ElementCreationStrategy;
 
 
 /**
@@ -260,6 +261,11 @@ private:
      * All formulae that belong to this document.
      */
     FormulaList formulae;
+
+	/**
+	 * Creation strategy to use in this document.
+	 */
+	ElementCreationStrategy* creationStrategy;
 };
 
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Ulrich Kuettler <ulrich.kuettler@gmx.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,13 +18,14 @@
 */
 
 
-#ifndef CREATIONSTRATEGY_H
-#define CREATIONSTRATEGY_H
+#ifndef OASISCREATIONSTRATEGY_H
+#define OASISCREATIONSTRATEGY_H
 
 
 #include <qstring.h>
 
 #include "kformuladefs.h"
+#include "creationstrategy.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -44,40 +45,9 @@ class TextElement;
 class UnderlineElement;
 
 /**
- * An object of this type needs to be known by the SequenceElement.
- * It decides what elements can be constructed.
+ * The strategy to be used for OASIS OpenDocument / MathML.
  */
-class ElementCreationStrategy {
-public:
-    virtual ~ElementCreationStrategy() {}
-
-    virtual BasicElement* createElement( QString type ) = 0;
-
-    /// there must always be a TextElement, so this can never return 0
-    virtual TextElement* createTextElement( const QChar& ch, bool symbol=false ) = 0;
-
-    /// when this gets called the user has seen the matrix dialog and expects a matrix!
-    virtual MatrixElement* createMatrixElement( uint rows, uint columns ) = 0;
-
-    virtual EmptyElement* createEmptyElement() = 0;
-    virtual NameSequence* createNameSequence() = 0;
-    virtual BracketElement* createBracketElement( SymbolType lhs, SymbolType rhs ) = 0;
-    virtual OverlineElement* createOverlineElement() = 0;
-    virtual UnderlineElement* createUnderlineElement() = 0;
-    virtual MultilineElement* createMultilineElement() = 0;
-    virtual SpaceElement* createSpaceElement( SpaceWidth width ) = 0;
-    virtual FractionElement* createFractionElement() = 0;
-    virtual RootElement* createRootElement() = 0;
-    virtual SymbolElement* createSymbolElement( SymbolType type ) = 0;
-    virtual IndexElement* createIndexElement() = 0;
-	virtual QString type() const = 0;
-};
-
-
-/**
- * The ordinary strategy to be used for plain kformula.
- */
-class OrdinaryCreationStrategy : public ElementCreationStrategy {
+class OasisCreationStrategy : public ElementCreationStrategy {
 public:
     virtual BasicElement* createElement( QString type );
 
@@ -94,10 +64,9 @@ public:
     virtual SymbolElement* createSymbolElement( SymbolType type );
     virtual MatrixElement* createMatrixElement( uint rows, uint columns );
     virtual IndexElement* createIndexElement();
-	virtual QString type() const { return "Ordinary"; }
+	virtual QString type() const { return "Oasis"; }
 };
-
 
 KFORMULA_NAMESPACE_END
 
-#endif // CREATIONSTRATEGY_H
+#endif // OASISCREATIONSTRATEGY_H

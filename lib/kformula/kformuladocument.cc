@@ -32,6 +32,7 @@
 
 #include "contextstyle.h"
 #include "creationstrategy.h"
+#include "oasiscreationstrategy.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
 #include "sequenceelement.h"
@@ -40,16 +41,9 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-
 static const int CURRENT_SYNTAX_VERSION = 1;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.3";
-
-/**
- * The creation strategy that we are going to use.
- */
-static OrdinaryCreationStrategy creationStrategy;
-
 
 int FormulaList::compareItems( QPtrCollection::Item a, QPtrCollection::Item b )
 {
@@ -72,7 +66,8 @@ Document::Document( QObject *parent, const char *name,
     : QObject( parent, name ), m_wrapper( 0 ), m_formula( 0 )
 {
     m_contextStyle = new ContextStyle;
-    SequenceElement::setCreationStrategy( &creationStrategy );
+	creationStrategy = new OasisCreationStrategy;
+	SequenceElement::setCreationStrategy( creationStrategy );
     formulae.setAutoDelete( false );
 }
 
@@ -130,6 +125,11 @@ int Document::formulaCount()
 
 bool Document::loadXML( const QDomDocument& doc )
 {
+    if ( creationStrategy->type() != "Ordinary" ) {
+        delete creationStrategy;
+        creationStrategy = new OrdinaryCreationStrategy;
+    }
+        
     //clear();
     QDomElement root = doc.documentElement();
 
@@ -166,7 +166,11 @@ bool Document::loadXML( const QDomDocument& doc )
 
 bool Document::loadOasis( const QDomDocument& doc )
 {
-   // ### TODO: not finished!
+    // ### TODO: not finished!
+    if ( creationStrategy->type() != "Oasis" ) {
+        delete creationStrategy;
+        creationStrategy = new OasisCreationStrategy;
+    }
     KFormula::Container* formula = newFormula( 0 );
     return formula->loadMathML( doc, true );
 }
