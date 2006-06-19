@@ -354,7 +354,7 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
 // static
 void StyleManager::releaseUnusedAutoStyles( Styles autoStyles )
 {
-  foreach ( Style* style, autoStyles )
+  foreach ( Style* style, autoStyles.values() )
   {
     if ( style->release() )
       delete style;
