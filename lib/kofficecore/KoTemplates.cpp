@@ -21,6 +21,7 @@
 
 #include <qdir.h>
 #include <qimage.h>
+#include <qprinter.h>
 
 #include <kdesktopfile.h>
 #include <ksimpleconfig.h>
@@ -31,6 +32,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
+#include <klocale.h>
 
 #include <stdlib.h>
 
@@ -240,6 +242,11 @@ void KoTemplateTree::readGroups() {
 }
 
 void KoTemplateTree::readTemplates() {
+    QString dontShow = "imperial";
+
+    if(KGlobal::locale()->pageSize() == QPrinter::Letter) {
+        dontShow = "metric";
+    }
 
     QPtrListIterator<KoTemplateGroup> groupIt(m_groups);
     for( ; groupIt.current()!=0L; ++groupIt) {
@@ -279,6 +286,11 @@ void KoTemplateTree::readTemplates() {
                         hidden=config.readBoolEntry("X-KDE-Hidden", false);
                         defaultTemplate = config.readBoolEntry("X-KDE-DefaultTemplate", false);
                         measureSystem=config.readEntry("X-KDE-MeasureSystem").lower();
+
+                        // Don't add a template that is for the wrong measure system
+                        if(measureSystem == dontShow)
+                            continue;
+
                         //kdDebug() << "hidden: " << hidden_str << endl;
                         templatePath=config.readPathEntry("URL");
                         //kdDebug() << "Link to : " << templatePath << endl;

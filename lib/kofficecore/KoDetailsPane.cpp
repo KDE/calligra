@@ -107,18 +107,9 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
     connect(kapp, SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
   }
 
-  QString dontShow = "imperial";
-
-  if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
-    dontShow = "metric";
-  }
-
   KListViewItem* selectItem = 0;
 
   for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
-    if(t->isHidden() || (t->measureSystem() == dontShow))
-      continue;
-
     KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
     QImage icon = t->loadPicture(instance).convertToImage();
     icon = icon.smoothScale(64, 64, QImage::ScaleMin);
