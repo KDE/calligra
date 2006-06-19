@@ -42,9 +42,9 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char *na
     panel = new MainProjectPanel(project, this);
 
     setMainWidget(panel);
-    enableButtonOK(false);
+    enableButtonOk(false);
     resize( QSize(500, 410).expandedTo(minimumSizeHint()));
-    connect(panel, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOK(bool)));
+    connect(panel, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
 }
 
 

@@ -40,8 +40,8 @@ WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p, const c
     m_panel = new WBSDefinitionPanel(def, this);
     setMainWidget(m_panel);
 
-    enableButtonOK(false);
-    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOK(bool)));
+    enableButtonOk(false);
+    connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
 }
 
 

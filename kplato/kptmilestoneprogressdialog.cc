@@ -39,13 +39,13 @@ MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
 
     setMainWidget(m_panel);
 
-    enableButtonOK(false);
+    enableButtonOk(false);
 
     connect(m_panel, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
 void MilestoneProgressDialog::slotChanged() {
-    enableButtonOK(true);
+    enableButtonOk(true);
 }
 
 KCommand *MilestoneProgressDialog::buildCommand(Part *part) {

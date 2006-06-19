@@ -52,10 +52,10 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, cons
     dia = new StandardWorktimeDialogImpl(m_original, this);
 
     setMainWidget(dia);
-    enableButtonOK(false);
+    enableButtonOk(false);
 
-    connect(dia, SIGNAL(obligatedFieldsFilled(bool) ), SLOT(enableButtonOK(bool)));
-    connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
+    connect(dia, SIGNAL(obligatedFieldsFilled(bool) ), SLOT(enableButtonOk(bool)));
+    connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)));
 }
 
 KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {

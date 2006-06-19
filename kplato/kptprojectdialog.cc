@@ -56,12 +56,12 @@ ProjectDialog::ProjectDialog(Project &p, QWidget *parent, const char *name)
     resourcesTab = new ResourcesPanel(dia, &project);
     dia->daTabs->insertTab(resourcesTab, i18n("Resources"), 1);
     setMainWidget(dia);
-    enableButtonOK(false);
+    enableButtonOk(false);
 
 	dia->namefield->setText(project.name());
 	dia->leaderfield->setText(project.leader());
 
-    connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
+    connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
     connect(dia, SIGNAL( schedulingTypeChanged(int) ), this, SLOT( slotSchedulingChanged(int) ));
 
     slotSchedulingChanged(dia->schedulerType->currentItem());

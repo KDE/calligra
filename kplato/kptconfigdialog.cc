@@ -65,7 +65,7 @@ ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, co
     //addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
     m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), project.standardWorktime(), page);
 
-    enableButtonOK(false);
+    enableButtonOk(false);
     enableButtonApply(false);
 
 //    connect(m_behaviorPage, SIGNAL(changed()), SLOT(slotChanged()));
@@ -95,12 +95,12 @@ void ConfigDialog::slotDefault() {
     m_taskDefaultPage->setStartValues(m_config.taskDefaults());
 //    m_behaviorPage->setStartValues();
 
-    enableButtonOK(false);
+    enableButtonOk(false);
     enableButtonApply(false);
 }
 
 void ConfigDialog::slotChanged() {
-    enableButtonOK(true);
+    enableButtonOk(true);
     enableButtonApply(true);
 }
 

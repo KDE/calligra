@@ -57,9 +57,9 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTim
     m_costTab = new TaskCostPanel(task, accounts, page);
 
     // Set the state of all the child widgets.
-    enableButtonOK(false);
+    enableButtonOk(false);
 
-    connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
+    connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
 }

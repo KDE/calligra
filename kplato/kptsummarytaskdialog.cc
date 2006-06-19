@@ -39,9 +39,9 @@ SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
     enableButtonSeparator( true );
     m_generalTab = new SummaryTaskGeneralPanel(task, this);
     setMainWidget(m_generalTab);
-    enableButtonOK(false);
+    enableButtonOk(false);
 
-    connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOK(bool)));
+    connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
 }
 
 

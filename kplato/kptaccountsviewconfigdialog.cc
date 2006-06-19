@@ -47,9 +47,9 @@ AccountsviewConfigDialog::AccountsviewConfigDialog(const QDate &date, int period
     m_panel->cumulative->setChecked(cumulative);
     setMainWidget(m_panel);
 
-    enableButtonOK(false);
+    enableButtonOk(false);
 
-    connect(m_panel, SIGNAL(changed(bool)), SLOT( enableButtonOK(bool)));
+    connect(m_panel, SIGNAL(changed(bool)), SLOT( enableButtonOk(bool)));
 }
 
 

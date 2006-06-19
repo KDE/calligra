@@ -47,10 +47,10 @@ IntervalEdit::IntervalEdit(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWi
     dia = new IntervalEditImpl(intervals, this);
 
     setMainWidget(dia);
-    enableButtonOK(false);
+    enableButtonOk(false);
 
-    connect(dia, SIGNAL(obligatedFieldsFilled(bool) ), SLOT(enableButtonOK(bool)));
-    connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
+    connect(dia, SIGNAL(obligatedFieldsFilled(bool) ), SLOT(enableButtonOk(bool)));
+    connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)));
 }
 
 Q3PtrList<QPair<QTime, QTime> > IntervalEdit::intervals() const {

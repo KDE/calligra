@@ -192,9 +192,9 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
     resize(QSize(725, 388).expandedTo(minimumSizeHint()));
 
     setMainWidget(dia);
-    enableButtonOK(false);
+    enableButtonOk(false);
 
-    connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
+    connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)));
 }
 
 KCommand *CalendarListDialog::buildCommand(Part *part) {

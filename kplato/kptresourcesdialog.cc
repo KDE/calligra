@@ -43,14 +43,14 @@ ResourcesDialog::ResourcesDialog(Project &p, QWidget *parent, const char *name)
     panel = new ResourcesPanel(this, &project);
 
     setMainWidget(panel);
-    enableButtonOK(false);
+    enableButtonOk(false);
 
     connect(panel, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
 
 void ResourcesDialog::slotChanged() {
-    enableButtonOK(true);
+    enableButtonOk(true);
 }
 
 void ResourcesDialog::slotOk() {

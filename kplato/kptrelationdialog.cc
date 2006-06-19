@@ -64,7 +64,7 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption,
     m_panel->lag->setValue(rel->lag());
 
     m_panel->relationType->setFocus();
-    enableButtonOK(true);
+    enableButtonOk(true);
     connect(m_panel->relationType, SIGNAL(clicked(int)), SLOT(typeClicked(int)));
     connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));
 }
@@ -82,12 +82,12 @@ void AddRelationDialog::slotOk() {
 }
 
 void AddRelationDialog::lagChanged() {
-    enableButtonOK(true);
+    enableButtonOk(true);
 }
 
 void AddRelationDialog::typeClicked(int id) {
     if (id != m_relation->type())
-        enableButtonOK(true);
+        enableButtonOk(true);
 }
 
 //////////////////
@@ -97,7 +97,7 @@ ModifyRelationDialog::ModifyRelationDialog(Relation *rel, QWidget *p, const char
 {
     setButtonText( KDialog::User1, i18n("Delete") );
     m_deleted = false;
-    enableButtonOK(false);
+    enableButtonOk(false);
 }
 
 // Delete

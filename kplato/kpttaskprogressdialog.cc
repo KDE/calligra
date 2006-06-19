@@ -39,13 +39,13 @@ TaskProgressDialog::TaskProgressDialog(Task &task, StandardWorktime *workTime, Q
 
     setMainWidget(m_panel);
 
-    enableButtonOK(false);
+    enableButtonOk(false);
 
     connect(m_panel, SIGNAL( changed() ), SLOT(slotChanged()));
 }
 
 void TaskProgressDialog::slotChanged() {
-    enableButtonOK(true);
+    enableButtonOk(true);
 }
 
 KCommand *TaskProgressDialog::buildCommand(Part *part) {
