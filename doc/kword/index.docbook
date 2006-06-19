@@ -546,7 +546,7 @@ from the menubar.</para></listitem>
 from the menubar.</para></listitem>
 <listitem><para>Type the &Tab; key again.  This will move the cursor near the right margin of the header.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
-<guimenuitem>Page</guimenuitem><guimenuitem>Pa	ge Number</guimenuitem></menuchoice>
+<guimenuitem>Page</guimenuitem><guimenuitem>Page Number</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
 <listitem><para>Move to an even numbered page in your document, and click in the header box.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
