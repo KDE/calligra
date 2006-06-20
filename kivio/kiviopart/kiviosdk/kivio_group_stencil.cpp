@@ -128,7 +128,7 @@ KivioCollisionType KivioGroupStencil::checkForCollision( KoPoint *p, double thre
     while( pStencil )
     {
         colType = pStencil->checkForCollision( p, threshold );
-        if( colType != kctNone ) {
+        if( colType != kctNone && pStencil->type()!=kstConnector) {
             return colType;
         }
 
