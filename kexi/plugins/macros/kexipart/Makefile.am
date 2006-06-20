@@ -16,6 +16,7 @@ kexihandler_macro_la_LIBADD = \
 
 INCLUDES = \
     -I$(top_srcdir)/lib  \
+    -I$(top_srcdir)/lib/kofficecore/  \
     -I$(top_srcdir)/kexi/core \
     -I$(top_srcdir)/kexi \
     -I$(top_srcdir)/kexi/widget \
