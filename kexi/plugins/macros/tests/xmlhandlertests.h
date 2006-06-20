@@ -60,13 +60,7 @@ namespace KoMacroTest {
 			/**
 			* Test the @a KoMacro::XMLHandler parseXML()-function.
 			*/
-			void testParseXML();
-
-			/**
-			* Test the @a KoMacro::XMLHandler toXML()-function.
-			*/
-			void testToXML();
-
+			void testParseAndToXML();
 
 		private:
 			/// @internal d-pointer class.
@@ -74,20 +68,28 @@ namespace KoMacroTest {
 			/// @internal d-pointer instance.
 			Private* const d;
 			
-			// Compares a XML-Element with a Macro. Call sub-asserts.
+			/** 
+			* Compares a XML-Element with a Macro. Call sub-asserts.
+			* @p macro The parsen @a Macro.
+			* @p domelement The given @a QDomElement which is parsen.
+			* @p isitemsempty Bool for expectation of an empty @a MacroItem -List.
+			* @p isactionset Bool for expectation that the @a Action -names are equal.
+			* @p isvariableok QMap of Bools for comparing each @a Variable .
+			*/
 			void assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
-				const QDomElement& domelement,
-				bool isitemsempty,
-				bool isactionset,
-				QMap<QString, bool> isvariableok);
+				const QDomElement& elem,
+				const bool isitemsempty,
+				const bool isactionset,
+				const QMap<QString, bool> isvariableok);
 
 			// Prints a QMap of Variables to kdDebug().
-			void printMvariables(QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, QString s);
+			void printMvariables(const QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, const QString s);
 
 			/** 
-			* Sub-methods of testParseXML().
+			* Sub-methods of testParseXML() and testToXML().
 			* Test the correct parsing of a @a QDomElement into a @a Macro
-			* respectively expected failure of parsing.
+			* respectively expected failure of parsing. Then transform it
+			* back and compare it.
 			*/
 			// 1.Test - Correct DomElement.
 			void testCorrectDomElement();
@@ -102,19 +104,17 @@ namespace KoMacroTest {
 			// 6.Test - XML-document if it has a wrong structure like
 			// wrong parathesis	or missing end tag.
 			void testWrongXMLStruct();
-			// 7.Test - XML-document with wrong item- and variable-tags.
-			void testWrongItemVarTags();
-			// 8.Test-XML-document with maximum field-size.
+			// 7.Test-XML-document with maximum field-size.
 			void testMaxNum();
-			// 9.Test-XML-document with maximum +1 field-size.
+			// 8.Test-XML-document with maximum+1 field-size.
 			void testMaxNum2();
-			// 10.Test-XML-document with minimum field-size.
+			// 9.Test-XML-document with minimum field-size.
 			void testMinNum();
-			// 11.Test-XML-document with minimum field-size.
+			// 10.Test-XML-document with minimum-1 field-size.
 			void testMinNum2();
-			// 12.Test - With a to big number.
+			// 11.Test - With a to big number.
 			void testBigNumber();
-			// 13.Test - With two MacroItems.
+			// 12.Test - With two MacroItems.
 			void testTwoMacroItems();
 	};
 }
