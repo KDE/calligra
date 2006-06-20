@@ -79,3 +79,9 @@
 	}
 
 #endif
+
+namespace KoMacroTest {
+	static const QString TESTSTRING = "teststring";
+	static const QString TESTINT = "testint";
+	static const QString TESTBOOL = "testbool";	
+}

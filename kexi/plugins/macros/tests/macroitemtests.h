@@ -28,7 +28,7 @@ namespace KoMacroTest {
 	* The common testsuite used to test common @a KoMacro
 	* functionality.
 	*/
-	class ActionTests : public KUnitTest::SlotTester
+	class MacroitemTests : public KUnitTest::SlotTester
 	{
 			Q_OBJECT
 		public:
@@ -36,12 +36,12 @@ namespace KoMacroTest {
 			/**
 			* Constructor.
 			*/
-			ActionTests();
+			MacroitemTests();
 
 			/**
 			* Destructor.
 			*/
-			virtual ~ActionTests();
+			virtual ~MacroitemTests();
 
 		public slots:
 
@@ -63,32 +63,18 @@ namespace KoMacroTest {
 			void testMacro();
 
 			/**
-			* Test the @a KoMacro::Action functionality.
+			* Subtest for the @a KoMacro::Action functionality.
 			*/
-			void testAction();
-
-			void testText();
+			void testMacroItemString();
 			/**
 			* Subtest for the @a KoMacro::Action functionality.
 			*/
-			void testName();
+			void testMacroItemInt();
 			/**
 			* Subtest for the @a KoMacro::Action functionality.
 			*/
-			void testComment();
-			/**
-			* Subtest for the @a KoMacro::Action functionality.
-			*/
-			void testVariableString();
-			/**
-			* Subtest for the @a KoMacro::Action functionality.
-			*/
-			void testVariableInt();
-			/**
-			* Subtest for the @a KoMacro::Action functionality.
-			*/
-			void testVariableBool();
-
+			void testMacroItemBool();
+			
 		private:
 			/// @internal d-pointer class.
 			class Private;

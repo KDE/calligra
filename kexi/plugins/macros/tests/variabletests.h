@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KOMACROTEST_ACTIONTESTS_H
-#define KOMACROTEST_ACTIONTESTS_H
+#ifndef KOMACROTEST_VARIABLETESTS_H
+#define KOMACROTEST_VARIABLETESTS_H
 
 #include <kunittest/tester.h>
 
@@ -28,7 +28,7 @@ namespace KoMacroTest {
 	* The common testsuite used to test common @a KoMacro
 	* functionality.
 	*/
-	class ActionTests : public KUnitTest::SlotTester
+	class VariableTests : public KUnitTest::SlotTester
 	{
 			Q_OBJECT
 		public:
@@ -36,12 +36,12 @@ namespace KoMacroTest {
 			/**
 			* Constructor.
 			*/
-			ActionTests();
+			VariableTests();
 
 			/**
 			* Destructor.
 			*/
-			virtual ~ActionTests();
+			virtual ~VariableTests();
 
 		public slots:
 
@@ -62,20 +62,6 @@ namespace KoMacroTest {
 			*/
 			void testMacro();
 
-			/**
-			* Test the @a KoMacro::Action functionality.
-			*/
-			void testAction();
-
-			void testText();
-			/**
-			* Subtest for the @a KoMacro::Action functionality.
-			*/
-			void testName();
-			/**
-			* Subtest for the @a KoMacro::Action functionality.
-			*/
-			void testComment();
 			/**
 			* Subtest for the @a KoMacro::Action functionality.
 			*/
