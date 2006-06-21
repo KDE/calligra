@@ -458,7 +458,7 @@ QColor StyleAttributes::getBackground()
 {
     if ( background_stack.empty() ) {
         kdWarning( DEBUGID ) << "Background stack is empty.\n";
-        return QColor( Qt::gray );
+        return QColor( Qt::white );
     }
     return background_stack.top();
 }

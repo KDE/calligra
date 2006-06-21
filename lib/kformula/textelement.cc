@@ -188,6 +188,11 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 //         kdDebug() << "draw text: " << text[0].unicode()
 //                   << " " << painter.font().family().latin1()
 //                   << endl;
+        painter.fillRect( context.layoutUnitToPixelX( parentOrigin.x() ),
+                          context.layoutUnitToPixelY( parentOrigin.y() ),
+                          context.layoutUnitToPixelX( getParent()->getWidth() ),
+                          context.layoutUnitToPixelY( getParent()->getHeight() ),
+                          style.getBackground() );
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
                           text );
@@ -204,6 +209,11 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                 // baseline==0 glyphs without yet another flag.
                 bl = -( getHeight()/2 + context.axisHeight( tstyle, factor ) );
             }
+            painter.fillRect( context.layoutUnitToPixelX( myPos.x() ),
+                              context.layoutUnitToPixelY( myPos.y() ),
+                              context.layoutUnitToPixelX( getWidth() ),
+                              context.layoutUnitToPixelY( getHeight() ),
+                              style.getBackground() );
             painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                               context.layoutUnitToPixelY( myPos.y()+bl ),
                               ch );
