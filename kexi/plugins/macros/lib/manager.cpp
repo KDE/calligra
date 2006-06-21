@@ -149,7 +149,7 @@ void Manager::publishAction(KSharedPtr<Action> action)
 	const QString name = action->name();
 	if(! d->actions.contains(name)) {
 		d->actionnames.append(name);
-		return;
+//	return;
 	}
 	d->actions.replace(name, action);
 }

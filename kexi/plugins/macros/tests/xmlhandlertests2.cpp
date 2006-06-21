@@ -16,7 +16,7 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#include "xmlhandlertests.h"
+#include "xmlhandlertests2.h"
 #include "testaction.h"
 #include "komacrotestbase.h"
 
@@ -44,9 +44,9 @@ namespace KoMacroTest {
 	* Register KoMacroTest::CommonTests as TestSuite.
 	*/
 	KUNITTEST_SUITE("KoMacroTestSuite")
-	KUNITTEST_REGISTER_TESTER(XMLHandlerTests);
+	KUNITTEST_REGISTER_TESTER(XMLHandlerTests2);
 
-	class XMLHandlerTests::Private
+	class XMLHandlerTests2::Private
 	{
 		public:		
 		/**
@@ -71,20 +71,22 @@ namespace KoMacroTest {
 	};
 }
 
-XMLHandlerTests::XMLHandlerTests()
+// TODO: 	- assertMacroEqMacro
+
+XMLHandlerTests2::XMLHandlerTests2()
 	: KUnitTest::SlotTester()
 	, d( new Private() ) // create the private d-pointer instance.
 {
 }
 
-XMLHandlerTests::~XMLHandlerTests()
+XMLHandlerTests2::~XMLHandlerTests2()
 {
 	delete d->xmlguiclient;
 	delete d;
 }
 
 
-void XMLHandlerTests::setUp()
+void XMLHandlerTests2::setUp()
 {
 	d->xmlguiclient = new KXMLGUIClient();
 	
@@ -97,7 +99,7 @@ void XMLHandlerTests::setUp()
 	::KoMacro::Manager::self()->publishAction(d->testaction);	
 }
 
-void XMLHandlerTests::tearDown()
+void XMLHandlerTests2::tearDown()
 {
 	delete d->xmlguiclient;
 }
@@ -105,47 +107,44 @@ void XMLHandlerTests::tearDown()
 /**
 * Test the @a KoMacro::XMLHandler parseXML() and toXML()-function.
 */
-void XMLHandlerTests::testParseAndToXML()
+void XMLHandlerTests2::testParseAndToXML()
 {
-	kdDebug()<<"===================== testParseAndToXML() ======================" << endl;
+	kdDebug()<<"===================== testParseAndToXML2() ======================" << endl;
 
 	// 1.Test - Correct DomElement.
 	testCorrectDomElement();
-	// 2.Test - XML-document with bad root element.
-	testBadRoot();
-	// 3.Test - XML-document with a missing Variable.
-	testMissingVariable();
-	// 4.Test - One more Variable in XML-Document.
-	testMoreVariables();
-	// 5.Test - XML-document with wrong macro-xmlversion.
-	testWrongVersion();
-	// 6.Test - XML-document if it has a wrong structure like wrong parathesis
-	// 	or missing end tag.
-	testWrongXMLStruct();
-	// 7.Test-XML-document with maximum field-size.
-	testMaxNum();
-	// 8.Test-XML-document with maximum+1 field-size.
-	testMaxNum2();
-	// 9.Test-XML-document with minimum field-size.
-	testMinNum();
-	// 10.Test-XML-document with minimum-1 field-size.
-	testMinNum2();
-	// 11.Test - With a to big number.
-	testBigNumber();
-	// 12.Test - With two MacroItems.
-	testTwoMacroItems();
+// 	// 2.Test - XML-document with bad root element.
+// 	testBadRoot();
+// 	// 3.Test - XML-document with a missing Variable.
+// 	testMissingVariable();
+// 	// 4.Test - One more Variable in XML-Document.
+// 	testMoreVariables();
+// 	// 5.Test - XML-document with wrong macro-xmlversion.
+// 	testWrongVersion();
+// 	// 6.Test - XML-document if it has a wrong structure like wrong parathesis
+// 	// 	or missing end tag.
+// 	testWrongXMLStruct();
+// 	// 7.Test-XML-document with maximum field-size.
+// 	testMaxNum();
+// 	// 8.Test-XML-document with maximum+1 field-size.
+// 	testMaxNum2();
+// 	// 9.Test-XML-document with minimum field-size.
+// 	testMinNum();
+// 	// 10.Test-XML-document with minimum-1 field-size.
+// 	testMinNum2();
+// 	// 11.Test - With a to big number.
+// 	testBigNumber();
+// 	// 12.Test - With two MacroItems.
+// 	testTwoMacroItems();
 }
+
 
 /***************************************************************************
 * Begin of Sub-methos of testParseXML().
 ***************************************************************************/
 // 1.Test - Correct DomElement.
-void XMLHandlerTests::testCorrectDomElement()
+void XMLHandlerTests2::testCorrectDomElement()
 {
-	// Local Init
-	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument doomdocument;
-
 	// Part 1: From XML to a Macro.
 	// Test-XML-document with normal allocated variables.
 	const QString xml = QString("<!DOCTYPE macros>"
@@ -158,31 +157,54 @@ void XMLHandlerTests::testCorrectDomElement()
 				      "</item>"
 				    "</macro>");
 	// Set the XML-document with the above string.
+	QDomDocument doomdocument;
 	doomdocument.setContent(xml);
 	const QDomElement elem = doomdocument.documentElement();
-	// Is our XML parseable by calling parseXML()?
-	KOMACROTEST_ASSERT(macro->parseXML(elem),true);
-	
-	// Is the parsen content in the Macro correct ?
-	QMap<QString,bool> isvariableok;
-	isvariableok["teststring"] = true;
-	isvariableok["testint"] = true;
-	isvariableok["testbool"] = true;
-	isvariableok["testdouble"] = true;
-	assertMacroContentEqToXML(macro,elem,false,true,isvariableok);
-	
-	// Transform back by calling toXML().
-	const QDomElement elem2 = macro->toXML();
-	assertMacroContentEqToXML(macro,elem2,false,true,isvariableok);
 
-	// Test the Compare-method when a Variable will change, it must fail.
-	macro->items().first()->variable("teststring")->setVariant("bla");
-	isvariableok.replace("teststring",false);
-	assertMacroContentEqToXML(macro,elem,false,true,isvariableok);
+	// Create a Macro manually about the above DomElement.
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+
+	// Create a MacroItem with the TestAction for macro2.
+	KSharedPtr<KoMacro::MacroItem> macroitem;
+	macro->addItem(macroitem);
+	KSharedPtr<KoMacro::Action> action = new TestAction();
+	macroitem->setAction(action);
+	KoMacro::Manager::self()->publishAction(action);
+
+	// Push the Variables into the macroitem2.
+	KSharedPtr<KoMacro::Variable> varstring = macroitem->addVariable("teststring",QVariant("teststring"));
+	KSharedPtr<KoMacro::Variable> varint = macroitem->addVariable("testint",QVariant(0));
+	KSharedPtr<KoMacro::Variable> varbool = macroitem->addVariable("testbool",QVariant(true));
+	KSharedPtr<KoMacro::Variable> vardouble = macroitem->addVariable("testdouble",QVariant(0.6));
+
+	// Is our XML parseable into a 2. Macro by calling parseXML()?
+	KSharedPtr<KoMacro::Macro> macro2 = KoMacro::Manager::self()->createMacro("testMacro");
+	KOMACROTEST_ASSERT(macro2->parseXML(elem),true);
+
+	// Iterator over the MacroItems of the parsen macro2.
+	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems2 = macro2->items();
+	QValueList<KSharedPtr<KoMacro::MacroItem > >::ConstIterator 
+		mit2(macroitems2.constBegin()), end2(macroitems2.constEnd());
+
+	while ( mit2 != end2 ) {
+		// 1.comparison - Test if the Action is correct?
+		const KSharedPtr<KoMacro::MacroItem> macroitem2 = *mit2;
+		const KSharedPtr<KoMacro::Action> action2 = macroitem2->action();
+		KOMACROTEST_ASSERT(assertActionsEqual(action,action2),true);
+
+		// Iterator over the Variables of the macroitem2.
+		QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables = macroitem2->variables();
+		
+
+		// Go to the next MacroItem
+		mit2++;
+	}
+
 }
 
+#if 0
 // 2.Test - XML-document with bad root element.
-void XMLHandlerTests::testBadRoot()
+void XMLHandlerTests2::testBadRoot()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -208,7 +230,7 @@ void XMLHandlerTests::testBadRoot()
 }
 
 // 3.Test - XML-document with a missing Variable.
-void XMLHandlerTests::testMissingVariable()
+void XMLHandlerTests2::testMissingVariable()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -236,7 +258,7 @@ void XMLHandlerTests::testMissingVariable()
 }
 
 // 4.Test - One more Variable in XML-Document.
-void XMLHandlerTests::testMoreVariables()
+void XMLHandlerTests2::testMoreVariables()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -268,7 +290,7 @@ void XMLHandlerTests::testMoreVariables()
 }
 
 // 5.Test - XML-document with wrong macro-xmlversion.
-void XMLHandlerTests::testWrongVersion()
+void XMLHandlerTests2::testWrongVersion()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -295,7 +317,7 @@ void XMLHandlerTests::testWrongVersion()
 
 // 6.Test - XML-document if it has a wrong structure like wrong parathesis
 // 	or missing end tag.
-void XMLHandlerTests::testWrongXMLStruct()
+void XMLHandlerTests2::testWrongXMLStruct()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -319,7 +341,7 @@ void XMLHandlerTests::testWrongXMLStruct()
 }
 
 // 7.Test-XML-document with maximum field-size.
-void XMLHandlerTests::testMaxNum()
+void XMLHandlerTests2::testMaxNum()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -349,7 +371,7 @@ void XMLHandlerTests::testMaxNum()
 }
 
 // 8.Test-XML-document with maximum+1 field-size.
-void XMLHandlerTests::testMaxNum2()
+void XMLHandlerTests2::testMaxNum2()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -379,7 +401,7 @@ void XMLHandlerTests::testMaxNum2()
 }
 
 // 9.Test-XML-document with minimum field-size.
-void XMLHandlerTests::testMinNum()
+void XMLHandlerTests2::testMinNum()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -409,7 +431,7 @@ void XMLHandlerTests::testMinNum()
 }
 
 // 10.Test-XML-document with minimum+1 field-size.
-void XMLHandlerTests::testMinNum2()
+void XMLHandlerTests2::testMinNum2()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -439,7 +461,7 @@ void XMLHandlerTests::testMinNum2()
 }
 
 // 11.Test - With a to big number.
-void XMLHandlerTests::testBigNumber()
+void XMLHandlerTests2::testBigNumber()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -469,7 +491,7 @@ void XMLHandlerTests::testBigNumber()
 }
 
 // 12.Test - With two MacroItems.
-void XMLHandlerTests::testTwoMacroItems()
+void XMLHandlerTests2::testTwoMacroItems()
 {
 	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomDocument doomdocument;
@@ -517,7 +539,7 @@ void XMLHandlerTests::testTwoMacroItems()
 * @p isactionset Bool for expectation that the @a Action -names are equal.
 * @p isvariableok QMap of Bools for comparing each @a Variable .
 */
-void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
+void XMLHandlerTests2::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
 	const QDomElement& elem,
 	const bool isitemsempty,
 	const bool isactionset,
@@ -605,7 +627,7 @@ void XMLHandlerTests::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro>
 }
 
 // Prints a QMap of Variables to kdDebug().
-void XMLHandlerTests::printMvariables(const QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, const QString s)
+void XMLHandlerTests2::printMvariables(const QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, const QString s)
 {
 	//QValueList<QString>::ConstIterator kit (keys.constBegin()), end(keys.constEnd());
 	QMap<QString, KSharedPtr<KoMacro::Variable > >::ConstIterator mvit (mvariables.constBegin()), end(mvariables.constEnd());
@@ -615,5 +637,12 @@ void XMLHandlerTests::printMvariables(const QMap<QString, KSharedPtr<KoMacro::Va
 		mvit++;
 	}
 }
+#endif
 
-#include "xmlhandlertests.moc"
+bool XMLHandlerTests2::assertActionsEqual(KSharedPtr<KoMacro::Action> action,
+	KSharedPtr<KoMacro::Action> action2)
+{
+	return action->name() == action2->name();
+}
+
+#include "xmlhandlertests2.moc"

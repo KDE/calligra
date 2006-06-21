@@ -129,8 +129,9 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					const QString value = childelem.text();
 
 					// Store the new variable in our macroitem.
-					KSharedPtr<Variable> variable = item->addVariable(name, value);
-					Q_UNUSED(variable);
+// 					KSharedPtr<Variable> variable = item->addVariable(name, value);
+					item->addVariable(name, value);
+					// Q_UNUSED(variable); TODO
 				}
 			}
 		}
