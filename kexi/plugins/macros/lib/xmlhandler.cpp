@@ -21,7 +21,6 @@
 #include "macro.h"
 #include "macroitem.h"
 #include "action.h"
-#include "metaparameter.h"
 
 #include <qdom.h>
 #include <kdebug.h>
@@ -186,10 +185,9 @@ QDomElement XMLHandler::toXML()
 			// Each MacroItem could have a list of variables. We
 			// iterate through that list and build a element
 			// for each single variable.
-
-			QStringList variablenames = action->variableNames();
-			for(QStringList::Iterator vit = variablenames.begin(); vit != variablenames.end(); ++vit) {
-				const KSharedPtr<Variable> v = item->variable(*vit);
+			QMap<QString, KSharedPtr<Variable > > varmap = item->variables();
+			for(QMap<QString, KSharedPtr<Variable > >::ConstIterator vit = varmap.constBegin(); vit != varmap.constEnd(); ++vit) {
+				const KSharedPtr<Variable> v = vit.data();
 				if(! v.data()) {
 					// skip if the variable is NULL.
 					continue;
@@ -199,7 +197,7 @@ QDomElement XMLHandler::toXML()
 				QDomElement varelement = document.createElement("variable");
 
 				// Remember the name the value has.
-				varelement.setAttribute("name", *vit);
+				varelement.setAttribute("name", vit.key()); 
 
 				// Remember the value as textnode.
 				varelement.appendChild(document.createTextNode(v->toString()));
