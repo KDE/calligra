@@ -254,8 +254,6 @@ Doc::~Doc()
 //   delete d->dcop;
 //   d->s_docs.removeAll( this );
 
-  kDebug(36001) << "alive 1" << endl;
-
   delete d->commandHistory;
 
   delete d->spellConfig;
@@ -1719,7 +1717,7 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
 // {
 //     if ( !d->dcop )
 //         d->dcop = new DocIface( this );
-// 
+//
 //     return d->dcop;
 // }
 
