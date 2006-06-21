@@ -181,7 +181,7 @@ and the dependency manager will do the rest. In addition, this gives us
 recursive dependency calculation at almost no cost.</p>
 
 <h2>Manipulators</h2>
-<p>Status: PLANNED.</p>
+<p>Status: IN PROGRESS.</p>
 
 <p>Currently, every operation on a cell or on a range of cells is quite complex.
 You need to ensure correct repainting, recalculation, iterate on a range and so on.</p>
@@ -218,7 +218,7 @@ below.</p>
 accomplish this.</p>
 
 <h2>Selection handling</h2>
-<p>Status: PLANNED</p>
+<p>Status: FINISHED.</p>
 
 <p>The selection shall be an instance of some RangeList class,
 or however we want to call it - this will contain a list of
@@ -497,7 +497,7 @@ corresponding manipulator provides methods to store/recall the undo information)
 <p>Cells are grouped together, and then hashed.</p>
 
 <h2>Format Storage</h2>
-<p>Status: PLANNED.</p>
+<p>Status: IN PROGRESS.</p>
 
 <p>Formatting specifies how a cell should look like. It involves font
 attributes like bold or italics, vertical and horizontal alignment,
@@ -600,25 +600,25 @@ http://lists.kde.org/?l=kde-usability&amp;m=110751297906231&amp;w=2</a></li>
 http://lists.kde.org/?l=koffice-devel&amp;m=110723903332496&amp;w=2</a></li>
 </ul>
 
-<p>Toolbars are utilized to place most frequently used actions. It is 
-important to present the user with default toolbars which make 
-sense, i.e. they do not contain unnecessary buttons. In-depth usability 
-analysis and/or further discussions are needed to make decision which 
+<p>Toolbars are utilized to place most frequently used actions. It is
+important to present the user with default toolbars which make
+sense, i.e. they do not contain unnecessary buttons. In-depth usability
+analysis and/or further discussions are needed to make decision which
 buttons need to be in the toolbar and which don't.</p>
 
-<p>For reference, here is a list of default shown toolbars in 
+<p>For reference, here is a list of default shown toolbars in
 some spreadsheet applications:</p>
 
 <p><b>Microsoft Excel 2002</b>:</p>
 
 <ul>
-<li><em>Standard toolbar</em>: New, Open, Save, Search, Print, Print Preview, 
-Spelling, Cut, Copy, Paste, Format Painter, Undo, Redo, Insert Hyperlink, 
+<li><em>Standard toolbar</em>: New, Open, Save, Search, Print, Print Preview,
+Spelling, Cut, Copy, Paste, Format Painter, Undo, Redo, Insert Hyperlink,
 Autosum, Sort Ascending, Sort Descending, Chart Wizard, Drawing, Zoom, Help</li>
-<li><em>Formating toolbar:</em>: Font, Font Size, Bold, Italic, Align Left, 
-Align Center, Align Right, Merge and Center, Format Currency, Format Percent, 
-Comma Style, Increase Precision, Decrease Precision, Increase Indent, 
-Decrease Indent, Merge Cells, Unmerge Cells, Merge Across, Borders, 
+<li><em>Formating toolbar:</em>: Font, Font Size, Bold, Italic, Align Left,
+Align Center, Align Right, Merge and Center, Format Currency, Format Percent,
+Comma Style, Increase Precision, Decrease Precision, Increase Indent,
+Decrease Indent, Merge Cells, Unmerge Cells, Merge Across, Borders,
 Fill Color, Font Color</li>
 </ul>
 
@@ -626,28 +626,28 @@ Fill Color, Font Color</li>
 <p><b>OpenOffice 2.0</b>:</p>
 
 <ul>
-<li><em>Standard toolbar</em>: New, Open, Save, E-mail, Edit, PDF, Print, 
-Page Preview, Spellcheck, Cut, Copy, Paste, Format Paintbrush, Undo, Redo, 
-Hyperlink, Sort Ascending, Sort Descending, Insert Chart, Navigator, Styles, 
+<li><em>Standard toolbar</em>: New, Open, Save, E-mail, Edit, PDF, Print,
+Page Preview, Spellcheck, Cut, Copy, Paste, Format Paintbrush, Undo, Redo,
+Hyperlink, Sort Ascending, Sort Descending, Insert Chart, Navigator, Styles,
 Gallery, Zoom</li>
-<li><em>Format Object toolbar:</em> Font Name, Font Size, Bold, Italic, 
-Underline, Font Color, Align Left, Align Center, Align Right, Justified, 
-Merge Cells, Format as Currency, Format as Percent, Format Standard, 
+<li><em>Format Object toolbar:</em> Font Name, Font Size, Bold, Italic,
+Underline, Font Color, Align Left, Align Center, Align Right, Justified,
+Merge Cells, Format as Currency, Format as Percent, Format Standard,
 Increase Precision, Decrease Precision, Increase Indent, Decrease Indent,
-Borders, Line Style, Line Color, Background Color, Align Top, Align Center 
+Borders, Line Style, Line Color, Background Color, Align Top, Align Center
 Vertically, Align Bottom </li>
 </ul>
 
 <p><b>Gnumeric 1.4</b>:</p>
 
 <ul>
-<li><em>Standard toolbar</em>: New, Open, Save, Print, Print Preview, 
-Cut, Copy, Paste, Undo, Redo, Hyperlink, Autosum, Function/Formula, 
+<li><em>Standard toolbar</em>: New, Open, Save, Print, Print Preview,
+Cut, Copy, Paste, Undo, Redo, Hyperlink, Autosum, Function/Formula,
 Insert Chart, Zoom</li>
-<li><em>Format toolbar:</em> Font Family, Font Size, Bold, Italic, 
-Underline, Align Left, Align Center, Align Right, Merge and Center, 
-Merge Cells, Split Cell, Format Currency, Format Percent, Thousand Separator, 
-Increase Precision, Decrease Precision, Decrease Indent, Increase Indent, 
+<li><em>Format toolbar:</em> Font Family, Font Size, Bold, Italic,
+Underline, Align Left, Align Center, Align Right, Merge and Center,
+Merge Cells, Split Cell, Format Currency, Format Percent, Thousand Separator,
+Increase Precision, Decrease Precision, Decrease Indent, Increase Indent,
 Borders, Background, Foreground</li>
 </ul>
 
@@ -664,41 +664,41 @@ http://lists.kde.org/?l=kde-cvs&amp;m=109511244721480&amp;w=2</a></li>
 http://lists.kde.org/?l=koffice-devel&amp;m=109518196922944&amp;w=2</a></li>
 </ul>
 
-<p>It is well known that writing clean and easily understandable module will lead 
-to better maintenance. However testing that particular module everytime there is 
-a significant change requires considerable amount of time and effort. Since KSpread 
-and other applications of its scale consist of hundreds of modules, in this case 
-automatic testing of each module will help a lot, not to mention that it might 
+<p>It is well known that writing clean and easily understandable module will lead
+to better maintenance. However testing that particular module everytime there is
+a significant change requires considerable amount of time and effort. Since KSpread
+and other applications of its scale consist of hundreds of modules, in this case
+automatic testing of each module will help a lot, not to mention that it might
 catch bug as early as possible.</p>
 
-<p>KSpread has a simple test framework to facilitate such kind of test. This can 
-be activated using the shortcut <tt>Ctrl+Shift+T</tt>. This test is however 
+<p>KSpread has a simple test framework to facilitate such kind of test. This can
+be activated using the shortcut <tt>Ctrl+Shift+T</tt>. This test is however
 not accessible via menu, because it is intended to be used only by the developers.
-Ideally, there should be tests for all modules contained in KSpread. It is 
-the responsibility of the developer to create the corresponding <tt>tester</tt> 
-for the code that he or she is working on. All tests should be kept in 
+Ideally, there should be tests for all modules contained in KSpread. It is
+the responsibility of the developer to create the corresponding <tt>tester</tt>
+for the code that he or she is working on. All tests should be kept in
 <tt>koffice/kspread/tests/</tt>.</p>
 
-<p>Making a new tester is not difficult. The easiest way is to copy an already 
-existing tester and modify it. Basically, it must be a subclass of class Tester 
-(see <tt>koffice/kspread/tests/tester.h</tt>). Just reimplement the virtual 
-function <tt>run()</tt> and it is ready. In order to make it possible to run 
-the new tester, add an instance of the class in TestRunner 
+<p>Making a new tester is not difficult. The easiest way is to copy an already
+existing tester and modify it. Basically, it must be a subclass of class Tester
+(see <tt>koffice/kspread/tests/tester.h</tt>). Just reimplement the virtual
+function <tt>run()</tt> and it is ready. In order to make it possible to run
+the new tester, add an instance of the class in TestRunner
 (for details, see <tt>koffice/kspread/tests/testrunner.cc</tt>).</p>
 
-<p>A tester must be self-contained, it should not use any test data from 
-current document. If necessary, it must create (or hard code) the data by 
+<p>A tester must be self-contained, it should not use any test data from
+current document. If necessary, it must create (or hard code) the data by
 itself.</p>
 
-<p>Whenever parts of KSpread features are improved or rewritten, it is always 
-a good idea to run the related tests to ensure that all the changes do not do 
-any harm. However, bear in mind that there is no 100% guarantee that the new 
+<p>Whenever parts of KSpread features are improved or rewritten, it is always
+a good idea to run the related tests to ensure that all the changes do not do
+any harm. However, bear in mind that there is no 100% guarantee that the new
 code is bug-free.</p>
 
-<p>Also, if there is a bug which is not caught by the tester (i.e. it does not 
-fail the tester, but the bug is confirmed), then the relevant tester must be 
-modified to include one or more test cases similar to the offending bug. 
-When the bug is finally fixed, from that point the test should always pass all 
+<p>Also, if there is a bug which is not caught by the tester (i.e. it does not
+fail the tester, but the bug is confirmed), then the relevant tester must be
+modified to include one or more test cases similar to the offending bug.
+When the bug is finally fixed, from that point the test should always pass all
 test cases.</p>
 
 </p>
@@ -716,13 +716,13 @@ on also more difficult to understand.</p>
 lack of documentation as for now, whoever understands something about the
 classes and functions should write the documentation.</p>
 
-<p>In complex source files, list of header includes can be very long. Unless 
-there is special reason not do it, try to group them together, i.e. standard 
-C/C++ headers come first, followed by Qt headers, and then KDE headers, 
-KOffice core/UI headers and application specific headers. For each group, 
+<p>In complex source files, list of header includes can be very long. Unless
+there is special reason not do it, try to group them together, i.e. standard
+C/C++ headers come first, followed by Qt headers, and then KDE headers,
+KOffice core/UI headers and application specific headers. For each group,
 sort the header files alphabetically. </p>
 
-<p>Write test cases. This will ease further maintenance. See also the section on Test 
+<p>Write test cases. This will ease further maintenance. See also the section on Test
 Framework above.</p>
 
 <p>Do not use the term <i>table</i>. It was incorrectly invented quite likely

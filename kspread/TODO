@@ -132,10 +132,10 @@ Things to do after the release of KOffice 1.4
   see OASIS.txt							      1 ----
 
 * Internals (See also DESIGN.html)
-  + Format Storage						      1 ----
+  + Format Storage						      1 STEF
     This would dramatically reduce memory consumption and allows
     styles for empty cells.
-    - Use new Format Storage						----
+    - Use new Format Storage						STEF
     - Remove old KSpreadFormat						----
 
   + Speed up selection.						      1 ----
