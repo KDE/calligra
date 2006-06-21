@@ -72,9 +72,9 @@ public:
                             luPt parentSize );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
-					   double factor,
+					   StyleAttributes& style,
                        luPt parentSize, const LuPixelPoint& origin );
 
     virtual bool isNormalChar() const;

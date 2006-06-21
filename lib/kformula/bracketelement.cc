@@ -265,24 +265,25 @@ BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void BracketElement::calcSizes( const ContextStyle& style,
+void BracketElement::calcSizes( const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle,
                                 ContextStyle::IndexStyle istyle,
-                                double factor )
+                                StyleAttributes& style )
 {
     SequenceElement* content = getContent();
-    content->calcSizes( style, tstyle, istyle, factor );
+    content->calcSizes( context, tstyle, istyle, style );
 
     //if ( left == 0 ) {
     delete left;
     delete right;
-    left = style.fontStyle().createArtwork( leftType );
-    right = style.fontStyle().createArtwork( rightType );
+    left = context.fontStyle().createArtwork( leftType );
+    right = context.fontStyle().createArtwork( rightType );
     //}
 
+    double factor = style.getSizeFactor();
     if (content->isTextOnly()) {
-        left->calcSizes(style, tstyle, factor);
-        right->calcSizes(style, tstyle, factor);
+        left->calcSizes(context, tstyle, factor);
+        right->calcSizes(context, tstyle, factor);
 
         setBaseline(QMAX(content->getBaseline(),
                          QMAX(left->getBaseline(), right->getBaseline())));
@@ -297,18 +298,18 @@ void BracketElement::calcSizes( const ContextStyle& style,
                             right->getY() + right->getHeight())));
     }
     else {
-        //kdDebug( DEBUGID ) << "BracketElement::calcSizes " << content->axis( style, tstyle ) << " " << content->getHeight() << endl;
-        luPixel contentHeight = 2 * QMAX( content->axis( style, tstyle, factor ),
-                                          content->getHeight() - content->axis( style, tstyle, factor ) );
-        left->calcSizes( style, tstyle, contentHeight );
-        right->calcSizes( style, tstyle, contentHeight );
+        //kdDebug( DEBUGID ) << "BracketElement::calcSizes " << content->axis( context, tstyle ) << " " << content->getHeight() << endl;
+        luPixel contentHeight = 2 * QMAX( content->axis( context, tstyle, factor ),
+                                          content->getHeight() - content->axis( context, tstyle, factor ) );
+        left->calcSizes( context, tstyle, contentHeight );
+        right->calcSizes( context, tstyle, contentHeight );
 
         // height
         setHeight(QMAX(contentHeight,
                        QMAX(left->getHeight(), right->getHeight())));
         //setMidline(getHeight() / 2);
 
-        content->setY(getHeight() / 2 - content->axis( style, tstyle, factor ));
+        content->setY(getHeight() / 2 - content->axis( context, tstyle, factor ));
         setBaseline(content->getBaseline() + content->getY());
 
         if ( left->isNormalChar() ) {
@@ -346,10 +347,10 @@ void BracketElement::calcSizes( const ContextStyle& style,
  * We can use our parentPosition to get our own origin then.
  */
 void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
-                           const ContextStyle& style,
+                           const ContextStyle& context,
                            ContextStyle::TextStyle tstyle,
                            ContextStyle::IndexStyle istyle,
-                           double factor,
+                           StyleAttributes& style,
                            const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
@@ -357,31 +358,32 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
     //    return;
 
     SequenceElement* content = getContent();
-    content->draw(painter, r, style, tstyle, istyle, factor, myPos);
+    content->draw(painter, r, context, tstyle, istyle, style, myPos);
 
     if (content->isTextOnly()) {
-        left->draw(painter, r, style, tstyle, factor, myPos);
-        right->draw(painter, r, style, tstyle, factor, myPos);
+        left->draw(painter, r, context, tstyle, style, myPos);
+        right->draw(painter, r, context, tstyle, style, myPos);
     }
     else {
-        luPixel contentHeight = 2 * QMAX(content->axis( style, tstyle, factor ),
-                                         content->getHeight() - content->axis( style, tstyle, factor ));
-        left->draw(painter, r, style, tstyle, factor, contentHeight, myPos);
-        right->draw(painter, r, style, tstyle, factor, contentHeight, myPos);
+        double factor = style.getSizeFactor();
+        luPixel contentHeight = 2 * QMAX(content->axis( context, tstyle, factor ),
+                                         content->getHeight() - content->axis( context, tstyle, factor ));
+        left->draw(painter, r, context, tstyle, style, contentHeight, myPos);
+        right->draw(painter, r, context, tstyle, style, contentHeight, myPos);
     }
 
     // Debug
 #if 0
     painter.setBrush( Qt::NoBrush );
     painter.setPen( Qt::red );
-    painter.drawRect( style.layoutUnitToPixelX( myPos.x()+left->getX() ),
-                      style.layoutUnitToPixelY( myPos.y()+left->getY() ),
-                      style.layoutUnitToPixelX( left->getWidth() ),
-                      style.layoutUnitToPixelY( left->getHeight() ) );
-    painter.drawRect( style.layoutUnitToPixelX( myPos.x()+right->getX() ),
-                      style.layoutUnitToPixelY( myPos.y()+right->getY() ),
-                      style.layoutUnitToPixelX( right->getWidth() ),
-                      style.layoutUnitToPixelY( right->getHeight() ) );
+    painter.drawRect( context.layoutUnitToPixelX( myPos.x()+left->getX() ),
+                      context.layoutUnitToPixelY( myPos.y()+left->getY() ),
+                      context.layoutUnitToPixelX( left->getWidth() ),
+                      context.layoutUnitToPixelY( left->getHeight() ) );
+    painter.drawRect( context.layoutUnitToPixelX( myPos.x()+right->getX() ),
+                      context.layoutUnitToPixelY( myPos.y()+right->getY() ),
+                      context.layoutUnitToPixelX( right->getWidth() ),
+                      context.layoutUnitToPixelY( right->getHeight() ) );
 #endif
 }
 
@@ -501,17 +503,17 @@ void OverlineElement::entered( SequenceElement* /*child*/ )
 }
 
 
-void OverlineElement::calcSizes( const ContextStyle& style,
+void OverlineElement::calcSizes( const ContextStyle& context,
                                  ContextStyle::TextStyle tstyle,
                                  ContextStyle::IndexStyle istyle,
-                                 double factor )
+                                 StyleAttributes& style )
 {
     SequenceElement* content = getContent();
-    content->calcSizes(style, tstyle,
-                       style.convertIndexStyleLower(istyle), factor );
+    content->calcSizes(context, tstyle,
+                       context.convertIndexStyleLower(istyle), style );
 
-    //luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle, factor ) );
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
+    //luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, style.getSizeFactor() ) );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, style.getSizeFactor() ) );
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
     setWidth( content->getWidth() );
@@ -523,10 +525,10 @@ void OverlineElement::calcSizes( const ContextStyle& style,
 }
 
 void OverlineElement::draw( QPainter& painter, const LuPixelRect& r,
-                            const ContextStyle& style,
+                            const ContextStyle& context,
                             ContextStyle::TextStyle tstyle,
                             ContextStyle::IndexStyle istyle,
-                            double factor,
+                            StyleAttributes& style,
                             const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
@@ -534,22 +536,23 @@ void OverlineElement::draw( QPainter& painter, const LuPixelRect& r,
     //    return;
 
     SequenceElement* content = getContent();
-    content->draw( painter, r, style, tstyle,
-                   style.convertIndexStyleLower( istyle ), factor, myPos );
+    content->draw( painter, r, context, tstyle,
+                   context.convertIndexStyleLower( istyle ), style, myPos );
 
     luPixel x = myPos.x();
     luPixel y = myPos.y();
-    //int distX = style.getDistanceX(tstyle);
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
+    //int distX = context.getDistanceX(tstyle);
+    double factor = style.getSizeFactor();
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
-    painter.setPen( QPen( style.getDefaultColor(),
-                          style.layoutUnitToPixelY( style.getLineWidth( factor ) ) ) );
+    painter.setPen( QPen( context.getDefaultColor(),
+                          context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
 
-    painter.drawLine( style.layoutUnitToPixelX( x ),
-                      style.layoutUnitToPixelY( y+distY/3 ),
-                      style.layoutUnitToPixelX( x+content->getWidth() ),
-                      style.layoutUnitToPixelY( y+distY/3 ) );
+    painter.drawLine( context.layoutUnitToPixelX( x ),
+                      context.layoutUnitToPixelY( y+distY/3 ),
+                      context.layoutUnitToPixelX( x+content->getWidth() ),
+                      context.layoutUnitToPixelY( y+distY/3 ) );
 }
 
 
@@ -603,17 +606,18 @@ void UnderlineElement::entered( SequenceElement* /*child*/ )
 }
 
 
-void UnderlineElement::calcSizes( const ContextStyle& style,
+void UnderlineElement::calcSizes( const ContextStyle& context,
                                   ContextStyle::TextStyle tstyle,
                                   ContextStyle::IndexStyle istyle,
-                                  double factor )
+                                  StyleAttributes& style )
 {
     SequenceElement* content = getContent();
-    content->calcSizes(style, tstyle,
-                       style.convertIndexStyleLower(istyle), factor );
+    double factor = style.getSizeFactor();
+    content->calcSizes(context, tstyle,
+                       context.convertIndexStyleLower(istyle), style );
 
-    //luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
+    //luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle ) );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
     setWidth( content->getWidth() );
@@ -625,10 +629,10 @@ void UnderlineElement::calcSizes( const ContextStyle& style,
 }
 
 void UnderlineElement::draw( QPainter& painter, const LuPixelRect& r,
-                             const ContextStyle& style,
+                             const ContextStyle& context,
                              ContextStyle::TextStyle tstyle,
                              ContextStyle::IndexStyle istyle,
-                             double factor,
+                             StyleAttributes& style,
                              const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
@@ -636,22 +640,23 @@ void UnderlineElement::draw( QPainter& painter, const LuPixelRect& r,
     //    return;
 
     SequenceElement* content = getContent();
-    content->draw( painter, r, style, tstyle,
-                   style.convertIndexStyleLower( istyle ), factor, myPos );
+    content->draw( painter, r, context, tstyle,
+                   context.convertIndexStyleLower( istyle ), style, myPos );
 
     luPixel x = myPos.x();
     luPixel y = myPos.y();
-    //int distX = style.getDistanceX(tstyle);
-    //luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    //int distX = context.getDistanceX(tstyle);
+    //luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle ) );
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
-    painter.setPen( QPen( style.getDefaultColor(),
-                          style.layoutUnitToPixelY( style.getLineWidth( factor ) ) ) );
+    double factor = style.getSizeFactor();
+    painter.setPen( QPen( context.getDefaultColor(),
+                          context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
 
-    painter.drawLine( style.layoutUnitToPixelX( x ),
-                      style.layoutUnitToPixelY( y+getHeight()-style.getLineWidth( factor ) ),
-                      style.layoutUnitToPixelX( x+content->getWidth() ),
-                      style.layoutUnitToPixelY( y+getHeight()-style.getLineWidth( factor ) ) );
+    painter.drawLine( context.layoutUnitToPixelX( x ),
+                      context.layoutUnitToPixelY( y+getHeight()-context.getLineWidth( factor ) ),
+                      context.layoutUnitToPixelX( x+content->getWidth() ),
+                      context.layoutUnitToPixelY( y+getHeight()-context.getLineWidth( factor ) ) );
 }
 
 

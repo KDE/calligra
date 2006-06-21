@@ -26,7 +26,13 @@ StyleElement::StyleElement( BasicElement* parent ) : SequenceElement( parent ),
                                                      ownSize( false ),
                                                      absoluteSize( true ),
                                                      style( anyChar ),
-                                                     family( anyFamily )
+                                                     custom_style( false ),
+                                                     family( anyFamily ),
+                                                     custom_family( false ),
+                                                     color( "#000000" ),
+                                                     custom_color( false ),
+                                                     background( "#FFFFFF" ),
+                                                     custom_background( false )
 {
 }
 
@@ -58,60 +64,60 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
     QString variantStr = element.attribute( "mathvariant" );
     if ( !variantStr.isNull() ) {
         if ( variantStr == "normal" ) {
-            family = normalFamily;
-            style = normalChar;
+            setCharStyle( normalChar );
+            setCharFamily( normalFamily );
         }
         else if ( variantStr == "bold" ) {
-            family = normalFamily;
-            style = boldChar;
+            setCharStyle( boldChar );
+            setCharFamily( normalFamily );
         }
         else if ( variantStr == "italic" ) {
-            family = normalFamily;
-            style = italicChar;
+            setCharStyle( italicChar );
+            setCharFamily( normalFamily );
         }
         else if ( variantStr == "bold-italic" ) {
-            family = normalFamily;
-            style = boldItalicChar;
+            setCharStyle( boldItalicChar );
+            setCharFamily( normalFamily );
         }
         else if ( variantStr == "double-struck" ) {
-            family = doubleStruckFamily;
-            style = normalChar;
+            setCharStyle( normalChar );
+            setCharFamily( doubleStruckFamily );
         }
         else if ( variantStr == "bold-fraktur" ) {
-            family = frakturFamily;
-            style = boldChar;
+            setCharStyle( boldChar );
+            setCharFamily( frakturFamily );
         }
         else if ( variantStr == "script" ) {
-            family = scriptFamily;
-            style = normalChar;
+            setCharStyle( normalChar );
+            setCharFamily( scriptFamily );
         }
         else if ( variantStr == "bold-script" ) {
-            family = scriptFamily;
-            style = boldChar;
+            setCharStyle( boldChar );
+            setCharFamily( scriptFamily );
         }
         else if ( variantStr == "fraktur" ) {
-            family = frakturFamily;
-            style = boldChar;
+            setCharStyle( boldChar );
+            setCharFamily( frakturFamily );
         }
         else if ( variantStr == "sans-serif" ) {
-            family = sansSerifFamily;
-            style = normalChar;
+            setCharStyle( normalChar );
+            setCharFamily( sansSerifFamily );
         }
         else if ( variantStr == "bold-sans-serif" ) {
-            family = sansSerifFamily;
-            style = boldChar;
+            setCharStyle( boldChar );
+            setCharFamily( sansSerifFamily );
         }
         else if ( variantStr == "sans-serif-italic" ) {
-            family = sansSerifFamily;
-            style = italicChar;
+            setCharStyle( italicChar );
+            setCharFamily( sansSerifFamily );
         }
         else if ( variantStr == "sans-serif-bold-italic" ) {
-            family = sansSerifFamily;
-            style = boldItalicChar;
+            setCharStyle( boldItalicChar );
+            setCharFamily( sansSerifFamily );
         }
         else if ( variantStr == "monospace" ) {
-            family = monospaceFamily;
-            style = normalChar;
+            setCharStyle( normalChar );
+            setCharFamily( monospaceFamily );
         }
     }
 
@@ -128,36 +134,52 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
 
     QString colorStr = element.attribute( "mathcolor" );
     if ( !colorStr.isNull() ) {
-        // TODO
+        color.setNamedColor( colorStr );
+        custom_color = true;
 	}
     QString backgroundStr = element.attribute( "mathbackground" );
     if ( !backgroundStr.isNull() ) {
-        // TODO
+        background.setNamedColor( backgroundStr );
+        custom_background = true;
 	}
     return true;
 }
 
-void StyleElement::calcSizes( const ContextStyle& style,
+void StyleElement::setCharStyle( CharStyle cs )
+{
+    style = cs;
+    custom_style = true;
+}
+
+void StyleElement::setCharFamily( CharFamily cf )
+{
+    family = cf;
+    custom_family = true;
+}
+
+void StyleElement::calcSizes( const ContextStyle& context,
                               ContextStyle::TextStyle tstyle,
                               ContextStyle::IndexStyle istyle,
-                              double factor )
+                              StyleAttributes& style )
 {
-    inherited::calcSizes( style, tstyle, istyle,
-                          getProportion( style, factor ) );
+    style.setSizeFactor( getSizeFactor( context, style.getSizeFactor() ) );
+    inherited::calcSizes( context, tstyle, istyle, style );
+    style.resetSizeFactor();
 }
 
 void StyleElement::draw( QPainter& painter, const LuPixelRect& r,
                          const ContextStyle& context,
                          ContextStyle::TextStyle tstyle,
                          ContextStyle::IndexStyle istyle,
-                         double factor,
+                         StyleAttributes& style,
                          const LuPixelPoint& parentOrigin )
 {
-    inherited::draw( painter, r, context, tstyle, istyle, 
-                     getProportion( context, factor ), parentOrigin );
+    style.setSizeFactor( getSizeFactor( context, style.getSizeFactor() ) );
+    inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
+    style.resetSizeFactor();
 }
 
-double StyleElement::getProportion( const ContextStyle& context, double factor )
+double StyleElement::getSizeFactor( const ContextStyle& context, double factor )
 {
     if ( ! ownSize )
         return factor;
@@ -165,6 +187,5 @@ double StyleElement::getProportion( const ContextStyle& context, double factor )
         return factor * size / context.baseSize();
     return factor * factor;
 }
-
 
 KFORMULA_NAMESPACE_END

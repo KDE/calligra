@@ -26,52 +26,69 @@ KFORMULA_NAMESPACE_BEGIN
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent ) {
 }
 
-void IdentifierElement::calcSizes( const ContextStyle& style,
+void IdentifierElement::calcSizes( const ContextStyle& context,
                                    ContextStyle::TextStyle tstyle,
                                    ContextStyle::IndexStyle istyle,
-                                   double factor ) {
+                                   StyleAttributes& style ) {
     // Identifiers, by default, use italic style when length == 1
     if ( countChildren() == 1 ) {
         TextElement *e = dynamic_cast<TextElement*>( getChild( (uint) 0 ) );
         if (e != 0) {
             if ( e->getCharStyle() == anyChar ) { // This means no specified variant
                 e->setCharStyle( italicChar );
-                inherited::calcSizes( style, tstyle, istyle, factor );
+                inherited::calcSizes( context, tstyle, istyle, style );
                 e->setCharStyle( anyChar );
             } else {
-                inherited::calcSizes( style, tstyle, istyle, factor );
+                inherited::calcSizes( context, tstyle, istyle, style );
             }
         } else {
-            inherited::calcSizes( style, tstyle, istyle, factor );
+            inherited::calcSizes( context, tstyle, istyle, style );
         }
     } else {
-        inherited::calcSizes( style, tstyle, istyle, factor );
+        inherited::calcSizes( context, tstyle, istyle, style );
     }
 }
 
 void IdentifierElement::draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-                       double factor,
-                       const LuPixelPoint& parentOrigin ) {
-    // Identifiers, by default, use italic style when length == 1
-    if ( countChildren() == 1 ) {
-        TextElement *e = dynamic_cast<TextElement*>( getChild( (uint) 0 ) );
-        if (e != 0) {
-            if ( e->getCharStyle() == anyChar ) { // This means no specified variant
-                e->setCharStyle( italicChar );
-                inherited::draw( painter, r, context, tstyle, istyle, factor, parentOrigin );
-                e->setCharStyle( anyChar );
-            } else {
-                inherited::draw( painter, r, context, tstyle, istyle, factor, parentOrigin );
-            }
-        } else {
-            inherited::draw( painter, r, context, tstyle, istyle, factor, parentOrigin );
-        }
-    } else {
-        inherited::draw( painter, r, context, tstyle, istyle, factor, parentOrigin );
+                              const ContextStyle& context,
+                              ContextStyle::TextStyle tstyle,
+                              ContextStyle::IndexStyle istyle,
+                              StyleAttributes& style,
+                              const LuPixelPoint& parentOrigin ) 
+{
+    if ( customCharStyle() ) {
+        style.setCharStyle( getCharStyle() );
     }
+    else if ( countChildren() == 1 ) {
+        style.setCharStyle( italicChar );
+    }
+    else {
+        style.setCharStyle( normalChar );
+    }
+
+    if ( customCharFamily() ) {
+        style.setCharFamily( getCharFamily() );
+    }
+    else {
+        style.setCharFamily( normalFamily );
+    }
+
+    if ( customColor() ) {
+        style.setColor( getColor() );
+    }
+    else {
+        style.setColor( style.getColor() );
+    }
+
+    if ( customBackground() ) {
+        style.setBackground( getBackground() );
+    }
+    else {
+        style.setBackground( style.getBackground() );
+    }
+
+    inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
+    style.reset();
 }
 
 KFORMULA_NAMESPACE_END

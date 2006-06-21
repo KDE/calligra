@@ -186,10 +186,10 @@ void Artwork::calcSizes( const ContextStyle& style,
 
 
 void Artwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
-                   const ContextStyle& style, ContextStyle::TextStyle tstyle,
-                   double factor, const LuPixelPoint& parentOrigin)
+                   const ContextStyle& context, ContextStyle::TextStyle tstyle,
+                   StyleAttributes& style, const LuPixelPoint& parentOrigin)
 {
-    luPt mySize = style.getAdjustedSize( tstyle, factor );
+    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
     luPixel myX = parentOrigin.x() + getX();
     luPixel myY = parentOrigin.y() + getY();
     /*
@@ -197,42 +197,42 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
         return;
     */
 
-    painter.setPen(style.getDefaultColor());
+    painter.setPen(context.getDefaultColor());
 
     switch (type) {
     case LeftSquareBracket:
-        drawCharacter(painter, style, myX, myY, mySize, leftSquareBracketChar);
+        drawCharacter(painter, context, myX, myY, mySize, leftSquareBracketChar);
         break;
     case RightSquareBracket:
-        drawCharacter(painter, style, myX, myY, mySize, rightSquareBracketChar);
+        drawCharacter(painter, context, myX, myY, mySize, rightSquareBracketChar);
         break;
     case LeftCurlyBracket:
-        drawCharacter(painter, style, myX, myY, mySize, leftCurlyBracketChar);
+        drawCharacter(painter, context, myX, myY, mySize, leftCurlyBracketChar);
         break;
     case RightCurlyBracket:
-        drawCharacter(painter, style, myX, myY, mySize, rightCurlyBracketChar);
+        drawCharacter(painter, context, myX, myY, mySize, rightCurlyBracketChar);
         break;
     case LeftLineBracket:
     case RightLineBracket:
-        drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+        drawCharacter(painter, context, myX, myY, mySize, verticalLineChar);
         break;
     case SlashBracket:
-        drawCharacter(painter, style, myX, myY, mySize, slashChar);
+        drawCharacter(painter, context, myX, myY, mySize, slashChar);
         break;
     case BackSlashBracket:
-        drawCharacter(painter, style, myX, myY, mySize, backSlashChar);
+        drawCharacter(painter, context, myX, myY, mySize, backSlashChar);
         break;
     case LeftCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
+        drawCharacter(painter, context, myX, myY, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
+        drawCharacter(painter, context, myX, myY, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
-        drawCharacter(painter, style, myX, myY, mySize, leftParenthesisChar);
+        drawCharacter(painter, context, myX, myY, mySize, leftParenthesisChar);
         break;
     case RightRoundBracket:
-        drawCharacter(painter, style, myX, myY, mySize, rightParenthesisChar);
+        drawCharacter(painter, context, myX, myY, mySize, rightParenthesisChar);
         break;
     case EmptyBracket:
         break;

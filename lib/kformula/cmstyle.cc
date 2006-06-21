@@ -374,12 +374,12 @@ void CMArtwork::calcSizes( const ContextStyle& style,
 
 
 void CMArtwork::draw( QPainter& painter, const LuPixelRect& r,
-                      const ContextStyle& style,
+                      const ContextStyle& context,
                       ContextStyle::TextStyle tstyle,
-                      double factor,
+                      StyleAttributes& style,
                       const LuPixelPoint& parentOrigin )
 {
-    luPt mySize = style.getAdjustedSize( tstyle, factor );
+    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
     luPixel myX = parentOrigin.x() + getX();
     luPixel myY = parentOrigin.y() + getY();
     /*
@@ -387,25 +387,25 @@ void CMArtwork::draw( QPainter& painter, const LuPixelRect& r,
         return;
     */
 
-    painter.setPen(style.getDefaultColor());
+    painter.setPen(context.getDefaultColor());
 
     switch (getType()) {
     case LeftLineBracket:
     case RightLineBracket:
-        drawCharacter(painter, style, myX, myY, mySize, 0x2223);
+        drawCharacter(painter, context, myX, myY, mySize, 0x2223);
         break;
     default:
-        Artwork::draw( painter, r, style, tstyle, factor, parentOrigin );
+        Artwork::draw( painter, r, context, tstyle, style, parentOrigin );
         break;
     }
 }
 
 
 void CMArtwork::draw(QPainter& painter, const LuPixelRect& ,
-                     const ContextStyle& style, ContextStyle::TextStyle tstyle,
-                     double factor, luPt , const LuPixelPoint& origin)
+                     const ContextStyle& context, ContextStyle::TextStyle tstyle,
+                     StyleAttributes& style, luPt , const LuPixelPoint& origin)
 {
-    luPt mySize = style.getAdjustedSize( tstyle, factor );
+    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
     /*
@@ -413,111 +413,111 @@ void CMArtwork::draw(QPainter& painter, const LuPixelRect& ,
         return;
     */
 
-    painter.setPen(style.getDefaultColor());
+    painter.setPen(context.getDefaultColor());
 
     switch (getType()) {
     case LeftSquareBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, leftSquareBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, leftSquareBracket, myX, myY, mySize );
         }
         break;
     case RightSquareBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, rightSquareBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, rightSquareBracket, myX, myY, mySize );
         }
         break;
     case LeftCurlyBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigCurlyBracket( painter, style, leftCurlyBracket, myX, myY, mySize );
+            drawBigCurlyBracket( painter, context, leftCurlyBracket, myX, myY, mySize );
         }
         break;
     case RightCurlyBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigCurlyBracket( painter, style, rightCurlyBracket, myX, myY, mySize );
+            drawBigCurlyBracket( painter, context, rightCurlyBracket, myX, myY, mySize );
         }
         break;
     case LeftLineBracket: {
         luPixel halfWidth = getWidth()/2;
-        drawBigRoundBracket( painter, style, leftLineBracket,
+        drawBigRoundBracket( painter, context, leftLineBracket,
                              myX-halfWidth, myY, mySize );
     }
         break;
     case RightLineBracket: {
         luPixel halfWidth = getWidth()/2;
-        drawBigRoundBracket( painter, style, rightLineBracket,
+        drawBigRoundBracket( painter, context, rightLineBracket,
                              myX-halfWidth, myY, mySize );
     }
         break;
     case SlashBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
         break;
     case BackSlashBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
         break;
     case LeftCornerBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
-        else drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
+        else drawCharacter(painter, context, myX, myY, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
-        else drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
+        else drawCharacter(painter, context, myX, myY, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, leftRoundBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, leftRoundBracket, myX, myY, mySize );
         }
         break;
     case RightRoundBracket:
         if ( cmChar != -1 ) {
-            drawCMDelimiter( painter, style, myX, myY, mySize );
+            drawCMDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, rightRoundBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, rightRoundBracket, myX, myY, mySize );
         }
         break;
     case EmptyBracket:
         break;
     case Integral:
-        drawCharacter(painter, style, QFont( "cmex10" ), myX, myY, mySize, cmex_Int);
+        drawCharacter(painter, context, QFont( "cmex10" ), myX, myY, mySize, cmex_Int);
         break;
     case Sum:
-        drawCharacter(painter, style, QFont( "cmex10" ), myX, myY, mySize, cmex_Sum);
+        drawCharacter(painter, context, QFont( "cmex10" ), myX, myY, mySize, cmex_Sum);
         break;
     case Product:
-        drawCharacter(painter, style, QFont( "cmex10" ), myX, myY, mySize, cmex_Prod);
+        drawCharacter(painter, context, QFont( "cmex10" ), myX, myY, mySize, cmex_Prod);
         break;
     }
 
     // debug
 //     painter.setBrush(Qt::NoBrush);
 //     painter.setPen(Qt::green);
-//     painter.drawRect( style.layoutUnitToPixelX( myX ),
-//                       style.layoutUnitToPixelY( myY ),
-//                       style.layoutUnitToPixelX( getWidth() ),
-//                       style.layoutUnitToPixelY( getHeight() ) );
+//     painter.drawRect( context.layoutUnitToPixelX( myX ),
+//                       context.layoutUnitToPixelY( myY ),
+//                       context.layoutUnitToPixelX( getWidth() ),
+//                       context.layoutUnitToPixelY( getHeight() ) );
 }
 
 

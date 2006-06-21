@@ -193,10 +193,10 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes( const ContextStyle& style,
+    virtual void calcSizes( const ContextStyle& context,
 							ContextStyle::TextStyle tstyle,
 							ContextStyle::IndexStyle istyle,
-							double factor );
+							StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -204,11 +204,11 @@ public:
      * We can use our parentPosition to get our own origin then.
      */
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
-                       const LuPixelPoint& parentOrigin );
+					   StyleAttributes& style,
+					   const LuPixelPoint& parentOrigin );
 
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
@@ -283,10 +283,10 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes( const ContextStyle& style,
+    virtual void calcSizes( const ContextStyle& context,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
-							double factor );
+							StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -294,10 +294,10 @@ public:
      * We can use our parentPosition to get our own origin then.
      */
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     /**
@@ -350,10 +350,10 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes( const ContextStyle& style,
+    virtual void calcSizes( const ContextStyle& context,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
-							double factor );
+							StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -361,10 +361,10 @@ public:
      * We can use our parentPosition to get our own origin then.
      */
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     /**

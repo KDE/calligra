@@ -305,11 +305,11 @@ void EsstixArtwork::calcSizes( const ContextStyle& style,
 
 
 void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
-                         const ContextStyle& style, ContextStyle::TextStyle tstyle,
-                         double factor,
+                         const ContextStyle& context, ContextStyle::TextStyle tstyle,
+                         StyleAttributes& style,
                          luPt /*parentSize*/, const LuPixelPoint& origin)
 {
-    luPt mySize = style.getAdjustedSize( tstyle, factor );
+    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
     /*
@@ -317,102 +317,102 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
         return;
     */
 
-    painter.setPen(style.getDefaultColor());
+    painter.setPen(context.getDefaultColor());
     //const SymbolTable& symbolTable = style.symbolTable();
 
     switch (getType()) {
     case LeftSquareBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, leftSquareBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, leftSquareBracket, myX, myY, mySize );
         }
         break;
     case RightSquareBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, rightSquareBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, rightSquareBracket, myX, myY, mySize );
         }
         break;
     case LeftCurlyBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigCurlyBracket( painter, style, leftCurlyBracket, myX, myY, mySize );
+            drawBigCurlyBracket( painter, context, leftCurlyBracket, myX, myY, mySize );
         }
         break;
     case RightCurlyBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigCurlyBracket( painter, style, rightCurlyBracket, myX, myY, mySize );
+            drawBigCurlyBracket( painter, context, rightCurlyBracket, myX, myY, mySize );
         }
         break;
     case LeftLineBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, leftLineBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, leftLineBracket, myX, myY, mySize );
         }
         break;
     case RightLineBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, rightLineBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, rightLineBracket, myX, myY, mySize );
         }
         break;
     case SlashBracket:
-        //drawCharacter(painter, style, myX, myY, mySize, '/');
+        //drawCharacter(painter, context, myX, myY, mySize, '/');
         break;
     case BackSlashBracket:
-        //drawCharacter(painter, style, myX, myY, mySize, '\\');
+        //drawCharacter(painter, context, myX, myY, mySize, '\\');
         break;
     case LeftCornerBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
-        else drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
+        else drawCharacter(painter, context, myX, myY, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
-        else drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
+        else drawCharacter(painter, context, myX, myY, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, leftRoundBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, leftRoundBracket, myX, myY, mySize );
         }
         break;
     case RightRoundBracket:
         if ( esstixChar != -1 ) {
-            drawEsstixDelimiter( painter, style, myX, myY, mySize );
+            drawEsstixDelimiter( painter, context, myX, myY, mySize );
         }
         else {
-            drawBigRoundBracket( painter, style, rightRoundBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, rightRoundBracket, myX, myY, mySize );
         }
         break;
     case EmptyBracket:
         break;
     case Integral:
-        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), integralChar);
+        drawCharacter(painter, context, myX, myY, qRound( 1.5*mySize ), integralChar);
         break;
     case Sum:
-        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), summationChar);
+        drawCharacter(painter, context, myX, myY, qRound( 1.5*mySize ), summationChar);
         break;
     case Product:
-        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), productChar);
+        drawCharacter(painter, context, myX, myY, qRound( 1.5*mySize ), productChar);
         break;
     }
 

@@ -421,10 +421,10 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void MatrixElement::calcSizes( const ContextStyle& style,
+void MatrixElement::calcSizes( const ContextStyle& context,
                                ContextStyle::TextStyle tstyle,
                                ContextStyle::IndexStyle istyle,
-                               double factor )
+                               StyleAttributes& style )
 {
     QMemArray<luPixel> toMidlines(getRows());
     QMemArray<luPixel> fromMidlines(getRows());
@@ -437,23 +437,24 @@ void MatrixElement::calcSizes( const ContextStyle& style,
     uint rows = getRows();
     uint columns = getColumns();
 
-    ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction(tstyle);
-    ContextStyle::IndexStyle i_istyle = style.convertIndexStyleUpper(istyle);
+    ContextStyle::TextStyle i_tstyle = context.convertTextStyleFraction(tstyle);
+    ContextStyle::IndexStyle i_istyle = context.convertIndexStyleUpper(istyle);
+    double factor = style.getSizeFactor();
 
     for (uint r = 0; r < rows; r++) {
         QPtrList< MatrixSequenceElement >* list = content.at(r);
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
-            element->calcSizes( style, i_tstyle, i_istyle, factor );
-            toMidlines[r] = QMAX(toMidlines[r], element->axis( style, i_tstyle, factor ));
+            element->calcSizes( context, i_tstyle, i_istyle, style );
+            toMidlines[r] = QMAX(toMidlines[r], element->axis( context, i_tstyle, factor ));
             fromMidlines[r] = QMAX(fromMidlines[r],
-                                   element->getHeight()-element->axis( style, i_tstyle, factor ));
+                                   element->getHeight()-element->axis( context, i_tstyle, factor ));
             widths[c] = QMAX(widths[c], element->getWidth());
         }
     }
 
-    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle, factor ) );
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
+    luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, factor ) );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
 
     luPixel yPos = 0;
     for (uint r = 0; r < rows; r++) {
@@ -462,7 +463,7 @@ void MatrixElement::calcSizes( const ContextStyle& style,
         yPos += toMidlines[r];
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
-            switch (style.getMatrixAlignment()) {
+            switch (context.getMatrixAlignment()) {
             case ContextStyle::left:
                 element->setX(xPos);
                 break;
@@ -473,7 +474,7 @@ void MatrixElement::calcSizes( const ContextStyle& style,
                 element->setX(xPos + widths[c] - element->getWidth());
                 break;
             }
-            element->setY(yPos - element->axis( style, i_tstyle, factor ));
+            element->setY(yPos - element->axis( context, i_tstyle, factor ));
             xPos += widths[c] + distX;
         }
         yPos += fromMidlines[r] + distY;
@@ -488,10 +489,10 @@ void MatrixElement::calcSizes( const ContextStyle& style,
     setWidth(width);
     setHeight(height);
     if ((rows == 2) && (columns == 1)) {
-        setBaseline( getMainChild()->getHeight() + distY / 2 + style.axisHeight( tstyle, factor ) );
+        setBaseline( getMainChild()->getHeight() + distY / 2 + context.axisHeight( tstyle, factor ) );
     }
     else {
-        setBaseline( height/2 + style.axisHeight( tstyle, factor ) );
+        setBaseline( height/2 + context.axisHeight( tstyle, factor ) );
     }
 }
 
@@ -501,10 +502,10 @@ void MatrixElement::calcSizes( const ContextStyle& style,
  * We can use our parentPosition to get our own origin then.
  */
 void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
-                          const ContextStyle& style,
+                          const ContextStyle& context,
                           ContextStyle::TextStyle tstyle,
                           ContextStyle::IndexStyle istyle,
-                          double factor,
+                          StyleAttributes& style,
                           const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
@@ -516,10 +517,10 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
 
     for (uint r = 0; r < rows; r++) {
         for (uint c = 0; c < columns; c++) {
-            getElement(r, c)->draw(painter, rect, style,
-                                   style.convertTextStyleFraction(tstyle),
-                                   style.convertIndexStyleUpper(istyle),
-                                   factor,
+            getElement(r, c)->draw(painter, rect, context,
+                                   context.convertTextStyleFraction(tstyle),
+                                   context.convertIndexStyleUpper(istyle),
+                                   style,
                                    myPos);
         }
     }
@@ -937,7 +938,7 @@ public:
     virtual void calcSizes( const ContextStyle& context,
                             ContextStyle::TextStyle tstyle,
                             ContextStyle::IndexStyle istyle,
-                            double factor );
+                            StyleAttributes& style );
 
     virtual void registerTab( BasicElement* tab );
 
@@ -1112,10 +1113,10 @@ BasicElement* MultilineSequenceElement::goToPos( FormulaCursor* cursor, bool& ha
 void MultilineSequenceElement::calcSizes( const ContextStyle& context,
                                           ContextStyle::TextStyle tstyle,
                                           ContextStyle::IndexStyle istyle,
-                                          double factor )
+                                          StyleAttributes& style )
 {
     tabs.clear();
-    inherited::calcSizes( context, tstyle, istyle, factor );
+    inherited::calcSizes( context, tstyle, istyle, style );
 }
 
 
@@ -1517,8 +1518,9 @@ void MultilineElement::moveDown( FormulaCursor* cursor, BasicElement* from )
 void MultilineElement::calcSizes( const ContextStyle& context,
                                   ContextStyle::TextStyle tstyle,
                                   ContextStyle::IndexStyle istyle,
-                                  double factor )
+                                  StyleAttributes& style )
 {
+    double factor = style.getSizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
     QFont font = context.getDefaultFont();
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
@@ -1532,7 +1534,7 @@ void MultilineElement::calcSizes( const ContextStyle& context,
     uint tabCount = 0;
     for ( uint i = 0; i < count; ++i ) {
         MultilineSequenceElement* line = content.at(i);
-        line->calcSizes( context, tstyle, istyle, factor );
+        line->calcSizes( context, tstyle, istyle, style );
         tabCount = QMAX( tabCount, line->tabCount() );
 
         height += leading;
@@ -1578,7 +1580,7 @@ void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
                              const ContextStyle& context,
                              ContextStyle::TextStyle tstyle,
                              ContextStyle::IndexStyle istyle,
-                             double factor,
+                             StyleAttributes& style,
                              const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
@@ -1604,7 +1606,7 @@ void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
 
     for ( uint i = 0; i < count; ++i ) {
         MultilineSequenceElement* line = content.at(i);
-        line->draw( painter, r, context, tstyle, istyle, factor, myPos );
+        line->draw( painter, r, context, tstyle, istyle, style, myPos );
     }
 }
 

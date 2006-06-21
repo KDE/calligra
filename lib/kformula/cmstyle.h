@@ -77,14 +77,14 @@ public:
 							double factor );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
-					   double factor,
-                       luPt parentSize, const LuPixelPoint& origin );
+					   StyleAttributes& style,
+					   luPt parentSize, const LuPixelPoint& origin );
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     virtual bool isNormalChar() const;

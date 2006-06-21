@@ -163,7 +163,7 @@ public:
     virtual void calcSizes( const ContextStyle& context,
 							ContextStyle::TextStyle tstyle,
 							ContextStyle::IndexStyle istyle,
-							double factor ) = 0;
+							StyleAttributes& style ) = 0;
 
     /**
      * Draws the whole element including its children.
@@ -174,7 +174,7 @@ public:
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin ) = 0;
 
 

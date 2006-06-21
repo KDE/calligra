@@ -143,14 +143,14 @@ public:
 							double factor );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
-					   double factor,
-                       luPt parentSize, const LuPixelPoint& origin ) = 0;
+					   StyleAttributes& style,
+					   luPt parentSize, const LuPixelPoint& origin ) = 0;
     virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& style,
+                       const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     luPixel getWidth() const { return size.width(); }

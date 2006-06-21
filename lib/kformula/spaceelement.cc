@@ -50,21 +50,22 @@ bool SpaceElement::accept( ElementVisitor* visitor )
 }
 
 
-void SpaceElement::calcSizes( const ContextStyle& style,
+void SpaceElement::calcSizes( const ContextStyle& context,
                               ContextStyle::TextStyle tstyle,
                               ContextStyle::IndexStyle /*istyle*/,
-                              double factor )
+                              StyleAttributes& style )
 {
-    luPt mySize = style.getAdjustedSize( tstyle, factor );
+    double factor = style.getSizeFactor();
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
 
-    QFont font = style.getDefaultFont();
+    QFont font = context.getDefaultFont();
     font.setPointSize( mySize );
 
     QFontMetrics fm( font );
     QChar ch = 'x';
     LuPixelRect bound = fm.boundingRect( ch );
 
-    setWidth( style.getSpace( tstyle, spaceWidth, factor ) );
+    setWidth( context.getSpace( tstyle, spaceWidth, factor ) );
     setHeight( bound.height() );
     setBaseline( -bound.top() );
     //setMidline( getBaseline() - fm.strikeOutPos() );
@@ -75,10 +76,10 @@ void SpaceElement::calcSizes( const ContextStyle& style,
 }
 
 void SpaceElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
-                         const ContextStyle& style,
+                         const ContextStyle& context,
                          ContextStyle::TextStyle /*tstyle*/,
                          ContextStyle::IndexStyle /*istyle*/,
-                         double /*factor*/,
+                         StyleAttributes& /*style*/,
                          const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
@@ -86,20 +87,20 @@ void SpaceElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    if ( style.edit() ) {
-        painter.setPen( style.getEmptyColor() );
-        painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight() ),
-                          style.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
-        painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight() ),
-                          style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight()-getHeight()/5 ) );
-        painter.drawLine( style.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight() ),
-                          style.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
-                          style.layoutUnitToPixelY( myPos.y()+getHeight()-getHeight()/5 ) );
+    if ( context.edit() ) {
+        painter.setPen( context.getEmptyColor() );
+        painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y()+getHeight() ),
+                          context.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
+                          context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
+        painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y()+getHeight() ),
+                          context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y()+getHeight()-getHeight()/5 ) );
+        painter.drawLine( context.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
+                          context.layoutUnitToPixelY( myPos.y()+getHeight() ),
+                          context.layoutUnitToPixelX( myPos.x()+getWidth()-1 ),
+                          context.layoutUnitToPixelY( myPos.y()+getHeight()-getHeight()/5 ) );
     }
 }
 

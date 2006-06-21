@@ -111,8 +111,9 @@ bool TextElement::isInvisible() const
 void TextElement::calcSizes( const ContextStyle& context, 
                              ContextStyle::TextStyle tstyle, 
                              ContextStyle::IndexStyle /*istyle*/,
-                             double factor )
+                             StyleAttributes& style )
 {
+    double factor = style.getSizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
     kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
@@ -153,15 +154,21 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                         const ContextStyle& context,
                         ContextStyle::TextStyle tstyle,
                         ContextStyle::IndexStyle /*istyle*/,
-                        double factor,
+                        StyleAttributes& style,
                         const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    setUpPainter( context, painter );
+    // Let container set the color, instead of elementType
+    //setUpPainter( context, painter );
+    painter.setPen( style.getColor() );
 
+    setCharStyle( style.getCharStyle() );
+    setCharFamily( style.getCharFamily() );
+
+    double factor = style.getSizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
     QFont font = getFont( context );
     font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
@@ -496,9 +503,9 @@ bool EmptyElement::accept( ElementVisitor* visitor )
 void EmptyElement::calcSizes( const ContextStyle& context,
                               ContextStyle::TextStyle tstyle,
                               ContextStyle::IndexStyle /*istyle*/,
-                              double factor )
+                              StyleAttributes& style )
 {
-    luPt mySize = context.getAdjustedSize( tstyle, factor );
+    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
     //kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = context.getDefaultFont();
@@ -516,7 +523,7 @@ void EmptyElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                          const ContextStyle& context,
                          ContextStyle::TextStyle /*tstyle*/,
                          ContextStyle::IndexStyle /*istyle*/,
-                         double ,
+                         StyleAttributes& /*style*/ ,
                          const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );

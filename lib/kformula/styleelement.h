@@ -35,41 +35,51 @@ public:
     double getAbsoluteSize() const { return size; }
 	double getRelativeSize() const { return factor; }
 
-    void setColor( const QColor& c ) { color = c; }
-    QColor getColor() const { return color; }
-
-    void setBackground( const QColor& bg ) { background = bg; }
-    QColor getBackground() const {return background; }
-
-    virtual void calcSizes( const ContextStyle& style,
+    virtual void calcSizes( const ContextStyle& context,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
-							double factor );
+							StyleAttributes& style );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
 protected:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
+
     void setCharStyle( CharStyle cs );
-    void setCharFamily( CharFamily cf );
     CharStyle getCharStyle() { return style; }
+	bool customCharStyle() { return custom_style; }
+
+    void setCharFamily( CharFamily cf );
     CharFamily getCharFamily() { return family; }
+	bool customCharFamily() { return custom_family; }
+
+    void setColor( const QColor& c ) { color = c; }
+    QColor getColor() const { return color; }
+	bool customColor() const { return custom_color; }
+
+    void setBackground( const QColor& bg ) { background = bg; }
+    QColor& getBackground() { return background; }
+	bool customBackground() const { return custom_background; }
 
 private:
-	double getProportion( const ContextStyle& context, double factor );
+	double getSizeFactor( const ContextStyle& context, double factor );
 	bool ownSize;
 	bool absoluteSize;
     double size;
 	double factor;
     CharStyle style;
+	bool custom_style;
     CharFamily family;
+	bool custom_family;
     QColor color;
+	bool custom_color;
     QColor background;
+	bool custom_background;
 };
 
 KFORMULA_NAMESPACE_END

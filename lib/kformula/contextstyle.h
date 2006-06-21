@@ -26,6 +26,7 @@
 #include <qfont.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qvaluestack.h>
 
 //KDE Include
 #include <kconfig.h>
@@ -326,6 +327,35 @@ private:
 
     FontStyle* m_fontStyle;
     QString m_fontStyleName;
+};
+
+
+class StyleAttributes {
+ public:
+    double getSizeFactor();
+    CharStyle getCharStyle();
+    CharFamily getCharFamily();
+	QColor getColor();
+	QColor getBackground();
+
+    void setSizeFactor( double );
+    void setCharStyle( CharStyle );
+    void setCharFamily( CharFamily );
+	void setColor( const QColor& );
+	void setBackground( const QColor& );
+
+	bool derivedColor();
+
+	void resetSizeFactor();
+	void reset();
+
+
+ private:
+    QValueStack<double> factor_stack;
+	QValueStack<CharStyle> style_stack;
+	QValueStack<CharFamily> family_stack;
+	QValueStack<QColor> color_stack;
+	QValueStack<QColor> background_stack;
 };
 
 KFORMULA_NAMESPACE_END

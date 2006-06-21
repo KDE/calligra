@@ -104,7 +104,7 @@ public:
      * Draws the cursor at its current position.
      * The cursor will always be drawn in xor mode.
      */
-    void draw( QPainter&, const ContextStyle& context, double factor, 
+    void draw( QPainter&, const ContextStyle& context, StyleAttributes& style,
 			   bool smallCursor, bool activeCursor );
 
 

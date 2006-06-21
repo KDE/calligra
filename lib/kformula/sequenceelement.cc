@@ -173,11 +173,12 @@ bool SequenceElement::isEmpty()
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void SequenceElement::calcSizes( const ContextStyle& style,
+void SequenceElement::calcSizes( const ContextStyle& context,
 								 ContextStyle::TextStyle tstyle,
 								 ContextStyle::IndexStyle istyle,
-								 double factor )
+								 StyleAttributes& style )
 {
+    double factor = style.getSizeFactor();
     if (!isEmpty()) {
         luPixel width = 0;
         luPixel toBaseline = 0;
@@ -191,13 +192,13 @@ void SequenceElement::calcSizes( const ContextStyle& style,
             luPixel spaceBefore = 0;
             if ( isFirstOfToken( child ) ) {
                 spaceBefore =
-                    style.ptToPixelX( child->getElementType()->getSpaceBefore( style,
-                                                                               tstyle,
-																			   factor ) );
+                    context.ptToPixelX( child->getElementType()->getSpaceBefore( context,
+                                                                                 tstyle,
+                                                                                 factor ) );
             }
 
             if ( !child->isInvisible() ) {
-                child->calcSizes( style, tstyle, istyle, factor );
+                child->calcSizes( context, tstyle, istyle, style );
                 child->setX( width + spaceBefore );
                 width += child->getWidth() + spaceBefore;
 
@@ -208,7 +209,7 @@ void SequenceElement::calcSizes( const ContextStyle& style,
                                          child->getHeight() - childBaseline );
                 }
                 else {
-                    luPixel bl = child->getHeight()/2 + style.axisHeight( tstyle, factor );
+                    luPixel bl = child->getHeight()/2 + context.axisHeight( tstyle, factor );
                     toBaseline = QMAX( toBaseline, bl );
                     fromBaseline = QMAX( fromBaseline, child->getHeight() - bl );
                 }
@@ -226,8 +227,8 @@ void SequenceElement::calcSizes( const ContextStyle& style,
         setChildrenPositions();
     }
     else {
-        luPixel w = style.getEmptyRectWidth( factor );
-        luPixel h = style.getEmptyRectHeight( factor );
+        luPixel w = context.getEmptyRectWidth( factor );
+        luPixel h = context.getEmptyRectHeight( factor );
         setWidth( w );
         setHeight( h );
         setBaseline( h );
@@ -255,7 +256,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
                             const ContextStyle& context,
                             ContextStyle::TextStyle tstyle,
                             ContextStyle::IndexStyle istyle,
-                            double factor,
+                            StyleAttributes& style,
                             const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
@@ -269,7 +270,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
         for ( ; it.current(); ) {
             BasicElement* child = it.current();
             if (!child->isInvisible()) {
-                child->draw(painter, r, context, tstyle, istyle, factor, myPos);
+                child->draw(painter, r, context, tstyle, istyle, style, myPos);
 
                 // Each starting element draws the whole token
                 // This only concerns TextElements.
@@ -287,7 +288,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
         }
     }
     else {
-        drawEmptyRect( painter, context, factor, myPos );
+        drawEmptyRect( painter, context, style.getSizeFactor(), myPos );
     }
     // Debug
     //painter.setPen(Qt::green);
@@ -377,7 +378,7 @@ void SequenceElement::calcCursorSize( const ContextStyle& context,
  * If the cursor is inside a sequence it needs to be drawn.
  */
 void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context,
-                                  double factor, FormulaCursor* cursor,
+                                  StyleAttributes& style, FormulaCursor* cursor,
                                   bool smallCursor, bool activeCursor )
 {
     painter.setRasterOp( Qt::XorROP );
@@ -390,7 +391,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
                           Qt::white );
     }
     painter.setPen( QPen( Qt::white,
-                    context.layoutUnitToPixelX( context.getLineWidth( factor )/2 ) ) );
+                          context.layoutUnitToPixelX( context.getLineWidth( style.getSizeFactor() )/2 ) ) );
     const LuPixelPoint& point = cursor->getCursorPoint();
     const LuPixelRect& size = cursor->getCursorSize();
     if ( activeCursor )
@@ -1544,12 +1545,12 @@ void NameSequence::calcCursorSize( const ContextStyle& context,
 }
 
 void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
-                               double factor, FormulaCursor* cursor,
+                               StyleAttributes& style, FormulaCursor* cursor,
                                bool smallCursor, bool activeCursor )
 {
     LuPixelPoint point = widgetPos();
     painter.setPen( QPen( context.getEmptyColor(),
-                          context.layoutUnitToPixelX( context.getLineWidth( factor )/2 ) ) );
+                          context.layoutUnitToPixelX( context.getLineWidth( style.getSizeFactor() )/2 ) ) );
     luPixel unitX = context.ptToLayoutUnitPixX( 1 );
     luPixel unitY = context.ptToLayoutUnitPixY( 1 );
     painter.drawRect( context.layoutUnitToPixelX( point.x()-unitX ),
@@ -1557,7 +1558,7 @@ void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
                       context.layoutUnitToPixelX( getWidth()+2*unitX ),
                       context.layoutUnitToPixelY( getHeight()+2*unitY ) );
 
-    inherited::drawCursor( painter, context, factor, cursor, smallCursor, activeCursor );
+    inherited::drawCursor( painter, context, style, cursor, smallCursor, activeCursor );
 }
 
 void NameSequence::moveWordLeft( FormulaCursor* cursor )

@@ -178,27 +178,28 @@ BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void RootElement::calcSizes( const ContextStyle& style,
+void RootElement::calcSizes( const ContextStyle& context,
                              ContextStyle::TextStyle tstyle,
                              ContextStyle::IndexStyle istyle,
-                             double factor )
+                             StyleAttributes& style )
 {
-    content->calcSizes( style, tstyle,
-                        style.convertIndexStyleLower(istyle), factor );
+    content->calcSizes( context, tstyle,
+                        context.convertIndexStyleLower(istyle), style );
 
     luPixel indexWidth = 0;
     luPixel indexHeight = 0;
     if (hasIndex()) {
-        index->calcSizes( style,
-                          style.convertTextStyleIndex(tstyle),
-                          style.convertIndexStyleUpper(istyle),
-                          factor );
+        index->calcSizes( context,
+                          context.convertTextStyleIndex(tstyle),
+                          context.convertIndexStyleUpper(istyle),
+                          style );
         indexWidth = index->getWidth();
         indexHeight = index->getHeight();
     }
 
-    luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle, factor ) );
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
+    double factor = style.getSizeFactor();
+    luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, factor ) );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (content->getHeight() + distY)/ 3;
 
     if (hasIndex()) {
@@ -238,52 +239,53 @@ void RootElement::calcSizes( const ContextStyle& style,
  * We can use our parentPosition to get our own origin then.
  */
 void RootElement::draw( QPainter& painter, const LuPixelRect& r,
-                        const ContextStyle& style,
+                        const ContextStyle& context,
                         ContextStyle::TextStyle tstyle,
                         ContextStyle::IndexStyle istyle,
-                        double factor,
+                        StyleAttributes& style,
                         const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    content->draw( painter, r, style, tstyle,
-                   style.convertIndexStyleLower(istyle), factor, myPos);
+    content->draw( painter, r, context, tstyle,
+                   context.convertIndexStyleLower(istyle), style, myPos);
     if (hasIndex()) {
-        index->draw(painter, r, style,
-                    style.convertTextStyleIndex(tstyle),
-                    style.convertIndexStyleUpper(istyle), factor, myPos);
+        index->draw(painter, r, context,
+                    context.convertTextStyleIndex(tstyle),
+                    context.convertIndexStyleUpper(istyle), style, myPos);
     }
 
     luPixel x = myPos.x() + rootOffset.x();
     luPixel y = myPos.y() + rootOffset.y();
-    //int distX = style.getDistanceX(tstyle);
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
+    //int distX = context.getDistanceX(tstyle);
+    double factor = style.getSizeFactor();
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (content->getHeight() + distY)/ 3;
 
-    painter.setPen( QPen( style.getDefaultColor(),
-                          style.layoutUnitToPixelX( 2*style.getLineWidth( factor ) ) ) );
-    painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
-                      style.layoutUnitToPixelY( y+unit+distY/3 ),
-                      style.layoutUnitToPixelX( x+unit/2+unit/3 ),
-                      style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
+    painter.setPen( QPen( context.getDefaultColor(),
+                          context.layoutUnitToPixelX( 2*context.getLineWidth( factor ) ) ) );
+    painter.drawLine( context.layoutUnitToPixelX( x+unit/3 ),
+                      context.layoutUnitToPixelY( y+unit+distY/3 ),
+                      context.layoutUnitToPixelX( x+unit/2+unit/3 ),
+                      context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
 
-    painter.setPen( QPen( style.getDefaultColor(),
-                          style.layoutUnitToPixelY( style.getLineWidth( factor ) ) ) );
+    painter.setPen( QPen( context.getDefaultColor(),
+                          context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
 
-    painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
-                      style.layoutUnitToPixelY( y+distY/3 ),
-                      style.layoutUnitToPixelX( x+unit/2+unit/3 ),
-                      style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
-    painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
-                      style.layoutUnitToPixelY( y+distY/3 ),
-                      style.layoutUnitToPixelX( x+unit+unit/3+content->getWidth() ),
-                      style.layoutUnitToPixelY( y+distY/3 ) );
-    painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
-                      style.layoutUnitToPixelY( y+unit+distY/2 ),
-                      style.layoutUnitToPixelX( x ),
-                      style.layoutUnitToPixelY( y+unit+unit/2 ) );
+    painter.drawLine( context.layoutUnitToPixelX( x+unit+unit/3 ),
+                      context.layoutUnitToPixelY( y+distY/3 ),
+                      context.layoutUnitToPixelX( x+unit/2+unit/3 ),
+                      context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
+    painter.drawLine( context.layoutUnitToPixelX( x+unit+unit/3 ),
+                      context.layoutUnitToPixelY( y+distY/3 ),
+                      context.layoutUnitToPixelX( x+unit+unit/3+content->getWidth() ),
+                      context.layoutUnitToPixelY( y+distY/3 ) );
+    painter.drawLine( context.layoutUnitToPixelX( x+unit/3 ),
+                      context.layoutUnitToPixelY( y+unit+distY/2 ),
+                      context.layoutUnitToPixelX( x ),
+                      context.layoutUnitToPixelY( y+unit+unit/2 ) );
 }
 
 

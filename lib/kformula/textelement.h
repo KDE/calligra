@@ -78,7 +78,7 @@ public:
     virtual void calcSizes( const ContextStyle& style,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
-							double factor );
+							StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -89,13 +89,18 @@ public:
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     /**
      * Dispatch this FontCommand to all our TextElement children.
      */
     virtual void dispatchFontCommand( FontCommand* cmd );
+
+    /**
+     * Set the color to use to display
+     */
+	void setColor( QColor c ) { color = c; }
 
     CharStyle getCharStyle() const { return charStyle(); }
     void setCharStyle( CharStyle cs );
@@ -180,6 +185,11 @@ private:
      */
     bool symbol;
 
+	/**
+	 * Color to display. Set by container.
+	 */
+	QColor color;
+
     /**
      * The attribute of the char. "anyChar" means leave the default.
      *
@@ -237,7 +247,7 @@ public:
     virtual void calcSizes( const ContextStyle& style,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
-							double factor );
+							StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -248,7 +258,7 @@ public:
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
 

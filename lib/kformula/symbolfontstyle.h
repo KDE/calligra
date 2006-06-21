@@ -55,7 +55,7 @@ public:
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
-					   double factor,
+					   StyleAttributes& style,
                        luPt parentSize, const LuPixelPoint& origin );
 };
 

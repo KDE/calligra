@@ -180,11 +180,11 @@ void SymbolArtwork::calcSizes( const ContextStyle& style,
 
 
 void SymbolArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
-                         const ContextStyle& style, ContextStyle::TextStyle tstyle,
-                         double factor,
+                         const ContextStyle& context, ContextStyle::TextStyle tstyle,
+                         StyleAttributes& style,
                          luPt parentSize, const LuPixelPoint& origin)
 {
-    luPt mySize = style.getAdjustedSize( tstyle, factor );
+    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
     /*
@@ -192,95 +192,95 @@ void SymbolArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
         return;
     */
 
-    painter.setPen(style.getDefaultColor());
+    painter.setPen(context.getDefaultColor());
 
     switch (getType()) {
     case LeftSquareBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            drawBigRoundBracket( painter, style, leftSquareBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, leftSquareBracket, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, leftSquareBracketChar);
+            drawCharacter(painter, context, myX, myY, mySize, leftSquareBracketChar);
         }
         break;
     case RightSquareBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            drawBigRoundBracket( painter, style, rightSquareBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, rightSquareBracket, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, rightSquareBracketChar);
+            drawCharacter(painter, context, myX, myY, mySize, rightSquareBracketChar);
         }
         break;
     case LeftCurlyBracket:
         if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
-            drawBigCurlyBracket( painter, style, leftCurlyBracket, myX, myY, mySize );
+            drawBigCurlyBracket( painter, context, leftCurlyBracket, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, leftCurlyBracketChar);
+            drawCharacter(painter, context, myX, myY, mySize, leftCurlyBracketChar);
         }
         break;
     case RightCurlyBracket:
         if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
-            drawBigCurlyBracket( painter, style, rightCurlyBracket, myX, myY, mySize );
+            drawBigCurlyBracket( painter, context, rightCurlyBracket, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, rightCurlyBracketChar);
+            drawCharacter(painter, context, myX, myY, mySize, rightCurlyBracketChar);
         }
         break;
     case LeftLineBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            drawBigRoundBracket( painter, style, leftLineBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, leftLineBracket, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+            drawCharacter(painter, context, myX, myY, mySize, verticalLineChar);
         }
         break;
     case RightLineBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            drawBigRoundBracket( painter, style, rightLineBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, rightLineBracket, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+            drawCharacter(painter, context, myX, myY, mySize, verticalLineChar);
         }
         break;
     case SlashBracket:
-        //drawCharacter(painter, style, myX, myY, mySize, '/');
+        //drawCharacter(painter, context, myX, myY, mySize, '/');
         break;
     case BackSlashBracket:
-        //drawCharacter(painter, style, myX, myY, mySize, '\\');
+        //drawCharacter(painter, context, myX, myY, mySize, '\\');
         break;
     case LeftCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, leftAngleBracketChar);
+        drawCharacter(painter, context, myX, myY, mySize, leftAngleBracketChar);
         break;
     case RightCornerBracket:
-        drawCharacter(painter, style, myX, myY, mySize, rightAngleBracketChar);
+        drawCharacter(painter, context, myX, myY, mySize, rightAngleBracketChar);
         break;
     case LeftRoundBracket:
         if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
-            drawBigRoundBracket( painter, style, leftRoundBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, leftRoundBracket, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, leftParenthesisChar);
+            drawCharacter(painter, context, myX, myY, mySize, leftParenthesisChar);
         }
         break;
     case RightRoundBracket:
         if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
-            drawBigRoundBracket( painter, style, rightRoundBracket, myX, myY, mySize );
+            drawBigRoundBracket( painter, context, rightRoundBracket, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, rightParenthesisChar);
+            drawCharacter(painter, context, myX, myY, mySize, rightParenthesisChar);
         }
         break;
     case EmptyBracket:
         break;
     case Integral:
-        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), integralChar);
+        drawCharacter(painter, context, myX, myY, qRound( 1.5*mySize ), integralChar);
         break;
     case Sum:
-        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), summationChar);
+        drawCharacter(painter, context, myX, myY, qRound( 1.5*mySize ), summationChar);
         break;
     case Product:
-        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), productChar);
+        drawCharacter(painter, context, myX, myY, qRound( 1.5*mySize ), productChar);
         break;
     }
 

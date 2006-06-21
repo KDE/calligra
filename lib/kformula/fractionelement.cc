@@ -114,25 +114,26 @@ BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void FractionElement::calcSizes( const ContextStyle& style, 
+void FractionElement::calcSizes( const ContextStyle& context, 
                                  ContextStyle::TextStyle tstyle,
                                  ContextStyle::IndexStyle istyle,
-                                 double factor )
+                                 StyleAttributes& style )
 {
-    ContextStyle::TextStyle i_tstyle = style.convertTextStyleFraction( tstyle );
-    ContextStyle::IndexStyle u_istyle = style.convertIndexStyleUpper( istyle );
-    ContextStyle::IndexStyle l_istyle = style.convertIndexStyleLower( istyle );
+    ContextStyle::TextStyle i_tstyle = context.convertTextStyleFraction( tstyle );
+    ContextStyle::IndexStyle u_istyle = context.convertIndexStyleUpper( istyle );
+    ContextStyle::IndexStyle l_istyle = context.convertIndexStyleLower( istyle );
+    double factor = style.getSizeFactor();
 
-    numerator->calcSizes( style, i_tstyle, u_istyle, factor );
-    denominator->calcSizes( style, i_tstyle, l_istyle, factor );
+    numerator->calcSizes( context, i_tstyle, u_istyle, style );
+    denominator->calcSizes( context, i_tstyle, l_istyle, style );
 
-    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle, factor ) );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
 
     setWidth( QMAX( numerator->getWidth(), denominator->getWidth() ) );
     setHeight( numerator->getHeight() + denominator->getHeight() +
-               2*distY + style.getLineWidth( factor ) );
-    setBaseline( qRound( numerator->getHeight() + distY + .5*style.getLineWidth( factor ) 
-                         + style.axisHeight( tstyle, factor ) ) );
+               2*distY + context.getLineWidth( factor ) );
+    setBaseline( qRound( numerator->getHeight() + distY + .5*context.getLineWidth( factor ) 
+                         + context.axisHeight( tstyle, factor ) ) );
 
     numerator->setX( ( getWidth() - numerator->getWidth() ) / 2 );
     denominator->setX( ( getWidth() - denominator->getWidth() ) / 2 );
@@ -148,33 +149,34 @@ void FractionElement::calcSizes( const ContextStyle& style,
  * We can use our parentPosition to get our own origin then.
  */
 void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
-                            const ContextStyle& style,
+                            const ContextStyle& context,
                             ContextStyle::TextStyle tstyle,
                             ContextStyle::IndexStyle istyle,
-                            double factor,
+                            StyleAttributes& style,
                             const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    numerator->draw( painter, r, style,
-                     style.convertTextStyleFraction( tstyle ),
-                     style.convertIndexStyleUpper( istyle ), factor, myPos);
+    numerator->draw( painter, r, context,
+                     context.convertTextStyleFraction( tstyle ),
+                     context.convertIndexStyleUpper( istyle ), style, myPos);
     if (denominator) { // Can be temporarily 0 see FractionElement::remove
-        denominator->draw( painter, r, style,
-                           style.convertTextStyleFraction( tstyle ),
-                           style.convertIndexStyleLower( istyle ), factor,
+        denominator->draw( painter, r, context,
+                           context.convertTextStyleFraction( tstyle ),
+                           context.convertIndexStyleLower( istyle ), style,
                            myPos);
     }
 
     if ( withLine ) {
-        painter.setPen( QPen( style.getDefaultColor(),
-                              style.layoutUnitToPixelY( style.getLineWidth( factor ) ) ) );
-        painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
-                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle, factor ) ),
-                          style.layoutUnitToPixelX( myPos.x() + getWidth() ),
-                          style.layoutUnitToPixelY( myPos.y() + axis( style, tstyle, factor ) ) );
+        double factor = style.getSizeFactor();
+        painter.setPen( QPen( context.getDefaultColor(),
+                              context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
+        painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y() + axis( context, tstyle, factor ) ),
+                          context.layoutUnitToPixelX( myPos.x() + getWidth() ),
+                          context.layoutUnitToPixelY( myPos.y() + axis( context, tstyle, factor ) ) );
     }
 }
 

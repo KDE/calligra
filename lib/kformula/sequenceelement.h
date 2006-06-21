@@ -97,7 +97,7 @@ public:
     virtual void calcSizes( const ContextStyle& style,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
-							double factor );
+							StyleAttributes& style );
 
     /**
      * Draws the whole element including its children.
@@ -108,7 +108,7 @@ public:
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
     /**
@@ -126,7 +126,7 @@ public:
      * If the cursor is inside a sequence it needs to be drawn.
      */
     virtual void drawCursor( QPainter& painter, const ContextStyle& context,
-							 double factor, FormulaCursor* cursor,
+							 StyleAttributes& style, FormulaCursor* cursor,
 							 bool smallCursor, bool activeCursor );
 
     // navigation
@@ -495,7 +495,7 @@ public:
      * If the cursor is inside a sequence it needs to be drawn.
      */
     virtual void drawCursor( QPainter& painter, const ContextStyle& context,
-							 double factor, FormulaCursor* cursor, 
+							 StyleAttributes& style, FormulaCursor* cursor, 
 							 bool smallCursor, bool activeCursor );
 
     /**

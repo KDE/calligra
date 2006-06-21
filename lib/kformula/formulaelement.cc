@@ -116,12 +116,12 @@ void FormulaElement::insertFormula( FormulaCursor* cursor )
     document->insertFormula( cursor );
 }
 
-void FormulaElement::calcSizes( const ContextStyle& style,
+void FormulaElement::calcSizes( const ContextStyle& context,
                                 ContextStyle::TextStyle tstyle,
                                 ContextStyle::IndexStyle istyle,
-                                double factor )
+                                StyleAttributes& style )
 {
-    inherited::calcSizes( style, tstyle, istyle, factor );
+    inherited::calcSizes( context, tstyle, istyle, style );
 }
 
 
@@ -129,10 +129,10 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
                            const ContextStyle& context,
                            ContextStyle::TextStyle tstyle,
                            ContextStyle::IndexStyle istyle,
-                           double factor,
+                           StyleAttributes& style,
                            const LuPixelPoint& parentOrigin )
 {
-    inherited::draw( painter, r, context, tstyle, istyle, factor, parentOrigin );
+    inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
 }
 
 
@@ -148,7 +148,8 @@ void FormulaElement::calcSizes( ContextStyle& context )
     else {
         context.setSizeFactor( 1 );
     }
-    calcSizes( context, context.getBaseTextStyle(), ContextStyle::normal, 1.0 );
+    StyleAttributes style;
+    calcSizes( context, context.getBaseTextStyle(), ContextStyle::normal, style );
 }
 
 /**
@@ -164,8 +165,9 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
     else {
         context.setSizeFactor( 1 );
     }
+    StyleAttributes style;
     draw( painter, r, context, context.getBaseTextStyle(),
-          ContextStyle::normal, 1, LuPixelPoint() );
+          ContextStyle::normal, style, LuPixelPoint() );
 }
 
 KCommand* FormulaElement::buildCommand( Container* container, Request* request )

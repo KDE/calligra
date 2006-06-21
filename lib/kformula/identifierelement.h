@@ -32,13 +32,13 @@ public:
     virtual void calcSizes( const ContextStyle& style,
 						    ContextStyle::TextStyle tstyle,
 						    ContextStyle::IndexStyle istyle,
-							double factor );
+							StyleAttributes& style );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   double factor,
+					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 };
 

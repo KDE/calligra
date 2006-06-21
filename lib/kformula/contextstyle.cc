@@ -37,8 +37,7 @@ ContextStyle::ContextStyle()
     : symbolFont( "Symbol" ),
       defaultColor(Qt::black), numberColor(Qt::blue),
       operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
-      emptyColor(Qt::blue), helpColor( Qt::gray ),
-      m_sizeFactor( 0 )
+      emptyColor(Qt::blue), helpColor( Qt::gray ), m_sizeFactor( 0 )
 {
 //     kdDebug() << "ContextStyle::ContextStyle" << endl
 //               << "defaultFont: " << defaultFont.rawName() << endl
@@ -416,5 +415,98 @@ void ContextStyle::setup()
     //m_axisHeight = ptToLayoutUnitPt( pixelYToPt( fm2.strikeOutPos() ) );
     m_axisHeight = ptToLayoutUnitPixY( pixelYToPt( fm2.strikeOutPos() ) );
 }
+
+
+double StyleAttributes::getSizeFactor()
+{
+    if ( factor_stack.empty() ) {
+        kdWarning( DEBUGID ) << "SizeFactor stack is empty.\n";
+        return 1.0;
+    }
+    return factor_stack.top();
+}
+
+CharStyle StyleAttributes::getCharStyle()
+{
+    if ( style_stack.empty() ) {
+        kdWarning( DEBUGID ) << "CharStyle stack is empty.\n";
+        return anyChar;
+    }
+    return style_stack.top();
+}
+
+CharFamily StyleAttributes::getCharFamily()
+{
+    if ( family_stack.empty() ) {
+        kdWarning( DEBUGID ) << "CharFamily stack is empty.\n";
+        return anyFamily;
+    }
+    return family_stack.top();
+}
+
+QColor StyleAttributes::getColor()
+{
+    if ( color_stack.empty() ) {
+        kdWarning( DEBUGID ) << "Color stack is empty.\n";
+        return QColor( Qt::black );
+        //return getDefaultColor();
+    }
+    return color_stack.top();
+}
+
+QColor StyleAttributes::getBackground()
+{
+    if ( background_stack.empty() ) {
+        kdWarning( DEBUGID ) << "Background stack is empty.\n";
+        return QColor( Qt::gray );
+    }
+    return background_stack.top();
+}
+
+void StyleAttributes::setSizeFactor( double f )
+{
+    factor_stack.push( f );
+}
+
+void StyleAttributes::setCharStyle( CharStyle cs ) 
+{
+    style_stack.push( cs ); 
+}
+
+void StyleAttributes::setCharFamily( CharFamily cf ) 
+{
+    family_stack.push( cf );
+}
+
+void StyleAttributes::setColor( const QColor& c )
+{
+    color_stack.push( c );
+}
+
+void StyleAttributes::setBackground( const QColor& bg )
+{
+    background_stack.push( bg );
+}
+
+bool StyleAttributes::derivedColor()
+{
+    return ! color_stack.empty();
+}
+
+void StyleAttributes::resetSizeFactor()
+{
+    factor_stack.pop();
+}
+
+void StyleAttributes::reset()
+{
+    factor_stack.pop();
+    style_stack.pop();
+    family_stack.pop();
+    color_stack.pop();
+    background_stack.pop();
+}
+
+
 
 KFORMULA_NAMESPACE_END
