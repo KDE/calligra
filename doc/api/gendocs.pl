@@ -16,19 +16,35 @@ if(! -d $basedir) {
 $doxygenconftmp=".doxygen.conf.tmp";
 
 #init
-print "Finding all sections...";
-@output=`find . -name Mainpage.dox -type f | grep -v _darcs`;
-foreach $section (@output) {
-    chomp($section);
-    $section=~s/^\.\///;
-    $section=~s/\/Mainpage.dox//;
-    # skip root dir while there are so little Mainpage.dox files
-    if($section eq "Mainpage.dox") {
-        next;
+if($#ARGV >= 0) {
+    for($i=0; $i <= $#ARGV; $i++) {
+        if( -f "$rootdir/$ARGV[$i]/Mainpage.dox") {
+            push @sections, $ARGV[$i];
+        }
+        else {
+            print "No Mainpage.dox found at '$rootdir/$ARGV[$i]' skipping..\n";
+        }
     }
-    push @sections,$section;
+    if($#sections == -1) {
+        print "Nothing to do!\n";
+        exit;
+    }
 }
-@output="";
+else {
+    print "Finding all sections...";
+    @output=`find . -name Mainpage.dox -type f | grep -v _darcs`;
+    foreach $section (@output) {
+        chomp($section);
+        $section=~s/^\.\///;
+        $section=~s/\/Mainpage.dox//;
+        # skip root dir while there are so little Mainpage.dox files
+        if($section eq "Mainpage.dox") {
+            next;
+        }
+        push @sections,$section;
+    }
+    @output="";
+}
 
 # for each section
 print $#sections+1 ." found";
