@@ -28,9 +28,16 @@
 KFORMULA_NAMESPACE_BEGIN
 
 class TokenElement : public StyleElement {
+    typedef StyleElement inherited;
 public:
     TokenElement( BasicElement* parent = 0 );
 	virtual bool buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
+	virtual void draw( QPainter& painter, const LuPixelRect& r,
+					   const ContextStyle& context,
+					   ContextStyle::TextStyle tstyle,
+					   ContextStyle::IndexStyle istyle,
+					   StyleAttributes& style,
+					   const LuPixelPoint& parentOrigin );
 
 };
 

@@ -46,4 +46,22 @@ bool TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDom
     return true;
 }
 
+void TokenElement::draw( QPainter& painter, const LuPixelRect& r,
+                              const ContextStyle& context,
+                              ContextStyle::TextStyle tstyle,
+                              ContextStyle::IndexStyle istyle,
+                              StyleAttributes& style,
+                              const LuPixelPoint& parentOrigin ) 
+{
+    if ( customCharStyle() ) {
+        style.setCharStyle( getCharStyle() );
+    }
+    else {
+        style.setCharStyle( normalChar );
+    }
+
+    inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
+    style.reset();
+}
+
 KFORMULA_NAMESPACE_END

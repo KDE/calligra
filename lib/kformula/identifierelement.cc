@@ -66,28 +66,7 @@ void IdentifierElement::draw( QPainter& painter, const LuPixelRect& r,
         style.setCharStyle( normalChar );
     }
 
-    if ( customCharFamily() ) {
-        style.setCharFamily( getCharFamily() );
-    }
-    else {
-        style.setCharFamily( normalFamily );
-    }
-
-    if ( customColor() ) {
-        style.setColor( getColor() );
-    }
-    else {
-        style.setColor( style.getColor() );
-    }
-
-    if ( customBackground() ) {
-        style.setBackground( getBackground() );
-    }
-    else {
-        style.setBackground( style.getBackground() );
-    }
-
-    inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
+    StyleElement::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
     style.reset();
 }
 
