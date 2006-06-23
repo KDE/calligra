@@ -117,7 +117,6 @@ void SortManipulator::sort (Element *element)
   int max = m_rows ? range.bottom() : range.right();
   int min = m_rows ? range.top() : range.left();
   int count = max - min + 1;
-  
   // initially, all values are at their original positions
   sorted.clear ();
   for (int i = 0; i < count; ++i) sorted[i] = i;

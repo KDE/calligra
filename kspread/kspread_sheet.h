@@ -616,24 +616,11 @@ public:
      */
     void pasteTextPlain( QString &_text, QRect pasteArea);
 
-    void sortByRow( const QRect &area, int ref_row, SortingOrder );
-    void sortByRow( const QRect &area, int key1, int key2, int key3,
-                    SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                    QStringList const * firstKey, bool copyFormat, bool headerRow,
-                    Point const & outputPoint, bool respectCase );
-    void sortByColumn( const QRect &area, int ref_column, SortingOrder );
-    void sortByColumn( const QRect &area, int key1, int key2, int key3,
-                       SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                       QStringList const * firstKey, bool copyFormat, bool headerCol,
-                       Point const & outputPoint, bool respectCase );
-    void swapCells( int x1, int y1, int x2, int y2, bool cpFormat );
-
     /**
      * @param x1, y1: values from source cell,
      * @param x2, y2: values from target cell
      * @param cpFormat: if true: cell format gets copied, too
      */
-    void copyCells( int x1, int y1, int x2, int y2, bool cpFormat );
     void setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type );
 
     /**
@@ -1382,7 +1369,6 @@ private:
                                bool down);
 
     void convertObscuringBorders();
-    void checkCellContent(Cell * cell1, Cell * cell2, int & ret);
     int  adjustColumnHelper(Cell * c, int _col, int _row);
     void checkContentDirection( QString const & name );
     bool objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list );

@@ -100,11 +100,11 @@ SortDialog::SortDialog( View * parent,  const char * name,
   Q3HButtonGroup * orientationGroup = new Q3HButtonGroup( layoutGroup, "orientationGroup" );
   orientationGroup->layout()->setMargin(0);
 
-  m_sortColumn = new QRadioButton( orientationGroup );
-  m_sortColumn->setText( i18n( "Sort &Rows" ) );
-
   m_sortRow = new QRadioButton( orientationGroup );
-  m_sortRow->setText( i18n( "Sort &Columns" ) );
+  m_sortRow->setText( i18n( "Sort &Rows" ) );
+
+  m_sortColumn = new QRadioButton( orientationGroup );
+  m_sortColumn->setText( i18n( "Sort &Columns" ) );
 
   //First row / column contains header toggle
   m_firstRowOrColHeader = new QCheckBox( layoutGroup );
@@ -264,6 +264,8 @@ SortDialog::SortDialog( View * parent,  const char * name,
            SLOT( firstRowHeaderChanged(int) ) );
   connect( orientationGroup, SIGNAL( pressed(int) ), this,
            SLOT( slotOrientationChanged(int) ) );
+  connect (this, SIGNAL (okClicked()), this, SLOT (slotOk ()));
+ 
   init();
 }
 
@@ -341,8 +343,8 @@ void SortDialog::init()
   // Entire columns selected ?
   if ( util_isColumnSelected(r) )
   {
-    m_sortRow->setEnabled(false);
-    m_sortColumn->setChecked(true);
+    m_sortColumn->setEnabled(false);
+    m_sortRow->setChecked(true);
 
     int right = r.right();
     for (int i = r.left(); i <= right; ++i)
@@ -367,8 +369,8 @@ void SortDialog::init()
   // Entire rows selected ?
   else if ( util_isRowSelected(r) )
   {
-    m_sortColumn->setEnabled(false);
-    m_sortRow->setChecked(true);
+    m_sortRow->setEnabled(false);
+    m_sortColumn->setChecked(true);
 
     int bottom = r.bottom();
     for (int i = r.top(); i <= bottom; ++i)
@@ -394,21 +396,21 @@ void SortDialog::init()
     // Selection is only one row
     if ( r.top() == r.bottom() )
     {
-      m_sortColumn->setEnabled(false);
-      m_sortRow->setChecked(true);
+      m_sortRow->setEnabled(false);
+      m_sortColumn->setChecked(true);
     }
     // only one column
     else if (r.left() == r.right())
     {
-      m_sortRow->setEnabled(false);
-      m_sortColumn->setChecked(true);
+      m_sortColumn->setEnabled(false);
+      m_sortRow->setChecked(true);
     }
     else
     {
         if (guessDataOrientation() == SortColumns)
-            m_sortRow->setChecked(true);
-        else
             m_sortColumn->setChecked(true);
+        else
+            m_sortRow->setChecked(true);
     }
 
     int right  = r.right();
