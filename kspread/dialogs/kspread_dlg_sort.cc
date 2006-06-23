@@ -99,6 +99,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   Q3HButtonGroup * orientationGroup = new Q3HButtonGroup( layoutGroup, "orientationGroup" );
   orientationGroup->layout()->setMargin(0);
+  orientationGroup->setExclusive (true);
 
   m_sortRow = new QRadioButton( orientationGroup );
   m_sortRow->setText( i18n( "Sort &Rows" ) );
@@ -252,7 +253,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   m_respectCase = new QCheckBox( m_page2 );
   m_respectCase->setText( i18n( "Case sensitive sort" ) );
-  m_respectCase->setChecked( true );
+  m_respectCase->setChecked( false );
 
   page2Layout->addWidget( m_respectCase, 2,0 );
 
@@ -456,11 +457,11 @@ void SortDialog::init()
   // Initialize the combo box
   if ( m_sortRow->isChecked() )
   {
-    slotOrientationChanged( SortRows );
+    slotOrientationChanged( SortColumns );
   }
   else
   {
-    slotOrientationChanged( SortColumns );
+    slotOrientationChanged( SortRows );
   }
 }
 
