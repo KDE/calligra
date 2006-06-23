@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Robert Knight <robertknight@gmail.com>
+             (C) 2006 Tomas Mecir <mecirt@gmail.com>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2002 Ariya Hidayat <ariya@kde.org>
              (C) 2002 John Dailey <dailey@vt.edu>
@@ -56,6 +57,7 @@
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 #include "kspread_util.h"
+#include "manipulator_sort.h"
 #include "selection.h"
 
 using namespace KSpread;
@@ -90,12 +92,11 @@ SortDialog::SortDialog( View * parent,  const char * name,
 //---------------- Sort Layout & Header Row/Column Toggle
 
   //Sort orientation selector (for selecting Left-To-Right or Top-To-Bottom sorting of the selection)
-  QGroupBox* layoutGroup = new QGroupBox(/*2 , Qt::Vertical,*/  m_page1, "layoutGroup");
+  QGroupBox* layoutGroup = new QGroupBox (m_page1, "layoutGroup");
   layoutGroup->setTitle( i18n("Layout") );
+  QVBoxLayout * layoutGroupLayout = new QVBoxLayout (layoutGroup);
 
   Q3HButtonGroup * orientationGroup = new Q3HButtonGroup( layoutGroup, "orientationGroup" );
-  //orientationGroup->setLineWidth(0);
-  //orientationGroup->setMargin(0);
   orientationGroup->layout()->setMargin(0);
 
   m_sortColumn = new QRadioButton( orientationGroup );
@@ -108,19 +109,22 @@ SortDialog::SortDialog( View * parent,  const char * name,
   m_firstRowOrColHeader = new QCheckBox( layoutGroup );
   //m_firstRowOrColHeader->setText( i18n( "&First row contains headers" ) );
   m_firstRowOrColHeader->setChecked(true);
+  
+  layoutGroupLayout->addWidget (orientationGroup);
+  layoutGroupLayout->addWidget (m_firstRowOrColHeader);
+  
   page1Layout->addWidget(layoutGroup,0,0);
 
 //----------------
 
   page1Layout->addItem(new QSpacerItem( 0, 10 ), 2, 0 );
 
-
   QGroupBox * sort1Box = new QGroupBox( m_page1 );
   sort1Box->setTitle( i18n( "Sort By" ) );
   sort1Box->setFlat(true);
-  sort1Box->layout()->setSpacing( KDialog::spacingHint() );
-  sort1Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort1BoxLayout = new QHBoxLayout( sort1Box );
+  sort1BoxLayout->setSpacing( KDialog::spacingHint() );
+  sort1BoxLayout->setMargin( KDialog::marginHint() );
   sort1BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey1 = new QComboBox( sort1Box );
@@ -136,9 +140,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
   QGroupBox * sort2Box = new QGroupBox( m_page1 );
   sort2Box->setTitle( i18n( "Then By" ) );
   sort2Box->setFlat(true);
-  sort2Box->layout()->setSpacing( KDialog::spacingHint() );
-  sort2Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort2BoxLayout = new QHBoxLayout( sort2Box );
+  sort2BoxLayout->setSpacing( KDialog::spacingHint() );
+  sort2BoxLayout->setMargin( KDialog::marginHint() );
   sort2BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey2 = new QComboBox( sort2Box );
@@ -155,9 +159,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
   QGroupBox * sort3Box = new QGroupBox( m_page1 );
   sort3Box->setTitle( i18n( "Then By" ) );
   sort3Box->setFlat(true);
-  sort3Box->layout()->setSpacing( KDialog::spacingHint() );
-  sort3Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort3BoxLayout = new QHBoxLayout( sort3Box );
+  sort3BoxLayout->setSpacing( KDialog::spacingHint() );
+  sort3BoxLayout->setMargin( KDialog::marginHint() );
   sort3BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey3 = new QComboBox( sort3Box );
@@ -185,9 +189,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   QGroupBox * firstKeyBox = new QGroupBox( m_page2 );
   firstKeyBox->setTitle( i18n( "First Key" ) );
-  firstKeyBox->layout()->setSpacing( KDialog::spacingHint() );
-  firstKeyBox->layout()->setMargin( KDialog::marginHint() );
   QVBoxLayout * firstKeyBoxLayout = new QVBoxLayout( firstKeyBox );
+  firstKeyBoxLayout->setSpacing( KDialog::spacingHint() );
+  firstKeyBoxLayout->setMargin( KDialog::marginHint() );
   firstKeyBoxLayout->setAlignment( Qt::AlignTop );
 
   m_useCustomLists = new QCheckBox( firstKeyBox );
@@ -207,13 +211,15 @@ SortDialog::SortDialog( View * parent,  const char * name,
   to just copy and paste the data and then sort the newly pasted data in place.
   -- Robert Knight
 
+  (Tomas) In addition, the Sort manipulator, which is now being used, doesn't
+  support this at all. So unless someone feels like adding the feature, I will
+  remove this.
+
   QGroupBox * resultToBox = new QGroupBox( m_page2 );
   resultToBox->setTitle( i18n( "Location to Store Sort Results" ) );
-  resultToBox->layout()->setSpacing( KDialog::spacingHint() );
-  resultToBox->layout()->setMargin( KDialog::marginHint() );
-
-
   QHBoxLayout * resultToBoxLayout = new QHBoxLayout( resultToBox );
+  resultToBoxLayout->setSpacing( KDialog::spacingHint() );
+  resultToBoxLayout->setMargin( KDialog::marginHint() );
   resultToBoxLayout->setAlignment( Qt::AlignTop );
 
   QLabel * destinationSheet=new QLabel(resultToBox,"destinationSheet");
@@ -257,7 +263,6 @@ SortDialog::SortDialog( View * parent,  const char * name,
            SLOT( firstRowHeaderChanged(int) ) );
   connect( orientationGroup, SIGNAL( pressed(int) ), this,
            SLOT( slotOrientationChanged(int) ) );
-
   init();
 }
 
@@ -511,174 +516,59 @@ void SortDialog::slotOrientationChanged(int id)
 
 void SortDialog::slotOk()
 {
-  m_pView->doc()->emitBeginOperation( false );
-
-  Orientation sortOrientation;
-  if (m_sortRow->isChecked())
-    sortOrientation=SortColumns;
-  else
-    sortOrientation=SortRows;
-
   Sheet * sheet = m_pView->activeSheet();
-  /*m_pView->doc()->map()->findSheet( m_outputSheet->currentText() );
-  if ( !sheet )
-  {
-    KMessageBox::error( this, i18n("The destination sheet does not exist.") );
-    m_outputSheet->setFocus();
-    m_tabWidget->setTabEnabled(m_page2, true);
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-    return;
-  }  */
+  
+  SortManipulator *sm = new SortManipulator ();
+  sm->setSheet (sheet);
 
-  /*if ( !outputPoint.isValid() || outputPoint.isSheetKnown() )
-  {
-    KMessageBox::error( this, i18n("The destination cell does not exist.") );
-    m_outputCell->setFocus();
-    m_tabWidget->setTabEnabled(m_page2, true);
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-    return;
-  }*/
-  //outputPoint.setSheet(sheet);
+  // set parameters
+  sm->setSortRows (m_sortRow->isChecked());
+  sm->setSkipFirst (m_firstRowOrColHeader->isChecked());
+  sm->setCaseSensitive (m_respectCase->isChecked());
+  sm->setCopyFormat (m_copyLayout->isChecked());
 
-  QRect sortArea = sourceArea();
-  Point outputPoint;
-    outputPoint.setPos(sortArea.topLeft());
-    outputPoint.setSheet(sheet);
-  bool hasHeader=m_firstRowOrColHeader->isChecked();
-
-  if ( hasHeader )
-  {
-    if (sortOrientation == SortColumns)
-    {
-        sortArea.setLeft( sortArea.left()+1 );
-        outputPoint.setColumn( outputPoint.column()+1 );
-    }
-    else
-    {
-        sortArea.setTop( sortArea.top()+1 );
-        outputPoint.setRow( outputPoint.row()+1 );
-    }
-  }
-
-  /*if ( sortArea.topLeft() != outputPoint.pos() )
-  {
-    int h = outputPoint.pos().y() + sortArea.height();
-    int w = outputPoint.pos().x() + sortArea.width();
-
-    if ( sortArea.contains(outputPoint.pos())
-         || ( w >= sortArea.left() && w <= sortArea.right() )
-         || ( h >= sortArea.top()  && h <= sortArea.bottom() ) )
-    {
-      KMessageBox::error( this, i18n("If the destination and source regions are different, they must not overlap.") );
-      m_outputCell->setFocus();
-      m_pView->slotUpdateView( m_pView->activeSheet() );
-      // TODO: set right tab
-      return;
-    }
-  }*/
-
-  int key1 = 1;
-  int key2 = 0;
-  int key3 = 0;
-  QStringList * firstKey = 0;
-  Sheet::SortingOrder order1;
-  Sheet::SortingOrder order2;
-  Sheet::SortingOrder order3;
-
-  order1 = ( m_sortOrder1->currentIndex() == 0 ? Sheet::Increase
-             : Sheet::Decrease );
-  order2 = ( m_sortOrder2->currentIndex() == 0 ? Sheet::Increase
-             : Sheet::Decrease );
-  order3 = ( m_sortOrder3->currentIndex() == 0 ? Sheet::Increase
-             : Sheet::Decrease );
-
-  if ( m_sortRow->isChecked() )
-  {
-    key1 = m_sortKey1->currentIndex() + sortArea.top();
-    if (m_sortKey2->currentIndex() > 0)
-      key2 = m_sortKey2->currentIndex() + sortArea.top() - 1; // cause there is "None"
-    if (m_sortKey3->currentIndex() > 0)
-      key3 = m_sortKey3->currentIndex() + sortArea.top() - 1; // cause there is "None"
-  }
-  else
-  {
-    key1 = m_sortKey1->currentIndex() + sortArea.left();
-    if (m_sortKey2->currentIndex() > 0)
-      key2 = m_sortKey2->currentIndex() + sortArea.left() - 1; // cause there is "None"
-    if (m_sortKey3->currentIndex() > 0)
-      key3 = m_sortKey3->currentIndex() + sortArea.left() - 1; // cause there is "None"
-
-  }
-  /*
-  if (m_firstRowOrColHeader->isChecked())
-    {
-      if (key1 >= 0)
-        ++key1;
-      if (key2 > 0)
-        ++key2;
-      if (key3 > 0)
-        ++key3;
-    }*/
+  // retrieve sorting order
+  bool sortAsc1 = (m_sortOrder1->currentIndex() == 0);
+  bool sortAsc2 = (m_sortOrder2->currentIndex() == 0);
+  bool sortAsc3 = (m_sortOrder3->currentIndex() == 0);
+  int sort1 = m_sortKey1->currentIndex();
+  int sort2 = m_sortKey2->currentIndex() - 1;  // first one is None
+  int sort3 = m_sortKey3->currentIndex() - 1;  // first one is None
+  // remove duplicates
+  if (sort1 == sort2) sort2 = -1;
+  if (sort1 == sort3) sort3 = -1;
+  if (sort2 == sort3) sort3 = -1;
+  
+  // set sorting order
+  sm->addSortBy (sort1, sortAsc1);
+  if (sort2 >= 0) sm->addSortBy (sort2, sortAsc2);
+  if (sort3 >= 0) sm->addSortBy (sort3, sortAsc3);
 
   if ( m_useCustomLists->isChecked() )
   {
-    firstKey = new QStringList();
+    // add custom list if any
+    QStringList clist;
     QString list = m_customList->currentText();
     QString tmp;
     int l = list.length();
-    for ( int i = 0; i < l; ++i )
+    for (int i = 0; i < l; ++i)
     {
-      if ( list[i] == ',' )
+      if (list[i] == ',')
       {
-        firstKey->append( tmp.trimmed() );
+        clist.append (tmp.trimmed());
         tmp = "";
       }
       else
         tmp += list[i];
     }
+    
+    sm->setUseCustomList (true);
+    sm->setCustomList (clist);
   }
+  sm->add (sourceArea());
+  sm->execute ();
 
-
-
-  if (key1 == key2)
-    key2 = 0;
-
-  if (key1 == key3)
-    key3 = 0;
-
-  if (key2 == 0 && key3 > 0)
-  {
-    key2 = key3;
-    key3 = 0;
-  }
-
-
-
-  if ( m_sortRow->isChecked() )
-  {
-    m_pView->activeSheet()->sortByRow( sortArea/*sourceArea*/, key1, key2, key3,
-                                       order1, order2, order3,
-                                       firstKey, m_copyLayout->isChecked(),
-                                       false /*m_firstRowOrColHeader->isChecked()*/,
-                                       outputPoint, m_respectCase->isChecked() );
-  }
-  else if (m_sortColumn->isChecked())
-  {
-    m_pView->activeSheet()->sortByColumn( sortArea /*sourceArea*/, key1, key2, key3,
-                                          order1, order2, order3,
-                                          firstKey, m_copyLayout->isChecked(),
-                                          false/*m_firstRowOrColHeader->isChecked()*/,
-                                          outputPoint, m_respectCase->isChecked() );
-  }
-  else
-  {
-    kDebug(36001) << "Err in radiobutton" << endl;
-  }
-
-  delete firstKey;
-  firstKey = 0;
-
-  m_pView->slotUpdateView( m_pView->activeSheet() );
+  m_pView->slotUpdateView (sheet);
   accept();
 }
 

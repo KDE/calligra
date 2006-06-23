@@ -3271,19 +3271,6 @@ void View::sortInc()
   sm->add (*d->selection);
   sm->execute ();
 
-  /*
-  doc()->emitBeginOperation( false );
-
-  // Entire row(s) selected ? Or just one row ?
-  if ( d->selection->isRowSelected() || range.top() == range.bottom() )
-    activeSheet()->sortByRow( range, range.top(), Sheet::Increase );
-  else
-    activeSheet()->sortByColumn( range, range.left(), Sheet::Increase );
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
-  */
-
   updateEditWidget();
 }
 
@@ -3307,19 +3294,6 @@ void View::sortDec()
   sm->add (*d->selection);
   sm->execute ();
 
-  /*
-  doc()->emitBeginOperation( false );
-
-    // Entire row(s) selected ? Or just one row ?
-  if ( d->selection->isRowSelected() || range.top() == range.bottom() )
-    activeSheet()->sortByRow( range, range.top(), Sheet::Decrease );
-  else
-    activeSheet()->sortByColumn( range, range.left(), Sheet::Decrease );
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
-  */
-  
   updateEditWidget();
 }
 
