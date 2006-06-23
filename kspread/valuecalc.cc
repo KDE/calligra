@@ -495,7 +495,7 @@ bool ValueCalc::naturalEqual (const Value &a, const Value &b, bool CS)
   if (!CS) {
     // not case sensitive -> convert strings to lowercase
     if (aa.isString()) aa = Value (aa.asString().toLower());
-    if (bb.isString()) bb = Value (aa.asString().toLower());
+    if (bb.isString()) bb = Value (bb.asString().toLower());
   }
   if (aa.allowComparison (bb)) return aa.equal (bb);
   return strEqual (aa, bb, CS);
@@ -508,7 +508,7 @@ bool ValueCalc::naturalGreater (const Value &a, const Value &b, bool CS)
   if (!CS) {
     // not case sensitive -> convert strings to lowercase
     if (aa.isString()) aa = Value (aa.asString().toLower());
-    if (bb.isString()) bb = Value (aa.asString().toLower());
+    if (bb.isString()) bb = Value (bb.asString().toLower());
   }
   if (aa.allowComparison (bb)) return aa.greater (bb);
   return strEqual (aa, bb, CS);

@@ -110,7 +110,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   //First row / column contains header toggle
   m_firstRowOrColHeader = new QCheckBox( layoutGroup );
   //m_firstRowOrColHeader->setText( i18n( "&First row contains headers" ) );
-  m_firstRowOrColHeader->setChecked(true);
+  m_firstRowOrColHeader->setChecked(false);
   
   layoutGroupLayout->addWidget (orientationGroup);
   layoutGroupLayout->addWidget (m_firstRowOrColHeader);
