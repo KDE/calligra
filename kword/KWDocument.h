@@ -849,7 +849,7 @@ protected:
     void loadTableStyleTemplates( const QDomElement &styles );
     void loadDefaultTableStyleTemplates();
     void loadDefaultTableTemplates();
-    void loadMasterPageStyle( const QString& masterPageName, KoOasisContext& context );
+    bool loadMasterPageStyle( const QString& masterPageName, KoOasisContext& context );
 
     void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
     void saveOasisCustomFied( KoXmlWriter &writer )const;
