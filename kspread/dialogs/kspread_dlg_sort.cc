@@ -71,6 +71,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   setObjectName( name );
   setModal( modal );
   setButtons( Ok|Cancel );
+  setDefaultButton (Ok);
 
   if ( !name )
     setObjectName( "SortDialog" );
