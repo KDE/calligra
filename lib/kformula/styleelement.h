@@ -28,12 +28,10 @@ KFORMULA_NAMESPACE_BEGIN
 class StyleElement : public SequenceElement {
     typedef SequenceElement inherited;
 public:
-    StyleElement( BasicElement* parent = 0 );
+	
+	enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
 
-    void setAbsoluteSize( double s );
-	void setRelativeSize( double s );
-    double getAbsoluteSize() const { return size; }
-	double getRelativeSize() const { return factor; }
+    StyleElement( BasicElement* parent = 0 );
 
     virtual void calcSizes( const ContextStyle& context,
 						    ContextStyle::TextStyle tstyle,
@@ -49,6 +47,12 @@ public:
 
 protected:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
+
+	void setSize( double s );
+	void setAbsoluteSize( double s );
+	void setRelativeSize( double s );
+	void setPixelSize( double s );
+	double getSizeFactor( const ContextStyle& context, double factor );
 
     void setCharStyle( CharStyle cs );
     CharStyle getCharStyle() { return style; }
@@ -67,11 +71,10 @@ protected:
 	bool customBackground() const { return custom_background; }
 
 private:
-	double getSizeFactor( const ContextStyle& context, double factor );
-	bool ownSize;
-	bool absoluteSize;
-    double size;
-	double factor;
+	double str2size( const QString& str, SizeType* st, uint index, SizeType type );
+	double getSize( const QString& str, SizeType* st );
+	SizeType size_type;
+	double size;
     CharStyle style;
 	bool custom_style;
     CharFamily family;
