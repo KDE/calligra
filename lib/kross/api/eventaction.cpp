@@ -47,15 +47,6 @@ const QString EventAction::getClassName() const
     return "Kross::Api::EventAction";
 }
 
-/*
-Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
-{
-    krossdebug( QString("=============> EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) );
-    //TODO
-    return 0;
-}
-*/
-
 Object::Ptr EventAction::getText(List::Ptr)
 {
     return new Variant(m_action->text());

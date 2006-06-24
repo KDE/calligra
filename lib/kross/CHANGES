@@ -4,8 +4,9 @@
 * Added krossdebug and krosswarning.
 * Integrated ProxyFunction's.
 * Python: Added unittest.
+* Removed Argument class.
 * Refactor of the tree-handling to improve the performance.
-* Removed Argument.
+* Tweaks on Object and Value to improve the performance.
 
 1.5.2
 * API: Fix possible crash in Manager::getInterpreternameForFile()

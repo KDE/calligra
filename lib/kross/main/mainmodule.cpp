@@ -78,7 +78,7 @@ bool MainModule::hasChild(const QString& name) const
 EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCString signal)
 {
     EventSignal* event = new EventSignal(name, sender, signal);
-    if(! addChild(event)) {
+    if(! addChild(name, event)) {
         krosswarning( QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) );
         return 0;
     }
@@ -88,7 +88,7 @@ EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCS
 EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCString slot)
 {
     EventSlot* event = new EventSlot(name, receiver, slot);
-    if(! addChild(event)) {
+    if(! addChild(name, event)) {
         krosswarning( QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) );
         return 0;
     }
@@ -98,7 +98,7 @@ EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCStr
 QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
     QtObject* qtobject = new QtObject(object, name);
-    if(! addChild(qtobject)) {
+    if(! addChild(name, qtobject)) {
         krosswarning( QString("Failed to add QObject name='%1'").arg(object->name()) );
         return 0;
     }
@@ -108,7 +108,7 @@ QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
     EventAction* event = new EventAction(name, action);
-    if(! addChild(event)) {
+    if(! addChild(name, event)) {
         krosswarning( QString("Failed to add KAction name='%1'").arg(action->name()) );
         return 0;
     }

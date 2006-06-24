@@ -60,16 +60,19 @@ PythonExtension::~PythonExtension()
     delete m_proxymethod;
 }
 
+#if 0
 Py::Object PythonExtension::str()
 {
-    QString s = m_object->getName();
-    return toPyObject(s.isEmpty() ? m_object->getClassName() : s);
+    Kross::Api::Callable* callable = dynamic_cast< Kross::Api::Callable* >(m_object);
+    QString s = callable ? callable->getName() : m_object->getClassName();
+    return toPyObject(s.isEmpty() ?  : s);
 }
 
 Py::Object PythonExtension::repr()
 {
     return toPyObject( m_object->toString() );
 }
+#endif
 
 Py::Object PythonExtension::getattr(const char* n)
 {

@@ -22,8 +22,8 @@
 
 using namespace Kross::Api;
 
-List::List(QValueList<Object::Ptr> value, const QString& name)
-    : Value< List, QValueList<Object::Ptr> >(value, name)
+List::List(QValueList<Object::Ptr> value)
+    : Value< List, QValueList<Object::Ptr> >(value)
 {
 }
 

@@ -70,7 +70,7 @@ KexiAppModule::KexiAppModule(Kross::Api::Manager* manager)
         if(mainwinqtobject) {
             ::KexiMainWindow* mainwin = dynamic_cast< ::KexiMainWindow* >( mainwinqtobject->getObject() );
             if(mainwin) {
-                addChild( new Kross::Api::Variant(KROSS_KEXIAPP_VERSION), "version" );
+                addChild( "version", new Kross::Api::Variant(KROSS_KEXIAPP_VERSION) );
                 addChild( new KexiAppMainWindow(mainwin) );
                 return;
             }

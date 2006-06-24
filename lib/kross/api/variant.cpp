@@ -24,8 +24,8 @@
 
 using namespace Kross::Api;
 
-Variant::Variant(const QVariant& value, const QString& name)
-    : Value<Variant, QVariant>(value, name)
+Variant::Variant(const QVariant& value)
+    : Value<Variant, QVariant>(value)
 {
 }
 
@@ -135,10 +135,12 @@ bool Variant::toBool(Object::Ptr object)
 
 QStringList Variant::toStringList(Object::Ptr object)
 {
-    if(object->getClassName() == "Kross::Api::List") {
+    List* list = dynamic_cast< List* >( object.data() );
+    if(list) {
         QStringList l;
-        QValueList<Object::Ptr> list = Object::fromObject<List>( object.data() )->getValue();
-        for(QValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+        QValueList<Object::Ptr> valuelist = list->getValue();
+        QValueList<Object::Ptr>::Iterator it(valuelist.begin()), end(valuelist.end());
+        for(; it != end; ++it)
             l.append( toString(*it) );
         return l;
     }
@@ -150,10 +152,12 @@ QStringList Variant::toStringList(Object::Ptr object)
 
 QValueList<QVariant> Variant::toList(Object::Ptr object)
 {
-    if(object->getClassName() == "Kross::Api::List") {
+    List* list = dynamic_cast< List* >( object.data() );
+    if(list) {
         QValueList<QVariant> l;
-        QValueList<Object::Ptr> list = Object::fromObject<List>( object.data() )->getValue();
-        for(QValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+        QValueList<Object::Ptr> valuelist = list->getValue();
+        QValueList<Object::Ptr>::Iterator it(valuelist.begin()), end(valuelist.end());
+        for(; it != end; ++it)
             l.append( toVariant(*it) );
         return l;
     }

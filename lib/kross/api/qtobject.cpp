@@ -45,13 +45,13 @@ QtObject::QtObject(QObject* object, const QString& name)
     QStrList slotnames = m_object->metaObject()->slotNames(false);
     for(char* c = slotnames.first(); c; c = slotnames.next()) {
         QCString s = c;
-        addChild( new EventSlot(s, object, s) );
+        addChild(s, new EventSlot(s, object, s) );
     }
 
     QStrList signalnames = m_object->metaObject()->signalNames(false);
     for(char* c = signalnames.first(); c; c = signalnames.next()) {
         QCString s = c;
-        addChild( new EventSignal(s, object, s) );
+        addChild(s, new EventSignal(s, object, s) );
     }
 
     // Add functions to wrap QObject methods into callable

@@ -66,6 +66,7 @@ namespace Kross { namespace Python {
              */
             virtual ~PythonExtension();
 
+#if 0
             /**
              * Overloaded method to return the string-representation
              * of this object.
@@ -81,6 +82,7 @@ namespace Kross { namespace Python {
              * \return A string representation of the value.
              */
             virtual Py::Object repr();
+#endif
 
             /**
              * Overloaded method to handle attribute calls

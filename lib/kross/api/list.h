@@ -54,9 +54,8 @@ namespace Kross { namespace Api {
              *
              * \param value The list of \a Object instances this
              *        list has initialy.
-             * \param name A name this list has.
              */
-            List(QValueList<Object::Ptr> value = QValueList<Object::Ptr>(), const QString& name = "list");
+            List(QValueList<Object::Ptr> value = QValueList<Object::Ptr>());
 
             /**
              * Destructor.

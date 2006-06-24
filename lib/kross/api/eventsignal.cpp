@@ -62,5 +62,5 @@ Object::Ptr EventSignal::call(const QString& /*name*/, KSharedPtr<List> argument
     m_sender->qt_emit(signalid, uo); // emit the signal
     delete [] uo;
 
-    return new Variant(true, "Kross::Api::EventSignal::Bool");
+    return new Variant( QVariant(true,0) );
 }

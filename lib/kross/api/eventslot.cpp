@@ -62,7 +62,7 @@ Object::Ptr EventSlot::call(const QString& /*name*/, List::Ptr arguments)
     m_receiver->qt_invoke(slotid, uo); // invoke the slot
     delete [] uo;
 
-    return new Variant(true, "Kross::Api::EventSlot::Bool");
+    return new Variant( QVariant(true,0) );
 }
 
 /*
