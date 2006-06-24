@@ -1821,9 +1821,13 @@ bool SequenceElement::buildMathMLChild( QDomNode node )
                 return false;
             }
         }
+        else {
+            return false;
+        }
+        parse();
+        return true;
     }
-    parse();
-    return true;
+    return false;
 }
 
 
