@@ -433,6 +433,15 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
     /**
+     * Returns if the SequenceElement could be constructed from the nodes first child.
+     * The node name must match the given name.
+     *
+     * This is a service for all subclasses that contain children.
+     */
+    bool buildChild( SequenceElement* child, QDomNode node, QString name );
+
+
+    /**
      * Reads our attributes from the MathML element.
      * Returns false if it failed.
      */
@@ -444,15 +453,6 @@ protected:
      * Returns false if it failed.
      */
 	virtual bool readContentFromMathMLDom(QDomNode& node);
-
-
-    /**
-     * Returns if the SequenceElement could be constructed from the nodes first child.
-     * The node name must match the given name.
-     *
-     * This is a service for all subclasses that contain children.
-     */
-    bool buildChild( SequenceElement* child, QDomNode node, QString name );
 
 
     /**
