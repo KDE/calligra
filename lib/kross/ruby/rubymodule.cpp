@@ -19,8 +19,6 @@
 
 #include "rubymodule.h"
 
-#include <api/object.h>
-
 #include "rubyconfig.h"
 #include "rubyextension.h"
 
@@ -31,18 +29,18 @@ namespace Ruby {
 class RubyModulePrivate {
     friend class RubyModule;
     /// The \a Kross::Api::Module this RubyExtension wraps.
-    Kross::Api::Module* m_module;
+    Kross::Api::Module::Ptr m_module;
 
 };
 
-RubyModule::RubyModule(Kross::Api::Module* mod, QString modname) : d(new RubyModulePrivate)
+RubyModule::RubyModule(Kross::Api::Module::Ptr mod, QString modname) : d(new RubyModulePrivate)
 {
     d->m_module = mod;
     modname = modname.left(1).upper() + modname.right(modname.length() - 1 );
     krossdebug(QString("Module: %1").arg(modname));
     VALUE rmodule = rb_define_module(modname.ascii());
     rb_define_module_function(rmodule,"method_missing",  (VALUE (*)(...))RubyModule::method_missing, -1);
-    VALUE rm = RubyExtension::toVALUE((Kross::Api::Object*)mod);
+    VALUE rm = RubyExtension::toVALUE( mod.data() );
     rb_define_const(rmodule, "MODULEOBJ", rm);
 }
 

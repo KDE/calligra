@@ -337,10 +337,9 @@ VALUE RubyExtension::toVALUE(const QVariant& variant)
 
 VALUE RubyExtension::toVALUE(Kross::Api::Object::Ptr object)
 {
-    if(! object) {
+    if(! object.data()) {
         return 0;
     }
-
     if(object->getClassName() == "Kross::Api::Variant") {
         QVariant v = static_cast<Kross::Api::Variant*>( object.data() )->getValue();
         return toVALUE(v);
