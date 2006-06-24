@@ -24,14 +24,20 @@
 #include <kspread_map.h>
 #include <kspread_sheet.h>
 
-#include <QList>
-
 namespace Kross { namespace KSpreadCore {
 
-Doc::Doc(KSpread::Doc* doc) : Kross::Api::Class<Doc>("KSpreadDocument"), m_doc(doc) {
-    this->addFunction0< Sheet >("getName", this, &Doc::currentSheet);
-    this->addFunction1< Sheet, Kross::Api::Variant >("sheetByName", this, &Doc::sheetByName);
-    this->addFunction0< Kross::Api::Variant >("sheetNames", this, &Doc::sheetNames);
+Doc::Doc(KSpread::Doc* doc)
+	: Kross::Api::Class<Doc>("KSpreadDocument"), m_doc(doc)
+{
+/*
+	this->addFunction0< Sheet >("getName", this, &Doc::currentSheet);
+
+	this->addFunction1< Sheet, Kross::Api::Variant >("sheetByName", this, &Doc::sheetByName);
+	this->addFunction0< Kross::Api::Variant >("sheetNames", this, &Doc::sheetNames);
+
+	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("loadNativeXML", this, &Doc::loadNativeXML);
+	this->addFunction0< Kross::Api::Variant >("saveNativeXML", this, &Doc::saveNativeXML);
+*/
 }
 
 Doc::~Doc() {
@@ -39,32 +45,39 @@ Doc::~Doc() {
 }
 
 const QString Doc::getClassName() const {
-    return "Kross::KSpreadCore::Doc";
+	return "Kross::KSpreadCore::Doc";
 }
 
 Sheet* Doc::currentSheet()
 {
-    return new Sheet(m_doc->displaySheet(), m_doc);
+	return new Sheet(m_doc->displaySheet(), m_doc);
 }
 
 Sheet* Doc::sheetByName(const QString& name)
 {
-    foreach ( KSpread::Sheet* sheet, m_doc->map()->sheetList() )
-    {
-        if(sheet->sheetName() == name)
-            return new Sheet(sheet, m_doc);
-    }
-    return 0;
+	foreach ( KSpread::Sheet* sheet, m_doc->map()->sheetList() )
+		if(sheet->sheetName() == name)
+			return new Sheet(sheet, m_doc);
+	return 0;
 }
 
 QStringList Doc::sheetNames()
 {
-    QStringList names;
-    foreach ( KSpread::Sheet* sheet, m_doc->map()->sheetList() )
-    {
-        names.append( sheet->sheetName() );
-    }
-    return names;
+	QStringList names;
+	foreach ( KSpread::Sheet* sheet, m_doc->map()->sheetList() )
+		names.append( sheet->sheetName() );
+	return names;
+}
+
+bool Doc::loadNativeXML(const QString& xml) {
+	QDomDocument doc;
+	if(! doc.setContent(xml, true))
+		return false;
+	return m_doc->loadXML(0, doc);
+}
+
+QString Doc::saveNativeXML() {
+	return m_doc->saveXML().toString(2);
 }
 
 }

@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "krs_color.h"
 #include "krs_cell.h"
 
 #include <kspread_sheet.h>
@@ -29,101 +28,161 @@
 
 namespace Kross { namespace KSpreadCore {
 
-Cell::Cell(KSpread::Cell* cell, KSpread::Sheet* sheet, uint col, uint row) : Kross::Api::Class<Cell>("KSpreadCell"), m_cell(cell), m_sheet(sheet), m_col(col), m_row(row) {
+Cell::Cell(KSpread::Cell* cell, KSpread::Sheet* sheet, uint col, uint row)
+	: Kross::Api::Class<Cell>("KSpreadCell"), m_cell(cell), m_sheet(sheet), m_col(col), m_row(row)
+{
+/*
+	this->addFunction0< Kross::Api::Variant >("value", this, &Cell::value);
+	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("setValue", this, &Cell::setValue);
 
-    this->addFunction0< Kross::Api::Variant >("value", this, &Cell::value);
-    this->addFunction0< Kross::Api::Variant >("text", this, &Cell::text);
-    this->addFunction1< void, Kross::Api::Variant >("setText", this, &Cell::setText);
+	this->addFunction0< Kross::Api::Variant >("name", this, &Cell::name);
+	this->addFunction0< Kross::Api::Variant >("fullName", this, &Cell::fullName);
 
-    //TODO
-    //this->addFunction0< void, Kross::Api::Variant >("setTextColor", this, &Cell::setTextColor);
-    //this->addFunction0< void, Kross::Api::Variant >("setBackgroundColor", this, &Cell::setBackgroundColor);
+	this->addFunction0< Kross::Api::Variant >("comment", this, &Cell::comment);
+	this->addFunction1< void, Kross::Api::Variant >("setComment", this, &Cell::setComment);
+
+	this->addFunction0< Kross::Api::Variant >("getFormatString", this, &Cell::getFormatString);
+	this->addFunction1< void, Kross::Api::Variant >("setFormatString", this, &Cell::setFormatString);
+
+	this->addFunction0< Kross::Api::Variant >("text", this, &Cell::text);
+	this->addFunction1< void, Kross::Api::Variant >("setText", this, &Cell::setText);
+
+	this->addFunction0< Kross::Api::Variant >("textColor", this, &Cell::textColor);
+	this->addFunction1< void, Kross::Api::Variant >("setTextColor", this, &Cell::setTextColor);
+	this->addFunction0< Kross::Api::Variant >("backgroundColor", this, &Cell::backgroundColor);
+	this->addFunction1< void, Kross::Api::Variant >("setBackgroundColor", this, &Cell::setBackgroundColor);
+*/
 }
 
 Cell::~Cell() {
 }
 
 const QString Cell::getClassName() const {
-    return "Kross::KSpreadCore::Cell";
+    return "Kross::KSpreadCore::KSpreadCell";
+}
+
+QVariant Cell::toVariant(const KSpread::Value& value)
+{
+	//Should we use following value-format enums here?
+	//fmt_None, fmt_Boolean, fmt_Number, fmt_Percent, fmt_Money, fmt_DateTime, fmt_Date, fmt_Time, fmt_String
+
+	switch(value.type()) {
+		case KSpread::Value::Empty:
+			return QVariant();
+		case KSpread::Value::Boolean:
+			return QVariant( value.asBoolean() );
+		case KSpread::Value::Integer:
+			return static_cast<qint64>(value.asInteger());
+		case KSpread::Value::Float:
+			return (float)value.asFloat();
+		case KSpread::Value::String:
+			return value.asString();
+		case KSpread::Value::Array: {
+			QList<QVariant> colarray;
+			for(uint j = 0; j < value.rows(); j++) {
+				QList<QVariant> rowarray;
+				for( uint i = 0; i < value.columns(); i++) {
+					KSpread::Value v = value.element(i,j);
+					rowarray.append( toVariant(v) );
+				}
+				colarray.append(rowarray);
+			}
+			return colarray;
+		} break;
+		case KSpread::Value::CellRange:
+			//FIXME: not yet used
+			return QVariant();
+		case KSpread::Value::Error:
+			return QVariant();
+	}
+	return QVariant();
 }
 
 QVariant Cell::value() {
-    KSpread::Value value = m_cell->value();
-    switch(value.type()) {
-	case KSpread::Value::Empty:
-            return QVariant();
-	case KSpread::Value::Boolean:
-            return QVariant(value.asBoolean(),0);
-	case KSpread::Value::Integer:
-            return static_cast<qint64>(value.asInteger());
-	case KSpread::Value::Float:
-            return (float)value.asFloat();
-	case KSpread::Value::String:
-            return value.asString();
-	case KSpread::Value::Array:
-	    //FIXME
-	    /*
-            Kross::Api::List* array = new Kross::Api::List;
-            for( uint j = 0; j < value.rows(); j++)
-            {
-                        Kross::Api::List* row = new Kross::Api::List;
-                        for( uint i = 0; i < value.columns(); i++)
-                        {
-                                    KSpread::Value v = value.element(i,j);
-                                    row->append(convertToKrossApiVariant(v));
-                        }
-                        array->append(row);
-            }
-            return array;
-	    */
-	case KSpread::Value::CellRange:
-	    //FIXME: not yet used
-            return QVariant();
-	case KSpread::Value::Error:
-            return QVariant();
-    }
-    return QVariant();
+	return toVariant( m_cell->value() );
+}
+
+bool Cell::setValue(const QVariant& value) {
+	KSpread::Value v = m_cell->value();
+	switch(value.type()) {
+		case QVariant::Bool: v.setValue( value.toBool() ); break;
+		case QVariant::ULongLong: v.setValue( (long)value.toLongLong() ); break;
+		case QVariant::Int: v.setValue( value.toInt() ); break;
+		case QVariant::Double: v.setValue( value.toDouble() ); break;
+		case QVariant::String: v.setValue( value.toString() ); break;
+		case QVariant::Date: v.setValue( value.toDate() ); break;
+		case QVariant::Time: v.setValue( value.toTime() ); break;
+		case QVariant::DateTime: v.setValue( value.toDateTime() ); break;
+		default: return false;
+	}
+	return true;
+}
+
+const QString Cell::name() const {
+	return m_cell->name();
+}
+
+const QString Cell::fullName() const {
+	return m_cell->fullName();
+}
+
+const QString Cell::comment() const {
+	return m_cell->format()->comment(m_col, m_row);
+}
+
+void Cell::setComment(const QString& c) {
+	return m_cell->format()->setComment(c);
+}
+
+const QString Cell::getFormatString() const {
+	return m_cell->format()->getFormatString(m_col, m_row);
+}
+
+void Cell::setFormatString(const QString& format) {
+	m_cell->format()->setFormatString(format);
 }
 
 const QString Cell::text() const {
-    return m_cell->text();
+	return m_cell->text();
 }
 
 bool Cell::setText(const QString& text, bool asString) {
 
-    //FIXME: there is some problem with asString parameter, when it's set
-    //to true KSpread says: ASSERT: "f" in dependencies.cc (621)
-    //kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
+	//FIXME: there is some problem with asString parameter, when it's set
+	//to true KSpread says: ASSERT: "f" in dependencies.cc (621)
+	//kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
 
-    KSpread::ProtectedCheck prot;
-    prot.setSheet (m_sheet);
-    prot.add (QPoint (m_col, m_row));
-    if (prot.check())
-        return false;
+	KSpread::ProtectedCheck prot;
+	prot.setSheet (m_sheet);
+	prot.add (QPoint (m_col, m_row));
+	if (prot.check())
+	return false;
 
-    KSpread::DataManipulator *dm = new KSpread::DataManipulator ();
-    dm->setSheet (m_sheet);
-    dm->setValue (text);
-    dm->setParsing (!asString);
-    dm->add (QPoint (m_col, m_row));
-    dm->execute ();
+	KSpread::DataManipulator *dm = new KSpread::DataManipulator ();
+	dm->setSheet (m_sheet);
+	dm->setValue (text);
+	dm->setParsing (!asString);
+	dm->add (QPoint (m_col, m_row));
+	dm->execute ();
 
-    return true;
+	return true;
 }
 
-#if 0
-Kross::Api::Object::Ptr Cell::setTextColor(Kross::Api::List::Ptr args) {
-    Color* c = (Color*)args->item(0).data();
-    m_cell->format()->setTextColor(c->toQColor());
-    return Kross::Api::Object::Ptr();
+const QString Cell::textColor() {
+	return m_cell->format()->textColor(m_col, m_row).name();
 }
 
-Kross::Api::Object::Ptr Cell::setBackgroundColor(Kross::Api::List::Ptr args) {
-    Color* c = (Color*)args->item(0).data();
-    m_cell->format()->setBgColor(c->toQColor());
-    return Kross::Api::Object::Ptr();
+void Cell::setTextColor(const QString& textcolor) {
+	m_cell->format()->setTextColor( QColor(textcolor) );
 }
-#endif
+
+const QString Cell::backgroundColor() {
+	return m_cell->format()->bgColor(m_col, m_row).name();
+}
+
+void Cell::setBackgroundColor(const QString& backgroundcolor) {
+	m_cell->format()->setBgColor( QColor(backgroundcolor) );
+}
 
 }
 }

@@ -9,8 +9,7 @@ set(krosskspreadcore_PART_SRCS
    kspreadcoremodule.cpp 
    krs_doc.cpp 
    krs_sheet.cpp 
-   krs_cell.cpp 
-   krs_color.cpp )
+   krs_cell.cpp )
 
 kde4_automoc(${krosskspreadcore_PART_SRCS})
 

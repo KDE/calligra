@@ -25,7 +25,6 @@
 #include <api/qtobject.h>
 #include <main/manager.h>
 
-#include "krs_color.h"
 #include "krs_doc.h"
 
 extern "C"
@@ -43,25 +42,14 @@ extern "C"
 
 using namespace Kross::KSpreadCore;
 
-KSpreadCoreFactory::KSpreadCoreFactory() : Kross::Api::Event<KSpreadCoreFactory>("KSpreadCoreFactory")
-{
-    addFunction("newRGBColor", &KSpreadCoreFactory::newRGBColor);
-}
-
-Kross::Api::Object::Ptr KSpreadCoreFactory::newRGBColor(Kross::Api::List::Ptr args)
-{
-    return Kross::Api::Object::Ptr(new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Rgb));
-}
-
-
 KSpreadCoreModule::KSpreadCoreModule(Kross::Api::Manager* manager)
-    : Kross::Api::Module("kspreadcore") , m_manager(manager), m_factory(new KSpreadCoreFactory())
+    : Kross::Api::Module("kspreadcore") , m_manager(manager)
 {
     QMap<QString, Object::Ptr> children = manager->getChildren();
     kDebug() << " there are " << children.size() << endl;
     for(QMap<QString, Object::Ptr>::const_iterator it = children.begin(); it != children.end(); it++)
     {
-        kDebug() << it.key() << " " << it.data() << endl;
+        kDebug() << it.key() << " " << it.value() << endl;
     }
 
     // Wrap doc
@@ -81,22 +69,10 @@ KSpreadCoreModule::KSpreadCoreModule(Kross::Api::Manager* manager)
 
 KSpreadCoreModule::~KSpreadCoreModule()
 {
-    delete m_factory;
 }
 
 
 const QString KSpreadCoreModule::getClassName() const
 {
     return "Kross::KSpreadCore::KSpreadCoreModule";
-}
-
-Kross::Api::Object::Ptr KSpreadCoreModule::call(const QString& name, Kross::Api::List::Ptr arguments)
-{
-    kDebug() << "KSpreadCoreModule::call" << name << endl;
-    if( m_factory->isAFunction(name))
-    {
-        return m_factory->call(name, arguments);
-    } else {
-        return Kross::Api::Module::call(name, arguments);
-    }
 }

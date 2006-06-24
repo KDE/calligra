@@ -24,44 +24,83 @@
 
 #include <api/class.h>
 
+#include <QList>
+#include <QDomDocument>
+
 namespace Kross { namespace KSpreadCore {
 
 class Sheet;
 
+/**
+ * The KSpread document.
+ *
+ * Example (in Ruby) :
+ * @code
+ * doc = krosskspreadcore::get("KSpreadDocument")
+ * @endcode
+ */
 class Doc : public Kross::Api::Class<Doc>
 {
-    public:
-        explicit Doc(KSpread::Doc* doc);
-        virtual ~Doc();
-        virtual const QString getClassName() const;
-    private:
-	/**
-	 * This function return the Sheet currently active in this Doc.
-	 *
-	 * Example (in Ruby) :
-	 * @code
-	 * doc = krosskspreadcore::get("KSpreadDocument")
-	 * sheet = doc.currentSheet()
-	 * @endcode
-	 */
-        Sheet* currentSheet();
-	/**
-	 * This function return a Sheet by name.
-	 *
-	 * Example (in Ruby) :
-	 * @code
-	 * doc = krosskspreadcore::get("KSpreadDocument")
-	 * sheet = doc.sheetByName("foosheet")
-	 * @endcode
-	 */
-        Sheet* sheetByName(const QString& name);
-	/**
-	 * This function returns an array with the sheet names
-	 * Example (in Ruby) : TODO
-	 */
-        QStringList sheetNames();
-    private:
-	KSpread::Doc* m_doc;
+	public:
+		explicit Doc(KSpread::Doc* doc);
+		virtual ~Doc();
+		virtual const QString getClassName() const;
+	private:
+
+		/**
+		* This function returns the Sheet currently active in this
+		* document.
+		*
+		* Example (in Ruby) :
+		* @code
+		* doc = krosskspreadcore::get("KSpreadDocument")
+		* sheet = doc.currentSheet()
+		* @endcode
+		*/
+		Sheet* currentSheet();
+
+		/**
+		* This function returns a Sheet by name.
+		*
+		* Example (in Ruby) :
+		* @code
+		* doc = krosskspreadcore::get("KSpreadDocument")
+		* sheet = doc.sheetByName("foosheet")
+		* @endcode
+		*/
+		Sheet* sheetByName(const QString& name);
+
+		/**
+		* This function returns an array with the sheet names
+		*
+		* Example (in Ruby) :
+		* @code
+		* doc = krosskspreadcore::get("KSpreadDocument")
+		* sheetnames = doc.sheetNames()
+		* sheet = doc.sheetByName( sheetnames[0] )
+		* @endcode
+		*/
+		QStringList sheetNames();
+
+		/**
+		* Loads the native XML document.
+		*/
+		bool loadNativeXML(const QString& xml);
+		/**
+		* Save and return the to a native document saved XML.
+		*/
+		QString saveNativeXML();
+
+#if 0
+		bool loadOpenDocXML(const QString& xml);
+		QString saveOpenDocXML();
+
+		bool loadOpenDocFile(const QString& file);
+		bool saveOpenDocFile(const QString& file) const;
+#endif
+
+	private:
+		KSpread::Doc* m_doc;
 };
 }
 }

@@ -73,7 +73,7 @@ KexiDB::DriverManager& KexiDBDriverManager::driverManager()
 
 Kross::Api::Object::Ptr KexiDBDriverManager::driverNames(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(driverManager().driverNames(), "Kross::KexiDB::DriverManager::driverNames::StringList");
+    return new Kross::Api::Variant(driverManager().driverNames());
 }
 
 Kross::Api::Object::Ptr KexiDBDriverManager::driver(Kross::Api::List::Ptr args)

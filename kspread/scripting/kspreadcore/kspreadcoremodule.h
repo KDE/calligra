@@ -33,36 +33,29 @@ namespace Kross { namespace Api {
 }}
 
 namespace Kross { namespace KSpreadCore {
+
     /**
-     * This class contains functions use to create new Kross object in a script
-     */
-    class KSpreadCoreFactory : public Kross::Api::Event<KSpreadCoreFactory>
-    {
-        public:
-            KSpreadCoreFactory();
-        private:
-            Kross::Api::Object::Ptr newRGBColor(Kross::Api::List::Ptr args);
-    };
-    /**
+     * The KSpreadCoreModule class implements a Kross::Api::Module to
+     * provide access to the KSpread functionality.
      *
+     * Example (in Ruby) :
+     * @code
+     * doc = krosskspreadcore::get("KSpreadDocument")
+     * sheet = doc.currentSheet()
+     * cell = sheet.cell(0, 0)
+     * cell.setValue("Hello World")
+     * @endcode
      */
     class KSpreadCoreModule : public Kross::Api::Module
     {
         public:
-            /**
-             * Constructor.
-             */
             KSpreadCoreModule(Kross::Api::Manager* manager);
-
-            /**
-             * Destructor.
-             */
             virtual ~KSpreadCoreModule();
-
-            /// \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
-            virtual Kross::Api::Object::Ptr call(const QString& name, Kross::Api::List::Ptr arguments);
+            //virtual Kross::Api::Object::Ptr call(const QString& name, Kross::Api::List::Ptr arguments);
         private:
+
+#if 0
             /**
              * This function return a new Color with the given RGB triplet
              * It takes three arguments :
@@ -77,11 +70,11 @@ namespace Kross { namespace KSpreadCore {
              * @endcode
              */
              Kross::Api::Object::Ptr newRGBColor(Kross::Api::List::Ptr);
+#endif
+
         private:
             Kross::Api::Manager* m_manager;
-            KSpreadCoreFactory* m_factory;
     };
-    
 
 }}
 
