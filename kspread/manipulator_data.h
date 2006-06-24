@@ -44,14 +44,6 @@ struct ADMStorage {
   FormatType format;
 };
 
-// the purpose of this class is to allow keeping a Format in a QMap without
-// having to use Format* (I'm lazy to write the memory-freeing code)
-struct FormatStorage {
-  FormatStorage () : format (0, 0) {};
-  FormatStorage (Sheet *s) : format (s, 0) {};
-  Format format;
-};
-
 class AbstractDataManipulator : public Manipulator {
   public:
     AbstractDataManipulator ();
@@ -84,12 +76,12 @@ class AbstractDFManipulator : public AbstractDataManipulator {
     void setChangeFormat (bool chf) { m_changeformat = chf; };
   protected:
     /** this method should return new format for a given cell */
-    virtual Format newFormat (Element *element, int col, int row) = 0;
+    virtual Format *newFormat (Element *element, int col, int row) = 0;
 
     /** preProcessing will store the old cell's data */
     virtual bool preProcessing ();
     
-    QMap<int, QMap<int, FormatStorage> > formats;
+    QMap<int, QMap<int, Format *> > formats;
     bool m_changeformat;
 };
 

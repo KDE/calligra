@@ -65,13 +65,15 @@ using namespace KSpread;
 
 Format::Format( Sheet * _sheet, Style * _style )
   : m_pSheet( _sheet ),
-    m_pStyle( _style ),
+    m_pStyle( 0 ),
     m_mask( 0 ),
     m_bNoFallBack( 0 ),
     m_flagsMask( 0 ),
     m_strComment( 0 ),
     m_pCell( 0 )
 {
+  // set the style, including proper ref counting
+  setStyle (_style);
 }
 
 Format::~Format()

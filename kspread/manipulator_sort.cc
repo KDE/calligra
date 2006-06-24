@@ -94,7 +94,7 @@ Value SortManipulator::newValue (Element *element, int col, int row,
   return val;
 }
 
-Format SortManipulator::newFormat (Element *element, int col, int row)
+Format *SortManipulator::newFormat (Element *element, int col, int row)
 {
   QRect range = element->rect();
   int colidx = col - range.left();
@@ -107,7 +107,7 @@ Format SortManipulator::newFormat (Element *element, int col, int row)
   }
  
   // have to return stored format, to avoid earlier calls disrupting latter ones
-  return formats[colidx][rowidx].format;
+  return formats[colidx][rowidx];
 }
 
 void SortManipulator::sort (Element *element)

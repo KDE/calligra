@@ -58,7 +58,7 @@ class KSPREAD_EXPORT SortManipulator : public AbstractDFManipulator {
   protected:
     virtual Value newValue (Element *element, int col, int row,
         bool *parse, FormatType *fmtType);
-    virtual Format newFormat (Element *element, int col, int row);
+    virtual Format *newFormat (Element *element, int col, int row);
 
     /** sort the data, filling the "sorted" structure */
     void sort (Element *element);

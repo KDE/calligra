@@ -117,6 +117,12 @@ AbstractDFManipulator::AbstractDFManipulator ()
 
 AbstractDFManipulator::~AbstractDFManipulator ()
 {
+  // delete all stored formats ...
+  QMap<int, QMap<int, Format *> >::iterator it1;
+  QMap<int, Format *>::iterator it2;
+  for (it1 = formats.begin(); it1 != formats.end(); ++it1)
+    for (it2 = (*it1).begin(); it2 != (*it1).end(); ++it2)
+      delete (*it2);
   formats.clear ();
 }
 
@@ -140,12 +146,10 @@ bool AbstractDFManipulator::process (Element* element)
       if (!cell->isDefault())
       {
         if (m_reverse) {
-          cell->format()->copy (formats[colidx][rowidx].format);
+          cell->format()->copy (*formats[colidx][rowidx]);
         }
         else {
-          Format f (m_sheet, 0);
-          f = newFormat (element, col, row);
-          cell->format()->copy (f);
+          cell->format()->copy (*newFormat (element, col, row));
         }
         cell->setLayoutDirtyFlag();
         cell->setDisplayDirtyFlag();
@@ -174,8 +178,8 @@ bool AbstractDFManipulator::preProcessing ()
         {
           int colidx = col - range.left();
           int rowidx = row - range.top();
-          FormatStorage f (m_sheet);
-          f.format.copy (*cell->format());
+          Format *f = new Format (m_sheet, 0);
+          f->copy (*cell->format());
           formats[colidx][rowidx] = f;
         }
       }
