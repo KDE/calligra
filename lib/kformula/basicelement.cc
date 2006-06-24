@@ -233,26 +233,6 @@ bool BasicElement::readContentFromDom(QDomNode&)
 }
 
 /**
- * Reads our attributes from the MathML element.
- * Returns false if it failed.
- */
-bool BasicElement::readAttributesFromMathMLDom(const QDomElement& )
-{
-    return true;
-}
-
-/**
- * Reads our content from the MathML node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
-bool BasicElement::readContentFromMathMLDom(QDomNode&)
-{
-    return true;
-}
-
-
-/**
  * Returns a SequenceElement constructed from the nodes first child
  * if the nodes name matches the given name.
  */
@@ -269,6 +249,25 @@ bool BasicElement::buildChild( SequenceElement* child, QDomNode node, QString na
         }
     }
     return false;
+}
+
+/**
+ * Reads our attributes from the MathML element.
+ * Returns false if it failed.
+ */
+bool BasicElement::readAttributesFromMathMLDom(const QDomElement& )
+{
+    return true;
+}
+
+/**
+ * Reads our content from the MathML node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool BasicElement::readContentFromMathMLDom(QDomNode&)
+{
+    return true;
 }
 
 QString BasicElement::toLatex()
