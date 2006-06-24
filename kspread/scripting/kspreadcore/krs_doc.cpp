@@ -29,7 +29,6 @@ namespace Kross { namespace KSpreadCore {
 Doc::Doc(KSpread::Doc* doc)
 	: Kross::Api::Class<Doc>("KSpreadDocument"), m_doc(doc)
 {
-/*
 	this->addFunction0< Sheet >("getName", this, &Doc::currentSheet);
 
 	this->addFunction1< Sheet, Kross::Api::Variant >("sheetByName", this, &Doc::sheetByName);
@@ -37,7 +36,6 @@ Doc::Doc(KSpread::Doc* doc)
 
 	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("loadNativeXML", this, &Doc::loadNativeXML);
 	this->addFunction0< Kross::Api::Variant >("saveNativeXML", this, &Doc::saveNativeXML);
-*/
 }
 
 Doc::~Doc() {

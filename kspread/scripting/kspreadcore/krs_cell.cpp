@@ -31,7 +31,6 @@ namespace Kross { namespace KSpreadCore {
 Cell::Cell(KSpread::Cell* cell, KSpread::Sheet* sheet, uint col, uint row)
 	: Kross::Api::Class<Cell>("KSpreadCell"), m_cell(cell), m_sheet(sheet), m_col(col), m_row(row)
 {
-/*
 	this->addFunction0< Kross::Api::Variant >("value", this, &Cell::value);
 	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("setValue", this, &Cell::setValue);
 
@@ -51,7 +50,6 @@ Cell::Cell(KSpread::Cell* cell, KSpread::Sheet* sheet, uint col, uint row)
 	this->addFunction1< void, Kross::Api::Variant >("setTextColor", this, &Cell::setTextColor);
 	this->addFunction0< Kross::Api::Variant >("backgroundColor", this, &Cell::backgroundColor);
 	this->addFunction1< void, Kross::Api::Variant >("setBackgroundColor", this, &Cell::setBackgroundColor);
-*/
 }
 
 Cell::~Cell() {
