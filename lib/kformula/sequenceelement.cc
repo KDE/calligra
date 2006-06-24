@@ -1793,11 +1793,37 @@ bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
  */
 bool SequenceElement::readContentFromMathMLDom(QDomNode& node)
 {
-    if (!BasicElement::readContentFromDom(node)) {
+    if (!BasicElement::readContentFromMathMLDom(node)) {
         return false;
     }
 
     return buildChildrenFromMathMLDom(children, node);
+}
+
+bool SequenceElement::buildMathMLChild( QDomNode node )
+{
+    if (node.isElement()) {
+        QDomElement e = node.toElement();
+        BasicElement* child = 0;
+        QString tag = e.tagName().lower();
+
+        child = creationStrategy->createElement(tag);
+        if (child != 0) {
+            child->setParent(this);
+            if (style != 0) {
+                child->setStyle(style);
+            }
+            if (child->buildFromMathMLDom(e)) {
+                children.append(child);
+            }
+            else {
+                delete child;
+                return false;
+            }
+        }
+    }
+    parse();
+    return true;
 }
 
 
