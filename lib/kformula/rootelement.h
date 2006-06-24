@@ -210,6 +210,20 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    /**
+     * Reads our attributes from the MathML element.
+     * Also checks whether it's a msqrt or mroot.
+     * Returns false if it failed.
+     */
+    virtual bool readAttributesFromMathMLDom(const QDomElement& element);
+
+    /**
+     * Reads our content from the MathML node. Sets the node to the next node
+     * that needs to be read.
+     * Returns false if it failed.
+     */
+    virtual bool readContentFromMathMLDom(QDomNode& node);
+
 private:
 
     class RootElementIndex : public ElementIndex {
@@ -241,6 +255,13 @@ private:
      * The point the artwork relates to.
      */
     LuPixelPoint rootOffset;
+
+	/**
+	 * Whether it is msqrt or mroot element. It is only used while reading
+	 * from MathML. When reading element contents we must know which of them
+	 * it is. After reading, hasIndex() should be used instead.
+	 */
+	bool square;
 };
 
 

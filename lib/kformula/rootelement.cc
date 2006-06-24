@@ -587,6 +587,56 @@ bool RootElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
+/**
+ * Reads our attributes from the MathML element.
+ * Also checks whether it's a msqrt or mroot.
+ * Returns false if it failed.
+ */
+bool RootElement::readAttributesFromMathMLDom(const QDomElement& element)
+{
+    if ( element.tagName().lower() == "mroot" )
+        square = false;
+    else
+        square = true;
+    return true;
+}
+
+
+/**
+ * Reads our content from the MathML node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool RootElement::readContentFromMathMLDom(QDomNode& node)
+{
+    if (!BasicElement::readContentFromMathMLDom(node)) {
+        return false;
+    }
+
+    if ( square ) {
+        // Any number of arguments are allowed
+        content->readContentFromMathMLDom( node );
+    }
+    else {
+        // Exactly two arguments are required
+        if ( !content->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
+            return false;
+        }
+        node = node.nextSibling();
+
+        index=new SequenceElement( this );
+        if ( !index->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty index in RootElement." << endl;
+            return false;
+        }
+    }
+
+    node = node.nextSibling();
+
+    return true;
+}
+
 QString RootElement::toLatex()
 {
     QString root;
