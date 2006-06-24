@@ -452,6 +452,32 @@ bool FractionElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
+/**
+ * Reads our content from the MathML node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool FractionElement::readContentFromMathMLDom(QDomNode& node)
+{
+    if (!BasicElement::readContentFromMathMLDom(node)) {
+        return false;
+    }
+
+    if ( !numerator->buildMathMLChild( node ) ) {
+        kdWarning( DEBUGID ) << "Empty numerator in FractionElement." << endl;
+        return false;
+    }
+    node = node.nextSibling();
+
+    if ( !denominator->buildMathMLChild( node ) ) {
+        kdWarning( DEBUGID ) << "Empty denominator in FractionElement." << endl;
+        return false;
+    }
+    node = node.nextSibling();
+
+    return true;
+}
+
 QString FractionElement::toLatex()
 {
     if ( withLine ) {

@@ -209,6 +209,13 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    /**
+     * Reads our content from the MathML node. Sets the node to the next node
+     * that needs to be read.
+     * Returns false if it failed.
+     */
+	virtual bool readContentFromMathMLDom(QDomNode& node);
+
 private:
 
     SequenceElement* numerator;
