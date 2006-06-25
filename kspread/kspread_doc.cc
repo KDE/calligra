@@ -344,13 +344,14 @@ void Doc::saveConfig()
         return;
     KConfig *config = Factory::global()->config();
     config->setGroup( "Parameters" );
-    config->writeEntry( "Zoom", m_zoom );
+    config->writeEntry( "Zoom", zoomInPercent() );
 
 }
 
 void Doc::initConfig()
 {
     KConfig *config = Factory::global()->config();
+    int zoom = 100;
 
     if( config->hasGroup("KSpread Page Layout" ))
     {
@@ -360,11 +361,8 @@ void Doc::initConfig()
     if( config->hasGroup("Parameters" ))
     {
         config->setGroup( "Parameters" );
-        // zoom factor must be multiplied by 100 for correct effect
-        m_zoom = config->readEntry( "Zoom", 1 ) * 100;
+        zoom = config->readEntry( "Zoom", 100 );
     }
-    else
-      m_zoom = 100;
 
     int undo=30;
     if(config->hasGroup("Misc" ) )
@@ -375,7 +373,7 @@ void Doc::initConfig()
     if(undo!=-1)
         setUndoRedoLimit(undo);
 
-    setZoomAndResolution( m_zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
+    setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
 int Doc::syntaxVersion() const
@@ -502,7 +500,7 @@ bool Doc::loadChildren( KoStore* _store )
 bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
   emitBeginOperation(true);
-  	bool result=saveOasisHelper( store, manifestWriter, SaveAll );
+    bool result=saveOasisHelper( store, manifestWriter, SaveAll );
   emitEndOperation();
 
   return result;
@@ -532,8 +530,8 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     //Check that temp file was successfully created
     if (contentTmpFile.status() != 0)
     {
-	    qWarning("Creation of temporary file to store document content failed.");
-	    return false;
+      qWarning("Creation of temporary file to store document content failed.");
+      return false;
     }
 
     contentTmpFile.setAutoDelete( true );
@@ -1271,23 +1269,23 @@ KSpellConfig * Doc::getKSpellConfig()
 {
     if (!d->spellConfig)
     {
-    	KSpellConfig ksconfig;
+      KSpellConfig ksconfig;
 
-    	KConfig *config = Factory::global()->config();
-    	if( config->hasGroup("KSpell kspread" ) )
-    	{
-        	config->setGroup( "KSpell kspread" );
-        	ksconfig.setNoRootAffix(config->readEntry ("KSpell_NoRootAffix", 0));
-        	ksconfig.setRunTogether(config->readEntry ("KSpell_RunTogether", 0));
-        	ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-        	ksconfig.setDictFromList(config->readEntry ("KSpell_DictFromList", false));
-        	ksconfig.setEncoding(config->readEntry ("KSpell_Encoding", int(KS_E_ASCII)));
-        	ksconfig.setClient(config->readEntry ("KSpell_Client", int(KS_CLIENT_ISPELL)));
-        	setKSpellConfig(ksconfig);
+      KConfig *config = Factory::global()->config();
+      if( config->hasGroup("KSpell kspread" ) )
+      {
+          config->setGroup( "KSpell kspread" );
+          ksconfig.setNoRootAffix(config->readEntry ("KSpell_NoRootAffix", 0));
+          ksconfig.setRunTogether(config->readEntry ("KSpell_RunTogether", 0));
+          ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+          ksconfig.setDictFromList(config->readEntry ("KSpell_DictFromList", false));
+          ksconfig.setEncoding(config->readEntry ("KSpell_Encoding", int(KS_E_ASCII)));
+          ksconfig.setClient(config->readEntry ("KSpell_Client", int(KS_CLIENT_ISPELL)));
+          setKSpellConfig(ksconfig);
 
-        	setDontCheckUpperWord(config->readEntry("KSpell_IgnoreUppercaseWords", false));
-        	setDontCheckTitleCase(config->readEntry("KSpell_IgnoreTitleCaseWords", false));
-    	}
+          setDontCheckUpperWord(config->readEntry("KSpell_IgnoreUppercaseWords", false));
+          setDontCheckTitleCase(config->readEntry("KSpell_IgnoreTitleCaseWords", false));
+      }
     }
   return d->spellConfig;
 }
@@ -1507,8 +1505,8 @@ void Doc::paintUpdates()
 }
 
 void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
-			   View* view,
-			   const Region& region)
+         View* view,
+         const Region& region)
 {
   //
   // Clip away children
@@ -1556,8 +1554,8 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
 
 
 void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
-		      View* view, const QRect &paintRegion,
-		      const Sheet* sheet)
+          View* view, const QRect &paintRegion,
+          const Sheet* sheet)
 {
   // Paint region has cell coordinates (col,row) while viewRegion has
   // world coordinates.  paintRegion is the cells to update and
@@ -1576,12 +1574,12 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
   KoPoint  dblCorner;
   if ( view == 0 ) //Most propably we are embedded and inactive, so no offset
     dblCorner = KoPoint( sheet->dblColumnPos( paintRegion.left() ),
-			 sheet->dblRowPos( paintRegion.top() ) );
+       sheet->dblRowPos( paintRegion.top() ) );
   else
     dblCorner = KoPoint( sheet->dblColumnPos( paintRegion.left() )
-			 - view->canvasWidget()->xOffset(),
-			 sheet->dblRowPos( paintRegion.top() )
-			 - view->canvasWidget()->yOffset() );
+       - view->canvasWidget()->xOffset(),
+       sheet->dblRowPos( paintRegion.top() )
+       - view->canvasWidget()->yOffset() );
   KoPoint dblCurrentCellPos( dblCorner );
 
   int regionBottom = paintRegion.bottom();
@@ -1629,16 +1627,16 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
         //paintBordersRight = true;
         paintBorder |= Cell::RightBorder;
       else if ( x == regionRight ) {
-	paintBorder |= Cell::RightBorder;
-	if ( cell->effRightBorderValue( x, y )
-	     < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-	  rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+  paintBorder |= Cell::RightBorder;
+  if ( cell->effRightBorderValue( x, y )
+       < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
       }
       else {
-	paintBorder |= Cell::RightBorder;
-	if ( cell->effRightBorderValue( x, y )
-	     < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-	  rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+  paintBorder |= Cell::RightBorder;
+  if ( cell->effRightBorderValue( x, y )
+       < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
       }
 
       // Similiar for other borders...
@@ -1646,15 +1644,15 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       if ( y >= KS_rowMax )
         paintBorder |= Cell::BottomBorder;
       else if ( y == regionBottom ) {
-	paintBorder |= Cell::BottomBorder;
-	if ( cell->effBottomBorderValue( x, y )
-	     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-	  bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+  paintBorder |= Cell::BottomBorder;
+  if ( cell->effBottomBorderValue( x, y )
+       < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+    bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
       else {
         paintBorder |= Cell::BottomBorder;
         if ( cell->effBottomBorderValue( x, y )
-	     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+       < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
           bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
 
@@ -1662,15 +1660,15 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       if ( x == 1 )
         paintBorder |= Cell::LeftBorder;
       else if ( x == regionLeft ) {
-	paintBorder |= Cell::LeftBorder;
-	if ( cell->effLeftBorderValue( x, y )
-	     < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-	  leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+  paintBorder |= Cell::LeftBorder;
+  if ( cell->effLeftBorderValue( x, y )
+       < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+    leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
       else {
         paintBorder |= Cell::LeftBorder;
         if ( cell->effLeftBorderValue( x, y )
-	     < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+       < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
           leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
 
@@ -1678,33 +1676,33 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       if ( y == 1 )
         paintBorder |= Cell::TopBorder;
       else if ( y == regionTop ) {
-	paintBorder |= Cell::TopBorder;
-	if ( cell->effTopBorderValue( x, y )
-	     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-	  topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+  paintBorder |= Cell::TopBorder;
+  if ( cell->effTopBorderValue( x, y )
+       < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+    topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
       else {
         paintBorder |= Cell::TopBorder;
         if ( cell->effTopBorderValue( x, y )
-	     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+       < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
           topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
 
 #if 0
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
-		       paintBordersRight, paintBordersBottom,
-		       paintBordersLeft, paintBordersTop,
-		       rightPen, bottomPen, leftPen, topPen,
-		       mergedCellsPainted, false );
+           paintBordersRight, paintBordersBottom,
+           paintBordersLeft, paintBordersTop,
+           rightPen, bottomPen, leftPen, topPen,
+           mergedCellsPainted, false );
 
       Cell::BorderSides highlightBorder=Cell::NoBorder;
       QPen highlightPen;
 #endif
 
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
-		       paintBorder,
-		       rightPen, bottomPen, leftPen, topPen,
-		       mergedCellsPainted );
+           paintBorder,
+           rightPen, bottomPen, leftPen, topPen,
+           mergedCellsPainted );
 
 
       dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
