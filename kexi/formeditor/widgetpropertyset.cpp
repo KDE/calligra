@@ -833,7 +833,7 @@ WidgetPropertySet::saveAlignProperty(const QString &property)
 
 	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(
 		(QWidget*)d->widgets.first() );
-	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : d->widgets.first();
+	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : (QWidget*)d->widgets.first();
 	int count = subwidget->metaObject()->findProperty("alignment", true);
 	const QMetaProperty *meta = subwidget->metaObject()->property(count, true);
 	subwidget->setProperty("alignment", meta->keysToValue(list));
