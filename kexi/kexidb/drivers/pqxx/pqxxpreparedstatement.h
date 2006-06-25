@@ -27,11 +27,11 @@
 #include <kexidb/preparedstatement.h>
 #include <kexidb/connection_p.h>
 
+namespace KexiDB 
+{
 /**
 	@author Adam Pigg <adam@piggz.co.uk>
 */
-namespace KexiDB 
-{
 class pqxxPreparedStatement : public PreparedStatement
 {
 	public:

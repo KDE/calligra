@@ -38,6 +38,8 @@
 /*! \namespace KexiDB 
 \brief High-level database connectivity library with database backend drivers
 
+@author Jaroslaw Staniek <js@iidea.pl>
+
 \section Framework
 DriverManager 
 

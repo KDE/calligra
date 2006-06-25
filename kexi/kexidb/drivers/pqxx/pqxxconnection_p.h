@@ -33,11 +33,13 @@
 #include <kexidb/connection_p.h>
 #include <pqxx/all.h>
 
-/**
-	@author Adam Pigg <adam@piggz.co.uk>
-*/
 namespace KexiDB
 {
+
+/**
+	@internal
+	@author Adam Pigg <adam@piggz.co.uk>
+*/
 class pqxxSqlConnectionInternal : public ConnectionInternal
 {
 	public:
