@@ -63,6 +63,19 @@ namespace KoMacroTest {
 		*/
 		KSharedPtr<KoMacro::Action> testaction;
 
+		/**
+		* @a MacroItem instances which ist fillen manually from the given XML
+		* and parsen by the @a XMLHandler over the XML.
+		*/
+		KSharedPtr<KoMacro::MacroItem> macroitem;	// created manually from XML
+		KSharedPtr<KoMacro::MacroItem> macroitem2;	// parsen from XML 
+
+		/**
+		* @a Macro instance as a container for the macroitems;
+		*/
+		KSharedPtr<KoMacro::Macro> macro;		// container for manually created items
+		KSharedPtr<KoMacro::Macro> macro2;		// container for parsen items
+
 		Private()
 			: xmlguiclient(0)
 			, testaction(0)
@@ -94,7 +107,10 @@ void XMLHandlerTests2::setUp()
 	if (::KoMacro::Manager::self() == 0) {	
 		::KoMacro::Manager::init( d->xmlguiclient );
 	}
-	
+
+	d->macro = KoMacro::Manager::self()->createMacro("testMacro");
+	d->macro2 = KoMacro::Manager::self()->createMacro("testMacro");
+
 	d->testaction = new TestAction();
 	::KoMacro::Manager::self()->publishAction(d->testaction);	
 }
@@ -145,12 +161,15 @@ void XMLHandlerTests2::testParseAndToXML()
 // 1.Test - Correct DomElement.
 void XMLHandlerTests2::testCorrectDomElement()
 {
+	d->macro->clearItems();
+	d->macro2->clearItems();
+
 	// Part 1: From XML to a Macro.
 	// Test-XML-document with normal allocated variables.
 	const QString xml = QString("<!DOCTYPE macros>"
 				    "<macro xmlversion=\"1\">"
 				      "<item action=\"testaction\" >"
-    					"<variable name=\"teststring\" >testString</variable>"
+    					"<variable name=\"teststring\" >test_string</variable>"
 						"<variable name=\"testint\" >0</variable>"
 						"<variable name=\"testbool\" >true</variable>"
 						"<variable name=\"testdouble\" >0.6</variable>"
@@ -161,45 +180,43 @@ void XMLHandlerTests2::testCorrectDomElement()
 	doomdocument.setContent(xml);
 	const QDomElement elem = doomdocument.documentElement();
 
-	// Create a Macro manually about the above DomElement.
-	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	// Create a MacroItem with the TestAction for macro2 and add it to macro.
+	d->macroitem = new KoMacro::MacroItem();
+	d->macro->addItem(d->macroitem);
 
-	// Create a MacroItem with the TestAction for macro2.
-	KSharedPtr<KoMacro::MacroItem> macroitem;
-	macro->addItem(macroitem);
-	KSharedPtr<KoMacro::Action> action = new TestAction();
-	macroitem->setAction(action);
-	KoMacro::Manager::self()->publishAction(action);
+	d->macroitem->setAction(d->testaction);
 
 	// Push the Variables into the macroitem2.
-	KSharedPtr<KoMacro::Variable> varstring = macroitem->addVariable("teststring",QVariant("teststring"));
-	KSharedPtr<KoMacro::Variable> varint = macroitem->addVariable("testint",QVariant(0));
-	KSharedPtr<KoMacro::Variable> varbool = macroitem->addVariable("testbool",QVariant(true));
-	KSharedPtr<KoMacro::Variable> vardouble = macroitem->addVariable("testdouble",QVariant(0.6));
+	KSharedPtr<KoMacro::Variable> varstring = 	d->macroitem->addVariable("teststring",QVariant("test_string"));
+	KSharedPtr<KoMacro::Variable> varint = 		d->macroitem->addVariable("testint",QVariant(0));
+	KSharedPtr<KoMacro::Variable> varbool = 	d->macroitem->addVariable("testbool",QVariant(true));
+	KSharedPtr<KoMacro::Variable> vardouble = 	d->macroitem->addVariable("testdouble",QVariant(0.6));
 
 	// Is our XML parseable into a 2. Macro by calling parseXML()?
-	KSharedPtr<KoMacro::Macro> macro2 = KoMacro::Manager::self()->createMacro("testMacro");
-	KOMACROTEST_ASSERT(macro2->parseXML(elem),true);
+	KOMACROTEST_ASSERT(d->macro2->parseXML(elem),true);
 
-	// Iterator over the MacroItems of the parsen macro2.
-	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems2 = macro2->items();
-	QValueList<KSharedPtr<KoMacro::MacroItem > >::ConstIterator 
-		mit2(macroitems2.constBegin()), end2(macroitems2.constEnd());
+	// Go down to the MacroItem of macro2.
+	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems2 = d->macro2->items();
+	KOMACROTEST_ASSERT((int)macroitems2.size(),1);
 
-	while ( mit2 != end2 ) {
+	{
 		// 1.comparison - Test if the Action is correct?
-		const KSharedPtr<KoMacro::MacroItem> macroitem2 = *mit2;
+		const KSharedPtr<KoMacro::MacroItem> macroitem2 = *macroitems2.constBegin();
 		const KSharedPtr<KoMacro::Action> action2 = macroitem2->action();
-		KOMACROTEST_ASSERT(assertActionsEqual(action,action2),true);
+		KOMACROTEST_ASSERT(assertActionsEqual(d->testaction,action2),true);
 
-		// Iterator over the Variables of the macroitem2.
-		QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables = macroitem2->variables();
-		
-
-		// Go to the next MacroItem
-		mit2++;
+		// Fetch the Variables of the macroitem2.
+		KOMACROTEST_ASSERT((int)macroitem2->variables().size(),4);
+		{
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	macroitem2->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		macroitem2->variable("testint")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	macroitem2->variable("testbool")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	macroitem2->variable("testdouble")),true);
+		}
 	}
 
+
+	// In the next test d->macro->clearItems();
 }
 
 #if 0
@@ -643,6 +660,13 @@ bool XMLHandlerTests2::assertActionsEqual(KSharedPtr<KoMacro::Action> action,
 	KSharedPtr<KoMacro::Action> action2)
 {
 	return action->name() == action2->name();
+}
+
+bool XMLHandlerTests2::assertVariablesEqual(KSharedPtr<KoMacro::Variable> var,
+	KSharedPtr<KoMacro::Variable> var2)
+{
+	//kdDebug() << "Variable1: " << var->variant() << " and Variable2: " << var2->variant() << endl;
+	return var->variant() == var2->variant();
 }
 
 #include "xmlhandlertests2.moc"

@@ -118,8 +118,12 @@ namespace KoMacroTest {
 			// 12.Test - With two MacroItems.
 			void testTwoMacroItems();
 #endif
+
 			bool assertActionsEqual(KSharedPtr<KoMacro::Action> action,
 				KSharedPtr<KoMacro::Action> action2);
+
+			bool assertVariablesEqual(KSharedPtr<KoMacro::Variable> var,
+				KSharedPtr<KoMacro::Variable> var2);
 	};
 }
 

@@ -6,12 +6,12 @@ endif
 
 bin_PROGRAMS = komacrotest $(GUIBINPROGRAM)
 
-komacrotest_SOURCES = komacrotest.cpp testobject.cpp testaction.cpp actiontests.cpp macrotests.cpp macroitemtests.cpp variabletests.cpp xmlhandlertests.cpp
+komacrotest_SOURCES = komacrotest.cpp testobject.cpp testaction.cpp actiontests.cpp macrotests.cpp macroitemtests.cpp variabletests.cpp xmlhandlertests.cpp xmlhandlertests2.cpp
 komacrotest_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 komacrotest_LDADD = -lkunittest ../lib/libkomacro.la $(LIB_KDEUI) $(LIB_KPARTS)
 
 if include_kunittestgui
-  komacrotestgui_SOURCES = komacrotestgui.cpp testobject.cpp testaction.cpp actiontests.cpp macrotests.cpp macroitemtests.cpp variabletests.cpp xmlhandlertests.cpp
+  komacrotestgui_SOURCES = komacrotestgui.cpp testobject.cpp testaction.cpp actiontests.cpp macrotests.cpp macroitemtests.cpp variabletests.cpp xmlhandlertests.cpp xmlhandlertests2.cpp
   komacrotestgui_LDFLAGS = $(KDE_RPATH) $(all_libraries)
   komacrotestgui_LDADD = -lkunittestgui ../lib/libkomacro.la $(LIB_KDEUI) $(LIB_KPARTS)
 endif
