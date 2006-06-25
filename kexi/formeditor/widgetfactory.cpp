@@ -51,6 +51,7 @@
 #include "widgetlibrary.h"
 #include "utils.h"
 #include "widgetpropertyset.h"
+#include "widgetwithsubpropertiesinterface.h"
 #include <koproperty/property.h>
 
 using namespace KFormDesigner;
@@ -252,8 +253,10 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 //		m_editor = editor;
 	}
 	//copy properties if available
-	if (-1!=m_editor->metaObject()->findProperty("margin", true) && -1!=w->metaObject()->findProperty("margin", true))
-		m_editor->setProperty("margin", w->property("margin"));
+	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : w;
+	if (-1!=m_editor->metaObject()->findProperty("margin", true) && -1!=subwidget->metaObject()->findProperty("margin", true))
+		m_editor->setProperty("margin", subwidget->property("margin"));
 //#endif
 //js	m_handles = new ResizeHandleSet(w, container->form(), true);
 	m_handles = container->form()->resizeHandlesForWidget(w);

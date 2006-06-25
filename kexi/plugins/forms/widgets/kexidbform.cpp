@@ -364,6 +364,21 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 	if (e->type()==QEvent::KeyPress) {
 		if (preview()) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+			// allow the editor widget to grab the key press event
+			QObject *o = watched; //focusWidget();
+			QWidget* realWidget = 0;
+			while (true) {
+				if (!o || o == dynamic_cast<QObject*>(d->dataAwareObject))
+					break;
+				if (dynamic_cast<KexiDataItemInterface*>(o)) {
+					realWidget = dynamic_cast<QWidget*>(o); //will beused below (for tab/backtab handling)
+					if (dynamic_cast<KexiDataItemInterface*>(o)->keyPressed(ke))
+						return false;
+					break;
+				}
+				o = o->parent();
+			}
+			// handle Esc key
 			if (ke->state() == Qt::NoButton && ke->key() == Qt::Key_Escape) {
 				//cancel field editing/row editing
 				if (d->dataAwareObject->editor()) {
@@ -384,11 +399,9 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 			const bool backtab = ((ke->state() == Qt::NoButton || ke->state() == Qt::ShiftModifier) && ke->key() == Qt::Key_Backtab)
 				|| (ke->state() == Qt::ShiftModifier && ke->key() == Qt::Key_Tab);
 
-								
-
 			if (tab || backtab) {
 				//the watched widget can be a subwidget of a real widget, e.g. autofield: find it
-				QWidget* realWidget = static_cast<QWidget*>(watched);
+				//QWidget* realWidget = static_cast<QWidget*>(watched);
 				while (dynamic_cast<KexiDataItemInterface*>(realWidget) && dynamic_cast<KexiDataItemInterface*>(realWidget)->parentInterface())
 					realWidget = dynamic_cast<QWidget*>( dynamic_cast<KexiDataItemInterface*>(realWidget)->parentInterface() );
 

@@ -22,7 +22,7 @@
 #define KexiDBImageBox_H
 
 #include "kexiformdataiteminterface.h"
-#include <qwidget.h>
+#include "kexiframe.h"
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QPixmap>
@@ -35,7 +35,7 @@
 //! A data-aware, editable image box.
 /*! Can also act as a normal static image box.
 */
-class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource )
@@ -49,6 +49,8 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 	Q_PROPERTY( bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio )
 	Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
 //	Q_PROPERTY( QString originalFileName READ originalFileName WRITE setOriginalFileName DESIGNABLE false )
+//	Q_OVERRIDE( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
+	Q_OVERRIDE( int lineWidth READ lineWidth WRITE setLineWidth )
 
 	public:
 		KexiDBImageBox( bool designMode, QWidget *parent, const char *name = 0 );
@@ -105,6 +107,12 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 		 or on saving the image data back to file. */
 //todo		QString originalFileName() const { return m_value.originalFileName(); }
 
+		//! Reimplemented to override behaviour of "lineWidth" property.
+		virtual void setLineWidth( int width );
+
+		//! Reimplemented to override behaviour of "paletteBackgroundColor" property.
+		virtual void setPaletteBackgroundColor( const QColor & color );
+
 	public slots:
 		void setPixmapId(uint id);
 
@@ -147,14 +155,20 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 
 		void showProperties();
 
+		//! @internal
+		void slotToggled( bool on );
+
 	signals:
-		//! Emitted when value has been changed. Actual value can be obtained using value().
-		virtual void valueChanged(const QByteArray& data);
+		//! Used for db-aware mode. Emitted when value has been changed. 
+		//! Actual value can be obtained using value().
+		virtual void pixmapChanged();
+//		virtual void valueChanged(const QByteArray& data);
 		void idChanged(long id);
 
 	protected slots:
 		void slotAboutToHidePopupMenu();
 		void slotChooserPressed();
+		void slotChooserReleased();
 
 	protected:
 		//! \return data depending on the current mode (db-aware or static)
@@ -162,9 +176,9 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 	
 		virtual void contextMenuEvent ( QContextMenuEvent * e );
 //		virtual void mousePressEvent( QMouseEvent *e );
-		//		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 		virtual void paintEvent( QPaintEvent* );
-//		virtual void resizeEvent( QResizeEvent* e );
+		virtual void resizeEvent( QResizeEvent* e );
 
 		//! Sets value \a value for a widget.
 		virtual void setValueInternal( const QVariant& add, bool /*removeOld*/ );
@@ -177,6 +191,13 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 		void setData(const KexiBLOBBuffer::Handle& handle);
 
 		bool popupMenuAvailable();
+
+		/*! Called by top-level form on key press event.
+		 Used for Key_Escape to if the popup is visible,
+		 so the key press won't be consumed to perform "cancel editing". */
+		virtual bool keyPressed(QKeyEvent *ke);
+
+		int realLineWidth() const;
 
 //		virtual void drawContents ( QPainter *p );
 
@@ -193,6 +214,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 //		ImageLabel *m_pixmapLabel;
 		QPixmap m_pixmap;
 		QByteArray m_value; //!< for db-aware mode
+		QString m_valueMimeType; //!< for db-aware mode
 //		PixmapData m_value;
 		KexiBLOBBuffer::Handle m_data;
 //		QString m_originalFileName;
@@ -203,14 +225,16 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 		KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
 			*m_deleteAction, *m_propertiesAction;
 		QTimer m_clickTimer;
-		int m_titleID;
 		int m_alignment;
 		bool m_designMode : 1;
 		bool m_readOnly : 1;
 		bool m_scaledContents : 1;
 		bool m_keepAspectRatio : 1;
 		bool m_insideSetData : 1;
-//		friend class ImageLabel;
+		bool m_setFocusOnButtonAfterClosingPopup : 1;
+		bool m_lineWidthChanged : 1;
+		bool m_paletteBackgroundColorChanged : 1;
+		bool m_paintEventEnabled : 1; //!< used to disable paintEvent()
 };
 
 #endif

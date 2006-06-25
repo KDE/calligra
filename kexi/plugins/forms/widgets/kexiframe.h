@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,17 +22,40 @@
 
 #include <q3frame.h>
 
-//! Push Button widget for Kexi forms
++ //! Frame widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiFrame : public Q3Frame
 {
 	Q_OBJECT
+//todo	Q_ENUMS( Shape Shadow )
 	Q_PROPERTY( QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true )
+//todo	Q_OVERRIDE( Shape frameShape READ frameShape WRITE setFrameShape )
+//todo	Q_OVERRIDE( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
 
 	public:
-		KexiFrame( QWidget * parent, const char * name = 0 );
+		KexiFrame( QWidget * parent, const char * name = 0, WFlags f = 0 );
 		virtual ~KexiFrame();
 
 		virtual const QColor& frameColor() const;
+
+#if 0
+//! @todo more options
+		enum Shadow {
+			NoShadow = QFrame::Plain,
+			Raised = QFrame::Raised,
+			Sunken = QFrame::Sunken
+		};
+//! @todo more options
+		enum Shape { NoFrame = QFrame::NoFrame, //!< no frame
+			Box = QFrame::Box,                  //!< rectangular box
+			Panel = QFrame::Panel,              //!< rectangular panel
+			StyledPanel = QFrame::StyledPanel,  //!< rectangular panel depending on the GUI style
+			GroupBoxPanel = QFrame::GroupBoxPanel //!< rectangular group-box-like panel depending on the GUI style
+		};
+		Shape frameShape() const;
+		void setFrameShape( KexiFrame::Shape shape );
+		Shadow frameShadow() const;
+		void setFrameShadow( KexiFrame::Shadow shadow );
+#endif
 
 	public slots:
 		virtual void setPalette( const QPalette &pal );

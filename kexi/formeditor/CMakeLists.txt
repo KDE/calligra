@@ -27,7 +27,9 @@ set(kformdesigner_LIB_SRCS
    editlistviewdialog.cpp 
    utils.cpp 
    widgetpropertyset.cpp 
-   kfdpixmapedit.cpp )
+   kfdpixmapedit.cpp
+   widgetwithsubpropertiesinterface.cpp
+)
 
 kde4_automoc(${kformdesigner_LIB_SRCS})
 

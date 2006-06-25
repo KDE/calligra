@@ -27,7 +27,7 @@ QColor lighterGrayBackgroundColor(const QPalette& palette);
 
 //! @short Used for extending editor widgets' context menu. 
 /*! @internal This is performed by adding a title and disabling editing 
- actions for when "read only" flag is true. */
+ actions when "read only" flag is true. */
 class KexiDBWidgetContextMenuExtender : public QObject
 {
 	public:
@@ -41,10 +41,15 @@ class KexiDBWidgetContextMenuExtender : public QObject
 		//! The menu has to be previously provided by createTitle().
 		void updatePopupMenuActions();
 
+		/*! Updates title for context menu based on data item \a iface caption or name
+		 Used in createTitle(QPopupMenu *menu) and KexiDBImageBox.
+		 \return true is the title has been added. */
+		static bool updateContextMenuTitleForDataItem(QPopupMenu *menu, KexiDataItemInterface* iface);
+
 	protected:
 		KexiDataItemInterface* m_iface;
 		QGuardedPtr<QPopupMenu> m_contextMenu;
-		bool m_contextMenuHasTitle; //!< True if KPopupTitle has been added to the context menu.
+		bool m_contextMenuHasTitle; //!< true if KPopupTitle has been added to the context menu.
 };
 
 #endif

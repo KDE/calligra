@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,7 +57,7 @@
 #include "events.h"
 #include "utils.h"
 #include "kexiflowlayout.h"
-
+#include "widgetwithsubpropertiesinterface.h"
 #include "formIO.h"
 
 /// A blank widget used when the class name is not supported
@@ -412,7 +412,15 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
 {
 	// Widget specific properties and attributes ///////////////
 	kDebug() << "FormIO::savePropertyValue()  Saving the property: " << name << endl;
-	const int propertyId = w->metaObject()->findProperty(name, true);
+	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+	QWidget *subwidget = w;
+	bool addSubwidgetFlag = false;
+	int propertyId = w->metaObject()->findProperty(name, true);
+	if (propertyId == -1 && subpropIface && subpropIface->subwidget()) { // try property from subwidget
+		subwidget = subpropIface->subwidget();
+		propertyId = subpropIface->subwidget()->metaObject()->findProperty(name, true);
+		addSubwidgetFlag = true;
+	}
 	if(propertyId == -1)
 	{
 		kDebug() << "FormIO::savePropertyValue()  The object doesn't have this property. Let's try the WidgetLibrary." << endl;
@@ -421,11 +429,13 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
 		return;
 	}
 
-	const QMetaProperty *meta = w->metaObject()->property(propertyId, true);
-	if (!meta->stored( w )) //not storable
+	const QMetaProperty *meta = subwidget->metaObject()->property(propertyId, true);
+	if (!meta->stored( subwidget )) //not storable
 		return;
 	QDomElement propertyE = parent.createElement("property");
 	propertyE.setAttribute("name", name);
+	if (addSubwidgetFlag)
+		propertyE.setAttribute("subwidget", "true");
 
 	if(meta && meta->isEnumType())
 	{
@@ -877,8 +887,10 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 		return text;
 	else if(type == "set")
 	{
-		int count = obj->metaObject()->findProperty(name.latin1(), true);
-		const QMetaProperty *meta = obj->metaObject()->property(count, true);
+		WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
+		QObject *subobject = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : obj;
+		int count = subobject->metaObject()->findProperty(name.latin1(), true);
+		const QMetaProperty *meta = subobject->metaObject()->property(count, true);
 
 		if(meta->isSetType())
 		{
@@ -891,7 +903,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 			return QVariant(meta->keysToValue(keys));
 		}
 	}
-		return QVariant();
+	return QVariant();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1157,7 +1169,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 	else
 	// We check if this classname is an alternate one, and replace it if necessary
 	{
-		classname = el.attribute("class").local8Bit();
+		classname = el.attribute("class").latin1();
 		alternate = container->form()->library()->classNameForAlternate(classname);
 	}
 
@@ -1243,9 +1255,12 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
 	Q3ValueList<Q3CString> list(container->form()->library()->autoSaveProperties(w->className()));
 	Q3ValueList<Q3CString>::ConstIterator endIt = list.constEnd();
+	KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface 
+		= dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w);
+	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : w;
 	for(Q3ValueList<Q3CString>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
-		if(w->metaObject()->findProperty(*it, true) != -1)
-			item->addModifiedProperty(*it, w->property(*it));
+		if(subwidget->metaObject()->findProperty(*it, true) != -1)
+			item->addModifiedProperty(*it, subwidget->property(*it));
 	}
 
 	if(resetCurrentForm)
@@ -1306,6 +1321,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 {
 	QString eltag = el.tagName();
 
+	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : w;
+
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QString tag = n.toElement().tagName();
@@ -1319,6 +1337,13 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 			if( ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")) &&
 			      (name == "name")) // we don't care about layout names
 				continue;
+
+			if (node.attribute("subwidget")=="true") {
+				//this is property for subwidget: remember it for delayed setting
+				//because now the subwidget could be not created yet (true e.g. for KexiDBAutoField)
+				item->addSubproperty( name.latin1(), readPropertyValue(node.firstChild(), w, name) );
+				continue;
+			}
 
 			// We cannot assign the buddy now as the buddy widget may not be created yet
 			if(name == "buddy")
@@ -1345,7 +1370,7 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 				}
 			}
 			// If the object doesn't have this property, we let the Factory handle it (maybe a special property)
-			else if(w->metaObject()->findProperty(name.latin1(), true) == -1)
+			else if(subwidget->metaObject()->findProperty(name.latin1(), true) == -1)
 			{
 				if(w->className() == QString::fromLatin1("CustomWidget"))
 					item->storeUnknownProperty(node);
@@ -1368,7 +1393,7 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 						r.moveTop(0);
 					val = r;
 				}
-				w->setProperty(name.latin1(), val);
+				subwidget->setProperty(name.latin1(), val);
 //				int count = w->metaObject()->findProperty(name, true);
 //				const QMetaProperty *meta = w->metaObject()->property(count, true);
 //				if(meta && meta->isEnumType()) {
