@@ -22,6 +22,7 @@
 #include <qwidget.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
+#include <koproperty/set.h>
 
 class KCommand;
 class KexiObjectInfoLabel;
@@ -32,9 +33,6 @@ class KexiProject;
 class QToolButton;
 class QLabel;
 class QFrame;
-namespace KoProperty {
-	class Set;
-}
 
 //! A page within form's property tabbed pane, providing data source information
 class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
@@ -104,8 +102,9 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 		KexiFieldListView* m_fieldListView;
 #endif
 
-//		class Private;
-//		Private *d;
+		//! Used only in assignPropertySet() to check whether we already have the set assigned
+		QCString m_currentObjectName;
+		//QGuardedPtr<KoProperty::Set> m_propertySet;
 };
 
 #endif

@@ -32,6 +32,35 @@ QColor lighterGrayBackgroundColor(const QPalette& palette)
 	return KexiUtils::blendedColors(palette.active().background(), palette.active().base(), 1, 2);
 }
 
+//static
+bool KexiDBWidgetContextMenuExtender::updateContextMenuTitleForDataItem(QPopupMenu *menu, KexiDataItemInterface* iface)
+{
+	if (!menu)
+		return false;
+	QString title( iface->columnInfo() ? iface->columnInfo()->captionOrAliasOrName() : QString::null );
+
+	if (title.isEmpty())
+		return false;
+
+	/*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
+	 (see doc/dev/settings.txt) */
+	title = title[0].upper() + title.mid(1);
+
+	const int id = menu->idAt(0);
+	if (dynamic_cast<QWidget*>(iface)) {
+		QPixmap icon(SmallIcon( KexiFormPart::library()->iconName(dynamic_cast<QWidget*>(iface)->className()) ));
+		QMenuItem *item = menu->findItem(id);
+		if (item && dynamic_cast<KPopupTitle *>(item->widget()))
+			dynamic_cast<KPopupTitle *>(item->widget())->setTitle(title, &icon);
+	}
+	else {
+		QMenuItem *item = menu->findItem(id);
+		if (item && dynamic_cast<KPopupTitle *>(item->widget()))
+			dynamic_cast<KPopupTitle *>(item->widget())->setTitle(title);
+	}
+	return true;
+}
+
 //-------
 
 KexiDBWidgetContextMenuExtender::KexiDBWidgetContextMenuExtender( QObject* parent, KexiDataItemInterface* iface )
@@ -50,20 +79,12 @@ void KexiDBWidgetContextMenuExtender::createTitle(QPopupMenu *menu)
 	if (!menu)
 		return;
 	m_contextMenu = menu;
-	QString title( m_iface->columnInfo() ? m_iface->columnInfo()->captionOrAliasOrName() : QString::null );
-	
-	if (!title.isEmpty()) {
-		KPopupTitle *titleItem = new KPopupTitle();
-		if (dynamic_cast<QWidget*>(m_iface)) {
-			QPixmap icon(SmallIcon( KexiFormPart::library()->iconName(dynamic_cast<QWidget*>(m_iface)->className()) ));
-			titleItem->setTitle(title, &icon);
-		}
-		else
-			titleItem->setTitle(title);
-		m_contextMenuHasTitle = true;
-		const int id = m_contextMenu->insertItem(titleItem, -1, 0);
-		m_contextMenu->setItemEnabled(id, false);
-	}
+	KPopupTitle *titleItem = new KPopupTitle();
+	const int id = m_contextMenu->insertItem(titleItem, -1, 0);
+	m_contextMenu->setItemEnabled(id, false);
+	m_contextMenuHasTitle = updateContextMenuTitleForDataItem(m_contextMenu, m_iface);
+	if (!m_contextMenuHasTitle)
+		m_contextMenu->removeItem(id);
 	updatePopupMenuActions();
 }
 

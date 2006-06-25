@@ -25,6 +25,7 @@
 #include <qwidget.h>
 #include <kexidb/field.h>
 #include <formeditor/container.h>
+#include <formeditor/widgetwithsubpropertiesinterface.h>
 #include "kexiformdataiteminterface.h"
 
 class QBoxLayout;
@@ -35,14 +36,18 @@ class QLabel;
 class KEXIFORMUTILS_EXPORT KexiDBAutoField : 
 	public QWidget,
 	public KexiFormDataItemInterface,
-	public KFormDesigner::DesignTimeDynamicChildWidgetHandler
+	public KFormDesigner::DesignTimeDynamicChildWidgetHandler,
+	public KFormDesigner::WidgetWithSubpropertiesInterface
 {
 	Q_OBJECT
 //'caption' is uncovered now	Q_PROPERTY(QString labelCaption READ caption WRITE setCaption DESIGNABLE true)
 	Q_OVERRIDE(QString caption READ caption WRITE setCaption DESIGNABLE true)
+	Q_OVERRIDE(QColor paletteForegroundColor READ paletteForegroundColor WRITE setPaletteForegroundColor DESIGNABLE true RESET unsetPalette)
+	Q_OVERRIDE(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor DESIGNABLE true RESET unsetPalette)
 	Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
 	Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition DESIGNABLE true)
 	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
 	/*internal, for design time only*/
@@ -80,20 +85,20 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		//! Reimpelmented to also install \a listenter for internal editor
 		virtual void installListener(KexiDataItemChangesListener* listener);
 
-		WidgetType widgetType() const { return m_widgetType_property; }
+		WidgetType widgetType() const;
 		void setWidgetType(WidgetType type);
 
-		LabelPosition labelPosition() const { return m_lblPosition; }
+		LabelPosition labelPosition() const;
 		void setLabelPosition(LabelPosition position);
 
-		QString caption() const { return m_caption; }
+		QString caption() const;
 		void setCaption(const QString &caption);
 
-		bool hasAutoCaption() const { return m_autoCaption; }
+		bool hasAutoCaption() const;
 		void setAutoCaption(bool autoCaption);
 
-		QWidget* editor() const { return m_editor; }
-		QLabel* label() const { return m_label; }
+		QWidget* editor() const;
+		QLabel* label() const;
 
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
@@ -111,13 +116,34 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		void setFieldCaptionInternal(const QString& text);
 
 		/*! @internal */
-		int fieldTypeInternal() const { return m_fieldTypeInternal; }
+		int fieldTypeInternal() const;
 
 		/*! @internal */
-		QString fieldCaptionInternal() const { return m_fieldCaptionInternal; }
+		QString fieldCaptionInternal() const;
 
 		virtual QSize sizeHint() const;
 		virtual void setFocusPolicy ( FocusPolicy policy );
+
+		//! Reimplemented to return internal editor's color.
+		const QColor & paletteForegroundColor() const;
+
+		//! Reimplemented to set internal editor's color.
+		void setPaletteForegroundColor( const QColor & color );
+
+		//! Reimplemented to return internal editor's color.
+		const QColor & paletteBackgroundColor() const;
+
+		//! Reimplemented to set internal editor's color.
+		virtual void setPaletteBackgroundColor( const QColor & color );
+
+		virtual QVariant property( const char * name ) const;
+
+		//! Reimplemented to accept subproperties. @see KFormDesigner::WidgetWithSubpropertiesInterface
+		virtual bool setProperty( const char * name, const QVariant & value );
+
+	protected slots:
+		void slotValueChanged();
+		virtual void paletteChange( const QPalette& oldPal );
 
 	protected:
 		virtual void setValueInternal(const QVariant&add, bool removeOld);
@@ -127,24 +153,12 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 //		virtual void paintEvent( QPaintEvent* pe );
 		void updateInformationAboutUnboundField();
 
-	protected slots:
-		void slotValueChanged();
-		virtual void paletteChange( const QPalette& oldPal );
+		//! internal editor can be created too late, so certain properties should be copied
+		void copyPropertiesToEditor();
 
 	private:
-		WidgetType m_widgetType; //!< internal: equal to m_widgetType_property ir equal to result 
-		                         //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
-		WidgetType  m_widgetType_property; //!< provides widget type or Auto
-		LabelPosition  m_lblPosition;
-		QBoxLayout  *m_layout;
-		QLabel  *m_label;
-		QWidget *m_editor;
-		QString  m_caption;
-		KexiDB::Field::Type m_fieldTypeInternal;
-		QString m_fieldCaptionInternal;
-		bool m_autoCaption : 1;
-		bool m_focusPolicyChanged : 1;
-		bool m_designMode : 1;
+		class Private;
+		Private *d;
 };
 
 #endif

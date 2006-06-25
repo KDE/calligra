@@ -342,6 +342,13 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 -- add such fancy frame: http://www.themaninblue.com/writing/perspective/2004/08/05/
 - tab widget: add color property for setting particular tab 
 - add a Scratchpad as in QtDesigner4, allows to drag&drop widgets between forms...
+- Use RESET clause for Q_PROPERTY, eg. RESET unsetPalette for paletteBackgroundColor.
+  Then, use bool QMetaProperty::reset ( QObject * o ) const to reset property value in the propeditor.
+- Autoforms: allow to define groups of fields so the fileds can be displayed with nice groupo boxes.
+  (e.g. http://www.glom.org/screenshots/glom_data_details.png)
+  This definition shgould be made during table design, so we can reuse groupping information also in
+  autoreports and auto web forms. Especially usable for tables with lots of fields.
+  We could even define the groupping levels so top-level groups can be splitted using Tab Wigget.
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -745,8 +752,8 @@ Migration (Import Project Wizard) TODO:
   (do not save anything)
 - 'select source db type' page: change "sqlite/msa/mysql/pg" to "sqlite/msa/server database"
   because type of server db is in fact selected on the next page (source conn selection)
-- copy kexi__db contents!
 - set the same path for "destination" file browser as for "source" one
+- add "do not create system tables" option to the wizard
 
 MDB Migration:
 - add checks for "no space left on device" error (otherwise Kexi will crash)
@@ -912,3 +919,8 @@ CREATE TABLE t1_new(a,b,d);
 INSERT INTO t1_new SELECT a,b,c FROM t1;
 DROP TABLE t1;
 ALTER TABLE t1_new RENAME TO t1;
+
+
+Forms
+TODO: hide "image" property when image box has data source assigned
+TODO: hide "word wrap" property for image box

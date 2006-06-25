@@ -1,4 +1,4 @@
------------------------------------------------------------
+f-----------------------------------------------------------
 Settings stored in 'kexirc' config file
 
 This is official list.
@@ -79,9 +79,9 @@ TODO:-doNotFocusAutonumberFields [boolean] (true by default; when this and autoT
                                          implement this in KexiFormView::afterSwitchFrom()
 TODO:-appendColonToAutoLabels [boolean] (true by default; when true, colon character is appended 
                                       to autolabel text)
-TODO:-makeFirstCharacterUpperCaseInAutoLabels [boolean] (true by default; when true, first character 
-                                      in autolabel text is converted to upper case. 
-                                      Usable when no field's title is provided)
+TODO:-makeFirstCharacterUpperCaseInCaptions [boolean] (true by default; when true, first character 
+                                      in autolabel or popup menu caption text is converted to upper case. 
+                                      Usable especially when no field's caption is provided)
 TODO:-labelPositionInAutoLabels [enum: Left, Top] (Left by default)
 
 TODO:-gridSize [uint] (10 by default)

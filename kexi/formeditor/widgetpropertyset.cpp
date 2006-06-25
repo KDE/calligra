@@ -36,6 +36,7 @@
 #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "commands.h"
+#include "widgetwithsubpropertiesinterface.h"
 
 #include <kexiutils/utils.h>
 #include <kexiutils/identifier.h>
@@ -228,9 +229,14 @@ WidgetPropertySet::addWidget(QWidget *w)
 	if(d->widgets.first()->className() == w->className())
 		classname = d->widgets.first()->className();
 
-	// show only properties shared by widget (properties chosed by factory)
+	// show only properties shared by widget (properties chosen by factory)
 	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(w);
+
+	//WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+//	QWidget *subwidget = isSubproperty ? subpropIface->subwidget() : w;
+
 	for(KoProperty::Set::Iterator it(d->set); it.current(); ++it) {
+		kdDebug() << it.currentKey() << endl;
 		if(!isPropertyVisible(it.currentKey(), isTopLevel, classname))
 			d->set[it.currentKey()].setVisible(false);
 	}
@@ -275,47 +281,66 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	QStrList pList = w->metaObject()->propertyNames(true);
 	QStrListIterator it(pList);
 
-	// iterate over the property list, and create Property objects
-	for(; it.current() != 0; ++it)  {
-		count = w->metaObject()->findProperty(*it, true);
-		const QMetaProperty *meta = w->metaObject()->property(count, true);
-		const char* propertyName = meta->name();
+	// add subproperties if available
+	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+	QStrList tmpList; //used to allocate copy of names
+	if (subpropIface) {
+		QValueList<QCString> subproperies( 
+			subpropIface->subproperies() );
+		foreach(QValueListConstIterator<QCString>, it, subproperies ) {
+			tmpList.append( *it );
+			pList.append( tmpList.last() );
+		}
+	}
 
-		if(meta->designable(w) && !d->set.contains(propertyName))  {
+	// iterate over the property list, and create Property objects
+	for(; it.current() != 0; ++it) {
+		kdDebug() << ">> " << it.current() << endl;
+		const QMetaProperty *subMeta = // special case - subproperty
+			subpropIface ? subpropIface->findMetaSubproperty(it.current()) : 0;
+		const QMetaProperty *meta = subMeta ? subMeta 
+			 : w->metaObject()->property( w->metaObject()->findProperty(*it, true), true);
+		if (!meta)
+			continue;
+		const char* propertyName = meta->name();
+		QWidget *subwidget = subMeta/*subpropIface*/ ? subpropIface->subwidget() : w;
+		WidgetInfo *subwinfo = form->library()->widgetInfoForClassName(subwidget->className());
+
+		if(meta->designable(subwidget) && !d->set.contains(propertyName)) {
 			//! \todo add another list for property description
 			QString desc( d->propCaption[meta->name()] );
 			//! \todo change i18n
 			if (desc.isEmpty())  //try to get property description from factory
-				desc = form->library()->propertyDescForName(winfo, propertyName);
+				desc = form->library()->propertyDescForName(subwinfo, propertyName);
 
 			modifiedPropertiesIt = modifiedProperties->find(propertyName);
 			const bool oldValueExists = modifiedPropertiesIt!=modifiedProperties->constEnd();
 
 			if(meta->isEnumType()) {
 				if(qstrcmp(propertyName, "alignment") == 0)  {
-					createAlignProperty(meta, w);
+					createAlignProperty(meta, w, subwidget);
 					continue;
 				}
 
 				QStringList keys = QStringList::fromStrList( meta->enumKeys() );
-				newProp = new KoProperty::Property(propertyName, createValueList(winfo, keys),
+				newProp = new KoProperty::Property(propertyName, createValueList(subwinfo, keys),
 					/* assign current or older value */
 					oldValueExists ? modifiedPropertiesIt.data() : 
-						meta->valueToKey( w->property(propertyName).toInt() ), 
+						meta->valueToKey( subwidget->property(propertyName).toInt() ), 
 					desc, desc );
 				//now set current value, so the old one is stored as old
 				if (oldValueExists) {
-					newProp->setValue( meta->valueToKey( w->property(propertyName).toInt() ) );
+					newProp->setValue( meta->valueToKey( subwidget->property(propertyName).toInt() ) );
 				}
 			}
 			else {
 				newProp = new KoProperty::Property(propertyName, 
 					/* assign current or older value */
-					oldValueExists ? modifiedPropertiesIt.data() : w->property(propertyName), 
-					desc, desc, winfo->customTypeForProperty(propertyName));
+					oldValueExists ? modifiedPropertiesIt.data() : subwidget->property(propertyName), 
+					desc, desc, subwinfo->customTypeForProperty(propertyName));
 				//now set current value, so the old one is stored as old
 				if (oldValueExists) {
-					newProp->setValue( w->property(propertyName) );
+					newProp->setValue( subwidget->property(propertyName) );
 				}
 			}
 
@@ -346,10 +371,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 
 	if (winfo) {
 		form->library()->setPropertyOptions(*this, *winfo, w);
-		//add meta-information
 		d->set.addProperty( newProp = new KoProperty::Property("this:classString", winfo->name()) );
-		newProp->setVisible(false);
-		d->set.addProperty( newProp = new KoProperty::Property("this:iconName", winfo->pixmap()) );
 		newProp->setVisible(false);
 		d->set.addProperty( newProp = new KoProperty::Property("this:iconName", winfo->pixmap()) );
 		newProp->setVisible(false);
@@ -422,8 +444,16 @@ WidgetPropertySet::isPropertyVisible(const QCString &property, bool isTopLevel, 
 */
 
 //	return KFormDesigner::FormManager::self()->lib()->isPropertyVisible(d->widgets.first()->className(), d->widgets.first(),
+	QWidget *w = d->widgets.first();
+	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+	QWidget *subwidget;
+	if (subpropIface && subpropIface->findMetaSubproperty(property)) // special case - subproperty
+		subwidget = subpropIface->subwidget();
+	else
+		subwidget = w;
+ 
 	return KFormDesigner::FormManager::self()->activeForm()->library()->isPropertyVisible(
-		d->widgets.first()->className(), d->widgets.first(), property, multiple, isTopLevel);
+		subwidget->className(), subwidget, property, multiple, isTopLevel);
 }
 
 ////////////////  Slots called when properties are modified ///////////////
@@ -557,11 +587,13 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 			d->set[it.key()].setValue(it.data());
 		}
 		else {
-			if (-1!=widget->metaObject()->findProperty(it.key(), true) && widget->property(it.key())!=it.data()) {
+			WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
+			QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
+			if (-1 != subwidget->metaObject()->findProperty(it.key(), true) && subwidget->property(it.key())!=it.data()) {
 				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(widget->name());
 				if (tree)
-					tree->addModifiedProperty(it.key(), widget->property(it.key()));
-				widget->setProperty(it.key(), it.data());
+					tree->addModifiedProperty(it.key(), subwidget->property(it.key()));
+				subwidget->setProperty(it.key(), it.data());
 				emit widgetPropertyChanged(widget, it.key(), it.data());
 			}
 		}
@@ -703,22 +735,23 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
 // Alignment-related functions /////////////////////////////
 
 void
-WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
+WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *widget, QWidget *subwidget)
 {
-	if (!KFormDesigner::FormManager::self()->activeForm() || !KFormDesigner::FormManager::self()->activeForm()->objectTree())
+	if (!KFormDesigner::FormManager::self()->activeForm() 
+|| !KFormDesigner::FormManager::self()->activeForm()->objectTree())
 		return;
 
 	QStringList list;
 	QString value;
-	const int alignment = obj->property("alignment").toInt();
+	const int alignment = subwidget->property("alignment").toInt();
 	QStringList keys = QStringList::fromStrList( meta->valueToKeys(alignment) );
 
 	QStrList *enumKeys = new QStrList(meta->enumKeys());
 	QStringList possibleValues = QStringList::fromStrList(*enumKeys);
 	delete enumKeys;
 
-	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(obj->name());
-	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(obj);
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(widget->name());
+	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(widget);
 
 	if(!possibleValues.grep("AlignHCenter").empty())  {
 		// Create the horizontal alignment property
@@ -765,16 +798,20 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 		}
 		updatePropertyValue(tree, "vAlign");
 	}
+	
 
 	if(!possibleValues.grep("WordBreak").empty()
-	  && !obj->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
+//		&& isPropertyVisible("wordbreak", false, subwidget->className())
+//	  && !subWidget->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
 	) {
 		// Create the wordbreak property
 		KoProperty::Property *p = new KoProperty::Property("wordbreak", 
 			QVariant(alignment & Qt::WordBreak, 3), i18n("Word Break"), i18n("Word Break") );
 		d->set.addProperty(p);
 		updatePropertyValue(tree, "wordbreak");
-		if(!isPropertyVisible(p->name(), isTopLevel)) {
+		if (!KFormDesigner::FormManager::self()->activeForm()->library()->isPropertyVisible(
+			subwidget->className(), subwidget, p->name(), false/*multiple*/, isTopLevel))
+		{
 			p->setVisible(false);
 		}
 	}
@@ -794,12 +831,15 @@ WidgetPropertySet::saveAlignProperty(const QString &property)
 	if( d->set.contains("wordbreak") && d->set["wordbreak"].value().toBool() )
 		list.append("WordBreak");
 
-	int count = d->widgets.first()->metaObject()->findProperty("alignment", true);
-	const QMetaProperty *meta = d->widgets.first()->metaObject()->property(count, true);
-	d->widgets.first()->setProperty("alignment", meta->keysToValue(list));
+	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(
+		(QWidget*)d->widgets.first() );
+	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : d->widgets.first();
+	int count = subwidget->metaObject()->findProperty("alignment", true);
+	const QMetaProperty *meta = subwidget->metaObject()->property(count, true);
+	subwidget->setProperty("alignment", meta->keysToValue(list));
 
-
-	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(d->widgets.first()->name());
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(
+		d->widgets.first()->name() );
 	if(tree && d->set[property.latin1()].isModified())
 		tree->addModifiedProperty(property.latin1(), d->set[property.latin1()].oldValue());
 
@@ -810,7 +850,7 @@ WidgetPropertySet::saveAlignProperty(const QString &property)
 		d->lastCommand->setValue(meta->keysToValue(list));
 	else {
 		d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
-			d->widgets.first()->property("alignment"), meta->keysToValue(list), "alignment");
+			subwidget->property("alignment"), meta->keysToValue(list), "alignment");
 		KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 	}
 }

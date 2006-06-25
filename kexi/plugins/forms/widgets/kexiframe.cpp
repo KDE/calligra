@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,12 +34,17 @@ class KexiFrame::Private
 		{
 		}
 		QColor frameColor;
+#if 0
+//todo
+		KexiFrame::Shape frameShape;
+		KexiFrame::Shadow frameShadow;
+#endif
 };
 
 //=========================================================
 
-KexiFrame::KexiFrame( QWidget * parent, const char * name )
-	: QFrame(parent, name)
+KexiFrame::KexiFrame( QWidget * parent, const char * name, WFlags f )
+	: QFrame(parent, name, f)
 	, d( new Private() )
 {
 	//defaults

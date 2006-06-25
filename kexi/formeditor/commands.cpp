@@ -39,6 +39,7 @@
 #include "events.h"
 #include "utils.h"
 #include "widgetpropertyset.h"
+#include "widgetwithsubpropertiesinterface.h"
 #include <koproperty/property.h>
 
 #include "commands.h"
@@ -123,8 +124,11 @@ PropertyCommand::unexecute()
 		QWidget *widg = item->widget();
 		FormManager::self()->activeForm()->setSelectedWidget(widg, true);
 		//m_propSet->setSelectedWidget(widg, true);
-		if (-1!=widg->metaObject()->findProperty( m_property, TRUE ))
-			widg->setProperty(m_property, it.data());
+
+		WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widg);
+		QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widg;
+		if (-1!=subWidget->metaObject()->findProperty( m_property, TRUE ))
+			subWidget->setProperty(m_property, it.data());
 	}
 
 	(*m_propSet)[m_property] = m_oldvalues.begin().data();

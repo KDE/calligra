@@ -61,7 +61,7 @@
 //#define KexiTableDesignerView_DEBUG
 
 //! @todo remove this when BLOBs are implemented
-#define KEXI_NO_BLOB_FIELDS
+//#define KEXI_NO_BLOB_FIELDS
 
 using namespace KexiTableDesignerCommands;
 

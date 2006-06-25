@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -168,6 +168,9 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		   \param value  the value of this property
 		   \param w      the widget whose property is being saved
 		   \param lib    the widget library for which the property is being saved
+
+			 Properties of subwidget are saved with subwidget="true" arribute added 
+			 to 'property' XML element.
 		*/
 		static void savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const char *name,
 			const QVariant &value, QWidget *w, WidgetLibrary *lib=0);

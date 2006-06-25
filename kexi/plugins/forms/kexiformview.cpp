@@ -30,6 +30,7 @@
 #include <formeditor/container.h>
 #include <formeditor/widgetpropertyset.h>
 #include <formeditor/commands.h>
+#include <formeditor/widgetwithsubpropertiesinterface.h>
 
 #include <kexi.h>
 #include <kexidialogbase.h>
@@ -320,6 +321,19 @@ KexiFormView::loadForm()
 					afWidget->setColumnInfo(colInfo);
 						//setFieldTypeInternal((int)colInfo->field->type());
 						//afWidget->setFieldCaptionInternal(colInfo->captionOrAliasOrName());
+				}
+			}
+			// (delayed) set values for subproperties
+//! @todo this could be at the KFD level, but KFD is going to be merged anyway with kexiforms, right?
+			KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface 
+				= dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>( it.current()->widget() );
+			if (subpropIface && subpropIface->subwidget() && it.current()->subproperties() ) {
+				QWidget *subwidget = subpropIface->subwidget();
+				QMap<QString, QVariant>* subprops = it.current()->subproperties();
+				for (QMapConstIterator<QString, QVariant> subpropIt = subprops->constBegin(); subpropIt!=subprops->constEnd(); ++subpropIt) {
+					kexipluginsdbg << "KexiFormView::loadForm(): delayed setting of the subproperty: widget="
+						<< it.current()->widget()->name() << " prop=" << subpropIt.key() << " val=" << subpropIt.data() << endl;
+					subwidget->setProperty( subpropIt.key().latin1(), subpropIt.data() );
 				}
 			}
 		}
@@ -1006,6 +1020,9 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 		}
 	}
 
+	// there will be many actions performed, do not update property pane until all that's finished
+	KFormDesigner::FormManager::self()->blockPropertyEditorUpdating(this);
+
 //! todo unnamed query colums are not supported
 
 //		KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
@@ -1014,7 +1031,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 		fields.count()==1 ? i18n("Insert AutoField widget") : i18n("Insert %1 AutoField widgets").arg(fields.count()),
 		KFormDesigner::FormManager::self()->propertySet()
 	);
-
+	
 	foreach( QStringList::ConstIterator, it, fields ) {
 		KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(*it);
 		if (!column) {
@@ -1115,6 +1132,9 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 		foreach_list (KFormDesigner::WidgetListIterator, it, widgetsToSelect)
 			form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
 	}
+
+	// eventually, update property pane
+	KFormDesigner::FormManager::self()->unblockPropertyEditorUpdating(this, KFormDesigner::FormManager::self()->propertySet());
 }
 
 void

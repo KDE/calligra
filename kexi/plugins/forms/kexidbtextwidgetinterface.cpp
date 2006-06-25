@@ -36,7 +36,8 @@ void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QW
 void KexiDBTextWidgetInterface::paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus  )
 {
 	KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
-	if (dataItemIface && dataItemIface->columnInfo() && dataItemIface->columnInfo()->field->isAutoIncrement()
+	if (dataItemIface && dataItemIface->columnInfo() && dataItemIface->columnInfo()->field
+		&& dataItemIface->columnInfo()->field->isAutoIncrement()
 		&& m_autonumberDisplayParameters && dataItemIface->cursorAtNewRow() && textIsEmpty)
 	{
 		QPainter p(w);

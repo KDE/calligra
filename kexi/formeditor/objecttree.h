@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -95,6 +96,15 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		void addModifiedProperty(const QCString &property, const QVariant &oldValue);
 		void storeUnknownProperty(QDomElement &el);
 
+		/*! Adds subproperty \a property value \a value (a property of subwidget).
+		 Remembering it for delayed setting is needed because on loading 
+		 the subwidget could be not created yet (true e.g. for KexiDBAutoField). */
+		void addSubproperty(const QCString &property, const QVariant& value);
+
+		/*! \return subproperties for this item, added by addSubproperty() 
+		 or 0 is there are no subproperties. */
+		QMap<QString, QVariant>* subproperties() const { return m_subprops; }
+
 		void setPixmapName(const QCString &property, const QString &name);
 		QString pixmapName(const QCString &property);
 
@@ -114,6 +124,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		ObjectTreeList	m_children;
 		QGuardedPtr<Container> m_container;
 		QMap<QString, QVariant> m_props;
+		QMap<QString, QVariant> *m_subprops;
 		QString  m_unknownProps;
 		QMap<QCString, QString> m_pixmapNames;
 		ObjectTreeItem* m_parent;
@@ -165,7 +176,7 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		QCString generateUniqueName(const QCString &prefix, bool numberSuffixRequired = true);
 
 	private:
-		ObjectTreeDict	m_treeDict;
+		ObjectTreeDict m_treeDict;
 };
 
 }

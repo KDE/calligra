@@ -39,7 +39,6 @@
 
 #include <formeditor/commands.h>
 
-#include <koproperty/set.h>
 #include <koproperty/property.h>
 #include <koproperty/utils.h>
 
@@ -351,7 +350,9 @@ void KexiDataSourcePage::slotFieldSelected()
 #endif
 	if (field)
 		dataType = field->type();
-	
+
+	m_clearWidgetDSButton->setEnabled( !m_sourceFieldCombo->fieldOrExpression().isEmpty() );
+
 	emit dataSourceFieldOrExpressionChanged(
 		m_sourceFieldCombo->fieldOrExpression(), 
 		m_sourceFieldCombo->fieldOrExpressionCaption(), 
@@ -366,12 +367,16 @@ void KexiDataSourcePage::setDataSource(const QCString& mimeType, const QCString&
 
 void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 {
+	QCString objectName;
+	if (propertySet && propertySet->contains("name"))
+		objectName = (*propertySet)["name"].value().toCString();
+	if (!objectName.isEmpty() && objectName == m_currentObjectName)
+		return; //the same object
+	m_currentObjectName = objectName;
 	QCString objectClassName;
 	if (propertySet) {
-		QCString objectName, iconName;
+		QCString iconName;
 		QString objectClassString;
-		if (propertySet->contains("name"))
-			objectName = (*propertySet)["name"].value().toCString();
 		if (propertySet->contains("this:iconName"))
 			iconName = (*propertySet)["this:iconName"].value().toCString();
 		if (propertySet->contains("this:classString"))
@@ -382,7 +387,6 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 		if (propertySet->contains("this:className"))
 			objectClassName = (*propertySet)["this:className"].value().toCString();
 	}
-
 
 	const bool isForm = objectClassName=="KexiDBForm";
 //	kdDebug() << "objectClassName=" << objectClassName << endl;

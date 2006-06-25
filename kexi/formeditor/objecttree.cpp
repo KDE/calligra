@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,6 +46,13 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidg
 	m_container = container;
 	m_eater = new EventEater(widget, parentContainer);
 	m_parent = 0;
+	m_subprops = 0;
+}
+
+ObjectTreeItem::~ObjectTreeItem()
+{
+//	kdDebug() << "ObjectTreeItem deleted: " << name() << endl;
+	delete m_subprops;
 }
 
 void
@@ -76,6 +84,14 @@ ObjectTreeItem::addModifiedProperty(const QCString &property, const QVariant &ol
 		m_props.insert(property, oldValue);
 		kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " oldValue: " << oldValue << endl;
 	}
+}
+
+void
+ObjectTreeItem::addSubproperty(const QCString &property, const QVariant& value)
+{
+	if (!m_subprops)
+		m_subprops = new QMap<QString, QVariant>();
+	m_subprops->insert( property, value );
 }
 
 void
@@ -111,11 +127,6 @@ ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
 		m_span = true;
 	else
 		m_span = false;
-}
-
-ObjectTreeItem::~ObjectTreeItem()
-{
-//	kdDebug() << "ObjectTreeItem deleted: " << name() << endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

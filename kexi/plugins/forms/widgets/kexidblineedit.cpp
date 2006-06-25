@@ -229,7 +229,7 @@ void KexiDBLineEdit::setReadOnly( bool readOnly )
 	if (m_internalReadOnly) {
 		m_readWriteValidator = validator();
 		if (!m_readOnlyValidator)
-			m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
+		m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
 		setValidator( m_readOnlyValidator );
 	}
 	else {

@@ -50,6 +50,8 @@
 #include <krecentdirs.h>
 #endif
 
+#include "kexidbutils.h"
+
 static KStaticDeleter<QPixmap> KexiDBImageBox_pmDeleter;
 static QPixmap* KexiDBImageBox_pm = 0;
 
@@ -57,18 +59,25 @@ static QPixmap* KexiDBImageBox_pm = 0;
 class KexiDBImageBox::Button : public QToolButton
 {
 	public:
-		Button(QWidget *parent) : QToolButton(parent, "KexiDBImageBox::Button")
+		Button(KexiDBImageBox *parent, KPopupMenu* aPopup)
+		 : QToolButton(parent, "KexiDBImageBox::Button")
+		 , disableMousePress(false)
+		 , popup(aPopup)
 		{
 			setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 			setFixedWidth(QMAX(15, qApp->globalStrut().width()));
 			//	setFixedWidth(m_chooser->minimumSizeHint().width()); //! @todo get this from a KStyle
-			setAutoRaise(true);
+//			setAutoRaise(true);
+			setToggleButton(true);
 		}
-		~Button() {}
+		
+		virtual ~Button() {}
+
 		virtual void drawButton( QPainter *p ) {
+//			p->fillRect(0, 0, width(), height(), red);
 			QToolButton::drawButton(p);
 			QStyle::SFlags arrowFlags = QStyle::Style_Default;
-			if (isDown())
+			if (isDown() || state()==On)
 				arrowFlags |= QStyle::Style_Down;
 			if (isEnabled())
 				arrowFlags |= QStyle::Style_Enabled;
@@ -76,12 +85,42 @@ class KexiDBImageBox::Button : public QToolButton
 				QRect((width()-7)/2, height()-9, 7, 7), colorGroup(),
 				arrowFlags, QStyleOption() );
 		}
+		
+		virtual QSize sizeHint () const {
+			return QSize( fontMetrics().maxWidth() + 2*2, fontMetrics().height()*2 + 2*2 );
+		}
+
+		virtual void mousePressEvent( QMouseEvent *e ) {
+//			kexipluginsdbg << "#### mousePressEvent() " << e->button() << " " << state() 
+//				<< " disableMousePress=" << disableMousePress << " popup->isVisible()=" << popup->isVisible() << endl;
+			if (disableMousePress) {
+				disableMousePress = false;
+				if (popup && popup->isVisible())
+					return;
+			}
+			QToolButton::mousePressEvent(e);
+		}
+
+		virtual void keyPressEvent ( QKeyEvent * e ) {
+			const int k = e->key();
+			if ( (e->state() == Qt::NoButton && (k==Qt::Key_Enter || k==Qt::Key_Return || k==Qt::Key_F2 || k==Qt::Key_F4))
+			  || (e->state() == Qt::AltButton && e->key()==Qt::Key_Down) )
+			{
+				static_cast<KexiDBImageBox*>(parentWidget())->slotToggled(true);
+				e->accept();
+			}
+			QToolButton::keyPressEvent(e);
+
+		}
+
+		QGuardedPtr<KPopupMenu> popup;
+		bool disableMousePress : 1;
 };
 
 /////////
 
 KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *name )
-	: QWidget( parent, name, WNoAutoErase )
+	: KexiFrame( parent, name, Qt::WNoAutoErase )
 	, KexiFormDataItemInterface()
 	, m_actionCollection(this)
 	, m_alignment(Qt::AlignAuto|Qt::AlignTop)
@@ -90,24 +129,32 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	, m_scaledContents(false)
 	, m_keepAspectRatio(true)
 	, m_insideSetData(false)
+	, m_setFocusOnButtonAfterClosingPopup(false)
+	, m_lineWidthChanged(false)
+	, m_paletteBackgroundColorChanged(false)
+	, m_paintEventEnabled(true)
 {
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 	setBackgroundMode(Qt::NoBackground);
+	setFrameShape(QFrame::Box);
+	setFrameShadow(QFrame::Plain);
+	setFrameColor(Qt::black);
 
-//	QHBoxLayout *hlyr = new QHBoxLayout(this, 2);
-//	m_pixmapLabel = new ImageLabel(this);
-//	hlyr->addWidget(m_pixmapLabel);
+	//setup popup menu
+	m_popup = new KPopupMenu(this);
+	m_popup->insertTitle(QString::null);
 
 	if (m_designMode) {
 		m_chooser = 0;
 	}
 	else {
-		m_chooser = new Button(this);
+		m_chooser = new Button(this, m_popup);
+		m_chooser->setFocusPolicy(StrongFocus);
+		setFocusProxy(m_chooser);
+//		m_chooser->setPalette(qApp->palette());
 //		hlyr->addWidget(m_chooser);
 	}
-	//setup popup menu
-	m_popup = new KPopupMenu(this);
-	QString titleString = i18n("Image Box");
-	m_titleID = m_popup->insertTitle(SmallIcon("pixmaplabel"), titleString);
+
 	m_insertFromFileAction = new KAction(i18n("Insert From &File..."), SmallIconSet("fileopen"), 0,
 			this, SLOT(insertFromFile()), &m_actionCollection, "insert");
 	m_insertFromFileAction->plug(m_popup);
@@ -137,6 +184,8 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	if (m_chooser) {
 		//we couldn't use m_chooser->setPopup() because of drawing problems
 		connect(m_chooser, SIGNAL(pressed()), this, SLOT(slotChooserPressed()));
+		connect(m_chooser, SIGNAL(released()), this, SLOT(slotChooserReleased()));
+		connect(m_chooser, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
 	}
 
 	setDataSource( QString::null ); //to initialize popup menu and actions availability
@@ -163,10 +212,17 @@ void KexiDBImageBox::setValueInternal( const QVariant& add, bool /* irrelevant h
 {
 	if (isReadOnly())
 		return;
+	const bool valueWasEmpty = m_value.isEmpty();
 	m_value = add.toByteArray();
-//	m_pixmap = QPixmap(); //will be loaded on demand
+	if (!m_value.isEmpty()) {
+		QString type( KImageIO::typeForMime(m_valueMimeType) );
+		if (!KImageIO::canRead( type ) || !m_pixmap.loadFromData(m_value, type.latin1())) {
+			//! @todo inform about error?
+		}
+	}
 	repaint();
-	emit valueChanged(m_value);
+	if (m_value.isEmpty() != valueWasEmpty)
+		emit pixmapChanged();//valueChanged(m_value);
 }
 
 void KexiDBImageBox::setInvalidState( const QString& displayText )
@@ -346,12 +402,14 @@ void KexiDBImageBox::insertFromFile()
 			//! @todo err msg
 			return;
 		}
-		m_value = f.readAll();
+		QByteArray ba = f.readAll();
 		if (f.status()!=IO_Ok) {
 			//! @todo err msg
 			f.close();
 			return;
 		}
+		m_valueMimeType = KImageIO::mimeType( fileName ); 
+		setValueInternal( ba, true );
 	}
 	repaint();
 
@@ -461,7 +519,8 @@ void KexiDBImageBox::paste()
 	}
 	
 	repaint();
-	emit valueChanged(data());
+	if (!dataSource().isEmpty())
+		emit pixmapChanged();//valueChanged(data());
 }
 
 void KexiDBImageBox::clear()
@@ -485,7 +544,8 @@ void KexiDBImageBox::clear()
 
 //	m_pixmap = QPixmap(); //will be loaded on demand
 	repaint();
-	emit valueChanged(data());
+	if (!dataSource().isEmpty())
+		emit pixmapChanged();//valueChanged(data());
 }
 
 void KexiDBImageBox::showProperties()
@@ -496,9 +556,11 @@ void KexiDBImageBox::showProperties()
 void KexiDBImageBox::updateActionsAvailability()
 {
 	const bool notNull 
-		= (dataSource().isEmpty() && !pixmap().isNull())
-		|| (!dataSource().isEmpty() && !valueIsNull());
-	const bool readOnly = !dataSource().isEmpty() && !isReadOnly();
+		= (dataSource().isEmpty() && !pixmap().isNull()) //static pixmap available
+		|| (!dataSource().isEmpty() && !valueIsNull());  //db-aware pixmap available
+	// read-only if static pixmap or db-aware pixmap for read-only widget:
+	const bool readOnly = !m_designMode && dataSource().isEmpty() || !dataSource().isEmpty() && isReadOnly()
+		|| m_designMode && !dataSource().isEmpty();
 
 	m_insertFromFileAction->setEnabled( !readOnly );
 	m_saveAsAction->setEnabled( notNull );
@@ -512,7 +574,15 @@ void KexiDBImageBox::updateActionsAvailability()
 
 void KexiDBImageBox::slotAboutToHidePopupMenu()
 {
+//	kexipluginsdbg << "##### slotAboutToHidePopupMenu() " << endl;
 	m_clickTimer.start(50, true);
+	if (m_chooser && m_chooser->isOn()) {
+		m_chooser->toggle();
+		if (m_setFocusOnButtonAfterClosingPopup) {
+			m_setFocusOnButtonAfterClosingPopup = false;
+			m_chooser->setFocus();
+		}
+	}
 }
 
 void KexiDBImageBox::contextMenuEvent( QContextMenuEvent * e )
@@ -523,43 +593,76 @@ void KexiDBImageBox::contextMenuEvent( QContextMenuEvent * e )
 
 void KexiDBImageBox::slotChooserPressed()
 {
-	if (m_clickTimer.isActive())
+//	if (!m_clickTimer.isActive())
+//		return;
+//	m_chooser->setDown( false );
+}
+
+void KexiDBImageBox::slotChooserReleased()
+{
+}
+
+void KexiDBImageBox::slotToggled(bool on)
+{
+//	kexipluginsdbg << "##### slotToggled() " << on << endl;
+	if (m_clickTimer.isActive() || !on) {
+		m_chooser->disableMousePress = true;
 		return;
+	}
+	m_chooser->disableMousePress = false;
 	QRect screen = qApp->desktop()->availableGeometry( m_chooser );
 	QPoint p;
 	if ( QApplication::reverseLayout() ) {
-		if ( mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height() <= screen.height() )
+		if ( (mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height()) <= screen.height() )
 			p = m_chooser->mapToGlobal( m_chooser->rect().bottomRight() );
 		else
 			p = m_chooser->mapToGlobal( m_chooser->rect().topRight() - QPoint( 0, m_popup->sizeHint().height() ) );
 		p.rx() -= m_popup->sizeHint().width();
 	}
 	else {
-		if ( m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height() <= screen.height() )
+		if ( (m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height()) <= screen.height() )
 			p = m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() );
 		else
 			p = m_chooser->mapToGlobal( m_chooser->rect().topLeft() - QPoint( 0, m_popup->sizeHint().height() ) );
 	}
-	if (!m_popup->isVisible()) {
+	if (!m_popup->isVisible() && on) {
 		m_popup->exec( p, -1 );
+		m_popup->setFocus();
 	}
-	m_chooser->setDown( false );
+	//m_chooser->setDown( false );
 }
 
 void KexiDBImageBox::updateActionStrings()
 {
 	if (!m_popup)
 		return;
-	QString titleString = i18n("Image Box");
-	if (!dataSource().isEmpty())
-		titleString += (": " + dataSource());
-	m_popup->changeTitle(m_titleID, m_popup->titlePixmap(m_titleID), titleString);
+	if (m_designMode) {
+		QString titleString( i18n("Image Box") );
+		if (!dataSource().isEmpty())
+			titleString += (": " + dataSource());
+		m_popup->changeTitle(m_popup->idAt(0), m_popup->titlePixmap(m_popup->idAt(0)), titleString);
+	}
+	else {
+		//update title in data view mode, based on the data source
+		KexiDBWidgetContextMenuExtender::updateContextMenuTitleForDataItem(m_popup, this);
+	}
 
 	if (m_chooser) {
-		if (popupMenuAvailable() && dataSource().isEmpty()) //this may work in the future (see @todo below)
+		if (popupMenuAvailable() && dataSource().isEmpty()) { //this may work in the future (see @todo below)
 			QToolTip::add(m_chooser, i18n("Click to show actions for this image box"));
-		else
-			QToolTip::add(m_chooser, i18n("Click to show actions for \"%1\" image box").arg(dataSource()));
+		} else {
+			QString beautifiedImageBoxName;
+			if (m_designMode) {
+				beautifiedImageBoxName = dataSource();
+			}
+			else {
+				beautifiedImageBoxName = columnInfo() ? columnInfo()->captionOrAliasOrName() : QString::null;
+				/*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
+				 (see doc/dev/settings.txt) */
+				beautifiedImageBoxName = beautifiedImageBoxName[0].upper() + beautifiedImageBoxName.mid(1);
+			}
+			QToolTip::add(m_chooser, i18n("Click to show actions for \"%1\" image box").arg(beautifiedImageBoxName));
+		}
 	}
 }
 
@@ -585,6 +688,16 @@ void KexiDBImageBox::setDataSource( const QString &ds )
 			m_chooser->hide();
 		}
 	}
+
+	// update some properties s not changed by user
+//! @todo get default line width from global style settings
+	if (!m_lineWidthChanged) {
+		KexiFrame::setLineWidth( ds.isEmpty() ? 0 : 1 );
+	}
+	if (!m_paletteBackgroundColorChanged && parentWidget()) {
+		KexiFrame::setPaletteBackgroundColor( 
+			dataSource().isEmpty() ? parentWidget()->paletteBackgroundColor() : palette().active().base() );
+	}
 }
 
 QSize KexiDBImageBox::sizeHint() const
@@ -594,12 +707,23 @@ QSize KexiDBImageBox::sizeHint() const
 	return pixmap().size();
 }
 
-//void KexiDBImageBox::drawContents( QPainter *p )
-void KexiDBImageBox::paintEvent( QPaintEvent*pe )
+int KexiDBImageBox::realLineWidth() const
 {
+	if (frameShape()==QFrame::Box && (frameShadow()==QFrame::Sunken || frameShadow()==QFrame::Raised))
+		return 2 * lineWidth();
+	else
+		return lineWidth();
+}
+
+void KexiDBImageBox::paintEvent( QPaintEvent *pe )
+{
+	if (!m_paintEventEnabled)
+		return;
 	QPainter p(this);
 	p.setClipRect(pe->rect());
-	const int m = 0; //todo margin();
+	const int m = realLineWidth();
+	const int w = width()-m-m;
+	const int h = height()-m-m;
 //	QPainter ptr(this);
 //	ptr.fillRect(0,0,width(),height(), green);
 //	p->setClipRect(0, 0, width(), height());
@@ -608,7 +732,7 @@ void KexiDBImageBox::paintEvent( QPaintEvent*pe )
 //	QColor bg(palette().active().background());//parentWidget()->palette().active().background()
 	QColor bg(eraseColor());
 	if (m_designMode && pixmap().isNull()) {
-		QPixmap pm(size());
+		QPixmap pm(size()-QSize(m, m));
 		QPainter p2;
 		p2.begin(&pm, this);
 //			QLabel::drawContents( p );
@@ -617,7 +741,7 @@ void KexiDBImageBox::paintEvent( QPaintEvent*pe )
 		updatePixmap();
 		QImage img(KexiDBImageBox_pm->convertToImage());
 		img = KImageEffect::flatten(img, bg.dark(150),
-			qGray( bg.rgb() ) <= 20 ? Qt::darkGray : bg.light(105));
+			qGray( bg.rgb() ) <= 20 ? QColor(Qt::gray).dark(150) : bg.light(105));
 //				m_scalledDown = (pix.width() > (width()/2) || pix.height() > (height()/2));
 //				if (m_scalledDown)
 //					img = img.smoothScale(width()/2, height()/2, QImage::ScaleMin);
@@ -627,14 +751,15 @@ void KexiDBImageBox::paintEvent( QPaintEvent*pe )
 
 		QPixmap converted;
 		converted.convertFromImage(img);
-		p2.drawPixmap(m+2, height()-m-KexiDBImageBox_pm->height()-2, converted);
+		p2.drawPixmap(2, height()-m-m-KexiDBImageBox_pm->height()-2, converted);
 		QFont f(qApp->font());
 //		f.setPointSize(f.pointSize());
 		p2.setFont(f);
 		p2.setPen( KexiUtils::contrastColor( bg ) );
-		p2.drawText(pm.rect(), Qt::AlignCenter|Qt::WordBreak, i18n("No Image"));
+		p2.drawText(pm.rect(), Qt::AlignCenter|Qt::WordBreak, 
+			dataSource().isEmpty() ? i18n("No Image") : dataSource());
 		p2.end();
-		bitBlt(this, 0, 0, &pm);
+		bitBlt(this, m, m, &pm);
 	}
 	else {
 //		QFrame::drawContents( p );
@@ -651,7 +776,7 @@ void KexiDBImageBox::paintEvent( QPaintEvent*pe )
 				target = &p;
 			}
 			else {
-				pm.resize(size());
+				pm.resize(size()-QSize(m, m));
 				p2.begin(&pm, this);
 				target = &p2;
 			}
@@ -660,53 +785,54 @@ void KexiDBImageBox::paintEvent( QPaintEvent*pe )
 			if (m_scaledContents) {
 				if (m_keepAspectRatio) {
 					QImage img(pixmap().convertToImage());
-					img = img.smoothScale(width(), height(), QImage::ScaleMin);
-					QPoint pos(0,0);
-					if (img.width()<width()) {
+					img = img.smoothScale(w, h, QImage::ScaleMin);
+					QPoint pos(0, 0);
+					if (img.width() < w) {
 						int hAlign = QApplication::horizontalAlignment( m_alignment );
 						if ( hAlign & Qt::AlignRight )
-							pos.setX(width()-img.width());
+							pos.setX(w-img.width());
 						else if ( hAlign & Qt::AlignHCenter )
-							pos.setX(width()/2-img.width()/2);
+							pos.setX(w/2-img.width()/2);
 					}
-					else if (img.height()<height()) {
+					else if (img.height() < h) {
 						if ( m_alignment & Qt::AlignBottom )
-							pos.setY(height()-img.height());
+							pos.setY(h-img.height());
 						else if ( m_alignment & Qt::AlignVCenter )
-							pos.setY(height()/2-img.height()/2);
+							pos.setY(h/2-img.height()/2);
 					}
 					QPixmap px;
 					px.convertFromImage(img);
 					target->drawPixmap(pos, px);
 				}
 				else {
-					target->drawPixmap(QRect(m, m, width()-m*2, height()-m*2), pixmap());
+					target->drawPixmap(QRect(0, 0, w, h), pixmap());
 				}
 			}
 			else {
 				int hAlign = QApplication::horizontalAlignment( m_alignment );
 				QPoint pos;
 				if ( hAlign & Qt::AlignRight )
-					pos.setX(width()-pixmap().width()-m);
+					pos.setX(w-pixmap().width());
 				else if ( hAlign & Qt::AlignHCenter )
-					pos.setX(width()/2-pixmap().width()/2);
+					pos.setX(w/2-pixmap().width()/2);
 				else //left, etc.
-					pos.setX(m);
+					pos.setX(0);
 
 				if ( m_alignment & Qt::AlignBottom )
-					pos.setY(height()-pixmap().height()-m);
+					pos.setY(h-pixmap().height());
 				else if ( m_alignment & Qt::AlignVCenter )
-					pos.setY(height()/2-pixmap().height()/2);
+					pos.setY(h/2-pixmap().height()/2);
 				else //top, etc. 
-					pos.setY(m);
+					pos.setY(0);
 				target->drawPixmap(pos, pixmap());
 			}
 			if (!fast) {
 				p2.end();
-				bitBlt(this, 0, 0, &pm);
+				bitBlt(this, m, m, &pm);
 			}
 		}
 	}
+	KexiFrame::drawFrame( &p );
 }
 /*		virtual void KexiDBImageBox::paletteChange ( const QPalette & oldPalette )
 {
@@ -751,18 +877,22 @@ void KexiDBImageBox::setData(const KexiBLOBBuffer::Handle& handle)
 	m_data = handle;
 	emit idChanged(handle.id());
 	m_insideSetData = false;
+	update();
 }
 
-//		virtual void resizeEvent( QResizeEvent *e )
-//		{
-//			updatePixmap();
-//			QWidget::resizeEvent(e);
-//		}
-
-/*void KexiDBImageBox::paintEvent( QPaintEvent* )
+void KexiDBImageBox::resizeEvent( QResizeEvent * e )
 {
+	KexiFrame::resizeEvent(e);
+	if (m_chooser) {
+		QSize s( m_chooser->sizeHint() );
+		QSize margin( realLineWidth(), realLineWidth() );
+		s.setHeight( height() - 2*margin.height() );
+		s = s.boundedTo( size()-2*margin );
+		m_chooser->resize( s );
+		m_chooser->move( QRect(QPoint(0,0), e->size() - m_chooser->size() - margin + QSize(1,1)).bottomRight() );
+	}
 }
-*/
+
 /*
 bool KexiDBImageBox::setProperty( const char * name, const QVariant & value )
 {
@@ -778,11 +908,37 @@ bool KexiDBImageBox::setProperty( const char * name, const QVariant & value )
 	}
 	return ret;
 }
+*/
 
 void KexiDBImageBox::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
-	KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
-}*/
+	//updating strings and title is needed
+	updateActionStrings();
+}
+
+bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
+{
+	// Esc key should close the popup
+	if (ke->state() == Qt::NoButton && ke->key() == Qt::Key_Escape) {
+		if (m_popup->isVisible()) {
+			m_setFocusOnButtonAfterClosingPopup = true;
+			return true;
+		}
+	}
+	return false;
+}
+
+void KexiDBImageBox::setLineWidth( int width )
+{
+	m_lineWidthChanged = true;
+	KexiFrame::setLineWidth(width);
+}
+
+void KexiDBImageBox::setPaletteBackgroundColor( const QColor & color )
+{
+	m_paletteBackgroundColorChanged = true;
+	KexiFrame::setPaletteBackgroundColor(color);
+}
 
 #include "kexidbimagebox.moc"

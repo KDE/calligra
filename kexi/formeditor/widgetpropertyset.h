@@ -145,9 +145,13 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		// Following functions are used to create special types of properties, different
 		// from Q_PROPERTY
+
 		/*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for
-		 the QWidget \a obj. \a meta  is the QMetaProperty for "alignment" property".  */
-		void createAlignProperty(const QMetaProperty *meta, QWidget *obj);
+		 the QWidget \a widget. \a subwidget is the same as \a widget if the widget itself handles
+		 the property and it's a child widget if the child handles the property. 
+		 For example, the second case is true for KexiDBAutoField.
+		 \a meta  is the QMetaProperty for "alignment" property" of subwidget.  */
+		void createAlignProperty(const QMetaProperty *meta, QWidget *widget, QWidget *subwidget);
 
 		/*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak)
 		 and modifies the "alignment" property of  the widget.*/

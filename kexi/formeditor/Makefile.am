@@ -14,7 +14,7 @@ libkformdesigner_la_SOURCES = container.cpp resizehandle.cpp widgetfactory.cpp \
   objecttree.cpp formIO.cpp formmanager.cpp objecttreeview.cpp spring.cpp \
   commands.cpp events.cpp connectiondialog.cpp richtextdialog.cpp \
   tabstopdialog.cpp editlistviewdialog.cpp utils.cpp widgetpropertyset.cpp \
-  kfdpixmapedit.cpp
+  kfdpixmapedit.cpp widgetwithsubpropertiesinterface.cpp
 
 METASOURCES = AUTO
 libkformdesigner_la_LIBADD = \
