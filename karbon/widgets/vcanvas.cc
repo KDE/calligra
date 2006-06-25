@@ -59,7 +59,6 @@ KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
     : QWidget()
     , m_tool(0)
     , m_zoomHandler()
-    , m_viewConverter(&m_zoomHandler)
     , m_snapToGrid(false)
 {
     setBackgroundRole(QPalette::Base);
@@ -83,9 +82,9 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     gc.setRenderHint(QPainter::Antialiasing);
     gc.setClipRect(ev->rect());
 
-    m_shapeManager->paint( gc, m_viewConverter, false );
+    m_shapeManager->paint( gc, m_zoomHandler, false );
     if( m_tool )
-        m_tool->paint( gc, m_viewConverter );
+        m_tool->paint( gc, m_zoomHandler );
 
     gc.end();
 }
@@ -99,63 +98,28 @@ void KarbonCanvas::wheelEvent(QWheelEvent *e)
 
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
-
-    if( m_tool )
-    {
-        m_tool->mouseMoveEvent( &ev );
-    }
+    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToDocument(e->pos()) ));
+    m_tool->mouseMoveEvent( &ev );
 }
 
 void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
-
-    if( m_tool )
-    {
-        m_tool->mousePressEvent( &ev );
-    }
+    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToDocument(e->pos()) ));
+    m_tool->mousePressEvent( &ev );
 }
 
 void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToNormal(e->pos()) ));
-
-    if( m_tool )
-    {
-        m_tool->mouseReleaseEvent( &ev );
-    }
+    KoPointerEvent ev(e, QPointF( m_zoomHandler.viewToDocument(e->pos()) ));
+    m_tool->mouseReleaseEvent( &ev );
 }
 
 void KarbonCanvas::keyReleaseEvent (QKeyEvent *e) {
-    if( m_tool )
-        m_tool->keyReleaseEvent(e);
+    m_tool->keyReleaseEvent(e);
 }
 
 void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
-    if( m_tool )
-        m_tool->keyPressEvent(e);
-}
-
-QPointF KarbonCanvas::ViewConverter::normalToView( const QPointF &normalPoint ) {
-    return m_zoomHandler->normalToView(normalPoint);
-}
-
-QPointF KarbonCanvas::ViewConverter::viewToNormal( const QPointF &viewPoint ) {
-    return m_zoomHandler->viewToNormal(viewPoint);
-}
-
-QRectF KarbonCanvas::ViewConverter::normalToView( const QRectF &normalRect ) {
-    return m_zoomHandler->normalToView(normalRect);
-}
-
-QRectF KarbonCanvas::ViewConverter::viewToNormal( const QRectF &viewRect ) {
-    return m_zoomHandler->viewToNormal(viewRect);
-}
-
-void KarbonCanvas::ViewConverter::zoom(double *zoomX, double *zoomY) const {
-    *zoomX = m_zoomHandler->zoomItX(100.0) / 100.0;
-    *zoomY = m_zoomHandler->zoomItY(100.0) / 100.0;
+    m_tool->keyPressEvent(e);
 }
 
 void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
@@ -168,7 +132,7 @@ void KarbonCanvas::addCommand(KCommand *command, bool execute) {
 }
 
 void KarbonCanvas::updateCanvas(const QRectF& rc) {
-    QRect clipRect(m_viewConverter.normalToView(rc).toRect());
+    QRect clipRect(m_zoomHandler.documentToView(rc).toRect());
     clipRect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
     update(clipRect);
 }

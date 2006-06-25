@@ -467,8 +467,8 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
 
    assert( embeddedObject()->document() != 0 );
 
-   double zoomX = static_cast<double>( sheet()->doc()->zoom() ) / 100;
-   double zoomY = static_cast<double>( sheet()->doc()->zoom() ) / 100;
+   double zoomX, zoomY;
+    sheet()->doc()->zoom(&zoomX, &zoomY);
    embeddedObject()->document()->paintEverything( *_painter,
         zoomedBound,
         embeddedObject()->isTransparent(),

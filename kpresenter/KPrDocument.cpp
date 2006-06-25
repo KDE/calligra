@@ -312,7 +312,7 @@ void KPrDocument::saveConfig()
     {
         KConfig *config = KPrFactory::global()->config();
         config->setGroup( "Interface" );
-        config->writeEntry( "Zoom", m_zoomHandler->zoom() );
+        config->writeEntry( "Zoom", m_zoomHandler->zoomInPercent() );
         config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
         config->writeEntry( "ViewFormattingChars", m_bViewFormattingChars );
         config->writeEntry( "ShowGrid" , m_bShowGrid );
@@ -3806,7 +3806,7 @@ void KPrDocument::paintContent( QPainter& painter, const QRect& rect,
 
 QPixmap KPrDocument::generatePreview( const QSize& size )
 {
-    int oldZoom = zoomHandler()->zoom();
+    int oldZoom = zoomHandler()->zoomInPercent();
     double oldResolutionX = zoomHandler()->resolutionX();
     double oldResolutionY = zoomHandler()->resolutionY();
 

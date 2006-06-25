@@ -2007,7 +2007,7 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
 #endif
 
   // Scale the font size according to the current zoom.
-  tmpFont.setPointSizeF( 0.01 * format()->sheet()->doc()->zoom()
+  tmpFont.setPointSizeF( 0.01 * format()->sheet()->doc()->zoomInPercent()
            * tmpFont.pointSizeF() );
 
   painter.setFont( tmpFont );

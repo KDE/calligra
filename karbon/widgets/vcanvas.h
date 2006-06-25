@@ -79,7 +79,7 @@ public:
     KoTool *tool() { return m_tool; }
     void setTool(KoTool *tool) { m_tool = tool; }
 
-    KoViewConverter *viewConverter() { return &m_viewConverter; }
+    KoViewConverter *viewConverter() { return &m_zoomHandler; }
 
     QWidget *canvasWidget() { return this; }
 
@@ -99,21 +99,8 @@ private:
     KoShapeManager* m_shapeManager;
     KoZoomHandler m_zoomHandler;
 
-    class ViewConverter : public KoViewConverter {
-        public:
-            ViewConverter(KoZoomHandler *handler) { m_zoomHandler = handler; };
-            QPointF normalToView( const QPointF &normalPoint );
-            QPointF viewToNormal( const QPointF &viewPoint );
-            QRectF normalToView( const QRectF &normalPoint );
-            QRectF viewToNormal( const QRectF &viewPoint );
-            void zoom(double *zoomX, double *zoomY) const;
-        private:
-            KoZoomHandler *m_zoomHandler;
-    };
-
     //KSillyCommandHistory *m_commandHistory;
 
-    ViewConverter m_viewConverter;
     KoTool *m_tool;
 
     bool m_snapToGrid;

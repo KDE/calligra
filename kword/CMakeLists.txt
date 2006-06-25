@@ -2,158 +2,159 @@
 
 project(kword)
 
-add_subdirectory( mailmerge )
+#add_subdirectory( mailmerge )
 add_subdirectory( templates )
-add_subdirectory( dtd )
+#add_subdirectory( dtd )
 add_subdirectory( pics )
-add_subdirectory( toolbar )
-add_subdirectory( expression )
-add_subdirectory( data )
-add_subdirectory( tests )
+#add_subdirectory( toolbar )
+#add_subdirectory( expression )
+#add_subdirectory( data )
+#add_subdirectory( tests )
+add_subdirectory( part )
 
-include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kformula ${KOFFICEUI_INCLUDES} )
-
-
-########### next target ###############
-
-set(kwordpart_PART_SRCS KWFactoryInit.cpp )
-
-kde4_automoc(${kwordpart_PART_SRCS})
-
-kde4_add_plugin(kwordpart WITH_PREFIX ${kwordpart_PART_SRCS})
-
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordpart )
-
-target_link_libraries(kwordpart  ${KDE4_KDECORE_LIBS} kwordprivate )
-
-install_targets(${PLUGIN_INSTALL_DIR} kwordpart )
+#include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kformula ${KOFFICEUI_INCLUDES} )
 
 
 ########### next target ###############
 
-set(kwmailmerge_interface_LIB_SRCS KWMailMergeDataSource.cpp )
-
-kde4_automoc(${kwmailmerge_interface_LIB_SRCS})
-
-
-kde4_add_library(kwmailmerge_interface SHARED ${kwmailmerge_interface_LIB_SRCS})
-
-target_link_libraries(kwmailmerge_interface  ${KDE4_KDECORE_LIBS} )
-
-set_target_properties(kwmailmerge_interface PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kwmailmerge_interface )
-
-
-########### next target ###############
-
-set(kwordprivate_LIB_SRCS 
-   KWTableFrameSet.cpp 
-   KWCanvas.cpp 
-   KWFrame.cpp 
-   #KWFormulaFrameSet.cpp 
-   KWFactory.cpp 
-   KWDocument.cpp 
-   KWView.cpp 
-   KWViewMode.cpp 
-   KWTextParag.cpp 
-   KWTextDocument.cpp 
-   #KWTextFrameSet.cpp 
-   KWPartFrameSet.cpp 
-   KWTextImage.cpp 
-   KWAnchor.cpp 
-   KWConfig.cpp 
-   KWVariable.cpp 
-   KWFrameDia.cpp 
-   KWFootNoteDia.cpp 
-   KWFrameStyle.cpp 
-   KWFrameStyleManager.cpp 
-   KWTableStyle.cpp 
-   KWTableStyleManager.cpp 
-   KWTableTemplate.cpp 
-   KWTableTemplateSelector.cpp 
-   KWTableDia.cpp 
-   KWInsertDia.cpp 
-   KWDeleteDia.cpp 
-   KWDocStruct.cpp 
-   KWInsertTOCCommand.cpp 
-   KWStyleManager.cpp 
-   KWFindReplace.cpp 
-   KWCommand.cpp 
-   KWStatisticsDialog.cpp 
-   KWMailMergeDataBase.cpp 
-   KWMailMergeLabelAction.cpp 
-   KWEditPersonnalExpression.cpp 
-   KWSplitCellDia.cpp 
-   KWInsertPicDia.cpp 
-   #KWordDocIface.cpp 
-   #KWordViewIface.cpp 
-   #KWordTextFrameSetIface.cpp 
-   #KWordTextFrameSetEditIface.cpp 
-   #KWordFrameSetIface.cpp 
-   #KWordFormulaFrameSetIface.cpp 
-   #KWordFormulaFrameSetEditIface.cpp 
-    #KWordPictureFrameSetIface.cpp 
-   #KWordTableFrameSetIface.cpp 
-   #KWordPartFrameSetIface.cpp 
-   #KWBgSpellCheck.cpp 
-   KWResizeTableDia.cpp 
-   KWFrameLayout.cpp 
-   KWConfigFootNoteDia.cpp 
-   KWCreateBookmarkDia.cpp 
-   KWImportStyleDia.cpp 
-   #KWordFootNoteFrameSetIface.cpp 
-   KWSortDia.cpp 
-   KWInsertPageDia.cpp 
-   KWCollectFramesetsVisitor.cpp 
-   KWOasisLoader.cpp 
-   KWOasisSaver.cpp 
-   KWFrameList.cpp 
-   KWPage.cpp 
-   KWPageManager.cpp 
-   KWFrameSet.cpp 
-   KWFrameSetEdit.cpp 
-   KWPictureFrameSet.cpp 
-   KWFrameViewManager.cpp 
-   KWFrameView.cpp 
-   KWStartupWidget.cpp 
-   KWLoadingInfo.cpp
-    KWGUI.cpp )
-
-kde4_automoc(${kwordprivate_LIB_SRCS})
-
-kde4_add_ui3_files(kwordprivate_LIB_SRCS KWCreateBookmarkDiaBase.ui KWSelectBookmarkDiaBase.ui KWStartupWidgetBase.ui )
-
-
-kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
-
-target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake kofficeui kotext kformulalib kwmailmerge_interface )
-
-set_target_properties(kwordprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kwordprivate )
-
-
-########### next target ###############
-
-set(kword_KDEINIT_SRCS main.cpp )
-
-kde4_automoc(${kword_KDEINIT_SRCS})
-
-kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
-
-target_link_libraries(kdeinit_kword  ${KDE4_KDECORE_LIBS} kofficecore )
-
-install_targets(${LIB_INSTALL_DIR} kdeinit_kword )
-
-target_link_libraries( kword kdeinit_kword )
-install_targets(/bin kword )
-
-########### install files ###############
-
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES  kwmailmerge.desktop )
-install_files( ${DATA_INSTALL_DIR}/kword FILES  kword.rc kword_readonly.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kwordpart.desktop )
-install_files( ${XDG_APPS_DIR} FILES  kword.desktop )
-install_files( /include/kword FILES  KWMailMergeDataSource.h )
+# set(kwordpart_PART_SRCS KWFactoryInit.cpp )
+#
+# kde4_automoc(${kwordpart_PART_SRCS})
+#
+# kde4_add_plugin(kwordpart WITH_PREFIX ${kwordpart_PART_SRCS})
+#
+# kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordpart )
+#
+# target_link_libraries(kwordpart  ${KDE4_KDECORE_LIBS} kwordprivate )
+#
+# install_targets(${PLUGIN_INSTALL_DIR} kwordpart )
+#
+#
+# ########### next target ###############
+#
+# set(kwmailmerge_interface_LIB_SRCS KWMailMergeDataSource.cpp )
+#
+# kde4_automoc(${kwmailmerge_interface_LIB_SRCS})
+#
+#
+# kde4_add_library(kwmailmerge_interface SHARED ${kwmailmerge_interface_LIB_SRCS})
+#
+# target_link_libraries(kwmailmerge_interface  ${KDE4_KDECORE_LIBS} )
+#
+# set_target_properties(kwmailmerge_interface PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+# install_targets(${LIB_INSTALL_DIR} kwmailmerge_interface )
+#
+#
+# ########### next target ###############
+#
+# set(kwordprivate_LIB_SRCS 
+#    KWTableFrameSet.cpp 
+#    KWCanvas.cpp 
+#    KWFrame.cpp 
+#    #KWFormulaFrameSet.cpp 
+#    KWFactory.cpp 
+#    KWDocument.cpp 
+#    KWView.cpp 
+#    KWViewMode.cpp 
+#    KWTextParag.cpp 
+#    KWTextDocument.cpp 
+#    #KWTextFrameSet.cpp 
+#    KWPartFrameSet.cpp 
+#    KWTextImage.cpp 
+#    KWAnchor.cpp 
+#    KWConfig.cpp 
+#    KWVariable.cpp 
+#    KWFrameDia.cpp 
+#    KWFootNoteDia.cpp 
+#    KWFrameStyle.cpp 
+#    KWFrameStyleManager.cpp 
+#    KWTableStyle.cpp 
+#    KWTableStyleManager.cpp 
+#    KWTableTemplate.cpp 
+#    KWTableTemplateSelector.cpp 
+#    KWTableDia.cpp 
+#    KWInsertDia.cpp 
+#    KWDeleteDia.cpp 
+#    KWDocStruct.cpp 
+#    KWInsertTOCCommand.cpp 
+#    KWStyleManager.cpp 
+#    KWFindReplace.cpp 
+#    KWCommand.cpp 
+#    KWStatisticsDialog.cpp 
+#    KWMailMergeDataBase.cpp 
+#    KWMailMergeLabelAction.cpp 
+#    KWEditPersonnalExpression.cpp 
+#    KWSplitCellDia.cpp 
+#    KWInsertPicDia.cpp 
+#    #KWordDocIface.cpp 
+#    #KWordViewIface.cpp 
+#    #KWordTextFrameSetIface.cpp 
+#    #KWordTextFrameSetEditIface.cpp 
+#    #KWordFrameSetIface.cpp 
+#    #KWordFormulaFrameSetIface.cpp 
+#    #KWordFormulaFrameSetEditIface.cpp 
+#     #KWordPictureFrameSetIface.cpp 
+#    #KWordTableFrameSetIface.cpp 
+#    #KWordPartFrameSetIface.cpp 
+#    #KWBgSpellCheck.cpp 
+#    KWResizeTableDia.cpp 
+#    KWFrameLayout.cpp 
+#    KWConfigFootNoteDia.cpp 
+#    KWCreateBookmarkDia.cpp 
+#    KWImportStyleDia.cpp 
+#    #KWordFootNoteFrameSetIface.cpp 
+#    KWSortDia.cpp 
+#    KWInsertPageDia.cpp 
+#    KWCollectFramesetsVisitor.cpp 
+#    KWOasisLoader.cpp 
+#    KWOasisSaver.cpp 
+#    KWFrameList.cpp 
+#    KWPage.cpp 
+#    KWPageManager.cpp 
+#    KWFrameSet.cpp 
+#    KWFrameSetEdit.cpp 
+#    KWPictureFrameSet.cpp 
+#    KWFrameViewManager.cpp 
+#    KWFrameView.cpp 
+#    KWStartupWidget.cpp 
+#    KWLoadingInfo.cpp
+#     KWGUI.cpp )
+#
+# kde4_automoc(${kwordprivate_LIB_SRCS})
+#
+# kde4_add_ui3_files(kwordprivate_LIB_SRCS KWCreateBookmarkDiaBase.ui KWSelectBookmarkDiaBase.ui KWStartupWidgetBase.ui )
+#
+#
+# kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
+#
+# target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake kofficeui kotext kformulalib kwmailmerge_interface )
+#
+# set_target_properties(kwordprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+# install_targets(${LIB_INSTALL_DIR} kwordprivate )
+#
+#
+# ########### next target ###############
+#
+# set(kword_KDEINIT_SRCS main.cpp )
+#
+# kde4_automoc(${kword_KDEINIT_SRCS})
+#
+# kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
+#
+# target_link_libraries(kdeinit_kword  ${KDE4_KDECORE_LIBS} kofficecore )
+#
+# install_targets(${LIB_INSTALL_DIR} kdeinit_kword )
+#
+# target_link_libraries( kword kdeinit_kword )
+# install_targets(/bin kword )
+#
+# ########### install files ###############
+#
+# install_files( ${SERVICETYPES_INSTALL_DIR} FILES  kwmailmerge.desktop )
+# install_files( ${DATA_INSTALL_DIR}/kword FILES  kword.rc kword_readonly.rc )
+# install_files( ${SERVICES_INSTALL_DIR} FILES  kwordpart.desktop )
+# install_files( ${XDG_APPS_DIR} FILES  kword.desktop )
+# install_files( /include/kword FILES  KWMailMergeDataSource.h )
 
 
 

@@ -1581,7 +1581,7 @@ View::View( QWidget *_parent, const char *_name,
         setZoom( 100, true );
     }
 
-    viewZoom( QString::number( doc()->zoom() ) );
+    viewZoom( QString::number( doc()->zoomInPercent() ) );
 
     // ## Might be wrong, if doc isn't loaded yet
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
@@ -4731,7 +4731,7 @@ void View::print( KPrinter &prt )
             d->canvas->deleteEditor( true ); // save changes
         }
 
-        int oldZoom = doc()->zoom();
+        int oldZoom = doc()->zoomInPercent();
 
         //Comment from KWord
         //   We don't get valid metrics from the printer - and we want a better resolution
@@ -4994,7 +4994,7 @@ void View::togglePageBorders( bool mode )
 void View::viewZoom( const QString & s )
 {
 
-  int oldZoom = doc()->zoom();
+  int oldZoom = doc()->zoomInPercent();
 
   bool ok = false;
   QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
@@ -5278,7 +5278,7 @@ void View::refreshView()
     return;
 
   d->adjustActions( !sheet->isProtected() );
-  d->actions->viewZoom->setZoom( doc()->zoom() );
+  d->actions->viewZoom->setZoom( doc()->zoomInPercent() );
 
   bool active = sheet->getShowFormula();
   if ( sheet && !sheet->isProtected() )

@@ -555,7 +555,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 
   // set font size according to zoom factor
   QFont font( _cell->format()->font() );
-  font.setPointSizeF( 0.01 * _parent->doc()->zoom() * font.pointSizeF() );
+  font.setPointSizeF( 0.01 * _parent->doc()->zoomInPercent() * font.pointSizeF() );
   d->textEdit->setFont( font );
 
   if (d->fontLength == 0)
@@ -817,7 +817,7 @@ void CellEditor::copy()
 void CellEditor::setEditorFont(QFont const & font, bool updateSize)
 {
   QFont tmpFont( font );
-  tmpFont.setPointSizeF( 0.01 * canvas()->doc()->zoom() * tmpFont.pointSizeF() );
+  tmpFont.setPointSizeF( 0.01 * canvas()->doc()->zoomInPercent() * tmpFont.pointSizeF() );
   d->textEdit->setFont( tmpFont );
 
   if (updateSize)

@@ -177,8 +177,8 @@ void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
     int penw = ( pen.style() == Qt::NoPen ) ? 0 : int( pen.pointWidth() );
     KoRect r( KoPoint( penw, penw ), KoPoint( getSize().width() - ( penw * 2.0 ),
               getSize().height() - ( penw * 2.0 ) ) );
-    double zoomX = static_cast<double>( _zoomHandler->zoom() ) / 100;
-    double zoomY = static_cast<double>( _zoomHandler->zoom() ) / 100;
+    double zoomX, zoomY;
+    _zoomHandler->zoom(&zoomX, &zoomY);
     child->document()->paintEverything( *_painter,
                                         _zoomHandler->zoomRectOld( r ),
                                         true, // flicker?

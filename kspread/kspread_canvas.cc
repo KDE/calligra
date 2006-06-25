@@ -3765,7 +3765,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 
     d->cellEditor->setPalette( editorPalette );
     QFont tmpFont = cell->format()->textFont( markerColumn(), markerRow() );
-    tmpFont.setPointSizeF( 0.01 * d->view->doc()->zoom() * tmpFont.pointSizeF() );
+    tmpFont.setPointSizeF( 0.01 * d->view->doc()->zoomInPercent() * tmpFont.pointSizeF() );
     d->cellEditor->setFont( tmpFont );
 
     KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
@@ -5086,9 +5086,9 @@ void VBorder::paintEvent( QPaintEvent* event )
 
   // fonts
   QFont normalFont( painter.font() );
-  if ( m_pCanvas->d->view->doc()->zoom() < 100 )
+  if ( m_pCanvas->d->view->doc()->zoomInPercent() < 100 )
   {
-    normalFont.setPointSizeF( 0.01 * m_pCanvas->d->view->doc()->zoom() *
+    normalFont.setPointSizeF( 0.01 * m_pCanvas->d->view->doc()->zoomInPercent() *
                                   normalFont.pointSizeF() );
   }
   QFont boldFont( normalFont );
@@ -5794,9 +5794,9 @@ void HBorder::paintEvent( QPaintEvent* event )
 
   // fonts
   QFont normalFont( painter.font() );
-  if ( m_pCanvas->d->view->doc()->zoom() < 100 )
+  if ( m_pCanvas->d->view->doc()->zoomInPercent() < 100 )
   {
-    normalFont.setPointSizeF( 0.01 * m_pCanvas->d->view->doc()->zoom() *
+    normalFont.setPointSizeF( 0.01 * m_pCanvas->d->view->doc()->zoomInPercent() *
         normalFont.pointSizeF() );
   }
   QFont boldFont( normalFont );

@@ -370,7 +370,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
         m_sbObjectLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
         addStatusBarItem( m_sbObjectLabel, 1 );
 
-        m_sbZoomLabel = new KStatusBarLabel( ' ' + QString::number( m_pKPresenterDoc->zoomHandler()->zoom() ) + "% ", 0, sb );
+        m_sbZoomLabel = new KStatusBarLabel( ' ' + QString::number( m_pKPresenterDoc->zoomHandler()->zoomInPercent() ) + "% ", 0, sb );
         m_sbZoomLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         addStatusBarItem( m_sbZoomLabel, 0 );
 
@@ -491,7 +491,7 @@ void KPrView::print( KPrinter &prt )
     float top_margin = 0.0;
     int dpiX=0;
     int dpiY=0;
-    int oldZoom = zoomHandler()->zoom();
+    int oldZoom = zoomHandler()->zoomInPercent();
     bool displayFieldCode = m_pKPresenterDoc->getVariableCollection()->variableSetting()->displayFieldCode();
     if ( displayFieldCode )
     {
@@ -512,7 +512,7 @@ void KPrView::print( KPrinter &prt )
     QRect rect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
     double zoom = qMin( double( metrics.width() ) / double( rect.width() ),
                         double( metrics.height() ) / double( rect.height() ) );
-    double newZoom = zoom * m_pKPresenterDoc->zoomHandler()->zoom();
+    double newZoom = zoom * m_pKPresenterDoc->zoomHandler()->zoomInPercent();
     kDebug(33001) << "KPrView::print newZoom = " << newZoom << endl;
     setZoom( int( newZoom ), false );
     QRect paintingRect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
@@ -2192,7 +2192,7 @@ void KPrView::initGui()
     KStatusBar * sb = statusBar();
     if ( sb )
         sb->show();
-    showZoom( zoomHandler()->zoom() );
+    showZoom( zoomHandler()->zoomInPercent() );
     updateHeaderFooterButton();
     updateDisplayObjectMasterPageButton();
     updateDisplayBackgroundButton();
@@ -5218,14 +5218,14 @@ void KPrView::viewZoom( const QString &s )
         zoom=regexp.cap(1).toInt(&ok);
     }
     if( !ok || zoom<10 ) //zoom should be valid and >10
-        zoom = zoomHandler()->zoom();
+        zoom = zoomHandler()->zoomInPercent();
     zoom = qMin( zoom, 4000);
     //refresh menu
     changeZoomMenu( zoom );
     //refresh menu item
     showZoom(zoom);
     //apply zoom if zoom!=m_doc->zoom()
-    if( zoom != zoomHandler()->zoom() )
+    if( zoom != zoomHandler()->zoomInPercent() )
     {
         setZoom( zoom, true );
         KPrTextView *edit=m_canvas->currentTextObjectView();
@@ -5688,7 +5688,7 @@ void KPrView::openPopupMenuZoom( const QPoint & _point )
 void KPrView::zoomMinus()
 {
     //unzoom from 25%
-    int zoom = zoomHandler()->zoom() - (int)(zoomHandler()->zoom()*0.25);
+    int zoom = zoomHandler()->zoomInPercent() - (int)(zoomHandler()->zoomInPercent()*0.25);
     viewZoom( QString::number(zoom ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
 }
@@ -5709,7 +5709,7 @@ void KPrView::zoomEntirePage()
 
 void KPrView::zoomPlus()
 {
-    int zoom = zoomHandler()->zoom() + int( zoomHandler()->zoom() * 0.25 );
+    int zoom = zoomHandler()->zoomInPercent() + int( zoomHandler()->zoomInPercent() * 0.25 );
     viewZoom( QString::number( zoom ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
 }

@@ -2934,7 +2934,7 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
 
     kDebug() << "zoomX=" << zoomX << " zoomY=" << zoomY << " zoom=" << zoom << endl;
 
-    m_zoomBeforePresentation = doc->zoomHandler()->zoom();
+    m_zoomBeforePresentation = doc->zoomHandler()->zoomInPercent();
     kDebug() << "old zoomed resolutions =" << doc->zoomHandler()->zoomedResolutionX() << "," << doc->zoomHandler()->zoomedResolutionY() << endl;
     // Seems to fail (Qt uses the wrong font sizes...)
     //doc->zoomHandler()->setZoomedResolution( zoomX * doc->zoomHandler()->zoomedResolutionX(),
@@ -3247,7 +3247,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     //kDebug(33001) << "Page::drawPageInPix" << endl;
 
     KPrDocument *doc = m_view->kPresenterDoc();
-    int oldZoom = doc->zoomHandler()->zoom();
+    int oldZoom = doc->zoomHandler()->zoomInPercent();
     bool oldDisplayFieldValue = false;
 
     if( 0 < forceWidth || 0 < forceHeight )
