@@ -1423,10 +1423,10 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     kDebug(36001) << "paintContent() called on " << rect << endl;
 
   //  ElapsedTime et( "Doc::paintContent1" );
-    //kDebug(36001) << "Doc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+    //kDebug(36001) << "Doc::paintContent m_zoom=" << zoomInPercent() << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
     // save current zoom
-    int oldZoom = m_zoom;
+    int oldZoom = zoomInPercent();
 
     // choose sheet: the first or the active
     Sheet* sheet = 0;
@@ -1458,7 +1458,6 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     painter.restore();
 
     // restore zoom
-    m_zoom = oldZoom;
     setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
