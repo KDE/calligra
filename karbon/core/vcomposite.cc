@@ -87,6 +87,7 @@ VPath::~VPath()
 {
 }
 
+/*
 DCOPObject* VPath::dcopObject()
 {
 	if ( !m_dcop )
@@ -94,7 +95,7 @@ DCOPObject* VPath::dcopObject()
 
 	return m_dcop;
 }
-
+*/
 
 void
 VPath::draw( VPainter* painter, const QRectF *rect ) const

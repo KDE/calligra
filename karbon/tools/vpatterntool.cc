@@ -52,9 +52,13 @@
 #include <kactioncollection.h>
 
 VPatternWidget::VPatternWidget( Q3PtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
-	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, "", true, i18n( "Choose Pattern" ), Ok | Cancel )
+	: KDialog( parent )
 	, m_pattern( 0 )
 {
+	setModal( true );
+	setCaption( i18n( "Choose Pattern" ) );
+	setButtons( Ok | Cancel );
+
 	QWidget *base = new QWidget( this );
 	QVBoxLayout* layout = new QVBoxLayout( base );
 	layout->addWidget( m_patternChooser = new KoIconChooser( QSize( 32, 32 ), base ) );

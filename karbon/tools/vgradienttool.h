@@ -20,7 +20,7 @@
 #ifndef __VGRADIENTTOOL_H__
 #define __VGRADIENTTOOL_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "vtool.h"
 #include "vgradient.h"
@@ -77,7 +77,7 @@ protected slots:
 private:
 	enum { normal, moveOrigin, moveVector, moveCenter, createNew } m_state;
 
-	class VGradientOptionsWidget : public KDialogBase
+	class VGradientOptionsWidget : public KDialog
 	{
 	public:
 		VGradientOptionsWidget( VGradient& gradient );

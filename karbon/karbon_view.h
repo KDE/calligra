@@ -36,7 +36,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QEvent>
-class DCOPObject;
+
 class QLabel;
 
 class KAction;
@@ -83,8 +83,6 @@ public:
 	KarbonView( KarbonPart* part, QWidget* parent = 0L,
 				const char* name = 0L );
 	virtual ~KarbonView();
-
-	virtual DCOPObject* dcopObject();
 
 	KarbonPart *part() const { return m_part; }
 
@@ -272,9 +270,6 @@ private:
 	VTransformDocker	*m_TransformDocker;
 
 	VSelectToolBar		*m_selectToolBar;
-
-	// dcop
-	DCOPObject		*m_dcop;
 
 	//Status Bar
 	QLabel				*m_status;       // Ordinary status

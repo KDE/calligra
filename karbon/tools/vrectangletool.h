@@ -22,7 +22,7 @@
 
 
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "vshapetool.h"
 #include "KoTool.h"
@@ -47,7 +47,7 @@ public:
 	void refreshUnit();
 
 private:
-	class VRectangleOptionsWidget : public KDialogBase
+	class VRectangleOptionsWidget : public KDialog
 	{
 	public:
 		VRectangleOptionsWidget( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );

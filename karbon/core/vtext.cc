@@ -172,15 +172,6 @@ VText::~VText()
 {
 }
 
-DCOPObject* VText::dcopObject()
-{
-	if( !m_dcop )
-		m_dcop = new VTextIface( this );
-
-	return m_dcop;
-}
-
-
 void
 VText::draw( VPainter* painter, const QRectF* /*rect*/ ) const
 {

@@ -52,7 +52,7 @@ public:
 	VPath( const VPath& path );
 	virtual ~VPath();
 
-	virtual DCOPObject* dcopObject();
+	//virtual DCOPObject* dcopObject();
 
 	/**
 	 * Returns the knot of the last segment of the last subpath.

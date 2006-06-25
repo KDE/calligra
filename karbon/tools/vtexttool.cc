@@ -326,9 +326,13 @@ ShadowWidget::updatePreview()
 }
 
 VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
-	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, "", true, i18n( "Text" ), Ok | Cancel )
+	: KDialog( parent )
 	, m_tool( tool )
 {
+	setModal( true );
+	setCaption( i18n( "Text" ) );
+	setButtons( Ok | Cancel );
+
 	//setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 	//setFrameStyle( Box | Sunken );
 	QWidget *base = new QWidget( this );

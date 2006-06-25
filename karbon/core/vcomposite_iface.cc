@@ -19,6 +19,7 @@
 */
 
 #include "vcomposite_iface.h"
+/*
 #include "vcomposite.h"
 
 #include <QPointF>
@@ -69,4 +70,4 @@ VPathIface::close()
 {
 	m_composite->close();
 }
-
+*/

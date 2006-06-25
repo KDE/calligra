@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "q3frame.h"
 #include "q3groupbox.h"
@@ -100,7 +100,7 @@ protected:
 };
 
 
-class VTextOptionsWidget : public KDialogBase
+class VTextOptionsWidget : public KDialog
 {
 	Q_OBJECT
 

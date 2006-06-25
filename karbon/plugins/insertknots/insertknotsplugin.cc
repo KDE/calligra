@@ -50,10 +50,12 @@ InsertKnotsPlugin::slotInsertKnots()
 }
 
 VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
-	: KDialog( parent, i18n( "Insert Knots" ), KDialog::Ok | KDialog::Cancel )
+	: KDialog( parent )
 {
 	setObjectName(name);
 	setModal(true);
+	setCaption( i18n( "Insert Knots" ) );
+	setButtons( Ok | Cancel );
 
 	// add input fields:
 /* TODO needs porting: 

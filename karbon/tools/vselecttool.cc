@@ -43,9 +43,13 @@
 #include <kactioncollection.h>
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
-	: KDialogBase( KDialogBase::Plain, Qt::Dialog, 0L, "", true, i18n( "Selection" ), Ok | Cancel )
+	: KDialog( 0L ) 
 	, m_part( part )
 {
+	setCaption( i18n( "Selection" ) );
+	setButtons( Ok | Cancel );
+	setModal( true );
+
 	Q3ButtonGroup *group = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ), this );
 
 	new QRadioButton( i18n( "Select in current layer" ), group );

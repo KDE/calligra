@@ -55,9 +55,14 @@
 #include "vpenciltool.moc"
 
 VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, const char* name )
-	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Pencil Settings" ), Ok | Cancel )
+	: KDialog( parent )
 	, m_view( view )
 {
+	setObjectName( name );
+	setModal( true );
+	setCaption( i18n( "Pencil Settings" ) );
+	setButtons( Ok | Cancel );
+
 	Q3VBox *vbox = new Q3VBox( this );
 
 	m_combo = new QComboBox( vbox );

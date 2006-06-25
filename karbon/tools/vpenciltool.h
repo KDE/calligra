@@ -28,7 +28,7 @@
 #include <QLabel>
 
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "vtool.h"
 
@@ -44,7 +44,7 @@ class KDoubleNumInput;
 class QCursor;
 class QPointF;
 
-class VPencilOptionsWidget : public KDialogBase
+class VPencilOptionsWidget : public KDialog
 {
 	Q_OBJECT
 	public:

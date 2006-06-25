@@ -9,6 +9,7 @@
 #include <koffice_export.h>
 
 #include <QMatrix>
+#include <QString>
 
 class QRectF;
 class QImage;

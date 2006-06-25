@@ -20,7 +20,7 @@
 #ifndef __VPOLYGONTOOL_H__
 #define __VPOLYGONTOOL_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "vshapetool.h"
 
@@ -45,7 +45,7 @@ public:
 	virtual void arrowKeyReleased( Qt::Key );
 
 private:
-	class VPolygonOptionsWidget : public KDialogBase
+	class VPolygonOptionsWidget : public KDialog
 	{
 	public:
 		VPolygonOptionsWidget( KarbonView *view, QWidget *parent = 0L, const char *name = 0L );

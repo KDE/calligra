@@ -20,7 +20,7 @@
 #ifndef __VPATTERNTOOL_H__
 #define __VPATTERNTOOL_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "vtool.h"
 #include "vpattern.h"
@@ -32,7 +32,7 @@ class KoIconChooser;
 class QPointF;
 class QRectF;
 
-class VPatternWidget : public KDialogBase
+class VPatternWidget : public KDialog
 {
 Q_OBJECT
 

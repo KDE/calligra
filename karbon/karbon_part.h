@@ -28,7 +28,6 @@
 #include "vdocument.h"
 #include "koffice_export.h"
 
-class DCOPObject;
 class QRectF;
 class QRect;
 class VCommand;
@@ -62,8 +61,6 @@ public:
 	virtual bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter );
 
 	virtual void addShell( KoMainWindow *shell );
-
-	virtual DCOPObject* dcopObject();
 
 	/// insert a new vobject
 	void insertObject( VObject* object );
@@ -123,7 +120,6 @@ private:
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
 	bool m_merge;
 	unsigned int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
-	DCOPObject *dcop;
 };
 
 #endif

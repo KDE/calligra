@@ -33,7 +33,7 @@
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 
-VObject::VObject( VObject* parent, VState state ) : m_dcop( 0L )
+VObject::VObject( VObject* parent, VState state )
 {
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -53,7 +53,6 @@ VObject::VObject( const VObject& obj )
 	m_state = obj.m_state;
 
 	invalidateBoundingBox();
-	m_dcop = 0L;
 
 	/* TODO: porting to flake
 	VDocument *srcDoc = obj.document();
@@ -70,16 +69,6 @@ VObject::~VObject()
 {
 	delete( m_stroke );
 	delete( m_fill );
-	delete m_dcop;
-}
-
-DCOPObject *
-VObject::dcopObject()
-{
-    if ( !m_dcop )
-		m_dcop = new VObjectIface( this );
-
-    return m_dcop;
 }
 
 void

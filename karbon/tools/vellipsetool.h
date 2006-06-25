@@ -20,7 +20,7 @@
 #ifndef __VELLIPSETOOL_H__
 #define __VELLIPSETOOL_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "vshapetool.h"
 //Added by qt3to4:
@@ -34,7 +34,7 @@ class QLabel;
 class QWidget;
 class QPointF;
 
-class VEllipseOptionsWidget : public KDialogBase
+class VEllipseOptionsWidget : public KDialog
 {
 Q_OBJECT
 public:

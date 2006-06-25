@@ -67,7 +67,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 	setInstance( KarbonFactory::instance(), false );
 	setTemplateType( "karbon_template" );
 	m_bShowStatusBar = true;
-	dcop = 0L;
 
 	m_commandHistory = new VCommandHistory( this );
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
@@ -78,9 +77,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 	m_merge = false;
 
 	m_maxRecentFiles = 10;
-
-	//if( name )
-        dcopObject();
 
 	// set as default paper
 	m_pageLayout.format = KoPageFormat::defaultFormat();
@@ -100,15 +96,6 @@ KarbonPart::~KarbonPart()
 {
 	// delete the command-history:
 	delete m_commandHistory;
-	delete dcop;
-}
-
-DCOPObject* KarbonPart::dcopObject()
-{
-	if( !dcop )
-		dcop = new KarbonPartIface( this );
-
-	return dcop;
 }
 
 void

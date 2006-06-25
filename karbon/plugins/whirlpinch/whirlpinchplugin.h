@@ -20,7 +20,7 @@
 #ifndef __WHIRLPINCHPLUGIN_H__
 #define __WHIRLPINCHPLUGIN_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kparts/plugin.h>
 #include <commands/vcommand.h>
 
@@ -45,7 +45,7 @@ private:
 
 class KDoubleNumInput;
 
-class VWhirlPinchDlg : public KDialogBase
+class VWhirlPinchDlg : public KDialog
 {
 	Q_OBJECT
 

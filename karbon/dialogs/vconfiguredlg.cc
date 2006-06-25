@@ -29,7 +29,6 @@
 
 #include <kiconloader.h>
 #include <kconfig.h>
-#include <kdialogbase.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
@@ -45,36 +44,35 @@
 
 
 VConfigureDlg::VConfigureDlg( KarbonView* parent )
-		: KDialogBase( KDialogBase::IconList, i18n( "Configure" ),
-					   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel | KDialogBase::Default,
-					   KDialogBase::Ok, parent )
-
+	: KPageDialog( parent )
 {
-	KVBox * page = addVBoxPage(
-					   i18n( "Interface" ), i18n( "Interface" ),
-					   BarIcon( "misc", K3Icon::SizeMedium ) );
+	setFaceType( List );
+	setCaption( i18n( "Configure" ) );
+	setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default );
+	setDefaultButton( KDialog::Ok );
 
-	m_interfacePage = new VConfigInterfacePage( parent, page );
+	m_interfacePage = new VConfigInterfacePage( parent );
+	KPageWidgetItem* item = addPage( m_interfacePage, i18n( "Interface" ) );
+	item->setHeader( i18n( "Interface" ) );
+	item->setIcon( BarIcon( "misc", K3Icon::SizeMedium ) );
 
-	page = addVBoxPage(
-			   i18n( "Misc" ), i18n( "Misc" ),
-			   BarIcon( "misc", K3Icon::SizeMedium ) );
+	m_miscPage = new VConfigMiscPage( parent );
+	item = addPage( m_miscPage, i18n( "Misc" ) );
+	item->setHeader( i18n( "Misc" ) );
+	item->setIcon( BarIcon( "misc", K3Icon::SizeMedium ) );
 
-	m_miscPage = new VConfigMiscPage( parent, page );
-
-	page = addVBoxPage(
-			   i18n( "Grid" ), i18n( "Grid" ),
-			   BarIcon( "grid", K3Icon::SizeMedium ) );
-
-	m_gridPage = new VConfigGridPage( parent, page );
+	m_gridPage = new VConfigGridPage( parent );
+	item = addPage( m_gridPage, i18n( "Grid" ) );
+	item->setHeader( i18n( "Grid" ) );
+	item->setIcon( BarIcon( "grid", K3Icon::SizeMedium ) );
 
 	connect( m_miscPage, SIGNAL( unitChanged( int ) ), m_gridPage, SLOT( slotUnitChanged( int ) ) );
 
-	page = addVBoxPage(
-			   i18n( "Document" ), i18n( "Document Settings" ),
-			   BarIcon( "document", K3Icon::SizeMedium ) );
+	m_defaultDocPage = new VConfigDefaultPage( parent );
+	item = addPage( m_defaultDocPage, i18n( "Document" ) );
+	item->setHeader( i18n( "Document Settings" ) );
+	item->setIcon( BarIcon( "document", K3Icon::SizeMedium ) );
 
-	m_defaultDocPage = new VConfigDefaultPage( parent, page );
 	connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
 
@@ -88,6 +86,17 @@ void VConfigureDlg::slotApply()
 
 void VConfigureDlg::slotDefault()
 {
+	QWidget* curr = currentPage()->widget();
+
+	if( curr == m_interfacePage )
+		m_interfacePage->slotDefault();
+	else if( curr == m_miscPage )
+		m_miscPage->slotDefault();
+	else if( curr == m_gridPage )
+		m_gridPage->slotDefault();
+	else if( curr == m_defaultDocPage )
+		m_defaultDocPage->slotDefault();
+	/*
 	switch( activePageIndex() )
 	{
 		case 0: m_interfacePage->slotDefault();
@@ -101,12 +110,11 @@ void VConfigureDlg::slotDefault()
 		default:
 			break;
 	}
+	*/
 }
 
 
-VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
-		KVBox* box, char* name )
-		: QObject( box->parent() )
+VConfigInterfacePage::VConfigInterfacePage( KarbonView* view, char* name )
 {
 	setObjectName(name);
 
@@ -118,7 +126,7 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 	m_oldDockerFontSize = 8;
 	bool oldShowStatusBar = true;
 
-	QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Interface" ), box );
+	QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Interface" ), this );
 
 	m_config->setGroup( "" );
 
@@ -209,8 +217,7 @@ void VConfigInterfacePage::slotDefault()
 }
 
 
-VConfigMiscPage::VConfigMiscPage( KarbonView* view, KVBox* box, char* name )
-		: QObject( box->parent() )
+VConfigMiscPage::VConfigMiscPage( KarbonView* view, char* name )
 {
     setObjectName(name);
 
@@ -219,7 +226,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, KVBox* box, char* name )
 
     KoUnit::Unit unit = view->part()->unit();
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Misc" ), box );
+    QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Misc" ), this );
 
     QGridLayout* grid = new QGridLayout();
     grid->setSpacing(KDialog::spacingHint());
@@ -287,8 +294,7 @@ void VConfigMiscPage::slotDefault()
     m_unit->setCurrentIndex( 0 );
 }
 
-VConfigGridPage::VConfigGridPage( KarbonView* view, KVBox* page, char* name )
-		: QObject( page->parent() )
+VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 {
 	setObjectName(name);
 
@@ -302,15 +308,15 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, KVBox* page, char* name )
 	double sw = gd.snap.width();
 	double sh = gd.snap.height();
 
-	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), page );
+	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), this );
 	m_gridChBox->setChecked( gd.isShow );
-	m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), page );
+	m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), this );
 	m_snapChBox->setChecked( gd.isSnap );
-	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), page);
-	m_gridColorBtn = new KColorButton( gd.color, page );
+	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), this);
+	m_gridColorBtn = new KColorButton( gd.color, this );
 	gridColorLbl->setBuddy( m_gridColorBtn );
 
-	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), page );
+	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), this );
 	QGridLayout* layoutSpacingGrp = new QGridLayout;
 	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ) );
 	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, fw, unit );
@@ -324,7 +330,7 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, KVBox* page, char* name )
 	layoutSpacingGrp->addWidget(m_spaceVertUSpin, 1, 1);
 	spacingGrp->setLayout(layoutSpacingGrp);
 
-	QGroupBox* snapGrp = new QGroupBox( i18n( "Snap Distance" ), page );
+	QGroupBox* snapGrp = new QGroupBox( i18n( "Snap Distance" ), this );
 	QGridLayout* layoutSnapGrp = new QGridLayout;
 	QLabel* snapHorizLbl = new QLabel( i18n( "H&orizontal:" ) );
 	m_snapHorizUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fw, 0.1, sw, unit );
@@ -396,9 +402,7 @@ void VConfigGridPage::slotDefault()
 	m_gridColorBtn->setColor( QColor( 228, 228, 228 ) );
 }
 
-VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
-                                        KVBox* box, char* name )
-    : QObject( box->parent() )
+VConfigDefaultPage::VConfigDefaultPage( KarbonView* view, char* name )
 {
     setObjectName(name);
 
@@ -407,7 +411,7 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
     m_config = KarbonFactory::instance()->config();
 
     QGroupBox* gbDocumentSettings = new QGroupBox(
-        i18n( "Document Settings" ), box );
+        i18n( "Document Settings" ), this );
     // TODO: needs porting:
     //gbDocumentSettings->setMargin( KDialog::marginHint() );
     //gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );

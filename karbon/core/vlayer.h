@@ -26,7 +26,6 @@
 #include <QRectF>
 
 class QDomElement;
-class DCOPObject;
 class KoStore;
 class KoXmlWriter;
 class KoGenStyles;

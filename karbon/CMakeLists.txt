@@ -50,9 +50,9 @@ set(karboncommon_LIB_SRCS
    karbon_factory.cc 
    karbon_resourceserver.cc 
    karbon_part.cc 
-   karbon_part_iface.cc 
+#   karbon_part_iface.cc 
    karbon_view.cc 
-   karbon_view_iface.cc 
+#   karbon_view_iface.cc 
    karbon_drag.cpp 
    karbon_grid_data.cpp 
    karbon_tool_registry.cc 
@@ -62,11 +62,11 @@ set(karboncommon_LIB_SRCS
 
 kde4_automoc(${karboncommon_LIB_SRCS})
 
-kde4_add_dcop_skels(karboncommon_LIB_SRCS karbon_part_iface.h karbon_view_iface.h )
+#kde4_add_dcop_skels(karboncommon_LIB_SRCS karbon_part_iface.h karbon_view_iface.h )
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
-target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} kofficecore kofficeui kopalette kopainter kotext karbondockers karbonwidgets vpainter karbonxrgbrender karboncore karbonshapes karboncommands karbonvisitors karbondialogs ${IMAGEMAGICK_LIBRARIES})
+target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} kofficecore kofficeui kopalette kopainter kotext karbondockers karbonwidgets vpainter karboncore karbonshapes karboncommands karbonvisitors karbondialogs ${IMAGEMAGICK_LIBRARIES})
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} karboncommon )

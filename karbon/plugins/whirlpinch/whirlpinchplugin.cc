@@ -60,8 +60,13 @@ WhirlPinchPlugin::slotWhirlPinch()
 }
 
 VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Whirl Pinch" ), Ok | Cancel )
+	: KDialog( parent )
 {
+	setObjectName( name );
+	setModal( true );
+	setCaption( i18n( "Whirl Pinch" ) );
+	setButtons( Ok | Cancel );
+
 	// add input fields:
 	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
 

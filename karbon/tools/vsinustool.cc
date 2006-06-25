@@ -34,9 +34,14 @@
 #include <kactioncollection.h>
 
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Sinus" ), Ok | Cancel )
+	: KDialog( parent )
 	, m_part( part )
 {
+	setObjectName( name );
+	setModal( true );
+	setCaption( i18n( "Insert Sinus" ) );
+	setButtons( Ok | Cancel );
+
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	// add width/height-input:

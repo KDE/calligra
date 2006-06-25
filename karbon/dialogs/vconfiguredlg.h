@@ -21,7 +21,8 @@
 #define __VCONFIGUREDLG_H__
 
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
+#include <kvbox.h>
 
 class KarbonView;
 class KConfig;
@@ -31,13 +32,12 @@ class KoUnitDoubleSpinBox;
 class QCheckBox;
 class QComboBox;
 
-class VConfigInterfacePage : public QObject
+class VConfigInterfacePage : public KVBox
 {
 	Q_OBJECT
 
 public:
-	VConfigInterfacePage(
-		KarbonView* view, KVBox *box = 0L, char* name = 0L );
+	VConfigInterfacePage( KarbonView* view, char* name = 0L );
 
 	void apply();
 
@@ -61,13 +61,12 @@ private:
 };
 
 
-class VConfigMiscPage : public QObject
+class VConfigMiscPage : public KVBox
 {
 	Q_OBJECT
 
 public:
-	VConfigMiscPage(
-		KarbonView* view, KVBox* box, char* name = 0L );
+	VConfigMiscPage( KarbonView* view, char* name = 0L );
 
 	void apply();
 
@@ -87,13 +86,12 @@ private:
 	QComboBox *m_unit;
 };
 
-class VConfigDefaultPage : public QObject
+class VConfigDefaultPage : public KVBox
 {
 	Q_OBJECT
 
 public:
-	VConfigDefaultPage(
-		KarbonView* view, KVBox* box, char* name = 0L );
+	VConfigDefaultPage( KarbonView* view, char* name = 0L );
 
 	void apply();
 
@@ -112,13 +110,13 @@ private:
 	bool m_oldSaveAsPath;
 };
 
-class VConfigGridPage : public QObject
+class VConfigGridPage : public KVBox
 {
 	Q_OBJECT
 
 public:
 	VConfigGridPage(
-		KarbonView* view, KVBox* box, char* name = 0L );
+		KarbonView* view, char* name = 0L );
 
 	void apply();
 
@@ -141,7 +139,7 @@ private:
 	KColorButton* m_gridColorBtn;
 };
 
-class VConfigureDlg : public KDialogBase
+class VConfigureDlg : public KPageDialog
 {
 	Q_OBJECT
 

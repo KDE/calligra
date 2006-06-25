@@ -20,7 +20,7 @@
 #ifndef __VSELECTTOOL_H__
 #define __VSELECTTOOL_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klocale.h>
 
 #include "vtool.h"
@@ -28,7 +28,7 @@
 class QPointF;
 class KarbonView;
 
-class VSelectOptionsWidget : public KDialogBase
+class VSelectOptionsWidget : public KDialog
 {
 Q_OBJECT
 

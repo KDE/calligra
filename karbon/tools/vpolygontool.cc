@@ -21,7 +21,6 @@
 #include <QLabel>
 #include <q3groupbox.h>
 
-#include <kdialogbase.h>
 #include <klocale.h>
 #include <KoUnitWidgets.h>
 
@@ -33,9 +32,14 @@
 #include <kactioncollection.h>
 
 VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonView *view, QWidget* parent, const char* name )
-	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Polygon" ), Ok | Cancel )
+	: KDialog( parent )
 	, m_view(view)
 {
+	setObjectName( name );
+	setModal( true );
+	setCaption( i18n( "Insert Polygon" ) );
+	setButtons( Ok | Cancel );
+
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Radius:" ), group );

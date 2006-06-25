@@ -23,6 +23,8 @@
 
 #include "vobject_iface.h"
 
+/*
+TODO: porting to DBUS ?
 class VPath;
 
 class VPathIface : public VObjectIface
@@ -47,5 +49,5 @@ k_dcop:
 private:
 	VPath *m_composite;
 };
-
+*/
 #endif

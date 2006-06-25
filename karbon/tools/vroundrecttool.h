@@ -21,7 +21,7 @@
 #define __VROUNDRECTTOOL_H__
 
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <knuminput.h>
 
 
@@ -50,7 +50,7 @@ public:
 	void refreshUnit();
 
 private:
-	class VRoundRectOptionsWidget : public KDialogBase
+	class VRoundRectOptionsWidget : public KDialog
 	{
 	public:
 		VRoundRectOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );

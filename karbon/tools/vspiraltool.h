@@ -20,7 +20,7 @@
 #ifndef __VSPIRALTOOL_H__
 #define __VSPIRALTOOL_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klocale.h>
 
 #include "vshapetool.h"
@@ -48,7 +48,7 @@ public:
 	virtual void arrowKeyReleased( Qt::Key );
 
 private:
-	class VSpiralOptionsWidget : public KDialogBase
+	class VSpiralOptionsWidget : public KDialog
 	{
 	public:
 		VSpiralOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char* name = 0L );

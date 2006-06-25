@@ -56,11 +56,12 @@ VRoundCornersPlugin::slotRoundCorners()
 
 
 VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
-	: KDialog( parent, i18n( "Polygonize" ), KDialog::Ok | KDialog::Cancel  )
+	: KDialog( parent )
 {
 	setObjectName(name);
 	setModal(true);
-
+	setCaption( i18n( "Polygonize" ) );
+	setButtons( Ok | Cancel );
 	// add input:
 	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
 

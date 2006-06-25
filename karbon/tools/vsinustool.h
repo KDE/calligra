@@ -20,7 +20,7 @@
 #ifndef __VSINUSTOOL_H__
 #define __VSINUSTOOL_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "vshapetool.h"
 //Added by qt3to4:
 #include <QLabel>
@@ -45,7 +45,7 @@ public:
 	void refreshUnit();
 
 private:
-	class VSinusOptionsWidget : public KDialogBase
+	class VSinusOptionsWidget : public KDialog
 	{
 	public:
 		VSinusOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );

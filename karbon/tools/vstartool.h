@@ -21,7 +21,7 @@
 #define __VSTARTOOL_H__
 
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "vshapetool.h"
 //Added by qt3to4:
@@ -33,7 +33,7 @@ class KIntSpinBox;
 class KComboBox;
 class KarbonView;
 
-class VStarOptionsWidget : public KDialogBase
+class VStarOptionsWidget : public KDialog
 {
 Q_OBJECT
 public:

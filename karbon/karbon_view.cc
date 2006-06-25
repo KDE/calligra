@@ -148,9 +148,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	else
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 
-	m_dcop = 0L;
-	dcopObject(); // build it
-
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
 	m_status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
@@ -266,8 +263,6 @@ KarbonView::~KarbonView()
 
 	delete m_canvas;
 
-	delete m_dcop;
-
 	delete m_toolController;
 }
 
@@ -370,17 +365,6 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 		KXMLGUIBuilder::removeContainer( container, parent, element, id );
 }
 
-
-DCOPObject *
-KarbonView::dcopObject()
-{
-	debugView("KarbonView::dcopObject()");
-
-	if( !m_dcop )
-		m_dcop = new KarbonViewIface( this );
-
-	return m_dcop;
-}
 
 QWidget*
 KarbonView::canvas() const

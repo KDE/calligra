@@ -23,7 +23,6 @@
 
 
 #include <QRectF>
-#include <dcopobject.h>
 #include <koffice_export.h>
 
 class QDomElement;
@@ -32,7 +31,6 @@ class VFill;
 class VPainter;
 class VStroke;
 class VVisitor;
-class DCOPObject;
 class KoStore;
 class KoXmlWriter;
 class KoOasisLoadingContext;
@@ -82,13 +80,6 @@ public:
 	 * Destroys the object and deletes the stroke, fill and DCOP-object.
 	 */
 	virtual ~VObject();
-
-	/**
-	 * Returns pointer to internal DCOP object.
-	 *
-	 * If no internal DCOP object exist yet, it is created.
-	 */
-	virtual DCOPObject* dcopObject();
 
 	/**
 	 * Draw the object to a painting device.
@@ -288,8 +279,6 @@ protected:
 
 	VStroke* m_stroke; /**< the object's stroke */
 	VFill* m_fill; /**< the object's fill */
-
-	DCOPObject *m_dcop; /**< the object's DCOP object */
 
 private:
 	VObject* m_parent;

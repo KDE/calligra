@@ -58,10 +58,12 @@ ShadowEffectPlugin::slotShadowEffect()
 }
 
 VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
-	: KDialog( parent, i18n( "Create Shadow Effect" ), KDialog::Ok | KDialog::Cancel )
+	: KDialog( parent )
 {
 	setObjectName(name);
 	setModal(true);
+	setCaption( i18n( "Create Shadow Effect" ) );
+	setButtons( Ok | Cancel );
 
 	// add input fields on the left:
 	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );

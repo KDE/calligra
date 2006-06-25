@@ -34,9 +34,14 @@
 
 
 VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Insert Star" ), Ok | Cancel )
+	: KDialog( parent )
 	, m_part( part )
 {
+	setObjectName( name );
+	setModal( true );
+	setCaption( i18n( "Insert Star" ) );
+	setButtons( Ok | Cancel );
+
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Type:" ), group );
 	m_type = new KComboBox( false, group );
