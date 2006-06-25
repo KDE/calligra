@@ -3238,7 +3238,7 @@ void KWView::viewZoom( const QString &s )
     {
         m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
         double height = m_doc->resolutionY() * m_currentPage->height();
-        double width = m_doc->resolutionX() * m_currentPage->height();
+        double width = m_doc->resolutionX() * m_currentPage->width();
         zoom = QMIN( qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height ),
                      qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) ) - 1;
 

@@ -1165,7 +1165,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         }
     }
 
-    loadMasterPageStyle( m_loadingInfo->m_currentMasterPage, context );
+    if ( !loadMasterPageStyle( m_loadingInfo->m_currentMasterPage, context ) )
+        return false;
 
     if ( context.cursorTextParagraph() ) {
         // Maybe, once 1.3-support is dropped, we can get rid of InitialEditing and fetch the
@@ -1206,21 +1207,6 @@ bool KWDocument::loadOasisPageLayout( const QString& masterPageName, KoOasisCont
     if ( masterPageStyle )
     {
         m_pageLayout.loadOasis( *masterPageStyle );
-        if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 )
-        {
-            // Loading page layout failed, try to see why.
-            QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
-            //if ( properties.isNull() )
-            //    setErrorMessage( i18n( "Invalid document. No page layout properties were found. The application which produced this document isn't OASIS-compliant." ) );
-            //else if ( properties.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
-            //    setErrorMessage( i18n( "Invalid document. Page layout has no page width. The application which produced this document isn't OASIS-compliant." ) );
-            //else
-            if ( properties.hasAttributeNS( "http://www.w3.org/1999/XSL/Format", "page-width" ) )
-                setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document is not OASIS-compliant." ) );
-            else
-                setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
-            return false;
-        }
         pageManager()->setDefaultPage(m_pageLayout);
 
         const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
@@ -1298,13 +1284,32 @@ bool KWDocument::loadOasisPageLayout( const QString& masterPageName, KoOasisCont
     return true;
 }
 
-void KWDocument::loadMasterPageStyle( const QString& masterPageName, KoOasisContext& context )
+bool KWDocument::loadMasterPageStyle( const QString& masterPageName, KoOasisContext& context )
 {
     const KoOasisStyles& oasisStyles = context.oasisStyles();
     const QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
     const QDomElement *masterPageStyle = masterPage ? oasisStyles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
     Q_ASSERT( masterPageStyle );
+
+    // This check is done here and not in loadOasisPageLayout in case the Standard master-page
+    // has no page information but the first paragraph points to a master-page that does (#129585)
+    if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 )
+    {
+        // Loading page layout failed, try to see why.
+        QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        //if ( properties.isNull() )
+        //    setErrorMessage( i18n( "Invalid document. No page layout properties were found. The application which produced this document isn't OASIS-compliant." ) );
+        //else if ( properties.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
+        //    setErrorMessage( i18n( "Invalid document. Page layout has no page width. The application which produced this document isn't OASIS-compliant." ) );
+        //else
+        if ( properties.hasAttributeNS( "http://www.w3.org/1999/XSL/Format", "page-width" ) )
+            setErrorMessage( i18n( "Invalid document. 'fo' has the wrong namespace. The application which produced this document is not OASIS-compliant." ) );
+        else
+            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
+        return false;
+    }
+
 
     KoKWHeaderFooter& hf = m_loadingInfo->hf;
 
@@ -1383,6 +1388,7 @@ void KWDocument::loadMasterPageStyle( const QString& masterPageName, KoOasisCont
         }
         // TODO ptFootNoteBodySpacing
     }
+    return true;
 }
 
 // Called before loading

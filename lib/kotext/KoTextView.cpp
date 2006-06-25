@@ -360,28 +360,36 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             // and a kaccel makes it hard to
             else
 	    {
-	      if ( e->state() & ControlButton )
-		switch ( e->key() )
-	      {
-		case Key_F16: // Copy key on Sun keyboards
-		  copy();
-		  break;
-		case Key_A:
-		  moveCursor( MoveLineStart, e->state() & ShiftButton );
-		  break;
-		case Key_E:
-		  moveCursor( MoveLineEnd, e->state() & ShiftButton );
-		  break;
-		case Key_K:
-		  textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionKill );
-		  break;
-		case Key_Insert:
-		  copy();
-		  break;
-		case Key_Space:
-		  insertNonbreakingSpace();
-		  break;
-	      }
+                if ( e->state() & ControlButton ) {
+                    switch ( e->key() )
+                    {
+                    case Key_F16: // Copy key on Sun keyboards
+                        copy();
+                        break;
+                    case Key_A:
+                        moveCursor( MoveLineStart, e->state() & ShiftButton );
+                        break;
+                    case Key_E:
+                        moveCursor( MoveLineEnd, e->state() & ShiftButton );
+                        break;
+                    case Key_K:
+                        textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionKill );
+                        break;
+                    case Key_Insert:
+                        copy();
+                        break;
+                    case Key_Space:
+                        insertNonbreakingSpace();
+                        break;
+                    default:
+                        clearUndoRedoInfo = FALSE;
+                        break;
+                    }
+                }
+                else // e.g. just Key_Shift -> don't do anything (#129481)
+                {
+                    clearUndoRedoInfo = FALSE;
+                }
 	    }
             break;
         }
