@@ -77,7 +77,7 @@ KoShapeManager* KivioCanvas::shapeManager() const
 
 void KivioCanvas::updateCanvas(const QRectF& rc)
 {
-  QRect clipRect(viewConverter()->normalToView(rc).toRect());
+  QRect clipRect(viewConverter()->documentToView(rc).toRect());
   clipRect.adjust(-2, -2, 2, 2); // Resize to fit anti-aliasing
   update(clipRect);
 }
