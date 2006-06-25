@@ -1676,7 +1676,6 @@ QString HideShowManipulator::name() const
 /***************************************************************************
   class RemovalManipulator
 ****************************************************************************/
-
 bool RemovalManipulator::mainProcessing()
 {
   QByteArray data;
@@ -1735,12 +1734,6 @@ void RemovalManipulator::saveCellRegion( QByteArray& data )
   QTextStream stream( &data, QIODevice::WriteOnly );
   stream.setCodec( "UTF-8" );
   stream << document;
-}
-
-bool TextRemovalManipulator::process( Cell* cell )
-{
-  cell->setCellText( "" );
-  return true;
 }
 
 bool CommentRemovalManipulator::process( Cell* cell )

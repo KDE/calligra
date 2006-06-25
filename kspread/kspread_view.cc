@@ -118,6 +118,7 @@
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
 #include "kspread_undo.h"
+#include "manipulator_data.h"
 #include "manipulator_sort.h"
 #include "testrunner.h"
 #include "valuecalc.h"
@@ -5923,11 +5924,11 @@ void View::fillRight()
   if (!activeSheet())
     return;
 
-  doc()->emitBeginOperation( false );
-  d->activeSheet->fillSelection( selectionInfo(), Sheet::Right );
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  FillManipulator *fm = new FillManipulator ();
+  fm->setSheet (activeSheet());
+  fm->setDirection (FillManipulator::Right);
+  fm->add (*d->selection);
+  fm->execute ();
 }
 
 void View::fillLeft()
@@ -5935,11 +5936,11 @@ void View::fillLeft()
   if (!activeSheet())
     return;
 
-  doc()->emitBeginOperation( false );
-  d->activeSheet->fillSelection( selectionInfo(), Sheet::Left );
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  FillManipulator *fm = new FillManipulator ();
+  fm->setSheet (activeSheet());
+  fm->setDirection (FillManipulator::Left);
+  fm->add (*d->selection);
+  fm->execute ();
 }
 
 void View::fillUp()
@@ -5947,11 +5948,11 @@ void View::fillUp()
   if (!activeSheet())
     return;
 
-  doc()->emitBeginOperation( false );
-  d->activeSheet->fillSelection( selectionInfo(), Sheet::Up );
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  FillManipulator *fm = new FillManipulator ();
+  fm->setSheet (activeSheet());
+  fm->setDirection (FillManipulator::Up);
+  fm->add (*d->selection);
+  fm->execute ();
 }
 
 void View::fillDown()
@@ -5959,11 +5960,11 @@ void View::fillDown()
   if (!activeSheet())
     return;
 
-  doc()->emitBeginOperation( false );
-  d->activeSheet->fillSelection( selectionInfo(), Sheet::Down );
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  FillManipulator *fm = new FillManipulator ();
+  fm->setSheet (activeSheet());
+  fm->setDirection (FillManipulator::Down);
+  fm->add (*d->selection);
+  fm->execute ();
 }
 
 void View::defaultSelection()

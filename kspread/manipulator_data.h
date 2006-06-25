@@ -55,6 +55,10 @@ class AbstractDataManipulator : public Manipulator {
     user-entered string and parsed by Cell. */
     virtual Value newValue (Element *element, int col, int row,
       bool *parse, FormatType *fmtType) = 0;
+
+    /** return value stored at given coordinates */
+    Value stored (int col, int row, bool *parse);
+
     /** preProcessing will store the old cell's data */
     virtual bool preProcessing ();
     QMap<int, QMap<int, ADMStorage> > oldData;
@@ -120,6 +124,22 @@ class KSPREAD_EXPORT ArrayFormulaManipulator : public AbstractDataManipulator {
     virtual Value newValue (Element *element, int col, int row, bool *,
         FormatType *);
     QString cellRef, m_text;
+};
+
+/** the FillManipulator is used in the Fill operation */
+class KSPREAD_EXPORT FillManipulator : public AbstractDFManipulator {
+  public:
+    FillManipulator ();
+    virtual ~FillManipulator ();
+    
+    enum Direction { Up = 0, Down, Left, Right };
+
+    void setDirection (Direction d) { m_dir = d; };
+  protected:
+    virtual Value newValue (Element *element, int col, int row,
+        bool *parse, FormatType *fmtType);
+    virtual Format *newFormat (Element *element, int col, int row);
+    Direction m_dir;
 };
 
 /** class ProtectedCheck can be used to check, whether a particular

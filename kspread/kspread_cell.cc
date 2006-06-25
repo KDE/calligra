@@ -808,7 +808,7 @@ bool Cell::needsPrinting() const
 
     //We don't need to print anything if the background is white
     if (backgroundColor != Qt::white)
-    	return true;
+      return true;
   }
 
   return false;
@@ -1552,13 +1552,13 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
 
       for ( int i = d->row + 1; i <= r; ++i )
       {
-  	Cell  *cell = format()->sheet()->nonDefaultCell( d->column, i );
-  	cell->obscure( this );
+    Cell  *cell = format()->sheet()->nonDefaultCell( d->column, i );
+    cell->obscure( this );
       }
 
       // Not enough space?
       if ( end == -1 )
-  	setFlag( Flag_CellTooShortY );
+    setFlag( Flag_CellTooShortY );
     }
     else
       setFlag( Flag_CellTooShortY );
@@ -4041,49 +4041,49 @@ QString Cell::textDisplaying( QPainter &_painter )
       //Note that numbers are always treated as left-aligned since if we have to cut digits off, they should
       //always be the least significant ones at the end of the string
       if ( a == Style::Left || a == Style::HAlignUndefined || isNumeric)
-  		tmp = d->strOutText.left(i);
+      tmp = d->strOutText.left(i);
       else if ( a == Style::Right)
-  		tmp = d->strOutText.right(i);
+      tmp = d->strOutText.right(i);
       else
-  		tmp = d->strOutText.mid( ( d->strOutText.length() - i ) / 2, i);
+      tmp = d->strOutText.mid( ( d->strOutText.length() - i ) / 2, i);
 
       if (isNumeric)
       {
-	  //For numeric values, we can cut off digits after the decimal point to make it fit,
-	  //but not the integer part of the number.
-	  //If this number still contains a fraction part then we don't need to do anything, if we have run
-	  //out of space to fit even the integer part of the number then display #########
-	  //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
+    //For numeric values, we can cut off digits after the decimal point to make it fit,
+    //but not the integer part of the number.
+    //If this number still contains a fraction part then we don't need to do anything, if we have run
+    //out of space to fit even the integer part of the number then display #########
+    //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
 
-	  if (!tmp.contains('.'))
-	  	d->strOutText=QString().fill('#',20);
+    if (!tmp.contains('.'))
+      d->strOutText=QString().fill('#',20);
       }
 
       // 4 equal length of red triangle +1 point.
       if ( format()->sheet()->doc()->unzoomItXOld( fm.width( tmp ) ) + tmpIndent
      < len - 4.0 - 1.0 )
       {
-  	if ( format()->getAngle( column(), row() ) != 0 )
-	{
-    		QString tmp2;
-    		RowFormat *rl = format()->sheet()->rowFormat( row() );
-    		if ( d->textHeight > rl->dblHeight() )
-		{
-      			for ( int j = d->strOutText.length(); j != 0; j-- )
-			{
-        			tmp2 = d->strOutText.left( j );
-        			if ( format()->sheet()->doc()->unzoomItYOld( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
-        			{
-    					return d->strOutText.left( qMin( tmp.length(), tmp2.length() ) );
-        			}
-      			}
-    		}
-    		else
-      			return tmp;
+    if ( format()->getAngle( column(), row() ) != 0 )
+  {
+        QString tmp2;
+        RowFormat *rl = format()->sheet()->rowFormat( row() );
+        if ( d->textHeight > rl->dblHeight() )
+    {
+            for ( int j = d->strOutText.length(); j != 0; j-- )
+      {
+              tmp2 = d->strOutText.left( j );
+              if ( format()->sheet()->doc()->unzoomItYOld( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
+              {
+              return d->strOutText.left( qMin( tmp.length(), tmp2.length() ) );
+              }
+            }
+        }
+        else
+            return tmp;
 
-  	}
-  	else
-    		return tmp;
+    }
+    else
+        return tmp;
       }
     }
     return QString( "" );
@@ -5562,13 +5562,13 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         cellStyle = const_cast<QDomElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
 
-	if ( cellStyle )
-		loadOasisConditional( const_cast<QDomElement *>( cellStyle ) );
+  if ( cellStyle )
+    loadOasisConditional( const_cast<QDomElement *>( cellStyle ) );
    }
 
     if (style)
     {
-    	format()->setStyle( style );
+      format()->setStyle( style );
     }
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.

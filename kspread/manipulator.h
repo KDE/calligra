@@ -611,7 +611,8 @@ private:
 };
 
 
-
+// TODO: storing undo information by doing an XML dump is a bad idea, replace
+// with something that only stores relevant data
 /**
  * \class RemovalManipulator
  * \brief Abstract class for removing cell attributes.
@@ -631,21 +632,6 @@ protected:
 
   QByteArray m_redoData;
   QByteArray m_undoData;
-
-private:
-};
-
-/**
- * \class TextRemovalManipulator
- * \brief Removes the texts of a cell region.
- */
-class TextRemovalManipulator : public RemovalManipulator
-{
-public:
-
-protected:
-  virtual bool process( Cell* cell );
-  virtual QString name() const { return i18n( "Remove Text" ); }
 
 private:
 };

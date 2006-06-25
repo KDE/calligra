@@ -360,7 +360,8 @@ void Doc::initConfig()
     if( config->hasGroup("Parameters" ))
     {
         config->setGroup( "Parameters" );
-        m_zoom = config->readEntry( "Zoom", 100 );
+        // zoom factor must be multiplied by 100 for correct effect
+        m_zoom = config->readEntry( "Zoom", 1 ) * 100;
     }
     else
       m_zoom = 100;

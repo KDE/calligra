@@ -585,8 +585,6 @@ public:
      */
     void clearCondition(Selection* selection );
 
-    void fillSelection( Selection* selection, int direction );
-
     void setWordSpelling(Selection* selection,const QString _listWord );
 
     /**
@@ -1369,7 +1367,6 @@ private:
                                bool down);
 
     void convertObscuringBorders();
-    int  adjustColumnHelper(Cell * c, int _col, int _row);
     void checkContentDirection( QString const & name );
     bool objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list );
 

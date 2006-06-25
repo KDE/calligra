@@ -3417,32 +3417,6 @@ void Sheet::decreaseIndent( Selection* selectionInfo )
     workOnCells( selectionInfo, w );
 }
 
-
-int Sheet::adjustColumnHelper( Cell * c, int _col, int _row )
-{
-    double long_max = 0.0;
-    c->calculateTextParameters( painter(), _col, _row );
-    if ( c->textWidth() > long_max )
-    {
-        double indent = 0.0;
-        int a = c->format()->align( c->column(), c->row() );
-        if ( a == Style::HAlignUndefined )
-        {
-            if ( c->value().isNumber() || c->isDate() || c->isTime())
-                a = Style::Right;
-            else
-                a = Style::Left;
-        }
-
-        if ( a == Style::Left )
-            indent = c->format()->getIndent( c->column(), c->row() );
-        long_max = indent + c->textWidth()
-            + c->format()->leftBorderWidth( c->column(), c->row() )
-            + c->format()->rightBorderWidth( c->column(), c->row() );
-    }
-    return (int)long_max;
-}
-
 void Sheet::adjustArea(const Region& region)
 {
   AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
@@ -3476,8 +3450,13 @@ void Sheet::clearText( Selection* selectionInfo )
   if (areaIsEmpty(*selectionInfo))
     return;
 
-  Manipulator* manipulator = new TextRemovalManipulator();
+  DataManipulator* manipulator = new DataManipulator();
   manipulator->setSheet(this);
+  manipulator->setName (i18n ("Clear Text"));
+  // parsing gets set only so that setCellText is called as it should be,
+  // no actual parsing shall be done
+  manipulator->setParsing (true);
+  manipulator->setValue (Value (""));
   manipulator->add(*selectionInfo);
   manipulator->execute();
 }
@@ -3500,84 +3479,6 @@ void Sheet::clearCondition( Selection* selectionInfo )
   manipulator->add(*selectionInfo);
   manipulator->execute();
 }
-
-void Sheet::fillSelection( Selection * selectionInfo, int direction )
-{
-  QRect rct( selectionInfo->selection() );
-  int right  = rct.right();
-  int bottom = rct.bottom();
-  int left   = rct.left();
-  int top    = rct.top();
-  int width  = rct.width();
-  int height = rct.height();
-
-  QDomDocument undoDoc = saveCellRegion( rct );
-  loadSelectionUndo( undoDoc, rct, left - 1, top - 1, false, 0 );
-
-  QDomDocument doc;
-
-  switch( direction )
-  {
-   case Right:
-    doc = saveCellRegion( QRect( left, top, 1, height ) );
-    break;
-
-   case Up:
-    doc = saveCellRegion( QRect( left, bottom, width, 1 ) );
-    break;
-
-   case Left:
-    doc = saveCellRegion( QRect( right, top, 1, height ) );
-    break;
-
-   case Down:
-    doc = saveCellRegion( QRect( left, top, width, 1 ) );
-    break;
-  };
-
-  // Save to buffer
-  QBuffer buffer;
-  buffer.open( QIODevice::WriteOnly );
-  QTextStream str( &buffer );
-  str.setCodec( "UTF-8" );
-  str << doc;
-  buffer.close();
-
-  int i;
-  switch( direction )
-  {
-   case Right:
-    for ( i = left + 1; i <= right; ++i )
-    {
-      paste( buffer.buffer(), QRect( i, top, 1, 1 ), false );
-    }
-    break;
-
-   case Up:
-    for ( i = bottom + 1; i >= top; --i )
-    {
-      paste( buffer.buffer(), QRect( left, i, 1, 1 ), false );
-    }
-    break;
-
-   case Left:
-    for ( i = right - 1; i >= left; --i )
-    {
-      paste( buffer.buffer(), QRect( i, top, 1, 1 ), false );
-    }
-    break;
-
-   case Down:
-    for ( i = top + 1; i <= bottom; ++i )
-    {
-      paste( buffer.buffer(), QRect( left, i, 1, 1 ), false );
-    }
-    break;
-  }
-
-  this->doc()->setModified( true );
-}
-
 
 struct DefaultSelectionWorker : public Sheet::CellWorker {
     DefaultSelectionWorker( ) : Sheet::CellWorker( true, false, true ) { }

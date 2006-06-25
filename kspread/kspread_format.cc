@@ -124,7 +124,7 @@ void Format::copy( const Format & _l )
   m_flagsMask   = _l.m_flagsMask;
   m_bNoFallBack = _l.m_bNoFallBack;
 
-  if ( _l.m_strComment )
+  if ( _l.m_strComment && (m_strComment != _l.m_strComment))
   {
     if (m_strComment)
       delete m_strComment;

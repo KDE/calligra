@@ -79,6 +79,18 @@ bool AbstractDataManipulator::process (Element* element)
   return true;
 }
 
+Value AbstractDataManipulator::stored (int col, int row, bool *parse)
+{
+  Value val = oldData[col][row].val;
+  QString text = oldData[col][row].text;
+  *parse = false;
+  if (!text.isEmpty()) {
+    val = Value (text);
+    *parse = true;
+  }
+  return val;
+}
+
 bool AbstractDataManipulator::preProcessing ()
 {
   // not the first run - data already stored ...
@@ -145,12 +157,12 @@ bool AbstractDFManipulator::process (Element* element)
       // TODO: is this really correct ?
       if (!cell->isDefault())
       {
-        if (m_reverse) {
-          cell->format()->copy (*formats[colidx][rowidx]);
-        }
-        else {
-          cell->format()->copy (*newFormat (element, col, row));
-        }
+        Format *f = 0;
+        if (m_reverse)
+          f = formats[colidx][rowidx];
+        else
+          f = newFormat (element, col, row);
+        if (f) cell->format()->copy (*f);
         cell->setLayoutDirtyFlag();
         cell->setDisplayDirtyFlag();
       }
@@ -238,6 +250,50 @@ Value ArrayFormulaManipulator::newValue (Element *element, int col, int row,
     cellRef = "=INDEX(" + cell->name() + ';';
     return m_text;
   }
+}
+
+FillManipulator::FillManipulator ()
+{
+  m_dir = Down;
+  m_changeformat = true;
+  m_name = i18n ("Fill Selection");
+}
+
+FillManipulator::~FillManipulator ()
+{
+}
+
+Value FillManipulator::newValue (Element *element, int col, int row,
+    bool *parse, FormatType *fmtType)
+{
+  QRect range = element->rect();
+  int colidx = col - range.left();
+  int rowidx = row - range.top();
+  int rows = element->rect().bottom() - element->rect().top() + 1;
+  int cols = element->rect().right() - element->rect().left() + 1;
+  switch (m_dir) {
+    case Up: rowidx = rows - 1; break;
+    case Down: rowidx = 0; break;
+    case Left: colidx = cols - 1; break;
+    case Right: colidx = 0; break;
+  };
+  return stored (colidx, rowidx, parse);
+}
+
+Format *FillManipulator::newFormat (Element *element, int col, int row)
+{
+  QRect range = element->rect();
+  int colidx = col - range.left();
+  int rowidx = row - range.top();
+  int rows = element->rect().bottom() - element->rect().top() + 1;
+  int cols = element->rect().right() - element->rect().left() + 1;
+  switch (m_dir) {
+    case Up: rowidx = rows - 1; break;
+    case Down: rowidx = 0; break;
+    case Left: colidx = cols - 1; break;
+    case Right: colidx = 0; break;
+  };
+  return formats[colidx][rowidx];
 }
 
 ProtectedCheck::ProtectedCheck ()

@@ -84,14 +84,7 @@ Value SortManipulator::newValue (Element *element, int col, int row,
     colidx = sorted[colidx];
 
   // have to return stored value, to avoid earlier calls disrupting latter ones
-  Value val = oldData[colidx][rowidx].val;
-  QString text = oldData[colidx][rowidx].text;
-  *parse = false;
-  if (!text.isEmpty()) {
-    val = Value (text);
-    *parse = true;
-  }
-  return val;
+  return stored (colidx, rowidx, parse);
 }
 
 Format *SortManipulator::newFormat (Element *element, int col, int row)
