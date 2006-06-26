@@ -14,8 +14,20 @@ CCMAIL:danny@commit-digest.org
 
 For bugfixes use CCMAIL:###-done@bugs.kde.org
 
-TODO:
-- inform Raphael about koffice.org/1.5/ url, give him the php code
+
+2006-06-26
+Forms
+- AutoField widget: changing value of "Widget Type" property reloads the entire 
+  property set, so new properties can appear and unused properties can be hidden 
+  in the Property Editor.
+2.0: ported
+KoProperty
+- delayed deleting of editors on setting a new property set
+1.0/2.0: ported
+- added additional, internal "property change" signal so it will be always emitted 
+  _before_ the public one; thus e.g. it is legal to reload the property set within 
+  the "property change" handler
+2.0: ported
 
 2006-06-19..23
 Forms

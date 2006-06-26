@@ -922,5 +922,7 @@ ALTER TABLE t1_new RENAME TO t1;
 
 
 Forms
-TODO: hide "image" property when image box has data source assigned
-TODO: hide "word wrap" property for image box
+- enable edit->copy, actions, etc. for Data View
+
+TODO:
+- inform Raphael about koffice.org/1.5/ url, give him the php code
