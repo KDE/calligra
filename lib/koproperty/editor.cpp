@@ -356,8 +356,10 @@ void
 Editor::changeSetLater()
 {
 	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
-	if (kapp->hasPendingEvents())
+	if (kapp->hasPendingEvents()) {
+		d->changeSetLaterTimer.start(10, true); //try again...
 		return;
+	}
 	d->setListLater_set = false;
 	if (!d->setListLater_list)
 		return;
@@ -376,12 +378,12 @@ Editor::clear(bool editorOnly)
 
 	if(!editorOnly) {
 		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+		if(d->set)
+			d->set->disconnect(this);
 		clearWidgetCache();
 		KListView::clear();
 		d->itemDict.clear();
 		d->topItem = 0;
-		if(d->set)
-			d->set->disconnect(this);
 	}
 }
 
@@ -630,7 +632,8 @@ void
 Editor::clearWidgetCache()
 {
 	for(QMap<Property*, Widget*>::iterator it = d->widgetCache.begin(); it != d->widgetCache.end(); ++it)
-		delete it.data();
+		it.data()->deleteLater();
+//		delete it.data();
 	d->widgetCache.clear();
 }
 
