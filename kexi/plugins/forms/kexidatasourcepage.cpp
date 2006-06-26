@@ -100,6 +100,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	connect(m_clearWidgetDSButton, SIGNAL(clicked()), this, SLOT(clearWidgetDataSourceSelection()));
 
 	m_sourceFieldCombo = new KexiFieldComboBox(contents, "sourceFieldCombo");
+	m_widgetDSLabel->setBuddy(m_sourceFieldCombo);
 	contentsVlyr->addWidget(m_sourceFieldCombo);
 
 	m_dataSourceSeparator = new Q3Frame(contents);

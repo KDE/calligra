@@ -48,7 +48,7 @@ class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
 
 		//! \return a list of subproperties avaliable for this widget.
 		//! This is achieved by only listing those properties that are available in the 
-		QValueList<QCString> subproperies() const;
+		QValueList<Q3CString> subproperies() const;
 
 		//! \return a meta property for a widget's subproperty or 0 if there 
 		//! is no such subproperty.
@@ -65,7 +65,7 @@ class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
 
 	protected:
 		QGuardedPtr<QWidget> m_subwidget;
-		QValueList<QCString> m_subproperies;
+		QValueList<Q3CString> m_subproperies;
 };
 }
 

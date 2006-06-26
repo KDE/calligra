@@ -64,10 +64,13 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		void  addValueCaption(const Q3CString &value, const QString &caption);
 
 	public slots:
-		/*! Sets the widget which property are shown in the list. If \a add is true, the list switch to
-		multiple widget mode (only common properties are shown). Should be directly
-		 connected to Form::widgetSelected() signal. */
-		void setSelectedWidget(QWidget *w, bool add=false);
+		/*! Sets the widget which properties are shown in the property editor. 
+		 If \a add is true, the list switch to multiple widget mode 
+		 (only common properties are shown). Should be directly
+		 connected to Form::widgetSelected() signal. 
+		 If \a forceReload is true, the the properties will be redisplayed in the property editor 
+		 even if these were already displayed. */
+		void setSelectedWidget(QWidget *w, bool add = false, bool forceReload = false);
 
 		/*!  This function is called every time a property is modifed.  It also takes
 		 care of saving set and enum properties. */
@@ -79,7 +82,7 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*! This slot is called when the watched widget is destroyed. Resets the buffer.*/
 		void slotWidgetDestroyed();
 
-//		void setPropertyValueInDesignMode(QWidget* widget, const QMap<QCString, QVariant> &propValues,
+//		void setPropertyValueInDesignMode(QWidget* widget, const QMap<Q3CString, QVariant> &propValues,
 		void createPropertyCommandsInDesignMode(QWidget* widget, const QMap<Q3CString, 
 			QVariant> &propValues, CommandGroup *group, bool addToActiveForm = true,
 			bool execFlagForSubCommands = false);
@@ -181,6 +184,9 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*! \return The i18n'ed list of values, that will be shown by Property
 		Editor (using descFromValue()).*/
 		//QStringList captionForList(const QStringList &list);
+
+		//! Helper
+		void emitWidgetPropertyChanged(QWidget *w, const Q3CString& property, const QVariant& value);
 
 	private:
 		WidgetPropertySetPrivate *d;

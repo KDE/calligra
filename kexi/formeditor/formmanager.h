@@ -165,17 +165,20 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		bool isTopLevel(QWidget *w);
 
 		//! \return A pointer to the KoProperty::Editor we use.
-		KoProperty::Editor* propertyEditor() const { return m_editor; }
+		//unused KoProperty::Editor* propertyEditor() const { return m_editor; }
 
-		/*! Shows a propertybuffer \a buff in a Property Editor.
+		/*! Shows a property set \a set in a Property Editor.
 		 If \a buff is 0, Property Editor will be cleared.
-		 If \a forceReload is true, the buffer needs to be reloaded even
-		 if it's the same as previous one. */
-		virtual void showPropertySet(WidgetPropertySet *list, bool forceReload = false);
+		 If \a forceReload is true, the set will be reloaded even
+		 if it's the same as previous one. 
+		 If \a propertyToSelect is not empty, an item for this name will be selected 
+		 (usable when previously there was no set visible). */
+		virtual void showPropertySet(WidgetPropertySet *set, bool forceReload = false, 
+			const Q3CString& propertyToSelect = Q3CString());
 
 		void blockPropertyEditorUpdating(void *blockingObject);
 
-		void unblockPropertyEditorUpdating(void *blockingObject, WidgetPropertySet *propSet);
+		void unblockPropertyEditorUpdating(void *blockingObject, WidgetPropertySet *set);
 
 		/*! Sets the external property editor pane used by FormDesigner (it may be docked).*/
 		void setEditor(KoProperty::Editor *editor);
@@ -331,10 +334,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void changeFont();
 
 	signals:
-		/*! This signal is emited as the property buffer switched.
-		 If \a forceReload is true, the buffer needs to be reloaded even
+		/*! This signal is emited as the property set switched.
+		 If \a forceReload is true, the set needs to be reloaded even
 		 if it's the same as previous one. */
-		void propertySetSwitched(KoProperty::Set *list, bool forceReload = false);
+		void propertySetSwitched(KoProperty::Set *set, bool forceReload = false, const QCString& propertyToSelect = QCString());
 
 		/*! This signal is emitted when any change is made to the Form \a form,
 		 so it will need to be saved. */
@@ -437,7 +440,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		WidgetPropertySet *m_propSet;
 //		WidgetLibrary *m_lib;
-		QPointer<KoProperty::Editor>  m_editor;
+		//unused QPointer<KoProperty::Editor>  m_editor;
 		QPointer<ObjectTreeView>  m_treeview;
 		// Forms
 		Q3PtrList<Form> m_forms;

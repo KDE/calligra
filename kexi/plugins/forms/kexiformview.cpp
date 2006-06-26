@@ -102,8 +102,8 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	}
 	else
 	{
-		connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool)),
-			this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool)));
+		connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QCString&)),
+			this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool, const QCString&)));
 		connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form *, bool)),
 			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
@@ -353,13 +353,13 @@ KexiFormView::loadForm()
 }
 
 void
-KexiFormView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload)
+KexiFormView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload, const QCString& propertyToSelect)
 {
 	//if (m_buffer == b)
 	//	return;
 	m_propertySet = set;
 	if (forceReload)
-		propertySetReloaded(true/*preservePrevSelection*/);
+		propertySetReloaded(true/*preservePrevSelection*/, propertyToSelect);
 	else
 		propertySetSwitched();
 

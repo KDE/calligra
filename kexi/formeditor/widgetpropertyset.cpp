@@ -25,6 +25,8 @@
 #include <qvariant.h>
 #include <qevent.h>
 #include <qlayout.h>
+#include <qapplication.h>
+#include <qeventloop.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -81,8 +83,8 @@ class WidgetPropertySetPrivate
 		QColorGroup* origActiveColors;
 
 		// i18n stuff
-		QMap<QCString, QString> propCaption;
-		QMap<QCString, QString> propValCaption;
+		QMap<Q3CString, QString> propCaption;
+		QMap<Q3CString, QString> propValCaption;
 };
 }
 
@@ -112,19 +114,19 @@ WidgetPropertySet::manager()
 }*/
 
 KoProperty::Property&
-WidgetPropertySet::operator[](const QCString &name)
+WidgetPropertySet::operator[](const Q3CString &name)
 {
 	return d->set[name];
 }
 
 KoProperty::Property&
-WidgetPropertySet::property(const QCString &name)
+WidgetPropertySet::property(const Q3CString &name)
 {
 	return d->set[name];
 }
 
 bool
-WidgetPropertySet::contains(const QCString &property)
+WidgetPropertySet::contains(const Q3CString &property)
 {
 	return d->set.contains(property);
 }
@@ -185,7 +187,7 @@ WidgetPropertySet::isUndoing()
 /////////////// Functions related to adding widgets /////////////////////////////////////
 
 void
-WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
+WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload)
 {
 	if(!w) {
 		clearSet();
@@ -193,7 +195,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 	}
 
 	// don't add a widget twice
-	if(d->widgets.contains(QPointer<QWidget>(w))) {
+	if(!forceReload && d->widgets.contains(QPointer<QWidget>(w))) {
 		kWarning() << "WidgetPropertySet::setSelectedWidget() Widget is already selected" << endl;
 		return;
 	}
@@ -201,9 +203,14 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 	if(d->widgets.count() == 0)
 		add = false;
 
+	Q3CString prevProperty;
 	if(add)
 		addWidget(w);
 	else {
+		if (forceReload) {
+			KFormDesigner::FormManager::self()->showPropertySet(0, true/*force*/);
+			prevProperty = d->set.prevSelection();
+		}
 		clearSet(true); //clear but do not reload to avoid blinking
 		d->widgets.append(QPointer<QWidget>(w));
 		createPropertiesForWidget(w);
@@ -212,7 +219,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 		connect(w, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()));
 	}
 
-	KFormDesigner::FormManager::self()->showPropertySet(this, true/*force*/);
+	KFormDesigner::FormManager::self()->showPropertySet(this, true/*force*/, prevProperty);
 }
 
 void
@@ -225,7 +232,7 @@ WidgetPropertySet::addWidget(QWidget *w)
 	d->lastGeoCommand = 0;
 	d->properties.clear();
 
-	QCString classname;
+	Q3CString classname;
 	if(d->widgets.first()->className() == w->className())
 		classname = d->widgets.first()->className();
 
@@ -285,9 +292,9 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
 	QStrList tmpList; //used to allocate copy of names
 	if (subpropIface) {
-		QValueList<QCString> subproperies( 
+		QValueList<Q3CString> subproperies( 
 			subpropIface->subproperies() );
-		foreach(QValueListConstIterator<QCString>, it, subproperies ) {
+		foreach(QValueListConstIterator<Q3CString>, it, subproperies ) {
 			tmpList.append( *it );
 			pList.append( tmpList.last() );
 		}
@@ -414,7 +421,7 @@ WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *propert
 }
 
 bool
-WidgetPropertySet::isPropertyVisible(const QCString &property, bool isTopLevel, const QCString &classname)
+WidgetPropertySet::isPropertyVisible(const Q3CString &property, bool isTopLevel, const Q3CString &classname)
 {
 	const bool multiple = d->widgets.count() >= 2;
 	if(multiple && classname.isEmpty())
@@ -467,9 +474,9 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 		|| ! KFormDesigner::FormManager::self()->activeForm()->objectTree())
 		return;
 
-	QCString property = p.name();
+	Q3CString property = p.name();
 	if (0==property.find("this:"))
-		return; //starts with magical prefix: it's meta prop.
+		return; //starts with magical prefix: it's a "meta" prop.
 
 	QVariant value = p.value();
 
@@ -528,7 +535,7 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 			if(property == "name")
 				emit widgetNameChanged(d->widgets.first()->name(), p.value().toCString());
 			d->widgets.first()->setProperty(property, value);
-			emit widgetPropertyChanged(d->widgets.first(), property, value);
+			emitWidgetPropertyChanged(d->widgets.first(), property, value);
 	}
 	else
 	{
@@ -537,7 +544,7 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 		else {
 			if (d->slotPropertyChanged_addCommandEnabled && !KFormDesigner::FormManager::self()->isRedoing()) {
 				// We store old values for each widget
-				QMap<QCString, QVariant> list;
+				QMap<Q3CString, QVariant> list;
 	//			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
 				foreach(QGuardedWidgetList::ConstIterator, it, d->widgets)
 					list.insert((*it)->name(), (*it)->property(property));
@@ -550,19 +557,34 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 //			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
 		foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 			if (!alterLastCommand) {
-				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->name());
+				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()
+					->lookup((*it)->name());
 				if(tree && p.isModified())
 					tree->addModifiedProperty(property, (*it)->property(property));
 			}
 			(*it)->setProperty(property, value);
-			emit widgetPropertyChanged((*it), property, value);
+			emitWidgetPropertyChanged((*it), property, value);
 		}
+	}
+}
+
+void WidgetPropertySet::emitWidgetPropertyChanged(QWidget *w, const Q3CString& property, const QVariant& value)
+{
+	emit widgetPropertyChanged(w, property, value);
+
+	Form *form = KFormDesigner::FormManager::self()->activeForm();
+	if (form && form->library()->propertySetShouldBeReloadedAfterPropertyChange( w->className(), w, property)) {
+		//setSelectedWidget(0, false);
+		qApp->eventLoop()->processEvents(QEventLoop::AllEvents); //be sure events related to editors are consumed
+		setSelectedWidget(w, /*!add*/false, /*forceReload*/true);
+		qApp->eventLoop()->processEvents(QEventLoop::AllEvents); //be sure events related to editors are consumed
+		//KFormDesigner::FormManager::self()->showPropertySet(this, true/*forceReload*/);
 	}
 }
 
 void
 WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget, 
-	const QMap<QCString, QVariant> &propValues, CommandGroup *group, bool addToActiveForm,
+	const QMap<Q3CString, QVariant> &propValues, CommandGroup *group, bool addToActiveForm,
 	bool execFlagForSubCommands)
 {
 	if (!widget || propValues.isEmpty())
@@ -572,9 +594,9 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 	const bool widgetIsSelected = KFormDesigner::FormManager::self()->activeForm()->selectedWidget() == widget;
 
 	d->slotPropertyChanged_addCommandEnabled = false;
-	QMap<QCString, QVariant>::ConstIterator endIt = propValues.constEnd();
+	QMap<Q3CString, QVariant>::ConstIterator endIt = propValues.constEnd();
 //	CommandGroup *group = new CommandGroup(commandName);
-	for(QMap<QCString, QVariant>::ConstIterator it = propValues.constBegin(); it != endIt; ++it)
+	for(QMap<Q3CString, QVariant>::ConstIterator it = propValues.constBegin(); it != endIt; ++it)
 	{
 		if (!d->set.contains(it.key())) {
 			kWarning() << "WidgetPropertySet::createPropertyCommandsInDesignMode(): \"" <<it.key()<<"\" property not found"<<endl;
@@ -865,7 +887,7 @@ WidgetPropertySet::createLayoutProperty(ObjectTreeItem *item)
 		!KFormDesigner::FormManager::self()->activeForm()->objectTree() || !container->widget())
 		return;
 	// special containers have no 'layout' property, as it should not be changed
-	QCString className = container->widget()->className();
+	Q3CString className = container->widget()->className();
 	if((className == "HBox") || (className == "VBox") || (className == "Grid"))
 		return;
 
@@ -1036,13 +1058,13 @@ WidgetPropertySet::initPropertiesDescription()
 }
 
 QString
-WidgetPropertySet::propertyCaption(const QCString &name)
+WidgetPropertySet::propertyCaption(const Q3CString &name)
 {
 	return d->propCaption[name];
 }
 
 QString
-WidgetPropertySet::valueCaption(const QCString &name)
+WidgetPropertySet::valueCaption(const Q3CString &name)
 {
 	return d->propValCaption[name];
 }
@@ -1073,14 +1095,14 @@ WidgetPropertySet::createValueList(WidgetInfo *winfo, const QStringList &list)
 }
 
 void
-WidgetPropertySet::addPropertyCaption(const QCString &property, const QString &caption)
+WidgetPropertySet::addPropertyCaption(const Q3CString &property, const QString &caption)
 {
 	if(!d->propCaption.contains(property))
 		d->propCaption[property] = caption;
 }
 
 void
-WidgetPropertySet::addValueCaption(const QCString &value, const QString &caption)
+WidgetPropertySet::addValueCaption(const Q3CString &value, const QString &caption)
 {
 	if(!d->propValCaption.contains(value))
 		d->propValCaption[value] = caption;

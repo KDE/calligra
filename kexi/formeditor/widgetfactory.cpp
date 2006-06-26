@@ -581,6 +581,16 @@ WidgetFactory::isPropertyVisibleInternal(const Q3CString &, QWidget *w,
 	return true;
 }
 
+bool
+WidgetFactory::propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w, 
+	const Q3CString& property)
+{
+	Q_UNUSED(classname);
+	Q_UNUSED(w);
+	Q_UNUSED(property);
+	return false;
+}
+
 void
 WidgetFactory::resizeEditor(QWidget *, QWidget *, const Q3CString&)
 {

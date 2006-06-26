@@ -160,7 +160,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 If \a preservePrevSelection is true and there was a property set
 		 assigned before call, previously selected item will be preselected
 		 in the editor (if found). */
-		void propertySetReloaded(bool preservePrevSelection = false);
+		void propertySetReloaded(bool preservePrevSelection = false, const QCString& propertyToSelect = QCString());
 
 		/*! Tells this dialog to create and store data of the new object
 		 pointed by \a sdata on the backend.

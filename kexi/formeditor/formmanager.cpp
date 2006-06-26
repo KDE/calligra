@@ -131,7 +131,7 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 //moved to createWidgetLibrary()	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
 	m_propSet = new WidgetPropertySet(this);
 
-	m_editor = 0;
+	//unused m_editor = 0;
 	m_active = 0;
 	m_inserting = false;
 	m_drawingSlot = false;
@@ -139,7 +139,6 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 	m_connection = 0;
 	m_popup = 0;
 	m_treeview = 0;
-	m_editor = 0;
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_deleteWidgetLater_list.setAutoDelete(true);
@@ -177,14 +176,14 @@ FormManager::createWidgetLibrary(FormManager* m, const QStringList& supportedFac
 	return new WidgetLibrary(_self, supportedFactoryGroups);
 }
 
-void
+/*unused void
 FormManager::setEditor(KoProperty::Editor *editor)
 {
 	m_editor = editor;
 
 	if(editor)
 		editor->changeSet(m_propSet->set());
-}
+}*/
 
 void
 FormManager::setObjectTreeView(ObjectTreeView *treeview)
@@ -1033,7 +1032,7 @@ FormManager::menuSignalChosen(int id)
 		}
 	}
 	else if(m_menuWidget)
-		emit(createFormSlot(m_active, m_menuWidget->name(), m_popup->text(id)));
+		emit createFormSlot(m_active, m_menuWidget->name(), m_popup->text(id));
 }
 
 void
@@ -1149,15 +1148,19 @@ FormManager::breakLayout()
 }
 
 void
-FormManager::showPropertySet(WidgetPropertySet *propSet, bool forceReload)
+FormManager::showPropertySet(WidgetPropertySet *set, bool forceReload, const Q3CString& propertyToSelect)
 {
 	if (m_objectBlockingPropertyEditorUpdating)
 		return;
 
-	if(m_editor)
-		m_editor->changeSet(propSet ? propSet->set() : 0);
+/*unused	if(m_editor) {
+		if (propertyToSelect.isEmpty() && forceReload)
+			m_editor->changeSet(set ? set->set() : 0, propertyToSelect);
+		else
+			m_editor->changeSet(set ? set->set() : 0);
+	}*/
 
-	emit propertySetSwitched(propSet ? propSet->set(): 0, forceReload);
+	emit propertySetSwitched(set ? set->set(): 0, /*preservePrevSelection*/forceReload, propertyToSelect);
 }
 
 void
@@ -1169,13 +1172,13 @@ FormManager::blockPropertyEditorUpdating(void *blockingObject)
 }
 
 void
-FormManager::unblockPropertyEditorUpdating(void *blockingObject, WidgetPropertySet *propSet)
+FormManager::unblockPropertyEditorUpdating(void *blockingObject, WidgetPropertySet *set)
 {
 	if (!blockingObject || m_objectBlockingPropertyEditorUpdating!=blockingObject)
 		return;
 
 	m_objectBlockingPropertyEditorUpdating = 0;
-	showPropertySet(propSet, true/*forceReload*/);
+	showPropertySet(set, true/*forceReload*/);
 }
 
 void

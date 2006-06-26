@@ -110,10 +110,10 @@ void KexiViewBase::propertySetSwitched()
 		m_mainWin->propertySetSwitched( parentDialog(), false );
 }
 
-void KexiViewBase::propertySetReloaded(bool preservePrevSelection)
+void KexiViewBase::propertySetReloaded(bool preservePrevSelection, const QCString& propertyToSelect)
 {
 	if (parentDialog())
-		m_mainWin->propertySetSwitched( parentDialog(), true, preservePrevSelection );
+		m_mainWin->propertySetSwitched( parentDialog(), true, preservePrevSelection, propertyToSelect );
 }
 
 void KexiViewBase::setDirty(bool set)

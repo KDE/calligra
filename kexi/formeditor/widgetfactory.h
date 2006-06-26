@@ -227,7 +227,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
   readSpecialProperty()). \n \n
 
   <b>Special internal properties</b>\n
-  Use void setInternalProperty(const QCString& classname, const QCString& property, const QString& value);
+  Use void setInternalProperty(const Q3CString& classname, const Q3CString& property, const QString& value);
   to set values of special internal properties.
   Currently these properties are used for customizing popup menu items used for orientation selection.
   Customization for class ClassName should look like:
@@ -372,14 +372,21 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		}
 
 	protected:
+		/*! This function is called when we want to know whether the property should be visible.
+		 Implement it in the factory; don't forget to call implementation in the superclass. 
+		 Default implementation hides "caption", "icon", "sizeIncrement" and "iconText" properties. */
 		virtual bool isPropertyVisibleInternal(const Q3CString &classname, QWidget *w,
 			const Q3CString &property, bool isTopLevel);
+
+		/*! Sometimes property sets should be reloaded when a given property value changed.
+		 Implement it in the factory. Default implementation always returns false. */
+		virtual bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w, 
+			const Q3CString& property);
 
 		/*! This function creates a KLineEdit to input some text and edit a widget's contents.
 		 This can be used in startEditing(). \a text is the text to display by default
 		  in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
-		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
-		 */
+		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit. */
 		void createEditor(const Q3CString &classname, const QString &text,
 			QWidget *w, Container *container, QRect geometry,
 			int align, bool useFrame=false, bool multiLine = false,

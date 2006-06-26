@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -168,6 +168,10 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		/*! Used by WidgetPropertySet::setWidget() after creating properties. */
 		void setPropertyOptions( WidgetPropertySet &list, const WidgetInfo& winfo, QWidget* w );
+
+		/*! Sometimes property sets should be reloaded when a given property value changed. */
+		bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w, 
+			const Q3CString& property);
 
 	signals:
 		void prepareInsert(const Q3CString &c);

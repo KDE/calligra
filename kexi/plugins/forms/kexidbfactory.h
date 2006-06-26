@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,7 +43,6 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		KexiDBFactory(QObject *parent, const char *name, const QStringList &args);
 		virtual ~KexiDBFactory();
 
-//		virtual QString	name();
 		virtual QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, 
 			KFormDesigner::Container *container, int options = DefaultOptions );
 
@@ -66,9 +65,12 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		virtual bool changeText(const QString &newText);
 		virtual void resizeEditor(QWidget *editor, QWidget *widget, const Q3CString &classname);
 
-		virtual bool isPropertyVisibleInternal(const Q3CString &, QWidget *, const Q3CString &, bool isTopLevel);
-//		QWidget *m_widget;
-//		KFormDesigner::Container *m_container;
+		virtual bool isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
+			const Q3CString& property, bool isTopLevel);
+
+		//! Sometimes property sets should be reloaded when a given property value changed.
+		virtual bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w, 
+			const Q3CString& property);
 
 		KAction* m_assignAction;
 };
