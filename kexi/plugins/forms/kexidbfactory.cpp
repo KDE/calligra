@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -595,6 +595,17 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 	}
 
 	return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
+}
+
+bool
+KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QCString& classname, 
+	QWidget *w, const QCString& property)
+{
+	Q_UNUSED(classname);
+	Q_UNUSED(w);
+	if (property=="fieldTypeInternal" || property=="widgetType")
+		return true;
+	return false;
 }
 
 bool

@@ -40,6 +40,7 @@
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
 #include <kimageeffect.h>
+#include <kstdaccel.h>
 
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
@@ -503,7 +504,7 @@ void KexiDBImageBox::copy()
 
 void KexiDBImageBox::paste()
 {
-	if (isReadOnly())
+	if (isReadOnly() || (!m_designMode && !hasFocus()))
 		return;
 	QPixmap pm( qApp->clipboard()->pixmap(QClipboard::Clipboard) );
 //	if (!pm.isNull())
@@ -920,11 +921,15 @@ void KexiDBImageBox::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
 {
 	// Esc key should close the popup
+	kdDebug() << KStdAccel::shortcut(KStdAccel::Copy).keyCodeQt() << " "  << ke->key() << endl;
 	if (ke->state() == Qt::NoButton && ke->key() == Qt::Key_Escape) {
 		if (m_popup->isVisible()) {
 			m_setFocusOnButtonAfterClosingPopup = true;
 			return true;
 		}
+	}
+	else if (ke->state() == Qt::ControlButton && KStdAccel::shortcut(KStdAccel::Copy).keyCodeQt() == (ke->key()|CTRL)) {
+		
 	}
 	return false;
 }

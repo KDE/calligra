@@ -25,6 +25,8 @@
 #include <qvariant.h>
 #include <qevent.h>
 #include <qlayout.h>
+#include <qapplication.h>
+#include <qeventloop.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -185,7 +187,7 @@ WidgetPropertySet::isUndoing()
 /////////////// Functions related to adding widgets /////////////////////////////////////
 
 void
-WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
+WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload)
 {
 	if(!w) {
 		clearSet();
@@ -193,7 +195,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 	}
 
 	// don't add a widget twice
-	if(d->widgets.contains(QGuardedPtr<QWidget>(w))) {
+	if(!forceReload && d->widgets.contains(QGuardedPtr<QWidget>(w))) {
 		kdWarning() << "WidgetPropertySet::setSelectedWidget() Widget is already selected" << endl;
 		return;
 	}
@@ -201,9 +203,14 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 	if(d->widgets.count() == 0)
 		add = false;
 
+	QCString prevProperty;
 	if(add)
 		addWidget(w);
 	else {
+		if (forceReload) {
+			KFormDesigner::FormManager::self()->showPropertySet(0, true/*force*/);
+			prevProperty = d->set.prevSelection();
+		}
 		clearSet(true); //clear but do not reload to avoid blinking
 		d->widgets.append(QGuardedPtr<QWidget>(w));
 		createPropertiesForWidget(w);
@@ -212,7 +219,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 		connect(w, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()));
 	}
 
-	KFormDesigner::FormManager::self()->showPropertySet(this, true/*force*/);
+	KFormDesigner::FormManager::self()->showPropertySet(this, true/*force*/, prevProperty);
 }
 
 void
@@ -469,7 +476,7 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 
 	QCString property = p.name();
 	if (0==property.find("this:"))
-		return; //starts with magical prefix: it's meta prop.
+		return; //starts with magical prefix: it's a "meta" prop.
 
 	QVariant value = p.value();
 
@@ -528,7 +535,7 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 			if(property == "name")
 				emit widgetNameChanged(d->widgets.first()->name(), p.value().toCString());
 			d->widgets.first()->setProperty(property, value);
-			emit widgetPropertyChanged(d->widgets.first(), property, value);
+			emitWidgetPropertyChanged(d->widgets.first(), property, value);
 	}
 	else
 	{
@@ -550,13 +557,28 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 //			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
 		foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 			if (!alterLastCommand) {
-				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->name());
+				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()
+					->lookup((*it)->name());
 				if(tree && p.isModified())
 					tree->addModifiedProperty(property, (*it)->property(property));
 			}
 			(*it)->setProperty(property, value);
-			emit widgetPropertyChanged((*it), property, value);
+			emitWidgetPropertyChanged((*it), property, value);
 		}
+	}
+}
+
+void WidgetPropertySet::emitWidgetPropertyChanged(QWidget *w, const QCString& property, const QVariant& value)
+{
+	emit widgetPropertyChanged(w, property, value);
+
+	Form *form = KFormDesigner::FormManager::self()->activeForm();
+	if (form && form->library()->propertySetShouldBeReloadedAfterPropertyChange( w->className(), w, property)) {
+		//setSelectedWidget(0, false);
+		qApp->eventLoop()->processEvents(QEventLoop::AllEvents); //be sure events related to editors are consumed
+		setSelectedWidget(w, /*!add*/false, /*forceReload*/true);
+		qApp->eventLoop()->processEvents(QEventLoop::AllEvents); //be sure events related to editors are consumed
+		//KFormDesigner::FormManager::self()->showPropertySet(this, true/*forceReload*/);
 	}
 }
 

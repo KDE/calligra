@@ -109,7 +109,8 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 			const QStringList& fields, const QPoint& pos = QPoint(-1,-1));
 
 	protected slots:
-		void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false);
+		void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false, 
+			const QCString& propertyToSelect = QCString());
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
 		void slotFocus(bool in);
 		void slotHandleDragMoveEvent(QDragMoveEvent* e);

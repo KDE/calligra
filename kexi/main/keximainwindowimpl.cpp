@@ -3529,7 +3529,8 @@ void KexiMainWindowImpl::acceptPropertySetEditing()
 		d->propEditor->editor()->acceptInput();
 }
 
-void KexiMainWindowImpl::propertySetSwitched(KexiDialogBase *dlg, bool force, bool preservePrevSelection)
+void KexiMainWindowImpl::propertySetSwitched(KexiDialogBase *dlg, bool force, bool preservePrevSelection,
+	const QCString& propertyToSelect)
 {
 	kdDebug() << "KexiMainWindowImpl::propertySetSwitched()" << endl;
 	if ((KexiDialogBase*)d->curDialog!=dlg)
@@ -3538,7 +3539,12 @@ void KexiMainWindowImpl::propertySetSwitched(KexiDialogBase *dlg, bool force, bo
 		KoProperty::Set *newBuf = d->curDialog ? d->curDialog->propertySet() : 0;
 		if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
 			d->propBuffer = newBuf;
-			d->propEditor->editor()->changeSet( d->propBuffer, preservePrevSelection );
+			if (preservePrevSelection) {
+				if (propertyToSelect.isEmpty())
+					d->propEditor->editor()->changeSet( d->propBuffer, preservePrevSelection );
+				else
+					d->propEditor->editor()->changeSet( d->propBuffer, propertyToSelect );
+			}
 		}
 	}
 }

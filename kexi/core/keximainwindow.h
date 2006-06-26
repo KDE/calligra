@@ -101,7 +101,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 set before call, previously selected item will be preselected
 		 in the editor (if found). */
 		virtual void propertySetSwitched(KexiDialogBase *dlg, bool force=false,
-			bool preservePrevSelection = true) = 0;
+			bool preservePrevSelection = true, const QCString& propertyToSelect = QCString()) = 0;
 
 		/*! Saves dialog's \a dlg data. If dialog's data is never saved,
 		 user is asked for name and title, before saving (see getNewObjectInfo()).

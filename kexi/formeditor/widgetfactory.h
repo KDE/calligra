@@ -367,14 +367,21 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		}
 
 	protected:
+		/*! This function is called when we want to know whether the property should be visible.
+		 Implement it in the factory; don't forget to call implementation in the superclass. 
+		 Default implementation hides "caption", "icon", "sizeIncrement" and "iconText" properties. */
 		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w,
 			const QCString &property, bool isTopLevel);
+
+		/*! Sometimes property sets should be reloaded when a given property value changed.
+		 Implement it in the factory. Default implementation always returns false. */
+		virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QCString& classname, QWidget *w, 
+			const QCString& property);
 
 		/*! This function creates a KLineEdit to input some text and edit a widget's contents.
 		 This can be used in startEditing(). \a text is the text to display by default
 		  in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
-		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
-		 */
+		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit. */
 		void createEditor(const QCString &classname, const QString &text,
 			QWidget *w, Container *container, QRect geometry,
 			int align, bool useFrame=false, bool multiLine = false,

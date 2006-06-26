@@ -404,7 +404,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		virtual void acceptPropertySetEditing();
 
 		virtual void propertySetSwitched(KexiDialogBase *dlg, bool force=false,
-			bool preservePrevSelection = true);
+			bool preservePrevSelection = true, const QCString& propertyToSelect = QCString());
 
 		/*! Handles changes in 'dirty' flag for dialogs. */
 		void slotDirtyFlagChanged(KexiDialogBase*);
