@@ -103,6 +103,7 @@ class EditorPrivate
 		QTimer changeSetLaterTimer;
 		bool setListLater_set : 1;
 		bool preservePrevSelection_preservePrevSelection : 1;
+		QCString preservePrevSelection_propertyToSelect;
 		//bool doNotSetFocusOnSelection : 1;
 		//! Used in setFocus() to prevent scrolling to previously selected item on mouse click
 		bool justClickedItem : 1;
@@ -285,13 +286,32 @@ Editor::addItem(const QCString &name, EditorItem *parent)
 void
 Editor::changeSet(Set *set, bool preservePrevSelection)
 {
+	changeSetInternal(set, preservePrevSelection, "");
+}
+
+void
+Editor::changeSet(Set *set, const QCString& propertyToSelect)
+{
+	changeSetInternal(set, !propertyToSelect.isEmpty(), propertyToSelect);
+}
+
+void
+Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QCString& propertyToSelect)
+{
 	if (d->insideSlotValueChanged) {
 		//changeSet() called from inside of slotValueChanged()
 		//this is dangerous, because there can be pending events,
 		//especially for the GUI stuff, so let's do delayed work
 		d->setListLater_list = set;
 		d->preservePrevSelection_preservePrevSelection = preservePrevSelection;
+		d->preservePrevSelection_propertyToSelect = propertyToSelect;
 		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+		if (d->set) {
+			//store prev. selection for this prop set
+			if (d->currentItem)
+				d->set->setPrevSelection( d->currentItem->property()->name() );
+			kdDebug() << d->set->prevSelection() << endl;
+		}
 		if (!d->setListLater_set) {
 			d->setListLater_set = true;
 			d->changeSetLaterTimer.start(10, true);
@@ -304,10 +324,12 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 		//store prev. selection for this prop set
 		if (d->currentItem)
 			d->set->setPrevSelection( d->currentItem->property()->name() );
+		else
+			d->set->setPrevSelection( "" );
 		d->set->disconnect(this);
 	}
 
-	QCString selectedPropertyName1, selectedPropertyName2;
+	QCString selectedPropertyName1 = propertyToSelect, selectedPropertyName2 = propertyToSelect;
 	if (preservePrevSelection) {
 		//try to find prev. selection:
 		//1. in new list's prev. selection
@@ -321,7 +343,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 	d->set = set;
 	if (d->set) {
 		//receive property changes
-		connect(d->set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+		connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&, KoProperty::Property&)),
 			this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
 		connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
 			this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
@@ -331,7 +353,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 
 	fill();
 	if (d->set) {
-		//select prev. selecteed item
+		//select prev. selected item
 		EditorItem * item = 0;
 		if (!selectedPropertyName2.isEmpty()) //try other one for old prop set
 			item = d->itemDict[selectedPropertyName2];
@@ -367,15 +389,18 @@ void
 Editor::changeSetLater()
 {
 	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
-	if (kapp->hasPendingEvents())
+	if (kapp->hasPendingEvents()) {
+		d->changeSetLaterTimer.start(10, true); //try again...
 		return;
+	}
 	d->setListLater_set = false;
 	if (!d->setListLater_list)
 		return;
 
 	bool b = d->insideSlotValueChanged;
 	d->insideSlotValueChanged = false;
-	changeSet(d->setListLater_list, d->preservePrevSelection_preservePrevSelection);
+	changeSetInternal(d->setListLater_list, d->preservePrevSelection_preservePrevSelection, 
+		d->preservePrevSelection_propertyToSelect);
 	d->insideSlotValueChanged = b;
 }
 
@@ -387,12 +412,12 @@ Editor::clear(bool editorOnly)
 
 	if(!editorOnly) {
 		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
-		clearWidgetCache();
+		if(d->set)
+			d->set->disconnect(this);
+		clearWidgetCache(); 
 		KListView::clear();
 		d->itemDict.clear();
 		d->topItem = 0;
-		if(d->set)
-			d->set->disconnect(this);
 	}
 }
 
@@ -641,7 +666,8 @@ void
 Editor::clearWidgetCache()
 {
 	for(QMap<Property*, Widget*>::iterator it = d->widgetCache.begin(); it != d->widgetCache.end(); ++it)
-		delete it.data();
+		it.data()->deleteLater();
+//		delete it.data();
 	d->widgetCache.clear();
 }
 
