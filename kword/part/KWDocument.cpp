@@ -33,7 +33,6 @@
 #include <KoOasisStyles.h>
 #include <KoToolManager.h>
 #include <KoTextShape.h>
-#include <KoTextShapeFactory.h>
 #include <KoShapeRegistry.h>
 
 // KDE + Qt includes
@@ -54,11 +53,6 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     m_zoomMode = KoZoomMode::ZOOM_WIDTH;
     KoToolManager::instance()->toolBox()->show();
 
-    // replace plugin version with dynamic-loadable library version
-    KoTextShapeFactory *factory = new KoTextShapeFactory(parent, QStringList());
-    KoShapeRegistry::instance()->remove(factory->shapeId());
-    KoShapeRegistry::instance()->add(factory);
-
     connect (&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
 
 appendPage();
@@ -71,10 +65,9 @@ KWDocument::~KWDocument() {
 }
 
 void KWDocument::addShape (KoShape *shape) {
-    KoTextShape *text = dynamic_cast<KoTextShape*>(shape);
-    if(text) {
+    if(shape->shapeId() == KoTextShape_SHAPEID) {
         KWTextFrameSet *fs = new KWTextFrameSet();
-        KWTextFrame *frame = new KWTextFrame(text, fs);
+        KWTextFrame *frame = new KWTextFrame(shape, fs);
         addFrameSet(fs);
     } else {
         KWFrameSet *fs = new KWFrameSet();

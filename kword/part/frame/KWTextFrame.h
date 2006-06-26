@@ -22,20 +22,19 @@
 
 #include "KWFrame.h"
 
-#include <KoTextShape.h>
+#include <KoShape.h>
 #include <KoViewConverter.h>
 
 /// KWTextFrame
 class KWTextFrame : public KWFrame {
 public:
-    KWTextFrame(KoTextShape *shape, KWFrameSet *parent);
+    KWTextFrame(KoShape *shape, KWFrameSet *parent);
     ~KWTextFrame();
 
 private:
     int m_minimumFrameHeight;
     bool m_drawFootNoteLine;
     int m_documentOffset;
-    KoTextShape *m_textShape;
 };
 
 #endif

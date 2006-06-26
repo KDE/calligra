@@ -45,6 +45,7 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
     m_view = view;
     m_shapeManager = new KoShapeManager(this);
     m_viewMode = KWViewMode::create(viewMode, this);
+    setFocusPolicy(Qt::StrongFocus);
 
     connect(document, SIGNAL(pageAdded(KWPage*)), this, SLOT(pageSetupChanged()));
     connect(document, SIGNAL(pageRemoved(KWPage*)), this, SLOT(pageSetupChanged()));

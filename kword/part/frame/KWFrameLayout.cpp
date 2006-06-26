@@ -27,7 +27,6 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoTextShape.h>
-#include <KoShape.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -63,11 +62,9 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
             PageSpreadShapeFactory(KWFrameLayout *parent) {
                 m_parent = parent;
             }
-            KoTextShape *create(KWPage *page) {
-                KoTextShape *shape = m_parent->createTextShape(page);
-kDebug() << "shape pos; " << shape->position().x() << "," << shape->position().y() << endl;
+            KoShape *create(KWPage *page) {
+                KoShape *shape = m_parent->createTextShape(page);
                 shape->setPosition(QPointF(page->width()/2+1, shape->position().y()));
-kDebug() << "         ; " << shape->position().x() << "," << shape->position().y() << endl;
                 return shape;
             }
             KWFrameLayout *m_parent;
@@ -415,10 +412,10 @@ void KWFrameLayout::setup() {
     m_setup = true;
 }
 
-KoTextShape *KWFrameLayout::createTextShape(KWPage *page) {
+KoShape *KWFrameLayout::createTextShape(KWPage *page) {
     KoShapeFactory *factory = KoShapeRegistry::instance()->get(KoTextShape_SHAPEID);
     Q_ASSERT(factory);
-    KoTextShape *shape = static_cast<KoTextShape*> (factory->createDefaultShape());
+    KoShape *shape = factory->createDefaultShape();
     shape->setPosition(QPointF(0, page->offsetInDocument()));
     return shape;
 }

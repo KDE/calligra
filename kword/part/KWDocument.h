@@ -209,7 +209,6 @@ private:
     KWFrameLayout m_frameLayout;
 };
 
-/// \internal
 class PageProcessingQueue : public QObject {
     Q_OBJECT
 public:

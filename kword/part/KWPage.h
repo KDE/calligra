@@ -25,12 +25,20 @@
 class KoZoomHandler;
 
 /**
- * This class represents a printed page of the document.
+ * This class represents a printed page of the document.  Each page is either left, right or
+ * a pageSpread. See the PageSideEnum for details.
+ * The KWPage is created and maintained by the KWPageManager so you won't find a constructor
+ * on this class.  Margins and sizes are inherited from the page managers default, setting the
+ * size to the same size as the default will from then on update the size automatically.
  */
 class KWPage {
 public:
     /// An enum to define if this is a page that is printed to be a left or a right page
-    enum PageSideEnum {Left, Right, PageSpread };
+    enum PageSideEnum {
+        Left,       ///< A left page. Used for even-numbered pages
+        Right,      ///< A right page. Used for odd numbered pages
+        PageSpread  ///< A page spread which is one KWPage instance, but represents 2 pagenumbers
+    };
 
     /// set the width of the page in pt
     void setWidth(const double &x);
@@ -52,7 +60,7 @@ public:
      * Any page should either use valid left and right margins, or valid pageedge/binding ones,
      * setting this one will remove the left/right ones.
      */
-    void setMarginClosestBinding(const double &y);
+    void setMarginClosestBinding(const double &x);
     /**
      * set width of the left margin.
      * Any page should either use valid left and right margins, or valid pageedge/binding ones,

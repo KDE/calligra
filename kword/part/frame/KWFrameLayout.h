@@ -35,7 +35,7 @@ class KWPageSettings;
 class KWPage;
 class KWFrame;
 
-class KoTextShape;
+class KoShape;
 
 /**
  * This class is a controller class for frame layouting.
@@ -79,7 +79,7 @@ signals:
     void newFrameSet(KWFrameSet *fs);
 
 private:
-    KoTextShape *createTextShape(KWPage *page);
+    KoShape *createTextShape(KWPage *page);
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type);
     QList<KWFrame *> framesInPage(QRectF page);
     void setup();

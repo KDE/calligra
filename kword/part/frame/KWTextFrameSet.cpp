@@ -20,7 +20,7 @@
 #include "KWTextFrameSet.h"
 #include "KWFrame.h"
 
-#include "KoTextShape.h"
+#include <KoTextShapeData.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -73,8 +73,13 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
         frame->shape()->setLocked(true);
     if(frameCount() == 1 && m_document->isEmpty()) {
         delete m_document;
-        m_document = static_cast<KoTextShape*>(frame->shape())->document();
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+        Q_ASSERT(data);
+        m_document = data->document();
     }
-    else
-        static_cast<KoTextShape*>(frame->shape())->setDocument(m_document);
+    else {
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+        Q_ASSERT(data);
+        data->setDocument(m_document, false);
+    }
 }

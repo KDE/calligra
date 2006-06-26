@@ -21,17 +21,68 @@
 #include "KWTextFrameSet.h"
 
 #include <KoViewConverter.h>
-#include <KoTextShape.h>
+#include <KoTextShapeData.h>
 
-KWTextFrame::KWTextFrame(KoTextShape *shape, KWFrameSet *parent)
+#include <QTextFrame>
+#include <QTextDocument>
+#include <QTextBlock>
+#include <QTextFragment>
+#include <kdebug.h>
+
+KWTextFrame::KWTextFrame(KoShape *shape, KWFrameSet *parent)
     : KWFrame(shape, parent),
     m_minimumFrameHeight( 2 ),
     m_drawFootNoteLine( false ),
     m_documentOffset( 0 )
 {
-    m_textShape = shape;
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+    QTextFrame *root = data->document()->rootFrame();
+    class Printer {
+      public:
+        Printer() { }
+        QString createBlank(int len) {
+            QString blank;
+            for(int i=0; i < len; i++)
+                blank = blank + " ";
+            return blank;
+        }
+        void printFragment(QTextFragment fragment, int inset=0) {
+            if(!fragment.isValid()) return;
+            QString blank = createBlank(inset);
+            kDebug() << blank << "Fragment" <<endl;
+            kDebug() << blank << "  '"  << fragment.text() << "'" << endl;
+        }
+        void printBlock(QTextBlock block, int inset) {
+            if(!block.isValid()) return;
+            QString blank = createBlank(inset);
+            kDebug() << blank << "Block" << endl;
+            //kDebug() << blank << "  '" << block.text() << "'" << endl;
+            QTextBlock::Iterator iter = block.begin();
+            while(!iter.atEnd()) {
+                printFragment(iter.fragment(), inset+1);
+                iter++;
+            }
+        }
+        void printFrame(QTextFrame *frame, int inset=0) {
+            if(frame==0) return;
+            QString blank = createBlank(inset);
+           //foreach(QTextFrame *child, frame->childFrames()) {
+           //    kDebug() << blank << "Frame" << endl;
+           //    printFrame(child, inset+1);
+           //}
+           //kDebug() << blank << "---------" << endl;
+            QTextFrame::Iterator iter = frame->begin();
+            while(! iter.atEnd()) {
+                printFrame(iter.currentFrame(), inset+1);
+                printBlock(iter.currentBlock(), inset+1);
+                iter++;
+            }
+        }
+    };
+
+    Printer printer;
+    printer.printFrame(root);
 }
 
 KWTextFrame::~KWTextFrame() {
-    m_textShape = 0;
 }
