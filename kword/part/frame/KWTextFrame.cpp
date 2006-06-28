@@ -29,11 +29,8 @@
 #include <QTextFragment>
 #include <kdebug.h>
 
-KWTextFrame::KWTextFrame(KoShape *shape, KWFrameSet *parent)
-    : KWFrame(shape, parent),
-    m_minimumFrameHeight( 2 ),
-    m_drawFootNoteLine( false ),
-    m_documentOffset( 0 )
+KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent)
+    : KWFrame(shape, parent)
 {
 }
 

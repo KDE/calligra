@@ -25,19 +25,28 @@
 
 class QTextDocument;
 
-/// KWTextFrameSet
+/**
+ * A frameset with a TextDocument backing it.
+ */
 class KWORD_TEST_EXPORT KWTextFrameSet : public KWFrameSet {
 public:
+    /// normal constructor, for user text
     KWTextFrameSet();
+    /**
+     * Constructor with a type of text specified
+     * @param type the type of frameSet; this can indicate headers, footers etc.
+     */
     KWTextFrameSet(KWord::TextFrameSetType type);
     ~KWTextFrameSet();
 
+    /// return the type of frameSet this is
     KWord::TextFrameSetType textFrameSetType() { return m_textFrameSetType; }
 
+    /// return the document with the text that belongs to this frameset.
     QTextDocument *document() const { return m_document; }
 
 protected:
-    virtual void setupFrame(KWFrame *frame);
+    void setupFrame(KWFrame *frame);
 
 private:
     QTextDocument *m_document;

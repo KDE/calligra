@@ -26,16 +26,26 @@
 #include <KoShape.h>
 #include <KoViewConverter.h>
 
-/// KWTextFrame
+class KWTextFrameSet;
+
+/**
+ * A single frame capable of showing text from a KWTextFrameSet
+ */
 class KWORD_TEST_EXPORT KWTextFrame : public KWFrame {
 public:
-    KWTextFrame(KoShape *shape, KWFrameSet *parent);
+    /**
+     * Constructor
+     * @param shape a ready made shape that is capable of showing text
+     *      This shape should be created using a KoShapeFactory from the textShape plugin
+     * @param parent the frameSet this frame will be associated with.
+     */
+    KWTextFrame(KoShape *shape, KWTextFrameSet *parent);
     ~KWTextFrame();
 
 private:
+    /* TODO
     int m_minimumFrameHeight;
-    bool m_drawFootNoteLine;
-    int m_documentOffset;
+    bool m_drawFootNoteLine; */
 };
 
 #endif

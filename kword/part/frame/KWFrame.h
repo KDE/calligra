@@ -77,18 +77,38 @@ public:
      */
     void setNewFrameBehavior(KWord::NewFrameBehavior nf) { m_newFrameBehavior = nf; }
 
+    /**
+     * Return the side around text from another (text)frame should flow.
+     */
     KWord::RunAroundSide runAroundSide() const { return m_runAroundSide; }
+    /**
+     * Set the side around text from another (text)frame should flow.
+     * @param side the requested side
+     */
     void setRunAroundSide(KWord::RunAroundSide side) { m_runAroundSide = side; }
 
+    /**
+     * The space between this frames edge and the text when that text runs around this frame.
+     * @return the space around this frame to keep free from text
+     */
     double runAroundDistance() { return m_runAroundDistance; }
+    /**
+     * Set the space between this frames edge and the text when that text runs around this frame.
+     * @param distance the space around this frame to keep free from text
+     */
     void setRunAroundDistance(double distance) { m_runAroundDistance = distance; }
 
-    KoShape *shape() { return m_shape; }
+    /**
+     * Each frame will be rendered by a shape which also holds the position etc.
+     * @return the shape that represents this frame.
+     */
+    KoShape *shape() const { return m_shape; }
 
+    /**
+     * Return the parent frameset.
+     * @return the parent frameset
+     */
     KWFrameSet *frameSet() const { return m_frameSet; }
-
-protected:
-    KoShape *m_shape;
 
 private:
     KWord::FrameBehavior m_frameBehavior;
@@ -98,6 +118,7 @@ private:
     double m_runAroundDistance;
 
     KWFrameSet *m_frameSet;
+    KoShape *m_shape;
 };
 
 #endif

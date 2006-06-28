@@ -31,6 +31,10 @@ class QTextLayout;
 class KWTextFrameSet;
 class KWTextFrame;
 
+/**
+ * KWords text layouter that allows text to flow in multiple frames and around
+ * other KWord objects.
+ */
 class KWORD_TEST_EXPORT KWTextDocumentLayout : public QAbstractTextDocumentLayout {
 public:
     /// constructor
@@ -53,12 +57,15 @@ public:
      * Returns the cursor postion for the given point with the accuracy
      * specified. Returns -1 to indicate failure if no valid cursor position
      * was found.
+     * @param point the point in the document
+     * @param accuracy if Qt::ExactHit this method will return -1 when not actaully hitting any text
      */
     int hitTest ( const QPointF & point, Qt::HitTestAccuracy accuracy ) const;
-    /// Returns the number of pages required by the layout.
+    /// reimplemented to always return 1
     int pageCount () const;
 
 protected:
+    /// reimplemented
     void documentChanged(int position, int charsRemoved, int charsAdded);
 
 private:

@@ -74,8 +74,8 @@ KWTextFrameSet::~KWTextFrameSet() {
 }
 
 void KWTextFrameSet::setupFrame(KWFrame *frame) {
-//    if(m_textFrameSetType != KWord::OtherTextFrameSet)
-//        frame->shape()->setLocked(true);
+    if(m_textFrameSetType != KWord::OtherTextFrameSet)
+        frame->shape()->setLocked(true);
     if(frameCount() == 1 && m_document->isEmpty()) {
         delete m_document;
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
