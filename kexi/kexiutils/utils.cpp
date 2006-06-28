@@ -283,7 +283,7 @@ void KexiUtils::drawPixmap( QPainter& p, const QColor& backgroundColor, int line
 	}
 	if (!fast) {
 		p2.end();
-		bitBlt(p.device(), p.worldMatrix().dx() + rect.x() + lineWidth, p.worldMatrix().dy() + rect.y() + lineWidth, &pm);
+		bitBlt(p.device(), (int)p.worldMatrix().dx() + rect.x() + lineWidth, (int)p.worldMatrix().dy() + rect.y() + lineWidth, &pm);
 	}
 }
 
