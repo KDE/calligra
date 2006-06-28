@@ -29,14 +29,14 @@
  Time format is retrieved from the KDE global settings
  and input/output is performed using KLineEdit (from KexiInputTableEdit).
 */
-class KEXIDATATABLE_EXPORT KexiTimeTableEdit : public KexiInputTableEdit
+class KexiTimeTableEdit : public KexiInputTableEdit
 {
 	Q_OBJECT
 
 	public:
 		KexiTimeTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
 		virtual ~KexiTimeTableEdit();
-		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 		virtual QVariant value();
 		virtual bool valueIsNull();

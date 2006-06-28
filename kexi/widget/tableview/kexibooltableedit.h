@@ -27,7 +27,7 @@
 
 /*! @short Cell editor for boolean type.
 */
-class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
+class KexiBoolTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 
@@ -51,7 +51,7 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 
 		virtual void clear();
 
-		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
 		virtual void clickedOnContents();

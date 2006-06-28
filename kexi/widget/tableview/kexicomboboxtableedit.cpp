@@ -394,7 +394,7 @@ void KexiComboBoxTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, i
 	p->drawRect(x, y, w, h);
 }
 
-void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, QVariant val, 
+void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
 

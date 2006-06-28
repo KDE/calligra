@@ -130,6 +130,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		//! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly 
 		//! is still false.
 		bool m_internalReadOnly : 1;
+
+		//! Used in slotTextChanged()
+		bool m_slotTextChanged_enabled : 1;
 };
 
 #endif

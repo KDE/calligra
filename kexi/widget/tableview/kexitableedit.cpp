@@ -133,7 +133,7 @@ void KexiTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, in
 	p->drawRect(x, y, w, h);
 }
 
-void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, QVariant val, 
+void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, const QVariant& val, 
 	QString &txt, int &align, int &/*x*/, int &y_offset, int &w, int &/*h*/  )
 {
 #ifdef Q_WS_WIN

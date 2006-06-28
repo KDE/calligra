@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Peter Simonsson <psn@linux.se>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,17 +49,18 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
+#include <kexiutils/utils.h>
 
-//KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::Field &f, QScrollView *parent)
 KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiTableEdit(column, parent,"KexiBlobTableEdit")
 {
-	m_proc = 0;
-	m_content = 0;
+//	m_proc = 0;
+//	m_content = 0;
 }
 
 KexiBlobTableEdit::~KexiBlobTableEdit()
 {
+#if 0
 	kDebug() << "KexiBlobTableEdit: Cleaning up..." << endl;
 	if (m_tempFile) {
 		m_tempFile->unlink();
@@ -68,11 +69,18 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 	delete m_proc;
 	m_proc = 0;
 	kDebug() << "KexiBlobTableEdit: Ready." << endl;
+#endif
 }
 
 //! initializes this editor with \a add value
-void KexiBlobTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
+void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
+	if (removeOld)
+		m_value = add.toByteArray();
+	else //do not add "m_origValue" to "add" as this is QByteArray
+		m_value = m_origValue.toByteArray();
+
+#if 0 //todo?
 	QByteArray val = m_origValue.toByteArray();
 	kDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
 	m_tempFile = new KTempFile();
@@ -87,6 +95,8 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeO
 	kDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
 
 	setViewWidget( new QWidget(this) );
+#endif
+
 /*js: TODO
 	QGridLayout *g = new QGridLayout(m_view);
 
@@ -132,18 +142,20 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeO
 bool KexiBlobTableEdit::valueIsNull()
 {
 //TODO
-	return m_content->text().isNull();
+	return m_value.isEmpty();
 }
 
 bool KexiBlobTableEdit::valueIsEmpty()
 {
 //TODO
-	return m_content->text().isEmpty();
+	return m_value.isEmpty();
 }
 
 QVariant
 KexiBlobTableEdit::value()
 {
+	return m_value;
+#if 0
 	//todo
 //	ok = true;
 
@@ -165,7 +177,23 @@ KexiBlobTableEdit::value()
 }
 
 void
-KexiBlobTableEdit::slotFinished(KProcess* /*p*/)
+KexiBlobTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
+	QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
+{
+//! @todo optimize: load to m_pixmap, downsize
+	QPixmap pixmap;
+	x = 0;
+	w -= 1; //a place for border
+	h -= 1; //a place for border
+	if (val.canCast(QVariant::ByteArray) && pixmap.loadFromData(val.toByteArray())) {
+		KexiUtils::drawPixmap( *p, Qt::white/*temp*/, 0/*lineWidth*/, QRect(x, y_offset, w, h), 
+			pixmap, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/);
+	}
+}
+
+/*
+void
+KexiBlobTableEdit::slotFinished(KProcess* p)
 {
 	kDebug() << "Prorgam is finished!" << endl;
 
@@ -274,7 +302,7 @@ KexiBlobTableEdit::loadFile()
 
 	if(!file.isEmpty())
 	{
-		/*KIO::FileCopyJob* job =*/(void) KIO::file_copy(KUrl(file), KUrl(m_tempFile->name()), -1, true);
+		(void) KIO::file_copy(KUrl(file), KUrl(m_tempFile->name()), -1, true);
 	}
 }
 
@@ -285,20 +313,18 @@ KexiBlobTableEdit::saveFile()
 
 	if(!file.isEmpty())
 	{
-		/*KIO::FileCopyJob* job =*/ (void)KIO::file_copy(KUrl(m_tempFile->name()), KUrl(file), -1, true);
+		(void)KIO::file_copy(KUrl(m_tempFile->name()), KUrl(file), -1, true);
 	}
-}
+}*/
 
 bool KexiBlobTableEdit::cursorAtStart()
 {
-	//TODO?
-	return false;
+	return true;
 }
 
 bool KexiBlobTableEdit::cursorAtEnd()
 {
-	//TODO?
-	return false;
+	return true;
 }
 
 void KexiBlobTableEdit::clear()
@@ -306,25 +332,7 @@ void KexiBlobTableEdit::clear()
 	//TODO??
 }
 
-//======================================================
-
-KexiBlobEditorFactoryItem::KexiBlobEditorFactoryItem()
-{
-}
-
-KexiBlobEditorFactoryItem::~KexiBlobEditorFactoryItem()
-{
-}
-
-KexiTableEdit* KexiBlobEditorFactoryItem::createEditor(
-	KexiTableViewColumn & /*column*/, Q3ScrollView* /*parent*/)
-{
-//! @todo js: enable when KexiBlobTableEdit will be stable again!
-//DISABLED
-//	return new KexiBlobTableEdit(f, parent);
-	return 0;
-}
-
+KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiBlobEditorFactoryItem, KexiBlobTableEdit)
 
 //=======================
 //This class is temporarily here:
@@ -382,7 +390,7 @@ bool KexiKIconTableEdit::cursorAtEnd()
 	return true;
 }
 
-void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant val, 
+void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVariant& val, 
 	QString &/*txt*/, int &/*align*/, int &/*x*/, int &y_offset, int &w, int &h  )
 {
 	Q_UNUSED( y_offset );

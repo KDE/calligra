@@ -75,7 +75,7 @@ void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 	m_lineedit->setCursorPosition(0); //ok?
 }
 
-void KexiDateTableEdit::setupContents( QPainter *p, bool focused, QVariant val, 
+void KexiDateTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
 {
 	Q_UNUSED(p);

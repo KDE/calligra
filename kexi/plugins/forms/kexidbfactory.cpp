@@ -309,6 +309,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 
 	//used in labels, frames...
 	m_propDesc["frameColor"] = i18n("Frame Color");
+	m_propDesc["dropDownButtonVisible"] = i18n("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)", "Drop-Down\nButton Visible");
 }
 
 KexiDBFactory::~KexiDBFactory()

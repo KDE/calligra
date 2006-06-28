@@ -98,7 +98,7 @@ bool KexiBoolTableEdit::cursorAtEnd()
 	return m_lineedit->size();
 }*/
 
-void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant val, 
+void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVariant& val, 
 	QString &/*txt*/, int &/*align*/, int &/*x*/, int &y_offset, int &w, int &h  )
 {
 #ifdef Q_WS_WIN
@@ -115,7 +115,7 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant v
 	QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
 	p->setPen(QPen(colorGroup().text(), 1));
 	p->drawRect(r);
-	if (val.asBool()) {
+	if (val.toBool()) {
 		p->drawLine(r.x(), r.y(), r.right(), r.bottom());
 		p->drawLine(r.x(), r.bottom(), r.right(), r.y());
 //			p->drawLine(r.x() + 2, r.y() + 2, r.right() - 1, r.bottom() - 1);

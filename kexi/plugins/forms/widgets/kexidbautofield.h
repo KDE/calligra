@@ -145,7 +145,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		virtual bool setProperty( const char * name, const QVariant & value );
 
 	protected slots:
-		void slotValueChanged();
+//		void slotValueChanged();
 		virtual void paletteChange( const QPalette& oldPal );
 
 	protected:

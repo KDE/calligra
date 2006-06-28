@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,6 +50,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDat
 	Q_PROPERTY( Alignment alignment READ alignment WRITE setAlignment )
 //	Q_PROPERTY( QString originalFileName READ originalFileName WRITE setOriginalFileName DESIGNABLE false )
 //	Q_OVERRIDE( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
+	Q_PROPERTY( bool dropDownButtonVisible READ dropDownButtonVisible WRITE setDropDownButtonVisible )
 	Q_OVERRIDE( int lineWidth READ lineWidth WRITE setLineWidth )
 
 	public:
@@ -113,6 +114,12 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDat
 		//! Reimplemented to override behaviour of "paletteBackgroundColor" property.
 		virtual void setPaletteBackgroundColor( const QColor & color );
 
+		//! \return true id drop down button should be visible (the default).
+		bool dropDownButtonVisible() const;
+
+		//! For overriden property
+		int lineWidth() const { return KexiFrame::lineWidth(); }
+
 	public slots:
 		void setPixmapId(uint id);
 
@@ -158,10 +165,13 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDat
 		//! @internal
 		void slotToggled( bool on );
 
+		//! \return sets dropDownButtonVisible property. @see dropDownButtonVisible()
+		void setDropDownButtonVisible( bool set );
+
 	signals:
 		//! Used for db-aware mode. Emitted when value has been changed. 
 		//! Actual value can be obtained using value().
-		virtual void pixmapChanged();
+//		virtual void pixmapChanged();
 //		virtual void valueChanged(const QByteArray& data);
 		void idChanged(long id);
 
@@ -181,7 +191,12 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDat
 		virtual void resizeEvent( QResizeEvent* e );
 
 		//! Sets value \a value for a widget.
-		virtual void setValueInternal( const QVariant& add, bool /*removeOld*/ );
+		virtual void setValueInternal( const QVariant& add, bool removeOld ) {
+			setValueInternal( add, removeOld, true /*loadPixmap*/ );
+		}
+
+		//! @internal, added \a loadPixmap option used by paste().
+		void setValueInternal( const QVariant& add, bool removeOld, bool loadPixmap );
 
 		//! Updates i18n'd action strings after datasource change
 		void updateActionStrings();
@@ -197,6 +212,8 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDat
 		 so the key press won't be consumed to perform "cancel editing". */
 		virtual bool keyPressed(QKeyEvent *ke);
 
+		//! \return real line width, i.e. for Boxed sunken or Boxed raised 
+		//! frames returns doubled width value.
 		int realLineWidth() const;
 
 //		virtual void drawContents ( QPainter *p );
@@ -235,6 +252,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDat
 		bool m_lineWidthChanged : 1;
 		bool m_paletteBackgroundColorChanged : 1;
 		bool m_paintEventEnabled : 1; //!< used to disable paintEvent()
+		bool m_dropDownButtonVisible : 1;
 };
 
 #endif
