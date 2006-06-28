@@ -27,20 +27,13 @@ After the feature freeze
 
 * Bugs
   + The chart title is not included in the chart from the wizard      1 DONE
+  + The Data Editor shows wrong when first row/column is checked      1 ----
   + The title is miniscule					      2 ---- 
      - small fonts everywhere, in fact
 
 * Features
   + First Row / Col as label					      1 DONE
-    - Connect GUI to KChartParams in the config dialog			  done
-    - Connect GUI to KChartParams in the wizard				  done
-    - Use it when drawing						  done
-    - Save and load the values in the file				  done
   + Combined Bars and Lines charts				      1 DONE
-    - Connect GUI to KChartParams in the config dialog			  done
-    - Connect GUI to KChartParams in the wizard				  done
-    - Use it when drawing						  done
-    - Save and load the values in the file				  done
   + Maybe call the analysis code and do sensible defaults	      2 ----
   + Grid setting for both directions				      2 ----
 
