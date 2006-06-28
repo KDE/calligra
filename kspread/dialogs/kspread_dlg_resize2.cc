@@ -43,7 +43,7 @@
 #include <kspread_sheet.h>
 #include <kspread_undo.h>
 #include <kspread_view.h>
-#include "manipulator.h"
+#include "manipulator_rowcol.h"
 #include "selection.h"
 
 #include "kspread_dlg_resize2.h"

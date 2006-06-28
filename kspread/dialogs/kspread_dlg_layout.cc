@@ -68,7 +68,8 @@
 #include "kspread_style_manager.h"
 #include "kspread_undo.h"
 #include "kspread_util.h"
-#include "manipulator.h"
+#include "manipulator_format.h"
+#include "manipulator_rowcol.h"
 #include "selection.h"
 #include "valueformatter.h"
 

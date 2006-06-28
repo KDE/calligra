@@ -80,8 +80,9 @@
 #include "kspread_undo.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
-#include "manipulator.h"
 #include "manipulator_data.h"
+#include "manipulator_format.h"
+#include "manipulator_rowcol.h"
 
 
 #include "KSpreadSheetAdaptor.h"
