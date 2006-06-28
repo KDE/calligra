@@ -30,8 +30,8 @@ KexiDBTransaction::KexiDBTransaction(::KexiDB::Transaction& transaction)
     : Kross::Api::Class<KexiDBTransaction>("KexiDBTransaction")
     , m_transaction(transaction)
 {
-    addFunction("isActive", &KexiDBTransaction::isActive);
-    addFunction("isNull", &KexiDBTransaction::isNull);
+    this->addFunction0< Kross::Api::Variant >("isActive", this, &KexiDBTransaction::isActive);
+    this->addFunction0< Kross::Api::Variant >("isNull", this, &KexiDBTransaction::isNull);
 }
 
 KexiDBTransaction::~KexiDBTransaction()
@@ -48,14 +48,5 @@ const QString KexiDBTransaction::getClassName() const
     return m_transaction;
 }
 
-Kross::Api::Object::Ptr KexiDBTransaction::isActive(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(QVariant(m_transaction.active(),0));
-}
-
-Kross::Api::Object::Ptr KexiDBTransaction::isNull(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(QVariant(m_transaction.isNull(),0));
-}
-
-
+bool KexiDBTransaction::isActive() const { return m_transaction.active(); }
+bool KexiDBTransaction::isNull() const { return m_transaction.isNull(); }

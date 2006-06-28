@@ -35,57 +35,61 @@ namespace Kross { namespace KexiDB {
     class KexiDBConnection;
 
     /**
-     * The KexiDBCursor class is a wrapper around the
-     * \a ::KexiDB::Cursor class to provide database
-     * cursor functionality.
+     * The cursor provides a control structure for the successive traversal
+     * of records in a result set as returned e.g. by a query.
+     *
+     * Example (in Python) ;
+     * @code
+     * # Once we have a KexiDBConnection object we are able to execute a query string and get a cursor as result.
+     * cursor = connection.executeQueryString("SELECT * from emp")
+     * # Let's check if the query was successfully.
+     * if not cursor: raise("Query failed")
+     * # Walk through all items in the table.
+     * while(not cursor.eof()):
+     *     # Iterate over the fields the record has.
+     *     for i in range( cursor.fieldCount() ):
+     *         # Print some informations.
+     *         print "%s %s %s" % (cursor.at(), i, cursor.value(i))
+     *     # and move on to the next record.
+     *     cursor.moveNext()
+     * @endcode
      */
     class KexiDBCursor : public Kross::Api::Class<KexiDBCursor>
     {
         public:
-
-            /**
-             * Constructor.
-             *
-             * \param cursor The \a ::KexiDB::Cursor this class
-             *        wraps.
-             */
             KexiDBCursor(::KexiDB::Cursor* cursor);
-
-            /**
-             * Destructor.
-             */
             virtual ~KexiDBCursor();
-
-            /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
-            /// Opens the cursor.
+        private:
+
+            /** Opens the cursor. */
             bool open();
-            /// Returns true if the cursor is opened else false.
+            /** Returns true if the cursor is opened else false. */
             bool isOpened();
-            /// Closes and then opens again the same cursor.
+            /** Closes and then opens again the same cursor. */
             bool reopen();
-            /// Closes previously opened cursor.
+            /** Closes previously opened cursor. */
             bool close();
-            /// Moves current position to the first record and retrieves it.
+            /** Moves current position to the first record and retrieves it. */
             bool moveFirst();
-            /// Moves current position to the last record and retrieves it.
+            /** Moves current position to the last record and retrieves it. */
             bool moveLast();
-            /// Moves current position to the previous record and retrieves it.
+            /** Moves current position to the previous record and retrieves it. */
             bool movePrev();
-            /// Moves current position to the next record and retrieves it.
+            /** Moves current position to the next record and retrieves it. */
             bool moveNext();
-            /// Returns true if current position is before first record.
+            /** Returns true if current position is before first record. */
             bool bof();
-            /// Returns true if current position is after last record.
+            /** Returns true if current position is after last record. */
             bool eof();
-            /// Returns current internal position of the cursor's query. Records 
-            /// are numbered from 0; the value -1 means that the cursor does not 
-            /// point to a valid record.
+            /** Returns current internal position of the cursor's query. Records
+            are numbered from 0; the value -1 means that the cursor does not
+            point to a valid record. */
             Q_LLONG at();
-            /// Returns the number of fields available for this cursor.
+            /** Returns the number of fields available for this cursor. */
             uint fieldCount();
-            /// Returns the value stored in the passed column number (counting from 0).
+            /** Returns the value stored in the passed column number (counting from 0). */
             QVariant value(uint index);
 
         private:

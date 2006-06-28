@@ -32,37 +32,28 @@ namespace Kross { namespace KexiDB {
     // Forward declaration.
     class KexiDBConnection;
 
+    /**
+    * Transactions are used to ensure that integrity of a database is
+    * maintained.
+    */
     class KexiDBTransaction : public Kross::Api::Class<KexiDBTransaction>
     {
         public:
-
-            /**
-             * Constructor.
-             *
-             * \param transaction The \a ::KexiDB::Transaction instance
-             *        this object wraps.
-             */
             KexiDBTransaction(::KexiDB::Transaction& transaction);
-
-            /**
-             * Destructor.
-             */
             virtual ~KexiDBTransaction();
-
-            /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
-
-            /// Return the ::KexiDB::Transaction instance.
             ::KexiDB::Transaction& transaction();
 
         private:
+
+            /** Return true if the transaction is active (ie. started). */
+            bool isActive() const;
+
+            /** Return true if the transaction is uninitialized (null). */
+            bool isNull() const;
+
+        private:
             ::KexiDB::Transaction& m_transaction;
-
-            /// Return true if the transaction is avtive (ie. started).
-            Kross::Api::Object::Ptr isActive(Kross::Api::List::Ptr);
-
-            /// Return true if the transaction is uinitialised (null).
-            Kross::Api::Object::Ptr isNull(Kross::Api::List::Ptr);
     };
 
 }}

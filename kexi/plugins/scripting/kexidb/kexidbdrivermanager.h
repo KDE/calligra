@@ -31,102 +31,72 @@
 
 namespace Kross { namespace KexiDB {
 
+    // Forward declarations.
+    class KexiDBDriver;
+    class KexiDBConnectionData;
+    class KexiDBField;
+    class KexiDBTableSchema;
+    class KexiDBQuerySchema;
+
     /**
-     * Class to wrap \a ::KexiDB::DriverManager and
-     * make the functionality accessible.
+     * The drivermanager is the base class to access KexiDBDriver objects and provides
+     * common functionality to deal with the KexiDB module.
      *
-     * The drivermanager is the base class to access
-     * \a KexiDBDriver objects.
+     * Example (in Python) ;
+     * @code
+     * # Import the kexidb module.
+     * import krosskexidb
+     * # Get the drivermanager.
+     * drivermanager = krosskexidb.DriverManager()
+     * # Let's determinate the mimetype (e.g. "application/x-sqlite3").
+     * mimetype = drivermanager.mimeForFile("/home/user/mykexidbfile.kexi")
+     * # Now we use that mimetype to get the name of the driver to handle that file (e.g. "SQLite3")
+     * drivername = drivermanager.lookupByMime(mimetype)
+     * # We are able to create the driver now.
+     * driver = drivermanager.driver(drivername)
+     * @endcode
      */
     class KexiDBDriverManager : public Kross::Api::Class<KexiDBDriverManager>
     {
         public:
-
-            /**
-             * Constructor.
-             */
             KexiDBDriverManager();
-
-            /**
-             * Destructor.
-             */
             virtual ~KexiDBDriverManager();
-
-            /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
         private:
 
-            /**
-             * Method to access the m_drivermanager. Use
-             * this rather then the m_drivermanager direct
-             * cause the method does some extra checks.
-             *
-             * \throw QString Description of the error.
-             * \return The \a ::KexiDB::DriverManager
-             *         instance this class holds.
-             */
+            /** Returns a list with avaible drivernames. */
+            const QStringList driverNames();
+
+            /** Return the to the defined drivername matching KexiDBDriver object. */
+            KexiDBDriver* driver(const QString& drivername);
+
+            /** Return the to the defined mimetype-string matching drivername. */
+            const QString lookupByMime(const QString& mimetype);
+
+            /** Return the matching mimetype for the defined file. */
+            const QString mimeForFile(const QString& filename);
+
+            /** Return a new KexiDBConnectionData object. */
+            KexiDBConnectionData* createConnectionData();
+
+            /** Create and return a KexiDBConnectionData object. Fill the content of the
+            KexiDBConnectionData object with the defined file as. The file could be e.g.
+            a *.kexi file or a *.kexis file. */
+            KexiDBConnectionData* createConnectionDataByFile(const QString& filename);
+
+            /** Return a new KexiDBField object. */
+            KexiDBField* field();
+
+            /** Return a new KexiDBTableSchema object. */
+            KexiDBTableSchema* tableSchema(const QString& tablename);
+
+            /** Return a new KexiDBQuerySchema object. */
+            KexiDBQuerySchema* querySchema();
+
+        private:
             inline ::KexiDB::DriverManager& driverManager();
-
-            /// ::KexiDB::DriverManager instance.
             ::KexiDB::DriverManager m_drivermanager;
-
-            /**
-             * Return a stringlist with avaible drivernames.
-             *
-             * See \see ::KexiDB::DriverManager::driverNames()
-             */
-            Kross::Api::Object::Ptr driverNames(Kross::Api::List::Ptr);
-
-            /**
-             * Return the to the defined drivername matching
-             * \a KexiDBDriver object.
-             *
-             * See \see ::KexiDB::DriverManager::driver()
-             */
-            Kross::Api::Object::Ptr driver(Kross::Api::List::Ptr);
-
-            /**
-             * Return the to the defined mimetype-string
-             * matching drivername.
-             *
-             * See \see ::KexiDB::DriverManager::lookupByMime()
-             */
-            Kross::Api::Object::Ptr lookupByMime(Kross::Api::List::Ptr);
-
-            /**
-             * Return the matching mimetype for the defined file.
-             * \todo move that functionality to a more common place.
-             * See \see ::KexiDB::DriverManager::lookupByMime()
-             */
-            Kross::Api::Object::Ptr mimeForFile(Kross::Api::List::Ptr);
-
-            /**
-             * Return a new \a KexiDBConnectionData object.
-             */
-            Kross::Api::Object::Ptr createConnectionData(Kross::Api::List::Ptr);
-
-            /**
-             * Create and return a \a KexiDBConnectionData object. Fill the
-             * content of the \a KexiDBConnectionData object with the defined
-             * file as. The file could be e.g. a *.kexi file or a *.kexis file.
-             */
-            Kross::Api::Object::Ptr createConnectionDataByFile(Kross::Api::List::Ptr);
-
-            /**
-             * Return a new \a KexiDBField object.
-             */
-            Kross::Api::Object::Ptr field(Kross::Api::List::Ptr);
-
-            /**
-             * Return a new \a KexiDBTableSchema object.
-             */
-            Kross::Api::Object::Ptr tableSchema(Kross::Api::List::Ptr);
-
-            /**
-             * Return a new \a KexiDBQuerySchema object.
-             */
-            Kross::Api::Object::Ptr querySchema(Kross::Api::List::Ptr);
     };
 
 }}

@@ -31,55 +31,53 @@
 
 namespace Kross { namespace KexiDB {
 
+    // Forward declarations.
+    class KexiDBField;
+    class KexiDBFieldList;
+
+    /**
+    * A list of fields.
+    */
     class KexiDBFieldList : public Kross::Api::Class<KexiDBFieldList>
     {
         public:
-
-            /**
-             * Constructor.
-             */
             KexiDBFieldList(::KexiDB::FieldList* fieldlist);
-
-            /**
-             * Destructor.
-             */
             virtual ~KexiDBFieldList();
-
-            /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
-
             ::KexiDB::FieldList* fieldlist() { return m_fieldlist; }
 
         private:
-            ::KexiDB::FieldList* m_fieldlist;
 
-            /// \return the number of fields.
-            Kross::Api::Object::Ptr fieldCount(Kross::Api::List::Ptr);
-            /// \return the field specified by the number passed as an argument.
-            Kross::Api::Object::Ptr field(Kross::Api::List::Ptr);
-            /// \return a list of all fields.
+            /** Returns the number of fields. */
+            uint fieldCount();
+            /** Return the field specified by the index-number passed as an argument. */
+            KexiDBField* field(uint index);
+            /** Return the field specified by the as an argument passed fieldname. */
+            KexiDBField* fieldByName(const QString& name);
+
+            /** Returns a list of all fields. */
             Kross::Api::Object::Ptr fields(Kross::Api::List::Ptr);
-            /** \return true if the KexiDBField object passed as an argument is 
-            in the field list. */
-            Kross::Api::Object::Ptr hasField(Kross::Api::List::Ptr);
-            /// \return a list of field names.
-            Kross::Api::Object::Ptr names(Kross::Api::List::Ptr);
+            /** Returns true if the KexiDBField object passed as an argument is in the field list. */
+            bool hasField(KexiDBField* field);
+            /** Return a list of field names. */
+            const QStringList names() const;
 
-            /// Adds the KexiDBField object passed as an argument to the field list.
-            Kross::Api::Object::Ptr addField(Kross::Api::List::Ptr);
+            /** Adds the KexiDBField object passed as an argument to the field list. */
+            void addField(KexiDBField* field);
             /** Inserts the KexiDBField object passed as the second argument
             into the field list at the position defined by the first argument. */
-            Kross::Api::Object::Ptr insertField(Kross::Api::List::Ptr);
-            /** Removes the KexiDBField object passed as an argument from the 
-            field list. */
-            Kross::Api::Object::Ptr removeField(Kross::Api::List::Ptr);
-            /// Removes all KexiDBField objects from the fieldlist.
-            Kross::Api::Object::Ptr clear(Kross::Api::List::Ptr);
-            /// Set the fieldlist to the as argument passed list of fields.
-            Kross::Api::Object::Ptr setFields(Kross::Api::List::Ptr);
+            void insertField(uint index, KexiDBField* field);
+            /** Removes the KexiDBField object passed as an argument from the field list. */
+            void removeField(KexiDBField* field);
+            /** Removes all KexiDBField objects from the fieldlist. */
+            void clear();
+            /** Set the fieldlist to the as argument passed list of fields. */
+            void setFields(KexiDBFieldList* fieldlist);
+            /** Creates and returns list that contain fields selected by name. */
+            KexiDBFieldList* subList(Q3ValueList<QVariant> list);
 
-            /// Creates and returns list that contain fields selected by name.
-            Kross::Api::Object::Ptr subList(Kross::Api::List::Ptr);
+        private:
+            ::KexiDB::FieldList* m_fieldlist;
     };
 
 }}
