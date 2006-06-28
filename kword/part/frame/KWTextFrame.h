@@ -21,12 +21,13 @@
 #define KWTEXTFRAME_H
 
 #include "KWFrame.h"
+#include "kword_export.h"
 
 #include <KoShape.h>
 #include <KoViewConverter.h>
 
 /// KWTextFrame
-class KWTextFrame : public KWFrame {
+class KWORD_TEST_EXPORT KWTextFrame : public KWFrame {
 public:
     KWTextFrame(KoShape *shape, KWFrameSet *parent);
     ~KWTextFrame();

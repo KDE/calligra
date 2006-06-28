@@ -21,6 +21,7 @@
 #define KWFRAME_H
 
 #include "KWord.h"
+#include "kword_export.h"
 
 #include <KoShape.h>
 
@@ -34,7 +35,7 @@ class KoViewConverter;
  * A frame is really just a square that is used to place the content
  * of a frameset.
  */
-class KWFrame {
+class KWORD_TEST_EXPORT KWFrame {
 public:
     /**
      * Constructor

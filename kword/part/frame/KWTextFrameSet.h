@@ -21,17 +21,20 @@
 #define KWTEXTFRAMESET_H
 
 #include "KWFrameSet.h"
+#include "kword_export.h"
 
 class QTextDocument;
 
 /// KWTextFrameSet
-class KWTextFrameSet : public KWFrameSet {
+class KWORD_TEST_EXPORT KWTextFrameSet : public KWFrameSet {
 public:
     KWTextFrameSet();
     KWTextFrameSet(KWord::TextFrameSetType type);
     ~KWTextFrameSet();
 
     KWord::TextFrameSetType textFrameSetType() { return m_textFrameSetType; }
+
+    QTextDocument *document() const { return m_document; }
 
 protected:
     virtual void setupFrame(KWFrame *frame);

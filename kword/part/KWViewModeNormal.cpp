@@ -22,7 +22,7 @@
 #include "KWPageManager.h"
 #include "KWPage.h"
 
-#include <kdebug.h>
+//#include <kdebug.h>
 
 #define GAP 5
 
@@ -33,22 +33,6 @@ KWViewModeNormal::KWViewModeNormal( KWCanvas* canvas )
 }
 
 QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const {
-    // it is important to note that between the input and output there will be
-    // no difference in zoom levels; all we are talking about are translations.
-// TODO make KWViewModeNormal::clipRectToDocument actually use the viewRect
-
-#if 0
-    // First: unzoom to figure out which pages are intersected
-    QRectF docRect = QRectF(viewRect.topLeft(), viewRect.size());
-    docRect = viewToDocument(docRect);
-
-    KWPageManager *pageManager = canvas()->document()->pageManager();
-
-    int pageNumber=pageManager->pageNumber(docRect.topLeft());
-    KWPage *page = pageManager->page(pageNumber);
-    
-
-#endif
     const KWPageManager *pageManager = canvas()->document()->pageManager();
     QList<ViewMap> answer;
     int pageOffset = pageManager->startPage();
@@ -56,11 +40,17 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     foreach(KWPage *page, pageManager->pages()) {
         QRectF zoomedPage = canvas()->viewConverter()->documentToView(page->rect());
         ViewMap vm;
-        vm.clipRect = zoomedPage.toRect();
 //kDebug() << "page[" << page->pageNumber() << "] uses pagetops: " << m_pageTops[page->pageNumber() - pageOffset] << endl;
         vm.distance = canvas()->viewConverter()->documentToView(
                 QPointF(offsetX, m_pageTops[page->pageNumber() - pageOffset] - page->offsetInDocument()));
-        answer.append(vm );
+
+        QRectF targetPage = QRectF(zoomedPage.topLeft() + vm.distance, zoomedPage.size());
+        QRectF intersection = targetPage.intersect(viewRect);
+        if(! intersection.isEmpty()) {
+            intersection.moveTopLeft(intersection.topLeft() - vm.distance);
+            vm.clipRect = intersection.toRect();
+            answer.append(vm );
+        }
         if(page->pageSide() == KWPage::Left)
             offsetX = page->width() + GAP;
         else
@@ -124,7 +114,6 @@ void KWViewModeNormal::updatePageCache() {
         }
     }
     m_contents = QSizeF(width, bottom);
-kDebug() << "  contents: " << width << "x" << bottom << endl;
 }
 
 QSize KWViewModeNormal::contentsSize() {

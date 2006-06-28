@@ -36,6 +36,9 @@
 #include <QPainter>
 #include <QSize>
 
+// #define DEBUG_REPAINT
+
+
 KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent )
     : QWidget(parent),
     m_document( document ),
@@ -123,6 +126,9 @@ void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
     m_tool->keyReleaseEvent(e);
 }
 
+#ifdef DEBUG_REPAINT
+# include <stdlib.h>
+#endif
 void KWCanvas::paintEvent(QPaintEvent * ev) {
     QPainter painter( this );
 
@@ -132,7 +138,11 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
             painter.save();
             painter.translate(vm.distance.x(), vm.distance.y());
             painter.setClipRect(vm.clipRect);
-painter.fillRect(vm.clipRect, QBrush(QColor(Qt::white))); // TODO paper background
+            QColor color = Qt::white; // TODO paper background
+#ifdef DEBUG_REPAINT
+    color = QColor(random()%255, random()%255, random()%255);
+#endif
+            painter.fillRect(vm.clipRect, QBrush(color));
             painter.setRenderHint(QPainter::Antialiasing);
             m_shapeManager->paint( painter, *(viewConverter()), false );
             m_tool->paint( painter, *(viewConverter()) );

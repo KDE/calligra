@@ -4,8 +4,7 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-class TestBasicLayout : public QObject
-{
+class TestBasicLayout : public QObject {
     Q_OBJECT
 public:
     TestBasicLayout();
@@ -13,8 +12,6 @@ public:
 private slots:
     // tests
     void testGetOrCreateFrameSet();
-
-private:
 };
 
 #endif
