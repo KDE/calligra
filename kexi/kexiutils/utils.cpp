@@ -21,19 +21,13 @@
 #include "utils_p.h"
 
 #include <qregexp.h>
-#include <qheader.h>
-#include <qlayout.h>
-#include <qlayout.h>
+#include <qpainter.h>
+#include <qimage.h>
+#include <qwmatrix.h>
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
-#include <ktabwidget.h>
-#include <klistview.h>
-#include <kiconloader.h>
-#include <kdialogbase.h>
-#include <kpushbutton.h>
-#include <kguiitem.h>
 
 using namespace KexiUtils;
 
@@ -214,144 +208,79 @@ void KexiUtils::simpleDecrypt(QString& string)
 		string[i] = QChar( string[i].unicode() - 47 - i );
 }
 
-static DebugWindowDialog* debugWindow = 0;
-static KTabWidget* debugWindowTab = 0;
-static KListView* kexiDbCursorDebugPage = 0;
-static KListView* kexiAlterTableActionDebugPage = 0;
-
-#ifdef KEXI_DEBUG_GUI
-QWidget *KexiUtils::createDebugWindow(QWidget *parent)
+void KexiUtils::drawPixmap( QPainter& p, const QColor& backgroundColor, int lineWidth, const QRect& rect, 
+	const QPixmap& pixmap, int alignment, bool scaledContents, bool keepAspectRatio)
 {
-	// (this is internal code - do not use i18n() here)
-	debugWindow = new DebugWindowDialog(parent);
-	debugWindow->setSizeGripEnabled( true );
-	QBoxLayout *lyr = new QVBoxLayout(debugWindow, KDialogBase::marginHint());
-	debugWindowTab = new KTabWidget(debugWindow, "debugWindowTab");
-	lyr->addWidget( debugWindowTab );
-	debugWindow->resize(900, 600);
-	debugWindow->setIcon( DesktopIcon("info") );
-	debugWindow->setCaption("Kexi Internal Debugger");
-	debugWindow->show();
-	return debugWindow;
-}
-
-void KexiUtils::addDBCursorDebug(const QString& text)
-{
-	// (this is internal code - do not use i18n() here)
-	if (!debugWindowTab)
+	if (pixmap.isNull())
 		return;
-	if (!kexiDbCursorDebugPage) {
-		QWidget *page = new QWidget(debugWindowTab);
-		QVBoxLayout *vbox = new QVBoxLayout(page);
-		QHBoxLayout *hbox = new QHBoxLayout(page);
-		vbox->addLayout(hbox);
-		hbox->addStretch(1);
-		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
-		hbox->addWidget(btn_clear);
 
-		kexiDbCursorDebugPage = new KListView(page, "kexiDbCursorDebugPage");
-		QObject::connect(btn_clear, SIGNAL(clicked()), kexiDbCursorDebugPage, SLOT(clear()));
-		vbox->addWidget(kexiDbCursorDebugPage);
-		kexiDbCursorDebugPage->addColumn("");
-		kexiDbCursorDebugPage->header()->hide();
-		kexiDbCursorDebugPage->setSorting(-1);
-		kexiDbCursorDebugPage->setAllColumnsShowFocus ( true );
-		kexiDbCursorDebugPage->setColumnWidthMode( 0, QListView::Maximum );
-		kexiDbCursorDebugPage->setRootIsDecorated( true );
-		debugWindowTab->addTab( page, "DB Cursors" );
-		debugWindowTab->showPage(page);
-		kexiDbCursorDebugPage->show();
-	}
-	//add \n after (about) every 30 characters
-//TODO	QString realText
-
-	KListViewItem * li = new KListViewItem( kexiDbCursorDebugPage, kexiDbCursorDebugPage->lastItem(), text );
-	li->setMultiLinesEnabled( true );
-}
-
-void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
-{
-	// (this is internal code - do not use i18n() here)
-	if (!debugWindowTab)
-		return;
-	if (!kexiAlterTableActionDebugPage) {
-		QWidget *page = new QWidget(debugWindowTab);
-		QVBoxLayout *vbox = new QVBoxLayout(page);
-		QHBoxLayout *hbox = new QHBoxLayout(page);
-		vbox->addLayout(hbox);
-		hbox->addStretch(1);
-		KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "filesave"), page);
-		btn_exec->setName("executeRealAlterTable");
-		hbox->addWidget(btn_exec);
-		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
-		hbox->addWidget(btn_clear);
-		KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "exec"), page);
-		btn_sim->setName("simulateAlterTableExecution");
-		hbox->addWidget(btn_sim);
-
-		kexiAlterTableActionDebugPage = new KListView(page, "kexiAlterTableActionDebugPage");
-		QObject::connect(btn_clear, SIGNAL(clicked()), kexiAlterTableActionDebugPage, SLOT(clear()));
-		vbox->addWidget(kexiAlterTableActionDebugPage);
-		kexiAlterTableActionDebugPage->addColumn("");
-		kexiAlterTableActionDebugPage->header()->hide();
-		kexiAlterTableActionDebugPage->setSorting(-1);
-		kexiAlterTableActionDebugPage->setAllColumnsShowFocus ( true );
-		kexiAlterTableActionDebugPage->setColumnWidthMode( 0, QListView::Maximum );
-		kexiAlterTableActionDebugPage->setRootIsDecorated( true );
-		debugWindowTab->addTab( page, "AlterTable Actions" );
-		debugWindowTab->showPage(page);
-		page->show();
-	}
-	if (text.isEmpty()) //don't move up!
-		return;
-	KListViewItem * li;
-	int availableNestingLevels = 0;
-	// compute availableNestingLevels
-	QListViewItem * lastItem = kexiAlterTableActionDebugPage->lastItem();
-	//kdDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString::null) << endl;
-	while (lastItem) {
-		lastItem = lastItem->parent();
-		availableNestingLevels++;
-	}
-	//kdDebug() << "availableNestingLevels: " << availableNestingLevels << endl;
-	//go up (availableNestingLevels-levelsToGoUp) levels
-	lastItem = kexiAlterTableActionDebugPage->lastItem();
-	int levelsToGoUp = availableNestingLevels - nestingLevel;
-	while (levelsToGoUp > 0 && lastItem) {
-		lastItem = lastItem->parent();
-		levelsToGoUp--;
-	}
-	//kdDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString::null) << endl;
-	if (lastItem) {
-		QListViewItem *after = lastItem->firstChild(); //find last child so we can insert a new item after it
-		while (after && after->nextSibling())
-			after = after->nextSibling();
-		if (after)
-			li = new KListViewItem( lastItem, after, text ); //child, after
-		else
-			li = new KListViewItem( lastItem, text ); //1st child
+	const bool fast = pixmap.width()>1000 && pixmap.height()>800; //fast drawing needed
+	const int w = rect.width()-lineWidth-lineWidth;
+	const int h = rect.height()-lineWidth-lineWidth;
+//! @todo we can optimize drawing by drawing rescaled pixmap here 
+//! and performing detailed painting later (using QTimer)
+	QPixmap pm;
+	QPainter p2;
+	QPainter *target;
+	if (fast) {
+		target = &p;
 	}
 	else {
-		lastItem = kexiAlterTableActionDebugPage->lastItem();
-		while (lastItem && lastItem->parent())
-			lastItem = lastItem->parent();
-		//kdDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString::null) << endl;
-		li = new KListViewItem( kexiAlterTableActionDebugPage, lastItem, text ); //after
+		pm.resize(rect.size()-QSize(lineWidth, lineWidth));
+		p2.begin(&pm, p.device());
+		target = &p2;
 	}
-	li->setOpen(true);
-	li->setMultiLinesEnabled( true );
-}
+//! @todo only create buffered pixmap of the minimum size and then do not fillRect()
+	target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
 
-void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName, 
-	const QObject *receiver, const char* slot)
-{
-	if (debugWindow) {
-		KPushButton* btn = findFirstChild<KPushButton>(debugWindow, "KPushButton", actionName);
-		if (btn)
-			QObject::connect(btn, SIGNAL(clicked()), receiver, slot);
+	if (scaledContents) {
+		if (keepAspectRatio) {
+			QImage img(pixmap.convertToImage());
+			img = img.smoothScale(w, h, QImage::ScaleMin);
+			QPoint pos( rect.topLeft() ); //0, 0);
+			if (img.width() < w) {
+				int hAlign = QApplication::horizontalAlignment( alignment );
+				if ( hAlign & Qt::AlignRight )
+					pos.setX(pos.x() + w-img.width());
+				else if ( hAlign & Qt::AlignHCenter )
+					pos.setX(pos.x() + w/2-img.width()/2);
+			}
+			else if (img.height() < h) {
+				if ( alignment & Qt::AlignBottom )
+					pos.setY(pos.y() + h-img.height());
+				else if ( alignment & Qt::AlignVCenter )
+					pos.setY(pos.y() + h/2-img.height()/2);
+			}
+			QPixmap px;
+			px.convertFromImage(img);
+			target->drawPixmap(pos, px);
+		}
+		else {
+			target->drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
+		}
+	}
+	else {
+		int hAlign = QApplication::horizontalAlignment( alignment );
+		QPoint pos;
+		if ( hAlign & Qt::AlignRight )
+			pos.setX(pos.x() + w-pixmap.width());
+		else if ( hAlign & Qt::AlignHCenter )
+			pos.setX(pos.x() + w/2-pixmap.width()/2);
+		else //left, etc.
+			pos.setX(pos.x());
+
+		if ( alignment & Qt::AlignBottom )
+			pos.setY(pos.y() + h-pixmap.height());
+		else if ( alignment & Qt::AlignVCenter )
+			pos.setY(pos.y() + h/2-pixmap.height()/2);
+		else //top, etc. 
+			pos.setY(pos.y());
+		target->drawPixmap(pos, pixmap);
+	}
+	if (!fast) {
+		p2.end();
+		bitBlt(p.device(), p.worldMatrix().dx() + rect.x() + lineWidth, p.worldMatrix().dy() + rect.y() + lineWidth, &pm);
 	}
 }
-
-#endif //KEXI_DEBUG_GUI
 
 #include "utils_p.moc"

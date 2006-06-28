@@ -150,15 +150,15 @@ KexiDBAutoField::createEditor()
 		case Date:
 		case Time:
 		case DateTime:
-			newSubwidget = new KexiDBLineEdit( this );
+			newSubwidget = new KexiDBLineEdit( this, QCString("KexiDBAutoField_KexiDBLineEdit:")+name() );
 			connect( newSubwidget, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotValueChanged() ) );
 			break;
 		case MultiLineText:
-			newSubwidget = new KexiDBTextEdit( this );
+			newSubwidget = new KexiDBTextEdit( this, QCString("KexiDBAutoField_KexiDBTextEdit:")+name() );
 			connect( newSubwidget, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotValueChanged() ) );
 			break;
 		case Boolean:
-			newSubwidget = new KexiDBCheckBox(dataSource(), this);
+			newSubwidget = new KexiDBCheckBox(dataSource(), this, QCString("KexiDBAutoField_KexiDBCheckBox:")+name());
 			connect( newSubwidget, SIGNAL(stateChanged()), this, SLOT(slotValueChanged()));
 			break;
 		//! \todo create db-aware spinboxes, date, time edit, etc
@@ -183,8 +183,8 @@ KexiDBAutoField::createEditor()
 			connect( newSubwidget, SIGNAL(valueChanged(int)), this, SLOT( slotValueChanged() ) );
 			break;*/
 		case Image:
-			newSubwidget = new KexiDBImageBox(d->designMode, this);
-			connect( newSubwidget, SIGNAL(pixmapChanged()), this, SLOT( slotValueChanged() ) );
+			newSubwidget = new KexiDBImageBox(d->designMode, this, QCString("KexiDBAutoField_KexiDBImageBox:")+name());
+//			connect( newSubwidget, SIGNAL(pixmapChanged()), this, SLOT( slotValueChanged() ) );
 			break;
 		default:
 			newSubwidget = 0;
@@ -310,6 +310,7 @@ KexiDBAutoField::setValueInternal(const QVariant& add, bool removeOld)
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
 	if(iface)
 		iface->setValue(m_origValue, add, removeOld);
+//		iface->setValueInternal(add, removeOld);
 }
 
 QVariant
@@ -321,11 +322,11 @@ KexiDBAutoField::value()
 	return QVariant();
 }
 
-void
+/*void
 KexiDBAutoField::slotValueChanged()
 {
 	signalValueChanged();
-}
+}*/
 
 bool
 KexiDBAutoField::valueIsNull()
@@ -351,7 +352,6 @@ KexiDBAutoField::valueIsValid()
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
 	if(iface)
 		return iface->valueIsValid();
-
 	return true;
 }
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +41,8 @@
 #include <kstaticdeleter.h>
 #include <kimageeffect.h>
 #include <kstdaccel.h>
+#include <kmessagebox.h>
+#include <kguiitem.h>
 
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
@@ -134,6 +136,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	, m_lineWidthChanged(false)
 	, m_paletteBackgroundColorChanged(false)
 	, m_paintEventEnabled(true)
+	, m_dropDownButtonVisible(true)
 {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 	setBackgroundMode(Qt::NoBackground);
@@ -206,24 +209,35 @@ QVariant KexiDBImageBox::value()
 		return QVariant();
 	}
 	//db-aware mode
-	return QVariant(); //todo
+	return m_value; //todo
+	//return QVariant(); //todo
 }
 
-void KexiDBImageBox::setValueInternal( const QVariant& add, bool /* irrelevant here: removeOld*/ )
+void KexiDBImageBox::setValueInternal( const QVariant& add, bool removeOld, bool loadPixmap )
 {
 	if (isReadOnly())
 		return;
-	const bool valueWasEmpty = m_value.isEmpty();
-	m_value = add.toByteArray();
-	if (!m_value.isEmpty()) {
-		QString type( KImageIO::typeForMime(m_valueMimeType) );
-		if (!KImageIO::canRead( type ) || !m_pixmap.loadFromData(m_value, type.latin1())) {
+//	const bool valueWasEmpty = m_value.isEmpty();
+	if (removeOld) 
+		m_value = add.toByteArray();
+	else //do not add "m_origValue" to "add" as this is QByteArray
+		m_value = m_origValue.toByteArray();
+	bool ok = !m_value.isEmpty();
+	if (ok) {
+		///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );
+		///ok = KImageIO::canRead( type );
+		ok = loadPixmap ? m_pixmap.loadFromData(m_value) : true; //, type.latin1());
+		if (!ok) {
 			//! @todo inform about error?
 		}
 	}
+	if (!ok) {
+		m_valueMimeType = QString::null;
+		m_pixmap = QPixmap();
+	}
 	repaint();
-	if (m_value.isEmpty() != valueWasEmpty)
-		emit pixmapChanged();//valueChanged(m_value);
+//	if (m_value.isEmpty() != valueWasEmpty)
+//		emit pixmapChanged();//valueChanged(m_value);
 }
 
 void KexiDBImageBox::setInvalidState( const QString& displayText )
@@ -391,6 +405,7 @@ void KexiDBImageBox::insertFromFile()
 		if (!h)
 			return;
 		setData(h);
+		repaint();
 	}
 	else {
 		//db-aware
@@ -412,7 +427,6 @@ void KexiDBImageBox::insertFromFile()
 		m_valueMimeType = KImageIO::mimeType( fileName ); 
 		setValueInternal( ba, true );
 	}
-	repaint();
 
 //! @todo emit signal for setting "dirty" flag within the design
 
@@ -422,6 +436,9 @@ void KexiDBImageBox::insertFromFile()
 	if (url.isLocalFile())
 		KRecentDirs::add(":LastVisitedImagePath", url.directory());
 #endif
+	if (!dataSource().isEmpty()) {
+		signalValueChanged();
+	}
 }
 
 QByteArray KexiDBImageBox::data() const
@@ -438,17 +455,28 @@ QByteArray KexiDBImageBox::data() const
 
 void KexiDBImageBox::saveAs()
 {
-//	if (!m_pixmapLabel->pixmap() || m_pixmapLabel->pixmap()->isNull()) {
 	if (data().isEmpty()) {
 		kdWarning() << "KexiDBImageBox::saveAs(): no pixmap!" << endl;
 		return;
 	}
+	QString origFilename, fileExtension;
+	if (dataSource().isEmpty()) { //for static images filename and mimetype can be available
+		origFilename = m_data.originalFileName();
+		if (!origFilename.isEmpty())
+			origFilename = QString("/") + origFilename;
+		if (!m_data.mimeType().isEmpty())
+			fileExtension = KImageIO::typeForMime(m_data.mimeType()).lower();
+	}
+	else {
+		// PNG data is the default
+		fileExtension = "png";
+	}
+	
 #ifdef Q_WS_WIN
 	QString recentDir;
 
 	QString fileName = QFileDialog::getSaveFileName(
-		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path()
-		+"/"+m_data.originalFileName(), 
+		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path() + origFilename,
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
 		this, 0, i18n("Save Image to File"));
 #else
@@ -458,11 +486,22 @@ void KexiDBImageBox::saveAs()
 #endif
 	if (fileName.isEmpty())
 		return;
+	if (QFileInfo(fileName).extension().isEmpty())
+		fileName += (QString(".")+fileExtension);
 	kexipluginsdbg << fileName << endl;
 	KURL url;
 	url.setPath( fileName );
 
 	QFile f(fileName);
+	if (f.exists() && KMessageBox::Yes != KMessageBox::warningYesNo(this, 
+		"<qt>"+i18n("File %1 already exists."
+		"<p>Do you want to replace it with a new one?")
+		.arg(QDir::convertSeparators(fileName))+"</qt>",0, 
+		KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Don't Replace"))))
+	{
+		return;
+	}
+
 	if (!f.open(IO_WriteOnly)) {
 		//! @todo err msg
 		return;
@@ -482,7 +521,6 @@ void KexiDBImageBox::saveAs()
 
 #ifdef Q_WS_WIN
 	//save last visited path
-//	KURL url(fileName);
 	if (url.isLocalFile())
 		KRecentDirs::add(":LastVisitedImagePath", url.directory());
 #endif
@@ -516,12 +554,22 @@ void KexiDBImageBox::paste()
 	else {
 		//db-aware mode
 		m_pixmap = pm;
-//todo m_value
+    QByteArray ba;
+    QBuffer buffer( ba );
+    buffer.open( IO_WriteOnly );
+		if (m_pixmap.save( &buffer, "PNG" )) {// write pixmap into ba in PNG format
+			setValueInternal( ba, true, false/* !loadPixmap */ );
+		}
+		else {
+			setValueInternal( QByteArray(), true );
+		}
 	}
 	
 	repaint();
-	if (!dataSource().isEmpty())
-		emit pixmapChanged();//valueChanged(data());
+	if (!dataSource().isEmpty()) {
+//		emit pixmapChanged();
+		signalValueChanged();
+	}
 }
 
 void KexiDBImageBox::clear()
@@ -534,19 +582,20 @@ void KexiDBImageBox::clear()
 		if (isReadOnly())
 			return;
 		//db-aware mode
-		m_pixmap = QPixmap();
-		m_value = QByteArray();
+		setValueInternal(QByteArray(), true);
+		//m_pixmap = QPixmap();
 	}
-	
-//	setValueInternal(QByteArray(), true);
+
 //	m_originalFileName = QString::null;
 
 	//! @todo emit signal for setting "dirty" flag within the design
 
 //	m_pixmap = QPixmap(); //will be loaded on demand
 	repaint();
-	if (!dataSource().isEmpty())
-		emit pixmapChanged();//valueChanged(data());
+	if (!dataSource().isEmpty()) {
+//		emit pixmapChanged();//valueChanged(data());
+		signalValueChanged();
+	}
 }
 
 void KexiDBImageBox::showProperties()
@@ -725,36 +774,22 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 	const int m = realLineWidth();
 	const int w = width()-m-m;
 	const int h = height()-m-m;
-//	QPainter ptr(this);
-//	ptr.fillRect(0,0,width(),height(), green);
-//	p->setClipRect(0, 0, width(), height());
-//	QFrame::drawContents( p );
-//	QFrame::drawFrame( p );
-//	QColor bg(palette().active().background());//parentWidget()->palette().active().background()
 	QColor bg(eraseColor());
 	if (m_designMode && pixmap().isNull()) {
 		QPixmap pm(size()-QSize(m, m));
 		QPainter p2;
 		p2.begin(&pm, this);
-//			QLabel::drawContents( p );
 		p2.fillRect(0,0,width(),height(), bg);
 
 		updatePixmap();
 		QImage img(KexiDBImageBox_pm->convertToImage());
 		img = KImageEffect::flatten(img, bg.dark(150),
 			qGray( bg.rgb() ) <= 20 ? QColor(Qt::gray).dark(150) : bg.light(105));
-//				m_scalledDown = (pix.width() > (width()/2) || pix.height() > (height()/2));
-//				if (m_scalledDown)
-//					img = img.smoothScale(width()/2, height()/2, QImage::ScaleMin);
-	
-//				KexiDBImageBox_pmDeleter.setObject( KexiDBImageBox_pm, new QPixmap() );
-//				KexiDBImageBox_pm->convertFromImage(img);
 
 		QPixmap converted;
 		converted.convertFromImage(img);
 		p2.drawPixmap(2, height()-m-m-KexiDBImageBox_pm->height()-2, converted);
 		QFont f(qApp->font());
-//		f.setPointSize(f.pointSize());
 		p2.setFont(f);
 		p2.setPen( KexiUtils::contrastColor( bg ) );
 		p2.drawText(pm.rect(), Qt::AlignCenter|Qt::WordBreak, 
@@ -763,7 +798,17 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 		bitBlt(this, m, m, &pm);
 	}
 	else {
-//		QFrame::drawContents( p );
+		QSize internalSize(size());
+		if (m_chooser && m_dropDownButtonVisible && !dataSource().isEmpty())
+			internalSize.setWidth( internalSize.width() - m_chooser->width() );
+		
+		//clearing needed here because we may need to draw a pixmap with transparency
+		p.fillRect(0,0,width(),height(), bg);
+
+		KexiUtils::drawPixmap( p, bg, m, QRect(QPoint(0,0), internalSize), pixmap(), m_alignment, 
+			m_scaledContents, m_keepAspectRatio );
+
+#if 0 //moved to KexiUtils::drawPixmap()
 		if (pixmap().isNull())
 			p.fillRect(0,0,width(),height(), bg);
 		else {
@@ -832,9 +877,11 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 				bitBlt(this, m, m, &pm);
 			}
 		}
+#endif
 	}
 	KexiFrame::drawFrame( &p );
 }
+
 /*		virtual void KexiDBImageBox::paletteChange ( const QPalette & oldPalette )
 {
 	QFrame::paletteChange(oldPalette);
@@ -844,6 +891,7 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 		repaint();
 	}
 }*/
+
 void KexiDBImageBox::updatePixmap() {
 	if (! (m_designMode && pixmap().isNull()) )
 		return;
@@ -921,16 +969,14 @@ void KexiDBImageBox::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
 {
 	// Esc key should close the popup
-	kdDebug() << KStdAccel::shortcut(KStdAccel::Copy).keyCodeQt() << " "  << ke->key() << endl;
 	if (ke->state() == Qt::NoButton && ke->key() == Qt::Key_Escape) {
 		if (m_popup->isVisible()) {
 			m_setFocusOnButtonAfterClosingPopup = true;
 			return true;
 		}
 	}
-	else if (ke->state() == Qt::ControlButton && KStdAccel::shortcut(KStdAccel::Copy).keyCodeQt() == (ke->key()|CTRL)) {
-		
-	}
+//	else if (ke->state() == Qt::ControlButton && KStdAccel::shortcut(KStdAccel::Copy).keyCodeQt() == (ke->key()|Qt::CTRL)) {
+//	}
 	return false;
 }
 
@@ -944,6 +990,25 @@ void KexiDBImageBox::setPaletteBackgroundColor( const QColor & color )
 {
 	m_paletteBackgroundColorChanged = true;
 	KexiFrame::setPaletteBackgroundColor(color);
+}
+
+bool KexiDBImageBox::dropDownButtonVisible() const
+{
+	return m_dropDownButtonVisible;
+}
+
+void KexiDBImageBox::setDropDownButtonVisible( bool set )
+{
+//! @todo use global default setting for this property
+	if (m_dropDownButtonVisible == set)
+		return;
+	m_dropDownButtonVisible = set;
+	if (m_chooser) {
+		if (m_dropDownButtonVisible)
+			m_chooser->show();
+		else
+			m_chooser->hide();
+	}
 }
 
 #include "kexidbimagebox.moc"

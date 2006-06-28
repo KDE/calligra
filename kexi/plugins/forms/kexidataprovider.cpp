@@ -63,6 +63,8 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 		KexiFormDataItemInterface* const formDataItem = dynamic_cast<KexiFormDataItemInterface*>(obj);
 		if (!formDataItem)
 			continue;
+		if (formDataItem->parentInterface()) //item with parent interface: collect parent instead...
+			continue;
 #if 0 //! @todo reenable when subform is moved to KexiDBForm
 		KexiDBForm *dbForm = KexiUtils::findParent<KexiDBForm>(obj, "KexiDBForm"); //form's surface...
 		if (dbForm!=m_mainWidget) //only set data for this form's data items
@@ -111,8 +113,9 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 		QMap<KexiDB::Field*,int> tmpDuplicatedItems;
 		QMapIterator<KexiDB::Field*,int> it_dup;
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-//			KexiDB::QueryColumnInfo *cii = it.current()->columnInfo();
-			kdDebug() << " ** " << it.current()->columnInfo()->field << endl;
+			if (!it.current()->columnInfo()->field)
+				continue;
+			kdDebug() << " ** " << it.current()->columnInfo()->field->name() << endl;
 			it_dup = tmpDuplicatedItems.find( it.current()->columnInfo()->field );
 			uint count;
 			if (it_dup==tmpDuplicatedItems.end())
@@ -133,8 +136,8 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 	if (m_duplicatedItems->find( item->columnInfo()->field )) {
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			if (it.current()!=item && item->columnInfo()->field == it.current()->columnInfo()->field) {
-				kexipluginsdbg << "- setting value for item '" 
-					<< dynamic_cast<QObject*>(it.current())->name() << " == " << value.toString() << endl;
+				kexipluginsdbg << "- setting a copy of value for item '" 
+					<< dynamic_cast<QObject*>(it.current())->name() << "' == " << value << endl;
 				it.current()->setValue( value );
 			}
 		}

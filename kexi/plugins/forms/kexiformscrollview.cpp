@@ -28,6 +28,7 @@
 #include <widget/utils/kexirecordmarker.h>
 
 #include <kpopupmenu.h>
+#include <kdebug.h>
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  : KexiScrollView(parent, preview)
@@ -479,12 +480,17 @@ void KexiFormScrollView::cancelEditor()
 		m_errorMessagePopup->close();
 
 	dynamic_cast<KexiFormDataItemInterface*>(m_editor)->undoChanges();
-//not needed	m_editor = 0;
+	fillDuplicatedDataItems(dynamic_cast<KexiFormDataItemInterface*>(m_editor), m_editor->value());
 }
 
 void KexiFormScrollView::updateAfterCancelRowEdit()
 {
 	for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
+		if (dynamic_cast<QWidget*>(it.current())) {
+			kexipluginsdbg << "KexiFormScrollView::updateAfterCancelRowEdit(): "
+				<< dynamic_cast<QWidget*>(it.current())->className() << " " 
+				<< dynamic_cast<QWidget*>(it.current())->name() << endl;
+		}
 		it.current()->undoChanges();
 	}
 	recordNavigator()->showEditingIndicator(false);

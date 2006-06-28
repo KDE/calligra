@@ -171,6 +171,10 @@ namespace KexiUtils
 		const QObject *receiver, const char* slot);
 #endif
 
+	//! Draws pixmap on painter \a p using predefined parameters.
+	//! Used in KexiDBImageBox and KexiBlobTableEdit.
+	KEXIUTILS_EXPORT void drawPixmap( QPainter& p, const QColor& backgroundColor, int lineWidth, const QRect& rect,
+		const QPixmap& pixmap, int alignment, bool scaledContents, bool keepAspectRatio);
 }
 
 

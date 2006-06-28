@@ -14,20 +14,37 @@ CCMAIL:danny@commit-digest.org
 
 For bugfixes use CCMAIL:###-done@bugs.kde.org
 
+2006-06-28
+KexiDB
+- SQLite 3.2: fixed opening databases with non-latin1 pathnames
+2.0: merged
+CSV Import Dialog
+- parsing data improved: values without leading zeros, like 1/2/2006 work;
+ Since apps like MS Access in the USA creates csv files with date 
+ format month/day/year, (and without leading zeros), text with "/" 
+ inside is assumed to be in this format.
+1.0/2.0: ported
+
+2006-06-27
+Forms
+- Image Box widget: now supports saving data in the database!
+  Fixed filling duplicated data widgets; fixed editing;
+  "Drop-Down Button Visible" property added.
+2.0: merged
 
 2006-06-26
 Forms
 - AutoField widget: changing value of "Widget Type" property reloads the entire 
   property set, so new properties can appear and unused properties can be hidden 
   in the Property Editor.
-2.0: ported
+2.0: merged
 KoProperty
 - delayed deleting of editors on setting a new property set
 1.0/2.0: ported
 - added additional, internal "property change" signal so it will be always emitted 
   _before_ the public one; thus e.g. it is legal to reload the property set within 
   the "property change" handler
-2.0: ported
+2.0: merged
 
 2006-06-19..23
 Forms
@@ -35,14 +52,14 @@ Forms
   (e.g. keyboard handling for popup), db-awareness added, 
   frame-related properties added, tab/backtab handling fixed,
   fixed updating position of image when the frame changes
-2.0: ported
+2.0: merged
 - AutoField widget: added support for Image (Object) type,
   fixed handling color properties, internal editor's properties are 
   automatically inherited by the AutoField widget as so-called subproperties
-2.0: ported
+2.0: merged
 - removed flickering of the Property Pane after dropping a new field 
   onto the form
-2.0: ported
+2.0: merged
 
 2006-06-06
 CSV Import Dialog
@@ -53,11 +70,11 @@ CSV Import Dialog
 Migration
 - improved usability for selecting type of destination database
   (no mention of SQLite for now)
-2.0: ported
+2.0: merged
 KexiDB
 - renaming table fields works, table schema is recreated when needed,
   and just altered in-place when it's enough to do so
-2.0: ported
+2.0: merged
 Table View
 - cell editor: the contents are marked as changed only when the original 
   value differs from the current
@@ -65,10 +82,10 @@ Table View
 Table Designer
 - changing field's description is supported by undo/redo commands 
   and by alter table actions.
-2.0: ported
+2.0: merged
 - Internal Debugger: added "Real alter table" button, 
   for s convenience, "save" action now uses the old alter table code
-2.0: ported
+2.0: merged
 
 2006-06-05
 KoProperty
@@ -77,28 +94,28 @@ KoProperty
 KexiDB
 - SQLite library upgraded from 3.0.7 to 3.2.8 (backward compatible),
   to get "table renaming" function.
-2.0: ported
+2.0: merged
 - optimization: "rename table" action now uses "ALTER TABLE RENAME TO" 
   SQL statement, O(1).
-2.0: ported
+2.0: merged
 - X-Kexi-DoNotAllowProjectImportingTo KexiDB driver propery added, false by defaut
-2.0: ported
+2.0: merged
 
 2006-06-02
 KexiDB
 - fixed setting database filename when relative path has been provided
 1.0/2.0: ported
 - minor utilities added usable for altering
-2.0: ported
+2.0: merged
 - table altering improved for SQLite: changing data types will be possible soon
-2.0: ported
+2.0: merged
 
 2006-05-31
 KoProperty
 - methods in Set::Iterator are now const
-2.0: ported
+2.0: merged
 - added propertyValues(const Set& set) utility function
-2.0: ported
+2.0: merged
 
 2006-05-30
 Table View
@@ -106,50 +123,50 @@ Table View
 1.0/2.0: ported
 Table Designer
 - improved undo/redo actions: deleting and redoing actions fixed
-2.0: ported
+2.0: merged
 - added title to the context menu
-2.0: ported
+2.0: merged
 KexiDB
 - improved alter table machinery; now fields are identified by UIDs 
   to avoid problems with multiple fields sharing the same name
-2.0: ported
+2.0: merged
 
 2006-05-29
 KoProperty
 - animate clicking on the group title's area
-2.0: ported
+2.0: merged
 - added a container widget that can be used to split information into hideable sections 
-2.0: ported
+2.0: merged
 Form Designer
 - data source pane splitted vertically into two sections for transparency
-2.0: ported
+2.0: merged
 Table Designer
 - clear PK when selecting non-integer type
-2.0: ported
+2.0: merged
 
 2006-05-27
 KoProperty
 - Possible fix for crash. Not sure this is the definitive fix for bug 124917.
   Thanks to Jaime Torres
-2.0: ported
+2.0: merged
 - group items now have rather pretty appearance styled with KDE style
-2.0: ported
+2.0: merged
 - fixed groups order, API changed: now it's possible to get order of groups
-2.0: ported
+2.0: merged
 - sorting disabled when groups are present
-2.0: ported
+2.0: merged
 - icons can be defined and displayed within the group items
-2.0: ported
+2.0: merged
 
 2006-05-26
 KexiDB
 - improved handling extended table schema information
 - improved alter table
-2.0: ported
+2.0: merged
 Table Designer
 - improved undo/redo actions; prepared for reuse
   in the table-altering machinery of KexiDB
-2.0: ported
+2.0: merged
 
 2006-05-25
 Forms
@@ -157,21 +174,21 @@ Forms
 1.0/2.0: ported
 - "Read only" property is now supported by all data-aware widgets, 
   and form itself
-2.0: ported
+2.0: merged
 - background color of the line edit in read-only mode is blended with white
   to get lighter gray
-2.0: ported
+2.0: merged
 - accessibility+usability: read only line edit widget now shows the caret
-2.0: ported
+2.0: merged
 - display field caption as title for editor's context menu
-2.0: ported
+2.0: merged
 
 ~~~~~~~~~~~~~~~~ 2006.1.1 (OOPL, bugfix) ~~~~~~~~~~~~~~~~
 
 2006-05-18
 Table Designer
 - improved support Undo/Redo actions
-2.0: ported
+2.0: merged
 Forms
 - fixed saving data changes for db-aware checkboxes
   (fixed by setting StrongFocus policy as default)
@@ -201,10 +218,10 @@ Table Designer
 2006-05-15
 General
 - -execute command line option added; useful for executing macros, scripts, etc.
-2.0: ported
+2.0: merged
 Table View
 - small API and source code improvements (s/buf/set)
-2.0: ported
+2.0: merged
 KoProperty
 - fixed making a deep copy of Set object containing custom properties
 - deep copy of Set object now maintains the original order
@@ -214,7 +231,7 @@ KoProperty
 2006-05-09
 KoProperty
 - API changed: a few methods are now const; optimization
-2.0: ported
+2.0: merged
 
 2006-05-08
 KexiDB
@@ -324,7 +341,7 @@ CSV Import
   by setting ImportExport/MaximumBytesForPreviewInImportDialog option in kexirc
 1.0/2.0: ported
 - display rows number on the top of the window
-2.0: ported
+2.0: merged
 
 2006-04-11
 Forms Designer
@@ -344,7 +361,7 @@ KexiDB
 Table Designer
 - More intrusive warning when altering table design
 1.0: ported (except the message)
-2.0: ported
+2.0: merged
 Forms Designer
 - fixed possible crash when switching to data view mode unbound autofield widgets
 - while in data mode, do not display "(unbound)" text for unbound autofield widgets

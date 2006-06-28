@@ -29,7 +29,7 @@
 
 /*! @short General purpose cell editor using line edit widget.
 */
-class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
+class KexiInputTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 

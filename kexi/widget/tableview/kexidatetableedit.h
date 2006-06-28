@@ -31,14 +31,14 @@
  Date format is retrieved from the KDE global settings.
  and input/output is performed using KLineEdit (from KexiInputTableEdit).
 */
-class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiInputTableEdit
+class KexiDateTableEdit : public KexiInputTableEdit
 {
 	Q_OBJECT
 
 	public:
 		KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
 		virtual ~KexiDateTableEdit();
-		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 		virtual QVariant value();
 		virtual bool valueIsNull();

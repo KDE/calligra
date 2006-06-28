@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Peter Simonsson <psn@linux.se>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +35,6 @@ class KexiBlobTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 	public:
-//		KexiBlobTableEdit(KexiDB::Field &f, QScrollView *parent=0);
 		KexiBlobTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
 		virtual ~KexiBlobTableEdit();
 
@@ -47,25 +46,28 @@ class KexiBlobTableEdit : public KexiTableEdit
 		virtual void clear();
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
-	protected slots:
-		void slotFinished(KProcess* p);
-		void open();
-		void openWith();
-		void menu();
-		void loadFile();
-		void saveFile();
+//	protected slots:
+//		void slotFinished(KProcess* p);
+//		void open();
+//		void openWith();
+//		void menu();
+//		void loadFile();
+//		void saveFile();
 
 	protected:
 		//! initializes this editor with \a add value
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-		QString openWithDlg(const QString& file);
+		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
-		void execute(const QString& app, const QString& file);
+		//todo QString openWithDlg(const QString& file);
+		//todo void execute(const QString& app, const QString& file);
 
-		KTempFile* m_tempFile;
-		KProcess* m_proc;
-		QTextEdit *m_content;
+		QByteArray m_value;
+//todo		KTempFile* m_tempFile;
+//todo		KProcess* m_proc;
+//todo		QTextEdit *m_content;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
@@ -77,7 +79,7 @@ KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
 /*! @short Cell editor for displaying kde icon (using icon name provided as string).
  Read only.
 */
-class KEXIDATATABLE_EXPORT KexiKIconTableEdit : public KexiTableEdit
+class KexiKIconTableEdit : public KexiTableEdit
 {
 	public:
 		KexiKIconTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
@@ -99,7 +101,7 @@ class KEXIDATATABLE_EXPORT KexiKIconTableEdit : public KexiTableEdit
 
 		virtual void clear();
 
-		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
 	protected:

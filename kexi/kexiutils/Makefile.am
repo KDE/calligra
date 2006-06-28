@@ -1,7 +1,7 @@
 include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexiutils.la
-libkexiutils_la_SOURCES = identifier.cpp validator.cpp utils.cpp
+libkexiutils_la_SOURCES = identifier.cpp validator.cpp utils.cpp debuggui.cpp
 
 libkexiutilsincludedir=$(includedir)/kexiutils
 libkexiutilsinclude_HEADERS = tristate.h identifier.h validator.h utils.h kexiutils_export.h

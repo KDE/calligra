@@ -55,6 +55,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  , m_timeFormatter(0)
  , m_menuExtender(this, this)
  , m_internalReadOnly(false)
+ , m_slotTextChanged_enabled(true)
 {
 #ifdef USE_KLineEdit_setReadOnly
 //! @todo reenable as an app aption
@@ -125,10 +126,15 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 			return;
 		}
 	}
+	
+	m_slotTextChanged_enabled = false;
+
 	if (removeOld)
 		setText( add.toString() );
 	else
 		setText( m_origValue.toString() + add.toString() );
+
+	m_slotTextChanged_enabled = true;
 }
 
 QVariant KexiDBLineEdit::value()
@@ -167,6 +173,8 @@ QVariant KexiDBLineEdit::value()
 
 void KexiDBLineEdit::slotTextChanged(const QString&)
 {
+	if (!m_slotTextChanged_enabled)
+		return;
 	signalValueChanged();
 }
 

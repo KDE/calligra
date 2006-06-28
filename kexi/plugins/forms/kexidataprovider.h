@@ -53,7 +53,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 
 		QStringList usedDataSources() const { return m_usedDataSources; }
 
-		QPtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
+		//unused QPtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
 
 		/*! Fills data items with appropriate data fetched from \a cursor. */
 		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);

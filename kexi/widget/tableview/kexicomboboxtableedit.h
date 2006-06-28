@@ -61,7 +61,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 		virtual void paintFocusBorders( QPainter *p, QVariant &cal, int x, int y, int w, int h );
 
-		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
 //		virtual int rightMargin();
