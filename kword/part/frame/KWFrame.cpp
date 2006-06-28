@@ -31,6 +31,7 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
     m_newFrameBehavior( KWord::NoFollowupFrame ),
     m_runAroundSide( KWord::BiggestRunAroundSide ),
     m_runAroundDistance( 1.0 ),
+    m_isCopy(false),
     m_frameSet( parent )
 {
     parent->addFrame(this);

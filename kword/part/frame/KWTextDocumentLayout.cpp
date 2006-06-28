@@ -117,11 +117,18 @@ kDebug() << "KWTextDocumentLayout::documentChanged "<< position << ", " << chars
 
 void KWTextDocumentLayout::layout() {
     double offset = 0.0;
+    double previousOffset = offset;
     foreach(KWFrame *frame, m_frameSet->frames()) {
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
         Q_ASSERT(data); // only TextShapes are allowed on a KWTextFrameSet
-        data->setDocumentOffset(offset);
+        if(frame->isCopy()) {
+            data->setDocumentOffset(previousOffset);
+            continue;
+        }
+        else
+            data->setDocumentOffset(offset);
         layout(static_cast<KWTextFrame*> (frame), offset);
+        previousOffset = offset;
         offset += frame->shape()->size().height() + 10;
     }
 }

@@ -77,7 +77,7 @@ public:
 signals:
     /**
      * emitted whenever a frame is added
-     * @param the frame that has just been added
+     * @param frame the frame that has just been added
      */
     void frameAdded(KWFrame *frame);
     /**

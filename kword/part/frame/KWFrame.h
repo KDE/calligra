@@ -32,13 +32,14 @@ class KoViewConverter;
  * This class represents a single frame.
  * A frame belongs to a frameset which states its contents.
  * A frame does NOT have contents, the frameset stores that.
- * A frame is really just a square that is used to place the content
+ * A frame is really just a shape that is used to place the content
  * of a frameset.
  */
 class KWORD_TEST_EXPORT KWFrame {
 public:
     /**
      * Constructor
+     * @param shape the shape that displays the content, containing size/position
      * @param parent the parent frameset
      */
     KWFrame(KoShape *shape, KWFrameSet *parent);
@@ -110,15 +111,31 @@ public:
      */
     KWFrameSet *frameSet() const { return m_frameSet; }
 
+    /**
+     * States if this frame is a copy of the previous one.
+     * If this frame is a copy, then this frame is drawn with the same content as the
+     * previous frame in this frameset.
+     * @return true if this is a copy
+     */
+    bool isCopy() { return m_isCopy; }
+    /**
+     * Sets if this frame is a copy of the previous one.
+     * If this frame is a copy, then this frame is drawn with the same content as the
+     * previous frame in this frameset.
+     * @param on if true, the frame is now a copy
+     */
+    void setCopy(bool on) { m_isCopy = on; }
+
 private:
+    KoShape *m_shape;
     KWord::FrameBehavior m_frameBehavior;
     KWord::SheetSide m_sheetSide;
     KWord::NewFrameBehavior m_newFrameBehavior;
     KWord::RunAroundSide m_runAroundSide;
     double m_runAroundDistance;
+    bool m_isCopy;
 
     KWFrameSet *m_frameSet;
-    KoShape *m_shape;
 };
 
 #endif
