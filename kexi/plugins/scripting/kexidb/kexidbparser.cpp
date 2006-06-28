@@ -31,18 +31,19 @@ KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parse
     , m_connection(connection)
     , m_parser(parser)
 {
-    addFunction("parse", &KexiDBParser::parse);
-    addFunction("clear", &KexiDBParser::clear);
-    addFunction("operation", &KexiDBParser::operation);
+    this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("parse", this, &KexiDBParser::parse);
+    this->addFunction0< void >("clear", this, &KexiDBParser::clear);
 
-    addFunction("table", &KexiDBParser::table);
-    addFunction("query", &KexiDBParser::query);
-    addFunction("connection", &KexiDBParser::connection);
-    addFunction("statement", &KexiDBParser::statement);
+    this->addFunction0< Kross::Api::Variant >("operation", this, &KexiDBParser::operation);
 
-    addFunction("errorType", &KexiDBParser::errorType);
-    addFunction("errorMsg", &KexiDBParser::errorMsg);
-    addFunction("errorAt", &KexiDBParser::errorAt);
+    this->addFunction0< KexiDBTableSchema >("table", this, &KexiDBParser::table);
+    this->addFunction0< KexiDBQuerySchema >("query", this, &KexiDBParser::query);
+    this->addFunction0< KexiDBConnection >("connection", this, &KexiDBParser::connection);
+    this->addFunction0< Kross::Api::Variant >("statement", this, &KexiDBParser::statement);
+
+    this->addFunction0< Kross::Api::Variant >("errorType", this, &KexiDBParser::errorType);
+    this->addFunction0< Kross::Api::Variant >("errorMsg", this, &KexiDBParser::errorMsg);
+    this->addFunction0< Kross::Api::Variant >("errorAt", this, &KexiDBParser::errorAt);
 }
 
 KexiDBParser::~KexiDBParser()
@@ -54,60 +55,23 @@ const QString KexiDBParser::getClassName() const
     return "Kross::KexiDB::KexiDBParser";
 }
 
-Kross::Api::Object::Ptr KexiDBParser::parse(Kross::Api::List::Ptr args)
-{
-    return new Kross::Api::Variant(
-           QVariant(m_parser->parse(Kross::Api::Variant::toString(args->item(0))),0));
-}
+bool KexiDBParser::parse(const QString& sql) { return m_parser->parse(sql); }
+void KexiDBParser::clear() { m_parser->clear(); }
+const QString KexiDBParser::operation() { return m_parser->operationString(); }
 
-Kross::Api::Object::Ptr KexiDBParser::clear(Kross::Api::List::Ptr)
-{
-    m_parser->clear();
-    return 0;
-}
-
-Kross::Api::Object::Ptr KexiDBParser::operation(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(m_parser->operationString());
-    return 0;
-}
-
-Kross::Api::Object::Ptr KexiDBParser::table(Kross::Api::List::Ptr)
-{
+KexiDBTableSchema* KexiDBParser::table() {
     ::KexiDB::TableSchema* t = m_parser->table();
-    if(! t) return 0;
-    return new KexiDBTableSchema(t);
+    return t ? new KexiDBTableSchema(t) : 0;
 }
 
-Kross::Api::Object::Ptr KexiDBParser::query(Kross::Api::List::Ptr)
-{
+KexiDBQuerySchema* KexiDBParser::query() {
     ::KexiDB::QuerySchema* q = m_parser->query();
-    if(! q) return 0;
-    return new KexiDBQuerySchema(q);
+    return q ? new KexiDBQuerySchema(q) : 0;
 }
 
-Kross::Api::Object::Ptr KexiDBParser::connection(Kross::Api::List::Ptr)
-{
-    return m_connection;
-}
+KexiDBConnection* KexiDBParser::connection() { return m_connection; }
+const QString KexiDBParser::statement() { return m_parser->statement(); }
 
-Kross::Api::Object::Ptr KexiDBParser::statement(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(m_parser->statement());
-}
-
-Kross::Api::Object::Ptr KexiDBParser::errorType(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(m_parser->error().type());
-}
-
-Kross::Api::Object::Ptr KexiDBParser::errorMsg(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(m_parser->error().error());
-}
-
-Kross::Api::Object::Ptr KexiDBParser::errorAt(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(m_parser->error().at());
-}
-
+const QString KexiDBParser::errorType() { return m_parser->error().type(); }
+const QString KexiDBParser::errorMsg() { return m_parser->error().error(); }
+int KexiDBParser::errorAt() { return m_parser->error().at(); }

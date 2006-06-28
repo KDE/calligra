@@ -40,27 +40,26 @@ using namespace Kross::KexiDB;
 KexiDBDriverManager::KexiDBDriverManager()
     : Kross::Api::Class<KexiDBDriverManager>("DriverManager")
 {
-    krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::KexiDBDriverManager()") );
+    //krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::KexiDBDriverManager()") );
 
-    addFunction("driverNames", &KexiDBDriverManager::driverNames);
-    addFunction("driver", &KexiDBDriverManager::driver);
-    addFunction("lookupByMime", &KexiDBDriverManager::lookupByMime);
-    addFunction("mimeForFile", &KexiDBDriverManager::mimeForFile);
+    this->addFunction0< Kross::Api::Variant >("driverNames", this, &KexiDBDriverManager::driverNames);
 
-    addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData);
-    addFunction("createConnectionDataByFile", &KexiDBDriverManager::createConnectionDataByFile);
-    addFunction("field", &KexiDBDriverManager::field);
-    addFunction("tableSchema", &KexiDBDriverManager::tableSchema);
-    addFunction("querySchema", &KexiDBDriverManager::querySchema);
+    this->addFunction1< KexiDBDriver, Kross::Api::Variant >("driver", this, &KexiDBDriverManager::driver);
+    this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("lookupByMime", this, &KexiDBDriverManager::lookupByMime);
+    this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("mimeForFile", this, &KexiDBDriverManager::mimeForFile);
+
+    this->addFunction0< KexiDBConnectionData >("createConnectionData", this, &KexiDBDriverManager::createConnectionData);
+    this->addFunction1< KexiDBConnectionData, Kross::Api::Variant >("createConnectionDataByFile", this, &KexiDBDriverManager::createConnectionDataByFile);
+    this->addFunction0< KexiDBField >("field", this, &KexiDBDriverManager::field);
+    this->addFunction1< KexiDBTableSchema, Kross::Api::Variant >("tableSchema", this, &KexiDBDriverManager::tableSchema);
+    this->addFunction0< KexiDBQuerySchema>("querySchema", this, &KexiDBDriverManager::querySchema);
 }
 
-KexiDBDriverManager::~KexiDBDriverManager()
-{
-    krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::~KexiDBDriverManager()") );
+KexiDBDriverManager::~KexiDBDriverManager() {
+    //krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::~KexiDBDriverManager()") );
 }
 
-const QString KexiDBDriverManager::getClassName() const
-{
+const QString KexiDBDriverManager::getClassName() const {
     return "Kross::KexiDB::KexiDBDriverManager";
 }
 
@@ -71,57 +70,44 @@ KexiDB::DriverManager& KexiDBDriverManager::driverManager()
     return m_drivermanager;
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::driverNames(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(driverManager().driverNames());
+const QStringList KexiDBDriverManager::driverNames() {
+    return driverManager().driverNames();
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::driver(Kross::Api::List::Ptr args)
-{
-    QString drivername = Kross::Api::Variant::toString(args->item(0));
+KexiDBDriver* KexiDBDriverManager::driver(const QString& drivername) {
     QGuardedPtr< ::KexiDB::Driver > driver = driverManager().driver(drivername); // caching is done by the DriverManager
-    if(! driver)
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such KexiDB::Driver object for the defined drivername '%1'.").arg(drivername)) );
-    if(driver->error())
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg())) );
+    if(! driver) return 0;
+    if(driver->error()) throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg())) );
     return new KexiDBDriver(driver);
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::lookupByMime(Kross::Api::List::Ptr args)
-{
-    return new Kross::Api::Variant(
-        driverManager().lookupByMime( Kross::Api::Variant::toString(args->item(0)) ));
+const QString KexiDBDriverManager::lookupByMime(const QString& mimetype) {
+    return driverManager().lookupByMime(mimetype);
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::mimeForFile(Kross::Api::List::Ptr args)
-{
-    QString const file = Kross::Api::Variant::toString(args->item(0));
-    QString mimename = KMimeType::findByFileContent(file)->name();
+const QString KexiDBDriverManager::mimeForFile(const QString& filename) {
+    QString mimename = KMimeType::findByFileContent( filename )->name();
     if(mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain")
-        mimename = KMimeType::findByURL(file)->name();
-    return new Kross::Api::Variant(mimename);
+        mimename = KMimeType::findByURL(filename)->name();
+    return mimename;
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionData(Kross::Api::List::Ptr)
-{
+KexiDBConnectionData* KexiDBDriverManager::createConnectionData() {
     return new KexiDBConnectionData( new ::KexiDB::ConnectionData() );
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::Api::List::Ptr args)
-{
-//! @todo reuse the original code!
+KexiDBConnectionData* KexiDBDriverManager::createConnectionDataByFile(const QString& filename) {
+    //! @todo reuse the original code!
 
-    QString const file = Kross::Api::Variant::toString(args->item(0));
-
-    QString mimename = KMimeType::findByFileContent(file)->name();
+    QString mimename = KMimeType::findByFileContent(filename)->name();
     if(mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain")
-        mimename = KMimeType::findByURL(file)->name();
+        mimename = KMimeType::findByURL(filename)->name();
 
     if(mimename == "application/x-kexiproject-shortcut" || mimename == "application/x-kexi-connectiondata") {
-        KConfig config(file, true, false);
+        KConfig config(filename, true, false);
         QString groupkey;
         QStringList groups(config.groupList());
-	QStringList::ConstIterator it, end( groups.constEnd() );
+        QStringList::ConstIterator it, end( groups.constEnd() );
         for( it = groups.constBegin(); it != end; ++it) {
             if((*it).lower()!="file information") {
                 groupkey = *it;
@@ -169,25 +155,20 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::A
         return 0;
 
     ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
-    data->setFileName(file);
+    data->setFileName(filename);
     data->driverName = drivername;
     return new KexiDBConnectionData(data);
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::field(Kross::Api::List::Ptr)
-{
+KexiDBField* KexiDBDriverManager::field() {
     return new KexiDBField( new ::KexiDB::Field() );
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::tableSchema(Kross::Api::List::Ptr args)
-{
-    return new KexiDBTableSchema(
-               new ::KexiDB::TableSchema(Kross::Api::Variant::toString(args->item(0)))
-           );
+KexiDBTableSchema* KexiDBDriverManager::tableSchema(const QString& tablename) {
+    return new KexiDBTableSchema( new ::KexiDB::TableSchema(tablename) );
 }
 
-Kross::Api::Object::Ptr KexiDBDriverManager::querySchema(Kross::Api::List::Ptr)
-{
+KexiDBQuerySchema* KexiDBDriverManager::querySchema() {
     return new KexiDBQuerySchema( new ::KexiDB::QuerySchema() );
 }
 

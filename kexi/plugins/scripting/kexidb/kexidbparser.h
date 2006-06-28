@@ -33,51 +33,60 @@ namespace Kross { namespace KexiDB {
 
     // Forward declaration.
     class KexiDBConnection;
+    class KexiDBTableSchema;
+    class KexiDBQuerySchema;
 
+    /**
+    * The KexiDBParser could be used to parse SQL-statements.
+    *
+    * Example (in Python) ;
+    * @code
+    * # First we need a parser object.
+    * parser = connection.parser()
+    * # Parse a SQL-statement.
+    * parser.parse("SELECT * from table1")
+    * # The operation could be e.g. SELECT or INSERT.
+    * if parser.operation() == 'Error':
+    *     raise parser.errorMsg()
+    * # Print some feedback.
+    * print "Successfully parsed the SQL-statement %s" % parser.statement()
+    * @endcode
+    */
     class KexiDBParser : public Kross::Api::Class<KexiDBParser>
     {
         public:
-
-            /**
-             * Constructor.
-             */
             KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser);
-
-            /**
-             * Destructor.
-             */
             virtual ~KexiDBParser();
-
-            /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
+
+        private:
+
+            /** Clears previous results and runs the parser on the SQL statement passed as an argument. */
+            bool parse(const QString& sql);
+            /** Clears parsing results. */
+            void clear();
+            /** Returns the resulting operation. */
+            const QString operation();
+
+            /** Returns the KexiDBTableSchema object on a CREATE TABLE operation. */
+            KexiDBTableSchema* table();
+            /** Returns the KexiDBQuerySchema object on a SELECT operation. */
+            KexiDBQuerySchema* query();
+            /** Returns the KexiDBConnection object pointing to the used database connection. */
+            KexiDBConnection* connection();
+            /** Returns the SQL query statement. */
+            const QString statement();
+
+            /** Returns the type string of the last error. */
+            const QString errorType();
+            /** Returns the message of the last error. */
+            const QString errorMsg();
+            /** Returns the position where the last error occurred. */
+            int errorAt();
 
         private:
             KexiDBConnection* m_connection;
             ::KexiDB::Parser* m_parser;
-
-            /** Clears previous results and runs the parser on the 
-            SQL statement passed as an argument. */
-            Kross::Api::Object::Ptr parse(Kross::Api::List::Ptr);
-            /// Clears results.
-            Kross::Api::Object::Ptr clear(Kross::Api::List::Ptr);
-            /// \return the resulting operation.
-            Kross::Api::Object::Ptr operation(Kross::Api::List::Ptr);
-
-            /// \return the \a KexiDBTableSchema object on a CREATE TABLE operation.
-            Kross::Api::Object::Ptr table(Kross::Api::List::Ptr);
-            /// \return the \a KexiDBQuerySchema object on a SELECT operation."
-            Kross::Api::Object::Ptr query(Kross::Api::List::Ptr);
-            /// \return the \a KexiDBConnection object pointing to the used database connection.
-            Kross::Api::Object::Ptr connection(Kross::Api::List::Ptr);
-            /// \return the SQL query statement.
-            Kross::Api::Object::Ptr statement(Kross::Api::List::Ptr);
-
-            /// \return the type string of the last error.
-            Kross::Api::Object::Ptr errorType(Kross::Api::List::Ptr);
-            /// \return the message of the last error.
-            Kross::Api::Object::Ptr errorMsg(Kross::Api::List::Ptr);
-            /// \return the position where the last error occurred.
-            Kross::Api::Object::Ptr errorAt(Kross::Api::List::Ptr);
     };
 
 }}

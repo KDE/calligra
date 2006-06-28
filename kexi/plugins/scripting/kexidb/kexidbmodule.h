@@ -53,18 +53,8 @@ namespace KexiDB {
     class KexiDBModule : public Kross::Api::Module
     {
         public:
-
-            /**
-             * Constructor.
-             */
             KexiDBModule(Kross::Api::Manager* manager);
-
-            /**
-             * Destructor.
-             */
             virtual ~KexiDBModule();
-
-            /// \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
             /**

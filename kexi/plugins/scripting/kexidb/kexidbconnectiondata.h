@@ -33,104 +33,91 @@
 namespace Kross { namespace KexiDB {
 
     /**
-     * The KexiDBConnection class handles \a ::KexiDB::Connection
-     * instances and wraps parts of the functionality.
+     * A KexiDBConnectionData is used to store the details needed for
+     * a connection with a database.
      */
     class KexiDBConnectionData : public Kross::Api::Class<KexiDBConnectionData>
     {
+            friend class KexiDBDriverManager;
         public:
-
-            /**
-             * Constructor.
-             *
-             * \param data The \a ::KexiDB::ConnectionData instance
-             *        this class wraps.
-             */
             KexiDBConnectionData(::KexiDB::ConnectionData* data);
-
+            virtual ~KexiDBConnectionData();
             operator ::KexiDB::ConnectionData& () { return *m_data; }
             operator ::KexiDB::ConnectionData* () { return m_data; }
-
-            /**
-             * Destructor.
-             */
-            virtual ~KexiDBConnectionData();
-
-            /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
-
             ::KexiDB::ConnectionData* data() { return m_data; }
-            QString databaseName() { return m_dbname; }
-            void setDatabaseName(const QString& s) { m_dbname = s; }
+
+        private:
+
+            /** Return the connection name. */
+            const QString caption() const;
+            /** Set the connection name. */
+            void setCaption(const QString& name);
+
+            /** Return the description. */
+            const QString description() const;
+            /** Set the description. */
+            void setDescription(const QString& desc);
+
+            /** Return drivername. */
+            const QString driverName() const;
+            /** Set the drivername. */
+            void setDriverName(const QString& driver);
+
+            /** Return true if a local socket file is used else false. */
+            bool localSocketFileUsed() const;
+            /** Set if the local socket file should be used. */
+            void setLocalSocketFileUsed(bool used);
+            /** Return the local socket filename. */
+            const QString localSocketFileName() const;
+            /** Set the local socket filename. */
+            void setLocalSocketFileName(const QString& socketfilename);
+
+            // For serverbased drivers
+
+            /** Return the database name. */
+            const QString databaseName() const;
+            /** Set the database name. */
+            void setDatabaseName(const QString& dbname);
+
+            /** Return the hostname. */
+            const QString hostName() const;
+            /** Set the hostname. */
+            void setHostName(const QString& hostname);
+
+            /** Return the port number. */
+            int port() const;
+            /** Set the port number. */
+            void setPort(int p);
+
+            /** Return the password. */
+            const QString password() const;
+            /** Set the password. */
+            void setPassword(const QString& passwd);
+
+            /** Return the username. */
+            const QString userName() const;
+            /** Set the username. */
+            void setUserName(const QString& username);
+
+            // For filebased drivers
+
+            /** Return the filename. */
+            const QString fileName() const;
+            /** Set the filename. */
+            void setFileName(const QString& filename);
+
+            /** Return the database path. */
+            const QString dbPath() const;
+            /** Return the database filename. */
+            const QString dbFileName() const;
+
+            /** Return a user-friendly string representation. */
+            const QString serverInfoString() const;
 
         private:
             ::KexiDB::ConnectionData* m_data;
             QString m_dbname;
-
-            /// \return connection name.
-            Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
-            /// Set connection name.
-            Kross::Api::Object::Ptr setCaption(Kross::Api::List::Ptr);
-
-            /// \return the description.
-            Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
-            /// Set the description.
-            Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
-
-            /// \return drivername.
-            Kross::Api::Object::Ptr driverName(Kross::Api::List::Ptr);
-            /// Set the drivername.
-            Kross::Api::Object::Ptr setDriverName(Kross::Api::List::Ptr);
-
-            /// \return true if a local socket file is used else false.
-            Kross::Api::Object::Ptr localSocketFileUsed(Kross::Api::List::Ptr);
-            /// Set if the local socket file should be used.
-            Kross::Api::Object::Ptr setLocalSocketFileUsed(Kross::Api::List::Ptr);
-            /// \return local socket filename.
-            Kross::Api::Object::Ptr localSocketFileName(Kross::Api::List::Ptr);
-            /// Set the local socket filename.
-            Kross::Api::Object::Ptr setLocalSocketFileName(Kross::Api::List::Ptr);
-
-            // For serverbased drivers
-            /// \return the database name.
-            Kross::Api::Object::Ptr databaseName(Kross::Api::List::Ptr);
-            /// Set the database name.
-            Kross::Api::Object::Ptr setDatabaseName(Kross::Api::List::Ptr);
-
-            /// \return hostname.
-            Kross::Api::Object::Ptr hostName(Kross::Api::List::Ptr);
-            /// Set the hostname.
-            Kross::Api::Object::Ptr setHostName(Kross::Api::List::Ptr);
-
-            /// \return port
-            Kross::Api::Object::Ptr port(Kross::Api::List::Ptr);
-            /// Set port.
-            Kross::Api::Object::Ptr setPort(Kross::Api::List::Ptr);
-
-            /// \return password.
-            Kross::Api::Object::Ptr password(Kross::Api::List::Ptr);
-            /// Set password.
-            Kross::Api::Object::Ptr setPassword(Kross::Api::List::Ptr);
-
-            /// \return username.
-            Kross::Api::Object::Ptr userName(Kross::Api::List::Ptr);
-            /// Set username.
-            Kross::Api::Object::Ptr setUserName(Kross::Api::List::Ptr);
-
-            // For filebased drivers
-
-            /// \return filename.
-            Kross::Api::Object::Ptr fileName(Kross::Api::List::Ptr);
-            /// Set filename.
-            Kross::Api::Object::Ptr setFileName(Kross::Api::List::Ptr);
-
-            /// \return database path.
-            Kross::Api::Object::Ptr dbPath(Kross::Api::List::Ptr);
-            /// \return database filename.
-            Kross::Api::Object::Ptr dbFileName(Kross::Api::List::Ptr);
-
-            /// Return a user-friendly string representation.
-            Kross::Api::Object::Ptr serverInfoString(Kross::Api::List::Ptr);
     };
 
 }}
