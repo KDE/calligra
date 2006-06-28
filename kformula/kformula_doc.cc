@@ -146,7 +146,8 @@ bool KFormulaDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDom
 
 bool KFormulaDoc::loadXML(QIODevice *, const QDomDocument& doc)
 {
-    if ( doc.doctype().name().lower() == "math" ) // FIXME: This is ugly
+    if ( doc.doctype().name().lower() == "math"
+         || doc.documentElement().tagName().lower() == "math" )
         if ( document->loadOasis( doc ) ) {
             history->clear();
             history->documentSaved();
@@ -160,6 +161,31 @@ bool KFormulaDoc::loadXML(QIODevice *, const QDomDocument& doc)
     return false;
 }
 
+/**
+ * Saves the document in native format, to a given file.
+ * It is reimplemented to handle the special case of MathML, since it is
+ * a native format but not compressed.
+ */
+bool KFormulaDoc::saveNativeFormat( const QString & file )
+{
+    QCString mimeType = outputMimeType();
+    bool mathml = !mimeType.isEmpty() && mimeType.contains( "mathml", false );
+    if ( mathml ) {
+        QFile f( file );
+        if ( f.open( IO_WriteOnly | IO_Translate ) )
+        {
+            QTextStream stream( &f );
+            stream.setEncoding( QTextStream::UnicodeUTF8 );
+            formula->saveMathML( stream, true );
+            f.close();
+            return true;
+        }
+        else
+            return false;
+    }
+    // If it's not MathML, let the parent handle it
+    return KoDocument::saveNativeFormat( file );
+}
 
 KoView* KFormulaDoc::createViewInstance(QWidget* _parent, const char *name)
 {

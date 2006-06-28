@@ -1674,16 +1674,18 @@ bool KoDocument::loadNativeFormat( const QString & file )
         }
 
         // Try to find out whether it is a mime multi part file
-        char buf[5];
-        if ( in.readBlock( buf, 4 ) < 4 )
-        {
-            QApplication::restoreOverrideCursor();
-            in.close();
-            d->lastErrorMessage = i18n( "Could not read the beginning of the file." );
-            return false;
-        }
+        char buf[2];
+        do {
+            if ( in.readBlock( buf, 1 ) < 1 )
+            {
+                QApplication::restoreOverrideCursor();
+                in.close();
+                d->lastErrorMessage = i18n( "Could not read the beginning of the file." );
+                return false;
+            }
+        } while ( QChar( buf[0] ).isSpace() );
         // ### TODO: allow UTF-16
-        isRawXML = (strncasecmp( buf, "<?xm", 4 ) == 0);
+        isRawXML = ( buf[0] == '<' );
         //kdDebug(30003) << "PATTERN=" << buf << endl;
     }
     // Is it plain XML?

@@ -68,6 +68,13 @@ public:
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QDomDocument saveXML();
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+	
+	/**
+	 * Saves the document in native format, to a given file.
+	 * It is reimplemented to handle the special case of MathML, since it is
+	 * a native format but not compressed.
+	 */
+    virtual bool saveNativeFormat( const QString & file );
 
     KFormula::Container* getFormula() const { return formula; }
     KFormula::Document* getDocument() const { return document; }
