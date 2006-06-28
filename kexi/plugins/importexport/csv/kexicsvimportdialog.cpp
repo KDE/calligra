@@ -295,10 +295,9 @@ if ( m_mode == Clipboard )
   }
   else if ( mode == File )
   {*/
-	m_dateRegExp1 = QRegExp("\\d{1,4}[/\\-\\.]\\d{1,2}[/\\-\\.]\\d{1,2}");
-	m_dateRegExp2 = QRegExp("\\d{1,2}[/\\-\\.]\\d{1,2}[/\\-\\.]\\d{1,4}");
-	m_timeRegExp1 = QRegExp("\\d{1,2}:\\d{1,2}:\\d{1,2}");
-	m_timeRegExp2 = QRegExp("\\d{1,2}:\\d{1,2}");
+	m_dateRegExp = QRegExp("(\\d{1,4})([/\\-\\.])(\\d{1,2})([/\\-\\.])(\\d{1,4})");
+	m_timeRegExp1 = QRegExp("(\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
+	m_timeRegExp2 = QRegExp("(\\d{1,2}):(\\d{1,2})");
 	m_fpNumberRegExp = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+");
 
 	if (m_mode == File) {
@@ -911,7 +910,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 		//-date?
 		if (!found && (row==1 || type==_DATE_TYPE || type==_NO_TYPE_YET)) {
 			if ((row==1 || type==_NO_TYPE_YET)
-				&& (text.isEmpty() || m_dateRegExp1.exactMatch(text) || m_dateRegExp2.exactMatch(text)))
+				&& (text.isEmpty() || m_dateRegExp.exactMatch(text)))
 			{
 				m_detectedTypes[col]=_DATE_TYPE;
 				found = true; //yes
@@ -939,7 +938,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 						//try all combinations
 						QString datePart( dateTimeList[0].stripWhiteSpace() );
 						QString timePart( dateTimeList[1].stripWhiteSpace() );
-						ok = (m_dateRegExp1.exactMatch(datePart) || m_dateRegExp2.exactMatch(datePart))
+						ok = m_dateRegExp.exactMatch(datePart)
 							&& (m_timeRegExp1.exactMatch(timePart) || m_timeRegExp2.exactMatch(timePart));
 					}
 					detected = ok;
@@ -973,6 +972,36 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 	}
 }
 
+bool KexiCSVImportDialog::parseDate(const QString& text, QDate& date)
+{
+	if (!m_dateRegExp.exactMatch(text))
+		return false;
+	//dddd - dd - dddd
+	//1    2 3  4 5    <- pos
+	const int d1 = m_dateRegExp.cap(1).toInt(), d3 = m_dateRegExp.cap(3).toInt(), d5 = m_dateRegExp.cap(5).toInt();
+	if (m_dateRegExp.cap(2)=="/") //probably separator for american format mm/dd/yyyy
+		date = QDate(d5, d1, d3);
+	else {
+		if (d5 > 31) //d5 == year
+			date = QDate(d5, d3, d1);
+		else //d1 == year
+			date = QDate(d1, d3, d5);
+	}
+	return date.isValid();
+}
+
+bool KexiCSVImportDialog::parseTime(const QString& text, QTime& time)
+{
+	time = QTime::fromString(text, Qt::ISODate); //same as m_timeRegExp1
+	if (time.isValid())
+		return true;
+	if (m_timeRegExp2.exactMatch(text)) { //hh:mm:ss
+		time = QTime(m_timeRegExp2.cap(1).toInt(), m_timeRegExp2.cap(3).toInt(), m_timeRegExp2.cap(5).toInt());
+		return true;
+	}
+	return false;
+}
+
 void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool inGUI)
 {
 	if (!inGUI) {
@@ -1000,35 +1029,30 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 			*m_importingStatement << ( t.isEmpty() ? QVariant() : t.toDouble() );
 		}
 		else if (detectedType==_DATE_TYPE) {
-			QDate date( QDate::fromString(text, Qt::ISODate) ); //same as m_dateRegExp1
-			if (!date.isValid() && m_dateRegExp2.exactMatch(text)) //dd-mm-yyyy
-				date = QDate(text.mid(6,4).toInt(), text.mid(3,2).toInt(), text.left(2).toInt());
-			*m_importingStatement << date;
+			//QDate date( QDate::fromString(text, Qt::ISODate) ); //same as m_dateRegExp1
+			QDate date;
+			if (parseDate(text, date))
+				*m_importingStatement << date;
 		}
 		else if (detectedType==_TIME_TYPE) {
-			QTime time( QTime::fromString(text, Qt::ISODate) ); //same as m_timeRegExp1
-			if (!time.isValid() && m_timeRegExp2.exactMatch(text)) //hh:mm:ss
-				time = QTime(text.left(2).toInt(), text.mid(3,2).toInt(), text.mid(6,2).toInt());
-			*m_importingStatement << time;
+			QTime time;
+			if (parseTime(text, time))
+				*m_importingStatement << time;
 		}
 		else if (detectedType==_DATETIME_TYPE) {
-			const QStringList dateTimeList( QStringList::split(" ", text) );
-//! @todo also support ISODateTime's "T" separator?
+			QStringList dateTimeList( QStringList::split(" ", text) );
+			if (dateTimeList.count()<2)
+				dateTimeList = QStringList::split("T", text); //also support ISODateTime's "T" separator
 //! @todo also support timezones?
 			if (dateTimeList.count()>=2) {
-				//try all combinations
 				QString datePart( dateTimeList[0].stripWhiteSpace() );
-				QString timePart( dateTimeList[1].stripWhiteSpace() );
-				QDateTime dateTime;
-				dateTime.setDate( QDate::fromString(datePart, Qt::ISODate) ); //same as m_dateRegExp1
-				if (!dateTime.date().isValid() && m_dateRegExp2.exactMatch(datePart)) //dd-mm-yyyy
-					dateTime.setDate( QDate(datePart.mid(6,4).toInt(), 
-						datePart.mid(3,2).toInt(), datePart.left(2).toInt()) );
-				dateTime.setTime( QTime::fromString(timePart, Qt::ISODate) ); //same as m_timeRegExp1
-				if (!dateTime.time().isValid() && m_timeRegExp2.exactMatch(timePart)) //hh:mm:ss
-					dateTime.setTime( QTime(timePart.left(2).toInt(), 
-						timePart.mid(3,2).toInt(), timePart.mid(6,2).toInt()) );
-				*m_importingStatement << dateTime;
+				QDate date;
+				if (parseDate(datePart, date)) {
+					QString timePart( dateTimeList[1].stripWhiteSpace() );
+					QTime time;
+					if (parseTime(timePart, time))
+						*m_importingStatement << QDateTime(date, time);
+				}
 			}
 		}
 		else //_TEXT_TYPE and the rest
