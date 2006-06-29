@@ -417,7 +417,7 @@ KarbonView::dropEvent( QDropEvent *e )
 	{
 		VObject *clipart = selection.first();
 		QPointF p( e->pos() );
-		p = m_canvas->viewConverter()->viewToNormal( p ); // TODO: or normalToView ?
+		p = m_canvas->viewConverter()->viewToDocument( p ); // TODO: or documentToView ?
 		QMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
 
 		VTransformCmd trafo( 0L, mat );

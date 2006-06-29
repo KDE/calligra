@@ -92,7 +92,8 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
 void KarbonCanvas::wheelEvent(QWheelEvent *e)
 {
     double steps = e->delta() / 240.0;
-    int zoom = qRound(m_zoomHandler.zoom() / (float) pow(2.0, steps));
+    // TODO: zoomhandler doesn't have a zoom() function, not sure how to replace it at the moment, so disable it till it's fixed (tbscope)
+    // int zoom = qRound(m_zoomHandler.zoom() / (float) pow(2.0, steps));
     //zoomChanged( qMax(10, qMin(1000, zoom)) );
 }
 
