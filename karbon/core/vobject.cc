@@ -22,7 +22,6 @@
 #include "vdocument.h"
 #include "vfill.h"
 #include "vobject.h"
-#include "vobject_iface.h"
 #include "vstroke.h"
 
 #include <KoStore.h>

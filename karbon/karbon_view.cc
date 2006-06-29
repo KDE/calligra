@@ -94,7 +94,6 @@
 // The rest.
 #include "karbon_factory.h"
 #include "karbon_part.h"
-#include "karbon_view_iface.h"
 #include "vglobal.h"
 #include "vselection.h"
 #include "vtool.h"

@@ -26,9 +26,10 @@
 
 #include <kdebug.h>
 
+#include <math.h>
+
 #include "vpath.h"
 #include "vtext.h"
-#include "vtext_iface.h"
 #include "vstroke.h"
 #include "vfill.h"
 #include "vvisitor.h"

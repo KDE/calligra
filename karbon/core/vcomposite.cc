@@ -29,7 +29,6 @@
 #include <KoGenStyles.h>
 
 #include "vcomposite.h"
-#include "vcomposite_iface.h"
 #include "vfill.h"
 #include "vpainter.h"
 #include "vsegment.h"

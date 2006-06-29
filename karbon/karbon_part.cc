@@ -40,7 +40,6 @@
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
-#include "karbon_part_iface.h"
 #include "karbon_view.h"
 #include "vcommand.h"
 #include "vglobal.h"
