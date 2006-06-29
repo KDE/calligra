@@ -328,7 +328,7 @@ QStringList StyleManager::styleNames() const
 {
   QStringList list;
 
-  list.push_back( "Default" );
+  list.push_back( i18n("Default") );
 
   Styles::const_iterator iter = m_styles.begin();
   Styles::const_iterator end  = m_styles.end();
