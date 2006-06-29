@@ -48,6 +48,11 @@ bool AbstractDataManipulator::process (Element* element)
       int rowidx = row - range.top();
       bool parse = false;
       FormatType fmtType = No_format;
+      
+      // do nothing if we don't want a change here
+      if (!wantChange (element, col, row))
+        continue;
+      
       if (m_reverse) {
         // reverse - use the stored value
         if (oldData.contains (colidx) && oldData[colidx].contains (rowidx)) {
@@ -294,6 +299,49 @@ Format *FillManipulator::newFormat (Element *element, int col, int row)
     case Right: colidx = 0; break;
   };
   return formats[colidx][rowidx];
+}
+
+CaseManipulator::CaseManipulator ()
+{
+  m_mode = Upper;
+  m_name = i18n ("Change Case");
+}
+
+CaseManipulator::~CaseManipulator ()
+{
+}
+
+Value CaseManipulator::newValue (Element *element, int col, int row,
+    bool *parse, FormatType *)
+{
+  // if we are here, we know that we want the change
+  *parse = false;
+  QString str = m_sheet->cellAt (col, row)->value().asString();
+  switch (m_mode) {
+    case Upper: str = str.toUpper();
+    break;
+    case Lower: str = str.toLower();
+    break;
+    case FirstUpper:
+      if (str.length() > 0)
+        str = str.at(0).toUpper() + str.right(str.length()-1);
+    break;
+  };
+  return Value (str);
+}
+
+bool CaseManipulator::wantChange (Element *element, int col, int row)
+{
+  Cell *cell = m_sheet->cellAt (col, row);
+  // don't change cells with a formula
+  if (cell->isFormula())
+    return false;
+  // don't change cells containing other things than strings
+  if (!cell->value().isString())
+    return false;
+  // original version was dismissing text starting with '!' and '*', is this
+  // necessary ?
+  return true;
 }
 
 ProtectedCheck::ProtectedCheck ()

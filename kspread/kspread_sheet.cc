@@ -1647,73 +1647,37 @@ void Sheet::setSelectionSize(Selection* selectionInfo,
   manipulator->execute();
 }
 
-
-struct SetSelectionUpperLowerWorker : public Sheet::CellWorker {
-    int _type;
-    Sheet   * _s;
-    SetSelectionUpperLowerWorker( int type, Sheet * s )
-      : Sheet::CellWorker( false ), _type( type ),  _s( s ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region )
-    {
-      return new UndoChangeAreaTextCell( doc, sheet, region );
-    }
-    bool testCondition( Cell* c ) {
-  return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
-     && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
-     && !c->isPartOfMerged() );
-    }
-    void doWork( Cell* cell, bool, int, int )
-    {
-  cell->setDisplayDirtyFlag();
-  if ( _type == -1 )
-      cell->setCellText( (cell->text().toLower()));
-  else if ( _type == 1 )
-      cell->setCellText( (cell->text().toUpper()));
-  cell->clearDisplayDirtyFlag();
-    }
-};
-
-void Sheet::setSelectionUpperLower( Selection* selectionInfo,
-                                           int _type )
+void Sheet::setSelectionUpperLower( Selection* selectionInfo, int _type )
 {
-  SetSelectionUpperLowerWorker w( _type, this );
-  workOnCells( selectionInfo, w );
+  CaseManipulator::CaseMode m;
+  QString name;
+  if (_type == -1) {
+    m = CaseManipulator::Lower;
+    name = i18n ("Switch to lowercase");
+  }
+  else if (_type == 1) {
+    m = CaseManipulator::Upper;
+    name = i18n ("Switch to uppercase");
+  }
+  else
+    return;  // wrong type
+  CaseManipulator *manipulator = new CaseManipulator;
+  manipulator->setSheet (this);
+  manipulator->setName (name);
+  manipulator->changeMode (m);
+  manipulator->add (*selectionInfo);
+  manipulator->execute ();
 }
-
-
-struct SetSelectionFirstLetterUpperWorker : public Sheet::CellWorker
-{
-    Changes * _c;
-    Sheet   * _s;
-    SetSelectionFirstLetterUpperWorker( Sheet * s )
-      : Sheet::CellWorker( false ),  _s( s ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
-  return   new UndoChangeAreaTextCell( doc, sheet, region );
-    }
-    bool testCondition( Cell* c ) {
-  return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
-     && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
-     && !c->isPartOfMerged() );
-    }
-    void doWork( Cell* cell, bool, int, int )
-    {
-
-  cell->setDisplayDirtyFlag();
-  QString tmp = cell->text();
-  int len = tmp.length();
-  cell->setCellText( (tmp.at(0).toUpper()+tmp.right(len-1)) );
-  cell->clearDisplayDirtyFlag();
-    }
-};
 
 void Sheet::setSelectionfirstLetterUpper( Selection* selectionInfo)
 {
-  SetSelectionFirstLetterUpperWorker w(  this );
-  workOnCells( selectionInfo, w );
+  CaseManipulator *manipulator = new CaseManipulator;
+  manipulator->setSheet (this);
+  manipulator->setName (i18n ("First letter uppercase"));
+  manipulator->changeMode (CaseManipulator::FirstUpper);
+  manipulator->add (*selectionInfo);
+  manipulator->execute ();
 }
-
 
 struct SetSelectionVerticalTextWorker : public Sheet::CellWorker {
     bool _b;

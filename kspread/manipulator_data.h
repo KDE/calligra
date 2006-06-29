@@ -56,6 +56,11 @@ class AbstractDataManipulator : public Manipulator {
     virtual Value newValue (Element *element, int col, int row,
       bool *parse, FormatType *fmtType) = 0;
 
+    /** do we want to change this cell ? */
+    virtual bool wantChange (Element *element, int col, int row) {
+      return true;
+    };
+    
     /** return value stored at given coordinates */
     Value stored (int col, int row, bool *parse);
 
@@ -141,6 +146,31 @@ class KSPREAD_EXPORT FillManipulator : public AbstractDFManipulator {
     virtual Format *newFormat (Element *element, int col, int row);
     Direction m_dir;
 };
+
+/** CaseManipulator converts data to uppercase/lowercase/... */
+class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator {
+  public:
+    CaseManipulator ();
+    virtual ~CaseManipulator ();
+    
+    enum CaseMode {
+      Upper = 0,
+      Lower,
+      FirstUpper
+    };
+    void changeMode (CaseMode mode) { m_mode = mode; };
+    void changeLowerCase ();
+    void changeFirstUpper ();
+  protected:
+    virtual Value newValue (Element *element, int col, int row,
+        bool *parse, FormatType *fmtType);
+
+    /** do we want to change this cell ? */
+    virtual bool wantChange (Element *element, int col, int row);
+    
+    CaseMode m_mode;
+};
+
 
 /** class ProtectedCheck can be used to check, whether a particular
   range is protected or not */
