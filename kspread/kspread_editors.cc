@@ -1584,7 +1584,6 @@ class RegionSelector::Private
     View* view;
     QDialog* parentDialog;
     KDialog* dialog;
-    QLabel* label;
     KTextEdit* textEdit;
     QToolButton* button;
     FormulaEditorHighlighter* highlighter;
@@ -1605,7 +1604,6 @@ RegionSelector::RegionSelector( QWidget* parent )
   d->parentDialog = 0;
   d->view = 0;
   d->dialog = 0;
-  d->label = 0; // construct on setting label text [setLabel(const QString&)]
   d->highlighter = 0;
   d->button = new QToolButton( this );
   d->button->setCheckable( true );
@@ -1656,27 +1654,6 @@ void RegionSelector::setDialog( QDialog* dialog )
   d->parentDialog = dialog;
 }
 
-void RegionSelector::setLabel( const QString& text )
-{
-  if ( text.isEmpty() )
-  {
-    if ( d->label )
-    {
-      delete d->label;
-      d->label = 0;
-    }
-  }
-  else
-  {
-    if ( !d->label )
-    {
-      d->label = new QLabel( text, this );
-      d->label->setBuddy( d->textEdit );
-      static_cast<QHBoxLayout*>( layout() )->insertWidget( 0, d->label );
-    }
-  }
-}
-
 KTextEdit* RegionSelector::textEdit() const
 {
   return d->textEdit;
@@ -1712,9 +1689,10 @@ void RegionSelector::switchDisplayMode( bool state )
   {
     d->displayMode = Dialog;
 
-    d->dialog = new KDialog( d->parentDialog->parentWidget() );
-    d->dialog->resize( 400, 20 );
+    d->dialog = new KDialog( d->parentDialog->parentWidget(), Qt::Tool );
+    d->dialog->resize( d->parentDialog->width(), 20 );
     d->dialog->move( d->parentDialog->pos() );
+    d->dialog->setButtons( 0 );
     d->dialog->setModal( false );
 
     if ( d->selectionMode == SingleCell )
@@ -1726,16 +1704,20 @@ void RegionSelector::switchDisplayMode( bool state )
       d->dialog->setCaption( i18n("Select Multiple Cells") );
     }
 
-    QHBoxLayout* layout = new QHBoxLayout( d->dialog );
+    QWidget* widget = new QWidget( d->dialog );
+    QHBoxLayout* layout = new QHBoxLayout( widget );
     layout->setMargin( 0 );
     layout->setSpacing( 0 );
     layout->addWidget( d->textEdit );
     layout->addWidget( d->button );
 
+    d->dialog->setMainWidget( widget );
     d->dialog->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     d->dialog->installEventFilter( this );
-    d->parentDialog->hide();
+    d->dialog->layout()->setMargin( 0 );
+    d->dialog->layout()->setSpacing( 0 );
     d->dialog->show();
+    d->parentDialog->hide();
   }
   else
   {
@@ -1745,9 +1727,9 @@ void RegionSelector::switchDisplayMode( bool state )
     layout()->addWidget( d->button );
 
     d->parentDialog->move( d->dialog->pos() );
+    d->parentDialog->show();
     delete d->dialog;
     d->dialog = 0;
-    d->parentDialog->show();
   }
 }
 
