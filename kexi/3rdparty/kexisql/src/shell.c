@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include "sqlite.h"
 #include <ctype.h>
-#include <config-kexi.h>
+#include <kexi/config-kexi.h>
 #if defined(_WIN32)
 # include <io.h>
 #endif
