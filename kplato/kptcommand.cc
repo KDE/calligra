@@ -366,6 +366,7 @@ void NodeDeleteCmd::execute() {
             m_appointments.append(it.current());
         }
         m_parent->delChildNode(m_node, false/*take*/);
+        m_node->setParent(0);
         m_mine = true;
         setSchScheduled(false);
         setCommandType(1);
@@ -423,6 +424,7 @@ void TaskAddCmd::execute() {
 }
 void TaskAddCmd::unexecute() {
     m_node->getParent()->delChildNode(m_node, false/*take*/);
+    m_node->setParent(0);
     m_added = false;
     
     setCommandType(1);
@@ -455,6 +457,7 @@ void SubtaskAddCmd::execute() {
 }
 void SubtaskAddCmd::unexecute() {
     m_parent->delChildNode(m_node, false/*take*/);
+    m_node->setParent(0);
     m_added = false;
     
     setCommandType(1);
