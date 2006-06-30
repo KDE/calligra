@@ -79,9 +79,9 @@ Part::Part(QWidget *parentWidget,
 
 Part::~Part() {
     m_config.save();
+    delete m_commandHistory; // before project, in case of dependencies...
     delete m_project;
     delete m_projectDialog;
-    delete m_commandHistory;
     if (m_embeddedGanttView)
       delete m_embeddedGanttView;
     if (m_embeddedContext)
