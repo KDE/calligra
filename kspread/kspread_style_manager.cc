@@ -349,6 +349,7 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
       styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
     }
   }
+  return styleElements;
 }
 
 // static
