@@ -173,6 +173,7 @@ QString SheetAdaptor::cell( int x, int y )
 
 QString SheetAdaptor::cell( const QString& name )
 {
+  Q_UNUSED(name)
 //     QString str = objeId();
 //     str += '/';
 //     str += name.toLatin1();

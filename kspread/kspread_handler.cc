@@ -208,6 +208,7 @@ InsertPictureHandler::~InsertPictureHandler()
 }
 void InsertPictureHandler::insertObject( QRect r)
 {
+  Q_UNUSED(r)
   //m_view->insertPicture(/* r,*/ m_file );
 }
 

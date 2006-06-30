@@ -276,6 +276,7 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
     m_dlg( new ConditionalWidget( this ) ),
     m_marker( marker )
 {
+  Q_UNUSED(name)
   setButtons( KDialog::Ok|KDialog::Cancel );
   setCaption( i18n( "Conditional Cell Attributes") );
 

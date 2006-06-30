@@ -2712,6 +2712,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                                 QPen const & rightPen, QPen const & /*bottomPen*/,
                                 QPen const & leftPen, QPen const & topPen )
 {
+  Q_UNUSED(cellRef)
     /*
         *** Notes about optimisation ***
 
@@ -2740,7 +2741,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   const bool isMergedOrObscured = isPartOfMerged() || isObscured();
   bool paintTop;
   bool paintLeft;
-  bool paintBottom=false;
+//   bool paintBottom=false;
   bool paintRight=false;
 
   paintLeft   = ( (paintBorder & LeftBorder) &&

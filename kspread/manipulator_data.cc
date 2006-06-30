@@ -271,6 +271,7 @@ FillManipulator::~FillManipulator ()
 Value FillManipulator::newValue (Element *element, int col, int row,
     bool *parse, FormatType *fmtType)
 {
+  Q_UNUSED(fmtType)
   QRect range = element->rect();
   int colidx = col - range.left();
   int rowidx = row - range.top();
@@ -314,6 +315,7 @@ CaseManipulator::~CaseManipulator ()
 Value CaseManipulator::newValue (Element *element, int col, int row,
     bool *parse, FormatType *)
 {
+  Q_UNUSED(element)
   // if we are here, we know that we want the change
   *parse = false;
   QString str = m_sheet->cellAt (col, row)->value().asString();
@@ -332,6 +334,7 @@ Value CaseManipulator::newValue (Element *element, int col, int row,
 
 bool CaseManipulator::wantChange (Element *element, int col, int row)
 {
+  Q_UNUSED(element)
   Cell *cell = m_sheet->cellAt (col, row);
   // don't change cells with a formula
   if (cell->isFormula())

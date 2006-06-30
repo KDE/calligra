@@ -5400,6 +5400,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
                              const KoOasisStyles& oasisStyles, int & indexCol,
                              const Styles& styleMap)
 {
+  Q_UNUSED(styleMap)
     kDebug()<<"bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
     bool collapsed = ( column.attributeNS( KoXmlNS::table, "visibility", QString::null ) == "collapse" );
@@ -5636,8 +5637,6 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
                             {
         if (k != cols)
           columnIndex++;
-
-        Style* targetStyle = style;
 
         for ( int newRow = backupRow; newRow < endRow;++newRow )
         {

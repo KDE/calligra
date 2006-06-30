@@ -58,6 +58,9 @@ class AbstractDataManipulator : public Manipulator {
 
     /** do we want to change this cell ? */
     virtual bool wantChange (Element *element, int col, int row) {
+      Q_UNUSED(element)
+      Q_UNUSED(col)
+      Q_UNUSED(row)
       return true;
     };
     
