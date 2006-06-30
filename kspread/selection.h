@@ -44,7 +44,18 @@ class View;
 class KSPREAD_EXPORT Selection : public QObject, public Region
 {
   Q_OBJECT
+
 public:
+  /**
+   * The selection mode.
+   */
+  // TODO Stefan: merge with RegionSelector::SelectionMode
+  enum Mode
+  {
+    SingleCell = 0,     ///< single cell selection mode
+    MultipleCells = 1   ///< multiple cell selection mode
+  };
+
   /**
    * Constructor.
    * Creates a new selection with (1,1) as initial location.
@@ -180,8 +191,8 @@ public:
   Element* activeElement() const;
 
   /**
-   * Sets the starting position and the length of a subregion in a multiple
-   * selection
+   * Sets the starting position and the length of a subregion in a selection
+   * which allows multiple occurences of elements.
    */
   void setActiveSubRegion(uint start, uint length);
 
@@ -207,9 +218,14 @@ public:
 
 
   /**
-   * Sets, wether multiple selections are allowed.
+   * Sets, wether multiple occurences of elements are allowed.
    */
-  void setMultipleSelection(bool state);
+  void setMultipleOccurences(bool state);
+
+  /**
+   * \param mode single cell or multiple cell selection
+   */
+  void setSelectionMode(Mode mode);
 
   QRect lastRange(bool extend = true) const;
   QRect extendToMergedAreas(QRect area) const;

@@ -1491,7 +1491,7 @@ View::View( QWidget *_parent, const char *_name,
 
     d->selection = new Selection( this );
     d->choice = new Selection( this );
-    d->choice->setMultipleSelection(true);
+    d->choice->setMultipleOccurences(true);
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
     connect(d->choice, SIGNAL(changed(const Region&)), this, SLOT(slotChangeChoice(const Region&)));
 

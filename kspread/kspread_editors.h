@@ -331,7 +331,7 @@ class KSPREAD_EXPORT RegionSelector : public QWidget
   Q_OBJECT
 
 public:
-  enum SelectionMode { SingleCell, MutipleCells };
+  enum SelectionMode { SingleCell = 0, MultipleCells = 1 }; // TODO Stefan: merge with Selection::Mode
   enum DisplayMode { Widget, Dialog };
 
   RegionSelector( QWidget* parent = 0 );

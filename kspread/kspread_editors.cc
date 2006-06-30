@@ -1675,6 +1675,14 @@ bool RegionSelector::eventFilter( QObject* object, QEvent* event )
   {
     Private::s_focussedSelector = this;
     d->view->canvasWidget()->startChoose();
+    if (d->selectionMode == SingleCell)
+    {
+      d->view->choice()->setSelectionMode( Selection::SingleCell );
+    }
+    else
+    {
+      d->view->choice()->setSelectionMode( Selection::MultipleCells );
+    }
     // TODO Stefan: initialize choice
   }
   return QObject::eventFilter( object, event );

@@ -36,8 +36,10 @@ SolverDialog::SolverDialog( View* view, QWidget* parent )
   setModal( false );
   function->setView( view );
   function->setDialog( this );
+  function->setSelectionMode( RegionSelector::SingleCell );
   parameters->setView( view );
   parameters->setDialog( this );
+  parameters->setSelectionMode( RegionSelector::MultipleCells );
 
   QWidget* detailsWidget = new QWidget( this );
   Ui::SolverDetails::setupUi( detailsWidget );

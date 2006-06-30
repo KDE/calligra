@@ -61,7 +61,8 @@ public:
     colors.push_back(Qt::darkCyan);
     colors.push_back(Qt::darkYellow);
 
-    multipleSelection = false;
+    multipleOccurences = false;
+    selectionMode = MultipleCells;
 
     activeElement = 0;
     activeSubRegionStart = 0;
@@ -75,7 +76,8 @@ public:
   QPoint marker;
   QList<QColor> colors;
 
-  bool multipleSelection : 1;
+  bool multipleOccurences : 1;
+  Mode selectionMode : 2;
 
   int activeElement;
   int activeSubRegionStart;
@@ -186,6 +188,12 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
   if (!d->view->activeSheet())
     return;
 
+  if (d->selectionMode == SingleCell)
+  {
+    initialize(range.bottomRight(), sheet);
+    return;
+  }
+
   if (!sheet)
   {
     if (d->sheet)
@@ -259,6 +267,12 @@ void Selection::initialize(const Region& region, Sheet* sheet)
 {
   if (!region.isValid())
       return;
+
+  if (d->selectionMode == SingleCell)
+  {
+    initialize(cells()[0]->rect().bottomRight(), sheet);
+    return;
+  }
 
   if (!sheet)
   {
@@ -334,6 +348,12 @@ void Selection::update(const QPoint& point)
 {
   uint count = cells().count();
 
+  if (d->selectionMode == SingleCell)
+  {
+    initialize(point);
+    return;
+  }
+
   if (cells().isEmpty())
   {
     add(point);
@@ -373,7 +393,7 @@ void Selection::update(const QPoint& point)
 
   delete cells().takeAt(d->activeElement);
   // returns iterator to the new element (before 'it') or 'it'
-  insert(d->activeElement, newRange, sheet, d->multipleSelection);
+  insert(d->activeElement, newRange, sheet, d->multipleOccurences);
   d->activeSubRegionLength += cells().count() - count;
 
   // The call to insert() above can just return the iterator which has been
@@ -461,7 +481,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   if (!isValid(point))
     return;
 
-  if (isEmpty())
+  if (isEmpty() || d->selectionMode == SingleCell)
   {
     initialize(point, sheet);
     return;
@@ -498,7 +518,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   }
 
   uint count = cells().count();
-  if (d->multipleSelection)
+  if (d->multipleOccurences)
   {
     // always succesful
     insert(++d->activeElement, point, sheet, false);
@@ -525,7 +545,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   if (!isValid(range) || (range == QRect(0,0,1,1)))
     return;
 
-  if (isEmpty())
+  if (isEmpty() || d->selectionMode == SingleCell)
   {
     initialize(range, sheet);
     return;
@@ -572,7 +592,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
 
   uint count = cells().count();
   Element* element;
-  if (d->multipleSelection)
+  if (d->multipleOccurences)
   {
     //always succesful
     insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)), sheet, false);
@@ -802,9 +822,14 @@ QString Selection::activeSubRegionName() const
   return names.isEmpty() ? "" : names.join(";");
 }
 
-void Selection::setMultipleSelection(bool state)
+void Selection::setMultipleOccurences(bool state)
 {
-  d->multipleSelection = state;
+  d->multipleOccurences = state;
+}
+
+void Selection::setSelectionMode(Mode mode)
+{
+  d->selectionMode = mode;
 }
 
 const QList<QColor>& Selection::colors() const
