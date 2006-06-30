@@ -32,9 +32,28 @@
 
 namespace Kross { namespace KexiDB {
 
+    // Forward-declarations.
+    class KexiDBFieldList;
+    class KexiDBQuerySchema;
+
     /**
      * The KexiDBSchema object provides common functionality for schemas
      * like KexiDBTableSchema or KexiDBQuerySchema.
+     *
+     * Example (in Python) ;
+     * @code
+     * # Get the tableschema from a KexiDBConnection object.
+     * tableschema = connection.tableSchema("dept")
+     * # Print some informations.
+     * print "table=%s description=%s" % (tableschema.name(), tableschema.description())
+     * # Get the "SELECT * FROM dept;" queryschema for the table.
+     * queryschema = tableschema.query()
+     * # Walk through the fields/columns the queryschema has and print the fieldnames.
+     * for field in queryschema.fieldlist().fields():
+     *     print "fieldname=%s" % field.name()
+     * # Execute the query. The returned KexiDBCursor object could be used then to iterate through the result.
+     * cursor = connection.executeQuerySchema(queryschema)
+     * @endcode
      */
     template<class T>
     class KexiDBSchema : public Kross::Api::Class<T>
@@ -46,22 +65,22 @@ namespace Kross { namespace KexiDB {
         private:
 
             /** Returns the name of the schema. */
-            Kross::Api::Object::Ptr name(Kross::Api::List::Ptr);
+            const QString name() const;
             /** Set the name of the schema. */
-            Kross::Api::Object::Ptr setName(Kross::Api::List::Ptr);
+            void setName(const QString& name);
 
             /** Returns the caption of the schema. */
-            Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
+            const QString caption() const;
             /** Set the caption of the schema. */
-            Kross::Api::Object::Ptr setCaption(Kross::Api::List::Ptr);
+            void setCaption(const QString& caption);
 
             /** Returns a description of the schema. */
-            Kross::Api::Object::Ptr description(Kross::Api::List::Ptr);
+            const QString description() const;
             /** Set a description of the schema. */
-            Kross::Api::Object::Ptr setDescription(Kross::Api::List::Ptr);
+            void setDescription(const QString& description);
 
             /** Returns the KexiDBFieldList object this schema has. */
-            Kross::Api::Object::Ptr fieldlist(Kross::Api::List::Ptr);
+            KexiDBFieldList* fieldlist() const;
 
         protected:
             ::KexiDB::SchemaData* m_schema;
@@ -83,7 +102,7 @@ namespace Kross { namespace KexiDB {
 
             /** Return the KexiDBQuerySchema object that represents a
             "SELECT * FROM this_KexiDBTableSchema_object" SQL-statement. */
-            Kross::Api::Object::Ptr query(Kross::Api::List::Ptr);
+            KexiDBQuerySchema* query();
 
     };
 
@@ -101,11 +120,11 @@ namespace Kross { namespace KexiDB {
         private:
 
             /** Returns the SQL-statement of this query schema. */
-            Kross::Api::Object::Ptr statement(Kross::Api::List::Ptr);
+            const QString statement() const;
             /** Set the SQL-statement of this query schema. */
-            Kross::Api::Object::Ptr setStatement(Kross::Api::List::Ptr);
+            void setStatement(const QString& statement);
             /** Set the where-expression. */
-            Kross::Api::Object::Ptr setWhereExpression(Kross::Api::List::Ptr);
+            bool setWhereExpression(const QString& whereexpression);
 
     };
 

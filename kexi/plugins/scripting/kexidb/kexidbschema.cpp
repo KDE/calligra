@@ -38,66 +38,54 @@ KexiDBSchema<T>::KexiDBSchema(const QString& name, ::KexiDB::SchemaData* schema,
     , m_schema(schema)
     , m_fieldlist(fieldlist)
 {
-    addFunction("name", &KexiDBSchema<T>::name);
-    addFunction("setName", &KexiDBSchema<T>::setName);
+    this->template addFunction0<Kross::Api::Variant>("name", this, &KexiDBSchema<T>::name);
+    this->template addFunction1<void, Kross::Api::Variant>("setName", this, &KexiDBSchema<T>::setName);
 
-    addFunction("caption", &KexiDBSchema<T>::caption);
-    addFunction("setCaption", &KexiDBSchema<T>::setCaption);
+    this->template addFunction0<Kross::Api::Variant>("caption", this, &KexiDBSchema<T>::caption);
+    this->template addFunction1<void, Kross::Api::Variant>("setCaption", this, &KexiDBSchema<T>::setCaption);
 
-    addFunction("description", &KexiDBSchema<T>::description);
-    addFunction("setDescription", &KexiDBSchema<T>::setDescription);
+    this->template addFunction0<Kross::Api::Variant>("description", this, &KexiDBSchema<T>::description);
+    this->template addFunction1<void, Kross::Api::Variant>("setDescription", this, &KexiDBSchema<T>::setDescription);
 
-    addFunction("fieldlist", &KexiDBSchema<T>::fieldlist);
+    this->template addFunction0<KexiDBFieldList>("fieldlist", this, &KexiDBSchema<T>::fieldlist);
 }
 
 template<class T>
-KexiDBSchema<T>::~KexiDBSchema<T>()
-{
+KexiDBSchema<T>::~KexiDBSchema<T>() {
 }
 
 template<class T>
-Kross::Api::Object::Ptr KexiDBSchema<T>::name(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(m_schema->name());
+const QString KexiDBSchema<T>::name() const {
+    return m_schema->name();
 }
 
 template<class T>
-Kross::Api::Object::Ptr KexiDBSchema<T>::setName(Kross::Api::List::Ptr args)
-{
-    m_schema->setName(Kross::Api::Variant::toString(args->item(0)));
-    return name(args);
+void KexiDBSchema<T>::setName(const QString& name) {
+    m_schema->setName(name);
 }
 
 template<class T>
-Kross::Api::Object::Ptr KexiDBSchema<T>::caption(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(m_schema->caption());
+const QString KexiDBSchema<T>::caption() const {
+    return m_schema->caption();
 }
 
 template<class T>
-Kross::Api::Object::Ptr KexiDBSchema<T>::setCaption(Kross::Api::List::Ptr args)
-{
-    m_schema->setCaption(Kross::Api::Variant::toString(args->item(0)));
-    return caption(args);
+void KexiDBSchema<T>::setCaption(const QString& caption) {
+    m_schema->setCaption(caption);
 }
 
 template<class T>
-Kross::Api::Object::Ptr KexiDBSchema<T>::description(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(m_schema->description());
+const QString KexiDBSchema<T>::description() const {
+    return m_schema->description();
 }
 
 template<class T>
-Kross::Api::Object::Ptr KexiDBSchema<T>::setDescription(Kross::Api::List::Ptr args)
-{
-    m_schema->setDescription(Kross::Api::Variant::toString(args->item(0)));
-    return description(args);
+void KexiDBSchema<T>::setDescription(const QString& description) {
+    m_schema->setDescription(description);
 }
 
 template<class T>
-Kross::Api::Object::Ptr KexiDBSchema<T>::fieldlist(Kross::Api::List::Ptr)
-{
-    //TODO cache; pass optional KexiDBFieldList* to our class and return here.
+KexiDBFieldList* KexiDBSchema<T>::fieldlist() const {
     return new KexiDBFieldList(m_fieldlist);
 }
 
@@ -108,25 +96,21 @@ Kross::Api::Object::Ptr KexiDBSchema<T>::fieldlist(Kross::Api::List::Ptr)
 KexiDBTableSchema::KexiDBTableSchema(::KexiDB::TableSchema* tableschema)
     : KexiDBSchema<KexiDBTableSchema>("KexiDBTableSchema", tableschema, tableschema)
 {
-    addFunction("query", &KexiDBTableSchema::query);
+    this->addFunction0<KexiDBQuerySchema>("query", this, &KexiDBTableSchema::query);
 }
 
-KexiDBTableSchema::~KexiDBTableSchema()
-{
+KexiDBTableSchema::~KexiDBTableSchema() {
 }
 
-const QString KexiDBTableSchema::getClassName() const
-{
+const QString KexiDBTableSchema::getClassName() const {
     return "Kross::KexiDB::KexiDBTableSchema";
 }
 
-::KexiDB::TableSchema* KexiDBTableSchema::tableschema()
-{
+::KexiDB::TableSchema* KexiDBTableSchema::tableschema() {
     return static_cast< ::KexiDB::TableSchema* >(m_schema);
 }
 
-Kross::Api::Object::Ptr KexiDBTableSchema::query(Kross::Api::List::Ptr)
-{
+KexiDBQuerySchema* KexiDBTableSchema::query() {
     return new KexiDBQuerySchema( tableschema()->query() );
 }
 
@@ -137,45 +121,35 @@ Kross::Api::Object::Ptr KexiDBTableSchema::query(Kross::Api::List::Ptr)
 KexiDBQuerySchema::KexiDBQuerySchema(::KexiDB::QuerySchema* queryschema)
     : KexiDBSchema<KexiDBQuerySchema>("KexiDBQuerySchema", queryschema, queryschema)
 {
-    addFunction("statement", &KexiDBQuerySchema::statement);
-    addFunction("setStatement", &KexiDBQuerySchema::setStatement);
-    addFunction("setWhereExpression", &KexiDBQuerySchema::setWhereExpression);
+    this->addFunction0<Kross::Api::Variant>("statement", this, &KexiDBQuerySchema::statement);
+    this->addFunction1<void, Kross::Api::Variant>("setStatement", this, &KexiDBQuerySchema::setStatement);
+    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("setWhereExpression", this, &KexiDBQuerySchema::setWhereExpression);
 }
 
-KexiDBQuerySchema::~KexiDBQuerySchema()
-{
+KexiDBQuerySchema::~KexiDBQuerySchema() {
 }
 
-const QString KexiDBQuerySchema::getClassName() const
-{
+const QString KexiDBQuerySchema::getClassName() const {
     return "Kross::KexiDB::KexiDBQuerySchema";
 }
 
-::KexiDB::QuerySchema* KexiDBQuerySchema::queryschema()
-{
+::KexiDB::QuerySchema* KexiDBQuerySchema::queryschema() {
     return static_cast< ::KexiDB::QuerySchema* >(m_schema);
 }
 
-Kross::Api::Object::Ptr KexiDBQuerySchema::statement(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(
-           static_cast< ::KexiDB::QuerySchema* >(m_schema)->statement() );
+const QString KexiDBQuerySchema::statement() const {
+    return static_cast< ::KexiDB::QuerySchema* >(m_schema)->statement();
 }
 
-Kross::Api::Object::Ptr KexiDBQuerySchema::setStatement(Kross::Api::List::Ptr args)
-{
-    static_cast< ::KexiDB::QuerySchema* >(m_schema)->setStatement(
-        Kross::Api::Variant::toString(args->item(0))
-    );
-    return statement(args);
+void KexiDBQuerySchema::setStatement(const QString& statement) {
+    static_cast< ::KexiDB::QuerySchema* >(m_schema)->setStatement(statement);
 }
 
-Kross::Api::Object::Ptr KexiDBQuerySchema::setWhereExpression(Kross::Api::List::Ptr args)
-{
+bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression) {
     ::KexiDB::BaseExpr* oldexpr = static_cast< ::KexiDB::QuerySchema* >(m_schema)->whereExpression();
 
     ///@todo use ::KexiDB::Parser for such kind of parser-functionality.
-    QString s = Kross::Api::Variant::toString(args->item(0));
+    QString s = whereexpression;
     try {
         QRegExp re("[\"',]{1,1}");
         while(true) {
@@ -217,7 +191,7 @@ Kross::Api::Object::Ptr KexiDBQuerySchema::setWhereExpression(Kross::Api::List::
     catch(Kross::Api::Exception::Ptr e) {
         Kross::krosswarning("Exception in Kross::KexiDB::KexiDBQuerySchema::setWhereExpression: ");
         static_cast< ::KexiDB::QuerySchema* >(m_schema)->setWhereExpression(oldexpr); // fallback
-        return new Kross::Api::Variant(QVariant(false,0));
+        return false;
     }
-    return new Kross::Api::Variant(QVariant(true,0));
+    return true;
 }

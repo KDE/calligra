@@ -121,6 +121,14 @@ namespace Kross { namespace Api {
             ListT(QValueList<OBJECT> values) : List(values) {}
 
             template< typename TYPE >
+            ListT(QValueList<TYPE> values) : List()
+            {
+                QValueListIterator<TYPE> it(values.begin()), end(values.end());
+                for(; it != end; ++it)
+                    this->append( new OBJECT(*it) );
+            }
+
+            template< typename TYPE >
             ListT(QIntDict<TYPE> values) : List()
             {
                 QIntDictIterator<TYPE> it( values );

@@ -86,24 +86,19 @@ KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDrive
     this->addFunction1< Kross::Api::Variant, KexiDBTransaction >("rollbackTransaction", this, &KexiDBConnection::rollbackTransaction);
     this->addFunction0< KexiDBTransaction >("defaultTransaction", this, &KexiDBConnection::defaultTransaction);
     this->addFunction1< void, KexiDBTransaction >("setDefaultTransaction", this, &KexiDBConnection::setDefaultTransaction);
-
-    addFunction("transactions", &KexiDBConnection::transactions);
-    //this->addFunction0< Kross::Api::ListT<KexiDBTransaction> >("transactions", this, &KexiDBConnection::transactions);
+    this->addFunction0<Kross::Api::List>("transactions", this, &KexiDBConnection::transactions);
 
     this->addFunction0< KexiDBParser >("parser", this, &KexiDBConnection::parser);
 }
 
-KexiDBConnection::~KexiDBConnection()
-{
+KexiDBConnection::~KexiDBConnection() {
 }
 
-const QString KexiDBConnection::getClassName() const
-{
+const QString KexiDBConnection::getClassName() const {
     return "Kross::KexiDB::KexiDBConnection";
 }
 
-::KexiDB::Connection* KexiDBConnection::connection() const
-{
+::KexiDB::Connection* KexiDBConnection::connection() const {
     if(! m_connection)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Connection is NULL.")) );
     //if(m_connection->error())
@@ -157,6 +152,15 @@ KexiDBCursor* KexiDBConnection::executeQuerySchema(KexiDBQuerySchema* queryschem
     return cursor ? new KexiDBCursor(cursor) : 0;
 }
 
+/*TODO
+bool KexiDBConnection::insertRecordIntoFieldlist(KexiDBFieldList* fieldlist, QValueList<QVariant> values) {
+    return connection()->insertRecord(*fieldlist->fieldlist(), values);
+}
+
+bool KexiDBConnection::insertRecordIntoTable(KexiDBTableSchema* tableschema, QValueList<QVariant> values) {
+    return connection()->insertRecord(*tableschema->tableschema(), values);
+}
+*/
 Kross::Api::Object::Ptr KexiDBConnection::insertRecord(Kross::Api::List::Ptr args) {
     QValueList<QVariant> values = Kross::Api::Variant::toList(args->item(1));
     Kross::Api::Object::Ptr obj = args->item(0);
@@ -210,12 +214,8 @@ bool KexiDBConnection::rollbackTransaction(KexiDBTransaction* transaction) { ret
 KexiDBTransaction* KexiDBConnection::defaultTransaction() { return new KexiDBTransaction( connection()->defaultTransaction() ); }
 void KexiDBConnection::setDefaultTransaction(KexiDBTransaction* transaction) { connection()->setDefaultTransaction( transaction->transaction() ); }
 
-Kross::Api::Object::Ptr KexiDBConnection::transactions(Kross::Api::List::Ptr) {
-    QValueList<Kross::Api::Object::Ptr> l;
-    QValueList< ::KexiDB::Transaction > list = connection()->transactions();
-    QValueList< ::KexiDB::Transaction >::Iterator it( list.begin() ), end( list.end() );
-    for(; it != end; ++it) l.append( new KexiDBTransaction(*it) );
-    return new Kross::Api::List(l);
+Kross::Api::List* KexiDBConnection::transactions() {
+    return new Kross::Api::ListT<KexiDBTransaction>( connection()->transactions() );
 }
 
 KexiDBParser* KexiDBConnection::parser() { return new KexiDBParser(this, new ::KexiDB::Parser(connection())); }
