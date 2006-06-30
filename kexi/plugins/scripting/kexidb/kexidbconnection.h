@@ -124,6 +124,7 @@ namespace Kross { namespace KexiDB {
             the opened cursor created for results of this query. */
             KexiDBCursor* executeQuerySchema(KexiDBQuerySchema* queryschema);
 
+//TODO replace following method with a proxymethod.
             /** Inserts the as argument passed KexiDBField object. */
             Kross::Api::Object::Ptr insertRecord(Kross::Api::List::Ptr);
 
@@ -168,8 +169,9 @@ namespace Kross { namespace KexiDB {
             /** Sets default transaction that will be used as context for operations on data in opened
             database for this connection. */
             void setDefaultTransaction(KexiDBTransaction* transaction);
+
             /** Return list of currently active KexiDBTransaction objects. */
-            Kross::Api::Object::Ptr transactions(Kross::Api::List::Ptr);
+            Kross::Api::List* transactions();
 
             /** Return a KexiDBParser object. */
             KexiDBParser* parser();

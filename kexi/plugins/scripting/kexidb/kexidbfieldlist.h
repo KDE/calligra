@@ -36,7 +36,25 @@ namespace Kross { namespace KexiDB {
     class KexiDBFieldList;
 
     /**
-    * A list of fields.
+    * A list of fields. The KexiDBFieldList can be used to handle KexiDBField objects
+    * in a backend-independend way.
+    *
+    * Example (in Python) ;
+    * @code
+    * # Get the tableschema for the "dept" table.
+    * table = connection.tableSchema("dept")
+    * # Create a KexiDBFieldList based on the table and filled with the selected fields.
+    * subfields = ["deptno","name","loc"]
+    * fieldlist = table.fieldlist().subList(subfields)
+    * # Create the "SELECT * from dept;" queryschema.
+    * query = table.query()
+    * # We change the queryschema to "SELECT deptno,name,loc FROM dept;" now.
+    * query.fieldlist().setFields(fieldlist)
+    * # and change the query to "SELECT deptno,name,loc FROM dept WHERE deptno=5;"
+    * query.setWhereExpression("deptno=5")
+    * # Execute the query and get a KexiDBCursor object as result which could be used to iterate through the result.
+    * cursor = connection.executeQuerySchema(query)
+    * @endcode
     */
     class KexiDBFieldList : public Kross::Api::Class<KexiDBFieldList>
     {
@@ -56,7 +74,7 @@ namespace Kross { namespace KexiDB {
             KexiDBField* fieldByName(const QString& name);
 
             /** Returns a list of all fields. */
-            Kross::Api::Object::Ptr fields(Kross::Api::List::Ptr);
+            Kross::Api::List* fields();
             /** Returns true if the KexiDBField object passed as an argument is in the field list. */
             bool hasField(KexiDBField* field);
             /** Return a list of field names. */

@@ -37,7 +37,7 @@ KexiDBFieldList::KexiDBFieldList(::KexiDB::FieldList* fieldlist)
     this->addFunction1< KexiDBField, Kross::Api::Variant >("field", this, &KexiDBFieldList::field);
     this->addFunction1< KexiDBField, Kross::Api::Variant >("fieldByName", this, &KexiDBFieldList::fieldByName);
 
-    addFunction("fields", &KexiDBFieldList::fields);
+    this->addFunction0< Kross::Api::List >("fields", this, &KexiDBFieldList::fields);
 
     this->addFunction1< Kross::Api::Variant, KexiDBField >("hasField", this, &KexiDBFieldList::hasField);
     this->addFunction0< Kross::Api::Variant >("names", this, &KexiDBFieldList::names);
@@ -74,12 +74,8 @@ KexiDBField* KexiDBFieldList::fieldByName(const QString& name) {
     return field ? new KexiDBField(field) : 0;
 }
 
-Kross::Api::Object::Ptr KexiDBFieldList::fields(Kross::Api::List::Ptr) {
-    Q3ValueList<Object::Ptr> list;
-    ::KexiDB::Field::ListIterator it( *m_fieldlist->fields() );
-    for(; it.current(); ++it)
-        list.append( new KexiDBField(it.current()) );
-    return new Kross::Api::List(list);
+Kross::Api::List* KexiDBFieldList::fields() {
+    return new Kross::Api::ListT<KexiDBField>( *m_fieldlist->fields() );
 }
 
 bool KexiDBFieldList::hasField(KexiDBField* field) { return m_fieldlist->hasField( field->field() ); }
