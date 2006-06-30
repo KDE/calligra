@@ -178,9 +178,8 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	const bool wasReadOnly = Connection::isReadOnly();
 
 	d->res = sqlite3_open( 
-		QFile::encodeName( m_data->fileName() ), 
 		//QFile::encodeName( m_data->fileName() ), 
-		m_data->fileName().toUtf8(), /* unicode expected since SQLite 3.1 */
+		m_data->fileName().toUtf8().constData(), /* unicode expected since SQLite 3.1 */
 		&d->data,
 		exclusiveFlag,
 		allowReadonly /* If 1 and locking fails, try opening in read-only mode */

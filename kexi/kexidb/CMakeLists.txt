@@ -51,7 +51,8 @@ kde4_automoc(${kexidb_LIB_SRCS})
 
 add_definitions( -DMAKE_KEXI_DB_LIB )
 kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
-target_link_libraries(kexidb  ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} kexiutils )
+target_link_libraries(kexidb 
+   ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kexiutils )
 
 set_target_properties(kexidb PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install_targets(${LIB_INSTALL_DIR} kexidb )

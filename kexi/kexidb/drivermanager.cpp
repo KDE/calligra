@@ -219,7 +219,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 
 	KexiDBDbg << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
-	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(ptr,
+	drv = KParts::ComponentFactory::createPartInstanceFromService<KexiDB::Driver>(ptr, /*QWidget*/0,
 		this,
 		QStringList(),
 		&m_serverResultNum);
@@ -229,11 +229,11 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".")
 				.arg(name) );
 		if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
-			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoServiceFound]="ErrNoServiceFound";
-			m_componentLoadingErrors[KParts::ComponentFactory::ErrServiceProvidesNoLibrary]="ErrServiceProvidesNoLibrary";
-			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoLibrary]="ErrNoLibrary";
-			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoFactory]="ErrNoFactory";
-			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoComponent]="ErrNoComponent";
+			m_componentLoadingErrors[KLibLoader::ErrNoServiceFound]="ErrNoServiceFound";
+			m_componentLoadingErrors[KLibLoader::ErrServiceProvidesNoLibrary]="ErrServiceProvidesNoLibrary";
+			m_componentLoadingErrors[KLibLoader::ErrNoLibrary]="ErrNoLibrary";
+			m_componentLoadingErrors[KLibLoader::ErrNoFactory]="ErrNoFactory";
+			m_componentLoadingErrors[KLibLoader::ErrNoComponent]="ErrNoComponent";
 		}
 		m_serverResultName=m_componentLoadingErrors[m_serverResultNum];
 		return 0;
