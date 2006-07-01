@@ -47,6 +47,8 @@ public:
 
 protected:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
+	virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+	void writeMathMLAttributes( QDomElement& element );
 
 	void setSize( double s );
 	void setAbsoluteSize( double s );

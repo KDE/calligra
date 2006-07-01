@@ -191,6 +191,119 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
     return true;
 }
 
+void StyleElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+{
+    QDomElement de = doc.createElement( oasisFormat ? "math:mstyle" : "mstyle" );
+    writeMathMLAttributes( de );
+    inherited::writeMathML( doc, de, oasisFormat );
+    parent.appendChild( de );
+}
+
+void StyleElement::writeMathMLAttributes( QDomElement& element )
+{
+    // mathvariant attribute
+    if ( customCharStyle() ) {
+        if ( !customCharFamily() || family == normalFamily ) {
+            if ( style == normalChar ) {
+                element.setAttribute( "mathvariant", "normal" );
+            }
+            else if ( style == boldChar ) {
+                element.setAttribute( "mathvariant", "bold" );
+            }
+            else if ( style == italicChar ) {
+                element.setAttribute( "mathvariant", "italic" );
+            }
+            else if ( style == boldItalicChar ) {
+                element.setAttribute( "mathvariant", "bold-italic" );
+            }
+            else { // anyChar or unknown, it's always an error
+                kdWarning( DEBUGID ) << "Mathvariant: unknown style for normal family\n";
+            }
+        }
+        else if ( family == doubleStruckFamily ) {
+            if ( style == normalChar ) {
+                element.setAttribute( "mathvariant", "double-struck" );
+            }
+            else { // Shouldn't happen, it's a bug
+                kdWarning( DEBUGID ) << "Mathvariant: unknown style for double-struck family\n";
+            }
+        }
+        else if ( family == frakturFamily ) {
+            if ( style == normalChar ) {
+                element.setAttribute( "mathvariant", "fraktur" );
+            }
+            else if ( style == boldChar ) {
+                element.setAttribute( "mathvariant", "bold-fraktur" );
+            }
+            else {
+                kdWarning( DEBUGID ) << "Mathvariant: unknown style for fraktur family\n";
+            }
+        }
+        else if ( family == scriptFamily ) {
+            if ( style == normalChar ) {
+                element.setAttribute( "mathvariant", "script" );
+            }
+            else if ( style == boldChar ) {
+                element.setAttribute( "mathvariant", "bold-script" );
+            }
+            else { // Shouldn't happen, it's a bug
+                kdWarning( DEBUGID ) << "Mathvariant: unknown style for script family\n";
+            }
+        }
+        else if ( family == sansSerifFamily ) {
+            if ( style == normalChar ) {
+                element.setAttribute( "mathvariant", "sans-serif" );
+            }
+            else if ( style == boldChar ) {
+                element.setAttribute( "mathvariant", "bold-sans-serif" );
+            }
+            else if ( style == italicChar ) {
+                element.setAttribute( "mathvariant", "sans-serif-italic" );
+            }
+            else if ( style == boldItalicChar ) {
+                element.setAttribute( "mathvariant", "sans-serif-bold-italic" );
+            }
+            else {
+                kdWarning( DEBUGID ) << "Mathvariant: unknown style for sans serif family\n";
+            }
+        }
+        else if ( family == monospaceFamily ) {
+            if ( style == normalChar ) {
+                element.setAttribute( "mathvariant", "monospace" );
+            }
+            else {
+                kdWarning( DEBUGID ) << "Mathvariant: unknown style for monospace family\n";
+            }
+        }
+        else {
+            kdWarning( DEBUGID ) << "Mathvariant: unknown family\n";
+        }
+    }
+
+    // mathsize attribute
+    switch ( size_type ) {
+    case AbsoluteSize:
+        element.setAttribute( "mathsize", QString( "%1pt" ).arg( size ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( "mathsize", QString( "%1%" ).arg( size * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( "mathsize", QString( "%3px" ).arg( size ) );
+        break;
+    }
+
+    // mathcolor attribute
+    if ( customColor() ) {
+        element.setAttribute( "mathcolor", color.name() );
+    }
+    
+    // mathbackground attribute
+    if ( customBackground() ) {
+        element.setAttribute( "mathbackground", background.name() );
+    }
+}
+
 void StyleElement::setSize( double s )
 { 
         kdDebug( DEBUGID) << "Setting size: " << s << endl;
