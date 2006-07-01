@@ -29,62 +29,62 @@ class StyleElement : public SequenceElement {
     typedef SequenceElement inherited;
 public:
 	
-	enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
+    enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
 
     StyleElement( BasicElement* parent = 0 );
 
     virtual void calcSizes( const ContextStyle& context,
-						    ContextStyle::TextStyle tstyle,
-						    ContextStyle::IndexStyle istyle,
-							StyleAttributes& style );
+                            ContextStyle::TextStyle tstyle,
+                            ContextStyle::IndexStyle istyle,
+                            StyleAttributes& style );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& context,
                        ContextStyle::TextStyle tstyle,
                        ContextStyle::IndexStyle istyle,
-					   StyleAttributes& style,
+                       StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
 protected:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
-	virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-	void writeMathMLAttributes( QDomElement& element );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    void writeMathMLAttributes( QDomElement& element );
 
-	void setSize( double s );
-	void setAbsoluteSize( double s );
-	void setRelativeSize( double s );
-	void setPixelSize( double s );
-	double getSizeFactor( const ContextStyle& context, double factor );
+    void setSize( double s );
+    void setAbsoluteSize( double s );
+    void setRelativeSize( double s );
+    void setPixelSize( double s );
+    double getSizeFactor( const ContextStyle& context, double factor );
 
     void setCharStyle( CharStyle cs );
-    CharStyle getCharStyle() { return style; }
-	bool customCharStyle() { return custom_style; }
+    CharStyle getCharStyle() const { return style; }
+    bool customCharStyle() const { return custom_style; }
 
     void setCharFamily( CharFamily cf );
-    CharFamily getCharFamily() { return family; }
-	bool customCharFamily() { return custom_family; }
+    CharFamily getCharFamily() const { return family; }
+    bool customCharFamily() const { return custom_family; }
 
     void setColor( const QColor& c ) { color = c; }
     QColor getColor() const { return color; }
-	bool customColor() const { return custom_color; }
+    bool customColor() const { return custom_color; }
 
     void setBackground( const QColor& bg ) { background = bg; }
-    QColor& getBackground() { return background; }
-	bool customBackground() const { return custom_background; }
+    QColor getBackground() const { return background; }
+    bool customBackground() const { return custom_background; }
 
 private:
-	double str2size( const QString& str, SizeType* st, uint index, SizeType type );
-	double getSize( const QString& str, SizeType* st );
-	SizeType size_type;
-	double size;
+    double str2size( const QString& str, SizeType* st, uint index, SizeType type );
+    double getSize( const QString& str, SizeType* st );
+    SizeType size_type;
+    double size;
     CharStyle style;
-	bool custom_style;
     CharFamily family;
-	bool custom_family;
     QColor color;
-	bool custom_color;
     QColor background;
-	bool custom_background;
+    bool custom_style;
+    bool custom_family;
+    bool custom_color;
+    bool custom_background;
 };
 
 KFORMULA_NAMESPACE_END
