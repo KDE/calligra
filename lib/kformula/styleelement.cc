@@ -25,12 +25,12 @@ KFORMULA_NAMESPACE_BEGIN
 StyleElement::StyleElement( BasicElement* parent ) : SequenceElement( parent ),
                                                      size_type ( NoSize ),
                                                      style( anyChar ),
-                                                     custom_style( false ),
                                                      family( anyFamily ),
-                                                     custom_family( false ),
                                                      color( "#000000" ),
-                                                     custom_color( false ),
                                                      background( "#FFFFFF" ),
+                                                     custom_style( false ),
+                                                     custom_family( false ),
+                                                     custom_color( false ),
                                                      custom_background( false )
 {
 }
