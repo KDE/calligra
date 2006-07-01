@@ -26,8 +26,8 @@ using namespace KSpread::Plugins;
 SolverDialog::SolverDialog( View* view, QWidget* parent )
   : KDialog( parent )
 {
-    setCaption( i18n("Function Optimizer") );
-    setButtons( KDialog::Ok|KDialog::Cancel|KDialog::Details );
+  setCaption( i18n("Function Optimizer") );
+  setButtons( Ok|Cancel|Details );
   setAttribute( Qt::WA_DeleteOnClose );
 
   QWidget* widget = new QWidget( this );

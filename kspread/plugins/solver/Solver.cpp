@@ -60,7 +60,7 @@ Solver::Solver( QObject* parent, const QStringList& args )
   d->view = qobject_cast<View*>( parent );
   if ( !d->view )
   {
-    kError() << "Solver: Parent object is NOT a KSpread::View! Quitting." << endl;
+    kError() << "Solver: Parent object is not a KSpread::View! Quitting." << endl;
     return;
   }
 
@@ -83,39 +83,47 @@ void Solver::showDialog()
 
 void Solver::optimize()
 {
-  register Sheet * const  sheet = d->view->activeSheet();
+  register Sheet * const sheet = d->view->activeSheet();
   if ( !sheet )
     return;
 
-  Region region( d->view, d->dialog->function->textEdit()->text() );
-  Q_ASSERT( region.isSingular() );
-  QPoint point = (*region.constBegin())->rect().topLeft();
-  Cell* cell = sheet->cellAt( point.x(), point.y() );
+  if (d->dialog->function->textEdit()->toPlainText().isEmpty())
+    return;
 
-  kDebug() << cell->text() << endl;
+  if (d->dialog->parameters->textEdit()->toPlainText().isEmpty())
+    return;
+
+  Region region( d->view, d->dialog->function->textEdit()->toPlainText() );
+  if (!region.isValid())
+    return;
+
+  const QPoint point = (*region.constBegin())->rect().topLeft();
+  const Cell* formulaCell = sheet->cellAt( point.x(), point.y() );
+  if (!formulaCell->isFormula())
+    return;
+
+  kDebug() << formulaCell->text() << endl;
   s_formula = new Formula( sheet );
-  // TODO invert for maximum / substract goal value
-  s_formula->setExpression( cell-> text() );
-
-  // Minimize the function.
-  int dimVectors = 2; // TODO determine dimension of the function
-  int dimParameters = 2; // TODO determine dimension of the parameters
-
-  /* Initial vertex size vector */
-  gsl_vector* stepSizes = gsl_vector_alloc( dimParameters );
-
-  /* Set all step sizes to 1 */
-  gsl_vector_set_all(stepSizes, 1.0);
-
-  /* Starting point */
-  gsl_vector* x = gsl_vector_alloc( dimVectors );
-  gsl_vector_set(x, 0, 5.0);
-  gsl_vector_set(x, 1, 7.0);
+  if (d->dialog->minimizeButton->isChecked())
+  {
+    s_formula->setExpression( formulaCell->text() );
+  }
+  else if (d->dialog->maximizeButton->isChecked())
+  {
+    // invert the formula
+    s_formula->setExpression( "=-(" + formulaCell->text().mid(1) + ')' );
+  }
+  else // if (d->dialog->valueButton->isChecked())
+  {
+    // TODO
+    s_formula->setExpression( formulaCell->text() );
+  }
 
   // Determine the parameters
+  int dimension = 0;
   int index = 0;
   Parameters* parameters = new Parameters;
-  region = Region( d->view, d->dialog->parameters->textEdit()->text() );
+  region = Region( d->view, d->dialog->parameters->textEdit()->toPlainText() );
   Region::ConstIterator end( region.constEnd() );
   for ( Region::ConstIterator it( region.constBegin() ); it != end; ++it )
   {
@@ -125,9 +133,20 @@ void Solver::optimize()
       for ( int row = range.top(); row <= range.bottom(); ++row )
       {
         parameters->cells.append( sheet->cellAt( col, row ) );
-        gsl_vector_set( x, index++, sheet->cellAt( col, row )->value().asFloat() );
+        ++dimension;
       }
     }
+  }
+
+  /* Initial vertex size vector with a step size of 1 */
+  gsl_vector* stepSizes = gsl_vector_alloc( dimension );
+  gsl_vector_set_all(stepSizes, 1.0);
+
+  /* Initialize starting point */
+  gsl_vector* x = gsl_vector_alloc( dimension );
+  foreach (Cell* cell, parameters->cells)
+  {
+    gsl_vector_set( x, index++, cell->value().asFloat() );
   }
 
   /* Initialize method and iterate */
@@ -138,7 +157,7 @@ void Solver::optimize()
 
   // Use the simplex minimizer. The others depend on the first derivative.
   const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex;
-  gsl_multimin_fminimizer* minimizer = gsl_multimin_fminimizer_alloc( T, dimParameters );
+  gsl_multimin_fminimizer* minimizer = gsl_multimin_fminimizer_alloc( T, dimension );
   gsl_multimin_fminimizer_set( minimizer, &functionInfo, x, stepSizes );
 
   int status = 0;
@@ -159,10 +178,10 @@ void Solver::optimize()
 
     if ( status == GSL_SUCCESS )
     {
-      kDebug() << "converged to minimum after " << iteration << " at" << endl;
+      kDebug() << "converged to minimum after " << iteration << " iteration(s) at" << endl;
     }
 
-    for ( int i = 0; i < dimVectors; ++i )
+    for ( int i = 0; i < dimension; ++i )
     {
       printf( "%10.3e ", gsl_vector_get( minimizer->x, i ) );
     }

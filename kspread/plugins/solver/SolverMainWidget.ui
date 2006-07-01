@@ -88,9 +88,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       </item>
       <item row="0" column="0" >
        <widget class="QRadioButton" name="maximizeButton" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
         <property name="text" >
          <string>Maximize</string>
         </property>
