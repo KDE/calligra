@@ -176,7 +176,7 @@ bool KFormulaDoc::saveNativeFormat( const QString & file )
         {
             QTextStream stream( &f );
             stream.setEncoding( QTextStream::UnicodeUTF8 );
-            formula->saveMathML( stream, true );
+            formula->saveMathML( stream, false );
             f.close();
             return true;
         }
