@@ -333,6 +333,9 @@ public:
         BasicElement& operator* ()
             { return *m_sequence->getChild( m_pos ); }
 
+        BasicElement* operator->() const
+            { return m_sequence->getChild( m_pos ); }
+
         ChildIterator& operator++ ()
             { ++m_pos; return *this; }
         ChildIterator operator++ ( int )
