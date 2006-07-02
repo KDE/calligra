@@ -64,4 +64,13 @@ void TokenElement::draw( QPainter& painter, const LuPixelRect& r,
     style.reset();
 }
 
+void TokenElement::writeMathMLText( QDomDocument& doc, QDomElement& element )
+{
+    QString value;
+    for ( iterator it = begin(); it != end(); it++ ) {
+        value += it->getCharacter();
+    }
+    element.appendChild( doc.createTextNode( value ) );
+}
+
 KFORMULA_NAMESPACE_END

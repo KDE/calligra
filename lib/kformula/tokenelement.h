@@ -39,6 +39,8 @@ public:
 					   StyleAttributes& style,
 					   const LuPixelPoint& parentOrigin );
 
+protected:
+    void writeMathMLText( QDomDocument& doc, QDomElement& element );
 };
 
 KFORMULA_NAMESPACE_END

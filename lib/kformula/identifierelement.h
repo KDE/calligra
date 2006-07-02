@@ -40,6 +40,8 @@ public:
                        ContextStyle::IndexStyle istyle,
 					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
+protected:
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 };
 
 KFORMULA_NAMESPACE_END

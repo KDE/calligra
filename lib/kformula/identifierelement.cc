@@ -70,4 +70,13 @@ void IdentifierElement::draw( QPainter& painter, const LuPixelRect& r,
     style.reset();
 }
 
+void IdentifierElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+{
+    QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
+    writeMathMLAttributes( de );
+    writeMathMLText( doc, de );
+    parent.appendChild( de );
+}
+
+
 KFORMULA_NAMESPACE_END
