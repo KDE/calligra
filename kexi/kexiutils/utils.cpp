@@ -24,6 +24,7 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qwmatrix.h>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -212,6 +213,8 @@ void KexiUtils::simpleDecrypt(QString& string)
 		string[i] = QChar( string[i].unicode() - 47 - i );
 }
 
+#if 0//todo
+
 void KexiUtils::drawPixmap( QPainter& p, const QColor& backgroundColor, int lineWidth, const QRect& rect, 
 	const QPixmap& pixmap, int alignment, bool scaledContents, bool keepAspectRatio)
 {
@@ -286,5 +289,7 @@ void KexiUtils::drawPixmap( QPainter& p, const QColor& backgroundColor, int line
 		bitBlt(p.device(), (int)p.worldMatrix().dx() + rect.x() + lineWidth, (int)p.worldMatrix().dy() + rect.y() + lineWidth, &pm);
 	}
 }
+
+#endif
 
 #include "utils_p.moc"

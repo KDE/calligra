@@ -20,7 +20,7 @@
 #include "utils.h"
 #include "utils_p.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 
 #include <ktabwidget.h>
