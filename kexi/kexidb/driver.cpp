@@ -110,17 +110,18 @@ bool Driver::isValid()
 		|| KexiDB::versionMinor() != versionMinor())
 	{
 		setError(ERR_INCOMPAT_DRIVER_VERSION,
-		i18n("Incompatible database driver's \"%1\" version: found version %2, expected version %3.")
-		.arg( objectName() )
-		.arg( QString("%1.%2").arg(versionMajor()).arg(versionMinor()) )
-		.arg( QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor())) );
+		i18n("Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
+			objectName(),
+			QString("%1.%2").arg(versionMajor()).arg(versionMinor()),
+			QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor())) );
 		return false;
 	}
 
-	QString inv_impl = i18n("Invalid database driver's \"%1\" implementation:\n").arg(name());
-	QString not_init = i18n("Value of \"%1\" is not initialized for the driver.");
+	QString inv_impl = i18n("Invalid database driver's \"%1\" implementation:\n", name());
+	KLocalizedString not_init = ki18n("Value of \"%1\" is not initialized for the driver.");
 	if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
-		setError(ERR_INVALID_DRIVER_IMPL, inv_impl + not_init.arg("DriverBehaviour::ROW_ID_FIELD_NAME"));
+		setError(ERR_INVALID_DRIVER_IMPL, 
+			inv_impl + not_init.subs("DriverBehaviour::ROW_ID_FIELD_NAME").toString());
 		return false;
 	}
 

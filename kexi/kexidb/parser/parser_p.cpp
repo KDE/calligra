@@ -146,15 +146,13 @@ void yyerror(const char *str)
 
 			if ( parser->isReservedKeyword( ctoken.toLatin1() ) ) {
 				parser->setError( ParserError(i18n("Syntax Error"),
-				                                   i18n("\"%1\" is a reserved keyword")
-				                                        .arg( ctoken ) + lexerErr,
-				                                   ctoken, current) );
+					i18n("\"%1\" is a reserved keyword", ctoken ) + lexerErr,
+					ctoken, current) );
 			}
 			else {
 				parser->setError( ParserError(i18n("Syntax Error"),
-				                  i18n("Syntax Error near \"%1\"")
-				                       .arg( ctoken ) + lexerErr,
-				                  ctoken, current) );
+					i18n("Syntax Error near \"%1\"", ctoken ) + lexerErr,
+					ctoken, current) );
 			}
 		}
 	}
@@ -447,7 +445,7 @@ QuerySchema* parseSelect(
 			TableSchema *s = parser->db()->tableSchema(tname);
 			if(!s) {
 				setError(//i18n("Field List Error"),
-					i18n("Table \"%1\" does not exist").arg(tname));
+					i18n("Table \"%1\" does not exist", tname));
 	//			yyerror("fieldlisterror");
 				CLEANUP;
 				return 0;
@@ -521,8 +519,8 @@ QuerySchema* parseSelect(
 	//			isFieldWithAlias = true;
 				aliasVariable = e->toBinary()->right()->toVariable();
 				if (!aliasVariable) {
-					setError(i18n("Invalid alias definition for column \"%1\"")
-						.arg(columnExpr->toString())); //ok?
+					setError(i18n("Invalid alias definition for column \"%1\"",
+						columnExpr->toString())); //ok?
 					CLEANUP;
 					return 0;
 				}
@@ -553,7 +551,7 @@ QuerySchema* parseSelect(
 				e->toBinary()->m_larg = 0;
 			}
 			else {
-				setError(i18n("Invalid \"%1\" column definition").arg(e->toString())); //ok?
+				setError(i18n("Invalid \"%1\" column definition", e->toString())); //ok?
 				CLEANUP;
 				return 0;
 			}

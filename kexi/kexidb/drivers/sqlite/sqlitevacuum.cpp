@@ -78,8 +78,8 @@ tristate SQLiteVacuum::run()
 		return m_result;
 	}
 	m_dlg = new KProgressDialog(0, i18n("Compacting database"), 
-		"<qt>"+i18n("Compacting database \"%1\"...")
-		.arg("<nobr>"+QDir::convertSeparators(QFileInfo(m_filePath).fileName())+"</nobr>")
+		"<qt>"+i18n("Compacting database \"%1\"...", 
+		"<nobr>"+QDir::convertSeparators(QFileInfo(m_filePath).fileName())+"</nobr>")
 	);
 	m_dlg->adjustSize();
 	m_dlg->resize(300, m_dlg->height());
@@ -97,8 +97,7 @@ tristate SQLiteVacuum::run()
 	if (m_result == true) {
 		const uint newSize = QFileInfo(m_filePath).size();
 		const uint decrease = 100-100*newSize/origSize;
-		KMessageBox::information(0, i18n("The database has been compacted. Current size decreased by %1% to %2.")
-			.arg(decrease).arg(KIO::convertSize(newSize)));
+		KMessageBox::information(0, i18n("The database has been compacted. Current size decreased by %1% to %2.", decrease, KIO::convertSize(newSize)));
 	}
 	return m_result;
 }

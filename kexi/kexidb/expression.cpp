@@ -541,16 +541,16 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 					//ambiguous field name
 					parseInfo.errMsg = i18n("Ambiguous field name");
 					parseInfo.errDescr = i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
-						"Use \"<tableName>.%4\" notation to specify table name.")
-						.arg(firstField->table()->name()).arg(f->table()->name())
-						.arg(fieldName).arg(fieldName);
+						"Use \"<tableName>.%4\" notation to specify table name.",
+						firstField->table()->name(), f->table()->name(),
+						fieldName, fieldName);
 					return false;
 				}
 			}
 		}
 		if (!firstField) {
 			parseInfo.errMsg = i18n("Field not found");
-			parseInfo.errDescr = i18n("Table containing \"%1\" field not found").arg(fieldName);
+			parseInfo.errDescr = i18n("Table containing \"%1\" field not found", fieldName);
 			return false;
 		}
 		//ok
@@ -577,8 +577,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 		if (covered) {
 			parseInfo.errMsg = i18n("Could not access the table directly using its name");
 			parseInfo.errDescr = i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-				"you can write \"%3\"").arg(tableName)
-				.arg(tableName+"."+fieldName).arg(tableAlias+"."+QString(fieldName));
+				"you can write \"%3\"", tableName, tableName+"."+fieldName, tableAlias+"."+QString(fieldName));
 			return false;
 		}
 	}
@@ -596,7 +595,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
 	if (!ts) {
 		parseInfo.errMsg = i18n("Table not found");
-		parseInfo.errDescr = i18n("Unknown table \"%1\"").arg(tableName);
+		parseInfo.errDescr = i18n("Unknown table \"%1\"", tableName);
 		return false;
 	}
 
@@ -609,8 +608,8 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 	//it's a table.*
 	if (fieldName=="*") {
 		if (positionsList->count()>1) {
-			parseInfo.errMsg = i18n("Ambiguous \"%1.*\" expression").arg(tableName);
-			parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined").arg(tableName);
+			parseInfo.errMsg = i18n("Ambiguous \"%1.*\" expression", tableName);
+			parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined", tableName);
 			return false;
 		}
 		tableForQueryAsterisk = ts;
@@ -622,8 +621,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 	Field *realField = ts->field(fieldName);
 	if (!realField) {
 		parseInfo.errMsg = i18n("Field not found");
-		parseInfo.errDescr = i18n("Table \"%1\" has no \"%2\" field")
-			.arg(tableName).arg(fieldName);
+		parseInfo.errDescr = i18n("Table \"%1\" has no \"%2\" field", tableName, fieldName);
 		return false;
 	}
 
@@ -637,10 +635,9 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 		if (otherTS->field(fieldName))
 			numberOfTheSameFields++;
 		if (numberOfTheSameFields>1) {
-			parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression")
-				.arg(tableName).arg(fieldName);
-			parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field")
-				.arg(tableName).arg(fieldName);
+			parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName);
+			parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field",
+				tableName, fieldName);
 			return false;
 		}
 	}

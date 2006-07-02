@@ -190,8 +190,8 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 		//opened as read only, ask
 		if (KMessageBox::Continue != 
 			askQuestion( 
-			i18n("Do you want to open file \"%1\" as read-only?")
-				.arg(QDir::convertSeparators(m_data->fileName()))
+			i18n("Do you want to open file \"%1\" as read-only?", 
+				QDir::convertSeparators(m_data->fileName()))
 			+ "\n\n"
 			+ i18n("The file is probably already open on this or another computer.") + " "
 			+ i18n("Could not gain exclusive access for writing the file."),
@@ -252,8 +252,8 @@ bool SQLiteConnection::drv_closeDatabase()
 bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 {
 	if (QFile(m_data->fileName()).exists() && !QDir().remove(m_data->fileName())) {
-		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\".")
-			.arg(QDir::convertSeparators(dbName)) + " "
+		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\".", 
+			QDir::convertSeparators(dbName)) + " "
 			+ i18n("Check the file's permissions and whether it is already opened and locked by another application."));
 		return false;
 	}

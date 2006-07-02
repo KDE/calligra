@@ -365,8 +365,8 @@ ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
 	const KexiDB::ConnectionData& data,
 	KexiDB::MessageHandler& msgHandler)
  : KProgressDialog(parent, 
-	i18n("Test Connection"), i18n("<qt>Testing connection to <b>%1</b> database server...</qt>")
-	.arg(data.serverInfoString(true)), true /*modal*/)
+	i18n("Test Connection"), i18n("<qt>Testing connection to <b>%1</b> database server...</qt>",
+		data.serverInfoString(true)), true /*modal*/)
  , m_thread(new ConnectionTestThread(this, data))
  , m_connData(data)
  , m_msgHandler(&msgHandler)
@@ -418,14 +418,13 @@ void ConnectionTestDialog::slotTimeout()
 		}
 		else if (notResponding) {
 			KMessageBox::sorry(0, 
-				i18n("<qt>Test connection to <b>%1</b> database server failed. The server is not responding.</qt>")
-					.arg(m_connData.serverInfoString(true)),
+				i18n("<qt>Test connection to <b>%1</b> database server failed. The server is not responding.</qt>", m_connData.serverInfoString(true)),
 				i18n("Test Connection"));
 		}
 		else {
 			KMessageBox::information(0, 
-				i18n("<qt>Test connection to <b>%1</b> database server established successfully.</qt>")
-					.arg(m_connData.serverInfoString(true)),
+				i18n("<qt>Test connection to <b>%1</b> database server established successfully.</qt>",
+					m_connData.serverInfoString(true)),
 				i18n("Test Connection"));
 		}
 //		slotCancel();

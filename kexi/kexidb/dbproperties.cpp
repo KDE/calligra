@@ -41,7 +41,7 @@ bool DatabaseProperties::setValue( const QString& _name, const QVariant& value )
 		QString::fromLatin1("select 1 from kexi__db where db_property=%1")
 			.arg(m_conn->driver()->escapeString(name)), ok);
 	if (!ok) {
-		setError(m_conn, i18n("Could not set value of database property \"%1\".").arg(name));
+		setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
 		return false;
 	}
 
@@ -51,7 +51,7 @@ bool DatabaseProperties::setValue( const QString& _name, const QVariant& value )
 			.arg(m_conn->driver()->escapeString(value.toString()))
 			.arg(m_conn->driver()->escapeString(name))))
 		{
-			setError(m_conn, i18n("Could not set value of database property \"%1\".").arg(name));
+			setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
 			return false;
 		}
 		return true;
@@ -62,7 +62,7 @@ bool DatabaseProperties::setValue( const QString& _name, const QVariant& value )
 		.arg(m_conn->driver()->escapeString(name))
 		.arg(m_conn->driver()->escapeString(value.toString()))))
 	{
-		setError(m_conn, i18n("Could not set value of database property \"%1\".").arg(name));
+		setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
 		return false;
 	}
 	return true;
@@ -79,7 +79,7 @@ bool DatabaseProperties::setCaption( const QString& _name, const QString& captio
 		QString::fromLatin1("select 1 from kexi__db where db_property=%1")
 			.arg(m_conn->driver()->escapeString(name)), ok);
 	if (!ok) {
-		setError(m_conn, i18n("Could not set caption for database property \"%1\".").arg(name));
+		setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
 		return false;
 	}
 
@@ -89,7 +89,7 @@ bool DatabaseProperties::setCaption( const QString& _name, const QString& captio
 			.arg(m_conn->driver()->escapeString(caption))
 			.arg(m_conn->driver()->escapeString(name))))
 		{
-			setError(m_conn, i18n("Could not set caption for database property \"%1\".").arg(name));
+			setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
 			return false;
 		}
 		return true;
@@ -100,7 +100,7 @@ bool DatabaseProperties::setCaption( const QString& _name, const QString& captio
 		.arg(m_conn->driver()->escapeString(name))
 		.arg(m_conn->driver()->escapeString(caption))))
 	{
-		setError(m_conn, i18n("Could not set caption for database property \"%1\".").arg(name));
+		setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
 		return false;
 	}
 	return true;
@@ -113,7 +113,7 @@ QVariant DatabaseProperties::value( const QString& _name )
 	if (true!=m_conn->querySingleString(
 		QString::fromLatin1("select db_value from kexi__db where db_property=")
 		+ m_conn->driver()->escapeString(name), result)) {
-		m_conn->setError(ERR_NO_DB_PROPERTY, i18n("Could not read database property \"%1\".").arg(name));
+		m_conn->setError(ERR_NO_DB_PROPERTY, i18n("Could not read database property \"%1\".", name));
 		return QVariant();
 	}
 	return result;
@@ -128,7 +128,7 @@ QString DatabaseProperties::caption( const QString& _name )
 	if (true!=m_conn->querySingleString(
 		QString::fromLatin1("select db_value from kexi__db where db_property=")
 		+ m_conn->driver()->escapeString(name), result)) {
-		setError(m_conn, i18n("Could not read database property \"%1\".").arg(name));
+		setError(m_conn, i18n("Could not read database property \"%1\".", name));
 		return QString::null;
 	}
 	return result;

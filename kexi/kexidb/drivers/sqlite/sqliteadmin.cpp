@@ -44,7 +44,7 @@ bool SQLiteAdminTools::vacuum(const KexiDB::ConnectionData& data, const QString&
 #else
 	KexiDB::DriverManager manager;
 	KexiDB::Driver *drv = manager.driver(data.driverName);
-	QString title( i18n("Could not compact database \"%1\".").arg(QDir::convertSeparators(databaseName)) );
+	QString title( i18n("Could not compact database \"%1\".", QDir::convertSeparators(databaseName)) );
 	if (!drv) {
 		setError(&manager, title);
 		return false;

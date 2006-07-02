@@ -194,7 +194,7 @@ KexiDB::Driver::Info DriverManagerInternal::driverInfo(const QString &name)
 {
 	KexiDB::Driver::Info i = m_driversInfo[name.toLower()];
 	if (!error() && i.name.isEmpty())
-		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver \"%1\".").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver \"%1\".", name) );
 	return i;
 }
 
@@ -211,7 +211,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		return drv; //cached
 
 	if (!m_services_lcase.contains( name.toLower() )) {
-		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver \"%1\".").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver \"%1\".", name) );
 		return 0;
 	}
 
@@ -223,11 +223,9 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		this,
 		QStringList(),
 		&m_serverResultNum);
-	drv->setObjectName( srv_name );
 
 	if (!drv) {
-		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".")
-				.arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".", name) );
 		if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
 			m_componentLoadingErrors[KLibLoader::ErrNoServiceFound]="ErrNoServiceFound";
 			m_componentLoadingErrors[KLibLoader::ErrServiceProvidesNoLibrary]="ErrServiceProvidesNoLibrary";
@@ -241,6 +239,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	KexiDBDbg << "KexiDBInterfaceManager::load(): loading succeed: " << name <<endl;
 //	KexiDBDbg << "drv="<<(long)drv <<endl;
 
+	drv->setObjectName( srv_name );
 	drv->d->service = ptr.data(); //store info
 	drv->d->fileDBDriverMimeType = ptr->property("X-Kexi-FileDBDriverMime").toString();
 	drv->d->initInternalProperties();
@@ -370,7 +369,7 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
 	if (d_int->m_services_lcase.contains( name.toLower() ) ) {
 		return *d_int->m_services_lcase.find( name.toLower() );
 	} else {
-		setError(ERR_DRIVERMANAGER, i18n("No such driver service: \"%1\".").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("No such driver service: \"%1\".", name) );
 		return KService::Ptr();
 	}
 }

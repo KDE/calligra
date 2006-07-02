@@ -44,8 +44,8 @@ Validator::Result ObjectNameValidator::internalCheck(
 		 : !m_drv->isSystemObjectName(v.toString()))
 		return Validator::Ok;
 	message = i18n("You cannot use name \"%1\" for your object.\n"
-		"It is reserved for internal Kexi objects. Please choose another name.")
-		.arg(v.toString());
+		"It is reserved for internal Kexi objects. Please choose another name.",
+		v.toString());
 	details = i18n("Names of internal Kexi objects are starting with \"kexi__\".");
 	return Validator::Error;
 }

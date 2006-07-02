@@ -220,8 +220,8 @@ bool Connection::connect()
 
 	if (!(d->isConnected = drv_connect())) {
 		setError(m_driver->isFileDriver() ?
-			i18n("Could not open \"%1\" project file.").arg(QDir::convertSeparators(m_data->fileName()))
-			: i18n("Could not connect to \"%1\" database server.").arg(m_data->serverInfoString()) );
+			i18n("Could not open \"%1\" project file.", QDir::convertSeparators(m_data->fileName()))
+			: i18n("Could not connect to \"%1\" database server.", m_data->serverInfoString()) );
 	}
 	return d->isConnected;
 }
@@ -329,7 +329,7 @@ bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 
 	if (list.indexOf( dbName ) == -1) {
 		if (!ignoreErrors)
-			setError(ERR_OBJECT_NOT_FOUND, i18n("The database \"%1\" does not exist.").arg(dbName));
+			setError(ERR_OBJECT_NOT_FOUND, i18n("The database \"%1\" does not exist.", dbName));
 		return false;
 	}
 
@@ -349,20 +349,20 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 		QFileInfo file(m_data->fileName());
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
-				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.")
-				.arg(QDir::convertSeparators(m_data->fileName())) );
+				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.",
+					QDir::convertSeparators(m_data->fileName())) );
 			return false;
 		}
 		if (!file.isReadable()) {
 			if (!ignoreErrors)
-				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.")
-				.arg(QDir::convertSeparators(m_data->fileName())) );
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.",
+					QDir::convertSeparators(m_data->fileName())) );
 			return false;
 		}
 		if (!file.isWritable()) {
 			if (!ignoreErrors)
-				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.")
-				.arg(QDir::convertSeparators(m_data->fileName())) );
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.",
+					QDir::convertSeparators(m_data->fileName())) );
 			return false;
 		}
 		return true;
@@ -390,7 +390,7 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 
 #define createDatabase_CLOSE \
 	{ if (!closeDatabase()) { \
-		setError(i18n("Database \"%1\" created but could not be closed after creation.").arg(dbName) ); \
+		setError(i18n("Database \"%1\" created but could not be closed after creation.", dbName) ); \
 		return false; \
 	} }
 
@@ -404,12 +404,12 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 
 	if (databaseExists( dbName )) {
-		setError(ERR_OBJECT_EXISTS, i18n("Database \"%1\" already exists.").arg(dbName) );
+		setError(ERR_OBJECT_EXISTS, i18n("Database \"%1\" already exists.", dbName) );
 		return false;
 	}
 	if (m_driver->isSystemDatabaseName( dbName )) {
 		setError(ERR_SYSTEM_NAME_RESERVED,
-			i18n("Cannot create database \"%1\". This name is reserved for system database.").arg(dbName) );
+			i18n("Cannot create database \"%1\". This name is reserved for system database.", dbName) );
 		return false;
 	}
 	if (m_driver->isFileDriver()) {
@@ -424,7 +424,7 @@ bool Connection::createDatabase( const QString &dbName )
 
 	//low-level create
 	if (!drv_createDatabase( dbName )) {
-		setError(i18n("Error creating database \"%1\" on the server.").arg(dbName) );
+		setError(i18n("Error creating database \"%1\" on the server.", dbName) );
 		closeDatabase();//sanity
 		return false;
 	}
@@ -438,7 +438,7 @@ bool Connection::createDatabase( const QString &dbName )
 	if (!tmpdbName.isEmpty() || !m_driver->d->isDBOpenedAfterCreate) {
 		//db need to be opened
 		if (!useDatabase( dbName, false/*not yet kexi compatible!*/ )) {
-			setError(i18n("Database \"%1\" created but could not be opened.").arg(dbName) );
+			setError(i18n("Database \"%1\" created but could not be opened.", dbName) );
 			return false;
 		}
 	}
@@ -532,7 +532,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible, bool *
 	if (!drv_useDatabase( my_dbName, cancelled, msgHandler )) {
 		if (cancelled && *cancelled)
 			return false;
-		QString msg(i18n("Opening database \"%1\" failed.").arg( my_dbName ));
+		QString msg(i18n("Opening database \"%1\" failed.", my_dbName ));
 		if (error())
 			setError( this, msg );
 		else
@@ -571,9 +571,9 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible, bool *
 		//** error if major version does not match
 		if (m_driver->versionMajor()!=KexiDB::versionMajor()) {
 			setError(ERR_INCOMPAT_DATABASE_VERSION,
-				i18n("Database version (%1) does not match Kexi application's version (%2)")
-				.arg( QString("%1.%2").arg(versionMajor()).arg(versionMinor()) )
-				.arg( QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor()) ) );
+				i18n("Database version (%1) does not match Kexi application's version (%2)",
+					QString("%1.%2").arg(versionMajor()).arg(versionMinor()),
+					QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor()) ) );
 			return false;
 		}
 		if (m_driver->versionMinor()!=KexiDB::versionMinor()) {
@@ -644,8 +644,8 @@ bool Connection::useTemporaryDatabaseIfNeeded(QString &tmpdbName)
 		d->skip_databaseExists_check_in_useDatabase = orig_skip_databaseExists_check_in_useDatabase;
 		if (!ret) {
 			setError(errorNum(),
-				i18n("Error during starting temporary connection using \"%1\" database name.")
-				.arg(tmpdbName) );
+				i18n("Error during starting temporary connection using \"%1\" database name.",
+					tmpdbName) );
 			return false;
 		}
 	}
@@ -684,7 +684,7 @@ bool Connection::dropDatabase( const QString &dbName )
 	}
 
 	if (m_driver->isSystemDatabaseName( dbToDrop )) {
-		setError(ERR_SYSTEM_NAME_RESERVED, i18n("Cannot delete system database \"%1\".").arg(dbToDrop) );
+		setError(ERR_SYSTEM_NAME_RESERVED, i18n("Cannot delete system database \"%1\".", dbToDrop) );
 		return false;
 	}
 
@@ -1295,8 +1295,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	if (!internalTable) {
 		if (m_driver->isSystemObjectName( tableName )) {
 			clearError();
-			setError(ERR_SYSTEM_NAME_RESERVED, i18n("System name \"%1\" cannot be used as table name.")
-				.arg(tableSchema->name()));
+			setError(ERR_SYSTEM_NAME_RESERVED, i18n("System name \"%1\" cannot be used as table name.", 
+				tableSchema->name()));
 			return false;
 		}
 
@@ -1304,8 +1304,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		if (sys_field) {
 			clearError();
 			setError(ERR_SYSTEM_NAME_RESERVED,
-				i18n("System name \"%1\" cannot be used as one of fields in \"%2\" table.")
-				.arg(sys_field->name()).arg(tableName));
+				i18n("System name \"%1\" cannot be used as one of fields in \"%2\" table.",
+				sys_field->name(), tableName));
 			return false;
 		}
 	}
@@ -1320,7 +1320,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 			if (existingTable == tableSchema) {
 				clearError();
 				setError(ERR_OBJECT_EXISTS,
-					i18n("Could not create the same table \"%1\" twice.").arg(tableSchema->name()) );
+					i18n("Could not create the same table \"%1\" twice.", tableSchema->name()) );
 				return false;
 			}
 //TODO(js): update any structure (e.g. queries) that depend on this table!
@@ -1334,7 +1334,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	else {
 		if (this->tableSchema( tableSchema->name() ) != 0) {
 			clearError();
-			setError(ERR_OBJECT_EXISTS, i18n("Table \"%1\" already exists.").arg(tableSchema->name()) );
+			setError(ERR_OBJECT_EXISTS, i18n("Table \"%1\" already exists.", tableSchema->name()) );
 			return false;
 		}
 	}
@@ -1456,13 +1456,13 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemov
 	if (!tableSchema)
 		return false;
 
-	QString errmsg(i18n("Table \"%1\" cannot be removed.\n"));
+	KLocalizedString errmsg = ki18n("Table \"%1\" cannot be removed.\n");
 	//be sure that we handle the correct TableSchema object:
 	if (tableSchema->id() < 0
 		|| this->tableSchema(tableSchema->name())!=tableSchema
 		|| this->tableSchema(tableSchema->id())!=tableSchema)
 	{
-		setError(ERR_OBJECT_NOT_FOUND, errmsg.arg(tableSchema->name())
+		setError(ERR_OBJECT_NOT_FOUND, errmsg.subs(tableSchema->name()).toString()
 			+i18n("Unexpected name or identifier."));
 		return false;
 	}
@@ -1473,7 +1473,8 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemov
 
 	//sanity checks:
 	if (m_driver->isSystemObjectName( tableSchema->name() )) {
-		setError(ERR_SYSTEM_NAME_RESERVED, errmsg.arg(tableSchema->name()) + d->strItIsASystemObject());
+		setError(ERR_SYSTEM_NAME_RESERVED, errmsg.subs(tableSchema->name()).toString()
+			+ d->strItIsASystemObject());
 		return false;
 	}
 
@@ -1511,8 +1512,8 @@ tristate Connection::dropTable( const QString& table )
 	clearError();
 	TableSchema* ts = tableSchema( table );
 	if (!ts) {
-		setError(ERR_OBJECT_NOT_FOUND, i18n("Table \"%1\" does not exist.")
-			.arg(table));
+		setError(ERR_OBJECT_NOT_FOUND, i18n("Table \"%1\" does not exist.",
+			table));
 		return false;
 	}
 	return dropTable(ts);
@@ -1526,8 +1527,8 @@ tristate Connection::alterTable( TableSchema& tableSchema, TableSchema& newTable
 		return res;
 
 	if (&tableSchema == &newTableSchema) {
-		setError(ERR_OBJECT_THE_SAME, i18n("Could not alter table \"%1\" using the same table.")
-			.arg(tableSchema.name()));
+		setError(ERR_OBJECT_THE_SAME, i18n("Could not alter table \"%1\" using the same table.",
+			tableSchema.name()));
 		return false;
 	}
 //TODO(js): implement real altering
@@ -1548,18 +1549,18 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 {
 	clearError();
 	if (&tableSchema!=m_tables[tableSchema.id()]) {
-		setError(ERR_OBJECT_NOT_FOUND, i18n("Unknown table \"%1\"").arg(tableSchema.name()));
+		setError(ERR_OBJECT_NOT_FOUND, i18n("Unknown table \"%1\"", tableSchema.name()));
 		return false;
 	}
 	if (newName.isEmpty() || !KexiUtils::isIdentifier(newName)) {
-		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\"").arg(newName));
+		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\"", newName));
 		return false;
 	}
 	const QString oldTableName = tableSchema.name();
 	const QString newTableName = newName.lower().stripWhiteSpace();
 	if (oldTableName.lower().stripWhiteSpace() == newTableName) {
-		setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.")
-			.arg(newTableName));
+		setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.",
+			newTableName));
 		return false;
 	}
 //TODO: alter table name for server DB backends!
@@ -1568,8 +1569,8 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 	const bool destTableExists = this->tableSchema( newName ) != 0;
 	if (!replace && destTableExists) {
 		setError(ERR_OBJECT_EXISTS,
-			i18n("Could not rename table \"%1\" to \"%2\". Table \"%3\" already exists.")
-			.arg(tableSchema.name()).arg(newName).arg(newName));
+			i18n("Could not rename table \"%1\" to \"%2\". Table \"%3\" already exists.",
+				tableSchema.name(), newName, newName));
 		return false;
 	}
 
@@ -1678,8 +1679,8 @@ bool Connection::dropQuery( const QString& query )
 	clearError();
 	QuerySchema* qs = querySchema( query );
 	if (!qs) {
-		setError(ERR_OBJECT_NOT_FOUND, i18n("Query \"%1\" does not exist.")
-			.arg(query));
+		setError(ERR_OBJECT_NOT_FOUND, i18n("Query \"%1\" does not exist.",
+			query));
 		return false;
 	}
 	return dropQuery(qs);
@@ -1755,7 +1756,7 @@ bool Connection::rollbackAutoCommitTransaction(const Transaction& trans)
 
 #define SET_ERR_TRANS_NOT_SUPP \
 	{ setError(ERR_UNSUPPORTED_DRV_FEATURE, \
-	 i18n("Transactions are not supported for \"%1\" driver.").arg(m_driver->name() )); }
+	 i18n("Transactions are not supported for \"%1\" driver.", m_driver->name() )); }
 
 #define SET_BEGIN_TR_ERROR \
 	 { if (!error()) \
@@ -2026,7 +2027,7 @@ bool Connection::setupObjectSchemaData( const RowData &data, SchemaData &sdata )
 	}
 	sdata.m_name = data[2].toString();
 	if (!KexiUtils::isIdentifier( sdata.m_name )) {
-		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"").arg(sdata.m_name));
+		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"", sdata.m_name));
 		return false;
 	}
 	sdata.m_caption = data[3].toString();
@@ -2145,7 +2146,7 @@ tristate Connection::querySingleRecord(QuerySchema& query, RowData &data)
 bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
 {
 	if (column >= cursor->fieldCount()) {
-		setError(ERR_CURSOR_RECORD_FETCHING, i18n("Column %1 does not exist for the query.").arg(column));
+		setError(ERR_CURSOR_RECORD_FETCHING, i18n("Column %1 does not exist for the query.", column));
 		return false;
 	}
 	return true;
@@ -2404,8 +2405,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 	QString errorMsg;
 	int errorLine, errorColumn;
 	if (!doc.setContent( extendedTableSchemaString, &errorMsg, &errorLine, &errorColumn ))
-		loadExtendedTableSchemaData_ERR2( i18n("Error in XML data: \"%1\" in line %2, column %3.\nXML data: ")
-			.arg(errorMsg).arg(errorLine).arg(errorColumn) + extendedTableSchemaString.left(1024));
+		loadExtendedTableSchemaData_ERR2( i18n("Error in XML data: \"%1\" in line %2, column %3.\nXML data: ", errorMsg, errorLine, errorColumn) + extendedTableSchemaString.left(1024));
 
 //! @todo look at the current format version (KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION)
 
@@ -2505,8 +2505,8 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 			break;
 
 		if (!KexiUtils::isIdentifier( cursor->value(2).toString() )) {
-			setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"")
-				.arg( cursor->value(2).toString() ));
+			setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"", 
+				cursor->value(2).toString() ));
 			ok=false;
 			break;
 		}
@@ -2624,8 +2624,8 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 	QString sqlText;
 	if (!loadDataBlock( objID, sqlText, "sql" )) {
 		setError(ERR_OBJECT_NOT_FOUND,
-			i18n("Could not find definition for query \"%1\". Removing this query is recommended.")
-			.arg(data[2].toString()));
+			i18n("Could not find definition for query \"%1\". Removing this query is recommended.", 
+				data[2].toString()));
 		return 0;
 	}
 	d->parser()->parse( sqlText );
@@ -2635,8 +2635,7 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 		setError(ERR_SQL_PARSE_ERROR,
 			i18n("<p>Could not load definition for query \"%1\". "
 			"SQL statement for this query is invalid:<br><tt>%2</tt></p>\n"
-			"<p>You can open this query in Text View and correct it.</p>").arg(data[2].toString())
-			.arg(d->parser()->statement()));
+			"<p>You can open this query in Text View and correct it.</p>", data[2].toString(), 			d->parser()->statement()));
 		return 0;
 	}
 	if (!setupObjectSchemaData( data, *query )) {
@@ -2871,7 +2870,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 				QVariant val = data[ pkeyFieldsOrder[i] ];
 				if (val.isNull() || !val.isValid()) {
 					setError(ERR_UPDATE_NULL_PKEY_FIELD,
-						i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
+						i18n("Primary key's field \"%1\" cannot be empty.", it.current()->name()));
 	//js todo: pass the field's name somewhere!
 					return false;
 				}
@@ -2948,8 +2947,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 				KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
 				setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY,
-					i18n("Could not insert row because it does not contain entire master table's primary key.")
-					.arg(query.name()));
+					i18n("Could not insert row because it does not contain entire master table's primary key."));
 				return false;
 			}
 		}
@@ -3058,8 +3056,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 	if (!mt) {
 		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
 		setError(ERR_DELETE_NO_MASTER_TABLE,
-			i18n("Could not delete row because there is no master table defined.")
-			.arg(query.name()));
+			i18n("Could not delete row because there is no master table defined."));
 		return false;
 	}
 	IndexSchema *pkey = (mt->primaryKey() && !mt->primaryKey()->fields()->isEmpty()) ? mt->primaryKey() : 0;
@@ -3092,8 +3089,8 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 				sqlwhere+=" AND ";
 			QVariant val = data[ pkeyFieldsOrder[i] ];
 			if (val.isNull() || !val.isValid()) {
-				setError(ERR_DELETE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.")
-					.arg(it.current()->name()));
+				setError(ERR_DELETE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.", 
+					it.current()->name()));
 //js todo: pass the field's name somewhere!
 				return false;
 			}
