@@ -17,22 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWPageSettings.h"
+#ifndef KWFRAMERUNAROUNDPROPERTIES_H
+#define KWFRAMERUNAROUNDPROPERTIES_H
 
+#include <QWidget>
+#include <QList>
 
-KWPageSettings::KWPageSettings() {
-    m_pageLayout = KoPageLayout::standardLayout();
-    m_pageLayout.ptLeft = -1;
-    m_pageLayout.ptRight = -1;
-    m_pageLayout.ptPageEdge = 10;
-    m_pageLayout.ptBindingSide = 140;
-    m_mainFrame = true;
-    m_headerDistance = 10;
-    m_footerDistance = 9;
-    m_footnoteDistance = 8;
-    m_endNoteDistance = 7;
-    m_firstHeader = KWord::HFTypeNone;
-    m_firstFooter = KWord::HFTypeEvenOdd;
-    m_headers = KWord::HFTypeEvenOdd;
-    m_footers = KWord::HFTypeSameAsFirst;
-}
+#include "ui_KWFrameRunaroundProperties.h"
+
+class KWFrame;
+
+class KWFrameRunaroundProperties : public QWidget {
+    Q_OBJECT
+public:
+    KWFrameRunaroundProperties(QWidget *parent = 0);
+    ~KWFrameRunaroundProperties();
+
+    void open(const QList<KWFrame*> &frames);
+
+private:
+    Ui::KWFrameRunaroundProperties widget;
+};
+
+#endif

@@ -2,3 +2,4 @@
  * \mainpage
  * KWord Part
  */
+IGNORE_PREFIX=KW

@@ -17,22 +17,44 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWPageSettings.h"
+#ifndef KWFRAMECONNECTSELECTOR_H
+#define KWFRAMECONNECTSELECTOR_H
 
+#include "ui_KWFrameConnectSelector.h"
+#include <dialog/KWShapeConfigFactory.h>
 
-KWPageSettings::KWPageSettings() {
-    m_pageLayout = KoPageLayout::standardLayout();
-    m_pageLayout.ptLeft = -1;
-    m_pageLayout.ptRight = -1;
-    m_pageLayout.ptPageEdge = 10;
-    m_pageLayout.ptBindingSide = 140;
-    m_mainFrame = true;
-    m_headerDistance = 10;
-    m_footerDistance = 9;
-    m_footnoteDistance = 8;
-    m_endNoteDistance = 7;
-    m_firstHeader = KWord::HFTypeNone;
-    m_firstFooter = KWord::HFTypeEvenOdd;
-    m_headers = KWord::HFTypeEvenOdd;
-    m_footers = KWord::HFTypeSameAsFirst;
-}
+#include <KoShapeConfigWidgetBase.h>
+
+#include <QWidget>
+#include <QList>
+
+class KWFrame;
+class KWTextFrame;
+class KWFrameSet;
+class KWDocument;
+
+class KWFrameConnectSelector : public KoShapeConfigWidgetBase {
+    Q_OBJECT
+public:
+    KWFrameConnectSelector(FrameConfigSharedState *state);
+    ~KWFrameConnectSelector();
+
+    bool open(KWFrame *frame);
+    void open(KoShape *shape);
+    void save();
+    KAction *createAction();
+
+private slots:
+    void frameSetSelected(QTreeWidgetItem* item);
+    void nameChanged(const QString &text);
+
+private:
+    Ui::KWFrameConnectSelector widget;
+
+    QList<KWFrameSet*> m_frameSets;
+    QList<QTreeWidgetItem *> m_items;
+
+    FrameConfigSharedState *m_state;
+};
+
+#endif

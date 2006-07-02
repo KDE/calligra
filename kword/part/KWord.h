@@ -29,12 +29,6 @@ public:
         AutoCreateNewFrameBehavior, ///< Create a new frame on the next page
         IgnoreContentFrameBehavior  ///< Ignore the content and clip it
     };
-    /// Determines if a frame will be copied on even or odd pages only.
-    enum SheetSide {
-        AnySheetSide, ///< Copy frame to a new page if it was present on the last page
-        OddSheetSide, ///< If the new page is an odd-numbered one; copy frames from the last odd page
-        EvenSheetSide ///< If the new page is an even-numbered one; copy frames from the last even page
-    };
     /// What happens on new page
     enum NewFrameBehavior {
         ReconnectNewFrame,  ///< On new page reconnect a copied from to the flow

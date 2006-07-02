@@ -45,11 +45,15 @@ public:
     /// return the document with the text that belongs to this frameset.
     QTextDocument *document() const { return m_document; }
 
+    bool protectContent() { return m_protectContent; }
+    void setProtectContent(bool protect) { m_protectContent = protect; }
+
 protected:
     void setupFrame(KWFrame *frame);
 
 private:
     QTextDocument *m_document;
+    bool m_protectContent;
     KWord::TextFrameSetType m_textFrameSetType;
 };
 

@@ -25,10 +25,12 @@
 #include "KWCanvas.h"
 #include "KWPage.h"
 #include "KWViewMode.h"
+#include "dialog/KWFrameDialog.h"
 
 // koffice libs includes
 #include <KoShape.h>
 #include <KoShapeManager.h>
+#include <KoSelection.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -84,6 +86,11 @@ void KWView::setupActions() {
     QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
     connect( m_actionViewZoom, SIGNAL( triggered( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
+
+    m_actionFormatFrameSet = new KAction( i18n( "Frame/Frameset Properties" ),
+            actionCollection(), "format_frameset");
+    m_actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties" ) );
+    connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 }
 
 void KWView::setZoom( int zoom ) {
@@ -207,6 +214,18 @@ void KWView::resizeEvent( QResizeEvent *e )
     s.replace("&", ""); // hack to work around bug in KSelectAction
     if ( !KoZoomMode::isConstant(s) )
         viewZoom( s );
+}
+
+void KWView::editFrameProperties() {
+    QList<KWFrame*> frames;
+    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedObjects()) {
+        KWFrame *frame = m_document->frameForShape(shape);
+        if(frame)
+            frames.append(frame);
+    }
+    KWFrameDialog *frameDialog = new KWFrameDialog(frames, m_document, this);
+    frameDialog->exec();
+    delete frameDialog;
 }
 
 #include "KWView.moc"

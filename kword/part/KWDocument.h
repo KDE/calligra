@@ -40,6 +40,7 @@ class KWFrameSet;
 
 class KoOasisStyles;
 
+class KLocalizedString;
 class QDomDocument;
 class QIODevice;
 
@@ -101,6 +102,7 @@ public:
     bool saveOasis(KoStore*, KoXmlWriter*);
     /// reimplemented from KoShapeControllerBase
     KoView* createViewInstance(QWidget*, const char*);
+
 
     // others
     /**
@@ -176,6 +178,13 @@ public:
      */
     int lastPage() const;
 
+    KWFrame *frameForShape(KoShape *shape) const;
+
+    const QList<KWFrameSet*> &frameSets() const { return m_frameSets; }
+    KWFrameSet *frameSetByName( const QString & name );
+    QString suggestFrameSetNameForCopy( const QString& base );
+    QString uniqueFrameSetName( const QString& suggestion );
+
 public slots:
     /// Register new frameset
     void addFrameSet( KWFrameSet *f );
@@ -192,11 +201,15 @@ signals:
     void frameSetRemoved(KWFrameSet*);
 
 private slots:
-    /// Frame added to already registed frameset
+    /// Frame maintainance on already registed framesets
     void addFrame( KWFrame *frame );
+    void removeFrame( KWFrame *frame );
 
 private:
     friend class PageProcessingQueue;
+    QString renameFrameSet( const QString& prefix , const QString& base );
+
+private:
     bool m_snapToGrid;
     double m_gridX, m_gridY;
     int m_zoom;
@@ -207,6 +220,7 @@ private:
     KWPageManager m_pageManager;
     KWPageSettings m_pageSettings;
     KWFrameLayout m_frameLayout;
+    QMap<KoShape*, KWFrame*> m_frameMap;
 };
 
 class PageProcessingQueue : public QObject {

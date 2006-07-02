@@ -16,23 +16,26 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KWFRAMEGEOMETRY_H
+#define KWFRAMEGEOMETRY_H
 
-#include "KWPageSettings.h"
+#include <QWidget>
+#include <QList>
 
+#include "ui_KWFrameGeometry.h"
 
-KWPageSettings::KWPageSettings() {
-    m_pageLayout = KoPageLayout::standardLayout();
-    m_pageLayout.ptLeft = -1;
-    m_pageLayout.ptRight = -1;
-    m_pageLayout.ptPageEdge = 10;
-    m_pageLayout.ptBindingSide = 140;
-    m_mainFrame = true;
-    m_headerDistance = 10;
-    m_footerDistance = 9;
-    m_footnoteDistance = 8;
-    m_endNoteDistance = 7;
-    m_firstHeader = KWord::HFTypeNone;
-    m_firstFooter = KWord::HFTypeEvenOdd;
-    m_headers = KWord::HFTypeEvenOdd;
-    m_footers = KWord::HFTypeSameAsFirst;
-}
+class KWFrame;
+
+class KWFrameGeometry : public QWidget {
+    Q_OBJECT
+public:
+    KWFrameGeometry(QWidget *parent = 0);
+    ~KWFrameGeometry();
+
+    void open(const QList<KWFrame*> &frames);
+
+private:
+    Ui::KWFrameGeometry widget;
+};
+
+#endif

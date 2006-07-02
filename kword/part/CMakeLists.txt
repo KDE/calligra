@@ -18,12 +18,28 @@ set(kwordprivate_LIB_SRCS
     KWViewMode.cpp
     KWViewModeNormal.cpp
     KWViewModePreview.cpp
+
     frame/KWTextDocumentLayout.cpp
     frame/KWFrameLayout.cpp
     frame/KWFrame.cpp
     frame/KWFrameSet.cpp
     frame/KWTextFrame.cpp
-    frame/KWTextFrameSet.cpp)
+    frame/KWTextFrameSet.cpp
+
+    dialog/KWFrameConnectSelector.cpp
+    dialog/KWFrameGeometry.cpp
+    dialog/KWFrameRunaroundProperties.cpp
+    dialog/KWGeneralFrameProperties.cpp
+    dialog/KWFrameDialog.cpp
+    dialog/KWShapeConfigFactory.cpp
+)
+
+kde4_add_ui_files(kwordprivate_LIB_SRCS
+    dialog/KWFrameConnectSelector.ui
+    dialog/KWFrameGeometry.ui
+    dialog/KWFrameRunaroundProperties.ui
+    dialog/KWGeneralFrameProperties.ui
+)
 
 kde4_automoc(${kwordprivate_LIB_SRCS})
 
@@ -32,6 +48,7 @@ kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake kofficeui kotext)
 
 if(KDE4_BUILD_TESTS)
+    # only with this definition will the KWORD_EXPORT_TEST macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 

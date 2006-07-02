@@ -59,13 +59,13 @@ public:
      * For frame duplication policy on new page creation.
      * Determines if this frame will be copied on even or odd pages only.
      */
-    KWord::SheetSide sheetSide() const { return m_sheetSide; }
+    bool frameOnBothSheets() const { return m_copyToEverySheet; }
     /**
      * Determines if this frame will be copied on even or odd pages only.
      * Altering this does not change the frames placed until a new page is created.
-     * @param side the new sheet side
+     * @param both if true this frame will be copied to every page, if false only every other page
      */
-    void setSheetSide(KWord::SheetSide side) { m_sheetSide = side; }
+    void setFrameOnBothSheets(bool both) { m_copyToEverySheet = both; }
 
     /**
      * For frame duplication policy on new page creation.
@@ -110,6 +110,7 @@ public:
      * @return the parent frameset
      */
     KWFrameSet *frameSet() const { return m_frameSet; }
+    void setFrameSet(KWFrameSet *newFrameSet);
 
     /**
      * States if this frame is a copy of the previous one.
@@ -129,7 +130,7 @@ public:
 private:
     KoShape *m_shape;
     KWord::FrameBehavior m_frameBehavior;
-    KWord::SheetSide m_sheetSide;
+    bool m_copyToEverySheet;
     KWord::NewFrameBehavior m_newFrameBehavior;
     KWord::RunAroundSide m_runAroundSide;
     double m_runAroundDistance;

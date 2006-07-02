@@ -27,17 +27,25 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
 
     : m_shape(shape),
     m_frameBehavior( KWord::AutoExtendFrameBehavior ),
-    m_sheetSide( KWord::AnySheetSide ),
+    m_copyToEverySheet( true ),
     m_newFrameBehavior( KWord::NoFollowupFrame ),
     m_runAroundSide( KWord::BiggestRunAroundSide ),
     m_runAroundDistance( 1.0 ),
     m_isCopy(false),
     m_frameSet( parent )
 {
-    parent->addFrame(this);
+    if(parent)
+        parent->addFrame(this);
 }
 
 KWFrame::~KWFrame() {
     delete m_shape;
     m_shape = 0;
+}
+
+void KWFrame::setFrameSet(KWFrameSet *fs) {
+    if(m_frameSet)
+        m_frameSet->removeFrame(this);
+    m_frameSet = fs;
+    fs->addFrame(this);
 }

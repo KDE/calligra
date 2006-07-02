@@ -1,0 +1,217 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>KWFrameGeometry</class>
+ <widget class="QWidget" name="KWFrameGeometry" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>410</width>
+    <height>343</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="3" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="marginsGB" >
+     <property name="title" >
+      <string>Margins</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item rowspan="2" row="1" column="4" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>144</width>
+          <height>41</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0" colspan="4" >
+       <widget class="QCheckBox" name="m_synchronize" >
+        <property name="text" >
+         <string>Synchronize changes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QSpinBox" name="m_topMargin" />
+      </item>
+      <item row="2" column="3" >
+       <widget class="QSpinBox" name="m_bottomMargin" />
+      </item>
+      <item row="2" column="2" >
+       <widget class="QLabel" name="label_9" >
+        <property name="text" >
+         <string>Bottom:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_bottomMargin</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="label_8" >
+        <property name="text" >
+         <string>Top:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_topMargin</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_7" >
+        <property name="text" >
+         <string>Right:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_rightMargin</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QSpinBox" name="m_rightMargin" />
+      </item>
+      <item row="1" column="1" >
+       <widget class="QSpinBox" name="m_leftMargin" />
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_6" >
+        <property name="text" >
+         <string>Left:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_leftMargin</cstring>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="positionGB" >
+     <property name="title" >
+      <string>Position</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item rowspan="2" row="0" column="4" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QSpinBox" name="m_frameLeft" />
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Left:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_frameLeft</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="text" >
+         <string>Width:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_frameWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QSpinBox" name="m_frameWidth" />
+      </item>
+      <item row="0" column="3" >
+       <widget class="QSpinBox" name="m_frameTop" />
+      </item>
+      <item row="0" column="2" >
+       <widget class="QLabel" name="label_4" >
+        <property name="text" >
+         <string>Top:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_frameTop</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="label_5" >
+        <property name="text" >
+         <string>Height:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>m_frameHeight</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QSpinBox" name="m_frameHeight" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QCheckBox" name="m_protectSize" >
+     <property name="text" >
+      <string>Protect size and position</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

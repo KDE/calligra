@@ -17,22 +17,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWPageSettings.h"
+#ifndef KWGENERALFRAMEPROPERTIES_H
+#define KWGENERALFRAMEPROPERTIES_H
 
+#include "ui_KWGeneralFrameProperties.h"
+#include <dialog/KWShapeConfigFactory.h>
 
-KWPageSettings::KWPageSettings() {
-    m_pageLayout = KoPageLayout::standardLayout();
-    m_pageLayout.ptLeft = -1;
-    m_pageLayout.ptRight = -1;
-    m_pageLayout.ptPageEdge = 10;
-    m_pageLayout.ptBindingSide = 140;
-    m_mainFrame = true;
-    m_headerDistance = 10;
-    m_footerDistance = 9;
-    m_footnoteDistance = 8;
-    m_endNoteDistance = 7;
-    m_firstHeader = KWord::HFTypeNone;
-    m_firstFooter = KWord::HFTypeEvenOdd;
-    m_headers = KWord::HFTypeEvenOdd;
-    m_footers = KWord::HFTypeSameAsFirst;
-}
+#include <KoShapeConfigWidgetBase.h>
+
+#include <QWidget>
+#include <QList>
+
+class KWFrame;
+
+class KWGeneralFrameProperties : public KoShapeConfigWidgetBase {
+    Q_OBJECT
+public:
+    KWGeneralFrameProperties(FrameConfigSharedState *state);
+    ~KWGeneralFrameProperties();
+
+    void open(const QList<KWFrame*> &frames);
+    void open(KoShape *shape);
+    void save();
+    KAction *createAction();
+
+private:
+    Ui::KWGeneralFrameProperties widget;
+    FrameConfigSharedState *m_state;
+    KoShape *m_shape;
+    QList<KWFrame*> m_frames;
+    QButtonGroup *m_textGroup, *m_newPageGroup;
+};
+
+#endif

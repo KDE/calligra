@@ -29,7 +29,8 @@
 
 KWTextFrameSet::KWTextFrameSet()
     : m_document( new QTextDocument() ),
-    m_textFrameSetType( KWord::OtherTextFrameSet )
+    m_textFrameSetType( KWord::OtherTextFrameSet ),
+    m_protectContent(false)
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
 }
@@ -65,7 +66,7 @@ m_document->setHtml("Pleff lorem monaq morel plaff lerom baple merol pliff ipsum
         default: ;
     }
 
-if(m_textFrameSetType != KWord::MainTextFrameSet)
+//if(m_textFrameSetType != KWord::MainTextFrameSet)
     m_document->setHtml(name() +"<br>"+ name()); // TEST :)
 }
 
@@ -79,6 +80,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
         if(m_textFrameSetType != KWord::MainTextFrameSet && frameCount() > 1)
             frame->setCopy(true);
     }
+    // TODO sort frames
     if(frameCount() == 1 && m_document->isEmpty()) {
         delete m_document;
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());

@@ -27,6 +27,7 @@
 #include "frame/KWTextFrameSet.h"
 #include "frame/KWTextFrame.h"
 #include "frame/KWFrameLayout.h"
+#include "dialog/KWFrameDialog.h"
 
 // koffice libs includes
 #include <KoShapeManager.h>
@@ -36,9 +37,12 @@
 #include <KoShapeRegistry.h>
 
 // KDE + Qt includes
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <QIODevice>
 #include <QTimer>
 #include <QDomDocument>
+#include <QCoreApplication>
 
 
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
@@ -51,9 +55,26 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
 {
     m_pageManager.setDefaultPage(*pageSettings()->pageLayout());
     m_zoomMode = KoZoomMode::ZOOM_WIDTH;
-    KoToolManager::instance()->toolBox()->show();
 
     connect (&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
+
+    // Init shape Factories with our frame based configuration panels.
+    QList<KoShapeConfigFactory *> panels = KWFrameDialog::panels(this);
+    foreach(KoID id, KoShapeRegistry::instance()->listKeys())
+        KoShapeRegistry::instance()->get(id)->setOptionPanels(panels);
+
+    KoToolManager::instance()->toolBox()->show();
+
+    // print error if kotext not available
+    if( KoShapeRegistry::instance()->get(KoTextShape_SHAPEID) == 0 ) {
+         KMessageBox::error(parentWidget,
+                 i18n("Can not find needed text component, KWord will quit now"),
+                 i18n("Installation Error"));
+        QCoreApplication::exit(10);
+        QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit));
+        // TODO actually quit if I can figure out how to do that from here :(
+        return;
+    }
 
 appendPage();
 appendPage()->setPageSide(KWPage::PageSpread);
@@ -65,6 +86,7 @@ KWDocument::~KWDocument() {
 }
 
 void KWDocument::addShape (KoShape *shape) {
+#if 0
     if(shape->shapeId() == KoTextShape_SHAPEID) {
         KWTextFrameSet *fs = new KWTextFrameSet();
         KWTextFrame *frame = new KWTextFrame(shape, fs);
@@ -74,14 +96,17 @@ void KWDocument::addShape (KoShape *shape) {
         KWFrame *frame = new KWFrame(shape, fs);
         addFrameSet(fs);
     }
+#endif
 }
 
 void KWDocument::removeShape (KoShape *shape) {
+#if 0
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->remove(shape);
         canvas->update();
     }
+#endif
 }
 
 void KWDocument::paintContent(QPainter&, const QRect&, bool, double, double) {
@@ -142,6 +167,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     foreach(KWFrame *frame, fs->frames())
         addFrame(frame);
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
+    connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
     emit frameSetAdded(fs);
 }
 
@@ -158,6 +184,7 @@ int KWDocument::lastPage() const {
 }
 
 void KWDocument::addFrame(KWFrame *frame) {
+    m_frameMap.insert(frame->shape(), frame);
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->add(frame->shape());
@@ -165,6 +192,65 @@ void KWDocument::addFrame(KWFrame *frame) {
     frame->shape()->repaint();
 }
 
+void KWDocument::removeFrame(KWFrame *frame) {
+    m_frameMap.remove(frame->shape());
+}
+
+KWFrame *KWDocument::frameForShape(KoShape *shape) const {
+    return m_frameMap.value(shape);
+}
+
+KWFrameSet *KWDocument::frameSetByName( const QString & name )
+{
+    foreach(KWFrameSet *fs, m_frameSets) {
+        if(fs->name() == name)
+            return fs;
+    }
+    return 0;
+}
+
+
+QString KWDocument::uniqueFrameSetName( const QString& suggestion ) {
+    // make up a new name for the frameset, use "[base] [digits]" as template.
+    // Fully translatable naturally :)
+    return renameFrameSet("", suggestion);
+}
+
+QString KWDocument::suggestFrameSetNameForCopy( const QString& base ) {
+    // make up a new name for the frameset, use Copy[digits]-[base] as template.
+    // Fully translatable naturally :)
+    return renameFrameSet(i18n("Copy"), base);
+}
+
+QString KWDocument::renameFrameSet( const QString &prefix, const QString& base ) {
+    if(! frameSetByName(base))
+        return base;
+    QString before, after;
+    QRegExp findDigits("\\d+");
+    int pos = findDigits.indexIn(base);
+    if(pos >= 0) {
+        before=base.left(pos);
+        after = base.mid(pos + findDigits.matchedLength());
+    }
+    else if(prefix.isEmpty())
+        before = base +" ";
+    else {
+        before = prefix;
+        after = " "+ base;
+    }
+
+    if(! before.startsWith(prefix)) {
+        before = prefix + before;
+    }
+
+    int count=0;
+    while(true) {
+        QString name = (before + (count==0?"":QString::number(count)) + after).trimmed();
+        if(! frameSetByName(name))
+            return name;
+        count++;
+    }
+}
 
 // ************* PageProcessingQueue ************
 PageProcessingQueue::PageProcessingQueue(KWDocument *parent) {

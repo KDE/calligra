@@ -89,6 +89,7 @@ private:
 private slots:
     void viewZoom( const QString &zoom );
     void updateZoom();
+    void editFrameProperties();
 
 private:
     KWGui *m_gui;
@@ -98,6 +99,7 @@ private:
     KWPage *m_currentPage;
 
     KSelectAction *m_actionViewZoom;
+    KAction *m_actionFormatFrameSet;
 };
 
 #endif
