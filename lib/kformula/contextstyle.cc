@@ -420,7 +420,7 @@ void ContextStyle::setup()
 double StyleAttributes::getSizeFactor()
 {
     if ( factor_stack.empty() ) {
-        kdWarning( DEBUGID ) << "SizeFactor stack is empty.\n";
+//        kdWarning( DEBUGID ) << "SizeFactor stack is empty.\n";
         return 1.0;
     }
     return factor_stack.top();
@@ -429,7 +429,7 @@ double StyleAttributes::getSizeFactor()
 CharStyle StyleAttributes::getCharStyle()
 {
     if ( style_stack.empty() ) {
-        kdWarning( DEBUGID ) << "CharStyle stack is empty.\n";
+//        kdWarning( DEBUGID ) << "CharStyle stack is empty.\n";
         return anyChar;
     }
     return style_stack.top();
@@ -438,7 +438,7 @@ CharStyle StyleAttributes::getCharStyle()
 CharFamily StyleAttributes::getCharFamily()
 {
     if ( family_stack.empty() ) {
-        kdWarning( DEBUGID ) << "CharFamily stack is empty.\n";
+//        kdWarning( DEBUGID ) << "CharFamily stack is empty.\n";
         return anyFamily;
     }
     return family_stack.top();
@@ -447,7 +447,7 @@ CharFamily StyleAttributes::getCharFamily()
 QColor StyleAttributes::getColor()
 {
     if ( color_stack.empty() ) {
-        kdWarning( DEBUGID ) << "Color stack is empty.\n";
+//        kdWarning( DEBUGID ) << "Color stack is empty.\n";
         return QColor( Qt::black );
         //return getDefaultColor();
     }
@@ -457,7 +457,7 @@ QColor StyleAttributes::getColor()
 QColor StyleAttributes::getBackground()
 {
     if ( background_stack.empty() ) {
-        kdWarning( DEBUGID ) << "Background stack is empty.\n";
+//        kdWarning( DEBUGID ) << "Background stack is empty.\n";
         return QColor( Qt::white );
     }
     return background_stack.top();
