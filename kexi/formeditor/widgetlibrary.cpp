@@ -227,7 +227,7 @@ WidgetLibrary::loadFactories()
 		return;
 	d->factoriesLoaded = true;
 	for (Q3AsciiDictIterator<KService::Ptr> it(d->services); it.current(); ++it) {
-		WidgetFactory *f = KParts::ComponentFactory::createInstanceFromService<WidgetFactory>(
+		WidgetFactory *f = KService::createInstance<WidgetFactory>(
 			*it.current(), this, (*it.current())->library().latin1(), QStringList());
 		if (!f) {
 			kWarning() << "WidgetLibrary::loadFactories(): creating factory failed! "

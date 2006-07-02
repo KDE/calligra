@@ -27,7 +27,6 @@
 #include <kexidb/error.h>
 
 #include <klibloader.h>
-#include <kparts/componentfactory.h>
 #include <kservicetypetrader.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -204,7 +203,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		return 0;
 
 	clearError();
-	KexiDBDbg << "DriverManager::driver(): loading " << name << endl;
+	KexiDBDbg << "DriverManagerInternal::driver(): loading " << name << endl;
 
 	Driver *drv = name.isEmpty() ? 0 : m_drivers.find( name.toLatin1() );
 	if (drv)
@@ -218,8 +217,8 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	KService::Ptr ptr= *(m_services_lcase.find( name.toLower() ));
 	QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 
-	KexiDBDbg << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
-	drv = KParts::ComponentFactory::createPartInstanceFromService<KexiDB::Driver>(ptr, /*QWidget*/0,
+	KexiDBDbg << "KexiDBInterfaceManager::driver(): library: "<<ptr->library()<<endl;
+	drv = KService::createInstance<KexiDB::Driver>(ptr,
 		this,
 		QStringList(),
 		&m_serverResultNum);
@@ -236,7 +235,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		m_serverResultName=m_componentLoadingErrors[m_serverResultNum];
 		return 0;
 	}
-	KexiDBDbg << "KexiDBInterfaceManager::load(): loading succeed: " << name <<endl;
+	KexiDBDbg << "DriverManagerInternal::driver(): loading succeed: " << name <<endl;
 //	KexiDBDbg << "drv="<<(long)drv <<endl;
 
 	drv->setObjectName( srv_name );

@@ -203,7 +203,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 	QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
 
 	KexiDBDbg << "MigrateManagerInternal::driver(): library: "<<ptr->library()<<endl;
-	drv = KParts::ComponentFactory::createInstanceFromService<KexiMigrate>(ptr,
+	drv = KService::createInstance<KexiMigrate>(ptr,
 		this, srv_name.latin1(), QStringList(),&m_serverResultNum);
 
 	if (!drv) {

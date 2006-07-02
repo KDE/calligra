@@ -128,7 +128,7 @@ Manager::part(Info *i)
 	if(!p) {
 		kDebug() << "Manager::part().." << endl;
 		int error=0;
-		p = KParts::ComponentFactory::createInstanceFromService<Part>(i->ptr(), this, 
+		p = KService::createInstance<Part>(i->ptr(), this, 
 			QString(i->objectName()+"_part").latin1(), QStringList(), &error);
 		if(!p) {
 			kDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
