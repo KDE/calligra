@@ -116,12 +116,12 @@ void Solver::optimize()
   else // if (d->dialog->valueButton->isChecked())
   {
     // TODO
-    s_formula->setExpression( formulaCell->text() );
+    s_formula->setExpression( "=ABS(" + formulaCell->text().mid(1) + '-'
+                                      + d->dialog->value->text() + ')' );
   }
 
   // Determine the parameters
   int dimension = 0;
-  int index = 0;
   Parameters* parameters = new Parameters;
   region = Region( d->view, d->dialog->parameters->textEdit()->toPlainText() );
   Region::ConstIterator end( region.constEnd() );
@@ -143,6 +143,7 @@ void Solver::optimize()
   gsl_vector_set_all(stepSizes, 1.0);
 
   /* Initialize starting point */
+  int index = 0;
   gsl_vector* x = gsl_vector_alloc( dimension );
   foreach (Cell* cell, parameters->cells)
   {
@@ -152,7 +153,7 @@ void Solver::optimize()
   /* Initialize method and iterate */
   gsl_multimin_function functionInfo;
   functionInfo.f = &function;
-  functionInfo.n = index; // dimension (#components of x)
+  functionInfo.n = dimension;
   functionInfo.params = static_cast<void*>( parameters );
 
   // Use the simplex minimizer. The others depend on the first derivative.
@@ -196,6 +197,13 @@ void Solver::optimize()
   gsl_multimin_fminimizer_free(minimizer);
   delete parameters;
   delete s_formula;
+}
+
+double Solver::evaluate(const gsl_vector* vector, void *parameters)
+{
+  Q_UNUSED(vector)
+  Q_UNUSED(parameters)
+  return 0.0;
 }
 
 double function(const gsl_vector* vector, void *params)

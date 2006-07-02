@@ -68,9 +68,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       </property>
       <item row="2" column="0" >
        <widget class="QRadioButton" name="valueButton" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
         <property name="text" >
          <string>Value:</string>
         </property>
@@ -95,9 +92,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       </item>
       <item row="2" column="1" >
        <widget class="QLineEdit" name="value" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
      </layout>
