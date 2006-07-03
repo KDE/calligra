@@ -103,6 +103,7 @@ KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
 	d->layout = 0;
 	m_subwidget = 0;
 	d->label = new QLabel(text, this);
+	d->label->installEventFilter( this );
 	QFontMetrics fm( font() );
 	//d->label->setFixedWidth( fm.width("This is a test string length") );
 	d->autoCaption = true;
@@ -730,6 +731,15 @@ bool KexiDBAutoField::setProperty( const char * name, const QVariant & value )
 	if (ok)
 		return true;
 	return QWidget::setProperty(name, value);
+}
+
+bool KexiDBAutoField::eventFilter( QObject *o, QEvent *e )
+{
+	if (o==d->label && d->label->buddy() && e->type()==QEvent::MouseButtonRelease) {
+		//focus label's buddy when user clicked the label
+		d->label->buddy()->setFocus();
+	}
+	return QWidget::eventFilter(o, e);
 }
 
 /*
