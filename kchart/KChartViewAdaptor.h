@@ -20,7 +20,7 @@
 #ifndef KCHART_VIEW_ADAPTOR_H
 #define KCHART_VIEW_ADAPTOR_H
 
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 #include <QString>
 
