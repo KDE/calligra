@@ -156,6 +156,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		//! internal editor can be created too late, so certain properties should be copied
 		void copyPropertiesToEditor();
 
+		virtual bool eventFilter( QObject *o, QEvent *e );
 	private:
 		class Private;
 		Private *d;
