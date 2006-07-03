@@ -144,7 +144,8 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 
 		void initForm();
 		void loadForm();
-
+		void updateAutoFieldsDataSource();
+		
 		virtual void resizeEvent ( QResizeEvent * );
 
 		void initDataSource();
