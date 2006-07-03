@@ -230,7 +230,8 @@ KexiDBAutoField::setInvalidState( const QString &text )
 	m_widgetType = Auto;
 	createEditor();
 	setFocusPolicy(QWidget::NoFocus);
-	m_editor->setFocusPolicy(QWidget::NoFocus);
+	if (m_editor)
+		m_editor->setFocusPolicy(QWidget::NoFocus);
 //! @todo or set this to editor's text?
 	m_label->setText( text );
 }

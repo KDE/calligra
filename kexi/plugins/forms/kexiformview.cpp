@@ -277,6 +277,34 @@ KexiFormView::initForm()
 	}
 }
 
+void KexiFormView::updateAutoFieldsDataSource()
+{
+//! @todo call this when form's data source is changed
+	//update autofields: 
+	//-inherit captions
+	//-inherit data types
+	//(this data has not been stored in the form)
+	QString dataSourceString( m_dbform->dataSource() );
+	QCString dataSourceMimeTypeString( m_dbform->dataSourceMimeType() );
+	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+	KexiDB::TableOrQuerySchema tableOrQuery(
+		conn, dataSourceString.latin1(), dataSourceMimeTypeString=="kexi/table");
+	if (!tableOrQuery.table() && !tableOrQuery.query())
+		return;
+	for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
+		it.current(); ++it)
+	{
+		KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>( it.current()->widget() );
+		if (afWidget) {
+			KexiDB::QueryColumnInfo *colInfo = tableOrQuery.columnInfo( afWidget->dataSource() );
+			if (colInfo) {
+				afWidget->setColumnInfo(colInfo);
+					//setFieldTypeInternal((int)colInfo->field->type());
+					//afWidget->setFieldCaptionInternal(colInfo->captionOrAliasOrName());
+			}
+		}
+	}
+}
 
 void
 KexiFormView::loadForm()
@@ -288,6 +316,7 @@ KexiFormView::loadForm()
 	if(viewMode()==Kexi::DataViewMode && !tempData()->tempForm.isNull() )
 	{
 		KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, tempData()->tempForm);
+		updateAutoFieldsDataSource();
 		return;
 	}
 
@@ -299,34 +328,7 @@ KexiFormView::loadForm()
 	//"autoTabStops" property is loaded -set it within the form tree as well
 	form()->setAutoTabStops( m_dbform->autoTabStops() );
 
-//! @todo move this to a separate method and call when form's data source is changed
-	//update autofields: 
-	//-inherit captions
-	//-inherit data types
-	//(this data has not been stored in the form)
-	QString dataSourceString( m_dbform->dataSource() );
-	QCString dataSourceMimeTypeString( m_dbform->dataSourceMimeType() );
-	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
-	KexiDB::TableOrQuerySchema tableOrQuery(
-		conn, dataSourceString.latin1(), dataSourceMimeTypeString=="kexi/table");
-	if (tableOrQuery.table() || tableOrQuery.query()) {
-		for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
-			it.current(); ++it)
-		{
-			KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>( it.current()->widget() );
-			if (afWidget) {
-				KexiDB::QueryColumnInfo *colInfo = tableOrQuery.columnInfo( afWidget->dataSource() );
-				if (colInfo) {
-					afWidget->setColumnInfo(colInfo);
-						//setFieldTypeInternal((int)colInfo->field->type());
-						//afWidget->setFieldCaptionInternal(colInfo->captionOrAliasOrName());
-				}
-			}
-		}
-	}
-	else {
-//		kexipluginsdbg << "KexiFormView::loadForm(): no table/query" << endl;
-	}
+	updateAutoFieldsDataSource();
 }
 
 void
