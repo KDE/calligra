@@ -340,7 +340,7 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
 //js: moved from useDatabase():
-		QFileInfo file(data()->dbPath()+QDir::separator()+dbName);
+		QFileInfo file(m_data->fileName());
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
 				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.")
@@ -2237,6 +2237,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		QString::fromLatin1("SELECT t_id, f_type, f_name, f_length, f_precision, f_constraints, "
 			"f_options, f_default, f_order, f_caption, f_help"
 			" FROM kexi__fields WHERE t_id=%1 ORDER BY f_order").arg(t->m_id) ))) {
+		delete t;
 		return 0;
 	}
 	if (!cursor->moveFirst()) {
@@ -2244,6 +2245,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 			setError(i18n("Table has no fields defined."));
 		}
 		deleteCursor(cursor);
+		delete t;
 		return 0;
 	}
 	bool ok;
