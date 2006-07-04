@@ -25,7 +25,6 @@ using std::cout;
 using std::cerr;
 
 
-// #include <dcopobject.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -42,7 +41,7 @@ using std::cerr;
 #include "kchart_params.h"
 #include "kchart_part.h"
 #include "KChartParamsAdaptor.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 
 namespace KChart

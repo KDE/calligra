@@ -457,7 +457,7 @@ void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
 void KChartBackgroundPixmapConfigPage::slotBrowse()
 {
     //TODO: Support non-local wallpapers
-    KUrl url = KFileDialog::getOpenFileName( 0 );
+    KUrl url = KFileDialog::getOpenFileName( KUrl() );
     if( url.isEmpty() )
         return;
     showSettings( url.path() );

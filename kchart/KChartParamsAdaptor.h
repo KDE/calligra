@@ -28,7 +28,7 @@
 #include <QSize>
 #include <QString>
 
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 namespace KChart
 {
