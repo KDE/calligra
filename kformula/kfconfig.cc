@@ -22,6 +22,7 @@
 #include <kiconloader.h>
 #include <kinstance.h>
 #include <klocale.h>
+#include <kicon.h>
 
 #include "kfconfig.h"
 #include "kformula_factory.h"
@@ -40,7 +41,7 @@ KFConfig::KFConfig( KFormulaPartView* parent )
     KVBox* page1 = new KVBox();
     p1 = addPage( page1, i18n( "Formula" ) );
     p1->setHeader(  i18n( "Formula Settings" ) );
-    p1->setIcon( BarIcon( "kformula", K3Icon::SizeMedium ) );
+    p1->setIcon( KIcon(BarIcon( "kformula", K3Icon::SizeMedium )));
     _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page1 );

@@ -21,7 +21,7 @@
 #define KFORMULA_VIEW_ADAPTOR_H
 
 #include <QtCore/QObject>
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 #include <QString>
 #include <qstringlist.h>
