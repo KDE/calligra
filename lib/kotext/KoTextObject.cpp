@@ -1613,7 +1613,12 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
         macroCmd->addCommand( removeSelCmd );
 
     // Insert replacement
-    insert( cursor, format,
+    if ( !customItemsMap.isEmpty() )
+        insert( cursor, format,
+            replacement, KoTextObject::customItemChar() /* no place holder command */,
+            selectionId, insertFlags | DoNotRemoveSelected, customItemsMap );
+    else
+        insert( cursor, format,
             replacement, QString::null /* no place holder command */,
             selectionId, insertFlags | DoNotRemoveSelected, customItemsMap );
 
