@@ -101,8 +101,6 @@ namespace KoMacroTest {
 	};
 }
 
-// TODO: 	- assertMacroEqMacro
-
 XMLHandlerTests2::XMLHandlerTests2()
 	: KUnitTest::SlotTester()
 	, d( new Private() ) // create the private d-pointer instance.
@@ -149,17 +147,17 @@ void XMLHandlerTests2::testParseAndToXML()
 
 	// 1.Test - Correct DomElement.
 	testCorrectDomElement();
-// 	// 2.Test - XML-document with bad root element.
-// 	testBadRoot();
+	// 2.Test - XML-document with bad root element.
+ 	testBadRoot();
 	// 3.Test - XML-document with a missing Variable.
 	testMissingVariable();
 	// 4.Test - One more Variable in XML-Document.
 	testMoreVariables();
-// 	// 5.Test - XML-document with wrong macro-xmlversion.
-// 	testWrongVersion();
-// 	// 6.Test - XML-document if it has a wrong structure like wrong parathesis
-// 	// 	or missing end tag.
-// 	testWrongXMLStruct();
+ 	// 5.Test - XML-document with wrong macro-xmlversion.
+ 	testWrongVersion();
+	// 6.Test - XML-document if it has a wrong structure like wrong parathesis
+	// 	or missing end tag.
+	testWrongXMLStruct();
 	// 7.Test-XML-document with maximum field-size.
 	testMaxNum();
 	// 8.Test-XML-document with maximum+1 field-size.
@@ -170,7 +168,7 @@ void XMLHandlerTests2::testParseAndToXML()
 	testMinNum2();
 	// 11.Test - With a to big number.
 	testBigNumber();
-// 	// 12.Test - With two MacroItems.
+ 	// 12.Test - With two MacroItems.
 	testTwoMacroItems();
 }
 
@@ -232,12 +230,16 @@ void XMLHandlerTests2::testCorrectDomElement()
 		KOMACROTEST_ASSERT(d->macroitem2->variables().size(),(sizetypemap)4);
 		{	
 			// 4a.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem2->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem2->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),	true);
 		}
 	}
+	// Change varint and the belonging Variable in the parsen macro2test
+	// and test it in the macro3 below
+	varint->setVariant(117);
+	d->macroitem2->variable("testint")->setVariant(117);
 
 	// Now convert the parsen macro2 back to a QDomElement and again into macro3 for a better comparison.
 	const QDomElement elem2 = d->macro2->toXML();
@@ -258,41 +260,55 @@ void XMLHandlerTests2::testCorrectDomElement()
 		KOMACROTEST_ASSERT(d->macroitem3->variables().size(),(sizetypemap)4);
 		{	
 			// 4b.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem3->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem3->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),	true);
 		}
 	}
 }
 
-/*
+
 // 2.Test - XML-document with bad root element.
 void XMLHandlerTests2::testBadRoot()
 {
-	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument doomdocument;
+	// Clear macroitems in the macros.
+	d->macro->clearItems();
+	d->macro2->clearItems();
+	d->macro3->clearItems();
 
+	// Part 1: From XML to a Macro.
+	// Test-XML-document with normal allocated variables.
 	const QString xml = QString("<!DOCTYPE macros>"
 				    "<maro xmlversion=\"1\">"
 				      "<item action=\"testaction\" >"
-    					"<variable name=\"teststring\" >testString</variable>"
+    					"<variable name=\"teststring\" >test_string</variable>"
 						"<variable name=\"testint\" >0</variable>"
 						"<variable name=\"testbool\" >true</variable>"
 						"<variable name=\"testdouble\" >0.6</variable>"
 				      "</item>"
 				    "</maro>");
+	// Set the XML-document with the above string.
+	QDomDocument doomdocument;
 	doomdocument.setContent(xml);
 	const QDomElement elem = doomdocument.documentElement();
-	KOMACROTEST_XASSERT(macro->parseXML(elem),true);
 
-	//no assertMacroContentEqToXML(), because parsing failed.
-	assertMacroContentEqToXML(macro,elem,true,false,QMap<QString,bool>());
+	// Create a MacroItem with the TestAction for macro2 and add it to macro.
+	d->macroitem = new KoMacro::MacroItem();
+	d->macro->addItem(d->macroitem);
 
-	const QDomElement elem2 = macro->toXML();
-	assertMacroContentEqToXML(macro,elem2,true,false,QMap<QString,bool>());
+	d->macroitem->setAction(d->testaction);
+
+	// Push the Variables into the macroitem.
+	KSharedPtr<KoMacro::Variable> varstring = 	d->macroitem->addVariable("teststring",QVariant("test_string"));
+	KSharedPtr<KoMacro::Variable> varint = 		d->macroitem->addVariable("testint",QVariant(0));
+	KSharedPtr<KoMacro::Variable> varbool = 	d->macroitem->addVariable("testbool",QVariant(true));
+	KSharedPtr<KoMacro::Variable> vardouble = 	d->macroitem->addVariable("testdouble",QVariant(0.6));
+
+	// Is our XML parseable into a 2. Macro by calling parseXML()?
+	KOMACROTEST_XASSERT(d->macro2->parseXML(elem),true);
 }
-*/
+
 // 3.Test - XML-document with a missing Variable.
 void XMLHandlerTests2::testMissingVariable()
 {
@@ -327,7 +343,7 @@ void XMLHandlerTests2::testMissingVariable()
 	KSharedPtr<KoMacro::Variable> varint = 		d->macroitem->addVariable("testint",QVariant(0));
 	KSharedPtr<KoMacro::Variable> vardouble = 	d->macroitem->addVariable("testdouble",QVariant(0.6));
 		
-// Is our XML parseable into a 2. Macro by calling parseXML()?
+	// Is our XML parseable into a 2. Macro by calling parseXML()?
 	KOMACROTEST_ASSERT(d->macro2->parseXML(elem),true);
 
 	// Go down to the MacroItem of macro2.
@@ -345,9 +361,9 @@ void XMLHandlerTests2::testMissingVariable()
 		KOMACROTEST_ASSERT(d->macroitem2->variables().size(),(sizetypemap)3);
 		{	
 			// 4a.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem2->variable("testint")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),	true);
 		}
 	}
 
@@ -370,9 +386,9 @@ void XMLHandlerTests2::testMissingVariable()
 		KOMACROTEST_ASSERT(d->macroitem3->variables().size(),(sizetypemap)3);
 		{	
 			// 4b.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem3->variable("testint")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),	true);
 		}
 	}
 }
@@ -433,11 +449,11 @@ void XMLHandlerTests2::testMoreVariables()
 		KOMACROTEST_ASSERT(d->macroitem2->variables().size(),(sizetypemap)5);
 		{	
 			// 4a.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem2->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem2->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(varbla,		d->macroitem2->variable("testbla")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),	true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varbla,		d->macroitem2->variable("testbla")),	true);
 		}
 	}
 
@@ -460,67 +476,98 @@ void XMLHandlerTests2::testMoreVariables()
 		KOMACROTEST_ASSERT(d->macroitem3->variables().size(),(sizetypemap)5);
 		{	
 			// 4b.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem3->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem3->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(varbla,		d->macroitem3->variable("testbla")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),	true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varbla,		d->macroitem3->variable("testbla")),	true);
 		}
 	}
 }
 
-/*
+
 // 5.Test - XML-document with wrong macro-xmlversion.
 void XMLHandlerTests2::testWrongVersion()
 {
-	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument doomdocument;
+	// Clear macroitems in the macros.
+	d->macro->clearItems();
+	d->macro2->clearItems();
+	d->macro3->clearItems();
 
+	// Part 1: From XML to a Macro.
+	// Test-XML-document with normal allocated variables.
 	const QString xml = QString("<!DOCTYPE macros>"
-				    "<macro xmlversion=\"2\">"
+				    "<maro xmlversion=\"2\">"
 				      "<item action=\"testaction\" >"
-    					"<variable name=\"teststring\" >testString</variable>"
+    					"<variable name=\"teststring\" >test_string</variable>"
 						"<variable name=\"testint\" >0</variable>"
 						"<variable name=\"testbool\" >true</variable>"
 						"<variable name=\"testdouble\" >0.6</variable>"
 				      "</item>"
-				    "</macro>");
+				    "</maro>");
+	// Set the XML-document with the above string.
+	QDomDocument doomdocument;
 	doomdocument.setContent(xml);
 	const QDomElement elem = doomdocument.documentElement();
-	KOMACROTEST_XASSERT(macro->parseXML(elem),true);
 
-	//no assertMacroContentEqToXML(), because parsing failed.
-	assertMacroContentEqToXML(macro,elem,true,false,QMap<QString,bool>());
-	
-	const QDomElement elem2 = macro->toXML();
-	assertMacroContentEqToXML(macro,elem2,true,false,QMap<QString,bool>());
+	// Create a MacroItem with the TestAction for macro2 and add it to macro.
+	d->macroitem = new KoMacro::MacroItem();
+	d->macro->addItem(d->macroitem);
+
+	d->macroitem->setAction(d->testaction);
+
+	// Push the Variables into the macroitem.
+	KSharedPtr<KoMacro::Variable> varstring = 	d->macroitem->addVariable("teststring",QVariant("test_string"));
+	KSharedPtr<KoMacro::Variable> varint = 		d->macroitem->addVariable("testint",QVariant(0));
+	KSharedPtr<KoMacro::Variable> varbool = 	d->macroitem->addVariable("testbool",QVariant(true));
+	KSharedPtr<KoMacro::Variable> vardouble = 	d->macroitem->addVariable("testdouble",QVariant(0.6));
+
+	// Is our XML parseable into a 2. Macro by calling parseXML()?
+	KOMACROTEST_XASSERT(d->macro2->parseXML(elem),true);
 }
+
 
 // 6.Test - XML-document if it has a wrong structure like wrong parathesis
 // 	or missing end tag.
 void XMLHandlerTests2::testWrongXMLStruct()
 {
-	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
-	QDomDocument doomdocument;
+	// Clear macroitems in the macros.
+	d->macro->clearItems();
+	d->macro2->clearItems();
+	d->macro3->clearItems();
 
+	// Part 1: From XML to a Macro.
+	// Test-XML-document with normal allocated variables.
 	const QString xml = QString("<!DOCTYPE macros>"
-				    "macro xmlversion=\"1\">>"
+				    "maro xmlversion=\"1\">"
 				      "<item action=\"testaction\" >"
-    					"<variable name=\"teststring\" >testString</variable>"
+    					"<variable name=\"teststring\" >test_string</variable>"
 						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
 				      "</item>"
-				    "</macro>");
-	KOMACROTEST_XASSERT(doomdocument.setContent(xml),true);
+				    "</maro>");
+	// Set the XML-document with the above string.
+	QDomDocument doomdocument;
+	doomdocument.setContent(xml);
 	const QDomElement elem = doomdocument.documentElement();
-	KOMACROTEST_XASSERT(macro->parseXML(elem),true);
 
-	//no assertMacroContentEqToXML(), because parsing failed.
-	assertMacroContentEqToXML(macro,elem,true,false,QMap<QString,bool>());
-	
-	const QDomElement elem2 = macro->toXML();
-	assertMacroContentEqToXML(macro,elem2,true,false,QMap<QString,bool>());
+	// Create a MacroItem with the TestAction for macro2 and add it to macro.
+	d->macroitem = new KoMacro::MacroItem();
+	d->macro->addItem(d->macroitem);
+
+	d->macroitem->setAction(d->testaction);
+
+	// Push the Variables into the macroitem.
+	KSharedPtr<KoMacro::Variable> varstring = 	d->macroitem->addVariable("teststring",QVariant("test_string"));
+	KSharedPtr<KoMacro::Variable> varint = 		d->macroitem->addVariable("testint",QVariant(0));
+	KSharedPtr<KoMacro::Variable> varbool = 	d->macroitem->addVariable("testbool",QVariant(true));
+	KSharedPtr<KoMacro::Variable> vardouble = 	d->macroitem->addVariable("testdouble",QVariant(0.6));
+
+	// Is our XML parseable into a 2. Macro by calling parseXML()?
+	KOMACROTEST_XASSERT(d->macro2->parseXML(elem),true);
 }
-*/
+
 // 7.Test-XML-document with maximum field-size.
 void XMLHandlerTests2::testMaxNum()
 {
@@ -578,7 +625,7 @@ void XMLHandlerTests2::testMaxNum()
 			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem2->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem2->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),	true);
+// 			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),	true);
 		}
 	}
 
@@ -601,10 +648,10 @@ void XMLHandlerTests2::testMaxNum()
 		KOMACROTEST_ASSERT(d->macroitem3->variables().size(),(sizetypemap)4);
 		{	
 			// 4b.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem3->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem3->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
+// 			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
 		}
 	}
 }
@@ -663,10 +710,10 @@ void XMLHandlerTests2::testMaxNum2()
 		KOMACROTEST_ASSERT(d->macroitem2->variables().size(),(sizetypemap)4);
 		{	
 			// 4a.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem2->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem2->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
+// 			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
 		}
 	}
 
@@ -689,10 +736,10 @@ void XMLHandlerTests2::testMaxNum2()
 		KOMACROTEST_ASSERT(d->macroitem3->variables().size(),(sizetypemap)4);
 		{	
 			// 4b.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem3->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem3->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
+// 			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
 		}
 	}
 }
@@ -751,10 +798,10 @@ void XMLHandlerTests2::testMinNum()
 		KOMACROTEST_ASSERT(d->macroitem2->variables().size(),(sizetypemap)4);
 		{	
 			// 4a.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem2->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem2->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
+// 			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
 		}
 	}
 
@@ -777,10 +824,10 @@ void XMLHandlerTests2::testMinNum()
 		KOMACROTEST_ASSERT(d->macroitem3->variables().size(),(sizetypemap)4);
 		{	
 			// 4b.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem3->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem3->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
+// 			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
 		}
 	}
 }
@@ -839,10 +886,10 @@ void XMLHandlerTests2::testMinNum2()
 		KOMACROTEST_ASSERT(d->macroitem2->variables().size(),(sizetypemap)4);
 		{	
 			// 4a.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem2->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem2->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
+// 			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
 		}
 	}
 
@@ -865,10 +912,10 @@ void XMLHandlerTests2::testMinNum2()
 		KOMACROTEST_ASSERT(d->macroitem3->variables().size(),(sizetypemap)4);
 		{	
 			// 4b.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem3->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem3->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
+// 			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
 		}
 	}
 }
@@ -927,10 +974,10 @@ void XMLHandlerTests2::testBigNumber()
 		KOMACROTEST_ASSERT(d->macroitem2->variables().size(),(sizetypemap)4);
 		{	
 			// 4a.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem2->variable("teststring")),	true);
 			//KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem2->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem2->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem2->variable("testdouble")),	true);
 		}
 	}
 
@@ -953,10 +1000,10 @@ void XMLHandlerTests2::testBigNumber()
 		KOMACROTEST_ASSERT(d->macroitem3->variables().size(),(sizetypemap)4);
 		{	
 			// 4b.comparison - Test if the Variables are equal.
-			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(varstring,	d->macroitem3->variable("teststring")),	true);
 			//KOMACROTEST_ASSERT(assertVariablesEqual(varint,		d->macroitem3->variable("testint")),	true);
 			KOMACROTEST_ASSERT(assertVariablesEqual(varbool,	d->macroitem3->variable("testbool")),	true);
-			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),true);
+			KOMACROTEST_ASSERT(assertVariablesEqual(vardouble,	d->macroitem3->variable("testdouble")),	true);
 		}
 	}
 }
@@ -1095,117 +1142,8 @@ void XMLHandlerTests2::testTwoMacroItems()
 }
 
 /***************************************************************************
-* End of Sub-methos of testParseAndToXML().
+* End of Sub-methos of testParseAndToXML2().
 ***************************************************************************/
-
-/** 
-* Compares a XML-Element with a Macro. Call sub-asserts.
-* @p macro The parsen @a Macro.
-* @p elem The given @a QDomElement which is parsen.
-* @p isitemsempty Bool for expectation of an empty @a MacroItem -List.
-* @p isactionset Bool for expectation that the @a Action -names are equal.
-* @p isvariableok QMap of Bools for comparing each @a Variable .
-*/
-/*
-void XMLHandlerTests2::assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
-	const QDomElement& elem,
-	const bool isitemsempty,
-	const bool isactionset,
-	const QMap<QString, bool> isvariableok)
-{
-	// Make an Iterator over the MacroItems of the Macro.
-	const QValueList<KSharedPtr<KoMacro::MacroItem > > macroitems = macro->items();
-	QValueList<KSharedPtr<KoMacro::MacroItem > >::ConstIterator 
-		mit(macroitems.constBegin()), end(macroitems.constEnd());
-
-	//1.comparison - Is the MacroItem-list empty?
-	{
-		if( isitemsempty ) {
-			KOMACROTEST_XASSERT(macroitems.empty(),false);
-			kdDebug() << "There is no correct MacroItem parsen." << endl;
-			return;
-		}
-		else {
-			KOMACROTEST_ASSERT(macroitems.empty(),false);
-		}
-	}
-
-	// Got to the first item-elements of the elem (there is only one in the tests).
-	QDomNode itemnode = elem.firstChild();
-
-	// Iterate over the MacroItems and item-elements.
-	while(mit != end && ! itemnode.isNull()) {
-		const KSharedPtr<KoMacro::MacroItem> macroitem = *mit;
-		const QDomElement itemelem = itemnode.toElement();
-		
-		//2.comparison - Is the Action-name equal?
-		{
-			if( ! isactionset) {
-				KOMACROTEST_XASSERT(macroitem->action()->name() == itemelem.attribute("action"),true);
-				kdDebug() 	<< "Action-name not equal: " 
-							<< macroitem->action()->name()
-							<< " != " << itemelem.attribute("action") << endl;
-				return;
-			}
-			else {
-				KOMACROTEST_ASSERT(macroitem->action()->name() == itemelem.attribute("action"),true);
-			}
-		}
-
-		// Go down to MacroItem->Variable and item->variable and compare them.
-		QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables = macroitem->variables();
-		QDomNode varnode = itemelem.firstChild();
-
-		while ( ! varnode.isNull()) {
-			const QDomElement varelem = varnode.toElement();
-			const KSharedPtr<KoMacro::Variable> varitem = mvariables.find(varelem.attribute("name")).data();
-			
-			//3.comparison - Is the content of the Variable
-			// in the MacroItem and and item equal?
-			{
-				const bool var = *isvariableok.find(varelem.attribute("name"));
-				if( ! var ) {
-					KOMACROTEST_XASSERT(varitem->variant() == QVariant(varelem.text()), !var);
-					kdDebug() 	<< "The content of the Variable: " << varitem->name() 
-								<< " is not equal." << varitem->variant()
-								<< "!=" << varelem.text() << endl;
-				}
-				else {
-					KOMACROTEST_ASSERT(varitem->variant() == QVariant(varelem.text()), var);
-				}
-
-			}
-
-			// Erase the MacroItem from the map, because it is parsen correctly.
-			mvariables.erase(varitem->name());
-			// Go to next Variable in node-tree.
-			varnode = varnode.nextSibling();
-		}
-
-		//4.comparison - Is every MacroItem parsen?
-		{
-			KOMACROTEST_ASSERT(mvariables.empty(),true);
-			kdDebug() << "There are non-filled variable in the MacroItem: " << mvariables.count() <<endl;
-		}
-
-		// Go to next MacroItem and next item-element.
-		mit++;
-		itemnode = itemnode.nextSibling();
-	}
-}
-
-// Prints a QMap of Variables to kdDebug().
-void XMLHandlerTests2::printMvariables(const QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, const QString s)
-{
-	//QValueList<QString>::ConstIterator kit (keys.constBegin()), end(keys.constEnd());
-	QMap<QString, KSharedPtr<KoMacro::Variable > >::ConstIterator mvit (mvariables.constBegin()), end(mvariables.constEnd());
-	while(mvit != end){
-		const KoMacro::Variable * v = *mvit;
-		kdDebug() << s << ": " << v->name() << endl;
-		mvit++;
-	}
-}
-*/
 
 bool XMLHandlerTests2::assertActionsEqual(KSharedPtr<KoMacro::Action> action,
 	KSharedPtr<KoMacro::Action> action2)

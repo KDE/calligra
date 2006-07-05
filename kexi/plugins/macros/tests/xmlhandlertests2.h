@@ -97,16 +97,16 @@ namespace KoMacroTest {
 			// 1.Test - Correct DomElement.
 			void testCorrectDomElement();
 			// 2.Test - XML-document with bad root element.
-			//void testBadRoot();
+			void testBadRoot();
 			// 3.Test - XML-document with a missing Variable.
 			void testMissingVariable();
 			// 4.Test - One more Variable in XML-Document.
 			void testMoreVariables();
 			// 5.Test - XML-document with wrong macro-xmlversion.
-			//void testWrongVersion();
+			void testWrongVersion();
 			// 6.Test - XML-document if it has a wrong structure like
 			// wrong parathesis	or missing end tag.
-			//void testWrongXMLStruct();
+			void testWrongXMLStruct();
 			// 7.Test-XML-document with maximum field-size.
 			void testMaxNum();
 			// 8.Test-XML-document with maximum+1 field-size.
