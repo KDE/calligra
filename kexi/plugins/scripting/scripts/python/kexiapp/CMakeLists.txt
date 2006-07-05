@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi/kross/python/kexiapp FILES  __init__.py )
+install( FILES  __init__.py  DESTINATION ${DATA_INSTALL_DIR}/kexi/kross/python/kexiapp)
 
 
 

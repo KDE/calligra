@@ -17,12 +17,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadhtmlexport )
 
 target_link_libraries(kspreadhtmlexport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kspreadhtmlexport )
+install(TARGETS kspreadhtmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_html_export.desktop )
+install( FILES  kspread_html_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

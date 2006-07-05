@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresentermngexport )
 
 target_link_libraries(kpresentermngexport  ${KDE4_KDECORE_LIBS} kpresenterprivate kpresenterimageexport )
 
-install_targets(${PLUGIN_INSTALL_DIR} kpresentermngexport )
+install(TARGETS kpresentermngexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenter_mng_export.desktop )
+install( FILES  kpresenter_mng_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

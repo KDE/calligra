@@ -60,7 +60,7 @@ kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 target_link_libraries(kchartcommon  ${KDE4_KDE3SUPPORT_LIBS} kochart kofficeui kdchart )
 
 set_target_properties(kchartcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kchartcommon )
+install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -75,7 +75,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartpart )
 
 target_link_libraries(kchartpart  ${KDE4_KDECORE_LIBS} kchartcommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kchartpart )
+install(TARGETS kchartpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -88,16 +88,16 @@ kde4_add_kdeinit_executable( kchart ${kchart_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kchart )
+install(TARGETS kdeinit_kchart  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kchart kdeinit_kchart )
-install_targets(/bin kchart )
+install(TARGETS kchart  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kchartpart.desktop )
-install_files( ${DATA_INSTALL_DIR}/kchart FILES  kchart.rc kchart_readonly.rc )
-install_files( ${XDG_APPS_DIR} FILES  kchart.desktop )
+install( FILES  kchartpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kchart.rc kchart_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kchart)
+install( FILES  kchart.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

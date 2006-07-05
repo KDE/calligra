@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Hardware/Miscellaneous FILES  cd-rom.sml  cd-rom.xpm  CellPhone.sml  CellPhone.xpm  key.sml  key.xpm  desc  icon.xpm )
+install( FILES  cd-rom.sml  cd-rom.xpm  CellPhone.sml  CellPhone.xpm  key.sml  key.xpm  desc  icon.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Hardware/Miscellaneous)
 
 
 

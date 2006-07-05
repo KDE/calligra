@@ -18,7 +18,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oowriterimport )
 
 target_link_libraries(oowriterimport  kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} oowriterimport )
+install(TARGETS oowriterimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -33,7 +33,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oowriterexport )
 
 target_link_libraries(oowriterexport kofficecore kwordexportfilters  )
 
-install_targets(${PLUGIN_INSTALL_DIR} oowriterexport )
+install(TARGETS oowriterexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -41,7 +41,7 @@ install_targets(${PLUGIN_INSTALL_DIR} oowriterexport )
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_oowriter_import.desktop kword_oowriter_export.desktop )
+install( FILES  kword_oowriter_import.desktop kword_oowriter_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

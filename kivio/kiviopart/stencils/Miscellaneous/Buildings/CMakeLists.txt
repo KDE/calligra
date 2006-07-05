@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous/Buildings FILES  desc  Factory.sml  Factory.xpm  House.sml  House.xpm  icon.xpm  Office2.xpm  Office.sml  Office.xpm )
+install( FILES  desc  Factory.sml  Factory.xpm  House.sml  House.xpm  icon.xpm  Office2.xpm  Office.sml  Office.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous/Buildings)
 
 
 

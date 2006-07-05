@@ -5,9 +5,9 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/templates/Basic/.source FILES  empty.kft basicflow.kft )
-install_files( ${DATA_INSTALL_DIR}/kivio/templates/Basic FILES  .directory empty.desktop basicflow.desktop )
-install_files( ${DATA_INSTALL_DIR}/kivio/icons FILES  )
+install( FILES  empty.kft basicflow.kft  DESTINATION ${DATA_INSTALL_DIR}/kivio/templates/Basic/.source)
+install( FILES  .directory empty.desktop basicflow.desktop  DESTINATION ${DATA_INSTALL_DIR}/kivio/templates/Basic)
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kivio/icons)
 
 
 

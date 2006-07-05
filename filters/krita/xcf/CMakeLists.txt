@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaxcfimport )
 
 target_link_libraries(kritaxcfimport kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaxcfimport )
+install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -32,12 +32,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaxcfexport )
 
 target_link_libraries(kritaxcfexport kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritaxcfexport )
+install(TARGETS kritaxcfexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  krita_xcf_import.desktop krita_xcf_export.desktop )
+install( FILES  krita_xcf_import.desktop krita_xcf_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

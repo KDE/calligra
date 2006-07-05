@@ -19,7 +19,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskspreadcore )
 
 target_link_libraries(krosskspreadcore  ${KDE4_KDECORE_LIBS} krossapi krossmain kspreadcommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} krosskspreadcore )
+install(TARGETS krosskspreadcore  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

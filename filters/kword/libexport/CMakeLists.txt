@@ -20,7 +20,7 @@ kde4_add_library(kwordexportfilters SHARED ${kwordexportfilters_LIB_SRCS})
 target_link_libraries(kwordexportfilters  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set_target_properties(kwordexportfilters PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kwordexportfilters )
+install(TARGETS kwordexportfilters  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

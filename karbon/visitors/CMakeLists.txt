@@ -14,7 +14,7 @@ kde4_add_library(karbonvisitors ${karbonvisitors_SRCS})
 
 kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbonvisitors )
 
-install_targets(${LIB_INSTALL_DIR} karbonvisitors )
+install(TARGETS karbonvisitors  DESTINATION ${LIB_INSTALL_DIR})
 
 
 

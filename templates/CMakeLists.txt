@@ -5,8 +5,8 @@
 
 ########### install files ###############
 
-install_files( ${TEMPLATES_INSTALL_DIR} FILES  Presentation.desktop TextDocument.desktop SpreadSheet.desktop Illustration.desktop )
-install_files( ${TEMPLATES_INSTALL_DIR}/.source FILES  Presentation.kpt TextDocument.kwt SpreadSheet.kst Illustration.karbon )
+install( FILES  Presentation.desktop TextDocument.desktop SpreadSheet.desktop Illustration.desktop  DESTINATION ${TEMPLATES_INSTALL_DIR})
+install( FILES  Presentation.kpt TextDocument.kwt SpreadSheet.kst Illustration.karbon  DESTINATION ${TEMPLATES_INSTALL_DIR}/.source)
 
 
 

@@ -5,10 +5,10 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kword/dtd FILES  tabletemplates.dtd )
-install_files( ${DATA_INSTALL_DIR}/kword/dtd FILES  framestyles.dtd )
-install_files( ${DATA_INSTALL_DIR}/kword/dtd FILES  tablestyles.dtd )
-install_files( ${DATA_INSTALL_DIR}/kword/dtd FILES  kword.dtd )
+install( FILES  tabletemplates.dtd  DESTINATION ${DATA_INSTALL_DIR}/kword/dtd)
+install( FILES  framestyles.dtd  DESTINATION ${DATA_INSTALL_DIR}/kword/dtd)
+install( FILES  tablestyles.dtd  DESTINATION ${DATA_INSTALL_DIR}/kword/dtd)
+install( FILES  kword.dtd  DESTINATION ${DATA_INSTALL_DIR}/kword/dtd)
 
 
 

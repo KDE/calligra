@@ -33,12 +33,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_defaulttools )
 
 target_link_libraries(karbon_defaulttools  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} karbon_defaulttools )
+install(TARGETS karbon_defaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  karbondefaulttools.desktop )
+install( FILES  karbondefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} hancomwordimport )
 
 target_link_libraries(hancomwordimport  ${KDE4_KDECORE_LIBS} kstore kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} hancomwordimport )
+install(TARGETS hancomwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_hancomword_import.desktop )
+install( FILES  kword_hancomword_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

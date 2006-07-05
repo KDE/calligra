@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Flowcharting/Extended FILES  Database.sml  Database.xpm  Data_Store.sml  Data_Store.xpm  desc  icon.xpm  Process.sml  Process.xpm  Source_or_Sink.sml  Source_or_Sink.xpm )
+install( FILES  Database.sml  Database.xpm  Data_Store.sml  Data_Store.xpm  desc  icon.xpm  Process.sml  Process.xpm  Source_or_Sink.sml  Source_or_Sink.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Flowcharting/Extended)
 
 
 

@@ -5,9 +5,9 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kchart/icons FILES  )
-install_files( ${DATA_INSTALL_DIR}/kchart/templates/chart/.source FILES  BarChart.chrt Empty.chrt )
-install_files( ${DATA_INSTALL_DIR}/kchart/templates/chart FILES  .directory BarChart.desktop Empty.desktop )
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kchart/icons)
+install( FILES  BarChart.chrt Empty.chrt  DESTINATION ${DATA_INSTALL_DIR}/kchart/templates/chart/.source)
+install( FILES  .directory BarChart.desktop Empty.desktop  DESTINATION ${DATA_INSTALL_DIR}/kchart/templates/chart)
 
 
 

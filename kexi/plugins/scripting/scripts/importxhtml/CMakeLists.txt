@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi/scripts/importxhtml FILES  ImportXHTML.py ImportXHTML.rc )
+install( FILES  ImportXHTML.py ImportXHTML.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi/scripts/importxhtml)
 
 
 

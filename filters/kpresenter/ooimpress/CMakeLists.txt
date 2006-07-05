@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} ooimpressimport )
 
 target_link_libraries(ooimpressimport  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} ooimpressimport )
+install(TARGETS ooimpressimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -30,12 +30,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} ooimpressexport )
 
 target_link_libraries(ooimpressexport  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} ooimpressexport )
+install(TARGETS ooimpressexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenter_ooimpress_import.desktop kpresenter_ooimpress_export.desktop )
+install( FILES  kpresenter_ooimpress_import.desktop kpresenter_ooimpress_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

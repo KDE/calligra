@@ -53,7 +53,7 @@ kde4_add_library(kexisql3 SHARED ${kexisql3_LIB_SRCS})
 target_link_libraries(kexisql3  ${KDE4_KDECORE_LIBS} )
 
 set_target_properties(kexisql3 PROPERTIES VERSION 3.2.8 SOVERSION 3 )
-install_targets(${LIB_INSTALL_DIR} kexisql3 )
+install(TARGETS kexisql3  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -66,12 +66,12 @@ kde4_add_executable(ksqlite ${ksqlite_SRCS})
 
 target_link_libraries(ksqlite  ${KDE4_KDECORE_LIBS} kexisql3 )
 
-install_targets(/bin ksqlite )
+install(TARGETS ksqlite  DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files(  FILES  ./ksqlite2to3 )
+install( ./ksqlite2to3  DESTINATION FILES)
 
 
 

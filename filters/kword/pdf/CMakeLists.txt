@@ -70,12 +70,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} pdfimport )
 
 target_link_libraries(pdfimport  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} pdfimport )
+install(TARGETS pdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_pdf_import.desktop )
+install( FILES  kword_pdf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

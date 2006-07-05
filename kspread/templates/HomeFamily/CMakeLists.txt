@@ -5,9 +5,9 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kspread/icons FILES  )
-install_files( ${DATA_INSTALL_DIR}/kspread/templates/HomeFamily/.source FILES  BMI.kst MenuPlan.kst VacationChecklist.kst CreditCardTracker.kst )
-install_files( ${DATA_INSTALL_DIR}/kspread/templates/HomeFamily FILES  .directory BMI.desktop MenuPlan.desktop VacationChecklist.desktop CreditCardTracker.desktop )
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kspread/icons)
+install( FILES  BMI.kst MenuPlan.kst VacationChecklist.kst CreditCardTracker.kst  DESTINATION ${DATA_INSTALL_DIR}/kspread/templates/HomeFamily/.source)
+install( FILES  .directory BMI.desktop MenuPlan.desktop VacationChecklist.desktop CreditCardTracker.desktop  DESTINATION ${DATA_INSTALL_DIR}/kspread/templates/HomeFamily)
 
 
 

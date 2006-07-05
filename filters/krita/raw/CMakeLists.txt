@@ -17,13 +17,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_raw_import )
 
 target_link_libraries(krita_raw_import kritaui)
 
-install_targets(${PLUGIN_INSTALL_DIR} krita_raw_import )
+install(TARGETS krita_raw_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  krita_raw_import.desktop )
-install_files( ${XDG_APPS_DIR} FILES  krita_raw.desktop )
+install( FILES  krita_raw_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_raw.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

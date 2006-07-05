@@ -25,7 +25,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformulapart )
 
 target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui kformulalib kotext )
 
-install_targets(${PLUGIN_INSTALL_DIR} kformulapart )
+install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -38,17 +38,17 @@ kde4_add_kdeinit_executable( kformula ${kformula_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kformula  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kformula )
+install(TARGETS kdeinit_kformula  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kformula kdeinit_kformula )
-install_targets(/bin kformula )
+install(TARGETS kformula  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kformula FILES  tips )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kformulapart.desktop )
-install_files( ${DATA_INSTALL_DIR}/kformula FILES  kformula.rc kformula_readonly.rc )
-install_files( ${XDG_APPS_DIR} FILES  kformula.desktop )
+install( FILES  tips  DESTINATION ${DATA_INSTALL_DIR}/kformula)
+install( FILES  kformulapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kformula.rc kformula_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kformula)
+install( FILES  kformula.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

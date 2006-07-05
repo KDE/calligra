@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi/scripts/copycenter FILES  CopyCenter.py CopyCenterPluginQtSQL.py CopyCenterPluginKexiDB.py CopyCenter.rc readme.html )
+install( FILES  CopyCenter.py CopyCenterPluginQtSQL.py CopyCenterPluginKexiDB.py CopyCenter.rc readme.html  DESTINATION ${DATA_INSTALL_DIR}/kexi/scripts/copycenter)
 
 
 

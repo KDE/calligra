@@ -8,7 +8,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kiv
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio FILES  kivio_tool.rc )
+install( FILES  kivio_tool.rc  DESTINATION ${DATA_INSTALL_DIR}/kivio)
 
 
 

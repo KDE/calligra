@@ -13,7 +13,7 @@ kde4_add_executable(kexidbparser ${kexidbparser_SRCS})
 
 target_link_libraries(kexidbparser  ${KDE4_KDECORE_LIBS} kexidb kexidbparser )
 
-install_targets(/bin kexidbparser )
+install(TARGETS kexidbparser  DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### next target ###############

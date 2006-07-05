@@ -5,8 +5,8 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi/icons FILES  )
-install_files( ${DATA_INSTALL_DIR}/kexi/pics FILES  cp-wiz.png imagebox.png )
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kexi/icons)
+install( FILES  cp-wiz.png imagebox.png  DESTINATION ${DATA_INSTALL_DIR}/kexi/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 

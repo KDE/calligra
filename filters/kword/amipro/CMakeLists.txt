@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} amiproimport )
 
 target_link_libraries(amiproimport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 
-install_targets(${PLUGIN_INSTALL_DIR} amiproimport )
+install(TARGETS amiproimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -30,12 +30,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} amiproexport )
 
 target_link_libraries(amiproexport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 
-install_targets(${PLUGIN_INSTALL_DIR} amiproexport )
+install(TARGETS amiproexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_amipro_import.desktop kword_amipro_export.desktop )
+install( FILES  kword_amipro_import.desktop kword_amipro_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

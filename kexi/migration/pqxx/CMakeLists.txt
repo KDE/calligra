@@ -16,12 +16,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_pqxx )
 target_link_libraries(keximigrate_pqxx ${POSTGRESQL_LIBRARIES} ${PQXX_LIBRARIES} 
  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate )
 
-install_targets(${PLUGIN_INSTALL_DIR} keximigrate_pqxx )
+install(TARGETS keximigrate_pqxx  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  keximigrate_pqxx.desktop )
+install( FILES  keximigrate_pqxx.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

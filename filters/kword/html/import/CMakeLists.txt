@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} htmlimport )
 
 target_link_libraries(htmlimport  ${KDE4_KDECORE_LIBS} kotext khtml )
 
-install_targets(${PLUGIN_INSTALL_DIR} htmlimport )
+install(TARGETS htmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_html_import.desktop )
+install( FILES  kword_html_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/UML/ClassDiagrams FILES  ClassConceptual.sml  	icon.xpm  	Note.sml  	ClassConceptual.xpm  	Interface.sml  	Note.xpm  	Class.sml  	Interface.xpm  	TemplateClass.sml  	Class.xpm  	TemplateClass.xpm  	desc )
+install( FILES  ClassConceptual.sml  	icon.xpm  	Note.sml  	ClassConceptual.xpm  	Interface.sml  	Note.xpm  	Class.sml  	Interface.xpm  	TemplateClass.sml  	Class.xpm  	TemplateClass.xpm  	desc  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/UML/ClassDiagrams)
 
 
 

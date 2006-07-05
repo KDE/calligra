@@ -49,7 +49,7 @@ kde4_install_libtool_file( ${LIB_INSTALL_DIR} karboncore )
 
 target_link_libraries(karboncore ${FREETYPE_LIBRARIES} ${FONTCONFIG_LIBRARIES})
 
-install_targets(${LIB_INSTALL_DIR} karboncore )
+install(TARGETS karboncore  DESTINATION ${LIB_INSTALL_DIR})
 
 
 

@@ -17,15 +17,15 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kivioconnectortool )
 
 target_link_libraries(kivioconnectortool  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kivioconnectortool )
+install(TARGETS kivioconnectortool  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/pics FILES  kivio_connector_cursor1.png kivio_connector_cursor2.png )
-install_files( ${DATA_INSTALL_DIR}/kivio/icons FILES  )
-install_files( ${DATA_INSTALL_DIR}/kivio/kpartplugins FILES  kivioconnectortool.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kivioconnectortool.desktop )
+install( FILES  kivio_connector_cursor1.png kivio_connector_cursor2.png  DESTINATION ${DATA_INSTALL_DIR}/kivio/pics)
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kivio/icons)
+install( FILES  kivioconnectortool.rc  DESTINATION ${DATA_INSTALL_DIR}/kivio/kpartplugins)
+install( FILES  kivioconnectortool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

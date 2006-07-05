@@ -152,7 +152,7 @@ target_link_libraries(kspreadcommon
 	kspell2 )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kspreadcommon )
+install(TARGETS kspreadcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -167,7 +167,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadpart )
 
 target_link_libraries(kspreadpart  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kspreadpart )
+install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -180,16 +180,16 @@ kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kspread  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kspread )
+install(TARGETS kdeinit_kspread  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kspread kdeinit_kspread )
-install_targets(/bin kspread )
+install(TARGETS kspread  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kspread FILES  kspread.rc kspread_readonly.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kspreadpart.desktop )
-install_files( ${XDG_APPS_DIR} FILES  kspread.desktop )
+install( FILES  kspread.rc kspread_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kspread)
+install( FILES  kspreadpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

@@ -13,7 +13,7 @@ kde4_add_executable(kexistartuptest ${kexistartuptest_SRCS})
 
 target_link_libraries(kexistartuptest  ${KDE4_KDECORE_LIBS} kexidb kexicore )
 
-install_targets(/bin kexistartuptest )
+install(TARGETS kexistartuptest  DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### next target ###############

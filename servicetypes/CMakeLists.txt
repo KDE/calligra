@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES  kofilter.desktop koplugin.desktop  kofficepart.desktop kochart.desktop kofilterwrapper.desktop )
+install( FILES  kofilter.desktop koplugin.desktop  kofficepart.desktop kochart.desktop kofilterwrapper.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 
 

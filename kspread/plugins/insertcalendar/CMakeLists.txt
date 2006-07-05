@@ -17,12 +17,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadinsertcalendar )
 
 target_link_libraries(kspreadinsertcalendar  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kspreadinsertcalendar )
+install(TARGETS kspreadinsertcalendar  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kspread/kpartplugins FILES  insertcalendar.rc )
+install( FILES  insertcalendar.rc  DESTINATION ${DATA_INSTALL_DIR}/kspread/kpartplugins)
 
 
 

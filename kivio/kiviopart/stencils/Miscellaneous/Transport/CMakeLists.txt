@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous/Transport FILES  desc  icon.xpm  Truck.sml  Truck.xpm )
+install( FILES  desc  icon.xpm  Truck.sml  Truck.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous/Transport)
 
 
 

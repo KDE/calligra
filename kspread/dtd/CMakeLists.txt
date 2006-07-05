@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kspread/dtd FILES  kspread.dtd )
+install( FILES  kspread.dtd  DESTINATION ${DATA_INSTALL_DIR}/kspread/dtd)
 
 
 

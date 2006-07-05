@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kpresenter/templates/Screen/.source FILES  OneColumnLandscape.kpt   TitleLandscape.kpt   TwoColumnLandscape.kpt   emptyLandscape.kpt  )
+install( FILES  OneColumnLandscape.kpt   TitleLandscape.kpt   TwoColumnLandscape.kpt   emptyLandscape.kpt   DESTINATION ${DATA_INSTALL_DIR}/kpresenter/templates/Screen/.source)
 
 
 

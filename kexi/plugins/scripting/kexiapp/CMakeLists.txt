@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskexiapp )
 
 target_link_libraries(krosskexiapp  ${KDE4_KDECORE_LIBS} krossapi krossmain kexicore )
 
-install_targets(${PLUGIN_INSTALL_DIR} krosskexiapp )
+install(TARGETS krosskexiapp  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

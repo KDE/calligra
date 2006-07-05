@@ -28,7 +28,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordkword1dot3import )
 
 target_link_libraries(kwordkword1dot3import  ${KDE4_KDECORE_LIBS} kstore kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} kwordkword1dot3import )
+install(TARGETS kwordkword1dot3import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############

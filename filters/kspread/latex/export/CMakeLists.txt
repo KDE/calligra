@@ -32,12 +32,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadlatexexport )
 
 target_link_libraries(kspreadlatexexport  ${KDE4_KDEUI_LIBS} kstore kofficeui )
 
-install_targets(${PLUGIN_INSTALL_DIR} kspreadlatexexport )
+install(TARGETS kspreadlatexexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_latex_export.desktop )
+install( FILES  kspread_latex_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

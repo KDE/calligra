@@ -29,7 +29,7 @@ kde4_add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})
 target_link_libraries(keximigrate  ${KDE4_KDECORE_LIBS} kexicore kexidb kexiextendedwidgets keximain )
 
 set_target_properties(keximigrate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} keximigrate )
+install(TARGETS keximigrate  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -45,8 +45,8 @@ target_link_libraries(keximigratetest  ${KDE4_KDECORE_LIBS} keximigrate kexicore
 
 ########### install files ###############
 
-install_files( /include/kexidb FILES  keximigrate.h keximigratedata.h migratemanager.h )
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES  keximigration_driver.desktop )
+install( FILES  keximigrate.h keximigratedata.h migratemanager.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb)
+install( FILES  keximigration_driver.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 
 

@@ -12,7 +12,7 @@ kde4_add_library(karbondialogs ${karbondialogs_SRCS})
 
 kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbondialogs )
 
-install_targets(${LIB_INSTALL_DIR} karbondialogs )
+install(TARGETS karbondialogs  DESTINATION ${LIB_INSTALL_DIR})
 
 
 

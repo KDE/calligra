@@ -13,14 +13,14 @@ kde4_add_kdeinit_executable( kthesaurus ${kthesaurus_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kthesaurus  ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kthesaurus )
+install(TARGETS kdeinit_kthesaurus  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kthesaurus kdeinit_kthesaurus )
-install_targets(/bin kthesaurus )
+install(TARGETS kthesaurus  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES  KThesaurus.desktop )
+install( FILES  KThesaurus.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

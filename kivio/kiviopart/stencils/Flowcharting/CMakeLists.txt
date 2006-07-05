@@ -9,7 +9,7 @@ add_subdirectory( Extended )
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Flowcharting FILES  desc icon.xpm )
+install( FILES  desc icon.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Flowcharting)
 
 
 

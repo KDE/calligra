@@ -24,7 +24,7 @@ kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})
 target_link_libraries(keximain  ${KDE4_KDECORE_LIBS} kexidb kexicore kexiutils keximainstartup keximainprinting koproperty kexiextendedwidgets ${KDE4_KNEWSTUFF_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} keximain )
+install(TARGETS keximain  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

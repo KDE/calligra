@@ -42,12 +42,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordlatexexport )
 
 target_link_libraries(kwordlatexexport  ${KDE4_KIO_LIBS} kofficecore kformulalib ${IMAGEMAGICK_LIBRARIES} )
 
-install_targets(${PLUGIN_INSTALL_DIR} kwordlatexexport )
+install(TARGETS kwordlatexexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_latex_export.desktop )
+install( FILES  kword_latex_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

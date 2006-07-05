@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kpresenter/slideshow FILES  home.png first.png prev.png next.png last.png  )
+install( FILES  home.png first.png prev.png next.png last.png   DESTINATION ${DATA_INSTALL_DIR}/kpresenter/slideshow)
 
 
 

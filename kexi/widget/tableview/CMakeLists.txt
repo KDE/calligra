@@ -31,7 +31,7 @@ kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 target_link_libraries(kexidatatable  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils koproperty ${KDE4_KDEUI_LIBS} )
 
 set_target_properties(kexidatatable PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kexidatatable )
+install(TARGETS kexidatatable  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

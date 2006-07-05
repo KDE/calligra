@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/xsltfilter/export/kword/xslfo FILES  main.xsl kword2xslfo-table.xsl )
+install( FILES  main.xsl kword2xslfo-table.xsl  DESTINATION ${DATA_INSTALL_DIR}/xsltfilter/export/kword/xslfo)
 
 
 

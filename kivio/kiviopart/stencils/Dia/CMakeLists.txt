@@ -18,7 +18,7 @@ add_subdirectory( Sybase )
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Dia FILES  desc icon.xpm )
+install( FILES  desc icon.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Dia)
 
 
 

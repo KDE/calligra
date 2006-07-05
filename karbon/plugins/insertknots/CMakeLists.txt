@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_insertknotsplugin )
 
 target_link_libraries(karbon_insertknotsplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} karboncommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} karbon_insertknotsplugin )
+install(TARGETS karbon_insertknotsplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/karbon/kpartplugins FILES  insertknotsplugin.rc )
+install( FILES  insertknotsplugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
 
 
 

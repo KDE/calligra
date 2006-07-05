@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresenterjpegexport )
 
 target_link_libraries(kpresenterjpegexport  ${KDE4_KDECORE_LIBS} kpresenterprivate kpresenterimageexport )
 
-install_targets(${PLUGIN_INSTALL_DIR} kpresenterjpegexport )
+install(TARGETS kpresenterjpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenter_jpeg_export.desktop )
+install( FILES  kpresenter_jpeg_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

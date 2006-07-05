@@ -25,7 +25,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_openexr_import )
 
 target_link_libraries(krita_openexr_import kritaui krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES} )
 
-install_targets(${PLUGIN_INSTALL_DIR} krita_openexr_import )
+install(TARGETS krita_openexr_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -40,13 +40,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_openexr_export )
 
 target_link_libraries(krita_openexr_export kritaui krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES})
 
-install_targets(${PLUGIN_INSTALL_DIR} krita_openexr_export )
+install(TARGETS krita_openexr_export  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  krita_openexr_import.desktop krita_openexr_export.desktop )
-install_files( ${XDG_APPS_DIR} FILES  krita_openexr.desktop )
+install( FILES  krita_openexr_import.desktop krita_openexr_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_openexr.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

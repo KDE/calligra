@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous/ER FILES  desc icon.png entity.sml weakentity.sml attribute.sml multivaluedattribute.sml  	derivedattribute.sml relationship.sml weakrelationship.sml )
+install( FILES  desc icon.png entity.sml weakentity.sml attribute.sml multivaluedattribute.sml  	derivedattribute.sml relationship.sml weakrelationship.sml  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous/ER)
 
 
 

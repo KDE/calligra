@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/UML/ActivityDiagrams FILES  Activity.sml  	desc  	ForkJoin.xpm  	Start.sml  	Activity.xpm  	End.sml  	icon.xpm  	Start.xpm  	BranchMerge.sml  	End.xpm  	BranchMerge.xpm  	ForkJoin.sml )
+install( FILES  Activity.sml  	desc  	ForkJoin.xpm  	Start.sml  	Activity.xpm  	End.sml  	icon.xpm  	Start.xpm  	BranchMerge.sml  	End.xpm  	BranchMerge.xpm  	ForkJoin.sml  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/UML/ActivityDiagrams)
 
 
 

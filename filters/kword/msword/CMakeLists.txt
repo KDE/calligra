@@ -21,12 +21,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} mswordimport )
 
 target_link_libraries(mswordimport  ${KDE4_KDECORE_LIBS} ${WV2_LIBRARIES} kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} mswordimport )
+install(TARGETS mswordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_msword_import.desktop )
+install( FILES  kword_msword_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

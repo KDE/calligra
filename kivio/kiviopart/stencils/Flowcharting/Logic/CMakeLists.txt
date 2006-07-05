@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Flowcharting/Logic FILES  $(SHAPES) desc )
+install( FILES  $(SHAPES DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Flowcharting/Logic)
 
 
 

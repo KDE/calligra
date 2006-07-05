@@ -45,7 +45,7 @@ kde4_add_library(kexisql2 SHARED ${kexisql2_LIB_SRCS})
 target_link_libraries(kexisql2  ${KDE4_KDECORE_LIBS} )
 
 set_target_properties(kexisql2 PROPERTIES VERSION 2.8.15 SOVERSION 2 )
-install_targets(${LIB_INSTALL_DIR} kexisql2 )
+install(TARGETS kexisql2  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -58,7 +58,7 @@ kde4_add_executable(ksqlite2 ${ksqlite2_SRCS})
 
 target_link_libraries(ksqlite2  ${KDE4_KDECORE_LIBS} kexisql2 )
 
-install_targets(/bin ksqlite2 )
+install(TARGETS ksqlite2  DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### install files ###############

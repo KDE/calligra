@@ -8,7 +8,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  )
+install( FILES   DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

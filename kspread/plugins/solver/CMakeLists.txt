@@ -29,11 +29,11 @@ target_link_libraries( kspreadsolver
 	${KDE4_KDECORE_LIBS}
 )
 
-install_targets( ${PLUGIN_INSTALL_DIR} kspreadsolver )
+install(TARGETS kspreadsolver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kspread/kpartplugins FILES solver.rc )
+install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/kspread/kpartplugins)
 
 endif(GSL_FOUND)

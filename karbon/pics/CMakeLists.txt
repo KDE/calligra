@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/karbon/icons FILES  )
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/karbon/icons)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 

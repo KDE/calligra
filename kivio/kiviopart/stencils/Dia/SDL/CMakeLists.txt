@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Dia/SDL FILES  $(SHAPES) 	desc icon.xpm )
+install( FILES  $(SHAPES DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Dia/SDL)
 
 
 

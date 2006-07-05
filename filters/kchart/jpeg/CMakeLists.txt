@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartjpegexport )
 
 target_link_libraries(kchartjpegexport  ${KDE4_KDECORE_LIBS} kchartcommon kchartimageexport  )
 
-install_targets(${PLUGIN_INSTALL_DIR} kchartjpegexport )
+install(TARGETS kchartjpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kchart_jpeg_export.desktop )
+install( FILES  kchart_jpeg_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

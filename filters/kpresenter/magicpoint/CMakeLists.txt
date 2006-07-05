@@ -5,8 +5,8 @@
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenter_magicpoint_import.desktop )
-install_files(  FILES  mgp2kpr.py )
+install( FILES  kpresenter_magicpoint_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( mgp2kpr.py  DESTINATION FILES)
 
 
 

@@ -69,7 +69,7 @@ kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} kofficecore kofficeui kopalette kopainter kotext karbondockers karbonwidgets vpainter karboncore karbonshapes karboncommands karbonvisitors karbondialogs ${IMAGEMAGICK_LIBRARIES})
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} karboncommon )
+install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -84,7 +84,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonpart )
 
 target_link_libraries(karbonpart  ${KDE4_KDECORE_LIBS} karboncommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} karbonpart )
+install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -97,10 +97,10 @@ kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_karbon  ${KDE4_KDECORE_LIBS} karboncommon )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_karbon )
+install(TARGETS kdeinit_karbon  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( karbon kdeinit_karbon )
-install_targets(/bin karbon )
+install(TARGETS karbon  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 

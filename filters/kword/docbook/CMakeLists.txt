@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} docbookexport )
 
 target_link_libraries(docbookexport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 
-install_targets(${PLUGIN_INSTALL_DIR} docbookexport )
+install(TARGETS docbookexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_docbook_export.desktop )
+install( FILES  kword_docbook_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

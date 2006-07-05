@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_form )
 
 target_link_libraries(kexihandler_form  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexidatatable kexiextendedwidgets kformdesigner koproperty kexiformutils )
 
-install_targets(${PLUGIN_INSTALL_DIR} kexihandler_form )
+install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -32,7 +32,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_kexidbwidgets )
 
 target_link_libraries(kformdesigner_kexidbwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexiformutils )
 
-install_targets(${PLUGIN_INSTALL_DIR} kformdesigner_kexidbwidgets )
+install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -57,14 +57,14 @@ kde4_add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 target_link_libraries(kexiformutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets kexiformutilswidgets kformdesigner )
 
 set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kexiformutils )
+install(TARGETS kexiformutils  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexiformpartui.rc kexiformpartinstui.rc )
-install_files( ${SERVICES_INSTALL_DIR}/kformdesigner FILES  kformdesigner_kexidbfactory.desktop )
-install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexiformhandler.desktop )
+install( FILES  kexiformpartui.rc kexiformpartinstui.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi)
+install( FILES  kformdesigner_kexidbfactory.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kformdesigner)
+install( FILES  kexiformhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)
 
 
 

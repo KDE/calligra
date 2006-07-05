@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamagickimport )
 
 target_link_libraries(kritamagickimport kritaui ${IMAGEMAGICK_LIBRARIES})
 
-install_targets(${PLUGIN_INSTALL_DIR} kritamagickimport )
+install(TARGETS kritamagickimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -30,13 +30,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamagickexport )
 
 target_link_libraries(kritamagickexport kritaui ${IMAGEMAGICK_LIBRARIES})
 
-install_targets(${PLUGIN_INSTALL_DIR} kritamagickexport )
+install(TARGETS kritamagickexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  krita_magick_import.desktop krita_magick_export.desktop )
-install_files( ${XDG_APPS_DIR} FILES  krita_magick.desktop )
+install( FILES  krita_magick_import.desktop krita_magick_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_magick.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

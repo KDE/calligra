@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocimport )
 
 target_link_libraries(palmdocimport kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} palmdocimport )
+install(TARGETS palmdocimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -30,12 +30,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocexport )
 
 target_link_libraries(palmdocexport kofficecore kwordexportfilters)
 
-install_targets(${PLUGIN_INSTALL_DIR} palmdocexport )
+install(TARGETS palmdocexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_palmdoc_import.desktop kword_palmdoc_export.desktop )
+install( FILES  kword_palmdoc_import.desktop kword_palmdoc_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

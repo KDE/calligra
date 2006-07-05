@@ -18,13 +18,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_table )
 
 target_link_libraries(kexihandler_table  ${KDE4_KDECORE_LIBS} kexicore kexidb kexidatatable kexiextendedwidgets koproperty )
 
-install_targets(${PLUGIN_INSTALL_DIR} kexihandler_table )
+install(TARGETS kexihandler_table  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexitablepartui.rc kexitablepartinstui.rc )
-install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexitablehandler.desktop )
+install( FILES  kexitablepartui.rc kexitablepartinstui.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi)
+install( FILES  kexitablehandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)
 
 
 

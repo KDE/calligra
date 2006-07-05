@@ -55,13 +55,13 @@ target_link_libraries(kexidb
    ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kexiutils )
 
 set_target_properties(kexidb PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kexidb )
+install(TARGETS kexidb  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( /include/kexidb FILES  connection.h connectiondata.h cursor.h    driver.h drivermanager.h    error.h expression.h field.h fieldlist.h global.h object.h    schemadata.h tableschema.h queryschema.h indexschema.h    relationship.h parser/parser.h transaction.h preparedstatement.h    kexidb_export.h )
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES  kexidb_driver.desktop )
+install( FILES  connection.h connectiondata.h cursor.h    driver.h drivermanager.h    error.h expression.h field.h fieldlist.h global.h object.h    schemadata.h tableschema.h queryschema.h indexschema.h    relationship.h parser/parser.h transaction.h preparedstatement.h    kexidb_export.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb)
+install( FILES  kexidb_driver.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 
 

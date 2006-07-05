@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi/scripts/projectdocumentor FILES  ProjectDocumentor.py ProjectDocumentor.rc )
+install( FILES  ProjectDocumentor.py ProjectDocumentor.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi/scripts/projectdocumentor)
 
 
 

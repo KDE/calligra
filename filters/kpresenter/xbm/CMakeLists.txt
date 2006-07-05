@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresenterxbmexport )
 
 target_link_libraries(kpresenterxbmexport  ${KDE4_KDECORE_LIBS} kpresenterprivate  kpresenterimageexport )
 
-install_targets(${PLUGIN_INSTALL_DIR} kpresenterxbmexport )
+install(TARGETS kpresenterxbmexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenter_xbm_export.desktop )
+install( FILES  kpresenter_xbm_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

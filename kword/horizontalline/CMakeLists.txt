@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kword/horizontalline FILES  line.png )
+install( FILES  line.png  DESTINATION ${DATA_INSTALL_DIR}/kword/horizontalline)
 
 
 

@@ -19,7 +19,7 @@ kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 target_link_libraries(kivioprivate  ${KDE4_KDECORE_LIBS} kofficeui flake)
 
 set_target_properties(kivioprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kivioprivate )
+install(TARGETS kivioprivate  DESTINATION ${LIB_INSTALL_DIR})
 
 ### kiviopart ###
 set(kiviopart_PART_SRCS KivioFactoryInit.cpp )
@@ -32,7 +32,7 @@ kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kiviopart)
 
 target_link_libraries(kiviopart  ${KDE4_KDECORE_LIBS} kivioprivate)
 
-install_targets(${PLUGIN_INSTALL_DIR} kiviopart)
+install(TARGETS kiviopart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ### kdeinit kivio ###
 set(kivio_KDEINIT_SRCS main.cpp )
@@ -43,13 +43,13 @@ kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kivio)
+install(TARGETS kdeinit_kivio DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries(kivio kdeinit_kivio)
-install_targets(/bin kivio)
+install(TARGETS kivio DESTINATION ${BIN_INSTALL_DIR})
 
 ### desktop files ###
-install_files(${SERVICES_INSTALL_DIR} FILES  kiviopart.desktop)
-install_files(${XDG_APPS_DIR} FILES  kivio.desktop)
+install( FILES  kiviopart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kivio.desktop DESTINATION ${XDG_APPS_DIR})
 
 

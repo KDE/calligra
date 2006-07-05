@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} applixspreadimport )
 
 target_link_libraries(applixspreadimport  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} applixspreadimport )
+install(TARGETS applixspreadimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_applixspread_import.desktop )
+install( FILES  kspread_applixspread_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

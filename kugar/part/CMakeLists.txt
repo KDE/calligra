@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kugarpart )
 
 target_link_libraries(kugarpart  ${KDE4_KIO_LIBS} kugarlib ${KDE4_KPARTS_LIBS} ${KDE4_KDEPRINT_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} kugarpart )
+install(TARGETS kugarpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -28,17 +28,17 @@ kde4_add_kdeinit_executable( kugar ${kugar_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kugar  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kugar )
+install(TARGETS kdeinit_kugar  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kugar kdeinit_kugar )
-install_targets(/bin kugar )
+install(TARGETS kugar  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES  kugar.desktop )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kugarpart.desktop )
-install_files( ${DATA_INSTALL_DIR}/kugar FILES  kugarpart.rc )
-install_files( ${DATA_INSTALL_DIR}/kugar/dtd FILES  kugartemplate.dtd )
+install( FILES  kugar.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  kugarpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kugarpart.rc  DESTINATION ${DATA_INSTALL_DIR}/kugar)
+install( FILES  kugartemplate.dtd  DESTINATION ${DATA_INSTALL_DIR}/kugar/dtd)
 
 
 

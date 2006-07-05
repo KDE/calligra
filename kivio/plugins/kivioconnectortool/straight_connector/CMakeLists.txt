@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} straight_connector )
 
 target_link_libraries(straight_connector  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} straight_connector )
+install(TARGETS straight_connector  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/autoloadStencils FILES  straight_connector.xpm )
+install( FILES  straight_connector.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/autoloadStencils)
 
 
 

@@ -24,7 +24,7 @@ kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbonwidgets )
 
 target_link_libraries(karbonwidgets flake) 
 
-install_targets(${LIB_INSTALL_DIR} karbonwidgets )
+install(TARGETS karbonwidgets  DESTINATION ${LIB_INSTALL_DIR})
 
 
 

@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonmsodimport )
 
 target_link_libraries(karbonmsodimport  ${KDE4_KDECORE_LIBS} kwmf kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} karbonmsodimport )
+install(TARGETS karbonmsodimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  karbon_msod_import.desktop )
+install( FILES  karbon_msod_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

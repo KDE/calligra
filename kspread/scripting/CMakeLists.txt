@@ -22,13 +22,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadscripting )
 
 target_link_libraries(kspreadscripting  ${KDE4_KDECORE_LIBS} kspreadcommon krossmain )
 
-install_targets(${PLUGIN_INSTALL_DIR} kspreadscripting )
+install(TARGETS kspreadscripting  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kspreadscripting.desktop )
-install_files( ${DATA_INSTALL_DIR}/kspread/kpartplugins FILES  scripting.rc )
+install( FILES  kspreadscripting.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  scripting.rc  DESTINATION ${DATA_INSTALL_DIR}/kspread/kpartplugins)
 
 
 

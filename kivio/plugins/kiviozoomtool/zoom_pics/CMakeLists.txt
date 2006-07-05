@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/pics FILES  kivio_zoom.xpm kivio_zoom_allobject.xpm kivio_zoom_hand.xpm kivio_zoom_height.xpm kivio_zoom_minus.xpm kivio_zoom_page.xpm kivio_zoom_plus.xpm kivio_zoom_selected.xpm kivio_zoom_width.xpm  )
+install( FILES  kivio_zoom.xpm kivio_zoom_allobject.xpm kivio_zoom_hand.xpm kivio_zoom_height.xpm kivio_zoom_minus.xpm kivio_zoom_page.xpm kivio_zoom_plus.xpm kivio_zoom_selected.xpm kivio_zoom_width.xpm   DESTINATION ${DATA_INSTALL_DIR}/kivio/pics)
 
 
 

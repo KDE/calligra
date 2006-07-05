@@ -7,7 +7,7 @@ add_subdirectory( crystalsvg )
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kspread/icons FILES  )
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kspread/icons)
 
 
 

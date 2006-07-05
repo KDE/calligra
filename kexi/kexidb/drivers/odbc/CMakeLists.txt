@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_odbcdriver )
 
 target_link_libraries(kexidb_odbcdriver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} odbc kexidb )
 
-install_targets(${PLUGIN_INSTALL_DIR} kexidb_odbcdriver )
+install(TARGETS kexidb_odbcdriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kexidb_odbcdriver.desktop )
+install( FILES  kexidb_odbcdriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

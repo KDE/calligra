@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} examplepart )
 
 target_link_libraries(examplepart  ${KDE4_KPARTS_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} examplepart )
+install(TARGETS examplepart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -23,10 +23,10 @@ install_targets(${PLUGIN_INSTALL_DIR} examplepart )
 
 ########### install files ###############
 
-install_files( ${MIME_INSTALL_DIR}/application FILES  x-vnd.kde.example.desktop )
-install_files( ${SERVICES_INSTALL_DIR} FILES  examplepart.desktop )
-install_files( ${DATA_INSTALL_DIR}/example FILES  example.rc example_readonly.rc )
-install_files( ${XDG_APPS_DIR} FILES  example.desktop )
+install( FILES  x-vnd.kde.example.desktop  DESTINATION ${MIME_INSTALL_DIR}/application)
+install( FILES  examplepart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  example.rc example_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/example)
+install( FILES  example.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

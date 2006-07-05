@@ -53,7 +53,7 @@ if(KDE4_BUILD_TESTS)
 endif(KDE4_BUILD_TESTS)
 
 set_target_properties(kwordprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kwordprivate )
+install(TARGETS kwordprivate  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### KWordPart Library ###############
 
@@ -67,7 +67,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordpart )
 
 target_link_libraries(kwordpart ${KDE4_KDECORE_LIBS} kwordprivate )
 
-install_targets(${PLUGIN_INSTALL_DIR} kwordpart )
+install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### KWord exe ###############
@@ -80,13 +80,13 @@ kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kword  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kword )
+install(TARGETS kdeinit_kword  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kword kdeinit_kword )
-install_targets(/bin kword )
+install(TARGETS kword  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kword FILES  kword.rc kword_readonly.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kwordpart.desktop )
-install_files( ${XDG_APPS_DIR} FILES  kword.desktop )
+install( FILES  kword.rc kword_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kword)
+install( FILES  kwordpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kword.desktop  DESTINATION ${XDG_APPS_DIR})

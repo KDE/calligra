@@ -22,7 +22,7 @@ kde4_add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 target_link_libraries(kexiguiutils  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} )
 
 set_target_properties(kexiguiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kexiguiutils )
+install(TARGETS kexiguiutils  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

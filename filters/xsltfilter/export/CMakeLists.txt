@@ -20,12 +20,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} xsltexport )
 
 target_link_libraries(xsltexport  ${KDE4_KIO_LIBS} kofficecore ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES} )
 
-install_targets(${PLUGIN_INSTALL_DIR} xsltexport )
+install(TARGETS xsltexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  xslt_export.desktop )
+install( FILES  xslt_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

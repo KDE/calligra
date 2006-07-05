@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} applixwordimport )
 
 target_link_libraries(applixwordimport  ${KDE4_KDECORE_LIBS} kofficecore kstore )
 
-install_targets(${PLUGIN_INSTALL_DIR} applixwordimport )
+install(TARGETS applixwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_applixword_import.desktop )
+install( FILES  kword_applixword_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_shadoweffectplugin )
 
 target_link_libraries(karbon_shadoweffectplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} karbon_shadoweffectplugin )
+install(TARGETS karbon_shadoweffectplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/karbon/kpartplugins FILES  shadoweffectplugin.rc )
+install( FILES  shadoweffectplugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
 
 
 

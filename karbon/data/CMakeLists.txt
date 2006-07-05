@@ -5,11 +5,11 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/karbon/gradients FILES  simple.kgr allcolors.kgr )
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES  karbon_module.desktop )
-install_files( ${SERVICES_INSTALL_DIR} FILES  karbonpart.desktop )
-install_files( ${DATA_INSTALL_DIR}/karbon FILES  karbon.rc karbon_readonly.rc )
-install_files( ${XDG_APPS_DIR} FILES  karbon.desktop )
+install( FILES  simple.kgr allcolors.kgr  DESTINATION ${DATA_INSTALL_DIR}/karbon/gradients)
+install( FILES  karbon_module.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES  karbonpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  karbon.rc karbon_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon)
+install( FILES  karbon.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

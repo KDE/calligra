@@ -14,7 +14,7 @@ kde4_add_library(kpresenterimageexport SHARED ${kpresenterimageexport_LIB_SRCS})
 target_link_libraries(kpresenterimageexport  ${KDE4_KDECORE_LIBS} kpresenterprivate )
 
 set_target_properties(kpresenterimageexport PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kpresenterimageexport )
+install(TARGETS kpresenterimageexport  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

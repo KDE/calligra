@@ -13,7 +13,7 @@ kde4_add_executable(kformdesigner ${kformdesigner_SRCS})
 
 target_link_libraries(kformdesigner  ${KDE4_KDECORE_LIBS} kformdesigner )
 
-install_targets(/bin kformdesigner )
+install(TARGETS kformdesigner  DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -28,15 +28,15 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_part )
 
 target_link_libraries(kformdesigner_part  ${KDE4_KDECORE_LIBS} kformdesigner )
 
-install_targets(${PLUGIN_INSTALL_DIR} kformdesigner_part )
+install(TARGETS kformdesigner_part  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kformdesigner_part.desktop )
-install_files( ${DATA_INSTALL_DIR}/kformdesigner_part FILES  kformdesigner_part.rc kformdesigner_part_shell.rc )
-install_files( ${DATA_INSTALL_DIR}/kformdesigner FILES  kfd_mainwindow.rc )
-install_files( ${APPLNK_INSTALL_DIR}/Development FILES  kformdesigner.desktop )
+install( FILES  kformdesigner_part.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kformdesigner_part.rc kformdesigner_part_shell.rc  DESTINATION ${DATA_INSTALL_DIR}/kformdesigner_part)
+install( FILES  kfd_mainwindow.rc  DESTINATION ${DATA_INSTALL_DIR}/kformdesigner)
+install( FILES  kformdesigner.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Development)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 

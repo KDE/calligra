@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} rtfimport )
 
 target_link_libraries(rtfimport kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} rtfimport )
+install(TARGETS rtfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_rtf_import.desktop )
+install( FILES  kword_rtf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

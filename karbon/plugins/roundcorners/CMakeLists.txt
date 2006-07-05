@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_roundcornersplugin )
 
 target_link_libraries(karbon_roundcornersplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} karboncommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} karbon_roundcornersplugin )
+install(TARGETS karbon_roundcornersplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/karbon/kpartplugins FILES  roundcornersplugin.rc )
+install( FILES  roundcornersplugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
 
 
 

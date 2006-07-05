@@ -25,7 +25,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffimport )
 
 target_link_libraries(kritatiffimport kritaui tiff)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritatiffimport )
+install(TARGETS kritatiffimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -46,7 +46,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffexport )
 
 target_link_libraries(kritatiffexport kritaui tiff)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritatiffexport )
+install(TARGETS kritatiffexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -54,8 +54,8 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatiffexport )
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  krita_tiff_export.desktop krita_tiff_import.desktop )
-install_files( ${XDG_APPS_DIR} FILES  krita_tiff.desktop )
+install( FILES  krita_tiff_export.desktop krita_tiff_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_tiff.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

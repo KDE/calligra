@@ -5,9 +5,9 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/karbon/icons FILES  )
-install_files( ${DATA_INSTALL_DIR}/karbon/templates/Basic/.source FILES  empty.karbon )
-install_files( ${DATA_INSTALL_DIR}/karbon/templates/Basic FILES  .directory empty.desktop )
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/karbon/icons)
+install( FILES  empty.karbon  DESTINATION ${DATA_INSTALL_DIR}/karbon/templates/Basic/.source)
+install( FILES  .directory empty.desktop  DESTINATION ${DATA_INSTALL_DIR}/karbon/templates/Basic)
 
 
 

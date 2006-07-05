@@ -15,13 +15,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_script )
 
 target_link_libraries(kexihandler_script  ${KDE4_KDECORE_LIBS} krossmain kexicore kexiextendedwidgets koproperty )
 
-install_targets(${PLUGIN_INSTALL_DIR} kexihandler_script )
+install(TARGETS kexihandler_script  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexiscriptpartui.rc kexiscriptpartinstui.rc )
-install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexiscripthandler.desktop )
+install( FILES  kexiscriptpartui.rc kexiscriptpartinstui.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi)
+install( FILES  kexiscripthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)
 
 
 

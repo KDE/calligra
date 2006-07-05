@@ -139,7 +139,7 @@ kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 target_link_libraries(kpresenterprivate  ${KDE4_KDE3SUPPORT_LIBS} kofficeui kotext kopainter )
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kpresenterprivate )
+install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -154,7 +154,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresenterpart )
 
 target_link_libraries(kpresenterpart  ${KDE4_KDE3SUPPORT_LIBS} kpresenterprivate kofficecore kofficeui)
 
-install_targets(${PLUGIN_INSTALL_DIR} kpresenterpart )
+install(TARGETS kpresenterpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -167,16 +167,16 @@ kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kpresenter  ${KDE4_KDE3SUPPORT_LIBS} kofficecore kofficeui )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kpresenter )
+install(TARGETS kdeinit_kpresenter  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kpresenter kdeinit_kpresenter )
-install_targets(/bin kpresenter )
+install(TARGETS kpresenter  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kpresenter FILES  kpresenter.rc kpresenter_readonly.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenterpart.desktop )
-install_files( ${XDG_APPS_DIR} FILES  kpresenter.desktop )
+install( FILES  kpresenter.rc kpresenter_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kpresenter)
+install( FILES  kpresenterpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kpresenter.desktop  DESTINATION ${XDG_APPS_DIR})
 install(PROGRAMS kprconverter.pl DESTINATION bin )
 
 

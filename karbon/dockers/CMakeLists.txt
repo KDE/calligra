@@ -16,7 +16,7 @@ kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbondockers )
 
 #target_link_libraries( karbondockers ${KDE4_CORE} karbonpart )
 
-install_targets(${LIB_INSTALL_DIR} karbondockers )
+install(TARGETS karbondockers  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

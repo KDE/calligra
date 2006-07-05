@@ -26,12 +26,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} excelimport )
 
 target_link_libraries(excelimport kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} excelimport )
+install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_excel_import.desktop )
+install( FILES  kspread_excel_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

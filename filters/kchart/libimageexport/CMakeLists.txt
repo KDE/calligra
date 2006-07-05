@@ -20,7 +20,7 @@ kde4_add_library(kchartimageexport SHARED ${kchartimageexport_LIB_SRCS})
 target_link_libraries(kchartimageexport  ${KDE4_KDECORE_LIBS} kchartcommon)
 
 set_target_properties(kchartimageexport PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kchartimageexport )
+install(TARGETS kchartimageexport  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

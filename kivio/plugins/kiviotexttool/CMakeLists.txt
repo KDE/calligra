@@ -17,15 +17,15 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviotexttool )
 
 target_link_libraries(kiviotexttool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kiviotexttool )
+install(TARGETS kiviotexttool  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/pics FILES  kivio_text.xpm kivio_text_cursor.xpm )
-install_files( ${DATA_INSTALL_DIR}/kivio/autoloadStencils FILES  Text.sml Text.xpm )
-install_files( ${DATA_INSTALL_DIR}/kivio/kpartplugins FILES  kiviotexttool.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kiviotexttool.desktop )
+install( FILES  kivio_text.xpm kivio_text_cursor.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/pics)
+install( FILES  Text.sml Text.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/autoloadStencils)
+install( FILES  kiviotexttool.rc  DESTINATION ${DATA_INSTALL_DIR}/kivio/kpartplugins)
+install( FILES  kiviotexttool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

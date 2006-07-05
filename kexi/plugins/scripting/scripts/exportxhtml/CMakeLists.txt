@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi/scripts/exportxhtml FILES  ExportXHTML.py ExportXHTML.rc )
+install( FILES  ExportXHTML.py ExportXHTML.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi/scripts/exportxhtml)
 
 
 

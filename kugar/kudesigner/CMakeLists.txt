@@ -23,7 +23,7 @@ kde4_add_library(kudesignercore SHARED ${kudesignercore_LIB_SRCS})
 target_link_libraries(kudesignercore  ${KDE4_KDEUI_LIBS} kofficeui ${KDE4_KPARTS_LIBS} kofficecore koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
 
 set_target_properties(kudesignercore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kudesignercore )
+install(TARGETS kudesignercore  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -38,7 +38,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kudesignerpart )
 
 target_link_libraries(kudesignerpart  ${KDE4_KDECORE_LIBS} kudesignercore kofficeui ${KDE4_KPARTS_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} kudesignerpart )
+install(TARGETS kudesignerpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -51,15 +51,15 @@ kde4_add_kdeinit_executable( kudesigner ${kudesigner_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kudesigner  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kudesigner )
+install(TARGETS kdeinit_kudesigner  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kudesigner kdeinit_kudesigner )
-install_targets(/bin kudesigner )
+install(TARGETS kudesigner  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES  kudesigner.desktop )
-install_files( ${DATA_INSTALL_DIR}/kudesigner FILES  kudesignerui.rc kudesigner_readonly.rc )
+install( FILES  kudesigner.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  kudesignerui.rc kudesigner_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kudesigner)
 
 
 

@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_zoomtoolplugin )
 
 target_link_libraries(karbon_zoomtoolplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} karbon_zoomtoolplugin )
+install(TARGETS karbon_zoomtoolplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  karbonzoomtool.desktop )
+install( FILES  karbonzoomtool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

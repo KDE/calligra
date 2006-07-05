@@ -5,9 +5,9 @@
 
 ########### install files ###############
 
-install_files(  ${DATA_INSTALL_DIR}/kword/templates/Envelopes FILES  EnvelopeC6.kwt EnvelopeDL.kwt )
-install_files(  ${DATA_INSTALL_DIR}/kword/templates/Envelopes FILES  .directory EnvelopeC6.desktop EnvelopeDL.desktop )
-install_files( ${DATA_INSTALL_DIR}/kword/icons FILES  )
+install( FILES  EnvelopeC6.kwt EnvelopeDL.kwt  DESTINATION ${DATA_INSTALL_DIR}/kword/templates/Envelopes)
+install( FILES  .directory EnvelopeC6.desktop EnvelopeDL.desktop  DESTINATION ${DATA_INSTALL_DIR}/kword/templates/Envelopes)
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kword/icons)
 
 
 

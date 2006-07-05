@@ -14,7 +14,7 @@ kde4_add_library(kspreadexport SHARED ${kspreadexport_LIB_SRCS})
 target_link_libraries(kspreadexport  ${KDE4_KDECORE_LIBS} )
 
 set_target_properties(kspreadexport PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kspreadexport )
+install(TARGETS kspreadexport  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

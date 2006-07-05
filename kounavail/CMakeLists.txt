@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kounavailpart )
 
 target_link_libraries(kounavailpart  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} kounavailpart )
+install(TARGETS kounavailpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kounavail.desktop )
+install( FILES  kounavail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

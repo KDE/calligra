@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} applixgraphicimport )
 
 target_link_libraries(applixgraphicimport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${PLUGIN_INSTALL_DIR} applixgraphicimport )
+install(TARGETS applixgraphicimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kontour_applixgraphic_import.desktop )
+install( FILES  kontour_applixgraphic_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

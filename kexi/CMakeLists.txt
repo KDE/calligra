@@ -30,14 +30,14 @@ kde4_add_kdeinit_executable( kexi ${kexi_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kexicore keximain )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kexi )
+install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kexi kdeinit_kexi )
-install_targets(/bin kexi )
+install(TARGETS kexi  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kexi.desktop )
+install( FILES  kexi.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Office)
 
 #kde4_create_doxygen_docs( EXCLUDE 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc  )
 

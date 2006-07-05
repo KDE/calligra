@@ -5,9 +5,9 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kplato/icons FILES  )
-install_files( ${DATA_INSTALL_DIR}/kplato/templates/Simple/.source FILES  Plain.kplatot 8HourDay-40HourWeek.kplatot )
-install_files( ${DATA_INSTALL_DIR}/kplato/templates/Simple FILES  .directory Plain.desktop 8HourDay-40HourWeek.desktop )
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kplato/icons)
+install( FILES  Plain.kplatot 8HourDay-40HourWeek.kplatot  DESTINATION ${DATA_INSTALL_DIR}/kplato/templates/Simple/.source)
+install( FILES  .directory Plain.desktop 8HourDay-40HourWeek.desktop  DESTINATION ${DATA_INSTALL_DIR}/kplato/templates/Simple)
 
 
 

@@ -5,8 +5,8 @@
 
 ########### install files ###############
 
-install_files( ${MIME_INSTALL_DIR}/application FILES  x-sqlite2.desktop   x-sqlite3.desktop )
-install_files( ${CONFIG_INSTALL_DIR}/magic FILES  sqlite.magic msaccess.magic )
+install( FILES  x-sqlite2.desktop   x-sqlite3.desktop  DESTINATION ${MIME_INSTALL_DIR}/application)
+install( FILES  sqlite.magic msaccess.magic  DESTINATION ${CONFIG_INSTALL_DIR}/magic)
 
 
 

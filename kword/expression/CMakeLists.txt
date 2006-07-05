@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kword/expression FILES  expression.xml )
+install( FILES  expression.xml  DESTINATION ${DATA_INSTALL_DIR}/kword/expression)
 
 
 

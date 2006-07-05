@@ -17,12 +17,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_kabc )
 
 target_link_libraries(kwmailmerge_kabc ${KDE4_KDEUI_LIBS} kwmailmerge_interface kabc )
 
-install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_kabc )
+install(TARGETS kwmailmerge_kabc  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kwmailmerge_kabc.desktop )
+install( FILES  kwmailmerge_kabc.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

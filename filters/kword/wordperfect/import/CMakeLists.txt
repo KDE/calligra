@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wpimport )
 
 target_link_libraries(wpimport  ${KDE4_KDECORE_LIBS} kofficecore ${WPD_LIBRARIES} )
 
-install_targets(${PLUGIN_INSTALL_DIR} wpimport )
+install(TARGETS wpimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_wp_import.desktop  )
+install( FILES  kword_wp_import.desktop   DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

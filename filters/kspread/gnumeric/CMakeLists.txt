@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} gnumericexport )
 
 target_link_libraries(gnumericexport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} gnumericexport )
+install(TARGETS gnumericexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -30,12 +30,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} gnumericimport )
 
 target_link_libraries(gnumericimport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} gnumericimport )
+install(TARGETS gnumericimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_gnumeric_export.desktop kspread_gnumeric_import.desktop )
+install( FILES  kspread_gnumeric_export.desktop kspread_gnumeric_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

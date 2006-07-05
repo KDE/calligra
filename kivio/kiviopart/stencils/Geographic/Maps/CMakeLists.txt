@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Geographic/Maps FILES  Belgium.sml  Belgium.xpm  desc  Europe.sml  Europe.xpm  icon.xpm )
+install( FILES  Belgium.sml  Belgium.xpm  desc  Europe.sml  Europe.xpm  icon.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Geographic/Maps)
 
 
 

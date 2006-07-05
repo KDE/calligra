@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kugarnopimport )
 
 target_link_libraries(kugarnopimport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${PLUGIN_INSTALL_DIR} kugarnopimport )
+install(TARGETS kugarnopimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kugar_kugar_import.desktop )
+install( FILES  kugar_kugar_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

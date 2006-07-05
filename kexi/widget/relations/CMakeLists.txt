@@ -18,7 +18,7 @@ kde4_add_library(kexirelationsview SHARED ${kexirelationsview_LIB_SRCS})
 target_link_libraries(kexirelationsview  ${KDE4_KDECORE_LIBS} kexicore )
 
 set_target_properties(kexirelationsview PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kexirelationsview )
+install(TARGETS kexirelationsview  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############

@@ -17,13 +17,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviozoomtool )
 
 target_link_libraries(kiviozoomtool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kiviozoomtool )
+install(TARGETS kiviozoomtool  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/kpartplugins FILES  kiviozoomtool.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kiviozoomtool.desktop )
+install( FILES  kiviozoomtool.rc  DESTINATION ${DATA_INSTALL_DIR}/kivio/kpartplugins)
+install( FILES  kiviozoomtool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

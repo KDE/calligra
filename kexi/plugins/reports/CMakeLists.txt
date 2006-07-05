@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_report )
 
 target_link_libraries(kexihandler_report  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexiextendedwidgets kformdesigner kexiformutils kexireportutils )
 
-install_targets(${PLUGIN_INSTALL_DIR} kexihandler_report )
+install(TARGETS kexihandler_report  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -31,7 +31,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexireportwidgets )
 target_link_libraries(kexireportwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexireportutils
 kexiformutils kexiextendedwidgets kexiformutilswidgets )
 
-install_targets(${PLUGIN_INSTALL_DIR} kexireportwidgets )
+install(TARGETS kexireportwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -45,14 +45,14 @@ kde4_add_library(kexireportutils SHARED ${kexireportutils_LIB_SRCS})
 target_link_libraries(kexireportutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets kexiformutilswidgets kformdesigner kexiformutils )
 
 set_target_properties(kexireportutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kexireportutils )
+install(TARGETS kexireportutils  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexireportpartui.rc kexireportpartinstui.rc )
-install_files( ${SERVICES_INSTALL_DIR}/kformdesigner FILES  kformdesigner_kexireportfactory.desktop )
-install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexireporthandler.desktop )
+install( FILES  kexireportpartui.rc kexireportpartinstui.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi)
+install( FILES  kformdesigner_kexireportfactory.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kformdesigner)
+install( FILES  kexireporthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)
 
 
 

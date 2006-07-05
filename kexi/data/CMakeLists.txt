@@ -6,11 +6,11 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KDE34COMPAT)")
 
 ########### install files ###############
 
-install_files( ${SERVICETYPES_INSTALL_DIR} FILES  kexihandler.desktop )
-install_files( ${CONFIG_INSTALL_DIR} FILES  kexirc )
-install_files( ${CONFIG_INSTALL_DIR}/magic FILES  kexi.magic  )
-install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexiui.rc )
-install_files( ${MIME_INSTALL_DIR}/application FILES  x-kexiproject-sqlite.desktop  x-kexi-connectiondata.desktop  x-kexiproject-sqlite2.desktop  x-kexiproject-sqlite3.desktop  x-kexiproject-shortcut.desktop )
+install( FILES  kexihandler.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES  kexirc  DESTINATION ${CONFIG_INSTALL_DIR})
+install( FILES  kexi.magic   DESTINATION ${CONFIG_INSTALL_DIR}/magic)
+install( FILES  kexiui.rc  DESTINATION ${DATA_INSTALL_DIR}/kexi)
+install( FILES  x-kexiproject-sqlite.desktop  x-kexi-connectiondata.desktop  x-kexiproject-sqlite2.desktop  x-kexiproject-sqlite3.desktop  x-kexiproject-shortcut.desktop  DESTINATION ${MIME_INSTALL_DIR}/application)
 
 
 

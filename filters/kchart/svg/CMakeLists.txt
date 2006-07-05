@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartsvgexport )
 
 target_link_libraries(kchartsvgexport  ${KDE4_KDECORE_LIBS} kchartcommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kchartsvgexport )
+install(TARGETS kchartsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kchart_svg_export.desktop )
+install( FILES  kchart_svg_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

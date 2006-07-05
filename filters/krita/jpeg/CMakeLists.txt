@@ -25,7 +25,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegimport )
 
 target_link_libraries(kritajpegimport kritaui jpeg exif)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritajpegimport )
+install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -44,13 +44,13 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegexport )
 
 target_link_libraries(kritajpegexport kritaui jpeg exif)
 
-install_targets(${PLUGIN_INSTALL_DIR} kritajpegexport )
+install(TARGETS kritajpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  krita_jpeg_import.desktop krita_jpeg_export.desktop )
-install_files( ${XDG_APPS_DIR} FILES  krita_jpeg.desktop )
+install( FILES  krita_jpeg_import.desktop krita_jpeg_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_jpeg.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

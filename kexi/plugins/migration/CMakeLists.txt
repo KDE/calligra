@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_migration )
 
 target_link_libraries(kexihandler_migration  ${KDE4_KDECORE_LIBS} kexicore keximigrate )
 
-install_targets(${PLUGIN_INSTALL_DIR} kexihandler_migration )
+install(TARGETS kexihandler_migration  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  keximigrationhandler.desktop )
+install( FILES  keximigrationhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)
 
 
 

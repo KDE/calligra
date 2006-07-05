@@ -5,9 +5,9 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels/  FILES  BusinessCards10.kwt LabelsL16.kwt )
-install_files( ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels FILES  .directory BusinessCards10.desktop LabelsL16.desktop )
-install_files( ${DATA_INSTALL_DIR}/kword/icons FILES  )
+install( FILES  BusinessCards10.kwt LabelsL16.kwt  DESTINATION ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels/)
+install( FILES  .directory BusinessCards10.desktop LabelsL16.desktop  DESTINATION ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels)
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kword/icons)
 
 
 

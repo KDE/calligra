@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} sml_connector )
 
 target_link_libraries(sml_connector  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} sml_connector )
+install(TARGETS sml_connector  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kivio/autoloadStencils FILES  sml_connector.xpm )
+install( FILES  sml_connector.xpm  DESTINATION ${DATA_INSTALL_DIR}/kivio/autoloadStencils)
 
 
 

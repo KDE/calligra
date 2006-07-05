@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} dbaseimport )
 
 target_link_libraries(dbaseimport kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} dbaseimport )
+install(TARGETS dbaseimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_dbase_import.desktop )
+install( FILES  kspread_dbase_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

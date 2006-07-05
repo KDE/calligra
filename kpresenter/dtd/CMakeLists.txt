@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kpresenter/dtd FILES  kpresenter.dtd )
+install( FILES  kpresenter.dtd  DESTINATION ${DATA_INSTALL_DIR}/kpresenter/dtd)
 
 
 

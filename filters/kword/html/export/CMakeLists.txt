@@ -23,12 +23,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} htmlexport )
 
 target_link_libraries(htmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters ${KDE4_KDEUI_LIBS})
 
-install_targets(${PLUGIN_INSTALL_DIR} htmlexport )
+install(TARGETS htmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_html_export.desktop )
+install( FILES  kword_html_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

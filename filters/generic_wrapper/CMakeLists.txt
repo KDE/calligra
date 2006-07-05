@@ -19,12 +19,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} generickofilter )
 
 target_link_libraries(generickofilter  ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} generickofilter )
+install(TARGETS generickofilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  generic_filter.desktop )
+install( FILES  generic_filter.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfile_koffice )
 
 target_link_libraries(kfile_koffice  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${PLUGIN_INSTALL_DIR} kfile_koffice )
+install(TARGETS kfile_koffice  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kfile_koffice.desktop )
+install( FILES  kfile_koffice.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

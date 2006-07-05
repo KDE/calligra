@@ -59,7 +59,7 @@ kde4_add_library(kiviocommon SHARED ${kiviocommon_LIB_SRCS})
 target_link_libraries(kiviocommon  ${KDE4_KDECORE_LIBS} tools kiviosdk kivioconfig ui kofficeui kopainter kopalette kotext )
 
 set_target_properties(kiviocommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install_targets(${LIB_INSTALL_DIR} kiviocommon )
+install(TARGETS kiviocommon  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -74,7 +74,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviopart )
 
 target_link_libraries(kiviopart  ${KDE4_KDECORE_LIBS} kiviocommon )
 
-install_targets(${PLUGIN_INSTALL_DIR} kiviopart )
+install(TARGETS kiviopart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -87,16 +87,16 @@ kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kivio )
+install(TARGETS kdeinit_kivio  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kivio kdeinit_kivio )
-install_targets(/bin kivio )
+install(TARGETS kivio  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES  kivio.desktop )
-install_files( ${DATA_INSTALL_DIR}/kivio FILES  kivio.rc kivio_readonly.rc )
-install_files( ${SERVICES_INSTALL_DIR} FILES  kiviopart.desktop )
+install( FILES  kivio.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  kivio.rc kivio_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kivio)
+install( FILES  kiviopart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 

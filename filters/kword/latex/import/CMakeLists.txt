@@ -20,12 +20,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordlateximport )
 
 target_link_libraries(kwordlateximport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${PLUGIN_INSTALL_DIR} kwordlateximport )
+install(TARGETS kwordlateximport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kword_latex_import.desktop )
+install( FILES  kword_latex_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

@@ -8,7 +8,7 @@ add_subdirectory( Connections )
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kpresenter/autoforms FILES  .autoforms )
+install( FILES  .autoforms  DESTINATION ${DATA_INSTALL_DIR}/kpresenter/autoforms)
 
 
 

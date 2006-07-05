@@ -108,7 +108,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kplatopart )
 
 target_link_libraries(kplatopart kofficeui ${KDE4_KDEUI_LIBS} ${QT_QTXML_LIBRARY}  )
 
-install_targets(${PLUGIN_INSTALL_DIR} kplatopart )
+install(TARGETS kplatopart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -121,16 +121,16 @@ kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kplato  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_kplato )
+install(TARGETS kdeinit_kplato  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kplato kdeinit_kplato )
-install_targets(/bin kplato )
+install(TARGETS kplato  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kplatopart.desktop )
-install_files( ${DATA_INSTALL_DIR}/kplato FILES  kplato.rc kplato_readonly.rc )
-install_files( ${XDG_APPS_DIR} FILES  kplato.desktop )
+install( FILES  kplatopart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kplato.rc kplato_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kplato)
+install( FILES  kplato.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

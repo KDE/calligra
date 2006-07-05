@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/kudesigner/icons FILES  )
+install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kudesigner/icons)
 
 
 

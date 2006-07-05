@@ -15,12 +15,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kprkword )
 
 target_link_libraries(kprkword  ${KDE4_KDECORE_LIBS} kofficecore)
 
-install_targets(${PLUGIN_INSTALL_DIR} kprkword )
+install(TARGETS kprkword  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  kprkword.desktop )
+install( FILES  kprkword.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 
