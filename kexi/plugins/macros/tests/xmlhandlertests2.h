@@ -68,7 +68,9 @@ namespace KoMacroTest {
 			/// @internal d-pointer instance.
 			Private* const d;
 
-#if 0		
+			typedef QMap<QString,KoMacro::Variable>::size_type sizetypemap;
+			typedef QValueList<KSharedPtr<KoMacro::MacroItem > >::size_type sizetypelist;
+
 			/** 
 			* Compares a XML-Element with a Macro. Call sub-asserts.
 			* @p macro The parsen @a Macro.
@@ -77,7 +79,7 @@ namespace KoMacroTest {
 			* @p isactionset Bool for expectation that the @a Action -names are equal.
 			* @p isvariableok QMap of Bools for comparing each @a Variable .
 			*/
-			void assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
+/*			void assertMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro,
 				const QDomElement& elem,
 				const bool isitemsempty,
 				const bool isactionset,
@@ -85,7 +87,7 @@ namespace KoMacroTest {
 
 			// Prints a QMap of Variables to kdDebug().
 			void printMvariables(const QMap<QString, KSharedPtr<KoMacro::Variable > > mvariables, const QString s);
-#endif
+*/
 			/** 
 			* Sub-methods of testParseXML() and testToXML().
 			* Test the correct parsing of a @a QDomElement into a @a Macro
@@ -94,17 +96,17 @@ namespace KoMacroTest {
 			*/
 			// 1.Test - Correct DomElement.
 			void testCorrectDomElement();
-#if 0			// 2.Test - XML-document with bad root element.
-			void testBadRoot();
+			// 2.Test - XML-document with bad root element.
+			//void testBadRoot();
 			// 3.Test - XML-document with a missing Variable.
 			void testMissingVariable();
 			// 4.Test - One more Variable in XML-Document.
 			void testMoreVariables();
 			// 5.Test - XML-document with wrong macro-xmlversion.
-			void testWrongVersion();
+			//void testWrongVersion();
 			// 6.Test - XML-document if it has a wrong structure like
 			// wrong parathesis	or missing end tag.
-			void testWrongXMLStruct();
+			//void testWrongXMLStruct();
 			// 7.Test-XML-document with maximum field-size.
 			void testMaxNum();
 			// 8.Test-XML-document with maximum+1 field-size.
@@ -117,7 +119,7 @@ namespace KoMacroTest {
 			void testBigNumber();
 			// 12.Test - With two MacroItems.
 			void testTwoMacroItems();
-#endif
+
 
 			bool assertActionsEqual(KSharedPtr<KoMacro::Action> action,
 				KSharedPtr<KoMacro::Action> action2);

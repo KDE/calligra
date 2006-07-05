@@ -69,7 +69,7 @@ XMLHandler::~XMLHandler()
 
 bool XMLHandler::parseXML(const QDomElement& element)
 {
-	// Remove old items. We should clear first. TODO Is this redundant -> keximacroview.cpp:99
+	// Remove old items. We should clear first.
 	d->macro->clearItems();
 
 	// We expect a <macro> element. Do we really need to be such strict or
