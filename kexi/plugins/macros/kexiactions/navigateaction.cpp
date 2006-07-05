@@ -19,12 +19,6 @@
  ***************************************************************************/
 
 #include "navigateaction.h"
-//#include "objectvariable.h"
-
-#include "../lib/macroitem.h"
-#include "../lib/context.h"
-
-#include "objectnamevariable.h"
 
 #include <core/kexi.h>
 #include <core/kexiproject.h>

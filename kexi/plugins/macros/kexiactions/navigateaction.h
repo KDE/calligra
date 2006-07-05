@@ -21,9 +21,6 @@
 #ifndef KEXIMACRO_NAVIGATEACTION_H
 #define KEXIMACRO_NAVIGATEACTION_H
 
-#include "../lib/action.h"
-#include "../lib/variable.h"
-
 #include "kexiaction.h"
 
 class KexiMainWindow;

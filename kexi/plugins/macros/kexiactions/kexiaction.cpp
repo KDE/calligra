@@ -19,10 +19,7 @@
  ***************************************************************************/
 
 #include "kexiaction.h"
-
-#include "../lib/manager.h"
 #include "../lib/exception.h"
-#include "../lib/variable.h"
 
 #include <ksharedptr.h>
 
@@ -32,15 +29,13 @@ KexiAction::KexiAction(const QString& name, const QString& text)
 	: KoMacro::Action(name)
 {
 	m_mainwin = dynamic_cast< KexiMainWindow* >( KoMacro::Manager::self()->guiClient() );
+
 	if(! m_mainwin) {
 		throw KoMacro::Exception("Invalid KexiMainWindow instance.");
 	}
 
 	// Set the caption this action has.
 	setText(text);
-
-	// Publish this action.
-	KoMacro::Manager::self()->publishAction( KSharedPtr<Action>(this) );
 }
 
 KexiAction::~KexiAction()

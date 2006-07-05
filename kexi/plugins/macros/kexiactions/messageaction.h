@@ -21,7 +21,6 @@
 #ifndef KEXIMACRO_MESSAGEACTION_H
 #define KEXIMACRO_MESSAGEACTION_H
 
-#include "../lib/variable.h"
 
 #include "kexiaction.h"
 

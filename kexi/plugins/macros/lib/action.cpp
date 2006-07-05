@@ -2,6 +2,7 @@
  * This file is part of the KDE project
  * copyright (C) 2005 by Sebastian Sauer (mail@dipe.org)
  * copyright (C) 2005 by Tobi Krebs (tobi.krebs@gmail.com)
+ * copyright (C) 2006 by Sascha Kupper (kusato@kfnv.de)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,9 +19,7 @@
  ***************************************************************************/
 
 #include "action.h"
-#include "manager.h"
 
-#include <qstringlist.h>
 #include <kdebug.h>
 
 using namespace KoMacro;
@@ -75,6 +74,9 @@ Action::Action(const QString& name, const QString& text)
 	kdDebug() << "Action::Action() name=" << name << endl;
 	d->name = name;
 	setText(text);
+
+	// Publish this action.
+	KoMacro::Manager::self()->publishAction( KSharedPtr<Action>(this) );
 }
 
 Action::~Action()

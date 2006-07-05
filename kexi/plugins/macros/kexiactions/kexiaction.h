@@ -22,6 +22,12 @@
 #define KEXIMACRO_KEXIACTION_H
 
 #include "../lib/action.h"
+#include "../lib/variable.h"
+#include "../lib/macroitem.h"
+#include "../lib/context.h"
+
+#include "objectvariable.h"
+#include "objectnamevariable.h"
 
 #include <core/keximainwindow.h>
 
@@ -41,7 +47,6 @@ namespace KexiMacro {
 			/**
 			* Constructor.
 			*
-			* @param mainwin Kexi's main window implementation.
 			* @param name The unique name the @a KoMacro::Action has. This
 			* name will be used to identify the action.
 			* @param text The i18n-caption text used for display purposes.

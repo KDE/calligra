@@ -76,18 +76,6 @@ namespace KoMacroTest {
 			* Subtest for the @a KoMacro::Action functionality.
 			*/
 			void testComment();
-			/**
-			* Subtest for the @a KoMacro::Action functionality.
-			*/
-			void testVariableString();
-			/**
-			* Subtest for the @a KoMacro::Action functionality.
-			*/
-			void testVariableInt();
-			/**
-			* Subtest for the @a KoMacro::Action functionality.
-			*/
-			void testVariableBool();
 
 		private:
 			/// @internal d-pointer class.

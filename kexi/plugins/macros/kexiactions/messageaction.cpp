@@ -20,9 +20,6 @@
 
 #include "messageaction.h"
 
-#include "../lib/action.h"
-#include "../lib/context.h"
-
 #include <core/keximainwindow.h>
 
 #include <klocale.h>

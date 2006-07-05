@@ -19,12 +19,6 @@
  ***************************************************************************/
 
 #include "executeaction.h"
-#include "objectvariable.h"
-
-#include "../lib/macroitem.h"
-#include "../lib/context.h"
-
-#include "objectnamevariable.h"
 
 #include <core/kexi.h>
 #include <core/kexiproject.h>
@@ -41,8 +35,8 @@ ExecuteAction::ExecuteAction()
 	: KexiAction("execute", i18n("Execute"))
 {
 	int conditions = ObjectVariable<ExecuteAction>::VisibleInNav | ObjectVariable<ExecuteAction>::Executable;
-	KoMacro::Variable* objvar = new ObjectVariable<ExecuteAction>(this, conditions);
-	setVariable(KSharedPtr<KoMacro::Variable>( objvar ));
+	KSharedPtr<KoMacro::Variable> objvar = new ObjectVariable<ExecuteAction>(this, conditions);
+	setVariable(objvar);
 
 	setVariable(KSharedPtr<KoMacro::Variable>( new ObjectNameVariable<ExecuteAction>(this, objvar->variant().toString()) ));
 }

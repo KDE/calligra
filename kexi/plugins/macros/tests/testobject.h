@@ -80,7 +80,6 @@ namespace KoMacroTest {
 			/// @internal d-pointer instance.
 			Private* const d;
 	};
-
 }
 
 #endif

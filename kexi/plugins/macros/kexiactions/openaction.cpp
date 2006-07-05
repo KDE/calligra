@@ -19,11 +19,6 @@
  ***************************************************************************/
 
 #include "openaction.h"
-#include "objectvariable.h"
-#include "objectnamevariable.h"
-
-#include "../lib/macroitem.h"
-#include "../lib/context.h"
 
 #include <core/kexi.h>
 #include <core/kexiproject.h>
@@ -85,17 +80,12 @@ OpenAction::OpenAction()
 	: KexiAction("open", i18n("Open"))
 {
 	const int conditions = ObjectVariable<OpenAction>::VisibleInNav;
-	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this, conditions);
-	setVariable(KSharedPtr<KoMacro::Variable>( objvar ));
+	
+	KSharedPtr<KoMacro::Variable> objvar = new ObjectVariable<OpenAction>(this, conditions);
+	setVariable(objvar);
 
 	setVariable(KSharedPtr<KoMacro::Variable>( new ObjectNameVariable<OpenAction>(this, objvar->variant().toString()) ));
 	setVariable(KSharedPtr<KoMacro::Variable>( new ViewVariable<OpenAction>(this, objvar->variant().toString()) ));
-
-	/*TODO
-	KSharedPtr<KoMacro::Variable> activatevar = KSharedPtr<KoMacro::Variable>( new KexiVariable<OpenAction>(this, "activate", i18n("Activate")) );
-	activatevar->setVariant( QVariant(true,0) );
-	setVariable(activatevar);
-	*/
 }
 
 OpenAction::~OpenAction()

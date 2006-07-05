@@ -2,6 +2,7 @@
  * This file is part of the KDE project
  * copyright (C) 2005 by Sebastian Sauer (mail@dipe.org)
  * copyright (C) 2005 by Tobi Krebs (tobi.krebs@gmail.com)
+ * copyright (C) 2006 by Sascha Kupper (kusato@kfnv.de)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,20 +21,19 @@
 #ifndef KOMACRO_ACTION_H
 #define KOMACRO_ACTION_H
 
-#include <qobject.h>
-#include <ksharedptr.h>
-
-// Forward declarations.
-class QDomElement;
-
 #include "manager.h"
 #include "context.h"
 #include "variable.h"
 
-namespace KoMacro {
+#include <qobject.h>
+#include <ksharedptr.h>
+#include <qstringlist.h>
 
-	// Forward declarations.
-	//class Manager;
+
+// Forward declarations.
+class QDomElement;
+
+namespace KoMacro {
 
 	/**
 	 * The Action class extendes KAction to implement some additional
@@ -63,7 +63,7 @@ namespace KoMacro {
 
 			/**
 			* Constructor.
-			*
+			* 
 			* @param name The unique name this @a Action has.
 			* @param text The i18n-caption text this @a Action has.
 			*/

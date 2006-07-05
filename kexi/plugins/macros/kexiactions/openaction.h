@@ -21,9 +21,6 @@
 #ifndef KEXIMACRO_OPENACTION_H
 #define KEXIMACRO_OPENACTION_H
 
-#include "../lib/action.h"
-#include "../lib/variable.h"
-
 #include "kexiaction.h"
 
 class KexiMainWindow;
