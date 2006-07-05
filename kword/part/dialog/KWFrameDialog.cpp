@@ -28,14 +28,15 @@
 
 KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *document, QWidget *parent)
     : KPageDialog(parent),
-    m_frameConnectSelector(0)
+    m_frameConnectSelector(0),
+    m_frameGeometry(0)
 {
     m_state = new FrameConfigSharedState(document);
     setFaceType(Tabbed);
     m_generalFrameProperties = new KWGeneralFrameProperties(m_state);
     addPage(m_generalFrameProperties, i18n("Options"));
-    //m_frameRunaroundProperties = new KWFrameRunaroundProperties(this);
-    //addPage(m_frameRunaroundProperties, i18n("Text Run Around"));
+    m_frameRunaroundProperties = new KWFrameRunaroundProperties(m_state);
+    addPage(m_frameRunaroundProperties, i18n("Text Run Around"));
 
     if(frames.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
@@ -46,13 +47,13 @@ KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *documen
             delete m_frameConnectSelector;
             m_frameConnectSelector = 0;
         }
+        m_frameGeometry = new KWFrameGeometry(m_state);
+        m_frameGeometry->open(frame);
+        addPage(m_frameGeometry, i18n("Geometry"));
     }
-    //m_frameGeometry = new KWFrameGeometry(this);
-    //addPage(m_frameGeometry, i18n("Geometry"));
 
     m_generalFrameProperties->open(frames);
-    //m_frameRunaroundProperties->open(frames);
-    //m_frameGeometry->open(frames);
+    m_frameRunaroundProperties->open(frames);
 
     connect(this, SIGNAL( okClicked() ), this, SLOT( okClicked() ));
 }
@@ -61,10 +62,12 @@ KWFrameDialog::~KWFrameDialog() {
 }
 
 void KWFrameDialog::okClicked() {
-    m_frameConnectSelector->save();
+    if(m_frameConnectSelector)
+        m_frameConnectSelector->save();
     m_generalFrameProperties->save();
-    //m_frameRunaroundProperties->save();
-    //m_frameGeometry->save();
+    m_frameRunaroundProperties->save();
+    if(m_frameGeometry)
+        m_frameGeometry->save();
 }
 
 // static

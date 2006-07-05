@@ -20,23 +20,35 @@
 #ifndef KWFRAMERUNAROUNDPROPERTIES_H
 #define KWFRAMERUNAROUNDPROPERTIES_H
 
+#include "ui_KWFrameRunaroundProperties.h"
+#include <dialog/KWShapeConfigFactory.h>
+
+#include <KoShapeConfigWidgetBase.h>
+
 #include <QWidget>
 #include <QList>
 
-#include "ui_KWFrameRunaroundProperties.h"
-
 class KWFrame;
+class KoShape;
 
-class KWFrameRunaroundProperties : public QWidget {
+class KWFrameRunaroundProperties : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
-    KWFrameRunaroundProperties(QWidget *parent = 0);
+    KWFrameRunaroundProperties(FrameConfigSharedState *state);
     ~KWFrameRunaroundProperties();
 
     void open(const QList<KWFrame*> &frames);
+    void open(KoShape *shape);
+    void save();
+    KAction *createAction();
 
 private:
     Ui::KWFrameRunaroundProperties widget;
+    FrameConfigSharedState *m_state;
+
+    QButtonGroup *m_runAroundSide, *m_runAround;
+    QList<KWFrame*> m_frames;
+    KoShape *m_shape;
 };
 
 #endif

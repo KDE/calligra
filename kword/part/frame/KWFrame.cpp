@@ -30,6 +30,7 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
     m_copyToEverySheet( true ),
     m_newFrameBehavior( KWord::NoFollowupFrame ),
     m_runAroundSide( KWord::BiggestRunAroundSide ),
+    m_runAround( KWord::NoRunAround ),
     m_runAroundDistance( 1.0 ),
     m_isCopy(false),
     m_frameSet( parent )

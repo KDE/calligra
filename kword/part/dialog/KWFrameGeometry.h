@@ -19,23 +19,32 @@
 #ifndef KWFRAMEGEOMETRY_H
 #define KWFRAMEGEOMETRY_H
 
+#include "ui_KWFrameGeometry.h"
+#include <dialog/KWShapeConfigFactory.h>
+
+#include <KoShapeConfigWidgetBase.h>
+
 #include <QWidget>
 #include <QList>
 
-#include "ui_KWFrameGeometry.h"
-
 class KWFrame;
+class KoShape;
 
-class KWFrameGeometry : public QWidget {
+class KWFrameGeometry : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
-    KWFrameGeometry(QWidget *parent = 0);
+    KWFrameGeometry(FrameConfigSharedState *state);
     ~KWFrameGeometry();
 
-    void open(const QList<KWFrame*> &frames);
+    void open(KWFrame* frame);
+    void open(KoShape *shape);
+    void save();
+    KAction *createAction();
 
 private:
     Ui::KWFrameGeometry widget;
+    KWFrame *m_frame;
+    FrameConfigSharedState *m_state;
 };
 
 #endif

@@ -29,6 +29,7 @@ class QTextDocument;
  * A frameset with a TextDocument backing it.
  */
 class KWORD_TEST_EXPORT KWTextFrameSet : public KWFrameSet {
+    Q_OBJECT
 public:
     /// normal constructor, for user text
     KWTextFrameSet();
@@ -51,9 +52,14 @@ public:
 protected:
     void setupFrame(KWFrame *frame);
 
+private slots:
+    friend class KWTextDocumentLayout;
+    void relayout();
+    void requestLayout();
+
 private:
     QTextDocument *m_document;
-    bool m_protectContent;
+    bool m_protectContent, m_layoutTriggered;
     KWord::TextFrameSetType m_textFrameSetType;
 };
 

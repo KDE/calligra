@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>KWGeneralFrameProperties</class>
  <widget class="QWidget" name="KWGeneralFrameProperties" >
   <property name="geometry" >
@@ -163,7 +160,23 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>reconnect</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>evenOdd</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>345</x>
+     <y>92</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>340</x>
+     <y>145</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

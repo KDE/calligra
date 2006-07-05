@@ -17,18 +17,64 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KWFrameGeometry.h"
+#include "KWDocument.h"
 #include "frame/KWFrame.h"
 
-KWFrameGeometry::KWFrameGeometry(QWidget *parent)
-    : QWidget(parent)
+KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
+    : m_state(state),
+    m_frame(0)
 {
+    m_state->addUser();
     widget.setupUi(this);
+    KoUnit::Unit unit = m_state->document()->unit();
+    widget.left->setUnit(unit);
+    widget.left->setMinimum(0.0);
+    widget.top->setUnit(unit);
+    widget.top->setMinimum(0.0);
+    widget.width->setUnit(unit);
+    widget.width->setMinimum(0.0);
+    widget.height->setUnit(unit);
+    widget.height->setMinimum(0.0);
+    widget.leftMargin->setUnit(unit);
+    widget.leftMargin->setMinimum(0.0);
+    widget.rightMargin->setUnit(unit);
+    widget.rightMargin->setMinimum(0.0);
+    widget.bottomMargin->setUnit(unit);
+    widget.bottomMargin->setMinimum(0.0);
+    widget.topMargin->setUnit(unit);
+    widget.topMargin->setMinimum(0.0);
 }
 
 KWFrameGeometry::~KWFrameGeometry() {
+    m_state->removeUser();
 }
 
-void KWFrameGeometry::open(const QList<KWFrame*> &frames) {
+void KWFrameGeometry::open(KWFrame* frame) {
+    m_frame = frame;
+    open(frame->shape());
+    // TODO rest
 }
+
+void KWFrameGeometry::open(KoShape *shape) {
+    QPointF absolutePosition = shape->absolutePosition();
+    widget.left->changeValue(absolutePosition.x());
+    widget.top->changeValue(absolutePosition.y());
+    widget.width->changeValue(shape->size().width());
+    widget.height->changeValue(shape->size().height());
+}
+
+void KWFrameGeometry::save() {
+    KWFrame *frame = m_frame;
+    if(frame == 0)
+        frame = m_state->frame();
+    Q_ASSERT(frame);
+    QPointF pos(widget.left->value(), widget.top->value());
+    frame->shape()->setAbsolutePosition(pos);
+}
+
+KAction *KWFrameGeometry::createAction() {
+    return 0; // TODO
+}
+
 
 #include "KWFrameGeometry.moc"

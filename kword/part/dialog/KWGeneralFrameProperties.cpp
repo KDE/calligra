@@ -18,6 +18,7 @@
  */
 
 #include "KWGeneralFrameProperties.h"
+#include "KWFrameDialog.h"
 #include "frame/KWFrame.h"
 #include "frame/KWTextFrameSet.h"
 
@@ -43,8 +44,6 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
     m_newPageGroup->setId(widget.reconnect, KWord::ReconnectNewFrame);
     m_newPageGroup->addButton(widget.placeCopy);
     m_newPageGroup->setId(widget.placeCopy, KWord::CopyNewFrame);
-
-    connect(widget.noFollowup, SIGNAL(toggled(bool)), widget.evenOdd, SLOT(setDisabled(bool)));
 }
 
 KWGeneralFrameProperties::~KWGeneralFrameProperties() {
@@ -70,39 +69,6 @@ void KWGeneralFrameProperties::open(KoShape *shape) {
 
 void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
     m_frames = frames;
-    class GuiHelper {
-        public:
-            enum State {
-                Unset,
-                On,
-                Off,
-                TriState
-            };
-            GuiHelper() : m_state(Unset) { }
-            void addState(State state) {
-                if(m_state == Unset)
-                    m_state = state;
-                else if(m_state != state)
-                    m_state = TriState;
-            }
-
-            void updateCheckBox(QCheckBox *checkbox, bool hide) {
-                if(m_state == Unset) {
-                    if(hide)
-                        checkbox->setVisible(false);
-                    checkbox->setEnabled(false);
-                    checkbox->setTristate(true);
-                    checkbox->setCheckState(Qt::PartiallyChecked);
-                } else if(m_state == TriState) {
-                    checkbox->setTristate(true);
-                    checkbox->setCheckState(Qt::PartiallyChecked);
-                } else {
-                    checkbox->setCheckState(m_state == On ? Qt::Checked : Qt::Unchecked);
-                }
-            }
-
-        State m_state;
-    };
     // checkboxes
     GuiHelper copyFrame, allFrames, protectContent, evenOdd;
     // radioGroups

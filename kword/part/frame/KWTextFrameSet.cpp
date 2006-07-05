@@ -26,11 +26,13 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <QTextDocument>
+#include <QTimer>
 
 KWTextFrameSet::KWTextFrameSet()
     : m_document( new QTextDocument() ),
-    m_textFrameSetType( KWord::OtherTextFrameSet ),
-    m_protectContent(false)
+    m_protectContent(false),
+    m_layoutTriggered(false),
+    m_textFrameSetType( KWord::OtherTextFrameSet )
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
 }
@@ -81,16 +83,33 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
             frame->setCopy(true);
     }
     // TODO sort frames
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+    Q_ASSERT(data);
     if(frameCount() == 1 && m_document->isEmpty()) {
         delete m_document;
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
-        Q_ASSERT(data);
         m_document = data->document();
+        m_document->setDocumentLayout(new KWTextDocumentLayout(this));
         data->setDocument(m_document, false);
     }
     else {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
-        Q_ASSERT(data);
         data->setDocument(m_document, false);
+        data->faul();
+        requestLayout();
     }
+    connect (data, SIGNAL(relayout()), this, SLOT(requestLayout()));
 }
+
+void KWTextFrameSet::requestLayout() {
+    if(!m_layoutTriggered)
+        QTimer::singleShot(0, this, SLOT(relayout()));
+    m_layoutTriggered = true;
+}
+
+void KWTextFrameSet::relayout() {
+    m_layoutTriggered = false;
+    KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
+    if(lay)
+        lay->layout();
+}
+
+#include "KWTextFrameSet.moc"

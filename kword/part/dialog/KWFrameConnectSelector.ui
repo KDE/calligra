@@ -52,24 +52,24 @@
         <string>Name of frameset:</string>
        </property>
        <property name="buddy" >
-        <cstring>m_frameSetName</cstring>
+        <cstring>frameSetName</cstring>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="m_frameSetName" />
+      <widget class="QLineEdit" name="frameSetName" />
      </item>
     </layout>
    </item>
    <item row="2" column="0" colspan="2" >
-    <widget class="QRadioButton" name="m_newRadio" >
+    <widget class="QRadioButton" name="newRadio" >
      <property name="text" >
       <string>Create a new frameset:</string>
      </property>
     </widget>
    </item>
    <item row="0" column="0" colspan="2" >
-    <widget class="QRadioButton" name="m_existingRadio" >
+    <widget class="QRadioButton" name="existingRadio" >
      <property name="text" >
       <string>Select existing frameset to connect to:</string>
      </property>
@@ -92,7 +92,7 @@
     </spacer>
    </item>
    <item row="1" column="1" >
-    <widget class="QTreeWidget" name="m_framesList" >
+    <widget class="QTreeWidget" name="framesList" >
      <property name="rootIsDecorated" >
       <bool>false</bool>
      </property>

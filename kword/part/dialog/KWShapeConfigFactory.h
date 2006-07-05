@@ -22,7 +22,6 @@
 
 #include <KoShapeConfigFactory.h>
 
-class KoCanvasBase;
 class KoShape;
 class KWFrame;
 class KWDocument;
@@ -53,10 +52,12 @@ public:
     KWFrameConnectSelectorFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameConnectSelectorFactory() {}
 
-    KoShapeConfigWidgetBase *createConfigWidget(KoCanvasBase *canvas, KoShape *shape);
+    KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
     QString name() const;
 
     bool showForShapeId(const QString &id) const;
+    int sortingOrder() const { return 1; }
+
 private:
     FrameConfigSharedState *m_state;
 };
@@ -66,8 +67,10 @@ public:
     KWFrameGeometryFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameGeometryFactory() {}
 
-    KoShapeConfigWidgetBase *createConfigWidget(KoCanvasBase *canvas, KoShape *shape);
+    KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
     QString name() const;
+    int sortingOrder() const { return 0; }
+
 private:
     FrameConfigSharedState *m_state;
 };
@@ -77,8 +80,11 @@ public:
     KWFrameRunaroundPropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameRunaroundPropertiesFactory() {}
 
-    KoShapeConfigWidgetBase *createConfigWidget(KoCanvasBase *canvas, KoShape *shape);
+    KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
     QString name() const;
+
+    int sortingOrder() const { return 5; }
+
 private:
     FrameConfigSharedState *m_state;
 };
@@ -88,8 +94,10 @@ public:
     KWGeneralFramePropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWGeneralFramePropertiesFactory() {}
 
-    KoShapeConfigWidgetBase *createConfigWidget(KoCanvasBase *canvas, KoShape *shape);
+    KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
     QString name() const;
+    int sortingOrder() const { return 10; }
+
 private:
     FrameConfigSharedState *m_state;
 };

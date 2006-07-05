@@ -24,6 +24,7 @@
 
 #include <kpagedialog.h>
 #include <QList>
+#include <QCheckBox>
 
 class KWFrameConnectSelector;
 class KWFrameGeometry;
@@ -51,6 +52,40 @@ private:
     KWFrameRunaroundProperties *m_frameRunaroundProperties;
     KWGeneralFrameProperties *m_generalFrameProperties;
     FrameConfigSharedState *m_state;
+};
+
+class GuiHelper {
+public:
+    enum State {
+        Unset,
+        On,
+        Off,
+        TriState
+    };
+    GuiHelper() : m_state(Unset) { }
+    void addState(State state) {
+        if(m_state == Unset)
+            m_state = state;
+        else if(m_state != state)
+            m_state = TriState;
+    }
+
+    void updateCheckBox(QCheckBox *checkbox, bool hide) {
+        if(m_state == Unset) {
+            if(hide)
+                checkbox->setVisible(false);
+            checkbox->setEnabled(false);
+            checkbox->setTristate(true);
+            checkbox->setCheckState(Qt::PartiallyChecked);
+        } else if(m_state == TriState) {
+            checkbox->setTristate(true);
+            checkbox->setCheckState(Qt::PartiallyChecked);
+        } else {
+            checkbox->setCheckState(m_state == On ? Qt::Checked : Qt::Unchecked);
+        }
+    }
+
+    State m_state;
 };
 
 #endif

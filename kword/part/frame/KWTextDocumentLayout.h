@@ -69,9 +69,10 @@ protected:
     void documentChanged(int position, int charsRemoved, int charsAdded);
 
 private:
+    friend class KWTextFrameSet;
     void layout();
     //void layout(QTextLayout &layout, bool recalc=false);
-    void layout(KWTextFrame *frame, double offset);
+    bool layout(KWTextFrame *frame, double offset);
 
     KWTextFrameSet *m_frameSet;
 };

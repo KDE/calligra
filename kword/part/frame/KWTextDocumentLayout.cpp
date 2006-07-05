@@ -52,7 +52,7 @@ kDebug() << "KWTextDocumentLayout::documentSize"<< endl;
 }
 
 void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) {
-    //if(document()->begin().layout()->lineCount() == 0) // only first time
+    if(document()->begin().layout()->lineCount() == 0) // only first time
         layout();
     const QRegion clipRegion = painter->clipRegion();
     painter->setBrush(QBrush(Qt::black));
@@ -111,30 +111,57 @@ kDebug() << "KWTextDocumentLayout::pageCount"<< endl;
 }
 
 void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded) {
-kDebug() << "KWTextDocumentLayout::documentChanged "<< position << ", " << charsRemoved << ", " << charsAdded << endl;
-// TODO
+    if(m_frameSet->frameCount() == 0) // nothing to do.
+        return;
+    m_frameSet->requestLayout();
+
+    int end = position + qMax(charsAdded, charsRemoved);
+    foreach(KWFrame *frame, m_frameSet->frames()) {
+        if(frame->isCopy())
+            continue;
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+        if(data->position() <= position && data->endPosition() >= position) {
+            // found our (first) frame
+            data->faul();
+            return;
+        }
+    }
+    // if still here; then the change was not in any frame, lets relayout the last for now.
+    KWFrame *last = m_frameSet->frames().last();
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (last->shape()->userData());
+    data->faul();
 }
 
 void KWTextDocumentLayout::layout() {
     double offset = 0.0;
     double previousOffset = offset;
+    bool reLayout = false;
     foreach(KWFrame *frame, m_frameSet->frames()) {
+kDebug() << "frame [" << offset << "]"  << frame->shape()->position().x() << "," << frame->shape()->position().y() << endl;
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
         Q_ASSERT(data); // only TextShapes are allowed on a KWTextFrameSet
-        if(frame->isCopy()) {
-            data->setDocumentOffset(previousOffset);
-            continue;
-        }
-        else
+        if(reLayout || data->isDirty())
+            // relayout all frames from here.
+            reLayout = true;
+kDebug() << "  reLayout: " << reLayout << endl;
+        //if(reLayout) {
+            frame->shape()->repaint();
+            if(frame->isCopy()) {
+                data->setDocumentOffset(previousOffset);
+                data->wipe();
+                continue;
+            }
             data->setDocumentOffset(offset);
-        layout(static_cast<KWTextFrame*> (frame), offset);
+            reLayout = layout(static_cast<KWTextFrame*> (frame), offset);
+            data->wipe();
+        //}
         previousOffset = offset;
         offset += frame->shape()->size().height() + 10;
     }
 }
 
-void KWTextDocumentLayout::layout(KWTextFrame *frame, double offset) {
-//kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
+bool KWTextDocumentLayout::layout(KWTextFrame *frame, double offset) {
+kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
     bool firstParag = true;
     const double bottom = offset + frame->shape()->size().height();
 
@@ -148,6 +175,11 @@ void KWTextDocumentLayout::layout(KWTextFrame *frame, double offset) {
             break;
         block = block.next();
     }
+
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+//    if(!data->isDirty() && data->documentOffset() == offset)
+//        return false;
+    data->setPosition(block.position());
 
     // do layout
     bool started=false;
@@ -163,11 +195,13 @@ void KWTextDocumentLayout::layout(KWTextFrame *frame, double offset) {
         QTextLayout *layout = block.layout();
         layout->beginLayout();
         QFontMetricsF fontMetrics(block.charFormat().font());
+        int position = block.position();
         while(1) {
             // kDebug() << "     new line" << endl;
             if(offset + fontMetrics.lineSpacing() > bottom) {
                 layout->endLayout();
-                return;
+                data->setEndPosition(position);
+                return true;
             }
             QTextLine line = layout->createLine();
             if (!line.isValid())
@@ -176,6 +210,7 @@ void KWTextDocumentLayout::layout(KWTextFrame *frame, double offset) {
             offset += fontMetrics.leading();
             line.setPosition(QPoint(0, offset));
             offset += fontMetrics.height();
+            position += line.textLength();
         }
         layout->endLayout();
         block = block.next();

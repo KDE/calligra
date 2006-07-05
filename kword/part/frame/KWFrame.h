@@ -88,6 +88,9 @@ public:
      */
     void setRunAroundSide(KWord::RunAroundSide side) { m_runAroundSide = side; }
 
+    KWord::TextRunAround textRunAround() const { return m_runAround; }
+    void setTextRunAround(KWord::TextRunAround runAround) { m_runAround = runAround; }
+
     /**
      * The space between this frames edge and the text when that text runs around this frame.
      * @return the space around this frame to keep free from text
@@ -133,6 +136,7 @@ private:
     bool m_copyToEverySheet;
     KWord::NewFrameBehavior m_newFrameBehavior;
     KWord::RunAroundSide m_runAroundSide;
+    KWord::TextRunAround m_runAround;
     double m_runAroundDistance;
     bool m_isCopy;
 

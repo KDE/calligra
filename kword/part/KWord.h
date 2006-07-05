@@ -66,6 +66,12 @@ public:
         RightRunAroundSide      ///< Run other text around the right side of the frame
     };
 
+    enum TextRunAround {
+        NoRunAround,
+        RunAround,
+        RunThrough
+    };
+
     /// Each text frame set can be catogorized in one of these items
     enum TextFrameSetType {
         FirstPageHeaderTextFrameSet, ///< The frameSet that holds the header for the first page

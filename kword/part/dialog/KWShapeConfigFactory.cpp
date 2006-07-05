@@ -19,7 +19,9 @@
 
 #include "KWShapeConfigFactory.h"
 #include "KWGeneralFrameProperties.h"
+#include "KWFrameRunaroundProperties.h"
 #include "KWFrameConnectSelector.h"
+#include "KWFrameGeometry.h"
 #include <KWCanvas.h>
 #include <frame/KWFrame.h>
 #include <frame/KWFrameSet.h>
@@ -28,7 +30,7 @@
 
 #include <klocale.h>
 
-KoShapeConfigWidgetBase *KWFrameConnectSelectorFactory::createConfigWidget(KoCanvasBase *canvas, KoShape *shape) {
+KoShapeConfigWidgetBase *KWFrameConnectSelectorFactory::createConfigWidget(KoShape *shape) {
     KWFrameConnectSelector *widget = new KWFrameConnectSelector(m_state);
     widget->open(shape);
     return widget;
@@ -43,8 +45,10 @@ bool KWFrameConnectSelectorFactory::showForShapeId(const QString &id) const {
 }
 
 
-KoShapeConfigWidgetBase *KWFrameGeometryFactory::createConfigWidget(KoCanvasBase *canvas, KoShape *shape) {
-    return 0;
+KoShapeConfigWidgetBase *KWFrameGeometryFactory::createConfigWidget(KoShape *shape) {
+    KWFrameGeometry *widget = new KWFrameGeometry(m_state);
+    widget->open(shape);
+    return widget;
 }
 
 QString KWFrameGeometryFactory::name() const {
@@ -52,8 +56,10 @@ QString KWFrameGeometryFactory::name() const {
 }
 
 
-KoShapeConfigWidgetBase *KWFrameRunaroundPropertiesFactory::createConfigWidget(KoCanvasBase *canvas, KoShape *shape) {
-    return 0;
+KoShapeConfigWidgetBase *KWFrameRunaroundPropertiesFactory::createConfigWidget(KoShape *shape) {
+    KWFrameRunaroundProperties *widget = new KWFrameRunaroundProperties(m_state);
+    widget->open(shape);
+    return widget;
 }
 
 QString KWFrameRunaroundPropertiesFactory::name() const {
@@ -61,7 +67,7 @@ QString KWFrameRunaroundPropertiesFactory::name() const {
 }
 
 
-KoShapeConfigWidgetBase *KWGeneralFramePropertiesFactory::createConfigWidget(KoCanvasBase *canvas, KoShape *shape) {
+KoShapeConfigWidgetBase *KWGeneralFramePropertiesFactory::createConfigWidget(KoShape *shape) {
     KWGeneralFrameProperties *panel = new KWGeneralFrameProperties(m_state);
     panel->open(shape);
     return panel;

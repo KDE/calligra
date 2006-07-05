@@ -53,8 +53,8 @@ private:
 
     QList<KWFrameSet*> m_frameSets;
     QList<QTreeWidgetItem *> m_items;
-
     FrameConfigSharedState *m_state;
+    KWFrame *m_frame;
 };
 
 #endif
