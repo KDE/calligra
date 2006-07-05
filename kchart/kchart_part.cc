@@ -763,7 +763,7 @@ void KChartPart::loadConfig( KConfig *conf )
 
     //   backgroundPixmapName = conf->readPathEntry( "backgroundPixmapName" );
     //   if( !backgroundPixmapName.isNull() ) {
-    //     backgroundPixmap.load( locate( "wallpaper", backgroundPixmapName ));
+    //     backgroundPixmap.load( KStandardDirs::locate( "wallpaper", backgroundPixmapName ));
     //     backgroundPixmapIsDirty = true;
     //   } else
     //     backgroundPixmapIsDirty = false;
@@ -2184,7 +2184,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     }
 
     if ( !m_params->backgroundPixmapName.isNull() ) {
-        m_params->backgroundPixmap.load( locate( "wallpaper",
+        m_params->backgroundPixmap.load( KStandardDirs::locate( "wallpaper",
 						 m_params->backgroundPixmapName ));
         m_params->backgroundPixmapIsDirty = true;
     }

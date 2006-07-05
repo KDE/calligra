@@ -361,7 +361,7 @@ void KChartBackgroundPixmapConfigPage::apply()
 //                     load=false;
 //                 } else {
 //                     _params->backgroundPixmapName = wallCB->currentText();
-//                     bool load=_params->backgroundPixmap.load( locate( "wallpaper", _params->backgroundPixmapName ) );
+//                     bool load=_params->backgroundPixmap.load( KStandardDirs::locate( "wallpaper", _params->backgroundPixmapName ) );
 //                     if(load)
 //                         _params->backgroundPixmapIsDirty = true;
 //                 }
@@ -496,7 +496,7 @@ bool KChartBackgroundPixmapConfigPage::loadWallPaper()
                 break;
             }
         }
-        QString file = locate("wallpaper", wallFile);
+        QString file = KStandardDirs::locate("wallpaper", wallFile);
 	if( file.isEmpty() ) {
             kWarning(35001) << "Couldn't locate wallpaper " << wallFile << endl;
             wallPixmap.resize(0,0);
