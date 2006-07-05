@@ -531,7 +531,7 @@ void KoShellWindow::slotFileNew()
 
 void KoShellWindow::slotFileOpen()
 {
-    KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L);
+    KFileDialog *dialog=new KFileDialog(KUrl(), QString::null, 0L);
     if (!isImporting())
         dialog->setCaption( i18n("Open Document") );
     else
@@ -540,7 +540,7 @@ void KoShellWindow::slotFileOpen()
 
     KUrl url;
     if(dialog->exec()==QDialog::Accepted) {
-        url=dialog->selectedURL();
+        url=dialog->selectedUrl();
         recentAction()->addUrl( url );
         if ( url.isLocalFile() )
             KRecentDocument::add(url.path(KUrl::RemoveTrailingSlash));
@@ -667,7 +667,7 @@ void KoShellWindow::saveSettings()
 
 QString KoShellWindow::configFile() const
 {
-  //return readConfigFile( locate( "data", "koshell/koshell_shell.rc" ) );
+  //return readConfigFile( KStandardDirs::locate( "data", "koshell/koshell_shell.rc" ) );
   return QString::null; // use UI standards only for now
 }
 
