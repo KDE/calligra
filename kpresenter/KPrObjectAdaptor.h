@@ -24,7 +24,7 @@
 
 #include <QString>
 #include <QColor>
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 class KPrObject;
 

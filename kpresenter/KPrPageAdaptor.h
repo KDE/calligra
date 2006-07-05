@@ -27,7 +27,7 @@
 #include <QColor>
 #include "global.h"
 #include <QRect>
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 class KPrPage;
 

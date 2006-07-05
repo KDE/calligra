@@ -39,7 +39,7 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const
     : KDialog( parent )
 {
     setButtons(Ok | Cancel);
-    enableButtonSeparator(true);
+    showButtonSeparator(true);
 
     m_doc=_doc;
     KoUnit::Unit unit = m_doc->unit();

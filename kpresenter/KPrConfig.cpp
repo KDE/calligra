@@ -75,9 +75,9 @@
 #include <kfiledialog.h>
 #include <KoEditPath.h>
 
-#include <kspell2/configwidget.h>
-#include <kspell2/settings.h>
-#include <kspell2/loader.h>
+#include <sonnet/configwidget.h>
+#include <sonnet/settings.h>
+#include <sonnet/loader.h>
 using namespace KSpell2;
 
 KPrConfig::KPrConfig( KPrView* parent )

@@ -108,7 +108,7 @@ class KoTextIterator;
 class KStatusBarLabel;
 
 class KoSpell;
-#include <kspell2/loader.h>
+#include <sonnet/loader.h>
 namespace KSpell2 {
     class Dialog;
 }

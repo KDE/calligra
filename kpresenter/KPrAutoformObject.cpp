@@ -187,7 +187,7 @@ double KPrAutoformObject::load(const QDomElement &element)
             // okay, old file -- add the .source dir
             filename=filename.insert(filename.find('/'), "/.source");
         }
-        filename = locate("autoforms", filename, KPrFactory::global());
+        filename = KStandardDirs::locate("autoforms", filename, KPrFactory::global());
         atfInterp.load( filename );
     }
     return offset;

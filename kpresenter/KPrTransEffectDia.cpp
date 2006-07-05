@@ -152,7 +152,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     : KDialog( parent ),
       doc( _doc ), view( _view ), soundPlayer( 0 )
 {
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     setButtons(User1|Ok|Cancel);
 
     QWidget *page = new QWidget( this );
@@ -419,7 +419,7 @@ void KPrTransEffectDia::slotRequesterClicked( KUrlRequester * )
             dir = *it;
             if ( dir.isReadable() && dir.count() > 2 ) {
                 soundURL.setPath( *it );
-                requester->fileDialog()->setURL( soundURL );
+                requester->fileDialog()->setUrl( soundURL );
                 break;
             }
             ++it;

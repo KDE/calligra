@@ -442,7 +442,7 @@ void KPrEffectDia::slotRequesterClicked( KUrlRequester *requester )
             dir = *it;
             if ( dir.isReadable() && dir.count() > 2 ) {
                 soundURL.setPath( *it );
-                requester->fileDialog()->setURL( soundURL );
+                requester->fileDialog()->setUrl( soundURL );
                 break;
             }
             ++it;

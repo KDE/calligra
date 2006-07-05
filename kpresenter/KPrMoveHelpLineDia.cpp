@@ -39,7 +39,7 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
     : KDialog( parent )
 {
     setButtons(Ok | Cancel | User1);
-    enableButtonSeparator(true);
+    showButtonSeparator(true);
 
     m_doc=_doc;
     m_bRemoveLine = false;
@@ -75,7 +75,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
     : KDialog( parent )
 {
     setButtons(Ok|Cancel);
-    enableButtonSeparator(true);
+    showButtonSeparator(true);
 
     limitOfPage=_pageRect;
     m_doc=_doc;
@@ -133,7 +133,7 @@ KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _p
       m_bRemovePoint( false )
 {
     setButtons(Ok|Cancel| User1);
-    enableButtonSeparator(true);
+    showButtonSeparator(true);
     limitOfPage=_pageRect;
     m_doc=_doc;
     setButtonText( KDialog::User1, i18n("Remove") );

@@ -96,7 +96,7 @@
 #include <kcommand.h>
 #include "KPrDocumentAdaptor.h"
 
-#include <kspell2/settings.h>
+#include <sonnet/settings.h>
 
 #include <KoVariable.h>
 #include <KoAutoFormat.h>
@@ -2221,7 +2221,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
             return false;
         }
         cmd += " ";
-        cmd += locate( "exe", "kprconverter.pl" );
+        cmd += KStandardDirs::locate( "exe", "kprconverter.pl" );
         cmd += " ";
         cmd += KProcess::quote( tmpFileIn.name() );
         cmd += " ";
@@ -3301,7 +3301,7 @@ void KPrDocument::openTemplate( const KUrl& url )
 
 void KPrDocument::initEmpty()
 {
-    QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
+    QString fileName( KStandardDirs::locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
                              KPrFactory::global() ) );
     objStartY = 0;
     _clean = true;
@@ -3525,7 +3525,7 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
     QString fileName;
     if ( !chooseTemplate ) {
         if ( theFile.isEmpty() )
-            fileName = locateLocal( "appdata", "default.kpr" );
+            fileName = KStandardDirs::locateLocal( "appdata", "default.kpr" );
         else
             fileName = theFile;
     } else {
@@ -3541,7 +3541,7 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
 
         KUrl src, dest;
         src.setPath( fileName );
-        dest.setPath( locateLocal( "appdata", "default.kpr" ) );
+        dest.setPath( KStandardDirs::locateLocal( "appdata", "default.kpr" ) );
         kDebug(33001) << "Copying template  (in KPrDocument::templateFileName)" << endl
                        << "  from: " << src.prettyUrl() << endl
                        << "  to: " << dest.prettyUrl() << endl;

@@ -47,7 +47,7 @@
 #include <qradiobutton.h>
 #include <q3dragobject.h>
 #include <QFile>
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 #include <kactioncollection.h>
 #include <kfontaction.h>
@@ -139,7 +139,7 @@
 #include <KoGuideLineDia.h>
 #include <KoCompletionDia.h>
 
-#include <kspell.h>
+#include <k3spell.h>
 #include <kstatusbar.h>
 #include "KPrTextDocument.h"
 
@@ -166,9 +166,9 @@
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 
-#include <kspell2/defaultdictionary.h>
-#include <kspell2/dialog.h>
-#include <kspell2/loader.h>
+#include <sonnet/defaultdictionary.h>
+#include <sonnet/dialog.h>
+#include <sonnet/loader.h>
 #include <q3tl.h>
 #include "KoSpell.h"
 #include "KPrPrinterDlg.h"
@@ -667,9 +667,9 @@ void KPrView::insertPage()
 {
     InsertPageDia dia( this, 0, true );
 #if COPYOASISFORMAT
-    QString templ = locateLocal( "data", "kpresenter/default.oop" );
+    QString templ = KStandardDirs::locateLocal( "data", "kpresenter/default.oop" );
 #else
-    QString templ = locateLocal( "data", "kpresenter/default.kpr" );
+    QString templ = KStandardDirs::locateLocal( "data", "kpresenter/default.kpr" );
 #endif
     if ( !QFile::exists( templ ) ) {
         dia.radioDifferent->setChecked( true );
@@ -681,10 +681,10 @@ void KPrView::insertPage()
     if (dia.radioCurrentDefault->isChecked())
     {
 #if COPYOASISFORMAT
-        QString file = locateLocal( "data", "kpresenter/default.oop" );
+        QString file = KStandardDirs::locateLocal( "data", "kpresenter/default.oop" );
         m_pKPresenterDoc->savePage( file, currPg, true /*ignore stickies*/ );
 #else
-        QString file = locateLocal( "data", "kpresenter/default.kpr" );
+        QString file = KStandardDirs::locateLocal( "data", "kpresenter/default.kpr" );
         m_pKPresenterDoc->savePage( file, currPg, true /*ignore stickies*/ );
 #endif
     }
@@ -711,7 +711,7 @@ void KPrView::insertPicture()
 
     KUrl url;
     if ( fd.exec() == QDialog::Accepted )
-        url = fd.selectedURL();
+        url = fd.selectedUrl();
 
     if( url.isEmpty() || !url.isValid() )
     {
@@ -762,7 +762,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
     fd.setOperationMode(KFileDialog::Saving);
     if ( fd.exec() == QDialog::Accepted )
     {
-        url = fd.selectedURL();
+        url = fd.selectedUrl();
         if ( url.isValid() )
             {
                 if ( url.isLocalFile() )
@@ -1317,10 +1317,10 @@ void KPrView::extraCreateTemplate()
 void KPrView::extraDefaultTemplate()
 {
 #if COPYOASISFORMAT
-    QString file = locateLocal( "data", "kpresenter/default.oop" );
+    QString file = KStandardDirs::locateLocal( "data", "kpresenter/default.oop" );
     m_pKPresenterDoc->savePage( file, currPg );
 #else
-    QString file = locateLocal( "data", "kpresenter/default.kpr" );
+    QString file = KStandardDirs::locateLocal( "data", "kpresenter/default.kpr" );
     m_pKPresenterDoc->savePage( file, currPg );
 #endif
 }
@@ -1340,7 +1340,7 @@ void KPrView::extraWebPres()
         return;
     else if ( ret == KMessageBox::Yes )
     {
-        url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)"), this );
+        url = KFileDialog::getOpenUrl( KUrl(), i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)"), this );
 
         if( url.isEmpty() )
             return;
@@ -1463,17 +1463,17 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
     if ( m_canvas && !presStarted ) {
         m_screenSaverWasEnabled = false;
         // is screensaver enabled?
-        QDBusInterfacePtr screensaver("org.kde.kdesktop", "/", "org.kde.kdesktop.KScreensaver");
-        QDBusReply<bool> reply = screensaver->call("isEnabled");
-        if (reply.isSuccess() )
+        QDBusInterface screensaver("org.kde.kdesktop", "/", "org.kde.kdesktop.KScreensaver");
+        QDBusReply<bool> reply = screensaver.call("isEnabled");
+        if (reply.isValid() )
         {
             if ( reply.value() )
             {
                 // disable screensaver
                 QList<QVariant> args;
                 args << false;
-                reply = screensaver->callWithArgs("enable", args);
-                if (reply.isError() || !reply.value())
+                reply = screensaver.callWithArgumentList(QDBus::Block, "enable", args);
+                if (!reply.isValid() || !reply.value())
                     kWarning(33001) << "Couldn't disable screensaver (using dbus to kdesktop)!" << endl;
                 else
                     kDebug(33001) << "Screensaver successfully disabled" << endl;
@@ -1566,12 +1566,12 @@ void KPrView::screenStop()
         if ( m_screenSaverWasEnabled )
         {
             // start screensaver again
-            QDBusInterfacePtr screensaver("org.kde.kdesktop", "/",
+            QDBusInterface screensaver("org.kde.kdesktop", "/",
                                           "org.kde.kdesktop.KScreensaver");
             QList<QVariant> args;
             args << true;
-            QDBusReply<bool> reply = screensaver->callWithArgs("enable", args);
-            if (reply.isError() || !reply.value())
+            QDBusReply<bool> reply = screensaver.callWithArgumentList(QDBus::Block, "enable", args);
+            if (!reply.isValid() || !reply.value())
                 kWarning(33001) << "Couldn't re-enabled screensaver (using dbus to kdesktop)" << endl;
         }
 
@@ -3208,7 +3208,7 @@ void KPrView::backOk( KPrBackDialog* backDia, bool takeGlobal )
 void KPrView::afChooseOk( const QString & c )
 {
     QFileInfo fileInfo( c );
-    QString fileName = locate( "autoforms",
+    QString fileName = KStandardDirs::locate( "autoforms",
                                fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf",
                                KPrFactory::global() );
 
@@ -3386,7 +3386,7 @@ void KPrView::changePicture( const QString & filename )
 
     KUrl url;
     if ( fd.exec() == QDialog::Accepted )
-        url = fd.selectedURL();
+        url = fd.selectedUrl();
 
     if( url.isEmpty() || !url.isValid())
         return;
@@ -6064,7 +6064,7 @@ void KPrView::autoSpellCheck()
 
 void KPrView::insertFile(  )
 {
-    KFileDialog fd( QString::null, QString::null, this );
+    KFileDialog fd( KUrl(), QString::null, this );
     QStringList filter;
     filter<<"application/x-kpresenter";
     filter<<"application/vnd.oasis.opendocument.presentation";
@@ -6074,7 +6074,7 @@ void KPrView::insertFile(  )
     KUrl url;
     if ( fd.exec() == QDialog::Accepted )
     {
-        url = fd.selectedURL();
+        url = fd.selectedUrl();
         if( url.isEmpty() )
         {
             KMessageBox::sorry( this,

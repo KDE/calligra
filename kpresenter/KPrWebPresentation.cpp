@@ -293,7 +293,7 @@ void KPrWebPresentation::initCreation( KProgressBar *progressBar )
     {
         QString filename = pics[ index ];
         filename += ".png";
-        srcurl.setPath( locate( "slideshow", filename, KPrFactory::global() ) );
+        srcurl.setPath( KStandardDirs::locate( "slideshow", filename, KPrFactory::global() ) );
         desturl = path;
         desturl.addPath( "/pics/" + filename );
         KIO::NetAccess::file_copy( srcurl, desturl, -1, true /*overwrite*/);
@@ -663,7 +663,7 @@ void KPrWebPresentationWizard::setupPage1()
     sidebar->setMaximumSize( 106, 318 );
     sidebar->setFrameShape( Q3Frame::Panel );
     sidebar->setFrameShadow( Q3Frame::Sunken );
-    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
+    sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page1 );
     Q3GridLayout *layout = new Q3GridLayout( canvas, 7, 2,
@@ -761,7 +761,7 @@ void KPrWebPresentationWizard::setupPage2()
     sidebar->setMaximumSize( 106, 318 );
     sidebar->setFrameShape( Q3Frame::Panel );
     sidebar->setFrameShadow( Q3Frame::Sunken );
-    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
+    sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page2 );
     Q3GridLayout *layout = new Q3GridLayout( canvas, 6, 2,
@@ -851,7 +851,7 @@ void KPrWebPresentationWizard::setupPage3()
     sidebar->setMaximumSize( 106, 318 );
     sidebar->setFrameShape( Q3Frame::Panel );
     sidebar->setFrameShadow( Q3Frame::Sunken );
-    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
+    sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page3 );
     Q3GridLayout *layout = new Q3GridLayout( canvas, 6, 2,
@@ -908,7 +908,7 @@ void KPrWebPresentationWizard::setupPage4()
     sidebar->setMaximumSize( 106, 318 );
     sidebar->setFrameShape( Q3Frame::Panel );
     sidebar->setFrameShadow( Q3Frame::Sunken );
-    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
+    sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page4 );
     Q3GridLayout *layout = new Q3GridLayout( canvas, 3, 2,
@@ -976,7 +976,7 @@ void KPrWebPresentationWizard::setupPage5()
     sidebar->setMaximumSize( 106, 318 );
     sidebar->setFrameShape( Q3Frame::Panel );
     sidebar->setFrameShadow( Q3Frame::Sunken );
-    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
+    sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page5 );
     Q3GridLayout *layout = new Q3GridLayout( canvas, 6, 2,
