@@ -276,7 +276,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	const QVariantMap* modifiedProperties = tree->modifiedProperties();
 	QVariantMapConstIterator modifiedPropertiesIt;
 	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(w);
-	int count = 0;
+//	int count = 0;
 	KoProperty::Property *newProp = 0;
 	WidgetInfo *winfo = form->library()->widgetInfoForClassName(w->className());
 	if (!winfo) {

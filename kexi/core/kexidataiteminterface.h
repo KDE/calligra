@@ -182,7 +182,7 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 \return true if \a ke should be accepted by the widget item.
 		 This method is used e.g. in KexiDBImageBox for Key_Escape to if the popup is visible,
 		 so the key press won't be consumed to perform "cancel editing". */
-		virtual bool keyPressed(QKeyEvent *ke) { return false; };
+		virtual bool keyPressed(QKeyEvent *ke) { Q_UNUSED(ke); return false; };
 
 	protected:
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current
