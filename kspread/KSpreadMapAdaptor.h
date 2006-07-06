@@ -24,7 +24,7 @@
 #include <QList>
 #include <QStringList>
 
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 
 namespace KSpread

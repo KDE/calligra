@@ -46,7 +46,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <ksconfig.h>
+#include <k3sconfig.h>
 #include <ktempfile.h>
 
 #include <KoApplication.h>
@@ -151,7 +151,7 @@ public:
   KSpread::MoveTo moveTo;
   MethodOfCalc calcMethod;
   bool delayCalculation:1;
-  KSpellConfig *spellConfig;
+  K3SpellConfig *spellConfig;
   bool dontCheckUpperWord:1;
   bool dontCheckTitleCase:1;
     bool configLoadFromFile:1;
@@ -1252,14 +1252,14 @@ MethodOfCalc Doc::getTypeOfCalc() const
   return d->calcMethod;
 }
 
-void Doc::setKSpellConfig(KSpellConfig _kspell)
+void Doc::setKSpellConfig(K3SpellConfig _kspell)
 {
 #if defined( Q_CC_GNU )
 #warning TODO KDE4 port to sonnet
 #endif
 #if 0
   if (d->spellConfig == 0 )
-    d->spellConfig = new KSpellConfig();
+    d->spellConfig = new K3SpellConfig();
 
   d->spellConfig->setNoRootAffix(_kspell.noRootAffix ());
   d->spellConfig->setRunTogether(_kspell.runTogether ());
@@ -1270,7 +1270,7 @@ void Doc::setKSpellConfig(KSpellConfig _kspell)
 #endif
 }
 
-KSpellConfig * Doc::getKSpellConfig()
+K3SpellConfig * Doc::getKSpellConfig()
 {
 #if defined( Q_CC_GNU )
 #warning TODO KDE4 port to sonnet
@@ -1278,7 +1278,7 @@ KSpellConfig * Doc::getKSpellConfig()
 #if 0
     if (!d->spellConfig)
     {
-      KSpellConfig ksconfig;
+      K3SpellConfig ksconfig;
 
       KConfig *config = Factory::global()->config();
       if( config->hasGroup("KSpell kspread" ) )

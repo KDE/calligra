@@ -40,7 +40,7 @@
 #include "kspread_view.h"
 
 #include "KSpreadMapAdaptor.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 #include "kspread_map.h"
 

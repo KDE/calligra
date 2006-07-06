@@ -48,7 +48,7 @@ class QPainter;
 class KCommand;
 class KCommandHistory;
 class KCompletion;
-class KSpellConfig;
+class K3SpellConfig;
 
 class KoGenStyles;
 class KoOasisSettings;
@@ -457,8 +457,8 @@ public:
   /**
    * get custom kspell config
    */
-  void setKSpellConfig(KSpellConfig _kspell);
-  KSpellConfig * getKSpellConfig();
+  void setKSpellConfig(K3SpellConfig _kspell);
+  K3SpellConfig * getKSpellConfig();
 
   bool dontCheckUpperWord() const;
   void setDontCheckUpperWord(bool _b);

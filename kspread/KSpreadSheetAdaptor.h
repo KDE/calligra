@@ -27,7 +27,7 @@
 #ifndef KSPREAD_TABLE_IFACE_H
 #define KSPREAD_TABLE_IFACE_H
 
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 #include <QRect>
 #include <QString>

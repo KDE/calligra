@@ -86,7 +86,7 @@
 
 
 #include "KSpreadSheetAdaptor.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 
 #include "kspread_sheet.h"

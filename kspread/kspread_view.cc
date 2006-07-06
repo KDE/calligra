@@ -73,6 +73,8 @@
 #include <kprocio.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
+#include <k3spell.h>
+#include <k3spelldlg.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
 #include <kstandarddirs.h>
@@ -160,7 +162,7 @@
 
 // KSpread DCOP
 #include "KSpreadViewAdaptor.h"
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 #include "kspread_view.h"
 
@@ -259,7 +261,7 @@ public:
     // spell-check context
     struct
     {
-      KSpell *   kspell;
+      K3Spell *   kspell;
       Sheet *  firstSpellSheet;
       Sheet *  currentSpellSheet;
       Cell  *  currentCell;
@@ -2032,7 +2034,7 @@ void View::startKSpell()
         doc()->getKSpellConfig()->setReplaceAllList( d->spell.replaceAll );
 
     }
-    d->spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this,
+    d->spell.kspell = new K3Spell( this, i18n( "Spell Checking" ), this,
                                        SLOT( spellCheckerReady() ),
                                        doc()->getKSpellConfig() );
 
@@ -2327,7 +2329,7 @@ void View::spellCheckerFinished()
   if (d->canvas)
     d->canvas->setCursor( Qt::ArrowCursor );
 
-  KSpell::spellStatus status = d->spell.kspell->status();
+  K3Spell::spellStatus status = d->spell.kspell->status();
   d->spell.kspell->cleanUp();
   delete d->spell.kspell;
   d->spell.kspell = 0;
@@ -2335,13 +2337,13 @@ void View::spellCheckerFinished()
 
   bool kspellNotConfigured=false;
 
-  if (status == KSpell::Error)
+  if (status == K3Spell::Error)
   {
     KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
                                   "Please make sure you have ISpell properly configured and in your PATH."));
     kspellNotConfigured=true;
   }
-  else if (status == KSpell::Crashed)
+  else if (status == K3Spell::Crashed)
   {
     KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
   }
