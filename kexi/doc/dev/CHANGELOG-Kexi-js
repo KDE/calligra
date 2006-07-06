@@ -14,6 +14,42 @@ CCMAIL:danny@commit-digest.org
 
 For bugfixes use CCMAIL:###-done@bugs.kde.org
 
+2006-07-05
+Forms
+- AutoField: fixed handling foreground and background colors; 
+  added "foregroundLabelColor" and "backgroundLabelColor" properties;
+  subproperties coming from super classes are now visible;
+  better handling internal layout depending on label's position
+2.0: merged
+- "tristate" property for check box widget redefined:
+  supports DefaultTristate, TristateYes, TristateNo values. 
+  Thus, for bound widgets null values can be set
+  and for unbound widgets only Yes or No values can be set (by default).
+2.0: merged
+- fixed creating modified property objects of enum type
+2.0: merged
+KoProperty
+- fixed possible crash when clicking "undo" button causing 
+  the full property set's reload (it was the case for "Editor Type" 
+  property of the AutoField widget)
+1.0/2.0: ported
+
+2006-07-04
+KexiDB
+- fixed copying index and table objects
+1.0/2.0: ported
+
+2006-07-03
+Forms
+- AutoField: focus label's associated widget (editor) 
+  when user clicked the label
+2.0: merged
+- AutoField: update data source and values for subproperties on form loading 
+  also when we're switching from design to data view
+1.0/2.0: ported
+- AutoField: removed crash when table field has been renamed in the data source
+1.0/2.0: ported
+
 2006-06-28
 KexiDB
 - SQLite 3.2: fixed opening databases with non-latin1 pathnames
@@ -84,7 +120,7 @@ Table Designer
   and by alter table actions.
 2.0: merged
 - Internal Debugger: added "Real alter table" button, 
-  for s convenience, "save" action now uses the old alter table code
+  for convenience, "save" action now uses the old alter table code
 2.0: merged
 
 2006-06-05
@@ -98,7 +134,7 @@ KexiDB
 - optimization: "rename table" action now uses "ALTER TABLE RENAME TO" 
   SQL statement, O(1).
 2.0: merged
-- X-Kexi-DoNotAllowProjectImportingTo KexiDB driver propery added, false by defaut
+- X-Kexi-DoNotAllowProjectImportingTo KexiDB driver property added, false by defaut
 2.0: merged
 
 2006-06-02
@@ -138,7 +174,7 @@ KoProperty
 - added a container widget that can be used to split information into hideable sections 
 2.0: merged
 Form Designer
-- data source pane splitted vertically into two sections for transparency
+- data source pane splitted vertically into two sections for clarity
 2.0: merged
 Table Designer
 - clear PK when selecting non-integer type
@@ -1429,7 +1465,7 @@ Table View
   (default shortcut is overriden)
 Table Designer
 - on switching to design mode, row buffers are initialized after old buffers 
-  are cleared, not before (this fixes bug with disappearing propery buffer)
+  are cleared, not before (this fixes bug with disappearing property buffer)
 Form Designer
 - fix for setting background (gradient widget cleared background color value)
 
@@ -2511,8 +2547,8 @@ Table Designer
 - some rules added: e.g. setting 'indexed' property to false clears 'primaryKey';
   setting 'primaryKey' to true sets 'indexed', 'unique', etc. to true
 Core
-- KexiPropery, KexiProperyBuffer: some operators added, operator [QCString] now
-  returns KexiPropery, convenient operator = (QVariant) added; KexiPropery::null added
+- KexiProperty, KexiPropertyBuffer: some operators added, operator [QCString] now
+  returns KexiProperty, convenient operator = (QVariant) added; KexiProperty::null added
 TODO: KexiProperty: add support for positive integers, "Auto" values e.g. for integer ==0
  like defined in QSpinBox. Reuse this in PropIntSpinBox.
 

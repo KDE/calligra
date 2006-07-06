@@ -19,6 +19,7 @@
 */
 
 #include "kexidblineedit.h"
+#include "kexidbautofield.h"
 
 #include <kdebug.h>
 #include <knumvalidator.h>
@@ -365,6 +366,11 @@ bool KexiDBLineEdit::event( QEvent * e )
 	const bool ret = KLineEdit::event( e );
 	KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
 	return ret;
+}
+
+bool KexiDBLineEdit::appendStretchRequired(KexiDBAutoField* autoField) const
+{
+	return KexiDBAutoField::Top == autoField->labelPosition();
 }
 
 #include "kexidblineedit.moc"

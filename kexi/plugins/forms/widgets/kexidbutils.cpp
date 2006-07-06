@@ -99,3 +99,13 @@ void KexiDBWidgetContextMenuExtender::updatePopupMenuActions()
 		m_contextMenu->setItemEnabled(id-(int)IdClear, !readOnly);
 	}
 }
+
+//------------------
+
+KexiSubwidgetInterface::KexiSubwidgetInterface()
+{
+}
+
+KexiSubwidgetInterface::~KexiSubwidgetInterface()
+{
+}

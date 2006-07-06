@@ -25,11 +25,12 @@
 
 KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent, const char *name)
  : QCheckBox(text, parent, name), KexiFormDataItemInterface()
+ , m_invalidState(false)
+ , m_tristateChanged(false)
+ , m_tristate(TristateDefault)
 {
-	m_invalidState = false;
-//! todo: tristate 
-	setTristate(true);
 	setFocusPolicy(QWidget::StrongFocus);
+	updateTristate();
 	connect(this, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
 }
 
@@ -65,8 +66,10 @@ KexiDBCheckBox::setReadOnly(bool readOnly)
 void KexiDBCheckBox::setValueInternal(const QVariant &add, bool )
 {
 	Q_UNUSED(add);
-//	setState( add.isNull() ? NoChange : (add.toBool() ? On : Off) );
-	setState( m_origValue.isNull() ? NoChange : (m_origValue.toBool() ? On : Off) );
+	if (isTristateInternal())
+		setState( m_origValue.isNull() ? NoChange : (m_origValue.toBool() ? On : Off) );
+	else
+		setState( m_origValue.toBool() ? On : Off );
 }
 
 QVariant
@@ -116,6 +119,43 @@ bool KexiDBCheckBox::cursorAtEnd()
 void KexiDBCheckBox::clear()
 {
 	setState(NoChange);
+}
+
+void KexiDBCheckBox::setTristate(KexiDBCheckBox::Tristate tristate)
+{
+	m_tristateChanged = true;
+	m_tristate = tristate;
+	updateTristate();
+}
+
+KexiDBCheckBox::Tristate KexiDBCheckBox::isTristate() const
+{
+	return m_tristate;
+}
+
+bool KexiDBCheckBox::isTristateInternal() const
+{
+	if (m_tristate == TristateDefault)
+		return !dataSource().isEmpty();
+
+	return m_tristate == TristateOn;
+}
+
+void KexiDBCheckBox::updateTristate()
+{
+	if (m_tristate == TristateDefault) {
+//! @todo the data source may be defined as NOT NULL... thus disallowing NULL state
+		QCheckBox::setTristate( !dataSource().isEmpty() );
+	}
+	else {
+		QCheckBox::setTristate( m_tristate == TristateOn );
+	}
+}
+
+void KexiDBCheckBox::setDataSource(const QString &ds)
+{
+	KexiFormDataItemInterface::setDataSource(ds);
+	updateTristate();
 }
 
 #include "kexidbcheckbox.moc"

@@ -44,6 +44,8 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 	Q_OVERRIDE(QString caption READ caption WRITE setCaption DESIGNABLE true)
 	Q_OVERRIDE(QColor paletteForegroundColor READ paletteForegroundColor WRITE setPaletteForegroundColor DESIGNABLE true RESET unsetPalette)
 	Q_OVERRIDE(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor DESIGNABLE true RESET unsetPalette)
+	Q_PROPERTY(QColor foregroundLabelColor READ foregroundLabelColor WRITE setForegroundLabelColor DESIGNABLE true RESET unsetPalette)
+	Q_PROPERTY(QColor backgroundLabelColor READ backgroundLabelColor WRITE setBackgroundLabelColor DESIGNABLE true RESET unsetPalette)
 	Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
@@ -136,10 +138,26 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		//! Reimplemented to set internal editor's color.
 		virtual void setPaletteBackgroundColor( const QColor & color );
 
+		//! \return label's foreground color
+		const QColor & foregroundLabelColor() const;
+
+		//! Sets label's foreground color
+		virtual void setForegroundLabelColor( const QColor & color );
+
+		//! \return label's background color
+		const QColor & backgroundLabelColor() const;
+
+		//! Sets label's background color
+		virtual void setBackgroundLabelColor( const QColor & color );
+
+		//! Reimplemented to accept subproperties. @see KFormDesigner::WidgetWithSubpropertiesInterface
 		virtual QVariant property( const char * name ) const;
 
 		//! Reimplemented to accept subproperties. @see KFormDesigner::WidgetWithSubpropertiesInterface
 		virtual bool setProperty( const char * name, const QVariant & value );
+
+	public slots:
+		virtual void unsetPalette();
 
 	protected slots:
 //		void slotValueChanged();

@@ -923,9 +923,13 @@ ALTER TABLE t1_new RENAME TO t1;
 
 Forms
 - enable edit->copy, actions, etc. for Data View
+- ImageBox: show a tootip with large image and its name if the image was cropped
+  or only its name if the image is not cropped
+- AutoField: highlighting the label when the buddy is focused
+- AutoField: handle label editing after double clicking
+
 
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
-
 
 

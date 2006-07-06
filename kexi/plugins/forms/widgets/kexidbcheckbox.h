@@ -30,6 +30,8 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_OVERRIDE( Tristate tristate READ isTristate WRITE setTristate )
+	Q_ENUMS( Tristate )
 
 	public:
 		KexiDBCheckBox(const QString &text, QWidget *parent, const char *name=0);
@@ -62,8 +64,13 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 
 		virtual void setEnabled(bool enabled);
 
+		enum Tristate { TristateDefault, TristateOn, TristateOff };
+
+		void setTristate(Tristate tristate);
+		Tristate isTristate() const;
+
 	public slots:
-		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
+		void setDataSource(const QString &ds);
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		void slotStateChanged(int state);
 
@@ -73,8 +80,17 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 
+		//! \return true in isTristate() == TristateDefault and the widget has bound data source
+		//! or if isTristate() == TristateOn, else false is returned.
+		bool isTristateInternal() const;
+
+		//! Updates tristate in QCheckBox itself according to m_tristate.
+		void updateTristate();
+
 	private:
 		bool m_invalidState : 1;
+		bool m_tristateChanged : 1; //!< used in setTristate()
+		Tristate m_tristate; //!< used in isTristate() and setTristate()
 };
 
 #endif

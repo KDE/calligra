@@ -18,7 +18,10 @@
  */
 
 #include "widgetwithsubpropertiesinterface.h"
+
 #include <qmetaobject.h>
+#include <qasciidict.h>
+
 #include <kdebug.h>
 
 using namespace KFormDesigner;
@@ -35,15 +38,20 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
 {
 	m_subwidget = widget;
 	m_subproperies.clear();
+	QAsciiDict<char> addedSubproperies(1024);
 	if (m_subwidget) {
 		//remember properties in the subwidget that are not present in the parent
-		const int numProperties = m_subwidget->metaObject()->numProperties();
-		for (int i = 0; i < numProperties; i++) {
-			if (dynamic_cast<QObject*>(this)->metaObject()->findProperty( 
-					m_subwidget->metaObject()->property( i )->name(), true )==-1)
-			{
-				m_subproperies.append( m_subwidget->metaObject()->property( i )->name() );
-				kdDebug() << m_subproperies.last() << endl;
+		for( QMetaObject *metaObject = m_subwidget->metaObject(); metaObject; metaObject = metaObject->superClass()) {
+			const int numProperties = metaObject->numProperties();
+			for (int i = 0; i < numProperties; i++) {
+				const char *propertyName = metaObject->property( i )->name();
+				if (dynamic_cast<QObject*>(this)->metaObject()->findProperty( propertyName, true )==-1
+						&& !addedSubproperies.find( propertyName ) )
+				{
+					m_subproperies.append( propertyName );
+					addedSubproperies.insert( propertyName, (char*)1 );
+					kdDebug() << propertyName << endl;
+				}
 			}
 		}
 		qHeapSort( m_subproperies );
