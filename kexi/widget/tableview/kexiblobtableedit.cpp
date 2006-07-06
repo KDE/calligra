@@ -180,6 +180,9 @@ void
 KexiBlobTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
 {
+	Q_UNUSED(focused);
+	Q_UNUSED(txt);
+	Q_UNUSED(align);
 //! @todo optimize: load to m_pixmap, downsize
 	QPixmap pixmap;
 	x = 0;

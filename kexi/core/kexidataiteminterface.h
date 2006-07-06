@@ -175,6 +175,15 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 @see setParentDataItemInterface() */
 		inline KexiDataItemInterface* parentInterface() const { return m_parentDataItemInterface; }
 
+		/*! @internal
+		 Called by top-level form on key press event.
+		 Default implementation does nothing.
+		 Implement this if you want to handle key presses from within the editor widget item.
+		 \return true if \a ke should be accepted by the widget item.
+		 This method is used e.g. in KexiDBImageBox for Key_Escape to if the popup is visible,
+		 so the key press won't be consumed to perform "cancel editing". */
+		virtual bool keyPressed(QKeyEvent *ke) { Q_UNUSED(ke); return false; };
+
 	protected:
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current
 		 value (already storted in m_origValue). 

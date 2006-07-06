@@ -64,8 +64,8 @@ class KexiDBImageBox::Button : public QToolButton
 	public:
 		Button(KexiDBImageBox *parent, KPopupMenu* aPopup)
 		 : QToolButton(parent, "KexiDBImageBox::Button")
-		 , disableMousePress(false)
 		 , popup(aPopup)
+		 , disableMousePress(false)
 		{
 			setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 			setFixedWidth(QMAX(15, qApp->globalStrut().width()));
@@ -772,8 +772,8 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 	QPainter p(this);
 	p.setClipRect(pe->rect());
 	const int m = realLineWidth();
-	const int w = width()-m-m;
-	const int h = height()-m-m;
+//	const int w = width()-m-m;
+//	const int h = height()-m-m;
 	QColor bg(eraseColor());
 	if (m_designMode && pixmap().isNull()) {
 		QPixmap pm(size()-QSize(m, m));

@@ -61,8 +61,10 @@ class KexiSubwidgetInterface
 		KexiSubwidgetInterface();
 		virtual ~KexiSubwidgetInterface();
 
-		virtual bool appendStretchRequired(KexiDBAutoField* autoField) const { return false; }
-		virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const { return false; }
+		virtual bool appendStretchRequired(KexiDBAutoField* autoField) const
+			{ Q_UNUSED(autoField); return false; }
+		virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const
+			{ Q_UNUSED(autoField); return false; }
 };
 
 #endif
