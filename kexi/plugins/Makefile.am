@@ -1,6 +1,7 @@
-if compile_kexi_reports_plugin
-  REPORTS=reports
-endif
+# do not compile reports!
+#if compile_kexi_reports_plugin
+#   REPORTS=reports
+#endif
 
 if compile_kross
   SCRIPTINGDIR=scripting
