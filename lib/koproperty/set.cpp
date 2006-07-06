@@ -106,6 +106,7 @@ Set::Iterator::Iterator(const Set &set)
 
 Set::Iterator::~Iterator()
 {
+	delete iterator;
 }
 
 void

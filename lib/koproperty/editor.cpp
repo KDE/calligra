@@ -319,8 +319,11 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 	}
 
 	fill();
+
+	emit propertySetChanged(d->set);
+
 	if (d->set) {
-		//select prev. selecteed item
+		//select prev. selected item
 		EditorItem * item = 0;
 		if (!selectedPropertyName2.isEmpty()) //try other one for old prop set
 			item = d->itemDict[selectedPropertyName2];
@@ -336,8 +339,6 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 //			ensureItemVisible(item);
 		}
 	}
-
-	emit propertySetChanged(d->set);
 }
 
 //! @internal
@@ -373,8 +374,8 @@ Editor::changeSetLater()
 void
 Editor::clear(bool editorOnly)
 {
-	hideEditor();
 	d->itemToSelectLater = 0;
+	hideEditor();
 
 	if(!editorOnly) {
 		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
@@ -471,9 +472,11 @@ Editor::slotPropertyReset(Set& set, Property& property)
 		// prop not in the dict, might be a child prop.
 		if(!item && property.parent())
 			item = d->itemDict[property.parent()->name()];
-		repaintItem(item);
-		for(QListViewItem *it = item->firstChild(); it; it = it->nextSibling())
-			repaintItem(it);
+		if (item) {
+			repaintItem(item);
+			for(QListViewItem *it = item->firstChild(); it; it = it->nextSibling())
+				repaintItem(it);
+		}
 	}
 
 	showUndoButton( false );
@@ -578,6 +581,7 @@ Editor::slotCurrentChanged(QListViewItem *item)
 void
 Editor::slotSetWillBeCleared()
 {
+	d->itemToSelectLater = 0;
 	if (d->currentWidget) {
 		acceptInput();
 		d->currentWidget->setProperty(0);
