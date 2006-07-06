@@ -212,6 +212,7 @@ Editor::fill()
 		StringListMap::ConstIterator it = map.constBegin();
 		for( ; it != map.constEnd(); ++it) {
 			EditorGroupItem *groupItem = 0;
+//			kopropertydbg << "'" << it.key() << "' -> " << it.data().count() << endl;
 			if(!it.key().isEmpty() && !it.data().isEmpty() && map.count() > 1)
 				groupItem = new EditorGroupItem(d->topItem, d->set->groupDescription(it.key()) );
 

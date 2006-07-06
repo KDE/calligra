@@ -230,7 +230,7 @@ Set::removeProperty(const QCString &name)
 	if(name.isNull())
 		return;
 
-	Property *p = d->dict.take(name);
+	Property *p = d->dict.find(name);
 	removeProperty(p);
 }
 
@@ -276,6 +276,10 @@ Set::removeFromGroup(Property *property)
 		return;
 	QCString group = d->groupForProperty[property];
 	d->propertiesOfGroup[group].remove(property->name());
+	if (d->propertiesOfGroup[group].isEmpty()) {
+		//remove group as well
+		d->propertiesOfGroup.remove(group);
+	}
 	d->groupForProperty.remove(property);
 }
 
@@ -334,7 +338,7 @@ Set::contains(const QCString &name)
 Property&
 Set::property(const QCString &name)
 {
-	Property *p = d->dict[name];
+	Property *p = d->dict.find(name);
 	if (p)
 		return *p;
 //		p = new Property();
