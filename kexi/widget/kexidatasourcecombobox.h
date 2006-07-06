@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,8 +64,11 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 		void slotItemRemoved(const KexiPart::Item& item);
 		void slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName);
 		void slotActivated( int index );
+		void slotReturnPressed(const QString & text);
 
 	protected:
+		virtual void focusOutEvent( QFocusEvent *e );
+
 		class Private;
 		Private *d;
 };

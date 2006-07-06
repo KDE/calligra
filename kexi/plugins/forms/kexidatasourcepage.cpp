@@ -206,6 +206,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 		KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection );
 //	m_fieldListView->header()->show();
 	m_fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
+	m_availableFieldsLabel->setBuddy(m_fieldListView);
 	contentsVlyr->addWidget(m_fieldListView, 1);
 	connect(m_fieldListView, SIGNAL(selectionChanged()), this, SLOT(slotFieldListViewSelectionChanged()));
 #endif
@@ -230,12 +231,12 @@ void KexiDataSourcePage::setProject(KexiProject *prj)
 	m_dataSourceCombo->setProject(prj);
 }
 
-void KexiDataSourcePage::clearDataSourceSelection()
+void KexiDataSourcePage::clearDataSourceSelection(bool alsoClearComboBox)
 {
 	if (m_insideClearDataSourceSelection)
 		return;
 	m_insideClearDataSourceSelection = true;
-	if (!m_dataSourceCombo->selectedName().isEmpty())
+	if (alsoClearComboBox && !m_dataSourceCombo->selectedName().isEmpty())
 		m_dataSourceCombo->setDataSource("", ""); 
 //	if (!m_dataSourceCombo->currentText().isEmpty()) {
 //		m_dataSourceCombo->setCurrentText("");
@@ -293,9 +294,9 @@ void KexiDataSourcePage::slotInsertSelectedFields()
 
 void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
 {
-	const bool enable = !string.isEmpty();
+	const bool enable = !string.isEmpty() && m_dataSourceCombo->selectedName() == string.latin1();
 	if (!enable) {
-		clearDataSourceSelection();
+		clearDataSourceSelection( string.isEmpty()/*alsoClearComboBox*/ );
 	}
 	updateSourceFieldWidgetsAvailability();
 /*#ifndef KEXI_NO_AUTOFIELD_WIDGET
@@ -331,8 +332,8 @@ void KexiDataSourcePage::slotDataSourceSelected()
 	if (!dataSourceFound) {
 		m_sourceFieldCombo->setTableOrQuery("", true);
 	}
-	if (m_sourceFieldCombo->hasFocus())
-		m_dataSourceCombo->setFocus();
+	//if (m_sourceFieldCombo->hasFocus())
+//		m_dataSourceCombo->setFocus();
 	m_clearDSButton->setEnabled(dataSourceFound);
 	m_gotoButton->setEnabled(dataSourceFound);
 	if (dataSourceFound) {

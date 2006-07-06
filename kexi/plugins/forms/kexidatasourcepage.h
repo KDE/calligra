@@ -52,7 +52,7 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 
 	public slots:
 		void setProject(KexiProject *prj);
-		void clearDataSourceSelection();
+		void clearDataSourceSelection(bool alsoClearComboBox = true);
 		void clearWidgetDataSourceSelection();
 
 		//! Sets data source of a currently selected form. 

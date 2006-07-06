@@ -805,7 +805,7 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 		//clearing needed here because we may need to draw a pixmap with transparency
 		p.fillRect(0,0,width(),height(), bg);
 
-		KexiUtils::drawPixmap( p, bg, m, QRect(QPoint(0,0), internalSize), pixmap(), m_alignment, 
+		KexiUtils::drawPixmap( p, m, QRect(QPoint(0,0), internalSize), pixmap(), m_alignment, 
 			m_scaledContents, m_keepAspectRatio );
 
 #if 0 //moved to KexiUtils::drawPixmap()

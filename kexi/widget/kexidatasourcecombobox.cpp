@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,6 +74,7 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent, const char *name
 	setCompletionMode(KGlobalSettings::CompletionPopupAuto);
 	setSizeLimit( 16 );
 	connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
+	connect(this, SIGNAL(returnPressed(const QString &)), this, SLOT(slotReturnPressed(const QString &)));
 
 	d->tableIcon = SmallIcon("table");
 	d->queryIcon = SmallIcon("query");
@@ -320,6 +321,27 @@ Q3CString KexiDataSourceComboBox::selectedName() const
 	if (index >= d->firstTableIndex() && index < count())
 		return text(index).latin1();
 	return 0;
+}
+
+void KexiDataSourceComboBox::slotReturnPressed(const QString & text)
+{
+	//text is available: select item for this text:
+	if (text.isEmpty())
+		return;
+	QListBoxItem *item = listBox()->findItem( text, Qt::ExactMatch );
+	if (!item)
+		return;
+	int index = listBox()->index( item );
+	if (index < d->firstTableIndex())
+		return;
+	setCurrentItem( index );
+	emit dataSourceSelected();
+}
+
+void KexiDataSourceComboBox::focusOutEvent( QFocusEvent *e )
+{
+	KComboBox::focusOutEvent( e );
+	slotReturnPressed(currentText());
 }
 
 #include "kexidatasourcecombobox.moc"

@@ -326,7 +326,7 @@ KexiDBAutoField::setReadOnly( bool readOnly )
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
 	if(iface)
-		return iface->setReadOnly(readOnly);
+		iface->setReadOnly(readOnly);
 }
 
 void
@@ -653,11 +653,11 @@ QSize
 KexiDBAutoField::sizeHint() const
 {
 	if (d->lblPosition == NoLabel)
-		return d->editor ? d->editor->sizeHint() : QWidget::sizeHint();
+		return m_subwidget ? m_subwidget->sizeHint() : QWidget::sizeHint();
 
 	QSize s1(0,0);
-	if (d->editor)
-		s1 = d->editor->sizeHint();
+	if (m_subwidget)
+		s1 = m_subwidget->sizeHint();
 	QSize s2(d->label->sizeHint());
 	if (d->lblPosition == Top)
 		return QSize(qMax(s1.width(), s2.width()), s1.height()+KexiDBAutoField_SPACING+s2.height());
@@ -695,7 +695,7 @@ KexiDBAutoField::paintEvent( QPaintEvent* pe )
 	QWidget::paintEvent( pe );
 
 	if (   (d->autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
-		|| (!d->autoCaption && m_caption.isEmpty()) )
+		|| (!d->autoCaption && d->caption.isEmpty()) )
 	{
 		QPainter p(this);
 		p.setPen( d->label->paletteForegroundColor() );
