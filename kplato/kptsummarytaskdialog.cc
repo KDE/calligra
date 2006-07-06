@@ -36,7 +36,7 @@ SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
     setCaption( i18n("Summary Task Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     m_generalTab = new SummaryTaskGeneralPanel(task, this);
     setMainWidget(m_generalTab);
     enableButtonOk(false);

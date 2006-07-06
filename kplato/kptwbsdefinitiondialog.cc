@@ -35,7 +35,7 @@ WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p, const c
     setCaption( i18n("WBS Definition") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
 
     m_panel = new WBSDefinitionPanel(def, this);
     setMainWidget(m_panel);

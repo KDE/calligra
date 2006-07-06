@@ -39,7 +39,7 @@ AccountsviewConfigDialog::AccountsviewConfigDialog(const QDate &date, int period
     setCaption( i18n("Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     m_panel = new AccountsviewConfigPanel(this);
     m_panel->dateEdit->setDate(date);
     m_panel->periodBox->insertStringList(periodTexts);

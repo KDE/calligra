@@ -40,7 +40,7 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTim
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     setFaceType( KPageDialog::Tabbed );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     KVBox *page;
 
     // Create all the tabs.

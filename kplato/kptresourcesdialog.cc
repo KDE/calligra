@@ -39,7 +39,7 @@ ResourcesDialog::ResourcesDialog(Project &p, QWidget *parent, const char *name)
     setCaption( i18n("Resources") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     panel = new ResourcesPanel(this, &project);
 
     setMainWidget(panel);

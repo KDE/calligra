@@ -58,6 +58,5 @@
 <includehints>
     <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
 </includehints>
 </UI>

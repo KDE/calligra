@@ -34,7 +34,7 @@ TaskProgressDialog::TaskProgressDialog(Task &task, StandardWorktime *workTime, Q
     setCaption( i18n("Task Progress") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     m_panel = new TaskProgressPanel(task, workTime, this);
 
     setMainWidget(m_panel);

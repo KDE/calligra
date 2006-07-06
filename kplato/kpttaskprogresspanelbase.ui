@@ -421,17 +421,6 @@
 <includehints>
     <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
-    <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
-    <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
-    <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
 </includehints>
 </UI>

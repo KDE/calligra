@@ -46,7 +46,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, cons
     setCaption( i18n("Standard Worktime") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     //kDebug()<<k_funcinfo<<&p<<endl;
     m_original = p.standardWorktime();
     dia = new StandardWorktimeDialogImpl(m_original, this);

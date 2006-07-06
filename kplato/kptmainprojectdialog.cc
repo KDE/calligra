@@ -38,7 +38,7 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char *na
     setCaption( i18n("Project Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     panel = new MainProjectPanel(project, this);
 
     setMainWidget(panel);

@@ -172,7 +172,7 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
     setCaption( i18n("Calendar's Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     //kDebug()<<k_funcinfo<<&p<<endl;
     dia = new CalendarListDialogImpl(p, this);
     Q3PtrList<Calendar> list = p.calendars();

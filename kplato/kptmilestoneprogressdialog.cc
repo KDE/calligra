@@ -34,7 +34,7 @@ MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
     setCaption( i18n("Milestone Progress") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     m_panel = new MilestoneProgressPanel(task, this);
 
     setMainWidget(m_panel);

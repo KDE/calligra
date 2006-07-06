@@ -988,7 +988,8 @@ void View::slotExportGantt() {
     if (!m_ganttview) {
         return;
     }
-    QString fn = KFileDialog::getSaveFileName( QString::null, QString::null, this );
+    QString fn = KFileDialog::getSaveFileName( KUrl(), 
+QString::null, this );
     if (!fn.isEmpty()) {
         QFile f(fn);
         m_ganttview->exportGantt(&f);

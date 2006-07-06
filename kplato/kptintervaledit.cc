@@ -41,7 +41,7 @@ IntervalEdit::IntervalEdit(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWi
 {
     setCaption(i18n("Edit Interval"));
     setButtons(Ok|Cancel);
-    enableButtonSeparator(true);
+    showButtonSeparator(true);
 
     //kDebug()<<k_funcinfo<<endl;
     dia = new IntervalEditImpl(intervals, this);

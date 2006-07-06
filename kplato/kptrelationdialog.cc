@@ -45,7 +45,7 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption,
     setCaption( caption );
     setButtons( buttons );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     if (caption.isEmpty())
         setCaption(i18n("Add Relationship"));
     m_relation = rel;

@@ -51,7 +51,7 @@ ProjectDialog::ProjectDialog(Project &p, QWidget *parent, const char *name)
     setCaption( i18n("Project Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     dia = new ProjectDialogImpl(this);
     resourcesTab = new ResourcesPanel(dia, &project);
     dia->daTabs->insertTab(resourcesTab, i18n("Resources"), 1);

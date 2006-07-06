@@ -32,7 +32,7 @@ AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
     setCaption( i18n("Edit Accounts") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     m_panel = new AccountsPanel(acc, this);
     setMainWidget(m_panel);
 

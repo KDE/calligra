@@ -127,7 +127,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     setCaption( i18n("Resource Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    enableButtonSeparator( true );
+    showButtonSeparator( true );
     dia = new ResourceDialogImpl(this);
     setMainWidget(dia);
 	KDialog::enableButtonOk(false);
