@@ -200,11 +200,9 @@ public:
     virtual Calendar *findCalendar(const QString &id) const 
         { return id.isEmpty() ? 0 : calendarIdDict.find(id); }
     /// Remove the calendar with identity id from the register
-    virtual bool removeCalendarId(const QString &id) 
-        { return calendarIdDict.remove(id); }
+    virtual bool removeCalendarId(const QString &id);
     /// Insert the calendar with identity id
-    virtual void insertCalendarId(const QString &id, const Calendar *calendar)
-        { calendarIdDict.insert(id, calendar); }
+    virtual void insertCalendarId(const QString &id, const Calendar *calendar);
     
     /**
      * Setting a project to be baselined means the project data can not be edited anymore.

@@ -523,7 +523,8 @@ Calendar::~Calendar() {
     delete m_weekdays; 
 }
 Calendar::Calendar(Calendar *calendar)
-    : m_days() {
+    : m_project(0),
+      m_days() {
     m_days.setAutoDelete(true);
     copy(*calendar);
 }

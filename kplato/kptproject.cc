@@ -1022,6 +1022,16 @@ MainSchedule *Project::createSchedule(QString name, Schedule::Type type) {
     return sch;
 }
 
+bool Project::removeCalendarId(const QString &id) {
+    kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+    return calendarIdDict.remove(id); 
+}
+
+void Project::insertCalendarId(const QString &id, const Calendar *calendar) { 
+    kdDebug()<<k_funcinfo<<"id="<<id<<": "<<calendar->name()<<endl;
+    calendarIdDict.insert(id, calendar);
+}
+        
 #ifndef NDEBUG
 void Project::printDebug(bool children, QCString indent) {
 
