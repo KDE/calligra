@@ -869,9 +869,9 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 	else if(type == "set")
 	{
 		int count = obj->metaObject()->findProperty(name.latin1(), true);
-		const QMetaProperty *meta = obj->metaObject()->property(count, true);
+		const QMetaProperty *meta = count!=-1 ? obj->metaObject()->property(count, true) : 0;
 
-		if(meta->isSetType())
+		if(meta && meta->isSetType())
 		{
 			QStrList keys;
 			QStringList list = QStringList::split("|", text);
@@ -881,7 +881,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 			return QVariant(meta->keysToValue(keys));
 		}
 	}
-		return QVariant();
+	return QVariant();
 }
 
 /////////////////////////////////////////////////////////////////////////////
