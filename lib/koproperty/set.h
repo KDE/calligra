@@ -191,6 +191,10 @@ class KOPROPERTY_EXPORT Set : public QObject
 			@internal */
 		void addPropertyInternal(Property *property, QCString group, bool updateSortingKey);
 
+		/*! @internal used to declare that \a property wants to be informed 
+		 that the set has been cleared (all properties are deleted) */
+		void informAboutClearing(bool& cleared);
+
 	signals:
 		/*! Emitted when the value of the property is changed.*/
 		void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);

@@ -46,7 +46,11 @@ static Property Set_nonConstNull;
 class SetPrivate
 {
 	public:
-		SetPrivate() : dict(101, false), readOnly(false) {}
+		SetPrivate() :
+			dict(101, false), 
+			readOnly(false),
+			informAboutClearing(0)
+		{}
 		~SetPrivate(){}
 
 	//dict of properties in form name: property
@@ -66,6 +70,10 @@ class SetPrivate
 //	static Property nonConstNull;
 	QCString prevSelection;
 	QString typeName;
+
+	//! Used in Set::informAboutClearing(Property*) to declare that the property wants 
+	//! to be informed that the set has been cleared (all properties are deleted)
+	bool* informAboutClearing;
 
 	inline KoProperty::Property& property(const QCString &name) const
 	{
@@ -221,6 +229,9 @@ Set::removeProperty(const QCString &name)
 void
 Set::clear()
 {
+	if (d->informAboutClearing)
+		*d->informAboutClearing = true;
+	d->informAboutClearing = 0;
 	aboutToBeCleared();
 	d->propertiesOfGroup.clear();
 	d->groupNames.clear();
@@ -230,6 +241,13 @@ Set::clear()
 	Property::DictIterator it(d->dict);
 	while (it.current())
 		removeProperty( it.current() );
+}
+
+void
+Set::informAboutClearing(bool& cleared)
+{
+	cleared = false;
+	d->informAboutClearing = &cleared;
 }
 
 /////////////////////////////////////////////////////

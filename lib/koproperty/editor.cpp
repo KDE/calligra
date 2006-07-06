@@ -72,6 +72,7 @@ class EditorPrivate
 			currentItem = 0;
 			undoButton = 0;
 			topItem = 0;
+			itemToSelectLater = 0;
 			if (!kofficeAppDirAdded) {
 				kofficeAppDirAdded = true;
 				KGlobal::iconLoader()->addAppDir("koffice");
@@ -181,12 +182,14 @@ Editor::~Editor()
 {
 	clearWidgetCache();
 	delete d;
+	d = 0;
 }
 
 void
 Editor::fill()
 {
 	setUpdatesEnabled(false);
+	d->itemToSelectLater = 0;
 	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
 	hideEditor();
 	KListView::clear();
@@ -352,6 +355,9 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QCString& 
 	}
 
 	fill();
+
+	emit propertySetChanged(d->set);
+
 	if (d->set) {
 		//select prev. selected item
 		EditorItem * item = 0;
@@ -369,8 +375,6 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QCString& 
 //			ensureItemVisible(item);
 		}
 	}
-
-	emit propertySetChanged(d->set);
 }
 
 //! @internal
@@ -407,8 +411,8 @@ Editor::changeSetLater()
 void
 Editor::clear(bool editorOnly)
 {
-	hideEditor();
 	d->itemToSelectLater = 0;
+	hideEditor();
 
 	if(!editorOnly) {
 		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
@@ -505,9 +509,11 @@ Editor::slotPropertyReset(Set& set, Property& property)
 		// prop not in the dict, might be a child prop.
 		if(!item && property.parent())
 			item = d->itemDict[property.parent()->name()];
-		repaintItem(item);
-		for(QListViewItem *it = item->firstChild(); it; it = it->nextSibling())
-			repaintItem(it);
+		if (item) {
+			repaintItem(item);
+			for(QListViewItem *it = item->firstChild(); it; it = it->nextSibling())
+				repaintItem(it);
+		}
 	}
 
 	showUndoButton( false );
@@ -612,6 +618,7 @@ Editor::slotCurrentChanged(QListViewItem *item)
 void
 Editor::slotSetWillBeCleared()
 {
+	d->itemToSelectLater = 0;
 	if (d->currentWidget) {
 		acceptInput();
 		d->currentWidget->setProperty(0);
