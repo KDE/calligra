@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -81,6 +81,7 @@ KexiFieldComboBox::KexiFieldComboBox(QWidget *parent, const char *name)
 	setCompletionMode(KGlobalSettings::CompletionPopupAuto);
 	setSizeLimit( 16 );
 	connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
+	connect(this, SIGNAL(returnPressed(const QString &)), this, SLOT(slotReturnPressed(const QString &)));
 
 //	setAcceptDrops(true);
 //	viewport()->setAcceptDrops(true);
@@ -182,6 +183,31 @@ void KexiFieldComboBox::slotActivated(int i)
 {
 	d->fieldOrExpression = text(i);
 	emit selected();
+}
+
+void KexiFieldComboBox::slotReturnPressed(const QString & text)
+{
+	//text is available: select item for this text:
+	int index;
+	if (text.isEmpty()) {
+		index = 0;
+	}
+	else {
+		QListBoxItem *item = listBox()->findItem( text, Qt::ExactMatch );
+		if (!item)
+			return;
+		index = listBox()->index( item );
+		if (index < 1)
+			return;
+	}
+	setCurrentItem( index );
+	slotActivated( index );
+}
+
+void KexiFieldComboBox::focusOutEvent( QFocusEvent *e )
+{
+	KComboBox::focusOutEvent( e );
+	slotReturnPressed(currentText());
 }
 
 #include "kexifieldcombobox.moc"

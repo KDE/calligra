@@ -134,6 +134,7 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 		setText( add.toString() );
 	else
 		setText( m_origValue.toString() + add.toString() );
+	setCursorPosition(0); //ok?
 
 	m_slotTextChanged_enabled = true;
 }
@@ -365,6 +366,14 @@ bool KexiDBLineEdit::event( QEvent * e )
 {
 	const bool ret = KLineEdit::event( e );
 	KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
+	if (e->type()==QEvent::FocusOut) {
+		QFocusEvent *fe = static_cast<QFocusEvent *>(e);
+		if (fe->reason()!=QFocusEvent::ActiveWindow && fe->reason()!=QFocusEvent::Popup) {
+		//display aligned to left after loosing the focus (if this is not a deactivate event)
+//! @todo add option to set cursor at the beginning
+			setCursorPosition(0); //ok?
+		}
+	}
 	return ret;
 }
 

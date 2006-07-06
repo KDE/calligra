@@ -208,7 +208,7 @@ void KexiUtils::simpleDecrypt(QString& string)
 		string[i] = QChar( string[i].unicode() - 47 - i );
 }
 
-void KexiUtils::drawPixmap( QPainter& p, const QColor& backgroundColor, int lineWidth, const QRect& rect, 
+void KexiUtils::drawPixmap( QPainter& p, int lineWidth, const QRect& rect, 
 	const QPixmap& pixmap, int alignment, bool scaledContents, bool keepAspectRatio)
 {
 	if (pixmap.isNull())
@@ -219,25 +219,26 @@ void KexiUtils::drawPixmap( QPainter& p, const QColor& backgroundColor, int line
 	const int h = rect.height()-lineWidth-lineWidth;
 //! @todo we can optimize drawing by drawing rescaled pixmap here 
 //! and performing detailed painting later (using QTimer)
-	QPixmap pm;
+	QPixmap pixmapBuffer;
 	QPainter p2;
 	QPainter *target;
 	if (fast) {
 		target = &p;
 	}
 	else {
-		pm.resize(rect.size()-QSize(lineWidth, lineWidth));
-		p2.begin(&pm, p.device());
+//moved		pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
+//moved		p2.begin(&pm, p.device());
 		target = &p2;
 	}
 //! @todo only create buffered pixmap of the minimum size and then do not fillRect()
-	target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
+//	target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
 
+	QPoint pos;
 	if (scaledContents) {
 		if (keepAspectRatio) {
 			QImage img(pixmap.convertToImage());
 			img = img.smoothScale(w, h, QImage::ScaleMin);
-			QPoint pos( rect.topLeft() ); //0, 0);
+			pos = rect.topLeft(); //0, 0);
 			if (img.width() < w) {
 				int hAlign = QApplication::horizontalAlignment( alignment );
 				if ( hAlign & Qt::AlignRight )
@@ -251,17 +252,25 @@ void KexiUtils::drawPixmap( QPainter& p, const QColor& backgroundColor, int line
 				else if ( alignment & Qt::AlignVCenter )
 					pos.setY(pos.y() + h/2-img.height()/2);
 			}
-			QPixmap px;
-			px.convertFromImage(img);
-			target->drawPixmap(pos, px);
+			pixmapBuffer.convertFromImage(img);
+			if (!fast) {
+				p2.begin(&pixmapBuffer, p.device());
+			}
+			else
+				target->drawPixmap(pos, pixmapBuffer);
 		}
 		else {
-			target->drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
+			if (!fast) {
+				pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
+				p2.begin(&pixmapBuffer, p.device());
+				p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
+			}
+			else
+				target->drawPixmap(QRect(rect.x() + lineWidth, rect.y() + lineWidth, w, h), pixmap);
 		}
 	}
 	else {
 		int hAlign = QApplication::horizontalAlignment( alignment );
-		QPoint pos;
 		if ( hAlign & Qt::AlignRight )
 			pos.setX(pos.x() + w-pixmap.width());
 		else if ( hAlign & Qt::AlignHCenter )
@@ -275,11 +284,19 @@ void KexiUtils::drawPixmap( QPainter& p, const QColor& backgroundColor, int line
 			pos.setY(pos.y() + h/2-pixmap.height()/2);
 		else //top, etc. 
 			pos.setY(pos.y());
-		target->drawPixmap(pos, pixmap);
+//		target->drawPixmap(pos, pixmap);
+//		if (!fast)
+//			p2.begin(&pixmapBuffer, p.device());
+		p.drawPixmap(lineWidth, lineWidth, pixmap);
 	}
-	if (!fast) {
+	if (!fast && p.isActive()) {
 		p2.end();
-		bitBlt(p.device(), (int)p.worldMatrix().dx() + rect.x() + lineWidth, (int)p.worldMatrix().dy() + rect.y() + lineWidth, &pm);
+		bitBlt( p.device(), 
+//			pos.x(), 
+//			pos.y(), 
+			(int)p.worldMatrix().dx() + rect.x() + lineWidth + pos.x(), 
+			(int)p.worldMatrix().dy() + rect.y() + lineWidth + pos.y(), 
+			&pixmapBuffer);
 	}
 }
 
