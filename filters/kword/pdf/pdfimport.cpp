@@ -32,6 +32,7 @@
 #include <KoStore.h>
 #include <kapplication.h>
 #include <kprogressdialog.h>
+#include <kprogressbar.h>
 
 #include "data.h"
 

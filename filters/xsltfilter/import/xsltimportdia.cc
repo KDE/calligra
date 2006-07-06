@@ -146,8 +146,8 @@ void XSLTImportDia::chooseSlot()
 
     if(dialog->exec() == QDialog::Accepted)
     {
-        u = dialog->selectedURL();
-        KRecentDocument::add(dialog->selectedURL().url(), !dialog->selectedURL().isLocalFile());
+        u = dialog->selectedUrl();
+        KRecentDocument::add(dialog->selectedUrl().url(), !dialog->selectedUrl().isLocalFile());
     } else //revert state
     {
         //if (bEmpty) openEmpty();
