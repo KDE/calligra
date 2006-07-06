@@ -31,6 +31,7 @@
 #include <kexidb/driver.h>
 #include <kexidb/cursor.h>
 #include <kexidb/error.h>
+#include <kexiutils/utils.h>
 
 #include <qfile.h>
 #include <qdir.h>
@@ -282,6 +283,10 @@ bool SQLiteConnection::drv_executeSQL( const QString& statement )
 	d->temp_st = statement.local8Bit(); //latin1 only
 #endif
 
+#ifdef KEXI_DEBUG_GUI
+	KexiUtils::addKexiDBDebug(QString("ExecuteSQL (SQLite): ")+statement);
+#endif
+
 	d->res = sqlite_exec( 
 		d->data, 
 		(const char*)d->temp_st, 
@@ -289,6 +294,9 @@ bool SQLiteConnection::drv_executeSQL( const QString& statement )
 		0,
 		&d->errmsg_p );
 	d->storeResult();
+#ifdef KEXI_DEBUG_GUI
+	KexiUtils::addKexiDBDebug(d->res==SQLITE_OK ? "  Success" : "  Failure");
+#endif
 	return d->res==SQLITE_OK;
 }
 

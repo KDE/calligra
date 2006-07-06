@@ -139,7 +139,7 @@ class KEXI_DB_EXPORT Relationship
 		 to IndexSchema::attachRelationship() */
 		void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex, bool ownedByMaster);
 
-	IndexSchema *m_masterIndex;
+		IndexSchema *m_masterIndex;
 		IndexSchema *m_detailsIndex;
 
 		Field::PairList m_pairs;

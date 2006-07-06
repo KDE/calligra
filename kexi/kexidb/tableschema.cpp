@@ -89,8 +89,8 @@ TableSchema::TableSchema(const TableSchema& ts, bool copyId)
 	//deep copy all members
 	IndexSchema::ListIterator idx_it(ts.m_indices);
 	for (;idx_it.current();++idx_it) {
-		IndexSchema *idx = new IndexSchema(*idx_it.current());
-		idx->m_tableSchema = this;
+		IndexSchema *idx = new IndexSchema(
+			*idx_it.current(), *this /*fields from _this_ table will be assigned to the index*/);
 		if (idx->isPrimaryKey()) {//assign pkey
 			m_pkey = idx;
 		}

@@ -56,8 +56,18 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		 */
 		IndexSchema(TableSchema *tableSchema);
 
-		/*! Copy constructor. */
-		IndexSchema(const IndexSchema& idx);
+		/*! Copy constructor. Copies all attributes from index \a idx, and 
+		 fields assigned with it but the fields are taken (by name) from 
+		 \a parentTable, not from \a idx itself, so it's possible to copy of index
+		 for a copy of table. 
+
+		 To copy an index within the same table it's enough to call: 
+		 \code
+		 new IndexSchema(idx, *idx.table());
+		 \endcode
+		 @todo All relationships should be also copied
+		 */
+		IndexSchema(const IndexSchema& idx, TableSchema& parentTable);
 
 		/*! Destroys the index. Field objects are not deleted.
 		 All Relationship objects listed in masterRelationships() list 
