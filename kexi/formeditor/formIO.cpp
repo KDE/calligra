@@ -881,9 +881,9 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 		WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
 		QObject *subobject = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : obj;
 		int count = subobject->metaObject()->findProperty(name.latin1(), true);
-		const QMetaProperty *meta = subobject->metaObject()->property(count, true);
+		const QMetaProperty *meta = count!=-1 ? subobject->metaObject()->property(count, true) : 0;
 
-		if(meta->isSetType())
+		if(meta && meta->isSetType())
 		{
 			QStrList keys;
 			QStringList list = QStringList::split("|", text);
