@@ -523,7 +523,8 @@ Calendar::~Calendar() {
     delete m_weekdays; 
 }
 Calendar::Calendar(Calendar *calendar)
-    : m_days() {
+    : m_project(0),
+      m_days() {
     m_days.setAutoDelete(true);
     copy(*calendar);
 }
@@ -569,7 +570,7 @@ bool Calendar::setId(QString id) {
     }
     Calendar *c = findCalendar();
     if (c == this) {
-        //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+        kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
         removeId();
     } else if (c) {
         //can happen when making a copy

@@ -322,8 +322,12 @@ void Resource::addWorkingHour(QTime from, QTime until) {
 }
 
 Calendar *Resource::calendar(bool local) const {
-    if ( local == false && m_calendar == 0 && project() != 0)
+    if (!local && project() != 0 && (m_calendar == 0 || m_calendar->isDeleted())) {
         return project()->defaultCalendar();
+    }
+    if (m_calendar && m_calendar->isDeleted()) {
+        return 0;
+    }
     return m_calendar;
 }
 
@@ -366,7 +370,7 @@ void Resource::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("resource");
     element.appendChild(me);
 
-    if (m_calendar)
+    if (calendar(true))
         me.setAttribute("calendar-id", m_calendar->id());
     me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
