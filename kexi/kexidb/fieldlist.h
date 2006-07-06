@@ -96,7 +96,7 @@ class KEXI_DB_EXPORT FieldList
 		/*! \return true if fields in the list are owned by this list. */
 		inline bool isOwner() const { return m_fields.autoDelete(); }
 
-		/*! Removes all fields from the list, clears name. */
+		/*! Removes all fields from the list. */
 		virtual void clear();
 
 		/*! \return String for debugging purposes. */
