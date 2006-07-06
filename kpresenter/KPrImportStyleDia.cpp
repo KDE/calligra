@@ -49,7 +49,7 @@ KPrImportStyleDia::~KPrImportStyleDia()
 
 void KPrImportStyleDia::loadFile()
 {
-    KFileDialog fd( QString::null, QString::null, this);
+    KFileDialog fd( KUrl(), QString::null, this);
     QStringList lst;
 	lst<< "application/x-kpresenter";
 #if 0 //For the future
@@ -60,7 +60,7 @@ void KPrImportStyleDia::loadFile()
     KUrl url;
     if ( fd.exec() != QDialog::Accepted )
         return;
-    url = fd.selectedURL();
+    url = fd.selectedUrl();
     if( url.isEmpty() )
     {
         KMessageBox::sorry( this,

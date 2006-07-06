@@ -92,44 +92,44 @@ KPrConfig::KPrConfig( KPrView* parent )
     KVBox *page = new KVBox();
     m_p1 = addPage( page, i18n("Interface") );
     m_p1->setHeader( i18n("Interface") );
-    m_p1->setIcon( BarIcon("misc", K3Icon::SizeMedium) );
+    m_p1->setIcon( KIcon("misc") );
     _interfacePage=new KPrConfigureInterfacePage( parent, page );
     page = new KVBox();
     m_p2 = addPage( page, i18n("Color") );
     m_p2->setHeader( i18n("Color") );
-    m_p2->setIcon( BarIcon("colorize", K3Icon::SizeMedium) );
+    m_p2->setIcon( KIcon("colorize") );
     _colorBackground = new KPrConfigureColorBackground( parent, page );
 
     page = new KVBox();
     m_p3 = addPage( page, i18n("Spelling") );
     m_p3->setHeader( i18n("Color") );
-    m_p3->setIcon( BarIcon("colorize", K3Icon::SizeMedium) );
+    m_p3->setIcon( KIcon("colorize") );
     _spellPage=new KPrConfigureSpellPage(parent, page);
 
     page = new KVBox();
     m_p4 = addPage( page, i18n("Misc") );
     m_p4->setHeader( i18n("Misc") );
-    m_p4->setIcon( BarIcon("misc", K3Icon::SizeMedium) );
+    m_p4->setIcon( KIcon("misc") );
     _miscPage=new KPrConfigureMiscPage(parent, page);
 
     page = new KVBox();
     m_p5 = addPage( page, i18n("Document") );
     m_p5->setHeader( i18n("Document Settings") );
-    m_p5->setIcon( BarIcon("kpresenter_kpr", K3Icon::SizeMedium) );
+    m_p5->setIcon( KIcon("kpresenter_kpr") );
 
     _defaultDocPage=new KPrConfigureDefaultDocPage(parent, page);
 
     page = new KVBox();
     m_p6 = addPage( page, i18n("Tools") );
     m_p6->setHeader( i18n("Default Tools Settings") );
-    m_p6->setIcon( BarIcon("configure", K3Icon::SizeMedium) );
+    m_p6->setIcon( KIcon("configure") );
 
     _toolsPage=new KPrConfigureToolsPage(parent, page);
 
     page = new KVBox();
     m_p7 = addPage( page, i18n("Paths") );
     m_p7->setHeader( i18n("Path Settings") );
-    m_p7->setIcon( BarIcon("path", K3Icon::SizeMedium) );
+    m_p7->setIcon( KIcon("path") );
 
     m_pathPage=new KPrConfigurePathPage(parent, page);
 

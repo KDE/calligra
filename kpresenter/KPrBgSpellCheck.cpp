@@ -27,7 +27,7 @@
 #include "KoTextIterator.h"
 #include "KoTextObject.h"
 
-#include <kspell2/loader.h>
+#include <sonnet/loader.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 using namespace KSpell2;

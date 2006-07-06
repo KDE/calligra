@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 #include "KPrDocumentAdaptor.h"
 #include "KPrObjectAdaptor.h"
