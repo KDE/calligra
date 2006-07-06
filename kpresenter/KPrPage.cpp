@@ -81,7 +81,10 @@ KPrPage::KPrPage(KPrDocument *_doc, KPrPage *masterPage )
     : QObject( _doc )
     , m_doc( _doc )
     , m_masterPage( masterPage )
+    /*
+     * deactivate code using KPrPageAdaptor
     , m_dbus( 0 )
+    */
     , m_selectedSlides( true )
     , m_bHasHeader( false )
     , m_bHasFooter( false )
@@ -112,6 +115,8 @@ KPrPage::~KPrPage()
     delete m_kpbackground;
 }
 
+/*
+ * deactivate code using KPrPageAdaptor
 KPrPageAdaptor* KPrPage::dbusObject()
 {
     if ( !m_dbus ) {
@@ -123,7 +128,7 @@ KPrPageAdaptor* KPrPage::dbusObject()
 
     return m_dbus;
 }
-
+*/
 
 void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter ) const
 {

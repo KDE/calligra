@@ -106,7 +106,6 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrQuadricBezierCurveObjectAdaptor.cpp
    KPrCubicBezierCurveObjectAdaptor.cpp
    KPrLineObjectAdaptor.cpp
-   KPrPageAdaptor.cpp
    KPrPolygonObjectAdaptor.cpp
    KPrRectObjectAdaptor.cpp
    KPrViewAdaptor.cpp

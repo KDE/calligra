@@ -39,9 +39,12 @@ public:
 public Q_SLOTS:
     virtual int numPages() const;
     /// 0-based
+    /*
+     * deactivate code using KPrPageAdaptor
     virtual QString page( int num );
 
     virtual QString masterPage();
+    */
 
     bool selectPage( int page,bool select);
 

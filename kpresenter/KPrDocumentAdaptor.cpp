@@ -19,7 +19,10 @@
 */
 
 #include "KPrDocumentAdaptor.h"
+/*
+ * deactivate code using KPrPageAdaptor
 #include "KPrPageAdaptor.h"
+*/
 #include "KPrObjectAdaptor.h"
 #include "KPrTextObject.h"
 #include "KPrDocument.h"
@@ -42,6 +45,8 @@ int KPrDocumentAdaptor::numPages() const
     return doc->getPageNums();
 }
 
+/*
+ * deactivate code using KPrPageAdaptor
 QString KPrDocumentAdaptor::page( int num )
 {
     if( num>= (int )doc->getPageNums())
@@ -53,6 +58,7 @@ QString KPrDocumentAdaptor::masterPage()
 {
     return doc->masterPage()->dbusObject()->objectName();
 }
+*/
 
 void KPrDocumentAdaptor::setShowRuler(bool b)
 {

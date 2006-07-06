@@ -46,7 +46,10 @@ class KoDocumentEntry;
 class KoPageLayout;
 class KCommand;
 class KoPointArray;
+/*
+ * deactive KPrPageAdaptor
 class KPrPageAdaptor;
+*/
 class KPrTextObject;
 class KoTextObject;
 class KPrPixmapObject;
@@ -76,8 +79,11 @@ public:
 
     /**
      * @brief Return a DBUS interface for this page
-     */
+     /*
+    /* 
+     * deactivate code using KPrPageAdaptor
     virtual KPrPageAdaptor* dbusObject();
+    */
 
     /**
      * @brief Return a DBUS interface for this page
@@ -571,7 +577,10 @@ private:
     KPrBackGround *m_kpbackground;
     QString m_manualTitle;
     QString m_noteText;
+    /*
+     * deactivate code using KPrPageAdaptor
     KPrPageAdaptor *m_dbus;
+    */
     bool m_selectedSlides;
 
     QString m_pictureFile;
