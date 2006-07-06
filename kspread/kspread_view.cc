@@ -73,8 +73,6 @@
 #include <kprocio.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
-#include <kspell.h>
-#include <kspelldlg.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
 #include <kstandarddirs.h>

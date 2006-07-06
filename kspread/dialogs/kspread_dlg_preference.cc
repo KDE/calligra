@@ -37,7 +37,6 @@
 #include <kinstance.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
-#include <kspell.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kcolorbutton.h>
