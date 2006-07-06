@@ -188,6 +188,7 @@ public:
 private:
     Node *m_node;
     Node *m_parent;
+    Project *m_project;
     int m_index;
     bool m_mine;
     QPtrList<Appointment> m_appointments;
@@ -376,7 +377,8 @@ public:
 
 private:
     Node &m_node;
-    int m_oldindex, m_newindex;
+    Project *m_project;
+    bool m_moved;
 };
 
 class NodeMoveDownCmd : public NamedCommand
@@ -388,7 +390,8 @@ public:
 
 private:
     Node &m_node;
-    int m_oldindex, m_newindex;
+    Project *m_project;
+    bool m_moved;
 };
 
 class AddRelationCmd : public NamedCommand

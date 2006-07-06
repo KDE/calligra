@@ -120,42 +120,43 @@ Node *Node::projectNode() {
 void Node::delChildNode( Node *node, bool remove) {
     //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
     if ( m_nodes.findRef(node) != -1 ) {
-        removeId(node->id());
         if(remove)
             m_nodes.remove();
         else
             m_nodes.take();
     }
+    node->setParent(0);
 }
 
 void Node::delChildNode( int number, bool remove) {
     Node *n = m_nodes.at(number);
-    if (n)
-        removeId(n->id());
+    //kdDebug()<<k_funcinfo<<(n?n->id():"null")<<" : "<<(n?n->name():"")<<endl;
     if(remove)
         m_nodes.remove(number);
     else
         m_nodes.take(number);
+    
+    if (n) {
+        n->setParent(0);
+    }
 }
 
 void Node::insertChildNode( unsigned int index, Node *node) {
-    if (!node->setId(node->id())) {
-        kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
-    }
+    //kdDebug()<<k_funcinfo<<"insert id="<<node->id()<<": "<<node->name()<<endl;
     m_nodes.insert(index,node);
     node->setParent(this);
 }
 
 void Node::addChildNode( Node *node, Node *after) {
+    //kdDebug()<<k_funcinfo<<endl;
     int index = m_nodes.findRef(after);
     if (index == -1) {
-        if (!node->setId(node->id())) {
-            kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
-        }
+        //kdDebug()<<k_funcinfo<<"append id="<<node->id()<<": "<<node->name()<<endl;
         m_nodes.append(node);
         node->setParent(this);
         return;
     }
+    //kdDebug()<<k_funcinfo<<"insert id="<<node->id()<<": "<<node->name()<<endl;
     m_nodes.insert(index+1, node);
     node->setParent(this);
 }

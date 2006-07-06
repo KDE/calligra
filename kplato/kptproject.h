@@ -100,6 +100,8 @@ public:
 
     bool addTask( Node* task, Node* position );
     bool addSubTask( Node* task, Node* position );
+    bool addSubTask( Node* task, int index, Node* parent );
+    void delTask(Node *node);
     bool canIndentTask(Node* node);
     bool indentTask( Node* node );
     bool canUnindentTask( Node* node );
@@ -173,11 +175,12 @@ public:
     virtual Node *findNode(const QString &id) const 
         { return (m_parent ? m_parent->findNode(id) : nodeIdDict.find(id)); }
     /// Remove the node with identity id from the register
-    virtual bool removeId(const QString &id) 
-        { return (m_parent ? m_parent->removeId(id) : nodeIdDict.remove(id)); }
+    virtual bool removeId(const QString &id);
     /// Insert the node with identity id
-    virtual void insertId(const QString &id, const Node *node)
-        { m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node); }
+    virtual void insertId(const QString &id, const Node *node);
+    /// Register node. The nodes id must be unique and non-empty.
+    bool Project::registerNodeId(Node *node);
+    /// Create a unique id.
     QString uniqueNodeId(int seed=1);
     
     ResourceGroup *findResourceGroup(const QString &id) const 

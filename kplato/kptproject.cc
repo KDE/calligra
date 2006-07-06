@@ -364,7 +364,9 @@ bool Project::load(QDomElement &element) {
                 // Load the subproject
                 Project *child = new Project(this);
                 if (child->load(e)) {
-                    addChildNode(child);
+                    if (!addTask(child, this)) {
+                        delete child; // TODO: Complain about this
+                    }
                 } else {
                     // TODO: Complain about this
                     delete child;
@@ -375,7 +377,9 @@ bool Project::load(QDomElement &element) {
                 // Depends on resources already loaded
                 Task *child = new Task(this);
                 if (child->load(e, *this)) {
-                    addChildNode(child);
+                    if (!addTask(child, this)) {
+                        delete child; // TODO: Complain about this
+                    }
                 } else {
                     // TODO: Complain about this
                     delete child;
@@ -576,8 +580,7 @@ bool Project::addTask( Node* task, Node* position )
 		kdDebug()<<k_funcinfo<<"Task not found???"<<endl;
 		return false;
 	}
-	parentNode->insertChildNode( index+1, task );
-    return true;
+	return addSubTask(task, index+1, parentNode);
 }
 
 bool Project::addSubTask( Node* task, Node* position )
@@ -585,11 +588,41 @@ bool Project::addSubTask( Node* task, Node* position )
 	// we want to add a subtask to the node "position". It will become
 	// position's last child.
 	if ( 0 == position ) {
-      kdError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
-	  return false;
-	}
-	position->addChildNode(task);
+        kdError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
+        return false;
+    }
+    if (!registerNodeId(task)) {
+        kdError()<<k_funcinfo<<"Failed to register node id, can not add subtask: "<<task->name()<<endl;
+        return false;
+    }
+    position->addChildNode(task);
     return true;
+}
+
+bool Project::addSubTask( Node* task, int index, Node* parent )
+{
+    // we want to add a subtask to the node "parent" at the given index.
+    if ( 0 == parent ) {
+        kdError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
+        return false;
+    }
+    if (!registerNodeId(task)) {
+        kdError()<<k_funcinfo<<"Failed to register node id, can not add subtask: "<<task->name()<<endl;
+        return false;
+    }
+    parent->insertChildNode(index, task);
+    return true;
+}
+
+void Project::delTask(Node *node)
+{
+    Node *parent = node->getParent();
+    if (parent == 0) {
+        kdDebug()<<k_funcinfo<<"Node must have a parent!"<<endl;
+        return;
+    }
+    removeId(node->id());
+    parent->delChildNode(node, false/*take*/);
 }
 
 bool Project::canIndentTask(Node* node)
@@ -751,6 +784,34 @@ QString Project::uniqueNodeId(int seed) {
     }
     return QString("%1").arg(i);
 }
+
+bool Project::removeId(const QString &id) {
+    kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+    return (m_parent ? m_parent->removeId(id) : nodeIdDict.remove(id)); 
+}
+
+void Project::insertId(const QString &id, const Node *node) {
+    kdDebug()<<k_funcinfo<<"id="<<id<<" "<<node->name()<<endl;
+    m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node); 
+}
+
+bool Project::registerNodeId(Node *node) {
+    if (node->id().isEmpty()) {
+       kdError()<<k_funcinfo<<"Id is empty."<<endl;
+       return false;
+    }
+    Node *rn = findNode(node->id());
+    if (rn == 0) {
+       insertId(node->id(), node);
+       return true;
+    }
+    if (rn != node) {
+       kdError()<<k_funcinfo<<"Id allready exists for different task: "<<node->id()<<endl;
+       return false;
+    }
+    return true;
+}
+
 
 ResourceGroup *Project::group(QString id) {
     return findResourceGroup(id);
