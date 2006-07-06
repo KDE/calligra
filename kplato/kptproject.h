@@ -173,11 +173,9 @@ public:
     virtual Node *findNode(const QString &id) const 
         { return (m_parent ? m_parent->findNode(id) : nodeIdDict.find(id)); }
     /// Remove the node with identity id from the register
-    virtual bool removeId(const QString &id) 
-        { return (m_parent ? m_parent->removeId(id) : nodeIdDict.remove(id)); }
+    virtual bool removeId(const QString &id);
     /// Insert the node with identity id
-    virtual void insertId(const QString &id, const Node *node)
-        { m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node); }
+    virtual void insertId(const QString &id, const Node *node);
     QString uniqueNodeId(int seed=1);
     
     ResourceGroup *findResourceGroup(const QString &id) const 

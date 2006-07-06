@@ -753,6 +753,16 @@ QString Project::uniqueNodeId(int seed) {
     return QString("%1").arg(i);
 }
 
+bool Project::removeId(const QString &id) {
+    kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+    return (m_parent ? m_parent->removeId(id) : nodeIdDict.remove(id)); 
+}
+    /// Insert the node with identity id
+void Project::insertId(const QString &id, const Node *node) {
+    kdDebug()<<k_funcinfo<<"id="<<id<<": "<<node->name()<<endl;
+    m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node);
+}
+
 ResourceGroup *Project::group(QString id) {
     return findResourceGroup(id);
 }

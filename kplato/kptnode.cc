@@ -117,6 +117,17 @@ Node *Node::projectNode() {
     return 0;
 }
 
+//HACK
+void Node::delChildNode_NoId( Node *node, bool remove) {
+    //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
+    if ( m_nodes.findRef(node) != -1 ) {
+        if(remove)
+            m_nodes.remove();
+        else
+            m_nodes.take();
+    }
+}
+
 void Node::delChildNode( Node *node, bool remove) {
     //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
     if ( m_nodes.findRef(node) != -1 ) {
@@ -126,6 +137,14 @@ void Node::delChildNode( Node *node, bool remove) {
         else
             m_nodes.take();
     }
+}
+
+//HACK
+void Node::delChildNode_NoId( int number, bool remove) {
+    if(remove)
+        m_nodes.remove(number);
+    else
+        m_nodes.take(number);
 }
 
 void Node::delChildNode( int number, bool remove) {
@@ -138,20 +157,38 @@ void Node::delChildNode( int number, bool remove) {
         m_nodes.take(number);
 }
 
-void Node::insertChildNode( unsigned int index, Node *node) {
-    if (!node->setId(node->id())) {
-        kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
-    }
+//HACK
+void Node::insertChildNode_NoId( unsigned int index, Node *node) {
     m_nodes.insert(index,node);
     node->setParent(this);
 }
 
+void Node::insertChildNode( unsigned int index, Node *node) {
+    node->setParent(this);
+    if (!node->setId(node->id())) {
+        kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
+    }
+    m_nodes.insert(index,node);
+}
+
 void Node::addChildNode( Node *node, Node *after) {
     int index = m_nodes.findRef(after);
+    node->setParent(this);
+    if (!node->setId(node->id())) {
+         kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
+    }
     if (index == -1) {
-        if (!node->setId(node->id())) {
-            kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
-        }
+        m_nodes.append(node);
+        
+        return;
+    }
+    m_nodes.insert(index+1, node);
+}
+
+//HACK
+void Node::addChildNode_NoId( Node *node, Node *after) {
+    int index = m_nodes.findRef(after);
+    if (index == -1) {
         m_nodes.append(node);
         node->setParent(this);
         return;

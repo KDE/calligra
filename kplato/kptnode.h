@@ -103,9 +103,13 @@ public:
     const QPtrList<Node> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
     virtual void addChildNode(Node *node, Node *after=0);
+    virtual void addChildNode_NoId(Node *node, Node *after=0); //HACK
     virtual void insertChildNode(unsigned int index, Node *node);
+    virtual void insertChildNode_NoId(unsigned int index, Node *node); //HACK
     void delChildNode(Node *node, bool remove=true);
+    void delChildNode_NoId(Node *node, bool remove=true); //HACK
     void delChildNode(int number, bool remove=true);
+    void delChildNode_NoId(int number, bool remove=true); //HACK
     Node* getChildNode(int number) { return m_nodes.at(number); }
     const Node* getChildNode(int number) const;
 	int findChildNode( Node* node );

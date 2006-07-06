@@ -658,8 +658,8 @@ void NodeIndentCmd::execute() {
 }
 void NodeIndentCmd::unexecute() {
     if (m_newindex != -1) {
-        m_newparent->delChildNode(m_newindex, false);
-        m_oldparent->insertChildNode(m_oldindex, &m_node);
+        m_newparent->delChildNode_NoId(m_newindex, false);
+        m_oldparent->insertChildNode_NoId(m_oldindex, &m_node);
         m_node.setParent(m_oldparent);
         m_newindex = -1;
     }
@@ -687,8 +687,8 @@ void NodeUnindentCmd::execute() {
 }
 void NodeUnindentCmd::unexecute() {
     if (m_newindex != -1) {
-        m_newparent->delChildNode(m_newindex, false);
-        m_oldparent->insertChildNode(m_oldindex, &m_node);
+        m_newparent->delChildNode_NoId(m_newindex, false);
+        m_oldparent->insertChildNode_NoId(m_oldindex, &m_node);
         m_node.setParent(m_oldparent);
         m_newindex = -1;
     }
@@ -712,8 +712,8 @@ void NodeMoveUpCmd::execute() {
 }
 void NodeMoveUpCmd::unexecute() {
     if (m_newindex != -1) {
-        m_node.getParent()->delChildNode(m_newindex, false);
-        m_node.getParent()->insertChildNode(m_oldindex, &m_node);
+        m_node.getParent()->delChildNode_NoId(m_newindex, false);
+        m_node.getParent()->insertChildNode_NoId(m_oldindex, &m_node);
         m_newindex = -1;
     }
     
@@ -736,8 +736,8 @@ void NodeMoveDownCmd::execute() {
 }
 void NodeMoveDownCmd::unexecute() {
     if (m_newindex != -1) {
-        m_node.getParent()->delChildNode(m_newindex, false);
-        m_node.getParent()->insertChildNode(m_oldindex, &m_node);
+        m_node.getParent()->delChildNode_NoId(m_newindex, false);
+        m_node.getParent()->insertChildNode_NoId(m_oldindex, &m_node);
         m_newindex = -1;
     }
     
