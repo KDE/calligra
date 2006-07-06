@@ -218,7 +218,7 @@ void KWView::resizeEvent( QResizeEvent *e )
 
 void KWView::editFrameProperties() {
     QList<KWFrame*> frames;
-    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedObjects()) {
+    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
         KWFrame *frame = m_document->frameForShape(shape);
         if(frame)
             frames.append(frame);
