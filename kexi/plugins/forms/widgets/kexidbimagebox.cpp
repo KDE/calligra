@@ -1011,4 +1011,10 @@ void KexiDBImageBox::setDropDownButtonVisible( bool set )
 	}
 }
 
+bool KexiDBImageBox::subwidgetStretchRequired(KexiDBAutoField* autoField) const
+{
+	Q_UNUSED(autoField);
+	return true;
+}
+
 #include "kexidbimagebox.moc"

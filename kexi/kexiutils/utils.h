@@ -169,8 +169,8 @@ namespace KexiUtils
 	//! Creates debug window for convenient debugging output
 	KEXIUTILS_EXPORT QWidget *createDebugWindow(QWidget *parent);
 
-	//! Adds debug line for for KexiDB database cursors
-	KEXIUTILS_EXPORT void addDBCursorDebug(const QString& text);
+	//! Adds debug line for for KexiDB database
+	KEXIUTILS_EXPORT void addKexiDBDebug(const QString& text);
 
 	//! Adds debug line for for Table Designer (Alter Table actions)
 	KEXIUTILS_EXPORT void addAlterTableActionDebug(const QString& text, int nestingLevel = 0);

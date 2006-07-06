@@ -34,7 +34,7 @@
 
 static DebugWindowDialog* debugWindow = 0;
 static KTabWidget* debugWindowTab = 0;
-static KListView* kexiDbCursorDebugPage = 0;
+static KListView* kexiDBDebugPage = 0;
 static KListView* kexiAlterTableActionDebugPage = 0;
 
 QWidget *KexiUtils::createDebugWindow(QWidget *parent)
@@ -52,12 +52,12 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 	return debugWindow;
 }
 
-void KexiUtils::addDBCursorDebug(const QString& text)
+void KexiUtils::addKexiDBDebug(const QString& text)
 {
 	// (this is internal code - do not use i18n() here)
 	if (!debugWindowTab)
 		return;
-	if (!kexiDbCursorDebugPage) {
+	if (!kexiDBDebugPage) {
 		QWidget *page = new QWidget(debugWindowTab);
 		QVBoxLayout *vbox = new QVBoxLayout(page);
 		QHBoxLayout *hbox = new QHBoxLayout(page);
@@ -66,23 +66,23 @@ void KexiUtils::addDBCursorDebug(const QString& text)
 		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
 		hbox->addWidget(btn_clear);
 
-		kexiDbCursorDebugPage = new KListView(page, "kexiDbCursorDebugPage");
-		QObject::connect(btn_clear, SIGNAL(clicked()), kexiDbCursorDebugPage, SLOT(clear()));
-		vbox->addWidget(kexiDbCursorDebugPage);
-		kexiDbCursorDebugPage->addColumn("");
-		kexiDbCursorDebugPage->header()->hide();
-		kexiDbCursorDebugPage->setSorting(-1);
-		kexiDbCursorDebugPage->setAllColumnsShowFocus ( true );
-		kexiDbCursorDebugPage->setColumnWidthMode( 0, QListView::Maximum );
-		kexiDbCursorDebugPage->setRootIsDecorated( true );
-		debugWindowTab->addTab( page, "DB Cursors" );
+		kexiDBDebugPage = new KListView(page, "kexiDbDebugPage");
+		QObject::connect(btn_clear, SIGNAL(clicked()), kexiDBDebugPage, SLOT(clear()));
+		vbox->addWidget(kexiDBDebugPage);
+		kexiDBDebugPage->addColumn("");
+		kexiDBDebugPage->header()->hide();
+		kexiDBDebugPage->setSorting(-1);
+		kexiDBDebugPage->setAllColumnsShowFocus ( true );
+		kexiDBDebugPage->setColumnWidthMode( 0, QListView::Maximum );
+		kexiDBDebugPage->setRootIsDecorated( true );
+		debugWindowTab->addTab( page, "KexiDB" );
 		debugWindowTab->showPage(page);
-		kexiDbCursorDebugPage->show();
+		kexiDBDebugPage->show();
 	}
 	//add \n after (about) every 30 characters
 //TODO	QString realText
 
-	KListViewItem * li = new KListViewItem( kexiDbCursorDebugPage, kexiDbCursorDebugPage->lastItem(), text );
+	KListViewItem * li = new KListViewItem( kexiDBDebugPage, kexiDBDebugPage->lastItem(), text );
 	li->setMultiLinesEnabled( true );
 }
 

@@ -48,7 +48,8 @@ void setLighterGrayBackgroundColor(QWidget* widget);
 class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 	public KLineEdit,
 	protected KexiDBTextWidgetInterface,
-	public KexiFormDataItemInterface
+	public KexiFormDataItemInterface,
+	public KexiSubwidgetInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -111,6 +112,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		}
 
 		virtual QPopupMenu * createPopupMenu();
+
+		//! Implemented for KexiSubwidgetInterface
+		virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
 
 		//! Used for date and date/time types
 		KexiDateFormatter* m_dateFormatter;

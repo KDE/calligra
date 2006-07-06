@@ -23,6 +23,7 @@
 
 #include "kexiformdataiteminterface.h"
 #include "kexiframe.h"
+#include "kexidbutils.h"
 //Added by qt3to4:
 #include <QContextMenuEvent>
 #include <QPixmap>
@@ -35,7 +36,10 @@
 //! A data-aware, editable image box.
 /*! Can also act as a normal static image box.
 */
-class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBImageBox : 
+	public KexiFrame, 
+	public KexiFormDataItemInterface, 
+	public KexiSubwidgetInterface
 {
 	Q_OBJECT
 	Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource )
@@ -215,6 +219,9 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame, public KexiFormDat
 		//! \return real line width, i.e. for Boxed sunken or Boxed raised 
 		//! frames returns doubled width value.
 		int realLineWidth() const;
+
+		//! Implemented for KexiSubwidgetInterface
+		virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const;
 
 //		virtual void drawContents ( QPainter *p );
 

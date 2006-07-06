@@ -148,7 +148,14 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		void setForm(KFormDesigner::Form *f);
 
 		void initForm();
+
 		void loadForm();
+
+		//! Used in loadForm()
+		void updateAutoFieldsDataSource();
+
+		//! Used in loadForm()
+		void updateValuesForSubproperties();
 
 		virtual void resizeEvent ( QResizeEvent * );
 

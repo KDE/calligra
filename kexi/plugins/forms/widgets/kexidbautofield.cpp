@@ -53,7 +53,7 @@ class KexiDBAutoField::Private
 		}
 
 		WidgetType widgetType; //!< internal: equal to m_widgetType_property ir equal to result 
-		                         //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
+		                       //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
 		WidgetType  widgetType_property; //!< provides widget type or Auto
 		LabelPosition  lblPosition;
 		QBoxLayout  *layout;
@@ -61,8 +61,8 @@ class KexiDBAutoField::Private
 		QString  caption;
 		KexiDB::Field::Type fieldTypeInternal;
 		QString fieldCaptionInternal;
-		QColor paletteBackgroundColor; //!< needed because for unbound mode editor==0
-		QColor paletteForegroundColor; //!< needed because for unbound mode editor==0
+		QColor baseColor; //!< needed because for unbound mode editor==0
+		QColor textColor; //!< needed because for unbound mode editor==0
 		bool autoCaption : 1;
 		bool focusPolicyChanged : 1;
 		bool designMode : 1;
@@ -113,8 +113,8 @@ KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
 	setWidgetType(type);
 	setLabelPosition(pos);
 //	d->paletteBackgroundColor = palette().active().background();
-	d->paletteBackgroundColor = palette().active().base();
-	d->paletteForegroundColor = palette().active().foreground();
+	d->baseColor = palette().active().base();
+	d->textColor = palette().active().text();
 }
 
 void
@@ -220,8 +220,13 @@ KexiDBAutoField::createEditor()
 void KexiDBAutoField::copyPropertiesToEditor()
 {
 	if (m_subwidget) {
-		m_subwidget->setPaletteBackgroundColor( d->paletteBackgroundColor );
-		m_subwidget->setPaletteForegroundColor( d->paletteForegroundColor );
+		QPalette p( m_subwidget->palette() );
+		p.setColor( QPalette::Active, QColorGroup::Base, d->baseColor );
+		if(d->widgetType == Boolean)
+			p.setColor( QPalette::Active, QColorGroup::Foreground, d->textColor );
+		else
+			p.setColor( QPalette::Active, QColorGroup::Text, d->textColor );
+		m_subwidget->setPalette(p);
 	}
 }
 
@@ -253,13 +258,31 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 			align |= AlignVCenter;
 		}
 		d->label->setAlignment(align);
-		if(d->widgetType == Boolean)
+		if(d->widgetType == Boolean || (d->widgetType == Auto && fieldTypeInternal() == KexiDB::Field::InvalidType))
 			d->label->hide();
 		else
 			d->label->show();
 		d->layout->addWidget(d->label);
-		d->layout->addSpacing(KexiDBAutoField_SPACING);
+		if(position == Left && d->widgetType != Boolean)
+			d->layout->addSpacing(KexiDBAutoField_SPACING);
 		d->layout->addWidget(m_subwidget);
+		KexiSubwidgetInterface *subwidgetInterface = dynamic_cast<KexiSubwidgetInterface*>((QWidget*)m_subwidget);
+		if (subwidgetInterface) {
+			if (subwidgetInterface->appendStretchRequired(this))
+				d->layout->addStretch(0);
+			if (subwidgetInterface->subwidgetStretchRequired(this)) {
+				QSizePolicy sizePolicy( m_subwidget->sizePolicy() );
+				if(position == Left) {
+					sizePolicy.setHorData( QSizePolicy::Minimum );
+					d->label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+				}
+				else {
+					sizePolicy.setVerData( QSizePolicy::Minimum );
+					d->label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+				}
+				m_subwidget->setSizePolicy(sizePolicy);
+			}
+		}
 //		if(m_subwidget)
 	//		m_subwidget->setSizePolicy(...);
 	}
@@ -282,7 +305,8 @@ KexiDBAutoField::setInvalidState( const QString &text )
 	d->widgetType = Auto;
 	createEditor();
 	setFocusPolicy(QWidget::NoFocus);
-	m_subwidget->setFocusPolicy(QWidget::NoFocus);
+	if (m_subwidget)
+		m_subwidget->setFocusPolicy(QWidget::NoFocus);
 //! @todo or set this to editor's text?
 	d->label->setText( text );
 }
@@ -555,6 +579,7 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 				realText = text[0].upper() + text.mid(1);
 				if (d->widgetType!=Boolean) {
 //! @todo ":" suffix looks weird for checkbox; remove this condition when [x] is displayed _after_ label
+//! @todo support right-to-left layout where position of ":" is inverted
 					realText += ": ";
 				}
 			}
@@ -563,17 +588,17 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 			realText = text;
 	}
 
-	QWidget* widgetToAlterForegroundColor;
+//	QWidget* widgetToAlterForegroundColor;
 	if(d->widgetType == Boolean) {
 		static_cast<QCheckBox*>((QWidget*)m_subwidget)->setText(realText);
-		widgetToAlterForegroundColor = m_subwidget;
+//		widgetToAlterForegroundColor = m_subwidget;
 	}
 	else {
 		d->label->setText(realText);
-		widgetToAlterForegroundColor = d->label;
+//		widgetToAlterForegroundColor = d->label;
 	}
-
-/*	if (unbound)
+/*
+	if (unbound)
 		widgetToAlterForegroundColor->setPaletteForegroundColor( 
 			KexiUtils::blendedColors(
 				widgetToAlterForegroundColor->paletteForegroundColor(), 
@@ -688,31 +713,69 @@ KexiDBAutoField::paletteChange( const QPalette& oldPal )
 	d->label->setPalette( palette() );
 }
 
-// the menthods below are just proxies for the internal editor
+void KexiDBAutoField::unsetPalette()
+{
+	QWidget::unsetPalette();
+
+}
+
+// ===== methods below are just proxies for the internal editor or label =====
 
 const QColor & KexiDBAutoField::paletteForegroundColor() const
 {
-	return d->paletteForegroundColor;
+	return d->textColor;
 }
 
 void KexiDBAutoField::setPaletteForegroundColor( const QColor & color )
 {
-	d->paletteForegroundColor = color;
-	if (m_subwidget) {
-		m_subwidget->setPaletteForegroundColor( d->paletteForegroundColor );
-	}
+	d->textColor = color;
+	copyPropertiesToEditor();
 }
 
 const QColor & KexiDBAutoField::paletteBackgroundColor() const
 {
-	return d->paletteBackgroundColor;
+	return d->baseColor;
 }
 
 void KexiDBAutoField::setPaletteBackgroundColor( const QColor & color )
 {
-	d->paletteBackgroundColor = color;
-	if (m_subwidget) {
-		m_subwidget->setPaletteBackgroundColor( d->paletteBackgroundColor );
+	d->baseColor = color;
+	copyPropertiesToEditor();
+}
+
+const QColor & KexiDBAutoField::foregroundLabelColor() const
+{
+	if(d->widgetType == Boolean)
+		return paletteForegroundColor();
+
+	return d->label->paletteForegroundColor();
+}
+
+void KexiDBAutoField::setForegroundLabelColor( const QColor & color )
+{
+	if(d->widgetType == Boolean)
+		setPaletteForegroundColor(color);
+	else {
+		d->label->setPaletteForegroundColor(color);
+		QWidget::setPaletteForegroundColor(color);
+	}
+}
+
+const QColor & KexiDBAutoField::backgroundLabelColor() const
+{
+	if(d->widgetType == Boolean)
+		return paletteBackgroundColor();
+
+	return d->label->paletteBackgroundColor();
+}
+
+void KexiDBAutoField::setBackgroundLabelColor( const QColor & color )
+{
+	if(d->widgetType == Boolean)
+		setPaletteBackgroundColor(color);
+	else {
+		d->label->setPaletteBackgroundColor(color);
+		QWidget::setPaletteBackgroundColor(color);
 	}
 }
 

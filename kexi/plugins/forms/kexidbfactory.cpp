@@ -288,6 +288,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 
 //	m_propDesc["labelCaption"] = i18n("Label Text");
 	m_propDesc["autoCaption"] = i18n("Auto Label");
+	m_propDesc["foregroundLabelColor"] = i18n("Label Text Color");
+	m_propDesc["backgroundLabelColor"] = i18n("(a property name, keep the text narrow!)", "Label Background\nColor");
 
 	m_propDesc["labelPosition"] = i18n("Label Position");
 	m_propValDesc["Left"] = i18n("Label Position", "Left");
@@ -310,6 +312,11 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	//used in labels, frames...
 	m_propDesc["frameColor"] = i18n("Frame Color");
 	m_propDesc["dropDownButtonVisible"] = i18n("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)", "Drop-Down\nButton Visible");
+
+	//for checkbox
+	m_propValDesc["TristateDefault"] = i18n("Tristate checkbox, default", "Default");
+	m_propValDesc["TristateOn"] = i18n("Tristate checkbox, yes", "Yes");
+	m_propValDesc["TristateOff"] = i18n("Tristate checkbox, no", "No");
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -594,9 +601,16 @@ KexiDBFactory::isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
 			return true; //force
 		if (property=="fieldTypeInternal" || property=="fieldCaptionInternal")
 			return false;
+		ok = property!="text"; /* "text" is not needed as "caption" is used instead */
 	}
 	else if (classname == "KexiDBImageBox") {
 		ok = property!="font" && property!="wordbreak";
+	}
+	else if(classname == "KexiDBCheckBox") {
+		//hide text property if the widget is a child of an autofield beause there's already "caption" for this purpose
+		if (property=="text" && w && dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w->parentWidget()))
+			return false;
+		ok = property!="autoRepeat";
 	}
 
 	return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);

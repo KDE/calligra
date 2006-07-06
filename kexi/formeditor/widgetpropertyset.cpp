@@ -297,6 +297,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 		foreach(QValueListConstIterator<Q3CString>, it, subproperies ) {
 			tmpList.append( *it );
 			pList.append( tmpList.last() );
+			kdDebug() << "Added subproperty: " << *it << endl;
 		}
 	}
 
@@ -332,8 +333,8 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 				QStringList keys = QStringList::fromStrList( meta->enumKeys() );
 				newProp = new KoProperty::Property(propertyName, createValueList(subwinfo, keys),
 					/* assign current or older value */
-					oldValueExists ? modifiedPropertiesIt.data() : 
-						meta->valueToKey( subwidget->property(propertyName).toInt() ), 
+					meta->valueToKey( 
+						oldValueExists ? modifiedPropertiesIt.data().toInt() : subwidget->property(propertyName).toInt() ), 
 					desc, desc );
 				//now set current value, so the old one is stored as old
 				if (oldValueExists) {

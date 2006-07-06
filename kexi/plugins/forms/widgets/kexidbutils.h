@@ -52,4 +52,17 @@ class KexiDBWidgetContextMenuExtender : public QObject
 		bool m_contextMenuHasTitle; //!< true if KPopupTitle has been added to the context menu.
 };
 
+class KexiDBAutoField;
+
+//! An interface allowing to define custom behaviour for subwidget of the KexiDBAutoField
+class KexiSubwidgetInterface
+{
+	public:
+		KexiSubwidgetInterface();
+		virtual ~KexiSubwidgetInterface();
+
+		virtual bool appendStretchRequired(KexiDBAutoField* autoField) const { return false; }
+		virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const { return false; }
+};
+
 #endif
