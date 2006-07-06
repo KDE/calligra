@@ -42,9 +42,9 @@ Scripting::Scripting(QObject *parent, const QStringList &)
     setInstance(KSpreadScriptingFactory::instance());
 
     kDebug() << "Scripting plugin. Class: "
-          << className()
+          << metaObject()->className()
           << ", Parent: "
-          << parent -> className()
+          << parent->metaObject()->className()
           << "\n";
     if ( parent->inherits("KSpread::View") )
     {
@@ -54,7 +54,7 @@ Scripting::Scripting(QObject *parent, const QStringList &)
 //         m_scriptguiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
         kDebug() << "Setup actions for scripting !" << endl;
         //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
-        setXMLFile(locate("data","kspread/kpartplugins/scripting.rc"), true);
+        setXMLFile(KStandardDirs::locate("data","kspread/kpartplugins/scripting.rc"), true);
         new KAction(i18n("Execute Script File..."), 0, 0, m_scriptguiclient, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
         new KAction(i18n("Script Manager..."), 0, 0, m_scriptguiclient, SLOT(showScriptManager()), actionCollection(), "configurescripts");
         //END TODO

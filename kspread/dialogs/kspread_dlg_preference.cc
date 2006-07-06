@@ -33,6 +33,7 @@
 #include <QScrollBar>
 
 #include <kconfig.h>
+#include <kicon.h>
 #include <kinstance.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
@@ -70,32 +71,32 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   KVBox *page2 = new KVBox();
   p2 = addPage(page2, i18n("Locale Settings"));
-  p2->setIcon( BarIcon("gohome",K3Icon::SizeMedium) );
+  p2->setIcon( KIcon( BarIcon("gohome",K3Icon::SizeMedium) ) );
  _localePage=new parameterLocale(parent,page2 );
 
   KVBox *page3 = new KVBox();
   p3 = addPage(page3, i18n("Interface"));
-  p3->setIcon( BarIcon("signature",K3Icon::SizeMedium) );
+  p3->setIcon( KIcon( BarIcon("signature",K3Icon::SizeMedium) ) );
   _configure = new  configure(parent,page3 );
 
   KVBox *page4 = new KVBox();
   p4 = addPage(page4, i18n("Misc"));
-  p4->setIcon( BarIcon("misc",K3Icon::SizeMedium) );
+  p4->setIcon( KIcon( BarIcon("misc",K3Icon::SizeMedium) ) );
   _miscParameter = new  miscParameters(parent,page4 );
 
   KVBox *page5 = new KVBox();
   p5 = addPage(page5, i18n("Color"));
-  p5->setIcon( BarIcon("colorize",K3Icon::SizeMedium) );
+  p5->setIcon( KIcon( BarIcon("colorize",K3Icon::SizeMedium) ) );
   _colorParameter=new colorParameters(parent,page5 );
 
   KVBox *page6 = new KVBox();
   p6 = addPage(page6, i18n("Page Layout"));
-  p6->setIcon( BarIcon("edit",K3Icon::SizeMedium) );
+  p6->setIcon( KIcon( BarIcon("edit",K3Icon::SizeMedium) ) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
   KVBox *page7 = new KVBox();
   p7 = addPage(page7,  i18n("Spelling") );
-  p7->setIcon( BarIcon("spellcheck",K3Icon::SizeMedium) );
+  p7->setIcon( KIcon( BarIcon("spellcheck",K3Icon::SizeMedium) ) );
   p7->setHeader( i18n("Spell Checker Behavior") );
   _spellPage=new configureSpellPage(parent,page7);
 
@@ -909,7 +910,12 @@ configureSpellPage::configureSpellPage( View* _view,KVBox *box , char * /*name*/
   config = Factory::global()->config();
 
 
+#if defined( Q_CC_GNU )
+#warning TODO KDE4 port to sonnet
+#endif
+#if 0
   m_spellConfigWidget = new KSpellConfig( box, m_pView->doc()->getKSpellConfig()/*, false*/);
+#endif
   dontCheckUpperWord = new QCheckBox( i18n("Skip all uppercase words"),box);
   dontCheckUpperWord->setWhatsThis( i18n( "If checked, the words written in uppercase letters are not spell checked. This might be useful if you have a lot of acronyms such as KDE for example." ) );
   dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);
@@ -931,8 +937,11 @@ configureSpellPage::configureSpellPage( View* _view,KVBox *box , char * /*name*/
 
 void configureSpellPage::apply()
 {
+#if defined( Q_CC_GNU )
+#warning TODO KDE4 port to sonnet
+#endif
+#if 0
   m_pView->doc()->emitBeginOperation( false );
-
   KSpellConfig *_spellConfig = m_spellConfigWidget;
   config->setGroup( "KSpell kspread" );
   config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
@@ -956,6 +965,7 @@ void configureSpellPage::apply()
   //m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
 
   m_pView->slotUpdateView( m_pView->activeSheet() );
+#endif
 }
 
 void configureSpellPage::slotDefault()

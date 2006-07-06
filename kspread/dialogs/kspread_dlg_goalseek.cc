@@ -71,6 +71,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 {
   Q_UNUSED(marker)
   //setWFlags( Qt::WDestructiveClose );
+  setButtons( 0 );
   setModal( false );
 
   if ( !name )
@@ -81,7 +82,10 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   setSizeGripEnabled( true );
   setModal( false );
 
-  GoalSeekDialogLayout = new QGridLayout( this );
+  QWidget* mainWidget = new QWidget( this );
+  setMainWidget( mainWidget );
+
+  GoalSeekDialogLayout = new QGridLayout( mainWidget );
   GoalSeekDialogLayout->setMargin(KDialog::marginHint());
   GoalSeekDialogLayout->setSpacing(KDialog::spacingHint());
 

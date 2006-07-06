@@ -214,7 +214,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   else if ( mode == File )
   {
     setWindowTitle( i18n( "Inserting Text File" ) );
-    QString file = KFileDialog::getOpenFileName(":",
+    QString file = KFileDialog::getOpenFileName(KUrl("kfiledialog:///"),
                                                 "text/plain",
                                                 this);
     //cancel action !

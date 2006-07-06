@@ -1254,6 +1254,10 @@ MethodOfCalc Doc::getTypeOfCalc() const
 
 void Doc::setKSpellConfig(KSpellConfig _kspell)
 {
+#if defined( Q_CC_GNU )
+#warning TODO KDE4 port to sonnet
+#endif
+#if 0
   if (d->spellConfig == 0 )
     d->spellConfig = new KSpellConfig();
 
@@ -1263,10 +1267,15 @@ void Doc::setKSpellConfig(KSpellConfig _kspell)
   d->spellConfig->setDictFromList(_kspell.dictFromList());
   d->spellConfig->setEncoding(_kspell.encoding());
   d->spellConfig->setClient(_kspell.client());
+#endif
 }
 
 KSpellConfig * Doc::getKSpellConfig()
 {
+#if defined( Q_CC_GNU )
+#warning TODO KDE4 port to sonnet
+#endif
+#if 0
     if (!d->spellConfig)
     {
       KSpellConfig ksconfig;
@@ -1287,6 +1296,7 @@ KSpellConfig * Doc::getKSpellConfig()
           setDontCheckTitleCase(config->readEntry("KSpell_IgnoreTitleCaseWords", false));
       }
     }
+#endif
   return d->spellConfig;
 }
 

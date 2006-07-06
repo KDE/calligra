@@ -2024,6 +2024,10 @@ void View::extraSpelling()
 
 void View::startKSpell()
 {
+#if defined( Q_CC_GNU )
+#warning TODO KDE4 port to sonnet
+#endif
+#if 0
     if ( doc()->getKSpellConfig() )
     {
         doc()->getKSpellConfig()->setIgnoreList( doc()->spellListIgnoreAll() );
@@ -2057,7 +2061,7 @@ void View::startKSpell()
                     this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
   connect( d->spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
-
+#endif
 }
 
 void View::spellCheckerReplaceAll( const QString &orig, const QString & replacement)
@@ -4841,7 +4845,7 @@ void View::insertPicture()
   //This behaviour can be seen in other spreadsheets.
   //-- Robert Knight 12/02/06 <robertknight@gmail.com>
 
-  KUrl file = KFileDialog::getImageOpenURL( QString::null, d->canvas );
+  KUrl file = KFileDialog::getImageOpenUrl( KUrl(), d->canvas );
 
   if (file.isEmpty())
   return;
