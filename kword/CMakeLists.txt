@@ -27,7 +27,7 @@ add_subdirectory( part )
 #
 # target_link_libraries(kwordpart  ${KDE4_KDECORE_LIBS} kwordprivate )
 #
-install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
+#install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 #
 #
 # ########### next target ###############
@@ -42,7 +42,7 @@ install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 # target_link_libraries(kwmailmerge_interface  ${KDE4_KDECORE_LIBS} )
 #
 # set_target_properties(kwmailmerge_interface PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kwmailmerge_interface  DESTINATION ${LIB_INSTALL_DIR})
+# install(TARGETS kwmailmerge_interface  DESTINATION ${LIB_INSTALL_DIR})
 #
 #
 # ########### next target ###############
@@ -130,7 +130,7 @@ install(TARGETS kwmailmerge_interface  DESTINATION ${LIB_INSTALL_DIR})
 # target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake kofficeui kotext kformulalib kwmailmerge_interface )
 #
 # set_target_properties(kwordprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kwordprivate  DESTINATION ${LIB_INSTALL_DIR})
+#install(TARGETS kwordprivate  DESTINATION ${LIB_INSTALL_DIR})
 #
 #
 # ########### next target ###############
@@ -143,10 +143,10 @@ install(TARGETS kwordprivate  DESTINATION ${LIB_INSTALL_DIR})
 #
 # target_link_libraries(kdeinit_kword  ${KDE4_KDECORE_LIBS} kofficecore )
 #
-install(TARGETS kdeinit_kword  DESTINATION ${LIB_INSTALL_DIR})
+#install(TARGETS kdeinit_kword  DESTINATION ${LIB_INSTALL_DIR})
 #
 # target_link_libraries( kword kdeinit_kword )
-install(TARGETS kword  DESTINATION ${BIN_INSTALL_DIR})
+#install(TARGETS kword  DESTINATION ${BIN_INSTALL_DIR})
 #
 # ########### install files ###############
 #
