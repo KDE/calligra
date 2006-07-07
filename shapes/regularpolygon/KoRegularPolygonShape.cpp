@@ -19,6 +19,8 @@
 
 #include "KoRegularPolygonShape.h"
 
+#include <kdebug.h>
+
 #include <QPainter>
 
 #include <math.h>
@@ -33,24 +35,22 @@ void KoRegularPolygonShape::paint(QPainter &painter, KoViewConverter &converter)
 
 	double angle = 2 *M_PI / m_points;
 	double diameter = static_cast<double>(
-		qMax( size().width(), size().height() ) );
+		qMin( size().width(), size().height() ) );
 	double radius = diameter * 0.5;
 
-	polygon << QPointF(0, -radius);
+	double halfWidth = size().width() / 2;
+	double halfHeight = size().height() / 2;
 
-	double xmin = 0;
-	double ymin = -radius;
+	polygon << QPointF(halfWidth, halfHeight - radius);
+	//polygon << QPointF(0, - radius);
 
 	double a = angle;
 	for ( int i = 1; i < m_points; ++i ) {
 		double xp = radius * sin(a);
 		double yp = -radius * cos(a);
 		a += angle;
-		polygon << QPointF(xp, yp);
-		if (xp < xmin)
-			xmin = xp;
-		if (yp < ymin)
-			ymin = yp;
+	//	polygon << QPointF(xp, yp);
+		polygon << QPointF(halfWidth + xp, halfHeight + yp);
 	}
 	
 	painter.setBrush(background());
