@@ -1,6 +1,6 @@
-if compile_kexi_reports_plugin
-  REPORTS=reports
-endif
+#if compile_kexi_reports_plugin
+#  REPORTS=reports
+#endif
 
 if compile_kexi_macros_plugin
   MACRODIR=macros
