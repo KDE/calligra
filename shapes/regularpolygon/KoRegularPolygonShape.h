@@ -29,6 +29,7 @@ class FLAKE_EXPORT KoRegularPolygonShape : public KoShape
 public:
 	KoRegularPolygonShape();
 	void paint(QPainter &painter, KoViewConverter &converter);
+	void setPoints(int points);
 
 protected:
 	int m_points;

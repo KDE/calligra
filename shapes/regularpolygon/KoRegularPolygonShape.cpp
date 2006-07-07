@@ -65,3 +65,7 @@ void KoRegularPolygonShape::paint(QPainter &painter, KoViewConverter &converter)
 	painter.setBrush(background());
 	painter.drawPolygon(polygon);
 }
+
+void KoRegularPolygonShape::setPoints(int points) {
+	m_points = points;
+}

@@ -34,14 +34,26 @@ KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent, cons
 	setToolTip(i18n("A regular polygon shape"));
 
 	KoShapeTemplate t;
-	t.name = "Nice polygon";
-	t.toolTip = "A nice polygon";
+	t.name = "Nice pentagon";
+	t.toolTip = "A nice pentagon";
 	t.icon = "redSquare";
+	KoProperties *props = new KoProperties();
+	props->setProperty("points", 5);
+	t.properties = props;
+	addTemplate(t);
+
+	t.name = "Nice hexagon";
+	t.toolTip = "A nice hexagon";
+	t.icon = "redSquare";
+	props = new KoProperties();
+	props->setProperty("points", 6);
+	t.properties = props;
 	addTemplate(t);
 }
 
 KoShape *KoRegularPolygonShapeFactory::createDefaultShape() {
 	KoRegularPolygonShape *s = new KoRegularPolygonShape();
+	s->setPoints(5);
 	s->resize(QSizeF(100,100));
 	s->setBackground(QBrush(Qt::red));
 	return s;
@@ -49,6 +61,11 @@ KoShape *KoRegularPolygonShapeFactory::createDefaultShape() {
 
 KoShape *KoRegularPolygonShapeFactory::createShape(const KoProperties* props) const {
 	KoRegularPolygonShape *s = new KoRegularPolygonShape();
+	bool ok;
+	int points = props->getProperty("points").toUInt(&ok);
+	if (ok) {
+		s->setPoints(points);
+	}
 	s->resize(QSizeF(100,100));
 	s->setBackground(QBrush(Qt::red));
 	return s;
