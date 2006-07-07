@@ -41,16 +41,13 @@ void KoRegularPolygonShape::paint(QPainter &painter, KoViewConverter &converter)
 	double halfWidth = size().width() / 2;
 	double halfHeight = size().height() / 2;
 
-	polygon << QPointF(halfWidth, halfHeight - radius);
-	//polygon << QPointF(0, - radius);
+	double a = 0;
 
-	double a = angle;
-	for ( int i = 1; i < m_points; ++i ) {
+	for ( int i = 0; i < m_points; ++i ) {
 		double xp = radius * sin(a);
 		double yp = -radius * cos(a);
 		a += angle;
-	//	polygon << QPointF(xp, yp);
-		polygon << QPointF(halfWidth + xp, halfHeight + yp);
+		polygon << converter.documentToView(QPointF(halfWidth + xp, halfHeight + yp));
 	}
 	
 	painter.setBrush(background());
