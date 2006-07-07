@@ -67,7 +67,7 @@ void KudesignerDoc::addCommand( KCommand *cmd )
 
 void KudesignerDoc::initEmpty()
 {
-    QString fileName( locate( "kudesigner_template", "General/.source/A4.ktm", KudesignerFactory::global() ) );
+    QString fileName( KStandardDirs::locate( "kudesigner_template", "General/.source/A4.ktm", KudesignerFactory::global() ) );
     bool ok = loadNativeFormat( fileName );
     if ( !ok )
         showLoadingErrorDialog();
