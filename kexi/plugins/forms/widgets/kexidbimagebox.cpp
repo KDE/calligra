@@ -23,7 +23,6 @@
 #include <qapplication.h>
 #include <qpixmap.h>
 #include <qstyle.h>
-#include <qtoolbutton.h>
 #include <qclipboard.h>
 #include <qtooltip.h>
 #include <qimage.h>
@@ -44,6 +43,7 @@
 #include <kmessagebox.h>
 #include <kguiitem.h>
 
+#include <widget/utils/kexidropdownbutton.h>
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
@@ -57,70 +57,6 @@
 
 static KStaticDeleter<QPixmap> KexiDBImageBox_pmDeleter;
 static QPixmap* KexiDBImageBox_pm = 0;
-
-//! @internal A button class for KexiDBImageBox
-class KexiDBImageBox::Button : public QToolButton
-{
-	public:
-		Button(KexiDBImageBox *parent, KPopupMenu* aPopup)
-		 : QToolButton(parent, "KexiDBImageBox::Button")
-		 , popup(aPopup)
-		 , disableMousePress(false)
-		{
-			setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-			setFixedWidth(QMAX(15, qApp->globalStrut().width()));
-			//	setFixedWidth(m_chooser->minimumSizeHint().width()); //! @todo get this from a KStyle
-//			setAutoRaise(true);
-			setToggleButton(true);
-		}
-		
-		virtual ~Button() {}
-
-		virtual void drawButton( QPainter *p ) {
-//			p->fillRect(0, 0, width(), height(), red);
-			QToolButton::drawButton(p);
-			QStyle::SFlags arrowFlags = QStyle::Style_Default;
-			if (isDown() || state()==On)
-				arrowFlags |= QStyle::Style_Down;
-			if (isEnabled())
-				arrowFlags |= QStyle::Style_Enabled;
-			style().drawPrimitive(QStyle::PE_ArrowDown, p,
-				QRect((width()-7)/2, height()-9, 7, 7), colorGroup(),
-				arrowFlags, QStyleOption() );
-		}
-		
-		virtual QSize sizeHint () const {
-			return QSize( fontMetrics().maxWidth() + 2*2, fontMetrics().height()*2 + 2*2 );
-		}
-
-		virtual void mousePressEvent( QMouseEvent *e ) {
-//			kexipluginsdbg << "#### mousePressEvent() " << e->button() << " " << state() 
-//				<< " disableMousePress=" << disableMousePress << " popup->isVisible()=" << popup->isVisible() << endl;
-			if (disableMousePress) {
-				disableMousePress = false;
-				if (popup && popup->isVisible())
-					return;
-			}
-			QToolButton::mousePressEvent(e);
-		}
-
-		virtual void keyPressEvent ( QKeyEvent * e ) {
-			const int k = e->key();
-			if ( (e->state() == Qt::NoButton && (k==Qt::Key_Enter || k==Qt::Key_Return || k==Qt::Key_F2 || k==Qt::Key_F4))
-			  || (e->state() == Qt::AltButton && e->key()==Qt::Key_Down) )
-			{
-				static_cast<KexiDBImageBox*>(parentWidget())->slotToggled(true);
-				e->accept();
-			}
-			QToolButton::keyPressEvent(e);
-
-		}
-
-		QGuardedPtr<KPopupMenu> popup;
-		bool disableMousePress : 1;
-};
-
-/////////
 
 KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *name )
 	: KexiFrame( parent, name, Qt::WNoAutoErase )
@@ -152,8 +88,9 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 		m_chooser = 0;
 	}
 	else {
-		m_chooser = new Button(this, m_popup);
+		m_chooser = new KexiDropDownButton(this);
 		m_chooser->setFocusPolicy(StrongFocus);
+		m_chooser->setPopup(m_popup);
 		setFocusProxy(m_chooser);
 //		m_chooser->setPalette(qApp->palette());
 //		hlyr->addWidget(m_chooser);
@@ -622,6 +559,7 @@ void KexiDBImageBox::updateActionsAvailability()
 		m_propertiesAction->setEnabled( notNull );
 }
 
+/*
 void KexiDBImageBox::slotAboutToHidePopupMenu()
 {
 //	kexipluginsdbg << "##### slotAboutToHidePopupMenu() " << endl;
@@ -633,7 +571,7 @@ void KexiDBImageBox::slotAboutToHidePopupMenu()
 			m_chooser->setFocus();
 		}
 	}
-}
+}*/
 
 void KexiDBImageBox::contextMenuEvent( QContextMenuEvent * e )
 {
@@ -641,7 +579,7 @@ void KexiDBImageBox::contextMenuEvent( QContextMenuEvent * e )
 		m_popup->exec( e->globalPos(), -1 );
 }
 
-void KexiDBImageBox::slotChooserPressed()
+/*void KexiDBImageBox::slotChooserPressed()
 {
 //	if (!m_clickTimer.isActive())
 //		return;
@@ -654,6 +592,8 @@ void KexiDBImageBox::slotChooserReleased()
 
 void KexiDBImageBox::slotToggled(bool on)
 {
+	return;
+
 //	kexipluginsdbg << "##### slotToggled() " << on << endl;
 	if (m_clickTimer.isActive() || !on) {
 		m_chooser->disableMousePress = true;
@@ -680,7 +620,7 @@ void KexiDBImageBox::slotToggled(bool on)
 		m_popup->setFocus();
 	}
 	//m_chooser->setDown( false );
-}
+}*/
 
 void KexiDBImageBox::updateActionStrings()
 {
@@ -990,6 +930,8 @@ void KexiDBImageBox::setPaletteBackgroundColor( const QColor & color )
 {
 	m_paletteBackgroundColorChanged = true;
 	KexiFrame::setPaletteBackgroundColor(color);
+	if (m_chooser)
+		m_chooser->setPalette( qApp->palette() );
 }
 
 bool KexiDBImageBox::dropDownButtonVisible() const

@@ -393,7 +393,6 @@ void KexiComboBoxTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, i
 void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
-
 	KexiTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
 	if (focused && (w > d->button->width()))
 		w -= (d->button->width() - x);
