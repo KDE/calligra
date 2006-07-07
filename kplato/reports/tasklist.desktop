@@ -26,6 +26,7 @@ Name[sv]=Aktivitetslista
 Name[uk]=Список завдань
 Name[uz]=Вазифалар рўйхати
 Name[zh_CN]=任务列表
+Name[zh_TW]=工作清單
 Type=Link
 URL= .source/tasklist.ktf
 X-KDE-Hidden=false

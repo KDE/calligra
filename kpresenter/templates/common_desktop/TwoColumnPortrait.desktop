@@ -80,6 +80,7 @@ Comment[sr]=Презентација са насловом стране и дв�
 Comment[sr@Latn]=Prezentacija sa naslovom strane i dve tekstualne kolone (uspravno usmerena)
 Comment[sv]=Presentation med en sidrubrik och två textkolumner (stående format)
 Comment[uk]=Презентація з заголовком сторінки і двома стовпчиками для тексту (книжкова орієнтація)
+Comment[zh_TW]=具有頁面標題與兩欄文字的簡報（縱向）
 Type=Link
 URL=.source/TwoColumnPortrait.kpt
 X-KDE-Hidden=false

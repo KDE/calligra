@@ -29,6 +29,7 @@ Name[sv]=Krita TIFF-importfilter
 Name[uk]=Фільтр імпорту TIFF для Krita
 Name[uz]=Krita TIFF импорт филтери
 Name[zh_CN]=Krita TIFF 导入过滤器
+Name[zh_TW]=Krita TIFF 匯入過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita

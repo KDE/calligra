@@ -27,6 +27,7 @@ GenericName[sr@Latn]=Program za crtanje i obradu slika
 GenericName[sv]=Program för att rita och hantera bilder
 GenericName[uk]=Програма для малювання і обробки зображень
 GenericName[zh_CN]=绘制和操纵图像的应用程序
+GenericName[zh_TW]=影像繪製與處理應用程式
 Icon=krita
 MimeType=image/jpeg
 Name=Krita

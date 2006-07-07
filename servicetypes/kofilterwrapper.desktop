@@ -46,6 +46,7 @@ Comment[tr]=KOffice Filtre Kaydırması
 Comment[uk]=Обгортка фільтрів KOffice
 Comment[xh]=Isisongeli Sesihluzi se KOffice
 Comment[zh_CN]=KOffice 过滤器包装
+Comment[zh_TW]=KOffice 過濾器包裝
 
 [PropertyDef::X-KDE-Wrapper-Import]
 Type=QString

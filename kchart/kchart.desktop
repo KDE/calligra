@@ -74,6 +74,7 @@ Comment[sl]=Ustvarite grafiko in diagrame
 Comment[sr]=Правите графиконе
 Comment[sr@Latn]=Pravite grafikone
 Comment[sv]=Skapa grafik och diagram
+Comment[zh_TW]=建立圖形與圖表
 Exec=kchart %u
 Type=Application
 Icon=kchart

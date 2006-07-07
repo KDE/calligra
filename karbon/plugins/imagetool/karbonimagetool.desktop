@@ -29,6 +29,7 @@ Name[sv]=Bildverktyg
 Name[uk]=Засіб для зображень
 Name[uz]=Расм воситаси
 Name[zh_CN]=图像工具
+Name[zh_TW]=圖片工具
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_imagetoolplugin

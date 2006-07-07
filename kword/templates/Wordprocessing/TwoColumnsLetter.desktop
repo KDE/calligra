@@ -90,5 +90,6 @@ Comment[sv]=Skapar ett US Letter-dokument med två kolumner per sida.
 Comment[uk]=Створює документ для паперу "letter" з двома стовпчиками на сторінку.
 Comment[uz]=Икки устунли бўш хат форматидаги ҳужжатни яратиш.
 Comment[zh_CN]=创建每页两栏的信函文档。
+Comment[zh_TW]=建立一個每頁兩欄的 letter 文件。
 Icon=template_twocolumns
 X-KDE-MeasureSystem=imperial

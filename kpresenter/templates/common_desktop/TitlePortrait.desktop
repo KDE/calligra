@@ -80,6 +80,7 @@ Comment[sr]=Презентација са насловом стране (усп�
 Comment[sr@Latn]=Prezentacija sa naslovom strane (uspravno usmerena)
 Comment[sv]=Presentation med en sidrubrik (stående format)
 Comment[uk]=Презентація з заголовком сторінки (книжкова орієнтація)
+Comment[zh_TW]=具有標題的簡報（縱向）
 Type=Link
 URL=.source/TitlePortrait.kpt
 X-KDE-Hidden=false
