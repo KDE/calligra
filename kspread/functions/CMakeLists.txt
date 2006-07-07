@@ -5,7 +5,7 @@
 
 ########### install files ###############
 
-INSTALL_FILES( ${DATA_INSTALL_DIR}/kspread/functions FILES
+INSTALL(FILES
 	builtin.xml
 	financial.xml
 	trig.xml
@@ -19,7 +19,7 @@ INSTALL_FILES( ${DATA_INSTALL_DIR}/kspread/functions FILES
 	information.xml
 	engineering.xml
 	reference.xml
-)
+    DESTINATION ${DATA_INSTALL_DIR}/kspread/functions)
 
 
 
