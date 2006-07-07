@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KOPROPERTY_UTILS_H
+#define KOPROPERTY_UTILS_H
+
 #include <qmap.h>
 #include <qwidget.h>
 
@@ -42,3 +45,5 @@ class KOPROPERTY_EXPORT GroupContainer : public QWidget
 KOPROPERTY_EXPORT QMap<QCString, QVariant> propertyValues(const Set& set);
 
 }
+
+#endif
