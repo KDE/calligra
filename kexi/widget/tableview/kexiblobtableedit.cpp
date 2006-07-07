@@ -48,18 +48,45 @@
 #include <kio/job.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kmenu.h>
 
 #include <kexiutils/utils.h>
+#include <widget/utils/kexidropdownbutton.h>
+
+//! @internal
+class KexiBlobTableEdit::Private
+{
+public:
+	Private()
+	 : popup(0)
+	{
+	}
+
+	QByteArray value;
+	KexiDropDownButton *button;
+	QSize totalSize;
+	int parentRightMargin;
+	KMenu *popup;
+};
+
+//======================================================
 
 KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiTableEdit(column, parent,"KexiBlobTableEdit")
+ , d ( new Private() )
 {
 //	m_proc = 0;
 //	m_content = 0;
+	d->button = new KexiDropDownButton( parent->viewport() );
+	d->button->hide();
+	d->parentRightMargin = m_rightMargin;
+	d->popup = new KMenu(this);
+	d->button->setPopup( d->popup );
 }
 
 KexiBlobTableEdit::~KexiBlobTableEdit()
 {
+	delete d;
 #if 0
 	kDebug() << "KexiBlobTableEdit: Cleaning up..." << endl;
 	if (m_tempFile) {
@@ -76,9 +103,9 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 	if (removeOld)
-		m_value = add.toByteArray();
+		d->value = add.toByteArray();
 	else //do not add "m_origValue" to "add" as this is QByteArray
-		m_value = m_origValue.toByteArray();
+		d->value = m_origValue.toByteArray();
 
 #if 0 //todo?
 	QByteArray val = m_origValue.toByteArray();
@@ -142,19 +169,19 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 bool KexiBlobTableEdit::valueIsNull()
 {
 //TODO
-	return m_value.isEmpty();
+	return d->value.isEmpty();
 }
 
 bool KexiBlobTableEdit::valueIsEmpty()
 {
 //TODO
-	return m_value.isEmpty();
+	return d->value.isEmpty();
 }
 
 QVariant
 KexiBlobTableEdit::value()
 {
-	return m_value;
+	return d->value;
 #if 0
 	//todo
 //	ok = true;
@@ -183,6 +210,7 @@ KexiBlobTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val
 	Q_UNUSED(focused);
 	Q_UNUSED(txt);
 	Q_UNUSED(align);
+
 //! @todo optimize: load to m_pixmap, downsize
 	QPixmap pixmap;
 	x = 0;
@@ -335,52 +363,107 @@ void KexiBlobTableEdit::clear()
 	//TODO??
 }
 
+void KexiBlobTableEdit::showFocus( const QRect& r, bool readOnly )
+{
+//	d->button->move( pos().x()+ width(), pos().y() );
+	updateFocus( r );
+	d->button->setEnabled(!readOnly);
+	d->button->show();
+}
+
+void KexiBlobTableEdit::resize(int w, int h)
+{
+	d->totalSize = QSize(w,h);
+	QWidget::resize(w - d->button->width(), h);
+	d->button->resize( h, h );
+	m_rightMargin = d->parentRightMargin + d->button->width();
+	QRect r( pos().x(), pos().y(), w+1, h+1 );
+	r.moveBy(m_scrollView->contentsX(),m_scrollView->contentsY());
+	updateFocus( r );
+//todo	if (d->popup) {
+//todo		d->popup->updateSize();
+//todo	}
+}
+
+void KexiBlobTableEdit::updateFocus( const QRect& r )
+{
+	if (d->button->width() > r.width())
+		moveChild(d->button, r.right() + 1, r.top());
+	else
+		moveChild(d->button, r.right() - d->button->width(), r.top() );
+}
+
+void KexiBlobTableEdit::hideFocus()
+{
+	d->button->hide();
+}
+
+QSize KexiBlobTableEdit::totalSize() const
+{
+	return d->totalSize;
+}
+
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiBlobEditorFactoryItem, KexiBlobTableEdit)
 
 //=======================
-//This class is temporarily here:
+// KexiKIconTableEdit class is temporarily here:
+
+//! @internal
+class KexiKIconTableEdit::Private
+{
+public:
+	Private()
+	 : pixmapCache(17, 17, false)
+	{
+	}
+	//! We've no editor widget that would store current value, so we do this here
+	QVariant currentValue;
+
+	Q3Cache<QPixmap> pixmapCache;
+};
 
 
 KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiTableEdit(column, parent, "KexiKIconTableEdit")
- , m_pixmapCache(17, 17, false)
+ , d( new Private() )
 {
 	init();
 }
 
 KexiKIconTableEdit::~KexiKIconTableEdit()
 {
+	delete d;
 }
 
 void KexiKIconTableEdit::init()
 {
 	m_hasFocusableWidget = false;
-	m_pixmapCache.setAutoDelete(true);
+	d->pixmapCache.setAutoDelete(true);
 }
 	
 void KexiKIconTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
-	m_currentValue = m_origValue;
+	d->currentValue = m_origValue;
 }
 
 bool KexiKIconTableEdit::valueIsNull()
 {
-	return m_currentValue.isNull();
+	return d->currentValue.isNull();
 }
 
 bool KexiKIconTableEdit::valueIsEmpty()
 {
-	return m_currentValue.isNull();
+	return d->currentValue.isNull();
 }
 
 QVariant KexiKIconTableEdit::value()
 {
-	return m_currentValue;
+	return d->currentValue;
 }
 
 void KexiKIconTableEdit::clear()
 {
-	m_currentValue = QVariant();
+	d->currentValue = QVariant();
 }
 
 bool KexiKIconTableEdit::cursorAtStart()
@@ -418,13 +501,13 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVa
 
 	QString key = val.toString();
 	QPixmap *pix = 0;
-	if (!key.isEmpty() && !(pix = m_pixmapCache[ key ])) {
+	if (!key.isEmpty() && !(pix = d->pixmapCache[ key ])) {
 		//cache pixmap
 		QPixmap p = KGlobal::iconLoader()->loadIcon( key, K3Icon::Small, 
 			0, K3Icon::DefaultState, 0L, true/*canReturnNull*/ );
 		if (!p.isNull()) {
 			pix = new QPixmap(p);
-			m_pixmapCache.insert(key, pix);
+			d->pixmapCache.insert(key, pix);
 		}
 	}
 

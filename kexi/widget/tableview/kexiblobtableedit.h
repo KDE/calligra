@@ -56,6 +56,16 @@ class KexiBlobTableEdit : public KexiTableEdit
 //		void loadFile();
 //		void saveFile();
 
+		/*! Reimplemented: resizes a view(). */
+		virtual void resize(int w, int h);
+
+		virtual void showFocus( const QRect& r, bool readOnly );
+
+		virtual void hideFocus();
+
+		/*! \return total size of this editor, including popup button. */
+		virtual QSize totalSize() const;
+
 	protected:
 		//! initializes this editor with \a add value
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
@@ -70,6 +80,11 @@ class KexiBlobTableEdit : public KexiTableEdit
 
 //todo		void execute(const QString& app, const QString& file);
 
+		//! internal
+		void updateFocus( const QRect& r );
+
+		class Private;
+		Private *d;
 //todo		KTempFile* m_tempFile;
 //todo		KProcess* m_proc;
 //todo		Q3TextEdit *m_content;
@@ -119,7 +134,8 @@ class KexiKIconTableEdit : public KexiTableEdit
 		//! We've no editor widget that would store current value, so we do this here
 		QVariant m_currentValue;
 
-		Q3Cache<QPixmap> m_pixmapCache;
+		class Private;
+		Private *d;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiKIconTableEditorFactoryItem)

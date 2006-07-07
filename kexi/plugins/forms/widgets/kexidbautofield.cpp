@@ -25,6 +25,7 @@
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qmetaobject.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -112,7 +113,6 @@ KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
 	d->widgetType_property = (type==Auto ? Text : type); //to force "differ" to be true in setWidgetType()
 	setWidgetType(type);
 	setLabelPosition(pos);
-//	d->paletteBackgroundColor = palette().active().background();
 	d->baseColor = palette().active().base();
 	d->textColor = palette().active().text();
 }
@@ -211,6 +211,8 @@ KexiDBAutoField::createEditor()
 		}
 		setFocusProxy(newSubwidget); //ok?
 		copyPropertiesToEditor();
+		if (parentWidget())
+			newSubwidget->setPalette( qApp->palette() );
 //		KFormDesigner::installRecursiveEventFilter(newSubwidget, this);
 	}
 
@@ -227,6 +229,7 @@ void KexiDBAutoField::copyPropertiesToEditor()
 		else
 			p.setColor( QPalette::Active, QColorGroup::Text, d->textColor );
 		m_subwidget->setPalette(p);
+		m_subwidget->setPaletteBackgroundColor( d->baseColor );
 	}
 }
 
@@ -777,6 +780,9 @@ void KexiDBAutoField::setBackgroundLabelColor( const QColor & color )
 		d->label->setPaletteBackgroundColor(color);
 		QWidget::setPaletteBackgroundColor(color);
 	}
+
+//	if (m_subwidget)
+//		m_subwidget->setPalette( qApp->palette() );
 }
 
 QVariant KexiDBAutoField::property( const char * name ) const

@@ -33,6 +33,8 @@
 #include <kexiblobbuffer.h>
 #include <qtimer.h>
 
+class KexiDropDownButton;
+
 //! A data-aware, editable image box.
 /*! Can also act as a normal static image box.
 */
@@ -167,7 +169,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		void showProperties();
 
 		//! @internal
-		void slotToggled( bool on );
+//		void slotToggled( bool on );
 
 		//! \return sets dropDownButtonVisible property. @see dropDownButtonVisible()
 		void setDropDownButtonVisible( bool set );
@@ -180,9 +182,9 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		void idChanged(long id);
 
 	protected slots:
-		void slotAboutToHidePopupMenu();
-		void slotChooserPressed();
-		void slotChooserReleased();
+//		void slotAboutToHidePopupMenu();
+//		void slotChooserPressed();
+//		void slotChooserReleased();
 
 	protected:
 		//! \return data depending on the current mode (db-aware or static)
@@ -242,13 +244,12 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 //		PixmapData m_value;
 		KexiBLOBBuffer::Handle m_data;
 //		QString m_originalFileName;
-		class Button;
-		Button *m_chooser;
+		KexiDropDownButton *m_chooser;
 		KMenu *m_popup;
 		KActionCollection m_actionCollection;
 		KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
 			*m_deleteAction, *m_propertiesAction;
-		QTimer m_clickTimer;
+//		QTimer m_clickTimer;
 		int m_alignment;
 		bool m_designMode : 1;
 		bool m_readOnly : 1;
