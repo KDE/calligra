@@ -191,6 +191,21 @@ bool SingleContentElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
+bool SingleContentElement::readContentFromMathMLDom( QDomNode& node )
+{
+    if ( ! BasicElement::readContentFromMathMLDom( node ) ) {
+        return false;
+    }
+
+    if ( !content->buildMathMLChild( node ) ) {
+        kdWarning( DEBUGID) << "Empty content in SingleContentElement\n";
+        return false;
+    }
+    node = node.nextSibling();
+
+    return true;
+}
+
 void SingleContentElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     content->writeMathML( doc, parent, oasisFormat );
@@ -201,7 +216,8 @@ void SingleContentElement::writeMathML( QDomDocument& doc, QDomNode& parent, boo
 BracketElement::BracketElement(SymbolType l, SymbolType r, BasicElement* parent)
     : SingleContentElement(parent),
       left( 0 ), right( 0 ),
-      leftType( l ), rightType( r )
+      leftType( l ), rightType( r ),
+      m_operator( false )
 {
 }
 
@@ -216,7 +232,8 @@ BracketElement::~BracketElement()
 BracketElement::BracketElement( const BracketElement& other )
     : SingleContentElement( other ),
       left( 0 ), right( 0 ),
-      leftType( other.leftType ), rightType( other.rightType )
+      leftType( other.leftType ), rightType( other.rightType ),
+      m_operator( other.m_operator )
 {
 }
 
@@ -415,6 +432,118 @@ bool BracketElement::readAttributesFromDom(QDomElement element)
     if(!rightStr.isNull()) {
         rightType = static_cast<SymbolType>(rightStr.toInt());
     }
+    return true;
+}
+
+/**
+ * Reads our attributes from the MathML element.
+ * Returns false if it failed.
+ */
+bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
+{
+    if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
+        return false;
+    }
+
+    if ( element.tagName().lower() == "mo" ) {
+        m_operator = true;
+        // TODO: parse attributes in section 3.2.5.2
+    }
+    else { // mfenced, see attributes in section 3.3.8.2
+        QString openStr = element.attribute( "open" ).stripWhiteSpace();
+        if ( !openStr.isNull() ) {
+            if ( openStr == "[" )
+                leftType = LeftSquareBracket;
+            else if ( openStr == "]" )
+                leftType = RightSquareBracket;
+            else if ( openStr == "{" )
+                leftType = LeftCurlyBracket;
+            else if ( openStr == "}" )
+                leftType = RightCurlyBracket;
+            else if ( openStr == "<" )
+                leftType = LeftCornerBracket;
+            else if ( openStr == ">" )
+                leftType = RightCornerBracket;
+            else if ( openStr == "(" )
+                leftType = LeftRoundBracket;
+            else if ( openStr == ")" )
+                leftType = RightRoundBracket;
+            else if ( openStr == "/" )
+                leftType = SlashBracket;
+            else if ( openStr == "\\" )
+                leftType = BackSlashBracket;
+            else // TODO: Check for entity references
+                leftType = LeftRoundBracket;
+        }
+        QString closeStr = element.attribute( "close" ).stripWhiteSpace();
+        if ( !closeStr.isNull() ) {
+            if ( closeStr == "[" )
+                rightType = LeftSquareBracket;
+            else if ( closeStr == "]" )
+                rightType = RightSquareBracket;
+            else if ( closeStr == "{" )
+                rightType = LeftCurlyBracket;
+            else if ( closeStr == "}" )
+                rightType = RightCurlyBracket;
+            else if ( closeStr == "<" )
+                rightType = LeftCornerBracket;
+            else if ( closeStr == ">" )
+                rightType = RightCornerBracket;
+            else if ( closeStr == "(" )
+                rightType = LeftRoundBracket;
+            else if ( closeStr == ")" )
+                rightType = RightRoundBracket;
+            else if ( closeStr == "/" )
+                rightType = SlashBracket;
+            else if ( closeStr == "\\" )
+                rightType = BackSlashBracket;
+            else // TODO: Check for entity references
+                rightType = LeftRoundBracket;
+        }
+        QString separatorStr = element.attribute( "close" ).stripWhiteSpace();
+        if ( !separatorStr.isNull() ) {
+            m_separators = QStringList::split( ' ', separatorStr );
+        }
+    }
+    return true;
+}
+
+/**
+ * Reads our content from the MathML node. Sets the node to the next node
+ * that needs to be read.
+ * Returns false if it failed.
+ */
+bool BracketElement::readContentFromMathMLDom(QDomNode& node)
+{
+    if ( ! m_operator ) {
+        // if it's a mfence tag, we need to convert to equivalent expanded form.
+        // See section 3.3.8
+        if ( ! node.nextSibling().isNull() ) {
+            QDomDocument doc = node.ownerDocument();
+            QDomNode parent = node.parentNode();
+            QDomElement de = doc.createElement( "mrow" );
+            QStringList::Iterator it = m_separators.begin();
+            while ( !node.isNull() ) {
+                QDomNode no = node.nextSibling();
+                de.appendChild( node.toElement() );
+                if ( ! no.isNull() ) {
+                    QDomElement sep = doc.createElement( "mo" );
+                    de.appendChild( sep );
+                    if ( it != m_separators.end() ) {
+                        sep.appendChild( doc.createTextNode( *it ) );
+                    }
+                    else {
+                        sep.appendChild( doc.createTextNode( "," ) );
+                    }
+                    it++;
+                }
+                node = no;
+            }
+            parent.appendChild( de );
+            node = parent.firstChild();
+        }
+    }
+    inherited::readContentFromMathMLDom( node );
     return true;
 }
 

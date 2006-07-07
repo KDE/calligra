@@ -49,7 +49,7 @@ class UnderlineElement;
  */
 class OasisCreationStrategy : public ElementCreationStrategy {
 public:
-    virtual BasicElement* createElement( QString type );
+    virtual BasicElement* createElement( QString type, const QDomElement& element );
 
     virtual TextElement* createTextElement( const QChar& ch, bool symbol=false );
     virtual EmptyElement* createEmptyElement();
@@ -65,6 +65,8 @@ public:
     virtual MatrixElement* createMatrixElement( uint rows, uint columns );
     virtual IndexElement* createIndexElement();
 	virtual QString type() const { return "Oasis"; }
+
+    BasicElement* createOperatorElement( const QDomElement& element );
 };
 
 KFORMULA_NAMESPACE_END

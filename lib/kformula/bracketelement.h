@@ -136,6 +136,13 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    /**
+     * Reads our content from the MathML node. Sets the node to the next node
+     * that needs to be read.
+     * Returns false if it failed.
+     */
+	virtual bool readContentFromMathMLDom(QDomNode& node);
+
     SequenceElement* getContent() { return content; }
 
 private:
@@ -151,6 +158,7 @@ private:
  * A left and/or right bracket around one child.
  */
 class BracketElement : public SingleContentElement {
+    typedef SingleContentElement inherited;
     BracketElement& operator=( const BracketElement& ) { return *this; }
 public:
 
@@ -230,6 +238,19 @@ protected:
     virtual void writeDom(QDomElement element);
 
     /**
+     * Reads our attributes from the MathML element.
+     * Returns false if it failed.
+     */
+	virtual bool readAttributesFromMathMLDom(const QDomElement& element);
+
+    /**
+     * Reads our content from the MathML node. Sets the node to the next node
+     * that needs to be read.
+     * Returns false if it failed.
+     */
+	virtual bool readContentFromMathMLDom(QDomNode& node);
+
+    /**
      * @returns the latex representation of the element and
      * of the element's children
      */
@@ -252,6 +273,9 @@ private:
 
     SymbolType leftType;
     SymbolType rightType;
+
+    bool m_operator;
+    QStringList m_separators;
 };
 
 

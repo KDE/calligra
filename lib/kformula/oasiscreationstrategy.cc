@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qdom.h>
+
 #include "bracketelement.h"
 #include "elementtype.h"
 #include "fractionelement.h"
@@ -29,12 +31,13 @@
 #include "textelement.h"
 #include "tokenelement.h"
 #include "identifierelement.h"
+#include "operatorelement.h"
 
 #include "oasiscreationstrategy.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-BasicElement* OasisCreationStrategy::createElement( QString type )
+BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElement& element )
 {
     
     // TODO
@@ -54,8 +57,8 @@ BasicElement* OasisCreationStrategy::createElement( QString type )
     // declare
     kdDebug( DEBUGID ) << type << endl;
     if      ( type == "mi" )               return new IdentifierElement();
-    if      ( type == "mn"
-              || type == "mo"
+    else if ( type == "mo" )               return createOperatorElement( element );
+    else if ( type == "mn"
               || type == "mtext"
               || type == "ms" )            return new TokenElement();
 	else if ( type == "mstyle" )           return new StyleElement();
@@ -67,6 +70,7 @@ BasicElement* OasisCreationStrategy::createElement( QString type )
     else if ( type == "mspace" )           return new SpaceElement();
     else if ( type == "msqrt"
               || type == "mroot" )         return new RootElement();
+    else if ( type == "mfenced" )          return new BracketElement();
     else if ( type == "mtable" 
               || type == "mlabeledtr"
               || type == "mtr"
@@ -153,6 +157,37 @@ MatrixElement* OasisCreationStrategy::createMatrixElement( uint rows, uint colum
 IndexElement* OasisCreationStrategy::createIndexElement()
 {
     return new IndexElement;
+}
+
+BasicElement* OasisCreationStrategy::createOperatorElement( const QDomElement& element )
+{
+    QDomNode n = element.firstChild();
+    if ( n.isNull() )
+        return 0;
+    if ( n.isEntityReference() ) {
+        QString name = n.nodeName();
+        if ( name == "CloseCurlyDoubleQuote"
+             || name == "CloseCurlyQuote"
+             || name == "LeftAngleBracket"
+             || name == "LeftCeiling"
+             || name == "LeftDoubleBracket"
+             || name == "LeftFloor"
+             || name == "OpenCurlyQuote"
+             || name == "RightAngleBracket"
+             || name == "RightCeiling"
+             || name == "RightDoubleBracket"
+             || name == "RightFloor" ) {
+            return new BracketElement();
+        }
+        return new OperatorElement();
+    }
+    if ( n.isText() ) {
+        QString text = n.toText().data();
+        if ( text.length() == 1 && QString("()[]{}").contains(text[0]) ) {
+            return new BracketElement();
+        }
+    }
+    return new OperatorElement();
 }
 
 KFORMULA_NAMESPACE_END

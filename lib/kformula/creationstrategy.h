@@ -51,7 +51,7 @@ class ElementCreationStrategy {
 public:
     virtual ~ElementCreationStrategy() {}
 
-    virtual BasicElement* createElement( QString type ) = 0;
+    virtual BasicElement* createElement( QString type, const QDomElement& element ) = 0;
 
     /// there must always be a TextElement, so this can never return 0
     virtual TextElement* createTextElement( const QChar& ch, bool symbol=false ) = 0;
@@ -79,7 +79,7 @@ public:
  */
 class OrdinaryCreationStrategy : public ElementCreationStrategy {
 public:
-    virtual BasicElement* createElement( QString type );
+    virtual BasicElement* createElement( QString type, const QDomElement& element = 0 );
 
     virtual TextElement* createTextElement( const QChar& ch, bool symbol=false );
     virtual EmptyElement* createEmptyElement();

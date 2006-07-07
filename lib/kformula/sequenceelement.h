@@ -406,7 +406,7 @@ protected:
      *
      * @param type the desired type of the element
      */
-    virtual BasicElement* createElement(QString type);
+    virtual BasicElement* createElement(QString type, const QDomElement &element);
 
     /**
      * @returns the position where the child starts.

@@ -80,8 +80,7 @@ void StyleElement::draw( QPainter& painter, const LuPixelRect& r,
 // TODO: Support for deprecated attributes
 bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
 {
-    kdDebug( DEBUGID ) << "StyleElement::readAttributesFromMathMLDom\n";
-    if ( !BasicElement::readAttributesFromDom( element ) ) {
+    if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
         return false;
     }
 

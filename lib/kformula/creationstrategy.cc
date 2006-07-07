@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qdom.h>
+
 #include "bracketelement.h"
 #include "creationstrategy.h"
 #include "elementtype.h"
@@ -31,7 +33,7 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-BasicElement* OrdinaryCreationStrategy::createElement( QString type )
+BasicElement* OrdinaryCreationStrategy::createElement( QString type, const QDomElement& )
 {
     if      ( type == "TEXT" )         return new TextElement();
     else if ( type == "EMPTY" )        return new EmptyElement();

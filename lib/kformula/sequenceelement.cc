@@ -1342,7 +1342,7 @@ bool SequenceElement::buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNod
             BasicElement* child = 0;
             QString tag = e.tagName().upper();
 
-            child = createElement(tag);
+            child = createElement(tag, e);
             if (child != 0) {
                 child->setParent(this);
                 if (child->buildFromDom(e)) {
@@ -1364,9 +1364,9 @@ bool SequenceElement::buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNod
 }
 
 
-BasicElement* SequenceElement::createElement( QString type )
+BasicElement* SequenceElement::createElement( QString type, const QDomElement& element )
 {
-    return creationStrategy->createElement( type );
+    return creationStrategy->createElement( type, element );
 }
 
 /**
@@ -1765,7 +1765,7 @@ bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
             QString tag = e.tagName().lower();
 
 			kdDebug( DEBUGID ) << "Sequence Tag: " << tag << endl;
-            child = creationStrategy->createElement(tag);
+            child = creationStrategy->createElement(tag, e);
             if (child != 0) {
                 child->setParent(this);
                 if (style != 0) {
@@ -1807,7 +1807,7 @@ bool SequenceElement::buildMathMLChild( QDomNode node )
         BasicElement* child = 0;
         QString tag = e.tagName().lower();
 
-        child = creationStrategy->createElement(tag);
+        child = creationStrategy->createElement(tag, e);
         if (child != 0) {
             child->setParent(this);
             if (style != 0) {
