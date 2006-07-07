@@ -77,6 +77,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		virtual void paintEvent ( QPaintEvent * );
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 		virtual bool event ( QEvent * );
+
+		//! Used in slotTextChanged()
+		bool m_slotTextChanged_enabled : 1;
 };
 
 #endif

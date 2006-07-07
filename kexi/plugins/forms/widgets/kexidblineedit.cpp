@@ -31,6 +31,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  , KexiDBTextWidgetInterface()
  , KexiFormDataItemInterface()
 // , m_autonumberDisplayParameters(0)
+ , m_slotTextChanged_enabled(true)
 {
 	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
@@ -42,7 +43,7 @@ KexiDBLineEdit::~KexiDBLineEdit()
 
 void KexiDBLineEdit::setInvalidState( const QString& displayText )
 {
-	setReadOnly(true);
+	KLineEdit::setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & TabFocus)
 		setFocusPolicy(QWidget::ClickFocus);
@@ -61,6 +62,27 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 		else
 			setText( m_origValue.toString() + add.toString() );
 	}
+
+
+
+	if (removeOld && m_columnInfo) {
+		const KexiDB::Field::Type t = m_columnInfo->field->type();
+		if (t == KexiDB::Field::Boolean) {
+			//! @todo temporary solution for booleans!
+			setText( add.toBool() ? "1" : "0" );
+			return;
+		}
+	}
+	
+	m_slotTextChanged_enabled = false;
+
+	if (removeOld)
+		setText( add.toString() );
+	else
+		setText( m_origValue.toString() + add.toString() );
+	setCursorPosition(0); //ok?
+
+	m_slotTextChanged_enabled = true;
 }
 
 QVariant KexiDBLineEdit::value()
@@ -99,16 +121,21 @@ QVariant KexiDBLineEdit::value()
 
 void KexiDBLineEdit::slotTextChanged(const QString&)
 {
+	if (!m_slotTextChanged_enabled)
+		return;
 	signalValueChanged();
 }
 
 bool KexiDBLineEdit::valueIsNull()
 {
-	return text().isNull();
+	return valueIsEmpty(); //ok??? text().isNull();
 }
 
 bool KexiDBLineEdit::valueIsEmpty()
 {
+	if (text().isEmpty())
+		return true;
+
 	return text().isEmpty();
 }
 
@@ -134,7 +161,7 @@ bool KexiDBLineEdit::cursorAtEnd()
 
 void KexiDBLineEdit::clear()
 {
-	setText(QString::null);
+	KLineEdit::clear();
 }
 
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)

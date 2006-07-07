@@ -54,7 +54,7 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		KexiDataItemInterface();
 		virtual ~KexiDataItemInterface();
 
-		/*! Just initializes \a value, and calls init(const QString& add, bool removeOld). 
+		/*! Just initializes \a value, and calls setValueInternal(const QString& add, bool removeOld). 
 		 If \a removeOld is true, current value is set up as \a add.
 		 If \a removeOld if false, current value is set up as \a value + \a add.
 		 \a value is stored as 'old value' -it'd be usable in the future
@@ -172,6 +172,10 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		void setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface) {
 			m_parentDataItemInterface = parentDataItemInterface;
 		}
+
+		/*! \return a pointer to a Parent Data Item Interface. 
+		 @see setParentDataItemInterface() */
+		inline KexiDataItemInterface* parentInterface() const { return m_parentDataItemInterface; }
 
 	protected:
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current

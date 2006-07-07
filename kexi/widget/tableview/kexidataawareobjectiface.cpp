@@ -643,7 +643,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 
 bool KexiDataAwareObjectInterface::acceptRowEdit()
 {
-	if (!m_rowEditing)
+	if (!m_rowEditing || /*sanity*/!m_data->rowEditBuffer())
 		return true;
 	if (m_inside_acceptEditor) {
 		m_internal_acceptsRowEditAfterCellAccepting = true;

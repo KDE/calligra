@@ -293,8 +293,8 @@ void KexiDataSourcePage::slotDataSourceSelected()
 	if (!dataSourceFound) {
 		m_sourceFieldCombo->setTableOrQuery("", true);
 	}
-	if (m_sourceFieldCombo->hasFocus())
-		m_dataSourceCombo->setFocus();
+//	if (m_sourceFieldCombo->hasFocus())
+//		m_dataSourceCombo->setFocus();
 	m_clearDSButton->setEnabled(dataSourceFound);
 	m_gotoButton->setEnabled(dataSourceFound);
 	if (dataSourceFound) {

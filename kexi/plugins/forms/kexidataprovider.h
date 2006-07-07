@@ -28,7 +28,7 @@ namespace KexiDB {
 	class QuerySchema;
 }
 
-//! The KexiFormDataProvider class is a data provider for Kexi Forms
+//! @short The KexiFormDataProvider class is a data provider for Kexi Forms
 /*! This provider collects data-aware widgets using setMainWidget().
  Then, usedDataSources() unique list of required field names is available.
  On every call of fillDataItems() method, thew provider will fill data items 
@@ -53,7 +53,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 
 		QStringList usedDataSources() const { return m_usedDataSources; }
 
-		QPtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
+		//unused QPtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
 
 		/*! Fills data items with appropriate data fetched from \a cursor. */
 		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);
@@ -87,6 +87,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		QPtrList<KexiFormDataItemInterface> m_dataItems;
 		QStringList m_usedDataSources;
 		KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;
+		bool m_disableFillDuplicatedDataItems;
 };
 
 #endif
