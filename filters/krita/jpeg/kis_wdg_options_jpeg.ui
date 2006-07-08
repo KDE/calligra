@@ -8,13 +8,19 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>338</width>
-            <height>116</height>
+            <width>167</width>
+            <height>87</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KisWdgOptionsJPEG</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -66,7 +72,7 @@
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="tickmarks">
-                                <enum>Both</enum>
+                                <enum>Below</enum>
                             </property>
                             <property name="tickInterval">
                                 <number>10</number>
@@ -115,6 +121,9 @@
             <property name="text">
                 <string>Pr&amp;ogressive</string>
             </property>
+            <property name="accel">
+                <string>Alt+O</string>
+            </property>
             <property name="toolTip" stdset="0">
                 <string>Use progressive when publishing on the Internet</string>
             </property>
@@ -123,6 +132,23 @@
 Enabling progressive will cause the image to be displayed by the browser even while downloading.&lt;/p&gt;</string>
             </property>
         </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>61</height>
+                </size>
+            </property>
+        </spacer>
     </vbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>

@@ -76,7 +76,7 @@
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="tickmarks">
-                                <enum>NoMarks</enum>
+                                <enum>Below</enum>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Note: the compression level doesn't change the quality of the result</string>
