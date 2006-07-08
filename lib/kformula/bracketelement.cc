@@ -319,8 +319,8 @@ void BracketElement::calcSizes( const ContextStyle& context,
         //kdDebug( DEBUGID ) << "BracketElement::calcSizes " << content->axis( context, tstyle ) << " " << content->getHeight() << endl;
         luPixel contentHeight = 2 * QMAX( content->axis( context, tstyle, factor ),
                                           content->getHeight() - content->axis( context, tstyle, factor ) );
-        left->calcSizes( context, tstyle, contentHeight );
-        right->calcSizes( context, tstyle, contentHeight );
+        left->calcSizes( context, tstyle, factor, contentHeight );
+        right->calcSizes( context, tstyle, factor, contentHeight );
 
         // height
         setHeight(QMAX(contentHeight,

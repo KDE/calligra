@@ -209,7 +209,7 @@ void SymbolElement::calcSizes( const ContextStyle& context,
     symbol = context.fontStyle().createArtwork( symbolType );
     //}
 
-    symbol->calcSizes(context, tstyle, mySize);
+    symbol->calcSizes(context, tstyle, factor, mySize);
     content->calcSizes( context, tstyle, istyle, style );
 
     //symbol->scale(((double)parentSize)/symbol->getHeight()*2);
