@@ -128,6 +128,7 @@ void KWGeneralFrameProperties::save() {
         if(frame == 0 && m_shape)
             frame = m_state->createFrame(m_shape);
         Q_ASSERT(frame);
+        m_state->markFrameUsed();
         m_frames.append(frame);
     }
     foreach(KWFrame *frame, m_frames) {

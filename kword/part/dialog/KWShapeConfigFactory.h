@@ -36,13 +36,15 @@ public:
     void removeUser();
 
     KWFrame *frame() const { return m_frame; }
-    void setFrame(KWFrame *frame) { m_frame = frame; }
+    void setFrame(KWFrame *frame) { m_deleteFrame = true; m_frame = frame; }
     KWFrame *createFrame(KoShape *shape);
+    void markFrameUsed() { m_deleteFrame = false; }
 
     KWDocument *document() const { return m_document; }
 
 private:
     int m_refcount;
+    bool m_deleteFrame;
     KWFrame *m_frame;
     KWDocument *m_document;
 };

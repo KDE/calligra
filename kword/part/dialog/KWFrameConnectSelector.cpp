@@ -124,6 +124,7 @@ void KWFrameConnectSelector::save() {
     if(oldFS && oldFS->frameCount() == 0) {
         // TODO
     }
+    m_state->markFrameUsed();
 }
 
 void KWFrameConnectSelector::open(KoShape *shape) {

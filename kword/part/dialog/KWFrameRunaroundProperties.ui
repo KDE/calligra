@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>KWFrameRunaroundProperties</class>
  <widget class="QWidget" name="KWFrameRunaroundProperties" >
   <property name="geometry" >
@@ -113,7 +110,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="distance" />
+      <widget class="KoUnitDoubleSpinBox" name="distance" />
      </item>
      <item>
       <spacer>
@@ -145,7 +142,13 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KoUnitDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>KoUnitWidgets.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

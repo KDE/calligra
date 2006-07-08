@@ -80,19 +80,22 @@ QString KWGeneralFramePropertiesFactory::name() const {
 
 FrameConfigSharedState::FrameConfigSharedState(KWDocument *document)
     : m_refcount(0),
+    m_deleteFrame(false),
     m_frame(0),
     m_document(document)
 {
 }
 
 FrameConfigSharedState::~FrameConfigSharedState() {
-    delete m_frame;
+    if(m_deleteFrame)
+        delete m_frame;
 }
 
 void FrameConfigSharedState::removeUser() {
     m_refcount--;
     if(m_refcount == 0 && m_frame) {
-        delete m_frame;
+        if(m_deleteFrame)
+            delete m_frame;
         m_frame = 0;
     }
 }
@@ -102,6 +105,7 @@ KWFrame *FrameConfigSharedState::createFrame(KoShape *shape) {
         KWFrameSet *fs = new KWFrameSet();
         m_frame = new KWFrame(shape, fs);
         m_document->addFrameSet(fs);
+        m_deleteFrame = false;
     }
     return m_frame;
 }

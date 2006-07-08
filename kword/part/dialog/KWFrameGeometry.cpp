@@ -65,8 +65,10 @@ void KWFrameGeometry::open(KoShape *shape) {
 
 void KWFrameGeometry::save() {
     KWFrame *frame = m_frame;
-    if(frame == 0)
+    if(frame == 0) {
         frame = m_state->frame();
+        m_state->markFrameUsed();
+    }
     Q_ASSERT(frame);
     QPointF pos(widget.left->value(), widget.top->value());
     frame->shape()->setAbsolutePosition(pos);
