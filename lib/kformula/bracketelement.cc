@@ -217,7 +217,7 @@ BracketElement::BracketElement(SymbolType l, SymbolType r, BasicElement* parent)
     : SingleContentElement(parent),
       left( 0 ), right( 0 ),
       leftType( l ), rightType( r ),
-      m_operator( false )
+      m_operator( false ), m_customLeft( false ), m_customRight( false )
 {
 }
 
@@ -233,7 +233,8 @@ BracketElement::BracketElement( const BracketElement& other )
     : SingleContentElement( other ),
       left( 0 ), right( 0 ),
       leftType( other.leftType ), rightType( other.rightType ),
-      m_operator( other.m_operator )
+      m_operator( other.m_operator ),
+      m_customLeft( other.m_customLeft ), m_customRight( other.m_customRight )
 {
 }
 
@@ -450,8 +451,11 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
         // TODO: parse attributes in section 3.2.5.2
     }
     else { // mfenced, see attributes in section 3.3.8.2
+        leftType = LeftRoundBracket;
+        rightType = RightRoundBracket;
         QString openStr = element.attribute( "open" ).stripWhiteSpace();
         if ( !openStr.isNull() ) {
+            m_customLeft = true;
             if ( openStr == "[" )
                 leftType = LeftSquareBracket;
             else if ( openStr == "]" )
@@ -477,6 +481,7 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
         }
         QString closeStr = element.attribute( "close" ).stripWhiteSpace();
         if ( !closeStr.isNull() ) {
+            m_customRight = true;
             if ( closeStr == "[" )
                 rightType = LeftSquareBracket;
             else if ( closeStr == "]" )

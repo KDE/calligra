@@ -274,8 +274,10 @@ private:
     SymbolType leftType;
     SymbolType rightType;
 
-    bool m_operator;
     QStringList m_separators;
+    bool m_operator;
+    bool m_customLeft;
+    bool m_customRight;
 };
 
 
