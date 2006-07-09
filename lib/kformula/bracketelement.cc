@@ -505,7 +505,7 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
             else // TODO: Check for entity references
                 rightType = LeftRoundBracket;
         }
-        QString separatorStr = element.attribute( "close" ).stripWhiteSpace();
+        QString separatorStr = element.attribute( "separators" ).stripWhiteSpace();
         if ( !separatorStr.isNull() ) {
             m_separators = QStringList::split( ' ', separatorStr );
         }
