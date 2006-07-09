@@ -24,10 +24,10 @@ krosspython_la_SOURCES = \
 krosspython_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
-    CXX/libkrosspythoncxx.la \
+    cxx/libkrosspythoncxx.la \
     ../api/libkrossapi.la \
     ../main/libkrossmain.la
 
 INCLUDES = $(KROSS_INCLUDES) $(PYTHONINC) $(all_includes)
 METASOURCES = AUTO
-SUBDIRS = CXX scripts .
+SUBDIRS = cxx scripts .
