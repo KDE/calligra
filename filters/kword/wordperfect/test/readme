@@ -1,0 +1,83 @@
+These are some test files for WordPerfect import filter. Some are in two version:
+WP 5.x and WP 6/7/8 document. This is indicated by the extension: .wp for the former
+and .wpd for the latter
+
+docsummary.[wp,wpd]
+  Check the document information. The author should be "Ariya",
+  the title is "Test file for import filter", and the abstract
+  is "This is for abstract of the document". Invoke 'Document Information..'
+  from File menu in KWord to verify.
+
+fontcolor.[wp,wpd]
+  You should see some sentences. The first three have some words in different
+  colors: blue, red, and green. The next one is with custom color with
+  R:127, G:0, and  B: 127. The last has some part yellow highlighted.
+  NOTE: highlight is not available yet in WP 5.x
+
+fontsize.[wp,wpd]
+  There are sample texts in different size of font: 10 pt, 12 pt, 14 pt, and
+  20 pt respectively.
+
+formatting.[wp,wpd]
+  There are different sentences with text formatting: normal, bold,
+  italic, underline, double-underline (treated as underline by the
+  filter), striked out, subscript, and superscript.
+
+justification.[wp,wpd]
+  Five paragraphs, each with different justification settings: left justify,
+  right justify, center, full, and all justify.
+
+linespace.[wp,wpd]
+  Different paragraphs with single, double, and one-and-half linespace.
+
+pagemargins.[wp,wpd]
+  Test settings for left, right, top, and bottom margins. Check this by
+  invoking 'Page...' from 'Format' menu in KWord.
+
+typeface.[wp,wpd]
+  Has several paragraphs with different font, namely Arial, Book Antiqua,
+  Century Schoolbook, Courier New and Times New Roman. Sample Arial font
+  in bold and italic are also provided.
+
+umlaut.[wp,wpd]
+  Contains characters A, a, U, u, O, and o all with umlaut.
+
+table.[wp,wpd]
+  Simple table with three rows and two columns. Not supported yet.
+
+barcode.wpd
+  Contains a barcode of ZIP code: 40293. Not supported yet.
+
+multinational.wpd
+  This document contains all WP Multinational characters (of character set 1)
+
+phonetic.wpd
+  This document contains all WP Phonetic symbols (of character set 2)
+
+typographic.wpd
+  This document contains all WP Typographic symbols (of character set 4)
+
+iconic.wpd
+  This document contains all WP Iconic symbols (of character set 5)
+
+math.wpd
+  This document contains all WP math/scientific symbols (of character set 6)
+
+mathext.wpd
+  This document contains all WP additional math/scientific symbols
+  (of character set 7)
+
+greek.wpd
+  This document contains all WP Greek characters (of character set 8)
+
+hebrew.wpd
+  This document contains all WP Hebrew characters (of character set 9)
+
+cyrillic.wpd
+  This document contains all WP Cyrillic characters (of character set 10)
+
+japanese.wpd
+  This document contains all WP Japanese characters (of character set 11)
+
+
+Ariya Hidayat <ariyahidayat@yahoo.de>

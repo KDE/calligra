@@ -1,0 +1,1426 @@
+<!--    $Id$
+
+This is an XML document type definition (DTD) for the KWord document format.
+Written by Kalle Dalheimer <kalle at kde dot org> with (obviously) input from KWord's
+author Reginald Stadlbauer <reggie at kde dot org>.
+
+Kword DTD version 2 has been created by Thomas Zander, but only small adjustments from
+the original version were made.
+
+(In case of questions about this file, please ask one of the KOffice mailing lists!)
+
+About the version
+=================
+
+This is the DTD version 3, for KWord 1.3
+
+The DTD version 1 was used by KWord-0.8 (KOffice-1.0, the one included in KDE-2.0)
+The DTD version 2 was used by KWord-1.1 and KWord-1.2
+
+KWord will read the previous versions of its own file format but this is considered
+the most complete format, we highly encourage you to use this format.
+
+Version 3 specifics that have another meaning when read by earlier versions of KWord:
+* counter: depth and display-levels have been separated, older versions assume display-levels=depth+1
+* TOC: outline and numberingtype=1 have been separated, older versions assume outline if nt=1
+
+KWord overview
+==============
+
+The main structure of each KWord document is a header and a body. The header
+contains things like the paper size, the margins and so on.
+
+The body is organised around the concept of frames. You might have noticed
+that you can do nearly everything with the frames in your KWord document (e.g.
+move them around, interlock them, let your text "flow" through them, etc.). To
+achieve this flexibility, the body actually has to store the data in a
+hierarchy including framesets, frames, paragraphs, and so on.
+
+Framesets hold the actual text. Frames represent the rectangles in which this
+text is "flowed".
+
+Encoding (for advanced users)
+=============================
+
+KWord's document are encoded as UTF-8 by definition. Please use this encoding
+whenever possible. (Remember: ASCII is UTF-8 too and you could use numerical 
+character references like &#8164; to keep your document ASCII-clean.)
+
+If you find that writing in UTF-8 is too difficult on the system that you plan
+to use, then please use ISO-10646-UCS2 (also known as UTF-16.)
+
+Please write publicly available KWord documents only in one of these two encodings!
+
+Of course, if you do not use UTF-8, replace any occurrence of UTF-8 in the text below by the
+encoding that you have chosen. And please be sure to correctly define the XML declaration <?xml
+
+(Sorry, ISO-10646-UCS4 (also known as UTF-32) is not available, as QT cannot handle it.)
+
+Some basic notes on XML
+=======================
+
+- All kinds of numbers are stored like this: foo="1" (between " and " :)
+
+- A rational number looks like this: width="1.03" (note: the '.' separates
+integer and fractional parts).
+
+- <XYZ foo="100" bar="0"/> equals <XYZ foo="100" bar="0"></XYZ>
+
+- Unicode-letters (UTF-8 coded) are used to store the text
+
+- Some special characters ('<', '>', '&', '"', ''') are or can be "escaped" ('&lt;', '&gt;', '&amp;', '&quot;', '&apos;')
+Only these characters can be "escaped". XML cannot handle other "escapes", for example those of HTML are not valid (e.g. &eacute; .)
+
+- Please launch KWord and save an empty file - it is much easier to follow
+this documentation if you wade through an (almost empty) example document.
+
+- The XML begins with a special tag like this (it is called the XML declaration):
+
+    <?xml version="1.0" encoding="UTF-8"?>
+
+Each file starts with this tag. Note: You must not "close" this tag (i.e.
+don't put a </?xml...> at the end of the file!).
+
+-->
+
+<!--    A KWord document consists of a paper description, a number of
+        attributes and the framesets which contain the actual data. It
+        can also define a number of styles.
+
+        Attributes:
+
+            editor:         The program this file was written with.
+
+            mime:           The MIME type (must always have the value
+                            application/x-kword).
+
+            syntaxVersion:  Integer version of the syntax in the remainder of
+                            this file:
+
+                                1...as for KWord 0.8 (KOffice-1.0)
+                                2...as for KWord 1.1 or 1.2
+                                3...as for KWord 1.3
+                            KWord can read all previous versions, but always saves in the latest.
+-->
+<!ELEMENT DOC
+    (PAPER, ATTRIBUTES, VARIABLESETTINGS, FOOTNOTESETTING, ENDNOTESETTING, FRAMESETS, STYLES, PICTURES, PIXMAPS, CLIPARTS, SERIALL, (EMBEDDED*), SPELLCHECKIGNORELIST, BOOKMARKS)>
+<!ATTLIST DOC
+    editor CDATA #IMPLIED
+    mime CDATA #FIXED "application/x-kword"
+    syntaxVersion CDATA #REQUIRED>
+
+<!--    Describes the page format. Can have no or one PAPERBORDERS child that
+        describes the margins. Normally this is the first tag in the "header".
+
+        Attributes:
+
+            format:         integer value for the page format:
+
+                                0...DIN A3
+                                1...DIN A4
+                                2...DIN A5
+                                3...US LETTER
+                                4...US LEGAL
+                                5...SCREEN (screen sized)
+                                6...CUSTOM (just enter your preferred size)
+                                7...DIN B5
+                                8...US EXECUTIVE
+                                etc. See the enum in koffice/lib/kofficeui/koGlobal.h
+
+            width:          width in pt.
+
+            height:         height in pt.
+
+            orientation:    page orientation:
+
+                                0...Portrait
+                                1...Landscape
+
+            columns:        the number of columns (only in wordprocessing
+                            mode).
+
+            pages:          the number of pages. This is saved for information purposes,
+                            but not required nor used by KWord.
+
+            columnspacing:  the gap (in pt) between the columns (only in
+                            wordprocessing mode).
+
+            hType:          header style:
+
+                                0...same on all pages
+                                1...different on first, even and odd pages (2&3)
+                                2...different on first and other pages
+                                3...different on even and odd pages
+
+            fType:          footer style:
+
+                                0...same on all pages
+                                1...different on first, even and odd pages (2&3)
+                                2...different on first and other pages
+                                3...different on even and odd pages
+
+            spHeadBody:     distance (in pt) between headers and the text body (only in
+                            wordprocessing mode).
+
+            spFootBody:     distance (in pt) between footers and the text body (only in
+                            wordprocessing mode).
+            spFootNoteBody: distance ( in pt ) betwwen footnote and text body
+
+            slFootNotePosition: position of footnote separator line
+                                centered, right, left
+
+            slFootNoteLength:   percentage of page width default is 20
+            slFootNoteWidth:    width of line seperator default = 2pt
+            slFootNoteType:     type of line seperator solid, dot, dash etc...
+-->
+<!ELEMENT PAPER
+    (PAPERBORDERS?)>
+<!ATTLIST PAPER
+    format CDATA #REQUIRED
+    width CDATA #REQUIRED
+    height CDATA #REQUIRED
+    orientation CDATA #REQUIRED
+    columns CDATA #REQUIRED
+    columnspacing CDATA #REQUIRED
+    pages CDATA #IMPLIED
+    hType CDATA #IMPLIED
+    fType CDATA #IMPLIED
+    spHeadBody CDATA #IMPLIED
+    spFootBody CDATA #IMPLIED
+    spFootNoteBody CDATA #IMPLIED
+    slFootNotePosition CDATA #IMPLIED
+    slFootNoteLength CDATA #IMPLIED
+    slFootNoteWidth CDATA #IMPLIED
+    slFootNoteType CDATA #IMPLIED>
+
+
+<!--    Describes the margins of the page.
+
+        Attributes:
+
+            left:           left margin in pt.
+
+            right:          right margin in pt.
+
+            top:            top margin in pt.
+
+            bottom:         bottom margin in pt.
+-->
+<!ELEMENT PAPERBORDERS
+    EMPTY>
+<!ATTLIST PAPERBORDERS
+    left CDATA #REQUIRED
+    right CDATA #REQUIRED
+    top CDATA #REQUIRED
+    bottom CDATA #REQUIRED>
+
+
+<!--    Contains general attributes of the document. Has no children.
+
+        Attributes:
+
+            processing:     0..."Normal" document (Wordprocessing)
+                            1...DTP-document (DTPing)
+
+            standardpage:   currently ignored.
+
+            hasHeader:      0...the document has no headers
+                            1...the document has headers
+
+            hasFooter:      0...the document has no footers
+                            1...the document has footers
+
+            unit:           Basic unit for positioning, ruler,...
+                            This has no influence on the units in this document, only on what the user sees.
+                                mm...
+                                pt...
+                                inch...
+
+            hasTOC:         0...the document has no TOC
+                            1...the document has TOC
+
+            tabStopValue:   tabstop value in pt
+
+            activeFrameset: the name of the frameset that was edited when saving the document
+            cursorParagraph:if activeFrameset is a text frameset, the paragraph ID of the cursor
+            cursorIndex:    if activeFrameset is a text frameset, the character index of the cursor
+-->
+<!ELEMENT ATTRIBUTES
+    EMPTY>
+<!ATTLIST ATTRIBUTES
+    processing CDATA #REQUIRED
+    standardpage CDATA #IMPLIED
+    hasHeader CDATA #IMPLIED
+    hasFooter CDATA #IMPLIED
+    unit CDATA #IMPLIED
+    hasTOC CDATA #IMPLIED
+    tabStopValue CDATA #IMPLIED
+    activeFrameset CDATA #IMPLIED
+    cursorParagraph CDATA #IMPLIED
+    cursorIndex CDATA #IMPLIED>
+
+
+<!--    Contains general attributes variables. Has no children.
+
+        Attributes:
+            startingPageNumber:     the starting page number.
+            displaylink             ### TODO: document!
+            underlinelink:          Underline links by default (true/false)
+            displaycomment:         Display comment (true/false)
+            displayfieldcode:       Display the name of the variables if true (instead of their value)
+            lastPrintingDate:       Last printing date, in ISO-8601 format
+            creationDate:           Creation date of the document, in ISO-8601 format
+            modificationDate:       Modification date of the document, in ISO-8601 format
+-->
+<!ELEMENT VARIABLESETTINGS
+    EMPTY>
+<!ATTLIST VARIABLESETTINGS
+    startingPageNumber CDATA #IMPLIED
+    displaylink CDATA #IMPLIED
+    underlinelink CDATA #IMPLIED
+    displaycomment CDATA #IMPLIED
+    displayfieldcode CDATA #IMPLIED
+    lastPrintingDate CDATA #IMPLIED
+    creationDate CDATA #IMPLIED
+    modificationDate CDATA #IMPLIED>
+
+
+<!--    Contains general attributes for footnote.
+
+        Attributes:    see counter !
+
+        Ignore bullet, restart and depth.
+-->
+<!ELEMENT FOOTNOTESETTING
+    EMPTY>
+<!ATTLIST FOOTNOTESETTING
+    type CDATA #REQUIRED
+    depth CDATA #REQUIRED
+    bullet CDATA #IMPLIED
+    start CDATA #IMPLIED
+    numberingtype CDATA #IMPLIED
+    lefttext CDATA #IMPLIED
+    righttext CDATA #IMPLIED
+    bulletfont CDATA #IMPLIED
+    customdef CDATA #IMPLIED
+    restart CDATA #IMPLIED>
+
+<!--    Contains general attributes for endnote.
+
+        Attributes: see counter !
+
+        Ignore bullet, restart and depth.
+-->
+<!ELEMENT ENDNOTESETTING
+    EMPTY>
+<!ATTLIST ENDNOTESETTING
+    type CDATA #REQUIRED
+    depth CDATA #REQUIRED
+    bullet CDATA #IMPLIED
+    start CDATA #IMPLIED
+    numberingtype CDATA #IMPLIED
+    lefttext CDATA #IMPLIED
+    righttext CDATA #IMPLIED
+    bulletfont CDATA #IMPLIED
+    customdef CDATA #IMPLIED
+    restart CDATA #IMPLIED>
+
+
+<!--    Container that has a number of FRAMESET children.
+-->
+<!ELEMENT FRAMESETS
+    (FRAMESET+)>
+
+
+<!--    A frameset that bundles a number of FRAME elements (at least one).
+        In addition it can have a more specific element, depending on frameType.
+
+        Attributes:
+
+            frameType:      0...Base frame (for internal use only!!!)
+                            1...Text frame (contains PARAGRAPH tags)
+                            2...Picture frame (contains a PICTURE tag, or an IMAGE tag for KWord 1.1)
+                            3...Part frame (defined in EMBEDDED at the doc level) ### FIXME: does not happen in a FRAMESET but only in SETTINGS
+                            4...Formula frame (contains a FORMULA tag)
+                            5...Clipart frame (contains a CLIPART tag, only for KWord 1.1)
+                            6...Horizontal line frame (contains a PICTURE tag)
+                            10..reserved (internally for tables)
+
+            frameInfo:      0...normal text (or non-text frame)
+                            1...header for first page
+                            2...header for even pages (user-wise, i.e. with pages starting at 1)
+                            3...header for odd pages (user-wise, i.e. with pages starting at 1)
+                            4...footer for first page
+                            5...footer for even pages (user-wise, i.e. with pages starting at 1)
+                            6...footer for odd pages (user-wise, i.e. with pages starting at 1)
+                            7...footnote
+                            When the document uses the same headers on even and odd pages (hType=0,2),
+                            the header being used is the one for odd pages (frameInfo=3).
+
+            removable:      Whether the header-frame is removable or not:
+                            Used in tables where header cells on new pages are
+                            auto created with this set to 1.
+                                0...no (default)
+                                1...yes
+
+            visible:        Whether the frame is visible or not:
+
+                                0...no
+                                1...yes (default)
+
+            grpMgr:         If present, indicates that this frameset is
+                            a cell in a table. The value is the name of the
+                            group manager for this table. (i.e. If this
+                            frameset "belongs" to a table the position and the
+                            size are contolled by a group manager (one for
+                            each table)).
+
+            row:            Position in the table (only for tables). Index
+                            starts at 0. The index for the next row must equal
+                            the index for the current row, plus the
+                            value of "rows" for the current row.
+
+            col:            Ditto for columns.
+
+            rows:           Size of this cell in rows (only for tables).
+                            can be 1 or greater.
+
+            cols:           Ditto for columns.
+
+            protectContent: Protect content of text object
+
+            protectSize:    Prevent user from changing size and position
+                            of the frames in this frameset.
+
+                                0...no (default)
+                                1...yes
+
+
+-->
+<!ELEMENT FRAMESET
+    (FRAME|PARAGRAPH|PICTURE|IMAGE|CLIPART|FORMULA)*>  <!-- ### missing: defining FORMULA -->
+<!ATTLIST FRAMESET
+    name CDATA #REQUIRED
+    frameType CDATA #REQUIRED
+    frameInfo CDATA #REQUIRED
+    removable CDATA #IMPLIED
+    visible CDATA #IMPLIED
+    grpMgr CDATA #IMPLIED
+    row CDATA #IMPLIED
+    col CDATA #IMPLIED
+    rows CDATA #IMPLIED
+    cols CDATA #IMPLIED
+    protectContent CDATA #IMPLIED
+    protectSize CDATA #IMPLIED>
+
+<!ELEMENT FRAME
+    EMPTY>
+
+<!--    Describes a frame of a frameset.
+
+        Attributes:
+
+            right, left, top,
+            bottom:             absolute coordinates in pt.
+
+            min-height:         If set (and >0), this is the minimum height. Applies to AutoExtendFrame.
+
+            runaround:          0...No run around, the text runs through the frame
+                                1...Frame repels text in overlapping frames
+                                2...Text in overlapping frames will avoid the
+                                    complete horizontal space of this frame.
+
+            runaroundSide:      when runaround is 1 specify here the side of the frame
+                                on which the text should flow.
+                                Values: "left", "right" or "biggest". Default is biggest.
+
+            runaroundGap:       when runaround is 1 specify here the distance (in pt)
+                                between overlapping frames and runaround text
+
+            autoCreateNewFrame: What to do if the text is bigger than the frame:
+                                0...AutoExtendFrame (use this for headers/footers)
+                                    Make frame bigger to fit text.
+                                1...AutoCreateNewFrame (use this for the normal text body)
+                                    Place a new frame on next page.
+                                2...Ignore extra text
+
+            newFrameBehaviour:  DEPRECATED use newFrameBehavior instead.
+            newFrameBehavior:   0...On creating a new page, reconnect frame
+                                    to current frameset (use this for the normal text body).
+                                1...Don't create a followup frame on the new
+                                    page.
+                                2...This frame will be shown on the new page
+                                    as well (with the same content)
+
+            copy:               0...Not a copy
+                                1...This frame is a copy of the previous frame in this frameset
+                                (default is 1 for headers and footers and 0 for the others)
+
+            sheetSide:          0...AnySide
+                                1...this frame will only be shown on odd pages
+                                2...this frame will only be shown on even pages
+
+            lWidth, rWidth, tWidth, bWidth:  width (in pt) of a frame border (left, right, top, bottom)
+
+            lRed, lGreen, lBlue:   color (rgb) of the left frame border
+            rRed, rGreen, rBlue:   color (rgb) of the right frame border
+            tRed, tGreen, tBlue:   color (rgb) of the top frame border
+            bRed, bGreen, bBlue:   color (rgb) of the bottom frame border
+
+            lStyle, rStyle, tStyle, bStyle:  style of a frame border (left, right, top, bottom)
+                                             Solid = 0, Dash = 1, Dot = 2, Dash_dot = 3, Dash_dot_dot = 4
+
+            bkRed, bkGreen, bkBlue: color (rgb) used as the frame's background color
+            bkStyle : style of a frame background color
+            None = 0, SolidPattern = 1, Dense1Pattern = 2, Dense2Pattern = 3, Dense3Pattern = 4, Dense4Pattern = 5 etc... (look at in qbrush documentation)
+
+            bleftpt, brightpt, btoppt, bbottompt: frame margins (internal to the frame)
+
+            z-index: z index (signed int).
+                     Relative to the other frame in the same page.
+                     The frame with the biggest z index in a given page, is on top.
+-->
+<!ATTLIST FRAME
+    left CDATA #REQUIRED
+    right CDATA #REQUIRED
+    top CDATA #REQUIRED
+    bottom CDATA #REQUIRED
+    min-height CDATA #IMPLIED
+    runaround CDATA #IMPLIED
+    runaroundSide CDATA #IMPLIED
+    runaroundGap CDATA #IMPLIED
+    autoCreateNewFrame CDATA #IMPLIED
+    newFrameBehavior CDATA #REQUIRED
+    copy CDATA #IMPLIED
+    sheetSide CDATA #IMPLIED
+    lWidth CDATA #IMPLIED
+    rWidth CDATA #IMPLIED
+    tWidth CDATA #IMPLIED
+    bWidth CDATA #IMPLIED
+    lRed CDATA #IMPLIED
+    lGreen CDATA #IMPLIED
+    lBlue CDATA #IMPLIED
+    rRed CDATA #IMPLIED
+    rGreen CDATA #IMPLIED
+    rBlue CDATA #IMPLIED
+    tRed CDATA #IMPLIED
+    tGreen CDATA #IMPLIED
+    tBlue CDATA #IMPLIED
+    bRed CDATA #IMPLIED
+    bGreen CDATA #IMPLIED
+    bBlue CDATA #IMPLIED
+    lStyle CDATA #IMPLIED
+    rStyle CDATA #IMPLIED
+    tStyle CDATA #IMPLIED
+    bStyle CDATA #IMPLIED
+    bkRed CDATA #IMPLIED
+    bkGreen CDATA #IMPLIED
+    bkBlue CDATA #IMPLIED
+    bkStyle CDATA #IMPLIED
+    bleftpt CDATA #IMPLIED
+    brightpt CDATA #IMPLIED
+    btoppt CDATA #IMPLIED
+    bbottompt CDATA #IMPLIED
+    z-index CDATA #IMPLIED>
+
+<!ELEMENT PARAGRAPH
+    (TEXT|FORMATS|LAYOUT)*>
+
+<!--    Just guess :) The text is stored as UTF-8 coded Unicode
+        glyphs. Note: the format-tags navigate in the text using an index
+        which starts at 0 and runs up till it reaches length-1.
+
+        Some special character codes map to special features:
+            0xad is a soft hyphen
+            0xa0 is a non-breaking space
+            0x2011 is a non-breaking hyphen
+            \n is a linebreak (within the paragraph)
+            \t is a tabulator
+
+        Attributes:
+
+             xml:space:          "preserve" tells parsers to keep white spaces
+-->
+<!ELEMENT TEXT
+    (#PCDATA)>
+<!ATTLIST TEXT
+    xml:space (preserve) #FIXED "preserve">
+
+<!--    List of formats that apply to a given paragraph
+-->
+<!ELEMENT FORMATS
+    (FORMAT*)>
+
+<!--    A format tag describes the format of one or more characters in the
+        text.
+
+        Attributes:
+
+            id:                 type of format information:
+
+                                    0...none (mustn't be in a file)
+                                    1..."normal" text
+                                    2...a picture - in that case, only IMAGE is specified.
+                                                    This is DEPRECATED, use a floating frame instead.
+                                    3...tabulator - Not supported anymore. Use a '\t' in the text instead.
+                                    4...a variable - in that case, VARIABLE is also specified
+                                    5...a footnote - DEPRECATED (KOffice-1.0)
+                                    6...an anchor for a floating frame - in that case, only ANCHOR is specified.
+
+            pos:                position where the format starts. This is a
+                                zero-based index into the text of the
+                                paragraph.
+
+            len:                number of characters after pos for which the
+                                format is used. 1 for all ids except "normal text".
+
+        When FORMAT is used to specify the format of a style, pos and len are omitted.
+-->
+<!ELEMENT FORMAT
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOW|FONTATTRIBUTE|LANGUAGE|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
+
+
+<!ATTLIST FORMAT
+    id CDATA #REQUIRED
+    pos CDATA #IMPLIED
+    len CDATA #IMPLIED>
+
+
+<!-- LAYOUT
+        A layout holds all the attributes related to a paragraph,
+        other than its text and formatting.
+        Each of the child elements can be present only once, except
+        TABULATOR which can be repeated.
+        The FORMAT tag here is the 'default format' for the paragraph.
+-->
+<!ENTITY % layout "NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
+    LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|COUNTER|FORMAT|
+    TABULATOR*">
+<!ELEMENT LAYOUT
+    (%layout;)*>
+
+<!--
+        A style is a global setting that is used for all paragraphs which use that
+        style. As the markup is stored in one place (the style) changing the markup
+        throughout the document is simply a task of changing one or two styles.
+        Highly recommended for structured documents.
+
+        A style element contains the same child elements as the LAYOUT tag:
+        all the paragraph properties, as well as a text format.
+        It also contains the name of the following style, i.e. the one used when
+        the user presses Enter in a paragraph using this style.
+
+        Attributes:
+          outline   if "true", this style is part of the Table Of Contents.
+                    (by default it is not).
+-->
+<!ELEMENT STYLES
+    (STYLE*)>
+<!ELEMENT STYLE
+    (%layout;|FOLLOWING)*>
+<!ATTLIST STYLE
+    outline CDATA #IMPLIED>
+
+<!--
+        Defines the color of the text, using RGB.
+        (-1,-1,-1) means "default color", i.e. the base color from the color scheme
+        (usually black).
+-->
+<!ELEMENT COLOR
+    EMPTY>
+<!ATTLIST COLOR
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED>
+
+<!--
+        Defines the background color of the text (aka "highlight"), using RGB.
+        (-1,-1,-1) means "default color", i.e. the base color from the color scheme
+        (usually white).
+-->
+<!ELEMENT TEXTBACKGROUNDCOLOR
+    EMPTY>
+<!ATTLIST TEXTBACKGROUNDCOLOR
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED>
+
+
+<!--
+        A framestyle holds properties for borders, background and can be identified with a name.
+-->
+<!ELEMENT FRAMESTYLES
+    (FRAMESTYLE*)>
+<!ELEMENT FRAMESTYLE
+    (NAME|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER)>
+<!ATTLIST FRAMESTYLE
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED>
+
+
+<!--
+        A tablestyle holds properties for borders, background and (text)style. A tablestyle is
+        identified via its name. The properties are reach via the names corresponding to the
+        framestyle and style.
+-->
+<!ELEMENT TABLESTYLES
+    (TABLESTYLE*)>
+
+<!ELEMENT TABLESTYLE
+    (NAME|PSTYLE|PFRAMESTYLE)>
+
+<!ELEMENT PFRAMESTYLE
+    EMPTY>
+<!ATTLIST PFRAMESTYLE
+    name CDATA #REQUIRED>
+
+<!ELEMENT PSTYLE
+    EMPTY>
+<!ATTLIST PSTYLE
+    name CDATA #REQUIRED>
+            
+    
+<!--
+        name is the family name. Don't include fontsizes or bold, that is put in another tag.
+-->
+<!ELEMENT FONT
+    EMPTY>
+<!ATTLIST FONT
+    name CDATA #REQUIRED>
+
+<!-- SIZE
+        When size is used in a format the size is in points.
+-->
+<!ELEMENT SIZE
+    EMPTY>
+<!ATTLIST SIZE
+    value CDATA #REQUIRED>
+
+<!-- WEIGHT
+        Weight of a font is it's Boldness. Look at the QFont weight description for precise
+        numbers. Use normal=50, bold=75.
+-->
+<!ELEMENT WEIGHT
+    EMPTY>
+<!ATTLIST WEIGHT
+    value CDATA #REQUIRED>
+
+<!-- ITALIC
+        Value is either 0 or 1 with 1=true and 0=false
+-->
+<!ELEMENT ITALIC
+    EMPTY>
+<!ATTLIST ITALIC
+    value CDATA #REQUIRED>
+
+<!-- UNDERLINE
+        Value is either 0 or 1 or single or double or single-bold
+          0 = no underline
+          1 or single = single underline
+          double = double-underline.
+          single-bold = thick underline
+          wave = wave underline
+        styleline type of underline 
+                : solid, dash, dot, dashdot, dashdotdot
+        underlinecolor : color of underline line.
+        wordbyword: 0 or 1. If 1, spaces are not underlined. Opposite of fo:score-spaces.
+
+-->
+<!ELEMENT UNDERLINE
+    EMPTY>
+<!ATTLIST UNDERLINE
+    value CDATA #REQUIRED
+    styleline CDATA #REQUIRED
+    underlinecolor CDATA #REQUIRED
+    wordbyword CDATA #REQUIRED>
+
+<!-- STRIKEOUT
+        value: 0, 1 (or single), double, single-bold (see UNDERLINE)
+        styleline: style of strikeout line solid, dash, dot, dashdot, dashdotdot
+        wordbyword: 0 or 1. If 1, spaces are not striked out. Opposite of fo:score-spaces.
+-->
+<!ELEMENT STRIKEOUT
+    EMPTY>
+<!ATTLIST STRIKEOUT
+    value CDATA #REQUIRED
+    styleline CDATA #REQUIRED
+    wordbyword CDATA #REQUIRED>
+
+<!-- VERTALIGN
+            Super/sub script.
+            value: 0 = Normal
+                   1 = Subscript
+                   2 = Superscript
+            relativetextsize: 0.75 means 3/4 of the normal font size.
+-->
+<!ELEMENT VERTALIGN
+    EMPTY>
+<!ATTLIST VERTALIGN
+    value CDATA #REQUIRED
+    relativetextsize CDATA #REQUIRED>
+
+<!-- SHADOW
+        The value is the CSS specification for text-shadow (also used by XSL-FO).
+        http://www.w3.org/TR/REC-CSS2/text.html#text-shadow-props
+        KWord only supports a single shadow, and no blur radius, so it amounts to
+        either "none" or "color length length".
+-->
+<!ELEMENT SHADOW
+    EMPTY>
+<!ATTLIST SHADOW
+    text-shadow CDATA #REQUIRED>
+
+
+<!-- OFFSETFROMBASELINE
+        Value is define in pt
+-->
+<!ELEMENT OFFSETFROMBASELINE
+    EMPTY>
+<!ATTLIST OFFSETFROMBASELINE
+    value CDATA #REQUIRED>
+
+<!-- FONTATTRIBUTE
+        Value is either "none", "smallcaps", "uppercase", or "lowercase"
+-->
+<!ELEMENT FONTATTRIBUTE
+    EMPTY>
+<!ATTLIST FONTATTRIBUTE
+    value CDATA #REQUIRED>
+
+<!-- LANGUAGE
+        The name of the language used by this text span.
+        This is usually a two letters code, or ll_CC where a country is specified.
+-->
+<!ELEMENT LANGUAGE
+    EMPTY>
+<!ATTLIST LANGUAGE
+    value CDATA #REQUIRED>
+
+
+<!-- NAME
+        The name of a style.
+        If inside a <STYLE> tag, this defines the name of the style.
+        If inside a <LAYOUT> tag, this refers to an existing style,
+        to be used for this paragraph.
+-->
+<!ELEMENT NAME
+    EMPTY>
+<!ATTLIST NAME
+    value CDATA #REQUIRED>
+
+<!-- FOLLOWING
+        The FOLLOWING tag is a styles tag. You can only embed it in a style.
+        With this tag you can tell kword to switch to the style 'name' after
+        enter was pressed and the current style was used.
+        Example: Style H1 has the <following name="body"> tag. When the user is
+        finished typing the header tag and presses enter kword switches to the
+        style 'body'
+        The style-name given should be available.
+-->
+<!ELEMENT FOLLOWING
+    EMPTY>
+<!ATTLIST FOLLOWING
+    name CDATA #REQUIRED>
+
+<!-- FLOW
+        FLOW is a paragraph and style tag, that determines the alignment of the text.
+        align's value is one of: 'left', 'right', 'center', 'justify'
+        It can also be 'auto' for styles, meaning right for RTL text, left otherwise.
+
+        dir: Indicates the direction of the paragraph. 'L' or 'R' for left-to-right and right-to-left.
+        Automatic direction (dependent on first character) is the default.
+-->
+<!ELEMENT FLOW
+    EMPTY>
+<!ATTLIST FLOW
+    align (left|right|center|justify|auto) #REQUIRED
+    dir (L|R) #IMPLIED>
+
+<!-- INDENTS
+        left: indent (pt) that is used for the other lines in a paragraph.
+        right: indent (pt) on the right of all lines in the paragraph
+        first: indent (pt) from the left border (of the frame) of the first line of a paragraph.
+               This indent is added from the left indent (or to the right indent
+               in a right-to-left paragraph).
+        If not specified, the default value is 0.
+-->
+<!ELEMENT INDENTS
+    EMPTY>
+<!ATTLIST INDENTS
+    first CDATA #IMPLIED
+    left CDATA #IMPLIED
+    right CDATA #IMPLIED>
+
+<!-- OFFSETS
+        before: space before the paragraph, or "head offset" (KWord-0.8), aka "top margin" (KWord-1.0) (pt)
+        after: space after the paragraph, or "foot offset" (KWord-0.8), aka "bottom margin" (KWord-1.0) (pt)
+        If not specified, the default value is 0.
+-->
+<!ELEMENT OFFSETS
+    EMPTY>
+<!ATTLIST OFFSETS
+    before CDATA #IMPLIED
+    after CDATA #IMPLIED>
+
+<!--
+        A paragraph and a style can have counter data.
+        The document will do the counting of the paragraphs that use this.
+
+        type:   0 = None
+                1 = Numeral
+                2 = Alphabetical
+                3 = Alphabetical uppercase
+                4 = Roman numbering
+                5 = Roman numbering uppercase
+                6 = Custom bullet (one char, set by the 'bullet' attribute)
+                7 = Custom (complex string, see kword's dialog)
+                8 = Circle bullet (empty circle)
+                9 = Square bullet (full square)
+                10 = Disc bullet (full circle)
+                11 = Box bullet (empty square)
+
+        depth   The level of the numbering.
+                Depth of 0 means the major numbering. (1, 2, 3...)
+                Depth of 1 is 1.1, 1.2, 1.3 etc.
+
+        start   The first used number in the numbering (usually 1).
+                List numbering starts at <start> initially, or when restart is set to true.
+        numberingtype
+                0 = list numbering, 1 = chapter numbering.
+                Chapter numbering is used throughout the whole document (in future throughout books)
+        lefttext
+                The text that is printed left of the first numeral
+        righttext
+                The text that is printed right of the last numeral
+                A usual value for this one is "." (dot).
+
+        bullet  The unicode character code that is the custom bullet (for type=6)
+        bulletfont
+                The font to use for the custom bullet can be found in (use "symbol" if in doubt)
+        customdef
+                Definition of a custom counter - not supported yet
+        restart
+                If "true" or "1", this paragraph is numbered as specified by start.
+                Otherwise (default) it will extend the current list (with equal type and depth).
+
+        text    The text shown by the counter in the document when it was saved.
+                This is redundant information, unused by KWord upon loading, but useful
+                for export filters.
+
+        display-levels Number of levels to display (e.g. 3 means "1.2.1")
+
+        align   Counter alignment. Possible values include:
+	            int(Qt::AlignAuto), //left for LTR text and right for RTL text
+		    int(Qt::AlignLeft),
+		    int(Qt::AlignRight).
+-->
+<!ELEMENT COUNTER
+    EMPTY>
+<!ATTLIST COUNTER
+    type CDATA #REQUIRED
+    depth CDATA #REQUIRED
+    bullet CDATA #IMPLIED
+    start CDATA #IMPLIED
+    numberingtype CDATA #REQUIRED
+    lefttext CDATA #IMPLIED
+    righttext CDATA #IMPLIED
+    bulletfont CDATA #IMPLIED
+    customdef CDATA #IMPLIED
+    restart CDATA #IMPLIED
+    text CDATA #IMPLIED
+    display-levels CDATA #IMPLIED
+    align CDATA #IMPLIED>
+
+<!--
+        Linespacing defines the height of a line in a paragraph.
+        By default the line height is the height of the biggest character in the line.
+
+        The "type" can be "oneandhalf" for 1.5 * line_height and "double" for 2 * line_height.
+        More generally it can also be "multiple", where spacingvalue=3 means 3 * line_height.
+        Other values for the type are
+        "custom": spacingvalue is the distance between the lines in pt (added to the line height)
+        "atleast": the total line height is at least spacingvalue (in pt)
+        "fixed": spacingvalue is equal to the total line height (in pt).
+
+        See koffice/lib/kotext/koparaglayout.h for more details.
+
+        spacingvalue isn't used if type is "oneandhalf" or "double".
+
+        Compatibility note: KWord-1.1 only had a "value" attribute, which could
+        be set to a pt value (for custom), to "oneandhalf" or to "double".
+-->
+<!ELEMENT LINESPACING
+    EMPTY>
+<!ATTLIST LINESPACING
+    type (oneandhalf|double|custom|atleast|multiple|fixed) #IMPLIED
+    spacingvalue CDATA #IMPLIED>
+
+<!--
+        Attributes relating to the way paragraphs are broken at the end of a frame/page.
+        If this element isn't specified, the default is to break between lines of a parag.
+
+        linesTogether: if "true", all the lines of a given paragraph remain together.
+        hardFrameBreak: if "true", this paragraph is always at the beginning of a frame.
+        hardFrameBreakAfter: if "true", this paragraph is always the last in the frame.
+
+        Future extensions: keepWithPrevious, keepWithNext
+-->
+<!ELEMENT PAGEBREAKING
+    EMPTY>
+<!ATTLIST PAGEBREAKING
+    linesTogether       (true|false) #IMPLIED
+    hardFrameBreak      (true|false) #IMPLIED
+    hardFrameBreakAfter (true|false) #IMPLIED>
+
+<!--
+        The borders can be used on a frame and on a paragraph.
+        the border has a color, displayed in the RGB value.
+        The width is in points.
+        Style   0 = solid
+                1 = dashes
+                2 = dots
+                3 = dash - dot patterns
+                4 = dash dot dot patterns
+                5 = double line
+-->
+<!ELEMENT LEFTBORDER
+    EMPTY>
+<!ATTLIST LEFTBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT RIGHTBORDER
+    EMPTY>
+<!ATTLIST RIGHTBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT TOPBORDER
+    EMPTY>
+<!ATTLIST TOPBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT BOTTOMBORDER
+    EMPTY>
+<!ATTLIST BOTTOMBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+
+<!--    Defines the position of a tabulation
+        Attributes:
+
+            type:               0 .. left
+                                1 .. center
+                                2 .. right
+                                3 .. alignment at specified character
+
+            ptpos:              Position of the tabulation, in pt
+
+            filling:            0 .. blank
+                                1 .. dots
+                                2 .. line
+                                3 .. dash
+                                4 .. dash-dot
+                                5 .. dash-dot-dot
+
+            width:              Width of the filling, in pt
+
+            alignchar:          character at which text will be aligned when
+                                type==3 (former "decimal point") is set
+-->
+<!ELEMENT TABULATOR
+    EMPTY>
+<!ATTLIST TABULATOR
+    type CDATA #REQUIRED
+    ptpos CDATA #REQUIRED
+    filling CDATA #IMPLIED
+    width CDATA #IMPLIED
+    alignchar CDATA #IMPLIED>
+
+<!--    An anchor describes an object which is anchored.
+
+        Attributes:
+
+            type:               What kind of object is being anchored?
+
+                                    grpMgr: a table [deprecated]
+                                    frameset: a frameset [default]
+
+            instance:           An identifier that uniquely names the
+                                particular instance of the type of object
+                                being anchored.
+                                For framesets, this is the frameset name.
+-->
+
+<!ELEMENT ANCHOR
+    EMPTY>
+<!ATTLIST ANCHOR
+    type CDATA #REQUIRED
+    instance CDATA #REQUIRED>
+
+<!--    Definition of a picture - contains only one element, the key to the picture.
+-->
+<!ELEMENT PICTURE
+    (KEY)>
+<!ATTLIST PICTURE
+    keepAspectRatio CDATA #REQUIRED>
+
+<!--    Definition of an image - contains only one element, the key to the image.
+        Only for KWord 1.1. compatibility
+-->
+<!ELEMENT IMAGE
+    (KEY)>
+<!ATTLIST IMAGE
+    keepAspectRatio CDATA #REQUIRED>
+
+<!--    Definition of a clipart - contains only one element, the key to the clipart.
+        Only for KWord 1.1. compatibility
+-->
+<!ELEMENT CLIPART
+    (KEY)>
+
+<!--    Variable
+        A variable has always two child elements:
+        TYPE, and another one depending on the type.
+-->
+<!ELEMENT VARIABLE
+    (TYPE,(DATE|TIME|PGNUM|CUSTOM|MAILMERGE|FIELD|LINK|NOTE|FOOTNOTE))>
+
+<!--    Variable type
+        Attributes:
+        type
+            0... Date (uses DATE to save it)
+            1... [currently unused]
+            2... Time fixed (uses TIME to save it)
+            3... [currently unused]
+            4... Page number / number of pages (uses PGNUM to save it)
+            5... [currently unused]
+            6... Custom (uses CUSTOM to save it)
+            7... Mail Merge variable (uses MAILMERGE to save it)
+            8... Field (uses FIELD to save it)
+            9... Link (uses LINK)
+            10... Note (uses NOTE)
+            11... Footnote (uses FOOTNOTE)
+	    12... Statictic (uses STATISTIC)
+
+        key  the description of the variable format used to display this variable.
+            The first 4 letters identify the class of format:
+            DATE = a date
+            TIME = a time
+            NUMB = a number
+            STRI = a string
+            The rest (after the 4 letters) is quite internal, and depends on the type of variable.
+
+        text the text shown by the variable in the document when it was saved.
+            This is redundant information, unused by KWord upon loading, but useful
+            for export filters.
+-->
+<!ELEMENT TYPE
+    EMPTY>
+<!ATTLIST TYPE
+    type CDATA #REQUIRED
+    key  CDATA #IMPLIED
+    text CDATA #IMPLIED>
+
+<!--   Date value contained in a date variable.
+        day...  the day number
+        month.. the month number
+        year... the year number
+        fix.... 1 if the time is fixed, 0 if it's variable ("the current time")
+        correct... adjustement
+        subtype...
+           0 = fixed date, will never update itself automatically
+           1 = current date, updated as soon as the file is loaded
+               The value in the file is the value that the var had when saving.
+           2 = date of last printing
+           3 = date of file creation
+           4 = date of last modification
+-->
+<!ELEMENT DATE
+    EMPTY>
+<!ATTLIST DATE
+    day   CDATA #REQUIRED
+    month CDATA #REQUIRED
+    year  CDATA #REQUIRED
+    fix   CDATA #REQUIRED
+    correct CDATA #IMPLIED
+    subtype CDATA #REQUIRED
+    hour   CDATA #IMPLIED
+    minute CDATA #IMPLIED
+    second CDATA #IMPLIED>
+
+<!--   Time value contained in a time variable.
+        hour...  the hour number
+        minute.. the minute number
+        second... the second number
+        fix.... 1 if the time is fixed, 0 if it's variable ("the current time")
+          A time that is not fixed (variable) will be updated as soon as the file is loaded.
+          The value in the file is only the value that the var had when saving.
+        correct... adjustement
+-->
+<!ELEMENT TIME
+    EMPTY>
+<!ATTLIST TIME
+    hour   CDATA #REQUIRED
+    minute CDATA #REQUIRED
+    second CDATA #REQUIRED
+    fix    CDATA #REQUIRED
+    correct CDATA #IMPLIED>
+
+<!--   Details for a page-related variable.
+         subtype... Variable subtype:
+              0... number of current page.
+              1... total number of pages.
+              2... title of the current section
+         value... The variable value, number for subtype=0/1, string for subtype=2
+-->
+<!ELEMENT PGNUM
+    EMPTY>
+<!ATTLIST PGNUM
+    subtype CDATA #REQUIRED
+    value   CDATA #REQUIRED>
+
+<!--   Details for a custom variable.
+          name... The variable name
+          value... The variable value
+       Both name and value are entered by the user, they can be anything.
+-->
+<!ELEMENT CUSTOM
+    EMPTY>
+<!ATTLIST CUSTOM
+    name   CDATA #REQUIRED
+    value  CDATA #REQUIRED>
+
+<!-- <MAILMERGE> exists as two versions:
+     - a mail-merge variable
+     - the global mail merge settings
+     
+     The mail-merge variable has the attribute "name" (#REQUIRED in that case) and no children (EMPTY)
+     The global seetings has no attributes but has children (PLUGIN and DATASOURCE)
+-->
+<!ELEMENT MAILMERGE
+    (PLUGIN, DATASOURCE)?>
+<!ATTLIST MAILMERGE
+    name   CDATA #IMPLIED>
+    
+<!--
+  The plugin being used. library is the name of the lib, like "kwmailmerge_qtsqldb_power"
+-->
+<!ELEMENT PLUGIN
+    EMPTY>
+<!ATTLIST PLUGIN
+   library CDATA #REQUIRED>
+<!--
+  The children of <DATASOURCE> depends on the plugin
+-->
+<!ELEMENT DATASOURCE
+    ANY>
+<!--
+For the QtSQL-power-plugin, the contents of DATASOURCE is
+ (DEFINITION,SAMPLERECORD)
+ DEFINITION is (DATABASE,QUERY)
+ DATABASE has port, driver, username, databasename, hostname attributes.
+ QUERY has a value attribute (containing the SQL query)
+ SAMPLERECORD is (FIELD*)
+ FIELD has a name attribute.
+-->
+
+<!--    A "field" variable (property of the document)
+        subtype... Field subtype:
+                   0... Filename
+                   1... Directory name
+                   2... Author (as saved in documentinfo.xml)
+                   3... Email (as saved in documentinfo.xml)
+                   4... Company Name (as saved in documentinfo.xml)
+                   5... Path filename
+                   6... Filename without extension
+                   7... Telephone
+                   8... Fax
+                   9... Country
+                   10.. Document Title (as saved in documentinfo.xml)
+                   11.. Document Abstract (as saved in documentinfo.xml)
+                   12.. Postal Code
+                   13.. City
+                   14.. Street
+                   15.. AuthorTitle
+                   16.. Initials
+
+
+        value... the value of the field (text)
+-->
+<!ELEMENT FIELD
+    EMPTY>
+<!ATTLIST FIELD
+    subtype CDATA #REQUIRED
+    value CDATA #REQUIRED>
+
+<!--    A variable containing an hyperlink.
+        linkName... The text that appears in the document.
+        hrefName... The URL that this link points to.
+-->
+<!ELEMENT LINK
+    EMPTY>
+<!ATTLIST LINK
+    linkName CDATA #REQUIRED
+    hrefName CDATA #REQUIRED>
+
+<!--    A comment embedded into the text.
+        note... The text of the comment
+-->
+<!ELEMENT NOTE
+    EMPTY>
+<!ATTLIST NOTE
+    note CDATA #REQUIRED>
+
+<!--    A footnote variable.
+        value...    The text of the variable (e.g. "1", "2")
+        notetype... "footnote" or "endnote"
+        numberingtype... "auto" or "manual"
+        frameset... The name of the text frameset that contains the text
+          associated with this footnote. The frameset must be defined,
+          and must have frameInfo = 7.
+-->
+<!ELEMENT FOOTNOTE
+    EMPTY>
+<!ATTLIST FOOTNOTE
+    value CDATA #REQUIRED
+    notetype CDATA #REQUIRED
+    numberingtype CDATA #REQUIRED
+    frameset CDATA #REQUIRED>
+
+
+<!--    A statistic variable.
+        value...    A number (e.g. "1", "2")
+        type...	    A type of statistic variable 
+	            "0" Number of word
+		    "1" Number of sentence
+		    "2" Number of lines
+		    "3" Number of characters
+		    "4" Number of characters without space
+		    "5" Number of syllable
+		    "6" Number of frame
+		    "7"	Number of embedded object
+		    "8" Number of picture
+		    "9" Number of table
+-->
+<!ELEMENT STATISTIC
+    EMPTY>
+<!ATTLIST STATISTIC
+    value CDATA #REQUIRED
+    type CDATA #REQUIRED>
+
+
+<!--
+        Picture collection. This list holds the keys of all the picture
+        used by this document (by picture framesets), in the order in which
+        they are stored in the store (under pictures/).
+-->
+<!ELEMENT PICTURES
+    (KEY)*>
+
+<!--
+        Pixmap collection. This list holds the keys of all the pixmaps
+        used by this document (by picture framesets), in the order in which
+        they are stored in the store (under pictures/).
+        Only for KWord 1.1 compatibility.
+-->
+<!ELEMENT PIXMAPS
+    (KEY)*>
+
+<!--
+        Only for KWord 1.1 compatibility.
+-->
+<!ELEMENT CLIPARTS
+    (KEY)*>
+
+<!-- TODO: document! -->
+<!ELEMENT SERIALL
+    EMPTY>
+
+<!ELEMENT SPELLCHECKIGNORELIST ( SPELLCHECKIGNOREWORD+ )>
+<!ATTLIST SPELLCHECKIGNORELIST >
+<!ELEMENT SPELLCHECKIGNOREWORD EMPTY>
+<!ATTLIST SPELLCHECKIGNOREWORD word NMTOKEN #REQUIRED >
+
+<!ELEMENT BOOKMARKS ( BOOKMARKITEM+ )>
+<!ATTLIST BOOKMARKS >
+<!ELEMENT BOOKMARKITEM EMPTY>
+<!ATTLIST BOOKMARKITEM name NMTOKEN #REQUIRED 
+                       cursorIndexStart NMTOKEN #REQUIRED
+                       cursorIndexEnd NMTOKEN #REQUIRED
+                       frameset NMTOKEN #REQUIRED
+                       startparag NMTOKEN #REQUIRED
+                       endparag NMTOKEN #REQUIRED>
+
+<!--
+        The key mapping to one picture
+        
+        name:     the relative path to the picture in the store (e.g. picture/picture1.ext)
+                  (only if <KEY> is a child of <PICTURES>, otherwise the attribute name does not exist.)
+        filename: the original path of the picture
+        year...:  the date/time stamp
+                  (suggestions:
+                   - use UTC if you have the choice
+                   - use the *NIX epoch (1970-01-01 00:00:00.000 UTC) if no date is available otherwise)
+-->
+<!ELEMENT KEY
+    EMPTY>
+<!ATTLIST KEY
+    filename CDATA #REQUIRED
+    year CDATA #REQUIRED
+    month CDATA #REQUIRED
+    day CDATA #REQUIRED
+    hour CDATA #REQUIRED
+    minute CDATA #REQUIRED
+    second CDATA #REQUIRED
+    msec CDATA #REQUIRED
+    name CDATA #IMPLIED>
+
+<!--
+        Embedded object
+-->
+<!ELEMENT EMBEDDED
+    (OBJECT,SETTINGS)>
+
+<!--
+        Standard part of the embedded object (part, url and position)
+        mime    the mimetype, e.x. application/x-presenter
+        url     the url, either external or internal (tar:/N for partN/maindoc.xml)
+-->
+<!ELEMENT OBJECT
+    (RECT)>
+<!ATTLIST OBJECT
+    mime CDATA #REQUIRED
+    url CDATA #REQUIRED>
+<!--
+        Position of the embedded object
+-->
+<!ELEMENT RECT
+    EMPTY>
+<!ATTLIST RECT
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    w CDATA #REQUIRED
+    h CDATA #REQUIRED>
+
+<!--
+        Additionnal attributes of the embedded object.
+        In KWord's case, it's the definition of the frame around the object,
+        and the name of the part-frameset.
+        ### FIXME: the attribute list is the same as FRAMESET
+-->
+<!ELEMENT SETTINGS
+    (FRAME)>
+<!ATTLIST SETTINGS
+    name CDATA #REQUIRED>

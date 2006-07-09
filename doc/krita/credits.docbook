@@ -1,0 +1,63 @@
+<chapter id="credits">
+
+<title>Credits and License</title>
+
+<para>
+&krita;
+</para>
+<para>
+Program copyright &copy; 1999-2006 The &krita; Team
+</para>
+
+<para>
+Contributors:
+
+<itemizedlist>
+<listitem><para>Adrian Page
+<email>Adrian.Page@tesco.net</email></para></listitem>
+<listitem><para>Andrew Richards
+<email>physajr@phys.canterbury.ac.nz</email></para></listitem>
+<listitem><para>Bart Coppens <email>kde@bartcoppens.be</email></para></listitem>
+<listitem><para>Boudewijn Rempt
+<email>boud@valdyas.org</email> (current maintainer)</para></listitem>
+<listitem><para>Carsten Pfeiffer
+<email>pfeiffer@kde.org</email></para></listitem>
+<listitem><para>Casper Boemann <email>cbr@boemann.dk</email></para></listitem>
+<listitem><para>Cyrille Berger <email>cyb@lepi.org</email></para></listitem>
+<listitem><para>Danny Allen
+<email>dannya40uk@yahoo.co.uk</email></para></listitem>
+<listitem><para>Dirk Schoenberger
+<email>dirk.schoenberger@sz-online.de</email></para></listitem>
+<listitem><para>G&aacute;bor Lehel
+<email>illissius@gmail.com</email></para></listitem>
+<listitem><para>John Califf
+<email>jcaliff@compuzone.net</email></para></listitem>
+<listitem><para>Matthias Elter <email>elter@kde.org</email></para></listitem>
+<listitem><para>Melchior Franz <email>melchior@kde.org</email></para></listitem>
+<listitem><para>Michael Koch <email>koch@kde.org</email></para></listitem>
+<listitem><para>Michael Thaler
+<email>michael.thaler@ph.tum.de</email></para></listitem>
+<listitem><para>Patrick Julien
+<email>freak@codepimps.org</email></para></listitem>
+<listitem><para>Roger Larsson
+<email>roger.larsson@norran.net</email></para></listitem>
+<listitem><para>Sven Langkamp
+<email>longamp@reallygood.de</email></para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Documentation copyright &copy; 2005-2006 Boudewijn Rempt
+<email>boud@valdyas.org</email>, Sander Koning
+<email>sanderkoning@kde.nl</email>
+with contributions from Casper Boemann, Bart Coppens, Cyrille Berger, Burkhard
+Lueck, and Anne-Marie Mahfouf.
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;           <!-- FDL: do not remove -->
+&underGPL;        	 <!-- GPL License -->
+
+</chapter>
+
+

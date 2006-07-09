@@ -1,0 +1,338 @@
+<chapter id="filters">
+<title>Filters</title>
+
+<para>
+This chapter describes the various filters in detail. To illustrate the result
+of applying the filters, each description is accompanied by an sample image
+with the respective filter applied to it. The original image (with thanks to the
+photographer, Christian Peper) is shown below at half of the original size. The
+sample images demonstrating the results of applying the filters, are shown at
+25% of the original size.
+</para>
+<note><para>Some filters yield reasonable results for most images. For
+other filters though, quite some tweaking needs to be done before the desired
+outcome is achieved. If a filter does not do what you want, it might need
+more or less customising.</para></note>
+<para>
+See the <link linkend="commands-dialogs">Dialogs</link> chapter for more
+information on the dialog windows containing the filter settings.
+</para>
+
+<screenshot>
+<screeninfo>The original image.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The original image.</phrase>
+</textobject>
+<caption><para>The original image.</para></caption>
+</mediaobject>
+</screenshot>
+
+<sect1 id="filters-bumpmap">
+<title>The Bumpmap filter</title>
+<para>
+The Bumpmap filter takes two layers and uses one of these to convert the other
+one so that it will give an illusion of depth. The object layer (the layer to be
+transformed) is the actual layer that should receive the three-dimensional
+looks. The bumpmap layer is a grayscale layer, which is read and used to
+determine the height for each point of the object layer.
+</para><para>
+Alternatively, the same layer can be used as both object layer and bumpmap
+layer.
+</para>
+<screenshot>
+<screeninfo>The image with the Bumpmap filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-bumpmap.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Bumpmap filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Bumpmap filter applied to it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-edgedetection">
+<title>The Edge Detection filters</title>
+<para>
+These filters try to detect <quote>edges</quote> (boundaries) in the picture
+and modify the image such that only these edges retain their respective colors,
+while the rest of the image is turned gray. Through the use of lighting the
+image will then get a three-dimensional look.
+</para><para>
+There are four edge detection filters available. Each of these detects edges
+from a different side (possibly considering other parts of the image as being
+edges) and will therefore obtain a different resulting image.
+</para>
+<screenshot>
+<screeninfo>The image with the Bottom Edge Detection filter applied to
+it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-edgebottom.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Bottom Edge Detection filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Bottom Edge Detection filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-emboss">
+<title>The Emboss filters</title>
+<para>
+Emboss filters work somewhat like edge detection filters, with the difference
+that embossed images are entirely gray. Areas in the picture are detected and
+are given a certain <quote>height level</quote>, which is made visible by using
+grayscale borders, making the image look like it is three-dimensional.
+</para>
+<screenshot>
+<screeninfo>The image with the Emboss All filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-embossall.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Emboss All filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Emboss All filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+<screenshot>
+<screeninfo>The image with the Emboss Variable filter applied to
+it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-embossvariable.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Emboss Variable filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Emboss Variable filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-gaussianblur">
+<title>The Gaussian Blur filter</title>
+<para>
+This filter makes the image a little fuzzy by blurring it in a pseudo-random
+way. A gaussian algorithm is used for finding the extent to which each part of
+the image should be blurred.
+</para>
+<screenshot>
+<screeninfo>The image with the Gaussian Blur filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-gaussianblur.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Gaussian Blur filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Gaussian Blur filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-invert">
+<title>The Invert filter</title>
+<para>
+This filter inverts all colors. The Red, Green and Blue component of each pixel
+are taken and subtracted from 255. This means that red becomes cyan, green
+becomes purple, and blue becomes yellow. The resulting values form the new
+pixel color.
+</para>
+<screenshot>
+<screeninfo>The image with the Invert filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-invert.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Invert filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Invert filter applied to it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-meanremoval">
+<title>The Mean Removal filter</title>
+<para>
+This filter sharpens the image by changing the colors of neighboring pixels
+with approximately the same color, so that small differences are evened out.
+</para>
+<screenshot>
+<screeninfo>The image with the Mean Removal filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-meanremoval.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Mean Removal filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Mean Removal filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-oilpaint">
+<title>The Oilpaint filter</title>
+<para>
+An oilpaint effect is given to the image by creating patch-shaped areas in which
+the most important color is applied to the entire area.
+</para>
+<screenshot>
+<screeninfo>The image with the Oilpaint filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-oilpaint.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Oilpaint filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Oilpaint filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-pixelize">
+<title>The Pixelize filter</title>
+<para>
+The image is pixelated by taking a square area and giving it the mean color
+value of the pixels it contains.
+</para>
+<screenshot>
+<screeninfo>The image with the Pixelize filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-pixelize.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Pixelize filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Pixelize filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-raindrops">
+<title>The Raindrops filter</title>
+<para>
+This filter makes it look like raindrops have fallen on the image by distorting
+drop-shaped areas with a lens-like effect as one would see when looking
+at the image through a real raindrop. Some raindrops will have a fish-eye lens
+effect.
+</para>
+<screenshot>
+<screeninfo>The image with the Raindrops filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-raindrops.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Raindrops filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Raindrops filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-roundcorners">
+<title>The Round Corners filter</title>
+<para>
+This filter just rounds off the corners of the image. This is done by making
+the outside of the rounded corner transparent.
+</para>
+<screenshot>
+<screeninfo>The image with the Round Corners filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-roundcorners.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Round Corners filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Round Corners filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-sharpen">
+<title>The Sharpen filter</title>
+<para>
+This filter sharpens the image.
+</para>
+<screenshot>
+<screeninfo>The image with the Sharpen filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-sharpen.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Sharpen filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Sharpen filter applied to it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-simplenoise">
+<title>The Simple Noise Reduction filter</title>
+<para>
+This filter reduces noise in the image by giving loose pixels a color close to
+the surrounding area. This causes small details to be lost, but can enhance the
+general view of the image when this is hampered by too many unnecessary details.
+</para>
+<screenshot>
+<screeninfo>The image with the Simple Noise Reduction filter applied to
+it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-simplenoise.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Simple Noise Reduction filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Simple Noise Reduction filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-tiles">
+<title>The Small Tiles filter</title>
+<para>
+The picture is reduced in size and repeated multiple times.
+</para>
+<screenshot>
+<screeninfo>The image with the Small Tiles filter applied to it.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-tiles.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Small Tiles filter applied to it.</phrase>
+</textobject>
+<caption><para>The image with the Small Tiles filter applied to
+it.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+</chapter>

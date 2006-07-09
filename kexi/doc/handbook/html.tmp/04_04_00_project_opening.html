@@ -1,0 +1,59 @@
+<H2>4.4. Opening an existing Kexi database file</H2>
+<p>
+To open an existing Kexi database file:
+</p>
+<p>
+<ul>
+<li><a href="#window_open_existing">select it in <em>Open Existing Project</em></a> window; or</li>
+<li><a href="#open_icon">open it by clicking on .kexi file's icon</a></li>
+</ul>
+</p>
+
+<a name="window_open_existing"></a>
+<H3>4.4.1. Opening a database file in <em>Open Existing Project</em> window</H3>
+<p>
+<ol>
+<li><p>
+Run Kexi application (see <a href="04_02_00_running_kexi.html">Running Kexi</a>). You should see &quot;Choose Project&quot; startup dialog window. Choose <em>Open Existing Project</em> tab. You will see following dialog:
+ <br><img src="img/04_04_01_startup_open_existing.png">
+ <br>Startup window: <em>Open Existing Project</em> tab<br><br>
+</p></li>
+<li><p>From <em>Look in</em> drop down, pick a folder containing a file you are looking for.
+</p></li>
+<li><p>Pick a file, you want to open ir enter its name using the <em>File name</em> box.
+</p></li>
+<li><p>Click <em>OK</em> button.
+</p></li>
+</ol>
+<H4>Notes</H4>
+<p>
+<ul>
+<li>By default <em>File type</em> drop down list has <em>All Supported Files</em> setting chosen. 
+In case the file you are looking for has other extension, you can change selection of <em>File type</em> drop down list to <em>All files</em> to display all available files (regardless of an extension).
+</li>
+<li>If you have selected a file of external type like MS Access' .mdb file, Kexi will provide you with option to import the file.
+<!-- todo an advice to read "importing" chapter will be placed here -->
+</li>
+<li>If you have selected a <em>connection data</em> file (with .kexic extension) or a <em>shortcut to a project on database server</em> file (with .kexis extension), Kexi will display appropriate windows.
+</li>
+</ul>
+</p>
+
+<a name="open_icon"></a>
+<H3>4.4.2. Opening an existing Kexi database file by clicking on .kexi file's icon</H3>
+<p>
+Click file's icon using your file manager or desktop:
+</p>
+<img src="icons/mime-kexiproject_sqlite.png" class="icon"/>
+<p>
+Kexi will open this database project automatically.
+</p>
+
+<H4>Notes</H4>
+<p>
+<ul>
+<li>
+<p><b>Note about databse files accessed remotely.</b> You may want to open a database file that is located on a remote source (e.g. an web or FTP server or MS Windows share). K Desktop Environment allows you to open files from remote sources directly in applications and saving changes back to the source, but this is not the case with database files. By clicking on a database file located on a remote source, you will cause a download the file to a temporary directory on your computer and all eventual your changes will be made to this local file. The remote original of the file will remain unchanged after you close Kexi, so it's recommended to copy (download) the file to your computer first, then open the file and copy it back to remove source if you want to make it up to date.</p>
+</li>
+</ul>
+</p>

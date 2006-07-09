@@ -1,0 +1,73 @@
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-kapp">
+<title>How to obtain &krita;</title>
+
+<!-- This first entity contains boiler plate for applications that are
+part of KDE CVS.  You should remove it if you are releasing your
+application -->
+
+&install.intro.documentation;
+
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<!--
+List any special requirements for your application here. This should include:
+.Libraries or other software that is not included in kdesupport,
+kdelibs, or kdebase.
+.Hardware requirements like amount of RAM, disk space, graphics card
+capabilities, screen resolution, special expansion cards, etc.
+.Operating systems the app will run on. If your app is designed only for a
+specific OS, (you wrote a graphical LILO configurator for example) put this
+information here.
+-->
+
+<para>
+&krita; depends on the following libraries, apart from what KOffice needs
+itself:
+</para>
+<itemizedlist>
+<listitem><para><ulink url="http://www.imagemagick.org/">Image
+Magick</ulink> &mdash; X11 Image Processing and Display
+Package</para></listitem>
+<listitem><para><ulink url="http://www.littlecms.com/">Little CMS</ulink>
+&mdash; A free color management system in 100K</para></listitem>
+<listitem><para><ulink
+url="http://www.openexr.com/">OpenEXR</ulink></para></listitem>
+</itemizedlist>
+
+<!-- For a list of updates, you may refer to the application web site
+or the ChangeLog file, or ... -->
+<para>
+You can find a list of changes in the <filename>ChangeLog</filename> file or on
+<ulink url="http://koffice.org/krita/">&krita;'s website</ulink>.
+</para>
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+<!-- This entity contains the boilerplate text for standard -->
+<!-- compilation instructions.  If your application requires any -->
+<!-- special handling, remove it, and replace with your own text. -->
+
+&install.compile.documentation;
+
+</sect1>
+
+<!--
+<sect1 id="configuration">
+<title>Configuration</title>
+
+<para>Don't forget to tell your system to start the <filename>dtd</filename>
+dicer-toaster daemon first, or &kmyapplication; won't work !</para>
+
+</sect1>
+-->
+
+</appendix>
+

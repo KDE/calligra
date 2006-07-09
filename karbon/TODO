@@ -1,0 +1,101 @@
+From the usability review of Thomas Zander
+------------------------------------------
+
+* Toolbars
+  - Toolbars should be persistent					----
+  - toolbox to the left by default					----
+
+* Toolbox
+  - select tool dialog has title "insert star"				DONE
+  - difficult to see which tool is selected				----
+  - clicking the "14" icon does not unselect previous tool		DONE
+  - add kbd shortcuts to the tools					----
+  - make 'ESC' select the 'Select tool'					----
+
+
+
+
+BIG TOPICS:
+1) create a consistent tool/plugin system
+	plugin input:
+	-	canvas (drawing, connecting to mouse/keyboard signals)
+	plugin output:
+	- icon
+	- help text
+	- options widget
+	- command
+	- kaction?
+2) selection redesign
+	- unify object and or node selection?
+	- achieve tight selection (exact selection-object collision test)
+3) reintroduce nodetool
+4) make VObject leaner
+5) introduce renderstack. And dont forget to rewrite shadoweffect to use it.
+
+GUI:
+-	remove the dialogs which show up when double clicking the strokefillpreview, this job is done
+	by "color manager" docker
+-	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
+	try to reuse them.
+-	make a UI for the node manipulation tool.
+-	rework the stroke/fill docker with preview on the document and apply button.
+-	Find a better way to select a color than the color manager. Maybe a popup ?
+-	gradient widget: maybe turn the midpoint arrows to black or 3d triangles like in gimp or illu
+-	gradient widget: better separate the midpoint arrows from the color stop triangles: put them
+	above the gradient bar like in adobe products. the current situation is a bit nasty
+	with near together midpoints and colorstops
+-	gradient widget: the midpoint arrows are currently hard to hit and modify
+
+REAL BUGS:
+-	patterns dont zoom
+-	VSelectionTool has an offset error relative to the handle nodes in the VSelection.
+-	fix i18n singular/plural
+-	crashes in vtext
+-	make curve1To, curve2To work
+-	vpolylinetool creates beziers where it could create lines
+-	Selections can't be undone/redone because there are no selection commands. 
+	Add a VSelectNodeCmd and/or a VSelectCmd. (See bug #60438)
+
+TODO:
+-	make pattern coords absolute and not relative to the shape
+-	VImage
+-	VPattern like VImage with embedded binaries instead of paths
+-	bring text support back, ideally using fontconfig and freetype, and no xft.
+-	improve printing (specifically printing of gradient and pattern fill), 
+	should go along with porting to qt4/the new rendering framework
+-	select first/last segment's knot if one of each other's knot is selected
+-	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
+-	use inside/intersection tests in vpath::combine() for changing winding.
+-	change flatness test in intersection code to a estimation used in gems code. otherwise
+	if the 2 input curves are the same our code runs forever.
+-	make VSelection a state pattern
+-	try to abstract rendering even more, preferably using kpainter abstraction.
+-	make layers tree robust, efficient and scalable.
+-	write odf enhanced-path parser (use some code from svgpathparser in lib)
+
+WISHLIST:
+-	krita export filter (with layers)
+-	add a nice grid-like shape like in Illu and webdraw
+-	pdf import filter (based on poppler)
+
+OPTIMIZATION:
+-	in VShapeTool and all manipulation tools: store temporary objects so one doesnt
+	have to recalculate/regenerate those for second draw() (erasing old shape)
+-	make fill/stroke shared so copying for undo/redo is more efficient. Also potentially
+	apply this to file format (like OOo does).
+-	transform() bbox too and dont recalculate it
+-	check places we use sqrt() if these are really necessary (lenny)
+
+MAKE IT NICE:
+-	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
+-	remove V*Tool::refreshUnit(). call this directly via dialog() instead
+-	pass all dialogs a parent
+-	think about using ghostscript's flatten algo (see comments in vflatten.cc)
+-	why represent opacity as float, not as short?
+-	introduce our own "Color drag" class, since we have in addition to rgb also opacity,
+	and maybe also gradient info could be dragged later.
+
+NEW IDEAS:
+- make VDocument a KoDocument?
+- use KParts::plugin for tools?
+

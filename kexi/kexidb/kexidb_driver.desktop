@@ -1,0 +1,64 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=Kexi/DBDriver
+Comment=Kexi SQL-Driver plugin
+Comment[ar]=ملحق سوّاقة SQL لدى Kexi
+Comment[bg]=Приставка на Kexi за драйвери за SQL
+Comment[br]=Lugent SQL-Driver evit Kexi
+Comment[ca]=Extensió del controlador SQL de Kexi
+Comment[cy]=Ategyn Gyrrydd-SQL Kexi
+Comment[da]=Kexi SQL-driver-plugin
+Comment[de]=Kexi SQL-Treiber-Plugin
+Comment[el]=Πρόσθετο οδηγού SQL του Kexi
+Comment[es]=Plugin de SQL-Driver de kexi
+Comment[et]=Kexi SQL-draiveri plugin
+Comment[eu]=Kexi-en SQL-kontrolatzailearen plugina
+Comment[fa]=Kexi برای SQL متصل کننده راه انداز
+Comment[fi]=Kexi SQL-laajennus
+Comment[fr]=Module de pilotage SQL de Kexi
+Comment[he]=תוסף מנהל התקן SQL ל־Kexi
+Comment[hr]=Dodatak za Kexi SQL pogonitelj (driver) 
+Comment[hu]=Kexi SQL-elérési bővítőmodul
+Comment[is]=Kexi SQL-rekil íforrit
+Comment[it]=Driver SQL per Kexi
+Comment[ja]=Kexi SQLドライバ プラグイン
+Comment[km]=កម្មវិធី​ជំនួយ​កម្មវិធី​បញ្ជា SQL សម្រាប់ Kexi
+Comment[lo]=ປລັກອິນພາບ
+Comment[lv]=Kexi SQL-Draivera iespraudnis
+Comment[ms]=Plugin Pemacu SQL Kexi
+Comment[nb]=SQL-drivermodul for Kexi
+Comment[nl]=Kexi SQL-stuurprogramma-plugin
+Comment[nn]=SQL-drivarmodul for Kexi
+Comment[pl]=Wtyczka sterownika SQL dla programu Kexi
+Comment[pt]='Plugin' do Controlador de SQL do Kexi
+Comment[pt_BR]=Plugin de Driver-SQL do Kexi
+Comment[ru]=Модуль драйвера SQL Kexi
+Comment[se]=Kexi SQL-stivrran lassemoduvla
+Comment[sk]=Modul ovládača SQL pre Kexi
+Comment[sl]=Vstavek Kexi SQL-Driver
+Comment[sr]=SQL-управљачки прикључак Kexi-ја
+Comment[sr@Latn]=SQL-upravljački priključak Kexi-ja
+Comment[sv]=Kexi SQL-insticksdrivrutin
+Comment[ta]=kexi SQL இயக்கி சொருகு
+Comment[tg]=Модули драйвери Kexi SQL
+Comment[tr]=Kexi SQl-Sürücüsü eki
+Comment[uk]=Втулок драйвера SQL Kexi
+Comment[uz]=Kexi SQL-драйвер плагини
+Comment[zh_CN]=Kexi SQL 驱动插件
+Comment[zh_TW]=Kexi SQL-驅動外掛程式
+
+[PropertyDef::X-Kexi-FileDBDriverMime]
+Type=QString
+
+[PropertyDef::X-Kexi-FileDBDriverMimeList]
+Type=QStringList
+
+[PropertyDef::X-Kexi-DriverName]
+Type=QString
+
+[PropertyDef::X-Kexi-DriverType]
+Type=QString
+
+[PropertyDef::X-Kexi-KexiDBVersion]
+Type=QString

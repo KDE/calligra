@@ -1,0 +1,31 @@
+libqpro library
+===============
+
+Purpose
+-------
+This C++ library provides functionality for reading and (eventually) writing
+Quattro Pro spreadsheet files.
+
+The library is designed as a tool for developers and does not provide any
+(useful) programs itself.
+
+The library was originally designed and written for the KSpread KDE
+spreadsheet program as part of the Quattro Pro filter.  I have tried to write
+it as a reusable set of classes so that it may used by other people,
+particularly those writing spreadsheet filters.
+
+KOffice programs rely heavily on the QT set of classes.  A QT interface to
+the library provides a lot of advantages.  However I realise that not everyone
+wants to include QT in their code and so the package produces either one or
+two libraries.  If QT is installed on the build machine then both libraries
+are built, otherwise only the non-QT library is produced.
+
+Installation
+------------
+To compile and install enter the usual:
+  ./configure
+  make
+  make install
+
+
+

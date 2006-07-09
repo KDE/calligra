@@ -1,0 +1,108 @@
+dnl Rename this file configure.in.in to have a check for KOffice in during configure
+
+dnl
+dnl Check for koffice. Argument is the minimum required version, in the form a.b.c.
+dnl This check *aborts* if koffice wasn't found or was too old.
+dnl If you only have an optional koffice requirement you'll have to change the test.
+dnl
+AC_DEFUN(AC_PATH_KOFFICE,
+[
+  dnl TODO: use AC_CACHE_VAL
+
+  if test -z "$1"; then
+    koffice_minver_maj=1
+    koffice_minver_min=2
+    koffice_minver_pat=94
+  else
+    koffice_minver_maj=`echo "$1" | sed -e "s/^\(.*\)\..*\..*$/\1/"`
+    koffice_minver_min=`echo "$1" | sed -e "s/^.*\.\(.*\)\..*$/\1/"`
+    koffice_minver_pat=`echo "$1" | sed -e "s/^.*\..*\.\(.*\)$/\1/"`
+  fi
+
+  AC_REQUIRE([AC_PATH_QT])
+
+  AC_MSG_CHECKING([for KOffice])
+
+  koffice_incdir=$kde_includes
+  koffice_libdir=$kde_libraries
+
+  AC_ARG_WITH(koffice-includes,
+              [  --with-koffice-includes=DIR   where include files for KOffice are installed ],
+              [  koffice_incdir="$withval"] )
+  AC_ARG_WITH(koffice-libs,
+              [  --with-koffice-libs=DIR   where libs for KOffice are installed ],
+              [  koffice_libdir="$withval"] )
+
+  if ! test -f "$koffice_incdir/kofficeversion.h"; then
+    AC_MSG_ERROR([Cannot find KOffice headers in $ac_koffice_includes. Please check your installation, or use --with-koffice-includes.])
+  fi
+
+  AC_LANG_SAVE
+  AC_LANG_CPLUSPLUS
+
+  ac_cxxflags_safe="$CXXFLAGS"
+  ac_ldflags_safe="$LDFLAGS"
+  ac_libs_safe="$LIBS"
+  CXXFLAGS="$CXXFLAGS -I$koffice_incdir $KDE_INCLUDES $all_includes"
+  LDFLAGS="$LDFLAGS $KDE_LDFLAGS $QT_LDFLAGS $all_libraries $USER_LDFLAGS $KDE_MT_LDFLAGS"
+  LIBS="$LIBS -lkofficeui $LIBQT"
+
+  AC_TRY_COMPILE(
+ [
+#include "confdefs.h"
+#include <kofficeversion.h>
+#if ! KOFFICE_IS_VERSION($koffice_minver_maj,$koffice_minver_min,$koffice_minver_pat)
+#error 1
+#endif
+ ],
+ [],
+ [ have_koffice="yes" ],
+ [
+  have_koffice="no"; dnl in case someone wants to turn the error below into a warning
+  AC_MSG_ERROR("Your KOffice version is too old. Please upgrade to at least $koffice_minver_maj.$koffice_minver_min.$koffice_minver_pat")
+ ])
+
+ dnl Ok it's the right version. Now, does it link ok?
+
+  cat > conftest.$ac_ext <<EOF
+#include <koApplication.h>
+int main( int, char ** )
+{
+    KoApplication app;
+    return 0;
+}
+EOF
+
+  if AC_TRY_EVAL(ac_link) && test -s conftest; then
+    rm -f conftest*
+  else
+    have_koffice="no"
+    rm -f conftest*
+    AC_MSG_ERROR([Cannot link small KOffice application. For more details look at config.log])
+  fi
+
+  CXXFLAGS="$ac_cxxflags_safe"
+  LDFLAGS="$ac_ldflags_safe"
+  LIBS="$ac_libs_safe"
+
+  AC_LANG_RESTORE
+
+  dnl Success, prepare the variables for the Makefile.am
+
+  KOFFICE_INCLUDES=""
+  if test "$koffice_incdir" != "/usr/include"; then
+    KOFFICE_INCLUDES="-I$koffice_incdir"
+  fi
+  KOFFICE_LDFLAGS=""
+  if test "$koffice_libdir" != "/usr/lib"; then
+    KOFFICE_LDFLAGS="-L$koffice_libdir"
+  fi
+  AC_SUBST(KOFFICE_LDFLAGS)
+
+  LIB_KOFFICE="-lkofficeui"
+  AC_SUBST(LIB_KOFFICE)
+
+  AC_MSG_RESULT([libraries $koffice_libdir, headers $koffice_incdir])
+])
+
+AC_PATH_KOFFICE

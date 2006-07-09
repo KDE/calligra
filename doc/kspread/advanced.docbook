@@ -1,0 +1,813 @@
+<chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Advanced &kspread;</title>
+<sect1 id="series">
+<title>Series</title>
+<para>When constructing a spreadsheet you often need to include a series of
+values, such as 10, 11, 12..., in a row or column. There are several ways you
+can do this in &kspread;.</para>
+<para>For a simple short series such as 5, 6, 7, 8... the <quote>Drag and Copy
+</quote> method is the simplest. Enter the starting value into the starting
+cell and the next value of the series into an adjacent cell.
+Then select both cells and move the mouse pointer so that it is over the small
+square at the bottom right corner; the cursor will change to a
+diagonal double headed arrow. Then hold the <mousebutton>left</mousebutton>
+mouse button down while you drag the cells down or across as needed.</para>
+<para>The step size is calculated as the difference between the two starting
+values that you have entered.
+For example if you enter <userinput>4</userinput> into cell A1 and 
+<userinput>3.5</userinput> into A2 then select both cells and Drag and Copy 
+them down, the step size will be the value in A2 minus the value 
+in A1, -0.5 in this case so you will get the series 4, 3.5, 3, 2.5, 2...</para>
+
+<para>The <quote>Drag and Copy</quote> method will even cope with series where 
+the step value is not a constant value but is itself a series. So that if you 
+start with 1, 3, 4, 6 Drag and Copy will extend it to 1, 3, 4, 6, 7, 9, 10, 
+12..., the step value in this example being the series 2, 1, 2, 1...</para>
+
+<para>&kspread; also recognizes some special <quote>series</quote> such as
+the days of the week. Try entering <userinput>Friday</userinput> into a cell 
+(note the capitalization) then Drag and Copy it down. To see what special series 
+are available, and perhaps create your own, select <menuchoice><guimenu>Tools
+</guimenu><guimenuitem>Custom Lists...</guimenuitem></menuchoice> .</para>
+
+<para>If you select a cell and choose <guimenuitem>Series...</guimenuitem> 
+from the <guimenu>Insert</guimenu> menu you will see the <guilabel>Series
+</guilabel> dialog box. This is useful for creating series that are too long 
+to be conveniently constructed using the Drag and Copy method, or for 
+creating geometric series such as 1, 1.5, 2.25, 3.375... where the step value,
+1.5 in this case, is used as a multiplier.</para>
+<para>If the type of series that you want is too complicated for any of the 
+previous methods, consider using a formula and Drag and Copying that. For 
+example to create a series with the values 2, 4, 16, 256... enter 
+<userinput>2</userinput> into A1, <userinput>=A1*A1</userinput> into A2, and 
+Drag and Copy cell A2 down.</para>
+</sect1>
+
+<sect1 id="formulas">
+<title>Formulae</title>
+<sect2 id="builtin">
+<title>Built in Functions</title>
+<para>&kspread; has a huge range of built in mathematical and other functions 
+that can be used in a formula cell. They can be seen and accessed by selecting 
+a cell then choosing <guimenuitem>Function...</guimenuitem> from the 
+<guimenu>Insert</guimenu> menu. This brings up the <guilabel>Function
+</guilabel> dialog box.</para>
+<para>Select the function you want to use from the listbox at the left of the 
+dialog box. The <guilabel>Help</guilabel> tab page will then display a description,
+the return type, Syntax, Parameters, and Examples for this function.
+In addition this page provides often links to Related Functions. 
+Then press the button with the down arrow key symbol on it to paste 
+it into the text edit box at the bottom of the dialog.</para>
+<para>The <guilabel>Parameters</guilabel> tab page will then be displayed 
+to let you enter the parameter(s) for the function you have just 
+chosen. If you want to enter an actual value for a parameter, just type it 
+into the appropriate text box in the <guilabel>Parameters</guilabel> page. To
+enter a cell reference rather than a value, <mousebutton>left</mousebutton> 
+click on the appropriate text box in the <guilabel>Parameters</guilabel> page;
+then <mousebutton>left</mousebutton> click on the target cell in 
+the spreadsheet.</para>
+<para>Instead of using the <guilabel>Parameters</guilabel> page, cell 
+references such as <userinput>B6</userinput> can be entered by typing them 
+directly into the edit box at the bottom of the <guilabel>Function</guilabel> 
+dialog. If a function has more than one parameter separate them with a 
+semi-colon (<keysym>;</keysym>).</para>
+<para>Pressing the <guibutton>OK</guibutton> button will insert the 
+function into the current cell and close the <guilabel>Function</guilabel>
+dialog.</para>
+<para>You can of course do without the <guilabel>Function</guilabel> 
+dialog and simply type the complete expression into the Formula toolbar's 
+main edit box. Function names are not case sensitive. Do not forget that all 
+expressions must start with an <keysym>=</keysym> symbol.</para>
+</sect2>
+
+<sect2 id="logical">
+<title>Logical Comparisons</title>
+<para>Logical functions such as IF(), AND(), OR() take parameters which have the 
+logical (boolean) values True or False. This type of value can be produced by 
+other logical functions such as ISEVEN() or by the comparison of values in 
+spreadsheet cells using the comparison expressions given in the following 
+table.</para>
+
+<informaltable><tgroup cols="3">
+<thead>
+<row>
+<entry> Expression </entry>
+<entry> Description </entry>
+<entry> Example </entry></row>
+</thead>
+<tbody>
+
+<row><entry><keysym>=</keysym><keysym>=</keysym></entry>
+<entry>Is equal to</entry>
+<entry><userinput>A2==B3</userinput> is True if the value in A2 is equal to 
+the value in B3</entry>
+</row>
+
+<row><entry><keysym>!</keysym><keysym>=</keysym></entry>
+<entry>Is not equal to</entry>
+<entry><userinput>A2!=B3</userinput> is True if the value in A2 is not equal 
+to the value in B3</entry>
+</row>
+
+<row><entry><keysym>&lt;</keysym><keysym>&gt;</keysym></entry>
+<entry>Is not equal to</entry>
+<entry>Same as <userinput>A2!=B3</userinput></entry>
+</row>
+
+<row><entry><keysym>&lt;</keysym></entry>
+<entry>Is less than</entry>
+<entry><userinput>A2&lt;B3</userinput> is True if the value in A2 is less than 
+the value in B3</entry>
+</row>
+
+<row><entry><keysym>&lt;</keysym><keysym>=</keysym></entry>
+<entry>Is less than or equal to</entry>
+<entry><userinput>A2&lt;=B3</userinput> is True if the value in A2 is less than 
+or equal to the value in B3</entry>
+</row>
+
+<row><entry><keysym>&gt;</keysym></entry>
+<entry>Is greater than</entry>
+<entry><userinput>A2&gt;B3</userinput> is True if the value in A2 is greater 
+than the value in B3</entry>
+</row>
+
+<row><entry><keysym>&gt;</keysym><keysym>=</keysym></entry>
+<entry>Is greater than or equal to</entry>
+<entry><userinput>A2&gt;=B3</userinput> is True if the value A2 is greater than 
+or equal to the value in B3</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+<para>Thus if you enter <userinput>=IF(B3&gt;B1;"BIGGER";"")</userinput> into 
+a cell it will display BIGGER if the value in B3 is greater than that in B1, 
+otherwise the cell will show nothing.</para>
+</sect2>
+
+<sect2 id="absolute">
+<title>Absolute Cell References</title>
+<para>If a formula contains a cell reference that reference will normally be 
+changed when the cell is copied to another part of the worksheet. To prevent 
+this behavior put a <keysym>$</keysym> symbol before the column letter, row 
+number or both. </para>
+
+<itemizedlist>
+<listitem><para>
+If A1 contains the formula <userinput>=D5</userinput> then on copying the 
+cell to B2 it will become <userinput>=E6</userinput> (the normal behavior).
+</para></listitem>
+<listitem><para>
+If A1 contains the formula <userinput>=$D5</userinput> then on copying the 
+cell to B2 it will become <userinput>=D6</userinput> (column letter not 
+changed).
+</para></listitem>
+<listitem><para>
+If A1 contains the formula <userinput>=D$5</userinput> then on copying the 
+cell to B2 it will become <userinput>=E5</userinput> (row number not 
+changed).
+</para></listitem>
+<listitem><para>
+If A1 contains the formula <userinput>=$D$5</userinput> then on copying the 
+cell to B2 it will remain as <userinput>=D5</userinput> (neither the column 
+letter nor the row number are changed). 
+</para></listitem>
+
+</itemizedlist>
+<para>When you are entering or editing a cell reference in a formula the 
+shortcut key <keysym>F4</keysym> can be used to step through these four 
+possibilities.</para>
+<para><link linkend="namedareas">Named cells</link> can be used in a similar 
+way to include a unchanging cell reference in a formula.
+</para>
+</sect2>
+</sect1>
+
+<sect1 id="sumspecialpaste">
+<title>Arithmetic using Special Paste</title>
+<para>Sometimes you may want to add a single value to a number of 
+cells, or subtract a value from them, or multiply or divide them all by a 
+single value. The <guimenuitem>Special Paste...</guimenuitem> option lets you 
+do this quickly and easily.</para>
+<para>First, enter the modifier value into any spare cell on your spreadsheet 
+and <guimenuitem>Copy</guimenuitem> it. Then select the area of cells you want 
+to change, choose <guimenuitem>Special Paste...</guimenuitem> from the 
+<guimenu>Edit</guimenu> or <mousebutton>right</mousebutton> mouse button menu 
+and select <guilabel>Addition</guilabel>, <guilabel>Subtraction</guilabel>, 
+<guilabel>Multiplication</guilabel> or <guilabel>Division</guilabel> from the 
+<guilabel>Operation</guilabel> section of the dialog box.</para>
+<para>You can also apply different modifier values to different rows or 
+columns of the target area by copying an area containing the wanted modifiers 
+before selecting the target area and doing <guimenuitem>Special Paste...
+</guimenuitem> . For example, if you enter <userinput>5</userinput> into cell 
+A1, <userinput>10</userinput> into B1, select both cells and do a <guimenuitem>
+Copy</guimenuitem> then <guimenuitem>Special Paste...</guimenuitem> <guilabel>
+Addition</guilabel> into cells A10 to D15, 5 will be added to A10:A15 and 
+C10:C15, and 10 to B10:B15 and D10:D15.</para>
+<para>Note that a modifier value can be a formula as well as a simple numeric 
+value. If it is a formula then &kspread; will adjust the cell references as 
+for a normal <guimenuitem>Paste</guimenuitem> operation.</para>
+</sect1>
+
+<sect1 id="goalseek">
+<title>Goal Seeking</title>
+<para>&kspread; can be used to solve algebraic expressions such as <emphasis>
+x + x^2 = 4</emphasis> or <emphasis>For what value of x does x + x squared 
+equal 4 ?</emphasis></para>
+<para>For this example you could enter <userinput>=A2+A2*A2</userinput>
+into A1 then either try different values in A2 until the result in A1 is as 
+close as you wish to <emphasis>4</emphasis> or, preferably, use &kspread;'s  
+<guimenuitem>Goal Seek</guimenuitem> feature which automatically adjusts the 
+value in one cell to try to make the value in another cell as close as 
+possible to a target value.</para>
+<para>It is invoked by selecting <guimenuitem>Goal Seek</guimenuitem> from 
+the <guimenu>Data</guimenu> menu. This brings up a dialog box in which you 
+should enter the reference of the target value cell (<userinput>A1</userinput> 
+in this case) into the <guilabel>Set cell:</guilabel> box, the target value 
+itself (<userinput>4</userinput>) into the <guilabel>To value:</guilabel> box 
+and the reference of the cell that is to be changed 
+(<userinput>A2</userinput>) into the <guilabel>By changing cell:</guilabel> 
+box. Note that you need to have entered some initial value into the cell that 
+is to be changed before starting <guimenuitem>Goal Seek</guimenuitem>.</para>
+<para>Pressing the <guibutton>Start</guibutton> button will start the
+calculation. When it finishes and if it has found a solution press the
+<guibutton>OK</guibutton> button to accept the result or
+<guibutton>Cancel</guibutton> to keep the original value.
+</para>
+</sect1>
+
+<sect1 id="sheets">
+<title>Using more than one Worksheet</title>
+<para>When you start a new, empty, document with &kspread; it will create a 
+number of blank worksheets. The number of sheets it creates is determined 
+by the <guilabel>Number of sheets open at the beginning:</guilabel> setting in 
+the <guilabel>Interface</guilabel> page of &kspread;'s 
+<link linkend="configinterface">configuration</link> dialog box.</para>
+<para><menuchoice><guimenu>Insert</guimenu><guimenuitem>Sheet</guimenuitem>
+</menuchoice> will add another sheet to the document.</para>
+<para>If the <guilabel>Show tabs</guilabel> box in the <guilabel>Interface
+</guilabel> page of &kspread;'s configuration dialog box is checked a small 
+tab will be shown near the bottom left of &kspread;'s window for each sheet. 
+<mousebutton>Left</mousebutton> click on one of these tabs to see that sheet.
+</para>
+<para>You can also switch between worksheets by using the 
+<keycombo action="simul">&Ctrl;<keysym>PageDown</keysym></keycombo> 
+to move to the next sheet, 
+<keycombo action="simul">&Ctrl;<keysym>PageUp</keysym></keycombo> to move to 
+the previous one.</para>
+<para>Worksheets are given the default names of <emphasis>Sheet1</emphasis>, 
+<emphasis>Sheet2</emphasis>... You can give a sheet a different name by 
+<mousebutton>right</mousebutton> clicking on the tab and selecting 
+<guimenuitem>Rename Sheet...</guimenuitem>.</para>
+<para>To remove a sheet from the document use the <guimenuitem>Remove Sheet
+</guimenuitem> option in the <menuchoice><guimenu>Format</guimenu><guisubmenu>
+Sheet</guisubmenu></menuchoice> submenu or in the little 
+menu that pops up when you <mousebutton>right</mousebutton> click on the tab 
+for the sheet you want to remove.</para>
+<para>Other entries in the <menuchoice><guimenu>Format</guimenu><guisubmenu>
+Sheet</guisubmenu></menuchoice> submenu allow you to show or hide a sheet in 
+much the same way as rows and columns can be hidden.</para>
+<para>If you want a formula in one sheet to refer to a cell in another sheet, 
+the cell reference must start with the sheet name followed by an exclamation 
+mark (<keysym>!</keysym>). For example if you enter <userinput>=Sheet2!A2
+</userinput> into a cell in Sheet 1, that cell will take the value from A2 of 
+Sheet2. Note that sheet names are case sensitive.</para>
+
+
+<sect2 id="consolidate">
+<title>Consolidating Data</title>
+<para>You may have constructed a document containing several worksheets 
+containing similar data but for, say, different months of the year, and wish 
+to have summary sheet containing the consolidated (&eg;, sum or average) values 
+of the corresponding data items in the other sheets.</para>
+<para>This task can be made slightly easier by using the <guimenuitem>
+Consolidate...</guimenuitem> item from the <guimenu>Data</guimenu> menu.</para>
+<para>Selecting this option brings up the <guilabel>Consolidate</guilabel>
+dialog box.</para>
+<para>For each of the source sheets, enter a reference to the desired data area
+in the <guilabel>Reference:</guilabel> box. Press <guibutton>Add</guibutton> to
+transfer it to the <guilabel>Entered references:</guilabel> box. The reference
+should include the name of the sheet containing the source data, such as
+<userinput>January!A1:A10</userinput>, and can be entered automatically by
+selecting the area in the appropriate sheet.</para>
+<para>After entering the references for all of the source data sheets 
+select the cell in the target sheet where you want the top left corner of the 
+consolidated results to appear. Then choose the appropriate function from
+the <guilabel>Function:</guilabel> combo box and press the
+<guibutton>OK</guibutton> button.</para>
+<para>If you check the <guilabel>Copy data</guilabel> box in the <guilabel>
+Consolidate</guilabel> dialog the values resulting from the consolidation will 
+be placed into the target cells rather than the formulae to calculate them.
+</para>
+</sect2>
+</sect1>
+
+<sect1 id="insertchart">
+<title>Inserting a Chart</title>
+<para>You can insert a chart into a sheet to give a graphical view of your 
+data.</para>
+<para>First select the area of cells containing the data and choose 
+<menuchoice><guimenu>Insert</guimenu><guimenuitem>Chart</guimenuitem>
+</menuchoice>. The cursor will change to a small cross shape which you 
+should drag across the sheet while holding the <mousebutton>left
+</mousebutton> mouse button down to define the area where you want the 
+chart to appear, there is no need to be too accurate at this stage as the 
+chart size can easily be changed at any time. When you release the mouse 
+button a chart wizard dialog box will appear.</para>
+<para>The wizard allows you to define the type of chart, labels and legend 
+that you need. You may wish to refer to the &kchart; Handbook at this stage,
+but again if you make a wrong choice you can correct it later. 
+When you press the <guibutton>Finish</guibutton> button the wizard will 
+vanish and you will see the chart embedded into the worksheet.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chart1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot of embedded chart</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>To move, resize or even delete the embedded chart click anywhere 
+within the chart area. It should now appear with a diagonal hatch border 
+and with a small black square at each corner and in the middle of each edge.
+</para>
+<para>If you move the cursor over any of the black squares it should change 
+to a double headed arrow. You can resize the chart by dragging one of these 
+squares with the <mousebutton>left</mousebutton> mouse button pressed. To 
+delete the chart <mousebutton>right</mousebutton> click on one of the 
+squares and select <guimenuitem>Delete Embedded Document</guimenuitem>.</para>
+<para>To move the chart move the cursor so that it is over one of the 
+hatched borders. The cursor should then change to a hand, press the 
+<mousebutton>left</mousebutton> mouse button and you will be able to drag the 
+chart to where you want it to be.</para>
+<para>To restore the chart to its normal appearance simply click anywhere 
+outside of the chart area.</para>
+<para>To change the format of the chart itself <mousebutton>left</mousebutton> 
+click twice within the chart area. It should then appear with a diagonal 
+hatch border without any small black squares and &kchart;'s <interface>
+Chart Toolbar</interface> should appear in &kspread;'s window. You can then 
+use these &kchart; tools or a selection from the menu that pops up when you 
+<mousebutton>right</mousebutton> click in the chart area to change the chart.</para>
+</sect1>
+
+<sect1 id="insertdata">
+<title>Inserting External Data</title>
+<para>You can insert data from a text file or from the clipboard into a 
+worksheet by first selecting the cell where you want the top left item of the 
+inserted data to appear, then choosing <guimenuitem>From Text File...
+</guimenuitem> or <guimenuitem>From Clipboard...</guimenuitem> from the 
+<menuchoice><guimenu>Insert</guimenu><guisubmenu>External Data</guisubmenu>
+</menuchoice> sub menu.</para>
+<para>In both cases &kspread; will assume that the data is in
+<acronym>CSV</acronym> form and will open a
+dialog box allowing you to control how the data is extracted from the file or
+clipboard and placed into the worksheet cells.</para>
+<para>If support for it has been included in your system, &kspread; can also
+insert data from a <acronym>SQL</acronym> database into a worksheet. This is
+done by using the <menuchoice><guimenu>Insert</guimenu><guisubmenu>
+External Data</guisubmenu><guimenuitem>From Database...</guimenuitem>
+</menuchoice> option.</para>
+</sect1>
+
+<sect1 id="hyper">
+<title>Link Cells</title>
+<para>A spreadsheet cell can be linked to an action so that <mousebutton>
+left </mousebutton> clicking on the cell will, for example, open your 
+browser. To make a cell act in this way select it and choose  
+<menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem>
+</menuchoice>. This will bring up the <guilabel>Insert Link</guilabel> 
+dialog box, which lets you choose between four types of link:</para>
+
+<itemizedlist>
+<listitem><para>An <guilabel>Internet</guilabel> link cell will try to 
+open your default browser at the &URL; entered in the 
+<guilabel>Internet address:</guilabel> text box of the <guilabel>Insert
+Link</guilabel> dialog when it is clicked. This could be, for example, 
+<userinput>http://www.koffice.org</userinput>. 
+</para></listitem>
+
+<listitem><para>Clicking on a cell containing a <guilabel>Mail</guilabel> 
+link will open your email composer using the address entered in the 
+<guilabel>Email:</guilabel> text box as the To: address. For example 
+<userinput>anon@example.com</userinput>.
+</para></listitem>
+
+<listitem><para>A <guilabel>File</guilabel> link cell holds the path to 
+a file or folder, as entered into the <guilabel>File location:</guilabel> 
+text box, and will try to open that file or folder with a suitable 
+application when clicked on.
+</para></listitem>
+
+<listitem><para>The <guilabel>Cell</guilabel> type of link cell holds a 
+&kspread; cell reference, entered in the <guilabel>Cell:</guilabel> text box. 
+<mousebutton>Left</mousebutton> clicking on this type of link cell causes 
+&kspread;'s focus to move to the target cell.
+</para></listitem>
+</itemizedlist>
+
+<para>All four types of link cell need some suitable text to be entered into 
+the <guilabel>Comment:</guilabel> field of the <guilabel>Insert Link</guilabel> 
+dialog. This is the text that appears in the cell, you can set 
+its style to <guilabel>Bold</guilabel> or <guilabel>Italic</guilabel> if you 
+wish.</para>
+</sect1>
+
+<sect1 id="validcheck">
+<title>Validity Checking</title>
+<para>&kspread; can automatically check the validity of entered data against 
+a number of criteria, and pop up a message box if the data is invalid.</para>
+<para>To enable this feature, select the cell(s) to be monitored and choose 
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Validity...</guimenuitem>
+</menuchoice>. This will bring up &kspread;'s <guilabel>Validity</guilabel> 
+dialog box which has two tabbed pages.</para>
+<para>In the <guilabel>Values</guilabel> page select what type of data is to 
+be considered valid from the <guilabel>Allow:</guilabel> combo box list then 
+define the valid range of values by choosing one of the options in the 
+<guilabel>Data:</guilabel> combo box and entering suitable value(s) into 
+one or both of the edit box(es).</para>
+<para>When you have done this change to the <guilabel>Error Alert</guilabel> 
+tab page. Here you can choose the type of message box
+(<guimenuitem>Stop</guimenuitem>, <guimenuitem>Warning</guimenuitem>
+or <guimenuitem>Information</guimenuitem>) that will appear when an invalid
+value is entered, and define the message box title and message text.</para>
+<para>Note that this feature only checks data that you enter into the cell, 
+for a way of checking the results from formulae cells see the <link 
+linkend="formatdata">Conditional Cell Attributes</link> section of this 
+Handbook.</para>
+</sect1>
+
+<sect1 id="protection">
+<title>Protection</title>
+
+<sect2 id="doc-protection">
+<title>Document protection</title>
+<para>Protecting the document means that without the password a user cannot add
+or delete sheets. Document protection does not protect cells.</para>
+<para>Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document</guimenuitem><guimenuitem>Protect Doc...</guimenuitem></menuchoice>.
+A dialog appears asking you for a password. The Password strength meter
+indicates if your password is secure enough. The longer the indicator is, the
+more secure your password.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>The Protect Document dialog</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>That password will then be required to unprotect the document.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>The Unprotect Document dialog</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>When a document is protected, you may not:</para>
+<itemizedlist>
+<listitem><para>
+Rename a sheet
+</para></listitem>
+<listitem><para>
+Insert a sheet
+</para></listitem>
+<listitem><para>
+Remove a sheet
+</para></listitem>
+<listitem><para>
+Hide a sheet
+</para></listitem>
+<listitem><para>
+Show a sheet
+</para></listitem>
+<listitem><para>
+See the sheet properties
+</para></listitem>
+<listitem><para>
+Merge or dissociate cells
+</para></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="sheet-protection">
+<title>Sheet protection</title>
+<para>Protecting a sheet means protecting the contents of all protected cells
+and objects on a sheet. Individual cells or a selection of cells can be
+unprotected within a protected sheet, see <link
+linkend="cell-protection">next section</link>.</para>
+<para>To protect a sheet, select
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.
+A  dialog appears asking you for a password. The Password strength meter
+indicates if your password is secure enough. The longer the indicator is, the
+more secure will be your password.</para>
+<para>That password will then be required to unprotect the sheet.</para>
+<para>When a sheet is protected, you may not:</para>
+<itemizedlist>
+<listitem><para>
+Insert any object or chart
+</para></listitem>
+<listitem><para>
+Format any cell
+</para></listitem>
+<listitem><para>
+Insert a row or a column
+</para></listitem>
+<listitem><para>
+Edit and change cell content
+</para></listitem>
+<listitem><para>
+Change any content in the sheet
+</para></listitem>
+</itemizedlist>
+
+<note><para>Protecting a sheet is especially useful for preventing accidental
+erasure of formulae.</para></note>
+</sect2>
+
+<sect2 id="cell-protection">
+<title>Cell or selected cells protection</title>
+<warning><para>Cell protection is active for all cells by default and is
+effective when you enable sheet protection. So if you keep the default and if
+you protect the sheet, all cells will be protected.</para></warning>
+<para>If you want only certain cells to be protected, this default protection
+must be turned off for all other cells. For example you might  want most cells
+to accept user input so you will uncheck <guilabel>Protected</guilabel> for
+those and choose to keep protected cells that should stay unchanged (such as
+titles). So you need 3 steps in order to protect only some cells: unprotect all
+the cells, select the cells to protect and protect them and then protect the
+whole sheet.</para>
+<para>To unprotect all the cells:</para>
+<itemizedlist>
+<listitem><para>
+Select the entire spreadsheet with the mouse.
+</para></listitem>
+<listitem><para>
+In the menubar, select <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
+Format...</guimenuitem></menuchoice>. 
+</para></listitem>
+<listitem><para>
+In the dialog that appears, go to the Cell Protection tab.
+</para></listitem>
+<listitem><para>
+Check <guilabel>Hide all</guilabel> and uncheck <guilabel>Protected</guilabel>
+to remove the protection on all cells. The cells are now all unprotected.
+</para></listitem>
+</itemizedlist>
+<para>To protect a range of selected cells or a selection of non-contiguous
+cells:</para>
+<itemizedlist>
+<listitem><para>
+Highlight the range of cells that are to be protected or use the <keycombo
+action="simul">&Ctrl;</keycombo> key to select non-contiguous cells.
+</para></listitem>
+<listitem><para>
+When all of the desired cells are selected, go to
+the <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
+Format...</guimenuitem></menuchoice> menu.
+</para></listitem>
+<listitem><para>
+In the dialog that appears, go to the Cell Protection tab.
+</para></listitem>
+<listitem><para>
+Click on the box next to <guilabel>Protected</guilabel> then click
+on <guibutton>OK</guibutton>.
+</para></listitem>
+</itemizedlist>
+<para>Once the cells are marked for protection, the protection option must be
+enabled at the sheet level, that means you must protect the entire sheet for the
+cell to be effectively protected:</para>
+<itemizedlist>
+<listitem><para>
+Select
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.
+</para></listitem>
+<listitem><para>
+In the dialog that appears, provide a safe password, then confirm it by typing
+it again. Click on <guibutton>OK</guibutton>.
+</para></listitem>
+<listitem><para>
+Protected cells in a protected sheet cannot be edited without unprotecting the
+whole sheet, and any sheet changes are disabled. For example, no one can
+insert rows or columns, change column width, or create embedded charts. 
+</para></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="hide-formula">
+<title>Hide cell formula</title>
+<para>You might want to hide your formulae so other people cannot see
+them. By default, every cell is protected and not hidden. But it is important to
+remember that these attributes have no effect unless the sheet itself is
+protected.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>A default cell with a formula</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>To hide cell formulae, select the appropriate cell or range of cells or
+non-contiguous cells with <keycombo action="simul">&Ctrl;</keycombo> and
+then choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
+Format...</guimenuitem></menuchoice> menu. In the Cell format
+dialog, click the Protection tab and select <guilabel>Hide formula</guilabel>.
+After you protect the sheet, the results of the formulae will be visible, but
+the formulae will not. </para>
+<para>You have now to protect the sheet: choose
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+to display the Protect Sheet dialog box. Enter a safe password twice to prevent
+others from unprotecting the sheet. </para>
+<para>When <guilabel>Hide formula</guilabel> is enabled and
+<guilabel>Protected</guilabel> is disabled, the formula is hidden after
+protecting the sheet but the cell content can be changed.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject>    
+<textobject>
+<phrase>Hide formula is enabled but the cell is not protected and the
+sheet is protected</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>When <guilabel>Hide formula</guilabel> and <guilabel>Protected</guilabel>
+are enabled, the formula is hidden after protecting the sheet and the cell
+content cannot be changed.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Hide formula and Protected are enabled in Cell Protection and the
+sheet is protected</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>Keep in mind that it is very easy to break the password for a
+protected sheet so if you are looking for real security, this is not the
+best solution.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title>Hide all in the cell</title>
+<para>You can hide both the formula and the content of the cell by
+choosing <guilabel>Hide all</guilabel> in the Cell Protection tab in the
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
+Format...</guimenuitem></menuchoice> menu. In the screenshot below, the
+cell itself is not protected (<guilabel>Protected</guilabel> is unchecked) thus
+the cell content can be changed.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><guilabel>Hide all</guilabel> only is enabled (no cell protection) and
+the sheet is protected</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>Here the cell itself is protected so it cannot be overwritten.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><guilabel>Hide all</guilabel> and <guilabel>Protected</guilabel> are
+enabled in Cell Protection and the sheet is protected</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
+</sect1>
+
+
+<sect1 id="other">
+<title>Other Features</title>
+
+<sect2 id="splitview">
+<title>Splitting the View</title>
+<para>If your spreadsheet is so large that you cannot see all of it at once, 
+splitting &kspread;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>
+Split View</guimenuitem></menuchoice> which will split the current view into 
+two parts. <menuchoice><guimenu>View</guimenu><guisubmenu>Splitter Orientation
+</guisubmenu></menuchoice> lets you choose between horizontal and vertical 
+splitting.</para>
+<para>This technique is particularly useful when you want to select an area 
+of the spreadsheet that is larger than can be shown in one view, perhaps to
+paste a copied cell into it. 
+Use the scrollbars to position the two views to show the top left and 
+bottom right cells of the wanted area, select the top left cell in one 
+view then hold the &Shift; key pressed while you select the 
+bottom right cell with the <mousebutton>left</mousebutton> mouse button.</para>
+<para>If there is more than one sheet in your document, you can show a 
+different sheet in each of the split views.</para>
+<para>The relative sizes of the views can be changed by dragging the thick bar 
+separating the views.</para>
+<para>To remove a view select <menuchoice><guimenu>View</guimenu><guimenuitem>
+Remove View</guimenuitem></menuchoice></para>
+</sect2>
+
+
+<sect2 id="namedareas">
+<title>Named Cells and Areas</title>
+<para>You can give a name such as <userinput>foo</userinput> to a cell or to 
+any area of a sheet by selecting the cell or area then selecting <guimenuitem>
+Area Name...</guimenuitem> from the <mousebutton>right</mousebutton> mouse 
+button menu. This will bring up the <guilabel>Area Name</guilabel> dialog box 
+where you can enter any name you wish.</para>
+<para>You can also name a cell or area by selecting it then typing the name 
+into the small text box at the left end of the Formula toolbar, overwriting the 
+cell reference that normally appears here.</para>
+<para>If you enter a name that has already been used into this text box 
+&kspread;'s selection will change to show the named cell(s).</para>
+<para>The <menuchoice><guimenu>Data</guimenu><guimenuitem>Show Area...
+</guimenuitem></menuchoice> option will give you a list of existing names 
+and let you change &kspread;'s focus to any of them or let you remove a name.
+</para>
+<para>Named cells are particularly useful in formulae as an alternative to 
+<link linkend="absolute"> absolute cell references</link> as the names can 
+be used in place of normal cell references and do not change when the 
+cell containing the formula is copied. When a name is used in this way it
+should be enclosed in single quotation marks.</para>
+<para>For example, if cell A1 has been given the name <userinput>fred
+</userinput> then you can enter a formula such as <userinput>='fred' + 2
+</userinput> into another cell which would always give the result of adding 
+2 to the value in A1 no matter where the formula cell was copied to.</para>
+<para>Note that cell and area names are treated as being in lowercase.</para>
+</sect2>
+
+<sect2 id="cellcomments">
+<title>Cell Comments</title>
+<para>A cell can contain a text comment that can be viewed when working on 
+the spreadsheet but which is not printed and not normally seen.</para>
+<para>To add a comment select the cell and choose <guimenuitem>Add/Modify 
+Comment...</guimenuitem> from the <mousebutton>right</mousebutton> mouse 
+button menu or from the <menuchoice><guimenu>Insert</guimenu><guisubmenu>
+Comment</guisubmenu></menuchoice> menu and type your comment into the 
+resulting <guilabel>Cell Comment</guilabel> dialog box.</para>
+<para>To see the comment hover the mouse pointer over the top right corner of 
+the cell. The comment will appear as if it were a Tooltip.
+</para>
+<para>If you check the <guilabel>Show comment indicator</guilabel> box of the 
+<guilabel>Misc</guilabel> page in the <menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure &kspread;...</guimenuitem></menuchoice> dialog, those 
+cells containing comments will be highlighted by a small red triangle in the 
+top right corner.</para>
+<para>To remove a comment from a cell, select <guimenuitem>Remove Comment
+</guimenuitem> from the <mousebutton>right</mousebutton> mouse button menu or 
+choose <menuchoice><guimenu>Edit</guimenu><guisubmenu>Clear</guisubmenu>
+<guimenuitem>Comment</guimenuitem></menuchoice>.</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

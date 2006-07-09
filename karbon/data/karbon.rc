@@ -1,0 +1,157 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="Karbon" version="6">
+<MenuBar>
+	<Menu name="file"><text>&amp;File</text>
+		<Action name="file_import"/>
+	</Menu>
+	<Menu name="edit">
+		<text>&amp;Edit</text>
+		<Action name="koffice_undo"/>
+		<Action name="koffice_redo"/>
+		<Separator/>
+		<Action name="edit_cut"/>
+		<Action name="edit_copy"/>
+		<Action name="edit_paste"/>
+		<Action name="edit_select_all"/>
+		<Action name="edit_deselect_all"/>
+		<Action name="edit_delete"/>
+		<Separator/>
+		<Menu name="edit_purge">
+			<text>P&amp;urge</text>
+			<Action name="edit_purge_history"/>
+		</Menu>
+	</Menu>
+	<Menu name="view">
+		<text>&amp;View</text>
+		<Action name="view_newview"/>
+		<ActionList name="view_closeallviews"/>
+		<Separator/>
+		<ActionList name="view_split"/>
+		<Action name="view_zoom_in"/>
+		<Action name="view_zoom_out"/>
+		<Action name="view_zoom"/>
+        <Action name="view_mode"/>
+	<Separator/>
+	<Action name="view_palette_action_menu"/>
+	<Action name="view_tool_options"/>
+	<Action name="view_context_help"/>
+	<Separator/>
+	<Action name="view_show_margins"/>
+	<Action name="view_show_ruler"/>
+	<Action name="view_show_grid"/>
+	<Separator/>
+	<Action name="view_snap_to_grid"/>
+	</Menu>
+	<Menu name="object">
+		<text>&amp;Object</text>
+		<Action name="object_duplicate"/>
+		<Menu name="object_order">
+			<text>&amp;Order</text>
+			<Action name="object_move_totop"/>
+			<Action name="object_move_up"/>
+			<Action name="object_move_down"/>
+			<Action name="object_move_tobottom"/>
+		</Menu>
+		<Menu name="object_align">
+			<text>&amp;Align</text>
+			<Action name="object_align_horizontal_left"/>
+			<Action name="object_align_horizontal_center"/>
+			<Action name="object_align_horizontal_right"/>
+			<Separator/>
+			<Action name="object_align_vertical_top"/>
+			<Action name="object_align_vertical_center"/>
+			<Action name="object_align_vertical_bottom"/>
+		</Menu>
+		<Menu name="object_distribute">
+			<text>&amp;Distribute</text>
+			<Action name="object_distribute_horizontal_center"/>
+			<Action name="object_distribute_horizontal_gap"/>
+			<Action name="object_distribute_horizontal_left"/>
+			<Action name="object_distribute_horizontal_right"/>
+			<Separator/>
+			<Action name="object_distribute_vertical_center"/>
+			<Action name="object_distribute_vertical_gap"/>
+			<Action name="object_distribute_vertical_top"/>
+			<Action name="object_distribute_vertical_bottom"/>
+		</Menu>
+		<Action name="selection_group"/>
+		<Action name="selection_ungroup"/>
+		<Action name="close_path"/>
+	</Menu>
+	<Menu name="effects">
+		<text>Effe&amp;cts</text>
+	</Menu>
+	 <Menu name="settings"><text>&amp;Settings</text>
+		<Separator group="settings_show"/>
+		<Action name="page_layout" group="settings_show"/>
+		<Separator group="settings_show"/>
+  		<Action name="configure" group="settings_configure"/>
+	</Menu>
+	</MenuBar>
+	<ToolBar name="edit_toolbar" fullWidth="false">
+		<Text>Edit</Text>
+		<Action name="koffice_undo"/>
+  		<Action name="koffice_redo"/>
+		<Action name="edit_cut"/>
+		<Action name="edit_copy"/>
+		<Action name="edit_paste"/>
+		<Action name="edit_delete"/>
+	</ToolBar>
+	<ToolBar name="view_toolbar" fullWidth="false">
+		<Text>View</Text>
+		<Action name="view_mode"/>
+		<Action name="view_zoom"/>
+		<Action name="help_context"/>
+	</ToolBar>
+	<ToolBar name="object_toolbar" fullWidth="false">
+		<Text>Object</Text>
+		<Action name="setLineStyle"/>
+		<Action name="setLineWidth"/>
+		<Action name="object_move_totop"/>
+		<Action name="object_move_up"/>
+		<Action name="object_move_down"/>
+		<Action name="object_move_tobottom"/>
+		<Action name="selection_group"/>
+		<Action name="selection_ungroup"/>
+	</ToolBar>
+	<ToolBar name="Tools" position="left">
+		<Text>Toolbox</Text>
+	</ToolBar>
+	<ToolBar name="align_toolbar" hidden="true" fullWidth="false">
+		<Text>Align</Text>
+		<Action name="object_align_horizontal_left"/>
+		<Action name="object_align_horizontal_center"/>
+		<Action name="object_align_horizontal_right"/>
+		<Action name="object_align_vertical_top"/>
+		<Action name="object_align_vertical_center"/>
+		<Action name="object_align_vertical_bottom"/>
+	</ToolBar>
+	<ToolBar name="Effects" hidden="true" fullWidth="false">
+		<Text></Text>
+	</ToolBar>
+	<Menu name="selection_popup">
+		<Action name="edit_cut"/>
+		<Action name="edit_copy"/>
+		<Action name="edit_paste"/>
+		<Action name="edit_delete"/>
+		<Separator/>
+		<ActionList name="selection_type_action"/>
+		<Menu name="object_order">
+			<text>&amp;Order</text>
+			<Action name="object_move_totop"/>
+			<Action name="object_move_up"/>
+			<Action name="object_move_down"/>
+			<Action name="object_move_tobottom"/>
+		</Menu>
+		<Menu name="object_align">
+			<text>&amp;Align</text>
+			<Action name="object_align_horizontal_left"/>
+			<Action name="object_align_horizontal_center"/>
+			<Action name="object_align_horizontal_right"/>
+			<Separator/>
+			<Action name="object_align_vertical_top"/>
+			<Action name="object_align_vertical_center"/>
+			<Action name="object_align_vertical_bottom"/>
+		</Menu>
+	</Menu>
+</kpartgui>

@@ -1,0 +1,117 @@
+BUGS :
+======
+- Placing of objects is not precise
+
+TO FINISH:
+===========
+- Presentation structure editor/viewer
+- Group objects (resizing is fucked up, set properties doesn't work)
+
+MISSING FEATURES / TODO:
+==============================
+- Current "align objects" aligns in relation with the page, is there a
+  way to align the h or v centers of several objects ?
+- use libkformula (or better, make a KPart out of it)
+- seperate the general configuration and page/slide specific config dialog
+  and make 2 out of them (currently it's one, which is confusing)
+- use GM in all dialogs
+- Rewrite autoforms (using XML)
+- Possibility to print 1, 2 or 4 slides / page
+- Menu item for copy page (to do it without copy+paste)
+- Extend Contents to Height => Fit contents to height (also shrink spacings!)
+  Maybe don´t only change spacings but also fontsizes
+- Make option for txt obj to be abe to set a few colors and automatically use
+  them in this order for the paragraphs (like always one in black and one in blue and
+  again and again)
+- Synchronize object background and page background => object can't load picture and page can't use different brush type.
+
+KOffice in general:
+=======================
+- koTemplateChooseDia:
+  - Restart with last presentation (suggesting it in initial "open" dialog)
+    (using kapp->getConfig)
+
+
+KPresenter after koffice 1.3
+============================
+Todo:
+- Create compatibility for saving in old format for page effect speed.
+- Put in zip format copy/paste object to dnd between OO and koffice
+
+
+In Progress:
+-> copy/paste element as oasis format
+	-> copy object (In Progress)
+
+Done:
+-> copy/paste element as oasis format
+    -> duplicate page 
+	-> copy page 
+	-> create template
+-> Hide/show header/footer by page (allow by oasis format)
+-> implement custom slide show
+
+KPresenter Oasis Format:
+========================
+Done:
+->save/load object:
+        -> rectangle
+        -> pie
+        -> text object
+        -> ellipse
+        -> group objet
+        -> polygone object
+        -> polyline object (all attributes)
+-> save/load  page background
+-> save/load object background
+-> save/load page effect (hide/show effect)
+-> save/load page sound effect
+-> save/load object effect
+-> save/load notes
+-> save/load stroke line
+-> save/load shadow object
+-> save/load page layout
+-> save/load sound page effect
+-> save/load picture object
+-> save/load page background image
+-> save/load animation group
+-> save/load sticky object
+-> save/load closed element (defined as polygone into oo spec draw:polygone)
+-> save/load picture effect
+	-> bright
+	-> contrast
+	-> intensity channel (green/blue/red)
+	-> grayscal
+-> save/load general config (GridIsVisible etc.)
+-> save/load object transparency
+-> save/load header/footer object
+-> save/load display header/footer
+-> save/load regular polygon
+-> save/load variable settings
+-> Save/load masterpage
+-> save/load in old format master page attribute
+
+Todo:
+-> save/load cubic/quadric/freehand object (define as svg object)
+-> save/load picture effect
+	-> picture effect (extend oasis format)
+	-> depth
+	-> mirror type (we must use rotate and draw:mirror element)
+
+Bugs:
+-> fix default value
+-> fix some arrow style  
+
+In Progress:
+-> save/load backgroud of master page (save works not perfect)
+-> save/load picture effect
+-> save/load protect object
+-> save/load embedded object
+
+After koffice-1.4
+-> allow to move object outside page (ask by boiko)
+-> allow to put all transparent picture with a specific color (ask by boiko)
+
+Reginald Stadlbauer <reggie@kde.org>
+Laurent Montel <montel@kde.org>
+

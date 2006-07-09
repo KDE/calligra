@@ -1,0 +1,23 @@
+Begin4
+Title:          libqpro
+Version:        0.3
+Entered-date:   2001-04-22
+Description:    This C++ library provides functionality for reading and (eventually) writing
+		Quattro Pro spreadsheet files.
+ 
+		The library is designed as a tool for developers and does not provide any
+		(useful) programs itself.
+ 
+		The library was originally designed and written for the KSpread KDE
+		spreadsheet program as part of the Quattro Pro filter.  I have tried to write
+		it as a reusable set of classes so that it may used by other people,
+		particularly those writing spreadsheet filters.
+Keywords:       quattro pro, spreadsheet
+Author:         gshort@users.sourceforge.net (Graham Short)
+Maintained-by:  gshort@users.sourceforge.net
+Primary-site:   http://libqpro.sourceforge.net
+Alternate-site: 
+Original-site:  
+Platforms:      linux, Compiled on various Unix but not tested.
+Copying-policy: GPL
+End

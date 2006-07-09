@@ -1,0 +1,17 @@
+2004-08-30
+
+Oasis format:
+-------------
+todo:
+-----
+-> Load oasis format
+
+Done:
+-----
+-> Save oasis format
+
+In progress:
+------------
+I don't know if libkformula implement 100% MathML format
+
+Laurent Montel <montel@kde.org>

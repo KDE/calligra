@@ -1,0 +1,148 @@
+<sect1 id="doc-structure">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Document Structure</title>
+<indexterm><primary>document structure</primary></indexterm>
+
+<para>Sometimes, when editing a complicated document, it can be helpful to look at an organized view of your document.</para>
+<para>You can use this organized view to jump immediately to certain text
+frames, select picture frames, change frame properties, delete frames,
+ or simply review your document.</para>
+
+<sect2 id="doc-structure-view">
+<title>Show and hide document structure area</title>
+<para>Because simple documents do not need the information provided in the document structure window, &kword; 
+has the ability to toggle the document structure window on and off.</para>
+<para>To toggle the document structure window on and off, select <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Show Doc Structure</guimenuitem>
+</menuchoice> from the menubar to make the document structure window visible.  Select <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Hide Doc Structure</guimenuitem>
+</menuchoice> from the menubar to make the document structure window disappear.</para>
+
+<para>You can move focus to the document structure area by pressing
+<keycombo>&Alt;<keycap>1</keycap></keycombo>.  You can move focus to the main document panel by pressing
+<keycombo>&Alt;<keycap>2</keycap></keycombo>.
+</para>
+</sect2>
+
+<sect2 id="doc-structure-navigate">
+<title>Navigating the document structure area</title>
+<para>Lets examine a sample document structure window.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="docstruct.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>As you can see, there are five groups of frames categorized (<guilabel>Text
+Frames/Frame Sets</guilabel>
+<guilabel>Pictures</guilabel>, <guilabel>Tables</guilabel>, <guilabel>Formula
+Frames</guilabel>, 
+<guilabel>Embedded Objects</guilabel>.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Text Frames/Frame Sets</guilabel></term>
+<listitem><para>Within this category, is a list of all text framesets.  Below
+each frameset, each frame is listed.  Below each frame, each paragraph is
+listed.</para></listitem>
+ </varlistentry>
+
+<varlistentry>
+<term><guilabel>Pictures</guilabel></term>
+<listitem><para>Within this category is a list of all frames that contain
+pictures, and the folder the pictures were loaded from.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Tables</guilabel></term>
+<listitem><para>Within this category is a list of all frames that contain
+tables.  Note that a table behaves very much like a frameset.
+Each cell of the table is a frame, and each frame may contain
+multiple paragraphs.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Formula Frames</guilabel></term>
+<listitem><para>Within this category is a list of all frames that contain
+formulas.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Embedded Objects</guilabel></term>
+<listitem><para>Within this category, is an alphabetical list of all frames
+that contain data from other &koffice; applications.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>You can use your mouse to select the category you want, or first
+put focus in the document structure area (press <keycombo>&Alt;<keycap>1</keycap></keycombo>)
+then use the up and down arrow keys to scroll through the list.
+Double click on a category to expand or collapse the category,
+or press the right or left arrow keys.</para>
+
+<note><para>Depending on your document, you may not have all categories in your
+document structure window.  The category only 
+appears when there is <emphasis>at least one</emphasis> frame in the
+category.</para></note>
+
+</sect2>
+
+
+<sect2 id="doc-structure-edit">
+<title>Edit a text frame, frameset, or paragraph using the document structure area</title>
+<para>To edit a text frame, frameset, or paragraph, click on the
+item with the &RMB; or scroll to the item and press the
+<keycap>Menu</keycap> key.  A popup menu will appear.  Select <guilabel>Edit
+Text</guilabel> from the menu.</para>
+</sect2>
+
+<sect2 id="doc-structure-speak">
+<title>Speak the text of a text frame, frameset, or paragraph using the document structure area</title>
+<para>If you have the KTTS component installed in your system, you can have the computer
+speak the text of the document.  To speak the text of a frame, frameset, or paragraph, click on the
+item with the &RMB; or scroll to the item and press the
+<keycap>Menu</keycap> key.  A popup menu will appear.  Select <guilabel>Speak
+Text</guilabel> from the menu.</para>
+
+<tip>
+<para>The <guilabel>Speak Text</guilabel> menu item will be disabled if KTTS
+is not installed in your system.
+</para>
+<para>If KTTS fails to speak the text, or speaks the text in the wrong
+language, make sure you have a <guilabel>Talker</guilabel> in
+KTTS configured with the correct language.  See <ulink url="help:kttsd">The KTTS Handbook</ulink>
+for details.  Also, make sure the <guilabel>Global Language</guilabel> is properly
+set in the &kword; settings.
+</para>
+</tip>
+</sect2>
+
+<sect2 id="doc-structure-show"><title>Jump to a frame, frameset, or paragraph using the document structure area</title>
+<para>To display a frame, frameset, or paragraph in the main document panel, click on the
+item with the &RMB; or scroll to the item and press the
+<keycap>Menu</keycap> key.  A popup menu will appear. Select <guilabel>Show</guilabel>
+ from the menu.</para>
+</sect2>
+
+<sect2 id="doc-structure-delete"><title>Delete frame or frameset using the document structure area</title>
+<para>To delete a frame or frameset, click on the
+frame title with the &RMB; or scroll to the frame title and press the
+<keycap>Menu</keycap> key.  A popup menu will appear. Select <guilabel>Delete
+Frame</guilabel> from the menu.</para>
+</sect2>
+
+<sect2 id="doc-structure-properties"><title>Edit a frame or paragraph properties using the document structure area</title>
+<para>To change the properties of a frame or paragraph, click on the
+item with the &RMB; or scroll to the item and press the
+<keycap>Menu</keycap> key.  A popup menu will appear.  Select
+<guilabel>Properties</guilabel> from the menu.</para>
+</sect2>
+
+</sect1>

@@ -1,0 +1,117 @@
+<sect1 id="tutorial-starting">
+<title>Starting to know Krita</title>
+
+<para>
+So, let's show you all the niceties. You can start &krita; either on its own
+or from the &koffice; shell. In your &kde; menus, &krita; should be placed
+either under Graphics or under Office &mdash; it depends a bit on who packaged
+&koffice; for you. Or do what I do: press
+<keycombo action="simul">&Alt;<keycap>F2</keycap></keycombo> (which opens the
+minicli), type <userinput><command>krita</command></userinput> and
+press <guibutton>OK</guibutton>.
+</para>
+
+<para>
+A little later, you'll be greeted by a dialog:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The Create Document dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="createdocument.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Create Document dialog</phrase>
+</textobject>
+<caption><para>The Create Document dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This is standard for &koffice;: you can create a new document, choose a
+document from among your files or select a document you had opened in an earlier
+session. We have got a bunch of templates here, ordered by color model. &krita;
+is a very flexible application and can handle many different types of images:
+<acronym>CMYK</acronym> images for printers, <acronym>RGB</acronym> images for
+the web, <acronym>RGB</acronym> images with high channel depths for
+photographers, watercolor images for painters &mdash; and more. For now, choose
+<guilabel>Custom Document</guilabel>. That will allow
+us to see the New Image dialog box:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The New Image dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newimage.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The New Image dialog</phrase>
+</textobject>
+<caption><para>The New Image dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+Here you can give your document a name, determine the dimensions and the
+resolution. The combination of width/height and resolution determines how big
+your image will be on screen or on paper: if your image has a resolution of
+100x100 dpi, and your image is 1000x1000 pixels big, then, if everything is
+configured correctly, your image will be exactly 10 inches long and 10 inches
+wide if you check with a ruler, no matter the resolution of your screen or of
+your printer &mdash; if shown at 100%. However, life is seldom so well-regulated
+that this actually works out. For now, just think pixels, not inches.
+</para>
+
+<para>
+The next group of options is a lot more interesting than resolution: &krita;
+is an enormously flexible application and you can work with many kinds of
+images. For this tutorial, just select <guilabel>RGB (8
+bits/channel)</guilabel>. You can also select a profile. For now, we leave this
+at the default setting of <guilabel>sRGB built-in - (lcms internal)</guilabel>.
+</para>
+
+<para>
+In the third option group, you can select the initial canvas color and the
+amount of opacity/transparency of this color. Furthermore you can
+add a description of the contents. We leave these options at their default
+settings as well, so click <guibutton>Create</guibutton> to actually create the new
+image.
+</para>
+
+<para>
+You will now see the main &krita; screen.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>&krita;'s main screen</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mainscreen.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>&krita;'s main screen</phrase>
+</textobject>
+<caption><para>&krita;'s main screen</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+On the left hand side and on the top, there are toolbars which offer you access
+to tools for painting, editing, and selecting.
+You can find a more detailed description of these toolbars <link
+linkend="commands-toolbars">here</link>. The actual painting area is in the
+middle. On the right side of your screen, there are various palettes, which you
+can read more about in <link linkend="commands-palettes">this section</link>.
+Finally, there is a menu bar at the top of the screen, as usually. Read more
+about it <link linkend="commands-menus">here</link>.
+</para>
+
+</sect1>

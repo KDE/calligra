@@ -1,0 +1,93 @@
+<!--	$Id$
+
+		This is an XML document type definition (DTD) for the KImageShop
+		image format. 
+		Written by Matthias Elter <elter@kde.org>.
+-->
+
+
+<!--   
+        A DOC element can contain only one IMAGE element.
+
+        Attributes
+	
+        editor:     The program this file was written with
+        depth:      The number of bytes a pixel uses per channel.
+	syntaxVersion: always 1 for now
+-->
+
+<!ELEMENT DOC (IMAGE)>
+<!ATTLIST DOC
+	editor   CDATA 'krita'
+	depth      CDATA #REQUIRED
+	syntaxVersion CDATA #REQUIRED>
+
+<!--	An image contains at most _one_ LAYERS element.
+
+        Attributes:
+
+        mime:       The MIME type 
+				If this is 'application/x-kra', then search for LAYERS component.
+				The data is saved in external binary files 
+        name:       Every image has a name.  This is also the in-store filename where to get the pixel data or foreign image.
+        width:      The image with in pixels.
+        height:     The image height in pixels.
+-->
+
+<!ELEMENT IMAGE (LAYERS)>
+<!ATTLIST IMAGE 
+	name       CDATA #REQUIRED
+	mime       CDATA #REQUIRED
+	width      CDATA #REQUIRED
+	height     CDATA #REQUIRED
+	x-res      CDATA #REQUIRED
+	y-res     CDATA #REQUIRED
+	profile CDATA #REQUIRED
+	colorspacename CDATA #REQUIRED>
+
+
+<!--	The layers element holds the image's layers.
+
+        Attributes: none
+
+-->
+<!ELEMENT LAYERS (layer)+>
+
+
+<!--
+        The data is saved in external binary files.
+        Attributes:
+
+        name:       The channel's name.
+        x:             The layer's horizontal positon in the image.
+        y:             The layer's vertical position in the image.
+        width:       The layer's width in pixels OBSOLETE
+        height:      The layers height in pixels OBSOLETE
+        opacity:    The layer's opactiy. A value betwenn 0 and 255.
+        visible       Is the layer visible? (yes or no)
+        linked:       Is the layer linked? (yes or no) OBSOLETE
+        filename:   The name of the binary file of the layer' data.
+        layertype:   The type of layer. paintlayer is assumed if absent.
+        filtername  The name of the filter in case the layer is an adjustmentlayer
+        filterversion The version of the filter in case the layer is an adjustmentlayer
+-->
+<!ELEMENT layer (LAYERS)?>
+<!ATTLIST layer 
+	name      CDATA #REQUIRED
+	x         CDATA #REQUIRED
+	y         CDATA #REQUIRED
+	width     CDATA #IMPLIED
+	height    CDATA #IMPLIED
+	opacity   CDATA #REQUIRED
+	visible   CDATA #REQUIRED
+	linked    CDATA #IMPLIED
+	colorspacename CDATA #REQUIRED
+	profile CDATA #REQUIRED
+	filename      CDATA #IMPLIED
+	layertype      CDATA "paintlayer"
+        filtername CDATA ""
+        filterversion CDATA ""
+>
+
+<!ELEMENT FILTERCONFIG (filterconfig)>
+

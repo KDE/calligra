@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DOC PUBLIC "-//KDE//DTD kword 1.2//EN" "http://www.koffice.org/DTD/kword-1.2.dtd">
+<DOC xmlns="http://www.koffice.org/DTD/kword" mime="application/x-kword" syntaxVersion="2" editor="KWord" >
+ <PAPER width="459.213" spFootNoteBody="10.0063" spHeadBody="8.98584" format="6" slFootNoteWidth="2" height="323.15" fType="0" slFootNoteLength="20" orientation="1" hType="0" columnspacing="3.00473" pages="2" spFootBody="8.98584" columns="1" >
+  <PAPERBORDERS right="14.1733" left="14.1733" bottom="14.1733" top="14.1733" />
+ </PAPER>
+ <ATTRIBUTES hasTOC="0" standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="0" tabStopValue="42.5198" />
+ <VARIABLESETTINGS displayfieldcode="0" displaylink="1" displaycomment="1" underlinelink="1" />
+ <FOOTNOTESETTING type="0" depth="0" />
+ <ENDNOTESETTING type="0" depth="0" />
+ <FRAMESETS>
+  <FRAMESET frameType="1" frameInfo="0" protectSize="0" name="Text Frameset 1" visible="1" >
+   <FRAME bRed="0" rRed="0" tGreen="0" bGreen="0" runaround="1" copy="0" rBlue="0" rGreen="0" bBlue="0" right="445.04014106" newFrameBehavior="0" tBlue="0" lRed="0" runaroundSide="biggest" left="14.1732529" lGreen="0" bottom="308.97691322" lBlue="0" runaroundGap="2" top="14.1732529" tRed="0" />
+   <FRAME bRed="0" rRed="0" tGreen="0" bGreen="0" runaround="1" copy="0" rBlue="0" rGreen="0" bBlue="0" right="445.04014106" newFrameBehavior="0" tBlue="0" lRed="0" runaroundSide="biggest" left="14.1732529" lGreen="0" bottom="632.12707934" lBlue="0" runaroundGap="2" top="337.32341902" tRed="0" />
+   <PARAGRAPH>
+    <TEXT xml:space="preserve" > </TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FORMAT id="1" pos="0" len="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="-1" red="-1" green="-1" />
+      <SIZE value="8" />
+      <ITALIC value="0" />
+      <VERTALIGN value="0" />
+      <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET frameType="1" frameInfo="0" protectSize="0" name="Box 1" visible="1" >
+   <FRAME bRed="0" bkBlue="255" rRed="0" tGreen="0" bGreen="0" runaround="1" copy="0" bkRed="255" rBlue="0" rGreen="0" bBlue="0" right="318.89819025" newFrameBehavior="1" tBlue="0" lRed="0" runaroundSide="biggest" left="300.47296148" bkStyle="1" lGreen="0" bkGreen="255" bottom="262.20517865" lBlue="0" runaroundGap="2.83465" top="235.27599814" autoCreateNewFrame="2" tRed="0" />
+   <PARAGRAPH>
+    <TEXT xml:space="preserve" > </TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="center" />
+     <OFFSETS before="5.6693" />
+     <FORMAT id="1" pos="0" len="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="-1" red="-1" green="-1" />
+      <SIZE value="14" />
+      <ITALIC value="0" />
+      <VERTALIGN value="0" />
+      <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET frameType="1" frameInfo="0" protectSize="0" name="Box 2" visible="1" >
+   <FRAME bRed="0" bkBlue="255" rRed="0" tGreen="0" bGreen="0" runaround="1" copy="0" bkRed="255" rBlue="0" rGreen="0" bBlue="0" right="345.82737076" newFrameBehavior="1" tBlue="0" lRed="0" runaroundSide="biggest" left="327.40214199" bkStyle="1" lGreen="0" bkGreen="255" bottom="262.20517865" lBlue="0" runaroundGap="2.83465" top="235.27599814" autoCreateNewFrame="2" tRed="0" />
+   <PARAGRAPH>
+    <TEXT xml:space="preserve" > </TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="center" />
+     <OFFSETS before="5.6693" />
+     <FORMAT id="1" pos="0" len="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="-1" red="-1" green="-1" />
+      <SIZE value="14" />
+      <ITALIC value="0" />
+      <VERTALIGN value="0" />
+      <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET frameType="1" frameInfo="0" protectSize="0" name="Box 3" visible="1" >
+   <FRAME bRed="0" bkBlue="255" rRed="0" tGreen="0" bGreen="0" runaround="1" copy="0" bkRed="255" rBlue="0" rGreen="0" bBlue="0" right="372.75655127" newFrameBehavior="1" tBlue="0" lRed="0" runaroundSide="biggest" left="354.3313225" bkStyle="1" lGreen="0" bkGreen="255" bottom="262.20517865" lBlue="0" runaroundGap="2.83465" top="235.27599814" autoCreateNewFrame="2" tRed="0" />
+   <PARAGRAPH>
+    <TEXT xml:space="preserve" > </TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="center" />
+     <OFFSETS before="5.6693" />
+     <FORMAT id="1" pos="0" len="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="-1" red="-1" green="-1" />
+      <SIZE value="14" />
+      <ITALIC value="0" />
+      <VERTALIGN value="0" />
+      <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET frameType="1" frameInfo="0" protectSize="0" name="Box 4" visible="1" >
+   <FRAME bRed="0" bkBlue="255" rRed="0" tGreen="0" bGreen="0" runaround="1" copy="0" bkRed="255" rBlue="0" rGreen="0" bBlue="0" right="399.68573178" newFrameBehavior="1" tBlue="0" lRed="0" runaroundSide="biggest" left="381.26050301" bkStyle="1" lGreen="0" bkGreen="255" bottom="262.20517865" lBlue="0" runaroundGap="2.83465" top="235.27599814" autoCreateNewFrame="2" tRed="0" />
+   <PARAGRAPH>
+    <TEXT xml:space="preserve" > </TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="center" />
+     <OFFSETS before="5.6693" />
+     <FORMAT id="1" pos="0" len="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="-1" red="-1" green="-1" />
+      <SIZE value="14" />
+      <ITALIC value="0" />
+      <VERTALIGN value="0" />
+      <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET frameType="1" frameInfo="0" protectSize="0" name="Main Text Frameset" visible="1" >
+   <FRAME bkBlue="255" runaround="1" copy="0" bkRed="255" right="399.9975433438" newFrameBehavior="1" runaroundSide="biggest" left="69.9875228202" bkStyle="1" bkGreen="255" bottom="230.0035480612" runaroundGap="2.83465" top="100.0064724624" autoCreateNewFrame="2" />
+   <PARAGRAPH>
+    <TEXT xml:space="preserve" > </TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FORMAT id="1" pos="0" len="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="-1" red="-1" green="-1" />
+      <SIZE value="14" />
+      <ITALIC value="0" />
+      <VERTALIGN value="0" />
+      <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+ </FRAMESETS>
+ <STYLES>
+  <STYLE>
+   <NAME value="Standard" />
+   <FLOW align="auto" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="-1" red="-1" green="-1" />
+    <SIZE value="-1" />
+    <ITALIC value="0" />
+    <VERTALIGN value="0" />
+    <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Document Title" />
+   <FLOW align="center" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="-1" red="-1" green="-1" />
+    <SIZE value="24" />
+    <ITALIC value="0" />
+    <VERTALIGN value="0" />
+    <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 1" />
+   <FLOW align="auto" />
+   <COUNTER numberingtype="1" righttext="." type="1" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="-1" red="-1" green="-1" />
+    <SIZE value="20" />
+    <ITALIC value="0" />
+    <VERTALIGN value="0" />
+    <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 2" />
+   <FLOW align="auto" />
+   <COUNTER numberingtype="1" righttext="." type="1" depth="1" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="-1" red="-1" green="-1" />
+    <SIZE value="16" />
+    <ITALIC value="0" />
+    <VERTALIGN value="0" />
+    <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 3" />
+   <FLOW align="auto" />
+   <COUNTER numberingtype="1" righttext="." type="1" depth="2" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="-1" red="-1" green="-1" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <VERTALIGN value="0" />
+    <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Enumerated List" />
+   <FLOW align="auto" />
+   <COUNTER numberingtype="0" righttext="." type="1" depth="0" />
+   <FOLLOWING name="Enumerated List" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="-1" red="-1" green="-1" />
+    <SIZE value="-1" />
+    <ITALIC value="0" />
+    <VERTALIGN value="0" />
+    <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Alphabetical List" />
+   <FLOW align="auto" />
+   <COUNTER numberingtype="0" righttext=")" type="2" depth="0" />
+   <FOLLOWING name="Alphabetical List" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="-1" red="-1" green="-1" />
+    <SIZE value="-1" />
+    <ITALIC value="0" />
+    <VERTALIGN value="0" />
+    <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Bullet List" />
+   <FLOW align="auto" />
+   <COUNTER numberingtype="0" type="10" depth="0" />
+   <FOLLOWING name="Bullet List" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="-1" red="-1" green="-1" />
+    <SIZE value="-1" />
+    <ITALIC value="0" />
+    <VERTALIGN value="0" />
+    <TEXTBACKGROUNDCOLOR blue="-1" red="-1" green="-1" />
+   </FORMAT>
+  </STYLE>
+ </STYLES>
+ <FRAMESTYLES>
+  <FRAMESTYLE blue="255" red="255" green="255" >
+   <NAME value="Plain" />
+  </FRAMESTYLE>
+ </FRAMESTYLES>
+ <TABLESTYLES>
+  <TABLESTYLE>
+   <NAME value="Plain" />
+   <PFRAMESTYLE name="Plain" />
+   <PSTYLE name="Standard" />
+  </TABLESTYLE>
+ </TABLESTYLES>
+ <PICTURES/>
+ <MAILMERGE/>
+</DOC>

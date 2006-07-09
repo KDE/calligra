@@ -1,0 +1,9 @@
+Ideas from graphics meeting (but also in my head before it):
+
+- use QPainterPath, get rid of libart
+- use color profiles/matching (krita?)
+- get rid of the old freetype code to convert text to path, use
+  QPainterPath::addText instead.
+- use koText for text boxes?
+- improve printing, should be a lot better when we use QPainter(?)
+- use real-time editing, for instance real-time changing of gradients

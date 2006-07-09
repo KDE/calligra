@@ -1,0 +1,238 @@
+<sect1 id="graphics">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Graphics</title>
+<indexterm><primary>graphics</primary><secondary>introduction</secondary></indexterm>
+
+<para>&kword; is very good at handling textual information.  &kword; can also be used to incorporate
+graphical images with text.  </para>
+<tip><para>A source of great clipart that is free to use is the <ulink url="http://www.openclipart.org">Open Clip Art Library</ulink>. This project has a large collection of vector graphics indexed and sorted by category, all released into the public domain.</para></tip>
+<para>Pictures can be inserted into a document as either <emphasis>framed</emphasis> or <emphasis>inline</emphasis> images.</para>
+<para>Framed images are pictures that have a frame around them.  The frame around a picture functions 
+exactly the same as a frame around text.  It contains the picture and determines the size and shape of the picture.</para>
+<para>An inline image has a frame around it, but this frame is inserted <emphasis>within</emphasis> the current text
+frame. If text is inserted in front of the picture, the picture travels down the frame just like any text would.  This means the picture will
+stay in the same area of the page as the text that surrounds it.</para>
+<para>Framed pictures, on the other hand, need to be moved by hand on the page.  </para>
+
+<para>&kword; can use pictures <link linkend="insert-graphics">already stored in a file</link> or <link linkend="scan-graphics"> acquire an image from a scanner</link>.</para>
+<sect2 id="insert-graphics"><title>Insert Graphics from a file</title>
+<indexterm><primary>graphics</primary><secondary>inserting</secondary></indexterm>
+
+<para>There are three ways to insert a picture into a document:</para>
+<itemizedlist>
+<listitem>
+<para>By selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Picture...</guimenuitem></menuchoice> from
+the menubar</para>
+</listitem>
+
+<listitem>
+<para>Using the keyboard shortcut: <keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo></para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="fpicture.png"
+format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>All three methods open a file selection dialog.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="insgrph1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para><link linkend="file-dialog">Use this dialog</link> to select the picture.</para>
+
+<tip><para>Pressing <keycap>Esc</keycap> at this point will cancel the insertion of a picture into your document.</para></tip>
+
+<para>Once the appropriate picture file is located, click on the filename once with the &LMB;.  Click
+<guibutton>OK</guibutton> to continue.</para>
+<para>A new dialog box appears.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="insgrph2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The right half of this dialog box contains a preview window.  The picture should be visible in this window.</para>
+<para>The left part of this box contains one button and two check boxes.</para>
+<variablelist>
+<varlistentry>
+<term><guibutton>Choose Picture...</guibutton></term>
+<listitem><para>Click this button and &kword; will open a
+new file dialog to choose a different picture.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Insert Picture Inline</guilabel></term>
+<listitem><para>If there is a mark in this check box, the picture will be an inline picture.  If there is no mark, a new frame will be
+created.  For details on the differences, see the <link linkend="graphics">introduction</link>.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Retain original aspect ratio</guilabel></term>
+<listitem><para><glossterm linkend="defaspectratio">Aspect ratio</glossterm> is defined in the &kword; glossary.</para>
+<para>If a there is a mark in this check box, &kword; will not allow any change the aspect ratio of the picture.  This prevents
+inappropriate stretching and compressing of the image.  It will still be possible to change the overall size of the image, but it 
+will not be possible to change the horizontal measurement without also changing the vertical measurement.</para>
+<para>If there is no mark in this check box, the horizontal and vertical sizes of the picture can be changed independently.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<para>To insert the picture, click <guibutton>OK</guibutton>.  To abort the picture entirely, click <guibutton>Cancel</guibutton>.</para>
+<para>If an inline picture was selected, click with the mouse in the appropriate location.   The picture will be inserted.</para>
+<para>If a framed picture was selected, the mouse cursor will change to crosshairs.  Locate one corner of the location of the new picture
+frame with the mouse.  Click and hold the &LMB; down.  Drag the cursor to adjust the size of the picture frame.  When the size of the 
+picture frame is correct, release the &LMB;.  &kword; will insert the picture into the frame, and resize the picture to fit within the
+frame.</para>
+</sect2>
+
+<sect2 id="scan-graphics"><title>Using a picture from a scanner</title>
+<note><para>A complete discussion of how to operate a scanner is beyond the scope of this documentation.  This document will confine itself to the controls available in &kword; but will not 
+go into detail on the use of these controls.</para></note>
+<para>To use a scanner to insert a picture into your kword document, begin by selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Scan Image...</guimenuitem></menuchoice> from
+the menubar.</para>
+<para> &kword; will open a dialog box for you to choose your scanner.  Simply click on the radio button to the left of your scanner.  Then click <guibutton>OK</guibutton>.  This will bring up the scanning dialog:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="scan.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You should begin by selecting the image type that you want to scan and the resolution.  First determine the picture type using the drop down box labeled 
+<guilabel>Scan Mode</guilabel>.  You can choose between <guilabel>Color</guilabel>, <guilabel>Greyscale</guilabel> or <guilabel>Binary</guilabel> image.</para>
+<para>If you want to select a different scanner, click the <guibutton>Source...</guibutton> button.</para>
+<para>If you have selected a <guilabel>Binary</guilabel> image, you can use the drop down box labeled <guilabel>Halftoning</guilabel> to select your halftone protocol.</para>
+<para>Select your resolution using the drop down box labeled <guilabel>Resolution</guilabel></para>
+<para>Now place the object you want to scan in the scanner and click <guibutton>Preview Scan</guibutton>.  Your scanner will take a low resolution 
+scan and preview it in the window in the far right of the dialog</para>
+<para>Using your mouse, click on the upper left corner of he area you want to scan with the &LMB; and hold the button down.  Drag the mouse down and 
+to the right to create a box for a high-resolution scan. When you have an appropriate sized box, release the &LMB;. Once the box is drawn, you 
+can adjust the selection box using the mouse. </para>
+<para>You can refer to the box to the left of the preview window labeled <guilabel>Selection</guilabel>.  This box will show you the height and 
+width of your selection and the amount of disk space you will need to store this image in the &kword; file. </para>
+<para>Once you are satisfied with the size and position of the selection box, click <guibutton>Final Scan</guibutton>.  The scanner will scan the selected area at the resolution you selected.  </para>
+<para>When the scanner is finished, click <guibutton>Close</guibutton> to close the dialog box.  Your cursor will now be crosshairs.  Using this cursor, draw the size and position you want your picture on the 
+page. The scanned image will be inserted in a separate frame.  You can now adjust the size of the picture by <link linkend="resize-frame">changing the size of the frame</link></para>
+<sect3 id="scan-adjust"><title>Adjusting the image prior to final scanning</title>
+<para>You can use the lower left part of this dialog to adjust your image prior to scanning. </para>
+<para>By moving the slider bar labeled <guilabel>Threshold</guilabel> you can adjust the cutoff point of white in the scanned image.  </para>
+<para>By moving the slider bars labeled <guilabel>Brightness</guilabel> and <guilabel>Sharpness</guilabel> you can adjust the relative brightness and the sharpness of the scanned image.</para>
+<note><para>The preview window will not show you the effects of changes to your scanned image in the preview window.</para></note>
+<para>You can select from one of three pre-defined gamma tables or you can select the <guilabel>User defined</guilabel> option from the drop 
+down box labeled <guilabel>Use custom gamma table</guilabel>.  If you selected <guilabel>User defined</guilabel> you can click the <guibutton>Edit...</guibutton> 
+to alter the <guilabel>Brightness</guilabel>, <guilabel>Contrast</guilabel> and <guilabel>Gamma</guilabel> for your customized gamma table. </para>
+</sect3>
+<sect3 id="scan-preview"><title>Adjusting the preview scan size</title>
+<para>If you know the size of the object you are scanning, you can select the preview area from the drop-down box labeled <guilabel>Scan size</guilabel>.  You can also use the radio buttons 
+labeled <guibutton>Landscape</guibutton> and <guibutton>Portrait</guibutton> to change the orientation of the preview area.</para>
+<note><para>Changing the orientation between portrait and landscape does not change the orientation of the scanned text or image.</para></note>
+</sect3>
+<sect3 id="scan-autosel"><title>Using auto-selection</title>
+<para>&kword; can try to automatically select the object you want to scan.  It does this by looking for an area within the preview window that seems to 
+define an object in the picture.  By default this option is disabled.  You can enable autoselection in this dialog.</para>
+<para>The autoselection area of the dialog is located just to the left of the preview window in the middle of the dialog box. It consists of three controls:</para>
+<variablelist>
+<varlistentry>
+<term>Checkbox</term>
+<listitem><para>If a mark is placed in the checkbox, auto-selection is enabled.
+ If there is no mark in the checkbox, then auto-selection is disabled.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Drop down box</term>
+<listitem><para>This drop down box contains two possible choices:  <guilabel>Black</guilabel> and <guilabel>White</guilabel>.  If 
+<guilabel>Black</guilabel> is chosen, then &kword; will look for an area surrounded by black to select automatically.  
+If <guilabel>White</guilabel> is chosen, then &kword; will look for an area surrounded by white to select automatically.</para></listitem>
+</varlistentry> 
+<varlistentry>
+
+<term>Slider bar labeled <guilabel>Threshold</guilabel></term>
+<listitem><para>By adjusting this slider bar, you determine the threshold auto-selection uses to determine the area to select automatically.</para></listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+<sect3 id="scan-misc"><title>Miscellaneous scanning options</title>
+<para>There are two additional options for scanning that are accessed by clicking on the <guilabel>Options</guilabel> tab.</para><screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="scan2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The checkbox labeled <guilabel>Ask for the scan device on plugin startup</guilabel> toggles the scanner selection dialog on and off.  If there is a mark in this 
+checkbox, &kword; will ask you to select your scanner each time you insert a scanned image into your document.  If there is no mark, then &kword; uses the previously 
+selected scanner.  If you have access to only one scanner, or you only use one scanner, you should remove any mark from this box.</para>
+<para>The checbox labled <guilabel>Query the network for scan devices</guilabel> is also used to select scanners.  If there is a mark in this checkbox, 
+&kword; will check your local network for scanners that are avaialbe.  If there is no mark in this box, &kword; will only look for scanners connected directly to 
+your machine.</para>
+<para>To save these options, click <guibutton>Close</guibutton>.</para>
+
+</sect3>
+
+</sect2>
+<sect2 id="resize-Graphics"><title>Changing the size of a picture</title>
+<indexterm><primary>graphics</primary><secondary>change the size of</secondary></indexterm>
+
+<para>Resizing a picture is done by changing the size of the frame that surrounds it.  &kword; will automatically change the picture to fill the
+entire frame.</para>
+<para>For information on changing the size of a frame, see <link linkend="resize-frame">Resizing frames</link>. </para>
+</sect2>
+<sect2 id="move-graphics"><title>Move Pictures</title>
+<indexterm><primary>graphics</primary><secondary>moving</secondary></indexterm>
+
+<para>The only way to move an inline image around on the page, is to alter the flow of the text that surrounds it.  If this
+is causing problems, the picture can always be <link linkend="switch-graphics">changed to a framed picture</link>.</para>
+<para>To move a framed picture in &kword; is the same as <link linkend="move-frame">moving any frame</link> in &kword;.</para>
+
+</sect2>
+<sect2 id="delete-graphics"><title>Delete Graphics</title>
+<indexterm><primary>graphics</primary><secondary>deleting</secondary></indexterm>
+
+<para>To delete a graphic in &kword;, simply <link linkend="delete-frame">delete the frame</link> around it.</para>
+</sect2>
+<sect2 id="save-graphics"><title>Saving Graphic in separate file</title>
+<indexterm><primary>graphics</primary><secondary>saving in a separate file</secondary></indexterm>
+
+<para>You can save a picture or graph to a separate file (for use in another document or to archive the graphic).</para>
+<para>Simply click once on the graphic with the &RMB;.  A submenu will appear.  Select <guilabel>Save Picture...</guilabel>. 
+A dialog will appear that will allow you to specify where to save the graphic.</para>
+<note><para>This does not remove the picture from the &kword; document file.  It is simply a way to extract a picture from a 
+document so it can be archived or used in another application.</para></note>
+</sect2>
+
+<sect2 id="switch-graphics"><title>Switching between inline and framed pictures</title>
+<indexterm><primary>graphics</primary><secondary>switching between inline and framed</secondary></indexterm>
+
+<para>Switching between inline pictures and framed pictures is easy in &kword;.</para>
+<sect3 id="inline-to-frame"><title>Change an inline picture to a framed picture</title>
+<para>To change in inline picture to a framed picture, click on the desired picture with the &LMB; once.  This selects the frame
+of the picture.</para>
+<para>Now click and hold with the &RMB; and a submenu will appear.  In the submenu, is a menu item labeled
+<guilabel>Inline Frame</guilabel>, with a mark in front of it.  Select this option by clicking with the &LMB;.</para>
+<para>The frame is now
+an independent and can be moved around freely.</para>
+</sect3>
+<sect3 id="frame-to-inline"><title>Change a framed picture to an inline picture</title>
+<para>To change a framed picture into an inline picture, click on the desired picture with the &LMB; once.  This selects the frame
+of the picture.</para>
+<para>Now click and hold with the &RMB; and a submenu will appear.  In the submenu, is a menu item labeled
+<guilabel>Inline Frame</guilabel>.  Select this option by clicking with the &LMB;.</para>
+<para>&kword; has now converted this to an inline frame.</para>
+<note><para>&kword; tries to make a reasonable estimation of where in the text the inline image should be inserted.</para>
+</note>
+</sect3>
+</sect2>
+</sect1>
+

@@ -1,0 +1,199 @@
+<chapter id="selections">
+<title>Selections</title>
+
+<para>
+This chapter gives a short introduction on selections.
+</para><para>
+You can select a part of an image masking off the rest. This is handy when
+you want to cut, copy or just modify a part of the image without affecting
+the rest. &krita; handles selections with a mask where each pixel is given any
+of 256 levels between selected and unselected. Yes, that is right, you can
+have fractionally selected pixels. And by working on individual pixels you
+can effectively <quote>paint</quote> your selection.
+</para><para>
+The selection mask is visualized with unselected pixels having a blueish
+tint, and selected pixels looking like normal. Fractionally selected pixels
+are shown as something in between. Additionally a red border is drawn around
+the selected areas. Fractionally selected pixels are inside the border, so
+even inside the red border you can possibly see the blueish tint on some pixels.
+</para>
+
+<sect1 id="selections-making">
+<title>Making a selection</title>
+<para>
+A whole range of tools exist to make selections. From rectangles, ellipses
+and freehand to the more exotic like color range select. When you make
+several selections they add up. So a rectangle select followed by an
+ellipse select select both areas. Later you can subtract from the selection
+with say the select-eraser.
+</para><para>
+To get back to normal (no active selection), choose
+<menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem>
+</menuchoice>. To select all pixels, choose
+<menuchoice><guimenu>Select</guimenu><guimenuitem>Select All</guimenuitem>
+</menuchoice>.
+</para><para>
+You may think that those two actions give the same result, but it
+is much more efficient to have no active selection than to have selected
+everything.
+</para><para>
+After having deselected you can bring your selection back by choosing
+<menuchoice><guimenu>Select</guimenu><guimenuitem>Reselect</guimenuitem>
+</menuchoice>.
+</para>
+</sect1>
+
+<sect1 id="selections-painting">
+<title>Painting your selection</title>
+<para>
+As said above you can essentially paint you selection, and just like
+when you paint normally you can choose to paint your selection freehand or
+guided with rectangles, ellipses, &etc;. You also have the choice of different
+paint tools like pen, brush, airbrush, &etc;. Choose the guide tool, and the
+paint tool in the toolbox, and go ahead and <quote>paint</quote> your
+selection.
+</para><para>
+The guide tools work just like you may be used to from other applications. So
+holding down shift while drawing a rectangle or an ellipse still forces them to
+be a square or a circle respectively.
+</para>
+
+<screenshot>
+<screeninfo>Painting a selection.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-1.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Painting a selection.</phrase>
+</textobject>
+<caption><para>Painting a selection.</para></caption>
+</mediaobject>
+</screenshot>
+<screenshot>
+<screeninfo>Painting a selection.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-2.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Painting a selection.</phrase>
+</textobject>
+<caption><para>Painting a selection.</para></caption>
+</mediaobject>
+</screenshot>
+
+</sect1>
+
+<sect1 id="selections-unselecting">
+<title>Unselecting</title>
+<para>
+All the selection paint tools have an option to add or subtract from the
+selection. This means that you can use all your familiar tools to both select
+and unselect. There is also a true selection eraser among the selection paint
+tools.
+</para>
+
+<screenshot>
+<screeninfo>Unselecting.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-3.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Unselecting.</phrase>
+</textobject>
+<caption><para>Unselecting.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="selections-making-new">
+<title>Making a new selection</title>
+<para>
+When you want to make a new selection, replacing the currently active one, you
+first need to deselect the active selection. Choose
+<menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem>
+</menuchoice>.
+</para>
+</sect1>
+
+<sect1 id="selections-contigious">
+<title>Selecting a contiguous area (magic wand)</title>
+<para>
+To follow the analogy of painting your selection Krita also provides an
+equivalent to filling a contiguous area. Some paint applications call this
+selection tool the magic wand tool. What it does is select the nearby
+pixels as long as they have nearly the same color as the pixel you click
+on. The selection floods out from the point you click on. In the fuzziness
+option you can set how different the colors are allowed to be before the
+flooding stops.
+</para>
+
+<screenshot>
+<screeninfo>Before the magic wand.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-4.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Before the magic wand.</phrase>
+</textobject>
+<caption><para>Before the magic wand.</para></caption>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo>A magic wand selection.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-5.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>A magic wand selection.</phrase>
+</textobject>
+<caption><para>A magic wand selection.</para></caption>
+</mediaobject>
+</screenshot>
+
+</sect1>
+
+<sect1 id="selections-similar">
+<title>Selecting similar colors</title>
+<para>
+The Select Similar tool lets you pick a pixel and then select all pixels that
+have a similar color. pickng a color in one corner of the image may select a
+pixel in another corner if they have similar color.
+In the fuzziness option you can set how similar the colors must be to be
+selected.
+</para>
+
+<screenshot>
+<screeninfo>Selecting similar colors.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="using-selections-6.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Selecting similar colors.</phrase>
+</textobject>
+<caption><para>Selecting similar colors.</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="selections-inverting">
+<title>Inverting the selection</title>
+<para>
+In some cases it is easier to specify your selection the other way around. That
+is, first you select the parts that ultimately should not be selected and then
+then you choose
+<menuchoice><guimenu>Select</guimenu><guimenuitem>Invert</guimenuitem>
+</menuchoice>.
+What invert does, is that for every pixel it flips the selection level so to
+speak, by setting it to 256 minus the current selection level. Thus what was
+selected becomes unselected and vice versa.
+</para>
+</sect1>
+
+</chapter>

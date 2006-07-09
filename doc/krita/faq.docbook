@@ -1,0 +1,43 @@
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<para>
+Stuff does not work, sometimes. &krita; can crash, sometimes — not all
+that often, these days, but still. So you will need some help. The first thing
+to do is try to determine what was going on, exactly. Then you can create a
+bug report: go to the <guimenu>Help</guimenu> menu and select
+<guimenuitem>Report Bug</guimenuitem>. That way we know exactly which version of
+&krita; you are using. Please try to make reasonably sure that your problem has
+not been reported already! You can also, if it is just that you cannot figure
+out how to do something that you can do using Photoshop using &krita; or some
+other question, mail the &krita; developers at our mailing list
+<email>kde-kimageshop@kde.org</email>, or mail the maintainer directly:
+<email>boud@valdyas.org</email>.
+</para>
+
+&reporting.bugs;
+&updating.documentation;
+
+<!-- <qandaset id="faqlist">
+<qandaentry>
+<question>
+<para>My Mouse doesn't work. How do I quit &kmyapplication;?</para>
+</question>
+<answer>
+<para>You silly goose! Check out the <link linkend="commands">Commands
+Section</link> for the answer.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>Why can't I twiddle my documents?</para>
+</question>
+<answer>
+<para>You can only twiddle your documents if you have the foobar.lib
+installed.</para>
+</answer>
+</qandaentry>
+</qandaset> -->
+
+</chapter>
+

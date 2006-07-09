@@ -1,0 +1,728 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Engineering</GroupName>
+
+    <Function>
+      <Name>BASE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Base</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Precision</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BASE() function converts a number from base-10 to a string value in a target base from 2 to 36.</Text>
+	<Syntax>BASE(number;base;prec)</Syntax>
+	<Example>BASE(128;8) returns "200"</Example>
+	<Example>BASE(123.47;16;6) returns "7B.7851EB"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BESSELI</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Where the function is evaluated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Order of the function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The BESSELI() function returns the modified Bessel function In(x).</Text>
+        <Syntax>BESSELI(X;N)</Syntax>
+        <Example>BESSELI(0.7;3) returns 0.007367374</Example>
+        <Related>BESSELJ</Related>
+        <Related>BESSELK</Related>
+        <Related>BESSELY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BESSELJ</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Where the function is evaluated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Order of the function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The BESSELJ() function returns the Bessel function.</Text>
+        <Syntax>BESSELJ(X;N)</Syntax>
+        <Example>BESSELJ(0.89;3) returns 0.013974004</Example>
+        <Related>BESSELI</Related>
+        <Related>BESSELK</Related>
+        <Related>BESSELY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BESSELK</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Where the function is evaluated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Order of the function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The BESSELK() function returns the modified Bessel function, which is equivalent to the Bessel function evaluated for purely imaginary arguments.</Text>
+        <Syntax>BESSELK(X;N)</Syntax>
+        <Example>BESSELK(3;9) returns 397.95880</Example>
+        <Related>BESSELI</Related>
+        <Related>BESSELJ</Related>
+        <Related>BESSELY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BESSELY</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Where the function is evaluated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Order of the function</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The BESSELY() function returns the Bessel function, which is also called the Weber function or the Neumann function.</Text>
+        <Syntax>BESSELY(X;N)</Syntax>
+        <Example>BESSELY(4;2) equals 0.215903595</Example>
+        <Related>BESSELI</Related>
+        <Related>BESSELJ</Related>
+        <Related>BESSELK</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CONVERT</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>From unit</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>To unit</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+        <Text>The CONVERT() function returns a conversion from one measurement system to another.</Text>
+        <Text>Supported mass units: g (gram), sg (pieces), lbm (pound), u (atomic mass), ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight (hundredweight), bron (gross registered ton).</Text>
+        <Text>Supported distance units: m (meter), in (inch), ft (feet), mi (mile), Nmi (nautical mile), ang (Angstrom), parsec, lightyear.</Text>
+        <Text>Supported pressure units: Pa (Pascal), atm (atmosphere), mmHg (mm of Mercury), psi, Torr.</Text>
+        <Text>Supported force units: N (Newton), dyn, pound.</Text>
+        <Text>Supported energy units: J (Joule), e (erg), c (Thermodynamic calorie), cal (IT calorie), eV (electronvolt), HPh (Horsepower-hour), Wh (Watt-hour), flb (foot-pound), BTU.</Text>
+        <Text>Supported power units: W (Watt), HP (horsepower), PS (Pferdestaerke).</Text>
+        <Text>Supported magnetism units: T (Tesla), ga (Gauss).</Text>
+        <Text>Supported temperature units: C (Celsius), F (Fahrenheit), K (Kelvin).</Text>
+        <Text>Supported volume units: l (liter), tsp (teaspoon), tbs (tablespoon), oz (ounce liquid), cup, pt (pint), qt (quart), gal (gallone), barrel, m3 (cubic meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 (cubic foot), yd3 (cubic yard).</Text>
+        <Text>Supported area units: m2 (square meter), mi2 (square mile), Nmi2 (square Nautical mile), in2 (square inch), ft2 (square foot), yd2 (square yard), acre, ha (hectare).</Text>
+        <Text>Supported speed units: m/s (meters per second), m/h (meters per hour), mph (miles per hour), kn (knot).</Text>
+        <Text>For metric units any of the following prefixes can be used: E (exa, 1E+18), P (peta, 1E+15), T (tera, 1E+12), G (giga, 1E+09), M (mega, 1E+06), k (kilo, 1E+03), h (hecto, 1E+02), e (dekao, 1E+01), d (deci, 1E-01), c (centi, 1E-02), m (milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p (pico, 1E-12), f (femto, 1E-15), a (atto, 1E-18).</Text>
+        <Syntax>CONVERT(Number; From Unit; To Unit)</Syntax>
+        <Example>CONVERT(32;"C";"F") equals 89.6</Example>
+        <Example>CONVERT(3;"lbm";"kg") equals 1.3608</Example>
+        <Example>CONVERT(7.9;"cal";"J") equals 33.0757</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ERF</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Lower limit</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Upper limit</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The ERF() function returns the error function.</Text>
+        <Syntax>ERF(Lower limit; Upper limit)</Syntax>
+        <Example>ERF(0.4) equals 0.42839236</Example>
+        <Related>ERFC</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ERFC</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Lower limit</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Upper limit</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The ERFC() function returns the complementary error function.</Text>
+        <Syntax>ERFC(Lower limit; Upper limit)</Syntax>
+        <Example>ERFC(0.4) equals 0.57160764</Example>
+        <Related>ERF</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DEC2BIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DEC2BIN() function returns the value formatted as a binary number.</Text>
+	<Syntax>DEC2BIN(value)</Syntax>
+	<Example>DEC2BIN(12) returns "1100"</Example>
+	<Example>DEC2BIN(55) returns "110111"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DEC2HEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DEC2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>DEC2HEX(value)</Syntax>
+	<Example>DEC2HEX(12) returns "c"</Example>
+	<Example>DEC2HEX(55) returns "37"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DEC2OCT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DEC2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>DEC2OCT(value)</Syntax>
+	<Example>DEC2OCT(12) returns "14"</Example>
+	<Example>DEC2OCT(55) returns "67"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2BIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2BIN() function returns the value formatted as a binary number.</Text>
+	<Syntax>OCT2BIN(value)</Syntax>
+	<Example>OCT2BIN("12") returns "1010"</Example>
+	<Example>OCT2BIN("55") returns "101101"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>OCT2DEC(value)</Syntax>
+	<Example>OCT2DEC("12") returns 10 </Example>
+	<Example>OCT2DEC("55") returns 45 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OCT2HEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The OCT2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>OCT2HEX(value)</Syntax>
+	<Example>OCT2HEX("12") returns "a"</Example>
+	<Example>OCT2HEX("55") returns "2d"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>BIN2DEC(value)</Syntax>
+	<Example>BIN2DEC("1010") returns 10 </Example>
+	<Example>BIN2DEC("11111") returns 31 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2OCT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>BIN2OCT(value)</Syntax>
+	<Example>BIN2OCT("1010") returns "12" </Example>
+	<Example>BIN2OCT("11111") returns "37" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BIN2HEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The BIN2HEX() function returns the value formatted as a hexadecimal number.</Text>
+	<Syntax>BIN2HEX(value)</Syntax>
+	<Example>BIN2HEX("1010") returns "a"</Example>
+	<Example>BIN2HEX("11111") returns "1f"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2DEC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2DEC() function returns the value formatted as a decimal number.</Text>
+	<Syntax>HEX2DEC(value)</Syntax>
+	<Example>HEX2DEC("a") returns 10 </Example>
+	<Example>HEX2DEC("37") returns 55 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2OCT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2OCT() function returns the value formatted as an octal number.</Text>
+	<Syntax>HEX2OCT(value)</Syntax>
+	<Example>HEX2OCT("a") returns "12" </Example>
+	<Example>HEX2OCT("37") returns "67" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HEX2BIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>The value to convert</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HEX2BIN() function returns the value formatted as a binary number.</Text>
+	<Syntax>HEX2BIN(value)</Syntax>
+	<Example>HEX2BIN("a") returns "1010"</Example>
+	<Example>HEX2BIN("37") returns "110111"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COMPLEX</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Real coefficient</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Imaginary coefficient</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The COMPLEX(real;imag) returns a complex number of form x+yi.</Text>
+	<Syntax>COMPLEX(real;imag)</Syntax>
+	<Example>COMPLEX(1.2;3.4) returns "1.2+3.4i"</Example>
+	<Example>COMPLEX(0;-1) returns "-i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMAGINARY</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMAGINARY(string) returns the imaginary coefficient of a complex.</Text>
+	<Syntax>IMAGINARY(string)</Syntax>
+	<Example>IMAGINARY("1.2+3.4i") returns 3.4</Example>
+	<Example>IMAGINARY("1.2") returns 0 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMREAL</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMREAL(string) returns the real coefficient of a complex.</Text>
+	<Syntax>IMREAL(string)</Syntax>
+	<Example>IMREAL("1.2+3.4i") returns 1.2</Example>
+	<Example>IMREAL("1.2i") returns 0 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMCOS</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMCOS(string) returns the cosine of a complex number.</Text>
+	<Syntax>IMCOS(string)</Syntax>
+	<Example>IMCOS("1+i") returns "0.83373-0.988898i"</Example>
+	<Example>IMCOS("12i") returns 81 377.4 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSIN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSIN(string) function returns the sine of a complex number.</Text>
+	<Syntax>IMSIN(string)</Syntax>
+	<Example>IMSIN("1+i") returns "1.29846+0.634964i"</Example>
+	<Example>IMSIN("1.2") returns -0.536573 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMEXP</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMEXP(string) returns the exponential of a complex number.</Text>
+	<Syntax>IMEXP(string)</Syntax>
+	<Example>IMEXP("2-i") returns "3.99232-6.21768i"</Example>
+	<Example>IMEXP("12i") returns "0.843854-0.536573i" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMLN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMLN(string) returns the natural logarithm of a complex number.</Text>
+	<Syntax>IMLN(string)</Syntax>
+	<Example>IMLN("3-i") returns "1.15129-0.321751i"</Example>
+	<Example>IMLN("12") returns 2.48491 </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSQRT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSQRT(string) returns the square root of a complex number.</Text>
+	<Syntax>IMSQRT(string)</Syntax>
+	<Example>IMSQRT("1+i") returns "1.09868+0.45509i"</Example>
+	<Example>IMSQRT("1.2i") returns "0.774597+0.774597i" </Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMPOWER</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Power</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMPOWER(string) returns a complex number raised to a power.</Text>
+	<Syntax>IMPOWER(string)</Syntax>
+	<Example>IMPOWER("4-i";2) returns "15-8i"</Example>
+	<Example>IMPOWER("1.2";2) returns 1.44 </Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>IMSUM</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSUM() returns the sum of several complex numbers of form x+yi.</Text>
+	<Syntax>IMSUM(value;value;...)</Syntax>
+	<Example>IMSUM(1.2;"3.4+5i") returns "4.6+5i"</Example>
+	<Example>IMSUM(1.2;"1i") returns "1.2+i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMDIV</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMDIV() returns the division of several complex numbers of form x+yi.</Text>
+	<Syntax>IMDIV(value;value;...)</Syntax>
+	<Example>IMDIV(1.2;"3.4+5i") returns "0.111597-0.164114i"</Example>
+	<Example>IMDIV("12+i";"12-i") returns "0.986207+0.16551i"</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>IMSUB</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMSUB() returns the difference of several complex numbers of form x+yi.</Text>
+	<Syntax>IMSUB(value;value;...)</Syntax>
+	<Example>IMSUB(1.2;"3.4+5i") returns "-2.2-5i"</Example>
+	<Example>IMSUB(1.2;"1i") returns "1.2-i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMPRODUCT</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Complex number</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMPRODUCT() returns the product of several complex numbers of form x+yi.</Text>
+	<Syntax>IMPRODUCT(value;value;...)</Syntax>
+	<Example>IMPRODUCT(1.2;"3.4+5i") returns "4.08+6i"</Example>
+	<Example>IMPRODUCT(1.2;"1i") returns "+1.2i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMCONJUGATE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMCONJUGATE(complex number) returns the conjugate of a complex number of form x+yi.</Text>
+	<Syntax>IMCONJUGATE(complex number)</Syntax>
+	<Example>IMCONJUGATE("1.2+5i") returns "1.2-5i"</Example>
+	<Example>IMCONJUGATE("-i") returns "i"</Example>
+                <Example>IMCONJUGATE("12") returns "12"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMARGUMENT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMARGUMENT(complex number) returns the argument of a complex number of form x+yi.</Text>
+	<Syntax>IMARGUMENT(complex number)</Syntax>
+	<Example>IMARGUMENT("1.2+5i") returns 0.6072</Example>
+	<Example>IMARGUMENT("-i") returns -1.57079633 </Example>
+        <Example>IMARGUMENT("12") returns "#Div/0"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMABS</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMABS(complex number) returns the norm of a complex number of form x+yi.</Text>
+	<Syntax>IMABS(complex number)</Syntax>
+	<Example>IMABS("1.2+5i") returns 5.1419</Example>
+	<Example>IMABS("-i") returns 1</Example>
+                <Example>IMABS("12") returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DELTA</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The DELTA() function returns 1 if x equals y, otherwise returns 0. y defaults to 0.</Text>
+	<Syntax>DELTA(x; y)</Syntax>
+	<Example>DELTA(1.2; 3.4) returns 0</Example>
+	<Example>DELTA(3; 3) returns 1</Example>
+	<Example>DELTA(1; TRUE) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GESTEP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The GESTEP() function returns 1 if x greater or equals y, otherwise returns 0. y defaults to 0.</Text>
+	<Syntax>GESTEP(x; y)</Syntax>
+	<Example>GESTEP(1.2; 3.4) returns 0</Example>
+	<Example>GESTEP(3; 3) returns 1</Example>
+	<Example>GESTEP(0.4; TRUE) returns 0</Example>
+	<Example>GESTEP(4; 3) returns 1</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

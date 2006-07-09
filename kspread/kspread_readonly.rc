@@ -1,0 +1,16 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="2">
+<MenuBar>
+ <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="copy"/>
+  <Separator/>
+  <Action name="edit_find"/>
+ </Menu>
+ <Menu name="view"><text>&amp;View</text>
+  <Separator/>
+  <Action name="gotoCell"/>
+  <Action name="showPageBorders"/>
+  <Separator/>
+  <Action name="view_zoom"/>
+ </Menu>
+</MenuBar>
+</kpartgui>

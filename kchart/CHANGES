@@ -1,0 +1,14 @@
+Changes since KChart 1.3
+------------------------
+Put complete KChart component into the KChart namespace (KDChart not included)
+Fix parent of the Data Editor dialog (part of bug #76412)
+
+Changes since KChart 1.2
+------------------------
+
+Fix paininting of surrounding frame (see also #46251 Legend not completely visible )
+
+
+Changes since KChart 1.1
+------------------------
+-Add dcop interface

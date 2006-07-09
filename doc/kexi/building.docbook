@@ -1,0 +1,222 @@
+<!--
+  <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" >
+-->
+
+<chapter id="building-databases">
+<title>Building Simple Databases</title>
+<sect1 id="building-intro">
+<title>Introduction</title>
+<para>
+To learn the basics of Kexi, you could build a simple database
+utilizing most elementary Kexi's features. To make things simpler,
+advanced database design topics will not be covered here.
+</para>
+<para>
+Start by creating a new empty <emphasis>Phone Book</emphasis>.
+<!--
+See chapter <a href="04_03_00_creating_database.html">4.3.
+Creating a new database project</a> for information how to do this.
+-->
+</para>
+<itemizedlist>
+<title>Having a new empty database project, perform the following steps:</title>
+<listitem><para>Design database tables. Read section <!--<a href="05_01_00_table_designing.html">5.1</a>--></para></listitem>
+<listitem><para>Enter data to tables. Read section <!--<a href="05_02_00_data_entering_into_tables.html">5.2</a>--></para></listitem>
+<listitem><para>Design database queries. Read section <!-- <a href="05_03_00_query_designing.html">5.3</a> --></para></listitem>
+<listitem><para>Design forms. Read section <!-- <a href="05_04_00_form_designing.html">5.4</a> --></para></listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="designing-tables">
+<title>Designing Database Tables</title>
+<para>
+First, there will be two tables added to your database:
+<emphasis>persons</emphasis> and <emphasis>phone_numbers</emphasis>.
+These are exactly the same tables as described in chapter <link
+linkend="database-and-spreadsheet">Database and spreadsheet</link>.
+A layout for <emphasis>Persons</emphasis> can be found in section
+<link linkend="data-integrity-and-validity">Data integrity and validity</link>
+in that chapter.
+</para>
+<itemizedlist>
+<listitem>
+<para>
+Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Table</guimenuitem>
+</menuchoice> from the Menubar. You can also use the button <guilabel>Create
+object: table</guilabel> on the <link linkend="project-navigator-pane">Project
+Navigator's toolbar</link>.
+</para>
+</listitem>
+<listitem>
+<para>
+The Table Designer's window will appear. Looking at the top of designer's window
+you will notice that Kexi proposed you a generic name like
+<emphasis>template</emphasis> for the new table. The table design is not saved
+yet so you will be able to assign more proper name later. Moreover, because of
+the same reason, the table name is not yet visible in the
+<link linkend="project-navigator-pane">Project Navigator</link>.
+</para>
+</listitem>
+</itemizedlist>
+
+
+<sect2 id="design-window">
+<title>The Table Designer window</title>
+<itemizedlist>
+<title>Table Designer window consists of following columns:</title>
+<listitem><para>
+<emphasis>PK</emphasis> - Primary Key. <!-- It will be discussed this topic in
+<link linkend="building-advanced-database">in a later chapter</link>. -->
+</para></listitem>
+<listitem><para>
+<emphasis>Field Name</emphasis> - field name (in other words: column name)
+which will be visible during data entering.
+</para></listitem>
+<listitem><para>
+<emphasis>Data Type</emphasis> - a combo box containing a list of data types,
+allowing to set a main rule for entered data for a given field. For example,
+when an integer number data type is set for a field, a database user will not
+able to enter letter characters into this field.
+</para></listitem>
+<listitem><para>
+<emphasis>Comments</emphasis> - you can enter here any information useful for
+understanding what the given field is provided for. This additional text will
+be saved within the table design and only visible in design mode.
+</para></listitem>
+</itemizedlist>
+<para>
+In the <emphasis>Table designer</emphasis> window, every row corresponds to
+a single table field. You can recognize you are in <emphasis>design
+mode</emphasis> because the <!-- <img src="icons/state_edit.png" class="icon"> -->
+<emphasis>Switch to Design View mode</emphasis> button is toggled on within
+the main &kexi; toolbar.
+</para>
+
+<itemizedlist>
+<title>To start entering the <emphasis>Persons</emphasis> table design:</title>
+<listitem><para>
+In the first row click on the cell in the <emphasis>Field name</emphasis>
+column and enter <emphasis>name</emphasis> as field name.
+</para>
+<itemizedlist>
+<title>Notes about field names</title>
+<listitem><para>
+Every field must have a name, it cannot be empty.
+</para></listitem>
+<listitem><para>
+Field names may not contain special characters (like ±, ¶, Ü)
+or space characters. The names must only contain <!--roman -->letters,
+<!-- JSTANIEK: TODO: what about for example japanese letters? Are they allowed in japanese versions?-->
+numbers and underscore sign &quot;_&quot;. Use the latter instead of
+spaces or dashes.
+</para></listitem>
+<listitem><para>
+Field names must be started with a letter or underscore sign
+&quot;_&quot;, never with a number.
+</para></listitem>
+<listitem><para>
+It does not matter whether you are using small or capital letters.
+For &kexi; the database name &quot;Persons&quot; is the same as
+&quot;persons&quot;.
+</para></listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<itemizedlist>
+<title>In a similar way, enter the following fields into the table design:</title>
+<listitem><para><guilabel>surname</guilabel></para></listitem>
+<listitem><para>street</para></listitem>
+<listitem><para>house_number</para></listitem>
+<listitem><para>city</para></listitem>
+</itemizedlist>
+</listitem>
+<listitem><para>
+All the above fields, except <emphasis>house_number</emphasis>, are of type
+<emphasis>text</emphasis>.
+Change <emphasis>house_number</emphasis> field's type to <emphasis>integer
+number</emphasis>. To do this, click on a cell in the <emphasis>Data
+Type</emphasis> column, <emphasis>house_number</emphasis> row and then
+click on drop down list's button <!--<img src="icons/dropdown_button.png" class="icon">-->
+(you can also press <keycombo><keycap>F4</keycap></keycombo> or
+<keycombo action="simul">&Alt;<keycap>Down</keycap></keycombo>. The list
+of data types will appear. Select the <emphasis>Integer number</emphasis> type.
+<!--
+ <br><img src="img/05_01_01_changing_datatype.png">
+ <br>Changing data type of a filed to integer number<br><br>
+-->
+</para><para>
+From now on, the <emphasis>house_number</emphasis> field only accepts numbers.
+</para></listitem>
+<!-- TODO setting additional properties: e.g. caption -->
+<listitem><para>
+<emphasis>Persons</emphasis> table desgin is ready. Click <!-- <img src="icons/state_data.png" class="icon">-->
+<guilabel>Switch to Data View</guilabel> button on the toolbar to finish
+designing and switch to Data View for the table. This allows you entering
+data into the table.
+</para></listitem>
+<listitem><para>
+As the design is not yet saved in the database, the &quot;Save Object As&quot;
+dialog window appears. You need to specify the name for the new table.
+<!--
+ <br><img src="img/05_01_01_entering_table_name.png">
+ <br>Entering table name before saving its design<br><br>
+-->
+</para><para>
+&kexi; offers a generic name like <emphasis>Table1</emphasis>.
+To change the name, enter <emphasis>Persons</emphasis> into the
+<emphasis>Caption</emphasis> field and press the <keycombo>
+<keycap>Enter</keycap></keycombo> key or click the <guilabel>OK</guilabel>
+button. The <emphasis>Caption</emphasis> field will be used to display the
+table to database end-users, e.g. as a form. Unlike the name, the caption can
+contain any characters including spaces and special characters.
+</para><para>
+Note that filling the <emphasis>Caption</emphasis> field automatically fills
+the <emphasis>Name</emphasis> field. For your convenience the rule for using
+only letters, numbers and the &quot;_&quot; character is kept. You
+can alter contents of the <emphasis>Name</emphasis> field if you want to.
+<!--
+ <br><img src="img/05_01_01_automatic_names.png">
+ <br>Example of automatically filled Name field<br><br>
+-->
+</para></listitem>
+<listitem><para>
+You are asked about an agreement for automatic adding of primary key to the table.
+<!--The idea of primary keys is described in <a href=""> -->
+<!-- TODO chapter # chapter 6</a>.--> Click <guilabel>Add primary key</guilabel>
+button to continue.
+<!--
+ <br><img src="img/05_01_01_pkey_recommended.png">
+ <br>A question about automatic adding a primary key<br><br>
+-->
+</para></listitem>
+<listitem><para>
+The <emphasis>Persons</emphasis> table has been created and opened in Data View.
+Its name appears in the Project Navigator pane.
+<!-- <br><img src="img/05_01_01_table_created.png">
+ <br><em>Persons</em> table in the Project Navigator pane<br><br>
+-->
+</para></listitem>
+<listitem><para>
+Create <emphasis>phone_numbers</emphasis> table, in a similar
+way as <emphasis>persons</emphasis> table.
+</para></listitem>
+<listitem><para>
+Create <emphasis>person</emphasis> field of type <emphasis>Integer
+number</emphasis> and <emphasis>phone</emphasis> of type <emphasis>Text</emphasis>.
+Do not use a number type here because phone numbers can have many different
+forms and prefixes.
+</para></listitem>
+<listitem><para>
+Click <!--<img src="icons/state_data.png" class="icon"> --> <guilabel>Switch to
+Data View</guilabel> button on the toolbar and enter <emphasis>Phones</emphasis>
+caption for the table. As for your previous table, allow Kexi to automatically
+create primary key.
+</para></listitem>
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+</chapter>
+

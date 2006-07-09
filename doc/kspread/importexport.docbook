@@ -1,0 +1,105 @@
+<chapter id="importexport">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Importing and Exporting Foreign Formats</title>
+<para>&kspread; has a limited ability to import (read) and export (write)
+spreadsheet files with foreign formats. &kspread;'s capabilities at the time
+of writing are summarized in the table below, for more up to date
+information visit <ulink url="http://www.koffice.org/filters/status.phtml">
+http://www.koffice.org/filters/status.phtml</ulink>.</para>
+
+<informaltable><tgroup cols="3">
+<thead>
+<row>
+<entry> Format </entry>
+<entry> Import </entry>
+<entry> Export </entry></row>
+</thead>
+<tbody>
+
+<row><entry>Applix Spreadsheet</entry>
+<entry>Beta</entry>
+<entry>None</entry>
+</row>
+
+<row><entry>Comma Separated Values (<link linkend="csvdata"><acronym>CSV
+</acronym></link>)</entry>
+<entry>Good</entry>
+<entry>Good</entry>
+</row>
+
+<row><entry>dBase</entry>
+<entry>Beta</entry>
+<entry>None</entry>
+</row>
+
+<row><entry>Excel 97/2000</entry>
+<entry>Good</entry>
+<entry>None</entry>
+</row>
+
+<row><entry>Gnumeric</entry>
+<entry>Beta</entry>
+<entry>Beta</entry>
+</row>
+
+<row><entry>HTML</entry>
+<entry>None</entry>
+<entry>Beta</entry>
+</row>
+
+<row><entry>Quattro Pro</entry>
+<entry>Beta</entry>
+<entry>None</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+<para>To import a foreign file just load it as though it were a &kspread;
+native file with <menuchoice><guimenu>File</guimenu><guimenuitem>
+Open...</guimenuitem></menuchoice>.</para>
+<para>To export a &kspread; file in a different format select <menuchoice>
+<guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice>
+and select the format from the <guilabel>Filter:</guilabel> combo box.
+Although &kspread; automatically adds a <literal role="extension">
+.ksp</literal> extension to the names of files saved in its native format,
+you should add the correct extension for foreign formats.</para>
+
+<sect1 id="csvdata">
+<title><acronym>CSV</acronym> Data</title>
+<para>Tables of data are often held in text files with the values in a
+line being separated by a comma, space, tab or other character,
+for example <emphasis>123, 456, 789, abcd, efgh</emphasis>. Such files
+are commonly called <quote><acronym>CSV</acronym></quote> (Comma Separated
+Values) files, even though the separating character may not be a comma.</para>
+<para>If you ask &kspread; to open a text file it assumes that the file is
+in <acronym>CSV</acronym> format and launches a dialog box that allows you to
+specify the delimiter (separating character) used by the file, and shows how
+the data items will be placed into different spreadsheet cells.</para>
+<para>Other options in this dialog box let you define the <guilabel>Format
+</guilabel> of the spreadsheet cells, whether text quote characters should be
+removed, and whether the first line(s) of the file should be ignored.</para>
+</sect1>
+</chapter>
+
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

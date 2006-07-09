@@ -1,0 +1,86 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>BrushPropertyUI</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>BrushPropertyUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>268</width>
+            <height>186</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Brush</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>styleLabel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Style:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>styleCombo</cstring>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="0" column="1">
+            <property name="name">
+                <cstring>styleCombo</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Choose the style or the pattern.</string>
+            </property>
+        </widget>
+        <widget class="KColorButton" row="1" column="1">
+            <property name="name">
+                <cstring>colorChooser</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Choose the color (white is the default). Clicking on the color will display the standard KDE color chooser dialog.</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>colorLabel</cstring>
+            </property>
+            <property name="text">
+                <string>C&amp;olor:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>colorChooser</cstring>
+            </property>
+        </widget>
+        <widget class="QFrame" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>previewPanel</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+</includehints>
+</UI>

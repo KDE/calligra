@@ -1,0 +1,357 @@
+<!-- If you want to edit or validate this document separately, uncomment
+this prolog
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+-->
+<sect1 id="kugartemplate">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title><sgmltag class="element">KugarTemplate</sgmltag> element</title>
+
+<para>
+The <sgmltag class="element">KugarTemplate</sgmltag> element defines
+report attributes relating to page size, orientation, and margins.
+</para>
+
+<synopsis>
+&lt;!ELEMENT KugarTemplate (<link linkend="report-header-and-footer">ReportHeader</link>, <link linkend="page-header-and-footer">PageHeader</link>, <link linkend="detail-header-and-footer">DetailHeader</link>*, <link linkend="detail">Detail</link>*, <link linkend="detail-header-and-footer">DetailFooter</link>*, <link linkend="page-header-and-footer">PageFooter</link>, <link linkend="report-header-and-footer">ReportFooter</link>)&gt;
+&lt;!ATTLIST KugarTemplate
+PageSize        CDATA #REQUIRED
+PageOrientation CDATA #REQUIRED
+TopMargin       CDATA #REQUIRED
+BottomMargin    CDATA #REQUIRED
+LeftMargin      CDATA #REQUIRED
+RightMargin     CDATA #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+
+<varlistentry>
+<term>Elements</term>
+
+<listitem>
+
+<para>
+The <sgmltag class="element">KugarTemplate</sgmltag> element contains
+the following elements:
+</para>
+
+<variablelist>
+<varlistentry>
+<term><link linkend="report-header-and-footer"><sgmltag class="element">ReportHeader</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">ReportHeader</sgmltag> element defines
+report sections that are usually printed at the beginning of the report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="page-header-and-footer"><sgmltag class="element">PageHeader</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">PageHeader</sgmltag> element defines report
+sections that are usually printed at the top of every page of the
+report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="detail-header-and-footer"><sgmltag class="element">DetailHeader</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">DetailHeader</sgmltag> element defines report
+sections that are printed before details of a given level on the report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="detail"><sgmltag class="element">Detail</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">Detail</sgmltag> element defines the report
+section that contains the report data. The report can have an unlimited number
+of details.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="detail-header-and-footer"><sgmltag class="element">DetailFooter</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">DetailFooter</sgmltag> element defines report
+sections that are printed after details of a given level and below on the report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="page-header-and-footer"><sgmltag class="element">PageFooter</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">PageFooter</sgmltag> element defines report
+sections that are usually printed at the end of every page in the
+report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="report-header-and-footer"><sgmltag class="element">ReportFooter</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">ReportFooter</sgmltag> element defines report
+sections that are usually printed at the end of the report.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</listitem>
+
+</varlistentry>
+
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><anchor id="kut-pagesize"/><sgmltag class="attribute">PageSize</sgmltag></term>
+<listitem>
+<para>
+Sets the size of the report page.  The following values are available:
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Page Size</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+<entry>0</entry>
+<entry>A4</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>B5</entry>
+</row>
+<row>
+<entry>2</entry>
+<entry>Letter</entry>
+</row>
+<row>
+<entry>3</entry>
+<entry>Legal</entry>
+</row>
+<row>
+<entry>4</entry>
+<entry>Executive</entry>
+</row>
+<row>
+<entry>5</entry>
+<entry>A0</entry>
+</row>
+<row>
+<entry>6</entry>
+<entry>A1</entry>
+</row>
+<row>
+<entry>7</entry>
+<entry>A2</entry>
+</row>
+<row>
+<entry>8</entry>
+<entry>A3</entry>
+</row>
+<row>
+<entry>9</entry>
+<entry>A5</entry>
+</row>
+<row>
+<entry>10</entry>
+<entry>A6</entry>
+</row>
+<row>
+<entry>11</entry>
+<entry>A7</entry>
+</row>
+<row>
+<entry>12</entry>
+<entry>A8</entry>
+</row>
+<row>
+<entry>13</entry>
+<entry>A9</entry>
+</row>
+<row>
+<entry>14</entry>
+<entry>B0</entry>
+</row>
+<row>
+<entry>15</entry>
+<entry>B1</entry>
+</row>
+<row>
+<entry>16</entry>
+<entry>B10</entry>
+</row>
+<row>
+<entry>17</entry>
+<entry>B2</entry>
+</row>
+<row>
+<entry>18</entry>
+<entry>B3</entry>
+</row>
+<row>
+<entry>19</entry>
+<entry>B4</entry>
+</row>
+<row>
+<entry>20</entry>
+<entry>B6</entry>
+</row>
+<row>
+<entry>21</entry>
+<entry>B7</entry>
+</row>
+<row>
+<entry>22</entry>
+<entry>B8</entry>
+</row>
+<row>
+<entry>23</entry>
+<entry>B9</entry>
+</row>
+<row>
+<entry>24</entry>
+<entry>C5E</entry>
+</row>
+<row>
+<entry>25</entry>
+<entry>Comm10E</entry>
+</row>
+<row>
+<entry>26</entry>
+<entry>DLE</entry>
+</row>
+<row>
+<entry>27</entry>
+<entry>Folio</entry>
+</row>
+<row>
+<entry>28</entry>
+<entry>Ledger</entry>
+</row>
+<row>
+<entry>29</entry>
+<entry>Tabloid</entry>
+</row>
+<row>
+<entry>30</entry>
+<entry>NPageSize</entry>
+</row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><anchor id="kut-pageorient"/><sgmltag class="attribute">PageOrientation</sgmltag></term>
+<listitem>
+<para>
+Sets the report page orientation.
+</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Value</entry>
+<entry>Orientation</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>0</entry>
+<entry>Portrait</entry>
+</row>
+<row>
+<entry>1</entry>
+<entry>Landscape</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><anchor id="kut-topmargin"/><sgmltag class="attribute">TopMargin</sgmltag></term>
+<listitem>
+<para>
+Sets the top margin of the report page. <!-- in what scale? -->
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><anchor id="kut-botmargin"/><sgmltag class="attribute">BottomMargin</sgmltag></term>
+<listitem>
+<para>
+Sets the bottom margin of the report page. <!-- in what scale? -->
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><anchor id="kut-leftmargin"/><sgmltag class="attribute">LeftMargin</sgmltag></term>
+<listitem>
+<para>
+Sets the left margin of the report page. <!-- in what scale? -->
+</para>
+</listitem>
+</varlistentry><varlistentry>
+<term><anchor id="kut-rightmargin"/><sgmltag class="attribute">RightMargin</sgmltag></term>
+<listitem>
+<para>
+Sets the right margin of the report page. <!-- in what scale? -->
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>

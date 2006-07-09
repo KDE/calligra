@@ -1,0 +1,151 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>PolygonPropertyUI</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>PolygonPropertyUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>224</width>
+            <height>309</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Polygon</string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>These settings are used in the Insert-&gt;Shape-&gt;Convex/Concave Polygon menu.</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout4</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KComboBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>typeCombo</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>You can choose Polygon or Convex/Concave as a type.</string>
+                    </property>
+                </widget>
+                <widget class="KPrPolygonPreview" row="3" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>polygonPreview</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>200</width>
+                            <height>200</height>
+                        </size>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This displays a preview of your choices.</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="1" column="1">
+                    <property name="name">
+                        <cstring>cornersInput</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>3</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Set here the number of corners of the polygon.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>typebLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Type:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>typeCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Sharpness:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>sharpnessInput</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput" row="2" column="1">
+                    <property name="name">
+                        <cstring>sharpnessInput</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Increase or decrease the sharpness of the polygon.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Corn&amp;ers:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>cornersInput</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KPrPolygonPreview</class>
+        <header location="global">KPrPolygonPreview.h</header>>
+        <sizehint>
+            <width>200</width>
+            <height>200</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="826">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000030149444154388db59531681b5718c77f0e377c070e3c810a3a70e0041eac51852e0a19e45134830a1d9a4c69a04bc8928e990a693a640e1d0c8642b08742321894c1507991b484c890902bb8701a047760c3bd21701fe4201dde49b6a41a32b8df72dcbbeffdbefffbbfefbd5b1b0c07cce266ebe667ae2006c3c1dada0cdc3be87d6e6c35b0d692a409d9c7ec8b20d65ae29398d19b1114e7e3de4ce98b3f5e10dc0053cf0951b4506496e1b964bf7ce6c585d9054c62d01d617ca48be0596553cf496d8f2c8b01c5f795fc93904e85ec4c01a152857a5d9175d0b2805c872080f18595ccc1499a10a225d4e2fbc2877786fe81253ab6c04c8d106e09db5d43ab0d146e5c64d1a23938fb98a185cea1c33eecfd9eba49eb427dcb201e245365f2b7b2fb5b4a3a31dcb927178afe07d86901df870fefa4842aed6f6b74ba42e52b4014d580e1eb9cbd9d94de7e4aad16d2f9be02d805f0b5e532f927a1ffcacea1777f122a8105b164a7c25faf323a5d9f1f1fd600e1e5bec59e2d4b5c7ef5209d0ad17b8b31864e57c0b3e0815ac3ee33253ab664a770ff5185d1a1cb8d2267d3e58aa1dc7d2508cbe597d0e74fdd269aaaf0f52d414c4ea3e9762c996869e42560d7a72e41c4799a2586e74f95e8d8151481fa86efbe7b3398ac58b1a2b8527589f15451ad303ac2293542ad6648a796278f13a27185e4c4754310facb98c53a79e19a3fdc1426ff28c3d7399d1f7cb25343eb96106cf83c790ce9c4f2eb831855c55485663327992eb6dc8a6259874ed700b0b793323cccb9ffa842b30d6133e3e75fea989ac15a8b16ca76b746b0b92278d919774c5b6d48a78697fb29bbcf52468742a32120909c24e899ce67beed5be2db01e22d1e9485bb620e47f9ee9e606a21bd3f5d3744c7e7c54d55e87443867d8b554515ac5db4620e8e4f62263170fd1cdee90aad7640141992891b0f367c9adfe4049bb07d3b7022bd8c687c0978f46684ee084150b65ac1fcca94591b7a90a496e4c095164fb016a2b192a497795cc0f84817aebe25f7bf70ccc54a575c555c03f78ffa5fc0570d1f0c076bff0232285a09643cc7ce0000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

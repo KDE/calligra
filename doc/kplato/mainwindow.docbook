@@ -1,0 +1,53 @@
+<chapter id="main-window">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>&kplato; Main window</title>
+
+<para>Here is the default &kplato; main window when you load an existing
+project.</para>
+
+
+<screenshot>
+<screeninfo>Here's a screenshot of &kplato;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="mainwindow1.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>&kplato; main window</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<para>At the top there is the menubar (1).  All &kplato; functions are
+available from the menus, which are described in detail in <xref
+linkend="commands" />.</para>
+
+<para>Below the menubar are located the toolbars (2) and (3). You can show or
+hide them using the
+<menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Toolbars</guimenuitem></menuchoice> menu. You can also configure
+the toolbars (add or remove actions) using the
+<menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem></menuchoice> dialog.
+</para >
+<para>(3) is the view toolbar. It allows you to quickly switch between
+different views: Gantt, Resources or Accounts.</para>
+<para>(4) is the main view. In the Gantt view currently shown on
+the screenshot, you have 2 panes, one with the tasks names and one with
+the Gantt chart.</para>
+<para>(5) is the resource pane which you can see in the Gantt and Resources
+views but not in the Account view. It is not shown per default and you
+can drag the separation bar to display it.</para>
+
+</chapter>

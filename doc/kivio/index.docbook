@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY package "koffice">
+  <!ENTITY kappname "&kivio;">
+  <!ENTITY introduction SYSTEM "introduction.docbook">
+  <!ENTITY usage SYSTEM "usage.docbook">
+  <!ENTITY working SYSTEM "working.docbook">
+  <!ENTITY credits SYSTEM "credits.docbook">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>&kivio; User's Manual</title>
+
+<authorgroup>
+
+<author>
+<firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<date>2006-01-30</date>
+<releaseinfo>1.5.0</releaseinfo>
+
+<copyright>
+<year>2003</year><year>2000</year>
+<holder>Ben Lamb</holder>
+</copyright>
+
+
+<legalnotice>&FDLNotice;</legalnotice>
+<abstract>
+<para>
+&kivio; is the &koffice; flowchart and diagram creation tool.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Kivio</keyword>
+<keyword>KOffice</keyword>
+<keyword>Flowchart</keyword>
+<keyword>Diagram</keyword>
+</keywordset>
+
+</bookinfo>
+
+&introduction;
+&usage;
+&working;
+&credits;
+
+</book>

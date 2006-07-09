@@ -1,0 +1,507 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&koshell;">
+  <!ENTITY package "koffice">
+  <!ENTITY % English "INCLUDE" >
+  <!ENTITY % addindex "IGNORE">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &koshell; Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+<year>2005-2006</year>
+<holder>Anne-Marie Mahfouf</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (DD/MM/YYYY) and of the version
+(Major.minor.lesser), it could be used by automation scripts -->
+
+<date>2006-01-30</date>
+<releaseinfo>1.5.0</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&koshell; is the &koffice; Workspace where you can work with each component of the &koffice; productivity suite at the same time. &koshell; helps you organize your work in a friendly environment.
+</para>
+</abstract>
+
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KOffice</keyword>
+<keyword>workspace</keyword>
+<keyword>KWord</keyword>
+<keyword>KSpread</keyword>
+<keyword>KPresenter</keyword>
+<keyword>KChart</keyword>
+<keyword>KPlato</keyword>
+<keyword>Kexi</keyword>
+<keyword>Krita</keyword>
+<keyword>Kivio</keyword>
+<keyword>Kugar</keyword>
+<keyword>KFormula</keyword>
+<keyword>Karbon14</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para>&koshell; is a framework in which you can work with several &koffice; applications in the same window. Being based on a true component framework &koshell; provides exactly the
+same functionality as the stand-alone applications, and adds more
+features, by making available all components in the same window. </para>
+
+<para>
+&koshell; is part of the &koffice; productivity suite for the K Desktop
+Environment.  Other applications in &koffice; include:</para>
+
+<itemizedlist>
+<listitem><para>&kword; (A full featured <acronym>WYSIWYG</acronym> (What You See Is What You Get)
+Word-processor/Desktop Publishing Program.)</para></listitem>
+<listitem><para>&kspread; (A spreadsheet application.)</para></listitem>
+<listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
+<listitem><para>Kexi (An integrated environment for databases.)  </para></listitem>
+<listitem><para>&kivio; (A flowchart creator.)</para></listitem>
+<listitem><para><application>Karbon14</application> (A vector drawing program.)</para></listitem>
+<listitem><para>&krita; (A pixel based drawing program.)</para></listitem>
+<listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
+<listitem><para>&kformula; (A formula editor.)</para></listitem>
+<listitem><para>&kugar; (A report generation tool.)  </para></listitem>
+</itemizedlist>
+
+<para>See the individual application manuals for details on how to use them. These manuals apply to
+running the applications as components inside &koshell; just as well as running them stand-alone.
+</para>
+
+</chapter>
+
+<chapter id="main-window">
+<title>The &koshell; Main Window</title>
+
+<sect1 id="General">
+<title>General</title>
+
+<para>&koshell; consists in a friendly workspace to allow you to work on several &koffice; applications at the same time. In the &koshell; main window you can see a side pane on the left showing the icons of the available &koffice; components and the main view on the right which contains the main window of the active component and the usual menubar and toolbar. </para>
+
+<screenshot>
+<screeninfo>Here's a screenshot of &koshell; when you start it for the first time</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="koshell1.png" format="PNG"/>
+	  </imageobject>
+	    <textobject>
+	    <phrase>&koshell; screenshot</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<para>
+Here you can see &koshell; as it is the first time you run it. &koshell; always starts empty. You can then choose different actions. You can use the side pane on the left to open the programs as if they are standalone applications. You can also open any supported document via the <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem>
+</menuchoice> menu and the corresponding &koffice; application will open with the document loaded.
+</para>
+
+<para>
+You can also import any supported document using the <menuchoice><guimenu>File</guimenu><guimenuitem>Import</guimenuitem>
+</menuchoice> menu and as with the Open action, the adequate &koffice; application will be used to load your document. 
+</para>
+
+</sect1>
+
+<sect1 id="side-pane">
+<title>Side Pane</title>
+
+<screenshot>
+<screeninfo>&koshell;'s Side Pane</screeninfo>
+<mediaobject>
+<imageobject><imagedata format="PNG" fileref="side-pane.png"/></imageobject>
+<textobject>
+<phrase>&koshell;'s Side Pane</phrase>
+</textobject>
+<caption>
+<para>
+&koshell;'s Side Pane
+</para>
+</caption>
+</mediaobject>
+</screenshot>
+
+<para>The side pane allows you to open a new &koffice; component as if it was the stand-alone application. In most components, you are asked what document you want to open, a template, an empty document or an existing document. The main window of the component is then shown and the menubar, toolbars and statusbar in &koshell; are
+adapted to reflect the functionality of the active component.</para>
+
+
+<para>You can change the size of the icons in the side pane.
+Right-clicking on the side pane will give you the option to use Large,
+Normal, or Small icons, as well as the option to use text only
+instead of icons.</para>
+
+<para>If you dislike the sidebar, you can simply hide it by dragging the
+splitter to the left. </para>
+
+</sect1>
+
+<sect1 id="main-view">
+
+<title>Main View</title>
+
+<para>The view on the right which takes up most of the area of the &koshell;
+main window shows the active component. This exactly corresponds to the main
+window the component uses when run as a stand-alone application. </para>
+
+<screenshot>
+<screeninfo>&koshell;'s Main View</screeninfo>
+<mediaobject>
+<imageobject><imagedata format="PNG" fileref="main-view.png"/></imageobject>
+<textobject>
+<phrase>&koshell;'s Main View</phrase>
+</textobject>
+<caption>
+<para>
+	&koshell;'s Main View
+</para>
+</caption>
+</mediaobject>
+</screenshot>
+<para>When a component is loaded, the component own menus are merged with the &koshell; menus and the component toolbars are added on the workspace.</para>
+
+<para>Each new component is opened in a new tab. Using the &RMB; on each tab title, you can save the document in that tab or close that tab. The small button on the right bottom with a red cross also allows you to close the current tab.</para>
+
+<para>A special action common to all components is the
+ <menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem> </menuchoice> action in &koshell; menubar. It opens the Insert Object dialog which starts the &koffice; component as if it was a stand-alone application.</para>
+
+<screenshot>
+<screeninfo>&koshell; Insert Object dialog</screeninfo>
+<mediaobject>
+<imageobject><imagedata format="PNG" fileref="new-dialog.png"/></imageobject>
+<textobject>
+<phrase>&koshell; Insert Object dialog</phrase>
+</textobject>
+<caption>
+<para>
+&koshell; Insert Object dialog
+</para>
+</caption>
+</mediaobject>
+</screenshot>
+
+</sect1>
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<sect1 id="koshell-mainwindow">
+<title>Menus and shortcut keys</title>
+
+<sect2>
+<title>The <guimenu>File</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open</action> the Insert Object dialog which lists all possible new documents you can open.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open</action> a supported document by choosing the corresponding &koffice; application. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> a selection of recently saved documents you can open. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save</action> the current document. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save</action> the current document with a name you provide. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reload</action> the current document. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Import</action> a supported document. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Export</action> the current document. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Invokes &kmail; so you can email the file.
+The file is already attached to the email.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save All</guimenuitem>
+</menuchoice></term>
+<listitem><para>Saves all open documents in &koffice; Workspace.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Print the current document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Print Preview...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View the current document as it will be printed.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View or enter information about the current document and 
+author.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Close the current document but leave &koshell; running.
+</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quits</action> &koshell;.</para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+
+<sect2>
+<title>The <guimenu>Settings</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Hide/Show Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggle</action> the Main Toolbar.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure</action> the shortcuts.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure</action> the items you want to put in the toolbar.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Help</guimenu> Menu</title>
+&help.menu.documentation;
+</sect2>
+</sect1>
+</chapter>
+
+<chapter id="technology">
+<title>Under The Hood</title>
+
+<para>&koshell; makes extensive use of several &kde; key technologies, most
+notably KParts and &DCOP;.</para>
+
+<para>The &GUI; integration of the components is done by plugins
+providing KParts versions of the applications. This only needs a thin
+additional layer on top of the already existing code of the
+stand-alone applications. Because they are based on the KParts component model, &koffice; programs
+are designed to work very well with each other. Any &koffice; component
+can be embedded in another &koffice; document.</para>
+
+<para>For communication between the components &DCOP; is used. This
+has the nice characteristic that it is completely transparent to
+whether the application is run stand-alone or embedded as KPart into
+&koshell;. </para>
+
+</chapter>
+
+<chapter id="credits">
+
+<title>Credits and License</title>
+
+<para>
+&koshell;
+</para>
+<para>
+Program copyright 2001-2005 The &koffice; Workspace Team
+</para>
+<para>
+Original authors:
+<itemizedlist>
+<listitem><para>Sven Lüppken 
+<email>sven@kde.org</email></para> </listitem>
+<listitem><para>Torben Weis
+<email>weis@kde.org</email></para> </listitem>
+<listitem><para>David Faure
+<email>faure@kde.org</email></para> </listitem>
+</itemizedlist>
+</para>
+
+<para>
+Documentation copyright 2005 Anne-Marie Mahfouf annma@kde.org
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;               <!-- FDL: do not remove -->
+&underGPL;        	 <!-- GPL License -->
+
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-koshell">
+<title>How to obtain &koshell;</title>
+
+&install.intro.documentation;
+
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>
+&koshell; is part of &koffice; 
+on <ulink url="http://www.koffice.org/koshell ">The &koshell; home 
+page</ulink>
+You must have &koffice; installed. &koshell; will not work without the rest of 
+&koffice;
+</para>
+
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and installation</title>
+
+&install.compile.documentation;
+
+</sect1>
+</appendix>
+
+&documentation.index;
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes: nil
+sgml-general-insert-case: lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
+
+

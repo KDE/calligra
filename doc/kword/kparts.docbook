@@ -1,0 +1,56 @@
+<sect1 id="kparts">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>KOffice Data</title>
+<indexterm><primary>inserting &koffice; data</primary></indexterm>
+<indexterm><primary>&koffice;</primary><secondary>inserting data into &kword;</secondary></indexterm>
+
+<para>The applications which make up &koffice; are capable of a fine degree of integration between each other.</para>
+<note><para>Because the actual process of inserting a component varies depending on the application, this chapter will not detail 
+every step of the process.  You will need to be familiar with the basics of using the other application in order to correctly insert 
+a component from that application</para>
+<para>Refer to the help files of the other applications for more specific information.</para></note>
+<sect2 id="kparts-insert"><title>General instructions</title>
+<para>There are two ways to insert a component (spreadsheet, presentation, graph, etc) from another application in &koffice;:</para>
+
+<itemizedlist>
+<listitem>
+<para>Selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Object Frame</guimenuitem></menuchoice> from
+the menubar.</para>
+<para>You will be given a list of &koffice; applications to choose from.  Select the application you desire.</para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="kpart.png" format="PNG"
+align="center"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+<para>A dialog box will appear with a list of &koffice; applications to choose from.  Select the application you desire.</para>
+
+</listitem>
+</itemizedlist>
+
+<para>&kword; 
+will now ask you to define a frame for this object. Place the mouse pointer where you want the upper left corner of the frame to 
+be located.  Click and hold with the &LMB;.  Drag the mouse to draw a square for your new object.  When you are happy with the size of the object frame, release the &LMB;</para>
+<para>&kword; will now execute the application you selected <emphasis>from within &kword;</emphasis>.  The details of each
+application are different.  Please see the application manuals for the specific &koffice; application for details on the use of that
+application. (In other words, from this point on, if you insert a spreadsheet from &kspread;, then the windows will act the same
+as &kspread;.)</para>
+</sect2>
+<sect2 id="kparts-edit"><title>Working with the inserted component</title>
+<para>To edit the data within the component, simply double click with the mouse pointer and &kword; will change the toolbars, menuitems and
+application structure to match the &koffice; application.  This way, you can use the application specific tools to refine your component.</para>
+<note><para>The frame that contains the embedded data, can be <link linkend="frames">manipulated</link> 
+the same as any other frame in &kword;.</para></note>
+<para>When you save your document, the component is saved within the &kword; document.</para>
+</sect2>
+</sect1>

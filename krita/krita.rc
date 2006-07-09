@@ -1,0 +1,185 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="11">
+
+<MenuBar>
+ <Menu name="Edit"><text>&amp;Edit</text>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
+  <Separator/>
+  <Action name="cut"/>
+  <Action name="copy"/>
+  <Action name="copy_merged"/>
+  <Action name="paste"/>
+  <Action name="paste_new"/>
+  <Action name="clear"/>
+  <Action name="fill_selection_foreground_color"/>
+  <Action name="fill_selection_background_color"/>
+  <Action name="fill_selection_pattern"/>
+  <Separator/>
+  <Action name="revert"/>
+  <Separator/>
+  <Menu name="Resources"><text>&amp;Resources</text>
+   <Action name="add_palette"/>
+   <Action name="edit_palette"/>
+  </Menu>
+ </Menu>
+
+ <Menu name="View"><text>&amp;View</text>
+  <Action name="fullscreen"/>
+  <Separator/>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
+  <ActionList name="view_split"/>
+  <Action name="zoom_in"/>
+  <Action name="zoom_out"/>
+  <Action name="actual_pixels"/>
+  <Action name="actual_size"/>
+  <Action name="fit_to_canvas"/>
+  <Separator/>
+  <Action name="view_ruler"/>
+  <!--Action name="view_guidelines"/-->
+  <Separator/>
+  <Action name="view_toggle_grid" />
+  <Menu name="view_fast_grid_config"><text>Grid Spacing</text>
+   <Action name="view_fast_grid_1x1" />
+   <Action name="view_fast_grid_2x2" />
+   <Action name="view_fast_grid_5x5" />
+   <Action name="view_fast_grid_10x10" />
+   <Action name="view_fast_grid_20x20" />
+   <Action name="view_fast_grid_40x40" />
+  </Menu>
+  <Separator/>
+  <Action name="view_palette_action_menu"/>
+  <Separator/>
+  <Action name="refresh_canvas"/>
+ </Menu>
+
+
+<Menu name="Image"><text>&amp;Image</text>
+  <Action name="img_properties"/>
+  <Action name="resizeimgtolayer"/>
+  <Action name="duplicate_image"/>
+</Menu>
+
+<Menu name="Layer"><text>&amp;Layer</text>
+  <Menu name="LayerNew"><text>New</text>
+  	<Action name="insert_layer"/>
+	<Action name="insert_part_layer"/>
+        <Action name="insert_adjustment_layer"/>
+  	<Action name="insert_image_as_layer"/>
+  	<Action name="cut_selection_to_new_layer"/>
+  	<Action name="copy_selection_to_new_layer"/>
+  </Menu>	
+  <Action name="remove_layer"/>
+  <Action name="duplicate_layer"/>
+  <Action name="hide_layer"/>
+  <Action name="link_layer"/>
+  <Separator/>
+  <Action name="raiselayer"/>
+  <Action name="lowerlayer"/>
+  <Action name="toplayer"/>
+  <Action name="bottomlayer"/>
+  <Separator/>
+  <Action name="resizelayertoowner"/>
+  <Separator/>
+  <Action name="save_layer_as_image"/>
+  <Action name="layer_to_image"/>
+<Separator/>
+  <Action name="mirrorLayerX"/>
+  <Action name="mirrorLayerY"/>
+  <Separator/>
+  <Action name="layer_properties"/>
+  <Separator/>
+  <Action name="merge_layer"/>
+  <Action name="flatten_image"/>
+</Menu>
+
+
+<Menu name="Select"><text>&amp;Select</text>
+    <Action name="select_all"/>
+    <Action name="deselect"/>
+    <Action name="reselect"/>
+    <Action name="invert"/>
+    <Separator/>
+    <Action name="feather"/>
+   <Action name = "grow"/>
+   <Action name = "similar"/>
+   <Separator/>
+   <Action name="toggle_display_selection"/>
+</Menu>
+
+<Menu name="Filter"><text>Filte&amp;r</text>
+	<Action name="filter_apply_again"/>
+	<Separator/>
+    <Action name="adjust_filters"/>
+	<Action name="artistic_filters"/>
+	<Action name="blur_filters"/>
+	<Action name="color_filters"/>
+	<Action name="decor_filters"/>
+	<Action name="edge_filters"/>
+	<Action name="enhance_filters"/>
+	<Action name="emboss_filters"/>
+    <Action name="map_filters"/>
+    <Action name="nonphotorealistic_filters"/>
+	<Action name="misc_filters"/>
+</Menu>
+
+<Menu name="Tools"><text>&amp;Tools</text>
+</Menu>
+
+
+<Menu name="settings"><text>Settings</text>
+  <Separator group="settings_show"/>
+  <Action name="preferences" group="settings_configure"/>
+</Menu>
+
+</MenuBar>
+
+<ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
+  <Separator/>
+  <Action name="cut"/>
+  <Action name="copy"/>
+  <Action name="remove"/>
+  <Action name="scrap_selection"/>
+  <Action name="paste_special"/>
+</ToolBar>
+
+<ToolBar name="navigation" position="top"><Text>Navigation</Text>
+  <Action name="refresh_canvas"/>
+  <Action name="zoom_in"/>
+  <Action name="zoom_out"/>
+</ToolBar>
+
+<ToolBar name="ToolBox" position="left">
+    <Text>Krita</Text>
+</ToolBar>
+
+<ToolBar name="BrushesAndStuff" position="top">
+     <Text>Brushes and Stuff</Text>
+     <Action name="brushes"/>
+     <Action name="gradients"/>
+     <Action name="patterns"/>
+     <Separator/>
+     <Action name="paintops"/>
+     <Action name="paintop_options"/>
+</ToolBar>
+
+<Menu name="image_popup">
+ <Action name="select_all"/>
+ <Action name="deselect"/>
+ <Action name="invert"/>
+ <Separator/>
+ <Action name="duplicate_layer"/>
+ <Separator/>
+ <Action name="koffice_undo"/>
+ <Action name="koffice_redo"/>
+ <Separator/>
+ <Action name="cut"/>
+ <Action name="copy"/>
+ <Action name="paste"/>
+ <Action name="paste_new"/>
+</Menu>
+
+</kpartgui>

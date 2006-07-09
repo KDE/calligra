@@ -1,0 +1,97 @@
+I just want to store some notes here in CVS as a compilation of
+what I understood from some previous discussion on redesigning -- wanted
+to do this before it is forgotten.  It is very unlikely that I am 
+going to have the time/motivation to do this myself but hopefully
+this can help give a start to whomever does the work.  I don't think
+anything here is definitive, and certainly if there are better ideas
+than we should scrap these.  For Norbert/Phillip/Ariya this is just
+to help keep track of our ideas, and hopefully the future will see
+many more KSpread hackers who can use this as a head-start in thinking
+about KSpread design.
+
+
+NOTE: when I say 'pointer' in this description, I'm thinking of some shared
+object kind of class with a reference count -- not a literal pointer
+that we would have to remeber to delete...
+
+
+
+The problem needing solved is that the class KSpreadCell (which has 
+about a billion instantiations during a run of the program) is several
+hundred bytes.  This is a tremendous waste of space, and most of it
+is spent holding information such as font type/size/color, which borders
+to draw and line thickness, background color, and so on.  Since this
+information is going to be identical for a vast majority of cells, we 
+should find an efficient way to share data among cells.
+
+The first idea is to break the format information into small classes,
+such as one for font size/type, one for border information and so on.
+The way to save memory is to use a 'flyweight' system in which cells
+would have a pointer to the data, so cells with the same formatting have
+the same pointer and the information itself has only a single instantiation.
+
+At first, we can simply use the copy constructor of this class to implement
+the sharing, and if it seems profitable in the long run these classes
+can keep some kind of static mapping so that in the constructor a check
+can be done to see if, for instance, helvetica font size 12 has already
+been allocated in the past and use that pointer rather than allocating
+a 2nd instance.
+
+
+
+
+Next, these format objects would be collected objects I was calling 'styles'
+A style would basically be one of every type of Format object and thus
+would completely define the format of the cell.  A style can be shared the
+same way as a format object -- if two cells have all identical format
+objects than they can share the same style object.
+
+
+
+We had discussed two different ways of actually mapping these formats
+and styles to particular cells.  
+
+One way is to simply have
+each cell contain a pointer to its style.  Rather than each cell using
+200ish bytes to store the formatting, it has the single 4 byte pointer,
+and then the the 200ish bytes is shared among all cells with that same
+formatting information.
+
+The other possibility is to map it by region.  This involves storing
+a map of some sort in KSpreadSheet to say, cells A2:E30 have this style,
+column H has this style, etc.  Here, the cell itself would store no
+formatting.  
+
+If I remember correctly, we were leaning towards the second
+method because of both the memory consumption, and because it is a simpler
+way of handling setting formatting on a full column or row.  However
+this method will be much more complex to implement in a way that there
+can be efficient lookup to retrieve the current style for a particular cell.
+
+
+
+Some things to decide:
+
+How fine grained to make the format objects?
+- How much information to store in each format object.  If there are a few,
+  large format objects, than each Style is very small, requiring only a 
+  single pointer for each of these few format objects.  However the data
+  sharing is not very efficient if between 2 cells the font color changes, and
+  there are 10 other pieces of data that are exactly the same
+
+  If there is too little in each format object, than we don't gain any
+  savings in memory because each additional type of format object results
+  in an extra pointer in each style object
+
+
+
+
+
+There's probably much more that can be put in here.
+
+
+BTW, I hope to stay involved at least a little with KSpread.  It is unlikely
+however that I will try to take on any large chunks of code unless I just get 
+in a random programming fit on a weekend  :-)  
+
+-John

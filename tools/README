@@ -1,0 +1,8 @@
+Here you can find 
+- implementation of KDataTools for koffice
+    spell/ is a spell-checking data tool
+
+- a command-line koffice document converter, "koconverter"
+
+- a kio_thumbnail module for previewing WMF and SVG pictures ("cliparts")
+

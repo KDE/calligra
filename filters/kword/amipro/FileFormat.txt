@@ -1,0 +1,225 @@
+Lotus AmiPro File Format (NOT FINISHED YET)
+
+Ariya Hidayat <ariyahidayat@yahoo.de>
+Last rev: March 16, 2002
+
+1  Foreword
+-----------
+This is solely based on my reverse-engineering work whilst
+I work on AmiPro import filter for KWord.
+
+2  Structure of AmiPro document
+-------------------------------
+An AmiPro document consists of (in order of appearance):
+- header
+- content, i.e the text
+- embedded objects (frame, image, ...)
+
+3  Formatting
+-------------
+Basic text formatting, such as bold, italic, and so on is
+done inline by enclosing the text in a form of tag (like
+HTML tag). A tag is something like: <+$>
+
+The following list summarizes known formmating tags:
+  <+!> bold on
+  <-!> bold off
+  <+"> italic on
+  <-"> italic off
+  <+#> underline on
+  <-#> underline off
+  <+)> double underline on
+  <-)> double underline off
+  <+$> word underline on
+  <-$> word underline off
+  <+&> superscript on
+  <-&> superscript off
+  <+'> subscript on
+  <-'> subscript off
+  <+%> strikethrough on
+  <-%> strikethrough off
+
+Note: Word underline is just like underline, except that
+spaces between words are not underlined.
+
+Paragraph align is also encoded using tag, here it the list:
+  <+@> left alignment
+  <+A> right alignment
+  <+B> center alignment
+  <+C> justified
+
+Linespacing is encoded using tag:
+  <:S+-1> single
+  <:S+-2> one-and-half
+  <:S+-3> double
+  <:S+480> custom, 480/20 = 24 pt
+
+Font: tag <:f...>
+Example: <:f240,2Arial,255,0,0> means "Arial" font
+of size 240/20 = 12 pt, with red color (R=255,G=0,B=0).
+Simple tag <:f> means back to default font.
+
+Special characters are escaped or encoded because 
+they have special meaning. Known so far: 
+   < encoded as <<
+   [            <[>
+   @            @@
+   >            <;>
+
+4  Styles
+---------
+Styles are defined in the header, precisely in section
+[tag]. The format for this section is shown with an
+example below:
+
+ [tag]
+     Title          style name
+     8              shortcut key ("F8")
+     [fnt]
+         Arial      font family ("Arial")
+         360        font size, 360/20 = 18 pt
+         0          font color (see below)
+         16385      formatting flag (see below)
+     [algn]
+         4          alignment flag (see below)
+         1
+         216        indent, 216/20 = 10.8 pt 
+         144        first line indent, 144/20 = 7.2 pt
+         288        rest indent, 288/20 = 14.4 pt
+     [spc]
+         33         linespace flag (see below)
+         400        custom spacing, 400/20 = 20 pt
+         1
+         144        space before, 144/20 = 7.2 pt
+         72         space after, 72/20 = 3.6 pt
+         1
+         115        text tightness (90%=tight,115%=loose)
+     [brk]
+         16         break flag (see below)
+     [line]
+         8
+         0
+         1
+         0
+         1
+         1
+         1
+         10
+         10
+         1
+
+        [spec]
+                0
+                1
+
+                0
+                1
+                1
+                0
+                0
+                0
+                0
+        [nfmt]
+                272
+                1
+                2
+                .
+                ,
+                </c>
+        Title             style followed (see also break flag)
+        0
+        0
+
+
+Color Representation:
+  bit 0-7   : red 
+  bit 8-15  : green
+  bit 16-23 : blue
+
+Note about AmiPro flags: although many things are set
+per bit, sometimes they are mutually exclusive, e.g
+left-aligned vs right-aligned. This must be taken into
+consideration.
+
+Formatting flag (16 bit)
+  bit 0  : bold
+  bit 1  : italic
+  bit 2  : underline
+  bit 3  : word underline
+  bit 4  : all caps
+  bit 6  : double underline
+  bit 11 : initial caps
+  bit 12 : first line bold
+  bit 14 & 15 always set (??)
+
+Alignment flag
+  bit 0  : left aligned
+  bit 1  : right aligned
+  bit 2  : centered
+  bit 3  : justified
+  bit 4  : all indent (left & right)
+  bit 9  : hanging indent
+
+Linespace flag
+  bit 0  : single
+  bit 1  : one-and-half
+  bit 2  : double
+  bit 3  : custom
+  bit 4  : always add in
+  bit 5  : add in when not a break
+
+Break flag:
+  bit 0  : page break before
+  bit 1  : page break after
+  bit 2  : allow break within
+  bit 3  : keep with previous
+  bit 4  : keep with next
+  bit 5  :
+  bit 6  : specifiy following style
+  bit 7  : column break before
+  bit 8  : column break after
+
+Styles are applied using the following sequences:
+@StyleName@, which put inline (within the text/content).
+Normally this appears in beginning of paragraph.
+
+5  Page Layout
+-------------
+Page layout is defined in section [lay]. Here is the format,
+along with an example:
+
+  [lay]
+      Standard
+      516
+      [rght]
+          16833     paper height, 16833/20 = 841.65 pt
+	  11906     paper width, 11906/20 = 595.3 pt
+	  4
+	  1440
+	  1440
+	  1
+	  1440
+	  1440
+	  0
+	  1
+		0
+		1
+		0
+		2
+		1
+		1440
+		10465
+		12
+
+
+6  Frame, Image, Table
+----------------------
+still pretty much a mystery :-P
+
+7  Equation
+-----------
+Equation or mathematical formula is represented in
+a language similar to TeX or LaTeX. Each equation is however
+put in a separate frame, so it is not really part
+of the document. Think of equation as embedded object
+within the document.

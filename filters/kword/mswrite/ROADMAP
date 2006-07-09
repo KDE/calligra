@@ -1,0 +1,21 @@
+Current "Roadmap" for mswritefilter Development:
+
+0.1 Preliminary (plain text)
+0.2 Character formatting
+0.3 Paragraph & page formatting, pagebreaks, headers & footers, pictures,
+    performance increase
+
+0.5 Major rewrite - portable code, export filter added
+
+    <<< WE ARE HERE >>>
+
+0.6 LibMSWrite API stabilises, performance enhancements, implement OLE?
+
+0.9 Preparation for final release + full stress testing
+1.0 Final release (unless bugs are found etc.)
+
+Last Updated: $Date$
+Clarence Dang <dang@kde.org>
+
+
+--

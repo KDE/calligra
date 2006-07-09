@@ -1,0 +1,755 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>KOffice filters status: Applix Spreadsheet FILTER</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
+<A NAME="START">&nbsp;</A>
+
+<BR>
+<center>
+ <h1>
+  KOffice filters status: &nbsp;&nbsp;<i>Applix Spreadsheet FILTER</i>
+ </h1>
+</center>
+
+<hr NOSHADE SIZE=2 WIDTH="70%">
+
+<font size="-1"><b>
+ <A HREF="#import">Import</A> |
+ <A HREF="#export">Export</A>
+</b></font>
+
+<BR><BR><BR>
+<center><a NAME="import"></a></center>
+
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000" WIDTH="100%">
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH="100%">
+
+    <tr BGCOLOR="#DDFFDD">
+     <td COLSPAN="2">
+      <center><b><i><font size="+1">
+       <BR>
+        Import Applix Spreadsheet for kspread<BR>
+       <BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH="1%" NOWRAP><b><font size="+1">Last update</font></b></td>
+     <td>03 mar 2001</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Features</font></b></td>
+     <td>
+       - can import simple and complex Applix Spreadsheet documents<br>
+       - tests the headline of the document<br>
+       - converts &lt;, &gt;, &amp;, to &amp;lt; &amp;gt; &amp;amp;<br>
+       - converts all applix special characters<br>
+       - converts fontsize, fontcolor, horizontal and vertical alignment, bold, italic, underline<br>
+       - eats long text strings (more than one row in inputfile)<br>
+       - converts different tables inside of one document<br>
+       - cellformat: background color, brushstyles, brushcolor<br>
+       - cellframe: linewidth, linetype, linecolor<br>
+       - row height and column width<br>
+       - converting the fontfamily (incl. reading the typeface table)<br>
+       - correct process bar value emiting (procent)<br>
+       - rows A-Z and greater Z (AA-ZZ) are right translate into integer values<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Todo</font></b></td>
+     <td>
+       - cellframes: double lines are not supported in kspread till now. So they can't translated correct.<br>
+       - check the row height and column width - they are not right sometimes<br>
+       - grouped row and column formats<br>
+       - add endoffile checking with dialog in do-while loops<br>
+       - detect valueline (can only do textlines)<br>
+       - convert a formular, date or something else right with cell references<br>
+       - change the printf output to debug (xxxxx) output<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">History</font></b></td>
+      <td>
+
+
+       <table border="0" cellspacing="0">
+        <tr valign=top>
+         <td align=right>17 mar 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>The fontfamily in support (incl. bugfix)<BR>
+             Longnamed columns like AA are right supported now- for cell elements and column width elements<BR>
+             Corrected the row width values. They start with 32768!<BR>
+             Little code cleanup. Updated the fileformat description.
+         </td>
+        </tr>
+        <tr>
+         <td align=right>13 mar 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Added the progress bar value emiting (<A HREF="faure@kde.org">David Faure</A>)</td>
+        </tr>
+        <tr>
+         <td align=right>11 mar 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Added fileformat description.</td> 
+        </tr>
+        <tr>
+         <td align=right>10 mar 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Checked in this version after discussion with David Faure. He told me that he just tried to begin with a applix spreadsheet import filter too.</td>
+        </tr>
+        <tr>
+         <td align=right>09 mar 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Read the row height and column width.</td>
+        </tr>
+        <tr>
+         <td align=right>03 mar 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Reads the typefont and the colortable, converts cmyk to rgb, added some style information (cell and string)</td>
+        </tr>
+        <tr>
+         <td align=right>24 feb 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Add &lt;, &gt;, &amp; and applix character convertation</td>
+        </tr>
+        <tr>
+         <td align=right>11 feb 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Written a filter that only can filter simple applix files</td>
+        </tr>
+       </table>
+
+
+      </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Authors&nbsp;</font></b></td>
+     <td><A HREF="mailto:ebartels@nwn.de">Enno Bartels</A></td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Links</font></b></td>
+     <td><A HREF="http://home.nordwest.net/ebartels/applixinfo/as/index.html">Applixword example</A></td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Progress report </font></b></td>
+     <td><B><U><font size="+1">Fileformat:</font></U></B><BR>
+         <BR>
+         <B><U>Main Structure:</U></B><BR>
+         <spacer size="20">1. Header<BR>
+         <spacer size="20">2. Colortable<BR>
+         <spacer size="20">3. Fonttable<BR>
+         <spacer size="20">...<BR>
+         <spacer size="20">4. View<BR> 
+         <spacer size="20">...<BR>
+         <spacer size="20">5. Headers and footers<BR>
+         <spacer size="20">6. Cellvalues<BR>
+         <spacer size="20">7. End<BR><BR><BR>  
+         
+
+         <B><U>1. Header:</U></B><BR> 
+         <spacer size="10">The headerline looks like that:<BR>
+         <spacer size="20"><B><I>*BEGIN SPREADSHEETS VERSION=430/430 ENCODING=7BIT</I></B><BR><BR><BR>
+
+
+         <B><U>2. Colormap:</U></B><BR> 
+         <spacer size="10">The colormap has 3 parts<BR> 
+         <spacer size="10">2.1. Starting line<BR> 
+         <spacer size="10">2.2. Value lines<BR> 
+         <spacer size="10">2.3. Ending line<BR>
+         <BR> 
+
+         <spacer size="10"><U>2.1. Colormap start:</U><BR> 
+         <spacer size="20">The colormap begins with this line<BR> 
+         <spacer size="20"><B><I>COLORMAP</I></B><BR>
+         <BR> 
+
+         <spacer size="10"><U>2.2. Colormap value:</U><BR>
+         <spacer size="20">A color value line has the following parts (cmyk - colorsystem)<BR>
+         <spacer size="20"><B>Text 0 c m y k 0</B><BR>
+         <BR>  
+
+         <spacer size="20">
+         <TABLE CELLPADDING="0" BORDER="0">
+          <TR>
+           <TD>2.2.1.</TD>
+           <TD>Text</TD>
+           <TD>= Textstring</TD>
+           <TD>-</TD>
+          </TR>
+          <TR>
+           <TD>2.2.2.</TD>
+           <TD>0</TD>
+           <TD>= NULL</TD>
+           <TD>-</TD>
+          </TR>
+          <TR>
+           <TD>2.2.3.</TD>
+           <TD>c</TD>
+           <TD>= cyan</TD>
+           <TD>0-255</TD>
+          </TR>
+          <TR>
+           <TD>2.2.4.</TD>
+           <TD>m</TD>
+           <TD>= magenta</TD>
+           <TD>0-255</TD> 
+          </TR>
+          <TR>
+           <TD>2.2.5.</TD>
+           <TD>y</TD>
+           <TD>= yellow</TD>
+           <TD>0-255</TD>
+          </TR>
+          <TR>
+           <TD>2.2.6.</TD>
+           <TD>k</TD>
+           <TD>= black (key)</TD>
+           <TD>0-255</TD>
+          </TR>
+          <TR>
+           <TD>2.2.7.</TD>
+           <TD>0</TD>
+           <TD>= NULL</TD>
+           <TD>-</TD>
+          </TR>
+         </TABLE>
+         <BR><BR>
+
+         <spacer size="20">Color converting is very simple cmyk to rgb:<BR>
+         <spacer size="20">r = 255 - (c+k)<BR> 
+         <spacer size="20">g = 255 - (m+k)<BR> 
+         <spacer size="20">b = 255 - (y+k)<BR> 
+         <spacer size="20">If the value of r, g or b if less then 0 you must set it to 0 .<BR>
+         <BR>
+         <spacer size="20">For examples inside koffice look a this files too<br>
+         <spacer size="20"><I>koffice/kimageshop/core/kis_color.cc and kis_color.h</I><BR>
+         <BR><BR>
+
+         <spacer size="10"><U>2.3. Colormap end:</U><BR> 
+         <spacer size="20">The colormap ends with this line:<BR> 
+         <spacer size="20"><B><I>END COLORMAP</I></B>
+         <BR><BR> 
+
+
+         <B><U>3. Fonttable:</U></B><BR> 
+         <spacer size="10">The fonttable has 3 parts<BR> 
+         <spacer size="10">3.1. Starting line<BR> 
+         <spacer size="10">3.2. Value lines<BR> 
+         <spacer size="10">3.3. Ending line<BR>
+         <BR> 
+         
+         <spacer size="10"><U>3.1. Starting line</U><BR>
+         <spacer size="20">The fonttable begins with this line:<BR> 
+         <spacer size="20"><B><I>TYPEFACE TABLE</I></B><BR> 
+         <BR>
+ 
+         <spacer size="10"><U>3.2. Value line</U><BR>
+         <spacer size="20">The fonttable value line looks like that:<BR> 
+         <spacer size="20"><B>Helvetica</B><BR>
+         <BR> 
+
+         <spacer size="10"><U>3.3. Ending line</U><BR>
+         <spacer size="20">The colormap ends with this line ends with<BR> 
+         <spacer size="20"><B><I>END TYPEFACE TABLE</I></B><BR>
+         <BR><BR>
+
+
+         <B><U>4. View:</U></B><BR>
+         <spacer size="10">Each table has its own view section and everyone has 3 parts<br>
+         <spacer size="10">4.1. Starting line<BR> 
+         <spacer size="10">4.2. Value lines<BR> 
+         <spacer size="10">4.3. Ending line<BR>
+         <spacer size="10">This is an example with the table name <B>A</B><BR>         
+         <BR> 
+         
+         <spacer size="10"><U>4.1. Starting line</U><BR>
+         <spacer size="20">The view of table <B>A</B> begins with this line:<BR> 
+         <spacer size="20"><B><I>View Start, Name: ~A:~</I></B><br>
+         <BR> 
+        
+         <spacer size="10"><U>4.2. Value lines</U><BR>
+         <spacer size="20">There are different value lines, but all of them start with <B>view</B><BR>
+         <spacer size="20">There are following important value lines:<BR>
+
+         <spacer size="20">4.2.1. Column width <BR>      
+         <spacer size="20">4.2.2. Row heights<BR>
+         <BR>
+      
+         <spacer size="20"><U>4.2.1. Column width</U><BR> 
+         <spacer size="30">In the view of an table block is for example the width of a column:<br>
+         <spacer size="30"><B><I>View Column Widths: A:3 B:3 C:3 D:3 E:3 F:3 G:4 H:4</I></B><br>
+         <BR>
+      
+         <spacer size="20"><U>4.2.1. Row height</U><BR> 
+         <spacer size="30">or the height of a row<br>
+         <spacer size="30"><B><I>View Row Heights: 3:18 4:24 8:32804 </I></B><br>
+         <spacer size="30">Attention: If the row value is greater then 32768 you have to calc rowHeight = rowHeight - 32768 to get the right value!
+         <br><br>
+
+         <spacer size="10"><U>4.3. Ending line</U><BR>
+         <spacer size="20">The view of table <B>A</B> ends with this line:<BR> 
+         <spacer size="20"><B><I>View End, Name: ~A:~</I></B><BR> 
+         <br><br>
+ 
+
+         <B><U>5. Headers and footers:</U></B><BR> 
+         <spacer size="10">The headers and footers section has 3 parts<BR> 
+         <spacer size="10">5.1. Starting line<BR> 
+         <spacer size="10">5.2. Value lines<BR> 
+         <spacer size="10">5.3. Ending line<BR>
+         <BR> 
+         
+         <spacer size="10"><U>5.1. Starting line</U><BR>
+         <spacer size="20">The headers and footers section begins with this line:<BR> 
+         <spacer size="20"><B><I>Headers And Footers</I></B><BR> 
+         <BR>
+ 
+         <spacer size="10"><U>5.2. Value lines</U><BR>
+         <spacer size="20">-<BR> 
+         <spacer size="20">-<BR>
+         <BR> 
+
+         <spacer size="10"><U>5.3. Ending line</U><BR>
+         <spacer size="20">The headers and footers section end with<BR> 
+         <spacer size="20"><B><I>Headers And Footers End</I></B><BR>
+         <BR><BR>
+
+
+
+         <B><U>6. Cellvalue:</U></B><BR> 
+         <spacer size="10">This is a cellvalue line<BR>
+         <spacer size="10"><B><I>('DN|B,I,U,TF1,P18|T4) A!D11: Hello everybody</I></B><BR> <BR> 
+         <spacer size="10">a cellvalue line has 3 parts:<BR> 
+         <spacer size="10">6.1. Formatpart<BR> 
+         <spacer size="10">6.2. Location part<BR> 
+         <spacer size="10">6.3. Text String, formular, value, link, etc.<BR>
+         <BR>
+
+
+         <spacer size="10"><U>6.1. Formatpart:</U><BR> 
+         <spacer size="20">The format part looks like that:<BR> 
+         <spacer size="20"><B>('DN|B,I,U,TF1,P18|T4)</B><BR> 
+         <spacer size="20">There are 3 formatsubparts divided by <B>|</B>:<BR>
+         <spacer size="20"><B>(Part1|Part2|Part3)</B><BR>
+         <spacer size="20">5.1.1. Part 1 - Alignment format<BR>
+         <spacer size="20">5.1.2. Part 2 - Text format<BR>
+         <spacer size="20">5.1.3. Part 3 - Cell format<BR>
+         <BR>
+
+
+         <spacer size="20"><U>6.1.1. Part 1 - Alignment format</U><BR>
+         <spacer size="30">This is the alignment format for vertical, horizontal alignment<BR>
+         <spacer size="30">
+         <TABLE CELLPADDING="0" BORDER="0">
+          <TR>
+           <TD>6.1.1.1&nbsp;&nbsp;</TD>
+           <TD><B>1</B></TD>
+           <TD>horizontal alignment</TD>
+           <TD>left</TD>
+          </TR>
+          <TR>
+           <TD>6.1.1.2&nbsp;&nbsp;</TD>
+           <TD><B>2</B></TD>
+           <TD>horizontal alignment</TD>
+           <TD>right</TD>
+          </TR>
+          <TR>
+           <TD>6.1.1.3&nbsp;&nbsp;</TD>
+           <TD><B>3</B></TD>
+           <TD>horizontal alignment</TD>
+           <TD>center</TD>
+          </TR>
+          <TR>
+           <TD>6.1.1.4&nbsp;&nbsp;</TD>
+           <TD><B>VT</B></TD>
+           <TD>vertical alignment</TD>
+           <TD>top</TD>
+          </TR>
+          <TR>
+           <TD>6.1.1.5&nbsp;&nbsp;</TD>
+           <TD><B>VC</B></TD>
+           <TD>vertical alignment</TD>
+           <TD>center</TD>
+          </TR>
+          <TR>
+           <TD>6.1.1.5&nbsp;&nbsp;</TD>
+           <TD><B>VB</B></TD>
+           <TD>vertical alignment</TD>
+           <TD>bottom</TD>
+          </TR>
+          <TR>
+           <TD>6.1.1.6&nbsp;&nbsp;</TD>
+           <TD><B>DN</B></TD>
+           <TD>??</TD>
+           <TD>??</TD>
+          </TR>
+         </TABLE>
+         <BR>
+
+
+         <spacer size="20"><U>6.1.2. Part 2 - Text format</U><BR>
+         <spacer size="30">This is the alignment format for the text<BR>
+         <spacer size="30">
+         <TABLE CELLPADDING="0" BORDER="0">
+          <TR>
+           <TD>6.1.2.1.&nbsp;&nbsp;</TD>
+           <TD><B>B</B></TD>
+           <TD>bold</TD>
+           <TD>-</TD>
+          </TR>
+          <TR>
+           <TD>6.1.2.2.&nbsp;&nbsp;</TD>
+           <TD><B>I</B></TD>
+           <TD>italic</TD>
+           <TD>-</TD>
+          </TR>
+          <TR>
+           <TD>6.1.2.3.&nbsp;&nbsp;</TD>
+           <TD><B>U</B></TD>
+           <TD>underline</TD>
+           <TD>-</TD>
+          </TR>
+          <TR>
+           <TD>6.1.2.4.&nbsp;&nbsp;</TD>
+           <TD><B>TFx</B></TD>
+           <TD>fontfamily</TD>
+           <TD>x is the number in the fonttable.</TD>
+          </TR>
+          <TR>
+           <TD>6.1.2.5.&nbsp;&nbsp;</TD>
+           <TD><B>Px</B></TD>
+           <TD>fontsize</TD>
+           <TD>x is the fontsize.</TD>
+          </TR>
+         </TABLE>
+         <BR>
+
+        
+
+         <spacer size="20"><U>6.1.3. Part 3 - Cell format</U><BR>
+         <spacer size="30">This is the alignment format for the text<BR>
+         <spacer size="30">
+         <TABLE CELLPADDING="0" BORDER="0">
+          <TR>
+           <TD>6.1.3.1.&nbsp;&nbsp;</TD>
+           <TD><B>Txy</B></TD>
+           <TD>Frame at the top</TD>
+          </TR>
+          <TR>
+           <TD>6.1.3.2.&nbsp;&nbsp;</TD>
+           <TD><B>Bxy</B></TD>
+           <TD>Frame at the bottom</TD>
+          </TR>
+          <TR>
+           <TD>6.1.3.3.&nbsp;&nbsp;</TD>
+           <TD><B>Lxy</B></TD>
+           <TD>Frame at the left side</TD>
+          </TR>
+          <TR>
+           <TD>6.1.3.4.&nbsp;&nbsp;</TD>
+           <TD><B>Rxy</B></TD>
+           <TD>Frame at the right side</TD>
+          </TR>
+         </TABLE>
+         <BR>
+
+         <spacer size="30">x = number describes the penwidth and penstyle of the frame line<BR>
+         <spacer size="30">
+         <TABLE CELLPADDING="0" BORDER="1">
+          <TR>
+           <TD ALIGN=CENTER colspan=2>applix</TD>
+           <TD ALIGN=CENTER>&nbsp;</TD>
+           <TD ALIGN=CENTER colspan=2> kspread</TD>
+          </TR>
+          <TR>
+           <TD ALIGN=CENTER>number x</TD>
+           <TD ALIGN=CENTER>info</TD>
+           <TD ALIGN=CENTER>&nbsp;</TD>
+           <TD ALIGN=CENTER>penwidth</TD>
+           <TD ALIGN=CENTER>penstyle</TD>
+          </TR>
+          <TR>
+           <TD>1</TD>
+           <TD>-</TD>
+           <TD>&nbsp;=&nbsp;</TD>
+           <TD>1</TD>
+           <TD>1</TD>
+          </TR>
+          <TR>
+           <TD>2</TD>
+           <TD>-</TD>
+           <TD>&nbsp;=&nbsp;</TD>
+           <TD>2</TD>
+           <TD>1</TD>
+          </TR>
+          <TR>
+           <TD>3</TD>
+           <TD>-</TD>
+           <TD>&nbsp;=&nbsp;</TD>
+           <TD>3</TD>
+           <TD>1</TD>
+          </TR>
+          <TR>
+           <TD>4</TD>
+           <TD>dashed</TD>
+           <TD>&nbsp;=&nbsp;</TD>
+           <TD>1</TD>
+           <TD>3</TD>
+          </TR>
+           <TR>
+           <TD>5</TD>
+           <TD>double line</TD>
+           <TD>&nbsp;=&nbsp;</TD>
+           <TD>5</TD>
+           <TD>1</TD>
+          </TR>
+         </TABLE>
+         <BR>
+
+
+         <spacer size="30">y = examples <B>FG7</B> &nbsp;&nbsp; <B>SH11FG18</B> &nbsp;&nbsp; <B>SH11FG18BG4</B><BR>
+         <spacer size="30">it has max 3 Parts:<BR>
+         <spacer size="30">6.1.3.4.1. Foreground color.<BR>
+         <spacer size="30">6.1.3.4.2. Background shade type.<BR>
+         <spacer size="30">6.1.3.4.3. Background color.<BR>
+         <BR>
+
+         <spacer size="30"><U>6.1.3.4.1. Foreground color:</U><BR>
+         <spacer size="40">FGx = Foreground color.  - x is the number in the colortable<BR>
+         <BR>
+
+         <spacer size="30"><U>6.1.3.4.2. Background shade type:</U><BR>
+         <spacer size="40">SHx = Background shade type. x is the shadetypenumber<BR>
+         <spacer size="40">Not all can be translate !<BR>
+         <BR>
+         <spacer size="40">
+         <TABLE CELLPADDING="0" BORDER="1">
+          <TR>
+           <TD ALIGN=CENTER>applix</TD>
+           <TD ALIGN=CENTER>&nbsp;</TD>
+           <TD ALIGN=CENTER>kspread</TD>
+          </TR>
+          <TR>
+           <TD ALIGN=CENTER>shadetype number </TD>
+           <TD ALIGN=CENTER>&nbsp;</TD>
+           <TD ALIGN=CENTER>shadetype number</TD>
+          </TR>
+          <TR>
+           <TD>1</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+          <TR>
+           <TD>2</TD>
+           <TD>=</TD>
+           <TD>7</TD>
+          </TR>
+          <TR>
+           <TD>3</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+          <TR>
+           <TD>4</TD>
+           <TD>=</TD>
+           <TD>4</TD>
+          </TR>
+          <TR>
+           <TD>5</TD>
+           <TD>=</TD>
+           <TD>3</TD>
+          </TR>
+          <TR>
+           <TD>6</TD>
+           <TD>=</TD>
+           <TD>2</TD>
+          </TR>
+          <TR>
+           <TD>7</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+          <TR>
+           <TD>8</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+          <TR>
+           <TD>9</TD>
+           <TD>=</TD>
+           <TD>10</TD>
+          </TR>
+          <TR>
+           <TD>10</TD>
+           <TD>=</TD>
+           <TD>9</TD>
+          </TR>
+          <TR>
+           <TD>11</TD>
+           <TD>=</TD>
+           <TD>11</TD>
+          </TR>
+          <TR>
+           <TD>12</TD>
+           <TD>=</TD>
+           <TD>12</TD>
+          </TR>
+          <TR>
+           <TD>13</TD>
+           <TD>=</TD>
+           <TD>13</TD>
+          </TR>
+          <TR>
+           <TD>14</TD>
+           <TD>=</TD>
+           <TD>14</TD>
+          </TR>
+          <TR>
+           <TD>15</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+          <TR>
+           <TD>16</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+          <TR>
+           <TD>17</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+          <TR>
+           <TD>18</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+          <TR>
+           <TD>19</TD>
+           <TD>=</TD>
+           <TD>0</TD>
+          </TR>
+         </TABLE>
+         <BR>
+
+         <spacer size="30"><U>6.1.3.4.3. Background color:</U> <BR>
+         <spacer size="40">BGx = Background color. x is the number in the colortable<BR>
+         <BR><BR>
+         
+                        
+         <spacer size="10"><U>6.2. Location part:</U> <BR> 
+         <spacer size="20">The location part looks like that:<BR> 
+         <spacer size="20"><B>A!D11:</B><BR> 
+         <spacer size="20">A = table <BR> 
+         <spacer size="20">D11 = cellnumber<BR> 
+         <spacer size="30">D = columnnumber<BR> 
+         <spacer size="30">11 = rownumber<BR> 
+         <spacer size="30">:=textstring, ;=formular, .=value<BR> 
+         <BR>
+
+         <spacer size="10"><U>6.3. Text String etc:</U><BR> 
+         <spacer size="20">The text string part looks like that:<BR> 
+         <spacer size="20"><B>Hello everybody</B><BR>
+         <BR>
+
+
+
+
+
+
+         <B><U>7. End</U></B><BR> 
+         The end looks like that:<BR>
+         <B><I></I>*END SPREADSHEETS</B><BR>
+         <BR><BR>
+        
+
+    </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+
+<br><br><br>
+
+<hr NOSHADE SIZE=1>
+<br><br><br>
+
+
+<center>
+ <a NAME="export"></a>
+</center>
+
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000"  WIDTH="100%">
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH="100%">
+    <tr BGCOLOR="#FFDDDD">
+     <td COLSPAN="2">
+      <center><b><i><font size="+1">
+       <BR>Export kspread to Applix Spreadsheet<BR><BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH="1%" NOWRAP><b><font size="+1">Last update</font></b></td>
+     <td>-</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Features</font></b></td>
+     <td>None</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Todo</font></b></td>
+     <td>Everything</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">History</font></b></td>
+     <td>-</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Authors</font></b></td>
+     <td><!a href="mailto:null@kde.org">-</a></td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Links</font></b></td>
+     <td><!a href="http://www.koffice.org">-</a></td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Progress report </font></b></td>
+     <td>---</td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+
+</body>
+</html>

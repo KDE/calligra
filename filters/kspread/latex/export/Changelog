@@ -1,0 +1,36 @@
+- 18 April 2003
+	o fix the dcop interface
+
+- 22 march 2003
+-features
+	o row color;
+	o text color.
+	
+-bugs
+	o don't generate border if no style defined.
+
+-internal
+	o clean code;
+	o add comments;
+	o don't add the maindoc.xml at the end of tex file anymore.
+
+- 16 march 2003
+- features
+	o cell color
+	o support param from the dialog box : language, encoding, quality, 
+	default font, document class, document type.
+	Document style, picture and contents tabs are not supported.
+		
+- bugs
+	o bad format for column when no format exists;
+	o include package which are needed.
+
+- 02 march 2003
+- features
+	o column color.
+
+- bugs
+	o fix bug when a cell was not defined but needed.
+
+- 18 January 2003
+	 Implements cell borders, multirow.

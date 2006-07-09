@@ -1,0 +1,153 @@
+<chapter id="introduction">
+<title>Introduction</title>
+
+<sect1 id="introduction-krita">
+<title>What is &krita;?</title>
+<para>
+&krita;, part of &koffice;, can do everything you want with images &mdash; or
+it will be able to one day. Everything from photo retouching, image editing,
+and last but not least creating original art on your computer as if you were
+working with real paint and brushes, pencils, pen and ink. Every day
+&krita; becomes a little better, a little more useful.  We are working on it,
+anyway. We, that is, Adrian, Bart, Boudewijn, Casper, Cyrille, Michael and Sven.
+It could be you, too &mdash; whether you would like to help with some artwork
+for the user interface, cool ideas for the todo, helpful bug reports, usability
+reviews or even actual code, you will not be snubbed by us.
+</para>
+<para>
+&krita; is as much yours as it is ours. It should be fun, innovative, and
+experimental &mdash; first and foremost a pleasure to use and to hack on.
+</para>
+</sect1>
+
+<sect1 id="introduction-keyfeatures">
+<title>Key features</title>
+
+<para>The most important features &krita; currently has to offer, are:</para>
+<itemizedlist>
+
+<listitem><para>Plugins: Krita is extensible through plugins. There are tools,
+colorspaces, paint operations, filters and kpart-based user interface plugins.
+</para></listitem>
+
+<listitem><para>Scriptable: &krita; is scriptable in Python and Ruby using
+Kross, the cross language scripting engine that originated in Kexi. The
+scripting is compatible with PyQt/KDE and Korundum for adding GUI
+items, such as dialog boxes.</para></listitem>
+
+<listitem><para>Color models: &krita; uses lcms for a dependable color
+workflow using icc profiles for importing, exporting, selecting paint colors,
+printing, cutting and pasting. 8, 16, and 32 bit colorspaces are available
+(RGB, CMYK, L*a*b*, ...) and colors can be selected from a color wheel, rgb or
+grayscale sliders or with a palette.</para></listitem>
+
+<listitem><para>Editing and viewing: Unlimited undo and redo are available.
+You can cut, copy and paste between lagers and images, with conversion through
+icc profiles if this is necessary.  OpenGL is supported for display. The view
+can be made fullscreen and can be split. Rulers are available, the
+image can be zoomed, and for maximizing the workspace all palette windows can
+be hidden in one go. Also a histogram palette is available.</para></listitem>
+
+<listitem><para>Images and layers: Layers and entire images can be mirrored,
+sheared, rotated and scaled, converted between colorspaces, and layers in
+different colorspaces can be merged. An image can be separated into colorspace
+channels.</para></listitem>
+
+<listitem><para>Layers: Layers can be added, removed, grouped, locked, made
+(in)visible, and re-ordered.  Adjustment layers (layers which perform a filter
+function) can be added as well. A layer can be saved as a separate image and
+its colorspace can be changed.</para></listitem>
+
+<listitem><para>Tools: Through the innovative paintOp plugin system, all
+painting tools (brush, ellipse, line, etc.) can paint aliased, anti-aliased,
+erase, airbrush and more.</para></listitem>
+
+<listitem><para>Filters: &krita; can multithread the operation of some
+filters. Flters can be previewed in the filter gallery. Available filters
+include color adjustment, sharpen or blur, emboss, raindrops, and
+more.</para></listitem>
+
+<listitem><para>Brushes: The GIMP brush shapes can be used, both colored and
+grayscale brushes and pipe brushes. Custom brushes can be created, even from
+entire layers or images. Colored brushes can also be used as
+masks.</para></listitem>
+
+</itemizedlist>
+
+<sect2 id="introduction-keyfeatures-colormanagement">
+<title>Color management</title>
+<para>
+One of the most distinguishing features in &krita; is its color management.
+If you put two screens side to side, you will notice that there is often a lot
+of difference in the way they display colors. Even white, especially white, is
+often not the same thing at all. On one screen it can be a dirty yellow, on
+another screen a sickly bluish. Very seldom is it a creamy milk-white. The same
+holds, unfortunately, for scanners, printers and digital cameras. So, if you
+want to see the right colors on screen and on paper, being the colors that you
+saw when taking your snapshot, you will have to compensate.
+</para><para>
+&krita; can do this for you: in &krita;, a color is (almost) never just a set of
+numbers, one for each color channel; it is a set of numbers with information
+attached. And that extra information is contained in a profile: your image has a
+profile, your scanner has a profile, your camera should have a profile and your
+screen has a profile. When passing information from your image to your screen,
+the profiles are checked and the correct color is computed. This may cause a
+little slowness, now and then, but the result is that you can work with colors,
+instead of almost meaningless RGB triplets.
+</para><para>
+Available colorspaces are: 8 bit/channel RGB, CMYK, grayscale and wet
+watercolors, 16 bit/channel RGB, CMYK, grayscale and L*a*b*, <quote>half</quote>
+RGB, and 32 bit float RGB (HDR) and LMS.
+</para>
+</sect2>
+
+<sect2 id="introduction-keyfeatures-imageformats">
+<title>Image formats</title>
+<para>
+&krita; currently supports the following image formats, both for importing and
+exporting, apart from its own: PNG, TIFF, JPEG, Dicom, XCF, PSD, GIF, BMP,
+XPM, Targa, RGB, and OpenEXR. Additionally, &krita; can import 
+ICO files. PSD (the Photoshop file format) is only supported up to version 6,
+from version 7 on, the Photoshop file format is closed. 
+</para><para>
+Embedded icc profiles and exif information are preserved on export to
+supporting file formats. &krita;'s native file format stores icc and exif
+information.
+</para>
+</sect2>
+
+</sect1>
+
+<sect1 id="introduction-manual">
+<title>About this manual</title>
+<para>
+We are assuming you have got a good working knowledge of &kde; and of your
+operating system. The first chapter will give you a quick tour of &krita;'s
+cool features; the other chapters will expand on that information.
+</para>
+<note><para>
+This manual is not complete. The invitation to join us and help out extends to
+the manual, too!
+</para></note>
+<para>
+Should you have any questions, comments or suggestions, please contact the
+documentation maintainer at <email>sanderkoning@kde.nl</email>.
+</para>
+</sect1>
+
+<sect1 id="introduction-maintainer">
+<title>About the application maintainer</title>
+<para>
+Hi! I'm Boudewijn Rempt &mdash; the current maintainer of &krita;. I was
+educated as a linguist, retrained as a database developer, work as a Java
+hacker, study theology and I have always liked to paint and sketch a little.
+Conspiciously absent in my life have been two important things for a developer
+of an image app: mathematics and experience with graphic design. That means that
+I am probably not the best person to explain the niceties of using an image
+editor or a paint application to you. If you catch me in an error, please don't
+hesitate to mail me: <email>boud@valdyas.org</email>.
+</para>
+</sect1>
+
+</chapter>
+

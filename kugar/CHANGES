@@ -1,0 +1,116 @@
+*************************
+VERSION 1.3
+*************************
+
+Changes:
+
+ 1. Kugar and Kugar Designer are now pure KOffice applications.
+    Partification was made and KOffice zipped xml format is used.
+    
+ 2. Kugar and Kugar Designer are available in Qt-only versions.
+    They are included in the source tree but not compiled by default.
+    To compile run:
+    qmake kugar.pro
+    make -f Makefile.qt
+ 
+ 3. Direct database support in Kugar.
+
+
+*************************
+VERSION 1.2
+*************************
+
+Changes:
+
+ 1. GUI Report Designer is added (kudesigner)
+    Qt version of designer can be found in maintainer's web site
+    http://www.cloudtemple.mksat.net
+
+ 2. Users can add as many detail bands to the report as needed,
+    this can be useful if we print report with data, arranged according
+    the master-detail relationship.
+    For example, now Kugar's
+    Detail Level="0" -> Detail Level="1" -> Detail Level="2"
+    corresponds to many commertial report engines'
+    Master -> Detail -> Subdetail
+
+ 3. Any detail of any level can now have detail header and detail footer
+
+ 4. Added DDMMYY_PERIOD (e.g. 25.02.02)
+    and DDMMYYYY_PERIOD (e.g. 25.02.2002) date type output formats
+    for Fields, Specials and CalculatedFields.
+    They have numbers 11 and 12 to use in a report template.
+
+ 5. Report engine is now completely Qt-based. Any use of KDE classes were
+    removed and replaced with their Qt analogs (KPrinter -> QPrinter,
+    KMessageBox -> QMessageBox)
+
+ 6. KReportViewer class is added to Kugar lib - it uses KMessageBox and
+    KPrinter classes.
+    kugar.h now references to kreportviewer.h
+    Qt users should include kugarqt.h that references to mreportviewr.h
+
+
+*************************
+VERSION 1.0
+*************************
+
+Changes:
+
+ 1. Change the documentation to reflect the new maintainer and web site.
+ 2. Renamed the whole package.
+ 3. Switched from the Apache Xerces XML Parser to the parser included with Qt
+    v2.2.0.
+ 4. Converted the reportviewer to being a KPart.
+ 5. Extended the data DTD to include a prefered template.
+ 6. The template can be specified as a URL.
+
+
+*************************
+VERSION 0.2
+*************************
+
+Changes:
+
+ 1. Added new class MLineObject for drawing simple lines on a report.
+ 2. Moved metaphrast code to a seperate dir and added code to create a shared
+    library.
+ 3. Switched from IBM XML4C to Apache Xerces XML Parser. Not using ICU, just
+    native transcoding.
+ 4. Added command line switches to the viewer utility.
+ 5. Added support for formatting negative numbers with a user defined color.
+ 6. Added currency data type to field and calc objects.
+ 7. Added support for formatting numbers.
+ 8. Added support for formatting dates. To format dates, the field type must be
+    defined as a date and the date string in the data file must be in
+    mm/dd/yyyy or mm-dd-yyyy format.
+ 9. Fixed bug that added an empty page to the end of a report.
+10. Added a progress dialog to MReportViewer for printing. User can now cancel
+    a print job.
+11. Added code to MReportViewer to allow printing of selected pages.
+12. Added code to MReportViewer to print multiple copies. QPrinter does not
+    appear to handle this correctly.
+13. Added code to MReportViewer to print reverse page order.
+14. Added method getRenderSteps() to MReportEngine, returns count of rendering
+    steps required to process the report.  Convenience funtion for UI progress
+    indicators.
+15. Added signal signalRenderStatus(int) to MReportEngine to track rendering
+    progress.  Convenience funtion for UI progress indicators.
+16. Added public slot cancelRendering() to MReportEngine to cancel report
+    rendering.
+17. Added a progress dialog for report rendering to MReportViewer.  User can
+    now cancel report processing.
+18. Changed rendering code to draw at absolute y position. Previous version
+    used to subtract 1 from the y pos so that bordered fields would not have
+    double borders on one side.  Existing reports that used bordered fields in
+    this way will need to be modified, shrink the height of the report section
+    by one - the bordered fields will still form a grid (see samplereport1.xml).
+19. Added clear functions to report sections so the report engine can clear
+    existing formatting data before setting a new report template.
+
+
+*************************
+VERSION 0.1 
+*************************
+
+First release

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE DOC >
+<DOC mime="application/x-kword" syntaxVersion="3" editor="KWord" >
+ <PAPER width="612.285" zoom="100" spHeadBody="9.92128" format="3" height="790.868" fType="0" orientation="0" hType="0" columnspacing="15" spFootBody="9.92128" columns="2" >
+  <PAPERBORDERS right="56.693" left="56.693" bottom="42.5198" top="42.5198" />
+ </PAPER>
+ <ATTRIBUTES standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="0" />
+ <FRAMESETS>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" visible="1" >
+   <FRAME runaround="1" right="294" left="28" bottom="798" runaroundGap="2" top="42" />
+   </FRAMESET>
+ </FRAMESETS>
+ <STYLES>
+  <STYLE>
+   <NAME value="Standard" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Document Title" />
+   <FLOW align="center" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <!-- Use KDE settings for the font family -->
+    <WEIGHT value="75" />
+    <SIZE value="24" />
+   </FORMAT>
+  </STYLE>
+  <STYLE outline="true">
+   <NAME value="Head 1" />
+   <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="0" display-levels="1"/>
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font family -->
+    <SIZE value="20" />
+    <WEIGHT value="75" />
+   </FORMAT>
+  </STYLE>
+  <STYLE outline="true">
+   <NAME value="Head 2" />
+   <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="1" display-levels="2"/>
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font family -->
+    <SIZE value="16" />
+    <WEIGHT value="75" />
+   </FORMAT>
+  </STYLE>
+  <STYLE outline="true">
+   <NAME value="Head 3" />
+   <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="2" display-levels="3"/>
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font family -->
+    <SIZE value="12" />
+    <WEIGHT value="75" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Enumerated List" />
+   <COUNTER numberingtype="0" righttext="." type="1" start="1" depth="0" />
+   <FOLLOWING name="Enumerated List" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Alphabetical List" />
+   <COUNTER numberingtype="0" righttext=")" type="2" start="1" depth="0" />
+   <FOLLOWING name="Alphabetical List" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Bullet List" />
+   <COUNTER numberingtype="0" type="10" start="1" depth="0" />
+   <FOLLOWING name="Bullet List" />
+   <FORMAT id="1">
+    <!-- Use KDE settings for the font -->
+   </FORMAT>
+  </STYLE>
+ </STYLES>
+</DOC>

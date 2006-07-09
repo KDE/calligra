@@ -1,0 +1,34 @@
+1. Welcome
+
+ Welcome to KWord's AbiWord import/export filter.
+
+ For now, this file is just a storage for some technical notes.
+
+2. AbiWord's Multiple File Formats
+
+ AbiWord's file format has evolved with the time. The older file formats are
+ XML-like, the newer ones are in XML.
+
+ See the file FileFormats.html for an overview!
+
+ The AbiWord filter for KWord *must* be able to read all those formats. A user
+ will not be happy if you tell him that his sub-version is not supported!
+
+ However to make it easier all these formats differ mainly only in the header.
+ (Only the "awml" format has different names for some tags.)
+
+ Additionally, some files ("anonymous" ones?) seems to have tags and attributes
+ in upper case. This must also be taken care of.
+
+ Files in all those formats can be found in the source distribution of AbiWord
+ (www.abisource.com), see in AbiWord's source code under the sub-directory
+ test/wp and under its own sub-directories.
+
+3. A Few Problems
+
+ AbiWord is still in development. Be careful that future file formats does not
+ contain potential problems. At least they should not crash the import filter.
+
+ You must really look into AbiWord's source code, as you will have the surprise
+ to find that the documented file format (also in the source distribution) does
+ not tell everything.

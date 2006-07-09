@@ -1,0 +1,27 @@
+# TODO write a print_kotextdocument that calls a print_kotextstring
+# that uses something like printqstring does (to show the string on a single line)
+
+# Print the contents of a KoTextString (use when debugging a core file)
+# To reassemble the output of this function into a string, use gdb_output_to_text.pl
+define print_kotextstring_noprocess
+    set $s = sizeof(KoTextStringChar)
+    set $str = $arg0
+    set $length = $str->data->shd->len / $s
+    set $arr = ((KoTextStringChar*)($str->data->shd->data))
+    set $i = 0
+    while $i < $length-1
+      print (char)($arr[$i++].c.ucs & 0xff)
+    end
+end
+
+# Print the contents of a KoTextDocument (use when debugging a core file)
+define print_kotextdocument_noprocess
+    set $textdoc = $arg0
+    set $p = $textdoc->fParag
+    while $p != $textdoc->lParag
+      print_kotextstring_noprocess $p->str
+      print -1
+      set $p = $p->n
+    end
+end
+

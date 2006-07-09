@@ -1,0 +1,51 @@
+AC_ARG_WITH(libwv2,AC_HELP_STRING([--with-libwv2=DIR],[use libwv2 in DIR]),[
+	if [ test "x$withval" != "xno" ]; then
+		if [ test "x$withval" != "xyes" ]; then
+			WV2_DIR=$withval
+		fi
+		search_for_wv2=yes
+	else
+		search_for_wv2=no
+	fi
+],[	search_for_wv2=yes
+])
+
+if [ test $search_for_wv2 != no ]; then
+	if [ test -n "$WV2_DIR" ]; then
+		KDE_FIND_PATH(wv2-config, WV2_CONFIG, [$WV2_DIR/bin], [
+		  AC_MSG_WARN([Could not find libwv2, check http://www.sourceforge.net/projects/wvware/])
+		])
+	else
+		KDE_FIND_PATH(wv2-config, WV2_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+		  AC_MSG_WARN([Could not find libwv2 anywhere, check http://www.sourceforge.net/projects/wvware/])
+		])
+	fi
+fi
+
+if test -n "$WV2_CONFIG"; then
+  vers=`$WV2_CONFIG --version 2>/dev/null | $SED -e 's/libwv2 //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 1009
+  then
+     LIBWV2_LIBS="`$WV2_CONFIG --libs`"
+     LIBWV2_RPATH=
+     for args in $LIBWV2_LIBS; do
+	  case $args in
+	    -L*)
+  	       LIBWV2_RPATH="$LIBWV2_RPATH $args"
+ 	       ;;
+          esac
+     done
+     LIBWV2_RPATH=`echo $LIBWV2_RPATH | $SED -e "s/-L/-R/g"`
+     LIBWV2_CFLAGS="`$WV2_CONFIG --cflags`"
+
+     AC_DEFINE_UNQUOTED(HAVE_WV2, 1, [Defines if your system has the wv2 library])
+  else
+     AC_MSG_WARN([You need at least version 0.1.9 of libwv2])
+  fi
+fi
+
+
+AC_SUBST(LIBWV2_LIBS)
+AC_SUBST(LIBWV2_CFLAGS)
+AC_SUBST(LIBWV2_RPATH)
+AM_CONDITIONAL(include_wv2_msword_filter, test -n "$LIBWV2_LIBS")

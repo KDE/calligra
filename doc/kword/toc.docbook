@@ -1,0 +1,67 @@
+<sect1 id="toc">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Table of Contents</title>
+<indexterm><primary>table of contents</primary><secondary>introduction</secondary></indexterm>
+
+<para>When writing a large document, it is useful to include a table of contents.  This can be done automatically
+with &kword;.</para>
+<para>To begin creating a table of contents &kword; needs to know what to include in the table of contents.
+The first part of this chapter describes how to prepare the document to generate an accurate table of contents.</para>
+<para>The second part of this section, discusses the actual generation and updating of the table of contents.</para>
+<para>The final part of this section provides pointers on changing the look of the table of contents.</para>
+<sect2 id="toc-prepare"><title>Preparing the document</title>
+<indexterm><primary>table of contents</primary><secondary>preparing document for</secondary></indexterm>
+
+<para>&kword; uses a style-based method of creating table of contents entries.</para>
+<para>For more information on styles, see the <link linkend="styles">Styles</link> section of this documentation.</para>
+<para>To mark each level of the document, use the paragraph styles <guilabel>Head 1</guilabel>,
+<guilabel>Head 2</guilabel> and <guilabel>Head 3</guilabel>.</para>
+<para>Major subjects should be marked with the <guilabel>Head 1</guilabel> style. </para>
+<para>Sub-headings under the <guilabel>Head 1</guilabel> subjects should be marked with <guilabel>Head 2</guilabel>.</para>
+<para>Sub-headings under the <guilabel>Head 2</guilabel> subject headings should be marked with <guilabel>Head 3</guilabel></para>
+<para>Once this is done, proceed to the next section.</para>
+</sect2>
+<sect2 id="toc-create"><title>Creating the table of contents</title>
+<indexterm><primary>table of contents</primary><secondary>creating</secondary></indexterm>
+<indexterm><primary>table of contents</primary><secondary>updating</secondary></indexterm>
+
+<para>To create the table of contents is easy.  Simply place the cursor in a text frame where the table of contents should be inserted.</para>
+<para>Select <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Table of Contents</guimenuitem></menuchoice> from
+the menubar.</para>
+<para>&kword; locates all entries labeled with the appropriate paragraph styles, and their corresponding page numbers.  
+It assembles this into the
+table of contents.</para>
+<note><para>Once the table of contents is created, it will remain unchanged until &kword; is instructed to update it.</para>
+<para>To update the table of contents, click once with the &LMB; in the current table of contents.  Then select
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Update Table of Contents</guimenuitem></menuchoice> from
+the menubar.</para>
+<para>&kword; will replace the old table of contents with a newly updated one.</para></note>
+</sect2>
+<sect2 id="toc-style"><title>Changing the look of the table of contents.</title>
+<indexterm><primary>table of contents</primary><secondary>formatting</secondary></indexterm>
+
+<para>The look of the table of contents is also adjusted by using the paragraph styles in &kword;.</para>
+<para>The table of contents title is formated with the <guilabel>Contents Title</guilabel> paragraph style. 
+All major subject headings (those marked with the <guilabel>Head 1</guilabel> style), are now formatted
+using <guilabel>Contents Head 1</guilabel> paragraph style.  All sub-headings (those marked with the 
+<guilabel>Head 2</guilabel> style), are now formatted
+using <guilabel>Contents Head 2</guilabel> paragraph style.  Finally, all sub-headings (those marked with 
+the <guilabel>Head 3</guilabel> style), are now formatted
+using <guilabel>Contents Head 3</guilabel> paragraph style. </para>
+<para>By <link linkend="style-edit">changing the look</link> of those three styles, 
+the appearance of the
+table of contents can be radically changed.</para>
+
+</sect2>
+</sect1>
+

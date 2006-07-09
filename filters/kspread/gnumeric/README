@@ -1,0 +1,30 @@
+This is a GNUmeric import and export filter for kspread.
+
+This is heavily based on the kspread CSV import and export filters.
+
+It has been tested with Gnumeric v0.61 and kspread v1.0.
+
+The file format is mainly based on reading output of gnumeric. It
+requires the zlib library to read the compressed gnumeric output.
+
+It does not change behavior based on the version of the gnumeric file.
+This will have to be done in the future to maintain maximum compatibilit
+
+I will have to go back with a fine tooth comb and implement 
+
+Wouldn't it be nice to have a generic library used by all opensource
+spreadsheets to import and export files.. Someday. 
+
+Phillip Ezolt (phillipezolt@hotmail.com) (GNUmeric import and export)
+
+No idea if it is usefull; but it is a sin to let a good URL get lost...
+    More info on gnumeric:
+    http://www.object-refinery.com/jworkbook/
+
+
+cvs page for file format: (url gave by Jody Goldberg <jody@gnome.org>)
+http://cvs.gnome.org/viewcvs/gnumeric/gnumeric.xsd?rev=1.11&view=markup
+http://cvs.gnome.org/viewcvs/gnumeric/plugins/xml_sax/xml-sax-read.c?rev=1.132&view=markup
+
+Last test with gnumeric -1.4.2 and pango 1.8.1
+

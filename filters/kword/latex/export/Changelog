@@ -1,0 +1,157 @@
+
+KOFFICE RELEASE 1.3 BETA 1 21 avril 2003
+18 april 2003
+- bugs
+	o fix the dcop interface.
+
+02 March 2003
+- features
+	o note support;
+	o wave and double underline support;
+	o encoding (latin1, unicode, ascii) + package encod;
+	o language with babel package;
+	o add more option in the dialog box.
+
+- internal
+	o clean code for variablezone (inherit from textzone).
+	
+23 February 2003
+- features
+	o support pictures path.
+	
+22 February 2003
+- bugs
+	o don't close koStore if not open;
+	o the kword document is no more added at the end of latex file;
+	o text color work again.
+
+- features
+	o Define default font size;
+	o Change font only in kword mode;
+	o background color.
+
+3 November 2002
+- features
+	o Convert picture in eps picture.
+	
+- internal
+	o Use the config class;
+	o Clean up the code.
+	
+12 September 2002
+- features
+	o Add a new option to choose the class.
+	
+- internal
+	o Change the way to go through options to parser.
+
+KOFFICE RELEASE 1.2 11 September 2002
+
+19 may 2002
+- features
+	o border for table :
+		+ full line and column ;
+		+ partial line or column ;
+	o indent;
+	o add a config class which contains all configuration information
+	(from the dialog box for example).
+
+- bugs
+	o some warning in compilation has been fixed.
+	o border line for table.
+
+RELEASE 1.2 beta 1
+
+march 2002
+- features
+	o variables.
+
+18 January 2002
+- bugs
+	o correct text bug : the document was generated without text !
+	
+06 november 2001
+- features
+	o support of picture inline (don't still work).
+	o compile with qt3
+
+27 October
+- features
+	o support of unicode with omega
+
+14 October
+- BUG FIXES
+	o Some special char. were not corected generated.
+
+22 August
+- BUG FIXES
+	o the list were not closed when it's following directly by a chapter title. corrected.
+
+---------------------------------------
+29 July 2001
+- bug fixes
+	o bug fix for headers but are still problems.
+	o bug fix when a anchor or other embeded object are on the same
+	  line than a text zone.
+
+---------------------------------------
+15 July 2001
+- bug fixes
+	o characters encoding bug
+	o somes table bugs
+	o text zone inherit paragraph format
+	
+- features
+	o news parameters dialog box
+	o anchor support
+	o formula support
+	
+---------------------------------------
+07 July 2001
+- bug fixes
+	o section are embeded in a list because of the last changes ;
+	o new paragraph (let a blanck line now) ;
+	o no environment (right, center, ...) in a header or footer
+	  (from the last changes).
+
+- features
+	o generate embedable file
+	o new xml parser = QDom
+
+---------------------------------------
+3 June 2001
+- bugs fixes
+	o color
+	o if a section doesn't exist in latex, now the title is in bold
+	o blanck line between 2 paragraphes.
+	o textsize
+	o end of environment
+
+- clean code generated
+- use QList for all lists
+- improve the table generation. Now it is pretty good.
+- new features
+	o improve the special character support but still a lot of work (mathematical
+	mode, ...).
+	o table now support border line (only top line)
+	o a dialog box to select some features (style, language/encoding)
+
+---------------------------------------
+06 May 2001
+- bug fixes
+	o enum bug fixes
+- new features
+	o formula, part and table class (not still usable, though)
+	o stock formula parts (no generation)
+	o stock table part
+
+---------------------------------------
+28 april 2001
+- bug fixes : 
+	o default color is black (new dtd)
+	o format bug (new dtd)
+	o enum bug with bullet (new dtd) 
+- new features
+	o strikeout
+	o picture
+

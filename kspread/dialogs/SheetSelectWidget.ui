@@ -1,0 +1,270 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>SheetSelectWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SheetSelectWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>527</width>
+            <height>160</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>Sheet Selection</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="KPushButton" row="0" column="1">
+            <property name="name">
+                <cstring>ButtonSelectAll</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image0</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Select all sheets.</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>ButtonSelect</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image1</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Select sheets.</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="3" column="1">
+            <property name="name">
+                <cstring>ButtonRemoveAll</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image2</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Clear Selection.</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="2" column="1">
+            <property name="name">
+                <cstring>ButtonRemove</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image3</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Remove sheets.</string>
+            </property>
+        </widget>
+        <widget class="KListView" row="0" column="0" rowspan="4" colspan="1">
+            <column>
+                <property name="text">
+                    <string>Available Sheets</string>
+                </property>
+                <property name="clickable">
+                    <bool>false</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>ListViewAvailable</cstring>
+            </property>
+            <property name="resizePolicy">
+                <enum>AutoOneFit</enum>
+            </property>
+            <property name="selectionMode" stdset="0">
+                <enum>Extended</enum>
+            </property>
+            <property name="fullWidth">
+                <bool>true</bool>
+            </property>
+            <property name="dragEnabled">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Available sheets.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;List of all available sheets.&lt;/b&gt;&lt;br&gt;
+To print a sheet you have to select one or more sheets in this list and use the buttons to insert the selected sheet(s) in the right-hand list, which lists all sheets that are printed.&lt;br&gt;
+You can insert a sheet as often as you like, this way it will be printed multiple times. This is useful for dividers or title pages, for example.</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="0" column="3">
+            <property name="name">
+                <cstring>ButtonMoveTop</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image4</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Move selected sheet to the top.</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="1" column="3">
+            <property name="name">
+                <cstring>ButtonMoveUp</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image5</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Move selected sheet up.</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="2" column="3">
+            <property name="name">
+                <cstring>ButtonMoveDown</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image6</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Move selected sheet down.</string>
+            </property>
+        </widget>
+        <widget class="KPushButton" row="3" column="3">
+            <property name="name">
+                <cstring>ButtonMoveBottom</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image7</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Move selected sheet to the bottom.</string>
+            </property>
+        </widget>
+        <widget class="KListView" row="0" column="2" rowspan="4" colspan="1">
+            <column>
+                <property name="text">
+                    <string>Selected Sheets</string>
+                </property>
+                <property name="clickable">
+                    <bool>false</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>ListViewSelected</cstring>
+            </property>
+            <property name="acceptDrops">
+                <bool>true</bool>
+            </property>
+            <property name="resizePolicy">
+                <enum>AutoOneFit</enum>
+            </property>
+            <property name="selectionMode" stdset="0">
+                <enum>Extended</enum>
+            </property>
+            <property name="fullWidth">
+                <bool>true</bool>
+            </property>
+            <property name="dragEnabled">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>List of sheets to print in given order.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;List of sheets to print.&lt;/b&gt;&lt;br&gt;
+Only the sheets listed here will be printed in the order of listing. You can change the print order with the up and down buttons.&lt;br&gt;
+It is even possible to print a sheet more than once. Just insert the desired sheet again and order the list to your needs.</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="905">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000035049444154388db5955f685b5518c07fb9f7a6c9bab44b6a52eb74a5ce2a8e31e87c5126686548fd33b7b921139c985870b80759f1c1a7dac9180c645d611044376e35455199d1271f04d9cb26286c3e0d9982a0334ddac595adc9cd9ff39de3c3ad6db334d1977df071e1f0fb7ef7bbe71cee1730c6702722f0d0e8f7c34674d6888e6a250b46c9d8ef5fee9a5e0df50d6786d026ab950c1825682553c54b87c6da892da34db6d8737f74e3c8d3541edc1e55586effeeaf920d9436a7caf76c1e78f87092ee3d7bd1b67324b6f5b4db5e2c12dd32b499ec7ef874f46ebc6d3b106cf7de91cf97e546f4f0e0f607c8ee87ef0edf45ff4bbb113b98ec1e9c6c29b78cd2d43514cbb03102670e6cc07be40904cbed7b329304d022743a8662199486b307e3dcf7f23eb4ed24d76f3ab1a6dcd222d405e6cb7e263ae1e48b512a8fee442cdb4d3c76f69451424d9965a62a30792041df9b6f20b17832dc7bac496e1925d435cc9556321a82f1e762541f1f415bce11239a9a34325e1d267686e84bbe82ee49243bbac7dd46f15251a1d498eb837074570f91679f47853aa984ba9a98520ddeda11a677f43524de9bb443ef2ccb039b5e3867ec67f691dab6f621780a2e5e832d71ff0c5a31ee4f15e64e7f80f9ebcf9f313ce518e5779c5f6c75beb035ee3fdb31fd893085d70fc147e9216673ae63447c71a975d17f455dc39522105e070753f0fef1bd8e56be78b64d37ed62b106bfdcf0afe1ea708c686a0a666ff90b4a4345fc2b0510b2216841870d81a52203d4046e56a1ac56d92a1eccb8005ffb5b5183bc0691e637ffef0fa978e0a6219f3b0fa41cad0434d46b7e2bd66d7ca058c0f9f60bea7b5e85ae684ba9fe380df9dc344ca696b76243686d5ecf15a87e93c1944a44bc05ec44b3d8781e373f6994fa6225c4c2cdd25aa1c0dfe732e095df33221391a0217c1b279e47ee4c1a3ddb2805ffef46344c4386170adcf82c83f6bc54e5fac451ad345d1d8d4cc77c8e6bc78e53cf354b011cad34b1752b0b8bb90257a76790b297aaccbf3b0d604488040dd125eed61f397e9b4a239eb7a6f4df8e178a177e201686eaaf57b9f2e10cca5b91021825e7af5ffcd1dfb27c8ecb27d2a8726b2940a07bf0e4b0563a6b94f8a349ebb1cadcf87423f5f610c6648181a59529986c3b9a02776a98fe032baad331ecd127a50000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="657">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000025849444154388d9dd54f48545114c7f1af36e98c5a8eff3057cea23434e815eefa43b68a60a2082417198981d02a0822da05120482b5186a11a3eba0d9b489a07117410b17ad024b178e992659396f66eeb9f7b618a171ded5193b703687773feff72e8f7b6bacb59456efd8ac678d49192531a3045390a9855797eeb0c7aa29877b46df7ddd68ea8cf50df4b2bcbcc1e687f7e0fb73466470e9edf0cf6ae1daf281151debeaef253514e2cd781b1d674f23d47a46e974e7a9e9e87fc346847038c4ba0fdac08be128adf13885c841cf2849b79d7856151e8495461958f38bad343cbd58c7b1a10ba8a6a86745a7a3479f54c45d5b81d2b096fdd779817b67ea181889a30eb47846e97453f7e35d714762411958cd06fbfac97a8e8f5e459a5b3dab241de978b823eed8e362e2d54d775feeafa7efd635a4a5dd334aa7f7373e70e2cec4050ddfb33bf7f99e3087c747d06d1d9e1149d7d4de0de0ee3d36b0b2b97b0f7487e9be3d86693fe4616daadc0905b742105d5c5c5a62b616944439d21566f5e60d7e4f4c9cab0c2b4dc1016b03fb4ad0bc06638b735705602b9a82c0ca9fe0c3ca405620abb606391fa69300b355241694147faf6d2f34a04b8f959c0fc9042c67e6802b9561d158015df2d9d602e5e84c02be65e680416b27038793337143605af2929c4f6e2681dd0575c25634cd61376a7c9f1fc9cae88e89a30e58677d169f27904c65d40d8ba6b97efb2cb7b6cee74492fc5275a813b64a68b439429162ec5f8b193e3d4a2059bf6a14dc87d0c29797af69d03ef9f9793e16d1d9bda0e0b8f34291fb9e119db2a2635ba3296b27f77c99fe05fc2089421fcaadf90000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="968">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000038f49444154388db5955f685b551cc73ff79e9bf4264dd69bb6595d5b35db8ad4ad8ed63d2873b8c9748cc2b44145c416133a644cd0b2175fc4e27cd98b8d201419d5c4cd0785c91cbe083ee81e5ca0cc3f0fba9659e774d8b5b6a5ad6dfef4e69e737d48d6348d6b41d8811f97c3f9dceff9fecebf9fe6ba2e77a3699b010d5d1f2434430ce8864033c40d4dd7a35397fa7e5acb449efb32a61b22a119c2d20db180ae45f58d44ad5def27953006ea7aa2b4bf1a27d7bc23e22a9558cbdc7bf4f398444fe61fe8b25a8e1c66ae7ebb85722f1877120dee7c37a98411dbfefc335c78a5813a139ebcd9c65f37270ede665a0e7f1a9388a4bde731cebf5cc7435be169b583e9af7fb3fe53b8b6f57452094fecfe179fe5c3be461c057359f01b2eae9400dcf3f8d9a2e8de037cf4421dcd81225350a01c4995b0193e9594a1c6586b7f2f43476b589130932d8e15a48beb28c28f8c24a42e060a8f1e2211b508fbd732e0ca75c29ee09b49591f8eb5c45f62f0500db902e40ae571db01252578bd03cefe230c7687b06ae0ef4c992928701d5516d6bd6f245563536cdbb118afed33c9d890b12bb3c99b41a4598bd5ddcdeb4fd5e3f7c074a692b1657172034e5ac0376eb8a9337cfc18bd7b4d966c585a270a70605790b1137dec6be58e8cbd6629926c6bee74fb8f735fd864310f8bd57c312b6077231b32b604bdb4143df4c6c1f471750e9a6ac1b3e1e9deb8d912bceb372f5380af7e87f61004bcff5fd85372fc059f247be83f01a60f47c1cf33e037604b0d7845f9debba51f0b0a568ac7991a01a600a394a5ed80bfe438cead498b91e183c48be2005909d995cd1d2e97be860e4240a1742405a4f390fe98e58e0813e39dfaee2e34e14173a98ec505bc9f9d81e6089a2f5031e62a50aa9896efda0f88f2dce98b2c7744b4ebe39d5b1eeec2f479300d2ac2333785bc92465c1fc3dfd686af2e50c5980668bf5c61ddfe0fc5d5adc9546664982d6e8e904945043c2e4a2adc5cf66dfbfc596a17a7ab9890597c2b04552d7d512d7544962fa73bb7ee6927d8105c75c2e23cf3a3df53f8e79d270ceffe3f56c6c77a1a1fdc49c0aa743e3f3abade71d9b9cce55213ef0d63cc4c12f241c807412fabaf5b7e763025b3b9f89fa97378e6a7579990afc86c701586e24e3697faf1f4304c4d123261e6f228ca51dfde26f2b36fa59c6c2e7ef5cc39f2bf5e2364c2ec77695c472e6c5a9ae064021828756e005118aa284d66f8544cd3f5d5d2a41922aaddad62fa2fb812750e71873b130000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="663">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000025e49444154388d9d95bf6b13611cc69fbb5e72494c9bd7d8a606145390223af4745041a4899b438b010545d05a444597dacd417010ecd40cc241c15a1d9c042bf8075c07371d6e10d1a118215e13511b699abbe4de1f0ed290341772c9179ee5deef7d78dee7fdbebc921002cd254912bad5a10b6f7372509993030a6445c94b0372f6eb72c66cee51ba529a2a79ee1591038a41216bd113a7904c127cfef02515ab9456018cf5054e9c7e4e0465060b04b5e4e459bcb9414054206d1f41e5bd95dadd2ffb81c62774c22935ea91212d3e358d67970918077edb4028a480bbb4ed9fae8e87c67384bbcc607b87b5894be7f1301384cb805fd5ffeb2e070465bd81f71c5820c265068d8f6827af4fe3fe99201c0a384d065d06f05ec0eabe4784536af0e184767cf622ae6a2a7e6eb7f7d519fc47a1841f10ee32432492dab15b573075d41b0af414c53ce19419d2fea4367ee71a260f8750aa76da576f8e57f9c8a896ba7713dac1104a95ced01db0e433e37474660663a361143b6c7fa71807361d80f8cd980aa0d8c529e54061bbb7715b735eaca4bfdfbe0b351a6e7ce402a8b1d6516bac7938f6ba79596c586675494779d346d901ca36f0d7069c3a00de2eaf39f6002f960164b06199625987d8b2212800d659c2f5056e82172d537aa9234c6d44147414a7fea268818ba265ba2b3a06858d58089ef219453b9c5a96595ed231c86d9010da247c1e9e27bcf6c3320b4f75a85b7f1053d1a23e1cb7c2ab05cbfcf4781152c96ac410e10eb8ffc3eb0ca7557bede3131db5f57544988d6fafdf81539adfdd2df5f39802f33900730020c9725e0e0c64a9b3d0f298fe035d3d29db4f6561c90000000049454e44ae426082</data>
+    </image>
+    <image name="image4">
+        <data format="PNG" length="873">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000033049444154388da5d4cb4f5c6518c7f1ef993903cc8dce34582ca56955a6c6c40525c54b0206e874d745e72fe01c8d1bddd08d8946132f0b5704a309b11a73a61a20a926e2dd289376e1c24663bdb021510224e53e3094b930c379cfe30266803267a2ed6ff3e6bcef793e79cf9bf7399a88a0691a6e89f54f44441c4b9473c9b11562ab71c756e6dc17898c5b8d88a0bb8ae59790ebc5ba50fb426b3b203c3075f392beb516017a6bd5796a2db6f5ff68157dc1f6ec994e52a69fbf0702343dd345d11fee69898f59f704c7fa27ac625dc8b813ebe4ca459da37ed82cc1fb177d447b7a29051a8de6eeabaeb856ed8c63c684b5e50b1a9947cef156af4e5bf46051b6042f4f94d8f8fe3b3ce995e4ea2fcf9bfbd745e4301c3353d6962f60ac3d748e173a754e3656df517e1bdefbb944f69baff0ae2e25d7fe7cb1821f826366ca52788cf9581789c7748e05dc3e7427451b3e9b2cb23df63114f2c98da901f3101c7b366529f11a4ba73a387b3a4ca4a1366a3b9029427a0ba6ff5921f0ed3524974f66675f322bf0a3cf5d1fb2f10cdc6eeda0b9294ca0c625b405d677c1fdf1a49769181f4572f977f20baf5cd6448433664ae64e3d41b13e8c57032f80dc256a3b53db77cfefc75797a8fbe4030acbaf693a80a314c5fa30004a4055abaa0196e3343523f64eb50e20b633d334f7c7e96cf40422b2838860d70751fe60f5dd65efa06d6e8048a5c6f3d72d1ce5ccecc14a2582cbb34381f9e99eddff018eadb07d7e56ba135561ffd7d7d036d6716c1bb19df27843442e834b831cef1b1972347d20dd11c70e1fadbee3f4320d5f8e2085fc1b85c5575f3f706ad51ae478df88e168ba956e8f6387aaa3157c7509dff8552497334b993793ae704bdf88e178752bd77101158aba7907b3b2c8f6e84738b99ca90a6f270fc12de7470df1ea96f6641c69fc8fe86ed4e2026b1f5ec1decc9ac860b2029fb83066e0d5ad50571ccf91ff879653ba3dcfecbbc3a842c114194c6a2242cbf9d1f5635ddd117febc97b42cb59ff7d92a9612b2332182d5fb7c8836df787021c79ea71a68689c05e8364d2bfdd8a3cfcf4d9fb82273ffd012053811da512333ffdfaf9f48d9b917273b88ff6deb372400ef47a064800fc0bff20c9075c6bda090000000049454e44ae426082</data>
+    </image>
+    <image name="image5">
+        <data format="PNG" length="653">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000025449444154388dedd54b48546114c0f1ff9db933a5a33651a21934168e11045e7c1521d92c0ab39541ee72ca966d5ab6095ab52d08722556502004838bcaf031aea255cc426c11e64483f94891a679dcb9dfa3c5e8d094a354b808fae0f2c1e1dc1fe71ceefd3e436bcd4e2cd78ea8ff246c6c97d0d037e6d74a45b490679423508e98528eec49bcbcb4f6c7704378cc8fd2d1ac596ed5b435039a44f435eeb52f31e588d0c2d4e59278c95104c3e379d4e3b33a2eb4331a2e63345c4ea8b7935c5995a5858c569f18f4977adfbd297a65dcafb58e66bd3eabf96c1bb73a3d247390cc4147c0cdfbf20073339f6a4925bbcaaacf0f67165f64b785835727f2a8c7671d3dddcef5760f5f6d8a9e96836ee27b8e9098f958cbb76497d77f6ed85e7d558417cd38d83f519869ddc936fa9acc529d02f0e8adcdccd03358fc1cd38e0ca512370b332fc08dfd937ead54346bfaacaae656ba1b8b515be6f75d3ff5f8fc9dcddce05358988f294784ec95db6b05b8f1daa45faf57aa8eb572ead0e695daf25778350b6fe2599c278f613e11538e0c89f49d3513406b1d91da65ad045a0956987cd8f20b85740e9652b092d988ecc6e8eec53d74df52193b02848c60ffc45da55d37160eb4e0aeacc4ed290d1a1aec1cd84e8984a579e4c301743a7dcf68088f69fb700bb2622f004a434e83a3406af0b8c06d80d700d7b6ff2938b3b32c0f3cc0d442b27f5f05ae2d2afd9d2582752c03a612322e67a7eb6b9a8e637aff4ecfa5324c474600e246e0e288a5858c2847d4e70f19c9fa618372047a232644517c234f3b0225e48f7e1ce831fedf203b0e7f07b6cc32072013e5190000000049454e44ae426082</data>
+    </image>
+    <image name="image6">
+        <data format="PNG" length="592">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000021749444154388dedd54d48545114c0f1ff9b79e37c68cd1327923ee0419144050f174111a1084614d46c5c044510ed825ab66b958ba0d1454c848151db6008dc3f2122ca84592a6d2274b2b20f317d2fef578b57e9cce844c82c822e5cb8e79ccbef9ebbb9d732c6d08c116b8afa4fc2d6be4bbe67b42e69215d2d245a488c506821d1328aa3a958ad57c7abfb1446c8375aaabc6db42e2db46d7773fbbb684ddb9bea72712160ead11397c989926da472771dea62e8c4e6d068a4b96a9fa13c39e1da5a2ae63f2c30fda9834c6273ecb280d9d715006c2de5b029bfb836183fca85230ea9bf68fcfd124c7d8ed66e16c69e56f8786f1460d802d87dfab1af4cac471febe7e4815612f1c6e097109e576066714d320ce0d64d08837128f4da005aaa3c62c517cf7c6f2cde4ff7ce963a4c1ab02df826e0e51c085d838e14210cca401ec0fa55eb3cfed0d152f92b99ac17eb3b452e5b8d2b1d61b34ba0d6be024100f78bf0ae52067aa1f0b50a06c81d1e718c50be6875bca0ef2cb164f277cd18585135d7080318ad47eb6080f683771c2d952fdbdabdeffd03d092acdd121d1406a8074598ab47d78501b6eebded68a17cb21dde96817358a954555d0701f3778bc8cafae886304066c7a0a3a5f213b99cb7e7f245e2e90897cb01d38522e1ccc6684318a0a5fd866384f2339ddbbcee2be7c1185e0d8db2f8b631fa4718209ebaee68a94a46aa9e9fa97120df0805b0feff204d877f007cf8163df7483bad0000000049454e44ae426082</data>
+    </image>
+    <image name="image7">
+        <data format="PNG" length="803">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002ea49444154388da5d44f68147714c0f1ef8c937f6be34e4c1ab7fec16cc45aa42da5399460c5b407912ad4804a0f016741f09c2a8542411b697b31d1aa2c82d259a145d1c37a10050f8d624e068d2715a117d1352a1b7763b213777fbfdff3b0c926319b0d350f667ef0667e9ff9f1786f2c1161c3befe0ed12669b47645698cd2bcdfaa32a24ce778eae71b0e801849e6235177db96561613d7feb9e5beb87e3309341461addd8f3f6fa573fda25cc6776fe6d2d57f5d8022ac4ce6defde7eec0ca15acfae0fdd040c140ff43449b4c09365a77d73d1af24f38edec6a0bd354b730f46004069fc1f038449642fed93063e79388986e004b44b02c8bb53b2f7b0adbcf7cb6994d9fb82cab290f160cdc7a022313d339ebc53055e71348908b15468f2444641a0658bdeda2a72cdb1f6bfb96d6350dd8d66cd408fc370ae38577d00b090872b17cf64802600e0cf0d1377f7bda5ae28f7eb595aa86e5a5bc0081062d33d09793682e88e5b33d89d2bbe56080e6f6bf0e6bdb3994ddf41dca6d2c5b12ebe5f3a993fe9acff41c9ef9ac04afda7ae10bd1e69828dd31b3e9756d88cc8eaeb270f5993f61248d510651aa3824dadc00ba457aef3993c54be622d19660651411400444d0a1fab2284061cf5ec8be0291e93d77063bb83b9804a253edd692fdb47d5ea45c48d885b03b3b195d0777075b006c00510627330286c55da954e91b4558abe3e1812b38afd28b43cfc6018ec38c0169fcf2b4af2dc77bfdf5f768b7e97f9585e1149c8bc3449080bed89c7673379ef48ded78aa3306d5f38cde3b21130141ef6f2514e6e9e3fa75bdbee5367aa1ce1fb06a2ae32608489f8ea352a9123a2f0cb074f51ffe92e54d5ea4ab0bbbb6b62caa8380c727e2bc793a1bad0803d436f5f835cd1f7aebf77b3875b371950bb87f344eeec95c744118a0aafe173f1469f6da0eeca32a54fc97167201b77f8f33f6b83c3a05176f15c2aefea9df8df6c9f65369d97e2a2de1b547057e1caab467c1130358f641578cf1819d93a9cb400cfa3295e0b7368fded24916db230000000049454e44ae426082</data>
+    </image>
+</images>
+<tabstops>
+    <tabstop>ListViewAvailable</tabstop>
+    <tabstop>ListViewSelected</tabstop>
+    <tabstop>ButtonSelectAll</tabstop>
+    <tabstop>ButtonSelect</tabstop>
+    <tabstop>ButtonRemove</tabstop>
+    <tabstop>ButtonRemoveAll</tabstop>
+    <tabstop>ButtonMoveTop</tabstop>
+    <tabstop>ButtonMoveUp</tabstop>
+    <tabstop>ButtonMoveDown</tabstop>
+    <tabstop>ButtonMoveBottom</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klistview.h</includehint>
+</includehints>
+</UI>

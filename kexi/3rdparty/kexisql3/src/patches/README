@@ -1,0 +1,18 @@
+CHANGES in this version compared to official SQLite 3.0.7
+
+(c) 2005, Jaroslaw Staniek, js at iidea.pl
+
+- to simplify patching, removed lines with CVS variable "$Id" (see remove_id.sh script)
+- test*.c and os_test.* files removed
+- config.h updated for compatibility with KDE build tools and renamed to sqliteconfig.h
+- for convenience in the code that optionally uses SQLite2, sqlite.h added as an alias for sqlite3.h
+- in sqlite3_open(), sqlite3_open16() and related internal functions following args added:
+  int exclusive,          /* If 1, exclusive read/write access is required, 
+                             else only shared writing is locked. */
+  int allowReadonly       /* If 1 and read/write opening fails, 
+                             try opening in read-only mode */
+  Above functions in addition to SQLITE_CANTOPEN can now return following values 
+  (useful for fine grained error-checking): 
+   - SQLITE_CANTOPEN_WITH_LOCKED_READWRITE - unable to open with locked read/write access
+   - SQLITE_CANTOPEN_WITH_LOCKED_WRITE - unable to open with locked write access"; break;
+

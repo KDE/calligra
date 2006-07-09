@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<!-- $Id$ -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>FileFormats.html</title>
+<style type="text/css">
+BODY
+{
+    background-color: #FFFFFF
+}
+DT
+{
+    font-weight:bold;
+}
+SPAN.bold
+{
+    font-weight: bold;
+}
+/* The colors are PROVISORY */
+SPAN.tags
+{
+    color:red;
+}
+SPAN.doctype
+{
+    color:green;
+}
+SPAN.attribute
+{
+    color:blue;
+}
+</style>
+</head>
+<body>
+<h1>1 Foreword</h1>
+<p>AbiWord's file format has evolved with the time. The older file formats are
+XML-like, the newer ones are in XML.</p>
+
+<p>The names given for each file format are <span class="bold">not</span>
+official, it is just how I have named them.</p>
+
+<p>They might be also other variations of the file format than those described below.</p>
+
+<p>The CVS dates are the dates when I have tested and found out things. So any
+feature described must have appeared earlier. The dates are in format year-month-day.</p>
+
+<h1>2 AbiWord's File Formats</h1>
+
+<p>Here are a few versions (from oldest to newest):</p>
+
+<dt>awml</dt>
+<dd>
+The "awml" format starts with a tag <span class="tags">&lt;awml&gt;</span>
+and has no other header before. Some tags have different names than in later
+versions.
+</dd>
+
+<dt> Anonymous</dt>
+<dd>
+The "anonymous" format is the same but the tag
+<span class="tags">&lt;awml&gt;</span> is now named
+<span class="tags">&lt;abiword&gt;</span>. Some of these files have upper case
+tag and attribute names.
+</dd>
+
+<dt>Numbered</dt>
+<dd>
+The "numbered" version has a special header embeded in XML comments and the
+tag <span class="tags">&lt;abiword&gt;</span> has now a
+<span class="attribute">version</span> attribute with a version number as
+parameter.
+</dd>
+
+<dt>Unnumbered</dt>
+<dd>
+The "unnumbered" version has the version number of the
+<span class="attribute">version</span> attribute with the value "unnumbered".
+</dd>
+
+<dt>XML</dt>
+<dd>
+The "xml" version has a XML declaration (
+<span class="tags">&lt;?xml</span> ) and but has still the special header after
+the XML declaration. Note: the encoding (e.g. UTF-8) is not always given.
+</dd>
+
+<dt>File Format 1.0</dt>
+<dd>
+The "fileformat 1.0" version: the <span class="tags">&lt;abiword&gt;</span>
+tag has an attribute <span class="attribute">fileformat</span> (set to 1.0)
+</dd>
+
+<dt>Wrong Doc Type</dt>
+<dd>
+The "wrong doctype": a DOCTYPE was added with a wrong public type of:
+<span class="doctype">"-//W3C//DTD ABW 1.0 Strict//EN"</span>.
+(Wrong is the W3C part! W3C has nothing to do with AbiWord. AbiWord Bug #1882)
+</dd>
+
+<dt>Correct Doc Type</dt>
+<dd>
+The "correct doctype": (AbiWord CVS 2001-08-21) with a DOCTYPE of:
+<span class="doctype">&lt;!DOCTYPE abw PUBLIC
+"-//ABISOURCE//DTD ABW 1.0 Strict//EN" "http://www.abisource.com/awml.dtd"&gt;
+</span>
+</dd>
+
+<dt>New Doc Type / Wrong Name Space Definition</dt>
+<dd>
+The "new doctype": (AbiWord CVS 2002-02-??) with a DOCTYPE of:
+<span class="doctype">&lt;!DOCTYPE abiword PUBLIC
+"-//ABISOURCE//DTD AWML 1.0 Strict//EN" "http://www.abisource.com/awml.dtd"&gt;
+</span>
+The name space definition is wrong because it uses <span class="attribute">xmlns:awml</span>.
+However it is the default name space of the file so it should be defined by
+<span class="attribute">xmlns</span>. The <span class="tags">&lt;abiword&gt;</span>
+tag has new attributes: <span class="attribute">version</span> and
+<span class="attribute">styles</span>.
+</dd>
+
+</body>
+</html>

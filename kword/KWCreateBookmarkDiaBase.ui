@@ -1,0 +1,57 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>KWCreateBookmarkDiaBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>createBookmarkDia</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>496</width>
+            <height>104</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Create New Bookmark</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>lName</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Name:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>m_bookmarkName</cstring>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>lExplain</cstring>
+            </property>
+            <property name="text">
+                <string>Bookmarks allow you to jump between parts of your document.
+Please provide the name of your bookmark.</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="6"/>
+</UI>

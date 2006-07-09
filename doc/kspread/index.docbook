@@ -1,0 +1,207 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&kspread;">
+  <!ENTITY package "koffice">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+  <!ENTITY basics SYSTEM "basics.docbook">
+  <!ENTITY format SYSTEM "format.docbook">
+  <!ENTITY advanced SYSTEM "advanced.docbook">
+  <!ENTITY importexport SYSTEM "importexport.docbook">
+  <!ENTITY config SYSTEM "config.docbook">
+  <!ENTITY configdialog SYSTEM "configdialog.docbook">
+  <!ENTITY a11y SYSTEM "a11y.docbook">
+  <!ENTITY commands SYSTEM "commands.docbook">
+  <!ENTITY faq SYSTEM "faq.docbook">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &kspread; Handbook</title>
+
+<!-- MAINTAINED BY raphael.langerhorst@kdemail.net -->
+
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Roberts</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Gary</firstname>
+<surname>Cramblitt</surname>
+<affiliation>
+<address><email>garycramblitt@comcast.net</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+<year>2002</year>
+<holder>Pamela Roberts</holder>
+</copyright>
+
+<copyright>
+<year>2005</year>
+<holder>Anne-Marie Mahfouf</holder>
+</copyright>
+
+<copyright>
+<year>2006</year>
+<holder>Gary Cramblitt</holder>
+</copyright>
+
+<!-- Translators: put here the copyright notice of the translation -->
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2006-01-24</date>
+<releaseinfo>1.5.0</releaseinfo>
+
+
+<abstract>
+<para>
+&kspread; is a full featured spreadsheet program.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>Koffice</keyword>
+<keyword>KSpread</keyword>
+<keyword>Spreadsheet</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para>This handbook is dedicated to the memory of <ulink
+url="http://www.bricklin.com/visicalc.htm">Visicalc.</ulink></para>
+<para>
+&kspread; is a full featured spreadsheet program. It is part of the &koffice;
+productivity suite for the K Desktop Environment (&kde;).</para>
+<para>Other &koffice; applications include &kword;, (word processing),
+&kpresenter; (slide presentation creator) and &kchart; (for producing charts
+and graphs) among others.</para>
+
+<para>You might care to visit <ulink url="http://www.kde.org">
+http://www.kde.org</ulink> for more information about &kde; in general, or the
+&koffice; web site at <ulink url="http://www.koffice.org">
+http://www.koffice.org</ulink></para>
+
+</chapter>
+
+&basics;
+
+&format;
+
+&advanced;
+
+&config;
+
+&configdialog;
+
+&a11y;
+
+&commands;
+
+&faq;
+
+<chapter id="credits">
+
+<title>Credits and License</title>
+
+<para>
+&kspread;
+</para>
+<para>
+Program copyright 1998-2002 The KSpread Team:
+</para>
+<para>
+<itemizedlist>
+<listitem><para>Torben Weis <email>weis@kde.org</email></para>
+</listitem>
+<listitem><para>Laurent Montel <email>lmontel@mandrakesoft.com</email></para>
+</listitem>
+<listitem><para>David Faure <email>faure@kde.org</email></para>
+</listitem>
+<listitem><para>John Dailey <email>dailey@vt.edu</email></para>
+</listitem>
+<listitem><para>Philipp Müller <email>philipp.mueller@gmx.de</email></para>
+</listitem>
+<listitem><para>Ariya Hidayat <email>ariya@kde.org</email></para>
+</listitem>
+<listitem><para>Norbert Andres <email>nandres@web.de</email></para>
+</listitem>
+<listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para>
+</listitem>
+<listitem><para>Werner Trobin <email>trobin@kde.org</email></para>
+</listitem>
+<listitem><para>Nikolas Zimmerman <email>wildfox@kde.org</email></para>
+</listitem>
+<listitem><para>Helge Deller <email>deller@gmx.de</email></para>
+</listitem>
+<listitem><para>Percy Leonhart <email>percy@eris23.org</email></para>
+</listitem>
+<listitem><para>Eva Brucherseifer <email>eva@kde.org</email></para>
+</listitem>
+<listitem><para>Phillip Ezolt <email>phillipezolt@hotmail.com</email></para>
+</listitem>
+<listitem><para>Enno Bartels <email>ebartels@nwn.de</email></para>
+</listitem>
+<listitem><para>Graham Short <email>grahshrt@netscape.net</email></para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>
+Documentation copyright 2002 Pamela Roberts
+<email>pamroberts@blueyonder.co.uk</email>
+</para>
+
+<para>Minor updates to documentation for &koffice; 1.3 by
+&Philip.Rodrigues; &Philip.Rodrigues.mail;.</para>
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+&underGPL;
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<para>&kspread; is part of &kde;'s &koffice; package and uses various
+&koffice; libraries. &koffice; itself is part of &kde; and depends on the
+general &kde; libraries.</para>
+<para>For instructions on acquiring and installing &kde;, &koffice; and
+&kspread; please visit
+<ulink url="http://www.kde.org">http://www.kde.org</ulink> and
+<ulink url="http://www.koffice.org">http://www.koffice.org</ulink>.</para>
+
+</appendix>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
+

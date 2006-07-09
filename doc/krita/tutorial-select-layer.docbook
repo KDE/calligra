@@ -1,0 +1,258 @@
+<sect1 id="tutorial-select-layer">
+<title>A Small selections and layers tutorial</title>
+
+<!-- Does someone know a better way to do this? -->
+<screenshot>
+<screeninfo>The starting image</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-sample.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The starting image</phrase>
+</textobject>
+<caption><para>The starting image</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+The image above is the image we will work with. Save it to disk (by
+right-clicking on it and choosing <guilabel>Save Image As...</guilabel>) and
+then open it in &krita; &mdash; your screen will look a bit like this (we have
+zoomed in):
+</para>
+
+<screenshot>
+<screeninfo>Krita with the starting image</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-1.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The starting image</phrase>
+</textobject>
+<caption><para>The starting image</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Now try to select the outline of the head with the select outline tool: 
+</para>
+
+<screenshot>
+<screeninfo>The Outline Tool</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-2.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Outline Tool</phrase>
+</textobject>
+<caption><para>The Outline Tool</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+After you select it, it should look a bit like this picture:
+</para>
+
+<screenshot>
+<screeninfo>The picture after selecting the head</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-3.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The picture after selecting the head</phrase>
+</textobject>
+<caption><para>The picture after selecting the head</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+If you accidently select too much, you can cut that part easily off by switching the tool to subtract mode: 
+</para>
+
+<screenshot>
+<screeninfo>The Subtract Mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-4.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Subtract Mode</phrase>
+</textobject>
+<caption><para>The Subtract Mode</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Now it's time to make the edges of the selection a bit fuzzy. This can be done by applying feather to the selection. 
+</para>
+
+<screenshot>
+<screeninfo>Feather Selection</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-5.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Feather Selection</phrase>
+</textobject>
+<caption><para>Feather Selection</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Now cut the selection, using
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Cut</guimenuitem></menuchoice>.
+Delete the current layer with
+<menuchoice><guimenu>Layer</guimenu><guimenuitem>Remove
+Layer</guimenuitem></menuchoice>. Paste your selection, with
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem></menuchoice>.
+Now we give ourselves a bit more room to work in by resizing the image a bit.
+Use the <menuchoice><guimenu>Image</guimenu><guimenuitem>Change Image
+Size...</guimenuitem></menuchoice> dialog for this.
+</para>
+
+<screenshot>
+<screeninfo>The Image Size dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-6.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Image Size dialog</phrase>
+</textobject>
+<caption><para>The Image Size dialog</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Add a new layer, and place it below the old layer. You do this by selecting the new layer in the layerbox, and then pressing the little 'down' arrow at the bottom.
+Now we are going to select the area around the head with a contiguous select
+(the tool has a selection-with-bucketfill icon).
+</para>
+
+<screenshot>
+<screeninfo>The Contiguous Select Tool</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-7.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Contiguous Select Tool</phrase>
+</textobject>
+<caption><para>The Contiguous Select Tool</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Make sure to select "Sample merged" in the tool options:
+</para>
+
+<screenshot>
+<screeninfo>The Sample Merged option</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-8.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Sample Merged option</phrase>
+</textobject>
+<caption><para>The Sample Merged option</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Feather the selection again, and invert it.
+Select the contiguous fill tool (this is different from the contiguous select tool) and use it on the layer. 
+</para>
+
+<screenshot>
+<screeninfo>The Contiguous Fill Tool</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-9.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Contiguous Fill Tool</phrase>
+</textobject>
+<caption><para>The Contiguous Fill Tool</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Deselect with <menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem></menuchoice>.
+You'll notice some artefacts of the feathering at the sides. You can select them easily with a rectangular select and then cut them.
+</para>
+
+<screenshot>
+<screeninfo>The Rectangular Select Tool</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-10.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Rectangular Select Tool</phrase>
+</textobject>
+<caption><para>The Rectangular Select Tool</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Move the shadow layer a bit down and to the right to make it look nice.
+</para>
+
+<screenshot>
+<screeninfo>Moving the shadow layer</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-11.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Moving the shadow layer</phrase>
+</textobject>
+<caption><para>Moving the shadow layer</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Now you can use the crop tool to make the image better fit around the head.
+</para>
+
+<screenshot>
+<screeninfo>The Crop Tool</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-12.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Crop Tool</phrase>
+</textobject>
+<caption><para>The Crop Tool</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Save the image, and you're done :-)
+</para>
+
+<screenshot>
+<screeninfo>The resulting image</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-13.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The resulting image</phrase>
+</textobject>
+<caption><para>The resulting image</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>
+Thanks go to Bart Coppens for providing this tutorial. The original is available at <ulink url="http://www.bartcoppens.be/krita/hackergotchi.html">http://www.bartcoppens.be/krita/hackergotchi.html</ulink>.
+</para>
+
+</sect1>

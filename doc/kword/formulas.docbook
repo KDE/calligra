@@ -1,0 +1,69 @@
+<sect1 id="formulas">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Formulas</title>
+<indexterm><primary>formulas</primary></indexterm>
+
+<para>&kword; has the ability to directly create formulas using the formula editor common to all &koffice; applications.</para>
+<note><para>This is a formula editor for creating graphical versions of formulas.  &kword; does not currently have the ability 
+to solve mathematical equations.</para></note>
+
+<sect2 id="formulas-add"><title>Add a formula</title>
+<para>There are three ways to insert a formula into a document:</para>
+<itemizedlist>
+<listitem>
+<para>By selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Formula</guimenuitem></menuchoice> from
+the menubar</para>
+</listitem>
+
+<listitem>
+<para>Using the keyboard shortcut: <keycap>F4</keycap></para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="part-kformula.png"
+format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
+</listitem>
+</itemizedlist>
+<para>&kword; creates a formula frame at the current cursor location.</para>
+<note><para>Formula frames behave differently than most other frames in &kword;: </para>
+<itemizedlist>
+<listitem><para><emphasis>All</emphasis> formula frames are inserted <glossterm linkend="definlineframe">inline</glossterm> by default.
+This frame can later be
+converted to a <emphasis>non-inline</emphasis> frame later.</para></listitem>
+<listitem><para>Formula frames expand and contract depending on the resulting size of the formula.</para></listitem>
+<listitem><para>Formula frames automatically determine where in the line they are lined up.</para></listitem>
+</itemizedlist>
+</note>
+
+</sect2>
+
+<sect2 id="formula-move"><title>Moving a formula</title>
+<para>By default, formula frames are created as <glossterm linkend="definlineframe">inline</glossterm> frames by default.  The formula frame
+will move with the text as any other inline frame would.</para>
+<para>If you want to have more control over where the formula is placed, you can convert it to a framed formula by clicking on the 
+frame surrounding the formula with the &RMB;.  A submenu will appear.  Simply select <guilabel>Inline Frame</guilabel> and the formula will 
+now be a freely movable frame. </para>
+<para>Once converted to a freely movable frame, you can <link linkend="move-frame">move the frame</link> 
+just like any other frame in &kword;.</para>
+</sect2>
+
+<sect2 id="formula-delete"><title>Removing a formula</title>
+<para>To delete a formula in &kword;, simply <link linkend="delete-frame">delete the frame</link> around it.</para>
+</sect2>
+
+<sect2 id="formula-edit"><title>Editing a formula</title>
+<para>Editing a formula is beyond the scope of this documentation.  
+Please see the &kformula; handbook for help with the editing of the formula.</para>
+</sect2>
+</sect1>
+

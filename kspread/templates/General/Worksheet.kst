@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE spreadsheet PUBLIC "-//KDE//DTD kspread 1.2//EN" "http://www.koffice.org/DTD/kspread-1.2.dtd">
+<spreadsheet xmlns="http://www.koffice.org/DTD/kspread" mime="application/x-kspread" syntaxVersion="1" editor="KSpread" >
+ <paper format="A4" orientation="Portrait" >
+  <borders right="20" left="20" bottom="20" top="20" />
+  <head/>
+  <foot/>
+ </paper>
+ <map markerColumn="1" activeTable="Sheet1" markerRow="1" >
+  <table columnnumber="0" borders="0" hide="0" hidezero="0" grid="1" firstletterupper="0" formular="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" lcmode="0" name="Sheet1" borders1.2="1" printCommentIndicator="0" >
+   <paper format="A4" orientation="Portrait" >
+    <borders right="20" left="20" bottom="20" top="20" />
+    <head/>
+    <foot/>
+   </paper>
+  </table>
+  <table columnnumber="0" borders="0" hide="0" hidezero="0" grid="1" firstletterupper="0" formular="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" lcmode="0" name="Sheet2" borders1.2="1" printCommentIndicator="0" >
+   <paper format="A4" orientation="Portrait" >
+    <borders right="20" left="20" bottom="20" top="20" />
+    <head/>
+    <foot/>
+   </paper>
+  </table>
+  <table columnnumber="0" borders="0" hide="0" hidezero="0" grid="1" firstletterupper="0" formular="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" lcmode="0" name="Sheet3" borders1.2="1" printCommentIndicator="0" >
+   <paper format="A4" orientation="Portrait" >
+    <borders right="20" left="20" bottom="20" top="20" />
+    <head/>
+    <foot/>
+   </paper>
+  </table>
+ </map>
+</spreadsheet>

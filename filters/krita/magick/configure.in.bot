@@ -1,0 +1,13 @@
+if test -z "$LIBMAGICK_LIBS"; then
+  echo ""
+  echo "You're missing ImageMagick (>=6.1.0). krita's ImageMagick import/export"
+  echo "filter will not be compiled. You can download ImageMagick from"
+  echo "http://www.imagemagick.org/. The ImageMagick filter allows krita to"
+  echo "read and write XCF, PSD, GIF, BMP, and many other image formats."
+  echo ""
+  echo "If you have problems compiling ImageMagick, please try configuring it using"
+  echo "the --without-magick-plus-plus flag, the C++ API isn't needed for krita."
+  echo ""
+  all_tests=bad
+fi
+

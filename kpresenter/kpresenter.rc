@@ -1,0 +1,682 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="115">
+<MenuBar>
+ <Menu name="file"><text>&amp;File</text>
+  <Separator/>
+  <Action name="extra_webpres"/>
+  <Action name="extra_mspres"/>
+  <Action name="extra_template"/>
+  <Action name="extra_defaulttemplate"/>
+ </Menu>
+ <Menu name="Edit"><text>&amp;Edit</text>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="edit_selectall"/>
+  <Action name="edit_deselectall"/>
+  <Separator/>
+  <Action name="edit_find"/>
+  <Action name="edit_findnext"/>
+  <Action name="edit_findprevious"/>
+  <Action name="edit_replace"/>
+  <Separator/>
+  <Action name="edit_copypage"/>
+  <Action name="edit_duplicatepage"/>
+  <Action name="edit_delpage"/>
+  <Separator/>
+  <Action name="duplicate_obj"/>
+ </Menu>
+ <Menu name="View"><text>&amp;View</text>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
+  <ActionList name="view_split"/>
+  <Action name="view_showsidebar"/>
+  <Action name="view_shownotebar"/>
+  <Separator/>
+  <Action name="view_master"/>
+  <Separator/>
+  <Action name="view_formattingchars"/>
+  <Separator/>
+  <Action name="view_guidelines"/>
+  <Action name="add_guideline"/>
+  <Action name="view_grid"/>
+  <Action name="view_snaptogrid"/>
+  <Separator/>
+  <Action name="view_zoom"/>
+ </Menu>
+ <Menu name="Insert"><text>&amp;Insert</text>
+  <Action name="insert_specialchar"/>
+  <Action name="insert_variable"/> <!-- menu -->
+  <Action name="insert_expression"/> <!-- menu -->
+  <Action name="insert_link"/>
+  <Action name="insert_comment"/>
+  <Separator/>
+  <Action name="insert_page"/>
+  <Action name="insert_file"/>
+  <Separator/>
+  <Action name="tools_text"/>
+  <Action name="tools_diagramm"/>
+  <Action name="tools_table"/>
+  <Action name="tools_object"/>
+  <Separator/>
+  <Action name="insert_picture"/>
+  <Action name="insert_clipart"/>
+  <Separator/>
+  <Menu name="Insert Line"><text>Line</text>
+    <Action name="tools_line"/>
+    <Action name="tools_freehand"/>
+    <Action name="tools_polyline"/>
+    <Action name="tools_quadricbeziercurve"/>
+    <Action name="tools_cubicbeziercurve"/>
+  </Menu>
+  <Menu name="Insert Shape"><text>Shape</text>
+    <Action name="tools_rectangle"/>
+    <Action name="tools_circle"/>
+    <Action name="tools_pie"/>
+    <Action name="tools_polygon"/>
+    <Action name="tools_closed_freehand"/>
+    <Action name="tools_closed_polyline"/>
+    <Action name="tools_closed_quadricbeziercurve"/>
+    <Action name="tools_closed_cubicbeziercurve"/>
+    <Action name="tools_autoform"/>
+  </Menu>
+ </Menu>
+ <Menu name="Format"><text>F&amp;ormat</text>
+  <Action name="tools_mouse"/>
+  <Action name="tools_rotate"/>
+  <Action name="tools_zoom"/>
+  <Action name="extra_properties"/>
+  <Separator/>
+  <Menu name="Arrange Objects"><text>Arra&amp;nge Objects</text>
+    <Action name="extra_lower"/>
+    <Action name="extra_send_backward"/>
+    <Action name="extra_bring_forward"/>
+    <Action name="extra_raise"/>
+  </Menu>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Action name="extra_group"/>
+  <Action name="extra_ungroup"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="extra_layout"/>
+  <Separator/>
+  <Action name="extra_header"/>
+  <Action name="extra_footer"/>
+  <Separator/>
+  <Action name="extra_background"/>
+ </Menu>
+ <Menu name="Text"><text>Te&amp;xt</text>
+  <Action name="text_default"/>
+  <Action name="text_font"/>
+  <Action name="format_paragraph"/>
+  <Action name="text_color"/>
+  <Separator/>
+  <Action name="format_stylist"/>
+  <Action name="import_style"/>
+  <Action name="format_stylemenu"/>
+  <Action name="create_style"/>
+  <Separator/>
+  <Menu name="Align"><text>&amp;Align</text>
+   <Action name="text_alignleft"/>
+   <Action name="text_aligncenter"/>
+   <Action name="text_alignright"/>
+   <Action name="text_alignblock"/>
+  </Menu>
+  <Separator/>
+  <Menu name="Type"><text>T&amp;ype</text>
+   <Action name="text_normalText"/>   
+  <Action name="format_number"/>
+  <Action name="format_bullet"/>
+  </Menu>
+  <Separator/>
+  <Action name="text_depthPlus"/>
+  <Action name="text_depthMinus"/>
+  <Separator/>
+  <Action name="text_con2hei"/>
+  <Action name="text_obj2cont"/>
+  <Action name="text_inspgnum"/>
+  <Separator/>
+  <Action name="change_case"/>
+  <Separator/>
+  <Menu name="SpellCheck"><text>Spellcheck</text>
+	  <Action name="tool_auto_spellcheck"/>
+	  <Action name="extra_spellcheck"/>
+  </Menu>  
+  <Separator/>
+  <Menu name="AutoFormat"><text>Autocorrection</text>
+  	<Action name="enable_autocorrection"/>
+  	<Action name="apply_autoformat"/>
+  </Menu>
+ </Menu>
+ <Menu name="Slide Show"><text>Sli&amp;de Show</text>
+  <Action name="screen_configpages"/>
+  <Action name="screen_assigneffect"/>
+  <Action name="screen_transeffect"/>
+  <Separator/>
+  <Action name="screen_start"/>
+  <Action name="screen_startfromfirst"/>
+  <Separator/>
+  <Action name="custom_slide_show"/>
+  <Separator/>
+  <Action name="screen_first"/>
+  <Action name="screen_prev"/>
+  <Action name="screen_next"/>
+  <Action name="screen_last"/>
+ </Menu>
+ <Menu name="settings"><text>&amp;Settings</text>
+  <Separator group="settings_show"/>
+  <Action name="direct_cursor" group="settings_show"/>
+  <Separator group="settings_show"/>
+  <Action name="extra_autocorrection" group="settings_show"/>
+  <Action name="configure_completion" group="settings_show"/>
+  <Separator group="settings_show"/>
+  <Action name="extra_configure" group="settings_configure"/>
+ </Menu>
+</MenuBar>
+<StatusBar/>
+<ToolBar name="mainToolBar"><Text>File</Text>
+</ToolBar>
+<ToolBar name="editToolBar" position="top" fullWidth="false"><Text>Edit</Text>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="view_zoom"/>
+</ToolBar>
+<ToolBar name="insertToolBar" position="top" fullWidth="false"><Text>Insert</Text>
+  <Action name="tools_mouse"/>
+  <Separator/>
+  <Action name="tools_text"/>
+  <Action name="tools_autoform"/>
+  <Action name="tools_diagramm"/>
+  <Action name="tools_table"/>
+  <Action name="tools_formula"/>
+  <Action name="tools_object"/>
+  <Separator/>
+  <Action name="insert_picture"/>
+  <Action name="insert_clipart"/>
+  <Separator/>
+  <Action name="tools_linepopup"/>
+  <Action name="tools_closed_linepopup"/>
+  <Action name="tools_shapepopup"/>
+</ToolBar>
+<ToolBar name="toolsToolBar" position="left" fullWidth="false" hidden="true"><Text>Tools</Text>
+  <Action name="tools_rotate"/>
+  <Action name="tools_zoom"/>
+  <Separator/>
+  <Action name="extra_arrangepopup"/>
+  <Action name="extra_alignobjs"/>
+  <Separator/>
+  <Action name="extra_group"/>
+  <Action name="extra_ungroup"/>
+</ToolBar>
+<ToolBar name="extraToolBar" position="top" fullWidth="false"><Text>Format</Text>
+  <Action name="extra_properties"/>
+  <Action name="extra_linebegin"/>
+  <Action name="extra_lineend"/>
+  <Action name="extra_penstyle"/>
+  <Action name="extra_penwidth"/>
+  <Action name="brush_color"/>
+  <Action name="pen_color"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+</ToolBar>
+<ToolBar name="textToolBar" position="top" fullWidth="false"><Text>Text</Text>
+  <Action name="format_style"/>
+  <Action name="text_fontfamily"/>
+  <Action name="text_fontsize"/>
+  <Separator/>
+  <Action name="text_bold"/>
+  <Action name="text_italic"/>
+  <Action name="text_underline"/>
+  <Separator/>
+  <Action name="text_alignleft"/>
+  <Action name="text_aligncenter"/>
+  <Action name="text_alignright"/>
+  <Action name="text_alignblock"/>
+  <Separator/>
+  <Action name="format_number"/>
+  <Action name="format_bullet"/>
+  <Separator/>
+  <Action name="text_depthMinus"/>
+  <Action name="text_depthPlus"/>
+  <Separator/>
+  <Action name="text_color"/>
+</ToolBar>
+<ToolBar name="slideShowToolBar" position="top" fullWidth="false"><Text>Slide Show</Text>
+  <Action name="screen_configpages"/>
+  <Action name="screen_assigneffect"/>
+  <Action name="screen_transeffect"/>
+  <Action name="screen_start"/>
+  <Action name="screen_startfromfirst"/>
+</ToolBar>
+<ToolBar name="navigationToolBar" position="top" hidden="true" fullWidth="false"><Text>Navigation</Text>
+  <Action name="screen_first"/>
+  <Action name="screen_prev"/>
+  <Action name="screen_next"/>
+  <Action name="screen_last"/>
+</ToolBar>
+<Menu name="menupage_popup">
+  <Action name="extra_layout"/>
+  <Action name="extra_background"/>
+  <Separator/>
+  <Action name="view_guidelines"/>
+  <Action name="add_guideline"/>
+  <Action name="view_grid"/>
+  <Action name="view_snaptogrid"/>
+  <Separator/>
+  <Action name="insert_page_popup"/>
+  <Action name="extra_defaulttemplate"/>
+  <Action name="edit_duplicatepage"/>
+  <Action name="edit_delpage"/>
+  <Separator/>
+  <Action name="display_object_from_master_page"/>
+  <Action name="display_background"/>
+  <Separator/> 
+  <Action name="extra_header"/>
+  <Action name="extra_footer"/>
+  <Separator/>
+  <Action name="edit_paste"/>
+  <ActionList name="picture_action"/>
+</Menu>
+<Menu name="textobject_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Menu name="Vertical Alignment"><text>Vertical Alignment</text>
+   <Action name="align_top"/>
+   <Action name="align_center"/>
+   <Action name="align_bottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extendobjectheight"/>
+  <Action name="resizetextobject"/>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="partobject_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="rectangleobject_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="graphmenu_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="flip_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="closed_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Action name="close_object"/>
+  <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="piemenu_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="clipmenu_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="change_clipart"/>
+  <Action name="save_clipart"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="picmenu_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="change_picture"/>
+  <Action name="save_picture"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Action name="image_effect"/>
+  <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="pic_original_size"/>
+  <Menu name="Scale Picture"><text>&amp;Scale to Show the Picture 1:1 In</text>
+   <Action name="pic_640_480"/>
+   <Action name="pic_800_600"/>
+   <Action name="pic_1024_768"/>
+   <Action name="pic_1280_1024"/>
+   <Action name="pic_1600_1200"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="sidebarmenu_popup">
+  <Action name="insert_page_popup"/>
+  <Action name="edit_duplicatepage"/>
+  <Action name="edit_delpage"/>
+  <Action name="rename_page"/>
+  <Action name="edit_copypage"/>
+</Menu>
+<Menu name="variable_popup">
+ <ActionList name="variable_action"/>
+</Menu>
+<Menu name="text_popup">
+ <Action name="text_default"/>
+ <Action name="text_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="brush_color"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <ActionList name="datatools"/>
+</Menu>
+<Menu name="text_popup_spell">
+ <Action name="text_default"/>
+ <Action name="text_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="brush_color"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <ActionList name="datatools"/>
+ <Action name="ignore_all"/>
+ <Action name="add_word_to_dictionary"/>
+</Menu>
+<Menu name="text_popup_spell_with_result">
+ <Action name="text_default"/>
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="border_backgroundcolor"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <ActionList name="datatools"/>
+ <Action name="ignore_all"/>
+ <Action name="add_word_to_dictionary"/>
+ <Separator/>
+ <Menu name="check_spell_list"><text>Spell Check Result</text>
+   <ActionList name="spell_result_action"/>
+ </Menu>
+</Menu>
+<Menu name="custom_var_popup">
+ <Action name="text_default"/>
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="brush_color"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Action name="edit_customvars"/>
+ <ActionList name="datatools"/>
+</Menu>
+<Menu name="text_popup_link">
+ <Action name="text_default"/>
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="brush_color"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Action name="open_link"/>
+ <Action name="change_link"/>
+ <Action name="copy_link"/>
+ <Action name="remove_link"/>
+ <Action name="add_to_bookmark"/>
+ <ActionList name="datatools_link"/>
+</Menu>
+<Menu name="note_popup">
+ <Action name="text_default"/>
+ <Action name="format_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="brush_color"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <Separator/>
+ <Action name="edit_comment"/>
+ <Action name="remove_comment"/>
+ <Action name="copy_text_comment"/>
+ <ActionList name="datatools"/>
+</Menu>
+<Menu name="polygonobject_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Action name="extra_aligncenterh"/>
+   <Action name="extra_alignright"/>
+   <Action name="extra_aligntop"/>
+   <Action name="extra_aligncenterv"/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
+  <Separator/>
+  <Action name="extra_properties"/>
+</Menu>
+<Menu name="zoom_popup">
+ <Action name="zoom_plus"/>
+ <Action name="zoom_minus"/>
+ <Separator/>
+ <Action name="zoom_entire_page"/>
+ <Action name="zoom_page_width"/>
+ <Action name="zoom_page_height"/>
+ <Separator/>
+ <Action name="zoom_selected_object"/>
+ <Action name="zoom_all_object"/>
+</Menu>
+</kpartgui>

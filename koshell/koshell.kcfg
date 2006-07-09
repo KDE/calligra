@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd"> 
+<kcfg> 
+<kcfgfile name="koshellrc"/>
+  <group name="koshell">
+    <entry name="SidebarWidth" type="Int"> 
+      <label>Defines the width of the sidebar.</label>
+      <default>80</default>
+    </entry>
+  </group>
+  <group name="sidepane">
+    <entry type="Int" name="SidePaneIconSize">
+      <default>32</default>
+    </entry>
+    <entry type="Bool" name="SidePaneShowIcons"><default>true</default></entry>
+    <entry type="Bool" name="SidePaneShowText"><default>true</default></entry>
+  </group>
+</kcfg>

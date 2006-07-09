@@ -1,0 +1,66 @@
+# Check if the tiff lib is available
+AC_FIND_TIFF
+AM_CONDITIONAL(have_tiff, test -n "$LIBTIFF")
+
+AC_FIND_PNG
+AM_CONDITIONAL(have_png, test -n "$LIBPNG")
+
+AC_FIND_JPEG
+AM_CONDITIONAL(have_jpeg, test -n "$LIBJPEG")
+
+#---------------------------------------------------------
+# libexif detection
+# taken from libkexif's configure.in.in
+#---------------------------------------------------------
+
+LIBEXIF=no
+
+#PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.5.7, ,
+#        [ AC_MSG_WARN([libexif >= 0.5.7 not found.])
+#          LIBEXIF=yes ])
+
+
+#PKG_CHECK_MODULES(LIBEXIF06, libexif >= 0.6.9,
+#        AC_DEFINE(HAVE_EXIF06,1,[check for libexif > 0.6]),
+#                AC_MSG_WARN([Using old version of libexif.]))
+
+PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.6.12 , ,
+        [ AC_MSG_WARN([libexif >= 0.6.12 not found.])
+          LIBEXIF=yes ])
+
+AC_SUBST(LIBEXIF_LIBS)
+AC_SUBST(LIBEXIF_CFLAGS)
+
+#---------------------------------------------------------
+# libexif detection
+#---------------------------------------------------------
+AC_MSG_CHECKING([if C++ program with exif can be compiled])
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+ac_save_CXXFLAGS="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS $LIBEXIF_CFLAGS"
+AC_CACHE_VAL(exif_build,
+[
+    AC_TRY_COMPILE([
+    extern "C" {
+#include <libexif/exif-loader.h>
+#include <libexif/exif-utils.h>
+}
+    ],[
+        ExifLoader *l = exif_loader_new ();
+        exif_loader_write_file (l,"kikoo");
+        return 0;
+    ], exif_build=yes,
+    exif_build=no)
+])
+AC_MSG_RESULT($exif_build)
+if test "$exif_build" = "no"; then
+    LIBEXIF=""
+fi
+CXXFLAGS="$ac_save_CXXFLAGS"
+AC_LANG_RESTORE
+
+                
+AM_CONDITIONAL(have_exif, test -n "$LIBEXIF")
+AM_CONDITIONAL(include_jpeg_filter, test -n "$LIBJPEG" -a -n "$LIBEXIF")
+AM_CONDITIONAL(include_tiff_filter, test -n "$LIBTIFF" -a -n "$LIBEXIF")

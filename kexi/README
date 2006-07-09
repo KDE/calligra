@@ -1,0 +1,43 @@
+
+Introduction:
+=============
+
+Kexi is an integrated data management application. It can be used for 
+creating database schemas, inserting data, performing queries, and 
+processing data. Forms can be created to provide a custom interface to your 
+data. All database objects - tables, queries and forms - are stored in the 
+database, making it easy to share data and design.
+
+Kexi is Free/Libre/Open-Source Software. As a real member of the KDE and 
+KOffice projects, Kexi integrates fluently into both. It is designed to be 
+fully usable also without KDE on Linux/Unix and MS Windows platforms.
+
+Kexi is considered as a long awaited Open Source competitor for Microsoft 
+Access, FileMaker and Oracle Forms. Its development is motivated by the 
+lack of Rapid Application Development (RAD) tools for database systems that 
+are sufficiently powerful, inexpensive, open standards driven and portable 
+across many operating systems and hardware platforms. 
+
+Contacts:
+=========
+
+Developers: http://kexi-project.org/contact.html
+
+User mailing list: mailto:kexi@kde.org
+   (subscribe at https://mail.kde.org/mailman/listinfo/kexi)
+
+Developer and advanced user mailing list: mailto:kexi-devel@kde.org
+   (subscribe at https://mail.kde.org/mailman/listinfo/kexi-devel)
+
+If you have questions about this README file or about KOffice in general,
+please mail to the KOffice mailing list: mailto:koffice@kde.org
+
+
+Links:
+======
+Kexi at Koffice.org: http://koffice.org/kexi/
+Kexi Project Home Page: http://kexi-project.org/
+
+--
+Have fun,
+Kexi Team

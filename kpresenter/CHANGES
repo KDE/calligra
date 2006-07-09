@@ -1,0 +1,282 @@
+Changes after KPresenter 1.4
+============================
+Fixes:
+- Fixed Bug 47825 object appeared on the wrong page after save/open in kpr format
+- Fixed Bug 118825: Property altering actions are not enabled correctly
+
+Changes:
+- Added auto guidelines
+- Now we can or not display object from master page
+- Draw objects of the master slide behind the objects of the current slide.
+
+Changes after KPresenter 1.3
+============================
+Fixes:
+- Fixed undo of delete and group command
+- Fixed possible crash in presentation mode if not all slides are shown
+- Fixed take tmp objects for redrawing in effect from the correct page
+- Fixed show the duration for the correct page if not all slides are shown
+- Fixed crash in infinite loop presentation mode when first slide is not shown
+- Fixed redrawing of lines in drawing mode in case of a repaint event
+- Fixed aligning of rotated lines and line with pen.width() > 1
+- Fixed that the width/height of an rotated object could be negative
+- Fixed copy and paste when one pic is in the copied objects
+- Fixed crash in history of group/ungroup commands
+- Ignore sticky objects when duplicating a page
+- Fixed Object Effects are not correctly done (#64384)
+- Fixed drawing of rect with round corners when zoomed and gradient filling
+- Fixed no alpha channel set on mirrored pictures
+- Fixed objects placed on wrong page after saving and loading in kpr file format
+- Fixed picture not updated when only depth is changed
+- Fixed saving of document type for webpresentations
+
+Changes:
+- Flip now works as in Gimp. Horizontal flip flips on y-axis
+  vertical filp on x-axis
+- Group objects: The grouped object is now in the z-order of the upperst
+  object grouped and no longer on the top.
+- Ungroup object: The objects are now in the z-order where the group object 
+  was and no longer on top.
+- If a page is shown more than once during a presentation add the time for 
+  the duration instead of showing only the last duration.
+- Use kspell2
+- Now PresSpeed is into each page
+- Now PageUp/PageDown during presentation go to beginning of the next/previous slide
+- Each object effect can have it's own speed now
+- Copy between kword/kpresenter
+- Now we can configure header/footer by page
+- Configure Custom Slide Show
+- Add statistic variable
+
+Changes after KPresenter 1.3 RC1
+================================
+- during a presentation variables on the sticky page were not updated (#67515)
+
+
+Changes after KPresenter 1.3 beta 4
+===================================
+Fixes:
+- Fixed When resizing a frame it does not snap to the grid (#63032)
+- Fixed after resize/undo size of object is not the same
+- Fixed after move/undo position of object is not the same
+- Fixed resizing of poly line objects
+- Fixed after reload of some objects moved up a little bit
+- Fixed moving with key left used y grid
+- Fixed header/footer moved in undo
+
+Changes after KPresenter 1.3 beta 3
+===================================
+Fixes:
+- Fixed cursor not blinking in some cases
+- Fixed "blinking cursor erases formatting characters" bug
+- "Adjust object to contents" works as intended now
+- Purpose of the 'Notebar' is unknown (#63037)
+- kpresenter crashed when I tried to insert the variable
+  "section title" (#61735)
+- large footer from kpresenter 1.2.1 will crash kpresenter
+  (#61449)
+- embedded spreadsheet (table button) appears at wrong size
+  (#58498)
+- embedded kspread object displayed with wrong size (#33233)
+- KPresenter hangs when inserted text wraps to newline
+  (#56946)
+- layer lowering is incorrect (#53277)
+- resize handles deceptive when zoomed out (#61602)
+- fixed painting garbage at a side of the screen in the presentation mode (on
+  weird DPIs)
+
+Changes after KPresenter 1.3 beta 2
+===================================
+Fixes:
+- KPR 'forgets' solid line attribute of text frames (#61343)
+- fix pasting text objects screwing UTF-8 text
+- snap to Grid function aligns relatively, not absolutely (#56181)
+- when cutting&pasting a vertically centred text frame,
+  the vertical position changes (#61330)
+
+Changes:
+- grid, snap to grid are on now by default, with a finer step of 5mm
+  (#60011 and #60013)
+
+Changes after KPresenter 1.3 beta 1
+===================================
+Fixes:
+- fixed loading of old documents with invalid paragraph indents
+- paste image gives tiny initial object (#59058)
+- setting the font size in the toolbar doesn't work (#39786)
+- objects disappears on the rightside of a dinA0 presentation (#37370)
+- large unwanted offset in print preview and printing (#56123)
+
+New features:
+- flip groups horizontally/vertically (#45561)
+
+
+Changes after KPresenter 1.2
+============================
+- Add "add to bookmark" feature
+- Add font properties : change relative font size when we sub/super script font
+- Add support to add offset from baseline
+- Now koinsertlink use 'recent document'
+- Add support to insert cursor directly
+- Add autocorrection : "Capitalize name of days"
+- Added support for global language
+- Use new kospell API
+- Added support for naming objects
+- Added flipping support for most objects (not yet for text autoform and kpart)
+
+Visual stuff:
+- objects use "forbidden" cursor when they're protected (new)
+- display an "End of presentation"-slide at end of presentation; configurable
+  (new)
+- transition effect dialog with preview (new)
+
+Text boxes:
+- can spellcheck in selection only (new)
+- shadow is a text property now (bugfix)
+- link manipulation (add/copy/remove) (new)
+- access to spellcheck result via context menu
+- text formats now include language information (new)
+- new line spacing types: at least / exactly / multiple of (new)
+- new font attributes: small caps, uppercase, lowercase (new)
+- new underline and strikethru type: word by word
+
+Images:
+- properly draw images with alpha channels (bugfix)
+- better loading of background pictures; especially for remote files (new)
+
+Variables:
+- created/modified/printed document date (bug #24242)
+- added time/date variable offset (new)
+- added new variables: Next page number, Previous page number (new)
+
+Configurability:
+- whether and where to create backup files (new)
+- path to pictures (new)
+- personal dictionary (new)
+- list of ignored words when spellchecking (new)
+- go with a per-slide default when inserting a new one (wish #22629)
+- printing of slide notes (wish #56120)
+
+Misc:
+- web presentation: better HTML generation, usability improvement of the wizard (new)
+- copy/paste image/embedded objects between different instances (bugfix)
+- comment text can be copied now (bugfix)
+- undo/redo shows history of commands (new)
+
+
+Changes between KPresenter-1.2-RC1 and KPresenter-1.2
+=====================================================
+Bugfixes:
+- Fix undo/redo move object.
+- Fix #45966 kpresenter refuses to update image with same name
+- Fix #45991: problems w.r.t. font color and bullets
+- Fix mouse move event + vertical alignment
+- Fix resize to height : Don't create command when it's not necessary.
+- Fix availableHeight + vertical alignment
+- Fix save variable.
+- Fix recalc page number + sticky object
+- Fix draw gradient + rectangle object
+- Fix presentation mode : Don't draw grid and helpline in this mode
+- Fix update ruler tabs when we switch between two text object
+- Fix move up/down style
+- Fix restore style shortcut when we remove/rename/add style
+
+
+Changes between KPresenter-1.2-beta2 and KPresenter-1.2-RC1
+===========================================================
+New:
+- Like all of KOffice: a readonly GUI for embedding into Konqueror
+- More DCOP calls
+
+Bugfixes:
+- Fix resize text object
+- Fix webpresentation => display real variable value 
+- Fix autocorrection (crash/change language etc...)
+- Fix update sidebar
+- Fix key event when text object is protect content.
+- Fix group object : allow to change text object attribute, fix load close object etc...
+- Width and height spin boxes in the style dialog are now coupled when
+  keep aspect ratio is in effect.
+- Fix unselect object : use right button + shift
+- Fixed rounded rectangle + gradient
+- Fixed saving shadowed objects (when only their color differed from
+  the defaults)
+- Restored a lot of backwards compatibility (formatting, bullets, numbers,
+  whitespace handling etc.)
+- Speedup in displaying of the pixmap objects
+- Fixed the drawing of the background (no gradient when background is
+  an image or a clipart)
+
+Crashes:
+- Fixed crash when we close kword and "special char dialogbox" is not closed
+- Fixed several memory leaks
+- Fixed crash when we cancel insert time/date variable.
+- Fixed crash when we duplicate page and there was an embedded document.
+- Fixed crash when we split view and we try to open menu when factory() is null
+- Fixed crash when we didn't select a slide and try to launch presentation
+
+
+KPresenter 1.2beta1 -> 1.2 beta 2
+---------------------------------
+- Add support for flip polyline object
+- Add support for "protect size and postion"
+- When we create a line object and we press shift we draw horizontal/vertical
+- Added support for dnd between text objects
+- Added support for keeping ratio of objects
+- Added dialog for duplicatiing objects
+- Add "Apply AutoFormat"
+- Add new type of begin/end line (line arrow, Dimension line... )
+- Add support for find/replace with format
+- Now we can create directly a style from a selection
+- Add support for protect content of text object
+- Now we can close polyline object
+- Fix save/load variable
+- Use tripleState in styledia
+- Removed settings-toolbar and corresponding menu-entries
+- Added tab to properties-dialog according to selected object
+- Moved default-settings for rectangles, pies and polygons to
+  'Settings' -> 'Configure KPresenter'
+- Now we can change grid color
+- Add option to "Snap to grid"
+- Add support for text object margins
+- Improve font style
+- New transition effects: Strips
+- Add support for vertical alignment
+- Now we can change tab stop value
+- Now we can save picture from file to disk
+- Add Closed Line Object (freehand, polyline, quadric bezier curve, cubic bezier curve)
+- Add New Cursor for rotate tool and freehand tool
+- Merged actions for lines, shapes and arrangement of objects into
+  an appropriate drop-down menu
+- Add support for autocorrect with format
+- Add option "Allow cursor in text object protected content"
+- Add import text style support
+- Add save page background image on disk
+- Add display field code (for variable)
+- We can change autoformat language
+
+
+Changes after KPresenter 1.1
+============================
+- Port to kotext
+- New effect : kpresenter can play sounds
+- Thumbnail mode for the sidebar
+- Add notebar
+- Add a real statusbar
+- Add New Tool : freehand, polyline, quadric bezier curve, cubic bezier curve, convex/concave polygon
+- Add zoom support
+- Improve undo/redo (now we can undo/redo "insert new page"/"delete page"/"paste page"/"Duplicate page")
+- Now kpresenter has real page
+- Limit position/size object to page
+- spell checking/search/find works on all page
+- Add "Show Presentation Duration"
+- Add dcop interface : now we can insert text, change text format, etc...
+- Add support for style
+- Add support for background spell checking
+- Add support for manual completion (use CTRL + E )
+- Add Help line
+- New transition effect: Blinds, Box In/Out, Checkboard, Cover, Uncover, Dissolve, Random,...
+- Add grid support
+- Add Help Point
+- Add support to change zoom with mouse (zoom selected area)
+- Add Configure Picture Dialog

@@ -1,0 +1,9 @@
+<KrossScripting>
+    <ScriptAction
+      name="FiltersTestRuby"
+      text="Filters test"
+      description="Test of filters in scripting (ruby)"
+      icon=""
+      interpreter="ruby"
+      file="filterstest.rb" />
+</KrossScripting>

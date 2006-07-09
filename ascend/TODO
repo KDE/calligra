@@ -1,0 +1,17 @@
+* Reimplement initDoc() to get rid of the template dialog,		DONE
+  try just calling initEmpty() from there.
+
+* Provide your own rc file in WUView with setXMLFile()			DONE
+  In that file, define a big toolbar (see kdelibs/kdeui/kpartgui.dtd
+   for the attributes to use, like iconSize, position etc.)
+
+* Get rid of unnecessary stuff in the GUI				DONE
+   - Hide the menubar using mainWindow()->menuBar()->hide().		done
+   - Hide the document structure window.				done
+   - Hide the rulers							done
+
+* Transform the GUI							----
+   - Use the new icons in toolbars					--
+   - Place the new toolbars correctly					--
+
+* The New / Open dialog							----

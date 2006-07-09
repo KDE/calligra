@@ -1,0 +1,56 @@
+<sect1 id="columns">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+
+<title>Columns</title>
+<indexterm><primary>columns</primary></indexterm>
+
+<para>You can divide the page into several columns, of equal width, with
+a user controlled space in between each column.</para>
+
+<note>
+<para>This feature is only available in Text Oriented documents.</para>
+
+<para>If you are working in a Page Layout document, you can
+build up several columns using a different frame for each column.</para>
+</note>
+
+<para>To change the number and width of columns select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
+from the menubar.</para>
+
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wpfmtpg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Click on the tab labeled <guilabel>Columns</guilabel>.</para>
+
+<para>This will change the dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="wpfmtpg2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can now select the number of columns in the spin box labeled <guilabel>Columns:</guilabel>, and the spacing
+between columns in the text box labeled <guilabel>Column spacing:</guilabel>.</para>
+
+<para>The preview box shows you what your page will look like.</para>
+
+<para>Click <guibutton>OK</guibutton> when you are done.</para>
+
+<para>Click <guibutton>Cancel</guibutton> to abort changes.</para>
+
+</sect1>

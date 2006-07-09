@@ -1,0 +1,566 @@
+<chapter id="commands">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Command Reference</title>
+
+<sect1 id="filemenu">
+<title>The <guimenu>File</guimenu> Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Create a new document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open an existing document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open an existing document</action> by selecting it
+from a combo box of recently used files.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save the document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save the document with a new name or format.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reloads the document.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Import other documents.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save a document to any supported format.</action>
+The document does not become the exported file.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Send the file as an email attachment.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Print the document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Print Preview...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View the document as it will be printed.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View or enter information about the document and 
+author.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Close the current document but leave &kplato; running.
+</action></para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quit</action> &kplato;.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title>The <guimenu>Edit</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Undo</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Undo the last action.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Redo</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Redo the last undone action.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete Task</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete</action> the currently highlighted task.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Indent Task</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Indent</action> the currently highlighted task.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Unindent Task</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Unindent</action> the currently highlighted task.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Move Up</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Move up</action> the currently highlighted task.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Move Down</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Move down</action> the currently highlighted task.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title>The <guimenu>View</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Expected</guimenuitem>
+</menuchoice></term>
+<listitem><para><action> - </action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Optimistic</guimenuitem>
+</menuchoice></term>
+<listitem><para><action> - </action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Pessimistic</guimenuitem>
+</menuchoice></term>
+<listitem><para><action> -</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Gantt</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View Gantt</action> 
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Resources</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggle</action> on and off the resources names in the
+Gantt view.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Task Name</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggle</action> on and off the tasks names in the
+Gantt view.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Task Links</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggle</action> on and off the task links in the
+Gantt view.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Progress</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggle</action> on and off the progress in the
+Gantt view.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Float</guimenuitem>
+</menuchoice></term>
+<listitem><para><action> - </action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Critical Path</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Highlight</action> the critical path in red.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Critical Tasks</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Highlight</action> the critical tasks in red.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Resources</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View</action> the resources instead of the Gantt or
+the accounts.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Accounts</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>View</action> the accounts instead of the Gantt or
+the resources.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+
+<sect1 id="insertmenu">
+<title>The <guimenu>Insert</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Task...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the task settings dialog which allows
+to define a new task after the current highlighted task.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Sub-Task...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the task settings dialog which allows
+to define and insert a new sub-task of the current highlighted task.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Milestone...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the task settings dialog which allows
+to define and insert a new sub-task of the current highlighted task.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="projectmenu">
+<title>The <guimenu>Project</guimenu> Menu</title>
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Edit Main Project...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the project settings dialog.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Edit Standard Worktime...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the standard worktime dialog.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Edit Calendar...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the calendar settings dialog.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Edit Accounts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the accounts settings dialog.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Edit Resources...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the resources dialog where you can add
+new resources groups and new resources names and properties.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Project</guimenu>
+<guimenuitem>Calculate</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Calculate</action> Expected, Optimistic and Pessimistic.
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title>The <guimenu>Tools</guimenu> Menu</title>
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Generate WBS Code</guimenuitem>
+</menuchoice></term>
+<listitem><para><action> - </action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Define WBS Pattern...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action> - </action>
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title>The <guimenu>Settings</guimenu> Menu</title>
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Toolbars</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the toolbars: File, Report,
+View and Project.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure the keyboard shortcuts used by &kplato;.
+</action> 
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure</action> the items you want to put in
+the toolbars.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure &kplato;...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> the &kplato; settings dialog.
+</para></listitem>
+</varlistentry>
+
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

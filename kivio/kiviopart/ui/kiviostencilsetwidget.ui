@@ -1,0 +1,168 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KivioStencilSetWidget</class>
+<comment>This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+</comment>
+<author>(C) 2004-2005 Peter Simonsson</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KivioStencilSetWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Stencil Set</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QSplitter" row="0" column="0">
+            <property name="name">
+                <cstring>splitter1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <widget class="KListView">
+                <column>
+                    <property name="text">
+                        <string>Stencil Set</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <property name="name">
+                    <cstring>m_stencilSetLView</cstring>
+                </property>
+                <property name="rootIsDecorated">
+                    <bool>true</bool>
+                </property>
+                <property name="resizeMode">
+                    <enum>AllColumns</enum>
+                </property>
+                <property name="fullWidth">
+                    <bool>true</bool>
+                </property>
+                <property name="itemsMovable">
+                    <bool>false</bool>
+                </property>
+                <property name="dropVisualizer">
+                    <bool>false</bool>
+                </property>
+                <property name="shadeSortColumn">
+                    <bool>false</bool>
+                </property>
+            </widget>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>m_stencilsetGBox</cstring>
+                </property>
+                <property name="title">
+                    <string>No Selection</string>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QSplitter" row="0" column="0">
+                        <property name="name">
+                            <cstring>m_stencilSetSplitter</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <widget class="QIconView">
+                            <property name="name">
+                                <cstring>m_stencilIView</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>false</bool>
+                            </property>
+                            <property name="hScrollBarMode">
+                                <enum>AlwaysOff</enum>
+                            </property>
+                            <property name="selectionMode">
+                                <enum>NoSelection</enum>
+                            </property>
+                            <property name="gridX">
+                                <number>64</number>
+                            </property>
+                            <property name="gridY">
+                                <number>64</number>
+                            </property>
+                            <property name="resizeMode">
+                                <enum>Adjust</enum>
+                            </property>
+                            <property name="itemsMovable">
+                                <bool>false</bool>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This is a preview of the stencils contained in the set</string>
+                            </property>
+                        </widget>
+                        <widget class="QTextBrowser">
+                            <property name="name">
+                                <cstring>m_descriptionBrowser</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>4</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                    </widget>
+                    <widget class="QPushButton" row="1" column="0">
+                        <property name="name">
+                            <cstring>m_addToDocBtn</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Add to Document</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
+</UI>

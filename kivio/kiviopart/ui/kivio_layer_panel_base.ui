@@ -1,0 +1,99 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KivioLayerPanelBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KivioLayerPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>177</width>
+            <height>268</height>
+        </rect>
+    </property>
+    <property name="layoutMargin" stdset="0">
+    </property>
+    <property name="layoutSpacing" stdset="0">
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="KToolBar">
+            <property name="name">
+                <cstring>bar</cstring>
+            </property>
+        </widget>
+        <widget class="QListView">
+            <property name="name">
+                <cstring>list</cstring>
+            </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+            <property name="showToolTips">
+                <bool>false</bool>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KToolBar</class>
+        <header location="local">ktoolbar.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>list</sender>
+        <signal>currentChanged(QListViewItem*)</signal>
+        <receiver>KivioLayerPanelBase</receiver>
+        <slot>updateButtons(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>list</sender>
+        <signal>currentChanged(QListViewItem*)</signal>
+        <receiver>KivioLayerPanelBase</receiver>
+        <slot>itemActivated(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>list</sender>
+        <signal>clicked(QListViewItem*,const QPoint&amp;,int)</signal>
+        <receiver>KivioLayerPanelBase</receiver>
+        <slot>itemClicked(QListViewItem*,const QPoint&amp;,int)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="protected">itemActivated(QListViewItem*)</slot>
+    <slot access="protected">itemClicked(QListViewItem*,const QPoint&amp;,int)</slot>
+    <slot access="protected">updateButtons(QListViewItem*)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>ktoolbar.h</includehint>
+</includehints>
+</UI>

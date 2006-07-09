@@ -1,0 +1,637 @@
+<chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>&kspread; Basics</title>
+
+<note><para>Like the rest of &kde;, &kspread; is highly configurable, which can
+cause problems for readers trying to compare the text in a document such as
+this with what they see on the version of &kspread; running on their desktop.
+To cut down on some of the possibilities for confusion, it it suggested that
+when you first start to use &kspread; you set the default options in all pages
+of the &kspread; configuration dialog (obtained by selecting
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+&kspread;...</guimenuitem></menuchoice>) except for <guilabel>Completion mode:
+</guilabel> in the <guisubmenu>Misc</guisubmenu> page, which should be set to
+<guimenuitem>None</guimenuitem>.
+</para>
+<para>You may also find it helpful to globally enable Tooltips in &kcontrolcenter;
+in <menuchoice><guimenu>Appearance &amp;
+Themes</guimenu><guimenuitem>Style</guimenuitem></menuchoice>
+dialog box. </para></note>
+
+<sect1 id="starting">
+<title>Spreadsheets for Beginners</title>
+
+<para>This section attempts to explain by example what a spreadsheet program
+such as &kspread; actually does, and why it is such a useful tool in any
+situation where you have to deal with numbers. If you have already used a
+spreadsheet program you may wish to skip to the next section.</para>
+
+<para>The first thing to do is to start up &kspread;. You can do this by
+<mousebutton>left</mousebutton> clicking on a &kspread; icon if there is one
+on your desktop or panel, or you can select
+<menuchoice><guimenu>Office</guimenu><guimenuitem>&kspread;</guimenuitem>
+</menuchoice>
+from the K menu.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>KSpread at first run</phrase>
+</textobject>
+</mediaobject>
+When it has started you will be given the choice of opening a recent
+document, creating a new document from a template (with templates categories) or
+opening an existing document . Select the <guilabel>General</guilabel> category
+on the left and choose the <guilabel>Blank Worksheet</guilabel> template. Then
+click the <guibutton>Use This Template</guibutton> button.</para>
+
+<para>Looking at &kspread; once it has started up, you will see a sheet of
+empty rectangular cells arranged in numbered rows and lettered columns. This
+is where you enter data or formula, text or charts.
+<mediaobject>
+<imageobject>
+<imagedata fileref="starting1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot starting1</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>Now, enter the text and values shown in the first 5 rows of the above
+screenshot into the same cells of your spreadsheet. Ignore what is in row 7
+for the moment. To enter anything into a cell first select the cell by
+<mousebutton>left</mousebutton> clicking inside it, then type whatever you
+want, then press <keycap>Enter</keycap> or use the arrow keys to move the
+selection point to another cell.
+</para>
+<para>What we have entered so far could be a simple budget for the next two
+months, listing how much we think we will be spending for Food, Shelter,
+Clothing and any Other expenditure. Now select cell B7 (column B, row 7), 
+type in <userinput>=B2+B3+B4+B5</userinput> and press <keycap>Enter</keycap>. 
+Because it begins with a <keycap>=</keycap> symbol &kspread; sees this as a 
+formula, something it has to calculate, in this case by adding together the 
+values in the 4 cells B2 to B5, and what is shown in the cell B7 is the result 
+of that calculation.</para>
+<para>You could enter a similar formula into cell C7, except that in this case
+it would have to be <userinput>=C2+C3+C4+C5</userinput>, but there is an
+easier way which is to Copy cell B7 and Paste it into C7. &kspread; will
+automatically adjust the cell references from B.. to C.. when the Paste is
+done.</para>
+<para>At this point you may think that &kspread; is doing no more than you
+could manage with pencil, paper and a calculator, and you could be right, but
+remember that this is a very small example of a spreadsheet, doing simple
+calculations on only a few numbers. For any reasonably amount of values or data
+using a spreadsheet to do the calculations is much quicker and more accurate
+than doing them manually.</para>
+<para>Also, a spreadsheet lets you play the <quote>What if?</quote> game.
+Because each formula is automatically recalculated whenever any of the values
+it refers to are changed, you can quickly see what happens if you alter any of
+them. Using our example you can see the effect of reducing the amount spent on
+food in December by just entering a new value into cell C2. If you had a
+spreadsheet that modelled the greenhouse effect accurately you could perhaps
+see the effect of a 50 percent reduction in the amount of methane released 
+into the atmosphere.</para>
+</sect1>
+
+<sect1 id="selecting">
+<title>Selecting Cells</title>
+<para>You can select a single cell or a rectangular area of cells in the 
+spreadsheet. The selected cell(s) are displayed with a thick black border
+and a colored background.</para>
+<itemizedlist>
+<title>You can select a single cell in one of the following ways</title>
+<listitem><para><mousebutton>left</mousebutton> click on it</para></listitem>
+<listitem><para>enter the cell reference (for example <userinput>B5</userinput>)
+into the cell reference box at the left end of the Formula toolbar and press
+<keycap>Enter</keycap></para></listitem>
+<listitem><para>use the <menuchoice><guimenu>View</guimenu><guimenuitem>Goto
+Cell...</guimenuitem></menuchoice> menu option</para></listitem>
+</itemizedlist>
+
+<para>You can also steer your way around with the <keysym>arrow</keysym> keys.
+Pressing the <keysym>Enter</keysym> key will move the current selection one
+position up, down, left or right depending on the setting in the <guilabel>Misc
+</guilabel> page of &kspread;'s <link linkend="configmisc">configuration dialog
+box</link>.</para> <para>If you hold the <keycombo
+action="simul">&Shift;</keycombo> key down while using the
+<keysym>arrow</keysym> keys the selection will move to the start or end of the
+block of occupied cells.</para>
+<para>To select an area of contiguous cells drag the mouse cursor across the
+desired area with the <mousebutton>left</mousebutton> button held down, or enter
+the references of the top left and bottom right cells separated by a colon into
+the Formula toolbar cell reference box (for example <userinput>B7:C14
+</userinput>) and press <keycap>Enter</keycap>, or enter these cell references
+in a similar format into the dialog box brought up by <menuchoice><guimenu>
+View</guimenu><guimenuitem>Goto Cell...</guimenuitem></menuchoice>.</para>
+<para>You can also select an area of cells by selecting the cell in one corner
+of the wanted area then holding the <keycombo
+action="simul">&Shift; </keycombo> key down while using the
+<mousebutton>left</mousebutton> mouse button to select the cell in the opposite
+corner.</para>
+
+<para>To select a complete row or column of cells <mousebutton>left
+</mousebutton> click on the row number at the left of the worksheet or on the 
+column letters at the top. To select adjacent rows or columns drag the mouse 
+pointer over the appropriate row numbers or column letters with the 
+<mousebutton>left</mousebutton> button held down.</para>
+
+<para>To select non-contiguous cells, click on the first cell you want to select
+then hold the <keycombo
+action="simul">&Ctrl;</keycombo> key and select the other
+cells.</para>
+
+</sect1>
+
+<sect1 id="entering">
+<title>Entering Data</title>
+<para>Entering data into a cell can be as simple as selecting the cell, typing 
+your data, then pressing <keycap>Enter</keycap> or moving the selection to 
+another cell with one of the <keysym>arrow</keysym> keys. Depending on how you 
+enter the data, &kspread; will interpret it as a number, date, time or text:</para>
+<itemizedlist>
+<listitem><para>
+Numbers are entered in the obvious way; <userinput>123</userinput>, <userinput>
+-123</userinput>, <userinput>456.7</userinput> or in scientific notation 
+<userinput>-1.2E-5</userinput>.
+</para></listitem>
+<listitem><para>
+Dates should be entered in your <quote>System</quote> format, as defined in 
+the K menu <menuchoice><guisubmenu>Settings</guisubmenu> <guisubmenu>
+Regional &amp; Accessibility</guisubmenu> <guimenuitem>Country/Region &amp; Language</guimenuitem>
+</menuchoice> dialog box.  If, for example, you are using the DD/MM/YYYY form 
+you should enter <userinput>30/03/2002</userinput> for 30th March 2002. 
+Leading zeroes can be omitted from the day and month fields and only the last
+one or two digits of the year need to be entered if the date is in the current 
+century, for example <userinput>9/1/2</userinput> for 9th January 2002. 
+</para></listitem>
+<listitem><para>
+Times should also be entered using the <quote>System</quote> format. For 
+example if you are using a 12 hour clock then enter times in HH:MIN am|pm or 
+HH:MIN:SS am|pm format such as <userinput>9:42 am</userinput> or <userinput>
+10:30:52 pm</userinput>.
+</para></listitem>
+<listitem><para>
+&kspread; defines any input data as <quote>text</quote> if it cannot 
+recognize the data as being a number, date or time.
+</para></listitem>
+</itemizedlist>
+<note><para>By default, &kspread; right justifies numbers, dates and times 
+within a cell and left justifies anything else. This can be a useful guide 
+to whether you have entered a date or time in the correct format. But 
+remember that how items are displayed can be changed by altering 
+the <link linkend="formatdata">cell format</link>.</para></note>
+
+<para>The main text entry box in the Formula toolbar provides an easy way of 
+editing the contents of a selected cell. Press <keycap>Enter</keycap> or 
+<mousebutton>left</mousebutton> click on the green tick mark when you are 
+happy with what you have entered, or click on the red cross to cancel your 
+edits.</para>
+
+<sect2 id="genericformat">
+<title>Generic Cell Format</title>
+<para>
+&kspread; uses the <quote>Generic</quote> cell format as default. As long
+as this format is used, &kspread; autodetects the actual data type depending
+on the current cell data. For example if you enter some text into a cell and
+later enter a number into the same cell, &kspread; automatically interprets
+the new data as a number. If you want to define the type of data yourself, you
+can explicitly set it in the <link linkend="formatdata">cell format</link>.
+You can change the format back to <quote>Generic</quote> at any time.
+</para>
+</sect2>
+
+</sect1>
+
+<sect1 id="copypaste">
+<title>Copy, Cut and Paste</title>
+
+<para>At first glance, &kspread;'s <guimenuitem>Cut</guimenuitem>, 
+<guimenuitem>Copy</guimenuitem> and <guimenuitem>Paste</guimenuitem> appear 
+to be similar to these functions in other &kde; applications. Having selected 
+a cell or cells, you can choose <guimenuitem>Copy</guimenuitem> or 
+<guimenuitem>Cut</guimenuitem> from the <guimenu>Edit</guimenu> menu or from
+the drop down menu you get by holding the <mousebutton>right</mousebutton> 
+mouse button down on a selected cell. You can also use the shortcuts 
+<keycombo action="simul">&Ctrl;<keycap>C</keycap>
+</keycombo> or <keycombo action="simul">&Ctrl;<keycap>X</keycap>
+</keycombo>, then move the selection to the target cell and choose 
+<guimenuitem>Paste</guimenuitem> or press <keycombo action="simul">
+&Ctrl;<keycap>V</keycap></keycombo>. However there are some 
+subtleties associated with these functions in &kspread; and these are discussed 
+below.</para>
+
+<para>If a cell contains a formula then the formula itself is copied rather 
+than the displayed result, and if the formula contains a reference to another 
+cell, then that reference is changed by the <guimenuitem>Cut</guimenuitem> 
+or <guimenuitem>Copy</guimenuitem> and <guimenuitem>Paste</guimenuitem> 
+operation to point to the cell that is in the same relative position as in 
+the original cell. For example if cell A2 contains the formula <userinput>
+=B3</userinput> and is copied to C4, cell C4 will contain <userinput>=D5
+</userinput>.</para>
+<para>This may seem to be a rather strange way of doing a copy, but 
+99 percent of the time it is exactly what is wanted (if it is not then see the 
+section about <link linkend="absolute">absolute cell references</link>). 
+For example in the simple shopping list shown below, cell D2 should contain 
+<userinput>=B2 * C2</userinput>, D3 should be <userinput>=B3 * C3</userinput>, 
+D4 should be <userinput>=B4 * C4</userinput> and so on. Instead of having to 
+enter a different formula in each cell, you can just enter the first formula 
+into D2 and then copy it into the cells below, letting &kspread; adjust the 
+cell references to suit.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="copy1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot copy1</phrase>
+</textobject>
+</mediaobject>
+
+<sect2 id="copypasteareas">
+<title>Copying and Pasting Cell Areas</title>
+<para>In the above example D2 can be copied into all three cells D3 to D5 at 
+once by just copying D2 then selecting the complete cell area D3:D5 before 
+doing the paste.</para>
+<para>A rectangular area of cells can be cut or copied in one operation by 
+selecting the area before doing the cut or copy. Then select the top left 
+corner cell of the area you want to paste into before doing the paste.</para>
+<para>If you cut or copy a rectangular area of cells, say B2:C3, and paste it 
+into a larger area such as A10:D13 the original pattern of cells will be 
+repeated to fill the target area.</para>
+<para>&kspread; also provides a <quote>Drag and Copy</quote> method for 
+copying cells down into other cells immediately below or to the 
+right of the original cell(s). To use this method select the cell(s) to be 
+copied then position the mouse pointer over the small black square at the 
+bottom right corner of the selected cell(s) so the cursor changes to a double 
+headed arrow. Then hold the <mousebutton>left</mousebutton> mouse button down 
+while you drag the selected cell(s) as far as you wish. Note that cell
+references in formulae are incremented according to the
+relative position change. Absolute references are not changed.</para>
+</sect2>
+
+<sect2 id="specialpaste">
+<title>Other Paste Modes</title>
+<para>A cell may contain text, a value, or a formula, and may also contain 
+special font, border or background <link linkend="formatspread">formatting 
+information</link>. &kspread; has special versions of Paste that let 
+you handle these items in different ways.</para>
+
+<para><menuchoice><guimenu>Edit</guimenu><guimenuitem>Special
+Paste...</guimenuitem></menuchoice>brings up the <guilabel> Special
+Paste</guilabel> dialog box. By selecting the appropriate item from
+the top part of this dialog you can choose to paste just
+<guilabel>Text </guilabel>, the cell <guilabel>Format</guilabel>, any
+<guilabel>Comment </guilabel> in the cell(s) or <guilabel>Everything
+without border</guilabel>. The items in the bottom part of this dialog
+box allow you to do simple <link linkend="sumspecialpaste">arithmetic
+on an area of cells</link>.
+</para>
+
+<para><guimenuitem>Paste with Insertion...</guimenuitem> inserts the copied 
+cell(s) into the sheet by moving the cells that would otherwise be overwritten 
+a suitable number of rows of columns down or to the right. It can also be used 
+to insert complete copied row(s) or column(s) into the worksheet.</para>
+</sect2>
+
+</sect1>
+
+<sect1 id="insdel">
+<title>Insert and Delete</title>
+<para>Use the <keysym>Delete</keysym> key or <menuchoice><guimenu>Edit
+</guimenu><guisubmenu>Clear</guisubmenu><guimenuitem>Text</guimenuitem>
+</menuchoice> to remove the text, value or formula from selected cell(s), 
+row(s) or column(s) without affecting anything else.</para>
+
+<para>To delete everything in the selected cell(s), row(s) or column(s), 
+including comments and special formatting, use <keycombo action="simul">
+&Shift;<keysym>Delete</keysym></keycombo> or choose the <guimenuitem>Delete
+</guimenuitem> option from the <guimenu>Edit</guimenu> menu or from the pop 
+up menu you get when you <mousebutton>right</mousebutton> click on a selection.
+</para>
+<para>To remove selected row(s) or column(s) completely, use the  
+<guimenuitem>Delete Rows</guimenuitem> or <guimenuitem>Delete
+Columns</guimenuitem> options from the <mousebutton>right</mousebutton> mouse
+button pop up menu.</para>
+<para>If you select a cell or cells and choose <guimenuitem>Remove Cells...
+</guimenuitem> from the <mousebutton>right</mousebutton> mouse button pop up 
+menu, you can then choose whether other cells in the worksheet will be moved 
+up or to the left to fill in the space left by the cell(s) you have chosen to 
+remove.</para>
+<para>If you want to insert new, blank, row(s) or column(s) into the 
+sheet, select row(s) or column(s) where you wish the new row(s) or
+column(s) to be placed and choose the <guimenuitem>Insert Rows</guimenuitem>, 
+<guimenuitem>Insert Columns</guimenuitem> option from the <mousebutton>
+right</mousebutton> mouse button pop up menu.</para>
+<para>You can insert new cells into the worksheet by selecting the 
+area where you want them to appear then choosing the <guimenuitem>
+Insert Cells...</guimenuitem> option from the <mousebutton>right</mousebutton> 
+mouse button pop up menu. You will then be asked whether the existing cell(s) 
+in the selected area should be moved down or to the right to make room for the 
+new ones.</para>
+
+</sect1>
+
+<sect1 id="simplesums">
+<title>Simple Sums</title>
+<para>If the first character in a cell is an equals sign (<keycap>=</keycap>) 
+&kspread; will take the cell contents to be a formula which is to be  
+calculated. The result of the calculation will be displayed in the cell rather 
+than the formula itself. For example, enter <userinput>=2+3</userinput> 
+into a cell and it should display <emphasis>5</emphasis>.</para>
+<para>More usefully, a formula can contain references to other cells, so 
+that <userinput>=B4+A3</userinput> will calculate the sum of the values in 
+cells B4 and A3, and this calculation will be updated whenever cells B4 or A3 
+are changed.</para>
+<para>As well as addition, a formula can make use of the <keycap>-</keycap>
+symbol for subtraction, <keycap>*</keycap> for multiplication, and <keycap>
+/</keycap> to perform division. The round bracket symbols <keycap>(</keycap> 
+and <keycap>)</keycap> can also be used as in normal algebra, so you could 
+enter more complex formulae such as <userinput>=((B10 + C3) *5 - F11) / 2
+</userinput>.</para>
+
+<para>Cells containing a formula will be marked with a small blue triangle 
+at the bottom left corner if the <guilabel>Show formula indicator</guilabel>
+check box in the <guilabel>Preferences</guilabel> page of &kspread;'s 
+<link linkend="configdialog">configuration</link> dialog is checked.</para>
+<para>&kspread; also includes a large number of built-in functions for 
+applications such as statistical, trigonometrical and financial calculations. 
+Their use will be examined in more depth in a <link linkend="formulas">
+later section</link> of this manual, but if you are interested at this stage 
+choose <guimenuitem>Function...</guimenuitem> from the <guimenu>Insert
+</guimenu> menu and take a look through the <guilabel>Function
+</guilabel> dialog box that will be displayed..</para>
+<para>For the time being, however, the <userinput>SUM</userinput> function may 
+be of interest as it calculates the sum of all values in a specified area of 
+cells. For example <userinput>=SUM(B4:C10)</userinput> calculates the sum of 
+all values in the cell area B4 to C10.</para>
+<para>If &kspread; displays a row of <keycap>#</keycap> symbols when you have 
+entered your formula this usually means that it cannot understand what 
+you have entered, but if the row of <keycap>#</keycap> symbols ends with a 
+small red arrow this just means that the cell is not wide enough to display 
+the complete result, in which case you should either make the cell(s) wider 
+or change their <link linkend="formatdata">format</link> so that the result 
+does fit properly.</para>
+
+<sect2 id="recalc">
+<title>Recalculation</title>
+<para>If the <guilabel>Automatic recalculation</guilabel> box in the
+<menuchoice><guimenu>Format</guimenu>
+<guisubmenu>Sheet</guisubmenu><guisubmenu>Sheet Properties</guisubmenu>
+</menuchoice> dialog box is 
+checked, &kspread; will recalculate the values of cells whenever anything that 
+affects them is changed in the sheet.</para>
+<para>When <guilabel>Automatic recalculation</guilabel> is not checked for the current sheet, you can instruct &kspread; to perform a recalculation at any time by 
+using the <guimenuitem>Recalculate Sheet</guimenuitem> or <guimenuitem>
+Recalculate Document</guimenuitem> option in the <guimenu>Tools</guimenu> 
+menu or their shortcuts <keycombo action="simul">&Shift;<keysym>F9</keysym>
+</keycombo> or <keysym>F9</keysym>.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sort">
+<title>Sorting Data</title>
+<para>In the simple example shown below, the data consist of the names and 
+countries of a number of mountains together with their height above sea level. 
+&kspread; can sort data such as this in different ways.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot of sorted data</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>We may want the data sorted so that the names are in 
+alphabetical order. To do this select the area containing the data (A2:C7 
+in this case) and choose <guimenuitem>Sort...</guimenuitem> from the <guimenu>Data</guimenu> 
+menu. This opens the <guilabel>Sorting</guilabel> dialog box. Using the <guilabel>Sort Criteria</guilabel> page of this dialog box you 
+can choose which column of the data is to be used as a primary sort key and, 
+if you wish, other columns to be used as secondary and tertiary keys. Using
+the example in the above screenshot, choosing column B as the first key and 
+column C as the second would sort the data by country and, for each country, 
+by height.</para>
+<para>Sorting is done alphanumerically, and is case sensitive, numbers coming 
+before uppercase letters which come before lowercase letters, so that cells 
+containing the entries <userinput>Cat</userinput>, <userinput>bar</userinput>, 
+<userinput>77</userinput> and <userinput>Bat</userinput> would be sorted into 
+the following order: <emphasis>77  Bat  Cat  bar</emphasis>.</para>
+<!-- Obsolete, AFAICT (Phil)
+<para>The <guimenuitem>Sort Increasing</guimenuitem> and <guimenuitem>Sort 
+Decreasing</guimenuitem> options from the <guimenu>Data</guimenu> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice><guimenu>Data
+</guimenu><guimenuitem>Sort...</guimenuitem></menuchoice> to bring up the 
+<guilabel>Sort</guilabel> dialog box.</para>
+-->
+
+<para>The <guilabel>Options</guilabel> page of the dialog lets you
+sort by row instead of by column and allows you to sort using the
+order of items in a custom list such as January, February... instead
+of alphanumerically.</para>
+
+<para>&kspread; can also place the results of a sort into a different area of 
+the sheet, or even into a different worksheet, rather than overwriting the 
+original data. To do this enter the top left cell reference of the target 
+area into the <guilabel>Destination Cell:</guilabel> text box and select a
+<guilabel>Destination Sheet:</guilabel> in the <guilabel>Options</guilabel> page. The cell 
+formats will also be copied to the new area if you check the <guilabel>
+Copy cell Formatting (Borders, Colors, Text Style)</guilabel> box. If you check the 
+<guilabel>First row contains headers</guilabel> box data in the first row will be copied directly to the 
+first row of the target area without being included in the sort operation.
+</para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title>The Status bar Summary Calculator</title>
+<para>The left hand end of the Status bar shows a summary of the values in 
+the selected cell(s). According to the setting of the <guilabel>Method of 
+calc:</guilabel> combo box in the <guilabel>Misc</guilabel> page of 
+&kspread;'s configuration dialog the summary can be:</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Sum</guilabel></term>
+<listitem><para>The value displayed is the sum of the values in the selected 
+cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Min</guilabel></term>
+<listitem><para>The value displayed is the minimum of the values in the selected 
+cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Max</guilabel></term>
+<listitem><para>The value displayed is the maximum of the values in the selected 
+cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Average</guilabel></term>
+<listitem><para>The value displayed is the average of the values in the selected 
+cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Count</guilabel></term>
+<listitem><para>The value displayed is the number of cells containing numeric 
+values.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>None</guilabel></term>
+<listitem><para>No summary calculation is performed.
+</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The method of calculation can also be changed by <mousebutton>right
+</mousebutton> clicking on the summary calculation result area of the 
+Status bar and choosing an item from the pop up menu.</para>
+
+</sect1>
+
+<sect1 id="saving">
+<title>Saving your Work</title>
+<para>&kspread; saves the complete document, which may include more than one 
+worksheet, as a single document file.</para>
+<para>If you have created a new document, or want to save an existing one 
+under a different name, use <menuchoice><guimenu>File</guimenu><guimenuitem>
+Save As...</guimenuitem></menuchoice>. This will bring up &kde;'s common 
+<guilabel>Save Document As</guilabel> dialog box. 
+Choose the folder where you want to save the document and enter a 
+suitable file name into the <guilabel>Location:</guilabel> text box. &kspread; 
+documents are normally automatically saved with a <filename>.ksp</filename> 
+extension, you do not need to add this to the filename but do make sure that 
+the <guilabel>Filter:</guilabel> selection is set to &kspread;.</para>
+<para>To save your document without changing its name, just use <menuchoice>
+<guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>.</para>
+
+<para>You can also save a &kspread; document in a foreign format: see 
+ the Import/Export section for more information 
+about doing this.</para>
+<para>When you save a modified version of an existing document
+&kspread; will keep the previous version as a backup file, adding a
+<literal>~</literal> to the end of the filename.</para>
+<para>&kspread; can provide some protection against losing your work because 
+of a computer crash or because you have closed &kspread; without saving the 
+current document. It does this by automatically saving the latest version of 
+the document you are working on every few minutes using a modified file name. 
+The autosaved version is normally removed when you next save your document, 
+so that it will only exist if it is more up to date than the version that was
+saved manually.
+When you open a document &kspread; checks to see if an autosaved
+version exists, and if it finds one it will offer to open that instead.</para>
+<para>Autosaved documents are saved with a file name of the form
+<filename>.yourfilename.autosave</filename> (note the leading period),
+so that <filename>spread1.ksp</filename> would be autosaved as
+<filename>.spread1.ksp.autosave</filename>. The autosave feature is
+<link linkend="configinterface">user configurable</link>.</para>
+
+<sect2 id="templates">
+<title>Templates</title>
+<para>If you are going to be creating a lot of similar documents you can
+save yourself time and trouble by first creating a template and then
+using that as the basis for the individual documents.</para>
+<para>To do this first create a document containing the common elements,
+then save it as a template by choosing <menuchoice><guimenu>File</guimenu>
+<guimenuitem>Create Template From Document...</guimenuitem></menuchoice>.
+Doing this opens the <guilabel>Create Template</guilabel> dialog box.
+Enter a name for your new template into the <guilabel>Name:</guilabel> text
+box and press <guibutton>OK</guibutton>. The next time you start a new
+document by choosing <menuchoice><guimenu>File</guimenu><guimenuitem>New
+</guimenuitem></menuchoice> or when you next start &kspread; the <guilabel>
+Choose</guilabel> dialog box will give you the option of creating the
+new document from your template.</para>
+<para>The <guilabel>Create Template</guilabel> dialog box also lets you
+choose a different picture to be displayed above the template name in the
+<guilabel>Choose</guilabel> dialog box, and lets you save your templates
+under different group names, which will appear as different tab pages in
+the <guilabel>Choose</guilabel> dialog box.</para>
+</sect2>
+
+</sect1>
+
+<sect1 id="printing">
+<title>Printing a Spreadsheet</title>
+<para>Printing a spreadsheet is basically done by selecting <menuchoice>
+<guimenu>File</guimenu><guimenuitem>Print...</guimenuitem></menuchoice> which
+brings up &kde;'s common <guilabel>Print</guilabel> dialog box where you can
+choose, among other options, the printer to be used, the number of copies and
+whether all or only selected pages are to be printed.</para>
+<para>By default &kspread; will print all items in the current worksheet, but
+you can restrict this by first selecting the area that you want to be
+printed then choosing <guimenuitem>Define Print Range</guimenuitem> from the
+<menuchoice><guimenu>Format</guimenu><guisubmenu>Print Range</guisubmenu>
+</menuchoice> sub menu.</para>
+<para>&kspread; will print as many pages as are necessary to include all
+items in the current worksheet. You can quickly see how a worksheet will be
+spilt into separate pages for printing by checking the <menuchoice><guimenu>
+View</guimenu>
+<guimenuitem>Show Page Borders</guimenuitem></menuchoice> box. The boundaries
+of each printed page will then be marked by colored lines in the
+worksheet.</para>
+
+<para>For a more detailed view of what is to be sent to the printer, including
+anything you have asked to be included in the page headers and footers (see
+below), choose <menuchoice><guimenu>File</guimenu><guimenuitem>Print
+Preview...</guimenuitem></menuchoice>.</para>
+
+<para>To improve the appearance of the printed output , you can change the
+fonts, colors, borders and sizes of the cells in the worksheet, see the
+<link linkend="formatspread">Spreadsheet Formatting</link> section for more
+details about how to do this.</para>
+
+<para>You can also use the <guilabel>Page Layout</guilabel> dialog box,
+invoked by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Page
+Layout...</guimenuitem></menuchoice>, to change the orientation of the printed
+pages, the paper size (this should be suitable for your printer) and the size
+of the page borders.</para>
+<para>The <guilabel>Header &amp; Footer</guilabel> page of the <guilabel>
+Page Layout</guilabel> dialog box also lets you add text, including items such
+as the filename, date and page number to the header and footer, of each
+printed page.</para>
+<para>The <guilabel>Ranges</guilabel> section of the <guilabel>Options
+</guilabel> page of the <guilabel>Page Layout</guilabel> dialog box provides
+an alternative way of restricting the printed output to just one part of the
+worksheet and allows you to repeat selected column(s) or row(s) on each printed
+page. This page also lets you select whether or not to print the grid,
+comment indicators and formula indicators, objects and charts.
+In the section <guilabel>Scale Printout</guilabel> you can set a scalefactor 
+or limit the number of pages for the print.</para>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

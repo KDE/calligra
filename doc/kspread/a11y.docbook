@@ -1,0 +1,318 @@
+<chapter id="a11y">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Gary</firstname>
+<surname>Cramblitt</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
+<title>For Users with Disabilities</title>
+<para>This section of the documentation discusses accessibility features in &kspread;
+for users with disabilities. Some of these features apply to &kde; as a whole and are controlled from 
+<ulink url="help:kcontrol">&kcontrolcenter;</ulink>.  Some apply to all &koffice; applications,
+and some are specific to &kspread;.</para>
+
+<sect1 id="a11y-install">
+<title>Installing the <command>kdeaccessibility</command> Module</title>
+<indexterm><primary>kdeaccessibility</primary></indexterm>
+<para>
+Most of the features described in this chapter are enabled by installing the
+<command>kdeaccessibility</command> module.  
+The <command>kdeaccessibility</command> module is part of the &kde; project
+<ulink url="http://www.kde.org">http://www.kde.org</ulink>.  The <command>kdeaccessibility</command> 
+package can be obtained from &kde-ftp;, the
+main ftp site of the &kde; project.
+</para>
+
+<para>Many distributions offer precompiled binaries on their ftp sites.  Please check your distribution's web sites for more information.</para>
+
+<para>More information about &kde; accessibility can be obtained by
+visiting <ulink url="http://accessibility.kde.org/">http://accessibility.kde.org/</ulink>.
+</para>
+</sect1>
+
+<sect1 id="a11y-sight">
+<title>Visual Impairments</title>
+<indexterm><primary>Visual Impairments</primary></indexterm>
+
+<note><para>&kspread; is not usable by totally blind users.  It is hoped that
+a general screen reader for the blind will be available in future versions of &kde;.
+</para></note>
+
+<sect2 id="a11y-theming">
+<title>Theming</title>
+<indexterm><primary>Theming</primary></indexterm>
+<para>For low-sighted or light alergic users, several features are available from 
+<menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem></menuchoice>. 
+Under <menuchoice><guimenu>Appearance &amp; Themes</guimenu><guimenuitem>Theme Manager</guimenuitem>
+</menuchoice>, you may select from several themes.  If you are light alergic, the
+<guilabel>HighContrastDark</guilabel> or <guilabel>HighContrastLight</guilabel> themes
+may be helpful.  If you have difficulty reading small fonts or seeing small icons, the
+<guilabel>HighContrastDark-Big</guilabel> or <guilabel>HighContrastLight-Big</guilabel>
+themes will increase the size of text, buttons, and icons.  You may also customize
+background, colors, fonts, and icons from the same screen.  A set of monochrome icons
+is available.
+</para>
+
+<tip><para>If you choose one of the <guilabel>Big</guilabel> themes, you may discover that
+some screens are too large to fit your monitor.  Purchasing a larger monitor will be helpful.
+You can drag the portions of the screen not visible into the visable area by
+holding down the &Alt; key and dragging with the mouse anywhere
+within the screen.  If you have trouble operating a mouse, you can also move screens by pressing
+<keycombo action="simul">&Alt;<keycap>F3</keycap></keycombo>.  In 
+the dropdown Windows Operations Menu, choose 
+<menuchoice><guimenuitem>Move</guimenuitem></menuchoice>.
+Move the screen with the arrow keys and press <keycap>&Esc;</keycap>.
+</para></tip>
+
+</sect2>
+
+<sect2 id="a11y-kmagnifier">
+<title>KMagnifier</title>
+<indexterm><primary>magnifier</primary></indexterm>
+<para>The <command>kdeaccessibility</command> module includes a screen magnifier
+application called <ulink url="help:kmag">KMagnifier</ulink>.
+If it is installed, you may run it from
+<menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
+<guimenuitem>Accessibility</guimenuitem><guimenuitem>Screen Magnifier</guimenuitem></menuchoice>.
+</para>
+</sect2>
+
+<sect2 id="a11y-tts">
+<title>Text-to-Speech</title>
+<indexterm><primary>Text-to-Speech</primary></indexterm>
+<indexterm><primary>TTS</primary></indexterm>
+<para>The <command>kdeaccessibility</command> module includes a Text-to-Speech
+component called KTTS.  If KTTS is installed, you can configure &kspread; to
+speak the text that is under the mouse pointer or speak the text of each
+screen widget as it receives focus.  Before using this feature, first configure
+KTTS.  See <ulink url="help:kttsd">The KTTS Handbook</ulink> for details.
+To turn on the TTS feature in &kspread;, 
+select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+&kspread;...</guimenuitem></menuchoice> from the menubar.
+This will display a dialog box.
+Clicking <guibutton>TTS</guibutton> will allow you to change
+the following.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="tts.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Speak widget under mouse pointer</guilabel></term>
+<listitem><para>When checked, &kspread; will speak the text of each widget
+as the mouse pointer moves over the widget.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Speak widget with focus</guilabel></term>
+<listitem><para>When checked, &kspread; will speak the text of each widget
+as it receives focus.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Speak tool tips</guilabel></term>
+<listitem><para>When checked, &kspread; will speak the popup tool tip
+for each widget in addition to the text of the widget.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Speak Whats This</guilabel></term>
+<listitem><para>When checked, &kspread; will speak the Whats This help
+for each widget in addition to the text of the widget.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Say whether disabled</guilabel></term>
+<listitem><para>When checked, &kspread; will speak the word "disabled"
+if the widget is currently disabled (grayed).</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Speak accelerators</guilabel></term>
+<listitem><para>When checked, &kspread; will speak the accelerator
+of the widget in addition to the text of the widget.
+Accelerators are the underlined letters you see in the text of the
+widget.  For example, in the main menu, the 
+<menuchoice><guimenuitem>Quit</guimenuitem></menuchoice> menu item
+has the "Q" underlined.  You can choose it by pressing <keycap>Q</keycap>.
+To speak the accelerator, check this option and enter the
+word you want to speak before the accelerator in the
+<guilabel>Prefaced by the word</guilabel> box.  In this
+example shown above, &kspread; will speak "Accelerator Q".</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Polling interval</guilabel></term>
+<listitem><para>This option determines how often &kspread; will
+check for a change in the widget under the mouse pointer or
+a new focused widget.  You should leave this option on the
+default setting.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<note><para>
+If the <guibutton>TTS</guibutton> option does not appear
+on this screen, you do not have the KTTS component installed
+in your system.
+</para></note>
+
+<note><para>Not all widgets are spoken.  For example,
+the items on the main menubar are not spoken.
+</para></note>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="a11y-motor">
+<title>Motor Impairments and Mouseless Operation</title>
+<indexterm><primary>Motor Impairments</primary></indexterm>
+<indexterm><primary>Mouseless Operation</primary></indexterm>
+
+<sect2 id="a11y-kmousetool">
+<title>KMouseTool</title>
+<para>If you can operate a mouse, but have trouble clicking, the
+<ulink url="help:kmag">KMouseTool</ulink> application may help.  Run it from
+<menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
+<guimenuitem>Accessibility</guimenuitem><guimenuitem>KMouseTool</guimenuitem></menuchoice>.
+</para>
+</sect2>
+
+<sect2 id="a11y-kbd-xaccess">
+<title>XAccess Features</title>
+<indexterm><primary>XAccess</primary></indexterm>
+<indexterm><primary>Sticky Keys</primary></indexterm>
+<indexterm><primary>Slow Keys</primary></indexterm>
+<indexterm><primary>Bounce Keys</primary></indexterm>
+
+<para>The &kcontrolcenter; offers several keyboard features collectively called XAccess.
+They include:</para>
+<variablelist>
+<varlistentry>
+<term>Sticky Keys</term>
+<listitem><para>This feature permits operation of meta keys, such as
+&Alt;, &Ctrl;, and &Shift; without having to hold the keys down.  It is useful
+when you can only use one finger or one hand to operate the keyboard.
+With Sticky Keys on, press and release a &Alt;, &Ctrl;, or &Shift; key, then
+press another key.  The result is as if you pressed both keys at once.
+Press the &Alt;, &Ctrl;, or &Shift; key again to turn off the sticky key.
+Activate this feature in 
+<menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem>
+<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Modifier Keys</guimenuitem></menuchoice>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Slow Keys</term>
+<listitem><para>This feature is useful if you have hand tremors or difficulty
+accurately pressing keys.  It prevents
+inadvertent key presses by requiring that a key be held down for a minimum
+time before it is accepted.  Activate this feature in
+<menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem>
+<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Keyboard Filters </guimenuitem></menuchoice>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Bounce Keys</term>
+<listitem><para>This feature is also useful if you have hand tremors.  It prevents
+inadvertent repeated key presses by preventing another keystroke for
+a certain amount of time.  Activate this feature in
+<menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem>
+<guimenuitem>Regional &amp; Accessibility</guimenuitem><guimenuitem>Keyboard  Filters</guimenuitem></menuchoice>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="a11y-mouse-emulation">
+<title>Mouse Emulation</title>
+<indexterm><primary>Mouse Emulation</primary></indexterm>
+<para>Mouse Emulation permits you to move and click the mouse using the keyboard.
+Press <keycombo>&Alt;<keycap>F12</keycap></keycombo> to activate it.  Use the arrow keys
+to move the mouse pointer to the desired location, and press <keycap>spacebar</keycap>
+to "click" the mouse.  Unfortunately, you cannot use Mouse Emulation to perform
+&RMB; clicks or dragging.
+</para>
+</sect2>
+
+<sect2 id="a11y-mouse-navigation">
+<title>Mouse Navigation</title>
+<indexterm><primary>Mouse Navigation</primary></indexterm>
+<para>This feature permits you to emulate the mouse using the numeric keypad
+of your keyboard.  To activate it, go to
+<menuchoice><guimenu>K-Button</guimenu><guimenuitem>&kcontrolcenter;</guimenuitem>
+<guimenuitem>Peripherals</guimenuitem><guimenuitem>Mouse</guimenuitem>
+<guimenuitem>Mouse Navigation</guimenuitem></menuchoice>.
+Check the <guilabel>Move pointer with keyboard (using the num pad)</guilabel> box. When you do this, the other settings will become enabled, and you can customize the keyboard pointer behavior further, if required. 
+ The various keys on the number pad move in the direction you would expect. Note that you can move diagonally as well as up, down, left and right. The <keycap>5</keycap> key emulates a click to a pointer button, typically &LMB;. You change which button is emulated by using the <keycap>/</keycap> key (which makes it &LMB;),
+<keycap>*</keycap> key (which makes it middle mouse button) and <keycap>-</keycap> (which makes it &RMB;).
+ Using the <keycap>+</keycap> emulates a doubleclick to the selected pointer button. You can use the
+<keycap>0</keycap> key to emulate holding down the selected pointer button (for easy dragging),
+and then use the <keycap>.</keycap> to emulate releasing the selected pointer button.
+</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="mousenav.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+</sect2>
+
+<sect2 id="a11y-motor-shortcuts">
+<title>Keyboard shortcuts</title>
+
+<para>Use the <keycap>Menu</keycap> key to pop up the context
+menu.  On most keyboards, the <keycap>Menu</keycap> key is on the righthand
+side of the keyboard between the <keycap>&Windows;</keycap> and &Ctrl;
+keys.  It has a menu icon on it.
+</para>
+
+</sect2>
+
+<sect2 id="a11y-motor-panel-sizing">
+<title>Resizing panels</title>
+
+<para>If you have activated two or more views of a spreadsheet,
+you can move the sizing bar between the views by pressing <keycap>F8</keycap>.  A sizing icon appears
+overtop the sizing bar.  Use the arrow keys to move the bar up or down, or left or right.
+Press <keycap>F8</keycap> again or &Esc; when finished sizing.
+</para>
+
+</sect2>
+
+<sect2 id="a11y-motor-moving-focus">
+<title>Setting focus to widgets</title>
+
+<para>Normally, one can use the &Tab; and <keycombo action="simul">&Shift;&Tab;</keycombo>
+to move focus from one widget to the next in any application.  However, in &kspread;,
+pressing &Tab; does not move the focus; instead it moves the cell selection forwards.
+You can set focus to any widget that can receive focus by
+pressing <keycombo action="simul">&Alt;<keycap>F8</keycap></keycombo>.  A small lettered box appears
+overtop each widget on the screen that can receive focus.
+</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="kbd-focus-ext.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Press the letter to move focus to the corresponding widget.  Press
+<keycombo action="simul">&Alt;<keycap>F8</keycap></keycombo> again or &Esc;
+to abandon moving the focus.
+</para>
+
+</sect2>
+
+</sect1> 
+
+</chapter>

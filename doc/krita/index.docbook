@@ -1,0 +1,132 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&krita;">
+  <!ENTITY package "koffice">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+  <!ENTITY introduction SYSTEM "introduction.docbook">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY tutorial-starting SYSTEM "tutorial-starting.docbook">
+  <!ENTITY tutorial-select-layer SYSTEM "tutorial-select-layer.docbook">
+  <!ENTITY tutorial-quick-starts SYSTEM "tutorial-quick-starts.docbook">
+  <!ENTITY selections SYSTEM "using-selections.docbook">
+  <!ENTITY filters SYSTEM "using-filters.docbook">
+  <!ENTITY layers SYSTEM "using-layers.docbook">
+  <!ENTITY colorspaces SYSTEM "using-colorspaces.docbook">
+  <!ENTITY commands SYSTEM "commands.docbook">
+  <!ENTITY commands-toolbars SYSTEM "commands-toolbars.docbook">
+  <!ENTITY commands-palettes SYSTEM "commands-palettes.docbook">
+  <!ENTITY commands-menus SYSTEM "commands-menus.docbook">
+  <!ENTITY commands-dialogs SYSTEM "commands-dialogs.docbook">
+  <!ENTITY settings SYSTEM "settings.docbook">
+  <!ENTITY scripting SYSTEM "scripting.docbook">
+  <!ENTITY developers SYSTEM "developers.docbook">
+  <!ENTITY faq SYSTEM "faq.docbook">
+  <!ENTITY credits SYSTEM "credits.docbook">
+  <!ENTITY installation SYSTEM "installation.docbook">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &krita; Handbook</title>
+
+<authorgroup>
+<author>
+<personname>
+<firstname>Boudewijn</firstname>
+<surname>Rempt</surname>
+</personname>
+<email>boud@valdyas.org</email>
+</author>
+<author>
+<personname>
+<firstname>Casper</firstname>
+<surname>Boemann</surname>
+</personname>
+<email>cbr@boemann.dk</email>
+</author>
+<author>
+<personname>
+<firstname>Cyrille</firstname>
+<surname>Berger</surname>
+</personname>
+<email>cberger@cberger.net</email>
+</author>
+<author>
+<personname>
+<firstname>Sander</firstname>
+<surname>Koning</surname>
+</personname>
+<email>sanderkoning@kde.nl</email>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+<year>2005-2006</year>
+<holder>Boudewijn Rempt</holder>
+<holder>Casper Boemann</holder>
+<holder>Cyrille Berger</holder>
+<holder>Sander Koning</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation -->
+
+<date>2006-01-31</date>
+<releaseinfo>1.5.0</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&krita; is part of the &koffice; package. &krita; is a photo retouching, image
+editing application, but above all, a paint application that will allow you to
+create original art on your computer as if you were working with paint and
+brushes, pencils, pen and ink &mdash; or, at least, it will one day. We are
+continually working on extending &krita; and making it better in every respect.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>koffice</keyword>
+<keyword>Krita</keyword>
+<keyword>image manipulation</keyword>
+<keyword>graphics</keyword>
+<keyword>painting</keyword>
+</keywordset>
+
+</bookinfo>
+
+&introduction;
+&tutorial;
+&layers;
+&selections;
+&filters;
+&colorspaces;
+&commands;
+&settings;
+&scripting; 
+&developers; 
+&faq;
+&credits;
+&installation;
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: xml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+vim:tabstop=2:shiftwidth=2:expandtab
+kate: space-indent on; indent-width 2; tab-width 2; indent-mode none;
+-->

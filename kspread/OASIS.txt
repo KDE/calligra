@@ -1,0 +1,240 @@
+ 
+===========================================================
+  STATUS of OASIS support in KSpread
+===========================================================
+
+*Legend*
+   [ ] Not implemented   
+   [x] Implemented   
+   [!] Implemented, not fully compatible
+
+
+Cell
+   [x] Obscured/covered cells
+   [x] Column spans
+   [x] Row spans
+   [!] Comment/annotation
+   [!] Hyperlink
+   [!] Validation
+   [!] Conditional formatting
+   [x] Value, Type and Result
+       [x] Boolean
+       [x] String
+       [x] Number
+           [x] Floating-point
+           [ ] Percentage
+           [ ] Currency
+           [x] Date
+           [x] Time
+           [x] Fraction
+           [x] Scientific
+
+Format
+   [x] Font family
+   [x] Font size
+   [!] Numeric format 
+   [X] Borders
+   [ ] Border shadow
+   [X] Font color
+   [X] Background style
+
+Sheet
+   [x] Sheet name
+   [x] Display or hide
+   [x] Protection status
+   [x] Marker position (Not reload)
+   [x] Sheet properties (view options)
+   [ ] Value highlighting
+   [ ] Sheet tab color (Not supported by kspread)
+
+Document/Workbook   
+   [x] Active sheet
+   [x] Header
+   [x] Footer
+   [x] Page layout
+   [x] Protection status
+   [x] Print range
+   [x] Print setup
+
+View Settings
+         
+Formula (not supported yet)
+
+Configuration Settings
+    ShowZeroValues
+    ShowNotes
+    [X] ShowGrid
+    GridColor
+    ShowPageBreak
+    LinkUpdateMode
+    HasColumnRowHeaders
+    HasSheetTabs
+    IsOutlineSymbolsSet
+    IsSnapToRaster
+    RasterIsVisible
+    RasterResolutionX
+    RasterResolutionY
+    RasterSubdivisionX
+    RasterSubdivisionY
+    IsRasterAxisSynchronized
+    AutoCalculate
+    PrinterName
+    PrinterSetup
+    ApplyUserData
+    CharacterCompressionType
+    IsKernAsianPunctuation
+    SaveVersionOnClose
+    UpdateFromTemplate
+
+===========================================================
+  REMARKS, INCOMPATIBILITIES, etc
+===========================================================
+
+KSpread does not support rich text. Any cells/annotations which contain 
+rich text will be converted to simple plain text.
+
+Link may not fully compatible since KSpread can only link the whole cell, 
+not partial text. For example, if the text is "Visit the website" where only 
+the string "website" is a hyperlink to an URL, in KSpread the whole string 
+"Visit the website" becomes the link. Consequently, if the text contains 
+two or more links, only the first link will be used.
+(I will fixe when we convert it to kotext)
+
+===========================================================
+  IN PROGRESS
+===========================================================
+-> Save/load numeric-style
+
+===========================================================
+  TODO
+===========================================================
+-> after loading cursor position me must update view
+-> fix default value (for printing)
+-> Save/load spell checking ignore word into settings.xml
+-> Save/load col-width/row-height into settings.xml
+-> Fix load conditional attribute, for the moment it load just one style
+
+===========================================================
+  EXEMPLARY XML SNIPPETS
+===========================================================
+
+Hyperlink (whole cell)
+    <table:table-cell>
+      <text:p>
+        <text:a xlink:href="http://www.koffice.org/">Visit KOffice website</text:a>
+      </text:p>
+    </table:table-cell>
+    
+Hyperlink (one word, rich text)
+    <table:table-cell>
+      <text:p>
+      This is a 
+        <text:a xlink:href="http://www.kde.org/">link</text:a>
+       to somewhere
+      </text:p>
+    </table:table-cell>
+
+Link to another cell
+    <table:table-cell>
+      <text:p>
+        <text:a xlink:href="#A1">Jump to Home</text:a>
+      </text:p>
+    </table:table-cell>
+
+Multiline Text inside cell
+    <table:table-cell>
+      <text:p>Halo There</text:p>
+      <text:p>What's up guys</text:p>
+      <text:p>This is very long indeed</text:p>
+    </table:table-cell>
+
+Merged cells
+     <table:table-cell table:style-name="ce2" office:value-type="string" 
+     office:string-value="These A1:B1 are merged together" table:number-columns-spanned="2">
+       <text:p>These A1:B1 are merged together</text:p>
+     </table:table-cell>
+     <table:covered-table-cell table:style-name="ce3"/>
+
+Cell horizontal alignment: top
+    <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="top"/>
+    </style:style>
+
+Cell horizontal alignment: middle
+    <style:style style:name="ce2" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="middle"/>
+    </style:style>
+
+Cell horizontal alignment: bottom
+    <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:vertical-align="bottom"/>
+    </style:style>
+
+Cell vertical alignment: top
+    <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties fo:text-align="center" 
+      style:text-align-source="fix" style:repeat-content="none" 
+      fo:margin-left="0in" style:vertical-align="top"/>
+    </style:style>
+
+Cell vertical alignment: middle
+    <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties fo:text-align="center" 
+      style:text-align-source="fix" style:repeat-content="none" 
+      fo:margin-left="0in" style:vertical-align="middle"/>
+    </style:style>
+
+
+Cell vertical alignment: bottom
+    <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties fo:text-align="center" 
+      style:text-align-source="fix" style:repeat-content="none" 
+      fo:margin-left="0in" style:vertical-align="bottom"/>
+    </style:style>
+
+    <style:style style:name="Heading" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties fo:font-size="16pt" fo:font-style="italic" fo:font-weight="bold"/>
+    </style:style>
+
+
+Unprotected cell
+    <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:cell-protect="none" 
+      style:print-content="true"/>
+    </style:style>
+
+Protected sheet
+    <table:table table:name="Sheet1" table:style-name="ta1" 
+    table:protected="true" table:protection-key="Fa52hNHBdTG7CgoGGStwsTuzHyI=" 
+    table:automatic-print-range="false">
+    ....
+    </table:table>
+    
+Repeate-header-rows:
+        <table:table-header-rows>
+          <table:table-row table:style-name="ro1">
+            <table:table-cell table:number-columns-repeated="2"/>
+            <table:table-cell table:style-name="Default"/>
+            <table:table-cell table:number-columns-repeated="3"/>
+          </table:table-row>
+          <table:table-row table:style-name="ro1">
+            <table:table-cell table:number-columns-repeated="3"/>
+            <table:table-cell table:style-name="ce1" table:number-columns-repeated="3"/>
+          </table:table-row>
+        </table:table-header-rows>
+
+Repeate header columns
+----------------------
+        <table:table-header-columns>
+          <table:table-column table:style-name="co1" table:number-columns-repeated="2" table:default-cell-style-name="ce5"/>
+          <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
+        </table:table-header-columns>
+
+Bug found:
+----------
+- duplicate cell area is not good.
+- Style is not save/load correctly
+- Cell format is not saving/loading
+ 

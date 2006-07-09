@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiscriptpart" version="4">
+
+<!-- ToolBar name="design" fullWidth="false" noMerge="0">
+   <text>Design</text>
+   <Action name="script_execute"/>
+</ToolBar -->
+
+</kpartgui>

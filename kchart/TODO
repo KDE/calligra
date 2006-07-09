@@ -1,0 +1,146 @@
+Legend
+======
+
+----	Not yet done (for main tasks, parts of it may be done)
+DONE	Task is all done
+KDCH	Must be fixed in KDChart (new version will be out before 1.4).
+KSPR	Must be fixed in KSpread
+done	This subtask is done
+kdch	This subtask must be fixed in KDChart
+kspr	This subtask must be fixed in KSpread
+
+INGE	Inge has taken this task
+inge	Inge has taken this subtask
+RAPH	Raphael has taken this task
+
+
+Before release of KOffice 1.5.0
+===============================
+
+Item								   Prio Status
+------------------------------------------------------------------------------
+
+
+
+After the feature freeze
+------------------------
+
+* Bugs
+  + The chart title is not included in the chart from the wizard      1 DONE
+  + The Data Editor shows wrong when first row/column is checked      1 ----
+  + The title is miniscule					      2 ---- 
+     - small fonts everywhere, in fact
+
+* Features
+  + First Row / Col as label					      1 DONE
+  + Combined Bars and Lines charts				      1 DONE
+  + Maybe call the analysis code and do sensible defaults	      2 ----
+  + Grid setting for both directions				      2 ----
+
+* Data editor
+  + Better keyboard shortcuts?					      2 ----
+    - Remove the spinboxes from the buddy list.				  ----
+  + Show labels in the first row / column			      1 ----
+    - Add "first row / column as label" checkboxes to the gui		  ----
+    - Make the first row / column differently colored			  ----
+    - label rows and columns in the table correctly			  ----
+    - insert rows / columns before current cell				  ----
+  + Adjust labels when inserting / deleting rows / columns	      1 ----
+
+* OpenDocument Support
+  Item							Load	Save
+  ----------------------------------------------------------------------------
+  + Handle all chart types				----	----
+  + Plot area						----	----
+  + Legend						DONE	DONE
+  + Axes						----	----
+
+* Scripting
+  + DCOP for data manipulation					      2 ----
+    - class KChartData
+  + DCOP for chart manipulation					      2 ----
+    - class KChartParam							  done
+
+
+* Structure
+  + put dialogs in their own directory				      3 ----
+
+
+After 1.5
+=========
+
+
+Item								   Prio Status
+------------------------------------------------------------------------------
+
+* Bugs
+
+* Wishes
+  + Give KChart the same page layout dialog as KSpread.		      1 ----
+       (Kivio has a simpler variation with only one page.)
+
+* Issues with KSpread
+
+* Miscellaneous fixes
+  + Save position of Actions toolbar in config.			      2 ----
+  + Wrong images for HiLo subtype icons.			      1 ----
+
+* Toolbars
+
+* Data editor
+  + Better keyboard shortcuts?					      1 ----
+    - Remove the spinboxes from the buddy list.				--
+
+* Config dialog
+  + Check keyboard shortcuts for all tabs			     S1 ----
+  + Setting background image doesn't work			      2 ----
+  + According to Fredrik, background page works badly all over	      2 ----
+
+* Wizard
+
+* Manual
+
+* Filters
+
+* KDChart (See also above)
+
+
+================================================================
+                  After release of KOffice 1.5
+================================================================
+
+* Config dialog
+  + Check *all* subpages for uglyness and bugs			     S1 INGE
+    - Color		Ugly					     S1 --
+    - BackgroundPixmap	Ugly					     S1 --
+  + Integrate the Colors and Font pages into Axes?		      2 ----
+    - Maybe create a little combination widget that can change        2 --
+      both font and color for a text item?
+
+* Data Editor							      1 ----
+  + Insert / Delete Rows / Columns
+  + Selections: Clear, Cut/Copy&Paste, 
+  + Formulas?
+  + Select specific areas to chart (apart from entire data)
+
+* Wizard
+  + New data page?						     S2 ----
+    - Data in rows / columns						--
+    - First row / column as header?					--
+  + Subtype page should have icons for subtypes like config dialog.   2 ----
+
+* Chart types
+  + Check all chart types and see if they are drawn logically	      2 ----
+    from their input data.  Especially check strange data
+    (negative numbers, etc), and missing data.
+    - Bar							      2 --
+    - Line							      2 --
+    - Area							      2 --
+    - HiLo							      2 --
+    - Box  & Whiskers						      2 --
+    - Pie							      2 --
+    - Ring							      2 --
+    - Polar							      2 --
+
+* Miscellaneous fixes
+  + Tooltips & What's this help all over the program?		     S1 ----

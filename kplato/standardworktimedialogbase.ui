@@ -1,0 +1,152 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPlato::StandardWorktimeDialogBase</class>
+<author>Dag Andersen </author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>StandardWorktimeDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>228</width>
+            <height>112</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>StandardWorktime</string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>These values are used when you estimate the effort needed to complete a task.</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Hours per year:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>year</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Hours per month:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>month</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>textLabel4</cstring>
+            </property>
+            <property name="text">
+                <string>Hours per day:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>day</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>textLabe3</cstring>
+            </property>
+            <property name="text">
+                <string>Hours per week:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>week</cstring>
+            </property>
+        </widget>
+        <widget class="KDoubleSpinBox" row="0" column="1">
+            <property name="name">
+                <cstring>year</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+            <property name="maxValue">
+                <number>8784</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Number of working hours in a normal year.</string>
+            </property>
+        </widget>
+        <widget class="KDoubleSpinBox" row="1" column="1">
+            <property name="name">
+                <cstring>month</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+            <property name="maxValue">
+                <number>744</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Number of working hours in a normal month.</string>
+            </property>
+        </widget>
+        <widget class="KDoubleSpinBox" row="2" column="1">
+            <property name="name">
+                <cstring>week</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+            <property name="maxValue">
+                <number>168</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Number of working hours in a normal week.</string>
+            </property>
+        </widget>
+        <widget class="KDoubleSpinBox" row="3" column="1">
+            <property name="name">
+                <cstring>day</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+            <property name="maxValue">
+                <number>24</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Number of working hours in a normal day.</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

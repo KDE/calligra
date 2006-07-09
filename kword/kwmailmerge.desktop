@@ -1,0 +1,67 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KWord/MailMergePlugin
+Comment=KWord mailmerge plugin
+Comment[ar]=ملحق دمج البريد لدى KWord
+Comment[bg]=Приставка на KWord за генериране на регулярна е-поща
+Comment[bs]=KWord dodatak za spajanje mailova
+Comment[ca]=Connector de KWord per a la fusió de correus
+Comment[cs]=Modul pro KWord pro sériové dopisy
+Comment[cy]=Ategyn uno post KWord
+Comment[da]=KWord postindfletnings-plugin
+Comment[de]=KWord Serienbrief-Plugin
+Comment[el]=Πρόσθετο συγχώνευσης αλληλογραφίας του KWord
+Comment[eo]=Retpoŝtintegrilo por Verkilo
+Comment[es]=Plugin de combinación de correo de KWord
+Comment[et]=KWordi kirjakoosteplugin
+Comment[eu]=KWord-en posta bateratzeko plugina
+Comment[fi]=KWord-postituslaajennus
+Comment[fr]=Module fusion de courrier pour KWord
+Comment[ga]=Breiseán postchumaisc KWord
+Comment[he]=תוסף מיזוג דואר ל־KWord
+Comment[hi]=के-वर्ड मेलमर्ज प्लगइन
+Comment[hr]=KWord dodatak za mailmerge
+Comment[hu]=KWord körlevél-bővítőmodul
+Comment[is]=KWord mailmerge íforrit
+Comment[it]=Stampa unione per KWord
+Comment[ja]=KWord mailmerge プラグイン
+Comment[km]=កម្មវិធី​ជំនួយ​សំបុត្រ​សំណុំបែបបទ សម្រាប់ KWord
+Comment[lo]=ປັກອິນລວນເຂົ້າໄວ້ໃນຈົດຫມາຍຂອງເອກະສານຂໍ້ຄວາມ
+Comment[lt]=KWord laiško prijungimo priedas
+Comment[lv]=KWord pasta apvieno??anas iespraudnis
+Comment[ms]=Plugin cantum mel KWord
+Comment[mt]=Plagin tal-mailmerge ta' KWord
+Comment[nb]=Postflettingsmodul for KWord
+Comment[nl]=KWord-plugin voor standaardbrieven (mailmerge)
+Comment[nn]=Postflettingsmodul for KWord
+Comment[pl]=Wtyczka korespondencji seryjnej dla KWord
+Comment[pt]='Plugin' de junção de e-mails do KWord
+Comment[pt_BR]=Plug-in de mala direta  do KWord
+Comment[ro]=Modul KWord de scrisori combinate
+Comment[ru]=Модуль почтового слияния KWord
+Comment[se]=KWord:a boastabárgidanmoduvla
+Comment[sk]=Modul pre KWord pre sériové listy
+Comment[sl]=Vstavek za združevanje pošte za KWord
+Comment[sr]=KWord-ов прикључак за стапање поште
+Comment[sr@Latn]=KWord-ov priključak za stapanje pošte
+Comment[sv]=Kword-insticksprogram för brevsammanfogning
+Comment[tg]=Дарҷ кардани KWord Якшавии Почта
+Comment[th]=ปลั๊กอินรวมเข้าไว้ในจดหมายของเอกสารข้อความ K
+Comment[tr]=KWord posta bütünleştirme eklentisi
+Comment[uk]=Втулок об'єднання пошти для KWord
+Comment[xh]=Uxutyo lweposi ye plagi yangaphakathi ye KWord
+Comment[zh_CN]=KWord 邮件合并插件
+Comment[zh_TW]=KWord 郵件合併外掛程式
+
+[PropertyDef::X-KDE-Capabilities]
+Type=QStringList
+
+[PropertyDef::X-KDE-InternalName]
+Type=QString
+
+[PropertyDef::X-KDE-Library]
+Type=QString
+
+[PropertyDef::X-KDE-PluginVersion]
+Type=int

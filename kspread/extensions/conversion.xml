@@ -1,0 +1,277 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Conversion</GroupName>
+
+    <Function>
+      <Name>BOOL2STRING</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Bool value to convert</Comment>
+        <Type range="false">Boolean</Type>
+      </Parameter>
+      <Help>
+        <Text>The BOOL2STRING() function returns a string value for a given boolean value. This method is intended for using a boolean in methods which require a string</Text>
+        <Syntax>BOOL2STRING(value)</Syntax>
+	<Example>BOOL2STRING(true) returns "True"</Example>
+	<Example>BOOL2STRING(false) returns "False"</Example>
+        <Example>upper(BOOL2STRING(find("nan";"banana"))) returns TRUE</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INT2BOOL</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+        <Comment>Integer value to convert</Comment>
+        <Type range="false">Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The INT2BOOL() function returns a boolean value for a given integer number. This method is intended for using an integer in methods which require a boolean. It only accepts 0 or 1. If any other value is given, false is returned.</Text>
+        <Syntax>INT2BOOL(value)</Syntax>
+        <Example>INT2BOOL(1) returns true</Example>
+        <Example>INT2BOOL(0) returns false</Example>
+        <Example>OR(INT2BOOL(1); false) returns true</Example>
+        <Related>BOOL2INT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BOOL2INT</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>Bool value to convert</Comment>
+        <Type range="false">Boolean</Type>
+      </Parameter>
+      <Help>
+        <Text>The BOOL2INT() function returns an integer value for a given boolean value. This method is intended for using a boolean value in methods which require an integer.</Text>
+        <Syntax>BOOL2INT(value)</Syntax>
+        <Example>BOOL2INT(True) returns 1</Example>
+        <Example>BOOL2INT(False) returns 0</Example>
+        <Related>INT2BOOL</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NUM2STRING</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Number to convert into string</Comment>
+        <Type range="false">Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The NUM2STRING() function returns a string value for a given number. Note that KSpread can auto-covert numbers to strings if needed, so this function should rarely be needed.</Text>
+        <Syntax>NUM2STRING(value)</Syntax>
+        <Example>NUM2STRING(10) returns "10"</Example>
+        <Example>NUM2STRING(2.05) returns "2.05"</Example>
+        <Example>=find("101";NUM2STRING(A1)) (A1 = 2.010102) returns True</Example>
+        <Related>STRING</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>STRING</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Number to convert into string</Comment>
+        <Type range="false">Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The STRING() function returns a string value for a given number. It is the same as the NUM2STRING function.</Text>
+        <Related>NUM2STRING</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CHARTOASCII</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>A one character string to convert</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+        <Text>The CHARTOASCII() function returns the ASCII code for the given character.</Text>
+        <Syntax>CHARTOASCII(value)</Syntax>
+        <Example>CHARTOASCII("v") returns 118</Example>
+        <Example>CHARTOASCII(r) is an error. The character must be in quotes.</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ASCIITOCHAR</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>The ASCII values to convert</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The ASCIITOCHAR() function returns the character for each given ASCII code</Text>
+        <Syntax>ASCIITOCHAR(value)</Syntax>
+        <Example>ASCIITOCHAR(118) returns "v"</Example>
+        <Example>ASCIITOCHAR(75; 68; 69) returns "KDE"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>POLR</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value in X</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value in Y</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The POLR() function returns the radius corresponding to the position of a point in a cartesian landmark.</Text>
+	<Syntax>POLR(X;Y)</Syntax>
+	<Example>POLR(12;12) returns 16.9705</Example>
+	<Example>POLR(12;0) returns 12</Example>
+        <Related>POLA</Related>
+        <Related>CARX</Related>
+        <Related>CARY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>POLA</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value in X</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value in Y</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The POLA() function returns the angle (in radians) corresponding to the position of a point in a cartesian landmark.</Text>
+	<Syntax>POLA(X;Y)</Syntax>
+	<Example>POLA(12;12) returns 0.78539816</Example>
+	<Example>POLA(12;0) returns 0</Example>
+            <Example>POLA(0;12) returns 1.5707</Example>
+        <Related>POLR</Related>
+        <Related>CARX</Related>
+        <Related>CARY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CARX</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Radius</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The CARX() function returns the X position corresponding to the position of a point in a polar landmark.</Text>
+	<Syntax>CARX(Radius;Angle)</Syntax>
+	<Example>CARX(12;1.5707) returns 0.00115592</Example>
+	<Example>CARX(12;0) returns 12</Example>
+        <Related>CARY</Related>
+        <Related>POLA</Related>
+        <Related>POLR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DECSEX</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+        <Text>The DECSEX() function converts a double value to a time value.</Text>
+        <Syntax>DECSEX(double)</Syntax>
+        <Example>DECSEX(1.6668) returns 1:40 </Example>
+        <Example>DECSEX(7.8) returns 7:47</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SEXDEC</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Hours</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Minutes</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Seconds</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The SEXDEC() function returns a decimal value. You can also supply a time value.</Text>
+        <Syntax>SEXDEC(time value) or SEXDEC(hours;minutes;seconds)</Syntax>
+        <Example>SEXDEC(1;5;7) returns 1.0852778 </Example>
+        <Example>DECSEX("8:05") returns 8.08333333</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CARY</Name>
+      <Type>Double</Type>
+      <Parameter>
+	<Comment>Radius</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+        <Text>The CARY() function returns the Y position corresponding to the position of a point in a polar landmark.</Text>
+        <Syntax>CARY(Radius;Angle)</Syntax>
+        <Example>CARY(12;1.5707) returns 12</Example>
+        <Example>CARY(12;0) returns 0</Example>
+        <Related>CARX</Related>
+        <Related>POLA</Related>
+        <Related>POLR</Related>
+      </Help>
+    </Function>
+
+ <Function>
+      <Name>ROMAN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The ROMAN() function returns the number in roman format. Number should be positive and entire.</Text>
+        <Syntax>ROMAN(Number)</Syntax>
+        <Example>ROMAN(99) returns "XCIX"</Example>
+        <Example>ROMAN(-55) returns "Err"</Example>
+        <Related>ARABIC</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ARABIC</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Numeral</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+        <Text>The ARABIC() function converts a roman numeral into a number.</Text>
+        <Syntax>ARABIC(Numeral)</Syntax>
+        <Example>ARABIC("IV") returns 4</Example>
+        <Example>ARABIC("XCIX") returns 99</Example>
+        <Related>ROMAN</Related>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

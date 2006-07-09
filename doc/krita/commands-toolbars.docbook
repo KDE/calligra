@@ -1,0 +1,596 @@
+<sect1 id="commands-toolbars">
+<title>Toolbars</title>
+
+<para>This section describes &krita;'s toolbars. By default, the
+<guilabel>Krita</guilabel> toolbar is located to the left of the drawing area,
+while the others can be found at the top, below the menu bar.</para>
+
+<para>You can customize your toolbars by choosing
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+Toolbars...</guimenuitem></menuchoice> or by clicking with the &RMB; on a
+toolbar and choosing <guimenuitem>Configure Toolbars...</guimenuitem>.</para>
+
+<sect2 id="commands-toolbars-file">
+<title>The <guilabel>File</guilabel> Toolbar</title>
+
+<para>
+<screenshot>
+<screeninfo>The File toolbar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-file.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The File toolbar</phrase>
+</textobject>
+<caption><para>The File toolbar</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>This toolbar contains actions for working with files. In &krita;'s
+default, there are five buttons on this toolbar: <guilabel>New</guilabel>,
+<guilabel>Open</guilabel>, <guilabel>Save</guilabel>, <guilabel>Print
+Preview</guilabel>, and <guilabel>Print</guilabel>.</para>
+
+<para>These actions all correspond to entries in the <link
+linkend="commands-menus-file"><guimenu>File</guimenu> menu</link>.</para>
+
+</sect2>
+
+<sect2 id="commands-toolbars-edit">
+<title>The <guilabel>Edit</guilabel> Toolbar</title>
+
+<para>
+<screenshot>
+<screeninfo>The Edit toolbar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-edit.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Edit toolbar</phrase>
+</textobject>
+<caption><para>The Edit toolbar</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>This toolbar contains editing actions. With default settings this
+toolbar offers four buttons: <guilabel>Undo</guilabel>,
+<guilabel>Redo</guilabel>, <guilabel>Cut</guilabel>, and
+<guilabel>Copy</guilabel>.</para>
+
+<para>These actions all correspond to entries in the <link
+linkend="commands-menus-edit"><guimenu>Edit</guimenu> menu</link>.</para>
+</sect2>
+
+<sect2 id="commands-toolbars-navigation">
+<title>The <guilabel>Navigation</guilabel> Toolbar</title>
+
+<para>
+<screenshot>
+<screeninfo>The Navigation toolbar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-navigation.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Navigation toolbar</phrase>
+</textobject>
+<caption><para>The Navigation toolbar</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>This toolbar offers easy access to navigation actions. The two
+default actions available are <guilabel>Zoom In</guilabel> and
+<guilabel>Zoom Out</guilabel>. With <guilabel>Zoom In</guilabel>, the zoom 
+level is increased. You will see less, but in higher detail. With
+<guilabel>Zoom Out</guilabel>, the zoom level is decreased, so that you see
+more at less detail. </para>
+
+</sect2>
+
+<sect2 id="commands-toolbars-krita">
+<title>The <guilabel>Krita</guilabel> Toolbar</title>
+
+<para>
+<screenshot>
+<screeninfo>The Krita toolbar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-krita.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Krita toolbar</phrase>
+</textobject>
+<caption><para>The Krita toolbar</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>This toolbar contains painting operations and tools, as well as
+editing and selecting tools. The available actions and some controls are listed
+below. You can change the behaviour of most tools (and with that, usually the
+resulting effect) by setting tool options in the
+<link linkend="commands-palettes-controlbox">Control box palette</link>.</para>
+
+<variablelist>
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-brush.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Brush</term>
+<listitem><para>
+With this tool you can paint freely. Click the &LMB; to paint a
+single instance of the currently selected brush, or hold the &LMB; and drag
+your mouse around to paint. The mouse movements you make are directly used for
+painting.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-line.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Line</term>
+<listitem><para>
+This tool is used to draw lines. Click the &LMB; to indicate the first
+endpoint, keep the button pressed, drag to the second endpoint and release the
+button.
+</para><para>
+Use &Shift; while holding the mouse button to restrict drawing to only
+horizontal or vertical lines. You can press &Alt; while still keeping the &LMB;
+down to move the line to a different location.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-rectangle.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Rectangle</term>
+<listitem><para>
+This tool can be used to paint rectangles. Click and hold the &LMB; to indicate
+one corner of the rectangle, drag to the opposite corner, and release the
+button.
+</para><para>
+If you hold &Shift; while drawing, a square will be drawn instead of a
+rectangle. Holding &Ctrl; will change the way the rectangle is constructed.
+Normally, the first mouse click indicates one corner and the second click the
+opposite. With &Ctrl;, the initial mouse position indicates the center of the
+rectangle, and the final mouse position indicates a corner.
+You can press &Alt; while still keeping the &LMB; down to move the rectangle to
+a different location.
+</para><para>
+You can change between the corner/corner and center/corner drawing
+methods as often as you want by pressing or releasing &Ctrl;, provided that you
+keep the &LMB; pressed. With &Ctrl; pressed, mouse movements will affect all
+four corners of the rectangle (relative to the center), without &Ctrl;, one
+of the corners is unaffected.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-ellipse.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Ellipse</term>
+<listitem><para>
+Use this tool to paint an ellipse. The currently selected brush is used for
+drawing the ellipse outline. Click and hold the &LMB; to indicate one corner of
+the <quote>bounding rectangle</quote> of the ellipse, then move your mouse to
+the opposite corner. &krita; will show a preview of the ellipse using a thin
+line. Release the button to draw the ellipse.
+</para><para>
+If you hold &Shift; while drawing, a circle will be drawn instead of an
+ellipse. Holding &Ctrl; will change the way the ellipse is constructed: instead
+of two corners, the initial mouse position indicates the ellipse center, and the
+final mouse position indicates one of the corners of the bounding rectangle.
+You can press &Alt; while still keeping the &LMB; down to move the ellipse to a
+different location.
+</para><para>
+You can change between the corner/corner and center/corner drawing
+methods as often as you want by pressing or releasing &Ctrl;, provided that you
+keep the &LMB; pressed. With &Ctrl; pressed, mouse movements will
+affect all four corners of the bounding rectangle (relative to the center),
+without &Ctrl;, the corner opposite to the one you are moving remains still.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-polygon.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Polygon</term>
+<listitem><para>
+With this tool you can draw polygons. Click the &LMB; to indicate the
+starting point and successive vertices, then click the &RMB; to connect the last
+vertex to the starting point.
+</para></listitem></varlistentry>
+
+<varlistentry> <term><inlinemediaobject><imageobject><imagedata
+fileref="tool-polyline.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Polyline</term>
+<listitem><para>
+Polylines are drawn like polygons, but the &RMB; click indicating the
+end of the polyline does not connect the last vertex to the first one.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-star.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Star</term>
+<listitem><para>
+This tool creates star-shaped objects. Press the &LMB; to indicate the center,
+and drag the mouse to change the size and rotation of the star.
+</para><para>
+You can press &Alt; while still keeping the &LMB; down to move the star to a
+different location.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-duplicate.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Duplicate</term>
+<listitem><para>
+You can use this tool to duplicate parts of an image. Click with the &RMB; on
+the location you want to duplicate from. &krita; will indicate this location by
+an outline of your current brush. Then click with the &LMB; to designate the
+location where you want to duplicate to, and drag with the mouse. You will then
+duplicate whatever is at the source location to the current (destination)
+location.
+</para><para>
+While you are painting the duplicate, both your cursor in the destination
+location and the brush outline in the source location will move, in order to
+give you visual feedback.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-paintwithfilters.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Paint with
+filters</term>
+<listitem><para>
+This tool allows you to pick a filter and draw with it.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata fileref="tool-transform.png"
+format="PNG"></imagedata> </imageobject></inlinemediaobject> Transform</term>
+<listitem><para>
+With this tool you can quickly transform the current selection or layer.
+Handles will appear at the corners and sides, with which you can scale the
+selection or layer. You can also click anywhere in the selection or layer and
+to move it by dragging the mouse.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-crop.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Crop</term>
+<listitem><para>
+With this tool you can crop a layer or an image to a certain rectangular area.
+Click and drag with the &LMB; to define an area. This area is designated by an
+outline with 8 handles. You can then use the handles to change the size of the
+area which the image or layer is to be cropped to. You can also click and drag
+inside the area to move the outline in its entirety.
+</para><para>
+Doubleclick outside the area (i.e. on a part of the image that is to be removed)
+to confirm the cropping operation.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-contiguousfill.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Contiguous fill</term>
+<listitem><para>
+Use this tool to fill a contiguous area of one color with the current
+foreground color or a pattern. Simply click to fill up the area.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-gradient.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Gradient</term>
+<listitem><para>
+This tool fills the current layer or selection with the currently selected
+gradient. Click the &LMB;, hold it, and drag the mouse to define two endpoints.
+The gradient will be drawn along this line. If the line does not extend to the
+border of the selection or layer, the color at the corresponding endpoint of
+the gradient will be used to fill up the rest of the area at that side.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-text.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Text</term>
+<listitem><para>
+With this tool you can add simple text to your image. Click the &LMB; on the
+location at which you want have the text. Then enter the desired text in the
+dialog window that appears. The text will be horizontally centered on, and
+the top of the text will be at the same height as, the chosen location.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-pan.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Pan</term>
+<listitem><para>
+This tool can be used to navigate through your image. Click and hold the &LMB;
+and move the mouse to scroll in a certain direction.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-move.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Move</term>
+<listitem><para>
+With this tool, you can move the current layer or selection by dragging the
+mouse.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-zoom.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Zoom</term>
+<listitem><para>
+Use this tool to zoom in and out. Click the &LMB; to increase the zoom by
+a factor 2 (e.g. 1:1 to 2:1), click the &RMB; to decrease the zoom by a factor
+2 (e.g. 1:1 to 1:2).
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-colorpicker.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Color picker</term>
+<listitem><para>
+With this tool you can find the color values of a point. Click the &LMB;
+somewhere in the image to see color information about that point in the
+<guilabel>Control box</guilabel>.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-paintselection.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Paint selection</term>
+<listitem><para>
+This tool can be used to select custom areas. The currently selected brush is
+used to select areas: instead of painting on the image, the area is selected.
+For more information on selections, see <link
+linkend="selections">the Selections chapter</link>.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata
+fileref="tool-eraseselection.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Erase selection</term>
+<listitem><para>
+This tool works almost the same as the Paint selection tool, but a selection,
+if it exists at the mouse location, is removed instead of created.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectrectangular.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Select rectangular</term>
+<listitem><para>
+You can use this tool to select rectangular areas. Operation is similar to the
+Rectangle tool, and &Shift;, &Ctrl; and &Alt; can be used like when painting
+rectangles.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectelliptical.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Select elliptical</term>
+<listitem><para>
+You can use this tool to select elliptical areas. Operation is similar
+to the Ellipse tool, and &Shift;, &Ctrl; and &Alt; can be used like when
+painting ellipses.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectpolygonal.png"
+format="PNG"></imagedata> </imageobject></inlinemediaobject> Select
+polygonal</term>
+<listitem><para>
+You can use this tool to select polygonal areas. Operation is similar to
+the Polygon tool, and &Shift;, &Ctrl; and &Alt; can be used like when painting
+polygons.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectoutline.png"
+format="PNG"></imagedata> </imageobject></inlinemediaobject> Select
+outline</term>
+<listitem><para>
+You can use this tool to select custom outlined areas. Click the &LMB; and drag
+with your mouse, like when painting with the Brush tool, to define the
+outline. When you release the mouse button, the outline will be finished with a
+straight line between the current position and the start position.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectcontiguous.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Select contiguous</term>
+<listitem><para>
+With this tool you can select contiguous areas of a color. Click with the
+&LMB; to select an area.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectsimilar.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Select similar</term>
+<listitem><para>
+With this tool you can select multiple areas with the same color. Detection is
+done the same as with the contiguous fill, but the areas do not need to be
+adjacent.
+</para></listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="commands-toolbars-brushesandstuff">
+<title>The <guilabel>Brushes and Stuff</guilabel> Toolbar</title>
+
+<para>
+<screenshot>
+<screeninfo>The Brushes and Stuff toolbar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushesandstuff.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brushes and Stuff toolbar</phrase>
+</textobject>
+<caption><para>The Brushes and Stuff toolbar</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>This toolbar contains dropdown <quote>palettes</quote> in which you
+can choose brush shapes, gradients, and fill patterns. It also contains a
+dropdown box for painter's tools, and a tablet pressure setting.</para>
+
+<sect3 id="commands-toolbars-brushesandstuff-brushshapes">
+<title>Brush Shapes</title>
+
+<para>
+<screenshot>
+<screeninfo>The Brush Shapes palette</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-brushshapes-predefined.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brush Shapes palette</phrase>
+</textobject>
+<caption><para>The Brush Shapes palette</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>In the <guilabel>Brush Shapes</guilabel> palette, you can choose
+which brush to paint with. This brush is used for painting operations
+like Freehand, Rectangle, Ellipse, etcetera. You can choose a predefined
+brush (in the <guilabel>Predefined Brushes</guilabel> tab, shown above), or
+customize or create one.</para>
+
+<para>
+<screenshot>
+<screeninfo>The Brush Shapes palette with the Autobrush tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-brushshapes-autobrush.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brush Shapes palette with the Autobrush tab</phrase>
+</textobject>
+<caption><para>The Brush Shapes palette with the Autobrush
+tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>The <guilabel>Autobrush</guilabel> tab allows you to create a customized
+rectangular or ellipsoid brush. You can set its height and width using
+the <guilabel>Size</guilabel> spin boxes. The link icon controls whether 
+the height and width are forced to be the same or not. If a connected link
+picture is shown, changing one value will automatically change the other one 
+as well. A disconnected link indicates that both values can be set
+independently. The fuzziness of the brush can be set with the
+<guilabel>Fade</guilabel> spin boxes. Again, horizontal and vertical values can
+be allowed to differ or not, depending on the state of the link button.</para>
+
+<para>
+<screenshot>
+<screeninfo>The Brush Shapes palette with the Custom Brush tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-brushshapes-custombrush.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brush Shapes palette with the Custom Brush tab</phrase>
+</textobject>
+<caption><para>The Brush Shapes palette with the Custom Brush
+tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>The <guilabel>Custom Brush</guilabel> tab of this palette lets you
+use the current image as a brush. With the <guibutton>Add to
+Predefined Brushes</guibutton> button, you can save it for later use.</para>
+
+</sect3>
+
+<sect3 id="commands-toolbars-brushesandstuff-gradients">
+<title>Gradients</title>
+
+<para>
+<screenshot>
+<screeninfo>The Gradients palette</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-gradients.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Gradients palette</phrase>
+</textobject>
+<caption><para>The Gradients palette</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>In the <guilabel>Gradients</guilabel> palette, you can choose a gradient
+to paint with using the Gradient fill tool. Clicking once on a gradient in the
+palette will show a larger preview. Click it again to make it the current
+gradient.</para>
+<para>You can create your own gradients with the <guibutton>Custom
+Gradient</guibutton> button.</para>
+
+</sect3>
+
+<sect3 id="commands-toolbars-brushesandstuff-patterns">
+<title>Patterns</title>
+
+<para>
+<screenshot>
+<screeninfo>The Patterns palette</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-patterns.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Patterns palette</phrase>
+</textobject>
+<caption><para>The Patterns palette</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>The <guilabel>Patterns</guilabel> palette allows you to choose a pattern
+for operations like Pattern fill. Click a pattern to see a preview at
+actual size, then click it again to select it.</para>
+
+<para>
+<screenshot>
+<screeninfo>The Patterns palette with the Custom Pattern tab selected</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-patterns-custompattern.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Patterns palette with the Custom Pattern tab selected</phrase>
+</textobject>
+<caption><para>The Patterns palette with the Custom Pattern tab selected</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>You can also create a custom pattern, as is shown above.</para>
+
+</sect3>
+
+<sect3 id="commands-toolbars-brushesandstuff-painterstools">
+<title>Painter's tools</title>
+
+<para>With the <guilabel>Painter's tools</guilabel> dropdown box, you can
+select the tool your painting operation should simulate. For example, you can
+paint with a normal brush, an airbrush, or a filter.</para>
+
+</sect3>
+
+<sect3 id="commands-toolbars-brushesandstuff-pressurevariation">
+<title>Pressure variation</title>
+
+<para>This setting allows you to change &krita;'s behaviour when you use a
+tablet to paint with. When you change the pressure on the tablet, you can
+choose between changing the line width (<guilabel>size</guilabel>), the
+opacity, and the darkness.</para>
+
+</sect3>
+
+</sect2>
+
+</sect1>

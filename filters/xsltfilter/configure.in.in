@@ -1,0 +1,70 @@
+
+KDE_FIND_PATH(xml2-config, XML_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+  AC_MSG_WARN([Could not find libxml2 anywhere, check ftp://xmlsoft.org/ for libxml >= 2.4.8. (we also keep a version of it in kdesupport for CVS users' convience)])
+  HELP_SUBDIR=
+])
+
+if test -n "$XML_CONFIG"; then
+  vers=`$XML_CONFIG --version 2>/dev/null | $SED -e 's/libxml //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 2004008
+  then
+     LIBXML_LIBS="`$XML_CONFIG --libs`"
+     LIBXML_RPATH=
+     for args in $LIBXML_LIBS; do
+	  case $args in
+	    -L*)
+  	       LIBXML_RPATH="$LIBXML_RPATH $args"
+ 	       ;;
+          esac
+     done
+     LIBXML_RPATH=`echo $LIBXML_RPATH | $SED -e "s/-L/-R/g"`
+     LIBXML_CFLAGS="`$XML_CONFIG --cflags`"
+
+     KDE_FIND_PATH(xmllint, XMLLINT, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [XMLLINT=""])
+     AC_DEFINE_UNQUOTED(XMLLINT, "$XMLLINT", [Defines the executable of xmllint])
+  else
+     AC_MSG_WARN([You need at least libxml 2.4.8])
+     HELP_SUBDIR=
+  fi
+fi
+
+KDE_FIND_PATH(xslt-config, XSLT_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+  AC_MSG_WARN([Could not find libxslt anywhere, check ftp://xmlsoft.org/ for libxslt >= 1.0.7. (we also keep a version of it in kdesupport for CVS users' convience)])
+  HELP_SUBDIR=
+])
+
+if test -n "$XSLT_CONFIG"; then
+   vers=`$XSLT_CONFIG --version 2>/dev/null | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+   if test -n "$vers" && test "$vers" -ge 1000007; then
+     LIBXSLT_LIBS="`$XSLT_CONFIG --libs`"
+     LIBXSLT_RPATH=
+     for args in $LIBXSLT_LIBS; do
+       case $args in
+        -L*)
+  	  LIBXSLT_RPATH="$LIBXSLT_RPATH $args"
+ 	  ;;
+       esac
+     done
+     LIBXSLT_RPATH=`echo $LIBXSLT_RPATH | $SED -e "s/-L/-R/g"`
+     LIBXSLT_CFLAGS="`$XSLT_CONFIG --cflags`"
+
+   else
+     AC_MSG_WARN([You need at least libxslt 1.0.7])
+     HELP_SUBDIR=
+   fi
+fi
+
+if test ! "$USE_RPATH" = "yes"; then
+    LIBXSLT_RPATH=
+    LIBXML_RPATH=
+fi
+
+AC_SUBST(LIBXSLT_LIBS)
+AC_SUBST(LIBXSLT_CFLAGS)
+AC_SUBST(LIBXSLT_RPATH)
+
+AC_SUBST(LIBXML_LIBS)
+AC_SUBST(LIBXML_CFLAGS)
+AC_SUBST(LIBXML_RPATH)
+
+AM_CONDITIONAL(include_XSLTFILTERS, test -n "$LIBXML_LIBS" -a -n "$LIBXSLT_LIBS")

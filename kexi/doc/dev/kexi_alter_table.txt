@@ -1,0 +1,110 @@
+-----------------------
+KEXI ALTER TABLE ISSUES
+-----------------------
+
+1. PROBLEMS
+- different databases have different set of altering capabilities
+  (SQLite has no table altering capabilities at all; re-creation is needed:
+  this has high cost in time and disk space for large tables)
+- we need to collect every detailed change made in Table Designer and apply 
+  these changes to existing table schema
+- in the case when a table is already filled with data, we need to perform 
+  tasks to move that data to a new structure, 
+  especially if database engine can't do it for us or if the engine 
+  wants simply drop the data because convertion cannot be done automatically
+- because of above issues, some work needs to be done at the client side
+
+2. What can be altered using ALTER TABLE:
+2.1 Inserting columns
+		(into a specified position)
+		ADD COLUMN <column_definition> [FIRST | AFTER <col_name> ]
+
+		(adding many colums at the end)
+		ADD COLUMN <column_definition>,...
+
+2.2 Adding constraints, indices
+		ADD INDEX [<index_name>] [<index_type>] (<index_col_name>,...)
+
+		ADD CONSTRAINT [<symbol>] PRIMARY KEY [<index_type>] (<index_col_name>,...)
+
+		ADD CONSTRAINT [<symbol>] UNIQUE [<index_name>] [<index_type>] (<index_col_name>,...)
+
+		ADD CONSTRAINT [<symbol>] FOREIGN KEY [<index_name>] (<index_col_name>,...)
+			[<reference_definition>]
+
+2.3 Altering column properties
+		ALTER COLUMN <col_name> {SET DEFAULT <literal> | DROP DEFAULT}
+
+		CHANGE COLUMN <old_col_name> column_definition [FIRST|AFTER <col_name>]
+
+		(rename column)
+		CHANGE <old_column> <new_column>
+
+		MODIFY COLUMN <column_definition> [FIRST | AFTER <col_name>]
+
+2.4 Dropping
+		DROP COLUMN <col_name>
+
+		DROP PRIMARY KEY
+
+		DROP INDEX <index_name>
+
+		DROP FOREIGN KEY <fk_symbol>
+
+2.5 Renaming a table
+		RENAME TO <new_tbl_name>
+
+
+3. How to perform table altering be re-creation:
+SQLite:  (taken from Ticket 236: Add RENAME TABLE 
+	- will be easier to work around missing ALTER TABLE
+		http://www.sqlite.org/cvstrac/tktview?tn=236,8)
+	Currently the recommended method to ALTER TABLE is:
+
+	1. Create a temporary table.
+	2. Copy all data from original table to temporary table.
+	3. Drop the original table.
+	4. Create a new table.
+	5. Copy all data from the temporary table to the new table.
+
+For example, suppose you have a table named "t1" with columns 
+names "a", "b", and "c" and that you want to delete column "c" 
+from this table. The following steps illustrate how this could be done:
+
+BEGIN TRANSACTION;
+CREATE TEMPORARY TABLE t1_backup(a,b);
+INSERT INTO t1_backup SELECT a,b FROM t1;
+DROP TABLE t1;
+CREATE TABLE t1(a,b);
+INSERT INTO t1 SELECT a,b FROM t1_backup;
+DROP TABLE t1_backup;
+COMMIT;
+
+If the table name also changes on altering, it's easier to do the 
+altering (no temp. table needed):
+
+BEGIN TRANSACTION;
+CREATE TABLE t2(c,d);
+INSERT INTO t2 (c,d) SELECT a,b FROM t1;
+DROP TABLE t1;
+COMMIT;
+
+	If we had RENAME TABLE, we'd get easier alter table here:
+	1. Rename original table to temp name.
+	2. Create new table with ORIGINAL name.
+	3. Move data from previous to new table.
+	4. Drop previous table.
+
+4. PROPOSED ALGORITHM
+
+
+
+5. Useful documentation
+	http://dev.mysql.com/doc/mysql/en/ALTER_TABLE.html
+
+
+6. Document History
+2004-07-20 js
+	Started
+	Asked Richard Hipp about RENAME TABLE
+

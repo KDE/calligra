@@ -1,0 +1,1480 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>EffectBrowserBase</class>
+<author>Lukas Tinkl &lt;lukas@kde.org&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Form1</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>636</width>
+            <height>314</height>
+        </rect>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox" row="0" column="1">
+            <property name="name">
+                <cstring>gbPreview</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Preview</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>m_previewLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>1</horstretch>
+                            <verstretch>1</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>300</width>
+                            <height>200</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="scaledContents">
+                        <bool>true</bool>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>Layout4</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Image &amp;effect:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>m_effectCombo</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>Channel Intensity</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Fade</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Flatten</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Intensity</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Desaturate</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Contrast</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Normalize</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Equalize</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Threshold</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Solarize</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Emboss</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Despeckle</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Charcoal</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Noise</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Blur</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Edge</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Implode</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Oil Paint</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Sharpen</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Spread</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Shade</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Swirl</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Wave</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>m_effectCombo</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="insertionPolicy">
+                                <enum>NoInsertion</enum>
+                            </property>
+                            <property name="duplicatesEnabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="Line">
+                    <property name="name">
+                        <cstring>Line1</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>HLine</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QWidgetStack">
+                    <property name="name">
+                        <cstring>m_widgetStack</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>0</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Value:</string>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox">
+                                <property name="name">
+                                    <cstring>chanInt_value</cstring>
+                                </property>
+                                <property name="suffix">
+                                    <string> %</string>
+                                </property>
+                                <property name="maxValue">
+                                    <number>100</number>
+                                </property>
+                                <property name="minValue">
+                                    <number>-100</number>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Color component:</string>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>Red</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Green</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Blue</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Gray</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>All</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>chanInt_component</cstring>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer1</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>130</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>1</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel5</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Value:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel6</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Color:</string>
+                                </property>
+                            </widget>
+                            <widget class="KColorButton" row="3" column="0">
+                                <property name="name">
+                                    <cstring>fade_color</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput" row="1" column="0">
+                                <property name="name">
+                                    <cstring>fade_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>0.3</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>1</number>
+                                </property>
+                            </widget>
+                            <spacer row="4" column="0">
+                                <property name="name">
+                                    <cstring>Spacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>130</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>2</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel1_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Color 1:</string>
+                                </property>
+                            </widget>
+                            <widget class="KColorButton">
+                                <property name="name">
+                                    <cstring>flatten_color1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Color 2:</string>
+                                </property>
+                            </widget>
+                            <widget class="KColorButton">
+                                <property name="name">
+                                    <cstring>flatten_color2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>81</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>3</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Intensity:</string>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox">
+                                <property name="name">
+                                    <cstring>intensity_value</cstring>
+                                </property>
+                                <property name="suffix">
+                                    <string> %</string>
+                                </property>
+                                <property name="maxValue">
+                                    <number>100</number>
+                                </property>
+                                <property name="value">
+                                    <number>10</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer4</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>71</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>4</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel4_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Value:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>desaturate_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>0.3</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>1</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer8</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>111</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>5</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel5_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Value:</string>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox">
+                                <property name="name">
+                                    <cstring>contrast_value</cstring>
+                                </property>
+                                <property name="maxValue">
+                                    <number>255</number>
+                                </property>
+                                <property name="minValue">
+                                    <number>-255</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer5</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>71</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>6</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel8</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>This effect has no options.</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignTop</set>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>7</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel9</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>This effect has no options.</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignTop</set>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>8</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel7</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Value:</string>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox">
+                                <property name="name">
+                                    <cstring>threshold_value</cstring>
+                                </property>
+                                <property name="maxValue">
+                                    <number>256</number>
+                                </property>
+                                <property name="value">
+                                    <number>128</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer6</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>111</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>9</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel10</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Factor:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>solarize_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>10</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>99.9</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer9</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>121</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>10</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel9_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>This effect has no options.</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignTop</set>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>11</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel9_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>This effect has no options.</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignTop</set>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>12</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel1_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Factor:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>charcoal_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>50</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>99.9</number>
+                                </property>
+                                <property name="suffix">
+                                    <string> %</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer10</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>101</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>13</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel2_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Type:</string>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>Uniform</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Gaussian</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Multiplicative Gaussian</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Impulse</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>LaPlace</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Poisson</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>noise_type</cstring>
+                                </property>
+                                <property name="currentItem">
+                                    <number>1</number>
+                                </property>
+                                <property name="duplicatesEnabled">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer11</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>101</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>14</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel3_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Factor:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>blur_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>50</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>99.9</number>
+                                </property>
+                                <property name="suffix">
+                                    <string> %</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer12</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>101</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>15</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel3_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Factor:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>edge_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>50</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>99.9</number>
+                                </property>
+                                <property name="suffix">
+                                    <string> %</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer12_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>181</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>16</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel3_2_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Factor:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>implode_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>30</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>99.9</number>
+                                </property>
+                                <property name="suffix">
+                                    <string> %</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer12_3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>181</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>17</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel4_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Radius:</string>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox">
+                                <property name="name">
+                                    <cstring>oilPaint_radius</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>3</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer15</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>71</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>18</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel3_2_4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Factor:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>sharpen_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>30</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>99.9</number>
+                                </property>
+                                <property name="suffix">
+                                    <string> %</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer12_4</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>181</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>19</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel4_3_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Value:</string>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox">
+                                <property name="name">
+                                    <cstring>spread_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>3</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer15_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>183</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>20</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>shade_color</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Color Shading</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel5_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Azimuth:</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Determines the light source and direction.</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>shade_azimuth</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>30</number>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel6_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Elevation:</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Determines the light source and direction.</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>shade_elevation</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>30</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer18</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>41</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>21</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel7_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Angle:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>swirl_value</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>50</number>
+                                </property>
+                                <property name="maxValue">
+                                    <number>359.9</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer19</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>81</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>page</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>22</number>
+                        </attribute>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel9_4</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Amplitude:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>wave_amplitude</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>25</number>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel10_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Wave length:</string>
+                                </property>
+                            </widget>
+                            <widget class="KDoubleNumInput">
+                                <property name="name">
+                                    <cstring>wave_length</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>150</number>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer20</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>91</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>m_effectCombo</sender>
+        <signal>activated(int)</signal>
+        <receiver>m_widgetStack</receiver>
+        <slot>raiseWidget(int)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="flattenpathplugin" library="karbon_flattenpathplugin">
+<MenuBar>
+	<Menu name="effects">
+		<Action name="path_flatten"/>
+	</Menu>
+</MenuBar>
+<ToolBar name="Effects" hidden="true" fullWidth="false">
+	<Action name="path_flatten"/>
+</ToolBar>
+</kpartplugin>

@@ -1,0 +1,194 @@
+<chapter id="kword-screen">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>The &kword; Window</title>
+
+<sect1 id="screen-overview">
+<title>Overview</title>
+<indexterm><primary>screen</primary></indexterm>
+
+<para>&kword;, like most &GUI; based programs, divides
+the window up into several areas. Each area of the window is used to
+perform a group of similar features.  When you examine the &kword;
+window, it is divided into 5 major areas:</para>
+
+<orderedlist numeration="arabic">
+<listitem><para><link linkend="kde-frame">The &kde; Titlebar</link>
+(which remains at the top of all programs run under
+&kde;).</para></listitem>
+
+<listitem><para><link linkend="mb">The Menubar</link>.</para></listitem>
+
+<listitem><para><link linkend="tb">An assortment of
+Toolbars</link>.</para></listitem>
+
+<listitem><para><link linkend="kde-docstruct">The Document Structure Area</link>.</para></listitem>
+
+<listitem><para><link linkend="da">The Document
+Area</link>, including the rulers and scrollbars.</para></listitem>
+
+<listitem><para><link linkend="statb">The Status bar</link>.</para></listitem>
+
+</orderedlist>
+
+<screenshot>
+<mediaobject><imageobject>
+<imagedata fileref="screen.png" format="PNG"/></imageobject>
+</mediaobject></screenshot>
+
+<variablelist>
+<varlistentry>
+<term><emphasis><anchor id="kde-frame"/>The &kde; Titlebar</emphasis></term>
+<listitem><para>The &kde; titlebar sits on top of all applications run under &kde;.
+For more information on the titlebar, please see the &kde; User Guide.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis><anchor id="mb"/>The Menubar</emphasis></term>
+
+<listitem><para>The menubar provides access to all of &kword;'s functions and
+options.  Each part of the &kword; menubar is detailed in the section
+entitled: <link linkend="basic-menubar">The Menubar</link>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis><anchor id="tb"/>The Toolbars</emphasis></term>
+
+<listitem><para>The toolbars provide shortcuts to commonly used functions.
+&kword; uses 8 toolbars, with similar functions grouped together.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis><anchor id="kde-docstruct"/>Document Structure Area</emphasis></term>
+<listitem><para>The Document Structure Area places individual types of data into useful groups 
+(pictures, tables, text, etc) to help you find the correct data in a complicated document.  For 
+more information, see the section on <link linkend="doc-structure">Document Structure</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><emphasis><anchor id="statb"/>The Statusbar</emphasis></term>
+<listitem><para>The status bar provides important information during the editing of your document.
+In the lower left corner, &kword; gives you the current page number and the total number of pages.  There will be helpful text shown in
+the status bar whenever you hold the mouse over a menu item.</para>
+<para>The status bar can be toggled on and off.
+See the section on <link linkend="opt-ui">Configure &kword; User Interface</link>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis><anchor id="da"/>The Document Area</emphasis></term>
+
+<listitem><para>The document area consists of:</para>
+
+<itemizedlist>
+<listitem><para><emphasis>Horizontal and Vertical Rulers</emphasis> -
+The rulers can be used to help you layout your document.  For more
+information on rulers, see <link linkend="rulers">Using
+Rulers</link>.</para>
+</listitem>
+
+
+<listitem><para><emphasis>Scrollbars</emphasis> - The scrollbars are used to move through a &kword; document
+quickly.  The &kword; scrollbars functions similar to all scrollbars in
+&kde; or &Windows;.</para>
+<para>The scrollbars can be toggled on and off.
+See the section on <link linkend="opt-ui">Configure &kword; User Interface</link>.</para>
+</listitem>
+
+<listitem><para><emphasis>Tab Selector</emphasis> - This is used to select and place tab stops in your document for
+easy formatting.  For more information on tab stops, see the section
+entitled <link linkend="tab-stops">Using Tab Stops</link>.</para>
+</listitem>
+
+
+<listitem><para><emphasis>Document View</emphasis> - This is the area of the screen which is used to enter text.  It
+shows you the current status of your document, and allows you to adjust
+frames, select text, and cut and paste text.  </para>
+</listitem>
+</itemizedlist></listitem>
+
+</varlistentry>
+</variablelist>
+
+
+</sect1>
+
+<sect1 id="rulers">
+<title>Using Rulers</title>
+<indexterm><primary>rulers</primary></indexterm>
+<para>Along the top and left edges of the document area, are a
+horizontal and a vertical ruler.</para>
+
+<para>These rulers measure from the top left corner of the page. </para>
+
+<para>Each ruler has a bright area surrounded by a dark area.  The
+bright area shows the size and location of the currently edited frame
+on that page.  As you change frames, the bright area changes to reflect
+the new frame's settings.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="ruler.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The ruler can measure the page in many common units of measure including:</para>
+
+<itemizedlist>
+<listitem><para>Millimeters (mm)</para></listitem>
+<listitem><para>Points (pt)</para></listitem>
+<listitem><para>Inches (in)</para></listitem>
+<listitem><para>Centimeters (cm)</para></listitem>
+<listitem><para>Decimeters (dm)</para></listitem>
+<listitem><para>Pica (pi)</para></listitem>
+<listitem><para>Didot (dd)</para></listitem>
+<listitem><para>Cicero (cc)</para></listitem>
+</itemizedlist>
+
+<para>To change the units of the ruler, place the mouse cursor over one
+of the rulers (either one), and click with the
+<mousebutton>right</mousebutton> button on your mouse.</para>
+
+<para>Select the units you want to use from the sub-menu.  You will notice both rulers
+change to the new unit of measure.</para>
+
+<para>You may also notice two vertical arrows (one pointed up, the other
+pointed down), on the left side of the bright area of the horizontal
+ruler. These are used to adjust the margin of a paragraph.  For more
+information, see the section entitled <link
+linkend="format-para">Formatting Paragraphs.</link></para>
+
+<para>Finally, you may see some black marks, which are not part of the
+ruler.  They may appear as L shaped, a Reverse-L, an Upside-down T, or
+an Upside-down T with a dot in it.  These are locations of tab stops.
+For more information see the section entitled <link
+linkend="tab-stops">Using Tab Stops</link>.</para>
+
+<tip>
+<para>To quickly format the page layout, you can right mouse click on
+either ruler.  A small sub menu will appear.  Simply select <guilabel>Page Layout...</guilabel>,
+and the <link linkend="page-format">Page Layout Dialog box</link> 
+will appear.</para>
+</tip>
+
+<note>
+<para>If you don't want the rulers in your document area, they
+can be switched off.</para><para> Simply select <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Hide Rulers</guimenuitem></menuchoice> from the menubar.  
+This will remove the rulers from the document area. Simply select <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Show Rulers</guimenuitem></menuchoice> to display the rulers again.
+</para>
+</note>
+
+</sect1>
+
+</chapter>

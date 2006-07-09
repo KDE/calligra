@@ -1,0 +1,70 @@
+/* This file is part of the KDE project
+   Copyright (C) 2002, The Karbon Developers
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
+
+#ifndef __VOBJECT_IFACE_H__
+#define __VOBJECT_IFACE_H__
+
+#include <KoRect.h>
+
+class VObject;
+class QDomElement;
+class VFill;
+class VPainter;
+class VStroke;
+class VVisitor;
+
+#include <dcopobject.h>
+#include <dcopref.h>
+
+class VObjectIface : public DCOPObject
+{
+	K_DCOP
+
+public:
+	VObjectIface( VObject *obj );
+
+k_dcop:
+	/*void draw( VPainter*, const KoRect* = 0L ) const {}
+	const KoRect& boundingBox() const { return m_boundingBox; }
+
+	bool boundingBoxIsInvalid() const;
+	void invalidateBoundingBox();
+	void setParent( VObject* parent ) { m_parent = parent; }*/
+
+	DCOPRef parent() const;
+
+	int state() const;
+	void setState( int state );
+
+	/*VStroke* stroke() const { return m_stroke; }
+	VFill* fill() const { return m_fill; }
+	void setStroke( const VStroke& stroke );
+	void setFill( const VFill& fill );
+	void save( QDomElement& element ) const;
+	void load( const QDomElement& element );
+	VObject* clone() const = 0;
+	void accept( VVisitor&  ) {}
+	void insertInfrontOf( VObject* , VObject* ) { }*/
+
+private:
+	VObject* m_object;
+};
+
+#endif
+

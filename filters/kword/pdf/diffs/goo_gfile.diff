@@ -1,0 +1,84 @@
+diff -u /home/azhyd/xpdf-2.00/goo/gfile.cc goo/gfile.cc
+--- /home/azhyd/xpdf-2.00/goo/gfile.cc	Sun Nov  3 23:15:36 2002
++++ goo/gfile.cc	Wed Nov 20 06:43:32 2002
+@@ -443,7 +443,7 @@
+ #endif
+ }
+ 
+-GBool openTempFile(GString **name, FILE **f, char *mode, char *ext) {
++GBool openTempFile(GString **name, FILE **f, char *mode/*, char *ext*/) {
+ #if defined(WIN32)
+   //---------- Win32 ----------
+   char *s;
+@@ -488,24 +488,24 @@
+   char *s;
+   int fd;
+ 
+-  if (ext) {
+-#if HAVE_MKSTEMPS
+-    if ((s = getenv("TMPDIR"))) {
+-      *name = new GString(s);
+-    } else {
+-      *name = new GString("/tmp");
+-    }
+-    (*name)->append("/XXXXXX")->append(ext);
+-    fd = mkstemps((*name)->getCString(), strlen(ext));
+-#else
+-    if (!(s = tmpnam(NULL))) {
+-      return gFalse;
+-    }
+-    *name = new GString(s);
+-    (*name)->append(ext);
+-    fd = open((*name)->getCString(), O_WRONLY | O_CREAT | O_EXCL, 0600);
+-#endif
+-  } else {
++//  if (ext) {
++//#if HAVE_MKSTEMPS
++//    if ((s = getenv("TMPDIR"))) {
++//      *name = new GString(s);
++//    } else {
++//      *name = new GString("/tmp");
++//    }
++//    (*name)->append("/XXXXXX")->append(ext);
++//    fd = mkstemps((*name)->getCString(), strlen(ext));
++//#else
++//    if (!(s = tmpnam(NULL))) {
++//     return gFalse;
++//}
++//    *name = new GString(s);
++//    (*name)->append(ext);
++//    fd = open((*name)->getCString(), O_WRONLY | O_CREAT | O_EXCL, 0600);
++//#endif
++//} else {
+ #if HAVE_MKSTEMP
+     if ((s = getenv("TMPDIR"))) {
+       *name = new GString(s);
+@@ -521,7 +521,7 @@
+     *name = new GString(s);
+     fd = open((*name)->getCString(), O_WRONLY | O_CREAT | O_EXCL, 0600);
+ #endif // HAVE_MKSTEMP
+-  }
++//  }
+   if (fd < 0 || !(*f = fdopen(fd, mode))) {
+     delete *name;
+     return gFalse;
+diff -u /home/azhyd/xpdf-2.00/goo/gfile.h goo/gfile.h
+--- /home/azhyd/xpdf-2.00/goo/gfile.h	Sun Nov  3 23:15:36 2002
++++ goo/gfile.h	Thu Nov 21 04:49:16 2002
+@@ -11,6 +11,7 @@
+ #ifndef GFILE_H
+ #define GFILE_H
+ 
++#include <aconf.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stddef.h>
+@@ -83,7 +84,7 @@
+ // should be done to the returned file pointer; the file may be
+ // reopened later for reading, but not for writing.  The <mode> string
+ // should be "w" or "wb".  Returns true on success.
+-extern GBool openTempFile(GString **name, FILE **f, char *mode, char *ext);
++extern GBool openTempFile(GString **name, FILE **f, char *mode);//, char *ext);
+ 
+ // Execute <command>.  Returns true on success.
+ extern GBool executeCommand(char *cmd);

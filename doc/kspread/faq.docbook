@@ -1,0 +1,45 @@
+<chapter id="faq">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Questions and Answers</title>
+
+<qandaset>
+
+<qandaentry>
+<question><para>How many rows and columns can I have in a sheet?</para>
+</question>
+<answer><para>Theoretically up to 32767 rows and 32767 columns.</para></answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>Where are the templates stored?</para>
+</question>
+<answer><para>As <literal role="extension">.kst</literal> files under
+<filename>~/.kde/share/apps/kspread/templates/</filename>.
+</para></answer>
+</qandaentry>
+
+</qandaset>
+</chapter>
+
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

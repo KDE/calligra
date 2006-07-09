@@ -1,0 +1,356 @@
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Step by Step Tutorial</title>
+<indexterm><primary>tutorial</primary></indexterm>
+<para>This section is a step by step
+walk through of the most important functions needed to understand how
+to create and manipulate a complex document. This tutorial will generate the start of a
+newsletter as an example document. </para>
+
+<para>It is recommend that you go through the tutorial in order at
+least once if you are new to frame based word processors.</para>
+
+<sect1 id="choose-template">
+<title>Tutorial: Choosing the initial template</title>
+
+<note><para>The steps to this tutorial are numbered from 1 to 23.
+Beneath each step, is text in <emphasis>italics</emphasis> which further elaborates or explains the changes.</para></note>
+
+<para>When you first <link linkend="starting-kword">start &kword;</link> (or <link linkend="new-doc">start a new
+document</link> after &kword; is running), &kword; asks for a document template.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="ChooseTempDia.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject>
+</mediaobject>
+
+<para><emphasis>Here you can either:</emphasis></para>
+<itemizedlist>
+<listitem>
+<para><emphasis>Select the initial template for your new
+document.</emphasis></para>
+</listitem>
+<listitem>
+<para><emphasis>Open a &kword; document saved to your hard
+drive or network.</emphasis></para>
+</listitem>
+
+</itemizedlist>
+
+<para>Step 1: Click on the <guilabel>Page Layout</guilabel> icon.</para>
+
+<mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut1.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
+
+<para><emphasis>This will list the Page Layout templates available on
+your system. For information on the differences between Page Layout and Text Oriented templates, see the section entitled 
+<link linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout
+templates</link>.</emphasis></para>
+
+<para>Step 2: Now select the <guilabel>Simple Layout</guilabel> icon by
+clicking once with the left button of your mouse.</para>
+
+<mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut2.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
+
+<para><emphasis>This is the template we will use for the
+tutorial</emphasis>.</para>
+
+<para>Step 3: Now confirm your selection by clicking on
+<guibutton>Use This Template</guibutton>.</para>
+
+<mediaobject><imageobject><imagedata format="PNG" fileref="Tut3.png"
+align="center"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
+
+<para><emphasis>To complete your selection</emphasis>.</para>
+
+<para><emphasis>&kword; will open a new document with three frames. The
+frames are outlined on the white background, as gray boxes. Each box is
+a separate frame.</emphasis></para>
+
+</sect1>
+
+<sect1 id="tutorial-frame-select">
+<title>Tutorial: Selecting a frame and entering text into that frame</title>
+
+<para><emphasis>To begin entering text (or adding any sort of data for
+that matter) into a document, its important to let &kword; know which
+frame to put the data in.</emphasis></para>
+
+<note>
+<para>In order to keep both editing and formatting of your document efficient and simple,
+the command executed with a mouse click changes depending on where in the &kword; window the pointer
+is located.</para>
+
+<para>When the pointer is located over toolbars, scrollbars, menu buttons or other areas
+<emphasis>outside the document</emphasis>, the pointer is an arrow. You should already be
+familiar with this type of pointer when using other &kde; programs. </para>
+<para>When <emphasis>inside the document</emphasis>, there are two separate pointers which alternate automatically
+based on how close to a frame edge the pointer is currently located.</para>
+<para>When the mouse pointer is near the edge of a frame, the pointer will change into two intersecting lines
+with arrows on all four points.  Clicking the left mouse button now will select the nearest frame.  </para>
+<para>As you move the pointer away from the edge of the frame, the pointer will change into the text entry pointer.
+Clicking the left mouse button at this time will tell &kword; to insert text into this frame.</para>
+</note>
+
+
+<para>Step 4: Place the mouse pointer over the upper-left frame.  
+Make sure you do not see the <emphasis>frame select pointer</emphasis></para>
+<para>Step 5: Click once with the left mouse button.</para>
+
+<mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut4.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject>
+
+<para><emphasis>This tells &kword; to insert text into this frame. Click in the upper left corner of the frame to position the cursor in the upper left corner of the frame. </emphasis></para>
+
+<para>Step 6: Enter the following text using the keyboard: <userinput>KWord Press Release</userinput>.</para>
+
+<para><emphasis>This is some sample text for our
+newsletter.</emphasis></para>
+
+<para>Step 7: Select <emphasis>KWord Press Release</emphasis> by placing
+the mouse cursor on the right end of the text.  Click once with the
+&LMB; and drag the mouse cursor
+to the left.  Selected text will be white text on a colored 
+background.  When all the text has been selected, release the &LMB;.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut7.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+<para><emphasis>This defines what text is going to be altered with Step 8.</emphasis></para>
+<para>Step 8: Click inside the text size combo box.  Change this
+number to 26.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut8.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>This changes the size of the selected text to one more
+appropriate for a title.</emphasis></para>
+
+</sect1>
+
+<sect1 id="tutorial-resize-frame"> <title>Tutorial: Changing the size of a frame</title>
+
+<para><emphasis>Now that we have entered some text, we can see that the
+frame should extend across the entire width of the page for a title.  We need to change
+the size and shape of the frame. </emphasis></para>
+
+<para>Step 9: Place the mouse pointer over the frame border (you will notice the cursor
+changes to two intersecting lines with arrows), and click
+once with the &LMB;.</para>
+
+<para><emphasis>This will select this frame, so it can be
+re-shaped.</emphasis></para>
+
+<para><emphasis>You will now notice the frame is outlined in black, with
+8 yellow squares on the outline.  These squares are used for re-sizing the
+frame.</emphasis></para>
+
+<para>Step 10: Place the mouse pointer over the grey square in the lower
+right corner of the frame. Click with the &LMB; and hold it
+down. Drag the mouse up and to the right.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut11a.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>Notice how the frame changes shape.  Adjust the size and
+shape of the frame until it looks similar to the example below:</emphasis></para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut11b.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para>When it does, release the mouse button.</para>
+
+</sect1>
+
+<sect1 id="tutorial-move-frame"> 
+<title>Tutorial: Moving a frame on the page and layering frames</title>
+
+<para>Now that we have created a title block, we will center it at the
+top of the page.</para>
+
+<para>Step 11: Place the mouse pointer over the border of the frame (but
+not on any of the squares).</para>
+
+<para><emphasis>The pointer will now change to a 4 way arrow.  This
+indicates &kword; is ready to move the frame on the
+page.</emphasis></para>
+
+<para>Step 12: Click and hold with the left mouse button. Drag the
+mouse, and the frame will follow it.  Position the frame in the center
+of the page near the top. When you are satisfied with its final
+location, release the mouse button.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut13.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para>Notice how the right side of the title block has slid behind the empty frame on the right. This is easily corrected.</para>
+
+<para>Step 13: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Bring to Front</guimenuitem></menuchoice>.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut13a.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para>This will place the title on top of the other frame. You can raise and lower frames to give you the look you need.</para>
+</sect1>
+
+<sect1 id="tutorial-add-frame"> 
+<title>Tutorial: Adding a new frame/Making text flow between two frames</title>
+<para>Now we will add a new text frame to our document for our first article.</para>
+<para>Step 14: Begin by selecting
+<menuchoice><guimenu>Insert</guimenu><guimenuitem>Text
+Frame</guimenuitem></menuchoice> from the menubar.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut14.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>The pointer has changed to cross-hairs.  You can draw
+your new text box with this cursor.  Start by placing the pointer at one
+corner.  Click and hold the <mousebutton>left</mousebutton> mouse
+button.  Drag the mouse diagonally.  An outline will appear which
+represents your new text frame.  When you have a text frame of
+reasonable size, release the <mousebutton>left</mousebutton> mouse
+button.</emphasis></para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut14a.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>It is not important if your text box does not resemble
+the example for the purposes of this tutorial.</emphasis></para>
+
+<para><emphasis>When you release the <mousebutton>left</mousebutton>
+mouse button, a new dialog box appears.</emphasis></para>
+
+
+<para><emphasis>This dialog box lists all the current frame sets and has a radio button to create a 
+new frame set (default value). By selecting the default value, you will
+create a new frame set (text will not flow from any other frame into this
+frame)</emphasis>.</para>
+
+<para><emphasis>Notice that the default name for this frameset is 
+<guilabel>Text Frameset 3</guilabel></emphasis></para>
+
+<para>Step 15: For the purposes of this tutorial, the default value of
+<guilabel>Create a new frameset</guilabel> is good.  Simply select
+<guibutton>OK</guibutton>.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut15.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>Now you can see your new frame has been created. It is called
+<guilabel>Text Frameset 3</guilabel></emphasis></para>
+
+<para><emphasis>Now we are going to create another small frame right next to this one.</emphasis></para>
+
+<para>Step 16: Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Text
+Frame</guimenuitem></menuchoice>.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut14.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para>Again using the crosshair pointer, draw another small frame near the first one.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut14b.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para>A dialog box will appear.</para>
+
+<para>Step 17: Select <guilabel>Text Frameset 3</guilabel> by clicking with the &LMB;.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut15b.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para>Step 18: Select <guibutton>OK</guibutton>.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut16.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>What you have just done, is connect this new textframe, to the last frame you created.
+  To test this:</emphasis></para>
+
+<para>Step 19: Click once inside the leftmost frame with the &LMB;.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut18.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para>Step 20: Begin typing.  You will need to type quite a bit, but
+keep typing.  When you run out of space in the text frame, you will see
+your new text is moved immediately into your new text frame.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut19.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+</sect1>
+
+<sect1 id="tutorial-del-frame"> 
+<title>Tutorial: Deleting a frame</title>
+
+<para>Now we will delete an unneeded frame. We will delete
+the long text frame on the right side of the page.</para>
+
+<para>Step 21: Place the mouse pointer over the frame border of the right
+hand text frame (Remember: watch for the pointer to change), and click with the &LMB;.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut21.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>This selects the frame.</emphasis></para>
+
+<para>Step 22: Select
+<menuchoice><guimenu>Frames</guimenu><guimenuitem>Delete
+Frame</guimenuitem></menuchoice>.</para>
+
+<para><mediaobject><imageobject><imagedata format="PNG"
+fileref="Tut22.png"/></imageobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>A small dialog box appears, checking that you really intended to delete this frame.</emphasis></para>
+<para>Step 23: Select <guibutton>Delete</guibutton>.</para>
+
+<para><emphasis>This deletes the frame.</emphasis></para>
+
+</sect1>
+<sect1 id="tutorial-summary">
+<title>Tutorial: Summary</title>
+
+<para>Hopefully this tutorial has introduced you to the most basic tasks in &kword;.</para>
+
+<para>At this point, you have :</para>
+
+<itemizedlist>
+<listitem><para>Started a new document using a template</para></listitem>
+<listitem><para>Added text to a frame.</para></listitem>
+<listitem><para>Resized text.</para></listitem>
+<listitem><para>Created, moved, resized and deleted frames.</para></listitem>
+</itemizedlist>
+<para>The purpose of this tutorial was not to explore every aspect of &kword;, but to
+introduce you to the bare essentials.  Hopefully you understand the basic manipulation
+of frames.  From this point, you can refer to the specific sections of the manual for
+help, tips and advanced features of &kword;.</para>
+</sect1>
+</chapter>

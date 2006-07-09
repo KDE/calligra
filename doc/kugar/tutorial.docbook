@@ -1,0 +1,313 @@
+<!-- If you want to validate or edit this document separately, uncomment
+this prolog
+
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
+-->
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Tutorial</title>
+
+<para>This tutorial attempts to be a brief introduction to Kugar.</para>
+
+<para>You will create a sample report template with &kudesigner;,
+a sample data file and finally generate a complete report.</para>
+
+<para>The source code for sample templates and data files can be found
+in <filename>sample1.ktf</filename> and <filename>sample1.kdf</filename>
+that are distributed with &kugar;.</para>
+
+
+<sect1 id="tut-1">
+<title>Creating the report template with &kudesigner;</title>
+
+<para>
+Run Kugar Designer by typing <command>kudesigner</command> in the shell.
+</para>
+
+<para>
+After you start the designer, choose <guimenu>File</guimenu>|<guilabel>New</guilabel>
+and set the page size to <guilabel>Letter</guilabel> and paper orientation to
+<guilabel>Landscape</guilabel>. Set the left and right margins to 48, top
+and bottom margins to 40. All dimensions in &kudesigner; (page
+margins, sizes, positions, &etc;) are measured in millimeters.
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut_file_new.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><interface>New Report</interface> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+A new report is now created and all buttons on the <guilabel>Items Toolbar</guilabel>
+and <guilabel>Sections Toolbar</guilabel> are now enabled (the corresponding
+menu items from <guilabel>Items</guilabel> and <guilabel>Sections</guilabel> are also enabled).
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut_empty_report.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Empty Report window</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>Now it is the time to add some sections to the report and determine
+their sizes. We will add <link linkend="report-header-and-footer">report header and footer</link>,
+<link linkend="page-header-and-footer">page header and footer</link> and a single
+<link linkend="detail">detail</link> section. Report headers and footers are printed on the
+first page and on the last page of the report before and after any other report data accordingly.
+Report footers are good places for <link linkend="calculated-field-element">calculated fields</link>.
+Page headers and footers are printed at the top and bottom of each page.
+Our report will have one detail section with level 0. This means that all our data rows
+have identical structure (&ie; fields). If the data structure is more complex or it is
+organized according to a master-detail relationship, more detail levels should be created.
+See <filename>sample3.ktf</filename> and <filename>sample3.kdf</filename> for an example
+of how that can be done.
+Refer to the <link linkend="template-elements">template elements descriptions</link>
+for additional information.
+</para>
+
+<para>Sections are added by using <guilabel>Sections</guilabel> menu
+or a <guilabel>Sections Toolbar</guilabel>. Now add a report header and footer,
+a page header and footer and then a detail section.
+When adding a detail section, set
+its level to 0 as shown on the screenshot below.
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut_set_level.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Setting the detail level</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+Our report should now look like this one in the screenshot.
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut_rep_look1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Report with sections</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+All our sections have a predefined height - 50mm. Let's change it.
+To do this &RMB; click on the Report Header section or click the <guilabel>Edit Properties</guilabel>
+button on the <guilabel>Edit Toolbar</guilabel> and then choose a section.
+The Properties window should be shown.
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut_edit_height.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Height of the section editing</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+Now set the Report Header's height to 70. Let's perform that procedure
+for all other sections. Set the Page Header's height to 45 and the Detail's to 30.
+The Page and Report Footers should be 32 mm in height.
+</para>
+
+<para>
+A report template with properly sized sections is ready to be filled with
+report items.
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut_rep_look2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Report with sized sections</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+You can now add items to the sections on the report. Five different types of
+items can be added to the report. <link linkend="label-element">Label</link>
+is a rectangular area that can have borders and can be filled by
+any kind of textual data. The Label's foreground and background colors,
+as well as fonts, can be changed. Border line types and line colors are also
+customizable. <link linkend="field-element">Fields</link> can be placed
+on to a detail section. Fields represent data fields; their values
+will be collected from a data file while generating a report.
+Counts, sums, averages, &etc; for field values can be printed on the report
+by means of <link linkend="calculated-field-element">Calculated Fields</link>.
+<link linkend="special-element">Specials</link> are labels with predefined text,
+such as current date or page number. The general report appearance can be refined
+with <link linkend="line-element">Lines</link>.
+</para>
+
+<para>
+To add a report item click the corresponding item button on the <guilabel>Items Toolbar</guilabel>
+and place (click) it on the section. The chosen item will be placed on the selected section
+with the upper left corner at the given coordinates. Other properties are set to default
+values and can be changed with the <guilabel>Report Item Options</guilabel> dialog (the same way
+we used to change the section's height).
+</para>
+
+<para>
+So, let's add labels to the report header and page header as shown on the screenshot below.
+Note that the <quote>Mutiny Bay Software</quote> label has its <guilabel>BorderStyle</guilabel>
+and <guilabel>BorderWidth</guilabel> set to 0 and <quote>Software Inventory Report</quote> - 1mm.
+Any colors are set as a combination of three values (RGB - red,green,blue) separated by commas.
+</para>
+
+<para>
+We will also add field elements to the detail section. Just assume we have four fields
+- title, version, platform and copies. So, four <guilabel>Field</guilabel> elements should be placed and
+their <guilabel>Field</guilabel> properties set. Note that <guilabel>Text</guilabel>
+property is automatically set to <quote>[<userinput>field_name</userinput>]</quote>.
+</para>
+
+<para>
+Our page footer is a good place to show the current date and page number, so add two
+special fields and set their <guilabel>Type</guilabel> properties to 0 and 1.
+A special with Type=0 will represent date and one with Type=1 - page number. Note that
+special's <guilabel>Text</guilabel> property is changed automatically.
+</para>
+
+<para>
+The last element to be placed is a <guilabel>Calculated Field</guilabel> for the <quote>copies</quote>
+field. To acquire a sum (copies) set the calculated field's <guilabel>Field</guilabel> property
+to <quote>copies</quote> and <guilabel>CalculationType</guilabel> to 1 (sum function).
+</para>
+
+<para>
+Finally, our report template should look like this:
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut_rep_complete.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Complete report</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect1>
+
+
+
+<sect1 id="tut-2">
+<title>Creating the report data file</title>
+
+<para>
+Generally speaking, data files may be created in several ways. Some will use xsl transformation tables
+to generate proper &XML; from another &XML; document (like a &kspread; spreadsheet); others will use
+their own program to fetch data from a database and fill the data file. In this tutorial we will
+simply create it by hand. The source code for the example can be found in file <filename>sample1.kdf</filename>
+or copied from the example below.
+</para>
+
+<programlisting>
+&lt;?xml version=<quote>1.0</quote> encoding=<quote>UTF-8</quote>?&gt;
+
+&lt;!DOCTYPE KugarData [
+    &lt;!ELEMENT KugarData (Row* )&gt;
+    &lt;!ATTLIST KugarData
+        Template CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT Row EMPTY&gt;
+    &lt;!ATTLIST Row
+        level CDATA #REQUIRED
+        title CDATA #REQUIRED
+        version CDATA #REQUIRED
+        platform CDATA #REQUIRED
+        copies CDATA #REQUIRED&gt;
+]&gt;
+
+&lt;KugarData Template="sample1.ktf"&gt;
+    &lt;Row level="0" title="  BRU" version="15.0" platform="x86" copies="1"/&gt;
+    &lt;Row level="0" title="  Caldera Open Linux" version="2.2" platform="x86" copies="3"/&gt;
+    &lt;Row level="0" title="  K Desktop" version="1.1.1" platform="x86" copies="1"/&gt;
+    &lt;Row level="0" title="  Netscape Communicator" version="4.6" platform="x86" copies="10"/&gt;
+    &lt;Row level="0" title="  Redhat Linux" version="5.0" platform="x86" copies="11"/&gt;
+    &lt;Row level="0" title="  Redhat Linux" version="5.1" platform="x86" copies="12"/&gt;
+    &lt;Row level="0" title="  Redhat Linux" version="5.2" platform="x86" copies="14"/&gt;
+    &lt;Row level="0" title="  Redhat Linux" version="6.0" platform="x86" copies="15"/&gt;
+    &lt;Row level="0" title="  Star Office" version="5.0" platform="x86" copies="1"/&gt;
+    &lt;Row level="0" title="  Star Office" version="5.1" platform="x86" copies="3"/&gt;
+    &lt;Row level="0" title="  Microsoft Windows NT" version="3.1" platform="x86" copies="1"/&gt;
+    &lt;Row level="0" title="  Microsoft Windows NT" version="3.51" platform="x86" copies="1"/&gt;
+    &lt;Row level="0" title="  Microsoft Windows NT" version="4.0" platform="x86" copies="1"/&gt;
+    &lt;Row level="0" title="  Microsoft Windows NT" version="5.0" platform="x86" copies="1"/&gt;
+    &lt;Row level="0" title="  Sun Solaris" version="2.5" platform="Sparc" copies="1"/&gt;
+&lt;/KugarData&gt;
+</programlisting>
+
+</sect1>
+
+<sect1 id="tut-3">
+<title>Generating the report</title>
+
+<para>
+At this moment we have a report template (<filename>sample1.ktf</filename>) and
+a report data file (<filename>sample1.kdf</filename>).
+</para>
+<para>
+To generate a report, type the following command in the shell:
+<command>kugar <option>-r <replaceable>sample1.ktf</replaceable></option>
+<option>-d <replaceable>sample1.kdf</replaceable></option></command>
+</para>
+
+<para>
+This will bring up a &kugar; shell window with the report generated.
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut_rep_generated.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Generated report</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect1>
+
+</chapter>

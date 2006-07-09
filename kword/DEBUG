@@ -1,0 +1,15 @@
+Tips for developers
+===================
+
+KWord has a few hidden keys (aka easter-eggs :) that help debugging it,
+without the need for menuitems to be removed before releasing.
+
+The current debug keys are:
+
+Ctrl-Shift-F : Frames debug. Outputs information about all existing frames.
+Ctrl-Shift-P : Paragraphs debug. Outputs information about all paragraphs of the current frameset.
+Ctrl-Shift-V : Verbose parag debug. Includes formatting of each character.
+Ctrl-Shift-S : Styles debug. Prints all KoStyles.
+Ctrl-Shift-M : Mark the debug output. Just prints the current date/time.
+
+(The code is in koffice/kword/kwcanvas.cc.)

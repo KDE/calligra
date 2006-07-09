@@ -1,0 +1,632 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>KivioAlignDialogWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KivioAlignDialogWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>450</width>
+            <height>240</height>
+        </rect>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="layoutMargin" stdset="0">
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>align</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Align</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup" row="0" column="1">
+                        <property name="name">
+                            <cstring>hAlignBox</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Horizontal</string>
+                        </property>
+                        <property name="layoutMargin" stdset="0">
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel3_2_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image0</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="2">
+                                <property name="name">
+                                    <cstring>PixmapLabel2_2_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image1</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="4">
+                                <property name="name">
+                                    <cstring>PixmapLabel1_2_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image2</pixmap>
+                                </property>
+                                <property name="scaledContents">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <spacer row="0" column="1">
+                                <property name="name">
+                                    <cstring>Spacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <spacer row="0" column="3">
+                                <property name="name">
+                                    <cstring>Spacer3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>ahleft</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Left</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="2" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>ahcenter</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Ce&amp;nter</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="2" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>ahnone</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>N&amp;one</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <spacer row="2" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>spacer15</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>41</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <spacer row="0" column="5">
+                                <property name="name">
+                                    <cstring>Spacer4</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton" row="1" column="4" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>ahright</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Right</string>
+                                </property>
+                            </widget>
+                            <spacer row="2" column="4" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>spacer16</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>51</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </grid>
+                    </widget>
+                    <widget class="QCheckBox" row="1" column="1">
+                        <property name="name">
+                            <cstring>aCenterPage</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Center of &amp;page</string>
+                        </property>
+                    </widget>
+                    <widget class="QButtonGroup" row="0" column="0" rowspan="3" colspan="1">
+                        <property name="name">
+                            <cstring>vAlignBox</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Vertical</string>
+                        </property>
+                        <property name="layoutMargin" stdset="0">
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel6_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image3</pixmap>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignTop|AlignLeft</set>
+                                </property>
+                                <property name="vAlign" stdset="0">
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="0" column="1">
+                                <property name="name">
+                                    <cstring>avtop</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Top</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel5_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image4</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="1">
+                                <property name="name">
+                                    <cstring>avcenter</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>C&amp;enter</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel4_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image5</pixmap>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignBottom|AlignLeft</set>
+                                </property>
+                                <property name="vAlign" stdset="0">
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="3" column="1">
+                                <property name="name">
+                                    <cstring>avnone</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;None</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="1">
+                                <property name="name">
+                                    <cstring>avbottom</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Bottom</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer row="2" column="1">
+                        <property name="name">
+                            <cstring>Spacer1_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>16</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>distribute</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Distribute</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup" row="1" column="1">
+                        <property name="name">
+                            <cstring>ButtonGroup9</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="title">
+                            <string></string>
+                        </property>
+                        <property name="layoutMargin" stdset="0">
+                        </property>
+                        <property name="layoutSpacing" stdset="0">
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>0</number>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>dselection</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>E&amp;xtent of selection</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>dpage</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Extent of pa&amp;ge</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QButtonGroup" row="0" column="0" rowspan="2" colspan="1">
+                        <property name="name">
+                            <cstring>vDistBox</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Vertical</string>
+                        </property>
+                        <property name="layoutMargin" stdset="0">
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel8_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image6</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="0" column="1">
+                                <property name="name">
+                                    <cstring>dvtop</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Top</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="1">
+                                <property name="name">
+                                    <cstring>dvcenter</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>C&amp;enter</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel8_3</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image7</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="4" column="1">
+                                <property name="name">
+                                    <cstring>dvnone</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;None</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="1">
+                                <property name="name">
+                                    <cstring>dvspacing</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Spacing</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel8_4</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image8</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="3" column="1">
+                                <property name="name">
+                                    <cstring>dvbottom</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Bottom</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="3" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel8_5</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image9</pixmap>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="0" column="1">
+                        <property name="name">
+                            <cstring>hDistBox</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Horizontal</string>
+                        </property>
+                        <property name="layoutMargin" stdset="0">
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>PixmapLabel10_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image10</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="3">
+                                <property name="name">
+                                    <cstring>PixmapLabel7_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image11</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="1">
+                                <property name="name">
+                                    <cstring>PixmapLabel9_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image12</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="2">
+                                <property name="name">
+                                    <cstring>PixmapLabel8_6</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image13</pixmap>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>dhleft</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Left</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="2">
+                                <property name="name">
+                                    <cstring>dhspacing</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>S&amp;pacing</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="3">
+                                <property name="name">
+                                    <cstring>dhright</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Right</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="1">
+                                <property name="name">
+                                    <cstring>dhcenter</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Ce&amp;nter</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="1" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>dhnone</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>N&amp;one</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b530b630b4300673955101582c110e90c4602aa82586c50e6c6e816a842a4388810520a25031981230036a079269898938d561370fbbbdc8eeabb5e60200b9f04d62</data>
+    </image>
+    <image name="image1">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab840265280d154b04016530891083aba39218163bb0b905ac4b39114d0ca849194420bb19aa176e1e441a6a5e62224e75d8cdc36e2fb2fb6aadb9001318544a</data>
+    </image>
+    <image name="image2">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab4405ca70b1443840128329a39618163bb0b905ac12c37d300226969808570c134b44322e118f3aace661b717d97db5d65c000f8a544a</data>
+    </image>
+    <image name="image3">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b530b630b4300673d10058371024820930504615831050b144309fa01854809018980dd54faa18dc3c6437c31d020628ee232c862c845dacd69a0b0077074d62</data>
+    </image>
+    <image name="image4">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab4400651081534c190cc042ca703198122c6210618262ca506bc04e4303b8d4116f07163723790d538c4018a001a55a6b2e00270d4ba8</data>
+    </image>
+    <image name="image5">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab4400651041584c192c48504c1982c162ca60802686d007a2c911c3661e563164f7e11543f22fcccd4862896840a9d69a0b00536e4b7c</data>
+    </image>
+    <image name="image6">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e2565856405bffcbc54103b11c85636000310570fc4b530b630b4300673d1005837082482008856564688413048025d4c2f510f430c552f16f3a000452f14a0d8011784e8c5e66698f1300016833a832c312ce629a301a55a6b2e0058404bd2</data>
+    </image>
+    <image name="image7">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab44037031651040178362a85822082843311060a853c6340f44a0db0bd48f2186a2178f184c2f9273e176203917ae17c9b97037a3a883fa0dd93c94304016abb5e6020051784f1a</data>
+    </image>
+    <image name="image8">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab4406ca7a7a703165104017436074b144e5440c319001b8cc4b4403186ed143b2034d0c9b5e98f1c8fe8039176a3d8618cccdc86270bd58ccc308ab5a6b2e00ba5e4fba</data>
+    </image>
+    <image name="image9">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab4403601d20802e06a4c916c3625e221ac0708b32441d8a10d01474b144e5448418cc2264bdca088c2e86aa178251ec40330fc3cdb5d65c0045eb4fe6</data>
+    </image>
+    <image name="image10">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab54d6830208032a9608e42927a288254201217558cdc32206360c5d0cc8225b0c8b79707bc192e8622043c815039b576bcd05008a6f51d6</data>
+    </image>
+    <image name="image11">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab0401653d2850d643124b040a2b27a288254201217558cdc32e86691e500c84c91543980765a2d80bd5429e18ba79b5d65c0093cf51d6</data>
+    </image>
+    <image name="image12">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006abd4d353d6830210032e9608e42927a288254201217558cd4317039b842e06328f5c312ce6c1ed8548a289810d21530c625ead351700a0bd5202</data>
+    </image>
+    <image name="image13">
+        <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab040365300201a8987222442c51192a9608062031080b973a1ce6618ac1cd43160332c816c3621edc5eb024ba18c81072c520e6d55a730100685452a2</data>
+    </image>
+</images>
+ <includes>
+     <include location="global" impldecl="in implementation">kdialog.h</include>
+ </includes>
+
+ <layoutdefaults spacing="6" margin="11"/>
+ <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>

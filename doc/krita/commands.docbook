@@ -1,0 +1,16 @@
+<chapter id="commands">
+<title>Command Reference</title>
+
+<para>
+This chapter explains &krita;'s user interface in detail. Each of the menus,
+toolbars, palettes, and dialogs will be discussed.
+</para>
+
+&commands-menus;
+&commands-toolbars;
+&commands-palettes;
+&commands-dialogs;
+
+</chapter>
+
+

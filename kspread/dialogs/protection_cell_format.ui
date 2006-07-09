@@ -1,0 +1,180 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ProtectionTab</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ProtectionTab</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>250</width>
+            <height>187</height>
+        </rect>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>This tab enables you to set Cell Protection. All cells are protected by default (that means cell content cannot be changed) and for the cell protection to be active you also need to protect the sheet using the Tools -&gt; Protect Document -&gt; Protect Sheet... menu and to provide a password.
+You can also hide the cell formula in order to protect the way you calculate the formula. This also needs to enable shet protection to work.
+You can hide the cell content with Hide all and again this needs sheet protection.
+You can learn more about all these settings in the User Manual in the Advanced KSpread chapter.</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>Printing</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>m_bDontPrint</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Do not print text</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked, the content of the cell will not be printed. If this is not checked (default), the cell content will be printed.
+Note that you can print it even if the cell is protected</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Protection</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>layout12</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>m_bHideAll</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Hide &amp;all</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This hides the cell content and works only when the sheet is protected. Whether the cell itself is protected or not does not matter.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout11</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer3</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Fixed</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>30</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>m_bIsProtected</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Protected</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>If checked, the cell content will be protected. This is the default behaviour. You need to protect the whole sheet using theTools-&gt;Protect document-&gt;Protect Sheet... menu for this individual cell protection to work. See the manual for more details in the Advanced KSpread chapter. When a cell is protected, its content cannot be changed.</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout10</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer4</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Fixed</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>30</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>m_bHideFormula</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Hide formula</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>When this is checked, the cell is still visible. However, its contents do not appear in the Formula bar. Hiding formula is only working for cells that contain formulae so the user cannot view the formula. And the sheet must be protected for this to work.</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<connections>
+  <connection>
+    <sender>m_bHideAll</sender>
+    <signal>toggled(bool)</signal>
+    <receiver>m_bIsProtected</receiver>
+    <slot>setDisabled(bool)</slot>
+  </connection>
+  <connection>
+    <sender>m_bHideAll</sender>
+    <signal>toggled(bool)</signal>
+    <receiver>m_bHideFormula</receiver>
+    <slot>setDisabled(bool)</slot>
+  </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

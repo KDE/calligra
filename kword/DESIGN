@@ -1,0 +1,129 @@
+Overall design
+==============
+
+* The document (KWDocument) has a list of framesets (KWFrameSet)
+
+* Framesets include: text frameset, picture/clipart frameset, table frameset etc.
+
+* A frameset has a list of frames, KWFrame. A KWFrame is basically a rectangle
+(KoRect) with a bunch of attributes. 
+The frameset contains the contents, like the text or a picture.
+The frames visualize the contents of the frameset. 
+Imagine a 10 pages document, with 1 text-frameset and 10 frames, because our
+example author wants to have one frame per page.  This means that there is one 
+text, and the frames define where on the pages this text is displayed.
+
+* About text framesets: they hold a text document (KWTextDocument, which is
+a QTextDocument from the KoText classes - more on KoText later).
+
+* About Tables; one table is a KWTableFrameset. This tableframeset contains
+all the cells as its frames. But because the cells have a different text per
+cell, we contain the cells in their own KWTextFrameset.
+
+   KWTableFrameSet
+    |           |
+    |        TextFrames
+  Cells               +--------+
+      |                        |
+      + ---> KWTextFrameSet    |
+      |          +-> KWFrame <-+
+      |                        |
+      + ---> KWTextFrameSet    |
+      |          +-> KWFrame <-+
+      |                        |
+      + ---> KWTextFrameSet    |
+                 +-> KWFrame <-+
+
+* The z-order of the frames (i.e. which one is on top of which)
+is defined by m_zOrder in KWFrame. This number is relative to the other
+frames *on the same page*.
+
+Frame layout and pages
+======================
+Generally, the user is free to position frames where he/she wants to.
+
+KWTextFrameSet::slotAfterFormatting() takes care of triggering frame
+resizing (AutoExtend frames), creating a new page (AutoCreateNewFrame), etc.
+
+However, in Word Processing mode, some frames are special: main text frameset
+(which might include columns), headers, footers, and footnotes. All of those
+are laid out by the KWFrameLayout class, which is triggered by
+KWDocument::recalcFrames.
+
+When creating a new page, KWDocument::insertPage takes care of creating the
+followup frames for all frames with newFrameBehavior=Reconnect.
+
+The newFrameBehavior called "Copy" means "exact copy of the contents of
+the frame". This is used for headers/footers (but the user can also use
+it for logos and stuff). In such a case we don't copy anything, we simply
+paint the same contents in many pages.
+
+In WP mode, removing pages is automatically done by KWDocument::tryRemovingPages().
+
+In DTP mode pages are user-controlled (insert and delete page actions),
+but overflowing text can still create a new page as well.
+
+The difficulty with frame layout is that in most cases the frame size and
+number depends on the text inside, and the text layout depends on the frames
+(frame width, frames on top, etc.). This is why text layout (formatMore())
+and frame layout (e.g. KWFrameLayout) often call each other, resulting in
+infinite loops when some code goes wrong.
+
+Editing
+=======
+To edit the contents of a text frameset (including table cells), the user clicks on it.
+This creates an edit object for the frameset, which will be destroyed as soon as we go
+edit another frameset. This means, in a given view (canvas), there is only one edit
+object at a given moment (for text objects, it's the one with the cursor).
+There is one type of edit object per type of frameset. For instance: KWTextFrameSetEdit.
+
+The kotext library provides a base class for the 'text editing' object, it's KoTextView.
+
+Custom items
+============
+A custom item is anything (like an inline frame, a variable etc.) that
+is treated as a special character. QTextCustomItem is the base class for
+it, we have KoTextCustomItem in kotext.
+
+Inline frames are one kind of custom item. The frame (and its englobing
+frameset) exist as usual, but a KWAnchor instance is created, inserted
+into the text, and linked to the frame. The anchor always has the same size
+as the frame. When the text is flowed, the anchor is positioned, it tells
+the frame to move to the new position.
+
+Painting
+========
+Here's how the painting (drawing the stuff on screen, and on printer) works:
+Each frameset is responsible for drawing itself. The base class, KWFrameSet,
+handles the generic code for iterating through the frames, applying the
+"frame is a copy" stuff, drawing the borders, etc. So each specific frameset
+class only has to implement drawFrame (exception for KWTableFrameset though).
+
+Painting of text: KWTextFrameset paints the text for each frame, calling
+KoTextDocument::drawWYSIWYG (with flags for "only the changed paragraphs" etc).
+When printing this method delegates to drawWithoutDoubleBuffer.
+Both methods iterate through the paragraphs, and call drawParagWYSIWYG for each
+one to be redrawn. This method implements the double-buffering, paints the
+background color and the space on the right of the paragraph, and calls
+QTextParag::paint(). Its role is to draw series of characters with the same
+formatting at once (in one go). For each set of chars to be painted,
+KoTextParag::drawParagString is called.
+
+In short:
+KWFrame::drawContents -> KWTextFrameSet::drawFrame
+ -> KoTextDocument::drawWYSIWYG -> KoTextDocument::drawParagWYSIWYG
+ -> KoTextParag::paint -> KoTextParag::drawParagString -> KoTextParag::drawParagStringInternal
+
+The cursor is also drawn by KoTextParag::paint, which calls KoTextParag::drawCursor.
+The blinking cursor is implemented in KoTextView, which calls a virtual
+drawCursor() method, implemented in KWTextFrameSetEdit.
+
+More low-level things
+=====================
+.. such as coordinate systems, font sizes, justified spaces etc.
+See lib/kotext/DESIGN.
+
+
+Wow, you managed to read this until the end ? Good. "GOTO 10" now ;)
+
+David Faure <faure@kde.org>

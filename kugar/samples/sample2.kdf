@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE KugarData [
+    <!ELEMENT KugarData (Row* )>
+    <!ATTLIST KugarData
+        Template CDATA #REQUIRED>
+
+    <!ELEMENT Row EMPTY>
+    <!ATTLIST Row
+        level CDATA #REQUIRED 
+        prddesc CDATA #REQUIRED
+        prdnumber CDATA #REQUIRED
+        onsale CDATA #REQUIRED
+        price CDATA #REQUIRED
+        onhand CDATA #REQUIRED
+        reorder CDATA #REQUIRED
+        lastorder CDATA #REQUIRED>
+]>
+
+<KugarData Template="sample2.ktf">
+	<Row level="0" prddesc="Category 5 HD Jacks (Black)" prdnumber="DCO245OB" onsale="Y" price="5.99" onhand="-100" reorder="100" lastorder="02/25/2000" />
+	<Row level="0" prddesc="Category 5 HD Jacks (Blue)" prdnumber="DCO245OWB" onsale="Y" price="5.99" onhand="534" reorder="100" lastorder="02/25/2000" />
+	<Row level="0" prddesc="Category 5 HD Jacks (Gray)" prdnumber="DCO245OG" onsale="Y" price="5.99" onhand="856" reorder="100" lastorder="02/25/2000" />
+	<Row level="0" prddesc="Category 5 HD Jacks (Orange)" prdnumber="DCO245OO" onsale="Y" price="5.99" onhand="1432" reorder="100" lastorder="02/25/2000" />
+	<Row level="0" prddesc="Category 5 HD Jacks (Red)" prdnumber="DCO245OWR" onsale="Y" price="5.99" onhand="345" reorder="100" lastorder="02/25/2000" />
+	<Row level="0" prddesc="Category 5 HD Jacks (White)" prdnumber="DCO245OW" onsale="Y" price="5.99" onhand="946" reorder="100" lastorder="02/25/2000" />
+	<Row level="0" prddesc="Cisco Router 1 Ethernet/2 Serial" prdnumber="DEB1602" onsale="N" price="1659.00" onhand="74" reorder="5" lastorder="01/16/2000" />
+	<Row level="0" prddesc="Cisco Router 1 Ethernet/2 Sync Serial" prdnumber="DEB1611" onsale="N" price="2049.00" onhand="25" reorder="5" lastorder="01/16/2000" />
+	<Row level="0" prddesc="Cisco Router 2 Ethernet/2 Serial" prdnumber="DEB1609" onsale="N" price="1949.00" onhand="25" reorder="5" lastorder="01/16/2000" />
+	<Row level="0" prddesc="Datatwist 350 Patch Cable 1' (Blue)" prdnumber="DCA3153BL" onsale="N" price="6.99" onhand="2784" reorder="100" lastorder="01/27/2000" />
+	<Row level="0" prddesc="Datatwist 350 Patch Cable 1' (Green)" prdnumber="DCA3153GN" onsale="N" price="6.99" onhand="3531" reorder="100" lastorder="01/27/2000" />
+	<Row level="0" prddesc="Datatwist 350 Patch Cable 1' (Orange)" prdnumber="DCA3153OR" onsale="N" price="6.99" onhand="2674" reorder="100" lastorder="01/27/2000" />
+	<Row level="0" prddesc="Datatwist 350 Patch Cable 1' (Pink)" prdnumber="DCA3153PK" onsale="N" price="6.99" onhand="12684" reorder="100" lastorder="01/27/2000" />
+	<Row level="0" prddesc="Datatwist 350 Patch Cable 1' (Red)" prdnumber="DCA3153RD" onsale="N" price="6.99" onhand="4725" reorder="100" lastorder="01/27/2000" />
+	<Row level="0" prddesc="Etherlink 10 ISA UTP only" prdnumber="3C509BTPO" onsale="N" price="59.95" onhand="1232" reorder="25" lastorder="12/23/1999" />
+	<Row level="0" prddesc="Etherlink 10 ISA UTP/AUI" prdnumber="3C509BTP" onsale="Y" price="99.95" onhand="-5" reorder="10" lastorder="02/15/2000" />
+	<Row level="0" prddesc="Etherlink 10 ISA UTP/BNC" prdnumber="3C509BTPC" onsale="N" price="69.95" onhand="132" reorder="25" lastorder="10/11/1999" />
+	<Row level="0" prddesc="Etherlink 10 UTP 32-bit EISA" prdnumber="3C592TPO" onsale="Y" price="179.95" onhand="200" reorder="15" lastorder="09/01/1999" />
+	<Row level="0" prddesc="EZ Hub 12-port 10/100 Hub" prdnumber="DEH3889" onsale="N" price="239.99" onhand="2435" reorder="35" lastorder="10/07/1999" />
+	<Row level="0" prddesc="EZ Stack 8-port 10/100 Hub" prdnumber="DEH3693" onsale="N" price="224.99" onhand="1195" reorder="35" lastorder="11/15/1999" />
+	<Row level="0" prddesc="EZ Stack 16-port 10/100 Hub" prdnumber="DEH3694" onsale="N" price="399.99" onhand="345" reorder="25" lastorder="06/04/1999" />
+	<Row level="0" prddesc="Intel NetportExpress 10/100 1-Port" prdnumber="DEP1716" onsale="N" price="209.99" onhand="121" reorder="25" lastorder="02/12/2000" />
+	<Row level="0" prddesc="Intel NetportExpress 10/100 1-Port 3-Pack" prdnumber="DEP1717" onsale="N" price="569.99" onhand="98" reorder="25" lastorder="02/12/2000" />
+	<Row level="0" prddesc="Intel NetportExpress 10/100 3-Port" prdnumber="DEP1758" onsale="N" price="305.99" onhand="82" reorder="25" lastorder="02/12/2000" />
+	<Row level="0" prddesc="Intel NetportExpress 10/100 3-Port 3-Pack" prdnumber="DEP1759" onsale="N" price="809.99" onhand="321" reorder="25" lastorder="02/12/2000" />
+	<Row level="0" prddesc="Intel NetportExpress 10/100 1-Port 10Base-T" prdnumber="DEP1801" onsale="N" price="149.99" onhand="775" reorder="25" lastorder="02/12/2000" />
+	<Row level="0" prddesc="Intel NetportExpress 10/100 3-Port 10Base-T" prdnumber="DEP1803" onsale="N" price="249.99" onhand="121" reorder="25" lastorder="02/12/2000" />
+	<Row level="0" prddesc="Intel NetportExpress PRO 3-Port Token Ring" prdnumber="DEP1447" onsale="N" price="479.99" onhand="45" reorder="5" lastorder="02/12/2000" />
+</KugarData>

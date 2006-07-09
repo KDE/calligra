@@ -1,0 +1,280 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+  <Group>
+    <GroupName>Trigonometric</GroupName>
+
+    <Function>
+      <Name>COS</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The COS() function returns the cosine of x, where x is given in radians.</Text>
+	<Syntax>COS(Float)</Syntax>
+	<Example>COS(0) equals 1.0</Example>
+	<Example>COS(PI()/2) equals 0</Example>
+	<Related>SIN</Related>
+	<Related>ACOS</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ACOT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ACOT() function returns the inverse cotangent of a number.</Text>
+	<Syntax>ACOT(Float)</Syntax>
+	<Example>ACOT(0) equals 1.57079633</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>SIN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The SIN() function returns the sine of x, where x is given in radians.</Text>
+	<Syntax>SIN(Float)</Syntax>
+	<Example>SIN(0) equals 0</Example>
+	<Example>SIN(PI()/2) equals 1</Example>
+	<Related>COS</Related>
+	<Related>ASIN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TAN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The TAN() function returns the tangent of x, where x is given in radians.</Text>
+	<Syntax>TAN(Float)</Syntax>
+	<Example>TAN(0.7) equals 0.84228838</Example>
+	<Example>TAN(0) equals 0</Example>
+	<Related>ATAN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ACOS</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ACOS() function returns the arc cosine in radians and the value is mathematically defined to be 0 to PI (inclusive).</Text>
+	<Syntax>ACOS(Float)</Syntax>
+	<Example>ACOS(0.8) equals 0.6435011</Example>
+	<Example>ACOS(0) equals 1.57079633</Example>
+	<Related>COS</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ASIN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ASIN() function returns the arc sine in radians and the value is mathematically defined to be -PI/2 to PI/2 (inclusive).</Text>
+	<Syntax>ASIN(Float)</Syntax>
+	<Example>ASIN(0.8) equals 0.92729522</Example>
+	<Example>ASIN(0) equals 0</Example>
+	<Related>SIN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ATAN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ATAN() function returns the arc tangent in radians and the value is mathematically defined to be -PI/2 to PI/2 (inclusive).</Text>
+	<Syntax>ATAN(Float)</Syntax>
+	<Example>ATAN(0.8) equals 0.67474094</Example>
+	<Example>ATAN(0) equals 0</Example>
+	<Related>TAN</Related>
+	<Related>ATAN2</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COSH</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The COSH() function returns the hyperbolic cosine of x, which is defined mathematically as (exp(x) + exp(-x)) / 2.</Text>
+	<Syntax>COSH(Float)</Syntax>
+	<Example>COSH(0.8) equals 1.33743495</Example>
+	<Example>COSH(0) equals 1</Example>
+	<Related>ACOSH</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SINH</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The SINH() function returns the hyperbolic sine of x, which is defined mathematically as (exp(x) - exp(-x)) / 2.</Text>
+	<Syntax>SINH(Float)</Syntax>
+	<Example>SINH(0.8) equals 0.88810598</Example>
+	<Example>SINH(0) equals 0</Example>
+	<Related>ASINH</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TANH</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The TANH() function returns the hyperbolic tangent of x, which is defined mathematically as sinh(x)/cosh(x).</Text>
+	<Syntax>TANH(Float)</Syntax>
+	<Example>TANH(0.8) equals 0.66403677</Example>
+	<Example>TANH(0) equals 0</Example>
+	<Related>ATANH</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ACOSH</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ACOSH() function calculates the inverse hyperbolic cosine of x. That is the value whose hyperbolic cosine is x. If x is less than 1.0, acosh() returns not-a-number (NaN) and errno is set.</Text>
+	<Syntax>ACOSH(Float)</Syntax>
+	<Example>ACOSH(5) equals 2.29243167</Example>
+	<Example>ACOSH(0) equals NaN</Example>
+	<Related>COSH</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ASINH</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ASINH() function calculates the inverse hyperbolic sine of x; that is the value whose hyperbolic sine is x.</Text>
+	<Syntax>ASINH(Float)</Syntax>
+	<Example>ASINH(0.8) equals 0.73266826</Example>
+	<Example>ASINH(0) equals 0</Example>
+	<Related>SINH</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ATANH</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ATANH() function calculates the inverse hyperbolic tangent of x; that is the value whose hyperbolic tangent is x. If the absolute value of x is greater than 1.0, ATANH() returns not-a-number (NaN).</Text>
+	<Syntax>ATANH(Float)</Syntax>
+	<Example>ATANH(0.8) equals 1.09861229</Example>
+	<Example>ATANH(0) equals 0</Example>
+	<Related>TANH</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ATAN2</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+       <Comment>Angle (radians)</Comment>
+       <Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>This function calculates the arc tangent of the two variables x and y. It is similar to calculating the arc tangent of y/x, except that the signs of both arguments are used to determine the quadrant of the result.</Text>
+	<Syntax>ATAN2(value;value)</Syntax>
+	<Example>ATAN2(0.5;1.0) equals 1.107149</Example>
+	<Example>ATAN2(-0.5;2.0) equals 1.815775</Example>
+	<Related>ATAN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DEGREES</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (radians)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>This function transforms a radian angle to a degree angle.</Text>
+	<Syntax>DEGREES(Float)</Syntax>
+	<Example>DEGREES(0.78) equals 44.69</Example>
+	<Example>DEGREES(1) equals 57.29</Example>
+	<Related>RADIANS</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RADIANS</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Angle (degrees)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>This function transforms a degree angle to a radian angle.</Text>
+	<Syntax>RADIANS(Float)</Syntax>
+	<Example>RADIANS(75) equals 1.308</Example>
+	<Example>RADIANS(90) equals 1.5707</Example>
+	<Related>DEGREES</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PI</Name>
+      <Type>Float</Type>
+      <Help>
+	<Text>The PI() function returns the value of PI.</Text>
+	<Syntax>PI()</Syntax>
+	<Example>PI() equals 3.141592654...</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

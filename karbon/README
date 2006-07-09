@@ -1,0 +1,50 @@
+Karbon14 is a vector graphics application within koffice.
+
+
+Object hierarchy:
+-----------------
+
+        +- vdocument
+        |
+        +- vcomposite--+- (shapes)
+        |
+vobject-+- vtext
+        |
+        +- vgroup-+- vlayer
+
+
+Files and directories:
+----------------------
+commands/
+	Undo/redo operations.
+
+core/
+	Essential data structures.
+
+data/
+	KDE data.
+
+dialogs/
+	Dialogs.
+
+dockers/
+	Dockers.
+
+pics/
+	Icons and grafx.
+
+render/
+	Everything related to painting
+
+shapes/
+	The basic shapes like ellipse and rectangle etc.
+	Shapes are nothing more than paths.
+
+tests/
+	Demonstration karbon files.
+
+tools/
+	Stuff you can do with the mouse.
+
+widgets/
+	Widgets.

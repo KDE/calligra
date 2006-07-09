@@ -1,0 +1,195 @@
+* General:
+
+ - Paragraph background color can now be set (in addition to text background color)
+ - Palettes now remember their position between sessions (Krita, Kivio, Karbon)
+ - Palettes now have a smart mode where they start floating on small screens and
+   docked on larger screens
+ - ToolBox is no longer duplicated for every view
+ - Accessibility: Allow speaking texts using the kdeaccessibility tools (KTTS).
+ - Accessibility: Alt-F8 to set focus to any focusable widget.
+ - Accessibility: F8 and Shift-F8 for mouseless splitter and dock widget sizing.
+
+* Bug fixes:
+
+** KWord:
+ - Statistic variables are not saved in KWord format (#111478)
+ - Fix bug where inserting a large image would not make it a size that fits the page
+ - Fix bug where images in headers were only shown in the first page.
+ - Fix RMB in table-cell should not unselect text
+
+
+** Krita:
+ - Krita now compiles on NetBSD
+ - Fix rotation bugs
+ - When "Select Similar Colors" a transparant area, add only transparant areas instead 
+   of the entire image to the selection.
+ - Fix loading and saving of grayscale images
+ - Fix ImageMagick 16/8 bit image confusion when loading and saving.
+ - BUG: 110296 Display is now restored on cancel
+ - many crash fixes
+ - Warn when applying a filter that will convert the layer data
+ - create and save new brushes
+ - show image in center of window
+ - group layers in folders
+ - cmyk8, cmyk16, rgb16, gray16, rgb-half, rgb-float16 and lab16 colorspaces
+
+
+** KSpread:
+ - Fixed spreadsheets containing formulae being marked as modified immediately after being opened.
+ - 115948 format changes of an automerged cell affects all cells in the set.
+
+** Karbon:
+- 114421 Transform palette has a strange layout when it is tall 
+- 114424 Stroke properties palette has a strange layout when it is...
+- 114425 Color palette has title "Fill color" even when it shows s... 
+- 114428 The last created object should stay selected
+- 114577 The Document/Layers/History palette is not shown on start
+- 114579 Deleting polyline segment moves the mouse pointer to (0, 0)
+- 114580 JJ: The line thickness SpinBox has no tooltip
+- 112765 Selecting a polyline and running the "round corners" plug...
+- 60438 undo confusion between point and shape action
+- 92974 svg export creates useless svg file (from text tool)
+- 115752 Make paste operation undo:able
+- 116612 svg import/rendering bugs
+- 111372 karbon: KLibrary: Undefined symbol "init_libkarbonpart"
+- 114578 A polyline spline has a too big surrounding box
+- 89596 Switching between Karbon14 and KSVGPlugin view in Konquer...
+- 38555 segv when opening a file svg or kontour native
+- 116422 un-usable selecting behaviour multple moving
+- 116972 Transform palette is not updated when moving or scaling an object
+- 115213 The color and opacity bars in the color chooser palette are backwards.
+	(thanks Marijn Kruisselbrink for the initial patch)
+- 96944 Wanted: good right-click actions for polyline tool, zoom ...
+- 111619 Page layout: size alias and margins doesn't get saved
+- 111717 How to bring back the overview window if you close it?
+- 111618 Rename plugins menu to "Effects"
+- 109520 Change Align Center (Vertical) to Align Middle and add some extra separators
+- 108789 Keybindings like krita, and other tweaks
+- 108755 Always use this document at startup, Karbon has no way to stop doing this. Add a basic karbon template.
+- 91376, 111207, 60844 Dockers now use the KoPalette library. This means a huge improvement when it comes to docker management 
+- 112691 Usability: The tools should be grouped
+- 114429 The color picker is bad: Karbon now uses the Krita color choosers.
+- 99927 karbon prints empty page the same in preview
+- 119452 Printing scales the entire drawing down
+- 116494 [usability] polyline interaction suggestions
+- 119024 Color chooser doesn't move crosshair/sliders when switching from foreground to background color
+- 112680 JJ: All the dockers lack tooltips
+- 39138 selecting inside groups 
+- 124691 crash when adding pattern
+- 126006 Duplicated "Snap to grid" in "View" menu
+- 126095 deleted objects saved in in odg
+- 125957 l10n for Russian: different "width" for stroke and other ...
+- 102860 karbon crashes when pasting text
+- 126341 Can't undo after using whirl/pinch effect
+- 129039 Reordering layer elements reorders layers themselves
+- 126094 polyline tool does not work as expected
+
+** Kivio:
+ - Fix grid painting
+ - Fix loading of remote documents
+
+* Features:
+
+** Krita:
+ - Add histograms
+ - Histograms for images with more than 8-bit to the channel can be zoomed
+ - Add histogram docker
+ - Many filters are now colorspace independent
+ - Add CMYK (8 and 16 bit)
+ - Add 16-bit grayscale
+ - Image separation feature
+ - Add openEXR support
+ - Separate painting styles from tools; now every tool, from freehand to star can use any
+   painting style (eraser, brush, pen, airbrush...)
+ - Create better and more modern selection visualisation
+ - Put brush, gradient, pattern and paint style in popups in a toolbar, reducing the amount
+   of space Krita needs for its dockers
+ - Make hardness of tablet pressure curve configurable
+ - Many performance improvements to the backend (allocation cache, transform cache)
+ - Use color profiles everywhere
+ - New curves widget for color adjustments
+ - Add feather selection feature
+ - Pasted clipboard contents are placed in the middle of the image initially
+ - Brush shape is shown as an outline cursor when painting freehand
+ - Krita now adds itself to the Open With menu in Konqueror
+ - support more modes from GImp image hose brushes
+ - Much work on documentation
+ - Allow the user to choose between contiguous fill behaviour in combination with selections. 
+   Either fill the entire selection, or floodfill the image, but taking the selection into 
+   account (default behaviour).
+ - Add a 16-bit float half format RGB colourspace and change the OpenEXR filters to use it. 
+   Will probably add the option to load into 32-bit float as that should be faster.
+ - 16-bit LAB is now the fallback colormodel when a particular colormodel doesn't implement
+   a certain function
+ - Filter gallery feature
+ - Add an option to the colorpicker to pick colors not just from the active or
+   from all visible layers, but from any layer, while still working on this layer.
+ - Tools and most menu items now are disabled when a layer is invisible or locked.
+ - Add noise reduction filter
+ - Made scrolling with a scrollwheel work better
+ - Add round corners filter
+ - Add sobel filter
+ - Made crop tool much more usable
+ - Add small tiles filter
+ - Add pixellize filter
+ - Remove the text brush
+
+** KWord:
+ - Undo and redo for resizing of tables and columns
+ - Grid for objects
+ - allow documents to start at any page number (no gui yet)
+ - Accessiblity: keyboard navigation across frames, create frame using the keyboard
+ - cleanups and usability improvements for the document structure widget
+ - make the Fit to Width zoommode work properly, even when you resize the window later.
+ - make Fit to Width zoommode the default for new users
+ - KWord makes selecting/moving/resizing frames easier by implementing all features from http://www.koffice.org/developer/keyboardmodifiers.php
+ - paint the cursor in a color that is always readable, even if you set the background color to black
+ - make positioning the caret at frame edge easier.
+ - make frame handling much easier
+ - Center page on screen
+ - Create new set of templates, based on usability and user feedback.
+ - make deleting a page (in dtp mode) actually work when there was still content on the page.
+ - frame selections are now per view.
+ - Remember picture insert directory
+ - Accessibility: Enhanced mouseless navigation using document structure area.
+ - KWord now uses OASIS OpenDocument
+ - Accessibility: Improvement: "Menu" key shows RMB popup in document structure area.
+ - Add a dot as the suffix of numbered lists (1, a, A, III)
+
+** KSpread:
+ - 	Added cell reference highlighting when editing formulae.  Also added click-and-drag resizing
+	of ranges referenced in formulae.
+ -	Greatly improved OpenDocument support
+ -	Sort dialog displays column & row names instead of "Column A","Column B" for selecting sort criteria
+ - new formula engine implemented - parsing and evaluation much faster and
+   more robust and flexible
+
+** Karbon
+ - Duplicate object.
+ - Minor new feature: make it able to change docker font sizes.
+ - Enabled right mouse click to zoom out of canvas, partially fixing bug 96944
+ - Load SVG and Gimp gradients
+ - Support for changing gradient or pattern fills on the canvas (wish 119344)
+
+** KPresenter:
+ - Display or not background
+ - Display or not slide master object
+ - QWhatsThis help added in COnfigure KPresenter... dialog
+ - User manual is up-to-date
+
+** KChart:
+ - Correctly set a background color/image
+
+** Kivio:
+ - Port to the new KoGuides which adds auto guide lines
+ - Port to KoPalette and cleaned up the palettes (toolwindows)
+ - Make it possible to rearrange the pages with d'n'd in the tab bar
+ - Add undo support for Add Connector Target
+ - New stencil text editor
+ - Added an object list palette
+ - Made the old stencil set toolwindow a dialog and cleaned it up a bit
+ - Made text properties editable for each textbox and not only each stencil
+
+** Filters:
+ - Kpresenter can export page as image file (png/bmp/svg/mng/jpeg/xbm)
+ - Kivio can export page as image file

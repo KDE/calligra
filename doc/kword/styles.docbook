@@ -1,0 +1,351 @@
+<sect1 id="styles">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Text styles</title>
+<indexterm><primary>text styles</primary><secondary>introduction</secondary></indexterm>
+
+<sect2 id="style-intro"><title>Introduction to text styles</title>
+<para>When you build documents that are more complex than a business
+letter, such as a book, newsletter, or resume, the document is often
+broken down into sections.  Each of these sections may have a similar
+appearance.  </para>
+
+<para>You can use text styles to easily keep a consistent look throughout
+your document.</para>
+
+<tip>
+<para>If you are familiar with Styles in &Microsoft;
+<application>Word</application>, &kword; text styles perform similar functions in &kword;. 
+You can <link linkend="style-select">skip to the next section</link>.</para>
+</tip>
+
+<para>Lets look at a section of a document and try to identify appropriate text styles:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="textstyex.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>In this example, you can see several different text styles at work:</para>
+
+<itemizedlist>
+<listitem><para>The title is centered, underlined and in bold text</para></listitem>
+<listitem><para>The section title (Income) is boldfaced.</para></listitem>
+<listitem><para>The caption for figure 1-1 is smaller than normal text and boldface.</para></listitem>
+<listitem><para>The rest of the document is in a standard font.</para></listitem>
+</itemizedlist>
+
+
+<para>We do not need to know exactly how we want the text and paragraphs
+of these sections to look yet.  All we need to do is identify these
+sections of text as <quote>Section Titles</quote>, <quote>Normal
+Text</quote>, etc.</para>
+
+<para>Once we have finished the document, you can change the look of all
+the text labeled <quote>Section Title</quote> all at once.  </para>
+
+<para>This will ensure that all section titles appear consistent
+throughout your document.</para>
+
+<para>&kword; has 8 predefined text styles.</para>
+
+<note><para>Text styles should not be confused with <link linkend="tablestyle">table styles</link> or
+<link linkend="framestyles">frame styles</link>.</para>
+<para>Text styles determine how the characters and paragraphs appear.  Framestyles, control the borders and background color for the
+frame.  Tablestyles determine how tables appear in the finished document.</para></note>
+</sect2>
+
+<sect2 id="style-select">
+<title>Changing the text style of text</title>
+<indexterm><primary>text styles</primary><secondary>changing text style of selected text</secondary></indexterm>
+
+<para>To change the text style of text, first, <link linkend="select">select
+the text</link> you want the changes to apply to.</para>
+
+<para>You can now change the text style in one of two ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>Select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Style</guimenuitem></menuchoice>
+from the menubar.  This will show the list of available text styles, select
+the text style from the list.</para>
+</listitem>
+
+<listitem>
+<para>You can select the text style using the combo box on the <link linkend="paragraph-toolbar">Paragraph toolbar</link>.  
+This combo box looks like this: <inlinemediaobject><imageobject><imagedata
+fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject>.</para>
+</listitem>
+</itemizedlist>
+<para>Simply select the new text style from the list provided.</para>
+
+<tip><para>You can change the text style of an entire paragraph.  Simply place the cursor in a paragraph (making sure that 
+no characters are selected) and select a new style.  Every character in the paragraph will be converted to the new text style.</para></tip>
+</sect2>
+
+<sect2 id="style-add">
+<title>Creating a text style</title>
+<indexterm><primary>text styles</primary><secondary>creating</secondary></indexterm>
+
+<para>If you plan on using text styles extensively in a large document, you
+will probably want to create new text styles specific for your needs.
+</para>
+
+<para>There are two ways to create a new text style:</para>
+
+<orderedlist>
+<listitem><para><link linkend="style-add-dialog">Create a text style based on another text style using a dialog</link>.</para></listitem>
+<listitem><para><link linkend="style-add-text">Format a block of text to the desired format,
+then create a text style based on that text</link>.</para></listitem>
+</orderedlist>
+
+
+<sect3 id="style-add-dialog">
+<title>Creating a new text style based on a current text style</title>
+<para>To create a new text style select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Style Manager...</guimenuitem></menuchoice>
+from the menubar.</para><para>This will bring up a dialog box.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="styldlg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>In the list box on the left, is a list of all the currently defined text styles.  Select the current style that most closely resembles the new
+text style.  Click on that text style once with the &LMB;.</para>
+
+<para>Click the <guibutton>New</guibutton> button.</para>
+
+<para>&kword; will create a new text style based on the selected text style.  It will assign it a temporary name [New Style Template (8)].</para>
+
+<para>Type a descriptive name in the box labeled
+<guilabel>Name</guilabel>.  This will be the name of the text style.</para>
+
+<para>The rest of the dialog is used to make the alterations needed to create the new
+text style.</para>
+
+<para>The preview box will show you what your new text style will look
+like.</para>
+
+<para>Use the tabs labeled <link linkend="style-font">Font</link>,
+<link
+linkend="style-space">Indent &amp; Spacing</link>, <link
+linkend="style-align">General Layout</link>, <link
+linkend="style-borders">Borders</link>, <link
+linkend="style-numbering">Bullets/Numbering</link>, and <link
+linkend="style-tabulators">Tabulators</link>, to format the text style.</para>
+
+<para>Click <guibutton>OK</guibutton> to create your new text style.</para>
+<para>Click <guibutton>Cancel</guibutton> to abort the creation of the
+text style.</para>
+
+<sect4 id="style-font">
+<title>Changing the Font Size, Type etc.</title>
+
+<para>The tab labeled <guilabel>Font</guilabel> is used to set the font type, font style, formatting, etc.</para>
+
+<para>This tab functions identically to the <link linkend="change-font-dialog">change font dialog</link> used to edit general text.
+Changes to this tab affect to
+all text formated with this text style.</para>
+
+</sect4>
+
+<sect4 id="style-space">
+<title>Changing Paragraph Spacing and Indents</title>
+
+<para>The tab labeled <guilabel>Indents &amp; Spacing</guilabel> is used to adjust
+spacing between lines, and paragraph indentation.</para>
+
+<para>This tab functions identically to the same tab in the <link linkend="indents-and-spaces">Format Paragraph</link> dialog.
+Changes to this tab affect to
+all text formated with this text style.</para>
+</sect4>
+
+<sect4 id="style-align">
+<title>Changing Paragraph Alignment</title>
+
+<para>The tab labeled <guilabel>General Layout</guilabel> determines how the text is placed <emphasis>within
+the line</emphasis>.  With other applications, you may have referred to
+this as <emphasis>Alignment</emphasis>, or
+<emphasis>Justification</emphasis>.</para>
+
+<para>This tab functions identically to the same tab in the <link linkend="para-aligns">Format Paragraph</link> dialog.
+Changes to this tab affect to
+all text formated with this text style.</para>
+
+</sect4>
+
+<sect4 id="style-borders">
+<title>Changing Paragraph Borders</title>
+
+<para>The tab labeled <guilabel>Borders</guilabel> is used to define and configure graphical borders
+around your paragraphs.</para>
+
+<para>This tab functions identically to the same tab in the <link linkend="para-borders">Format Paragraph</link> dialog.
+Changes to this tab affect to
+all text formated with this text style.</para>
+
+</sect4>
+
+<sect4 id="style-numbering">
+<title>Changing Paragraph Numbering/Bullets</title>
+
+<para>The tab labeled <guilabel>Bullets/Numbers</guilabel> is used to make all text formatted with this text style into a list.</para>
+
+<para>This tab functions identically to the same tab in the <link linkend="para-bullets-and-numbers">Format Paragraph</link> dialog.
+For more information see the section entitled <link linkend="lists">Lists</link>.</para>
+
+
+</sect4>
+
+<sect4 id="style-tabulators">
+<title>Changing Tab-stops.</title>
+
+<para>Using the tab labeled <guilabel>Tabulators</guilabel> it is possible to define tab stops for the new text style.</para>
+
+<para>This tab functions identically to the same tab in the <link linkend="tab-stop-setting-dialog">Format Paragraph</link> dialog.
+For more information see the section entitled <link linkend="tab-stops">Using Tab Stops</link>.</para>
+
+</sect4>
+
+</sect3>
+<sect3 id="style-add-text">
+<title>Creating a text style based on formatted text</title>
+<para>If you have text that is already formatted correctly for a new text style:</para>
+<orderedlist>
+<listitem><para>Select the text and select
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Create Style From Selection...</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+
+<listitem><para>&kword; will prompt you for a name for your text style.  Enter the name in the text box.</para></listitem>
+<listitem><para>Click the 
+<guibutton>OK</guibutton> button.</para></listitem>
+</orderedlist>
+<para>  A new text style is created with the font, paragraph spacing, paragraph alignment, borders and shadows of the
+currently selected text.</para>
+<note><para>Future formatting changes to this selected text will not automatically change the text style you just created.  If you want the changes
+to become part of the text style, you must <link linkend="style-edit">edit the text style</link>.</para></note>
+</sect3>
+</sect2>
+
+<sect2 id="style-deleting">
+<title>Deleting a text style</title>
+<indexterm><primary>text styles</primary><secondary>deleting</secondary></indexterm>
+
+<para>Deleting an unneeded text style is easy.</para>
+
+
+<para>Select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Style Manager...</guimenuitem></menuchoice>
+from the menubar.</para><para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="styldlg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>From the list of available text styles, select the style you want to
+delete by clicking once with the &LMB;.</para>
+
+<warning>
+<para>Be sure you have selected the correct text style before you click
+<guibutton>Delete</guibutton>.  &kword; will not ask for confirmation,
+so you will not be given an opportunity to back out.</para>
+</warning>
+<para>Click <guibutton>Delete</guibutton>.</para>
+<para>The text style is now deleted.</para>
+
+</sect2>
+
+<sect2 id="style-edit">
+<title>Editing a text style</title>
+<indexterm><primary>text styles</primary><secondary>editing</secondary></indexterm>
+
+<para>The true power of text styles, is the ability to edit the formatting
+options of that text style <emphasis>after</emphasis> the text style is defined.  
+By changing the formatting of the text style, &kword; will immediately change
+every paragraph with that text style, and maintain a consistent look to
+the document.</para>
+
+<para>&kword; uses the same interfaces to edit the formatting options of a
+text style, that it used to create the text style in the first
+place.</para>
+
+<para>To edit a current text style:</para>
+
+<para>Select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Style Manager...</guimenuitem></menuchoice>
+from the menubar.</para><para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="styldlg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Select the text style you want to edit from the list on the left by clicking once with the &LMB;.
+Now you can make the changes you want to this text style.</para>
+
+<para>The preview box will show you what your new text style will look
+like.</para>
+
+<warning>
+<para>Do not change the name of your template.</para>
+
+<para>Doing so will delete your current text style from the list (and create
+a new one with the new name).</para>
+
+<para>Any paragraphs which were originally formatted with this text style,
+will revert to <quote>Standard</quote>.</para>
+</warning>
+
+<para>Use the buttons labeled <link linkend="style-font">Font</link>,
+<link
+linkend="style-space">Indent and Spacing</link>, <link
+linkend="style-align">Aligns</link>, <link
+linkend="style-borders">Borders</link>, <link
+linkend="style-numbering">Bullets/Numbering</link>, and <link
+linkend="style-tabulators">Tabulators</link> to alter the look of  the text style.</para>
+
+<para>Click <guibutton>OK</guibutton> to commit your changes.</para>
+
+<para>Click <guibutton>Cancel</guibutton> to abort all changes to this
+text style.</para>
+
+</sect2>
+
+<sect2 id="style-import">
+<title>Import a text style</title>
+<indexterm><primary>text styles</primary><secondary>importing</secondary></indexterm>
+
+<para>&kword; has the ability to import a text style from one &kword; document and include it in the 
+list of text text styles in another &kword; document.</para>
+<para>To import a text style, select <menuchoice><guimenu>Format</guimenu><guimenuitem>Import Style...</guimenuitem></menuchoice>
+from the menubar.</para><para>This will bring up an empty dialog box.</para>
+<para>Click on the <guibutton>Load</guibutton> button.  This will bring up a 
+<link linkend="file-dialog">file selection dialog</link>.  Choose the &kword; file you want to import the text style from and click
+<guibutton>OK</guibutton>.</para>
+<para>The dialog box will now fill with all available text text styles available for import.</para>
+<tip><para>If &kword; encounters a duplicate text style name in the selected file, it will append a number to the end of the
+text style name to identify the imported style.</para>
+<para>As an example, if you import the <emphasis>Standard</emphasis> text style from another &kword; file, &kword; will change
+the text style name to <emphasis>Standard-1</emphasis>.</para></tip>
+<para>Select <emphasis>all</emphasis> the text style you want to import.  Then click
+<guibutton>OK</guibutton>.</para>
+</sect2>
+
+</sect1>

@@ -1,0 +1,594 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Text</GroupName>
+
+    <Function>
+      <Name>DOLLAR</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Decimals</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DOLLAR() function converts a number to text using currency format, with the decimals rounded to the specified place. Although the name is DOLLAR, this function will do the conversion according to the current locale.</Text>
+	<Syntax>DOLLAR(number;decimals)</Syntax>
+	<Example>DOLLAR(1403.77) returns "$ 1,403.77"</Example>
+	<Example>DOLLAR(-0.123;4) returns "$-0.1230"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>FIXED</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Decimals</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>No_commas</Comment>
+	<Type>Bool</Type>
+      </Parameter>
+      <Help>
+	<Text>The FIXED() function rounds a number to the specified number of decimals, formats the number in decimal format string, and returns the result as text. If decimals is negative, number is rounded to the left of the decimal point. If you omit decimals, it is assumed to be 2. If optional parameter no_commas is True, thousand separators will not show up.</Text>
+	<Syntax>FIXED(number;decimals;no_commas)</Syntax>
+	<Example>FIXED(1234.567;1) returns "1,234.6"</Example>
+	<Example>FIXED(1234.567;1;FALSE) returns "1234.6"</Example>
+	<Example>FIXED(44.332) returns "44.33"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SUBSTITUTE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Text for which you want to substitute</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Part of text you want to replace</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>New text which will be replacement</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Occurrence of replacement</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUBSTITUTE() substitutes new_text for old_text in a text string. If instance_num is specified, only that instance of old_text is replaced. Otherwise, every occurrence of old_text is changed to new_text. Use SUBSTITUTE when you want to replace specific text, use REPLACE when you want to replace any text that occurs in a specific location.</Text>
+	<Syntax>SUBSTITUTE(text; old_text; new_text; instance_num)</Syntax>
+	<Example>SUBSTITUTE("Cost Data";"Cost";"Sales") returns "Sales Data"</Example>
+	<Example>SUBSTITUTE("Qtr 1, 2001";"1";"3";1) returns "Qtr 3, 2001"</Example>
+	<Example>SUBSTITUTE("Qtr 1, 2001";"1";"3";4) returns "Qtr 3, 2003"</Example>
+        <Related>REPLACE</Related>
+        <Related>FIND</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SEARCH</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The text you want to find</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>The text which may contain find_text</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Specified index to start the search</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The SEARCH() function finds one text string (find_text) within another text string (within_text) and returns the number of the starting point of find_text, from the leftmost character of within_text.</Text>
+        <Text>You can use wildcard characters, question mark (?) and asterisk (*). A question mark matches any single character, an asterisk matches any sequences of characters.</Text>
+        <Text>Parameter start_num specifies the character at which to start the search. The first character is character number 1. If start_num is omitted, it is assumed to be 1. SEARCH does not distinguish between uppercase and lowercase letters.</Text>
+	<Syntax>SEARCH(find_text;within_text;start_num)</Syntax>
+	<Example>SEARCH("e";"Statements";6) returns 7</Example>
+	<Example>SEARCH("margin";"Profit Margin") returns 8</Example>
+        <Related>FIND</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>T</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+      <Text>The T() function returns the text referred to by value. If value is, or refers to, text then T returns value. If value does not refer to text then T returns empty text.</Text>
+	<Syntax>T(value)</Syntax>
+	<Example>T("KOffice") returns "KOffice"</Example>
+	<Example>T(1.2) returns "" (empty text)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TEXT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The TEXT() function converts a value to text.</Text>
+	<Syntax>TEXT(value)</Syntax>
+	<Example>TEXT(1234.56) returns "1234.56"</Example>
+	<Example>TEXT("KSpread") returns "KSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PROPER</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The PROPER() function converts the first letter of each word to uppercase and the rest of the letters to lowercase.</Text>
+	<Syntax>PROPER(string)</Syntax>
+	<Example>PROPER("this is a title") returns "This Is A Title"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COMPARE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String to compare with</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Compare case-sensitive (true/false)</Comment>
+	<Type>Boolean</Type>
+      </Parameter>
+      <Help>
+	      <Text>The COMPARE() function returns 0 if the two strings are equal; -1 if the first one is lower in value than the second one; otherwise it returns 1.</Text>
+	<Syntax>COMPARE(string1; string2; true|false)</Syntax>
+	<Example>COMPARE("KOffice"; "KOffice"; true) returns 0</Example>
+        <Example>COMPARE("koffice"; "KOffice"; true) returns 1</Example>
+        <Example>COMPARE("kspread"; "KOffice"; false) returns 1</Example>
+        <Related>EXACT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>EXACT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The EXACT() function returns True if these two strings are equal. Otherwise, it returns False.</Text>
+	<Syntax>EXACT(string1;string2)</Syntax>
+	<Example>EXACT("KOffice";"KOffice") returns True</Example>
+        <Example>EXACT("KSpread";"KOffice") returns False</Example>
+        <Related>COMPARE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>REPLACE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Text which you want to replace some characters</Comment>
+	<Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Position of the characters to replace</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of characters to replace</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>The text that will replace characters in old text</Comment>
+	<Type range="false">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The REPLACE() function replaces part of a text string with a different text string.</Text>
+	<Syntax>REPLACE(text;position;length;new_text)</Syntax>
+	<Example>REPLACE("abcdefghijk";6;5;"-") returns "abcde-k"</Example>
+	<Example>REPLACE("2002";3;2;"03") returns "2003"</Example>
+        <Related>FIND</Related>
+        <Related>MID</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>FIND</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>The text you want to find</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>The text which may contain find_text</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Specifies index to start the search</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The FIND() function finds one text string (find_text) within another text string (within_text) and returns the number of the starting point of find_text, from the leftmost character of within_text.</Text>
+        <Text>Parameter start_num specifies the character at which to start the search. The first character is character number 1. If start_num is omitted, it is assumed to be 1.</Text>
+        <Text>You can also use function SEARCH, but unlike SEARCH, FIND is case-sensitive and does not allow wildcard characters.</Text>
+	<Syntax>FIND(find_text;within_text;start_num)</Syntax>
+	<Example>FIND("KOf";"KOffice") returns 1</Example>
+	<Example>FIND("i";"KOffice") returns 5</Example>
+	<Example>FIND("K";"KSpread in KOffice";4) returns 12</Example>
+        <Related>SEARCH</Related>
+        <Related>REPLACE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MID</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Position</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Length</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The MID() function returns a substring that contains 'length' characters of the string, starting at 'position' index.</Text>
+	<Syntax>MID(text;position;length)</Syntax>
+	<Syntax>MID(text;position)</Syntax>
+	<Example>MID("KOffice";2;3) returns "Off"</Example>
+	<Example>MID("KOffice";2) returns "Office"</Example>
+        <Related>LEFT</Related>
+        <Related>RIGHT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LEN</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The LEN() function returns the length of the string.</Text>
+	<Syntax>LEN(text)</Syntax>
+	<Example>LEN("hello") returns 5</Example>
+	<Example>LEN("KSpread") returns 7</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TRIM</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The TRIM() function returns text with only single spaces between words.</Text>
+	<Syntax>TRIM(text)</Syntax>
+	<Example>TRIM(" hello    KSpread   ") returns "hello KSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CONCATENATE</Name>
+      <Type>String</Type>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>String values</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>The CONCATENATE() function returns a string which is the concatenation of the strings passed as parameters.</Text>
+	<Syntax>CONCATENATE(value;value;...)</Syntax>
+	<Example>CONCATENATE("KSpread";"KOffice";"KDE") returns "KSpreadKOfficeKDE"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RIGHT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Amount of characters</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The RIGHT() function returns a substring that contains the 'length' rightmost characters of the string. The whole string is returned if 'length' exceeds the length of the string.</Text>
+	<Syntax>RIGHT(text;length)</Syntax>
+	<Example>RIGHT("hello";2) returns "lo"</Example>
+	<Example>RIGHT("KSpread";10) returns "KSpread"</Example>
+	<Example>RIGHT("KSpread") returns "d"</Example>
+        <Related>LEFT</Related>
+        <Related>MID</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LEFT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Amount of characters</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The LEFT() function returns a substring that contains the 'length' leftmost characters of the string. The whole string is returned if 'length' exceeds the length of the string.</Text>
+	<Syntax>LEFT(text;length)</Syntax>
+	<Example>LEFT("hello";2) returns "he"</Example>
+	<Example>LEFT("KSpread";10) returns "KSpread"</Example>
+	<Example>LEFT("KSpread") returns "K"</Example>
+        <Related>RIGHT</Related>
+        <Related>MID</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>REPT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Count of repetitions</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The REPT() function repeats the first parameter as often as told by the second parameter.</Text>
+	<Syntax>REPT(text;count)</Syntax>
+	<Example>REPT("KSpread";3) returns "KSpreadKSpreadKSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ROT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Text</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROT() function encrypts text by replacing each letter with the one 13 places along in the alphabet. If the 13th position is beyond the letter Z, it begins again at A (rotation).</Text>
+        <Text>By applying the encryption function again to the resulting text, you can decrypt the text.</Text>
+	<Syntax>ROT(Text)</Syntax>
+	<Example>ROT("KSpread") returns "XFcernq"</Example>
+	<Example>ROT("XFcernq") returns "KSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TOGGLE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The TOGGLE() function changes lowercase characters to uppercase and uppercase characters to lowercase.</Text>
+	<Syntax>TOGGLE(text)</Syntax>
+	<Example>TOGGLE("hello") returns "HELLO"</Example>
+	<Example>TOGGLE("HELLO") returns "hello"</Example>
+	<Example>TOGGLE("HeLlO") returns "hElLo"</Example>
+        <Related>UPPER</Related>
+        <Related>LOWER</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CLEAN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The CLEAN() function removes every non-printable character from the string</Text>
+	<Syntax>CLEAN(text)</Syntax>
+	<Example>CLEAN(AsciiToChar(7) + "HELLO") returns "HELLO"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SLEEK</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The SLEEK() function removes all spaces from the string.</Text>
+	<Syntax>SLEEK(text)</Syntax>
+	<Example>SLEEK("This is   some  text ") returns "Thisissometext"</Example>
+        <Related>TRIM</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>UPPER</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The UPPER() function converts a string to upper case.</Text>
+	<Syntax>UPPER(text)</Syntax>
+	<Example>UPPER("hello") returns "HELLO"</Example>
+	<Example>UPPER("HELLO") returns "HELLO"</Example>
+        <Related>LOWER</Related>
+        <Related>TOGGLE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LOWER</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The LOWER() function converts a string to lower case.</Text>
+	<Syntax>LOWER(text)</Syntax>
+	<Example>LOWER("hello") returns "hello"</Example>
+	<Example>LOWER("HELLO") returns "hello"</Example>
+        <Related>UPPER</Related>
+        <Related>TOGGLE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CHAR</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Character code</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The CHAR() function returns the character specified by a number.</Text>
+	<Syntax>CHAR(code)</Syntax>
+	<Example>CHAR(65) returns "A"</Example>
+        <Related>CODE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CODE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Text</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The CODE() function returns a numeric code for the first character in a text string.</Text>
+	<Syntax>CODE(text)</Syntax>
+	<Example>CODE("KDE") returns 75</Example>
+        <Related>CHAR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>VALUE</Name>
+      <Type>Double</Type>
+      <Parameter>
+        <Comment>Text</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Help>  
+        <Text>Converts text string that represents a value to the real value.  </Text> 
+        <Syntax>VALUE(text)</Syntax>
+        <Example>VALUE("14.03") returns 14.03</Example>
+      </Help> 
+    </Function>
+
+    <Function>
+      <Name>REGEXP</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Searched text</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Regular expression</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Default value (optional)</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Back-reference (optional)</Comment>
+        <Type range="false">Number</Type>
+      </Parameter>
+      <Help>  
+        <Text>Returns a part of the string that matches a regular expression. If the string does not match the given regular expression, value specified as default is returned.</Text> 
+        <Text>If a back-reference is provided, then the value of that back-reference is returned.</Text>
+        <Text>If no default value is given, an empty string is assumed. If no back-reference is given, 0 is assumed (so that entire matching part is returned).</Text>
+        <Syntax>REGEXP(text; regexp; default; backref)</Syntax>
+        <Example>REGEXP("Number is   15.";"[0-9]+") = "15" </Example>
+        <Example>REGEXP("15, 20, 26, 41";"([0-9]+), *[0-9]+$";"";1) = "26" </Example>
+      </Help> 
+    </Function>
+
+    <Function>
+      <Name>REGEXPRE</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Searched text</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Regular expression</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Replacement</Comment>
+        <Type range="false">String</Type>
+      </Parameter>
+      <Help>  
+        <Text>Replaces all matches of a regular expression with the replacement text</Text> 
+        <Syntax>REGEXPRE(text; regexp; replacement)</Syntax>
+        <Example>REGEXPRE("14 and 15 and 16";"[0-9]+";"num") returns "num and num and num"</Example>
+      </Help> 
+    </Function>
+
+
+  </Group>
+
+</KSpreadFunctions>

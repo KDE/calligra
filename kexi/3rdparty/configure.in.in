@@ -1,0 +1,60 @@
+dnl This is copied from gpsim-0.21.1/acinclude.m4, which was itself
+dnl copied from the NcFTP distribution. 
+dnl Modified by David Faure <faure@kde.org> for kexi's purposes.
+dnl
+dnl  Original author Mike Gleason mgleason@NcFTP.com
+dnl
+dnl
+AC_DEFUN([kexi_LIB_READLINE], [
+AC_MSG_CHECKING([for Readline library])
+
+kexi_cv_lib_readline=no
+ac_save_LIBS="$LIBS"
+# Note: $LIBCURSES is permitted to be empty.
+for LIBREADLINE in "-lreadline" "-lreadline $LIBCURSES" "-lreadline -ltermcap" "-lreadline -lncurses" "-lreadline -lcurses"
+do
+	LIBS="$ac_save_LIBS $LIBREADLINE"
+	AC_TRY_RUN([
+	/* program */
+#include <stdio.h>
+#include <stdlib.h>
+#include <readline/readline.h>
+ 
+main(int argc, char **argv)
+{
+	/* Note:  don't actually call readline, since it may block;
+	 * We just want to see if it (dynamic) linked in okay.
+	 */
+	if (argc == 0)	/* never true */
+		readline(0);
+	exit(0);
+}
+],[
+	# action if true
+	kexi_cv_lib_readline=yes
+],[
+	# action if false
+	kexi_cv_lib_readline=no
+],[
+	# action if cross compiling
+	kexi_cv_lib_readline=no
+])
+
+	if test "$kexi_cv_lib_readline" = yes ; then break ; fi
+done
+# restore LIBS
+LIBS="$ac_save_LIBS"
+
+if test "$kexi_cv_lib_readline" = no ; then
+	LIBREADLINE=""
+	AC_MSG_RESULT("not found - kexisql will not be compiled")
+else
+	AC_MSG_RESULT($LIBREADLINE)
+	AC_DEFINE(HAVE_READLINE, 1, [define if you have libreadline available])
+fi
+
+AM_CONDITIONAL(have_readline, test "$kexi_cv_lib_readline" = "yes")
+AC_SUBST(LIBREADLINE)
+])
+
+kexi_LIB_READLINE

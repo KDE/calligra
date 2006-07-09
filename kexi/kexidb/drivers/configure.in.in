@@ -1,0 +1,244 @@
+dnl ========================================
+dnl checks for MySQL
+dnl taken form KDEDB
+dnl ========================================
+
+AC_ARG_ENABLE(mysql,
+	AC_HELP_STRING([--enable-mysql],[build MySQL-plugin [default=yes]]),
+              mysql_plugin=$enableval, mysql_plugin=yes)
+
+if test "x$mysql_plugin" = "xyes"; then
+  compile_mysql_plugin="yes"
+else
+  compile_mysql_plugin="no"
+fi
+
+AC_ARG_WITH(mysql_includes,
+AC_HELP_STRING([--with-mysql-includes=DIR],[use MySQL-includes installed in this directory]),
+[
+  ac_mysql_incdir=$withval
+], ac_mysql_incdir=
+)
+
+AC_ARG_WITH(mysql_libraries,
+AC_HELP_STRING([--with-mysql-libraries=DIR],[use MySQL-libs installed in this directory ]),
+[
+  ac_mysql_libdir=$withval
+], ac_mysql_libdir=
+)
+
+dnl ==============================================
+dnl check whether MySQL should be compiled
+dnl and where headers and libraries are installed
+dnl if present compile mysql-plugin
+dnl ==============================================
+
+AC_MSG_CHECKING([for MySQL])
+
+if test "$compile_mysql_plugin" = "yes"; then
+  if test -n "$ac_mysql_incdir" -o -n "$ac_mysql_libdir"; then
+dnl *** Configure arguments for includes or libs given    ***
+dnl *** and MySQL not explicitly disabled.                ***
+dnl *** Check that the paths given to configure are valid ***
+    AC_MSG_CHECKING([for MySQL headers])
+    mysql_incdirs="$ac_mysql_incdir /usr/local/include /usr/include"
+    AC_FIND_FILE(mysql/mysql.h, $mysql_incdirs, mysql_incdir)
+    if test -r $mysql_incdir/mysql/mysql.h; then
+      MYSQL_INC=$mysql_incdir
+      AC_MSG_RESULT([$MYSQL_INC])
+      AC_SUBST(MYSQL_INC)
+    else
+      compile_mysql_plugin="no"
+      AC_MSG_RESULT([not found])
+    fi
+
+    AC_MSG_CHECKING([for MySQL libraries])
+    mysql_libdirs="$ac_mysql_libdir /usr/local/lib$kdelibsuff /usr/lib$kdelibsuff"
+    AC_FIND_FILE(mysql/libmysqlclient.so, $mysql_libdirs, mysql_libdir)
+    if test -r $mysql_libdir/mysql/libmysqlclient.so; then
+      MYSQL_LIBS=$mysql_libdir
+      AC_MSG_RESULT([$MYSQL_LIBS])
+      AC_SUBST(MYSQL_LIBS)
+    else
+      compile_mysql_plugin="no"
+      AC_MSG_RESULT([not found])
+    fi
+  else
+dnl *** No configure arguments for includes or libs given ***
+dnl *** and MySQL not explicitly disabled.                ***
+    KDE_FIND_PATH(mysql_config, MYSQL_CONFIG,
+      [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /usr/bin ], [
+      AC_MSG_RESULT([not found])
+    ])
+
+    if test -n "$MYSQL_CONFIG"; then
+      mysql_incdir=`$MYSQL_CONFIG --cflags| $SED -e "s,-I,,g" | cut -d " " -f 1`
+      mysql_libdir=`$MYSQL_CONFIG --libs| $SED -e "s,',,g"`
+      MYSQL_INC=$mysql_incdir
+      MYSQL_LIBS=$mysql_libdir
+      AC_SUBST(MYSQL_INC)
+      AC_SUBST(MYSQL_LIBS)
+      compile_mypsql_plugin="yes"
+      AC_MSG_RESULT([headers $mysql_incdir, libraries $mysql_libdir])
+    else
+      compile_mysql_plugin="no"
+    fi
+  fi
+else
+dnl *** MySQL plugin explicitly disabled.            ***
+dnl *** Show that we are doing as requested.              ***
+  AC_MSG_NOTICE([Not attempting to configure MySQL as requested])
+fi
+
+AM_CONDITIONAL(compile_mysql_plugin, test "$compile_mysql_plugin" = "yes")
+
+dnl ========================================
+dnl Checks for PostgreSQL
+dnl ========================================
+
+dnl ========================================
+dnl libpq
+dnl   Add configure-args
+dnl ========================================
+
+dnl Assume we're building until something fails, unless explicitly disabled
+AC_ARG_ENABLE(pgsql,
+AC_HELP_STRING([--enable-pgsql],[build PostgreSQL-plugin [default=yes]]),
+ pgsql_plugin=$enableval, pgsql_plugin=yes)
+
+if test "x$pgsql_plugin" = "xyes"; then
+  compile_pgsql_plugin="yes"
+else
+  compile_pgsql_plugin="no"
+fi
+
+AC_ARG_WITH(pgsql-includes,
+AC_HELP_STRING([--with-pgsql-includes=DIR],[use PostgreSQL(libpq)-includes installed in this directory ]),
+[
+  ac_pgsql_incdir=$withval
+], ac_pgsql_incdir=
+)
+
+AC_ARG_WITH(pgsql-libraries,
+AC_HELP_STRING([--with-pgsql-libraries=DIR],[use PostgreSQL(libpq)-libraries installed in this directory ]),
+[
+  ac_pgsql_libdir=$withval
+], ac_pgsql_libdir=
+)
+
+
+dnl ========================================
+dnl   header/library directories
+dnl ========================================
+
+if test "$compile_pgsql_plugin" = "yes"; then
+  if test -n "$ac_pgsql_incdir" -o -n "$ac_pgsql_libdir"; then
+dnl *** Configure arguments for includes or libs given    ***
+dnl *** and PostgreSQL not explicitly disabled.           ***
+dnl *** Check that the paths given to configure are valid ***
+    AC_MSG_CHECKING([for PostgreSQL C API headers])
+    pgsql_incdirs="$ac_pgsql_incdir /usr/local/include /usr/include"
+    AC_FIND_FILE(libpq-fe.h, $pgsql_incdirs, pgsql_incdir)
+    if test -r $pgsql_incdir/libpq-fe.h; then
+      PG_INCDIR=$pgsql_incdir
+      AC_MSG_RESULT([$PG_INCDIR])
+      AC_SUBST(PG_INCDIR)
+    else
+      compile_pgsql_plugin="no"
+      AC_MSG_RESULT([not found])
+    fi
+
+    AC_MSG_CHECKING([for PostgreSQL C API libraries])
+    pgsql_libdirs="$ac_pgsql_libdir /usr/local/lib$kdelibsuff /usr/lib$kdelibsuff"
+    AC_FIND_FILE(libpq.so, $pgsql_libdirs, pgsql_libdir)
+    if test -r $pgsql_libdir/libpq.so; then
+      PG_LIBDIR=$pgsql_libdir
+      AC_MSG_RESULT([$PG_LIBDIR])
+      AC_SUBST(PG_LIBDIR)
+    else
+      compile_pgsql_plugin="no"
+      AC_MSG_RESULT([not found])
+    fi
+  else
+dnl *** No configure arguments for includes or libs given ***
+dnl *** and PostgreSQL not explicitly disabled.           ***
+    KDE_FIND_PATH(pg_config, PG_CONFIG,
+      [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /usr/bin ], [
+      AC_MSG_RESULT([not found])
+    ])
+
+    if test -n "$PG_CONFIG"; then
+      pgsql_incdir=`$PG_CONFIG --includedir`
+      pgsql_libdir=`$PG_CONFIG --libdir`
+      PG_INCDIR=$pgsql_incdir
+      PG_LIBDIR=$pgsql_libdir
+      AC_SUBST(PG_LIBDIR)
+      compile_pgsql_plugin="yes"
+      AC_MSG_RESULT([headers $pgsql_incdir, libraries $pgsql_libdir])
+    else
+      compile_pgsql_plugin="no"
+    fi
+  fi
+else
+dnl *** PostgreSQL plugin explicitly disabled.            ***
+dnl *** Show that we are doing as requested.              ***
+  AC_MSG_NOTICE([Not attempting to configure PostgreSQL as requested])
+fi
+
+AM_CONDITIONAL(compile_pgsql_plugin, test "$compile_pgsql_plugin" = "yes")
+
+
+dnl ========================================
+dnl libpqxx checks
+dnl ========================================
+
+AC_ARG_WITH(pqxx-includes,
+AC_HELP_STRING([--with-pqxx-includes=DIR],[use PostgreSQL(libpqxx)-includes installed in this directory ]),
+[
+  ac_pqxx_incdir=$withval
+], ac_pqxx_incdir=
+)
+
+AC_ARG_WITH(pqxx-libraries,
+AC_HELP_STRING([--with-pqxx-libraries=DIR],[use PostgreSQL(libpqxx)-libraries installed in this directory ]),
+[
+  ac_pqxx_libdir=$withval
+], ac_pqxx_libdir=
+)
+
+
+dnl ========================================
+dnl   libpqxx headers
+dnl ========================================
+if test "$compile_pgsql_plugin" = "yes"; then
+  AC_MSG_CHECKING([for PostgreSQL C++ includes])
+  pqxx_incdirs="$ac_pqxx_incdir /usr/local/include /usr/include"
+  AC_FIND_FILE(pqxx/pqxx, $pqxx_incdirs, pqxx_incdir)
+  if test -r $pqxx_incdir/pqxx/pqxx; then
+    PQXX_INCDIR=$pqxx_incdir
+    AC_MSG_RESULT([$PQXX_INCDIR])
+    AC_SUBST(PQXX_INCDIR)
+  else
+    compile_pgsql_plugin="no"
+    AC_MSG_RESULT([not found])
+  fi
+fi
+
+dnl ========================================
+dnl   libpqxx libraries
+dnl ========================================
+if test "$compile_pgsql_plugin" = "yes"; then
+  AC_MSG_CHECKING([for PostgreSQL C++ libraries])
+  pqxx_libdirs="$ac_pqxx_libdir /usr/local/lib$kdelibsuff /usr/lib$kdelibsuff"
+  AC_FIND_FILE(libpqxx.so, $pqxx_libdirs, pqxx_libdir)
+  if test -r $pqxx_libdir/libpqxx.so; then
+    PQXX_LIBDIR=$pqxx_libdir
+    AC_MSG_RESULT([$PQXX_LIBDIR])
+    AC_SUBST(PQXX_LIBDIR)
+  else
+    compile_pgsql_plugin="no"
+    AC_MSG_RESULT([not found])
+  fi
+fi
+
+AM_CONDITIONAL(compile_pgsql_plugin, test "$compile_pgsql_plugin" = "yes")

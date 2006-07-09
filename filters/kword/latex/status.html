@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>KOffice filters status: LaTeX FILTER</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
+<A NAME="START">&nbsp;</A>
+
+<BR>
+<center>
+ <h1>
+  KOffice filters status: &nbsp;&nbsp;<i>LaTeX  FILTER</i>
+ </h1>
+</center>
+
+<hr NOSHADE SIZE=2 WIDTH="70%">
+
+<font size="-1"><b>
+ <A HREF="#import">Import</A> |
+ <A HREF="#export">Export</A>
+</b></font>
+
+<BR><BR><BR>
+<center><a NAME="import"></a></center>
+
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000" WIDTH="100%">
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH="100%">
+
+    <tr BGCOLOR="#DDFFDD">
+     <td COLSPAN="2">
+      <center><b><i><font size="+1">
+       <BR>
+        Import LaTeX for kword<BR>
+       <BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH="1%" NOWRAP><b><font size="+1">Last update</font></b></td>
+		 <td>26 april 2003</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Features</font></b></td>
+     <td>None</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Todo</font></b></td>
+		 <td>The parser may not analyse all tex document.</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">History</font></b></td>
+		 <td>18 april 2003:<br/>
+			 <ul>
+				 <li>parser can parse some latex files;</li>
+				 <li>generator can generate a basic kword document.</li>
+			 </ul>
+		 </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Authors&nbsp;</font></b></td>
+     <td><a href="mailto:rjacolin AT ifrance DOT com">-</a></td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Links</font></b></td>
+     <td><a href="http://www.koffice.org">-</a></td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Progress report </font></b></td>
+     <td>---</td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+
+<br><br><br>
+
+<hr NOSHADE SIZE=1>
+<br><br><br>
+
+
+<center>
+ <a NAME="export"></a>
+</center>
+
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000"  WIDTH="100%">
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH="100%">
+    <tr BGCOLOR="#FFDDDD">
+     <td COLSPAN="2">
+      <center><b><i><font size="+1">
+       <BR>Export kword to LaTeX <BR><BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH="1%" NOWRAP><b><font size="+1">Last update</font></b></td>
+     <td>26 April 2003</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Features</font></b></td>
+     <td>Can export to LaTeX formats, somes documents with text only and formulas.
+	Picture are not translated (the name is not write in the latex markup with new extension),
+	<b>simple</b> tables are supported now but part is still not supported yet.<br>
+	Kword is used only as a word processing not WYSIWYG.
+	</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Todo</font></b></td>
+     <td>
+<B>VERSION 1:</B>
+<table BORDER="0" WIDTH="100%">
+<tr><td>text with accent</td>			<td>DONE</td></tr>
+<tr><td>text with special characters</td>	<td>A LOT OF SPECIAL CHARS SUPPORTED for latin1  (all for unicode)!</td></tr>
+<tr><td>layout</td>				<td>DONE</td></tr>
+<tr><td>title</td>				<td>DONE</td></tr>
+<tr><td>list</td>				<td>DONE</td></tr>
+<tr><td>paper</td>				<td>DONE</td></tr>
+<tr><td>footnote, head</td>			<td>DONE (still a little bug for first foot/header and a line is added)</td></tr>
+<tr><td>comments with kdoc</td>			<td>STARTED</td></tr>
+<tr><td>unicode support</td>			<td>DONE (omega package)</td></tr>
+<tr><td>break (line, page)</td>			<td>STARTED</td></tr>
+<tr><td>indent list</td>			<td></td></tr>
+</table>
+<B>VERSION 2</B>
+<table BORDER="0" WIDTH="100%">
+<tr><td>table</td> 				<td>STARTED</td></tr>
+<tr><td>picture</td>				<td>DONE</td></tr>
+<tr><td>personalization</td>			<td></td></tr>
+</table>
+<B>VERSION 3</B>
+<table BORDER="0" WIDTH="100%">
+<tr><td>parts</td>				<td></td></tr>
+<tr><td>math</td>				<td>STARTED (KFormula)</td></tr>
+<tr><td>figure</td>				<td></td></tr>
+<tr><td>frame</td>				<td></td></tr>
+</table>
+<!--</ul>-->
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">History</font></b></td>
+     <td>See the changelog for more informations.
+			 <ul>
+				 <li>02 March 2003
+				 <ul><li>Note support</li>
+					 <li>wave and double underline</li>
+					 <li>encoding</li>
+					 <li>language</li>
+				 </ul>
+				 </li>
+				 <li>23 February 2003
+				 <ul><li>Support path for pictures</li>
+					 <li>Background color</li></ul>
+				 </li>
+				 
+				 <li>3 November 2002
+				 <ul><li>Generate pictures in eps pictures</li></ul>
+				 </li>
+				 <li>12 september 2002
+				 <ul><li>New options</li></ul>
+				 </li>
+				 <li>19 may 2002
+				 <ul><li>support of border for tables</li></ul>
+					</li>
+	<li>03 February 2002
+	<ul>
+		<li>features
+		<ul>
+			<li>support of variables.</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+
+	<li>06 November 2001
+	<ul>
+		<li>features
+		<ul>
+			<li>support of picture inline.</li>
+			<li>compile with qt3</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+
+	<li>27 October 2001
+	<ul>
+		<li>features
+		<ul>
+			<li>support of unicode with omega</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>14 October 2001
+	<ul>
+		<li>BUG FIXES
+		<ul>
+			<li>Some special char. were not corected generated.</li>
+		</ul>
+		</li>
+	</ul></li>
+	<li>20 August 2001
+	<ul>
+		<li>bug fixes
+			<ul>
+				<li>lists were not closed if they were following by a chapter.</li>
+			</ul>
+		</li>
+		<li>features
+		</li>
+	</ul>
+	</li>
+	<li>15 July 2001
+	<ul>
+		<li>bug fixes
+			<ul>
+				<li>characters encoding bug,</li>
+				<li>somes table bugs,</li>
+				<li>text zone inherit paragraph format.</li>
+			</ul>
+		</li>
+		<li>features
+			<ul>
+				<li>news parameters dialog box,</li>
+				<li>anchor support,</li>
+				<li>formula support.</li>
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li>07 July 2001
+	<ul>
+		<li>bug fixes
+			<ul>
+				<li>section are embeded in a list because of the last changes ;</li>
+				<li>new paragraph (let a blanck line now) ;</li>
+				<li>no environment (right, center, ...) in a header or footer
+				  (from the last changes).</li>
+			</ul>
+		</li>
+		<li>features
+			<ul>
+				<li>generate embedable file</li>
+				<li>new xml parser = QDom</li>
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li>3 June 2001
+	<ul>
+		<li>bugs fixes
+			<ul>
+				<li>color</li>
+				<li>if a section doesn't exist in latex, now the title is in bold</li>
+				<li>blanck line between 2 paragraphes.</li>
+				<li>textsize</li>
+				<li>end of environment</li>
+			</ul>
+		</li>
+		<li>clean code generated</li>
+		<li>use QList for all lists</li>
+		<li>improve the table generation. Now it is pretty good.</li>
+		<li>new features
+			<ul>
+				<li>improve the special character support but still a lot of work (mathematical
+				mode, ...).</li>
+				<li>table now support border line (only top line)</li>
+				<li>a dialog box to select some features (style, language/encoding)</li>
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li>06 May 2001
+	<ul>
+		<li>bug fixes
+			<ul>
+				<li>enum bug fixes</li>
+			</ul>
+		</li>
+		<li>new features
+			<ul>
+				<li>formula, part and table class (not still usable, though)</li>
+				<li>stock formula parts (no generation)</li>
+				<li>stock table part</li>
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li>07 May 2001 : fix bug list (now list work fine), analyse a formula (but can not 
+		be generated), simples tables are supported (no cell splited or merged) but with
+		a little "bug" for cell size (nb of lines).
+	</li>
+
+	<li>28 April 2001 : second update to support the new dtd, bugs fixes and
+		implements class to support pictures.
+	</li>
+	<li>19 March 2001 : just a first update to support the new dtd.
+	</li>
+	<li>end of January 2001: second version
+		<ul>
+			<li>paragraph (with italic, bold text) are supported,</li>
+			<li>color,</li>
+			<li>title, list,</li>
+			<li>footnote, endnote,</li>
+			<li>paper size and orientation, column (to improve).</li>
+		</ul>
+	</li>
+	<li>December 2000 : first version (doesn't work)
+		<ul>
+			<li>generate a line,</li>
+			<li>architecture design,</li>
+			<li>important memory leak.</li>
+		</ul>
+	</li>
+	</ul>
+    </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Authors</font></b></td>
+     <td><a href="mailto:rjacolin AT ifrance DOT com">Robert JACOLIN</a></td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Links</font></b></td>
+     <td><a href="http://elbobby.free.fr/kword/index.html">Des copies d'écrans (commentaires en français)</a><br>
+	<a href="http://elbobby.free.fr/kword/index-en.html">Some Screenshots (comments in poor english)</a>
+	</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Progress report </font></b></td>
+     <td>
+
+     </td>
+    </tr>
+
+
+
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+
+</body>
+</html>

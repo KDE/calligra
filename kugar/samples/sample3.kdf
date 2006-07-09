@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE KugarData [
+    <!ELEMENT KugarData (Row* )>
+    <!ATTLIST KugarData
+        Template CDATA #REQUIRED>
+
+    <!ELEMENT Row EMPTY>
+    <!ATTLIST Row 
+    	level CDATA #REQUIRED
+        title CDATA #REQUIRED
+        version CDATA #IMPLIED
+        platform CDATA #IMPLIED
+        copies CDATA #IMPLIED>
+]>
+
+<KugarData Template="sample3.ktf">
+	<Row level="1" title="  BRU" version="15.0" platform="x86" copies="1"/>
+	<Row level="1" title="  Caldera Open Linux" version="2.2" platform="x86" copies="3"/>
+	<Row level="1" title="  K Desktop" version="1.1.1" platform="x86" copies="1"/>
+	<Row level="1" title="  Netscape Communicator" version="4.6" platform="x86" copies="10"/>
+	<Row level="0" title="Redhat" />
+	<Row level="1" title="  Redhat Linux" version="5.0" platform="x86" copies="11"/>
+	<Row level="1" title="  Redhat Linux" version="5.1" platform="x86" copies="12"/>
+	<Row level="1" title="  Redhat Linux" version="5.2" platform="x86" copies="14"/>
+	<Row level="1" title="  Redhat Linux" version="6.0" platform="x86" copies="15"/>
+	<Row level="0" title="Sun" />
+	<Row level="1" title="  Star Office" version="5.0" platform="x86" copies="1"/>
+	<Row level="1" title="  Star Office" version="5.1" platform="x86" copies="3"/>
+	<Row level="1" title="  Sun Solaris" version="2.5" platform="Sparc" copies="1"/>
+	<Row level="0" title="Microsoft" />
+	<Row level="1" title="  Microsoft Windows NT" version="3.1" platform="x86" copies="1"/>
+	<Row level="1" title="  Microsoft Windows NT" version="3.51" platform="x86" copies="1"/>
+	<Row level="1" title="  Microsoft Windows NT" version="4.0" platform="x86" copies="1"/>
+	<Row level="1" title="  Microsoft Windows NT" version="5.0" platform="x86" copies="1"/>
+</KugarData>

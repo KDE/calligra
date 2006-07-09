@@ -1,0 +1,228 @@
+<chapter id="definitions">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Raphael</firstname>
+<surname>Langerhorst</surname>
+<affiliation>
+<address><email>raphael.langerhorst@kdemail.net</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Definitions</title>
+
+<sect1 id="gantt">
+<title>Gantt charts</title>
+<para>A Gantt chart is a popular type of bar chart, that aims to show the timing
+of tasks or activities as they occur over time. Although the Gantt chart did not
+initially indicate the relationships between tasks this has become more
+common in current usage as both timing and interdependencies between tasks can
+be identified.
+</para>
+<para>
+In project management, a Gantt chart can show when the project terminal elements
+start and finish, summary elements (shown) or terminal element dependencies (not
+shown). A terminal element is defined as the smallest task tracked as part of
+the project effort. The tasks are displayed on a page as bars. The page is laid
+out such that time increases as you move across the page. A task's start
+time/date is indicated by the point on the page the bar starts, and it's
+duration is indicated by the length of the bar.
+</para>
+<para>
+Since the initial introduction of Gantt charts, they have become an industry
+standard as a key project management tool for representing the phases, tasks and
+activities that are scheduled as part of a project Work Breakdown Structure
+(WBS) or timeline of tasks.
+</para>
+<para>
+The initial format of the chart was developed by Henry L. Gantt (1861-1919) in
+1910 (see <quote>Work, Wages and Profit</quote> by H. L. Gantt, published by The
+Engineering Magazine, NY, 1910).
+</para>
+</sect1>
+
+<sect1 id="wbs">
+<title>Work Breakdown Structure (WBS)</title>
+<para>
+In project management, a work breakdown structure (WBS) is an exhaustive,
+hierarchical (from general to specific) tree structure of deliverables and tasks
+that need to be performed to complete a project.
+</para>
+<para>
+The purpose of a WBS is to identify terminal elements (the actual items to be
+done in a project). Therefore, WBS serves as the basis for much of project
+planning.
+</para>
+<para>A useful rule of thumb is that any project can be broken down into
+between 10 and 20 tasks.
+</para>
+<para>
+Work breakdown structure is a very common project management tool. Many United
+States government statements of work require work breakdown structures.
+</para>
+<para>See the <xref linkend="configure-wbs" /> section to learn how to
+configure your WBS.
+</para>
+</sect1>
+
+<sect1 id="float">
+<title>Float</title>
+<para>
+Float in project management is the amount of time that a terminal element in a
+project network can be delayed by, without causing a delay to:
+<itemizedlist>
+<listitem><para>subsequent terminal elements (free float)</para></listitem>
+<listitem><para>project completion date (total float).</para></listitem>
+</itemizedlist>
+Float is sometimes also called slack.
+</para>
+</sect1>
+
+<sect1 id="task">
+<title>Task</title>
+<para>
+A task is a part of a project that needs to be accomplished within a defined
+period of time. Tasks can be linked together to create Dependencies. 
+</para>
+<para>
+Tasks take place over a period of time and generally consume resources.
+</para>
+<para>
+A task is termed critical when it has zero or negative float.
+</para>
+<para>
+In &kplato;, each task has a task ID, a name and a responsible person.
+The timing, the cost and the assigned resources can also be set
+in the <guilabel>Task Settings</guilabel>dialog.
+</para>
+<para>A subtask is any node in the WBS tree that has a task as its
+parent.</para>
+
+</sect1>
+
+<sect1 id="resource">
+<title>Resource</title>
+<para>
+A resource is an item required to complete a task. Resources can be
+people, equipment, facilities, funding or anything else needed to perform the
+work of a project. Resources can have a limited time availability (&ie; an
+employee that works 8 hours a day, 5 days a week).
+</para>
+<para>The availability is
+defined by <link linkend="calendar">calendars</link>.
+</para>
+<para>
+In &kplato; resources are either persons (work) or machines/devices (material).
+</para>
+</sect1>
+
+<sect1 id="calendar">
+<title>Calendars</title>
+<para>
+A calendar defines at what time a <link linkend="resource">resource</link>
+is available.
+</para>
+<para>
+Calendars can be either a regular working week or special working times
+that can be individually defined for each day. This allows for very subtle
+control over the availability of resources.
+</para>
+<para>
+Every <link linkend="resource">resource</link> is usually connected to a
+calendar.
+</para>
+<para>
+In &kplato; you can even use hierarchical calendars.
+</para>
+</sect1>
+
+<sect1 id="milestone">
+<title>Milestone</title>
+<para>
+A milestone is a scheduled event signifying the completion of a major
+deliverable or a set of related deliverables (usually marking the end of a
+period). A milestone  is an activity with zero duration and no effort &ie; there
+is no work associated with a milestone. It is a flag in the workplan to signify
+some other work has completed. 
+</para>
+<para>
+Usually a milestone is used as a project checkpoint to validate how the project
+is progressing and revalidate work. Milestones are also used as high-level
+snapshots for management to validate the progress of the project. In many cases
+there is a decision to be made at a milestone.
+</para>
+</sect1>
+
+<sect1 id="critical-path">
+<title>Critical path</title>
+<para>A path is a series of connected tasks. In project management, a
+critical path is the sequence of project network terminal elements with the
+longest overall duration, determining the shortest time to complete the project.
+</para>
+<para>
+The duration of the critical path determines the duration of the entire project.
+Any delay of a terminal element on the critical path directly impacts the
+planned project completion date (i.e. there is no float on the critical path).
+For example, if a task on the critical path is delayed by one day, then the
+entire project will be delayed by one day (unless another task on the
+critical path can be accelerated by one day).
+</para>
+<para>
+A project can have several, parallel critical paths. An additional parallel path
+through the network with the total duration just shorter than the critical path
+is called a sub-critical path.
+</para>
+<para>
+Originally, the critical path method considered only logical dependencies among
+terminal elements. A related concept is the critical chain, which adds resource
+dependencies.
+</para>
+<para>
+The critical path method was invented by the DuPont corporation.
+</para>
+</sect1>
+
+<sect1 id="scheduling">
+<title>Scheduling</title>
+<para>
+Scheduling is the process of creating a project schedule based on the project
+data like <link linkend="task">tasks</link>,
+<link linkend="resource">resources</link> and
+<link linkend="calendar">calendars</link>. The result can be viewed in a chart,
+like a <link linkend="gantt">gantt chart</link>. &kplato; can also generate
+reports for a project.
+</para>
+<para>
+There are usually various scheduling modes, like optimistic, expected and
+pessimistic scheduling. When creating a task the additional estimation
+percentage
+for optimistic and pessimistic scheduling can be set. These settings are then
+used for the various scheduling modes.
+</para>
+<para>
+When scheduling a project with &kplato;, you can choose between optimistic,
+expected and pessimistic scheduling.
+</para>
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

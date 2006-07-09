@@ -1,0 +1,11 @@
+KOffice 1.3post
+===============
+
+- add support for some old KWord syntax features (only useful with koconverter.)
+- improved handling of footnotes and endnotes (which are now differenciated.)
+- add support for notes
+- support language as character property
+- text images (original from KWord 0.8 or re-saved by KWord 1.2 or 1.3)
+- old tabulators (from KWord 0.8)
+- add support for non-inlined tables
+- add support for non-inlined pictures

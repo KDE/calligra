@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="whirlpinchplugin" library="karbon_whirlpinchplugin">
+<MenuBar>
+	<Menu name="effects">
+		<Action name="path_whirlpinch"/>
+	</Menu>
+</MenuBar>
+<ToolBar name="Effects" hidden="true" fullWidth="false">
+	<Action name="path_whirlpinch"/>
+</ToolBar>
+</kpartplugin>

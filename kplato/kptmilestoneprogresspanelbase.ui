@@ -1,0 +1,63 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPlato::MilestoneProgressPanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>MilestoneProgressPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>343</width>
+            <height>120</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>MilestoneProgressPanelBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>finished</cstring>
+            </property>
+            <property name="text">
+                <string>Finished</string>
+            </property>
+        </widget>
+        <widget class="KDateTimeWidget">
+            <property name="name">
+                <cstring>finishTime</cstring>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer8</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kdatetimewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>ktimewidget.h</includehint>
+</includehints>
+</UI>

@@ -1,0 +1,77 @@
+README                                  last edited: 20.11.2003
+
+
+
+CONTENTS
+
+   1. What you find here
+   2. Which projects are allowed to used this code
+   3. Where to find additional information
+   4. Obtaining commercial support
+
+
+
+1. What you find here
+---------------------
+
+   This directory contains the GPL'ed version of KD Chart,
+   this is from the KD Chart webpage:
+
+   ''KD Chart is a tool for creating business charts and is
+     the most powerful Qt component of its kind.
+
+     Besides having all the standard features, KD Chart(...)''
+
+   Go on
+   reading: http://www.klaralvdalens-datakonsult.se/kdchart/
+
+
+
+2. Which projects are allowed to used this code
+-----------------------------------------------
+
+   This version of the KD Chart code may be used EXCLUSIVELY
+   for software projects using the GNU General Public License,
+   for details see file LICENSE included with these sources.
+
+   If you intend to develop software that is closed-source or
+   otherwise not compatible with the GNU General Public License
+   contact Klarälvdalens Datakonsult AB for further information
+   and licensing conditions: info@klaralvdalens-datakonsult.se
+
+
+
+3. Where to find additional information
+---------------------------------------
+
+   * See the function calls embedded in KChart to learn how
+     to use KD Chart for your own projects.
+
+   * See the (doxygen enabled) documentation inside the
+     source.
+
+   * Carefully study the KD Chart Programmers Manual
+     provided here:
+
+http://www.klaralvdalens-datakonsult.se/kdchart/ProgrammersManual/KDChart.pdf
+
+     Note that this manual frequently refers to a lot of sample
+     files which are shipped together with the commercial
+     version of KD Chart (being dual-licensed, see section 2).
+     It is possible to understand the manual without studying
+     these samples by just reading the documentation inside
+     the source.
+
+
+
+4. Obtaining commercial support
+-------------------------------
+   Commercial support (and licensing for software projects that
+   are not compatible to the GPL, see section 2.) is available
+   from Klarälvdalens Datakonsult AB, please send your mail to:
+
+               info@klaralvdalens-datakonsult.se
+
+
+
+filename: KOffice / kchart / kdchart / README

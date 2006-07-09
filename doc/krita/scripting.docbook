@@ -1,0 +1,534 @@
+<chapter id="scripting">
+<title>Scripting</title>
+
+<para>
+In &krita;, you can write scripts in Ruby or Python (the availability of the
+interpreters might depend on what your distributions or the administrator of
+your machine did install). Here you will find a description of the scripting
+API.
+</para><para>
+Some examples are distributed with &krita;, and you might find them in
+<filename>/usr/share/apps/krita/scripts</filename> (or
+<filename>/opt/kde/share/apps/krita/scripts</filename>).
+</para>
+
+<sect1 id="scripting-variables">
+<title>Variables in the <classname>Krosskritacore</classname> module</title>
+
+<itemizedlist>
+<listitem><para><varname>KritaDocument</varname> returns a
+<classname>Document</classname> object</para></listitem>
+<listitem><para><varname>KritaScript</varname> returns a
+<classname>ScriptProgress</classname> object</para></listitem>
+</itemizedlist>
+
+<para>
+You can retrieve an object using the <function>get</function> function of the
+<classname>Krosskritacore</classname> module, in Ruby you will have to write something like that:
+<programlisting>
+doc = Krosskritacore::get("KritaDocument")
+script = Krosskritacore::get("KritaScript")
+</programlisting>
+</para>
+
+</sect1>
+
+<sect1 id="scripting-functions">
+<title>Functions in the <classname>Krosskritacore</classname> module</title>
+
+<itemizedlist>
+<listitem><para>Function: <function>getBrush</function></para><para>
+This function returns a <classname>Brush</classname> taken from the list of
+&krita; resources. It takes one argument: the name of the brush.
+For example (in Ruby):
+<programlisting>
+Krosskritacore::getBrush("Circle (05)")
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>getFilter</function></para><para>
+This function returns a <classname>Filter</classname> taken from the list of
+&krita; resources. It takes one argument: the name of the filter.
+For example (in Ruby):
+<programlisting>
+Krosskritacore::getFilter("invert")
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>getPattern</function></para><para>
+This function returns a <classname>Pattern</classname> taken from the list of
+&krita; resources. It takes one argument: the name of the pattern.
+For example (in Ruby):
+<programlisting>
+Krosskritacore::getPattern("Bricks")
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>loadBrush</function></para><para>
+This function loads a <classname>Brush</classname> and then returns it.
+It takes one argument: the filename of the brush.</para></listitem>
+
+<listitem><para>Function: <function>loadPattern</function></para><para>
+This function loads a <classname>Pattern</classname> and then returns it.
+It takes one argument: the filename of the pattern.</para></listitem>
+
+<listitem><para>Function: <function>newCircleBrush</function></para><para>
+This function returns a <classname>Brush</classname> with a circular shape. It
+takes at least two arguments: width and height. It can take two other
+arguments: width of the shading, and height of the shading. If the shading
+is not specified, no shading will be used.
+For example (in Ruby):
+<programlisting>
+Krosskritacore::newCircleBrush(10,20) # create a plain circle
+Krosskritacore::newCircleBrush(10,20,5,10) # create a gradient
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>newHSVColor</function></para><para>
+This function returns a new <classname>Color</classname> with the given HSV
+triplet. It takes three arguments: hue component (0 to 255), saturation
+component (0 to 255), value component (0 to 255).
+
+For example (in Ruby):
+<programlisting>
+Krosskritacore::newRGBColor(255,125,0)
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>newImage</function></para><para>
+This function returns a new <classname>Image</classname>. It takes four arguments:
+width, height, colorspace id, name of the image. And in return you get an
+<classname>Image</classname> object.
+For example (in Ruby):
+<programlisting>
+Krosskritacore::newImage(10,20, "RGBA", "kikoo")
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>newRectBrush</function></para><para>
+This function returns a <classname>Brush</classname> with a rectangular shape.
+It takes at least two arguments: width and height. It can take two other
+arguments: width of the shading and height of the shading. If the shading is
+not specified, no shading will be used.
+For example (in Ruby):
+<programlisting>
+ Krosskritacore::newRectBrush(10,20) # create a plain rectangle
+ Krosskritacore::newRectBrush(10,20,5,10) # create a gradient
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>newRGBColor</function></para><para>
+This function returns a new <classname>Color</classname> with the given RGB
+triplet. It takes three arguments: red component (0 to 255), blue component (0 to
+255), green component (0 to 255).
+For example (in Ruby):
+<programlisting>
+Krosskritacore::newRGBColor(255,0,0) # create a red color
+Krosskritacore::newRGBColor(255,255,255) # create a white color
+</programlisting></para></listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="scripting-objects">
+<title>Descriptions and function lists for various objects in
+<classname>Krosskritacore</classname></title>
+
+<itemizedlist>
+<listitem><para>Object: PaintLayer</para>
+
+<itemizedlist>
+<listitem><para>Function: <function>beginPainting</function></para></listitem>
+
+<listitem><para>Function: <function>convertToColorspace</function></para><para>
+Convert the image to a colorspace. This function takes one argument: the name
+of the destination colorspace.
+For example (in Ruby):
+<programlisting>
+image.convertToColorspace("CMYK")
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>createHistogram</function></para><para>
+This function creates an Histogram for this layer. It takes two arguments:
+the type of the histogram ("RGB8HISTO"), and 0 if the histogram is linear, or
+1 if it is logarithmic.</para></listitem>
+
+<listitem><para>Function: <function>createHLineIterator</function></para><para>
+Create an iterator over a layer, it will iterate on a row. This function takes three arguments:
+<varname>x</varname> (start in the row), <varname>y</varname> (vertical
+position of the row), width of the row.</para></listitem>
+
+<listitem><para>Function: <function>createPainter</function></para><para>
+This function creates a <classname>Painter</classname> which will allow you to
+some painting on the layer. </para></listitem>
+
+<listitem><para>Function: <function>createRectIterator</function></para><para>
+Create an iterator over a layer, it will iterate on a rectangular area. This
+function takes four arguments: <varname>x</varname>, <varname>y</varname>,
+width of the rectangle, height of the rectangle.</para></listitem>
+
+<listitem><para>Function: <function>createVLineIterator</function></para><para>
+Create an iterator over a layer, it will iterate on a column. This function
+takes three arguments: <varname>x</varname> (horizontal position of the
+column), <varname>y</varname> (start in the column), height of the column.</para></listitem>
+
+<listitem><para>Function: <function>endPainting</function></para><para>
+Uses this function to close the current undo entry and add it to the history.</para></listitem>
+
+<listitem><para>Function: <function>fastWaveletTransformation</function></para><para>
+Return the fast wavelet transformed of the layer.</para></listitem>
+
+<listitem><para>Function: <function>fastWaveletUntransformation</function></para><para>
+Untransform a fast wavelet into this layer. It takes one argument: a wavelet
+object.
+For example (in Ruby):
+<programlisting>
+wavelet = layer.fastWaveletTransformation()
+layer.fastWaveletUntransformation(wavelet)
+</programlisting></para></listitem>
+
+<listitem><para>Function: <function>getHeight</function></para><para>
+Return the height of the layer.</para></listitem>
+
+<listitem><para>Function: <function>getWidth</function></para><para>
+Return the width of the layer.</para></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem><para>Object: <classname>Filter</classname></para>
+<itemizedlist>
+
+<listitem><para>Function: <function>getFilterConfiguration</function></para><para>
+This function returns the <classname>FilterConfiguration</classname>
+associated with this filter.</para></listitem>
+
+<listitem><para>Function: <function>process</function></para><para>
+This function will apply the filter. It takes at least one argument: the
+source layer. You can also use these four aguments: <varname>x</varname>,
+<varname>y</varname>, <varname>width</varname>, <varname>height</varname>.
+(<varname>x</varname>,<varname>y</varname>,<varname>width</varname>,<varname>height</varname>)
+defines the rectangular area on which the filter
+will be computed. If the rectangle is not defined, then the filter will be
+apply on the entire source layer.
+For example (in Ruby)
+<programlisting>
+doc = Krosskritacore::get("KritaDocument")
+image = doc.getImage()
+layer = image.getActivePaintLayer()
+width = layer.getWidth()
+height = layer.getHeight()
+filter = Krosskritacore::getFilter("invert")
+filter.process(layer, layer)
+filter.process(layer, layer, 10, 10, 20, 20 )
+</programlisting></para></listitem>
+</itemizedlist></listitem>
+
+<listitem><para>Object: <classname>FilterConfiguration</classname></para>
+<itemizedlist>
+
+<listitem><para>Function: <function>getProperty</function></para><para>
+This function returns the value of a parameter of the associated
+<classname>Filter</classname>. It takes one argument: the name of the
+parameter.</para></listitem>
+
+<listitem><para>Function: <function>setProperty</function></para><para>
+This function defines a parameter of the associated
+<classname>Filter</classname>. It takes two arguments: the name of the
+parameter and the value, whose type depends on the
+<classname>Filter</classname>.</para></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem><para>Object: <classname>Histogram</classname></para>
+
+<para>This class allows you to access the histogram of a
+<classname>PaintLayer</classname>.
+Example (in Ruby):
+<programlisting>
+ doc = krosskritacore::get("KritaDocument")
+ image = doc.getImage()
+ layer = image.getActiveLayer()
+ histo = layer.createHistogram("RGB8HISTO",0)
+ min = layer.getMin() * 255
+ max = layer.getMax() * 255
+ for i in min..max
+   print layer.getValue(i)
+   print "\n"
+ end
+</programlisting>
+</para>
+
+<itemizedlist>
+<listitem><para>Function: <function>getChannel</function></para><para>
+Return the selected channel.</para></listitem>
+
+<listitem><para>Function: <function>getCount</function></para><para>
+This function returns the number of pixels used by the histogram.</para></listitem>
+
+<listitem><para>Function: <function>getHighest</function></para><para>
+This function returns the highest value of the histogram.</para></listitem>
+
+<listitem><para>Function: <function>getLowest</function></para><para>
+This function returns the lowest value of the histogram.</para></listitem>
+
+<listitem><para>Function: <function>getMax</function></para><para>
+This function returns the maximum bound of the histogram (values at greater
+position than the maximum are null). The value is in the range 0.0 &ndash; 1.0.</para></listitem>
+
+<listitem><para>Function: <function>getMean</function></para><para>
+This function returns the mean of the histogram.</para></listitem>
+
+<listitem><para>Function: <function>getMin</function></para><para>
+This function returns the minimum bound of the histogram (values at smaller
+position than the minimum are null) The value is in the range 0.0 &ndash; 1.0.</para></listitem>
+
+<listitem><para>Function: <function>getNumberOfBins</function></para><para>
+Return the number of bins of this histogram. </para></listitem>
+
+<listitem><para>Function: <function>getTotal</function></para><para>
+This function returns the sum of all values of the histogram.</para></listitem>
+
+<listitem><para>Function: <function>getValue</function></para><para>
+Return the value of a bin of the histogram. This function takes one argument:
+index, in the range [0..255].</para></listitem>
+
+<listitem><para>Function: <function>setChannel</function></para><para>
+Select the channel of the layer on which to get the result of the histogram.
+This function takes one argument: the channel number.</para></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem><para>Object: <classname>ScriptProgress</classname></para>
+<para><classname>ScriptProgress</classname> is used to manage the progress bar
+of the status bar in &krita;.
+For example (in Ruby):
+<programlisting>
+script = Krosskritacore::get("KritaScript")
+script.setProgressTotalSteps(1000)
+script.setProgressStage("progressive", 0)
+for i in 1..900
+  script.incProgress()
+end
+script.setProgressStage("brutal", 1000)
+</programlisting></para>
+
+<itemizedlist>
+<listitem><para>Function: <function>incProgress</function></para><para>
+This function increments the progress by one step.</para></listitem>
+
+<listitem><para>Function: <function>setProgress</function></para><para>
+This function sets the value of the progress. It takes one argument:
+the value of the progress.</para></listitem>
+
+<listitem><para>Function: <function>setProgressStage</function></para><para>
+This function sets the value of the progress and displays the text.</para></listitem>
+
+<listitem><para>Function: <function>setProgressTotalSteps</function></para><para>
+This function set the number of steps that the script will require. It takes
+one argument: the maximum value of the progress</para></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem><para>Object: <classname>Wavelet</classname></para><para>
+This object holds the coefficients of a wavelet transformation of a
+<classname>PaintLayer</classname>.</para>
+<itemizedlist>
+
+<listitem><para>Function: <function>getDepth</function></para><para>
+Returns the depth of the layer.</para></listitem>
+
+<listitem><para>Function: <function>getNCoeff</function></para><para>
+Returns the value of the Nth coefficient. The function takes one argument: the
+index of the coefficient.</para></listitem>
+
+<listitem><para>Function: <function>getNumCoeffs</function></para><para>
+Returns the number of coefficients in this wavelet (= size * size * depth).</para></listitem>
+
+<listitem><para>Function: <function>getSize</function></para><para>
+Returns the size of the wavelet (size = width = height).</para></listitem>
+
+<listitem><para>Function: <function>getXYCoeff</function></para><para>
+Returns the value of a coefficient. The function takes two arguments:
+<varname>x</varname> and <varname>y</varname>.</para></listitem>
+
+<listitem><para>Function: <function>setNCoeff</function></para><para>
+Set the value of the Nth coefficient. The function takes two arguments: the
+index of the coefficient and the new value of the coefficient.</para></listitem>
+
+<listitem><para>Function: <function>setXYCoeff</function></para><para>
+Set the value of a coefficient. The function takes three arguments:
+<varname>x</varname>, <varname>y</varname>, and the new value of the
+coefficient.</para></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem><para>Object: <classname>Painter</classname></para>
+<itemizedlist>
+
+<listitem><para>Function: <function>convolve</function></para><para>
+This function applies a convolution kernel to an image. It takes at least three arguments:
+a list of a list with the kernel (all lists need to have the same size),
+factor, and offset.
+</para><para>
+The value of a pixel will be given by the following function: K * P / factor + offset,
+where K is the kernel and P is the neighbourhood.
+</para><para>
+It can take the following optional arguments: <varname>borderOp</varname>
+(control how to convolve the pixels on the border of an image: 0 = use the
+default color, 1 = use the pixel on the opposite side of the image, 2 = use
+the border pixel, 3 = avoid border pixels), <varname>channel</varname> (1 for
+color, 2 for alpha, 3 for both), <varname>x</varname>, <varname>y</varname>,
+<varname>width</varname>, <varname>height</varname>.</para></listitem>
+
+<listitem><para>Function: <function>setFillThreshold</function></para><para>
+Sets the fill threshold. It takes one argument: the threshold.</para></listitem>
+
+<listitem><para>Function: <function>fillColor</function></para><para>
+Starts filling with a color. It takes two arguments: <varname>x</varname> and
+<varname>y</varname>.</para></listitem>
+
+<listitem><para>Function: <function>fillPattern</function></para><para>
+Starts filling with a pattern. It takes two arguments: <varname>x</varname>
+and <varname>y</varname>.</para></listitem>
+
+<listitem><para>Function: <function>paintPolyline</function></para><para>
+This function will paint a polyline. It takes two arguments: a list of x
+positions, and a list of y positions.</para></listitem>
+
+<listitem><para>Function: <function>paintLine</function></para><para>
+This function will paint a line. It takes five arguments:
+<varname>x1</varname>, <varname>y1</varname>, <varname>x2</varname>,
+<varname>y2</varname>, and <varname>pressure</varname>. 
+</para></listitem>
+
+<listitem><para>Function: <function>paintBezierCurve</function></para><para>
+This function will paint a Bezier curve. It takes ten arguments:
+<varname>x1</varname>, <varname>y1</varname>, <varname>p1</varname>,
+<varname>cx1</varname>, <varname>cy1</varname>, <varname>cx2</varname>,
+<varname>cx2</varname>, <varname>x2</varname>, <varname>y2</varname>,
+<varname>p2</varname>, where (<varname>x1</varname>,<varname>y1</varname>) is
+the start position, <varname>p1</varname> is the pressure at the start,
+(<varname>x2</varname>,<varname>y2</varname>) is the end position,
+<varname>p2</varname> is the pressure at the end.
+(<varname>cx1</varname>,<varname>cy1</varname>) and
+(<varname>cx2</varname>,<varname>cy2</varname>) are the positions of the
+control points.</para></listitem>
+
+<listitem><para>Function: <function>paintEllipse</function></para><para>
+This function will paint an ellipse. It takes five arguments:
+<varname>x1</varname>, <varname>y1</varname>, <varname>x2</varname>,
+<varname>y2</varname>, <varname>pressure</varname>, where
+(<varname>x1</varname>,<varname>y1</varname>) and
+(<varname>x2</varname>,<varname>y2</varname>) are the positions of the two
+centers.</para></listitem>
+
+<listitem><para>Function: <function>paintPolygon</function></para><para>
+This function will paint a polygon. It takes two arguments: a list of x
+positions and a list of y positions.</para></listitem>
+
+<listitem><para>Function: <function>paintRect</function></para><para>
+This function will paint a rectangle. It takes five arguments:
+<varname>x</varname>, <varname>y</varname>, <varname>width</varname>
+<varname>height</varname>, <varname>pressure</varname>.</para></listitem>
+
+<listitem><para>Function: <function>paintAt</function></para><para>
+This function will paint at a given position.
+It takes three arguments: <varname>x</varname>, <varname>y</varname>,
+<varname>pressure</varname>.</para></listitem>
+
+<listitem><para>Function: <function>setPaintColor</function></para><para>
+This function sets the paint color (also called foreground color). It takes
+one argument: a <classname>Color</classname>.</para></listitem>
+
+<listitem><para>Function: <function>setBackgroundColor</function></para><para>
+This function sets the background color. It takes one argument: a
+<classname>Color</classname>.</para></listitem>
+
+<listitem><para>Function: <function>setPattern</function></para><para>
+This function sets the pattern used for filling. It takes one argument: a
+<classname>Pattern</classname> object.</para></listitem>
+
+<listitem><para>Function: <function>setBrush</function></para><para>
+This function sets the brush used for painting. It takes one argument: a
+<classname>Brush</classname> object.</para></listitem>
+
+<listitem><para>Function: <function>setPaintOp</function></para><para>
+This function defines the paint operation. It takes one argument: the name of
+the paint operation.</para></listitem>
+
+<listitem><para>Function: <function>setDuplicateOffset</function></para><para>
+This function defines the duplicate offset. It takes two arguments: the
+horizontal offset and the vertical offset.</para></listitem>
+
+<listitem><para>Function: <function>setOpacity</function></para><para>
+This function set the opacity of the painting. It takes one argument: the
+opacity, in the range 0 to 255.</para></listitem>
+
+<listitem><para>Function: <function>setStrokeStyle</function></para><para>
+This function sets the style of the stroke. It takes one argument: 0 for none,
+or 1 for brush.</para></listitem>
+
+<listitem><para>Function: <function>setFillStyle</function></para><para>
+This function sets the fill style of the <classname>Painter</classname>.
+It takes one argument: 0 for none, 1 for fill with foreground color, 2 for
+fill with background color, 3 for fill with pattern.</para></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem><para>Object: <classname>Iterator</classname></para><para>
+This object allows you to change pixel values one by one.
+The name of some functions depends on the colorspace, for instance, if the
+colorspace of the layer is RGB, you will have <function>setR</function>,
+<function>setG</function> and <function>setB</function>, and for
+CMYK: <function>setC</function>, <function>setM</function>,
+<function>setY</function> and <function>setK</function>. In the documentation
+below we will assume that the colorspace is called ABC, with three channels:
+A, B and C.</para>
+
+<itemizedlist>
+<listitem><para>Functions: <function>setA</function>,
+<function>setB</function>, <function>setC</function></para><para>
+Those functions take one argument: the new value of one of the channels of
+this pixel.</para></listitem>
+
+<listitem><para>Function: <function>setABC</function></para><para>
+Set the value of all channels. This function takes one argument: an array with
+the new values for all channels.</para></listitem>
+
+<listitem><para>Function <function>getA</function>,
+<function>getB</function>, <function>getC</function></para><para>
+Return the value of one of the channels of this pixel.</para></listitem>
+
+<listitem><para>Function: <function>getABC</function></para><para>
+Return an array with the values of all channels.</para></listitem>
+
+<listitem><para>Function: <function>darken</function></para><para>
+Darken a pixel. This function takes at least one argument:
+<varname>shade</varname> (amount used to darken all color channels). This
+function can take the following optional argument:
+<varname>compensation</varname> (to limit the darkening).</para></listitem>
+
+<listitem><para>Function: <function>invertColor</function></para><para>
+Invert the color of a pixel.</para></listitem>
+
+<listitem><para>Function: <function>next</function></para><para>
+Increment the position, go to the next pixel.</para></listitem>
+
+<listitem><para>Function: <function>isDone</function></para><para>
+Return true if the iterator is at the end (no more pixels are
+available).</para></listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="scripting-resources">
+<title>Resources</title>
+
+<para>
+Here are hints or partial lists of resources for &krita;.
+</para><para>
+For <classname>Brush</classname> and <classname>Pattern</classname>: You can get
+the name and the associated brush or pattern from the selector in &krita;'s
+toolbar.
+</para><para>
+A list of ids for colorspaces in &krita; 1.5: LABA, RGBA, RGBA16, RGBAF32,
+RGBAF16HALF, LMSAF32, GRAYA, GRAYA16, CMYK, CMYKA16.
+</para>
+</sect1>
+
+</chapter>
+

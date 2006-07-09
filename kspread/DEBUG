@@ -1,0 +1,11 @@
+Tips for developers
+===================
+
+KSpread has a few hidden keys (aka easter-eggs :) that help debugging it,
+without the need for menuitems to be removed before releasing.
+
+The current debug keys are:
+
+Ctrl-Shift-T : activate kspread's self tests
+Ctrl-Shift-I : show object inspector
+

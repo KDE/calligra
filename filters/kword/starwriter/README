@@ -1,0 +1,23 @@
+StarWriter 5.x Import Filter
+by Marco Zanon <info@marcozanon.com>
+
+This filter is still under development, will probably sometimes crash
+and may not work properly.
+At the moment it only loads text, without attributes; support is going
+to be added for tables (ready but still unstable), paragraphs and
+characters attributes (to be written soon) and pictures.
+
+NOTE. We need to know how to read page properties such as size and
+margins (without using the 'J' section, which instead refers to
+"File -> Printer setup" and not to "Format -> Page").
+
+The filter only imports StarWriter Document (SDW) version 5. Older
+version is not supported at the moment and might or might not be in
+the future. StarWriter 6 document uses XML format which should be
+handled by OpenOffice Writer filter.
+
+POLE stuff (to read OLE storage) is written by Ariya Hidayat
+<ariya@kde.org> and should be considered as experimental, not even in
+alpha or beta quality.
+
+Helps, patches, bug reports are all welcomed.

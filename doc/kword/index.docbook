@@ -1,0 +1,1854 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&kword;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY fundamentals SYSTEM "fundimentals.docbook">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY basics SYSTEM "basics.docbook">
+  <!ENTITY storeprint SYSTEM "storeprint.docbook">
+  <!ENTITY editing SYSTEM "editing.docbook">
+  <!ENTITY pageformat SYSTEM "pageformat.docbook">
+  <!ENTITY frames SYSTEM "frames.docbook">
+  <!ENTITY formatframe SYSTEM "formatframes.docbook">
+  <!ENTITY formatpara SYSTEM "formatpara.docbook">
+  <!ENTITY tabstops SYSTEM "tabstops.docbook">
+  <!ENTITY formatcharacters SYSTEM "formatchar.docbook">
+  <!ENTITY styles SYSTEM "styles.docbook">
+  <!ENTITY columns SYSTEM "columns.docbook">
+  <!ENTITY tabls SYSTEM "table.docbook">
+  <!ENTITY headersfooters SYSTEM "headerfooter.docbook">
+  <!ENTITY templatecreation SYSTEM "templatecreation.docbook">
+  <!ENTITY guides4 SYSTEM "kwordguides4.docbook">
+  <!ENTITY mbtb SYSTEM "mbtb.docbook">
+  <!ENTITY opt SYSTEM "opt.docbook">
+  <!ENTITY filedlg SYSTEM "filedlg.docbook">
+  <!ENTITY techstuff SYSTEM "techinfo.docbook">
+  <!ENTITY graphics SYSTEM "graphics.docbook">
+  <!ENTITY toc SYSTEM "toc.docbook">
+  <!ENTITY parts SYSTEM "kparts.docbook">
+  <!ENTITY formulas SYSTEM "formulas.docbook">
+  <!ENTITY lists SYSTEM "lists.docbook">
+  <!ENTITY variables SYSTEM "docvariables.docbook">
+  <!ENTITY expressions SYSTEM "expressions.docbook">
+  <!ENTITY links SYSTEM "doclinks.docbook">
+  <!ENTITY comments SYSTEM "doccomments.docbook">
+  <!ENTITY footend SYSTEM "footendnotes.docbook">
+  <!ENTITY a11y SYSTEM "a11y.docbook">
+  <!ENTITY struct SYSTEM "docstruct.docbook">
+  <!ENTITY mmerge SYSTEM "mailmerge.docbook">
+  <!ENTITY insfile SYSTEM "insertfile.docbook">
+  <!ENTITY bookmarks SYSTEM "bookmarks.docbook">
+  <!ENTITY migrating SYSTEM "migrating.docbook">
+  <!ENTITY chapnumb SYSTEM "chapnumb.docbook">
+
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+]>
+
+<book lang="&language;">
+<bookinfo>
+<title>The &kword; Users' Manual</title>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<author>
+<firstname>Gary</firstname>
+<surname>Cramblitt</surname>
+<affiliation>
+<address><email>garycramblitt@comcast.net</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+<copyright>
+<year>2000-2006</year>
+<holder>Michael McBride</holder>
+</copyright>
+<copyright>
+<year>2006</year>
+<holder>Gary Cramblitt</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2006-1-24</date>
+<releaseinfo>1.5</releaseinfo>
+
+<abstract>
+<para>
+&kword; is a complete word-processing and simple desktop publishing program. It is part of the
+&koffice; suite of utilities.
+</para>
+<para>
+This manual describes &kword; 1.5.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KWord</keyword>
+<keyword>KOffice</keyword>
+<keyword>word processing</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<sect1 id="introduction1">
+<title>Introduction</title>
+<indexterm><primary>introduction</primary></indexterm>
+<para>
+&kword;, is a full featured
+
+<acronym>WYSIWYG</acronym> (What You See Is What You Get)
+Word-processor/Desktop Publishing Program.
+</para>
+
+<indexterm><primary>&koffice;</primary><secondary>applications</secondary></indexterm><para>
+&kword; is part of the &koffice; productivity suite for the K Desktop
+Environment.  Other applications in &koffice; include:
+</para>
+
+<itemizedlist>
+<listitem><para>&kspread; (A spreadsheet application.)</para></listitem>
+<listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
+<listitem><para>&karbon14; (A vector drawing program.)</para></listitem>
+<listitem><para>&kivio; (A flowchart creator)</para></listitem>
+<listitem><para>&krita; (A pixel based drawing program.)</para></listitem>
+<listitem><para>&kugar; (A report generation tool.)  </para></listitem>
+<listitem><para>&kexi; (An integrated environment for databases.)  </para></listitem>
+<listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
+<listitem><para><application>KPlato</application> (An integrated project management and planning tool.)</para></listitem>
+<listitem><para>and a simple integrated office desktop, to help organize your
+work.</para></listitem>
+</itemizedlist>
+
+<para>
+All &koffice; applications were designed from the beginning to take
+advantage of the features of &kde;. Because of this, &kword; (like
+all of &koffice;), supports many advanced features you expect from todays desktop environment.
+</para>
+
+<para>
+&kword; is a word-processor which can work either as a traditional word
+processor, or as a simple but powerful desktop publishing
+application. This is possible because &kword; is a frame oriented word
+processor, not a page oriented word processor (&Microsoft;
+<application>Word</application>,&Wordperfect;
+and <application>Applixware</application> are all page oriented word
+processors).
+</para>
+
+<para>
+Frame oriented word processors work by creating one or more
+<emphasis>frames</emphasis> per page. Each frame acts as a boundary (like
+a frame which surrounds a photograph), which limits the text to the
+boundaries of the frame.  You can move and re-size boundaries to define
+exactly where on the page the text will be placed.  As you re-size
+frames, the text is reworked to fit within these frames.
+</para>
+
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="intro1.png" align="center"/>
+        </imageobject>
+<textobject><phrase>Button</phrase></textobject>
+</mediaobject>
+
+<para>
+You can easily <emphasis>connect</emphasis> one frame to the next. When
+you connect two frames, any text which does not fit within the first
+frame, flows easily and automatically into the next.
+</para>
+
+<mediaobject>
+<imageobject><imagedata format="PNG" fileref="intro2.png"
+               align="center"/> </imageobject>
+<textobject><phrase>Button</phrase></textobject>
+</mediaobject>
+
+<para>
+In addition to text, you can include virtually anything inside a frame.
+A frame can contain a spreadsheet, pictures, a database form,
+or nearly any piece of data. Since each page can have any number of
+frames, documents can appear quite sophisticated while still remaining
+easy to edit.
+</para>
+
+<para>
+&kword; users also benefit from the auto wrap features of &kword;. When
+you place one frame on top of part of another frame, the text from the
+<emphasis>lowest</emphasis> frame can be automatically wrapped around
+the newly created frame. This reformatting occurs in a
+<acronym>WYSIWYG</acronym> Graphical User Interface, and happens
+automatically while you edit.
+</para>
+
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="intro3.png" align="center"/>
+        </imageobject>
+<textobject><phrase>Button</phrase></textobject>
+</mediaobject>
+
+<indexterm><primary>&kword;</primary><secondary>features</secondary></indexterm>
+<para>
+As a word-processor, &kword; includes the most used options of many other
+word processors, while maintaining a simple interface. In addition to
+the features you expect from a modern word-processing package (text
+entry, bold face, italics, text alignment, text printing, &etc;),
+&kword; can:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>Use predefined templates, to generate complex document layout with
+one click of the mouse. As a user, you can build your own templates,
+download templates from the web, or use the current document to create a
+new template.</para>
+</listitem>
+<listitem>
+<para>&kword; provides automatic numbering of lists and automatic bulleting of lists with any character or shape you want. <!--You are not
+limited to numbers or letters, you can define your own series for your
+special lists.--> </para>
+</listitem>
+<listitem>
+<para>Define paragraph layout styles, frame layout styles and table layout styles, to shorten the editing time of
+your document, and ensure consistency throughout a long document.</para>
+</listitem>
+<listitem>
+<para>Edit headers and footers for your documents.  You can have
+different headers for even and odd pages, or the same headers
+throughout.</para>
+</listitem>
+<listitem>
+<para>Search through your document for text. You can further refine
+your search by specifying font, format, font size and many other
+features of the text. By adding wild-cards to your search, the search and
+replace functions can become very powerful.</para>
+</listitem>
+<listitem>
+<para>Footnotes and Endnotes.  &kword; has all the tools necessary to manage footnotes or endnotes.</para>
+</listitem>
+<listitem>
+<para>Tables. You can either use the table formatting capabilities of
+&kword;, or you can import any spreadsheet from &kspread;.</para>
+</listitem>
+<listitem>
+<para>&kword; has built in support for KParts.  KParts allows you to
+insert any spreadsheet, picture, chart, graph, document, or any other
+data type from any &koffice; application.  You are free to edit that
+KPart using the tools designed for that task, without needing to start
+the application at all.</para>
+</listitem>
+<listitem>
+<para>&kword; can zoom in or out to make the editing of your documents
+easier on any computer, and with any font size. </para>
+</listitem>
+<listitem>
+<para>&kword; supports customizable toolbars and menus.</para>
+</listitem>
+<listitem>
+<para>&kword; has extensive internationalization support including right-to-left and left-to-right text flow.</para>
+</listitem>
+<listitem>
+<para>You can embed formulas directly into &kword; using the integrated
+formula editor.</para>
+</listitem>
+<listitem>
+<para>You can have &kword; auto-correct many of the most common spelling and punctuation mistakes.</para>
+</listitem>
+<listitem>
+<para>&kword; can check the spelling of your document. &kword; can automatically mark misspelled words as you type.</para>
+</listitem>
+<listitem>
+<para>You can access an on-line thesaurus (English only) to find the exact word you are looking for.</para>
+</listitem><listitem>
+<para>&kword; can automatically create a table of contents, and keep it up to date.</para>
+</listitem>
+<listitem>
+<para>&kword; has optional autocompletion for commonly used words.</para>
+</listitem>
+<listitem>
+<para>&kword; has support for document bookmarks, to easily navigate large documents..</para>
+</listitem>
+<listitem>
+<para>&kword; has support for Internet hyperlinks and email addresses.</para>
+</listitem>
+<listitem>
+<para>&kword; has the ability for proofreaders to make comments about portions of the text.  These
+comments are stored in the &kword; file, and can be changed or deleted easily.</para>
+</listitem>
+<listitem>
+<para>&kword; can merge data from an outside database, spreadsheet, document or text file to create mailinglists, form letters, invoices, etc.</para>
+</listitem>
+<listitem>
+<para>&kword; can load and save documents from other wordprocessing programs with an extensive list of filters.</para>
+</listitem>
+<listitem><para>&kword; can create PDF files.</para></listitem>
+
+<listitem>
+<para>You can edit one document from multiple views.  This allows you to have several windows open on 
+<emphasis>one document</emphasis>.  Edits in one window are immediately updated in the other window.</para>
+</listitem>
+<listitem>
+<para>&kword; can surround your frames with borders and you can set the background color of each frame separately if you want.</para>
+</listitem>
+<listitem>
+<para>&kword; has several accessibility features, including the ability to speak all or part of
+a document using Text-to-Speech (KTTS) and manipulate documents using the keyboard only.</para>
+</listitem>
+
+</itemizedlist>
+
+<para>The best part about &kword;, is the effort that has been placed to
+make &kword; a productive tool for all your needs from the simplest
+letter, to the most complex document you might need to work on.</para>
+
+</sect1>
+
+<sect1 id="who-reads">
+<title>What parts of this guide should I read?</title>
+<indexterm><primary>getting started</primary></indexterm>
+
+<para>Anyone who has looked at the table of contents has surely come to
+the conclusion that reading this manual from cover to cover, is an
+unreasonable (and fortunately unnecessary) task.</para>
+
+<para>This user guide is designed to be helpful to a wide variety of
+users, from the very experienced, to the novice user.  Since different users will have different needs, each section of
+this manual is self-contained.  The user is not expected to have read all of
+the previous sections of the manual to find the instructions
+useful.</para>
+
+<para>To help determine what
+should be read before starting to work with &kword;, a suggested
+reading list for three levels of users is given below.</para>
+
+<para>If each of these sections is read <emphasis>before</emphasis>
+ starting to use &kword;, using &kword; will be easier.</para>
+
+<informaltable>
+<tgroup cols="3">
+<thead>
+<row>
+<entry>Experience Level</entry>
+<entry>Previous Experience</entry>
+<entry>What you should read</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+<entry>Novice</entry>
+<entry>No previous computer experience</entry>
+<entry>
+<simplelist type="vert" columns="1">
+<member><link linkend="fundamentals">Fundamentals</link></member>
+<member><link linkend="tutorial">Step by Step Tutorial</link></member>
+<member><link linkend="kword-screen">The &kword; Screen</link></member>
+<member><link linkend="store-print">Document Storage and Printing</link></member>
+<member><link linkend="guides-2">Editing Your Document</link></member>
+<member><link linkend="menu-intro">Introduction to Menu Bars and Toolbars</link></member>
+<member><link linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout templates</link></member>
+</simplelist>
+</entry>
+</row>
+
+<row>
+<entry>Intermediate</entry>
+<entry>Comfortable with other page based word processors (&Microsoft;
+<application>Word</application>, <application>Word Perfect</application>
+or <application>Applixware</application>.)</entry>
+<entry><simplelist type="vert" columns="1">
+<member><link linkend="fundamentals">Fundamentals</link></member>
+<member><link linkend="tutorial">Step by Step Tutorial</link></member>
+<member><link linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout templates</link></member>
+</simplelist></entry>
+</row>
+
+<row>
+<entry>Advanced User</entry>
+<entry>Comfortable with other frames based word processors (<application>Frame Maker</application>,
+&etc;).</entry>
+<entry><simplelist type="vert" columns="1">
+<member><link linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout templates</link></member>
+</simplelist></entry></row>
+</tbody></tgroup>
+</informaltable>
+
+<para>These sections will help with the basic information. As other specific questions or situations arise, the
+other sections of this manual can be used as a reference.</para>
+
+<para>Obviously this will not cover everyone's needs.  Please use it as a guide to help
+determine which parts of the manual will be helpful to read before you begin using &kword;.</para>
+
+</sect1>
+
+</chapter>
+
+<!-- **************************************************************************************************** -->
+&fundamentals;
+&tutorial;
+&basics;
+&storeprint;
+&editing;
+
+<chapter id="guides-3">
+<title>Detailed Guides: Document Layout</title>
+
+<para>This section of the guide is designed to help the user with the format and layout of their
+documents.  The section will begin with information on changing the size and shape of the page
+and the margins, and work progressively through smaller and smaller
+blocks of text (frames, then paragraphs, then characters). At each level, all of the format and
+layout options will be explained.</para>
+
+<para>After discussing the formatting of individual characters, the manual will elaborate on styles
+(to provide consistent formatting through the document), lists, multi-column documents, tables and finally the use of headers
+and footers in a document.</para>
+
+<para>The final part will show you how to save a document as a template for future documents.</para>
+
+&pageformat;
+&frames;
+&formatframe;
+&formatpara;
+&tabstops;
+&formatcharacters;
+&styles;
+&columns;
+&lists;
+&tabls;
+&headersfooters;
+&templatecreation;
+</chapter>
+
+<chapter id="guides-4"><title>Detailed Guides: More than just text</title>
+<para>Up to this point in the documentation, we have been focusing on text.  That is about to change!</para>
+<para>This chapter will discuss inserting a table of contents, graphics, page numbers, links to web pages and how to
+insert other types of &koffice; data into a document.</para>
+<para>This chapter will also cover document information and its relationship to document variables.</para>
+<sect1 id="documentinfo"><title>Entering Document information </title>
+<indexterm><primary>document information</primary></indexterm>
+<para>&kword; can store information about the author and the document in the same file as the text and data of the document.</para>
+<para>Entering this information into &kword; has two potential benefits:</para>
+<orderedlist>
+<listitem><para>This information will always be available for reference.  This is especially important in situations where
+there are many possible authors (employees) and hundreds (or thousands) of documents.</para></listitem>
+<listitem><para>The information supplied here, can be inserted automatically into the document as a
+<link linkend="variables">document variable</link>.</para></listitem>
+</orderedlist>
+<para>To enter document information, simply select <menuchoice>
+<guimenu>File</guimenu><guimenuitem>Document Information...</guimenuitem>
+</menuchoice> from the menubar.  This will bring up a dialog box with two tabs.</para>
+<para>The first tab is labeled <guilabel>Author</guilabel> and has blanks to enter the authors name, title, company and contact
+information (email address, telephone numbers and physical address).</para>
+<tip><para>Every value entered in this dialog can be inserted as a
+<link linkend="variables">document variables</link>.</para></tip>
+<para>At the bottom of the dialog is a button labeled <guibutton>Load From Address Book</guibutton>. Clicking 
+on this button will automatically insert your information contained in the &kde; address book into this &kword; document information dialog.</para>
+<note><para>You must inform the &kde; address book which entry corresponds to your information.  </para>
+<para>To do this, open the &kde; address book, select the entry that contains your name and address.  Now select <menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Set as Personal Contact Data</guimenuitem></menuchoice>from the menubar in the &kde; address book. This only needs to be performed once.</para>
+<para>&kword; will now insert the entered information when the <guibutton>Load From Address Book</guibutton> button is clicked.</para></note>
+<para>The second tab is labeled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract. </para>
+<tip><para>Both the document title and the abstract can be accessed through
+<link linkend="variables">document variables</link>.</para></tip>
+<para>When finished entering the information, click <guibutton>OK</guibutton> to apply the changes.
+If any document variables were changed, &kword; will update their values throughout the document.</para>
+</sect1>
+&graphics;
+&toc;
+&variables;
+&expressions;
+&links;
+&comments;
+&footend;
+&parts;
+&insfile;
+&bookmarks;
+&formulas;
+</chapter>
+
+<!-- **************************************************************************************************** -->
+<!-- Detailed Guides: For Users with Disabilities -->
+&a11y;
+
+<!-- **************************************************************************************************** -->
+<chapter id="advanced-topics"><title>Advanced Topics</title>
+<para>The sections that are included in this chapter are for advanced users.  The instructions for these sections
+will assume you are familiar with the basic operation of &kword;.</para>
+&struct;
+<!--&chapnumb;   Still needs to be written-->
+&mmerge;
+</chapter>
+
+<!-- **************************************************************************************************** -->
+<!--&migrating;   Still needs to be written-->
+<!-- **************************************************************************************************** -->
+<chapter id="quickdirty">
+<title>How do I...</title>
+<para>The next part of &kword; documentation is designed to provide examples on how to solve specific
+problems using &kword;.</para>
+<para>Each section is a self contained list of steps, and refers the reader to other sections of the documentation
+for more complete information on different aspects of &kword;.</para>
+<para>These examples were selected to:</para>
+<itemizedlist>
+<listitem><para>Show how &kword; might function differently from other word processors you are used to.</para></listitem>
+<listitem><para>Show how to combine several elements to create the desired document.</para></listitem>
+<listitem><para>Illustrate the power of &kword;.</para></listitem>
+</itemizedlist>
+<para>You can use these examples as recipes for your document, or modify them to create the look or content
+you desire.</para>
+<sect1 id="qd-page-numbers">
+<title>How do I get the pages numbers on the outsides of the pages and
+the title in the middle of the header (like a novel)?</title>
+<indexterm><primary>insert page numbers</primary></indexterm>
+
+<para>This first example shows how you can combine center tabs and variables in a header to create a common format to your document.</para>
+<note><para>Your document must be at least 2 pages long <emphasis>before</emphasis> you begin this procedure. </para></note>
+<orderedlist>
+<listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Click on the <guilabel>Document</guilabel> tab.</para></listitem>
+<listitem><para>Click once in the text box labeled <guilabel>Title</guilabel> with the &LMB; and enter
+the desired document title.</para></listitem>
+<listitem><para>Click on the <guibutton>OK</guibutton> button.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Click on the <guilabel>Header &amp; Footer</guilabel> tab.</para></listitem>
+<listitem><para>Select <guilabel>Different header for even and odd pages</guilabel>.</para></listitem>
+<listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Headers</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Move to an odd numbered page in your document, and click in the header box.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>The format paragraph dialog will appear.  Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
+<listitem><para>Click the <guibutton>New</guibutton> button.</para></listitem>
+<listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is exactly 1/2 the frame width.  The frame width is
+ listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
+<listitem><para>Click the <guibutton>Center</guibutton> radio button in the section entitled <guilabel>Alignment</guilabel>.</para></listitem>
+ 
+<listitem><para>Click the <guibutton>New</guibutton> button again.</para></listitem>
+<listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is slightly less than the frame width.  The frame width is
+ listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
+<listitem><para>Click the <guibutton>Right</guibutton> radio button in the section entitled <guilabel>Alignment</guilabel>.</para></listitem>
+
+<listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
+<listitem><para>Click in the header again with the &LMB;.</para></listitem>
+<listitem><para>Type the Tab Key.  This will move the cursor to the center of the header.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Document Information</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Type the Tab key again.  This will move the cursor near the right margin of the header.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Page</guimenuitem><guimenuitem>Page Number</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Move to an even numbered page in your document, and click in the header box.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>The format paragraph dialog will appear.  Click on the <guilabel>Tabulators</guilabel> tab.</para></listitem>
+<listitem><para>Click the <guibutton>New</guibutton> button.</para></listitem>
+<listitem><para>Using the arrows of the spinbox labeled <guilabel>Position</guilabel> enter a value that is exactly 1/2 the frame width.  The frame width is
+ listed directly below the <guilabel>Position</guilabel> spin box.</para></listitem>
+<listitem><para>Click the <guibutton>Center</guibutton> radio button in the section entitled <guilabel>Alignment</guilabel>.</para></listitem>
+<listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
+<listitem><para>Click in the header again with the &LMB;.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Page</guimenuitem><guimenuitem>Page Number</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Type the Tab key.  This will move the cursor to the center of the header.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Document Information</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+</orderedlist>
+<para>That completes the procedure. Your document now has the title of the document in the center along the top of each page, and
+the page numbers on the outside corners of the pages.  </para>
+<para>If you want page numbers on the bottom of the pages, you can use <link linkend="headers-and-footers">Footers</link> instead of
+headers in your document.</para>
+</sect1>
+
+<sect1 id="qd-pdf">
+<title>How do I create a <literal role="extension">.pdf</literal> file?</title>
+<indexterm><primary>creating a PDF file</primary></indexterm>
+<indexterm><primary>PDF, creating</primary></indexterm>
+
+<para>&kword; differs slightly from other word processors here.  Instead of saving your file as a
+<literal role="extension">.pdf</literal> file, you <emphasis>print</emphasis> your file to create the
+<literal role="extension">.pdf</literal> file.</para>
+<para>When you are ready to create a <literal role="extension">.pdf</literal> file from your document:</para>
+
+<orderedlist>
+<listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>
+from the menubar.</para>
+<para>This will bring up the print dialog.</para></listitem>
+<listitem><para>In the combo box labeled <guilabel>Name</guilabel>, select <guilabel>Print to File (PDF)</guilabel></para></listitem>
+<listitem><para>Enter your desired filename in the <guilabel>Output file:</guilabel> text box.</para></listitem>
+<listitem><para>If you wish to make any changes to the PDF formatting, select <guibutton>Properties</guibutton>.</para>
+<para>A complete explanation to all these properties, is beyond the scope of this document.</para></listitem>
+<listitem><para>Click <guibutton>OK</guibutton>.</para></listitem>
+</orderedlist>
+<para>Your PDF file will be created and saved at the location specified in <guilabel>Output file</guilabel>.  This file can be uploaded
+onto any website.</para>
+<para>For more information on printing in &kde;, visit <ulink url="http://printing.kde.org">The &kde; Print web page</ulink>.</para>
+
+</sect1>
+
+<sect1 id="qd-template-remove">
+<title>How do I remove template categories from the open dialog.</title>
+
+<para>Templates can only be removed using the template creation dialog. For instructions, click
+<link linkend="template-delete-group">Removing template group</link>.</para>
+</sect1>
+
+<!--
+<sect1 id="qd-watermark">
+<title>How do I create a watermark for my document</title>
+<para>To be written</para>
+</sect1>
+-->
+</chapter>
+
+<!-- **************************************************************************************************** -->
+&mbtb;
+&opt;
+<!-- **************************************************************************************************** -->
+
+<chapter id="q-and-a">
+<title>Questions and Answers</title>
+<indexterm><primary>FAQ</primary></indexterm>
+
+<qandaset id="faq">
+<qandaentry>
+<question>
+<para>When I try to load a document or picture, it does not appear in my dialog
+box, but I know I saved it there. Why can I not see it?</para>
+</question>
+<answer>
+<para>Check to make sure that you have selected the correct file type in the <link linkend="file-dialog">open dialog box</link>.
+If you save a file in one format, but ask
+&kword; to show you the files from another format, you will not see your saved file.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>What is a <literal role="extension">kwd</literal> file?
+What is a <literal role="extension">kwt</literal> file?</para>
+</question>
+<answer>
+<para>A <literal role="extension">kwd</literal> file is a &kword; document.  </para>
+<para>A <literal role="extension">kwt</literal> file is a &kword; template file.  </para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question id="updates">
+<para>Where can I get updates?</para>
+</question>
+<answer>
+<para>For updates to &kword; you should always check the following sites:</para>
+<para>The &koffice; website (<ulink url="http://koffice.kde.org">http://koffice.kde.org</ulink>) is the first place to look for updates.
+Any software updates, bug fixes or announcements of new releases of &koffice; will be found here. </para>
+<para>Addons for &koffice; can be found at <ulink url="http://koffice.kde.org/addons/">http://koffice.kde.org/addons/</ulink>.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question id="themes">
+<para>How do themes affect &kword;?</para>
+</question>
+<answer>
+<para>&kword; (like all of &koffice;) is completely themeable.  You can use any QT or &kde; theme to customize the look of &kword;.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question id="readdoc">
+<para>Can I use &kword; to read &Microsoft; Word files?</para>
+</question>
+<answer>
+<para>&kword; does have the ability to import &Microsoft; Word files.  The conversion process is not perfect,
+and some formatting information will be lost.  For more details please refer to the
+<link linkend="filters">Import/Export Filters</link> section of the documentation.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question id="writedoc">
+<para>Can I save my &kword; document as a &Microsoft; Word file?</para>
+</question>
+<answer>
+<para>At the moment, &kword; does not yet provide support for exporting to &Microsoft; Word
+documents. If you need to exchange documents with MS Word,
+you should use Rich Text Format as an intermediate file format.
+Rich Text Format files
+are converted well by both &Microsoft; Word and &kword;,</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question id="writepdf">
+<para>Can I save my &kword; document as a PDF file?</para>
+</question>
+<answer>
+<para>Yes.  Instructions on creating a PDF file are found
+<link linkend="qd-pdf">here</link>.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question id="exchangedoc">
+<para>I have to exchange documents with a friend who does not have &kword;; what is
+the best way to do this ?</para>
+</question>
+<answer>
+<para>What you and your friend need to do is agree on a file format that both word processors
+can read and write effectively.  Rich Text Format is probably a good choice.</para>
+</answer>
+</qandaentry>
+
+</qandaset>
+</chapter>
+<!-- **************************************************************************************************** -->
+
+<chapter id="credits">
+<title>Credits and Licenses</title>
+<indexterm><primary>credits</primary><secondary>options</secondary></indexterm>
+<indexterm><primary>licenses</primary><secondary>options</secondary></indexterm>
+
+<para>&kword; Copyright 1999-2005 by The &kword; Team</para>
+
+<itemizedlist>
+<title>&kword; Developers (Alphabetically)</title>
+<listitem><para>Dag Andersen <email>danders@get2net.dk</email></para></listitem>
+<listitem><para>John Califf <email>jcaliff@compuzone.net</email></para></listitem>
+<listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
+<listitem><para>Krister Wicksell Eriksson <email>krister.wicksell@spray.se</email></para></listitem>
+<listitem><para>&David.Faure; &David.Faure.mail;</para></listitem>
+<listitem><para>Nicolas Goutte <email>goutte@kde.org</email></para></listitem>
+<listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
+<listitem><para>&Simon.Hausmann; &Simon.Hausmann.mail;</para></listitem>
+<listitem><para>Nash Hoogwater <email>nrhoogwater@wanadoo.nl</email></para></listitem>
+<listitem><para>&Stephan.Kulow; &Stephan.Kulow.mail;</para></listitem>
+<listitem><para>Sven L&uuml;ppken <email>sven@kde.org></email></para></listitem>
+<listitem><para>Laurent Montel <email>montel@kde.org</email></para></listitem>
+<listitem><para>&Daniel.Naber; &Daniel.Naber.mail;</para></listitem>
+<listitem><para>Reginald Stadlbauer <email>reggie@kde.org</email></para></listitem>
+<listitem><para>Werner Trobin <email>trobin@kde.org</email></para></listitem>
+<listitem><para>Torben Weis <email>weis@kde.org</email></para></listitem>
+<listitem><para>&Joseph.Wenninger; <email>jowenn@kde.org</email></para></listitem>
+<listitem><para>Thomas Zander <email>zander@kde.org</email></para></listitem>
+
+</itemizedlist>
+
+<itemizedlist>
+<title>&kword; Import/Export Filter Developers (Alphabetically)</title>
+<listitem><para>Enno Bartels <email>ebartels@nwn.de</email></para></listitem>
+<listitem><para>Wolf-Michael Bolle</para></listitem>
+<listitem><para>&Matthias.Kalle.Dalheimer; <email>kalle@dalheimer.de</email></para></listitem>
+<listitem><para>Clarence Dang <email>dang@kde.org</email></para></listitem>
+<listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
+<listitem><para>Nicolas Goutte <email>goutte@kde.org</email></para></listitem>
+<listitem><para>Tomasz Grobelny <email>grotk@poczta.onet.pl</email></para></listitem>
+<listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
+<listitem><para>Ariya Hidayat <email>ariya@kde.org</email></para></listitem>
+<listitem><para>Robert Jacolin <email>rjacolin@ifrance.com</email></para></listitem>
+<listitem><para>Michael Johnson</para></listitem>
+<!--<listitem><para>Alexandros Karypidis<email>mailto:karypid@inf.uth.gr</email></para></listitem>-->
+<listitem><para>Ewald Snel <email>ewald@rambo.its.tudelft.nl</email></para></listitem>
+</itemizedlist>
+
+<itemizedlist>
+<title>&kformula; developers</title>
+<listitem><para>Andrea Rizzi <email>rizzi@kde.org</email></para></listitem>
+<listitem><para>Ulrich Kuettler <email>ulrich.kuettler@mailbox.tu-dresden.de</email></para></listitem>
+</itemizedlist>
+
+<para>Documentation by &Mike.McBride;</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+<para>This program is licensed under the terms of the <ulink
+ url="http://www.gnu.org/copyleft/library.html#SEC1">&GNU; Library General
+Public License v2</ulink>.</para>
+
+
+</chapter>
+
+<!-- **************************************************************************************************** -->
+<appendix id="installation">
+<title>Installation</title>
+<indexterm><primary>&kword;</primary><secondary>installation</secondary></indexterm>
+
+<sect1 id="getting-kword">
+<title>How to obtain &kword;</title>
+
+<para>&kword; is part of the &kde; project <ulink
+url="http://www.kde.org">http://www.kde.org</ulink>.  &kword; is located
+in the &koffice; package which can be obtained from &kde-ftp;, the
+main ftp site of the &kde; project. </para>
+
+<para>Many distributions offer precompiled binaries on their ftp sites.  Please check your distribution's web sites for more information.</para>
+
+<para>If you want to compile &kword; from source, then you should read through the next few sections for help on compilation.</para>
+
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+<indexterm><primary>&kword;</primary><secondary>requirements</secondary></indexterm>
+
+<para>In order to successfully use &kword;, you need:</para>
+
+<itemizedlist>
+<listitem>
+<para>&Qt; Toolkit 3.2 or later.  This can be obtained from <ulink
+url="http://www.trolltech.com">Trolltech</ulink>.</para>
+<tip><para>While &koffice; will compile and run with any version of &Qt; 3.2 or later, it is recommended that you compile and install
+&Qt; 3.3.4 to take advantage of all the bug fixes (including some security fixes) that have occurred.</para></tip>
+</listitem>
+
+<listitem>
+<para>&kde; 3.3.0 libraries (kdelibs) and the &kde; 3.3.0 base package
+(kdebase).  These can be obtained from the <ulink
+url="http://www.kde.org">&kde; web page.</ulink></para>
+<tip><para>While &koffice; will compile and run with any version of &kde; 3.3.0 or later, it is recommended that you compile and install
+&kde; 3.4 to take advantage of all the bug fixes that have occurred.</para>
+<para>It is also recommended that you install the arts package 1.3.2 from the
+<ulink url="ftp://ftp.kde.org">&kde; &FTP; site</ulink>.</para></tip>
+</listitem>
+
+<listitem>
+<para>&GNU; c++ compiler or any c++ compiler that supports exceptions.  For help on obtaining this, please refer to
+your distribution's web site.</para>
+</listitem>
+
+<listitem>
+<para><application>autoconf 2.53</application> or later and <application>automake 1.7</application> or later</para>
+</listitem>
+</itemizedlist>
+
+<note><para>In order to use external databases for mail merging documents, you must have
+the QT toolkit compiled with SQL support.  To add SQL support (as a plugin), simply include
+<option>-plugin-sql-<replaceable>driver</replaceable></option> in your configure line.</para>
+<para><replaceable>driver</replaceable> should be replaced with <replaceable>mysql</replaceable>, <replaceable>odbc</replaceable>,
+<replaceable>CVS</replaceable>, or <replaceable>psql</replaceable> as is appropriate for your database needs.</para></note>
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+<para>Complete instructions on installing &koffice; from source are located at
+<ulink url="http://www.koffice.org/download/source.php">http://www.koffice.org/download/source.php</ulink>.</para>
+
+</sect1>
+</appendix>
+
+<appendix id="commandline">
+<title>&kword; Command Line Options</title>
+<indexterm><primary>&kword;</primary><secondary>command line options</secondary></indexterm>
+
+<para>You can specify some initial actions for &kword;.  The most
+commonly used options are discussed below with instructions on finding
+help on the rest of the command line options.</para>
+
+<para><emphasis>Specifying the file name</emphasis></para>
+
+<para>Probably the most common command line option used is to specify
+the file to edit.</para>
+
+<para>The format for specifying the file name is:</para>
+
+<screen width="40">
+<prompt>$</prompt> <userinput><command>kword</command> <replaceable>filename</replaceable></userinput>
+</screen>
+
+<para>Example:</para>
+<informalexample><screen width="40">
+<prompt>$</prompt> <userinput><command>kword</command> <filename>Resume.kwd</filename></userinput>
+</screen></informalexample>
+<para>This will cause &kword; to load <filename>Resume.kwd</filename> for editing.</para>
+
+<para><emphasis>Show &kword; version</emphasis></para>
+
+<para>To see the version numbers for the QT toolkit, &kde;, and &kword; type:</para>
+
+<screen width="40">
+<prompt>$</prompt> <userinput><command>kword -v</command></userinput>
+</screen>
+
+<para><emphasis>Show the license for &kword;</emphasis></para>
+
+<para>To see the license for &kword; type:</para>
+
+<screen width="40">
+<prompt>$</prompt> <userinput><command>kword --license</command></userinput>
+</screen>
+
+
+<para><emphasis>Show &kword; developer list</emphasis></para>
+
+<para>To see the list of developers for &kword; type:</para>
+
+<screen width="40">
+<prompt>$</prompt> <userinput><command>kword --author</command></userinput>
+</screen>
+
+<para><emphasis>Other command line options</emphasis></para>
+
+<para>There are many other, rarely used, command line options.  You can get detailed help on these options by typing:</para>
+<screen width="40">
+<prompt>$</prompt> <userinput><command>kword</command> <option>--help</option></userinput>
+</screen>
+
+</appendix>
+
+<appendix id="filters">
+<title>Import/Export Filters</title>
+<indexterm><primary>&kword;</primary><secondary>filters</secondary></indexterm>
+<indexterm><primary>filters</primary></indexterm>
+
+<sect1 id="filter-intro"><title>Introduction to Filters</title>
+<para>&kword; has the ability (with varying success) to load data
+from foreign (non-&koffice;) data files.  &kword; also has the ability to
+save data as non-&koffice; data files.  This is provided to help users
+of &kword; to interact more seamlessly with people who use other
+operating systems and wordprocessors.</para>
+
+<para>&kword; does this by loading a non-&koffice; datafile into
+memory and passing the data through a <emphasis>filter</emphasis>
+to extract as much information as possible from the data file.  Some
+formatting information will be lost or changed by the filter in the
+attempt.</para>
+
+<para>When &kword; reads data <emphasis>into</emphasis>
+&kword; from a non-&koffice; file format, it is
+<emphasis>importing</emphasis> the data.</para>
+
+
+<para>When &kword; saves a &kword; document as a non-&koffice;
+file format, it is <emphasis>exporting</emphasis> the data.</para>
+
+</sect1>
+<sect1 id="filters-included"><title>Filters included in &kword;</title>
+
+<para>&kword; comes with the following filters:</para>
+
+<informaltable>
+
+<tgroup cols="3">
+<thead><row><entry> </entry><entry>Import</entry><entry>Export</entry></row></thead>
+<tbody>
+<row><entry>Abiword</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>AmiPro</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Applixword</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>&HTML;</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>&kpresenter;</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Hancom Word</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Magic Point Presentation</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>&Microsoft; Powerpoint</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>&Microsoft; Word</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>&Microsoft; Write</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Oasis OpenDocument</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Openoffice Presentation</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Openoffice Text Document</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Palm Document</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>PDF</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>Plain Text</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>RTF</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>SGML</entry><entry>No</entry><entry>Yes</entry></row>
+<row><entry>TeX Document</entry><entry>No</entry><entry>Yes</entry></row>
+<row><entry>WML</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>Wordperfect</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>&XML;</entry><entry>Yes</entry><entry>No</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>For details on each filter, please refer to the <ulink 
+url="http://koffice.org/filters/">&koffice; filters web page</ulink>. </para>
+
+</sect1>
+
+
+
+</appendix>
+
+<appendix id="keys">
+<title>Key Bindings Summary</title>
+<indexterm><primary>keyboard shortcuts</primary><secondary>table of</secondary></indexterm>
+
+<para>Keybindings for Working with Documents</para>
+<informaltable>
+<tgroup cols="2"><tbody>
+<row>
+<entry><link linkend="menu-new">Start New
+Document</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>N</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-open">Open
+Document</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>O</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-save">Save
+Document</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>S</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-print">Print
+Document</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>P</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-close">Close
+Document</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>W</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-quit">Quit
+&kword;</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>Q</keycap></keycombo></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+
+<para>Keybindings for Character Selection</para>
+<informaltable>
+<tgroup cols="2"><tbody>
+<row><entry>Move selection one character to the left.</entry><entry><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry></row>
+<row><entry>Move selection one word to the left.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Left Arrow</keycap></keycombo></entry></row>
+<row><entry>Move selection one character to the right.</entry><entry><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry></row>
+<row><entry>Move selection one word to the right.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Right Arrow</keycap></keycombo></entry></row>
+
+<row><entry>Selects all characters from the start of the selection, to the character directly up one line.</entry><entry><keycombo action="simul">&Shift;<keycap>Up Arrow</keycap></keycombo></entry></row>
+<row><entry>Selects all characters from the start of the selection, to the first character of the line directly above.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Up Arrow</keycap></keycombo></entry></row>
+
+<row><entry>Selects all characters from the start of the selection, to the character directly down one line.</entry><entry><keycombo action="simul">&Shift;<keycap>Down Arrow</keycap></keycombo></entry></row>
+<row><entry>Selects all characters from the start of the selection, to the last character of the line directly below.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Down Arrow</keycap></keycombo></entry></row>
+
+<row><entry>Selects all characters from the start of the selection, to the beginning of the line.</entry><entry><keycombo action="simul">&Shift;<keycap>Home</keycap></keycombo></entry></row>
+<row><entry>Selects all characters from the start of the selection, to the beginning of the document.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Home</keycap></keycombo></entry></row>
+
+<row><entry>Selects all characters from the start of the selection, to the end of the line.</entry><entry><keycombo action="simul">&Shift;<keycap>End</keycap></keycombo></entry></row>
+<row><entry>Selects all characters from the start of the selection, to the end of the document.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>End</keycap></keycombo></entry></row>
+
+<row><entry>Moves the current endpoint one screen up.</entry><entry><keycombo action="simul">&Shift;<keycap>Page-Up</keycap></keycombo></entry></row>
+<row><entry>Moves the current endpoint one page up. The endpoint is located at the first character of this page.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Page-Up</keycap></keycombo></entry></row>
+
+
+<row><entry>Moves the current endpoint down one screen.</entry><entry><keycombo action="simul">&Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
+
+<row><entry>Moves the current endpoint down one page.  The endpoint is located at the first character of this page.</entry><entry><keycombo action="simul">&Ctrl; &Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
+<row><entry>Select all text in the current frame.</entry><entry><keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo></entry></row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Keybindings for Character Formatting</para>
+<informaltable>
+
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Toggle Boldface On/Off</entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>B</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Toggle Italics On/Off</entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>I</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Toggle Underline On/Off</entry>
+<entry><keycombo action="simul">&Ctrl;<keycap>U</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="format-font">Format Font</link></entry>
+<entry><keycombo
+action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Decrease Font Size</entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>&lt;</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Increase Font Size</entry>
+<entry><keycombo action="simul">&Ctrl;<keycap>&gt;</keycap></keycombo></entry>
+</row>
+
+
+
+</tbody>
+</tgroup>
+</informaltable>
+
+
+<para>Keybindings for Paragraph Formatting</para>
+<informaltable>
+
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Align Block (Justify)</entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>J</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Align Center</entry>
+<entry><keycombo
+action="simul">&Alt;&Ctrl;<keycap>C</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Align Left</entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>L</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Align Right</entry>
+<entry><keycombo
+action="simul">&Alt;&Ctrl;<keycap>R</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Format Paragraph</entry>
+<entry><keycombo
+action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo></entry>
+</row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+
+<para>Keybindings for Basic Editing Functions and Search and
+Replace</para>
+<informaltable>
+
+<tgroup cols="2">
+<tbody>
+
+<row>
+<entry><link linkend="menu-copy">Copy</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>C</keycap></keycombo> (<keycombo
+action="simul">&Ctrl;<keycap>Insert</keycap></keycombo>)</entry>
+</row>
+
+<row>
+<entry><link linkend="menu-cut">Cut</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>X</keycap></keycombo> (<keycombo
+action="simul">&Shift;<keycap>Delete</keycap></keycombo>)</entry>
+</row>
+
+<row>
+<entry><link linkend="menu-paste">Paste</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>V</keycap></keycombo> (<keycombo
+action="simul">&Shift;<keycap>Insert</keycap></keycombo>)</entry>
+</row>
+
+<row>
+<entry><link linkend="menu-find">Find</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>F</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link
+linkend="menu-replace">Replace</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>R</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-undo">Undo</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>Z</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-redo">Redo</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Keybindings for Inserting</para>
+<informaltable>
+
+<tgroup cols="2"><tbody>
+
+<row>
+<entry><link linkend="menu-create-text-frame">Create Text
+Frame</link></entry>
+<entry><keycombo action="simul"><keycap>F10</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-insert-picture">Insert
+Picture</link></entry>
+<entry><keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-create-formula">Create
+Formula Frame</link></entry>
+<entry><keycombo action="simul"><keycap>F4</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-create-table">Create
+Table</link></entry>
+<entry><keycombo
+action="simul"><keycap>F5</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link
+linkend="menu-insert-special-character">Insert Special
+Character</link></entry>
+<entry><keycombo
+action="simul">&Alt;&Shift;<keycap>C</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Insert Non-breaking Space</entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>Space</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Insert Soft Hyphen</entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>-</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Insert Line
+Break</entry>
+<entry><keycombo
+action="simul">&Shift;<keycap>Return</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link
+linkend="menu-insert-hard-frame-break">Insert Hard Frame
+Break</link></entry>
+<entry><keycombo
+action="simul">&Ctrl;<keycap>Return</keycap></keycombo></entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+<para>Keybindings for Accessibility</para>
+<informaltable>
+<tgroup cols="2"><tbody>
+<row>
+<entry>Popup Context Menu</entry>
+<entry><keycap>Menu</keycap> (see note below)</entry>
+</row>
+<row>
+<entry><link linkend="a11y-motor-panel-sizing">Resize Panel Forward</link></entry>
+<entry><keycap>F8</keycap></entry>
+</row>
+<row>
+<entry><link linkend="a11y-motor-panel-sizing">Resize Panel Reverse</link></entry>
+<entry><keycombo action="simul">&Shift;<keycap>F8</keycap></keycombo></entry>
+</row>
+<row>
+<entry><link linkend="a11y-motor-moving-focus">Set Focus to Widget</link></entry>
+<entry><keycombo action="simul">&Alt;<keycap>F8</keycap></keycombo></entry>
+</row>
+<row>
+<entry>Enter keyboard <link linkend="a11y-mouse-emulation">Mouse Emulation</link> mode</entry>
+<entry><keycombo action="simul">&Alt;<keycap>F12</keycap></keycombo></entry>
+</row>
+<row>
+<entry>Click mouse in <link linkend="a11y-mouse-emulation">Mouse Emulation</link> mode</entry>
+<entry><keycap>spacebar</keycap></entry>
+</row>
+<row>
+<entry>Go to Document Structure</entry>
+<entry><keycombo action="simul">&Alt;<keycap>1</keycap></keycombo></entry>
+</row>
+<row>
+<entry>Go to Document</entry>
+<entry><keycombo action="simul">&Alt;<keycap>2</keycap></keycombo></entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<note><para>
+On most keyboards, the <keycap>Menu</keycap> key is on the righthand side between
+the &Windows; and &Ctrl; keys.  It has a menu icon on it.
+</para></note>
+
+<para>Keybindings for <link linkend="a11y-mouse-navigation">Mouse Navigation</link></para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="mousenav.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Miscellaneous Keyboard Shortcuts</para>
+<informaltable>
+
+<tgroup cols="2"><tbody>
+<row>
+<entry>&kword; Handbook</entry>
+<entry><keycombo action="simul"><keycap>F1</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Whats This?</entry>
+<entry><keycombo action="simul">&Shift;<keycap>F1</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry>Completion</entry>
+<entry><keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-lower-frame">Lower Frame</link></entry>
+<entry><keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-raise-frame">Raise Frame</link></entry>
+<entry><keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo></entry>
+</row>
+
+<row>
+<entry><link linkend="menu-format-stylist">Show Stylist</link></entry>
+<entry><keycombo action="simul">&Alt;&Ctrl;<keycap>S</keycap></keycombo></entry>
+</row>
+
+
+
+
+</tbody></tgroup></informaltable>
+</appendix>
+
+<appendix id="technical-info">
+<title>&kword; Technical details</title>
+
+&techstuff;
+<sect1 id="mimetype">
+<title>Kword &MIME; types</title>
+<indexterm><primary>&kword;</primary><secondary>&MIME; types</secondary></indexterm>
+
+<para>The &kword; &MIME; type is :  application/x-kword</para>
+</sect1>
+</appendix>
+
+<!-- **************************************************************************************************** -->
+
+<glossary id="glossary">
+<title>Glossary</title>
+
+<glossentry id="defaspectratio">
+<glossterm>Aspect Ratio</glossterm>
+<glossdef>
+<para>This is the ratio of the measurement of a screen, picture or document
+horizontally compared to the vertical measurement.  All standard
+computer monitors have the same aspect ratio, regardless of their
+resolution. Any &kword; document that conforms to the standard
+screen will look good on any monitor.</para>
+<para>For many images, it is important to maintain the aspect ratio.  This prevents
+distortion to the picture.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defbinarycode">
+<glossterm>Binary code</glossterm>
+<glossdef>
+<para>Binary code is the actual instructions for the computer. So if we
+refer to <emphasis>binaries</emphasis> we mean the executable &kword;
+program.  While computers have no difficulties reading binary files,
+they are not easily understood by people.  Compare this distribution method to <glossterm
+linkend="defsourcecode">Source Code</glossterm>. For more information on compiling &kword;, see
+the section entitled <link
+linkend="installation">Installation</link></para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defbitmap">
+<glossterm>Bitmap Image</glossterm>
+<glossdef>
+<para>Bit mapped images are composed of individual dots.  This type of
+file is very good for photographs and complex drawings. The downside of
+using bitmap images, is that when you change the size of the image on
+the page, there is a loss of detail. The file names of such pictures
+often end in <emphasis>jpeg</emphasis>, <emphasis>png</emphasis> or
+<emphasis>gif</emphasis>. </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defcell">
+<glossterm>Cells</glossterm>
+<glossdef>
+<para>Tables are made up of rows and columns of cells.  Each cell is
+defined by a combination of the row and column of a heading.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defclipboard">
+<glossterm>Clipboard</glossterm>
+<glossdef>
+<para>The clipboard is a temporary storage area in memory.  Whenever you
+use the <guimenuitem>Cut</guimenuitem> or
+<guimenuitem>Copy</guimenuitem> command, you are placing the object that
+was selected into this memory location.  Then when you use the
+<guimenuitem>Paste</guimenuitem> command, you insert the information
+from the clipboard into the document.  For more information see the
+section on <link linkend="clipboard">Cut/Copy/Paste</link>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defcompiling">
+<glossterm>Compiling</glossterm>
+<glossdef>
+<para>When you compile a program, you are converting it from
+a source file (which is easily edited by a programmer) into a binary
+file (which the computer uses). Compare this distribution method to <glossterm
+linkend="defbinarycode">Binary Code</glossterm>.</para>  
+<para>Compiling programs
+is not as easy as installing binary versions. Users who are only interested in 
+using &kword; are encouraged to find a binary version of &kword; for their computer.  For 
+users who want to learn more about programming, more information on compiling &kword; is 
+available in the section entitled <link
+linkend="installation">Installation</link>.</para></glossdef>
+</glossentry>
+
+<glossentry id="defcustomvariables">
+<glossterm>Custom Variables</glossterm>
+<glossdef>
+<para>Using custom variables you can store certain values (&eg; numbers
+or text) for later use in your document or in a script. If you want to
+find out more about custom variables, see <link
+linkend="variables">Document Variables</link>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defdeb">
+<glossterm>DEB</glossterm>
+<glossdef>
+<para>This is a binary file format that is used by Debian and Debian-based
+distributions.  This will be the suffix of a file
+specifically for
+these distributions.  An example would be
+<filename>koffice-1.2.deb</filename>. For more information on installing
+these files, refer to the <ulink url="http://www.debian.org">Debian Web
+Site</ulink>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defdialogbox">
+<glossterm>Dialog Box</glossterm>
+<glossdef>
+<para>A dialog box is a small window that appears on top of your working
+document.  This window usually has questions, information or
+configuration options related to the task you are performing.  When you
+are finished with the dialog box, it will disappear and return you to
+your document (possibly after making some changes to the
+document).</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defdtp">
+<glossterm><acronym>DTP</acronym></glossterm>
+<glossdef>
+<para>Stands for <emphasis>DeskTop Publishing</emphasis>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="deffaq">
+<glossterm><acronym>FAQ</acronym></glossterm>
+<glossdef>
+<para>Stands for <emphasis>Frequently Asked Questions</emphasis> and
+normally means a document, where questions that arise many times are answered. If you
+have a question to the developers of &koffice;, you should always have a
+look at the <acronym>FAQ</acronym> first; you can find the latest version
+<ulink
+url="http://koffice.kde.org/faq">here</ulink>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="deffilemask">
+<glossterm>File Mask</glossterm>
+<glossdef>
+<para>A file mask can be thought of as a strainer for you.  On the
+average computer, there are several thousand files. These files are
+sorted into sub-directories, but it is not uncommon for many users to
+have 100's of data files in a single sub-directory.</para>
+<para>Fortunately for us, most applications use a suffix to their
+filenames.  By applying a file mask, &kword; will only show you the
+files which are not filtered out by the mask. (That is to say &kword;
+only shows the files that fit through the strainer).  This can be
+helpful if you have many files from many different applications. The
+file mask is incorporated in the <guilabel>Filter:</guilabel> line of
+the save and load dialog boxes.</para>
+<para>As an example. If you use a file mask for &kword; files, the file
+mask will try to filter out all files that are not for
+&kword;.</para></glossdef>
+</glossentry>
+
+<glossentry id="deffilter">
+<glossterm>Filter</glossterm>
+<glossdef>
+<para>A filter takes a document file from one program (&eg; &Microsoft;
+<application>Word</application>), and <emphasis>filters</emphasis> out
+the text and formatting information and converts that information into a
+&kword; document.  Filters are used to read and write files for other
+programs.  More information on the filters included with &kword;
+is available in the section entitled <link linkend="filters">Import/Export Filters</link>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="deffooter">
+<glossterm>Footer</glossterm>
+<glossdef>
+<para>The footer of a page is an area below the normal text area. Often
+it contains the page numbering and maybe some additional
+information. The contents of the footer are normally the same for most
+pages, and changing the footer on one page will change all other pages
+as well. See <glossterm linkend="defheader">Header</glossterm>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defframe">
+<glossterm>Frame</glossterm>
+<glossdef>
+<para>Nearly everything in &kword; is in a frame. Text is always in
+a text frame. Pictures are in picture frames. Parts are in part
+frames. A frame is basically just a rectangle that can contain some part
+of your document. Frames can be moved, resized, deleted etc.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defframeset">
+<glossterm>Frameset</glossterm>
+<glossdef>
+<para>A frame-set is a group of frames which are connected together. If
+you are writing text that does not fit into the first frame of a frame-set,
+it will continue in the next frame belonging to that frame-set.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defftp">
+<glossterm>&FTP;</glossterm>
+<glossdef>
+<para>&FTP; is the <emphasis>File Transfer Protocol</emphasis>; it is an
+Internet protocol that allows you to retrieve files from so-called &FTP;
+servers. If you want to download &koffice; from the Internet, you will
+probably use &FTP;.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defhardramebreak">
+<glossterm>Hard Frame Break</glossterm>
+<glossdef>
+<para>Normally, &kword; automatically adjusts text so it fits into a
+text frame. By inserting a hard frame break you can force &kword; to
+always start the next frame in the frameset with the text that follows
+the break.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defhangingindent">
+<glossterm>Hanging indention</glossterm>
+<glossdef>
+<para>A paragraph where the first line of the paragraph extends outwards to 
+the left compared with other lines in the paragraph.</para>
+
+
+</glossdef>
+</glossentry>
+
+<glossentry id="defheader">
+<glossterm>Header</glossterm>
+<glossdef>
+<para>The header of a page is an area above the normal text area. Often
+it contains the page numbering and maybe some additional
+information. The contents of the header normally are the same for most
+pages, and changing the header on one page will change all other pages
+as well. See <glossterm linkend="deffooter">Footer</glossterm>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defhtml">
+<glossterm><acronym>&HTML;</acronym></glossterm>
+<glossdef>
+<para>Stands for <emphasis>HyperText Markup Language</emphasis>. Most
+web pages on the Internet are written in
+&HTML;. &kword; can read and write
+&HTML; documents for publishing on the World Wide
+Web.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defhue">
+<glossterm>Hue</glossterm>
+<glossdef>
+<para>Hue is a more technically correct term for what we generally refer to as <emphasis>color</emphasis>.</para>
+<para>Examples of hues include red, green, blue and purple.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="definlineframe">
+<glossterm>Inline frame</glossterm>
+<glossdef>
+<para>An inline frame is a special frame type in &kword;.  Inline frames are associated with a position in a text frame.
+&kword; will keep the inline frame near the specified text.  You will not be able to determine where exactly on a page the
+frame will appear, but it will be located close to the specified text.</para>
+<para>If you insert or delete text in front of the specified text, the inline image will move up or down the page to follow the
+specified text</para>
+<para><tip><para>Inline frames are very useful when they contain a picture, graph or figure.  Simply place the inline frame within the
+text which describes the object, and &kword; will make sure both the text and the inline frame are always near each other.</para></tip></para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defkde2">
+<glossterm>&kde;</glossterm>
+<glossdef>
+<para>Stands for the <emphasis>K Desktop Environment</emphasis>.  Part of &kde; is
+required for &kword; to operate.  The K Desktop Environment is a user
+interface which allows users to manipulate files and operate programs
+graphically.  For more information, please visit <ulink
+url="http://www.kde.org">www.kde.org</ulink>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defkeybinding">
+<glossterm>Key Binding</glossterm>
+<glossdef>
+<para>All of the features of &kword; are available through the menubar.
+You will find, however, that there are certain features of &kword; that
+you use on a regular basis.  You can <emphasis>bind</emphasis> a certain
+key combination to that function.  Once this combination is bound to the
+function, you can use it as a shortcut to the function.  &kword; comes
+with several <link linkend="keys">predefined key-bindings</link>. For
+more information on changing the default key-bindings, click <link
+linkend="options-keybindings">here</link>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="deflandscape">
+<glossterm>Landscape</glossterm>
+<glossdef>
+<para>When you have a standard sheet of paper, you can either orient
+your document with the long side vertically or horizontally.  When the
+horizontal dimension is greater than the vertical, this is termed
+Landscape.</para>
+<para>Example: <inlinemediaobject><imageobject><imagedata
+fileref="landscape.png"
+format="PNG"/></imageobject></inlinemediaobject></para>
+<para> Compare
+with <glossterm linkend="defportrait">Portrait</glossterm>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defmenubar">
+<glossterm>Menubar</glossterm>
+<glossdef>
+<para>The menubar is located at the top of the &kword; screen.  You can
+use it to access all features of &kword;.</para>
+<para>Menubar: <inlinemediaobject><imageobject> <imagedata
+fileref="basic.png" format="PNG"
+align="center"/></imageobject></inlinemediaobject></para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defportrait">
+<glossterm>Portrait</glossterm>
+<glossdef>
+<para>When you have a standard sheet of paper, you can either orient
+your document with the long side vertically or horizontally.  When the
+vertical dimension is greater than the horizontal, this is termed
+Portrait.</para>
+<para>Example: <inlinemediaobject><imageobject><imagedata
+fileref="portrait.png" format="PNG"
+align="center"/></imageobject></inlinemediaobject></para>
+<para>Compare with <glossterm
+linkend="deflandscape">Landscape</glossterm>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defrpm">
+<glossterm><acronym>RPM</acronym></glossterm>
+<glossdef>
+<para>This is the binary file format for distributions based on the
+&RedHat; package manager, a widely used packaging tool for the &Linux;
+operating system.  If you still have to get &koffice; and your system
+supports <acronym>RPM</acronym> packages, you should get &koffice;
+packages ending in <literal role="extension">.rpm</literal>. They are
+very easy to use.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defsaturation">
+<glossterm><acronym>Saturation</acronym></glossterm>
+<glossdef>
+<para>Saturation refers to the subjective quantity of a specific hue in a color.  Colors with a low saturation appear more white.
+Colors with high saturation appear more richly colored.</para>
+<para>This is a set of four red dots which increase in saturation from left to right.
+<inlinemediaobject><imageobject><imagedata
+fileref="saturation.png" format="PNG"/></imageobject></inlinemediaobject></para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defscalingpicture">
+<glossterm>Scaling Pictures</glossterm>
+<glossdef>
+<para>Whenever you change the size of a graphics image, you are scaling
+that image.  In &kword; you scale the pictures by changing the shape of
+the frame which surrounds the graphic.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defsourcecode">
+<glossterm>Source Code</glossterm>
+<glossdef>
+<para>Source code is the human readable version of an application (such
+as &kword;).  Computers cannot use source code directly.  Instead,
+source code must be <glossterm linkend="defcompiling">compiled</glossterm> into
+binary code, before use.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="deftar">
+<glossterm>TAR</glossterm>
+<glossdef>
+<para>Tar is a tool used for the archiving of files in so-called
+<emphasis>tar-files</emphasis> which you recognize by their suffix
+<literal role="extension">.tar</literal>.  You can find &koffice; source
+and binary distributions as <glossterm linkend="deftgz">gzipped
+tar-files</glossterm>; however, you should not use them if there are special
+packages for your system and package manager. See <glossterm
+linkend="defrpm">RPM</glossterm>, <glossterm linkend="defdeb">DEB</glossterm>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="deftargz">
+<glossterm><literal role="extension">tar.gz</literal></glossterm>
+<glossdef>
+<para>See <glossterm linkend="deftgz"><acronym>TGZ</acronym></glossterm>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="deftgz">
+<glossterm><acronym>TGZ</acronym></glossterm>
+<glossdef>
+<para>Files ending in <literal role="extension">.tar.gz</literal> or
+<literal role="extension">.tgz</literal> are <glossterm
+linkend="deftar">tar-files</glossterm> compressed with the
+<command>gzip</command> program.  This makes the tar files smaller and
+quicker to download.  You can find &koffice; source and binary
+distributions in this format; however, you should not use them if there
+are special packages for your system and package manager. See <glossterm
+linkend="defrpm">RPM</glossterm>, <glossterm linkend="defdeb">DEB</glossterm>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="deftoolbar">
+<glossterm>Toolbar</glossterm>
+<glossdef>
+<para>A toolbar is a line of buttons which are shortcuts to more of the
+commonly used features of &kword;.  More information on toolbars can be
+found <link linkend="toolbars">here</link>.</para>
+<para>Example Toolbar: <inlinemediaobject><imageobject> <imagedata
+fileref="filetb.png" format="PNG"
+align="center"/></imageobject></inlinemediaobject></para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defurl">
+<glossterm>&URL;</glossterm>
+<glossdef>
+<para>&URL; is an abbreviation for Universal Resource Locater.  A universal resource locater is
+the technical term for what is commonly referred to as a websites address.</para>
+<para>Examples of &URL;s include <ulink url="http://www.koffice.org">http://www.koffice.org</ulink> and
+<ulink url="http://www.kde.org">http://www.kde.org</ulink></para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defvalue">
+<glossterm><acronym>Value (color)</acronym></glossterm>
+<glossdef>
+<para>Color value refers to how bright or dark a color is.  Colors with low value are more black in appearance.  Colors with high
+value are more richly colored.</para>
+<para>This is a set of four red dots which increase in value from left to right.
+<inlinemediaobject><imageobject><imagedata
+fileref="value.png" format="PNG"/></imageobject></inlinemediaobject></para>
+</glossdef>
+</glossentry>
+
+
+<glossentry id="defvectorimage">
+<glossterm>Vector Image</glossterm>
+<glossdef>
+<para>A vector based graphic is described in terms of lines and shapes,
+not in terms of dots.  These files 
+scale better than bit-mapped images. </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defwysiwyg">
+<glossterm><acronym>WYSIWYG</acronym></glossterm>
+<glossdef>
+<para>Stands for <emphasis>What You See Is What You Get</emphasis>.
+&kword; is a <acronym>WYSIWYG</acronym> word processor, which means that
+the document will appear the same on the screen while you are editing
+it, as it will on the printed page.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defx">
+<glossterm>&X-Window; system</glossterm>
+<glossdef>
+<para>The &X-Window; System (also known simply as <quote>X</quote>) is
+required for &koffice; to operate.  More information on &X-Window; for
+&Linux; can be found at <ulink
+url="http://www.xfree86.org">http://www.xfree86.org</ulink></para>
+</glossdef>
+</glossentry>
+
+</glossary>
+
+&documentation.index;
+</book>

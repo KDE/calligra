@@ -1,0 +1,212 @@
+#############################################################################
+# Makefile for building: sqlite3
+#############################################################################
+
+####### Compiler, tools and options
+
+CC		=	cl
+CXX		=	cl
+LEX		= flex
+YACC		= byacc
+CFLAGS	=	-nologo -Zm200 -W3 -MDd -Z7 -GX -GR -DTHREADSAFE=1 -D_OFF_T_DEFINED=1 -DNO_TCL=1
+CXXFLAGS	=	-nologo -Zm200 /GR /GX /GZ /TP -W3 -MDd -Z7 -GX -GR  -DUNICODE 
+LEXFLAGS	=
+YACCFLAGS	=-d
+INCPATH	=	 -Isrc -I$(QTDIR)\include 
+LINK	=	link
+LFLAGS	=	/NOLOGO /FORCE:MULTIPLE /DEBUG /SUBSYSTEM:console /DEF:sqlite3.def /DLL
+VERSION=3.0.7
+LIBS	=	 "kernel32.lib" "user32.lib" "gdi32.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "imm32.lib" "winmm.lib" "wsock32.lib" "winspool.lib" 
+IDL		=	midl
+ZIP		=	zip -r -9
+COPY_FILE	=       copy
+COPY_DIR	=       copy
+DEL_FILE	=       del
+DEL_DIR	=       rmdir
+MOVE		=       move
+CHK_DIR_EXISTS =	if not exist
+MKDIR		=	mkdir
+
+####### Files
+
+HEADERS =	
+SOURCES =	\
+  src/attach.c \
+  src/auth.c \
+  src/btree.c \
+  src/btree.h \
+  src/build.c \
+  src/date.c \
+  src/delete.c \
+  src/expr.c \
+  src/func.c \
+  src/hash.c \
+  src/hash.h \
+  src/insert.c \
+  src/legacy.c \
+  src/main.c \
+  src/opcodes.c \
+  src/os_mac.c \
+  src/os_unix.c \
+  src/os_win.c \
+  src/pager.c \
+  src/pager.h \
+  src/parse.c \
+  src/pragma.c \
+  src/printf.c \
+  src/random.c \
+  src/select.c \
+  src/shell.c \
+  src/sqliteInt.h \
+  src/table.c \
+  src/tclsqlite.c \
+  src/tokenize.c \
+  src/trigger.c \
+  src/utf.c \
+  src/update.c \
+  src/util.c \
+  src/vacuum.c \
+  src/vdbe.c \
+  src/vdbe.h \
+  src/vdbeapi.c \
+  src/vdbeaux.c \
+  src/vdbemem.c \
+  src/vdbeInt.h \
+  src/where.c
+
+OBJECTS =	\
+  obj/attach.obj \
+  obj/auth.obj \
+  obj/btree.obj \
+  obj/build.obj \
+  obj/date.obj \
+  obj/delete.obj \
+  obj/expr.obj \
+  obj/func.obj \
+  obj/hash.obj \
+  obj/insert.obj \
+  obj/legacy.obj \
+  obj/main.obj \
+  obj/opcodes.obj \
+  obj/os_mac.obj \
+  obj/os_unix.obj \
+  obj/os_win.obj \
+  obj/pager.obj \
+  obj/parse.obj \
+  obj/pragma.obj \
+  obj/printf.obj \
+  obj/random.obj \
+  obj/select.obj \
+  obj/shell.obj \
+  obj/table.obj \
+  obj/tclsqlite.obj \
+  obj/tokenize.obj \
+  obj/trigger.obj \
+  obj/utf.obj \
+  obj/update.obj \
+  obj/util.obj \
+  obj/vacuum.obj \
+  obj/vdbe.obj \
+  obj/vdbeapi.obj \
+  obj/vdbeaux.obj \
+  obj/vdbemem.obj \
+  obj/where.obj
+
+FORMS =	
+UICDECLS =	
+UICIMPLS =	
+SRCMOC	=	
+OBJMOC	=	
+DIST	=	
+TARGET	=	$(KDEDIR)/bin/kexisql3_d.dll
+
+####### Implicit rules
+
+.SUFFIXES: .c .cpp .cc .cxx .C
+
+{moc\}.cpp{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{moc\}.cc{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{moc\}.cxx{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{moc\}.C{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{moc\}.c{obj\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.cpp{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.cc{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.cxx{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.C{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.c{obj\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{src\}.c{obj\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+####### Build rules
+
+all: $(TARGET) sqlite
+
+$(TARGET):  $(UICDECLS) $(OBJECTS) $(OBJMOC) 
+	$(LINK) $(LFLAGS) /OUT:$(TARGET) @<< 
+	  $(OBJECTS) $(OBJMOC) $(LIBS)
+<<
+
+sqlite:	src/shell.c $(KDEDIR)/bin/kexisql3_d.lib
+	link $(READLINE_FLAGS) $(LIBPTHREAD) \
+		/OUT:$(KDEDIR)/bin/ksqlite.exe obj/shell.obj $(KDEDIR)/bin/kexisql3_d.lib $(LIBREADLINE)
+
+mocables: $(SRCMOC)
+uicables: $(UICIMPLS) $(UICDECLS)
+
+uiclean:
+mocclean:
+clean: 
+	-del obj\*.obj
+	-del sqlite.pdb
+
+distclean: clean
+	-del $(TARGET)
+
+####### Install
+
+install: all 
+
+uninstall: 
+

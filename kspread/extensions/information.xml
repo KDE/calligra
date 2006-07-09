@@ -1,0 +1,297 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Information</GroupName>
+
+    <Function>
+      <Name>N</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The N() function converts a value to a number. If value is or refers to a number, this function returns the number. If value is True, this function returns 1. If a value is a date, this function returns the serial number of that date. Anything else will cause the function to return 0.</Text>
+	<Syntax>N(value)</Syntax>
+	<Example>N(3.14) returns 3.14</Example>
+	<Example>N("7") returns 0 (because "7" is text)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INFO</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Type of information</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The INFO() function returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns the path of the current directory, "numfile" returns the number of active documents, "release" returns the version of KSpread as text, "recalc" returns the current recalculation mode: "Automatic" or "Manual", "system" returns the name of the operating environment, "osversion" returns the current operating system.</Text>
+	<Syntax>INFO(type)</Syntax>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISLOGICAL</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISLOGICAL() function returns True if the parameter is a boolean value. Otherwise it returns False.</Text>
+	<Syntax>ISLOGICAL(x)</Syntax>
+	<Example>ISLOGICAL(A1>A2) returns True</Example>
+	<Example>ISLOGICAL(12) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISBLANK</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISBLANK() function returns True if the parameter is empty. Otherwise it returns False.</Text>
+	<Syntax>ISBLANK(x)</Syntax>
+	<Example>ISBLANK(A1) returns True if A1 is empty</Example>
+	<Example>ISBLANK(A1) returns False if A1 holds a value</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNUMBER</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNUMBER() function returns True if the parameter is a numerical value. Otherwise it returns False. It's the same as ISNUM.</Text>
+	<Syntax>ISNUMBER(x)</Syntax>
+	<Example>ISNUMBER(12) returns True</Example>
+	<Example>ISNUMBER(hello) returns False</Example>
+  <Related>ISNUM</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNUM</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNUM() function returns True if the parameter is a numerical value. Otherwise it returns False. It's the same as ISNUMBER.</Text>
+	<Syntax>ISNUM(x)</Syntax>
+	<Example>ISNUM(12) returns True</Example>
+  <Example>ISNUM(hello) returns False</Example>
+  <Related>ISNUMBER</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISTIME</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISTIME() function returns True if the parameter is a time value. Otherwise it returns False.</Text>
+	<Syntax>ISTIME(x)</Syntax>
+	<Example>ISTIME("12:05") returns True</Example>
+	<Example>ISTIME("hello") returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISDATE</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISDATE() function returns True if the parameter is a date value. Otherwise it returns False</Text>
+	<Syntax>ISDATE(x)</Syntax>
+	<Example>ISDATE("2000-2-2") returns True</Example>
+	<Example>ISDATE("hello") returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISREF</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISREF() function returns True if the parameter refers to a reference. Otherwise it returns False</Text>
+	<Syntax>ISREF(x)</Syntax>
+	<Example>ISREF(A12) returns true</Example>
+	<Example>ISREF("hello") returns false</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISTEXT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISTEXT() function returns True if the parameter is a string. Otherwise it returns False</Text>
+	<Syntax>ISTEXT(x)</Syntax>
+	<Example>ISTEXT(12) returns False</Example>
+	<Example>ISTEXT("hello") returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNONTEXT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNONTEXT() function returns True if the parameter is not a string. Otherwise it returns False. It's the same as ISNOTTEXT.</Text>
+	<Syntax>ISNONTEXT(x)</Syntax>
+	<Example>ISNONTEXT(12) returns True</Example>
+  <Example>ISNONTEXT("hello") returns False</Example>
+  <Related>ISNOTTEXT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNOTTEXT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNOTTEXT() function returns True if the parameter is not a string. Otherwise it returns False. It's the same as ISNONTEXT.</Text>
+	<Syntax>ISNOTTEXT(x)</Syntax>
+	<Example>ISNOTTEXT(12) returns True</Example>
+  <Example>ISNOTTEXT("hello") returns False</Example>
+  <Related>ISNONTEXT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISODD</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISODD() function returns True if the number is odd. Otherwise returns False.</Text>
+	<Syntax>ISODD(x)</Syntax>
+	<Example>ISODD(12) returns False</Example>
+	<Example>ISODD(-7) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISEVEN</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISEVEN() function returns True if the number is even. Otherwise returns False.</Text>
+	<Syntax>ISEVEN(x)</Syntax>
+	<Example>ISEVEN(12) returns True</Example>
+	<Example>ISEVEN(-7) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISERR</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISERR() function returns True if its parameter is an error other than N/A. Otherwise, it returns False. Use ISERROR() if you want to include the N/A error as well.</Text>
+	<Syntax>ISERR(x)</Syntax>
+        <Related>ISERROR</Related>
+        <Related>ISNA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISERROR</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISERROR() function returns True if its parameter is an error of any type. Otherwise, it returns False.</Text>
+	<Syntax>ISERROR(x)</Syntax>
+        <Related>ISERR</Related>
+        <Related>ISNA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNA</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNA() function returns True if its parameter is a N/A error. In all other cases, it returns False.</Text>
+	<Syntax>ISNA(x)</Syntax>
+        <Related>ISERR</Related>
+        <Related>ISERROR</Related>
+      </Help>
+    </Function>
+
+   <Function>
+      <Name>TYPE</Name>
+      <Type>Int</Type>
+   <Function>
+      <Name>TYPE</Name>
+      <Type>Int</Type>
+   <Function>
+      <Name>TYPE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The TYPE() function returns 1 if the value is a number, 2 if it is text, 4 if the value is a logical value, 16 if it is an error value or 64 if the value is an array. If the cell the value represents contains a formula you get its return type.</Text>
+	<Syntax>TYPE(x)</Syntax>
+	<Example>TYPE(A1) returns 2, if A1 contains "Text"</Example>
+	<Example>TYPE(-7) returns 1</Example>
+	<Example>TYPE(A2) returns 1, if A2 contains "=CURRENTDATE()"</Example>
+      </Help>
+    </Function>
+    
+    <Function>
+      <Name>FILENAME</Name>
+      <Type>String</Type>
+      <Help>
+	<Text>Returns the current filename. If the current document is not saved, an empty string is returned.</Text>
+	<Syntax>FILENAME()</Syntax>
+	</Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

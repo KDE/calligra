@@ -1,0 +1,1039 @@
+<sect1 id="commands-dialogs">
+<title>Dialogs</title>
+
+<para>
+This section describes &krita;'s dialog windows.
+</para>
+
+<sect2 id="commands-dialogs-image">
+<title>Dialogs for working with images</title>
+
+<sect3 id="commands-dialogs-images-colorrange">
+<title>The Color Range dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Color Range dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-colorrange.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Color Range dialog</phrase>
+</textobject>
+<caption><para>The Color Range dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+You can create a selection based on the color values of pixels here. In the
+dropdown box, choose which color range you want to select. Pixels will be
+selected according to their color value on this scale (&eg; a fully yellow
+pixel would score maximally on the red, green, and yellow scales).
+If you check the <guilabel>Invert</guilabel> box, pixels are more selected if they
+have a lower value in the range. You can choose if the current selection should be
+added to or subtracted from by the color range selection by clicking the
+respective option: <guilabel>Add to current selection</guilabel> or
+<guilabel>Select from current selection</guilabel>. Choose
+<guibutton>Select</guibutton> to actually perform the selection or
+<guibutton>Deselect</guibutton> to remove these pixels from the selection.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-image-convertimagetype">
+<title>The Convert Image Type dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Convert Image Type dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-convertimagetype.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Convert Image Type dialog</phrase>
+</textobject>
+<caption><para>The Convert Image Type dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog allows you to convert your image from one color space to another.
+The <guilabel>Target color space</guilabel> and <guilabel>Destination ICM
+profile</guilabel> are used to set to which colorspace and profile the image
+will be converted. You can influence how this conversion is done with the
+<guilabel>Rendering Intent</guilabel> option.
+</para>
+<para>
+With <guilabel>Perceptual</guilabel> conversion, the source color space is
+mapped linearly to the destination color space. If the destination color space
+<quote>accepts</quote> a lesser color range than the source, shifts may occur
+because the range is compressed. <guilabel>Relative colorimetric</guilabel>
+conversion converts every color to the closest color in the destination color
+space. This may mean that a certain color range is mapped to one color in the
+destination color space. <guilabel>Saturation</guilabel> means that fully
+saturated colors will remain fully saturated, even if this means that the
+actual color is changed. With <guilabel>Absolute colorimetric</guilabel>
+conversion, the same approach is used as with <guilabel>Relative
+colorimetric</guilabel>, but the white point of the color space (the value
+designating the color white) is not changed to match the new color space,
+which may result in unwanted changes to near colors.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-image-imageproperties">
+<title>The Image Properties dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Image Properties dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-imageproperties.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Image Properties dialog</phrase>
+</textobject>
+<caption><para>The Image Properties dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+On this dialog you can a couple of image properties. First of all, the
+<guilabel>Name</guilabel> of the image. If you did not set a name earlier
+(that can also be done when creating the image), it will have a default name
+like <quote>Image1</quote>. Then, you can set its size (determined by the
+<guilabel>Width</guilabel> and <guilabel>Height</guilabel> in pixels and
+the <guilabel>Resolution</guilabel> in dots per inch) and the color profile to
+be used (<guilabel>Profile</guilabel>). Finally, you can fill in the
+<guilabel>Description</guilabel> field with any information you want to add to
+the image.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-image-imagesize">
+<title>The Image Size dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Image Size dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-imagesize.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Image Size dialog</phrase>
+</textobject>
+<caption><para>The Image Size dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog lets you resize your image. In the top part, you can choose the
+way the image is resized. If you choose <guilabel>Resize</guilabel>, the size
+of the image is changed, but its layers (which contain the actual contents)
+will not be modified. So, when you double the height and width of the image,
+your original image will occupy the top-left quarter part of your new image.
+On decreasing the size of your image, the image layers will stretch out over
+the image borders, unless you choose <guilabel>Crop layers on image
+resize</guilabel>, which will crop all layers to the new image size.
+</para><para>
+With <guilabel>Scale</guilabel>, the image layers will be resized with the
+image. So increasing the image size will actually enlarge the contents, and
+similar for decreasing.
+</para><para>
+Under <guilabel>Pixel dimensions</guilabel>, you can set which new size you
+want the image to have. The original size is given as a reference. The new
+size can be set both as pixels or as a percentage, with 100% being the
+original size. If you select <guilabel>Constrain proportions</guilabel>, the
+new width and height will always be set to the same percentage. For example,
+if you have an image of 200 x 100 pixels, and set the width to 20 pixels, the
+height will automatically be changed to 10. With this checkbox unselected, you
+can also resize the image non-proportionally. 
+</para><para>
+The <guilabel>Filter:</guilabel> dropdown box can be used to select a
+different algorithm for determining the colors of the pixels in the newly
+resized image that did not correspond to a pixel in the old image (the
+calculated corresponding location in the old image was located in between
+pixels). BSpline uses a 4 x 4 pixel grid and results into a quite high
+blurring. Bell is quite fast while resulting in a reasonably smooth image.
+Box is the fastest method, but yields the least appealing result. Hermite
+keeps the image quite sharp, while smoothing it as well, and is reasonably
+fast. Lancros3 results inte sharp images, but is very slow.  Mitchell (the
+default) is not very fast, but often yields a good intermediate result.
+Triangle/Bilinear uses the 2 x 2 pixel grid around the calculated location,
+resulting in relatively sharp lines. 
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-image-rotateimage">
+<title>The Rotate Image dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Rotate Image dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-rotateimage.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Rotate Image dialog</phrase>
+</textobject>
+<caption><para>The Rotate Image dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can rotate the image. The top part of the dialog shows
+the result of the rotation in the form of a change in dimension (if any) and
+visual feedback. Under <guilabel>Direction</guilabel> you can choose between 
+rotating clockwise and counter-clockwise. Under <guilabel>Angle</guilabel>,
+you can set the amount of rotation. 90, 180 and 270 degrees can be selected
+using the respective option button, other amounts need to be specified with
+the <guilabel>Custom</guilabel> spin box.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-image-separateimage">
+<title>The Separate Image dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Separate Image dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-separateimage.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Separate Image dialog</phrase>
+</textobject>
+<caption><para>The Separate Image dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can separate (part of) your image. Every color component
+(channel) will be put into a separate layer or image. At the top of the
+dialog, the current color model is shown. Below that, a couple of options can
+be set.
+</para>
+<para>
+Under <guilabel>Source</guilabel>, you can choose what part of the image to
+separate. The two options are <guilabel>Current layer</guilabel>, which
+(obviously) only uses the currently selected layer and <guilabel>Flatten all
+layers before separation</guilabel>, which uses the entire image.
+</para>
+<para>
+Under <guilabel>Output</guilabel>, you can choose where the result of the
+separation should be written to: either to a couple of layers, or to a couple
+of images.
+</para>
+<para>
+Under <guilabel>Alpha Options</guilabel>, you can choose what should be done
+with the alpha channel of the selected layer(s). It can be copied to each new
+channel, be discarded, or separated on its own.
+</para>
+<para>
+The two options at the bottom of the dialog, finally, determine whether the
+source should be downscaled to 8 bit colors (if it contains more), and if the
+output should be in color (default is to separate the channels to grayscale
+values).
+</para>
+</sect3>
+
+<sect3 id="commands-dialogs-image-shearimage">
+<title>The Shear Image dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Shear Image dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-shearimage.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Shear Image dialog</phrase>
+</textobject>
+<caption><para>The Shear Image dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog allows you to shear your image. By shearing, the bounding
+rectangle of your image is transformed into a parallellogram. One pixel
+row/column is kept in place, the next one is shifted by a certain amount, the
+next one by the same amount relative to the previous one, etcetera.
+The X and Y shearing angles can be set using the two spin boxes.
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="commands-dialogs-layers">
+<title>Dialogs for working with layers</title>
+
+<sect3 id="commands-dialogs-layers-convertlayertype">
+<title>The Convert Layer Type dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Convert Layer Type dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-convertlayertype.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Convert Layer Type dialog</phrase>
+</textobject>
+<caption><para>The Convert Layer Type dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog is exactly the same as the <link
+linkend="commands-dialogs-image-convertimagetype"><guilabel>Convert Image
+Type</guilabel> dialog</link>, which converts an entire image instead of a
+single layer. See the description there for details.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-dropshadow">
+<title>The Drop Shadow dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Drop Shadow dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-dropshadow.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Drop Shadow dialog</phrase>
+</textobject>
+<caption><para>The Drop Shadow dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can add a drop shadow effect to the current layer.
+Select the X and Y offsets (displacements) of the shadow relative to the
+original layer with the two topmost spin boxes. The <guilabel>Blur
+radius</guilabel> spinbox determines the radius in which the shadow will be
+blurred (to achieve a smooth transition at the shadow border). If you want
+a special color for the shadow, you can choose one with the
+<guilabel>Color</guilabel> field. The <guilabel>Opacity</guilabel> slider and
+spinbox can be used to make the shadow more or less transparent. Disable the
+<guilabel>Allow resizing</guilabel> checkbox if you don't want the layer to be
+resized in order to give it a shadow.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-histogram">
+<title>The Histogram dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Histogram dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-histogram.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Histogram dialog</phrase>
+</textobject>
+<caption><para>The Histogram dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog shows a histogram for the current layer. With the
+<guilabel>Method:</guilabel> settings, you can choose what kind of histogram
+to show. You can change the channel(s) to show with the
+<guilabel>Channels:</guilabel> listbox, and the scale on which it should be
+drawn with the <guilabel>Linear</guilabel> and
+<guilabel>Logarithmic</guilabel> radio buttons. Under the preview, there are
+buttons available to zoom in to, and move over, the histogram. These are
+activated for 16-bit colorspace layers.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-layerproperties">
+<title>The Layer Properties dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Layer Properties dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-layerproperties.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Layer Properties dialog</phrase>
+</textobject>
+<caption><para>The Layer Properties dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog is in essence the same as the <link
+linkend="commands-dialogs-layers-newlayer">New Layer</link> dialog, with the difference that
+you cannot change its colorspace or profile anymore. These properties are
+shown, though, to keep the information complete.
+</para>
+</sect3>
+
+<sect3 id="commands-dialogs-layers-layersize">
+<title>The Layer Size dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Layer Size dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-layersize.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Layer Size dialog</phrase>
+</textobject>
+<caption><para>The Layer Size dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog allows you to resize the current layer.
+Under <guilabel>Pixel dimensions</guilabel>, you can set which new size you
+want the layer to have. The original size is given as a reference. The new
+size can be set both as pixels or as a percentage, with 100% being the
+original size. If you select <guilabel>Constrain proportions</guilabel>, the
+new width and height will always be set to the same percentage. For example,
+if you have a layer of 200 x 100 pixels, and set the width to 20 pixels, the
+height will automatically be changed to 10. With this checkbox unselected, you
+can also resize the layer non-proportionally. The <guilabel>Filter:</guilabel>
+dropdown list can be used to select a different algorithm for resizing nthe
+layer.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-newadjustmentlayer">
+<title>The New Adjustment Layer dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The New Adjustment Layer dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-newadjustmentlayer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The New Adjustment Layer dialog</phrase>
+</textobject>
+<caption><para>The New Adjustment Layer dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+In this dialog, you can select the type of adjustment layer to add to the
+image. In the left-hand list, you can see the available adjustment layers,
+each with a preview. When you select one, the <guilabel>Preview</guilabel>
+will change to show a correctly scaled preview of what the result of the
+adjustment layer is going to be. 
+</para><para>
+You can then choose to show either the original image or the preview of the
+adjustment layer with the radio buttons below the preview window. The buttons
+next to these allow you to zoom in, zoom out, and refresh the preview,
+respectively. The <guilabel>Autoupdate</guilabel> checkbox determines if the
+preview window should update automatically after you made a change.
+</para><para>
+The various options available for the filter that is used to create the
+adjustment layer, are shown at the bottom of the dialog. See the section on
+<link linkend="commands-dialogs-filters">filters</link> of this chapter for
+descriptions.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-newlayer">
+<title>The New Layer dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The New Layer dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-newlayer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The New Layer dialog</phrase>
+</textobject>
+<caption><para>The New Layer dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+You can add a new layer to your image with this dialog. If you want a
+descriptive name for your layer, you can fill one in at
+<guilabel>Name:</guilabel>. You can select the desired colorspace for the new
+layer with the <guilabel>Colorspace:</guilabel> list, and the specific
+color profile for that colorspace at <guilabel>Profile:</guilabel>.
+You can preset the layer's opacity (you can change it later with the slider in
+the layer box), and choose the mode with which the layer should be composited
+onto the final image.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-rotatelayer">
+<title>The Rotate Layer dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Rotate Layer dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-rotatelayer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Rotate Layer dialog</phrase>
+</textobject>
+<caption><para>The Rotate Layer dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog, similar to the <link
+linkend="commands-dialogs-image-rotateimage"><guilabel>Rotate Image</guilabel>
+dialog</link>, allows you to rotate the current layer. You can choose the
+direction in which to rotate and the amount to rotate the layer by.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-shearlayer">
+<title>The Shear Layer dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Shear Layer dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-shearlayer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Shear Layer dialog</phrase>
+</textobject>
+<caption><para>The Shear Layer dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog works the same as the <link
+linkend="commands-dialogs-image-shearimage"><guilabel>Shear Image</guilabel>
+dialog</link>, except that it operates on the current layer instead of on the
+entire image.
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="commands-dialogs-filters">
+<title>Dialogs for working with filters</title>
+
+<para>
+All filter dialogs consist of a filter-specific part, at the left, and a
+generic part, at the right. The generic part contains a preview window, which
+you can configure using the controls below it. Choose
+<guilabel>Preview</guilabel> or <guilabel>Original</guilabel> depending on
+whether you want the preview window to show the preview of the filter effect
+or the original image. You can soom in and zoom out, and refresh the preview,
+with the three buttons at the bottom right. Furthermore, the option
+<guilabel>Autoupdate</guilabel> determines if the preview window is updated
+automatically. If you uncheck this checkbox, you will have to refresh the
+preview yourself.
+</para>
+
+<sect3 id="commands-dialogs-filters-brightnesscontrast">
+<title>The Brightness / Contrast dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Brightness / Contrast dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-brightnesscontrast.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brightness / Contrast dialog</phrase>
+</textobject>
+<caption><para>The Brightness / Contrast dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can customize the brightness and contrast of your image.
+</para><para>
+The curve diagram has a histogram-like background that shows you the abundance
+of various brightness levels. The curve itself (initially a diagonal line from
+bottom left to top right) determines to which new brightness level (on the
+vertical axis) pixels with a certain original level (on the horizontal axis) are
+to be mapped. For example, the default diagonal line from bottom left to top
+right sets every original pixel to its own brightness value, meaning no
+change. A horizontal line means that all pixels will get the same brightness.
+This means minimal contrast, the brightness itself is indicated by the height
+at which the line is placed.
+</para><para>
+You can click on a handle (red circle) to select it (a selected handle is
+indicated by a filled circle) and drag it around to change the shape of the
+curve. The curve will be drawn smoothly through the handles (always
+strictly from left to right). If you click on the curve, a handle is added to
+it at that position. Clicking somewhere else in the image will also add a
+handle at that point. You can press <keycap>Delete</keycap> to delete the
+currently selected handle.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-bumpmap">
+<title>The Bumpmap dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Bumpmap dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-bumpmap.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Bumpmap dialog</phrase>
+</textobject>
+<caption><para>The Bumpmap dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+You can apply a bumpmap effect and customize it using this dialog. One layer
+is used as bumpmap layer: it is read as grayscale image and the gray values of
+its pixels are used to to distort the other layer for creating the depth
+illusion. High grey values, &ie; more white, mean a larger height, small
+values, &ie; near black, mean a smaller height &mdash; or a larger depth, the
+height can get <quote>below sealevel</quote>. A light source, shining
+<quote>from above</quote> on the image that lies <quote>on the ground</quote>,
+is simulated to determine the depth and direction of the shadows.
+</para><para>
+The first option in this dialog offers you the selection of the
+<guilabel>Bumpmap layer</guilabel>.
+</para><para>
+Under <guilabel>Type</guilabel>, you can select what kind of bumpmap to be
+applied. There are three types, <guilabel>Linear</guilabel> (a normal
+application of the bumpmap), <guilabel>Spherical</guilabel> (focusing on the
+extremes, that is, the shadow and highlight values) and
+<guilabel>Sinusoidal</guilabel> (focusing on the midtone values).
+</para><para>
+Then, there are three options to modify the bumpmap apart from its
+algorithmical application. With <guilabel>Compensate for darkening</guilabel>,
+the image is restored to about its original average lightness if using the
+bumpmap filter would make it darker. The <guilabel>Invert bumpmap</guilabel>
+option creates an inverted bumpmap (high and low are reversed). With
+<guilabel>Tile bumpmap</guilabel>, a bumpmap layer that is smaller than the
+layer it is applied to, will be tiled (repeatedly) to cover the entire layer.
+</para><para>
+Under <guilabel>Settings</guilabel>, you can select the mathematical
+parameters for the bumpmap. First of all, <guilabel>Azimuth</guilabel> (the
+angle of the light source in the X-Y plane), <guilabel>Elevation</guilabel>
+(the height of the simulated light source above the surface in degrees, with 0
+degrees being on the ground and 90 degrees being vertically above the image),
+and <guilabel>Depth</guilabel> (the maximal vertical distortion of the image).
+</para><para>
+Then, there are the <guilabel>X offset</guilabel> and <guilabel>Y
+offset</guilabel>, with which you can displace the bumpmap layer relative to
+the destination layer, <guilabel>Water level</guilabel> (the depth seen as
+neutral), and <guilabel>Ambient light</guilabel>, which determines the
+relative amount of ambient (environmental) light.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-coloradjustment">
+<title>The Color Adjustment dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Color Adjustment dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-coloradjustment.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Color Adjustment dialog</phrase>
+</textobject>
+<caption><para>The Color Adjustment dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog allows you to customize the Color Adjustment filter. You can use
+the curve (see the section on <link
+linkend="commands-dialogs-filters-brightnesscontrast">Brightness /
+Contrast</link> for a description on the curve) to determine the mapping
+from old to new color levels, for each of the channels separately.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-cubism">
+<title>The Cubism filter</title>
+
+<para>
+<screenshot>
+<screeninfo>The Cubism filter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-cubism.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Cubism filter</phrase>
+</textobject>
+<caption><para>The Cubism filter</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog has two filter-specific options. The <guilabel>Tile
+size:</guilabel> slider and spinbox determine how big the tiles are in which
+the image is subdivided, the <guilabel>Tile saturation:</guilabel> setting
+sets the color saturation of the tiles.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-customconvolution">
+<title>The Custom Convolution filter</title>
+
+<para>
+<screenshot>
+<screeninfo>The Custom Convolution filter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="filters-customconvolution.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Custom Convolution filter</phrase>
+</textobject>
+<caption><para>The Custom Convolution filter</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this filter, you can apply a customized distortion effect to your image.
+The nine spinboxes at the top left determine the distortion. Each pixel is
+assigned a new value based on these values: the old color values of the pixel
+inself and the eight surrounding pixels are each multiplied by the values in
+the respective spinboxes, these results are added, and the final result is the
+new color value for the pixel. Before being applied, this final result can be
+multiplied with a certain <guilabel>Factor:</guilabel> or a certain
+<guilabel>Offset:</guilabel> can be added to it.
+</para><para>
+In the example screenshot, each pixel is assigned a new value based on its
+own (the 1 in the center), to which are added the values of the pixels to its
+top right and directly below it (each with a factor of 1, &ie; the actual
+value, since multiplying by one has no effect), and from which are subtracted
+the values of the pixels to its bottom right and directly above it (added with
+a factor of -1, so subtracted by a factor of 1).
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-emboss">
+<title>The Emboss dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Emboss dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-emboss.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Emboss dialog</phrase>
+</textobject>
+<caption><para>The Emboss dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog contains just one option, the <guilabel>Depth:</guilabel> slider
+and spinbox which determines the depth of the embossing effect.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-filtersgallery">
+<title>The Filters Gallery dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Filters Gallery dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-filtersgallery.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Filters Gallery dialog</phrase>
+</textobject>
+<caption><para>The Filters Gallery dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog can be used to get a quick overview of what the various available
+filters do. The filters are in turn applied to the current image and the
+results are put in the left list box as thumbnails. If you select one, its
+options become available in the <guilabel>Configuration</guilabel> section.
+See the description of the respective filter for details.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-imagerestauration">
+<title>The Image Restauration dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Image Restauration dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Image Restauration dialog</phrase>
+</textobject>
+<caption><para>The Image Restauration dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+Using this dialog, you can specify exactly how the image restauration should
+be done. This filter tries to increase the quality of an image, for instance
+by removing scratches. Various options are available to customize its
+behaviour.
+</para><para>
+(Unfortunately, these are not described as of yet.)
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-oilpaint">
+<title>The Oilpaint filter</title>
+
+<para>
+<screenshot>
+<screeninfo>The Oilpaint filter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-oilpaint.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Oilpaint filter</phrase>
+</textobject>
+<caption><para>The Oilpaint filter</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog can configure two parameters for the associated filter. The
+<guilabel>Brush size:</guilabel> setting determines the size of the brush that
+is used to simulate the oilpaint effect, the <guilabel>Smooth:</guilabel>
+setting specifies if the difference in colors between adjacent
+<quote>swatches</quote> may be large (low smoothness) or should be small (high
+smoothness).
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-pixelize">
+<title>The Pixelize dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Pixelize dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-pixelize.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Pixelize dialog</phrase>
+</textobject>
+<caption><para>The Pixelize dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+On this dialog, you can adjust two settings. <guilabel>Pixel width:</guilabel>
+and <guilabel>Pixel height:</guilabel> indicate the width and height of the
+area that should be taken together and averaged to form one new, large
+<quote>pixel</quote>.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-raindrops">
+<title>The Raindrops filter</title>
+
+<para>
+<screenshot>
+<screeninfo>The Raindrops filter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-raindrops.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Raindrops filter</phrase>
+</textobject>
+<caption><para>The Raindrops filter</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This filter can be configured using the settings <guilabel>Drop
+size:</guilabel> (the average diameter of the raindrops),
+<guilabel>Number:</guilabel> (the number of raindrop effects that should be
+added to the image), and <guilabel>Fish eyes:</guilabel> (the percentage of
+raindrops that should be rendered as fisheye lens effects instead of plain
+raindrop effects).
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-roundcorners">
+<title>The Round Corners dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Round Corners dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-roundcorners.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Round Corners dialog</phrase>
+</textobject>
+<caption><para>The Round Corners dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog has one setting: the radius of the rounded corners.
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="commands-dialogs-misc">
+<title>Miscellaneous dialogs</title>
+
+<sect3 id="commands-dialogs-misc-addpalette">
+<title>The Add Palette dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Add Palette dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-addpalette.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Add Palette dialog</phrase>
+</textobject>
+<caption><para>The Add Palette dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can add a custom color palette to &krita;. Fill in the
+name for your palette in the text field at the top. Then make the palette: use
+the button <guibutton>Add New Color...</guibutton> to add a color to the palette
+and <guibutton>Remove Selected Color</guibutton> to remove the currently
+selected color. Click the button <guibutton>Add to Predefined
+Palettes</guibutton> to add your newly created palette to the palette list, or
+just choose <guibutton>OK</guibutton> when you're done.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-misc-documentinformation">
+<title>The Document Information dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Document Information dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-documentinformation.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Document Information dialog</phrase>
+</textobject>
+<caption><para>The Document Information dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog is the same as in other &koffice; programs. You can enter various
+information about your document here, which will be saved with the document so
+that you can retrieve it later to review or edit.
+</para>
+
+<para>
+On the <guilabel>General</guilabel> tab, you can enter the title, subject and
+keywords, as well as an abstract. On the bottom of this tab, some statistical
+information is displayed. On the <guilabel>Author</guilabel> tab, you can
+store information about yourself. The third tab, <guilabel>User-defined
+Metadata</guilabel>, allows you to store any other information.
+</para>
+</sect3>
+
+</sect2>
+
+
+</sect1>
