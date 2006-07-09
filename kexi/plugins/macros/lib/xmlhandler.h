@@ -34,6 +34,7 @@ namespace KoMacro {
 	* The XMLHandler class manages the (un-)serialization of
 	* a @a Macro instance to/from XML.
 	*/
+	// TODO Shouldn't we derivate here from QObject and KShared rather than in Macro??
 	class KOMACRO_EXPORT XMLHandler
 	{
 		public:

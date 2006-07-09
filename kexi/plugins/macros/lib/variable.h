@@ -92,6 +92,7 @@ namespace KoMacro {
 			* @param element The QDomElement that may optional contains the
 			* variable content or other additional informations.
 			*/
+			// TODO Do we need this constructor??
 			Variable(const QDomElement& element);
 
 			/**
@@ -105,7 +106,7 @@ namespace KoMacro {
 			QString name() const;
 
 			/**
-			* Set the name this @a Variable has.
+			* Set the name @param name this @a Variable has.
 			*/
 			void setName(const QString& name);
 
@@ -115,12 +116,12 @@ namespace KoMacro {
 			QString text() const;
 
 			/**
-			* Set the caption this @a Variable has.
+			* Set the caption @param text this @a Variable has.
 			*/
 			void setText(const QString& text);
 
 			/**
-			* Set the QObject @p object this variable has. A 
+			* Set the QObject @param object this variable has. A 
 			* previously remembered value will be overwritten and 
 			* the new type is a @a TypeObject .
 			*/
@@ -134,9 +135,9 @@ namespace KoMacro {
 			const QVariant variant() const;
 
 			/**
-			* Set the QVariant @p variant this variable has. A 
+			* Set the QVariant @param variant this variable has. A 
 			* previously remembered value will be overwritten and 
-			* the new type is a @a TypeVariant . If @p detecttype is
+			* the new type is a @a TypeVariant . If @param detecttype is
 			* true the method tries to set the @a variantType according
 			* to the passed QVariant. If false the variantType won't
 			* be changed.
@@ -184,10 +185,10 @@ namespace KoMacro {
 			bool isEnabled() const;
 
 			/**
-			* Set this @a Variable to be enabled if @p enabled is
+			* Set this @a Variable to be enabled if @param enabled is
 			* true else the variable is disabled.
 			*/
-			void setEnabled(bool enabled);
+			void setEnabled(const bool enabled);
 
 		private:
 			/// @internal d-pointer class.

@@ -52,7 +52,7 @@ namespace KoMacro {
 
 			/// Property to get/set the comment.
 			Q_PROPERTY(QString comment READ comment WRITE setComment)
-
+			// TODO why is the action no q-property??
 			//Q_PROPERTY(QString action READ action WRITE setAction)
 
 		public:
@@ -64,7 +64,7 @@ namespace KoMacro {
 
 			/**
 			* Constructor.
-			*
+			* TODO Where is this param??
 			* @param parent The parent QObject. We use the
 			* QObject garbage-collector mechanism. So, if the
 			* parent got deleted, this instance will be
@@ -84,7 +84,7 @@ namespace KoMacro {
 			QString comment() const;
 
 			/**
-			* Set the comment defined by the user for this
+			* Set the comment @param comment defined by the user for this
 			* @a MacroItem .
 			*/
 			void setComment(const QString& comment);
@@ -98,23 +98,30 @@ namespace KoMacro {
 			KSharedPtr<Action> action() const;
 
 			/**
-			* Set the @a Action this @a MacroItem points to.
+			* Set the @a Action @param action this @a MacroItem points to.
 			*/
 			void setAction(KSharedPtr<Action> action);
 
 			/**
-			* @return the Variable as QVariant.
+			* @return a @Variant from the @a Variable identified with
+			* the name @param name . If this @a MacroItem doesn't
+			* have a @a Variable with that name NULL is
+			* returned.
+			* If the boolean value @param checkaction is true, we
+			* also look if our @a Action may know about
+			* such a @param name in the case this @a MacroItem
+			* doesn't have such a name.
 			*/
 			QVariant variant(const QString& name, bool checkaction = false) const;
 
 			/**
 			* @return the @a Variable instance identified with
-			* the name @p name . If this @a MacroItem doesn't
+			* the name @param name . If this @a MacroItem doesn't
 			* have a @a Variable with that name NULL is
 			* returned.
-			* If the boolean value @p checkaction is true, we
-			* also look if our @a action() may know about
-			* such a @p name in the case this @a MacroItem
+			* If the boolean value @param checkaction is true, we
+			* also look if our @a Action may know about
+			* such a @param name in the case this @a MacroItem
 			* doesn't have such a name.
 			*/
 			KSharedPtr<Variable> variable(const QString& name, bool checkaction = false) const;
@@ -125,8 +132,9 @@ namespace KoMacro {
 			QMap<QString, KSharedPtr<Variable> > variables() const;
 
 			/**
-			* Set the @a QVariant @p variant as variable with the variablename
-			* @p name .
+			* Set the @a QVariant @param variant as variable with the variablename
+			* @param name .
+			* @return a bool for successfull setting.
 			*/
 			bool setVariant(const QString& name, const QVariant& variant);
 
@@ -136,13 +144,12 @@ namespace KoMacro {
 			bool setVariable(const QString& name, const QVariant& variant);
 
 			/**
-			* Add a new variable to our @a MacroItem instance.
+			* Add a new variable with the vaiablename @param name and the given
+			* @a QVariant @param variant to our @a MacroItem instance.
 			*/
-			KSharedPtr<Variable> addVariable(const QString& name, const QVariant& value);
+			KSharedPtr<Variable> addVariable(const QString& name, const QVariant& variant);
 
-			//bool isDirty() const;
-			//void setDirty(bool dirty);
-
+		// TODO Remove??
 		/*
 		public slots:
 			void activate() {}

@@ -222,7 +222,7 @@ bool Variable::isEnabled() const
 	return d->enabled;
 }
 
-void Variable::setEnabled(bool enabled)
+void Variable::setEnabled(const bool enabled)
 {
 	d->enabled = enabled;
 }

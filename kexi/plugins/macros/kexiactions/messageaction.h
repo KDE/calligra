@@ -58,7 +58,7 @@ namespace KexiMacro {
 
 			/**
 			* Called if the @a Action should be executed within the
-			* defined @p context .
+			* defined @param context .
 			*/
 			virtual void activate(KSharedPtr<KoMacro::Context> context);
 

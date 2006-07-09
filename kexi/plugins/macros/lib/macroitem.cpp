@@ -36,17 +36,22 @@ namespace KoMacro {
 			QString comment;
 			Variable::Map variables;
 
+			/** 
+			* define a @a QVariant -cast as inline for better performance
+			* @return the casted @a QVariant by passing a @param variant and its
+			* expected QVariant::Type @param type.
+			*/
 			inline const QVariant cast(const QVariant& variant, QVariant::Type type) const
 			{
 				// If ok is true the QVariant v holds our new and to the correct type
 				// casted variant value. If ok is false the as argument passed variant
-				// QVariant contains the (maybe uncasted string to prevent data-losing
+				// QVariant contains the (maybe uncasted string to prevent data-loosing
 				// what would happen if we e.g. would expect an integer and cast it to
 				// an incompatible non-int string) value.
 				bool ok = false;
 				QVariant v;
 
-				// Try to cast the passed variable to the expected variable-type.
+				// Try to cast the passed variant to the expected variant-type.
 				switch(type) {
 					case QVariant::Bool: {
 						const QString s = variant.toString();
@@ -55,6 +60,7 @@ namespace KoMacro {
 					} break;
 					case QVariant::Int: {
 						v = variant.toInt(&ok);
+						// TODO Isn't the 2.condition a 2.test which is redundant or what do this?
 						Q_ASSERT(!ok || v.toString() == variant.toString());
 					} break;
 					case QVariant::UInt: {
@@ -190,58 +196,16 @@ bool MacroItem::setVariable(const QString& name, const QVariant& variant)
 	return setVariant(name, variant);
 }
 
-KSharedPtr<Variable> MacroItem::addVariable(const QString& name, const QVariant& value)
+// TODO How work this implicit cast from QString to QVariant??
+KSharedPtr<Variable> MacroItem::addVariable(const QString& name, const QVariant& variant)
 {
+	//TODO Why doesn't this prints a message, when a variable is parsen from XML??
 	Q_ASSERT(! d->variables.contains(name) );
 	KSharedPtr<Variable> variable = KSharedPtr<Variable>( new Variable() );
 	variable->setName(name);
 	d->variables.replace(name, variable);
-	this->setVariant(name, value);
+	this->setVariant(name, variant);
 	return variable;
 }
-
-#if 0
-QStringList MacroItem::setVariable(const QString& name, KSharedPtr<Variable> variable)
-{
-	Variable* v = d->action ? d->action->variable(name).data() : 0;
-	if(! v) {
-		/*
-		// The name isn't known, try to fallback to the name the variable defines.
-		v = d->action->variable( variable->name() );
-		if(! v.data()) {
-		*/
-		kdWarning() << QString("MacroItem::setVariable() No such variable \"%1\"").arg(name) << endl;
-		return QStringList();
-	}
-
-	if(! v->validVariable(variable)) {
-		kdWarning() << QString("MacroItem::setVariable() update for variable \"%1\" failed.").arg(name) 	<< endl;
-		return QStringList();
-	}
-	kdDebug() << "MacroItem::setVariable() name=" << name << " variable=" << variable->variant().toString() << endl;
-
-	d->variables.replace(name, variable);
-	return d->action->notifyUpdated(name, this);
-	//v->updated(this);
-
-	QStringList sl;
-	Variable::List list = d->action->notifyUpdated(name, d->variables);
-	Variable::List::Iterator it(list.begin()), end(list.end());
-	for (; it != end; ++it) {
-		const QString n = (*it)->name();;
-		sl << n;
-		//if( ! d->variables.contains(n) ) {
-		kdDebug()<<"    name=" << n << " value=" << (*it)->variant().toString() << endl;
-		//setVariable(n, *it);
-		d->variables.replace(n, *it);
-		//}
-		/* KSharedPtr<Variable> v = d->variables[ (*it)->name() ];
-		if(v.data() && (*it)->type() == v->type() && ! v->variant().isNull()) {
-			(*it)->setVariant( v->variant().toString() );
-		} */
-	}
-	return sl;
-}
-#endif
 
 #include "macroitem.moc"

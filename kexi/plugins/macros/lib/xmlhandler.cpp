@@ -25,6 +25,8 @@
 #include <qdom.h>
 #include <kdebug.h>
 
+// TODO do more forwards??
+
 using namespace KoMacro;
 
 namespace KoMacro {
@@ -49,6 +51,9 @@ namespace KoMacro {
 			* @param macro The @a Macro instance this
 			* @a XMLHandler manages.
 			*/
+			// TODO Why a normal Pointer?? What is if:
+			// LS* = KsharedPtr <...>    and
+			// KSharedPtr = RS*
 			Private(Macro* const macro)
 				: macro(macro)
 			{
@@ -129,9 +134,7 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					const QString value = childelem.text();
 
 					// Store the new variable in our macroitem.
-// 					KSharedPtr<Variable> variable = item->addVariable(name, value);
 					item->addVariable(name, value);
-					// Q_UNUSED(variable); TODO
 				}
 			}
 		}
@@ -177,6 +180,7 @@ QDomElement XMLHandler::toXML()
 
 		// Each MacroItem could point to an Action provided by the Manager.
 		const Action* action = item->action().data();
+		// TODO We could loose data, if there is no valid action or null is set??
 		if( action ) {
 			append = true;
 
@@ -187,6 +191,7 @@ QDomElement XMLHandler::toXML()
 			// iterate through that list and build a element
 			// for each single variable.
 			QMap<QString, KSharedPtr<Variable > > varmap = item->variables();
+			// TODO Why for (;;++vit)??
 			for(QMap<QString, KSharedPtr<Variable > >::ConstIterator vit = varmap.constBegin(); vit != varmap.constEnd(); ++vit) {
 				const KSharedPtr<Variable> v = vit.data();
 				if(! v.data()) {
@@ -197,7 +202,7 @@ QDomElement XMLHandler::toXML()
 				// the name of the variable.
 				QDomElement varelement = document.createElement("variable");
 
-				// Remember the name the value has.
+				// Remember the name the value has. TODO why not v->name()
 				varelement.setAttribute("name", vit.key()); 
 
 				// Remember the value as textnode.
