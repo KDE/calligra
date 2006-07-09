@@ -123,6 +123,26 @@ class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator {
     bool m_parsing : 1;
 };
 
+class KSPREAD_EXPORT SeriesManipulator : public AbstractDataManipulator {
+  public:
+    enum Series { Column, Row, Linear, Geometric };
+    
+    SeriesManipulator ();
+    virtual ~SeriesManipulator ();
+    
+    /** Setup the series. This sets the necessary parameters, and also the
+    correct range. */
+    void setupSeries (const QPoint &_marker, double start, double end,
+        double step, Series mode, Series type);
+  protected:
+    virtual Value newValue (Element *element, int col, int row, bool *,
+        FormatType *);
+    
+    Series m_type;
+    Value m_start, m_step, m_prev;
+    int m_last;
+};
+
 class KSPREAD_EXPORT ArrayFormulaManipulator : public AbstractDataManipulator {
   public:
     ArrayFormulaManipulator ();

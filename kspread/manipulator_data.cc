@@ -23,7 +23,12 @@
 #include <klocale.h>
 
 #include "kspread_cell.h"
+#include "kspread_doc.h"
 #include "kspread_sheet.h"
+#include "valuecalc.h"
+
+#include <float.h>
+#include <math.h>
 
 using namespace KSpread;
 
@@ -228,9 +233,89 @@ Value DataManipulator::newValue (Element *element, int col, int row,
   return data.element (colidx, rowidx);
 }
 
+SeriesManipulator::SeriesManipulator ()
+{
+  setName (i18n ("Insert Series"));
+  
+  m_type = Linear;
+  m_last = -2;
+}
+
+SeriesManipulator::~SeriesManipulator ()
+{
+}
+
+void SeriesManipulator::setupSeries (const QPoint &_marker, double start,
+    double end, double step, Series mode, Series type)
+{
+  m_type = type;
+  m_start = Value (start);
+  m_step = Value (step);
+  
+  // compute cell count
+  int numberOfCells;
+  if (end > start)
+    numberOfCells = (int) ((end - start) / step + 1); /*initialize for linear*/
+  else if (end < start)
+    numberOfCells = (int) ((start - end) / step + 1); /*initialize for linear*/
+  else //equal ! => one cell fix infini loop
+    numberOfCells = 1;
+  if (type == Geometric)
+    /* basically, A(n) = start ^ n
+    * so when does end = start ^ n ??
+    * when n = ln(end) / ln(start)
+    */
+    numberOfCells = (int)( (log((double)end) / log((double)start)) +
+        DBL_EPSILON) + 1;
+
+  // with this, generate range information
+  Region range (_marker.x(), _marker.y(), (mode == Column) ? 1 : numberOfCells,
+      (mode == Row) ? 1 : numberOfCells);
+
+  // and add the range to the manipulator
+  add (range);
+}
+
+Value SeriesManipulator::newValue (Element *element, int col, int row,
+    bool *parse, FormatType *)
+{
+  *parse = false;
+  ValueCalc *calc = m_sheet->doc()->calc();
+
+  // either col or row is always zero
+  int which = (col > 0) ? col : row;
+  Value val;
+  if (which == m_last + 1) {
+    // if we are requesting next item in the series, which should almost always
+    // be the case, we can use the pre-computed value to speed up the process
+    if (m_type == Linear)
+      val = calc->add (m_prev, m_step);
+    if (m_type == Geometric) {
+      val = calc->mul (m_prev, m_step);
+    }
+  }
+  else {
+    // otherwise compute from scratch
+    val = m_start;
+    for (int i = 0; i < which; ++i)
+    {
+      if (m_type == Linear)
+        val = calc->add (val, m_step);
+      if (m_type == Geometric)
+        val = calc->mul (val, m_step);
+    } 
+  }
+  // store last value
+  m_prev = val;
+  m_last = which;
+  
+  // return the computed value
+  return val;
+}
+
 ArrayFormulaManipulator::ArrayFormulaManipulator ()
 {
-  m_name = i18n ("Set Array Formula");
+  setName (i18n ("Set Array Formula"));
 }
 
 ArrayFormulaManipulator::~ArrayFormulaManipulator ()

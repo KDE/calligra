@@ -615,13 +615,6 @@ public:
     void pasteTextPlain( QString &_text, QRect pasteArea);
 
     /**
-     * @param x1, y1: values from source cell,
-     * @param x2, y2: values from target cell
-     * @param cpFormat: if true: cell format gets copied, too
-     */
-    void setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type );
-
-    /**
      * Moves all cells of the row _marker.y() which are in
      * the column _marker.x() or right hand of that one position
      * to the right.

@@ -29,6 +29,7 @@
 #include "kspread_editors.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
+#include "manipulator_data.h"
 
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -122,102 +123,79 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
 void SeriesDlg::slotOk()
 {
 
-  Series mode=Column;  //same as Vertical
-  Series type=Linear;  // same as Horizontal
+  bool isColumn = column->isChecked();
+  bool isLinear = linear->isChecked();
+  
   QString tmp;
   double dstep, dend, dstart;
   Sheet * m_pSheet;
   m_pSheet = m_pView->activeSheet();
 
-  if(column->isChecked())
-    mode = Column;
-  else if(row->isChecked())
-    mode = Row;
-
-  if (linear->isChecked())
-    type = Linear;
-  else if (geometric->isChecked())
-    type = Geometric;
-
   dstart = start->value();
   dend= end->value();
   dstep = step->value();
-  if ( type == Geometric )
+  if (!isLinear)  // = Geometric
   {
-      if  ( dstart < 0 || dend < 0 )
-      {
-          KMessageBox::error( this, i18n("End and start value must be positive.") );
-          return;
-      }
-      if ( dstart > dend && dstep >= 1)
-      {
-        KMessageBox::error( this, i18n("End value must be greater than the start value or the step must be less than '1'.") );
-        return;
-      }
-      if ( dstart == 0 || dend == 0 || dstep == 0)
-      {
-        KMessageBox::error( this, i18n("None of the Start, Stop or Step values may be equal to zero.") );
-        return;
-      }
-      if ( dstep == 1)
-      {
-        KMessageBox::error( this, i18n("Step value must be different from 1") );
-        return;
-      }
-  }
-
-  if (dstep >= 0)
-  {
-      if (linear->isChecked() && dstep == 0)
-      {
-          KMessageBox::error( this, i18n("The step value must be greater than zero; "
-                                         "otherwise, the linear series is infinite.") );
-          step->setFocus();
-          return;
-      }
-      /*      else if (geometric->isChecked() && dstep <= 1)
-              {
-              KMessageBox::error( this, i18n("The step value must be greater than one; "
-                                       "otherwise, the geometric series is infinite.") );
-                                       step->setFocus();
-                                       return;
-                                       }
-      */
-      else if ( type == Linear && dend < dstart )
-      {
-          KMessageBox::error( this,
-                              i18n("If the start value is greater than the end value the step must be less than zero.") );
-          return;
-      }
-  }
-  else if (type != Linear)
-  {
+    if  ( dstart < 0.0 || dend < 0.0 )
+    {
+      KMessageBox::error( this, i18n("End and start value must be positive.") );
+      return;
+    }
+    if ( dstart > dend && dstep >= 1.0)
+    {
+      KMessageBox::error( this, i18n("End value must be greater than the start "
+          "value or the step must be less than '1'.") );
+      return;
+    }
+    if ( dstart == 0.0 || dend == 0.0 || dstep == 0.0)
+    {
+      KMessageBox::error( this, i18n("None of the Start, Stop or Step values "
+          "may be equal to zero.") );
+      return;
+    }
+    if ( dstep == 1.0)
+    {
+      KMessageBox::error( this, i18n("Step value must be different from 1") );
+      return;
+    }
+    if ( dstep < 0.0)
+    {
       KMessageBox::error( this, i18n("Step is negative.") );
       return;
+    }
   }
-  else
+
+  if (isLinear)   // Linear
   {
-      if (dstart <= dend)
-      {
-        KMessageBox::error( this,
-                            i18n("If the step is negative, the start value must be greater then the end value.") );
-        return;
-      }
+    if (dstep == 0.0)
+    {
+      KMessageBox::error( this, i18n("The step value must be greater than zero; "
+          "otherwise, the linear series is infinite.") );
+      return;
+    }
+    if ((dstep > 0.0) && (dend < dstart))
+    {
+      KMessageBox::error( this, i18n("If the start value is greater than the "
+          "end value the step must be less than zero.") );
+      return;
+    }
+    if ((dstep < 0.0) && (dstart <= dend))
+    {
+      KMessageBox::error( this, i18n("If the step is negative, the start value "
+          "must be greater then the end value.") );
+      return;
+    }
   }
 
-  //        double val_end = qMax(dend, dstart);
-  //        double val_start = qMin(dend, dstart);
-  m_pView->doc()->emitBeginOperation( false );
+  SeriesManipulator *manipulator = new SeriesManipulator;
+  manipulator->setSheet (m_pView->activeSheet());
+  manipulator->setupSeries (marker, dstart, dend, dstep,
+      isColumn ? SeriesManipulator::Column : SeriesManipulator::Row,
+      isLinear ? SeriesManipulator::Linear : SeriesManipulator::Geometric);
+  
+  // setupSeries also called add(), so we can call execute directly
+  manipulator->execute ();
 
-  m_pSheet->setSeries( marker, dstart, dend, dstep, mode, type );
-
-  Cell * cell = m_pSheet->cellAt( marker.x(), marker.y() );
-  if ( cell->text() != 0 )
-    m_pView->editWidget()->setText( cell->text() );
-  else
-    m_pView->editWidget()->setText( "" );
-
-  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 
