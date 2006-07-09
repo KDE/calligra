@@ -265,6 +265,13 @@ private:
      * @return a LaTex string for the given symbol
      */
     QString latexString(char);
+    
+    /**
+     * Set left and right types in operator fences
+     * @param open if true set SymbolType for open (left) bracket, 
+     * otherwise set for close (right) bracket;
+     */
+    bool operatorType( QDomNode& node, bool open );
 
     /**
      * The brackets we are showing.

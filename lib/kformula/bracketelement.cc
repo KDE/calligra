@@ -520,7 +520,12 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
  */
 int BracketElement::readContentFromMathMLDom(QDomNode& node)
 {
-    if ( ! m_operator ) {
+    if ( m_operator ) {
+        node = node.parentNode();
+        if ( ! operatorType( node, true ) )
+            return -1;
+    }
+    else {
         // if it's a mfence tag, we need to convert to equivalent expanded form.
         // See section 3.3.8
         if ( ! node.nextSibling().isNull() ) {
@@ -549,6 +554,12 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
         }
     }
     inherited::readContentFromMathMLDom( node );
+    if ( m_operator ) {
+        if ( ! operatorType( node, false ) ) {
+            return -1;
+        }
+        return 3;
+    }
     return 1;
 }
 
@@ -594,6 +605,52 @@ QString BracketElement::latexString(char type)
 QString BracketElement::formulaString()
 {
     return "(" + getContent()->formulaString() + ")";
+}
+
+bool BracketElement::operatorType( QDomNode& node, bool open )
+{
+    SymbolType* type = open ? &leftType : &rightType;
+    if ( node.isElement() ) {
+        QDomElement e = node.toElement();
+        QString s =  e.text();
+        if ( s.isNull() )
+            return false;
+        *type = static_cast<SymbolType>( QString::number( s.at( 0 ).latin1() ).toInt() );
+        node = node.nextSibling();
+    }
+    else if ( node.isEntityReference() ) {
+        QString name = node.nodeName();
+        // TODO: To fully support these, SymbolType has to be extended,
+        //       and better Unicode support is a must
+        // CloseCurlyDoubleQuote 0x201D
+        // CloseCurlyQoute       0x2019
+        // LeftCeiling           0x2308
+        // LeftDoubleBracket     0x301A
+        // LeftFloor             0x230A
+        // OpenCurlyDoubleQuote  0x201C
+        // OpenCurlyQuote        0x2018
+        // RightCeiling          0x2309
+        // RightDoubleBracket    0x301B
+        // RightFloor            0x230B
+        if ( name == "LeftAngleBracket" ) {
+            *type = LeftCornerBracket;
+        }
+        else if ( name == "RightAngleBracket" ) {
+            *type = RightCornerBracket; 
+        }
+        else {
+            if ( open ) {
+                *type = LeftRoundBracket;
+            }
+            else
+                *type = RightRoundBracket;
+        }
+        node = node.nextSibling();
+    }
+    else {
+        return false;
+    }
+    return true;
 }
 
 void BracketElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
