@@ -573,7 +573,7 @@ bool Container::loadMathML( const QDomElement &fe, bool /*oasisFormat*/ )
     kdDebug( DEBUGID ) << "loadMathML" << endl;
     if (!fe.isNull()) {
         FormulaElement* root = createMainSequence();
-        if (root->buildFromMathMLDom(fe)) {
+        if ( root->buildFromMathMLDom( fe ) != - 1) {
             delete impl->rootElement;
             impl->rootElement = root;
             emit formulaLoaded(rootElement());

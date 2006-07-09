@@ -222,7 +222,7 @@ protected:
      * that needs to be read.
      * Returns false if it failed.
      */
-    virtual bool readContentFromMathMLDom(QDomNode& node);
+    virtual int readContentFromMathMLDom(QDomNode& node);
 
 private:
 

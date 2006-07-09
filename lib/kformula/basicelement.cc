@@ -193,14 +193,14 @@ bool BasicElement::buildFromDom(QDomElement element)
     return readContentFromDom(node);
 }
 
-bool BasicElement::buildFromMathMLDom(QDomElement element)
+int BasicElement::buildFromMathMLDom(QDomElement element)
 {/*
     if (element.tagName() != getTagName()) {
         kdWarning( DEBUGID ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
         return false;
 		}*/
     if (!readAttributesFromMathMLDom(element)) {
-        return false;
+        return -1;
         }
     QDomNode node = element.firstChild();
     return readContentFromMathMLDom(node);
@@ -265,9 +265,9 @@ bool BasicElement::readAttributesFromMathMLDom(const QDomElement& )
  * that needs to be read.
  * Returns false if it failed.
  */
-bool BasicElement::readContentFromMathMLDom(QDomNode&)
+int BasicElement::readContentFromMathMLDom(QDomNode&)
 {
-    return true;
+    return 0;
 }
 
 QString BasicElement::toLatex()

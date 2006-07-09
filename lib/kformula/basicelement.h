@@ -385,9 +385,11 @@ public:
     bool buildFromDom(QDomElement element);
 
     /**
-     * Heiner's test method. Should read MathML...
+     * Set this element attribute, build children and call 
+     * their builFromMathMLDom.
+     * Returns the number of nodes processed or -1 if it failed.
      */
-	bool buildFromMathMLDom( QDomElement element );
+	int buildFromMathMLDom( QDomElement element );
 
     // debug
     static int getEvilDestructionCount() { return evilDestructionCount; }
@@ -449,10 +451,11 @@ protected:
 
     /**
      * Reads our content from the MathML node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
+     * that needs to be read. It is sometimes needed to read more than one node
+     * (e. g. for fence operators).
+     * Returns the number of nodes processed or -1 if it failed.
      */
-	virtual bool readContentFromMathMLDom(QDomNode& node);
+	virtual int readContentFromMathMLDom(QDomNode& node);
 
 
     /**

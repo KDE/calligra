@@ -1759,6 +1759,7 @@ bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
 
 bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
     while (!n.isNull()) {
+        int nodeNumber;
         if (n.isElement()) {
             QDomElement e = n.toElement();
             BasicElement* child = 0;
@@ -1771,7 +1772,8 @@ bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
                 if (style != 0) {
                     child->setStyle(style);
                 }
-                if (child->buildFromMathMLDom(e)) {
+                nodeNumber = child->buildFromMathMLDom( e );
+                if ( nodeNumber != -1 ) {
                     list.append(child);
                 }
                 else {
@@ -1783,7 +1785,12 @@ bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
                 return false;
             }
         }
-        n = n.nextSibling();
+        for (int i = 0; i < nodeNumber; i++ ) {
+            if ( n.isNull() ) {
+                return false;
+            }
+            n = n.nextSibling();
+        }
     }
 	parse();
     return true;
@@ -1791,10 +1798,10 @@ bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
 
 /**
  */
-bool SequenceElement::readContentFromMathMLDom(QDomNode& node)
+int SequenceElement::readContentFromMathMLDom(QDomNode& node)
 {
-    if (!BasicElement::readContentFromMathMLDom(node)) {
-        return false;
+    if ( BasicElement::readContentFromMathMLDom(node) == -1 ) {
+        return -1;
     }
 
     return buildChildrenFromMathMLDom(children, node);
@@ -1813,7 +1820,7 @@ bool SequenceElement::buildMathMLChild( QDomNode node )
             if (style != 0) {
                 child->setStyle(style);
             }
-            if (child->buildFromMathMLDom(e)) {
+            if (child->buildFromMathMLDom(e) != -1) {
                 children.append(child);
             }
             else {

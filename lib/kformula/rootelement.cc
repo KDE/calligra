@@ -607,10 +607,10 @@ bool RootElement::readAttributesFromMathMLDom(const QDomElement& element)
  * that needs to be read.
  * Returns false if it failed.
  */
-bool RootElement::readContentFromMathMLDom(QDomNode& node)
+int RootElement::readContentFromMathMLDom(QDomNode& node)
 {
-    if (!BasicElement::readContentFromMathMLDom(node)) {
-        return false;
+    if ( BasicElement::readContentFromMathMLDom( node ) == -1 ) {
+        return -1;
     }
 
     if ( square ) {
@@ -621,20 +621,20 @@ bool RootElement::readContentFromMathMLDom(QDomNode& node)
         // Exactly two arguments are required
         if ( !content->buildMathMLChild( node ) ) {
             kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
-            return false;
+            return -1;
         }
         node = node.nextSibling();
 
         index=new SequenceElement( this );
         if ( !index->buildMathMLChild( node ) ) {
             kdWarning( DEBUGID ) << "Empty index in RootElement." << endl;
-            return false;
+            return -1;
         }
     }
 
     node = node.nextSibling();
 
-    return true;
+    return 1;
 }
 
 QString RootElement::toLatex()

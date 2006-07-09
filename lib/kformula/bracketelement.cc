@@ -191,19 +191,19 @@ bool SingleContentElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
-bool SingleContentElement::readContentFromMathMLDom( QDomNode& node )
+int SingleContentElement::readContentFromMathMLDom( QDomNode& node )
 {
-    if ( ! BasicElement::readContentFromMathMLDom( node ) ) {
-        return false;
+    if ( BasicElement::readContentFromMathMLDom( node ) == -1 ) {
+        return -1;
     }
 
     if ( !content->buildMathMLChild( node ) ) {
         kdWarning( DEBUGID) << "Empty content in SingleContentElement\n";
-        return false;
+        return -1;
     }
     node = node.nextSibling();
 
-    return true;
+    return 1;
 }
 
 void SingleContentElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
@@ -518,7 +518,7 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
  * that needs to be read.
  * Returns false if it failed.
  */
-bool BracketElement::readContentFromMathMLDom(QDomNode& node)
+int BracketElement::readContentFromMathMLDom(QDomNode& node)
 {
     if ( ! m_operator ) {
         // if it's a mfence tag, we need to convert to equivalent expanded form.
@@ -549,7 +549,7 @@ bool BracketElement::readContentFromMathMLDom(QDomNode& node)
         }
     }
     inherited::readContentFromMathMLDom( node );
-    return true;
+    return 1;
 }
 
 QString BracketElement::toLatex()

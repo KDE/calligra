@@ -141,7 +141,7 @@ protected:
      * that needs to be read.
      * Returns false if it failed.
      */
-	virtual bool readContentFromMathMLDom(QDomNode& node);
+	virtual int readContentFromMathMLDom(QDomNode& node);
 
     SequenceElement* getContent() { return content; }
 
@@ -245,10 +245,11 @@ protected:
 
     /**
      * Reads our content from the MathML node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
+     * that needs to be read. It is sometimes needed to read more than one node
+     * (e. g. for fence operators).
+     * Returns the number of nodes processed or -1 if it failed.
      */
-	virtual bool readContentFromMathMLDom(QDomNode& node);
+	virtual int readContentFromMathMLDom(QDomNode& node);
 
     /**
      * @returns the latex representation of the element and
