@@ -264,7 +264,7 @@ private:
     /**
      * @return a LaTex string for the given symbol
      */
-     QString latexString(char);
+    QString latexString(char);
 
     /**
      * The brackets we are showing.
