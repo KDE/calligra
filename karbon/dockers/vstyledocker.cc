@@ -255,7 +255,7 @@ ClipartWidget::importClipart()
 {
 	QStringList filter;
 	filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
-	KFileDialog dialog( "foo", "", 0);
+	KFileDialog dialog( KUrl("foo"), "", 0);
 	dialog.setCaption("Choose Graphic to Add");
 	dialog.setModal(true);
 	dialog.setMimeFilter( filter, "application/x-karbon" );

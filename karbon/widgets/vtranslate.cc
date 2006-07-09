@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kstdguiitem.h>
+#include <kguiitem.h>
 #include <kpushbutton.h>
 
 #include "vtranslate.h"

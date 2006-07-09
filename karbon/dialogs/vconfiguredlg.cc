@@ -35,6 +35,7 @@
 #include <KoUnitWidgets.h>
 #include <kvbox.h>
 #include <kinstance.h>
+#include <kicon.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -54,24 +55,24 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 	m_interfacePage = new VConfigInterfacePage( parent );
 	KPageWidgetItem* item = addPage( m_interfacePage, i18n( "Interface" ) );
 	item->setHeader( i18n( "Interface" ) );
-	item->setIcon( BarIcon( "misc", K3Icon::SizeMedium ) );
+	item->setIcon(KIcon(BarIcon("misc", K3Icon::SizeMedium)));
 
 	m_miscPage = new VConfigMiscPage( parent );
 	item = addPage( m_miscPage, i18n( "Misc" ) );
 	item->setHeader( i18n( "Misc" ) );
-	item->setIcon( BarIcon( "misc", K3Icon::SizeMedium ) );
+	item->setIcon(KIcon(BarIcon("misc", K3Icon::SizeMedium)));
 
 	m_gridPage = new VConfigGridPage( parent );
 	item = addPage( m_gridPage, i18n( "Grid" ) );
 	item->setHeader( i18n( "Grid" ) );
-	item->setIcon( BarIcon( "grid", K3Icon::SizeMedium ) );
+	item->setIcon(KIcon(BarIcon("grid", K3Icon::SizeMedium)));
 
 	connect( m_miscPage, SIGNAL( unitChanged( int ) ), m_gridPage, SLOT( slotUnitChanged( int ) ) );
 
 	m_defaultDocPage = new VConfigDefaultPage( parent );
 	item = addPage( m_defaultDocPage, i18n( "Document" ) );
 	item->setHeader( i18n( "Document Settings" ) );
-	item->setIcon( BarIcon( "document", K3Icon::SizeMedium ) );
+	item->setIcon(KIcon(BarIcon("document", K3Icon::SizeMedium)));
 
 	connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
