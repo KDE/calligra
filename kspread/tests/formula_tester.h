@@ -21,7 +21,7 @@
 #define KSPREAD_FORMULA_TESTER
 
 #include <QString>
-#include <kspread_value.h>
+#include <Value.h>
 
 #include "tester.h"
 

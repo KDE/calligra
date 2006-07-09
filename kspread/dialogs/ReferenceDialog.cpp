@@ -25,14 +25,14 @@
 
 
 #include "ReferenceDialog.h"
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "kspread_util.h"
-#include "kspread_map.h"
-#include "kspread_view.h"
-#include "kspread_sheet.h"
-#include "selection.h"
-#include "kspread_locale.h"
+#include "Canvas.h"
+#include "Doc.h"
+#include "Util.h"
+#include "Map.h"
+#include "View.h"
+#include "Sheet.h"
+#include "Selection.h"
+#include "Locale.h"
 
 #include <QVariant>
 #include <QComboBox>

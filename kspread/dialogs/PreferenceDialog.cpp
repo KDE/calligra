@@ -43,13 +43,13 @@
 
 #include <KoTabBar.h>
 
-#include "kspread_sheet.h"
-#include "kspread_sheetprint.h"
-#include "kspread_doc.h"
-#include "kspread_canvas.h"
-#include "kspread_view.h"
-#include "kspread_locale.h"
-#include "kspread_editors.h"
+#include "Sheet.h"
+#include "Sheetprint.h"
+#include "Doc.h"
+#include "Canvas.h"
+#include "View.h"
+#include "Locale.h"
+#include "Editors.h"
 
 #include "PreferenceDialog.h"
 

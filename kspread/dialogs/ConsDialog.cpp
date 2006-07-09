@@ -43,17 +43,17 @@
 #include <kdialog.h>
 #include <kmessagebox.h>
 
-#include <kspread_canvas.h>
-#include <kspread_doc.h>
-#include <kspread_global.h>
-#include <kspread_locale.h>
-#include <kspread_sheet.h>
-#include <kspread_util.h>
-#include <kspread_view.h>
+#include <Canvas.h>
+#include <Doc.h>
+#include <Global.h>
+#include <Locale.h>
+#include <Sheet.h>
+#include <Util.h>
+#include <View.h>
 
-#include <formula.h>
-#include <selection.h>
-#include <valueconverter.h>
+#include <Formula.h>
+#include <Selection.h>
+#include <Valueconverter.h>
 
 #include "ConsDialog.h"
 

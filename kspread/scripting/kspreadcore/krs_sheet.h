@@ -20,8 +20,8 @@
 #ifndef KROSS_KSPREADCOREKRSSHEET_H
 #define KROSS_KSPREADCOREKRSSHEET_H
 
-#include <kspread_sheet.h>
-#include <kspread_value.h>
+#include <Sheet.h>
+#include <Value.h>
 
 #include <api/class.h>
 

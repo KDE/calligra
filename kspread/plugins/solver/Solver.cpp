@@ -21,12 +21,12 @@
 #include <kgenericfactory.h>
 #include <ktextedit.h>
 
-#include <formula.h>
-#include <kspread_cell.h>
-#include <kspread_sheet.h>
-#include <kspread_value.h>
-#include <kspread_view.h>
-#include <region.h>
+#include <Formula.h>
+#include <Cell.h>
+#include <Sheet.h>
+#include <Value.h>
+#include <View.h>
+#include <Region.h>
 
 #include "SolverDialog.h"
 

@@ -20,9 +20,9 @@
 #include "krs_doc.h"
 #include "krs_sheet.h"
 
-#include <kspread_doc.h>
-#include <kspread_map.h>
-#include <kspread_sheet.h>
+#include <Doc.h>
+#include <Map.h>
+#include <Sheet.h>
 
 namespace Kross { namespace KSpreadCore {
 

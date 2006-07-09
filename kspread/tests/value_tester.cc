@@ -22,7 +22,7 @@
 
 #include <math.h>
 
-#include <kspread_value.h>
+#include <Value.h>
 
 #define CHECK(x,y)  check(__FILE__,__LINE__,#x,x,y)
 #define CHECK_DATE(d,x) check(__FILE__,__LINE__,d->asDate().toString().toLatin1(),d->asFloat(),x)

@@ -22,7 +22,7 @@
 #include <klocale.h>
 #include <kvbox.h>
 
-#include "kspread_sheet.h"
+#include "Sheet.h"
 
 #include "sheet_properties.h"
 

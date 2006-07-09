@@ -91,51 +91,51 @@ SET (kspreadcommon_LIB_SRCS
 	${dialogs_DIR_SRCS}
 	${tests_DIR_SRCS}
 	${functions_DIR_SRCS}
-	digest.cc
-	commands.cc
-	damages.cc
-	dependencies.cc
-	formula.cc
-	functions.cc
-	kspread_autofill.cc
-	kspread_canvas.cc
-	kspread_cell.cc
-	kspread_cluster.cc
-	kspread_condition.cc
-	kspread_doc.cc
-	kspread_editors.cc
-	kspread_events.cc
-	kspread_factory.cc
-	kspread_format.cc
-	kspread_handler.cc
-	kspread_locale.cc
-	kspread_map.cc
-	KSpreadMapAdaptor.cc
-	kspread_numformat.cc
-	kspread_object.cc
-	kspread_style.cc
-	kspread_style_manager.cc
-	kspread_undo.cc
-	kspread_value.cc
-	kspread_view.cc
-	KSpreadViewAdaptor.cc
-	kspread_sheet.cc
-	KSpreadSheetAdaptor.cc
-	kspread_sheetprint.cc
-	kspread_util.cc
-	kspread_toolbox.cc
-	valuecalc.cc
-	valueconverter.cc
-	valueformatter.cc
-	valueparser.cc
-	kspread_genvalidationstyle.cc
-	region.cc
-	selection.cc
-	manipulator.cc
-	manipulator_data.cc
-	manipulator_format.cc
-	manipulator_rowcol.cc
-	manipulator_sort.cc
+	Digest.cpp
+	Commands.cpp
+	Damages.cpp
+	Dependencies.cpp
+	Formula.cpp
+	Functions.cpp
+	Autofill.cpp
+	Canvas.cpp
+	Cell.cpp
+	Cluster.cpp
+	Condition.cpp
+	Doc.cpp
+	Editors.cpp
+	Events.cpp
+	Factory.cpp
+	Format.cpp
+	Handler.cpp
+	Locale.cpp
+	Map.cpp
+	KSpreadMapAdaptor.cpp
+	Numformat.cpp
+	Object.cpp
+	Style.cpp
+	Style_manager.cpp
+	Undo.cpp
+	Value.cpp
+	View.cpp
+	KSpreadViewAdaptor.cpp
+	Sheet.cpp
+	KSpreadSheetAdaptor.cpp
+	Sheetprint.cpp
+	Util.cpp
+	Toolbox.cpp
+	Valuecalc.cpp
+	Valueconverter.cpp
+	Valueformatter.cpp
+	Valueparser.cpp
+	Genvalidationstyle.cpp
+	Region.cpp
+	Selection.cpp
+	Manipulator.cpp
+	Manipulator_data.cpp
+	Manipulator_format.cpp
+	Manipulator_rowcol.cpp
+	Manipulator_sort.cpp
 	kspread_generalProperty.cpp
 	kspread_propertyEditor.cpp
 	)
@@ -157,7 +157,7 @@ install(TARGETS kspreadcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### next target ###############
 
-SET (kspreadpart_PART_SRCS kspread_factory_init.cc )
+SET (kspreadpart_PART_SRCS Factory_init.cpp )
 
 kde4_automoc(${kspreadpart_PART_SRCS})
 
@@ -172,7 +172,7 @@ install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-SET (kspread_KDEINIT_SRCS main.cc )
+SET (kspread_KDEINIT_SRCS Main.cpp )
 
 kde4_automoc(${kspread_KDEINIT_SRCS})
 
@@ -209,24 +209,24 @@ install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 #lib_LTLIBRARIES = libkspreadcommon.la
 #kde_module_LTLIBRARIES = libkspreadpart.la
 #
-#libkspreadcommon_la_SOURCES = digest.cc commands.cc damages.cc dependencies.cc \
-#	formula.cc 	functions.cc kspread_autofill.cc kspread_canvas.cc \
-#	kspread_cell.cc kspread_cluster.cc kspread_condition.cc kspread_doc.cc \
-#	kspread_editors.cc kspread_events.cc kspread_factory.cc kspread_format.cc \
+#libkspreadcommon_la_SOURCES = Digest.cpp Commands.cpp Damages.cpp Dependencies.cpp \
+#	Formula.cpp 	Functions.cpp Autofill.cpp Canvas.cpp \
+#	Cell.cpp Cluster.cpp Condition.cpp Doc.cpp \
+#	Editors.cpp Events.cpp Factory.cpp Format.cpp \
 #	functions/conversion.cc functions/database.cc functions/datetime.cc \
-#	functions/engineering.cc functions/financial.cc functions/helper.cc \
+#	functions/engineering.cc functions/financial.cc Functions.helper.cc \
 #	functions/information.cc functions/logic.cc functions/math.cc \
 #	functions/reference.cc functions/statistical.cc functions/text.cc \
-#	functions/trig.cc kspread_handler.cc kspread_locale.cc kspread_map.cc \
-#	kspread_numformat.cc kspread_object.cc kspread_style.cc kspread_style_manager.cc \
-#	kspread_undo.cc kspread_value.cc kspread_view.cc kspread_sheet.cc kspread_sheetprint.cc \
-#	kspread_util.cc kspread_toolbox.cc 	valuecalc.cc 	valueconverter.cc 	valueformatter.cc \
-#		valueparser.cc KSpreadAppIface.cc KSpreadAppIface.skel KSpreadCellIface.cc \
-#	KSpreadCellIface.skel KSpreadColumnIface.skel KSpreadColumnIface.cc KSpreadDocIface.cc \
-#	KSpreadDocIface.skel KSpreadLayoutIface.skel KSpreadLayoutIface.cc KSpreadMapIface.cc \
-#	KSpreadMapIface.skel KSpreadRowIface.skel KSpreadRowIface.cc KSpreadTableIface.cc \
-#	KSpreadTableIface.skel KSpreadViewIface.skel KSpreadViewIface.cc \
-#		kspread_genvalidationstyle.cc region.cc selection.cc manipulator.cc manipulator_data.cc \
+#	functions/trig.cc Handler.cpp Locale.cpp Map.cpp \
+#	Numformat.cpp Object.cpp Style.cpp Style_manager.cpp \
+#	Undo.cpp Value.cpp View.cpp Sheet.cpp Sheetprint.cpp \
+#	Util.cpp Toolbox.cpp 	Valuecalc.cpp 	Valueconverter.cpp 	Valueformatter.cpp \
+#		Valueparser.cpp KSpreadAppIface.cpp KSpreadAppIface.skel KSpreadCellIface.cpp \
+#	KSpreadCellIface.skel KSpreadColumnIface.skel KSpreadColumnIface.cpp KSpreadDocIface.cpp \
+#	KSpreadDocIface.skel KSpreadLayoutIface.skel KSpreadLayoutIface.cpp KSpreadMapIface.cpp \
+#	KSpreadMapIface.skel KSpreadRowIface.skel KSpreadRowIface.cpp KSpreadTableIface.cpp \
+#	KSpreadTableIface.skel KSpreadViewIface.skel KSpreadViewIface.cpp \
+#		Genvalidationstyle.cpp Region.cpp Selection.cpp Manipulator.cpp Manipulator_data.cpp \
 #	kspread_generalProperty.cpp kspread_propertyEditor.cpp
 #
 #libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
@@ -236,7 +236,7 @@ install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 #
 #libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 #libkspreadpart_la_LIBADD  = libkspreadcommon.la
-#libkspreadpart_la_SOURCES = kspread_factory_init.cc
+#libkspreadpart_la_SOURCES = Factory_init.cpp
 #
 #
 #METASOURCES = AUTO
@@ -244,7 +244,7 @@ install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 ### The kdeinit loadable module and the executable
 #kdeinit_LTLIBRARIES = kspread.la
 #bin_PROGRAMS =
-#kspread_la_SOURCES = main.cc
+#kspread_la_SOURCES = Main.cpp
 #kspread_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 #kspread_la_LIBADD = $(LIB_KOFFICECORE)
 #
@@ -267,7 +267,7 @@ install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 #messages: rc.cpp
 #	$(EXTRACTRC) --tag-group=koffice functions/*.xml > xml_doc.cc
 #	$(EXTRACTRC) dialogs/*.ui >> rc.cpp
-#	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h dialogs/*.cc tests/*.cc -o $(podir)/kspread.pot
+#	$(XGETTEXT) rc.cpp *.cc Aboutdata.h dialogs/*.cc tests/*.cc -o $(podir)/kspread.pot
 #	-rm xml_doc.cc
 #
 #include ../admin/Doxyfile.am

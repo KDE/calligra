@@ -27,7 +27,7 @@
 #include <KoGeneralPropertyUi.h>
 #include <KoUnitWidgets.h>
 
-#include "kspread_generalProperty.h"
+#include "GeneralProperty.h"
 
 using namespace KSpread;
 

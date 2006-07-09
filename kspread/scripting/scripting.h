@@ -23,7 +23,7 @@
 #define SCRIPTING_H
 
 #include <kparts/plugin.h>
-#include <kspread_view.h>
+#include <View.h>
 
 namespace Kross {
     namespace Api {

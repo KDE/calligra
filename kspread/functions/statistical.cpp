@@ -20,9 +20,9 @@
 
 // built-in statistical functions
 
-#include "functions.h"
-#include "valuecalc.h"
-#include "valueconverter.h"
+#include "Functions.h"
+#include "Valuecalc.h"
+#include "Valueconverter.h"
 
 // needed for MODE
 #include <QList>

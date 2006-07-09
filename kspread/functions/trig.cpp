@@ -20,8 +20,8 @@
 
 // built-in trigonometric functions
 
-#include "functions.h"
-#include "valuecalc.h"
+#include "Functions.h"
+#include "Valuecalc.h"
 
 using namespace KSpread;
 

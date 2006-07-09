@@ -39,14 +39,14 @@
 #include <kinstance.h>
 
 #include "FormatDialog.h"
-#include "kspread_doc.h"
-#include "kspread_locale.h"
-#include "kspread_sheet.h"
-#include "kspread_style.h"
-#include "kspread_style_manager.h"
-#include "kspread_undo.h"
-#include "kspread_view.h"
-#include "selection.h"
+#include "Doc.h"
+#include "Locale.h"
+#include "Sheet.h"
+#include "Style.h"
+#include "Style_manager.h"
+#include "Undo.h"
+#include "View.h"
+#include "Selection.h"
 
 
 using namespace KSpread;

@@ -20,9 +20,9 @@
 #ifndef KROSS_KSPREADCOREKRSCELL_H
 #define KROSS_KSPREADCOREKRSCELL_H
 
-#include <kspread_sheet.h>
-#include <kspread_cell.h>
-#include <kspread_value.h>
+#include <Sheet.h>
+#include <Cell.h>
+#include <Value.h>
 
 #include <api/class.h>
 

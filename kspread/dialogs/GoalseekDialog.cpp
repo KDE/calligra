@@ -25,16 +25,16 @@
 
 #include "GoalseekDialog.h"
 
-#include "kspread_canvas.h"
-#include "kspread_cell.h"
-#include "kspread_doc.h"
-#include "kspread_editors.h"
-#include "kspread_map.h"
-#include "selection.h"
-#include "kspread_sheet.h"
-#include "kspread_undo.h"
-#include "kspread_util.h"
-#include "kspread_view.h"
+#include "Canvas.h"
+#include "Cell.h"
+#include "Doc.h"
+#include "Editors.h"
+#include "Map.h"
+#include "Selection.h"
+#include "Sheet.h"
+#include "Undo.h"
+#include "Util.h"
+#include "View.h"
 
 #include <kapplication.h>
 #include <kdebug.h>

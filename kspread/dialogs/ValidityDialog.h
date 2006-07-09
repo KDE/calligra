@@ -26,7 +26,7 @@
 
 #include <kpagedialog.h>
 
-#include "kspread_cell.h"
+#include "Cell.h"
 //Added by qt3to4:
 #include <QLabel>
 

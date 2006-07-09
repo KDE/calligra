@@ -41,11 +41,11 @@
 
 #include <knuminput.h>
 #include <kcompletion.h>
-#include "kspread_view.h"
-#include "kspread_style.h"
-#include "kspread_format.h"
-#include "kspread_doc.h"
-#include "kspread_value.h"
+#include "View.h"
+#include "Style.h"
+#include "Format.h"
+#include "Doc.h"
+#include "Value.h"
 #include "ui_position_cell_format.h"
 #include "ui_font_cell_format.h"
 #include "ui_protection_cell_format.h"

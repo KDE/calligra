@@ -25,11 +25,11 @@
 
 
 #include "SeriesDialog.h"
-#include "kspread_doc.h"
-#include "kspread_editors.h"
-#include "kspread_sheet.h"
-#include "kspread_view.h"
-#include "manipulator_data.h"
+#include "Doc.h"
+#include "Editors.h"
+#include "Sheet.h"
+#include "View.h"
+#include "Manipulator_data.h"
 
 #include <QGroupBox>
 #include <QHBoxLayout>

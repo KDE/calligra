@@ -20,9 +20,9 @@
 
 // built-in logical functions
 
-#include "functions.h"
-#include "valuecalc.h"
-#include "valueconverter.h"
+#include "Functions.h"
+#include "Valuecalc.h"
+#include "Valueconverter.h"
 
 using namespace KSpread;
 

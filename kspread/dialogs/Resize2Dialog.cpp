@@ -36,15 +36,15 @@
 #include <KoUnit.h>
 #include <KoUnitWidgets.h>
 
-#include <kspread_canvas.h>
-#include <kspread_doc.h>
-#include <kspread_global.h>
-#include <kspread_locale.h>
-#include <kspread_sheet.h>
-#include <kspread_undo.h>
-#include <kspread_view.h>
-#include "manipulator_rowcol.h"
-#include "selection.h"
+#include <Canvas.h>
+#include <Doc.h>
+#include <Global.h>
+#include <Locale.h>
+#include <Sheet.h>
+#include <Undo.h>
+#include <View.h>
+#include "Manipulator_rowcol.h"
+#include "Selection.h"
 
 #include "Resize2Dialog.h"
 

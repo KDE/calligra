@@ -29,11 +29,11 @@
 
 #include <kmessagebox.h>
 
-#include "kspread_doc.h"
-#include "kspread_locale.h"
-#include "kspread_sheet.h"
-#include "kspread_view.h"
-#include "selection.h"
+#include "Doc.h"
+#include "Locale.h"
+#include "Sheet.h"
+#include "View.h"
+#include "Selection.h"
 
 #include "AreaDialog.h"
 

@@ -19,13 +19,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_cell.h"
+#include "Cell.h"
 #include "DatabaseDialog.h"
-#include "kspread_doc.h"
-#include "kspread_sheet.h"
-#include "kspread_util.h"
-#include "kspread_undo.h"
-#include "kspread_view.h"
+#include "Doc.h"
+#include "Sheet.h"
+#include "Util.h"
+#include "Undo.h"
+#include "View.h"
 
 #include <kdebug.h>
 #include <kdialog.h>

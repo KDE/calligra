@@ -20,7 +20,7 @@
 #ifndef KSPREAD_KROSS_KRS_DOC_H_
 #define KSPREAD_KROSS_KRS_DOC_H_
 
-#include <kspread_doc.h>
+#include <Doc.h>
 
 #include <api/class.h>
 

@@ -28,13 +28,13 @@
 #include <k3listview.h>
 #include <klocale.h>
 
-#include "kspread_canvas.h"
-#include "kspread_cell.h"
+#include "Canvas.h"
+#include "Cell.h"
 #include "LayoutDialog.h"
-#include "kspread_sheet.h"
-#include "kspread_style.h"
-#include "kspread_style_manager.h"
-#include "kspread_view.h"
+#include "Sheet.h"
+#include "Style.h"
+#include "Style_manager.h"
+#include "View.h"
 
 #include "StylesDialog.h"
 
@@ -88,7 +88,7 @@ StyleDialog::StyleDialog( View * parent, StyleManager * manager )
   enableButton( KDialog::User2, true );
   enableButton( KDialog::User3, false );
 
-  connect( m_dlg->m_styleList, SIGNAL( selectionChanged( Q3ListViewItem * ) ),
+  connect( m_dlg->m_styleList, SIGNAL( Selection.hanged( Q3ListViewItem * ) ),
            this, SLOT( slotSelectionChanged( Q3ListViewItem * ) ) );
   connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ),
            this, SLOT( slotDisplayMode( int ) ) );

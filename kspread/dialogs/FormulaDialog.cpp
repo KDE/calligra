@@ -32,16 +32,16 @@
 #include <QVBoxLayout>
 
 #include "FormulaDialog.h"
-#include "kspread_canvas.h"
-#include "kspread_util.h"
-#include "kspread_editors.h"
-#include "kspread_doc.h"
-#include "kspread_locale.h"
-#include "kspread_map.h"
-#include "selection.h"
-#include "kspread_sheet.h"
-#include "kspread_view.h"
-#include "functions.h"
+#include "Canvas.h"
+#include "Util.h"
+#include "Editors.h"
+#include "Doc.h"
+#include "Locale.h"
+#include "Map.h"
+#include "Selection.h"
+#include "Sheet.h"
+#include "View.h"
+#include "Functions.h"
 
 #include <kapplication.h>
 #include <kdebug.h>

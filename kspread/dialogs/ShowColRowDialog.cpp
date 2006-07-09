@@ -27,11 +27,11 @@
 
 #include <klocale.h>
 
-#include "kspread_doc.h"
-#include "kspread_sheet.h"
-#include "kspread_util.h"
-#include "kspread_view.h"
-#include "region.h"
+#include "Doc.h"
+#include "Sheet.h"
+#include "Util.h"
+#include "View.h"
+#include "Region.h"
 
 #include "ShowColRowDialog.h"
 

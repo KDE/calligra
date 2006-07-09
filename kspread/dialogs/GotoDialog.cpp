@@ -29,12 +29,12 @@
 
 #include <klineedit.h>
 
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "kspread_locale.h"
-#include "kspread_util.h"
-#include "kspread_view.h"
-#include "selection.h"
+#include "Canvas.h"
+#include "Doc.h"
+#include "Locale.h"
+#include "Util.h"
+#include "View.h"
+#include "Selection.h"
 
 #include "GotoDialog.h"
 

@@ -17,13 +17,13 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "kspread_propertyEditor.h"
+#include "PropertyEditor.h"
 
-#include "kspread_object.h"
-#include "kspread_sheet.h"
-#include "kspread_doc.h"
+#include "Object.h"
+#include "Sheet.h"
+#include "Doc.h"
 // #include "KPrUtils.h"
-#include "commands.h"
+#include "Commands.h"
 // #include "KPrPenStyleWidget.h"
 // #include "KPrBrushProperty.h"
 // #include "KPrRectProperty.h"

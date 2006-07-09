@@ -23,9 +23,9 @@
 #include "tester.h"
 #include "formula_tester.h"
 
-#include <formula.h>
-#include <kspread_util.h>
-#include <kspread_value.h>
+#include <Formula.h>
+#include <Util.h>
+#include <Value.h>
 
 #define CHECK_PARSE(x,y)  checkParse(__FILE__,__LINE__,#x,x,y)
 #define CHECK_EVAL(x,y)  checkEval(__FILE__,__LINE__,#x,x,y)

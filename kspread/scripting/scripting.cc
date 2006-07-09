@@ -30,8 +30,8 @@
 #include <main/scriptguiclient.h>
 #include <main/wdgscriptsmanager.h>
 
-#include <kspread_doc.h>
-#include <kspread_view.h>
+#include <Doc.h>
+#include <View.h>
 
 typedef KGenericFactory<Scripting> KSpreadScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kspreadscripting, KSpreadScriptingFactory( "kspread" ) )

@@ -24,7 +24,7 @@
 
 #include <kdialog.h>
 
-#include "kspread_sheet.h"
+#include "Sheet.h"
 #include "ui_sheet_properties_base.h"
 
 namespace KSpread

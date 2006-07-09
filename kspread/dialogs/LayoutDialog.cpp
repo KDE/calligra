@@ -60,18 +60,18 @@
 
 #include <KoUnitWidgets.h>
 
-#include "kspread_canvas.h"
+#include "Canvas.h"
 #include "LayoutDialog.h"
-#include "kspread_locale.h"
-#include "kspread_sheet.h"
-#include "kspread_style.h"
-#include "kspread_style_manager.h"
-#include "kspread_undo.h"
-#include "kspread_util.h"
-#include "manipulator_format.h"
-#include "manipulator_rowcol.h"
-#include "selection.h"
-#include "valueformatter.h"
+#include "Locale.h"
+#include "Sheet.h"
+#include "Style.h"
+#include "Style_manager.h"
+#include "Undo.h"
+#include "Util.h"
+#include "Manipulator_format.h"
+#include "Manipulator_rowcol.h"
+#include "Selection.h"
+#include "Valueformatter.h"
 
 using namespace KSpread;
 
@@ -1318,7 +1318,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     connect(textFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
     connect(customFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
 
-    connect(listFormat,SIGNAL(selectionChanged ()),this,SLOT(makeformat()));
+    connect(listFormat,SIGNAL(Selection.hanged ()),this,SLOT(makeformat()));
     connect(precision,SIGNAL(valueChanged(int)),this,SLOT(slotChangeValue(int)));
     connect(prefix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
     connect(postfix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));

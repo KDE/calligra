@@ -28,10 +28,10 @@
 
 #include <kpagedialog.h>
 
-#include "kspread_cell.h"
-#include "kspread_style.h"
-#include "kspread_sheet.h"
-#include "dependencies.h"
+#include "Cell.h"
+#include "Style.h"
+#include "Sheet.h"
+#include "Dependencies.h"
 
 namespace KSpread
 {

@@ -32,10 +32,10 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include <kspread_cell.h>
-#include <kspread_doc.h>
-#include <kspread_sheet.h>
-#include <kspread_view.h>
+#include <Cell.h>
+#include <Doc.h>
+#include <Sheet.h>
+#include <View.h>
 
 #include "AngleDialog.h"
 

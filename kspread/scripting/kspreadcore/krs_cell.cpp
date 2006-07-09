@@ -19,12 +19,12 @@
 
 #include "krs_cell.h"
 
-#include <kspread_sheet.h>
-#include <kspread_cell.h>
-#include <kspread_value.h>
+#include <Sheet.h>
+#include <Cell.h>
+#include <Value.h>
 
-#include "manipulator.h"
-#include "manipulator_data.h"
+#include "Manipulator.h"
+#include "Manipulator_data.h"
 
 namespace Kross { namespace KSpreadCore {
 
@@ -147,7 +147,7 @@ const QString Cell::text() const {
 bool Cell::setText(const QString& text, bool asString) {
 
 	//FIXME: there is some problem with asString parameter, when it's set
-	//to true KSpread says: ASSERT: "f" in dependencies.cc (621)
+	//to true KSpread says: ASSERT: "f" in Dependencies.cpp (621)
 	//kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
 
 	KSpread::ProtectedCheck prot;

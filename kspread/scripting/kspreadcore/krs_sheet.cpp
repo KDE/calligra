@@ -21,10 +21,10 @@
 #include "krs_sheet.h"
 #include "krs_doc.h"
 
-#include <kspread_doc.h>
-#include <kspread_sheet.h>
-#include <kspread_cell.h>
-#include <kspread_value.h>
+#include <Doc.h>
+#include <Sheet.h>
+#include <Cell.h>
+#include <Value.h>
 
 namespace Kross { namespace KSpreadCore {
 

@@ -34,9 +34,9 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include "kspread_autofill.h"
-#include "kspread_factory.h"
-#include "kspread_locale.h"
+#include "Autofill.h"
+#include "Factory.h"
+#include "Locale.h"
 
 #include "ListDialog.h"
 

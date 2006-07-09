@@ -30,11 +30,11 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "selection.h"
-#include "kspread_sheet.h"
-#include "kspread_view.h"
+#include "Canvas.h"
+#include "Doc.h"
+#include "Selection.h"
+#include "Sheet.h"
+#include "View.h"
 
 #include "CommentDialog.h"
 

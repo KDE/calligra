@@ -52,13 +52,13 @@
 #include <kinstance.h>
 
 #include "SortDialog.h"
-#include "kspread_doc.h"
-#include "kspread_map.h"
-#include "kspread_sheet.h"
-#include "kspread_view.h"
-#include "kspread_util.h"
-#include "manipulator_sort.h"
-#include "selection.h"
+#include "Doc.h"
+#include "Map.h"
+#include "Sheet.h"
+#include "View.h"
+#include "Util.h"
+#include "Manipulator_sort.h"
+#include "Selection.h"
 
 using namespace KSpread;
 

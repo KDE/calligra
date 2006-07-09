@@ -22,10 +22,10 @@
 
 #include <math.h>
 
-#include "functions.h"
+#include "Functions.h"
 #include "functions/helper.h"
-#include "valuecalc.h"
-#include "valueconverter.h"
+#include "Valuecalc.h"
+#include "Valueconverter.h"
 
 #include <klocale.h>
 #include <kcalendarsystem.h>

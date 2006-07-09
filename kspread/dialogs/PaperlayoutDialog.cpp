@@ -22,14 +22,14 @@
 */
 
 #include "PaperlayoutDialog.h"
-#include <kspread_doc.h>
-#include "kspread_map.h"
-#include "kspread_sheet.h"
-#include "kspread_sheetprint.h"
-#include <kspread_undo.h>
-#include <kspread_util.h>
-#include <kspread_view.h>
-#include <selection.h>
+#include <Doc.h>
+#include "Map.h"
+#include "Sheet.h"
+#include "Sheetprint.h"
+#include <Undo.h>
+#include <Util.h>
+#include <View.h>
+#include <Selection.h>
 
 #include <QCheckBox>
 #include <QLabel>

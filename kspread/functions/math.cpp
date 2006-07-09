@@ -23,13 +23,13 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "functions.h"
-#include "valuecalc.h"
-#include "valueconverter.h"
+#include "Functions.h"
+#include "Valuecalc.h"
+#include "Valueconverter.h"
 
 // these two are needed for SUBTOTAL:
-#include "kspread_cell.h"
-#include "kspread_sheet.h"
+#include "Cell.h"
+#include "Sheet.h"
 
 // needed for RANDBINOM and so
 #include <math.h>

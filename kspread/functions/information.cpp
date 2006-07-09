@@ -28,12 +28,12 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "functions.h"
-#include "valuecalc.h"
-#include "valueconverter.h"
+#include "Functions.h"
+#include "Valuecalc.h"
+#include "Valueconverter.h"
 
-#include "kspread_doc.h"
-#include "kspread_sheet.h"
+#include "Doc.h"
+#include "Sheet.h"
 
 using namespace KSpread;
 

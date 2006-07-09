@@ -30,11 +30,11 @@
 #include <QCheckBox>
 
 #include "PasteinsertDialog.h"
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "kspread_sheet.h"
-#include "kspread_view.h"
-#include "selection.h"
+#include "Canvas.h"
+#include "Doc.h"
+#include "Sheet.h"
+#include "View.h"
+#include "Selection.h"
 
 using namespace KSpread;
 

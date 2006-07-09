@@ -25,10 +25,10 @@
 
 #include "kspread_insertcalendardialog.h"
 
-#include "../../kspread_view.h"
-#include "../../kspread_doc.h"
-#include "../../selection.h"
-#include "../../kspread_sheet.h"
+#include "../../View.h"
+#include "../../Doc.h"
+#include "../../Selection.h"
+#include "../../Sheet.h"
 
 #include <kcalendarsystem.h>
 #include <kcalendarsystemfactory.h>

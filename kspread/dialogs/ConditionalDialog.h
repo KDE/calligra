@@ -26,7 +26,7 @@
 #include <kdialog.h>
 #include <QWidget>
 
-#include "kspread_condition.h"
+#include "Condition.h"
 
 class QComboBox;
 class KLineEdit;

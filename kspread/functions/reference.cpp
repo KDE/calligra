@@ -20,14 +20,14 @@
 
 // built-in reference functions
 
-#include "kspread_cell.h"
-#include "kspread_sheet.h"
-#include "kspread_util.h"
-#include "kspread_value.h"
+#include "Cell.h"
+#include "Sheet.h"
+#include "Util.h"
+#include "Value.h"
 
-#include "functions.h"
-#include "valuecalc.h"
-#include "valueconverter.h"
+#include "Functions.h"
+#include "Valuecalc.h"
+#include "Valueconverter.h"
 
 using namespace KSpread;
 

@@ -22,16 +22,16 @@
 
 
 #include "ConditionalDialog.h"
-#include "kspread_condition.h"
+#include "Condition.h"
 
-#include "kspread_canvas.h"
-#include "kspread_cell.h"
-#include "kspread_doc.h"
-#include "selection.h"
-#include "kspread_sheet.h"
-#include "kspread_style.h"
-#include "kspread_style_manager.h"
-#include "kspread_view.h"
+#include "Canvas.h"
+#include "Cell.h"
+#include "Doc.h"
+#include "Selection.h"
+#include "Sheet.h"
+#include "Style.h"
+#include "Style_manager.h"
+#include "View.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>
