@@ -109,7 +109,7 @@ namespace KoMacro {
 			* signal passed arguments are transfered into the
 			* activation @a Context .
 			*/
-			void connectSignal(const QObject* sender, const char* signal);
+			//void connectSignal(const QObject* sender, const char* signal);
 
 		public slots:
 

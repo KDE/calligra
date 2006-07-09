@@ -103,7 +103,6 @@ void MacroTests::setUp()
 {
 	d->xmlguiclient = new KXMLGUIClient();
 	//::KoMacro::Manager::init( d->xmlguiclient );
-	//Singelton more or less ...
 	if (::KoMacro::Manager::self() == 0) {	
 		::KoMacro::Manager::init( d->xmlguiclient );
 	}
@@ -133,52 +132,61 @@ void MacroTests::tearDown()
 
 void MacroTests::testMacro()
 {
-//TODO: CLEANUP!!!!!!	
 	kdDebug()<<"===================== testMacro() ======================" << endl;
 
 	QDomElement const domelement = d->doomdocument->documentElement();
 	
-	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::Macro> macro1 = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::Macro> macro2 = KoMacro::Manager::self()->createMacro("testMacro");
 	//Is our XML parseable ?
-	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+	KOMACROTEST_ASSERT(macro1->parseXML(domelement),true);
+	KOMACROTEST_ASSERT(macro2->parseXML(domelement),true);
 
 	//check that it is not null
-	KOMACROTEST_XASSERT(sizetype(macro.data()), sizetype(0));
+	KOMACROTEST_XASSERT(sizetype(macro1.data()), sizetype(0));
+	KOMACROTEST_XASSERT(sizetype(macro2.data()), sizetype(0));
 
-	//check the name
-	KOMACROTEST_ASSERT( QString(macro->name()), QString("testMacro") );
+	//check macro1 == macro2
+	KOMACROTEST_ASSERT(macro1->name(), macro2->name() );
+
+	//create list of KsharedPtr from the childs of the macro	
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items1 = macro1->items();
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items2 = macro2->items();
 	
-	/**
-	 @deprecated values no longer exist
-	
-	//check the text
-	KOMACROTEST_ASSERT( macro->text(), QString("My Macro") );
-	//check iconname
-	KOMACROTEST_ASSERT( QString(macro->icon()), QString("myicon") );
-	//check comment
-	KOMACROTEST_ASSERT( macro->comment(), QString("Some comment to describe the Macro.") );
-	 */
-	
-	//create list of KsharedPtr from the childs of the macro
-	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = macro->items();
 	//check that there is one
-	KOMACROTEST_ASSERT( items.count(), sizetype(1) );
+	KOMACROTEST_XASSERT( items1.count(), sizetype(0) );	
+	KOMACROTEST_XASSERT( items2.count(), sizetype(0) );	
+
+	//check macro1 == macro2	
+	KOMACROTEST_ASSERT( items1.count(), items2.count() );
+	
+	//check the name
+	KOMACROTEST_ASSERT( QString(macro1->name()), QString("testMacro") );
+	
+	{
+		const QString tmp1 = QString("test");
+		macro1->setName(tmp1);
+
+		//check the name changed
+		KOMACROTEST_XASSERT( QString(macro1->name()), QString("testMacro") );	
+		//check the name
+		KOMACROTEST_ASSERT( QString(macro1->name()), QString("test") );
+	}
+	
 	//fetch the first one
-	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
-	//How do we know that an action exist ?	
-	//-> check that it is not null
+	KSharedPtr<KoMacro::Action> actionptr = items1[0]->action();
+	//check that it is not null
 	KOMACROTEST_XASSERT(sizetype(actionptr.data()), sizetype(0));
 	//check that it has the right name
 	KOMACROTEST_ASSERT( QString(actionptr->name()), QString("testaction") );
 	//check that it has the right text
 	KOMACROTEST_ASSERT( actionptr->text(), QString("Test") );
 
-	//create another macro
-	KSharedPtr<KoMacro::Macro> yanMacro = KoMacro::Manager::self()->createMacro("testMacro2");
-	
-	KOMACROTEST_ASSERT(yanMacro->parseXML(domelement),true);
-	
-	//check that they aren?t null
-	KOMACROTEST_XASSERT(sizetype(yanMacro.data()), sizetype(0));
+	//try to clear items
+	macro1->clearItems();
+	//get items
+	items1 = macro1->items();
+	//check taht they are deleted
+	KOMACROTEST_ASSERT( items1.count(), sizetype(0) );
 }
 #include "macrotests.moc"

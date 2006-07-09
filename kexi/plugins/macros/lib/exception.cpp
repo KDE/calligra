@@ -51,37 +51,46 @@ namespace KoMacro {
 
 }
 
+//constructor
 Exception::Exception(const QString& errormessage)
 	: d( new Private(errormessage) ) // create the private d-pointer instance.
 {
+	//debuging infos
 	kdDebug() << QString("Exception errormessage=\"%1\"").arg(errormessage) << endl;
 }
 
+//copy constructor
 Exception::Exception (const Exception& e)
 	: d( new Private( e.errorMessage() ) )
 {
 	d->tracemessages = e.traceMessages();
 }
 
+//deconstructor
 Exception::~Exception()
 {
 	delete d;
 }
 
+//get d-pointer errormessage
 const QString Exception::errorMessage() const
 {
 	return d->errormessage;
 }
 
+//get d-pointer tracemessages
 const QString Exception::traceMessages() const
 {
 	return d->tracemessages;
 }
 
+//add a Qstring to d-pointer tracemessages
 void Exception::addTraceMessage(const QString& tracemessage)
 {
+	//no tracemessages till now
 	if(d->tracemessages.isEmpty())
 		d->tracemessages = tracemessage;
+	//append to existing ones
 	else
 		d->tracemessages += "\n" + tracemessage;
 }

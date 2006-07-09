@@ -18,6 +18,7 @@
 #ifndef KOMACROTEST_BASE_H
 #define KOMACROTEST_BASE_H
 
+//Our own extended Macros from KUnittest
 /**
 * Macro to perform an equality check and exits the method if the check failed.
 *
@@ -80,6 +81,8 @@
 
 #endif
 
+//Used more tha once at various places 
+//names of variables from testaction
 namespace KoMacroTest {
 	static const QString TESTSTRING = "teststring";
 	static const QString TESTINT = "testint";

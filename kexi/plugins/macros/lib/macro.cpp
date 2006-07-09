@@ -54,6 +54,7 @@ namespace KoMacro {
 
 }
 
+//constructor, initalize internal (d-pointer) name
 Macro::Macro(const QString& name)
 	: QObject()
 	, KShared()
@@ -63,64 +64,75 @@ Macro::Macro(const QString& name)
 	d->name = name;
 }
 
+//destructor
 Macro::~Macro()
 {
 	// destroy the private d-pointer instance.
 	delete d;
 }
 
+//get internal (d-pointer) name
 const QString Macro::name() const
 {
 	return d->name;
 }
 
+//set internal (d-pointer) name
 void Macro::setName(const QString& name)
 {
 	d->name = name;
 }
 
+//get an "extended" name
 const QString Macro::toString() const
 {
 	return QString("Macro:%1").arg(name());
 }
 
+//get (d-pointer) itemlist
 QValueList<KSharedPtr<MacroItem > >& Macro::items() const
 {
 	return d->itemlist;
 }
 
+//add a macroitem to internal (d-pointer) itemlist
 void Macro::addItem(KSharedPtr<MacroItem> item)
 {
 	d->itemlist.append(item);
 }
-
+//clear internal (d-pointer) itemlist
 void Macro::clearItems()
 {
 	d->itemlist.clear();
 }
 
-void Macro::connectSignal(const QObject* sender, const char* signal)
-{
-	MetaProxy* metaproxy = new MetaProxy();
+//no longer needed
+// void Macro::connectSignal(const QObject* sender, const char* signal)
+// {
+// 	MetaProxy* metaproxy = new MetaProxy();
+// 
+// 	metaproxy->connectSignal(sender, signal);
+// 
+// 	connect( metaproxy, SIGNAL(slotCalled(QValueList< KSharedPtr<Variable> >)),
+// 			 this,SLOT(activate(QValueList< KSharedPtr<Variable> >)) );
+// 
+// 	//TODO d->proxies.append( metaproxy );
+// }
 
-	metaproxy->connectSignal(sender, signal);
-
-	connect( metaproxy, SIGNAL(slotCalled(QValueList< KSharedPtr<Variable> >)),
-			 this,SLOT(activate(QValueList< KSharedPtr<Variable> >)) );
-
-	//TODO d->proxies.append( metaproxy );
-}
-
+//run our macro
 KSharedPtr<Context> Macro::execute(QObject* sender)
 {
 	kdDebug() << "Macro::execute(KSharedPtr<Context>)" << endl;
 
+	//create context in which macro can/should run
 	KSharedPtr<Context> c = KSharedPtr<Context>( new Context(this) );
 	if(sender) {
 		// set the sender-variable if we got a sender QObject.
 		c->setVariable("[sender]", KSharedPtr<Variable>( new Variable(sender) ));
 	}
 	//connect(context, SIGNAL(activated()), this, SIGNAL(activated()));
+	
+	//call activate in the context of the macro
 	c->activate( c );
 
 	return c;
