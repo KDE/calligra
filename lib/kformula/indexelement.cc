@@ -1303,6 +1303,101 @@ bool IndexElement::readContentFromDom(QDomNode& node)
         lowerLeftRead || lowerMiddleRead || lowerRightRead;
 }
 
+/**
+ * Reads our content from the MathML node. Sets the node to the next node
+ * that needs to be read. It is sometimes needed to read more than one node
+ * (e. g. for fence operators).
+ * Returns the number of nodes processed or -1 if it failed.
+ */
+int IndexElement::readContentFromMathMLDom( QDomNode& node )
+{
+    if ( BasicElement::readContentFromMathMLDom( node ) == -1 ) {
+        return -1;
+    }
+
+    if ( ! content->buildMathMLChild( node ) ) {
+        kdWarning( DEBUGID ) << "Empty base in Script" << endl;
+        return -1;
+    }
+    node = node.nextSibling();
+
+    QString indexType = node.parentNode().nodeName().lower();
+    if ( indexType == "msub" ) {
+        lowerRight = new SequenceElement( this );
+        if ( ! lowerRight->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty subscript in Script" << endl;
+            return -1;
+        }
+        node = node.nextSibling();
+        return 1;
+    }
+
+    if ( indexType == "msup" ) {
+        upperRight = new SequenceElement( this );
+        if ( ! upperRight->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty superscript in Script" << endl;
+            return -1;
+        }
+        node = node.nextSibling();
+        return 1;
+    }
+
+    if ( indexType == "msubsup" ) {
+        lowerRight = new SequenceElement( this );
+        if ( ! lowerRight->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty subscript in Script" << endl;
+            return -1;
+        }
+        node = node.nextSibling();
+
+        upperRight = new SequenceElement( this );
+        if ( ! upperRight->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty superscript in Script" << endl;
+            return -1;
+        }
+        node = node.nextSibling();
+        return 1;
+    }
+    if ( indexType == "munder" ) {
+        lowerMiddle = new SequenceElement( this );
+        if ( ! lowerMiddle->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty underscript in Script" << endl;
+            return -1;
+        }
+        node = node.nextSibling();
+        return 1;
+    }
+
+    if ( indexType == "mover" ) {
+        upperMiddle = new SequenceElement( this );
+        if ( ! upperMiddle->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty overscript in Script" << endl;
+            return -1;
+        }
+        node = node.nextSibling();
+        return 1;
+    }
+
+    if ( indexType == "munderover" ) {
+        lowerMiddle = new SequenceElement( this );
+        if ( ! lowerMiddle->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty underscript in Script" << endl;
+            return -1;
+        }
+        node = node.nextSibling();
+
+        upperMiddle = new SequenceElement( this );
+        if ( ! upperMiddle->buildMathMLChild( node ) ) {
+            kdWarning( DEBUGID ) << "Empty overscript in Script" << endl;
+            return -1;
+        }
+        node = node.nextSibling();
+        return 1;
+    }
+    // TODO: mmultiscripts, section 3.4.7
+}
+
+
 ElementIndexPtr IndexElement::getIndex( int position )
 {
     switch (position) {
