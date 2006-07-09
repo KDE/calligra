@@ -15,18 +15,18 @@
  </Menu>
  <Menu name="Element"><text>E&amp;lement</text>
   <Menu name="Add"><text>Add</text>
-  <Action name="formula_addtext"/>
-  <Action name="formula_addroot"/>
-  <Action name="formula_addfrac"/>
-  <Action name="formula_addbra"/>
-  <Action name="formula_addintegral"/>
-  <Action name="formula_addsum"/>
-  <Action name="formula_addproduct"/>
-  <Action name="formula_addmatrix"/>
-  <Action name="formula_add_one_by_two_matrix"/>
-  <Action name="formula_addoverline"/>
-  <Action name="formula_addunderline"/>
-  <Action name="formula_addmultiline"/>
+  <Action name="addtext"/>
+  <Action name="addroot"/>
+  <Action name="addfrac"/>
+  <Action name="addbra"/>
+  <Action name="addintegral"/>
+  <Action name="addsum"/>
+  <Action name="addproduct"/>
+  <Action name="addmatrix"/>
+  <Action name="add_one_by_two_matrix"/>
+  <Action name="addoverline"/>
+  <Action name="addunderline"/>
+  <Action name="addmultiline"/>
   <Separator/>
   <Action name="formula_addupperindex"/>
   <Action name="formula_addlowerindex"/>

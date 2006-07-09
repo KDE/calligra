@@ -1,17 +1,21 @@
-2004-08-30
+02.07.2006
 
-Oasis format:
--------------
-todo:
------
--> Load oasis format
+There is work going on the 1.6 branch with Alfredo implementing full MathML support.
+His changes will be merged soon.
 
-Done:
------
--> Save oasis format
+Martin is working on the trunk for KOffice 2. He redesigns the libraries to make them
+ready for the KFormulaShape in KOffice 2. This will be the usual way to work with
+formulas. KWord will hold formulas as KFormulaShape and also every other KOffice app
+is able to do so.
 
-In progress:
-------------
-I don't know if libkformula implement 100% MathML format
+Further possible features:
+- new GUI ( will come )
+- updated and improved LaTex filters ( is important )
+- filter for Ms equation format ( is it documented? )
+- support for different editing ways:
+     - WYSIWYG ( the thing we had so far )
+     - OpenOffice syntax
+     - direct MathMl tree editing
+     - direct Latex input
+- integration of KFormula with KSpread
 
-Laurent Montel <montel@kde.org>

@@ -1,5 +1,5 @@
-
 project(kformula)
+
 add_subdirectory( pics )
 
 include_directories(${KFORMULA_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
@@ -8,14 +8,12 @@ include_directories(${KFORMULA_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES
 ########### next target ###############
 
 set(kformulapart_PART_SRCS 
-   kformula_doc.cc 
-   kformula_view.cc 
-   kformula_view_adaptor.cc
-   kformula_factory.cc 
-   kformulawidget.cc 
-   kfconfig.cc 
-   formulastring.cc 
-   fsparser.cc )
+   KFormulaPartDocument.cpp 
+   KFormulaPartView.cpp 
+   KFormulaPartViewAdaptor.cpp
+   KFormulaPartFactory.cpp
+   KFormulaCanvas.cpp 
+   KFormulaConfigDialog.cpp )
 
 kde4_automoc(${kformulapart_PART_SRCS})
 
@@ -23,14 +21,14 @@ kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformulapart )
 
-target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui kformulalib kotext )
+target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui kformulalib )
 
 install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
 
-set(kformula_KDEINIT_SRCS main.cc )
+set(kformula_KDEINIT_SRCS main.cpp )
 
 kde4_automoc(${kformula_KDEINIT_SRCS})
 
