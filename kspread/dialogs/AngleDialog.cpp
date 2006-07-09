@@ -37,7 +37,7 @@
 #include <kspread_sheet.h>
 #include <kspread_view.h>
 
-#include "kspread_dlg_angle.h"
+#include "AngleDialog.h"
 
 using namespace KSpread;
 
@@ -93,4 +93,4 @@ void AngleDialog::slotDefault()
 }
 
 
-#include "kspread_dlg_angle.moc"
+#include "AngleDialog.moc"

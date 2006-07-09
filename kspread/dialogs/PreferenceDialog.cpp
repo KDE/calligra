@@ -51,7 +51,7 @@
 #include "kspread_locale.h"
 #include "kspread_editors.h"
 
-#include "kspread_dlg_preference.h"
+#include "PreferenceDialog.h"
 
 using namespace KSpread;
 
@@ -975,4 +975,4 @@ void configureSpellPage::slotDefault()
 
 ////
 
-#include "kspread_dlg_preference.moc"
+#include "PreferenceDialog.moc"

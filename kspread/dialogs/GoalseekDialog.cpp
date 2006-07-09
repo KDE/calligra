@@ -23,7 +23,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_dlg_goalseek.h"
+#include "GoalseekDialog.h"
 
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
@@ -481,5 +481,5 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   m_maxIter = 0;
 }
 
-#include "kspread_dlg_goalseek.moc"
+#include "GoalseekDialog.moc"
 

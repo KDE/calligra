@@ -18,7 +18,7 @@
 */
 
 
-#include "kspread_dlg_find.h"
+#include "FindDialog.h"
 #include <QCheckBox>
 #include <QLayout>
 //Added by qt3to4:
@@ -167,4 +167,4 @@ bool SearchDlg::searchInAllSheet() const
 }
 
 
-#include "kspread_dlg_find.moc"
+#include "FindDialog.moc"

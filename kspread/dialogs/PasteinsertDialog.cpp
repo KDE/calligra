@@ -29,7 +29,7 @@
 #include <QRadioButton>
 #include <QCheckBox>
 
-#include "kspread_dlg_pasteinsert.h"
+#include "PasteinsertDialog.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_sheet.h"
@@ -81,4 +81,4 @@ void PasteInsertDialog::slotOk()
     accept();
 }
 
-#include "kspread_dlg_pasteinsert.moc"
+#include "PasteinsertDialog.moc"

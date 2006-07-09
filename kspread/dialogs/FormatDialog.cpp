@@ -38,7 +38,7 @@
 #include <ksimpleconfig.h>
 #include <kinstance.h>
 
-#include "kspread_dlg_format.h"
+#include "FormatDialog.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 #include "kspread_sheet.h"
@@ -361,4 +361,4 @@ bool FormatDialog::parseXML( const QDomDocument& doc )
     return true;
 }
 
-#include "kspread_dlg_format.moc"
+#include "FormatDialog.moc"

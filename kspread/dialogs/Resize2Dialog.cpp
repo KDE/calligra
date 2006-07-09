@@ -46,7 +46,7 @@
 #include "manipulator_rowcol.h"
 #include "selection.h"
 
-#include "kspread_dlg_resize2.h"
+#include "Resize2Dialog.h"
 
 using namespace KSpread;
 
@@ -195,4 +195,4 @@ void ResizeColumn::slotDefault()
 }
 
 
-#include "kspread_dlg_resize2.moc"
+#include "Resize2Dialog.moc"

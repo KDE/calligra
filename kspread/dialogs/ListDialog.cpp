@@ -38,7 +38,7 @@
 #include "kspread_factory.h"
 #include "kspread_locale.h"
 
-#include "kspread_dlg_list.h"
+#include "ListDialog.h"
 
 using namespace KSpread;
 
@@ -328,4 +328,4 @@ void ListDialog::slotCopy()
 }
 
 
-#include "kspread_dlg_list.moc"
+#include "ListDialog.moc"

@@ -36,7 +36,7 @@
 #include "kspread_map.h"
 #include "commands.h"
 
-#include "kspread_dlg_show.h"
+#include "ShowDialog.h"
 
 using namespace KSpread;
 
@@ -118,4 +118,4 @@ void ShowDialog::slotOk()
     accept();
 }
 
-#include "kspread_dlg_show.moc"
+#include "ShowDialog.moc"

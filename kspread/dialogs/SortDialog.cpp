@@ -51,7 +51,7 @@
 #include <kvbox.h>
 #include <kinstance.h>
 
-#include "kspread_dlg_sort.h"
+#include "SortDialog.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
 #include "kspread_sheet.h"
@@ -630,4 +630,4 @@ void SortDialog::firstRowHeaderChanged( int /*state*/ )
   }*/
 }
 
-#include "kspread_dlg_sort.moc"
+#include "SortDialog.moc"

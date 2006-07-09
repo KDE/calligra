@@ -24,7 +24,7 @@
 */
 
 
-#include "kspread_dlg_reference.h"
+#include "ReferenceDialog.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
@@ -370,4 +370,4 @@ void EditAreaName::slotOk()
   accept();
 }
 
-#include "kspread_dlg_reference.moc"
+#include "ReferenceDialog.moc"

@@ -55,7 +55,7 @@
 #include <selection.h>
 #include <valueconverter.h>
 
-#include "kspread_dlg_cons.h"
+#include "ConsDialog.h"
 
 using namespace KSpread;
 
@@ -693,4 +693,4 @@ QString ConsolidateDialog::evaluate( const QString& formula, Sheet* sheet )
   return result;
 }
 
-#include "kspread_dlg_cons.moc"
+#include "ConsDialog.moc"

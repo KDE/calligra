@@ -21,7 +21,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_dlg_paperlayout.h"
+#include "PaperlayoutDialog.h"
 #include <kspread_doc.h>
 #include "kspread_map.h"
 #include "kspread_sheet.h"
@@ -567,4 +567,4 @@ bool PaperLayout::eventFilter( QObject* obj, QEvent* ev )
 }
 
 
-#include "kspread_dlg_paperlayout.moc"
+#include "PaperlayoutDialog.moc"

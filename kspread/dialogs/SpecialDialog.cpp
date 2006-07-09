@@ -31,7 +31,7 @@
 #include "kspread_view.h"
 #include "selection.h"
 
-#include "kspread_dlg_special.h"
+#include "SpecialDialog.h"
 
 using namespace KSpread;
 
@@ -106,4 +106,4 @@ void SpecialPasteDialog::slotToggled( bool b )
     divisionButton->setEnabled( !b );
 }
 
-#include "kspread_dlg_special.moc"
+#include "SpecialDialog.moc"

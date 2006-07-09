@@ -31,7 +31,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 
-#include "kspread_dlg_formula.h"
+#include "FormulaDialog.h"
 #include "kspread_canvas.h"
 #include "kspread_util.h"
 #include "kspread_editors.h"
@@ -772,4 +772,4 @@ void FormulaDialog::closeEvent ( QCloseEvent * e )
   e->accept();
 }
 
-#include "kspread_dlg_formula.moc"
+#include "FormulaDialog.moc"

@@ -33,7 +33,7 @@
 #include "kspread_view.h"
 #include "region.h"
 
-#include "kspread_dlg_showColRow.h"
+#include "ShowColRowDialog.h"
 
 using namespace KSpread;
 
@@ -156,4 +156,4 @@ void ShowColRow::slotOk()
   accept();
 }
 
-#include "kspread_dlg_showColRow.moc"
+#include "ShowColRowDialog.moc"

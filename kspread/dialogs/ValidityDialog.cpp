@@ -21,7 +21,7 @@
 */
 
 
-#include "kspread_dlg_validity.h"
+#include "ValidityDialog.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
@@ -832,4 +832,4 @@ void DlgValidity::OkPressed()
   accept();
 }
 
-#include "kspread_dlg_validity.moc"
+#include "ValidityDialog.moc"

@@ -20,7 +20,7 @@
 */
 
 #include "kspread_cell.h"
-#include "kspread_dlg_database.h"
+#include "DatabaseDialog.h"
 #include "kspread_doc.h"
 #include "kspread_sheet.h"
 #include "kspread_util.h"
@@ -1201,6 +1201,6 @@ void DatabaseDialog::sheetViewClicked( Q3ListViewItem * )
 }
 
 
-#include "kspread_dlg_database.moc"
+#include "DatabaseDialog.moc"
 
 #endif // QT_NO_SQL

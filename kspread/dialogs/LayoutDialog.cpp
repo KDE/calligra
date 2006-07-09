@@ -61,7 +61,7 @@
 #include <KoUnitWidgets.h>
 
 #include "kspread_canvas.h"
-#include "kspread_dlg_layout.h"
+#include "LayoutDialog.h"
 #include "kspread_locale.h"
 #include "kspread_sheet.h"
 #include "kspread_style.h"
@@ -3964,5 +3964,5 @@ void CellFormatPagePattern::apply(FormatManipulator *_obj)
     _obj->setBackgroundColor( bgColor );
 }
 
-#include "kspread_dlg_layout.moc"
+#include "LayoutDialog.moc"
 

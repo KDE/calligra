@@ -18,36 +18,36 @@ include_directories( tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kc
 
 ########### next target ###############
 SET (dialogs_DIR_SRCS
-	dialogs/kspread_dlg_angle.cc
-	dialogs/kspread_dlg_area.cc
-	dialogs/kspread_dlg_comment.cc
-	dialogs/kspread_dlg_conditional.cc
-	dialogs/kspread_dlg_cons.cc
-	dialogs/kspread_dlg_csv.cc
-	dialogs/kspread_dlg_database.cc
-	dialogs/kspread_dlg_format.cc
-	dialogs/kspread_dlg_formula.cc
-	dialogs/kspread_dlg_goalseek.cc
-	dialogs/kspread_dlg_goto.cc
-	dialogs/kspread_dlg_insert.cc
-	dialogs/kspread_dlg_layout.cc
-	dialogs/kspread_dlg_list.cc
-	dialogs/kspread_dlg_paperlayout.cc
-	dialogs/kspread_dlg_pasteinsert.cc
-	dialogs/kspread_dlg_preference.cc
-	dialogs/kspread_dlg_reference.cc
-	dialogs/kspread_dlg_resize2.cc
-	dialogs/kspread_dlg_series.cc
-	dialogs/kspread_dlg_show.cc
-	dialogs/kspread_dlg_showColRow.cc
-	dialogs/kspread_dlg_sort.cc
-	dialogs/kspread_dlg_special.cc
-	dialogs/kspread_dlg_styles.cc
-	dialogs/kspread_dlg_subtotal.cc
-	dialogs/kspread_dlg_validity.cc
+	dialogs/AngleDialog.cpp
+	dialogs/AreaDialog.cpp
+	dialogs/CommentDialog.cpp
+	dialogs/ConditionalDialog.cpp
+	dialogs/ConsDialog.cpp
+	dialogs/CsvDialog.cpp
+	dialogs/DatabaseDialog.cpp
+	dialogs/FormatDialog.cpp
+	dialogs/FormulaDialog.cpp
+	dialogs/GoalseekDialog.cpp
+	dialogs/GotoDialog.cpp
+	dialogs/InsertDialog.cpp
+	dialogs/LayoutDialog.cpp
+	dialogs/ListDialog.cpp
+	dialogs/PaperlayoutDialog.cpp
+	dialogs/PasteinsertDialog.cpp
+	dialogs/PreferenceDialog.cpp
+	dialogs/ReferenceDialog.cpp
+	dialogs/Resize2Dialog.cpp
+	dialogs/SeriesDialog.cpp
+	dialogs/ShowDialog.cpp
+	dialogs/ShowColRowDialog.cpp
+	dialogs/SortDialog.cpp
+	dialogs/SpecialDialog.cpp
+	dialogs/StylesDialog.cpp
+	dialogs/SubtotalDialog.cpp
+	dialogs/ValidityDialog.cpp
 	dialogs/link.cc
 	dialogs/sheet_properties.cc
-	dialogs/kspread_dlg_find.cc
+	dialogs/FindDialog.cpp
 	dialogs/SheetSelectPage.cc
 	)
 

@@ -52,7 +52,7 @@
 #include <kspread_undo.h>
 #include <kspread_view.h>
 
-#include "kspread_dlg_csv.h"
+#include "CsvDialog.h"
 
 using namespace KSpread;
 
@@ -741,4 +741,4 @@ void CSVDialog::ignoreDuplicatesChanged(int)
   fillSheet();
 }
 
-#include "kspread_dlg_csv.moc"
+#include "CsvDialog.moc"

@@ -30,13 +30,13 @@
 
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
-#include "kspread_dlg_layout.h"
+#include "LayoutDialog.h"
 #include "kspread_sheet.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
 #include "kspread_view.h"
 
-#include "kspread_dlg_styles.h"
+#include "StylesDialog.h"
 
 using namespace KSpread;
 
@@ -337,5 +337,5 @@ void StyleDialog::slotSelectionChanged( Q3ListViewItem * item )
 }
 
 
-#include "kspread_dlg_styles.moc"
+#include "StylesDialog.moc"
 

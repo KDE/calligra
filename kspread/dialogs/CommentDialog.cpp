@@ -36,7 +36,7 @@
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 
-#include "kspread_dlg_comment.h"
+#include "CommentDialog.h"
 
 using namespace KSpread;
 
@@ -89,4 +89,4 @@ void CommentDialog::slotOk()
     accept();
 }
 
-#include "kspread_dlg_comment.moc"
+#include "CommentDialog.moc"

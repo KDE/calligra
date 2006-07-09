@@ -35,7 +35,7 @@
 #include "kspread_view.h"
 #include "selection.h"
 
-#include "kspread_dlg_area.h"
+#include "AreaDialog.h"
 
 using namespace KSpread;
 
@@ -107,4 +107,4 @@ void AreaDialog::slotOk()
   }
 }
 
-#include "kspread_dlg_area.moc"
+#include "AreaDialog.moc"

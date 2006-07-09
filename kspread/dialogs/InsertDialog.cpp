@@ -38,7 +38,7 @@
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 
-#include "kspread_dlg_insert.h"
+#include "InsertDialog.h"
 
 using namespace KSpread;
 
@@ -152,4 +152,4 @@ void InsertDialog::slotOk()
     accept();
 }
 
-#include "kspread_dlg_insert.moc"
+#include "InsertDialog.moc"

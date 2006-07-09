@@ -33,7 +33,7 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 
-#include "kspread_dlg_subtotal.h"
+#include "SubtotalDialog.h"
 
 using namespace KSpread;
 
@@ -322,5 +322,5 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
   return true;
 }
 
-#include "kspread_dlg_subtotal.moc"
+#include "SubtotalDialog.moc"
 

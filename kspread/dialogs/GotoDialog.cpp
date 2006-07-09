@@ -36,7 +36,7 @@
 #include "kspread_view.h"
 #include "selection.h"
 
-#include "kspread_dlg_goto.h"
+#include "GotoDialog.h"
 
 using namespace KSpread;
 
@@ -93,4 +93,4 @@ void GotoDialog::slotOk()
     m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
-#include "kspread_dlg_goto.moc"
+#include "GotoDialog.moc"

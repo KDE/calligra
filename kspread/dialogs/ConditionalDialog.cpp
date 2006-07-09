@@ -21,7 +21,7 @@
 */
 
 
-#include "kspread_dlg_conditional.h"
+#include "ConditionalDialog.h"
 #include "kspread_condition.h"
 
 #include "kspread_canvas.h"
@@ -669,6 +669,6 @@ void ConditionalDialog::slotOk()
   accept();
 }
 
-#include "kspread_dlg_conditional.moc"
+#include "ConditionalDialog.moc"
 
 

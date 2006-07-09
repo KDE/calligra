@@ -24,7 +24,7 @@
 */
 
 
-#include "kspread_dlg_series.h"
+#include "SeriesDialog.h"
 #include "kspread_doc.h"
 #include "kspread_editors.h"
 #include "kspread_sheet.h"
@@ -200,4 +200,4 @@ void SeriesDlg::slotOk()
 }
 
 
-#include "kspread_dlg_series.moc"
+#include "SeriesDialog.moc"
