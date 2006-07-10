@@ -20,37 +20,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QButtonGroup>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QClipboard>
-#include <QComboBox>
-#include <QLabel>
-#include <QLineEdit>
-#include <QMimeData>
-#include <QPainter>
-#include <QPushButton>
-#include <QRadioButton>
-#include <q3table.h>
-#include <QLayout>
-#include <QVector>
-//Added by qt3to4:
-#include <QTextStream>
-#include <QGridLayout>
-
-#include <kapplication.h>
-#include <kdebug.h>
-#include <kdialog.h>
-#include <kfiledialog.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kpushbutton.h>
-
-#include <Cell.h>
-#include <Doc.h>
-#include <Sheet.h>
-#include <Undo.h>
-#include <View.h>
+#include "header.h"
 
 #include "CsvDialog.h"
 

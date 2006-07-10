@@ -251,4 +251,4 @@ void GeneralProperty::slotHeightChanged( double value )
 }
 
 
-#include "kspread_generalProperty.moc"
+#include "GeneralProperty.moc"

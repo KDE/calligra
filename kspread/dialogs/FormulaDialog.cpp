@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 
 #include "FormulaDialog.h"
+#include "Cell.h"
 #include "Canvas.h"
 #include "Util.h"
 #include "Editors.h"

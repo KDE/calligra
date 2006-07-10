@@ -30,6 +30,8 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 
+//KSpread includes
+#include "Cell.h"
 #include "Canvas.h"
 #include "Doc.h"
 #include "Selection.h"

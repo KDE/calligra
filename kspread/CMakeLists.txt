@@ -15,6 +15,7 @@ endif(KOFFICE_ENABLE_SCRIPTING)
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
+SET_SOURCE_FILES_PROPERTIES(dialogs/CsvDialog.cpp dialogs/AngleDialog.cpp dialogs/AreaDialog.cpp COMPILE_FLAGS "-ftime-report")
 
 ########### next target ###############
 SET (dialogs_DIR_SRCS
@@ -136,8 +137,8 @@ SET (kspreadcommon_LIB_SRCS
 	Manipulator_format.cpp
 	Manipulator_rowcol.cpp
 	Manipulator_sort.cpp
-	kspread_generalProperty.cpp
-	kspread_propertyEditor.cpp
+	GeneralProperty.cpp
+	PropertyEditor.cpp
 	)
 
 kde4_automoc(${kspreadcommon_LIB_SRCS})
@@ -227,7 +228,7 @@ install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 #	KSpreadMapIface.skel KSpreadRowIface.skel KSpreadRowIface.cpp KSpreadTableIface.cpp \
 #	KSpreadTableIface.skel KSpreadViewIface.skel KSpreadViewIface.cpp \
 #		Genvalidationstyle.cpp Region.cpp Selection.cpp Manipulator.cpp Manipulator_data.cpp \
-#	kspread_generalProperty.cpp kspread_propertyEditor.cpp
+#	GeneralProperty.cpp PropertyEditor.cpp
 #
 #libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 #libkspreadcommon_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \

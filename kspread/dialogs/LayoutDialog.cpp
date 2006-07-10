@@ -60,6 +60,7 @@
 
 #include <KoUnitWidgets.h>
 
+#include "Cell.h"
 #include "Canvas.h"
 #include "LayoutDialog.h"
 #include "Locale.h"

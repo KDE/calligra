@@ -39,6 +39,7 @@
 #include <kinstance.h>
 
 #include "FormatDialog.h"
+#include "Cell.h"
 #include "Doc.h"
 #include "Locale.h"
 #include "Sheet.h"

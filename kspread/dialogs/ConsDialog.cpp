@@ -28,6 +28,7 @@
 
 #include <assert.h>
 
+//Qt Includes
 #include <QCheckBox>
 #include <QCloseEvent>
 #include <QComboBox>
@@ -38,11 +39,13 @@
 //Added by qt3to4:
 #include <Q3ListBox>
 
+//KDE Includes
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
 
+//KSpread Includes
 #include <Canvas.h>
 #include <Doc.h>
 #include <Global.h>
@@ -54,6 +57,7 @@
 #include <Formula.h>
 #include <Selection.h>
 #include <Valueconverter.h>
+#include <Cell.h>
 
 #include "ConsDialog.h"
 

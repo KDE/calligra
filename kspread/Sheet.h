@@ -34,7 +34,7 @@
 #include <KoDocumentChild.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
 
-#include "Autofill.h"
+//#include "Autofill.h"
 #include "Cell.h"
 #include "Format.h"
 #include "Style.h"
@@ -62,6 +62,7 @@ class Part;
 
 namespace KSpread
 {
+class AutoFillSequence;
 class Canvas;
 class Cell;
 class EmbeddedChart;

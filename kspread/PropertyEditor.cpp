@@ -497,4 +497,4 @@ void PropertyEditor::slotDone()
         m_generalProperty->apply();
 }
 
-#include "kspread_propertyEditor.moc"
+#include "PropertyEditor.moc"
