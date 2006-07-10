@@ -15,7 +15,6 @@ endif(KOFFICE_ENABLE_SCRIPTING)
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
-SET_SOURCE_FILES_PROPERTIES(dialogs/CsvDialog.cpp dialogs/AngleDialog.cpp dialogs/AreaDialog.cpp COMPILE_FLAGS "-ftime-report")
 
 ########### next target ###############
 SET (dialogs_DIR_SRCS
