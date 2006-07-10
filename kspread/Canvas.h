@@ -420,9 +420,10 @@ protected:
     virtual void focusInEvent( QFocusEvent* );
     virtual void focusOutEvent( QFocusEvent* );
     virtual void resizeEvent( QResizeEvent * _ev );
-    virtual void dragMoveEvent(QDragMoveEvent * _ev);
-    virtual void dropEvent(QDropEvent * _ev);
-    virtual void dragLeaveEvent(QDragLeaveEvent * _ev);
+    virtual void dragEnterEvent(QDragEnterEvent*);
+    virtual void dragMoveEvent(QDragMoveEvent*);
+    virtual void dragLeaveEvent(QDragLeaveEvent*);
+    virtual void dropEvent(QDropEvent*);
 
     /**
      * Checks to see if there is a size grip for a highlight range at a given position.

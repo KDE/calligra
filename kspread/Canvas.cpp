@@ -276,7 +276,7 @@ Canvas::Canvas(View *view)
     connect( d->view, SIGNAL( autoScroll( const QPoint & )), this, SLOT( slotAutoScroll( const QPoint &)));
   }
   setFocus();
-  installEventFilter( this );
+//   installEventFilter( this );
   setAcceptDrops( true );
   setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
@@ -1731,19 +1731,36 @@ void Canvas::focusOutEvent( QFocusEvent* )
     d->view->disableAutoScroll();
 }
 
-void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
+void Canvas::dragEnterEvent( QDragEnterEvent* event )
+{
+  const QMimeData* mimeData = event->mimeData();
+  if ( mimeData->hasText() ||
+       mimeData->hasFormat( "application/x-kspread-snippet" ) )
+  {
+    event->acceptProposedAction();
+  }
+}
+
+void Canvas::dragMoveEvent( QDragMoveEvent* event )
 {
   register Sheet * const sheet = activeSheet();
   if (!sheet)
   {
-    _ev->ignore();
+    event->ignore();
     return;
   }
 
-  const QMimeData* mimeData = _ev->mimeData();
-
-  _ev->setAccepted( mimeData->hasText() ||
-                    mimeData->hasFormat( "application/x-kspread-snippet" ) );
+  const QMimeData* mimeData = event->mimeData();
+  if ( mimeData->hasText() ||
+       mimeData->hasFormat( "application/x-kspread-snippet" ) )
+  {
+    event->acceptProposedAction();
+  }
+  else
+  {
+    event->ignore();
+    return;
+  }
 
   double dwidth = d->view->doc()->unzoomItXOld( width() );
   double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
@@ -1755,14 +1772,14 @@ void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
 
   double ev_PosX;
   if (sheet->layoutDirection()==Sheet::RightToLeft)
-    ev_PosX = dwidth - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
+    ev_PosX = dwidth - d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
   else
-    ev_PosX = d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
+    ev_PosX = d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
 
-  double ev_PosY = d->view->doc()->unzoomItYOld( _ev->pos().y() ) + yOffset();
+  double ev_PosY = d->view->doc()->unzoomItYOld( event->pos().y() ) + yOffset();
 
   if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
-    _ev->ignore( r1 );
+    event->ignore( r1 );
 }
 
 void Canvas::dragLeaveEvent( QDragLeaveEvent * )
