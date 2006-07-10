@@ -125,7 +125,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
   <customwidget>
    <class>KSpread::RegionSelector</class>
    <extends>QWidget</extends>
-   <header>kspread_editors.h</header>
+   <header>Editors.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
