@@ -13,7 +13,7 @@ if(KOFFICE_ENABLE_SCRIPTING)
     add_subdirectory(scripting)
 endif(KOFFICE_ENABLE_SCRIPTING)
 
-include_directories( tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
 
 ########### next target ###############
