@@ -32,66 +32,13 @@
 /* Version number of package */
 #define VERSION "1.4.88"
 
-/* Defined if compiling without arts */
-/* #undef WITHOUT_ARTS */
-
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
 /* #undef WORDS_BIGENDIAN */
 
-/* Defines the executable of xmllint */
-#define XMLLINT "/usr/bin/xmllint"
-
-
-
-
-/*
- * AIX defines FD_SET in terms of bzero, but fails to include <strings.h>
- * that defines bzero.
- */
-
-#if defined(_AIX)
-#include <strings.h>
-#endif
-
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64
-
-
-#if !defined(HAVE_RES_INIT_PROTO)
-#ifdef __cplusplus
-extern "C" {
-#endif
-int res_init(void);
-#ifdef __cplusplus
-}
-#endif
-#endif
-
-
-
-#if !defined(HAVE_STRLCAT_PROTO)
-#ifdef __cplusplus
-extern "C" {
-#endif
-unsigned long strlcat(char*, const char*, unsigned long);
-#ifdef __cplusplus
-}
-#endif
-#endif
-
-
-
-#if !defined(HAVE_STRLCPY_PROTO)
-#ifdef __cplusplus
-extern "C" {
-#endif
-unsigned long strlcpy(char*, const char*, unsigned long);
-#ifdef __cplusplus
-}
-#endif
-#endif
 
 
 /* Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2). */
@@ -99,12 +46,3 @@ unsigned long strlcpy(char*, const char*, unsigned long);
 
 /* Define for large files, on AIX-style hosts. */
 /* #undef _LARGE_FILES */
-
-
-/*
- * On HP-UX, the declaration of vsnprintf() is needed every time !
- */
-
-#if defined(__SVR4) && !defined(__svr4__)
-#define __svr4__ 1
-#endif
