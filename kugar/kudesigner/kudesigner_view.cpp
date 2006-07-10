@@ -41,7 +41,6 @@
 #include <QDockWidget>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <k3widgetaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -103,7 +102,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
     m_structure = new Kudesigner::StructureWidget( dw1 );
     m_propertyEditor = new Editor( dw2 );
 #warning "kde4: port it"
-#if 0    
+#if 0
 	dw1->boxLayout() ->addWidget( m_structure, 1 );
     dw2->boxLayout() ->addWidget( m_propertyEditor, 1 );
     dw1->setFixedExtentWidth( 400 );
@@ -225,19 +224,21 @@ void KudesignerView::initActions()
     itemsLine = new KToggleAction( i18n( "Line" ), "frame_chart", 0, this,
                                   SLOT( slotAddItemLine() ), actionCollection(), "line" );
 
-	QActionGroup *group = new QActionGroup( this );
+    QActionGroup *group = new QActionGroup( this );
     group->addAction( itemsNothing );
-	group->addAction( itemsLabel);
-	group->addAction( itemsField);
-	group->addAction( itemsSpecial );
-	group->addAction( itemsCalculated );
-	group->addAction( itemsLine );
-	
-    gridActionLabel = new K3WidgetAction( gridLabel, i18n( "Grid Label" ), 0, this,
-                                         0, actionCollection(), "gridlabel" );
+    group->addAction( itemsLabel);
+    group->addAction( itemsField);
+    group->addAction( itemsSpecial );
+    group->addAction( itemsCalculated );
+    group->addAction( itemsLine );
 
-    gridAction = new K3WidgetAction( gridBox, i18n( "Grid Size" ), 0, this,
-                                    0, actionCollection(), "gridaction" );
+    gridActionLabel = new KAction( i18n( "Grid Label" ), 0, this,
+                                   0, actionCollection(), "gridlabel" );
+    gridActionLabel->setDefaultWidget( gridLabel );
+
+    gridAction = new KAction( i18n( "Grid Size" ), 0, this,
+                              0, actionCollection(), "gridaction" );
+    gridAction->setDefaultWidget( gridBox );
 }
 
 void KudesignerView::updateReadWrite( bool /*readwrite*/ )
