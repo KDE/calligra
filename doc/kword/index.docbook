@@ -444,19 +444,18 @@ there are many possible authors (employees) and hundreds (or thousands) of docum
 <para>To enter document information, simply select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Document Information...</guimenuitem>
 </menuchoice> from the menubar.  This will bring up a dialog box with two tabs.</para>
-<para>The first tab is labeled <guilabel>Author</guilabel> and has blanks to enter the authors name, title, company and contact
-information (email address, telephone numbers and physical address).</para>
+<para>The first tab is labeled <guilabel>General</guilabel>. Enter a document <guilabel>Title</guilabel>, <guilabel>Subject</guilabel> lines, <guilabel>Keywords</guilabel> and an <guilabel>Abstract</guilabel>. </para>
+<para>The bottom of this page displays the <guilabel>Type</guilabel> of the document, the date of the creation and modification, the last printing date, the <guilabel>Total editing time</guilabel> and the <guilabel>Revision number</guilabel>. Click on <guibutton>Reset</guibutton> to clear all data and set the actual date as creation date.</para>
+<tip><para>Both the document <guilabel>Title</guilabel> and the <guilabel>Abstract</guilabel> can be accessed through<link linkend="variables">document variables</link>.</para></tip>
+<para>The second tab is labeled <guilabel>Author</guilabel> and has blanks to enter the authors name, <guilabel>Initials</guilabel>, <guilabel>Title</guilabel>, <guilabel>Position</guilabel>, <guilabel>Company</guilabel> and contact information (email address, telephone numbers and physical address).</para>
 <tip><para>Every value entered in this dialog can be inserted as a
 <link linkend="variables">document variables</link>.</para></tip>
-<para>At the bottom of the dialog is a button labeled <guibutton>Load From Address Book</guibutton>. Clicking 
-on this button will automatically insert your information contained in the &kde; address book into this &kword; document information dialog.</para>
+<para>At the bottom of the dialog is a button labeled <guibutton>Load From Address Book</guibutton>. Clicking on this button will automatically insert your information contained in the &kde; address book into this &kword; document information dialog.</para>
 <note><para>You must inform the &kde; address book which entry corresponds to your information.  </para>
 <para>To do this, open the &kde; address book, select the entry that contains your name and address.  Now select <menuchoice>
 <guimenu>Edit</guimenu><guimenuitem>Set as Personal Contact Data</guimenuitem></menuchoice>from the menubar in the &kde; address book. This only needs to be performed once.</para>
 <para>&kword; will now insert the entered information when the <guibutton>Load From Address Book</guibutton> button is clicked.</para></note>
-<para>The second tab is labeled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract. </para>
-<tip><para>Both the document title and the abstract can be accessed through
-<link linkend="variables">document variables</link>.</para></tip>
+<para>The second button <guibutton>Delete Personal Data</guibutton> allows you to remove all data of the entries on this page.</para>
 <para>When finished entering the information, click <guibutton>OK</guibutton> to apply the changes.
 If any document variables were changed, &kword; will update their values throughout the document.</para>
 </sect1>
