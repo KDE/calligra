@@ -21,8 +21,8 @@
 #include <csvexportdialog.h>
 #include <exportdialogui.h>
 
-#include <kspread_map.h>
-#include <kspread_sheet.h>
+#include <kspread/Map.h>
+#include <kspread/Sheet.h>
 
 #include <q3buttongroup.h>
 #include <QCheckBox>

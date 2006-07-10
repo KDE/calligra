@@ -32,12 +32,12 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
-#include <kspread_map.h>
-#include <kspread_sheet.h>
-#include <kspread_doc.h>
-#include <kspread_value.h>
-#include <kspread_view.h>
-#include <selection.h>
+#include <kspread/Map.h>
+#include <kspread/Sheet.h>
+#include <kspread/Doc.h>
+#include <kspread/Value.h>
+#include <kspread/View.h>
+#include <kspread/Selection.h>
 
 #include <csvexportdialog.h>
 

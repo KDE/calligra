@@ -33,13 +33,13 @@
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
-#include <kspread_doc.h>
-#include <kspread_global.h>
-#include <kspread_map.h>
-#include <kspread_sheet.h>
-#include <kspread_style.h>
-#include <kspread_style_manager.h>
-#include <kspread_cell.h>
+#include <kspread/Doc.h>
+#include <kspread/Global.h>
+#include <kspread/Map.h>
+#include <kspread/Sheet.h>
+#include <kspread/Style.h>
+#include <kspread/Style_manager.h>
+#include <kspread/Cell.h>
 
 #include <csvdialog.h>
 
