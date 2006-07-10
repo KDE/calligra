@@ -834,6 +834,98 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
+/**
+ * Reads our content from the MathML node. Sets the node to the next node
+ * that needs to be read. It is sometimes needed to read more than one node
+ * (e. g. for fence operators).
+ * Returns the number of nodes processed or -1 if it failed.
+ */
+int MatrixElement::readContentFromMathMLDom( QDomNode& node )
+{
+    // We have twice, since there may be empty elements and we need to know how
+    // many of them we have. So, first pass, get number of rows and columns
+
+    if ( BasicElement::readContentFromMathMLDom( node ) == -1 ) {
+        return -1;
+    }
+
+    int rows = 0;
+    int cols = 0;
+    QDomNode n = node;
+    while ( !n.isNull() ) {
+        if ( n.isElement() ) {
+            QDomElement e = n.toElement();
+            if ( e.tagName().lower() == "mtr")
+            {
+                rows++;
+
+                /* Determins the number of columns */
+                QDomNode cellnode = e.firstChild();
+                int cc = 0;
+
+                while ( !cellnode.isNull() ) {
+                    if ( cellnode.isElement() )
+                        cc++;
+                    cellnode = cellnode.nextSibling();
+                }
+                if ( cc > cols )
+                    cols = cc;
+            }
+        }
+        else {
+            kdDebug( DEBUGID ) << "<mtable> child: " << n.nodeName() << endl;
+            return -1;
+        }
+        n = n.nextSibling();
+    }
+
+    // Create elements
+    content.clear();
+    for (uint r = 0; r < rows; r++) {
+        QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
+        list->setAutoDelete(true);
+        content.append(list);
+        for (uint c = 0; c < cols; c++) {
+            MatrixSequenceElement* element = new MatrixSequenceElement(this);
+            list->append(element);
+        }
+    }
+
+    // Second pass, read elements now
+    uint r = 0;
+    uint c = 0;
+    while ( !node.isNull() ) {
+        if ( node.isElement() ) {
+            QDomElement e = node.toElement();
+            if ( e.tagName().lower() == "mtr" ) {
+                QDomNode cellnode = e.firstChild();
+                while ( !cellnode.isNull() ) {
+                    if ( cellnode.isElement() ) {
+                        QDomElement cellelement = cellnode.toElement();
+                        if ( cellelement.tagName().lower() != "mtd" ) {
+                            // TODO: Inferred mtd. Deprecated in MathML 2.0
+                            kdWarning( DEBUGID ) << "Unsupported tag " 
+                                                 << cellelement.tagName()
+                                                 << " inside matrix row\n";
+                        }
+                        else {
+                            SequenceElement* element = getElement(r, c);
+                            if ( element->buildFromMathMLDom( e ) == -1 )
+                                return -1;
+                            c++;
+                        }
+                    }
+                    cellnode = cellnode.nextSibling();
+                }
+                c = 0;
+                r++;
+            }
+        }
+        node = node.nextSibling();
+    }
+    return 1;
+}
+
 QString MatrixElement::toLatex()
 {
     //All the border handling must be implemented here too

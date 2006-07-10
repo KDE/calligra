@@ -74,7 +74,6 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     else if ( type == "mtable" 
               || type == "mlabeledtr"
               || type == "mtr"
-              || type == "mtd"
               || type == "maligngroup"
               || type == "malignmark" 
               || type == "maction"
@@ -89,7 +88,8 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
               || type == "mmultiscripts" ) return new IndexElement();
     else if ( type == "mfrac" )            return new FractionElement();
     else if ( type == "interval" )         return new BracketElement();
-    else if ( type == "mrow" )             return new SequenceElement();
+    else if ( type == "mrow"
+              || type == "mtd" )           return new SequenceElement();
     return 0;
 }
 

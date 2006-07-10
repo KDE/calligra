@@ -227,6 +227,14 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    /**
+     * Reads our content from the MathML node. Sets the node to the next node
+     * that needs to be read. It is sometimes needed to read more than one node
+     * (e. g. for fence operators).
+     * Returns the number of nodes processed or -1 if it failed.
+     */
+	virtual int readContentFromMathMLDom(QDomNode& node);
+
 private:
 
     MatrixSequenceElement* getElement(uint row, uint column)
