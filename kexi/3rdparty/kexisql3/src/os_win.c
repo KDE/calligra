@@ -258,7 +258,7 @@ int sqlite3OsOpenReadWrite(
    			 access = FILE_SHARE_READ;*/
       if( zWide ){
         h = CreateFileW(zWide,
-          GENERIC_READ | GENERIC_WRITE,
+          GENERIC_READ,
           access,
           NULL,
           OPEN_ALWAYS,
@@ -268,7 +268,7 @@ int sqlite3OsOpenReadWrite(
       }
       else {
         h = CreateFileA(zFilename,
-          GENERIC_READ | GENERIC_WRITE,
+          GENERIC_READ,
           access,
           NULL,
           OPEN_ALWAYS,
