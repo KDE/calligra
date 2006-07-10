@@ -44,17 +44,17 @@
 #include <KoDom.h>
 #include <ooutils.h>
 
-#include <kspread_cell.h>
-#include <kspread_condition.h>
-#include <kspread_doc.h>
-#include <kspread_global.h>
-#include <kspread_map.h>
-#include <kspread_sheet.h>
-#include <kspread_sheetprint.h>
-#include <kspread_style.h>
-#include <kspread_style_manager.h>
-#include <kspread_util.h>
-#include <kspread_value.h>
+#include <kspread/Cell.h>
+#include <kspread/Condition.h>
+#include <kspread/Doc.h>
+#include <kspread/Global.h>
+#include <kspread/Map.h>
+#include <kspread/Sheet.h>
+#include <kspread/Sheetprint.h>
+#include <kspread/Style.h>
+#include <kspread/Style_manager.h>
+#include <kspread/Util.h>
+#include <kspread/Value.h>
 
 #define SECSPERDAY (24 * 60 * 60)
 

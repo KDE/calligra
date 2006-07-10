@@ -22,7 +22,7 @@
 #define OpenCalc_IMPORT_H__
 
 #include <KoFilter.h>
-#include "kspread_format.h"
+#include "kspread/Format.h"
 
 #include <q3dict.h>
 #include <qdom.h>

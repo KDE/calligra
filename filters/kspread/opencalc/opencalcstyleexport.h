@@ -21,7 +21,7 @@
 #ifndef OPENCALCSTYLEEXPORT_H
 #define OPENCALCSTYLEEXPORT_H
 
-#include "kspread_format.h"
+#include "kspread/Format.h"
 
 #include <QColor>
 #include <QFont>

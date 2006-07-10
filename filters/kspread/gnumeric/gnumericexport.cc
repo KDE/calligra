@@ -36,12 +36,12 @@
 #include <Q3ValueList>
 #include <QByteArray>
 
-#include <kspread_map.h>
-#include <kspread_sheet.h>
-#include <kspread_doc.h>
-#include <kspread_view.h>
-#include <kspread_canvas.h>
-#include <kspread_sheetprint.h>
+#include <kspread/Map.h>
+#include <kspread/Sheet.h>
+#include <kspread/Doc.h>
+#include <kspread/View.h>
+#include <kspread/Canvas.h>
+#include <kspread/Sheetprint.h>
 #include <KoDocumentInfo.h>
 
 using namespace KSpread;

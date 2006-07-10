@@ -37,12 +37,12 @@
 #include <KoGlobal.h>
 
 // hehe >:->
-#include <kspread_doc.h>
-#include <kspread_map.h>
-#include <kspread_sheet.h>
-#include <kspread_sheetprint.h>
-#include <kspread_cell.h>
-#include <kspread_util.h>
+#include <kspread/Doc.h>
+#include <kspread/Map.h>
+#include <kspread/Sheet.h>
+#include <kspread/Sheetprint.h>
+#include <kspread/Cell.h>
+#include <kspread/Util.h>
 #include <KoDocumentInfo.h>
 
 #include <math.h>

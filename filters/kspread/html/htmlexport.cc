@@ -34,10 +34,10 @@
 #include <KoDocumentInfo.h>
 #include <kofficeversion.h>
 
-#include <kspread_map.h>
-#include <kspread_sheet.h>
-#include <kspread_doc.h>
-#include <kspread_util.h>
+#include <kspread/Map.h>
+#include <kspread/Sheet.h>
+#include <kspread/Doc.h>
+#include <kspread/Util.h>
 
 using namespace KSpread;
 

@@ -42,18 +42,18 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 
-#include <kspread_aboutdata.h>
-#include <kspread_cell.h>
-#include <kspread_doc.h>
-//#include <kspread_format.h>
-#include <kspread_map.h>
-#include <kspread_view.h>
-#include <kspread_canvas.h>
-#include <kspread_sheet.h>
-#include <kspread_sheetprint.h>
-#include <kspread_style.h>
-#include <kspread_style_manager.h>
-#include <kspread_util.h>
+#include <kspread/Aboutdata.h> // for version
+#include <kspread/Cell.h>
+#include <kspread/Doc.h>
+//#include <kspread/Format.h>
+#include <kspread/Map.h>
+#include <kspread/View.h>
+#include <kspread/Canvas.h>
+#include <kspread/Sheet.h>
+#include <kspread/Sheetprint.h>
+#include <kspread/Style.h>
+#include <kspread/Style_manager.h>
+#include <kspread/Util.h>
 
 using namespace KSpread;
 

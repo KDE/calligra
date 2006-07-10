@@ -25,10 +25,10 @@
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
 
-#include <kspread_doc.h>
-#include <kspread_sheet.h>
-#include <kspread_cell.h>
-#include <kspread_map.h>
+#include <kspread/Doc.h>
+#include <kspread/Sheet.h>
+#include <kspread/Cell.h>
+#include <kspread/Map.h>
 
 #include <qproimport.h>
 

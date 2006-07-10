@@ -21,11 +21,11 @@
 
 #include <KoGlobal.h>
 
-#include <kspread_cell.h>
-#include <kspread_doc.h>
-#include <kspread_sheet.h>
-#include <kspread_style.h>
-#include <kspread_style_manager.h>
+#include <kspread/Cell.h>
+#include <kspread/Doc.h>
+#include <kspread/Sheet.h>
+#include <kspread/Style.h>
+#include <kspread/Style_manager.h>
 
 #include <qdom.h>
 
