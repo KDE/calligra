@@ -17,23 +17,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// KSpread
 #include "Editors.h"
 #include "Canvas.h"
 #include "Cell.h"
 #include "Doc.h"
 #include "Selection.h"
+#include "Format.h"
 #include "Sheet.h"
 #include "View.h"
 #include "Util.h"
 #include "Formula.h"
 #include "Functions.h"
 
+// KDE
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kicon.h>
 #include <klistbox.h>
 #include <ktextedit.h>
+#include <klocale.h>
 
+// Qt
 #include <QAbstractButton>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -53,8 +58,6 @@
 //Added by qt3to4:
 #include <q3listbox.h>
 
-#warning "kde4: I think that it's not a good idea to use private class"
-//#include <private/qrichtext_p.h>
 
 using namespace KSpread;
 

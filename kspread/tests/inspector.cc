@@ -19,6 +19,7 @@
 
 #include "inspector.h"
 
+// Qt
 #include <QFrame>
 #include <QLayout>
 #include <q3listview.h>
@@ -28,7 +29,9 @@
 
 #include <kpagedialog.h>
 
+// KSpread
 #include "Cell.h"
+#include "Format.h"
 #include "Style.h"
 #include "Sheet.h"
 #include "Dependencies.h"

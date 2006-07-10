@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "Format.h"
 #include "Sheet.h"
 #include "Selection.h"
 #include "Locale.h"

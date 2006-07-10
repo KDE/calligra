@@ -43,6 +43,7 @@
 #include "Doc.h"
 #include "Locale.h"
 #include "Sheet.h"
+#include "Format.h"
 #include "Style.h"
 #include "Style_manager.h"
 #include "Undo.h"

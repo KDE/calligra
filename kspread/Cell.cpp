@@ -55,6 +55,7 @@
 #include "Format.h"
 #include "Global.h"
 #include "Map.h"
+#include "Object.h"
 #include "Sheet.h"
 #include "Sheetprint.h"
 #include "Style.h"
@@ -82,6 +83,8 @@
 #include <kmessagebox.h>
 
 #include <kdebug.h>
+
+#include <Cell.h>
 
 using namespace KSpread;
 

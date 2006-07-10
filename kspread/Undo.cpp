@@ -23,6 +23,7 @@
 #include "Global.h"
 #include "Locale.h"
 #include "Map.h"
+#include "Format.h"
 #include "Sheet.h"
 #include "Sheetprint.h"
 #include "Style.h"

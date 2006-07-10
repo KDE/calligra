@@ -28,6 +28,7 @@
 #include <KoDom.h>
 #include <KoGenStyles.h>
 #include <KoOasisSettings.h>
+#include <KoOasisLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 

@@ -19,16 +19,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// Qt
 #include <QCheckBox>
 #include <QComboBox>
 #include <q3listview.h>
 #include <QVector>
 
+// KDE
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
+// KSpread
 #include "Sheet.h"
+#include "Format.h"
 #include "View.h"
 #include "Doc.h"
 #include "Util.h"

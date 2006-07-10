@@ -41,10 +41,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// std
 #include <assert.h>
 #include <float.h>
 #include <stdlib.h>
 
+// Qt
 #include <QApplication>
 #include <QBuffer>
 #include <QByteArray>
@@ -70,6 +72,7 @@
 #include <QWheelEvent>
 #include <QWidget>
 
+// KDE
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -78,18 +81,21 @@
 #include <ksharedptr.h>
 #include <kwordwrap.h>
 
+// KOffice
 #include <KoOasisStore.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentChild.h>
 #include <KoRect.h>
 
+// KSpread
 #include "Commands.h"
 #include "Doc.h"
 #include "Editors.h"
 #include "Global.h"
 #include "Locale.h"
 #include "Map.h"
+#include "Format.h"
 #include "Sheet.h"
 #include "Undo.h"
 #include "Util.h"

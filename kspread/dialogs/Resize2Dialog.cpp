@@ -25,21 +25,26 @@
 
 #include <float.h>
 
+// Qt
 #include <QLabel>
 #include <QLayout>
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+// KDE
 #include <knuminput.h>
 
+// KOffice
 #include <KoUnit.h>
 #include <KoUnitWidgets.h>
 
+// KSpread
 #include <Canvas.h>
 #include <Doc.h>
 #include <Global.h>
 #include <Locale.h>
+#include <Format.h>
 #include <Sheet.h>
 #include <Undo.h>
 #include <View.h>

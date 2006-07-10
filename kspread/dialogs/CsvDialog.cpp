@@ -48,6 +48,7 @@
 #include <Cell.h>
 #include <Doc.h>
 #include <Sheet.h>
+#include <Format.h>
 #include <Undo.h>
 #include <View.h>
 

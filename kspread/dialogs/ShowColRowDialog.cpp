@@ -20,19 +20,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// Qt
 #include <QLabel>
 #include <QVBoxLayout>
 //Added by qt3to4:
 #include <Q3ListBox>
 
+// KDE
 #include <klocale.h>
 
+// KSpread
 #include "Doc.h"
 #include "Sheet.h"
+#include "Format.h"
 #include "Util.h"
 #include "View.h"
 #include "Region.h"
 
+// Local
 #include "ShowColRowDialog.h"
 
 using namespace KSpread;

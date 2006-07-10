@@ -28,7 +28,7 @@
 #include <QPen>
 #include <QPixmap>
 #include <QRect>
-#include <QWidget>
+//#include <QWidget>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -36,10 +36,10 @@
 
 //#include "Autofill.h"
 #include "Cell.h"
-#include "Format.h"
+//#include "Format.h"
 #include "Style.h"
 #include "Global.h"
-#include "Object.h"
+//#include "Object.h"
 
 class QWidget;
 class QPainter;
@@ -65,9 +65,12 @@ namespace KSpread
 class AutoFillSequence;
 class Canvas;
 class Cell;
+class ColumnFormat;
+class RowFormat;
 class EmbeddedChart;
 class DependencyManager;
 class Doc;
+class Format;
 class GenValidationStyles;
 class Map;
 class Point;
