@@ -37,8 +37,6 @@
 #include <klocale.h>
 #include <QLabel>
 
-#include <q3buttongroup.h>
-
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
@@ -63,54 +61,62 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
   QWidget *page = new QWidget();
   setMainWidget( page );
 
-  QHBoxLayout *grid1 = new QHBoxLayout(page);
+  QVBoxLayout *grid1 = new QVBoxLayout(page);
   grid1->setSpacing( spacingHint() );
 
-  Q3ButtonGroup* gb1 = new Q3ButtonGroup( 2, Qt::Vertical,
-    i18n("Insert Values"), page );
-  column = new QRadioButton( i18n("Vertical"), gb1 );
+  QGroupBox* gb1 = new QGroupBox (i18n("Insert Values"), page);
+  QHBoxLayout *gb1layout = new QHBoxLayout (gb1);
+  gb1layout->setSpacing (spacingHint ());
+  column = new QRadioButton (i18n("Vertical"), gb1);
   column->setWhatsThis( i18n("Insert the series vertically, one below the other") );
-  row = new QRadioButton( i18n("Horizontal"), gb1 );
+  row = new QRadioButton (i18n("Horizontal"), gb1);
   row->setWhatsThis( i18n("Insert the series horizontally, from left to right") );
-
   column->setChecked(true);
 
-  Q3ButtonGroup* gb2 = new Q3ButtonGroup( 2, Qt::Vertical,
-    i18n("Type"), page );
-  linear = new QRadioButton( i18n("Linear (2,4,6,...)"), gb2 );
+  gb1layout->addWidget (column);
+  gb1layout->addWidget (row);
+  
+  QGroupBox* gb2 = new QGroupBox (i18n("Type"), page );
+  QHBoxLayout *gb2layout = new QHBoxLayout (gb2);
+  gb2layout->setSpacing (spacingHint ());
+  linear = new QRadioButton (i18n("Linear (2,4,6,...)"), gb2 );
   linear->setWhatsThis( i18n("Generate a series from 'start' to 'end' and for each step add "
      "the value provided in step. This creates a series where each value "
      "is 'step' larger than the value before it.") );
-  geometric = new QRadioButton( i18n("Geometric (2,4,8,...)"), gb2 );
+  geometric = new QRadioButton (i18n("Geometric (2,4,8,...)"), gb2 );
   geometric->setWhatsThis( i18n("Generate a series from 'start' to 'end' and for each step multiply "
      "the value with the value provided in step. Using a step of 5 produces a list like: "
       "5, 25, 125, 625 since 5 multiplied by 5 (step) equals 25, and that multiplied by 5 equals 125, "
       "which multiplied by the same step-value of 5 equals 625.") );
-
   linear->setChecked(true);
 
-  QGroupBox* gb = new QGroupBox( /*1, Qt::Vertical, */i18n("Parameters"), page );
-  QWidget *params = new QWidget( gb );
-  QGridLayout *params_layout = new QGridLayout( params );
-  params_layout->setSpacing( spacingHint() );
+  gb2layout->addWidget (linear);
+  gb2layout->addWidget (geometric);
 
-  QLabel* label = new QLabel( i18n( "Start value:" ), params );
-  params_layout->addWidget(label);
-  start=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
-  params_layout->addWidget(start);
+  QGroupBox* gb = new QGroupBox (i18n ("Parameters"), page);
+  QGridLayout *gb_layout = new QGridLayout (gb);
+  gb_layout->setSpacing (spacingHint ());
 
-  label = new QLabel( i18n( "Stop value:" ), params );
-  params_layout->addWidget(label);
-  end=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
-  params_layout->addWidget(end);
+  QLabel* label = new QLabel (i18n ("Start value:"), gb);
+  gb_layout->addWidget(label, 0, 0);
+  start = new KDoubleNumInput (-999999.999, 999999.99, 0.0,
+      gb, 1.0, 3);
+  gb_layout->addWidget(start, 0, 1);
 
-  label = new QLabel( i18n( "Step value:" ), params );
-  params_layout->addWidget(label);
-  step=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
-  params_layout->addWidget(step);
+  label = new QLabel (i18n ("Stop value:"), gb);
+  gb_layout->addWidget(label, 1, 0);
+  end = new KDoubleNumInput (-999999.999, 999999.99, 0.0,
+      gb, 1.0, 3);
+  gb_layout->addWidget(end, 1, 1);
 
+  label = new QLabel (i18n ("Step value:"), gb);
+  gb_layout->addWidget (label, 2, 0);
+  step = new KDoubleNumInput (-999999.999, 999999.99, 0.0,
+      gb, 1.0, 3);
+  gb_layout->addWidget(step, 2, 1);
+  gb_layout->setColumnStretch (1, 9);
+  
   grid1->addWidget(gb);
-
   grid1->addWidget(gb1);
   grid1->addWidget(gb2);
 

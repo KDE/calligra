@@ -164,7 +164,7 @@ Region::Region(int x, int y, Sheet* sheet)
 
   if (!isValid(QPoint(x,y)))
   {
-    kError(36001) << "Region::Region(int x, int y): Coordinates are invalid!" << endl;
+    kError(36001) << "Region::Region(" << x << ", " << y << "): Coordinates are invalid!" << endl;
     return;
   }
   add(QPoint(x,y), sheet);
@@ -176,7 +176,7 @@ Region::Region(int x, int y, int width, int height, Sheet* sheet)
 
   if (!isValid(QRect(x,y,width,height)))
   {
-    kError(36001) << "Region::Region(int x, int y, int width, int height): Dimensions are invalid!" << endl;
+    kError(36001) << "Region::Region(" << x << ", " << y << ", " << width << ", " << height << "): Dimensions are invalid!" << endl;
     return;
   }
   add(QRect(x,y,width,height), sheet);

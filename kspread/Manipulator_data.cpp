@@ -251,22 +251,17 @@ void SeriesManipulator::setupSeries (const QPoint &_marker, double start,
   m_type = type;
   m_start = Value (start);
   m_step = Value (step);
-  
   // compute cell count
-  int numberOfCells;
-  if (end > start)
-    numberOfCells = (int) ((end - start) / step + 1); /*initialize for linear*/
-  else if (end < start)
-    numberOfCells = (int) ((start - end) / step + 1); /*initialize for linear*/
-  else //equal ! => one cell fix infini loop
-    numberOfCells = 1;
+  int numberOfCells = 1;
+  if (type == Linear)
+    numberOfCells = (int) ((end - start) / step + 1);
   if (type == Geometric)
-    /* basically, A(n) = start ^ n
-    * so when does end = start ^ n ??
-    * when n = ln(end) / ln(start)
+    /* basically, A(n) = start * step ^ n
+    * so when is end >= start * step ^ n ??
+    * when n = ln(end/start) / ln(step)
     */
-    numberOfCells = (int)( (log((double)end) / log((double)start)) +
-        DBL_EPSILON) + 1;
+    // DBL_EPSILON is added to prevent rounding errors
+    numberOfCells = (int) (log (end / start) / log (step) + DBL_EPSILON) + 1;
 
   // with this, generate range information
   Region range (_marker.x(), _marker.y(), (mode == Column) ? 1 : numberOfCells,
@@ -282,17 +277,19 @@ Value SeriesManipulator::newValue (Element *element, int col, int row,
   *parse = false;
   ValueCalc *calc = m_sheet->doc()->calc();
 
-  // either col or row is always zero
-  int which = (col > 0) ? col : row;
+  // either colidx or rowidx is always zero
+  QRect range = element->rect();
+  int colidx = col - range.left();
+  int rowidx = row - range.top();
+  int which = (colidx > 0) ? colidx : rowidx;
   Value val;
   if (which == m_last + 1) {
     // if we are requesting next item in the series, which should almost always
     // be the case, we can use the pre-computed value to speed up the process
     if (m_type == Linear)
       val = calc->add (m_prev, m_step);
-    if (m_type == Geometric) {
+    if (m_type == Geometric)
       val = calc->mul (m_prev, m_step);
-    }
   }
   else {
     // otherwise compute from scratch
