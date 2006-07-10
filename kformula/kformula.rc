@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KFormula" version="3">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KFormula" version="31">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="koffice_undo"/>
@@ -46,27 +46,10 @@
    <Action name="formula_removerow"/>
   </Menu>
   <Action name="formula_textsize"/>
-
   <Action name="formula_typeleft"/>
   <Action name="formula_typeright"/>
   <Action name="formula_insertsymbol"/>
  </Menu>
-<!--
- <Menu name="Font"><text>Font</text>
-  <Action name="textfont"/>
-  <Action name="textsize"/>
-  <Action name="textbold"/>
-  <Action name="textitalic"/>
-  <Action name="textunder"/>
-  <Menu name="scale"><text>Increase/Decrease Options..</text>
-  <Action name="fontelement"/>
-  <Action name="fontindex"/>
-  <Action name="fontchild"/>
-  <Action name="fontnext"/>
-
-  </Menu>
- </Menu>
--->
  <Menu name="settings"><text>&amp;Settings</text>
   <Separator group="settings_show"/>
   <Action name="formula_syntaxhighlighting" group="settings_show"/>
@@ -79,7 +62,7 @@
   </Menu>
 </MenuBar>
 
- <ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>
+ <ToolBar fullWidth="true" name="edit_toolbar" position="top"><Text>Edit</Text>
   <Action name="koffice_undo"/>
   <Action name="koffice_redo"/>
   <Separator/>
@@ -88,19 +71,19 @@
   <Action name="edit_paste"/>
  </ToolBar>
  <ToolBar name="Add"><Text>Add</Text>
-  <Action name="formula_addtext"/>
-  <Action name="formula_addroot"/>
-  <Action name="formula_addfrac"/>
-  <Action name="formula_addbra"/>
-  <Action name="formula_addsqrbra"/>
-  <Action name="formula_addcurbra"/>
-  <Action name="formula_addabsbra"/>
-  <Action name="formula_addoverline"/>
-  <Action name="formula_addunderline"/>
-  <Action name="formula_addintegral"/>
-  <Action name="formula_addsum"/>
-  <Action name="formula_addproduct"/>
-  <Action name="formula_addmatrix"/>
+  <Action name="addtext"/>
+  <Action name="addroot"/>
+  <Action name="addfrac"/>
+  <Action name="addbra"/>
+  <Action name="addsqrbra"/>
+  <Action name="addcurbra"/>
+  <Action name="addabsbra"/>
+  <Action name="addoverline"/>
+  <Action name="addunderline"/>
+  <Action name="addintegral"/>
+  <Action name="addsum"/>
+  <Action name="addproduct"/>
+  <Action name="addmatrix"/>
   <Action name="formula_add_one_by_two_matrix"/>
   <Action name="formula_addupperleft"/>
   <Action name="formula_addlowerleft"/>
@@ -121,30 +104,6 @@
   <Separator/>
   <Action name="formula_fontfamily"/>
  </ToolBar>
-<!--
- <ToolBar name="Element"><Text>Element</Text>
-  <Action name="textsplit"/>
-  <Action name="rootindex"/>
-  <Action name="typeleft"/>
-  <Action name="typeright"/>
-  <Action name="fracup"/>
-  <Action name="fracmiddle"/>
-  <Action name="fracdown"/>
-  <Action name="fracleft"/>
-  <Action name="fraccenter"/>
-  <Action name="fracright"/>
-  <Action name="fracmidline"/>
-  <Action name="fracnear"/>
-  <Action name="fracfar"/>
-  <Action name="ihigher"/>
-  <Action name="ilower"/>
-  <Action name="matrixset"/>
-  <Action name="matrixinsrow"/>
-  <Action name="matrixinscol"/>
-  <Action name="matrixremrow"/>
-  <Action name="matrixremcol"/>
- </ToolBar>
--->
  <ToolBar name="Symbol"><Text>Symbol</Text>
   <Action name="formula_symbolnames"/>
   <Action name="formula_insertsymbol"/>

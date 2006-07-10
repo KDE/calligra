@@ -55,12 +55,16 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent,
         setXMLFile("kformula_readonly.rc");
     else
         setXMLFile("kformula.rc");
+	
+    setupActions();
 
     KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 }
 
 KFormulaPartView::~KFormulaPartView()
 {
+    delete m_formulaCanvas;
+    delete m_dbus;
 }
 
 KFormulaPartViewAdaptor* KFormulaPartView::dbusObject()
@@ -70,7 +74,6 @@ KFormulaPartViewAdaptor* KFormulaPartView::dbusObject()
 
 void KFormulaPartView::setupActions()
 {
-    KActionCollection* c = actionCollection();
     KGlobal::dirs()->addResourceType( "toolbar", KStandardDirs::kde_default("data") +
                                       "kformula/pics/" );
 	
@@ -78,13 +81,20 @@ void KFormulaPartView::setupActions()
     m_copyAction;
     m_pasteAction;*/
 
-    m_addBracketAction = new KAction( i18n("Add Bracket"), c, "addbracket" );
-    m_addFractionAction = new KAction( i18n("Add Fraction"), c, "addfraction" );
-    m_addRootAction = new KAction( i18n("Add Root"), c, "addroot" );
-    m_addSumAction = new KAction( i18n("Add Sum"), c, "addsum" );
-    m_addProductAction = new KAction( i18n("Add Product"), c, "addproduct" );
-    m_addIntegralAction = new KAction( i18n("Add Integral"), c, "addintegral" );
-    m_addMatrixAction = new KAction( i18n("Add Matrix"), c, "addmatrix" );
+    m_addBracketAction = new KAction( KIcon("paren"), i18n("Add Bracket"),
+		                      actionCollection(), "addbracket" );
+    m_addFractionAction = new KAction( KIcon("frac"), i18n("Add Fraction"),
+		                       actionCollection(), "addfraction" );
+    m_addRootAction = new KAction( KIcon("sqrt"), i18n("Add Root"),
+		                   actionCollection(), "addroot" );
+    m_addSumAction = new KAction( KIcon("sum"), i18n("Add Sum"),
+		                  actionCollection(), "addsum" );
+    m_addProductAction = new KAction( KIcon("prod"), i18n("Add Product"),
+		                      actionCollection(), "addproduct" );
+    m_addIntegralAction = new KAction( KIcon("int"), i18n("Add Integral"),
+		                       actionCollection(), "addintegral" );
+    m_addMatrixAction = new KAction( KIcon("matrix"), i18n("Add Matrix"),
+		                     actionCollection(), "addmatrix" );
 /*    m_addUpperLeftAction;
     m_addLowerLeftAction;
     m_addUpperRightAction;
@@ -92,6 +102,8 @@ void KFormulaPartView::setupActions()
     m_addGenericUpperAction;
     m_addGenericLowerAction;
     m_removeEnclosingAction;*/
+
+    KStdAction::preferences( this, SLOT(configure()), actionCollection(), "configure" );
 
 //    KAction* m_formulaStringAction;
 }
