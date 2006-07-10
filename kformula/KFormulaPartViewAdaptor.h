@@ -22,7 +22,7 @@
 #define KFORMULAVIEWADAPTOR_H
 
 #include <QtCore/QObject>
-#include <dbus/qdbus.h>
+#include <QtDBus/QtDBus>
 
 #include <QString>
 #include <QStringList>
