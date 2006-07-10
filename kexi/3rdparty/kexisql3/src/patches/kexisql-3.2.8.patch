@@ -314,7 +314,7 @@ diff -u ../../sqlite-3.2.8.orig/os_win.c ./os_win.c
 +   			 access = FILE_SHARE_READ;*/
 +      if( zWide ){
 +        h = CreateFileW(zWide,
-+          GENERIC_READ | GENERIC_WRITE,
++          GENERIC_READ,
 +          access,
 +          NULL,
 +          OPEN_ALWAYS,
@@ -324,7 +324,7 @@ diff -u ../../sqlite-3.2.8.orig/os_win.c ./os_win.c
 +      }
 +      else {
 +        h = CreateFileA(zFilename,
-+          GENERIC_READ | GENERIC_WRITE,
++          GENERIC_READ,
 +          access,
 +          NULL,
 +          OPEN_ALWAYS,
