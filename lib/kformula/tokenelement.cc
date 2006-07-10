@@ -31,7 +31,7 @@ TokenElement::TokenElement( BasicElement* parent ) : StyleElement( parent ) {}
 bool TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
     if (!n.isText())
         return false;
-    QString textelements = n.toText().data();
+    QString textelements = n.toText().data().stripWhiteSpace();
     for (uint i = 0; i < textelements.length(); i++) {
         TextElement* child = new TextElement(textelements[i]);
         if (child != 0) {
