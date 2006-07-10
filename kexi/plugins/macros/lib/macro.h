@@ -26,9 +26,6 @@
 #include "action.h"
 #include "xmlhandler.h"
 
-// Forward declarations.
-class QDomElement;
-
 namespace KoMacro {
 
 	// Forward declarations.

@@ -29,10 +29,6 @@
 #include <ksharedptr.h>
 #include <qstringlist.h>
 
-
-// Forward declarations.
-class QDomElement;
-
 namespace KoMacro {
 
 	/**

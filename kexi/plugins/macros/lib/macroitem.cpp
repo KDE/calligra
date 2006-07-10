@@ -32,8 +32,19 @@ namespace KoMacro {
 	class MacroItem::Private
 	{
 		public:
+			/**
+			* The @a Action this @a MacroItem has.
+			*/
 			KSharedPtr<Action> action;
+			
+			/**
+			* The comment this @a MacroItem has.
+			*/
 			QString comment;
+			
+			/**
+			* The @a QMap of @a Variable this @a MacroItem has.
+			*/
 			Variable::Map variables;
 
 			/** 
@@ -60,7 +71,7 @@ namespace KoMacro {
 					} break;
 					case QVariant::Int: {
 						v = variant.toInt(&ok);
-						// TODO Isn't the 2.condition a 2.test which is redundant or what do this?
+						// Check if the cast is correct.
 						Q_ASSERT(!ok || v.toString() == variant.toString());
 					} break;
 					case QVariant::UInt: {
@@ -196,14 +207,17 @@ bool MacroItem::setVariable(const QString& name, const QVariant& variant)
 	return setVariant(name, variant);
 }
 
-// TODO How work this implicit cast from QString to QVariant??
 KSharedPtr<Variable> MacroItem::addVariable(const QString& name, const QVariant& variant)
 {
-	//TODO Why doesn't this prints a message, when a variable is parsen from XML??
 	Q_ASSERT(! d->variables.contains(name) );
+	// Create a new Variable.
 	KSharedPtr<Variable> variable = KSharedPtr<Variable>( new Variable() );
 	variable->setName(name);
+	
+	// Put it into the Variable-map.
 	d->variables.replace(name, variable);
+	
+	// Set the variant of the Variable.
 	this->setVariant(name, variant);
 	return variable;
 }

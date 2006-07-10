@@ -88,11 +88,10 @@ namespace KoMacro {
 
 			/**
 			* Constructor from the QDomElement @p element .
-			* 
+			* @deprecated replaced with methods of @a XMLHandler.
 			* @param element The QDomElement that may optional contains the
 			* variable content or other additional informations.
 			*/
-			// TODO Do we need this constructor??
 			Variable(const QDomElement& element);
 
 			/**
@@ -177,7 +176,7 @@ namespace KoMacro {
 			* that are children of this @a Variable .
 			*/
 			Variable::List& children() const;
-
+#if 0
 			/**
 			* @return true if this @a Variable is enabled else
 			* false is returned.
@@ -189,7 +188,7 @@ namespace KoMacro {
 			* true else the variable is disabled.
 			*/
 			void setEnabled(const bool enabled);
-
+#endif
 		private:
 			/// @internal d-pointer class.
 			class Private;

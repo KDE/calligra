@@ -60,6 +60,7 @@ namespace KoMacro {
 			/**
 			* Optional list of children this @a Variable has.
 			*/
+			// TODO Dow we use this or is it for the future??
 			Variable::List children;
 
 			/**
@@ -216,7 +217,7 @@ Variable::List& Variable::children() const
 {
 	return d->children;
 }
-
+/*
 bool Variable::isEnabled() const
 {
 	return d->enabled;
@@ -226,5 +227,4 @@ void Variable::setEnabled(const bool enabled)
 {
 	d->enabled = enabled;
 }
-
-//#include "variable.moc"
+*/

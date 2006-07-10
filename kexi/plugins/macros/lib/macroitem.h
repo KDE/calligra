@@ -22,7 +22,6 @@
 
 #include <qobject.h>
 
-//#include <kaction.h>
 #include <ksharedptr.h>
 
 // Forward declarations.
@@ -48,12 +47,6 @@ namespace KoMacro {
 		: public QObject
 		, public KShared
 	{
-			Q_OBJECT
-
-			/// Property to get/set the comment.
-			Q_PROPERTY(QString comment READ comment WRITE setComment)
-			// TODO why is the action no q-property??
-			//Q_PROPERTY(QString action READ action WRITE setAction)
 
 		public:
 
@@ -64,11 +57,6 @@ namespace KoMacro {
 
 			/**
 			* Constructor.
-			* TODO Where is this param??
-			* @param parent The parent QObject. We use the
-			* QObject garbage-collector mechanism. So, if the
-			* parent got deleted, this instance will be
-			* automaticly deleted too.
 			*/
 			explicit MacroItem();
 
@@ -148,14 +136,6 @@ namespace KoMacro {
 			* @a QVariant @param variant to our @a MacroItem instance.
 			*/
 			KSharedPtr<Variable> addVariable(const QString& name, const QVariant& variant);
-
-		// TODO Remove??
-		/*
-		public slots:
-			void activate() {}
-		signals:
-			void updatedVariables();
-		*/
 
 		private:
 			/// @internal d-pointer class.
