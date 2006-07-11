@@ -98,6 +98,7 @@ SET (kspreadcommon_LIB_SRCS
 	Formula.cpp
 	Functions.cpp
 	AutoFill.cpp
+	Border.cpp
 	Canvas.cpp
 	Cell.cpp
 	Cluster.cpp

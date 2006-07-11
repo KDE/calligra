@@ -106,6 +106,7 @@
 #include "Digest.h"
 #include "inspector.h"
 #include "Ksploadinginfo.h"
+#include "Border.h"
 #include "Canvas.h"
 #include "Editors.h"
 #include "Events.h"

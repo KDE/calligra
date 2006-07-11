@@ -1424,8 +1424,8 @@ Sheet::SelectionType Sheet::workOnCells( const QPoint& _marker, CellWorker& work
 
 Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & worker )
 {
-  Sheet::SelectionType result;
-
+  Sheet::SelectionType result = CellRegion;
+ 
   doc()->emitBeginOperation();
 
   // see what is selected; if nothing, take marker position

@@ -47,6 +47,7 @@
 #include "SheetPrint.h"
 #include "Doc.h"
 #include "Canvas.h"
+#include "Border.h"
 #include "View.h"
 #include "Locale.h"
 #include "Editors.h"

@@ -591,7 +591,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   d->marker = bottomRight;
 
   uint count = cells().count();
-  Element* element;
+  Element* element = 0;
   if (d->multipleOccurences)
   {
     //always succesful
