@@ -168,7 +168,7 @@ void ListDialog::init()
 
     config = Factory::global()->config();
     config->setGroup( "Parameters" );
-    QStringList other=config->readListEntry("Other list");
+    QStringList other=config->readEntry("Other list", QStringList());
     QString tmp;
     for ( QStringList::Iterator it = other.begin(); it != other.end();++it )
     {

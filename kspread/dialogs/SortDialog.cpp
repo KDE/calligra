@@ -93,7 +93,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 //---------------- Sort Layout & Header Row/Column Toggle
 
   //Sort orientation selector (for selecting Left-To-Right or Top-To-Bottom sorting of the selection)
-  QGroupBox* layoutGroup = new QGroupBox (m_page1, "layoutGroup");
+  QGroupBox* layoutGroup = new QGroupBox(m_page1);
   layoutGroup->setTitle( i18n("Layout") );
   QVBoxLayout * layoutGroupLayout = new QVBoxLayout (layoutGroup);
 
@@ -305,7 +305,7 @@ void SortDialog::init()
 
   KConfig * config = Factory::global()->config();
   config->setGroup( "Parameters" );
-  QStringList other = config->readListEntry("Other list");
+  QStringList other = config->readEntry("Other list", QStringList());
   QString tmp;
   for ( QStringList::Iterator it = other.begin(); it != other.end(); ++it )
   {

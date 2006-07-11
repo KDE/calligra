@@ -55,9 +55,10 @@
 
 using namespace KSpread;
 
-reference::reference( View* parent, const char* name )
-  : QDialog( parent, name,true )
+reference::reference( View* parent, const char* /*name*/ )
+  : QDialog( parent )
 {
+  setModal(true);
   m_pView = parent;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( KDialog::marginHint() );
@@ -308,7 +309,7 @@ EditAreaName::EditAreaName( View * parent,
   EditAreaNameLayout->addWidget( m_areaName, 0, 1 );
 
   QList<Sheet*> sheetList = m_pView->doc()->map()->sheetList();
-  for (unsigned int c = 0; c < sheetList.count(); ++c)
+  for (int c = 0; c < sheetList.count(); ++c)
   {
     Sheet * t = sheetList.at(c);
     if (!t)
@@ -332,7 +333,7 @@ EditAreaName::EditAreaName( View * parent,
     }
   }
 
-  m_sheets->setCurrentText( (*it).sheet_name );
+  m_sheets->setItemText( m_sheets->currentIndex(), (*it).sheet_name );
   m_area->setText( tmpName );
 
 }

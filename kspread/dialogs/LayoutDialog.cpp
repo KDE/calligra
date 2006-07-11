@@ -192,10 +192,10 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   m_parentBox->insertItems( 1, tmp );
 
   if ( m_dlg->getStyle()->parent() )
-    m_parentBox->setCurrentText( m_dlg->getStyle()->parentName() );
+    m_parentBox->setItemText( m_parentBox->currentIndex(), m_dlg->getStyle()->parentName() );
   else
   {
-    m_parentBox->setCurrentText( i18n( "<None>" ) );
+    m_parentBox->setItemText( m_parentBox->currentIndex(), i18n( "<None>" ) );
 
     if ( m_dlg->getStyle()->definesAll() )
       m_parentBox->setEnabled( false );
@@ -1093,7 +1093,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     layout->setMargin(6);
     layout->setSpacing(10);
 
-    Q3ButtonGroup *grp = new Q3ButtonGroup( i18n("Format"),this);
+    QGroupBox *grp = new QGroupBox( i18n("Format"),this);
     QGridLayout *grid = new QGridLayout(grp);
     grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -1101,7 +1101,6 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     int fHeight = grp->fontMetrics().height();
     grid->addItem(new QSpacerItem( 0, fHeight/2 ), 0, 0 ); // groupbox title
 
-    grp->setRadioButtonExclusive( true );
     generic=new QRadioButton(i18n("Generic"),grp);
     generic->setWhatsThis( i18n( "This is the default format and KSpread autodetects the actual data type depending on the current cell data. By default, KSpread right justifies numbers, dates and times within a cell and left justifies anything else." ) );
     grid->addWidget(generic,1,0);
@@ -1291,7 +1290,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
                   }
                   else
                     tmp = dlg->cCurrency.symbol;
-                  currency->setCurrentText( tmp );
+                  currency->setItemText( currency->currentIndex(), tmp );
                 }
         }
         else if ( cellFormatType == Scientific_format )

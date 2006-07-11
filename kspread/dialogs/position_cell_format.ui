@@ -30,7 +30,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     </property>
     <layout class="QGridLayout" >
       <item row="0" column="0" >
-        <widget class="Q3ButtonGroup" name="horizontalGroup" >
+        <widget class="QGroupBox" name="horizontalGroup" >
           <property name="sizePolicy" >
             <sizepolicy>
               <hsizetype>3</hsizetype>
@@ -82,7 +82,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
         </widget>
       </item>
       <item row="0" column="1" >
-        <widget class="Q3ButtonGroup" name="buttonGroup2" >
+        <widget class="QGroupBox" name="buttonGroup2" >
           <property name="title" >
             <string>Vertical</string>
           </property>
