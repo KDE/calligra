@@ -33,7 +33,7 @@
 #include "LayoutDialog.h"
 #include "Sheet.h"
 #include "Style.h"
-#include "Style_manager.h"
+#include "StyleManager.h"
 #include "View.h"
 
 #include "StylesDialog.h"

@@ -23,7 +23,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "GoalseekDialog.h"
+#include "GoalSeekDialog.h"
 
 #include "Canvas.h"
 #include "Cell.h"
@@ -481,5 +481,5 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   m_maxIter = 0;
 }
 
-#include "GoalseekDialog.moc"
+#include "GoalSeekDialog.moc"
 

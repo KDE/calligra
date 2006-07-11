@@ -24,8 +24,8 @@
 
 #include "Functions.h"
 #include "functions/helper.h"
-#include "Valuecalc.h"
-#include "Valueconverter.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
 
 #include <klocale.h>
 #include <kcalendarsystem.h>

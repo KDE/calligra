@@ -44,7 +44,7 @@
 #include <KoTabBar.h>
 
 #include "Sheet.h"
-#include "Sheetprint.h"
+#include "SheetPrint.h"
 #include "Doc.h"
 #include "Canvas.h"
 #include "View.h"

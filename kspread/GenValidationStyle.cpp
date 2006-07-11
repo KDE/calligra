@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Genvalidationstyle.h"
+#include "GenValidationStyle.h"
 #include "Cell.h"
 #include <KoXmlWriter.h>
 

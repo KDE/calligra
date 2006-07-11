@@ -859,7 +859,7 @@ bool EmbeddedPictureObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &
     sc.xmlWriter.addAttribute( "xlink:type", "simple" );
     sc.xmlWriter.addAttribute( "xlink:show", "embed" );
     sc.xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
-    sc.xmlWriter.addAttribute( "xlink:href", imageCollection->getOasisFileName( image ) );
+    sc.xmlWriter.addAttribute( "xLinkDialog.href", imageCollection->getOasisFileName( image ) );
     sc.xmlWriter.endElement();
 
     return true;

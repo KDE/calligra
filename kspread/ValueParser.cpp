@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Valueparser.h"
+#include "ValueParser.h"
 
 #include "Cell.h"
 #include "Format.h"

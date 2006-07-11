@@ -37,8 +37,9 @@
 #include <kspread/Global.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
+#include <kspread/Format.h>
 #include <kspread/Style.h>
-#include <kspread/Style_manager.h>
+#include <kspread/StyleManager.h>
 #include <kspread/Cell.h>
 
 #include <csvdialog.h>

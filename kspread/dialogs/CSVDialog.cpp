@@ -53,7 +53,7 @@
 #include <View.h>
 
 
-#include "CsvDialog.h"
+#include "CSVDialog.h"
 
 using namespace KSpread;
 
@@ -742,4 +742,4 @@ void CSVDialog::ignoreDuplicatesChanged(int)
   fillSheet();
 }
 
-#include "CsvDialog.moc"
+#include "CSVDialog.moc"

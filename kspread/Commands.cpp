@@ -28,7 +28,7 @@
 #include "Undo.h"
 #include "Util.h"
 
-#include "Sheetprint.h"
+#include "SheetPrint.h"
 
 using namespace KSpread;
 

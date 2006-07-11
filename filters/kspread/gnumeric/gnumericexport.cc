@@ -38,10 +38,11 @@
 
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
+#include <kspread/Format.h>
 #include <kspread/Doc.h>
 #include <kspread/View.h>
 #include <kspread/Canvas.h>
-#include <kspread/Sheetprint.h>
+#include <kspread/SheetPrint.h>
 #include <KoDocumentInfo.h>
 
 using namespace KSpread;

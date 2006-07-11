@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Manipulator_rowcol.h"
+#include "RowColumnManipulators.h"
 
 #include <float.h>
 

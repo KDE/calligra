@@ -42,7 +42,7 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 
-#include <kspread/Aboutdata.h> // for version
+#include <kspread/AboutData.h> // for version
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
 //#include <kspread/Format.h>
@@ -50,9 +50,9 @@
 #include <kspread/View.h>
 #include <kspread/Canvas.h>
 #include <kspread/Sheet.h>
-#include <kspread/Sheetprint.h>
+#include <kspread/SheetPrint.h>
 #include <kspread/Style.h>
-#include <kspread/Style_manager.h>
+#include <kspread/StyleManager.h>
 #include <kspread/Util.h>
 
 using namespace KSpread;

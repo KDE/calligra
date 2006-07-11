@@ -66,13 +66,13 @@
 #include "Locale.h"
 #include "Sheet.h"
 #include "Style.h"
-#include "Style_manager.h"
+#include "StyleManager.h"
 #include "Undo.h"
 #include "Util.h"
-#include "Manipulator_format.h"
-#include "Manipulator_rowcol.h"
+#include "FormatManipulators.h"
+#include "RowColumnManipulators.h"
 #include "Selection.h"
-#include "Valueformatter.h"
+#include "ValueFormatter.h"
 
 using namespace KSpread;
 

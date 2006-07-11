@@ -31,7 +31,7 @@
 #include "Sheet.h"
 #include "Format.h"
 #include "Style.h"
-#include "Style_manager.h"
+#include "StyleManager.h"
 #include "Undo.h"
 #include "View.h"
 

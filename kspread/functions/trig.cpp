@@ -21,7 +21,7 @@
 // built-in trigonometric functions
 
 #include "Functions.h"
-#include "Valuecalc.h"
+#include "ValueCalc.h"
 
 using namespace KSpread;
 

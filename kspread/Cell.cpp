@@ -57,21 +57,21 @@
 #include "Map.h"
 #include "Object.h"
 #include "Sheet.h"
-#include "Sheetprint.h"
+#include "SheetPrint.h"
 #include "Style.h"
-#include "Style_manager.h"
+#include "StyleManager.h"
 #include "Util.h"
 #include "Ksploadinginfo.h"
-#include "Genvalidationstyle.h"
+#include "GenValidationStyle.h"
 #include "Locale.h"
 #include "Value.h"
 #include "View.h"
 #include "Value.h"
 #include "Formula.h"
 #include "Selection.h"
-#include "Valueconverter.h"
-#include "Valueformatter.h"
-#include "Valueparser.h"
+#include "ValueConverter.h"
+#include "ValueFormatter.h"
+#include "ValueParser.h"
 
 #include <KoStyleStack.h>
 #include <KoRect.h>
@@ -5430,9 +5430,9 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.startElement( "text:a" );
         //Reference cell is started by '#'
         if ( localReferenceAnchor( link() ) )
-            xmlwriter.addAttribute( " xlink:href", ( '#'+link() ) );
+            xmlwriter.addAttribute( " xLinkDialog.href", ( '#'+link() ) );
         else
-            xmlwriter.addAttribute( " xlink:href", link() );
+            xmlwriter.addAttribute( " xLinkDialog.href", link() );
         xmlwriter.addTextNode( text() );
         xmlwriter.endElement();
         xmlwriter.endElement();

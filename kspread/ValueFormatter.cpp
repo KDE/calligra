@@ -18,12 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Valueformatter.h"
+#include "ValueFormatter.h"
 
 #include "Cell.h"
 #include "Locale.h"
 #include "Util.h"
-#include "Valueconverter.h"
+#include "ValueConverter.h"
 
 #include <kcalendarsystem.h>
 #include <kdebug.h>

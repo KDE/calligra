@@ -25,9 +25,9 @@
 #include "Map.h"
 #include "Format.h"
 #include "Sheet.h"
-#include "Sheetprint.h"
+#include "SheetPrint.h"
 #include "Style.h"
-#include "Style_manager.h"
+#include "StyleManager.h"
 #include "Util.h"
 
 #include "Undo.h"

@@ -24,8 +24,8 @@
 #include <klocale.h>
 
 #include "Functions.h"
-#include "Valuecalc.h"
-#include "Valueconverter.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
 
 // these two are needed for SUBTOTAL:
 #include "Cell.h"

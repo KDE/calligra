@@ -34,7 +34,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include "Autofill.h"
+#include "AutoFill.h"
 #include "Factory.h"
 #include "Locale.h"
 

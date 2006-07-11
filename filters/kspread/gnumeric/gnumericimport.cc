@@ -39,8 +39,9 @@
 // hehe >:->
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
+#include <kspread/Format.h>
 #include <kspread/Sheet.h>
-#include <kspread/Sheetprint.h>
+#include <kspread/SheetPrint.h>
 #include <kspread/Cell.h>
 #include <kspread/Util.h>
 #include <KoDocumentInfo.h>

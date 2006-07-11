@@ -26,7 +26,7 @@
 #include "Doc.h"
 #include "Undo.h"
 
-#include "Sheetprint.h"
+#include "SheetPrint.h"
 
 #include "Commands.h"
 #include <KoDocumentInfo.h>
@@ -42,7 +42,7 @@
 #include <pwd.h>
 #include <unistd.h>
 
-#include "Sheetprint.moc"
+#include "SheetPrint.moc"
 
 #define NO_MODIFICATION_POSSIBLE \
 do { \

@@ -18,14 +18,14 @@
 */
 
 
-#include "Manipulator_data.h"
+#include "DataManipulators.h"
 
 #include <klocale.h>
 
 #include "Cell.h"
 #include "Doc.h"
 #include "Sheet.h"
-#include "Valuecalc.h"
+#include "ValueCalc.h"
 
 #include <float.h>
 #include <math.h>

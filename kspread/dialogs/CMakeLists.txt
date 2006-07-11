@@ -55,9 +55,9 @@
 #	kspread_dlg_subtotal.cc \
 #	kspread_dlg_validity.cc \
 #	kspreadsubtotal.ui \
-#    link.cc \
+#    LinkDialog.cpp \
 #	sheet_properties_base.ui \
-#	sheet_properties.cc \
+#	SheetProperties.cpp \
 #	kspread_dlg_find.cc \
 #	position_cell_format.ui \
 #	font_cell_format.ui \
@@ -84,7 +84,7 @@
 #	kspread_dlg_preference.h \
 #	kspread_dlg_reference.h \
 #	kspread_dlg_resize2.h \
-#    link.h \
+#    LinkDialog.h \
 #	kspread_dlg_find.h
 #
 #METASOURCES = AUTO

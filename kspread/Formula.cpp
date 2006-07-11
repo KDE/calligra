@@ -26,9 +26,9 @@
 #include "Util.h"
 #include "Value.h"
 
-#include "Valuecalc.h"
-#include "Valueconverter.h"
-#include "Valueparser.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
+#include "ValueParser.h"
 
 #include "Functions.h"
 

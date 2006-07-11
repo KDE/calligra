@@ -42,8 +42,8 @@
 #include "Sheet.h"
 #include "Undo.h"
 #include "Value.h"
-#include "Valueconverter.h"
-#include "Autofill.h"
+#include "ValueConverter.h"
+#include "AutoFill.h"
 
 using namespace KSpread;
 

@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Manipulator_format.h"
+#include "FormatManipulators.h"
 #include "Cell.h"
 #include "Sheet.h"
 

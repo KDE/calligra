@@ -29,7 +29,7 @@
 #include <QRadioButton>
 #include <QCheckBox>
 
-#include "PasteinsertDialog.h"
+#include "PasteInsertDialog.h"
 #include "Canvas.h"
 #include "Doc.h"
 #include "Sheet.h"
@@ -81,4 +81,4 @@ void PasteInsertDialog::slotOk()
     accept();
 }
 
-#include "PasteinsertDialog.moc"
+#include "PasteInsertDialog.moc"

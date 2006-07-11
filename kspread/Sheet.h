@@ -34,7 +34,7 @@
 #include <KoDocumentChild.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
 
-//#include "Autofill.h"
+//#include "AutoFill.h"
 #include "Cell.h"
 //#include "Format.h"
 #include "Style.h"

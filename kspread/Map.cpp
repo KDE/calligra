@@ -34,10 +34,10 @@
 
 #include "Canvas.h"
 #include "Doc.h"
-#include "Genvalidationstyle.h"
+#include "GenValidationStyle.h"
 #include "Locale.h"
 #include "Sheet.h"
-#include "Style_manager.h"
+#include "StyleManager.h"
 #include "View.h"
 
 #include "KSpreadMapAdaptor.h"

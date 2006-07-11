@@ -22,18 +22,18 @@ SET (dialogs_DIR_SRCS
 	dialogs/AreaDialog.cpp
 	dialogs/CommentDialog.cpp
 	dialogs/ConditionalDialog.cpp
-	dialogs/ConsDialog.cpp
-	dialogs/CsvDialog.cpp
+	dialogs/ConsolidateDialog.cpp
+	dialogs/CSVDialog.cpp
 	dialogs/DatabaseDialog.cpp
 	dialogs/FormatDialog.cpp
 	dialogs/FormulaDialog.cpp
-	dialogs/GoalseekDialog.cpp
+	dialogs/GoalSeekDialog.cpp
 	dialogs/GotoDialog.cpp
 	dialogs/InsertDialog.cpp
 	dialogs/LayoutDialog.cpp
 	dialogs/ListDialog.cpp
-	dialogs/PaperlayoutDialog.cpp
-	dialogs/PasteinsertDialog.cpp
+	dialogs/PaperLayoutDialog.cpp
+	dialogs/PasteInsertDialog.cpp
 	dialogs/PreferenceDialog.cpp
 	dialogs/ReferenceDialog.cpp
 	dialogs/Resize2Dialog.cpp
@@ -45,8 +45,8 @@ SET (dialogs_DIR_SRCS
 	dialogs/StylesDialog.cpp
 	dialogs/SubtotalDialog.cpp
 	dialogs/ValidityDialog.cpp
-	dialogs/link.cc
-	dialogs/sheet_properties.cc
+	dialogs/LinkDialog.cpp
+	dialogs/SheetPropertiesDialog.cpp
 	dialogs/FindDialog.cpp
 	dialogs/SheetSelectPage.cc
 	)
@@ -97,7 +97,7 @@ SET (kspreadcommon_LIB_SRCS
 	Dependencies.cpp
 	Formula.cpp
 	Functions.cpp
-	Autofill.cpp
+	AutoFill.cpp
 	Canvas.cpp
 	Cell.cpp
 	Cluster.cpp
@@ -114,28 +114,28 @@ SET (kspreadcommon_LIB_SRCS
 	Numformat.cpp
 	Object.cpp
 	Style.cpp
-	Style_manager.cpp
+	StyleManager.cpp
 	Undo.cpp
 	Value.cpp
 	View.cpp
 	KSpreadViewAdaptor.cpp
 	Sheet.cpp
 	KSpreadSheetAdaptor.cpp
-	Sheetprint.cpp
+	SheetPrint.cpp
 	Util.cpp
 	Toolbox.cpp
-	Valuecalc.cpp
-	Valueconverter.cpp
-	Valueformatter.cpp
-	Valueparser.cpp
-	Genvalidationstyle.cpp
+	ValueCalc.cpp
+	ValueConverter.cpp
+	ValueFormatter.cpp
+	ValueParser.cpp
+	GenValidationStyle.cpp
 	Region.cpp
 	Selection.cpp
 	Manipulator.cpp
-	Manipulator_data.cpp
-	Manipulator_format.cpp
-	Manipulator_rowcol.cpp
-	Manipulator_sort.cpp
+	DataManipulators.cpp
+	FormatManipulators.cpp
+	RowColumnManipulators.cpp
+	SortManipulator.cpp
 	GeneralProperty.cpp
 	PropertyEditor.cpp
 	)
@@ -210,7 +210,7 @@ install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 #kde_module_LTLIBRARIES = libkspreadpart.la
 #
 #libkspreadcommon_la_SOURCES = Digest.cpp Commands.cpp Damages.cpp Dependencies.cpp \
-#	Formula.cpp 	Functions.cpp Autofill.cpp Canvas.cpp \
+#	Formula.cpp 	Functions.cpp AutoFill.cpp Canvas.cpp \
 #	Cell.cpp Cluster.cpp Condition.cpp Doc.cpp \
 #	Editors.cpp Events.cpp Factory.cpp Format.cpp \
 #	functions/conversion.cc functions/database.cc functions/datetime.cc \
@@ -218,15 +218,15 @@ install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 #	functions/information.cc functions/logic.cc functions/math.cc \
 #	functions/reference.cc functions/statistical.cc functions/text.cc \
 #	functions/trig.cc Handler.cpp Locale.cpp Map.cpp \
-#	Numformat.cpp Object.cpp Style.cpp Style_manager.cpp \
-#	Undo.cpp Value.cpp View.cpp Sheet.cpp Sheetprint.cpp \
-#	Util.cpp Toolbox.cpp 	Valuecalc.cpp 	Valueconverter.cpp 	Valueformatter.cpp \
-#		Valueparser.cpp KSpreadAppIface.cpp KSpreadAppIface.skel KSpreadCellIface.cpp \
+#	Numformat.cpp Object.cpp Style.cpp StyleManager.cpp \
+#	Undo.cpp Value.cpp View.cpp Sheet.cpp SheetPrint.cpp \
+#	Util.cpp Toolbox.cpp 	ValueCalc.cpp 	ValueConverter.cpp 	ValueFormatter.cpp \
+#		ValueParser.cpp KSpreadAppIface.cpp KSpreadAppIface.skel KSpreadCellIface.cpp \
 #	KSpreadCellIface.skel KSpreadColumnIface.skel KSpreadColumnIface.cpp KSpreadDocIface.cpp \
 #	KSpreadDocIface.skel KSpreadLayoutIface.skel KSpreadLayoutIface.cpp KSpreadMapIface.cpp \
 #	KSpreadMapIface.skel KSpreadRowIface.skel KSpreadRowIface.cpp KSpreadTableIface.cpp \
 #	KSpreadTableIface.skel KSpreadViewIface.skel KSpreadViewIface.cpp \
-#		Genvalidationstyle.cpp Region.cpp Selection.cpp Manipulator.cpp Manipulator_data.cpp \
+#		GenValidationStyle.cpp Region.cpp Selection.cpp Manipulator.cpp DataManipulators.cpp \
 #	GeneralProperty.cpp PropertyEditor.cpp
 #
 #libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
@@ -267,7 +267,7 @@ install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 #messages: rc.cpp
 #	$(EXTRACTRC) --tag-group=koffice functions/*.xml > xml_doc.cc
 #	$(EXTRACTRC) dialogs/*.ui >> rc.cpp
-#	$(XGETTEXT) rc.cpp *.cc Aboutdata.h dialogs/*.cc tests/*.cc -o $(podir)/kspread.pot
+#	$(XGETTEXT) rc.cpp *.cc AboutData.h dialogs/*.cc tests/*.cc -o $(podir)/kspread.pot
 #	-rm xml_doc.cc
 #
 #include ../admin/Doxyfile.am

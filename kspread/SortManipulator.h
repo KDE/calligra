@@ -23,7 +23,7 @@
 
 
 
-#include "Manipulator_data.h"
+#include "DataManipulators.h"
 
 namespace KSpread {
 

@@ -22,7 +22,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "link.h"
+#include "LinkDialog.h"
 
 #include <QComboBox>
 #include <QFrame>
@@ -303,4 +303,4 @@ void LinkDialog::slotOk()
     accept();
 }
 
-#include "link.moc"
+#include "LinkDialog.moc"

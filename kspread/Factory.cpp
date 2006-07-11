@@ -21,7 +21,7 @@
 #include <kinstance.h>
 #include <kstandarddirs.h>
 
-#include "Aboutdata.h"
+#include "AboutData.h"
 #include "Doc.h"
 // #include "KSpreadAppIface.h"
 

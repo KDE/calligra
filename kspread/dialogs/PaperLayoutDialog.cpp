@@ -21,11 +21,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "PaperlayoutDialog.h"
+#include "PaperLayoutDialog.h"
 #include <Doc.h>
 #include "Map.h"
 #include "Sheet.h"
-#include "Sheetprint.h"
+#include "SheetPrint.h"
 #include <Undo.h>
 #include <Util.h>
 #include <View.h>
@@ -567,4 +567,4 @@ bool PaperLayout::eventFilter( QObject* obj, QEvent* ev )
 }
 
 
-#include "PaperlayoutDialog.moc"
+#include "PaperLayoutDialog.moc"

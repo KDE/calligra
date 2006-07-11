@@ -21,7 +21,7 @@
 #include <kcmdlineargs.h>
 
 // #include <dcopclient.h>
-#include "Aboutdata.h"
+#include "AboutData.h"
 
 using namespace KSpread;
 

@@ -48,7 +48,7 @@
 #include <Sheet.h>
 #include <Undo.h>
 #include <View.h>
-#include "Manipulator_rowcol.h"
+#include "RowColumnManipulators.h"
 #include "Selection.h"
 
 #include "Resize2Dialog.h"

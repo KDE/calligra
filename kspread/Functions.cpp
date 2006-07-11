@@ -31,7 +31,7 @@
 
 #include "Formula.h"
 #include "Factory.h"
-#include "Valuecalc.h"
+#include "ValueCalc.h"
 
 #include "Functions.h"
 

@@ -24,7 +24,7 @@
 #include <Value.h>
 
 #include "Manipulator.h"
-#include "Manipulator_data.h"
+#include "DataManipulators.h"
 
 namespace Kross { namespace KSpreadCore {
 

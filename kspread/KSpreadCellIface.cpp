@@ -32,7 +32,7 @@
 #include "Sheet.h"
 #include "Value.h"
 #include "Region.h"
-#include "Valueconverter.h"
+#include "ValueConverter.h"
 
 using namespace KSpread;
 

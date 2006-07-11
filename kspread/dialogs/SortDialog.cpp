@@ -57,7 +57,7 @@
 #include "Sheet.h"
 #include "View.h"
 #include "Util.h"
-#include "Manipulator_sort.h"
+#include "SortManipulator.h"
 #include "Selection.h"
 
 using namespace KSpread;

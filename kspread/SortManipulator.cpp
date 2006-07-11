@@ -18,12 +18,12 @@
 */
 
 
-#include "Manipulator_sort.h"
+#include "SortManipulator.h"
 
 #include "Doc.h"
 #include "Sheet.h"
-#include "Valuecalc.h"
-#include "Valueconverter.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
 
 #include <klocale.h>
 

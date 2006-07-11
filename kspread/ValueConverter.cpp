@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Valueconverter.h"
+#include "ValueConverter.h"
 
 #include "Locale.h"
-#include "Valueparser.h"
+#include "ValueParser.h"
 
 using namespace KSpread;
 

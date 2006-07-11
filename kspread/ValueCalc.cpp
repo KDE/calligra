@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Valuecalc.h"
+#include "ValueCalc.h"
 
-#include "Valueconverter.h"
+#include "ValueConverter.h"
 
 #include <kdebug.h>
 #include <errno.h>

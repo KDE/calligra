@@ -24,7 +24,7 @@
 #include "Sheet.h"
 #include "Doc.h"
 #include "Style.h"
-#include "Style_manager.h"
+#include "StyleManager.h"
 #include "Util.h"
 
 #include <KoGenStyles.h>

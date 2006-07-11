@@ -50,9 +50,10 @@
 #include <kspread/Global.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
-#include <kspread/Sheetprint.h>
+#include <kspread/SheetPrint.h>
+#include <kspread/Format.h>
 #include <kspread/Style.h>
-#include <kspread/Style_manager.h>
+#include <kspread/StyleManager.h>
 #include <kspread/Util.h>
 #include <kspread/Value.h>
 

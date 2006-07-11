@@ -28,7 +28,7 @@
 
 #include "Doc.h"
 #include "Style.h"
-#include "Style_manager.h"
+#include "StyleManager.h"
 
 using namespace KSpread;
 

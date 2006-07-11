@@ -29,7 +29,7 @@
 */
 
 #include "Sheet.h"
-#include "Sheetprint.h"
+#include "SheetPrint.h"
 #include "Util.h"
 #include "Doc.h"
 

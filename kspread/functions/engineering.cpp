@@ -21,8 +21,8 @@
 // built-in engineering functions
 
 #include "Functions.h"
-#include "Valuecalc.h"
-#include "Valueconverter.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
 
 // used by the CONVERT function
 #include <QMap>
