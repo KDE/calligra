@@ -132,10 +132,10 @@ Things to do after the release of KOffice 1.4
   see OASIS.txt							      1 ----
 
 * Internals (See also DESIGN.html)
-  + Format Storage						      1 STEF
+  + Format Storage						      1 ----
     This would dramatically reduce memory consumption and allows
     styles for empty cells.
-    - Use new Format Storage						STEF
+    - Use new Format Storage						----
     - Remove old KSpreadFormat						----
 
   + Speed up selection.						      1 ----
@@ -194,6 +194,12 @@ Things to do after the release of KOffice 1.4
     - fix the line edit height
     - implement single cell restriction (maybe in Selection)
     - jump back to parent dialog on closing the mini dialog
+
+* Value engine
+  + DependencyManager						      1 STEF
+    - elaborate, if it could be simplified by using the Region class
+    - factor out recalculation
+  + RecalcManager						      1 STEF
 
 
 * General features
