@@ -401,11 +401,11 @@ double StyleElement::getSize( const QString& str, SizeType* st )
     }
     index = str.find( "em", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, AbsoluteSize );
+        return str2size( str, st, index, RelativeSize );
     }
     index = str.find( "ex", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, AbsoluteSize );
+        return str2size( str, st, index, RelativeSize );
     }
     index = str.find( "pc", 0, false );
     if ( index != -1 ) {
