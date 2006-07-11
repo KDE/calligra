@@ -234,7 +234,7 @@ void GoalSeekDialog::buttonOkClicked()
   {
     Sheet * sheet = m_pView->activeSheet();
 
-    Point source( m_selector3->textEdit()->text(), sheet->workbook(), sheet );
+    Point source( m_selector3->textEdit()->toPlainText(), sheet->workbook(), sheet );
     if (!source.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
@@ -245,7 +245,7 @@ void GoalSeekDialog::buttonOkClicked()
       return;
     }
 
-    Point target( m_selector1->textEdit()->text(), sheet->workbook(), sheet );
+    Point target( m_selector1->textEdit()->toPlainText(), sheet->workbook(), sheet );
     if (!target.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
@@ -257,7 +257,7 @@ void GoalSeekDialog::buttonOkClicked()
     }
 
     bool ok = false;
-    double goal = m_pView->doc()->locale()->readNumber(m_selector2->textEdit()->text(), &ok );
+    double goal = m_pView->doc()->locale()->readNumber(m_selector2->textEdit()->toPlainText(), &ok );
     if ( !ok )
     {
       KMessageBox::error( this, i18n("Target value is invalid.") );
@@ -457,7 +457,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     m_targetCell->calc( false );
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:",
-                                 m_selector3->textEdit()->text() ) );
+                                 m_selector3->textEdit()->toPlainText() ) );
     m_newValue->setText( m_pView->doc()->locale()->formatNumber( startA ) );
     m_currentValue->setText( m_pView->doc()->locale()->formatNumber( m_oldSource ) );
     m_restored = false;
@@ -470,7 +470,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
     m_targetCell->calc( false );
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution.",
-                                 m_selector3->textEdit()->text() ) );
+                                 m_selector3->textEdit()->toPlainText() ) );
     m_newValue->setText( "" );
     m_currentValue->setText( m_pView->doc()->locale()->formatNumber( m_oldSource ) );
     m_restored = true;

@@ -206,7 +206,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
 	//	other=new QStringList();
 	KConfig *config = Factory::global()->config();
 	config->setGroup( "Parameters" );
-	other=new QStringList(config->readListEntry("Other list"));
+        other=new QStringList(config->readEntry("Other list", QStringList()));
       }
 
     if ( month->indexOf( _str ) != -1 )
@@ -977,7 +977,7 @@ bool Sheet::fillSequenceWithInterval( const QList<Cell*>& _srcList,
       //
       // Since the interval may be of length 'step' we calculate the delta
       // between cells 0 and step, 1 and step+1, ...., step-1 and 2*step-1
-      for ( unsigned int t = 0; t < step; t++ )
+      for ( int t = 0; t < step; t++ )
       {
 	deltaList.append( new AutoFillDeltaSequence( _seqList.at(t),
 						     _seqList.at(t+step) ) );

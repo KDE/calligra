@@ -379,7 +379,7 @@ void ConditionalDialog::init()
 
 	if ( !found )  /* if it's not here, don't display this condition */
 	{
-	  it1 = conditionList.remove( it1 );
+	  it1 = conditionList.erase( it1 );
 	}
 	else
 	{
@@ -442,7 +442,7 @@ void ConditionalDialog::init( Conditional const & tmp, int numCondition )
 
   if ( tmp.styleName )
   {
-    sb->setCurrentText( *tmp.styleName );
+    sb->setItemText( sb->currentIndex(), *tmp.styleName );
     sb->setEnabled( true );
   }
 

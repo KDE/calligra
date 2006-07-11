@@ -140,7 +140,7 @@ void FormatDialog::slotActivated( int index )
 	return;
     }
 
-    m_label->setIcon( pix );
+    m_label->setWindowIcon( pix );
 }
 
 void FormatDialog::slotOk()
