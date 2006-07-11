@@ -1,19 +1,16 @@
-Compiling KOffice with cmake
+Compiling KOffice Trunk
 
-We use the snapshop of kdelibs4, for the time being.
-The url is:
+KOffice compiles using kdelibs-snapshot.
+An explenation on how to install that and its dependencies is
+updated regularly on:
 
-svn.kde.org/home/kde/branches/work/kdelibs4_snapshot
+http://wiki.kde.org/tiki-index.php?page=KDE3To4
 
-Make sure this has compiled and installed completely; especially
-the $kdedir/share/apps/modules/cmake directory must be installed
+After you followed that you should be more familiar with KDE4 and CMake
+development.
+There is one more dependency for koffice that is kdepimlibs, which is
+in svn at:
+    svn.kde.org/home/kde/trunk/KDE/kdepimlibs
 
-It is sufficient to set PATH and LD_LIBRARY_PATH to the location
-of your kde4 library installation to compile: running is more
-demanding.
-
-then type
-
-cmake .
-
-in the toplevel dir and after that, make
+Next you can start your compile of KOffice just like you have done
+with the above two libraries.
