@@ -80,7 +80,6 @@ TestRunner::TestRunner():
 
   d->logView = new QTextEdit( mainWidget );
   layout->addWidget( d->logView, 2, 2, 0, 3 );
-  d->logView->setTextFormat( Qt::LogText );
 
   QObject::connect( d->runButton, SIGNAL( clicked() ), this, SLOT( runTest() ) );
 

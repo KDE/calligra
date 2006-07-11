@@ -5574,7 +5574,6 @@ void View::slotListChoosePopupMenu( )
   delete d->popupListChoose;
 
   d->popupListChoose = new QMenu();
-  int id = 0;
   QRect selection( d->selection->selection() );
   Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
   QString tmp = cell->text();
@@ -5618,9 +5617,11 @@ void View::slotListChoosePopupMenu( )
  */
 
   for ( QStringList::Iterator it = itemList.begin(); it != itemList.end();++it )
-    d->popupListChoose->insertItem( (*it), id++ );
+  {
+    d->popupListChoose->addAction( (*it) );
+  }
 
-  if ( id == 0 )
+  if ( itemList.isEmpty() )
     return;
   RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
   double tx = d->activeSheet->dblColumnPos( d->canvas->markerColumn(), d->canvas );

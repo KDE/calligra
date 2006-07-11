@@ -95,7 +95,7 @@ void ToolBox::paintEvent( QPaintEvent* ev )
 
 void ToolBox::childEvent( QChildEvent* ev )
 {
-    if ( ev->inserted() && ev->child()->isWidgetType() )
+    if ( ev->type() == QEvent::ChildInserted && ev->child()->isWidgetType() )
 	m_layout->addWidget( (QWidget*)ev->child() );
     resize( sizeHint() );
 }
