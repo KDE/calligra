@@ -227,7 +227,8 @@ public:
    */
   void setSelectionMode(Mode mode);
 
-  QRect lastRange(bool extend = true) const;
+  QRect firstRange() const;
+  QRect lastRange() const;
   QRect extendToMergedAreas(QRect area) const;
 
   const QList<QColor>& colors() const;

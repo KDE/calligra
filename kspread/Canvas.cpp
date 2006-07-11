@@ -252,8 +252,6 @@ Canvas::Canvas(View *view)
   //d->editWidget = d->view->editWidget();
   d->posWidget = d->view->posWidget();
 
-  setBackgroundMode( Qt::PaletteBase );
-
   setMouseTracking( true );
   d->mousePressed = false;
   d->mouseSelectedObject = false;
@@ -1757,8 +1755,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   }
 
   const QMimeData* mimeData = event->mimeData();
-  if ( mimeData->hasText() ||
-       mimeData->hasFormat( "application/x-kspread-snippet" ) )
+  if ( mimeData->hasText() || mimeData->hasFormat( "application/x-kspread-snippet" ) )
   {
     event->acceptProposedAction();
   }
@@ -1767,25 +1764,82 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
     event->ignore();
     return;
   }
-
+#if 0 // TODO Stefan: implement drag marking rectangle
+  QRect dragMarkingRect;
+  if ( mimeData->hasFormat( "application/x-kspread-snippet" ) )
+  {
+    if ( event->source() == this  )
+    {
+      kDebug() << "source == this" << endl;
+      dragMarkingRect = selectionInfo()->boundingRect();
+    }
+    else
+    {
+      kDebug() << "source != this" << endl;
+      QByteArray data = mimeData->data( "application/x-kspread-snippet" );
+      QString errorMsg;
+      int errorLine;
+      int errorColumn;
+      QDomDocument doc;
+      if ( !doc.setContent( data, false, &errorMsg, &errorLine, &errorColumn ) )
+      {
+        // an error occured
+        kDebug() << "Canvas::daragMoveEvent: an error occured" << endl
+                 << "line: " << errorLine << " col: " << errorColumn
+                 << ' ' << errorMsg << endl;
+        dragMarkingRect = QRect(1,1,1,1);
+      }
+      else
+      {
+        QDomElement root = doc.documentElement(); // "spreadsheet-snippet"
+        dragMarkingRect = QRect(1,1,
+                                root.attribute( "columns" ).toInt(),
+                                root.attribute( "rows" ).toInt());
+      }
+    }
+  }
+  else // if ( mimeData->hasText() )
+  {
+    kDebug() << "has text" << endl;
+    dragMarkingRect = QRect(1,1,1,1);
+  }
+#endif
+  const QPoint dragAnchor = selectionInfo()->boundingRect().topLeft();
   double dwidth = d->view->doc()->unzoomItXOld( width() );
-  double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
-  double ypos = sheet->dblRowPos( selectionInfo()->lastRange().top() );
-  double width  = sheet->columnFormat( selectionInfo()->lastRange().left() )->dblWidth( this );
-  double height = sheet->rowFormat( selectionInfo()->lastRange().top() )->dblHeight( this );
+  double xpos = sheet->dblColumnPos( dragAnchor.x() );
+  double ypos = sheet->dblRowPos( dragAnchor.y() );
+  double width  = sheet->columnFormat( dragAnchor.x() )->dblWidth( this );
+  double height = sheet->rowFormat( dragAnchor.y() )->dblHeight( this );
 
-  QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
+  // consider also the selection rectangle
+  const QRect noGoArea((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
 
-  double ev_PosX;
+  // determine the current position
+  double eventPosX;
   if (sheet->layoutDirection()==Sheet::RightToLeft)
-    ev_PosX = dwidth - d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
+  {
+    eventPosX = dwidth - d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
+  }
   else
-    ev_PosX = d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
+  {
+    eventPosX = d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
+  }
+  double eventPosY = d->view->doc()->unzoomItYOld( event->pos().y() ) + yOffset();
 
-  double ev_PosY = d->view->doc()->unzoomItYOld( event->pos().y() ) + yOffset();
+  if ( noGoArea.contains( QPoint((int) eventPosX, (int) eventPosY) ) )
+  {
+    event->ignore( noGoArea );
+    return;
+  }
 
-  if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
-    event->ignore( r1 );
+#if 0 // TODO Stefan: implement drag marking rectangle
+  // determine the cell position under the mouse
+  double tmp;
+  const int col = sheet->leftColumn( eventPosX, tmp );
+  const int row = sheet->topRow( eventPosY, tmp );
+  dragMarkingRect.moveTo( QPoint( col, row ) );
+  kDebug() << "MARKING RECT = " << dragMarkingRect << endl;
+#endif
 }
 
 void Canvas::dragLeaveEvent( QDragLeaveEvent * )
@@ -1798,6 +1852,7 @@ void Canvas::dragLeaveEvent( QDragLeaveEvent * )
 void Canvas::dropEvent( QDropEvent * _ev )
 {
   d->dragging = false;
+  d->view->disableAutoScroll();
 // FIXME Stefan: Still needed?
 //   if ( d->scrollTimer->isActive() )
 //     d->scrollTimer->stop();
@@ -4388,7 +4443,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
     QPen pen( Qt::black, 2 );
     painter.setPen( pen );
 
-    retrieveMarkerInfo( selectionInfo()->extendToMergedAreas(range), viewRect, positions, paintSides );
+    retrieveMarkerInfo( range, viewRect, positions, paintSides );
 
     double left =   positions[0];
     double top =    positions[1];

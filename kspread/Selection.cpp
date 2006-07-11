@@ -837,10 +837,14 @@ const QList<QColor>& Selection::colors() const
   return d->colors;
 }
 
-QRect Selection::lastRange(bool extend) const
+QRect Selection::firstRange() const
 {
-  QRect selection = QRect(d->anchor, d->marker);
-  return extend ? extendToMergedAreas(selection) : selection;
+  return cells().isEmpty() ? QRect(1,1,1,1) : cells().first()->rect();
+}
+
+QRect Selection::lastRange() const
+{
+  return cells().isEmpty() ? QRect(1,1,1,1) : cells().last()->rect();
 }
 
 QRect Selection::selection(bool extend) const
