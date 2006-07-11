@@ -22,6 +22,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <qcursor.h>
+#include <QFontComboBox>
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
@@ -37,7 +38,6 @@
 #include <QPaintEvent>
 
 #include <kdebug.h>
-#include <kfontcombo.h>
 #include <kfontdialog.h>
 #include <kiconloader.h>
 #include <knuminput.h>
@@ -352,7 +352,8 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	textLayout->setMargin( 3 );
 	textLayout->setSpacing( 2 );
-	textLayout->addWidget( m_fontCombo = new KFontCombo( list, textWidget ), 0, 0, 1, 3 );
+	textLayout->addWidget( m_fontCombo = new QFontComboBox( textWidget ), 0, 0, 1, 3 );
+	m_fontCombo->insertItems( 0, list );
 	textLayout->addWidget( m_fontSize = new KIntNumInput( textWidget ), 1, 0 );
 	textLayout->addWidget( m_boldCheck = new QCheckBox( i18n( "Bold" ), textWidget ), 1, 1 );
 	textLayout->addWidget( m_italicCheck = new QCheckBox( i18n( "Italic" ), textWidget ), 1, 2 );
@@ -438,8 +439,10 @@ VTextOptionsWidget::~VTextOptionsWidget()
 void
 VTextOptionsWidget::valueChanged( int )
 {
+	/* TODO: port to QFontComboBox which doesn't seem to have similar functions
 	m_fontCombo->setBold( m_boldCheck->isChecked() );
 	m_fontCombo->setItalic( m_italicCheck->isChecked() );
+	*/
 
 	m_textEditor->setFont( QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() ) );
 
@@ -501,8 +504,10 @@ VTextOptionsWidget::setFont( const QFont& font )
 
 	m_fontSize->setValue( font.pointSize() );
 
+	/* TODO: Port to QFontComboBox which doesn't seem to have similar functions
 	m_fontCombo->setBold( m_boldCheck->isChecked() );
 	m_fontCombo->setItalic( m_italicCheck->isChecked() );
+	*/
 
 	m_textEditor->setFont( QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() ) );
 }

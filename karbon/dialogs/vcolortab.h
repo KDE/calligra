@@ -22,9 +22,11 @@
 #define __VCOLORTAB_H
 
 #include <qtabwidget.h>
+#include <kxyselector.h>
+#include <kselector.h>
 
 class QColor;
-class KHSSelector;
+class KHueSaturationSelector;
 class KIntSpinBox;
 class KGradientSelector;
 class KColorPatch;
@@ -42,7 +44,7 @@ public:
 
 private:
 	QWidget* mRGBWidget;
-	KHSSelector* mColorSelector;
+	KHueSaturationSelector* mColorSelector;
 	KIntSpinBox* mRed;
 	KIntSpinBox* mGreen;
 	KIntSpinBox* mBlue;

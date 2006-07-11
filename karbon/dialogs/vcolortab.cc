@@ -44,7 +44,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 
 	mRGBWidget = new QWidget( this );
 	mainLayout = new QGridLayout;
-	mColorSelector = new KHSSelector( mRGBWidget );
+	mColorSelector = new KHueSaturationSelector( mRGBWidget );
 	mColorSelector->setMinimumHeight( 165 );
 	mColorSelector->setMinimumWidth( 165 );
 	connect( mColorSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );

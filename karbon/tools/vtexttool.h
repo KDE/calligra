@@ -30,7 +30,6 @@
 #include "q3frame.h"
 #include "q3groupbox.h"
 #include "qcombobox.h"
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <QMouseEvent>
 
@@ -39,7 +38,7 @@
 #include "vtool.h"
 
 class QPointF;
-class KFontCombo;
+class QFontComboBox;
 class KIntNumInput;
 class QCheckBox;
 class QLineEdit;
@@ -137,7 +136,7 @@ public slots:
 
 protected:
 	QTabWidget* m_tabWidget;
-	KFontCombo* m_fontCombo;
+	QFontComboBox* m_fontCombo;
 	QCheckBox* m_boldCheck;
 	QCheckBox* m_italicCheck;
 	KIntNumInput* m_fontSize;
