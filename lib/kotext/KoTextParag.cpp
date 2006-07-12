@@ -2710,7 +2710,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         // Try to keep the order of the tag names by probability of happening
         if ( node.isText() )
         {
-            textData = node.toText().data();
+            textData = node.toText().data().simplifyWhiteSpace();
         }
         else if ( isTextNS && localName == "span" ) // text:span
         {
