@@ -1587,7 +1587,7 @@ void ValueCalc::twoArrayWalk (const Value &a1, const Value &a2,
     for (int c = 0; c < cols; c++)
     {
       Value v1 = a1.element (c, r);
-      Value v2 = a1.element (c, r);
+      Value v2 = a2.element (c, r);
       if (v1.isArray() && v2.isArray())
         twoArrayWalk (v1, v2, res, func);
       else {
