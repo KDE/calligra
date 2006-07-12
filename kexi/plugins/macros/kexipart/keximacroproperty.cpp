@@ -70,7 +70,7 @@ KexiMacroProperty::~KexiMacroProperty()
 void KexiMacroProperty::init()
 {
 	Q_ASSERT( d->macroitem != 0 );
-	kdDebug() << "--------- KexiMacroProperty::set() macroitem=" << d->macroitem->name() << " name=" << d->name << endl;
+	//kdDebug() << "--------- KexiMacroProperty::set() macroitem=" << d->macroitem->name() << " name=" << d->name << endl;
 
 	KSharedPtr<KoMacro::Action> action = d->macroitem->action();
 	KSharedPtr<KoMacro::Variable> actionvariable = action->variable(d->name);

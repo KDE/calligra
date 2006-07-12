@@ -104,61 +104,6 @@ bool KexiMacroPart::execute(KexiPart::Item* item, QObject* sender)
 	return true;
 }
 
-class TestAction : public KoMacro::Action
-{
-		//Q_OBJECT
-	private:
-		KoMacro::Variable* intvar;
-	public:
-		TestAction() : KoMacro::Action("test") {
-			setText("Test");
-
-			intvar = new KoMacro::Variable(QVariant(12345));
-			intvar->setName("intvar");
-			intvar->setText("IntVar");
-
-			QStringList list;
-			list << "FirstItem" << "SecondItem" << "TheirdItem";
-			intvar->children().append( KSharedPtr<KoMacro::Variable>( new KoMacro::Variable(list, "@list") ) );
-			intvar->children().append(new KoMacro::Variable( "First Child","firstvar","First Var" ));
-			intvar->children().append(new KoMacro::Variable( QVariant(12345),"secondvar","Second Var" ));
-			intvar->children().append(new KoMacro::Variable( QVariant(true,0),"theirdvar","Theird Var" ));
-			setVariable(intvar);
-
-			KoMacro::Variable* int2var = new KoMacro::Variable(QVariant(54321));
-			int2var->setName("int2var");
-			int2var->setText("Int2Var");
-			setVariable(int2var);
-/*
-			KoMacro::Variable* boolvar = new KoMacro::Variable(QVariant(true,0));
-			boolvar->setName("boolvar");
-			boolvar->setText("BoolVar");
-			boolvar->children().append(new KoMacro::Variable( "Bool first" ));
-			boolvar->children().append(new KoMacro::Variable( "Bool second" ));
-			boolvar->children().append(new KoMacro::Variable( "Bool theird" ));
-			setVariable(boolvar);
-*/
-
-			KoMacro::Manager::self()->publishAction( KSharedPtr<Action>(this) );
-		}
-		virtual ~TestAction() {}
-		virtual bool notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name) {
-			kdDebug()<<"===================> TestAction::notifyUpdated() macroitem="<<macroitem->name()<<" variablename="<<name<<endl;
-			/*
-			KSharedPtr<KoMacro::Variable> iv = variable["int2var"];
-			if(iv)
-				iv->setEnabled(false);
-			else
-				kdWarning()<<"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"<<endl;
-			*/
-			return true;
-		}
-	public slots:
-		virtual void activate(KSharedPtr<KoMacro::Context> context) {
-			Q_UNUSED(context);
-		}
-};
-
 void KexiMacroPart::initPartActions()
 {
 	//kdDebug() << "KexiMacroPart::initPartActions()" << endl;
@@ -168,8 +113,6 @@ void KexiMacroPart::initPartActions()
 	new KexiMacro::ExecuteAction;
 	new KexiMacro::NavigateAction;
 	new KexiMacro::MessageAction;
-
-	new TestAction; // testcase above
 }
 
 void KexiMacroPart::initInstanceActions()

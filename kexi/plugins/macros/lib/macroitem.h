@@ -43,9 +43,7 @@ namespace KoMacro {
 	* MacroItem choosen @a Action implementation) and holds the by the
 	* user defined modifications like e.g. the comment on the other hand.
 	*/
-	class KOMACRO_EXPORT MacroItem
-		: public QObject
-		, public KShared
+	class KOMACRO_EXPORT MacroItem : public KShared
 	{
 
 		public:

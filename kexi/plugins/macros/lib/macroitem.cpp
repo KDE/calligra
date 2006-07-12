@@ -109,8 +109,7 @@ namespace KoMacro {
 }
 
 MacroItem::MacroItem()
-	: QObject()
-	, KShared()
+	: KShared()
 	, d( new Private() )
 {
 }
@@ -221,5 +220,3 @@ KSharedPtr<Variable> MacroItem::addVariable(const QString& name, const QVariant&
 	this->setVariant(name, variant);
 	return variable;
 }
-
-#include "macroitem.moc"
