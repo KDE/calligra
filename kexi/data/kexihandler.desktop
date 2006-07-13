@@ -24,16 +24,17 @@ Comment[hu]=Kexi projektkezelők
 Comment[is]=Kexi verkefnis meðhöndlarar
 Comment[it]=Gestione progetto di Kexi
 Comment[ja]=Kexi プロジェクトハンドラ
+Comment[km]=កម្មវិធី​ដោះស្រាយ​គម្រោង Kexi
 Comment[lo]=ສ້າງແຟ້ມຂໍ້ຄວາມໃໝ่
 Comment[lv]=Kexi Projekta Apstrādātāji
 Comment[ms]=Pengendali Projek Kexi
 Comment[nb]=Kexi prosjektbehandlere
 Comment[nl]=Kexi projecthandlers
 Comment[nn]=Kexi-prosjekthandtering
-Comment[pl]=Program obsługi projektu Kexi
+Comment[pl]=Pliki obsługi projektu Kexi
 Comment[pt]=Gestores de Projecto do Kexi
 Comment[pt_BR]=Manipuladores de Projeto do Kexi
-Comment[ru]=Обработчик проектов Kexi
+Comment[ru]=Среда проектов Kexi
 Comment[se]=Kexi-prošeaktagieđaheaddjit
 Comment[sk]=Spracovanie projektov Kexi
 Comment[sl]=Ravnalniki s projekti za Kexi
@@ -45,6 +46,7 @@ Comment[tg]=Kexi Лоиҳаи дастнавис
 Comment[tr]=Kexi Proje İşleci
 Comment[uk]=Обробники проекту Kexi
 Comment[zh_CN]=Kexi 项目处理器
+Comment[zh_TW]=Kexi 專案控管程式
 
 [PropertyDef::X-Kexi-PartVersion]
 Type=int

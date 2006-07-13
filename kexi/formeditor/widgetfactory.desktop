@@ -22,10 +22,11 @@ Comment[ja]=ウィジェットファクトリーベース
 Comment[ms]=Pangkalan Kilang Widget
 Comment[nb]=Base for elementfabrikk
 Comment[nn]=Base for elementfabrikk
-Comment[pl]=Podstawowa fabryka widżetów
+Comment[pl]=Podstawowa fabryka kontrolek
 Comment[pt]=Fábrica de Elementos
 Comment[pt_BR]=Widget de Fábrica Base
 Comment[ru]=Базовое приложение, содержащее офисный элемент управления
+Comment[se]=Áhtafabrihka vuođđu
 Comment[sk]=Základ pre vytváracie rozhranie prvkov
 Comment[sl]=Tovarna gradnikov
 Comment[sr]=Основа фабрике контрола
@@ -35,6 +36,7 @@ Comment[ta]= widget  தொழிற்சாலை தளம்
 Comment[tg]=Гузориши база, ки таркиботи идораи офис дар дохил дорад
 Comment[uk]=База фабрики віджетів
 Comment[zh_CN]=基础组件工厂
+Comment[zh_TW]=視窗元件工廠基地
 
 [PropertyDef::X-KFormDesigner-FactoryGroup]
 Type=QString

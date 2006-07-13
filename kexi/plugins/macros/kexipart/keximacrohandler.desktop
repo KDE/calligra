@@ -4,10 +4,8 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Macros
-GenericName[de]=Makros
 
 Name=Macros
-Name[de]=Makros
 
 X-KDE-Library=kexihandler_macro
 X-KDE-ParentApp=kexi

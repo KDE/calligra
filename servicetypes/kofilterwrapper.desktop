@@ -22,14 +22,15 @@ Comment[hr]=KOffice filter omotač
 Comment[hu]=KOffice-szűrőprogram
 Comment[is]=KOffice síuhluti
 Comment[it]=Adattatore per filtri di KOffice
-Comment[ja]=KOfficeフィルターラッパー
+Comment[ja]=KOfficeフィルタラッパー
+Comment[km]=គ្រឿង​ខ្ចប់​តម្រង KOffice
 Comment[lo]=ຕົວກອງຂອງໂປຣແກມຊຸດສໍານັກງານ K
 Comment[lv]=KOffice Filtra Apstrādātājs
 Comment[ms]=Pembalut Penapis KOffice
 Comment[nb]=KOffice-filterinnpakning
 Comment[nl]=KOffice Filterwrapper
 Comment[nn]=KOffice-filteromslag
-Comment[pl]=Filtr KOffice
+Comment[pl]=Pojemnik grupujący filtry dla KOffice
 Comment[pt]=Interface para um Filtro do KOffice
 Comment[pt_BR]=Filtro Wrapper do KOffice
 Comment[ru]=Обработчик фильтра KOffice
@@ -45,6 +46,7 @@ Comment[tr]=KOffice Filtre Kaydırması
 Comment[uk]=Обгортка фільтрів KOffice
 Comment[xh]=Isisongeli Sesihluzi se KOffice
 Comment[zh_CN]=KOffice 过滤器包装
+Comment[zh_TW]=KOffice 過濾器包裝
 
 [PropertyDef::X-KDE-Wrapper-Import]
 Type=QString

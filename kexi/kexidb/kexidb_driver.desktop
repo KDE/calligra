@@ -23,16 +23,18 @@ Comment[hu]=Kexi SQL-elérési bővítőmodul
 Comment[is]=Kexi SQL-rekil íforrit
 Comment[it]=Driver SQL per Kexi
 Comment[ja]=Kexi SQLドライバ プラグイン
+Comment[km]=កម្មវិធី​ជំនួយ​កម្មវិធី​បញ្ជា SQL សម្រាប់ Kexi
 Comment[lo]=ປລັກອິນພາບ
 Comment[lv]=Kexi SQL-Draivera iespraudnis
 Comment[ms]=Plugin Pemacu SQL Kexi
 Comment[nb]=SQL-drivermodul for Kexi
 Comment[nl]=Kexi SQL-stuurprogramma-plugin
 Comment[nn]=SQL-drivarmodul for Kexi
-Comment[pl]=Wtyczka sterownika SQL programu Kexi
+Comment[pl]=Wtyczka sterownika SQL dla programu Kexi
 Comment[pt]='Plugin' do Controlador de SQL do Kexi
 Comment[pt_BR]=Plugin de Driver-SQL do Kexi
 Comment[ru]=Модуль драйвера SQL Kexi
+Comment[se]=Kexi SQL-stivrran lassemoduvla
 Comment[sk]=Modul ovládača SQL pre Kexi
 Comment[sl]=Vstavek Kexi SQL-Driver
 Comment[sr]=SQL-управљачки прикључак Kexi-ја
@@ -44,6 +46,7 @@ Comment[tr]=Kexi SQl-Sürücüsü eki
 Comment[uk]=Втулок драйвера SQL Kexi
 Comment[uz]=Kexi SQL-драйвер плагини
 Comment[zh_CN]=Kexi SQL 驱动插件
+Comment[zh_TW]=Kexi SQL-驅動外掛程式
 
 [PropertyDef::X-Kexi-FileDBDriverMime]
 Type=QString
