@@ -30,7 +30,6 @@ public:
 	~KoRegularPolygonShapeFactory() {}
 	KoShape *createDefaultShape();
 	KoShape *createShape(const KoProperties*) const;
-	QWidget *optionWidget() { return 0; }
 };
 
 #endif

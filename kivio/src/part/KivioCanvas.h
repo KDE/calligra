@@ -20,9 +20,13 @@
 #ifndef KIVIOCANVAS_H
 #define KIVIOCANVAS_H
 
+#include "KivioDocument.h"
+#include "KivioView.h"
+
 #include <QWidget>
 
 #include <KoCanvasBase.h>
+#include <KoUnit.h>
 
 class QPaintEvent;
 class KoZoomHandler;
@@ -99,6 +103,8 @@ class KivioCanvas : public QWidget, public KoCanvasBase
      * Return the widget that will be added to the scrollArea.
      */
     virtual QWidget* canvasWidget();
+
+    KoUnit::Unit unit() { return m_view->document()->unit(); }
 
   public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)

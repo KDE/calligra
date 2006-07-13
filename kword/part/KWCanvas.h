@@ -75,6 +75,8 @@ public:
     KoViewConverter *viewConverter();
     /// overwritten method from superclass
     QWidget* canvasWidget() { return this; }
+    /// overwritten method from superclass
+    KoUnit::Unit unit() { return document()->unit(); }
 
     // getters
     /// return the document that this canvas works on

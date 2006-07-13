@@ -102,7 +102,7 @@
      <item>
       <widget class="QLabel" name="label_5" >
        <property name="text" >
-        <string>Distance Between Frame &amp;&amp; Text:</string>
+        <string>Distance Between Frame and Text:</string>
        </property>
        <property name="buddy" >
         <cstring>distance</cstring>
