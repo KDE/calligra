@@ -76,7 +76,6 @@ Region::Region(Map* map, const QString& string, Sheet* fallbackSheet)
     {
       sheet = fallbackSheet;
     }
-    kDebug() << "SHEET << " << sheet->name() << endl;
 
     int delimiterPos = sRegion.indexOf(':');
     if (delimiterPos > -1)
