@@ -439,7 +439,7 @@ void MatrixElement::calcSizes( const ContextStyle& context,
 
     ContextStyle::TextStyle i_tstyle = context.convertTextStyleFraction(tstyle);
     ContextStyle::IndexStyle i_istyle = context.convertIndexStyleUpper(istyle);
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
 
     for (uint r = 0; r < rows; r++) {
         QPtrList< MatrixSequenceElement >* list = content.at(r);
@@ -1612,7 +1612,7 @@ void MultilineElement::calcSizes( const ContextStyle& context,
                                   ContextStyle::IndexStyle istyle,
                                   StyleAttributes& style )
 {
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
     QFont font = context.getDefaultFont();
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );

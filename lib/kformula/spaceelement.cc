@@ -55,7 +55,7 @@ void SpaceElement::calcSizes( const ContextStyle& context,
                               ContextStyle::IndexStyle /*istyle*/,
                               StyleAttributes& style )
 {
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
 
     QFont font = context.getDefaultFont();

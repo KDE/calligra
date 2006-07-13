@@ -113,11 +113,11 @@ void TextElement::calcSizes( const ContextStyle& context,
                              ContextStyle::IndexStyle /*istyle*/,
                              StyleAttributes& style )
 {
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
     kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
-    QFont font = getFont( context );
+    QFont font = getFont( context, style );
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
 
     QFontMetrics fm( font );
@@ -163,14 +163,14 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 
     // Let container set the color, instead of elementType
     //setUpPainter( context, painter );
-    painter.setPen( style.getColor() );
+    painter.setPen( style.color() );
 
-    setCharStyle( style.getCharStyle() );
-    setCharFamily( style.getCharFamily() );
+    setCharStyle( style.charStyle() );
+    setCharFamily( style.charFamily() );
 
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
-    QFont font = getFont( context );
+    QFont font = getFont( context, style );
     font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
     painter.setFont( font );
 
@@ -192,7 +192,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                           context.layoutUnitToPixelY( parentOrigin.y() ),
                           context.layoutUnitToPixelX( getParent()->getWidth() ),
                           context.layoutUnitToPixelY( getParent()->getHeight() ),
-                          style.getBackground() );
+                          style.background() );
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
                           text );
@@ -213,7 +213,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                               context.layoutUnitToPixelY( myPos.y() ),
                               context.layoutUnitToPixelX( getWidth() ),
                               context.layoutUnitToPixelY( getHeight() ),
-                              style.getBackground() );
+                              style.background() );
             painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                               context.layoutUnitToPixelY( myPos.y()+bl ),
                               ch );
@@ -283,7 +283,7 @@ QChar TextElement::getRealCharacter(const ContextStyle& context)
 }
 
 
-QFont TextElement::getFont(const ContextStyle& context)
+QFont TextElement::getFont(const ContextStyle& context, const StyleAttributes& style)
 {
     if ( !isSymbol() ) {
         const FontStyle& fontStyle = context.fontStyle();
@@ -297,7 +297,10 @@ QFont TextElement::getFont(const ContextStyle& context)
             }
         }
         QFont font;
-        if (getElementType() != 0) {
+        if ( style.customFont() ) {
+            font = style.font();
+        }
+        else if (getElementType() != 0) {
             font = getElementType()->getFont(context);
         }
         else {
@@ -515,7 +518,7 @@ void EmptyElement::calcSizes( const ContextStyle& context,
                               ContextStyle::IndexStyle /*istyle*/,
                               StyleAttributes& style )
 {
-    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
+    luPt mySize = context.getAdjustedSize( tstyle, style.sizeFactor() );
     //kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = context.getDefaultFont();

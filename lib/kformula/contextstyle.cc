@@ -417,94 +417,123 @@ void ContextStyle::setup()
 }
 
 
-double StyleAttributes::getSizeFactor()
+double StyleAttributes::sizeFactor() const
 {
-    if ( factor_stack.empty() ) {
+    if ( m_size.empty() ) {
 //        kdWarning( DEBUGID ) << "SizeFactor stack is empty.\n";
         return 1.0;
     }
-    return factor_stack.top();
+    return m_size.top();
 }
 
-CharStyle StyleAttributes::getCharStyle()
+bool StyleAttributes::customMathVariant() const
 {
-    if ( style_stack.empty() ) {
+    if ( m_customMathVariant.empty() ) {
+        return false;
+    }
+    return m_customMathVariant.top();
+}
+
+CharStyle StyleAttributes::charStyle() const
+{
+    if ( m_charStyle.empty() ) {
 //        kdWarning( DEBUGID ) << "CharStyle stack is empty.\n";
         return anyChar;
     }
-    return style_stack.top();
+    return m_charStyle.top();
 }
 
-CharFamily StyleAttributes::getCharFamily()
+CharFamily StyleAttributes::charFamily() const
 {
-    if ( family_stack.empty() ) {
+    if ( m_charFamily.empty() ) {
 //        kdWarning( DEBUGID ) << "CharFamily stack is empty.\n";
         return anyFamily;
     }
-    return family_stack.top();
+    return m_charFamily.top();
 }
 
-QColor StyleAttributes::getColor()
+QColor StyleAttributes::color() const
 {
-    if ( color_stack.empty() ) {
+    if ( m_color.empty() ) {
 //        kdWarning( DEBUGID ) << "Color stack is empty.\n";
         return QColor( Qt::black );
         //return getDefaultColor();
     }
-    return color_stack.top();
+    return m_color.top();
 }
 
-QColor StyleAttributes::getBackground()
+QColor StyleAttributes::background() const
 {
-    if ( background_stack.empty() ) {
+    if ( m_background.empty() ) {
 //        kdWarning( DEBUGID ) << "Background stack is empty.\n";
         return QColor( Qt::white );
     }
-    return background_stack.top();
+    return m_background.top();
 }
 
-void StyleAttributes::setSizeFactor( double f )
+QFont StyleAttributes::font() const
 {
-    factor_stack.push( f );
+    if ( m_font.empty() ) {
+        return QFont();
+    }
+    return m_font.top();
 }
 
-void StyleAttributes::setCharStyle( CharStyle cs ) 
+bool StyleAttributes::fontWeight() const
 {
-    style_stack.push( cs ); 
+    if ( m_fontWeight.empty() ) {
+        return false;
+    }
+    return m_fontWeight.top();
 }
 
-void StyleAttributes::setCharFamily( CharFamily cf ) 
+bool StyleAttributes::customFontWeight() const
 {
-    family_stack.push( cf );
+    if ( m_customFontWeight.empty() ) {
+        return false;
+    }
+    return m_customFontWeight.top();
 }
 
-void StyleAttributes::setColor( const QColor& c )
+bool StyleAttributes::customFont() const
 {
-    color_stack.push( c );
-}
-
-void StyleAttributes::setBackground( const QColor& bg )
-{
-    background_stack.push( bg );
-}
-
-bool StyleAttributes::derivedColor()
-{
-    return ! color_stack.empty();
-}
-
-void StyleAttributes::resetSizeFactor()
-{
-    factor_stack.pop();
+    if ( m_customFontFamily.empty() ) {
+        return false;
+    }
+    return m_customFontFamily.top();
 }
 
 void StyleAttributes::reset()
 {
-    factor_stack.pop();
-    style_stack.pop();
-    family_stack.pop();
-    color_stack.pop();
-    background_stack.pop();
+    if ( ! m_size.empty() ) {
+        m_size.pop();
+    }
+    if ( ! m_charStyle.empty() ) {
+        m_charStyle.pop();
+    }
+    if ( ! m_charFamily.empty() ) {
+        m_charFamily.pop();
+    }
+    if ( ! m_color.empty() ) {
+        m_color.pop();
+    }
+    if ( ! m_background.empty() ) {
+        m_background.pop();
+    }
+    if ( ! m_customFontFamily.empty() ) {
+        if ( m_customFontFamily.pop() ) {
+            if ( ! m_font.empty() ) {
+                m_font.pop();
+            }
+        }
+    }
+    if ( ! m_customFontWeight.empty() ) {
+        if ( m_customFontWeight.pop() ) {
+            if ( ! m_fontWeight.empty() ) {
+                m_fontWeight.pop();
+            }
+        }
+    }
 }
 
 

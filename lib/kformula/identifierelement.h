@@ -29,19 +29,10 @@ class IdentifierElement : public TokenElement {
 public:
     IdentifierElement( BasicElement* parent = 0 );
 
-    virtual void calcSizes( const ContextStyle& style,
-						    ContextStyle::TextStyle tstyle,
-						    ContextStyle::IndexStyle istyle,
-							StyleAttributes& style );
-
-    virtual void draw( QPainter& painter, const LuPixelRect& r,
-                       const ContextStyle& context,
-                       ContextStyle::TextStyle tstyle,
-                       ContextStyle::IndexStyle istyle,
-					   StyleAttributes& style,
-                       const LuPixelPoint& parentOrigin );
 protected:
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
+    virtual void setStyleVariant( StyleAttributes& style );
 };
 
 KFORMULA_NAMESPACE_END

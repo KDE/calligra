@@ -189,7 +189,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                    const ContextStyle& context, ContextStyle::TextStyle tstyle,
                    StyleAttributes& style, const LuPixelPoint& parentOrigin)
 {
-    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
+    luPt mySize = context.getAdjustedSize( tstyle, style.sizeFactor() );
     luPixel myX = parentOrigin.x() + getX();
     luPixel myY = parentOrigin.y() + getY();
     /*

@@ -298,7 +298,7 @@ void BracketElement::calcSizes( const ContextStyle& context,
     right = context.fontStyle().createArtwork( rightType );
     //}
 
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     if (content->isTextOnly()) {
         left->calcSizes(context, tstyle, factor);
         right->calcSizes(context, tstyle, factor);
@@ -383,7 +383,7 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
         right->draw(painter, r, context, tstyle, style, myPos);
     }
     else {
-        double factor = style.getSizeFactor();
+        double factor = style.sizeFactor();
         luPixel contentHeight = 2 * QMAX(content->axis( context, tstyle, factor ),
                                          content->getHeight() - content->axis( context, tstyle, factor ));
         left->draw(painter, r, context, tstyle, style, contentHeight, myPos);
@@ -703,8 +703,8 @@ void OverlineElement::calcSizes( const ContextStyle& context,
     content->calcSizes(context, tstyle,
                        context.convertIndexStyleLower(istyle), style );
 
-    //luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, style.getSizeFactor() ) );
-    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, style.getSizeFactor() ) );
+    //luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, style.sizeFactor() ) );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, style.sizeFactor() ) );
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
     setWidth( content->getWidth() );
@@ -733,7 +733,7 @@ void OverlineElement::draw( QPainter& painter, const LuPixelRect& r,
     luPixel x = myPos.x();
     luPixel y = myPos.y();
     //int distX = context.getDistanceX(tstyle);
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
@@ -803,7 +803,7 @@ void UnderlineElement::calcSizes( const ContextStyle& context,
                                   StyleAttributes& style )
 {
     SequenceElement* content = getContent();
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     content->calcSizes(context, tstyle,
                        context.convertIndexStyleLower(istyle), style );
 
@@ -840,7 +840,7 @@ void UnderlineElement::draw( QPainter& painter, const LuPixelRect& r,
     //luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle ) );
     //luPixel unit = (content->getHeight() + distY)/ 3;
 
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     painter.setPen( QPen( context.getDefaultColor(),
                           context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
 

@@ -122,7 +122,7 @@ void FractionElement::calcSizes( const ContextStyle& context,
     ContextStyle::TextStyle i_tstyle = context.convertTextStyleFraction( tstyle );
     ContextStyle::IndexStyle u_istyle = context.convertIndexStyleUpper( istyle );
     ContextStyle::IndexStyle l_istyle = context.convertIndexStyleLower( istyle );
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
 
     numerator->calcSizes( context, i_tstyle, u_istyle, style );
     denominator->calcSizes( context, i_tstyle, l_istyle, style );
@@ -170,7 +170,7 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 
     if ( withLine ) {
-        double factor = style.getSizeFactor();
+        double factor = style.sizeFactor();
         painter.setPen( QPen( context.getDefaultColor(),
                               context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
         painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),

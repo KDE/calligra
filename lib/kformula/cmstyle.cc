@@ -379,7 +379,7 @@ void CMArtwork::draw( QPainter& painter, const LuPixelRect& r,
                       StyleAttributes& style,
                       const LuPixelPoint& parentOrigin )
 {
-    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
+    luPt mySize = context.getAdjustedSize( tstyle, style.sizeFactor() );
     luPixel myX = parentOrigin.x() + getX();
     luPixel myY = parentOrigin.y() + getY();
     /*
@@ -405,7 +405,7 @@ void CMArtwork::draw(QPainter& painter, const LuPixelRect& ,
                      const ContextStyle& context, ContextStyle::TextStyle tstyle,
                      StyleAttributes& style, luPt , const LuPixelPoint& origin)
 {
-    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
+    luPt mySize = context.getAdjustedSize( tstyle, style.sizeFactor() );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
     /*

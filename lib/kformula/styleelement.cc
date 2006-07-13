@@ -23,15 +23,19 @@
 KFORMULA_NAMESPACE_BEGIN
 
 StyleElement::StyleElement( BasicElement* parent ) : SequenceElement( parent ),
-                                                     size_type ( NoSize ),
-                                                     style( anyChar ),
-                                                     family( anyFamily ),
-                                                     color( "#000000" ),
-                                                     background( "#FFFFFF" ),
-                                                     custom_style( false ),
-                                                     custom_family( false ),
-                                                     custom_color( false ),
-                                                     custom_background( false )
+                                                     m_mathSizeType ( NoSize ),
+                                                     m_charStyle( anyChar ),
+                                                     m_charFamily( anyFamily ),
+                                                     m_mathColor( "#000000" ),
+                                                     m_mathBackground( "#FFFFFF" ),
+                                                     m_fontSizeType( NoSize ),
+                                                     m_customMathVariant( false ),
+                                                     m_customMathColor( false ),
+                                                     m_customMathBackground( false ),
+                                                     m_customFontWeight( false ),
+                                                     m_customFontStyle( false ),
+                                                     m_customFontFamily( false ),
+                                                     m_customColor( false )
 {
 }
 
@@ -40,9 +44,12 @@ void StyleElement::calcSizes( const ContextStyle& context,
                               ContextStyle::IndexStyle istyle,
                               StyleAttributes& style )
 {
-    style.setSizeFactor( getSizeFactor( context, style.getSizeFactor() ) );
+    style.setSizeFactor( sizeFactor( context, style.sizeFactor() ) );
+    setStyleVariant( style );
+    setStyleColor( style );
+    setStyleBackground( style );
     inherited::calcSizes( context, tstyle, istyle, style );
-    style.resetSizeFactor();
+    style.reset();
 }
 
 void StyleElement::draw( QPainter& painter, const LuPixelRect& r,
@@ -52,29 +59,12 @@ void StyleElement::draw( QPainter& painter, const LuPixelRect& r,
                          StyleAttributes& style,
                          const LuPixelPoint& parentOrigin )
 {
-    style.setSizeFactor( getSizeFactor( context, style.getSizeFactor() ) );
-
-    if ( customCharFamily() ) {
-        style.setCharFamily( getCharFamily() );
-    }
-    else {
-        style.setCharFamily( normalFamily );
-    }
-
-    if ( customColor() ) {
-        style.setColor( getColor() );
-    }
-    else {
-        style.setColor( style.getColor() );
-    }
-
-    if ( customBackground() ) {
-        style.setBackground( getBackground() );
-    }
-    else {
-        style.setBackground( style.getBackground() );
-    }
+    style.setSizeFactor( sizeFactor( context, style.sizeFactor() ) );
+    setStyleVariant( style );
+    setStyleColor( style );
+    setStyleBackground( style );
     inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
+    style.reset();
 }
 
 // TODO: Support for deprecated attributes
@@ -147,8 +137,6 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
 
     QString sizeStr = element.attribute( "mathsize" );
     if ( !sizeStr.isNull() ) {
-        // FIXME: This is broken
-        kdDebug( DEBUGID ) << "MathSize attribute " << sizeStr << endl;
         if ( sizeStr == "small" ) {
             setRelativeSize( 0.8 ); // ### Arbitrary size
         }
@@ -159,8 +147,8 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
             setRelativeSize( 1.2 ); // ### Arbitrary size
         }
         else {
-            double s = getSize( sizeStr, &size_type );
-            switch ( size_type ) {
+            double s = getSize( sizeStr, &m_mathSizeType );
+            switch ( m_mathSizeType ) {
             case AbsoluteSize:
                 setAbsoluteSize( s );
                 break;
@@ -178,15 +166,74 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
     if ( !colorStr.isNull() ) {
         // TODO: Named colors differ from those Qt supports. See section 3.2.2.2
         kdWarning() << "Setting color: " << colorStr << endl;
-        color.setNamedColor( colorStr );
-        custom_color = true;
+        setMathColor( QColor( colorStr ) );
 	}
     QString backgroundStr = element.attribute( "mathbackground" );
     if ( !backgroundStr.isNull() ) {
         // TODO: Named colors differ from those Qt supports. See section 3.2.2.2
-        background.setNamedColor( backgroundStr );
-        custom_background = true;
+        setMathBackground( QColor( backgroundStr ) );
 	}
+
+    // Deprecated attributes. See Section 3.2.2.1
+
+    sizeStr = element.attribute( "fontsize" );
+    if ( ! sizeStr.isNull() ) {
+        if ( sizeStr == "small" ) {
+            setRelativeSize( 0.8, true ); // ### Arbitrary size
+        }
+        else if ( sizeStr == "normal" ) {
+            setRelativeSize( 1.0, true );
+        }
+        else if ( sizeStr == "big" ) {
+            setRelativeSize( 1.2, true ); // ### Arbitrary size
+        }
+        else {
+            double s = getSize( sizeStr, &m_fontSizeType );
+            switch ( m_fontSizeType ) {
+            case AbsoluteSize:
+                setAbsoluteSize( s, true );
+                break;
+            case RelativeSize:
+                setRelativeSize( s, true );
+                break;
+            case PixelSize:
+                setPixelSize( s, true );
+                break;
+            }
+        }
+    }
+
+    QString styleStr = element.attribute( "fontstyle" );
+    if ( ! styleStr.isNull() ) {
+        if ( styleStr.lower() == "italic" ) {
+            setFontStyle( true );
+        }
+        else {
+            setFontStyle( false );
+        }
+    }
+
+    QString weightStr = element.attribute( "fontweight" );
+    if ( ! weightStr.isNull() ) {
+        if ( weightStr.lower() == "bold" ) {
+            setFontWeight( true );
+        }
+        else {
+            setFontWeight( false );
+        }
+    }
+
+    QString familyStr =  element.attribute( "fontfamily" );
+    if ( ! familyStr.isNull() ) {
+        setFontFamily( familyStr );
+    }
+
+    colorStr = element.attribute( "color" );
+    if ( ! colorStr.isNull() ) {
+        // TODO: Named colors differ from those Qt supports. See section 3.2.2.2
+        setColor( QColor( colorStr  ) );
+	}
+
     return true;
 }
 
@@ -201,73 +248,73 @@ void StyleElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisF
 void StyleElement::writeMathMLAttributes( QDomElement& element )
 {
     // mathvariant attribute
-    if ( customCharStyle() ) {
-        if ( !customCharFamily() || family == normalFamily ) {
-            if ( style == normalChar ) {
+    if ( customMathVariant() ) {
+        if ( charFamily() == normalFamily ) {
+            if ( charStyle() == normalChar ) {
                 element.setAttribute( "mathvariant", "normal" );
             }
-            else if ( style == boldChar ) {
+            else if ( charStyle() == boldChar ) {
                 element.setAttribute( "mathvariant", "bold" );
             }
-            else if ( style == italicChar ) {
+            else if ( charStyle() == italicChar ) {
                 element.setAttribute( "mathvariant", "italic" );
             }
-            else if ( style == boldItalicChar ) {
+            else if ( charStyle() == boldItalicChar ) {
                 element.setAttribute( "mathvariant", "bold-italic" );
             }
             else { // anyChar or unknown, it's always an error
                 kdWarning( DEBUGID ) << "Mathvariant: unknown style for normal family\n";
             }
         }
-        else if ( family == doubleStruckFamily ) {
-            if ( style == normalChar ) {
+        else if ( charFamily() == doubleStruckFamily ) {
+            if ( charStyle() == normalChar ) {
                 element.setAttribute( "mathvariant", "double-struck" );
             }
             else { // Shouldn't happen, it's a bug
                 kdWarning( DEBUGID ) << "Mathvariant: unknown style for double-struck family\n";
             }
         }
-        else if ( family == frakturFamily ) {
-            if ( style == normalChar ) {
+        else if ( charFamily() == frakturFamily ) {
+            if ( charStyle() == normalChar ) {
                 element.setAttribute( "mathvariant", "fraktur" );
             }
-            else if ( style == boldChar ) {
+            else if ( charStyle() == boldChar ) {
                 element.setAttribute( "mathvariant", "bold-fraktur" );
             }
             else {
                 kdWarning( DEBUGID ) << "Mathvariant: unknown style for fraktur family\n";
             }
         }
-        else if ( family == scriptFamily ) {
-            if ( style == normalChar ) {
+        else if ( charFamily() == scriptFamily ) {
+            if ( charStyle() == normalChar ) {
                 element.setAttribute( "mathvariant", "script" );
             }
-            else if ( style == boldChar ) {
+            else if ( charStyle() == boldChar ) {
                 element.setAttribute( "mathvariant", "bold-script" );
             }
             else { // Shouldn't happen, it's a bug
                 kdWarning( DEBUGID ) << "Mathvariant: unknown style for script family\n";
             }
         }
-        else if ( family == sansSerifFamily ) {
-            if ( style == normalChar ) {
+        else if ( charFamily() == sansSerifFamily ) {
+            if ( charStyle() == normalChar ) {
                 element.setAttribute( "mathvariant", "sans-serif" );
             }
-            else if ( style == boldChar ) {
+            else if ( charStyle() == boldChar ) {
                 element.setAttribute( "mathvariant", "bold-sans-serif" );
             }
-            else if ( style == italicChar ) {
+            else if ( charStyle() == italicChar ) {
                 element.setAttribute( "mathvariant", "sans-serif-italic" );
             }
-            else if ( style == boldItalicChar ) {
+            else if ( charStyle() == boldItalicChar ) {
                 element.setAttribute( "mathvariant", "sans-serif-bold-italic" );
             }
             else {
                 kdWarning( DEBUGID ) << "Mathvariant: unknown style for sans serif family\n";
             }
         }
-        else if ( family == monospaceFamily ) {
-            if ( style == normalChar ) {
+        else if ( charFamily() == monospaceFamily ) {
+            if ( charStyle() == normalChar ) {
                 element.setAttribute( "mathvariant", "monospace" );
             }
             else {
@@ -280,84 +327,166 @@ void StyleElement::writeMathMLAttributes( QDomElement& element )
     }
 
     // mathsize attribute
-    switch ( size_type ) {
+    switch ( m_mathSizeType ) {
     case AbsoluteSize:
-        element.setAttribute( "mathsize", QString( "%1pt" ).arg( size ) );
+        element.setAttribute( "mathsize", QString( "%1pt" ).arg( m_mathSize ) );
         break;
     case RelativeSize:
-        element.setAttribute( "mathsize", QString( "%1%" ).arg( size * 100.0 ) );
+        element.setAttribute( "mathsize", QString( "%1%" ).arg( m_mathSize * 100.0 ) );
         break;
     case PixelSize:
-        element.setAttribute( "mathsize", QString( "%3px" ).arg( size ) );
+        element.setAttribute( "mathsize", QString( "%3px" ).arg( m_mathSize ) );
         break;
     }
 
     // mathcolor attribute
-    if ( customColor() ) {
-        element.setAttribute( "mathcolor", color.name() );
+    if ( customMathColor() ) {
+        element.setAttribute( "mathcolor", mathColor().name() );
     }
     
     // mathbackground attribute
-    if ( customBackground() ) {
-        element.setAttribute( "mathbackground", background.name() );
+    if ( customMathBackground() ) {
+        element.setAttribute( "mathbackground", mathBackground().name() );
     }
 }
 
-void StyleElement::setSize( double s )
-{ 
-        kdDebug( DEBUGID) << "Setting size: " << s << endl;
-        size = s;
-}
-
-void StyleElement::setAbsoluteSize( double s )
+void StyleElement::setAbsoluteSize( double s, bool fontsize )
 { 
         kdDebug( DEBUGID) << "Setting absolute size: " << s << endl;
-        size_type = AbsoluteSize;
-        size = s;
+        if ( fontsize ) {
+            m_fontSizeType = AbsoluteSize;
+            m_fontSize = s;
+        }
+        else {
+            m_mathSizeType = AbsoluteSize;
+            m_mathSize = s;
+        }
 }
 
-void StyleElement::setRelativeSize( double f )
+void StyleElement::setRelativeSize( double f, bool fontsize )
 { 
         kdDebug( DEBUGID) << "Setting relative size: " << f << endl;
-        size_type = RelativeSize;
-        size = f;
+        if ( fontsize ) {
+            m_fontSizeType = RelativeSize;
+            m_fontSize = f;
+        }
+        else {
+            m_mathSizeType = RelativeSize;
+            m_mathSize = f;
+        }
 }
 
-void StyleElement::setPixelSize( double px )
-{ 
-        kdDebug( DEBUGID) << "Setting pixel size: " << px << endl;
-        size_type = PixelSize;
-        size = px;
-}
-
-double StyleElement::getSizeFactor( const ContextStyle& context, double factor )
+void StyleElement::setPixelSize( double px, bool fontsize )
 {
-    switch ( size_type ) {
-    case NoSize:
-        return factor;
+        kdDebug( DEBUGID) << "Setting pixel size: " << px << endl;
+        if ( fontsize ) {
+            m_fontSizeType = PixelSize;
+            m_fontSize = px;
+        }
+        else {
+            m_mathSizeType = PixelSize;
+            m_mathSize = px;
+        }
+}
+
+void StyleElement::setStyleVariant( StyleAttributes& style )
+{
+    if ( customMathVariant() ) {
+        style.setCharFamily ( charFamily() );
+        style.setCustomMathVariant ( true );
+        style.setCustomFontWeight( false );
+        style.setCustomFont( false );
+    }
+    else {
+        style.setCustomMathVariant( false );
+        if ( customFontFamily() ) {
+            style.setCustomFont( true );
+            style.setFont( QFont(fontFamily()) );
+        }
+
+        bool fontweight = false;
+        if ( customFontWeight() || style.customFontWeight() ) {
+            style.setCustomFontWeight( true );
+            if ( customFontWeight() ) {
+                style.setFontWeight( fontWeight() );
+                fontweight = fontWeight();
+            }
+            else {
+                fontweight = style.customFontWeight();
+            }
+        }
+        else {
+            style.setCustomFontWeight( false );
+        }
+
+        bool fontstyle = false;
+        if ( customFontStyle() ) {
+            fontstyle = fontStyle();
+        }
+
+        if ( fontweight && fontstyle ) {
+            style.setCharStyle( boldItalicChar );
+        }
+        else if ( fontweight && ! fontstyle ) {
+            style.setCharStyle( boldChar );
+        }
+        else if ( ! fontweight && fontstyle ) {
+            style.setCharStyle( italicChar );
+        }
+        else {
+            style.setCharStyle( normalChar );
+        }
+    }
+}
+
+void StyleElement::setStyleColor( StyleAttributes& style )
+{
+    if ( customMathColor() ) {
+        style.setColor( mathColor() );
+    }
+    else if ( customColor() ) {
+        style.setColor( color() );
+    }
+    else {
+        style.setColor( style.color() );
+    }
+}
+
+void StyleElement::setStyleBackground( StyleAttributes& style )
+{
+    if ( customMathBackground() ) {
+        style.setBackground( mathBackground() );
+    }
+    else {
+        style.setBackground( style.background() );
+    }
+}
+
+double StyleElement::sizeFactor( const ContextStyle& context, double factor )
+{
+    switch ( m_mathSizeType ) {
     case AbsoluteSize:
-        return factor * size / context.baseSize();
+        return factor * m_mathSize / context.baseSize();
     case RelativeSize:
-        return factor * size;
+        return factor * m_mathSize;
     case PixelSize:
         // 3.2.2 says v-unit insteado of h-unit, that's why we use Y and not X
 //        kdDebug( DEBUGID ) 
-        return factor * context.pixelYToPt( size ) / context.baseSize(); 
+        return factor * context.pixelYToPt( m_mathSize ) / context.baseSize(); 
+    case NoSize:
+        switch ( m_fontSizeType ) {
+        case AbsoluteSize:
+            return factor * m_fontSize / context.baseSize();
+        case RelativeSize:
+            return factor * m_fontSize;
+        case PixelSize:
+            return factor * context.pixelYToPt( m_fontSize ) / context.baseSize();
+        case NoSize:
+            return factor;
+        }
     }
-    kdWarning( DEBUGID ) << "getSizeFactor: Unknown SizeType\n";
+    kdWarning( DEBUGID ) << k_funcinfo << " Unknown SizeType\n";
     return factor;
-}
-
-void StyleElement::setCharStyle( CharStyle cs )
-{
-    style = cs;
-    custom_style = true;
-}
-
-void StyleElement::setCharFamily( CharFamily cf )
-{
-    family = cf;
-    custom_family = true;
 }
 
 double StyleElement::str2size( const QString& str, SizeType *st, uint index, SizeType type )

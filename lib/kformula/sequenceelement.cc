@@ -178,7 +178,7 @@ void SequenceElement::calcSizes( const ContextStyle& context,
 								 ContextStyle::IndexStyle istyle,
 								 StyleAttributes& style )
 {
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     if (!isEmpty()) {
         luPixel width = 0;
         luPixel toBaseline = 0;
@@ -288,7 +288,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
         }
     }
     else {
-        drawEmptyRect( painter, context, style.getSizeFactor(), myPos );
+        drawEmptyRect( painter, context, style.sizeFactor(), myPos );
     }
     // Debug
     //painter.setPen(Qt::green);
@@ -391,7 +391,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
                           Qt::white );
     }
     painter.setPen( QPen( Qt::white,
-                          context.layoutUnitToPixelX( context.getLineWidth( style.getSizeFactor() )/2 ) ) );
+                          context.layoutUnitToPixelX( context.getLineWidth( style.sizeFactor() )/2 ) ) );
     const LuPixelPoint& point = cursor->getCursorPoint();
     const LuPixelRect& size = cursor->getCursorSize();
     if ( activeCursor )
@@ -1550,7 +1550,7 @@ void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
 {
     LuPixelPoint point = widgetPos();
     painter.setPen( QPen( context.getEmptyColor(),
-                          context.layoutUnitToPixelX( context.getLineWidth( style.getSizeFactor() )/2 ) ) );
+                          context.layoutUnitToPixelX( context.getLineWidth( style.sizeFactor() )/2 ) ) );
     luPixel unitX = context.ptToLayoutUnitPixX( 1 );
     luPixel unitY = context.ptToLayoutUnitPixY( 1 );
     painter.drawRect( context.layoutUnitToPixelX( point.x()-unitX ),

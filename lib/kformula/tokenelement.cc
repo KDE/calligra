@@ -36,32 +36,14 @@ bool TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDom
         TextElement* child = new TextElement(textelements[i]);
         if (child != 0) {
             child->setParent(this);
-            child->setCharFamily( getCharFamily() );
-            child->setCharStyle( getCharStyle() );
+            child->setCharFamily( charFamily() );
+            child->setCharStyle( charStyle() );
 			list.append(child);
         }
     }
 	parse();
 	kdWarning() << "Num of children " << list.count() << endl;
     return true;
-}
-
-void TokenElement::draw( QPainter& painter, const LuPixelRect& r,
-                              const ContextStyle& context,
-                              ContextStyle::TextStyle tstyle,
-                              ContextStyle::IndexStyle istyle,
-                              StyleAttributes& style,
-                              const LuPixelPoint& parentOrigin ) 
-{
-    if ( customCharStyle() ) {
-        style.setCharStyle( getCharStyle() );
-    }
-    else {
-        style.setCharStyle( normalChar );
-    }
-
-    inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
-    style.reset();
 }
 
 void TokenElement::writeMathMLText( QDomDocument& doc, QDomElement& element )

@@ -332,30 +332,60 @@ private:
 
 class StyleAttributes {
  public:
-    double getSizeFactor();
-    CharStyle getCharStyle();
-    CharFamily getCharFamily();
-    QColor getColor();
-    QColor getBackground();
+    double sizeFactor() const ;
+    bool customMathVariant() const ;
+    CharStyle charStyle() const ;
+    CharFamily charFamily() const ;
+    QColor color() const ;
+    QColor background() const ;
+    QFont font() const ;
+    bool fontWeight() const ;
+    bool customFontWeight() const ;
+    bool customFont() const ;
 
-    void setSizeFactor( double );
-    void setCharStyle( CharStyle );
-    void setCharFamily( CharFamily );
-    void setColor( const QColor& );
-    void setBackground( const QColor& );
+    void setSizeFactor( double s ) { m_size.push( s ); }
+    void setCustomMathVariant( bool cmv ) { m_customMathVariant.push( cmv ); }
+    void setCharStyle( CharStyle cs ) { m_charStyle.push( cs ); }
+    void setCharFamily( CharFamily cf ) { m_charFamily.push( cf ); }
+    void setColor( const QColor& c ) { m_color.push( c ); }
+    void setBackground( const QColor& bg ) { m_background.push( bg ); }
+    void setFont( const QFont& f ) { m_font.push( f ); }
+    void setCustomFont( bool cf ) { m_customFontFamily.push ( cf ); }
+    void setCustomFontWeight( bool cfw ) { m_customFontWeight.push( cfw ); }
+    void setFontWeight( bool fw ) { m_fontWeight.push( fw ); }
 
-    bool derivedColor();
-
-    void resetSizeFactor();
     void reset();
 
-
  private:
-    QValueStack<double> factor_stack;
-    QValueStack<CharStyle> style_stack;
-    QValueStack<CharFamily> family_stack;
-    QValueStack<QColor> color_stack;
-    QValueStack<QColor> background_stack;
+    // Size of the font in points (mathsize / fontsize)
+    QValueStack<double> m_size;
+
+    // Whether a custom mathvariant attribute is in use
+    QValueStack<bool> m_customMathVariant;
+
+    // Font style (mathvariant, fontweight, fontstyle)
+    QValueStack<CharStyle> m_charStyle;
+
+    // Font family (mathvariant)
+    QValueStack<CharFamily> m_charFamily;
+
+    // Foreground color (mathcolor, color)
+    QValueStack<QColor> m_color;
+
+    // Background color (mathbackground)
+    QValueStack<QColor> m_background;
+
+    // Font family (fontfamily)
+    QValueStack<QFont> m_font;
+
+    // Whether a custom fontfamily attribute is in use (instead of CharFamily)
+    QValueStack<bool> m_customFontFamily;
+
+    // Font Weight (fontweight)
+    QValueStack<bool> m_fontWeight;
+
+    // Whether a custom fontweight attribute is in use
+    QValueStack<bool> m_customFontWeight;
 };
 
 KFORMULA_NAMESPACE_END

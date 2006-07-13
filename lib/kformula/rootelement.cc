@@ -197,7 +197,7 @@ void RootElement::calcSizes( const ContextStyle& context,
         indexHeight = index->getHeight();
     }
 
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, factor ) );
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (content->getHeight() + distY)/ 3;
@@ -260,7 +260,7 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
     luPixel x = myPos.x() + rootOffset.x();
     luPixel y = myPos.y() + rootOffset.y();
     //int distX = context.getDistanceX(tstyle);
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (content->getHeight() + distY)/ 3;
 

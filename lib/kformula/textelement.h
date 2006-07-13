@@ -164,7 +164,7 @@ protected:
     /**
      * @returns the font to be used for the element.
      */
-    QFont getFont(const ContextStyle& context);
+    QFont getFont(const ContextStyle& context, const StyleAttributes& style);
 
     /**
      * Sets up the painter to be used for drawing.

@@ -50,41 +50,108 @@ protected:
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
     void writeMathMLAttributes( QDomElement& element );
 
-    void setSize( double s );
-    void setAbsoluteSize( double s );
-    void setRelativeSize( double s );
-    void setPixelSize( double s );
-    double getSizeFactor( const ContextStyle& context, double factor );
+    void setAbsoluteSize( double s, bool fontsize = false );
+    void setRelativeSize( double s, bool fontsize = false );
+    void setPixelSize( double s, bool fontsize = false );
 
-    void setCharStyle( CharStyle cs );
-    CharStyle getCharStyle() const { return style; }
-    bool customCharStyle() const { return custom_style; }
+    void setCharStyle( CharStyle cs ) { 
+        m_charStyle = cs;
+        m_customMathVariant = true; 
+    }
+    CharStyle charStyle() const { return m_charStyle; }
 
-    void setCharFamily( CharFamily cf );
-    CharFamily getCharFamily() const { return family; }
-    bool customCharFamily() const { return custom_family; }
+    void setCharFamily( CharFamily cf ) { 
+        m_charFamily = cf; 
+        m_customMathVariant = true;
+    }
+    CharFamily charFamily() const { return m_charFamily; }
 
-    void setColor( const QColor& c ) { color = c; }
-    QColor getColor() const { return color; }
-    bool customColor() const { return custom_color; }
+    void setMathColor( const QColor& c ) {
+        m_mathColor = c; 
+        m_customMathColor = true;
+    }
+    QColor mathColor() const { return m_mathColor; }
 
-    void setBackground( const QColor& bg ) { background = bg; }
-    QColor getBackground() const { return background; }
-    bool customBackground() const { return custom_background; }
+    void setMathBackground( const QColor& bg ) { 
+        m_mathBackground = bg; 
+        m_customMathBackground = true;
+    }
+    QColor mathBackground() const { return m_mathBackground; }
+
+    void setFontWeight( bool w ) { 
+        m_fontWeight = w;
+        m_customFontWeight = true; 
+    }
+    bool fontWeight() const { return m_fontWeight; }
+
+    void setFontStyle( bool s ) { 
+        m_fontStyle = s;
+        m_customFontStyle = true;
+    }
+    bool fontStyle() const { return m_fontStyle; }
+
+    void setFontFamily( const QString& s ) { 
+        m_fontFamily = s;
+        m_customFontFamily = true;
+    }
+    QString fontFamily() const { return m_fontFamily; }
+
+    void setColor( const QColor& c ) { 
+        m_color = c; 
+        m_customColor = true;
+    }
+    QColor color() const { return m_color; }
+
+    bool customMathVariant() const { return m_customMathVariant; }
+    bool customMathColor() const { return m_customMathColor; }
+    bool customMathBackground() const { return m_customMathBackground; }
+    bool customFontWeight() const { return m_customFontWeight; }
+    bool customFontStyle() const { return m_customFontStyle; }
+    bool customFontFamily() const { return m_customFontFamily; }
+    bool customColor() const { return m_customColor; }
+
+    /**
+     * Set the mathvariant related info in style stacks, including info for
+     * deprecated attributes. It may be redefined by token elements whose
+     * behaviour differs from default one (e.g. identifiers)
+     */
+    virtual void setStyleVariant( StyleAttributes& style );
+
+    void setStyleColor( StyleAttributes& style );
+    void setStyleBackground( StyleAttributes& style );
 
 private:
+    double sizeFactor( const ContextStyle& context, double factor );
+
     double str2size( const QString& str, SizeType* st, uint index, SizeType type );
     double getSize( const QString& str, SizeType* st );
-    SizeType size_type;
-    double size;
-    CharStyle style;
-    CharFamily family;
-    QColor color;
-    QColor background;
-    bool custom_style;
-    bool custom_family;
-    bool custom_color;
-    bool custom_background;
+
+    // MathML 2.0 attributes
+    SizeType m_mathSizeType;
+    double m_mathSize;
+    CharStyle m_charStyle;
+    CharFamily m_charFamily;
+    QColor m_mathColor;
+    QColor m_mathBackground;
+
+    // Deprecated MathML 1.01 attributes
+    SizeType m_fontSizeType;
+    double m_fontSize;
+    QString m_fontFamily;
+    QColor m_color;
+    bool m_fontWeight;
+    bool m_fontStyle;
+
+    // MathML 2.0 attributes set ?
+    bool m_customMathVariant;
+    bool m_customMathColor;
+    bool m_customMathBackground;
+
+    // Deprecated MathML 1.01 attributes set ?
+    bool m_customFontWeight;
+    bool m_customFontStyle;
+    bool m_customFontFamily;
+    bool m_customColor;
 };
 
 KFORMULA_NAMESPACE_END

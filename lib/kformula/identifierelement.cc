@@ -26,50 +26,6 @@ KFORMULA_NAMESPACE_BEGIN
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent ) {
 }
 
-void IdentifierElement::calcSizes( const ContextStyle& context,
-                                   ContextStyle::TextStyle tstyle,
-                                   ContextStyle::IndexStyle istyle,
-                                   StyleAttributes& style ) {
-    // Identifiers, by default, use italic style when length == 1
-    if ( countChildren() == 1 ) {
-        TextElement *e = dynamic_cast<TextElement*>( getChild( (uint) 0 ) );
-        if (e != 0) {
-            if ( e->getCharStyle() == anyChar ) { // This means no specified variant
-                e->setCharStyle( italicChar );
-                inherited::calcSizes( context, tstyle, istyle, style );
-                e->setCharStyle( anyChar );
-            } else {
-                inherited::calcSizes( context, tstyle, istyle, style );
-            }
-        } else {
-            inherited::calcSizes( context, tstyle, istyle, style );
-        }
-    } else {
-        inherited::calcSizes( context, tstyle, istyle, style );
-    }
-}
-
-void IdentifierElement::draw( QPainter& painter, const LuPixelRect& r,
-                              const ContextStyle& context,
-                              ContextStyle::TextStyle tstyle,
-                              ContextStyle::IndexStyle istyle,
-                              StyleAttributes& style,
-                              const LuPixelPoint& parentOrigin ) 
-{
-    if ( customCharStyle() ) {
-        style.setCharStyle( getCharStyle() );
-    }
-    else if ( countChildren() == 1 ) {
-        style.setCharStyle( italicChar );
-    }
-    else {
-        style.setCharStyle( normalChar );
-    }
-
-    StyleElement::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
-    style.reset();
-}
-
 void IdentifierElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
@@ -78,5 +34,60 @@ void IdentifierElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool o
     parent.appendChild( de );
 }
 
+void IdentifierElement::setStyleVariant( StyleAttributes& style )
+{
+    if ( customMathVariant() ) {
+        style.setCharFamily ( charFamily() );
+        style.setCustomMathVariant ( true );
+        style.setCustomFontWeight( false );
+        style.setCustomFont( false );
+    }
+    else {
+        style.setCustomMathVariant( false );
+        if ( customFontFamily() ) {
+            style.setCustomFont( true );
+            style.setFont( QFont(fontFamily()) );
+        }
+
+        bool fontweight = false;
+        if ( customFontWeight() || style.customFontWeight() ) {
+            style.setCustomFontWeight( true );
+            if ( customFontWeight() ) {
+                style.setFontWeight( fontWeight() );
+                fontweight = fontWeight();
+            }
+            else {
+                fontweight = style.customFontWeight();
+            }
+        }
+        else {
+            style.setCustomFontWeight( false );
+        }
+
+        bool fontstyle;
+        if ( customFontStyle() ) {
+            fontstyle = fontStyle();
+        }
+        else if ( countChildren() == 1 ) {
+            fontstyle = true;
+        }
+        else {
+            fontstyle = false;
+        }
+
+        if ( fontweight && fontstyle ) {
+            style.setCharStyle( boldItalicChar );
+        }
+        else if ( fontweight && ! fontstyle ) {
+            style.setCharStyle( boldChar );
+        }
+        else if ( ! fontweight && fontstyle ) {
+            style.setCharStyle( italicChar );
+        }
+        else {
+            style.setCharStyle( normalChar );
+        }
+    }
+}
 
 KFORMULA_NAMESPACE_END

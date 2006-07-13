@@ -309,7 +309,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                          StyleAttributes& style,
                          luPt /*parentSize*/, const LuPixelPoint& origin)
 {
-    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
+    luPt mySize = context.getAdjustedSize( tstyle, style.sizeFactor() );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
     /*

@@ -336,7 +336,7 @@ void IndexElement::calcSizes(const ContextStyle& context,
 							 ContextStyle::IndexStyle istyle,
 							 StyleAttributes& style )
 {
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
 
     ContextStyle::TextStyle i_tstyle = context.convertTextStyleIndex(tstyle);
@@ -1395,6 +1395,7 @@ int IndexElement::readContentFromMathMLDom( QDomNode& node )
         return 1;
     }
     // TODO: mmultiscripts, section 3.4.7
+    return 1;
 }
 
 

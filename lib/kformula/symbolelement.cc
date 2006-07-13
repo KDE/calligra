@@ -199,7 +199,7 @@ void SymbolElement::calcSizes( const ContextStyle& context,
                                ContextStyle::IndexStyle istyle,
                                StyleAttributes& style )
 {
-    double factor = style.getSizeFactor();
+    double factor = style.sizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
     luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, factor ) );
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
@@ -314,7 +314,7 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
 
-    luPt mySize = context.getAdjustedSize( tstyle, style.getSizeFactor() );
+    luPt mySize = context.getAdjustedSize( tstyle, style.sizeFactor() );
     symbol->draw( painter, r, context, tstyle, style, mySize, myPos );
     content->draw( painter, r, context, tstyle, istyle, style, myPos );
     if ( hasUpper() ) {

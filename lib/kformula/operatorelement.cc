@@ -47,8 +47,8 @@ bool OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
         TextElement* child = new TextElement(textelements[i], true);
         if (child != 0) {
             child->setParent(this);
-            child->setCharFamily( getCharFamily() );
-            child->setCharStyle( getCharStyle() );
+            child->setCharFamily( charFamily() );
+            child->setCharStyle( charStyle() );
 			list.append(child);
         }
     }
