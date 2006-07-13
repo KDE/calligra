@@ -104,10 +104,10 @@ public:
 
   bool saveChildren( KoStore* _store );
 
-  void password( QByteArray & passwd ) const { passwd = m_strPassword; }
-  bool isProtected() const { return !m_strPassword.isNull(); }
+  void password( QByteArray & passwd ) const;
+  bool isProtected() const;
   void setProtected( QByteArray const & passwd );
-  bool checkPassword( QByteArray const & passwd ) const { return ( passwd == m_strPassword ); }
+  bool checkPassword( QByteArray const & passwd ) const;
 
   /**
    * The sheet named @p _from is being moved to the sheet @p _to.
@@ -133,11 +133,11 @@ public:
    */
   Sheet* previousSheet( Sheet* );
 
-  Sheet* initialActiveSheet()const { return m_initialActiveSheet; }
-  int initialMarkerColumn() const { return m_initialMarkerColumn; }
-  int initialMarkerRow()    const { return m_initialMarkerRow; }
-  double initialXOffset()   const { return m_initialXOffset; }
-  double initialYOffset()   const { return m_initialYOffset; }
+  Sheet* initialActiveSheet()  const;
+  int    initialMarkerColumn() const;
+  int    initialMarkerRow()    const;
+  double initialXOffset()      const;
+  double initialYOffset()      const;
 
 
   /**
@@ -164,17 +164,17 @@ public:
    * @return a pointer to the sheet at index @p index in this map
    * @return @c 0 if the index exceeds the list boundaries
    */
-  Sheet* sheet( int index ) const { return m_lstSheets.value( index );  }
+  Sheet* sheet( int index ) const;
 
   /**
    * @return the list of sheets in this map
    */
-  QList<Sheet*>& sheetList() { return m_lstSheets; }
+  QList<Sheet*>& sheetList();
 
   /**
    * @return amount of sheets in this map
    */
-  int count() const { return m_lstSheets.count(); }
+  int count() const;
 
   void update();
 
@@ -186,7 +186,7 @@ public:
   QStringList visibleSheets() const;
   QStringList hiddenSheets() const;
 
-    static bool respectCase;
+  static bool respectCase;
 
 signals:
 
@@ -194,33 +194,10 @@ signals:
    * Emitted if a new table is added to the document.
    */
   void sig_addSheet( Sheet *_table );
+
 private:
-
-  Doc* m_doc;
-
-  /**
-   * List of all sheets in this map. The list has autodelete turned on.
-   */
-  QList<Sheet*> m_lstSheets;
-  QList<Sheet*> m_lstDeletedSheets;
-
-  /**
-   * Password to protect the map from being changed.
-   */
-  QByteArray m_strPassword;
-  /**
-   * Set from the XML
-   */
-  Sheet * m_initialActiveSheet;
-  int m_initialMarkerColumn;
-  int m_initialMarkerRow;
-  double m_initialXOffset;
-  double m_initialYOffset;
-
-  // used to give every Sheet a unique default name.
-  int tableId;
-
-  MapAdaptor* m_dbus;
+  class Private;
+  Private * const d;
 };
 
 } // namespace KSpread

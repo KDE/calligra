@@ -47,42 +47,75 @@
 
 using namespace KSpread;
 
+class Map::Private
+{
+public:
+  Doc* doc;
+
+  /**
+   * List of all sheets in this map. The list has autodelete turned on.
+   */
+  QList<Sheet*> lstSheets;
+  QList<Sheet*> lstDeletedSheets;
+
+  /**
+   * Password to protect the map from being changed.
+   */
+  QByteArray strPassword;
+  /**
+   * Set from the XML
+   */
+  Sheet* initialActiveSheet;
+  int    initialMarkerColumn;
+  int    initialMarkerRow;
+  double initialXOffset;
+  double initialYOffset;
+
+  // used to give every Sheet a unique default name.
+  int tableId;
+
+  MapAdaptor* dbus;
+};
+
+
 bool Map::respectCase = true;
 
 Map::Map ( Doc* doc, const char* name)
   : QObject( doc ),
-    m_doc( doc ),
-    m_initialActiveSheet( 0 ),
-    m_initialMarkerColumn( 0 ),
-    m_initialMarkerRow( 0 ),
-    m_initialXOffset(0.0),
-    m_initialYOffset(0.0),
-    tableId (1)
+    d(new Private)
 {
   setObjectName( name ); // ### necessary for DCOP/Scripting?
-  m_dbus = new MapAdaptor(this);
+  d->doc = doc;
+  d->initialActiveSheet = 0;
+  d->initialMarkerColumn = 0;
+  d->initialMarkerRow = 0;
+  d->initialXOffset = 0.0;
+  d->initialYOffset = 0.0;
+  d->tableId = 1;
+
+  d->dbus = new MapAdaptor(this);
   QDBus::sessionBus().registerObject( "/"+doc->objectName() + '/' + objectName(), this);
- 
 }
 
 Map::~Map()
 {
-  qDeleteAll( m_lstSheets );
+  qDeleteAll( d->lstSheets );
+  delete d;
 }
 
 Doc* Map::doc() const
 {
-  return m_doc;
+  return d->doc;
 }
 
 void Map::setProtected( QByteArray const & passwd )
 {
-  m_strPassword = passwd;
+  d->strPassword = passwd;
 }
 
 Sheet* Map::createSheet()
 {
-  QString s( i18n("Sheet%1", tableId++ ) );
+  QString s( i18n("Sheet%1", d->tableId++ ) );
   Sheet *t = new Sheet ( this, s , s.toUtf8());
   t->setSheetName( s, true ); // huh? (Werner)
   return t;
@@ -90,9 +123,9 @@ Sheet* Map::createSheet()
 
 void Map::addSheet( Sheet *_sheet )
 {
-  m_lstSheets.append( _sheet );
+  d->lstSheets.append( _sheet );
 
-  m_doc->setModified( true );
+  d->doc->setModified( true );
 
   emit sig_addSheet( _sheet );
 }
@@ -109,25 +142,25 @@ void Map::moveSheet( const QString & _from, const QString & _to, bool _before )
   Sheet* sheetfrom = findSheet( _from );
   Sheet* sheetto = findSheet( _to );
 
-  int from = m_lstSheets.indexOf( sheetfrom ) ;
-  int to = m_lstSheets.indexOf( sheetto ) ;
+  int from = d->lstSheets.indexOf( sheetfrom ) ;
+  int to = d->lstSheets.indexOf( sheetto ) ;
   if ( !_before )
   ++to;
 
-  if ( to > (int)m_lstSheets.count() )
+  if ( to > (int)d->lstSheets.count() )
   {
-    m_lstSheets.append( sheetfrom );
-    m_lstSheets.removeAt( from );
+    d->lstSheets.append( sheetfrom );
+    d->lstSheets.removeAt( from );
   }
   else if ( from < to )
   {
-    m_lstSheets.insert( to, sheetfrom );
-    m_lstSheets.removeAt( from );
+    d->lstSheets.insert( to, sheetfrom );
+    d->lstSheets.removeAt( from );
   }
   else
   {
-    m_lstSheets.removeAt( from );
-    m_lstSheets.insert( to, sheetfrom );
+    d->lstSheets.removeAt( from );
+    d->lstSheets.insert( to, sheetfrom );
   }
 }
 
@@ -141,7 +174,7 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !sheetsMap.isNull() <<endl;
     if ( !sheetsMap.isNull() )
     {
-      foreach ( Sheet* sheet, m_lstSheets )
+      foreach ( Sheet* sheet, d->lstSheets )
       {
         sheet->loadOasisSettings( sheetsMap );
       }
@@ -153,7 +186,7 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     if (!activeSheet.isEmpty())
     {
         // Used by View's constructor
-        m_initialActiveSheet = findSheet( activeSheet );
+        d->initialActiveSheet = findSheet( activeSheet );
     }
 
 }
@@ -163,7 +196,7 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
     settingsWriter.addConfigItem( "ViewId", QString::fromLatin1( "View1" ) );
     // Save visual info for the first view, such as active sheet and active cell
     // It looks like a hack, but reopening a document creates only one view anyway (David)
-    View * view = static_cast<View*>( m_doc->views().first());
+    View * view = static_cast<View*>( d->doc->views().first());
     if ( view ) // no view if embedded document
     {
         // save current sheet selection before to save marker, otherwise current pos is not saved
@@ -175,7 +208,7 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
     //<config:config-item-map-named config:name="Tables">
     settingsWriter.startElement("config:config-item-map-named" );
     settingsWriter.addAttribute("config:name","Tables" );
-    foreach ( Sheet* sheet, m_lstSheets )
+    foreach ( Sheet* sheet, d->lstSheets )
     {
       settingsWriter.startElement( "config:config-item-map-entry" );
       settingsWriter.addAttribute( "config:name", sheet->sheetName() );
@@ -197,10 +230,10 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
 
 bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj )
 {
-    if ( !m_strPassword.isEmpty() )
+    if ( !d->strPassword.isEmpty() )
     {
         xmlWriter.addAttribute("table:structure-protected", "true" );
-        QByteArray str = KCodecs::base64Encode( m_strPassword );
+        QByteArray str = KCodecs::base64Encode( d->strPassword );
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
     }
@@ -220,7 +253,7 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     KoXmlWriter bodyTmpWriter( tmpFile );
 
 
-    foreach ( Sheet* sheet, m_lstSheets )
+    foreach ( Sheet* sheet, d->lstSheets )
     {
         sheet->saveOasis( bodyTmpWriter, mainStyles, valStyle, store,
                           manifestWriter, _indexObj, _partIndexObj );
@@ -241,7 +274,7 @@ QDomElement Map::save( QDomDocument& doc )
     QDomElement mymap = doc.createElement( "map" );
   // Save visual info for the first view, such as active sheet and active cell
   // It looks like a hack, but reopening a document creates only one view anyway (David)
-  View * view = static_cast<View*>(m_doc->views().first());
+  View * view = static_cast<View*>(d->doc->views().first());
   if ( view ) // no view if embedded document
   {
     Canvas * canvas = view->canvasWidget();
@@ -252,18 +285,18 @@ QDomElement Map::save( QDomDocument& doc )
     mymap.setAttribute( "yOffset",      canvas->yOffset() );
   }
 
-  if ( !m_strPassword.isNull() )
+  if ( !d->strPassword.isNull() )
   {
-    if ( m_strPassword.size() > 0 )
+    if ( d->strPassword.size() > 0 )
     {
-      QByteArray str = KCodecs::base64Encode( m_strPassword );
+      QByteArray str = KCodecs::base64Encode( d->strPassword );
       mymap.setAttribute( "protected", QString( str.data() ) );
     }
     else
       mymap.setAttribute( "protected", "" );
   }
 
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     QDomElement e = sheet->saveXML( doc );
     if ( e.isNull() )
@@ -284,7 +317,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
             QByteArray str( p.toLatin1() );
             passwd = KCodecs::base64Decode( str );
         }
-        m_strPassword = passwd;
+        d->strPassword = passwd;
     }
 
     QDomNode sheetNode = KoDom::namedItemNS( body, KoXmlNS::table, "table" );
@@ -345,10 +378,10 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
 bool Map::loadXML( const QDomElement& mymap )
 {
   QString activeSheet   = mymap.attribute( "activeTable" );
-  m_initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
-  m_initialMarkerRow    = mymap.attribute( "markerRow" ).toInt();
-  m_initialXOffset      = mymap.attribute( "xOffset" ).toDouble();
-  m_initialYOffset      = mymap.attribute( "yOffset" ).toDouble();
+  d->initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
+  d->initialMarkerRow    = mymap.attribute( "markerRow" ).toInt();
+  d->initialXOffset      = mymap.attribute( "xOffset" ).toDouble();
+  d->initialYOffset      = mymap.attribute( "yOffset" ).toDouble();
 
   QDomNode n = mymap.firstChild();
   if ( n.isNull() )
@@ -376,16 +409,16 @@ bool Map::loadXML( const QDomElement& mymap )
     if ( passwd.length() > 0 )
     {
       QByteArray str( passwd.toLatin1() );
-      m_strPassword = KCodecs::base64Decode( str );
+      d->strPassword = KCodecs::base64Decode( str );
     }
     else
-      m_strPassword = QByteArray( "" );
+      d->strPassword = QByteArray( "" );
   }
 
   if (!activeSheet.isEmpty())
   {
     // Used by View's constructor
-    m_initialActiveSheet = findSheet( activeSheet );
+    d->initialActiveSheet = findSheet( activeSheet );
   }
 
   return true;
@@ -393,7 +426,7 @@ bool Map::loadXML( const QDomElement& mymap )
 
 void Map::update()
 {
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     sheet->recalc();
   }
@@ -401,7 +434,7 @@ void Map::update()
 
 Sheet* Map::findSheet( const QString & _name )
 {
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     if ( _name.toLower() == sheet->sheetName().toLower() )
       return sheet;
@@ -411,13 +444,13 @@ Sheet* Map::findSheet( const QString & _name )
 
 Sheet * Map::nextSheet( Sheet * currentSheet )
 {
-  if( currentSheet == m_lstSheets.last())
+  if( currentSheet == d->lstSheets.last())
     return currentSheet;
   int index = 0;
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     if ( sheet == currentSheet )
-      return m_lstSheets.value( ++index );
+      return d->lstSheets.value( ++index );
     ++index;
   }
   return 0;
@@ -425,13 +458,13 @@ Sheet * Map::nextSheet( Sheet * currentSheet )
 
 Sheet * Map::previousSheet( Sheet * currentSheet )
 {
-  if( currentSheet == m_lstSheets.first())
+  if( currentSheet == d->lstSheets.first())
     return currentSheet;
   int index = 0;
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     if ( sheet  == currentSheet )
-      return m_lstSheets.value( --index );
+      return d->lstSheets.value( --index );
     ++index;
   }
   return 0;
@@ -439,7 +472,7 @@ Sheet * Map::previousSheet( Sheet * currentSheet )
 
 bool Map::saveChildren( KoStore * _store )
 {
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     // set the child document's url to an internal url (ex: "tar:/0/1")
     if ( !sheet->saveChildren( _store, sheet->sheetName() ) )
@@ -450,7 +483,7 @@ bool Map::saveChildren( KoStore * _store )
 
 bool Map::loadChildren( KoStore * _store )
 {
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     if ( !sheet->loadChildren( _store ) )
       return false;
@@ -460,26 +493,26 @@ bool Map::loadChildren( KoStore * _store )
 
 MapAdaptor * Map::dbusObject()
 {
-    return m_dbus;
+    return d->dbus;
 }
 
 void Map::takeSheet( Sheet * sheet )
 {
-  m_lstSheets.removeAll( sheet );
-  m_lstDeletedSheets.append( sheet );
+  d->lstSheets.removeAll( sheet );
+  d->lstDeletedSheets.append( sheet );
 }
 
 void Map::insertSheet( Sheet * sheet )
 {
-    m_lstDeletedSheets.removeAll( sheet );
-    m_lstSheets.append(sheet);
+    d->lstDeletedSheets.removeAll( sheet );
+    d->lstSheets.append(sheet);
 }
 
 // FIXME cache this for faster operation
 QStringList Map::visibleSheets() const
 {
   QStringList result;
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     if( !sheet->isHidden() )
       result.append( sheet->sheetName() );
@@ -491,12 +524,68 @@ QStringList Map::visibleSheets() const
 QStringList Map::hiddenSheets() const
 {
   QStringList result;
-  foreach ( Sheet* sheet, m_lstSheets )
+  foreach ( Sheet* sheet, d->lstSheets )
   {
     if( sheet->isHidden() )
       result.append( sheet->sheetName() );
   }
   return result;
+}
+
+void Map::password( QByteArray & passwd ) const
+{
+  passwd = d->strPassword;
+}
+
+bool Map::isProtected() const
+{
+  return !d->strPassword.isNull();
+}
+
+bool Map::checkPassword( QByteArray const & passwd ) const
+{
+  return ( passwd == d->strPassword );
+}
+
+
+Sheet* Map::initialActiveSheet()const
+{
+  return d->initialActiveSheet;
+}
+
+int Map::initialMarkerColumn() const
+{
+  return d->initialMarkerColumn;
+}
+
+int Map::initialMarkerRow() const
+{
+  return d->initialMarkerRow;
+}
+
+double Map::initialXOffset() const
+{
+  return d->initialXOffset;
+}
+
+double Map::initialYOffset() const
+{
+  return d->initialYOffset;
+}
+
+Sheet* Map::sheet( int index ) const
+{
+  return d->lstSheets.value( index );
+}
+
+QList<Sheet*>& Map::sheetList()
+{
+  return d->lstSheets;
+}
+
+int Map::count() const
+{
+  return d->lstSheets.count();
 }
 
 #include "Map.moc"
