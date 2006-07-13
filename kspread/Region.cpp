@@ -27,7 +27,6 @@
 #include "Map.h"
 #include "Sheet.h"
 #include "Util.h"
-#include "View.h"
 
 #include "Region.h"
 
@@ -38,12 +37,12 @@ class Region::Private
 {
 public:
   Private()
-    : view(0),
+    : map(0),
       cells(QList<Element*>())
   {
   }
 
-  View* view;
+  Map* map;
   QList<Element*> cells;
 };
 
@@ -57,10 +56,10 @@ Region::Region()
   d = new Private();
 }
 
-Region::Region(View* view, const QString& string, Sheet* sheet)
+Region::Region(Map* map, const QString& string, Sheet* fallbackSheet)
 {
   d = new Private();
-  d->view = view;
+  d->map = map;
 
   if (string.isEmpty())
   {
@@ -71,10 +70,13 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
   for (QStringList::ConstIterator it = substrings.constBegin(); it != end; ++it)
   {
     QString sRegion = *it;
+
+    Sheet* sheet = filterSheetName(sRegion);
     if (!sheet)
     {
-      sheet = filterSheetName(sRegion);
+      sheet = fallbackSheet;
     }
+    kDebug() << "SHEET << " << sheet->name() << endl;
 
     int delimiterPos = sRegion.indexOf(':');
     if (delimiterPos > -1)
@@ -139,7 +141,7 @@ Region::Region(const QPoint& point, Sheet* sheet)
 Region::Region(const Region& list)
 {
   d = new Private();
-  d->view = list.d->view;
+  d->map = list.d->map;
 
   ConstIterator end(list.d->cells.constEnd());
   for (ConstIterator it = list.d->cells.constBegin(); it != end; ++it)
@@ -189,15 +191,15 @@ Region::~Region()
   delete d;
 }
 
-View* Region::view() const
+Map* Region::map() const
 {
-  Q_ASSERT(d->view);
-  return d->view;
+  Q_ASSERT(d->map);
+  return d->map;
 }
 
-void Region::setView(View* view)
+void Region::setMap(Map* map)
 {
-  d->view = view;
+  d->map = map;
 }
 
 bool Region::isValid() const
@@ -688,7 +690,7 @@ bool Region::operator==(const Region& other) const
 
 void Region::operator=(const Region& other)
 {
-  d->view = other.d->view;
+  d->map = other.d->map;
   clear();
   ConstIterator end(other.d->cells.constEnd());
   for (ConstIterator it = other.d->cells.constBegin(); it != end; ++it)
@@ -716,12 +718,7 @@ Sheet* Region::filterSheetName(QString& sRegion)
     QString sheetName = sRegion.left(delimiterPos);
     // remove the '!'
     sRegion = sRegion.right(sRegion.length() - delimiterPos - 1);
-    sheet = d->view->doc()->map()->findSheet(sheetName);
-    if (!sheet)
-    {
-      kDebug() << "Sheet " << sheetName << " not found. Using active sheet!" << endl;
-      sheet = d->view->activeSheet();
-    }
+    sheet = d->map->findSheet(sheetName);
   }
   return sheet;
 }
@@ -914,6 +911,10 @@ bool Region::Point::contains(const QRect& range) const
     return (range.width() == 1) && (range.height() == 1) && (range.topLeft() == m_point);
 }
 
+Cell* Region::Point::cell() const
+{
+  return m_sheet->cellAt(m_point);
+}
 
 /***************************************************************************
   class Range

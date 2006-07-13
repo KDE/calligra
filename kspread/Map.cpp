@@ -33,9 +33,11 @@
 #include <KoXmlWriter.h>
 
 #include "Canvas.h"
+#include "DependencyManager.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
 #include "Locale.h"
+#include "RecalcManager.h"
 #include "Sheet.h"
 #include "StyleManager.h"
 #include "View.h"
@@ -51,6 +53,8 @@ class Map::Private
 {
 public:
   Doc* doc;
+  DependencyManager* dependencyManager;
+  RecalcManager* recalcManager;
 
   /**
    * List of all sheets in this map. The list has autodelete turned on.
@@ -86,6 +90,8 @@ Map::Map ( Doc* doc, const char* name)
 {
   setObjectName( name ); // ### necessary for DCOP/Scripting?
   d->doc = doc;
+  d->dependencyManager = new DependencyManager();
+  d->recalcManager = new RecalcManager(d->dependencyManager);
   d->initialActiveSheet = 0;
   d->initialMarkerColumn = 0;
   d->initialMarkerRow = 0;
@@ -100,12 +106,24 @@ Map::Map ( Doc* doc, const char* name)
 Map::~Map()
 {
   qDeleteAll( d->lstSheets );
+  delete d->dependencyManager;
+  delete d->recalcManager;
   delete d;
 }
 
 Doc* Map::doc() const
 {
   return d->doc;
+}
+
+DependencyManager* Map::dependencyManager() const
+{
+  return d->dependencyManager;
+}
+
+RecalcManager* Map::recalcManager() const
+{
+  return d->recalcManager;
 }
 
 void Map::setProtected( QByteArray const & passwd )
@@ -422,14 +440,6 @@ bool Map::loadXML( const QDomElement& mymap )
   }
 
   return true;
-}
-
-void Map::update()
-{
-  foreach ( Sheet* sheet, d->lstSheets )
-  {
-    sheet->recalc();
-  }
 }
 
 Sheet* Map::findSheet( const QString & _name )

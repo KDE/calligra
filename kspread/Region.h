@@ -32,9 +32,10 @@
 
 namespace KSpread
 {
+class Cell;
 class Manipulator;
+class Map;
 class Sheet;
-class View;
 
 /**
  * \class Region
@@ -44,12 +45,11 @@ class View;
  */
 class KSPREAD_EXPORT Region
 {
-protected:
+public:
   class Element;
   class Point;
   class Range;
 
-public:
   /**
    * Constructor.
    * Creates an empty region.
@@ -75,11 +75,11 @@ public:
   /**
    * Constructor.
    * Creates a region consisting of the region defined in @p strRegion .
-   * @param view used to determine the sheet, if it's named in the string
+   * @param map used to determine the sheet, if it's named in the string
    * @param strRegion a string representing the region (e.g. "A1:B3")
-   * @param sheet the sheet the region belongs to
+   * @param sheet the fallback sheet, if \p strRegion does not contain one
    */
-  Region(View* view, const QString& strRegion, Sheet* sheet = 0);
+  Region(Map* map, const QString& strRegion, Sheet* sheet);
 
   /**
    * Copy Constructor.
@@ -124,7 +124,7 @@ public:
   /**
    * @param sRegion will be modified, if a valid sheet was found. The sheetname
    * will be removed
-   * @return sheet named in the @p sRegion or the active sheet of the view
+   * @return sheet named in the @p sRegion or null
    */
   Sheet* filterSheetName(QString& sRegion);
 
@@ -261,14 +261,14 @@ public:
 
 
   /**
-   * @return the view to which this region belongs.
+   * @return the map to which this region belongs.
    */
-  View* view() const;
+  Map* map() const;
 
   /**
-   * Sets the view to which this region belongs.
+   * Sets the map to which this region belongs.
    */
-  void setView(View*);
+  void setMap(Map*);
 
 
   typedef QList<Element*>::Iterator      Iterator;
@@ -402,6 +402,7 @@ protected:
 class Region::Point : public Region::Element
 {
 public:
+  Point(int col, int row) : Element(), m_point(col,row) {}
   Point(const QPoint&);
   Point(const QString&);
   virtual ~Point();
@@ -419,6 +420,16 @@ public:
   virtual QRect rect() const { return QRect(m_point,m_point); }
 
   QPoint pos() const { return m_point; }
+  Cell* cell() const;
+
+  bool operator<(const Point& other) const
+  {
+    if (m_point == other.m_point)
+      return m_sheet < other.m_sheet; // pointers!
+    if (m_point.y() < other.m_point.y())
+      return true;
+    return ((m_point.y() == other.m_point.y()) && (m_point.x() < other.m_point.x()));
+  }
 
 private:
   QPoint m_point;

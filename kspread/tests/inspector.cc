@@ -31,10 +31,12 @@
 
 // KSpread
 #include "Cell.h"
+#include "DependencyManager.h"
 #include "Format.h"
-#include "Style.h"
+#include "Map.h"
+#include "Region.h"
 #include "Sheet.h"
-#include "Dependencies.h"
+#include "Style.h"
 
 namespace KSpread
 {
@@ -146,26 +148,23 @@ void Inspector::Private::handleSheet()
 
 void Inspector::Private::handleDep()
 {
-  Point cellPoint;
-  cellPoint.setSheet(sheet);
-  cellPoint.setRow( cell->row() );
-  cellPoint.setColumn( cell->column() );
-
-  DependencyManager* manager = sheet->dependencies();
-  QLinkedList<Point> deps = manager->getDependants( cellPoint );
+  DependencyManager* manager = sheet->workbook()->dependencyManager();
+  Region deps = manager->getDependants( cell );
 
   depView->clear();
-  QLinkedList<Point>::ConstIterator end(deps.end());
-  for( QLinkedList<Point>::ConstIterator it(deps.begin()); it != end; ++it )
+  Region::ConstIterator end(deps.constEnd());
+  for( Region::ConstIterator it(deps.constBegin()); it != end; ++it )
   {
+    const QRect range = (*it)->rect();
+    for (int col = range.left(); col <= range.right(); ++col)
+      for (int row = range.top(); row <= range.bottom(); ++row)
+    {
     QString k1, k2;
 
-    Point point = *it;
-    int row = point.row();
-    int column = point.column();
-    k1 = Cell::fullName( point.sheet(), column, row );
+    k1 = Cell::fullName( (*it)->sheet(), col, row );
 
     new Q3ListViewItem( depView, k1, k2 );
+    }
   }
 
 }

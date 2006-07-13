@@ -40,12 +40,13 @@ class KoOasisSettings;
 namespace KSpread
 {
 class Changes;
-class Map;
+class DependencyManager;
 class Doc;
-class Sheet;
 class GenValidationStyles;
-class Style;
 class MapAdaptor;
+class RecalcManager;
+class Sheet;
+class Style;
 
 /**
  * A map is a simple container for all sheets. Usually a complete map
@@ -66,6 +67,16 @@ public:
   virtual ~Map();
 
   Doc* doc() const;
+
+  /**
+   * \return a pointer to the dependency manager
+   */
+  DependencyManager* dependencyManager() const;
+
+  /**
+   * \return a pointer to the recalculation manager
+   */
+  RecalcManager* recalcManager() const;
 
   /**
    * \ingroup OpenDocument
@@ -101,7 +112,6 @@ public:
 
 
   bool loadChildren( KoStore* _store );
-
   bool saveChildren( KoStore* _store );
 
   void password( QByteArray & passwd ) const;
@@ -175,8 +185,6 @@ public:
    * @return amount of sheets in this map
    */
   int count() const;
-
-  void update();
 
   virtual MapAdaptor* dbusObject();
 

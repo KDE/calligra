@@ -775,7 +775,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
         Token::Type type = token.type();
         if (type == Token::Cell || type == Token::Range)
         {
-          Region region(d->canvas->view(), token.text());
+          Region region(d->canvas->view()->doc()->map(), token.text(), d->canvas->activeSheet());
           it = region.constBegin();
 
           if (!alreadyUsedRegions.contains(region))
@@ -1331,7 +1331,7 @@ bool LocationEditWidget::activateItem()
             QString tmp = (*it).sheet_name;
             tmp += '!';
             tmp += util_rangeName((*it).rect);
-            m_pView->selectionInfo()->initialize( Region(m_pView,tmp) );
+            m_pView->selectionInfo()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
             return true;
         }
     }
@@ -1346,11 +1346,11 @@ bool LocationEditWidget::activateItem()
 
     // Selection entered in location widget
     if ( ltext.contains( ':' ) )
-      m_pView->selectionInfo()->initialize( Region(m_pView,tmp) );
+      m_pView->selectionInfo()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
     // Location entered in location widget
     else
     {
-      Region region(m_pView,tmp);
+      Region region(m_pView->doc()->map(), tmp, m_pView->activeSheet());
         bool validName = true;
         for (int i = 0; i < ltext.length(); ++i)
         {

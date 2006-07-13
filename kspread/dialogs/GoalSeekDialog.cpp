@@ -131,13 +131,11 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   m_buttonOk = new QPushButton( this );
   m_buttonOk->setText( i18n( "&Start" ) );
-  m_buttonOk->setShortcut( 276824143 );
   m_buttonOk->setAutoDefault( true );
   m_buttonOk->setDefault( true );
   Layout5->addWidget( m_buttonOk );
 
   m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this );
-  m_buttonCancel->setShortcut( 276824131 );
   m_buttonCancel->setAutoDefault( true );
   Layout5->addWidget( m_buttonCancel );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );

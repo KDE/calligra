@@ -232,7 +232,7 @@ void reference::slotOk()
         m_pView->setActiveSheet(sheet);
     }
 
-    Region region(m_pView, Cell::fullName(m_pView->activeSheet(), area[index].rect.left(), area[index].rect.top()));
+    Region region(m_pView->doc()->map(), Cell::fullName(m_pView->activeSheet(), area[index].rect.left(), area[index].rect.top()), m_pView->activeSheet());
     m_pView->selectionInfo()->initialize(region);
     m_pView->selectionInfo()->initialize(area[ index ].rect);//,                                           m_pView->activeSheet() );
   }

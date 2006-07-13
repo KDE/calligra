@@ -114,6 +114,7 @@
 #include "Handler.h"
 #include "Locale.h"
 #include "Map.h"
+#include "RecalcManager.h"
 #include "Selection.h"
 #include "SheetPrint.h"
 #include "Style.h"
@@ -1947,14 +1948,7 @@ void View::recalcWorkBook()
     return;
 
   doc()->emitBeginOperation( true );
-  foreach ( Sheet* sheet, doc()->map()->sheetList() )
-  {
-   // bool b = tbl->getAutoCalc();
-   // tbl->setAutoCalc( true );
-    sheet->recalc( /*force recalculation = */ true);
-   // tbl->setAutoCalc( b );
-  }
-
+  doc()->map()->recalcManager()->recalcMap();
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 

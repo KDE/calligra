@@ -22,23 +22,13 @@
 
 #include <QLinkedList>
 
+#include "Region.h"
 #include "Util.h"
 
 namespace KSpread
 {
+class Region;
 class Sheet;
-
-struct DependencyList;
-
-/** Range dependency - stores information about one dependency of one cell on
-one range of cells. */
-
-struct RangeDependency {
-  int cellrow, cellcolumn;
-  Sheet *cellsheet;
-  Range range;
-};
-
 
 /**
 This class manages dependencies.
@@ -46,10 +36,13 @@ No need to inherit from DocBase here, at least not yet.
 TODO: describe how it works and why there are two types of dependencies
 */
 
-class KSPREAD_EXPORT DependencyManager {
- public:
+class KSPREAD_EXPORT DependencyManager
+{
+  friend class RecalcManager;
+
+public:
   /** constructor */
-   DependencyManager (Sheet *s);
+   DependencyManager();
   /** destructor */
   ~DependencyManager ();
 
@@ -57,28 +50,28 @@ class KSPREAD_EXPORT DependencyManager {
   void reset ();
 
   /** handle the fact that cell's contents have changed */
-  void cellChanged (const Point &cell);
-  /** handle the fact that a range has been changed */
-  void rangeChanged (const Range &range);
-  /** handle the fact that a range list has been changed */
-  void rangeListChanged (const RangeList &rangeList);
+  void regionChanged (const Region& region);
 
   /** a named area was somehow modified */
   void areaModified (const QString &name);
 
   /** get dependencies of a cell */
-  RangeList getDependencies (const Point &cell);
-  /** get cells depending on this cell, either through normal or range dependency */
-  QLinkedList<Point> getDependants (const Point &cell);
+  Region getDependencies (const Point &cell);
+
+  /**
+   * \return cells depending on \p cell
+   */
+  Region getDependants(const Cell* cell);
+
 protected:
+  QMap<Region::Point, Region> dependencies() const;
 
   /** local d-pointer */
-  DependencyList *deps;
-  friend class DependencyList;
+  class Private;
+  Private * const d;
 };
 
 //end of namespace
 }
 
 #endif // KSPREAD_DEPENDENCIES
-

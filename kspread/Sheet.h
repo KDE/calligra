@@ -68,7 +68,6 @@ class Cell;
 class ColumnFormat;
 class RowFormat;
 class EmbeddedChart;
-class DependencyManager;
 class Doc;
 class Format;
 class GenValidationStyles;
@@ -1218,9 +1217,6 @@ public:
   Cell* getNextCellRight(int col, int row) const;
 
   SheetPrint * print() const;
-
-  /** returns a pointer to the dependency manager */
-  KSpread::DependencyManager *dependencies ();
 
   /**
    * @brief Get the amount of selected objects that belong to this sheet

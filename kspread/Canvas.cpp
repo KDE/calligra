@@ -1184,7 +1184,7 @@ void Canvas::processLeftClickAnchor()
     }
     else
     {
-      selectionInfo()->initialize(Region(d->view, d->anchor));
+      selectionInfo()->initialize(Region(d->view->doc()->map(), d->anchor, activeSheet()));
     }
 }
 

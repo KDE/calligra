@@ -23,6 +23,8 @@
 
 #include <Formula.h>
 #include <Cell.h>
+#include <Doc.h>
+#include <Sheet.h>
 #include <Sheet.h>
 #include <Value.h>
 #include <View.h>
@@ -93,7 +95,7 @@ void Solver::optimize()
   if (d->dialog->parameters->textEdit()->toPlainText().isEmpty())
     return;
 
-  Region region( d->view, d->dialog->function->textEdit()->toPlainText() );
+  Region region( d->view->doc()->map(), d->dialog->function->textEdit()->toPlainText(), d->view->activeSheet() );
   if (!region.isValid())
     return;
 
@@ -123,7 +125,7 @@ void Solver::optimize()
   // Determine the parameters
   int dimension = 0;
   Parameters* parameters = new Parameters;
-  region = Region( d->view, d->dialog->parameters->textEdit()->toPlainText() );
+  region = Region( d->view->doc()->map(), d->dialog->parameters->textEdit()->toPlainText(), d->view->activeSheet() );
   Region::ConstIterator end( region.constEnd() );
   for ( Region::ConstIterator it( region.constBegin() ); it != end; ++it )
   {

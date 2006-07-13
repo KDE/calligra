@@ -62,7 +62,7 @@
 #include <KoXmlWriter.h>
 
 #include "Commands.h"
-#include "Dependencies.h"
+#include "DependencyManager.h"
 #include "Selection.h"
 #include "Ksploadinginfo.h"
 #include "Canvas.h"
@@ -73,6 +73,7 @@
 #include "Locale.h"
 #include "Map.h"
 #include "Object.h"
+#include "RecalcManager.h"
 #include "SheetPrint.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -279,8 +280,6 @@ public:
 
   int scrollPosX;
   int scrollPosY;
-
-  KSpread::DependencyManager *dependencies;
 };
 
 int Sheet::s_id = 0;
@@ -357,9 +356,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
       QObject::setObjectName( s.data() );
   }
   d->print = new SheetPrint( this );
-
-  // initialize dependencies
-  d->dependencies = new KSpread::DependencyManager (this);
 
   // connect to named area slots
   QObject::connect( doc(), SIGNAL( sig_addAreaName( const QString & ) ),
@@ -678,11 +674,6 @@ const QBrush& Sheet::emptyBrush() const
 const QColor& Sheet::emptyColor() const
 {
   return d->emptyColor;
-}
-
-KSpread::DependencyManager *Sheet::dependencies ()
-{
-  return d->dependencies;
 }
 
 int Sheet::numSelected() const
@@ -1090,14 +1081,13 @@ void Sheet::setCalcDirtyFlag()
 
 void Sheet::updateAllDependencies()
 {
-        for (Cell* cell = d->cells.firstCell() ; cell ; cell = cell->nextCell())
-        {
-            Point cellLocation;
-            cellLocation.setSheet(cell->sheet());
-            cellLocation.setRow(cell->row());
-            cellLocation.setColumn(cell->column());
-            d->dependencies->cellChanged(cellLocation);
-        }
+  Region region;
+  for (Cell* cell = d->cells.firstCell() ; cell ; cell = cell->nextCell())
+  {
+    region.add(QPoint(cell->column(), cell->row()), this);
+  }
+  d->workbook->dependencyManager()->regionChanged(region);
+  d->workbook->recalcManager()->regionChanged(region);
 }
 
 void Sheet::recalc()
@@ -1123,33 +1113,8 @@ void Sheet::recalc( bool force )
   if ( !getAutoCalc() )
     updateAllDependencies();
 
-
-  // (Tomas): actually recalc each cell
-  // this is FAR from being perfect, dependencies will cause some to be
-  // recalculated a LOT, but it's still better than otherwise, where
-  // we get no recalc if the result stored in a file differs from the
-  // current one - then we only obtain the correct result AFTER we scroll
-  // to the cell ... recalc should actually ... recalc :)
-  Cell* c;
-
-  int count = 0;
-  c = d->cells.firstCell();
-  for( ; c; c = c->nextCell() )
-    ++count;
-
-  int cur = 0;
-  int percent = -1;
-  c = d->cells.firstCell();
-  for( ; c; c = c->nextCell() )
-  {
-    c->calc (false);
-    cur++;
-    // some debug output to get some idea how damn slow this is ...
-    if (cur*100/count != percent) {
-      percent = cur*100/count;
-//       kDebug() << "Recalc: " << percent << '%' << endl;
-    }
-  }
+  // Recalculate cells
+  d->workbook->recalcManager()->recalcSheet(this);
 
   //  emitEndOperation();
   emit sig_updateView( this );
@@ -1160,15 +1125,16 @@ void Sheet::valueChanged (Cell *cell)
 
   //TODO: call cell updating, when cell damaging implemented
 
-  //prepare the Point structure
-  Point c;
-  c.setRow (cell->row());
-  c.setColumn (cell->column());
-  c.setSheet( this );
+  //prepare the Region structure
+  Region region;
+  region.add(QPoint(cell->column(), cell->row()), this);
 
   //update dependencies
   if ( getAutoCalc() )
-        d->dependencies->cellChanged (c);
+  {
+    d->workbook->dependencyManager()->regionChanged (region);
+    d->workbook->recalcManager()->regionChanged(region);
+  }
 
   //REMOVED - modification change - this was causing modified flag to be set inappropriately.
   //nobody else seems to be setting the modified flag, so we do it here
@@ -1857,7 +1823,7 @@ void Sheet::setSelectionPercent( Selection* selectionInfo, bool b )
 
 void Sheet::slotAreaModified (const QString &name)
 {
-  d->dependencies->areaModified (name);
+  d->workbook->dependencyManager()->areaModified (name);
 }
 
 
@@ -6666,8 +6632,6 @@ Sheet::~Sheet()
     delete d->defaultRowFormat;
     delete d->defaultColumnFormat;
     delete d->print;
-
-    delete d->dependencies;
 
     delete d;
 

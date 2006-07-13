@@ -94,7 +94,7 @@ SET (kspreadcommon_LIB_SRCS
 	Digest.cpp
 	Commands.cpp
 	Damages.cpp
-	Dependencies.cpp
+	DependencyManager.cpp
 	Formula.cpp
 	Functions.cpp
 	AutoFill.cpp
@@ -114,6 +114,7 @@ SET (kspreadcommon_LIB_SRCS
 	KSpreadMapAdaptor.cpp
 	Numformat.cpp
 	Object.cpp
+	RecalcManager.cpp
 	Style.cpp
 	StyleManager.cpp
 	Undo.cpp
