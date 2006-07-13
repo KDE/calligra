@@ -591,14 +591,13 @@ from the menubar.</para>
 <para>A complete explanation to all these properties, is beyond the scope of this document.</para></listitem>
 <listitem><para>Click <guibutton>OK</guibutton>.</para></listitem>
 </orderedlist>
-<para>Your PDF file will be created and saved at the location specified in <guilabel>Output file</guilabel>.  This file can be uploaded
-onto any website.</para>
+<para>Your PDF file will be created and saved at the location specified in <guilabel>Output file</guilabel>.</para>
 <para>For more information on printing in &kde;, visit <ulink url="http://printing.kde.org">The &kde; Print web page</ulink>.</para>
 
 </sect1>
 
 <sect1 id="qd-template-remove">
-<title>How do I remove template categories from the open dialog.</title>
+<title>How do I remove template categories from the startup dialog.</title>
 
 <para>Templates can only be removed using the <guilabel>Create Template</guilabel> dialog. For instructions, click
 <link linkend="template-delete-group">Removing template group</link>.</para>
