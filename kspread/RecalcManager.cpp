@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+             2004 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -233,6 +234,20 @@ void RecalcManager::recalcCell(Cell* cell) const
   if (cell->testFlag (Cell::Flag_Progress) ||
       cell->testFlag (Cell::Flag_CircularCalculation))
   {
+    kError(36001) << "ERROR: Circle, cell " << cell->fullName() << endl;
+    Value v;
+    // don't set anything if the cell already has all these things set
+    // this prevents endless loop for inter-sheet curcular dependencies,
+    // where the usual mechanisms fail doe to having multiple dependency
+    // managers ...
+    if (!cell->testFlag (Cell::Flag_CircularCalculation))
+    {
+      cell->setFlag(Cell::Flag_CircularCalculation);
+      v.setError ( "####" );
+      cell->setValue (v);
+    }
+    //clear the computing-dependencies flag
+    cell->clearFlag (Cell::Flag_Progress);
     return;
   }
   //set the computing-dependencies flag
