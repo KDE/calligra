@@ -1,3 +1,3 @@
 
-SUBDIRS = insertcalendar scripting
+SUBDIRS = insertcalendar
 
