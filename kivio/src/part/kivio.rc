@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="kivio" version="30">
+  <MenuBar>
+    <Menu name="View"><text>&amp;View</text>
+      <Action name="view_palette_action_menu"/>
+    </Menu>
+  </MenuBar>
+</kpartgui>

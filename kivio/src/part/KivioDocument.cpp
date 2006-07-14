@@ -19,11 +19,20 @@
 
 #include "KivioDocument.h"
 
+#include <QDomElement>
+#include <QDomDocument>
+
 #include <kcommand.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <KoMainWindow.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 #include "KivioView.h"
+#include "KivioMasterPage.h"
+#include "KivioPage.h"
 
 KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
   : KoDocument(parentWidget, parent, singleViewMode)
@@ -39,6 +48,11 @@ KivioDocument::~KivioDocument()
 {
   delete m_commandHistory;
   m_commandHistory = 0;
+
+  qDeleteAll(m_pageList);
+  m_pageList.clear();
+  qDeleteAll(m_masterPageList);
+  m_masterPageList.clear();
 }
 
 void KivioDocument::paintContent(QPainter &painter, const QRect &rect, bool transparent,
@@ -62,11 +76,48 @@ bool KivioDocument::loadXML(QIODevice* device, const QDomDocument& doc)
 bool KivioDocument::loadOasis(const QDomDocument& doc, KoOasisStyles& oasisStyles,
                         const QDomDocument& settings, KoStore* store)
 {
-  Q_UNUSED(doc);
   Q_UNUSED(oasisStyles);
   Q_UNUSED(settings);
   Q_UNUSED(store);
 
+  kDebug(43000) << "Start loading OASIS document..." << endl;
+
+  QDomElement contents = doc.documentElement();
+  QDomElement realBody = KoDom::namedItemNS( contents, KoXmlNS::office, "body");
+
+  if(realBody.isNull()) {
+    kError(43000) << "No office:body found!" << endl;
+    setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
+    return false;
+  }
+
+  QDomElement body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
+
+  if ( body.isNull() )
+  {
+    kError(43000) << "No office:drawing found!" << endl;
+    QDomElement childElem;
+    QString localName;
+
+    forEachElement( childElem, realBody ) {
+      localName = childElem.localName();
+    }
+
+    if(localName.isEmpty()) {
+      setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+    } else {
+      setErrorMessage(i18n("This is not a graphical document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
+    }
+
+    return false;
+  }
+
+  return true;
+}
+
+bool KivioDocument::loadMasterPages(const KoOasisContext& oasisContext)
+{
+  Q_UNUSED(oasisContext);
   return true;
 }
 
@@ -106,6 +157,36 @@ void KivioDocument::addShell(KoMainWindow* shell)
   connect(shell, SIGNAL(saveDialogShown()), this, SLOT(saveDialogShown()));
 
   KoDocument::addShell(shell);
+}
+
+KivioMasterPage* KivioDocument::addMasterPage(const QString& title)
+{
+  KivioMasterPage* masterPage = new KivioMasterPage(this, title);
+  m_masterPageList.append(masterPage);
+
+  return masterPage;
+}
+
+KivioPage* KivioDocument::addPage(KivioMasterPage* masterPage, const QString& title)
+{
+  if(!masterPage) {
+    return 0;
+  }
+
+  KivioPage* page = new KivioPage(masterPage, title);
+  m_pageList.append(page);
+
+  return page;
+}
+
+KivioMasterPage* KivioDocument::masterPageByIndex(int index)
+{
+  return m_masterPageList.at(index);
+}
+
+KivioPage* KivioDocument::pageByIndex(int index)
+{
+  return m_pageList.at(index);
 }
 
 #include "KivioDocument.moc"

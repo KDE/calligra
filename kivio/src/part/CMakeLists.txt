@@ -1,5 +1,3 @@
-
-
 project(kivio)
 
 include_directories(${KOFFICEUI_INCLUDES})
@@ -10,6 +8,9 @@ set(kivioprivate_LIB_SRCS
   KivioDocument.cpp
   KivioView.cpp
   KivioCanvas.cpp
+  KivioAbstractPage.cpp
+  KivioMasterPage.cpp
+  KivioPage.cpp
 )
 
 kde4_automoc(${kivioprivate_LIB_SRCS})
@@ -49,7 +50,8 @@ target_link_libraries(kivio kdeinit_kivio)
 install(TARGETS kivio DESTINATION ${BIN_INSTALL_DIR})
 
 ### desktop files ###
-install( FILES  kiviopart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  kivio.desktop DESTINATION ${XDG_APPS_DIR})
+install( FILES kiviopart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES kivio.desktop DESTINATION ${XDG_APPS_DIR})
 
-
+### GUI files ###
+install( FILES kivio.rc DESTINATION ${DATA_INSTALL_DIR}/kivio)

@@ -20,6 +20,8 @@
 #ifndef KIVIODOCUMENT_H
 #define KIVIODOCUMENT_H
 
+#include <QList>
+
 #include <KoDocument.h>
 
 class QDomDocument;
@@ -32,8 +34,12 @@ class KCommandHistory;
 
 class KoStore;
 class KoOasisStyle;
+class KoOasisContext;
 class KoXmlWriter;
 class KoView;
+
+class KivioMasterPage;
+class KivioPage;
 
 class KivioDocument : public KoDocument
 {
@@ -53,20 +59,58 @@ class KivioDocument : public KoDocument
 
     virtual bool saveOasis(KoStore* store, KoXmlWriter* manifestWriter);
 
+    /// Reimplemented for command history support
     virtual void addShell(KoMainWindow* shell);
 
     /// Add @p command to the command history
     void addCommand(KCommand* command, bool execute);
 
+    /* ---------Page handling--------- */
+    /** Creates a master page and adds it to the document
+      * @param title Title of the master page
+      * @return Pointer to the new master page
+      */
+    KivioMasterPage* addMasterPage(const QString& title);
+
+    /** Creates a page and adds it to the document
+      * @param masterPage Master page for the page
+      * @param title Title of the page
+      * @return Pointer to the new page or null if the page couldn't be created
+      */
+    KivioPage* addPage(KivioMasterPage* masterPage, const QString& title);
+
+    /** Returns the master page at @p index in the list
+      * @param index Index in the list
+      * @return Pointer to master page if @p index exists in the list else null
+      */
+    KivioMasterPage* masterPageByIndex(int index);
+
+    /** Returns the page at @p index in the list
+     * @param index Index in the list
+     * @return Pointer to page if @p index exists in the list else null
+     */
+    KivioPage* pageByIndex(int index);
+
   public slots:
+    /// This is called when the last saved state of the document has been restored
     void slotDocumentRestored();
+    /// This is called whenever a command has been executed or unexecuted
     void slotCommandExecuted();
 
   protected:
+    /// Creates a KivioView instance and returns it
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
+
+    /** Load OpenDoc master pages
+      * @return true if loading was successful else false
+      */
+    bool loadMasterPages(const KoOasisContext& oasisContext);
 
   private:
     KCommandHistory* m_commandHistory;
+
+    QList<KivioMasterPage*> m_masterPageList;
+    QList<KivioPage*> m_pageList;
 };
 
 #endif
