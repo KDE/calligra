@@ -60,6 +60,7 @@ KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
     , m_tool(0)
     , m_zoomHandler()
     , m_snapToGrid(false)
+    , m_unit( KoUnit::U_PT )
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);

@@ -83,6 +83,8 @@ public:
 
     QWidget *canvasWidget() { return this; }
 
+    virtual KoUnit::Unit unit() { return m_unit; };
+
 protected:
     void paintEvent(QPaintEvent * ev);
     void wheelEvent(QWheelEvent *e);
@@ -102,6 +104,7 @@ private:
     //KSillyCommandHistory *m_commandHistory;
 
     KoTool *m_tool;
+    KoUnit::Unit m_unit;
 
     bool m_snapToGrid;
 };
