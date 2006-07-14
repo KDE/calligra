@@ -473,13 +473,7 @@ public:
      * @param force If false, the sheet will be recalculated if automatic calculation is enabled.
      * If true, the sheet will be recalculated regardless of the automatic calculation setting.
      */
-    void recalc( bool force );
-
-    /**
-     * Recalculates the current sheet, if automatic recalculation is enabled.
-     */
-    void recalc();
-
+    void recalc( bool force = false );
 
     /** handles the fact that a cell has been changed - updates
     things that need to be updated */

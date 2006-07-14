@@ -476,8 +476,6 @@ void Sheet::setAutoCalc( bool _AutoCalc )
     }
 
     d->autoCalc=_AutoCalc;
-
-
 }
 
 bool Sheet::getShowColumnNumber() const
@@ -1087,11 +1085,6 @@ void Sheet::updateAllDependencies()
     region.add(QPoint(cell->column(), cell->row()), this);
   }
   d->workbook->dependencyManager()->regionChanged(region);
-}
-
-void Sheet::recalc()
-{
-    recalc(false);
 }
 
 void Sheet::recalc( bool force )
