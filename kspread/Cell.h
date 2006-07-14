@@ -58,47 +58,14 @@ class KoOasisLoadingContext;
 namespace KSpread
 {
 class Canvas;
+class ConditionalDialog;
 class Format;
+class Formula;
 class GenValidationStyles;
 class Sheet;
+class Validity;
 class Value;
 class View;
-class ConditionalDialog;
-
-struct Validity
-{
-  Validity()
-  {
-      valMin = 0.0;
-      valMax = 0.0;
-      m_cond = Conditional::None;
-      m_action = Action::Stop;
-      m_restriction = Restriction::None;
-      displayMessage = true;
-      allowEmptyCell = false;
-      displayValidationInformation = false;
-  };
-
-    QString message;
-    QString title;
-    QString titleInfo;
-    QString messageInfo;
-    double valMin;
-    double valMax;
-    Conditional::Type m_cond;
-    Action::Type m_action;
-    Restriction::Type m_restriction;
-    QTime  timeMin;
-    QTime  timeMax;
-    QDate  dateMin;
-    QDate  dateMax;
-    bool displayMessage;
-    bool allowEmptyCell;
-    bool displayValidationInformation;
-    QStringList listValidity;
-};
-
-class Formula;
 
 /**
  * For every cell in the spread sheet there is a Cell object.
@@ -821,7 +788,7 @@ public:
      */
     void setConditionList(const QLinkedList<Conditional> &newList);
 
-    Validity * getValidity( int newStruct = -1 );
+    Validity* validity( bool create = false );
 
     void removeValidity();
 

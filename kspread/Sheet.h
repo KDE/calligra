@@ -79,6 +79,7 @@ class Sheet;
 class SheetPrint;
 class Style;
 class UndoInsertRemoveAction;
+class Validity;
 class View;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
@@ -692,7 +693,7 @@ public:
     void setConditional( Selection* selection,
        QLinkedList<Conditional> const & newConditions );
 
-    void setValidity( Selection* selection, KSpread::Validity tmp );
+    void setValidity( Selection* selection, const KSpread::Validity& tmp );
 
     /**
      * Returns, if the grid shall be shown on the screen

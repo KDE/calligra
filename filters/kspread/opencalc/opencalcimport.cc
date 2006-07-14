@@ -55,6 +55,7 @@
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Util.h>
+#include <kspread/Validity.h>
 #include <kspread/Value.h>
 
 #define SECSPERDAY (24 * 60 * 60)
@@ -571,7 +572,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
     if ( e.hasAttributeNS( ooNS::table, "validation-name" ) )
     {
         kDebug(30518)<<" Celle has a validation :"<<e.attributeNS( ooNS::table, "validation-name", QString::null )<<endl;
-        loadOasisValidation( cell->getValidity(), e.attributeNS( ooNS::table, "validation-name", QString::null ) );
+        loadOasisValidation( cell->validity(true), e.attributeNS( ooNS::table, "validation-name", QString::null ) );
     }
     if ( e.hasAttributeNS( ooNS::table, "value-type" ) )
     {

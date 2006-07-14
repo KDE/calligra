@@ -79,6 +79,7 @@
 #include "StyleManager.h"
 #include "Undo.h"
 #include "Util.h"
+#include "Validity.h"
 #include "View.h"
 #include "DataManipulators.h"
 #include "FormatManipulators.h"
@@ -2645,7 +2646,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
                             return false;
                         break;
                     case Validity:
-                        if ( c->getValidity(0))
+                        if ( c->validity())
                             return false;
                         break;
                     case Comment:
@@ -2680,7 +2681,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
                             return false;
                         break;
                     case Validity:
-                        if ( c->getValidity(0))
+                        if ( c->validity())
                             return false;
                         break;
                     case Comment:
@@ -2717,7 +2718,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
                             return false;
                         break;
                     case Validity:
-                        if ( cell->getValidity(0))
+                        if ( cell->validity())
                             return false;
                         break;
                     case Comment:
@@ -3240,7 +3241,7 @@ void Sheet::setConditional( Selection* selectionInfo,
 
 struct SetValidityWorker : public Sheet::CellWorker {
     Validity tmp;
-    SetValidityWorker( Validity _tmp ) : Sheet::CellWorker( ), tmp( _tmp ) { }
+    SetValidityWorker( const Validity& _tmp ) : Sheet::CellWorker( ), tmp( _tmp ) { }
 
     class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
   return new UndoConditional( doc, sheet, region );
@@ -3255,7 +3256,7 @@ struct SetValidityWorker : public Sheet::CellWorker {
     cell->removeValidity();
       else
       {
-    Validity *tmpValidity = cell->getValidity();
+    Validity *tmpValidity = cell->validity();
     tmpValidity->message=tmp.message;
     tmpValidity->title=tmp.title;
     tmpValidity->valMin=tmp.valMin;
@@ -3280,7 +3281,7 @@ struct SetValidityWorker : public Sheet::CellWorker {
 };
 
 void Sheet::setValidity(Selection* selectionInfo,
-                        KSpread::Validity tmp )
+                        const KSpread::Validity& tmp )
 {
     SetValidityWorker w( tmp );
     workOnCells( selectionInfo, w );

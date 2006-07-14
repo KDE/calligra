@@ -36,7 +36,10 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 
-// hehe >:->
+// KOffice
+#include <KoDocumentInfo.h>
+
+// KSpread
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
 #include <kspread/Format.h>
@@ -44,7 +47,7 @@
 #include <kspread/SheetPrint.h>
 #include <kspread/Cell.h>
 #include <kspread/Util.h>
-#include <KoDocumentInfo.h>
+#include <kspread/Validity.h>
 
 #include <math.h>
 
@@ -1397,7 +1400,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         if ( !validation_element.isNull() )
                         {
                             kDebug(30521)<<" Cell validation \n";
-                            Validity* kspread_validity = kspread_cell->getValidity();
+                            Validity* kspread_validity = kspread_cell->validity(true);
                             if ( validation_element.hasAttribute( "AllowBlank" ) && validation_element.attribute( "AllowBlank" )=="true" )
                             {
                                 kspread_validity->allowEmptyCell=true;

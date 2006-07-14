@@ -36,6 +36,10 @@
 #include <Q3ValueList>
 #include <QByteArray>
 
+// KOffice
+#include <KoDocumentInfo.h>
+
+// KSpread
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
 #include <kspread/Format.h>
@@ -43,7 +47,7 @@
 #include <kspread/View.h>
 #include <kspread/Canvas.h>
 #include <kspread/SheetPrint.h>
-#include <KoDocumentInfo.h>
+#include <kspread/Validity.h>
 
 using namespace KSpread;
 
@@ -229,7 +233,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
     //<gmr:Validation Style="1" Type="1" Operator="7" AllowBlank="true" UseDropdown="false" Title="ghhg" Message="ghghhhjfhfghjfghj&#10;fg&#10;hjgf&#10;hj">
     //        <gmr:Expression0>45</gmr:Expression0>
     //      </gmr:Validation>
-    Validity *kspread_validity = cell->getValidity();
+    Validity *kspread_validity = cell->validity(true);
     QDomElement val = gnumeric_doc.createElement( "gmr:Validation" );
     val.setAttribute( "Title", kspread_validity->title );
     val.setAttribute( "Message", kspread_validity->message );
@@ -696,7 +700,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
     cell_style.appendChild(GetFontStyle(gnumeric_doc, cell, currentcolumn, currentrow));
 
-    if ( cell->getValidity() )
+    if ( cell->validity() )
     {
         cell_style.appendChild( GetValidity( gnumeric_doc, cell ) );
     }

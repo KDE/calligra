@@ -96,11 +96,12 @@
 #include "Locale.h"
 #include "Map.h"
 #include "Format.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "Undo.h"
 #include "Util.h"
+#include "Validity.h"
 #include "View.h"
-#include "Selection.h"
 
 #include "Border.h"
 #include "CanvasPrivate.h"
@@ -423,10 +424,10 @@ void Canvas::validateSelection()
         int col = selectionInfo()->marker().x();
         int row = selectionInfo()->marker().y();
         Cell * cell = sheet->cellAt( col,row );
-        if ( cell && cell->getValidity(0) && cell->getValidity()->displayValidationInformation)
+        if ( cell && cell->validity() && cell->validity()->displayValidationInformation)
         {
-            QString title = cell->getValidity(0)->titleInfo;
-            QString message = cell->getValidity(0)->messageInfo;
+            QString title = cell->validity()->titleInfo;
+            QString message = cell->validity()->messageInfo;
             if ( title.isEmpty() && message.isEmpty() )
                 return;
 

@@ -69,6 +69,7 @@
 #include "Value.h"
 #include "Formula.h"
 #include "Selection.h"
+#include "Validity.h"
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 #include "ValueParser.h"
@@ -550,13 +551,13 @@ void Cell::setNextCell( Cell* c )
     d->nextCell = c;
 }
 
-Validity* Cell::getValidity( int newStruct  )
+Validity* Cell::validity( bool create )
 {
-    if ( (!newStruct) && (!d->hasExtra()))
+    if ( (!create) && (!d->hasExtra()))
       //we don't have validity struct and we don't want one
       return 0;
 
-    if( ( d->extra()->validity == 0 ) && ( newStruct == -1 ) )
+    if( ( d->extra()->validity == 0 ) && create )
         d->extra()->validity = new Validity;
     return  d->extra()->validity;
 }

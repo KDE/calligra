@@ -20,30 +20,30 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include "ValidityDialog.h"
-#include "Canvas.h"
-#include "Doc.h"
-#include "Locale.h"
-#include "Sheet.h"
-#include "View.h"
-
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QLabel>
+#include <q3textedit.h>
 #include <QLayout>
 #include <q3buttongroup.h>
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QFrame>
+
 #include <knumvalidator.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include <QComboBox>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QLabel>
-#include <q3textedit.h>
-#include <QCheckBox>
+#include "Canvas.h"
+#include "Doc.h"
+#include "Locale.h"
+#include "Sheet.h"
+#include "View.h"
+
+#include "ValidityDialog.h"
 
 using namespace KSpread;
 
@@ -447,7 +447,7 @@ void DlgValidity::changeIndexCond(int _index)
 void DlgValidity::init()
 {
   Cell *c = m_pView->activeSheet()->cellAt( marker.left(), marker.top() );
-  Validity * tmpValidity=c->getValidity(0);
+  Validity * tmpValidity = c->validity();
   if(tmpValidity!=0)
   {
     message->setText(tmpValidity->message);

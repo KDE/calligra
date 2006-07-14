@@ -26,9 +26,7 @@
 
 #include <kpagedialog.h>
 
-#include "Cell.h"
-//Added by qt3to4:
-#include <QLabel>
+#include "Validity.h"
 
 class QLabel;
 class QLineEdit;
