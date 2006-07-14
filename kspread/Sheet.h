@@ -1071,14 +1071,9 @@ public:
     void updateView();
 
     /**
-     * repaints all visible cells in the given rect
+     * repaints all visible cells in \p region
      */
-    void updateView( QRect const & rect );
-
-    /**
-     * repaints all visible cells in the given rect
-     */
-    void updateView(Region*);
+    void updateView(const Region& region);
 
     /**
      * used to refresh cells when you make redodelete

@@ -4063,14 +4063,9 @@ void Sheet::updateView()
   emit sig_updateView( this );
 }
 
-void Sheet::updateView( QRect const & rect )
+void Sheet::updateView(const Region& region)
 {
-  emit sig_updateView( this, rect );
-}
-
-void Sheet::updateView(Region* region)
-{
-  emit sig_updateView( this, *region );
+  emit sig_updateView( this, region );
 }
 
 void Sheet::refreshView( const Region& region )

@@ -1124,7 +1124,7 @@ void UndoCellFormat::undo()
   }
   }
   sheet->setRegionPaintDirty( m_region );
-  sheet->updateView( &m_region );
+  sheet->updateView( m_region );
 
   doc()->setUndoLocked( false );
 }
@@ -1173,7 +1173,7 @@ void UndoCellFormat::redo()
   }
 
   sheet->setRegionPaintDirty( m_region );
-  sheet->updateView( &m_region );
+  sheet->updateView( m_region );
   doc()->setUndoLocked( false );
 }
 
