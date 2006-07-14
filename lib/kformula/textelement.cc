@@ -250,14 +250,12 @@ void TextElement::dispatchFontCommand( FontCommand* cmd )
 
 void TextElement::setCharStyle( CharStyle cs )
 {
-    kdDebug( DEBUGID ) << "Changing Char Style to: " << cs << endl;
     charStyle( cs );
     formula()->changed();
 }
 
 void TextElement::setCharFamily( CharFamily cf )
 {
-    kdDebug( DEBUGID ) << "Changing Char Family to: " << cf << endl;
     charFamily( cf );
     formula()->changed();
 }
@@ -306,7 +304,6 @@ QFont TextElement::getFont(const ContextStyle& context, const StyleAttributes& s
         else {
             font = context.getDefaultFont();
         }
-        kdDebug( DEBUGID ) << "TextElement, charStyle(): " << charStyle() << endl;
         switch ( charStyle() ) {
         case anyChar:
             font.setItalic( false );
