@@ -498,23 +498,23 @@ void StyleElement::setStyleBackground( StyleAttributes& style )
 
 double StyleElement::sizeFactor( const ContextStyle& context, double factor )
 {
+    double basesize = context.layoutUnitPtToPt( context.getBaseSize() );
     switch ( m_mathSizeType ) {
     case AbsoluteSize:
-        return factor * m_mathSize / context.baseSize();
+        return factor * m_mathSize / basesize;
     case RelativeSize:
         return factor * m_mathSize;
     case PixelSize:
-        // 3.2.2 says v-unit insteado of h-unit, that's why we use Y and not X
-//        kdDebug( DEBUGID ) 
-        return factor * context.pixelYToPt( m_mathSize ) / context.baseSize(); 
+        // 3.2.2 says v-unit instead of h-unit, that's why we use Y and not X
+        return factor * context.pixelYToPt( m_mathSize ) / basesize;
     case NoSize:
         switch ( m_fontSizeType ) {
         case AbsoluteSize:
-            return factor * m_fontSize / context.baseSize();
+            return factor * m_fontSize / basesize;
         case RelativeSize:
             return factor * m_fontSize;
         case PixelSize:
-            return factor * context.pixelYToPt( m_fontSize ) / context.baseSize();
+            return factor * context.pixelYToPt( m_fontSize ) / basesize;
         case NoSize:
             return factor;
         }
