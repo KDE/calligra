@@ -70,9 +70,11 @@ void RecalcManager::regionChanged(const Region& region)
     {
       const QRect range = (*it)->rect();
       const Sheet* sheet = (*it)->sheet();
-      for (int col = range.left(); col <= range.right(); ++col)
+      const int right = range.right();
+      const int bottom = range.bottom();
+      for (int col = range.left(); col <= right; ++col)
       {
-        for (int row = range.top(); row <= range.bottom(); ++row)
+        for (int row = range.top(); row <= bottom; ++row)
         {
           Cell* cell = sheet->cellAt(col, row);
 
@@ -165,9 +167,11 @@ int RecalcManager::computeDepth(Cell* cell) const
   {
     const QRect range = (*it)->rect();
     Sheet* sheet = (*it)->sheet();
-    for (int col = range.left(); col <= range.right(); ++col)
+    const int right = range.right();
+    const int bottom = range.bottom();
+    for (int col = range.left(); col <= right; ++col)
     {
-      for (int row = range.top(); row <= range.bottom(); ++row)
+      for (int row = range.top(); row <= bottom; ++row)
       {
         Region::Point referencedPoint(col, row);
         referencedPoint.setSheet(sheet);
@@ -202,9 +206,11 @@ void RecalcManager::recalcRegion(const Region& region)
   {
     const QRect range = (*it)->rect();
     const Sheet* sheet = (*it)->sheet();
-    for (int col = range.left(); col <= range.right(); ++col)
+    const int right = range.right();
+    const int bottom = range.bottom();
+    for (int col = range.left(); col <= right; ++col)
     {
-      for (int row = range.top(); row <= range.bottom(); ++row)
+      for (int row = range.top(); row <= bottom; ++row)
       {
         Cell* const cell = sheet->cellAt(col, row);
         recalcCell(cell);
