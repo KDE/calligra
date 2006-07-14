@@ -156,6 +156,15 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		 Handles KexiTableViewData::reloadRequested() signal. */
 		virtual void reloadData() { KexiDataAwareObjectInterface::reloadData(); }
 
+		//! Copy current selection to a clipboard (e.g. cell)
+		virtual void copySelection();
+
+		//! Cut current selection to a clipboard (e.g. cell)
+		virtual void cutSelection();
+
+		//! Paste current clipboard contents (e.g. to a cell)
+		virtual void paste();
+
 	protected:
 		//! Implementation for KexiDataAwareObjectInterface
 		virtual void clearColumnsInternal(bool repaint);
@@ -191,6 +200,9 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		/*! Implementation for KexiDataAwareObjectInterface
 		 Redraws specified cell. */
 		virtual void updateCell(int row, int col);
+
+		/*! Redraws the current cell. Implemented after KexiDataAwareObjectInterface. */
+		virtual void updateCurrentCell();
 
 		/*! Implementation for KexiDataAwareObjectInterface
 		 Redraws all cells of specified row. */
@@ -240,6 +252,10 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		 Reimplemented from KexiDataAwareObjectInterface: just clears 'edit' indicator.
 		 Used by cancelRowEdit(). */
 		virtual void updateAfterAcceptRowEdit();
+
+		/*! @internal
+		 Used to invoke copy/paste/cut etc. actions at the focused widget's level. */
+		void handleDataWidgetAction(const QString& actionName);
 
 		//virtual bool focusNextPrevChild( bool next );
 

@@ -26,39 +26,11 @@
 #include <formeditor/widgetlibrary.h>
 #include <kexiutils/utils.h>
 #include "../kexiformpart.h"
+#include <widget/utils/kexiimagecontextmenu.h>
 
 QColor lighterGrayBackgroundColor(const QPalette& palette)
 {
 	return KexiUtils::blendedColors(palette.active().background(), palette.active().base(), 1, 2);
-}
-
-//static
-bool KexiDBWidgetContextMenuExtender::updateContextMenuTitleForDataItem(QPopupMenu *menu, KexiDataItemInterface* iface)
-{
-	if (!menu)
-		return false;
-	QString title( iface->columnInfo() ? iface->columnInfo()->captionOrAliasOrName() : QString::null );
-
-	if (title.isEmpty())
-		return false;
-
-	/*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
-	 (see doc/dev/settings.txt) */
-	title = title[0].upper() + title.mid(1);
-
-	const int id = menu->idAt(0);
-	if (dynamic_cast<QWidget*>(iface)) {
-		QPixmap icon(SmallIcon( KexiFormPart::library()->iconName(dynamic_cast<QWidget*>(iface)->className()) ));
-		QMenuItem *item = menu->findItem(id);
-		if (item && dynamic_cast<KPopupTitle *>(item->widget()))
-			dynamic_cast<KPopupTitle *>(item->widget())->setTitle(title, &icon);
-	}
-	else {
-		QMenuItem *item = menu->findItem(id);
-		if (item && dynamic_cast<KPopupTitle *>(item->widget()))
-			dynamic_cast<KPopupTitle *>(item->widget())->setTitle(title);
-	}
-	return true;
 }
 
 //-------
@@ -82,7 +54,14 @@ void KexiDBWidgetContextMenuExtender::createTitle(QPopupMenu *menu)
 	KPopupTitle *titleItem = new KPopupTitle();
 	const int id = m_contextMenu->insertItem(titleItem, -1, 0);
 	m_contextMenu->setItemEnabled(id, false);
-	m_contextMenuHasTitle = updateContextMenuTitleForDataItem(m_contextMenu, m_iface);
+	QString icon;
+	if (dynamic_cast<QWidget*>(m_iface))
+		icon = KexiFormPart::library()->iconName(dynamic_cast<QWidget*>(m_iface)->className());
+
+	m_contextMenuHasTitle = m_iface->columnInfo() ?
+		KexiImageContextMenu::updateTitle(m_contextMenu, m_iface->columnInfo()->captionOrAliasOrName(), icon)
+		: false;
+
 	if (!m_contextMenuHasTitle)
 		m_contextMenu->removeItem(id);
 	updatePopupMenuActions();

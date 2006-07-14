@@ -19,6 +19,7 @@
  */
 
 #include "kexitableedit.h"
+#include "kexidataawareobjectiface.h"
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 
@@ -245,6 +246,12 @@ void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/,
 int KexiTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )
 {
 	return fm.width( val.toString() );
+}
+
+void KexiTableEdit::repaintRelatedCell()
+{
+	if (dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView))
+		dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView)->updateCurrentCell();
 }
 
 

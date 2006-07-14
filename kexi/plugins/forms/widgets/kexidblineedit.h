@@ -90,6 +90,11 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
+		/*! Handles action having standard name \a actionName. 
+		 Action could be: "edit_copy", "edit_paste", etc.
+		 Reimplemented after KexiDataItemChangesListener. */
+		virtual void handleAction(const QString& actionName);
+
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }

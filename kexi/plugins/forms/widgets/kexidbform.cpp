@@ -370,9 +370,9 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 			while (true) {
 				if (!o || o == dynamic_cast<QObject*>(d->dataAwareObject))
 					break;
-				if (dynamic_cast<KexiDataItemInterface*>(o)) {
+				if (dynamic_cast<KexiFormDataItemInterface*>(o)) {
 					realWidget = dynamic_cast<QWidget*>(o); //will beused below (for tab/backtab handling)
-					if (dynamic_cast<KexiDataItemInterface*>(o)->keyPressed(ke))
+					if (dynamic_cast<KexiFormDataItemInterface*>(o)->keyPressed(ke))
 						return false;
 					break;
 				}

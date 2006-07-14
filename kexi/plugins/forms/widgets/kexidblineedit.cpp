@@ -385,4 +385,18 @@ bool KexiDBLineEdit::appendStretchRequired(KexiDBAutoField* autoField) const
 	return KexiDBAutoField::Top == autoField->labelPosition();
 }
 
+void KexiDBLineEdit::handleAction(const QString& actionName)
+{
+	if (actionName=="edit_copy") {
+		copy();
+	}
+	else if (actionName=="edit_paste") {
+		paste();
+	}
+	else if (actionName=="edit_cut") {
+		cut();
+	}
+	//! @todo ?
+}
+
 #include "kexidblineedit.moc"

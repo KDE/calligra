@@ -395,8 +395,8 @@ KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, Q3Popup
 	else if(classname == "KexiDBImageBox")
 	{
 		KexiDBImageBox *imageBox = static_cast<KexiDBImageBox*>(w);
-		imageBox->updateActionsAvailability();
-		KActionCollection *ac = imageBox->actionCollection();
+		imageBox->contextMenu()->updateActionsAvailability();
+		KActionCollection *ac = imageBox->contextMenu()->actionCollection();
 		KMenu *subMenu = new KMenu();
 //! @todo make these actions undoable/redoable
 		menu->insertItem(i18n("&Image"), subMenu);

@@ -26,6 +26,8 @@
 //Added by qt3to4:
 #include <QPixmap>
 
+#include <kurl.h>
+
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
@@ -45,16 +47,8 @@ class KexiBlobTableEdit : public KexiTableEdit
 
 		virtual QVariant value();
 
-		virtual void clear();
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
-//	protected slots:
-//		void slotFinished(KProcess* p);
-//		void open();
-//		void openWith();
-//		void menu();
-//		void loadFile();
-//		void saveFile();
 
 		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
@@ -65,6 +59,37 @@ class KexiBlobTableEdit : public KexiTableEdit
 
 		/*! \return total size of this editor, including popup button. */
 		virtual QSize totalSize() const;
+
+		virtual void paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h );
+
+		/*! Reimplemented to handle the key events. */
+		virtual bool handleKeyPress( QKeyEvent* ke, bool editorActive );
+
+		/*! Handles double click request coming from the table view. 
+		 \return true if it has been consumed. 
+		 Reimplemented in KexiBlobTableEdit (to execute "insert file" action. */
+		virtual bool handleDoubleClick();
+
+		/*! Handles action having standard name \a actionName. 
+		 Action could be: "edit_cut", "edit_paste", etc. */
+		virtual void handleAction(const QString& actionName);
+
+		/*! Handles copy action for value. The \a value is copied to clipboard in format appropriate 
+		 for the editor's impementation, e.g. for image cell it can be a pixmap. 
+		 Reimplemented after KexiTableEdit. */
+		virtual void handleCopyAction(const QVariant& value);
+
+	protected slots:
+		void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+
+		void handleInsertFromFileAction(const KURL& url);
+		void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
+		void handleSaveAsAction(const QString& fileName);
+		void handleCutAction();
+		void handleCopyAction();
+		void handlePasteAction();
+		virtual void clear();
+		void handleShowPropertiesAction();
 
 	protected:
 		//! initializes this editor with \a add value
@@ -80,8 +105,13 @@ class KexiBlobTableEdit : public KexiTableEdit
 
 //todo		void execute(const QString& app, const QString& file);
 
-		//! internal
+		//! @internal
 		void updateFocus( const QRect& r );
+
+		void signalEditRequested();
+
+		//! @internal
+		void executeCopyAction(const QByteArray& data);
 
 		class Private;
 		Private *d;
@@ -123,6 +153,10 @@ class KexiKIconTableEdit : public KexiTableEdit
 
 		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+
+		/*! Handles copy action for value. Does nothing.
+		 Reimplemented after KexiTableEdit. */
+		virtual void handleCopyAction(const QVariant& value);
 
 	protected:
 		//! initializes this editor with \a add value

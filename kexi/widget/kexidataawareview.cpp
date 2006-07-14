@@ -97,6 +97,15 @@ void KexiDataAwareView::initActions()
 	setAvailable("data_sort_az", m_dataAwareObject->isSortingEnabled());
 	setAvailable("data_sort_za", m_dataAwareObject->isSortingEnabled());
 //! \todo 	plugSharedAction("data_filter", this, SLOT(???()));
+
+	plugSharedAction("edit_copy", this, SLOT(copySelection()));
+	m_actionClient->plugSharedAction(sharedAction("edit_copy")); //for proper shortcut
+
+	plugSharedAction("edit_cut", this, SLOT(cutSelection()));
+	m_actionClient->plugSharedAction(sharedAction("edit_cut")); //for proper shortcut
+
+	plugSharedAction("edit_paste", this, SLOT(paste()));
+	m_actionClient->plugSharedAction(sharedAction("edit_paste")); //for proper shortcut
 }
 
 void KexiDataAwareView::slotUpdateRowActions(int row)
@@ -234,6 +243,21 @@ void KexiDataAwareView::sortAscending()
 void KexiDataAwareView::sortDescending()
 {
 	m_dataAwareObject->sortDescending();
+}
+
+void KexiDataAwareView::copySelection()
+{
+	m_dataAwareObject->copySelection();
+}
+
+void KexiDataAwareView::cutSelection()
+{
+	m_dataAwareObject->cutSelection();
+}
+
+void KexiDataAwareView::paste()
+{
+	m_dataAwareObject->paste();
 }
 
 #include "kexidataawareview.moc"

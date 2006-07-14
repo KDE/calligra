@@ -116,3 +116,4 @@ void KexiDataItemInterface::setParentDataItemInterface(KexiDataItemInterface* pa
 {
 	m_parentDataItemInterface = parentDataItemInterface;
 }
+

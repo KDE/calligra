@@ -56,6 +56,14 @@ class KexiBoolTableEdit : public KexiTableEdit
 
 		virtual void clickedOnContents();
 
+		/*! Handles action having standard name \a actionName. 
+		 Action could be: "edit_cut", "edit_paste", etc. */
+		virtual void handleAction(const QString& actionName);
+
+		/*! Handles copy action for value. Copies empty string for null, "1" for true, "0" for false.
+		 Reimplemented after KexiTableEdit. */
+		virtual void handleCopyAction(const QVariant& value);
+
 	protected slots:
 
 	protected:

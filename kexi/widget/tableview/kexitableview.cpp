@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1098,11 +1098,15 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 
 	if(m_currentItem)
 	{
-		if(d->editOnDoubleClick && columnEditable(m_curCol) 
-			&& columnType(m_curCol) != KexiDB::Field::Boolean)
-		{
-			startEditCurrentCell();
-//			createEditor(m_curRow, m_curCol, QString::null);
+		if(d->editOnDoubleClick && columnEditable(m_curCol) && columnType(m_curCol) != KexiDB::Field::Boolean) {
+			KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol, /*ignoreMissingEditor=*/true ) );
+			if (edit && edit->handleDoubleClick()) {
+				//nothing to do: editors like BLOB editor has custom handling of double clicking
+			}
+			else {
+				startEditCurrentCell();
+	//			createEditor(m_curRow, m_curCol, QString::null);
+			}
 		}
 
 		emit itemDblClicked(m_currentItem, m_curRow, m_curCol);
@@ -1582,9 +1586,6 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 					curCol--;
 			}
 		}
-		else if ( nobtn && (k==Qt::Key_Enter || k==Qt::Key_Return || shortCutPressed(e, "edit_edititem")) ) {
-			startEditOrToggleValue();
-		}
 		else if (nobtn && k==d->contextMenuKey) { //Qt::Key_Menu:
 			showContextMenu();
 		}
@@ -1595,16 +1596,20 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 				e->accept();
 				return;
 			}
-
-			kDebug() << "KexiTableView::KeyPressEvent(): default" << endl;
-			if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
-				kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k,0,16) <<endl;
-//				e->ignore();
-				Q3ScrollView::keyPressEvent(e);
-				return;
+			else if ( nobtn && (k==Qt::Key_Enter || k==Qt::Key_Return || shortCutPressed(e, "edit_edititem")) ) {
+				//this condition is moved after handleKeyPress() to allow to everride enter key as well
+				startEditOrToggleValue();
 			}
-
-			printable = true;
+			else {
+				kDebug() << "KexiTableView::KeyPressEvent(): default" << endl;
+				if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
+					kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k,0,16) <<endl;
+	//				e->ignore();
+					Q3ScrollView::keyPressEvent(e);
+					return;
+				}
+				printable = true;
+			}
 		}
 	}
 	//finally: we've printable char:
@@ -1955,6 +1960,11 @@ void KexiTableView::updateCell(int row, int col)
 	r.setHeight(r.height()+6);
 	r.setTop(r.top()-3);
 	updateContents();*/
+}
+
+void KexiTableView::updateCurrentCell()
+{
+	updateCell(m_curRow, m_curCol);
 }
 
 void KexiTableView::updateRow(int row)
@@ -2512,6 +2522,33 @@ void KexiTableView::moveToFirstRecordRequested()
 {
 	setFocus();
 	selectFirstRow();
+}
+
+void KexiTableView::copySelection()
+{
+	if (m_currentItem && m_curCol!=-1) {
+		KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+		if (edit)
+			edit->handleCopyAction( m_currentItem->at( m_curCol ) );
+	}
+}
+
+//! Cut current selection to a clipboard (e.g. cell)
+void KexiTableView::cutSelection()
+{
+	//try to handle @ editor's level
+	KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+	if (edit)
+		edit->handleAction("edit_cut");
+}
+
+//! Paste current clipboard contents (e.g. to a cell)
+void KexiTableView::paste()
+{
+	//try to handle @ editor's level
+	KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+	if (edit)
+		edit->handleAction("edit_paste");
 }
 
 bool KexiTableView::eventFilter( QObject *o, QEvent *e )

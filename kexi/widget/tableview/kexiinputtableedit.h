@@ -63,6 +63,15 @@ class KexiInputTableEdit : public KexiTableEdit
 		/*! \return total size of this editor, including any buttons, etc. (if present). */
 		virtual QSize totalSize();
 
+		/*! Handles action having standard name \a actionName. 
+		 Action could be: "edit_cut", "edit_paste", etc. */
+		virtual void handleAction(const QString& actionName);
+
+		/*! Handles copy action for value. The \a value is copied to clipboard in format appropriate 
+		 for the editor's impementation, e.g. for image cell it can be a pixmap. 
+		 Reimplemented after KexiTableEdit. */
+		virtual void handleCopyAction(const QVariant& value);
+
 	protected slots:
 		void setRestrictedCompletion();
 		void completed(const QString &);
@@ -74,6 +83,11 @@ class KexiInputTableEdit : public KexiTableEdit
 		void showHintButton();
 		void init();
 		virtual void paintEvent( QPaintEvent *e );
+
+		/*! \return text for \a value. \a add is a text that should be added to the value if possible.
+		 If \a setValidator is true, an appropriate validator will be setup for the internal line edit 
+		 widget when needed. */
+		QString valueToText(const QVariant& value, const QString& add, bool setValidator = false);
 
 		bool m_calculatedCell;
 		QString m_decsym; //! decimal symbol
