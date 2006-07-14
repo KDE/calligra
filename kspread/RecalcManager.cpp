@@ -44,12 +44,14 @@ public:
   QHash<Cell*, int> cells;
   QMap<int, Cell*> depths;
   DependencyManager* depManager;
+  bool busy;
 };
 
 RecalcManager::RecalcManager(DependencyManager* depManager)
   : d(new Private)
 {
   d->depManager = depManager;
+  d->busy = false;
 }
 
 RecalcManager::~RecalcManager()
@@ -59,9 +61,10 @@ RecalcManager::~RecalcManager()
 
 void RecalcManager::regionChanged(const Region& region)
 {
+  if (d->busy)
+    return;
   kDebug() << "RecalcManager::regionChanged " << region.name() << endl;
   {
-    ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
     {
@@ -77,17 +80,19 @@ void RecalcManager::regionChanged(const Region& region)
           if( cell->isDefault() )
             continue;
 
-          const Region region = d->depManager->getDependants(cell);
-          recalcRegion(region);
+          recalcRegion(d->depManager->getDependants(cell));
         }
       }
     }
   }
-  recalc();
 }
 
 void RecalcManager::recalcSheet(Sheet* const sheet)
 {
+  if (d->busy)
+    return;
+  d->busy = true;
+  ElapsedTime et( "Overall sheet recalculation", ElapsedTime::PrintOnlyTime );
   {
     ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
     foreach (Region::Point point, d->depManager->dependencies().keys())
@@ -102,15 +107,19 @@ void RecalcManager::recalcSheet(Sheet* const sheet)
       {
         int depth = computeDepth(cell);
         d->cells.insert(cell, depth);
-        d->depths.insert(depth, cell);
+        d->depths.insertMulti(depth, cell);
       }
     }
   }
   recalc();
+  d->busy = false;
 }
 
 void RecalcManager::recalcMap()
 {
+  if (d->busy)
+    return;
+  d->busy = true;
   ElapsedTime et( "Overall map recalculation", ElapsedTime::PrintOnlyTime );
   {
     ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
@@ -121,11 +130,12 @@ void RecalcManager::recalcMap()
       {
         int depth = computeDepth(cell);
         d->cells.insert(cell, depth);
-        d->depths.insert(depth, cell);
+        d->depths.insertMulti(depth, cell);
       }
     }
   }
   recalc();
+  d->busy = false;
 }
 
 void RecalcManager::recalc()
@@ -171,7 +181,7 @@ int RecalcManager::computeDepth(Cell* cell) const
         Cell* referencedCell = sheet->cellAt(col, row);
         if (d->cells.contains(referencedCell))
         {
-          // the references cell depth was already computed
+          // the referenced cell depth was already computed
           depth = qMax(d->cells[referencedCell] + 1, depth);
           continue;
         }
@@ -197,12 +207,15 @@ void RecalcManager::recalcRegion(const Region& region)
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell* const cell = sheet->cellAt(col, row);
+        recalcCell(cell);
+#if 0
         if (!d->cells.contains(cell))
         {
           int depth = computeDepth(cell);
           d->cells.insert(cell, depth);
-          d->depths.insert(depth, cell);
+          d->depths.insertMulti(depth, cell);
         }
+#endif
       }
     }
   }

@@ -1967,10 +1967,7 @@ void View::recalcWorkSheet()
   if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( true );
-//    bool b = d->activeSheet->getAutoCalc();
-//    d->activeSheet->setAutoCalc( true );
-    d->activeSheet->recalc( /*force recalculation = */ true);
- //   d->activeSheet->setAutoCalc( b );
+    doc()->map()->recalcManager()->recalcSheet(d->activeSheet);
     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
 }
