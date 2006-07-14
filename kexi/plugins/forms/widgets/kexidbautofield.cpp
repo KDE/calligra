@@ -210,9 +210,9 @@ KexiDBAutoField::createEditor()
 			QWidget::setFocusPolicy(newSubwidget->focusPolicy());
 		}
 		setFocusProxy(newSubwidget); //ok?
-		copyPropertiesToEditor();
 		if (parentWidget())
 			newSubwidget->setPalette( qApp->palette() );
+		copyPropertiesToEditor();
 //		KFormDesigner::installRecursiveEventFilter(newSubwidget, this);
 	}
 
@@ -222,6 +222,8 @@ KexiDBAutoField::createEditor()
 void KexiDBAutoField::copyPropertiesToEditor()
 {
 	if (m_subwidget) {
+		kdDebug() << "KexiDBAutoField::copyPropertiesToEditor(): base col: " <<  d->baseColor.name() << 
+			"; text col: " << d->textColor.name() << endl;
 		QPalette p( m_subwidget->palette() );
 		p.setColor( QPalette::Active, QColorGroup::Base, d->baseColor );
 		if(d->widgetType == Boolean)
@@ -229,7 +231,7 @@ void KexiDBAutoField::copyPropertiesToEditor()
 		else
 			p.setColor( QPalette::Active, QColorGroup::Text, d->textColor );
 		m_subwidget->setPalette(p);
-		m_subwidget->setPaletteBackgroundColor( d->baseColor );
+		//m_subwidget->setPaletteBackgroundColor( d->baseColor );
 	}
 }
 
