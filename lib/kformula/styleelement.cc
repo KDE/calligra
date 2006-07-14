@@ -348,6 +348,40 @@ void StyleElement::writeMathMLAttributes( QDomElement& element )
     if ( customMathBackground() ) {
         element.setAttribute( "mathbackground", mathBackground().name() );
     }
+
+    // Deprecated MathML 1.01 Attributes
+    // fontsize attribute
+    switch ( m_fontSizeType ) {
+    case AbsoluteSize:
+        element.setAttribute( "fontsize", QString( "%1pt" ).arg( m_fontSize ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( "fontsize", QString( "%1%" ).arg( m_fontSize * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( "fontsize", QString( "%3px" ).arg( m_fontSize ) );
+        break;
+    }
+
+    // fontweight attribute
+    if ( customFontWeight() ) {
+        element.setAttribute( "fontweight", fontWeight() ? "bold" : "normal" );
+    }
+
+    // fontstyle attribute
+    if ( customFontStyle() ) {
+        element.setAttribute( "fontstyle", fontStyle() ? "italic" : "normal" );
+    }
+
+    // fontfamily attribute
+    if ( customFontFamily() ) {
+        element.setAttribute( "fontfamily", fontFamily() );
+    }
+
+    // color attribute
+    if ( customColor() ) {
+        element.setAttribute( "color", color().name() );
+    }
 }
 
 void StyleElement::setAbsoluteSize( double s, bool fontsize )
