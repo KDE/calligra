@@ -195,19 +195,6 @@ class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator {
 };
 
 
-/** class ProtectedCheck can be used to check, whether a particular
-  range is protected or not */
-class KSPREAD_EXPORT ProtectedCheck : public Region {
-  public:
-    ProtectedCheck ();
-    virtual ~ProtectedCheck ();
-    void setSheet (Sheet *sheet) { m_sheet = sheet; };
-    bool check ();
-  protected:
-    Sheet *m_sheet;
-};
-
-
 } // namespace KSpread
 
 #endif  // KSPREAD_MANIPULATOR_DATA

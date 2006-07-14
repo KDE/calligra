@@ -163,41 +163,6 @@ QString Undo::getUndoName()
 
 /****************************************************************************
  *
- * MacroUndoAction
- *
- ***************************************************************************/
-MacroUndoAction::MacroUndoAction( Doc *_doc, const QString& _name ):
- UndoAction( _doc )
-{
-    name=_name;
-}
-
-MacroUndoAction::~MacroUndoAction()
-{
-    qDeleteAll(m_commands);
-}
-
-void MacroUndoAction::addCommand(UndoAction *command)
-{
-    m_commands.append(command);
-}
-
-void MacroUndoAction::undo()
-{
-    int end = m_commands.count();
-    for ( int i = 0; i < end; ++i )
-        m_commands[i]->undo();
-}
-
-void MacroUndoAction::redo()
-{
-    int end = m_commands.count();
-    for ( int i = 0; i < end; ++i )
-        m_commands[i]->redo();
-}
-
-/****************************************************************************
- *
  * UndoInsertRemoveAction
  *
  ***************************************************************************/

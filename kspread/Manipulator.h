@@ -98,6 +98,10 @@ public:
    */
   void setRegisterUndo(bool registerUndo) { m_register = registerUndo; }
 
+  /** Set whether the manipulator will automatically bail out with an error
+  message box, if the range is protected. */
+  void setProtectedCheck (bool protcheck) { m_protcheck = protcheck; };
+  
   /**
    * Sets the name to \p name . The name is used for the undo/redo
    * functionality.
@@ -140,13 +144,41 @@ protected:
 
   Sheet* m_sheet;
   QString m_name;
-  bool   m_creation : 1;
-  bool   m_reverse  : 1;
-  bool   m_firstrun : 1;
-  bool   m_format   : 1;
-  bool   m_register : 1;
+  bool   m_creation  : 1;
+  bool   m_reverse   : 1;
+  bool   m_firstrun  : 1;
+  bool   m_format    : 1;
+  bool   m_register  : 1;
+  bool   m_protcheck : 1;
 private:
 };
+
+/**
+ * The macro manipulator holds a set of manipulators and calls them all at once.
+ * Each of the manipulators has its own range, MacroManipulator does not take
+ * care of that.
+ * */
+class KSPREAD_EXPORT MacroManipulator : public Manipulator {
+  public:
+    void execute ();
+    void unexecute ();
+    void add (Manipulator *manipulator);
+  protected:
+    QList<Manipulator *> manipulators;
+};
+
+/** class ProtectedCheck can be used to check, whether a particular
+  range is protected or not */
+class KSPREAD_EXPORT ProtectedCheck : public Region {
+  public:
+    ProtectedCheck ();
+    virtual ~ProtectedCheck ();
+    void setSheet (Sheet *sheet) { m_sheet = sheet; };
+    bool check ();
+  protected:
+    Sheet *m_sheet;
+};
+
 
 /**
  * \class MergeManipulator

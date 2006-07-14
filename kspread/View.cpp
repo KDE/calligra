@@ -267,7 +267,7 @@ public:
       Sheet *  firstSpellSheet;
       Sheet *  currentSpellSheet;
       Cell  *  currentCell;
-      MacroUndoAction *macroCmdSpellCheck;
+      MacroManipulator *macroCmdSpellCheck;
       unsigned int    spellCurrCellX;
       unsigned int    spellCurrCellY;
       unsigned int    spellStartCellX;
@@ -2168,7 +2168,7 @@ void View::spellCleanup()
   KMessageBox::information( this, i18n( "Spell checking is complete." ) );
 
   if ( d->spell.macroCmdSpellCheck )
-    doc()->addCommand( d->spell.macroCmdSpellCheck );
+    doc()->addCommand (d->spell.macroCmdSpellCheck);
   d->spell.macroCmdSpellCheck=0;
 }
 
@@ -2257,23 +2257,30 @@ void View::spellCheckerCorrected( const QString & old, const QString & corr,
   Q_ASSERT( cell );
   if ( !cell )
     return;
+  
+  QString content (cell->text());
+  content.replace (pos, old.length(), corr);
 
-  doc()->emitBeginOperation(false);
-  QString content( cell->text() );
+  DataManipulator *manipulator = new DataManipulator;
+  manipulator->setSheet (d->activeSheet);
+  manipulator->setName (i18n ("Correct Misspelled Word"));
+  manipulator->setValue (Value (content));
+  manipulator->setParsing (false);
+  manipulator->add (QPoint (cell->column(), cell->row()));
+  manipulator->setRegisterUndo (false);
+  manipulator->execute ();
 
-  UndoSetText* undo = new UndoSetText( doc(), d->activeSheet,
-                                                     content,
-                                                     d->spell.spellCurrCellX,
-                                                     d->spell.spellCurrCellY,
-                                                     cell->formatType());
-  content.replace( pos, old.length(), corr );
-  cell->setCellText( content );
-  d->editWidget->setText( content );
-
-  if ( !d->spell.macroCmdSpellCheck )
-      d->spell.macroCmdSpellCheck = new MacroUndoAction( doc(), i18n("Correct Misspelled Word") );
-  d->spell.macroCmdSpellCheck->addCommand( undo );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  // the manipulator doesn't register itself for the undo, instead, we
+  // put all manipulators into one macro action, which will undo everything
+  // at once
+  if (!d->spell.macroCmdSpellCheck) {
+    MacroManipulator *mm = new MacroManipulator;
+    mm->setName (i18n("Correct Misspelled Word"));
+    mm->setSheet (d->activeSheet);
+    mm->setRegisterUndo (false);
+    d->spell.macroCmdSpellCheck = mm;
+  }
+  d->spell.macroCmdSpellCheck->add (manipulator);
 }
 
 void View::spellCheckerDone( const QString & )
@@ -5646,24 +5653,16 @@ void View::slotItemSelected( QAction* action )
   QString tmp = action->text();
   int x = d->canvas->markerColumn();
   int y = d->canvas->markerRow();
-  Cell * cell = d->activeSheet->nonDefaultCell( x, y );
-
-  if ( tmp == cell->text() )
+  Cell * cell = d->activeSheet->cellAt (x, y);
+  if (tmp == cell->text())
     return;
 
-  doc()->emitBeginOperation( false );
-
-  if ( !doc()->undoLocked() )
-  {
-    UndoSetText* undo = new UndoSetText( doc(), d->activeSheet, cell->text(),
-                                                       x, y, cell->formatType() );
-    doc()->addCommand( undo );
-  }
-
-  cell->setCellText( tmp );
-  d->editWidget->setText( tmp );
-
-  doc()->emitEndOperation( QRect( x, y, 1, 1 ) );
+  DataManipulator *manipulator = new DataManipulator;
+  manipulator->setSheet (d->activeSheet);
+  manipulator->setValue (Value (tmp));
+  manipulator->setParsing (true);
+  manipulator->add (QPoint (x, y));
+  manipulator->execute ();
 }
 
 void View::openPopupMenu( const QPoint & _point )
@@ -5796,19 +5795,10 @@ void View::slotActivateTool( int _id )
       return;
   }
 
-  QString text = activeSheet()->getWordSpelling( selectionInfo() );
+  QString text = activeSheet()->getWordSpelling (selectionInfo());
 
   if ( tool->run( entry->command, &text, "QString", "text/plain") )
-  {
-      doc()->emitBeginOperation(false);
-
-      activeSheet()->setWordSpelling( selectionInfo(), text);
-
-      Cell *cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
-      d->editWidget->setText( cell->text() );
-
-      doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
-  }
+    activeSheet()->setWordSpelling (selectionInfo(), text);
 }
 
 void View::deleteSelection()
@@ -6860,10 +6850,8 @@ void View::calcStatusBarOp()
     break;
   }
 
-  //doc()->emitBeginOperation();
   if ( d->calcLabel )
     d->calcLabel->setText(QString(' ') + tmp + ' ');
-  //doc()->emitEndOperation();
 }
 
 void View::statusBarClicked(int _id)

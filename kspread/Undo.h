@@ -132,21 +132,6 @@ protected:
     QString name;
 };
 
-class MacroUndoAction : public UndoAction
-{
-public:
-    MacroUndoAction( Doc * _doc, const QString & _name );
-    virtual ~MacroUndoAction();
-
-    void addCommand(UndoAction *command);
-
-    virtual void undo();
-    virtual void redo();
-
-protected:
-    QList<UndoAction*> m_commands;
-};
-
 class UndoInsertRemoveAction : public UndoAction
 {
 public:

@@ -88,7 +88,8 @@ Manipulator::Manipulator()
     m_reverse(false),
     m_firstrun(true),
     m_format(true),
-    m_register(true)
+    m_register(true),
+    m_protcheck(true)
 {
 }
 
@@ -104,6 +105,20 @@ void Manipulator::execute()
                 << "Manipulating all sheets of the region." << endl;
   }
 
+  // protection check if needed
+  if (m_protcheck) {
+    ProtectedCheck check;
+    check.setSheet (m_sheet);
+    Region::Iterator endOfList(cells().end());
+    for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
+      check.add ((*it)->rect());
+    if (check.check ())
+    {
+      KMessageBox::error (0, i18n ("You cannot change a protected sheet"));
+      return;
+    }
+  }
+  
   bool successfully = true;
   successfully = preProcessing();
   if (!successfully)
@@ -230,6 +245,75 @@ bool Manipulator::mainProcessing()
   return successfully;
 }
 
+void MacroManipulator::execute ()
+{
+  QList<Manipulator *>::iterator it;
+  for (it = manipulators.begin(); it != manipulators.end(); ++it)
+    (*it)->execute ();
+  // add me to undo if needed - same as in Manipulator::execute
+  if (m_firstrun && m_register)
+  {
+    m_sheet->doc()->addCommand (this);
+    m_sheet->doc()->setModified (true);
+  }
+  m_firstrun = false;
+}
+
+void MacroManipulator::unexecute ()
+{
+  QList<Manipulator *>::iterator it;
+  for (it = manipulators.begin(); it != manipulators.end(); ++it)
+    (*it)->unexecute ();
+}
+
+void MacroManipulator::add (Manipulator *manipulator)
+{
+  manipulator->setRegisterUndo (false);
+  manipulators.push_back (manipulator);
+}
+
+/***************************************************************************
+  class ProtectedCheck
+****************************************************************************/
+
+ProtectedCheck::ProtectedCheck ()
+{
+}
+
+ProtectedCheck::~ProtectedCheck ()
+{
+}
+
+bool ProtectedCheck::check ()
+{
+  if (!m_sheet->isProtected())
+    return false;
+
+  bool prot = false;
+  Region::Iterator endOfList(cells().end());
+  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
+  {
+    Region::Element *element = *it;
+    QRect range = element->rect();
+
+    for (int col = range.left(); col <= range.right(); ++col)
+    {
+      for (int row = range.top(); row <= range.bottom(); ++row)
+      {
+        Cell *cell = m_sheet->cellAt (col, row);
+        if (!cell->format()->notProtected (col, row))
+        {
+          prot = true;
+          break;
+        }
+      }
+      if (prot) break;
+    }
+  }
+  return prot;
+}
+
+
 
 /***************************************************************************
   class MergeManipulator
@@ -242,6 +326,7 @@ MergeManipulator::MergeManipulator()
     m_mergeVertical(false),
     m_unmerger(0)
 {
+  m_protcheck = false;  // this manipulator does its own checking
 }
 
 MergeManipulator::~MergeManipulator()
@@ -479,6 +564,7 @@ bool MergeManipulator::postProcessing()
 DilationManipulator::DilationManipulator()
   : Manipulator()
 {
+  m_protcheck = false;  // this manipulator does its own checking
 }
 
 DilationManipulator::~DilationManipulator()

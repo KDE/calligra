@@ -1025,12 +1025,6 @@ Cell* Sheet::nonDefaultCell( int _column, int _row, Style* _style )
 
 void Sheet::setText( int _row, int _column, const QString& _text, bool asString )
 {
-  ProtectedCheck prot;
-  prot.setSheet (this);
-  prot.add (QPoint (_column, _row));
-  if (prot.check())
-    NO_MODIFICATION_POSSIBLE;
-
   DataManipulator *dm = new DataManipulator ();
   dm->setSheet (this);
   dm->setValue (_text);
@@ -1045,13 +1039,6 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
 
 void Sheet::setArrayFormula (Selection *selectionInfo, const QString &_text)
 {
-  // check protection
-  ProtectedCheck prot;
-  prot.setSheet (this);
-  prot.add (*selectionInfo);
-  if (prot.check())
-    NO_MODIFICATION_POSSIBLE;
-
   // create and call the manipulator
   ArrayFormulaManipulator *afm = new ArrayFormulaManipulator;
   afm->setSheet (this);
@@ -1222,9 +1209,6 @@ void Sheet::valueChanged (Cell *cell)
  => returns text, no signal emitted, no cell-create, similar to TYPE B
  --> use emit_signal=false, create_if_default=false and type B
 
- setWordSpelling
- => no signal emitted, no cell-create, similar to type B
- --> use emit_signal=false, create_if_default=false and type B
  */
 
 class UndoAction* Sheet::CellWorkerTypeA::createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region )
@@ -3288,72 +3272,84 @@ void Sheet::setValidity(Selection* selectionInfo,
 }
 
 
-struct GetWordSpellingWorker : public Sheet::CellWorker {
-    QString& listWord;
-    GetWordSpellingWorker( QString& _listWord ) : Sheet::CellWorker( false, false, true ), listWord( _listWord ) { }
+/**
+ * Here we define two manipulators - GetWordSpellingManipulator and
+ * SetWordSpellingManipulator. This is not ideal, but these two are so specific
+ * that there isn't much use in declaring them in *Manipulators.h
+ * */
 
-    class UndoAction* createUndoAction( Doc*, Sheet*, const KSpread::Region& ) {
-  return 0;
-    }
-    bool testCondition( Cell* ) {
-        return true;
-    }
-    void doWork( Cell* c, bool cellRegion, int, int ) {
-  if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
-      if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
-     && !c->isDate()
-     && !c->text().isEmpty())
-      {
-    listWord+=c->text()+'\n';
+// returns all the strings in the range. Name a bit confusing.
+class GetWordSpellingManipulator : public Manipulator {
+ public:
+  QString getSpelling () {
+    QString res;
+    
+    Region::Iterator endOfList(cells().end());
+    for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
+    {
+      Region::Element *element = *it;
+      QRect range = element->rect();
+
+      for (int col = range.left(); col <= range.right(); ++col) {
+        for (int row = range.top(); row <= range.bottom(); ++row) {
+          Cell *cell = m_sheet->cellAt (col, row);
+          if (cell->value().isString() && (!cell->isFormula())) {
+            QString txt = cell->value().asString();
+            if (!txt.isEmpty())
+              res += txt + '\n';
+          }
+        }
       }
-  }
     }
+    return res;
+  };  
 };
 
 QString Sheet::getWordSpelling(Selection* selectionInfo )
 {
-    QString listWord;
-    GetWordSpellingWorker w( listWord );
-    workOnCells( selectionInfo, w );
-    return listWord;
+  GetWordSpellingManipulator manipulator;
+  manipulator.setSheet (this);
+  manipulator.add (*selectionInfo);
+  return manipulator.getSpelling();
 }
 
-
-struct SetWordSpellingWorker : public Sheet::CellWorker {
-    QStringList& list;
-    int pos;
-    Sheet   * sheet;
-    SetWordSpellingWorker( QStringList & _list,Sheet * s )
-      : Sheet::CellWorker( false, false, true ), list( _list ), pos( 0 ),  sheet( s ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
-  return new UndoChangeAreaTextCell( doc, sheet, region );
-    }
-    bool testCondition( Cell* ) {
-        return true;
-    }
-    void doWork( Cell* c, bool cellRegion, int, int )
-    {
-  if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
-      if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
-     && !c->isDate()
-     && !c->text().isEmpty())
-      {
-
-
-    c->setCellText( list[pos] );
-    pos++;
-      }
+// applies new strings to the range
+class SetWordSpellingManipulator : public AbstractDataManipulator {
+ public:
+  SetWordSpellingManipulator () : idx(0) {
+    setName (i18n ("Set Word Spelling"));  // TODO: is the name correct ?
   }
+  void setString (QString str) {
+    list = str.split ('\n');
+    idx = 0;
+  };
+  
+ protected:
+  int idx;
+  QStringList list;
+  Value newValue (Element *, int col, int row, bool *parsing, FormatType *)
+  {
+    *parsing = false;
+    // find out whether this cell was supplying data for the original list
+    Cell *cell = m_sheet->cellAt (col, row);
+    if (cell->value().isString() && (!cell->isFormula())) {
+      QString txt = cell->value().asString();
+      if (!txt.isEmpty())
+        // yes it was - return new data
+        return list[idx++];
+      // no it wasn't - keep old data
     }
+    return cell->value();
+  }
 };
 
-void Sheet::setWordSpelling(Selection* selectionInfo,
-                                   const QString _listWord )
+void Sheet::setWordSpelling(Selection* selectionInfo, const QString _listWord )
 {
-    QStringList list = _listWord.split( '\n' );
-    SetWordSpellingWorker w( list,  this );
-    workOnCells( selectionInfo, w );
+  SetWordSpellingManipulator *manipulator = new SetWordSpellingManipulator;
+  manipulator->setSheet (this);
+  manipulator->setString (_listWord);
+  manipulator->add (*selectionInfo);
+  manipulator->execute ();
 }
 
 static QString cellAsText( Cell* cell, unsigned int max )
@@ -3532,6 +3528,9 @@ void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
 {
 //  QString tmp;
 //  tmp= QString::fromLocal8Bit(_mime->encodedData( "text/plain" ));
+
+//  QStringList list = _listWord.split( '\n' );
+
   if( _text.isEmpty() )
     return;
 
@@ -3595,13 +3594,6 @@ void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
     // exclude the left part and '\n'
     tmp = tmp.right(tmp.length() - p - 1);
   }
-
-  if (!isLoading())
-    refreshMergedCell();
-
-  emit sig_updateView( this );
-  emit sig_updateHBorder( this );
-  emit sig_updateVBorder( this );
 }
 
 void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
