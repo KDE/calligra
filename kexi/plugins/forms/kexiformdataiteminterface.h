@@ -92,6 +92,15 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		/*! Undoes changes made to this item - just resets to original value. */
 		void undoChanges();
 
+		/*! @internal
+		 Called by top-level form on key press event.
+		 Default implementation does nothing.
+		 Implement this if you want to handle key presses from within the editor widget item.
+		 \return true if \a ke should be accepted by the widget item.
+		 This method is used e.g. in KexiDBImageBox for Key_Escape to if the popup is visible,
+		 so the key press won't be consumed to perform "cancel editing". */
+		virtual bool keyPressed(QKeyEvent *ke) { Q_UNUSED(ke); return false; };
+
 	protected:
 		QString m_dataSource;
 		QCString m_dataSourceMimeType;

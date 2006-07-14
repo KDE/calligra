@@ -20,6 +20,7 @@
 #include "kexidropdownbutton.h"
 
 #include <kpopupmenu.h>
+#include <kdebug.h>
 
 #include <qstyle.h>
 #include <qapplication.h>
@@ -29,8 +30,15 @@ KexiDropDownButton::KexiDropDownButton(QWidget *parent)
 {
 	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 //! @todo get this from a KStyle
-	setFixedWidth(QMAX(15, qApp->globalStrut().width()));
-//	setToggleButton(true);
+//	setFixedWidth(QMAX(18, qApp->globalStrut().width()));
+	int fixedWidth;
+	//hack
+	if (qstricmp(style().name(),"thinkeramik")==0)
+		fixedWidth = 18; //typical width as in "windows" style
+	else
+		fixedWidth = style().querySubControlMetrics( QStyle::CC_ComboBox, 
+			this, QStyle::SC_ComboBoxArrow ).width();
+	setFixedWidth( fixedWidth );
 	setPopupDelay(10/*ms*/);
 }
 

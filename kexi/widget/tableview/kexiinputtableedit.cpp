@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,8 @@
 #include <qlayout.h>
 #include <qtimer.h>
 #include <qpainter.h>
+#include <qapplication.h>
+#include <qclipboard.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -108,115 +110,20 @@ void KexiInputTableEdit::init()
 #endif
 
 }
-	
-void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
+
+void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-#if 0 //js
-	if(!ov.isEmpty())
-	{
-		if (m_type==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
-			if(ov == KGlobal::locale()->decimalSymbol() || ov == KGlobal::locale()->monetaryDecimalSymbol())
-				m_cview->setText(ov);
-		}
-		else if (m_type==KexiDB::Field::Integer) {
-			if(ov == KGlobal::locale()->negativeSign())
-				m_cview->setText(ov);
-		}
-		else if (	case QVariant::UInt:
-				m_cview->setAlignment(AlignRight);
-				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
-					m_cview->setText(ov);
-				if(ov == "=")
-				{
-					kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): calculated!" << endl;
-					m_calculatedCell = true;
-					m_cview->setText(ov);
-				}
-				break;
+	QString text( valueToText(removeOld ? QVariant() : m_origValue, add.toString(), true/*setValidator*/) );
 
-
-			default:
-				m_cview->setText(ov);
-				QTimer::singleShot(1, this, SLOT(setRestrictedCompletion()));
-				break;
+	if (text.isEmpty()) {
+		if (m_origValue.toString().isEmpty()) {
+			//we have to set NULL initial value:
+			m_lineedit->setText(QString::null);
 		}
 	}
-	else
-#endif
-		QVariant origValue;
-		if (!removeOld)
-			origValue = m_origValue;
-		QString tmp_val;
-		QString add(add_.toString());
-
-		if (field()->isFPNumericType()) {
-//! @todo precision!
-//			tmp_val = QString::number(origValue.toDouble(), 'f', 2/*prec*/);
-//! @todo support 'g' format
-			tmp_val = QString::number(origValue.toDouble(), 'f', 
-				QMAX(field()->visibleDecimalPlaces(), 10)); //<-- 10 is quite good maximum for fractional digits 
-			                                              //! @todo add command line settings?
-			if (origValue.toDouble() == 0.0) {
-				tmp_val=add; //eat 0
-			}
-			else {
-//! @todo (js): get decimal places settings here...
-				QStringList sl = QStringList::split(".", tmp_val);
-				if (tmp_val.isEmpty())
-					m_lineedit->setText("");
-				else if (sl.count()==2) {
-					kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
-					const QString sl1 = sl[1];
-					int pos = sl1.length()-1;
-					if (pos>=1) {
-						for (;pos>=0 && sl1[pos]=='0';pos--)
-							;
-						pos++;
-					}
-					if (pos>0)
-						tmp_val = sl[0] + m_decsym + sl1.left(pos);
-					else
-						tmp_val = sl[0]; //no decimal point
-				}
-				tmp_val+=add;
-			}
-//			m_lineedit->setText(tmp_val);
-			QValidator *validator = new KDoubleValidator(m_lineedit);
-			m_lineedit->setValidator( validator );
-		}
-		else {
-			tmp_val = origValue.toString();
-			if (field()->isIntegerType()) {
-				if (origValue.toInt() == 0) {
-					tmp_val=add; //eat 0
-				}
-				else {
-					tmp_val += add;
-				}
-//			m_lineedit->setText(tmp_val);
-			//js: @todo implement ranges here!
-				QValidator *validator = new KIntValidator(m_lineedit);
-				m_lineedit->setValidator( validator );
-			}
-			else {//default: text
-				tmp_val+=add;
-//			m_lineedit->setText(tmp_val);
-			}
-		}
-
-		if (tmp_val.isEmpty()) {
-			if (origValue.toString().isEmpty()) {
-				//we have to set NULL initial value:
-				m_lineedit->setText(QString::null);
-			}
-		}
-		else {
-			m_lineedit->setText(tmp_val);
-		}
-		
-		kdDebug() << "KexiInputTableEdit:  " << m_lineedit->text().length() << endl;
-//		m_cview->setSelection(0, m_cview->text().length());
-//		QTimer::singleShot(0, m_view, SLOT(selectAll()));
+	else {
+		m_lineedit->setText(text);
+	}
 
 #if 0
 //move to end is better by default
@@ -225,13 +132,69 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 //js TODO: by default we're moving to the end of editor, ADD OPTION allowing "select all chars"
 		m_lineedit->end(false);
 #endif
-//		setRestrictedCompletion();
+}
 
-//	m_comp = comp;
-//	setFocusProxy(m_lineedit);
+QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& add, bool setValidator)
+{
+	QString text; //result
 
-	//orig. editor's text
-//not needed	m_origText = m_lineedit->text();
+	if (field()->isFPNumericType()) {
+//! @todo precision!
+//! @todo support 'g' format
+		text = QString::number(value.toDouble(), 'f', 
+			QMAX(field()->visibleDecimalPlaces(), 10)); //<-- 10 is quite good maximum for fractional digits 
+													  //! @todo add command line settings?
+		if (value.toDouble() == 0.0) {
+			text = add; //eat 0
+		}
+		else {
+//! @todo (js): get decimal places settings here...
+			QStringList sl = QStringList::split(".", text);
+			if (text.isEmpty()) {
+//					m_lineedit->setText("");
+			}
+			else if (sl.count()==2) {
+				kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
+				const QString sl1 = sl[1];
+				int pos = sl1.length()-1;
+				if (pos>=1) {
+					for (;pos>=0 && sl1[pos]=='0';pos--)
+						;
+					pos++;
+				}
+				if (pos>0)
+					text = sl[0] + m_decsym + sl1.left(pos);
+				else
+					text = sl[0]; //no decimal point
+			}
+			text += add;
+		}
+		if (setValidator) {
+			QValidator *validator = new KDoubleValidator(m_lineedit);
+			m_lineedit->setValidator( validator );
+		}
+	}
+	else {
+		text = value.toString();
+		if (field()->isIntegerType()) {
+			if (value.toInt() == 0) {
+				text = add; //eat 0
+			}
+			else {
+				text += add;
+			}
+//! @todo implement ranges here!
+			if (setValidator) {
+				QValidator *validator = new KIntValidator(m_lineedit);
+				m_lineedit->setValidator( validator );
+			}
+		}
+		else {//default: text
+			text += add;
+		}
+	}
+
+	return text;
 }
 
 void KexiInputTableEdit::paintEvent ( QPaintEvent * /*e*/ )
@@ -424,6 +387,33 @@ QSize KexiInputTableEdit::totalSize()
 	if (!m_lineedit)
 		return size();
 	return m_lineedit->size();
+}
+
+void KexiInputTableEdit::handleCopyAction(const QVariant& value)
+{
+//! @todo handle rich text?
+	qApp->clipboard()->setText( valueToText(value, QString::null) );
+}
+
+void KexiInputTableEdit::handleAction(const QString& actionName)
+{
+	const bool alreadyVisible = m_lineedit->isVisible();
+
+	if (actionName=="edit_paste") {
+		if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+			emit editRequested();
+			m_lineedit->clear();
+		}
+		m_lineedit->paste();
+	}
+	else if (actionName=="edit_cut") {
+//! @todo handle rich text?
+		if (!alreadyVisible) { //cut the entire text if the cell was not in edit mode
+			emit editRequested();
+			m_lineedit->selectAll();
+		}
+		m_lineedit->cut();
+	}
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

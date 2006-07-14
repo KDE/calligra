@@ -24,9 +24,8 @@
 #include "kexiformdataiteminterface.h"
 #include "kexiframe.h"
 #include "kexidbutils.h"
-#include <kactioncollection.h>
 #include <kexiblobbuffer.h>
-#include <qtimer.h>
+#include <widget/utils/kexiimagecontextmenu.h>
 
 class KexiDropDownButton;
 
@@ -85,8 +84,6 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		//! always true
 		virtual bool cursorAtEnd();
 
-//		virtual void clear();
-
 //		//! used to catch setIndent(), etc.
 //		virtual bool setProperty ( const char * name, const QVariant & value );
 
@@ -102,7 +99,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 
 		virtual QSize sizeHint() const;
 
-		KActionCollection* actionCollection() { return &m_actionCollection; }
+		KexiImageContextMenu *contextMenu() const;
 
 		/*! \return original file name of image loaded from a file. 
 		 This can be later reused for displaying the image within a collection (to be implemented)
@@ -143,25 +140,11 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 
 		void setScaledContents(bool set);
 
-		void insertFromFile();
-
 		void setAlignment(int alignment);
 
 		void setKeepAspectRatio(bool set);
 
-		void updateActionsAvailability();
-
-		void saveAs();
-
-		void cut();
-
-		void copy();
-
-		void paste();
-
-		virtual void clear();
-
-		void showProperties();
+//		void updateActionsAvailability();
 
 		//! @internal
 //		void slotToggled( bool on );
@@ -169,17 +152,28 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		//! \return sets dropDownButtonVisible property. @see dropDownButtonVisible()
 		void setDropDownButtonVisible( bool set );
 
+		//! Forces execution of "insert from file" action
+		void insertFromFile();
+
 	signals:
 		//! Used for db-aware mode. Emitted when value has been changed. 
 		//! Actual value can be obtained using value().
 //		virtual void pixmapChanged();
 //		virtual void valueChanged(const QByteArray& data);
+
 		void idChanged(long id);
 
 	protected slots:
-//		void slotAboutToHidePopupMenu();
-//		void slotChooserPressed();
-//		void slotChooserReleased();
+		void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+
+		void handleInsertFromFileAction(const KURL& url);
+		void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
+		void handleSaveAsAction(const QString& fileName);
+		void handleCutAction();
+		void handleCopyAction();
+		void handlePasteAction();
+		virtual void clear();
+		void handleShowPropertiesAction();
 
 	protected:
 		//! \return data depending on the current mode (db-aware or static)
@@ -240,10 +234,10 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		KexiBLOBBuffer::Handle m_data;
 //		QString m_originalFileName;
 		KexiDropDownButton *m_chooser;
-		KPopupMenu *m_popup;
-		KActionCollection m_actionCollection;
-		KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
-			*m_deleteAction, *m_propertiesAction;
+		KexiImageContextMenu *m_popup;
+//moved		KActionCollection m_actionCollection;
+//moved		KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
+//			*m_deleteAction, *m_propertiesAction;
 //		QTimer m_clickTimer;
 		int m_alignment;
 		bool m_designMode : 1;

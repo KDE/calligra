@@ -320,6 +320,10 @@ void KexiFormScrollView::updateCell(int row, int col)
 	//! @todo
 }
 
+void KexiFormScrollView::updateCurrentCell()
+{
+}
+
 void KexiFormScrollView::updateRow(int row)
 {
 	Q_UNUSED(row)
@@ -521,6 +525,35 @@ void KexiFormScrollView::refreshContentsSize()
 		if (m_form)
 			m_form->clearCommandHistory();
 	}
+}
+
+void KexiFormScrollView::handleDataWidgetAction(const QString& actionName)
+{
+	QWidget *w = focusWidget();
+	KexiFormDataItemInterface *item = 0;
+	while (w) {
+		item = dynamic_cast<KexiFormDataItemInterface*>(w);
+		if (item)
+			break;
+		w = w->parentWidget();
+	}
+	if (item)
+		item->handleAction(actionName);
+}
+
+void KexiFormScrollView::copySelection()
+{
+	handleDataWidgetAction("edit_copy");
+}
+
+void KexiFormScrollView::cutSelection()
+{
+	handleDataWidgetAction("edit_cut");
+}
+
+void KexiFormScrollView::paste()
+{
+	handleDataWidgetAction("edit_paste");
 }
 
 #include "kexiformscrollview.moc"

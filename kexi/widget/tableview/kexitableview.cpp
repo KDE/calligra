@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -303,10 +303,10 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	//context menu
 	m_popup = new KPopupMenu(this, "contextMenu");
 #if 0 //moved to mainwindow's actions
-	d->menu_id_addRecord = m_popup->insertItem(i18n("Add Record"), this, SLOT(addRecord()), CTRL+Key_Insert);
+	d->menu_id_addRecord = m_popup->insertItem(i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
 	d->menu_id_removeRecord = m_popup->insertItem(
 		kapp->iconLoader()->loadIcon("button_cancel", KIcon::Small),
-		i18n("Remove Record"), this, SLOT(removeRecord()), CTRL+Key_Delete);
+		i18n("Remove Record"), this, SLOT(removeRecord()), Qt::CTRL+Qt::Key_Delete);
 #endif
 
 #ifdef Q_WS_WIN
@@ -1082,11 +1082,15 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 
 	if(m_currentItem)
 	{
-		if(d->editOnDoubleClick && columnEditable(m_curCol) 
-			&& columnType(m_curCol) != KexiDB::Field::Boolean)
-		{
-			startEditCurrentCell();
-//			createEditor(m_curRow, m_curCol, QString::null);
+		if(d->editOnDoubleClick && columnEditable(m_curCol) && columnType(m_curCol) != KexiDB::Field::Boolean) {
+			KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol, /*ignoreMissingEditor=*/true ) );
+			if (edit && edit->handleDoubleClick()) {
+				//nothing to do: editors like BLOB editor has custom handling of double clicking
+			}
+			else {
+				startEditCurrentCell();
+	//			createEditor(m_curRow, m_curCol, QString::null);
+			}
 		}
 
 		emit itemDblClicked(m_currentItem, m_curRow, m_curCol);
@@ -1342,15 +1346,15 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 	//check default shortcut (when user app has no action shortcuts defined
 	// but we want these shortcuts to still work)
 	if (action_name=="data_save_row")
-		return (k == Key_Return || k == Key_Enter) && e->state()==ShiftButton;
+		return (k == Qt::Key_Return || k == Qt::Key_Enter) && e->state()==Qt::ShiftButton;
 	if (action_name=="edit_delete_row")
-		return k == Key_Delete && e->state()==ControlButton;
+		return k == Qt::Key_Delete && e->state()==Qt::ControlButton;
 	if (action_name=="edit_delete")
-		return k == Key_Delete && e->state()==NoButton;
+		return k == Qt::Key_Delete && e->state()==Qt::NoButton;
 	if (action_name=="edit_edititem")
-		return k == Key_F2 && e->state()==NoButton;
+		return k == Qt::Key_F2 && e->state()==Qt::NoButton;
 	if (action_name=="edit_insert_empty_row")
-		return k == Key_Insert && e->state()==(ShiftButton | ControlButton);
+		return k == Qt::Key_Insert && e->state()==(Qt::ShiftButton | Qt::ControlButton);
 
 	return false;
 }
@@ -1388,11 +1392,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	}
 
 	if(m_editor) {// if a cell is edited, do some special stuff
-		if (k == Key_Escape) {
+		if (k == Qt::Key_Escape) {
 			cancelEditor();
 			e->accept();
 			return;
-		} else if (k == Key_Return || k == Key_Enter) {
+		} else if (k == Qt::Key_Return || k == Qt::Key_Enter) {
 			if (columnType(m_curCol) == KexiDB::Field::Boolean) {
 				boolToggled();
 			}
@@ -1411,7 +1415,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 	}
 
-	if(k == Key_Return || k == Key_Enter)
+	if(k == Qt::Key_Return || k == Qt::Key_Enter)
 	{
 		emit itemReturnPressed(m_currentItem, m_curRow, m_curCol);
 	}
@@ -1440,7 +1444,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 	}
 
-/*	case Key_Delete:
+/*	case Qt::Key_Delete:
 		if (e->state()==Qt::ControlButton) {//remove current row
 			deleteCurrentRow();
 		}
@@ -1449,35 +1453,35 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 		break;*/
 
-	if (k == Key_Shift || k == Key_Alt || k == Key_Control || k == Key_Meta) {
+	if (k == Qt::Key_Shift || k == Qt::Key_Alt || k == Qt::Key_Control || k == Qt::Key_Meta) {
 		e->ignore();
 	}
-	else if (k == Key_Up && nobtn) {
+	else if (k == Qt::Key_Up && nobtn) {
 		selectPrevRow();
 		e->accept();
 		return;
 	}
-	else if (k == Key_Down && nobtn) {
+	else if (k == Qt::Key_Down && nobtn) {
 //			curRow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), curRow + 1);
 		selectNextRow();
 		e->accept();
 		return;
 	}
-	else if (k == Key_PageUp && nobtn) {
+	else if (k == Qt::Key_PageUp && nobtn) {
 //			curRow -= visibleHeight() / d->rowHeight;
 //			curRow = QMAX(0, curRow);
 		selectPrevPage();
 		e->accept();
 		return;
 	}
-	else if (k == Key_PageDown && nobtn) {
+	else if (k == Qt::Key_PageDown && nobtn) {
 //			curRow += visibleHeight() / d->rowHeight;
 //			curRow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), curRow);
 		selectNextPage();
 		e->accept();
 		return;
 	}
-	else if (k == Key_Home) {
+	else if (k == Qt::Key_Home) {
 		if (d->appearance.fullRowSelection) {
 			//we're in row-selection mode: home key always moves to 1st row
 			curRow = 0;//to 1st row
@@ -1495,7 +1499,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			}
 		}
 	}
-	else if (k == Key_End) {
+	else if (k == Qt::Key_End) {
 		if (d->appearance.fullRowSelection) {
 			//we're in row-selection mode: home key always moves to last row
 			curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row
@@ -1513,11 +1517,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			}
 		}
 	}
-	else if (k == Key_Backspace && nobtn) {
+	else if (k == Qt::Key_Backspace && nobtn) {
 		if (!ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
 			createEditor(curRow, curCol, QString::null, true);
 	}
-	else if (k == Key_Space) {
+	else if (k == Qt::Key_Space) {
 		if (nobtn && !ro && columnEditable(curCol)) {
 			if (columnType(curCol) == KexiDB::Field::Boolean) {
 				boolToggled();
@@ -1526,7 +1530,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 				printable = true; //just space key
 		}
 	}
-	else if (k == Key_Escape) {
+	else if (k == Qt::Key_Escape) {
 		if (nobtn && m_rowEditing) {
 			cancelRowEdit();
 			return;
@@ -1534,8 +1538,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	}
 	else {
 		//others:
-		if (nobtn && (k==Key_Tab || k==Key_Right)) {
-//! \todo add option for stopping at 1st column for Key_left
+		if (nobtn && (k==Qt::Key_Tab || k==Qt::Key_Right)) {
+//! \todo add option for stopping at 1st column for Qt::Key_left
 			//tab
 			if (acceptEditor()) {
 				if (curCol == (columns() - 1)) {
@@ -1548,10 +1552,10 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 					curCol++;
 			}
 		}
-		else if ((e->state()==ShiftButton && k==Key_Tab)
-		 || (nobtn && k==Key_Backtab)
-		 || (e->state()==ShiftButton && k==Key_Backtab)
-		 || (nobtn && k==Key_Left)
+		else if ((e->state()==ShiftButton && k==Qt::Key_Tab)
+		 || (nobtn && k==Qt::Key_Backtab)
+		 || (e->state()==ShiftButton && k==Qt::Key_Backtab)
+		 || (nobtn && k==Qt::Key_Left)
 			) {
 //! \todo add option for stopping at last column
 			//backward tab
@@ -1566,10 +1570,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 					curCol--;
 			}
 		}
-		else if ( nobtn && (k==Key_Enter || k==Key_Return || shortCutPressed(e, "edit_edititem")) ) {
-			startEditOrToggleValue();
-		}
-		else if (nobtn && k==d->contextMenuKey) { //Key_Menu:
+		else if (nobtn && k==d->contextMenuKey) { //Qt::Key_Menu:
 			showContextMenu();
 		}
 		else {
@@ -1579,16 +1580,20 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 				e->accept();
 				return;
 			}
-
-			kdDebug() << "KexiTableView::KeyPressEvent(): default" << endl;
-			if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
-				kdDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k,0,16) <<endl;
-//				e->ignore();
-				QScrollView::keyPressEvent(e);
-				return;
+			else if ( nobtn && (k==Qt::Key_Enter || k==Qt::Key_Return || shortCutPressed(e, "edit_edititem")) ) {
+				//this condition is moved after handleKeyPress() to allow to everride enter key as well
+				startEditOrToggleValue();
 			}
-
-			printable = true;
+			else {
+				kdDebug() << "KexiTableView::KeyPressEvent(): default" << endl;
+				if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
+					kdDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k,0,16) <<endl;
+	//				e->ignore();
+					QScrollView::keyPressEvent(e);
+					return;
+				}
+				printable = true;
+			}
 		}
 	}
 	//finally: we've printable char:
@@ -1939,6 +1944,11 @@ void KexiTableView::updateCell(int row, int col)
 	r.setHeight(r.height()+6);
 	r.setTop(r.top()-3);
 	updateContents();*/
+}
+
+void KexiTableView::updateCurrentCell()
+{
+	updateCell(m_curRow, m_curCol);
 }
 
 void KexiTableView::updateRow(int row)
@@ -2498,6 +2508,33 @@ void KexiTableView::moveToFirstRecordRequested()
 	selectFirstRow();
 }
 
+void KexiTableView::copySelection()
+{
+	if (m_currentItem && m_curCol!=-1) {
+		KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+		if (edit)
+			edit->handleCopyAction( m_currentItem->at( m_curCol ) );
+	}
+}
+
+//! Cut current selection to a clipboard (e.g. cell)
+void KexiTableView::cutSelection()
+{
+	//try to handle @ editor's level
+	KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+	if (edit)
+		edit->handleAction("edit_cut");
+}
+
+//! Paste current clipboard contents (e.g. to a cell)
+void KexiTableView::paste()
+{
+	//try to handle @ editor's level
+	KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+	if (edit)
+		edit->handleAction("edit_paste");
+}
+
 bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 {
 	//don't allow to stole key my events by others:
@@ -2516,11 +2553,11 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				return true;
 			}
 			else if (m_editor && (o==dynamic_cast<QObject*>(m_editor) || o==m_editor->widget())) {
-				if ( (k==Key_Tab && (s==NoButton || s==ShiftButton))
+				if ( (k==Qt::Key_Tab && (s==Qt::NoButton || s==Qt::ShiftButton))
 					|| (overrideEditorShortcutNeeded(ke))
-					|| (k==Key_Enter || k==Key_Return || k==Key_Up || k==Key_Down) 
-					|| (k==Key_Left && m_editor->cursorAtStart())
-					|| (k==Key_Right && m_editor->cursorAtEnd())
+					|| (k==Qt::Key_Enter || k==Qt::Key_Return || k==Qt::Key_Up || k==Qt::Key_Down) 
+					|| (k==Qt::Key_Left && m_editor->cursorAtStart())
+					|| (k==Qt::Key_Right && m_editor->cursorAtEnd())
 					)
 				{
 					//try to steal the key press from editor or it's internal widget...
@@ -2535,7 +2572,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				if (ke->isAccepted())
 					return true;
 			}*/
-/*todo			else if ((k==Key_Tab || k==(SHIFT|Key_Tab)) && o==d->navRowNumber) {
+/*todo			else if ((k==Qt::Key_Tab || k==(Qt::SHIFT|Qt::Key_Tab)) && o==d->navRowNumber) {
 				//tab key focuses tv
 				ke->accept();
 				setFocus();

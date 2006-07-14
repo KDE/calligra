@@ -14,6 +14,25 @@ CCMAIL:danny@commit-digest.org
 
 For bugfixes use CCMAIL:###-done@bugs.kde.org
 
+2006-07-10..14
+Forms
+- context menus now have consistent title: "<objectname> : <objecttype>"
+- cut/copy/paste shared actions work for form widgets in data view
+2.0: merged
+Table View
+- context menu from image box reused in the Table View's cell editor
+- cut/copy/paste/clear actions work for the image cells, including shortcuts
+- cut/copy/paste/clear actions work for text/number/boolean cells
+- fractional character ("," or ".") can be entered as the first character for
+  floating-point data types, what means 0.xxxxx
+- fixed updating row number info in the record navigator and updating the current 
+  cell after column sorting
+- BLOB data is sorted by size
+2.0: merged
+KexiDB
+- SQLite driver: read only connections work again
+2.0: merged
+
 2006-07-07
 Forms
 - AutoField, Image Box: fixed setting background color; 
@@ -22,6 +41,8 @@ Forms
 Table View
 - added drop down button as image cell editor
 2.0: merged
+
+~~~~~~~~~~~~~~~~ 1.0.2 bugfix release (with KOffice 1.5.2)  ~~~~~~~~~~~~~~~~
 
 2006-07-06
 Forms

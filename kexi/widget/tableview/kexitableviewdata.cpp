@@ -191,9 +191,11 @@ void KexiTableViewColumn::setRelatedDataEditable(bool set)
 bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 {
 	if (m_field->isNumericType()) {
-		if (ch=="-")
+		if (ch=='.' || ch==',')
+			return m_field->isFPNumericType();
+		if (ch=='-')
 			 return !m_field->isUnsigned();
-		if (ch=="+" || (ch>="0" && ch<="9"))
+		if (ch=='+' || (ch>='0' && ch<='9'))
 			return true;
 		return false;
 	}
@@ -204,7 +206,7 @@ bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 	case KexiDB::Field::Date:
 	case KexiDB::Field::DateTime:
 	case KexiDB::Field::Time:
-		return ch>="0" && ch<="9";
+		return ch>='0' && ch<='9';
 	default:;
 	}
 	return true;
@@ -380,7 +382,9 @@ void KexiTableViewData::setSorting(int column, bool ascending)
 
 	const KexiDB::Field *field = columns.at(m_key)->field();
 	const int t = field->type();
-	if (KexiDB::Field::isFPNumericType(t))
+	if (field->isTextType())
+		cmpFunc = &KexiTableViewData::cmpStr;
+	else if (KexiDB::Field::isFPNumericType(t))
 		cmpFunc = &KexiTableViewData::cmpDouble;
 	else if (t==KexiDB::Field::BigInteger) {
 		if (field->isUnsigned())
@@ -398,8 +402,11 @@ void KexiTableViewData::setSorting(int column, bool ascending)
 		cmpFunc = &KexiTableViewData::cmpTime;
 	else if (t == KexiDB::Field::DateTime)
 		cmpFunc = &KexiTableViewData::cmpDateTime;
+	else if (t == KexiDB::Field::BLOB)
+//! TODO allow users to define BLOB sorting function?
+		cmpFunc = &KexiTableViewData::cmpBLOB;
 	else
-		cmpFunc = &KexiTableViewData::cmpStr; //text or anything else
+		cmpFunc = &KexiTableViewData::cmpStr; //anything else
 }
 
 int KexiTableViewData::compareItems(Item item1, Item item2)
@@ -503,6 +510,12 @@ int KexiTableViewData::cmpStr(Item item1, Item item2)
 		return m_order*(as.length()-bs.length());
 
 	return m_order*(au-bu);
+}
+
+int KexiTableViewData::cmpBLOB(Item item1, Item item2)
+{
+	CMP_NULLS(item1, item2);
+	return m_leftTmp.toByteArray().size() - m_rightTmp.toByteArray().size();
 }
 
 void KexiTableViewData::setReadOnly(bool set)

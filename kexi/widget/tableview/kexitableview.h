@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -189,6 +189,9 @@ public:
 
 	/*! Redraws specified cell. */
 	virtual void updateCell(int row, int col);
+
+	/*! Redraws the current cell. Implemented after KexiDataAwareObjectInterface. */
+	virtual void updateCurrentCell();
 
 	/*! Redraws all cells of specified row. */
 	virtual void updateRow(int row);
@@ -572,6 +575,15 @@ protected:
 	virtual void moveToNextRecordRequested();
 	virtual void moveToFirstRecordRequested();
 	virtual void addNewRecordRequested() { KexiDataAwareObjectInterface::addNewRecordRequested(); }
+
+	//! Copy current selection to a clipboard (e.g. cell)
+	virtual void copySelection();
+
+	//! Cut current selection to a clipboard (e.g. cell)
+	virtual void cutSelection();
+
+	//! Paste current clipboard contents (e.g. to a cell)
+	virtual void paste();
 
 	/*! Used in KexiDataAwareObjectInterface::slotRowDeleted() 
 	 to repaint tow \a row and all visible below. */

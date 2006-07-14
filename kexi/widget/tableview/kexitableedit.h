@@ -34,6 +34,7 @@ namespace KexiDB {
 }
 
 /*! @short Abstract class for a cell editor.
+ Handles cell painting and displaying the editor widget.
 */
 class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemInterface
 {
@@ -112,7 +113,18 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 For implementation: true should be returned if \a ke should be accepted.
 		 If \a editorActive is true, this editor is currently active, i.e. the table view is in edit mode.
 		 By default false is returned. */
-		virtual bool handleKeyPress( QKeyEvent * /*ke*/, bool /*editorActive*/ ) { return false; }
+		virtual bool handleKeyPress( QKeyEvent* ke, bool editorActive ) { 
+			Q_UNUSED(ke); Q_UNUSED(editorActive); return false; }
+
+		/*! Handles double click request coming from the table view. 
+		 \return true if it has been consumed. 
+		 Reimplemented in KexiBlobTableEdit (to execute "insert file" action. */
+		virtual bool handleDoubleClick() { return false; }
+
+		/*! Handles copy action for value. The \a value is copied to clipboard in format appropriate 
+		 for the editor's impementation, e.g. for image cell it can be a pixmap. 
+		 For reimplementation. */
+		virtual void handleCopyAction(const QVariant& value) = 0;
 
 		/*! \return width of \a value. For the default implementation \a val is converted to a string 
 		 and width of this string is returned. */
@@ -139,6 +151,10 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 are outside of this editor widget, instead of calling QWidget::move(). */
 		void moveChild( QWidget * child, int x, int y ) {
 			m_scrollView->moveChild(child, x, y); }
+
+		/*! Allows to force redrawing the related cell by the editor itself. Usable when the editor is not 
+		 displayed by a QWidget but rather by table view cell itself, for example KexiBlobTableEdit. */
+		void repaintRelatedCell();
 
 		KexiTableViewColumn *m_column;
 		int m_leftMargin;

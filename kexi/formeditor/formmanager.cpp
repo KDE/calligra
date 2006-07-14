@@ -857,10 +857,10 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	if(!multiple)
 	{
 		if(w == container->form()->widget())
-			m_popup->insertTitle(SmallIcon("form"), i18n("Form: ") + w->name());
+			m_popup->insertTitle(SmallIcon("form"), i18n("%1 : Form").arg(w->name()) );
 		else
 			m_popup->insertTitle( SmallIcon(
-				container->form()->library()->iconName(w->className())), n + ": " + w->name() );
+				container->form()->library()->iconName(w->className())), QString(w->name()) + " : " + n );
 	}
 	else
 		m_popup->insertTitle(SmallIcon("multiple_obj"), i18n("Multiple Widgets")

@@ -289,7 +289,7 @@ void KexiUtils::drawPixmap( QPainter& p, int lineWidth, const QRect& rect,
 //			p2.begin(&pixmapBuffer, p.device());
 		p.drawPixmap(lineWidth, lineWidth, pixmap);
 	}
-	if (!fast && p.isActive()) {
+	if (scaledContents && !fast && p.isActive()) {
 		p2.end();
 		bitBlt( p.device(), 
 //			pos.x(), 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -342,7 +342,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void createEditor(int row, int col, const QString& addText = QString::null, 
 			bool removeOld = false) = 0;
 
-		/*! Used when Return key is pressed on cell or "+" nav. button is clicked.
+		/*! Used when Return key is pressed on cell, the cell has been double clicked
+		 or "+" navigator's button is clicked.
 		 Also used when we want to continue editing a cell after "invalid value" message
 		 was displayed (in this case, \a setText is usually not empty, what means
 		 that text will be set in the cell replacing previous value).
@@ -380,6 +381,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 ('readOnly' flag from data member is still checked though).
 		*/
 		virtual bool columnEditable(int col);
+
+		/*! Redraws the current cell. To be implemented. */
+		virtual void updateCurrentCell() = 0;
 
 		inline KexiRecordMarker* verticalHeader() const { return m_verticalHeader; }
 
@@ -431,6 +435,15 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 			const char* voidSignal) = 0;
 
 		virtual void slotDataDestroying();
+
+		//! Copy current selection to a clipboard (e.g. cell)
+		virtual void copySelection() = 0;
+
+		//! Cut current selection to a clipboard (e.g. cell)
+		virtual void cutSelection() = 0;
+
+		//! Paste current clipboard contents (e.g. to a cell)
+		virtual void paste() = 0;
 
 	protected:
 		/*! Reimplementation for KexiDataAwareObjectInterface.

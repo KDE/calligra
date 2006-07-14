@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libkexiguiutils.la
 libkexiguiutils_la_SOURCES = kexisharedactionclient.cpp kexirecordnavigator.cpp \
 	kexigradientwidget.cpp kexirecordmarker.cpp kexidisplayutils.cpp \
 	kexiflowlayout.cpp kexidatetimeformatter.cpp kexiarrowtip.cpp \
-	kexidropdownbutton.cpp
+	kexidropdownbutton.cpp kexiimagecontextmenu.cpp
 
 libkexiguiutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiguiutils_la_LIBADD = $(LIB_KDEUI)

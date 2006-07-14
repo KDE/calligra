@@ -22,6 +22,8 @@
 #include <kexidb/field.h>
 
 #include <qpainter.h>
+#include <qapplication.h>
+#include <qclipboard.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -111,11 +113,16 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVar
 	int s = QMAX(h - 5, 12);
 	s = QMIN( h-3, s );
 	s = QMIN( w-3, s );//avoid too large box
-//		QRect r(w/2 - s/2 + x, h/2 - s/2 - 1, s, s);
 	QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
-	p->setPen(QPen(colorGroup().text(), 1));
+	if (val.isNull())
+		p->setPen(QPen(palette().disabled().text(), 1));
+	else
+		p->setPen(QPen(colorGroup().text(), 1));
 	p->drawRect(r);
-	if (val.toBool()) {
+	if (val.isNull()) {
+		p->drawText( r, Qt::AlignCenter, "?" );
+	}
+	else if (val.toBool()) {
 		p->drawLine(r.x(), r.y(), r.right(), r.bottom());
 		p->drawLine(r.x(), r.bottom(), r.right(), r.y());
 //			p->drawLine(r.x() + 2, r.y() + 2, r.right() - 1, r.bottom() - 1);
@@ -126,6 +133,41 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVar
 void KexiBoolTableEdit::clickedOnContents()
 {
 	m_currentValue = QVariant( !m_currentValue.toBool(), 0 );
+}
+
+void KexiBoolTableEdit::handleAction(const QString& actionName)
+{
+	if (actionName=="edit_paste") {
+		emit editRequested();
+		bool ok;
+		const int value = qApp->clipboard()->text( QClipboard::Clipboard ).toInt(&ok);
+		if (ok) {
+			m_currentValue = (value==0) ? QVariant(false, 0) : QVariant(true, 1);
+		}
+		else {
+			m_currentValue = field()->isNotNull() 
+				? QVariant(0, false)/*0 instead of NULL - handle case when null is not allowed*/
+				: QVariant();
+		}
+		repaintRelatedCell();
+	}
+	else if (actionName=="edit_cut") {
+		emit editRequested();
+//! @todo handle defaultValue...
+		m_currentValue = field()->isNotNull() 
+			? QVariant(0, false)/*0 instead of NULL - handle case when null is not allowed*/
+			: QVariant();
+		handleCopyAction(m_origValue);
+		repaintRelatedCell();
+	}
+}
+
+void KexiBoolTableEdit::handleCopyAction(const QVariant& value)
+{
+	if (value.type()==QVariant::Bool)
+		qApp->clipboard()->setText(value.toBool() ? "1" : "0");
+	else
+		qApp->clipboard()->setText(QString::null);
 }
 
 //======================================================

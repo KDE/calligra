@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -262,7 +262,8 @@ bool KexiDataAwareObjectInterface::sort()
 
 	if (!acceptRowEdit())
 		return false;
-			
+
+	const int oldRow = m_curRow;
 	if (m_data->sortedColumn()!=-1)
 		m_data->sort();
 
@@ -276,13 +277,19 @@ bool KexiDataAwareObjectInterface::sort()
 	}
 	if (m_currentItem != m_insertItem) {
 		m_curRow = m_data->findRef(m_currentItem);
+		int jump = m_curRow - oldRow;
+		if (jump<0)
+			(*m_itemIterator) -= -jump;
+		else
+			(*m_itemIterator) += jump;
 	}
 
-//	d->pCurrentItem = m_data->at(d->curRow);
-
 	updateGUIAfterSorting();
+	editorShowFocus( m_curRow, m_curCol );
 	if (m_verticalHeader)
 		m_verticalHeader->setCurrentRow(m_curRow);
+	if (m_navPanel)
+		m_navPanel->setCurrentRecordNumber(m_curRow+1);
 	return true;
 }
 
@@ -1103,6 +1110,8 @@ void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
 	m_editor->clear();
 	if (m_editor->acceptEditorAfterDeleteContents())
 		acceptEditor();
+	if (!m_editor->hasFocusableWidget())
+		updateCell(m_curRow, m_curCol);
 }
 
 void KexiDataAwareObjectInterface::deleteCurrentRow()

@@ -592,7 +592,8 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_clear_table->setWhatsThis(i18n("Clears table contents."));
 	setActionVolatile( d->action_edit_clear_table, true );
 
-	d->action_edit_edititem = createSharedAction(i18n("Edit Item"), 0, Key_F2, "edit_edititem");
+	d->action_edit_edititem = createSharedAction(i18n("Edit Item"), 0, 0, /* CONFLICT in TV: Key_F2,  */
+		"edit_edititem");
 	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item"));
 	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
@@ -726,19 +727,6 @@ void KexiMainWindowImpl::initActions()
 	slotOptionsEnableForms(true, true);
 #else
 	slotOptionsEnableForms(false, true);
-
-# if 0
-	KToggleAction *toggleaction = new KToggleAction(i18n("Enable Forms"), "", 0, actionCollection(), "options_enable_forms");
-#  if KDE_IS_VERSION(3,2,90)
-	toggleaction->setCheckedState(i18n("Disable Forms"));
-#  endif
-	d->config->setGroup("Unfinished");
-	if (d->config->readBoolEntry("EnableForms", false)) {
-		slotOptionsEnableForms( true, true );
-		toggleaction->setChecked(true);
-	}
-	connect(toggleaction, SIGNAL(toggled(bool)), this, SLOT(slotOptionsEnableForms(bool)));
-# endif //0
 #endif
 
 #ifdef KEXI_REPORTS_SUPPORT
@@ -3655,19 +3643,21 @@ void KexiMainWindowImpl::importantInfo(bool /*onStartup*/)
 void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
 {
 	Kexi::tempShowForms() = show;
+#if 0
 	d->config->setGroup("Unfinished");
 	d->config->writeEntry("EnableForms", Kexi::tempShowForms());
 	if (noMessage)
 		return;
-	QString note = i18n("Please note that forms are currently unstable functionality, provided <u>only for your preview</u>.");
+	QString note = futureI18n("Please note that forms are currently unstable functionality, provided <u>only for your preview</u>.");
 	if (show) {
 		KMessageBox::information(this,
-			"<p>"+i18n("Forms will be available after restarting Kexi application.")+"</p>"+note+"<p>");
+			"<p>"+futureI18n("Forms will be available after restarting Kexi application.")+"</p>"+note+"<p>");
 	}
 	else {
 		KMessageBox::information(this,
-			"<p>"+i18n("Forms will be hidden after restarting Kexi application.")+"</p><p>"+note+"<p>");
+			"<p>"+futureI18n("Forms will be hidden after restarting Kexi application.")+"</p><p>"+note+"<p>");
 	}
+#endif
 }
 
 bool KexiMainWindowImpl::inFinalMode() const

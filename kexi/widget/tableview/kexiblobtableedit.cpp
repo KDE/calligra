@@ -32,6 +32,10 @@
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qpainter.h>
+#include <qtooltip.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qbuffer.h>
 
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -49,9 +53,11 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
+#include <kstdaccel.h>
 
 #include <kexiutils/utils.h>
 #include <widget/utils/kexidropdownbutton.h>
+#include <widget/utils/kexiimagecontextmenu.h>
 
 //! @internal
 class KexiBlobTableEdit::Private
@@ -59,6 +65,8 @@ class KexiBlobTableEdit::Private
 public:
 	Private()
 	 : popup(0)
+	 , readOnly(false)
+	 , setValueInternalEnabled(true)
 	{
 	}
 
@@ -66,7 +74,9 @@ public:
 	KexiDropDownButton *button;
 	QSize totalSize;
 	int parentRightMargin;
-	KPopupMenu *popup;
+	KexiImageContextMenu *popup;
+	bool readOnly : 1; //!< cached for slotUpdateActionsAvailabilityRequested() 
+	bool setValueInternalEnabled : 1; //!< used to disable KexiBlobTableEdit::setValueInternal()
 };
 
 //======================================================
@@ -77,11 +87,39 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QScrollView *p
 {
 //	m_proc = 0;
 //	m_content = 0;
+	m_hasFocusableWidget = false;
 	d->button = new KexiDropDownButton( parent->viewport() );
 	d->button->hide();
+	QToolTip::add(d->button, i18n("Click to show available actions for this cell"));
 	d->parentRightMargin = m_rightMargin;
-	d->popup = new KPopupMenu(this);
+
+	d->popup = new KexiImageContextMenu(this);
+	if (column.fieldinfo)
+		KexiImageContextMenu::updateTitle( d->popup, column.fieldinfo->captionOrAliasOrName(),
+//! @todo pixmaplabel icon is hardcoded...
+			"pixmaplabel" );
 	d->button->setPopup( d->popup );
+
+	//force edit requested to start editing... (this will call slotUpdateActionsAvailabilityRequested())
+	//connect(d->popup, SIGNAL(aboutToShow()), this, SIGNAL(editRequested()));
+
+	connect(d->popup, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
+		this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
+
+	connect(d->popup, SIGNAL(insertFromFileRequested(const KURL&)),
+		this, SLOT(handleInsertFromFileAction(const KURL&)));
+	connect(d->popup, SIGNAL(saveAsRequested(const QString&)),
+		this, SLOT(handleSaveAsAction(const QString&)));
+	connect(d->popup, SIGNAL(cutRequested()),
+		this, SLOT(handleCutAction()));
+	connect(d->popup, SIGNAL(copyRequested()),
+		this, SLOT(handleCopyAction()));
+	connect(d->popup, SIGNAL(pasteRequested()),
+		this, SLOT(handlePasteAction()));
+	connect(d->popup, SIGNAL(clearRequested()),
+		this, SLOT(clear()));
+	connect(d->popup, SIGNAL(showPropertiesRequested()),
+		this, SLOT(handleShowPropertiesAction()));
 }
 
 KexiBlobTableEdit::~KexiBlobTableEdit()
@@ -102,6 +140,8 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 //! initializes this editor with \a add value
 void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
+	if (!d->setValueInternalEnabled)
+		return;
 	if (removeOld)
 		d->value = add.toByteArray();
 	else //do not add "m_origValue" to "add" as this is QByteArray
@@ -169,6 +209,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 bool KexiBlobTableEdit::valueIsNull()
 {
 //TODO
+	d->value.size();
 	return d->value.isEmpty();
 }
 
@@ -202,6 +243,14 @@ KexiBlobTableEdit::value()
 	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
 	return QVariant(value);
 #endif
+}
+
+void KexiBlobTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h )
+{
+//	d->currentEditorWidth = w;
+	if (w > d->button->width())
+		w -= d->button->width();
+	p->drawRect(x, y, w, h);
 }
 
 void
@@ -358,13 +407,110 @@ bool KexiBlobTableEdit::cursorAtEnd()
 	return true;
 }
 
+void KexiBlobTableEdit::handleInsertFromFileAction(const KURL& url)
+{
+	if (isReadOnly())
+		return;
+
+	QString fileName( url.isLocalFile() ? url.path() : url.prettyURL() );
+
+	//! @todo download the file if remote, then set fileName properly
+	QFile f(fileName);
+	if (!f.open(IO_ReadOnly)) {
+		//! @todo err msg
+		return;
+	}
+	QByteArray ba = f.readAll();
+	if (f.status()!=IO_Ok) {
+		//! @todo err msg
+		f.close();
+		return;
+	}
+	f.close();
+//	m_valueMimeType = KImageIO::mimeType( fileName ); 
+	setValueInternal( ba, true );
+	signalEditRequested();
+	//emit acceptRequested();
+}
+
+void KexiBlobTableEdit::handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
+{
+	dataIsEmpty = valueIsEmpty();
+//! @todo no fname stored for now
+}
+
+void KexiBlobTableEdit::handleSaveAsAction(const QString& fileName)
+{
+	QFile f(fileName);
+	if (!f.open(IO_WriteOnly)) {
+		//! @todo err msg
+		return;
+	}
+	f.writeBlock( d->value );
+	if (f.status()!=IO_Ok) {
+		//! @todo err msg
+		f.close();
+		return;
+	}
+	f.close();
+}
+
+void KexiBlobTableEdit::handleCutAction()
+{
+	if (isReadOnly())
+		return;
+	handleCopyAction();
+	clear();
+}
+
+void KexiBlobTableEdit::handleCopyAction()
+{
+	executeCopyAction(d->value);
+}
+
+void KexiBlobTableEdit::executeCopyAction(const QByteArray& data)
+{
+	QPixmap pixmap;
+	if (!pixmap.loadFromData(data))
+		return;
+	qApp->clipboard()->setPixmap(pixmap, QClipboard::Clipboard);
+}
+
+void KexiBlobTableEdit::handlePasteAction()
+{
+	if (isReadOnly())
+		return;
+	QPixmap pm( qApp->clipboard()->pixmap(QClipboard::Clipboard) );
+	QByteArray ba;
+	QBuffer buffer( ba );
+	buffer.open( IO_WriteOnly );
+	if (pm.save( &buffer, "PNG" )) {// write pixmap into ba in PNG format
+		setValueInternal( ba, true );
+	}
+	else {
+		setValueInternal( QByteArray(), true );
+	}
+	signalEditRequested();
+	//emit acceptRequested();
+	repaintRelatedCell();
+}
+
 void KexiBlobTableEdit::clear()
 {
-	//TODO??
+	setValueInternal( QByteArray(), true );
+	signalEditRequested();
+	//emit acceptRequested();
+	repaintRelatedCell();
+}
+
+void KexiBlobTableEdit::handleShowPropertiesAction()
+{
+	//! @todo
 }
 
 void KexiBlobTableEdit::showFocus( const QRect& r, bool readOnly )
 {
+	d->readOnly = readOnly; //cache for slotUpdateActionsAvailabilityRequested() 
 //	d->button->move( pos().x()+ width(), pos().y() );
 	updateFocus( r );
 	d->button->setEnabled(!readOnly);
@@ -401,6 +547,62 @@ void KexiBlobTableEdit::hideFocus()
 QSize KexiBlobTableEdit::totalSize() const
 {
 	return d->totalSize;
+}
+
+void KexiBlobTableEdit::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
+{
+	emit editRequested();
+	valueIsNull = this->valueIsNull();
+	valueIsReadOnly = d->readOnly || isReadOnly();
+}
+
+void KexiBlobTableEdit::signalEditRequested()
+{
+	d->setValueInternalEnabled = false;
+	emit editRequested();
+	d->setValueInternalEnabled = true;
+}
+
+bool KexiBlobTableEdit::handleKeyPress( QKeyEvent* ke, bool editorActive )
+{
+	Q_UNUSED(editorActive);
+
+	const int k = ke->key();
+	KKey kkey(ke);
+	if ((ke->state()==Qt::NoButton && k==Qt::Key_F4)
+		|| (ke->state()==Qt::AltButton && k==Qt::Key_Down)) {
+		d->button->animateClick();
+		QMouseEvent me( QEvent::MouseButtonPress, QPoint(2,2), Qt::LeftButton, Qt::NoButton );
+		QApplication::sendEvent( d->button, &me );
+	}
+	else if ((ke->state()==NoButton && (k==Qt::Key_F2 || k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return))) {
+		d->popup->insertFromFile();
+	}
+	else
+		return false;
+	return true;
+}
+
+bool KexiBlobTableEdit::handleDoubleClick()
+{
+	d->popup->insertFromFile();
+	return true;
+}
+
+void KexiBlobTableEdit::handleCopyAction(const QVariant& value)
+{
+	executeCopyAction(value.toByteArray());
+}
+
+void KexiBlobTableEdit::handleAction(const QString& actionName)
+{
+	if (actionName=="edit_paste") {
+		d->popup->paste();
+	}
+	else if (actionName=="edit_cut") {
+		emit editRequested();
+		d->popup->cut();
+	}
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiBlobEditorFactoryItem, KexiBlobTableEdit)
@@ -513,6 +715,11 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVa
 	if (pix) {
 		p->drawPixmap( (w-pix->width())/2, (h-pix->height())/2, *pix );
 	}
+}
+
+void KexiKIconTableEdit::handleCopyAction(const QVariant& value)
+{
+	Q_UNUSED(value);
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiKIconTableEditorFactoryItem, KexiKIconTableEdit)

@@ -57,6 +57,9 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase
 		void cancelRowEdit();
 		void sortAscending();
 		void sortDescending();
+		void copySelection();
+		void cutSelection();
+		void paste();
 
 	protected slots:
 //		void slotCellSelected(const QVariant& v); //!< @internal

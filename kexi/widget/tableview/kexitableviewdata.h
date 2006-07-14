@@ -457,6 +457,9 @@ protected:
 	int cmpDateTime(Item item1, Item item2);
 	int cmpTime(Item item1, Item item2);
 
+	//! Compare function for BLOB data (QByteArray). Uses size as the weight.
+	int cmpBLOB(Item item1, Item item2);
+
 	//! internal: for saveRowChanges() and saveNewRow()
 	bool saveRow(KexiTableItem& item, bool insert, bool repaint);
 

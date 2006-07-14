@@ -47,6 +47,7 @@
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
+#include <formeditor/widgetlibrary.h>
 
 #ifdef Q_WS_WIN
 #include <win32_utils.h>
@@ -54,6 +55,7 @@
 #endif
 
 #include "kexidbutils.h"
+#include "../kexiformpart.h"
 
 static KStaticDeleter<QPixmap> KexiDBImageBox_pmDeleter;
 static QPixmap* KexiDBImageBox_pm = 0;
@@ -61,7 +63,6 @@ static QPixmap* KexiDBImageBox_pm = 0;
 KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *name )
 	: KexiFrame( parent, name, Qt::WNoAutoErase )
 	, KexiFormDataItemInterface()
-	, m_actionCollection(this)
 	, m_alignment(Qt::AlignAuto|Qt::AlignTop)
 	, m_designMode(designMode)
 	, m_readOnly(false)
@@ -81,8 +82,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	setFrameColor(Qt::black);
 
 	//setup popup menu
-	m_popup = new KPopupMenu(this);
-	m_popup->insertTitle(QString::null);
+	m_popup = new KexiImageContextMenu(this);
 
 	if (m_designMode) {
 		m_chooser = 0;
@@ -96,47 +96,41 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 //		hlyr->addWidget(m_chooser);
 	}
 
-	m_insertFromFileAction = new KAction(i18n("Insert From &File..."), SmallIconSet("fileopen"), 0,
-			this, SLOT(insertFromFile()), &m_actionCollection, "insert");
-	m_insertFromFileAction->plug(m_popup);
-	m_saveAsAction = KStdAction::saveAs(this, SLOT(saveAs()), &m_actionCollection);
-//	m_saveAsAction->setText(i18n("&Save &As..."));
-	m_saveAsAction->plug(m_popup);
-	m_popup->insertSeparator();
-	m_cutAction = KStdAction::cut(this, SLOT(cut()), &m_actionCollection);
-	m_cutAction->plug(m_popup);
-	m_copyAction = KStdAction::copy(this, SLOT(copy()), &m_actionCollection);
-	m_copyAction->plug(m_popup);
-	m_pasteAction = KStdAction::paste(this, SLOT(paste()), &m_actionCollection);
-	m_pasteAction->plug(m_popup);
-	m_deleteAction = new KAction(i18n("&Clear"), SmallIconSet("editdelete"), 0,
-		this, SLOT(clear()), &m_actionCollection, "delete");
-	m_deleteAction->plug(m_popup);
-#ifdef KEXI_NO_UNFINISHED 
-	m_propertiesAction = 0;
-#else
-	m_popup->insertSeparator();
-	m_propertiesAction = new KAction(i18n("Properties"), 0, 0,
-		this, SLOT(showProperties()), &m_actionCollection, "properties");
-	m_propertiesAction->plug(m_popup);
-#endif
-	connect(m_popup, SIGNAL(aboutToShow()), this, SLOT(updateActionsAvailability()));
-	connect(m_popup, SIGNAL(aboutToHide()), this, SLOT(slotAboutToHidePopupMenu()));
-	if (m_chooser) {
+	connect(m_popup, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
+		this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
+	connect(m_popup, SIGNAL(insertFromFileRequested(const KURL&)),
+		this, SLOT(handleInsertFromFileAction(const KURL&)));
+	connect(m_popup, SIGNAL(saveAsRequested(const QString&)),
+		this, SLOT(handleSaveAsAction(const QString&)));
+	connect(m_popup, SIGNAL(cutRequested()),
+		this, SLOT(handleCutAction()));
+	connect(m_popup, SIGNAL(copyRequested()),
+		this, SLOT(handleCopyAction()));
+	connect(m_popup, SIGNAL(pasteRequested()),
+		this, SLOT(handlePasteAction()));
+	connect(m_popup, SIGNAL(clearRequested()),
+		this, SLOT(clear()));
+	connect(m_popup, SIGNAL(showPropertiesRequested()),
+		this, SLOT(handleShowPropertiesAction()));
+
+//	connect(m_popup, SIGNAL(aboutToHide()), this, SLOT(slotAboutToHidePopupMenu()));
+//	if (m_chooser) {
 		//we couldn't use m_chooser->setPopup() because of drawing problems
-		connect(m_chooser, SIGNAL(pressed()), this, SLOT(slotChooserPressed()));
-		connect(m_chooser, SIGNAL(released()), this, SLOT(slotChooserReleased()));
-		connect(m_chooser, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-	}
+//		connect(m_chooser, SIGNAL(pressed()), this, SLOT(slotChooserPressed()));
+//		connect(m_chooser, SIGNAL(released()), this, SLOT(slotChooserReleased()));
+//		connect(m_chooser, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
+//	}
 
 	setDataSource( QString::null ); //to initialize popup menu and actions availability
-
-//	m_chooser->setPopupDelay(0);
-//	m_chooser->setPopup(m_popup);
 }
 
 KexiDBImageBox::~KexiDBImageBox()
 {
+}
+
+KexiImageContextMenu* KexiDBImageBox::contextMenu() const
+{
+	return m_popup;
 }
 
 QVariant KexiDBImageBox::value()
@@ -301,40 +295,27 @@ bool KexiDBImageBox::cursorAtEnd()
 	return true;
 }
 
-/*void KexiDBImageBox::clear()
+QByteArray KexiDBImageBox::data() const
 {
-	if (isReadOnly())
-		return;
-	m_pixmap = QPixmap();
-	repaint();
-//	m_pixmapLabel->setPixmap(QPixmap());
-//	m_pixmapLabel->setText(QString::null);
-	emit valueChanged(QPixmap());
-}*/
+	if (dataSource().isEmpty()) {
+		//static mode
+		return m_data.data();
+	}
+	else {
+		//db-aware mode
+		return m_value;
+	}
+}
 
 void KexiDBImageBox::insertFromFile()
 {
+	m_popup->insertFromFile();
+}
+
+void KexiDBImageBox::handleInsertFromFileAction(const KURL& url)
+{
 	if (!dataSource().isEmpty() && isReadOnly())
 		return;
-
-#ifdef Q_WS_WIN
-	QString recentDir;
-	QString fileName = QFileDialog::getOpenFileName(
-		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path(), 
-		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
-		this, 0, i18n("Insert Image From File"));
-	KURL url;
-	url.setPath( fileName );
-#else
-	KURL url( KFileDialog::getImageOpenURL(
-		":LastVisitedImagePath", this, i18n("Insert Image From File")) );
-//	QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
-
-	//! @todo download the file if remote, then set fileName properly
-#endif
-	if (!url.isValid())
-		return;
-	kexipluginsdbg << "fname=" << url.prettyURL() << endl;
 
 	if (dataSource().isEmpty()) {
 		//static mode
@@ -346,9 +327,8 @@ void KexiDBImageBox::insertFromFile()
 	}
 	else {
 		//db-aware
-#ifndef Q_WS_WIN
-		QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
-#endif
+		QString fileName( url.isLocalFile() ? url.path() : url.prettyURL() );
+
 		//! @todo download the file if remote, then set fileName properly
 		QFile f(fileName);
 		if (!f.open(IO_ReadOnly)) {
@@ -366,37 +346,18 @@ void KexiDBImageBox::insertFromFile()
 	}
 
 //! @todo emit signal for setting "dirty" flag within the design
-
-#ifdef Q_WS_WIN
-	//save last visited path
-//	KURL url(fileName);
-	if (url.isLocalFile())
-		KRecentDirs::add(":LastVisitedImagePath", url.directory());
-#endif
 	if (!dataSource().isEmpty()) {
 		signalValueChanged();
 	}
 }
 
-QByteArray KexiDBImageBox::data() const
-{
-	if (dataSource().isEmpty()) {
-		//static mode
-		return m_data.data();
-	}
-	else {
-		//db-aware mode
-		return m_value;
-	}
-}
-
-void KexiDBImageBox::saveAs()
+void KexiDBImageBox::handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
 {
 	if (data().isEmpty()) {
-		kdWarning() << "KexiDBImageBox::saveAs(): no pixmap!" << endl;
+		kdWarning() << "KexiDBImageBox::handleAboutToSaveAs(): no pixmap!" << endl;
+		dataIsEmpty = false;
 		return;
 	}
-	QString origFilename, fileExtension;
 	if (dataSource().isEmpty()) { //for static images filename and mimetype can be available
 		origFilename = m_data.originalFileName();
 		if (!origFilename.isEmpty())
@@ -404,41 +365,11 @@ void KexiDBImageBox::saveAs()
 		if (!m_data.mimeType().isEmpty())
 			fileExtension = KImageIO::typeForMime(m_data.mimeType()).lower();
 	}
-	else {
-		// PNG data is the default
-		fileExtension = "png";
-	}
-	
-#ifdef Q_WS_WIN
-	QString recentDir;
+}
 
-	QString fileName = QFileDialog::getSaveFileName(
-		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path() + origFilename,
-		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
-		this, 0, i18n("Save Image to File"));
-#else
-	//! @todo add originalFileName! (requires access to KRecentDirs)
-	QString fileName = KFileDialog::getSaveFileName(
-		":LastVisitedImagePath", KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image to File"));
-#endif
-	if (fileName.isEmpty())
-		return;
-	if (QFileInfo(fileName).extension().isEmpty())
-		fileName += (QString(".")+fileExtension);
-	kexipluginsdbg << fileName << endl;
-	KURL url;
-	url.setPath( fileName );
-
+void KexiDBImageBox::handleSaveAsAction(const QString& fileName)
+{
 	QFile f(fileName);
-	if (f.exists() && KMessageBox::Yes != KMessageBox::warningYesNo(this, 
-		"<qt>"+i18n("File %1 already exists."
-		"<p>Do you want to replace it with a new one?")
-		.arg(QDir::convertSeparators(fileName))+"</qt>",0, 
-		KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Don't Replace"))))
-	{
-		return;
-	}
-
 	if (!f.open(IO_WriteOnly)) {
 		//! @todo err msg
 		return;
@@ -450,34 +381,22 @@ void KexiDBImageBox::saveAs()
 		return;
 	}
 	f.close();
-
-//	if (!m_value.pixmap().save(fileName, KImageIO::type(fileName).latin1())) {
-//		//! @todo err msg
-//		return;
-//	}
-
-#ifdef Q_WS_WIN
-	//save last visited path
-	if (url.isLocalFile())
-		KRecentDirs::add(":LastVisitedImagePath", url.directory());
-#endif
 }
 
-void KexiDBImageBox::cut()
+void KexiDBImageBox::handleCutAction()
 {
 	if (!dataSource().isEmpty() && isReadOnly())
 		return;
-	copy();
+	handleCopyAction();
 	clear();
 }
 
-void KexiDBImageBox::copy()
+void KexiDBImageBox::handleCopyAction()
 {
-//	if (m_pixmapLabel->pixmap())
 	qApp->clipboard()->setPixmap(pixmap(), QClipboard::Clipboard);
 }
 
-void KexiDBImageBox::paste()
+void KexiDBImageBox::handlePasteAction()
 {
 	if (isReadOnly() || (!m_designMode && !hasFocus()))
 		return;
@@ -491,9 +410,9 @@ void KexiDBImageBox::paste()
 	else {
 		//db-aware mode
 		m_pixmap = pm;
-    QByteArray ba;
-    QBuffer buffer( ba );
-    buffer.open( IO_WriteOnly );
+	QByteArray ba;
+	QBuffer buffer( ba );
+	buffer.open( IO_WriteOnly );
 		if (m_pixmap.save( &buffer, "PNG" )) {// write pixmap into ba in PNG format
 			setValueInternal( ba, true, false/* !loadPixmap */ );
 		}
@@ -535,28 +454,20 @@ void KexiDBImageBox::clear()
 	}
 }
 
-void KexiDBImageBox::showProperties()
+void KexiDBImageBox::handleShowPropertiesAction()
 {
 	//! @todo
 }
 
-void KexiDBImageBox::updateActionsAvailability()
+void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
 {
-	const bool notNull 
-		= (dataSource().isEmpty() && !pixmap().isNull()) //static pixmap available
-		|| (!dataSource().isEmpty() && !valueIsNull());  //db-aware pixmap available
+	valueIsNull = !(
+		   (dataSource().isEmpty() && !pixmap().isNull()) /*static pixmap available*/
+		|| (!dataSource().isEmpty() && !this->valueIsNull())  /*db-aware pixmap available*/
+	);
 	// read-only if static pixmap or db-aware pixmap for read-only widget:
-	const bool readOnly = !m_designMode && dataSource().isEmpty() || !dataSource().isEmpty() && isReadOnly()
+	valueIsReadOnly = !m_designMode && dataSource().isEmpty() || !dataSource().isEmpty() && isReadOnly()
 		|| m_designMode && !dataSource().isEmpty();
-
-	m_insertFromFileAction->setEnabled( !readOnly );
-	m_saveAsAction->setEnabled( notNull );
-	m_cutAction->setEnabled( notNull && !readOnly );
-	m_copyAction->setEnabled( notNull );
-	m_pasteAction->setEnabled( !readOnly );
-	m_deleteAction->setEnabled( notNull && !readOnly );
-	if (m_propertiesAction)
-		m_propertiesAction->setEnabled( notNull );
 }
 
 /*
@@ -627,14 +538,17 @@ void KexiDBImageBox::updateActionStrings()
 	if (!m_popup)
 		return;
 	if (m_designMode) {
-		QString titleString( i18n("Image Box") );
+/*		QString titleString( i18n("Image Box") );
 		if (!dataSource().isEmpty())
-			titleString += (": " + dataSource());
-		m_popup->changeTitle(m_popup->idAt(0), m_popup->titlePixmap(m_popup->idAt(0)), titleString);
+			titleString.prepend(dataSource() + " : ");
+		m_popup->changeTitle(m_popup->idAt(0), m_popup->titlePixmap(m_popup->idAt(0)), titleString);*/
 	}
 	else {
 		//update title in data view mode, based on the data source
-		KexiDBWidgetContextMenuExtender::updateContextMenuTitleForDataItem(m_popup, this);
+		if (columnInfo()) {
+			KexiImageContextMenu::updateTitle( m_popup, columnInfo()->captionOrAliasOrName(),
+				KexiFormPart::library()->iconName(className()) );
+		}
 	}
 
 	if (m_chooser) {

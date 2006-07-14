@@ -927,7 +927,12 @@ Forms
   or only its name if the image is not cropped
 - AutoField: highlighting the label when the buddy is focused
 - AutoField: handle label editing after double clicking
+- AutoField: draw required field in bold (or optionally add (*)
+TODO: fix behaviour in KexiDBForm::eventFilter() when clicking on menu
 
+Table View
+- allow to select entire rows, columns and grids as in a spreadsheet; 
+  offer copy/cut/paste/copy-to-file/clear for such selections
 
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code

@@ -24,7 +24,7 @@
 #include <qguardedptr.h>
 
 //! @short A button class for drop-down "Image" menu
-/*! Used in KexiDBImageBox.
+/*! Used in KexiDBImageBox and KexiBlobTableEdit.
  Additionally, the button reacts on pressing space, return, enter, 
  F2, F4 and alt+down buttons. */
 class KEXIGUIUTILS_EXPORT KexiDropDownButton : public QToolButton
