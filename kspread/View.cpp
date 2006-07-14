@@ -3868,9 +3868,11 @@ void View::cutSelection()
     d->activeSheet->cutSelection( selectionInfo() );
     calcStatusBarOp();
     updateEditWidget();
-    }
-else
+  }
+  else
+  {
     d->canvas->editor()->cut();
+  }
 
   markSelectionAsDirty();
   doc()->emitEndOperation();
@@ -4020,7 +4022,7 @@ void View::changeAngle()
                     QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ));
   if ( dlg.exec() )
   {
-    //TODO Stefan: where is the angle operation?
+    // the actual angle manipulation is performed in AngleDialog::slotOk()
     d->activeSheet->adjustArea(*selectionInfo());
   }
 }

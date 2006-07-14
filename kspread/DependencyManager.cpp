@@ -307,7 +307,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
   if (cell->hasError())
     return Region();
 
-  Formula* f = cell->formula();
+  const Formula* f = cell->formula();
   Q_ASSERT(f);
   if (f==0)
   {

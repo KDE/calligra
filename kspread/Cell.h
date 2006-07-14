@@ -168,7 +168,11 @@ public:
 
     QString strOutText() const;
 
-    Formula *formula () const;
+    /**
+     * The cell's formula. Usable to analyze the formula's tokens.
+     * \return point to the cell's formula object
+     */
+    const Formula* formula() const;
 
     /** Returns the format object of this cell */
     Format* format() const;

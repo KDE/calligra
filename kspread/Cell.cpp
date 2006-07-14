@@ -464,7 +464,7 @@ QString Cell::strOutText() const
     return d->strOutText;
 }
 
-Formula *Cell::formula () const
+const Formula* Cell::formula() const
 {
   return d->formula;
 }
