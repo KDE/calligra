@@ -129,38 +129,6 @@ namespace Paste
   };
 } // namespace Paste
 
-/**
- * This namespace collects enumerations related to
- * cell content restrictions.
- */
-namespace Restriction
-{
-  /**
-   * The type of the restriction
-   */
-  enum Type
-  {
-    None /** No restriction */,
-    Number /** Restrict to numbers */,
-    Text /** Restrict to texts */,
-    Time /** Restrict to times */,
-    Date /** Restrict to dates */,
-    Integer /** Restrict to integers  */,
-    TextLength /** Restrict text length */,
-    List /** Restrict to lists */
-  };
-} // namespace Restriction
-
-namespace Action
-{
-  enum Type
-  {
-    Stop,
-    Warning,
-    Information
-  };
-}
-
 enum Series { Column,Row,Linear,Geometric };
 // necessary due to QDock* enums (Werner)
 enum MoveTo { Bottom, Left, Top, Right, BottomFirst };

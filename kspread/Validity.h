@@ -33,11 +33,48 @@
 #ifndef KSPREAD_VALIDITY
 #define KSPREAD_VALIDITY
 
+// Qt
+#include <QDate>
+#include <QStringList>
+#include <QTime>
+
+// KSpread
 #include "Condition.h"
-#include "Global.h"
 
 namespace KSpread
 {
+
+/**
+ * This namespace collects enumerations related to
+ * cell content restrictions.
+ */
+namespace Restriction
+{
+  /**
+   * The type of the restriction
+   */
+  enum Type
+  {
+    None /** No restriction */,
+    Number /** Restrict to numbers */,
+    Text /** Restrict to texts */,
+    Time /** Restrict to times */,
+    Date /** Restrict to dates */,
+    Integer /** Restrict to integers  */,
+    TextLength /** Restrict text length */,
+    List /** Restrict to lists */
+  };
+} // namespace Restriction
+
+namespace Action
+{
+  enum Type
+  {
+    Stop,
+    Warning,
+    Information
+  };
+}
 
 class Validity
 {
