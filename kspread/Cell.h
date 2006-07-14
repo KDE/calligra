@@ -185,12 +185,21 @@ public:
 
     /**
      * Sets the value for this cell.
+     * It also clears all errors, if the value itself is not an error.
+     * In addition to this, it calculates the outstring and sets the dirty
+     * flags so that a redraw is forced.
      */
     void setValue( const Value& value );
-    /** Like setValue, but also sets formatting and input text. Can therefore
-    be used as a replacement for setCellText, if we don't need to parse. */
+
+    /**
+     * Like setValue(), but also sets formatting type \p fmtType and
+     * input text \p txt. Can therefore be used as a replacement for
+     * setCellText(), if we don't need to parse.
+     * If \p txt is not given, the input text is derived from the value.
+     * \note Calls setValue() after setting the formatting and input text.
+     */
     void setCellValue (const Value &v, FormatType fmtType = No_format,
-  const QString &txt = QString::null);
+                       const QString &txt = QString::null);
 
     Cell* previousCell() const;
     Cell* nextCell() const;
@@ -409,16 +418,9 @@ public:
 
     /**
      * The high-level method for setting text, when the user inputs it.
-     * It will revert back to the old text if testValidity() returns action==stop.
+     * It will revert back to the old text, if testValidity() returns action==stop.
      */
     void setCellText( const QString& _text, bool asString = false );
-
-    /**
-     * Sets the text in the cell when the user inputs it.
-     * Will determine the type of contents automatically.
-     * Called by setCellText.
-     */
-    void setDisplayText( const QString& _text );
 
     /**
      * Sets a link for this cell. For example, setLink( "mailto:joe@somewhere.com" )
@@ -938,10 +940,12 @@ protected:
 
     /**
      * \ingroup Painting
-     *  Called from @ref #paintCell to determine the text
-     * wich can be displaying.
-    */
-    QString textDisplaying( QPainter &painter);
+     * Determines the text, that could be displayed.
+     * This depends on the cell content format (text, number, etc), the cell
+     * dimension, the alignment, ...
+     * \internal Called from paintText().
+     */
+    QString textDisplaying(QPainter& painter);
 
     /**
      * Cleans up formula stuff.
@@ -949,6 +953,13 @@ protected:
      * formula.
      */
     void clearFormula();
+
+    /**
+     * Sets the text in the cell when the user inputs it.
+     * Will determine the type of contents automatically.
+     * \internal Called by setCellText().
+     */
+    void setDisplayText( const QString& _text );
 
     /**
      * Check the input from the user, and determine the contents of the cell accordingly

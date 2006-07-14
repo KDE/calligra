@@ -2061,6 +2061,9 @@ bool Cell::makeFormula()
     return false;
   }
 
+  // Update the dependencies.
+  format()->sheet()->formulaChanged(this);
+
   // we must recalc
   setCalcDirtyFlag ();
 

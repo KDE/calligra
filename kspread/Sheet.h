@@ -476,9 +476,17 @@ public:
      */
     void recalc( bool force = false );
 
-    /** handles the fact that a cell has been changed - updates
-    things that need to be updated */
+    /**
+     * Handles the fact that a cell has been changed.
+     * Recalculates dependant cells.
+     */
     void valueChanged (Cell *cell);
+
+    /**
+     * Handles the fact, that a formula has been changed.
+     * Updates the dependencies accordingly.
+     */
+    void formulaChanged(Cell *cell);
 
     /**
     * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
@@ -1244,9 +1252,6 @@ protected slots:
   void slotAreaModified (const QString &name);
 
 protected:
-     /** Updates dependencies for all cells on this sheet */
-     void updateAllDependencies();
-
     /**
      * Change the name of a sheet in all formulas.
      * When you change name sheet Sheet1 -> Price

@@ -471,7 +471,6 @@ void Sheet::setAutoCalc( bool _AutoCalc )
     //If enabling automatic calculation, make sure that the dependencies are up-to-date
     if (_AutoCalc == true)
     {
-        updateAllDependencies();
         recalc();
     }
 
@@ -1064,16 +1063,6 @@ void Sheet::setCalcDirtyFlag()
     }
 }
 
-void Sheet::updateAllDependencies()
-{
-  Region region;
-  for (Cell* cell = d->cells.firstCell() ; cell ; cell = cell->nextCell())
-  {
-    region.add(QPoint(cell->column(), cell->row()), this);
-  }
-  d->workbook->dependencyManager()->regionChanged(region);
-}
-
 void Sheet::recalc( bool force )
 {
   ElapsedTime et( "Recalculating " + d->name, ElapsedTime::PrintOnlyTime );
@@ -1086,12 +1075,6 @@ void Sheet::recalc( bool force )
   if ( !getAutoCalc() && !force )
         return;
 
-  //If automatic calculation is disabled, the dependencies won't be up to date, so they need
-  //to be recalculated.
-  //FIXME:  Tomas, is there a more efficient way to do this?
-  if ( !getAutoCalc() )
-    updateAllDependencies();
-
   // Recalculate cells
   d->workbook->recalcManager()->recalcSheet(this);
 
@@ -1101,23 +1084,34 @@ void Sheet::recalc( bool force )
 
 void Sheet::valueChanged (Cell *cell)
 {
-
   //TODO: call cell updating, when cell damaging implemented
 
-  //prepare the Region structure
+  // Prepare the Region structure.
   Region region;
   region.add(QPoint(cell->column(), cell->row()), this);
 
-  //update dependencies
+  // Recaculate cells depending on this cell.
   if ( getAutoCalc() )
   {
-    d->workbook->dependencyManager()->regionChanged (region);
     d->workbook->recalcManager()->regionChanged(region);
   }
 
   //REMOVED - modification change - this was causing modified flag to be set inappropriately.
   //nobody else seems to be setting the modified flag, so we do it here
 //  doc()->setModified (true);
+}
+
+void Sheet::formulaChanged(Cell *cell)
+{
+  // NOTE Stefan: Always update the dependencies, not just for recalculations,
+  //              because we want formulas to be updated on cut'n'paste.
+
+  // Prepare the Region structure.
+  Region region;
+  region.add(QPoint(cell->column(), cell->row()), this);
+
+  // Update dependencies.
+  d->workbook->dependencyManager()->regionChanged (region);
 }
 
 /*
