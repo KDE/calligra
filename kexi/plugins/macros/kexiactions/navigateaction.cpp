@@ -128,7 +128,7 @@ void NavigateAction::activate(KSharedPtr<KoMacro::Context> context)
 	KexiDataAwareView* dbview = dynamic_cast<KexiDataAwareView*>( view );
 	KexiDataAwareObjectInterface* dbobj = dbview ? dbview->dataAwareObject() : 0;
 	if(! dbview) {
-		throw KoMacro::Exception(i18n("The view for \"%1\" is not dataaware.").arg(dialog->caption()));
+		throw KoMacro::Exception(i18n("The view for \"%1\" could not handle data.").arg(dialog->caption()));
 	}
 
 	const QString record = context->variable("record")->variant().toString();
