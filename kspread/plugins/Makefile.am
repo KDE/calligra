@@ -1,3 +1,5 @@
+if compile_kross
+  SCRIPTINGDIR=scripting
+endif
 
-SUBDIRS = insertcalendar
-
+SUBDIRS = insertcalendar $(SCRIPTINGDIR)
