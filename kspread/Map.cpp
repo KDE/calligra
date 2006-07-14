@@ -57,7 +57,7 @@ public:
   RecalcManager* recalcManager;
 
   /**
-   * List of all sheets in this map. The list has autodelete turned on.
+   * List of all sheets in this map.
    */
   QList<Sheet*> lstSheets;
   QList<Sheet*> lstDeletedSheets;
@@ -77,8 +77,6 @@ public:
 
   // used to give every Sheet a unique default name.
   int tableId;
-
-  MapAdaptor* dbus;
 };
 
 
@@ -99,13 +97,14 @@ Map::Map ( Doc* doc, const char* name)
   d->initialYOffset = 0.0;
   d->tableId = 1;
 
-  d->dbus = new MapAdaptor(this);
+  new MapAdaptor(this);
   QDBus::sessionBus().registerObject( "/"+doc->objectName() + '/' + objectName(), this);
 }
 
 Map::~Map()
 {
   qDeleteAll( d->lstSheets );
+  qDeleteAll( d->lstDeletedSheets );
   delete d->dependencyManager;
   delete d->recalcManager;
   delete d;
@@ -499,11 +498,6 @@ bool Map::loadChildren( KoStore * _store )
       return false;
   }
   return true;
-}
-
-MapAdaptor * Map::dbusObject()
-{
-    return d->dbus;
 }
 
 void Map::takeSheet( Sheet * sheet )

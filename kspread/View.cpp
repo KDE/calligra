@@ -178,7 +178,6 @@ class View::Private
 public:
     View* view;
     Doc* doc;
-    ViewAdaptor* dbus;
 
     // the active sheet, may be 0
     // this is the sheet which has the input focus
@@ -1485,7 +1484,7 @@ View::View( QWidget *_parent, const char *_name,
     d->view = this;
     d->doc = _doc;
 
-    d->dbus = new ViewAdaptor(this);
+    new ViewAdaptor(this);
 
     d->activeSheet = 0;
 
@@ -6987,11 +6986,6 @@ void View::deleteEditor( bool saveChanges )
 
     markSelectionAsDirty();
     doc()->emitEndOperation();
-}
-
-ViewAdaptor * View::dbusObject()
-{
-  return d->dbus;
 }
 
 QWidget * View::canvas() const

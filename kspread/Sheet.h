@@ -1039,8 +1039,6 @@ public:
 
     void enableScrollBarUpdates( bool _enable );
 
-    virtual SheetAdaptor* dbusObject();
-
     static Sheet* find( int _id );
 
 #ifndef NDEBUG

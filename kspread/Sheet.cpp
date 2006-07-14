@@ -310,10 +310,9 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
 
   d->defaultFormat = new Format (this, d->workbook->doc()->styleManager()->defaultStyle());
   d->emptyPen.setStyle( Qt::NoPen );
-  d->dbus = 0;
   d->name = sheetName;
 
-  d->dbus = new SheetAdaptor(this);
+  new SheetAdaptor(this);
   QDBus::sessionBus().registerObject( "/"+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName(), this);
 
   d->cells.setAutoDelete( true );
@@ -6653,11 +6652,6 @@ void Sheet::checkRangeVBorder ( int _row )
 void Sheet::enableScrollBarUpdates( bool _enable )
 {
   d->scrollBarUpdates = _enable;
-}
-
-SheetAdaptor* Sheet::dbusObject()
-{
-    return d->dbus;
 }
 
 void Sheet::hideSheet(bool _hide)

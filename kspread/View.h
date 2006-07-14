@@ -191,7 +191,6 @@ public:
      */
     void deleteEditor( bool saveChanges = true );
     void closeEditor();
-    virtual ViewAdaptor* dbusObject();
 
     virtual QWidget *canvas() const;
     virtual int canvasXOffset() const;

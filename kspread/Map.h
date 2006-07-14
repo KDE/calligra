@@ -186,8 +186,6 @@ public:
    */
   int count() const;
 
-  virtual MapAdaptor* dbusObject();
-
   void takeSheet( Sheet * sheet );
   void insertSheet( Sheet * sheet );
 
