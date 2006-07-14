@@ -1087,7 +1087,6 @@ void Sheet::updateAllDependencies()
     region.add(QPoint(cell->column(), cell->row()), this);
   }
   d->workbook->dependencyManager()->regionChanged(region);
-  d->workbook->recalcManager()->regionChanged(region);
 }
 
 void Sheet::recalc()
