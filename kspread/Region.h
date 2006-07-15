@@ -404,6 +404,7 @@ protected:
 class Region::Point : public Region::Element
 {
 public:
+  Point() : Element(), m_point() {}
   Point(int col, int row) : Element(), m_point(col,row) {}
   Point(const QPoint&);
   Point(const QString&);
@@ -431,6 +432,10 @@ public:
     if (m_point.y() < other.m_point.y())
       return true;
     return ((m_point.y() == other.m_point.y()) && (m_point.x() < other.m_point.x()));
+  }
+  bool operator==(const Point& other)
+  {
+    return ((m_point == other.m_point) && (m_sheet == other.m_sheet));
   }
 
 private:

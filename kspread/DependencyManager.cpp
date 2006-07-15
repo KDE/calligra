@@ -18,9 +18,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-
+#include <QHash>
 #include <QLinkedList>
 #include <QMap>
+
+#include <KoRTree.h>
 
 #include "Cell.h"
 #include "DependencyManager.h"
@@ -77,7 +79,9 @@ public:
   /** dependencies of each cell */
   QMap<Region::Point, Region> dependencies;
   /** list of cells, that depend on a cell */
-  QMap<Region::Point, Region> dependants;
+  class PointTree :public KoRTree<Region::Point>
+  { public: PointTree() : KoRTree<Region::Point>(128,64) {} };
+  QHash<Sheet*, PointTree*> dependants; // FIXME Stefan: Why is a QHash<Sheet*, PointTree> crashing?
   /** list of cells referencing a given named area */
   QMap<QString, QMap<Region::Point, bool> > areaDeps;
 };
@@ -99,7 +103,12 @@ void DependencyManager::Private::dump()
     }
   }
 
-  mend = dependants.end();
+  foreach (Sheet* sheet, dependants.keys())
+  {
+    kDebug() << "The cells dependencies in " << sheet->name() << " are :" << endl;
+    dependants[sheet]->debug();
+  }
+/*  mend = dependants.end();
   for ( QMap<Region::Point, Region>::ConstIterator mit(dependants.begin()); mit != mend; ++mit )
   {
     Region::Point p = mit.key();
@@ -109,7 +118,7 @@ void DependencyManager::Private::dump()
     {
       kDebug() << "  cell " << (*rit)->name() << endl;
     }
-  }
+  }*/
 }
 
 DependencyManager::DependencyManager()
@@ -130,6 +139,9 @@ void DependencyManager::reset ()
 void DependencyManager::regionChanged(const Region& region)
 {
   kDebug() << "DependencyManager::regionChanged " << region.name() << endl;
+  KoRTree<Region::Point> tree(128, 64);
+  tree.insert(QRectF(0.0,0.0,1,1), Region::Point(1,1));
+
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
   {
@@ -189,10 +201,19 @@ KSpread::Region DependencyManager::Private::getDependencies (const Region::Point
 
 KSpread::Region DependencyManager::Private::getDependants(const Cell* cell)
 {
-  Region::Point point(QPoint(cell->column(), cell->row()));
-  point.setSheet(cell->sheet());
+  Sheet* const sheet = cell->sheet();
 
-  return dependants.value(point);
+  if (!dependants.contains(sheet))
+    return Region();
+
+  KoRTree<Region::Point>* tree = dependants.value(sheet);
+
+  Region region;
+  foreach (Region::Point point, tree->contains(QPoint(cell->column(), cell->row())))
+  {
+    region.add(point.pos(), point.sheet());
+  }
+  return region;
 }
 
 void DependencyManager::Private::areaModified (const QString &name)
@@ -219,25 +240,18 @@ void DependencyManager::Private::addDependency(const Cell* cell, const Region& r
   Region::Point point(QPoint(cell->column(), cell->row()));
   point.setSheet(cell->sheet());
 
+  // empty region will be created automatically, if necessary
   dependencies[point].add(region);
 
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
   {
     Sheet* sheet = (*it)->sheet();
-    const QRect range = (*it)->rect();
-    const int bottom = range.bottom();
-    const int right = range.right();
-    for (int row = range.top(); row <= bottom; ++row)
-    {
-      for (int col = range.left(); col <= right; ++col)
-      {
-        Region::Point point2(QPoint(col, row));
-        point2.setSheet(sheet);
+    QRectF range = QRectF((*it)->rect()).adjusted(0, 0, -0.1, -0.1);
+kDebug() << "QRECTF = " << range << endl;
 
-        dependants[point2].add(Region(point.pos(), point.sheet()));
-      }
-    }
+    if (!dependants.contains(sheet)) dependants.insert(sheet, new PointTree);
+    dependants[sheet]->insert(range, point);
   }
 }
 
@@ -257,20 +271,10 @@ void DependencyManager::Private::removeDependencies(const Cell* cell)
   {
     Sheet* const sheet = (*it)->sheet();
     const QRect range = (*it)->rect();
-    const int right = range.right();
-    const int bottom = range.bottom();
-    for (int col = range.left(); col <= right; ++col)
-      for (int row = range.top(); row <= bottom; ++row)
-    {
-      Region::Point referencedPoint(col, row);
-      referencedPoint.setSheet(sheet);
 
-      //we no longer depend on this cell
-      dependants[referencedPoint].sub(point.pos(), point.sheet());
-      if (dependants[referencedPoint].isEmpty())
-      {
-        dependants.remove(referencedPoint);
-      }
+    if (dependants.contains(sheet))
+    {
+      dependants[sheet]->remove(point);
     }
   }
 
