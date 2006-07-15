@@ -1237,21 +1237,23 @@ void KPrBrushCmd::unexecute()
 
 
 KPrPgConfCmd::KPrPgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
-                      bool _showPresentationDuration, QPen _pen,
+                      bool _showEndOfPresentationSlide, bool _showPresentationDuration, QPen _pen,
                       Q3ValueList<bool> _selectedSlides, const QString & _presentationName,
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
-                      bool _oldShowPresentationDuration, QPen _oldPen,
+                      bool _oldShowEndOfPresentationSlide, bool _oldShowPresentationDuration, QPen _oldPen,
                       Q3ValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
                       KPrDocument *_doc )
     : KNamedCommand( _name )
 {
     manualSwitch = _manualSwitch;
     infiniteLoop = _infiniteLoop;
+    showEndOfPresentationSlide = _showEndOfPresentationSlide;
     showPresentationDuration = _showPresentationDuration;
     pen = _pen;
     selectedSlides = _selectedSlides;
     oldManualSwitch = _oldManualSwitch;
     oldInfiniteLoop = _oldInfiniteLoop;
+    oldShowEndOfPresentationSlide = _oldShowEndOfPresentationSlide;
     oldShowPresentationDuration = _oldShowPresentationDuration;
     oldPen = _oldPen;
     oldSelectedSlides = _oldSelectedSlides;
@@ -1264,6 +1266,7 @@ void KPrPgConfCmd::execute()
 {
     doc->setManualSwitch( manualSwitch );
     doc->setInfiniteLoop( infiniteLoop );
+    doc->setShowEndOfPresentationSlide ( showEndOfPresentationSlide );
     doc->setPresentationDuration( showPresentationDuration );
     doc->setPresPen( pen );
     doc->setPresentationName( presentationName );
@@ -1278,6 +1281,7 @@ void KPrPgConfCmd::unexecute()
 {
     doc->setManualSwitch( oldManualSwitch );
     doc->setInfiniteLoop( oldInfiniteLoop );
+    doc->setShowEndOfPresentationSlide( oldShowEndOfPresentationSlide );
     doc->setPresentationDuration( oldShowPresentationDuration );
     doc->setPresPen( oldPen );
     doc->setPresentationName( oldPresentationName );

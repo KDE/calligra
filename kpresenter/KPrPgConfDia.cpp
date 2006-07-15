@@ -102,9 +102,19 @@ void KPrPgConfDia::setupPageGeneral()
 					"<b>Automatic transition to next step or slide</b> "
 					"button is selected above.</p> <p>This option may be "
 					"useful if you are running a promotional display.</p>") );
-    infiniteLoop->setChecked( m_doc->spInfiniteLoop() );
+    
     infiniteLoop->setEnabled( !m_doc->spManualSwitch() );
     connect( m_autoButton, SIGNAL( toggled(bool) ), infiniteLoop, SLOT( setEnabled(bool) ) );
+    connect( m_autoButton, SIGNAL( toggled(bool) ), infiniteLoop, SLOT( setChecked(bool) ) );
+
+    endOfPresentationSlide = new QCheckBox( i18n( "&Show 'End of presentation' slide" ), generalPage );
+    QWhatsThis::add( endOfPresentationSlide, i18n("<p>If this checkbox is selected, when the slideshow "
+					"has finished a black slideshow containing the "
+					"message 'End of presentation. Click to exit' will "
+					"be shown.") );
+    endOfPresentationSlide->setChecked( m_doc->spShowEndOfPresentationSlide() );
+    endOfPresentationSlide->setDisabled( infiniteLoop->isEnabled() && getInfiniteLoop() );
+    connect( infiniteLoop, SIGNAL( toggled(bool) ), endOfPresentationSlide, SLOT( setDisabled(bool) ) );
 
     presentationDuration = new QCheckBox( i18n( "Measure presentation &duration" ), generalPage );
     presentationDuration->setWhatsThis( i18n("<p>If this checkbox is selected, the time that "
@@ -242,6 +252,11 @@ void KPrPgConfDia::radioButtonClicked()
 bool KPrPgConfDia::getInfiniteLoop() const
 {
     return infiniteLoop->isChecked();
+}
+
+bool KPrPgConfDia::getShowEndOfPresentationSlide() const
+{
+    return endOfPresentationSlide->isChecked();
 }
 
 bool KPrPgConfDia::getManualSwitch() const

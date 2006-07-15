@@ -196,6 +196,16 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             docElement.appendChild(infElem);
         }
 
+        // FIXME show-end-of-presentation-slide is not standard as of 20060531.
+        // dfaure will request its addition per #koffice on 20060531
+        // (pgquiles AT elpauer DOT org)
+        if (settings.attributeNS( ooNS::presentation, "show-end-of-presentation-slide", QString::null)=="true")
+        {
+            QDomElement infElem = doc.createElement("SHOWENDOFPRESENTATIONSLIDE");
+            infElem.setAttribute("value", 1);
+            docElement.appendChild(infElem);
+        }
+
         if (settings.attributeNS( ooNS::presentation, "force-manual", QString::null)=="true")
         {
             QDomElement manualElem = doc.createElement("MANUALSWITCH");

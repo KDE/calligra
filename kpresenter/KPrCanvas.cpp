@@ -3131,8 +3131,8 @@ bool KPrCanvas::pNext( bool gotoNextPage )
     //kDebug(33001) << "Page::pNext last slide -> End of presentation" << endl;
 
     // When we are in manual mode or in automatic mode with no infinite loop
-    // we display the 'End of presentation' slide.
-    if ( ( spManualSwitch() || !spInfiniteLoop() ) && !showingLastSlide )
+    // we display the 'End of presentation' slide, unles told explicitly by showEndOfPresentationSlide
+    if ( ( spManualSwitch() || !spInfiniteLoop() ) && !showingLastSlide  && spShowEndOfPresentationSlide() )
     {
         m_view->setPageDuration( m_step.m_pageNumber );
 
@@ -3149,7 +3149,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         showingLastSlide = true;
         emit stopAutomaticPresentation(); // no automatic mode for last slide
     }
-    else if ( showingLastSlide ) // after last slide stop presentation
+    else if ( showingLastSlide || !spShowEndOfPresentationSlide() ) // after last slide stop presentation
     {
         showingLastSlide = false;
         m_view->screenStop();
@@ -4270,6 +4270,11 @@ QColor KPrCanvas::txtBackCol() const
 bool KPrCanvas::spInfiniteLoop() const
 {
     return m_view->kPresenterDoc()->spInfiniteLoop();
+}
+
+bool KPrCanvas::spShowEndOfPresentationSlide() const
+{
+    return m_view->kPresenterDoc()->spShowEndOfPresentationSlide();
 }
 
 bool KPrCanvas::spManualSwitch() const

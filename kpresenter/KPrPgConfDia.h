@@ -54,6 +54,7 @@ public:
     KPrPgConfDia( QWidget* parent, KPrDocument* doc );
     ~KPrPgConfDia();
     bool getInfiniteLoop() const;
+    bool getShowEndOfPresentationSlide() const;
     bool getManualSwitch() const;
     bool getPresentationDuration() const;
     QPen getPen() const;
@@ -65,7 +66,7 @@ protected:
 
     KPrDocument* m_doc;
 
-    QCheckBox *infiniteLoop, *presentationDuration;
+    QCheckBox *infiniteLoop, *presentationDuration, *endOfPresentationSlide;
     QRadioButton *m_manualButton, *m_autoButton;
     KColorButton* penColor;
     QSpinBox* penWidth;

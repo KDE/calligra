@@ -205,6 +205,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection);
     _clean = true;
     _spInfiniteLoop = false;
+    _spShowEndOfPresentationSlide = true;
     _spManualSwitch = true;
     _showPresentationDuration = false;
     tmpSoundFileList = Q3PtrList<KTempFile>();
@@ -583,6 +584,11 @@ QDomDocument KPrDocument::saveXML()
     // ### If we will create a new version of the file format, fix that spelling error
     element=doc.createElement("INFINITLOOP");
     element.setAttribute("value", _spInfiniteLoop);
+// TODO Element SHOWENDOFPRESENTATIONSLIDE does not exist in the ODP specification
+// TODO This element was added by pgquiles AT elpauer DOT org
+   element=doc.createElement("SHOWENDOFPRESENTATIONSLIDE");
+   element.setAttribute("value", _spShowEndOfPresentationSlide);
+// TODO End of SHOWENDOFPRESENTATIONSLIDE
     presenter.appendChild(element);
     element=doc.createElement("MANUALSWITCH");
     element.setAttribute("value", _spManualSwitch);
@@ -1372,7 +1378,12 @@ void KPrDocument::loadOasisPresentationSettings( QDomNode &settingsDoc )
     //kDebug()<<"settings.attribute(presentation:endless) :"<<settings.attributeNS( KoXmlNS::presentation, "endless", QString::null)<<endl;
     if (settings.attributeNS( KoXmlNS::presentation, "endless", QString::null)=="true")
         _spInfiniteLoop = true;
-
+// FIXME Element "show-end-of-presentation-slide" does not exist in the ODP specification yet
+// FIXME This element was added by pgquiles AT elpauer DOT org on 20060531. dfaure is going to
+// FIXME request its inclusion in ODP
+   if (settings.attributeNS( KoXmlNS::presentation, "show-end-of-presentation-slide", QString::null)=="true")
+       _spShowEndOfPresentationSlide = true;
+// FIXME End of "show-end-of-presentation-slide"
     if (settings.attributeNS( KoXmlNS::presentation, "force-manual", QString::null)=="true")
         _spManualSwitch = true;
     if ( settings.hasAttributeNS( KoXmlNS::presentation, "start-page" ) )
@@ -1424,6 +1435,9 @@ void KPrDocument::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter, 
     //FIXME
     contentTmpWriter.startElement( "presentation:settings" );
     contentTmpWriter.addAttribute( "presentation:endless",  ( _spInfiniteLoop ? "true" : "false" ) );
+    //FIXME show-end-of-presentation-slide is not standard yet. dfaure will
+    // request its addition per #koffice on 20060531 (pgquiles AT elpauer DOT org)
+    contentTmpWriter.addAttribute( "presentation:show-end-of-presentation-slide",  ( _spShowEndOfPresentationSlide ? "true" : "false" ) );
     contentTmpWriter.addAttribute( "presentation:force-manual",  ( _spManualSwitch ? "true" : "false" ) );
     //add for default presentation
     if ( !m_presentationName.isEmpty() )
@@ -1577,6 +1591,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
 
         __pgLayout = KoPageLayout::standardLayout();
         _spInfiniteLoop = false;
+        _spShowEndOfPresentationSlide = true;
         _spManualSwitch = true;
         _showPresentationDuration = false;
         _xRnd = 20;
@@ -2345,6 +2360,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
     if ( _clean ) {
         __pgLayout = KoPageLayout::standardLayout();
         _spInfiniteLoop = false;
+        _spShowEndOfPresentationSlide = true;
         _spManualSwitch = true;
         _showPresentationDuration = false;
         _xRnd = 20;
@@ -2593,6 +2609,11 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
             if(_clean) {
                 if(elem.hasAttribute("value"))
                     _spInfiniteLoop = static_cast<bool>(elem.attribute("value").toInt());
+            }
+        } else if(elem.tagName()=="SHOWENDOFPRESENTATIONSLIDE") {
+            if(_clean) {
+                if(elem.hasAttribute("value"))
+                    _spShowEndOfPresentationSlide = static_cast<bool>(elem.attribute("value").toInt());
             }
         } else if(elem.tagName()=="PRESSPEED") {
             if(_clean) {
