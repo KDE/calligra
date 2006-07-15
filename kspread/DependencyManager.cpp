@@ -139,9 +139,6 @@ void DependencyManager::reset ()
 void DependencyManager::regionChanged(const Region& region)
 {
   kDebug() << "DependencyManager::regionChanged " << region.name() << endl;
-  KoRTree<Region::Point> tree(128, 64);
-  tree.insert(QRectF(0.0,0.0,1,1), Region::Point(1,1));
-
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
   {
@@ -248,7 +245,6 @@ void DependencyManager::Private::addDependency(const Cell* cell, const Region& r
   {
     Sheet* sheet = (*it)->sheet();
     QRectF range = QRectF((*it)->rect()).adjusted(0, 0, -0.1, -0.1);
-kDebug() << "QRECTF = " << range << endl;
 
     if (!dependants.contains(sheet)) dependants.insert(sheet, new PointTree);
     dependants[sheet]->insert(range, point);
