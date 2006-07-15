@@ -196,6 +196,13 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             docElement.appendChild(infElem);
         }
 
+        if (settings.attributeNS( ooNS::presentation, "show-end-of-presentation-slide", QString::null)=="true")
+        {
+            QDomElement infElem = doc.createElement("SHOWENDOFPRESENTATIONSLIDE");
+            infElem.setAttribute("value", 1);
+            docElement.appendChild(infElem);
+        }
+
         if (settings.attributeNS( ooNS::presentation, "force-manual", QString::null)=="true")
         {
             QDomElement manualElem = doc.createElement("MANUALSWITCH");

@@ -201,6 +201,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection);
     _clean = true;
     _spInfiniteLoop = false;
+    _spShowEndOfPresentationSlide = true;
     _spManualSwitch = true;
     _showPresentationDuration = false;
     tmpSoundFileList = QPtrList<KTempFile>();
@@ -580,6 +581,8 @@ QDomDocument KPrDocument::saveXML()
     // ### If we will create a new version of the file format, fix that spelling error
     element=doc.createElement("INFINITLOOP");
     element.setAttribute("value", _spInfiniteLoop);
+   element=doc.createElement("SHOWENDOFPRESENTATIONSLIDE");
+   element.setAttribute("value", _spShowEndOfPresentationSlide);
     presenter.appendChild(element);
     element=doc.createElement("MANUALSWITCH");
     element.setAttribute("value", _spManualSwitch);
@@ -1369,7 +1372,8 @@ void KPrDocument::loadOasisPresentationSettings( QDomNode &settingsDoc )
     //kdDebug()<<"settings.attribute(presentation:endless) :"<<settings.attributeNS( KoXmlNS::presentation, "endless", QString::null)<<endl;
     if (settings.attributeNS( KoXmlNS::presentation, "endless", QString::null)=="true")
         _spInfiniteLoop = true;
-
+   if (settings.attributeNS( KoXmlNS::presentation, "show-end-of-presentation-slide", QString::null)=="true")
+       _spShowEndOfPresentationSlide = true;
     if (settings.attributeNS( KoXmlNS::presentation, "force-manual", QString::null)=="true")
         _spManualSwitch = true;
     if ( settings.hasAttributeNS( KoXmlNS::presentation, "start-page" ) )
@@ -1421,6 +1425,7 @@ void KPrDocument::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter, 
     //FIXME
     contentTmpWriter.startElement( "presentation:settings" );
     contentTmpWriter.addAttribute( "presentation:endless",  ( _spInfiniteLoop ? "true" : "false" ) );
+    contentTmpWriter.addAttribute( "presentation:show-end-of-presentation-slide",  ( _spShowEndOfPresentationSlide ? "true" : "false" ) );
     contentTmpWriter.addAttribute( "presentation:force-manual",  ( _spManualSwitch ? "true" : "false" ) );
     //add for default presentation
     if ( !m_presentationName.isEmpty() )
@@ -1574,6 +1579,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
 
         __pgLayout = KoPageLayout::standardLayout();
         _spInfiniteLoop = false;
+        _spShowEndOfPresentationSlide = true;
         _spManualSwitch = true;
         _showPresentationDuration = false;
         _xRnd = 20;
@@ -2342,6 +2348,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
     if ( _clean ) {
         __pgLayout = KoPageLayout::standardLayout();
         _spInfiniteLoop = false;
+        _spShowEndOfPresentationSlide = true;
         _spManualSwitch = true;
         _showPresentationDuration = false;
         _xRnd = 20;
@@ -2590,6 +2597,11 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
             if(_clean) {
                 if(elem.hasAttribute("value"))
                     _spInfiniteLoop = static_cast<bool>(elem.attribute("value").toInt());
+            }
+        } else if(elem.tagName()=="SHOWENDOFPRESENTATIONSLIDE") {
+            if(_clean) {
+                if(elem.hasAttribute("value"))
+                    _spShowEndOfPresentationSlide = static_cast<bool>(elem.attribute("value").toInt());
             }
         } else if(elem.tagName()=="PRESSPEED") {
             if(_clean) {

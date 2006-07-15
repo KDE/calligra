@@ -3215,11 +3215,12 @@ void KPrView::pgConfOk()
 
     KPrPgConfCmd *pgConfCmd = new KPrPgConfCmd( i18n( "Configure Slide Show" ),
                                           pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
-                                          pgConfDia->getPresentationDuration(), pgConfDia->getPen(),
+                                          pgConfDia->getShowEndOfPresentationSlide(), pgConfDia->getPresentationDuration(), pgConfDia->getPen(),
                                           pgConfDia->getSelectedSlides(),
                                           pgConfDia->presentationName(),
                                           kPresenterDoc()->spManualSwitch(),
                                           kPresenterDoc()->spInfiniteLoop(),
+                                          kPresenterDoc()->spShowEndOfPresentationSlide(),
                                           kPresenterDoc()->presentationDuration(),
                                           kPresenterDoc()->presPen(),
                                           selectedSlides,

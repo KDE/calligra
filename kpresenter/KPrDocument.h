@@ -118,6 +118,7 @@ class KPrDocument : public KoDocument
     Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
     Q_PROPERTY( bool backgroundSpellCheckEnabled READ backgroundSpellCheckEnabled WRITE enableBackgroundSpellCheck )
     Q_PROPERTY( bool spInfiniteLoop READ spInfiniteLoop WRITE setInfiniteLoop )
+    Q_PROPERTY( bool spShowEndOfPresentationSlide READ spShowEndOfPresentationSlide WRITE setShowEndOfPresentationSlide )
     Q_PROPERTY( bool spManualSwitch READ spManualSwitch WRITE setManualSwitch )
     Q_PROPERTY( bool presentationDuration READ presentationDuration WRITE setPresentationDuration )
     Q_PROPERTY( QColor gridColor READ gridColor WRITE setGridColor )
@@ -199,9 +200,11 @@ class KPrDocument : public KoDocument
 
     // get values for screenpresentations
     bool spInfiniteLoop() const { return _spInfiniteLoop; }
+    bool spShowEndOfPresentationSlide() const { return _spShowEndOfPresentationSlide; }
     bool spManualSwitch() const { return _spManualSwitch; }
     bool presentationDuration() const { return _showPresentationDuration; }
     void setInfiniteLoop( bool il ) { _spInfiniteLoop = il; }
+    void setShowEndOfPresentationSlide( bool shw ) { _spShowEndOfPresentationSlide = shw; }
     void setManualSwitch( bool ms ) { _spManualSwitch = ms; }
     void setPresentationDuration( bool pd ) { _showPresentationDuration = pd; }
 
@@ -611,7 +614,7 @@ protected:
     // ************ variables ************
 
     // screenpresentations
-    bool _spInfiniteLoop, _spManualSwitch, _showPresentationDuration;
+    bool _spInfiniteLoop, _spShowEndOfPresentationSlide, _spManualSwitch, _showPresentationDuration;
 
     // options
     int _xRnd, _yRnd;

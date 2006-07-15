@@ -479,10 +479,10 @@ class KPrPgConfCmd : public KNamedCommand
 {
 public:
     KPrPgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
-               bool _showPresentationDuration, QPen _pen,
+               bool _showEndOfPresentationSlide, bool _showPresentationDuration, QPen _pen,
                QValueList<bool> _selectedSlides, const QString & _presentationName,
                bool _oldManualSwitch, bool _oldInfiniteLoop,
-               bool _oldShowPresentationDuration, QPen _oldPen,
+               bool _oldShowEndOfPresentationSlide, bool _oldShowPresentationDuration, QPen _oldPen,
                QValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
                KPrDocument *_doc );
 
@@ -492,6 +492,7 @@ public:
 protected:
     bool manualSwitch, oldManualSwitch;
     bool infiniteLoop, oldInfiniteLoop;
+    bool showEndOfPresentationSlide, oldShowEndOfPresentationSlide;
     bool showPresentationDuration, oldShowPresentationDuration;
     QPen pen, oldPen;
     QValueList<bool> selectedSlides, oldSelectedSlides;

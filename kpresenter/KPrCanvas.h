@@ -536,6 +536,7 @@ protected:
     unsigned int currPgNum() const;
     QColor txtBackCol() const;
     bool spInfiniteLoop() const;
+    bool spShowEndOfPresentationSlide() const;
     bool spManualSwitch() const;
     QRect getPageRect( bool decBorders = true ) const;
     unsigned int pageNums() const;
