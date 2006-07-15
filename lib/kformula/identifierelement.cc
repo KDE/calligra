@@ -38,6 +38,7 @@ void IdentifierElement::setStyleVariant( StyleAttributes& style )
 {
     if ( customMathVariant() ) {
         style.setCharFamily ( charFamily() );
+        style.setCharStyle( charStyle() );
         style.setCustomMathVariant ( true );
         style.setCustomFontWeight( false );
         style.setCustomFont( false );
