@@ -30,6 +30,14 @@ Cell::Cell(KSpread::Cell* cell, KSpread::Sheet* sheet, uint col, uint row)
 	this->addFunction0< Kross::Api::Variant >("value", this, &Cell::value);
 	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("setValue", this, &Cell::setValue);
 
+	this->addFunction0< Kross::Api::Variant >("column", this, &Cell::column);
+	this->addFunction0< Kross::Api::Variant >("row", this, &Cell::row);
+
+	this->addFunction0< Cell >("previousCell", this, &Cell::previousCell);
+	this->addFunction0< Cell >("nextCell", this, &Cell::nextCell);
+	this->addFunction1< void, Cell >("setPreviousCell", this, &Cell::setPreviousCell);
+	this->addFunction1< void, Cell >("setNextCell", this, &Cell::setNextCell);
+
 	this->addFunction0< Kross::Api::Variant >("name", this, &Cell::name);
 	this->addFunction0< Kross::Api::Variant >("fullName", this, &Cell::fullName);
 
@@ -55,7 +63,7 @@ const QString Cell::getClassName() const {
     return "Kross::KSpreadCore::KSpreadCell";
 }
 
-QVariant Cell::toVariant(const KSpread::Value& value)
+QVariant Cell::toVariant(const KSpread::Value& value) const
 {
 	//Should we use following value-format enums here?
 	//fmt_None, fmt_Boolean, fmt_Number, fmt_Percent, fmt_Money, fmt_DateTime, fmt_Date, fmt_Time, fmt_String
@@ -92,7 +100,7 @@ QVariant Cell::toVariant(const KSpread::Value& value)
 	return QVariant();
 }
 
-QVariant Cell::value() {
+QVariant Cell::value() const {
 	return toVariant( m_cell->value() );
 }
 
@@ -110,6 +118,32 @@ bool Cell::setValue(const QVariant& value) {
 		default: return false;
 	}
 	return true;
+}
+
+int Cell::column() const {
+	return m_cell->column();
+}
+
+int Cell::row() const  {
+	return m_cell->row();
+}
+
+Cell* Cell::previousCell() const {
+	KSpread::Cell* c = m_cell->previousCell();
+	return c ? new Cell(c,c->sheet(),c->column(),c->row()) : 0;
+}
+
+Cell* Cell::nextCell() const {
+	KSpread::Cell* c = m_cell->nextCell();
+	return c ? new Cell(c,c->sheet(),c->column(),c->row()) : 0;
+}
+
+void Cell::setPreviousCell(Cell* c) {
+	return m_cell->setPreviousCell(c->m_cell);
+}
+
+void Cell::setNextCell(Cell* c) {
+	return m_cell->setNextCell(c->m_cell);
 }
 
 const QString Cell::name() const {

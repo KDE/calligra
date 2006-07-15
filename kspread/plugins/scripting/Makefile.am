@@ -1,5 +1,5 @@
 #SUBDIRS = kspreadcore samples
-SUBDIRS = kspreadcore
+SUBDIRS = kspreadcore scripts
 
 INCLUDES = -I$(top_builddir)/lib/kross/main \
            -I$(top_srcdir)/kspread \

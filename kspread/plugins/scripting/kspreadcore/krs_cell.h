@@ -58,12 +58,38 @@ class Cell : public Kross::Api::Class<Cell>
 		/**
 		* Return the value of the cell.
 		*/
-		QVariant value();
+		QVariant value() const;
 		/**
 		* Set the value the cell has.
 		*/
 		bool setValue(const QVariant& value);
-	
+
+		/**
+		* Return the column number.
+		*/
+		int column() const;
+		/**
+		* Return the row number.
+		*/
+		int row() const;
+
+		/**
+		* Return the previous cell if there is any.
+		*/
+		Cell* previousCell() const;
+		/**
+		* Return the next cell if there is any.
+		*/
+		Cell* nextCell() const;
+		/**
+		* Set the previous cell.
+		*/
+		void setPreviousCell(Cell* c);
+		/**
+		* Set the next cell.
+		*/
+		void setNextCell(Cell* c);
+
 		/**
 		* Returns the name of the cell. For example, the cell in first column
 		* and first row is "A1".
@@ -136,7 +162,7 @@ class Cell : public Kross::Api::Class<Cell>
 		KSpread::Sheet* m_sheet;
 		uint m_col, m_row;
 	
-		QVariant toVariant(const KSpread::Value& value);
+		QVariant toVariant(const KSpread::Value& value) const;
 };
 }
 }
