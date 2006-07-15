@@ -52,6 +52,7 @@ Comment[es]=Desarrollo de aplicaciones de escritorio para base de datos
 Comment[et]=Töölaua andmebaasirakenduste arendamine
 Comment[pt]=Desenvolver aplicações de bases de dados para o utilizador
 Comment[pt_BR]=Desenvolver aplicações de bases de dados para o utilizador
+Comment[zh_TW]=開發桌面資料庫應用程式
 DocPath=kexi/index.html
 X-KDE-NativeMimeType=application/x-kexiproject-sqlite
 X-KDE-NOTKoDocumentEmbeddable=true
