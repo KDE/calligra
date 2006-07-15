@@ -26,7 +26,6 @@ AM_CONDITIONAL(compile_kexionly, test "$KEXI_ONLY" = "yes" )
 
 AC_MSG_CHECKING([whether kopainter should be compiled])
 
-
 # first check which main application we could compile
 for args in $SUBDIRLIST ; do
     case $args in
@@ -37,15 +36,17 @@ for args in $SUBDIRLIST ; do
 done
 
 # now remove the applications the user has asked not to compile
+COMPILE_LIB_FOR_KPRESENTER="#"
 for args in $DO_NOT_COMPILE ; do
     case $args in
         krita) COMPILE_LIB_FOR_KRITA= ;;
         karbon) COMPILE_LIB_FOR_KARBON= ;;
         kivio) COMPILE_LIB_FOR_KIVIO= ;;
+	kpresenter) COMPILE_LIB_FOR_KPRESENTER= ;;
     esac
 done
 
-if test -n "$COMPILE_LIB_FOR_KRITA$COMPILE_LIB_FOR_KARBON$COMPILE_LIB_FOR_KIVIO" ; then
+if test -n "$COMPILE_LIB_FOR_KRITA$COMPILE_LIB_FOR_KARBON$COMPILE_LIB_FOR_KIVIO$COMPILE_LIB_FOR_KPRESENTER" ; then
     USERFEEDBACKCOMPILELIB="yes"
 else
     USERFEEDBACKCOMPILELIB="no"
