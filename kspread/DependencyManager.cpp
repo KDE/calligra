@@ -105,8 +105,15 @@ void DependencyManager::Private::dump()
 
   foreach (Sheet* sheet, dependants.keys())
   {
-    kDebug() << "The cells dependencies in " << sheet->name() << " are :" << endl;
-    dependants[sheet]->debug();
+    QList<QRectF> keys = dependants[sheet]->keys();
+    QList<Region::Point> values = dependants[sheet]->values();
+    Q_ASSERT(keys.count() == values.count());
+    int count = keys.count();
+    for (int i = 0; i < count; ++i)
+    {
+      kDebug() << "The cells depending on " << sheet->sheetName() << " " << keys[i].toRect() <<" are :" << endl;
+      kDebug() << values[i].name() << endl;
+    }
   }
 /*  mend = dependants.end();
   for ( QMap<Region::Point, Region>::ConstIterator mit(dependants.begin()); mit != mend; ++mit )
@@ -128,6 +135,7 @@ DependencyManager::DependencyManager()
 
 DependencyManager::~DependencyManager ()
 {
+  qDeleteAll(d->dependants.values());
   delete d;
 }
 
