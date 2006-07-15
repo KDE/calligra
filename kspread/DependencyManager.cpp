@@ -129,6 +129,7 @@ void DependencyManager::reset ()
 
 void DependencyManager::regionChanged(const Region& region)
 {
+  kDebug() << "DependencyManager::regionChanged " << region.name() << endl;
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
   {
@@ -140,20 +141,20 @@ void DependencyManager::regionChanged(const Region& region)
       {
         Cell* cell = sheet->cellAt(col, row);
 
-        // empty or default cell? do nothing
-        if( cell->isDefault() )
+        // empty or default cell? remove it
+        if ( cell->isEmpty() /*|| cell->isDefault()*/ )
+        {
+          d->removeDependencies(cell);
           continue;
-
-        // if the cell contains the circle error, we mustn't do anything
-        if (cell->testFlag (Cell::Flag_CircularCalculation))
-          continue;
+        }
 
         // don't re-generate dependencies if we're updating dependencies
-        if ( !(cell->testFlag (Cell::Flag_Progress)))
+//         if ( !(cell->testFlag (Cell::Flag_Progress)))
           d->generateDependencies(cell);
       }
     }
   }
+  d->dump();
 }
 
 void DependencyManager::areaModified (const QString &name)
@@ -254,15 +255,22 @@ void DependencyManager::Private::removeDependencies(const Cell* cell)
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
   {
+    Sheet* const sheet = (*it)->sheet();
     const QRect range = (*it)->rect();
-    for (int col = range.left(); col <= range.right(); ++col)
-      for (int row = range.top(); row <= range.bottom(); ++row)
+    const int right = range.right();
+    const int bottom = range.bottom();
+    for (int col = range.left(); col <= right; ++col)
+      for (int row = range.top(); row <= bottom; ++row)
     {
-      if (!dependants.contains(point))
-        continue;  //this should never happen
+      Region::Point referencedPoint(col, row);
+      referencedPoint.setSheet(sheet);
 
       //we no longer depend on this cell
-      dependants.remove(point);
+      dependants[referencedPoint].sub(point.pos(), point.sheet());
+      if (dependants[referencedPoint].isEmpty())
+      {
+        dependants.remove(referencedPoint);
+      }
     }
   }
 
@@ -304,7 +312,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
 
   // Broken formula -> meaningless dependencies
   // (tries to avoid cell->formula() being null)
-  if (cell->hasError())
+  if (cell->testFlag(Cell::Flag_ParseError))
     return Region();
 
   const Formula* f = cell->formula();

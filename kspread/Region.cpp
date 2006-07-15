@@ -276,13 +276,17 @@ Region::Element* Region::add(const Region& region)
   return d->cells.isEmpty() ? 0 : d->cells.last();
 }
 
-void Region::sub(const QPoint& point)
+void Region::sub(const QPoint& point, Sheet* sheet)
 {
   // TODO Stefan: Improve!
   Iterator endOfList(d->cells.end());
   for (Iterator it = d->cells.begin(); it != endOfList; ++it)
   {
     Element *element = *it;
+    if (element->sheet() != sheet)
+    {
+      continue;
+    }
     if (element->rect() == QRect(point,point))
     {
       delete element;
@@ -292,13 +296,17 @@ void Region::sub(const QPoint& point)
   }
 }
 
-void Region::sub(const QRect& range)
+void Region::sub(const QRect& range, Sheet* sheet)
 {
   // TODO Stefan: Improve!
   Iterator endOfList(d->cells.end());
   for (Iterator it = d->cells.begin(); it != endOfList; ++it)
   {
     Element *element = *it;
+    if (element->sheet() != sheet)
+    {
+      continue;
+    }
     if (element->rect() == range.normalized())
     {
       delete element;

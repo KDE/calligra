@@ -4150,7 +4150,7 @@ bool Sheet::testListChoose(Selection* selectionInfo)
 }
 
 
-
+// era: absolute references
 QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
 {
   QDomDocument dd( "spreadsheet-snippet" );
