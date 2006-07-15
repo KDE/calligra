@@ -24,6 +24,7 @@
 
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
+#include <kactioncollection.h>
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 #include <main/manager.h>
@@ -34,7 +35,7 @@
 #include <View.h>
 
 typedef KGenericFactory<Scripting> KSpreadScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY( kspreadscripting, KSpreadScriptingFactory( "kspread" ) )
+K_EXPORT_COMPONENT_FACTORY( kspreadscripting, KSpreadScriptingFactory( "kspreadscripting" ) )
 
 Scripting::Scripting(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
@@ -46,6 +47,7 @@ Scripting::Scripting(QObject *parent, const QStringList &)
           << ", Parent: "
           << parent->metaObject()->className()
           << "\n";
+
     if ( parent->inherits("KSpread::View") )
     {
         setInstance(Scripting::instance());
@@ -53,14 +55,16 @@ Scripting::Scripting(QObject *parent, const QStringList &)
         m_scriptguiclient = new Kross::Api::ScriptGUIClient( m_view, m_view );
 //         m_scriptguiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
         kDebug() << "Setup actions for scripting !" << endl;
-        //BEGIN TODO: understand why the ScriptGUIClient doesn't "link" its actions to the menu
+
         setXMLFile(KStandardDirs::locate("data","kspread/kpartplugins/scripting.rc"), true);
         new KAction(i18n("Execute Script File..."), 0, 0, m_scriptguiclient, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
         new KAction(i18n("Script Manager..."), 0, 0, m_scriptguiclient, SLOT(showScriptManager()), actionCollection(), "configurescripts");
-        //END TODO
+
+        KAction* scriptmenuaction = m_scriptguiclient->action("installedscripts");
+        actionCollection()->insert(scriptmenuaction);
 
         connect(m_scriptguiclient, SIGNAL(executionFinished( const Kross::Api::ScriptAction* )), this, SLOT(executionFinished(const Kross::Api::ScriptAction*)));
-	Kross::Api::Manager::scriptManager()->addQObject(m_view->doc(), "KSpreadDocument");
+        Kross::Api::Manager::scriptManager()->addQObject(m_view->doc(), "KSpreadDocument");
         Kross::Api::Manager::scriptManager()->addQObject(m_view, "KSpreadView");
     }
 

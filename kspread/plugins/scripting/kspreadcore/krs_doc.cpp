@@ -29,7 +29,7 @@ namespace Kross { namespace KSpreadCore {
 Doc::Doc(KSpread::Doc* doc)
 	: Kross::Api::Class<Doc>("KSpreadDocument"), m_doc(doc)
 {
-	this->addFunction0< Sheet >("getName", this, &Doc::currentSheet);
+	this->addFunction0< Sheet >("currentSheet", this, &Doc::currentSheet);
 
 	this->addFunction1< Sheet, Kross::Api::Variant >("sheetByName", this, &Doc::sheetByName);
 	this->addFunction0< Kross::Api::Variant >("sheetNames", this, &Doc::sheetNames);

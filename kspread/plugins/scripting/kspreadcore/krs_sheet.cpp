@@ -30,8 +30,13 @@ namespace Kross { namespace KSpreadCore {
 
 Sheet::Sheet(KSpread::Sheet* sheet, KSpread::Doc *doc) : Kross::Api::Class<Sheet>("KSpreadSheet"), m_sheet(sheet), m_doc(doc) {
 
-    this->addFunction0< Kross::Api::Variant >("getName", this, &Sheet::getName);
+    this->addFunction0< Kross::Api::Variant >("name", this, &Sheet::name);
     this->addFunction1< void, Kross::Api::Variant >("setName", this, &Sheet::setName);
+
+    this->addFunction0< Kross::Api::Variant >("maxColumn", this, &Sheet::maxColumn);
+    this->addFunction0< Kross::Api::Variant >("maxRow", this, &Sheet::maxRow);
+
+    this->addFunction0< Cell >("firstCell", this, &Sheet::firstCell);
 
     this->addFunction2< Cell, Kross::Api::Variant, Kross::Api::Variant >("cell", this, &Sheet::cell);
 
@@ -49,7 +54,7 @@ const QString Sheet::getClassName() const {
     return "Kross::KSpreadCore::Sheet";
 }
 
-const QString Sheet::getName() const
+const QString Sheet::name() const
 {
     return m_sheet->sheetName();
 }
@@ -57,6 +62,19 @@ const QString Sheet::getName() const
 void Sheet::setName(const QString& name)
 {
     m_sheet->setSheetName(name);
+}
+
+int Sheet::maxColumn() const {
+    return m_sheet->maxColumn();
+}
+
+int Sheet::maxRow() const { 
+    return m_sheet->maxRow();
+}
+
+Cell* Sheet::firstCell() const {
+    KSpread::Cell* c = m_sheet->firstCell();
+    return c ? new Cell(c,c->sheet(),c->column(),c->row()) : 0;
 }
 
 Cell* Sheet::cell(uint col, uint row) {
