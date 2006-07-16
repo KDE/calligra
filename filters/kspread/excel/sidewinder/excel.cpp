@@ -1088,7 +1088,7 @@ unsigned FormulaToken::nameIndex() const
 }
 
 
-UString FormulaToken::area( unsigned row, unsigned col ) const
+UString FormulaToken::area( unsigned /*row*/, unsigned /*col*/ ) const
 {
   // FIXME check data size !
   unsigned char buf[2];
@@ -1171,7 +1171,7 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   return result;
 }
 
-UString FormulaToken::ref( unsigned row, unsigned col ) const
+UString FormulaToken::ref( unsigned /*row*/, unsigned /*col*/ ) const
 {
   // FIXME check data size !
   // FIXME handle shared formula
@@ -2296,7 +2296,7 @@ void ExternNameRecord::setData( unsigned size, const unsigned char* data )
   }
 }
 
-void ExternNameRecord::dump( std::ostream& out ) const
+void ExternNameRecord::dump( std::ostream& /*out*/ ) const
 {
 }
 
@@ -3273,7 +3273,7 @@ void NameRecord::setData( unsigned size, const unsigned char* data )
   }
 }
 
-void NameRecord::dump( std::ostream& out ) const
+void NameRecord::dump( std::ostream& /*out*/ ) const
 {
 }
 
@@ -4304,7 +4304,7 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   if( version() == Excel97 )
   {
     unsigned options = data[8];
-    unsigned attributes = data[9];
+//     unsigned attributes = data[9];
 
     setIndentLevel( options & 0x0f );
     setShrinkContent( options & 0x10 );

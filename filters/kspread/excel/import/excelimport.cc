@@ -28,7 +28,6 @@
 #include <excelimport.moc>
 
 #include <QBuffer>
-#include <q3cstring.h>
 #include <QDateTime>
 #include <QFile>
 #include <QString>
@@ -50,11 +49,11 @@ typedef KGenericFactory<ExcelImport> ExcelImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libexcelimport, ExcelImportFactory( "kofficefilters" ) )
 
 
-// UString -> QConstString conversion. Use .string() to get the QString.
+// UString -> QConstString conversion. Use  to get the QString.
 // Always store the QConstString into a variable first, to avoid a deep copy.
-inline QConstString string( const Swinder::UString& str ) {
+inline QString string( const Swinder::UString& str ) {
    // Let's hope there's no copying of the QConstString happening...
-   return QConstString( reinterpret_cast<const QChar*>( str.data() ), str.length() );
+    return QString::fromRawData( reinterpret_cast<const QChar*>( str.data() ), str.length() );
 }
 
 using namespace Swinder;
@@ -340,7 +339,7 @@ void ExcelImport::Private::processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWr
 
   xmlWriter->startElement( "table:table" );
 
-  xmlWriter->addAttribute( "table:name", string( sheet->name() ).string() );
+  xmlWriter->addAttribute( "table:name", string( sheet->name() ) );
   xmlWriter->addAttribute( "table:print", "false" );
   xmlWriter->addAttribute( "table:protected", "false" );
   xmlWriter->addAttribute( "table:style-name", QString("ta%1").arg(sheetFormatIndex));
@@ -622,7 +621,7 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
   xmlWriter->addAttribute( "table:style-name", QString("ce%1").arg(cellFormatIndex) );
   cellFormatIndex++;
 
-  QString formula = string( cell->formula() ).string();
+  QString formula = string( cell->formula() );
   if( !formula.isEmpty() )
     xmlWriter->addAttribute( "table:formula", formula.prepend("=") );
 
@@ -635,7 +634,7 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
   }
   else if( value.isFloat() || value.isInteger() )
   {
-    QString valueFormat = string( cell->format().valueFormat() ).string();
+    QString valueFormat = string( cell->format().valueFormat() );
 
     bool handled = false;
 
@@ -671,7 +670,7 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
   }
   else if( value.isString() )
   {
-    QString str = string( value.asString() ).string();
+    QString str = string( value.asString() );
     xmlWriter->addAttribute( "office:value-type", "string" );
     xmlWriter->addAttribute( "office:string-value", str );
     xmlWriter->startElement( "text:p" );
@@ -694,7 +693,7 @@ void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWrit
 
   // handle data format, e.g. number style
   QString refName;
-  QString valueFormat = string( format.valueFormat() ).string();
+  QString valueFormat = string( format.valueFormat() );
   if( valueFormat != QString("General") )
   {
     refName = QString("N%1").arg(valueFormatIndex);
@@ -779,7 +778,7 @@ void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter
       xmlWriter->addAttribute( "style:text-position", "super" );
 
     if( !font.fontFamily().isEmpty() )
-      xmlWriter->addAttribute( "style:font-name", string(font.fontFamily()).string() );
+      xmlWriter->addAttribute( "style:font-name", string(font.fontFamily()) );
 
     xmlWriter->addAttribute( "fo:font-size", QString("%1pt").arg(font.fontSize()) );
 
