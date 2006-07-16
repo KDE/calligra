@@ -2244,20 +2244,17 @@ void KPrView::setupActions()
              actionEditPaste, SLOT( setEnabled( bool ) ) );
     m_pKPresenterDoc->clipboardDataChanged(); // set paste's initial state
 
-    actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", Qt::CTRL + Qt::Key_Delete,
-                                    this, SLOT( editDelete() ),
-                                    actionCollection(), "edit_delete" );
+    actionEditDelete = new KAction(KIcon("editdelete"),  i18n( "&Delete" ), actionCollection(), "edit_delete" );
+    connect(actionEditDelete, SIGNAL(triggered(bool) ), SLOT( editDelete() ));
+    actionEditDelete->setShortcut(Qt::CTRL + Qt::Key_Delete);
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDeSelectAll= KStdAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
-    actionEditCopyPage = new KAction( i18n( "Copy Slide" ), "editcopy",
-                                      0, this, SLOT( editCopyPage() ),
-                                      actionCollection(), "edit_copypage" );
-    actionEditDuplicatePage = new KAction( i18n( "Duplicate Slide" ), "newslide",
-                                      0, this, SLOT( editDuplicatePage() ),
-                                      actionCollection(), "edit_duplicatepage" );
-    actionEditDelPage = new KAction( i18n( "Delete Slide" ), "delslide", 0,
-                                     this, SLOT( editDelPage() ),
-                                     actionCollection(), "edit_delpage" );
+    actionEditCopyPage = new KAction(KIcon("editcopy"),  i18n( "Copy Slide" ), actionCollection(), "edit_copypage" );
+    connect(actionEditCopyPage, SIGNAL(triggered(bool) ), SLOT( editCopyPage() ));
+    actionEditDuplicatePage = new KAction(KIcon("newslide"),  i18n( "Duplicate Slide" ), actionCollection(), "edit_duplicatepage" );
+    connect(actionEditDuplicatePage, SIGNAL(triggered(bool) ), SLOT( editDuplicatePage() ));
+    actionEditDelPage = new KAction(KIcon("delslide"),  i18n( "Delete Slide" ), actionCollection(), "edit_delpage" );
+    connect(actionEditDelPage, SIGNAL(triggered(bool) ), SLOT( editDelPage() ));
 
     actionEditFind=KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
     actionEditFindNext = KStdAction::findNext( this, SLOT( editFindNext() ), actionCollection(), "edit_findnext" );
@@ -2304,17 +2301,16 @@ void KPrView::setupActions()
 
     // ---------------- insert actions
 
-    actionInsertPage = new KAction( i18n( "&Slide..." ), "slide", Qt::Key_F2,
-                                    this, SLOT( insertPage() ),
-                                    actionCollection(), "insert_page" );
+    actionInsertPage = new KAction(KIcon("slide"),  i18n( "&Slide..." ), actionCollection(), "insert_page" );
+    connect(actionInsertPage, SIGNAL(triggered(bool) ), SLOT( insertPage() ));
+    actionInsertPage->setShortcut(Qt::Key_F2);
 
-    new KAction( i18n( "Insert &Slide..." ), "newslide", 0,
-                                    this, SLOT( insertPage() ),
-                                    actionCollection(), "insert_page_popup" );
+    KAction *action = new KAction(KIcon("newslide"),  i18n( "Insert &Slide..." ), actionCollection(), "insert_page_popup" );
+    connect(action, SIGNAL(triggered(bool) ), SLOT( insertPage() ));
 
-    actionInsertPicture = new KAction( i18n( "P&icture..." ), "frame_image", Qt::SHIFT+Qt::Key_F5,
-                                       this, SLOT( insertPicture() ),
-                                       actionCollection(), "insert_picture" );
+    actionInsertPicture = new KAction(KIcon("frame_image"),  i18n( "P&icture..." ), actionCollection(), "insert_picture" );
+    connect(actionInsertPicture, SIGNAL(triggered(bool) ), SLOT( insertPicture() ));
+    actionInsertPicture->setShortcut(Qt::SHIFT+Qt::Key_F5);
 
     // ----------------- tools actions
 	QActionGroup* toolsGroup = new QActionGroup( this );
@@ -2531,13 +2527,13 @@ void KPrView::setupActions()
         else
             actionFormatNumber->insert( act );
     }
-    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ),  QApplication::isRightToLeft() ?"format_decreaseindent" : "format_increaseindent",
-                                       Qt::CTRL + Qt::Key_Plus, this, SLOT( textDepthPlus() ),
-                                       actionCollection(), "text_depthPlus" );
+    actionTextDepthPlus = new KAction(KIcon(QApplication::isRightToLeft() ?"format_decreaseindent" : "format_increaseindent"),  i18n( "&Increase Depth" ), actionCollection(), "text_depthPlus" );
+    connect(actionTextDepthPlus, SIGNAL(triggered(bool) ), SLOT( textDepthPlus() ));
+    actionTextDepthPlus->setShortcut(Qt::CTRL + Qt::Key_Plus);
 
-    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), QApplication::isRightToLeft() ?"format_increaseindent" : "format_decreaseindent",
-                                        Qt::CTRL + Qt::Key_Minus, this, SLOT( textDepthMinus() ),
-                                        actionCollection(), "text_depthMinus" );
+    actionTextDepthMinus = new KAction(KIcon(QApplication::isRightToLeft() ?"format_increaseindent" : "format_decreaseindent"),  i18n( "&Decrease Depth" ), actionCollection(), "text_depthMinus" );
+    connect(actionTextDepthMinus, SIGNAL(triggered(bool) ), SLOT( textDepthMinus() ));
+    actionTextDepthMinus->setShortcut(Qt::CTRL + Qt::Key_Minus);
 
     actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), 0,
                                                this, SLOT( textContentsToHeight() ),
@@ -2547,76 +2543,61 @@ void KPrView::setupActions()
                                             this, SLOT( textObjectToContents() ),
                                             actionCollection(), "text_obj2cont" );
 
-    actionTextInsertPageNum = new KAction( i18n( "&Insert Slide Number" ), "pgnum", 0,
-                                           this, SLOT( textInsertPageNum() ),
-                                           actionCollection(), "text_inspgnum" );
+    actionTextInsertPageNum = new KAction(KIcon("pgnum"),  i18n( "&Insert Slide Number" ), actionCollection(), "text_inspgnum" );
+    connect(actionTextInsertPageNum, SIGNAL(triggered(bool) ), SLOT( textInsertPageNum() ));
 
     // ----------------- format actions
 
-    actionExtraProperties = new KAction( i18n( "&Properties" ), "penbrush", 0,
-                                         this, SLOT( extraProperties() ),
-                                         actionCollection(), "extra_properties" );
+    actionExtraProperties = new KAction(KIcon("penbrush"),  i18n( "&Properties" ), actionCollection(), "extra_properties" );
+    connect(actionExtraProperties, SIGNAL(triggered(bool) ), SLOT( extraProperties() ));
 
     actionExtraArrangePopup = new KActionMenu( KIcon("arrange"),i18n( "Arra&nge Objects" ),
                                                actionCollection(), "extra_arrangepopup" );
     actionExtraArrangePopup->setDelayed( false );
 
-    actionExtraRaise = new KAction( i18n( "Ra&ise Objects" ), "raise",
-                                    Qt::CTRL+Qt::SHIFT+Qt::Key_R, this, SLOT( extraRaise() ),
-                                    actionCollection(), "extra_raise" );
+    actionExtraRaise = new KAction(KIcon("raise"),  i18n( "Ra&ise Objects" ), actionCollection(), "extra_raise" );
+    connect(actionExtraRaise, SIGNAL(triggered(bool) ), SLOT( extraRaise() ));
+    actionExtraRaise->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_R);
 
-    actionExtraLower = new KAction( i18n( "&Lower Objects" ), "lower", Qt::CTRL +Qt::SHIFT+ Qt::Key_L,
-                                    this, SLOT( extraLower() ),
-                                    actionCollection(), "extra_lower" );
+    actionExtraLower = new KAction(KIcon("lower"),  i18n( "&Lower Objects" ), actionCollection(), "extra_lower" );
+    connect(actionExtraLower, SIGNAL(triggered(bool) ), SLOT( extraLower() ));
+    actionExtraLower->setShortcut(Qt::CTRL +Qt::SHIFT+ Qt::Key_L);
 
-    actionExtraBringForward= new KAction( i18n( "Bring to Front" ), "bring_forward",
-                                          0, this, SLOT( extraBringForward() ),
-                                          actionCollection(), "extra_bring_forward" );
+    actionExtraBringForward = new KAction(KIcon("bring_forward"),  i18n( "Bring to Front" ), actionCollection(), "extra_bring_forward" );
+    connect(actionExtraBringForward, SIGNAL(triggered(bool) ), SLOT( extraBringForward() ));
 
-    actionExtraSendBackward= new KAction( i18n( "Send to Back" ), "send_backward",
-                                          0, this, SLOT( extraSendBackward() ),
-                                          actionCollection(), "extra_send_backward" );
+    actionExtraSendBackward = new KAction(KIcon("send_backward"),  i18n( "Send to Back" ), actionCollection(), "extra_send_backward" );
+    connect(actionExtraSendBackward, SIGNAL(triggered(bool) ), SLOT( extraSendBackward() ));
 
 
 
-    actionExtraRotate = new KAction( i18n( "R&otate Objects..." ), "rotate_cw", 0,
-                                     this, SLOT( extraRotate() ),
-                                     actionCollection(), "extra_rotate" );
+    actionExtraRotate = new KAction(KIcon("rotate_cw"),  i18n( "R&otate Objects..." ), actionCollection(), "extra_rotate" );
+    connect(actionExtraRotate, SIGNAL(triggered(bool) ), SLOT( extraRotate() ));
 
-    actionExtraShadow = new KAction( i18n( "&Shadow Objects..." ), "shadow", 0,
-                                     this, SLOT( extraShadow() ),
-                                     actionCollection(), "extra_shadow" );
+    actionExtraShadow = new KAction(KIcon("shadow"),  i18n( "&Shadow Objects..." ), actionCollection(), "extra_shadow" );
+    connect(actionExtraShadow, SIGNAL(triggered(bool) ), SLOT( extraShadow() ));
 
-    actionExtraAlignObjLeft = new KAction( i18n( "Align &Left" ), "aoleft", 0,
-                                           this, SLOT( extraAlignObjLeft() ),
-                                           actionCollection(), "extra_alignleft" );
+    actionExtraAlignObjLeft = new KAction(KIcon("aoleft"),  i18n( "Align &Left" ), actionCollection(), "extra_alignleft" );
+    connect(actionExtraAlignObjLeft, SIGNAL(triggered(bool) ), SLOT( extraAlignObjLeft() ));
 
-    actionExtraAlignObjCenterH = new KAction( i18n( "Align Center (&horizontally)" ),
-                                              "aocenterh", 0,
-                                              this, SLOT( extraAlignObjCenterH() ),
-                                              actionCollection(), "extra_aligncenterh" );
+    actionExtraAlignObjCenterH = new KAction(KIcon("aocenterh"),  i18n( "Align Center (&horizontally)" ), actionCollection(), "extra_aligncenterh" );
+    connect(actionExtraAlignObjCenterH, SIGNAL(triggered(bool) ), SLOT( extraAlignObjCenterH() ));
 
-    actionExtraAlignObjRight = new KAction( i18n( "Align &Right" ), "aoright", 0,
-                                            this, SLOT( extraAlignObjRight() ),
-                                            actionCollection(), "extra_alignright" );
+    actionExtraAlignObjRight = new KAction(KIcon("aoright"),  i18n( "Align &Right" ), actionCollection(), "extra_alignright" );
+    connect(actionExtraAlignObjRight, SIGNAL(triggered(bool) ), SLOT( extraAlignObjRight() ));
 
-    actionExtraAlignObjTop = new KAction( i18n( "Align &Top" ), "aotop", 0,
-                                          this, SLOT( extraAlignObjTop() ),
-                                          actionCollection(), "extra_aligntop" );
+    actionExtraAlignObjTop = new KAction(KIcon("aotop"),  i18n( "Align &Top" ), actionCollection(), "extra_aligntop" );
+    connect(actionExtraAlignObjTop, SIGNAL(triggered(bool) ), SLOT( extraAlignObjTop() ));
 
-    actionExtraAlignObjCenterV = new KAction( i18n( "Align Center (&vertically)" ),
-                                              "aocenterv", 0,
-                                              this, SLOT( extraAlignObjCenterV() ),
-                                              actionCollection(), "extra_aligncenterv" );
+    actionExtraAlignObjCenterV = new KAction(KIcon("aocenterv"),  i18n( "Align Center (&vertically)" ), actionCollection(), "extra_aligncenterv" );
+    connect(actionExtraAlignObjCenterV, SIGNAL(triggered(bool) ), SLOT( extraAlignObjCenterV() ));
 
-    actionExtraAlignObjBottom = new KAction( i18n( "Align &Bottom" ), "aobottom", 0,
-                                             this, SLOT( extraAlignObjBottom() ),
-                                             actionCollection(), "extra_alignbottom" );
+    actionExtraAlignObjBottom = new KAction(KIcon("aobottom"),  i18n( "Align &Bottom" ), actionCollection(), "extra_alignbottom" );
+    connect(actionExtraAlignObjBottom, SIGNAL(triggered(bool) ), SLOT( extraAlignObjBottom() ));
 
 
-    actionExtraBackground = new KAction( i18n( "Slide Bac&kground..." ), "background", 0,
-                                         this, SLOT( extraBackground() ),
-                                         actionCollection(), "extra_background" );
+    actionExtraBackground = new KAction(KIcon("background"),  i18n( "Slide Bac&kground..." ), actionCollection(), "extra_background" );
+    connect(actionExtraBackground, SIGNAL(triggered(bool) ), SLOT( extraBackground() ));
 
     actionExtraLayout = new KAction( i18n( "Page &Layout..." ), 0,
                                      this, SLOT( extraLayout() ),
@@ -2634,15 +2615,11 @@ void KPrView::setupActions()
     m_actionExtraFooter->setCheckedState( i18n( "Disable Document Foo&ter" ) );
     m_actionExtraFooter->setToolTip( i18n( "Shows and hides footer display for the current slide" ) );
 
-    actionExtraConfigure = new KAction( i18n( "Configure KPresenter..." ),
-                                        "configure", 0,
-                                        this, SLOT( extraConfigure() ),
-                                        actionCollection(), "extra_configure" );
+    actionExtraConfigure = new KAction(KIcon("configure"),  i18n( "Configure KPresenter..." ), actionCollection(), "extra_configure" );
+    connect(actionExtraConfigure, SIGNAL(triggered(bool) ), SLOT( extraConfigure() ));
 
-    actionExtraWebPres = new KAction( i18n( "Create &HTML Slideshow..." ),
-                                      "webpres", 0,
-                                      this, SLOT( extraWebPres() ),
-                                      actionCollection(), "extra_webpres" );
+    actionExtraWebPres = new KAction(KIcon("webpres"),  i18n( "Create &HTML Slideshow..." ), actionCollection(), "extra_webpres" );
+    connect(actionExtraWebPres, SIGNAL(triggered(bool) ), SLOT( extraWebPres() ));
 
     actionExtraMSPres = new KAction( i18n( "Create Memor&y Stick Slideshow..." ),
 				     0, this, SLOT( extraMSPres() ),
@@ -2660,13 +2637,11 @@ void KPrView::setupActions()
                                             actionCollection(), "extra_alignobjs" );
     actionExtraAlignObjsPopup->setDelayed( false );
 
-    actionExtraLineBegin = new KAction( i18n("Line Begin"), "line_begin", 0,
-                                        this, SLOT( extraLineBegin() ),
-                                        actionCollection(), "extra_linebegin" );
+    actionExtraLineBegin = new KAction(KIcon("line_begin"),  i18n("Line Begin"), actionCollection(), "extra_linebegin" );
+    connect(actionExtraLineBegin, SIGNAL(triggered(bool) ), SLOT( extraLineBegin() ));
 
-    actionExtraLineEnd = new KAction( i18n("Line End"), "line_end", 0,
-                                      this, SLOT( extraLineEnd() ),
-                                      actionCollection(), "extra_lineend" );
+    actionExtraLineEnd = new KAction(KIcon("line_end"),  i18n("Line End"), actionCollection(), "extra_lineend" );
+    connect(actionExtraLineEnd, SIGNAL(triggered(bool) ), SLOT( extraLineEnd() ));
 #warning "kde4 disable it"
 #if 0
     actionExtraPenStyle = new KoLineStyleAction( i18n("Outline Style"), "pen_style",
@@ -2681,68 +2656,49 @@ void KPrView::setupActions()
     connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit::Unit ) ),
              actionExtraPenWidth, SLOT( setUnit( KoUnit::Unit ) ) );
 #endif
-    actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group",
-                                    QKeySequence( "Ctrl+G" ),
-                                    this, SLOT( extraGroup() ),
-                                    actionCollection(), "extra_group" );
+    actionExtraGroup = new KAction(KIcon("group"),  i18n( "&Group Objects" ), actionCollection(), "extra_group" );
+    connect(actionExtraGroup, SIGNAL(triggered(bool) ), SLOT( extraGroup() ));
+    actionExtraGroup->setShortcut(QKeySequence( "Ctrl+G" ));
 
-    actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ), "ungroup",
-                                      QKeySequence( "Ctrl+Shift+G" ),
-                                      this, SLOT( extraUnGroup() ),
-                                      actionCollection(), "extra_ungroup" );
+    actionExtraUnGroup = new KAction(KIcon("ungroup"),  i18n( "&Ungroup Objects" ), actionCollection(), "extra_ungroup" );
+    connect(actionExtraUnGroup, SIGNAL(triggered(bool) ), SLOT( extraUnGroup() ));
+    actionExtraUnGroup->setShortcut(QKeySequence( "Ctrl+Shift+G" ));
 
     // ----------------- slideshow actions
 
-    actionScreenConfigPages = new KAction( i18n( "&Configure Slide Show..." ),
-                                           "configure", 0,
-                                           this, SLOT( screenConfigPages() ),
-                                           actionCollection(), "screen_configpages" );
+    actionScreenConfigPages = new KAction(KIcon("configure"),  i18n( "&Configure Slide Show..." ), actionCollection(), "screen_configpages" );
+    connect(actionScreenConfigPages, SIGNAL(triggered(bool) ), SLOT( screenConfigPages() ));
 
-    actionScreenAssignEffect = new KAction( i18n( "Edit &Object Effect..." ),
-                                            "effect", 0,
-                                            this, SLOT( screenAssignEffect() ),
-                                            actionCollection(), "screen_assigneffect");
+    actionScreenAssignEffect = new KAction(KIcon("effect"),  i18n( "Edit &Object Effect..." ), actionCollection(), "screen_assigneffect");
+    connect(actionScreenAssignEffect, SIGNAL(triggered(bool) ), SLOT( screenAssignEffect() ));
 
-    actionScreenTransEffect = new KAction( i18n( "Edit Slide &Transition..." ),
-                                           "slide_effect", 0,
-                                           this, SLOT( screenTransEffect() ),
-                                           actionCollection(), "screen_transeffect");
+    actionScreenTransEffect = new KAction(KIcon("slide_effect"),  i18n( "Edit Slide &Transition..." ), actionCollection(), "screen_transeffect");
+    connect(actionScreenTransEffect, SIGNAL(triggered(bool) ), SLOT( screenTransEffect() ));
 
 
-    actionScreenStart = new KAction( i18n( "&Start" ),
-                                     "2rightarrow", Qt::Key_F12,
-                                     this, SLOT( screenStart() ),
-                                     actionCollection(), "screen_start" );
+    actionScreenStart = new KAction(KIcon("2rightarrow"),  i18n( "&Start" ), actionCollection(), "screen_start" );
+    connect(actionScreenStart, SIGNAL(triggered(bool) ), SLOT( screenStart() ));
+    actionScreenStart->setShortcut(Qt::Key_F12);
 
-    actionScreenStartFromFirst = new KAction( i18n( "Start From &First Slide" ),
-                                              "1rightarrow", 0,
-                                              this, SLOT( screenStartFromFirst() ),
-                                              actionCollection(), "screen_startfromfirst" );
+    actionScreenStartFromFirst = new KAction(KIcon("1rightarrow"),  i18n( "Start From &First Slide" ), actionCollection(), "screen_startfromfirst" );
+    connect(actionScreenStartFromFirst, SIGNAL(triggered(bool) ), SLOT( screenStartFromFirst() ));
 
-    actionScreenFirst = new KAction( i18n( "&Go to Start" ),
-                                     "start", 0,
-                                     this, SLOT( screenFirst() ),
-                                     actionCollection(), "screen_first" );
+    actionScreenFirst = new KAction(KIcon("start"),  i18n( "&Go to Start" ), actionCollection(), "screen_first" );
+    connect(actionScreenFirst, SIGNAL(triggered(bool) ), SLOT( screenFirst() ));
 
-    actionScreenPrev = new KAction( i18n( "&Previous Slide" ),
-                                    "back", Qt::Key_PageUp,
-                                    this, SLOT( screenPrev() ),
-                                    actionCollection(), "screen_prev" );
+    actionScreenPrev = new KAction(KIcon("back"),  i18n( "&Previous Slide" ), actionCollection(), "screen_prev" );
+    connect(actionScreenPrev, SIGNAL(triggered(bool) ), SLOT( screenPrev() ));
+    actionScreenPrev->setShortcut(Qt::Key_PageUp);
 
-    actionScreenNext = new KAction( i18n( "&Next Slide" ),
-                                    "forward", Qt::Key_PageDown,
-                                    this, SLOT( screenNext() ),
-                                    actionCollection(), "screen_next" );
+    actionScreenNext = new KAction(KIcon("forward"),  i18n( "&Next Slide" ), actionCollection(), "screen_next" );
+    connect(actionScreenNext, SIGNAL(triggered(bool) ), SLOT( screenNext() ));
+    actionScreenNext->setShortcut(Qt::Key_PageDown);
 
-    actionScreenLast = new KAction( i18n( "Go to &End" ),
-                                    "finish", 0,
-                                    this, SLOT( screenLast() ),
-                                    actionCollection(), "screen_last" );
+    actionScreenLast = new KAction(KIcon("finish"),  i18n( "Go to &End" ), actionCollection(), "screen_last" );
+    connect(actionScreenLast, SIGNAL(triggered(bool) ), SLOT( screenLast() ));
 
-    actionScreenSkip = new KAction( i18n( "Goto &Slide..." ),
-                                    "goto", 0,
-                                    this, SLOT( screenSkip() ),
-                                    actionCollection(), "screen_skip" );
+    actionScreenSkip = new KAction(KIcon("goto"),  i18n( "Goto &Slide..." ), actionCollection(), "screen_skip" );
+    connect(actionScreenSkip, SIGNAL(triggered(bool) ), SLOT( screenSkip() ));
 
     // ----------------- colorbar(Brush and Pen) action
 
@@ -2789,8 +2745,8 @@ void KPrView::setupActions()
                                    SLOT( picViewOrig1600x1200() ),
                                    actionCollection(), "pic_1600_1200" );
 
-    actionChangePic=new KAction( i18n( "&Change Picture..." ),"frame_image",0,this,
-                                 SLOT( chPic() ), actionCollection(), "change_picture" );
+    actionChangePic = new KAction(KIcon("frame_image"),  i18n( "&Change Picture..." ), actionCollection(), "change_picture" );
+    connect(actionChangePic, SIGNAL(triggered(bool) ), SLOT( chPic() ));
 
 
     actionImageEffect = new KAction( i18n("Image &Effect..."), 0, this,
@@ -2807,10 +2763,9 @@ void KPrView::setupActions()
     actionFormatSub->setActionGroup(valignGroup );
 
 
-    actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
-                                           Qt::ALT + Qt::SHIFT + Qt::Key_C,
-                                           this, SLOT( insertSpecialChar() ),
-                                           actionCollection(), "insert_specialchar" );
+    actionInsertSpecialChar = new KAction(KIcon("char"),  i18n( "Sp&ecial Character..." ), actionCollection(), "insert_specialchar" );
+    connect(actionInsertSpecialChar, SIGNAL(triggered(bool) ), SLOT( insertSpecialChar() ));
+    actionInsertSpecialChar->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
 
     actionInsertLink = new KAction( i18n( "Link..." ), 0,
                                     this, SLOT( insertLink() ),
@@ -2887,13 +2842,11 @@ void KPrView::setupActions()
                                             actionCollection(), "refresh_all_variable" );
     actionInsertVariable->insert(actionRefreshAllVariable);
 
-    actionIncreaseFontSize = new KAction( i18n("Increase Font Size"),"fontsizeup", 0,
-                                          this, SLOT( increaseFontSize() ),
-                                          actionCollection(), "increaseFontSize" );
+    actionIncreaseFontSize = new KAction(KIcon("fontsizeup"),  i18n("Increase Font Size"), actionCollection(), "increaseFontSize" );
+    connect(actionIncreaseFontSize, SIGNAL(triggered(bool) ), SLOT( increaseFontSize() ));
 
-    actionDecreaseFontSize = new KAction( i18n("Decrease Font Size"),"fontsizedown", 0,
-                                          this, SLOT( decreaseFontSize() ),
-                                          actionCollection(), "decreaseFontSize" );
+    actionDecreaseFontSize = new KAction(KIcon("fontsizedown"),  i18n("Decrease Font Size"), actionCollection(), "decreaseFontSize" );
+    connect(actionDecreaseFontSize, SIGNAL(triggered(bool) ), SLOT( decreaseFontSize() ));
 
     actionChangeCase=new KAction( i18n( "Change Case..." ), 0,
                                   this, SLOT( changeCaseOfText() ),
@@ -2967,12 +2920,10 @@ void KPrView::setupActions()
                                              this, SLOT( configureCompletion() ),
                                              actionCollection(), "configure_completion" );
 
-    actionZoomMinus = new KAction( i18n( "Zoom Out" ), "viewmag-",0,
-                                   this, SLOT( zoomMinus() ),
-                                   actionCollection(), "zoom_minus" );
-    actionZoomPlus = new KAction( i18n( "Zoom In" ), "viewmag+",0,
-                                  this, SLOT( zoomPlus() ),
-                                  actionCollection(), "zoom_plus" );
+    actionZoomMinus = new KAction(KIcon("viewmag-"),  i18n( "Zoom Out" ), actionCollection(), "zoom_minus" );
+    connect(actionZoomMinus, SIGNAL(triggered(bool) ), SLOT( zoomMinus() ));
+    actionZoomPlus = new KAction(KIcon("viewmag+"),  i18n( "Zoom In" ), actionCollection(), "zoom_plus" );
+    connect(actionZoomPlus, SIGNAL(triggered(bool) ), SLOT( zoomPlus() ));
     actionZoomEntirePage = new KAction( i18n( "Zoom Entire Slide" ), 0,
                                         this, SLOT( zoomEntirePage() ),
                                         actionCollection(), "zoom_entire_page" );
@@ -2980,9 +2931,8 @@ void KPrView::setupActions()
     actionZoomMinus = new KAction( i18n( "Zoom Slide Width" ), 0,
                                    this, SLOT( zoomPageWidth() ),
                                    actionCollection(), "zoom_page_width" );
-    actionZoomSelectedObject= new KAction( i18n( "Zoom Selected Objects" ), "viewmagfit",0,
-                                           this, SLOT( zoomSelectedObject() ),
-                                           actionCollection(), "zoom_selected_object" );
+    actionZoomSelectedObject = new KAction(KIcon("viewmagfit"),  i18n( "Zoom Selected Objects" ), actionCollection(), "zoom_selected_object" );
+    connect(actionZoomSelectedObject, SIGNAL(triggered(bool) ), SLOT( zoomSelectedObject() ));
     actionZoomPageHeight= new KAction( i18n( "Zoom Slide Height" ), 0,
                                        this, SLOT( zoomPageHeight() ),
                                        actionCollection(), "zoom_page_height" );

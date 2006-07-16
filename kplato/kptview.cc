@@ -169,17 +169,18 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionCopy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
     actionPaste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
 
-    actionIndentTask = new KAction(i18n("Indent Task"), "indent_task", 0, this,
-        SLOT(slotIndentTask()), actionCollection(), "indent_task");
-    actionUnindentTask = new KAction(i18n("Unindent Task"), "unindent_task", 0, this,
-        SLOT(slotUnindentTask()), actionCollection(), "unindent_task");
-    actionMoveTaskUp = new KAction(i18n("Move Up"), "move_task_up", 0, this,
-        SLOT(slotMoveTaskUp()), actionCollection(), "move_task_up");
-    actionMoveTaskDown = new KAction(i18n("Move Down"), "move_task_down", 0, this,
-        SLOT(slotMoveTaskDown()), actionCollection(), "move_task_down");
+    actionIndentTask = new KAction(KIcon("indent_task"), i18n("Indent Task"), actionCollection(), "indent_task");
+    connect(actionIndentTask, SIGNAL(triggered(bool) ), SLOT(slotIndentTask()));
+    actionUnindentTask = new KAction(KIcon("unindent_task"), i18n("Unindent Task"), actionCollection(), "unindent_task");
+    connect(actionUnindentTask, SIGNAL(triggered(bool) ), SLOT(slotUnindentTask()));
+    actionMoveTaskUp = new KAction(KIcon("move_task_up"), i18n("Move Up"), actionCollection(), "move_task_up");
+    connect(actionMoveTaskUp, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskUp()));
+    actionMoveTaskDown = new KAction(KIcon("move_task_down"), i18n("Move Down"), actionCollection(), "move_task_down");
+    connect(actionMoveTaskDown, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskDown()));
 
     // ------ View
-    actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
+    actionViewGantt = new KAction(KIcon("gantt_chart"), i18n("Gantt"), actionCollection(), "view_gantt");
+    connect(actionViewGantt, SIGNAL(triggered(bool) ), SLOT(slotViewGantt()));
 
     actionViewExpected = new KToggleAction(i18n("Expected"), 0, 0, this, SLOT(slotViewExpected()), actionCollection(), "view_expected");
     actionViewOptimistic = new KToggleAction(i18n("Optimistic"), 0, 0, this, SLOT(slotViewOptimistic()), actionCollection(), "view_optimistic");
@@ -206,41 +207,52 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     actionViewTaskAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewTaskAppointments()), actionCollection(), "view_task_appointments");
 
-    actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
+    actionViewPert = new KAction(KIcon("pert_chart"), i18n("Network"), actionCollection(), "view_pert");
+    connect(actionViewPert, SIGNAL(triggered(bool) ), SLOT(slotViewPert()));
 
-    actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
+    actionViewResources = new KAction(KIcon("resources"), i18n("Resources"), actionCollection(), "view_resources");
+    connect(actionViewResources, SIGNAL(triggered(bool) ), SLOT(slotViewResources()));
 
     actionViewResourceAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewResourceAppointments()), actionCollection(), "view_resource_appointments");
 
-    actionViewAccounts = new KAction(i18n("Accounts"), "accounts", 0, this, SLOT(slotViewAccounts()), actionCollection(), "view_accounts");
+    actionViewAccounts = new KAction(KIcon("accounts"), i18n("Accounts"), actionCollection(), "view_accounts");
+    connect(actionViewAccounts, SIGNAL(triggered(bool) ), SLOT(slotViewAccounts()));
 
     //actionViewReports = new KAction(i18n("Reports"), "reports", 0, this, SLOT(slotViewReports()), actionCollection(), "view_reports");
 
     // ------ Insert
-    actionAddTask = new KAction(i18n("Task..."), "add_task", 0, this,
-        SLOT(slotAddTask()), actionCollection(), "add_task");
-    actionAddSubtask = new KAction(i18n("Sub-Task..."), "add_sub_task", 0, this,
-        SLOT(slotAddSubTask()), actionCollection(), "add_sub_task");
-    actionAddMilestone = new KAction(i18n("Milestone..."), "add_milestone", 0, this,
-        SLOT(slotAddMilestone()), actionCollection(), "add_milestone");
+    actionAddTask = new KAction(KIcon("add_task"), i18n("Task..."), actionCollection(), "add_task");
+    connect(actionAddTask, SIGNAL(triggered(bool) ), SLOT(slotAddTask()));
+    actionAddSubtask = new KAction(KIcon("add_sub_task"), i18n("Sub-Task..."), actionCollection(), "add_sub_task");
+    connect(actionAddSubtask, SIGNAL(triggered(bool) ), SLOT(slotAddSubTask()));
+    actionAddMilestone = new KAction(KIcon("add_milestone"), i18n("Milestone..."), actionCollection(), "add_milestone");
+    connect(actionAddMilestone, SIGNAL(triggered(bool) ), SLOT(slotAddMilestone()));
 
     // ------ Project
-    actionEditMainProject = new KAction(i18n("Edit Main Project..."), "edit", 0, this, SLOT(slotProjectEdit()), actionCollection(), "project_edit");
-    actionEditStandardWorktime = new KAction(i18n("Edit Standard Worktime..."), "edit", 0, this, SLOT(slotProjectWorktime()), actionCollection(), "project_worktime");
-    actionEditCalendar = new KAction(i18n("Edit Calendar..."), "edit", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
-    actionEditAccounts = new KAction(i18n("Edit Accounts..."), "edit", 0, this, SLOT(slotProjectAccounts()), actionCollection(), "project_accounts");
-    actionEditResources = new KAction(i18n("Edit Resources..."), "edit", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
+    actionEditMainProject = new KAction(KIcon("edit"), i18n("Edit Main Project..."), actionCollection(), "project_edit");
+    connect(actionEditMainProject, SIGNAL(triggered(bool) ), SLOT(slotProjectEdit()));
+    actionEditStandardWorktime = new KAction(KIcon("edit"), i18n("Edit Standard Worktime..."), actionCollection(), "project_worktime");
+    connect(actionEditStandardWorktime, SIGNAL(triggered(bool) ), SLOT(slotProjectWorktime()));
+    actionEditCalendar = new KAction(KIcon("edit"), i18n("Edit Calendar..."), actionCollection(), "project_calendar");
+    connect(actionEditCalendar, SIGNAL(triggered(bool) ), SLOT(slotProjectCalendar()));
+    actionEditAccounts = new KAction(KIcon("edit"), i18n("Edit Accounts..."), actionCollection(), "project_accounts");
+    connect(actionEditAccounts, SIGNAL(triggered(bool) ), SLOT(slotProjectAccounts()));
+    actionEditResources = new KAction(KIcon("edit"), i18n("Edit Resources..."), actionCollection(), "project_resources");
+    connect(actionEditResources, SIGNAL(triggered(bool) ), SLOT(slotProjectResources()));
 
     actionCalculate = new KActionMenu(KIcon("project_calculate"), i18n("Calculate"), actionCollection(),"action_calculate");
     connect(actionCalculate, SIGNAL(activated()), SLOT(slotProjectCalculate()));
 
-    actionCalculateExpected = new KAction(i18n("Expected"), 0, 0, this, SLOT(slotProjectCalculateExpected()), actionCollection(), "project_calculate_expected");
+    actionCalculateExpected = new KAction(i18n("Expected"), actionCollection(), "project_calculate_expected");
+    connect(actionCalculateExpected, SIGNAL(triggered(bool) ), SLOT(slotProjectCalculateExpected()));
     actionCalculate->insert(actionCalculateExpected);
 
-    actionCalculateOptimistic = new KAction(i18n("Optimistic"), 0, 0, this, SLOT(slotProjectCalculateOptimistic()), actionCollection(), "project_calculate_optimistic");
+    actionCalculateOptimistic = new KAction(i18n("Optimistic"), actionCollection(), "project_calculate_optimistic");
+    connect(actionCalculateOptimistic, SIGNAL(triggered(bool) ), SLOT(slotProjectCalculateOptimistic()));
     actionCalculate->insert(actionCalculateOptimistic);
 
-    actionCalculatePessimistic = new KAction(i18n("Pessimistic"), 0, 0, this, SLOT(slotProjectCalculatePessimistic()), actionCollection(), "project_calculate_pessimistic");
+    actionCalculatePessimistic = new KAction(i18n("Pessimistic"), actionCollection(), "project_calculate_pessimistic");
+    connect(actionCalculatePessimistic, SIGNAL(triggered(bool) ), SLOT(slotProjectCalculatePessimistic()));
     actionCalculate->insert(actionCalculatePessimistic);
 
 /*    // ------ Reports
@@ -260,31 +272,30 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
 
     // ------ Tools
-    actionDefineWBS =
-        new KAction(i18n("Define WBS Pattern..."), "tools_define_wbs", 0, this,
-        SLOT(slotDefineWBS()), actionCollection(), "tools_generate_wbs");
-    actionGenerateWBS =
-        new KAction(i18n("Generate WBS Code"), "tools_generate_wbs", 0, this,
-        SLOT(slotGenerateWBS()), actionCollection(), "tools_define_wbs");
+    actionDefineWBS = new KAction(KIcon("tools_define_wbs"), i18n("Define WBS Pattern..."), actionCollection(), "tools_generate_wbs");
+    connect(actionDefineWBS, SIGNAL(triggered(bool) ), SLOT(slotDefineWBS()));
+ 
+    actionGenerateWBS = new KAction(KIcon("tools_generate_wbs"), i18n("Generate WBS Code"), actionCollection(), "tools_define_wbs");
+    connect(actionGenerateWBS, SIGNAL(triggered(bool) ), SLOT(slotGenerateWBS()));
 
     // ------ Export (testing)
     //actionExportGantt = new KAction(i18n("Export Ganttview"), "export_gantt", 0, this,
     //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
 
     // ------ Settings
-    actionConfigure = new KAction(i18n("Configure KPlato..."), "configure", 0, this,
-        SLOT(slotConfigure()), actionCollection(), "configure");
+    actionConfigure = new KAction(KIcon("configure"), i18n("Configure KPlato..."), actionCollection(), "configure");
+    connect(actionConfigure, SIGNAL(triggered(bool) ), SLOT(slotConfigure()));
 
     // ------ Popup
-    actionOpenNode = new KAction(i18n("Edit..."), "edit", 0, this,
-        SLOT(slotOpenNode()), actionCollection(), "node_properties");
-    actionTaskProgress = new KAction(i18n("Progress..."), "edit", 0, this,
-        SLOT(slotTaskProgress()), actionCollection(), "task_progress");
-    actionDeleteTask = new KAction(i18n("Delete Task"), "editdelete", 0, this,
-        SLOT(slotDeleteTask()), actionCollection(), "delete_task");
+    actionOpenNode = new KAction(KIcon("edit"), i18n("Edit..."), actionCollection(), "node_properties");
+    connect(actionOpenNode, SIGNAL(triggered(bool) ), SLOT(slotOpenNode()));
+    actionTaskProgress = new KAction(KIcon("edit"), i18n("Progress..."), actionCollection(), "task_progress");
+    connect(actionTaskProgress, SIGNAL(triggered(bool) ), SLOT(slotTaskProgress()));
+    actionDeleteTask = new KAction(KIcon("editdelete"), i18n("Delete Task"), actionCollection(), "delete_task");
+    connect(actionDeleteTask, SIGNAL(triggered(bool) ), SLOT(slotDeleteTask()));
 
-    actionEditResource = new KAction(i18n("Edit Resource..."), "edit", 0, this,
-        SLOT(slotEditResource()), actionCollection(), "edit_resource");
+    actionEditResource = new KAction(KIcon("edit"), i18n("Edit Resource..."), actionCollection(), "edit_resource");
+    connect(actionEditResource, SIGNAL(triggered(bool) ), SLOT(slotEditResource()));
 
     // ------------------- Actions with a key binding and no GUI item
     // Temporary, till we get a menu entry

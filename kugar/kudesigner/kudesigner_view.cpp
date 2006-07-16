@@ -188,27 +188,27 @@ void KudesignerView::initActions()
     copyAction = KStdAction::copy( this, SLOT( copy() ), actionCollection() );
     pasteAction = KStdAction::paste( this, SLOT( paste() ), actionCollection() );
     selectAllAction = KStdAction::selectAll( this, SLOT( selectAll() ), actionCollection() );
-    deleteAction = new KAction( i18n( "Delete" ), "editdelete", 0, this,
-                                SLOT( deleteItems() ), actionCollection(), "edit_delete" );
+    deleteAction = new KAction(KIcon("editdelete"),  i18n( "Delete" ), actionCollection(), "edit_delete" );
+    connect(deleteAction, SIGNAL(triggered(bool) ), SLOT( deleteItems() ));
     cutAction->setEnabled( false );
     copyAction->setEnabled( false );
     pasteAction->setEnabled( false );
     //    deleteAction->setEnabled(false);
 
-    sectionsReportHeader = new KAction( i18n( "Report Header" ), "irh", 0, this,
-                                        SLOT( slotAddReportHeader() ), actionCollection(), "rheader" );
-    sectionsReportFooter = new KAction( i18n( "Report Footer" ), "irf", 0, this,
-                                        SLOT( slotAddReportFooter() ), actionCollection(), "rfooter" );
-    sectionsPageHeader = new KAction( i18n( "Page Header" ), "iph", 0, this,
-                                      SLOT( slotAddPageHeader() ), actionCollection(), "pheader" );
-    sectionsPageFooter = new KAction( i18n( "Page Footer" ), "ipf", 0, this,
-                                      SLOT( slotAddPageFooter() ), actionCollection(), "pfooter" );
-    sectionsDetailHeader = new KAction( i18n( "Detail Header" ), "idh", 0, this,
-                                        SLOT( slotAddDetailHeader() ), actionCollection(), "dheader" );
-    sectionsDetail = new KAction( i18n( "Detail" ), "id", 0, this,
-                                  SLOT( slotAddDetail() ), actionCollection(), "detail" );
-    sectionsDetailFooter = new KAction( i18n( "Detail Footer" ), "idf", 0, this,
-                                        SLOT( slotAddDetailFooter() ), actionCollection(), "dfooter" );
+    sectionsReportHeader = new KAction(KIcon("irh"),  i18n( "Report Header" ), actionCollection(), "rheader" );
+    connect(sectionsReportHeader, SIGNAL(triggered(bool) ), SLOT( slotAddReportHeader() ));
+    sectionsReportFooter = new KAction(KIcon("irf"),  i18n( "Report Footer" ), actionCollection(), "rfooter" );
+    connect(sectionsReportFooter, SIGNAL(triggered(bool) ), SLOT( slotAddReportFooter() ));
+    sectionsPageHeader = new KAction(KIcon("iph"),  i18n( "Page Header" ), actionCollection(), "pheader" );
+    connect(sectionsPageHeader, SIGNAL(triggered(bool) ), SLOT( slotAddPageHeader() ));
+    sectionsPageFooter = new KAction(KIcon("ipf"),  i18n( "Page Footer" ), actionCollection(), "pfooter" );
+    connect(sectionsPageFooter, SIGNAL(triggered(bool) ), SLOT( slotAddPageFooter() ));
+    sectionsDetailHeader = new KAction(KIcon("idh"),  i18n( "Detail Header" ), actionCollection(), "dheader" );
+    connect(sectionsDetailHeader, SIGNAL(triggered(bool) ), SLOT( slotAddDetailHeader() ));
+    sectionsDetail = new KAction(KIcon("id"),  i18n( "Detail" ), actionCollection(), "detail" );
+    connect(sectionsDetail, SIGNAL(triggered(bool) ), SLOT( slotAddDetail() ));
+    sectionsDetailFooter = new KAction(KIcon("idf"),  i18n( "Detail Footer" ), actionCollection(), "dfooter" );
+    connect(sectionsDetailFooter, SIGNAL(triggered(bool) ), SLOT( slotAddDetailFooter() ));
 
     itemsNothing = new KToggleAction( i18n( "Clear Selection" ), "frame_edit", 0, this,
                                      SLOT( slotAddItemNothing() ), actionCollection(), "nothing" );

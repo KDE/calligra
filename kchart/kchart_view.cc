@@ -78,17 +78,12 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 		       this, SLOT( extraCreateTemplate() ),
 		       actionCollection(), "extra_template" );
 
-    m_wizard = new KAction( i18n("Customize with &Wizard..."),
-                            "wizard", 0,
-                            this, SLOT( wizard() ),
-                            actionCollection(), "wizard");
-    m_edit = new KAction( i18n("Edit &Data..."), "edit", 0,
-                          this, SLOT( editData() ),
-                          actionCollection(), "editdata");
-    m_config = new KAction( i18n( "&Chart..." ), "configure", 0,
-
-                            this, SLOT( slotConfig() ),
-                            actionCollection(), "config" );
+    m_wizard = new KAction(KIcon("wizard"),  i18n("Customize with &Wizard..."), actionCollection(), "wizard");
+    connect(m_wizard, SIGNAL(triggered(bool) ), SLOT( wizard() ));
+    m_edit = new KAction(KIcon("edit"),  i18n("Edit &Data..."), actionCollection(), "editdata");
+    connect(m_edit, SIGNAL(triggered(bool) ), SLOT( editData() ));
+    m_config = new KAction(KIcon("configure"),  i18n( "&Chart..." ), actionCollection(), "config" );
+    connect(m_config, SIGNAL(triggered(bool) ), SLOT( slotConfig() ));
 
     // One KToggleAction per chart type
     m_chartbars = new KToggleAction( i18n("&Bar"), "chart_bar_3d", 0, this,
