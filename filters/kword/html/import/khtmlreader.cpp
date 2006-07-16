@@ -271,44 +271,6 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 	return true;
 }
 
-
-
-void KHTMLReader::parseStyle(DOM::Element e) {
-  // styles are broken broken broken broken broken broken.
-  //FIXME: wait until getComputedStyle is more than
-  // 'return 0' in khtml
-  kDebug(30503) << "entering parseStyle" << endl;
-     DOM::CSSStyleDeclaration s1=e.style();
-     DOM::Document doc=_html->document();
-     DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
-
-     kDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
-     if ( s1.getPropertyValue("font-weight").string() == "bolder" )
-     {
-	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-     }
-     if ( s1.getPropertyValue("font-weight").string() == "bold" )
-     {
-	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-     }
-     /*if (DOM::PROPV("font-weight") == "bolder")
-	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-     if (PROPV("font-weight") == "bold")
-	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-     */
-/*
-     // debugging code.
-     kDebug(30503) << "e.style()" << endl;
-     for (unsigned int i=0;i<s1.length();i++) {
-        kDebug(30503) << QString("%1: %2").arg(s1.item(i).string()).arg(s1.getPropertyValue(s1.item(i)).string()) << endl;
-     }
-     kDebug(30503) << "override style" << endl;
-     for (unsigned int i=0;i<s2.length();i++) {
-        kDebug(30503) << QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string()) << endl;
-     }
-*/
-}
-
 void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 
 	QDomElement qf=state()->format;
@@ -343,6 +305,58 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 		int currdepth=(_writer->getLayoutAttribute(state()->paragraph,"COUNTER","depth")).toInt();
 		_writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(currdepth+1));
 	}
+}
+
+void KHTMLReader::parseStyle(DOM::Element e) {
+  // styles are broken broken broken broken broken broken.
+  //FIXME: wait until getComputedStyle is more than
+  // 'return 0' in khtml
+  kDebug(30503) << "entering parseStyle" << endl;
+     DOM::CSSStyleDeclaration s1=e.style();
+     DOM::Document doc=_html->document();
+     DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
+
+     kDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
+     if ( s1.getPropertyValue("font-weight").string() == "bolder" )
+     {
+	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+     }
+     if ( s1.getPropertyValue("font-weight").string() == "bold" )
+     {
+	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+     }
+
+     // process e.g. <style="color: #ffffff">
+       if ( s1.getPropertyValue("color").string() != QString() )
+       {
+         QColor c=parsecolor(s1.getPropertyValue("color").string());
+         char* ch=new char[64];
+         snprintf(ch,64,"%i",c.red());
+         _writer->formatAttribute(state()->paragraph,"COLOR","red",QString("%1").arg(ch));
+         snprintf(ch,64,"%i",c.green());
+         _writer->formatAttribute(state()->paragraph,"COLOR","green",QString("%1").arg(ch));
+         snprintf(ch,64,"%i",c.blue());
+         _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString("%1").arg(ch));
+         delete [] ch;
+       }
+     // processed.
+
+     /*if (DOM::PROPV("font-weight") == "bolder")
+	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+     if (PROPV("font-weight") == "bold")
+	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+     */
+/*
+     // debugging code.
+     kDebug(30503) << "e.style()" << endl;
+     for (unsigned int i=0;i<s1.length();i++) {
+        kDebug(30503) << QString("%1: %2").arg(s1.item(i).string()).arg(s1.getPropertyValue(s1.item(i)).string()) << endl;
+     }
+     kDebug(30503) << "override style" << endl;
+     for (unsigned int i=0;i<s2.length();i++) {
+        kDebug(30503) << QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string()) << endl;
+     }
+*/
 }
 
 KHTMLReader::~KHTMLReader(){
