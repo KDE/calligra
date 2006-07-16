@@ -29,10 +29,13 @@
 #include <KoMainWindow.h>
 #include <KoDom.h>
 #include <KoXmlNS.h>
+#include <KoShape.h>
+#include <KoShapeManager.h>
 
 #include "KivioView.h"
 #include "KivioMasterPage.h"
 #include "KivioPage.h"
+#include "KivioAbstractPage.h"
 
 KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
   : KoDocument(parentWidget, parent, singleViewMode)
@@ -93,13 +96,12 @@ bool KivioDocument::loadOasis(const QDomDocument& doc, KoOasisStyles& oasisStyle
 
   QDomElement body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
 
-  if ( body.isNull() )
-  {
+  if(body.isNull()) {
     kError(43000) << "No office:drawing found!" << endl;
     QDomElement childElem;
     QString localName;
 
-    forEachElement( childElem, realBody ) {
+    forEachElement(childElem, realBody) {
       localName = childElem.localName();
     }
 
@@ -161,7 +163,7 @@ void KivioDocument::addShell(KoMainWindow* shell)
 
 KivioMasterPage* KivioDocument::addMasterPage(const QString& title)
 {
-  KivioMasterPage* masterPage = new KivioMasterPage(this, title);
+  KivioMasterPage* masterPage = new KivioMasterPage(title);
   m_masterPageList.append(masterPage);
 
   return masterPage;
@@ -187,6 +189,64 @@ KivioMasterPage* KivioDocument::masterPageByIndex(int index)
 KivioPage* KivioDocument::pageByIndex(int index)
 {
   return m_pageList.at(index);
+}
+
+void KivioDocument::addShape(KivioAbstractPage* page, KoShape* shape)
+{
+  if(page == 0 || shape == 0) {
+    return;
+  }
+
+  page->addShape(shape);
+
+  KoView* view = 0;
+  KivioView* kivioView = 0;
+  KivioPage* kivioPage = 0;
+
+  foreach(view, views()) {
+    kivioView = qobject_cast<KivioView*>(view);
+
+    if(kivioView && kivioView->activePage()) {
+      if(kivioView->activePage() == page) {
+        kivioView->shapeManager()->add(shape);
+      } else {
+        kivioPage = dynamic_cast<KivioPage*>(kivioView->activePage());
+
+        if(kivioPage && (kivioPage->masterPage() == page)) {
+          kivioView->shapeManager()->add(shape);
+        }
+      }
+    }
+  }
+}
+
+void KivioDocument::removeShape(KivioAbstractPage* page, KoShape* shape)
+{
+  if(page == 0 || shape == 0) {
+    return;
+  }
+
+  page->removeShape(shape);
+
+  KoView* view = 0;
+  KivioView* kivioView = 0;
+  KivioPage* kivioPage = 0;
+
+  foreach(view, views()) {
+    kivioView = qobject_cast<KivioView*>(view);
+
+    if(kivioView && kivioView->activePage()) {
+      if(kivioView->activePage() == page) {
+        kivioView->shapeManager()->remove(shape);
+      } else {
+        kivioPage = dynamic_cast<KivioPage*>(kivioView->activePage());
+
+        if(kivioPage && (kivioPage->masterPage() == page)) {
+          kivioView->shapeManager()->remove(shape);
+        }
+      }
+    }
+  }
 }
 
 #include "KivioDocument.moc"

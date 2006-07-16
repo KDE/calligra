@@ -21,11 +21,16 @@
 #define KIVIOVIEW_H
 
 #include <KoView.h>
+#include <KoShapeControllerBase.h>
+
+class KoShapeManager;
+class KoCanvasController;
 
 class KivioCanvas;
 class KivioDocument;
+class KivioAbstractPage;
 
-class KivioView : public KoView
+class KivioView : public KoView, public KoShapeControllerBase
 {
   Q_OBJECT
 
@@ -42,6 +47,21 @@ class KivioView : public KoView
 
     virtual void updateReadWrite(bool readwrite);
 
+    /// The page currently shown on the canvas
+    KivioAbstractPage* activePage() const;
+
+    /// The shape manager that handles drawing of the shapes on the canvas
+    KoShapeManager* shapeManager() const;
+
+    /// Adds @p shape to the document and updates all views
+    virtual void addShape(KoShape* shape);
+    /// Removes @p shape from the document and updates all views
+    virtual void removeShape(KoShape* shape);
+
+  public slots:
+    /// Change the page that will be shown on the canvas
+    void setActivePage(KivioAbstractPage* page);
+
   protected:
     /// Creates and initializes the GUI.
     void initGUI();
@@ -49,6 +69,9 @@ class KivioView : public KoView
   private:
     KivioDocument* m_document;
     KivioCanvas* m_canvas;
+    KoCanvasController* m_canvasController;
+
+    KivioAbstractPage* m_activePage;
 };
 
 #endif

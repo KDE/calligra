@@ -19,8 +19,11 @@
 
 #include "KivioAbstractPage.h"
 
-KivioAbstractPage::KivioAbstractPage(KivioDocument* document, const QString& title)
-  : KoShapeControllerBase(), m_document(document)
+#include <KoShape.h>
+
+#include "KivioDocument.h"
+
+KivioAbstractPage::KivioAbstractPage(const QString& title)
 {
   setTitle(title);
 }
@@ -45,10 +48,23 @@ QString KivioAbstractPage::title() const
 
 void KivioAbstractPage::addShape(KoShape* shape)
 {
+  if(shape == 0) {
+    return;
+  }
+
   m_shapeList.append(shape);
 }
 
 void KivioAbstractPage::removeShape(KoShape* shape)
 {
+  if(shape == 0) {
+    return;
+  }
+
   m_shapeList.removeAll(shape);
+}
+
+QList<KoShape*> KivioAbstractPage::shapeList() const
+{
+  return m_shapeList;
 }

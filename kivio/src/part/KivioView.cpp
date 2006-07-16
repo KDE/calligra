@@ -23,13 +23,18 @@
 #include <QScrollBar>
 
 #include <KoCanvasController.h>
+#include <KoShapeManager.h>
+#include <KoToolManager.h>
+#include <KoToolBox.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
+#include "KivioAbstractPage.h"
 
 KivioView::KivioView(KivioDocument* document, QWidget* parent, const char* name)
   : KoView(document, parent, name), m_document(document)
 {
+  m_activePage = 0;
   initGUI();
 }
 
@@ -66,10 +71,43 @@ void KivioView::initGUI()
 
   m_canvas = new KivioCanvas(this);
 
-  KoCanvasController* canvasController = new KoCanvasController(this);
-  canvasController->setCanvas(m_canvas);
+  m_canvasController = new KoCanvasController(this);
+  m_canvasController->setCanvas(m_canvas);
 
-  layout->addWidget(canvasController, 0, 0);
+  layout->addWidget(m_canvasController, 0, 0);
+
+  KoToolManager::instance()->addControllers(m_canvasController, this);
+}
+
+KivioAbstractPage* KivioView::activePage() const
+{
+  return m_activePage;
+}
+
+KoShapeManager* KivioView::shapeManager() const
+{
+  return m_canvas->shapeManager();
+}
+
+void KivioView::setActivePage(KivioAbstractPage* page)
+{
+  if(!page) {
+    return;
+  }
+
+  m_activePage = page;
+  shapeManager()->setShapes(page->shapeList());
+  m_canvas->updateSize();
+}
+
+void KivioView::addShape(KoShape* shape)
+{
+  m_document->addShape(m_activePage, shape);
+}
+
+void KivioView::removeShape(KoShape* shape)
+{
+  m_document->removeShape(m_activePage, shape);
 }
 
 #include "KivioView.moc"

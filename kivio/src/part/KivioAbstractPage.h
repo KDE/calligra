@@ -23,19 +23,17 @@
 #include <QString>
 #include <QList>
 
-#include <KoShapeControllerBase.h>
-
 class KoPageLayout;
+class KoShape;
+
 class KivioDocument;
 
 /** Base class for KivioPage and KivioMasterPage */
-class KivioAbstractPage : public KoShapeControllerBase
+class KivioAbstractPage
 {
   public:
-    KivioAbstractPage(KivioDocument* document, const QString& title);
+    KivioAbstractPage(const QString& title);
     virtual ~KivioAbstractPage();
-
-    KivioDocument* document() const { return m_document; }
 
     /// Change the page title
     void setTitle(const QString& newTitle);
@@ -47,8 +45,9 @@ class KivioAbstractPage : public KoShapeControllerBase
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
 
+    QList<KoShape*> shapeList() const;
+
   private:
-    KivioDocument* m_document;
     QString m_title;
     QList<KoShape*> m_shapeList;
 };

@@ -37,9 +37,11 @@ class KoOasisStyle;
 class KoOasisContext;
 class KoXmlWriter;
 class KoView;
+class KoShape;
 
 class KivioMasterPage;
 class KivioPage;
+class KivioAbstractPage;
 
 class KivioDocument : public KoDocument
 {
@@ -90,6 +92,12 @@ class KivioDocument : public KoDocument
      * @return Pointer to page if @p index exists in the list else null
      */
     KivioPage* pageByIndex(int index);
+
+    /// Adds @p shape to @p page and updates the views
+    void addShape(KivioAbstractPage* page, KoShape* shape);
+
+    /// Removes @p shape from @p page and updates the views
+    void removeShape(KivioAbstractPage* page, KoShape* shape);
 
   public slots:
     /// This is called when the last saved state of the document has been restored

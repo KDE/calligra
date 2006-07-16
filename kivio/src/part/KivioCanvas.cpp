@@ -26,14 +26,17 @@
 
 #include <KoZoomHandler.h>
 #include <KoPageLayout.h>
+#include <KoShapeManager.h>
 
 #include "KivioView.h"
 #include "KivioDocument.h"
+#include "KivioAbstractPage.h"
 
 KivioCanvas::KivioCanvas(KivioView* parent)
-  : QWidget(parent)
+  : QWidget(parent), m_view(parent)
 {
   m_zoomHandler = new KoZoomHandler;
+  m_shapeManager = new KoShapeManager(this);
 
   setMouseTracking(true);
 
@@ -71,8 +74,7 @@ void KivioCanvas::addCommand(KCommand* command, bool execute)
 
 KoShapeManager* KivioCanvas::shapeManager() const
 {
-  // TODO Implement this
-  return 0;
+  return m_shapeManager;
 }
 
 void KivioCanvas::updateCanvas(const QRectF& rc)
@@ -94,10 +96,15 @@ QWidget* KivioCanvas::canvasWidget()
 
 void KivioCanvas::updateSize()
 {
-  // TODO Use the layout of the actual page
-  KoPageLayout pageLayout = KoPageLayout::standardLayout();
-  int width = qRound(m_zoomHandler->zoomItX(pageLayout.ptWidth));
-  int height = qRound(m_zoomHandler->zoomItX(pageLayout.ptHeight));
+  int width = 0;
+  int height = 0;
+
+  if(m_view->activePage()) {
+    KoPageLayout pageLayout = m_view->activePage()->pageLayout();
+    width = qRound(m_zoomHandler->zoomItX(pageLayout.ptWidth));
+    height = qRound(m_zoomHandler->zoomItX(pageLayout.ptHeight));
+  }
+
   setMinimumSize(width, height);
 }
 

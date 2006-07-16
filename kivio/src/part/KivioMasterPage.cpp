@@ -19,8 +19,8 @@
 
 #include "KivioMasterPage.h"
 
-KivioMasterPage::KivioMasterPage(KivioDocument* document, const QString& title)
-  : KivioAbstractPage(document, title)
+KivioMasterPage::KivioMasterPage(const QString& title)
+  : KivioAbstractPage(title)
 {
   m_pageLayout = KoPageLayout::standardLayout();
 }

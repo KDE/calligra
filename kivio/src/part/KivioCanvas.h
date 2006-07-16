@@ -29,9 +29,12 @@
 #include <KoUnit.h>
 
 class QPaintEvent;
+
 class KoZoomHandler;
-class KivioView;
 class KoTool;
+class KoShapeManager;
+
+class KivioView;
 
 class KivioCanvas : public QWidget, public KoCanvasBase
 {
@@ -119,6 +122,8 @@ class KivioCanvas : public QWidget, public KoCanvasBase
     KoTool *m_tool;
 
     KoZoomHandler* m_zoomHandler;
+
+    KoShapeManager* m_shapeManager;
 };
 
 #endif

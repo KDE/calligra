@@ -24,7 +24,7 @@
 #include "KivioMasterPage.h"
 
 KivioPage::KivioPage(KivioMasterPage* master, const QString& title)
-  : KivioAbstractPage(master->document(), title), m_masterPage(master)
+  : KivioAbstractPage(title), m_masterPage(master)
 {
 }
 
