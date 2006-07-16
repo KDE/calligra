@@ -37,6 +37,7 @@
 #include <QPushButton>
 #include <qradiobutton.h>
 #include <q3valuelist.h>
+#include <QWhatsThis>
 
 //Added by qt3to4:
 #include <Q3GridLayout>
