@@ -465,7 +465,18 @@ void KHTMLReader::parseStyle(DOM::Element e) {
          _writer->formatAttribute(state()->paragraph,"COLOR","green",QString::number(c.green()));
          _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString::number(c.blue()));
        }
-     // processed.
+     // done
+     // process e.g. <style="font-size: 42">
+       if ( s1.getPropertyValue("font-size").string() != QString() )
+       {
+         QString size=s1.getPropertyValue("font-size").string();
+         if (size.endsWith("pt"))
+         {
+           size=size.left(size.length()-2);
+         }
+         _writer->formatAttribute(state()->paragraph,"SIZE","value",size);
+       }
+     // done
 
      /*if (DOM::PROPV("font-weight") == "bolder")
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
