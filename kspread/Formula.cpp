@@ -1017,8 +1017,6 @@ void Formula::compile( const Tokens& tokens ) const
         // conditions: precedence of op >= precedence of token
         // action: push (op) to result
         // e.g. "A * B" becomes 'A' if token is operator '+'
-        // exception: for caret (power operator), if op is another caret
-        // then the rule doesn't apply, e.g. "2^3^2" is evaluated as "2^(3^2)"
         if( !ruleFound )
         if( syntaxStack.itemCount() >= 3 )
         {
@@ -1029,7 +1027,6 @@ void Formula::compile( const Tokens& tokens ) const
           if( !b.isOperator() )
           if( op.isOperator() )
           if( token.asOperator() != Token::LeftPar )
-          if( token.asOperator() != Token::Caret )
           if( opPrecedence( op.asOperator() ) >= opPrecedence( token.asOperator() ) )
           {
             ruleFound = true;
