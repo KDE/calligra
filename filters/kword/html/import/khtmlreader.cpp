@@ -461,14 +461,9 @@ void KHTMLReader::parseStyle(DOM::Element e) {
        if ( s1.getPropertyValue("color").string() != QString() )
        {
          QColor c=parsecolor(s1.getPropertyValue("color").string());
-         char* ch=new char[64];
-         snprintf(ch,64,"%i",c.red());
-         _writer->formatAttribute(state()->paragraph,"COLOR","red",QString("%1").arg(ch));
-         snprintf(ch,64,"%i",c.green());
-         _writer->formatAttribute(state()->paragraph,"COLOR","green",QString("%1").arg(ch));
-         snprintf(ch,64,"%i",c.blue());
-         _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString("%1").arg(ch));
-         delete [] ch;
+         _writer->formatAttribute(state()->paragraph,"COLOR","red",QString::number(c.red()));
+         _writer->formatAttribute(state()->paragraph,"COLOR","green",QString::number(c.green()));
+         _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString::number(c.blue()));
        }
      // processed.
 
