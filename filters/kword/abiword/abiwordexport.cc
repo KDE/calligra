@@ -156,7 +156,7 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         << " (in AbiWordWorker::doOpenFile)" << endl;
     //Find the last extension
     QString strExt;
-    const int result=filenameOut.findRev('.');
+    const int result=filenameOut.lastIndexOf('.');
     if (result>=0)
     {
         strExt=filenameOut.mid(result);
@@ -201,7 +201,7 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
     m_streamOut=new QTextStream(m_ioDevice);
 
     // We only export in UTF-8 (are there AbiWord ports that cannot read UTF-8? Be careful SVG uses UTF-8 too!)
-    m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
+    m_streamOut->setCodec( QTextCodec::codecForName("utf-8") );
     return true;
 }
 
@@ -255,8 +255,8 @@ void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& 
 
     QByteArray image;
 
-    QString strExtension(koStoreName.lower());
-    const int result=koStoreName.findRev(".");
+    QString strExtension(koStoreName.toLower());
+    const int result=koStoreName.lastIndexOf(".");
     if (result>=0)
     {
         strExtension=koStoreName.mid(result+1);
@@ -308,7 +308,7 @@ bool AbiWordWorker::doCloseDocument(void)
         for (it=m_mapPictureData.begin(); it!=end; ++it)
         {
             // Warning: do not mix up KWord's key and the iterator's key!
-            writePictureData(it.key(),it.data().filename());
+            writePictureData(it.key(),it.value().filename());
         }
 
         *m_streamOut << "</data>\n";
@@ -546,7 +546,7 @@ void AbiWordWorker::writeAbiProps (const TextFormatting& formatLayout, const Tex
     QString abiprops=textFormatToAbiProps(formatLayout,format,false);
 
     // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
-    const int result=abiprops.findRev(";");
+    const int result=abiprops.lastIndexOf(';');
 
     if (result>=0)
     {
@@ -569,7 +569,7 @@ void AbiWordWorker::processNormalText ( const QString &paraText,
 
     // Replace line feeds by line breaks
     int pos;
-    while ((pos=partialText.find(QChar(10)))>-1)
+    while ((pos=partialText.indexOf(QChar(10)))>=0)
     {
         partialText.replace(pos,1,"<br/>");
     }
@@ -907,7 +907,7 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
     {
         // Find the last semi-comma
         // Note: as in CSS2, semi-commas only separates instructions (like in PASCAL) and do not terminate them (like in C)
-        const int result=props.findRev(";");
+        const int result=props.lastIndexOf(';');
         if (result>=0)
         {
             // Remove the last semi-comma and the space thereafter
@@ -959,7 +959,7 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
 
     QString abiprops=layoutToCss(layout,layout,true);
 
-    const int result=abiprops.findRev(";");
+    const int result=abiprops.lastIndexOf(';');
     if (result>=0)
     {
         // Remove the last semi-comma and the space thereafter
