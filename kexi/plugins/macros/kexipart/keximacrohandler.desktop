@@ -6,11 +6,13 @@ ServiceTypes=Kexi/Handler
 GenericName=Macros
 GenericName[da]=Makroer
 GenericName[et]=Makrod
+GenericName[it]=Macro
 GenericName[zh_TW]=巨集
 
 Name=Macros
 Name[da]=Makroer
 Name[et]=Makrod
+Name[it]=Macro
 Name[zh_TW]=巨集
 
 X-KDE-Library=kexihandler_macro
