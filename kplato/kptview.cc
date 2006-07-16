@@ -245,15 +245,15 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     actionCalculateExpected = new KAction(i18n("Expected"), actionCollection(), "project_calculate_expected");
     connect(actionCalculateExpected, SIGNAL(triggered(bool) ), SLOT(slotProjectCalculateExpected()));
-    actionCalculate->insert(actionCalculateExpected);
+    actionCalculate->addAction(actionCalculateExpected);
 
     actionCalculateOptimistic = new KAction(i18n("Optimistic"), actionCollection(), "project_calculate_optimistic");
     connect(actionCalculateOptimistic, SIGNAL(triggered(bool) ), SLOT(slotProjectCalculateOptimistic()));
-    actionCalculate->insert(actionCalculateOptimistic);
+    actionCalculate->addAction(actionCalculateOptimistic);
 
     actionCalculatePessimistic = new KAction(i18n("Pessimistic"), actionCollection(), "project_calculate_pessimistic");
     connect(actionCalculatePessimistic, SIGNAL(triggered(bool) ), SLOT(slotProjectCalculatePessimistic()));
-    actionCalculate->insert(actionCalculatePessimistic);
+    actionCalculate->addAction(actionCalculatePessimistic);
 
 /*    // ------ Reports
     actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");

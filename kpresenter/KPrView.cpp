@@ -2520,12 +2520,12 @@ void KPrView::setupActions()
         act->setActionGroup( counterGroup);
         // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
         if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
-            actionFormatBullet->insert( act );
-            actionFormatNumber->insert( act );
+            actionFormatBullet->addAction( act );
+            actionFormatNumber->addAction( act );
         } else if ( styleIt.current()->isBullet() )
-            actionFormatBullet->insert( act );
+            actionFormatBullet->addAction( act );
         else
-            actionFormatNumber->insert( act );
+            actionFormatNumber->addAction( act );
     }
     actionTextDepthPlus = new KAction(KIcon(QApplication::isRightToLeft() ?"format_decreaseindent" : "format_increaseindent"),  i18n( "&Increase Depth" ), actionCollection(), "text_depthPlus" );
     connect(actionTextDepthPlus, SIGNAL(triggered(bool) ), SLOT( textDepthPlus() ));
@@ -2807,7 +2807,7 @@ void KPrView::setupActions()
 
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
                                           actionCollection(), "insert_custom" );
-    actionInsertVariable->insert(actionInsertCustom);
+    actionInsertVariable->addAction(actionInsertCustom);
     refreshCustomMenu();
 
     addVariableActions( VT_PGNUM, KoPageVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
@@ -2816,7 +2816,7 @@ void KPrView::setupActions()
     actionInsertVariable->popupMenu()->insertSeparator();
     actionRefreshAllVariable = new KAction( i18n( "&Refresh All Variables" ), actionCollection(), "refresh_all_variable" );
     connect(actionRefreshAllVariable, SIGNAL(triggered(bool)), SLOT( refreshAllVariable() ));
-    actionInsertVariable->insert(actionRefreshAllVariable);
+    actionInsertVariable->addAction(actionRefreshAllVariable);
 
     actionIncreaseFontSize = new KAction(KIcon("fontsizeup"),  i18n("Increase Font Size"), actionCollection(), "increaseFontSize" );
     connect(actionIncreaseFontSize, SIGNAL(triggered(bool) ), SLOT( increaseFontSize() ));
@@ -3544,35 +3544,35 @@ void KPrView::setupPopupMenus()
     m_arrangeObjectsPopup->setCheckable(false);
 
     // create insert-line popup
-    actionToolsLinePopup->insert(actionToolsLine);
-    actionToolsLinePopup->insert(actionToolsFreehand);
-    actionToolsLinePopup->insert(actionToolsPolyline);
-    actionToolsLinePopup->insert(actionToolsCubicBezierCurve);
-    actionToolsLinePopup->insert(actionToolsQuadricBezierCurve);
+    actionToolsLinePopup->addAction(actionToolsLine);
+    actionToolsLinePopup->addAction(actionToolsFreehand);
+    actionToolsLinePopup->addAction(actionToolsPolyline);
+    actionToolsLinePopup->addAction(actionToolsCubicBezierCurve);
+    actionToolsLinePopup->addAction(actionToolsQuadricBezierCurve);
 
     // create insert-shape popup
-    actionToolsShapePopup->insert(actionToolsRectangle);
-    actionToolsShapePopup->insert(actionToolsCircleOrEllipse);
-    actionToolsShapePopup->insert(actionToolsPie);
-    actionToolsShapePopup->insert(actionToolsConvexOrConcavePolygon);
+    actionToolsShapePopup->addAction(actionToolsRectangle);
+    actionToolsShapePopup->addAction(actionToolsCircleOrEllipse);
+    actionToolsShapePopup->addAction(actionToolsPie);
+    actionToolsShapePopup->addAction(actionToolsConvexOrConcavePolygon);
 
     // create insert-closed-line popup
-    actionToolsClosedLinePopup->insert(actionToolsClosedFreehand);
-    actionToolsClosedLinePopup->insert(actionToolsClosedPolyline);
-    actionToolsClosedLinePopup->insert(actionToolsClosedQuadricBezierCurve);
-    actionToolsClosedLinePopup->insert(actionToolsClosedCubicBezierCurve);
+    actionToolsClosedLinePopup->addAction(actionToolsClosedFreehand);
+    actionToolsClosedLinePopup->addAction(actionToolsClosedPolyline);
+    actionToolsClosedLinePopup->addAction(actionToolsClosedQuadricBezierCurve);
+    actionToolsClosedLinePopup->addAction(actionToolsClosedCubicBezierCurve);
 
-    actionExtraAlignObjsPopup->insert( actionExtraAlignObjLeft );
-    actionExtraAlignObjsPopup->insert( actionExtraAlignObjCenterV );
-    actionExtraAlignObjsPopup->insert( actionExtraAlignObjRight );
-    actionExtraAlignObjsPopup->insert( actionExtraAlignObjTop );
-    actionExtraAlignObjsPopup->insert( actionExtraAlignObjCenterH );
-    actionExtraAlignObjsPopup->insert( actionExtraAlignObjBottom );
+    actionExtraAlignObjsPopup->addAction( actionExtraAlignObjLeft );
+    actionExtraAlignObjsPopup->addAction( actionExtraAlignObjCenterV );
+    actionExtraAlignObjsPopup->addAction( actionExtraAlignObjRight );
+    actionExtraAlignObjsPopup->addAction( actionExtraAlignObjTop );
+    actionExtraAlignObjsPopup->addAction( actionExtraAlignObjCenterH );
+    actionExtraAlignObjsPopup->addAction( actionExtraAlignObjBottom );
 
-    actionExtraArrangePopup->insert( actionExtraLower );
-    actionExtraArrangePopup->insert( actionExtraSendBackward );
-    actionExtraArrangePopup->insert( actionExtraBringForward );
-    actionExtraArrangePopup->insert( actionExtraRaise );
+    actionExtraArrangePopup->addAction( actionExtraLower );
+    actionExtraArrangePopup->addAction( actionExtraSendBackward );
+    actionExtraArrangePopup->addAction( actionExtraBringForward );
+    actionExtraArrangePopup->addAction( actionExtraRaise );
 }
 
 void KPrView::setupScrollbars()
@@ -4659,7 +4659,7 @@ void KPrView::addVariableActions( int type, const QStringList & texts,
     if ( texts.count() > 1 && !menuText.isEmpty() )
     {
         KActionMenu * subMenu = new KActionMenu( actionCollection() ,menuText );
-        parentMenu->insert( subMenu );
+        parentMenu->addAction( subMenu );
         parentMenu = subMenu;
     }
     QStringList::ConstIterator it = texts.begin();
@@ -4673,7 +4673,7 @@ void KPrView::addVariableActions( int type, const QStringList & texts,
             KAction *act = new KAction( (*it), actionCollection(), "var-action" );
             connect(act, SIGNAL(triggered(bool)), SLOT( insertVariable() ));
             m_variableDefMap.insert( act, v );
-            parentMenu->insert( act );
+            parentMenu->addAction( act );
         }
     }
 }
@@ -4691,7 +4691,7 @@ void KPrView::refreshCustomMenu()
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
                                           actionCollection(), "insert_custom" );
 
-    actionInsertVariable->insert(actionInsertCustom, 0);
+    actionInsertVariable->addAction(actionInsertCustom);
 
 
     actionInsertCustom->popupMenu()->clear();
@@ -4715,7 +4715,7 @@ void KPrView::refreshCustomMenu()
                 act->setShortcut(shortCuts[varName]);
 #warning "kde4 port it"
                 //act->setGroup( "custom-variable-action" );
-                actionInsertCustom->insert( act );
+                actionInsertCustom->addAction( act );
                 i++;
             }
         }
@@ -4728,13 +4728,13 @@ void KPrView::refreshCustomMenu()
     connect(act, SIGNAL(triggered(bool)), SLOT( insertNewCustomVariable() ));
 #warning "kde4: port it"
 	//act->setGroup( "custom-variable-action" );
-    actionInsertCustom->insert( act );
+    actionInsertCustom->addAction( act );
 
     actionInsertCustom->popupMenu()->insertSeparator();
 
     actionEditCustomVars->setEnabled(state);
     actionEditCustomVarsEdit->setEnabled( state );
-    actionInsertCustom->insert( actionEditCustomVarsEdit );
+    actionInsertCustom->addAction( actionEditCustomVarsEdit );
 }
 
 void KPrView::insertCustomVariable()
@@ -5321,7 +5321,7 @@ void KPrView::updateStyleList()
             act->setActionGroup(styleGroup);
 
 			act->setToolTip( i18n( "Apply a paragraph style" ) );
-            actionFormatStyleMenu->insert( act );
+            actionFormatStyleMenu->addAction( act );
         }
     }
     bool isText=!m_canvas->applicableTextInterfaces().isEmpty();
