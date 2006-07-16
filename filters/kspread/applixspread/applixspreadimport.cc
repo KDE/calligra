@@ -165,7 +165,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
             int ok = true;
             do
 	    {
-              pos = in.at ();
+              pos = in.pos ();
               mystrn = nextLine( stream );
               if (mystrn[0] == ' ')
 	      {
@@ -174,7 +174,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
 	      }
               else
 	      {
-                in.at (pos);
+                in.seek (pos);
                 ok = false;
 	      }
 	    }
@@ -184,7 +184,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
 
 
           // Search for ')'
-          pos = mystr.find (')');
+          pos = mystr.indexOf (')');
           typestr = mystr.left (pos);
 
 
@@ -193,7 +193,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           // alllenght = alllenght - pos - 1;
 
           // Search for ':'
-          pos = mystr.find (':');
+          pos = mystr.indexOf (':');
 
           // Copy cellnumber information
           cellnostr = mystr.left (pos);
@@ -204,7 +204,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
 
 
           // Split Table and Cell Number
-          pos = cellnostr.find ('!');
+          pos = cellnostr.indexOf ('!');
 
           // Copy tabnumber information
           tabnostr = cellnostr.left (pos);
@@ -218,7 +218,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
 
 
 
-          pos = cellnostr.find (QRegExp ("[0-9]"));
+          pos = cellnostr.indexOf (QRegExp ("[0-9]"));
           kDebug()<<" findpos :"<<pos<<endl;
 
 
@@ -230,7 +230,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           irow   = rowstr.toInt(&ok);
 
           kDebug()<<" findpos :"<< rowstr<<" "<<irow<<endl;
-          sscanf (cellnostr.latin1(), "%299s%d",tmp, &bla);
+          sscanf (cellnostr.toLatin1(), "%299s%d",tmp, &bla);
           sprintf (tmp1, "%d", irow);
           leni = strlen (tmp1);
 	  QString cellcolstr;
@@ -243,7 +243,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           icol = translateColumnNumber (cellcolstr);
 
 
-	  //  sscanf (cellnostr.latin1(), "%c%d",&ccol, &irow);
+	  //  sscanf (cellnostr.toLatin1(), "%c%d",&ccol, &irow);
 
           // Transformat ascii column to int column
 	  //  icol = ccol - 64;
@@ -268,7 +268,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
             // initialize
             foundSpecialCharakter = false;
 
-            pos = mystr.find ("^");
+            pos = mystr.indexOf ("^");
 
             // is there a special character ?
             if (pos > -1 )
@@ -293,8 +293,8 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           QString typeCharStr;
           QString typeCellStr;
 
-          int pos1 = typestr.find    ("|");
-          int pos2 = typestr.findRev ("|");
+          int pos1 = typestr.indexOf    ("|");
+          int pos2 = typestr.lastIndexOf ("|");
 
 
           typeFormStr = typestr.left  (pos1);
@@ -329,7 +329,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           QStringList typeCharList;
           int bold=0, italic=0, underline=0, nn=0, fontsize=12, fontnr=-1;
 
-          typeCharList = QStringList::split (',', typeCharStr);
+          typeCharList = typeCharStr.split (',');
 
           for (QStringList::Iterator it = typeCharList.begin();
                it != typeCharList.end(); ++it )
@@ -356,17 +356,17 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
 	    }
             else if ((*it).startsWith("FG") )
 	    {
-              sscanf ((*it).latin1(), "FG%d", &fg);
+              sscanf ((*it).toLatin1(), "FG%d", &fg);
               kDebug()<<"  = Colornr "<< fg<<endl;
 	    }
             else if ((*it).startsWith("TF") )
 	    {
-              sscanf ((*it).latin1(), "TF%d", &fontnr);
+              sscanf ((*it).toLatin1(), "TF%d", &fontnr);
               kDebug()<<" = Font :"<<fontnr<<" "<<typefacetab[fontnr]<<endl;
 	    }
             else if ((*it).startsWith("P") )
 	    {
-              sscanf ((*it).latin1(), "P%d", &fontsize);
+              sscanf ((*it).toLatin1(), "P%d", &fontsize);
               kDebug()<<"   = Fontsize "<<fontsize<<endl;
 	    }
             else
@@ -385,13 +385,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           QStringList typeFormList;
           int align = 0, valign=0;
 
-          typeFormList = QStringList::split (',', typeFormStr);
+          typeFormList = typeFormStr.split (',');
           nn=0;
           for (QStringList::Iterator it = typeFormList.begin(); it != typeFormList.end(); ++it )
           {
 	    // Output
               //kDebug()<< "   Type (%2d)   >%s< ",
-              //    nn, (*it).latin1() );
+              //    nn, (*it).toLatin1() );
             nn++;
             // Grep horizontal alignment
             if      ( (*it) == "1")
@@ -445,13 +445,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           int rightbrushstyle=0, rightbrushcolor=1, rightfg_bg=1;
           int bottombrushstyle=0, bottombrushcolor=1, bottomfg_bg=1;
 
-          typeCellList = QStringList::split (',', typeCellStr);
+          typeCellList = typeCellStr.split (',');
           nn=0;
           for ( QStringList::Iterator it = typeCellList.begin(); it != typeCellList.end(); ++it )
           {
 	    // Output
             printf ("   Cell (%2d)   >%s< ",
-                    nn, (*it).latin1() );
+                    nn, (*it).toLatin1() );
             nn++;
 
 	    if ((*it)[0] == 'T')
@@ -610,7 +610,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
               if (fontnr != -1)
 	      {
                 str += "family=\"";
-                str += typefacetab[fontnr].latin1();
+                str += typefacetab[fontnr].toLatin1();
                 str += "\" ";
 	      }
               str += "weight=\"0\"";
@@ -902,7 +902,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
      if (mystr == "END TYPEFACE TABLE" ) ok = false;
      else
      {
-         //printf ("  %2d: <%s>\n", tftabCounter, mystr.latin1());
+         //printf ("  %2d: <%s>\n", tftabCounter, mystr.toLatin1());
        typefacetab.append(mystr);
        tftabCounter++;
      }
@@ -944,7 +944,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
        contcount -= 5;
 
        // Begin off interest
-       pos = mystr.find (" 0 ");
+       pos = mystr.indexOf (" 0 ");
 
        // get colorname
        colstr = mystr.left (pos);
@@ -954,12 +954,12 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
        t_mycolor *tmc = new t_mycolor;
 
        // get sub colors
-       pos = sscanf (mystr.latin1(), "0 %d %d %d %d 0",
+       pos = sscanf (mystr.toLatin1(), "0 %d %d %d %d 0",
                      &tmc->c, &tmc->m, &tmc->y, &tmc->k);
 
        printf ("  - <%-20s> <%-15s> <%3d> <%3d> <%3d> <%3d>  pos: %d\n",
-                mystr.latin1(),
-                colstr.latin1(),
+                mystr.toLatin1(),
+                colstr.toLatin1(),
                 tmc->c, tmc->m, tmc->y, tmc->k, pos);
 
        // Color transformation cmyk -> rgb
@@ -1031,17 +1031,17 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
 
           // loop
           QStringList ColumnList;
-          ColumnList = QStringList::split (' ', mystr);
+          ColumnList = mystr.split(' ');
 
           for ( QStringList::Iterator it = ColumnList.begin(); it != ColumnList.end(); ++it )
           {
 
-            sscanf ((*it).latin1(), "%c:%d", &ccolumn, &colwidth);
+            sscanf ((*it).toLatin1(), "%c:%d", &ccolumn, &colwidth);
             int len = (*it).length ();
-            int pos = (*it).find (":");
+            int pos = (*it).indexOf (":");
             (*it).remove (pos, len-pos);
 
-            printf( "     >%s<- -<%c><%d>  \n", (*it).latin1(), ccolumn, colwidth);
+            printf( "     >%s<- -<%c><%d>  \n", (*it).toLatin1(), ccolumn, colwidth);
 
             // Transformat ascii column to int column
             icolumn = translateColumnNumber (*it);
@@ -1072,11 +1072,11 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
 
          // loop
          QStringList RowList;
-         RowList = QStringList::split (' ', mystr);
+         RowList = mystr.split(' ');
 
          for ( QStringList::Iterator it = RowList.begin(); it != RowList.end(); ++it )
          {
-            sscanf ((*it).latin1(), " %d:%d",
+            sscanf ((*it).toLatin1(), " %d:%d",
                     &irow, &rowheight);
             printf ("   row: %2d   height: %2d\n", irow, rowheight);
             if (rowheight > 32768) rowheight -= 32768;
@@ -1101,8 +1101,8 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
    rc.tabname.append (tabname);
    rc.rc.append (rowcolstr);
 
-   printf ("%s %s\n", tabname.latin1(),
-                      rowcolstr.latin1());
+   printf ("%s %s\n", tabname.toLatin1(),
+                      rowcolstr.toLatin1());
 
    printf ("...done \n\n");
 }
@@ -1123,12 +1123,12 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
   int     m2=0, m3=0;
 
   // filter SH = Brushstyle Background
-  pos = it.find ("SH");
+  pos = it.indexOf ("SH");
   if (pos > -1)
   {
      tmpstr = it;
      if (pos > 0)   tmpstr.remove(0, pos);
-     pos = sscanf (tmpstr.latin1(), "SH%d",
+     pos = sscanf (tmpstr.toLatin1(), "SH%d",
                    style);
 
      printf ("style: %d(%d)  ",
@@ -1137,12 +1137,12 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
 
 
   // filter FG = FGCOLOR
-  pos = it.find ("FG");
+  pos = it.indexOf ("FG");
   if (pos > -1)
   {
     tmpstr = it;
     if (pos > 0)   tmpstr.remove(0, pos);
-    pos = sscanf (tmpstr.latin1(), "FG%d",
+    pos = sscanf (tmpstr.toLatin1(), "FG%d",
                   fgcolor);
     printf ("fg: %d(%d)  ",
             *fgcolor, pos);
@@ -1151,12 +1151,12 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
 
 
   // filter BG = BGCOLOR
-  pos = it.find ("BG");
+  pos = it.indexOf ("BG");
   if (pos > -1)
   {
     tmpstr = it;
     if (pos > 0)   tmpstr.remove(0, pos);
-    pos = sscanf (tmpstr.latin1(), "BG%d",
+    pos = sscanf (tmpstr.toLatin1(), "BG%d",
                   bgcolor);
     printf ("bgcolor: %d(%d)  ",
             *bgcolor, pos);
@@ -1257,7 +1257,7 @@ APPLIXSPREADImport::readHeader (QTextStream &stream)
 
     // Read Headline
     mystr = nextLine (stream);
-    rueck = sscanf (mystr.latin1(),
+    rueck = sscanf (mystr.toLatin1(),
                     "*BEGIN SPREADSHEETS VERSION=%d/%d ENCODING=%dBIT",
 	             &vers[0], &vers[1], &vers[2]);
     printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
@@ -1266,13 +1266,13 @@ APPLIXSPREADImport::readHeader (QTextStream &stream)
     if (rueck <= 0)
     {
       printf ("Header not correkt - May be it is not an applixspreadsheet file\n");
-      printf ("Headerline: <%s>\n", mystr.latin1());
+      printf ("Headerline: <%s>\n", mystr.toLatin1());
 
       QMessageBox::critical (0L, "Applix spreadsheet header problem",
               QString ("The Applix Spreadsheet header is not correct. "
                        "May be it is not an applix spreadsheet file! <BR>"
-                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr.latin1()),
-			"Okay");
+                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),
+                       "Okay");
 
 
       return false;
@@ -1302,19 +1302,19 @@ APPLIXSPREADImport::translateColumnNumber (QString colstr)
   printf ("HI 0 len:%d\n", len );
   while ((p >= 0))
   {
-     printf ("HI 1 x:%d p:%d char:<%c>\n", x, p, colstr[p].latin1());
+     printf ("HI 1 x:%d p:%d char:<%c>\n", x, p, colstr[p].toLatin1());
      // Upper chars
      if      ((colstr[p] >= 'A') && (colstr[p] <= 'Z'))
      {
          kDebug ()<<" UPPER\n";
-       icol = icol + ((int)pow ((double)x, 26) * (colstr[p].latin1() - 'A' + 1)  );
+       icol = icol + ((int)pow ((double)x, 26) * (colstr[p].toLatin1() - 'A' + 1)  );
        x++;
      }
      // lower chars
      else if ((colstr[p] >= 'a') && (colstr[p] <= 'z'))
      {
          kDebug()<<" lower\n";
-       icol = icol + ((int)pow ((double)x, 26) * (colstr[p].latin1() - 'a' + 1)  );
+       icol = icol + ((int)pow ((double)x, 26) * (colstr[p].toLatin1() - 'a' + 1)  );
        x++;
      }
      p--;
@@ -1322,7 +1322,7 @@ APPLIXSPREADImport::translateColumnNumber (QString colstr)
 
    }
 
-   printf ("translateColumnNumber : <%s> -> %d\n", colstr.latin1(), icol);
+   printf ("translateColumnNumber : <%s> -> %d\n", colstr.toLatin1(), icol);
    return icol;
 }
 
