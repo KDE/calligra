@@ -18,16 +18,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef CSVIMPORTDIALOG_H
-#define CSVIMPORTDIALOG_H
+#ifndef KO_CSV_IMPORT_DIALOG
+#define KO_CSV_IMPORT_DIALOG
 
 #include <qstringlist.h>
 
 #include <kdialog.h>
 
-class DialogUI;
+#include "koffice_export.h"
 
-class CSVImportDialog : public KDialog
+#include "ui_KoCsvImportDialog.h"
+
+class KoCsvImportWidget;
+
+class KOFFICEUI_EXPORT KoCsvImportDialog : public KDialog
 {
     Q_OBJECT
 public:
@@ -41,8 +45,8 @@ public:
         POINTNUMBER ///< Number, which decimal symbol is a point/dot
     };
 
-    CSVImportDialog(QWidget* parent, QByteArray& fileArray);
-    ~CSVImportDialog();
+    KoCsvImportDialog(QWidget* parent, QByteArray& fileArray);
+    ~KoCsvImportDialog();
 
     bool     firstRowContainHeaders();
     bool     firstColContainHeaders();
@@ -61,7 +65,7 @@ private:
     QTextCodec* getCodec(void) const;
 
     // The real contents of the dialog
-    DialogUI  *m_dialog;
+    KoCsvImportWidget *m_dialog;
 
     bool       m_adjustRows;
     bool       m_adjustCols;
@@ -88,4 +92,4 @@ private slots:
     void encodingChanged ( const QString & );
 };
 
-#endif
+#endif // KO_CSV_IMPORT_DIALOG

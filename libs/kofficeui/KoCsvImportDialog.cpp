@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
    Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -18,9 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <csvimportdialogui.h>
-#include <csvimportdialog.h>
-
+// Qt
 #include <q3table.h>
 #include <QCheckBox>
 #include <qcursor.h>
@@ -33,6 +31,7 @@
 #include <qradiobutton.h>
 #include <qtextcodec.h>
 
+// KDE
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -40,10 +39,19 @@
 #include <kmessagebox.h>
 #include <kcharsets.h>
 
+// local
+#include "KoCsvImportDialog.h"
+#include "ui_KoCsvImportDialog.h"
 
-CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
+class KoCsvImportWidget : public QWidget, public Ui::KoCsvImportWidget
+{
+public:
+  KoCsvImportWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
+};
+
+KoCsvImportDialog::KoCsvImportDialog(QWidget* parent, QByteArray& fileArray)
     : KDialog(parent),
-      m_dialog(new DialogUI(this)),
+      m_dialog(new KoCsvImportWidget(this)),
       m_adjustRows(false),
       m_adjustCols(false),
       m_startRow(0),
@@ -56,9 +64,9 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
       m_fileArray(fileArray),
       m_codec( QTextCodec::codecForName( "UTF-8" ) )
 {
-    setButtons(  KDialog::Ok|KDialog::Cancel );
+    setButtons( KDialog::Ok|KDialog::Cancel );
+    setDefaultButton(KDialog::No);
 
-	setDefaultButton(KDialog::No);
     setCaption( i18n( "Import Data" ) );
     kapp->restoreOverrideCursor();
 
@@ -90,10 +98,11 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
     setMainWidget(m_dialog);
 
     m_dialog->m_sheet->setSelectionMode( Q3Table::Multi );
+    QButtonGroup* buttonGroup = m_dialog->m_radioComma->group();
 
     connect(m_dialog->m_formatComboBox, SIGNAL(activated( const QString& )),
             this, SLOT(formatChanged( const QString& )));
-    connect(m_dialog->m_delimiterBox, SIGNAL(clicked(int)),
+    connect(buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(delimiterClicked(int)));
     connect(m_dialog->m_delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
@@ -112,7 +121,7 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
 }
 
 
-CSVImportDialog::~CSVImportDialog()
+KoCsvImportDialog::~KoCsvImportDialog()
 {
     kapp->setOverrideCursor(Qt::WaitCursor);
 }
@@ -122,19 +131,19 @@ CSVImportDialog::~CSVImportDialog()
 //                       public methods
 
 
-bool CSVImportDialog::firstRowContainHeaders()
+bool KoCsvImportDialog::firstRowContainHeaders()
 {
     return m_dialog->m_firstRowHeader->isChecked();
 }
 
 
-bool CSVImportDialog::firstColContainHeaders()
+bool KoCsvImportDialog::firstColContainHeaders()
 {
     return m_dialog->m_firstColHeader->isChecked();
 }
 
 
-int CSVImportDialog::rows()
+int KoCsvImportDialog::rows()
 {
     int rows = m_dialog->m_sheet->numRows();
 
@@ -145,7 +154,7 @@ int CSVImportDialog::rows()
 }
 
 
-int CSVImportDialog::cols()
+int KoCsvImportDialog::cols()
 {
     int cols = m_dialog->m_sheet->numCols();
 
@@ -156,7 +165,7 @@ int CSVImportDialog::cols()
 }
 
 
-QString CSVImportDialog::text(int row, int col)
+QString KoCsvImportDialog::text(int row, int col)
 {
     // Check for overflow.
     if ( row >= rows() || col >= cols())
@@ -169,7 +178,7 @@ QString CSVImportDialog::text(int row, int col)
 // ----------------------------------------------------------------
 
 
-void CSVImportDialog::fillTable( )
+void KoCsvImportDialog::fillTable( )
 {
     int row, column;
     bool lastCharDelimiter = false;
@@ -392,7 +401,7 @@ void CSVImportDialog::fillTable( )
     kapp->restoreOverrideCursor();
 }
 
-void CSVImportDialog::fillComboBox()
+void KoCsvImportDialog::fillComboBox()
 {
   if ( m_endRow == -1 )
     m_dialog->m_rowEnd->setValue( m_dialog->m_sheet->numRows() );  
@@ -415,7 +424,7 @@ void CSVImportDialog::fillComboBox()
   m_dialog->m_colStart->setMaxValue( m_dialog->m_sheet->numCols() );
 }
 
-int CSVImportDialog::headerType(int col)
+int KoCsvImportDialog::headerType(int col)
 {
     QString header = m_dialog->m_sheet->horizontalHeader()->label(col);
     
@@ -435,7 +444,7 @@ int CSVImportDialog::headerType(int col)
         return TEXT; // Should not happen
 }
 
-void CSVImportDialog::setText(int row, int col, const QString& text)
+void KoCsvImportDialog::setText(int row, int col, const QString& text)
 {
     if ( row < 1 || col < 1 ) // skipped by the user
         return;
@@ -461,7 +470,7 @@ void CSVImportDialog::setText(int row, int col, const QString& text)
 /*
  * Called after the first fillTable() when number of rows are unknown.
  */
-void CSVImportDialog::adjustRows(int iRows)
+void KoCsvImportDialog::adjustRows(int iRows)
 {
     if (m_adjustRows) 
     {
@@ -470,7 +479,7 @@ void CSVImportDialog::adjustRows(int iRows)
     }
 }
 
-void CSVImportDialog::adjustCols(int iCols)
+void KoCsvImportDialog::adjustCols(int iCols)
 {
     if (m_adjustCols) 
     {  
@@ -487,24 +496,24 @@ void CSVImportDialog::adjustCols(int iCols)
     }
 }
 
-void CSVImportDialog::returnPressed()
+void KoCsvImportDialog::returnPressed()
 {
-    if (m_dialog->m_delimiterBox->id(m_dialog->m_delimiterBox->selected()) != 4)
+    if (m_dialog->m_radioOther->isChecked())
         return;
 
     m_delimiter = m_dialog->m_delimiterEdit->text();
     fillTable();
 }
 
-void CSVImportDialog::textChanged ( const QString & )
+void KoCsvImportDialog::textChanged ( const QString & )
 {
     m_dialog->m_radioOther->setChecked ( true );
-    delimiterClicked(4); // other
+    delimiterClicked(m_dialog->m_radioOther->group()->id(m_dialog->m_radioOther)); // other
 }
 
-void CSVImportDialog::formatChanged( const QString& newValue )
+void KoCsvImportDialog::formatChanged( const QString& newValue )
 {
-    //kDebug(30501) << "CSVImportDialog::formatChanged:" << newValue << endl;
+    //kDebug(30501) << "KoCsvImportDialog::formatChanged:" << newValue << endl;
     for ( int i = 0; i < m_dialog->m_sheet->numSelections(); ++i )
     {
         Q3TableSelection select ( m_dialog->m_sheet->selection( i ) );
@@ -516,31 +525,24 @@ void CSVImportDialog::formatChanged( const QString& newValue )
     }
 }
 
-void CSVImportDialog::delimiterClicked(int id)
+void KoCsvImportDialog::delimiterClicked(int id)
 {
-    switch (id)
-    {
-    case 0: // comma
+    const QButtonGroup* group = m_dialog->m_radioComma->group();
+    if (id == group->id(m_dialog->m_radioComma) )
         m_delimiter = ",";
-        break;
-    case 4: // other
+    else if (id == group->id(m_dialog->m_radioOther))
         m_delimiter = m_dialog->m_delimiterEdit->text();
-        break;
-    case 2: // tab
+    else if (id == group->id(m_dialog->m_radioTab))
         m_delimiter = "\t";
-        break;
-    case 3: // space
+    else if (id == group->id(m_dialog->m_radioSpace))
         m_delimiter = " ";
-        break;
-    case 1: // semicolon
+    else if (id == group->id(m_dialog->m_radioSemicolon))
         m_delimiter = ";";
-        break;
-    }
 
     fillTable();
 }
 
-void CSVImportDialog::textquoteSelected(const QString& mark)
+void KoCsvImportDialog::textquoteSelected(const QString& mark)
 {
     if (mark == i18n("None"))
         m_textquote = 0;
@@ -550,7 +552,7 @@ void CSVImportDialog::textquoteSelected(const QString& mark)
     fillTable();
 }
 
-void CSVImportDialog::updateClicked()
+void KoCsvImportDialog::updateClicked()
 {
   if ( !checkUpdateRange() )
     return;
@@ -564,7 +566,7 @@ void CSVImportDialog::updateClicked()
   fillTable();
 }
 
-bool CSVImportDialog::checkUpdateRange()
+bool KoCsvImportDialog::checkUpdateRange()
 {
   if ( ( m_dialog->m_rowStart->value() > m_dialog->m_rowEnd->value() ) 
        || ( m_dialog->m_colStart->value() > m_dialog->m_colEnd->value() ) )
@@ -576,13 +578,13 @@ bool CSVImportDialog::checkUpdateRange()
   return true;
 }
 
-void CSVImportDialog::currentCellChanged(int, int col)
+void KoCsvImportDialog::currentCellChanged(int, int col)
 {
     const QString header = m_dialog->m_sheet->horizontalHeader()->label(col);
     m_dialog->m_formatComboBox->setCurrentText( header );
 }
 
-void CSVImportDialog::ignoreDuplicatesChanged(int)
+void KoCsvImportDialog::ignoreDuplicatesChanged(int)
 {
   if (m_dialog->m_ignoreDuplicates->isChecked())
     m_ignoreDups = true;
@@ -591,7 +593,7 @@ void CSVImportDialog::ignoreDuplicatesChanged(int)
   fillTable();
 }
 
-QTextCodec* CSVImportDialog::getCodec(void) const
+QTextCodec* KoCsvImportDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
     kDebug(30502) << "Encoding: " << strCodec << endl;
@@ -622,7 +624,7 @@ QTextCodec* CSVImportDialog::getCodec(void) const
     return codec;
 }
 
-void CSVImportDialog::encodingChanged ( const QString & )
+void KoCsvImportDialog::encodingChanged ( const QString & )
 {
     QTextCodec* codec = getCodec();
 
@@ -633,5 +635,4 @@ void CSVImportDialog::encodingChanged ( const QString & )
     }
 }
 
-
-#include <csvimportdialog.moc>
+#include <KoCsvImportDialog.moc>

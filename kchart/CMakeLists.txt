@@ -46,12 +46,10 @@ set(kchartcommon_LIB_SRCS
    kchartLine3dConfigPage.cc 
    kchartParameterPolarConfigPage.cc 
    kchartPageLayout.cc 
-   kchartPrinterDlg.cc 
-   csvimportdialog.cc )
+   kchartPrinterDlg.cc
+)
 
 kde4_automoc(${kchartcommon_LIB_SRCS})
-
-kde4_add_ui3_files(kchartcommon_LIB_SRCS csvimportdialogui.ui )
 
 # kde4_add_dcop_skels(kchartcommon_LIB_SRCS KChartViewIface.h KChartParamsIface.h )
 

@@ -27,6 +27,7 @@
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
 
+#include <KoCsvImportDialog.h>
 #include <KoTemplateCreateDia.h>
 
 #include "kdchart/KDChart.h"
@@ -41,7 +42,6 @@
 #include <KoViewAdaptor.h>
 #include "kchartPageLayout.h"
 #include "kchartPrinterDlg.h"
-#include "csvimportdialog.h"
 
 
 using namespace std;
@@ -660,7 +660,7 @@ KFileDialog::getOpenFileName(KUrl(QString::null),// startDir
     // Let the CSV dialog structure the data in the file.
     QByteArray  inData( inFile.readAll() );
     inFile.close();
-    CSVImportDialog  *dialog = new CSVImportDialog(0L, inData);
+    KoCsvImportDialog *dialog = new KoCsvImportDialog(0L, inData);
 
     if ( !dialog->exec() ) {
 	kDebug(35001) << "Cancel was pressed" << endl;
