@@ -299,16 +299,23 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     // ------------------- Actions with a key binding and no GUI item
     // Temporary, till we get a menu entry
-    actNoInformation = new KAction("Toggle no information", Qt::CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotViewGanttNoInformation()), actionCollection(), "show_noinformation");
+    actNoInformation = new KAction("Toggle no information", actionCollection(), "show_noinformation");
+    connect(actNoInformation, SIGNAL(triggered(bool)), SLOT(slotViewGanttNoInformation()));
+    actNoInformation->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_T);
 
 #ifndef NDEBUG
     //new KAction("Print Debug", CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
-    new KAction("Print Debug", Qt::CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT(slotPrintSelectedDebug()), actionCollection(), "print_debug");
-    new KAction("Print Calendar Debug", Qt::CTRL+Qt::SHIFT+Qt::Key_C, this, SLOT(slotPrintCalendarDebug()), actionCollection(), "print_calendar_debug");
+    KAction *action = new KAction("Print Debug", actionCollection(), "print_debug");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotPrintSelectedDebug()));
+    action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_P);
+    action = new KAction("Print Calendar Debug", actionCollection(), "print_calendar_debug");
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotPrintCalendarDebug()));
+    action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_C);
 //     new KAction("Print Test Debug", CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
-    KAction* actExportGantt = new KAction( i18n( "Export Gantt" ), Qt::CTRL+Qt::SHIFT+Qt::Key_G,
-                        this, SLOT( slotExportGantt() ), actionCollection(), "export_gantt" );
+    KAction *actExportGantt = new KAction( i18n( "Export Gantt" ), actionCollection(), "export_gantt" );
+    connect(actExportGantt, SIGNAL(triggered(bool)), SLOT( slotExportGantt() ));
+    actExportGantt->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_G);
 
 #endif
     // Stupid compilers ;)

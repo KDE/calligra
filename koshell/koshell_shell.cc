@@ -734,7 +734,8 @@ void KoShellWindow::showPartSpecificHelp()
 KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 {
   setXMLFile( "koshellui.rc", true, true );
-  window->mnuSaveAll = new KAction( i18n("Save All"), 0, window, SLOT( saveAll() ), actionCollection(), "save_all" );
+  window->mnuSaveAll = new KAction( i18n("Save All"), actionCollection(), "save_all" );
+  QObject::connect(window->mnuSaveAll, SIGNAL(triggered(bool)), window, SLOT( saveAll() ));
   window->mnuSaveAll->setEnabled(false);
   window->partSpecificHelpAction = new KAction(KIcon("contents"), i18n("Part Handbook"), actionCollection(), "partSpecificHelp");
   QObject::connect(window->partSpecificHelpAction, SIGNAL(triggered(bool) ), window, SLOT(showPartSpecificHelp()));

@@ -68,15 +68,10 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 
     m_dbus = new ViewAdaptor(this);
 
-    m_importData = new KAction( i18n( "Import Data..." ), 0,
-				this, SLOT( importData() ),
-				actionCollection(), "import_data" );
-#if 0
-    KAction * actionExtraCreateTemplate	=
-#endif
-	new KAction( i18n( "&Create Template From Document..." ), 0,
-		       this, SLOT( extraCreateTemplate() ),
-		       actionCollection(), "extra_template" );
+    m_importData = new KAction( i18n( "Import Data..." ), actionCollection(), "import_data" );
+    connect(m_importData, SIGNAL(triggered(bool)), SLOT( importData() ));
+    KAction *actionExtraCreateTemplate = new KAction( i18n( "&Create Template From Document..." ), actionCollection(), "extra_template" );
+    connect(actionExtraCreateTemplate, SIGNAL(triggered(bool)), SLOT( extraCreateTemplate() ));
 
     m_wizard = new KAction(KIcon("wizard"),  i18n("Customize with &Wizard..."), actionCollection(), "wizard");
     connect(m_wizard, SIGNAL(triggered(bool) ), SLOT( wizard() ));
@@ -127,37 +122,22 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      "polarchart");
 	charttypes->addAction(m_chartpolar);
     // Configuration KActions
-    m_colorConfig = new KAction( i18n( "&Colors..." ), 0,
-                            this, SLOT( slotConfigColor() ),
-                            actionCollection(), "color_config" );
-
-    m_fontConfig = new KAction( i18n( "&Font..." ), 0,
-                            this, SLOT( slotConfigFont() ),
-                            actionCollection(), "font_config" );
-
-    m_backConfig = new KAction( i18n( "&Background..." ), 0,
-                            this, SLOT( slotConfigBack() ),
-                            actionCollection(), "back_config" );
-
-    m_legendConfig = new KAction( i18n( "&Legend..." ), 0,
-                            this, SLOT( slotConfigLegend() ),
-                            actionCollection(), "legend_config" );
-
-    m_subTypeChartConfig = new KAction( i18n( "Chart &Sub-type..." ), 0,
-                            this, SLOT( slotConfigSubTypeChart() ),
-                            actionCollection(), "legend_subtype" );
-
-    m_dataFormatConfig = new KAction( i18n( "&Data Format..." ), 0,
-                            this, SLOT( slotConfigDataFormat() ),
-                            actionCollection(), "data_format" );
-
-    m_headerFooterConfig = new KAction( i18n( "&Header && Footer..." ), 0,
-                            this, SLOT( slotConfigHeaderFooterChart() ),
-                            actionCollection(), "headerfooter_subtype" );
-
-    m_pageLayoutConfig = new KAction( i18n( "Page Layout..." ), 0,
-                            this, SLOT( slotConfigPageLayout() ),
-                            actionCollection(), "page_layout" );
+    m_colorConfig = new KAction( i18n( "&Colors..." ), actionCollection(), "color_config" );
+    connect(m_colorConfig, SIGNAL(triggered(bool)), SLOT( slotConfigColor() ));
+ m_fontConfig = new KAction( i18n( "&Font..." ), actionCollection(), "font_config" );
+ connect(m_fontConfig, SIGNAL(triggered(bool)), SLOT( slotConfigFont() ));
+ m_backConfig = new KAction( i18n( "&Background..." ), actionCollection(), "back_config" );
+ connect(m_backConfig, SIGNAL(triggered(bool)), SLOT( slotConfigBack() ));
+ m_legendConfig = new KAction( i18n( "&Legend..." ), actionCollection(), "legend_config" );
+ connect(m_legendConfig, SIGNAL(triggered(bool)), SLOT( slotConfigLegend() ));
+ m_subTypeChartConfig = new KAction( i18n( "Chart &Sub-type..." ), actionCollection(), "legend_subtype" );
+ connect(m_subTypeChartConfig, SIGNAL(triggered(bool)), SLOT( slotConfigSubTypeChart() ));
+ m_dataFormatConfig = new KAction( i18n( "&Data Format..." ), actionCollection(), "data_format" );
+ connect(m_dataFormatConfig, SIGNAL(triggered(bool)), SLOT( slotConfigDataFormat() ));
+ m_headerFooterConfig = new KAction( i18n( "&Header && Footer..." ), actionCollection(), "headerfooter_subtype" );
+ connect(m_headerFooterConfig, SIGNAL(triggered(bool)), SLOT( slotConfigHeaderFooterChart() ));
+ m_pageLayoutConfig = new KAction( i18n( "Page Layout..." ), actionCollection(), "page_layout" );
+ connect(m_pageLayoutConfig, SIGNAL(triggered(bool)), SLOT( slotConfigPageLayout() ));
 
     // initialize the configuration
     //    loadConfig();

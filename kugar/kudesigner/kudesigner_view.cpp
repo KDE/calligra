@@ -232,12 +232,10 @@ void KudesignerView::initActions()
     group->addAction( itemsCalculated );
     group->addAction( itemsLine );
 
-    gridActionLabel = new KAction( i18n( "Grid Label" ), 0, this,
-                                   0, actionCollection(), "gridlabel" );
+    gridActionLabel = new KAction( i18n( "Grid Label" ), actionCollection(), "gridlabel" );
     gridActionLabel->setDefaultWidget( gridLabel );
 
-    gridAction = new KAction( i18n( "Grid Size" ), 0, this,
-                              0, actionCollection(), "gridaction" );
+    gridAction = new KAction( i18n( "Grid Size" ), actionCollection(), "gridaction" );
     gridAction->setDefaultWidget( gridBox );
 }
 

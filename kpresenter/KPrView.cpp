@@ -2440,8 +2440,8 @@ void KPrView::setupActions()
 
     // ----------------- text actions
 
-    actionTextFont = new KAction( i18n( "&Font..." ), 0, this, SLOT( mtextFont() ),
-                                  actionCollection(), "text_font" );
+    actionTextFont = new KAction( i18n( "&Font..." ), actionCollection(), "text_font" );
+    connect(actionTextFont, SIGNAL(triggered(bool)), SLOT( mtextFont() ));
 
     actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), actionCollection(), "text_fontsize" );
     connect( actionTextFontSize, SIGNAL( fontSizeChanged( int ) ),
@@ -2535,13 +2535,11 @@ void KPrView::setupActions()
     connect(actionTextDepthMinus, SIGNAL(triggered(bool) ), SLOT( textDepthMinus() ));
     actionTextDepthMinus->setShortcut(Qt::CTRL + Qt::Key_Minus);
 
-    actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), 0,
-                                               this, SLOT( textContentsToHeight() ),
-                                               actionCollection(), "text_con2hei" );
+    actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), actionCollection(), "text_con2hei" );
+    connect(actionTextExtentCont2Height, SIGNAL(triggered(bool)), SLOT( textContentsToHeight() ));
 
-    actionTextExtendObj2Cont = new KAction( i18n( "&Extend Object to Fit Contents" ), 0,
-                                            this, SLOT( textObjectToContents() ),
-                                            actionCollection(), "text_obj2cont" );
+    actionTextExtendObj2Cont = new KAction( i18n( "&Extend Object to Fit Contents" ), actionCollection(), "text_obj2cont" );
+    connect(actionTextExtendObj2Cont, SIGNAL(triggered(bool)), SLOT( textObjectToContents() ));
 
     actionTextInsertPageNum = new KAction(KIcon("pgnum"),  i18n( "&Insert Slide Number" ), actionCollection(), "text_inspgnum" );
     connect(actionTextInsertPageNum, SIGNAL(triggered(bool) ), SLOT( textInsertPageNum() ));
@@ -2599,9 +2597,8 @@ void KPrView::setupActions()
     actionExtraBackground = new KAction(KIcon("background"),  i18n( "Slide Bac&kground..." ), actionCollection(), "extra_background" );
     connect(actionExtraBackground, SIGNAL(triggered(bool) ), SLOT( extraBackground() ));
 
-    actionExtraLayout = new KAction( i18n( "Page &Layout..." ), 0,
-                                     this, SLOT( extraLayout() ),
-                                     actionCollection(), "extra_layout" );
+    actionExtraLayout = new KAction( i18n( "Page &Layout..." ), actionCollection(), "extra_layout" );
+    connect(actionExtraLayout, SIGNAL(triggered(bool)), SLOT( extraLayout() ));
 
     m_actionExtraHeader = new KToggleAction( i18n( "Enable Document &Header" ), 0,
                                              this, SLOT( viewHeader() ),
@@ -2621,17 +2618,14 @@ void KPrView::setupActions()
     actionExtraWebPres = new KAction(KIcon("webpres"),  i18n( "Create &HTML Slideshow..." ), actionCollection(), "extra_webpres" );
     connect(actionExtraWebPres, SIGNAL(triggered(bool) ), SLOT( extraWebPres() ));
 
-    actionExtraMSPres = new KAction( i18n( "Create Memor&y Stick Slideshow..." ),
-				     0, this, SLOT( extraMSPres() ),
-				     actionCollection(), "extra_mspres" );
+    actionExtraMSPres = new KAction( i18n( "Create Memor&y Stick Slideshow..." ), actionCollection(), "extra_mspres" );
+    connect(actionExtraMSPres, SIGNAL(triggered(bool)), SLOT( extraMSPres() ));
 
-    actionExtraCreateTemplate = new KAction( i18n( "Template Manager" ), 0,
-                                             this, SLOT( extraCreateTemplate() ),
-                                             actionCollection(), "extra_template" );
+    actionExtraCreateTemplate = new KAction( i18n( "Template Manager" ), actionCollection(), "extra_template" );
+    connect(actionExtraCreateTemplate, SIGNAL(triggered(bool)), SLOT( extraCreateTemplate() ));
 
-    actionExtraDefaultTemplate = new KAction( i18n( "Use Current Slide as Default Template" ), 0,
-                                              this, SLOT( extraDefaultTemplate() ),
-                                              actionCollection(), "extra_defaulttemplate" );
+    actionExtraDefaultTemplate = new KAction( i18n( "Use Current Slide as Default Template" ), actionCollection(), "extra_defaulttemplate" );
+    connect(actionExtraDefaultTemplate, SIGNAL(triggered(bool)), SLOT( extraDefaultTemplate() ));
 
     actionExtraAlignObjsPopup = new KActionMenu( KIcon("alignobjs"),i18n("Align O&bjects"),
                                             actionCollection(), "extra_alignobjs" );
@@ -2711,46 +2705,39 @@ void KPrView::setupActions()
                                               actionCollection(), "pen_color" );
     connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
     actionPenColor->setDefaultColor(QColor());
-    actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ),
-                                            actionCollection(), "extendobjectheight" );
+    actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ), actionCollection(), "extendobjectheight" );
+    connect(actionExtendObjectHeight, SIGNAL(triggered(bool)), SLOT( textContentsToHeight() ));
 
-    actionResizeTextObject = new KAction( i18n( "&Resize Object to Fit Contents" ),0, this, SLOT( textObjectToContents() ),
-                                          actionCollection(), "resizetextobject" );
+    actionResizeTextObject = new KAction( i18n( "&Resize Object to Fit Contents" ), actionCollection(), "resizetextobject" );
+    connect(actionResizeTextObject, SIGNAL(triggered(bool)), SLOT( textObjectToContents() ));
 
-    actionRenamePage=new KAction(i18n( "&Rename Slide..." ),0,this,
-                                 SLOT( renamePageTitle() ),
-                                 actionCollection(), "rename_page" );
+    actionRenamePage = new KAction(i18n( "&Rename Slide..." ), actionCollection(), "rename_page" );
+    connect(actionRenamePage, SIGNAL(triggered(bool)), SLOT( renamePageTitle() ));
 
-    actionPicOriginalSize = new KAction( i18n( "Sca&le to Original Size" ), 0, this,
-                                         SLOT( picViewOriginalSize() ),
-                                         actionCollection(), "pic_original_size" );
+    actionPicOriginalSize = new KAction( i18n( "Sca&le to Original Size" ), actionCollection(), "pic_original_size" );
+    connect(actionPicOriginalSize, SIGNAL(triggered(bool)), SLOT( picViewOriginalSize() ));
 
-    actionPic640x480=new KAction(i18n( "640x480" ),0,this,
-                                 SLOT( picViewOrig640x480() ),
-                                 actionCollection(), "pic_640_480" );
+    actionPic640x480 = new KAction(i18n( "640x480" ), actionCollection(), "pic_640_480" );
+    connect(actionPic640x480, SIGNAL(triggered(bool)), SLOT( picViewOrig640x480() ));
 
-    actionPic800x600=new KAction(i18n( "800x600" ),0,this,
-                                 SLOT( picViewOrig800x600() ),
-                                 actionCollection(), "pic_800_600" );
+    actionPic800x600 = new KAction(i18n( "800x600" ), actionCollection(), "pic_800_600" );
+    connect(actionPic800x600, SIGNAL(triggered(bool)), SLOT( picViewOrig800x600() ));
 
-    actionPic1024x768=new KAction(i18n( "1024x768" ),0,this,
-                                  SLOT( picViewOrig1024x768() ),
-                                  actionCollection(), "pic_1024_768" );
+    actionPic1024x768 = new KAction(i18n( "1024x768" ), actionCollection(), "pic_1024_768" );
+    connect(actionPic1024x768, SIGNAL(triggered(bool)), SLOT( picViewOrig1024x768() ));
 
-    actionPic1280x1024=new KAction(i18n( "1280x1024" ),0,this,
-                                   SLOT( picViewOrig1280x1024() ),
-                                   actionCollection(), "pic_1280_1024" );
+    actionPic1280x1024 = new KAction(i18n( "1280x1024" ), actionCollection(), "pic_1280_1024" );
+    connect(actionPic1280x1024, SIGNAL(triggered(bool)), SLOT( picViewOrig1280x1024() ));
 
-    actionPic1600x1200=new KAction(i18n( "1600x1200" ),0,this,
-                                   SLOT( picViewOrig1600x1200() ),
-                                   actionCollection(), "pic_1600_1200" );
+    actionPic1600x1200 = new KAction(i18n( "1600x1200" ), actionCollection(), "pic_1600_1200" );
+    connect(actionPic1600x1200, SIGNAL(triggered(bool)), SLOT( picViewOrig1600x1200() ));
 
     actionChangePic = new KAction(KIcon("frame_image"),  i18n( "&Change Picture..." ), actionCollection(), "change_picture" );
     connect(actionChangePic, SIGNAL(triggered(bool) ), SLOT( chPic() ));
 
 
-    actionImageEffect = new KAction( i18n("Image &Effect..."), 0, this,
-                                     SLOT(imageEffect()), actionCollection(), "image_effect");
+    actionImageEffect = new KAction( i18n("Image &Effect..."), actionCollection(), "image_effect");
+    connect(actionImageEffect, SIGNAL(triggered(bool)), SLOT(imageEffect()));
 
 	QActionGroup* valignGroup = new QActionGroup( this );
     actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
@@ -2767,9 +2754,8 @@ void KPrView::setupActions()
     connect(actionInsertSpecialChar, SIGNAL(triggered(bool) ), SLOT( insertSpecialChar() ));
     actionInsertSpecialChar->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
 
-    actionInsertLink = new KAction( i18n( "Link..." ), 0,
-                                    this, SLOT( insertLink() ),
-                                    actionCollection(), "insert_link" );
+    actionInsertLink = new KAction( i18n( "Link..." ), actionCollection(), "insert_link" );
+    connect(actionInsertLink, SIGNAL(triggered(bool)), SLOT( insertLink() ));
 
 #if 0
     //code from page.cc
@@ -2777,47 +2763,38 @@ void KPrView::setupActions()
     picResizeMenu->insertSeparator();
     picResizeMenu->insertItem( i18n( "Enter Custom Factor..." ), this, SLOT( picViewOrigFactor() ) );
 #endif
-    (void) new KAction( i18n( "Configure &Autocorrection..." ), 0,
-                        this, SLOT( extraAutoFormat() ),
-                        actionCollection(), "extra_autocorrection" );
+    action = new KAction( i18n( "Configure &Autocorrection..." ), actionCollection(), "extra_autocorrection" );
+    connect(action, SIGNAL(triggered(bool)), SLOT( extraAutoFormat() ));
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
 
-    actionFormatParag = new KAction( i18n( "&Paragraph..." ), Qt::ALT + Qt::CTRL + Qt::Key_P,
-                                     this, SLOT( formatParagraph() ),
-                                     actionCollection(), "format_paragraph" );
+    actionFormatParag = new KAction( i18n( "&Paragraph..." ), actionCollection(), "format_paragraph" );
+    connect(actionFormatParag, SIGNAL(triggered(bool)), SLOT( formatParagraph() ));
+    actionFormatParag->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
 
-    actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
-                                     this, SLOT( textDefaultFormat() ),
-                                     actionCollection(), "text_default" );
+    actionFormatDefault = new KAction( i18n( "Default Format" ), actionCollection(), "text_default" );
+    connect(actionFormatDefault, SIGNAL(triggered(bool)), SLOT( textDefaultFormat() ));
 
-    actionOpenLink = new KAction( i18n( "Open Link" ), 0,
-                                  this, SLOT( openLink() ),
-                                  actionCollection(), "open_link" );
+    actionOpenLink = new KAction( i18n( "Open Link" ), actionCollection(), "open_link" );
+    connect(actionOpenLink, SIGNAL(triggered(bool)), SLOT( openLink() ));
 
-    actionChangeLink=new KAction( i18n("Change Link..."), 0,
-                                  this,SLOT(changeLink()),
-                                  actionCollection(), "change_link");
+    actionChangeLink = new KAction( i18n("Change Link..."), actionCollection(), "change_link");
+    connect(actionChangeLink, SIGNAL(triggered(bool)), SLOT(changeLink()));
 
-    actionCopyLink = new KAction( i18n( "Copy Link" ), 0,
-                                  this, SLOT( copyLink() ),
-                                  actionCollection(), "copy_link" );
+    actionCopyLink = new KAction( i18n( "Copy Link" ), actionCollection(), "copy_link" );
+    connect(actionCopyLink, SIGNAL(triggered(bool)), SLOT( copyLink() ));
 
-    actionRemoveLink = new KAction( i18n( "Remove Link" ), 0,
-                                    this, SLOT( removeLink() ),
-                                    actionCollection(), "remove_link" );
+    actionRemoveLink = new KAction( i18n( "Remove Link" ), actionCollection(), "remove_link" );
+    connect(actionRemoveLink, SIGNAL(triggered(bool)), SLOT( removeLink() ));
 
 
-    actionAddLinkToBookmak = new KAction( i18n( "Add to Bookmark" ), 0,
-                                          this, SLOT( addToBookmark() ),
-                                          actionCollection(), "add_to_bookmark" );
+    actionAddLinkToBookmak = new KAction( i18n( "Add to Bookmark" ), actionCollection(), "add_to_bookmark" );
+    connect(actionAddLinkToBookmak, SIGNAL(triggered(bool)), SLOT( addToBookmark() ));
 
-    actionEditCustomVarsEdit = new KAction( i18n( "&Custom Variables..." ), 0,
-                                            this, SLOT( editCustomVars() ),
-                                            actionCollection(), "edit_vars" );
+    actionEditCustomVarsEdit = new KAction( i18n( "&Custom Variables..." ), actionCollection(), "edit_vars" );
+    connect(actionEditCustomVarsEdit, SIGNAL(triggered(bool)), SLOT( editCustomVars() ));
 
-    actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
-                                        this, SLOT( editCustomVariable() ),
-                                        actionCollection(), "edit_customvars" );
+    actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), actionCollection(), "edit_customvars" );
+    connect(actionEditCustomVars, SIGNAL(triggered(bool)), SLOT( editCustomVariable() ));
 
 
     m_variableDefMap.clear();
@@ -2837,9 +2814,8 @@ void KPrView::setupActions()
     addVariableActions( VT_STATISTIC, KPrStatisticVariable::actionTexts(), actionInsertVariable, i18n("&Statistic") );
 
     actionInsertVariable->popupMenu()->insertSeparator();
-    actionRefreshAllVariable = new KAction( i18n( "&Refresh All Variables" ), 0,
-                                            this, SLOT( refreshAllVariable() ),
-                                            actionCollection(), "refresh_all_variable" );
+    actionRefreshAllVariable = new KAction( i18n( "&Refresh All Variables" ), actionCollection(), "refresh_all_variable" );
+    connect(actionRefreshAllVariable, SIGNAL(triggered(bool)), SLOT( refreshAllVariable() ));
     actionInsertVariable->insert(actionRefreshAllVariable);
 
     actionIncreaseFontSize = new KAction(KIcon("fontsizeup"),  i18n("Increase Font Size"), actionCollection(), "increaseFontSize" );
@@ -2848,9 +2824,8 @@ void KPrView::setupActions()
     actionDecreaseFontSize = new KAction(KIcon("fontsizedown"),  i18n("Decrease Font Size"), actionCollection(), "decreaseFontSize" );
     connect(actionDecreaseFontSize, SIGNAL(triggered(bool) ), SLOT( decreaseFontSize() ));
 
-    actionChangeCase=new KAction( i18n( "Change Case..." ), 0,
-                                  this, SLOT( changeCaseOfText() ),
-                                  actionCollection(), "change_case" );
+    actionChangeCase = new KAction( i18n( "Change Case..." ), actionCollection(), "change_case" );
+    connect(actionChangeCase, SIGNAL(triggered(bool)), SLOT( changeCaseOfText() ));
 
     actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                         actionCollection(), "view_zoom" );
@@ -2859,9 +2834,9 @@ void KPrView::setupActions()
     actionViewZoom->setEditable(true);
     changeZoomMenu( );
 
-    actionFormatStylist = new KAction( i18n( "&Style Manager" ), Qt::ALT + Qt::CTRL + Qt::Key_S,
-                                       this, SLOT( extraStylist() ),
-                                       actionCollection(), "format_stylist" );
+    actionFormatStylist = new KAction( i18n( "&Style Manager" ), actionCollection(), "format_stylist" );
+    connect(actionFormatStylist, SIGNAL(triggered(bool)), SLOT( extraStylist() ));
+    actionFormatStylist->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
 
     actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ),
                                              actionCollection(), "format_stylemenu" );
@@ -2880,90 +2855,81 @@ void KPrView::setupActions()
     actionAllowAutoFormat->setCheckedState(i18n("Disable Autocorrection"));
 
     // ------------------- Actions with a key binding and no GUI item
-    new KAction( i18n( "Insert Non-Breaking Space" ), Qt::CTRL+Qt::Key_Space,
-                 this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
-    new KAction( i18n( "Insert Non-Breaking Hyphen" ), Qt::CTRL+Qt::SHIFT+Qt::Key_Minus,
-                 this, SLOT( slotNonbreakingHyphen() ), actionCollection(), "nonbreaking_hyphen" );
-    new KAction( i18n( "Insert Soft Hyphen" ), Qt::CTRL+Qt::Key_Minus,
-                 this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
-    new KAction( i18n( "Line Break" ), Qt::SHIFT+Qt::Key_Return,
-                 this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
-    new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
-                 this, SLOT( slotCompletion() ), actionCollection(), "completion" );
+    action = new KAction( i18n( "Insert Non-Breaking Space" ), actionCollection(), "nonbreaking_space" );
+    connect(action, SIGNAL(triggered(bool)), SLOT( slotNonbreakingSpace() ));
+    action->setShortcut(Qt::CTRL+Qt::Key_Space);
+    action = new KAction( i18n( "Insert Non-Breaking Hyphen" ), actionCollection(), "nonbreaking_hyphen" );
+    connect(action, SIGNAL(triggered(bool)), SLOT( slotNonbreakingHyphen() ));
+    action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Minus);
+    action = new KAction( i18n( "Insert Soft Hyphen" ), actionCollection(), "soft_hyphen" );
+    connect(action, SIGNAL(triggered(bool)), SLOT( slotSoftHyphen() ));
+    action->setShortcut(Qt::CTRL+Qt::Key_Minus);
+    action = new KAction( i18n( "Line Break" ), actionCollection(), "line_break" );
+    connect(action, SIGNAL(triggered(bool)), SLOT( slotLineBreak() ));
+    action->setShortcut(Qt::SHIFT+Qt::Key_Return);
+    action = new KAction( i18n( "Completion" ), actionCollection(), "completion" );
+    connect(action, SIGNAL(triggered(bool)), SLOT( slotCompletion() ));
+    action->setShortcut(KStdAccel::shortcut(KStdAccel::TextCompletion));
 
-    new KAction( i18n( "Increase Numbering Level" ), Qt::ALT+Qt::Key_Right,
-                 this, SLOT( slotIncreaseNumberingLevel() ), actionCollection(), "increase_numbering_level" );
-    new KAction( i18n( "Decrease Numbering Level" ), Qt::ALT+Qt::Key_Left,
-                 this, SLOT( slotDecreaseNumberingLevel() ), actionCollection(), "decrease_numbering_level" );
+    action = new KAction( i18n( "Increase Numbering Level" ), actionCollection(), "increase_numbering_level" );
+    connect(action, SIGNAL(triggered(bool)), SLOT( slotIncreaseNumberingLevel() ));
+    action->setShortcut(Qt::ALT+Qt::Key_Right);
+    action = new KAction( i18n( "Decrease Numbering Level" ), actionCollection(), "decrease_numbering_level" );
+    connect(action, SIGNAL(triggered(bool)), SLOT( slotDecreaseNumberingLevel() ));
+    action->setShortcut(Qt::ALT+Qt::Key_Left);
 
 
-    actionInsertComment = new KAction( i18n( "Comment..." ), 0,
-                                       this, SLOT( insertComment() ),
-                                       actionCollection(), "insert_comment" );
-    actionEditComment = new KAction( i18n("Edit Comment..."), 0,
-                                     this,SLOT(editComment()),
-                                     actionCollection(), "edit_comment");
+    actionInsertComment = new KAction( i18n( "Comment..." ), actionCollection(), "insert_comment" );
+    connect(actionInsertComment, SIGNAL(triggered(bool)), SLOT( insertComment() ));
+    actionEditComment = new KAction( i18n("Edit Comment..."), actionCollection(), "edit_comment");
+    connect(actionEditComment, SIGNAL(triggered(bool)), SLOT(editComment()));
 
-    actionAddGuideLine = new KAction( i18n( "Add Guide Line..."), 0,
-                                      this, SLOT( addGuideLine()),
-                                      actionCollection(), "add_guideline");
+    actionAddGuideLine = new KAction( i18n( "Add Guide Line..."), actionCollection(), "add_guideline");
+    connect(actionAddGuideLine, SIGNAL(triggered(bool)), SLOT( addGuideLine()));
 
-    actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
-                                       this,SLOT(removeComment()),
-                                       actionCollection(), "remove_comment");
+    actionRemoveComment = new KAction( i18n("Remove Comment"), actionCollection(), "remove_comment");
+    connect(actionRemoveComment, SIGNAL(triggered(bool)), SLOT(removeComment()));
 
-    actionCopyTextOfComment = new KAction( i18n("Copy Text of Comment..."), 0,
-                                           this,SLOT(copyTextOfComment()),
-                                           actionCollection(), "copy_text_comment");
+    actionCopyTextOfComment = new KAction( i18n("Copy Text of Comment..."), actionCollection(), "copy_text_comment");
+    connect(actionCopyTextOfComment, SIGNAL(triggered(bool)), SLOT(copyTextOfComment()));
 
-    actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), 0,
-                                             this, SLOT( configureCompletion() ),
-                                             actionCollection(), "configure_completion" );
+    actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), actionCollection(), "configure_completion" );
+    connect(actionConfigureCompletion, SIGNAL(triggered(bool)), SLOT( configureCompletion() ));
 
     actionZoomMinus = new KAction(KIcon("viewmag-"),  i18n( "Zoom Out" ), actionCollection(), "zoom_minus" );
     connect(actionZoomMinus, SIGNAL(triggered(bool) ), SLOT( zoomMinus() ));
     actionZoomPlus = new KAction(KIcon("viewmag+"),  i18n( "Zoom In" ), actionCollection(), "zoom_plus" );
     connect(actionZoomPlus, SIGNAL(triggered(bool) ), SLOT( zoomPlus() ));
-    actionZoomEntirePage = new KAction( i18n( "Zoom Entire Slide" ), 0,
-                                        this, SLOT( zoomEntirePage() ),
-                                        actionCollection(), "zoom_entire_page" );
+    actionZoomEntirePage = new KAction( i18n( "Zoom Entire Slide" ), actionCollection(), "zoom_entire_page" );
+    connect(actionZoomEntirePage, SIGNAL(triggered(bool)), SLOT( zoomEntirePage() ));
 
-    actionZoomMinus = new KAction( i18n( "Zoom Slide Width" ), 0,
-                                   this, SLOT( zoomPageWidth() ),
-                                   actionCollection(), "zoom_page_width" );
+    actionZoomMinus = new KAction( i18n( "Zoom Slide Width" ), actionCollection(), "zoom_page_width" );
+    connect(actionZoomMinus, SIGNAL(triggered(bool)), SLOT( zoomPageWidth() ));
     actionZoomSelectedObject = new KAction(KIcon("viewmagfit"),  i18n( "Zoom Selected Objects" ), actionCollection(), "zoom_selected_object" );
     connect(actionZoomSelectedObject, SIGNAL(triggered(bool) ), SLOT( zoomSelectedObject() ));
-    actionZoomPageHeight= new KAction( i18n( "Zoom Slide Height" ), 0,
-                                       this, SLOT( zoomPageHeight() ),
-                                       actionCollection(), "zoom_page_height" );
+    actionZoomPageHeight = new KAction( i18n( "Zoom Slide Height" ), actionCollection(), "zoom_page_height" );
+    connect(actionZoomPageHeight, SIGNAL(triggered(bool)), SLOT( zoomPageHeight() ));
 
-    actionZoomAllObject= new KAction( i18n( "Zoom All Objects" ), 0,
-                                      this, SLOT( zoomAllObject() ),
-                                      actionCollection(), "zoom_all_object" );
+    actionZoomAllObject = new KAction( i18n( "Zoom All Objects" ), actionCollection(), "zoom_all_object" );
+    connect(actionZoomAllObject, SIGNAL(triggered(bool)), SLOT( zoomAllObject() ));
 
-    actionFlipHorizontal= new KAction( i18n( "Horizontal Flip" ), 0,
-                                       this, SLOT( flipHorizontal() ),
-                                       actionCollection(), "horizontal_flip" );
+    actionFlipHorizontal = new KAction( i18n( "Horizontal Flip" ), actionCollection(), "horizontal_flip" );
+    connect(actionFlipHorizontal, SIGNAL(triggered(bool)), SLOT( flipHorizontal() ));
 
-    actionFlipVertical= new KAction( i18n( "Vertical Flip" ), 0,
-                                     this, SLOT( flipVertical() ),
-                                     actionCollection(), "vertical_flip" );
+    actionFlipVertical = new KAction( i18n( "Vertical Flip" ), actionCollection(), "vertical_flip" );
+    connect(actionFlipVertical, SIGNAL(triggered(bool)), SLOT( flipVertical() ));
 
-    actionDuplicateObj = new KAction( i18n( "Duplicate Object..." ), 0,
-                                      this, SLOT( duplicateObj() ),
-                                      actionCollection(), "duplicate_obj" );
+    actionDuplicateObj = new KAction( i18n( "Duplicate Object..." ), actionCollection(), "duplicate_obj" );
+    connect(actionDuplicateObj, SIGNAL(triggered(bool)), SLOT( duplicateObj() ));
 
-    actionApplyAutoFormat= new KAction( i18n( "Apply Autocorrection" ), 0,
-                                        this, SLOT( applyAutoFormat() ),
-                                        actionCollection(), "apply_autoformat" );
+    actionApplyAutoFormat = new KAction( i18n( "Apply Autocorrection" ), actionCollection(), "apply_autoformat" );
+    connect(actionApplyAutoFormat, SIGNAL(triggered(bool)), SLOT( applyAutoFormat() ));
 
-    actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection..." ), 0,
-                                                  this, SLOT( createStyleFromSelection()),
-                                                  actionCollection(), "create_style" );
+    actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection..." ), actionCollection(), "create_style" );
+    connect(actionCreateStyleFromSelection, SIGNAL(triggered(bool)), SLOT( createStyleFromSelection()));
 
-    actionCloseObject = new KAction( i18n( "Close Object" ), 0,
-                                     this, SLOT( closeObject()),
-                                     actionCollection(), "close_object" );
+    actionCloseObject = new KAction( i18n( "Close Object" ), actionCollection(), "close_object" );
+    connect(actionCloseObject, SIGNAL(triggered(bool)), SLOT( closeObject()));
 
 	QActionGroup* verticalAlignment = new QActionGroup( this );
 	verticalAlignment->setExclusive( true );
@@ -2985,40 +2951,33 @@ void KPrView::setupActions()
     actionAlignVerticalCenter->setActionGroup( verticalAlignment );
 
 
-    actionSavePicture= new KAction( i18n("Save Picture..."), 0,
-                                    this, SLOT( savePicture() ),
-                                    actionCollection(), "save_picture");
+    actionSavePicture = new KAction( i18n("Save Picture..."), actionCollection(), "save_picture");
+    connect(actionSavePicture, SIGNAL(triggered(bool)), SLOT( savePicture() ));
 
     actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), 0,
                                                  this, SLOT( autoSpellCheck() ),
                                                  actionCollection(), "tool_auto_spellcheck" );
 
-    actionInsertFile= new KAction( i18n( "File..." ), 0,
-                                   this, SLOT( insertFile() ),
-                                   actionCollection(), "insert_file" );
-    actionImportStyle= new KAction( i18n( "Import Styles..." ), 0,
-                                    this, SLOT( importStyle() ),
-                                    actionCollection(), "import_style" );
+    actionInsertFile = new KAction( i18n( "File..." ), actionCollection(), "insert_file" );
+    connect(actionInsertFile, SIGNAL(triggered(bool)), SLOT( insertFile() ));
+    actionImportStyle = new KAction( i18n( "Import Styles..." ), actionCollection(), "import_style" );
+    connect(actionImportStyle, SIGNAL(triggered(bool)), SLOT( importStyle() ));
 
-    actionSaveBackgroundPicture= new KAction( i18n( "Save Background Picture..." ), 0,
-                                              this, SLOT(backgroundPicture() ),
-                                              actionCollection(), "save_bgpicture" );
+    actionSaveBackgroundPicture = new KAction( i18n( "Save Background Picture..." ), actionCollection(), "save_bgpicture" );
+    connect(actionSaveBackgroundPicture, SIGNAL(triggered(bool)), SLOT(backgroundPicture() ));
 #if 0
     actionInsertDirectCursor = new KToggleAction( i18n( "Type Anywhere Cursor" ), 0,
                                                   this, SLOT( insertDirectCursor() ),
                                                   actionCollection(), "direct_cursor" );
 #endif
 
-    actionSpellIgnoreAll = new KAction( i18n( "Ignore All" ), 0,
-                                        this, SLOT( slotAddIgnoreAllWord() ),
-                                        actionCollection(), "ignore_all" );
+    actionSpellIgnoreAll = new KAction( i18n( "Ignore All" ), actionCollection(), "ignore_all" );
+    connect(actionSpellIgnoreAll, SIGNAL(triggered(bool)), SLOT( slotAddIgnoreAllWord() ));
 
-    actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
-                                                   this, SLOT( addWordToDictionary() ),
-                                                   actionCollection(), "add_word_to_dictionary" );
-    actionCustomSlideShow = new KAction( i18n( "Custom Slide Show..." ), 0,
-                                         this, SLOT( customSlideShow() ),
-                                         actionCollection(), "custom_slide_show" );
+    actionAddWordToPersonalDictionary = new KAction( i18n( "Add Word to Dictionary" ), actionCollection(), "add_word_to_dictionary" );
+    connect(actionAddWordToPersonalDictionary, SIGNAL(triggered(bool)), SLOT( addWordToDictionary() ));
+    actionCustomSlideShow = new KAction( i18n( "Custom Slide Show..." ), actionCollection(), "custom_slide_show" );
+    connect(actionCustomSlideShow, SIGNAL(triggered(bool)), SLOT( customSlideShow() ));
 
     actionDisplayObjectFromMasterPage = new KToggleAction( i18n( "Hide Object From Slide Master" ), 0,
                                          this, SLOT( displayObjectFromMasterPage() ),
@@ -4711,8 +4670,8 @@ void KPrView::addVariableActions( int type, const QStringList & texts,
             VariableDef v;
             v.type = type;
             v.subtype = i;
-            KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
-                                         actionCollection(), "var-action" );
+            KAction *act = new KAction( (*it), actionCollection(), "var-action" );
+            connect(act, SIGNAL(triggered(bool)), SLOT( insertVariable() ));
             m_variableDefMap.insert( act, v );
             parentMenu->insert( act );
         }
@@ -4751,8 +4710,9 @@ void KPrView::refreshCustomMenu()
             {
                 lst.append( varName );
                 Q3CString name = QString("custom-action_%1").arg(i).toLatin1();
-                act = new KAction( varName, shortCuts[varName], this,
-                                   SLOT( insertCustomVariable() ), actionCollection(), name );
+                act = new KAction( varName, actionCollection(), name );
+                connect(act, SIGNAL(triggered(bool)), SLOT( insertCustomVariable() ));
+                act->setShortcut(shortCuts[varName]);
 #warning "kde4 port it"
                 //act->setGroup( "custom-variable-action" );
                 actionInsertCustom->insert( act );
@@ -4764,8 +4724,8 @@ void KPrView::refreshCustomMenu()
     if(state)
         actionInsertCustom->popupMenu()->insertSeparator();
 
-    act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(),
-                       QString("custom-action_%1").arg(i).toLatin1() );
+    act = new KAction( i18n("New..."), actionCollection(), QString("custom-action_%1").arg(i).toLatin1() );
+    connect(act, SIGNAL(triggered(bool)), SLOT( insertNewCustomVariable() ));
 #warning "kde4: port it"
 	//act->setGroup( "custom-variable-action" );
     actionInsertCustom->insert( act );
