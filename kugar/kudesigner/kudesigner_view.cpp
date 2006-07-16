@@ -210,19 +210,19 @@ void KudesignerView::initActions()
     sectionsDetailFooter = new KAction(KIcon("idf"),  i18n( "Detail Footer" ), actionCollection(), "dfooter" );
     connect(sectionsDetailFooter, SIGNAL(triggered(bool) ), SLOT( slotAddDetailFooter() ));
 
-    itemsNothing = new KToggleAction( i18n( "Clear Selection" ), "frame_edit", 0, this,
-                                     SLOT( slotAddItemNothing() ), actionCollection(), "nothing" );
+    itemsNothing = new KToggleAction(KIcon("frame_edit"),  i18n( "Clear Selection" ), actionCollection(), "nothing" );
+    connect(itemsNothing, SIGNAL(triggered(bool)), SLOT( slotAddItemNothing() ));
     itemsNothing->setChecked( true );
-    itemsLabel = new KToggleAction( i18n( "Label" ), "frame_text", 0, this,
-                                   SLOT( slotAddItemLabel() ), actionCollection(), "label" );
-    itemsField = new KToggleAction( i18n( "Field" ), "frame_field", 0, this,
-                                   SLOT( slotAddItemField() ), actionCollection(), "field" );
-    itemsSpecial = new KToggleAction( i18n( "Special Field" ), "frame_query", 0, this,
-                                     SLOT( slotAddItemSpecial() ), actionCollection(), "special" );
-    itemsCalculated = new KToggleAction( i18n( "Calculated Field" ), "frame_formula", 0, this,
-                                        SLOT( slotAddItemCalculated() ), actionCollection(), "calcfield" );
-    itemsLine = new KToggleAction( i18n( "Line" ), "frame_chart", 0, this,
-                                  SLOT( slotAddItemLine() ), actionCollection(), "line" );
+    itemsLabel = new KToggleAction(KIcon("frame_text"),  i18n( "Label" ), actionCollection(), "label" );
+    connect(itemsLabel, SIGNAL(triggered(bool)), SLOT( slotAddItemLabel() ));
+    itemsField = new KToggleAction(KIcon("frame_field"),  i18n( "Field" ), actionCollection(), "field" );
+    connect(itemsField, SIGNAL(triggered(bool)), SLOT( slotAddItemField() ));
+    itemsSpecial = new KToggleAction(KIcon("frame_query"),  i18n( "Special Field" ), actionCollection(), "special" );
+    connect(itemsSpecial, SIGNAL(triggered(bool)), SLOT( slotAddItemSpecial() ));
+    itemsCalculated = new KToggleAction(KIcon("frame_formula"),  i18n( "Calculated Field" ), actionCollection(), "calcfield" );
+    connect(itemsCalculated, SIGNAL(triggered(bool)), SLOT( slotAddItemCalculated() ));
+    itemsLine = new KToggleAction(KIcon("frame_chart"),  i18n( "Line" ), actionCollection(), "line" );
+    connect(itemsLine, SIGNAL(triggered(bool)), SLOT( slotAddItemLine() ));
 
     QActionGroup *group = new QActionGroup( this );
     group->addAction( itemsNothing );

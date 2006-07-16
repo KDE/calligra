@@ -81,45 +81,33 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     connect(m_config, SIGNAL(triggered(bool) ), SLOT( slotConfig() ));
 
     // One KToggleAction per chart type
-    m_chartbars = new KToggleAction( i18n("&Bar"), "chart_bar_3d", 0, this,
-                                     SLOT( barsChart() ), actionCollection(),
-                                     "barschart");
+    m_chartbars = new KToggleAction(KIcon("chart_bar_3d"),  i18n("&Bar"), actionCollection(), "barschart");
+    connect(m_chartbars, SIGNAL(triggered(bool)), SLOT( barsChart() ));
     QActionGroup *charttypes = new QActionGroup( this );
 	charttypes->addAction(m_chartbars);
 
-    m_chartline = new KToggleAction( i18n("&Line"), "chart_line", 0, this,
-                                     SLOT( lineChart() ), actionCollection(),
-                                     "linechart");
+    m_chartline = new KToggleAction(KIcon("chart_line"),  i18n("&Line"), actionCollection(), "linechart");
+    connect(m_chartline, SIGNAL(triggered(bool)), SLOT( lineChart() ));
 	charttypes->addAction(m_chartline);
 
-    m_chartareas = new KToggleAction( i18n("&Area"), "chart_area", 0, this,
-                                      SLOT( areasChart() ), actionCollection(),
-                                      "areaschart");
+    m_chartareas = new KToggleAction(KIcon("chart_area"),  i18n("&Area"), actionCollection(), "areaschart");
+    connect(m_chartareas, SIGNAL(triggered(bool)), SLOT( areasChart() ));
 	charttypes->addAction(m_chartareas);
 
-    m_charthilo = new KToggleAction( i18n("&HiLo"), "chart_hilo", 0, this,
-                                     SLOT( hiLoChart() ), actionCollection(),
-                                     "hilochart");
+    m_charthilo = new KToggleAction(KIcon("chart_hilo"),  i18n("&HiLo"), actionCollection(), "hilochart");
+    connect(m_charthilo, SIGNAL(triggered(bool)), SLOT( hiLoChart() ));
 	charttypes->addAction(m_charthilo);
-
-    m_chartbw = new KToggleAction( i18n("Bo&x && Whiskers"), "chart_boxwhisker", 0, this,
-                                     SLOT( bwChart() ), actionCollection(),
-                                     "bwchart");
+ m_chartbw = new KToggleAction(KIcon("chart_boxwhisker"),  i18n("Bo&x && Whiskers"), actionCollection(), "bwchart");
+ connect(m_chartbw, SIGNAL(triggered(bool)), SLOT( bwChart() ));
 	charttypes->addAction(m_chartbw);
-
-    m_chartpie = new KToggleAction( i18n("&Pie"), "chart_pie", 0, this,
-                                    SLOT( pieChart() ), actionCollection(),
-                                    "piechart");
+ m_chartpie = new KToggleAction(KIcon("chart_pie"),  i18n("&Pie"), actionCollection(), "piechart");
+ connect(m_chartpie, SIGNAL(triggered(bool)), SLOT( pieChart() ));
     charttypes->addAction(m_chartpie);
-
-    m_chartring = new KToggleAction( i18n("&Ring"), "chart_ring", 0, this,
-                                     SLOT( ringChart() ), actionCollection(),
-                                     "ringchart");
+ m_chartring = new KToggleAction(KIcon("chart_ring"),  i18n("&Ring"), actionCollection(), "ringchart");
+ connect(m_chartring, SIGNAL(triggered(bool)), SLOT( ringChart() ));
 	charttypes->addAction(m_chartring);
-
-	m_chartpolar = new KToggleAction( i18n("&Polar"), "chart_polar", 0, this,
-                                     SLOT( polarChart() ), actionCollection(),
-                                     "polarchart");
+ m_chartpolar = new KToggleAction(KIcon("chart_polar"),  i18n("&Polar"), actionCollection(), "polarchart");
+ connect(m_chartpolar, SIGNAL(triggered(bool)), SLOT( polarChart() ));
 	charttypes->addAction(m_chartpolar);
     // Configuration KActions
     m_colorConfig = new KAction( i18n( "&Colors..." ), actionCollection(), "color_config" );

@@ -182,9 +182,12 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionViewGantt = new KAction(KIcon("gantt_chart"), i18n("Gantt"), actionCollection(), "view_gantt");
     connect(actionViewGantt, SIGNAL(triggered(bool) ), SLOT(slotViewGantt()));
 
-    actionViewExpected = new KToggleAction(i18n("Expected"), 0, 0, this, SLOT(slotViewExpected()), actionCollection(), "view_expected");
-    actionViewOptimistic = new KToggleAction(i18n("Optimistic"), 0, 0, this, SLOT(slotViewOptimistic()), actionCollection(), "view_optimistic");
-    actionViewPessimistic = new KToggleAction(i18n("Pessimistic"), 0, 0, this, SLOT(slotViewPessimistic()), actionCollection(), "view_pessimistic");
+    actionViewExpected = new KToggleAction(i18n("Expected"), actionCollection(), "view_expected");
+    connect(actionViewExpected, SIGNAL(triggered(bool)), SLOT(slotViewExpected()));
+    actionViewOptimistic = new KToggleAction(i18n("Optimistic"), actionCollection(), "view_optimistic");
+    connect(actionViewOptimistic, SIGNAL(triggered(bool)), SLOT(slotViewOptimistic()));
+    actionViewPessimistic = new KToggleAction(i18n("Pessimistic"), actionCollection(), "view_pessimistic");
+    connect(actionViewPessimistic, SIGNAL(triggered(bool)), SLOT(slotViewPessimistic()));
 
 	QActionGroup *estimationType = new QActionGroup( this );
     estimationType->setExclusive( true );
@@ -195,17 +198,25 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
 
 
-    actionViewGanttResources = new KToggleAction(i18n("Resources"), 0, 0, this, SLOT(slotViewGanttResources()), actionCollection(), "view_gantt_showResources");
-    actionViewGanttTaskName = new KToggleAction(i18n("Task Name"), 0, 0, this, SLOT(slotViewGanttTaskName()), actionCollection(), "view_gantt_showTaskName");
-    actionViewGanttTaskLinks = new KToggleAction(i18n("Task Links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");
-    actionViewGanttProgress = new KToggleAction(i18n("Progress"), 0, 0, this, SLOT(slotViewGanttProgress()), actionCollection(), "view_gantt_showProgress");
-    actionViewGanttFloat = new KToggleAction(i18n("Float"), 0, 0, this, SLOT(slotViewGanttFloat()), actionCollection(), "view_gantt_showFloat");
-    actionViewGanttCriticalTasks = new KToggleAction(i18n("Critical Tasks"), 0, 0, this, SLOT(slotViewGanttCriticalTasks()), actionCollection(), "view_gantt_showCriticalTasks");
-    actionViewGanttCriticalPath = new KToggleAction(i18n("Critical Path"), 0, 0, this, SLOT(slotViewGanttCriticalPath()), actionCollection(), "view_gantt_showCriticalPath");
+    actionViewGanttResources = new KToggleAction(i18n("Resources"), actionCollection(), "view_gantt_showResources");
+    connect(actionViewGanttResources, SIGNAL(triggered(bool)), SLOT(slotViewGanttResources()));
+    actionViewGanttTaskName = new KToggleAction(i18n("Task Name"), actionCollection(), "view_gantt_showTaskName");
+    connect(actionViewGanttTaskName, SIGNAL(triggered(bool)), SLOT(slotViewGanttTaskName()));
+    actionViewGanttTaskLinks = new KToggleAction(i18n("Task Links"), actionCollection(), "view_gantt_showTaskLinks");
+    connect(actionViewGanttTaskLinks, SIGNAL(triggered(bool)), SLOT(slotViewGanttTaskLinks()));
+    actionViewGanttProgress = new KToggleAction(i18n("Progress"), actionCollection(), "view_gantt_showProgress");
+    connect(actionViewGanttProgress, SIGNAL(triggered(bool)), SLOT(slotViewGanttProgress()));
+    actionViewGanttFloat = new KToggleAction(i18n("Float"), actionCollection(), "view_gantt_showFloat");
+    connect(actionViewGanttFloat, SIGNAL(triggered(bool)), SLOT(slotViewGanttFloat()));
+    actionViewGanttCriticalTasks = new KToggleAction(i18n("Critical Tasks"), actionCollection(), "view_gantt_showCriticalTasks");
+    connect(actionViewGanttCriticalTasks, SIGNAL(triggered(bool)), SLOT(slotViewGanttCriticalTasks()));
+    actionViewGanttCriticalPath = new KToggleAction(i18n("Critical Path"), actionCollection(), "view_gantt_showCriticalPath");
+    connect(actionViewGanttCriticalPath, SIGNAL(triggered(bool)), SLOT(slotViewGanttCriticalPath()));
 
 //    actionViewGanttNotScheduled = new KToggleAction(i18n("Not Scheduled"), 0, 0, this, SLOT(slotViewGanttNotScheduled()), actionCollection(), "view_gantt_showNotScheduled");
 
-    actionViewTaskAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewTaskAppointments()), actionCollection(), "view_task_appointments");
+    actionViewTaskAppointments = new KToggleAction(i18n("Show allocations"), actionCollection(), "view_task_appointments");
+    connect(actionViewTaskAppointments, SIGNAL(triggered(bool)), SLOT(slotViewTaskAppointments()));
 
     actionViewPert = new KAction(KIcon("pert_chart"), i18n("Network"), actionCollection(), "view_pert");
     connect(actionViewPert, SIGNAL(triggered(bool) ), SLOT(slotViewPert()));
@@ -213,7 +224,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionViewResources = new KAction(KIcon("resources"), i18n("Resources"), actionCollection(), "view_resources");
     connect(actionViewResources, SIGNAL(triggered(bool) ), SLOT(slotViewResources()));
 
-    actionViewResourceAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewResourceAppointments()), actionCollection(), "view_resource_appointments");
+    actionViewResourceAppointments = new KToggleAction(i18n("Show allocations"), actionCollection(), "view_resource_appointments");
+    connect(actionViewResourceAppointments, SIGNAL(triggered(bool)), SLOT(slotViewResourceAppointments()));
 
     actionViewAccounts = new KAction(KIcon("accounts"), i18n("Accounts"), actionCollection(), "view_accounts");
     connect(actionViewAccounts, SIGNAL(triggered(bool) ), SLOT(slotViewAccounts()));

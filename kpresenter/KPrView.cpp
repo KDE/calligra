@@ -2314,20 +2314,17 @@ void KPrView::setupActions()
 
     // ----------------- tools actions
 	QActionGroup* toolsGroup = new QActionGroup( this );
-    actionToolsMouse = new KToggleAction( i18n( "Select" ), "select", 0,
-                                          this, SLOT( toolsMouse() ),
-                                          actionCollection(), "tools_mouse" );
+    actionToolsMouse = new KToggleAction(KIcon("select"),  i18n( "Select" ), actionCollection(), "tools_mouse" );
+    connect(actionToolsMouse, SIGNAL(triggered(bool)), SLOT( toolsMouse() ));
     actionToolsMouse->setActionGroup( toolsGroup );
     actionToolsMouse->setChecked( true );
 
-    actionToolsRotate = new KToggleAction( i18n( "&Rotate" ), "rotate", 0,
-                                           this, SLOT( toolsRotate() ),
-                                           actionCollection(), "tools_rotate" );
+    actionToolsRotate = new KToggleAction(KIcon("rotate"),  i18n( "&Rotate" ), actionCollection(), "tools_rotate" );
+    connect(actionToolsRotate, SIGNAL(triggered(bool)), SLOT( toolsRotate() ));
     actionToolsRotate->setActionGroup( toolsGroup );
 
-    actionToolsZoom = new KToggleAction( i18n( "&Zoom" ), "viewmag", 0,
-                                         this, SLOT( toolsZoom() ),
-                                         actionCollection(), "tools_zoom" );
+    actionToolsZoom = new KToggleAction(KIcon("viewmag"),  i18n( "&Zoom" ), actionCollection(), "tools_zoom" );
+    connect(actionToolsZoom, SIGNAL(triggered(bool)), SLOT( toolsZoom() ));
     actionToolsZoom->setActionGroup( toolsGroup );
 
     actionToolsShapePopup = new KActionMenu( KIcon("rectangle"),i18n( "&Shape" ),
@@ -2335,39 +2332,34 @@ void KPrView::setupActions()
     actionToolsShapePopup->setDelayed(true);
     connect(actionToolsShapePopup, SIGNAL(activated()), this, SLOT(toolsShapePopup()));
 
-    actionToolsRectangle = new KToggleAction( i18n( "&Rectangle" ), "rectangle",
-                                              0, this, SLOT( toolsRectangle() ),
-                                              actionCollection(), "tools_rectangle" );
+    actionToolsRectangle = new KToggleAction(KIcon("rectangle"),  i18n( "&Rectangle" ), actionCollection(), "tools_rectangle" );
+    connect(actionToolsRectangle, SIGNAL(triggered(bool)), SLOT( toolsRectangle() ));
     actionToolsRectangle->setActionGroup( toolsGroup );
 
-    actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ), "circle",
-                                                    0, this, SLOT( toolsCircleOrEllipse() ),
-                                                    actionCollection(), "tools_circle" );
+    actionToolsCircleOrEllipse = new KToggleAction(KIcon("circle"),  i18n( "&Circle/Ellipse" ), actionCollection(), "tools_circle" );
+    connect(actionToolsCircleOrEllipse, SIGNAL(triggered(bool)), SLOT( toolsCircleOrEllipse() ));
     actionToolsCircleOrEllipse->setActionGroup( toolsGroup );
 
-    actionToolsPie = new KToggleAction( i18n( "&Pie/Arc/Chord" ), "pie", 0,
-                                        this, SLOT( toolsPie() ),
-                                        actionCollection(), "tools_pie" );
+    actionToolsPie = new KToggleAction(KIcon("pie"),  i18n( "&Pie/Arc/Chord" ), actionCollection(), "tools_pie" );
+    connect(actionToolsPie, SIGNAL(triggered(bool)), SLOT( toolsPie() ));
     actionToolsPie->setActionGroup( toolsGroup );
 
-    actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Qt::Key_F10, // same shortcut as KWord
-                                         this, SLOT( toolsText() ),
-                                         actionCollection(), "tools_text" );
+    actionToolsText = new KToggleAction(KIcon("frame_text"), i18n( "&Text" ), actionCollection(), "tools_text" );
+    connect(actionToolsText, SIGNAL(triggered(bool)), SLOT( toolsText() ));
+    actionToolsText->setShortcut(Qt::Key_F10); // same shortcut as KWord this
     actionToolsText->setActionGroup( toolsGroup );
 
-    actionToolsAutoform = new KToggleAction( i18n( "&Arrows && Connections" ), "autoform",
-                                             0, this, SLOT( toolsAutoform() ),
-                                             actionCollection(), "tools_autoform" );
+    actionToolsAutoform = new KToggleAction(KIcon("autoform"),  i18n( "&Arrows && Connections" ), actionCollection(), "tools_autoform" );
+    connect(actionToolsAutoform, SIGNAL(triggered(bool)), SLOT( toolsAutoform() ));
     actionToolsAutoform->setActionGroup( toolsGroup );
 
-    actionToolsDiagramm = new KToggleAction( i18n( "&Chart" ), "frame_chart", 0,
-                                             this, SLOT( toolsDiagramm() ),
-                                             actionCollection(), "tools_diagramm" );
+    actionToolsDiagramm = new KToggleAction(KIcon("frame_chart"),  i18n( "&Chart" ), actionCollection(), "tools_diagramm" );
+    connect(actionToolsDiagramm, SIGNAL(triggered(bool)), SLOT( toolsDiagramm() ));
     actionToolsDiagramm->setActionGroup( toolsGroup );
 
-    actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", Qt::Key_F5 /*same as kword*/,
-                                          this, SLOT( toolsTable() ),
-                                          actionCollection(), "tools_table" );
+    actionToolsTable = new KToggleAction(KIcon("frame_spreadsheet"),  i18n( "Ta&ble"), actionCollection(), "tools_table" );
+    connect(actionToolsTable, SIGNAL(triggered(bool)), SLOT( toolsTable() ));
+    actionToolsTable->setShortcut(Qt::Key_F5 /*same as kword*/);
     actionToolsTable->setActionGroup( toolsGroup );
 
     actionToolsObject = new KoPartSelectAction( i18n( "&Object" ), "frame_query",
@@ -2379,34 +2371,28 @@ void KPrView::setupActions()
     actionToolsLinePopup->setDelayed(true);
     connect(actionToolsLinePopup, SIGNAL(activated()), this, SLOT(toolsLinePopup()));
 
-    actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", 0,
-                                         this, SLOT( toolsLine() ),
-                                         actionCollection(), "tools_line" );
+    actionToolsLine = new KToggleAction(KIcon("line"),  i18n( "&Line" ), actionCollection(), "tools_line" );
+    connect(actionToolsLine, SIGNAL(triggered(bool)), SLOT( toolsLine() ));
     actionToolsLine->setActionGroup( toolsGroup );
 
-    actionToolsFreehand = new KToggleAction( i18n( "&Freehand" ), "freehand", 0,
-                                             this, SLOT( toolsFreehand() ),
-                                             actionCollection(), "tools_freehand" );
+    actionToolsFreehand = new KToggleAction(KIcon("freehand"),  i18n( "&Freehand" ), actionCollection(), "tools_freehand" );
+    connect(actionToolsFreehand, SIGNAL(triggered(bool)), SLOT( toolsFreehand() ));
     actionToolsFreehand->setActionGroup( toolsGroup );
 
-    actionToolsPolyline = new KToggleAction( i18n( "Po&lyline" ), "polyline", 0,
-                                             this, SLOT( toolsPolyline() ),
-                                             actionCollection(), "tools_polyline" );
+    actionToolsPolyline = new KToggleAction(KIcon("polyline"),  i18n( "Po&lyline" ), actionCollection(), "tools_polyline" );
+    connect(actionToolsPolyline, SIGNAL(triggered(bool)), SLOT( toolsPolyline() ));
     actionToolsPolyline->setActionGroup( toolsGroup );
 
-    actionToolsQuadricBezierCurve = new KToggleAction( i18n( "&Quadric Bezier Curve" ), "quadricbeziercurve", 0,
-                                                       this, SLOT( toolsQuadricBezierCurve() ),
-                                                       actionCollection(), "tools_quadricbeziercurve" );
+    actionToolsQuadricBezierCurve = new KToggleAction(KIcon("quadricbeziercurve"),  i18n( "&Quadric Bezier Curve" ), actionCollection(), "tools_quadricbeziercurve" );
+    connect(actionToolsQuadricBezierCurve, SIGNAL(triggered(bool)), SLOT( toolsQuadricBezierCurve() ));
     actionToolsQuadricBezierCurve->setActionGroup( toolsGroup );
 
-    actionToolsCubicBezierCurve = new KToggleAction( i18n( "C&ubic Bezier Curve" ), "cubicbeziercurve", 0,
-                                                     this, SLOT( toolsCubicBezierCurve() ),
-                                                     actionCollection(), "tools_cubicbeziercurve" );
+    actionToolsCubicBezierCurve = new KToggleAction(KIcon("cubicbeziercurve"),  i18n( "C&ubic Bezier Curve" ), actionCollection(), "tools_cubicbeziercurve" );
+    connect(actionToolsCubicBezierCurve, SIGNAL(triggered(bool)), SLOT( toolsCubicBezierCurve() ));
     actionToolsCubicBezierCurve->setActionGroup( toolsGroup );
 
-    actionToolsConvexOrConcavePolygon = new KToggleAction( i18n( "Co&nvex/Concave Polygon" ), "polygon", 0,
-                                                           this, SLOT( toolsConvexOrConcavePolygon() ),
-                                                           actionCollection(), "tools_polygon" );
+    actionToolsConvexOrConcavePolygon = new KToggleAction(KIcon("polygon"),  i18n( "Co&nvex/Concave Polygon" ), actionCollection(), "tools_polygon" );
+    connect(actionToolsConvexOrConcavePolygon, SIGNAL(triggered(bool)), SLOT( toolsConvexOrConcavePolygon() ));
     actionToolsConvexOrConcavePolygon->setActionGroup( toolsGroup );
 
 
@@ -2415,27 +2401,23 @@ void KPrView::setupActions()
     actionToolsClosedLinePopup->setDelayed(true);
     connect(actionToolsClosedLinePopup, SIGNAL(activated()), this, SLOT(toolsClosedLinePopup()));
 
-    actionToolsClosedFreehand = new KToggleAction( i18n( "Closed &Freehand" ), "closed_freehand", 0,
-                                                   this, SLOT( toolsClosedFreehand() ),
-                                                   actionCollection(), "tools_closed_freehand" );
+    actionToolsClosedFreehand = new KToggleAction(KIcon("closed_freehand"),  i18n( "Closed &Freehand" ), actionCollection(), "tools_closed_freehand" );
+    connect(actionToolsClosedFreehand, SIGNAL(triggered(bool)), SLOT( toolsClosedFreehand() ));
     actionToolsClosedFreehand->setActionGroup( toolsGroup );
 
 
-    actionToolsClosedPolyline = new KToggleAction( i18n( "Closed Po&lyline" ), "closed_polyline", 0,
-                                                   this, SLOT( toolsClosedPolyline() ),
-                                                   actionCollection(), "tools_closed_polyline" );
+    actionToolsClosedPolyline = new KToggleAction(KIcon("closed_polyline"),  i18n( "Closed Po&lyline" ), actionCollection(), "tools_closed_polyline" );
+    connect(actionToolsClosedPolyline, SIGNAL(triggered(bool)), SLOT( toolsClosedPolyline() ));
     actionToolsClosedPolyline->setActionGroup( toolsGroup );
 
 
-    actionToolsClosedQuadricBezierCurve = new KToggleAction( i18n( "Closed &Quadric Bezier Curve" ), "closed_quadricbeziercurve", 0,
-                                                             this, SLOT( toolsClosedQuadricBezierCurve() ),
-                                                             actionCollection(), "tools_closed_quadricbeziercurve" );
+    actionToolsClosedQuadricBezierCurve = new KToggleAction(KIcon("closed_quadricbeziercurve"),  i18n( "Closed &Quadric Bezier Curve" ), actionCollection(), "tools_closed_quadricbeziercurve" );
+    connect(actionToolsClosedQuadricBezierCurve, SIGNAL(triggered(bool)), SLOT( toolsClosedQuadricBezierCurve() ));
     actionToolsClosedQuadricBezierCurve->setActionGroup( toolsGroup );
 
 
-    actionToolsClosedCubicBezierCurve = new KToggleAction( i18n( "Closed C&ubic Bezier Curve" ), "closed_cubicbeziercurve", 0,
-                                                           this, SLOT( toolsClosedCubicBezierCurve() ),
-                                                           actionCollection(), "tools_closed_cubicbeziercurve" );
+    actionToolsClosedCubicBezierCurve = new KToggleAction(KIcon("closed_cubicbeziercurve"),  i18n( "Closed C&ubic Bezier Curve" ), actionCollection(), "tools_closed_cubicbeziercurve" );
+    connect(actionToolsClosedCubicBezierCurve, SIGNAL(triggered(bool)), SLOT( toolsClosedCubicBezierCurve() ));
     actionToolsClosedCubicBezierCurve->setActionGroup( toolsGroup );
 
     // ----------------- text actions
@@ -2458,21 +2440,20 @@ void KPrView::setupActions()
     connect( actionTextFontFamily , SIGNAL( triggered(const QString &) ),
              this, SLOT( fontSelected(const QString &) ) );
 
-    actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", Qt::CTRL + Qt::Key_B,
-                                        this, SLOT( textBold() ),
-                                        actionCollection(), "text_bold" );
+    actionTextBold = new KToggleAction(KIcon("text_bold"),  i18n( "&Bold" ), actionCollection(), "text_bold" );
+    connect(actionTextBold, SIGNAL(triggered(bool)), SLOT( textBold() ));
+    actionTextBold->setShortcut(Qt::CTRL + Qt::Key_B);
 
-    actionTextItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", Qt::CTRL + Qt::Key_I,
-                                          this, SLOT( textItalic() ),
-                                          actionCollection(), "text_italic" );
+    actionTextItalic = new KToggleAction(KIcon("text_italic"),  i18n( "&Italic" ), actionCollection(), "text_italic" );
+    connect(actionTextItalic, SIGNAL(triggered(bool)), SLOT( textItalic() ));
+    actionTextItalic->setShortcut(Qt::CTRL + Qt::Key_I);
 
-    actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", Qt::CTRL + Qt::Key_U,
-                                             this, SLOT( textUnderline() ),
-                                             actionCollection(), "text_underline" );
+    actionTextUnderline = new KToggleAction(KIcon("text_under"),  i18n( "&Underline" ), actionCollection(), "text_underline" );
+    connect(actionTextUnderline, SIGNAL(triggered(bool)), SLOT( textUnderline() ));
+    actionTextUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
 
-    actionFormatStrikeOut = new KToggleAction( i18n( "&Strike Out" ), "text_strike", 0 ,
-                                               this, SLOT( textStrikeOut() ),
-                                               actionCollection(), "format_strike" );
+    actionFormatStrikeOut = new KToggleAction(KIcon("text_strike"),  i18n( "&Strike Out" ), actionCollection(), "format_strike" );
+    connect(actionFormatStrikeOut, SIGNAL(triggered(bool)), SLOT( textStrikeOut() ));
 
     actionTextColor = new TKSelectColorAction( i18n( "&Color..." ), TKSelectColorAction::TextColor,
                                                actionCollection(), "text_color" ,true);
@@ -2481,25 +2462,25 @@ void KPrView::setupActions()
 
 
 	QActionGroup* alignGroup = new QActionGroup( this );
-    actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", Qt::ALT + Qt::Key_L,
-                                             this, SLOT( textAlignLeft() ),
-                                             actionCollection(), "text_alignleft" );
+    actionTextAlignLeft = new KToggleAction(KIcon("text_left"),  i18n( "Align &Left" ), actionCollection(), "text_alignleft" );
+    connect(actionTextAlignLeft, SIGNAL(triggered(bool)), SLOT( textAlignLeft() ));
+    actionTextAlignLeft->setShortcut(Qt::ALT + Qt::Key_L);
     actionTextAlignLeft->setActionGroup( alignGroup );
     actionTextAlignLeft->setChecked( true );
 
-    actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", Qt::ALT + Qt::Key_C,
-                                               this, SLOT( textAlignCenter() ),
-                                               actionCollection(), "text_aligncenter" );
+    actionTextAlignCenter = new KToggleAction(KIcon("text_center"),  i18n( "Align &Center" ), actionCollection(), "text_aligncenter" );
+    connect(actionTextAlignCenter, SIGNAL(triggered(bool)), SLOT( textAlignCenter() ));
+    actionTextAlignCenter->setShortcut(Qt::ALT + Qt::Key_C);
     actionTextAlignCenter->setActionGroup( alignGroup );
 
-    actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", Qt::ALT + Qt::Key_R,
-                                              this, SLOT( textAlignRight() ),
-                                              actionCollection(), "text_alignright" );
+    actionTextAlignRight = new KToggleAction(KIcon("text_right"),  i18n( "Align &Right" ), actionCollection(), "text_alignright" );
+    connect(actionTextAlignRight, SIGNAL(triggered(bool)), SLOT( textAlignRight() ));
+    actionTextAlignRight->setShortcut(Qt::ALT + Qt::Key_R);
     actionTextAlignRight->setActionGroup( alignGroup );
 
-    actionTextAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", Qt::CTRL + Qt::Key_J,
-                                              this, SLOT( textAlignBlock() ),
-                                              actionCollection(), "text_alignblock" );
+    actionTextAlignBlock = new KToggleAction(KIcon("text_block"),  i18n( "Align &Block" ), actionCollection(), "text_alignblock" );
+    connect(actionTextAlignBlock, SIGNAL(triggered(bool)), SLOT( textAlignBlock() ));
+    actionTextAlignBlock->setShortcut(Qt::CTRL + Qt::Key_J);
     actionTextAlignBlock->setActionGroup( alignGroup );
 
 
@@ -2740,13 +2721,11 @@ void KPrView::setupActions()
     connect(actionImageEffect, SIGNAL(triggered(bool)), SLOT(imageEffect()));
 
 	QActionGroup* valignGroup = new QActionGroup( this );
-    actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
-                                           this, SLOT( textSuperScript() ),
-                                           actionCollection(), "format_super" );
+    actionFormatSuper = new KToggleAction(KIcon("super"),  i18n( "Superscript" ), actionCollection(), "format_super" );
+    connect(actionFormatSuper, SIGNAL(triggered(bool)), SLOT( textSuperScript() ));
     actionFormatSuper->setActionGroup(valignGroup );
-    actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
-                                         this, SLOT( textSubScript() ),
-                                         actionCollection(), "format_sub" );
+    actionFormatSub = new KToggleAction(KIcon("sub"),  i18n( "Subscript" ), actionCollection(), "format_sub" );
+    connect(actionFormatSub, SIGNAL(triggered(bool)), SLOT( textSubScript() ));
     actionFormatSub->setActionGroup(valignGroup );
 
 
