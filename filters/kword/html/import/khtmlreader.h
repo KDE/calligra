@@ -20,8 +20,10 @@
 #define KHTMLREADER_H
 
 #include <khtml_part.h> // fixme speedup compile time by moving these into the cpp file.
+
 #include <qdom.h>
 #include <q3ptrstack.h>
+
 #include <kwdwriter.h>
 
 //#include <qstack.h>

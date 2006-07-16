@@ -21,16 +21,15 @@
 
 
 #include <QRect>
-#include <KoStore.h>
 #include <qdom.h>
+
+#include <KoStore.h>
+
+class KoTextZoomHandler;
 
 /**
   *@author Frank Dekervel
   */
-
-
-class KoTextZoomHandler;
-
 class KWDWriter {
 public: 
 	KWDWriter(KoStore *store);

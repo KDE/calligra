@@ -29,7 +29,6 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-
 class HTMLImport : public KoFilter {
 
     Q_OBJECT

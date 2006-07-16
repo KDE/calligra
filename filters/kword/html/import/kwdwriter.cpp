@@ -19,10 +19,11 @@
 #include "kwdwriter.h"
 #include <stdlib.h>
 #include "qrect.h"
-//Added by qt3to4:
-#include <QByteArray>
 #include <KoTextZoomHandler.h>
 #include <qpaintdevice.h>
+
+//Added by qt3to4:
+#include <QByteArray>
 
 KWDWriter::KWDWriter(KoStore *store){
 	_zoomhandler = new KoTextZoomHandler();

@@ -29,8 +29,6 @@
 
 #include <khtmlreader.h>
 #include <kwdwriter.h>
-//Added by qt3to4:
-#include <QByteArray>
 
 typedef KGenericFactory<HTMLImport> HTMLImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libhtmlimport, HTMLImportFactory( "kofficefilters" ) )
