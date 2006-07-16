@@ -266,7 +266,7 @@ void OpenCalcImport::checkForNamedAreas( QString & formula ) const
     }
     if ( word.length() > 0 )
     {
-      if ( m_namedAreas.find( word ) != m_namedAreas.end() )
+      if ( m_namedAreas.contains( word ) )
       {
         formula = formula.replace( start, word.length(), "'" + word + "'" );
         l = formula.length();
@@ -281,7 +281,7 @@ void OpenCalcImport::checkForNamedAreas( QString & formula ) const
   }
   if ( word.length() > 0 )
   {
-    if ( m_namedAreas.find( word ) != m_namedAreas.end() )
+    if ( m_namedAreas.contains( word ) )
     {
       formula = formula.replace( start, word.length(), "'" + word + "'" );
       l = formula.length();
@@ -824,7 +824,7 @@ void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, Con
     {
         val = val.remove( "cell-content-is-between(" );
         val = val.remove( ")" );
-        QStringList listVal = QStringList::split( "," , val );
+        QStringList listVal = val.split( "," );
         loadOasisValidationValue( listVal, newCondition );
         newCondition.cond = Conditional::Between;
     }
@@ -832,7 +832,7 @@ void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, Con
     {
         val = val.remove( "cell-content-is-not-between(" );
         val = val.remove( ")" );
-        QStringList listVal = QStringList::split( ",", val );
+        QStringList listVal = val.split( "," );
         loadOasisValidationValue( listVal,newCondition );
         newCondition.cond = Conditional::Different;
     }
@@ -2462,7 +2462,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
             kDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
-            QStringList listVal = QStringList::split( ",", valExpression );
+            QStringList listVal = valExpression.split( "," );
             loadOasisValidationValue( val, listVal );
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
@@ -2473,7 +2473,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             kDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             kDebug(30518)<<" valExpression :"<<valExpression<<endl;
-            QStringList listVal = QStringList::split( ",", valExpression );
+            QStringList listVal = valExpression.split( "," );
             loadOasisValidationValue( val, listVal );
 
         }
@@ -2513,7 +2513,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             {
                 valExpression = valExpression.remove( "cell-content-is-between(" );
                 valExpression = valExpression.remove( ")" );
-                QStringList listVal = QStringList::split( "," , valExpression );
+                QStringList listVal = valExpression.split( "," );
                 loadOasisValidationValue( val, listVal );
 
                 val->m_cond = Conditional::Between;
@@ -2522,7 +2522,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             {
                 valExpression = valExpression.remove( "cell-content-is-not-between(" );
                 valExpression = valExpression.remove( ")" );
-                QStringList listVal = QStringList::split( ",", valExpression );
+                QStringList listVal = valExpression.split( "," );
                 loadOasisValidationValue( val, listVal );
                 val->m_cond = Conditional::Different;
             }
@@ -2748,7 +2748,7 @@ KoFilter::ConversionStatus OpenCalcImport::convert( QByteArray const & from, QBy
 
   if (  !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
   {
-    kWarning(30518) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+    kWarning(30518) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
     return KoFilter::NotImplemented;
   }
 

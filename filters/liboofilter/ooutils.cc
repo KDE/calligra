@@ -138,7 +138,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack&
                 lineSpacing.setAttribute("type","oneandhalf");
             else if( value=="200%")
                 lineSpacing.setAttribute("type","double");
-            else if ( value.find('%') > -1 )
+            else if ( value.contains('%') )
             {
                 double percent = value.toDouble();
                 lineSpacing.setAttribute("type", "multiple");
@@ -237,7 +237,7 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
         {
             int filling = 0;
             QChar ch = leaderChar[0];
-            switch (ch.latin1()) {
+            switch (ch.toLatin1()) {
             case '.':
                 filling = 1; break;
             case '-':
@@ -383,7 +383,7 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
     //OO: <vertical position (% or sub or super)> [<size as %>]
     //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
     // TODO in kword: vertical positions other than sub/super
-    QStringList lst = QStringList::split( ' ', text_position );
+    QStringList lst = text_position.split( ' ' );
     if ( !lst.isEmpty() )
     {
         QString textPos = lst.front().trimmed();
