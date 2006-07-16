@@ -2,7 +2,7 @@ if have_openexr
 OPENEXR_SUBDIR=openexr
 endif
 
-if include_imagemagick_filter
+if include_graphicsmagick_filter
 IMAGEMAGICK_SUBDIR=magick
 endif
 
