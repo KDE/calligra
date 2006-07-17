@@ -30,19 +30,16 @@ class Sheet;
  * \class RecalcManager
  * \brief Manages the recalculations of cells containing a formula.
  *
- * If a cell region was changed, the cells, that are refering to this
- * region, are updated.
- * The recalculations of a cell region are triggered by cell value
- * changes. The recalculation itself changes the value of a cell, so
- * we get a cascade of recalculation events.
+ * The recalculations of a cell region, a sheet or the map are based
+ * on the following principle:
  *
- * The recalculations of a sheet or the map is based on the following:
  * A cell could refer to other cells, which need to be recalculated
  * before. The order of recalculation is determined by the depth of
  * references, i.e. first the cells, which do not refer to other cells,
  * are recalculated. Cells refering to those are next. Then cells, which
  * refer to the ones in the last step follow and so on until all cells
  * have been updated.
+ *
  * Cell value changes are blocked while doing this, i.e. they do not
  * trigger a new recalculation event.
  */
@@ -64,18 +61,12 @@ public:
 
   /**
    * Recalculates the cells refering to cells in \p region .
-   * The updated cells trigger new recalculations until all
-   * dependants have been updated.
-   *
-   * \todo This works fine for the case in which a single cell
-   * was changed, but leads to problems with cell regions. If one of
-   * the cells in the changed region refers to another one in the same
-   * region, this cell gets recalculated twice. One time in the current
-   * recalculation event and one time in the event triggered be the
-   * update of the refered cell. Use a similar approach as for sheets/map
-   * in the other direction.
+   * First the reference cell depths are computed for all cells
+   * refering to this region. Then the cells are recalculated sorted
+   * by the reference depth in ascending order.
    *
    * \see recalcRegion()
+   * \see recalc()
    */
   void regionChanged(const Region& region);
 
@@ -83,6 +74,7 @@ public:
    * Recalculates the sheet \p sheet .
    * First the reference cell depths are computed. Then the cells are
    * recalculated sorted by the reference depth in ascending order.
+   *
    * \see recalc()
    */
   void recalcSheet(Sheet* const sheet);
@@ -91,6 +83,7 @@ public:
    * Recalculates the whole map.
    * First the reference cell depth are computed. Then the cells are
    * recalculated sorted by the reference depth in ascending order.
+   *
    * \see recalc()
    */
   void recalcMap();
@@ -115,19 +108,23 @@ protected:
   /**
    * Iterates over the map of cell with their reference depths
    * and calls recalcCell().
+   *
    * \see recalcCell()
    */
   void recalc();
 
   /**
    * Used in the recalculation events for changed regions.
-   * Calls recalcCell() for each position in \p region .
+   * Determines the reference depth for each position in \p region .
+   * Calls itself recursively for the regions, that depend on cells
+   * in \p region .
+   *
    * \see recalcCell()
    */
   void recalcRegion(const Region& region);
 
   /**
-   * Recalculates a cell.
+   * Recalculates \p cell .
    * Checks for circular recalculations and sets an error, if those
    * occur.
    */

@@ -64,8 +64,11 @@ void RecalcManager::regionChanged(const Region& region)
 {
   if (d->busy)
     return;
+  d->busy = true;
   kDebug() << "RecalcManager::regionChanged " << region.name() << endl;
+  ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
   {
+    ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
     {
@@ -78,16 +81,13 @@ void RecalcManager::regionChanged(const Region& region)
         for (int row = range.top(); row <= bottom; ++row)
         {
           Cell* cell = sheet->cellAt(col, row);
-
-          // empty or default cell? do nothing
-          if( cell->isDefault() )
-            continue;
-
           recalcRegion(d->depManager->getDependants(cell));
         }
       }
     }
   }
+  recalc();
+  d->busy = false;
 }
 
 void RecalcManager::recalcSheet(Sheet* const sheet)
@@ -184,6 +184,11 @@ int RecalcManager::computeDepth(Cell* cell) const
         }
 
         Cell* referencedCell = sheet->cellAt(col, row);
+        if (referencedCell == cell)
+        {
+          // skip circula dependencies
+          continue;
+        }
         if (d->cells.contains(referencedCell))
         {
           // the referenced cell depth was already computed
@@ -214,15 +219,21 @@ void RecalcManager::recalcRegion(const Region& region)
       for (int row = range.top(); row <= bottom; ++row)
       {
         Cell* const cell = sheet->cellAt(col, row);
-        recalcCell(cell);
-#if 0
+
         if (!d->cells.contains(cell))
         {
           int depth = computeDepth(cell);
           d->cells.insert(cell, depth);
           d->depths.insertMulti(depth, cell);
         }
-#endif
+
+        // recursion. we need the whole dependency tree of the changed region
+        Region dependantRegion = d->depManager->getDependants(cell);
+        // FIXME Stefan: The circular dependency is actually a problem for the DependencyManager.
+        if (!dependantRegion.contains(QPoint(cell->column(), cell->row()), cell->sheet()))
+        {
+          recalcRegion(dependantRegion);
+        }
       }
     }
   }
