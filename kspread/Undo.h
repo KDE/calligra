@@ -319,25 +319,6 @@ protected:
 };
 
 
-class UndoSetText : public UndoAction
-{
-public:
-    UndoSetText( Doc *_doc, Sheet *_sheet, const QString& _text, int _column, int _row, FormatType _formatType );
-    virtual ~UndoSetText();
-
-    virtual void undo();
-    virtual void redo();
-
-protected:
-    QString m_sheetName;
-    int m_iRow;
-    int m_iColumn;
-    QString m_strText;
-    QString m_strRedoText;
-    FormatType m_eFormatType;
-    FormatType m_eFormatTypeRedo;
-};
-
 class UndoCellFormat : public UndoAction
 {
 public:

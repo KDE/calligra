@@ -111,8 +111,8 @@ class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator {
     /** set the values for the range. Can be either a single value, or
     a value array */
     void setValue (Value val) { data = val; };
-    /** If set, all cells shall be switched to this format. Will do
-    nothing if parsing is true. */
+    /** If set, all cells shall be switched to this format. If parsing is
+    true, the resulting value may end up being different. */
     void setFormat (FormatType fmtType) { m_format = fmtType; };
   protected:
     virtual Value newValue (Element *element, int col, int row, bool *,

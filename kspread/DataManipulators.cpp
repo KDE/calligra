@@ -75,6 +75,8 @@ bool AbstractDataManipulator::process (Element* element)
       // we have the data - set it !
       if (parse) {
         Cell *cell = m_sheet->nonDefaultCell (col, row);
+        if (fmtType != No_format)
+          cell->format()->setFormatType (fmtType);
         cell->setCellText (text);
       } else {
         Cell *cell = m_sheet->cellAt (col, row);

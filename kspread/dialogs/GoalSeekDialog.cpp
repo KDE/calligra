@@ -32,9 +32,9 @@
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "Undo.h"
 #include "Util.h"
 #include "View.h"
+#include "DataManipulators.h"
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -307,16 +307,6 @@ void GoalSeekDialog::buttonOkClicked()
   }
   else
   {
-    if ( !pDoc->undoLocked() )
-    {
-      UndoSetText * undo
-        = new UndoSetText( pDoc, m_pView->activeSheet(), QString::number(m_oldSource),
-                                  m_sourceCell->column(), m_sourceCell->row(),
-                                  m_sourceCell->formatType() );
-
-      pDoc->addCommand( undo );
-    }
-
     m_restored = true;
   }
 

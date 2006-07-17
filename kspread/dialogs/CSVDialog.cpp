@@ -49,8 +49,8 @@
 #include <Doc.h>
 #include <Sheet.h>
 #include <Format.h>
-#include <Undo.h>
 #include <View.h>
+#include <DataManipulators.h>
 
 
 #include "CSVDialog.h"
@@ -614,106 +614,39 @@ void CSVDialog::accept()
 {
   Sheet * sheet  = m_pView->activeSheet();
   QString csv_delimiter;
-  Cell  * cell;
 
   int numRows = m_sheet->numRows();
   int numCols = m_sheet->numCols();
 
-  if (numRows == 0)
-    ++numRows;
+  if ((numRows == 0) || (numCols == 0))
+    return;  // nothing to do here
 
   if ( (numCols > m_targetRect.width()) && (m_targetRect.width() > 1) )
   {
     numCols = m_targetRect.width();
   }
   else
-    m_targetRect.setRight( m_targetRect.left() + numCols );
+    m_targetRect.setRight( m_targetRect.left() + numCols - 1 );
 
   if ( (numRows > m_targetRect.height()) && (m_targetRect.height() > 1) )
     numRows = m_targetRect.height();
   else
-    m_targetRect.setBottom( m_targetRect.top() + numRows );
+    m_targetRect.setBottom( m_targetRect.top() + numRows - 1 );
 
-  if ( numRows == 1 && numCols == 1)
-  {
-    Doc * doc = m_pView->doc();
-    cell = sheet->nonDefaultCell( m_targetRect.left(), m_targetRect.top() );
-    if ( !doc->undoLocked() )
-    {
-      UndoSetText * undo = new UndoSetText( doc, sheet , cell->text(), m_targetRect.left(),
-                                                          m_targetRect.top(), cell->formatType() );
-      doc->addCommand( undo );
-    }
-  }
-  else
-  {
-      UndoChangeAreaTextCell * undo = new UndoChangeAreaTextCell( m_pView->doc(), sheet , m_targetRect );
-      m_pView->doc()->addCommand( undo );
-  }
-
-  m_pView->doc()->emitBeginOperation();
-
-  int i;
-  int left = m_targetRect.left();
-  int top  = m_targetRect.top();
-
-  QVector<double> widths( numCols );
-  for ( i = 0; i < numCols; ++i )
-  {
-    ColumnFormat * c  = sheet->nonDefaultColumnFormat( left + i );
-    widths[i] = c->dblWidth();
-  }
-
+  Value val (numCols, numRows);
   for (int row = 0; row < numRows; ++row)
-  {
     for (int col = 0; col < numCols; ++col)
-    {
-      cell = sheet->nonDefaultCell( left + col, top + row );
-      cell->setCellText( getText( row, col ) );
+      val.setElement (col, row, getText (row, col));
 
-      QFontMetrics fm = sheet->painter().fontMetrics();
-      double w = fm.width( cell->strOutText() );
-      if ( w == 0.0 )
-      {
-        QFontMetrics fm( cell->format()->textFont( left + col, top + row ) );
-        w = fm.width('x') * (double) getText( row, col ).length();
-      }
-
-      if ( w > widths[col] )
-        widths[col] = w;
-
-      cell->format()->setFormatType(Generic_format);
-      /*
-      Disabling this code for now, everything will use Generic formatting,
-      hoping for the best (Tomas)
-      //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
-
-      switch (getHeader(col))
-      {
-       case TEXT:
-        break;
-       case NUMBER:
-        cell->format()->setFormatType(Number_format);
-        cell->setPrecision(2);
-        break;
-       case DATE:
-        cell->format()->setFormatType(ShortDate_format);
-        break;
-       case CURRENCY:
-        cell->format()->setFormatType(Money_format);
-        break;
-      }
-      */
-    }
-  }
-
-  for ( i = 0; i < numCols; ++i )
-  {
-    ColumnFormat * c  = sheet->nonDefaultColumnFormat( left + i );
-    c->setDblWidth( widths[i] );
-    sheet->emit_updateColumn( c, left + i );
-  }
-
+  DataManipulator *manipulator = new DataManipulator;
+  manipulator->setName (i18n ("Text to Columns"));
+  manipulator->setSheet (sheet);
+  manipulator->setParsing (true);
+  manipulator->setFormat (Generic_format);
+  manipulator->setValue (val);
+  manipulator->add (m_targetRect);
+  manipulator->execute ();
+  
   m_pView->slotUpdateView( sheet );
   QDialog::accept();
 }

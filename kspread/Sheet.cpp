@@ -3517,77 +3517,34 @@ void Sheet::paste( const QRect& pasteArea, bool makeUndo,
     // doc()->emitEndOperation();
 }
 
-
 void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
 {
 //  QString tmp;
 //  tmp= QString::fromLocal8Bit(_mime->encodedData( "text/plain" ));
 
-//  QStringList list = _listWord.split( '\n' );
-
-  if( _text.isEmpty() )
+  if (_text.isEmpty())
     return;
 
-  QString tmp = _text;
-  int i;
-  int mx   = pasteArea.left();
-  int my   = pasteArea.top();
-  int rows = 1;
-  int len  = tmp.length();
+  int mx = pasteArea.left();
+  int my = pasteArea.top();
+  
+  // split the text into lines and put them into an array value
+  QStringList list = _text.split( '\n' );
+  Value value (1, list.size());
+  int which = 0;
+  QStringList::iterator it;
+  for (it = list.begin(); it != list.end(); ++it)
+    value.setElement (0, which++, Value (*it));
 
-  //count the numbers of lines in text
-  for ( i = 0; i < len; ++i )
-  {
-    if ( tmp[i] == '\n' )
-      ++rows;
-  }
-
-  Cell * cell = nonDefaultCell( mx, my );
-  if ( rows == 1 )
-  {
-    if ( !doc()->undoLocked() )
-    {
-      UndoSetText * undo = new UndoSetText( doc(), this , cell->text(), mx, my, cell->formatType() );
-      doc()->addCommand( undo );
-    }
-  }
-  else
-  {
-      QRect rect(mx, my, mx, my + rows - 1);
-      UndoChangeAreaTextCell * undo = new UndoChangeAreaTextCell( doc(), this , rect );
-      doc()->addCommand( undo );
-  }
-
-  i = 0;
-  QString rowtext;
-
-  while ( i < rows )
-  {
-    int p = 0;
-
-    p = tmp.indexOf('\n');
-
-    if (p < 0)
-      p = tmp.length();
-
-    rowtext = tmp.left(p);
-
-    if ( !isProtected() || cell->format()->notProtected( mx, my + i ) )
-    {
-      cell->setCellText( rowtext );
-      cell->updateChart();
-    }
-
-    // next cell
-    ++i;
-    cell = nonDefaultCell( mx, my + i );
-
-    if (!cell || p == (int) tmp.length())
-      break;
-
-    // exclude the left part and '\n'
-    tmp = tmp.right(tmp.length() - p - 1);
-  }
+  Region range (mx, my, 1, list.size());
+  
+  // create a manipulator, configure it and execute it
+  DataManipulator *manipulator = new DataManipulator;
+  manipulator->setSheet (this);
+  manipulator->setParsing (false);
+  manipulator->setValue (value);
+  manipulator->add (range);
+  manipulator->execute ();
 }
 
 void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
