@@ -47,8 +47,6 @@
 #include "vcolordocker.h"
 
 #include <ko_hsv_widget.h>
-#include <ko_cmyk_widget.h>
-#include <ko_rgb_widget.h>
 #include <koColor.h>
 
 #include <kdebug.h>
@@ -73,20 +71,6 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	connect(this, SIGNAL(fgColorChanged(const QColor &)), mHSVWidget, SLOT(setFgColor(const QColor &)));
 	connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
 	mTabWidget->addTab( mHSVWidget, i18n( "HSV" ) );
-
-	/* ##### RGB WIDGET ##### */
-	mRGBWidget = new KoRGBWidget( mTabWidget );
-	connect( mRGBWidget, SIGNAL( sigFgColorChanged( const QColor &) ), this, SLOT( updateFgColor( const QColor &) ) );
-	connect( mRGBWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
-	connect(this, SIGNAL(fgColorChanged(const QColor &)), mRGBWidget, SLOT(setFgColor(const QColor &)));
-	connect(this, SIGNAL(bgColorChanged(const QColor &)), mRGBWidget, SLOT(setBgColor(const QColor &)));
-	mTabWidget->addTab( mRGBWidget, i18n( "RGB" ) );
-
-	/* ##### CMYK WIDGET ##### */
-	/*mCMYKWidget = new KoCMYKWidget( mTabWidget );
-	connect( mCMYKWidget, SIGNAL( sigFgColorChanged( const QColor &) ), this, SLOT( updateFgColor( const QColor &) ) );
-	connect( mCMYKWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
-	mTabWidget->addTab( mCMYKWidget, i18n( "CMYK" ) );*/
 
 	//Opacity
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "white" ), QColor( "black" ), 0, 100, 100, this );
@@ -113,8 +97,6 @@ VColorDocker::~VColorDocker()
 void VColorDocker::updateFgColor(const QColor &c)
 {
 	mHSVWidget->blockSignals(true);
-	mRGBWidget->blockSignals(true);
-	//mCMYKWidget->blockSignals(true);
 
 	m_oldColor = m_color;
 
@@ -153,15 +135,11 @@ void VColorDocker::updateFgColor(const QColor &c)
 	emit fgColorChanged( c );
 
 	mHSVWidget->blockSignals(false);
-	mRGBWidget->blockSignals(false);
-	//mCMYKWidget->blockSignals(false);
 }
 
 void VColorDocker::updateBgColor(const QColor &c)
 {
 	mHSVWidget->blockSignals(true);
-	mRGBWidget->blockSignals(true);
-	//mCMYKWidget->blockSignals(true);
 
 	m_oldColor = m_color;
 
@@ -200,8 +178,6 @@ void VColorDocker::updateBgColor(const QColor &c)
 	emit bgColorChanged( c );
 
 	mHSVWidget->blockSignals(false);
-	mRGBWidget->blockSignals(false);
-	//mCMYKWidget->blockSignals(false);
 }
 
 void VColorDocker::updateOpacity()
@@ -239,8 +215,6 @@ void VColorDocker::update()
 {
 
 	mHSVWidget->blockSignals(true);
-	mRGBWidget->blockSignals(true);
-	//mCMYKWidget->blockSignals(true);
 
 	int objCnt = m_part->document().selection()->objects().count();
 
@@ -252,17 +226,10 @@ void VColorDocker::update()
 		QColor bgColor = QColor(obj->fill()->color());
 
 		mHSVWidget->setFgColor(fgColor);
-		mRGBWidget->setFgColor(fgColor);
-		//mCMYKWidget->setFgColor(fgColor);
-			
 		mHSVWidget->setBgColor(bgColor);
-		mRGBWidget->setBgColor(bgColor);
-		//mCMYKWidget->setBgColor(bgColor);
 	}
 
 	mHSVWidget->blockSignals(false);
-	mRGBWidget->blockSignals(false);
-	//mCMYKWidget->blockSignals(false);
 }
 
 #include "vcolordocker.moc"

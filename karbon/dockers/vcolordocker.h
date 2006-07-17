@@ -30,8 +30,6 @@ class KarbonView;
 class VColor;
 class VColorSlider;
 class KoHSVWidget;
-class KoCMYKWidget;
-class KoRGBWidget;
 
 class VColorDocker : public QWidget
 {
@@ -54,8 +52,6 @@ private:
 
 	QTabWidget *mTabWidget;
 	KoHSVWidget *mHSVWidget;
-	//KoCMYKWidget *mCMYKWidget;
-	KoRGBWidget *mRGBWidget;
 	VColorSlider *mOpacity;
 
 signals:
