@@ -30,6 +30,7 @@ public:
 	KoRegularPolygonShape();
 	void paint(QPainter &painter, KoViewConverter &converter);
 	void setPoints(int points);
+	const QPainterPath outline() const;
 
 protected:
 	int m_points;
