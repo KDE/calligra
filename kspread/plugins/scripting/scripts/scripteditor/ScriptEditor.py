@@ -18,6 +18,9 @@ try:
 except (ImportError):
 	raise "Failed to import the required PyQt python module."
 
+####################################################################################
+# Samples.
+
 class Widget(qt.QHBox):
 	def __init__(self, parentwidget, label = None):
 		self.parentwidget = parentwidget
@@ -51,8 +54,9 @@ class EditWidget(Widget):
 		return self.edit.text()
 
 class FileWidget(Widget):
-	def __init__(self, parentwidget, label, filtermask):
+	def __init__(self, parentwidget, label, filtermask, openfiledialog = True):
 		self.filtermask = filtermask
+		self.openfiledialog = openfiledialog
 		import qt
 		global Widget
 		Widget.__init__(self, parentwidget, label)
@@ -63,12 +67,18 @@ class FileWidget(Widget):
 	def btnClicked(self):
 		import qt
 		text = str( self.edit.text() )
-		filename = str( qt.QFileDialog.getOpenFileName(text, self.filtermask, self.parentwidget) )
+		if self.openfiledialog:
+			filename = str( qt.QFileDialog.getOpenFileName(text, self.filtermask, self.parentwidget) )
+		else:
+			filename = qt.QFileDialog.getSaveFileName(text, self.filtermask, self.parentwidget)
 		if filename != "": self.edit.setText( filename )
 	def value(self):
 		return self.edit.text()
 
 class Samples:
+
+	####################################################################################
+	# KexiDB
 
 	class KexiDB:
 		def __init__(self, parentwidget):
@@ -202,28 +212,33 @@ class Samples:
 					'	cursor.moveNext()',
 				)
 
+	####################################################################################
+	# KSpread
+
 	class KSpread:
 		def __init__(self, parentwidget):
 			self.parentwidget = parentwidget
 
 		class _SheetWidget(ListWidget):
-			def __init__(self, parentwidget):
+			def __init__(self, parentwidget, label = "Sheet:"):
 				global ListWidget
-				ListWidget.__init__(self, parentwidget, "Sheet:")
+				ListWidget.__init__(self, parentwidget, label)
 
 				try:
 					import krosskspreadcore
 					document = krosskspreadcore.get("KSpreadDocument")
 					for sheetname in document.sheetNames():
 						self.combo.insertItem(sheetname)
-				except ImportError:
-					pass
+				except:
+					import traceback
+					trace = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
+					print trace
 
 		class _CellsWidget(ListWidget):
 			def __init__(self, parentwidget):
 				global ListWidget
 				ListWidget.__init__(self, parentwidget, "Cells (col1:row1 - col2:row2):")
-				self.combo.insertItem( "1:1 - %s:%s" % (5,5) )
+				self.combo.insertItem( "1:1 - %s:%s" % (5,10) )
 				self.combo.insertItem( "1:1 - %s:%s" % (256,256) )
 				self.combo.insertItem( "1:1 - %s:%s" % (32767,32767) )
 			def value(self):
@@ -242,6 +257,7 @@ class Samples:
 				self.edit.setText(color)
 			def value(self):
 				return "#%s" % EditWidget.value(self)
+
 		class SetTextOfCells:
 			""" Set the text of the defined cells. """
 			name = "Set text of cells"
@@ -267,7 +283,7 @@ class Samples:
 					'',
 					'( (col1,row1),(col2,row2) ) = {Cells}',
 					'for c in range(col1,col2):',
-					'	for r in range(col1,col2):',
+					'	for r in range(row1,row2):',
 					'		cell = sheet.cell(c,r)',
 					'		print "cell c=%s r=%s v=%s" % (c,r,cell.value())',
 					'		cell.setText( \"{Value}\" )',
@@ -334,10 +350,9 @@ class Samples:
 				)
 
 		class PrintSheetDetails:
-			""" Print details abvout the current sheet. """
+			""" Print details about the current sheet. """
 			name = "Details about a sheet"
 			def __init__(self, parent):
-				pass
 				self.widgets = {
 					"SheetName" : Samples.KSpread._SheetWidget( parent.parentwidget ),
 				}
@@ -357,6 +372,277 @@ class Samples:
 					'print "name=%s" % sheet.name()',
 					'print "maxcolumns=%s maxrows=%s" % (sheet.maxColumn(),sheet.maxRow())',
 				)
+
+		class LoadDocFromNativeXML:
+			""" Load the document from a native XML file. """
+			name = "Load document from native XML File"
+			def __init__(self, parent):
+				global FileWidget
+				self.widgets = {
+					"FileName" : FileWidget( parent.parentwidget, "XML File:", "*.xml;;*" ),
+				}
+			def getCode(self):
+				return (
+					'# Import the PyQt module.',
+					'import qt',
+					'',
+					'def loadFile(filename):',
+					'	# Import the krosskspreadcore module.',
+					'	import krosskspreadcore',
+					'	# Try to read the file.',
+					'	try:',
+					'		file = open(filename, "r")',
+					'		xml = file.read()',
+					'		file.close()',
+					'	except IOError, (errno, strerror):',
+					'		qt.QMessageBox.critical(self,"Error","<qt>Failed to read file %s<br><br>%s</qt>" % (filename,strerror))',
+					'		return',
+					'',
+					'	# Get the current document.',
+					'	document = krosskspreadcore.get("KSpreadDocument")',
+					'	# Load the document from the native XML string.',
+					'	ok = document.loadNativeXML( xml )',
+					'',
+					'# Show the openfile dialog',
+					'filename = "{FileName}"',
+					'openfilename = qt.QFileDialog.getOpenFileName(filename,"*.xml;;*", self)',
+					'if str(openfilename) != "":',
+					'	loadFile( openfilename )',
+				)
+
+		class SaveDocToNativeXML:
+			""" Save the document to a native XML file. """
+			name = "Save document to native XML File"
+			def __init__(self, parent):
+				global FileWidget
+				self.widgets = {
+					"FileName" : FileWidget( parent.parentwidget, "XML File:", "*.xml;;*", False ),
+				}
+			def getCode(self):
+				return (
+					'# Import the PyQt module.',
+					'import qt',
+					'',
+					'def saveFile(filename):',
+					'	# Import the krosskspreadcore module.',
+					'	import krosskspreadcore',
+					'	# Try to open the file for writting.',
+					'	try:',
+					'		file = open(filename, "w")',
+					'	except IOError, (errno, strerror):',
+					'		qt.QMessageBox.critical(self,"Error","<qt>Failed to create file %s<br><br>%s</qt>" % (filename,strerror))',
+					'		return',
+					'	# Get the current document.',
+					'	document = krosskspreadcore.get("KSpreadDocument")',
+					'	# Get the native XML string.',
+					'	xml = document.saveNativeXML()',
+					'	# Write the XML string to the file.',
+					'	file.write( xml )',
+					'	# Close the file.',
+					'	file.close()',
+					'',
+					'# Show the savefile dialog',
+					'filename = "{FileName}"',
+					'savefilename = qt.QFileDialog.getSaveFileName(filename,"*.xml;;*", self)',
+					'if str(savefilename) != "":',
+					'	saveFile( savefilename )',
+				)
+
+		class CopySheets:
+			""" Copy the text-content from one sheet to another. """
+			name = "Copy sheets"
+			def __init__(self, parent):
+				self.widgets = {
+					"SourceSheet" : Samples.KSpread._SheetWidget( parent.parentwidget, "Source sheet:" ),
+					"TargetSheet" : Samples.KSpread._SheetWidget( parent.parentwidget, "Target sheet:" ),
+				}
+			def getCode(self):
+				return (
+					'# Import the KSpread module.',
+					'import krosskspreadcore',
+					'# Get the current document.',
+					'document = krosskspreadcore.get("KSpreadDocument")',
+					'# Get the source sheet.',
+					'fromsheet = document.sheetByName( "{SourceSheet}" )',
+					'if not fromsheet: raise "No such sheet {SourceSheet} %s" % document.sheetNames()',
+					'# Get the target sheet.',
+					'tosheet = document.sheetByName( "{TargetSheet}" )',
+					'if not fromsheet: raise "No such sheet {TargetSheet} %s" % document.sheetNames()',
+					'# Copy the cells.',
+					'fromcell = fromsheet.firstCell()',
+					'while fromcell:',
+					'	tocell = tosheet.cell( fromcell.column(), fromcell.row() )',
+					'	tocell.setText( fromcell.text() )',
+					'	#tocell.setValue( fromcell.value() )',
+					'	fromcell = fromcell.nextCell()',
+				)
+
+
+
+
+
+
+		class LoadSheetFromCSV:
+			""" Load the content of a CSV file into a KSpread sheet. """
+			name = "Load data from CSV file into sheet"
+			def __init__(self, parent):
+				self.widgets = {
+					"Sheet" : Samples.KSpread._SheetWidget( parent.parentwidget ),
+					"FileName" : FileWidget( parent.parentwidget, "CSV File:", "*.csv;;*", True ),
+				}
+			def getCode(self):
+				return (
+					'# Import the KSpread module.',
+					'import krosskspreadcore',
+					'# Get the current document and the sheet.',
+					'document = krosskspreadcore.get("KSpreadDocument")',
+					'sheet = document.sheetByName( "{Sheet}" )',
+					'if not sheet: raise "No such sheet {Sheet} %s" % document.sheetNames()',
+					'',
+					'filename = "{FileName}"',
+					'try:',
+					'	file = open(filename, "r")',
+					'except IOError:',
+					'	raise "Failed to open CSV File: %s" % filename',
+					'',
+					'import csv',
+					'csvparser = csv.reader(file)',
+					'row = 1',
+					'while True:',
+					'	try:',
+					'		record = csvparser.next()',
+					'	except StopIteration:',
+					'		break',
+					'	col = 1',
+					'	for item in record:',
+					'		sheet.cell(col,row).setText( item )',
+					'		col += 1',
+					'	row += 1',
+					'file.close()',
+				)
+
+		class SaveSheetToCSV:
+			""" Save the content of a KSpread sheet into a CSV file. """
+			name = "Save data from a sheet into a CSV file"
+			def __init__(self, parent):
+				self.widgets = {
+					"Sheet" : Samples.KSpread._SheetWidget( parent.parentwidget ),
+					"FileName" : FileWidget( parent.parentwidget, "CSV File:", "*.csv;;*", False ),
+				}
+			def getCode(self):
+				return (
+					'filename = "{FileName}"',
+					'try:',
+					'	file = open(filename, "w")',
+					'except IOError:',
+					'	raise "Failed to write CSV File: %s" % filename',
+					'# Prepare CSV-writer',
+					'import csv',
+					'csvwriter = csv.writer(file)',
+					'# Import the KSpread module.',
+					'import krosskspreadcore',
+					'# Get the current document and the sheet.',
+					'document = krosskspreadcore.get("KSpreadDocument")',
+					'sheet = document.sheetByName( "{Sheet}" )',
+					'if not sheet: raise "No such sheet {Sheet} %s" % document.sheetNames()',
+					'# Iterate over the cells.',
+					'cell = sheet.firstCell()',
+					'record = []',
+					'while cell:',
+					'	record.append( cell.text() )',
+					'	if cell.column() == 1 or not cell.nextCell():',
+					'		csvwriter.writerow( record )',
+					'		record = []',
+					'	cell = cell.nextCell()',
+					'file.close()',
+				)
+
+
+	####################################################################################
+	# PyQt
+
+	class PyQt:
+		def __init__(self, parentwidget):
+			self.parentwidget = parentwidget
+
+		class OpenFileDialog:
+			""" Show the usage of the openfile dialog with QFileDialog. """
+			name = "Open File Dialog"
+			def __init__(self, parent):
+				pass
+				self.widgets = {
+					"FileName" : FileWidget( parent.parentwidget, "Open File:", "*.txt *.html;;*" ),
+				}
+			def getCode(self):
+				return (
+					'import qt',
+					'openfilename = qt.QFileDialog.getOpenFileName("{FileName}","*.txt *.html;;*", self)',
+					'print "openfile=%s" % openfilename',
+				)
+
+		class SaveFileDialog:
+			""" Show the usage of the savefile dialog with QFileDialog. """
+			name = "Save File Dialog"
+			def __init__(self, parent):
+				pass
+				self.widgets = {
+					"FileName" : FileWidget( parent.parentwidget, "Save File:", "*.txt *.html;;*", False ),
+				}
+			def getCode(self):
+				return (
+					'import qt',
+					'savefilename = qt.QFileDialog.getSaveFileName("{FileName}","*.txt *.html;;*", self)',
+					'print "savefile=%s" % savefilename',
+				)
+
+		class CustomDialog:
+			""" Show a custom dialog that inherits a QDialog. """
+			name = "Custom Dialog"
+			def __init__(self, parent):
+				pass
+				self.widgets = {
+				}
+			def getCode(self):
+				return (
+					'import qt',
+					'',
+					'class MyDialog(qt.QDialog):',
+					'	def __init__(self, parent):',
+					'		import qt',
+					'		qt.QDialog.__init__(self, parent, "MyDialog", 1, qt.Qt.WDestructiveClose)',
+					'		self.setCaption("My Dialog")',
+					'		btn = qt.QPushButton("Click me",self)',
+					'		qt.QObject.connect(btn, qt.SIGNAL("clicked()"), self.buttonClicked)',
+					'	def buttonClicked(self):',
+					'		import qt',
+					'		qt.QMessageBox.information(self, "The Caption", "This is the message string.")',
+					'',
+					'dialog = MyDialog(self)',
+					'dialog.exec_loop()',
+				)
+
+		class InputDialog:
+			""" Show how to use a QInputDialog. """
+			name = "Input Dialog"
+			def __init__(self, parent):
+				global EditWidget
+				self.widgets = {
+					"Caption" : EditWidget( parent.parentwidget, "Caption" ),
+					"Message" : EditWidget( parent.parentwidget, "Message" ),
+				}
+			def getCode(self):
+				return (
+					'import qt',
+					'',
+					'text, ok = qt.QInputDialog.getText("{Caption}", "{Message}", qt.QLineEdit.Normal, "")',
+					'if ok:',
+					'	print "Text defined: %s" % text',
+					'else:',
+					'	print "Dialog aborted."',
+				)
+
+####################################################################################
+# Dialog implementations.
 
 class SampleDialog(qt.QDialog):
 	def __init__(self, parent, sampleclazz, samplechildclazz):
@@ -439,7 +725,7 @@ class MainDialog(qt.QDialog):
 		splitter = qt.QSplitter(box)
 		splitter.setOrientation(qt.Qt.Vertical)
 
-		self.scripttext = qt.QTextEdit(splitter)
+		self.scripttext = qt.QMultiLineEdit(splitter)
 		self.scripttext.setWordWrap( qt.QTextEdit.NoWrap )
 		self.scripttext.setTextFormat( qt.Qt.PlainText )
 		qt.QObject.connect(self.scripttext, qt.SIGNAL("cursorPositionChanged(int,int)"),self.cursorPositionChanged)
@@ -483,15 +769,38 @@ class MainDialog(qt.QDialog):
 
 		editmenu = qt.QPopupMenu(menu)
 		menu.insertItem("&Edit", editmenu)
-		editmenu.insertItem("Undo", self.scripttext.undo, qt.QKeySequence("CTRL+Z"))
-		editmenu.insertItem("Redo", self.scripttext.redo, qt.QKeySequence("CTRL+Shift+Z"))
+
+		undoaction = qt.QAction("Undo", qt.QKeySequence("CTRL+Z"), self)
+		qt.QObject.connect(undoaction, qt.SIGNAL("activated()"), self.scripttext.undo)
+		undoaction.addTo(editmenu)
+
+		redoaction = qt.QAction("Redo", qt.QKeySequence("CTRL+Shift+Z"), self)
+		qt.QObject.connect(redoaction, qt.SIGNAL("activated()"), self.scripttext.redo)
+		redoaction.addTo(editmenu)
+
 		editmenu.insertSeparator()
-		editmenu.insertItem("Cut", self.scripttext.cut, qt.QKeySequence("CTRL+X"))
-		editmenu.insertItem("Copy", self.scripttext.copy, qt.QKeySequence("CTRL+C"))
-		editmenu.insertItem("Paste", self.scripttext.paste, qt.QKeySequence("CTRL+V"))
-		editmenu.insertItem("Clear", self.scripttext.clear, qt.QKeySequence("CTRL+Shift+X"))
+
+		cutaction = qt.QAction("Cut", qt.QKeySequence("CTRL+X"), self)
+		qt.QObject.connect(cutaction, qt.SIGNAL("activated()"), self.scripttext.cut)
+		cutaction.addTo(editmenu)
+
+		copyaction = qt.QAction("Copy", qt.QKeySequence("CTRL+C"), self)
+		qt.QObject.connect(copyaction, qt.SIGNAL("activated()"), self.scripttext.copy)
+		copyaction.addTo(editmenu)
+
+		pasteaction = qt.QAction("Paste", qt.QKeySequence("CTRL+V"), self)
+		qt.QObject.connect(pasteaction, qt.SIGNAL("activated()"), self.scripttext.paste)
+		pasteaction.addTo(editmenu)
+
+		clearaction = qt.QAction("Clear", qt.QKeySequence("CTRL+Shift+X"), self)
+		qt.QObject.connect(clearaction, qt.SIGNAL("activated()"), self.scripttext.clear)
+		clearaction.addTo(editmenu)
+
 		editmenu.insertSeparator()
-		editmenu.insertItem("Select All", self.scripttext.selectAll)
+
+		selallaction = qt.QAction("Select All", 0, self)
+		qt.QObject.connect(selallaction, qt.SIGNAL("activated()"), self.scripttext.selectAll)
+		selallaction.addTo(editmenu)
 
 		scriptmenu = qt.QPopupMenu(menu)
 		menu.insertItem("&Script", scriptmenu)
@@ -571,6 +880,16 @@ class MainDialog(qt.QDialog):
 			import traceback
 			trace = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
 			sys.stderr.write(trace)
+			try:
+				# this is a bit tricky. we need to go to steps back to know where the exception really happened.
+				tb = sys.exc_info()[2]
+				while hasattr(tb,"tb_next") and tb.tb_next:
+					tb = tb.tb_next
+				lineno = tb.tb_lineno
+				print "EXCEPTION: lineno=%s" % lineno
+				self.scripttext.setCursorPosition( lineno, 0 )
+			except:
+				pass
 
 		sys.stdout = sys.__stdout__
 		sys.stderr = sys.__stderr__
@@ -640,6 +959,9 @@ class MainDialog(qt.QDialog):
 		if filename == "": return
 		self.filename = filename
 		self.saveFile()
+
+####################################################################################
+# Show the main dialog.
 
 if __name__ == "__main__":
 	scriptpath = os.getcwd()

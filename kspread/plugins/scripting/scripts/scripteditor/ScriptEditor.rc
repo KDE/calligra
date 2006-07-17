@@ -1,7 +1,7 @@
 <KrossScripting>
     <ScriptAction
       name="scripteditor"
-      version="1"
+      version="2"
       text="Script Editor"
       icon="edit"
       interpreter="python"
