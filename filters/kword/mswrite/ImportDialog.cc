@@ -44,8 +44,8 @@ MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
  	setDefaultButton(KDialog::No);
 	kapp->restoreOverrideCursor();
 
-   m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->availableEncodingNames());
-    //m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->descriptiveEncodingNames());
+   m_dialog->comboBoxEncoding->addItems(KGlobal::charsets()->availableEncodingNames());
+    //m_dialog->comboBoxEncoding->addItems(KGlobal::charsets()->descriptiveEncodingNames());
 
     resize(size()); // Is this right?
 

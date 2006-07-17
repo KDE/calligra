@@ -645,7 +645,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     languageTitle->setWhatsThis( i18n( "Use this drop down box to determine the default language for the document. This setting is used by the hyphenation and spelling tools." ) );
 
     m_globalLanguage = new QComboBox( languageContainer );
-    m_globalLanguage->insertStringList( KoGlobal::listOfLanguages() );
+    m_globalLanguage->addItems( KoGlobal::listOfLanguages() );
     m_globalLanguage->setCurrentText( KoGlobal::languageFromTag( doc->globalLanguage() ) );
 
     languageLayout->addWidget(languageTitle, 0, 0);

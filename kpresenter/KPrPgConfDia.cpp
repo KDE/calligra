@@ -178,7 +178,7 @@ void KPrPgConfDia::setupPageSlides()
     m_labelCustomSlide = new QLabel( i18n( "Custom slide:" ),box );
 
     m_customSlideCombobox = new QComboBox( box );
-    m_customSlideCombobox->insertStringList( m_doc->presentationList() );
+    m_customSlideCombobox->addItems( m_doc->presentationList() );
 
     m_selectedSlide = new QRadioButton( i18n( "Selected pages:" ), group, "selectedslide" );
     slidesLayout->addMultiCellWidget( group, 0,2,0,1 );

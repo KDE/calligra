@@ -42,7 +42,7 @@ AccountsviewConfigDialog::AccountsviewConfigDialog(const QDate &date, int period
     showButtonSeparator( true );
     m_panel = new AccountsviewConfigPanel(this);
     m_panel->dateEdit->setDate(date);
-    m_panel->periodBox->insertStringList(periodTexts);
+    m_panel->periodBox->addItems(periodTexts);
     m_panel->periodBox->setCurrentItem(period);
     m_panel->cumulative->setChecked(cumulative);
     setMainWidget(m_panel);

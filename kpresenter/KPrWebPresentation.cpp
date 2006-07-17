@@ -822,8 +822,8 @@ void KPrWebPresentationWizard::setupPage2()
 
     doctype = new KComboBox( false, canvas );
     layout->addWidget( doctype, 4, 1 );
-    doctype->insertItem( "HTML 4.01", -1 );
-    doctype->insertItem( "XHTML 1.0", -1 );
+    doctype->addItem( "HTML 4.01" );
+    doctype->addItem( "XHTML 1.0" );
 
     doctype->setCurrentItem( webPres.isXML() ? 1 : 0 );
 

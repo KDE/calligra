@@ -46,7 +46,7 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     
     QStringList codeList = def.codeList();
     defaultSeparator->setText(def.defaultSeparator());
-    defaultCode->insertStringList(codeList);
+    defaultCode->addItems(codeList);
     defaultCode->setCurrentItem(def.defaultCodeIndex());
     defaultCode->setFocus();
     

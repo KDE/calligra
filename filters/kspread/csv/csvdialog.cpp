@@ -70,7 +70,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     encodings << description.arg("Apple Roman"); // Apple
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
     encodings << description.arg("CP 1258"); // Windows
-    m_dialog->comboBoxEncoding->insertStringList(encodings);
+    m_dialog->comboBoxEncoding->addItems(encodings);
 
     m_formatList << i18n( "Text" );
     m_formatList << i18n( "Number" );
@@ -78,7 +78,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     m_formatList << i18n( "Date" );
     m_formatList << i18n( "Decimal Comma Number" );
     m_formatList << i18n( "Decimal Point Number" );
-    m_dialog->m_formatComboBox->insertStringList( m_formatList );
+    m_dialog->m_formatComboBox->addItems( m_formatList );
 
     m_dialog->m_sheet->setReadOnly( true );
 

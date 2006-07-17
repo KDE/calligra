@@ -67,7 +67,7 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
   encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
   encodings << description.arg("CP 1258"); // Windows
 
-  m_dialog->comboBoxEncoding->insertStringList(encodings);
+  m_dialog->comboBoxEncoding->addItems(encodings);
 
   setButtonsOrientation ( Qt::Vertical );
 

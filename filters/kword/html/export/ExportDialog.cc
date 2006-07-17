@@ -51,7 +51,7 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
     encodingList += i18nc( "Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()) );
     encodingList += KGlobal::charsets()->descriptiveEncodingNames();
 
-    m_dialog->comboBoxEncoding->insertStringList( encodingList );
+    m_dialog->comboBoxEncoding->addItems( encodingList );
 
     m_dialog->KURL_ExternalCSS->setMode( KFile::ExistingOnly );
 

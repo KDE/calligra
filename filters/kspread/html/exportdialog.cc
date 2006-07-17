@@ -47,7 +47,7 @@ ExportDialog::ExportDialog( QWidget *parent )
            m_mainwidget->mSheets, SLOT( clearSelection() ) );
 
   m_mainwidget->mEncodingBox->addItem( i18n( "Recommended: UTF-8" ) );
-  m_mainwidget->mEncodingBox->insertItem( i18n( "Locale (%1)", QString::fromLatin1( KGlobal::locale()->codecForEncoding()->name() ) ) );
+  m_mainwidget->mEncodingBox->addItem( i18n( "Locale (%1)", QString::fromLatin1( KGlobal::locale()->codecForEncoding()->name() ) ) );
 
   m_mainwidget->mCustomURL->setMode( KFile::ExistingOnly );
 
