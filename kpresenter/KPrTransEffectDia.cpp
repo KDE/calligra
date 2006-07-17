@@ -248,9 +248,9 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     speedLayout->setAutoAdd( true );
 
     speedCombo = new QComboBox( sp );
-    speedCombo->insertItem(i18n("Slow") );
-    speedCombo->insertItem(i18n("Medium") );
-    speedCombo->insertItem(i18n("Fast") );
+    speedCombo->addItem(i18n("Slow") );
+    speedCombo->addItem(i18n("Medium") );
+    speedCombo->addItem(i18n("Fast") );
 
 
     speedCombo->setCurrentItem( speed );

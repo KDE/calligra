@@ -165,10 +165,10 @@ void AccountsPanel::removeElement(Q3ListViewItem *item) {
 void AccountsPanel::refreshDefaultAccount() {
     accountsComboBox->clear();
     m_currentIndex = 0;
-    accountsComboBox->insertItem(i18n("None"));
+    accountsComboBox->addItem(i18n("None"));
     Q3DictIterator<Q3ListViewItem> it(m_elements);
     for(int i=1; it.current(); ++it, ++i) {
-        accountsComboBox->insertItem(it.currentKey());
+        accountsComboBox->addItem(it.currentKey());
         if (static_cast<AccountItem*>(it.current())->isDefault) {
             m_currentIndex = i;
             accountsComboBox->setCurrentItem(i);

@@ -305,14 +305,14 @@ void CalendarListDialogImpl::slotSelectionChanged(Q3ListViewItem *listItem) {
     CalendarListViewItem *cal = dynamic_cast<CalendarListViewItem *>(listItem);
     if (cal) {
         setCalendar(cal->calendar);
-        baseCalendar->insertItem(i18n("None"));
+        baseCalendar->addItem(i18n("None"));
         baseCalendarList.append(0);
         int me = 0, i = 0;
         Q3ListViewItemIterator it(calendarList);
         for (; it.current(); ++it) {
             CalendarListViewItem *item = dynamic_cast<CalendarListViewItem*>(it.current());
             if (item && cal != item && !item->hasBaseCalendar(cal)) {
-                baseCalendar->insertItem(item->text(0));
+                baseCalendar->addItem(item->text(0));
                 baseCalendarList.append(item);
                 i++;
                 if (item == cal->base) {

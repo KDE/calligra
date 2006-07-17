@@ -71,7 +71,7 @@ XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QByteArray &format, QWidge
 		if(!value.isEmpty())
 		{
 			_recentList.append( value );
-			recentBox->insertItem(value);
+			recentBox->addItem(value);
 		}
 		else
 			i = 10;

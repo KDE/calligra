@@ -46,9 +46,9 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
 
     m_typeCombo = new KComboBox( this );
     layout->addWidget( m_typeCombo, 0, 1 );
-    m_typeCombo->insertItem( i18n( "Single Color" ) );
-    m_typeCombo->insertItem( i18n( "Gradient" ) );
-    m_typeCombo->insertItem( i18n( "Transparent" ) );
+    m_typeCombo->addItem( i18n( "Single Color" ) );
+    m_typeCombo->addItem( i18n( "Gradient" ) );
+    m_typeCombo->addItem( i18n( "Transparent" ) );
     m_typeCombo->setWhatsThis( i18n( "You can choose between Single Color, Gradient or Transparent as the type." ) );
 
     QLabel *typeLabel = new QLabel( i18n( "&Type:" ), this );
@@ -70,12 +70,12 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 37 ) );
     m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 12 ) );
     m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 6 ) );
-    m_brushUI->styleCombo->insertItem( i18n( "Horizontal Lines" ) );
-    m_brushUI->styleCombo->insertItem( i18n( "Vertical Lines" ) );
-    m_brushUI->styleCombo->insertItem( i18n( "Crossing Lines" ) );
-    m_brushUI->styleCombo->insertItem( i18n( "Diagonal Lines ( / )" ) );
-    m_brushUI->styleCombo->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
-    m_brushUI->styleCombo->insertItem( i18n( "Diagonal Crossing Lines" ) );
+    m_brushUI->styleCombo->addItem( i18n( "Horizontal Lines" ) );
+    m_brushUI->styleCombo->addItem( i18n( "Vertical Lines" ) );
+    m_brushUI->styleCombo->addItem( i18n( "Crossing Lines" ) );
+    m_brushUI->styleCombo->addItem( i18n( "Diagonal Lines ( / )" ) );
+    m_brushUI->styleCombo->addItem( i18n( "Diagonal Lines ( \\ )" ) );
+    m_brushUI->styleCombo->addItem( i18n( "Diagonal Crossing Lines" ) );
 
     m_preview_color = new KPrPBPreview( m_brushUI->previewPanel, KPrPBPreview::Brush );
     Q3HBoxLayout *hbox = new Q3HBoxLayout( m_brushUI->previewPanel );
@@ -90,14 +90,14 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     m_stack->addWidget( m_brushUI, 0 );
 
     m_gradientUI = new GradientPropertyUI( m_stack );
-    m_gradientUI->styleCombo->insertItem( i18n( "Horizontal" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Vertical" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Diagonal 1" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Diagonal 2" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Circle" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Rectangle" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "PipeCross" ) );
-    m_gradientUI->styleCombo->insertItem( i18n( "Pyramid" ) );
+    m_gradientUI->styleCombo->addItem( i18n( "Horizontal" ) );
+    m_gradientUI->styleCombo->addItem( i18n( "Vertical" ) );
+    m_gradientUI->styleCombo->addItem( i18n( "Diagonal 1" ) );
+    m_gradientUI->styleCombo->addItem( i18n( "Diagonal 2" ) );
+    m_gradientUI->styleCombo->addItem( i18n( "Circle" ) );
+    m_gradientUI->styleCombo->addItem( i18n( "Rectangle" ) );
+    m_gradientUI->styleCombo->addItem( i18n( "PipeCross" ) );
+    m_gradientUI->styleCombo->addItem( i18n( "Pyramid" ) );
 
     m_preview_gradient = new KPrPBPreview( m_gradientUI->previewPanel, KPrPBPreview::Gradient );
     hbox = new Q3HBoxLayout( m_gradientUI->previewPanel );

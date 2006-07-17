@@ -38,8 +38,8 @@ KPrPolygonProperty::KPrPolygonProperty( QWidget *parent, const char *name, KPrPo
     Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new PolygonPropertyUI( this ) );
 
-    m_ui->typeCombo->insertItem( i18n( "Polygon" ) );
-    m_ui->typeCombo->insertItem( i18n( "Convex/Concave" ) );
+    m_ui->typeCombo->addItem( i18n( "Polygon" ) );
+    m_ui->typeCombo->addItem( i18n( "Convex/Concave" ) );
 
     connect( m_ui->typeCombo, SIGNAL( activated( int ) ),
              this, SLOT(slotTypeChanged( int ) ) );

@@ -90,29 +90,29 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 	/*qualityComboBox->insertItem("final");
   qualityComboBox->insertItem("draft");*/
 
-	classComboBox->insertItem("article");
-  classComboBox->insertItem("book");
-  classComboBox->insertItem("letter");
-  classComboBox->insertItem("report");
-  classComboBox->insertItem("slides");
+	classComboBox->addItem("article");
+  classComboBox->addItem("book");
+  classComboBox->addItem("letter");
+  classComboBox->addItem("report");
+  classComboBox->addItem("slides");
 
-	encodingComboBox->insertItem("unicode");
-  encodingComboBox->insertItem("ansinew");
-  encodingComboBox->insertItem("applemac");
-  encodingComboBox->insertItem("ascii");
-  encodingComboBox->insertItem("latin1");
-  encodingComboBox->insertItem("latin2");
-  encodingComboBox->insertItem("latin3");
-  encodingComboBox->insertItem("latin5");
-  encodingComboBox->insertItem("cp437");
-  encodingComboBox->insertItem("cp437de");
-  encodingComboBox->insertItem("cp850");
-  encodingComboBox->insertItem("cp852");
-  encodingComboBox->insertItem("cp865");
-  encodingComboBox->insertItem("cp1250");
-  encodingComboBox->insertItem("cp1252");
-  encodingComboBox->insertItem("decmulti");
-  encodingComboBox->insertItem("next");
+	encodingComboBox->addItem("unicode");
+  encodingComboBox->addItem("ansinew");
+  encodingComboBox->addItem("applemac");
+  encodingComboBox->addItem("ascii");
+  encodingComboBox->addItem("latin1");
+  encodingComboBox->addItem("latin2");
+  encodingComboBox->addItem("latin3");
+  encodingComboBox->addItem("latin5");
+  encodingComboBox->addItem("cp437");
+  encodingComboBox->addItem("cp437de");
+  encodingComboBox->addItem("cp850");
+  encodingComboBox->addItem("cp852");
+  encodingComboBox->addItem("cp865");
+  encodingComboBox->addItem("cp1250");
+  encodingComboBox->addItem("cp1252");
+  encodingComboBox->addItem("decmulti");
+  encodingComboBox->addItem("next");
 
 	languagesList->insertItem("american");
 	languagesList->insertItem("austrian");

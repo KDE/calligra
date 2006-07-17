@@ -48,12 +48,12 @@ KPrPenStyleWidget::KPrPenStyleWidget( QWidget *parent, const char *name, const K
     connect( m_ui->colorChooser, SIGNAL( changed( const QColor& ) ),
              this, SLOT( slotPenChanged() ) );
 
-    m_ui->styleCombo->insertItem( i18n( "No Outline" ) );
-    m_ui->styleCombo->insertItem( "__________" );
-    m_ui->styleCombo->insertItem( "__ __ __ __" );
-    m_ui->styleCombo->insertItem( "_ _ _ _ _ _" );
-    m_ui->styleCombo->insertItem( "__ _ __ _ __" );
-    m_ui->styleCombo->insertItem( "__ _ _ __ _" );
+    m_ui->styleCombo->addItem( i18n( "No Outline" ) );
+    m_ui->styleCombo->addItem( "__________" );
+    m_ui->styleCombo->addItem( "__ __ __ __" );
+    m_ui->styleCombo->addItem( "_ _ _ _ _ _" );
+    m_ui->styleCombo->addItem( "__ _ __ _ __" );
+    m_ui->styleCombo->addItem( "__ _ _ __ _" );
 
     m_ui->widthInput->setRange( 1, 10,  1, false);
 
@@ -63,26 +63,26 @@ KPrPenStyleWidget::KPrPenStyleWidget( QWidget *parent, const char *name, const K
     connect( m_ui->widthInput, SIGNAL( valueChanged( double ) ),
              this, SLOT( slotPenChanged() ) );
 
-    m_ui->lineBeginCombo->insertItem( i18n("Normal") );
-    m_ui->lineBeginCombo->insertItem( i18n("Arrow") );
-    m_ui->lineBeginCombo->insertItem( i18n("Square") );
-    m_ui->lineBeginCombo->insertItem( i18n("Circle") );
-    m_ui->lineBeginCombo->insertItem( i18n("Line Arrow") );
-    m_ui->lineBeginCombo->insertItem( i18n("Dimension Line") );
-    m_ui->lineBeginCombo->insertItem( i18n("Double Arrow") );
-    m_ui->lineBeginCombo->insertItem( i18n("Double Line Arrow") );
+    m_ui->lineBeginCombo->addItem( i18n("Normal") );
+    m_ui->lineBeginCombo->addItem( i18n("Arrow") );
+    m_ui->lineBeginCombo->addItem( i18n("Square") );
+    m_ui->lineBeginCombo->addItem( i18n("Circle") );
+    m_ui->lineBeginCombo->addItem( i18n("Line Arrow") );
+    m_ui->lineBeginCombo->addItem( i18n("Dimension Line") );
+    m_ui->lineBeginCombo->addItem( i18n("Double Arrow") );
+    m_ui->lineBeginCombo->addItem( i18n("Double Line Arrow") );
 
     connect( m_ui->lineBeginCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotLineBeginChanged() ) );
 
-    m_ui->lineEndCombo->insertItem( i18n("Normal") );
-    m_ui->lineEndCombo->insertItem( i18n("Arrow") );
-    m_ui->lineEndCombo->insertItem( i18n("Square") );
-    m_ui->lineEndCombo->insertItem( i18n("Circle") );
-    m_ui->lineEndCombo->insertItem( i18n("Line Arrow") );
-    m_ui->lineEndCombo->insertItem( i18n("Dimension Line") );
-    m_ui->lineEndCombo->insertItem( i18n("Double Arrow") );
-    m_ui->lineEndCombo->insertItem( i18n("Double Line Arrow") );
+    m_ui->lineEndCombo->addItem( i18n("Normal") );
+    m_ui->lineEndCombo->addItem( i18n("Arrow") );
+    m_ui->lineEndCombo->addItem( i18n("Square") );
+    m_ui->lineEndCombo->addItem( i18n("Circle") );
+    m_ui->lineEndCombo->addItem( i18n("Line Arrow") );
+    m_ui->lineEndCombo->addItem( i18n("Dimension Line") );
+    m_ui->lineEndCombo->addItem( i18n("Double Arrow") );
+    m_ui->lineEndCombo->addItem( i18n("Double Line Arrow") );
 
     connect( m_ui->lineEndCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotLineEndChanged() ) );

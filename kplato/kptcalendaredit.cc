@@ -198,9 +198,9 @@ void CalendarEdit::slotDateSelected(QDate date) {
     //kDebug()<<k_funcinfo<<"("<<date.toString()<<")"<<endl;
     clearEditPart();
     state->clear();
-    state->insertItem(i18n("Undefined"));
-    state->insertItem(i18n("Non-working"));
-    state->insertItem(i18n("Working"));
+    state->addItem(i18n("Undefined"));
+    state->addItem(i18n("Non-working"));
+    state->addItem(i18n("Working"));
 
     CalendarDay *calDay = m_calendar->findDay(date);
     state->setEnabled(true);
@@ -247,9 +247,9 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
         return;
     }
     state->clear();
-    state->insertItem(i18n("Undefined"));
-    state->insertItem(i18n("Non-working"));
-    state->insertItem(i18n("Working"));
+    state->addItem(i18n("Undefined"));
+    state->addItem(i18n("Non-working"));
+    state->addItem(i18n("Working"));
     Q3PtrListIterator<QPair<QTime, QTime> > it = calDay->workingIntervals();
     for (; it.current(); ++it) {
         IntervalItem *item = new IntervalItem(intervalList, it.current()->first, it.current()->second);

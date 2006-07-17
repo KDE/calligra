@@ -812,7 +812,7 @@ void KPrWebPresentationWizard::setupPage2()
       QTextCodec *codecForEnc = KGlobal::charsets()->codecForName(KGlobal::charsets()->encodingForName(encodings[i]), found);
       if (found)
       {
-        encoding->insertItem(encodings[i]);
+        encoding->addItem(encodings[i]);
 
         if ( codecForEnc->name() == webPres.getEncoding() )
           encoding->setCurrentItem(idx);

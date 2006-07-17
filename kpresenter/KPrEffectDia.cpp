@@ -88,19 +88,19 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     upperRow->addWidget(lEffect, 1, 0);
 
     cEffect = new QComboBox( false, grp1, "cEffect" );
-    cEffect->insertItem( i18n( "No Effect" ) );
-    cEffect->insertItem( i18n( "Come From Right" ) );
-    cEffect->insertItem( i18n( "Come From Left" ) );
-    cEffect->insertItem( i18n( "Come From Top" ) );
-    cEffect->insertItem( i18n( "Come From Bottom" ) );
-    cEffect->insertItem( i18n( "Come From Right/Top" ) );
-    cEffect->insertItem( i18n( "Come From Right/Bottom" ) );
-    cEffect->insertItem( i18n( "Come From Left/Top" ) );
-    cEffect->insertItem( i18n( "Come From Left/Bottom" ) );
-    cEffect->insertItem( i18n( "Wipe From Left" ) );
-    cEffect->insertItem( i18n( "Wipe From Right" ) );
-    cEffect->insertItem( i18n( "Wipe From Top" ) );
-    cEffect->insertItem( i18n( "Wipe From Bottom" ) );
+    cEffect->addItem( i18n( "No Effect" ) );
+    cEffect->addItem( i18n( "Come From Right" ) );
+    cEffect->addItem( i18n( "Come From Left" ) );
+    cEffect->addItem( i18n( "Come From Top" ) );
+    cEffect->addItem( i18n( "Come From Bottom" ) );
+    cEffect->addItem( i18n( "Come From Right/Top" ) );
+    cEffect->addItem( i18n( "Come From Right/Bottom" ) );
+    cEffect->addItem( i18n( "Come From Left/Top" ) );
+    cEffect->addItem( i18n( "Come From Left/Bottom" ) );
+    cEffect->addItem( i18n( "Wipe From Left" ) );
+    cEffect->addItem( i18n( "Wipe From Right" ) );
+    cEffect->addItem( i18n( "Wipe From Top" ) );
+    cEffect->addItem( i18n( "Wipe From Bottom" ) );
     cEffect->setCurrentItem( static_cast<int>( obj->getEffect() ) );
     upperRow->addWidget(cEffect, 1, 1);
 
@@ -111,9 +111,9 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     upperRow->addWidget(lAppearSpeed, 2, 0);
 
     cAppearSpeed = new QComboBox( false, grp1, "cEffect" );
-    cAppearSpeed->insertItem( i18n( "Slow" ) );
-    cAppearSpeed->insertItem( i18n( "Medium" ) );
-    cAppearSpeed->insertItem( i18n( "Fast" ) );
+    cAppearSpeed->addItem( i18n( "Slow" ) );
+    cAppearSpeed->addItem( i18n( "Medium" ) );
+    cAppearSpeed->addItem( i18n( "Fast" ) );
     cAppearSpeed->setCurrentItem( static_cast<int>( obj->getAppearSpeed() ) );
     upperRow->addWidget(cAppearSpeed, 2, 1);
     appearEffectChanged( cEffect->currentItem() );
@@ -123,12 +123,12 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     upperRow->addWidget(lEffect2, 3, 0);
 
     cEffect2 = new QComboBox( false, grp1, "cEffect2" );
-    cEffect2->insertItem( i18n( "No Effect" ) );
+    cEffect2->addItem( i18n( "No Effect" ) );
     upperRow->addWidget(cEffect2, 3, 1);
 
     switch ( obj->getType() ) {
     case OT_TEXT: {
-        cEffect2->insertItem( i18n( "Paragraph After Paragraph" ) );
+        cEffect2->addItem( i18n( "Paragraph After Paragraph" ) );
     } break;
     default:
         lEffect2->setEnabled(false);
@@ -220,19 +220,19 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lowerRow->addWidget(lDEffect, 1, 0);
 
     cDisappear = new QComboBox( false, grp2, "cDisappear" );
-    cDisappear->insertItem( i18n( "No Effect" ) );
-    cDisappear->insertItem( i18n( "Disappear to Right" ) );
-    cDisappear->insertItem( i18n( "Disappear to Left" ) );
-    cDisappear->insertItem( i18n( "Disappear to Top" ) );
-    cDisappear->insertItem( i18n( "Disappear to Bottom" ) );
-    cDisappear->insertItem( i18n( "Disappear to Right/Top" ) );
-    cDisappear->insertItem( i18n( "Disappear to Right/Bottom" ) );
-    cDisappear->insertItem( i18n( "Disappear to Left/Top" ) );
-    cDisappear->insertItem( i18n( "Disappear to Left/Bottom" ) );
-    cDisappear->insertItem( i18n( "Wipe to Left" ) );
-    cDisappear->insertItem( i18n( "Wipe to Right" ) );
-    cDisappear->insertItem( i18n( "Wipe to Top" ) );
-    cDisappear->insertItem( i18n( "Wipe to Bottom" ) );
+    cDisappear->addItem( i18n( "No Effect" ) );
+    cDisappear->addItem( i18n( "Disappear to Right" ) );
+    cDisappear->addItem( i18n( "Disappear to Left" ) );
+    cDisappear->addItem( i18n( "Disappear to Top" ) );
+    cDisappear->addItem( i18n( "Disappear to Bottom" ) );
+    cDisappear->addItem( i18n( "Disappear to Right/Top" ) );
+    cDisappear->addItem( i18n( "Disappear to Right/Bottom" ) );
+    cDisappear->addItem( i18n( "Disappear to Left/Top" ) );
+    cDisappear->addItem( i18n( "Disappear to Left/Bottom" ) );
+    cDisappear->addItem( i18n( "Wipe to Left" ) );
+    cDisappear->addItem( i18n( "Wipe to Right" ) );
+    cDisappear->addItem( i18n( "Wipe to Top" ) );
+    cDisappear->addItem( i18n( "Wipe to Bottom" ) );
     cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
     lowerRow->addWidget(cDisappear, 1, 1);
 
@@ -243,9 +243,9 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lowerRow->addWidget(lDisappearSpeed, 2, 0);
 
     cDisappearSpeed = new QComboBox( false, grp2, "cEffect" );
-    cDisappearSpeed->insertItem( i18n( "Slow" ) );
-    cDisappearSpeed->insertItem( i18n( "Medium" ) );
-    cDisappearSpeed->insertItem( i18n( "Fast" ) );
+    cDisappearSpeed->addItem( i18n( "Slow" ) );
+    cDisappearSpeed->addItem( i18n( "Medium" ) );
+    cDisappearSpeed->addItem( i18n( "Fast" ) );
     cDisappearSpeed->setCurrentItem( static_cast<int>( obj->getDisappearSpeed() ) );
     lowerRow->addWidget(cDisappearSpeed, 2, 1);
 

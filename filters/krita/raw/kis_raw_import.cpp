@@ -594,7 +594,7 @@ void KisRawImport::slotFillCmbProfiles()
     QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
-        m_page->cmbProfile->insertItem(profile->productName());
+        m_page->cmbProfile->addItem(profile->productName());
     }
 }
 

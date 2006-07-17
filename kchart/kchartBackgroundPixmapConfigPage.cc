@@ -99,7 +99,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                                    "select any image file by clicking on the "
                                    "<i>Browse</i> button below." ) );
     center->addWidget( wallCB );
-    wallCB->insertItem( i18n("None") );
+    wallCB->addItem( i18n("None") );
 
 	loadWallpaperFilesList();
     QPushButton* browsePB = new QPushButton( i18n("&Browse..."), this );
@@ -270,7 +270,7 @@ void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
         it != papers.end();
         ++it)
    {
-      wallCB->insertItem(it.data().first);
+      wallCB->addItem(it.data().first);
       m_wallpaper[it.data().second] = i;
       i++;
    }
@@ -441,7 +441,7 @@ void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
          i--;
          wallCB->removeItem(i);
       }
-      wallCB->insertItem(imageCaption);
+      wallCB->addItem(imageCaption);
       m_wallpaper[fileName] = i;
       wallCB->setCurrentItem(i);
    }

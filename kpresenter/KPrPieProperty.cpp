@@ -40,9 +40,9 @@ KPrPieProperty::KPrPieProperty( QWidget *parent, const char *name, KPrPieValueCm
     Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new PiePropertyUI( this ) );
 
-    m_ui->typeCombo->insertItem( i18n( "Pie" ) );
-    m_ui->typeCombo->insertItem( i18n( "Arc" ) );
-    m_ui->typeCombo->insertItem( i18n( "Chord" ) );
+    m_ui->typeCombo->addItem( i18n( "Pie" ) );
+    m_ui->typeCombo->addItem( i18n( "Arc" ) );
+    m_ui->typeCombo->addItem( i18n( "Chord" ) );
 
     connect( m_ui->typeCombo, SIGNAL( activated( int ) ), this, SLOT( slotTypeChanged( int ) ) );
 

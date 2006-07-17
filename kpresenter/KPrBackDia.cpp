@@ -116,8 +116,8 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     vbox->addWidget( new QLabel( i18n( "Background type:" ), page ) );
 
     backCombo = new QComboBox( false, page );
-    backCombo->insertItem( i18n( "Color/Gradient" ) );
-    backCombo->insertItem( i18n( "Picture" ) );
+    backCombo->addItem( i18n( "Color/Gradient" ) );
+    backCombo->addItem( i18n( "Picture" ) );
     backCombo->setCurrentItem( (int)backType );
     connect( backCombo, SIGNAL( activated( int ) ),
              this, SLOT( changeComboText(int) ) );
@@ -134,15 +134,15 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     colorTab->setMargin( 5 );
 
     cType = new QComboBox( false, colorTab );
-    cType->insertItem( i18n( "Plain" ) );
-    cType->insertItem( i18n( "Vertical Gradient" ) );
-    cType->insertItem( i18n( "Horizontal Gradient" ) );
-    cType->insertItem( i18n( "Diagonal Gradient 1" ) );
-    cType->insertItem( i18n( "Diagonal Gradient 2" ) );
-    cType->insertItem( i18n( "Circle Gradient" ) );
-    cType->insertItem( i18n( "Rectangle Gradient" ) );
-    cType->insertItem( i18n( "PipeCross Gradient" ) );
-    cType->insertItem( i18n( "Pyramid Gradient" ) );
+    cType->addItem( i18n( "Plain" ) );
+    cType->addItem( i18n( "Vertical Gradient" ) );
+    cType->addItem( i18n( "Horizontal Gradient" ) );
+    cType->addItem( i18n( "Diagonal Gradient 1" ) );
+    cType->addItem( i18n( "Diagonal Gradient 2" ) );
+    cType->addItem( i18n( "Circle Gradient" ) );
+    cType->addItem( i18n( "Rectangle Gradient" ) );
+    cType->addItem( i18n( "PipeCross Gradient" ) );
+    cType->addItem( i18n( "Pyramid Gradient" ) );
     cType->setCurrentItem( _bcType );
     connect( cType, SIGNAL( activated( int ) ),
              this, SLOT( updateConfiguration() ) );
@@ -186,9 +186,9 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     l->setFixedHeight( l->sizeHint().height() );
 
     picView = new QComboBox( false, picTab );
-    picView->insertItem( i18n( "Scaled" ) );
-    picView->insertItem( i18n( "Centered" ) );
-    picView->insertItem( i18n( "Tiled" ) );
+    picView->addItem( i18n( "Scaled" ) );
+    picView->addItem( i18n( "Centered" ) );
+    picView->addItem( i18n( "Tiled" ) );
     picView->setCurrentItem( (int)backPicView );
     connect( picView, SIGNAL( activated( int ) ),
              this, SLOT( updateConfiguration() ) );

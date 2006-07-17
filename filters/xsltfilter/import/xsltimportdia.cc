@@ -66,7 +66,7 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* pa
 		if(!value.isEmpty())
 		{
 			_recentList.append( value );
-			recentBox->insertItem(value);
+			recentBox->addItem(value);
 		}
 		else
 			i = 10;

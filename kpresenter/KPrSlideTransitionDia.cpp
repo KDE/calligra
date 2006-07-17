@@ -84,49 +84,49 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     m_target.fill( Qt::black );
 
     // fill effect combo
-    m_dialog->effectCombo->insertItem( i18n( "No Effect" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Close Horizontal" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Close Vertical" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Close From All Directions" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Open Horizontal" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Open Vertical" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Open From All Directions" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Interlocking Horizontal 1" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Interlocking Horizontal 2" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Interlocking Vertical 1" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Interlocking Vertical 2" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Surround 1" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Fly Away 1" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Blinds Horizontal" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Blinds Vertical" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Box In" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Box Out" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Checkerboard Across" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Checkerboard Down" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Cover Down" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Uncover Down" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Cover Up" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Uncover Up" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Cover Left" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Uncover Left" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Cover Right" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Uncover Right" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Cover Left-Up" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Uncover Left-Up" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Cover Left-Down" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Uncover Left-Down" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Cover Right-Up" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Uncover Right-Up" ) );
+    m_dialog->effectCombo->addItem( i18n( "No Effect" ) );
+    m_dialog->effectCombo->addItem( i18n( "Close Horizontal" ) );
+    m_dialog->effectCombo->addItem( i18n( "Close Vertical" ) );
+    m_dialog->effectCombo->addItem( i18n( "Close From All Directions" ) );
+    m_dialog->effectCombo->addItem( i18n( "Open Horizontal" ) );
+    m_dialog->effectCombo->addItem( i18n( "Open Vertical" ) );
+    m_dialog->effectCombo->addItem( i18n( "Open From All Directions" ) );
+    m_dialog->effectCombo->addItem( i18n( "Interlocking Horizontal 1" ) );
+    m_dialog->effectCombo->addItem( i18n( "Interlocking Horizontal 2" ) );
+    m_dialog->effectCombo->addItem( i18n( "Interlocking Vertical 1" ) );
+    m_dialog->effectCombo->addItem( i18n( "Interlocking Vertical 2" ) );
+    m_dialog->effectCombo->addItem( i18n( "Surround 1" ) );
+    m_dialog->effectCombo->addItem( i18n( "Fly Away 1" ) );
+    m_dialog->effectCombo->addItem( i18n( "Blinds Horizontal" ) );
+    m_dialog->effectCombo->addItem( i18n( "Blinds Vertical" ) );
+    m_dialog->effectCombo->addItem( i18n( "Box In" ) );
+    m_dialog->effectCombo->addItem( i18n( "Box Out" ) );
+    m_dialog->effectCombo->addItem( i18n( "Checkerboard Across" ) );
+    m_dialog->effectCombo->addItem( i18n( "Checkerboard Down" ) );
+    m_dialog->effectCombo->addItem( i18n( "Cover Down" ) );
+    m_dialog->effectCombo->addItem( i18n( "Uncover Down" ) );
+    m_dialog->effectCombo->addItem( i18n( "Cover Up" ) );
+    m_dialog->effectCombo->addItem( i18n( "Uncover Up" ) );
+    m_dialog->effectCombo->addItem( i18n( "Cover Left" ) );
+    m_dialog->effectCombo->addItem( i18n( "Uncover Left" ) );
+    m_dialog->effectCombo->addItem( i18n( "Cover Right" ) );
+    m_dialog->effectCombo->addItem( i18n( "Uncover Right" ) );
+    m_dialog->effectCombo->addItem( i18n( "Cover Left-Up" ) );
+    m_dialog->effectCombo->addItem( i18n( "Uncover Left-Up" ) );
+    m_dialog->effectCombo->addItem( i18n( "Cover Left-Down" ) );
+    m_dialog->effectCombo->addItem( i18n( "Uncover Left-Down" ) );
+    m_dialog->effectCombo->addItem( i18n( "Cover Right-Up" ) );
+    m_dialog->effectCombo->addItem( i18n( "Uncover Right-Up" ) );
     //TODO change the strings to use Down instead of Bottome to make them consistent
-    m_dialog->effectCombo->insertItem( i18n( "Cover Right-Bottom" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Uncover Right-Bottom" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Dissolve" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Strips Left-Up" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Strips Left-Down" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Strips Right-Up" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Strips Right-Down" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Melting" ) );
-    m_dialog->effectCombo->insertItem( i18n( "Random Transition" ) );
+    m_dialog->effectCombo->addItem( i18n( "Cover Right-Bottom" ) );
+    m_dialog->effectCombo->addItem( i18n( "Uncover Right-Bottom" ) );
+    m_dialog->effectCombo->addItem( i18n( "Dissolve" ) );
+    m_dialog->effectCombo->addItem( i18n( "Strips Left-Up" ) );
+    m_dialog->effectCombo->addItem( i18n( "Strips Left-Down" ) );
+    m_dialog->effectCombo->addItem( i18n( "Strips Right-Up" ) );
+    m_dialog->effectCombo->addItem( i18n( "Strips Right-Down" ) );
+    m_dialog->effectCombo->addItem( i18n( "Melting" ) );
+    m_dialog->effectCombo->addItem( i18n( "Random Transition" ) );
     m_dialog->effectCombo->setCurrentItem( static_cast<int>( m_effect ) );
 
     // workaround, because Random Effect is always negative
@@ -136,9 +136,9 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     connect( m_dialog->effectCombo, SIGNAL( activated( int ) ), this, SLOT( effectChanged( int ) ) );
 
     // setup speed combo
-    m_dialog->speedCombo->insertItem( i18n("Slow") );
-    m_dialog->speedCombo->insertItem( i18n("Medium") );
-    m_dialog->speedCombo->insertItem( i18n("Fast") );
+    m_dialog->speedCombo->addItem( i18n("Slow") );
+    m_dialog->speedCombo->addItem( i18n("Medium") );
+    m_dialog->speedCombo->addItem( i18n("Fast") );
 
     m_dialog->speedCombo->setCurrentItem( m_effectSpeed );
 
