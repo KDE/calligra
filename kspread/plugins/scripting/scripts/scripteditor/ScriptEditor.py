@@ -426,7 +426,7 @@ class MainDialog(qt.QDialog):
 
 		import os, qt
 		qt.QDialog.__init__(self, parent, "MainDialog", 1, qt.Qt.WDestructiveClose)
-		self.setCaption("Actions")
+		self.setCaption("Script Editor")
 		
 		layout = qt.QVBoxLayout(self)
 		box = qt.QVBox(self)
