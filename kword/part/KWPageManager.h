@@ -135,19 +135,15 @@ public:
 private:
     /// helper method for the topOfPage and bottomOfPage
     double pageOffset(int pageNumber, bool bottom) const;
-    /// sorter for numbered pages.
-    class PageList : public QList<KWPage*> {
-    protected:
-        int compareItems(QList<KWPage*>::reference a, QList<KWPage*>::reference b);
-    };
+    friend class KWPage;
+    static int compareItems(KWPage* a, KWPage *b);
 
-    PageList m_pageList;
+private:
+    QList<KWPage*> m_pageList;
     int m_firstPage;
     bool m_onlyAllowAppend; // true for WP style documents.
 
     KoPageLayout m_defaultPageLayout;
-
-friend class KWPage;
 };
 
 #endif

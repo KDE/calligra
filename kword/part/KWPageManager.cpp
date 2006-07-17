@@ -40,7 +40,7 @@ int KWPageManager::pageNumber(const QPointF &point) const {
         startOfpage += page->height();
         pageNumber++;
     }
-    return pageNumber;
+    return pageNumber-1;
 }
 
 int KWPageManager::pageNumber(const KoShape *shape) const {
@@ -104,6 +104,7 @@ KWPage* KWPageManager::insertPage(int index) {
     }
     KWPage *page = new KWPage(this, qMin( qMax(index, m_firstPage), lastPageNumber()+1 ));
     m_pageList.append(page);
+    qSort(m_pageList.begin(), m_pageList.end(), compareItems);
     return page;
 }
 
@@ -214,11 +215,7 @@ QList<KWPage*> KWPageManager::pages() const {
 }
 
 // **** PageList ****
-int KWPageManager::PageList::compareItems(QList<KWPage*>::reference a,QList<KWPage*>::reference b)
+int KWPageManager::compareItems(KWPage *a, KWPage *b)
 {
-    int pa = ((KWPage *)a)->pageNumber();
-    int pb = ((KWPage *)b)->pageNumber();
-    if (pa == pb) return 0;
-    if (pa < pb) return -1;
-    return 1;
+    return b->pageNumber() - a->pageNumber() > 0;
 }
