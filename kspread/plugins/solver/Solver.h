@@ -58,6 +58,8 @@ public:
    */
   ~Solver();
 
+  double evaluate( const gsl_vector* vector, void* parameters );
+
 protected Q_SLOTS:
   /**
    * Called when the Solver action is triggered.
