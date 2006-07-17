@@ -46,7 +46,8 @@
 
 #include "vcolordocker.h"
 
-#include <ko_hsv_widget.h>
+// TODO port to KoUniColorChooser
+//#include <ko_hsv_widget.h>
 #include <koColor.h>
 
 #include <kdebug.h>
@@ -65,13 +66,15 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mTabWidget = new QTabWidget( this );
 
 	/* ##### HSV WIDGET ##### */
+	// TODO port to KoUniColorChooser
+	/*
 	mHSVWidget = new KoHSVWidget( mTabWidget );
 	connect( mHSVWidget, SIGNAL( sigFgColorChanged( const QColor &) ), this, SLOT( updateFgColor( const QColor &) ) );
 	connect( mHSVWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
 	connect(this, SIGNAL(fgColorChanged(const QColor &)), mHSVWidget, SLOT(setFgColor(const QColor &)));
 	connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
 	mTabWidget->addTab( mHSVWidget, i18n( "HSV" ) );
-
+	*/
 	//Opacity
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "white" ), QColor( "black" ), 0, 100, 100, this );
 	//TODO: Make "white" a transparent color
@@ -96,7 +99,7 @@ VColorDocker::~VColorDocker()
 
 void VColorDocker::updateFgColor(const QColor &c)
 {
-	mHSVWidget->blockSignals(true);
+	//mHSVWidget->blockSignals(true);
 
 	m_oldColor = m_color;
 
@@ -134,12 +137,12 @@ void VColorDocker::updateFgColor(const QColor &c)
  
 	emit fgColorChanged( c );
 
-	mHSVWidget->blockSignals(false);
+	//mHSVWidget->blockSignals(false);
 }
 
 void VColorDocker::updateBgColor(const QColor &c)
 {
-	mHSVWidget->blockSignals(true);
+	//mHSVWidget->blockSignals(true);
 
 	m_oldColor = m_color;
 
@@ -177,7 +180,7 @@ void VColorDocker::updateBgColor(const QColor &c)
  
 	emit bgColorChanged( c );
 
-	mHSVWidget->blockSignals(false);
+	//mHSVWidget->blockSignals(false);
 }
 
 void VColorDocker::updateOpacity()
@@ -214,7 +217,7 @@ void VColorDocker::setStrokeDocker()
 void VColorDocker::update()
 {
 
-	mHSVWidget->blockSignals(true);
+	//mHSVWidget->blockSignals(true);
 
 	int objCnt = m_part->document().selection()->objects().count();
 
@@ -225,11 +228,12 @@ void VColorDocker::update()
 		QColor fgColor = QColor(obj->stroke()->color());
 		QColor bgColor = QColor(obj->fill()->color());
 
-		mHSVWidget->setFgColor(fgColor);
-		mHSVWidget->setBgColor(bgColor);
+		// TODO port to KoUniColorChooser
+		//mHSVWidget->setFgColor(fgColor);
+		//mHSVWidget->setBgColor(bgColor);
 	}
 
-	mHSVWidget->blockSignals(false);
+	//mHSVWidget->blockSignals(false);
 }
 
 #include "vcolordocker.moc"

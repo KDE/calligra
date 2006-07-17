@@ -29,7 +29,8 @@ class QColor;
 class KarbonView;
 class VColor;
 class VColorSlider;
-class KoHSVWidget;
+// TODO port to KoUniColorChooser
+//class KoHSVWidget;
 
 class VColorDocker : public QWidget
 {
@@ -51,7 +52,8 @@ private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );
 
 	QTabWidget *mTabWidget;
-	KoHSVWidget *mHSVWidget;
+	// TODO port to KoUniColorChooser
+	//KoHSVWidget *mHSVWidget;
 	VColorSlider *mOpacity;
 
 signals:
