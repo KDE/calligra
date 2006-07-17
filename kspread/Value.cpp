@@ -125,6 +125,8 @@ public:
   void init( unsigned c, unsigned r )
   {
     if (chunks) clear();
+    if (c <= 0) c = 1;
+    if (r <= 0) r = 1;
     columns = c; rows = r;
     int cc = columns / CHUNK_COLS;
     int rr = rows / CHUNK_ROWS;
