@@ -77,6 +77,8 @@ foreach $section (@sections) {
 #Create linking page
 print "\n". $i ."/$totalSteps) Creating wrapper pages";
 my %classes;
+my %packages;
+
 chdir "$rootdir/doc/api";
 foreach $section (@sections) {
     $sect=$section;
@@ -106,16 +108,33 @@ foreach $section (@sections) {
 }
 chdir $rootdir;
 
+$browsingHtml = "<html><body>\n"
+  . "<style>.FrameItemFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif }</style>\n"
+  . "<table border=\"0\" width=\"100%\"><tr><td nowrap><font class=\"FrameItemFont\">\n";
+$browsingHtmlClose = "</font></td></tr></body></html>\n";
+
+# generate packages.html
+open(FILE, ">$rootdir/doc/api/packages.html");
+print FILE "$browsingHtml";
+foreach $section (@sections) {
+    $sect=$section;
+    $sect=~s/\//-/;
+    $packages{$sect}= "<a href=\"$sect/annotated.html\" target=\"main\">$section</a><br>\n";
+}
+foreach $key (sort {uc($a) cmp uc($b)} keys %packages) {
+    print FILE $packages{$key};
+}
+print FILE $browsingHtmlClose;
+close FILE;
+
 # sort and print
 open(FILE, ">$rootdir/doc/api/allClasses.html");
-print FILE "<html><body>\n";
-print FILE "<style>.FrameItemFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif }</style>\n";
-print FILE "<table border=\"0\" width=\"100%\"><tr><td nowrap><font class=\"FrameItemFont\">\n";
+print FILE "$browsingHtml";
 print FILE "<b><a href=\"allClasses.html\">All Classes</a> / <a href=\"allClasses-light.html\">Most Classes</a></b></br></br>\n";
 foreach $key (sort {uc($a) cmp uc($b)} keys %classes) {
     print FILE $classes{$key};
 }
-print FILE "</font></td></tr></body></html>\n";
+print FILE $browsingHtmlClose;
 close FILE;
 system "grep -v '/undocumented.html' $rootdir/doc/api/allClasses.html > $rootdir/doc/api/allClasses-light.html";
 
@@ -124,7 +143,7 @@ open (FILE,">$rootdir/doc/api/index.html");
 if($rootdir=~/.*\/(.*)$/) {
     $project=$1;
 }
-print FILE "<html><head><title>$project API docs</title><frameset cols=\"20%,80%\"><frame src=\"allClasses.html\"><frame src=\"sections.html\" name=\"main\"></frameset>\n</head></html>";
+print FILE "<html><head><title>$project API docs</title><frameset cols=\"20%,80%\"><frameset rows=\"30%,70%\"><frame src=\"packages.html\"><frame src=\"allClasses-light.html\"></frameset><frame src=\"sections.html\" name=\"main\"></frameset>\n</head></html>";
 close (FILE);
 
 # generate sections.html
@@ -475,5 +494,6 @@ sub addClass() {
     }
     $string .= "</a><br>\n";
 
+    if($classType eq "Namespace") { $packages{$className} = $string; }
     $classes{$className}=$string;
 }
