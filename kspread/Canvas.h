@@ -84,9 +84,8 @@ class EmbeddedObject;
 
 
 /**
- * The canvas builds a part of the GUI of KSpread.
- * It contains the borders, scrollbars,
- * editwidget and of course it displays the sheet.
+ * The scrollable area showing the cells.
+ *
  * Especially most of the user interface logic is implemented here.
  * That means that this class knows what to do when a key is pressed
  * or if the mouse button was clicked.

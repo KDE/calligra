@@ -12,7 +12,7 @@ class Canvas;
 class View;
 
 /**
- * HBorder
+ * The widget above the cells showing the column headers.
  */
 class HBorder : public QWidget
 {
@@ -98,7 +98,7 @@ private:
 
 
 /**
- * VBorder
+ * The widget left to the cells showing the row headers.
  */
 class VBorder : public QWidget
 {

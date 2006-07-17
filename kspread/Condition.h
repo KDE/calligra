@@ -38,8 +38,10 @@ class Cell;
 class Style;
 
 /**
- * Structure to indicate the condition we're testing on a cell and the special
- * font and color that will be applied if it's true
+ * \class Conditional
+ * Conditional formatting.
+ * Holds the actual condition and the applicable style for conditional
+ * Cell formattings.
  */
 class KSPREAD_EXPORT Conditional
 {
@@ -65,7 +67,8 @@ public:
 
 
 /**
- * Manages a set of conditions for a cell
+ * \class Conditions
+ * Manages a set of conditions for a cell.
  */
 class Conditions
 {

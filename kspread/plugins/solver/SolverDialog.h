@@ -35,14 +35,27 @@ class View;
 namespace Plugins
 {
 
+/**
+ * \class SolverDialog
+ * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ */
 class SolverDialog : public KDialog, public Ui::Solver, public Ui::SolverDetails
 {
   Q_OBJECT
 
 public:
+  /**
+   * Constructor.
+   * \p view The view pointer. Used to access the cells.
+   * \p parent the parent widget
+   */
   SolverDialog( View* view, QWidget* parent );
 
 protected Q_SLOTS:
+  /**
+   * Deletes the dialog.
+   * Called after one of button is clicked and the dialog will be closed.
+   */
   void finishDialog();
 };
 

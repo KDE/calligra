@@ -34,7 +34,7 @@ class Cell;
 class ColumnFormat;
 class RowFormat;
 
-/** Philipp
+/**
 This class defines a pointer map to all cells, which makes access to them more performant
 and additionally limits memory consumption.
 
@@ -69,8 +69,6 @@ are equal in both matrizes, but normally it will be the regular case, that you h
 a lot of rows than columns. Maybe something like LEVEL1=128/256 and LEVEL2=256/128 (x/y), still keeping
 2^15 values/cells in each direction (benefit: you won't loose memory in empty columns).
 */
-
-
 class Cluster
 {
 public:
@@ -260,6 +258,10 @@ private:
     int m_biggestX, m_biggestY;
 };
 
+/**
+ * A pointer map to all column formats.
+ * \see Cluster
+ */
 class ColumnCluster
 {
 public:
@@ -289,6 +291,10 @@ private:
     bool m_autoDelete;
 };
 
+/**
+ * A pointer map to all row formats.
+ * \see Cluster
+ */
 class RowCluster
 {
 public:
