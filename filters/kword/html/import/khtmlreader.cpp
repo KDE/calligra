@@ -447,33 +447,50 @@ void KHTMLReader::parseStyle(DOM::Element e) {
   //FIXME: wait until getComputedStyle is more than
   // 'return 0' in khtml
   kDebug(30503) << "entering parseStyle" << endl;
-     DOM::CSSStyleDeclaration s1=e.style();
-     DOM::Document doc=_html->document();
-     DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
+  DOM::CSSStyleDeclaration s1=e.style();
+  DOM::Document doc=_html->document();
+  DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
 
-     kDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
-     if ( s1.getPropertyValue("font-weight").string() == "bolder" )
-     {
-	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-     }
-     if ( s1.getPropertyValue("font-weight").string() == "bold" )
-     {
-	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-     }
+  kDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
+  if ( s1.getPropertyValue("font-weight").string() == "bolder" )
+  {
+    _writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+  }
+  if ( s1.getPropertyValue("font-weight").string() == "bold" )
+  {
+    _writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+  }
 
-     // process e.g. <style="color: #ffffff">
-       if ( s1.getPropertyValue("color").string() != QString() )
-       {
-         QColor c=parsecolor(s1.getPropertyValue("color").string());
-         _writer->formatAttribute(state()->paragraph,"COLOR","red",QString::number(c.red()));
-         _writer->formatAttribute(state()->paragraph,"COLOR","green",QString::number(c.green()));
-         _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString::number(c.blue()));
-       }
-     // processed.
+  // process e.g. <style="color: #ffffff">
+  if ( s1.getPropertyValue("color").string() != QString() )
+  {
+    QColor c=parsecolor(s1.getPropertyValue("color").string());
+    _writer->formatAttribute(state()->paragraph,"COLOR","red",QString::number(c.red()));
+    _writer->formatAttribute(state()->paragraph,"COLOR","green",QString::number(c.green()));
+    _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString::number(c.blue()));
+  } // done
+  // process e.g. <style="font-size: 42">
+  if ( s1.getPropertyValue("font-size").string() != QString() )
+  {
+    QString size=s1.getPropertyValue("font-size").string();
+    if (size.endsWith("pt"))
+    {
+      size=size.left(size.length()-2);
+    }
+    _writer->formatAttribute(state()->paragraph,"SIZE","value",size);
+  }
+  // done
+  // process e.g. <style="text-align: center">this is in the center</style>
+  if ( s1.getPropertyValue("text-align").string() != QString() )
+  {
+    state()->layout=_writer->setLayout(state()->paragraph,state()->layout);
+    if (!(_writer->getText(state()->paragraph).isEmpty()))
+      startNewParagraph(false,false);
+    _writer->layoutAttribute(state()->paragraph, "FLOW","align",s1.getPropertyValue("text-align").string());
+  }
+  // done
 
      /*if (DOM::PROPV("font-weight") == "bolder")
-	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-     if (PROPV("font-weight") == "bold")
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
      */
 /*
