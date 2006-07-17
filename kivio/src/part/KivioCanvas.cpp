@@ -23,10 +23,14 @@
 #include <QPainter>
 #include <QPalette>
 #include <QBrush>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 #include <KoZoomHandler.h>
 #include <KoPageLayout.h>
 #include <KoShapeManager.h>
+#include <KoTool.h>
+#include <KoPointerEvent.h>
 
 #include "KivioView.h"
 #include "KivioDocument.h"
@@ -111,9 +115,41 @@ void KivioCanvas::updateSize()
 void KivioCanvas::paintEvent(QPaintEvent* event)
 {
   QPainter painter(this);
+  painter.setRenderHint(QPainter::Antialiasing);
   painter.setClipRect(event->rect());
 
-  painter.setRenderHint(QPainter::Antialiasing);
+  shapeManager()->paint(painter, *(viewConverter()), false);
+  m_tool->paint(painter, *(viewConverter()));
+
+  painter.end();
+}
+
+void KivioCanvas::mouseMoveEvent(QMouseEvent* event)
+{
+  KoPointerEvent pointerEvent(event, viewConverter()->viewToDocument(event->pos()));
+  m_tool->mouseMoveEvent(&pointerEvent);
+}
+
+void KivioCanvas::mousePressEvent(QMouseEvent* event)
+{
+  KoPointerEvent pointerEvent(event, viewConverter()->viewToDocument(event->pos()));
+  m_tool->mousePressEvent(&pointerEvent);
+}
+
+void KivioCanvas::mouseReleaseEvent(QMouseEvent* event)
+{
+  KoPointerEvent pointerEvent(event, viewConverter()->viewToDocument(event->pos()));
+  m_tool->mouseReleaseEvent(&pointerEvent);
+}
+
+void KivioCanvas::keyPressEvent(QKeyEvent* event)
+{
+  m_tool->keyPressEvent(event);
+}
+
+void KivioCanvas::keyReleaseEvent(QKeyEvent* event)
+{
+  m_tool->keyReleaseEvent(event);
 }
 
 #include "KivioCanvas.moc"

@@ -26,16 +26,21 @@
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
 #include <KoToolBox.h>
+#include <KoShapeSelector.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
 #include "KivioAbstractPage.h"
+#include "KivioPage.h"
 
 KivioView::KivioView(KivioDocument* document, QWidget* parent, const char* name)
   : KoView(document, parent, name), m_document(document)
 {
   m_activePage = 0;
   initGUI();
+
+  if(m_document->pageCount() > 0)
+    setActivePage(m_document->pageByIndex(0));
 }
 
 KivioView::~KivioView()
@@ -77,6 +82,11 @@ void KivioView::initGUI()
   layout->addWidget(m_canvasController, 0, 0);
 
   KoToolManager::instance()->addControllers(m_canvasController, this);
+  KoToolManager::instance()->toolBox()->show();
+
+  KoShapeSelector *selector = new KoShapeSelector(0, m_canvasController, ".*");
+  selector->resize(QSize(100, 200));
+  selector->show();
 }
 
 KivioAbstractPage* KivioView::activePage() const

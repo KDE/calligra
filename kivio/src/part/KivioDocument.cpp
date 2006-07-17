@@ -45,6 +45,10 @@ KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool single
           this, SLOT(slotDocumentRestored()));
   connect(m_commandHistory, SIGNAL(commandExecuted(KCommand*)),
           this, SLOT(slotCommandExecuted()));
+
+  //TODO Remove when ready testing
+  KivioMasterPage* masterPage = addMasterPage("standard");
+  addPage(masterPage, "page 1");
 }
 
 KivioDocument::~KivioDocument()
@@ -247,6 +251,11 @@ void KivioDocument::removeShape(KivioAbstractPage* page, KoShape* shape)
       }
     }
   }
+}
+
+int KivioDocument::pageCount() const
+{
+  return m_pageList.count();
 }
 
 #include "KivioDocument.moc"

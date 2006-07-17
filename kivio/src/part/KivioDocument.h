@@ -93,6 +93,9 @@ class KivioDocument : public KoDocument
      */
     KivioPage* pageByIndex(int index);
 
+    /// Returns the number of pages in the document
+    int pageCount() const;
+
     /// Adds @p shape to @p page and updates the views
     void addShape(KivioAbstractPage* page, KoShape* shape);
 
