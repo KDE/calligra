@@ -921,10 +921,10 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
 
                 if (silent) // don't let the document change the window caption
                   pDoc->setTitleModified();
-            }   // if (wantToSave)  {
+            }   // if (wantToSave)
             else
                 ret = false;
-        }   // if (bOk) {
+        }   // if (bOk)
         else
             ret = false;
     }
@@ -968,6 +968,8 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
 
     if (!ret && reset_url)
         pDoc->resetURL(); //clean the suggested filename as the save dialog was rejected
+    else if (! silent) // don't let the document change the window caption
+        pDoc->setTitleModified();
     return ret;
 }
 
