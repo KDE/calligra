@@ -1,5 +1,10 @@
 /**
  * \mainpage
  * KWord Part
+ * KWord is an application specializing in multi-page text layout and printing, the application
+ * is structured to have various libraries that do the actual heavy lifting. This directory
+ * contains the kwordprivate library and the KoPart providing library 'kwordpart'.
+ * Entry points are the KWDocument as well as the KWView classes, but the KWFrame and
+ * KWTextFrame classes are just as important, but for a bit more lowlevel.
  */
 IGNORE_PREFIX=KW
