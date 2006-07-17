@@ -99,8 +99,8 @@ class Dialog(qt.QDialog):
 
 	def browseClicked(self):
 		import qt
-		filename = qt.QFileDialog.getOpenFileName(str(self.fileedit.text()),"*.htm *.html *.xhtml;;*", self)
-		if str(filename) != "": self.fileedit.setText(str(filename))
+		filename = str( qt.QFileDialog.getSaveFileName(str(self.fileedit.text()),"*.htm *.html *.xhtml;;*", self) )
+		if filename != "": self.fileedit.setText(filename)
 	
 	def getDefaultFile(self):
 		import os

@@ -1,1 +1,1 @@
-SUBDIRS = exporthtml
+SUBDIRS = exporthtml scripteditor
