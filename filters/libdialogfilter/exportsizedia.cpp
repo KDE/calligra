@@ -81,7 +81,8 @@ void ExportSizeDia::setupGUI()
 					       KDialog::marginHint(),
 					       KDialog::spacingHint() );
 #endif
-    m_proportional = new QCheckBox( page, "proportional" );
+    m_proportional = new QCheckBox( page );
+    m_proportional->setObjectName( "proportional" );
     m_proportional->setText( i18n( "Keep ratio" ) );
     m_proportional->setChecked( true );
     mainLayout->addWidget( m_proportional, 0, 0 );

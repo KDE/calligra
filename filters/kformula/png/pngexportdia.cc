@@ -183,7 +183,8 @@ void PNGExportDia::setupGUI()
 
     Q3BoxLayout* mainLayout = new Q3VBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
 
-    proportional = new QCheckBox( page, "proportional" );
+    proportional = new QCheckBox( page );
+    proportional->setObjectName( "proportional" );
     proportional->setText( i18n( "Keep ratio" ) );
     proportional->setChecked( true );
     mainLayout->addWidget( proportional );
