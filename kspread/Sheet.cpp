@@ -6737,18 +6737,18 @@ void Sheet::convertObscuringBorders()
 void Sheet::setRegionPaintDirty( const Region & region )
 {
 // Robert: This seems a very heavy handed way of doing this - look for something more efficient.
-//  DilationManipulator manipulator;
-//  manipulator.setSheet(this);
-//  manipulator.add(region);
-//  manipulator.execute();
+  DilationManipulator manipulator;
+  manipulator.setSheet(this);
+  manipulator.add(region);
+  manipulator.execute();
 
   // don't put it in the undo list! ;-)
-  //d->paintDirtyList.add(manipulator);
+  d->paintDirtyList.add(manipulator);
   
-   d->paintDirtyList.add(region);
+  // d->paintDirtyList.add(region);
 	
- // kDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
-  kDebug() << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
+  kDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
+  //kDebug() << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
 }
 
 void Sheet::clearPaintDirtyData()
