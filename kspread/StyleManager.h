@@ -46,15 +46,19 @@ class KSPREAD_EXPORT StyleManager
   QDomElement save( QDomDocument & doc );
   bool loadXML( QDomElement const & styles );
 
-    void saveOasis( KoGenStyles &mainStyles );
-    void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles );
+  void saveOasis( KoGenStyles &mainStyles );
+  void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles );
 
   CustomStyle * defaultStyle() const { return m_defaultStyle; }
   CustomStyle * style( QString const & name ) const;
 
+  void resetDefaultStyle ();
+ 
   bool checkCircle( QString const & name, QString const & parent );
   bool validateStyleName( QString const & name, CustomStyle * style );
   void changeName( QString const & oldName, QString const & newName );
+
+  void insertStyle (CustomStyle *style);
 
   void takeStyle( CustomStyle * style );
   void createBuiltinStyles();

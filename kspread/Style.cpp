@@ -2810,9 +2810,7 @@ CustomStyle::CustomStyle( QString const & name, CustomStyle * parent )
   : Style(),
     m_name( name )
 {
-  m_parent = parent;
-  if ( m_parent )
-    m_parentName = m_parent->name();
+  setParent (parent);
 }
 
 CustomStyle::~CustomStyle()
@@ -2829,12 +2827,12 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
 //     if ( style.type() == 0 && ( m_type == BUILTIN ) && ( m_name == "Default" ) )
 //       return "Default";
 
-    if ( m_name.isEmpty() )
+  if ( name().isEmpty() )
         return QString::null; // TODO fallback to Style::saveOasis() ???
 
     // default style does not need display name
-    if( type() != BUILTIN || m_name != "Default" )
-        style.addAttribute( "style:display-name", m_name );
+    if( type() != BUILTIN || name() != "Default" )
+      style.addAttribute( "style:display-name", name() );
 
     // doing the real work
     saveOasisStyle( style, mainStyles );
@@ -2843,7 +2841,7 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
     if ( style.type() == Doc::STYLE_CELL_AUTO )
         return QString::null;
 
-    if( ( m_type == BUILTIN ) && ( m_name == "Default" ) )
+    if( ( type() == BUILTIN ) && ( name() == "Default" ) )
     {
         style.setDefaultStyle(true);
         // don't i18n'ize "Default" in this case
@@ -2856,27 +2854,27 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
 
 void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const QDomElement& style, const QString & name )
 {
-    m_name = name;
+    setName (name);
     if ( style.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
-        m_parentName = style.attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
-    else if ( m_name != "Default" )
-        m_parentName = "Default";
+      setParentName (style.attributeNS( KoXmlNS::style, "parent-style-name", QString::null ));
+    else if ( this->name() != "Default" )
+        setParentName ("Default");
 
-    m_type = CUSTOM;
+    setType (CUSTOM);
 
     Style::loadOasisStyle( oasisStyles, style );
 }
 
 void CustomStyle::save( QDomDocument & doc, QDomElement & styles )
 {
-  if ( m_name.isEmpty() )
+  if ( name().isEmpty() )
     return;
 
   QDomElement style( doc.createElement( "style" ) );
-  style.setAttribute( "type", (int) m_type );
-  if ( m_parent )
-    style.setAttribute( "parent", m_parent->name() );
-  style.setAttribute( "name", m_name );
+  style.setAttribute( "type", (int) type() );
+  if (parent())
+    style.setAttribute( "parent", parent()->name() );
+  style.setAttribute( "name", name() );
 
   QDomElement format( doc.createElement( "format" ) );
   saveXML( doc, format );
@@ -2887,16 +2885,16 @@ void CustomStyle::save( QDomDocument & doc, QDomElement & styles )
 
 bool CustomStyle::loadXML( QDomElement const & style, QString const & name )
 {
-  m_name = name;
+  setName (name);
 
   if ( style.hasAttribute( "parent" ) )
-    m_parentName = style.attribute( "parent" );
+    setParentName (style.attribute( "parent" ));
 
   if ( !style.hasAttribute( "type" ) )
     return false;
 
   bool ok = true;
-  m_type = (StyleType) style.attribute( "type" ).toInt( &ok );
+  setType ((StyleType) style.attribute( "type" ).toInt( &ok ));
   if ( !ok )
     return false;
 

@@ -46,39 +46,33 @@ StyleManager::~StyleManager()
 void StyleManager::saveOasis( KoGenStyles &mainStyles )
 {
     kDebug() << "Saving default oasis style" << endl;
-    KoGenStyle defaultStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
-    m_defaultStyle->saveOasis( defaultStyle, mainStyles );
+    KoGenStyle defStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
+    defaultStyle()->saveOasis( defStyle, mainStyles );
 
-    CustomStyles::iterator iter = m_styles.begin();
-    CustomStyles::iterator end  = m_styles.end();
-
-    while ( iter != end )
-    {
-        kDebug() << "Saving style" << endl;
-        CustomStyle * styleData = iter.value();
-
+    QStringList names = styleNames ();
+    QStringList::iterator it;
+    for (it = names.begin(); it != names.end(); ++it) {
+      if (*it != "Default") {
+        CustomStyle * styleData = style (*it);
+        
         KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
         styleData->saveOasis( customStyle, mainStyles );
-
-        ++iter;
+      }
     }
 }
 
 void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 {
     // loading default style first
-    const QDomElement* defaultStyle = oasisStyles.defaultStyle( "table-cell" );
-    if ( defaultStyle )
+    const QDomElement* defStyle = oasisStyles.defaultStyle( "table-cell" );
+    if ( defStyle )
     {
-      m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, "Default" );
-      m_defaultStyle->setType( Style::BUILTIN );
+      defaultStyle()->loadOasis( oasisStyles, *defStyle, "Default" );
+      defaultStyle()->setType( Style::BUILTIN );
       kDebug() << "StyleManager: default cell style loaded!" << endl;
     }
     else
-    {
-      delete m_defaultStyle;
-      m_defaultStyle = new CustomStyle();
-    }
+      resetDefaultStyle();
 
     uint nStyles = oasisStyles.userStyles().count();
     kDebug() << " number of template style to load : " << nStyles << endl;
@@ -104,22 +98,20 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
             //fixme test return;
             style->loadOasis( oasisStyles, styleElem, name );
             style->setType( Style::CUSTOM );
-            m_styles[name] = style;
+            insertStyle (style);
             kDebug() << "Style " << name << ": " << style << endl;
         }
     }
 
-    // set the parent pointers after we loaded all styles
-    CustomStyles::iterator iter = m_styles.begin();
-    CustomStyles::iterator end  = m_styles.end();
-    while ( iter != end )
-    {
-        CustomStyle * styleData = iter.value();
-
+    // reparent all styles
+    QStringList names = styleNames ();
+    QStringList::iterator it;
+    for (it = names.begin(); it != names.end(); ++it) {
+      if (*it != "Default") {
+        CustomStyle * styleData = style (*it);
         if ( !styleData->parent() && !styleData->parentName().isNull() )
-            styleData->setParent( m_styles[ styleData->parentName() ] );
-
-        ++iter;
+          styleData->setParent( m_styles[ styleData->parentName() ] );
+      }
     }
 }
 
@@ -179,30 +171,34 @@ bool StyleManager::loadXML( QDomElement const & styles )
 
       if ( style->type() == Style::AUTO )
         style->setType( Style::CUSTOM );
-      m_styles[name] = style;
+      insertStyle (style);
       kDebug() << "Style " << name << ": " << style << endl;
     }
 
     e = e.nextSibling().toElement();
   }
 
-  CustomStyles::iterator iter = m_styles.begin();
-  CustomStyles::iterator end  = m_styles.end();
-
-  while ( iter != end )
-  {
-    CustomStyle * styleData = iter.value();
-
-    if ( !styleData->parent() && !styleData->parentName().isNull() )
-      styleData->setParent( m_styles[ styleData->parentName() ] );
-
-    ++iter;
+  defaultStyle()->setName( "Default" );
+  defaultStyle()->setType( Style::BUILTIN );
+  
+  // reparent all styles
+  QStringList names = styleNames ();
+  QStringList::iterator it;
+  for (it = names.begin(); it != names.end(); ++it) {
+    if (*it != "Default") {
+      CustomStyle * styleData = style (*it);
+      if ( !styleData->parent() && !styleData->parentName().isNull() )
+        styleData->setParent( m_styles[ styleData->parentName() ] );
+    }
   }
 
-  m_defaultStyle->setName( "Default" );
-  m_defaultStyle->setType( Style::BUILTIN );
-
   return true;
+}
+
+void StyleManager::resetDefaultStyle ()
+{
+  delete m_defaultStyle;
+  m_defaultStyle = new CustomStyle;
 }
 
 void StyleManager::createBuiltinStyles()
@@ -228,11 +224,16 @@ void StyleManager::createBuiltinStyles()
 
 CustomStyle * StyleManager::style( QString const & name ) const
 {
+  if (m_styles.count (name))
+    return m_styles[name];
+  
+/* (old code, seems to be doing the same as the two lines above, less effectively
   CustomStyles::const_iterator iter( m_styles.find( name ) );
 
   if ( iter != m_styles.end() )
     return iter.value();
-
+*/
+  
   if ( name == "Default" )
     return m_defaultStyle;
 
@@ -313,6 +314,14 @@ void StyleManager::changeName( QString const & oldName, QString const & newName 
     m_styles.erase( iter );
     m_styles[newName] = s;
   }
+}
+
+void StyleManager::insertStyle (CustomStyle *style)
+{
+  QString name = style->name();
+  if (m_styles.count (name) && (m_styles[name] != style))
+    delete m_styles[name];
+  m_styles[name] = style;
 }
 
 QStringList StyleManager::styleNames() const

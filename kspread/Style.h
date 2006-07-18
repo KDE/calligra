@@ -270,6 +270,8 @@ public:
   CustomStyle * parent() const;
   QString const & parentName() const { return m_parentName; }
   void setParent( CustomStyle * parent );
+  // setParentName is needed by loading code, which doesn't set the real parent
+  void setParentName (const QString &n) { m_parentName = n; };
 
   /**
    * Returns the name of a colour.  This is the same as returned by QColor::name, but an internal cache
@@ -277,6 +279,7 @@ public:
    */
   static QString colorName( const QColor& color );
 
+  bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 protected:
   /**
    * Helper function for saveOasis
@@ -398,7 +401,6 @@ protected:
   uint m_leftPenValue;
   uint m_topPenValue;
 
-  bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 };
 
 /**
