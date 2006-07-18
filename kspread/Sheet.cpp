@@ -3497,18 +3497,16 @@ void Sheet::paste( const QRect& pasteArea, bool makeUndo,
     }
     else if( mimeData->hasText() )
     {
-        // ### Stefan: Is this still true for Qt4?
-        // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
-        // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
-        QString _text = QApplication::clipboard()->text( clipboardMode );
-        doc()->emitBeginOperation();
-        pasteTextPlain( _text, pasteArea );
-        emit sig_updateView( this );
-        // doc()->emitEndOperation();
-        return;
+      // ### Stefan: Is this still true for Qt4?
+      // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
+      // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
+      QString _text = QApplication::clipboard()->text( clipboardMode );
+      pasteTextPlain( _text, pasteArea );
+      return;
     }
     else
-        return;
+      // TODO: complain about unrecognized type ?
+      return;
 
     // Do the actual pasting.
     doc()->emitBeginOperation();
@@ -4246,31 +4244,32 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
 QDomElement Sheet::saveXML( QDomDocument& dd )
 {
     QDomElement sheet = dd.createElement( "table" );
-    sheet.setAttribute( "name", d->name );
-
+    sheet.setAttribute( "name", sheetName() );
 
     //Laurent: for oasis format I think that we must use style:direction...
-    sheet.setAttribute( "layoutDirection", (d->layoutDirection == RightToLeft) ? "rtl" : "ltr" );
-    sheet.setAttribute( "columnnumber", (int)d->showColumnNumber);
-    sheet.setAttribute( "borders", (int)d->showPageBorders);
-    sheet.setAttribute( "hide", (int)d->hide);
-    sheet.setAttribute( "hidezero", (int)d->hideZero);
-    sheet.setAttribute( "firstletterupper", (int)d->firstLetterUpper);
-    sheet.setAttribute( "grid", (int)d->showGrid );
-    sheet.setAttribute( "printGrid", (int)d->print->printGrid() );
-    sheet.setAttribute( "printCommentIndicator", (int)d->print->printCommentIndicator() );
-    sheet.setAttribute( "printFormulaIndicator", (int)d->print->printFormulaIndicator() );
-    sheet.setAttribute( "showFormula", (int)d->showFormula);
-    sheet.setAttribute( "showFormulaIndicator", (int)d->showFormulaIndicator);
-    sheet.setAttribute( "showCommentIndicator", (int)d->showCommentIndicator);
-    sheet.setAttribute( "lcmode", (int)d->lcMode);
-    sheet.setAttribute( "autoCalc", (int)d->autoCalc);
+    sheet.setAttribute( "layoutDirection", (layoutDirection() == RightToLeft) ? "rtl" : "ltr" );
+    sheet.setAttribute( "columnnumber", (int)getShowColumnNumber());
+    sheet.setAttribute( "borders", (int)isShowPageBorders());
+    sheet.setAttribute( "hide", (int)isHidden());
+    sheet.setAttribute( "hidezero", (int)getHideZero());
+    sheet.setAttribute( "firstletterupper", (int)getFirstLetterUpper());
+    sheet.setAttribute( "grid", (int)getShowGrid() );
+    sheet.setAttribute( "printGrid", (int)print()->printGrid() );
+    sheet.setAttribute( "printCommentIndicator", (int)print()->printCommentIndicator() );
+    sheet.setAttribute( "printFormulaIndicator", (int)print()->printFormulaIndicator() );
+    sheet.setAttribute( "showFormula", (int)getShowFormula());
+    sheet.setAttribute( "showFormulaIndicator", (int)getShowFormulaIndicator());
+    sheet.setAttribute( "showCommentIndicator", (int)getShowCommentIndicator());
+    sheet.setAttribute( "lcmode", (int)getLcMode());
+    sheet.setAttribute( "autoCalc", (int)getAutoCalc());
     sheet.setAttribute( "borders1.2", 1);
-    if ( !d->password.isNull() )
+    QByteArray pwd;
+    password (pwd);
+    if ( !pwd.isNull() )
     {
-      if ( d->password.size() > 0 )
+      if ( pwd.size() > 0 )
       {
-        QByteArray str = KCodecs::base64Encode( d->password );
+        QByteArray str = KCodecs::base64Encode(pwd);
         sheet.setAttribute( "protected", QString( str.data() ) );
       }
       else
@@ -4279,61 +4278,61 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
 
     // paper parameters
     QDomElement paper = dd.createElement( "paper" );
-    paper.setAttribute( "format", d->print->paperFormatString() );
-    paper.setAttribute( "orientation", d->print->orientationString() );
+    paper.setAttribute( "format", print()->paperFormatString() );
+    paper.setAttribute( "orientation", print()->orientationString() );
     sheet.appendChild( paper );
 
     QDomElement borders = dd.createElement( "borders" );
-    borders.setAttribute( "left", d->print->leftBorder() );
-    borders.setAttribute( "top", d->print->topBorder() );
-    borders.setAttribute( "right", d->print->rightBorder() );
-    borders.setAttribute( "bottom", d->print->bottomBorder() );
+    borders.setAttribute( "left", print()->leftBorder() );
+    borders.setAttribute( "top", print()->topBorder() );
+    borders.setAttribute( "right", print()->rightBorder() );
+    borders.setAttribute( "bottom", print()->bottomBorder() );
     paper.appendChild( borders );
 
     QDomElement head = dd.createElement( "head" );
     paper.appendChild( head );
-    if ( !d->print->headLeft().isEmpty() )
+    if ( !print()->headLeft().isEmpty() )
     {
       QDomElement left = dd.createElement( "left" );
       head.appendChild( left );
-      left.appendChild( dd.createTextNode( d->print->headLeft() ) );
+      left.appendChild( dd.createTextNode( print()->headLeft() ) );
     }
-    if ( !d->print->headMid().isEmpty() )
+    if ( !print()->headMid().isEmpty() )
     {
       QDomElement center = dd.createElement( "center" );
       head.appendChild( center );
-      center.appendChild( dd.createTextNode( d->print->headMid() ) );
+      center.appendChild( dd.createTextNode( print()->headMid() ) );
     }
-    if ( !d->print->headRight().isEmpty() )
+    if ( !print()->headRight().isEmpty() )
     {
       QDomElement right = dd.createElement( "right" );
       head.appendChild( right );
-      right.appendChild( dd.createTextNode( d->print->headRight() ) );
+      right.appendChild( dd.createTextNode( print()->headRight() ) );
     }
     QDomElement foot = dd.createElement( "foot" );
     paper.appendChild( foot );
-    if ( !d->print->footLeft().isEmpty() )
+    if ( !print()->footLeft().isEmpty() )
     {
       QDomElement left = dd.createElement( "left" );
       foot.appendChild( left );
-      left.appendChild( dd.createTextNode( d->print->footLeft() ) );
+      left.appendChild( dd.createTextNode( print()->footLeft() ) );
     }
-    if ( !d->print->footMid().isEmpty() )
+    if ( !print()->footMid().isEmpty() )
     {
       QDomElement center = dd.createElement( "center" );
       foot.appendChild( center );
-      center.appendChild( dd.createTextNode( d->print->footMid() ) );
+      center.appendChild( dd.createTextNode( print()->footMid() ) );
     }
-    if ( !d->print->footRight().isEmpty() )
+    if ( !print()->footRight().isEmpty() )
     {
       QDomElement right = dd.createElement( "right" );
       foot.appendChild( right );
-      right.appendChild( dd.createTextNode( d->print->footRight() ) );
+      right.appendChild( dd.createTextNode( print()->footRight() ) );
     }
 
     // print range
     QDomElement printrange = dd.createElement( "printrange-rect" );
-    QRect _printRange = d->print->printRange();
+    QRect _printRange = print()->printRange();
     int left = _printRange.left();
     int right = _printRange.right();
     int top = _printRange.top();
@@ -4358,25 +4357,25 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
 
     // Print repeat columns
     QDomElement printRepeatColumns = dd.createElement( "printrepeatcolumns" );
-    printRepeatColumns.setAttribute( "left", d->print->printRepeatColumns().first );
-    printRepeatColumns.setAttribute( "right", d->print->printRepeatColumns().second );
+    printRepeatColumns.setAttribute( "left", print()->printRepeatColumns().first );
+    printRepeatColumns.setAttribute( "right", print()->printRepeatColumns().second );
     sheet.appendChild( printRepeatColumns );
 
     // Print repeat rows
     QDomElement printRepeatRows = dd.createElement( "printrepeatrows" );
-    printRepeatRows.setAttribute( "top", d->print->printRepeatRows().first );
-    printRepeatRows.setAttribute( "bottom", d->print->printRepeatRows().second );
+    printRepeatRows.setAttribute( "top", print()->printRepeatRows().first );
+    printRepeatRows.setAttribute( "bottom", print()->printRepeatRows().second );
     sheet.appendChild( printRepeatRows );
 
     //Save print zoom
-    sheet.setAttribute( "printZoom", d->print->zoom() );
+    sheet.setAttribute( "printZoom", print()->zoom() );
 
     //Save page limits
-    sheet.setAttribute( "printPageLimitX", d->print->pageLimitX() );
-    sheet.setAttribute( "printPageLimitY", d->print->pageLimitY() );
+    sheet.setAttribute( "printPageLimitX", print()->pageLimitX() );
+    sheet.setAttribute( "printPageLimitY", print()->pageLimitY() );
 
     // Save all cells.
-    Cell* c = d->cells.firstCell();
+    Cell* c = firstCell();
     for( ;c; c = c->nextCell() )
     {
         if ( !c->isDefault() )
@@ -4388,7 +4387,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     }
 
     // Save all RowFormat objects.
-    RowFormat* rl = d->rows.first();
+    RowFormat* rl = firstRow();
     for( ; rl; rl = rl->next() )
     {
         if ( !rl->isDefault() )
@@ -4401,7 +4400,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     }
 
     // Save all ColumnFormat objects.
-    ColumnFormat* cl = d->columns.first();
+    ColumnFormat* cl = firstCol();
     for( ; cl; cl = cl->next() )
     {
         if ( !cl->isDefault() )
@@ -4713,7 +4712,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
                        KoOasisLoadingContext& oasisContext,
                        const Styles& styleMap )
 {
-    d->layoutDirection = LeftToRight;
+    setLayoutDirection (LeftToRight);
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
@@ -4729,7 +4728,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
                 if ( properties.hasAttributeNS( KoXmlNS::table, "display" ) )
                 {
                     bool visible = (properties.attributeNS( KoXmlNS::table, "display", QString::null ) == "true" ? true : false );
-                    d->hide = !visible;
+                    setHidden (!visible);
                 }
             }
             if ( style->hasAttributeNS( KoXmlNS::style, "master-page-name" ) )
@@ -4816,7 +4815,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
         range = Oasis::decodeFormula( range );
         Range p( range );
         if ( sheetName() == p.sheetName() )
-            d->print->setPrintRange( p.range() );
+          print()->setPrintRange( p.range() );
     }
 
 
@@ -4831,7 +4830,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
             passwd = KCodecs::base64Decode( str );
         }
         kDebug(30518) << "Password hash: '" << passwd << '\'' << endl;
-        d->password = passwd;
+        setProtected (passwd);
     }
     return true;
 }
@@ -4917,7 +4916,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) )
     {
         kDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
-        d->layoutDirection = ( styleStack.attributeNS( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? LeftToRight : RightToLeft;
+        setLayoutDirection (( styleStack.attributeNS( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? LeftToRight : RightToLeft);
         //TODO
         //<value>lr-tb</value>
         //<value>rl-tb</value>
@@ -4959,7 +4958,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
         }
         if ( str.contains( "grid" ) )
         {
-            d->print->setPrintGrid( true );
+          print()->setPrintGrid( true );
         }
         if ( str.contains( "annotations" ) )
         {
@@ -5010,7 +5009,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     }
     format = QString( "%1x%2" ).arg( width ).arg( height );
     kDebug()<<" format : "<<format<<endl;
-    d->print->setPaperLayout( left, top, right, bottom, format, orientation );
+    print()->setPaperLayout( left, top, right, bottom, format, orientation );
 
     kDebug()<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
 //<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
@@ -5480,7 +5479,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
                 }
                 else if ( var == "<author>" )
                 {
-                    Doc* sdoc = d->workbook->doc();
+                    Doc* sdoc = workbook()->doc();
                     KoDocumentInfo* docInfo = sdoc->documentInfo();
 
                     text += docInfo->authorInfo( "creator" );
@@ -5488,7 +5487,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
                 }
                 else if ( var == "<email>" )
                 {
-                    Doc* sdoc = d->workbook->doc();
+                    Doc* sdoc = workbook()->doc();
                     KoDocumentInfo* docInfo = sdoc->documentInfo();
 
                     text += docInfo->authorInfo( "email" );
@@ -5497,7 +5496,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
                 }
                 else if ( var == "<org>" )
                 {
-                    Doc* sdoc = d->workbook->doc();
+                    Doc* sdoc = workbook()->doc();
                     KoDocumentInfo* docInfo    = sdoc->documentInfo();
 
                     text += docInfo->authorInfo( "company" );
@@ -5541,12 +5540,12 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
 void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
 {
     // Find the entry in the map that applies to this sheet (by name)
-    KoOasisSettings::Items items = settings.entry( d->name );
+    KoOasisSettings::Items items = settings.entry( sheetName() );
     if ( items.isNull() )
         return;
-    d->hideZero = items.parseConfigItemBool( "ShowZeroValues" );
-    d->showGrid = items.parseConfigItemBool( "ShowGrid" );
-    d->firstLetterUpper = items.parseConfigItemBool( "FirstLetterUpper" );
+    setHideZero (items.parseConfigItemBool( "ShowZeroValues" ));
+    setShowGrid (items.parseConfigItemBool( "ShowGrid" ));
+    setFirstLetterUpper (items.parseConfigItemBool( "FirstLetterUpper" ));
 
     int cursorX = items.parseConfigItemInt( "CursorPositionX" );
     int cursorY = items.parseConfigItemInt( "CursorPositionY" );
@@ -5556,27 +5555,27 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
     double offsetY = items.parseConfigItemDouble( "yOffset" );
     doc()->loadingInfo()->setScrollingOffset( this, KoPoint( offsetX, offsetY ) );
 
-    d->showFormulaIndicator = items.parseConfigItemBool( "ShowFormulaIndicator" );
-    d->showCommentIndicator = items.parseConfigItemBool( "ShowCommentIndicator" );
-    d->showPageBorders = items.parseConfigItemBool( "ShowPageBorders" );
-    d->lcMode = items.parseConfigItemBool( "lcmode" );
-    d->autoCalc = items.parseConfigItemBool( "autoCalc" );
-    d->showColumnNumber = items.parseConfigItemBool( "ShowColumnNumber" );
+    setShowFormulaIndicator (items.parseConfigItemBool( "ShowFormulaIndicator" ));
+    setShowCommentIndicator (items.parseConfigItemBool( "ShowCommentIndicator" ));
+    setShowPageBorders (items.parseConfigItemBool( "ShowPageBorders" ));
+    setLcMode (items.parseConfigItemBool( "lcmode" ));
+    setAutoCalc (items.parseConfigItemBool( "autoCalc" ));
+    setShowColumnNumber (items.parseConfigItemBool( "ShowColumnNumber" ));
 }
 
 void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
 {
-    //not into each page into oo spec
-    settingsWriter.addConfigItem( "ShowZeroValues", d->hideZero );
-    settingsWriter.addConfigItem( "ShowGrid", d->showGrid );
-    //not define into oo spec
-    settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper);
-    settingsWriter.addConfigItem( "ShowFormulaIndicator", d->showFormulaIndicator );
-    settingsWriter.addConfigItem( "ShowCommentIndicator", d->showCommentIndicator );
-    settingsWriter.addConfigItem( "ShowPageBorders",d->showPageBorders );
-    settingsWriter.addConfigItem( "lcmode", d->lcMode );
-    settingsWriter.addConfigItem( "autoCalc", d->autoCalc );
-    settingsWriter.addConfigItem( "ShowColumnNumber", d->showColumnNumber );
+  //not into each page into oo spec
+  settingsWriter.addConfigItem( "ShowZeroValues", getHideZero() );
+  settingsWriter.addConfigItem( "ShowGrid", getShowGrid() );
+  //not define into oo spec
+  settingsWriter.addConfigItem( "FirstLetterUpper", getFirstLetterUpper());
+  settingsWriter.addConfigItem( "ShowFormulaIndicator", getShowFormulaIndicator() );
+  settingsWriter.addConfigItem( "ShowCommentIndicator", getShowCommentIndicator() );
+  settingsWriter.addConfigItem( "ShowPageBorders", isShowPageBorders() );
+  settingsWriter.addConfigItem( "lcmode", getLcMode() );
+  settingsWriter.addConfigItem( "autoCalc", getAutoCalc() );
+  settingsWriter.addConfigItem( "ShowColumnNumber", getShowColumnNumber() );
 }
 
 bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* /*manifestWriter*/, int &indexObj, int &partIndexObj )
@@ -5584,19 +5583,21 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     int maxCols= 1;
     int maxRows= 1;
     xmlWriter.startElement( "table:table" );
-    xmlWriter.addAttribute( "table:name", d->name );
+    xmlWriter.addAttribute( "table:name", sheetName() );
     xmlWriter.addAttribute( "table:style-name", saveOasisSheetStyleName(mainStyles )  );
-    if ( !d->password.isEmpty() )
+    QByteArray pwd;
+    password (pwd);
+    if ( !pwd.isEmpty() )
     {
         xmlWriter.addAttribute("table:protected", "true" );
-        QByteArray str = KCodecs::base64Encode( d->password );
+        QByteArray str = KCodecs::base64Encode( pwd );
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
     }
-    QRect _printRange = d->print->printRange();
+    QRect _printRange = print()->printRange();
     if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
     {
-        QString range= convertRangeToRef( d->name, _printRange );
+        QString range= convertRangeToRef( sheetName(), _printRange );
         kDebug()<<" range : "<<range<<endl;
         xmlWriter.addAttribute( "table:print-ranges", range );
     }
@@ -5611,13 +5612,13 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
 void Sheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
 {
     QString printParameter;
-    if ( d->print->printGrid() )
+    if ( print()->printGrid() )
         printParameter="grid ";
-    if ( d->print->printObjects() )
+    if ( print()->printObjects() )
       printParameter+="objects ";
-    if ( d->print->printCharts() )
+    if ( print()->printCharts() )
       printParameter+="charts ";
-    if ( d->showFormula )
+    if ( getShowFormula() )
         printParameter+="formulas ";
     if ( !printParameter.isEmpty() )
     {
@@ -5631,7 +5632,7 @@ QString Sheet::saveOasisSheetStyleName( KoGenStyles &mainStyles )
     KoGenStyle pageStyle( Doc::STYLE_PAGE, "table"/*FIXME I don't know if name is sheet*/ );
 
     KoGenStyle pageMaster( Doc::STYLE_PAGEMASTER );
-    pageMaster.addAttribute( "style:page-layout-name", d->print->saveOasisSheetStyleLayout( mainStyles ) );
+    pageMaster.addAttribute( "style:page-layout-name", print()->saveOasisSheetStyleLayout( mainStyles ) );
 
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
@@ -5642,7 +5643,7 @@ QString Sheet::saveOasisSheetStyleName( KoGenStyles &mainStyles )
     pageMaster.addChildElement( "headerfooter", elementContents );
     pageStyle.addAttribute( "style:master-page-name", mainStyles.lookup( pageMaster, "Standard" ) );
 
-    pageStyle.addProperty( "table:display", !d->hide );
+    pageStyle.addProperty( "table:display", !isHidden() );
     return mainStyles.lookup( pageStyle, "ta" );
 }
 
@@ -5857,10 +5858,11 @@ void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int
 bool Sheet::loadXML( const QDomElement& sheet )
 {
     bool ok = false;
+    QString sname = sheetName();
     if ( !doc()->loadingInfo() ||  !doc()->loadingInfo()->loadTemplate() )
     {
-        d->name = sheet.attribute( "name" );
-        if ( d->name.isEmpty() )
+        sname = sheet.attribute( "name" );
+        if ( sname.isEmpty() )
         {
             doc()->setErrorMessage( i18n("Invalid document. Sheet name is empty.") );
             return false;
@@ -5868,41 +5870,41 @@ bool Sheet::loadXML( const QDomElement& sheet )
     }
 
     bool detectDirection = true;
-    d->layoutDirection = LeftToRight;
+    setLayoutDirection (LeftToRight);
     QString layoutDir = sheet.attribute( "layoutDirection" );
     if( !layoutDir.isEmpty() )
     {
         if( layoutDir == "rtl" )
         {
            detectDirection = false;
-           d->layoutDirection = RightToLeft;
+           setLayoutDirection (RightToLeft);
         }
         else if( layoutDir == "ltr" )
         {
            detectDirection = false;
-           d->layoutDirection = LeftToRight;
+           setLayoutDirection (LeftToRight);
         }
         else
             kDebug()<<" Direction not implemented : "<<layoutDir<<endl;
     }
     if( detectDirection )
-       checkContentDirection( d->name );
+      checkContentDirection( sheetName() );
 
     /* older versions of KSpread allowed all sorts of characters that
        the parser won't actually understand.  Replace these with '_'
        Also, the initial character cannot be a space.
     */
-    if (d->name[0] == ' ')
+    while (sname[0] == ' ')
     {
-      d->name.remove(0,1);
+      sname.remove(0,1);
     }
-    for (int i=0; i < d->name.length(); i++)
+    for (int i=0; i < sname.length(); i++)
     {
-      if ( !(d->name[i].isLetterOrNumber() ||
-             d->name[i] == ' ' || d->name[i] == '.' ||
-             d->name[i] == '_'))
-        {
-        d->name[i] = '_';
+      if ( !(sname[i].isLetterOrNumber() ||
+             sname[i] == ' ' || sname[i] == '.' ||
+             sname[i] == '_'))
+      {
+        sname[i] = '_';
       }
     }
 
@@ -5911,96 +5913,98 @@ bool Sheet::loadXML( const QDomElement& sheet )
     QString baseName;
     int nameSuffix = 0;
 
-    testName = d->name;
-    baseName = d->name;
+    testName = sname;
+    baseName = sname;
 
     /* so we don't panic over finding ourself in the follwing test*/
-    d->name = "";
+    sname = "";
     while (workbook()->findSheet(testName) != 0)
     {
       nameSuffix++;
       testName = baseName + '_' + QString::number(nameSuffix);
     }
-    d->name = testName;
+    sname = testName;
 
     kDebug(36001)<<"Sheet::loadXML: table name="<<d->name<<endl;
-    setObjectName(d->name.toUtf8());
+    setObjectName(sname.toUtf8());
+    setSheetName (sname, true);
+
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     if( sheet.hasAttribute( "grid" ) )
     {
-        d->showGrid = (int)sheet.attribute("grid").toInt( &ok );
+        setShowGrid ((int)sheet.attribute("grid").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "printGrid" ) )
     {
-        d->print->setPrintGrid( (bool)sheet.attribute("printGrid").toInt( &ok ) );
+        print()->setPrintGrid( (bool)sheet.attribute("printGrid").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "printCommentIndicator" ) )
     {
-        d->print->setPrintCommentIndicator( (bool)sheet.attribute("printCommentIndicator").toInt( &ok ) );
+        print()->setPrintCommentIndicator( (bool)sheet.attribute("printCommentIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "printFormulaIndicator" ) )
     {
-        d->print->setPrintFormulaIndicator( (bool)sheet.attribute("printFormulaIndicator").toInt( &ok ) );
+        print()->setPrintFormulaIndicator( (bool)sheet.attribute("printFormulaIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "hide" ) )
     {
-        d->hide = (bool)sheet.attribute("hide").toInt( &ok );
+        setHidden ( (bool)sheet.attribute("hide").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "showFormula" ) )
     {
-        d->showFormula = (bool)sheet.attribute("showFormula").toInt( &ok );
+        setShowFormula ((bool)sheet.attribute("showFormula").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     //Compatibility with KSpread 1.1.x
     if( sheet.hasAttribute( "formular" ) )
     {
-        d->showFormula = (bool)sheet.attribute("formular").toInt( &ok );
+        setShowFormula ((bool)sheet.attribute("formular").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "showFormulaIndicator" ) )
     {
-        d->showFormulaIndicator = (bool)sheet.attribute("showFormulaIndicator").toInt( &ok );
+        setShowFormulaIndicator ( (bool)sheet.attribute("showFormulaIndicator").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "showCommentIndicator" ) )
     {
-        d->showCommentIndicator = (bool)sheet.attribute("showCommentIndicator").toInt( &ok );
+        setShowCommentIndicator ( (bool)sheet.attribute("showCommentIndicator").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "borders" ) )
     {
-        d->showPageBorders = (bool)sheet.attribute("borders").toInt( &ok );
+        setShowPageBorders ((bool)sheet.attribute("borders").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "lcmode" ) )
     {
-        d->lcMode = (bool)sheet.attribute("lcmode").toInt( &ok );
+        setLcMode ((bool)sheet.attribute("lcmode").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if ( sheet.hasAttribute( "autoCalc" ) )
     {
-        d->autoCalc = ( bool )sheet.attribute( "autoCalc" ).toInt( &ok );
+        setAutoCalc (( bool )sheet.attribute( "autoCalc" ).toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "columnnumber" ) )
     {
-        d->showColumnNumber = (bool)sheet.attribute("columnnumber").toInt( &ok );
+        setShowColumnNumber ((bool)sheet.attribute("columnnumber").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "hidezero" ) )
     {
-        d->hideZero = (bool)sheet.attribute("hidezero").toInt( &ok );
+        setHideZero ((bool)sheet.attribute("hidezero").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "firstletterupper" ) )
     {
-        d->firstLetterUpper = (bool)sheet.attribute("firstletterupper").toInt( &ok );
+        setFirstLetterUpper ((bool)sheet.attribute("firstletterupper").toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
 
@@ -6019,7 +6023,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
         float right = borders.attribute( "right" ).toFloat();
         float top = borders.attribute( "top" ).toFloat();
         float bottom = borders.attribute( "bottom" ).toFloat();
-        d->print->setPaperLayout( left, top, right, bottom, format, orientation );
+        print()->setPaperLayout( left, top, right, bottom, format, orientation );
       }
       QString hleft, hright, hcenter;
       QString fleft, fright, fcenter;
@@ -6051,7 +6055,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
         if ( !right.isNull() )
           fright = right.text();
       }
-      d->print->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
+      print()->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
       // load print range
@@ -6072,7 +6076,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
           top = 1;
           bottom = KS_rowMax;
         }
-        d->print->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
+        print()->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
       }
 
       // load print zoom
@@ -6081,7 +6085,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
         double zoom = sheet.attribute( "printZoom" ).toDouble( &ok );
         if ( ok )
         {
-          d->print->setZoom( zoom );
+          print()->setZoom( zoom );
         }
       }
 
@@ -6091,7 +6095,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
         int pageLimit = sheet.attribute( "printPageLimitX" ).toInt( &ok );
         if ( ok )
         {
-          d->print->setPageLimitX( pageLimit );
+          print()->setPageLimitX( pageLimit );
         }
       }
 
@@ -6101,7 +6105,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
         int pageLimit = sheet.attribute( "printPageLimitY" ).toInt( &ok );
         if ( ok )
         {
-          d->print->setPageLimitY( pageLimit );
+          print()->setPageLimitY( pageLimit );
         }
       }
 
@@ -6171,7 +6175,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     {
         int left = printrepeatcolumns.attribute( "left" ).toInt();
         int right = printrepeatcolumns.attribute( "right" ).toInt();
-        d->print->setPrintRepeatColumns( qMakePair( left, right ) );
+        print()->setPrintRepeatColumns( qMakePair( left, right ) );
     }
 
     // load print repeat rows
@@ -6180,7 +6184,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     {
         int top = printrepeatrows.attribute( "top" ).toInt();
         int bottom = printrepeatrows.attribute( "bottom" ).toInt();
-        d->print->setPrintRepeatRows( qMakePair( top, bottom ) );
+        print()->setPrintRepeatRows( qMakePair( top, bottom ) );
     }
 
     if( !sheet.hasAttribute( "borders1.2" ) )
@@ -6195,10 +6199,10 @@ bool Sheet::loadXML( const QDomElement& sheet )
       if ( passwd.length() > 0 )
       {
         QByteArray str( passwd.toLatin1() );
-        d->password = KCodecs::base64Decode( str );
+        setProtected (KCodecs::base64Decode( str ));
       }
       else
-        d->password = QByteArray( "" );
+        setProtected (QByteArray( "" ));
     }
 
     return true;
