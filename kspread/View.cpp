@@ -4173,7 +4173,7 @@ void View::textToColumns()
     return;
   }*/
 
-  CSVDialog dialog( this, "CSVDialog", area, CSVDialog::Column );
+  CSVDialog dialog( this, area, CSVDialog::Column );
   if( !dialog.cancelled() )
     dialog.exec();
 }
@@ -4639,7 +4639,7 @@ void View::insertFromTextfile()
     d->canvas->closeEditor();
     //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
-    CSVDialog dialog( this, "CSVDialog", d->selection->selection(), CSVDialog::File );
+    CSVDialog dialog( this, d->selection->selection(), CSVDialog::File );
     if( !dialog.cancelled() )
       dialog.exec();
 }
@@ -4648,7 +4648,7 @@ void View::insertFromClipboard()
 {
     d->canvas->closeEditor();
 
-    CSVDialog dialog( this, "CSVDialog", d->selection->selection(), CSVDialog::Clipboard );
+    CSVDialog dialog( this, d->selection->selection(), CSVDialog::Clipboard );
     if( !dialog.cancelled() )
       dialog.exec();
 }

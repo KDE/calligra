@@ -648,7 +648,8 @@ KFileDialog::getOpenFileName(KUrl(QString::null),// startDir
     // Let the CSV dialog structure the data in the file.
     QByteArray  inData( inFile.readAll() );
     inFile.close();
-    KoCsvImportDialog *dialog = new KoCsvImportDialog(0L, inData);
+    KoCsvImportDialog *dialog = new KoCsvImportDialog(0L);
+    dialog->setData(inData);
 
     if ( !dialog->exec() ) {
 	kDebug(35001) << "Cancel was pressed" << endl;

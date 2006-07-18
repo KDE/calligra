@@ -19,23 +19,10 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <QButtonGroup>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QClipboard>
-#include <QComboBox>
-#include <QLabel>
-#include <QLineEdit>
+
+#include <QByteArray>
 #include <QMimeData>
-#include <QPainter>
-#include <QPushButton>
-#include <QRadioButton>
-#include <q3table.h>
-#include <QLayout>
-#include <QVector>
-//Added by qt3to4:
-#include <QTextStream>
-#include <QGridLayout>
+#include <QString>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -46,152 +33,29 @@
 #include <kpushbutton.h>
 
 #include <Cell.h>
+#include <DataManipulators.h>
 #include <Doc.h>
 #include <Sheet.h>
 #include <Format.h>
 #include <View.h>
-#include <DataManipulators.h>
-
 
 #include "CSVDialog.h"
 
 using namespace KSpread;
 
-CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode mode)
-  : KDialog( parent ),
+CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
+  : KoCsvImportDialog( parent ),
     m_pView( parent ),
     m_cancelled( false ),
-    m_adjustRows( 0 ),
-    m_startline( 0 ),
-    m_textquote( '"' ),
-    m_delimiter( ',' ),
     m_targetRect( rect ),
     m_mode( mode )
 {
-  setModal( true );
-  setButtons( Ok|Cancel );
-
-  if ( !name )
-    setObjectName( "CSV" );
-
-  setSizeGripEnabled( true );
-
-  QWidget *page = new QWidget();
-  setMainWidget( page );
-  MyDialogLayout = new QGridLayout( page );
-  MyDialogLayout->setMargin( KDialog::marginHint() );
-  MyDialogLayout->setSpacing( KDialog::spacingHint() );
-
   // Limit the range
   int column = m_targetRect.left();
   Cell* lastCell = m_pView->activeSheet()->getLastCellColumn( column );
   if( lastCell )
     if( m_targetRect.bottom() > lastCell->row() )
       m_targetRect.setBottom( lastCell->row() );
-
-  m_sheet = new Q3Table( page, "m_table" );
-  //m_sheet->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, m_sheet->sizePolicy().hasHeightForWidth() ) );
-  m_sheet->setNumRows( 0 );
-  m_sheet->setNumCols( 0 );
-
-  MyDialogLayout->addWidget( m_sheet, 3, 0, 1, 4 );
-
-  // Delimiter: comma, semicolon, tab, space, other
-  m_delimiterBox = new QGroupBox( page );
-  m_delimiterBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1 ) );
-  m_delimiterBox->setTitle( i18n( "Delimiter" ) );
-  m_delimiterBoxLayout = new QGridLayout( m_delimiterBox );
-  m_delimiterBoxLayout->setSpacing( KDialog::spacingHint() );
-  m_delimiterBoxLayout->setMargin( KDialog::marginHint() );
-  m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
-  MyDialogLayout->addWidget( m_delimiterBox, 0, 0, 3, 1 );
-
-  m_ignoreDuplicates = new QCheckBox( page );
-  m_ignoreDuplicates->setText( i18n( "Ignore duplicate delimiters" ) );
-
-  MyDialogLayout->addWidget( m_ignoreDuplicates, 2, 2, 1, 2 );
-
-  m_radioComma = new QRadioButton( m_delimiterBox );
-  m_radioComma->setText( i18n( "Comma" ) );
-  m_radioComma->setChecked( true );
-  m_delimiterBoxLayout->addWidget( m_radioComma, 0, 0 );
-
-  m_radioSemicolon = new QRadioButton( m_delimiterBox );
-  m_radioSemicolon->setText( i18n( "Semicolon" ) );
-  m_delimiterBoxLayout->addWidget( m_radioSemicolon, 0, 1 );
-
-  m_radioTab = new QRadioButton( m_delimiterBox );
-  m_radioTab->setText( i18n( "Tabulator" ) );
-  m_delimiterBoxLayout->addWidget( m_radioTab, 1, 0 );
-
-  m_radioSpace = new QRadioButton( m_delimiterBox );
-  m_radioSpace->setText( i18n( "Space" ) );
-  m_delimiterBoxLayout->addWidget( m_radioSpace, 1, 1 );
-
-  m_radioOther = new QRadioButton( m_delimiterBox );
-  m_radioOther->setText( i18n( "Other" ) );
-  m_delimiterBoxLayout->addWidget( m_radioOther, 0, 2 );
-
-  m_delimiterEdit = new QLineEdit( m_delimiterBox );
-  m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0 ) );
-  m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
-  m_delimiterBoxLayout->addWidget( m_delimiterEdit, 1, 2 );
-
-
-  // Format: number, text, currency,
-  m_formatBox = new QGroupBox( page );
-  m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1 ) );
-  m_formatBox->setTitle( i18n( "Format" ) );
-  m_formatBoxLayout = new QGridLayout( m_formatBox );
-  m_formatBoxLayout->setSpacing( KDialog::spacingHint() );
-  m_formatBoxLayout->setMargin( KDialog::marginHint() );
-  m_formatBoxLayout->setAlignment( Qt::AlignTop );
-  MyDialogLayout->addWidget( m_formatBox, 0, 1, 3, 1 );
-
-  m_radioNumber = new QRadioButton( m_formatBox );
-  m_radioNumber->setText( i18n( "Number" ) );
-  m_formatBoxLayout->addWidget( m_radioNumber, 1, 0, 1, 2 );
-
-  m_radioText = new QRadioButton( m_formatBox );
-  m_radioText->setText( i18n( "Text" ) );
-  m_radioText->setChecked( true );
-  m_formatBoxLayout->addWidget( m_radioText, 0, 0 );
-
-  m_radioCurrency = new QRadioButton( m_formatBox );
-  m_radioCurrency->setText( i18n( "Currency" ) );
-  m_formatBoxLayout->addWidget( m_radioCurrency, 0, 1, 1, 2 );
-
-  m_radioDate = new QRadioButton( m_formatBox );
-  m_radioDate->setText( i18n( "Date" ) );
-  m_formatBoxLayout->addWidget( m_radioDate, 1, 2 );
-
-  m_comboLine = new QComboBox( page );
-  m_comboLine->insertItem( 0, i18n( "1" ) );
-  m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0 ) );
-
-  MyDialogLayout->addWidget( m_comboLine, 1, 3 );
-
-  m_comboQuote = new QComboBox( page );
-  m_comboQuote->insertItem( 0, i18n( "\"" ) );
-  m_comboQuote->insertItem( 1, i18n( "'" ) );
-  m_comboQuote->insertItem( 2, i18n( "None" ) );
-  m_comboQuote->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0 ) );
-
-  MyDialogLayout->addWidget( m_comboQuote, 1, 2 );
-  QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
-  MyDialogLayout->addItem( spacer_2, 2, 3 );
-
-  TextLabel3 = new QLabel( page );
-  TextLabel3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0 ) );
-  TextLabel3->setText( i18n( "Start at line:" ) );
-
-  MyDialogLayout->addWidget( TextLabel3, 0, 3 );
-
-  TextLabel2 = new QLabel( page );
-  TextLabel2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0 ) );
-  TextLabel2->setText( i18n( "Textquote:" ) );
-
-  MyDialogLayout->addWidget( TextLabel2, 0, 2 );
 
   if ( m_mode == Clipboard )
   {
@@ -241,7 +105,8 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   else
   {
     setWindowTitle( i18n( "Text to Columns" ) );
-    m_data = "";
+    m_dialog->m_tabWidget->setTabEnabled(0, false);
+    m_fileArray.clear();
     Cell  * cell;
     Sheet * sheet = m_pView->activeSheet();
     int col = m_targetRect.left();
@@ -250,35 +115,12 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
       cell = sheet->cellAt( col, i );
       if ( !cell->isEmpty() && !cell->isDefault() )
       {
-        m_data += cell->strOutText();
+        m_fileArray.append( cell->strOutText().toUtf8() /* FIXME */ );
       }
-      m_data += '\n';
+      m_fileArray.append( '\n' );
     }
   }
-
-  fillSheet();
-  fillComboBox();
-
-  resize(sizeHint());
-
-  m_sheet->setSelectionMode(Q3Table::NoSelection);
-
-  connect(m_formatBox, SIGNAL(clicked(int)),
-          this, SLOT(formatClicked(int)));
-  connect(m_delimiterBox, SIGNAL(clicked(int)),
-          this, SLOT(delimiterClicked(int)));
-  connect(m_delimiterEdit, SIGNAL(returnPressed()),
-          this, SLOT(returnPressed()));
-  connect(m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
-          this, SLOT(textChanged ( const QString & ) ));
-  connect(m_comboLine, SIGNAL(activated(const QString&)),
-          this, SLOT(lineSelected(const QString&)));
-  connect(m_comboQuote, SIGNAL(activated(const QString&)),
-          this, SLOT(textquoteSelected(const QString&)));
-  connect(m_sheet, SIGNAL(currentChanged(int, int)),
-          this, SLOT(currentCellChanged(int, int)));
-  connect(m_ignoreDuplicates, SIGNAL(stateChanged(int)),
-          this, SLOT(ignoreDuplicatesChanged(int)));
+  fillTable();
 }
 
 CSVDialog::~CSVDialog()
@@ -291,332 +133,13 @@ bool CSVDialog::cancelled()
   return m_cancelled;
 }
 
-void CSVDialog::fillSheet()
-{
-  int row, column;
-  bool lastCharDelimiter = false;
-  bool ignoreDups = m_ignoreDuplicates->isChecked();
-  enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
-         S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
-
-  QChar x;
-  QString field = "";
-
-  for (row = 0; row < m_sheet->numRows(); ++row)
-    for (column = 0; column < m_sheet->numCols(); ++column)
-      m_sheet->clearCell(row, column);
-
-  row = column = 1;
-  if (m_mode != Column)
-  {
-    m_mode = Column;
-    m_data = QString(m_fileArray);
-    m_fileArray.resize(0);
-  }
-
-  QTextStream inputStream(&m_data, QIODevice::ReadOnly);
-  inputStream.setCodec(QTextCodec::codecForLocale());
-
-  while (!inputStream.atEnd())
-  {
-    inputStream >> x; // read one char
-
-    if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
-
-    switch (state)
-    {
-     case S_START :
-      if (x == m_textquote)
-      {
-        state = S_QUOTED_FIELD;
-      }
-      else if (QString(x) == m_delimiter)
-      {
-        if ((ignoreDups == false) || (lastCharDelimiter == false))
-          ++column;
-        lastCharDelimiter = true;
-      }
-      else if (x == '\n')
-      {
-        ++row;
-        column = 1;
-      }
-      else
-      {
-        field += x;
-        state = S_MAYBE_NORMAL_FIELD;
-      }
-      break;
-     case S_QUOTED_FIELD :
-      if (x == m_textquote)
-      {
-        state = S_MAYBE_END_OF_QUOTED_FIELD;
-      }
-      else if (x == '\n')
-      {
-        setText(row - m_startline, column, field);
-        field = "";
-        if (x == '\n')
-        {
-          ++row;
-          column = 1;
-        }
-        else
-        {
-          if ((ignoreDups == false) || (lastCharDelimiter == false))
-            ++column;
-          lastCharDelimiter = true;
-        }
-        state = S_START;
-      }
-      else
-      {
-        field += x;
-      }
-      break;
-     case S_MAYBE_END_OF_QUOTED_FIELD :
-      if (x == m_textquote)
-      {
-        field += x;
-        state = S_QUOTED_FIELD;
-      }
-      else if (QString(x) == m_delimiter || x == '\n')
-      {
-        setText(row - m_startline, column, field);
-        field = "";
-        if (x == '\n')
-        {
-          ++row;
-          column = 1;
-        }
-        else
-        {
-          if ((ignoreDups == false) || (lastCharDelimiter == false))
-            ++column;
-          lastCharDelimiter = true;
-        }
-        state = S_START;
-      }
-      else
-      {
-        state = S_END_OF_QUOTED_FIELD;
-      }
-      break;
-     case S_END_OF_QUOTED_FIELD :
-       if (QString(x) == m_delimiter || x == '\n')
-      {
-        setText(row - m_startline, column, field);
-        field = "";
-        if (x == '\n')
-        {
-          ++row;
-          column = 1;
-        }
-        else
-        {
-          if ((ignoreDups == false) || (lastCharDelimiter == false))
-            ++column;
-          lastCharDelimiter = true;
-        }
-        state = S_START;
-      }
-      else
-      {
-        state = S_END_OF_QUOTED_FIELD;
-      }
-      break;
-     case S_MAYBE_NORMAL_FIELD :
-      if (x == m_textquote)
-      {
-        field = "";
-        state = S_QUOTED_FIELD;
-        break;
-      }
-     case S_NORMAL_FIELD :
-       if (QString(x) == m_delimiter || x == '\n')
-      {
-        setText(row - m_startline, column, field);
-        field = "";
-        if (x == '\n')
-        {
-          ++row;
-          column = 1;
-        }
-        else
-        {
-          if ((ignoreDups == false) || (lastCharDelimiter == false))
-            ++column;
-          lastCharDelimiter = true;
-        }
-        state = S_START;
-      }
-      else
-      {
-        field += x;
-      }
-    }
-    if (QString(x) != m_delimiter)
-      lastCharDelimiter = false;
-  }
-
-  // file with only one line without '\n'
-  if (field.length() > 0)
-  {
-    setText(row - m_startline, column, field);
-    ++row;
-    field = "";
-  }
-
-  adjustRows( row - m_startline );
-
-  for (column = 0; column < m_sheet->numCols(); ++column)
-  {
-    QString header = m_sheet->horizontalHeader()->label(column);
-    if (header != i18n("Text") && header != i18n("Number") &&
-        header != i18n("Date") && header != i18n("Currency"))
-      m_sheet->horizontalHeader()->setLabel(column, i18n("Text"));
-
-    m_sheet->adjustColumn(column);
-  }
-}
-
-void CSVDialog::fillComboBox()
-{
-  m_comboLine->clear();
-  for (int row = 0; row < m_sheet->numRows(); ++row)
-    m_comboLine->insertItem(row, QString::number(row + 1));
-}
-
-void CSVDialog::setText(int row, int col, const QString& text)
-{
-  if (row < 1) // skipped by the user
-    return;
-
-  if (m_sheet->numRows() < row) {
-    m_sheet->setNumRows(row+5000); /* We add 5000 at a time to limit recalculations */
-    m_adjustRows=1;
-  }
-
-  if (m_sheet->numCols() < col)
-    m_sheet->setNumCols(col);
-
-  m_sheet->setText(row - 1, col - 1, text);
-}
-
-/*
- * Called after the first fillSheet() when number of rows are unknown.
- */
-void CSVDialog::adjustRows(int iRows)
-{
-  if (m_adjustRows)
-  {
-    m_sheet->setNumRows( iRows );
-    m_adjustRows=0;
-  }
-}
-
-void CSVDialog::returnPressed()
-{
-  if (m_radioOther->isChecked())
-    return;
-
-  m_delimiter = m_delimiterEdit->text();
-  fillSheet();
-}
-
-void CSVDialog::textChanged ( const QString & )
-{
-  m_radioOther->setChecked ( true );
-  delimiterClicked(4); // other
-}
-
-void CSVDialog::formatClicked(int id)
-{
-  QString header;
-
-  switch (id)
-  {
-   case 1: // text
-    header = i18n("Text");
-    break;
-   case 0: // number
-    header = i18n("Number");
-    break;
-   case 3: // date
-    header = i18n("Date");
-    break;
-   case 2: // currency
-    header = i18n("Currency");
-    break;
-  }
-
-  m_sheet->horizontalHeader()->setLabel(m_sheet->currentColumn(), header);
-}
-
-void CSVDialog::delimiterClicked(int id)
-{
-  switch (id)
-  {
-   case 0: // comma
-    m_delimiter = ',';
-    break;
-   case 4: // other
-    m_delimiter = m_delimiterEdit->text();
-    break;
-   case 2: // tab
-    m_delimiter = '\t';
-    break;
-   case 3: // space
-    m_delimiter = ' ';
-    break;
-   case 1: // semicolon
-    m_delimiter = ';';
-    break;
-  }
-
-  fillSheet();
-}
-
-void CSVDialog::textquoteSelected(const QString& mark)
-{
-  if (mark == i18n("none"))
-    m_textquote = 0;
-  else
-    m_textquote = mark[0];
-
-  fillSheet();
-}
-
-void CSVDialog::lineSelected(const QString& line)
-{
-  m_startline = line.toInt() - 1;
-  fillSheet();
-}
-
-void CSVDialog::currentCellChanged(int, int col)
-{
-  int id;
-  QString header = m_sheet->horizontalHeader()->label(col);
-
-  if (header == i18n("Text"))
-    id = 1;
-  else if (header == i18n("Number"))
-    id = 0;
-  else if (header == i18n("Date"))
-    id = 3;
-  else
-    id = 2;
-
-  m_radioComma->group()->button(id)->setChecked(true);
-}
-
 void CSVDialog::accept()
 {
   Sheet * sheet  = m_pView->activeSheet();
   QString csv_delimiter;
 
-  int numRows = m_sheet->numRows();
-  int numCols = m_sheet->numCols();
+  int numRows = m_dialog->m_sheet->numRows();
+  int numCols = m_dialog->m_sheet->numCols();
 
   if ((numRows == 0) || (numCols == 0))
     return;  // nothing to do here
@@ -646,33 +169,14 @@ void CSVDialog::accept()
   manipulator->setValue (val);
   manipulator->add (m_targetRect);
   manipulator->execute ();
-  
+
   m_pView->slotUpdateView( sheet );
   QDialog::accept();
 }
 
-int CSVDialog::getHeader(int col)
-{
-  QString header = m_sheet->horizontalHeader()->label(col);
-
-  if (header == i18n("Text"))
-    return TEXT;
-  else if (header == i18n("Number"))
-    return NUMBER;
-  else if (header == i18n("Currency"))
-    return CURRENCY;
-  else
-    return DATE;
-}
-
 QString CSVDialog::getText(int row, int col)
 {
-  return m_sheet->text(row, col);
-}
-
-void CSVDialog::ignoreDuplicatesChanged(int)
-{
-  fillSheet();
+  return m_dialog->m_sheet->text(row, col);
 }
 
 #include "CSVDialog.moc"

@@ -1,8 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
-             (C) 2002      Laurent Montel <montel@kde.org>
-             (C) 1999 David Faure <faure@kde.org>
+   Copyright 2006      Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+             2002-2003 Norbert Andres <nandres@web.de>
+             2002-2003 Ariya Hidayat <ariya@kde.org>
+             2002      Laurent Montel <montel@kde.org>
+             1999      David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,20 +24,7 @@
 #ifndef CSVDIALOG_H
 #define CSVDIALOG_H
 
-#include <kdialog.h>
-
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QGroupBox;
-class QComboBox;
-class QCheckBox;
-class QLabel;
-class QLineEdit;
-class QPushButton;
-class QRadioButton;
-class Q3Table;
-
+#include <KoCsvImportDialog.h>
 
 namespace KSpread
 {
@@ -52,77 +40,28 @@ class View;
  * using mode, which can be Column, File, or Clipboard respectively.
  *
 */
-class CSVDialog : public KDialog
+class CSVDialog : public KoCsvImportDialog
 {
   Q_OBJECT
 
- public:
-
+public:
   enum Mode { Clipboard, File, Column };
-  enum Header { TEXT, NUMBER, DATE, CURRENCY };
 
-  CSVDialog( View * parent, const char * name, QRect const & rect, Mode mode);
-
+  CSVDialog( View * parent, QRect const & rect, Mode mode);
   ~CSVDialog();
 
   bool cancelled();
 
- protected:
+protected:
   void accept();
 
-
- private:
-  View* m_pView;
-
-  QGridLayout* MyDialogLayout;
-  QHBoxLayout* Layout1;
-  QGridLayout* m_delimiterBoxLayout;
-  QGridLayout* m_formatBoxLayout;
-  Q3Table* m_sheet;
-  QGroupBox* m_delimiterBox;
-  QRadioButton* m_radioComma;
-  QRadioButton* m_radioSemicolon;
-  QRadioButton* m_radioTab;
-  QRadioButton* m_radioSpace;
-  QRadioButton* m_radioOther;
-  QLineEdit* m_delimiterEdit;
-  QGroupBox* m_formatBox;
-  QRadioButton* m_radioNumber;
-  QRadioButton* m_radioText;
-  QRadioButton* m_radioCurrency;
-  QRadioButton* m_radioDate;
-  QComboBox* m_comboLine;
-  QComboBox* m_comboQuote;
-  QLabel* TextLabel3;
-  QLabel* TextLabel2;
-  QCheckBox * m_ignoreDuplicates;
-
-  void fillSheet();
-  void fillComboBox();
-  void setText(int row, int col, const QString& text);
-  void adjustRows(int iRows);
-  int  getHeader(int col);
+private:
   QString getText(int row, int col);
 
-  bool m_cancelled;
-  int   m_adjustRows;
-  int   m_startline;
-  QChar m_textquote;
-  QString m_delimiter;
-  QString m_data;
-  QByteArray m_fileArray;
-  QRect m_targetRect;
-  Mode  m_mode;
-
- private slots:
-  void returnPressed();
-  void formatClicked(int id);
-  void delimiterClicked(int id);
-  void lineSelected(const QString& line);
-  void textquoteSelected(const QString& mark);
-  void currentCellChanged(int, int col);
-  void textChanged ( const QString & );
-  void ignoreDuplicatesChanged(int);
+  View*   m_pView;
+  bool    m_cancelled;
+  QRect   m_targetRect;
+  Mode    m_mode;
 };
 
 } // namespace KSpread
