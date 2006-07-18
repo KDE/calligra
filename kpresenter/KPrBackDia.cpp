@@ -115,7 +115,8 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     }
     vbox->addWidget( new QLabel( i18n( "Background type:" ), page ) );
 
-    backCombo = new QComboBox( false, page );
+    backCombo = new QComboBox(page );
+    backCombo->setEditable( false );
     backCombo->addItem( i18n( "Color/Gradient" ) );
     backCombo->addItem( i18n( "Picture" ) );
     backCombo->setCurrentIndex( (int)backType );
@@ -133,7 +134,8 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     colorTab->setSpacing( KDialog::spacingHint() );
     colorTab->setMargin( 5 );
 
-    cType = new QComboBox( false, colorTab );
+    cType = new QComboBox(colorTab );
+    cType->setEditable( false );
     cType->addItem( i18n( "Plain" ) );
     cType->addItem( i18n( "Vertical Gradient" ) );
     cType->addItem( i18n( "Horizontal Gradient" ) );
@@ -185,7 +187,8 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     QLabel *l = new QLabel( i18n( "View mode:" ), picTab );
     l->setFixedHeight( l->sizeHint().height() );
 
-    picView = new QComboBox( false, picTab );
+    picView = new QComboBox(picTab );
+    picView->setEditable( false );
     picView->addItem( i18n( "Scaled" ) );
     picView->addItem( i18n( "Centered" ) );
     picView->addItem( i18n( "Tiled" ) );

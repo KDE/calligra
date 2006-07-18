@@ -73,7 +73,8 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, Qt::WFlag
 
     layout8 = new Q3HBoxLayout( 0, 0, 6, "layout8");
 
-    state = new QComboBox( FALSE, day, "state" );
+    state = new QComboBox(day, "state" );
+    state->setEditable( false );
     layout8->addWidget( state );
 
     bApply = new QPushButton( day, "bApply" );

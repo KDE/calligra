@@ -87,7 +87,8 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lEffect->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget(lEffect, 1, 0);
 
-    cEffect = new QComboBox( false, grp1, "cEffect" );
+    cEffect = new QComboBox(grp1, "cEffect" );
+    cEffect->setEditable( false );
     cEffect->addItem( i18n( "No Effect" ) );
     cEffect->addItem( i18n( "Come From Right" ) );
     cEffect->addItem( i18n( "Come From Left" ) );
