@@ -22,6 +22,7 @@
 
 #include <QList>
 #include <QRect>
+#include <QSet>
 #include <QString>
 
 #include <kdebug.h>
@@ -152,15 +153,23 @@ public:
 
   /**
    * @param col the col to check
+   *
    * @return @c true, if the colum @p col is selected. If column @p col
    * is not given, it returns true, if at least one column is selected
+   *
+   * \note If you want to check more than one column for selection, use
+   * columnsSelected(). It returns a set of all selected columns at once.
    */
   bool isColumnSelected(uint col = 0) const;
 
   /**
    * @param row the row to check
+   *
    * @return @c true, if the row @p row is selected. If row @p row
    * is not given, it returns true, if at least one row is selected
+   *
+   * \note If you want to check more than one row for selection, use
+   * rowsSelected(). It returns a set of all selected rows at once.
    */
   bool isRowSelected(uint row = 0) const;
 
@@ -170,16 +179,26 @@ public:
   bool isColumnOrRowSelected() const;
 
   /**
-   * @param col the col to check
-   * @return @c true, if the at least one cell in column @p col is selected
+   * @return a set of column numbers, for those columns, that are selected
    */
-  bool isColumnAffected(uint col) const;
+  QSet<int> columnsSelected() const;
 
   /**
-   * @param row the row to check
-   * @return @c true, if the at least one cell in row @p row is selected
+   * @return a set of row numbers, for those rows, that are selected
    */
-  bool isRowAffected(uint row) const;
+  QSet<int> rowsSelected() const;
+
+  /**
+   * @return a set of column numbers, for those columns, that have at least
+   * one cell selected
+   */
+  QSet<int> columnsAffected() const;
+
+  /**
+   * @return a set of row numbers, for those rows, that have at least
+   * one cell selected
+   */
+  QSet<int> rowsAffected() const;
 
   /**
    * @param point the point's location

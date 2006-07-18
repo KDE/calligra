@@ -584,12 +584,13 @@ void VBorder::paintEvent( QPaintEvent* event )
   yPos = yPos - m_pCanvas->yOffset();
   int width = m_pCanvas->d->view->doc()->zoomItXOld( YBORDER_WIDTH );
 
-
+  const QSet<int> selectedRows = m_pView->selectionInfo()->rowsSelected();
+  const QSet<int> affectedRows = m_pView->selectionInfo()->rowsAffected();
   //Loop through the rows, until we are out of range
   while ( yPos <= m_pCanvas->d->view->doc()->unzoomItYOld( paintRect.bottom() ) )
   {
-    const bool selected = (m_pView->selectionInfo()->isRowSelected(y));
-    const bool highlighted = (!selected && m_pView->selectionInfo()->isRowAffected(y));
+    const bool selected = (selectedRows.contains(y));
+    const bool highlighted = (!selected && affectedRows.contains(y));
 
     const RowFormat* rowFormat = sheet->rowFormat( y );
     const int zoomedYPos = m_pCanvas->d->view->doc()->zoomItYOld( yPos );
@@ -1313,11 +1314,13 @@ void HBorder::paintEvent( QPaintEvent* event )
 
     xPos -= sheet->columnFormat( x )->dblWidth();
 
+    const QSet<int> selectedColumns = m_pView->selectionInfo()->columnsSelected();
+    const QSet<int> affectedColumns = m_pView->selectionInfo()->columnsAffected();
     //Loop through the columns, until we are out of range
     while ( xPos <= m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.right() ) )
     {
-      bool selected = (m_pView->selectionInfo()->isColumnSelected(x));
-      bool highlighted = (!selected && m_pView->selectionInfo()->isColumnAffected(x));
+      bool selected = (selectedColumns.contains(x));
+      bool highlighted = (!selected && affectedColumns.contains(x));
 
       const ColumnFormat * col_lay = sheet->columnFormat( x );
       int zoomedXPos = m_pCanvas->d->view->doc()->zoomItXOld( xPos );
@@ -1365,11 +1368,13 @@ void HBorder::paintEvent( QPaintEvent* event )
   }
   else
   {
+    const QSet<int> selectedColumns = m_pView->selectionInfo()->columnsSelected();
+    const QSet<int> affectedColumns = m_pView->selectionInfo()->columnsAffected();
     //Loop through the columns, until we are out of range
     while ( xPos <= m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.right() ) )
     {
-      bool selected = (m_pView->selectionInfo()->isColumnSelected(x));
-      bool highlighted = (!selected && m_pView->selectionInfo()->isColumnAffected(x));
+      bool selected = (selectedColumns.contains(x));
+      bool highlighted = (!selected && affectedColumns.contains(x));
 
       const ColumnFormat *col_lay = sheet->columnFormat( x );
       int zoomedXPos = m_pCanvas->d->view->doc()->zoomItXOld( xPos );
