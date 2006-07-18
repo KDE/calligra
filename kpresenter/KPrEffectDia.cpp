@@ -247,7 +247,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lDisappearSpeed->setAlignment( Qt::AlignVCenter );
     lowerRow->addWidget(lDisappearSpeed, 2, 0);
 
-    cDisappearSpeed = new QComboBox( grp2, "cEffect" );
+    cDisappearSpeed = new QComboBox( grp2 );
     cDisappearSpeed->setEditable(false);
     cDisappearSpeed->addItem( i18n( "Slow" ) );
     cDisappearSpeed->addItem( i18n( "Medium" ) );
