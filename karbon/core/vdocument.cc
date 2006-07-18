@@ -198,9 +198,16 @@ VDocument::setActiveLayer( KoLayerShape* layer )
 } // VDocument::setActiveLayer
 
 void
-VDocument::append( KoShape* object )
+VDocument::add( KoShape* shape )
 {
-	m_activeLayer->addChild( object );
+	m_activeLayer->addChild( shape );
+}
+
+void
+VDocument::remove( KoShape* shape )
+{
+	foreach( KoShape *layer, m_layers ) 
+		((KoLayerShape*)layer)->removeChild( shape );
 }
 
 QDomDocument
@@ -281,6 +288,7 @@ VDocument::loadXML( const QDomElement& doc )
 	m_unit = KoUnit::unit( doc.attribute( "unit", KoUnit::unitName( m_unit ) ) );
 
 	loadDocumentContent( doc );
+
 	return true;
 }
 
@@ -321,16 +329,4 @@ VDocument::objectName( const KoShape *obj ) const
 {
 	QMap<const KoShape *, QString>::ConstIterator it = m_objectNames.find( obj );
 	return it == m_objectNames.end() ? 0L : it.value();
-}
-
-void
-VDocument::addShape( KoShape* shape )
-{
-	m_activeLayer->addChild( shape );
-}
-
-void
-VDocument::removeShape( KoShape* shape )
-{
-	m_activeLayer->removeChild( shape );
 }

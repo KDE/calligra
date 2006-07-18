@@ -41,7 +41,7 @@ class VCommandHistory;
  * Finally a dcop interface is set up here.
  */
 
-class KARBONCOMMON_EXPORT KarbonPart : public KoDocument
+class KARBONCOMMON_EXPORT KarbonPart : public KoDocument, public KoShapeControllerBase
 {
 	Q_OBJECT
 public:
@@ -98,6 +98,10 @@ public:
 	void setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit );
 
 	bool mergeNativeFormat( const QString & file );
+
+	// implemented from KoShapeController
+	virtual void addShape( KoShape* shape );
+	virtual void removeShape( KoShape* shape );
 
 public slots:
 	/// repaint all views attached to this koDocument

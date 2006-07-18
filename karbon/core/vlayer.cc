@@ -31,8 +31,6 @@
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 
-#include <KoRectangleShape.h>
-
 KoLayerShape::KoLayerShape()
 : KoShapeContainer(new LayerMembers())
 {
@@ -55,22 +53,6 @@ KoLayerShape::load( const QDomElement& element )
 	setVisible( element.attribute( "visible" ) == 0 ? false : true );
 	// TODO: porting to flake
 	//VGroup::load( element );
-	resize( QSizeF( 300, 300 ) );
-	setAbsolutePosition( QPointF( 0, 0 ) );
-
-    KoShape * shape = new KoRectangleShape();
-    shape->setZIndex(2);
-    shape->setPosition( QPointF( 12, 12 ) );
-    shape->setBackground( Qt::green );
-	shape->setVisible( true );
-    addChild( shape );
-	
-    shape = new KoRectangleShape();
-    shape->setZIndex(1);
-    shape->setPosition( QPointF( 200, 200 ) );
-    shape->setBackground( Qt::red );
-	shape->setVisible( true );
-    addChild( shape );
 }
 
 bool

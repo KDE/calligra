@@ -193,7 +193,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_vertRuler->setUnit(p->unit());
 	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
 
-	m_canvas = new KarbonCanvas( p->document().layers() ); //, this, p );
+	m_canvas = new KarbonCanvas( p->document().shapes() ); //, this, p );
 	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
 	m_canvasView = new KoCanvasController(this);
@@ -222,10 +222,20 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 		// TODO: proper use of the toolbox once it is ready
 		// plug the toolbox as a docker for now to have something
-		KoToolManager::instance()->addControllers( m_canvasView, &p->document() );
+		KoToolManager::instance()->addControllers( m_canvasView, p );
 		QWidget *tb = KoToolManager::instance()->toolBox();
 		tb->setCaption( "Toolbox" );
 		paletteManager()->addWidget( tb, "ToolBox", "ToolBox" );
+
+		// for testing: manually set a shape id of the shape to be created
+		KoCreateShapesTool *createTool = KoToolManager::instance()->shapeCreatorTool( m_canvas );
+		if( createTool )
+		{
+			createTool->setShapeId( "KoRegularPolygonShape" );
+			//createTool->setShapeId( "43751" );
+			//createTool->setShapeId( "TextShapeID" );
+			createTool->setShapeController( p );
+		}
 
 		if( m_showRulerAction->isChecked() )
 		{

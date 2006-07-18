@@ -52,7 +52,7 @@ typedef QList<KoShape*> VLayerList;
  * the visually oriented karbon part.
  */
 
-class KARBONBASE_EXPORT VDocument : public VObject, public KoShapeControllerBase
+class KARBONBASE_EXPORT VDocument : public VObject
 {
 public:
 	/** The different selection modes */
@@ -219,6 +219,11 @@ public:
 	 */
 	const VLayerList& layers() const { return m_layers; }
 
+	/**
+	 * Returns the list of shapes.
+	 */
+	const QList<KoShape*> shapes() const { return m_shapes; }
+
 	QDomDocument saveXML() const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 	enum { STYLE_GRAPHICAUTO = 20, STYLE_LINEAR_GRADIENT, STYLE_RADIAL_GRADIENT, STYLE_STROKE };
@@ -258,12 +263,19 @@ public:
 		{ m_selectionMode = mode; }
 
 	/**
-	 * Appends a new object to the active layer.
+	 * Adds a new object to the active layer.
 	 *
 	 * @param object the object to append
 	 */
-	void append( KoShape* object );
+	void add( KoShape* shape );
 
+	/**
+	 * Removes an object from the document.
+	 *
+	 * @param object the object to append
+	 */
+	void remove( KoShape* shape );
+	
 	/**
 	 * Returns custom name of specified object.
 	 *
@@ -294,10 +306,6 @@ public:
 	 */
 	KarbonGridData &grid() { return m_gridData; }
 
-
-    virtual void addShape( KoShape* shape );
-    virtual void removeShape( KoShape* shape );
-
 private:
 	/**
 	 * Document width.
@@ -326,6 +334,7 @@ private:
 	KoUnit::Unit m_unit;
 
 	QMap<const KoShape *, QString>	m_objectNames;
+	QList<KoShape*> m_shapes;
 
 	// TODO this flag is used nowhere, can we remove it?
 	bool m_saveAsPath;

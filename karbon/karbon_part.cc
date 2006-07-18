@@ -38,6 +38,8 @@
 #include <KoOasisSettings.h>
 #include <KoMainWindow.h>
 
+#include <KoShapeManager.h>
+
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -619,6 +621,28 @@ KarbonPart::slotUnitChanged( KoUnit::Unit /*unit*/ )
 	if( m_toolController->activeTool() )
 		m_toolController->activeTool()->refreshUnit();
 #endif
+}
+
+void
+KarbonPart::addShape( KoShape* shape )
+{
+	m_doc.add( shape );
+	foreach( KoView *view, views() ) {
+		KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
+		canvas->shapeManager()->add(shape);
+		canvas->update();
+	}
+}
+
+void
+KarbonPart::removeShape( KoShape* shape )
+{
+	m_doc.remove( shape );
+	foreach( KoView *view, views() ) {
+		KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
+		canvas->shapeManager()->remove(shape);
+		canvas->update();
+	}
 }
 
 #include "karbon_part.moc"
