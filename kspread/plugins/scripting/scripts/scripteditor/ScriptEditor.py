@@ -733,6 +733,7 @@ class Samples:
 					'# Get the KWord DCOP client.',
 					'dcopclient = kdecore.KApplication.dcopClient()',
 					'apps = [ app for app in dcopclient.registeredApplications() if str(app).startswith("kword") ]',
+					'if len(apps) < 1: raise "No KWord instance is running. Please start KWord before!"',
 					'appname = apps[0]',
 					'd = dcopext.DCOPApp(appname, dcopclient)',
 					'',
