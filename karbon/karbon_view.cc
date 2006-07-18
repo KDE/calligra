@@ -58,6 +58,7 @@
 #include <vruler.h>
 #include <Kolinestyleaction.h>
 #include <KoToolManager.h>
+#include <KoShapeRegistry.h>
 
 // Commands.
 #include "valigncmd.h"
@@ -231,7 +232,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		KoCreateShapesTool *createTool = KoToolManager::instance()->shapeCreatorTool( m_canvas );
 		if( createTool )
 		{
-			createTool->setShapeId( "KoRegularPolygonShape" );
+			QList<KoID> shapeIdList = KoShapeRegistry::instance()->listKeys();
+			if( shapeIdList.count() > 0 )
+				createTool->setShapeId( shapeIdList.first().id() );
+			//createTool->setShapeId( "KoRegularPolygonShape" );
 			//createTool->setShapeId( "43751" );
 			//createTool->setShapeId( "TextShapeID" );
 			createTool->setShapeController( p );
