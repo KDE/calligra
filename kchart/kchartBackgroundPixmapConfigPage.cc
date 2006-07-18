@@ -90,7 +90,8 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     QLabel* wallpaperLA = new QLabel( i18n( "Background wallpaper:" ), this );
     center->addWidget( wallpaperLA );
 
-    wallCB = new QComboBox(this, "wallCombo" );
+    wallCB = new QComboBox( this );
+    wallCB->setObjectName( "wallCombo" );
     wallCB->setEditable( false );
     wallpaperLA->setBuddy(wallCB);
     wallCB->setWhatsThis( i18n( "You can select a background image from "

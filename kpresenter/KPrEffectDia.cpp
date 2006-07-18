@@ -87,7 +87,8 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lEffect->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget(lEffect, 1, 0);
 
-    cEffect = new QComboBox(grp1, "cEffect" );
+    cEffect = new QComboBox( grp1 );
+    cEffect->setObjectName( "cEffect" );
     cEffect->setEditable( false );
     cEffect->addItem( i18n( "No Effect" ) );
     cEffect->addItem( i18n( "Come From Right" ) );
@@ -111,7 +112,8 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lAppearSpeed->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget(lAppearSpeed, 2, 0);
 
-    cAppearSpeed = new QComboBox( false, grp1, "cEffect" );
+    cAppearSpeed = new QComboBox( grp1, "cEffect" );
+    cAppearSpeed->setEditable(false);
     cAppearSpeed->addItem( i18n( "Slow" ) );
     cAppearSpeed->addItem( i18n( "Medium" ) );
     cAppearSpeed->addItem( i18n( "Fast" ) );
@@ -123,7 +125,8 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lEffect2->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget(lEffect2, 3, 0);
 
-    cEffect2 = new QComboBox( false, grp1, "cEffect2" );
+    cEffect2 = new QComboBox( grp1, "cEffect2" );
+    cEffect2->setEditable(false);
     cEffect2->addItem( i18n( "No Effect" ) );
     upperRow->addWidget(cEffect2, 3, 1);
 
@@ -220,7 +223,8 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lDEffect->setAlignment( Qt::AlignVCenter );
     lowerRow->addWidget(lDEffect, 1, 0);
 
-    cDisappear = new QComboBox( false, grp2, "cDisappear" );
+    cDisappear = new QComboBox( grp2, "cDisappear" );
+    cDisappear->setEditable(false);
     cDisappear->addItem( i18n( "No Effect" ) );
     cDisappear->addItem( i18n( "Disappear to Right" ) );
     cDisappear->addItem( i18n( "Disappear to Left" ) );
@@ -243,7 +247,8 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lDisappearSpeed->setAlignment( Qt::AlignVCenter );
     lowerRow->addWidget(lDisappearSpeed, 2, 0);
 
-    cDisappearSpeed = new QComboBox( false, grp2, "cEffect" );
+    cDisappearSpeed = new QComboBox( grp2, "cEffect" );
+    cDisappearSpeed->setEditable(false);
     cDisappearSpeed->addItem( i18n( "Slow" ) );
     cDisappearSpeed->addItem( i18n( "Medium" ) );
     cDisappearSpeed->addItem( i18n( "Fast" ) );
