@@ -1,6 +1,6 @@
 project(kspread)
 
-add_subdirectory( rtree )
+#add_subdirectory( rtree )
 add_subdirectory( dialogs )
 add_subdirectory( tests )
 add_subdirectory( plugins )
