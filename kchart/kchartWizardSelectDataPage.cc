@@ -17,11 +17,13 @@ KChartWizardSelectDataPage::KChartWizardSelectDataPage( QWidget* parent ) :
   rangeED->setText( "" );
 
   QLabel* tmpQLabel;
-  tmpQLabel = new QLabel( this, "Label_1" );
+  tmpQLabel = new QLabel( this );
+  tmpQLabel->setObjectName( "Label_1" );
   tmpQLabel->setGeometry( 10, 30, 360, 20 );
   tmpQLabel->setText( "If the selected cells dont match your table," );
 
-  tmpQLabel = new QLabel( this, "Label_2" );
+  tmpQLabel = new QLabel( this );
+  tmpQLabel->setObjectName( "Label_2" );
   tmpQLabel->setGeometry( 10, 50, 360, 20 );
   tmpQLabel->setText( "you must select another rectangular area here." );
 

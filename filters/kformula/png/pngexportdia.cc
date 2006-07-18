@@ -188,10 +188,12 @@ void PNGExportDia::setupGUI()
     proportional->setChecked( true );
     mainLayout->addWidget( proportional );
 
-    QLabel* height = new QLabel( page, "Height" );
+    QLabel* height = new QLabel( page );
+    height->setObjectName( "Height" );
     height->setText( i18n( "Height" ) );
     widthEdit = new KIntNumInput( page );
-    QLabel* width = new QLabel( page, "Width" );
+    QLabel* width = new QLabel( page );
+    width->setObjectName( "Width" );
     width->setText( i18n( "Width" ) );
     heightEdit = new KIntNumInput( page );
 
@@ -203,9 +205,11 @@ void PNGExportDia::setupGUI()
 
     mainLayout->addLayout( layout1 );
 
-    QLabel* percentHeight = new QLabel( page, "PercentHeight" );
+    QLabel* percentHeight = new QLabel( page );
+    percentHeight->setObjectName( "PercentHeight" );
     percentHeight->setText( i18n( "Height (%)" ) );
-    QLabel* percentWidth = new QLabel( page, "PercentWidth" );
+    QLabel* percentWidth = new QLabel( page );
+    percentWidth->setObjectName( "PercentWidth" );
     percentWidth->setText( i18n( "Width (%)" ) );
     percWidthEdit = new KDoubleNumInput( page );
     percHeightEdit = new KDoubleNumInput( page );

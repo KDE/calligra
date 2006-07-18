@@ -86,11 +86,13 @@ void ExportSizeDia::setupGUI()
     m_proportional->setChecked( true );
     mainLayout->addWidget( m_proportional, 0, 0 );
 
-    QLabel* width = new QLabel( page, "width" );
+    QLabel* width = new QLabel( page );
+    width->setObjectName( "width" );
     width->setText( i18n( "Width:" ) );
     m_widthEdit = new KIntNumInput( page );
 	m_widthEdit->setObjectName("widthEdit" );
-    QLabel* height = new QLabel( page, "height" );
+    QLabel* height = new QLabel( page );
+    height->setObjectName( "height" );
     height->setText( i18n( "Height:" ) );
     m_heightEdit = new KIntNumInput( page );
 	m_heightEdit->setObjectName("heightEdit" );

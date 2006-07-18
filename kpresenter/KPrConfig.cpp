@@ -321,7 +321,8 @@ KPrConfigureColorBackground::KPrConfigureColorBackground( KPrView* _view, QWidge
     oldGridColor = m_pView->kPresenterDoc()->gridColor();
     Q3VBoxLayout *box = new Q3VBoxLayout( this, 0, 0 );
 
-    QLabel *lab = new QLabel( this, "label20" );
+    QLabel *lab = new QLabel( this );
+    lab->setObjectName( "label20" );
     lab->setText( i18n( "Background object color:" ) );
     lab->setWhatsThis( i18n( "Change the background color of the text box. The background is white by default. If you have a dark background color and you want to put some white text on it, you can change the color of the text box so that you can see what you are typing. When you have finished, the area around the text will revert to the background color. The Defaults button restores the original settings." ) );
     box->addWidget(lab);
@@ -333,7 +334,8 @@ KPrConfigureColorBackground::KPrConfigureColorBackground( KPrView* _view, QWidge
     box->addWidget(bgColor);
 
 
-    lab = new QLabel( this, "label20" );
+    lab = new QLabel( this );
+    lab->setObjectName( "label20" );
     lab->setText( i18n( "Grid color:" ) );
     lab->setWhatsThis( i18n( "Here you can change the grid color, which is black by default." ) );
     box->addWidget(lab);

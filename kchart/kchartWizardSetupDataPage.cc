@@ -42,7 +42,8 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   tmpQGroupBox->insert( datacol );
 
   QLabel* tmpQLabel;
-  tmpQLabel = new QLabel( this, "Label_3" );
+  tmpQLabel = new QLabel( this );
+  tmpQLabel->setObjectName( "Label_3" );
   tmpQLabel->setGeometry( 270, 20, 100, 20 );
   tmpQLabel->setText( i18n("Data is in:") );
 
@@ -56,7 +57,8 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   coldescript->setText( "" );
   descrBG->insert( coldescript );
 
-  tmpQLabel = new QLabel( this, "Label_4" );
+  tmpQLabel = new QLabel( this );
+  tmpQLabel->setObjectName( "Label_4" );
   tmpQLabel->setGeometry( 280, 110, 100, 30 );
   tmpQLabel->setText( i18n("Use first row as description") );
   tmpQLabel->setAlignment( 1313 );
@@ -68,7 +70,8 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   rowdescript->setText( "" );
   descrBG->insert( rowdescript );
 
-  tmpQLabel = new QLabel( this, "Label_5" );
+  tmpQLabel = new QLabel( this );
+  tmpQLabel->setObjectName( "Label_5" );
   tmpQLabel->setGeometry( 280, 150, 100, 30 );
   tmpQLabel->setText( i18n("Use first column as description") );
   tmpQLabel->setAlignment( 1313 );
