@@ -121,26 +121,33 @@ void TextElement::calcSizes( const ContextStyle& context,
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
 
     QFontMetrics fm( font );
-    QChar ch = getRealCharacter(context);
-    if ( ch != QChar::null ) {
-        QRect bound = fm.boundingRect( ch );
-        setWidth( context.ptToLayoutUnitPt( fm.width( ch ) ) );
-        setHeight( context.ptToLayoutUnitPt( bound.height() ) );
-        setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
-
-        // There are some glyphs in TeX that have
-        // baseline==0. (\int, \sum, \prod)
-        if ( getBaseline() == 0 ) {
-            //setBaseline( getHeight()/2 + context.axisHeight( tstyle ) );
-            setBaseline( -1 );
-        }
-    }
-    else {
-        setWidth( qRound( context.getEmptyRectWidth( factor ) * 2./3. ) );
-        setHeight( qRound( context.getEmptyRectHeight( factor ) * 2./3. ) );
+    if ( character == applyFunctionChar || character == invisibleTimes || character == invisibleComma ) {
+        setWidth( 0 );
+        setHeight( 0 );
         setBaseline( getHeight() );
     }
+    else {
+        QChar ch = getRealCharacter(context);
+        if ( ch == QChar::null ) {
+            setWidth( qRound( context.getEmptyRectWidth( factor ) * 2./3. ) );
+            setHeight( qRound( context.getEmptyRectHeight( factor ) * 2./3. ) );
+            setBaseline( getHeight() );
+        }
+        else {
+            QRect bound = fm.boundingRect( ch );
+            setWidth( context.ptToLayoutUnitPt( fm.width( ch ) ) );
+            setHeight( context.ptToLayoutUnitPt( bound.height() ) );
+            setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
 
+            // There are some glyphs in TeX that have
+            // baseline==0. (\int, \sum, \prod)
+            if ( getBaseline() == 0 ) {
+                //setBaseline( getHeight()/2 + context.axisHeight( tstyle ) );
+                setBaseline( -1 );
+            }
+        }
+    }
+        
     kdDebug( DEBUGID ) << "height: " << getHeight() << endl;
     kdDebug( DEBUGID ) << "width: " << getWidth() << endl;
 }
@@ -157,6 +164,10 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                         StyleAttributes& style,
                         const LuPixelPoint& parentOrigin )
 {
+    if ( character == applyFunctionChar || character == invisibleTimes || character == invisibleComma ) {
+        return;
+    }
+
     LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
     //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
     //    return;
@@ -198,7 +209,6 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                           text );
     }
     else {
-        //kdDebug() << "draw char" << endl;
         QChar ch = getRealCharacter(context);
         if ( ch != QChar::null ) {
             luPixel bl = getBaseline();

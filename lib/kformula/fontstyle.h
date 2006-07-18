@@ -113,6 +113,9 @@ const QChar backSlashChar = 0x005C;
 const QChar integralChar = 0x222B;
 const QChar summationChar = 0x2211;
 const QChar productChar = 0x220F;
+const QChar applyFunctionChar = 0x2061;
+const QChar invisibleTimes = 0x2062;
+const QChar invisibleComma = 0x2063;
 
 extern const QChar leftRoundBracket[];
 extern const QChar leftSquareBracket[];

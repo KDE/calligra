@@ -29,20 +29,42 @@ KFORMULA_NAMESPACE_BEGIN
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent ) {}
 
 bool OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
+    QString textelements;
     if ( n.isEntityReference() ) {
-        kdWarning( DEBUGID ) << "IS ENTITYREFERENCE: " << n.toEntityReference().nodeName() << endl;
-    }
-    if (!n.isText())
-        return false;
-    QString textelements = n.toText().data();
-/*
-    if ( textelements.length() == 1 ) {
-        QChar ch = textelements[0];
-        if ( ch == '(' || ch == '[' || ch == '{' ) {
-            TextElement* child = new BracketElement();
+        QString entity = n.toEntityReference().nodeName();
+        if ( entity == "ApplyFunction" ) {
+            textelements = QChar(0x2601);
+        }
+        else if ( entity == "InvisibleTimes" ) {
+            textelements = QChar(0x2602);
+        }
+        else if ( entity == "InvisibleComma" ) {
+            textelements = QChar(0x2603);
+        }
+        else if ( entity == "CapitalDifferentialD" ) {
+            textelements = QChar(0x2145);
+        }
+        else if ( entity == "DifferentialD" ) {
+            textelements = QChar(0x2146);
+        }
+        else if ( entity == "ExponentialE" ) {
+            textelements = QChar(0x2147);
+        }
+        else if ( entity == "ImaginaryI" ) {
+            textelements = QChar(0x2148);
+        }
+        else {
+            kdWarning() << "Unknown entity " << entity << endl;
+            return false;
         }
     }
-*/
+    else if ( n.isText() ) {
+        textelements = n.toText().data();
+    }
+    else {
+        return false;
+    }
+    
     for (uint i = 0; i < textelements.length(); i++) {
         TextElement* child = new TextElement(textelements[i], true);
         if (child != 0) {
