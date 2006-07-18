@@ -4330,15 +4330,17 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
   if (d->cellEditor)
 	return;
 
-  Region::ConstIterator end(selectionInfo()->constEnd());
-  for (Region::ConstIterator it(selectionInfo()->constBegin()); it != end; ++it)
+  const Selection* selection = selectionInfo();
+  const QRect currentRange = QRect(selection->anchor(), selection->marker()).normalized();
+  Region::ConstIterator end(selection->constEnd());
+  for (Region::ConstIterator it(selection->constBegin()); it != end; ++it)
   {
     QRect range = (*it)->rect();
 
   	double positions[4];
   	bool paintSides[4];
 
-    bool current = QRect(selectionInfo()->anchor(), selectionInfo()->marker()).normalized() == range;
+    bool current = (currentRange == range);
     QPen pen( Qt::black, 2 );
     painter.setPen( pen );
 

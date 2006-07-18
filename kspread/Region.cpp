@@ -255,15 +255,16 @@ Region::Element* Region::add(const QPoint& point, Sheet* sheet)
 
 Region::Element* Region::add(const QRect& range, Sheet* sheet)
 {
-  if (range.normalized().width() == 0 || range.normalized().height() == 0)
+  const QRect normalizedRange = range.normalized();
+  if (normalizedRange.width() == 0 || normalizedRange.height() == 0)
   {
     return 0;
   }
-  if (range.size() == QSize(1,1))
+  if (normalizedRange.size() == QSize(1,1))
   {
-    return add(range.topLeft(), sheet);
+    return add(normalizedRange.topLeft(), sheet);
   }
-  return insert(d->cells.count(), range, sheet, false);
+  return insert(d->cells.count(), normalizedRange, sheet, false);
 }
 
 Region::Element* Region::add(const Region& region)
@@ -298,6 +299,7 @@ void Region::sub(const QPoint& point, Sheet* sheet)
 
 void Region::sub(const QRect& range, Sheet* sheet)
 {
+  const QRect normalizedRange = range.normalized();
   // TODO Stefan: Improve!
   Iterator endOfList(d->cells.end());
   for (Iterator it = d->cells.begin(); it != endOfList; ++it)
@@ -307,7 +309,7 @@ void Region::sub(const QRect& range, Sheet* sheet)
     {
       continue;
     }
-    if (element->rect() == range.normalized())
+    if (element->rect() == normalizedRange)
     {
       delete element;
       d->cells.removeAll(element);
@@ -459,14 +461,15 @@ Region::Element* Region::insert(int pos, const QPoint& point, Sheet* sheet, bool
 
 Region::Element* Region::insert(int pos, const QRect& range, Sheet* sheet, bool multi)
 {
-  if (range.size() == QSize(1,1))
+  const QRect normalizedRange = range.normalized();
+  if (normalizedRange.size() == QSize(1,1))
   {
-    return insert(pos, range.topLeft(), sheet);
+    return insert(pos, normalizedRange.topLeft(), sheet);
   }
 
   if (multi)
   {
-    Range* rrange = createRange(range);
+    Range* rrange = createRange(normalizedRange);
     rrange->setSheet(sheet);
     if (pos > d->cells.count())
       pos = d->cells.count();
@@ -483,11 +486,11 @@ Region::Element* Region::insert(int pos, const QRect& range, Sheet* sheet, bool 
       ++index;
       continue;
     }
-    if (d->cells[index]->contains(range))
+    if (d->cells[index]->contains(normalizedRange))
     {
       containsRange = true;
     }
-    else if (range.contains(d->cells[index]->rect()))
+    else if (normalizedRange.contains(d->cells[index]->rect()))
     {
       delete d->cells.takeAt(index--);
       continue;
@@ -495,7 +498,7 @@ Region::Element* Region::insert(int pos, const QRect& range, Sheet* sheet, bool 
   }
   if ( !containsRange )
   {
-    Range* rrange = createRange(range);
+    Range* rrange = createRange(normalizedRange);
     rrange->setSheet(sheet);
     if (pos > d->cells.count())
       pos = d->cells.count();
