@@ -135,7 +135,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     dia->nameEdit->setText(resource->name());
     dia->initialsEdit->setText(resource->initials());
     dia->emailEdit->setText(resource->email());
-    dia->type->setCurrentItem((int)resource->type()); // NOTE: must match enum
+    dia->type->setCurrentIndex((int)resource->type()); // NOTE: must match enum
     dia->units->setValue(resource->units());
     dia->availableFrom->setDateTime(resource->availableFrom());
     dia->availableUntil->setDateTime(resource->availableUntil());
