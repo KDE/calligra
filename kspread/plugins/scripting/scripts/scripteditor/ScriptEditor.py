@@ -477,11 +477,6 @@ class Samples:
 					'	fromcell = fromcell.nextCell()',
 				)
 
-
-
-
-
-
 		class LoadSheetFromCSV:
 			""" Load the content of a CSV file into a KSpread sheet. """
 			name = "Load data from CSV file into sheet"
@@ -641,6 +636,124 @@ class Samples:
 					'	print "Dialog aborted."',
 				)
 
+	####################################################################################
+	# DCOP
+
+	class DCOP:
+		def __init__(self, parentwidget):
+			self.parentwidget = parentwidget
+
+		class PrintClipboard:
+			""" Print the content from the clipper via DCOP. """
+			name = "Clipboard content"
+			def __init__(self, parent):
+				self.widgets = {
+				}
+			def getCode(self):
+				return (
+					'import qt, kdecore, dcop, dcopext',
+					'dcopclient = kdecore.KApplication.dcopClient()',
+					'apps = [ app for app in dcopclient.registeredApplications() if str(app).startswith("klipper") ]',
+					'd = dcopext.DCOPApp(apps[0], dcopclient)',
+					'result,typename,data = d.appclient.call(apps[0],"klipper","getClipboardContents()","")',
+					'ds = qt.QDataStream(data, qt.IO_ReadOnly)',
+					'print "Clipboard content:\\n%s" % kdecore.dcop_next(ds, "QString")',
+				)
+
+		class AmarokCollectionInfos:
+			""" Fetch some collection informations from the amarok collection via DCOP. """
+			name = "amarok collection infos"
+			def __init__(self, parent):
+				self.widgets = {
+				}
+			def getCode(self):
+				return (
+					'import qt, kdecore, dcop, dcopext',
+					'',
+					'dcopclient = kdecore.KApplication.dcopClient()',
+					'apps = [ app for app in dcopclient.registeredApplications() if str(app).startswith("amarok") ]',
+					'app = apps[0]',
+					'd = dcopext.DCOPApp(app, dcopclient)',
+					'',
+					'def dataToList(data, types = []):',
+					'	import qt, kdecore',
+					'	ds = qt.QDataStream(data, qt.IO_ReadOnly)',
+					'	return [ kdecore.dcop_next(ds, t) for t in types ]',
+					'',
+					'for funcname in ["totalAlbums","totalArtists","totalCompilations","totalGenres","totalTracks"]:',
+					'	result,replytype,replydata = d.appclient.call("amarok", "collection", "%s()" % funcname,"")',
+					'	print "%s: %s" % ( funcname, dataToList(replydata,["int"])[0] )',
+				)
+
+		class KopeteContacts:
+			""" Print the names of all contacts Kopete knows via DCOP. """
+			name = "Kopete contacts"
+			def __init__(self, parent):
+				self.widgets = {
+				}
+			def getCode(self):
+				return (
+					'import qt, kdecore, dcop, dcopext',
+					'',
+					'dcopclient = kdecore.KApplication.dcopClient()',
+					'apps = [ app for app in dcopclient.registeredApplications() if str(app).startswith("kopete") ]',
+					'app = apps[0]',
+					'd = dcopext.DCOPApp(app, dcopclient)',
+					'',
+					'(state,rtype,rdata) = d.appclient.call("kopete", "KopeteIface", "contacts()","")',
+					'if not state: raise "Failed to call the kopete contacts-function"',
+					'',
+					'ds = qt.QDataStream(rdata.data(), qt.IO_ReadOnly)',
+					'sl = kdecore.dcop_next (ds, "QStringList")',
+					'print "contacts=%s" % [ str(s) for s in sl ]',
+				)
+
+		class KWordSelectedText:
+			""" Get the selected text from a KWord instance via DCOP. """
+			name = "KWord selected text"
+			def __init__(self, parent):
+				self.widgets = {
+				}
+			def getCode(self):
+				return (
+					'import qt, kdecore, dcop, dcopext',
+					'',
+					'def dataToList(data, types = []):',
+					'	import qt, kdecore',
+					'	ds = qt.QDataStream(data, qt.IO_ReadOnly)',
+					'	return [ kdecore.dcop_next(ds, t) for t in types ]',
+					'def listToData(listdict):',
+					'	import qt, kdecore',
+					'	ba= qt.QByteArray()',
+					'	ds = qt.QDataStream(ba, qt.IO_WriteOnly)',
+					'	for (typename,value) in listdict:',
+					'		kdecore.dcop_add (ds, value, typename)',
+					'	return ba',
+					'',
+					'# Get the KWord DCOP client.',
+					'dcopclient = kdecore.KApplication.dcopClient()',
+					'apps = [ app for app in dcopclient.registeredApplications() if str(app).startswith("kword") ]',
+					'appname = apps[0]',
+					'd = dcopext.DCOPApp(appname, dcopclient)',
+					'',
+					'# Call the getDocuments() function.',
+					'(state,rtype,rdata) = d.appclient.call(appname, "KoApplicationIface", "getDocuments()","")',
+					'if not state: raise "%s: Failed to call getDocuments-function" % appname',
+					'documents = dataToList(rdata,["QValueList<DCOPRef>"])[0]',
+					'print "documents=%s" % [ str( doc.obj() ) for doc in documents ]',
+					'document = documents[0] # Let\'s just take the first document.',
+					'',
+					'# Get the frameset.',
+					'ba = listToData( [ ("int",0) ] )',
+					'(state,rtype,rdata) = d.appclient.call(appname, document.obj(), "textFrameSet(int)", ba)',
+					'if not state: raise "%s: Failed to call frameSet-function" % appname',
+					'frameset = dataToList( rdata,["DCOPRef"] )[0] # Let\'s just take the first textframe.',
+					'',
+					'# Get the selected text.',
+					'(state,rtype,rdata) = d.appclient.call(appname, frameset.obj(), "selectedText()", "")',
+					'print "Selected Text: %s" % dataToList( rdata,["QString"] )[0]',
+				)
+
 ####################################################################################
 # Dialog implementations.
 
@@ -684,7 +797,7 @@ class SampleDialog(qt.QDialog):
 		cancelbtn.setText("Cancel")
 		qt.QObject.connect(cancelbtn, qt.SIGNAL("clicked()"), self.close)
 
-		self.setCaption("Sample: %s" % self.samplechild.name)
+		self.setCaption(self.samplechild.name)
 		box.setMinimumSize(qt.QSize(500,340))
 
 	def okClicked(self):
@@ -705,7 +818,8 @@ class SampleDialog(qt.QDialog):
 class MainDialog(qt.QDialog):
 	def __init__(self, scriptpath, parent):
 		self.scriptpath = scriptpath
-		self.filename = self.getFileName("myscript.py")
+		if not hasattr(__main__,"scripteditorfilename"):
+			__main__.scripteditorfilename = self.getFileName("myscript.py")
 
 		import krosskspreadcore
 		self.doc = krosskspreadcore.get("KSpreadDocument")
@@ -822,7 +936,7 @@ class MainDialog(qt.QDialog):
 			itemid += 1
 			menu = qt.QPopupMenu(self.samplemenu)
 			qt.QObject.connect(menu, qt.SIGNAL("activated(int)"), self.sampleActivated)
-			self.samplemenu.insertItem(samplename, menu)
+			self.samplemenu.insertItem(samplename, menu, -1, self.samplemenu.count() - 1)
 			attr = getattr(Samples,samplename)
 			for a in dir(attr):
 				if a.startswith("_"): continue
@@ -831,8 +945,8 @@ class MainDialog(qt.QDialog):
 				itemid = menu.insertItem(child.name, itemid)
 				menu.setWhatsThis(itemid,"%s/%s" % (samplename,a))
 
-		if os.path.exists(self.filename):
-			self.openFile(self.filename)
+		if os.path.exists(__main__.scripteditorfilename):
+			self.openFile(__main__.scripteditorfilename)
 
 	def getFileName(self, filename):
 		import os
@@ -887,7 +1001,7 @@ class MainDialog(qt.QDialog):
 					tb = tb.tb_next
 				lineno = tb.tb_lineno
 				print "EXCEPTION: lineno=%s" % lineno
-				self.scripttext.setCursorPosition( lineno, 0 )
+				self.scripttext.setCursorPosition( lineno - 1, 0 )
 			except:
 				pass
 
@@ -911,7 +1025,7 @@ class MainDialog(qt.QDialog):
 		self.console.clear()
 		code = str( self.scripttext.text() )
 		def docompile(self):
-			compile(code, self.filename, 'exec')
+			compile(code, __main__.scripteditorfilename, 'exec')
 		self.execCode(docompile)
 		self.console.append("<b>Compiled!</b>")
 
@@ -929,35 +1043,35 @@ class MainDialog(qt.QDialog):
 		self.scripttext.clear()
 
 	def openFile(self, filename):
-		self.filename = None
+		__main__.scripteditorfilename = None
 		try:
 			file = open(filename, "r")
 			self.scripttext.setText( str( file.read() ) )
 			file.close()
-			self.filename = filename
+			__main__.scripteditorfilename = filename
 		except IOError, (errno, strerror):
 			qt.QMessageBox.critical(self,"Error","<qt>Failed to open script file \"%s\"<br><br>%s</qt>" % (filename,strerror))
 
 	def openFileAs(self):
 		import qt
 		self.console.clear()
-		filename = str( qt.QFileDialog.getOpenFileName(self.filename,"*.py;;*", self) )
+		filename = str( qt.QFileDialog.getOpenFileName(__main__.scripteditorfilename,"*.py;;*", self) )
 		if filename == "": return
 		self.openFile(filename)
 
 	def saveFile(self):
 		try:
-			file = open(self.filename, "w")
+			file = open(__main__.scripteditorfilename, "w")
 			file.write( str( self.scripttext.text() ) )
 			file.close()
 		except IOError, (errno, strerror):
-			qt.QMessageBox.critical(self,"Error","<qt>Failed to open script file \"%s\"<br><br>%s</qt>" % (self.filename,strerror))
+			qt.QMessageBox.critical(self,"Error","<qt>Failed to open script file \"%s\"<br><br>%s</qt>" % (__main__.scripteditorfilename,strerror))
 
 	def saveFileAs(self):
 		import qt
-		filename = str( qt.QFileDialog.getSaveFileName(self.filename,"*.py;;*", self) )
+		filename = str( qt.QFileDialog.getSaveFileName(__main__.scripteditorfilename,"*.py;;*", self) )
 		if filename == "": return
-		self.filename = filename
+		__main__.scripteditorfilename = filename
 		self.saveFile()
 
 ####################################################################################
@@ -970,5 +1084,5 @@ else:
 	scriptpath = os.path.dirname(__name__)
 	qtapp = qt.qApp
 
-MainDialog = MainDialog(scriptpath, qtapp.mainWidget())
-MainDialog.exec_loop()
+dialog = MainDialog(scriptpath, qtapp.mainWidget())
+dialog.exec_loop()
