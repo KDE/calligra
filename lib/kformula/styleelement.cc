@@ -513,20 +513,20 @@ double StyleElement::sizeFactor( const ContextStyle& context, double factor )
     double basesize = context.layoutUnitPtToPt( context.getBaseSize() );
     switch ( m_mathSizeType ) {
     case AbsoluteSize:
-        return factor * m_mathSize / basesize;
+        return m_mathSize / basesize;
     case RelativeSize:
-        return factor * m_mathSize;
+        return m_mathSize;
     case PixelSize:
         // 3.2.2 says v-unit instead of h-unit, that's why we use Y and not X
-        return factor * context.pixelYToPt( m_mathSize ) / basesize;
+        return context.pixelYToPt( m_mathSize ) / basesize;
     case NoSize:
         switch ( m_fontSizeType ) {
         case AbsoluteSize:
-            return factor * m_fontSize / basesize;
+            return m_fontSize / basesize;
         case RelativeSize:
-            return factor * m_fontSize;
+            return m_fontSize;
         case PixelSize:
-            return factor * context.pixelYToPt( m_fontSize ) / basesize;
+            return context.pixelYToPt( m_fontSize ) / basesize;
         case NoSize:
             return factor;
         }
