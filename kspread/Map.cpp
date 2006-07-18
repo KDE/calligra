@@ -98,7 +98,7 @@ Map::Map ( Doc* doc, const char* name)
   d->tableId = 1;
 
   new MapAdaptor(this);
-  QDBus::sessionBus().registerObject( "/"+doc->objectName() + '/' + objectName(), this);
+  QDBus::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
 }
 
 Map::~Map()

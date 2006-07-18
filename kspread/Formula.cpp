@@ -1096,7 +1096,7 @@ void Formula::compile( const Tokens& tokens ) const
             }
           }
 
-         // auxilary rule for unary operator:  (op) X -> X
+         // auxiliary rule for unary operator:  (op) X -> X
          // conditions: op is unary, op is first in syntax stack
          // action: push (op) to result
          if( !ruleFound )
@@ -1409,7 +1409,7 @@ Value Formula::eval() const
           args.insert (args.begin(), e.val);
           // TODO: create and fill a FunctionExtra object, if needed
           // problem: we don't know if we need it, as we don't have the
-          // fuction name yet ...
+          // function name yet ...
           fe.ranges[index - 1].col1 = e.col1;
           fe.ranges[index - 1].row1 = e.row1;
           fe.ranges[index - 1].col2 = e.col2;
@@ -1442,7 +1442,7 @@ Value Formula::eval() const
     delete calc;
   }
 
-  // more than one value in stack ? unsuccesful execution...
+  // more than one value in stack ? unsuccessful execution...
   if( stack.count() != 1 )
     return Value::errorVALUE();
 

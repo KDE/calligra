@@ -3044,7 +3044,7 @@ namespace Currency_LNS
     { "BHD", I18N_NOOP("Bahrain"), I18N_NOOP("Bahraini Dinar"), I18N_NOOP("BHD") },
     { "BDT", I18N_NOOP("Bangladesh"), I18N_NOOP("Taka"), I18N_NOOP("BDT") },
     { "BBD", I18N_NOOP("Barbados"), I18N_NOOP("Barbados Dollar"), I18N_NOOP("BBD") },
-    { "BYR", I18N_NOOP("Belarus"), I18N_NOOP("Belarussian Ruble"), I18N_NOOP("p.") },
+    { "BYR", I18N_NOOP("Belarus"), I18N_NOOP("Belarusian Ruble"), I18N_NOOP("p.") },
     { "EUR", I18N_NOOP("Belgium"), I18N_NOOP("Euro"), I18N_NOOP("EUR") },
     { "BEF", I18N_NOOP("Belgium"), I18N_NOOP("Franc"), I18N_NOOP("BF") },
     { "BZD", I18N_NOOP("Belize"), I18N_NOOP("Belize Dollar"), I18N_NOOP("BZ$") },

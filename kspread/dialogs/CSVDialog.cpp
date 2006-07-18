@@ -46,7 +46,7 @@ using namespace KSpread;
 CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
   : KoCsvImportDialog( parent ),
     m_pView( parent ),
-    m_cancelled( false ),
+    m_canceled( false ),
     m_targetRect( rect ),
     m_mode( mode )
 {
@@ -64,14 +64,14 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
     if ( !mime )
     {
       KMessageBox::information( this, i18n("There is no data in the clipboard.") );
-      m_cancelled = true;
+      m_canceled = true;
       return;
     }
 
     if ( !mime->hasText() )
     {
       KMessageBox::information( this, i18n("There is no usable data in the clipboard.") );
-      m_cancelled = true;
+      m_canceled = true;
       return;
     }
     m_fileArray = QByteArray( mime->text().toUtf8() );
@@ -86,7 +86,7 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
     if ( file.isEmpty() )
     {
         enableButton( Ok, false );
-        m_cancelled = true;
+        m_canceled = true;
         return;
     }
     QFile in(file);
@@ -95,7 +95,7 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
       KMessageBox::sorry( this, i18n("Cannot open input file.") );
       in.close();
       enableButton( Ok, false );
-      m_cancelled = true;
+      m_canceled = true;
       return;
     }
     m_fileArray = QByteArray(/*in.size()*/);
@@ -128,9 +128,9 @@ CSVDialog::~CSVDialog()
   // no need to delete child widgets, Qt does it all for us
 }
 
-bool CSVDialog::cancelled()
+bool CSVDialog::canceled()
 {
-  return m_cancelled;
+  return m_canceled;
 }
 
 void CSVDialog::accept()

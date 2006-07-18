@@ -50,7 +50,7 @@ public:
   CSVDialog( View * parent, QRect const & rect, Mode mode);
   ~CSVDialog();
 
-  bool cancelled();
+  bool canceled();
 
 protected:
   void accept();
@@ -59,7 +59,7 @@ private:
   QString getText(int row, int col);
 
   View*   m_pView;
-  bool    m_cancelled;
+  bool    m_canceled;
   QRect   m_targetRect;
   Mode    m_mode;
 };

@@ -62,7 +62,7 @@ public:
   bool paramCountOkay (int count);
   /** when set to true, the function can receive arrays. When set to
   false, the auto-array mechamism will be used for arrays (so the
-  fuction will receive simple values, not arrays). */
+  function will receive simple values, not arrays). */
   void setAcceptArray (bool accept = true);
   bool needsExtra ();
   void setNeedsExtra (bool extra);

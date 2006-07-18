@@ -192,7 +192,7 @@ public:
 
   /**
    * Sets the starting position and the length of a subregion in a selection
-   * which allows multiple occurences of elements.
+   * which allows multiple occurrences of elements.
    */
   void setActiveSubRegion(uint start, uint length);
 
@@ -218,7 +218,7 @@ public:
 
 
   /**
-   * Sets, wether multiple occurences of elements are allowed.
+   * Sets, wether multiple occurrences of elements are allowed.
    */
   void setMultipleOccurences(bool state);
 

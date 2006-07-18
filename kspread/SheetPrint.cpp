@@ -496,7 +496,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                   rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
               }
 
-            // similiar for other borders...
+            // similar for other borders...
             // bottom border:
             if ( y >= KS_rowMax )
               paintBordersBottom = true;

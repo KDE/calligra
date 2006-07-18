@@ -122,8 +122,8 @@ Canvas::Canvas(View *view)
 {
   d = new Private;
 
-  setAttribute( Qt::WA_OpaquePaintEvent );
-  setAttribute( Qt::WA_StaticContents );
+  setAttribute( Qt::WA_OpaquePaintEvent , true );
+  setAttribute( Qt::WA_StaticContents , true );
 
   d->cellEditor = 0;
   d->chooseCell = false;
@@ -183,7 +183,6 @@ Canvas::Canvas(View *view)
   setAcceptDrops( true );
   setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
-  setWindowFlags(Qt::WNoAutoErase);
 }
 
 Canvas::~Canvas()
@@ -690,7 +689,7 @@ void Canvas::slotScrollHorz( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
-  d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
+  d->view->doc()->emitEndOperation();
 }
 
 void Canvas::slotScrollVert( int _value )
@@ -699,7 +698,7 @@ void Canvas::slotScrollVert( int _value )
    if (!sheet)
     return;
 
-  d->view->doc()->emitBeginOperation(false);
+ // d->view->doc()->emitBeginOperation(false);
   double unzoomedValue = d->view->doc()->unzoomItYOld( _value );
 
   if ( unzoomedValue < 0 )
@@ -743,7 +742,7 @@ void Canvas::slotScrollVert( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
-  d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
+  //d->view->doc()->emitEndOperation( );
 }
 
 void Canvas::slotMaxColumn( int _max_column )
@@ -1218,6 +1217,7 @@ bool Canvas::highlightRangeSizeGripAt(double x, double y)
 
 void Canvas::mousePressEvent( QMouseEvent * _ev )
 {
+  
   register Sheet * const sheet = activeSheet();
   if (!sheet)
     return;
@@ -1552,7 +1552,27 @@ void Canvas::wheelEvent( QWheelEvent* _ev )
 
 void Canvas::paintEvent( QPaintEvent* event )
 {
-  if ( d->view->doc()->isLoading() )
+
+   const QRect paintRect( event->rect() );
+
+   double tmp;
+  
+   const Sheet* sheet = activeSheet();
+
+   if (!sheet)
+	   return;
+
+   QRect sheetArea;
+   sheetArea.setLeft( sheet->leftColumn( paintRect.left() , tmp , this) );
+   sheetArea.setRight( sheet->rightColumn( paintRect.right() , this) );
+   sheetArea.setTop( sheet->topRow( paintRect.top() , tmp , this ) );
+   sheetArea.setBottom( sheet->bottomRow( paintRect.bottom() , this ) );
+
+   kDebug() << "adding area indicated by QPaintEvent to dirty list" << endl;
+   activeSheet()->setRegionPaintDirty( sheetArea );
+   paintUpdates();
+		   	   
+/*  if ( d->view->doc()->isLoading() )
     return;
 
   register Sheet * const sheet = activeSheet();
@@ -1560,7 +1580,7 @@ void Canvas::paintEvent( QPaintEvent* event )
     return;
 
   // repaint whole visible region, if no cells are marked as dirty
-  if (sheet->paintDirtyData().isEmpty())
+  //if (sheet->paintDirtyData().isEmpty())
   {
 
   // painting rectangle
@@ -1601,7 +1621,7 @@ void Canvas::paintEvent( QPaintEvent* event )
   sheet->setRegionPaintDirty( vr );
   }
   paintUpdates();
-  event->accept();
+  event->accept();*/
 }
 
 void Canvas::focusInEvent( QFocusEvent* )
@@ -1682,8 +1702,8 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
       QDomDocument doc;
       if ( !doc.setContent( data, false, &errorMsg, &errorLine, &errorColumn ) )
       {
-        // an error occured
-        kDebug() << "Canvas::daragMoveEvent: an error occured" << endl
+        // an error occurred
+        kDebug() << "Canvas::daragMoveEvent: an error occurred" << endl
                  << "line: " << errorLine << " col: " << errorColumn
                  << ' ' << errorMsg << endl;
         dragMarkingRect = QRect(1,1,1,1);
@@ -3768,7 +3788,8 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
         d->cellEditor->setFocus();
 
 	setSelectionChangePaintDirty(sheet, *selectionInfo());
-	paintUpdates();
+	
+	update();
   }
 
   return true;

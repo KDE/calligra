@@ -2,7 +2,7 @@
    Copyright (C) 2005-2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
+   it under the terms of the GNU Library General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
    (at your option) any later version.
 
@@ -11,7 +11,7 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
+   You should have received a copy of the GNU Library General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
@@ -152,9 +152,9 @@ public:
   bool isValid() const;
 
   /**
-   * @param col the col to check
+   * @param col The column to check
    *
-   * @return @c true, if the colum @p col is selected. If column @p col
+   * @return @c True, if the column @p col is selected. If column @p col
    * is not given, it returns true, if at least one column is selected
    *
    * \note If you want to check more than one column for selection, use
@@ -311,7 +311,7 @@ protected:
    * @param index the index of the element in whose front the new point
    * is inserted
    * @param point the location of the point to be inserted
-   * @param multi @c true to allow multiple occurences of a point
+   * @param multi @c true to allow multiple occurrences of a point
    * @return the added point, a null pointer, if @p point is not
    * valid or the element containing @p point
    */
@@ -321,7 +321,7 @@ protected:
    * @param index the index of the element in whose front the new range
    * is inserted
    * @param range the location of the range to be inserted
-   * @param multi @c true to allow multiple occurences of a range
+   * @param multi @c true to allow multiple occurrences of a range
    * @return the added range, a null pointer, if @p range is not
    * valid or the element containing @p range
    */

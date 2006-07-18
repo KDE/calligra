@@ -520,7 +520,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   uint count = cells().count();
   if (d->multipleOccurences)
   {
-    // always succesful
+    // always successful
     insert(++d->activeElement, point, sheet, false);
   }
   else
@@ -594,7 +594,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   Element* element = 0;
   if (d->multipleOccurences)
   {
-    //always succesful
+    //always successful
     insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)), sheet, false);
   }
   else

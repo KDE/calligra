@@ -983,7 +983,7 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
   }
 
   // if we have a range, run through it, and put an empty value to the place
-  // of all occurences of the SUBTOTAL function
+  // of all occurrences of the SUBTOTAL function
   Value empty;
   if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
     for (int r = r1; r <= r2; ++r)

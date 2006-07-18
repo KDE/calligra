@@ -314,7 +314,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
   d->name = sheetName;
 
   new SheetAdaptor(this);
-  QDBus::sessionBus().registerObject( "/"+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName(), this);
+  QDBus::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName(), this);
 
   d->cells.setAutoDelete( true );
   d->rows.setAutoDelete( true );
@@ -3557,8 +3557,8 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
     QDomDocument doc;
     if ( !doc.setContent( b, false, &errorMsg, &errorLine, &errorColumn ) )
     {
-      // an error occured
-      kDebug() << "Sheet::paste(const QByteArray&): an error occured" << endl
+      // an error occurred
+      kDebug() << "Sheet::paste(const QByteArray&): an error occurred" << endl
                << "line: " << errorLine << " col: " << errorColumn
                << ' ' << errorMsg << endl;
       return;
@@ -3865,8 +3865,8 @@ bool Sheet::testAreaPasteInsert() const
     QDomDocument d;
     if ( !d.setContent( byteArray, false, &errorMsg, &errorLine, &errorColumn ) )
     {
-      // an error occured
-      kDebug() << "Sheet::testAreaPasteInsert(): an error occured" << endl
+      // an error occurred
+      kDebug() << "Sheet::testAreaPasteInsert(): an error occurred" << endl
                << "line: " << errorLine << " col: " << errorColumn
                << ' ' << errorMsg << endl;
       return false;
@@ -6736,13 +6736,19 @@ void Sheet::convertObscuringBorders()
 // TODO Stefan: these belong to View, even better Canvas
 void Sheet::setRegionPaintDirty( const Region & region )
 {
-  DilationManipulator manipulator;
-  manipulator.setSheet(this);
-  manipulator.add(region);
-  manipulator.execute();
+// Robert: This seems a very heavy handed way of doing this - look for something more efficient.
+//  DilationManipulator manipulator;
+//  manipulator.setSheet(this);
+//  manipulator.add(region);
+//  manipulator.execute();
+
   // don't put it in the undo list! ;-)
-  d->paintDirtyList.add(manipulator);
-  kDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
+  //d->paintDirtyList.add(manipulator);
+  
+   d->paintDirtyList.add(region);
+	
+ // kDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
+  kDebug() << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
 }
 
 void Sheet::clearPaintDirtyData()

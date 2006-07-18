@@ -126,7 +126,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
   if (!document)
   {
-    KMessageBox::error(0,i18n("Can't insert calendar because no document is set!"),i18n("Error"));
+    KMessageBox::error(0,i18n("Cannot insert calendar because no document is set!"),i18n("Error"));
     return;
   }
 
@@ -138,7 +138,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
   if (start.daysTo(end) > 3652)
   {
-    KMessageBox::error(0,i18n("Calendars shouldn't be longer than 10 years. If you really need such long periods you need to split them up."),i18n("Error"));
+    KMessageBox::error(0,i18n("Calendars should not be longer than 10 years. If you really need such long periods you need to split them up."),i18n("Error"));
     return;
   }
 

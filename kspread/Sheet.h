@@ -188,7 +188,7 @@ public:
      * @param makeUndo If set to @p true , the renaming is inserted in the
      *                 undo list.
      *
-     * @return @c true if the sheet was renamed succesfully
+     * @return @c true if the sheet was renamed successfully
      * @return @c false if the sheet could not be renamed. Usually the reason is
      * that this name is already used.
      *
@@ -246,7 +246,7 @@ public:
     /**
      * @brief get the rect for the objects
      *
-     * @param all true if the rect for all objects shoud be returned
+     * @param all true if the rect for all objects should be returned
      *        false if only the rect for selected objects sould be returned
      *
      * @return rect of the objects
@@ -258,9 +258,9 @@ public:
     KCommand *moveObject(View *m_view,const KoPoint &_move,bool key);
 
     /**
-     * @brief Create a uniq name for an object.
+     * @brief Create a unique name for an object.
      *
-     * Create a uniq name for the object. If no name is set for the object
+     * Create a unique name for the object. If no name is set for the object
      * a name according to its type is created. If the name already exists
      * append ' (x)'. // FIXME: not allowed by I18N
      *

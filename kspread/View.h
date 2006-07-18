@@ -636,7 +636,7 @@ private:
     Cell* nextFindValidCell( int col, int row );
 
     /**
-     * @return @c true if document is being loaded. It is useful to supress scrolling
+     * @return @c true if document is being loaded. It is useful to suppress scrolling
      * while the "View loading" process.
      */
     bool isLoading() const;

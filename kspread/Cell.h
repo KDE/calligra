@@ -243,7 +243,7 @@ public:
      *             Set this to false if you want smaller files.
      * @param era set this to true if you want to encode relative references as absolutely (they will be switched
      *            back to relative references during decoding) - is used for cutting to clipboard
-     *            Usually this is false, to only store the properties explicitely set.
+     *            Usually this is false, to only store the properties explicitly set.
      */
     QDomElement save( QDomDocument& doc,
                       int _x_offset = 0, int _y_offset = 0,
@@ -399,7 +399,7 @@ public:
     bool needsPrinting() const;
 
     /**
-     * Increases the precison of the
+     * Increases the precision of the
      * value displayed. Precision means here the amount of
      * digits behind the dot. If the current precision is the
      * default of -1, then it is set to the number of digits
@@ -407,7 +407,7 @@ public:
      */
     void incPrecision();
     /**
-     * Decreases the precison of the
+     * Decreases the precision of the
      * value displayed. Precision means here the amount of
      * digits behind the dot. If the current precision is the
      * default of -1, then it is set to the number of digits

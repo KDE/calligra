@@ -513,7 +513,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
       continue;
     }
 
-    // remove space at the begining
+    // remove space at the beginning
     if (sl > strpos && str.at( strpos).isSpace() )
       ++strpos;
 

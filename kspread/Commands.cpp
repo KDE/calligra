@@ -651,7 +651,7 @@ void RemoveObjectCommand::execute()
 {
 
 //  I don't think we need this:
-//       Make shure that this child has no active embedded view -> activate ourselfs
+//       Make sure that this child has no active embedded view -> activate ourselfs
 //       doc()->emitBeginOperation( false );
 //       partManager()->setActivePart( koDocument(), this );
 //       partManager()->setSelectedPart( 0 );

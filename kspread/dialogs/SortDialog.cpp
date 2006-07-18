@@ -293,15 +293,15 @@ SortDialog::~SortDialog()
 void SortDialog::init()
 {
   QStringList lst;
-  lst << i18n("January") + "," + i18n("February") + "," + i18n("March") +
-      "," + i18n("April") + "," + i18n("May") + "," + i18n("June") +
-      "," + i18n ("July") + "," + i18n("August") + "," + i18n("September") +
-      "," + i18n("October") + "," + i18n("November") +
-      "," + i18n("December");
+  lst << i18n("January") + ',' + i18n("February") + ',' + i18n("March") +
+      ',' + i18n("April") + ',' + i18n("May") + ',' + i18n("June") +
+      ',' + i18n ("July") + ',' + i18n("August") + ',' + i18n("September") +
+      ',' + i18n("October") + ',' + i18n("November") +
+      ',' + i18n("December");
 
-  lst << i18n("Monday") + "," + i18n("Tuesday") + "," + i18n("Wednesday") +
-  "," + i18n("Thursday") + "," + i18n("Friday") + "," + i18n("Saturday") +
-  "," + i18n("Sunday");
+  lst << i18n("Monday") + ',' + i18n("Tuesday") + ',' + i18n("Wednesday") +
+  ',' + i18n("Thursday") + ',' + i18n("Friday") + ',' + i18n("Saturday") +
+  ',' + i18n("Sunday");
 
   KConfig * config = Factory::global()->config();
   config->setGroup( "Parameters" );

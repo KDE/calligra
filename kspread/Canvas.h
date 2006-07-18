@@ -352,7 +352,7 @@ public:
     /**
      * @brief Get the list of objects in the order they should be displayed.
      *
-     * This takes into acount the object set in raiseObject so that it is
+     * This takes into account the object set in raiseObject so that it is
      * the last one in the list returned (the one that is displayed above all
      * the others).
      *

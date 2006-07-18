@@ -1313,7 +1313,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         else if ( hideFormula )
             style.addProperty( "style:cell-protect", "protected Formula.hidden" );
         else if ( featureSet( SNotProtected ) )// !isNotProtected
-            // write out, only if it is explicity set
+            // write out, only if it is explicitly set
             style.addProperty( "style:cell-protect", "protected" );
     }
 

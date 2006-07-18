@@ -4138,7 +4138,7 @@ QString Cell::textDisplaying( QPainter &_painter )
   for ( int i = d->strOutText.length(); i != 0; i-- ) {
     tmp = d->strOutText.left( i );
 
-    // 4 equals lenght of red triangle +1 pixel
+    // 4 equals length of red triangle +1 pixel
     if ( format()->sheet()->doc()->unzoomItXOld( fm.width( tmp ) ) < w - 4.0 - 1.0 )
       return tmp;
   }
