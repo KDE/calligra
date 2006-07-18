@@ -758,8 +758,10 @@ public:
     QString pasteOperation( const QString &new_text, const QString &old_text, Paste::Operation op );
 
     /**
-     * @return true if the cell contains a formula that could not
-     *         be evaluated. These cells usually appear with "####" on the screen.
+     * \return \c true if the cell contains a formula, that could not
+     *         be evaluated, has a circular dependecency or an invalidated
+     *         dependecency. These cells usually appear  on the screen with
+     *         "#Parse!", "#Circle!" or "#Depend!", respectively.
      */
     bool hasError() const;
 
@@ -898,7 +900,7 @@ public:
       /**
        * ParseError
        * True if the cell is calculated and there was an error during calculation
-       * In that case the cell usually displays "#####"
+       * In that case the cell usually displays "#Parse!"
        */
       Flag_ParseError            = 0x01000000,
       /**
@@ -907,6 +909,7 @@ public:
       Flag_CircularCalculation   = 0x02000000,
       /**
        * DependencyError
+       * \todo TODO Stefan: never set so far
        */
       Flag_DependencyError       = 0x04000000,
       /**

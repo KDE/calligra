@@ -26,6 +26,7 @@
 #include "Sheet.h"
 #include "Region.h"
 #include "Util.h"
+#include "ValueFormatter.h"
 
 #include "RecalcManager.h"
 
@@ -246,16 +247,16 @@ void RecalcManager::recalcCell(Cell* cell) const
       cell->testFlag (Cell::Flag_CircularCalculation))
   {
     kError(36001) << "ERROR: Circle, cell " << cell->fullName() << endl;
-    Value v;
     // don't set anything if the cell already has all these things set
     // this prevents endless loop for inter-sheet curcular dependencies,
     // where the usual mechanisms fail doe to having multiple dependency
     // managers ...
     if (!cell->testFlag (Cell::Flag_CircularCalculation))
     {
+      Value value;
       cell->setFlag(Cell::Flag_CircularCalculation);
-      v.setError ( "####" );
-      cell->setValue (v);
+      value.setError(ValueFormatter::errorFormat(cell));
+      cell->setValue(value);
     }
     //clear the computing-dependencies flag
     cell->clearFlag (Cell::Flag_Progress);

@@ -2056,7 +2056,7 @@ bool Cell::makeFormula()
     }
     setFlag(Flag_ParseError);
     Value value;
-    value.setError ( "####" );
+    value.setError ( ValueFormatter::errorFormat(this) );
     setValue (value);
     return false;
   }

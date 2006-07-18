@@ -57,6 +57,8 @@ class ValueFormatter {
   /** create a time format */
   QString timeFormat (const QDateTime &_time, FormatType fmtType);
 
+  static QString errorFormat (Cell *cell);
+
  protected:
 
   ValueConverter* converter;
@@ -72,8 +74,6 @@ class ValueFormatter {
 
   /** create a fraction format */
   QString fractionFormat (double value, FormatType fmtType);
-
-  QString errorFormat (Cell *cell);
 
   /** Remove trailing zeros and the decimal point if necessary
   unless the number has no decimal point */
