@@ -189,7 +189,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
-        m_bGlobalHyphenation=config->readBoolEntry("hyphenation", false);
+        m_bGlobalHyphenation=config->readEntry("hyphenation", false);
     }
 
     m_standardStyle->format().setLanguage( m_globalLanguage);
@@ -330,24 +330,24 @@ void KPrDocument::initConfig()
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
-        setBackupFile( config->readBoolEntry("BackupFile", true));
-        setCursorInProtectedArea( config->readBoolEntry( "cursorInProtectArea", true ));
+        setBackupFile( config->readEntry("BackupFile", true));
+        setCursorInProtectedArea( config->readEntry( "cursorInProtectArea", true ));
 
         // Config-file value in mm, default 10 pt
         double indent =  config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0) ) ;
         setIndentValue(indent);
         m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
-        setShowRuler(config->readBoolEntry("Rulers",true));
+        setShowRuler(config->readEntry("Rulers",true));
         zoom = config->readNumEntry( "Zoom", 100 );
-        setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
-        setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
-        setViewFormattingChars( config->readBoolEntry( "ViewFormattingChars", false ) );
-        setShowGrid( config->readBoolEntry( "ShowGrid" , true ));
-        setSnapToGrid( config->readBoolEntry( "SnapToGrid", true ));
+        setShowStatusBar( config->readEntry( "ShowStatusBar" , true ));
+        setAllowAutoFormat( config->readEntry( "AllowAutoFormat" , true ));
+        setViewFormattingChars( config->readEntry( "ViewFormattingChars", false ) );
+        setShowGrid( config->readEntry( "ShowGrid" , true ));
+        setSnapToGrid( config->readEntry( "SnapToGrid", true ));
         setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
         setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
 
-        m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
+        m_bInsertDirectCursor= config->readEntry( "InsertDirectCursor", false );
         m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
 
     }
@@ -370,7 +370,7 @@ void KPrDocument::initConfig()
        // Default is false for spellcheck, but the spell-check config dialog
        // should write out "true" when the user configures spell checking.
         if ( isReadWrite() )
-          m_bgSpellCheck->setEnabled(config->readBoolEntry( "SpellCheck", false ));
+          m_bgSpellCheck->setEnabled(config->readEntry( "SpellCheck", false ));
        else
           m_bgSpellCheck->setEnabled( false );
     }

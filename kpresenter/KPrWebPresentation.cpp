@@ -232,10 +232,10 @@ void KPrWebPresentation::loadConfig()
     titleColor = cfg.readColorEntry( "TitleColor", &titleColor );
     textColor = cfg.readColorEntry( "TextColor", &textColor );
     path = cfg.readPathEntry( "Path", path );
-    xml = cfg.readBoolEntry( "XML", xml );
-    m_bWriteHeader = cfg.readBoolEntry( "WriteHeader", m_bWriteHeader );
-    m_bWriteFooter = cfg.readBoolEntry( "WriteFooter", m_bWriteFooter );
-    m_bLoopSlides = cfg.readBoolEntry( "LoopSlides", m_bLoopSlides );
+    xml = cfg.readEntry( "XML", xml );
+    m_bWriteHeader = cfg.readEntry( "WriteHeader", m_bWriteHeader );
+    m_bWriteFooter = cfg.readEntry( "WriteFooter", m_bWriteFooter );
+    m_bLoopSlides = cfg.readEntry( "LoopSlides", m_bLoopSlides );
     zoom = cfg.readNumEntry( "Zoom", zoom );
     timeBetweenSlides = cfg.readNumEntry("TimeBetweenSlides", timeBetweenSlides );
     m_encoding = cfg.readEntry( "Encoding", m_encoding );

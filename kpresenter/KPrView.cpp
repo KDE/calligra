@@ -2154,7 +2154,7 @@ void KPrView::createGUI()
         sidebar->outline()->setSelected( sidebar->outline()->firstChild(), true );
         KConfig *config=KGlobal::config();
         config->setGroup("Global");
-        if(!config->readBoolEntry("Sidebar", true)) {
+        if(!config->readEntry("Sidebar", true)) {
             sidebar->hide();
             actionViewShowSideBar->setChecked(false);
         }
@@ -2165,7 +2165,7 @@ void KPrView::createGUI()
     {
         KConfig *config=KGlobal::config();
         config->setGroup("Global");
-        if(!config->readBoolEntry("Notebar", true)) {
+        if(!config->readEntry("Notebar", true)) {
             notebar->hide();
             actionViewShowNoteBar->setChecked(false);
         }

@@ -221,8 +221,8 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
         config->setGroup( "Interface" );
         oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
         ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
-        bShowRuler=config->readBoolEntry("Rulers",true);
-        oldShowStatusBar = config->readBoolEntry( "ShowStatusBar" , true );
+        bShowRuler=config->readEntry("Rulers",true);
+        oldShowStatusBar = config->readEntry( "ShowStatusBar" , true );
 
     }
 
@@ -428,7 +428,7 @@ KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, cha
     {
         config->setGroup( "Misc" );
         m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
-        m_printNotes = config->readBoolEntry("PrintNotes", true);
+        m_printNotes = config->readEntry("PrintNotes", true);
     }
 
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
@@ -602,9 +602,9 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
-        m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
+        m_oldBackupFile=config->readEntry("BackupFile",m_oldBackupFile);
         m_oldLanguage = config->readEntry( "language", m_oldLanguage );
-        m_oldHyphenation = config->readBoolEntry( "hyphenation", m_oldHyphenation);
+        m_oldHyphenation = config->readEntry( "hyphenation", m_oldHyphenation);
     }
 
     Q3GroupBox* gbDocumentDefaults = new Q3GroupBox( i18n("Document Defaults"), this, "GroupBox" );

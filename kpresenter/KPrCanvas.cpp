@@ -3616,7 +3616,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
 
     KConfig *config=KPrFactory::global()->config();
     config->setGroup("Misc");
-    bool printNotes = config->readBoolEntry("PrintNotes", true);
+    bool printNotes = config->readEntry("PrintNotes", true);
 
     KPrNoteBar *noteBar = m_view->getNoteBar();
     //don't print notes when there is no note to print or it's disabled

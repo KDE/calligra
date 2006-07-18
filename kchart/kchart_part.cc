@@ -700,15 +700,15 @@ void KChartPart::loadConfig( KConfig *conf )
     //   requested_ymax = conf->readDoubleNumEntry("requested_ymax", requested_ymax );
     //   requested_yinterval = conf->readDoubleNumEntry("requested_yinterval",
     // 					   requested_yinterval);
-    //   shelf = conf->readBoolEntry("shelf", shelf);
-    //   grid = conf->readBoolEntry("grid", grid);
-    //   xaxis = conf->readBoolEntry("xaxis", xaxis);
-    //   yaxis = conf->readBoolEntry("yaxis", yaxis);
-    //   yaxis2 = conf->readBoolEntry("yaxis2", yaxis);
-    //   llabel = conf->readBoolEntry("llabel", llabel);
+    //   shelf = conf->readEntry("shelf", shelf);
+    //   grid = conf->readEntry("grid", grid);
+    //   xaxis = conf->readEntry("xaxis", xaxis);
+    //   yaxis = conf->readEntry("yaxis", yaxis);
+    //   yaxis2 = conf->readEntry("yaxis2", yaxis);
+    //   llabel = conf->readEntry("llabel", llabel);
     //   yval_style = conf->readNumEntry("yval_style", yval_style);
     //   stack_type = (KChartStackType)conf->readNumEntry("stack_type", stack_type);
-    m_params->setLineMarker(conf->readBoolEntry("lineMarker",
+    m_params->setLineMarker(conf->readEntry("lineMarker",
 						m_params->lineMarker()));
     m_params->setThreeDBarDepth( conf->readDoubleNumEntry("_3d_depth",
 							  m_params->threeDBarDepth() ) );
@@ -742,9 +742,9 @@ void KChartPart::loadConfig( KConfig *conf )
     //   // TODO: Annotation font
     //   num_scatter_pts = conf->readNumEntry("num_scatter_pts", num_scatter_pts);
     //   // TODO: Scatter type
-    //   thumbnail = conf->readBoolEntry("thumbnail", thumbnail);
+    //   thumbnail = conf->readEntry("thumbnail", thumbnail);
     //   thumblabel = conf->readEntry("thumblabel", thumblabel);
-    //   border = conf->readBoolEntry("border", border);
+    //   border = conf->readEntry("border", border);
     //   BGColor = conf->readColorEntry("BGColor", &BGColor);
     //   PlotColor = conf->readColorEntry("PlotColor", &PlotColor);
     //   VolColor = conf->readColorEntry("VolColor", &VolColor);
@@ -752,12 +752,12 @@ void KChartPart::loadConfig( KConfig *conf )
     //   loadColorArray(conf, &SetColor, "SetColor");
     //   loadColorArray(conf, &ExtColor, "ExtColor");
     //   loadColorArray(conf, &ExtVolColor, "ExtVolColor");
-    //   transparent_bg = conf->readBoolEntry("transparent_bg", transparent_bg);
+    //   transparent_bg = conf->readEntry("transparent_bg", transparent_bg);
     //   // TODO: explode, missing
     //   percent_labels = (KChartPercentType)conf->readNumEntry("percent_labels",
     // 							 percent_labels);
     //   label_dist = conf->readNumEntry("label_dist", label_dist);
-    //   label_line = conf->readBoolEntry("label_line", label_line);
+    //   label_line = conf->readEntry("label_line", label_line);
     m_params->setChartType( (KChartParams::ChartType)conf->readNumEntry( "type", m_params->chartType() ) );
     //   other_threshold = conf->readNumEntry("other_threshold", other_threshold);
 
@@ -767,8 +767,8 @@ void KChartPart::loadConfig( KConfig *conf )
     //     backgroundPixmapIsDirty = true;
     //   } else
     //     backgroundPixmapIsDirty = false;
-    //   backgroundPixmapScaled = conf->readBoolEntry( "backgroundPixmapScaled", true );
-    //   backgroundPixmapCentered = conf->readBoolEntry( "backgroundPixmapCentered", true );
+    //   backgroundPixmapScaled = conf->readEntry( "backgroundPixmapScaled", true );
+    //   backgroundPixmapCentered = conf->readEntry( "backgroundPixmapCentered", true );
     //   backgroundPixmapIntensity = conf->readDoubleNumEntry( "backgroundPixmapIntensity", 0.25 );
 }
 
