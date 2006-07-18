@@ -126,6 +126,11 @@ private:
     double str2size( const QString& str, SizeType* st, uint index, SizeType type );
     double getSize( const QString& str, SizeType* st );
 
+    /**
+     * Return RGB string from HTML Colors. See HTML Spec, section 6.5
+     */
+    QString getHtmlColor( const QString& colorStr );
+
     // MathML 2.0 attributes
     SizeType m_mathSizeType;
     double m_mathSize;

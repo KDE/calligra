@@ -164,14 +164,21 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
 
     QString colorStr = element.attribute( "mathcolor" );
     if ( !colorStr.isNull() ) {
-        // TODO: Named colors differ from those Qt supports. See section 3.2.2.2
-        kdWarning() << "Setting color: " << colorStr << endl;
-        setMathColor( QColor( colorStr ) );
+        if ( colorStr[0] != '#' ) {
+            setMathColor( QColor( getHtmlColor( colorStr ) ) );
+        }
+        else {
+            setMathColor( QColor( colorStr ) );
+        }
 	}
     QString backgroundStr = element.attribute( "mathbackground" );
     if ( !backgroundStr.isNull() ) {
-        // TODO: Named colors differ from those Qt supports. See section 3.2.2.2
-        setMathBackground( QColor( backgroundStr ) );
+        if ( backgroundStr[0] != '#' ) {
+            setMathBackground( QColor( getHtmlColor( backgroundStr ) ) );
+        }
+        else {
+            setMathBackground( QColor( backgroundStr ) );
+        }
 	}
 
     // Deprecated attributes. See Section 3.2.2.1
@@ -230,8 +237,12 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
 
     colorStr = element.attribute( "color" );
     if ( ! colorStr.isNull() ) {
-        // TODO: Named colors differ from those Qt supports. See section 3.2.2.2
-        setColor( QColor( colorStr  ) );
+        if ( colorStr[0] != '#' ) {
+            setColor( QColor( getHtmlColor( colorStr ) ) );
+        }
+        else {
+            setColor( QColor( colorStr  ) );
+        }
 	}
 
     return true;
@@ -582,5 +593,49 @@ double StyleElement::getSize( const QString& str, SizeType* st )
     kdWarning( DEBUGID ) << "Unknown mathsize unit type\n";
     return -1;
 }
+
+/**
+ * Return RGB string from HTML Colors. See HTML Spec, section 6.5
+ */
+QString StyleElement::getHtmlColor( const QString& colorStr ){
+
+    QString colorname = colorStr.lower();
+
+    if ( colorname ==  "black" ) 
+        return "#000000";
+    if ( colorname == "silver" )
+        return "#C0C0C0";
+    if ( colorname == "gray" )
+        return "#808080";
+    if ( colorname == "white" )
+        return "#FFFFFF";
+    if ( colorname == "maroon" )
+        return "#800000";
+    if ( colorname == "red" )
+        return "#FF0000";
+    if ( colorname == "purple" )
+        return "#800080";
+    if ( colorname == "fuchsia" )
+        return "#FF00FF";
+    if ( colorname == "green" )
+        return "#008000";
+    if ( colorname == "lime" )
+        return "#00FF00";
+    if ( colorname == "olive" )
+        return "#808000";
+    if ( colorname == "yellow" )
+        return "#FFFF00";
+    if ( colorname == "navy" )
+        return "#000080";
+    if ( colorname == "blue")
+        return "#0000FF";
+    if ( colorname == "teal" )
+        return "#008080";
+    if ( colorname == "aqua" )
+        return "#00FFFF";
+    kdWarning( DEBUGID ) << "Invalid HTML color: " << colorname << endl;
+    return "#FFFFFF"; // ### Arbitrary selection of default color
+}
+
 
 KFORMULA_NAMESPACE_END
