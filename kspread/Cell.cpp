@@ -428,8 +428,8 @@ QString Cell::columnName( uint column )
     for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
         offset += limit;
 
-    for( unsigned c = column - offset; digits; --digits, c/=26 )
-        str.prepend( QChar( 'A' + (c%26) ) );
+    for( unsigned col = column - offset; digits; --digits, col/=26 )
+        str.prepend( QChar( 'A' + (col%26) ) );
 
     return str;
 }
@@ -484,9 +484,9 @@ const Value Cell::value() const
 // In addition to this, it calculates the outstring and sets the dirty
 // flags so that a redraw is forced.
 //
-void Cell::setValue( const Value& v )
+void Cell::setValue( const Value& value )
 {
-  if (v.type() != Value::Error)
+  if (value.type() != Value::Error)
     clearAllErrors();
 
   //If the value has not changed then we don't need to do anything
@@ -495,10 +495,10 @@ void Cell::setValue( const Value& v )
   //even though the value has not.  For example, if this cell was previously empty (and its value is
   //therefore empty) and a new dependency upon an empty cell has been added.  The new value would still
   //be empty, but the dependencies need to be updated (via the call to valueChanged() below).
-  if ( ( d->value == v ) && ( !isFormula() ) )
+  if ( ( d->value == value ) && ( !isFormula() ) )
     return;
 
-  d->value = v;
+  d->value = value;
 
   setFlag(Flag_LayoutDirty);
   setFlag(Flag_TextFormatDirty);
@@ -517,15 +517,15 @@ void Cell::setValue( const Value& v )
         format()->sheet()->setRegionPaintDirty(cellRect());
 }
 
-void Cell::setCellValue (const Value &v, FormatType fmtType, const QString &txt)
+void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &txt)
 {
   if (!txt.isEmpty())
     d->strText = txt;
   else
-    d->strText = sheet()->doc()->converter()->asString (v).asString();
+    d->strText = sheet()->doc()->converter()->asString (value).asString();
   if (fmtType != No_format)
     format()->setFormatType (fmtType);
-  setValue (v);
+  setValue (value);
 }
 
 // FIXME: Continue commenting and cleaning here (ingwa)
@@ -541,14 +541,14 @@ Cell* Cell::nextCell() const
     return d->nextCell;
 }
 
-void Cell::setPreviousCell( Cell* c )
+void Cell::setPreviousCell( Cell* cell )
 {
-    d->previousCell = c;
+    d->previousCell = cell;
 }
 
-void Cell::setNextCell( Cell* c )
+void Cell::setNextCell( Cell* cell )
 {
-    d->nextCell = c;
+    d->nextCell = cell;
 }
 
 Validity* Cell::validity( bool create )
@@ -613,9 +613,9 @@ void Cell::copyFormat( const Cell* cell )
     format()->setIndent( cell->format()->getIndent(_column, _row ) );
     format()->setAngle( cell->format()->getAngle(_column, _row) );
     format()->setFormatType( cell->format()->getFormatType(_column, _row) );
-    Style::Currency c;
-    if ( cell->format()->currencyInfo( c ) )
-      format()->setCurrency( c );*/
+    Style::Currency currency;
+    if ( cell->format()->currencyInfo( currency ) )
+      format()->setCurrency( currency );*/
 
     QLinkedList<Conditional> conditionList = cell->conditionList();
     if (d->hasExtra())
@@ -1458,17 +1458,17 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
          - format()->rightBorderWidth( _col, _row ) )
        && ( !d->hasExtra() || d->extra()->mergedYCells == 0 ) )
   {
-    int c = d->column;
+    int col = d->column;
 
     // Find free cells to the right of this one.
     int end = 0;
     while ( !end ) {
-      ColumnFormat  *cl2  = format()->sheet()->columnFormat( c + 1 );
-      Cell   *cell = format()->sheet()->visibleCellAt( c + 1, d->row );
+      ColumnFormat  *cl2  = format()->sheet()->columnFormat( col + 1 );
+      Cell   *cell = format()->sheet()->visibleCellAt( col + 1, d->row );
 
       if ( cell->isEmpty() ) {
   width += cl2->dblWidth() - 1;
-  c++;
+  col++;
 
   // Enough space?
   if ( d->textWidth + indent <= ( width - 2 * BORDER_SPACE
@@ -1497,10 +1497,10 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
          || ( format()->align( _col, _row ) == Style::HAlignUndefined
         && !value().isNumber() ) )
     {
-      if ( c - d->column > d->extra()->mergedXCells ) {
-  d->extra()->extraXCells = c - d->column;
+      if ( col - d->column > d->extra()->mergedXCells ) {
+  d->extra()->extraXCells = col - d->column;
   d->extra()->extraWidth  = width;
-  for ( int i = d->column + 1; i <= c; ++i ) {
+  for ( int i = d->column + 1; i <= col; ++i ) {
     Cell *cell = format()->sheet()->nonDefaultCell( i, d->row );
     cell->obscure( this );
   }
@@ -2055,9 +2055,9 @@ bool Cell::makeFormula()
       KMessageBox::error( (QWidget*)0, tmp);
     }
     setFlag(Flag_ParseError);
-    Value v;
-    v.setError ( "####" );
-    setValue (v);
+    Value value;
+    value.setError ( "####" );
+    setValue (value);
     return false;
   }
 
@@ -3160,9 +3160,9 @@ void Cell::paintText( QPainter& painter,
                && !( format()->sheet()->isProtected()
          && format()->isHideFormula( d->column, d->row ) ) ) )
     {
-      double v = value().asFloat();
+      double value = this->value().asFloat();
       if ( format()->floatColor( cellRef.x(), cellRef.y()) == Style::NegRed
-     && v < 0.0 )
+     && value < 0.0 )
         tmpPen.setColor( Qt::red );
     }
   }
@@ -3170,9 +3170,9 @@ void Cell::paintText( QPainter& painter,
   // Check for blue color, for hyperlink.
   if ( !link().isEmpty() ) {
     tmpPen.setColor( QApplication::palette().link().color() );
-    QFont f = painter.font();
-    f.setUnderline( true );
-    painter.setFont( f );
+    QFont font = painter.font();
+    font.setUnderline( true );
+    painter.setFont( font );
   }
 
 #if 0
@@ -5138,72 +5138,72 @@ QDomElement Cell::save( QDomDocument& doc,
 
     if (validity())
     {
-        Validity *v = validity();
-        QDomElement validity = doc.createElement("validity");
+        Validity *validity = this->validity();
+        QDomElement validityElement = doc.createElement("validity");
 
         QDomElement param=doc.createElement("param");
-        param.setAttribute("cond",(int)v->m_cond);
-        param.setAttribute("action",(int)v->m_action);
-        param.setAttribute("allow",(int)v->m_restriction);
-        param.setAttribute("valmin",v->valMin);
-        param.setAttribute("valmax",v->valMax);
-        param.setAttribute("displaymessage",v->displayMessage);
-        param.setAttribute("displayvalidationinformation",v->displayValidationInformation);
-        param.setAttribute("allowemptycell",v->allowEmptyCell);
-        if ( !v->listValidity.isEmpty() )
-            param.setAttribute( "listvalidity", v->listValidity.join( ";" ) );
-        validity.appendChild(param);
+        param.setAttribute("cond",(int)validity->m_cond);
+        param.setAttribute("action",(int)validity->m_action);
+        param.setAttribute("allow",(int)validity->m_restriction);
+        param.setAttribute("valmin",validity->valMin);
+        param.setAttribute("valmax",validity->valMax);
+        param.setAttribute("displaymessage",validity->displayMessage);
+        param.setAttribute("displayvalidationinformation",validity->displayValidationInformation);
+        param.setAttribute("allowemptycell",validity->allowEmptyCell);
+        if ( !validity->listValidity.isEmpty() )
+            param.setAttribute( "listvalidity", validity->listValidity.join( ";" ) );
+        validityElement.appendChild(param);
         QDomElement title = doc.createElement( "title" );
-        title.appendChild( doc.createTextNode( v->title ) );
-        validity.appendChild( title );
+        title.appendChild( doc.createTextNode( validity->title ) );
+        validityElement.appendChild( title );
         QDomElement message = doc.createElement( "message" );
-        message.appendChild( doc.createCDATASection( v->message ) );
-        validity.appendChild( message );
+        message.appendChild( doc.createCDATASection( validity->message ) );
+        validityElement.appendChild( message );
 
         QDomElement inputTitle = doc.createElement( "inputtitle" );
-        inputTitle.appendChild( doc.createTextNode( v->titleInfo ) );
-        validity.appendChild( inputTitle );
+        inputTitle.appendChild( doc.createTextNode( validity->titleInfo ) );
+        validityElement.appendChild( inputTitle );
 
         QDomElement inputMessage = doc.createElement( "inputmessage" );
-        inputMessage.appendChild( doc.createTextNode( v->messageInfo ) );
-        validity.appendChild( inputMessage );
+        inputMessage.appendChild( doc.createTextNode( validity->messageInfo ) );
+        validityElement.appendChild( inputMessage );
 
 
 
         QString tmp;
-        if ( v->timeMin.isValid() )
+        if ( validity->timeMin.isValid() )
         {
                 QDomElement timeMin = doc.createElement( "timemin" );
-                tmp=v->timeMin.toString();
+                tmp=validity->timeMin.toString();
                 timeMin.appendChild( doc.createTextNode( tmp ) );
-                validity.appendChild( timeMin );
+                validityElement.appendChild( timeMin );
         }
-        if ( v->timeMax.isValid() )
+        if ( validity->timeMax.isValid() )
         {
                 QDomElement timeMax = doc.createElement( "timemax" );
-                tmp=v->timeMax.toString();
+                tmp=validity->timeMax.toString();
                 timeMax.appendChild( doc.createTextNode( tmp ) );
-                validity.appendChild( timeMax );
+                validityElement.appendChild( timeMax );
         }
 
-        if ( v->dateMin.isValid() )
+        if ( validity->dateMin.isValid() )
         {
                 QDomElement dateMin = doc.createElement( "datemin" );
                 QString tmp("%1/%2/%3");
-                tmp = tmp.arg(v->dateMin.year()).arg(v->dateMin.month()).arg(v->dateMin.day());
+                tmp = tmp.arg(validity->dateMin.year()).arg(validity->dateMin.month()).arg(validity->dateMin.day());
                 dateMin.appendChild( doc.createTextNode( tmp ) );
-                validity.appendChild( dateMin );
+                validityElement.appendChild( dateMin );
         }
-        if ( v->dateMax.isValid() )
+        if ( validity->dateMax.isValid() )
         {
                 QDomElement dateMax = doc.createElement( "datemax" );
                 QString tmp("%1/%2/%3");
-                tmp = tmp.arg(v->dateMax.year()).arg(v->dateMax.month()).arg(v->dateMax.day());
+                tmp = tmp.arg(validity->dateMax.year()).arg(validity->dateMax.month()).arg(validity->dateMax.day());
                 dateMax.appendChild( doc.createTextNode( tmp ) );
-                validity.appendChild( dateMax );
+                validityElement.appendChild( dateMax );
         }
 
-        cell.appendChild( validity );
+        cell.appendChild( validityElement );
     }
 
     if ( format()->comment() )
@@ -5416,10 +5416,10 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
     }
 
-    Validity *v = validity();
-    if (v)
+    Validity *validity = this->validity();
+    if (validity)
     {
-        GenValidationStyle styleVal(v);
+        GenValidationStyle styleVal(validity);
         xmlwriter.addAttribute( "table:validation-name", valStyle.lookup( styleVal ) );
     }
     if ( isFormula() )
@@ -5668,17 +5668,17 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double v = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
+            double validity = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
                 Value value;
-                value.setValue(v);
+                value.setValue(validity);
                 value.setFormat (Value::fmt_Percent);
                 setCellValue( value );
 
                 if ( !isFormula && d->strText.isEmpty())
                 {
-                    QString str = locale()->formatNumber( v, 15 );
+                    QString str = locale()->formatNumber( validity, 15 );
                     setCellText( str );
                 }
 
@@ -5953,7 +5953,7 @@ void Cell::loadOasisValidation( const QString& validationName )
 {
     QDomElement element = sheet()->doc()->loadingInfo()->validation( validationName);
     removeValidity ();
-    Validity *v = validity (true);
+    Validity *validity = this->validity (true);
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
         QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString::null );
@@ -5976,19 +5976,19 @@ void Cell::loadOasisValidation( const QString& validationName )
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("oooc:cell-content-text-length()" );
             kDebug()<<" valExpression = :"<<valExpression<<endl;
-            v->m_restriction = Restriction::TextLength;
+            validity->m_restriction = Restriction::TextLength;
 
             loadOasisValidationCondition( valExpression );
         }
         else if ( valExpression.contains( "cell-content-is-text()" ) )
         {
-            v->m_restriction = Restriction::Text;
+            validity->m_restriction = Restriction::Text;
         }
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value) | cell-content-is-in-list( StringList )
         else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
         {
-            v->m_restriction = Restriction::TextLength;
-            v->m_cond = Conditional::Between;
+            validity->m_restriction = Restriction::TextLength;
+            validity->m_cond = Conditional::Between;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ')' );
@@ -5997,8 +5997,8 @@ void Cell::loadOasisValidation( const QString& validationName )
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
-            v->m_restriction = Restriction::TextLength;
-            v->m_cond = Conditional::Different;
+            validity->m_restriction = Restriction::TextLength;
+            validity->m_cond = Conditional::Different;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-not-between(" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ')' );
@@ -6008,11 +6008,11 @@ void Cell::loadOasisValidation( const QString& validationName )
         }
         else if ( valExpression.contains( "cell-content-is-in-list(" ) )
         {
-            v->m_restriction = Restriction::List;
+            validity->m_restriction = Restriction::List;
             valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ')' );
-            v->listValidity = valExpression.split( ';',  QString::SkipEmptyParts );
+            validity->listValidity = valExpression.split( ';',  QString::SkipEmptyParts );
 
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
@@ -6020,22 +6020,22 @@ void Cell::loadOasisValidation( const QString& validationName )
         {
             if (valExpression.contains( "cell-content-is-whole-number()" ) )
             {
-                v->m_restriction =  Restriction::Number;
+                validity->m_restriction =  Restriction::Number;
                 valExpression = valExpression.remove( "oooc:cell-content-is-whole-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
             {
-                v->m_restriction = Restriction::Integer;
+                validity->m_restriction = Restriction::Integer;
                 valExpression = valExpression.remove( "oooc:cell-content-is-decimal-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-date()" ) )
             {
-                v->m_restriction = Restriction::Date;
+                validity->m_restriction = Restriction::Date;
                 valExpression = valExpression.remove( "oooc:cell-content-is-date() and " );
             }
             else if (valExpression.contains( "cell-content-is-time()" ) )
             {
-                v->m_restriction = Restriction::Time;
+                validity->m_restriction = Restriction::Time;
                 valExpression = valExpression.remove( "oooc:cell-content-is-time() and " );
             }
             kDebug()<<"valExpression :"<<valExpression<<endl;
@@ -6053,7 +6053,7 @@ void Cell::loadOasisValidation( const QString& validationName )
                 valExpression = valExpression.remove( ')' );
                 QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
                 loadOasisValidationValue( listVal );
-                v->m_cond = Conditional::Between;
+                validity->m_cond = Conditional::Between;
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
             {
@@ -6061,14 +6061,14 @@ void Cell::loadOasisValidation( const QString& validationName )
                 valExpression = valExpression.remove( ')' );
                 QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
                 loadOasisValidationValue( listVal );
-                v->m_cond = Conditional::Different;
+                validity->m_cond = Conditional::Different;
             }
         }
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" ) )
     {
         kDebug()<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
-        v->allowEmptyCell = ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false );
+        validity->allowEmptyCell = ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false );
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "base-cell-address" ) )
     {
@@ -6081,18 +6081,18 @@ void Cell::loadOasisValidation( const QString& validationName )
         if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
         {
             kDebug()<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString::null )<<endl;
-            v->titleInfo = help.attributeNS( KoXmlNS::table, "title", QString::null );
+            validity->titleInfo = help.attributeNS( KoXmlNS::table, "title", QString::null );
         }
         if ( help.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
             kDebug()<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
-            v->displayValidationInformation = ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false );
+            validity->displayValidationInformation = ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false );
         }
         QDomElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
         {
             kDebug()<<"help text :"<<attrText.text()<<endl;
-            v->messageInfo = attrText.text();
+            validity->messageInfo = attrText.text();
         }
     }
 
@@ -6100,16 +6100,16 @@ void Cell::loadOasisValidation( const QString& validationName )
     if ( !error.isNull() )
     {
         if ( error.hasAttributeNS( KoXmlNS::table, "title" ) )
-            v->title = error.attributeNS( KoXmlNS::table, "title", QString::null );
+            validity->title = error.attributeNS( KoXmlNS::table, "title", QString::null );
         if ( error.hasAttributeNS( KoXmlNS::table, "message-type" ) )
         {
             QString str = error.attributeNS( KoXmlNS::table, "message-type", QString::null );
             if ( str == "warning" )
-              v->m_action = Action::Warning;
+              validity->m_action = Action::Warning;
             else if ( str == "information" )
-              v->m_action = Action::Information;
+              validity->m_action = Action::Information;
             else if ( str == "stop" )
-              v->m_action = Action::Stop;
+              validity->m_action = Action::Stop;
             else
                 kDebug()<<"validation : message type unknown  :"<<str<<endl;
         }
@@ -6117,11 +6117,11 @@ void Cell::loadOasisValidation( const QString& validationName )
         if ( error.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
             kDebug()<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
-            v->displayMessage = (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true");
+            validity->displayMessage = (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true");
         }
         QDomElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
-            v->message = attrText.text();
+            validity->message = attrText.text();
     }
 }
 
@@ -6131,43 +6131,43 @@ void Cell::loadOasisValidationValue( const QStringList &listVal )
     bool ok = false;
     kDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
     
-    Validity *v = validity(true);
+    Validity *validity = this->validity(true);
     
-    if ( v->m_restriction == Restriction::Date )
+    if ( validity->m_restriction == Restriction::Date )
     {
-        v->dateMin = QDate::fromString( listVal[0] );
-        v->dateMax = QDate::fromString( listVal[1] );
+        validity->dateMin = QDate::fromString( listVal[0] );
+        validity->dateMax = QDate::fromString( listVal[1] );
     }
-    else if ( v->m_restriction == Restriction::Time )
+    else if ( validity->m_restriction == Restriction::Time )
     {
-        v->timeMin = QTime::fromString( listVal[0] );
-        v->timeMax = QTime::fromString( listVal[1] );
+        validity->timeMin = QTime::fromString( listVal[0] );
+        validity->timeMax = QTime::fromString( listVal[1] );
     }
     else
     {
-        v->valMin = listVal[0].toDouble(&ok);
+        validity->valMin = listVal[0].toDouble(&ok);
         if ( !ok )
         {
-            v->valMin = listVal[0].toInt(&ok);
+            validity->valMin = listVal[0].toInt(&ok);
             if ( !ok )
                 kDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
 
 #if 0
             if ( !ok )
-                v->valMin = listVal[0];
+                validity->valMin = listVal[0];
 #endif
         }
         ok=false;
-        v->valMax = listVal[1].toDouble(&ok);
+        validity->valMax = listVal[1].toDouble(&ok);
         if ( !ok )
         {
-            v->valMax = listVal[1].toInt(&ok);
+            validity->valMax = listVal[1].toInt(&ok);
             if ( !ok )
                 kDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
 
 #if 0
             if ( !ok )
-                v->valMax = listVal[1];
+                validity->valMax = listVal[1];
 #endif
         }
     }
@@ -6175,63 +6175,63 @@ void Cell::loadOasisValidationValue( const QStringList &listVal )
 
 void Cell::loadOasisValidationCondition( QString &valExpression )
 {
-    Validity *v = validity (true);
-    if (!v) return;
+    Validity *validity = this->validity (true);
+    if (!validity) return;
     QString value;
     if (valExpression.indexOf( "<=" )==0 )
     {
         value = valExpression.remove( 0,2 );
-        v->m_cond = Conditional::InferiorEqual;
+        validity->m_cond = Conditional::InferiorEqual;
     }
     else if (valExpression.indexOf( ">=" )==0 )
     {
         value = valExpression.remove( 0,2 );
-        v->m_cond = Conditional::SuperiorEqual;
+        validity->m_cond = Conditional::SuperiorEqual;
     }
     else if (valExpression.indexOf( "!=" )==0 )
     {
         //add Differentto attribute
         value = valExpression.remove( 0,2 );
-        v->m_cond = Conditional::DifferentTo;
+        validity->m_cond = Conditional::DifferentTo;
     }
     else if ( valExpression.indexOf( '<' )==0 )
     {
         value = valExpression.remove( 0,1 );
-        v->m_cond = Conditional::Inferior;
+        validity->m_cond = Conditional::Inferior;
     }
     else if(valExpression.indexOf( '>' )==0 )
     {
         value = valExpression.remove( 0,1 );
-        v->m_cond = Conditional::Superior;
+        validity->m_cond = Conditional::Superior;
     }
     else if (valExpression.indexOf( '=' )==0 )
     {
         value = valExpression.remove( 0,1 );
-        v->m_cond = Conditional::Equal;
+        validity->m_cond = Conditional::Equal;
     }
     else
         kDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
-    if ( v->m_restriction == Restriction::Date )
+    if ( validity->m_restriction == Restriction::Date )
     {
-        v->dateMin = QDate::fromString( value );
+        validity->dateMin = QDate::fromString( value );
     }
-    else if (v->m_restriction == Restriction::Date )
+    else if (validity->m_restriction == Restriction::Date )
     {
-        v->timeMin = QTime::fromString( value );
+        validity->timeMin = QTime::fromString( value );
     }
     else
     {
         bool ok = false;
-        v->valMin = value.toDouble(&ok);
+        validity->valMin = value.toDouble(&ok);
         if ( !ok )
         {
-            v->valMin = value.toInt(&ok);
+            validity->valMin = value.toInt(&ok);
             if ( !ok )
                 kDebug()<<" Try to parse this value :"<<value<<endl;
 
 #if 0
             if ( !ok )
-                v->valMin = value;
+                validity->valMin = value;
 #endif
         }
     }
@@ -6267,18 +6267,18 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     //
     // Load formatting information.
     //
-    QDomElement f = cell.namedItem( "format" ).toElement();
-    if ( !f.isNull()
+    QDomElement formatElement = cell.namedItem( "format" ).toElement();
+    if ( !formatElement.isNull()
           && ( (pm == Paste::Normal) || (pm == Paste::Format) || (pm == Paste::NoBorder) ) )
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
 
-      if ( !format()->load( f, pm, paste ) )
+      if ( !format()->load( formatElement, pm, paste ) )
             return false;
 
-        if ( f.hasAttribute( "colspan" ) )
+        if ( formatElement.hasAttribute( "colspan" ) )
         {
-            int i = f.attribute("colspan").toInt( &ok );
+            int i = formatElement.attribute("colspan").toInt( &ok );
             if ( !ok ) return false;
             // Validation
             if ( i < 0 || i > KS_spanMax )
@@ -6294,9 +6294,9 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             }
         }
 
-        if ( f.hasAttribute( "rowspan" ) )
+        if ( formatElement.hasAttribute( "rowspan" ) )
         {
-            int i = f.attribute("rowspan").toInt( &ok );
+            int i = formatElement.attribute("rowspan").toInt( &ok );
             if ( !ok ) return false;
             // Validation
             if ( i < 0 || i > KS_spanMax )
@@ -6342,101 +6342,101 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
       }
     }
 
-    QDomElement validity = cell.namedItem( "validity" ).toElement();
-    if ( !validity.isNull())
+    QDomElement validityElement = cell.namedItem( "validity" ).toElement();
+    if ( !validityElement.isNull())
     {
-        QDomElement param = validity.namedItem( "param" ).toElement();
-        Validity *v = this->validity (true);
+        QDomElement param = validityElement.namedItem( "param" ).toElement();
+        Validity *validity = this->validity (true);
         if(!param.isNull())
         {
           if ( param.hasAttribute( "cond" ) )
           {
-            v->m_cond = (Conditional::Type) param.attribute("cond").toInt( &ok );
+            validity->m_cond = (Conditional::Type) param.attribute("cond").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "action" ) )
           {
-            v->m_action = (Action::Type) param.attribute("action").toInt( &ok );
+            validity->m_action = (Action::Type) param.attribute("action").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "allow" ) )
           {
-            v->m_restriction = (Restriction::Type) param.attribute("allow").toInt( &ok );
+            validity->m_restriction = (Restriction::Type) param.attribute("allow").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "valmin" ) )
           {
-            v->valMin = param.attribute("valmin").toDouble( &ok );
+            validity->valMin = param.attribute("valmin").toDouble( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "valmax" ) )
           {
-            v->valMax = param.attribute("valmax").toDouble( &ok );
+            validity->valMax = param.attribute("valmax").toDouble( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "displaymessage" ) )
           {
-              v->displayMessage = ( bool )param.attribute("displaymessage").toInt();
+              validity->displayMessage = ( bool )param.attribute("displaymessage").toInt();
           }
           if ( param.hasAttribute( "displayvalidationinformation" ) )
           {
-              v->displayValidationInformation = ( bool )param.attribute("displayvalidationinformation").toInt();
+              validity->displayValidationInformation = ( bool )param.attribute("displayvalidationinformation").toInt();
           }
           if ( param.hasAttribute( "allowemptycell" ) )
           {
-              v->allowEmptyCell = ( bool )param.attribute("allowemptycell").toInt();
+              validity->allowEmptyCell = ( bool )param.attribute("allowemptycell").toInt();
           }
           if ( param.hasAttribute("listvalidity") )
           {
-            v->listValidity = param.attribute("listvalidity").split(';', QString::SkipEmptyParts );
+            validity->listValidity = param.attribute("listvalidity").split(';', QString::SkipEmptyParts );
           }
         }
-        QDomElement inputTitle = validity.namedItem( "inputtitle" ).toElement();
+        QDomElement inputTitle = validityElement.namedItem( "inputtitle" ).toElement();
         if (!inputTitle.isNull())
         {
-            v->titleInfo = inputTitle.text();
+            validity->titleInfo = inputTitle.text();
         }
-        QDomElement inputMessage = validity.namedItem( "inputmessage" ).toElement();
+        QDomElement inputMessage = validityElement.namedItem( "inputmessage" ).toElement();
         if (!inputMessage.isNull())
         {
-            v->messageInfo = inputMessage.text();
+            validity->messageInfo = inputMessage.text();
         }
 
-        QDomElement title = validity.namedItem( "title" ).toElement();
+        QDomElement title = validityElement.namedItem( "title" ).toElement();
         if (!title.isNull())
         {
-            v->title = title.text();
+            validity->title = title.text();
         }
-        QDomElement message = validity.namedItem( "message" ).toElement();
+        QDomElement message = validityElement.namedItem( "message" ).toElement();
         if (!message.isNull())
         {
-            v->message = message.text();
+            validity->message = message.text();
         }
-        QDomElement timeMin = validity.namedItem( "timemin" ).toElement();
+        QDomElement timeMin = validityElement.namedItem( "timemin" ).toElement();
         if ( !timeMin.isNull()  )
         {
-            v->timeMin = toTime(timeMin);
+            validity->timeMin = toTime(timeMin);
         }
-        QDomElement timeMax = validity.namedItem( "timemax" ).toElement();
+        QDomElement timeMax = validityElement.namedItem( "timemax" ).toElement();
         if ( !timeMax.isNull()  )
         {
-            v->timeMax = toTime(timeMax);
-         }
-        QDomElement dateMin = validity.namedItem( "datemin" ).toElement();
+            validity->timeMax = toTime(timeMax);
+        }
+        QDomElement dateMin = validityElement.namedItem( "datemin" ).toElement();
         if ( !dateMin.isNull()  )
         {
-            v->dateMin = toDate(dateMin);
-         }
-        QDomElement dateMax = validity.namedItem( "datemax" ).toElement();
+            validity->dateMin = toDate(dateMin);
+        }
+        QDomElement dateMax = validityElement.namedItem( "datemax" ).toElement();
         if ( !dateMax.isNull()  )
         {
-            v->dateMax = toDate(dateMax);
-         }
+            validity->dateMax = toDate(dateMax);
+        }
     }
     else if ((pm == Paste::Normal) || (pm == Paste::NoBorder))
     {
