@@ -70,7 +70,7 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 	), this);
     grid1->addWidget(lbl, 4, 0);
 
-    grid1->setColStretch(5, 0);
+    grid1->setColumnStretch(5, 0);
 
     grid1->activate();
 

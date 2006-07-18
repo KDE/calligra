@@ -614,9 +614,9 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     QWidget *fontContainer = new QWidget(gbDocumentDefaults);
     Q3GridLayout * fontLayout = new Q3GridLayout(fontContainer, 1, 3);
 
-    fontLayout->setColStretch(0, 0);
-    fontLayout->setColStretch(1, 1);
-    fontLayout->setColStretch(2, 0);
+    fontLayout->setColumnStretch(0, 0);
+    fontLayout->setColumnStretch(1, 1);
+    fontLayout->setColumnStretch(2, 0);
 
     QLabel *fontTitle = new QLabel(i18n("Default font:"), fontContainer);
 
@@ -638,8 +638,8 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     QWidget *languageContainer = new QWidget(gbDocumentDefaults);
     Q3GridLayout * languageLayout = new Q3GridLayout(languageContainer, 1, 3);
 
-    languageLayout->setColStretch(0, 0);
-    languageLayout->setColStretch(1, 1);
+    languageLayout->setColumnStretch(0, 0);
+    languageLayout->setColumnStretch(1, 1);
 
     QLabel *languageTitle = new QLabel(i18n("Global language:"), languageContainer);
     languageTitle->setWhatsThis( i18n( "Use this drop down box to determine the default language for the document. This setting is used by the hyphenation and spelling tools." ) );

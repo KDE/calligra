@@ -72,7 +72,7 @@ void KivioTextFormatDlg::initPositionTab()
   QGridLayout* gl = new QGridLayout(tab);
   gl->setSpacing(KDialog::spacingHint());
   gl->setRowStretch(0, 10);
-  gl->setColStretch(1, 10);
+  gl->setColumnStretch(1, 10);
   gl->addWidget(m_valignBGrp, 0, 0);
   gl->addWidget(m_preview, 0, 1);
   gl->addWidget(m_halignBGrp, 1, 1);

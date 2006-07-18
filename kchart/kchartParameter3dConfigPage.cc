@@ -87,7 +87,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   gb->setAlignment(Qt::AlignLeft);
   grid1->addItem( new QSpacerItem(depth->width(), 0 ), 0, 0 );
   grid1->addItem( new QSpacerItem(angle3d->width(), 0 ), 0, 0 );
-  grid1->setColStretch(2,1);
+  grid1->setColumnStretch(2,1);
   grid1->setRowStretch(4,1);
 
   //it's not good but I don't know how

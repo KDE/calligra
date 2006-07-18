@@ -204,7 +204,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const Options& options,
 	m_alwaysUseCheckBox->hide();
 	// -</options section>
 
-//	exportOptionsLyr->setColStretch(3, 1);
+//	exportOptionsLyr->setColumnStretch(3, 1);
 	exportOptionsLyr->addMultiCell( 
 		new QSpacerItem( 0, 0, QSizePolicy::Preferred, QSizePolicy::MinimumExpanding), 5, 5, 0, 1 );
 

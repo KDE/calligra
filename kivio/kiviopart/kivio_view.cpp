@@ -252,7 +252,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   layout->addMultiCellLayout(tabLayout, 2, 2, 0, 1);
   layout->addMultiCellWidget(m_vertScrollBar, 0, 1, 2, 2);
   layout->setRowStretch(1, 10);
-  layout->setColStretch(1, 10);
+  layout->setColumnStretch(1, 10);
 
   QWidget::setFocusPolicy( Qt::StrongFocus );
   setFocusProxy( m_pCanvas );

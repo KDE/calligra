@@ -108,7 +108,7 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
     grid->addMultiCellWidget(fontChooser, 0, 2, 1, 1);
 #endif
 
-    grid->setColStretch(2, 1);
+    grid->setColumnStretch(2, 1);
     grid->setRowStretch(3, 1);
 
     connect( m_fontButton, SIGNAL(clicked()),

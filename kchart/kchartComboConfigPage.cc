@@ -61,7 +61,7 @@ KChartComboPage::KChartComboPage( KChartParams* params,
     grid1->addItem( new QSpacerItem(closeconnected->width(), 0 ), 0, 0 );
     grid1->addItem( new QSpacerItem(connecting->width(), 0 ), 0, 0 );
     grid1->addItem( new QSpacerItem(icap->width(), 0 ), 0, 0 );
-    grid1->setColStretch(0,1);
+    grid1->setColumnStretch(0,1);
     grid1->activate();
     //it's not good but I don't know how
     //to reduce space

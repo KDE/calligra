@@ -95,7 +95,7 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
     m_colMajor->setWhatsThis( i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
     m_colMajor->resize( m_colMajor->sizeHint() );
     grid1->addWidget(gb, 1, 0);
-    grid1->setColStretch(3, 0);
+    grid1->setColumnStretch(3, 0);
 
     grid1->activate();
 }
