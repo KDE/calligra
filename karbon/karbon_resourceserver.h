@@ -54,7 +54,7 @@ public:
 		return m_patterns.count();
 	}
 
-	Q3PtrList<KoIconItem> patterns()
+	Q3PtrList<QTableWidgetItem> patterns()
 	{
 		return m_patterns;
 	}
@@ -100,13 +100,13 @@ protected:
 	void saveClipart( VObject* object, double width, double height, const QString& filename );
 
 private:
-	Q3PtrList<KoIconItem> m_patterns;
+	Q3PtrList<QTableWidgetItem> m_patterns;
 	Q3PtrList<VGradientListItem>* m_gradients;
 	Q3PtrList<VClipartIconItem>* m_cliparts;
 	Q3Dict<QPixmap> m_pixmaps;
 };
 
-class VClipartIconItem : public KoIconItem
+class VClipartIconItem : public QTableWidgetItem
 {
 public:
 	VClipartIconItem( const VObject* clipart, double width, double height, QString filename );

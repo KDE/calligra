@@ -37,7 +37,7 @@ class VPatternWidget : public KDialog
 Q_OBJECT
 
 public:
-	VPatternWidget( Q3PtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent = 0L );
+	VPatternWidget( Q3PtrList<QTableWidgetItem>* patterns, VTool* tool, QWidget* parent = 0L );
 	~VPatternWidget();
 
 	VPattern* selectedPattern();
@@ -47,7 +47,7 @@ public slots:
 	void deletePattern();
 
 	void slotButtonClicked( int id );
-	void patternSelected( KoIconItem* );
+	void patternSelected( QTableWidgetItem* );
 
 private:
 	KoIconChooser*        m_patternChooser;

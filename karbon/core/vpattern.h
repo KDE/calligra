@@ -21,7 +21,7 @@
 #define __VPATTERN_H__
 
 #include <QPointF>
-#include <koIconChooser.h>
+#include <QTableWidgetItem>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <koffice_export.h>
@@ -29,7 +29,7 @@
 class QDomElement;
 
 
-class KARBONBASE_EXPORT VPattern : public KoIconItem
+class KARBONBASE_EXPORT VPattern : public QTableWidgetItem
 {
 public:
 	VPattern();
@@ -52,9 +52,7 @@ public:
 
 	void transform( const QMatrix& m );
 
-	// for KoIconItem
-    QPixmap& pixmap() const ;
-    QPixmap& thumbPixmap() const;
+        QPixmap& pixmap() const ;
 
 	bool isValid() const { return m_valid; }
 

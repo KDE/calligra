@@ -51,7 +51,7 @@
 
 #include <kactioncollection.h>
 
-VPatternWidget::VPatternWidget( Q3PtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
+VPatternWidget::VPatternWidget( Q3PtrList<QTableWidgetItem>* patterns, VTool*, QWidget* parent )
 	: KDialog( parent )
 	, m_pattern( 0 )
 {
@@ -79,9 +79,9 @@ VPatternWidget::VPatternWidget( Q3PtrList<KoIconItem>* patterns, VTool*, QWidget
 	layout->setMargin( 3 );
 
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
-	connect( m_patternChooser, SIGNAL( selected( KoIconItem* ) ), this, SLOT( patternSelected( KoIconItem* ) ) );
+	connect( m_patternChooser, SIGNAL( selected( QTableWidgetItem* ) ), this, SLOT( patternSelected( QTableWidgetItem* ) ) );
 
-	KoIconItem* item;
+	QTableWidgetItem* item;
 	for( item = patterns->first(); item; item = patterns->next() )
 		m_patternChooser->addItem( item );
 	m_pattern = (VPattern*)patterns->first();
@@ -108,9 +108,8 @@ void VPatternWidget::importPattern()
 
 void VPatternWidget::deletePattern()
 {
-	m_patternChooser->removeItem( m_pattern );
+//	m_patternChooser->removeItem( m_pattern );
 	KarbonFactory::rServer()->removePattern( m_pattern );
-	m_patternChooser->updateContents();
 	m_pattern = static_cast<VPattern*>( m_patternChooser->currentItem() );
 } // VPatternWidget::deletePattern
 
@@ -125,7 +124,7 @@ void VPatternWidget::slotButtonClicked( int id )
 	}
 } // VPatternWidget::slotButtonClicked
 
-void VPatternWidget::patternSelected( KoIconItem* item )
+void VPatternWidget::patternSelected( QTableWidgetItem* item )
 {
 	m_pattern = (VPattern*)item;
 	m_deletePatternButton->setEnabled( QFileInfo( m_pattern->tilename() ).isWritable() );
@@ -134,7 +133,7 @@ void VPatternWidget::patternSelected( KoIconItem* item )
 VPatternTool::VPatternTool( KarbonView *view )
 	: VTool( view, "tool_pattern" ), m_state( normal ), m_handleSize( 3 ), m_active( false )
 {
-	Q3PtrList<KoIconItem> patterns = KarbonFactory::rServer()->patterns();
+	Q3PtrList<QTableWidgetItem> patterns = KarbonFactory::rServer()->patterns();
 	m_optionsWidget = new VPatternWidget( &patterns, this );
 	registerTool( this );
 } // VPatternTool::VPatternTool

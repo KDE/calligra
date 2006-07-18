@@ -541,23 +541,18 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 
 	p2.end();
 
-	validPixmap = true;
-	validThumb = true;
-
 	m_delete = QFileInfo( filename ).isWritable();
 }
 
 
 VClipartIconItem::VClipartIconItem( const VClipartIconItem& item )
-		: KoIconItem( item )
+		: QTableWidgetItem( item )
 {
 	m_clipart = item.m_clipart->clone();
 	m_filename = item.m_filename;
 	m_delete = item.m_delete;
 	m_pixmap = item.m_pixmap;
 	m_thumbPixmap = item.m_thumbPixmap;
-	validPixmap = item.validPixmap;
-	validThumb = item.validThumb;
 	m_width = item.m_width;
 	m_height = item.m_height;
 }

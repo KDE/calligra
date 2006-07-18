@@ -56,7 +56,7 @@ public slots:
 	void addClipart();
 	void importClipart();
 	void deleteClipart();
-	void clipartSelected( KoIconItem* item );
+	void clipartSelected( QTableWidgetItem* item );
 
 	void slotButtonClicked( int id );
 
@@ -79,7 +79,7 @@ public:
 	 virtual ~VStyleDocker();
 
 public slots:
-	void slotItemSelected( KoIconItem * );
+	void slotItemSelected( QTableWidgetItem * );
 
 private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );

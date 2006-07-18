@@ -21,6 +21,7 @@
 
 #include "vpattern.h"
 #include <qpixmap.h>
+#include <QString>
 #define THUMB_SIZE 30
 
 #include "vglobal.h"
@@ -28,7 +29,6 @@
 VPattern::VPattern()
 {
 	m_valid = false;
-	validThumb = false;
 }
 
 VPattern::VPattern( const QString &tilename )
@@ -70,8 +70,7 @@ VPattern::load( const QString &tilename )
 		}
 
 		QImage thumbImg = m_image.scaled( xsize, ysize, Qt::IgnoreAspectRatio );
-		m_pixmapThumb.fromImage( thumbImg );
-		validThumb = true;
+		setIcon(QIcon(QPixmap::fromImage( thumbImg )));
 	}
 	m_valid = !m_image.isNull();
 }
@@ -132,11 +131,5 @@ QPixmap& VPattern::pixmap() const
 {
 	return (QPixmap&)m_pixmap;
 }
-
-QPixmap& VPattern::thumbPixmap() const
-{
-	return (QPixmap&)m_pixmapThumb;
-}
-
 
 

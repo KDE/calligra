@@ -51,7 +51,7 @@
 #include <unistd.h>
 
 ClipartChooser::ClipartChooser( QSize iconSize, QWidget *parent, const char *name )
-	: KoIconChooser( iconSize, parent, name )
+	: KoIconChooser( iconSize, parent)
 {
 	setDragEnabled( true );
 }
@@ -59,7 +59,7 @@ ClipartChooser::ClipartChooser( QSize iconSize, QWidget *parent, const char *nam
 void
 ClipartChooser::startDrag()
 {
-	KoIconChooser::startDrag();
+//	KoIconChooser::startDrag();
 	KarbonDrag* kd = new KarbonDrag( this );
 	VObjectList objects;
 	VClipartIconItem *selectedClipart = (VClipartIconItem *)currentItem();
@@ -87,7 +87,7 @@ VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	KoPatternChooser *pPatternChooser = new KoPatternChooser( KarbonFactory::rServer()->patterns(), mTabWidget );
 	pPatternChooser->setWindowTitle( i18n( "Patterns" ) );
 
-	connect( pPatternChooser, SIGNAL(selected( KoIconItem * ) ), this, SLOT( slotItemSelected( KoIconItem * )));
+	connect( pPatternChooser, SIGNAL(selected( QTableWidgetItem * ) ), this, SLOT( slotItemSelected( QTableWidgetItem * )));
 	mTabWidget->addTab( pPatternChooser, i18n( "Patterns" ) );
 
 	//Clipart
@@ -107,7 +107,7 @@ VStyleDocker::~VStyleDocker()
 {
 }
 
-void VStyleDocker::slotItemSelected( KoIconItem *item )
+void VStyleDocker::slotItemSelected( QTableWidgetItem *item )
 {
 	VPattern *pattern = (VPattern *)item;
 	if( !pattern ) return;
@@ -153,9 +153,8 @@ ClipartWidget::ClipartWidget( Q3PtrList<VClipartIconItem>* clipartItems, KarbonP
 
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 	//connect( m_deleteClipartButton, SIGNAL( clicked() ), this, SLOT( deleteClipart() ) );
-	connect( m_clipartChooser, SIGNAL( selected( KoIconItem* ) ), this, SLOT( clipartSelected( KoIconItem* ) ) );
+	connect( m_clipartChooser, SIGNAL( selected( QTableWidgetItem* ) ), this, SLOT( clipartSelected( QTableWidgetItem* ) ) );
 
-	m_clipartChooser->setAutoDelete( false );
 	VClipartIconItem* item = 0L;
 
 	for( item = clipartItems->first(); item; item = clipartItems->next() )
@@ -179,7 +178,7 @@ VClipartIconItem* ClipartWidget::selectedClipart()
 }
 
 void
-ClipartWidget::clipartSelected( KoIconItem* item )
+ClipartWidget::clipartSelected( QTableWidgetItem* item )
 {
 	if( item )
 	{
@@ -246,8 +245,6 @@ ClipartWidget::addClipart()
 
 		m_clipartChooser->addItem( KarbonFactory::rServer()->addClipart( clipart, clipartBox.width(), clipartBox.height() ) );
 	}
-
-	m_clipartChooser->updateContents();
 }
 
 void
@@ -291,8 +288,7 @@ ClipartWidget::deleteClipart()
 {
 	VClipartIconItem* clipartItem = m_clipartItem;
 	KarbonFactory::rServer()->removeClipart( clipartItem );
-	m_clipartChooser->removeItem( m_selectedItem );
-	m_clipartChooser->updateContents();
+	//m_clipartChooser->removeItem( m_selectedItem );
 }
 
 void
