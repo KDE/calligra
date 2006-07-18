@@ -48,7 +48,6 @@
 
 // TODO port to KoUniColorChooser
 //#include <ko_hsv_widget.h>
-#include <koColor.h>
 
 #include <kdebug.h>
 
