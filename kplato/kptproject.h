@@ -179,7 +179,7 @@ public:
     /// Insert the node with identity id
     virtual void insertId(const QString &id, const Node *node);
     /// Register node. The nodes id must be unique and non-empty.
-    bool Project::registerNodeId(Node *node);
+    bool registerNodeId(Node *node);
     /// Create a unique id.
     QString uniqueNodeId(int seed=1);
     
