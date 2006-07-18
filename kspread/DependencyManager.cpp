@@ -80,7 +80,7 @@ public:
   QMap<Region::Point, Region> dependencies;
   /** list of cells, that depend on a cell */
   class PointTree :public KoRTree<Region::Point>
-  { public: PointTree() : KoRTree<Region::Point>(128,64) {} };
+  { public: PointTree() : KoRTree<Region::Point>(8,4) {} };
   QHash<Sheet*, PointTree*> dependants; // FIXME Stefan: Why is a QHash<Sheet*, PointTree> crashing?
   /** list of cells referencing a given named area */
   QMap<QString, QMap<Region::Point, bool> > areaDeps;

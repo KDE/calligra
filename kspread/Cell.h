@@ -318,7 +318,6 @@ public:
       TopBorder    = 0x4,
       BottomBorder = 0x8,
     };
-    Q_DECLARE_FLAGS(Borders, Border)
 
     /**
      * \ingroup Painting
@@ -345,7 +344,7 @@ public:
      */
     void paintCell( const KoRect & rect, QPainter & painter,
                     View * view, const KoPoint & coordinate,
-                    const QPoint & cellRef, Borders paintBorder,
+                    const QPoint & cellRef, int paintBorder,
                     QPen& rightPen, QPen& bottomPen,
                     QPen& leftPen,  QPen& topPen,
                     QLinkedList<QPoint> &mergedCellsPainted );
@@ -1026,7 +1025,7 @@ private:
      */
     void paintCellBorders( QPainter& painter, const KoRect &rect,
                            const KoRect &cellRect, const QPoint &cellRef,
-                           Borders paintBorder,
+                           int paintBorder,
                            QPen & rightPen, QPen & bottomPen,
                            QPen & leftPen, QPen & topPen );
 
@@ -1037,7 +1036,7 @@ private:
      * @internal
      */
     void paintPageBorders( QPainter& painter, const KoRect &cellRect,
-                           const QPoint &cellRef, Borders paintBorder );
+                           const QPoint &cellRef, int paintBorder );
 
     /**
      * \ingroup Painting
@@ -1083,7 +1082,7 @@ private:
      */
     void paintDefaultBorders( QPainter& painter, const KoRect &rect,
                               const KoRect &cellRect, const QPoint &cellRef,
-                              Borders paintBorder,
+                              int paintBorder,
                               QPen const & rightPen, QPen const & bottomPen,
                               QPen const & leftPen, QPen const & topPen );
 
@@ -1105,7 +1104,7 @@ private:
      */
     void paintObscuredCells( const KoRect& rect, QPainter& painter,
                              View* view, const KoRect &cellRect,
-                             const QPoint &cellRef, Borders paintBorder,
+                             const QPoint &cellRef, int paintBorder,
                              QPen & rightPen, QPen & bottomPen,
                              QPen & leftPen, QPen & topPen,
                              QLinkedList<QPoint> &mergedCellsPainted );
@@ -1156,8 +1155,6 @@ private:
    */
   void loadOasisValidationValue( const QStringList &listVal );
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::Borders)
 
 } // namespace KSpread
 

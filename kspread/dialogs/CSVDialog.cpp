@@ -136,7 +136,6 @@ bool CSVDialog::cancelled()
 void CSVDialog::accept()
 {
   Sheet * sheet  = m_pView->activeSheet();
-  QString csv_delimiter;
 
   int numRows = m_dialog->m_sheet->numRows();
   int numCols = m_dialog->m_sheet->numCols();

@@ -2137,7 +2137,7 @@ bool Cell::calc(bool delay)
 
 void Cell::paintCell( const KoRect& rect, QPainter& painter,
                       View* view, const KoPoint& coordinate,
-                      const QPoint& cellRef, Borders paintBorder,
+                      const QPoint& cellRef, int paintBorder,
                       QPen& rightPen, QPen& bottomPen,
                       QPen& leftPen,  QPen& topPen,
                       QLinkedList<QPoint> &mergedCellsPainted )
@@ -2570,7 +2570,7 @@ void Cell::paintCell( const KoRect& rect, QPainter& painter,
 //
 void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                               View* view, const KoRect &cellRect,
-                              const QPoint &cellRef, Borders paintBorder,
+                              const QPoint &cellRef, int paintBorder,
                               QPen & rightPen, QPen & _bottomPen,
                               QPen & leftPen,  QPen & _topPen,
                               QLinkedList<QPoint> &mergedCellsPainted)
@@ -2715,7 +2715,7 @@ void Cell::paintBackground( QPainter& painter, const KoRect& cellRect,
 //
 void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                                 const KoRect &cellRect, const QPoint &cellRef,
-                                Borders paintBorder,
+                                int paintBorder,
                                 QPen const & rightPen, QPen const & /*bottomPen*/,
                                 QPen const & leftPen, QPen const & topPen )
 {
@@ -3420,7 +3420,7 @@ void Cell::paintText( QPainter& painter,
 // Paint page borders on the page.  Only do this on the screen.
 //
 void Cell::paintPageBorders( QPainter& painter, const KoRect &cellRect,
-                             const QPoint &cellRef, Borders paintBorder )
+                             const QPoint &cellRef, int paintBorder )
 {
   // Not screen?  Return immediately.
   if ( dynamic_cast<QPrinter*>(painter.device()) )
@@ -3497,7 +3497,7 @@ void Cell::paintPageBorders( QPainter& painter, const KoRect &cellRect,
 //
 void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                              const KoRect &cellRect, const QPoint &cellRef,
-                             Borders paintBorder,
+                             int paintBorder,
                              QPen& _rightPen, QPen& _bottomPen,
                              QPen& _leftPen,  QPen& _topPen )
 {

@@ -428,6 +428,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
 
 void VBorder::doAutoScroll()
 {
+#if 0
     if ( !m_bMousePressed )
     {
         m_scrollTimer->stop();
@@ -446,6 +447,7 @@ void VBorder::doAutoScroll()
 
     //Restart timer
     m_scrollTimer->start( 50 );
+#endif
 }
 
 void VBorder::wheelEvent( QWheelEvent* _ev )
@@ -1104,6 +1106,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
 
 void HBorder::doAutoScroll()
 {
+#if 0
     if ( !m_bMousePressed )
     {
         m_scrollTimer->stop();
@@ -1122,6 +1125,7 @@ void HBorder::doAutoScroll()
 
     //Restart timer
     m_scrollTimer->start( 50 );
+#endif
 }
 
 void HBorder::wheelEvent( QWheelEvent* _ev )
