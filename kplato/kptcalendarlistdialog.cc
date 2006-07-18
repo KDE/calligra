@@ -321,7 +321,7 @@ void CalendarListDialogImpl::slotSelectionChanged(Q3ListViewItem *listItem) {
                 }
             }
         }
-        baseCalendar->setCurrentItem(me);
+        baseCalendar->setCurrentIndex(me);
         baseCalendar->setEnabled(true);
         return;
     }

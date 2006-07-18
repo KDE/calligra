@@ -253,7 +253,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     speedCombo->addItem(i18n("Fast") );
 
 
-    speedCombo->setCurrentItem( speed );
+    speedCombo->setCurrentIndex( speed );
 
     connect( speedCombo, SIGNAL(activated(int)), this, SLOT(speedChanged(int)) );
 

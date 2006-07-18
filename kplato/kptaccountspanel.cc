@@ -171,7 +171,7 @@ void AccountsPanel::refreshDefaultAccount() {
         accountsComboBox->addItem(it.currentKey());
         if (static_cast<AccountItem*>(it.current())->isDefault) {
             m_currentIndex = i;
-            accountsComboBox->setCurrentItem(i);
+            accountsComboBox->setCurrentIndex(i);
             //kDebug()<<k_funcinfo<<"Default="<<it.current()->text(0)<<endl;
         }
     }
