@@ -26,14 +26,16 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   //tmpQGroupBox->setFrameStyle( 49 );
   tmpQGroupBox->setAlignment( 1 );
 
-  datarow = new QRadioButton( this, "RadioButton_1" );
+  datarow = new QRadioButton( this );
+  datarow->setObjectName( "RadioButton_1" );
   datarow->setGeometry( 270, 40, 100, 20 );
   datarow->setText( i18n("Rows") );
   connect( datarow, SIGNAL( clicked() ),
                    this, SLOT( dataInRowsClicked() ) );
   tmpQGroupBox->insert( datarow );
 
-  datacol = new QRadioButton( this, "RadioButton_2" );
+  datacol = new QRadioButton( this );
+  datacol->setObjectName( "RadioButton_2" );
   datacol->setGeometry( 270, 60, 100, 20 );
   datacol->setText( i18n("Columns") );
   datacol->setChecked( true );

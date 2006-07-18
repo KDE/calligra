@@ -169,7 +169,8 @@ void KPrPgConfDia::setupPageSlides()
     Q3ButtonGroup *group=new Q3VButtonGroup( slidesPage );
     group->setRadioButtonExclusive( true );
 
-    m_customSlide = new QRadioButton( i18n( "Custom slide show" ), group, "customslide" );
+    m_customSlide = new QRadioButton( i18n( "Custom slide show" ), group );
+    m_customSlide->setObjectName( "customslide" );
 
     connect( m_customSlide, SIGNAL( clicked () ), this, SLOT( radioButtonClicked() ) );
 
@@ -180,7 +181,8 @@ void KPrPgConfDia::setupPageSlides()
     m_customSlideCombobox = new QComboBox( box );
     m_customSlideCombobox->addItems( m_doc->presentationList() );
 
-    m_selectedSlide = new QRadioButton( i18n( "Selected pages:" ), group, "selectedslide" );
+    m_selectedSlide = new QRadioButton( i18n( "Selected pages:" ), group );
+    m_selectedSlide->setObjectName( "selectedslide" );
     slidesLayout->addMultiCellWidget( group, 0,2,0,1 );
     connect( m_selectedSlide, SIGNAL( clicked () ), this, SLOT( radioButtonClicked() ) );
 
