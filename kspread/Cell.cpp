@@ -5668,17 +5668,17 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double validity = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
+            double percent = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
                 Value value;
-                value.setValue(validity);
+                value.setValue(percent);
                 value.setFormat (Value::fmt_Percent);
                 setCellValue( value );
 
                 if ( !isFormula && d->strText.isEmpty())
                 {
-                    QString str = locale()->formatNumber( validity, 15 );
+                    QString str = locale()->formatNumber( percent, 15 );
                     setCellText( str );
                 }
 
