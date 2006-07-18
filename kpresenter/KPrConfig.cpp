@@ -220,7 +220,7 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
-        ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
+        ptIndent = config->readEntry("Indent", ptIndent);
         bShowRuler=config->readEntry("Rulers",true);
         oldShowStatusBar = config->readEntry( "ShowStatusBar" , true );
 

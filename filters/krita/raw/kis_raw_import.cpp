@@ -143,10 +143,10 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
     m_page->radioCamera->setChecked( cfg->readEntry("camera_wb", false));
     m_page->chkClip->setChecked( cfg->readEntry("clip", true));
     m_page->chkProfile->setChecked(cfg->readEntry("useprofile", false));
-    m_page->dblBrightness->setValue(cfg->readDoubleNumEntry("brightness", 1.0));
-    m_page->dblBlackpoint->setValue(cfg->readDoubleNumEntry("blackpoint", 0));
-    m_page->dblRed->setValue(cfg->readDoubleNumEntry("red", 1.0));
-    m_page->dblBlue->setValue(cfg->readDoubleNumEntry("blue", 1.0));
+    m_page->dblBrightness->setValue(cfg->readEntry("brightness", 1.0));
+    m_page->dblBlackpoint->setValue(cfg->readEntry("blackpoint", 0));
+    m_page->dblRed->setValue(cfg->readEntry("red", 1.0));
+    m_page->dblBlue->setValue(cfg->readEntry("blue", 1.0));
 
     if (m_dialog->exec() == QDialog::Accepted) {
 

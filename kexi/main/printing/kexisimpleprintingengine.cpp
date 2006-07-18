@@ -80,17 +80,17 @@ KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
 	else
 		settings.pageLayout.orientation = PG_PORTRAIT;
 	if (config->hasKey("pageWidth"))
-		settings.pageLayout.ptWidth = config->readDoubleNumEntry("pageWidth");
+		settings.pageLayout.ptWidth = config->readEntry("pageWidth");
 	if (config->hasKey("pageHeight"))
-		settings.pageLayout.ptHeight = config->readDoubleNumEntry("pageHeight");
+		settings.pageLayout.ptHeight = config->readEntry("pageHeight");
 	if (config->hasKey("pageLeftMargin"))
-		settings.pageLayout.ptLeft = config->readDoubleNumEntry("pageLeftMargin");
+		settings.pageLayout.ptLeft = config->readEntry("pageLeftMargin");
 	if (config->hasKey("pageRightMargin"))
-		settings.pageLayout.ptRight = config->readDoubleNumEntry("pageRightMargin");
+		settings.pageLayout.ptRight = config->readEntry("pageRightMargin");
 	if (config->hasKey("pageTopMargin"))
-		settings.pageLayout.ptTop = config->readDoubleNumEntry("pageTopMargin");
+		settings.pageLayout.ptTop = config->readEntry("pageTopMargin");
 	if (config->hasKey("pageBottomMargin"))
-		settings.pageLayout.ptBottom = config->readDoubleNumEntry("pageBottomMargin");
+		settings.pageLayout.ptBottom = config->readEntry("pageBottomMargin");
 	settings.addPageNumbers = config->readBoolEntry("addPageNumbersToPage", true);
 	settings.addDateAndTime = config->readBoolEntry("addDateAndTimePage", true);
 	settings.addTableBorders = config->readBoolEntry("addTableBorders", false);

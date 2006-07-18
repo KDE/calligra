@@ -334,7 +334,7 @@ void KPrDocument::initConfig()
         setCursorInProtectedArea( config->readEntry( "cursorInProtectArea", true ));
 
         // Config-file value in mm, default 10 pt
-        double indent =  config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0) ) ;
+        double indent =  config->readEntry("Indent", MM_TO_POINT(10.0) ) ;
         setIndentValue(indent);
         m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
         setShowRuler(config->readEntry("Rulers",true));
@@ -344,8 +344,8 @@ void KPrDocument::initConfig()
         setViewFormattingChars( config->readEntry( "ViewFormattingChars", false ) );
         setShowGrid( config->readEntry( "ShowGrid" , true ));
         setSnapToGrid( config->readEntry( "SnapToGrid", true ));
-        setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
-        setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
+        setGridX( config->readEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
+        setGridY( config->readEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
 
         m_bInsertDirectCursor= config->readEntry( "InsertDirectCursor", false );
         m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());

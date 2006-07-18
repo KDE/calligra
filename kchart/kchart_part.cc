@@ -696,9 +696,9 @@ void KChartPart::loadConfig( KConfig *conf )
     //   ylabel2_fmt = conf->readEntry("ylabel2_fmt", ylabel2_fmt);
     //   xlabel_spacing = conf->readNumEntry("xlabel_spacing");
     //   ylabel_density = conf->readNumEntry("ylabel_density", ylabel_density);
-    //   requested_ymin = conf->readDoubleNumEntry("requested_ymin", requested_ymin);
-    //   requested_ymax = conf->readDoubleNumEntry("requested_ymax", requested_ymax );
-    //   requested_yinterval = conf->readDoubleNumEntry("requested_yinterval",
+    //   requested_ymin = conf->readEntry("requested_ymin", requested_ymin);
+    //   requested_ymax = conf->readEntry("requested_ymax", requested_ymax );
+    //   requested_yinterval = conf->readEntry("requested_yinterval",
     // 					   requested_yinterval);
     //   shelf = conf->readEntry("shelf", shelf);
     //   grid = conf->readEntry("grid", grid);
@@ -710,7 +710,7 @@ void KChartPart::loadConfig( KConfig *conf )
     //   stack_type = (KChartStackType)conf->readNumEntry("stack_type", stack_type);
     m_params->setLineMarker(conf->readEntry("lineMarker",
 						m_params->lineMarker()));
-    m_params->setThreeDBarDepth( conf->readDoubleNumEntry("_3d_depth",
+    m_params->setThreeDBarDepth( conf->readEntry("_3d_depth",
 							  m_params->threeDBarDepth() ) );
     m_params->setThreeDBarAngle( conf->readNumEntry( "_3d_angle",
 						     m_params->threeDBarAngle() ) );
@@ -769,7 +769,7 @@ void KChartPart::loadConfig( KConfig *conf )
     //     backgroundPixmapIsDirty = false;
     //   backgroundPixmapScaled = conf->readEntry( "backgroundPixmapScaled", true );
     //   backgroundPixmapCentered = conf->readEntry( "backgroundPixmapCentered", true );
-    //   backgroundPixmapIntensity = conf->readDoubleNumEntry( "backgroundPixmapIntensity", 0.25 );
+    //   backgroundPixmapIntensity = conf->readEntry( "backgroundPixmapIntensity", 0.25 );
 }
 
 
