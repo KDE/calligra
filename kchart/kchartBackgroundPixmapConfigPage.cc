@@ -329,13 +329,13 @@ void KChartBackgroundPixmapConfigPage::init()
         {
             _backgroundCB->setColor( background.color() );
             right->setEnabled( false );
-            wallCB->setCurrentItem( 0 );
+            wallCB->setCurrentIndex( 0 );
         }
         else //pixmap as background
         {
             _backgroundCB->setEnabled( false );
             wallWidget->setPaletteBackgroundPixmap( *backPixmap );
-            wallCB->setCurrentItem( 1 );
+            wallCB->setCurrentIndex( 1 );
         }
 
         if ( backPixmapMode == KDFrame::PixCentered )
@@ -400,7 +400,7 @@ void KChartBackgroundPixmapConfigPage::apply()
         if( bFound )
         {
             KDFrame& frame( (KDFrame&)innerFrame->frame() );
-            if ( wallCB->currentItem() == 0 )
+            if ( wallCB->currentIndex() == 0 )
             {
                 frame.setBackPixmap( 0  );
                 frame.setBackground( _backgroundCB->color() );
@@ -443,11 +443,11 @@ void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
       }
       wallCB->addItem(imageCaption);
       m_wallpaper[fileName] = i;
-      wallCB->setCurrentItem(i);
+      wallCB->setCurrentIndex(i);
    }
    else
    {
-      wallCB->setCurrentItem(m_wallpaper[fileName]);
+      wallCB->setCurrentIndex(m_wallpaper[fileName]);
    }
    wallCB->blockSignals(false);
     loadWallPaper();
@@ -481,7 +481,7 @@ void KChartBackgroundPixmapConfigPage::slotWallPaperChanged( int index )
 
 bool KChartBackgroundPixmapConfigPage::loadWallPaper()
 {
-    int i = wallCB->currentItem();
+    int i = wallCB->currentIndex();
     if ( i == -1 || i == 0 ) {  // 0 is 'None'
 	wallPixmap.resize(0,0);
 	wallFile = "";

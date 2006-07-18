@@ -67,7 +67,7 @@ public:
 
     bool calculationNeeded() {  return m_calculationNeeded; }
 
-    Calendar *calendar() { return m_calendars[dia->calendarList->currentItem()]; }
+    Calendar *calendar() { return m_calendars[dia->calendarList->currentIndex()]; }
     KCommand *buildCommand(Part *part = 0);
     
     static KCommand *buildCommand(Resource *original, Resource &resource, Part *part);

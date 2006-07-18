@@ -118,7 +118,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     backCombo = new QComboBox( false, page );
     backCombo->addItem( i18n( "Color/Gradient" ) );
     backCombo->addItem( i18n( "Picture" ) );
-    backCombo->setCurrentItem( (int)backType );
+    backCombo->setCurrentIndex( (int)backType );
     connect( backCombo, SIGNAL( activated( int ) ),
              this, SLOT( changeComboText(int) ) );
 
@@ -143,7 +143,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     cType->addItem( i18n( "Rectangle Gradient" ) );
     cType->addItem( i18n( "PipeCross Gradient" ) );
     cType->addItem( i18n( "Pyramid Gradient" ) );
-    cType->setCurrentItem( _bcType );
+    cType->setCurrentIndex( _bcType );
     connect( cType, SIGNAL( activated( int ) ),
              this, SLOT( updateConfiguration() ) );
 
@@ -189,7 +189,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     picView->addItem( i18n( "Scaled" ) );
     picView->addItem( i18n( "Centered" ) );
     picView->addItem( i18n( "Tiled" ) );
-    picView->setCurrentItem( (int)backPicView );
+    picView->setCurrentIndex( (int)backPicView );
     connect( picView, SIGNAL( activated( int ) ),
              this, SLOT( updateConfiguration() ) );
 
@@ -240,10 +240,10 @@ void KPrBackDialog::slotReset()
 {
     if ( m_useMasterBackground )
         m_useMasterBackground->setChecked( oldUseMasterBackground );
-    backCombo->setCurrentItem( (int)oldBackType );
+    backCombo->setCurrentIndex( (int)oldBackType );
     color1Choose->setColor( oldBackColor1 );
     color2Choose->setColor( oldBackColor2 );
-    cType->setCurrentItem( oldBcType );
+    cType->setCurrentIndex( oldBcType );
 
     m_picture=m_oldpicture;
 
@@ -252,7 +252,7 @@ void KPrBackDialog::slotReset()
     else
         picChoose->setUrl( KUrl(""));
 
-    picView->setCurrentItem( (int)oldBackPicView );
+    picView->setCurrentIndex( (int)oldBackPicView );
     unbalanced->setChecked( oldUnbalanced );
     xfactor->setValue( oldXFactor );
     yfactor->setValue( oldYFactor );
@@ -348,12 +348,12 @@ void KPrBackDialog::updateConfiguration()
 
 BackType KPrBackDialog::getBackType() const
 {
-    return (BackType)backCombo->currentItem();
+    return (BackType)backCombo->currentIndex();
 }
 
 BackView KPrBackDialog::getBackView() const
 {
-    return (BackView)picView->currentItem();
+    return (BackView)picView->currentIndex();
 }
 
 QColor KPrBackDialog::getBackColor1() const
@@ -368,7 +368,7 @@ QColor KPrBackDialog::getBackColor2() const
 
 BCType KPrBackDialog::getBackColorType() const
 {
-    return (BCType)cType->currentItem();
+    return (BCType)cType->currentIndex();
 }
 
 bool KPrBackDialog::getBackUnbalanced() const
@@ -418,7 +418,7 @@ void KPrBackDialog::afterSelectPic( const QString &url )
     if ( picture.isNull() )
         return;
 
-    backCombo->setCurrentItem( 1 );
+    backCombo->setCurrentIndex( 1 );
     m_picture=picture;
     picChanged = true;
     updateConfiguration();

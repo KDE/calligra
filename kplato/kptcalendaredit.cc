@@ -119,7 +119,7 @@ void CalendarEdit::slotApplyClicked() {
             calDay = new CalendarDay(date);
             m_calendar->addDay(calDay);
         }
-        calDay->setState(state->currentItem()); //NOTE!!
+        calDay->setState(state->currentIndex()); //NOTE!!
         calDay->clearIntervals();
         if (calDay->state() == Map::Working) {
             for (Q3ListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
@@ -133,7 +133,7 @@ void CalendarEdit::slotApplyClicked() {
     for(IntMap::iterator it = weekdays.begin(); it != weekdays.end(); ++it) {
         //kDebug()<<k_funcinfo<<"weekday="<<it.key()<<endl;
         CalendarDay *weekday = m_calendar->weekday(it.key()-1);
-        weekday->setState(state->currentItem());//NOTE!!
+        weekday->setState(state->currentIndex());//NOTE!!
         weekday->clearIntervals();
         if (weekday->state() == Map::Working) {
             for (Q3ListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
@@ -143,7 +143,7 @@ void CalendarEdit::slotApplyClicked() {
         }
     }
 
-    calendarPanel->markSelected(state->currentItem()); //NOTE!!
+    calendarPanel->markSelected(state->currentIndex()); //NOTE!!
     emit applyClicked();
     slotCheckAllFieldsFilled();
 }
@@ -151,12 +151,12 @@ void CalendarEdit::slotApplyClicked() {
 void CalendarEdit::slotCheckAllFieldsFilled() {
     //kDebug()<<k_funcinfo<<endl;
     if (state->currentItem() == 0 /*undefined*/ ||
-        state->currentItem() == 1 /*Non-working*/||
+        state->currentIndex() == 1 /*Non-working*/||
         (state->currentItem() == 2 /*Working*/ && intervalList->firstChild()))
     {
         emit obligatedFieldsFilled(true);
     }
-    else if (state->currentItem() == 2 && !intervalList->firstChild())
+    else if (state->currentIndex() == 2 && !intervalList->firstChild())
     {
         emit obligatedFieldsFilled(false);
     }
@@ -212,23 +212,23 @@ void CalendarEdit::slotDateSelected(QDate date) {
         }
         if (calDay->state() == Map::Working) {
             //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is workday"<<endl;
-            state->setCurrentItem(2);
+            state->setCurrentIndex(2);
             slotStateActivated(2);
             bApply->setEnabled(calDay->workingIntervals().count() > 0);
         } else if (calDay->state() == Map::NonWorking){
             //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is holiday"<<endl;
-            state->setCurrentItem(1);
+            state->setCurrentIndex(1);
             slotStateActivated(1);
             bApply->setEnabled(true);
         } else  {
             //kDebug()<<k_funcinfo<<"("<<date.toString()<<")=none"<<endl;
-            state->setCurrentItem(0);
+            state->setCurrentIndex(0);
             slotStateActivated(0);
             bApply->setEnabled(true);
         }
     } else {
         // default
-        state->setCurrentItem(0);
+        state->setCurrentIndex(0);
         slotStateActivated(0);
         bApply->setEnabled(true);
     }
@@ -258,17 +258,17 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
     state->setEnabled(true);
     if (calDay->state() == Map::Working) {
         //kDebug()<<k_funcinfo<<"("<<day_<<")=workday"<<endl;
-        state->setCurrentItem(2);
+        state->setCurrentIndex(2);
         slotStateActivated(2);
         bApply->setEnabled(calDay->workingIntervals().count() > 0);
     } else if (calDay->state() == Map::NonWorking) {
         //kDebug()<<k_funcinfo<<"("<<day_<<")=Holiday"<<endl;
-        state->setCurrentItem(1);
+        state->setCurrentIndex(1);
         slotStateActivated(1);
         bApply->setEnabled(true);
     } else {
         //kDebug()<<k_funcinfo<<"("<<day_<<")=none"<<endl;
-        state->setCurrentItem(0);
+        state->setCurrentIndex(0);
         slotStateActivated(0);
         bApply->setEnabled(true);
     }

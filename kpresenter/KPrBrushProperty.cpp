@@ -130,7 +130,7 @@ KPrBrushProperty::~KPrBrushProperty()
 
 FillType KPrBrushProperty::getFillType() const
 {
-    int selected = m_typeCombo->currentItem();
+    int selected = m_typeCombo->currentIndex();
     if(selected == 2)
         selected = 0;
     return (FillType) selected;
@@ -141,7 +141,7 @@ QBrush KPrBrushProperty::getQBrush() const
 {
     QBrush brush;
 
-    switch ( m_brushUI->styleCombo->currentItem() )
+    switch ( m_brushUI->styleCombo->currentIndex() )
     {
         case 0:
             brush.setStyle( Qt::SolidPattern );
@@ -186,7 +186,7 @@ QBrush KPrBrushProperty::getQBrush() const
             brush.setStyle( Qt::DiagCrossPattern );
             break;
     }
-    if( m_typeCombo->currentItem() == 2)
+    if( m_typeCombo->currentIndex() == 2)
         brush.setStyle( Qt::NoBrush );
 
     brush.setColor( m_brushUI->colorChooser->color() );
@@ -209,7 +209,7 @@ QColor KPrBrushProperty::getGColor2()const
 
 BCType KPrBrushProperty::getGType()const
 {
-    return (BCType)( m_gradientUI->styleCombo->currentItem() +1 );
+    return (BCType)( m_gradientUI->styleCombo->currentIndex() +1 );
 }
 
 
@@ -349,46 +349,46 @@ void KPrBrushProperty::setQBrush( const QBrush &brush )
             // TODO
             break;
 			case Qt::SolidPattern:
-            m_brushUI->styleCombo->setCurrentItem( 0 );
+            m_brushUI->styleCombo->setCurrentIndex( 0 );
             break;
 			case Qt::Dense1Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 1 );
+            m_brushUI->styleCombo->setCurrentIndex( 1 );
             break;
 			case Qt::Dense2Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 2 );
+            m_brushUI->styleCombo->setCurrentIndex( 2 );
             break;
 			case Qt::Dense3Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 3 );
+            m_brushUI->styleCombo->setCurrentIndex( 3 );
             break;
 			case Qt::Dense4Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 4 );
+            m_brushUI->styleCombo->setCurrentIndex( 4 );
             break;
 			case Qt::Dense5Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 5 );
+            m_brushUI->styleCombo->setCurrentIndex( 5 );
             break;
 			case Qt::Dense6Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 6 );
+            m_brushUI->styleCombo->setCurrentIndex( 6 );
             break;
 			case Qt::Dense7Pattern:
-            m_brushUI->styleCombo->setCurrentItem( 7 );
+            m_brushUI->styleCombo->setCurrentIndex( 7 );
             break;
 			case Qt::HorPattern:
-            m_brushUI->styleCombo->setCurrentItem( 8 );
+            m_brushUI->styleCombo->setCurrentIndex( 8 );
             break;
 			case Qt::VerPattern:
-            m_brushUI->styleCombo->setCurrentItem( 9 );
+            m_brushUI->styleCombo->setCurrentIndex( 9 );
             break;
 			case Qt::CrossPattern:
-            m_brushUI->styleCombo->setCurrentItem( 10 );
+            m_brushUI->styleCombo->setCurrentIndex( 10 );
             break;
 			case Qt::BDiagPattern:
-            m_brushUI->styleCombo->setCurrentItem( 11 );
+            m_brushUI->styleCombo->setCurrentIndex( 11 );
             break;
 			case Qt::FDiagPattern:
-            m_brushUI->styleCombo->setCurrentItem( 12 );
+            m_brushUI->styleCombo->setCurrentIndex( 12 );
             break;
 			case Qt::DiagCrossPattern:
-            m_brushUI->styleCombo->setCurrentItem( 13 );
+            m_brushUI->styleCombo->setCurrentIndex( 13 );
             break;
 			case Qt::CustomPattern:
             break;
@@ -402,7 +402,7 @@ void KPrBrushProperty::setQBrush( const QBrush &brush )
 void KPrBrushProperty::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
                                     bool _unbalanced, int _xfactor, int _yfactor )
 {
-    m_gradientUI->styleCombo->setCurrentItem( (int) _t - 1 );
+    m_gradientUI->styleCombo->setCurrentIndex( (int) _t - 1 );
     m_gradientUI->color1Chooser->setColor( _c1 );
     m_gradientUI->color2Chooser->setColor( _c2 );
     m_gradientUI->unbalancedCheckBox->setChecked( _unbalanced );
@@ -440,7 +440,7 @@ void KPrBrushProperty::slotReset()
     else
         panelIndex = (int)m_brush.fillType;
 
-    m_typeCombo->setCurrentItem( panelIndex );
+    m_typeCombo->setCurrentIndex( panelIndex );
     slotTypeChanged( panelIndex );
 }
 

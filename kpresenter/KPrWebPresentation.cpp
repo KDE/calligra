@@ -815,7 +815,7 @@ void KPrWebPresentationWizard::setupPage2()
         encoding->addItem(encodings[i]);
 
         if ( codecForEnc->name() == webPres.getEncoding() )
-          encoding->setCurrentItem(idx);
+          encoding->setCurrentIndex(idx);
         idx++;
       }
     }
@@ -825,7 +825,7 @@ void KPrWebPresentationWizard::setupPage2()
     doctype->addItem( "HTML 4.01" );
     doctype->addItem( "XHTML 1.0" );
 
-    doctype->setCurrentItem( webPres.isXML() ? 1 : 0 );
+    doctype->setCurrentIndex( webPres.isXML() ? 1 : 0 );
 
     QSpacerItem* spacer = new QSpacerItem( 1, 10,
                                            QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -1060,7 +1060,7 @@ void KPrWebPresentationWizard::finish()
     webPres.setWriteHeader( writeHeader->isChecked() );
     webPres.setWriteFooter( writeFooter->isChecked() );
     webPres.setLoopSlides( loopSlides->isChecked() );
-    webPres.setXML( doctype->currentItem() != 0 );
+    webPres.setXML( doctype->currentIndex() != 0 );
     bool found = false;
     QTextCodec *codecForEnc = KGlobal::charsets()->codecForName(KGlobal::charsets()->encodingForName(encoding->currentText()), found);
     if ( found )

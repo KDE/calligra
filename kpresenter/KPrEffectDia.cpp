@@ -101,7 +101,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     cEffect->addItem( i18n( "Wipe From Right" ) );
     cEffect->addItem( i18n( "Wipe From Top" ) );
     cEffect->addItem( i18n( "Wipe From Bottom" ) );
-    cEffect->setCurrentItem( static_cast<int>( obj->getEffect() ) );
+    cEffect->setCurrentIndex( static_cast<int>( obj->getEffect() ) );
     upperRow->addWidget(cEffect, 1, 1);
 
     connect( cEffect, SIGNAL( activated( int ) ), this, SLOT( appearEffectChanged( int ) ) );
@@ -114,9 +114,9 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     cAppearSpeed->addItem( i18n( "Slow" ) );
     cAppearSpeed->addItem( i18n( "Medium" ) );
     cAppearSpeed->addItem( i18n( "Fast" ) );
-    cAppearSpeed->setCurrentItem( static_cast<int>( obj->getAppearSpeed() ) );
+    cAppearSpeed->setCurrentIndex( static_cast<int>( obj->getAppearSpeed() ) );
     upperRow->addWidget(cAppearSpeed, 2, 1);
-    appearEffectChanged( cEffect->currentItem() );
+    appearEffectChanged( cEffect->currentIndex() );
 
     lEffect2 = new QLabel( i18n( "Effect (object specific):" ), grp1 );
     lEffect2->setAlignment( Qt::AlignVCenter );
@@ -137,12 +137,12 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     }
 
     if ( obj->getEffect2() == EF2_NONE )
-        cEffect2->setCurrentItem( static_cast<int>( obj->getEffect2() ) );
+        cEffect2->setCurrentIndex( static_cast<int>( obj->getEffect2() ) );
     else {
         switch ( obj->getType() )
         {
         case OT_TEXT:
-            cEffect2->setCurrentItem( static_cast<int>( obj->getEffect2() + TxtObjOffset ) );
+            cEffect2->setCurrentIndex( static_cast<int>( obj->getEffect2() + TxtObjOffset ) );
             break;
         default: break;
         }
@@ -233,7 +233,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     cDisappear->addItem( i18n( "Wipe to Right" ) );
     cDisappear->addItem( i18n( "Wipe to Top" ) );
     cDisappear->addItem( i18n( "Wipe to Bottom" ) );
-    cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
+    cDisappear->setCurrentIndex( static_cast<int>( obj->getEffect3() ) );
     lowerRow->addWidget(cDisappear, 1, 1);
 
     connect( cDisappear, SIGNAL( activated( int ) ), this, SLOT( disappearEffectChanged( int ) ) );
@@ -246,7 +246,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     cDisappearSpeed->addItem( i18n( "Slow" ) );
     cDisappearSpeed->addItem( i18n( "Medium" ) );
     cDisappearSpeed->addItem( i18n( "Fast" ) );
-    cDisappearSpeed->setCurrentItem( static_cast<int>( obj->getDisappearSpeed() ) );
+    cDisappearSpeed->setCurrentIndex( static_cast<int>( obj->getDisappearSpeed() ) );
     lowerRow->addWidget(cDisappearSpeed, 2, 1);
 
     //appearEffectChanged( cEffect->currentItem() );
@@ -345,11 +345,11 @@ void KPrEffectDia::slotEffectDiaOk()
     KPrEffectCmd::EffectStruct eff;
     eff.appearStep = eAppearStep->value();
     eff.disappearStep = eDisappearStep->value();
-    eff.effect = ( Effect )cEffect->currentItem();
-    eff.effect2 = ( Effect2 )cEffect2->currentItem();
-    eff.effect3 = ( Effect3 )cDisappear->currentItem();
-    eff.m_appearSpeed = ( EffectSpeed )cAppearSpeed->currentItem();
-    eff.m_disappearSpeed = ( EffectSpeed )cDisappearSpeed->currentItem();
+    eff.effect = ( Effect )cEffect->currentIndex();
+    eff.effect2 = ( Effect2 )cEffect2->currentIndex();
+    eff.effect3 = ( Effect3 )cDisappear->currentIndex();
+    eff.m_appearSpeed = ( EffectSpeed )cAppearSpeed->currentIndex();
+    eff.m_disappearSpeed = ( EffectSpeed )cDisappearSpeed->currentIndex();
     eff.disappear = disappear->isChecked();
     eff.appearTimer = timerOfAppear->value();
     eff.disappearTimer = timerOfDisappear->value();
@@ -376,7 +376,7 @@ void KPrEffectDia::disappearChanged()
     eDisappearStep->setEnabled( disappear->isChecked() );
     disappearSoundEffect->setEnabled( disappear->isChecked() );
     disappearSoundEffectChanged();
-    disappearEffectChanged( cDisappear->currentItem() );
+    disappearEffectChanged( cDisappear->currentIndex() );
 
     if ( !view->kPresenterDoc()->spManualSwitch() )
         timerOfDisappear->setEnabled( disappear->isChecked() );
@@ -384,14 +384,14 @@ void KPrEffectDia::disappearChanged()
 
 void KPrEffectDia::appearEffectChanged( int /*num*/ )
 {
-    bool b = ( cEffect->currentItem() != 0 );
+    bool b = ( cEffect->currentIndex() != 0 );
     lAppearSpeed->setEnabled( b );
     cAppearSpeed->setEnabled( b );
 }
 
 void KPrEffectDia::disappearEffectChanged( int /*num*/ )
 {
-    bool b = ( cDisappear->currentItem() !=0 && disappear->isChecked() );
+    bool b = ( cDisappear->currentIndex() !=0 && disappear->isChecked() );
     lDisappearSpeed->setEnabled( b );
     cDisappearSpeed->setEnabled( b );
 }

@@ -66,7 +66,7 @@ ExportDialog::~ExportDialog()
 
 QTextCodec *ExportDialog::encoding() const
 {
-  if( m_mainwidget->mEncodingBox->currentItem() == 1 ) // locale selected
+  if( m_mainwidget->mEncodingBox->currentIndex() == 1 ) // locale selected
     return KGlobal::locale()->codecForEncoding();
 
   return QTextCodec::codecForName( "utf8" ); // utf8 is default

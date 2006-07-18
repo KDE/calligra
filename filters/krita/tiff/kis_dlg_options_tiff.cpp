@@ -90,7 +90,7 @@ void KisDlgOptionsTIFF::flattenToggled(bool t)
 KisTIFFOptions KisDlgOptionsTIFF::options()
 {
     KisTIFFOptions options;
-    switch(optionswdg->kComboBoxCompressionType->currentItem ())
+    switch(optionswdg->kComboBoxCompressionType->currentIndex ())
     {
         case 0:
             options.compressionType = COMPRESSION_NONE;
@@ -120,12 +120,12 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
             options.compressionType = COMPRESSION_PIXARLOG;
             break;
     }
-    options.predictor = optionswdg->kComboBoxPredictor->currentItem() + 1;
+    options.predictor = optionswdg->kComboBoxPredictor->currentIndex() + 1;
     options.alpha = optionswdg->alpha->isChecked();
     options.flatten = optionswdg->flatten->isChecked();
     options.jpegQuality = optionswdg->qualityLevel->value();
     options.deflateCompress = optionswdg->compressionLevelDeflate->value();
-    options.faxMode = optionswdg->kComboBoxFaxMode->currentItem() + 1;
+    options.faxMode = optionswdg->kComboBoxFaxMode->currentIndex() + 1;
     options.pixarLogCompress = optionswdg->compressionLevelPixarLog->value();
 
     return options;

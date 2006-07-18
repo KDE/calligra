@@ -108,22 +108,22 @@ void KPrPenStyleWidget::setPen( const KoPen &pen )
     switch ( pen.style() )
     {
 			case Qt::NoPen:
-            m_ui->styleCombo->setCurrentItem( 0 );
+            m_ui->styleCombo->setCurrentIndex( 0 );
             break;
 			case Qt::SolidLine:
-            m_ui->styleCombo->setCurrentItem( 1 );
+            m_ui->styleCombo->setCurrentIndex( 1 );
             break;
 			case Qt::DashLine:
-            m_ui->styleCombo->setCurrentItem( 2 );
+            m_ui->styleCombo->setCurrentIndex( 2 );
             break;
 			case Qt::DotLine:
-            m_ui->styleCombo->setCurrentItem( 3 );
+            m_ui->styleCombo->setCurrentIndex( 3 );
             break;
 			case Qt::DashDotLine:
-            m_ui->styleCombo->setCurrentItem( 4 );
+            m_ui->styleCombo->setCurrentIndex( 4 );
             break;
 			case Qt::DashDotDotLine:
-            m_ui->styleCombo->setCurrentItem( 5 );
+            m_ui->styleCombo->setCurrentIndex( 5 );
             break;
 			case Qt::MPenStyle:
             break; // not supported.
@@ -136,14 +136,14 @@ void KPrPenStyleWidget::setPen( const KoPen &pen )
 
 void KPrPenStyleWidget::setLineBegin( LineEnd lb )
 {
-    m_ui->lineBeginCombo->setCurrentItem( (int)lb );
+    m_ui->lineBeginCombo->setCurrentIndex( (int)lb );
     m_ui->pbPreview->setLineBegin( lb );
 }
 
 
 void KPrPenStyleWidget::setLineEnd( LineEnd le )
 {
-    m_ui->lineEndCombo->setCurrentItem( (int)le );
+    m_ui->lineEndCombo->setCurrentIndex( (int)le );
     m_ui->pbPreview->setLineEnd( le );
 }
 
@@ -152,7 +152,7 @@ KoPen KPrPenStyleWidget::getKPPen() const
 {
     KoPen pen;
 
-    switch ( m_ui->styleCombo->currentItem() )
+    switch ( m_ui->styleCombo->currentIndex() )
     {
         case 0:
             pen.setStyle( Qt::NoPen );
@@ -183,13 +183,13 @@ KoPen KPrPenStyleWidget::getKPPen() const
 
 LineEnd KPrPenStyleWidget::getLineBegin() const
 {
-    return (LineEnd) m_ui->lineBeginCombo->currentItem();
+    return (LineEnd) m_ui->lineBeginCombo->currentIndex();
 }
 
 
 LineEnd KPrPenStyleWidget::getLineEnd() const
 {
-    return (LineEnd) m_ui->lineEndCombo->currentItem();
+    return (LineEnd) m_ui->lineEndCombo->currentIndex();
 }
 
 

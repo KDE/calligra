@@ -209,7 +209,7 @@ void TaskGeneralPanel::estimationTypeChanged(int type) {
 void TaskGeneralPanel::scheduleTypeChanged(int value)
 {
     if (value == 6 /*Fixed interval*/) {
-        if (estimateType->currentItem() == 1/*duration*/){
+        if (estimateType->currentIndex() == 1/*duration*/){
             setEstimateScales(24);
             estimate->setEnabled(false);
             setEstimate(DateTime(endDateTime()) - DateTime(startDateTime()));
@@ -244,13 +244,13 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
 void TaskGeneralPanelImpl::setSchedulingType(int type)
 {
     enableDateTime(type);
-    scheduleType->setCurrentItem(type);
+    scheduleType->setCurrentIndex(type);
     emit schedulingTypeChanged(type);
 }
 
 int TaskGeneralPanelImpl::schedulingType() const
 {
-    return scheduleType->currentItem();
+    return scheduleType->currentIndex();
 }
 
 void TaskGeneralPanelImpl::changeLeader()
@@ -264,12 +264,12 @@ void TaskGeneralPanelImpl::changeLeader()
 
 void TaskGeneralPanelImpl::setEstimationType( int type )
 {
-    estimateType->setCurrentItem(type);
+    estimateType->setCurrentIndex(type);
 }
 
 int TaskGeneralPanelImpl::estimationType() const
 {
-    return estimateType->currentItem();
+    return estimateType->currentIndex();
 }
 
 void TaskGeneralPanelImpl::setOptimistic( int value )
@@ -350,7 +350,7 @@ void TaskGeneralPanelImpl::setEstimate( const Duration & duration)
 
 void TaskGeneralPanelImpl::setEstimateType( int type)
 {
-    estimateType->setCurrentItem(type);
+    estimateType->setCurrentIndex(type);
 }
 
 
@@ -402,9 +402,9 @@ void TaskGeneralPanelImpl::startDateChanged()
         scheduleEndTime->blockSignals(false);
         scheduleEndDate->blockSignals(false);
     }
-    if (scheduleType->currentItem() == 6 /*FixedInterval*/)
+    if (scheduleType->currentIndex() == 6 /*FixedInterval*/)
     {
-        estimationTypeChanged(estimateType->currentItem());
+        estimationTypeChanged(estimateType->currentIndex());
     }
     checkAllFieldsFilled();
 }
@@ -420,9 +420,9 @@ void TaskGeneralPanelImpl::startTimeChanged( const QTime &time )
         setEndTime(time);
         scheduleEndTime->blockSignals(false);
     }
-    if (scheduleType->currentItem() == 6 /*FixedInterval*/)
+    if (scheduleType->currentIndex() == 6 /*FixedInterval*/)
     {
-        estimationTypeChanged(estimateType->currentItem());
+        estimationTypeChanged(estimateType->currentIndex());
     }
     checkAllFieldsFilled();
 }
@@ -444,9 +444,9 @@ void TaskGeneralPanelImpl::endDateChanged()
         scheduleStartDate->blockSignals(false);
     }
 
-    if (scheduleType->currentItem() == 6 /*FixedInterval*/)
+    if (scheduleType->currentIndex() == 6 /*FixedInterval*/)
     {
-        estimationTypeChanged(estimateType->currentItem());
+        estimationTypeChanged(estimateType->currentIndex());
     }
     checkAllFieldsFilled();
 }
@@ -463,16 +463,16 @@ void TaskGeneralPanelImpl::endTimeChanged( const QTime &time )
         scheduleStartTime->blockSignals(false);
     }
 
-    if (scheduleType->currentItem() == 6 /*FixedInterval*/)
+    if (scheduleType->currentIndex() == 6 /*FixedInterval*/)
     {
-        estimationTypeChanged(estimateType->currentItem());
+        estimationTypeChanged(estimateType->currentIndex());
     }
     checkAllFieldsFilled();
 }
 
 void TaskGeneralPanelImpl::scheduleTypeChanged( int value )
 {
-     estimationTypeChanged(estimateType->currentItem());
+     estimationTypeChanged(estimateType->currentIndex());
      enableDateTime(value);
      checkAllFieldsFilled();
 }

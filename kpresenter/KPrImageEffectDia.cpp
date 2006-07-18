@@ -79,7 +79,7 @@ void KPrImageEffectDia::effectChanged(int eff)
     switch (m_effect) {
     case IE_CHANNEL_INTENSITY: {
         m_param1 = QVariant(base->chanInt_value->value());
-        m_param2 = QVariant(base->chanInt_component->currentItem());
+        m_param2 = QVariant(base->chanInt_component->currentIndex());
         _tmpImage = KImageEffect::channelIntensity(_tmpImage, m_param1.toDouble()/100.0,
                                                    static_cast<KImageEffect::RGBComponent>(m_param2.toInt()));
         break;
@@ -143,7 +143,7 @@ void KPrImageEffectDia::effectChanged(int eff)
         break;
     }
     case IE_NOISE: {
-        m_param1 = QVariant(base->noise_type->currentItem());
+        m_param1 = QVariant(base->noise_type->currentIndex());
         _tmpImage = KImageEffect::addNoise(_tmpImage, static_cast<KImageEffect::NoiseType>(m_param1.toInt()));
         break;
     }
@@ -235,7 +235,7 @@ void KPrImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVa
     switch (m_effect) {
     case IE_CHANNEL_INTENSITY: {
         base->chanInt_value->setValue(m_param1.toInt());
-        base->chanInt_component->setCurrentItem(m_param2.toInt());
+        base->chanInt_component->setCurrentIndex(m_param2.toInt());
         break;
     }
     case IE_FADE: {
@@ -273,7 +273,7 @@ void KPrImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVa
         break;
     }
     case IE_NOISE: {
-        base->noise_type->setCurrentItem(m_param1.toInt());
+        base->noise_type->setCurrentIndex(m_param1.toInt());
         break;
     }
     case IE_BLUR: {
@@ -327,7 +327,7 @@ void KPrImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVa
         break;
     }
 
-    base->m_effectCombo->setCurrentItem(static_cast<int>(m_effect));
+    base->m_effectCombo->setCurrentIndex(static_cast<int>(m_effect));
     base->m_widgetStack->raiseWidget(static_cast<int>(m_effect)); //bug in Qt? the above doesn't emit this :(
 }
 
@@ -411,7 +411,7 @@ void KPrImageEffectDia::setupSignals()
 
 void KPrImageEffectDia::effectParamChanged()
 {
-    effectChanged(base->m_effectCombo->currentItem());
+    effectChanged(base->m_effectCombo->currentIndex());
 }
 
 #include "KPrImageEffectDia.moc"

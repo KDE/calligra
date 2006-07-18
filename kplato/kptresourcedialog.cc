@@ -153,7 +153,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
         if (cit.current() == resource->calendar())
             cal = i;
     }
-    dia->calendarList->setCurrentItem(cal);
+    dia->calendarList->setCurrentIndex(cal);
 
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
@@ -174,12 +174,12 @@ void ResourceDialog::slotOk() {
     m_resource.setName(dia->nameEdit->text());
     m_resource.setInitials(dia->initialsEdit->text());
     m_resource.setEmail(dia->emailEdit->text());
-    m_resource.setType((Resource::Type)(dia->type->currentItem()));
+    m_resource.setType((Resource::Type)(dia->type->currentIndex()));
     m_resource.setUnits(dia->units->value());
 
     m_resource.setNormalRate(KGlobal::locale()->readMoney(dia->rateEdit->text()));
     m_resource.setOvertimeRate(KGlobal::locale()->readMoney(dia->overtimeEdit->text()));
-    m_resource.setCalendar(m_calendars[dia->calendarList->currentItem()]);
+    m_resource.setCalendar(m_calendars[dia->calendarList->currentIndex()]);
     m_resource.setAvailableFrom(dia->availableFrom->dateTime());
     m_resource.setAvailableUntil(dia->availableUntil->dateTime());
     accept();

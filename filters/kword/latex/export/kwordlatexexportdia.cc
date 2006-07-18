@@ -190,7 +190,7 @@ void KWordLatexExportDia::accept()
 	/* class names are not translated */
 	config->setClass(classComboBox->currentText());
 
-	if(qualityComboBox->currentItem() == 0)
+	if(qualityComboBox->currentIndex() == 0)
 		config->setQuality("final");
 	else
 		config->setQuality("draft");

@@ -64,7 +64,7 @@ ProjectDialog::ProjectDialog(Project &p, QWidget *parent, const char *name)
     connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
     connect(dia, SIGNAL( schedulingTypeChanged(int) ), this, SLOT( slotSchedulingChanged(int) ));
 
-    slotSchedulingChanged(dia->schedulerType->currentItem());
+    slotSchedulingChanged(dia->schedulerType->currentIndex());
     dia->namefield->setFocus();
 
     connect(resourcesTab, SIGNAL( changed() ), dia, SLOT( slotCheckAllFieldsFilled() ));
@@ -72,7 +72,7 @@ ProjectDialog::ProjectDialog(Project &p, QWidget *parent, const char *name)
 
 
 void ProjectDialog::slotOk() {
-    project.setConstraint((Node::ConstraintType) dia->schedulerType->currentItem());
+    project.setConstraint((Node::ConstraintType) dia->schedulerType->currentIndex());
     //FIXME
     project.setStartTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));
     project.setConstraintStartTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));

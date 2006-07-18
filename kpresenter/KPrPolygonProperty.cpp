@@ -109,7 +109,7 @@ void KPrPolygonProperty::apply()
 
 bool KPrPolygonProperty::isConvexConcave() const
 {
-    return m_ui->typeCombo->currentItem() == 1;
+    return m_ui->typeCombo->currentIndex() == 1;
 }
 
 
@@ -123,7 +123,7 @@ void KPrPolygonProperty::slotTypeChanged( int pos )
 
 void KPrPolygonProperty::slotReset()
 {
-    m_ui->typeCombo->setCurrentItem( m_polygonSettings.checkConcavePolygon ? 1 : 0 );
+    m_ui->typeCombo->setCurrentIndex( m_polygonSettings.checkConcavePolygon ? 1 : 0 );
     m_ui->polygonPreview->slotConvexConcave( m_polygonSettings.checkConcavePolygon );
     m_ui->sharpnessInput->setEnabled( m_polygonSettings.checkConcavePolygon );
     m_ui->cornersInput->setValue( m_polygonSettings.cornersValue );

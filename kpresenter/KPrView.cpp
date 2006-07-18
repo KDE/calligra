@@ -689,7 +689,7 @@ void KPrView::insertPage()
 #endif
     }
 
-    InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
+    InsertPos pos = (InsertPos)dia.locationCombo->currentIndex();
     m_pKPresenterDoc->insertNewPage( i18n("Insert new slide"), currPg, pos,
                                      dia.radioDifferent->isChecked(), QString::null );
     setRanges();

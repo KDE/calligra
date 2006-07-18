@@ -47,7 +47,7 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     QStringList codeList = def.codeList();
     defaultSeparator->setText(def.defaultSeparator());
     defaultCode->addItems(codeList);
-    defaultCode->setCurrentItem(def.defaultCodeIndex());
+    defaultCode->setCurrentIndex(def.defaultCodeIndex());
     defaultCode->setFocus();
     
     levelsGroup->setChecked(def.isLevelsDefEnabled());
@@ -87,7 +87,7 @@ KMacroCommand *WBSDefinitionPanel::buildCommand(Part */*part*/) {
 }
 
 bool WBSDefinitionPanel::ok() {
-    m_def.setDefaultCode(defaultCode->currentItem());
+    m_def.setDefaultCode(defaultCode->currentIndex());
     m_def.setDefaultSeparator(defaultSeparator->text());
     
     m_def.setLevelsDefEnabled(levelsGroup->isChecked());

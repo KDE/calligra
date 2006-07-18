@@ -127,11 +127,11 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     m_dialog->effectCombo->addItem( i18n( "Strips Right-Down" ) );
     m_dialog->effectCombo->addItem( i18n( "Melting" ) );
     m_dialog->effectCombo->addItem( i18n( "Random Transition" ) );
-    m_dialog->effectCombo->setCurrentItem( static_cast<int>( m_effect ) );
+    m_dialog->effectCombo->setCurrentIndex( static_cast<int>( m_effect ) );
 
     // workaround, because Random Effect is always negative
     if( m_effect == PEF_RANDOM )
-        m_dialog->effectCombo->setCurrentItem( m_dialog->effectCombo->count()-1 );
+        m_dialog->effectCombo->setCurrentIndex( m_dialog->effectCombo->count()-1 );
 
     connect( m_dialog->effectCombo, SIGNAL( activated( int ) ), this, SLOT( effectChanged( int ) ) );
 
@@ -140,7 +140,7 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     m_dialog->speedCombo->addItem( i18n("Medium") );
     m_dialog->speedCombo->addItem( i18n("Fast") );
 
-    m_dialog->speedCombo->setCurrentItem( m_effectSpeed );
+    m_dialog->speedCombo->setCurrentIndex( m_effectSpeed );
 
     connect( m_dialog->speedCombo, SIGNAL( activated( int ) ), this, SLOT( effectChanged( int ) ) );
 
@@ -187,11 +187,11 @@ void KPrSlideTransitionDia::effectChanged( int )
 
 void KPrSlideTransitionDia::preview()
 {
-    PageEffect effect = static_cast<PageEffect>( m_dialog->effectCombo->currentItem() );
+    PageEffect effect = static_cast<PageEffect>( m_dialog->effectCombo->currentIndex() );
     if ( m_dialog->effectCombo->currentText() == i18n( "Random Transition" ) )
         effect = PEF_RANDOM;
 
-    EffectSpeed effectSpeed = static_cast<EffectSpeed>( m_dialog->speedCombo->currentItem() );
+    EffectSpeed effectSpeed = static_cast<EffectSpeed>( m_dialog->speedCombo->currentIndex() );
 
     if ( m_pageEffect )
     {
@@ -326,11 +326,11 @@ void KPrSlideTransitionDia::slotUser1()
 
 void KPrSlideTransitionDia::apply( bool global )
 {
-    PageEffect effect = static_cast<PageEffect>( m_dialog->effectCombo->currentItem() );
+    PageEffect effect = static_cast<PageEffect>( m_dialog->effectCombo->currentIndex() );
     if ( m_dialog->effectCombo->currentText() == i18n( "Random Transition" ) )
         effect = PEF_RANDOM;
 
-    EffectSpeed effectSpeed = static_cast<EffectSpeed>( m_dialog->speedCombo->currentItem() );
+    EffectSpeed effectSpeed = static_cast<EffectSpeed>( m_dialog->speedCombo->currentIndex() );
     bool soundEffect = m_dialog->soundCheckBox->isChecked();
     QString soundFileName = m_dialog->soundRequester->url();
     int slideTime = m_dialog->automaticTransitionInput->value();

@@ -80,7 +80,7 @@ int KPrPieProperty::getPiePropertyChange() const
 KPrPieValueCmd::PieValues KPrPieProperty::getPieValues() const
 {
     KPrPieValueCmd::PieValues pieValues;
-    pieValues.pieType = static_cast<PieType>( m_ui->typeCombo->currentItem() );
+    pieValues.pieType = static_cast<PieType>( m_ui->typeCombo->currentIndex() );
     pieValues.pieAngle = m_ui->angleInput->value() * 16;
     pieValues.pieLength = m_ui->lengthInput->value() * 16;
     return pieValues;
@@ -113,7 +113,7 @@ void KPrPieProperty::apply()
 
 void KPrPieProperty::slotReset()
 {
-    m_ui->typeCombo->setCurrentItem( ( int ) m_pieValues.pieType );
+    m_ui->typeCombo->setCurrentIndex( ( int ) m_pieValues.pieType );
     m_ui->piePreview->setType( m_pieValues.pieType );
     m_ui->angleInput->setValue( m_pieValues.pieAngle / 16 );
     m_ui->piePreview->setAngle( m_pieValues.pieAngle );
