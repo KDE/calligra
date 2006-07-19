@@ -4394,7 +4394,7 @@ const QPen& Cell::effLeftBorderPen( int col, int row ) const
        && d->extra()->conditions->matchedStyle()->hasFeature( Style::SLeftBorder, true ) )
     return d->extra()->conditions->matchedStyle()->leftBorderPen();
 
-  return format()->leftBorderPen( col, row );
+  return leftBorderPen( col, row );
 }
 
 const QPen& Cell::effTopBorderPen( int col, int row ) const
@@ -4410,7 +4410,7 @@ const QPen& Cell::effTopBorderPen( int col, int row ) const
        && d->extra()->conditions->matchedStyle()->hasFeature( Style::STopBorder, true ) )
     return d->extra()->conditions->matchedStyle()->topBorderPen();
 
-  return format()->topBorderPen( col, row );
+  return topBorderPen( col, row );
 }
 
 const QPen& Cell::effRightBorderPen( int col, int row ) const
@@ -4426,7 +4426,7 @@ const QPen& Cell::effRightBorderPen( int col, int row ) const
        && d->extra()->conditions->matchedStyle()->hasFeature( Style::SRightBorder, true ) )
     return d->extra()->conditions->matchedStyle()->rightBorderPen();
 
-  return format()->rightBorderPen( col, row );
+  return rightBorderPen( col, row );
 }
 
 const QPen& Cell::effBottomBorderPen( int col, int row ) const
@@ -4442,7 +4442,7 @@ const QPen& Cell::effBottomBorderPen( int col, int row ) const
        && d->extra()->conditions->matchedStyle()->hasFeature( Style::SBottomBorder, true ) )
     return d->extra()->conditions->matchedStyle()->bottomBorderPen();
 
-  return format()->bottomBorderPen( col, row );
+  return bottomBorderPen( col, row );
 }
 
 const QPen & Cell::effGoUpDiagonalPen( int col, int row ) const
