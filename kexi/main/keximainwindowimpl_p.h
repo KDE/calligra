@@ -210,7 +210,7 @@ void updatePropEditorDockWidthInfo() {
 				propEditorDockSeparatorPos = ds->separatorPosInPercent();*/
 /*				if (propEditorDockSeparatorPos<=0) {
 						config->setGroup("MainWindow");
-						propEditorDockSeparatorPos = config->readNumEntry("RightDockPosition", 80);
+						propEditorDockSeparatorPos = config->readEntry("RightDockPosition", 80);
 						ds->setSeparatorPos(propEditorDockSeparatorPos, true);
 				}*/
 			/*}
@@ -258,7 +258,7 @@ void updatePropEditorDockWidthInfo() {
 #if defined(KDOCKWIDGET_P)
 				KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-				ds->setSeparatorPosInPercent(config->readNumEntry("RightDockPosition", 80));//%
+				ds->setSeparatorPosInPercent(config->readEntry("RightDockPosition", 80));//%
 #endif*/
 			}
 		}
@@ -278,14 +278,14 @@ void updatePropEditorDockWidthInfo() {
 				if (wasAutoOpen) //(dw2->isVisible())
 //				ds->setSeparatorPosInPercent( 100 * nav->width() / wnd->width() );
 					ds->setSeparatorPosInPercent(
-						qMax(qMax( config->readNumEntry("LeftDockPositionWithAutoOpen",20),
-						config->readNumEntry("LeftDockPosition",20)),20)
+						qMax(qMax( config->readEntry("LeftDockPositionWithAutoOpen",20),
+						config->readEntry("LeftDockPosition",20)),20)
 					);
 				else
 					ds->setSeparatorPosInPercent(
-					qMax(20, config->readNumEntry("LeftDockPosition", 20/* % */)));
+					qMax(20, config->readEntry("LeftDockPosition", 20/* % */)));
 
-	//			dw->resize( d->config->readNumEntry("LeftDockPosition", 115/* % */), dw->height() );
+	//			dw->resize( d->config->readEntry("LeftDockPosition", 115/* % */), dw->height() );
 # else
 				//there were problems on KDE < 3.4
 				ds->setSeparatorPosInPercent( 20 );

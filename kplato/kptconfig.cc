@@ -44,7 +44,7 @@ void Config::load() {
 /*    if( config->hasGroup("Behavior"))
     {
         config->setGroup("Behavior");
-        m_behavior.calculationMode = config->readNumEntry("CalculationMode",m_behavior.calculationMode);
+        m_behavior.calculationMode = config->readEntry("CalculationMode",m_behavior.calculationMode);
         m_behavior.allowOverbooking =  config->readEntry("AllowOverbooking",m_behavior.allowOverbooking);
     }*/
     if( config->hasGroup("Task defaults"))

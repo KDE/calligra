@@ -219,7 +219,7 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
 
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
-        oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
+        oldNbRecentFiles=config->readEntry("NbRecentFile",oldNbRecentFiles);
         ptIndent = config->readEntry("Indent", ptIndent);
         bShowRuler=config->readEntry("Rulers",true);
         oldShowStatusBar = config->readEntry( "ShowStatusBar" , true );
@@ -429,7 +429,7 @@ KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, cha
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
-        m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
+        m_oldNbRedo=config->readEntry("UndoRedo",m_oldNbRedo);
         m_printNotes = config->readEntry("PrintNotes", true);
     }
 
@@ -603,7 +603,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     m_oldHyphenation = doc->globalHyphenation();
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
-        oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
+        oldAutoSaveValue = config->readEntry( "AutoSave", oldAutoSaveValue );
         m_oldBackupFile=config->readEntry("BackupFile",m_oldBackupFile);
         m_oldLanguage = config->readEntry( "language", m_oldLanguage );
         m_oldHyphenation = config->readEntry( "hyphenation", m_oldHyphenation);

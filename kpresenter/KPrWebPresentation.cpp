@@ -212,7 +212,7 @@ void KPrWebPresentation::loadConfig()
     author = cfg.readEntry( "Author", author );
     title = cfg.readEntry( "Title", title );
     email = cfg.readEntry( "EMail", email );
-    unsigned int num = cfg.readNumEntry( "Slides", slideInfos.count() );
+    unsigned int num = cfg.readEntry( "Slides", slideInfos.count() );
     //kDebug(33001) << "KPrWebPresentation::loadConfig num=" << num << endl;
 
     if ( num <= slideInfos.count() ) {
@@ -236,8 +236,8 @@ void KPrWebPresentation::loadConfig()
     m_bWriteHeader = cfg.readEntry( "WriteHeader", m_bWriteHeader );
     m_bWriteFooter = cfg.readEntry( "WriteFooter", m_bWriteFooter );
     m_bLoopSlides = cfg.readEntry( "LoopSlides", m_bLoopSlides );
-    zoom = cfg.readNumEntry( "Zoom", zoom );
-    timeBetweenSlides = cfg.readNumEntry("TimeBetweenSlides", timeBetweenSlides );
+    zoom = cfg.readEntry( "Zoom", zoom );
+    timeBetweenSlides = cfg.readEntry("TimeBetweenSlides", timeBetweenSlides );
     m_encoding = cfg.readEntry( "Encoding", m_encoding );
 }
 

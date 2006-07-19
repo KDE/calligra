@@ -193,8 +193,8 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_typeNames[4] = i18n("date/time");
 
 	KGlobal::config()->setGroup("ImportExport");
-	m_maximumRowsForPreview = KGlobal::config()->readNumEntry("MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
-	m_maximumBytesForPreview = KGlobal::config()->readNumEntry("MaximumBytesForPreviewInImportDialog", MAX_BYTES_TO_PREVIEW);
+	m_maximumRowsForPreview = KGlobal::config()->readEntry("MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
+	m_maximumBytesForPreview = KGlobal::config()->readEntry("MaximumBytesForPreviewInImportDialog", MAX_BYTES_TO_PREVIEW);
 
 	m_pkIcon = SmallIcon("key");
 

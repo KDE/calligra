@@ -167,8 +167,8 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		int scnum = QApplication::desktop()->screenNumber(parentWidget());
 		QRect desk = QApplication::desktop()->screenGeometry(scnum);
 		d->config->setGroup("MainWindow");
-		QSize s ( d->config->readNumEntry( QString::fromLatin1("Width %1").arg(desk.width()), 700 ),
-			d->config->readNumEntry( QString::fromLatin1("Height %1").arg(desk.height()), 480 ) );
+		QSize s ( d->config->readEntry( QString::fromLatin1("Width %1").arg(desk.width()), 700 ),
+			d->config->readEntry( QString::fromLatin1("Height %1").arg(desk.height()), 480 ) );
 		resize (kMin (s.width(), desk.width()), qMin(s.height(), desk.height()));
 	}
 
@@ -1148,7 +1148,7 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 				KDockWidget *dw = (KDockWidget *)d->propEditorTabWidget->parentWidget();
 				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 				if(ds)
-					ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
+					ds->setSeparatorPosInPercent(d->config->readEntry("RightDockPosition", 80/* % */));
 	}
 #endif
 
@@ -1421,7 +1421,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 			KDockWidget::DockRight, getMainDockWidget(), 20);
 
 		d->config->setGroup("PropertyEditor");
-		int size = d->config->readNumEntry("FontSize", -1);
+		int size = d->config->readEntry("FontSize", -1);
 		QFont f( Kexi::smallFont(this/*init*/) );
 		if (size>0)
 			f.setPixelSize( size );
@@ -1441,10 +1441,10 @@ void KexiMainWindowImpl::initPropertyEditor()
 
 
 			d->config->setGroup("MainWindow");
-			ds->setSeparatorPosInPercent(d->config->readNumEntry("RightDockPosition", 80/* % */));
+			ds->setSeparatorPosInPercent(d->config->readEntry("RightDockPosition", 80/* % */));
 //			makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
 
-	//		ds->setForcedFixedWidth( dw, d->config->readNumEntry("RightDockPosition", 80) );
+	//		ds->setForcedFixedWidth( dw, d->config->readEntry("RightDockPosition", 80) );
 		//	ds->resize(400, ds->height());
 		//	dw->resize(400, dw->height());
 	#endif
@@ -1640,7 +1640,7 @@ KexiMainWindowImpl::restoreSettings()
 	}
 
 	d->config->setGroup("MainWindow");
-	int mdimode = d->config->readNumEntry("MDIMode", -1);//KMdi::TabPageMode);
+	int mdimode = d->config->readEntry("MDIMode", -1);//KMdi::TabPageMode);
 
 	const bool showProjectNavigator = d->config->readBoolEntry("ShowProjectNavigator", true);
 
@@ -1709,8 +1709,8 @@ KexiMainWindowImpl::restoreSettings()
 		}*/
 
 		config->setGroup("MainWindow");
-	    QSize s ( config->readNumEntry( QString::fromLatin1("Width %1").arg(desk.width()), 700 ),
-              config->readNumEntry( QString::fromLatin1("Height %1").arg(desk.height()), 480 ) );
+	    QSize s ( config->readEntry( QString::fromLatin1("Width %1").arg(desk.width()), 700 ),
+              config->readEntry( QString::fromLatin1("Height %1").arg(desk.height()), 480 ) );
 		resize (kMin (s.width(), desk.width()), qMin(s.height(), desk.height()));
 	}
 #endif
@@ -2584,7 +2584,7 @@ void KexiMainWindowImpl::slotViewPropertyEditor()
 		return;
 
 //js		d->config->setGroup("MainWindow");
-//js		ds->setSeparatorPos(d->config->readNumEntry("RightDockPosition", 80/* % */), true);
+//js		ds->setSeparatorPos(d->config->readEntry("RightDockPosition", 80/* % */), true);
 
 	if (!d->propEditorTabWidget->isVisible())
 		makeWidgetDockVisible(d->propEditorTabWidget);
@@ -2600,7 +2600,7 @@ void KexiMainWindowImpl::slotViewPropertyEditor()
 /*#if defined(KDOCKWIDGET_P)
 		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-		ds->setSeparatorPos(80,true);//d->config->readNumEntry("RightDockPosition", 80), true);
+		ds->setSeparatorPos(80,true);//d->config->readEntry("RightDockPosition", 80), true);
 #endif*/
 }
 

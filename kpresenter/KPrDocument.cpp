@@ -329,16 +329,16 @@ void KPrDocument::initConfig()
     KConfig* config = KPrFactory::global()->config();
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
-        setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
+        setAutoSave( config->readEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
         setBackupFile( config->readEntry("BackupFile", true));
         setCursorInProtectedArea( config->readEntry( "cursorInProtectArea", true ));
 
         // Config-file value in mm, default 10 pt
         double indent =  config->readEntry("Indent", MM_TO_POINT(10.0) ) ;
         setIndentValue(indent);
-        m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
+        m_maxRecentFiles = config->readEntry( "NbRecentFile", 10 );
         setShowRuler(config->readEntry("Rulers",true));
-        zoom = config->readNumEntry( "Zoom", 100 );
+        zoom = config->readEntry( "Zoom", 100 );
         setShowStatusBar( config->readEntry( "ShowStatusBar" , true ));
         setAllowAutoFormat( config->readEntry( "AllowAutoFormat" , true ));
         setViewFormattingChars( config->readEntry( "ViewFormattingChars", false ) );
@@ -378,7 +378,7 @@ void KPrDocument::initConfig()
     if(config->hasGroup("Misc" ) )
     {
         config->setGroup( "Misc" );
-        undo=config->readNumEntry("UndoRedo",-1);
+        undo=config->readEntry("UndoRedo",-1);
     }
     if(undo!=-1)
         setUndoRedoLimit(undo);

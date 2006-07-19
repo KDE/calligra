@@ -694,8 +694,8 @@ void KChartPart::loadConfig( KConfig *conf )
 
     //   ylabel_fmt = conf->readEntry("ylabel_fmt", ylabel_fmt );
     //   ylabel2_fmt = conf->readEntry("ylabel2_fmt", ylabel2_fmt);
-    //   xlabel_spacing = conf->readNumEntry("xlabel_spacing");
-    //   ylabel_density = conf->readNumEntry("ylabel_density", ylabel_density);
+    //   xlabel_spacing = conf->readEntry("xlabel_spacing");
+    //   ylabel_density = conf->readEntry("ylabel_density", ylabel_density);
     //   requested_ymin = conf->readEntry("requested_ymin", requested_ymin);
     //   requested_ymax = conf->readEntry("requested_ymax", requested_ymax );
     //   requested_yinterval = conf->readEntry("requested_yinterval",
@@ -706,13 +706,13 @@ void KChartPart::loadConfig( KConfig *conf )
     //   yaxis = conf->readEntry("yaxis", yaxis);
     //   yaxis2 = conf->readEntry("yaxis2", yaxis);
     //   llabel = conf->readEntry("llabel", llabel);
-    //   yval_style = conf->readNumEntry("yval_style", yval_style);
-    //   stack_type = (KChartStackType)conf->readNumEntry("stack_type", stack_type);
+    //   yval_style = conf->readEntry("yval_style", yval_style);
+    //   stack_type = (KChartStackType)conf->readEntry("stack_type", stack_type);
     m_params->setLineMarker(conf->readEntry("lineMarker",
 						m_params->lineMarker()));
     m_params->setThreeDBarDepth( conf->readEntry("_3d_depth",
 							  m_params->threeDBarDepth() ) );
-    m_params->setThreeDBarAngle( conf->readNumEntry( "_3d_angle",
+    m_params->setThreeDBarAngle( conf->readEntry( "_3d_angle",
 						     m_params->threeDBarAngle() ) );
 
     KDChartAxisParams  leftparams;
@@ -737,10 +737,10 @@ void KChartPart::loadConfig( KConfig *conf )
     m_params->setAxisParams( KDChartAxisParams::AxisPosBottom,
                             bottomparams );
 
-    //   hlc_style = (KChartHLCStyle)conf->readNumEntry("hlc_style", hlc_style);
-    //   hlc_cap_width = conf->readNumEntry("hlc_cap_width", hlc_cap_width);
+    //   hlc_style = (KChartHLCStyle)conf->readEntry("hlc_style", hlc_style);
+    //   hlc_cap_width = conf->readEntry("hlc_cap_width", hlc_cap_width);
     //   // TODO: Annotation font
-    //   num_scatter_pts = conf->readNumEntry("num_scatter_pts", num_scatter_pts);
+    //   num_scatter_pts = conf->readEntry("num_scatter_pts", num_scatter_pts);
     //   // TODO: Scatter type
     //   thumbnail = conf->readEntry("thumbnail", thumbnail);
     //   thumblabel = conf->readEntry("thumblabel", thumblabel);
@@ -754,12 +754,12 @@ void KChartPart::loadConfig( KConfig *conf )
     //   loadColorArray(conf, &ExtVolColor, "ExtVolColor");
     //   transparent_bg = conf->readEntry("transparent_bg", transparent_bg);
     //   // TODO: explode, missing
-    //   percent_labels = (KChartPercentType)conf->readNumEntry("percent_labels",
+    //   percent_labels = (KChartPercentType)conf->readEntry("percent_labels",
     // 							 percent_labels);
-    //   label_dist = conf->readNumEntry("label_dist", label_dist);
+    //   label_dist = conf->readEntry("label_dist", label_dist);
     //   label_line = conf->readEntry("label_line", label_line);
-    m_params->setChartType( (KChartParams::ChartType)conf->readNumEntry( "type", m_params->chartType() ) );
-    //   other_threshold = conf->readNumEntry("other_threshold", other_threshold);
+    m_params->setChartType( (KChartParams::ChartType)conf->readEntry( "type", int(m_params->chartType() )) );
+    //   other_threshold = conf->readEntry("other_threshold", other_threshold);
 
     //   backgroundPixmapName = conf->readPathEntry( "backgroundPixmapName" );
     //   if( !backgroundPixmapName.isNull() ) {

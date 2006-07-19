@@ -122,14 +122,14 @@ KexiDBConnectionData* KexiDBDriverManager::createConnectionDataByFile(const QStr
         //bool isDatabaseShortcut = (type == "database");
 
         ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
-        int version = config.readNumEntry("version", 2); //KexiDBShortcutFile_version
+        int version = config.readEntry("version", 2); //KexiDBShortcutFile_version
         data->setFileName(QString::null);
         data->caption = config.readEntry("caption");
         data->description = config.readEntry("comment");
         QString dbname = config.readEntry("name");
         data->driverName = config.readEntry("engine");
         data->hostName = config.readEntry("server");
-        data->port = config.readNumEntry("port", 0);
+        data->port = config.readEntry("port", 0);
         data->useLocalSocketFile = config.readBoolEntry("useLocalSocketFile", false);
         data->localSocketFileName = config.readEntry("localSocketFile");
 

@@ -64,7 +64,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 {
 	KConfig config(d->fileName, true /* readOnly */, false /* local */ );
 	config.setGroup("File Information");
-	data.formatVersion = config.readNumEntry("version", KexiDBShortcutFile_version);
+	data.formatVersion = config.readEntry("version", KexiDBShortcutFile_version);
 
 	QString groupKey;
 	if (!_groupKey || _groupKey->isEmpty()) {
@@ -136,7 +136,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 		return false;
 	}
 	data.connectionData()->hostName = config.readEntry("server"); //empty allowed
-	data.connectionData()->port = config.readNumEntry("port", 0);
+	data.connectionData()->port = config.readEntry("port", 0);
 	data.connectionData()->useLocalSocketFile = config.readBoolEntry("useLocalSocketFile", false);
 	data.connectionData()->localSocketFileName = config.readEntry("localSocketFile");
 	data.connectionData()->savePassword = config.hasKey("password") || config.hasKey("encryptedPassword");
