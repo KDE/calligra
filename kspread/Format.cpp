@@ -148,8 +148,8 @@ void Format::setStyle( Style * style )
   if (!style) return;
 
  // kDebug() << "Newly assigned style: " << m_pStyle << ", type: " << m_pStyle->type() << endl;
-  if (  style->type() == Style::BUILTIN || style->type() == Style::CUSTOM )
-    kDebug() << "Style name: " << ((CustomStyle *) m_pStyle)->name() << endl;
+//   if (  style->type() == Style::BUILTIN || style->type() == Style::CUSTOM )
+//     kDebug() << "Style name: " << ((CustomStyle *) m_pStyle)->name() << endl;
 }
 
 void Format::clearFlag( FormatFlags flag )

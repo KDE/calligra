@@ -132,18 +132,15 @@ void Map::setProtected( QByteArray const & passwd )
 
 Sheet* Map::createSheet()
 {
-  QString s( i18n("Sheet%1", d->tableId++ ) );
-  Sheet *t = new Sheet ( this, s , s.toUtf8());
-  t->setSheetName( s, true ); // huh? (Werner)
-  return t;
+  QString name( i18n("Sheet%1", d->tableId++) );
+  Sheet* sheet = new Sheet( this, name, name.toUtf8() );
+  return sheet;
 }
 
 void Map::addSheet( Sheet *_sheet )
 {
   d->lstSheets.append( _sheet );
-
   d->doc->setModified( true );
-
   emit sig_addSheet( _sheet );
 }
 

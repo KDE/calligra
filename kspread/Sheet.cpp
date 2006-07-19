@@ -294,10 +294,17 @@ Sheet* Sheet::find( int _id )
   return (*s_mapSheets)[ _id ];
 }
 
-Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
+Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   : QObject( map )
 {
-  setObjectName( _name );
+  Q_ASSERT(objectName);
+  // Get a unique name so that we can offer scripting
+  if ( !objectName )
+  {
+    objectName = "Sheet" + QByteArray::number(s_id);
+  }
+  setObjectName( objectName );
+
   if ( s_mapSheets == 0 )
     s_mapSheets = new QHash<int,Sheet*>;
   d = new Private;
@@ -314,7 +321,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
   d->name = sheetName;
 
   new SheetAdaptor(this);
-  QDBus::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName(), this);
+  QDBus::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName, this);
 
   d->cells.setAutoDelete( true );
   d->rows.setAutoDelete( true );
@@ -328,7 +335,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
 
   d->widget = new QWidget();
   d->painter = new QPainter;
-  d->painter->begin( d->widget );
+  d->painter->begin( d->widget ); // ### Stefan: Usage of QPainter outside of a paint event!
 
   d->maxColumn = 256;
   d->maxRow = 256;
@@ -349,12 +356,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
   d->hideZero=false;
   d->firstLetterUpper=false;
   d->autoCalc=true;
-  // Get a unique name so that we can offer scripting
-  if ( !_name )
-  {
-      QByteArray s("Sheet" + QByteArray::number(s_id));
-      QObject::setObjectName( s.data() );
-  }
   d->print = new SheetPrint( this );
 
   // connect to named area slots
@@ -5859,7 +5860,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
 {
     bool ok = false;
     QString sname = sheetName();
-    if ( !doc()->loadingInfo() ||  !doc()->loadingInfo()->loadTemplate() )
+    if ( !doc()->loadingInfo() || !doc()->loadingInfo()->loadTemplate() )
     {
         sname = sheet.attribute( "name" );
         if ( sname.isEmpty() )
@@ -5888,7 +5889,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
             kDebug()<<" Direction not implemented : "<<layoutDir<<endl;
     }
     if( detectDirection )
-      checkContentDirection( sheetName() );
+      checkContentDirection( sname );
 
     /* older versions of KSpread allowed all sorts of characters that
        the parser won't actually understand.  Replace these with '_'
@@ -5901,23 +5902,19 @@ bool Sheet::loadXML( const QDomElement& sheet )
     for (int i=0; i < sname.length(); i++)
     {
       if ( !(sname[i].isLetterOrNumber() ||
-             sname[i] == ' ' || sname[i] == '.' ||
-             sname[i] == '_'))
+             sname[i] == ' ' || sname[i] == '.' || sname[i] == '_') )
       {
         sname[i] = '_';
       }
     }
 
     /* make sure there are no name collisions with the altered name */
-    QString testName;
-    QString baseName;
+    QString testName = sname;
+    QString baseName = sname;
     int nameSuffix = 0;
 
-    testName = sname;
-    baseName = sname;
-
     /* so we don't panic over finding ourself in the follwing test*/
-    sname = "";
+    sname.clear();
     while (workbook()->findSheet(testName) != 0)
     {
       nameSuffix++;
@@ -5925,7 +5922,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     }
     sname = testName;
 
-    kDebug(36001)<<"Sheet::loadXML: table name="<<d->name<<endl;
+    kDebug(36001) << "Sheet::loadXML: table name = " << sname << endl;
     setObjectName(sname.toUtf8());
     setSheetName (sname, true);
 
