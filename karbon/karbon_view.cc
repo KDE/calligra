@@ -43,7 +43,6 @@
 #include <kdeversion.h>
 #include <kprinter.h>
 #include <kinstance.h>
-#include <kactionclasses.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
