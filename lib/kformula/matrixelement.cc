@@ -910,7 +910,7 @@ int MatrixElement::readContentFromMathMLDom( QDomNode& node )
                         }
                         else {
                             SequenceElement* element = getElement(r, c);
-                            if ( element->buildFromMathMLDom( e ) == -1 )
+                            if ( element->buildFromMathMLDom( cellelement ) == -1 )
                                 return -1;
                             c++;
                         }
