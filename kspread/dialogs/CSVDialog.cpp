@@ -105,7 +105,7 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
   else
   {
     setWindowTitle( i18n( "Text to Columns" ) );
-    m_dialog->m_tabWidget->setTabEnabled(0, false);
+    m_dialog->tabWidget2->setTabEnabled(0, false);
     m_fileArray.clear();
     Cell  * cell;
     Sheet * sheet = m_pView->activeSheet();
