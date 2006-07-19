@@ -59,7 +59,7 @@ bool OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
         }
     }
     else if ( n.isText() ) {
-        textelements = n.toText().data();
+        textelements = n.toText().data().stripWhiteSpace();
     }
     else {
         return false;
