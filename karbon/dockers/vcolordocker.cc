@@ -31,6 +31,9 @@
 
 #include <klocale.h>
 #include <KoMainWindow.h>
+#include <KoUniColorChooser.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -43,11 +46,8 @@
 #include "vstrokecmd.h"
 #include "vcommand.h"
 #include "vobject.h"
-
+#include "vcanvas.h"
 #include "vcolordocker.h"
-
-// TODO port to KoUniColorChooser
-//#include <ko_hsv_widget.h>
 
 #include <kdebug.h>
 
@@ -62,18 +62,14 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	m_fillCmd = 0;
 	m_strokeCmd = 0;
 
-	mTabWidget = new QTabWidget( this );
-
 	/* ##### HSV WIDGET ##### */
 	// TODO port to KoUniColorChooser
-	/*
-	mHSVWidget = new KoHSVWidget( mTabWidget );
-	connect( mHSVWidget, SIGNAL( sigFgColorChanged( const QColor &) ), this, SLOT( updateFgColor( const QColor &) ) );
-	connect( mHSVWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
-	connect(this, SIGNAL(fgColorChanged(const QColor &)), mHSVWidget, SLOT(setFgColor(const QColor &)));
-	connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
-	mTabWidget->addTab( mHSVWidget, i18n( "HSV" ) );
-	*/
+	m_colorChooser = new KoUniColorChooser( this );
+	connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), this, SLOT( updateColor( const KoColor &) ) );
+	//connect( m_colorChooser, SIGNAL( sigColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
+	connect(this, SIGNAL(colorChanged(const KoColor &)), m_colorChooser, SLOT(setColor(const KoColor &)));
+	//connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
+
 	//Opacity
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "white" ), QColor( "black" ), 0, 100, 100, this );
 	//TODO: Make "white" a transparent color
@@ -81,7 +77,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mOpacity->setToolTip( i18n( "Alpha (opacity)" ) );
 
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout;
-	mainWidgetLayout->addWidget( mTabWidget );
+	mainWidgetLayout->addWidget( m_colorChooser );
 	mainWidgetLayout->addWidget( mOpacity );
 	mainWidgetLayout->activate();
 
@@ -89,21 +85,33 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 
 	//setMaximumHeight( 174 );
 	setMinimumWidth( 194 );
-	
 }
 
 VColorDocker::~VColorDocker()
 {
 }
 
-void VColorDocker::updateFgColor(const QColor &c)
+void VColorDocker::updateColor( const KoColor &c )
 {
-	//mHSVWidget->blockSignals(true);
+	KoSelection *selection = m_view->canvasWidget()->shapeManager()->selection();
+	if( ! selection )
+		return;
+
+	foreach( KoShape* shape, selection->selectedShapes() )
+	{
+		shape->setBackground( QBrush( c.toQColor() ) );
+		shape->repaint();
+	}
+}
+
+void VColorDocker::updateFgColor(const KoColor &c)
+{
+	m_colorChooser->blockSignals(true);
 
 	m_oldColor = m_color;
 
 	m_color = c;
-
+	/*
 	VColor v = VColor(c);
 	v.setOpacity( m_opacity );
 
@@ -133,20 +141,21 @@ void VColorDocker::updateFgColor(const QColor &c)
 			m_part->addCommand( m_strokeCmd, true );
 		}
 	}
- 
-	emit fgColorChanged( c );
+	*/
+	emit colorChanged( c );
 
-	//mHSVWidget->blockSignals(false);
+	m_colorChooser->blockSignals(false);
 }
 
-void VColorDocker::updateBgColor(const QColor &c)
+void VColorDocker::updateBgColor(const KoColor &c)
 {
-	//mHSVWidget->blockSignals(true);
+	m_colorChooser->blockSignals(true);
 
 	m_oldColor = m_color;
 
 	m_color = c;
 
+	/*
 	VColor v = VColor(c);
 	v.setOpacity( m_opacity );
 
@@ -176,10 +185,10 @@ void VColorDocker::updateBgColor(const QColor &c)
 			m_part->addCommand( m_fillCmd, true );
 		}
 	}
- 
-	emit bgColorChanged( c );
+	*/
+	emit colorChanged( c );
 
-	//mHSVWidget->blockSignals(false);
+	m_colorChooser->blockSignals(false);
 }
 
 void VColorDocker::updateOpacity()
@@ -188,6 +197,7 @@ void VColorDocker::updateOpacity()
 
 	m_oldColor = m_color;
 
+	/*
 	VColor c = VColor(m_color);
 	c.setOpacity( m_opacity );
 
@@ -195,6 +205,7 @@ void VColorDocker::updateOpacity()
 		m_part->addCommand( new VStrokeCmd( &m_part->document(), c ), true );
 	else
 		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( c ) ), true );
+	*/
 }
 
 void
@@ -215,8 +226,8 @@ void VColorDocker::setStrokeDocker()
 
 void VColorDocker::update()
 {
-
-	//mHSVWidget->blockSignals(true);
+	/*
+	mHSVWidget->blockSignals(true);
 
 	int objCnt = m_part->document().selection()->objects().count();
 
@@ -227,12 +238,12 @@ void VColorDocker::update()
 		QColor fgColor = QColor(obj->stroke()->color());
 		QColor bgColor = QColor(obj->fill()->color());
 
-		// TODO port to KoUniColorChooser
 		//mHSVWidget->setFgColor(fgColor);
 		//mHSVWidget->setBgColor(bgColor);
 	}
 
-	//mHSVWidget->blockSignals(false);
+	mHSVWidget->blockSignals(false);
+	*/
 }
 
 #include "vcolordocker.moc"

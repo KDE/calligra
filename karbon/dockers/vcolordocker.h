@@ -23,14 +23,14 @@
 #ifndef __VCOLORDOCKER_H__
 #define __VCOLORDOCKER_H__
 
-class QTabWidget;
+#include <KoColor.h>
+
 class QWidget;
 class QColor;
 class KarbonView;
 class VColor;
 class VColorSlider;
-// TODO port to KoUniColorChooser
-//class KoHSVWidget;
+class KoUniColorChooser;
 
 class VColorDocker : public QWidget
 {
@@ -41,7 +41,7 @@ public:
 	 virtual ~VColorDocker();
 
 	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
-	 VColor color() { return m_color; }
+	 KoColor color() { return m_color; }
 
 public slots:
 	virtual void setFillDocker();
@@ -51,24 +51,24 @@ public slots:
 private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );
 
-	QTabWidget *mTabWidget;
-	// TODO port to KoUniColorChooser
-	//KoHSVWidget *mHSVWidget;
+	KoUniColorChooser *m_colorChooser;
 	VColorSlider *mOpacity;
 
 signals:
-	void fgColorChanged( const QColor &c );
-	void bgColorChanged( const QColor &c );
+	void colorChanged( const KoColor &c );
+	//void fgColorChanged( const QColor &c );
+	//void bgColorChanged( const QColor &c );
 
 private slots:
-	void updateFgColor(const QColor &c);
-	void updateBgColor(const QColor &c);
+	void updateColor( const KoColor &c );
+	void updateFgColor(const KoColor &c);
+	void updateBgColor(const KoColor &c);
 	void updateOpacity();
 
 protected:
 	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
-	QColor m_color;
-	QColor m_oldColor;
+	KoColor m_color;
+	KoColor m_oldColor;
 	float m_opacity;
 private:
 	KarbonPart *m_part;
