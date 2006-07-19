@@ -103,11 +103,13 @@ void ExportSizeDia::setupGUI()
     mainLayout->addWidget( height,     2, 0 );
     mainLayout->addWidget( m_heightEdit, 2, 1 );
 
-    QLabel* percentWidth = new QLabel( page, "PercentWidth" );
+    QLabel* percentWidth = new QLabel( page );
+    percentWidth->setObjectName( "PercentWidth" );
     percentWidth->setText( i18n( "Width (%):" ) );
     m_percWidthEdit = new KDoubleNumInput( page);
 	m_percWidthEdit->setObjectName("percWidthEdit" );
-    QLabel* percentHeight = new QLabel( page, "PercentHeight" );
+    QLabel* percentHeight = new QLabel( page );
+    percentHeight->setObjectName( "PercentHeight" );
     percentHeight->setText( i18n( "Height (%):" ) );
     m_percHeightEdit = new KDoubleNumInput( page);
 	m_percHeightEdit->setObjectName( "percHeightEdit" );
