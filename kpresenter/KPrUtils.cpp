@@ -346,7 +346,7 @@ QCursor KPrUtils::penCursor()
         0xd0, 0x0f, 0x00, 0x88, 0x07, 0x00, 0x88, 0x03, 0x00, 0xe4, 0x01, 0x00,
         0x7c, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    QBitmap pen_bitmap( 24, 24, pen_bits, true );
+    QBitmap pen_bitmap = QBitmap::fromData( QSize(24,  24),  pen_bits);
     QBitmap pen_mask( 24, 24 );
     QPixmap pix( pen_bitmap );
     pen_mask = pix.createHeuristicMask( false );
@@ -365,7 +365,7 @@ QCursor KPrUtils::rotateCursor()
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    QBitmap rotate_bitmap( 22, 22, rotate_bits, true );
+    QBitmap rotate_bitmap = QBitmap::fromData( QSize(22,  22),  rotate_bits);
     QBitmap rotate_mask( 22, 22 );
     QPixmap pix( rotate_bitmap );
     rotate_mask = pix.createHeuristicMask( false );
