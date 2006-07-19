@@ -448,7 +448,7 @@ GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
         generalValue.m_rect = object->geometry()/*getRect()*/;
     }
 
-#warning Why is this here? Before the conversion to Qt4 it was never processed.
+// ### Why is this here? Before the conversion to Qt4 it was never processed.
 #if 0
     foreach ( EmbeddedObject* object, m_objects )
     {

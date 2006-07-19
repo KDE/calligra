@@ -174,9 +174,10 @@ Canvas::Canvas(View *view)
 //   d->scrollTimer = new QTimer( this );
 //   connect (d->scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
 
-  if( d->view)
+  if (d->view)
   {
-    connect( d->view, SIGNAL( autoScroll( const QPoint & )), this, SLOT( slotAutoScroll( const QPoint &)));
+    connect( d->view, SIGNAL( autoScroll( const QPoint & )),
+             this, SLOT( slotAutoScroll( const QPoint &)));
   }
   setFocus();
 //   installEventFilter( this );
@@ -889,7 +890,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 }*/
 
-  if ( d->dragging )
+//   if ( d->dragging )
   {
     return;
   }
@@ -3158,9 +3159,15 @@ bool Canvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
 
 void Canvas::slotAutoScroll(const QPoint &scrollDistance)
 {
-  QPoint d = scrollDistance;
-  horzScrollBar()->setValue( horzScrollBar()->value() + d.x() );
-  vertScrollBar()->setValue( vertScrollBar()->value() + d.y() );
+  // NOTE Stefan: This slot is triggered by the same signal as
+  //              HBorder::slotAutoScroll and VBorder::slotAutoScroll.
+  //              Therefore, nothing has to be done except the scrolling was
+  //              initiated in the canvas.
+  if (!d->mousePressed)
+    return;
+//   kDebug() << "Canvas::slotAutoScroll(" << scrollDistance << " " << endl;
+  horzScrollBar()->setValue( horzScrollBar()->value() + scrollDistance.x() );
+  vertScrollBar()->setValue( vertScrollBar()->value() + scrollDistance.y() );
 }
 
 // TODO Stefan: Still needed?
@@ -3824,7 +3831,7 @@ void Canvas::copyOasisObjects()
     QMimeData* mimeData = new QMimeData();
     if ( !plainText.isEmpty() )
         mimeData->setText( plainText );
-#warning TODO KDE4 portage
+#warning TODO KDE4 portage: Drag'n'drop of KoPicture
 #if 0
     if ( !picture.isNull() )
         multiDrag->setMimeData( picture.dragObject( 0 ) );

@@ -93,14 +93,15 @@ VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
   m_iSelectionAnchor=1;
   m_bMousePressed = false;
 
-  m_scrollTimer = new QTimer( this );
-  connect (m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
+//   m_scrollTimer = new QTimer( this );
+  connect( m_pView, SIGNAL( autoScroll( const QPoint & )),
+           this, SLOT( slotAutoScroll( const QPoint &)) );
 }
 
 
 VBorder::~VBorder()
 {
-    delete m_scrollTimer;
+//     delete m_scrollTimer;
 }
 
 QSize VBorder::sizeHint() const
@@ -119,7 +120,10 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
     return;
 
   if ( _ev->button() == Qt::LeftButton )
+  {
     m_bMousePressed = true;
+    m_pView->enableAutoScroll();
+  }
 
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItYOld( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->d->view->doc()->unzoomItYOld( height() );
@@ -132,7 +136,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  m_scrollTimer->start( 50 );
+//   m_scrollTimer->start( 50 );
 
   // Find the first visible row and the y position of this row.
   double y;
@@ -211,8 +215,9 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
 
 void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
-    if ( m_scrollTimer->isActive() )
-        m_scrollTimer->stop();
+    m_pView->disableAutoScroll();
+//     if ( m_scrollTimer->isActive() )
+//         m_scrollTimer->stop();
 
     m_bMousePressed = false;
 
@@ -426,9 +431,25 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
+void VBorder::slotAutoScroll(const QPoint& scrollDistance)
+{
+  // NOTE Stefan: This slot is triggered by the same signal as
+  //              Canvas::slotAutoScroll and HBorder::slotAutoScroll.
+  //              Therefore, nothing has to be done except the scrolling was
+  //              initiated in this header.
+  if (!m_bMousePressed)
+    return;
+//   kDebug() << "VBorder::slotAutoScroll(" << scrollDistance << " " << endl;
+  if (scrollDistance.y() > 0 || scrollDistance.y() < -height())
+  {
+    m_pView->vertScrollBar()->setValue( m_pView->vertScrollBar()->value() + scrollDistance.y() );
+  }
+}
+
+// TODO Stefan: Still needed?
+#if 0
 void VBorder::doAutoScroll()
 {
-#if 0
     if ( !m_bMousePressed )
     {
         m_scrollTimer->stop();
@@ -447,8 +468,8 @@ void VBorder::doAutoScroll()
 
     //Restart timer
     m_scrollTimer->start( 50 );
-#endif
 }
+#endif
 
 void VBorder::wheelEvent( QWheelEvent* _ev )
 {
@@ -630,8 +651,9 @@ void VBorder::paintEvent( QPaintEvent* event )
 
 void VBorder::focusOutEvent( QFocusEvent* )
 {
-    if ( m_scrollTimer->isActive() )
-        m_scrollTimer->stop();
+    m_pView->disableAutoScroll();
+//     if ( m_scrollTimer->isActive() )
+//         m_scrollTimer->stop();
     m_bMousePressed = false;
 }
 
@@ -657,14 +679,15 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
   m_iSelectionAnchor=1;
   m_bMousePressed = false;
 
-  m_scrollTimer = new QTimer( this );
-  connect( m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
+//   m_scrollTimer = new QTimer( this );
+  connect( m_pView, SIGNAL( autoScroll( const QPoint & )),
+           this, SLOT( slotAutoScroll( const QPoint &)) );
 }
 
 
 HBorder::~HBorder()
 {
-    delete m_scrollTimer;
+//     delete m_scrollTimer;
 }
 
 QSize HBorder::sizeHint() const
@@ -678,7 +701,10 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     return;
 
   if ( _ev->button() == Qt::LeftButton )
+  {
     m_bMousePressed = true;
+    m_pView->enableAutoScroll();
+  }
 
   const register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
@@ -690,7 +716,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
       m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  m_scrollTimer->start( 50 );
+//   m_scrollTimer->start( 50 );
 
   double ev_PosX;
   double dWidth = m_pCanvas->d->view->doc()->unzoomItXOld( width() );
@@ -835,8 +861,9 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 
 void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
-    if ( m_scrollTimer->isActive() )
-        m_scrollTimer->stop();
+    m_pView->disableAutoScroll();
+//     if ( m_scrollTimer->isActive() )
+//         m_scrollTimer->stop();
 
     m_bMousePressed = false;
 
@@ -1105,9 +1132,25 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
+void HBorder::slotAutoScroll(const QPoint& scrollDistance)
+{
+  // NOTE Stefan: This slot is triggered by the same signal as
+  //              Canvas::slotAutoScroll and VBorder::slotAutoScroll.
+  //              Therefore, nothing has to be done except the scrolling was
+  //              initiated in this header.
+  if (!m_bMousePressed)
+    return;
+//   kDebug() << "HBorder::slotAutoScroll(" << scrollDistance << " " << endl;
+  if (scrollDistance.x() > 0 || scrollDistance.x() < -width())
+  {
+    m_pView->horzScrollBar()->setValue( m_pView->horzScrollBar()->value() + scrollDistance.x() );
+  }
+}
+
+// TODO Stefan: Still needed?
+#if 0
 void HBorder::doAutoScroll()
 {
-#if 0
     if ( !m_bMousePressed )
     {
         m_scrollTimer->stop();
@@ -1126,8 +1169,8 @@ void HBorder::doAutoScroll()
 
     //Restart timer
     m_scrollTimer->start( 50 );
-#endif
 }
+#endif
 
 void HBorder::wheelEvent( QWheelEvent* _ev )
 {
@@ -1427,12 +1470,11 @@ void HBorder::paintEvent( QPaintEvent* event )
 
 void HBorder::focusOutEvent( QFocusEvent* )
 {
-    if ( m_scrollTimer->isActive() )
-        m_scrollTimer->stop();
+//     if ( m_scrollTimer->isActive() )
+//         m_scrollTimer->stop();
+    kDebug() << "HBorder::focusOutEvent(" << endl;
+    m_pView->disableAutoScroll();
     m_bMousePressed = false;
 }
 
-
-
 #include "Border.moc"
-

@@ -86,7 +86,7 @@ Map::Map ( Doc* doc, const char* name)
   : QObject( doc ),
     d(new Private)
 {
-  setObjectName( name ); // ### necessary for DCOP/Scripting?
+  setObjectName( name ); // necessary for D-Bus
   d->doc = doc;
   d->dependencyManager = new DependencyManager();
   d->recalcManager = new RecalcManager(d->dependencyManager);

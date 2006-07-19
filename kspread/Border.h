@@ -47,7 +47,7 @@ public:
     QSize sizeHint() const;
 
 private slots:
-    void doAutoScroll();
+    void slotAutoScroll(const QPoint& distance);
 
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
@@ -63,7 +63,7 @@ protected:
 private:
     Canvas *m_pCanvas;
     View *m_pView;
-    QTimer * m_scrollTimer;
+//     QTimer * m_scrollTimer;
 
     /**
      * Flag that inidicates whether the user wants to mark columns.
@@ -132,7 +132,7 @@ public:
     QSize sizeHint() const;
 
 private slots:
-    void doAutoScroll();
+    void slotAutoScroll(const QPoint& distance);
 
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
@@ -147,7 +147,7 @@ protected:
 private:
     Canvas *m_pCanvas;
     View *m_pView;
-    QTimer * m_scrollTimer;
+//     QTimer * m_scrollTimer;
 
     bool m_bSelection;
     int m_iSelectionAnchor;
