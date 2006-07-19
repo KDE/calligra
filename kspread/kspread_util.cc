@@ -925,8 +925,15 @@ QString KSpread::convertRangeToRef( const QString & sheetName, const QRect & _ar
 
 QString KSpread::convertOasisPenToString( const QPen & pen )
 {
-    kdDebug()<<"convertOasisPenToString( const QPen & pen ) :"<<pen<<endl;
-    QString s = QString( "%1pt " ).arg( pen.width() );
+//     kdDebug()<<"convertOasisPenToString( const QPen & pen ) :"<<pen<<endl;
+    // NOTE Stefan: QPen api docs:
+    //              For horizontal and vertical lines a line width of 0 is
+    //              the same as a line width of 1.
+    //              A line width of 0 will produce a 1 pixel wide line using
+    //              a fast algorithm for diagonals. A line width of 1 will
+    //              also produce a 1 pixel wide line, but uses a slower more
+    //              accurate algorithm for diagonals.
+    QString s = QString( "%1pt " ).arg( (pen.width() == 0) ? 1 : pen.width() );
     switch( pen.style() )
     {
     case Qt::NoPen:

@@ -1318,43 +1318,47 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
             style.addProperty( "style:cell-protect", "protected" );
     }
 
-    if ( featureSet( SLeftBorder ) &&featureSet( SRightBorder ) &&
+    // borders
+    // NOTE Stefan: QPen api docs:
+    //              For horizontal and vertical lines a line width of 0 is
+    //              the same as a line width of 1.
+    //              A line width of 0 will produce a 1 pixel wide line using
+    //              a fast algorithm for diagonals. A line width of 1 will
+    //              also produce a 1 pixel wide line, but uses a slower more
+    //              accurate algorithm for diagonals.
+    if ( featureSet( SLeftBorder ) && featureSet( SRightBorder ) &&
          featureSet( STopBorder ) && featureSet( SBottomBorder ) &&
-        ( m_leftBorderPen == m_topBorderPen )&&
-         ( m_leftBorderPen == m_rightBorderPen )&&
+         ( m_leftBorderPen == m_topBorderPen ) &&
+         ( m_leftBorderPen == m_rightBorderPen ) &&
          ( m_leftBorderPen == m_bottomBorderPen ) )
     {
-        if ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) )
+      if ( m_leftBorderPen.style() != Qt::NoPen )
             style.addProperty("fo:border", convertOasisPenToString( m_leftBorderPen ) );
     }
     else
     {
-        if ( featureSet( SLeftBorder ) &&
-             ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) ) )
+        if ( featureSet( SLeftBorder ) && ( m_leftBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-left", convertOasisPenToString( m_leftBorderPen ) );
 
-        if ( featureSet( SRightBorder ) &&
-             ( ( m_rightBorderPen.width() != 0 ) && ( m_rightBorderPen.style() != Qt::NoPen ) ) )
+        if ( featureSet( SRightBorder ) && ( m_rightBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-right", convertOasisPenToString( m_rightBorderPen ) );
 
-        if ( featureSet( STopBorder ) &&
-             ( ( m_topBorderPen.width() != 0 ) && ( m_topBorderPen.style() != Qt::NoPen ) ) )
+        if ( featureSet( STopBorder ) && ( m_topBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-top", convertOasisPenToString( m_topBorderPen ) );
 
-        if ( featureSet( SBottomBorder ) &&
-             ( m_bottomBorderPen.width() != 0 ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
+        if ( featureSet( SBottomBorder ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-bottom", convertOasisPenToString( m_bottomBorderPen ) );
     }
-    if ( featureSet( SFallDiagonal ) &&
-         ( ( m_fallDiagonalPen.width() != 0 ) && ( m_fallDiagonalPen.style() != Qt::NoPen ) ) )
+    if ( featureSet( SFallDiagonal ) && ( m_fallDiagonalPen.style() != Qt::NoPen ) )
     {
         style.addProperty("style:diagonal-tl-br", convertOasisPenToString( m_fallDiagonalPen ) );
     }
-    if ( featureSet( SGoUpDiagonal ) &&
-         ( ( m_goUpDiagonalPen.width() != 0 ) && ( m_goUpDiagonalPen.style() != Qt::NoPen ) ))
+    if ( featureSet( SGoUpDiagonal ) && ( m_goUpDiagonalPen.style() != Qt::NoPen ) )
     {
         style.addProperty("style:diagonal-bl-tr", convertOasisPenToString(m_goUpDiagonalPen ) );
     }
+
+    // font
     if ( featureSet( SFontFamily ) )
     {
         style.addProperty("fo:font-family", m_fontFamily, KoGenStyle::TextType );
