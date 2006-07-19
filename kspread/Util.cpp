@@ -905,8 +905,12 @@ QString KSpread::convertRangeToRef( const QString & sheetName, const QRect & _ar
 
 QString KSpread::Oasis::encodePen( const QPen & pen )
 {
-    kDebug()<<"encodePen( const QPen & pen ) :"<<pen<<endl;
-    QString s = QString( "%1pt " ).arg( pen.width() );
+//     kDebug()<<"encodePen( const QPen & pen ) :"<<pen<<endl;
+    // NOTE Stefan: QPen api docs:
+    //              A line width of zero indicates a cosmetic pen. This means
+    //              that the pen width is always drawn one pixel wide,
+    //              independent of the transformation set on the painter.
+    QString s = QString( "%1pt " ).arg( (pen.width() == 0) ? 1 : pen.width() );
     switch( pen.style() )
     {
     case Qt::NoPen:

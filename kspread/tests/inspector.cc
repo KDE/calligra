@@ -51,11 +51,13 @@ public:
   Q3ListView *cellView;
   Q3ListView *formatView;
   Q3ListView *sheetView;
+  Q3ListView *styleView;
   Q3ListView* depView;
 
   void handleCell();
   void handleFormat();
   void handleSheet();
+  void handleStyle();
   void handleDep();
 };
 
@@ -136,6 +138,38 @@ void Inspector::Private::handleFormat()
   if (valid)
     currencyType = Currency::getChooseString(currrency.type, ok);
   new Q3ListViewItem( formatView, "Currency type", valid && ok ? currencyType : "Invalid" );
+
+  Q3ListViewItem* flags = new Q3ListViewItem( formatView, "Flags" );
+  new Q3ListViewItem( flags, "Border (left)",
+                     boolAsString( format->hasProperty(Style::SLeftBorder, true) ) );
+  new Q3ListViewItem( flags, "Border (right)",
+                     boolAsString( format->hasProperty(Style::SRightBorder, true) ) );
+  new Q3ListViewItem( flags, "Border (top)",
+                     boolAsString( format->hasProperty(Style::STopBorder, true) ) );
+  new Q3ListViewItem( flags, "Border (bottom)",
+                     boolAsString( format->hasProperty(Style::SBottomBorder, true) ) );
+
+  new Q3ListViewItem( formatView, "Border pen width (bottom)",
+                     QString::number( format->bottomBorderPen(col,row).width() ) );
+}
+
+void Inspector::Private::handleStyle() // direct style access
+{
+  styleView->clear();
+  const Style* style = cell->format()->style();
+
+  Q3ListViewItem* flags = new Q3ListViewItem( styleView, "Flags" );
+  new Q3ListViewItem( flags, "Border (left)",
+                     boolAsString( style->hasFeature(Style::SLeftBorder, true) ) );
+  new Q3ListViewItem( flags, "Border (right)",
+                     boolAsString( style->hasFeature(Style::SRightBorder, true) ) );
+  new Q3ListViewItem( flags, "Border (top)",
+                     boolAsString( style->hasFeature(Style::STopBorder, true) ) );
+  new Q3ListViewItem( flags, "Border (bottom)",
+                     boolAsString( style->hasFeature(Style::SBottomBorder, true) ) );
+
+  new Q3ListViewItem( styleView, "Border pen width (bottom)",
+                     QString::number( style->bottomBorderPen().width() ) );
 }
 
 void Inspector::Private::handleSheet()
@@ -202,6 +236,14 @@ Inspector::Inspector( Cell* cell ):
   d->formatView->addColumn( "Key", 150 );
   d->formatView->addColumn( "Value" );
 
+  QFrame* stylePage = new QFrame();
+  addPage(stylePage, QString("Style") );
+  QVBoxLayout* styleLayout = new QVBoxLayout( stylePage );
+  d->styleView = new Q3ListView( stylePage );
+  styleLayout->addWidget( d->styleView );
+  d->styleView->addColumn( "Key", 150 );
+  d->styleView->addColumn( "Value" );
+
   QFrame* sheetPage = new QFrame();
   addPage(sheetPage,  QString("Sheet") );
   QVBoxLayout* sheetLayout = new QVBoxLayout( sheetPage );
@@ -225,6 +267,7 @@ Inspector::Inspector( Cell* cell ):
   d->handleCell();
   d->handleFormat();
   d->handleSheet();
+  d->handleStyle();
   d->handleDep();
 
   resize( 350, 400 );
