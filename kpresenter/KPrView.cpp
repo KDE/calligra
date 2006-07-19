@@ -2792,7 +2792,7 @@ void KPrView::setupActions()
     addVariableActions( VT_PGNUM, KoPageVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
     addVariableActions( VT_STATISTIC, KPrStatisticVariable::actionTexts(), actionInsertVariable, i18n("&Statistic") );
 
-    actionInsertVariable->popupMenu()->insertSeparator();
+    actionInsertVariable->menu()->insertSeparator();
     actionRefreshAllVariable = new KAction( i18n( "&Refresh All Variables" ), actionCollection(), "refresh_all_variable" );
     connect(actionRefreshAllVariable, SIGNAL(triggered(bool)), SLOT( refreshAllVariable() ));
     actionInsertVariable->addAction(actionRefreshAllVariable);
@@ -4672,7 +4672,7 @@ void KPrView::refreshCustomMenu()
     actionInsertVariable->addAction(actionInsertCustom);
 
 
-    actionInsertCustom->popupMenu()->clear();
+    actionInsertCustom->menu()->clear();
     Q3PtrListIterator<KoVariable> it( m_pKPresenterDoc->getVariableCollection()->getVariables() );
     KAction * act=0;
     QStringList lst;
@@ -4700,7 +4700,7 @@ void KPrView::refreshCustomMenu()
     }
     bool state=!lst.isEmpty();
     if(state)
-        actionInsertCustom->popupMenu()->insertSeparator();
+        actionInsertCustom->menu()->insertSeparator();
 
     act = new KAction( i18n("New..."), actionCollection(), QString("custom-action_%1").arg(i).toLatin1() );
     connect(act, SIGNAL(triggered(bool)), SLOT( insertNewCustomVariable() ));
@@ -4708,7 +4708,7 @@ void KPrView::refreshCustomMenu()
 	//act->setGroup( "custom-variable-action" );
     actionInsertCustom->addAction( act );
 
-    actionInsertCustom->popupMenu()->insertSeparator();
+    actionInsertCustom->menu()->insertSeparator();
 
     actionEditCustomVars->setEnabled(state);
     actionEditCustomVarsEdit->setEnabled( state );
