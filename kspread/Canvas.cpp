@@ -890,7 +890,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 }*/
 
-//   if ( d->dragging )
+  if ( d->dragging )
   {
     return;
   }
