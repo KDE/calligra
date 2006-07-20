@@ -548,7 +548,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                   topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
               }
 
-              int paintBorder = Cell::NoBorder;
+              Cell::Borders paintBorder = Cell::NoBorder;
               if (paintBordersLeft) paintBorder |= Cell::LeftBorder;
 	      if (paintBordersRight) paintBorder |= Cell::RightBorder;
               if (paintBordersTop) paintBorder |= Cell::TopBorder;

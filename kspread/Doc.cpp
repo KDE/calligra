@@ -1619,7 +1619,7 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       bool paintBordersLeft   = false;
       bool paintBordersTop    = false;
 #endif
-      int paintBorder = Cell::NoBorder;
+      Cell::Borders paintBorder = Cell::NoBorder;
 
       QPen rightPen( cell->effRightBorderPen( x, y ) );
       QPen leftPen( cell->effLeftBorderPen( x, y ) );

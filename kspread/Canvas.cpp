@@ -4083,7 +4083,7 @@ void Canvas::paintUpdates()
           if (cell->layoutDirtyFlag()) cell->makeLayout( painter, x, y );
         }
 
-        int paintBorder = Cell::NoBorder;
+        Cell::Borders paintBorder = Cell::NoBorder;
 
         QPen bottomPen( cell->effBottomBorderPen( x, y ) );
         QPen rightPen( cell->effRightBorderPen( x, y ) );
