@@ -533,7 +533,7 @@ void AutoFillSequence::fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *d
     QString erg = "";
 
     // Special handling for formulas
-    if ( sequence.first() != 0 && sequence.first()->getType() == AutoFillSequenceItem::FORMULA )
+    if ( sequence.value(0) != 0 && sequence.first()->getType() == AutoFillSequenceItem::FORMULA )
     {
         QString f = dest->decodeFormula( sequence.first()->getString() );
         dest->setCellText( f );
