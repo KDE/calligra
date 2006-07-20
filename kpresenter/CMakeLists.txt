@@ -176,7 +176,7 @@ install(TARGETS kpresenter  DESTINATION ${BIN_INSTALL_DIR})
 install( FILES  kpresenter.rc kpresenter_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kpresenter)
 install( FILES  kpresenterpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kpresenter.desktop  DESTINATION ${XDG_APPS_DIR})
-install(PROGRAMS kprconverter.pl DESTINATION bin )
+install(PROGRAMS kprconverter.pl DESTINATION ${BIN_INSTALL_DIR} )
 
 
 
