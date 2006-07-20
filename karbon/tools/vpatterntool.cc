@@ -32,7 +32,7 @@
 #include <QVBoxLayout>
 
 #include <kiconloader.h>
-#include <koIconChooser.h>
+#include <KoResourceChooser.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 
@@ -61,7 +61,7 @@ VPatternWidget::VPatternWidget( Q3PtrList<QTableWidgetItem>* patterns, VTool*, Q
 
 	QWidget *base = new QWidget( this );
 	QVBoxLayout* layout = new QVBoxLayout( base );
-	layout->addWidget( m_patternChooser = new KoIconChooser( QSize( 32, 32 ), base ) );
+	layout->addWidget( m_patternChooser = new KoResourceChooser( QSize( 32, 32 ), base ) );
 	layout->addWidget( m_buttonGroup = new Q3HButtonGroup( base ) );
 	m_buttonGroup->insert( m_importPatternButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deletePatternButton = new QToolButton( m_buttonGroup ) );

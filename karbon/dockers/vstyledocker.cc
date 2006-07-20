@@ -51,7 +51,7 @@
 #include <unistd.h>
 
 ClipartChooser::ClipartChooser( QSize iconSize, QWidget *parent, const char *name )
-	: KoIconChooser( iconSize, parent)
+	: KoResourceChooser( iconSize, parent)
 {
 	setDragEnabled( true );
 }
@@ -59,7 +59,7 @@ ClipartChooser::ClipartChooser( QSize iconSize, QWidget *parent, const char *nam
 void
 ClipartChooser::startDrag()
 {
-//	KoIconChooser::startDrag();
+//	KoResourceChooser::startDrag();
 	KarbonDrag* kd = new KarbonDrag( this );
 	VObjectList objects;
 	VClipartIconItem *selectedClipart = (VClipartIconItem *)currentItem();

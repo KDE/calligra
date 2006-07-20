@@ -21,7 +21,7 @@
 #ifndef __VSTYLEDOCKER_H__
 #define __VSTYLEDOCKER_H__
 
-#include <koIconChooser.h>
+#include <KoResourceChooser.h>
 #include <QWidget>
 //Added by qt3to4:
 #include <QMouseEvent>
@@ -35,7 +35,7 @@ class QToolButton;
 
 class VClipartIconItem;
 
-class ClipartChooser : public KoIconChooser
+class ClipartChooser : public KoResourceChooser
 {
 public:
 	ClipartChooser( QSize iconSize, QWidget *parent = 0L, const char *name = 0L );

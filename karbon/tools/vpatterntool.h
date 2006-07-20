@@ -28,7 +28,7 @@
 
 class Q3HButtonGroup;
 class QToolButton;
-class KoIconChooser;
+class KoResourceChooser;
 class QPointF;
 class QRectF;
 
@@ -50,7 +50,7 @@ public slots:
 	void patternSelected( QTableWidgetItem* );
 
 private:
-	KoIconChooser*        m_patternChooser;
+	KoResourceChooser*        m_patternChooser;
 	Q3HButtonGroup*        m_buttonGroup;
 	QToolButton*          m_importPatternButton;
 	QToolButton*          m_deletePatternButton;
