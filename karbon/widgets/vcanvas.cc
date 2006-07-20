@@ -53,6 +53,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcolormimedata.h>
+#include <kcommand.h>
+
 #include "vlayer.h"
 
 KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
@@ -130,7 +132,9 @@ void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
 }
 
 void KarbonCanvas::addCommand(KCommand *command, bool execute) {
-    //m_commandHistory->addCommand(command, execute);
+
+    if( m_commandHistory )
+        m_commandHistory->addCommand(command, execute);
 }
 
 void KarbonCanvas::updateCanvas(const QRectF& rc) {

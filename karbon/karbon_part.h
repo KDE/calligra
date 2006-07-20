@@ -32,7 +32,8 @@ class QRectF;
 class QRect;
 class VCommand;
 class VDocument;
-class VCommandHistory;
+class KCommand;
+class KCommandHistory;
 
 /**
  * Keeps track of visual per document properties.
@@ -75,7 +76,7 @@ public:
 	void clearHistory();
 
 	/// access the command history:
-	VCommandHistory* commandHistory()
+	KCommandHistory* commandHistory()
 	{
 		return m_commandHistory;
 	}
@@ -108,7 +109,7 @@ public slots:
 	void repaintAllViews( bool repaint = true );
 	void repaintAllViews( const QRectF& );
 	void slotDocumentRestored();
-	void slotCommandExecuted( VCommand * );
+	void slotCommandExecuted( KCommand * );
 	void slotUnitChanged( KoUnit::Unit unit );
 
 protected:
@@ -119,7 +120,7 @@ protected:
 
 private:
 	VDocument m_doc;					/// store non-visual doc info
-	VCommandHistory* m_commandHistory;	/// maintain a command history for undo/redo
+	KCommandHistory* m_commandHistory;	/// maintain a command history for undo/redo
 
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
 	bool m_merge;

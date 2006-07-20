@@ -194,6 +194,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
 
 	m_canvas = new KarbonCanvas( p->document().shapes() ); //, this, p );
+	m_canvas->setCommandHistory( p->commandHistory() );
 	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
 	m_canvasView = new KoCanvasController(this);

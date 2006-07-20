@@ -276,11 +276,12 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 	m_layers->setAlignment( Qt::AlignRight );
 	m_format->setAlignment( Qt::AlignRight );
 
+	/*
 	connect( view->part()->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
 	connect( view->part()->commandHistory(), SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+	*/
 	connect( view, SIGNAL( pageLayoutChanged() ), this, SLOT( slotCommandExecuted() ) );
 	connect( view->canvasWidget(), SIGNAL( viewportChanged() ), this, SLOT( slotViewportChanged() ) );
-
 	setLayout(layout);
 
 	updateDocumentInfo();
@@ -524,7 +525,7 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	connect( m_layersListView, SIGNAL( selectionChanged() ), this, SLOT( selectionChangedFromList() ) );
 	connect( m_view, SIGNAL( selectionChange() ), this, SLOT( selectionChangedFromTool() ) );
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
-	connect( view->part()->commandHistory(), SIGNAL( commandExecuted( VCommand*) ), this, SLOT( slotCommandExecuted( VCommand* ) ) );
+	//connect( view->part()->commandHistory(), SIGNAL( commandExecuted( VCommand*) ), this, SLOT( slotCommandExecuted( VCommand* ) ) );
 
 	layout->activate();
 	setLayout(layout);
@@ -1294,6 +1295,7 @@ VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 	m_history->setSorting( 0, true );
 	VHistoryGroupItem* group = 0;
 	VHistoryItem* last = 0;
+	/*
 	Q3PtrVector<VCommand> cmds;
 	part->commandHistory()->commands()->toVector( &cmds );
 	int c = cmds.count();
@@ -1331,7 +1333,7 @@ VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 	connect( this, SIGNAL( redoCommand( VCommand* ) ), part->commandHistory(), SLOT( redo( VCommand* ) ) );
 	connect( this, SIGNAL( undoCommandsTo( VCommand* ) ), part->commandHistory(), SLOT( undoAllTo( VCommand* ) ) );
 	connect( this, SIGNAL( redoCommandsTo( VCommand* ) ), part->commandHistory(), SLOT( redoAllTo( VCommand* ) ) );
-
+	*/
 	setLayout(layout);
 } // VHistoryTab::VHistoryTab
 

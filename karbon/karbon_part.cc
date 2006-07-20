@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktempfile.h>
+#include <kcommand.h>
 #include <KoStoreDevice.h>
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
@@ -69,9 +70,9 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 	setTemplateType( "karbon_template" );
 	m_bShowStatusBar = true;
 
-	m_commandHistory = new VCommandHistory( this );
+	m_commandHistory = new KCommandHistory( actionCollection(), true );
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
-	connect( m_commandHistory, SIGNAL( commandExecuted( VCommand * ) ), this, SLOT( slotCommandExecuted( VCommand * ) ) );
+	connect( m_commandHistory, SIGNAL( commandExecuted( KCommand * ) ), this, SLOT( slotCommandExecuted( KCommand * ) ) );
 
 	initConfig();
 
@@ -450,11 +451,14 @@ KarbonPart::insertObject( VObject* object )
 void
 KarbonPart::addCommand( VCommand* cmd, bool repaint )
 {
+	kDebug(38000) << "KarbonPart::addCommand: please port to new command handling" << endl;
+	/* 
 	m_commandHistory->addCommand( cmd );
 	setModified( true );
 
 	if( repaint )
 		repaintAllViews();
+	*/
 }
 
 void
@@ -464,14 +468,16 @@ KarbonPart::slotDocumentRestored()
 }
 
 void
-KarbonPart::slotCommandExecuted( VCommand *command )
+KarbonPart::slotCommandExecuted( KCommand *command )
 {
 	setModified( true );
+	/*
 	if( command && command->changesSelection() )
 	{
 		foreach ( KoView* view, views() )
 			static_cast<KarbonView*>( view )->selectionChanged();
 	}
+	*/
 }
 
 void

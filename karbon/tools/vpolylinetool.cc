@@ -81,7 +81,7 @@ VPolylineTool::activate()
 	m_bezierPoints.clear();
 	m_close = false;
 
-	connect( view()->part()->commandHistory(), SIGNAL(commandExecuted()), this, SLOT(commandExecuted()) );
+	//connect( view()->part()->commandHistory(), SIGNAL(commandExecuted()), this, SLOT(commandExecuted()) );
 }
 
 void
@@ -138,7 +138,7 @@ VPolylineTool::deactivate()
 		view()->part()->addCommand( cmd, true );
 	}
 
-	disconnect( view()->part()->commandHistory(), SIGNAL(commandExecuted()), this, SLOT(commandExecuted()) );
+	//disconnect( view()->part()->commandHistory(), SIGNAL(commandExecuted()), this, SLOT(commandExecuted()) );
 }
 
 void

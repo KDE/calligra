@@ -37,7 +37,6 @@
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoShape.h>
-#include <kcommand.h>
 
 #include <KoShapeContainer.h>
 
@@ -54,6 +53,8 @@ class VPainter;
 class KoViewConverter;
 class KoShapeManager;
 class KoTool;
+class KCommand;
+class KCommandHistory;
 
 class KarbonCanvas: public QWidget, public KoCanvasBase
 {
@@ -85,6 +86,8 @@ public:
 
     virtual KoUnit::Unit unit() { return m_unit; };
 
+    void setCommandHistory( KCommandHistory* history ) { m_commandHistory = history; }
+
 protected:
     void paintEvent(QPaintEvent * ev);
     void wheelEvent(QWheelEvent *e);
@@ -101,8 +104,8 @@ private:
     KoShapeManager* m_shapeManager;
     KoZoomHandler m_zoomHandler;
 
-    //KSillyCommandHistory *m_commandHistory;
-
+    KCommandHistory *m_commandHistory;
+	
     KoTool *m_tool;
     KoUnit::Unit m_unit;
 
