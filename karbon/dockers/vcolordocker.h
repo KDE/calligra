@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <QMouseEvent>
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
    Copyright (C) 2002 - 2005, The Karbon Developers
@@ -23,13 +21,11 @@
 #ifndef __VCOLORDOCKER_H__
 #define __VCOLORDOCKER_H__
 
+#include <QMouseEvent>
 #include <KoColor.h>
 
 class QWidget;
-class QColor;
 class KarbonView;
-class VColor;
-class VColorSlider;
 class KoUniColorChooser;
 
 class VColorDocker : public QWidget
@@ -52,7 +48,6 @@ private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );
 
 	KoUniColorChooser *m_colorChooser;
-	VColorSlider *mOpacity;
 
 signals:
 	void colorChanged( const KoColor &c );
@@ -63,13 +58,12 @@ private slots:
 	void updateColor( const KoColor &c );
 	void updateFgColor(const KoColor &c);
 	void updateBgColor(const KoColor &c);
-	void updateOpacity();
 
 protected:
 	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
 	KoColor m_color;
 	KoColor m_oldColor;
-	float m_opacity;
+
 private:
 	KarbonPart *m_part;
 	KarbonView *m_view;

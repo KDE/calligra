@@ -57,28 +57,19 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	m_isStrokeDocker = false;
 	setWindowTitle( i18n( "Color Chooser" ) );
 
-	m_opacity = 1;
-
 	m_fillCmd = 0;
 	m_strokeCmd = 0;
 
 	/* ##### HSV WIDGET ##### */
 	// TODO port to KoUniColorChooser
-	m_colorChooser = new KoUniColorChooser( this );
+	m_colorChooser = new KoUniColorChooser( this, true );
 	connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), this, SLOT( updateColor( const KoColor &) ) );
 	//connect( m_colorChooser, SIGNAL( sigColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
 	connect(this, SIGNAL(colorChanged(const KoColor &)), m_colorChooser, SLOT(setColor(const KoColor &)));
 	//connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
 
-	//Opacity
-	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "white" ), QColor( "black" ), 0, 100, 100, this );
-	//TODO: Make "white" a transparent color
-	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
-	mOpacity->setToolTip( i18n( "Alpha (opacity)" ) );
-
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout;
 	mainWidgetLayout->addWidget( m_colorChooser );
-	mainWidgetLayout->addWidget( mOpacity );
 	mainWidgetLayout->activate();
 
 	setLayout(mainWidgetLayout);
@@ -97,9 +88,14 @@ void VColorDocker::updateColor( const KoColor &c )
 	if( ! selection )
 		return;
 
+	QColor color;
+	quint8 opacity;
+	c.toQColor(&color, &opacity);
+        color.setAlpha(opacity);
+
 	foreach( KoShape* shape, selection->selectedShapes() )
 	{
-		shape->setBackground( QBrush( c.toQColor() ) );
+		shape->setBackground( QBrush( color ) );
 		shape->repaint();
 	}
 }
@@ -189,23 +185,6 @@ void VColorDocker::updateBgColor(const KoColor &c)
 	emit colorChanged( c );
 
 	m_colorChooser->blockSignals(false);
-}
-
-void VColorDocker::updateOpacity()
-{
-	m_opacity = mOpacity->value() / 100.0;
-
-	m_oldColor = m_color;
-
-	/*
-	VColor c = VColor(m_color);
-	c.setOpacity( m_opacity );
-
-	if ( isStrokeDocker() )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), c ), true );
-	else
-		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( c ) ), true );
-	*/
 }
 
 void
