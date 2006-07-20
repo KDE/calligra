@@ -109,10 +109,11 @@ void DependencyManager::Private::dump()
     QList<Region::Point> values = dependants[sheet]->values();
     Q_ASSERT(keys.count() == values.count());
     int count = keys.count();
-    for (int i = 0; i < count; ++i)
-    {
-      kDebug() << "The cells depending on " << sheet->sheetName() << " " << keys[i].toRect() <<" are :" << endl;
-      kDebug() << values[i].name() << endl;
+    if (count) {
+      QString debugStr;
+      for (int i = 0; i < count; ++i)
+        debugStr += " " + values[i].name();
+      kDebug() << "The cells depending on " << sheet->sheetName() << " " << keys[0].toRect() << " are:" << debugStr << endl;
     }
   }
 /*  mend = dependants.end();

@@ -1006,7 +1006,7 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
   const QString ex = expr;
   QString result;
 
-  if (ex[0] == '=')
+  if ((!ex.isEmpty()) && (ex[0] == '='))
   {
 	result='=';
 	++i;
@@ -1061,7 +1061,9 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
          QString s;
 
          // check for two-chars operator, such as '<=', '>=', etc
-         s.append( ch ).append( ex[i+1] );
+         s.append( ch );
+         if (i+1 < ex.length())
+           s.append( ex[i+1] );
          op = matchOperator( s );
 
          // check for one-char operator, such as '+', ';', etc
@@ -1098,7 +1100,7 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
        // consume as long as alpha, dollar sign, underscore, or digit, or colon
        if( isIdentifier( ch )  || ch.isDigit() || ch == ':' )
          result.append( ex[i] );
-       else if ( ch == '.' && ex[i-1] != '[' && ex[i-1] != ':' )
+       else if ( ch == '.' && (i > 0) && ex[i-1] != '[' && ex[i-1] != ':' )
          result.append( '!' );
        else if( ch == ']' )
          state = Start;

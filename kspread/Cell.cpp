@@ -5866,7 +5866,7 @@ void Cell::loadOasisCellText( const QDomElement& parent )
                     cellText = textA.text();
                     setCellText( cellText );
                     setValue( cellText );
-                    if ( link[0]=='#' )
+                    if ( (!link.isEmpty()) && (link[0]=='#') )
                         link=link.remove( 0, 1 );
                     setLink( link );
                 }
@@ -6586,7 +6586,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
   setFlag(Flag_TextFormatDirty);
 
   // A formula like =A1+A2 ?
-  if( t[0] == '=' )
+  if( (!t.isEmpty()) && (t[0] == '=') )
   {
     t = decodeFormula( t, d->column, d->row );
     setCellText (pasteOperation( t, d->strText, op ));
@@ -6598,7 +6598,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
       kError(36001) << "ERROR: Syntax ERROR" << endl;
   }
   // rich text ?
-  else if (t[0] == '!' )
+  else if ((!t.isEmpty()) && (t[0] == '!') )
   {
       // KSpread pre 1.4 stores hyperlink as rich text (first char is '!')
       // extract the link and the correspoding text

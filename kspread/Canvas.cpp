@@ -3638,7 +3638,7 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
 
   if ( saveChanges )
   {
-      if ( t.at(0)=='=' )
+      if ( (!t.isEmpty()) && (t.at(0)=='=') )
       {
           //a formula
           int openParenthese = t.count( '(' );

@@ -1033,7 +1033,7 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
   dm->execute ();
 
   //refresh anchor
-  if(_text.at(0)=='!')
+  if ((!_text.isEmpty()) && (_text.at(0)=='!'))
     emit sig_updateView( this, Region(_column,_row,_column,_row) );
 }
 
