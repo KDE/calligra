@@ -7,6 +7,3 @@ include_directories(
 add_subdirectory( export )
 add_subdirectory( import )
 
-########### install files ###############
-
-

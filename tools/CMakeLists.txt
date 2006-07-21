@@ -9,15 +9,3 @@ add_subdirectory( kfile-plugins )
 add_subdirectory( quickprint )
 
 
-
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = converter thumbnail thesaurus kthesaurus kfile-plugins quickprint

@@ -16,15 +16,3 @@ add_subdirectory( qpro )
 add_subdirectory( excel )
 
 
-
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = applixspread csv dbase gnumeric latex opencalc html qpro excel
