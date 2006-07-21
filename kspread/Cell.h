@@ -937,8 +937,15 @@ protected:
 
     /**
      * \ingroup Painting
-     * Called from makeFormat() to determine the space
-     * needed for the text.
+     * Determines the space needed for the text to be displayed.
+     *
+     * This depends on the following variables:
+     * \li text direction or more general the angle
+     * \li wether the text is underlined
+     * \li vertical alignment
+     *
+     * There's a special treatment for bottom aligned, underlined text. For
+     * all other combinations of these two variables the dimension is the same.
      */
     void textSize( const QFontMetrics& fontMetrics );
 
@@ -1127,8 +1134,14 @@ private:
   in the parent Sheet object */
   void valueChanged ();
 
-  /* helper functions to the makeLayout(...) function */
-  /* (more to come) */
+  /**
+   * Determines the text to be displayed.
+   *
+   * This depends on the following variables:
+   * \li wether the value or the formula should be shown
+   *
+   * \see ValueFormatter::formatText
+   */
   void setOutputText();
 
 
@@ -1140,9 +1153,18 @@ private:
   int effAlignX();
 
   /**
-   * When you insert a cell at bottom or right
-   * and the size is not the same so text offset
-   * will not good => recalc offset
+   * \ingroup Painting
+   * Determines the text offset relative to the cell's top left corner.
+   *
+   * This depends on the following variables:
+   * \li horizontal alignment
+   * \li vertical alignment
+   * \li text angle
+   * \li text direction (horizontal or vertical)
+   * \li text width and height
+   * \li single or multiple rows
+   * \li cell width and height, including obscured cells
+   * \li thickness of the border pens
    */
   void offsetAlign( int _col, int _row );
 
