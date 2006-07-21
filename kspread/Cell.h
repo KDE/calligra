@@ -43,6 +43,8 @@
 
 class QDomElement;
 class QDomDocument;
+class QFont;
+class QFontMetrics;
 class QPainter;
 
 class KLocale;
@@ -809,9 +811,8 @@ public:
     /**
      * \ingroup Painting
      * Calculates the text parameters stored in cell
-     * Applies font to use to @p painter
      */
-    void calculateTextParameters( QPainter &painter, int _col, int _row );
+    void calculateTextParameters( int _col, int _row );
 
     /**
      * return align X when align is undefined
@@ -930,16 +931,16 @@ public:
 protected:
     /**
      * \ingroup Painting
-     * Applies the font to use to @p painter
+     * \return the zoomed font
      */
-    void applyZoomedFont( QPainter &painter, int _col, int _row );
+    QFont zoomedFont( int _col, int _row );
 
     /**
      * \ingroup Painting
      * Called from makeFormat() to determine the space
      * needed for the text.
      */
-    void textSize( QPainter &_paint );
+    void textSize( const QFontMetrics& fontMetrics );
 
     /**
      * \ingroup Painting

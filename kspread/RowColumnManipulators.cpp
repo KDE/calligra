@@ -502,7 +502,7 @@ bool AdjustColumnRowManipulator::preProcessing()
 double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell, int col, int row )
 {
   double long_max = 0.0;
-  cell->calculateTextParameters( m_sheet->painter(), col, row );
+  cell->calculateTextParameters( col, row );
   if ( cell->textWidth() > long_max )
   {
     double indent = 0.0;
@@ -543,7 +543,7 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell, int col, int r
 double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell, int col, int row)
 {
   double long_max = 0.0;
-  cell->calculateTextParameters( m_sheet->painter(), col, row);
+  cell->calculateTextParameters( col, row);
   if ( cell->textHeight() > long_max )
   {
     long_max = cell->textHeight()

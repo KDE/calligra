@@ -840,20 +840,6 @@ public:
     void setHidden( bool hidden );
 
     /**
-     * @return a painter for the hidden widget
-     *
-     * This function is useful while making formats where you
-     * need some QPainter related functions.
-     */
-    QPainter& painter();
-
-    /**
-     * @return a hidden widget.
-     * @see painter
-     */
-    QWidget* widget()const;
-
-    /**
      * @return a flag that indicates whether the sheet should paint the page breaks.
      *
      * @see setShowPageBorders

@@ -251,10 +251,6 @@ public:
   // cells that need painting
   Region paintDirtyList;
 
-  // to get font metrics
-  QPainter *painter;
-  QWidget *widget;
-
   // List of all cell bindings. For example charts use bindings to get
   // informed about changing cell contents.
   QList<CellBinding*> cellBindings;
@@ -332,10 +328,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->defaultRowFormat->setDefault();
   d->defaultColumnFormat = new ColumnFormat( this, 0 );
   d->defaultColumnFormat->setDefault();
-
-  d->widget = new QWidget();
-  d->painter = new QPainter;
-  d->painter->begin( d->widget ); // ### Stefan: Usage of QPainter outside of a paint event!
 
   d->maxColumn = 256;
   d->maxRow = 256;
@@ -611,16 +603,6 @@ bool Sheet::checkPassword( QByteArray const & passwd ) const
 SheetPrint* Sheet::print() const
 {
     return d->print;
-}
-
-QPainter& Sheet::painter()
-{
-    return *d->painter;
-}
-
-QWidget* Sheet::widget()const
-{
-    return d->widget;
 }
 
 void Sheet::setDefaultHeight( double height )
@@ -6553,10 +6535,6 @@ Sheet::~Sheet()
         c->sheetDies();
 
     d->cells.clear(); // cells destructor needs sheet to still exist
-
-    d->painter->end();
-    delete d->painter;
-    delete d->widget;
 
     delete d->defaultFormat;
     delete d->defaultCell;

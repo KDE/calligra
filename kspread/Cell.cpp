@@ -1273,8 +1273,8 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   // First, Determine the correct font with zoom taken into account,
   // and apply it to _painter.  Then calculate text dimensions, i.e.
   // d->textWidth and d->textHeight.
-  applyZoomedFont( _painter, _col, _row );
-  textSize( _painter );
+  _painter.setFont( zoomedFont( _col, _row ) );
+  textSize( _painter.fontMetrics() );
 
   //
   // Calculate the size of the cell
@@ -1867,11 +1867,8 @@ void Cell::offsetAlign( int _col, int _row )
 //
 // Used in makeLayout() and calculateTextParameters().
 //
-void Cell::textSize( QPainter &_paint )
+void Cell::textSize( const QFontMetrics& fm )
 {
-  QFontMetrics  fm = _paint.fontMetrics();
-  // Horizontal text ?
-
   int    tmpAngle;
   int    _row = row();
   int    _col = column();
@@ -1957,12 +1954,12 @@ void Cell::textSize( QPainter &_paint )
 }
 
 
-// Get the effective font to use after the zooming and apply it to `painter'.
+// Get the effective font to use after the zooming.
 //
 // Used in makeLayout() and calculateTextParameters().
 //
 
-void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
+QFont Cell::zoomedFont( int _col, int _row )
 {
   QFont  tmpFont( format()->textFont( _col, _row ) );
 
@@ -2014,22 +2011,18 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
   tmpFont.setPointSizeF( 0.01 * format()->sheet()->doc()->zoomInPercent()
            * tmpFont.pointSizeF() );
 
-  painter.setFont( tmpFont );
+  return tmpFont;
 }
 
 
 //used in Sheet::adjustColumnHelper and Sheet::adjustRow
-void Cell::calculateTextParameters( QPainter &_painter,
-             int _col, int _row )
+void Cell::calculateTextParameters( int col, int row )
 {
-  // Apply the correct font to _painter.
-  applyZoomedFont( _painter, _col, _row );
-
   // Recalculate d->textWidth and d->textHeight
-  textSize( _painter );
+  textSize( QFontMetrics( zoomedFont( col, row ) ) );
 
   // Recalculate d->textX and d->textY.
-  offsetAlign( _col, _row );
+  offsetAlign( col, row );
 }
 
 
@@ -3149,7 +3142,7 @@ void Cell::paintText( QPainter& painter,
   QPen tmpPen( textColorPrint );
 
   // Set the font according to the current zoom.
-  applyZoomedFont( painter, cellRef.x(), cellRef.y() );
+  painter.setFont( zoomedFont( cellRef.x(), cellRef.y() ) );
 
   // Check for red font color for negative values.
   if ( !d->hasExtra()
@@ -3218,7 +3211,7 @@ void Cell::paintText( QPainter& painter,
     d->strOutText = textDisplaying( painter );
 
     // Recalculate the text width and the offset.
-    textSize( painter );
+    textSize( painter.fontMetrics() );
     offsetAlign( column(), row() );
   }
 
