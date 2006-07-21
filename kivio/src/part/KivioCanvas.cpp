@@ -39,7 +39,6 @@
 KivioCanvas::KivioCanvas(KivioView* parent)
   : QWidget(parent), m_view(parent)
 {
-  m_zoomHandler = new KoZoomHandler;
   m_shapeManager = new KoShapeManager(this);
 
   setMouseTracking(true);
@@ -54,8 +53,6 @@ KivioCanvas::KivioCanvas(KivioView* parent)
 
 KivioCanvas::~KivioCanvas()
 {
-  delete m_zoomHandler;
-  m_zoomHandler = 0;
 }
 
 void KivioCanvas::gridSize(double *horizontal, double *vertical) const
@@ -90,7 +87,7 @@ void KivioCanvas::updateCanvas(const QRectF& rc)
 
 KoViewConverter* KivioCanvas::viewConverter()
 {
-  return m_zoomHandler;
+  return m_view->zoomHandler();
 }
 
 QWidget* KivioCanvas::canvasWidget()
@@ -105,8 +102,8 @@ void KivioCanvas::updateSize()
 
   if(m_view->activePage()) {
     KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-    width = qRound(m_zoomHandler->zoomItX(pageLayout.ptWidth));
-    height = qRound(m_zoomHandler->zoomItX(pageLayout.ptHeight));
+    width = qRound(m_view->zoomHandler()->zoomItX(pageLayout.ptWidth));
+    height = qRound(m_view->zoomHandler()->zoomItX(pageLayout.ptHeight));
   }
 
   setMinimumSize(width, height);

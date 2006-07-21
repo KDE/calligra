@@ -22,11 +22,16 @@
 #include <QGridLayout>
 #include <QScrollBar>
 
+#include <klocale.h>
+#include <kiconloader.h>
+
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
 #include <KoToolBox.h>
 #include <KoShapeSelector.h>
+#include <KoZoomAction.h>
+#include <KoZoomHandler.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
@@ -37,7 +42,10 @@ KivioView::KivioView(KivioDocument* document, QWidget* parent, const char* name)
   : KoView(document, parent, name), m_document(document)
 {
   m_activePage = 0;
+  m_zoomHandler = new KoZoomHandler;
+
   initGUI();
+  initActions();
 
   if(m_document->pageCount() > 0)
     setActivePage(m_document->pageByIndex(0));
@@ -45,6 +53,8 @@ KivioView::KivioView(KivioDocument* document, QWidget* parent, const char* name)
 
 KivioView::~KivioView()
 {
+  delete m_zoomHandler;
+  m_zoomHandler = 0;
 }
 
 KivioCanvas* KivioView::canvasWidget() const
@@ -89,6 +99,16 @@ void KivioView::initGUI()
   selector->show();
 }
 
+void KivioView::initActions()
+{
+  setXMLFile("kivio.rc");
+
+  m_viewZoomAction = new KoZoomAction(i18n("Zoom"), KIcon("viewmag"), 0,
+                                       actionCollection(), "ViewZoom");
+  connect(m_viewZoomAction, SIGNAL(zoomChanged(const QString&)),
+          this, SLOT(viewZoom(const QString&)));
+}
+
 KivioAbstractPage* KivioView::activePage() const
 {
   return m_activePage;
@@ -118,6 +138,48 @@ void KivioView::addShape(KoShape* shape)
 void KivioView::removeShape(KoShape* shape)
 {
   m_document->removeShape(m_activePage, shape);
+}
+
+KoZoomHandler* KivioView::zoomHandler() const
+{
+  return m_zoomHandler;
+}
+
+void KivioView::setZoom(int zoom)
+{
+  m_zoomHandler->setZoom(zoom);
+  m_canvas->updateSize();
+}
+
+void KivioView::viewZoom(const QString& zoomStr)
+{
+  bool ok = true;
+  int zoom = 0;
+
+  QString zoomString = zoomStr;
+  zoomString.replace("&",""); // hack to work around bug in KSelectAction
+
+  m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+  QRegExp regexp(".*(\\d+).*"); // "Captured" non-empty sequence of digits
+  int pos = regexp.indexIn(zoomString);
+
+  if(pos > -1) {
+    zoom = regexp.cap(1).toInt(&ok);
+  }
+
+  // Don't allow smaller zoom then 10%
+  if(!ok || (zoom < 10) || (zoom == m_zoomHandler->zoomInPercent())) {
+    return;
+  }
+
+  updateZoomAction(zoomString);
+  setZoom(zoom);
+  m_canvas->setFocus();
+}
+
+void KivioView::updateZoomAction(const QString& zoomString)
+{
+  m_viewZoomAction->setZoom(zoomString);
 }
 
 #include "KivioView.moc"

@@ -25,6 +25,8 @@
 
 class KoShapeManager;
 class KoCanvasController;
+class KoZoomAction;
+class KoZoomHandler;
 
 class KivioCanvas;
 class KivioDocument;
@@ -45,6 +47,9 @@ class KivioView : public KoView, public KoShapeControllerBase
     /// Returns the document
     KivioDocument* document() const;
 
+    /// Returns the zoom handler
+    KoZoomHandler* zoomHandler() const;
+
     virtual void updateReadWrite(bool readwrite);
 
     /// The page currently shown on the canvas
@@ -58,18 +63,34 @@ class KivioView : public KoView, public KoShapeControllerBase
     /// Removes @p shape from the document and updates all views
     virtual void removeShape(KoShape* shape);
 
-  public slots:
+  public Q_SLOTS:
     /// Change the page that will be shown on the canvas
     void setActivePage(KivioAbstractPage* page);
+
+    /// Set the new zoom and update the canvas
+    void setZoom(int zoom);
+
+  protected Q_SLOTS:
+    /// Called by the zoom action to set the zoom
+    void viewZoom(const QString& zoomStr);
 
   protected:
     /// Creates and initializes the GUI.
     void initGUI();
 
+    /// Initializes all the actions
+    void initActions();
+
+    /// Update the zoom action to the new zoom
+    void updateZoomAction(const QString& zoomString);
+
   private:
     KivioDocument* m_document;
     KivioCanvas* m_canvas;
     KoCanvasController* m_canvasController;
+    KoZoomHandler* m_zoomHandler;
+
+    KoZoomAction* m_viewZoomAction;
 
     KivioAbstractPage* m_activePage;
 };

@@ -128,8 +128,6 @@ class KivioCanvas : public QWidget, public KoCanvasBase
 
     KoTool *m_tool;
 
-    KoZoomHandler* m_zoomHandler;
-
     KoShapeManager* m_shapeManager;
 };
 
