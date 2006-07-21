@@ -415,66 +415,12 @@ bool KoTextFormatterCore::format()
             if ( lastBreak < 0 ) {
                 // Remember if this is the start of a line; testing c->lineStart after breaking
                 // is always true...
+
+                // "Empty line" can happen when there is a very wide character (e.g. inline table),
+                // or a very narrow passage between frames.
+                // But in fact the second case is already handled by KWTextFrameSet's "no-space case",
+                // so we don't come here in that case.
                 const bool emptyLine = c->lineStart;
-                if ( emptyLine ) // ouch, empty line
-                {
-                    // This happens when there is a very wide character (e.g. inline table),
-                    // or a very narrow passage between frames. In the second case we'll
-                    // have more room below, in the first case we might not.
-                    // So we look below, and come back if we don't find better.
-
-                    // Remember where the biggest availableWidth was, so that if we really
-                    // find nowhere for this big character, we'll come back here.
-                    if ( availableWidth > maxAvailableWidth.second )
-                    {
-                        maxAvailableWidth.first = y;
-                        maxAvailableWidth.second = availableWidth;
-                    }
-                    // Check if we're at the bottom of the doc, we won't find better then
-                    // (and the check further down would abort)
-                    if ( ( maxY > -1 && parag->rect().y() + y >= maxY ) || tmph <= 0 )
-                    {
-                        // Here we have to distinguish "table wider than document" (#112269)
-                        // and "not enough room for chars next to a big frame".
-                        // In the first case a new page wouldn't help, in the second it would.
-                        // ### Real fix: asking for the max width on a not-yet-created next page.
-                        // For now I just approximate that with the flow width.
-                        if ( c->width >= doc->flow()->width() )
-                        {
-                            // OK we go back to where there was most width for it.
-                            kdDebug(32500) << parag->rect().y() + y << " over maxY=" << maxY
-                                           << " -> final choice for the line: y=" << maxAvailableWidth.first << endl;
-                            y = maxAvailableWidth.first;
-                            if ( availableWidth )
-                                Q_ASSERT( maxAvailableWidth.second != 0 );
-                            lineStart->y = y;
-                            maxAvailableWidth = qMakePair( 0, 0 ); // clear it
-                        }
-                        else
-                        {
-                            // "small" chars and not enough width here, abort and hope for a new page.
-#ifdef DEBUG_FORMATTER
-                            if ( tmph <= 0 )
-                                kdDebug(32500) << "Line has a height of " << tmph << ", let's stop." << endl;
-                            else
-                                kdDebug(32500) << "We're after maxY, time to stop." << endl;
-#endif
-                            // No solution for now. Hopefully KWord will create more pages...
-                            abort = true;
-                        }
-                    }
-                    else
-                    {
-                        // We don't know yet what to do with this line that needs to go down
-                        // Ideally KWTextFrameSet would tell us how much we need to move
-                        // ("validHeight" idea). For now we keep the old behavior:
-                        y += tmph;
-                        kdDebug(32500) << "KoTextFormatter: moving down empty line by h=" << tmph << ": y=" << y << endl;
-
-                        --i; // so that the ++i in for() is a noop
-                        continue;
-                    }
-                }
                 if ( !emptyLine && i > 0 )
                 {
                     // (combine lineStart->baseLine/lineStart->h and tmpBaseLine/tmph)
