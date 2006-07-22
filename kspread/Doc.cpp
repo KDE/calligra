@@ -1435,9 +1435,6 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
   //  ElapsedTime et( "Doc::paintContent1" );
     //kDebug(36001) << "Doc::paintContent m_zoom=" << zoomInPercent() << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
-    // save current zoom
-    int oldZoom = zoomInPercent();
-
     // choose sheet: the first or the active
     Sheet* sheet = 0;
     if ( !d->activeSheet )
@@ -1447,19 +1444,28 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     if ( !sheet )
         return;
 
+    // save current zoom
+    double oldZoom = m_zoom;
+    // set the resolution once
+    setResolution( KoGlobal::dpiX(), KoGlobal::dpiY() );
+
     // only one zoom is supported
     double d_zoom = 1.0;
-    setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
+    setZoom( 1.0 );
     if ( m_zoomedResolutionX != zoomX )
         d_zoom *= ( zoomX / m_zoomedResolutionX );
+    setZoom( d_zoom );
 
     // KSpread support zoom, therefore no need to scale with worldMatrix
+    // Save the translation though.
     QMatrix matrix = painter.matrix();
     matrix.setMatrix( 1, 0, 0, 1, matrix.dx(), matrix.dy() );
+
+    // Unscale the rectangle.
     QRect prect = rect;
     prect.setWidth( (int) (prect.width() * painter.matrix().m11()) );
     prect.setHeight( (int) (prect.height() * painter.matrix().m22()) );
-    setZoomAndResolution( (int) ( d_zoom * 100 ), KoGlobal::dpiX(), KoGlobal::dpiY() );
+
     // paint the content, now zoom is correctly set
     kDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
@@ -1468,7 +1474,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     painter.restore();
 
     // restore zoom
-    setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
+    setZoom( oldZoom );
 }
 
 void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, Sheet* sheet, bool drawCursor )
