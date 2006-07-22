@@ -1110,23 +1110,17 @@ void DocumentWrapper::initSymbolNamesAction()
 {
     if ( m_hasActions ) {
         const SymbolTable& st = m_document->m_contextStyle->symbolTable();
-
         QStringList names = st.allNames();
-        //QStringList i18nNames;
-        QValueList<QFont> fonts;
+        QFont font( m_document->m_contextStyle->getFontStyle() );
         QMemArray<QChar> chars( names.count() );
 
-        int i = 0;
+        uint i = 0;
         for ( QStringList::Iterator it = names.begin();
               it != names.end();
               ++it, ++i ) {
-            QChar ch = st.unicode( *it );
-            //i18nNames.push_back( i18n( ( *it ).latin1() ) );
-
-            fonts.append( st.font( ch ) );
-            chars[ i ] = st.character( ch );
+            chars[ i ] = st.unicode( *it );
         }
-        m_symbolNamesAction->setSymbols( names, fonts, chars );
+        m_symbolNamesAction->setSymbols( names, m_document->m_contextStyle->getMathFont(), chars );
         m_selectedName = names[0];
     }
 }

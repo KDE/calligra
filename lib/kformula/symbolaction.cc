@@ -37,7 +37,7 @@ KFORMULA_NAMESPACE_BEGIN
 class SymbolComboItem : public QListBoxItem
 {
 public:
-    SymbolComboItem( const QString&, const QFont&, QChar, QComboBox* combo );
+    SymbolComboItem( const QString&, const QFont& , QChar, QComboBox* combo );
     virtual ~SymbolComboItem();
 
     virtual int width( const QListBox* ) const;
@@ -57,7 +57,7 @@ private:
 
 int SymbolComboItem::widest = 0;
 
-SymbolComboItem::SymbolComboItem( const QString &name, const QFont &font,
+SymbolComboItem::SymbolComboItem( const QString &name, const QFont& font, 
                                   QChar symbol, QComboBox *combo )
     : QListBoxItem( combo->listBox() ),
       m_combo( combo ),
@@ -141,11 +141,12 @@ int SymbolAction::plug( QWidget* w, int index )
     else return KSelectAction::plug( w, index );
 }
 
-void SymbolAction::setSymbols( const QStringList &names, const QValueList<QFont>& fonts,
+void SymbolAction::setSymbols( const QStringList &names,
+                               const QFont& font,
                                const QMemArray<QChar>& chars )
 {
-    m_fonts = fonts;
     m_chars = chars;
+    m_font = font;
     setItems( names );
 
     int len = containerCount();
@@ -163,8 +164,7 @@ void SymbolAction::updateItems( int id )
             cb->clear();
 
             for( uint i = 0; i < items().count(); ++i ) {
-                new SymbolComboItem( *items().at( i ), *m_fonts.at( i ),
-                                     m_chars.at( i ), cb );
+                new SymbolComboItem( *items().at( i ), m_font, m_chars.at( i ), cb );
             }
             cb->setMinimumWidth( cb->sizeHint().width() );
         }

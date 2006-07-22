@@ -272,6 +272,8 @@ void TextElement::setCharFamily( CharFamily cf )
 
 QChar TextElement::getRealCharacter(const ContextStyle& context)
 {
+    return character;
+/*
     if ( !isSymbol() ) {
         const FontStyle& fontStyle = context.fontStyle();
         const AlphaTable* alphaTable = fontStyle.alphaTable();
@@ -288,57 +290,46 @@ QChar TextElement::getRealCharacter(const ContextStyle& context)
     else {
         return getSymbolTable().character(character, charStyle());
     }
+*/
 }
 
 
 QFont TextElement::getFont(const ContextStyle& context, const StyleAttributes& style)
 {
-    if ( !isSymbol() ) {
-        const FontStyle& fontStyle = context.fontStyle();
-        const AlphaTable* alphaTable = fontStyle.alphaTable();
-        if ( alphaTable != 0 ) {
-            AlphaTableEntry ate = alphaTable->entry( character,
-                                                     charFamily(),
-                                                     charStyle() );
-            if ( ate.valid() ) {
-                return ate.font;
-            }
-        }
-        QFont font;
-        if ( style.customFont() ) {
-            font = style.font();
-        }
-        else if (getElementType() != 0) {
-            font = getElementType()->getFont(context);
-        }
-        else {
-            font = context.getDefaultFont();
-        }
-        switch ( charStyle() ) {
-        case anyChar:
-            font.setItalic( false );
-            font.setBold( false );
-            break;
-        case normalChar:
-            font.setItalic( false );
-            font.setBold( false );
-            break;
-        case boldChar:
-            font.setItalic( false );
-            font.setBold( true );
-            break;
-        case italicChar:
-            font.setItalic( true );
-            font.setBold( false );
-            break;
-        case boldItalicChar:
-            font.setItalic( true );
-            font.setBold( true );
-            break;
-        }
-        return font;
+    const FontStyle& fontStyle = context.fontStyle();
+    QFont font;
+    if ( style.customFont() ) {
+        font = style.font();
     }
-    return context.symbolTable().font( character, charStyle() );
+    else if (getElementType() != 0) {
+        font = getElementType()->getFont(context);
+    }
+    else {
+        font = context.getDefaultFont();
+    }
+    switch ( charStyle() ) {
+    case anyChar:
+        font.setItalic( false );
+        font.setBold( false );
+        break;
+    case normalChar:
+        font.setItalic( false );
+        font.setBold( false );
+        break;
+    case boldChar:
+        font.setItalic( false );
+        font.setBold( true );
+        break;
+    case italicChar:
+        font.setItalic( true );
+        font.setBold( false );
+        break;
+    case boldItalicChar:
+        font.setItalic( true );
+        font.setBold( true );
+        break;
+    }
+    return fontStyle.symbolTable()->font( character, font );
 }
 
 

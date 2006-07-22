@@ -41,7 +41,7 @@ bool TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDom
 			list.append(child);
         }
     }
-	parse();
+//	parse();
 	kdWarning() << "Num of children " << list.count() << endl;
     return true;
 }

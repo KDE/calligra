@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,10 +25,8 @@
 #include <kdebug.h>
 #include <KoGlobal.h>
 
-#include "cmstyle.h"
 #include "contextstyle.h"
-#include "esstixfontstyle.h"
-#include "symbolfontstyle.h"
+#include "fontstyle.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -79,21 +78,8 @@ void ContextStyle::setFontStyle( const QString& fontStyle, bool init )
 {
     delete m_fontStyle;
     m_fontStyleName = fontStyle;
-    if ( m_fontStyleName == "tex" ) {
-        m_fontStyle = new CMStyle();
-        if ( !m_fontStyle->init( this , init ) ) {
-        }
-    }
-    else if ( m_fontStyleName == "esstix" ) {
-        m_fontStyle = new EsstixFontStyle();
-        if ( !m_fontStyle->init( this ) ) {
-        }
-    }
-    else {
-        // The SymbolFontStyle is always expected to work.
-        m_fontStyle = new SymbolFontStyle();
-        m_fontStyle->init( this );
-    }
+    m_fontStyle = new FontStyle();
+    m_fontStyle->init( this, init );
 }
 
 
@@ -117,44 +103,12 @@ void ContextStyle::readConfig( KConfig* config, bool init )
     QString baseSize = config->readEntry( "baseSize", "20" );
     m_baseSize = baseSize.toInt();
 
-    m_fontStyleName = config->readEntry( "fontStyle" );
-
-    if ( m_fontStyleName.isEmpty() ) {
-        if (CMStyle::missingFonts( init ).isEmpty())
-            m_fontStyleName = "tex";
-        else if (EsstixFontStyle::missingFonts().isEmpty())
-    	    m_fontStyleName = "esstix";
-        else
-            m_fontStyleName = "symbol";
+    if ( ! FontStyle::missingFonts( init ).isEmpty() ) {
+        kdWarning( DEBUGID) << "Not all basic fonts found\n";
     }
+    mathFont.fromString("Arev Sans");
+    bracketFont.fromString("cmex10");
 
-#if 0
-    m_requestedFonts = config->readListEntry( "usedMathFonts" );
-    if ( m_requestedFonts.size() == 0 ) {
-        m_requestedFonts.push_back( "esstixone" );
-        m_requestedFonts.push_back( "esstixtwo" );
-        m_requestedFonts.push_back( "esstixthree" );
-        m_requestedFonts.push_back( "esstixfour" );
-        m_requestedFonts.push_back( "esstixfive" );
-        m_requestedFonts.push_back( "esstixsix" );
-        m_requestedFonts.push_back( "esstixseven" );
-        m_requestedFonts.push_back( "esstixeight" );
-        m_requestedFonts.push_back( "esstixnine" );
-        m_requestedFonts.push_back( "esstixten" );
-        m_requestedFonts.push_back( "esstixeleven" );
-        m_requestedFonts.push_back( "esstixtwelve" );
-        m_requestedFonts.push_back( "esstixthirteen" );
-        m_requestedFonts.push_back( "esstixfourteen" );
-        m_requestedFonts.push_back( "esstixfifteen" );
-        m_requestedFonts.push_back( "esstixsixteen" );
-        m_requestedFonts.push_back( "esstixseventeen" );
-//         m_requestedFonts.push_back( "mt extra" );
-//         m_requestedFonts.push_back( "mt symbol" );
-//         m_requestedFonts.push_back( "euclid math one" );
-//         m_requestedFonts.push_back( "euclid math two" );
-//         m_requestedFonts.push_back( "euclid symbol" );
-    }
-#endif
 
     // There's no gui right anymore but I'll leave it here...
     config->setGroup( "kformula Color" );

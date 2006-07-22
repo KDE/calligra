@@ -32,10 +32,8 @@ class QButtonGroup;
 class QCheckBox;
 class QColor;
 class QGridLayout;
-class QGroupBox;
 class QLabel;
 class QPushButton;
-class QRadioButton;
 class QSpinBox;
 class QStringList;
 class QWidget;
@@ -104,12 +102,6 @@ private:
 //     KColorButton* emptyColorBtn;
 //     KColorButton* errorColorBtn;
     QCheckBox* syntaxHighlighting;
-//     QGroupBox* hlBox;
-
-    QButtonGroup* styleBox;
-    QRadioButton* symbolStyle;
-    QRadioButton* esstixStyle;
-    QRadioButton* cmStyle;
 
     bool m_changed;
 };

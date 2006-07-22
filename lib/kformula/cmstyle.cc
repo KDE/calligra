@@ -621,4 +621,31 @@ void CMArtwork::drawCMDelimiter( QPainter& painter, const ContextStyle& style,
 }
 
 
+void CMArtwork::drawCMDelimiter( QPainter& painter, const ContextStyle& style,
+                                 luPixel x, luPixel y,
+                                 luPt height )
+{
+    QFont f( "cmex10" );
+    f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
+
+    painter.setFont( f );
+    painter.drawText( style.layoutUnitToPixelX( x ),
+                      style.layoutUnitToPixelY( y + getBaseline() ),
+                      QString( QChar( cmChar ) ) );
+
+    // Debug
+#if 0
+    QFontMetrics fm( f );
+    LuPixelRect bound = fm.boundingRect( cmChar );
+    painter.setBrush(Qt::NoBrush);
+    painter.setPen(Qt::green);
+    painter.drawRect( style.layoutUnitToPixelX( x ),
+                      style.layoutUnitToPixelY( y ),
+                      fm.width( cmChar ),
+                      bound.height() );
+#endif
+}
+
+
+
 KFORMULA_NAMESPACE_END

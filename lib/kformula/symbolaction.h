@@ -38,12 +38,13 @@ public:
                  const char* name = 0 );
 
     int plug( QWidget*, int index = -1 );
-    void setSymbols( const QStringList&, const QValueList<QFont>&, const QMemArray<QChar>& );
+    void setSymbols( const QStringList&, const QFont& font, const QMemArray<QChar>& );
     void updateItems( int );
 
 private:
     QValueList<QFont> m_fonts;
     QMemArray<QChar> m_chars;
+    QFont m_font;
 };
 
 KFORMULA_NAMESPACE_END

@@ -139,12 +139,16 @@ public:
     QString getFontStyle() const { return m_fontStyleName; }
     void setFontStyle( const QString& fontStyle, bool init = true );
 
+    QFont getMathFont()       const { return mathFont; }
+    QFont getBracketFont()    const { return bracketFont; }
     QFont getDefaultFont()    const { return defaultFont; }
     QFont getNameFont()       const { return nameFont; }
     QFont getNumberFont()     const { return numberFont; }
     QFont getOperatorFont()   const { return operatorFont; }
     QFont getSymbolFont()     const { return symbolFont; }
 
+    void setMathFont( QFont f )     { defaultFont = f; }
+    void setBracketFont( QFont f )  { bracketFont = f; }
     void setDefaultFont( QFont f )  { defaultFont = f; }
     void setNameFont( QFont f )     { nameFont = f; }
     void setNumberFont( QFont f )   { numberFont = f; }
@@ -252,6 +256,8 @@ private:
 
     TextStyleValues textStyleValues[ 4 ];
 
+    QFont mathFont;
+    QFont bracketFont;
     QFont defaultFont;
     QFont nameFont;
     QFont numberFont;
