@@ -209,14 +209,14 @@ public:
   KSpread::Formula *formula;
 
   // Position and dimension of displayed text.
-  // FIXME (comment): Which coordinate system?  pixels?  mm/cm?  zoom?
+  // Doc coordinate system; points; no zoom
   double  textX;
   double  textY;
   double  textWidth;
   double  textHeight;
 
   // result of "fm.ascent()" in makeLayout. used in offsetAlign.
-  int  fmAscent;
+  double  fmAscent;
 
   // Pointers to neighboring cells.
   // FIXME (comment): Which order?
@@ -248,7 +248,7 @@ Cell::Private::Private()
   textY      = 0.0;
   textWidth  = 0.0;
   textHeight = 0.0;
-  fmAscent   = 0;
+  fmAscent   = 0.0;
 
   nextCell     = 0;
   previousCell = 0;
@@ -1229,6 +1229,8 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   if ( !testFlag( Flag_LayoutDirty ) )
     return;
 
+  const Doc* doc = format()->sheet()->doc();
+
   // Some initializations.
   if (d->hasExtra())
     d->extra()->nbLines = 0;
@@ -1246,8 +1248,8 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   // there is no use in remaking the layout.
   ColumnFormat  *cl1 = format()->sheet()->columnFormat( _col );
   RowFormat     *rl1 = format()->sheet()->rowFormat( _row );
-  if ( cl1->isHide()
-       || ( rl1->dblHeight() <= format()->sheet()->doc()->unzoomItYOld( 2 ) ) ) {
+  if ( cl1->isHide() || ( rl1->dblHeight() <= doc->unzoomItY( 2 ) ) )
+  {
       clearFlag( Flag_LayoutDirty );
       return;
   }
@@ -1308,7 +1310,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     d->extra()->extraHeight = height;
   }
 
-  QFontMetrics  fm = _painter.fontMetrics();
+  QFontMetrics fm = _painter.fontMetrics();
   d->fmAscent = fm.ascent();
 
   // Check if we need to break the line into multiple lines and are
@@ -1359,8 +1361,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
         if (pos1 < linefeed && linefeed < breakpos)
           work_breakpos = linefeed;
 
-        double lineWidth = format()->sheet()->doc()
-            ->unzoomItXOld( fm.width( d->strOutText.mid( start, (pos1 - start) )
+        double lineWidth = doc->unzoomItX( fm.width( d->strOutText.mid( start, (pos1 - start) )
                 + o.mid( pos1, work_breakpos - pos1 ) ) );
 
         //linefeed could be -1 when no linefeed is found!
@@ -1422,9 +1423,11 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   pos = i + 1;
       }
 
-      double  tw = format()->sheet()->doc()->unzoomItXOld( fm.width( t ) );
+      const double tw = doc->unzoomItX( fm.width( t ) );
       if ( tw > d->textWidth )
-  d->textWidth = tw;
+      {
+        d->textWidth = tw;
+      }
     } while ( i != -1 );
   }
 
@@ -1683,8 +1686,11 @@ void Cell::offsetAlign( int _col, int _row )
     if ( d->extra()->extraYCells )  h = d->extra()->extraHeight;
   }
 
+  // doc coordinate system; no zoom applied
   const double effTop = BORDER_SPACE + 0.5 * effTopBorderPen( _col, _row ).width();
   const double effBottom = h - BORDER_SPACE - 0.5 * effBottomBorderPen( _col, _row ).width();
+
+  const Doc* doc = format()->sheet()->doc();
 
   // Calculate d->textY based on the vertical alignment and a few
   // other inputs.
@@ -1694,7 +1700,7 @@ void Cell::offsetAlign( int _col, int _row )
   {
     if ( tmpAngle == 0 )
     {
-      d->textY = effTop + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      d->textY = effTop + doc->unzoomItY( d->fmAscent );
     }
     else if ( tmpAngle < 0 )
     {
@@ -1702,8 +1708,7 @@ void Cell::offsetAlign( int _col, int _row )
     }
     else
     {
-      d->textY = effTop
-               + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY();
+      d->textY = effTop + doc->unzoomItY( d->fmAscent ) * cos( tmpAngle * M_PI / 180 );
     }
     break;
   }
@@ -1725,7 +1730,7 @@ void Cell::offsetAlign( int _col, int _row )
         else
         {
           d->textY = effBottom - d->textHeight
-                   + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY() );
+                   + doc->unzoomItY( d->fmAscent ) * cos( tmpAngle * M_PI / 180 );
         }
       }
       else
@@ -1737,8 +1742,7 @@ void Cell::offsetAlign( int _col, int _row )
         else
         {
           d->textY = effTop
-                  + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
-                  / format()->sheet()->doc()->zoomedResolutionY() );
+                   + doc->unzoomItY( d->fmAscent ) * cos( tmpAngle * M_PI / 180 );
         }
       }
     }
@@ -1747,13 +1751,11 @@ void Cell::offsetAlign( int _col, int _row )
       // Is enough place available?
       if ( effBottom - effTop - d->textHeight > 0 )
       {
-        d->textY = effBottom - d->textHeight
-                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+        d->textY = effBottom - d->textHeight + doc->unzoomItY( d->fmAscent );
       }
       else
       {
-        d->textY = effTop
-                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+        d->textY = effTop + doc->unzoomItY( d->fmAscent );
       }
     }
     else
@@ -1761,13 +1763,11 @@ void Cell::offsetAlign( int _col, int _row )
       // Is enough place available?
       if ( effBottom - effTop - d->textHeight > 0 )
       {
-        d->textY = effBottom - d->textHeight
-                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+        d->textY = effBottom - d->textHeight + doc->unzoomItY( d->fmAscent );
       }
       else
       {
-        d->textY = effTop
-                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+        d->textY = effTop + doc->unzoomItY( d->fmAscent );
       }
     }
     break;
@@ -1777,8 +1777,7 @@ void Cell::offsetAlign( int _col, int _row )
   {
     if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
     {
-      d->textY = ( h - d->textHeight ) / 2
-               + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      d->textY = ( h - d->textHeight ) / 2 + doc->unzoomItY( d->fmAscent );
     }
     else if ( tmpAngle != 0 )
     {
@@ -1792,7 +1791,7 @@ void Cell::offsetAlign( int _col, int _row )
         else
         {
           d->textY = ( h - d->textHeight ) / 2
-                   + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY();
+                   + doc->unzoomItY( d->fmAscent ) * cos( tmpAngle * M_PI / 180 );
         }
       }
       else
@@ -1804,7 +1803,7 @@ void Cell::offsetAlign( int _col, int _row )
         else
         {
           d->textY = effTop
-                   + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY() );
+                   + doc->unzoomItY( d->fmAscent ) * cos( tmpAngle * M_PI / 180 );
         }
       }
     }
@@ -1813,13 +1812,11 @@ void Cell::offsetAlign( int _col, int _row )
       // Is enough place available?
       if ( effBottom - effTop - d->textHeight > 0 )
       {
-        d->textY = ( h - d->textHeight ) / 2
-                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+        d->textY = ( h - d->textHeight ) / 2 + doc->unzoomItY( d->fmAscent );
       }
       else
       {
-        d->textY = effTop
-                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+        d->textY = effTop + doc->unzoomItY( d->fmAscent );
       }
     }
     else
@@ -1827,12 +1824,10 @@ void Cell::offsetAlign( int _col, int _row )
       // Is enough place available?
       if ( effBottom - effTop - d->textHeight > 0 )
       {
-        d->textY = ( h - d->textHeight ) / 2
-                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+        d->textY = ( h - d->textHeight ) / 2 + doc->unzoomItY( d->fmAscent );
       }
       else
-        d->textY = effTop
-                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+        d->textY = effTop + doc->unzoomItY( d->fmAscent );
     }
     break;
   }
@@ -1912,34 +1907,33 @@ void Cell::textSize( const QFontMetrics& fm )
     fontUnderlined  = format()->textFontUnderline( _col, _row );
   }
 
+  const Doc* doc = format()->sheet()->doc();
+
   // Set d->textWidth and d->textHeight to correct values according to
   // if the text is horizontal, vertical or rotated.
   if ( !tmpVerticalText && !tmpAngle ) {
     // Horizontal text.
 
-    d->textWidth = format()->sheet()->doc()->unzoomItXOld( fm.width( d->strOutText ) );
+    d->textWidth = doc->unzoomItX( fm.width( d->strOutText ) );
     int offsetFont = 0;
     if ( ( ay == Style::Bottom ) && fontUnderlined ) {
       offsetFont = fm.underlinePos() + 1;
     }
 
-    d->textHeight = format()->sheet()->doc()->unzoomItYOld( fm.ascent() + fm.descent()
-            + offsetFont );
+    d->textHeight = doc->unzoomItY( fm.ascent() + fm.descent() + offsetFont );
   }
   else if ( tmpAngle!= 0 ) {
     // Rotated text.
 
-    d->textHeight = format()->sheet()->doc()
-      ->unzoomItYOld( int( cos( tmpAngle * M_PI / 180 )
-      * ( fm.ascent() + fm.descent() )
-      + abs( int( ( fm.width( d->strOutText )
-              * sin( tmpAngle * M_PI / 180 ) ) ) ) ) );
+    d->textHeight = doc->unzoomItY( ( fm.ascent() + fm.descent() )
+                                    * cos( tmpAngle * M_PI / 180 )
+                                    + qAbs( fm.width( d->strOutText )
+                                            * sin( tmpAngle * M_PI / 180 ) ) );
 
-    d->textWidth = format()->sheet()->doc()
-      ->unzoomItXOld( int( abs( int( ( sin( tmpAngle * M_PI / 180 )
-            * ( fm.ascent() + fm.descent() ) ) ) )
-      + fm.width( d->strOutText )
-        * cos ( tmpAngle * M_PI / 180 ) ) );
+    d->textWidth = doc->unzoomItX( qAbs( ( fm.ascent() + fm.descent() )
+                                         * sin( tmpAngle * M_PI / 180 ) )
+                                   + fm.width( d->strOutText )
+                                   * cos( tmpAngle * M_PI / 180 ) );
   }
   else {
     // Vertical text.
@@ -1947,9 +1941,8 @@ void Cell::textSize( const QFontMetrics& fm )
     for ( int i = 0; i < d->strOutText.length(); i++ )
       width = qMax( width, fm.width( d->strOutText.at( i ) ) );
 
-    d->textWidth  = format()->sheet()->doc()->unzoomItXOld( width );
-    d->textHeight = format()->sheet()->doc()->unzoomItYOld( ( fm.ascent() + fm.descent() )
-            * d->strOutText.length() );
+    d->textWidth  = doc->unzoomItX( width );
+    d->textHeight = doc->unzoomItY( ( fm.ascent() + fm.descent() ) * d->strOutText.length() );
   }
 }
 
@@ -4013,6 +4006,7 @@ int Cell::effAlignX()
 
 QString Cell::textDisplaying( QPainter &_painter )
 {
+  const Doc* doc = format()->sheet()->doc();
   QFontMetrics  fm = _painter.fontMetrics();
   int           a  = format()->align( column(), row() );
 
@@ -4061,7 +4055,7 @@ QString Cell::textDisplaying( QPainter &_painter )
       }
 
       // 4 equal length of red triangle +1 point.
-      if ( format()->sheet()->doc()->unzoomItXOld( fm.width( tmp ) ) + tmpIndent
+      if ( doc->unzoomItXOld( fm.width( tmp ) ) + tmpIndent
      < len - 4.0 - 1.0 )
       {
     if ( format()->getAngle( column(), row() ) != 0 )
@@ -4073,7 +4067,7 @@ QString Cell::textDisplaying( QPainter &_painter )
             for ( int j = d->strOutText.length(); j != 0; j-- )
       {
               tmp2 = d->strOutText.left( j );
-              if ( format()->sheet()->doc()->unzoomItYOld( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
+              if ( doc->unzoomItYOld( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
               {
               return d->strOutText.left( qMin( tmp.length(), tmp2.length() ) );
               }
@@ -4113,7 +4107,7 @@ QString Cell::textDisplaying( QPainter &_painter )
       return QString( "" );
 
     for ( int i = d->strOutText.length(); i != 0; i-- ) {
-      if ( format()->sheet()->doc()->unzoomItYOld( fm.ascent() + fm.descent() ) * i
+      if ( doc->unzoomItYOld( fm.ascent() + fm.descent() ) * i
      < rl->dblHeight() - 1.0 )
   return d->strOutText.left( i );
     }
@@ -4132,7 +4126,7 @@ QString Cell::textDisplaying( QPainter &_painter )
     tmp = d->strOutText.left( i );
 
     // 4 equals length of red triangle +1 pixel
-    if ( format()->sheet()->doc()->unzoomItXOld( fm.width( tmp ) ) < w - 4.0 - 1.0 )
+    if ( doc->unzoomItXOld( fm.width( tmp ) ) < w - 4.0 - 1.0 )
       return tmp;
   }
 
