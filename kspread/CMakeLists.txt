@@ -148,7 +148,7 @@ target_link_libraries(kspreadcommon
 	${KDE4_KDECORE_LIBS}
 	${QT_QTSQL_LIBRARY}
 	kofficecore kofficeui kochart
-	kde3support
+	${KDE4_KDE3SUPPORT_LIBS}
 	kspell2 )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
