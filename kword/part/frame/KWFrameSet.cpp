@@ -18,6 +18,9 @@
  */
 
 #include "KWFrameSet.h"
+#include "KWFrame.h"
+
+#include <kdebug.h>
 
 KWFrameSet::KWFrameSet()
 : QObject()
@@ -40,5 +43,39 @@ void KWFrameSet::removeFrame(KWFrame *frame) {
     m_frames.removeAll(frame);
     emit frameRemoved(frame);
 }
+
+#ifndef NDEBUG
+void KWFrameSet::printDebug() {
+    //kDebug() << " |  Visible: " << isVisible() << endl;
+    int i=0;
+    foreach(KWFrame *frame, frames()) {
+        kDebug() << " +-- Frame " << i++ << " of "<< frameCount() << "    (" << frame << ")  " /*<<
+        (frame->isCopy() ? "[copy]" : "") */<< endl;
+        printDebug(frame);
+    }
+}
+
+void KWFrameSet::printDebug(KWFrame *frame) {
+    static const char * runaround[] = { "No Runaround", "Bounding Rect", "Skip", "ERROR" };
+    static const char * runaroundSide[] = { "Biggest", "Left", "Right", "ERROR" };
+    static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
+    static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
+    kDebug() << "     Rectangle : " << frame->shape()->position().x() << "," << frame->shape()->position().y() << " " << frame->shape()->size().width() << "x" << frame->shape()->size().height() << endl;
+    kDebug() << "     RunAround: "<< runaround[ frame->textRunAround() ] << " side:" << runaroundSide[ frame->runAroundSide() ]<< endl;
+    kDebug() << "     FrameBehavior: "<< frameBh[ frame->frameBehavior() ] << endl;
+    kDebug() << "     NewFrameBehavior: "<< newFrameBh[ frame->newFrameBehavior() ] << endl;
+    if(frame->shape()->background().style() == Qt::NoBrush)
+        kDebug() << "     BackgroundColor: Transparant\n";
+    else {
+        QColor col = frame->shape()->background().color();
+        kDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name() : QString("(default)") ) << endl;
+    }
+    kDebug() << "     frameOnBothSheets: "<< frame->frameOnBothSheets() << endl;
+    kDebug() << "     Z Order: " << frame->shape()->zIndex() << endl;
+
+    //kDebug() << "     minFrameHeight "<< frame->minimumFrameHeight() << endl;
+    //QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNumber()) : " [waiting for pages to be created]";
+}
+#endif
 
 #include "KWFrameSet.moc"

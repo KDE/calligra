@@ -49,6 +49,12 @@ public:
     bool protectContent() { return m_protectContent; }
     void setProtectContent(bool protect) { m_protectContent = protect; }
 
+#ifndef NDEBUG
+    void printDebug();
+    void printDebug(KWFrame *frame);
+#endif
+
+
 protected:
     void setupFrame(KWFrame *frame);
 

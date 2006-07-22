@@ -52,11 +52,11 @@ public:
      * @param frameSets all the framesets registred in the document.
      * @param pageSettings the settings used for auto-layout of frames.
      */
-    KWFrameLayout(const KWPageManager *pageManager, QList<KWFrameSet*> frameSets, const KWPageSettings *pageSettings);
+    KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets, const KWPageSettings *pageSettings);
     ~KWFrameLayout() {}
     /**
      * As soon as a new page is created you should call this method to auto-create all frames
-     * needed on that new page.  You should only call this method one time per new page!
+     * needed on that new page, with a call to layoutFramesOnPage done directly afterwards.
      * Note that the creation of a page-spread counts as one page, even though it takes two
      *  page numbers.
      * @param pageNumber the new page number.
@@ -71,6 +71,7 @@ public:
     void layoutFramesOnPage(int pageNumber);
     void updateFramesAfterDelete(int deletedPage);
     //void relayoutFrames(old layout, new layout); // per page ? Or per doc?
+    void cleanupHeadersFooters();
 
 signals:
     /**
@@ -79,17 +80,19 @@ signals:
     void newFrameSet(KWFrameSet *fs);
 
 private:
+    friend class TestBasicLayout;
     KoShape *createTextShape(KWPage *page);
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type);
     QList<KWFrame *> framesInPage(QRectF page);
     void setup();
-    bool shouldCreateHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
+    bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
+    bool hasFrameOn(KWTextFrameSet *fs, int pageNumber);
+    void cleanFrameSet(KWTextFrameSet *fs);
 
 private:
-    friend class TestBasicLayout;
     const KWPageManager *m_pageManager;
     const KWPageSettings *m_pageSettings;
-    QList<KWFrameSet *> m_frameSets;
+    const QList<KWFrameSet *> &m_frameSets;
 
     KWTextFrameSet *m_oddHeaders, *m_evenHeaders, *m_oddFooters, *m_evenFooters;
     KWTextFrameSet *m_firstHeader, *m_firstFooter, *m_maintext;

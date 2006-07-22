@@ -112,4 +112,17 @@ void KWTextFrameSet::relayout() {
         lay->layout();
 }
 
+#ifndef NDEBUG
+void KWTextFrameSet::printDebug(KWFrame *frame) {
+    KWFrameSet::printDebug(frame);
+}
+
+void KWTextFrameSet::printDebug() {
+    static const char * type[] = { "FirstPageHeader", "OddPagesHeader", "EvenPagesHeader", "FirstPageFooter", "OddPagesFooter", "EvenPagesFooter", "Main", "FootNote", "Other", "ERROR" };
+    kDebug() << " | Is a KWTextFrameSet" << endl;
+    kDebug() << " | FS Type: " << type[m_textFrameSetType] << endl;
+    KWFrameSet::printDebug();
+}
+#endif
+
 #include "KWTextFrameSet.moc"

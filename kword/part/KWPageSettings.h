@@ -29,6 +29,7 @@
  * This class holds all the settings for one document used in automatic placing of frames.
  * For documents that have a main text auto generated we have a lot of little options
  * to do that. This class wraps all these options.
+ * Note that the margins are per page and stored in a KWPage instance, not here.
  */
 class KWORD_TEST_EXPORT KWPageSettings {
 public:
@@ -36,13 +37,9 @@ public:
     KWPageSettings();
 
     /**
-     * Return the current page layout variables.
-     */
-    const KoPageLayout *pageLayout() const { return &m_pageLayout; }
-    /**
      * Return the current columns settings.
      */
-    const KoColumns *columns() const { return &m_columns; }
+    const KoColumns &columns() const { return m_columns; }
     /**
      * Return the type of header the first page will get.
      */
@@ -88,12 +85,12 @@ public:
      */
     void setFooterDistance(double distance) { m_footerDistance = distance; }
     /// return the distance between the footnote and the main frame.
-    double footnoteDistance() const { return m_footnoteDistance; }
+    double footnoteDistance() const { return m_footNoteDistance; }
     /**
      * Set the distance between the footnote and the main frame.
      * @param distance the distance
      */
-    void setFootnoteDistance(double distance) { m_footnoteDistance = distance; }
+    void setFootnoteDistance(double distance) { m_footNoteDistance = distance; }
     /// return the distance between the main text frame and the end notes frame.
     double endNoteDistance() const { return m_endNoteDistance; }
     /**
@@ -102,13 +99,38 @@ public:
      */
     void setEndNoteDistance(double distance) { m_endNoteDistance = distance; }
 
+    void setHeaderPolicy(KWord::HeaderFooterType p) { m_headers = p; }
+    void setFooterPolicy(KWord::HeaderFooterType p) { m_footers = p; }
+    void setFirstHeaderPolicy(KWord::HeaderFooterType p) { m_firstHeader = p; }
+    void setFirstFooterPolicy(KWord::HeaderFooterType p) { m_firstFooter = p; }
+
+    void setColumns(const KoColumns &columns) { m_columns = columns; }
+
+    int footNoteSeparatorLineLength() const { return m_footNoteSeparatorLineLength;}
+    void setFootNoteSeparatorLineLength( int length){  m_footNoteSeparatorLineLength = length;}
+
+    double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
+    void setFootNoteSeparatorLineWidth( double width){  m_footNoteSeparatorLineWidth=width;}
+
+    Qt::PenStyle footNoteSeparatorLineType() const { return m_footNoteSeparatorLineType;}
+    void setFootNoteSeparatorLineType( Qt::PenStyle type) {m_footNoteSeparatorLineType = type;}
+
+    void setFootNoteSeparatorLinePosition(KWord::FootNoteSeparatorLinePos
+            position) {m_footNoteSeparatorLinePos = position; }
+
+    void clear();
+
 private:
-    KoPageLayout m_pageLayout;
     KoColumns m_columns;
 
     bool m_mainFrame;
-    double m_headerDistance, m_footerDistance, m_footnoteDistance, m_endNoteDistance;
+    double m_headerDistance, m_footerDistance, m_footNoteDistance, m_endNoteDistance;
     KWord::HeaderFooterType m_firstHeader, m_firstFooter, m_headers, m_footers;
+
+    double m_footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
+    int m_footNoteSeparatorLineLength; ///< It's a percentage of page.
+    Qt::PenStyle m_footNoteSeparatorLineType; ///< foot note separate type
+    KWord::FootNoteSeparatorLinePos m_footNoteSeparatorLinePos; ///< alignment in page
 };
 
 #endif

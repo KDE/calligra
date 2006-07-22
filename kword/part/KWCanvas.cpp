@@ -123,6 +123,38 @@ void KWCanvas::keyPressEvent( QKeyEvent *e ) {
 }
 
 void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
+#ifndef NDEBUG
+    // Debug keys
+    if ( ( e->modifiers() & Qt::ControlModifier ) && ( e->modifiers() & Qt::ShiftModifier ) ) {
+        if(e->key() == Qt::Key_F) {
+            document()->printDebug();
+            e->accept();
+            return;
+        }
+        if(e->key() == Qt::Key_P) {
+            //printRTDebug( 0 );
+            e->accept();
+            return;
+        }
+        if(e->key() == Qt::Key_V) {
+            //printRTDebug( 1 );
+            e->accept();
+            return;
+        }
+        if(e->key() == Qt::Key_S) {
+            //m_doc->printStyleDebug();
+            e->accept();
+            return;
+        }
+        if(e->key() == Qt::Key_M) {
+            //const QDateTime dtMark ( QDateTime::currentDateTime() );
+            //kDebug(32002) << "Developer mark: " << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz") << endl;
+            e->accept();
+            return;
+        }
+        // For some reason 'T' doesn't work (maybe kxkb)
+    }
+#endif
     m_tool->keyReleaseEvent(e);
 }
 

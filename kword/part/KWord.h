@@ -81,6 +81,7 @@ public:
         OddPagesFooterTextFrameSet,  ///< The frameSet that holds the footers for the odd pages
         EvenPagesFooterTextFrameSet, ///< The frameSet that holds the footers for the even pages
         MainTextFrameSet,   ///< The frameset that holds all the frames for the main text area
+        FootNoteTextFrameSet,   ///< A frameset that holds a footnote
         OtherTextFrameSet   ///< Any other text frameset not managed by the auto-frame layout
     };
 
@@ -92,6 +93,11 @@ public:
         HFTypeSameAsFirst ///< Show the same content for each page, including the first page
     };
 
+    enum FootNoteSeparatorLinePos {
+        FootNoteSeparatorLeft,
+        FootNoteSeparatorCenter,
+        FootNoteSeparatorRight
+    };
 };
 
 #endif

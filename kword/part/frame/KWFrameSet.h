@@ -74,6 +74,11 @@ public:
      */
     int frameCount() const { return m_frames.count(); }
 
+#ifndef NDEBUG
+    virtual void printDebug();
+    void printDebug(KWFrame *frame);
+#endif
+
 signals:
     /**
      * emitted whenever a frame is added

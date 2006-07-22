@@ -24,8 +24,9 @@
 #include "KWCanvas.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
-#include "frame/KWTextFrameSet.h"
-#include "frame/KWTextFrame.h"
+#include "KWDLoader.h"
+#include "frame/KWFrameSet.h"
+#include "frame/KWFrame.h"
 #include "frame/KWFrameLayout.h"
 #include "dialog/KWFrameDialog.h"
 
@@ -44,7 +45,6 @@
 #include <QDomDocument>
 #include <QCoreApplication>
 
-
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument(parentWidget, parent, singleViewMode),
     m_snapToGrid(false),
@@ -53,7 +53,6 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     m_zoom(100),
     m_frameLayout(pageManager(), m_frameSets, pageSettings())
 {
-    m_pageManager.setDefaultPage(*pageSettings()->pageLayout());
     m_zoomMode = KoZoomMode::ZOOM_WIDTH;
 
     connect (&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
@@ -76,9 +75,8 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
         return;
     }
 
-appendPage();
-appendPage()->setPageSide(KWPage::PageSpread);
-appendPage();
+    clear();
+
 appendPage();
 }
 
@@ -110,14 +108,6 @@ void KWDocument::removeShape (KoShape *shape) {
 }
 
 void KWDocument::paintContent(QPainter&, const QRect&, bool, double, double) {
-    // TODO
-}
-
-bool KWDocument::loadXML(QIODevice*, const QDomDocument&) {
-    // TODO
-}
-
-bool KWDocument::loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*) {
     // TODO
 }
 
@@ -161,6 +151,7 @@ void KWDocument::removeFrameSet( KWFrameSet *fs ) {
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs) {
+kDebug() << "new fs: " << fs->name() << endl;
     if(m_frameSets.contains(fs)) return;
     setModified( true );
     m_frameSets.append(fs);
@@ -251,6 +242,208 @@ QString KWDocument::renameFrameSet( const QString &prefix, const QString& base )
         count++;
     }
 }
+
+// *** LOADING
+void KWDocument::clear() {
+    // document defaults
+    m_pageSettings.clear();
+    KoColumns columns = m_pageSettings.columns();
+    columns.ptColumnSpacing = m_defaultColumnSpacing; // TODO load this value on demand
+    m_pageSettings.setColumns(columns);
+    m_tabStop = MM_TO_POINT(15);
+    m_hasTOC = false;
+    foreach(KWFrameSet *fs, m_frameSets) {
+        removeFrameSet(fs);
+        delete fs;
+    }
+}
+
+bool KWDocument::loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*) {
+    // TODO
+}
+
+bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc ) {
+    QDomElement root = doc.documentElement();
+    clear();
+    KWDLoader loader(this);
+    bool rc = loader.load(root);
+    if (rc)
+        endOfLoading();
+    return rc;
+}
+
+void KWDocument::endOfLoading() // called by both oasis and oldxml
+{
+    // insert pages
+    double maxBottom = 0;
+    foreach(KWFrameSet* fs, m_frameSets) {
+        foreach(KWFrame *frame, fs->frames())
+            maxBottom = qMax(maxBottom, frame->shape()->boundingRect().bottom());
+    }
+    KWPage *last = pageManager()->page(lastPage());
+    double docHeight = last->offsetInDocument() + last->height();
+    while(docHeight <= maxBottom) {
+        kDebug(32001) << "KWDocument::loadXML appends a page\n";
+        last = appendPage();
+        docHeight += last->height();
+    }
+
+#if 0
+    // do some sanity checking on document.
+    for (int i = frameSetCount()-1; i>-1; i--) {
+        KWFrameSet *fs = frameSet(i);
+        if(!fs) {
+            kWarning() << "frameset " << i << " is NULL!!" << endl;
+            m_lstFrameSet.remove(i);
+            continue;
+        }
+        if( fs->type()==FT_TABLE) {
+            static_cast<KWTableFrameSet *>( fs )->validate();
+        } else if (fs->type() == FT_TEXT) {
+            for (int f=fs->frameCount()-1; f>=0; f--) {
+                KWFrame *frame = fs->frame(f);
+                if(frame->left() < 0) {
+                    kWarning() << fs->name() << " frame " << f << " pos.x is < 0, moving frame" << endl;
+                    frame->moveBy( 0- frame->left(), 0);
+                }
+                if(frame->right() > m_pageLayout.ptWidth) {
+                    kWarning() << fs->name() << " frame " << f << " rightborder outside page ("
+                        << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking" << endl;
+                    frame->setRight(m_pageLayout.ptWidth);
+                }
+                if(fs->isProtectSize())
+                    continue; // don't make frames bigger of a protected frameset.
+                if(frame->height() < s_minFrameHeight) {
+                    kWarning() << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
+                                << frame->height() << " is: " << s_minFrameHeight << ")" << endl;
+                    frame->setHeight(s_minFrameHeight);
+                }
+                if(frame->width() < s_minFrameWidth) {
+                    kWarning() << fs->name() << " frame " << f << " width is so small no text will fit, adjusting (was: "
+                                << frame->width() << " is: " << s_minFrameWidth  << ")" << endl;
+                    frame->setWidth(s_minFrameWidth);
+                }
+            }
+            if(fs->frameCount() == 0) {
+                KWPage *page = pageManager()->page(startPage());
+                KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->topMargin(),
+                        page->width() - page->leftMargin() - page->rightMargin(),
+                        page->height() - page->topMargin() - page->bottomMargin());
+                //kDebug(32001) << "KWDocument::loadXML main-KWFrame created " << *frame << endl;
+                fs->addFrame( frame );
+            }
+        } else if(fs->frameCount() == 0) {
+            kWarning () << "frameset " << i << " " << fs->name() << " has no frames" << endl;
+            removeFrameSet(fs);
+            if ( fs->type() == FT_PART )
+                delete static_cast<KWPartFrameSet *>(fs)->getChild();
+            delete fs;
+            continue;
+        }
+        if(fs->frameCount() > 0) {
+            KWFrame *frame = fs->frame(0);
+            if(frame->isCopy()) {
+                kWarning() << "First frame in a frameset[" << fs->name() << "] was set to be a copy; resetting\n";
+                frame->setCopy(false);
+            }
+        }
+    }
+
+    // Renumber footnotes
+    KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
+    if ( frameset  )
+        frameset->renumberFootNotes( false /*no repaint*/ );
+
+#endif
+    // remove header/footer frames that are not visible.
+    m_frameLayout.cleanupHeadersFooters();
+
+    foreach(KWPage *page, m_pageManager.pages())
+        m_frameLayout.createNewFramesForPage(page->pageNumber());
+
+    emit sigProgress(-1);
+
+    kDebug(32001) << "KWDocument::loadXML done" << endl;
+
+#if 0
+    // Connect to notifications from main text-frameset
+    if ( frameset ) {
+        connect( frameset->textObject(), SIGNAL( chapterParagraphFormatted( KoTextParag * ) ),
+                 SLOT( slotChapterParagraphFormatted( KoTextParag * ) ) );
+        connect( frameset, SIGNAL( mainTextHeightChanged() ),
+                 SIGNAL( mainTextHeightChanged() ) );
+    }
+#endif
+
+    // Note that more stuff will happen in completeLoading
+}
+
+
+#ifndef NDEBUG
+void KWDocument::printDebug() {
+    class Helper {
+        public:
+        static QString HFToString(KWord::HeaderFooterType type) {
+            switch(type) {
+                case KWord::HFTypeEvenOdd: return "evenOdd";
+                case KWord::HFTypeUniform: return "Uniform";
+                case KWord::HFTypeSameAsFirst: return "SameAsFirst";
+                default:
+                    return "None";
+            }
+        }
+    };
+
+    kDebug() << "----------------------------------------"<<endl;
+    kDebug() << "                 Debug info"<<endl;
+    kDebug() << "Document:" << this <<endl;
+    kDebug() << "Type of document: " << (m_pageSettings.hasMainTextFrame()?"WP":"DTP") << endl;
+    kDebug() << "First Header: " << Helper::HFToString(m_pageSettings.firstHeader()) << endl;
+    kDebug() << "First Footer: " << Helper::HFToString(m_pageSettings.firstFooter()) << endl;
+    kDebug() << "Other Headers: " << Helper::HFToString(m_pageSettings.headers()) << endl;
+    kDebug() << "Other Footers: " << Helper::HFToString(m_pageSettings.footers()) << endl;
+    kDebug() << "Units: " << KoUnit::unitName( unit() ) <<endl;
+    kDebug() << "# Framesets: " << frameSetCount() <<endl;
+    int i=0;
+    foreach(KWFrameSet *fs, m_frameSets) {
+        kDebug() << "Frameset " << i++ << ": '" <<
+            fs->name() << "' (" << fs << ")" << /*(fs->isDeleted()?" Deleted":"")<<*/endl;
+//       if ( fs->isVisible())
+           fs->printDebug();
+//      else
+//           kDebug() << "  [hidden] #" << fs->frameCount() << " frames" << endl;
+    }
+/* TODO
+    for ( uint pgNum = 0 ; pgNum < m_sectionTitles.size() ; ++pgNum ) {
+        kDebug() << "Page " << pgNum << "  Section: '" << m_sectionTitles[ pgNum ] << "'"<< endl;
+    }
+*/
+    /*
+    kDebug() << "# Images: " << getImageCollection()->iterator().count() <<endl;
+    QDictIterator<KWImage> it( getImageCollection()->iterator() );
+    while ( it.current() ) {
+        kDebug() << " + " << it.current()->getFilename() << ": "<<it.current()->refCount() <<endl;
+        ++it;
+    }
+    */
+
+    kDebug() << "PageManager holds "<< pageCount() << " pages in the range: " << startPage() <<
+        "-" << lastPage() << endl;
+    for (int pgnum = startPage() ; pgnum <= lastPage() ; pgnum++) {
+        KWPage *page = pageManager()->page(pgnum);
+        pgnum = page->pageNumber(); // in case the last one was a pagespread.
+        QString side = "[Left] ";
+        if(page->pageSide() == KWPage::Right)
+            side = "[Right]";
+        else if(page->pageSide() == KWPage::PageSpread)
+            side = "[PageSpread]";
+        kDebug() << "Page " << pgnum << side << " width=" << page->width() << " height=" << page->height() << endl;
+    }
+    kDebug() << "  The height of the doc (in pt) is: " << pageManager()->
+        bottomOfPage(lastPage()) << endl;
+}
+#endif
+
 
 // ************* PageProcessingQueue ************
 PageProcessingQueue::PageProcessingQueue(KWDocument *parent) {

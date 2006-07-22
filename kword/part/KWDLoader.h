@@ -17,29 +17,42 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWPageSettings.h"
+#ifndef KWDLOADER_H
+#define KWDLOADER_H
 
+#include <QObject>
 
-KWPageSettings::KWPageSettings() {
-    clear();
-}
+class KWDocument;
+class KWFrameSet;
+class KWPageSettings;
+class KWPageManager;
+class KWTextFrameSet;
+class QDomElement;
 
-void KWPageSettings::clear() {
-    // defaults
-    m_footNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
-    m_footNoteSeparatorLineWidth = 0.5; // like in OOo
-    m_footNoteSeparatorLineType = Qt::SolidLine;
+class KWDLoader : public QObject
+{
+    Q_OBJECT
+public:
+    KWDLoader(KWDocument *parent);
+    virtual ~KWDLoader();
 
-// TODO sane defaults.
-    m_mainFrame = true;
-    m_headerDistance = 10;
-    m_footerDistance = 9;
-    m_footNoteDistance = 8;
-    m_endNoteDistance = 7;
-    m_firstHeader = KWord::HFTypeNone;
-    m_firstFooter = KWord::HFTypeEvenOdd;
-    m_headers = KWord::HFTypeEvenOdd;
-    m_footers = KWord::HFTypeSameAsFirst;
-    m_columns.columns = 1;
-    m_columns.ptColumnSpacing = 6;
-}
+    bool load(QDomElement &root);
+
+signals:
+    void sigProgress(int percent);
+
+private:
+    void loadFrameSets( const QDomElement &framesets );
+    KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true , bool loadFootnote = true);
+    void fill(KWFrameSet *fs, QDomElement framesetElem);
+    void fill(KWTextFrameSet *fs, QDomElement framesetElem);
+
+private:
+    KWDocument *m_document;
+    KWPageSettings *m_pageSettings;
+    KWPageManager *m_pageManager;
+    bool m_foundMainFS;
+    int m_nrItemsToLoad, m_itemsLoaded;
+};
+
+#endif

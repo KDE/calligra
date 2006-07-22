@@ -26,7 +26,7 @@ void TestDocumentLayout::init() {
 void TestDocumentLayout:: testHitTest() {
     // init a basic document with 3 parags.
     KWTextFrameSet frameSet;
-    KWTextFrame frame(new TestTextShape(), &frameSet);
+    KWTextFrame frame(new MockTextShape(), &frameSet);
     KWTextDocumentLayout layout(&frameSet);
     QTextDocument *doc = layout.document();
     doc->setDocumentLayout(&layout);

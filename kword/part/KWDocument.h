@@ -92,15 +92,15 @@ public:
 
 
     // KoDocument interface
-    /// reimplemented from KoShapeControllerBase
+    /// reimplemented from KoDocument
     void paintContent(QPainter&, const QRect&, bool, double, double);
-    /// reimplemented from KoShapeControllerBase
+    /// reimplemented from KoDocument
     bool loadXML(QIODevice*, const QDomDocument&);
-    /// reimplemented from KoShapeControllerBase
+    /// reimplemented from KoDocument
     bool loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*);
-    /// reimplemented from KoShapeControllerBase
+    /// reimplemented from KoDocument
     bool saveOasis(KoStore*, KoXmlWriter*);
-    /// reimplemented from KoShapeControllerBase
+    /// reimplemented from KoDocument
     KoView* createViewInstance(QWidget*, const char*);
 
 
@@ -180,10 +180,15 @@ public:
 
     KWFrame *frameForShape(KoShape *shape) const;
 
+    int frameSetCount() const { return m_frameSets.count(); }
     const QList<KWFrameSet*> &frameSets() const { return m_frameSets; }
     KWFrameSet *frameSetByName( const QString & name );
     QString suggestFrameSetNameForCopy( const QString& base );
     QString uniqueFrameSetName( const QString& suggestion );
+
+#ifndef NDEBUG
+    void printDebug();
+#endif
 
 public slots:
     /// Register new frameset
@@ -207,12 +212,24 @@ private slots:
 
 private:
     friend class PageProcessingQueue;
+    friend class KWDLoader;
     QString renameFrameSet( const QString& prefix , const QString& base );
+    /// post process loading after either oasis or oldxml loading finished
+    void endOfLoading();
+    /** Called before loading
+     * It's important to clear out anything that might be in the document already,
+     * for things like using DCOP to load multiple documents into the same KWDocument,
+     * or "reload" when kword is embedded into konqueror.
+     */
+    void clear();
 
 private:
-    bool m_snapToGrid;
+    bool m_snapToGrid, m_hasTOC;
     double m_gridX, m_gridY;
-    int m_zoom;
+    double m_defaultColumnSpacing;
+    double m_tabStop;   ///< pt distance for auto-tabstops
+
+    int m_zoom; /// < zoom level in percent
     KoZoomMode::Mode m_zoomMode;
     QList<KWFrameSet*> m_frameSets;
     QString m_viewMode;

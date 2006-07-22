@@ -22,19 +22,18 @@ private slots:
     void testHitTest();
 
 private:
-    class TestTextShape : public KoShape {
-      public:
-        TestTextShape() {
-            setUserData(new KoTextShapeData());
-        }
-        void paint(QPainter &painter, KoViewConverter &converter) {
-            Q_UNUSED(painter);
-            Q_UNUSED(converter);
-        };
-    };
-
-private:
     QApplication *m_app;
+};
+
+class MockTextShape : public KoShape {
+  public:
+    MockTextShape() {
+        setUserData(new KoTextShapeData());
+    }
+    void paint(QPainter &painter, KoViewConverter &converter) {
+        Q_UNUSED(painter);
+        Q_UNUSED(converter);
+    }
 };
 
 #endif
