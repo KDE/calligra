@@ -590,8 +590,8 @@ double StyleElement::getSize( const QString& str, SizeType* st )
     if ( index != -1 ) {
         return str2size( str, st, index, PixelSize );
     }
-    kdWarning( DEBUGID ) << "Unknown mathsize unit type\n";
-    return -1;
+    // If there's no unit, assume 'pt'
+    return str2size( str, st, str.length(),AbsoluteSize );
 }
 
 /**
