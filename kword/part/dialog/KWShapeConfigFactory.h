@@ -49,55 +49,76 @@ private:
     KWDocument *m_document;
 };
 
+/// factory to create a KWFrameConnectSelector widget
 class KWFrameConnectSelectorFactory : public KoShapeConfigFactory {
 public:
+    /// constructor
     KWFrameConnectSelectorFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameConnectSelectorFactory() {}
 
+    /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
+    /// reimplemented method from superclass
     QString name() const;
 
+    /// reimplemented method from superclass
     bool showForShapeId(const QString &id) const;
+    /// reimplemented method from superclass
     int sortingOrder() const { return 1; }
 
 private:
     FrameConfigSharedState *m_state;
 };
 
+/// factory to create a KWFrameGeometry widget
 class KWFrameGeometryFactory : public KoShapeConfigFactory {
 public:
+    /// constructor
     KWFrameGeometryFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameGeometryFactory() {}
 
+    /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
+    /// reimplemented method from superclass
     QString name() const;
+    /// reimplemented method from superclass
     int sortingOrder() const { return 0; }
 
 private:
     FrameConfigSharedState *m_state;
 };
 
+/// factory to create a KWFrameRunaroundProperties widget
 class KWFrameRunaroundPropertiesFactory : public KoShapeConfigFactory {
 public:
+    /// constructor
     KWFrameRunaroundPropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameRunaroundPropertiesFactory() {}
 
+    /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
+    /// reimplemented method from superclass
     QString name() const;
 
+    /// reimplemented method from superclass
     int sortingOrder() const { return 5; }
 
 private:
     FrameConfigSharedState *m_state;
 };
 
+/// factory to create a KWGeneralFrameProperties widget
 class KWGeneralFramePropertiesFactory : public KoShapeConfigFactory {
 public:
+    /// constructor
     KWGeneralFramePropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWGeneralFramePropertiesFactory() {}
 
+    /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
+    /// reimplemented method from superclass
     QString name() const;
+    /// reimplemented method from superclass
     int sortingOrder() const { return 10; }
 
 private:

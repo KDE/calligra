@@ -71,6 +71,10 @@ public:
     void layoutFramesOnPage(int pageNumber);
     void updateFramesAfterDelete(int deletedPage);
     //void relayoutFrames(old layout, new layout); // per page ? Or per doc?
+    /**
+     *  delete any unneeded header/footer frames (but not their contents) based on
+     * the document settings
+     */
     void cleanupHeadersFooters();
 
 signals:

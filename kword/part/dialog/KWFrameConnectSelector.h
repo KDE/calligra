@@ -33,19 +33,25 @@ class KWTextFrame;
 class KWFrameSet;
 class KWDocument;
 
+/// A widget that is shown for 1 textframe to connect it to a frameset
 class KWFrameConnectSelector : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
+    /// constructor
     KWFrameConnectSelector(FrameConfigSharedState *state);
     ~KWFrameConnectSelector();
 
+    /// load all info from the argument frame into this widget
     bool open(KWFrame *frame);
+    /// reimplemented
     void open(KoShape *shape);
+    /// reimplemented
     void save();
+    /// reimplemented
     KAction *createAction();
 
 private slots:
-    void frameSetSelected(QTreeWidgetItem* item);
+    void frameSetSelected();
     void nameChanged(const QString &text);
 
 private:

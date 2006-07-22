@@ -31,15 +31,21 @@
 class KWFrame;
 class KoShape;
 
+/// A widget that is shown to allow the user to select the run around properties
 class KWFrameRunaroundProperties : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
+    /// constructor
     KWFrameRunaroundProperties(FrameConfigSharedState *state);
     ~KWFrameRunaroundProperties();
 
+    /// load all info from the argument frames into this widget
     void open(const QList<KWFrame*> &frames);
+    /// reimplemented
     void open(KoShape *shape);
+    /// reimplemented
     void save();
+    /// reimplemented
     KAction *createAction();
 
 private:

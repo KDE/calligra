@@ -84,27 +84,17 @@ KWDocument::~KWDocument() {
 }
 
 void KWDocument::addShape (KoShape *shape) {
-#if 0
-    if(shape->shapeId() == KoTextShape_SHAPEID) {
-        KWTextFrameSet *fs = new KWTextFrameSet();
-        KWTextFrame *frame = new KWTextFrame(shape, fs);
-        addFrameSet(fs);
-    } else {
-        KWFrameSet *fs = new KWFrameSet();
-        KWFrame *frame = new KWFrame(shape, fs);
-        addFrameSet(fs);
-    }
-#endif
+    Q_UNUSED(shape);
+    // we don't actually add a shape; we assume the FrameDia and friends call a addFrame instead
 }
 
 void KWDocument::removeShape (KoShape *shape) {
-#if 0
+    shape->repaint();
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->remove(shape);
-        canvas->update();
     }
-#endif
+    m_frameMap.remove(shape);
 }
 
 void KWDocument::paintContent(QPainter&, const QRect&, bool, double, double) {
@@ -115,7 +105,7 @@ bool KWDocument::saveOasis(KoStore*, KoXmlWriter*) {
     // TODO
 }
 
-KoView* KWDocument::createViewInstance(QWidget* parent, const char* name) {
+KoView* KWDocument::createViewInstance(QWidget* parent, const char*) {
     KWView *view = new KWView(m_viewMode, this, parent);
     foreach(KWFrameSet *fs, m_frameSets) {
         foreach(KWFrame *frame, fs->frames()) {

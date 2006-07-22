@@ -29,22 +29,40 @@ class KWPageManager;
 class KWTextFrameSet;
 class QDomElement;
 
+/// KWDocument delegates to this class the loading of (old style) KWD documents
 class KWDLoader : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor
+     * @param parent the document this loader will work for.
+     */
     KWDLoader(KWDocument *parent);
     virtual ~KWDLoader();
 
+    /**
+     * Load a document from a xml structure.
+     * @param root the root node from an xml document of the kword file format upto 1.4
+     * @return return true on success, false on failure
+     */
     bool load(QDomElement &root);
 
 signals:
+    /**
+     * This signal is emitted during loading with a percentage within 1-100 range
+     * @param percent the progress as a percentage
+     */
     void sigProgress(int percent);
 
 private:
+    /// find and load all framesets
     void loadFrameSets( const QDomElement &framesets );
+    /// load one frameset
     KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true , bool loadFootnote = true);
-    void fill(KWFrameSet *fs, QDomElement framesetElem);
+    /// fill the data of fs with the info from the element
+    void fill(KWFrameSet *fs, QDomElement element);
+    /// fill the data of fs with the info from the element
     void fill(KWTextFrameSet *fs, QDomElement framesetElem);
 
 private:

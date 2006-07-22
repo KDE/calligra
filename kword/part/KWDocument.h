@@ -178,15 +178,22 @@ public:
      */
     int lastPage() const;
 
+    /// return the frame that holds the argument shape
     KWFrame *frameForShape(KoShape *shape) const;
 
+    /// return the amount of framesets this document holds
     int frameSetCount() const { return m_frameSets.count(); }
+    /// return a list of all the framesets this document holds
     const QList<KWFrameSet*> &frameSets() const { return m_frameSets; }
+    /// return a frameset, or null, by name. @see KWFrameSet::name()
     KWFrameSet *frameSetByName( const QString & name );
+    /// return a suggestion for a copy frameset that does not collide with known ones.
     QString suggestFrameSetNameForCopy( const QString& base );
+    /// return a suggestion for a new frameset name that does not collide with known ones.
     QString uniqueFrameSetName( const QString& suggestion );
 
 #ifndef NDEBUG
+    /// Use a log of kDebug calls to print out the internal state of the document and its members
     void printDebug();
 #endif
 

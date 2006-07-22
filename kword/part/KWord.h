@@ -66,10 +66,14 @@ public:
         RightRunAroundSide      ///< Run other text around the right side of the frame
     };
 
+    /**
+     * This property specifies how text from a text frame behaves when a frame with
+     * one of these properties set on it intersects with it.
+     */
     enum TextRunAround {
-        NoRunAround,
-        RunAround,
-        RunThrough
+        NoRunAround, ///< The text will be completely avoiding the frame by avoiding the frame
+        RunAround,  ///< The text will run around the outline of the frame
+        RunThrough  ///< The text will completely ignore the frame and layout as if it was not there
     };
 
     /// Each text frame set can be catogorized in one of these items
@@ -93,10 +97,11 @@ public:
         HFTypeSameAsFirst ///< Show the same content for each page, including the first page
     };
 
+    /// Specifies the horizontal position of the line that separates main text and foot note
     enum FootNoteSeparatorLinePos {
-        FootNoteSeparatorLeft,
-        FootNoteSeparatorCenter,
-        FootNoteSeparatorRight
+        FootNoteSeparatorLeft, ///< Left of page
+        FootNoteSeparatorCenter, ///< Centred on page
+        FootNoteSeparatorRight  ///< Right of page
     };
 };
 

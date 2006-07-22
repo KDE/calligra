@@ -88,7 +88,17 @@ public:
      */
     void setRunAroundSide(KWord::RunAroundSide side) { m_runAroundSide = side; }
 
+    /**
+     * Return the text runaround property for this frame.
+     * This property specifies how text from another textframe will behave when this frame
+     * intersects with it.
+     */
     KWord::TextRunAround textRunAround() const { return m_runAround; }
+    /**
+     * Set the text runaround property for this frame.
+     * This property specifies how text from another textframe will behave when this frame
+     * intersects with it.
+     */
     void setTextRunAround(KWord::TextRunAround runAround) { m_runAround = runAround; }
 
     /**
@@ -113,7 +123,13 @@ public:
      * @return the parent frameset
      */
     KWFrameSet *frameSet() const { return m_frameSet; }
-    void setFrameSet(KWFrameSet *newFrameSet);
+    /**
+     * Set the frameset this frame will work on.
+     * Altering the frameset requires you to remove this frame on the old and add the frame on the
+     * new frameset
+     * @param newFrameSet the new frameset
+     */
+    virtual void setFrameSet(KWFrameSet *newFrameSet);
 
     /**
      * States if this frame is a copy of the previous one.

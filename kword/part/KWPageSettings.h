@@ -41,21 +41,29 @@ public:
      */
     const KoColumns &columns() const { return m_columns; }
     /**
-     * Return the type of header the first page will get.
+     * Set the new columns settings
      */
+    void setColumns(const KoColumns &columns) { m_columns = columns; }
+
+    /// Return the type of header the first page will get.
     KWord::HeaderFooterType firstHeader() const { return m_firstHeader; }
-    /**
-     * Return the type of footer the first page will get.
-     */
+    /// Set the type of header the first page will get.
+    void setFirstHeaderPolicy(KWord::HeaderFooterType p) { m_firstHeader = p; }
+
+    /// Return the type of footer the first page will get.
     KWord::HeaderFooterType firstFooter() const { return m_firstFooter; }
-    /**
-     * Return the type of header all the pages, except the first page will get.
-     */
+    /// Set the type of footer the first page will get.
+    void setFirstFooterPolicy(KWord::HeaderFooterType p) { m_firstFooter = p; }
+
+    /// Return the type of header all the pages, except the first page will get.
     KWord::HeaderFooterType headers() const { return m_headers; }
-    /**
-     * Return the type of footers all the pages, except the first page will get.
-     */
+    /// set the type of header all the pages, except the first page will get.
+    void setHeaderPolicy(KWord::HeaderFooterType p) { m_headers = p; }
+
+    /// Return the type of footers all the pages, except the first page will get.
     KWord::HeaderFooterType footers() const { return m_footers; }
+    /// Set the type of footers all the pages, except the first page will get.
+    void setFooterPolicy(KWord::HeaderFooterType p) { m_footers = p; }
 
     /**
      * This is the main toggle for all automatically generated frames.
@@ -99,25 +107,31 @@ public:
      */
     void setEndNoteDistance(double distance) { m_endNoteDistance = distance; }
 
-    void setHeaderPolicy(KWord::HeaderFooterType p) { m_headers = p; }
-    void setFooterPolicy(KWord::HeaderFooterType p) { m_footers = p; }
-    void setFirstHeaderPolicy(KWord::HeaderFooterType p) { m_firstHeader = p; }
-    void setFirstFooterPolicy(KWord::HeaderFooterType p) { m_firstFooter = p; }
-
-    void setColumns(const KoColumns &columns) { m_columns = columns; }
-
+    /// return the line length of the foot note separator line, in percent of the pagewidth
     int footNoteSeparatorLineLength() const { return m_footNoteSeparatorLineLength;}
+    /// set the line length of the foot note separator line, in percent of the pagewidth
     void setFootNoteSeparatorLineLength( int length){  m_footNoteSeparatorLineLength = length;}
 
+    /// return the thickness of the line (in pt) drawn above the foot notes
     double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
+    /// set the thickness of the line (in pt) drawn above the foot notes
     void setFootNoteSeparatorLineWidth( double width){  m_footNoteSeparatorLineWidth=width;}
 
+    /// return the pen style used to draw the foot note separator line
     Qt::PenStyle footNoteSeparatorLineType() const { return m_footNoteSeparatorLineType;}
+    /// set the pen style used to draw the foot note separator line
     void setFootNoteSeparatorLineType( Qt::PenStyle type) {m_footNoteSeparatorLineType = type;}
 
-    void setFootNoteSeparatorLinePosition(KWord::FootNoteSeparatorLinePos
-            position) {m_footNoteSeparatorLinePos = position; }
+    /// return the position on the page for the foot note separator line
+    KWord::FootNoteSeparatorLinePos footNoteSeparatorLinePosition() const {
+        return m_footNoteSeparatorLinePos;
+    }
+    /// set the position on the page for the foot note separator line
+    void setFootNoteSeparatorLinePosition(KWord::FootNoteSeparatorLinePos position) {
+        m_footNoteSeparatorLinePos = position;
+    }
 
+    /// initialize to default settings
     void clear();
 
 private:

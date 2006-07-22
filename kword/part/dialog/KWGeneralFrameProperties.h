@@ -30,15 +30,21 @@
 
 class KWFrame;
 
+/// A widget that allows the user to alter the general frame properties
 class KWGeneralFrameProperties : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
+    /// constructor
     KWGeneralFrameProperties(FrameConfigSharedState *state);
     ~KWGeneralFrameProperties();
 
+    /// load all info from the argument frame into this widget
     void open(const QList<KWFrame*> &frames);
+    /// reimplemented
     void open(KoShape *shape);
+    /// reimplemented
     void save();
+    /// reimplemented
     KAction *createAction();
 
 private:

@@ -22,8 +22,8 @@
 #include "frame/KWFrame.h"
 
 KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *state)
-    : m_shape(0),
-    m_state(state)
+    : m_state(state),
+     m_shape(0)
 {
     m_state->addUser();
     widget.setupUi(this);

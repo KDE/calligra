@@ -35,12 +35,23 @@ class KWFrameSet;
 class KWDocument;
 class FrameConfigSharedState;
 
+/// A dialog for showing and altering frame properties
 class KWFrameDialog : public KPageDialog {
     Q_OBJECT
 public:
+    /**
+     * Constructor.
+     * @param selectedFrames all frames that this dialog will show for user modification
+     * @param document the parent document where the frames belong to
+     * @param parent a parent widget for the purpose of centering the dialog
+     */
     KWFrameDialog (const QList<KWFrame*> &selectedFrames, KWDocument *document, QWidget *parent=0);
     ~KWFrameDialog();
 
+    /**
+     * Create a list of factories that will be able to create widgets to configure shapes.
+     * @param document the parent document these panels will work for.
+     */
     static QList<KoShapeConfigFactory *> panels(KWDocument *document);
 
 private slots:
@@ -54,15 +65,20 @@ private:
     FrameConfigSharedState *m_state;
 };
 
+/// A simple class usefull for finding out if a series of data object will cause a
+/// normal or a tri-state checkbox. For example.
 class GuiHelper {
 public:
+    /// the different states
     enum State {
-        Unset,
-        On,
-        Off,
-        TriState
+        Unset, ///< start value
+        On,     ///< on
+        Off,    ///< off
+        TriState ///< Both on and off
     };
+    /// constructor
     GuiHelper() : m_state(Unset) { }
+     /// Add a new state
     void addState(State state) {
         if(m_state == Unset)
             m_state = state;
@@ -70,6 +86,11 @@ public:
             m_state = TriState;
     }
 
+    /**
+     * Based on all the added states initialize the checkbox.
+     * @param checkbox the checkbox to set.
+     * @param hide if true the checkbox will be hidden when there was no 'addState' called
+     */
     void updateCheckBox(QCheckBox *checkbox, bool hide) {
         if(m_state == Unset) {
             if(hide)
@@ -85,7 +106,7 @@ public:
         }
     }
 
-    State m_state;
+    State m_state; ///< the current state
 };
 
 #endif

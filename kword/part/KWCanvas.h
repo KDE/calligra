@@ -57,25 +57,25 @@ public:
     void updateSize();
 
     // KoCanvasBase interface methods.
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void gridSize(double *horizontal, double *vertical) const;
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     bool snapToGrid() const;
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void addCommand(KCommand *command, bool execute = true);
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     KoShapeManager *shapeManager() const { return m_shapeManager; }
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void updateCanvas(const QRectF& rc);
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     KoTool* tool() { return m_tool; }
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void setTool(KoTool *tool) { m_tool = tool; }
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     KoViewConverter *viewConverter();
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     QWidget* canvasWidget() { return this; }
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     KoUnit::Unit unit() { return document()->unit(); }
 
     // getters
@@ -86,17 +86,17 @@ public:
     KWViewMode *viewMode() const { return m_viewMode; }
 
 protected:
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void keyPressEvent( QKeyEvent *e );
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void mouseMoveEvent(QMouseEvent *e);
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void mousePressEvent(QMouseEvent *e);
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void mouseReleaseEvent(QMouseEvent *e);
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void keyReleaseEvent (QKeyEvent *e);
-    /// overwritten method from superclass
+    /// reimplemented method from superclass
     void paintEvent(QPaintEvent * ev);
 
 private slots:

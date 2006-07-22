@@ -75,7 +75,9 @@ public:
     int frameCount() const { return m_frames.count(); }
 
 #ifndef NDEBUG
+    /// use kDebug calls to print internal info on this frameset
     virtual void printDebug();
+    /// use kDebug calls to print internal info of the argument frame
     void printDebug(KWFrame *frame);
 #endif
 

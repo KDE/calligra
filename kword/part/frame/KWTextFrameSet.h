@@ -46,7 +46,9 @@ public:
     /// return the document with the text that belongs to this frameset.
     QTextDocument *document() const { return m_document; }
 
-    bool protectContent() { return m_protectContent; }
+    /// return true if the content of this frameset should not be allowed to be altered
+    bool protectContent() const { return m_protectContent; }
+    /// set wheater the content of this frameset should not be allowed to be altered
     void setProtectContent(bool protect) { m_protectContent = protect; }
 
 #ifndef NDEBUG
