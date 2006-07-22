@@ -45,6 +45,7 @@
 #include <kinstance.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
+#include <kcommand.h>
 
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
@@ -58,6 +59,11 @@
 #include <Kolinestyleaction.h>
 #include <KoToolManager.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeManager.h>
+#include <KoShapeContainer.h>
+#include <KoShapeGroup.h>
+#include <KoCommand.h>
+#include <KoSelection.h>
 
 // Commands.
 #include "valigncmd.h"
@@ -195,6 +201,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	m_canvas = new KarbonCanvas( p->document().shapes() ); //, this, p );
 	m_canvas->setCommandHistory( p->commandHistory() );
+	connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
 	m_canvasView = new KoCanvasController(this);
@@ -835,7 +842,17 @@ KarbonView::groupSelection()
 {
 	debugView("KarbonView::groupSelection()");
 
-	part()->addCommand( new VGroupCmd( &part()->document() ), true );
+	KoSelection* selection = m_canvas->shapeManager()->selection();
+	if( ! selection )
+		return;
+
+	KoShapeGroup *group = new KoShapeGroup();
+	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
+	KMacroCommand *cmd = new KMacroCommand( i18n("Group shapes") );
+	cmd->addCommand( new KoShapeCreateCommand( m_part, group ) );
+	cmd->addCommand( new KoGroupShapesCommand( group, selectedShapes.toList() ) );
+		
+	part()->commandHistory()->addCommand( cmd, true );
 }
 
 void
@@ -843,7 +860,30 @@ KarbonView::ungroupSelection()
 {
 	debugView("KarbonView::ungroupSelection()");
 
-	part()->addCommand( new VUnGroupCmd( &part()->document() ), true );
+	KoSelection* selection = m_canvas->shapeManager()->selection();
+	if( ! selection )
+		return;
+
+	KoSelectionSet containerSet;
+
+	// first collect all shape containers from the actual selection
+	foreach( KoShape* shape, selection->selectedShapes( KoFlake::StrippedSelection ) )
+	{
+		if( shape->parent() )
+			containerSet << shape->parent();
+	}
+
+	KMacroCommand *cmd = new KMacroCommand( i18n("Ungroup shapes") );
+
+	// add a ungroup command for each found shape container to the macro command
+	foreach( KoShape* shape, containerSet )
+	{
+		KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
+		if( ! container )
+			continue;
+		cmd->addCommand( new KoUngroupShapesCommand( container, container->iterator() ) );
+	}
+	part()->commandHistory()->addCommand( cmd, true );
 }
 
 void
@@ -1519,13 +1559,17 @@ KarbonView::selectionChanged()
 {
 	debugView("KarbonView::selectionChanged()");
 
-	int count = part()->document().selection()->objects().count();
-	m_groupObjects->setEnabled( false );
-	m_closePath->setEnabled( false );
+	KoSelection *selection = m_canvas->shapeManager()->selection();
+	int count = selection->count();
+
+	m_groupObjects->setEnabled( count > 1 );
 	m_ungroupObjects->setEnabled( false );
+	m_closePath->setEnabled( false );
+	m_deleteSelectionAction->setEnabled( count > 0 );
 
 	if( count > 0 )
 	{
+		/** TODO needs porting to flake 
 		VObject *obj = part()->document().selection()->objects().getFirst();
 
 		if ( shell() ) {
@@ -1538,13 +1582,9 @@ KarbonView::selectionChanged()
 
 		if( count == 1 )
 		{
-			VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
-			m_ungroupObjects->setEnabled( group );
 			VPath *path = dynamic_cast<VPath *>( part()->document().selection()->objects().getFirst() );
 			m_closePath->setEnabled( path && !path->isClosed() );
 		}
-		else
-			m_groupObjects->setEnabled( true );
 
 		part()->document().selection()->setStroke( *obj->stroke() );
 		part()->document().selection()->setFill( *obj->fill() );
@@ -1564,8 +1604,18 @@ KarbonView::selectionChanged()
   			m_lineStyleAction->setCurrentSelection( Qt::DashDotLine );
 		else if( obj->stroke()->dashPattern().array().count() == 6 )
   			m_lineStyleAction->setCurrentSelection( Qt::DashDotDotLine );
-
-		m_deleteSelectionAction->setEnabled( true );
+		*/
+		
+		// check all selected shapes if they are grouped
+		// and enable the ungroup action if at least one is found
+		foreach( KoShape* shape, selection->selectedShapes() )
+		{
+			if( dynamic_cast<KoShapeGroup*>( shape->parent() ) )
+			{
+				m_ungroupObjects->setEnabled( true );
+				break;
+			}
+		}
 	}
 	else
 	{
@@ -1575,7 +1625,6 @@ KarbonView::selectionChanged()
 									 *( part()->document().selection()->fill() ) );
 		// TODO: activate the line below when KoLineStyleAction is ported.
 		// m_lineStyleAction->setEnabled( false );
-		m_deleteSelectionAction->setEnabled( false );
 	}
 	emit selectionChange();
 }

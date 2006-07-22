@@ -471,13 +471,11 @@ void
 KarbonPart::slotCommandExecuted( KCommand *command )
 {
 	setModified( true );
-	/*
-	if( command && command->changesSelection() )
+	if( command )
 	{
 		foreach ( KoView* view, views() )
 			static_cast<KarbonView*>( view )->selectionChanged();
 	}
-	*/
 }
 
 void
