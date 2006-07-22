@@ -128,13 +128,15 @@ QStringList SymbolTable::allNames() const
 {
     QStringList list;
 
-    for ( NameTable::const_iterator iter = names.begin();
-          iter != names.end();
-          ++iter )
-        if ( iter.key() != QChar::null ) {
-            list.append( iter.data() );
-        }
-
+    for ( int i=0; operatorTable[i].unicode != 0; ++i ) {
+        list.append( operatorTable[i].name );
+    }
+    for ( int i=0; arrowTable[i].unicode != 0; ++i ) {
+        list.append( arrowTable[i].name );
+    }
+    for ( int i=0; greekTable[i].unicode != 0; ++i ) {
+        list.append( greekTable[i].name );
+    }
     return list;
 }
 
