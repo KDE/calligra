@@ -35,7 +35,7 @@ class KConfig;
 KFORMULA_NAMESPACE_BEGIN
 
 class ContextStyle;
-
+struct UnicodeNameTable;
 
 /**
  * We expect to always have the symbol font.
@@ -86,7 +86,6 @@ public:
     void init( const QFont& font );
 
     bool contains( QString name ) const;
-    bool contains( ushort symbol ) const;
 
     /**
      * @returns the char in the symbol font that belongs to
@@ -118,6 +117,8 @@ public:
     typedef QMap<QString, QChar> EntryTable;
 
 private:
+
+    QString get_name( UnicodeNameTable entry ) const;
 
     /**
      * unicode -> name mapping.

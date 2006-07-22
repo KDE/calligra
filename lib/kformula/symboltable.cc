@@ -67,16 +67,16 @@ void SymbolTable::init( const QFont& font )
 {
     backupFont = font;
     for ( int i=0; operatorTable[i].unicode != 0; ++i ) {
-        names[QChar( operatorTable[i].unicode )] = operatorTable[i].name;
-        entries[operatorTable[i].name] = QChar( operatorTable[i].unicode );
+        names[QChar( operatorTable[i].unicode )] = get_name( operatorTable[i] );
+        entries[get_name( operatorTable[i] )] = QChar( operatorTable[i].unicode );
     }
     for ( int i=0; arrowTable[i].unicode != 0; ++i ) {
-        names[QChar( arrowTable[i].unicode )] = arrowTable[i].name;
-        entries[arrowTable[i].name] = QChar( arrowTable[i].unicode );
+        names[QChar( arrowTable[i].unicode )] = get_name( arrowTable[i] );
+        entries[get_name( arrowTable[i] )] = QChar( arrowTable[i].unicode );
     }
     for ( int i=0; greekTable[i].unicode != 0; ++i ) {
-        names[QChar( greekTable[i].unicode )] = greekTable[i].name;
-        entries[greekTable[i].name] = QChar( greekTable[i].unicode );
+        names[QChar( greekTable[i].unicode )] = get_name( greekTable[i] );
+        entries[get_name( greekTable[i] )] = QChar( greekTable[i].unicode );
     }
 }
 
@@ -129,18 +129,24 @@ QStringList SymbolTable::allNames() const
     QStringList list;
 
     for ( int i=0; operatorTable[i].unicode != 0; ++i ) {
-        list.append( operatorTable[i].name );
+        list.append( get_name( operatorTable[i] ));
     }
     for ( int i=0; arrowTable[i].unicode != 0; ++i ) {
-        list.append( arrowTable[i].name );
+        list.append( get_name( arrowTable[i] ));
     }
     for ( int i=0; greekTable[i].unicode != 0; ++i ) {
-        list.append( greekTable[i].name );
+        list.append( get_name( greekTable[i] ) );
     }
     return list;
 }
 
 
-
+QString SymbolTable::get_name( struct UnicodeNameTable entry ) const
+{
+    if ( entry.name == "" ) {
+        return "U" + QString( "%1" ).arg( entry.unicode, 4, 16 ).upper();
+    }
+    return entry.name;
+}
 
 KFORMULA_NAMESPACE_END
