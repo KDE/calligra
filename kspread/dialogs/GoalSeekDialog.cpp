@@ -212,8 +212,6 @@ GoalSeekDialog::~GoalSeekDialog()
   {
     m_pView->doc()->emitBeginOperation( false );
     m_sourceCell->setValue(m_oldSource);
-    m_targetCell->setCalcDirtyFlag();
-    m_targetCell->calc();
     m_pView->slotUpdateView( m_pView->activeSheet() );
   }
 }
@@ -321,8 +319,6 @@ void GoalSeekDialog::buttonCancelClicked()
   {
     m_pView->doc()->emitBeginOperation( false );
     m_sourceCell->setValue(m_oldSource);
-    m_targetCell->setCalcDirtyFlag();
-    m_targetCell->calc();
     m_restored = true;
     m_pView->slotUpdateView( m_pView->activeSheet() );
   }
@@ -382,16 +378,10 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     startB = x;
 
     m_sourceCell->setValue(startA);
-    //    m_sourceCell->updateDepending();
-    m_sourceCell->setCalcDirtyFlag();
-    m_targetCell->calc( false );
     resultA = m_targetCell->value().asFloat() - _goal;
     //    kDebug() << "Target A: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultA << endl;
 
     m_sourceCell->setValue(startB);
-    //    m_sourceCell->updateDepending();
-    m_sourceCell->setCalcDirtyFlag();
-    m_targetCell->calc( false );
     resultB = m_targetCell->value().asFloat() - _goal;
     /*
       kDebug() << "Target B: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultB << endl;
@@ -439,10 +429,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   if ( ok )
   {
     m_sourceCell->setValue( startA );
-    m_sourceCell->setCalcDirtyFlag();
     m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
-    //    m_targetCell->setCalcDirtyFlag();
-    m_targetCell->calc( false );
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:",
                                  m_selector3->textEdit()->toPlainText() ) );
@@ -454,9 +441,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   {
     // restore the old value
     m_sourceCell->setValue( m_oldSource );
-    m_targetCell->setCalcDirtyFlag();
     m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
-    m_targetCell->calc( false );
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution.",
                                  m_selector3->textEdit()->toPlainText() ) );
     m_newValue->setText( "" );
