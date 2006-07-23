@@ -1740,24 +1740,7 @@ void NameSequence::writeMathML( QDomDocument& doc, QDomNode& parent,bool oasisFo
     parent.appendChild( de );
 }
 
-/**
-bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n)
-{
-    if (!n.isElement())
-        return false;
-    QString textelements = n.toElement().text();
-    for (uint i = 0; i < textelements.length(); i++) {
-        BasicElement* child = new TextElement(textelements[i]);
-        if (child != 0) {
-            child->setParent(this);
-			list.append(child);
-        }
-    }
-    return true;
-}
- */
-
-bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
+int SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
     while (!n.isNull()) {
         int nodeNumber;
         if (n.isElement()) {
@@ -1778,22 +1761,22 @@ bool SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
                 }
                 else {
                     delete child;
-                    return false;
+                    return -1;
                 }
             }
             else {
-                return false;
+                return -1;
             }
         }
         for (int i = 0; i < nodeNumber; i++ ) {
             if ( n.isNull() ) {
-                return false;
+                return -1;
             }
             n = n.nextSibling();
         }
     }
 	parse();
-    return true;
+    return 1;
 }
 
 /**

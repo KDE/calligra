@@ -362,7 +362,7 @@ public:
     static void setCreationStrategy( ElementCreationStrategy* strategy );
 
 	virtual void setStyle(StyleElement *style);
-	virtual bool buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
+	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 	virtual int readContentFromMathMLDom(QDomNode& node);
 	bool buildMathMLChild( QDomNode node );
 

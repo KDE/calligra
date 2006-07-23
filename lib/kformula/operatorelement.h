@@ -31,7 +31,7 @@ class OperatorElement : public TokenElement {
     typedef TokenElement inherited;
 public:
     OperatorElement( BasicElement* parent = 0 );
-	virtual bool buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
+	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 
 protected:
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat );

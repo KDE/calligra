@@ -28,7 +28,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent ) {}
 
-bool OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
+int OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
     QString textelements;
     if ( n.isEntityReference() ) {
         QString entity = n.toEntityReference().nodeName();
@@ -55,14 +55,14 @@ bool OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
         }
         else {
             kdWarning() << "Unknown entity " << entity << endl;
-            return false;
+            return -1;
         }
     }
     else if ( n.isText() ) {
         textelements = n.toText().data().stripWhiteSpace();
     }
     else {
-        return false;
+        return -1;
     }
     
     for (uint i = 0; i < textelements.length(); i++) {
@@ -76,7 +76,7 @@ bool OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, Q
     }
 	parse();
 	kdWarning() << "Num of children " << list.count() << endl;
-    return true;
+    return 1;
 }
 
 void OperatorElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )

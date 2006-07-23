@@ -28,22 +28,26 @@ KFORMULA_NAMESPACE_BEGIN
 
 TokenElement::TokenElement( BasicElement* parent ) : StyleElement( parent ) {}
 
-bool TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
-    if (!n.isText())
-        return false;
-    QString textelements = n.toText().data().stripWhiteSpace();
-    for (uint i = 0; i < textelements.length(); i++) {
-        TextElement* child = new TextElement(textelements[i]);
-        if (child != 0) {
-            child->setParent(this);
-            child->setCharFamily( charFamily() );
-            child->setCharStyle( charStyle() );
-			list.append(child);
+int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
+    while ( ! n.isNull() ) {
+        if (!n.isText())
+            return -1;
+        QString textelements = n.toText().data().stripWhiteSpace();
+        kdWarning() << textelements << endl;
+        for (uint i = 0; i < textelements.length(); i++) {
+            TextElement* child = new TextElement(textelements[i]);
+            if (child != 0) {
+                child->setParent(this);
+                child->setCharFamily( charFamily() );
+                child->setCharStyle( charStyle() );
+                list.append(child);
+            }
+            n = n.nextSibling();
         }
     }
 //	parse();
 	kdWarning() << "Num of children " << list.count() << endl;
-    return true;
+    return 1;
 }
 
 void TokenElement::writeMathMLText( QDomDocument& doc, QDomElement& element )

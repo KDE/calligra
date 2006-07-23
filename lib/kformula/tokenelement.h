@@ -31,7 +31,7 @@ class TokenElement : public StyleElement {
     typedef StyleElement inherited;
 public:
     TokenElement( BasicElement* parent = 0 );
-	virtual bool buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
+	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 
 protected:
     void writeMathMLText( QDomDocument& doc, QDomElement& element );
