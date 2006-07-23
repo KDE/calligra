@@ -61,7 +61,7 @@ namespace {
             return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
         }
 
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n",cs->id().name()) ) ;
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n",cs->name()) ) ;
         return -1;
 
     }

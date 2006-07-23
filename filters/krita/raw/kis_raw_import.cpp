@@ -200,10 +200,10 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
             KoColorSpace * cs = 0;
             if (m_page->radioGray->isChecked()) {
-                cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( KoID("GRAYA"), profile() );
+                cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( "GRAYA", profile() );
             }
             else {
-               cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( KoID("RGBA"), profile() );
+               cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( "RGBA", profile() );
             }
             if (cs == 0) { kDebug() << "No CS\n"; return KoFilter::InternalError; }
 
@@ -238,10 +238,10 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
             KoColorSpace * cs = 0;
             if (m_page->radioGray->isChecked()) {
-                cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( KoID("GRAYA16"), profile() );
+                cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( "GRAYA16", profile() );
             }
             else {
-                cs = KisMetaRegistry::instance()->csRegistry()->colorSpace( KoID("RGBA16"), profile() );
+                cs = KisMetaRegistry::instance()->csRegistry()->colorSpace( "RGBA16", profile() );
             }
             if (cs == 0) return KoFilter::InternalError;
 
@@ -346,10 +346,10 @@ void KisRawImport::slotUpdatePreview()
 
         KoColorSpace * cs = 0;
         if (m_page->radioGray->isChecked()) {
-            cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( KoID("GRAYA16"), profile() );
+            cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( "GRAYA16", profile() );
         }
         else {
-            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace( KoID("RGBA16"), profile() );
+            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace( "RGBA16", profile() );
         }
         KisPaintDevice * dev = new KisPaintDevice(cs, "preview");
             // Copy the colordata to the pixels

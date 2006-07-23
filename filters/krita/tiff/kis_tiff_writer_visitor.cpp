@@ -34,29 +34,29 @@
 namespace {
     bool writeColorSpaceInformation( TIFF* image, KoColorSpace * cs, uint16& color_type )
     {
-        if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") )
+        if ( cs->id() == "GRAYA" || cs->id() == "GRAYA16" )
         {
             color_type = PHOTOMETRIC_MINISBLACK;
             return true;
         }
-        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") )
+        if ( cs->id() == "RGBA" || cs->id() == "RGBA16" )
         {
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-        if ( cs->id() == KoID("CMYK") || cs->id() == KoID("CMYKA16") )
+        if ( cs->id() == "CMYK" || cs->id() == "CMYKA16" )
         {
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
             return true;
         }
-        if ( cs->id() == KoID("LABA") )
+        if ( cs->id() == "LABA" )
         {
             color_type = PHOTOMETRIC_CIELAB;
             return true;
         }
 
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->id().name()) ) ;
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->name()) ) ;
         return false;
 
     }

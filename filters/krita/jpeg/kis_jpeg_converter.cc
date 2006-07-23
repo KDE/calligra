@@ -72,7 +72,7 @@ namespace {
         {
             return JCS_CMYK;
         }
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->id().name()) ) ;
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->name()) ) ;
         return JCS_UNKNOWN;
     }
 
