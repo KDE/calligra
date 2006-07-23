@@ -65,13 +65,11 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
     return 1;
 }
 
-void TokenElement::writeMathMLText( QDomDocument& doc, QDomElement& element )
+void TokenElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
 {
-    QString value;
     for ( iterator it = begin(); it != end(); it++ ) {
-        value += it->getCharacter();
+        it->writeMathML( doc, element, oasisFormat );
     }
-    element.appendChild( doc.createTextNode( value ) );
 }
 
 KFORMULA_NAMESPACE_END

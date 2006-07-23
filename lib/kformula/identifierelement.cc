@@ -30,7 +30,7 @@ void IdentifierElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool o
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
     writeMathMLAttributes( de );
-    writeMathMLText( doc, de );
+    writeMathMLContent( doc, de, oasisFormat );
     parent.appendChild( de );
 }
 

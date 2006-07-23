@@ -71,7 +71,6 @@ void GlyphElement::writeMathMLAttributes( QDomElement& element )
     element.setAttribute( "fontfamily", m_fontFamily );
     element.setAttribute( "index", m_char.unicode() );
     element.setAttribute( "alt", m_alt );
-    writeMathMLAttributes( element );
 }
 
 KFORMULA_NAMESPACE_END

@@ -34,7 +34,7 @@ public:
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 
 protected:
-    void writeMathMLText( QDomDocument& doc, QDomElement& element );
+    void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat = false );
 };
 
 KFORMULA_NAMESPACE_END

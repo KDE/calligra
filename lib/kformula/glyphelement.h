@@ -29,9 +29,10 @@ class GlyphElement : public TextElement {
 public:
     GlyphElement( BasicElement* parent = 0 );
 
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+
 protected:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 private:
     void writeMathMLAttributes( QDomElement& element );

@@ -83,7 +83,7 @@ void OperatorElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oas
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mo" : "mo" );
     writeMathMLAttributes( de );
-    writeMathMLText( doc, de );
+    writeMathMLContent( doc, de, oasisFormat );
     parent.appendChild( de );
 }
 

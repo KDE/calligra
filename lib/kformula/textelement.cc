@@ -349,6 +349,11 @@ const SymbolTable& TextElement::getSymbolTable() const
 }
 
 
+void TextElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool )
+{
+    parent.appendChild( doc.createTextNode( getCharacter() ) );
+}
+
 /**
  * Appends our attributes to the dom element.
  */
