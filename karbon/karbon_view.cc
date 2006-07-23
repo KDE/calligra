@@ -73,12 +73,11 @@
 #include "vdeletecmd.h"
 #include "vdistributecmd.h"
 #include "vfillcmd.h"
-#include "vgroupcmd.h"
 #include "vstrokecmd.h"
 #include "vtransformcmd.h"
 #include "vinsertcmd.h"
-#include "vungroupcmd.h"
 #include "vzordercmd.h"
+#include "vlayer.h"
 
 // Dialogs.
 #include "vconfiguredlg.h"
@@ -847,10 +846,21 @@ KarbonView::groupSelection()
 		return;
 
 	KoShapeGroup *group = new KoShapeGroup();
-	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
+	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+	
+	QList<KoShape*> groupedShapes;
+
+	// only group shapes with an unselected parent
+	foreach( KoShape* shape, selectedShapes )
+	{
+		if( selectedShapes.contains( shape->parent() ) )
+			continue;
+		groupedShapes << shape;
+	}
+	
 	KMacroCommand *cmd = new KMacroCommand( i18n("Group shapes") );
 	cmd->addCommand( new KoShapeCreateCommand( m_part, group ) );
-	cmd->addCommand( new KoGroupShapesCommand( group, selectedShapes.toList() ) );
+	cmd->addCommand( new KoGroupShapesCommand( group, groupedShapes ) );
 		
 	part()->commandHistory()->addCommand( cmd, true );
 }
@@ -864,13 +874,15 @@ KarbonView::ungroupSelection()
 	if( ! selection )
 		return;
 
+	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
 	KoSelectionSet containerSet;
 
-	// first collect all shape containers from the actual selection
-	foreach( KoShape* shape, selection->selectedShapes( KoFlake::StrippedSelection ) )
+	// only ungroup shape containers with an unselected parent
+	foreach( KoShape* shape, selectedShapes )
 	{
-		if( shape->parent() )
-			containerSet << shape->parent();
+		if( selectedShapes.contains( shape->parent() ) )
+			continue;
+		containerSet << shape;
 	}
 
 	KMacroCommand *cmd = new KMacroCommand( i18n("Ungroup shapes") );
@@ -879,9 +891,8 @@ KarbonView::ungroupSelection()
 	foreach( KoShape* shape, containerSet )
 	{
 		KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
-		if( ! container )
-			continue;
-		cmd->addCommand( new KoUngroupShapesCommand( container, container->iterator() ) );
+		if( container )
+			cmd->addCommand( new KoUngroupShapesCommand( container, container->iterator() ) );
 	}
 	part()->commandHistory()->addCommand( cmd, true );
 }
@@ -1560,12 +1571,14 @@ KarbonView::selectionChanged()
 	debugView("KarbonView::selectionChanged()");
 
 	KoSelection *selection = m_canvas->shapeManager()->selection();
-	int count = selection->count();
+	int count = selection->selectedShapes( KoFlake::TopLevelSelection ).count();
 
 	m_groupObjects->setEnabled( count > 1 );
 	m_ungroupObjects->setEnabled( false );
 	m_closePath->setEnabled( false );
 	m_deleteSelectionAction->setEnabled( count > 0 );
+
+	kDebug(38000) << count << " shapes selected" << endl;
 
 	if( count > 0 )
 	{
