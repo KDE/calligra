@@ -623,7 +623,10 @@ public:
      */
     bool calc(bool delay = true);
 
-    /** Set the calcDirtyFlag */
+    /**
+     * Marks this cell, so that it will be recalculated within the next
+     * paint event. Only marks the cell, if it has got a formula.
+     */
     void setCalcDirtyFlag();
 
     /**

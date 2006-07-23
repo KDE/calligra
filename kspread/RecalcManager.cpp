@@ -266,7 +266,7 @@ void RecalcManager::recalcCell(Cell* cell) const
   cell->setFlag(Cell::Flag_CalculatingCell);
 
   //mark the cell as calc-dirty
-  cell->setCalcDirtyFlag();
+  cell->setFlag(Cell::Flag_CalcDirty);
 
   //recalculate the cell
   cell->calc (false);

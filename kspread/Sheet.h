@@ -450,25 +450,9 @@ public:
     void setLayoutDirtyFlag();
 
     /**
-     * Sets the Cell::calcDirtyFlag in all cells.
-     * That means that the cells are marked dirty and will recalculate
-     * if requested. This function does only MARK, it does NOT actually calculate.
-     * Use Sheet::recalc to recaculate dirty values.
-     */
-    void setCalcDirtyFlag();
-
-    /**
-     * Calculates all cells in the sheet with the CalcDirtyFlag.
-     */
-  //why on earth would we want to do this?
-//    void calc();
-
-    /**
-     * Recalculates the current sheet. If you want to recalculate EVERYTHING, then
-     * call Sheet::setCalcDirtyFlag for all sheets in the Map to make
-     * sure that no invalid values in other sheets make you trouble.
+     * Recalculates the current sheet.
      *
-     * Recalc will do nothing if automatic calculation is disabled (via Sheet::setAutoCalc ).
+     * Recalc will do nothing, if automatic calculation is disabled (via Sheet::setAutoCalc)
      * unless the force flag is set to true.  Automatic recalculation is enabled by default.
      *
      * @param force If false, the sheet will be recalculated if automatic calculation is enabled.

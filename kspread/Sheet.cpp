@@ -1036,22 +1036,11 @@ void Sheet::setLayoutDirtyFlag()
         c->setLayoutDirtyFlag();
 }
 
-void Sheet::setCalcDirtyFlag()
-{
-    Cell* c = d->cells.firstCell();
-    for( ; c; c = c->nextCell() )
-    {
-        if ( !(c->isObscured() && c->isPartOfMerged()) )
-            c->setCalcDirtyFlag();
-    }
-}
-
 void Sheet::recalc( bool force )
 {
   ElapsedTime et( "Recalculating " + d->name, ElapsedTime::PrintOnlyTime );
   //  emitBeginOperation(true);
   //  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
-  setCalcDirtyFlag();
 
   //If automatic calculation is disabled, don't recalculate unless the force flag has been
   //set.
@@ -1069,13 +1058,13 @@ void Sheet::valueChanged (Cell *cell)
 {
   //TODO: call cell updating, when cell damaging implemented
 
-  // Prepare the Region structure.
-  Region region;
-  region.add(QPoint(cell->column(), cell->row()), this);
-
   // Recaculate cells depending on this cell.
   if ( getAutoCalc() )
   {
+    // Prepare the Region structure.
+    Region region;
+    region.add(QPoint(cell->column(), cell->row()), this);
+
     d->workbook->recalcManager()->regionChanged(region);
   }
 
@@ -1754,6 +1743,7 @@ struct SetSelectionPercentWorker : public Sheet::CellWorkerTypeA
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
+      Q_UNUSED(cellRegion)
   cell->format()->setFormatType( b ? Percentage_format : Generic_format);
     }
 };
@@ -1789,6 +1779,7 @@ void Sheet::refreshRemoveAreaName(const QString & _areaName)
 
 void Sheet::refreshChangeAreaName(const QString & _areaName)
 {
+  Region region; // for recalculation
   Cell * c = d->cells.firstCell();
   QString tmp = '\'' + _areaName + '\'';
   for( ;c ; c = c->nextCell() )
@@ -1800,13 +1791,12 @@ void Sheet::refreshChangeAreaName(const QString & _areaName)
         if ( !c->makeFormula() )
           kError(36001) << "ERROR: Syntax ERROR" << endl;
         else
-        {
-          /* setting a cell calc dirty also sets it paint dirty */
-          c->setCalcDirtyFlag();
-        }
+          region.add(QPoint(c->column(), c->row()), c->sheet());
       }
     }
   }
+  // recalculate cells
+  d->workbook->recalcManager()->regionChanged(region);
 }
 
 void Sheet::changeCellTabName( QString const & old_name, QString const & new_name )
@@ -2850,6 +2840,7 @@ struct SetSelectionStyleWorker : public Sheet::CellWorkerTypeA
 
   void doWork( Cell* cell, bool cellRegion, int, int )
   {
+    Q_UNUSED(cellRegion);
     cell->format()->setStyle( m_style );
   }
 };
@@ -2889,6 +2880,7 @@ struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
+      Q_UNUSED(cellRegion);
   cell->format()->setFormatType( b ? Money_format : Generic_format );
   cell->format()->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
     }
@@ -3556,6 +3548,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
 //             << columnsInClpbrd << " columns in clipboard." << endl;
 //   kDebug() << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
 
+  Region recalcRegion;
   QDomElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
   for (; !e.isNull(); e = e.nextSibling().toElement())
   {
@@ -3657,7 +3650,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
           {
             if (cell->isFormula())
             {
-                cell->setCalcDirtyFlag();
+              recalcRegion.add(QPoint(cell->column(), cell->row()), cell->sheet());
             }
           }
 
@@ -3684,6 +3677,10 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
     if ( refreshCell )
         refreshCell->updateChart();
   }
+
+  // recalculate cells
+  d->workbook->recalcManager()->regionChanged(recalcRegion);
+
     this->doc()->setModified( true );
 
     if (!isLoading())
@@ -3875,23 +3872,24 @@ void Sheet::deleteCells(const Region& region)
     }
   }
 
-    d->cells.setAutoDelete( false );
-
     // Remove the cells from the sheet
+    d->cells.setAutoDelete( false );
     while ( !cellStack.isEmpty() )
     {
       Cell * cell = cellStack.pop();
 
       d->cells.remove( cell->column(), cell->row() );
-      cell->setCalcDirtyFlag();
-      setRegionPaintDirty(cell->cellRect());
 
       delete cell;
     }
-
     d->cells.setAutoDelete( true );
 
+    // recalculate dependant cells
+    d->workbook->recalcManager()->regionChanged(region);
+    // relayout region
     setLayoutDirtyFlag();
+    // repaint region
+    setRegionPaintDirty(region);
 
     // TODO: don't go through all cells here!
     // Since obscured cells might have been deleted we
@@ -6256,6 +6254,7 @@ void Sheet::updateCell( Cell */*cell*/, int _column, int _row )
 
 void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
 {
+    Q_UNUSED(_format);
     if ( doc()->isLoading() )
         return;
 
@@ -6278,6 +6277,7 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
 
 void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 {
+    Q_UNUSED(_format);
     if ( doc()->isLoading() )
         return;
 

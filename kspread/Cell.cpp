@@ -703,7 +703,7 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
 void Cell::move( int col, int row )
 {
     setLayoutDirtyFlag();
-    setCalcDirtyFlag();
+    setCalcDirtyFlag(); // recalc in the next paint (!) event
 
     //int ex = extraXCells();
     //int ey = d->extra()->extraYCells();
@@ -2011,7 +2011,7 @@ bool Cell::makeFormula()
   format()->sheet()->formulaChanged(this);
 
   // we must recalc
-  setCalcDirtyFlag ();
+  setCalcDirtyFlag(); // recalc in the next paint (!) event
 
   return true;
 }
@@ -4576,7 +4576,7 @@ void Cell::setDisplayText( const QString& _text )
 
     if ( !makeFormula() )
       kError(36001) << "ERROR: Syntax ERROR" << endl;
-    setCalcDirtyFlag ();
+    setCalcDirtyFlag(); // recalc in the next paint (!) event
   }
 
   /**
@@ -4623,7 +4623,7 @@ void Cell::update()
     }
   }
 
-  setCalcDirtyFlag();
+  setCalcDirtyFlag(); // recalc in the next paint (!) event
 
   /* TODO - is this a good place for this? */
   updateChart(true);
@@ -5777,8 +5777,8 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
     if ( !frame.isNull() )
       loadOasisObjects( frame, oasisContext );
 
-    if (isFormula)
-      setCalcDirtyFlag ();   // formulas must be recalculated
+    if (isFormula)   // formulas must be recalculated
+      setCalcDirtyFlag(); // recalc in the next paint (!) event
 
     return true;
 }
