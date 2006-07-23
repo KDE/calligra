@@ -2488,16 +2488,12 @@ bool Format::isDefault() const
  *
  *****************************************************************************/
 
-//#define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
-//#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pSheet->emit_updateRow( this, m_iRow );
-
 RowFormat::RowFormat( Sheet * _sheet, int _row )
   : Format( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
 {
     m_next = 0;
     m_prev = 0;
 
-    m_bDisplayDirtyFlag = false;
     m_fHeight  = g_rowHeight;
     m_iRow     = _row;
     m_bDefault = false;
@@ -2736,16 +2732,9 @@ bool RowFormat::isDefault() const
  *
  *****************************************************************************/
 
-#undef UPDATE_BEGIN
-#undef UPDATE_END
-
-#define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
-#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pSheet->emit_updateColumn( this, m_iColumn );
-
 ColumnFormat::ColumnFormat( Sheet * _sheet, int _column )
   : Format( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
 {
-  m_bDisplayDirtyFlag = false;
   m_fWidth = g_colWidth;
   m_iColumn = _column;
   m_bDefault=false;

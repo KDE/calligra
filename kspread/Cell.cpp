@@ -208,7 +208,7 @@ public:
   Extra      *extra();
 
   Format     *format;
-  quint32   flags;
+  StatusFlags flags;
 
 private:
   // "Extra stuff", see explanation for Cell::Extra.
@@ -704,7 +704,6 @@ void Cell::move( int col, int row )
 {
     setLayoutDirtyFlag();
     setCalcDirtyFlag();
-    setDisplayDirtyFlag();
 
     //int ex = extraXCells();
     //int ey = d->extra()->extraYCells();
@@ -7052,44 +7051,24 @@ void Cell::clearAllErrors()
   clearFlag( Flag_DependencyError );
 }
 
-bool Cell::calcDirtyFlag()
-{
-  return isFormula() ? testFlag( Flag_CalcDirty ) : false;
-}
-
-bool Cell::layoutDirtyFlag() const
-{
-  return testFlag( Flag_LayoutDirty );
-}
-
-void Cell::clearDisplayDirtyFlag()
-{
-  clearFlag( Flag_DisplayDirty );
-}
-
-void Cell::setDisplayDirtyFlag()
-{
-  setFlag( Flag_DisplayDirty );
-}
-
 bool Cell::doesMergeCells() const
 {
   return testFlag( Flag_Merged );
 }
 
-void Cell::clearFlag( CellFlags flag )
+void Cell::clearFlag( StatusFlag flag )
 {
-  d->flags &= ~(quint32)flag;
+  d->flags &= ~flag;
 }
 
-void Cell::setFlag( CellFlags flag )
+void Cell::setFlag( StatusFlag flag )
 {
-  d->flags |= (quint32)flag;
+  d->flags |= flag;
 }
 
-bool Cell::testFlag( CellFlags flag ) const
+bool Cell::testFlag( StatusFlag flag ) const
 {
-  return ( d->flags & (quint32)flag );
+  return ( d->flags & flag );
 }
 
 

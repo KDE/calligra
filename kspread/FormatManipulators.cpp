@@ -173,9 +173,7 @@ bool FormatManipulator::process (Element *element)
           cell = m_sheet->nonDefaultCell(col,row);
           if ( !cell->isPartOfMerged() )
           {
-            cell->setDisplayDirtyFlag();
             doWork(cell->format(), row==top, row==bottom, col==left, col==right);
-            cell->clearDisplayDirtyFlag();
           }
         }
       }
@@ -208,7 +206,6 @@ bool FormatManipulator::process (Element *element)
       Cell *cell = m_sheet->nonDefaultCell( (*it2).col,(*it2).row );
       cell->format()->copy( *(*it2).l );
       cell->setLayoutDirtyFlag();
-      cell->setDisplayDirtyFlag();
     }
     m_sheet->setRegionPaintDirty( *this );
   }

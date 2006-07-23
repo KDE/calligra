@@ -243,7 +243,7 @@ void RecalcManager::recalcRegion(const Region& region)
 void RecalcManager::recalcCell(Cell* cell) const
 {
   //prevent infinite recursion (circular dependencies)
-  if (cell->testFlag (Cell::Flag_Progress) ||
+  if (cell->testFlag (Cell::Flag_CalculatingCell) ||
       cell->testFlag (Cell::Flag_CircularCalculation))
   {
     kError(36001) << "ERROR: Circle, cell " << cell->fullName() << endl;
@@ -259,11 +259,11 @@ void RecalcManager::recalcCell(Cell* cell) const
       cell->setValue(value);
     }
     //clear the computing-dependencies flag
-    cell->clearFlag (Cell::Flag_Progress);
+    cell->clearFlag (Cell::Flag_CalculatingCell);
     return;
   }
-  //set the computing-dependencies flag
-  cell->setFlag (Cell::Flag_Progress);
+  //set the calculation progress flag
+  cell->setFlag(Cell::Flag_CalculatingCell);
 
   //mark the cell as calc-dirty
   cell->setCalcDirtyFlag();
@@ -271,8 +271,8 @@ void RecalcManager::recalcCell(Cell* cell) const
   //recalculate the cell
   cell->calc (false);
 
-  //clear the computing-dependencies flag
-  cell->clearFlag (Cell::Flag_Progress);
+  //clear the calculation progress flag
+  cell->clearFlag(Cell::Flag_CalculatingCell);
 }
 
 void RecalcManager::dump() const

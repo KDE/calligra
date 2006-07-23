@@ -4503,12 +4503,10 @@ void View::slotReplace( const QString &newText, int, int, int )
     Cell *cell = d->searchInSheets.currentSheet->cellAt( d->findPos );
 
     // ...now I remember, update it!
-    cell->setDisplayDirtyFlag();
     if ( d->typeValue == FindOption::Value )
         cell->setCellText( newText );
     else if ( d->typeValue == FindOption::Note )
       cell->format()->setComment( newText );
-    cell->clearDisplayDirtyFlag();
 }
 
 void View::conditional()

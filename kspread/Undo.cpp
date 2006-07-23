@@ -1019,7 +1019,6 @@ void UndoCellFormat::undo()
     Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
     cell->format()->copy( *(*it2).l );
     cell->setLayoutDirtyFlag();
-    cell->setDisplayDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
   }
@@ -1067,7 +1066,6 @@ void UndoCellFormat::redo()
     Cell * cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
     cell->format()->copy( *(*it2).l );
     cell->setLayoutDirtyFlag();
-    cell->setDisplayDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
   }
@@ -1305,7 +1303,6 @@ void UndoSort::undo()
 
     cell->format()->copy( *(*it2).l );
     cell->setLayoutDirtyFlag();
-    cell->setDisplayDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
 
@@ -1358,7 +1355,6 @@ void UndoSort::redo()
 
       cell->format()->copy( *(*it2).l );
       cell->setLayoutDirtyFlag();
-      cell->setDisplayDirtyFlag();
       sheet->updateCell( cell, (*it2).col, (*it2).row );
     }
     sheet->setRegionPaintDirty(m_rctRect);

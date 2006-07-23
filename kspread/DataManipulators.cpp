@@ -176,7 +176,6 @@ bool AbstractDFManipulator::process (Element* element)
           f = newFormat (element, col, row);
         if (f) cell->format()->copy (*f);
         cell->setLayoutDirtyFlag();
-        cell->setDisplayDirtyFlag();
       }
     }
   }

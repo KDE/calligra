@@ -1609,11 +1609,9 @@ struct SetSelectionVerticalTextWorker : public Sheet::CellWorker {
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-  cell->setDisplayDirtyFlag();
   cell->format()->setVerticalText( _b );
   cell->format()->setMultiRow( false );
   cell->format()->setAngle( 0 );
-  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1637,9 +1635,7 @@ struct SetSelectionCommentWorker : public Sheet::CellWorker {
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-  cell->setDisplayDirtyFlag();
   cell->format()->setComment( _comment );
-  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1709,7 +1705,6 @@ struct SetSelectionBorderColorWorker : public Sheet::CellWorker {
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-  cell->setDisplayDirtyFlag();
   int it_Row = cell->row();
   int it_Col = cell->column();
   if ( cell->format()->topBorderStyle( it_Row, it_Col )!=Qt::NoPen )
@@ -1724,7 +1719,6 @@ struct SetSelectionBorderColorWorker : public Sheet::CellWorker {
     cell->format()->setBottomBorderColor( bd_Color );
   if ( cell->format()->rightBorderStyle( it_Row, it_Col )!=Qt::NoPen )
     cell->format()->setRightBorderColor( bd_Color );
-  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -1760,11 +1754,7 @@ struct SetSelectionPercentWorker : public Sheet::CellWorkerTypeA
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
   cell->format()->setFormatType( b ? Percentage_format : Generic_format);
-  if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -2717,11 +2707,9 @@ struct SetSelectionMultiRowWorker : public Sheet::CellWorker
 
   void doWork( Cell * cell, bool, int, int )
   {
-    cell->setDisplayDirtyFlag();
     cell->format()->setMultiRow( enable );
     cell->format()->setVerticalText( false );
     cell->format()->setAngle( 0 );
-    cell->clearDisplayDirtyFlag();
   }
 };
 
@@ -2818,12 +2806,10 @@ struct SetSelectionPrecisionWorker : public Sheet::CellWorker {
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
-  cell->setDisplayDirtyFlag();
   if ( _delta == 1 )
       cell->incPrecision();
   else
       cell->decPrecision();
-  cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -2864,13 +2850,7 @@ struct SetSelectionStyleWorker : public Sheet::CellWorkerTypeA
 
   void doWork( Cell* cell, bool cellRegion, int, int )
   {
-    if ( cellRegion )
-      cell->setDisplayDirtyFlag();
-
     cell->format()->setStyle( m_style );
-
-    if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
   }
 };
 
@@ -2909,12 +2889,8 @@ struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
   cell->format()->setFormatType( b ? Money_format : Generic_format );
   cell->format()->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
-  if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
     }
 };
 
@@ -2963,10 +2939,8 @@ struct IncreaseIndentWorker : public Sheet::CellWorkerTypeA {
     //cell->setAlign(Style::Left);
     //cell->format()->setIndent( 0.0 );
       }
-      cell->setDisplayDirtyFlag();
       // add the indentation value to the current value
       cell->format()->setIndent( cell->format()->getIndent(x,y) + valIndent );
-      cell->clearDisplayDirtyFlag();
   } else {
       cell->format()->setIndent( tmpIndent+valIndent);
       //cell->setAlign( Style::Left);
@@ -3009,9 +2983,7 @@ struct DecreaseIndentWorker : public Sheet::CellWorkerTypeA {
     }
     void doWork( Cell* cell, bool cellRegion, int x, int y ) {
   if ( cellRegion ) {
-      cell->setDisplayDirtyFlag();
       cell->format()->setIndent( qMax( 0.0, cell->format()->getIndent( x, y ) - valIndent ) );
-      cell->clearDisplayDirtyFlag();
   } else {
       cell->format()->setIndent( qMax( 0.0, tmpIndent - valIndent ) );
   }
@@ -3159,7 +3131,6 @@ struct SetConditionalWorker : public Sheet::CellWorker
     if ( !cell->isObscured() ) // TODO: isPartOfMerged()???
     {
       cell->setConditionList(conditionList);
-      cell->setDisplayDirtyFlag();
     }
   }
 };
@@ -3191,7 +3162,6 @@ void Sheet::setConditional( Selection* selectionInfo,
       {
         cell = nonDefaultCell( x, y, s );
         cell->setConditionList( newConditions );
-        cell->setDisplayDirtyFlag();
       }
     }
   }
@@ -3212,7 +3182,6 @@ struct SetValidityWorker : public Sheet::CellWorker {
     }
     void doWork( Cell* cell, bool, int, int ) {
   if ( !cell->isObscured() ) {
-      cell->setDisplayDirtyFlag();
       if ( tmp.m_restriction==Restriction::None )
     cell->removeValidity();
       else
@@ -3236,9 +3205,8 @@ struct SetValidityWorker : public Sheet::CellWorker {
                 tmpValidity->messageInfo=tmp.messageInfo;
                 tmpValidity->listValidity=tmp.listValidity;
       }
-      cell->clearDisplayDirtyFlag();
-  }
     }
+  }
 };
 
 void Sheet::setValidity(Selection* selectionInfo,
@@ -6306,7 +6274,6 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
       emit sig_updateView( this );
     }
     emit sig_maxRow(maxRow());
-    _format->clearDisplayDirtyFlag();
 }
 
 void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
@@ -6321,15 +6288,11 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 
     //All the cells in this column or to the right of it will need to be repainted if the column
     //has been resized or hidden, so add that region of the sheet to the paint dirty list.
-    setRegionPaintDirty( QRect( _column , 0 , KS_colMax , KS_rowMax) );
+    setRegionPaintDirty( QRect( _column , 1 , KS_colMax , KS_rowMax) );
 
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
     emit sig_maxColumn( maxColumn() );
-
-
-
-    _format->clearDisplayDirtyFlag();
 }
 
 bool Sheet::insertChart( const KoRect& rect, KoDocumentEntry& documentEntry,

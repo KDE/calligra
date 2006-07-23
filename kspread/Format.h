@@ -509,9 +509,6 @@ public:
 
     void setRow( int _r ) { m_iRow = _r; }
 
-    void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
-    void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
-
     RowFormat* next() const { return m_next; }
     RowFormat* previous() const { return m_prev; }
     void setNext( RowFormat* c ) { m_next = c; }
@@ -570,7 +567,6 @@ protected:
      */
     int m_iRow;
 
-    bool m_bDisplayDirtyFlag;
     bool m_bHide;
     RowFormat* m_next;
     RowFormat* m_prev;
@@ -649,9 +645,6 @@ public:
 
     void setColumn( int _c ) { m_iColumn = _c; }
 
-    void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
-    void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
-
     ColumnFormat* next() const { return m_next; }
     ColumnFormat* previous() const { return m_prev; }
     void setNext( ColumnFormat* c ) { m_next = c; }
@@ -707,8 +700,6 @@ protected:
      * @see #column
      */
     int m_iColumn;
-
-    bool m_bDisplayDirtyFlag;
 
     bool m_bHide;
 

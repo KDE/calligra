@@ -625,8 +625,6 @@ public:
 
     /** Set the calcDirtyFlag */
     void setCalcDirtyFlag();
-    /** Checks the calcDirtyFlag */
-    bool calcDirtyFlag();
 
     /**
      * Notify this cell that another cell is depending, or no longer depending on this cell's value
@@ -645,10 +643,6 @@ public:
      * some cell specific format value like font or text change.
      */
     void setLayoutDirtyFlag( bool format = false );
-    bool layoutDirtyFlag() const;
-
-    void clearDisplayDirtyFlag();
-    void setDisplayDirtyFlag();
 
     /**
      * Tells this cell that the Cell @p cell obscures this one.
@@ -835,9 +829,9 @@ public:
     void freeAllObscuredCells();
 
     /**
-     * Cell status flags
+     * Cell status flags.
      */
-    enum CellFlags
+    enum StatusFlag
     {
       /**
        * Flag_LayoutDirty
@@ -845,7 +839,7 @@ public:
        * If you change for example the fonts point size, set this flag. When the
        * cell must draw itself on the screen it will first recalculate its layout.
        */
-      Flag_LayoutDirty           = 0x00010000,
+      Flag_LayoutDirty           = 0x0001,
       /**
        * CalcDirty
        * Shows whether recalculation is necessary.
@@ -853,33 +847,22 @@ public:
        * entered a new formula, then this flag is set. If isFormula() is false
        * nothing will happen at all.
        */
-      Flag_CalcDirty             = 0x00020000,
+      Flag_CalcDirty             = 0x0002,
       /**
-       * Progress
+       * CalculatingCell
        * Tells whether this cell it currently under calculation.
        * If a cell thats 'progressFlag' is set is told to calculate we
        * have detected a circular reference and we must stop calulating.
        */
-      Flag_Progress              = 0x00040000,
+      Flag_CalculatingCell       = 0x0004,
       /**
        * UpdatingDeps
        * Tells whether we've already calculated the reverse dependancies for this
        * cell.  Similar to the Progress flag but it's for when we are calculating
        * in the reverse direction.
-       * @see updateDependancies()
+       * \todo TODO Stefan: never set so far
        */
-      Flag_UpdatingDeps          = 0x00080000,
-      /**
-       * DisplayDirty - TODO - is this unused now??
-       * If this flag is set, then it is known that this cell has to be updated
-       * on the display. This means that somewhere in the calling stack there is a
-       * function which will call @ref Sheet::updateCell once it retains
-       * the control. If a function changes the contents/layout of this cell and this
-       * flag is not set, then the function must set it at once. After the changes
-       * are done the function must call m_pSheet->updateCell(...).
-       * The flag is cleared by the function format()->sheet()->updateCell.
-       */
-      Flag_DisplayDirty          = 0x00100000,
+      Flag_UpdatingDeps          = 0x0008,
       /**
        * Merged
        * Tells whether the cell is merged with other cells.  Cells may
@@ -887,7 +870,7 @@ public:
        * do so by setting this flag. Merging the cell with 0 in both
        * directions, will disable this flag!
        */
-      Flag_Merged                = 0x00200000,
+      Flag_Merged                = 0x0010,
       /**
        * CellTooShortX
        * When it's True displays ** and/or the red triangle and when the
@@ -895,42 +878,46 @@ public:
        * it's true when text size is bigger that cell size
        * and when Align is center or left
        */
-      Flag_CellTooShortX         = 0x00400000,
+      Flag_CellTooShortX         = 0x0020,
       /**
        * CellTooShortY
        * When it's True when mouseover it, the tooltip displays the full value
        * it's true when text size is bigger that cell height
        */
-      Flag_CellTooShortY         = 0x00800000,
+      Flag_CellTooShortY         = 0x0040,
       /**
        * ParseError
        * True if the cell is calculated and there was an error during calculation
        * In that case the cell usually displays "#Parse!"
        */
-      Flag_ParseError            = 0x01000000,
+      Flag_ParseError            = 0x0080,
       /**
        * CircularCalculation
+       * True if the cell is calculated and there was an error during calculation
+       * In that case the cell usually displays "#Circle!"
        */
-      Flag_CircularCalculation   = 0x02000000,
+      Flag_CircularCalculation   = 0x0100,
       /**
        * DependencyError
        * \todo TODO Stefan: never set so far
        */
-      Flag_DependencyError       = 0x04000000,
+      Flag_DependencyError       = 0x0200,
       /**
        * PaintingCell
        * Set during painting
        */
-      Flag_PaintingCell          = 0x08000000,
+      Flag_PaintingCell          = 0x0400,
       /**
        * TextFormatDirty
+       * \todo TODO Stefan: difference to Flag_LayoutDirty?
        */
-      Flag_TextFormatDirty       = 0x10000000
+      Flag_TextFormatDirty       = 0x0800
     };
+    Q_DECLARE_FLAGS(StatusFlags, StatusFlag)
 
-    void clearFlag( CellFlags flag );
-    void setFlag( CellFlags flag );
-    bool testFlag( CellFlags flag ) const;
+    void clearFlag( StatusFlag flag );
+    void setFlag( StatusFlag flag );
+    bool testFlag( StatusFlag flag ) const;
 
 protected:
     /**
@@ -1247,6 +1234,7 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::Borders)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::StatusFlags)
 
 } // namespace KSpread
 

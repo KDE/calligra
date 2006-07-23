@@ -4079,8 +4079,10 @@ void Canvas::paintUpdates()
         // recalc and relayout only for non default cells
         if (!cell->isDefault())
         {
-          if (cell->calcDirtyFlag()) cell->calc();
-          if (cell->layoutDirtyFlag()) cell->makeLayout( x, y );
+          if (cell->testFlag(Cell::Flag_CalcDirty))
+            cell->calc();
+          if (cell->testFlag(Cell::Flag_LayoutDirty))
+            cell->makeLayout( x, y );
         }
 
         Cell::Borders paintBorder = Cell::NoBorder;
