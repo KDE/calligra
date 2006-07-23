@@ -31,7 +31,7 @@
 
 #include <kio/netaccess.h>
 
-#include <KoColorSpaceFactoryRegistry.h>
+#include <KoColorSpaceRegistry.h>
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -237,10 +237,10 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
-        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
+        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csName, profile);
     }
     else
-        cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID(csName,""),"");
+        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName,""),"");
 
     if(cs == 0) {
         kDebug(41008) << "Colorspace " << csName << " is not available, please check your installation." << endl;

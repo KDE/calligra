@@ -42,7 +42,7 @@
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_annotation.h"
-#include "KoColorSpaceFactoryRegistry.h"
+#include "KoColorSpaceRegistry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_rgb_f32_colorspace.h"
 #include "kis_rgb_f16half_colorspace.h"
@@ -98,7 +98,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
     int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-    KoColorSpace *cs = static_cast<KoColorSpace *>((KisMetaRegistry::instance()->csRegistry()->getColorSpace(KoID("RGBAF16HALF", ""),"")));
+    KoColorSpace *cs = static_cast<KoColorSpace *>((KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBAF16HALF", ""),"")));
 
     if (cs == 0) {
         return KoFilter::InternalError;

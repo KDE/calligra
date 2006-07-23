@@ -65,7 +65,7 @@ private:
     QSize determineSize(quint32& startOfImageData);
     void getImageData(QStringList arguments);
     KoColorProfile * profile();
-    KoID getColorSpace();
+    KoID colorSpace();
     
 private:
     QByteArray * m_data;
