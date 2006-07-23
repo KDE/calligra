@@ -172,6 +172,7 @@ BasicElement* OasisCreationStrategy::createOperatorElement( const QDomElement& e
              || name == "LeftCeiling"
              || name == "LeftDoubleBracket"
              || name == "LeftFloor"
+             || name == "OpenCurlyDoubleQuote"
              || name == "OpenCurlyQuote"
              || name == "RightAngleBracket"
              || name == "RightCeiling"
