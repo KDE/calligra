@@ -520,10 +520,33 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
  */
 int BracketElement::readContentFromMathMLDom(QDomNode& node)
 {
+    bool empty = false;
     if ( m_operator ) {
         node = node.parentNode();
+        QDomNode open = node;
+        QDomNode parent = node.parentNode();
         if ( ! operatorType( node, true ) )
             return -1;
+        int nodeNum = searchOperator( node );
+        if ( nodeNum == -1 ) // Closing bracket not found
+            return -1;
+        if ( nodeNum == 1 ) { // Empty content
+            empty = true;
+        }
+        if ( nodeNum > 2 ) { // More than two elements inside, infer a mrow
+            kdWarning() << "NodeNum: " << nodeNum << endl;
+            QDomDocument doc = node.ownerDocument();
+            QDomElement de = doc.createElement( "mrow" );
+            int i = 0;
+            do {
+                QDomNode n = node.nextSibling();
+                de.appendChild( node.toElement() );
+                node = n;
+            } while ( ++i < nodeNum );
+            parent.insertAfter( de, open );
+            node = de;
+            kdWarning() << doc.toString() << endl;
+        }
     }
     else {
         // if it's a mfence tag, we need to convert to equivalent expanded form.
@@ -553,11 +576,15 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
             node = parent.firstChild();
         }
     }
-    inherited::readContentFromMathMLDom( node );
+    if ( ! empty ) {
+        inherited::readContentFromMathMLDom( node );
+    }
     if ( m_operator ) {
         if ( ! operatorType( node, false ) ) {
             return -1;
         }
+        if ( empty )
+            return 2;
         return 3;
     }
     return 1;
@@ -652,6 +679,73 @@ bool BracketElement::operatorType( QDomNode& node, bool open )
     }
     return true;
 }
+
+int BracketElement::searchOperator( const QDomNode& node )
+{
+    QDomNode n = node;
+    for ( int i = 0; ! n.isNull(); n = n.nextSibling(), i++ ) {
+        if ( n.isElement() ) {
+            QDomElement e = n.toElement();
+            if ( e.tagName().lower() == "mo" ) {
+                // Try to guess looking at attributes
+                QString form = e.attribute( "form" );
+                QString f;
+                if ( ! form.isNull() ) {
+                    f = form.stripWhiteSpace().lower();
+                }
+                QString fence = e.attribute( "fence" );
+                if ( ! fence.isNull() ) {
+                    if ( fence.stripWhiteSpace().lower() == "false" ) {
+                        continue;
+                    }
+                    if ( ! f.isNull() ) {
+                        if ( f == "postfix" ) {
+                            return i;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                }
+                
+                // Guess looking at contents
+                QDomNode child = e.firstChild();
+                QString name;
+                if ( child.isText() )
+                    name = child.toText().data().stripWhiteSpace();
+                else if ( child.isEntityReference() )
+                    name = child.nodeName();
+                else 
+                    continue;
+                if ( name == ")"
+                     || name == "]"
+                     || name == "}"
+                     || name == "CloseCurlyDoubleQuote"
+                     || name == "CloseCurlyQuote"
+                     || name == "RightAngleBracket"
+                     || name == "RightCeiling"
+                     || name == "RightDoubleBracket"
+                     || name == "RightFloor" ) {
+                    if ( f.isNull() || f == "postfix" )
+                        return i;
+                }
+                if ( name == "("
+                     || name == "["
+                     || name == "{"
+                     || name == "LeftAngleBracket"
+                     || name == "LeftCeiling"
+                     || name == "LeftDoubleBracket"
+                     || name == "LeftFloor"
+                     || name == "OpenCurlyQuote" ) {
+                    if ( ! f.isNull() && f == "postfix" )
+                        return i;
+                }
+            }
+        }
+    }
+    return -1;
+}
+
 
 void BracketElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {

@@ -269,9 +269,15 @@ private:
     /**
      * Set left and right types in operator fences
      * @param open if true set SymbolType for open (left) bracket, 
-     * otherwise set for close (right) bracket;
+     * otherwise set for close (right) bracket.
      */
     bool operatorType( QDomNode& node, bool open );
+
+    /**
+     * Search through the nodes to find the close operator to match current
+     * open bracket.
+     */
+    int searchOperator( const QDomNode& node );
 
     /**
      * The brackets we are showing.
