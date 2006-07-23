@@ -158,6 +158,30 @@ void RecalcManager::recalc()
 
 int RecalcManager::computeDepth(Cell* cell) const
 {
+  //prevent infinite recursion (circular dependencies)
+  if (cell->testFlag(Cell::Flag_UpdatingDeps) ||
+      cell->testFlag (Cell::Flag_CircularCalculation))
+  {
+    kError(36001) << "Circular dependency at " << cell->fullName() << endl;
+    // don't set anything if the cell already has all these things set
+    // this prevents endless loop for inter-sheet curcular dependencies,
+    // where the usual mechanisms fail doe to having multiple dependency
+    // managers ...
+    if (!cell->testFlag (Cell::Flag_CircularCalculation))
+    {
+      Value value;
+      cell->setFlag(Cell::Flag_CircularCalculation);
+      value.setError(ValueFormatter::errorFormat(cell));
+      cell->setValue(value);
+    }
+    //clear the compute reference depth flag
+    cell->clearFlag (Cell::Flag_UpdatingDeps);
+    return 0;
+  }
+
+  // set the compute reference depth flag
+  cell->setFlag(Cell::Flag_UpdatingDeps);
+
   int depth = 0;
 
   Region::Point point(cell->column(), cell->row());
@@ -185,11 +209,6 @@ int RecalcManager::computeDepth(Cell* cell) const
         }
 
         Cell* referencedCell = sheet->cellAt(col, row);
-        if (referencedCell == cell)
-        {
-          // skip circula dependencies
-          continue;
-        }
         if (d->cells.contains(referencedCell))
         {
           // the referenced cell depth was already computed
@@ -203,6 +222,10 @@ int RecalcManager::computeDepth(Cell* cell) const
       }
     }
   }
+
+  //clear the computing reference depth flag
+  cell->clearFlag(Cell::Flag_UpdatingDeps);
+
   return depth;
 }
 
@@ -221,19 +244,20 @@ void RecalcManager::recalcRegion(const Region& region)
       {
         Cell* const cell = sheet->cellAt(col, row);
 
+        // If we have not processed this cell yet.
         if (!d->cells.contains(cell))
         {
           int depth = computeDepth(cell);
           d->cells.insert(cell, depth);
           d->depths.insertMulti(depth, cell);
-        }
 
-        // recursion. we need the whole dependency tree of the changed region
-        Region dependantRegion = d->depManager->getDependants(cell);
-        // FIXME Stefan: The circular dependency is actually a problem for the DependencyManager.
-        if (!dependantRegion.contains(QPoint(cell->column(), cell->row()), cell->sheet()))
-        {
-          recalcRegion(dependantRegion);
+          // Recursion. We need the whole dependency tree of the changed region.
+          // An infinite loop is prevented by the check above.
+          Region dependantRegion = d->depManager->getDependants(cell);
+          if (!dependantRegion.contains(QPoint(cell->column(), cell->row()), cell->sheet()))
+          {
+            recalcRegion(dependantRegion);
+          }
         }
       }
     }
@@ -246,6 +270,7 @@ void RecalcManager::recalcCell(Cell* cell) const
   if (cell->testFlag (Cell::Flag_CalculatingCell) ||
       cell->testFlag (Cell::Flag_CircularCalculation))
   {
+#if 0
     kError(36001) << "ERROR: Circle, cell " << cell->fullName() << endl;
     // don't set anything if the cell already has all these things set
     // this prevents endless loop for inter-sheet curcular dependencies,
@@ -258,7 +283,8 @@ void RecalcManager::recalcCell(Cell* cell) const
       value.setError(ValueFormatter::errorFormat(cell));
       cell->setValue(value);
     }
-    //clear the computing-dependencies flag
+#endif
+    //clear the calculation progress flag
     cell->clearFlag (Cell::Flag_CalculatingCell);
     return;
   }
