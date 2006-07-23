@@ -32,6 +32,7 @@
 #include <KoShapeSelector.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
+#include <KoPageLayout.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
@@ -103,7 +104,8 @@ void KivioView::initActions()
 {
   setXMLFile("kivio.rc");
 
-  m_viewZoomAction = new KoZoomAction(i18n("Zoom"), KIcon("viewmag"), 0,
+  m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
+                                       i18n("Zoom"), KIcon("viewmag"), 0,
                                        actionCollection(), "ViewZoom");
   connect(m_viewZoomAction, SIGNAL(zoomChanged(const QString&)),
           this, SLOT(viewZoom(const QString&)));
@@ -153,18 +155,41 @@ void KivioView::setZoom(int zoom)
 
 void KivioView::viewZoom(const QString& zoomStr)
 {
+  // No point trying to zoom something that isn't there...
+  if(m_activePage == 0) {
+    return;
+  }
+
   bool ok = true;
   int zoom = 0;
 
   QString zoomString = zoomStr;
   zoomString.replace("&",""); // hack to work around bug in KSelectAction
 
-  m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
-  QRegExp regexp(".*(\\d+).*"); // "Captured" non-empty sequence of digits
-  int pos = regexp.indexIn(zoomString);
+  if(zoomString == KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH) ) {
+    m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+    KoPageLayout layout = m_activePage->pageLayout();
+    zoom = qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) /
+        (m_zoomHandler->resolutionX() * layout.ptWidth)) - 1;
 
-  if(pos > -1) {
-    zoom = regexp.cap(1).toInt(&ok);
+    ok = true;
+  } else if(zoomString == KoZoomMode::toString(KoZoomMode::ZOOM_PAGE)) {
+    m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    KoPageLayout layout = m_activePage->pageLayout();
+    double height = m_zoomHandler->resolutionY() * layout.ptHeight;
+    double width = m_zoomHandler->resolutionX() * layout.ptWidth;
+    zoom = qMin(qRound(static_cast<double>(m_canvasController->visibleHeight() * 100) / height),
+                qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) / width)) - 1;
+
+    ok = true;
+  } else {
+    m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+    QRegExp regexp(".*(\\d+).*"); // "Captured" non-empty sequence of digits
+    int pos = regexp.indexIn(zoomString);
+
+    if(pos > -1) {
+      zoom = regexp.cap(1).toInt(&ok);
+    }
   }
 
   // Don't allow smaller zoom then 10%
@@ -172,14 +197,20 @@ void KivioView::viewZoom(const QString& zoomStr)
     return;
   }
 
-  updateZoomAction(zoomString);
+  m_viewZoomAction->setZoom(zoomString);
   setZoom(zoom);
   m_canvas->setFocus();
 }
 
-void KivioView::updateZoomAction(const QString& zoomString)
+void KivioView::resizeEvent(QResizeEvent* event)
 {
-  m_viewZoomAction->setZoom(zoomString);
+  Q_UNUSED(event);
+
+  if((m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH) ||
+        (m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE))
+  {
+    viewZoom(m_viewZoomAction->currentText());
+  }
 }
 
 #include "KivioView.moc"

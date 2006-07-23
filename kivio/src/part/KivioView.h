@@ -77,12 +77,11 @@ class KivioView : public KoView, public KoShapeControllerBase
   protected:
     /// Creates and initializes the GUI.
     void initGUI();
-
     /// Initializes all the actions
     void initActions();
 
-    /// Update the zoom action to the new zoom
-    void updateZoomAction(const QString& zoomString);
+    /// Reimplemented to recalc the zoom when in fit to page or width mode
+    virtual void resizeEvent(QResizeEvent* event);
 
   private:
     KivioDocument* m_document;
