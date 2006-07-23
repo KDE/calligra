@@ -869,7 +869,6 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     {
         loadOasisSettings( settings );
     }
-    emit sigProgress( 90 );
     initConfig();
     emit sigProgress(-1);
 
@@ -1950,6 +1949,11 @@ void Doc::addStringCompletion(const QString &stringCompletion)
 {
   if ( d->listCompletion.items().contains(stringCompletion) == 0 )
     d->listCompletion.addItem( stringCompletion );
+}
+
+void Doc::updateProgress( int percent )
+{
+  emit sigProgress( percent );
 }
 
 void Doc::refreshInterface()

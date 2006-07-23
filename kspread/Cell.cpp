@@ -492,8 +492,7 @@ void Cell::setValue( const Value& value )
   // Value of the cell has changed - trigger necessary actions
   valueChanged ();
 
-    if ( !format()->sheet()->isLoading() )
-        format()->sheet()->setRegionPaintDirty(cellRect());
+  format()->sheet()->setRegionPaintDirty(cellRect());
 }
 
 void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &txt)

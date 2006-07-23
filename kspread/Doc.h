@@ -716,6 +716,8 @@ public:
   int undoRedoLimit() const;
   void setUndoRedoLimit(int _val);
 
+  void updateProgress( int percent );
+
 public slots:
   void refreshInterface();
   void flushDamages();
