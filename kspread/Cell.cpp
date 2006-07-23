@@ -85,24 +85,11 @@
 
 #include <kdebug.h>
 
-#include <Cell.h>
+#include "Cell.h"
 
 using namespace KSpread;
 
-#define BORDER_SPACE 1
-
-
-/**
- * A pointer to the decimal separator
- */
-
-namespace Cell_LNS
-{
-  QChar decimal_point = '\0';
-}
-
-using namespace Cell_LNS;
-
+const int s_borderSpace = 1;
 
 // Some variables are placed in Cell::Extra because normally they're
 // not required in simple case of cell(s). For example, most plain
@@ -1399,8 +1386,8 @@ void Cell::textOffset( const QFontMetrics& fontMetrics )
   }
 
   // doc coordinate system; no zoom applied
-  const double effTop = BORDER_SPACE + 0.5 * effTopBorderPen( d->column, d->row ).width();
-  const double effBottom = h - BORDER_SPACE - 0.5 * effBottomBorderPen( d->column, d->row ).width();
+  const double effTop = s_borderSpace + 0.5 * effTopBorderPen( d->column, d->row ).width();
+  const double effBottom = h - s_borderSpace - 0.5 * effBottomBorderPen( d->column, d->row ).width();
 
   const Doc* doc = format()->sheet()->doc();
 
@@ -1555,14 +1542,14 @@ void Cell::textOffset( const QFontMetrics& fontMetrics )
   // Calculate d->textX based on alignment and textwidth.
   switch ( a ) {
   case Style::Left:
-    d->textX = 0.5 * effLeftBorderPen( d->column, d->row ).width() + BORDER_SPACE;
+    d->textX = 0.5 * effLeftBorderPen( d->column, d->row ).width() + s_borderSpace;
     break;
   case Style::Right:
-    d->textX = w - BORDER_SPACE - d->textWidth
+    d->textX = w - s_borderSpace - d->textWidth
              - 0.5 * effRightBorderPen( d->column, d->row ).width();
     break;
   case Style::Center:
-    d->textX = 0.5 * ( w - BORDER_SPACE - d->textWidth -
+    d->textX = 0.5 * ( w - s_borderSpace - d->textWidth -
                        0.5 * effRightBorderPen( d->column, d->row ).width() );
     break;
   }
@@ -1659,7 +1646,7 @@ void Cell::textSize( const QFontMetrics& fm )
 void Cell::breakLines( const QFontMetrics& fontMetrics )
 {
   if ( format()->multiRow( d->column, d->row ) &&
-       d->textWidth > ( dblWidth() - 2 * BORDER_SPACE
+       d->textWidth > ( dblWidth() - 2 * s_borderSpace
            - format()->leftBorderWidth( d->column, d->row )
            - format()->rightBorderWidth( d->column, d->row ) ) )
   {
@@ -1684,7 +1671,7 @@ void Cell::breakLines( const QFontMetrics& fontMetrics )
       int start = 0;    // Start of the line we are handling now
       int breakpos = 0;   // The next candidate pos to break the string
       int pos1 = 0;
-      int availableWidth = (int) ( dblWidth() - 2 * BORDER_SPACE
+      int availableWidth = (int) ( dblWidth() - 2 * s_borderSpace
           - format()->leftBorderWidth( d->column, d->row )
           - format()->rightBorderWidth( d->column, d->row ) );
 
@@ -1795,7 +1782,7 @@ void Cell::obscureHorizontalCells()
   // FIXME: Check if all cells along the merged edge to the right are
   //        empty and use the extra space?  No, probably not.
   //
-  if ( d->textWidth + indent > ( width - 2 * BORDER_SPACE
+  if ( d->textWidth + indent > ( width - 2 * s_borderSpace
        - format()->leftBorderWidth( d->column, d->row )
        - format()->rightBorderWidth( d->column, d->row ) ) &&
        ( !d->hasExtra() || d->extra()->mergedYCells == 0 ) )
@@ -1815,7 +1802,7 @@ void Cell::obscureHorizontalCells()
         col++;
 
         // Enough space?
-        if ( d->textWidth + indent <= ( width - 2 * BORDER_SPACE
+        if ( d->textWidth + indent <= ( width - 2 * s_borderSpace
              - format()->leftBorderWidth( d->column, d->row )
              - format()->rightBorderWidth( d->column, d->row ) ) )
           end = 1;
@@ -1870,7 +1857,7 @@ void Cell::obscureVerticalCells()
   // FIXME: Setting to make the current cell grow.
   //
   if ( d->strOutText.contains( '\n' ) &&
-       d->textHeight > ( height - 2 * BORDER_SPACE
+       d->textHeight > ( height - 2 * s_borderSpace
        - format()->topBorderWidth( d->column, d->row )
        - format()->bottomBorderWidth( d->column, d->row ) ) )
   {
@@ -1887,7 +1874,7 @@ void Cell::obscureVerticalCells()
         row++;
 
         // Enough space ?
-        if ( d->textHeight <= ( height - 2 * BORDER_SPACE
+        if ( d->textHeight <= ( height - 2 * s_borderSpace
              - format()->topBorderWidth( d->column, d->row )
              - format()->bottomBorderWidth( d->column, d->row ) ) )
           end = 1;
@@ -3328,11 +3315,11 @@ void Cell::paintText( QPainter& painter,
       // #### Torben: This looks duplicated for me
       switch ( align ) {
        case Style::Left:
-        d->textX = effLeftBorderPen( cellRef.x(), cellRef.y() ).width() + BORDER_SPACE;
+        d->textX = effLeftBorderPen( cellRef.x(), cellRef.y() ).width() + s_borderSpace;
         break;
 
        case Style::Right:
-        d->textX = cellRect.width() - BORDER_SPACE - doc->unzoomItXOld( fm.width( t ) )
+        d->textX = cellRect.width() - s_borderSpace - doc->unzoomItXOld( fm.width( t ) )
           - effRightBorderPen( cellRef.x(), cellRef.y() ).width();
         break;
 
@@ -4466,7 +4453,7 @@ void Cell::incPrecision()
 
   if ( tmpPreci == -1 )
   {
-    int pos = d->strOutText.indexOf(decimal_point);
+    int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
     if ( pos == -1 )
         pos = d->strOutText.indexOf('.');
     if ( pos == -1 )
@@ -4502,7 +4489,7 @@ void Cell::decPrecision()
 //  kDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
   if ( format()->precision(column(),row()) == -1 )
   {
-    int pos = d->strOutText.indexOf( decimal_point );
+    int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
     int start = 0;
     if ( d->strOutText.indexOf('%') != -1 )
         start = 2;
