@@ -164,9 +164,6 @@ Things to do after the release of KOffice 1.4
   + Rich text in cells.						      1 ----
 	Use KoText.
 
-  + code cleanups to layout processing				      1 ----
-    - Refactor Cell::makeLayout() (~350 loc)				----
-
   + Evaluation of how best to increase floating point precision.      3 ----
 	Suggestion:  GnuMP.    (Tomas)
 	This will work by converting all functions to compute using
@@ -196,10 +193,8 @@ Things to do after the release of KOffice 1.4
     - jump back to parent dialog on closing the mini dialog
 
 * Value engine
-  + DependencyManager						      1 STEF
-    - elaborate, if it could be simplified by using the Region class
-    - factor out recalculation
-  + RecalcManager						      1 STEF
+  + DependencyManager / RecalcManager				      1 STEF
+    - fix the circular dependency detection
 
 
 * General features

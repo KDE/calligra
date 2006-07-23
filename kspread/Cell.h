@@ -773,13 +773,6 @@ public:
     void clearAllErrors();
 
     /**
-     * \ingroup Painting
-     * Calculates the layout of the cell, i,e, determines what should be shown
-     * for this cell, m_strOutText.
-     */
-    void makeLayout( QPainter &_painter, int _col, int _row );
-
-    /**
      * Parses the formula.
      * @return @c false on error.
      */
@@ -809,10 +802,21 @@ public:
     bool testValidity() const;
 
     /**
-     * \ingroup Painting
-     * Calculates the text parameters stored in cell
+     * \ingroup Layout
+     * Calculates the layout of the cell.
+     *
+     * I.e. recalculates the text to be shown, its dimensions, its offset,
+     * breaks lines of the text to fit it into the cell, obscures neighbouring
+     * cells, if necessary.
      */
-    void calculateTextParameters( int _col, int _row );
+    void makeLayout( int _col, int _row );
+
+    /**
+     * \ingroup Layout
+     * Calculates the text dimensions and the offset
+     * for the current displayed text.
+     */
+    void calculateTextParameters();
 
     /**
      * return align X when align is undefined
@@ -930,33 +934,111 @@ public:
 
 protected:
     /**
-     * \ingroup Painting
-     * \return the zoomed font
-     */
-    QFont zoomedFont( int _col, int _row );
-
-    /**
-     * \ingroup Painting
+     * \ingroup Layout
      * Determines the space needed for the text to be displayed.
      *
      * This depends on the following variables:
-     * \li text direction or more general the angle
+     * \li text direction (horizontal or vertical)
+     * \li text angle
      * \li wether the text is underlined
      * \li vertical alignment
      *
      * There's a special treatment for bottom aligned, underlined text. For
      * all other combinations of these two variables the dimension is the same.
+     *
+     * \internal Called from makeLayout() and calculateTextParameters().
      */
     void textSize( const QFontMetrics& fontMetrics );
 
     /**
+     * \ingroup Layout
+     * Determines the text offset relative to the cell's top left corner.
+     *
+     * This depends on the following variables:
+     * \li horizontal alignment
+     * \li vertical alignment
+     * \li text angle
+     * \li text direction (horizontal or vertical)
+     * \li text width and height
+     * \li single or multiple rows
+     * \li cell width and height, including obscured cells
+     * \li thickness of the border pens
+     *
+     * \internal Called from makeLayout() and calculateTextParameters().
+     */
+    void textOffset( const QFontMetrics& fontMetrics );
+
+    /**
+     * \ingroup Layout
+     * Checks wether the cell text could be wrapped
+     * and does so, if it's necessary.
+     *
+     * \internal Called from makeLayout().
+     */
+    void breakLines( const QFontMetrics& fontMetrics );
+
+    /**
+     * \ingroup Layout
+     * Determines the dimension of this cell including any merged cells.
+     * Does NOT consider space, which is available from empty neighbours,
+     * and would be able to be obscured.
+     *
+     * \internal Called from makeLayout().
+     */
+    void calculateCellDimension() const;
+
+    /**
+     * \ingroup Layout
+     * Checks, wether horizontal neighbours could be obscured
+     * and does so, if necessary.
+     *
+     * \internal Called from makeLayout().
+     */
+    void obscureHorizontalCells();
+
+    /**
+     * \ingroup Layout
+     * Checks, wether vertical neighbours could be obscured
+     * and does so, if necessary.
+     *
+     * \internal Called from makeLayout().
+     */
+    void obscureVerticalCells();
+
+    /**
+     * \ingroup Layout
      * \ingroup Painting
-     * Determines the text, that could be displayed.
-     * This depends on the cell content format (text, number, etc), the cell
-     * dimension, the alignment, ...
+     * Determines the font to be used by evaluating the font settings
+     * and applies the zoom factor on the font size.
+     *
+     * This depends on the following variables:
+     * \li font family
+     * \li font size
+     * \li font flags
+     * \li zoom factor
+     * \li conditional formatting
+     *
+     * \return the zoomed font
+     *
+     * \internal
+     */
+    QFont zoomedFont( int _col, int _row ) const;
+
+    /**
+     * \ingroup Painting
+     * Adjust the output text, so that it only holds the part that can be
+     * displayed. The altered text is only temporary stored. It is restored
+     * after the paint event has been processed.
+     *
+     * This depends on the following variables:
+     * \li horizontal alignment
+     * \li value format
+     * \li text direction (horizontal or vertical)
+     * \li indentation
+     *
      * \internal Called from paintText().
      */
-    QString textDisplaying(QPainter& painter);
+    QString textDisplaying( const QFontMetrics& fontMetrics );
 
     /**
      * Cleans up formula stuff.
@@ -1023,7 +1105,7 @@ protected:
 private:
     class Extra;
     class Private;
-    Private *d;
+    Private * const d;
     // static const char* s_dataTypeToString[];
 
     /**
@@ -1151,22 +1233,6 @@ private:
                        QString str );
   void update();
   int effAlignX();
-
-  /**
-   * \ingroup Painting
-   * Determines the text offset relative to the cell's top left corner.
-   *
-   * This depends on the following variables:
-   * \li horizontal alignment
-   * \li vertical alignment
-   * \li text angle
-   * \li text direction (horizontal or vertical)
-   * \li text width and height
-   * \li single or multiple rows
-   * \li cell width and height, including obscured cells
-   * \li thickness of the border pens
-   */
-  void offsetAlign( int _col, int _row );
 
   /**
    * \ingroup OpenDocument

@@ -393,7 +393,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (!cell->isEmpty() && !cell->isObscured())
               {
-                m_newWidths[col] = qMax(adjustColumnHelper(cell, col, row),
+                m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
               }
             }
@@ -407,7 +407,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (!cell->isEmpty() && !cell->isObscured())
               {
-                m_newHeights[row] = qMax(adjustRowHelper(cell, col, row),
+                m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
               }
             }
@@ -433,7 +433,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
               {
-                m_newWidths[col] = qMax(adjustColumnHelper(cell, col, row),
+                m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
               }
             }
@@ -447,7 +447,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
               {
-                m_newHeights[row] = qMax(adjustRowHelper(cell, col, row),
+                m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
               }
             }
@@ -473,7 +473,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
               {
-                m_newWidths[col] = qMax(adjustColumnHelper(cell, col, row),
+                m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
               }
             }
@@ -487,7 +487,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
               {
-                m_newHeights[row] = qMax(adjustRowHelper(cell, col, row),
+                m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
               }
             }
@@ -499,10 +499,10 @@ bool AdjustColumnRowManipulator::preProcessing()
   return true;
 }
 
-double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell, int col, int row )
+double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 {
   double long_max = 0.0;
-  cell->calculateTextParameters( col, row );
+  cell->calculateTextParameters();
   if ( cell->textWidth() > long_max )
   {
     double indent = 0.0;
@@ -540,15 +540,15 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell, int col, int r
   }
 }
 
-double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell, int col, int row)
+double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell)
 {
   double long_max = 0.0;
-  cell->calculateTextParameters( col, row);
+  cell->calculateTextParameters();
   if ( cell->textHeight() > long_max )
   {
     long_max = cell->textHeight()
-        + cell->format()->topBorderWidth(col, row)
-        + cell->format()->bottomBorderWidth(col, row);
+        + cell->format()->topBorderWidth(cell->column(), cell->row())
+        + cell->format()->bottomBorderWidth(cell->column(), cell->row());
   }
 
   //  add 1 because long_max is the height of the text

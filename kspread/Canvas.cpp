@@ -4080,7 +4080,7 @@ void Canvas::paintUpdates()
         if (!cell->isDefault())
         {
           if (cell->calcDirtyFlag()) cell->calc();
-          if (cell->layoutDirtyFlag()) cell->makeLayout( painter, x, y );
+          if (cell->layoutDirtyFlag()) cell->makeLayout( x, y );
         }
 
         Cell::Borders paintBorder = Cell::NoBorder;

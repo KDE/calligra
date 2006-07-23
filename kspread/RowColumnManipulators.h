@@ -93,8 +93,8 @@ class AdjustColumnRowManipulator : public Manipulator
   protected:
     virtual QString name() const;
 
-    double adjustColumnHelper( Cell * c, int _col, int _row );
-    double adjustRowHelper( Cell * c, int _col, int _row );
+    double adjustColumnHelper( Cell * c);
+    double adjustRowHelper( Cell * c);
 
   private:
     bool m_adjustColumn : 1;
