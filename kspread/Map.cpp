@@ -385,6 +385,10 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
     //delete any styles which were not used
     StyleManager::releaseUnusedAutoStyles( autoStyles );
 
+    // update all dependencies and recalc all cells
+    d->dependencyManager->updateAllDependencies(this);
+    d->recalcManager->recalcMap();
+
     return true;
 }
 
@@ -434,6 +438,10 @@ bool Map::loadXML( const QDomElement& mymap )
     // Used by View's constructor
     d->initialActiveSheet = findSheet( activeSheet );
   }
+
+  // update all dependencies and recalc all cells
+  d->dependencyManager->updateAllDependencies(this);
+  d->recalcManager->recalcMap();
 
   return true;
 }
@@ -579,7 +587,7 @@ Sheet* Map::sheet( int index ) const
   return d->lstSheets.value( index );
 }
 
-QList<Sheet*>& Map::sheetList()
+QList<Sheet*>& Map::sheetList() const
 {
   return d->lstSheets;
 }

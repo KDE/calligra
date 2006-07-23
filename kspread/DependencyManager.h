@@ -55,6 +55,9 @@ public:
   /** a named area was somehow modified */
   void areaModified (const QString &name);
 
+  /** Updates the whole map. */
+  void updateAllDependencies(const Map* map);
+
   /** get dependencies of a cell */
   Region getDependencies (const Point &cell);
 

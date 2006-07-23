@@ -27,6 +27,7 @@
 #include "Cell.h"
 #include "DependencyManager.h"
 #include "Formula.h"
+#include "Map.h"
 #include "Region.h"
 #include "Sheet.h"
 
@@ -179,6 +180,25 @@ void DependencyManager::areaModified (const QString &name)
 {
   d->areaModified (name);
 }
+
+void DependencyManager::updateAllDependencies(const Map* map)
+{
+  foreach (const Sheet* sheet, map->sheetList())
+  {
+    for (Cell* cell = sheet->firstCell(); cell; cell = cell->nextCell())
+    {
+      // empty or default cell? remove it
+      if ( cell->isEmpty() /*|| cell->isDefault()*/ )
+      {
+        d->removeDependencies(cell);
+        continue;
+      }
+
+      d->generateDependencies(cell);
+    }
+  }
+}
+
 // RangeList DependencyManager::getDependencies (const Region::Point &cell)
 // {
 //   return d->getDependencies (cell);

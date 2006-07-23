@@ -1059,7 +1059,7 @@ void Sheet::valueChanged (Cell *cell)
   //TODO: call cell updating, when cell damaging implemented
 
   // Recaculate cells depending on this cell.
-  if ( getAutoCalc() )
+  if ( !doc()->isLoading() && getAutoCalc() )
   {
     // Prepare the Region structure.
     Region region;
@@ -1083,7 +1083,8 @@ void Sheet::formulaChanged(Cell *cell)
   region.add(QPoint(cell->column(), cell->row()), this);
 
   // Update dependencies.
-  d->workbook->dependencyManager()->regionChanged (region);
+  if (!doc()->isLoading())
+    d->workbook->dependencyManager()->regionChanged (region);
 }
 
 /*

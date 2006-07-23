@@ -274,7 +274,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
 
   bool percent = false;
   QString str2;
-  if( str.at(str.length()-1)=='%')
+  if( !str.isEmpty() && str.at(str.length()-1)=='%')
   {
     str2 = str.left (str.length()-1).trimmed();
     percent = true;

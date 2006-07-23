@@ -179,7 +179,7 @@ public:
   /**
    * @return the list of sheets in this map
    */
-  QList<Sheet*>& sheetList();
+  QList<Sheet*>& sheetList() const;
 
   /**
    * @return amount of sheets in this map

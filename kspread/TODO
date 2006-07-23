@@ -194,7 +194,11 @@ Things to do after the release of KOffice 1.4
 
 * Value engine
   + DependencyManager / RecalcManager				      1 STEF
-    - fix the circular dependency detection
+    - The reference depth changes only if a formula was altered. So,
+      it belongs to the DependencyManager and has to be moved. OTOH,
+      it is only use for recalculation. If this is disabled, the
+      reference depth is useless. Therefore, we have to respect the
+      automatic recalc setting.
 
 
 * General features
