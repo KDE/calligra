@@ -9,12 +9,12 @@
 
 /**
  * \page design Design Notes
- * \htmlinclude kspread/DESIGN.html
+ * \htmlinclude DESIGN.html
  */
 
 /**
  * \page painting Painting
- * \htmlinclude kspread/doc/PAINTING.html
+ * \htmlinclude doc/PAINTING.html
  */
 
 /* NOTE Stefan:
@@ -51,3 +51,5 @@
  * Classes and methods related to the plugins.
  */
 
+EXAMPLE_PATH=. doc
+EXAMPLE_RECURSIVE=NO
