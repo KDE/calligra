@@ -17,6 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qfontmetrics.h>
+#include <qpainter.h>
+
+#include "fontstyle.h"
 #include "glyphelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -55,7 +59,94 @@ bool GlyphElement::readAttributesFromMathMLDom( const QDomElement& element )
         return false;
     }
 
-    return inherited::readAttributesFromMathMLDom( element );
+    QStringList missing;
+    FontStyle::testFont( missing, m_fontFamily.lower() );
+    m_hasFont = missing.isEmpty();
+
+    return true;
+}
+
+
+/**
+ * Calculates our width and height and
+ * our children's parentPosition.
+ */
+void GlyphElement::calcSizes( const ContextStyle& context, 
+                              ContextStyle::TextStyle tstyle, 
+                              ContextStyle::IndexStyle /*istyle*/,
+                              StyleAttributes& style )
+{
+    double factor = style.sizeFactor();
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
+    QRect bound;
+
+    if ( m_hasFont ) {
+        QFont font( m_fontFamily );
+        font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
+        QFontMetrics fm ( font );
+        bound = fm.boundingRect( m_char );
+        setWidth( context.ptToLayoutUnitPt( fm.width( m_char ) ) );
+    }
+    else {
+        QFont font( context.getDefaultFont() );
+        font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
+        QFontMetrics fm ( font );
+        bound = fm.boundingRect( m_alt );
+        setWidth( context.ptToLayoutUnitPt( fm.width( m_alt ) ) );
+    }
+    setHeight( context.ptToLayoutUnitPt( bound.height() ) );
+    setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
+    
+    // There are some glyphs in TeX that have
+    // baseline==0. (\int, \sum, \prod)
+    if ( getBaseline() == 0 ) {
+        setBaseline( -1 );
+    }
+}
+
+/**
+ * Draws the whole element including its children.
+ * The `parentOrigin' is the point this element's parent starts.
+ * We can use our parentPosition to get our own origin then.
+ */
+void GlyphElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
+                        const ContextStyle& context,
+                        ContextStyle::TextStyle tstyle,
+                        ContextStyle::IndexStyle /*istyle*/,
+                        StyleAttributes& style,
+                        const LuPixelPoint& parentOrigin )
+{
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
+
+    double factor = style.sizeFactor();
+    luPt mySize = context.getAdjustedSize( tstyle, factor );
+    QFont font;
+    QString text;
+    
+    if ( m_hasFont ) {
+        painter.setPen( style.color() );
+        setCharStyle( style.charStyle() );
+        setCharFamily( style.charFamily() );
+        font = QFont( m_fontFamily );
+        text = m_char;
+        painter.fillRect( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y() ),
+                          context.layoutUnitToPixelX( getWidth() ),
+                          context.layoutUnitToPixelY( getHeight() ),
+                          style.background() );
+    }
+    else {
+        painter.setPen( context.getErrorColor() );
+        font = context.getDefaultFont();
+        text = m_alt;
+    }
+    font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
+    painter.setFont( font );
+    painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
+                      context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
+                      text );
 }
     
 

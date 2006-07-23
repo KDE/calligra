@@ -58,9 +58,8 @@ public:
 
     static bool m_installed;
 
-protected:
-
     static void testFont( QStringList& missing, const QString& fontName );
+
 private:
 
     static QStringList missingFontsInternal();

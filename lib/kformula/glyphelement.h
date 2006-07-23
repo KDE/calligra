@@ -29,6 +29,27 @@ class GlyphElement : public TextElement {
 public:
     GlyphElement( BasicElement* parent = 0 );
 
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes( const ContextStyle& style,
+						    ContextStyle::TextStyle tstyle,
+						    ContextStyle::IndexStyle istyle,
+							StyleAttributes& style );
+
+    /**
+     * Draws the whole element including its children.
+     * The `parentOrigin' is the point this element's parent starts.
+     * We can use our parentPosition to get our own origin then.
+     */
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+					   StyleAttributes& style,
+                       const LuPixelPoint& parentOrigin );
+
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
 protected:
@@ -40,6 +61,7 @@ private:
     QChar m_char;         // Char to be shown
     QString m_fontFamily; // Font family to use
     QString m_alt;        // Alternative text if font family not found
+    bool m_hasFont;       // Whether required font is available
 };
 
 KFORMULA_NAMESPACE_END
