@@ -193,6 +193,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     //kdDebug( DEBUGID ) << endl;
 
     // Each starting element draws the whole token
+    /*
     ElementType* token = getElementType();
     if ( ( token != 0 ) && !symbol ) {
         QString text = token->text( static_cast<SequenceElement*>( getParent() ) );
@@ -209,6 +210,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                           text );
     }
     else {
+    */
         QChar ch = getRealCharacter(context);
         if ( ch != QChar::null ) {
             luPixel bl = getBaseline();
@@ -236,7 +238,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                               context.layoutUnitToPixelX( getWidth() ),
                               context.layoutUnitToPixelY( getHeight() ) );
         }
-    }
+//    }
 
     // Debug
     //painter.setBrush(Qt::NoBrush);
