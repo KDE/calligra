@@ -29,6 +29,7 @@
 #include "spaceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
+#include "glyphelement.h"
 #include "tokenelement.h"
 #include "identifierelement.h"
 #include "operatorelement.h"
@@ -66,7 +67,7 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
               || type == "cn"
               || type == "list" 
               || type == "set" )           return new NameSequence();
-    else if ( type == "mglyph" )           return new TextElement();
+    else if ( type == "mglyph" )           return new GlyphElement();
     else if ( type == "mspace" )           return new SpaceElement();
     else if ( type == "msqrt"
               || type == "mroot" )         return new RootElement();

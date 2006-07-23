@@ -22,6 +22,7 @@
 #include "elementtype.h"
 #include "sequenceelement.h"
 #include "textelement.h"
+#include "glyphelement.h"
 #include "tokenelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -30,18 +31,32 @@ TokenElement::TokenElement( BasicElement* parent ) : StyleElement( parent ) {}
 
 int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
     while ( ! n.isNull() ) {
-        if (!n.isText())
-            return -1;
-        QString textelements = n.toText().data().stripWhiteSpace();
-        kdWarning() << textelements << endl;
-        for (uint i = 0; i < textelements.length(); i++) {
-            TextElement* child = new TextElement(textelements[i]);
-            if (child != 0) {
+        if ( n.isText() ) {
+            QString textelements = n.toText().data().stripWhiteSpace();
+            for (uint i = 0; i < textelements.length(); i++) {
+                TextElement* child = new TextElement(textelements[i]);
                 child->setParent(this);
                 child->setCharFamily( charFamily() );
                 child->setCharStyle( charStyle() );
                 list.append(child);
+                n = n.nextSibling();
             }
+        }
+        else if ( n.isElement() ) {
+            // Only mglyph element is allowed
+            QDomElement e = n.toElement();
+            if ( e.tagName().lower() != "mglyph" ) {
+                kdWarning( DEBUGID ) << "Invalid element inside Token Element\n";
+                return -1;
+            }
+            GlyphElement* child = new GlyphElement();
+            child->setParent(this);
+            child->setCharFamily( charFamily() );
+            child->setCharStyle( charStyle() );
+            if ( child->buildFromMathMLDom( e ) == -1 ) {
+                return -1;
+            }
+            list.append( child );
             n = n.nextSibling();
         }
     }
