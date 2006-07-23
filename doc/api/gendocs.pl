@@ -284,9 +284,9 @@ sub createConf() {
     #print FILE "EXCLUDE=\n";
     #print FILE "EXCLUDE_SYMLINKS=NO\n";
     #print FILE "EXCLUDE_PATTERNS=\n";
-    print FILE "EXAMPLE_PATH=$rootdir\n";
+    #print FILE "EXAMPLE_PATH=$rootdir\n";
     #print FILE "EXAMPLE_PATTERNS=\n";
-    print FILE "EXAMPLE_RECURSIVE=YES\n";
+    #print FILE "EXAMPLE_RECURSIVE=YES\n";
     print FILE "IMAGE_PATH=$basedir\n";
     #print FILE "INPUT_FILTER=\n";
     #print FILE "FILTER_PATTERNS=\n";
