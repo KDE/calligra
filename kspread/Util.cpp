@@ -1221,7 +1221,7 @@ QString KSpread::Oasis::encodeFormula(const QString& expr, const KLocale* locale
       ++i;
       continue;
     }
-    if ( ( expr[i] == '=' ) && ( expr[i + 1] == '=' ) )
+    if ( ( expr[i] == '=' ) && ( i + 1 < l && expr[i + 1] == '=' ) )
     {
       s += '=';
       ++i;++i;
@@ -1258,7 +1258,7 @@ QString KSpread::Oasis::encodeFormula(const QString& expr, const KLocale* locale
     if ( n == i )
     {
       int ml = exp.matchedLength();
-      if ( expr[ i + ml ] == '!' )
+      if ( i + ml < l && expr[ i + ml ] == '!' )
       {
         kDebug() << "No cell ref but sheet name" << endl;
         s += expr[i];

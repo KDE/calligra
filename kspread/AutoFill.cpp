@@ -695,6 +695,9 @@ void Sheet::fillSequence( const QList<Cell*>& _srcList,
                           const QList<AutoFillSequence*>& _seqList,
                           bool down )
 {
+    if (_srcList.isEmpty() || _destList.isEmpty())
+        return;
+
     doc()->emitBeginOperation(true);
 
     /* try finding an interval to use to fill the sequence */
