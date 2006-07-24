@@ -1,17 +1,1 @@
-
-
-
-
-
-########### install files ###############
-
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kplato/icons)
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#kplatoicondir = $(kde_datadir)/kplato/icons
-#kplatoicon_ICON = AUTO
+kde4_install_icons( ${DATA_INSTALL_DIR}/kplato/icons crystalsvg )
