@@ -76,8 +76,6 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     }
 
     clear();
-
-appendPage();
 }
 
 KWDocument::~KWDocument() {
@@ -141,7 +139,6 @@ void KWDocument::removeFrameSet( KWFrameSet *fs ) {
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs) {
-kDebug() << "new fs: " << fs->name() << endl;
     if(m_frameSets.contains(fs)) return;
     setModified( true );
     m_frameSets.append(fs);
@@ -271,9 +268,9 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             maxBottom = qMax(maxBottom, frame->shape()->boundingRect().bottom());
     }
     KWPage *last = pageManager()->page(lastPage());
-    double docHeight = last->offsetInDocument() + last->height();
+    double docHeight = last?(last->offsetInDocument() + last->height()):0.0;
     while(docHeight <= maxBottom) {
-        kDebug(32001) << "KWDocument::loadXML appends a page\n";
+        kDebug(32001) << "KWDocument::endOfLoading appends a page\n";
         last = appendPage();
         docHeight += last->height();
     }
