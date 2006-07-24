@@ -106,7 +106,7 @@ void KivioView::initActions()
 
   m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
                                        i18n("Zoom"), KIcon("viewmag"), 0,
-                                       actionCollection(), "ViewZoom");
+                                       actionCollection(), "view_zoom");
   connect(m_viewZoomAction, SIGNAL(zoomChanged(const QString&)),
           this, SLOT(viewZoom(const QString&)));
 }

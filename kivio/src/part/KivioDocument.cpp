@@ -36,10 +36,14 @@
 #include "KivioMasterPage.h"
 #include "KivioPage.h"
 #include "KivioAbstractPage.h"
+#include "KivioFactory.h"
 
 KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
   : KoDocument(parentWidget, parent, singleViewMode)
 {
+  setInstance(KivioFactory::instance(), false);
+  setTemplateType("kivio_template");
+
   m_commandHistory = new KCommandHistory(actionCollection(), true);
   connect(m_commandHistory, SIGNAL(documentRestored()),
           this, SLOT(slotDocumentRestored()));

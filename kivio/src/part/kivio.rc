@@ -1,14 +1,14 @@
-                      <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
 <kpartgui name="kivio" version="30">
   <MenuBar>
     <Menu name="edit"><text>&amp;Edit</text>
-      <Action name="koffice_undo"/>
-      <Action name="koffice_redo"/>
+      <Action name="edit_undo"/>
+      <Action name="edit_redo"/>
       <Separator/>
     </Menu>
-    <Menu name="View"><text>&amp;View</text>
-      <Action name="ViewZoom"/>
+    <Menu name="view"><text>&amp;View</text>
+      <Action name="view_zoom"/>
       <Separator/>
       <Action name="view_palette_action_menu"/>
     </Menu>
