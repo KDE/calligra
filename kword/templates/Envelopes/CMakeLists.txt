@@ -7,8 +7,8 @@
 
 install( FILES  EnvelopeC6.kwt EnvelopeDL.kwt  DESTINATION ${DATA_INSTALL_DIR}/kword/templates/Envelopes)
 install( FILES  .directory EnvelopeC6.desktop EnvelopeDL.desktop  DESTINATION ${DATA_INSTALL_DIR}/kword/templates/Envelopes)
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kword/icons)
 
+kde4_install_icons( ${DATA_INSTALL_DIR}/kword/icons crystalsvg )
 
 
 

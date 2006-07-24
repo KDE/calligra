@@ -7,7 +7,7 @@
 
 install( FILES  BusinessCards10.kwt LabelsL16.kwt  DESTINATION ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels/)
 install( FILES  .directory BusinessCards10.desktop LabelsL16.desktop  DESTINATION ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels)
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kword/icons)
+kde4_install_icons( ${DATA_INSTALL_DIR}/kword/icons crystalsvg )
 
 
 
