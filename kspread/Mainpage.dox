@@ -3,7 +3,15 @@
  * KSpread is a scriptable spreadsheet program which provides both
  * table-oriented sheets and support for complex mathematical formulas
  * and statistics.
- * \todo major classes
+ *
+ * \section majorclasses Major classes
+ * \li KSpread::Canvas The scrollable area showing the cells.
+ * \li KSpread::Cell Represents a cell in spreadsheet and holds all its data.
+ * \li KSpread::Doc This class holds the data that makes up a spreadsheet.
+ * \li KSpread::Map A map is a simple container for all sheets.
+ * \li KSpread::Sheet A sheet contains several cells.
+ * \li KSpread::View The View class displays a document.
+ *
  * \todo code examples
  */
 
