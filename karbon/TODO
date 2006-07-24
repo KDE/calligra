@@ -1,3 +1,73 @@
+Work packages toward the koffice 2.0 release
+---------------------------------------------------
+
+Here are some main things we have to work on to get ready for koffice 2.0
+Feel free to add or modify todos as they appear when working on karbon.
+Before working on some of the following, just add your name beside the todo you want to work on so that
+is no duplicate work.
+
+Canvas:
+-------
+- the basic things for flake integration are there, we need to improve the existing code when working on the
+  other parts
+- we should improve the canvas so that we can center the canvas vertically too
+- zooming support needs to be added to the gui (e.g. the view toolbar, zooming with mouse wheel, etc. )
+- we should add/replace the canvas at the document docker (bird eye view)
+- part drawing of page borders and the grid
+
+KoPathShape:
+------------
+
+- a KoPathShape is needed (work is underway as part of a soc work)
+- we need it fast since it is a somwhat central part of karbon as all the other shapes are derived from that
+- make sure it supports all we had with the old karbon path
+
+Layers:
+-------
+- figure out how we best implement the layers (its just a somewhat working hack right now)
+- the layer view needs porting to qt4 (use the model/view framework from qt see
+  http://www.phptr.com/content/images/0131872494/samplechapter/blanchette_ch10.pdf )
+- we should make that really pretty with preview of shapes in a tooltip etc.
+- drag and drop of items to reparent or raising/lowering them
+- toggling locking and visbility should be easy to use
+
+Shapes/Tools:
+---------------
+- once we have the KoPathShape, implement other shapes based on that (ellipse, star, etc.) and their corresponding tools
+- check if the KoTextShape provided by KWord is flexible enough for our use cases (i.e. text along a path)
+- check if we can reuse/extend/port some existing tools (e.g. gradient, pattern)
+- figure out how we can set a name for a shape (can that be done in flake or do we have to do it at the top of flake) 
+
+ODF support:
+------------
+- implement full odf loading and saving for all the shapes so we can switch our native format to odf
+- we need an improved odf path parser which supports embedded functions/formulae
+- use http://netmoc.cpe.ucf.edu/Projects/OpenDocument/TestSuite.html for testing (when they have some more drawing tests)
+
+Dockers:
+--------
+- port the transform docker to work on flake shapes (should be quite easy)
+- port the stroke docker to work with KoBorderModel (seems that shapes use that to draw their outline)
+
+Plugins:
+--------
+- port the old plugins to work with flake shapes
+
+Filters:
+--------
+- port the filters to create a document with flake shapes
+
+Cleanup:
+--------
+- removing of the command history docker (the undo/redo actions show a popup menu with the last commands)
+- remove dead code as we replace it with new code
+- get rid of qt3support classes whereever we can with our limited resources
+
+General:
+--------
+- consider the old todos and wishes when implementing/porting the above parts
+
+
 From the usability review of Thomas Zander
 ------------------------------------------
 
