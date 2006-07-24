@@ -224,16 +224,9 @@ void StyleManager::createBuiltinStyles()
 
 CustomStyle * StyleManager::style( QString const & name ) const
 {
-  if (m_styles.count (name))
+  if (m_styles.contains(name))
     return m_styles[name];
-  
-/* (old code, seems to be doing the same as the two lines above, less effectively
-  CustomStyles::const_iterator iter( m_styles.find( name ) );
 
-  if ( iter != m_styles.end() )
-    return iter.value();
-*/
-  
   if ( name == "Default" )
     return m_defaultStyle;
 
@@ -319,7 +312,7 @@ void StyleManager::changeName( QString const & oldName, QString const & newName 
 void StyleManager::insertStyle (CustomStyle *style)
 {
   QString name = style->name();
-  if (m_styles.count (name) && (m_styles[name] != style))
+  if (m_styles.contains(name) && (m_styles[name] != style))
     delete m_styles[name];
   m_styles[name] = style;
 }

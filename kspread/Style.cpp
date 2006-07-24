@@ -2820,16 +2820,17 @@ CustomStyle::~CustomStyle()
 
 QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
 {
-    // TODO:
     // If the type is undefined, we're called from Format
-    // and the OASIS style is not an automatic style. As
-    // the user styles are already created, we return here.
-    // TODO: CUSTOM styles
+    // and the OASIS style is not an automatic style.
+    // TODO: As the user styles are already created, look them up
+    //       in what way ever and return here.
 //     if ( style.type() == 0 && ( m_type == BUILTIN ) && ( m_name == "Default" ) )
 //       return "Default";
+    if ( style.type() == 0 )
+      style = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
 
-  if ( name().isEmpty() )
-        return QString::null; // TODO fallback to Style::saveOasis() ???
+    if ( name().isEmpty() )
+      return QString::null; // TODO fallback to Style::saveOasis() ???
 
     // default style does not need display name
     if( type() != BUILTIN || name() != "Default" )
