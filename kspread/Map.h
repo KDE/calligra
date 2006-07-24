@@ -192,6 +192,8 @@ public:
   QStringList visibleSheets() const;
   QStringList hiddenSheets() const;
 
+  int overallRowCount() const;
+
   static bool respectCase;
 
 signals:

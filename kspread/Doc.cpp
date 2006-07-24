@@ -957,7 +957,8 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
 
   emit sigProgress( 40 );
   // In case of reload (e.g. from konqueror)
-  map()->sheetList().clear(); // it's set to autoDelete
+  qDeleteAll(map()->sheetList());
+  map()->sheetList().clear();
 
   QDomElement styles = spread.namedItem( "styles" ).toElement();
   if ( !styles.isNull() )
@@ -1949,11 +1950,6 @@ void Doc::addStringCompletion(const QString &stringCompletion)
 {
   if ( d->listCompletion.items().contains(stringCompletion) == 0 )
     d->listCompletion.addItem( stringCompletion );
-}
-
-void Doc::updateProgress( int percent )
-{
-  emit sigProgress( percent );
 }
 
 void Doc::refreshInterface()

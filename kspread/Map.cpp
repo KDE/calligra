@@ -77,6 +77,9 @@ public:
 
   // used to give every Sheet a unique default name.
   int tableId;
+
+  // used to determine the laoding progress
+  int overallRowCount;
 };
 
 
@@ -96,6 +99,7 @@ Map::Map ( Doc* doc, const char* name)
   d->initialXOffset = 0.0;
   d->initialYOffset = 0.0;
   d->tableId = 1;
+  d->overallRowCount = 0;
 
   new MapAdaptor(this);
   QDBus::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
@@ -338,6 +342,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
     // sanity check
     if ( sheetNode.isNull() ) return false;
 
+    d->overallRowCount = 0;
     while ( !sheetNode.isNull() )
     {
         QDomElement sheetElement = sheetNode.toElement();
@@ -351,6 +356,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
                 {
                     Sheet* sheet = addNewSheet();
                     sheet->setSheetName( sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
+                    d->overallRowCount += sheetElement.childNodes().count();
                 }
             }
         }
@@ -375,7 +381,9 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
                     QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString::null );
                     Sheet* sheet = findSheet( name );
                     if( sheet )
+                    {
                         sheet->loadOasis( sheetElement, oasisContext, autoStyles );
+                    }
                 }
             }
         }
@@ -595,6 +603,11 @@ QList<Sheet*>& Map::sheetList() const
 int Map::count() const
 {
   return d->lstSheets.count();
+}
+
+int Map::overallRowCount() const
+{
+  return d->overallRowCount;
 }
 
 #include "Map.moc"

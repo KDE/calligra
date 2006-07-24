@@ -4712,8 +4712,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
     //Maps from a column index to the name of the default cell style for that column
     QMap<int,QString> defaultColumnCellStyles;
 
-    const int rows = sheetElement.childNodes().count();
-    doc()->updateProgress( 0 );
+    const int overallRowCount = workbook()->overallRowCount();
     int rowIndex = 1;
     int indexCol = 1;
     QDomNode rowNode = sheetElement.firstChild();
@@ -4758,7 +4757,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
             }
         }
         rowNode = rowNode.nextSibling();
-        doc()->updateProgress( 100 * rowIndex / rows );
+        doc()->emitProgress( 100 * rowIndex / overallRowCount );
     }
 
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
@@ -6059,9 +6058,6 @@ bool Sheet::loadXML( const QDomElement& sheet )
       }
 
     // Load the cells
-    const int rows = sheet.childNodes().count();
-    int rowIndex = 1;
-    doc()->updateProgress( 0 );
     QDomNode n = sheet.firstChild();
     while( !n.isNull() )
     {
@@ -6118,7 +6114,6 @@ bool Sheet::loadXML( const QDomElement& sheet )
         }
 
         n = n.nextSibling();
-        doc()->updateProgress( 45 * rowIndex++ / rows + 40 );
     }
 
 
