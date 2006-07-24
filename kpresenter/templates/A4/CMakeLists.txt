@@ -11,9 +11,6 @@ install( FILES  OneColumnLandscape.kpt   OneColumnPortrait.kpt   TitleLandscape.
 
 
 
-#original Makefile.am contents follow:
-
-#
 #install-data-local:
 #	$(mkinstalldirs) $(DESTDIR)$(kde_datadir)/kpresenter/templates/A4
 #	for file in OneColumnLandscape.desktop TitleLandscape.desktop \
