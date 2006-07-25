@@ -186,7 +186,7 @@ void MacroTests::testMacro()
 	macro1->clearItems();
 	//get items
 	items1 = macro1->items();
-	//check taht they are deleted
+	//check that they are deleted
 	KOMACROTEST_ASSERT( items1.count(), sizetype(0) );
 }
 #include "macrotests.moc"
