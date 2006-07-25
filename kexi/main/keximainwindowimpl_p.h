@@ -250,7 +250,10 @@ void updatePropEditorDockWidthInfo() {
 #endif
 			} else {
 				//propEditorToolWindow->show();
+				QWidget *origFocusWidget = qApp->focusWidget();
 				wnd->makeWidgetDockVisible(propEditorTabWidget);
+				if (origFocusWidget)
+					origFocusWidget->setFocus();
 /*moved
 #if defined(KDOCKWIDGET_P)
 				KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
