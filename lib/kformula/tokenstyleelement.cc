@@ -18,11 +18,11 @@
 */
 
 #include "basicelement.h"
-#include "styleelement.h"
+#include "tokenstyleelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-StyleElement::StyleElement( BasicElement* parent ) : SequenceElement( parent ),
+TokenStyleElement::TokenStyleElement( BasicElement* parent ) : SequenceElement( parent ),
                                                      m_mathSizeType ( NoSize ),
                                                      m_charStyle( anyChar ),
                                                      m_charFamily( anyFamily ),
@@ -39,7 +39,7 @@ StyleElement::StyleElement( BasicElement* parent ) : SequenceElement( parent ),
 {
 }
 
-void StyleElement::calcSizes( const ContextStyle& context,
+void TokenStyleElement::calcSizes( const ContextStyle& context,
                               ContextStyle::TextStyle tstyle,
                               ContextStyle::IndexStyle istyle,
                               StyleAttributes& style )
@@ -52,7 +52,7 @@ void StyleElement::calcSizes( const ContextStyle& context,
     style.reset();
 }
 
-void StyleElement::draw( QPainter& painter, const LuPixelRect& r,
+void TokenStyleElement::draw( QPainter& painter, const LuPixelRect& r,
                          const ContextStyle& context,
                          ContextStyle::TextStyle tstyle,
                          ContextStyle::IndexStyle istyle,
@@ -67,8 +67,7 @@ void StyleElement::draw( QPainter& painter, const LuPixelRect& r,
     style.reset();
 }
 
-// TODO: Support for deprecated attributes
-bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
+bool TokenStyleElement::readAttributesFromMathMLDom( const QDomElement& element )
 {
     if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
         return false;
@@ -248,15 +247,7 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
     return true;
 }
 
-void StyleElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mstyle" : "mstyle" );
-    writeMathMLAttributes( de );
-    inherited::writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
-void StyleElement::writeMathMLAttributes( QDomElement& element )
+void TokenStyleElement::writeMathMLAttributes( QDomElement& element )
 {
     // mathvariant attribute
     if ( customMathVariant() ) {
@@ -395,7 +386,7 @@ void StyleElement::writeMathMLAttributes( QDomElement& element )
     }
 }
 
-void StyleElement::setAbsoluteSize( double s, bool fontsize )
+void TokenStyleElement::setAbsoluteSize( double s, bool fontsize )
 { 
         kdDebug( DEBUGID) << "Setting absolute size: " << s << endl;
         if ( fontsize ) {
@@ -408,7 +399,7 @@ void StyleElement::setAbsoluteSize( double s, bool fontsize )
         }
 }
 
-void StyleElement::setRelativeSize( double f, bool fontsize )
+void TokenStyleElement::setRelativeSize( double f, bool fontsize )
 { 
         kdDebug( DEBUGID) << "Setting relative size: " << f << endl;
         if ( fontsize ) {
@@ -421,7 +412,7 @@ void StyleElement::setRelativeSize( double f, bool fontsize )
         }
 }
 
-void StyleElement::setPixelSize( double px, bool fontsize )
+void TokenStyleElement::setPixelSize( double px, bool fontsize )
 {
         kdDebug( DEBUGID) << "Setting pixel size: " << px << endl;
         if ( fontsize ) {
@@ -434,7 +425,7 @@ void StyleElement::setPixelSize( double px, bool fontsize )
         }
 }
 
-void StyleElement::setStyleVariant( StyleAttributes& style )
+void TokenStyleElement::setStyleVariant( StyleAttributes& style )
 {
     if ( customMathVariant() ) {
         style.setCharFamily ( charFamily() );
@@ -485,7 +476,7 @@ void StyleElement::setStyleVariant( StyleAttributes& style )
     }
 }
 
-void StyleElement::setStyleColor( StyleAttributes& style )
+void TokenStyleElement::setStyleColor( StyleAttributes& style )
 {
     if ( customMathColor() ) {
         style.setColor( mathColor() );
@@ -498,7 +489,7 @@ void StyleElement::setStyleColor( StyleAttributes& style )
     }
 }
 
-void StyleElement::setStyleBackground( StyleAttributes& style )
+void TokenStyleElement::setStyleBackground( StyleAttributes& style )
 {
     if ( customMathBackground() ) {
         style.setBackground( mathBackground() );
@@ -508,7 +499,7 @@ void StyleElement::setStyleBackground( StyleAttributes& style )
     }
 }
 
-double StyleElement::sizeFactor( const ContextStyle& context, double factor )
+double TokenStyleElement::sizeFactor( const ContextStyle& context, double factor )
 {
     double basesize = context.layoutUnitPtToPt( context.getBaseSize() );
     switch ( m_mathSizeType ) {
@@ -535,7 +526,7 @@ double StyleElement::sizeFactor( const ContextStyle& context, double factor )
     return factor;
 }
 
-double StyleElement::str2size( const QString& str, SizeType *st, uint index, SizeType type )
+double TokenStyleElement::str2size( const QString& str, SizeType *st, uint index, SizeType type )
 {
     QString num = str.left( index );
     bool ok;
@@ -552,7 +543,7 @@ double StyleElement::str2size( const QString& str, SizeType *st, uint index, Siz
     return -1;
 }
 
-double StyleElement::getSize( const QString& str, SizeType* st )
+double TokenStyleElement::getSize( const QString& str, SizeType* st )
 {
     int index = str.find( "%" );
     if ( index != -1 ) {
@@ -597,7 +588,7 @@ double StyleElement::getSize( const QString& str, SizeType* st )
 /**
  * Return RGB string from HTML Colors. See HTML Spec, section 6.5
  */
-QString StyleElement::getHtmlColor( const QString& colorStr ){
+QString TokenStyleElement::getHtmlColor( const QString& colorStr ){
 
     QString colorname = colorStr.lower();
 

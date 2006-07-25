@@ -30,6 +30,7 @@
 #include "symbolelement.h"
 #include "textelement.h"
 #include "glyphelement.h"
+#include "styleelement.h"
 #include "tokenelement.h"
 #include "identifierelement.h"
 #include "operatorelement.h"

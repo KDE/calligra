@@ -17,21 +17,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef STYLEELEMENT_H
-#define STYLEELEMENT_H
+#ifndef TOKENSTYLEELEMENT_H
+#define TOKENSTYLEELEMENT_H
 
 #include "kformuladefs.h"
 #include "sequenceelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-class StyleElement : public SequenceElement {
+/**
+ * This class handles mathematical style attributes common to token elements,
+ * as explained in MathML Spec, Section 3.2.2.
+ *
+ * It is in charge of reading and saving elements' attributes and setting
+ * rendering information according to these attributes.
+ */
+class TokenStyleElement : public SequenceElement {
     typedef SequenceElement inherited;
 public:
 	
     enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
 
-    StyleElement( BasicElement* parent = 0 );
+    TokenStyleElement( BasicElement* parent = 0 );
 
     virtual void calcSizes( const ContextStyle& context,
                             ContextStyle::TextStyle tstyle,
@@ -47,7 +54,6 @@ public:
 
 protected:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
     virtual void writeMathMLAttributes( QDomElement& element );
 
     void setAbsoluteSize( double s, bool fontsize = false );
@@ -120,9 +126,6 @@ protected:
     void setStyleColor( StyleAttributes& style );
     void setStyleBackground( StyleAttributes& style );
 
-private:
-    double sizeFactor( const ContextStyle& context, double factor );
-
     double str2size( const QString& str, SizeType* st, uint index, SizeType type );
     double getSize( const QString& str, SizeType* st );
 
@@ -130,6 +133,15 @@ private:
      * Return RGB string from HTML Colors. See HTML Spec, section 6.5
      */
     QString getHtmlColor( const QString& colorStr );
+
+private:
+    /**
+     * Nobody should access this member, neither from outside nor from derived
+     * classes. Token Elements must take care of saving by themselves.
+     */
+    virtual void writeMathML( QDomDocument& , QDomNode& , bool ) {}
+
+    double sizeFactor( const ContextStyle& context, double factor );
 
     // MathML 2.0 attributes
     SizeType m_mathSizeType;
@@ -161,4 +173,4 @@ private:
 
 KFORMULA_NAMESPACE_END
 
-#endif // STYLEELEMENT_H
+#endif // TOKENSTYLEELEMENT_H

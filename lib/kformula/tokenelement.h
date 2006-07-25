@@ -21,14 +21,14 @@
 #define TOKENELEMENT_H
 
 #include "formulacursor.h"
-#include "styleelement.h"
+#include "tokenstyleelement.h"
 #include "sequenceelement.h"
 #include "contextstyle.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-class TokenElement : public StyleElement {
-    typedef StyleElement inherited;
+class TokenElement : public TokenStyleElement {
+    typedef TokenStyleElement inherited;
 public:
     TokenElement( BasicElement* parent = 0 );
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);

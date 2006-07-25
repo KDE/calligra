@@ -27,7 +27,7 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-TokenElement::TokenElement( BasicElement* parent ) : StyleElement( parent ) {}
+TokenElement::TokenElement( BasicElement* parent ) : TokenStyleElement( parent ) {}
 
 int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
     while ( ! n.isNull() ) {
