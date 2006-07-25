@@ -222,8 +222,8 @@ KexiDBAutoField::createEditor()
 void KexiDBAutoField::copyPropertiesToEditor()
 {
 	if (m_subwidget) {
-		kdDebug() << "KexiDBAutoField::copyPropertiesToEditor(): base col: " <<  d->baseColor.name() << 
-			"; text col: " << d->textColor.name() << endl;
+//		kdDebug() << "KexiDBAutoField::copyPropertiesToEditor(): base col: " <<  d->baseColor.name() << 
+//			"; text col: " << d->textColor.name() << endl;
 		QPalette p( m_subwidget->palette() );
 		p.setColor( QPalette::Active, QColorGroup::Base, d->baseColor );
 		if(d->widgetType == Boolean)
