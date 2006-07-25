@@ -1,8 +1,5 @@
 
 
-
-
-
 ########### next target ###############
 
 set(kexisql3_LIB_SRCS 
@@ -71,7 +68,7 @@ install(TARGETS ksqlite  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( ./ksqlite2to3  DESTINATION FILES)
+install(FILES ksqlite2to3  DESTINATION ${BIN_INSTALL_DIR})
 
 
 

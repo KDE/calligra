@@ -306,7 +306,7 @@ KexiTableItem* KexiComboBoxTableEdit::selectItemForStringInLookupTable(const QSt
 
 	const QString txt( str.trimmed().lower() );
 	KexiTableViewData *lookupData = d->popup->tableView()->data();
-	const int boundColumn = lookupFieldSchema->boundColumn();
+//	const int boundColumn = lookupFieldSchema->boundColumn();
 	const int visibleColumn = lookupFieldSchema->visibleColumn();
 	KexiTableViewData::Iterator it(lookupData->iterator());
 	int row;
@@ -423,7 +423,7 @@ QVariant KexiComboBoxTableEdit::value()
 		if (lookupFieldSchema->boundColumn()==-1)
 			return m_origValue;
 		KexiTableItem *it = d->popup ? d->popup->tableView()->selectedItem() : 0;
-		if (!it && d->userEnteredText && !d->userEnteredText.isEmpty()) { //
+		if (!it && d->userEnteredTextChanged && !d->userEnteredText.isEmpty()) { //
 			//try to select a row using the user-entered text
 			if (!d->popup)
 				createPopup(false);

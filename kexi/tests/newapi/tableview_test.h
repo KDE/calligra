@@ -20,7 +20,7 @@
 #ifndef TABLEVIEW_TEST_H
 #define TABLEVIEW_TEST_H
 
-#include <widget/kexidatatableview.h>
+#include <widget/tableview/kexidatatableview.h>
 #include <kexidb/cursor.h>
 
 int tableViewTest()
