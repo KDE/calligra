@@ -22,7 +22,7 @@
 #ifndef KEXIDATATABLEVIEW_H
 #define KEXIDATATABLEVIEW_H
 
-#include <tableview/kexitableview.h>
+#include "kexitableview.h"
 
 class KexiTableItem;
 class QVariant;
@@ -35,7 +35,7 @@ namespace KexiDB {
 /**
  * Database aware table widget.
  */
-class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
+class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiTableView
 {
 	Q_OBJECT
 
@@ -44,6 +44,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 		 * creates a blank widget
 		 */
 		KexiDataTableView(QWidget *parent, const char *name =0);
+
 		/*! Creates a table widget and fills it using data from \a cursor.
 		 Cursor will be opened (with open()) if it is not yet opened.
 		 Cursor must be defined on query schema, not raw statement (see Connection::prepareQuery()

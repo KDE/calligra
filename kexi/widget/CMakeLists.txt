@@ -12,7 +12,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/ta
 set(kexiextendedwidgets_LIB_SRCS 
    kexidataawareview.cpp 
    kexidatatable.cpp 
-   kexidatatableview.cpp 
    kexiquerydesignersqleditor.cpp 
    kexisectionheader.cpp 
    pixmapcollection.cpp 

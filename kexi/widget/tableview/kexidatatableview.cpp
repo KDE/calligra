@@ -85,7 +85,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	m_cursor = cursor;
 
 	if (!m_cursor->query()) {
-		kDebug() << "KexiDataTableView::setData(): WARNING: cursor should have query schema defined!\n--aborting setData()." << endl;
+		kdDebug() << "KexiDataTableView::setData(): WARNING: cursor should have query schema defined!\n--aborting setData()." << endl;
 		m_cursor->debug();
 		clearColumns();
 		return false;
@@ -97,20 +97,18 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	}
 
 	if (!m_cursor->isOpened() && !m_cursor->open()) {
-		kDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData()." << endl;
+		kdDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData()." << endl;
 		m_cursor->debug();
 		clearColumns();
 		return false;
 	}
 
-//	uint i = 0;
-//	KexiDB::QueryColumnInfo::Vector vector = m_cursor->query()->fieldsExpanded();
 	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
 
 	QString caption = m_cursor->query()->caption();
-	if (caption.isEmpty()) {
+	if (caption.isEmpty())
 		caption = m_cursor->query()->name();
-	}
+
 	setCaption( caption );
 
 	//PRIMITIVE!! data setting:
@@ -119,10 +117,5 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	KexiTableView::setData(tv_data);
 	return true;
 }
-
-//void KexiDataTableView::slotClearData()
-//{
-//	deleteAllRows(true/*ask*/, true/*repaint*/);
-//}
 
 #include "kexidatatableview.moc"

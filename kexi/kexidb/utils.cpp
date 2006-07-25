@@ -23,6 +23,7 @@
 
 #include <qmap.h>
 #include <qthread.h>
+#include <qdom.h>
 #include <QMutex>
 #include <QSet>
 
@@ -239,7 +240,7 @@ const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
 		return m_table->query()->fieldsExpanded();
 	
 	if (m_query)
-		return m_query->fieldsExpanded(unique);
+		return m_query->fieldsExpanded(QuerySchema::Unique);
 
 	kWarning() << "TableOrQuery::fields() : no query or table specified!" << endl;
 	return QueryColumnInfo::Vector();
@@ -776,6 +777,42 @@ bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, con
 
 	KexiDBWarn << "KexiDB::setFieldProperty() property \"" << propertyName << "\" not found!" << endl;
 	return false;
+}
+
+QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
+{
+	Q3CString valueType = node.nodeName().latin1();
+	if (valueType.isEmpty())
+		return QVariant();
+	const QString text( node.firstChild().toElement().text() );
+	bool ok;
+	if (valueType == "string") {
+		return text;
+	}
+	if (valueType == "cstring") {
+		return Q3CString(text.latin1());
+	}
+	else if (valueType == "number") { // integer or double
+		if (text.find('.')!=-1) {
+			double val = text.toDouble(&ok);
+			if (ok)
+				return val;
+		}
+		else {
+			int val = text.toInt(&ok);
+			if (ok)
+				return val;
+			int valLong = text.toLongLong(&ok);
+			if (ok)
+				return valLong;
+		}
+	}
+	else if (valueType == "bool") {
+		return QVariant(text.lower()=="true" || text=="1", 1);
+	}
+//! @todo add more QVariant types
+	KexiDBWarn << "loadPropertyValueFromXML(): unknown type '" << valueType << "'" << endl;
+	return QVariant();
 }
 
 #include "utils_p.moc"

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -158,6 +158,40 @@ KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
 	delete d;
 }
 
+KexiDB::LookupFieldSchema *KexiComboBoxTableEdit::lookupFieldSchema() const
+{
+	if (column()->field() && column()->field()->table())
+		return column()->field()->table()->lookupFieldSchema( *column()->field() );
+	return 0;
+}
+
+int KexiComboBoxTableEdit::rowToHighlightForLookupTable() const
+{
+	if (!d->popup)
+		return 0;//err
+	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
+	if (!lookupFieldSchema)
+		return -1;
+	if (lookupFieldSchema->boundColumn()==-1)
+		return -1; //err
+	bool ok;
+	const int rowUid = m_origValue.toInt();
+//todo			tvData->findByUID( row );
+//! @todo for now we're assuming the id is INTEGER
+	KexiTableViewData *tvData = d->popup->tableView()->data();
+	const int boundColumn = lookupFieldSchema->boundColumn();
+	KexiTableViewData::Iterator it(tvData->iterator());
+	int row=0;
+	for (;it.current();++it, row++)
+	{
+		if (it.current()->at(boundColumn).toInt(&ok) == rowUid && ok || !ok)
+			break;
+	}
+	if (!ok || !it.current()) //item not found: highlight 1st row, if available
+		return -1;
+	return row;
+}
+
 void KexiComboBoxTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	Q_UNUSED(removeOld);
@@ -167,20 +201,56 @@ void KexiComboBoxTableEdit::setValueInternal(const QVariant& add_, bool removeOl
 	if (add.isEmpty()) {
 		KexiTableViewData *relData = column()->relatedData();
 		QString stringValue;
-		if (relData) {
+		int rowToHighlight = -1;
+		KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
+		if (lookupFieldSchema) {
+			//use 'lookup field' model
+//! @todo support more RowSourceType's, not only table
+//			KexiDB::TableSchema *lookupTable 
+	//			= column()->field()->table()->connection()->tableSchema( lookupFieldSchema->rowSource() );
+			if (lookupFieldSchema->boundColumn()==-1)
+//! @todo errmsg
+				return;
+			if (d->popup) {
+					bool ok;
+					const int rowUid = m_origValue.toInt();
+		//todo			tvData->findByUID( row );
+		//! @todo for now we're assuming the id is INTEGER
+					KexiTableViewData *tvData = d->popup->tableView()->data();
+					const int boundColumn = lookupFieldSchema->boundColumn();
+					KexiTableViewData::Iterator it(tvData->iterator());
+					int row=0;
+					for (;it.current();++it, row++)
+					{
+						if (it.current()->at(boundColumn).toInt(&ok) == rowUid && ok || !ok)
+							break;
+					}
+					if (!ok || !it.current()) //item not found: highlight 1st row, if available
+						row = 0;
+					else {
+						if (lookupFieldSchema->visibleColumn()!=-1 && (int)it.current()->size() >= lookupFieldSchema->visibleColumn()) {
+							stringValue = it.current()->at( lookupFieldSchema->visibleColumn() ).toString();
+						}
+					}
+					d->popup->tableView()->setHighlightedRow(row);
+			}
+		}
+		else if (relData) {
 			//use 'related table data' model
 //			KexiTableItem *it = d->popup ? d->popup->tableView()->selectedItem() : 0;
 //			if (it)
-			stringValue = valueForString(m_origValue.toString(), 0, 1);
+			stringValue = valueForString(m_origValue.toString(), &rowToHighlight, 0, 1);
 ////			stringValue = m_origValue.toString();
 //				stringValue = it->at(1).toString();
 		}
 		else {
 			//use 'enum hints' model
 			const int row = m_origValue.toInt();
-			stringValue = field()->enumHint(row);
+			stringValue = field()->enumHint(row).trimmed();
 		}
 		setLineEditText( stringValue );
+		m_lineedit->end(false);
+		m_lineedit->selectAll();
 		
 		if (d->popup) {
 			if (m_origValue.isNull()) {
@@ -188,6 +258,9 @@ void KexiComboBoxTableEdit::setValueInternal(const QVariant& add_, bool removeOl
 				d->popup->tableView()->setHighlightedRow(0);
 			} else {
 				if (relData) {
+					if (rowToHighlight!=-1)
+						d->popup->tableView()->setHighlightedRow(rowToHighlight);
+/*
 					int row = 0;
 					KexiTableViewData::Iterator it(relData->iterator());
 					for (;it.current();++it, row++)
@@ -203,7 +276,7 @@ void KexiComboBoxTableEdit::setValueInternal(const QVariant& add_, bool removeOl
 						//item not found: highlight 1st row, if available
 						if (!relData->isEmpty())
 							d->popup->tableView()->setHighlightedRow(0);
-					}
+					}*/
 					//TODO: select proper row using m_origValue key
 				}
 				else {
@@ -219,11 +292,38 @@ void KexiComboBoxTableEdit::setValueInternal(const QVariant& add_, bool removeOl
 			d->popup->tableView()->clearSelection();
 		m_lineedit->setText(add); //not setLineEditText(), because 'add' is entered by user!
 		//setLineEditText( add );
+		m_lineedit->end(false);
 	}
-	m_lineedit->end(false);
 }
 
-QString KexiComboBoxTableEdit::valueForString(const QString& str, 
+KexiTableItem* KexiComboBoxTableEdit::selectItemForStringInLookupTable(const QString& str)
+{
+	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
+	if (!d->popup || !lookupFieldSchema)
+		return 0; //safety
+//-not effective for large sets: please cache it!
+//.trimmed() is not generic!
+
+	const QString txt( str.trimmed().lower() );
+	KexiTableViewData *lookupData = d->popup->tableView()->data();
+	const int boundColumn = lookupFieldSchema->boundColumn();
+	const int visibleColumn = lookupFieldSchema->visibleColumn();
+	KexiTableViewData::Iterator it(lookupData->iterator());
+	int row;
+	for (row = 0;it.current();++it, row++) {
+		if (it.current()->at(visibleColumn).toString().trimmed().lower()==txt)
+			break;
+	}
+	if (it.current()) {
+		d->popup->tableView()->selectRow(row);
+	}
+	else {
+		d->popup->tableView()->clearSelection();
+	}
+	return it.current();
+}
+
+QString KexiComboBoxTableEdit::valueForString(const QString& str, int* row, 
 	uint lookInColumn, uint returnFromColumn, bool allowNulls)
 {
 	KexiTableViewData *relData = column()->relatedData();
@@ -233,14 +333,17 @@ QString KexiComboBoxTableEdit::valueForString(const QString& str,
 //-not effective for large sets: please cache it!
 //.trimmed() is not generic!
 
-	const QString txt = str.trimmed();
-	KexiTableViewData::Iterator it(relData->iterator());
-	for (;it.current();++it) {
-		if (it.current()->at(lookInColumn).toString().trimmed()==txt)
+	const QString txt = str.trimmed().lower();
+	KexiTableViewData::Iterator it( relData->iterator() );
+	for (*row = 0;it.current();++it, (*row)++) {
+		if (it.current()->at(lookInColumn).toString().trimmed().lower()==txt)
 			break;
 	}
 	if (it.current())
-		return it.current()->at(returnFromColumn).toString().trimmed();
+		return it.current()->at(returnFromColumn).toString();
+//		return it.current()->at(returnFromColumn).toString().trimmed();
+
+	*row = -1;
 
 	if (column()->relatedDataEditable())
 		return str; //new value entered and that's allowed
@@ -248,7 +351,7 @@ QString KexiComboBoxTableEdit::valueForString(const QString& str,
 	kexiwarn << "KexiComboBoxTableEdit::valueForString(): no related row found, ID will be painted!" << endl;
 	if (allowNulls)
 		return QString::null;
-	return str; //for sanity but it's veird to show id to the user
+	return str; //for sanity but it's weird to show id to the user
 }
 
 void KexiComboBoxTableEdit::showFocus( const QRect& r, bool readOnly )
@@ -301,17 +404,32 @@ QVariant KexiComboBoxTableEdit::value()
 {
 //	ok = true;
 	KexiTableViewData *relData = column()->relatedData();
+	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
 	if (relData) {
 		if (d->userEnteredTextChanged) {
 			//we've user-entered text: look for id
 //TODO: make error if matching text not found?
-			return valueForString(d->userEnteredText, 1, 0, true/*allowNulls*/);
+			int rowToHighlight;
+			return valueForString(d->userEnteredText, &rowToHighlight, 1, 0, true/*allowNulls*/);
 		}
 		else {
 			//use 'related table data' model
 			KexiTableItem *it = d->popup->tableView()->selectedItem();
 			return it ? it->at(0) : m_origValue;//QVariant();
 		}
+	}
+	else if (lookupFieldSchema)
+	{
+		if (lookupFieldSchema->boundColumn()==-1)
+			return m_origValue;
+		KexiTableItem *it = d->popup ? d->popup->tableView()->selectedItem() : 0;
+		if (!it && d->userEnteredText && !d->userEnteredText.isEmpty()) { //
+			//try to select a row using the user-entered text
+			if (!d->popup)
+				createPopup(false);
+			it = selectItemForStringInLookupTable( d->userEnteredText );
+		}
+		return it ? it->at( lookupFieldSchema->boundColumn() ) : QVariant();
 	}
 	else if (d->popup) {
 		//use 'enum hints' model
@@ -324,10 +442,19 @@ QVariant KexiComboBoxTableEdit::value()
 
 	if (m_lineedit->text().isEmpty())
 		return QVariant();
-/*js: TODO dont return just 1st row, but use autocompletion feature
+/*! \todo don't return just 1st row, but use autocompletion feature
       and: show message box if entered text does not match! */
 //	return 0; //1st row
 	return m_origValue; //unchanged
+}
+
+QVariant KexiComboBoxTableEdit::visibleValueForLookupField()
+{
+	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
+	if (!d->popup || !lookupFieldSchema)
+		return QVariant();
+	KexiTableItem *it = d->popup->tableView()->selectedItem();
+	return it ? it->at( lookupFieldSchema->visibleColumn() ) : QVariant();
 }
 
 /*bool KexiComboBoxTableEdit::cursorAtStart()
@@ -347,13 +474,15 @@ void KexiComboBoxTableEdit::clear()
 	m_lineedit->clear();
 	if (d->popup)
 		d->popup->hide();
+	slotLineEditTextChanged(QString::null);
 }
 
 bool KexiComboBoxTableEdit::valueChanged()
 {
 	//avoid comparing values:
 	KexiTableViewData *relData = column()->relatedData();
-	if (relData) {
+	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
+	if (relData || lookupFieldSchema) {
 		if (d->userEnteredTextChanged)
 			return true;
 
@@ -370,7 +499,7 @@ bool KexiComboBoxTableEdit::valueChanged()
 	}
 
 	//just compare values
-	return KexiTableEdit::valueChanged();
+	return KexiInputTableEdit::valueChanged();
 }
 
 bool KexiComboBoxTableEdit::valueIsNull()
@@ -397,13 +526,22 @@ void KexiComboBoxTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, i
 void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
-	KexiTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
+	KexiInputTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
 	if (focused && (w > d->button->width()))
 		w -= (d->button->width() - x);
 	if (!val.isNull()) {
 		KexiTableViewData *relData = column()->relatedData();
+		KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
 		if (relData) {
-			txt = valueForString(val.toString(), 0, 1);
+			int rowToHighlight;
+			txt = valueForString(val.toString(), &rowToHighlight, 0, 1);
+		}
+		else if (lookupFieldSchema) {
+			if (d->popup) {
+				KexiTableItem *it = d->popup->tableView()->selectedItem();
+				if (it && lookupFieldSchema->visibleColumn()!=-1 && (int)it->size() >= lookupFieldSchema->visibleColumn())
+					txt = it->at( lookupFieldSchema->visibleColumn() ).toString();
+			}
 		}
 		else {
 			//use 'enum hints' model
@@ -440,6 +578,11 @@ void KexiComboBoxTableEdit::slotButtonClicked()
 
 void KexiComboBoxTableEdit::showPopup()
 {
+	createPopup(true);
+}
+
+void KexiComboBoxTableEdit::createPopup(bool show)
+{
 	if (!d->popup) {
 //js TODO: now it's only for simple ENUM case!
 //		d->popup = new KexiComboBoxPopup(this, *field());
@@ -462,7 +605,7 @@ void KexiComboBoxTableEdit::showPopup()
 			d->popup->tableView()->setHighlightedRow( 0 );
 //			d->popup->tableView()->selectRow(m_origValue.toInt());
 	}
-	if (!m_lineedit->isVisible())
+	if (show && !m_lineedit->isVisible())
 		emit editRequested();
 
 	KexiTableView *tv = dynamic_cast<KexiTableView*>(m_scrollView);
@@ -472,13 +615,26 @@ void KexiComboBoxTableEdit::showPopup()
 //		const int h = d->popup->height()
 		const int w = qMax(d->popup->width(), d->currentEditorWidth);
 		d->popup->resize(w, 0);
-		d->popup->show();
+		if (show)
+			d->popup->show();
 		d->popup->updateSize(w);
 //		d->popup->resize(w, h);
-		int rowToHighlight;
-		if (!m_origValue.isNull() && m_origValue.toInt()>=0) {
-			d->popup->tableView()->selectRow( m_origValue.toInt() );
-			rowToHighlight = -1; //don't highlight: we've a selection
+		int rowToHighlight = -1;
+		KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
+		KexiTableViewData *relData = column()->relatedData();
+		if (lookupFieldSchema) {
+			rowToHighlight = rowToHighlightForLookupTable();
+		}
+		else if (relData) {
+			(void)valueForString(m_origValue.toString(), &rowToHighlight, 0, 1);
+		}
+		else //enum hint
+			rowToHighlight = m_origValue.toInt();
+
+		if (rowToHighlight!=-1) {
+			d->popup->tableView()->selectRow( rowToHighlight );
+//js ok?			rowToHighlight = -1; //don't highlight: we've a selection
+//moved up			rowToHighlight = m_origValue.toInt();
 		}
 		else {
 			rowToHighlight = qMax( d->popup->tableView()->highlightedRow(), 0);
@@ -514,7 +670,7 @@ void KexiComboBoxTableEdit::show()
 {
 	KexiInputTableEdit::show();
 	d->button->show();
-	d->button->setOn(false);
+//js	d->button->setOn(false);
 }
 
 void KexiComboBoxTableEdit::slotRowAccepted(KexiTableItem * item, int /*row*/)
@@ -536,17 +692,23 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 		slotButtonClicked();
 		return true;
 	}
-	else if (editorActive) {
+	else if (editorActive){
+		const bool enterPressed = k==Qt::Key_Enter || k==Qt::Key_Return;
+		if (enterPressed && d->userEnteredTextChanged) {
+			createPopup(false);
+			selectItemForStringInLookupTable( d->userEnteredText );
+			return false;
+		}
 
 		// The editor may be active but the pull down menu not existant/visible,
 		// e.g. when the user has pressed a normal button to activate the editor
 		// Don't handle the event here in that case.
-		if (!d->popup || !d->popup->isVisible()) {
+		if (!d->popup || (!enterPressed && !d->popup->isVisible())) {
 			return false;
 		}
 
-		int highlightedOrSelectedRow = d->popup->tableView()->highlightedRow();
-		if (highlightedOrSelectedRow < 0)
+		int highlightedOrSelectedRow = d->popup ? d->popup->tableView()->highlightedRow() : -1;
+		if (d->popup && highlightedOrSelectedRow < 0)
 			highlightedOrSelectedRow = d->popup->tableView()->currentRow();
 
 		switch (k) {
@@ -599,12 +761,19 @@ void KexiComboBoxTableEdit::slotItemSelected(KexiTableItem*)
 {
 	QString stringValue;
 	KexiTableViewData *relData = column()->relatedData();
+	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
 	if (relData) {
 		//use 'related table data' model
 //		KexiTableItem *it = d->popup->tableView()->selectedItem();
 		KexiTableItem *item = d->popup->tableView()->selectedItem();
 		if (item)
 			stringValue = item->at(1).toString();
+	}
+	else if (lookupFieldSchema) {
+		KexiTableItem *item = d->popup->tableView()->selectedItem();
+		if (item && lookupFieldSchema->visibleColumn()!=-1 && (int)item->size() >= lookupFieldSchema->visibleColumn()) {
+			stringValue = item->at( lookupFieldSchema->visibleColumn() ).toString();
+		}
 	}
 	else {
 		//use 'enum hints' model
@@ -684,21 +853,6 @@ void KexiComboBoxTableEdit::setLineEditText(const QString& text)
 	d->userEnteredTextChanged = false;
 }
 
-//======================================================
-
-KexiComboBoxEditorFactoryItem::KexiComboBoxEditorFactoryItem()
-{
-}
-
-KexiComboBoxEditorFactoryItem::~KexiComboBoxEditorFactoryItem()
-{
-}
-
-KexiTableEdit* KexiComboBoxEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, Q3ScrollView* parent)
-{
-	return new KexiComboBoxTableEdit(column, parent);
-}
-
+KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiComboBoxEditorFactoryItem, KexiComboBoxTableEdit)
 
 #include "kexicomboboxtableedit.moc"

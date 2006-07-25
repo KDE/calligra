@@ -9,6 +9,7 @@ set(kexidatatable_LIB_SRCS
    kexidataawareobjectiface.cpp 
    kexitableview.cpp 
    kexitableview_p.cpp 
+   kexidatatableview.cpp 
    kexicelleditorfactory.cpp 
    kexitableedit.cpp 
    kexitableheader.cpp 

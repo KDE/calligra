@@ -374,6 +374,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 	m_stack->raiseWidget( newView );
 	newView->propertySetSwitched();
 	m_parentWindow->invalidateSharedActions( newView );
+	newView->setFocus(); //js ok?
 //	setFocus();
 	return true;
 }

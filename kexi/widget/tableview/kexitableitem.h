@@ -46,6 +46,9 @@ class KEXIDATATABLE_EXPORT KexiTableItem : public KexiTableItemBase
 		/*! Clears exisiting column values, current number of columns is preserved. */
 		void clearValues();
 
+		/*! Prints debug string for this item. */
+		void debug() const;
+
 	protected:
 		KexiTableItem(int numCols);
 

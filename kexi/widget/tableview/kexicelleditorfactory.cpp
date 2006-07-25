@@ -103,14 +103,23 @@ void KexiCellEditorFactory::registerItem( KexiCellEditorFactoryItem& item, uint 
 
 KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, Q3ScrollView* parent)
 {
-	KexiTableViewData *rel_data = column.relatedData();
+	KexiDB::Field *realField;
+	if (column.visibleLookupColumnInfo) {
+		realField = column.visibleLookupColumnInfo->field;
+	}
+	else {
+		realField = column.field();
+	}
+
 	KexiCellEditorFactoryItem *item = 0;
-	if (rel_data) {
+	if (/*not db-aware case*/column.relatedData() 
+		|| (/*db-aware case*/column.field() && column.field()->table() && column.field()->table()->lookupFieldSchema( *column.field() )))
+	{
 		//--we need to create combo box because of relationship:
 		item = KexiCellEditorFactory::item( KexiDB::Field::Enum );
 	}
 	else {
-		item = KexiCellEditorFactory::item( column.field()->type(), column.field()->subType() );
+		item = KexiCellEditorFactory::item( realField->type(), realField->subType() );
 	}
 	
 #if 0 //js: TODO LATER

@@ -28,6 +28,8 @@
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
 
+class QDomNode;
+
 namespace KexiDB
 {
 	//! for convenience
@@ -286,6 +288,12 @@ namespace KexiDB
 	 */
 	KEXI_DB_EXPORT bool setFieldProperty(Field& field, const QByteArray& propertyName, 
 		const QVariant& value);
+
+	/*! @return property value loaded from a DOM \a node, written in a QtDesigner-like
+	 notation: <number>int</number> or <bool>bool</bool>, etc. Supported types are
+	 "string", "cstring", "bool", "number". For invalid values null QVariant is returned.
+	 You can check the validity of the returned value using QVariant::type(). */
+	KEXI_DB_EXPORT QVariant loadPropertyValueFromXML( const QDomNode& node );
 }
 
 #endif

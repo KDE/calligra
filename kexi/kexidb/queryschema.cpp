@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,12 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/queryschema.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/expression.h>
-#include <kexidb/parser/sqlparser.h>
-#include <kexidb/utils.h>
+#include "kexidb/queryschema.h"
+#include "kexidb/driver.h"
+#include "kexidb/connection.h"
+#include "kexidb/expression.h"
+#include "kexidb/parser/sqlparser.h"
+#include "utils.h"
+#include "lookupfieldschema.h"
 
 #include <assert.h>
 
@@ -39,6 +40,16 @@
 
 using namespace KexiDB;
 
+QueryColumnInfo::QueryColumnInfo(Field *f, Q3CString _alias, bool _visible)
+ : field(f), alias(_alias), indexForVisibleLookupValue(-1)
+ , visible(_visible)
+{
+}
+
+QueryColumnInfo::~QueryColumnInfo()
+{
+}
+
 //=======================================
 namespace KexiDB {
 //! @internal
@@ -48,9 +59,14 @@ class QuerySchemaPrivate
 		QuerySchemaPrivate(QuerySchema* q)
 		 : query(q)
 		 , masterTable(0)
+		 , fakeRowIDField(0)
+		 , fakeRowIDCol(0)
 		 , maxIndexWithAlias(-1)
 		 , visibility(64)
 		 , fieldsExpanded(0)
+		 , internalFields(0)
+		 , fieldsExpandedWithInternalAndRowID(0)
+		 , fieldsExpandedWithInternal(0)
 		 , orderByColumnList(0)
 		 , autoincFields(0)
 		 , fieldsOrder(0)
@@ -73,11 +89,16 @@ class QuerySchemaPrivate
 		~QuerySchemaPrivate()
 		{
 			delete fieldsExpanded;
+			delete internalFields;
+			delete fieldsExpandedWithInternalAndRowID;
+			delete fieldsExpandedWithInternal;
 			delete orderByColumnList;
 			delete autoincFields;
 			delete fieldsOrder;
 			delete pkeyFieldsOrder;
 			delete whereExpr;
+			delete fakeRowIDCol;
+			delete fakeRowIDField;
 		}
 
 		void clear()
@@ -102,6 +123,8 @@ class QuerySchemaPrivate
 			if (fieldsExpanded) {
 				delete fieldsExpanded;
 				fieldsExpanded = 0;
+				delete internalFields;
+				internalFields = 0;
 				delete fieldsOrder;
 				fieldsOrder = 0;
 				delete autoincFields;
@@ -154,6 +177,9 @@ class QuerySchemaPrivate
 		/*! List of tables used in this query */
 		TableSchema::List tables;
 
+		Field *fakeRowIDField; //! used to mark a place for ROWID
+		QueryColumnInfo *fakeRowIDCol; //! used to mark a place for ROWID
+
 	protected:
 		void tryRegenerateExprAliases()
 		{
@@ -202,6 +228,17 @@ class QuerySchemaPrivate
 		/*! Temporary field vector for using in fieldsExpanded() */
 //		Field::Vector *fieldsExpanded;
 		QueryColumnInfo::Vector *fieldsExpanded;
+
+		/*! Temporary field vector containing internal fields used for lookup columns. */
+		QueryColumnInfo::Vector *internalFields;
+
+		/*! Temporary, used to cache sum of expanded fields and internal fields used for lookup columns. 
+		 Contains not auto-deleted items.*/
+		QueryColumnInfo::Vector *fieldsExpandedWithInternal;
+
+		/*! Temporary, used to cache sum of expanded fields and internal fields (+rowid) used for lookup columns. 
+		 Contains not auto-deleted items.*/
+		QueryColumnInfo::Vector *fieldsExpandedWithInternalAndRowID;
 
 		/*! A list of fields for ORDER BY section. @see QuerySchema::orderByColumnList(). */
 		QueryColumnInfo::Vector *orderByColumnList;
@@ -801,12 +838,45 @@ QueryColumnInfo* QuerySchema::columnInfo(const QString& name)
 	return d->columnInfosByName[name];
 }
 
-QueryColumnInfo::Vector QuerySchema::fieldsExpanded(bool unique)
+QueryColumnInfo::Vector QuerySchema::fieldsExpanded(FieldsExpandedOptions options)
 {
 	computeFieldsExpanded();
-	if (!unique)
+	if (options == WithInternalFields || options == WithInternalFieldsAndRowID) {
+		//a ref to a proper pointer (as we cache the vector for two cases)
+		QueryColumnInfo::Vector*& tmpFieldsExpandedWithInternal = 
+			(options == WithInternalFields) ? d->fieldsExpandedWithInternal : d->fieldsExpandedWithInternalAndRowID;
+		//special case
+		if (!tmpFieldsExpandedWithInternal) {
+			//glue expanded and internal fields and cache it
+			const uint size = d->fieldsExpanded->count()
+				+ (d->internalFields ? d->internalFields->count() : 0)
+				+ ((options == WithInternalFieldsAndRowID) ? 1 : 0) /*ROWID*/;
+			tmpFieldsExpandedWithInternal = new QueryColumnInfo::Vector( size );
+			const uint fieldsExpandedVectorSize = d->fieldsExpanded->size();
+			for (uint i=0; i<fieldsExpandedVectorSize; i++)
+				tmpFieldsExpandedWithInternal->insert(i, d->fieldsExpanded->at(i));
+			const uint internalFieldsCount = d->internalFields ? d->internalFields->size() : 0;
+			if (internalFieldsCount > 0) {
+				for (uint i=0; i < internalFieldsCount; i++)
+					tmpFieldsExpandedWithInternal->insert(
+						fieldsExpandedVectorSize + i, d->internalFields->at(i));
+			}
+			if (options == WithInternalFieldsAndRowID) {
+				if (!d->fakeRowIDField) {
+					d->fakeRowIDField = new Field("rowID", Field::BigInteger);
+					d->fakeRowIDCol = new QueryColumnInfo(d->fakeRowIDField, Q3CString(), true);
+				}
+				tmpFieldsExpandedWithInternal->insert( 
+					fieldsExpandedVectorSize + internalFieldsCount, d->fakeRowIDCol );
+			}
+		}
+		return *tmpFieldsExpandedWithInternal;
+	}
+
+	if (options == Default)
 		return *d->fieldsExpanded;
 
+	//options == Unique:
 	Q3Dict<char> columnsAlreadyFound;
 	QueryColumnInfo::Vector result( d->fieldsExpanded->count() ); //initial size is set
 //	QMapConstIterator<QueryColumnInfo*, bool> columnsAlreadyFoundIt;
@@ -825,6 +895,18 @@ QueryColumnInfo::Vector QuerySchema::fieldsExpanded(bool unique)
 	return result;
 }
 
+QueryColumnInfo::Vector QuerySchema::internalFields()
+{
+	computeFieldsExpanded();
+	return d->internalFields ? *d->internalFields : QueryColumnInfo::Vector();
+}
+
+QueryColumnInfo* QuerySchema::expandedOrInternalField(uint index)
+{
+	QueryColumnInfo::Vector vector = fieldsExpanded(WithInternalFields);
+	return (index < vector.size()) ? vector[index] : 0;
+}
+
 void QuerySchema::computeFieldsExpanded()
 {
 	if (d->fieldsExpanded) {
@@ -833,17 +915,13 @@ void QuerySchema::computeFieldsExpanded()
 		return;
 	}
 
-//	if (detailedVisibility)
-//		detailedVisibility->clear();
-
-//	d->detailedVisibility.clear();
-//	m_fields_by_name.clear();
-
 	//collect all fields in a list (not a vector yet, because we do not know its size)
-	QueryColumnInfo::List list;
-	int i = 0;
-	int fieldPosition = 0;
-	for (Field *f = m_fields.first(); f; f = m_fields.next(), fieldPosition++) {
+	QueryColumnInfo::List list; //temporary
+	QueryColumnInfo::List lookup_list; //temporary, for collecting additional fields related to lookup fields
+	uint i = 0;
+	uint fieldPosition = 0;
+	Field *f;
+	for (Field::ListIterator it = fieldsIterator(); (f = it.current()); ++it, fieldPosition++) {
 		if (f->isQueryAsterisk()) {
 			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) {
 				Field::List *ast_fields = static_cast<QueryAsterisk*>(f)->table()->fields();
@@ -855,7 +933,7 @@ void QuerySchema::computeFieldsExpanded()
 //					list.append(ast_f);
 				}
 			}
-			else {//all-tables asterisk: itereate through table list
+			else {//all-tables asterisk: iterate through table list
 				for (TableSchema *table = d->tables.first(); table; table = d->tables.next()) {
 					//add all fields from this table
 					Field::List *tab_fields = table->fields();
@@ -873,9 +951,39 @@ void QuerySchema::computeFieldsExpanded()
 		else {
 			//a single field
 //			d->detailedVisibility += isFieldVisible(fieldPosition);
-			list.append(
-				new QueryColumnInfo(f, columnAlias(fieldPosition), isColumnVisible(fieldPosition)) );
-//			list.append(f);
+			QueryColumnInfo *ci = new QueryColumnInfo(f, columnAlias(fieldPosition), isColumnVisible(fieldPosition));
+			list.append( ci );
+
+			//handle lookup field schema
+			LookupFieldSchema *lookupFieldSchema = f->table()->lookupFieldSchema( *f );
+			if (lookupFieldSchema) {
+				// Lookup field schema found:
+				// Now we also need to fetch "visible" value from the lookup table, not only the value of binding.
+				// -> build LEFT OUTER JOIN clause for this purpose (LEFT, not INNER because the binding can be broken)
+				// "LEFT OUTER JOIN lookupTable ON thisTable.thisField=lookupTable.boundField"
+				if (lookupFieldSchema->rowSourceType()==LookupFieldSchema::Table) {
+					TableSchema *lookupTable = connection()->tableSchema( lookupFieldSchema->rowSource() );
+					Field *visibleField = 0;
+					Field *boundField = 0;
+					if (lookupTable && lookupFieldSchema->boundColumn()>=0 
+						&& (uint)lookupFieldSchema->boundColumn() < lookupTable->fieldCount()
+						&& (visibleField = lookupTable->field( lookupFieldSchema->visibleColumn()))
+						&& (boundField = lookupTable->field( lookupFieldSchema->boundColumn() )))
+					{
+						lookup_list.append( new QueryColumnInfo(visibleField, Q3CString(), true/*visible*/) );
+/*
+						//add visibleField to the list of SELECTed fields if it is not yes present there
+						if (!findTableField( visibleField->table()->name()+"."+visibleField->name() )) {
+							if (!table( visibleField->table()->name() )) {
+							}
+							if (!sql.isEmpty())
+								sql += QString::fromLatin1(", ");
+							sql += (escapeIdentifier(visibleField->table()->name(), drvEscaping) + "."
+								+ escapeIdentifier(visibleField->name(), drvEscaping));
+						}*/
+					}
+				}
+			}
 		}
 	}
 	//prepare clean vector for expanded list, and a map for order information
@@ -890,17 +998,17 @@ void QuerySchema::computeFieldsExpanded()
 		d->fieldsOrder->clear();
 	}
 
-	/*fill:
+	/*fill (based on prepared 'list' and 'lookup_list'):
 	 -the vector
 	 -the map
 	 -"fields by name" dictionary
 	*/
 	d->columnInfosByName.clear();
-	QueryColumnInfo::ListIterator it(list);
-	for (i=0; it.current(); ++it, i++)
+	i=0;
+	for (QueryColumnInfo::ListIterator it(list); it.current(); ++it, i++) 
 	{
-		d->fieldsExpanded->insert(i,it.current());
-		d->fieldsOrder->insert(it.current(),i);
+		d->fieldsExpanded->insert(i, it.current());
+		d->fieldsOrder->insert(it.current(), i);
 		//remember field by name/alias/table.name if there's no such string yet in d->columnInfosByName
 		if (!it.current()->alias.isEmpty()) {
 			//alias
@@ -916,6 +1024,67 @@ void QuerySchema::computeFieldsExpanded()
 				d->columnInfosByName.insert( tableAndName, it.current() );
 		}
 	}
+
+	//remove duplicates for lookup fields
+	QDict<uint> lookup_dict; //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue
+	                         // (a mapping from table.name string to uint* lookupFieldIndex
+	lookup_dict.setAutoDelete(true);
+	i=0;
+	for (QueryColumnInfo::ListIterator it(lookup_list); it.current();)
+	{
+		QString tableAndFieldName( it.current()->field->table()->name()+"."+it.current()->field->name() );
+		if ( columnInfo( tableAndFieldName )
+			|| lookup_dict[tableAndFieldName] ) {
+			// this table.field is already fetched by this query
+			lookup_list.removeRef( it.current() );
+		}
+		else {
+			lookup_dict.replace( tableAndFieldName, new uint( i ) );
+			++it;
+			i++;
+		}
+	}
+	//create internal expanded list with lookup fields
+	if (d->internalFields) {
+		d->internalFields->clear();
+		d->internalFields->resize( lookup_list.count() );
+	}
+	delete d->fieldsExpandedWithInternal; //clear cache
+	delete d->fieldsExpandedWithInternalAndRowID; //clear cache
+	d->fieldsExpandedWithInternal = 0;
+	d->fieldsExpandedWithInternalAndRowID = 0;
+	i=0;
+	for (QueryColumnInfo::ListIterator it(lookup_list); it.current();i++, ++it)
+	{
+		//add it to the internal list
+		if (!d->internalFields) {//create on demand
+			d->internalFields = new QueryColumnInfo::Vector( lookup_list.count() );
+			d->internalFields->setAutoDelete(true);
+		}
+		d->internalFields->insert(i, it.current());
+		d->fieldsOrder->insert(it.current(), list.count()+i);
+	}
+	//update QueryColumnInfo::indexForVisibleLookupValue cache for columns
+	d->fieldsExpanded->count();
+	for (i=0; i < d->fieldsExpanded->size(); i++) {
+		QueryColumnInfo* ci = d->fieldsExpanded->at(i);
+//! @todo QuerySchema itself will also support lookup fields...
+		LookupFieldSchema *lookupFieldSchema = ci->field->table()->lookupFieldSchema( *ci->field );
+		if (lookupFieldSchema) {
+			TableSchema *lookupTable = connection()->tableSchema( lookupFieldSchema->rowSource() );
+			Field *visibleField = 0;
+			if (lookupTable && lookupFieldSchema->boundColumn()>=0 
+				&& (uint)lookupFieldSchema->boundColumn() < lookupTable->fieldCount()
+				&& (visibleField = lookupTable->field( lookupFieldSchema->visibleColumn())))
+			{
+				QString visibleTableAndFieldName( visibleField->table()->name()+"."+visibleField->name() );
+				uint *index = lookup_dict[ visibleTableAndFieldName ];
+				if (index)
+					ci->indexForVisibleLookupValue = d->fieldsExpanded->size() + *index;
+			}
+		}
+	}
+
 //	if (detailedVisibility)
 //		*detailedVisibility = d->detailedVisibility;
 }

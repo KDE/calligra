@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -129,13 +129,13 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 //#endif
 
 #ifdef SQLITE3
-	inline QVariant getValue(Field *f, int i, bool ROWID)
+	inline QVariant getValue(Field *f, int i)
 	{
 		int type = sqlite3_column_type(prepared_st_handle, i);
 		if (type==SQLITE_NULL) {
 			return QVariant();
 		}
-		else if ((!f && !ROWID) || type==SQLITE_TEXT) {
+		else if (!f || type==SQLITE_TEXT) {
 //TODO: support for UTF-16
 #define GET_sqlite3_column_text QString::fromUtf8( (const char*)sqlite3_column_text(prepared_st_handle, i) )
 			if (!f || f->isTextType())
@@ -160,7 +160,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 			}
 		}
 		else if (type==SQLITE_INTEGER) {
-			switch (f ? f->type() : Field::Integer /*ROWID*/) {
+			switch (f->type()) {
 			case Field::Byte:
 			case Field::ShortInteger:
 			case Field::Integer:
@@ -316,7 +316,7 @@ void SQLiteCursor::drv_getNextRecord()
 //      // -- just set a flag that we've a data not fetched but available
 //		d->rowDataReadyToFetch = true;
 #endif
-		m_fieldCount -= (m_containsROWIDInfo ? 1 : 0);
+		//(m_logicalFieldCount introduced) m_fieldCount -= (m_containsROWIDInfo ? 1 : 0);
 	} else {
 //#ifdef SQLITE3
 //		d->rowDataReadyToFetch = false;
@@ -431,10 +431,10 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 #ifdef SQLITE2
 	const char **col = d->curr_coldata;
 #endif
-	const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
-	data.resize(realCount);
+	//const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
+	data.resize(m_fieldCount);
 	if (!m_fieldsExpanded) {//simple version: without types
-		for( uint i=0; i<realCount; i++ ) {
+		for( uint i=0; i<m_fieldCount; i++ ) {
 #ifdef SQLITE2
 			data[i] = QVariant( *col );
 			col++;
@@ -445,18 +445,18 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 		return;
 	}
 
-	const uint fieldsExpandedCount = m_fieldsExpanded->count();
-	for( uint i=0, j=0; i<realCount; i++, j++ ) {
+	//const uint fieldsExpandedCount = m_fieldsExpanded->count();
+	for( uint i=0, j=0; i<m_fieldCount; i++, j++ ) {
 //		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
 //			j++;
-		while (j < fieldsExpandedCount && !m_fieldsExpanded->at(j)->visible)
+		while (j < m_fieldCount && !m_fieldsExpanded->at(j)->visible)
 			j++;
-		if (j >= (fieldsExpandedCount+(m_containsROWIDInfo ? 1 : 0))) {
+		if (j >= (m_fieldCount /*+(m_containsROWIDInfo ? 1 : 0)*/)) {
 			//ERR!
 			break;
 		}
-//		Field *f = m_fieldsExpanded->at(j);
-		Field *f = (m_containsROWIDInfo && i>=m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
+		//(m_logicalFieldCount introduced) Field *f = (m_containsROWIDInfo && i>=m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
+		Field *f = (i>=m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
 //		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
 
 #ifdef SQLITE2
@@ -502,14 +502,15 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 
 		col++;
 #else //SQLITE3
-		data[i] = d->getValue(f, i, !f /*!f means ROWID*/);
+		data[i] = d->getValue(f, i); //, !f /*!f means ROWID*/);
 #endif
 	}
 }
 
 QVariant SQLiteCursor::value(uint i)
 {
-	if (i > (m_fieldCount-1+(m_containsROWIDInfo?1:0))) //range checking
+//	if (i > (m_fieldCount-1+(m_containsROWIDInfo?1:0))) //range checking
+	if (i > (m_fieldCount-1)) //range checking
 		return QVariant();
 //TODO: allow disable range checking! - performance reasons
 //	const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
@@ -517,16 +518,17 @@ QVariant SQLiteCursor::value(uint i)
 		? m_fieldsExpanded->at(i)->field : 0;
 #ifdef SQLITE2
 	//from most to least frequently used types:
-	if (i==m_fieldCount || f && f->isIntegerType())
+//(m_logicalFieldCount introduced) 	if (i==m_fieldCount || f && f->isIntegerType())
+	if (!f || f->isIntegerType())
 		return QVariant( Q3CString(d->curr_coldata[i]).toInt() );
-	if (!f || f->isTextType())
+	else if (!f || f->isTextType())
 		return QVariant( d->curr_coldata[i] );
 	else if (f->isFPNumericType())
 		return QVariant( Q3CString(d->curr_coldata[i]).toDouble() );
 
 	return QVariant( d->curr_coldata[i] ); //default
 #else
-	return d->getValue(f, i, i==m_fieldCount/*ROWID*/);
+	return d->getValue(f, i); //, i==m_logicalFieldCount/*ROWID*/);
 #endif
 }
 

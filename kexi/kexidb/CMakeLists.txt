@@ -43,6 +43,7 @@ set(kexidb_LIB_SRCS
    preparedstatement.cpp 
    dbproperties.cpp 
    admin.cpp 
+   lookupfieldschema.cpp 
 #temp. disabled   alter.cpp
 )
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,12 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/tableschema.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
+#include "tableschema.h"
+#include "driver.h"
+#include "connection.h"
+#include "lookupfieldschema.h"
 
 #include <assert.h>
-
 #include <kdebug.h>
 
 namespace KexiDB {
@@ -33,10 +33,13 @@ class TableSchema::Private
 public:
 	Private()
 	 : anyNonPKField(0)
+	 , lookupFields(101)
 	{
+		lookupFields.setAutoDelete(true);
 	}
 
 	Field *anyNonPKField;
+	QPtrDict<LookupFieldSchema> lookupFields;
 };
 }
 //-------------------------------------
@@ -196,6 +199,7 @@ void TableSchema::removeField(KexiDB::Field *field)
 {
 	if (d->anyNonPKField && field == d->anyNonPKField) //d->anyNonPKField will be removed!
 		d->anyNonPKField = 0;
+	d->lookupFields.remove(field);
 	FieldList::removeField(field);
 }
 
@@ -239,6 +243,7 @@ KexiDB::FieldList& TableSchema::addField(KexiDB::Field* field)
 void TableSchema::clear()
 {
 	m_indices.clear();
+	d->lookupFields.clear();
 	FieldList::clear();
 	SchemaData::clear();
 	m_conn = 0;
@@ -292,7 +297,15 @@ unsigned int TableSchema::fieldCount() const
 
 QString TableSchema::debugString()
 {
-	return QString("TABLE ") + schemaDataDebugString() + "\n" + FieldList::debugString();
+	QString s = QString("TABLE ") + schemaDataDebugString() + "\n" + FieldList::debugString();
+
+	Field *f;
+	for (Field::ListIterator it(m_fields); (f = it.current()); ++it) {
+		LookupFieldSchema *lookupSchema = lookupFieldSchema( *f );
+		if (lookupSchema)
+			s.append( lookupSchema->debugString() );
+	}
+	return s;
 }
 
 Connection* TableSchema::connection() const
@@ -310,7 +323,7 @@ void TableSchema::setKexiDBSystem(bool set)
 void TableSchema::setNative(bool set)
 {
 	if (m_isKexiDBSystem && !set) {
-		KexiDBDbg << "TableSchema::setNative(): cannot set native off"
+		KexiDBWarn << "TableSchema::setNative(): cannot set native off"
 			" when KexiDB system flag is set on!" << endl;
 		return;
 	}
@@ -338,6 +351,33 @@ Field* TableSchema::anyNonPKField()
 		d->anyNonPKField = f;
 	}
 	return d->anyNonPKField;
+}
+
+void TableSchema::setLookupFieldSchema( const QString& fieldName, LookupFieldSchema *lookupFieldSchema )
+{
+	Field *f = field(fieldName);
+	if (!f) {
+		KexiDBWarn << "TableSchema::setLookupFieldSchema(): no such field '" << fieldName 
+			<< "' in table " << name() << endl;
+		return;
+	}
+	if (lookupFieldSchema)
+		d->lookupFields.replace( f, lookupFieldSchema );
+	else
+		d->lookupFields.remove( f );
+}
+
+LookupFieldSchema *TableSchema::lookupFieldSchema( Field& field ) const
+{
+	return d->lookupFields.find( &field );
+}
+
+LookupFieldSchema *TableSchema::lookupFieldSchema( const QString& fieldName )
+{
+	Field *f = TableSchema::field(fieldName);
+	if (!f)
+		return 0;
+	return lookupFieldSchema( *f );
 }
 
 //--------------------------------------

@@ -24,6 +24,8 @@
 
 #include "kexitableitem.h"
 
+#include <kdebug.h>
+
 KexiTableItem::KexiTableItem(int numCols)
 : KexiTableItemBase(numCols)
 {
@@ -50,3 +52,11 @@ KexiTableItem::clearValues()
 	init(count());
 }
 
+void
+KexiTableItem::debug() const
+{
+	QString s = QString("KexiTableItem (%1 items)").arg(size());
+	for (uint i = 0; i < size(); i++)
+		s.append( QString::number(i)+":"+at(i).toString()+" " );
+	kexidbg << s << endl;
+}

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,7 +60,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		 so you shouldn't care about destroying this field. */
 		KexiTableViewColumn(KexiDB::Field& f, bool owner = false);
 
-		/*! Convenience ctor, like above. The field is created using specifed parameters that are 
+		/*! Not db-aware, convenience ctor, like above. The field is created using specifed parameters that are 
 		 equal to these accepted by KexiDB::Field ctor. The column will be the owner 
 		 of this automatically generated field.
 		 */
@@ -73,12 +73,13 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 			const QString& description = QString::null,
 			uint width = 0);
 
-		/*! Convenience ctor, simplified version of the above. */
+		/*! Not db-aware, convenience ctor, simplified version of the above. */
 		KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
 			const QString& description = QString::null);
 
 		//! Db-aware version.
-		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& fi);
+		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& aColumnInfo,
+			KexiDB::QueryColumnInfo* aVisibleLookupColumnInfo = 0);
 
 		virtual ~KexiTableViewColumn();
 
@@ -94,11 +95,14 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		inline void setReadOnly(bool ro) { m_readOnly=ro; }
 
 		//! Column visibility. By default column is visible.
-		inline bool visible() const { return fieldinfo ? fieldinfo->visible : m_visible; }
+		inline bool visible() const { return columnInfo ? columnInfo->visible : m_visible; }
 
 		//! Changes column visibility.
-		inline void setVisible(bool v) { if (fieldinfo) fieldinfo->visible=v;
-			m_visible=v; }
+		inline void setVisible(bool v) {
+			if (columnInfo)
+				columnInfo->visible = v;
+			m_visible=v; 
+		}
 
 		/*! \return whatever is available: 
 		 - field's caption
@@ -129,7 +133,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		inline KexiTableViewData *relatedData() const { return m_relatedData; }
 
 		/*! \return field for this column. 
-		 For db-aware information is taken from \a fieldinfo member. */
+		 For db-aware information is taken from \a columnInfo member. */
 		inline KexiDB::Field* field() const { return m_field; }
 
 		/*! Only usable if related data is set (ie. this is for combo boxes).
@@ -143,8 +147,15 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		inline bool relatedDataEditable() const { return m_relatedDataEditable; }
 
 		/*! A rich field information for db-aware data. 
-		 For not-db-aware data it is always 0 (use field() instead. */
-		KexiDB::QueryColumnInfo* fieldinfo;
+		 For not-db-aware data it is always 0 (use field() instead). */
+		KexiDB::QueryColumnInfo* columnInfo;
+
+		/*! A rich field information for db-aware data. Specifies information for a column
+		 that should be visible instead of columnInfo. For example case see 
+		 @ref KexiDB::QueryColumnInfo::Vector KexiDB::QuerySchema::fieldsExpanded(KexiDB::QuerySchema::FieldsExpandedOptions options = Default)
+
+		 For not-db-aware data it is always 0. */
+		KexiDB::QueryColumnInfo* visibleLookupColumnInfo;
 
 		bool isDBAware : 1; //!< true if data is stored in DB, not only in memeory
 
@@ -302,10 +313,13 @@ public:
 	 if the buffer is of simple type, or db-aware buffer if (isDBAware()==true).
 	 (then fields are addressed with KexiDB::Field, instead of caption strings).
 	 If \a allowSignals is true (the default), aboutToChangeCell() signal is emitted.
+	 \a visibleValueForLookupField allows to pass visible value (usually a text)
+	 for a lookup field (only reasonable if col->visibleLookupColumnInfo != 0).
 	 Note that \a newval may be changed in aboutToChangeCell() signal handler.
 	 \sa KexiDB::RowEditBuffer */
 	bool updateRowEditBufferRef(KexiTableItem *item, 
-		int colnum, KexiTableViewColumn* col, QVariant& newval, bool allowSignals = true);
+		int colnum, KexiTableViewColumn* col, QVariant& newval, bool allowSignals = true,
+		QVariant *visibleValueForLookupField = 0);
 
 	/*! Added for convenience. Like above but \a newval is passed by value. */
 	inline bool updateRowEditBuffer(KexiTableItem *item, int colnum, KexiTableViewColumn* col, 

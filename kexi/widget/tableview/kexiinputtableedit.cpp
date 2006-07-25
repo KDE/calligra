@@ -79,13 +79,14 @@ void KexiInputTableEdit::init()
 {
 	kDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
 	kDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
+	kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName() << endl;
 
 	//init settings
 	m_decsym = KGlobal::locale()->decimalSymbol();
 	if (m_decsym.isEmpty())
 		m_decsym=".";//default
 
-	const bool align_right = field()->isNumericType();
+	const bool align_right = displayedField()->isNumericType();
 
 	if (!align_right) {
 		//create layer for internal editor

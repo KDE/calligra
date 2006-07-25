@@ -29,7 +29,7 @@
 #include "kexiproject.h"
 #include "kexipartinfo.h"
 #include "widget/kexidatatable.h"
-#include "widget/kexidatatableview.h"
+#include "widget/tableview/kexidatatableview.h"
 #include "kexitabledesignerview.h"
 #include "kexitabledesigner_dataview.h"
 

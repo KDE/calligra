@@ -290,7 +290,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 (on open) within a project made with previous Kexi version not supporting 
 		 all currently defined structurtes. We're trying to be here as much backward compatible as possible.
 		 For this purpose, here's the complete list of currently created objects:
-		 - "kexi__blobs" - a table containing BLOBs data taht can be accessed globally at Kexi projects
+		 - "kexi__blobs" - a table containing BLOBs data that can be accessed globally at Kexi projects
 		   from within any database-aware view (table views, forms, reports, etc.)
 		 
 		 @param insideTransaction Embed entire creation process inside a transaction

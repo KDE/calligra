@@ -94,8 +94,8 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, Q3ScrollView *
 	d->parentRightMargin = m_rightMargin;
 
 	d->popup = new KexiImageContextMenu(this);
-	if (column.fieldinfo)
-		KexiImageContextMenu::updateTitle( d->popup, column.fieldinfo->captionOrAliasOrName(),
+	if (column.columnInfo)
+		KexiImageContextMenu::updateTitle( d->popup, column.columnInfo->captionOrAliasOrName(),
 //! @todo pixmaplabel icon is hardcoded...
 			"pixmaplabel" );
 	d->button->setPopup( d->popup );
