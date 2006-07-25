@@ -52,6 +52,7 @@ class KexiDBForm::Private
 		 : dataAwareObject(0)
 		 , orderedFocusWidgetsIterator(orderedFocusWidgets)
 		 , autoTabStops(false)
+		 , popupFocused(false)
 		{
 		}
 		KexiDataAwareObjectInterface* dataAwareObject;
@@ -63,7 +64,9 @@ class KexiDBForm::Private
 		Q3PtrListIterator<QWidget> orderedFocusWidgetsIterator;
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle
+//		QGuardedPtr<QWidget> widgetFocusedBeforePopup;
 		bool autoTabStops : 1;
+		bool popupFocused : 1; //!< used in KexiDBForm::eventFilter()
 };
 
 //========================
@@ -372,6 +375,8 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					break;
 				if (dynamic_cast<KexiFormDataItemInterface*>(o)) {
 					realWidget = dynamic_cast<QWidget*>(o); //will beused below (for tab/backtab handling)
+					if (realWidget == this) //we have ancountered 'this' form surface, give up
+						return false;
 					if (dynamic_cast<KexiFormDataItemInterface*>(o)->keyPressed(ke))
 						return false;
 					break;
@@ -458,7 +463,18 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 		}
 	}
 	else if (e->type()==QEvent::FocusIn) {
-		if (preview()) {
+		bool focusDataWidget = preview();
+		if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup) {
+			kdDebug() << "->>> focus IN, popup" <<endl;
+			focusDataWidget = !d->popupFocused;
+			d->popupFocused = false;
+//			if (d->widgetFocusedBeforePopup) {
+//				watched = d->widgetFocusedBeforePopup;
+//				d->widgetFocusedBeforePopup = 0;
+//			}
+		}
+
+		if (focusDataWidget) {
 			kexipluginsdbg << "KexiDBForm: FocusIn: " << watched->className() << " " << watched->name() << endl;
 			if (d->dataAwareObject) {
 				QWidget *dataItem = dynamic_cast<QWidget*>(watched);
@@ -484,6 +500,15 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 				}
 			}
 		}
+	}
+	else if (e->type()==QEvent::FocusOut) {
+		if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup) {
+			//d->widgetFocusedBeforePopup = (QWidget*)watched;
+			d->popupFocused = true;
+		}
+		else
+			d->popupFocused = false;
+//			d->widgetFocusedBeforePopup = 0;
 	}
 	return KexiDBFormBase::eventFilter(watched, e);
 }

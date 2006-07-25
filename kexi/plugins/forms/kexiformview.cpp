@@ -956,10 +956,11 @@ KexiFormView::setFocusInternal()
 		if (m_dbform->focusWidget()) {
 			//better-looking focus
 			if (m_setFocusInternalOnce) {
-				SET_FOCUS_USING_REASON(m_setFocusInternalOnce, QFocusEvent::Tab);
+				SET_FOCUS_USING_REASON(m_setFocusInternalOnce, QFocusEvent::Other);//Tab);
+				m_setFocusInternalOnce = 0;
 			}
 			else {
-				SET_FOCUS_USING_REASON(m_dbform->focusWidget(), QFocusEvent::Tab);
+				//ok? SET_FOCUS_USING_REASON(m_dbform->focusWidget(), QFocusEvent::Other);//Tab);
 			}
 			return;
 		}
