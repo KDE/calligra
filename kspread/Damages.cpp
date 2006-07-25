@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+             2004 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,13 +31,14 @@ class SheetDamage::Private
 {
 public:
   KSpread::Sheet* sheet;
-  int action;
+  Changes changes;
 };
 
 class CellDamage::Private
 {
 public:
   KSpread::Cell* cell;
+  Changes changes;
 };
 
 }
@@ -44,10 +46,11 @@ public:
 using namespace KSpread;
 
 
-CellDamage::CellDamage( KSpread::Cell* cell )
+CellDamage::CellDamage( KSpread::Cell* cell, Changes changes )
+  : d( new Private )
 {
-  d = new Private;
   d->cell = cell;
+  d->changes = changes;
 }
 
 CellDamage::~CellDamage()
@@ -55,16 +58,22 @@ CellDamage::~CellDamage()
   delete d;
 }
 
-KSpread::Cell* CellDamage::cell()
+KSpread::Cell* CellDamage::cell() const
 {
   return d->cell;
 }
 
-SheetDamage::SheetDamage( KSpread::Sheet* sheet, int action )
+CellDamage::Changes CellDamage::changes() const
 {
-  d = new Private;
+  return d->changes;
+}
+
+
+SheetDamage::SheetDamage( KSpread::Sheet* sheet, Changes changes )
+  : d( new Private )
+{
   d->sheet = sheet;
-  d->action = action;
+  d->changes = changes;
 }
 
 SheetDamage::~SheetDamage()
@@ -77,7 +86,7 @@ KSpread::Sheet* SheetDamage::sheet() const
   return d->sheet;
 }
 
-int SheetDamage::action() const
+SheetDamage::Changes SheetDamage::changes() const
 {
-  return d->action;
+  return d->changes;
 }

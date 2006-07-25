@@ -103,6 +103,7 @@
 // KSpread includes
 #include "Commands.h"
 #include "Damages.h"
+#include "DependencyManager.h"
 #include "Digest.h"
 #include "inspector.h"
 #include "Ksploadinginfo.h"
@@ -7178,44 +7179,75 @@ void View::saveCurrentSheetSelection()
 
 void View::handleDamages( const QList<Damage*>& damages )
 {
-    QList<Damage*>::ConstIterator it;
-    for( it = damages.begin(); it != damages.end(); ++it )
+    bool refreshView = false;
+    Region formulaChangedRegion;
+    Region layoutChangedRegion;
+    Region textFormatChagedRegion;
+    Region valueChangedRegion;
+
+    QList<Damage*>::ConstIterator end(damages.end());
+    for( QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it )
     {
         Damage* damage = *it;
         if( !damage ) continue;
 
         if( damage->type() == Damage::Cell )
         {
-            CellDamage* cd = static_cast<CellDamage*>( damage );
-            Cell* damagedCell = cd->cell();
+            CellDamage* cellDamage = static_cast<CellDamage*>( damage );
+            Cell* damagedCell = cellDamage->cell();
             Sheet* damagedSheet = damagedCell->sheet();
-            QRect drect( damagedCell->column(), damagedCell->row(), 1, 1 );
-            damagedSheet->setRegionPaintDirty( drect );
-            paintUpdates();
+            const QPoint position( damagedCell->column(), damagedCell->row() );
+
+            if ( cellDamage->changes() & CellDamage::Appearance )
+            {
+                damagedSheet->setRegionPaintDirty( position );
+            }
+            if ( cellDamage->changes() & CellDamage::Formula )
+            {
+                formulaChangedRegion.add( position, damagedSheet );
+            }
+            if ( cellDamage->changes() & CellDamage::Layout )
+            {
+                layoutChangedRegion.add( position, damagedSheet );
+            }
+            if ( cellDamage->changes() & CellDamage::TextFormat )
+            {
+                textFormatChagedRegion.add( position, damagedSheet );
+            }
+            if ( cellDamage->changes() & CellDamage::Value )
+            {
+                valueChangedRegion.add( position, damagedSheet );
+            }
         }
 
         if( damage->type() == Damage::Sheet )
         {
-            SheetDamage* sd = static_cast<SheetDamage*>( damage );
-            Sheet* damagedSheet = sd->sheet();
+            SheetDamage* sheetDamage = static_cast<SheetDamage*>( damage );
+            Sheet* damagedSheet = sheetDamage->sheet();
 
-            if( sd->action() == SheetDamage::PropertiesChanged )
+            if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
             {
                 foreach ( CellBinding* binding, damagedSheet->cellBindings() )
                 {
                      binding->cellChanged( 0 );
                 }
 
-                d->activeSheet->setRegionPaintDirty( QRect(QPoint(1,1),
-                    QPoint(KS_colMax, KS_rowMax)));
-
-                paintUpdates();
-                refreshView();
+                d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
+                refreshView = true;
             }
-
         }
-
     }
+
+    // First, update the dependencies.
+    doc()->map()->dependencyManager()->regionChanged( formulaChangedRegion );
+    // Tell the RecalcManager which cells have had a value change.
+    doc()->map()->recalcManager()->regionChanged( valueChangedRegion );
+    // TODO Stefan: handle text format changes
+    // TODO Stefan: handle layout changes
+    // At last repaint the dirty cells.
+    canvas()->update();
+    if ( refreshView )
+        this->refreshView();
 }
 
 void View::runInternalTests()

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+             2004 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,8 @@
 
 #ifndef KSPREAD_DAMAGES
 #define KSPREAD_DAMAGES
+
+#include "QFlags"
 
 namespace KSpread
 {
@@ -46,25 +49,38 @@ class Damage
 class CellDamage : public Damage
 {
   public:
+    enum Change
+    {
+      Appearance,
+      Formula,
+      Layout,
+      TextFormat,
+      Value
+    };
+    Q_DECLARE_FLAGS( Changes, Change )
 
-    CellDamage( KSpread::Cell* cell );
+    CellDamage( KSpread::Cell* cell, Changes changes );
 
     virtual ~CellDamage();
 
     virtual Type type() const { return Damage::Cell; }
 
-    KSpread::Cell* cell();
+    KSpread::Cell* cell() const;
+
+    Changes changes() const;
 
   private:
     class Private;
-    Private *d;
+    Private * const d;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS( CellDamage::Changes )
+
 
 class SheetDamage : public Damage
 {
   public:
 
-    enum
+    enum Change
     {
       None = 0,
       ContentChanged,
@@ -72,8 +88,9 @@ class SheetDamage : public Damage
       Hidden,
       Shown
     };
+    Q_DECLARE_FLAGS( Changes, Change )
 
-    SheetDamage( KSpread::Sheet* sheet, int action );
+    SheetDamage( KSpread::Sheet* sheet, Changes changes );
 
     virtual ~SheetDamage();
 
@@ -81,12 +98,13 @@ class SheetDamage : public Damage
 
     KSpread::Sheet* sheet() const;
 
-    int action() const;
+    Changes changes() const;
 
   private:
     class Private;
-    Private *d;
+    Private * const d;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS( SheetDamage::Changes )
 
 
 } // namespace KSpread

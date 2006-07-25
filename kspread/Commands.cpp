@@ -557,7 +557,7 @@ void LinkCommand::execute()
     cell->setCellText( newText );
   cell->setLink( newLink  );
 
-  doc->addDamage( new CellDamage( cell ) );
+  doc->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
 }
 
 void LinkCommand::unexecute()
@@ -567,7 +567,7 @@ void LinkCommand::unexecute()
   cell->setCellText( oldText );
   cell->setLink( oldLink );
 
-  doc->addDamage( new CellDamage( cell ) );
+  doc->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
 }
 
 QString LinkCommand::name() const
