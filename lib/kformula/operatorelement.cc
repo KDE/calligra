@@ -22,6 +22,7 @@
 #include "elementtype.h"
 #include "sequenceelement.h"
 #include "textelement.h"
+#include "fontstyle.h"
 #include "operatorelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -33,13 +34,13 @@ int OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QD
     if ( n.isEntityReference() ) {
         QString entity = n.toEntityReference().nodeName();
         if ( entity == "ApplyFunction" ) {
-            textelements = QChar(0x2601);
+            textelements = applyFunctionChar;
         }
         else if ( entity == "InvisibleTimes" ) {
-            textelements = QChar(0x2602);
+            textelements = invisibleTimes;
         }
         else if ( entity == "InvisibleComma" ) {
-            textelements = QChar(0x2603);
+            textelements = invisibleComma;
         }
         else if ( entity == "CapitalDifferentialD" ) {
             textelements = QChar(0x2145);
@@ -52,6 +53,18 @@ int OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QD
         }
         else if ( entity == "ImaginaryI" ) {
             textelements = QChar(0x2148);
+        }
+        else if ( entity.lower() == "sum" ) {
+            textelements = QChar(0x2211);
+        }
+        else if ( entity == "int" || entity == "Integral" ) {
+            textelements = QChar(0x222B);
+        }
+        else if ( entity == "Int" ) {
+            textelements = QChar(0x222C);
+        }
+        else if ( entity == "prod" || entity == "Product" ) {
+            textelements = QChar(0x0220F);
         }
         else {
             kdWarning() << "Unknown entity " << entity << endl;
