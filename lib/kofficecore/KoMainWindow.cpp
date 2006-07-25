@@ -918,9 +918,6 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
                     // always restore output format
                     pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
                 }
-
-                if (silent) // don't let the document change the window caption
-                  pDoc->setTitleModified();
             }   // if (wantToSave)
             else
                 ret = false;
