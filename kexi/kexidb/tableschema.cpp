@@ -26,6 +26,8 @@
 #include <assert.h>
 #include <kdebug.h>
 
+#include <q3ptrdict.h>
+
 namespace KexiDB {
 //! @internal
 class TableSchema::Private
@@ -39,7 +41,7 @@ public:
 	}
 
 	Field *anyNonPKField;
-	QPtrDict<LookupFieldSchema> lookupFields;
+	Q3PtrDict<LookupFieldSchema> lookupFields;
 };
 }
 //-------------------------------------

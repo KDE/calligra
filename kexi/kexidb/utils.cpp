@@ -33,6 +33,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kprogressbar.h>
 
 #include "utils_p.h"
 

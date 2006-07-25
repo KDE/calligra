@@ -20,7 +20,7 @@
 #ifndef KEXIDB_LOOKUPFIELDSCHEMA_H
 #define KEXIDB_LOOKUPFIELDSCHEMA_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
 
 class QDomElement;

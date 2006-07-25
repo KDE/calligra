@@ -22,6 +22,8 @@
 
 #include <qdom.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 using namespace KexiDB;
@@ -64,7 +66,9 @@ QString LookupFieldSchema::debugString() const
 	}
 	QString columnWidthsStr;
 	bool first=true;
-	foreach (Q3ValueList<int>::ConstIterator, it, m_columnWidths) {
+	for (Q3ValueList<int>::ConstIterator it=m_columnWidths.constBegin();
+		it!=m_columnWidths.constEnd();++it)
+	{
 		if (first)
 			first = false;
 		else

@@ -13,7 +13,9 @@ set(kexiguiutils_LIB_SRCS
    kexidisplayutils.cpp 
    kexiflowlayout.cpp
    kexidatetimeformatter.cpp
-   kexiarrowtip.cpp )
+   kexiarrowtip.cpp
+   kexiimagecontextmenu.cpp
+)
 
 kde4_automoc(${kexiguiutils_LIB_SRCS})
 

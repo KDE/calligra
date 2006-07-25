@@ -388,7 +388,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 			<<"' must contain table information!" <<endl;
 		return *this;
 	}
-	if (fieldCount()>=d->visibility.size()) {
+	if (fieldCount()>=(int)d->visibility.size()) {
 		d->visibility.resize(d->visibility.size()*2);
 		d->tablesBoundToColumns.resize(d->tablesBoundToColumns.size()*2);
 	}
@@ -445,7 +445,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 
 int QuerySchema::tableBoundToColumn(uint columnPosition) const
 {
-	if (columnPosition > d->tablesBoundToColumns.count()) {
+	if (columnPosition > (int)d->tablesBoundToColumns.count()) {
 		KexiDBWarn << "QuerySchema::tableBoundToColumn(): columnPosition (" << columnPosition
 			<< ") out of range" << endl;
 		return -1;
@@ -1026,7 +1026,7 @@ void QuerySchema::computeFieldsExpanded()
 	}
 
 	//remove duplicates for lookup fields
-	QDict<uint> lookup_dict; //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue
+	Q3Dict<uint> lookup_dict; //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue
 	                         // (a mapping from table.name string to uint* lookupFieldIndex
 	lookup_dict.setAutoDelete(true);
 	i=0;
