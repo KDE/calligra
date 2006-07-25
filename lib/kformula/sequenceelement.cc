@@ -1744,13 +1744,24 @@ void NameSequence::writeMathML( QDomDocument& doc, QDomNode& parent,bool oasisFo
 
 int SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
     while (!n.isNull()) {
-        int nodeNumber;
+        int nodeNumber = 1;
         if (n.isElement()) {
             QDomElement e = n.toElement();
             BasicElement* child = 0;
             QString tag = e.tagName().lower();
 
 			kdDebug( DEBUGID ) << "Sequence Tag: " << tag << endl;
+            if ( tag == "semantics" ) { // Special case, just pick the first child
+                QDomNode node = e.firstChild();
+                while( ! node.isElement() ) {
+                    node = node.nextSibling();
+                    if ( node.isNull() ) {
+                        return -1;
+                    }
+                }
+                e = node.toElement();
+                tag = e.tagName().lower();
+            }
             child = creationStrategy->createElement(tag, e);
             if (child != 0) {
                 child->setParent(this);
@@ -1767,7 +1778,7 @@ int SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QD
                 }
             }
             else {
-                return -1;
+                kdWarning() << "Unsupported MathML element: " << tag << endl;
             }
         }
         for (int i = 0; i < nodeNumber; i++ ) {
@@ -1794,32 +1805,35 @@ int SequenceElement::readContentFromMathMLDom(QDomNode& node)
 
 bool SequenceElement::buildMathMLChild( QDomNode node )
 {
-    if (node.isElement()) {
-        QDomElement e = node.toElement();
-        BasicElement* child = 0;
-        QString tag = e.tagName().lower();
-
-        child = creationStrategy->createElement(tag, e);
-        if (child != 0) {
-            child->setParent(this);
-            if (style != 0) {
-                child->setStyle(style);
-            }
-            if (child->buildFromMathMLDom(e) != -1) {
-                children.append(child);
-            }
-            else {
-                delete child;
-                return false;
-            }
-        }
-        else {
+    while ( ! node.isElement() ) {
+        node = node.nextSibling();
+        if ( node.isNull() ) {
             return false;
         }
-        parse();
-        return true;
     }
-    return false;
+    QDomElement e = node.toElement();
+    BasicElement* child = 0;
+    QString tag = e.tagName().lower();
+
+    child = creationStrategy->createElement(tag, e);
+    if (child != 0) {
+        child->setParent(this);
+        if (style != 0) {
+            child->setStyle(style);
+        }
+        if (child->buildFromMathMLDom(e) != -1) {
+            children.append(child);
+        }
+        else {
+            delete child;
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    parse();
+    return true;
 }
 
 
