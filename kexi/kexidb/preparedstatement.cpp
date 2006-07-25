@@ -104,7 +104,7 @@ QCString PreparedStatement::generateStatementString()
 		}
 		s.append(")");
 		s.prepend(QCString("INSERT INTO ") + table->name().latin1()
-			+ (allTableFieldsUsed ? "" : (" (" + namesList + ")"))
+			+ (allTableFieldsUsed ? QCString() : (" (" + namesList + ")"))
 			+ " VALUES (");
 	}
 	return s;
