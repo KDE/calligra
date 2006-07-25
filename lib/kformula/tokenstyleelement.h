@@ -124,7 +124,7 @@ protected:
     virtual void setStyleVariant( StyleAttributes& style );
 
     void setStyleColor( StyleAttributes& style );
-    void setStyleBackground( StyleAttributes& style );
+    virtual void setStyleBackground( StyleAttributes& style );
 
     double str2size( const QString& str, SizeType* st, uint index, SizeType type );
     double getSize( const QString& str, SizeType* st );

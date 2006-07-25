@@ -37,6 +37,8 @@ protected:
     virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
     virtual void writeMathMLAttributes( QDomElement& element );
 
+    virtual void setStyleBackground( StyleAttributes& style );
+
 private:
 
     void readSizeAttribute( const QString& str, SizeType* st, double* s );

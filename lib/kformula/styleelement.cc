@@ -157,6 +157,19 @@ void StyleElement::writeMathMLAttributes( QDomElement& element )
     inherited::writeMathMLAttributes( element );
 }
 
+void StyleElement::setStyleBackground( StyleAttributes& style )
+{
+    if ( customMathBackground() ) {
+        style.setBackground( mathBackground() );
+    }
+    else if ( m_customBackground ) {
+        style.setBackground( m_background );
+    }
+    else {
+        style.setBackground( style.background() );
+    }
+}
+
 void StyleElement::readSizeAttribute( const QString& str, SizeType* st, double* s )
 {
     if ( st == 0 || s == 0 ){
