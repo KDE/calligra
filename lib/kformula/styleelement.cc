@@ -133,6 +133,27 @@ void StyleElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisF
 
 void StyleElement::writeMathMLAttributes( QDomElement& element )
 {
+    if ( m_customScriptLevel ) {
+        element.setAttribute( "scriptlevel", QString( "%1" ).arg( m_scriptLevel ) );
+    }
+    if ( m_customDisplayStyle ) {
+        element.setAttribute( "displaystyle", m_displayStyle ? "true" : "false" );
+    }
+    if ( m_customScriptSizeMultiplier ) {
+        element.setAttribute( "scriptsizemultiplier", QString( "%1" ).arg( m_scriptSizeMultiplier ) );
+    }
+    writeSizeAttribute( element, "scriptminsize", m_scriptMinSizeType, m_scriptMinSize );
+    if ( m_customBackground ) {
+        element.setAttribute( "background", m_background.name() );
+    }
+    writeSizeAttribute( element, "veryverythinmathspace", m_veryVeryThinMathSpaceType, m_veryVeryThinMathSpace );
+    writeSizeAttribute( element, "verythinmathspace", m_veryThinMathSpaceType, m_veryThinMathSpace );
+    writeSizeAttribute( element, "thinmathspace", m_thinMathSpaceType, m_thinMathSpace );
+    writeSizeAttribute( element, "mediummathspace", m_mediumMathSpaceType, m_mediumMathSpace );
+    writeSizeAttribute( element, "thickmathspace", m_thickMathSpaceType, m_thickMathSpace );
+    writeSizeAttribute( element, "verythickmathspace", m_veryThickMathSpaceType, m_veryThickMathSpace );
+    writeSizeAttribute( element, "veryverythickmathspace", m_veryVeryThickMathSpaceType, m_veryVeryThickMathSpace );
+
     inherited::writeMathMLAttributes( element );
 }
 
@@ -156,7 +177,22 @@ void StyleElement::readSizeAttribute( const QString& str, SizeType* st, double* 
     else {
         *s = getSize( str, st );
     }
-
 }
+
+void StyleElement::writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s )
+{
+    switch ( st ) {
+    case AbsoluteSize:
+        element.setAttribute( str, QString( "%1pt" ).arg( s ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( str, QString( "%1%" ).arg( s * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( str, QString( "%3px" ).arg( s ) );
+        break;
+    }
+}
+
 
 KFORMULA_NAMESPACE_END

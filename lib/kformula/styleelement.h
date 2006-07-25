@@ -40,6 +40,8 @@ protected:
 private:
 
     void readSizeAttribute( const QString& str, SizeType* st, double* s );
+    void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );
+
     uint m_scriptLevel;
     SizeType m_scriptMinSizeType;
     double m_scriptSizeMultiplier;
