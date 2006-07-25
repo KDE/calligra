@@ -655,7 +655,7 @@ void RemoveObjectCommand::execute()
 //       doc()->emitBeginOperation( false );
 //       partManager()->setActivePart( koDocument(), this );
 //       partManager()->setSelectedPart( 0 );
-//       doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+//       doc()->emitEndOperation( d->canvas->visibleCells() );
 
   doc->embeddedObjects().removeAll( obj );
   if ( obj->getType() == OBJECT_CHART ||  obj->getType()== OBJECT_KOFFICE_PART)

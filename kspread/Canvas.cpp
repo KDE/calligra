@@ -691,7 +691,7 @@ void Canvas::slotScrollHorz( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
-  d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
+  d->view->doc()->emitEndOperation( visibleCells() );
 }
 
 void Canvas::slotScrollVert( int _value )
@@ -744,7 +744,7 @@ void Canvas::slotScrollVert( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
-  d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
+  d->view->doc()->emitEndOperation( visibleCells() );
 }
 
 void Canvas::slotMaxColumn( int _max_column )
@@ -2368,7 +2368,7 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
 
   if ( isObjectSelected() )
   {
-    d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
+    d->view->doc()->emitEndOperation( visibleCells() );
     d->view->deleteSelectedObjects();
     return;
   }
@@ -2871,7 +2871,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
 
   //most process*Key methods call emitEndOperation, this only gets called in some situations
   // (after some move operations)
-  d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
+  d->view->doc()->emitEndOperation( visibleCells() );
   return;
 }
 #if 0
@@ -4008,8 +4008,7 @@ QRect Canvas::cellsInArea( const QRect area ) const
 
 QRect Canvas::visibleCells() const
 {
-	return cellsInArea( QRect(0,0,width(),height()) );
-
+  return cellsInArea( QRect( 0, 0, width(), height() ) );
 }
 
 

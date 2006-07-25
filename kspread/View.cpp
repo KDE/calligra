@@ -1949,7 +1949,7 @@ void View::recalcWorkBook()
 
   doc()->emitBeginOperation( true );
   doc()->map()->recalcManager()->recalcMap();
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::refreshLocale()
@@ -1959,7 +1959,7 @@ void View::refreshLocale()
   {
     sheet->updateLocale();
   }
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::recalcWorkSheet()
@@ -1968,7 +1968,7 @@ void View::recalcWorkSheet()
   {
     doc()->emitBeginOperation( true );
     doc()->map()->recalcManager()->recalcSheet(d->activeSheet);
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -2457,7 +2457,7 @@ void View::initialPosition()
     // make paint effective:
     doc()->decreaseNumOperation();
 
-    QRect vr( activeSheet()->visibleRect( d->canvas ) );
+    QRect vr( d->canvas->visibleCells() );
 
     doc()->emitBeginOperation( false );
     activeSheet()->setRegionPaintDirty( vr );
@@ -2746,7 +2746,7 @@ void View::changeTextColor()
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionTextColor( selectionInfo(), d->actions->textColor->color() );
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -2768,7 +2768,7 @@ void View::changeBackgroundColor()
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionbgColor( selectionInfo(), d->actions->bgColor->color() );
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -2778,7 +2778,7 @@ void View::setSelectionBackgroundColor(const QColor &bgColor)
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionbgColor( selectionInfo(), bgColor );
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -2788,7 +2788,7 @@ void View::changeBorderColor()
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionBorderColor( selectionInfo(), d->actions->borderColor->color() );
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -2798,7 +2798,7 @@ void View::setSelectionBorderColor(const QColor &bdColor)
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionBorderColor( selectionInfo(), bdColor );
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -2846,7 +2846,7 @@ void View::deleteColumn()
   // Stefan: update the selection after deleting (a) column(s)
   d->selection->update();
 
-  QRect vr( d->activeSheet->visibleRect( d->canvas ) );
+  QRect vr( d->canvas->visibleCells() );
   vr.setLeft( r.left() );
 
   doc()->emitEndOperation( vr );
@@ -2865,7 +2865,7 @@ void View::deleteRow()
   // Stefan: update the selection after deleting (a) column(s)
   d->selection->update();
 
-  QRect vr( d->activeSheet->visibleRect( d->canvas ) );
+  QRect vr( d->canvas->visibleCells() );
   vr.setTop( r.top() );
 
   doc()->emitEndOperation( vr );
@@ -2882,7 +2882,7 @@ void View::insertColumn()
 
   updateEditWidget();
 
-  QRect vr( d->activeSheet->visibleRect( d->canvas ) );
+  QRect vr( d->canvas->visibleCells() );
   vr.setLeft( r.left() - 1 );
 
   doc()->emitEndOperation( vr );
@@ -2928,7 +2928,7 @@ void View::insertRow()
   d->activeSheet->insertRow( r.top(), ( r.bottom() - r.top() ) );
 
   updateEditWidget();
-  QRect vr( d->activeSheet->visibleRect( d->canvas ) );
+  QRect vr( d->canvas->visibleCells() );
   vr.setTop( r.top() - 1 );
 
   doc()->emitEndOperation( vr );
@@ -3619,21 +3619,21 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   }
   calcStatusBarOp();
 
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::slotSheetRenamed( Sheet* sheet, const QString& old_name )
 {
   doc()->emitBeginOperation( false );
   d->tabBar->renameTab( old_name, sheet->sheetName() );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::slotSheetHidden( Sheet* )
 {
   doc()->emitBeginOperation(false);
   updateShowSheetMenu();
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::slotSheetShown( Sheet* )
@@ -3641,7 +3641,7 @@ void View::slotSheetShown( Sheet* )
   doc()->emitBeginOperation(false);
   d->tabBar->setTabs( doc()->map()->visibleSheets() );
   updateShowSheetMenu();
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::changeSheet( const QString& _name )
@@ -3669,7 +3669,7 @@ void View::changeSheet( const QString& _name )
     d->hBorderWidget->repaint();
     d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
     d->canvas->slotMaxRow( d->activeSheet->maxRow() );
-    t->setRegionPaintDirty( t->visibleRect( d->canvas ) );
+    t->setRegionPaintDirty( d->canvas->visibleCells() );
     doc()->emitEndOperation();
 }
 
@@ -3763,7 +3763,7 @@ void View::insertSheet()
     d->actions->hideSheet->setEnabled( true );
   }
 
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::hideSheet()
@@ -3788,7 +3788,7 @@ void View::hideSheet()
   doc()->addCommand( command );
   command->execute();
 
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 
   d->tabBar->removeTab( d->activeSheet->sheetName() );
   d->tabBar->setActiveTab( sn );
@@ -3978,7 +3978,7 @@ void View::paste()
   {
     d->canvas->editor()->paste();
   }
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::specialPaste()
@@ -3993,7 +3993,7 @@ void View::specialPaste()
     {
       doc()->emitBeginOperation( false );
       d->activeSheet->recalc();
-      doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+      doc()->emitEndOperation( d->canvas->visibleCells() );
     }
     calcStatusBarOp();
     updateEditWidget();
@@ -4983,7 +4983,7 @@ void View::toggleProtectSheet( bool mode )
    // d->activeSheet->setRegionPaintDirty( QRect(QPoint( 0, 0 ), QPoint( KS_colMax, KS_rowMax ) ) );
    refreshView();
    updateEditWidget();
-   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+   doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::togglePageBorders( bool mode )
@@ -4993,7 +4993,7 @@ void View::togglePageBorders( bool mode )
 
   doc()->emitBeginOperation( false );
   d->activeSheet->setShowPageBorders( mode );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::viewZoom( const QString & s )
@@ -5018,7 +5018,7 @@ void View::viewZoom( const QString & s )
 
     if (activeSheet())
     {
-      QRect r( d->activeSheet->visibleRect( d->canvas ) );
+      QRect r( d->canvas->visibleCells() );
       r.setWidth( r.width() + 2 );
       doc()->emitEndOperation( r );
     }
@@ -5072,7 +5072,7 @@ void View::preference()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->refreshPreference();
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -5370,7 +5370,7 @@ void View::slotPopupDeleteChild()
 //     doc()->emitBeginOperation(false);
 //     d->popupChildObject->sheet()->deleteChild( d->popupChildObject );
 //     d->popupChildObject = 0;
-//     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+//     doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::popupColumnMenu( const QPoint & _point )
@@ -5993,7 +5993,7 @@ void View::slotInsertCellCopy()
     doc()->emitBeginOperation( false );
     d->activeSheet->paste( d->selection->lastRange(), true,
                            Paste::Normal, Paste::OverWrite, true );
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
   else
   {
@@ -6005,7 +6005,7 @@ void View::slotInsertCellCopy()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->recalc();
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
   updateEditWidget();
 }
@@ -6059,7 +6059,7 @@ void View::equalizeRow()
   {
     doc()->emitBeginOperation( false );
     canvasWidget()->equalizeRow();
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -6074,7 +6074,7 @@ void View::equalizeColumn()
   {
     doc()->emitBeginOperation( false );
     canvasWidget()->equalizeColumn();
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -6124,7 +6124,7 @@ void View::styleDialog()
   if ( d->activeSheet )
   {
     d->activeSheet->setLayoutDirtyFlag();
-    d->activeSheet->setRegionPaintDirty( d->activeSheet->visibleRect( d->canvas ) );
+    d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
   }
   if ( d->canvas )
     d->canvas->repaint();
@@ -6186,7 +6186,7 @@ void View::wrapText( bool b )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionMultiRow( selectionInfo(), b );
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -6421,7 +6421,7 @@ void View::insertObject()
   KoDocumentEntry e =  d->actions->insertPart->documentEntry();//KoPartSelectDia::selectPart( d->canvas );
   if ( e.isEmpty() )
   {
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
     return;
   }
 
@@ -6429,7 +6429,7 @@ void View::insertObject()
   delete d->insertHandler;
 
   d->insertHandler = new InsertPartHandler( this, d->canvas, e );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::insertChart()
@@ -6455,7 +6455,7 @@ void View::insertChart()
   doc()->emitBeginOperation( false );
 
   d->insertHandler = new InsertChartHandler( this, d->canvas, vec[0] );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 
@@ -6523,7 +6523,7 @@ void View::removeSheet()
     tbl->doc()->map()->takeSheet( tbl );
     doc()->takeSheet( tbl );
 #endif
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -6589,7 +6589,7 @@ void View::slotRename()
     doc()->emitBeginOperation(false);
     updateEditWidget();
     doc()->setModified( true );
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
   }
 }
 
@@ -6641,7 +6641,7 @@ void View::slotUpdateView( Sheet *_sheet )
   if ( ( !activeSheet() ) || ( _sheet != d->activeSheet ) )
     return;
 
-  d->activeSheet->setRegionPaintDirty( d->activeSheet->visibleRect( d->canvas ) );
+  d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
   doc()->emitEndOperation();
 }
 
@@ -6673,7 +6673,7 @@ void View::slotUpdateHBorder( Sheet * _sheet )
 
   doc()->emitBeginOperation(false);
   d->hBorderWidget->update();
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::slotUpdateVBorder( Sheet *_sheet )
@@ -6686,7 +6686,7 @@ void View::slotUpdateVBorder( Sheet *_sheet )
 
   doc()->emitBeginOperation( false );
   d->vBorderWidget->update();
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::slotChangeSelection(const KSpread::Region& changedRegion)
@@ -6898,7 +6898,7 @@ void View::menuCalc( bool )
 
   calcStatusBarOp();
 
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 
@@ -7005,7 +7005,7 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
   if ( d->activeSheet )
   {
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( d->canvas->visibleCells() );
 
     if ( ev->activated() )
     {
@@ -7073,7 +7073,7 @@ void View::removeSheet( Sheet *_t )
   bool state = doc()->map()->visibleSheets().count() > 1;
   d->actions->removeSheet->setEnabled( state );
   d->actions->hideSheet->setEnabled( state );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::insertSheet( Sheet* sheet )
@@ -7088,7 +7088,7 @@ void View::insertSheet( Sheet* sheet )
   bool state = ( doc()->map()->visibleSheets().count() > 1 );
   d->actions->removeSheet->setEnabled( state );
   d->actions->hideSheet->setEnabled( state );
-  doc()->emitEndOperation( sheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 QColor View::borderColor() const
@@ -7103,7 +7103,7 @@ void View::updateShowSheetMenu()
     d->actions->showSheet->setEnabled( false );
   else
     d->actions->showSheet->setEnabled( doc()->map()->hiddenSheets().count() > 0 );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
 void View::closeEditor()

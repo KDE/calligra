@@ -377,8 +377,6 @@ public:
     /** retrieve a range of values */
     Value valueRange (int col1, int row1, int col2, int row2) const;
 
-    QRect visibleRect( Canvas const * const _canvas ) const;
-
     /**
      * Determines the row for a given position \p _ypos . If the position is
      * on the border between two cells, the upper row is returned. Also, the offset
