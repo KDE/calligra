@@ -658,23 +658,6 @@ void Canvas::slotScrollHorz( int _value )
   // Relative movement
   int dx = d->view->doc()->zoomItXOld( d->xOffset - unzoomedValue );
 
-
-  /* what cells will need painted now? */
-  QRect area = visibleCells();
-  double tmp;
-  if (dx > 0)
-  {
-    area.setRight( area.left() );
-    area.setLeft( sheet->leftColumn( unzoomedValue, tmp ) );
-  }
-  else
-  {
-    area.setLeft( area.right() );
-    area.setRight( sheet->rightColumn( dwidth  + unzoomedValue ) );
-  }
-
-  sheet->setRegionPaintDirty(area);
-
   // New absolute position
   kDebug(36001) << "slotScrollHorz(): XOffset before setting: "
 		 << d->xOffset << endl;
@@ -718,24 +701,6 @@ void Canvas::slotScrollVert( int _value )
 
   // Relative movement
   int dy = d->view->doc()->zoomItYOld( d->yOffset - unzoomedValue );
-
-
-  /* what cells will need painted now? */
-  QRect area = visibleCells();
-  double tmp;
-  if (dy > 0)
-  {
-    area.setBottom(area.top());
-    area.setTop(sheet->topRow(unzoomedValue, tmp));
-  }
-  else
-  {
-    area.setTop(area.bottom());
-    area.setBottom(sheet->bottomRow(d->view->doc()->unzoomItYOld(height()) +
-                                            unzoomedValue));
-  }
-
-  sheet->setRegionPaintDirty( area );
 
   // New absolute position
   d->yOffset = unzoomedValue;
@@ -3623,11 +3588,10 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
   if ( !d->cellEditor )
     return;
 
+  //There may be highlighted areas on the sheet which will need to be erased
+  activeSheet()->setRegionPaintDirty( *choice() );
 
-	//There may be highlighted areas on the sheet which will need to be erased
-	setSelectionChangePaintDirty( activeSheet() , *choice() );
-
-  	d->editWidget->setEditMode( false );
+  d->editWidget->setEditMode( false );
 
   QString t = d->cellEditor->text();
   // Delete the cell editor first and after that update the document.
@@ -3774,8 +3738,8 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     if ( addFocus )
         d->cellEditor->setFocus();
 
-	setSelectionChangePaintDirty(sheet, *selectionInfo());
-	paintUpdates();
+    sheet->setRegionPaintDirty( *selectionInfo() );
+    paintUpdates();
   }
 
   return true;
@@ -3894,12 +3858,6 @@ void Canvas::updateEditor()
     d->cellEditor->updateChoice();
   }
 }
-
-void Canvas::setSelectionChangePaintDirty(Sheet* sheet, const Region& region)
-{
-  sheet->setRegionPaintDirty(region); // TODO should the paintDirtyList be in Canvas?
-}
-
 
 void Canvas::updatePosWidget()
 {

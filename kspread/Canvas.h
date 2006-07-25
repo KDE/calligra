@@ -587,16 +587,6 @@ private:
   void updateEditor();
 
   /**
-   * This function sets the paint dirty flag for a @p changedRegion in a
-   * @p sheet .
-   * The calculation which cells really should look different with the new
-   * selection rather than repainting the entire area has to be done before.
-   * @param sheet the sheet, which contains the cells
-   * @param changedRegion the cell region to be set as dirty
-   */
-  void setSelectionChangePaintDirty(Sheet* sheet, const Region& changedRegion);
-
-  /**
    * Determines the cell at @p point and shows its tooltip.
    * @param point the position for which a tooltip is requested
    */

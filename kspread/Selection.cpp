@@ -26,6 +26,7 @@
 #include "Cell.h"
 #include "Doc.h"
 #include "Editors.h"
+#include "Format.h"
 #include "Sheet.h"
 #include "View.h"
 #include "Util.h"
@@ -172,12 +173,12 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
 
   if (changedRegion == *this)
   {
-    emit changed(Region(topLeft, sheet));
+    emitChanged(Region(topLeft, sheet));
     return;
   }
   changedRegion.add(topLeft, sheet);
 
-  emit changed(changedRegion);
+  emitChanged(changedRegion);
 }
 
 void Selection::initialize(const QRect& range, Sheet* sheet)
@@ -260,7 +261,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
   }
   changedRegion.add(QRect(topLeft, bottomRight), sheet);
 
-  emit changed(changedRegion);
+  emitChanged(changedRegion);
 }
 
 void Selection::initialize(const Region& region, Sheet* sheet)
@@ -336,12 +337,12 @@ void Selection::initialize(const Region& region, Sheet* sheet)
   }
   changedRegion.add( region );
 
-  emit changed(changedRegion);
+  emitChanged(changedRegion);
 }
 
 void Selection::update()
 {
-  emit changed(*this);
+  emitChanged(*this);
 }
 
 void Selection::update(const QPoint& point)
@@ -473,7 +474,7 @@ void Selection::update(const QPoint& point)
   d->marker = topLeft;
   d->cursor = point;
 
-  emit changed(changedRegion);
+  emitChanged(changedRegion);
 }
 
 void Selection::extend(const QPoint& point, Sheet* sheet)
@@ -537,7 +538,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   changedRegion.add(topLeft, sheet);
   changedRegion.add(*this);
 
-  emit changed(changedRegion);
+  emitChanged(changedRegion);
 }
 
 void Selection::extend(const QRect& range, Sheet* sheet)
@@ -615,7 +616,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
 
   d->activeSubRegionLength += cells().count() - count;
 
-  emit changed(*this);
+  emitChanged(*this);
 }
 
 void Selection::extend(const Region& region)
@@ -642,7 +643,7 @@ void Selection::extend(const Region& region)
 
   d->activeSubRegionLength += cells().count() - count;
 
-  emit changed(*this);
+  emitChanged(*this);
 }
 
 Selection::Element* Selection::eor(const QPoint& point, Sheet* sheet)
@@ -937,6 +938,84 @@ Selection::Region::Range* Selection::createRange(const Range& range) const
   return new Range(range);
 }
 
+void Selection::emitChanged(const Region& region)
+{
+  Sheet * const sheet = d->view->activeSheet();
+  Region extendedRegion;
+  ConstIterator end(region.constEnd());
+  for (ConstIterator it = region.constBegin(); it != end; ++it)
+  {
+    Element* element = *it;
+    QRect area = element->rect();
+
+    ColumnFormat *col;
+    RowFormat *rl;
+    //look at if column is hiding.
+    //if it's hiding refreshing column+1 (or column -1 )
+    int left = area.left();
+    int right = area.right();
+    int top = area.top();
+    int bottom = area.bottom();
+
+    // a merged cells is selected
+    if (element->type() == Region::Element::Point)
+    {
+      Cell* cell = sheet->cellAt(left, top);
+      if (cell->doesMergeCells())
+      {
+        // extend to the merged region
+        // prevents artefacts of the selection rectangle
+        right += cell->mergedXCells();
+        bottom += cell->mergedYCells();
+      }
+    }
+
+    if ( right < KS_colMax )
+    {
+      do
+      {
+        right++;
+        col = sheet->columnFormat( right );
+      } while ( col->isHide() && right != KS_colMax );
+    }
+    if ( left > 1 )
+    {
+      do
+      {
+        left--;
+        col = sheet->columnFormat( left );
+      } while ( col->isHide() && left != 1);
+    }
+
+    if ( bottom < KS_rowMax )
+    {
+      do
+      {
+        bottom++;
+        rl = sheet->rowFormat( bottom );
+      } while ( rl->isHide() && bottom != KS_rowMax );
+    }
+
+    if ( top > 1 )
+    {
+      do
+      {
+        top--;
+        rl = sheet->rowFormat( top );
+      } while ( rl->isHide() && top != 1);
+    }
+
+    area.setLeft(left);
+    area.setRight(right);
+    area.setTop(top);
+    area.setBottom(bottom);
+
+    extendedRegion.add(area, element->sheet());
+  }
+
+  emit changed(extendedRegion);
+}
+
 void Selection::dump() const
 {
   kDebug() << *this << endl;
@@ -1030,4 +1109,5 @@ Selection::Range::Range(const QString& string)
 }
 
 } // namespace KSpread
+
 #include "Selection.moc"

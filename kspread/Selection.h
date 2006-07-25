@@ -248,40 +248,40 @@ protected:
   class Range;
 
   /**
-   * @reimp
    * @internal used to create derived Points
    */
   virtual Region::Point* createPoint(const QPoint&) const;
 
   /**
-   * @reimp
    * @internal used to create derived Points
    */
   virtual Region::Point* createPoint(const QString&) const;
 
   /**
-   * @reimp
    * @internal used to create derived Points
    */
   virtual Region::Point* createPoint(const Point&) const;
 
   /**
-   * @reimp
    * @internal used to create derived Ranges
    */
   virtual Region::Range* createRange(const QRect&) const;
 
   /**
-   * @reimp
    * @internal used to create derived Ranges
    */
   virtual Region::Range* createRange(const QString&) const;
 
   /**
-   * @reimp
    * @internal used to create derived Ranges
    */
   virtual Region::Range* createRange(const Range&) const;
+
+  /**
+   * Dilates the region and emits the changed() signal.
+   * \internal
+   */
+  void emitChanged(const Region& changedRegion);
 
   /**
    * @internal

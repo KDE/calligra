@@ -6741,7 +6741,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
 //   SelectionChanged ev(*selectionInfo(), activeSheet()->name());
 //   QApplication::sendEvent( this, &ev );
 
-  d->canvas->setSelectionChangePaintDirty( d->activeSheet, changedRegion );
+  d->activeSheet->setRegionPaintDirty( changedRegion );
   d->vBorderWidget->update();
   d->hBorderWidget->update();
 
@@ -6779,9 +6779,9 @@ void View::slotChangeChoice(const KSpread::Region& changedRegion)
   }
   doc()->emitBeginOperation( false );
   d->canvas->updateEditor();
-  d->canvas->setSelectionChangePaintDirty( d->activeSheet, changedRegion );
+  d->activeSheet->setRegionPaintDirty( changedRegion );
   d->canvas->scrollToCell(choice()->marker());
-  doc()->emitEndOperation( *choice() );
+  doc()->emitEndOperation(/* *choice() */);
   kDebug() << "Choice: " << *choice() << endl;
 }
 

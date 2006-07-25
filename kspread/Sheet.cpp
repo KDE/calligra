@@ -6608,24 +6608,14 @@ void Sheet::convertObscuringBorders()
  * Printout Functions *
  **********************/
 
-// TODO Stefan: these belong to View, even better Canvas
 void Sheet::setRegionPaintDirty( const Region & region )
 {
   if ( isLoading() )
     return;
-// Robert: This seems a very heavy handed way of doing this - look for something more efficient.
-  DilationManipulator manipulator;
-  manipulator.setSheet(this);
-  manipulator.add(region);
-  manipulator.execute();
 
-  // don't put it in the undo list! ;-)
-  d->paintDirtyList.add(manipulator);
-  
-  // d->paintDirtyList.add(region);
-	
-  kDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
-  //kDebug() << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
+  d->paintDirtyList.add(region);
+
+  kDebug() << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
 }
 
 void Sheet::clearPaintDirtyData()

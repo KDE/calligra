@@ -211,27 +211,6 @@ private:
 };
 
 
-
-/**
- * \class DilationManipulator
- * \brief Dilates a cell region by one cell in each direction.
- */
-class DilationManipulator : public Manipulator
-{
-public:
-  DilationManipulator();
-  virtual ~DilationManipulator();
-
-  virtual void execute();
-  virtual void unexecute();
-
-protected:
-  virtual QString name() const { return i18n("Dilate Region"); }
-
-private:
-};
-
-
 // TODO: storing undo information by doing an XML dump is a bad idea, replace
 // with something that only stores relevant data
 /**
