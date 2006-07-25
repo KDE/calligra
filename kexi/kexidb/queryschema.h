@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,13 +49,9 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		typedef QPtrList<QueryColumnInfo> List;
 		typedef QPtrListIterator<QueryColumnInfo> ListIterator;
 
-		QueryColumnInfo(Field *f, QCString _alias, bool _visible)
-		 : field(f), alias(_alias), visible(_visible)
-		{
-		}
-		~QueryColumnInfo()
-		{
-		}
+		QueryColumnInfo(Field *f, QCString _alias, bool _visible);
+		~QueryColumnInfo();
+
 		//! \return alias if it's not empty, field's name otherwise.
 		inline QCString aliasOrName() const { 
 			return alias.isEmpty() ? field->name().latin1() : (const char*)alias; 
@@ -68,6 +64,14 @@ class KEXI_DB_EXPORT QueryColumnInfo
 
 		Field *field;
 		QCString alias;
+
+		/*! Index of column with visible lookup value within the 'fields expanded' vector.
+		 -1 means no visible lookup value is available because there is no lookup for the column.
+		 Cached for efficiency as we use this information frequently.
+		 @see LookupFieldSchema::visibleVolumn() */
+		int indexForVisibleLookupValue;
+
+		//! true if this column is visible to the user
 		bool visible : 1;
 };
 
@@ -355,41 +359,78 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 */
 		virtual Field* field(const QString& name);
 
-		/* Like QuerySchema::field(const QString& name) but returns not only Field
+		/*! Like QuerySchema::field(const QString& name) but returns not only Field
 		 object for \a name but entire QueryColumnInfo object. */
 		QueryColumnInfo* columnInfo(const QString& name);
 
-		/*! QuerySchema::fields() returns vector of fields used for the query columns,
+		/*! Options used in fieldsExpanded(). */
+		enum FieldsExpandedOptions {
+			Default, //!< All fields are returned even if duplicated
+			Unique, //!< Unique list of fields is returned
+			WithInternalFields,        //!< Like Default but internal fields (for lookup) are appended
+			WithInternalFieldsAndRowID //!< Like WithInternalFields but RowID (big int type) field 
+			                           //!< is appended after internal fields
+		};
+
+		/*! \return fully expanded list of fields. 
+		 QuerySchema::fields() returns vector of fields used for the query columns,
 		 but in a case when there are asterisks defined for the query,
 		 it does not expand QueryAsterisk objects to field lists but return every
 		 asterisk as-is.
 		 This could be inconvenient when you need just a fully expanded list of fields,
 		 so this method does the work for you. 
 
-		 If \a unique is true, each field is returned in the vector only once 
+		 If \a options is Unique, each field is returned in the vector only once 
 		 (first found field is selected).
 		 Note however, that the same field can be returned more than once if it has attached 
 		 a different alias.
-		 For example, let t is TABLE( a, b ) and let query be defined 
+		 For example, let t be TABLE( a, b ) and let query be defined 
 		 by "SELECT *, a AS alfa FROM t" statement. Either fieldsExpanded(true) and fieldsExpanded(false)
 		 will return [ a, b, a (alfa) ] list.
 		 On the other hand, for query defined by "SELECT *, a FROM t" statement,
 		 fieldsExpanded(true) will return [ a, b ] list 
 		 and fieldsExpanded(false) will return [ a, b, a ] list.
 
+		 If \a options is WithInternalFields or WithInternalFieldsAndRowID, 
+		 additional internal fields are also appended to the vector.
+		 If \a options is WithRowIDAndInternalFields, 
+		 one fake BigInteger column is appended to make space for ROWID column used 
+		 by KexiDB::Cursor implementations. For example, let persons be TABLE( surname, city_id ), 
+		 let city_number reference cities.is in TABLE cities( id, name ) and let query q be defined 
+		 by "SELECT * FROM t" statement. If we want to display persons' city names instead of city_id's.
+		 To do this, cities.name has to be retrieved as well, so the following statement should be used:
+		 "SELECT * FROM persons, cities.name LEFT OUTER JOIN cities ON persons.city_id=cities.id".
+		 Thus, calling fieldsExpanded(false, true, true) will return 4 elements instead of 2:
+		 persons.surname, persons.city_id, cities.name, {ROWID}. The {ROWID} item is the placeholder 
+		 used for fetching ROWID by KexiDB cursors.
+
 		 By default, all fields are returned in the vector even 
-		 if there are multiple occurences of one or more.
+		 if there are multiple occurences of one or more (options == Default). 
 
 		 Note: You should assign the resulted vector in your space - it will be shared 
 		 and implicity copied on any modification.
 		 This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
-		QueryColumnInfo::Vector fieldsExpanded(bool unique = false); //QValueList<bool> *detailedVisibility = 0);
+		QueryColumnInfo::Vector fieldsExpanded(FieldsExpandedOptions options = Default);
+
+		/*! \return list of fields internal fields used for lookup columns. */
+		QueryColumnInfo::Vector QuerySchema::internalFields();
+
+		/*! \return info for expanded of internal field at index \a index. 
+		 The returned field can be either logical or internal (for lookup),
+		 the latter case is true if \a index &gt;= fieldsExpanded().count(). 
+		 Equivalent of QuerySchema::fieldsExpanded(WithInternalFields).at(index). */
+		QueryColumnInfo* expandedOrInternalField(uint index);
 
 		/*! \return a map for fast lookup of query columns' order.
 		 This is exactly opposite information compared to vector returned 
 		 by fieldsExpanded(). This method's result is cached by QuerySchema object.
+		 Note: indices of internal fields (see internalFields()) are also returned 
+		 here - in this case the index is counted as a sum of size(e) + i (where "e" is 
+		 the list of expanded fields and i is the column index within internal fields list).
+		 This feature is used eg. at the end of Connection::updateRow() where need indices of
+		 fields (including internal) to update all the values in memory.
 @todo js: UPDATE CACHE!
 		*/
 		QMap<QueryColumnInfo*,int> fieldsOrder();

@@ -100,6 +100,11 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		//! Used for checking if a given constraint within table of form is met.
 		virtual bool valueIsEmpty() = 0;
 
+		//! \return value that should be displayed for this item.
+		//! Only used for items like combo box, where real value is an integer while
+		//! displayed value is usually a text. For other item types this method should be empty.
+		virtual QVariant visibleValueForLookupField() { return QVariant(); }
+
 		/*! \return 'readOnly' flag for this item. The flag is usually taken from
 		 the item's widget, e.g. KLineEdit::isReadOnly(). 
 		 By default, always returns false. */

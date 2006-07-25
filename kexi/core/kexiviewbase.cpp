@@ -231,7 +231,8 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 				if (v) {
 					while (v->m_parentView)
 						v = v->m_parentView;
-					v->m_lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(v->focusWidget());
+					if (KexiUtils::hasParent( this, static_cast<QWidget*>(v->focusWidget()) ))
+						v->m_lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(v->focusWidget());
 //					v->m_lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(o); //focusWidget();
 				}
 			}

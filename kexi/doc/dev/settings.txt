@@ -119,6 +119,10 @@ Group: ImportExport
 # Only used when StoreOptionsForCSVExportDialog option is true.
 -DefaultEncodingForExportingCSVFiles [string]
 
+# Strip leading and trailing blanks off of text values when importing 
+# CSV (Comma-Separated Value) files.
+-StripBlanksOffOfTextValuesWhenImportingCSVFiles [boolean] (default: true)
+
 # Default setting used to specify whether column names should be added as the first row
 # for exporting CSV (Comma-Separated Value) files.
 # Only used when StoreOptionsForCSVExportDialog option is true.

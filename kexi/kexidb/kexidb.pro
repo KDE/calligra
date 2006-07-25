@@ -42,6 +42,7 @@ parser/sqlscanner.cpp \
 expression.cpp \
 keywords.cpp \
 preparedstatement.cpp \
-alter.cpp
+alter.cpp \
+lookupfieldschema.cpp
 
 #HEADERS =

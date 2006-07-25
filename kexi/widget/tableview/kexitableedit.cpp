@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,14 +45,14 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
 	installEventFilter(this);
 
 	//margins
-	if (m_column->field()->isFPNumericType()) {
+	if (displayedField()->isFPNumericType()) {
 #ifdef Q_WS_WIN
 		m_leftMargin = 0;
 #else
 		m_leftMargin = 0;
 #endif
 	}
-	else if (m_column->field()->isIntegerType()) {
+	else if (displayedField()->isIntegerType()) {
 #ifdef Q_WS_WIN
 		m_leftMargin = 1;
 #else
@@ -73,6 +73,14 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
 
 KexiTableEdit::~KexiTableEdit()
 {
+}
+
+KexiDB::Field *KexiTableEdit::displayedField() const
+{
+	if (m_column->visibleLookupColumnInfo)
+		return m_column->visibleLookupColumnInfo->field; //mainly for lookup field in KexiComboBoxTableEdit:
+
+	return m_column->field(); //typical case
 }
 
 void KexiTableEdit::setViewWidget(QWidget *v)
@@ -134,6 +142,8 @@ void KexiTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, in
 void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, const QVariant& val, 
 	QString &txt, int &align, int &/*x*/, int &y_offset, int &w, int &/*h*/  )
 {
+	KexiDB::Field *realField = displayedField();
+
 #ifdef Q_WS_WIN
 //	x = 1;
 	y_offset = -1;
@@ -145,17 +155,17 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, const QVa
 //	const int ctype = columnType(col);
 //	align = SingleLine | AlignVCenter;
 //	QString txt; //text to draw
-	if (m_column->field()->isFPNumericType()) {
+	if (realField->isFPNumericType()) {
 //js TODO: ADD OPTION to displaying NULL VALUES as e.g. "(null)"
 		if (!val.isNull()) {
 			txt = KexiDB::formatNumberForVisibleDecimalPlaces(
-				val.toDouble(), m_column->field()->visibleDecimalPlaces());
+				val.toDouble(), realField->visibleDecimalPlaces());
 			//txt = KGlobal::locale()->formatNumber(val.toDouble(), 10);
 		}
 		w -= 6;
 		align |= AlignRight;
 	}
-	else if (m_column->field()->isIntegerType()) {
+	else if (realField->isIntegerType()) {
 		Q_LLONG num = val.toLongLong();
 /*#ifdef Q_WS_WIN
 		x = 1;
@@ -193,7 +203,7 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 		x = 5;
 //		y_offset = 0;
 #endif*/
-//		switch (m_column->field()->type()) {
+//		switch (realField->type()) {
 /*moved		case KexiDB::Field::Time:
 			//it was QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 			if (!val.isNull()) {

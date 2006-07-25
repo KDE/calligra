@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ class KexiComboBoxPopup : public QFrame
 //js TODO: more ctors!
 		/*! Constructor for creating simple one-column enum-defined popup
 		 using definition from \a f. */
-		KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f);
+//unused		KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f);
 		KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column);
 		virtual ~KexiComboBoxPopup();
 

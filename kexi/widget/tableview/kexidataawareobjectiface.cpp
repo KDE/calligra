@@ -960,6 +960,8 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 		return false;
 	}
 
+	KexiTableViewColumn *currentTVColumn = column(m_curCol);
+
 	//try to get the value entered:
 	if (res == Validator::Ok) {
 		if (!setNull && !valueChanged
@@ -991,10 +993,10 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 		//Check other validation rules:
 		//1. check using validator
 //		KexiValidator *validator = m_data->column(m_curCol)->validator();
-		Validator *validator = column(m_curCol)->validator();
+		Validator *validator = currentTVColumn->validator();
 		if (validator) {
 //			res = validator->check(m_data->column(m_curCol)->field()->captionOrName(), 
-			res = validator->check(column(m_curCol)->field()->captionOrName(), 
+			res = validator->check(currentTVColumn->field()->captionOrName(), 
 				newval, msg, desc);
 		}
 	}
@@ -1022,7 +1024,13 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 //		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
 //		if (allow) {
 		//send changes to the backend
-		if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, column( m_curCol), newval)) {
+		QVariant visibleValueForLookupField;
+		if (currentTVColumn->visibleLookupColumnInfo)
+			visibleValueForLookupField = m_editor->visibleValueForLookupField(); //visible value for lookup field 
+		                                                                       //should be also added to the buffer
+		if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn, 
+			newval,	/*allowSignals*/true, currentTVColumn->visibleLookupColumnInfo ? &visibleValueForLookupField : 0))
+		{
 			kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
 			m_data->rowEditBuffer()->debug();
 		} else {
@@ -1086,8 +1094,9 @@ void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
 //	ensureVisible(columnPos(m_curCol), rowPos(m_curRow)+rowHeight(), 
 //		columnWidth(m_curCol), rowHeight());
 //OK?
-	ensureCellVisible(m_curRow+1, m_curCol);
-	createEditor(m_curRow, m_curCol, setText, !setText.isEmpty());
+	//ensureCellVisible(m_curRow+1, m_curCol);
+	if (!m_editor)
+		createEditor(m_curRow, m_curCol, setText, !setText.isEmpty());
 }
 
 void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
@@ -1494,7 +1503,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col)
 		KexiTableViewColumn* tvcol = column(col);
 		if (tvcol->isDBAware) {
 //			QVariant *cv = m_data->rowEditBuffer()->at( *static_cast<KexiDBTableViewColumn*>(tvcol)->field );
-			const QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->fieldinfo );
+			const QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->columnInfo );
 			if (cv)
 				return cv;
 

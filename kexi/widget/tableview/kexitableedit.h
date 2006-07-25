@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 
 		/*! A rich field information for db-aware data. 
 		 For not-db-aware data it is always 0 (use field() instead. */
-		virtual KexiDB::QueryColumnInfo *columnInfo() const { return m_column->fieldinfo; }
+		virtual KexiDB::QueryColumnInfo *columnInfo() const { return m_column->columnInfo; }
 
 		//! Implemented for KexiDataItemInterface.
 		//! Does nothing because instead KexiTableViewColumn is used to get field's schema.
@@ -155,6 +155,13 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		/*! Allows to force redrawing the related cell by the editor itself. Usable when the editor is not 
 		 displayed by a QWidget but rather by table view cell itself, for example KexiBlobTableEdit. */
 		void repaintRelatedCell();
+
+		/*! \return displayed field. This is equal field() in typical case but can return a different field
+		 definition if the column contains a lookup field. This distiction is especially used for 
+		 displaying dependent on the type and specifics of the field definition 
+		 (e.g. text type versus integer type). Note that we're computing the editor's value, 
+		 we still use field(). */
+		KexiDB::Field *displayedField() const;
 
 		KexiTableViewColumn *m_column;
 		int m_leftMargin;

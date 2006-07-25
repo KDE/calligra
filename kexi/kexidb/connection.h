@@ -863,8 +863,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		QString selectStatement( TableSchema& tableSchema ) const;
 
-		/*! Like selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const
-		 but also retrieves ROWID information, if \a alsoRetrieveROWID is true.
+		/*! Like Connection::selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const
+		 but also retrieves ROWID information (as the very last column), if \a alsoRetrieveROWID is true.
 		 Used by cursors. */
 		QString selectStatement( QuerySchema& querySchema, bool alsoRetrieveROWID, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const;
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -154,13 +154,13 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		Q_LLONG at() const;
 
 		/*! \return number of fields available for this cursor. 
-		 This never includes ROWID column. */
-		inline uint fieldCount() const { return m_fieldCount; }
+		 This never includes ROWID column or other internal coluns (e.g. lookup). */
+		inline uint fieldCount() const { return m_query ? m_logicalFieldCount : m_fieldCount; }
 
 		/*! \return true if ROWID information is appended with every row.
 		 ROWID information is available 
 		 if DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false
-		 for a KexiDB database driver and a table has no primary key defined. 
+		 for a KexiDB database driver and the master table has no primary key defined. 
 		 Phisically, ROWID value is returned after last returned field,
 		 so data vector's length is expanded by one. */
 		inline bool containsROWIDInfo() const { return m_containsROWIDInfo; }
@@ -321,17 +321,17 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		bool m_atLast : 1;
 		bool m_afterLast : 1;
 //		bool m_atLast;
-		bool m_validRecord : 1; //! true if valid record is currently retrieved @ current position
+		bool m_validRecord : 1; //!< true if valid record is currently retrieved @ current position
 		bool m_containsROWIDInfo : 1;
 		Q_LLONG m_at;
-		uint m_fieldCount; //! cached field count information
-		uint m_options; //! cursor options that describes its behaviour
-
-		char m_result; //! result of a row fetching
+		uint m_fieldCount; //!< cached field count information
+		uint m_logicalFieldCount;  //!< logical field count, i.e. without intrernal values like ROWID or lookup
+		uint m_options; //!< cursor options that describes its behaviour
+		char m_result; //!< result of a row fetching
 		
 		//<members related to buffering>
-		int m_records_in_buf;          //! number of records currently stored in the buffer
-		bool m_buffering_completed : 1;   //! true if we already have all records stored in the buffer
+		int m_records_in_buf;          //!< number of records currently stored in the buffer
+		bool m_buffering_completed : 1;   //!< true if we already have all records stored in the buffer
 		//</members related to buffering>
 
 		//! Useful e.g. for value(int) method when we need access to schema def.
@@ -340,14 +340,11 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		//! Used by setOrderByColumnList()
 		QueryColumnInfo::Vector* m_orderByColumnList;
 
-
-//		QValueList<bool> m_detailedVisibility;
-
 	private:
 		bool m_readAhead : 1;
 		
 		//<members related to buffering>
-		bool m_at_buffer : 1;             //! true if we already point to the buffer with curr_coldata
+		bool m_at_buffer : 1;             //!< true if we already point to the buffer with curr_coldata
 		//</members related to buffering>
 
 
@@ -358,5 +355,3 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 } //namespace KexiDB
 
 #endif
-
-

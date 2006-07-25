@@ -14,6 +14,32 @@ CCMAIL:danny@commit-digest.org
 
 For bugfixes use CCMAIL:###-done@bugs.kde.org
 
+2006-07-24
+Main Window
+- fixed setting focus after switching between views
+2.0: merged
+
+2006-07-18..2006-07-24
+KexiDB
+- added support for db-aware lookup fields
+2.0: merged
+Table View
+- added support for db-aware combobox fields
+- displaying values in combo box popup fixed
+2.0: merged
+CSV Import Dialog
+- leading 0xFEFF "BOM" unicode character is skipped
+   (http://www.unicode.org/charts/PDF/UFFF0.pdf)
+- added "Strip leading and trailing blanks off of text values" option
+- fixed changing options
+2.0: merged
+
+2006-07-17
+Forms
+- fixed maintaining focus when menu has been clicked
+- fixed tab/backtab for button widget (non-db-aware widgets in general)
+2.0: merged
+
 2006-07-10..14
 Forms
 - context menus now have consistent title: "<objectname> : <objecttype>"

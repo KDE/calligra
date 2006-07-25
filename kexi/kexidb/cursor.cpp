@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -84,19 +84,23 @@ void Cursor::init()
 	m_at_buffer = false;
 	m_result = -1;
 
+	m_containsROWIDInfo = (m_query && m_query->masterTable()) 
+		&& m_conn->m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false;
+
 	if (m_query) {
 		//get list of all fields
 		m_fieldsExpanded = new QueryColumnInfo::Vector();
-		*m_fieldsExpanded = m_query->fieldsExpanded();//&m_detailedVisibility);
+		*m_fieldsExpanded = m_query->fieldsExpanded(
+			m_containsROWIDInfo ? QuerySchema::WithInternalFieldsAndRowID : QuerySchema::WithInternalFields);
+		m_logicalFieldCount = m_fieldsExpanded->count() 
+			- m_query->internalFields().count() - (m_containsROWIDInfo?1:0);
 		m_fieldCount = m_fieldsExpanded->count();
 	} else {
 		m_fieldsExpanded = 0;
+		m_logicalFieldCount = 0;
 		m_fieldCount = 0;
 	}
 	m_orderByColumnList = 0;
-
-	m_containsROWIDInfo = (m_query && m_query->masterTable()) 
-		&& m_conn->m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false;
 }
 
 Cursor::~Cursor()
@@ -178,6 +182,7 @@ bool Cursor::close()
 	m_afterLast = false;
 	m_readAhead = false;
 	m_fieldCount = 0;
+	m_logicalFieldCount = 0;
 	m_at = -1;
 
 //	KexiDBDbg<<"Cursor::close() == "<<ret<<endl;
@@ -358,7 +363,7 @@ void Cursor::setBuffered(bool buffered)
 
 void Cursor::clearBuffer()
 {
-	if ( !isBuffered() || !m_fieldCount)
+	if ( !isBuffered() || m_fieldCount==0)
 		return;
 	
 	drv_clearBuffer();

@@ -103,14 +103,12 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 		return false;
 	}
 
-//	uint i = 0;
-//	KexiDB::QueryColumnInfo::Vector vector = m_cursor->query()->fieldsExpanded();
 	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
 
 	QString caption = m_cursor->query()->caption();
-	if (caption.isEmpty()) {
+	if (caption.isEmpty())
 		caption = m_cursor->query()->name();
-	}
+
 	setCaption( caption );
 
 	//PRIMITIVE!! data setting:
@@ -119,10 +117,5 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	KexiTableView::setData(tv_data);
 	return true;
 }
-
-//void KexiDataTableView::slotClearData()
-//{
-//	deleteAllRows(true/*ask*/, true/*repaint*/);
-//}
 
 #include "kexidatatableview.moc"

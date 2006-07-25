@@ -33,6 +33,7 @@
 #include "roweditbuffer.h"
 #include "utils.h"
 #include "dbproperties.h"
+#include "lookupfieldschema.h"
 #include "parser/parser.h"
 
 #include <kexiutils/utils.h>
@@ -1026,14 +1027,26 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 
 //! @todo looking at singleTable is visually nice but a field name can conflict 
 //!       with function or variable name...
-	const bool singleTable = querySchema.tables()->count() <= 1;
-
-	QString sql;
-	sql.reserve(4096);
-//	Field::List *fields = querySchema.fields();
-	uint number = 0;
-//	for (Field *f = fields->first(); f; f = fields->next(), number++) {
 	Field *f;
+	uint number = 0;
+	bool singleTable = querySchema.tables()->count() <= 1;
+	if (singleTable) {
+		//make sure we will have single table:
+		for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
+			if (querySchema.isColumnVisible(number) && f->table()->lookupFieldSchema( *f )) {
+				//uups, no, there's at least one left join
+				singleTable = false;
+				break;
+			}
+		}
+	}
+
+	QString sql; //final sql string
+//unused	QString s_from_additional; //additional tables list needed for lookup fields
+	QString s_additional_joins; //additional joins needed for lookup fields
+	QString s_additional_fields; //additional fields to append to the fields list
+	sql.reserve(4096);
+	number = 0;
 	for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
 		if (querySchema.isColumnVisible(number)) {
 			if (!sql.isEmpty())
@@ -1071,8 +1084,56 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 					sql += (QString::fromLatin1(" AS ") + aliasString);
 //! @todo add option that allows to omit "AS" keyword
 			}
+			LookupFieldSchema *lookupFieldSchema = f->table()->lookupFieldSchema( *f );
+			if (lookupFieldSchema) {
+				// Lookup field schema found
+				// Now we also need to fetch "visible" value from the lookup table, not only the value of binding.
+				// -> build LEFT OUTER JOIN clause for this purpose (LEFT, not INNER because the binding can be broken)
+				// "LEFT OUTER JOIN lookupTable ON thisTable.thisField=lookupTable.boundField"
+				if (lookupFieldSchema->rowSourceType()==LookupFieldSchema::Table) {
+					TableSchema *lookupTable = querySchema.connection()->tableSchema( lookupFieldSchema->rowSource() );
+					Field *visibleField = 0;
+					Field *boundField = 0;
+					if (lookupTable && lookupFieldSchema->boundColumn()>=0 
+						&& (uint)lookupFieldSchema->boundColumn() < lookupTable->fieldCount()
+						&& (visibleField = lookupTable->field( lookupFieldSchema->visibleColumn()))
+						&& (boundField = lookupTable->field( lookupFieldSchema->boundColumn() )))
+					{
+						//add LEFT OUTER JOIN
+						if (!s_additional_joins.isEmpty())
+							s_additional_joins += QString::fromLatin1(" ");
+						s_additional_joins += QString("LEFT OUTER JOIN %1 ON %2.%3=%4.%5")
+							.arg(escapeIdentifier(lookupTable->name(), drvEscaping))
+							.arg(escapeIdentifier(f->table()->name(), drvEscaping))
+							.arg(escapeIdentifier(f->name(), drvEscaping))
+							.arg(escapeIdentifier(lookupTable->name(), drvEscaping))
+							.arg(escapeIdentifier(boundField->name(), drvEscaping));
+
+						//add visibleField to the list of SELECTed fields if it is not yes present there
+						if (!querySchema.findTableField( visibleField->table()->name()+"."+visibleField->name() )) {
+							if (!querySchema.table( visibleField->table()->name() )) {
+/* not true
+								//table should be added after FROM
+								if (!s_from_additional.isEmpty())
+									s_from_additional += QString::fromLatin1(", ");
+								s_from_additional += escapeIdentifier(visibleField->table()->name(), drvEscaping);
+								*/
+							}
+							if (!s_additional_fields.isEmpty())
+								s_additional_fields += QString::fromLatin1(", ");
+							s_additional_fields += (escapeIdentifier(visibleField->table()->name(), drvEscaping) + "."
+								+ escapeIdentifier(visibleField->name(), drvEscaping));
+						}
+					}
+				}
+			}
 		}
 	}
+
+	//add lookup fields
+	if (!s_additional_fields.isEmpty())
+		sql += (QString::fromLatin1(", ") + s_additional_fields);
+
 	if (alsoRetrieveROWID) { //append rowid column
 		QString s;
 		if (!sql.isEmpty())
@@ -1082,6 +1143,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		s += m_driver->beh->ROW_ID_FIELD_NAME;
 		sql += s;
 	}
+
 	sql.prepend("SELECT ");
 	TableSchema::List* tables = querySchema.tables();
 	if (tables && !tables->isEmpty()) {
@@ -1099,13 +1161,24 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 			if (!aliasString.isEmpty())
 				s_from += (QString::fromLatin1(" AS ") + aliasString);
 		}
+/*unused	if (!s_from_additional.isEmpty()) {//additional tables list needed for lookup fields
+			if (!s_from.isEmpty())
+				s_from += QString::fromLatin1(", ");
+			s_from += s_from_additional;
+		}*/
 		sql += s_from;
 	}
 	QString s_where;
 	s_where.reserve(4096);
 
 	//JOINS
-//@todo: we're using WHERE for joins now; user INNER/LEFT/RIGHT JOIN later
+	if (!s_additional_joins.isEmpty()) {
+		sql += QString::fromLatin1(" ") + s_additional_joins + QString::fromLatin1(" ");
+	}
+
+//@todo: we're using WHERE for joins now; use INNER/LEFT/RIGHT JOIN later
+
+	//WHERE
 	Relationship *rel;
 	bool wasWhere = false; //for later use
 	for (Relationship::ListIterator it(*querySchema.relationships()); (rel = it.current()); ++it) {
@@ -2342,38 +2415,7 @@ static QVariant loadFieldPropertyFromExtendedTableSchemaData(
 	const QDomElement& propEl, QCString& propertyName)
 {
 	propertyName = propEl.attribute("name").latin1();
-	QCString valueType = propEl.firstChild().nodeName().latin1();
-	if (valueType.isEmpty())
-		return QVariant();
-	const QString text( propEl.firstChild().toElement().text() );
-	bool ok;
-	if (valueType == "string") {
-		return text;
-	}
-	if (valueType == "cstring") {
-		return QCString(text.latin1());
-	}
-	else if (valueType == "number") { // integer or double
-		if (text.find('.')!=-1) {
-			double val = text.toDouble(&ok);
-			if (ok)
-				return val;
-		}
-		else {
-			int val = text.toInt(&ok);
-			if (ok)
-				return val;
-			int valLong = text.toLongLong(&ok);
-			if (ok)
-				return valLong;
-		}
-	}
-	else if (valueType == "bool") {
-		return QVariant(text.lower()=="true" || text=="1", 1);
-	}
-//! @todo add more QVariant types
-	KexiDBWarn << "loadFieldPropertyFromExtendedTableSchemaData(): unknown type" << endl;
-	return QVariant();
+	return KexiDB::loadPropertyValueFromXML( propEl.firstChild() );
 }
 
 bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
@@ -2394,6 +2436,18 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 	if (!res)
 		loadExtendedTableSchemaData_ERR;
 	// extendedTableSchemaString will be just empty if there is no such data block
+
+//<temp. for LookupFieldSchema tests>
+	if (tableSchema.name()=="cars") {
+		LookupFieldSchema *lookupFieldSchema = new LookupFieldSchema();
+		lookupFieldSchema->setRowSourceType(LookupFieldSchema::Table);
+		lookupFieldSchema->setRowSource("persons");
+		lookupFieldSchema->setBoundColumn(0); //id
+		lookupFieldSchema->setVisibleColumn(3); //surname
+		tableSchema.setLookupFieldSchema( "owner", lookupFieldSchema );
+	}
+//</temp. for LookupFieldSchema tests>
+
 	if (extendedTableSchemaString.isEmpty())
 		return true;
 
@@ -2427,8 +2481,8 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 					bool ok;
 					int intValue;
 					if (propEl.tagName()=="property") {
-						QCString propertyName;
-						QVariant value = loadFieldPropertyFromExtendedTableSchemaData(propEl, propertyName);
+						QCString propertyName = propEl.attribute("name").latin1();
+						QVariant value = KexiDB::loadPropertyValueFromXML( propEl.firstChild() );
 						if (propertyName == "visibleDecimalPlaces"
 							&& KexiDB::supportsVisibleDecimalPlacesProperty(f->type()))
 						{
@@ -2436,7 +2490,11 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 							if (ok)
 								f->setVisibleDecimalPlaces(intValue);
 						}
-//! @more properties...
+//! @todo more properties...
+					}
+					else if (propEl.tagName()=="lookup-column") {
+						LookupFieldSchema *lookupFieldSchema = LookupFieldSchema::loadFromXML(propEl);
+						tableSchema.setLookupFieldSchema( f->name(), lookupFieldSchema );
 					}
 				}
 			}
@@ -2846,6 +2904,8 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	sqlwhere.reserve(1024);
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
+		if (it.key()->field->table()!=mt)
+			continue; // skip values for fields outside of the master table (e.g. a "visible value" of the lookup field)
 		if (!sqlset.isEmpty())
 			sqlset+=",";
 		sqlset += (escapeIdentifier(it.key()->field->name()) + "=" +
@@ -3002,10 +3062,10 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	Q_ULLONG ROWID = 0;
 	if (pkey && !aif_list->isEmpty()) {
 		//! @todo now only if PKEY is present, this should also work when there's no PKEY
-		QueryColumnInfo *id_fieldinfo = aif_list->first();
+		QueryColumnInfo *id_columnInfo = aif_list->first();
 //! @todo safe to cast it?
 		Q_ULLONG last_id = lastInsertedAutoIncValue(
-			id_fieldinfo->field->name(), id_fieldinfo->field->table()->name(), &ROWID);
+			id_columnInfo->field->name(), id_columnInfo->field->table()->name(), &ROWID);
 		if (last_id==(Q_ULLONG)-1 || last_id<=0) {
 			//! @todo show error
 //! @todo remove just inserted row. How? Using ROLLBACK?
@@ -3015,9 +3075,9 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		QString getAutoIncForInsertedValue = QString::fromLatin1("SELECT ")
 			+ query.autoIncrementSQLFieldsList(m_driver)
 			+ QString::fromLatin1(" FROM ")
-			+ escapeIdentifier(id_fieldinfo->field->table()->name())
+			+ escapeIdentifier(id_columnInfo->field->table()->name())
 			+ QString::fromLatin1(" WHERE ")
-			+ escapeIdentifier(id_fieldinfo->field->name()) + "="
+			+ escapeIdentifier(id_columnInfo->field->name()) + "="
 			+ QString::number(last_id);
 		if (true!=querySingleRecord(getAutoIncForInsertedValue, aif_data)) {
 			//! @todo show error

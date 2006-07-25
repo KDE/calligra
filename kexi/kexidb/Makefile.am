@@ -14,7 +14,7 @@ libkexidb_la_SOURCES = drivermanager.cpp driver.cpp driver_p.cpp connection.cpp 
  indexschema.cpp queryschema.cpp schemadata.cpp global.cpp relationship.cpp \
  roweditbuffer.cpp msghandler.cpp \
  dbobjectnamevalidator.cpp preparedstatement.cpp \
- dbproperties.cpp admin.cpp alter.cpp
+ dbproperties.cpp admin.cpp alter.cpp lookupfieldschema.cpp
 
 noinst_HEADERS = drivermanager_p.h utils_p.h
 

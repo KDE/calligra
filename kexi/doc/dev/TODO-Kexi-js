@@ -781,6 +781,8 @@ CSV Import TODO:
 - add better detection for CSV data with \t delimiters (needed for pasting from spreadsheets)
 - add option for storing import settings
 - always test using e.g. this file: http://cvs.sourceforge.net/viewcvs.py/*checkout*/wcuniverse/priv/units/units.csv
+- change boolean "First row contains column names" to 3-value combo:
+  "Get column names:" ["None", "From the first row", "From the first imported row"]
 
 CSV Export TODO:
 - add "Include row count as first column - include row number in the first 
@@ -790,6 +792,7 @@ CSV Export TODO:
    a NULL value in the document" option
 - MORE TODOs here: http://www.aquafold.com/docs-qw-save-results.html
 - by default, use delimiter=\t and quote=none for clipboard (needed for copying to spreadsheets)
+- add "Strip leading and trailing blanks off of text values" option
 
 KexiDB TODO:
 -implement QuerySchema::setOrderByColumnList()
@@ -798,20 +801,6 @@ KexiDB TODO:
 TableView TODO (before 1.0)
 - fix repainting cells when moving down/up arrow at the window boundaries 
   (weird, win32 is not affected)
-
-Table Designer TODO
-- i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)
-- add setting for default length of the text type
-
-Table Column Lookup XML Format:
-<rowsource>
-  empty
-  | <name>string</name>
-    <type>table|query</type>
-  |<sql>string</sql> #must be valid KEXISQL
-</rowsource>
-[todo]
-
 
 General TODO:
 - handle KApplication::shutDown()
@@ -898,9 +887,6 @@ KDElibs4 TODO:
 - show the screenshot of kexi displaying yes/no/maybe-dialogs, as for the "Woman edition"
 
 TODO:
-Kexi 1.1: Upgrade to SQLite 3.2.8 (but do not use ALTER TABLE ADD COLUMN, for compatibility with 3.0.7).
-THen, we can get RENAME TABLE command, so we can use it for recreating tables after schema altering.
-
 Kexi >2.0 (probably late 2007): Add SQLite >3.3 driver. Offer exporting similar to the one between 2.8->3.0.
  Think about backporting the >3.3 driver to Kexi 1.1.
 
@@ -928,7 +914,6 @@ Forms
 - AutoField: highlighting the label when the buddy is focused
 - AutoField: handle label editing after double clicking
 - AutoField: draw required field in bold (or optionally add (*)
-TODO: fix behaviour in KexiDBForm::eventFilter() when clicking on menu
 
 Table View
 - allow to select entire rows, columns and grids as in a spreadsheet; 
@@ -937,3 +922,48 @@ Table View
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
 
+Table Designer TODO
+- i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)
+- add setting for default length of the text type
+
+Table Column Lookup XML Format:
+<lookup-column>
+ <row-source>
+  empty
+  | <type>table|query|sql</type>  #required because there can be table and query with the same name
+                              #TODO1: support "valuelist"
+                              #TODO2: support "fieldlist" (basically a list of column names of a table/query,
+                                      "Field List" as in MSA)
+  |<name>string</name> #not used for sql source type
+  |<sql>string</sql> #must be valid KEXISQL SELECT QUERY
+ </row-source>
+ <bound-column>
+  <number>number</number> #in later implementation there can be more columns
+ </bound-column>
+ <visible-column> #a column that has to be visible in the combo box
+  <number>number</number> #in later implementation there can be more columns
+ </visible-column>
+ <column-widths"> #column widths, -1 means 'default'
+   <number>int</number>
+   ...
+   <number>int</number>
+ </column-widths>
+ <show-column-headers>
+   <bool>true/false</bool>
+ </show-column-headers>
+ <list-rows>
+   <number>1..100</number>
+ </list-rows>
+ <limit-to-list>
+   <bool>true/false</bool>
+ </limit-to-list>
+ <display-widget>
+   <bool>"combobox"/"listbox"</bool>
+ </display-widget>
+</lookup-column>
+
+[todo]
+
+Combobox table edit TODO:
+- copy should handle "displayed" value, not the real one 
+  (maybe let's use a custom clipboard mimetype?)

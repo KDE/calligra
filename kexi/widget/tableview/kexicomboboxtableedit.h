@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 
 #include "kexidb/field.h"
 #include "kexiinputtableedit.h"
+#include <kexidb/lookupfieldschema.h>
 
 class KPushButton;
 class KLineEdit;
@@ -51,6 +52,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		virtual bool valueChanged();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
+		virtual QVariant visibleValueForLookupField();
 
 		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
@@ -79,6 +81,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 	protected slots:
 		void slotButtonClicked();
+		void createPopup(bool show);
 		void showPopup();
 		void slotRowAccepted(KexiTableItem *item, int row);
 		void slotItemSelected(KexiTableItem*);
@@ -95,6 +98,10 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 		void updateTextForHighlightedRow();
 
+		//! Used to select row item for an user-entered text \a str.
+		//! Only for "lookup table" mode.
+		KexiTableItem* selectItemForStringInLookupTable(const QString& str);
+
 //		//! \return value (col #1 of related data) - only reasonable for 'related table data' model
 //		QString valueForID(const QVariant& val);
 
@@ -103,13 +110,17 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		 \a str is returned.
 		 Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string 
 		 for column #1 for id-column #0 */
-		QString valueForString(const QString& str, uint lookInColumn, 
+		QString valueForString(const QString& str, int* row, uint lookInColumn, 
 			uint returnFromColumn, bool allowNulls = false);
 
 
 		//! sets \a text for the line edit without setting a flag (d->userEnteredText) that indicates that 
 		//! the text has been entered by hand (by a user)
 		void setLineEditText(const QString& text);
+
+		KexiDB::LookupFieldSchema* lookupFieldSchema() const;
+
+		int rowToHighlightForLookupTable() const;
 
 		class Private;
 		Private *d;

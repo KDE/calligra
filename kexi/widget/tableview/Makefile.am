@@ -2,7 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexidatatable.la
 libkexidatatable_la_SOURCES = kexidataawareobjectiface.cpp \
-	kexitableview.cpp kexitableview_p.cpp \
+	kexitableview.cpp kexitableview_p.cpp kexidatatableview.cpp \
 	kexicelleditorfactory.cpp kexitableedit.cpp kexitableheader.cpp \
 	kexitableitem.cpp kexitableviewdata.cpp \
 	kexidatetableedit.cpp kexitimetableedit.cpp kexidatetimetableedit.cpp \

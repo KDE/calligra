@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,7 +44,8 @@ unsigned short KexiTableViewData::charTable[]=
 };
 
 KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
-: fieldinfo(0)
+: columnInfo(0)
+, visibleLookupColumnInfo(0)
 , m_field(&f)
 {
 	isDBAware = false;
@@ -60,7 +61,8 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 	QVariant defaultValue,
 	const QString& caption, const QString& description, uint width
 )
-: fieldinfo(0)
+: columnInfo(0)
+, visibleLookupColumnInfo(0)
 {
 	m_field = new KexiDB::Field(
 		name, ctype,
@@ -78,7 +80,8 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 
 KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
 	const QString& description)
-: fieldinfo(0)
+: columnInfo(0)
+, visibleLookupColumnInfo(0)
 {
 	m_field = new KexiDB::Field(
 		name, ctype,
@@ -94,41 +97,44 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 	init();
 }
 
+// db-aware
 KexiTableViewColumn::KexiTableViewColumn(
-	const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& fi)
-//	const KexiDB::QuerySchema &query, KexiDB::Field& f)
-: fieldinfo(&fi)
-, m_field(fi.field)
+	const KexiDB::QuerySchema &query, KexiDB::QueryColumnInfo& aColumnInfo,
+	KexiDB::QueryColumnInfo* aVisibleLookupColumnInfo)
+: columnInfo(&aColumnInfo)
+, visibleLookupColumnInfo(aVisibleLookupColumnInfo)
+, m_field(aColumnInfo.field)
 {
 	isDBAware = true;
 	m_fieldOwned = false;
 
 	//setup column's caption:
-	if (!fieldinfo->field->caption().isEmpty()) {
-		m_captionAliasOrName = fieldinfo->field->caption();
+	if (!columnInfo->field->caption().isEmpty()) {
+		m_captionAliasOrName = columnInfo->field->caption();
 	}
 	else {
 		//reuse alias if available:
-		m_captionAliasOrName = fieldinfo->alias;
+		m_captionAliasOrName = columnInfo->alias;
 		//last hance: use field name
 		if (m_captionAliasOrName.isEmpty())
-			m_captionAliasOrName = fieldinfo->field->name();
+			m_captionAliasOrName = columnInfo->field->name();
 		//todo: compute other auto-name?
 	}
 	init();
 	//setup column's readonly flag: 
 	// true if it's not from parent table's field or if the query itself is coming read-only connection
-	m_readOnly = (query.masterTable()!=fieldinfo->field->table())
+	m_readOnly = (query.masterTable()!=columnInfo->field->table())
 		|| (query.connection() && query.connection()->isReadOnly());
 //	kdDebug() << "KexiTableViewColumn: query.masterTable()==" 
-//		<< (query.masterTable() ? query.masterTable()->name() : "notable") << ", fieldinfo->field->table()=="
-//		<< (fieldinfo->field->table() ? fieldinfo->field->table()->name()  : "notable") << endl;
+//		<< (query.masterTable() ? query.masterTable()->name() : "notable") << ", columnInfo->field->table()=="
+//		<< (columnInfo->field->table() ? columnInfo->field->table()->name()  : "notable") << endl;
 
 //	m_visible = query.isFieldVisible(&f);
 }
 
 KexiTableViewColumn::KexiTableViewColumn(bool)
-: fieldinfo(0)
+: columnInfo(0)
+, visibleLookupColumnInfo(0)
 , m_field(0)
 {
 	isDBAware = false;
@@ -190,17 +196,21 @@ void KexiTableViewColumn::setRelatedDataEditable(bool set)
 
 bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 {
-	if (m_field->isNumericType()) {
+	// the field we're looking at can be related to "visible lookup column" 
+	// if lookup column is present
+	KexiDB::Field *visibleField = visibleLookupColumnInfo 
+		? visibleLookupColumnInfo->field : m_field;
+	if (visibleField->isNumericType()) {
 		if (ch=='.' || ch==',')
-			return m_field->isFPNumericType();
+			return visibleField->isFPNumericType();
 		if (ch=='-')
-			 return !m_field->isUnsigned();
+			 return !visibleField->isUnsigned();
 		if (ch=='+' || (ch>='0' && ch<='9'))
 			return true;
 		return false;
 	}
 
-	switch (m_field->type()) {
+	switch (visibleField->type()) {
 	case KexiDB::Field::Boolean:
 		return false;
 	case KexiDB::Field::Date:
@@ -222,6 +232,7 @@ KexiTableViewData::KexiTableViewData()
 	init();
 }
 
+// db-aware ctor
 KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	: QObject()
 	, KexiTableViewDataBase()
@@ -230,15 +241,23 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	m_cursor = c;
 	m_containsROWIDInfo = m_cursor->containsROWIDInfo();
 
-	KexiDB::QueryColumnInfo::Vector vector 
-		= m_cursor->query()->fieldsExpanded();
-	KexiTableViewColumn* col;
-	const uint count = vector.count();
-	for (uint i=0;i<count;i++) {
-		KexiDB::QueryColumnInfo *fi = vector[i];
-		if (fi->visible) {
-			col=new KexiTableViewColumn(*m_cursor->query(), *fi);
-			//col->setVisible( detailedVisibility[i] );
+
+	// 1. Allocate KexiTableViewColumn objects for each visible query column
+	const KexiDB::QueryColumnInfo::Vector fields = m_cursor->query()->fieldsExpanded();
+	const uint fieldsCount = fields.count();
+	for (uint i=0;i < fieldsCount;i++) {
+		KexiDB::QueryColumnInfo *ci = fields[i];
+		if (ci->visible) {
+			KexiDB::QueryColumnInfo *visibleLookupColumnInfo = 0;
+			if (ci->indexForVisibleLookupValue != -1) {
+				//Lookup field is defined
+				visibleLookupColumnInfo = m_cursor->query()->expandedOrInternalField( ci->indexForVisibleLookupValue );
+				if (visibleLookupColumnInfo) {
+					// 2. Create a KexiTableViewData object for each found lookup field
+					
+				}
+			}
+			KexiTableViewColumn* col = new KexiTableViewColumn(*m_cursor->query(), *ci, visibleLookupColumnInfo);
 			addColumn( col );
 		}
 	}
@@ -546,7 +565,8 @@ void KexiTableViewData::clearRowEditBuffer()
 }
 
 bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item, 
-	int colnum, KexiTableViewColumn* col, QVariant& newval, bool allowSignals)
+	int colnum, KexiTableViewColumn* col, QVariant& newval, bool allowSignals,
+	QVariant *visibleValueForLookupField)
 {
 	m_result.clear();
 	if (allowSignals)
@@ -563,13 +583,18 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 		return false;
 	}
 	if (m_pRowEditBuffer->isDBAware()) {
-		if (!(col->fieldinfo)) {
+		if (!(col->columnInfo)) {
 			kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
 				<< colnum << " not found!" << endl;
 			return false;
 		}
 //		if (!(static_cast<KexiDBTableViewColumn*>(col)->field)) {
-		m_pRowEditBuffer->insert( *col->fieldinfo, newval);
+		m_pRowEditBuffer->insert( *col->columnInfo, newval);
+
+		if (col->visibleLookupColumnInfo && visibleValueForLookupField) {
+			//this is value for lookup table: update visible value as well
+			m_pRowEditBuffer->insert( *col->visibleLookupColumnInfo, *visibleValueForLookupField);
+		}
 		return true;
 	}
 	if (!(col->field())) {
@@ -589,7 +614,7 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 //get a new value (of present in the buffer), or the old one, otherwise
 //(taken here for optimization)
 #define GET_VALUE if (!val) { \
-	val = m_cursor ? m_pRowEditBuffer->at( *it_f.current()->fieldinfo ) : m_pRowEditBuffer->at( *f ); \
+	val = m_cursor ? m_pRowEditBuffer->at( *it_f.current()->columnInfo ) : m_pRowEditBuffer->at( *f ); \
 	if (!val) \
 		val = &(*it_r); /* get old value */ \
 	}
@@ -824,11 +849,12 @@ void KexiTableViewData::preloadAllRows()
 	if (!m_cursor)
 		return;
 
-	const uint fcount = m_cursor->fieldCount() + (m_containsROWIDInfo ? 1 : 0);
+	//const uint fcount = m_cursor->fieldCount() + (m_containsROWIDInfo ? 1 : 0);
 	m_cursor->moveFirst();
 	for (int i=0;!m_cursor->eof();i++) {
-		KexiTableItem *item = new KexiTableItem(fcount);
+		KexiTableItem *item = new KexiTableItem(0);//fcount);
 		m_cursor->storeCurrentRow(*item);
+//		item->debug();
 		append( item );
 		m_cursor->moveNext();
 #ifndef KEXI_NO_PROCESS_EVENTS
@@ -844,4 +870,3 @@ bool KexiTableViewData::isReadOnly() const
 }
 
 #include "kexitableviewdata.moc"
-
