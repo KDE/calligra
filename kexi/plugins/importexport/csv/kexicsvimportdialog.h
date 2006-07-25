@@ -39,6 +39,8 @@
 #include <kexiutils/tristate.h>
 #include <kexidb/connection.h>
 
+#include "kexicsvimportoptionsdlg.h"
+
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
@@ -177,7 +179,7 @@ class KexiCSVImportDialog : public KDialogBase
 	QString m_fname;
 	QFile* m_file;
 	QTextStream *m_inputStream; //!< used in loadData()
-	QString m_encoding;
+	KexiCSVImportOptions m_options;
 	KProgressDialog *m_loadingProgressDlg, *m_importingProgressDlg;
 	bool m_dialogCancelled;
 	KexiCSVInfoLabel *m_infoLbl;

@@ -21,19 +21,34 @@
 #define KEXICSVOPTIONSDIALOG_H
 
 #include <kdialogbase.h>
+#include <qcheckbox.h>
 
 class KexiCharacterEncodingComboBox;
-class QCheckBox;
 
-//! @short CSV Options dialog.
+//! @short CSV Options
+class KexiCSVImportOptions
+{
+	public:
+		KexiCSVImportOptions();
+		~KexiCSVImportOptions();
+
+		bool operator== ( const KexiCSVImportOptions & opt ) const;
+		bool operator!= ( const KexiCSVImportOptions & opt ) const;
+
+		QString encoding;
+		bool defaultEncodingExplicitySet;
+		bool stripWhiteSpaceInTextValuesChecked;
+};
+
+//! @short CSV Options dialog
 class KexiCSVImportOptionsDialog : public KDialogBase
 {
 	Q_OBJECT
 	public:
-		KexiCSVImportOptionsDialog( const QString& selectedEncoding, QWidget* parent = 0 );
+		KexiCSVImportOptionsDialog( const KexiCSVImportOptions& options, QWidget* parent = 0 );
 		virtual ~KexiCSVImportOptionsDialog();
 
-		KexiCharacterEncodingComboBox* encodingComboBox() const;
+		KexiCSVImportOptions options() const;
 
 	protected slots:
 		virtual void accept();
@@ -41,6 +56,7 @@ class KexiCSVImportOptionsDialog : public KDialogBase
 	protected:
 		KexiCharacterEncodingComboBox *m_encodingComboBox;
 		QCheckBox *m_chkAlwaysUseThisEncoding;
+		QCheckBox *m_chkStripWhiteSpaceInTextValues;
 };
 
 #endif

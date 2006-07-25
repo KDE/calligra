@@ -69,7 +69,6 @@
 #include <widget/kexicharencodingcombobox.h>
 
 #include "kexicsvimportdialog.h"
-#include "kexicsvimportoptionsdlg.h"
 #include "kexicsvwidgets.h"
 
 #ifdef Q_WS_WIN
@@ -191,7 +190,8 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	setIcon(DesktopIcon(_IMPORT_ICON));
 	setSizeGripEnabled( TRUE );
 
-	m_encoding = QString::fromLatin1(KGlobal::locale()->encoding());
+//	m_encoding = QString::fromLatin1(KGlobal::locale()->encoding());
+//	m_stripWhiteSpaceInTextValuesChecked = true;
 	m_file = 0;
 	m_inputStream = 0;
 	
@@ -587,8 +587,8 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	else {
 		m_file->at(0); //always seek at 0 because loadRows() is called many times
 		m_inputStream = new QTextStream(m_file);
-		if (m_encoding != QString::fromLatin1(KGlobal::locale()->encoding())) {
-			QTextCodec *codec = KGlobal::charsets()->codecForName(m_encoding);
+		if (m_options.defaultEncodingExplicitySet) {
+			QTextCodec *codec = KGlobal::charsets()->codecForName(m_options.encoding);
 			if (codec)
 				m_inputStream->setCodec(codec); //QTextCodec::codecForName("CP1250"));
 		}
@@ -623,6 +623,12 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 
 		if (x == '\r') {
 			continue; // eat '\r', to handle RFC-compliant files
+		}
+		if (offset==0 && x.unicode()==0xfeff) {
+			// Ignore BOM, the "Byte Order Mark" 
+			// (http://en.wikipedia.org/wiki/Byte_Order_Mark, // http://www.unicode.org/charts/PDF/UFFF0.pdf)
+			// Probably fixed in Qt4.
+			continue;
 		}
 
 		switch (state)
@@ -1055,7 +1061,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 			}
 		}
 		else //_TEXT_TYPE and the rest
-			*m_importingStatement << text;
+			*m_importingStatement << (m_options.stripWhiteSpaceInTextValuesChecked ? text.stripWhiteSpace() : text);
 		return;
 	}
 	//save text to GUI (table view)
@@ -1105,7 +1111,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 		m_adjustRows=1;
 	}
 
-	m_table->setText(row - 1, col - 1, text.stripWhiteSpace());
+	m_table->setText(row - 1, col - 1, (m_options.stripWhiteSpaceInTextValuesChecked ? text.stripWhiteSpace() : text));
 	m_table->verticalHeader()->setLabel(row-1, QString::number(row-1));
 
 	detectTypeAndUniqueness(row-1, col-1, text);
@@ -1512,12 +1518,13 @@ void KexiCSVImportDialog::slot1stRowForFieldNamesChanged(int)
 
 void KexiCSVImportDialog::optionsButtonClicked()
 {
-	KexiCSVImportOptionsDialog dlg(m_encoding, this);
+	KexiCSVImportOptionsDialog dlg(m_options, this);
 	if (QDialog::Accepted != dlg.exec())
 		return;
 
-	if (m_encoding != dlg.encodingComboBox()->selectedEncoding()) {
-		m_encoding = dlg.encodingComboBox()->selectedEncoding();
+	KexiCSVImportOptions newOptions( dlg.options() );
+	if (m_options != newOptions) {
+		m_options = newOptions;
 		if (!openData())
 			return;
 		fillTable();
