@@ -12,7 +12,7 @@ KWORDDIR = kword
 endif
 
 if compile_filter_KPRESENTER
-KPRESENTERDIR = kpresenter
+KPRESENTERDIR = kpresenter olefilters
 endif
 
 if compile_filter_KSPREAD
