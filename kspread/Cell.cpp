@@ -550,13 +550,6 @@ void Cell::removeValidity()
 }
 
 
-void Cell::copyFormat( const int column , const int row )
-{
-    const Cell * cell = format()->sheet()->cellAt( column , row );
-
-    copyFormat( cell );
-}
-
 void Cell::copyFormat( const Cell* cell )
 {
 
@@ -659,7 +652,7 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
   for ( int x = _col; x <= _col + extraXCells; ++x ) {
     for ( int y = _row; y <= _row + extraYCells; ++y ) {
       if ( x != _col || y != _row )
-        format()->sheet()->nonDefaultCell( x, y )->unobscure(this);
+        format()->sheet()->cellAt( x, y )->unobscure(this);
     }
   }
 
@@ -1159,10 +1152,10 @@ void Cell::freeAllObscuredCells()
   if (!d->hasExtra())
     return;
 
-  for ( int x = d->column + d->extra()->mergedXCells;
-  x <= d->column + d->extra()->extraXCells; ++x ) {
-    for ( int y = d->row + d->extra()->mergedYCells;
-    y <= d->row + d->extra()->extraYCells; ++y ) {
+  const int extraXCells = d->extra()->extraXCells;
+  const int extraYCells = d->extra()->extraYCells;
+  for ( int x = d->column + d->extra()->mergedXCells; x <= d->column + extraXCells; ++x ) {
+    for ( int y = d->row + d->extra()->mergedYCells; y <= d->row + extraYCells; ++y ) {
       if ( x != d->column || y != d->row ) {
         Cell *cell = format()->sheet()->cellAt( x, y );
         cell->unobscure(this);
@@ -1172,7 +1165,6 @@ void Cell::freeAllObscuredCells()
 
   d->extra()->extraXCells = d->extra()->mergedXCells;
   d->extra()->extraYCells = d->extra()->mergedYCells;
-
 }
 
 
@@ -1275,9 +1267,26 @@ void Cell::makeLayout( int _col, int _row )
 
 void Cell::valueChanged ()
 {
-  update();
+  // Those obscuring us need to redo their layout cause they can't obscure us
+  // now that we've got text, but their text has not changed.
+  setLayoutDirtyFlag( false );
+  setFlag( Flag_TextFormatDirty );
+  // Those we've obscured also need a relayout.
+  for (int x = d->column; x <= d->column + extraXCells(); x++)
+  {
+    for (int y = d->row; y <= d->row + extraYCells(); y++)
+    {
+      Cell* cell = format()->sheet()->cellAt(x,y);
+      cell->setLayoutDirtyFlag();
+    }
+  }
 
-  format()->sheet()->valueChanged (this);
+  /* TODO - is this a good place for this? */
+  updateChart( true );
+
+  setCalcDirtyFlag(); // recalc in the next paint (!) event
+  // NOTE: Stefan: this would recalc this cell immediately
+//   format()->sheet()->valueChanged (this);
 }
 
 
@@ -4513,7 +4522,7 @@ void Cell::decPrecision()
 }
 
 //set numerical value
-//used in Sheet::setSeries (nowhere else yet)
+//used in CSVFilter::convert (nowhere else yet)
 void Cell::setNumber( double number )
 {
   setValue( Value( number ) );
@@ -4605,27 +4614,6 @@ void Cell::setLink( const QString& link )
 QString Cell::link() const
 {
   return d->hasExtra() ? d->extra()->link : QString::null;
-}
-
-void Cell::update()
-{
-  /* those obscuring us need to redo their layout cause they can't obscure us
-     now that we've got text.
-     This includes cells obscuring cells that we are obscuring
-  */
-  for (int x = d->column; x <= d->column + extraXCells(); x++)
-  {
-    for (int y = d->row; y <= d->row + extraYCells(); y++)
-    {
-      Cell* cell = format()->sheet()->cellAt(x,y);
-      cell->setLayoutDirtyFlag();
-    }
-  }
-
-  setCalcDirtyFlag(); // recalc in the next paint (!) event
-
-  /* TODO - is this a good place for this? */
-  updateChart(true);
 }
 
 bool Cell::testValidity() const
@@ -6538,11 +6526,9 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
     t = decodeFormula( t, d->column, d->row );
     setCellText (pasteOperation( t, d->strText, op ));
 
-    setFlag(Flag_CalcDirty);
     clearAllErrors();
 
-    if ( !makeFormula() )
-      kError(36001) << "ERROR: Syntax ERROR" << endl;
+    makeFormula();
   }
   // rich text ?
   else if ((!t.isEmpty()) && (t[0] == '!') )

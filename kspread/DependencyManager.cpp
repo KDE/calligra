@@ -263,6 +263,9 @@ void DependencyManager::Private::areaModified (const QString &name)
 
 void DependencyManager::Private::addDependency(const Cell* cell, const Region& region)
 {
+  if (region.isEmpty())
+    return;
+
   Region::Point point(QPoint(cell->column(), cell->row()));
   point.setSheet(cell->sheet());
 
@@ -345,10 +348,10 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
     return Region();
 
   const Formula* f = cell->formula();
-  Q_ASSERT(f);
   if (f==0)
   {
-    kDebug() << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0" << endl;
+    kDebug() << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
+    Q_ASSERT(cell->formula());
     return Region();
   }
 

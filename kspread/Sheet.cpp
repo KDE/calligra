@@ -1705,8 +1705,7 @@ void Sheet::refreshRemoveAreaName(const QString & _areaName)
     {
       if (c->text().indexOf(tmp) != -1)
       {
-        if ( !c->makeFormula() )
-          kError(36001) << "ERROR: Syntax ERROR" << endl;
+        c->makeFormula();
       }
     }
   }
@@ -1723,9 +1722,7 @@ void Sheet::refreshChangeAreaName(const QString & _areaName)
     {
       if (c->text().indexOf(tmp) != -1)
       {
-        if ( !c->makeFormula() )
-          kError(36001) << "ERROR: Syntax ERROR" << endl;
-        else
+        if ( c->makeFormula() )
           region.add(QPoint(c->column(), c->row()), c->sheet());
       }
     }
@@ -3780,6 +3777,10 @@ void Sheet::deleteCells(const Region& region)
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
   {
     QRect range = (*it)->rect();
+
+    // The RecalcManager needs a valid sheet.
+    if ( !(*it)->sheet() )
+      (*it)->setSheet( this );
 
     int right  = range.right();
     int left   = range.left();

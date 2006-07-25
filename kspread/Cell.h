@@ -284,18 +284,8 @@ public:
     QDate toDate(const QDomElement &element);
 
     /**
-     * Copies the format from the cell at the position @p column , @p row .
-     *
-     * @see copyFormat( const Cell* cell )
-     * @see copyAll
-     */
-    void copyFormat( const int column, const int row );
-
-    /**
-     * A convenience function.
      * Copies the format from the Cell @p cell .
      *
-     * @see copyFormat( const int column, const int row )
      * @see copyAll(Cell *cell)
      */
     void copyFormat( const Cell* cell );
@@ -1221,7 +1211,6 @@ private:
   bool loadCellData(const QDomElement &text, Paste::Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
                        QString str );
-  void update();
   int effAlignX();
 
   /**
