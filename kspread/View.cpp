@@ -7179,6 +7179,7 @@ void View::saveCurrentSheetSelection()
 
 void View::handleDamages( const QList<Damage*>& damages )
 {
+    kDebug() << "\tProcessing damages..." << endl;
     bool refreshView = false;
     Region formulaChangedRegion;
     Region layoutChangedRegion;

@@ -51,6 +51,7 @@
 
 #include "Canvas.h"
 #include "Condition.h"
+#include "Damages.h"
 #include "Doc.h"
 #include "Format.h"
 #include "Global.h"
@@ -479,9 +480,6 @@ void Cell::setValue( const Value& value )
 
   d->value = value;
 
-  setFlag(Flag_LayoutDirty);
-  setFlag(Flag_TextFormatDirty);
-
   // Format and set the outText.
   setOutputText();
 
@@ -694,36 +692,27 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
 
 void Cell::move( int col, int row )
 {
-    setLayoutDirtyFlag();
-    setCalcDirtyFlag(); // recalc in the next paint (!) event
+    // For the old position (the new is handled in valueChanged() at the end):
+    setFlag( Flag_TextFormatDirty );
+    setLayoutDirtyFlag( false );
+    format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
 
     //int ex = extraXCells();
     //int ey = d->extra()->extraYCells();
 
     if (d->hasExtra())
-      d->extra()->obscuringCells.clear();
-
-    // Unobscure the objects we obscure right now
-    int extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
-    int extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
-    for( int x = d->column; x <= d->column + extraXCells; ++x )
-        for( int y = d->row; y <= d->row + extraYCells; ++y )
-            if ( x != d->column || y != d->row )
-            {
-                Cell *cell = format()->sheet()->nonDefaultCell( x, y );
-                cell->unobscure(this);
-            }
-
-    d->column = col;
-    d->row    = row;
-
-    if (d->hasExtra())
     {
-      //    d->extra()->extraXCells = 0;
-      //    d->extra()->extraYCells = 0;
+      d->extra()->obscuringCells.clear();
       d->extra()->mergedXCells = 0;
       d->extra()->mergedYCells = 0;
     }
+
+    // Unobscure the objects we obscure right now
+    freeAllObscuredCells();
+
+    // move us
+    d->column = col;
+    d->row    = row;
 
     // Cell value has been changed (because we're another cell now).
     valueChanged ();
@@ -1284,9 +1273,7 @@ void Cell::valueChanged ()
   /* TODO - is this a good place for this? */
   updateChart( true );
 
-  setCalcDirtyFlag(); // recalc in the next paint (!) event
-  // NOTE: Stefan: this would recalc this cell immediately
-//   format()->sheet()->valueChanged (this);
+  format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
 }
 
 
@@ -2019,7 +2006,7 @@ bool Cell::makeFormula()
   format()->sheet()->formulaChanged(this);
 
   // we must recalc
-  setCalcDirtyFlag(); // recalc in the next paint (!) event
+  format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
 
   return true;
 }
@@ -2032,6 +2019,9 @@ void Cell::clearFormula()
 
 bool Cell::calc(bool delay)
 {
+  if ( !testFlag( Flag_CalcDirty ) )
+    return true;
+
   if ( !isFormula() )
     return true;
 
@@ -2051,26 +2041,19 @@ bool Cell::calc(bool delay)
     }
   }
 
-  if ( !testFlag( Flag_CalcDirty ) )
-    return true;
-
   if ( delay )
   {
     if ( format()->sheet()->doc()->delayCalculation() )
       return true;
   }
 
-  setFlag(Flag_LayoutDirty);
-  setFlag(Flag_TextFormatDirty);
-  clearFlag(Flag_CalcDirty);
-
   Value result = d->formula->eval ();
   setValue (result);
   if (result.isNumber())
     checkNumberFormat(); // auto-chooses number or scientific
 
+  // At last we can reset the calc dirty flag.
   clearFlag(Flag_CalcDirty);
-  setFlag(Flag_LayoutDirty);
 
   return true;
 }
@@ -4534,31 +4517,27 @@ void Cell::setNumber( double number )
 
 void Cell::setCellText( const QString& _text, bool asText )
 {
- // QString ctext = _text;
-
-// (Tomas) is this trim necessary for anything ?
-//  if( ctext.length() > 5000 )
-//    ctext = ctext.left( 5000 );
-
-  // empty string ?
-  if (_text.length() == 0) {
-    d->strOutText = d->strText = "";
-    setValue (Value::empty());
+  // empty string?
+  if (_text.isEmpty())
+  {
+    d->strText.clear();
+    d->strOutText.clear();
+    setValue( Value::empty() );
     return;
   }
 
-  // as text ?
-  if (asText) {
+  // as text?
+  if (asText)
+  {
     d->strOutText = _text;
     d->strText    = _text;
-    setValue (Value (_text));
-
+    setValue( Value( _text ) );
     return;
   }
 
-  QString oldText = d->strText;
+  const QString oldText = d->strText;
   setDisplayText( _text );
-  if(!format()->sheet()->isLoading() && !testValidity() )
+  if ( !format()->sheet()->isLoading() && !testValidity() )
   {
     //reapply old value if action == stop
     setDisplayText( oldText );
@@ -4567,36 +4546,23 @@ void Cell::setCellText( const QString& _text, bool asText )
 
 void Cell::setDisplayText( const QString& _text )
 {
-  bool isLoading = format()->sheet()->isLoading();
+  const bool isLoading = format()->sheet()->isLoading();
 
-  if (!isLoading)
+  if ( !isLoading )
     format()->sheet()->doc()->emitBeginOperation( false );
 
   d->strText = _text;
 
-  /**
-   * A real formula "=A1+A2*3" was entered.
-   */
+  // A real formula "=A1+A2*3" was entered.
   if ( !d->strText.isEmpty() && d->strText[0] == '=' )
   {
-    setFlag(Flag_LayoutDirty);
-    setFlag(Flag_TextFormatDirty);
-
-    if ( !makeFormula() )
-      kError(36001) << "ERROR: Syntax ERROR" << endl;
-    setCalcDirtyFlag(); // recalc in the next paint (!) event
+    makeFormula();
   }
-
-  /**
-   * Some numeric value or a string.
-   */
+  // Some numeric value or a string.
   else
   {
     // Find out what data type it is
     checkTextInput();
-
-    setFlag(Flag_LayoutDirty);
-    setFlag(Flag_TextFormatDirty);
   }
 
   if ( !isLoading )
@@ -4881,18 +4847,6 @@ bool Cell::isTime() const
       (value().format() == Value::fmt_Time)));
 }
 
-void Cell::setCalcDirtyFlag()
-{
-  if ( !isFormula() )
-  {
-    //don't set the flag if we don't hold a formula
-    clearFlag(Flag_CalcDirty);
-    return;
-  }
-  setFlag(Flag_CalcDirty);
-  format()->sheet()->setRegionPaintDirty(cellRect());
-}
-
 
 bool Cell::updateChart(bool refresh)
 {
@@ -5004,11 +4958,19 @@ void Cell::checkTextInput()
   // Goal of this method: determine the value of the cell
   clearAllErrors();
 
+  // Update the dependencies, if this was a formula.
+  if (d->formula)
+  {
+    kDebug() << "FORMULA THIS WAS!" << endl;
+    format()->sheet()->formulaChanged(this);
+  }
+
   d->value = Value::empty();
 
   // Get the text from that cell
   QString str = d->strText;
 
+  // Parses the text and sets its value appropriately (calls Cell::setValue).
   sheet()->doc()->parser()->parse (str, this);
 
   // Parsing as time acts like an autoformat: we even change d->strText
@@ -5765,7 +5727,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
       loadOasisObjects( frame, oasisContext );
 
     if (isFormula)   // formulas must be recalculated
-      setCalcDirtyFlag(); // recalc in the next paint (!) event
+      format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula & CellDamage::Value ) );
 
     return true;
 }

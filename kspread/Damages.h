@@ -51,11 +51,11 @@ class CellDamage : public Damage
   public:
     enum Change
     {
-      Appearance,
-      Formula,
-      Layout,
-      TextFormat,
-      Value
+      Appearance = 0x01,
+      Formula    = 0x02,
+      Layout     = 0x04,
+      TextFormat = 0x10,
+      Value      = 0x20
     };
     Q_DECLARE_FLAGS( Changes, Change )
 
@@ -82,11 +82,11 @@ class SheetDamage : public Damage
 
     enum Change
     {
-      None = 0,
-      ContentChanged,
-      PropertiesChanged,
-      Hidden,
-      Shown
+      None              = 0x01,
+      ContentChanged    = 0x02,
+      PropertiesChanged = 0x04,
+      Hidden            = 0x10,
+      Shown             = 0x20
     };
     Q_DECLARE_FLAGS( Changes, Change )
 

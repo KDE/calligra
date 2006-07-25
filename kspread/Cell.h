@@ -614,12 +614,6 @@ public:
     bool calc(bool delay = true);
 
     /**
-     * Marks this cell, so that it will be recalculated within the next
-     * paint event. Only marks the cell, if it has got a formula.
-     */
-    void setCalcDirtyFlag();
-
-    /**
      * Notify this cell that another cell is depending, or no longer depending on this cell's value
      *
      * @param col the column of the cell

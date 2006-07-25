@@ -37,7 +37,9 @@ public:
 class CellDamage::Private
 {
 public:
-  KSpread::Cell* cell;
+  int column;
+  int row;
+  KSpread::Sheet* sheet;
   Changes changes;
 };
 
@@ -49,7 +51,9 @@ using namespace KSpread;
 CellDamage::CellDamage( KSpread::Cell* cell, Changes changes )
   : d( new Private )
 {
-  d->cell = cell;
+  d->column = cell->column();
+  d->row = cell->row();
+  d->sheet = cell->sheet();
   d->changes = changes;
 }
 
@@ -60,7 +64,7 @@ CellDamage::~CellDamage()
 
 KSpread::Cell* CellDamage::cell() const
 {
-  return d->cell;
+  return d->sheet->cellAt( d->column, d->row );
 }
 
 CellDamage::Changes CellDamage::changes() const

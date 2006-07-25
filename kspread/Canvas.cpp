@@ -4033,11 +4033,9 @@ void Canvas::paintUpdates()
       {
         cell = sheet->cellAt( x, y );
 
-        // recalc and relayout only for non default cells
+        // relayout only for non default cells
         if (!cell->isDefault())
         {
-          if (cell->testFlag(Cell::Flag_CalcDirty))
-            cell->calc();
           if (cell->testFlag(Cell::Flag_LayoutDirty))
             cell->makeLayout( x, y );
         }
