@@ -3,7 +3,7 @@ Work packages toward the koffice 2.0 release
 
 Here are some main things we have to work on to get ready for koffice 2.0
 Feel free to add or modify todos as they appear when working on karbon.
-Before working on some of the following, just add your name beside the todo you want to work on so that
+Before working on some of the following, just add your name beside the todo you want to work on so there
 is no duplicate work.
 
 Canvas:
@@ -13,7 +13,7 @@ Canvas:
 - we should improve the canvas so that we can center the canvas vertically too
 - zooming support needs to be added to the gui (e.g. the view toolbar, zooming with mouse wheel, etc. )
 - we should add/replace the canvas at the document docker (bird eye view)
-- part drawing of page borders and the grid
+- port drawing of page borders and the grid
 
 KoPathShape:
 ------------
@@ -27,6 +27,7 @@ Layers:
 - figure out how we best implement the layers (its just a somewhat working hack right now)
 - the layer view needs porting to qt4 (use the model/view framework from qt see
   http://www.phptr.com/content/images/0131872494/samplechapter/blanchette_ch10.pdf )
+  -> seems like there is another soc project working on a layer view (KoDocumentSection* in libs/kofficui)
 - we should make that really pretty with preview of shapes in a tooltip etc.
 - drag and drop of items to reparent or raising/lowering them
 - toggling locking and visbility should be easy to use
@@ -66,6 +67,7 @@ Cleanup:
 General:
 --------
 - consider the old todos and wishes when implementing/porting the above parts
+- replace VColor with KoColor
 
 
 From the usability review of Thomas Zander
