@@ -1076,7 +1076,7 @@ void DilationManipulator::execute()
     do
     {
       right++;
-      col = m_sheet->nonDefaultColumnFormat( right );
+      col = m_sheet->columnFormat( right );
     } while ( col->isHide() && right != KS_colMax );
   }
   if ( left > 1 )
@@ -1084,7 +1084,7 @@ void DilationManipulator::execute()
     do
     {
       left--;
-      col = m_sheet->nonDefaultColumnFormat( left );
+      col = m_sheet->columnFormat( left );
     } while ( col->isHide() && left != 1);
   }
 
@@ -1093,7 +1093,7 @@ void DilationManipulator::execute()
     do
     {
       bottom++;
-      rl = m_sheet->nonDefaultRowFormat( bottom );
+      rl = m_sheet->rowFormat( bottom );
     } while ( rl->isHide() && bottom != KS_rowMax );
   }
 
@@ -1102,7 +1102,7 @@ void DilationManipulator::execute()
     do
     {
       top--;
-      rl = m_sheet->nonDefaultRowFormat( top );
+      rl = m_sheet->rowFormat( top );
     } while ( rl->isHide() && top != 1);
   }
 
