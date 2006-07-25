@@ -378,9 +378,57 @@ public:
     Value valueRange (int col1, int row1, int col2, int row2) const;
 
     QRect visibleRect( Canvas const * const _canvas ) const;
+
+    /**
+     * Determines the row for a given position \p _ypos . If the position is
+     * on the border between two cells, the upper row is returned. Also, the offset
+     * between the coordinate system root and the upper row border is determined.
+     *
+     * \param _ypos the position for which the row should be determined
+     * \param _top the offset between the coordinate system root and the upper row border
+     * \param canvas If not 0, the position and offset are treated as document coordinates
+     *               (unzoomed). Otherwise screen coordinates are assumed.
+     *
+     * \return the row for the given position \p _ypos
+     */
     int topRow( double _ypos, double &_top, const Canvas *_canvas = 0 ) const;
+
+    /**
+     * Determines the row for a given position \p _ypos . If the position is
+     * on the border between two cells, the lower row is returned.
+     *
+     * \param _ypos the position for which the row should be determined
+     * \param _canvas If not 0, the position and offset are treated as document coordinates
+     *                (unzoomed). Otherwise screen coordinates are assumed.
+     *
+     * \return the row for the given position \p _ypos
+     */
     int bottomRow( double _ypos, const Canvas *_canvas = 0 ) const;
+
+    /**
+     * Determines the column for a given position \p _xpos . If the position is
+     * on the border between two cells, the left column is returned. Also, the offset
+     * between the coordinate system root and the left column border is determined.
+     *
+     * \param _xpos the position for which the column should be determined
+     * \param _left the offset between the coordinate system root and the left column border
+     * \param canvas If not 0, the position and offset are treated as document coordinates
+     *               (unzoomed). Otherwise screen coordinates are assumed.
+     *
+     * \return the column for the given position \p _xpos
+     */
     int leftColumn( double _xpos, double &_left, const Canvas *_canvas = 0 ) const;
+
+    /**
+     * Determines the column for a given position \p _xpos . If the position is
+     * on the border between two cells, the right column is returned.
+     *
+     * \param _xpos the position for which the column should be determined
+     * \param canvas If not 0, the position and offset are treated as document coordinates
+     *               (unzoomed). Otherwise screen coordinates are assumed.
+     *
+     * \return the column for the given position \p _xpos
+     */
     int rightColumn( double _xpos, const Canvas *_canvas = 0 ) const;
 
     /**

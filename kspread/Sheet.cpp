@@ -704,20 +704,20 @@ int Sheet::rightColumn( double _xpos, const Canvas *_canvas ) const
         _xpos += _canvas->xOffset();
 
     int col = 1;
-    double x = 0.0;
-    while ( x < _xpos )
+    double x = columnFormat( col )->dblWidth( _canvas );
+    while ( x <= _xpos )
     {
         // Should never happen
         if ( col > KS_colMax )
-  {
-      kDebug(36001) << "Sheet:rightColumn: invalid column (col: " << col << ')' << endl;
-            return KS_colMax + 1; //Return out of range value, so other code can react on this
-  }
+        {
+            kDebug(36001) << "Sheet:rightColumn: invalid column (col: " << col << ')' << endl;
+                  return KS_colMax + 1; //Return out of range value, so other code can react on this
+        }
         x += columnFormat( col )->dblWidth( _canvas );
         col++;
     }
 
-    return col - 1;
+    return col;
 }
 
 QRect Sheet::visibleRect( Canvas const * const _canvas ) const
@@ -821,20 +821,20 @@ int Sheet::bottomRow( double _ypos, const Canvas *_canvas ) const
         _ypos += _canvas->yOffset();
 
     int row = 1;
-    double y = 0.0;
-    while ( y < _ypos )
+    double y = rowFormat( row )->dblHeight( _canvas );
+    while ( y <= _ypos )
     {
         // Should never happen
         if ( row > KS_rowMax )
-  {
-      kDebug(36001) << "Sheet:bottomRow: invalid row (row: " << row << ')' << endl;
-            return KS_rowMax + 1; //Return out of range value, so other code can react on this
-  }
+        {
+            kDebug(36001) << "Sheet:bottomRow: invalid row (row: " << row << ')' << endl;
+                  return KS_rowMax + 1; //Return out of range value, so other code can react on this
+        }
         y += rowFormat( row )->dblHeight( _canvas );
         row++;
     }
 
-    return row - 1;
+    return row;
 }
 
 double Sheet::dblColumnPos( int _col, const Canvas *_canvas ) const
