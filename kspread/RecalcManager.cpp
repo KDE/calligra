@@ -63,29 +63,14 @@ RecalcManager::~RecalcManager()
 
 void RecalcManager::regionChanged(const Region& region)
 {
-  if (d->busy)
+  if (d->busy || region.isEmpty())
     return;
   d->busy = true;
   kDebug() << "RecalcManager::regionChanged " << region.name() << endl;
   ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
   {
     ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
-    Region::ConstIterator end(region.constEnd());
-    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
-    {
-      const QRect range = (*it)->rect();
-      const Sheet* sheet = (*it)->sheet();
-      const int right = range.right();
-      const int bottom = range.bottom();
-      for (int col = range.left(); col <= right; ++col)
-      {
-        for (int row = range.top(); row <= bottom; ++row)
-        {
-          Cell* cell = sheet->cellAt(col, row);
-          recalcRegion(d->depManager->getDependants(cell));
-        }
-      }
-    }
+    recalcRegion(region);
   }
   recalc();
   d->busy = false;

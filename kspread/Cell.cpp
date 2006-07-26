@@ -466,6 +466,7 @@ const Value Cell::value() const
 //
 void Cell::setValue( const Value& value )
 {
+  kDebug() << k_funcinfo << endl;
   if (value.type() != Value::Error)
     clearAllErrors();
 
@@ -1980,7 +1981,7 @@ void Cell::calculateTextParameters()
 
 bool Cell::makeFormula()
 {
-  clearFormula ();
+  kDebug() << k_funcinfo << endl;
 
   d->formula = new KSpread::Formula (sheet(), this);
   d->formula->setExpression (d->strText);
@@ -2011,8 +2012,14 @@ bool Cell::makeFormula()
 
 void Cell::clearFormula()
 {
-  delete d->formula;
-  d->formula = 0;
+  // Update the dependencies, if this was a formula.
+  if (d->formula)
+  {
+    kDebug() << "This was a formula. Dependency update triggered." << endl;
+    format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
+    delete d->formula;
+    d->formula = 0;
+  }
 }
 
 bool Cell::calc(bool delay)
@@ -4515,6 +4522,11 @@ void Cell::setNumber( double number )
 
 void Cell::setCellText( const QString& _text, bool asText )
 {
+  kDebug() << k_funcinfo << endl;
+
+  // Clears the formula and updates the dependencies, if a formula exist.
+  clearFormula();
+
   // empty string?
   if (_text.isEmpty())
   {
@@ -4544,6 +4556,7 @@ void Cell::setCellText( const QString& _text, bool asText )
 
 void Cell::setDisplayText( const QString& _text )
 {
+  kDebug() << k_funcinfo << endl;
   const bool isLoading = format()->sheet()->isLoading();
 
   if ( !isLoading )
@@ -4953,15 +4966,9 @@ void Cell::convertToDate ()
 
 void Cell::checkTextInput()
 {
+  kDebug() << k_funcinfo << endl;
   // Goal of this method: determine the value of the cell
   clearAllErrors();
-
-  // Update the dependencies, if this was a formula.
-  if (d->formula)
-  {
-    kDebug() << "FORMULA THIS WAS!" << endl;
-    format()->sheet()->formulaChanged(this);
-  }
 
   d->value = Value::empty();
 

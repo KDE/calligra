@@ -141,6 +141,8 @@ void DependencyManager::reset ()
 
 void DependencyManager::regionChanged(const Region& region)
 {
+  if (region.isEmpty())
+    return;
   kDebug() << "DependencyManager::regionChanged " << region.name() << endl;
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
@@ -153,8 +155,8 @@ void DependencyManager::regionChanged(const Region& region)
       {
         Cell* cell = sheet->cellAt(col, row);
 
-        // empty or default cell? remove it
-        if ( cell->isEmpty() /*|| cell->isDefault()*/ )
+        // empty or default cell or cell without a formula? remove it
+        if ( cell->isEmpty() || !cell->isFormula() )
         {
           d->removeDependencies(cell);
           continue;
@@ -180,8 +182,8 @@ void DependencyManager::updateAllDependencies(const Map* map)
   {
     for (Cell* cell = sheet->firstCell(); cell; cell = cell->nextCell())
     {
-      // empty or default cell? remove it
-      if ( cell->isEmpty() /*|| cell->isDefault()*/ )
+      // empty or default cell or cell without a formula? remove it
+      if ( cell->isEmpty() || !cell->isFormula() )
       {
         d->removeDependencies(cell);
         continue;
@@ -223,7 +225,10 @@ KSpread::Region DependencyManager::Private::getDependants(const Cell* cell)
   Sheet* const sheet = cell->sheet();
 
   if (!dependants.contains(sheet))
+  {
+    kDebug() << "No dependant tree found for the cell's sheet." << endl;
     return Region();
+  }
 
   KoRTree<Region::Point>* tree = dependants.value(sheet);
 
