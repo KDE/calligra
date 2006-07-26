@@ -2002,11 +2002,9 @@ bool Cell::makeFormula()
     return false;
   }
 
-  // Update the dependencies.
-  format()->sheet()->formulaChanged(this);
-
-  // we must recalc
-  format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
+  // Update the dependencies and recalculate.
+  format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula |
+                                                             CellDamage::Value ) );
 
   return true;
 }
@@ -5727,7 +5725,8 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
       loadOasisObjects( frame, oasisContext );
 
     if (isFormula)   // formulas must be recalculated
-      format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula & CellDamage::Value ) );
+      format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula |
+                                                                 CellDamage::Value ) );
 
     return true;
 }

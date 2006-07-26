@@ -7240,9 +7240,11 @@ void View::handleDamages( const QList<Damage*>& damages )
     }
 
     // First, update the dependencies.
-    doc()->map()->dependencyManager()->regionChanged( formulaChangedRegion );
+    if ( !formulaChangedRegion.isEmpty() )
+        doc()->map()->dependencyManager()->regionChanged( formulaChangedRegion );
     // Tell the RecalcManager which cells have had a value change.
-    doc()->map()->recalcManager()->regionChanged( valueChangedRegion );
+    if ( !valueChangedRegion.isEmpty() )
+        doc()->map()->recalcManager()->regionChanged( valueChangedRegion );
     // TODO Stefan: handle text format changes
     // TODO Stefan: handle layout changes
     // At last repaint the dirty cells.

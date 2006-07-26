@@ -114,7 +114,9 @@ void DependencyManager::Private::dump()
       QString debugStr;
       for (int i = 0; i < count; ++i)
         debugStr += " " + values[i].name();
-      kDebug() << "The cells depending on " << sheet->sheetName() << " " << keys[0].toRect() << " are:" << debugStr << endl;
+      Region::Range tmpRange( keys[0].toRect() );
+      tmpRange.setSheet( sheet );
+      kDebug() << "The cells depending on " << tmpRange.name() << " are:" << debugStr << endl;
     }
   }
 /*  mend = dependants.end();
