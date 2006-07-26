@@ -198,7 +198,8 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 context.styleStack().save();
                 // We have a reference to a bookmark (### TODO)
                 // As we do not support it now, treat it as a <span> without formatting
-                parag->loadOasisSpan( tag, context, pos ); // recurse
+                bool leadingSpace = false;
+                parag->loadOasisSpan( tag, context, pos, leadingSpace ); // recurse
                 context.styleStack().restore();
             }
             else

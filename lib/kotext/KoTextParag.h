@@ -326,7 +326,14 @@ public:
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context,
                             int from, int to, bool saveAnchorsFramesets = false ) const;
 
-    void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos );
+    /**
+     * Load a section of text from a oasis based xml tree.
+     * @param parent the xml element that has content as children.
+     * @param context the context
+     * @param stripLeadingSpace Set to true to remove a leading space from the content even if
+     *        the xml contains one.
+     */
+    void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos, bool stripLeadingSpace = false);
 
     void applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
 

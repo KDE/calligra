@@ -2691,7 +2691,48 @@ QString KoTextParag::toString( int from, int length ) const
     return str;
 }
 
-void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos )
+// we cannot use QString::simplifyWhiteSpace() because it removes
+// leading and trailing whitespace, but such whitespace is significant
+// in ODF -- so we use this function to compress sequences of space characters
+// into single spaces
+static QString normalizeWhitespace( const QString& in, bool leadingSpace )
+{
+    QString text = in;
+    int r, w = 0;
+    int len = text.length();
+
+    for ( r = 0; r < len; ++r )
+    {
+        QCharRef ch = text[r];
+
+        if ( ch.isSpace() )
+        {
+            // if we were lead by whitespace in some parent or previous sibling element,
+            // we completely collapse this space
+            if ( r != 0 || !leadingSpace )
+                text[w++] = QChar( ' ' );
+
+            // find the end of the whitespace run
+            while ( r < len && text[r].isSpace() )
+                ++r;
+
+            // and then record the next non-whitespace character
+            if ( r < len )
+               text[w++] = text[r];
+        }
+        else
+        {
+            text[w++] = ch;
+        }
+    }
+
+    // and now trim off the unused part of the string
+    text.truncate(w);
+
+    return text;
+}
+
+void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos, bool leadingSpace )
 {
     // Parse every child node of the parent
     // Can't use forEachElement here since we also care about text nodes
@@ -2710,13 +2751,14 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         // Try to keep the order of the tag names by probability of happening
         if ( node.isText() )
         {
-            textData = node.toText().data().simplifyWhiteSpace();
+            textData = normalizeWhitespace( node.toText().data(), leadingSpace );
+            leadingSpace = textData[textData.length() - 1].isSpace();
         }
         else if ( isTextNS && localName == "span" ) // text:span
         {
             context.styleStack().save();
             context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
-            loadOasisSpan( ts, context, pos ); // recurse
+            loadOasisSpan( ts, context, pos, leadingSpace ); // recurse
             context.styleStack().restore();
         }
         else if ( isTextNS && localName == "s" ) // text:s
@@ -2839,7 +2881,9 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
     setFormat( document()->formatCollection()->format( &defaultFormat ) );
 
     // Load text
-    loadOasisSpan( parent, context, pos );
+    // OO.o compatibility: ignore leading whitespace in <p> and <h> elements
+    bool leadingWhitespace = true;
+    loadOasisSpan( parent, context, pos, leadingWhitespace );
 
     // Apply default format to trailing space
     const int len = str->length();

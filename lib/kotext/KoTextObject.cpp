@@ -2165,7 +2165,10 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
             if ( tagToLoad.localName() == "p" || tagToLoad.localName() == "h" ) {
                 context.styleStack().save();
                 context.fillStyleStack( tagToLoad, KoXmlNS::text, "style-name", "paragraph" );
-                lastParagraph->loadOasisSpan( tagToLoad, context, pos );
+
+                // OO.o compatibility: ignore leading whitespace in <p> and <h> elements
+                bool leadingSpace = true;
+                lastParagraph->loadOasisSpan( tagToLoad, context, pos, leadingSpace );
                 context.styleStack().restore();
 
                 lastParagraph->setChanged( true );
