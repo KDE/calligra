@@ -190,11 +190,12 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_colsSB->resize( m_colsSB->sizeHint() );
     m_colsSB->setMinValue(1);
     
-#if 0
+#if 1
     // The row/column as label checkboxes. 
     m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), page);
     m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), page);
 #endif
+
     //Buttons for Inserting / Removing rows & columns 
     QPushButton *insertRowButton = new QPushButton( i18n("Insert Row") , page);
     connect( insertRowButton, SIGNAL( clicked() ),
@@ -242,7 +243,8 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     hbl1->setMargin(10);
     topLayout->addLayout(hbl1);
 
-#if 0
+#if 1
+    // Last, the checkboxes with "First row/column as label"
     QHBoxLayout  *hbl2 = new QHBoxLayout(  );
     hbl2->addWidget(m_firstRowAsLabel);
     hbl2->addWidget(m_firstColAsLabel);
@@ -376,7 +378,7 @@ void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
     // Initiate widgets with the correct rows and columns.
     m_rowsSB->setValue(rowsCount);
     m_colsSB->setValue(colsCount);
-#if 0
+#if 1
     m_firstRowAsLabel->setChecked( params->firstRowAsLabel() );
     m_firstColAsLabel->setChecked( params->firstColAsLabel() );
 #endif
@@ -387,7 +389,6 @@ void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
     for (unsigned int row = headerRows(); row < rowsCount; row++) {
         for (unsigned int col = headerCols(); col < colsCount; col++) {
             QVariant t = dat->cellVal(row-headerRows(), col-headerCols());
-
 
             // Fill it in from the part.
             if (t.isValid()) {
@@ -461,7 +462,7 @@ void kchartDataEditor::getData( KChartParams *params, KDChartTableData *dat )
         }
     }
 
-#if 0
+#if 1
     params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
     params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
 #endif
