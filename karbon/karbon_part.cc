@@ -496,10 +496,8 @@ KarbonPart::repaintAllViews( bool repaint )
 void
 KarbonPart::repaintAllViews( const QRectF &rect )
 {
-// TODO: needs porting
-/*
 	foreach ( KoView* view, views() )
-		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( rect );*/
+		static_cast<KarbonView*>( view )->canvasWidget()->updateCanvas( rect );
 }
 
 void

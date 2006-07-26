@@ -34,6 +34,7 @@
 #include <KoUniColorChooser.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoCommand.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -91,13 +92,11 @@ void VColorDocker::updateColor( const KoColor &c )
 	QColor color;
 	quint8 opacity;
 	c.toQColor(&color, &opacity);
-        color.setAlpha(opacity);
+	color.setAlpha(opacity);
 
-	foreach( KoShape* shape, selection->selectedShapes() )
-	{
-		shape->setBackground( QBrush( color ) );
-		shape->repaint();
-	}
+	KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
+	m_part->commandHistory()->addCommand( cmd, true );
+	m_part->repaintAllViews( selection->boundingRect() );
 }
 
 void VColorDocker::updateFgColor(const KoColor &c)
