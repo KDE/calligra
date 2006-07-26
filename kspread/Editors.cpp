@@ -678,7 +678,7 @@ void CellEditor::slotCursorPositionChanged()
   Tokens tokens = d->highlighter->formulaTokens();
   uint rangeCounter = 0;
   uint currentRange = 0;
-  uint regionStart = 0;
+  uint regionStart = -1;
   uint regionEnd = 0;
   bool lastWasASemicolon = false;
   d->currentToken = 0;
@@ -746,8 +746,12 @@ void CellEditor::slotCursorPositionChanged()
 //             << ", regionEnd = " << regionEnd/* << endl*/
 //             << ", currentRange = " << currentRange << endl;
 
-  d->canvas->choice()->setActiveElement(currentRange);
-  d->canvas->choice()->setActiveSubRegion(regionStart, regionEnd-regionStart+1);
+  // only change the active sub region, if we have found one.
+  if (regionStart != -1)
+  {
+    d->canvas->choice()->setActiveElement(currentRange);
+    d->canvas->choice()->setActiveSubRegion(regionStart, regionEnd-regionStart+1);
+  }
 
   // triggered by keyboard action?
   if (!d->updatingChoice)
