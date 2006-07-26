@@ -117,7 +117,6 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 
 QDomElement StyleManager::save( QDomDocument & doc )
 {
-  kDebug() << "Saving styles" << endl;
   QDomElement styles = doc.createElement( "styles" );
 
   kDebug() << "Saving default style" << endl;
@@ -128,7 +127,6 @@ QDomElement StyleManager::save( QDomDocument & doc )
 
   while ( iter != end )
   {
-    kDebug() << "Saving style" << endl;
     CustomStyle * styleData = iter.value();
 
     styleData->save( doc, styles );
@@ -136,7 +134,6 @@ QDomElement StyleManager::save( QDomDocument & doc )
     ++iter;
   }
 
-  kDebug() << "End saving styles" << endl;
   return styles;
 }
 
