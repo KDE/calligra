@@ -3739,7 +3739,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
         d->cellEditor->setFocus();
 
     sheet->setRegionPaintDirty( *selectionInfo() );
-    paintUpdates();
+    repaint();
   }
 
   return true;
