@@ -221,8 +221,7 @@ public:
 private slots:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
-    void  slotCursorPositionChanged(int para,int pos);
-    void  slotTextCursorChanged();
+    void  slotCursorPositionChanged();
 
 protected:
     void resizeEvent( QResizeEvent* );

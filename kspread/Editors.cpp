@@ -546,8 +546,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 */
   setFocusProxy( d->textEdit );
 
-  connect( d->textEdit, SIGNAL( cursorPositionChanged(int,int) ), this, SLOT (slotCursorPositionChanged(int,int)));
-  connect( d->textEdit, SIGNAL( cursorPositionChanged() ), this, SLOT (slotTextCursorChanged()));
+  connect( d->textEdit, SIGNAL( cursorPositionChanged() ), this, SLOT (slotCursorPositionChanged()));
   connect( d->textEdit, SIGNAL( textChanged() ), this, SLOT( slotTextChanged() ) );
 
 // connect( d->textEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
@@ -662,7 +661,7 @@ void CellEditor::functionAutoComplete( const QString& item )
   d->textEdit->blockSignals( false );
 }
 
-void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
+void CellEditor::slotCursorPositionChanged()
 {
 //   kDebug() << k_funcinfo << endl;
 
@@ -671,6 +670,8 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   // turn choose mode on/off
   if (!checkChoice())
     return;
+
+  d->globalCursorPos = d->textEdit->mapToGlobal( d->textEdit->cursorRect().topLeft() );
 
   d->highlighter->rehighlight();
 
@@ -690,7 +691,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   // determine the subregion number, btw
   for (int i = 0; i < tokens.count(); ++i)
   {
-    if (tokens[i].pos() >= pos - 1) // without '='
+    if (tokens[i].pos() >= d->textEdit->textCursor().position() - 1) // without '='
     {
 /*      kDebug() << "token.pos >= cursor.pos" << endl;*/
       type = tokens[i].type();
@@ -795,11 +796,6 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
       d->canvas->doc()->emitEndOperation(*d->canvas->choice());
     }
   }
-}
-
-void CellEditor::slotTextCursorChanged()
-{
-  d->globalCursorPos = d->textEdit->mapToGlobal( d->textEdit->cursorRect().topLeft() );
 }
 
 void CellEditor::cut()
