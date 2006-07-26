@@ -5794,23 +5794,27 @@ bool Sheet::loadXML( const QDomElement& sheet )
       }
     }
 
-    /* make sure there are no name collisions with the altered name */
-    QString testName = sname;
-    QString baseName = sname;
-    int nameSuffix = 0;
-
-    /* so we don't panic over finding ourself in the follwing test*/
-    sname.clear();
-    while (workbook()->findSheet(testName) != 0)
+    // validate sheet name, if it differs from the current one
+    if ( sname != sheetName() )
     {
-      nameSuffix++;
-      testName = baseName + '_' + QString::number(nameSuffix);
-    }
-    sname = testName;
+        /* make sure there are no name collisions with the altered name */
+        QString testName = sname;
+        QString baseName = sname;
+        int nameSuffix = 0;
 
-    kDebug(36001) << "Sheet::loadXML: table name = " << sname << endl;
-    setObjectName(sname.toUtf8());
-    setSheetName (sname, true);
+        /* so we don't panic over finding ourself in the follwing test*/
+        sname.clear();
+        while (workbook()->findSheet(testName) != 0)
+        {
+            nameSuffix++;
+            testName = baseName + '_' + QString::number(nameSuffix);
+        }
+        sname = testName;
+
+        kDebug(36001) << "Sheet::loadXML: table name = " << sname << endl;
+        setObjectName(sname.toUtf8());
+        setSheetName (sname, true);
+    }
 
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
