@@ -96,7 +96,6 @@ void VColorDocker::updateColor( const KoColor &c )
 
 	KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
 	m_part->commandHistory()->addCommand( cmd, true );
-	m_part->repaintAllViews( selection->boundingRect() );
 }
 
 void VColorDocker::updateFgColor(const KoColor &c)
