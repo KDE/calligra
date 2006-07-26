@@ -95,7 +95,7 @@ void DependencyManager::Private::dump()
   for ( QMap<Region::Point, Region>::ConstIterator mit(dependencies.begin()); mit != mend; ++mit )
   {
     Region::Point p = mit.key();
-    kDebug() << "Cell " << p.name() << " depends on :" << endl;
+    kDebug() << "Cell " << p.name() << " depends on:" << endl;
 
     Region::ConstIterator rend((*mit).constEnd());
     for ( Region::ConstIterator rit((*mit).constBegin()); rit != rend; ++rit )
@@ -108,28 +108,19 @@ void DependencyManager::Private::dump()
   {
     QList<QRectF> keys = dependants[sheet]->keys();
     QList<Region::Point> values = dependants[sheet]->values();
-    Q_ASSERT(keys.count() == values.count());
-    int count = keys.count();
-    if (count) {
-      QString debugStr;
-      for (int i = 0; i < count; ++i)
-        debugStr += " " + values[i].name();
-      Region::Range tmpRange( keys[0].toRect() );
-      tmpRange.setSheet( sheet );
-      kDebug() << "The cells depending on " << tmpRange.name() << " are:" << debugStr << endl;
+    QHash<QString, QString> table;
+    for (int i = 0; i < keys.count(); ++i)
+    {
+      Region::Range tmpRange(keys[i].toRect());
+      tmpRange.setSheet(sheet);
+      table.insertMulti(tmpRange.name(), values[i].name());
+    }
+    foreach (QString uniqueKey, table.uniqueKeys())
+    {
+      QStringList debugStr(table.values(uniqueKey));
+      kDebug() << "The cells depending on " << uniqueKey << " are: " << debugStr.join(", ") << endl;
     }
   }
-/*  mend = dependants.end();
-  for ( QMap<Region::Point, Region>::ConstIterator mit(dependants.begin()); mit != mend; ++mit )
-  {
-    Region::Point p = mit.key();
-    kDebug() << "The cells that depend on " << p.name() << " are :" << endl;
-    Region::ConstIterator rend((*mit).constEnd());
-    for ( Region::ConstIterator rit((*mit).constBegin()); rit != rend; ++rit )
-    {
-      kDebug() << "  cell " << (*rit)->name() << endl;
-    }
-  }*/
 }
 
 DependencyManager::DependencyManager()
