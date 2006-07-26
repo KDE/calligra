@@ -29,10 +29,26 @@ KFORMULA_NAMESPACE_BEGIN
 
 TokenElement::TokenElement( BasicElement* parent ) : TokenStyleElement( parent ) {}
 
-int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
+int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) 
+{
     while ( ! n.isNull() ) {
         if ( n.isText() ) {
-            QString textelements = n.toText().data().stripWhiteSpace();
+            QString textelements = n.toText().data();
+            int entityBegin;
+            int entityEnd;
+            do {
+                entityBegin = textelements.find( '&' );
+                if ( entityBegin != -1 ) {
+                    entityEnd = textelements.find( ';', entityBegin );
+                    if ( entityEnd != -1 ) {
+                        uint len = entityEnd - entityBegin + 1;
+                        QString entity = textelements.mid( entityBegin, len );
+                        textelements.replace( (uint) entityBegin, (uint) len, getCharFromEntity( entity ) );
+                    }
+                }
+            } while ( entityBegin != -1 && entityEnd != -1 );
+            textelements = textelements.stripWhiteSpace();
+                
             for (uint i = 0; i < textelements.length(); i++) {
                 TextElement* child = new TextElement(textelements[i]);
                 child->setParent(this);
@@ -71,5 +87,15 @@ void TokenElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, 
         it->writeMathML( doc, element, oasisFormat );
     }
 }
+
+QString TokenElement::getCharFromEntity( const QString& entity )
+{
+    QChar ch = QChar::null;
+    if ( entity.left( 3 ) == "&#x" ) {
+        ch = QChar( entity.mid( 3, entity.length() - 1 ).toUShort( NULL, 16 ) );
+    }
+    return ch;
+}
+
 
 KFORMULA_NAMESPACE_END
