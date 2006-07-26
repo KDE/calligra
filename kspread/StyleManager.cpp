@@ -119,7 +119,6 @@ QDomElement StyleManager::save( QDomDocument & doc )
 {
   QDomElement styles = doc.createElement( "styles" );
 
-  kDebug() << "Saving default style" << endl;
   m_defaultStyle->save( doc, styles );
 
   CustomStyles::iterator iter = m_styles.begin();
