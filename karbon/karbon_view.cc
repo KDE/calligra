@@ -651,16 +651,14 @@ KarbonView::selectionAlignHorizontalLeft()
 {
 	debugView("KarbonView::selectionAlignHorizontalLeft()");
 
-	part()->addCommand(
-		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_LEFT ), true );
+	selectionAlign(KoShapeAlignCommand::ALIGN_HORIZONTAL_LEFT);
 }
 void
 KarbonView::selectionAlignHorizontalCenter()
 {
 	debugView("KarbonView::selectionAlignHorizontalCenter()");
 
-	part()->addCommand(
-		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_CENTER ), true );
+	selectionAlign(KoShapeAlignCommand::ALIGN_HORIZONTAL_CENTER);
 }
 
 void
@@ -668,8 +666,7 @@ KarbonView::selectionAlignHorizontalRight()
 {
 	debugView("KarbonView::selectionAlignHorizontalRight()");
 
-	part()->addCommand(
-		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_HORIZONTAL_RIGHT ), true );
+	selectionAlign(KoShapeAlignCommand::ALIGN_HORIZONTAL_RIGHT);
 }
 
 void
@@ -677,8 +674,7 @@ KarbonView::selectionAlignVerticalTop()
 {
 	debugView("KarbonView::selectionAlignVerticalTop()");
 
-	part()->addCommand(
-		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_TOP ), true );
+	selectionAlign(KoShapeAlignCommand::ALIGN_VERTICAL_TOP);
 }
 
 void
@@ -686,8 +682,7 @@ KarbonView::selectionAlignVerticalCenter()
 {
 	debugView("KarbonView::selectionAlignVerticalCenter()");
 
-	part()->addCommand(
-		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_CENTER ), true );
+	selectionAlign(KoShapeAlignCommand::ALIGN_VERTICAL_CENTER);
 }
 
 void
@@ -695,9 +690,24 @@ KarbonView::selectionAlignVerticalBottom()
 {
 	debugView("KarbonView::selectionAlignVerticalBottom()");
 
-	part()->addCommand(
-		new VAlignCmd( &part()->document(), VAlignCmd::ALIGN_VERTICAL_BOTTOM ), true );
+	selectionAlign(KoShapeAlignCommand::ALIGN_VERTICAL_BOTTOM);
 }
+
+void
+KarbonView::selectionAlign(KoShapeAlignCommand::Align align)
+{
+	KoSelection* selection = m_canvas->shapeManager()->selection();
+	if( ! selection )
+		return;
+
+	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+	if( selectedShapes.count() < 2) return;  // TODO: handle case count = 1
+
+	KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, selection->boundingRect());
+
+	part()->commandHistory()->addCommand( cmd, true );
+}
+
 
 void
 KarbonView::selectionDistributeHorizontalCenter()

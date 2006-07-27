@@ -29,6 +29,7 @@
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <KoUnit.h>
+#include <KoCommand.h>
 #include <koffice_export.h>
 //Added by qt3to4:
 #include <QDropEvent>
@@ -227,6 +228,8 @@ protected:
 private:
 	void initActions();
 	void updateRuler();
+
+	void selectionAlign(KoShapeAlignCommand::Align align);
 
 	KarbonPart		*m_part;
 	KarbonCanvas		*m_canvas;
