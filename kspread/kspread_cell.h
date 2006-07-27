@@ -255,7 +255,7 @@ public:
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
     bool saveOasis( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
-                    int row, int column, int &repeated,
+                    int row, int column, int maxCol, int &repeated,
                     GenValidationStyles &valStyle );
 
     void saveOasisValue (KoXmlWriter &xmlWriter);
