@@ -7311,7 +7311,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     while ( i <= maxCols )
     {
         ColumnFormat* column = columnFormat( i );
-        KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN, "table-column" );
+        KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
         currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
         currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
@@ -7326,7 +7326,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         while ( j <= maxCols )
         {
             ColumnFormat* nextColumn = columnFormat( j );
-            KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN, "table-column" );
+            KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
             nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
             nextColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
@@ -7341,15 +7341,17 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             ++j;
         }
         xmlWriter.startElement( "table:table-column" );
-        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
-        //FIXME doesn't create format if it's default format
+        if ( !column->isDefault() )
+        {
+          xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
 
-        // skip 'table:default-cell-style-name' attribute for the default style
-        if ( !currentDefaultCellStyle.isDefaultStyle() )
-            xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
+          // TODO Stefan: skip 'table:default-cell-style-name' attribute for the default style
+          if ( !currentDefaultCellStyle.isDefaultStyle() )
+              xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
 
-        if ( hide )
-            xmlWriter.addAttribute( "table:visibility", "collapse" );
+          if ( hide )
+              xmlWriter.addAttribute( "table:visibility", "collapse" );
+        }
 
         if ( repeated > 1 )
             xmlWriter.addAttribute( "table:number-columns-repeated", repeated  );
@@ -7360,12 +7362,15 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     for ( i = 1; i <= maxRows; ++i )
     {
         const RowFormat* row = rowFormat( i );
-        KoGenStyle currentRowStyle( Doc::STYLE_ROW, "table-row" );
+        KoGenStyle currentRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
         currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight());/*FIXME pt and not mm */
         currentRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         xmlWriter.startElement( "table:table-row" );
-        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentRowStyle, "ro" ) );
+        if ( !row->isDefault() )
+        {
+          xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentRowStyle, "ro" ) );
+        }
         int repeated = 1;
         if ( !rowAsCell( i, maxCols ) )
         {
@@ -7374,7 +7379,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             while ( j <= maxRows )
             {
                 const RowFormat *nextRow = rowFormat( j );
-                KoGenStyle nextRowStyle( Doc::STYLE_ROW, "table-row" );
+                KoGenStyle nextRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
                 nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );/*FIXME pt and not mm */
                 nextRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
@@ -7386,14 +7391,14 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                 ++j;
             }
             i += repeated-1; /*it's double incremented into loop for*/
-            if ( row->isHide() )
+            if ( row->isHide() ) // never true for the default row
                 xmlWriter.addAttribute( "table:visibility", "collapse" );
             if (  repeated > 1 )
                 xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
         }
         else
         {
-            if ( row->isHide() )
+          if ( row->isHide() ) // never true for the default row
                 xmlWriter.addAttribute( "table:visibility", "collapse" );
             saveOasisCells( xmlWriter, mainStyles, i, maxCols, valStyle );
         }

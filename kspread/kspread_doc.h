@@ -131,8 +131,10 @@ public:
    * Possible values for the "type" argument of the KoGenStyle constructor.
    */
   enum { STYLE_PAGE = 20,
-         STYLE_COLUMN,
-         STYLE_ROW,
+         STYLE_COLUMN_USER,    /**< commmon column styles */
+         STYLE_COLUMN_AUTO,    /**< auto column styles */
+         STYLE_ROW_USER,       /**< common row styles */
+         STYLE_ROW_AUTO,       /**< auto row styles */
          STYLE_CELL_USER,
          STYLE_CELL_AUTO,
          STYLE_PAGEMASTER,
