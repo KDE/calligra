@@ -4917,7 +4917,6 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
     bool collapsed = ( column.attributeNS( KoXmlNS::table, "visibility", QString::null ) == "collapse" );
     Format layout( this , doc()->styleManager()->defaultStyle() );
     int number = 1;
-    double width   = 10;//POINT_TO_MM( colWidth ); FIXME
     if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
     {
         bool ok = true;
@@ -4958,9 +4957,10 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
         kDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
 
+    double width = -1.0;
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "column-width" ) )
     {
-        width = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "column-width" ) , -1 );
+        width = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "column-width" ) , -1.0 );
         kDebug()<<" style:column-width : width :"<<width<<endl;
     }
 
@@ -4976,16 +4976,12 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
             kDebug()<<" str :"<<str<<endl;
     }
 
-
-  //  if ( number>30 )
-  //      number = 30; //TODO fixme !
-
     for ( int i = 0; i < number; ++i )
     {
         kDebug()<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ? "<<collapsed<<endl;
         ColumnFormat * col = new ColumnFormat( this, indexCol );
         col->copy( layout );
-        if ( width != -1 ) //safe
+        if ( width != -1.0 ) //safe
             col->setWidth( (int) width );
 
         // if ( insertPageBreak )
@@ -5007,7 +5003,6 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
                            const Styles& styleMap )
 {
 //    kDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
-    double height = -1.0;
     Format layout( this , doc()->styleManager()->defaultStyle() );
     KoStyleStack styleStack;
     styleStack.setTypeProperties( "table-row" );
@@ -5033,9 +5028,10 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
 
     layout.loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
     styleStack.setTypeProperties( "table-row" );
+    double height = -1.0;
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
     {
-        height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1 );
+        height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1.0 );
     //    kDebug()<<" properties style:row-height : height :"<<height<<endl;
     }
 
@@ -5080,7 +5076,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
        // kDebug()<<" create non defaultrow format :"<<rowIndex<<" repeate : "<<number<<" height :"<<height<<endl;
         RowFormat * rowL = nonDefaultRowFormat( rowIndex );
         rowL->copy( layout );
-        if ( height != -1 )
+        if ( height != -1.0 )
         {
          //   kDebug() << "Setting row height to " << height << endl;
             rowL->setHeight( (int) height );

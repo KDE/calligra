@@ -194,9 +194,9 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->pageBorderColor = Qt::red;
   d->configLoadFromFile = false;
 
-  QFont f( KoGlobal::defaultFont() );
-  Format::setGlobalRowHeight( f.pointSizeF() + 3 );
-  Format::setGlobalColWidth( ( f.pointSizeF() + 3 ) * 5 );
+  QFont font( KoGlobal::defaultFont() );
+  Format::setGlobalRowHeight( font.pointSizeF() + 3 );
+  Format::setGlobalColWidth( ( font.pointSizeF() + 3 ) * 5 );
 
   d->delayCalculation = false;
 

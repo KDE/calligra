@@ -421,6 +421,10 @@ protected:
      */
     QString * m_strComment;
 
+    // default column width and row height
+    static double s_columnWidth;
+    static double s_rowHeight;
+
 private:
     void setProperty( Style::FlagsSet p );
 

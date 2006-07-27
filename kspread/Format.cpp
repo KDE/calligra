@@ -47,14 +47,7 @@
 
 #include "Format.h"
 
-namespace format_LNS
-{
-  double g_colWidth  = colWidth;
-  double g_rowHeight = heightOfRow;
-}
-
 using namespace std;
-using namespace format_LNS;
 using namespace KSpread;
 
 /*****************************************************************************
@@ -62,6 +55,11 @@ using namespace KSpread;
  * Format
  *
  *****************************************************************************/
+
+// static variable construction
+// NOTE Stefan: These values are always overridden by the Doc c'tor.
+double Format::s_columnWidth = 100.0;
+double Format::s_rowHeight   = 20.0;
 
 Format::Format( Sheet * _sheet, Style * _style )
   : m_pSheet( _sheet ),
@@ -96,22 +94,22 @@ void Format::defaultStyleFormat()
 
 void Format::setGlobalColWidth( double width )
 {
-  g_colWidth = width;
+  s_columnWidth = width;
 }
 
 void Format::setGlobalRowHeight( double height )
 {
-  g_rowHeight = height;
+  s_rowHeight = height;
 }
 
 double Format::globalRowHeight()
 {
-  return g_rowHeight;
+  return s_rowHeight;
 }
 
 double Format::globalColWidth()
 {
-  return g_colWidth;
+  return s_columnWidth;
 }
 
 void Format::copy( const Format & _l )
@@ -2494,7 +2492,7 @@ RowFormat::RowFormat( Sheet * _sheet, int _row )
     m_next = 0;
     m_prev = 0;
 
-    m_fHeight  = g_rowHeight;
+    m_fHeight  = s_rowHeight;
     m_iRow     = _row;
     m_bDefault = false;
     m_bHide    = false;
@@ -2735,7 +2733,7 @@ bool RowFormat::isDefault() const
 ColumnFormat::ColumnFormat( Sheet * _sheet, int _column )
   : Format( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
 {
-  m_fWidth = g_colWidth;
+  m_fWidth = s_columnWidth;
   m_iColumn = _column;
   m_bDefault=false;
   m_bHide=false;
