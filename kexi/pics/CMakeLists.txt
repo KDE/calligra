@@ -5,11 +5,10 @@
 
 ########### install files ###############
 
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kexi/icons)
 install( FILES  cp-wiz.png imagebox.png  DESTINATION ${DATA_INSTALL_DIR}/kexi/pics)
 
-kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
-
+kde4_install_icons( ${DATA_INSTALL_DIR}/kexi/icons  hicolor )
+kde4_install_icons( ${DATA_INSTALL_DIR}/kexi/icons  crystalsvg )
 
 
 

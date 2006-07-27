@@ -1,17 +1,4 @@
+kde4_install_icons( ${DATA_INSTALL_DIR}/kpresenter/icons crystalsvg )
+kde4_install_icons( ${DATA_INSTALL_DIR}/kpresenter/icons hicolor )
 
 
-
-
-
-########### install files ###############
-
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/kpresenter/icons)
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#kpresentericondir = $(kde_datadir)/kpresenter/icons
-#kpresentericon_ICON = AUTO

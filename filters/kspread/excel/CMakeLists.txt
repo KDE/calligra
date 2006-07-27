@@ -6,12 +6,6 @@ add_subdirectory( import )
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
 
-########### install files ###############
-
-install( FILES   DESTINATION ${SERVICES_INSTALL_DIR})
-
-
-
 
 
 #original Makefile.am contents follow:
