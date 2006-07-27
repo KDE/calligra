@@ -96,6 +96,8 @@ VDistributeCmd::execute()
 
 	while(it.hasNext())	
 	{
+                it.next();
+
 		if( it.value() == first || it.value() == last )
 			continue;
 
