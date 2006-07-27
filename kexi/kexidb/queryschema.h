@@ -415,7 +415,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		QueryColumnInfo::Vector fieldsExpanded(FieldsExpandedOptions options = Default);
 
 		/*! \return list of fields internal fields used for lookup columns. */
-		QueryColumnInfo::Vector QuerySchema::internalFields();
+		QueryColumnInfo::Vector internalFields();
 
 		/*! \return info for expanded of internal field at index \a index. 
 		 The returned field can be either logical or internal (for lookup),
