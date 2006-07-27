@@ -2564,9 +2564,9 @@ double RowFormat::dblHeight( const Canvas *_canvas ) const
         return 0.0;
 
     if ( _canvas )
-        return _canvas->zoom() * m_fHeight;
+        return _canvas->zoom() * (m_iRow == 0) ? s_rowHeight : m_fHeight;
     else
-        return m_fHeight;
+        return (m_iRow == 0) ? s_rowHeight : m_fHeight;
 }
 
 double RowFormat::mmHeight() const
@@ -2806,9 +2806,9 @@ double ColumnFormat::dblWidth( const Canvas * _canvas ) const
     return 0.0;
 
   if ( _canvas )
-    return _canvas->zoom() * m_fWidth;
+      return _canvas->zoom() * (m_iColumn == 0) ? s_columnWidth : m_fWidth;
   else
-    return m_fWidth;
+      return (m_iColumn == 0) ? s_columnWidth : m_fWidth;
 }
 
 double ColumnFormat::mmWidth() const

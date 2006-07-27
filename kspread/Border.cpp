@@ -1347,7 +1347,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     xPos = xPos - m_pCanvas->xOffset();
   }
 
-  int height = m_pCanvas->d->view->doc()->zoomItYOld( Format::globalRowHeight() + 2 );
+  int height = m_pCanvas->d->view->doc()->zoomItYOld( painter.font().pointSizeF() + 5 );
 
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
