@@ -43,7 +43,6 @@ class Q3VButtonGroup;
 class KComboBox;
 class K3ListView;
 class KLineEdit;
-class KActiveLabel;
 class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
@@ -137,8 +136,7 @@ private:
 	KLineEdit *m_dstNewDBNameLineEdit;
 	KexiProjectSelectorWidget *m_srcDBName;
 
-	QLabel *m_lblImportingTxt;
-	KActiveLabel *m_lblImportingErrTxt, *m_finishLbl;
+	QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_finishLbl;
 	QCheckBox *m_openImportedProjectCheckBox;
 	bool m_fileBasedDstWasPresented, m_setupFileBasedSrcNeeded, 
 		m_importExecuted; //!< used in import()

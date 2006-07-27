@@ -100,6 +100,21 @@ bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::Obje
 	return true;
 }
 
+bool KexiMigrate::isSourceAndDestinationDataSourceTheSame() const
+{
+	KexiDB::ConnectionData* sourcedata = m_migrateData->source;
+	KexiDB::ConnectionData* destinationdata = m_migrateData->destination->connectionData();
+	return (
+		sourcedata && destinationdata &&
+		m_migrateData->sourceName == m_migrateData->destination->databaseName() && // same database name
+		sourcedata->driverName == destinationdata->driverName && // same driver
+		sourcedata->hostName == destinationdata->hostName && // same host
+		sourcedata->fileName() == destinationdata->fileName() && // same filename
+		sourcedata->dbPath() == destinationdata->dbPath() && // same database path
+		sourcedata->dbFileName() == destinationdata->dbFileName() // same database filename
+	);
+}
+
 //=============================================================================
 // Perform Import operation
 bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
