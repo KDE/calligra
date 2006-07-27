@@ -330,10 +330,18 @@ public:
      * Load a section of text from a oasis based xml tree.
      * @param parent the xml element that has content as children.
      * @param context the context
-     * @param stripLeadingSpace Set to true to remove a leading space from the content even if
-     *        the xml contains one.
+     * @param stripLeadingSpace whether to remove leading literal whitespace
      */
-    void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos, bool stripLeadingSpace = false);
+    void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos, bool stripLeadingSpace = false );
+
+    /**
+     * Load a section of text from a oasis based xml tree.
+     * @param parent the xml element that has content as children.
+     * @param context the context
+     * @param stripLeadingSpace whether to remove leading literal whitespace
+     * @param hasTrailingSpace whether there was trailing literal whitespace in the span's text
+     */
+    void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos, bool stripLeadingSpace, bool *hasTrailingSpace );
 
     void applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
 
