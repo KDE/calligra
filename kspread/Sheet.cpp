@@ -4915,8 +4915,6 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
 //   kDebug()<<"bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
     bool isNonDefaultColumn = false;
-    bool collapsed = ( column.attributeNS( KoXmlNS::table, "visibility", QString::null ) == "collapse" );
-    isNonDefaultColumn = collapsed;
 
     int number = 1;
     if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
@@ -4944,6 +4942,19 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
           isNonDefaultColumn = true;
         }
       }
+    }
+
+    bool collapsed = false;
+    if ( column.hasAttributeNS( KoXmlNS::table, "visibility" ) )
+    {
+      const QString visibility = column.attributeNS( KoXmlNS::table, "visibility", QString::null );
+      if ( visibility == "visible" )
+        collapsed = false;
+      else if ( visibility == "collapse" )
+        collapsed = true;
+      else if ( visibility == "filter" )
+        collapsed = false; // FIXME Stefan: Set to true, if filters are supported.
+      isNonDefaultColumn = true;
     }
 
     KoStyleStack styleStack;
@@ -5069,13 +5080,14 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
     bool collapse = false;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
-        QString visible = row.attributeNS( KoXmlNS::table, "visibility", QString::null );
-    //    kDebug()<<" row.attribute( table:visibility ) "<<visible<<endl;
-        if ( visible == "collapse" )
-            collapse=true;
-        else
-            kDebug()<<" visible row not implemented/supported : "<<visible<<endl;
-        isNonDefaultRow = true;
+      const QString visibility = row.attributeNS( KoXmlNS::table, "visibility", QString::null );
+      if ( visibility == "visible" )
+        collapse = false;
+      else if ( visibility == "collapse" )
+        collapse = true;
+      else if ( visibility == "filter" )
+        collapse = false; // FIXME Stefan: Set to true, if filters are supported.
+      isNonDefaultRow = true;
     }
 
     bool insertPageBreak = false;
