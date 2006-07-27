@@ -35,7 +35,6 @@
 #include <kdebug.h>
 #include <klineedit.h>
 #include <kiconloader.h>
-#include <kactivelabel.h>
 #include <kbuttonbox.h>
 
 #include <kexidb/drivermanager.h>
@@ -342,7 +341,7 @@ void ImportWizard::setupImporting()
 	m_lblImportingTxt = new QLabel(m_importingPage);
 	m_lblImportingTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
 
-	m_lblImportingErrTxt = new KActiveLabel(m_importingPage);
+	m_lblImportingErrTxt = new QLabel(m_importingPage);
 	m_lblImportingErrTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
 
 	m_progressBar = new KProgress(100, m_importingPage);
@@ -374,7 +373,7 @@ void ImportWizard::setupFinish()
 	m_finishPage = new QWidget(this);
 	m_finishPage->hide();
 	QVBoxLayout *vbox = new QVBoxLayout(m_finishPage, KDialog::marginHint());
-	m_finishLbl = new KActiveLabel(m_finishPage);
+	m_finishLbl = new QLabel(m_finishPage);
 	m_finishLbl->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
 
 	vbox->addWidget( m_finishLbl );
@@ -393,31 +392,28 @@ void ImportWizard::setupFinish()
 bool ImportWizard::checkUserInput()
 {
 	QString finishtxt;
-	bool problem;
 
-	problem = false;
-//	if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text().isEmpty()))
 	if (m_dstNewDBNameLineEdit->text().isEmpty())
 	{
-		problem = true;
-		finishtxt = finishtxt + "\n" + i18n("No new database name was entered.");
+		finishtxt = finishtxt + "<br>" + i18n("No new database name was entered.");
 	}
 
-	if (problem)
+	Kexi::ObjectStatus result;
+	KexiMigrate* sourceDriver = prepareImport(result);
+	if (sourceDriver->isSourceAndDestinationDataSourceTheSame())
 	{
-		finishtxt = i18n("Following problems were found with the data you entered:") +
-					"\n\n" +
-					finishtxt +
-					"\n\n" +
+		finishtxt = finishtxt + "<br>" + i18n("Both source and destination database are identical.");
+	}
+
+	if (! finishtxt.isNull())
+	{
+		finishtxt = "<qt>" + i18n("Following problems were found with the data you entered:") +
+					"<br>" + finishtxt + "<br><br>" +
 					i18n("Please click 'Back' button and correct these errors.");
 		m_lblImportingErrTxt->setText(finishtxt);
 	}
-//	else
-//	{
-//it was weird		finishtxt = i18n("No problems were found with the data you entered.");
-//	}
 
-	return !problem;
+	return finishtxt.isNull();
 }
 
 void ImportWizard::arriveSrcConnPage()
@@ -811,20 +807,24 @@ tristate ImportWizard::import()
 			);
 		}
 
-		sourceDriver->checkIfDestinationDatabaseOverwritingNeedsAccepting(
-			&result, acceptingNeeded);
+		if (!sourceDriver->checkIfDestinationDatabaseOverwritingNeedsAccepting(&result, acceptingNeeded)) {
+			kdDebug() << "Abort import cause checkIfDestinationDatabaseOverwritingNeedsAccepting returned false." << endl;
+			return false;
+		}
 
 		kdDebug() << sourceDriver->data()->destination->databaseName() << endl;
 		kdDebug() << "Performing import..." << endl;
 	}
 
-	if (!result.error() && acceptingNeeded && KMessageBox::Yes != KMessageBox::warningYesNo(this,
-		"<qt>"+i18n("Database %1 already exists."
-		"<p>Do you want to replace it with a new one?")
-		.arg(sourceDriver->data()->destination->infoString()),
-		0, KGuiItem(i18n("&Replace")), KGuiItem(i18n("No"))))
-	{
-		return cancelled;
+	if (!result.error() && acceptingNeeded) { // ok, the destination-db already exists...
+		if (KMessageBox::Yes != KMessageBox::warningYesNo(this,
+			"<qt>"+i18n("Database %1 already exists."
+			"<p>Do you want to replace it with a new one?")
+			.arg(sourceDriver->data()->destination->infoString()),
+			0, KGuiItem(i18n("&Replace")), KGuiItem(i18n("No"))))
+		{
+			return cancelled;
+		}
 	}
 
 	if (!result.error() && sourceDriver->progressSupported()) {

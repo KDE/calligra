@@ -99,6 +99,10 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		bool checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::ObjectStatus* result,
 			bool& acceptingNeeded);
 
+		/*! Checks if the source- and the destination databases are identical.
+		\return true if they are identical else false. */
+		bool isSourceAndDestinationDataSourceTheSame() const;
+
 		//! Perform an import operation
 		bool performImport(Kexi::ObjectStatus* result = 0);
 
