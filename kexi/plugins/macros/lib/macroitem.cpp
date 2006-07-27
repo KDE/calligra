@@ -191,7 +191,7 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 	// Now we inform the referenced action that a variable changed. If
 	// notifyUpdated() returns false, the action rejects the new variable
 	// and we need to restore the previous value.
-	if(! d->action->notifyUpdated(this, name)) {
+	if(d->action && ! d->action->notifyUpdated(this, name)) {
 		kdWarning() << "MacroItem::setVariable() Notify failed for variable name=" << name << endl;
 		variable->setVariant(oldvar);
 		return false; // the action rejected the changed variable whyever...
