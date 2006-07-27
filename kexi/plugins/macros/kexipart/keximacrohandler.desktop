@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Macros
+GenericName[br]=Makroù
 GenericName[da]=Makroer
 GenericName[et]=Makrod
 GenericName[it]=Macro
@@ -11,6 +12,7 @@ GenericName[sv]=Makron
 GenericName[zh_TW]=巨集
 
 Name=Macros
+Name[br]=Makroù
 Name[da]=Makroer
 Name[et]=Makrod
 Name[it]=Macro
