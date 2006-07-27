@@ -75,6 +75,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	, m_paintEventEnabled(true)
 	, m_dropDownButtonVisible(true)
 {
+	installEventFilter(this);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 	setBackgroundMode(Qt::NoBackground);
 	setFrameShape(QFrame::Box);
@@ -92,6 +93,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 		m_chooser->setFocusPolicy(StrongFocus);
 		m_chooser->setPopup(m_popup);
 		setFocusProxy(m_chooser);
+		m_chooser->installEventFilter(this);
 //		m_chooser->setPalette(qApp->palette());
 //		hlyr->addWidget(m_chooser);
 	}
@@ -583,9 +585,11 @@ void KexiDBImageBox::setDataSource( const QString &ds )
 	KexiFormDataItemInterface::setDataSource( ds );
 	setData(KexiBLOBBuffer::Handle());
 	updateActionStrings();
+	KexiFrame::setFocusPolicy( focusPolicy() ); //set modified policy
 
 	if (m_chooser) {
-		if (popupMenuAvailable()) {
+		m_chooser->setEnabled(popupMenuAvailable());
+		if (m_dropDownButtonVisible && popupMenuAvailable()) {
 			m_chooser->show();
 		}
 		else {
@@ -626,8 +630,6 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 	QPainter p(this);
 	p.setClipRect(pe->rect());
 	const int m = realLineWidth();
-//	const int w = width()-m-m;
-//	const int h = height()-m-m;
 	QColor bg(eraseColor());
 	if (m_designMode && pixmap().isNull()) {
 		QPixmap pm(size()-QSize(m, m));
@@ -661,79 +663,15 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 
 		KexiUtils::drawPixmap( p, m, QRect(QPoint(0,0), internalSize), pixmap(), m_alignment, 
 			m_scaledContents, m_keepAspectRatio );
-
-#if 0 //moved to KexiUtils::drawPixmap()
-		if (pixmap().isNull())
-			p.fillRect(0,0,width(),height(), bg);
-		else {
-			const bool fast = pixmap().width()>1000 && pixmap().height()>800; //fast drawing needed
-//! @todo we can optimize drawing by drawing rescaled pixmap here 
-//! and performing detailed painting later (using QTimer)
-			QPixmap pm;
-			QPainter p2;
-			QPainter *target;
-			if (fast) {
-				target = &p;
-			}
-			else {
-				pm.resize(size()-QSize(m, m));
-				p2.begin(&pm, this);
-				target = &p2;
-			}
-			//clearing needed here because we may need to draw a pixmap with transparency
-			target->fillRect(0,0,width(),height(), bg);
-			if (m_scaledContents) {
-				if (m_keepAspectRatio) {
-					QImage img(pixmap().convertToImage());
-					img = img.smoothScale(w, h, QImage::ScaleMin);
-					QPoint pos(0, 0);
-					if (img.width() < w) {
-						int hAlign = QApplication::horizontalAlignment( m_alignment );
-						if ( hAlign & Qt::AlignRight )
-							pos.setX(w-img.width());
-						else if ( hAlign & Qt::AlignHCenter )
-							pos.setX(w/2-img.width()/2);
-					}
-					else if (img.height() < h) {
-						if ( m_alignment & Qt::AlignBottom )
-							pos.setY(h-img.height());
-						else if ( m_alignment & Qt::AlignVCenter )
-							pos.setY(h/2-img.height()/2);
-					}
-					QPixmap px;
-					px.convertFromImage(img);
-					target->drawPixmap(pos, px);
-				}
-				else {
-					target->drawPixmap(QRect(0, 0, w, h), pixmap());
-				}
-			}
-			else {
-				int hAlign = QApplication::horizontalAlignment( m_alignment );
-				QPoint pos;
-				if ( hAlign & Qt::AlignRight )
-					pos.setX(w-pixmap().width());
-				else if ( hAlign & Qt::AlignHCenter )
-					pos.setX(w/2-pixmap().width()/2);
-				else //left, etc.
-					pos.setX(0);
-
-				if ( m_alignment & Qt::AlignBottom )
-					pos.setY(h-pixmap().height());
-				else if ( m_alignment & Qt::AlignVCenter )
-					pos.setY(h/2-pixmap().height()/2);
-				else //top, etc. 
-					pos.setY(0);
-				target->drawPixmap(pos, pixmap());
-			}
-			if (!fast) {
-				p2.end();
-				bitBlt(this, m, m, &pm);
-			}
-		}
-#endif
 	}
 	KexiFrame::drawFrame( &p );
+
+	// if the widget is focused, draw focus indicator rect _if_ there is no chooser button
+	if (!m_designMode && !dataSource().isEmpty() && hasFocus() && (!m_chooser || !m_chooser->isVisible())) {
+		style().drawPrimitive(
+			QStyle::PE_FocusRect, &p, style().subRect(QStyle::SR_PushButtonContents, this), 
+			palette().active() );
+	}
 }
 
 /*		virtual void KexiDBImageBox::paletteChange ( const QPalette & oldPalette )
@@ -871,6 +809,34 @@ bool KexiDBImageBox::subwidgetStretchRequired(KexiDBAutoField* autoField) const
 {
 	Q_UNUSED(autoField);
 	return true;
+}
+
+bool KexiDBImageBox::eventFilter( QObject * watched, QEvent * e )
+{
+	if (watched==this || watched==m_chooser) { //we're watching chooser as well because it's a focus proxy even if invisible
+		if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut || e->type()==QEvent::MouseButtonPress) {
+			update(); //to repaint focus rect
+		}
+	}
+	return KexiFrame::eventFilter(watched, e);
+}
+
+QWidget::FocusPolicy KexiDBImageBox::focusPolicy() const
+{
+	if (dataSource().isEmpty())
+		return NoFocus;
+	return m_focusPolicyInternal;
+}
+
+QWidget::FocusPolicy KexiDBImageBox::focusPolicyInternal() const
+{
+	return m_focusPolicyInternal;
+}
+
+void KexiDBImageBox::setFocusPolicy( FocusPolicy policy )
+{
+	m_focusPolicyInternal = policy;
+	KexiFrame::setFocusPolicy( focusPolicy() ); //set modified policy
 }
 
 #include "kexidbimagebox.moc"

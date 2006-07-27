@@ -644,15 +644,6 @@ bool KexiDBLabel::shadowEnabled() const
 	return d->shadowEnabled;
 }
 
-/*bool KexiDBLabel::event( QEvent* e )
-{
-	if (e->type()==QEvent::FocusOut) {
-		repaint();
-		kdDebug() << "FFFFFFFFFFFFFFFFFF!" << endl;
-	}
-	return QLabel::event(e);
-}*/
-
 #define ClassName KexiDBLabel
 #define SuperClassName QLabel
 #include "kexiframeutils_p.cpp"
