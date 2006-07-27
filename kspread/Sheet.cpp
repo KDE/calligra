@@ -5548,7 +5548,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //         kDebug() << "Sheet::saveOasisColRowCell: first col loop:"
 //                   << " i: " << i
 //                   << " column: " << column->column() << endl;
-        KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN, "table-column" );
+        KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
         currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );
         currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
@@ -5580,7 +5580,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             break;
           }
 
-          KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN, "table-column" );
+          KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
           nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );
           nextColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
@@ -5599,17 +5599,17 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         }
 
         xmlWriter.startElement( "table:table-column" );
-        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
+        if ( !column->isDefault() )
+        {
+          xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
 
-        // FIXME Stefan: don't create format if it's default format
+          // TODO Stefan: skip 'table:default-cell-style-name' attribute for the default style
+          if ( !currentDefaultCellStyle.isDefaultStyle() )
+              xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
 
-        // skip 'table:default-cell-style-name' attribute for the default style
-        if ( !currentDefaultCellStyle.isDefaultStyle() )
-            xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
-
-        if ( hide )
-            xmlWriter.addAttribute( "table:visibility", "collapse" );
-
+          if ( hide )
+              xmlWriter.addAttribute( "table:visibility", "collapse" );
+        }
         if ( repeated > 1 )
             xmlWriter.addAttribute( "table:number-columns-repeated", repeated  );
 
@@ -5632,15 +5632,16 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         kDebug() << "Sheet::saveOasisColRowCell: row: " << i << endl;
         const RowFormat* row = rowFormat( i );
 
-        KoGenStyle currentRowStyle( Doc::STYLE_ROW, "table-row" );
+        KoGenStyle currentRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
         currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight() );
         currentRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         xmlWriter.startElement( "table:table-row" );
 
-        // TODO Stefan: skip attribute saving for default row
-
-        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentRowStyle, "ro" ) );
+        if ( !row->isDefault() )
+        {
+          xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentRowStyle, "ro" ) );
+        }
         int repeated = 1;
         // empty row?
         if ( !getFirstCellRow( i ) )
@@ -5675,7 +5676,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               }
 
               // create the Oasis representation of the format for the comparison
-              KoGenStyle nextRowStyle( Doc::STYLE_ROW, "table-row" );
+              KoGenStyle nextRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
               nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );
               nextRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
@@ -5706,7 +5707,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             saveOasisCells( xmlWriter, mainStyles, i, maxCols, valStyle );
         }
 
-        if ( row->isHide() )
+        if ( row->isHide() ) // never true for the default row
             xmlWriter.addAttribute( "table:visibility", "collapse" );
 
         xmlWriter.endElement();

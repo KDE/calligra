@@ -547,7 +547,22 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     int indexObj = 1;
     int partIndexObj = 0;
 
+    // Saving the custom cell styles including the default cell style.
     styleManager()->saveOasis( mainStyles );
+
+    // Saving the default column style
+    KoGenStyle defaultColumnStyle( Doc::STYLE_COLUMN_USER, "table-column" );
+    defaultColumnStyle.addPropertyPt( "style:column-width", Format::globalColWidth() );
+    defaultColumnStyle.setDefaultStyle( true );
+    mainStyles.lookup( defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering );
+
+    // Saving the default row style
+    KoGenStyle defaultRowStyle( Doc::STYLE_ROW_USER, "table-row" );
+    defaultRowStyle.addPropertyPt( "style:row-height", Format::globalRowHeight() );
+    defaultRowStyle.setDefaultStyle( true );
+    mainStyles.lookup( defaultRowStyle, "Default", KoGenStyles::DontForceNumbering );
+
+    // Saving the map.
     map()->saveOasis( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
 
     saveOasisAreaName( contentTmpWriter );
@@ -569,13 +584,13 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
     }
 
-    styles = mainStyles.styles( STYLE_COLUMN );
+    styles = mainStyles.styles( STYLE_COLUMN_AUTO );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
     }
 
-    styles = mainStyles.styles( STYLE_ROW );
+    styles = mainStyles.styles( STYLE_ROW_AUTO );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
@@ -757,6 +772,31 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
+    // Writing out the common column styles.
+    styles = mainStyles.styles( Doc::STYLE_COLUMN_USER );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+      if ( (*it).style->isDefaultStyle() ) {
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-column-properties" );
+      }
+      else {
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
+      }
+    }
+
+    // Writing out the row column styles.
+    styles = mainStyles.styles( Doc::STYLE_ROW_USER );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+      if ( (*it).style->isDefaultStyle() ) {
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-row-properties" );
+      }
+      else {
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
+      }
+    }
+
+    // Writing out the common cell styles.
     styles = mainStyles.styles( Doc::STYLE_CELL_USER );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
@@ -851,6 +891,44 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 
     //load in first
     styleManager()->loadOasisStyleTemplate( oasisStyles );
+
+    // load default column style
+    const QDomElement* defaultColumnStyle = oasisStyles.defaultStyle( "table-column" );
+    if ( defaultColumnStyle )
+    {
+//       kDebug() << "style:default-style style:family=\"table-column\"" << endl;
+      KoStyleStack styleStack;
+      styleStack.push( *defaultColumnStyle );
+      styleStack.setTypeProperties( "table-column" );
+      if ( styleStack.hasAttributeNS( KoXmlNS::style, "column-width" ) )
+      {
+        const double width = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "column-width" ), -1.0 );
+        if ( width != -1.0 )
+        {
+//           kDebug() << "\tstyle:column-width: " << width << endl;
+          Format::setGlobalColWidth( width );
+        }
+      }
+    }
+
+    // load default row style
+    const QDomElement* defaultRowStyle = oasisStyles.defaultStyle( "table-row" );
+    if ( defaultRowStyle )
+    {
+//       kDebug() << "style:default-style style:family=\"table-row\"" << endl;
+      KoStyleStack styleStack;
+      styleStack.push( *defaultRowStyle );
+      styleStack.setTypeProperties( "table-row" );
+      if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
+      {
+        const double height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ), -1.0 );
+        if ( height != -1.0 )
+        {
+//           kDebug() << "\tstyle:row-height: " << height << endl;
+          Format::setGlobalRowHeight( height );
+        }
+      }
+    }
 
     // TODO check versions and mimetypes etc.
     loadOasisAreaName( body );

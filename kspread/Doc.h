@@ -122,8 +122,10 @@ public:
   enum
   {
     STYLE_PAGE = 20,      /**< table styles */
-    STYLE_COLUMN,         /**< column styles */
-    STYLE_ROW,            /**< row styles */
+    STYLE_COLUMN_USER,    /**< commmon column styles */
+    STYLE_COLUMN_AUTO,    /**< auto column styles */
+    STYLE_ROW_USER,       /**< common row styles */
+    STYLE_ROW_AUTO,       /**< auto row styles */
     STYLE_CELL_USER,      /**< common cell styles (used in StyleManager) */
     STYLE_CELL_AUTO,      /**< auto cell styles */
     STYLE_PAGEMASTER,     /**< master pages */
