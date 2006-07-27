@@ -1298,8 +1298,6 @@ protected:
 
     void maxRowCols( int & maxCols, int & maxRows );
 
-    bool rowAsCell( int row, int maxCols );
-
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
 
