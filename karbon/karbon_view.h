@@ -230,6 +230,7 @@ private:
 	void updateRuler();
 
 	void selectionAlign(KoShapeAlignCommand::Align align);
+	void selectionDistribute(KoShapeDistributeCommand::Distribute distribute);
 
 	KarbonPart		*m_part;
 	KarbonCanvas		*m_canvas;
