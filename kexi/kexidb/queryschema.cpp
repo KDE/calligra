@@ -955,7 +955,7 @@ void QuerySchema::computeFieldsExpanded()
 			list.append( ci );
 
 			//handle lookup field schema
-			LookupFieldSchema *lookupFieldSchema = f->table()->lookupFieldSchema( *f );
+			LookupFieldSchema *lookupFieldSchema = f->table() ? f->table()->lookupFieldSchema( *f ) : 0;
 			if (lookupFieldSchema) {
 				// Lookup field schema found:
 				// Now we also need to fetch "visible" value from the lookup table, not only the value of binding.
