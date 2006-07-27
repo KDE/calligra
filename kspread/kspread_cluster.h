@@ -137,7 +137,7 @@ public:
 
     /**
      * Removes all elements from the column.
-     * 
+     *
      */
     void clearColumn( int col );
     void clearRow( int row );
@@ -251,7 +251,7 @@ private:
 
     /** helper method used by valueRange */
     Value makeArray (int col1, int row1, int col2, int row2) const;
-    
+
     Cell*** m_cluster;
     Cell* m_first;
     bool m_autoDelete;
@@ -278,7 +278,8 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    ColumnFormat* first()const { return m_first; }
+    ColumnFormat* first() const { return m_first; }
+    ColumnFormat* next( int col ) const;
 
 private:
     ColumnFormat*** m_cluster;
