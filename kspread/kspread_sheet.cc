@@ -6688,8 +6688,6 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     kdDebug()<<"bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
     bool isNonDefaultColumn = false;
-    bool collapsed = ( column.attributeNS( KoXmlNS::table, "visibility", QString::null ) == "collapse" );
-    isNonDefaultColumn = collapsed;
 
     int number = 1;
     if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
@@ -6717,6 +6715,19 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
           isNonDefaultColumn = true;
         }
       }
+    }
+
+    bool collapsed = false;
+    if ( column.hasAttributeNS( KoXmlNS::table, "visibility" ) )
+    {
+      const QString visibility = column.attributeNS( KoXmlNS::table, "visibility", QString::null );
+      if ( visibility == "visible" )
+        collapsed = false;
+      else if ( visibility == "collapse" )
+        collapsed = true;
+      else if ( visibility == "filter" )
+        collapsed = false; // FIXME Stefan: Set to true, if filters are supported.
+      isNonDefaultColumn = true;
     }
 
     KoStyleStack styleStack;
@@ -6840,13 +6851,14 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     bool collapse = false;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
-        QString visible = row.attributeNS( KoXmlNS::table, "visibility", QString::null );
-    //    kdDebug()<<" row.attribute( table:visibility ) "<<visible<<endl;
-        if ( visible == "collapse" )
-            collapse=true;
-        else
-            kdDebug()<<" visible row not implemented/supported : "<<visible<<endl;
-
+      const QString visibility = row.attributeNS( KoXmlNS::table, "visibility", QString::null );
+      if ( visibility == "visible" )
+        collapse = false;
+      else if ( visibility == "collapse" )
+        collapse = true;
+      else if ( visibility == "filter" )
+        collapse = false; // FIXME Stefan: Set to true, if filters are supported.
+      isNonDefaultRow = true;
     }
 
     bool insertPageBreak = false;
@@ -6859,6 +6871,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         }
       //  else
       //      kdDebug()<<" str :"<<str<<endl;
+        isNonDefaultRow = true;
     }
 
     //number == number of row to be copy. But we must copy cell too.
