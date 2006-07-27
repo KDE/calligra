@@ -1967,6 +1967,8 @@ void View::initView()
 
     d->hBorderWidget = new HBorder( this, d->canvas,this );
     d->vBorderWidget = new VBorder( this, d->canvas ,this );
+    d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+    d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
 
     d->canvas->setFocusPolicy( QWidget::StrongFocus );
     QWidget::setFocusPolicy( QWidget::StrongFocus );
@@ -5593,9 +5595,7 @@ void View::refreshView()
 
   d->canvas->updatePosWidget();
 
-  d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
-  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( Format::globalRowHeight() + 2 ) );
-  d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
+  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( KoGlobal::defaultFont().pointSizeFloat() + 5 ) );
   d->vBorderWidget->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
 
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();

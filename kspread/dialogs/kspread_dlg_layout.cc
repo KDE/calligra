@@ -983,6 +983,7 @@ void CellFormatDialog::applyStyle()
   positionPage->apply( m_style );
   patternPage->apply( m_style );
   protectPage->apply( m_style );
+  m_pView->refreshView();
 }
 
 void CellFormatDialog::slotApply()
@@ -2302,7 +2303,8 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     // in case we're editing a style, we disable the cell size settings
     if (dlg->getStyle())
     {
-      sizeCellGroup->setEnabled(false);
+      defaultHeight->setEnabled(false);
+      defaultWidth->setEnabled(false);
     }
 
     connect(defaultWidth , SIGNAL(clicked() ),this, SLOT(slotChangeWidthState()));
@@ -2424,6 +2426,19 @@ void CellFormatPagePosition::apply( CustomStyle * style )
   if ( m_indent->isEnabled()
        && dlg->indent != m_indent->value() )
     style->changeIndent( m_indent->value() );
+
+  // setting the default column width and row height
+  if ( dlg->getStyle()->type() == Style::BUILTIN && dlg->getStyle()->name() == "Default" )
+  {
+    if ( (int) height->value() != (int) dlg->heightSize )
+    {
+      Format::setGlobalRowHeight( height->value() );
+    }
+    if ( (int) width->value() != (int) dlg->widthSize )
+    {
+      Format::setGlobalColWidth( width->value() );
+    }
+  }
 }
 
 void CellFormatPagePosition::apply(FormatManipulator* _obj)
@@ -2966,7 +2981,7 @@ QPixmap CellFormatPageBorder::paintFormatPixmap(PenStyle _style)
 
 void CellFormatPageBorder::loadIcon( QString _pix, BorderButton *_button)
 {
-  _button->setPixmap( QPixmap( KSBarIcon(_pix) ) );
+  _button->setPixmap( QPixmap( BarIcon(_pix, Factory::global()) ) );
 }
 
 void CellFormatPageBorder::apply(FormatManipulator* obj)

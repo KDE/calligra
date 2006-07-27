@@ -5824,7 +5824,7 @@ void HBorder::paintEvent( QPaintEvent* _ev )
     xPos = xPos - m_pCanvas->xOffset();
   }
 
-  int height = m_pCanvas->d->view->doc()->zoomItY( Format::globalRowHeight() + 2 );
+  int height = m_pCanvas->d->view->doc()->zoomItY( painter.font().pointSizeFloat() + 5 );
 
   QFont normalFont = painter.font();
   if ( m_pCanvas->d->view->doc()->zoom() < 100 )

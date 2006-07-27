@@ -48,14 +48,7 @@
 
 #include "kspread_format.h"
 
-namespace format_LNS
-{
-  double g_colWidth  = colWidth;
-  double g_rowHeight = heightOfRow;
-}
-
 using namespace std;
-using namespace format_LNS;
 using namespace KSpread;
 
 /*****************************************************************************
@@ -63,6 +56,11 @@ using namespace KSpread;
  * Format
  *
  *****************************************************************************/
+
+// static variable construction
+// NOTE Stefan: These values are always overridden by the Doc c'tor.
+double Format::s_columnWidth = 100.0;
+double Format::s_rowHeight   = 20.0;
 
 Format::Format( Sheet * _sheet, Style * _style )
   : m_pSheet( _sheet ),
@@ -95,22 +93,22 @@ void Format::defaultStyleFormat()
 
 void Format::setGlobalColWidth( double width )
 {
-  g_colWidth = width;
+  s_columnWidth = width;
 }
 
 void Format::setGlobalRowHeight( double height )
 {
-  g_rowHeight = height;
+  s_rowHeight = height;
 }
 
 double Format::globalRowHeight()
 {
-  return g_rowHeight;
+  return s_rowHeight;
 }
 
 double Format::globalColWidth()
 {
-  return g_colWidth;
+  return s_columnWidth;
 }
 
 void Format::copy( const Format & _l )
@@ -2499,7 +2497,7 @@ RowFormat::RowFormat( Sheet * _sheet, int _row )
     m_prev = 0;
 
     m_bDisplayDirtyFlag = false;
-    m_fHeight  = g_rowHeight;
+    m_fHeight  = s_rowHeight;
     m_iRow     = _row;
     m_bDefault = false;
     m_bHide    = false;
@@ -2571,9 +2569,9 @@ double RowFormat::dblHeight( const Canvas *_canvas ) const
         return 0.0;
 
     if ( _canvas )
-        return _canvas->zoom() * m_fHeight;
+        return _canvas->zoom() * (m_iRow == 0) ? s_rowHeight : m_fHeight;
     else
-        return m_fHeight;
+        return (m_iRow == 0) ? s_rowHeight : m_fHeight;
 }
 
 double RowFormat::mmHeight() const
@@ -2747,7 +2745,7 @@ ColumnFormat::ColumnFormat( Sheet * _sheet, int _column )
   : Format( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
 {
   m_bDisplayDirtyFlag = false;
-  m_fWidth = g_colWidth;
+  m_fWidth = s_columnWidth;
   m_iColumn = _column;
   m_bDefault=false;
   m_bHide=false;
@@ -2820,9 +2818,9 @@ double ColumnFormat::dblWidth( const Canvas * _canvas ) const
     return 0.0;
 
   if ( _canvas )
-    return _canvas->zoom() * m_fWidth;
+      return _canvas->zoom() * (m_iColumn == 0) ? s_columnWidth : m_fWidth;
   else
-    return m_fWidth;
+      return (m_iColumn == 0) ? s_columnWidth : m_fWidth;
 }
 
 double ColumnFormat::mmWidth() const
