@@ -7478,12 +7478,25 @@ bool Sheet::rowAsCell( int row, int maxCols )
 void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, GenValidationStyles &valStyle )
 {
     int i = 1;
-    while ( i <= maxCols )
+    Cell* cell = cellAt( i, row );
+    Cell* nextCell = getNextCellRight( i, row );
+    // while
+    //   the current cell is not a default one
+    // or
+    //   we have a further cell in this row
+    while ( !cell->isDefault() || nextCell )
     {
+        kdDebug() << "Sheet::saveOasisCells:"
+                  << " i: " << i
+                  << " column: " << (cell->isDefault() ? 0 : cell->column()) << endl;
         int repeated = 1;
-        Cell* cell = cellAt( i, row );
-        cell->saveOasis( xmlWriter, mainStyles, row, i, maxCols, repeated, valStyle );
+        cell->saveOasis( xmlWriter, mainStyles, row, i, repeated, valStyle );
         i += repeated;
+        // stop if we reached the end column
+        if ( i > maxCols )
+          break;
+        cell = cellAt( i, row );
+        nextCell = getNextCellRight( i, row );
     }
 }
 
