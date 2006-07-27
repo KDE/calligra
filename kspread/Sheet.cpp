@@ -4918,7 +4918,6 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
     bool collapsed = ( column.attributeNS( KoXmlNS::table, "visibility", QString::null ) == "collapse" );
     isNonDefaultColumn = collapsed;
 
-    Format layout( this , doc()->styleManager()->defaultStyle() );
     int number = 1;
     if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
     {
@@ -4932,34 +4931,33 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
         kDebug() << "Repeated: " << number << endl;
     }
 
-    KoStyleStack styleStack;
-    styleStack.setTypeProperties("table-column"); //style for column
+    Format layout( this , doc()->styleManager()->defaultStyle() );
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
-        QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
-        kDebug()<<" default-cell-style-name:"<<str<<" for column " << indexCol <<endl;
-
-  //TODO - Code to look up the style in styleMap and store a reference to it in some map
-  // between column indicies and Style instances.  This can then be used when rendering cells
-        isNonDefaultColumn = true;
+      const QString styleName = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
+      if ( !styleName.isEmpty() )
+      {
+        Style* const style = styleMap[ styleName ];
+        if ( style )
+        {
+          layout.setStyle( style );
+          isNonDefaultColumn = true;
+        }
+      }
     }
 
-    styleStack.setTypeProperties("table-column");
+    KoStyleStack styleStack;
     if ( column.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
-        if (style)
-  {
-    styleStack.push( *style );
-  /*  FIX_BEFORE_COMMIT
-    layout.loadOasisStyleProperties( styleStack , oasisStyles );
-    styleStack.pop();*/
-  }
-
-        kDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
+      QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
+      const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
+      if ( style )
+      {
+        styleStack.push( *style );
         isNonDefaultColumn = true;
+      }
     }
+    styleStack.setTypeProperties("table-column"); //style for column
 
     double width = -1.0;
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "column-width" ) )
@@ -5016,34 +5014,38 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
                            const Styles& styleMap )
 {
 //    kDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
-    Format layout( this , doc()->styleManager()->defaultStyle() );
-    KoStyleStack styleStack;
-    styleStack.setTypeProperties( "table-row" );
+
     int backupRow = rowIndex;
     bool isNonDefaultRow = false;
 
+    KoStyleStack styleStack;
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        const QDomElement *style = oasisContext.oasisStyles().findStyle( str, "table-row" );
+      QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
+      const QDomElement *style = oasisContext.oasisStyles().findStyle( str, "table-row" );
       if ( style )
+      {
         styleStack.push( *style );
-  //      kDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
-      isNonDefaultRow = true;
+        isNonDefaultRow = true;
+      }
     }
+    styleStack.setTypeProperties( "table-row" );
 
+    Format layout( this , doc()->styleManager()->defaultStyle() );
     if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
     {
-      QString str = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
-
-      //TODO - Code to look up this style name in the style map and store it in a map somewhere between
-      //row indicies and Style instances for use when rendering cells later on.
-      //      defaultRowCellStyle = styleMap[str];
-      isNonDefaultRow = true;
+      const QString styleName = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
+      if ( !styleName.isEmpty() )
+      {
+        Style* const style = styleMap[ styleName ];
+        if ( style )
+        {
+          layout.setStyle( style );
+          isNonDefaultRow = true;
+        }
+      }
     }
 
-    layout.loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
-    styleStack.setTypeProperties( "table-row" );
     double height = -1.0;
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
     {
@@ -5629,7 +5631,6 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
           xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
 
-          // TODO Stefan: skip 'table:default-cell-style-name' attribute for the default style
           if ( !currentDefaultCellStyle.isDefaultStyle() )
               xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
 
@@ -5655,12 +5656,15 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     // we have to loop through all rows of the used area
     for ( i = 1; i <= maxRows; ++i )
     {
-        kDebug() << "Sheet::saveOasisColRowCell: row: " << i << endl;
-        const RowFormat* row = rowFormat( i );
+        RowFormat* const row = rowFormat( i );
 
         KoGenStyle currentRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
         currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight() );
         currentRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+
+        // default cell style for row
+        KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
+        QString currentDefaultCellStyleName = row->saveOasisCellStyle( currentDefaultCellStyle, mainStyles );
 
         xmlWriter.startElement( "table:table-row" );
 
@@ -5685,7 +5689,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             //   next row with different Format
             while ( j <= maxRows && !getFirstCellRow( j ) )
             {
-              RowFormat* nextRow = rowFormat( j );
+              RowFormat* const nextRow = rowFormat( j );
 //               kDebug() << "Sheet::saveOasisColRowCell: second row loop:"
 //                         << " j: " << j
 //                         << " row: " << nextRow->row() << endl;
@@ -5706,10 +5710,13 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );
               nextRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
-              // TODO default cell style (name)
+              // default cell style name for next row
+              KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
+              QString nextDefaultCellStyleName = nextRow->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
 
               // if the formats differ, stop here
               if ( isHidden != nextRow->isHide() ||
+                   nextDefaultCellStyleName != currentDefaultCellStyleName ||
                    !(nextRowStyle == currentRowStyle) )
               {
                 break;
@@ -5721,6 +5728,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
             if ( repeated > 1 )
                 xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
+            if ( !currentDefaultCellStyle.isDefaultStyle() )
+              xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
+            if ( row->isHide() ) // never true for the default row
+              xmlWriter.addAttribute( "table:visibility", "collapse" );
 
             kDebug() << "Sheet::saveOasisColRowCell: empty row " << i << ' '
                       << "repeated " << repeated << " time(s)" << endl;
@@ -5730,12 +5741,13 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         }
         else // row is not empty
         {
+            if ( !currentDefaultCellStyle.isDefaultStyle() )
+              xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
+            if ( row->isHide() ) // never true for the default row
+              xmlWriter.addAttribute( "table:visibility", "collapse" );
+
             saveOasisCells( xmlWriter, mainStyles, i, maxCols, valStyle );
         }
-
-        if ( row->isHide() ) // never true for the default row
-            xmlWriter.addAttribute( "table:visibility", "collapse" );
-
         xmlWriter.endElement();
     }
 }
