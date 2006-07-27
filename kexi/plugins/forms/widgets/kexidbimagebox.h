@@ -57,6 +57,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 //	Q_OVERRIDE( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
 	Q_PROPERTY( bool dropDownButtonVisible READ dropDownButtonVisible WRITE setDropDownButtonVisible )
 	Q_OVERRIDE( int lineWidth READ lineWidth WRITE setLineWidth )
+	Q_OVERRIDE( FocusPolicy focusPolicy READ focusPolicyInternal WRITE setFocusPolicy )
 
 	public:
 		KexiDBImageBox( bool designMode, QWidget *parent, const char *name = 0 );
@@ -122,6 +123,18 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 
 		//! For overriden property
 		int lineWidth() const { return KexiFrame::lineWidth(); }
+
+		/*! Overriden to change the policy behaviour a bit:
+		 NoFocus is returned regardless the real focus flag 
+		 if the data source is empty (see dataSource()). */
+		FocusPolicy focusPolicy() const;
+
+		//! \return the internal focus policy value, i.e. the one unrelated to data source presence.
+		FocusPolicy focusPolicyInternal() const;
+
+		/*! Sets the internal focus policy value. 
+		 "Internal" means that if there is no data source set, real policy becomes NoFocus. */
+		virtual void setFocusPolicy( FocusPolicy policy );
 
 	public slots:
 		void setPixmapId(uint id);
@@ -189,6 +202,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 		virtual void paintEvent( QPaintEvent* );
 		virtual void resizeEvent( QResizeEvent* e );
+		virtual bool eventFilter( QObject * watched, QEvent * e );
 
 		//! Sets value \a value for a widget.
 		virtual void setValueInternal( const QVariant& add, bool removeOld ) {
@@ -245,6 +259,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 //			*m_deleteAction, *m_propertiesAction;
 //		QTimer m_clickTimer;
 		int m_alignment;
+		FocusPolicy m_focusPolicyInternal; //!< Used for focusPolicyInternal()
 		bool m_designMode : 1;
 		bool m_readOnly : 1;
 		bool m_scaledContents : 1;

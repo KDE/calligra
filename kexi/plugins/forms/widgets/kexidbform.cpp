@@ -438,8 +438,9 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					widgetToFocus = widgetToFocus->focusProxy();
 					if (d->dataAwareObject->acceptEditor()) {//try to accept this will validate the current 
 						                                       //input (if any)
-						SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Tab);
-						kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+						UNSET_FOCUS_USING_REASON(realWidget, QFocusEvent::Tab);
+						SET_FOCUS_USING_REASON(widgetToFocus, QFocusEvent::Tab);
+						kexipluginsdbg << "focusing " << widgetToFocus->name() << endl;
 					}
 					return true;
 				} else if (backtab) {
@@ -453,6 +454,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 						return true; //ignore
 					if (d->dataAwareObject->acceptEditor()) {//try to accept this will validate the current 
 						                                       //input (if any)
+						UNSET_FOCUS_USING_REASON(realWidget, QFocusEvent::Backtab);
 						//set focus, see above note
 						SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Backtab);
 						kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
@@ -497,6 +499,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					}
 					else
 						dataItem = dataItem->parentWidget();
+					dataItem->update();
 				}
 			}
 		}
@@ -509,6 +512,8 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 		else
 			d->popupFocused = false;
 //			d->widgetFocusedBeforePopup = 0;
+//		kdDebug() << "e->type()==QEvent::FocusOut " << watched->className() << " " <<watched->name() << endl;
+//		UNSET_FOCUS_USING_REASON(watched, static_cast<QFocusEvent*>(e)->reason());
 	}
 	return KexiDBFormBase::eventFilter(watched, e);
 }
