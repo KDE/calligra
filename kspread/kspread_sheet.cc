@@ -6687,7 +6687,10 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 {
     kdDebug()<<"bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
+    bool isNonDefaultColumn = false;
     bool collapsed = ( column.attributeNS( KoXmlNS::table, "visibility", QString::null ) == "collapse" );
+    isNonDefaultColumn = collapsed;
+
     Format layout( this , doc()->styleManager()->defaultStyle() );
     int number = 1;
     if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
@@ -6711,7 +6714,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 
 	//TODO - Code to look up the style in styleMap and store a reference to it in some map
 	// between column indicies and Style instances.  This can then be used when rendering cells
-
+        isNonDefaultColumn = true;
     }
 
     styleStack.setTypeProperties("table-column");
@@ -6728,6 +6731,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 	}
 
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
+        isNonDefaultColumn = true;
     }
 
     double width = -1.0;
@@ -6735,6 +6739,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     {
         width = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "column-width" ) , -1.0 );
         kdDebug()<<" style:column-width : width :"<<width<<endl;
+        isNonDefaultColumn = true;
     }
 
     bool insertPageBreak = false;
@@ -6747,26 +6752,34 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
         }
         else
             kdDebug()<<" str :"<<str<<endl;
+        isNonDefaultColumn = true;
     }
 
     for ( int i = 0; i < number; ++i )
     {
-        kdDebug()<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ? "<<collapsed<<endl;
-        ColumnFormat * col = new ColumnFormat( this, indexCol );
-        col->copy( layout );
+//         kdDebug()<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ? "<<collapsed<<endl;
+
+      ColumnFormat* columnFormat;
+      if ( isNonDefaultColumn )
+      {
+        columnFormat = nonDefaultColumnFormat( indexCol );
+
         if ( width != -1.0 ) //safe
-            col->setWidth( (int) width );
-
+            columnFormat->setWidth( (int) width );
         // if ( insertPageBreak )
-        //   col->setPageBreak( true )
-
+        //   columnFormat->setPageBreak( true )
         if ( collapsed )
-            col->setHide( true );
+            columnFormat->setHide( true );
+      }
+      else
+      {
+        columnFormat = this->columnFormat( indexCol );
+      }
+      columnFormat->copy( layout );
 
-        insertColumnFormat( col );
-        ++indexCol;
+      ++indexCol;
     }
-    kdDebug()<<" after index column !!!!!!!!!!!!!!!!!! :"<<indexCol<<endl;
+//     kdDebug()<<" after index column !!!!!!!!!!!!!!!!!! :"<<indexCol<<endl;
     return true;
 }
 
@@ -6774,10 +6787,12 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext,  QDict<Style>& styleMap )
 {
 //    kdDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
+
     Format layout( this , doc()->styleManager()->defaultStyle() );
     KoStyleStack styleStack;
     styleStack.setTypeProperties( "table-row" );
     int backupRow = rowIndex;
+    bool isNonDefaultRow = false;
 
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
@@ -6786,6 +6801,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
       if ( style )
         styleStack.push( *style );
   //      kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
+      isNonDefaultRow = true;
     }
 
     if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
@@ -6795,6 +6811,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
 	    //TODO - Code to look up this style name in the style map and store it in a map somewhere between
 	    //row indicies and Style instances for use when rendering cells later on.
 	    //	    defaultRowCellStyle = styleMap[str];
+            isNonDefaultRow = true;
     }
 
     layout.loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
@@ -6804,6 +6821,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     {
         height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1.0 );
     //    kdDebug()<<" properties style:row-height : height :"<<height<<endl;
+        isNonDefaultRow = true;
     }
 
     int number = 1;
@@ -6817,6 +6835,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
             // FIXME POSSIBLE DATA LOSS!
             number = QMIN( n, KS_rowMax - rowIndex + 1 );
     }
+
     bool collapse = false;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
@@ -6845,17 +6864,24 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     for ( int i = 0; i < number; ++i )
     {
        // kdDebug()<<" create non defaultrow format :"<<rowIndex<<" repeate : "<<number<<" height :"<<height<<endl;
-        RowFormat * rowL = nonDefaultRowFormat( rowIndex );
-        rowL->copy( layout );
-        if ( height != -1.0 )
-        {
-         //   kdDebug() << "Setting row height to " << height << endl;
-            rowL->setHeight( (int) height );
-        }
-        if ( collapse )
-            rowL->setHide( true );
 
-        ++rowIndex;
+      RowFormat* rowFormat;
+      if ( isNonDefaultRow )
+      {
+        rowFormat = nonDefaultRowFormat( rowIndex );
+
+        if ( height != -1.0 )
+            rowFormat->setHeight( (int) height );
+        if ( collapse )
+            rowFormat->setHide( true );
+      }
+      else
+      {
+        rowFormat = this->rowFormat( rowIndex );
+      }
+      rowFormat->copy( layout );
+
+      ++rowIndex;
     }
 
     int columnIndex = 0;
