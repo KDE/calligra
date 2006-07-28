@@ -783,7 +783,7 @@ KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distribute)
 	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
 	if( selectedShapes.count() < 2) return;
 
-	KoShapeDistributeCommand *cmd = new KoShapeDistributeCommand( selectedShapes, distribute);
+	KoShapeDistributeCommand *cmd = new KoShapeDistributeCommand( selectedShapes, distribute, selection->boundingRect());
 
 	part()->commandHistory()->addCommand( cmd, true );
 }
