@@ -869,15 +869,6 @@ Cell* Sheet::cellAt( int _column, int _row ) const
 
 Cell* Sheet::cellAt( int _column, int _row, bool _scrollbar_update )
 {
-  if ( _column > KS_colMax ) {
-    _column = KS_colMax;
-    kDebug (36001) << "Sheet::cellAt: column range: (col: " << _column << ')' << endl;
-  }
-  if ( _row > KS_rowMax) {
-    kDebug (36001) << "Sheet::cellAt: row out of range: (row: " << _row << ')' << endl;
-    _row = KS_rowMax;
-  }
-
   if ( _scrollbar_update && d->scrollBarUpdates )
   {
     checkRangeHBorder( _column );
