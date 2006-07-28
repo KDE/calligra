@@ -475,6 +475,8 @@ public:
   void addProperty( FlagsSet p );
   void removeProperty( FlagsSet p );
 
+  bool operator==( const CustomStyle& other ) const;
+
  private:
   friend class StyleManager;
 

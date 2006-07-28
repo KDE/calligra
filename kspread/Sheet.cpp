@@ -5610,7 +5610,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             // column in the next iteration of the outer loop
             break;
           }
-
+#if 0
           KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
           nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );
           nextColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
@@ -5624,7 +5624,11 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           {
             break;
           }
-
+#endif
+          if ( !( *column == *nextColumn ) )
+          {
+            break;
+          }
           ++repeated;
           nextColumn = d->columns.next( j++ );
         }
@@ -5707,7 +5711,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                 ++j;
                 continue;
               }
-
+#if 0
               // create the Oasis representation of the format for the comparison
               KoGenStyle nextRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
               nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );
@@ -5721,6 +5725,11 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               if ( isHidden != nextRow->isHide() ||
                    nextDefaultCellStyleName != currentDefaultCellStyleName ||
                    !(nextRowStyle == currentRowStyle) )
+              {
+                break;
+              }
+#endif
+              if ( !( *row == *nextRow ) )
               {
                 break;
               }

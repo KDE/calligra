@@ -129,39 +129,56 @@ bool Style::operator == (const Style& style) const
 	//This is prone to error because if someone adds additional
 	//properties to the style class they will have to remember
 	//to correct this function - can we do this a better way?
-
-	if ( 	m_properties == style.m_properties &&
-		m_type == style.m_type &&
-		m_featuresSet == style.m_featuresSet &&
-		m_alignX == style.m_alignX &&
-		m_alignY == style.m_alignY &&
-		m_floatFormat == style.m_floatFormat &&
-		m_floatColor == style.m_floatColor &&
-		m_formatType == style.m_formatType &&
-		m_fontFamily == style.m_fontFamily &&
-		m_fontFlags == style.m_fontFlags &&
-		m_fontSize == style.m_fontSize &&
-		m_textPen == style.m_textPen &&
-		m_bgColor == style.m_bgColor &&
-		m_rightBorderPen == style.m_rightBorderPen &&
-		m_bottomBorderPen == style.m_bottomBorderPen &&
-		m_leftBorderPen == style.m_leftBorderPen &&
-		m_topBorderPen == style.m_topBorderPen &&
-		m_fallDiagonalPen == style.m_fallDiagonalPen &&
-	        m_goUpDiagonalPen == style.m_goUpDiagonalPen &&
-		m_backGroundBrush == style.m_backGroundBrush &&
-		m_rotateAngle == style.m_rotateAngle &&
-		m_indent == style.m_indent &&
-		m_strFormat == style.m_strFormat &&
-		m_precision == style.m_precision &&
-		m_prefix == style.m_prefix &&
-		m_postfix == style.m_postfix &&
-		m_currency.type == style.m_currency.type &&
-		m_properties == style.m_properties )
-
-		return true;
-	else
-		return false;
+  if ( m_featuresSet != style.m_featuresSet )
+    return false;
+  if ( m_type != style.m_type )
+    return false;
+  // NOTE Stefan: Only compare the values of the set features.
+  if ( // layout (4)
+       ( m_featuresSet & SHAlign ) && ( m_alignX != style.m_alignX ) ||
+       ( m_featuresSet & SVAlign ) && ( m_alignY != style.m_alignY ) ||
+       ( m_featuresSet & SAngle )  && ( m_rotateAngle != style.m_rotateAngle ) ||
+       ( m_featuresSet & SIndent ) && ( m_indent != style.m_indent ) ||
+       // background (2)
+       ( m_featuresSet & SBackgroundColor ) && ( m_bgColor != style.m_bgColor ) ||
+       ( m_featuresSet & SBackgroundBrush ) && ( m_backGroundBrush != style.m_backGroundBrush ) ||
+       // borders (6)
+       ( m_featuresSet & SRightBorder )  && ( m_rightBorderPen != style.m_rightBorderPen ) ||
+       ( m_featuresSet & SBottomBorder ) && ( m_bottomBorderPen != style.m_bottomBorderPen ) ||
+       ( m_featuresSet & SLeftBorder )   && ( m_leftBorderPen != style.m_leftBorderPen ) ||
+       ( m_featuresSet & STopBorder )    && ( m_topBorderPen != style.m_topBorderPen ) ||
+       ( m_featuresSet & SFallDiagonal ) && ( m_fallDiagonalPen != style.m_fallDiagonalPen ) ||
+       ( m_featuresSet & SGoUpDiagonal ) && ( m_goUpDiagonalPen != style.m_goUpDiagonalPen ) ||
+       // format (7) (SFormatType twice)
+       ( m_featuresSet & SPrecision )    && ( m_precision != style.m_precision ) ||
+       ( m_featuresSet & SPrefix )       && ( m_prefix != style.m_prefix ) ||
+       ( m_featuresSet & SPostfix )      && ( m_postfix != style.m_postfix ) ||
+       ( m_featuresSet & SFloatFormat )  && ( m_floatFormat != style.m_floatFormat ) ||
+       ( m_featuresSet & SFloatColor )   && ( m_floatColor != style.m_floatColor ) ||
+       ( m_featuresSet & SFormatType )   && ( m_formatType != style.m_formatType ) ||
+       ( m_featuresSet & SFormatType )   && ( m_currency.type != style.m_currency.type ) ||
+       ( m_featuresSet & SCustomFormat ) && ( m_strFormat != style.m_strFormat ) ||
+       // font (4)
+       ( m_featuresSet & SFontFamily ) && ( m_fontFamily != style.m_fontFamily ) ||
+       ( m_featuresSet & SFontFlag )   && ( m_fontFlags != style.m_fontFlags ) ||
+       ( m_featuresSet & SFontSize )   && ( m_fontSize != style.m_fontSize ) ||
+       ( m_featuresSet & STextPen )    && ( m_textPen != style.m_textPen ) )
+  {
+    return false;
+  }
+  // Properties (7)
+  const uint differingProperties = m_properties xor style.m_properties;
+  if ( ( m_featuresSet & SDontPrintText ) && ( differingProperties & PDontPrintText ) ||
+       ( m_featuresSet & SCustomFormat )  && ( differingProperties & PCustomFormat ) ||
+       ( m_featuresSet & SNotProtected )  && ( differingProperties & PNotProtected ) ||
+       ( m_featuresSet & SHideAll )       && ( differingProperties & PHideAll ) ||
+       ( m_featuresSet & SHideFormula )   && ( differingProperties & PHideFormula ) ||
+       ( m_featuresSet & SMultiRow )      && ( differingProperties & PMultiRow ) ||
+       ( m_featuresSet & SVerticalText )  && ( differingProperties & PVerticalText ) )
+  {
+    return false;
+  }
+  return true;
 }
 
 void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element )
@@ -3263,4 +3280,9 @@ void CustomStyle::removeProperty( FlagsSet p )
   }
 }
 
-
+bool CustomStyle::operator==( const CustomStyle& other ) const
+{
+  if ( m_name != other.m_name )
+    return false;
+  return Style::operator==( other );
+}
