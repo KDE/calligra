@@ -138,6 +138,9 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_table->setRowMovingEnabled(true);
     m_table->setColumnMovingEnabled(true);
 
+    connect( m_table, SIGNAL( currentChanged(int, int) ),
+	     this,    SLOT( currentChanged(int, int) ) );
+  
     // Create the Rows setting
     m_rowsLA = new QLabel( i18n("# Rows:" ), page );
     m_rowsLA->resize( m_rowsLA->sizeHint() );
@@ -159,21 +162,21 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 #endif
 
     //Buttons for Inserting / Removing rows & columns 
-    QPushButton *insertRowButton = new QPushButton( i18n("Insert Row") , page);
-    connect( insertRowButton, SIGNAL( clicked() ),
-	     this,            SLOT( insertRow() ) );
+    m_insertRowButton = new QPushButton( i18n("Insert Row") , page);
+    connect( m_insertRowButton, SIGNAL( clicked() ),
+	     this,              SLOT( insertRow() ) );
     
-    QPushButton *insertColButton = new QPushButton( i18n("Insert Column") , page);
-    connect( insertColButton, SIGNAL( clicked() ),
-	     this,            SLOT( insertColumn() ) );
+    m_insertColButton = new QPushButton( i18n("Insert Column") , page);
+    connect( m_insertColButton, SIGNAL( clicked() ),
+	     this,              SLOT( insertColumn() ) );
     
-    QPushButton* removeRowButton = new QPushButton( i18n("Remove Row") , page);
-    connect( removeRowButton, SIGNAL( clicked() ),
-	     this,            SLOT( removeCurrentRow() ) );
+    m_removeRowButton = new QPushButton( i18n("Remove Row") , page);
+    connect( m_removeRowButton, SIGNAL( clicked() ),
+	     this,              SLOT( removeCurrentRow() ) );
     
-    QPushButton* removeColButton = new QPushButton( i18n("Remove Column") , page);
-    connect( removeColButton, SIGNAL( clicked() ),
-	     this,            SLOT( removeCurrentColumn() ) );
+    m_removeColButton = new QPushButton( i18n("Remove Column") , page);
+    connect( m_removeColButton, SIGNAL( clicked() ),
+	     this,              SLOT( removeCurrentColumn() ) );
         
   
     // Start the layout.  The buttons are at the top.
@@ -182,10 +185,10 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     Q3HBoxLayout* insertRemoveLayout = new Q3HBoxLayout( );
    
     insertRemoveLayout->setSpacing(5);
-    insertRemoveLayout->addWidget(insertRowButton);
-    insertRemoveLayout->addWidget(insertColButton);
-    insertRemoveLayout->addWidget(removeRowButton);
-    insertRemoveLayout->addWidget(removeColButton);
+    insertRemoveLayout->addWidget(m_insertRowButton);
+    insertRemoveLayout->addWidget(m_insertColButton);
+    insertRemoveLayout->addWidget(m_removeRowButton);
+    insertRemoveLayout->addWidget(m_removeColButton);
     insertRemoveLayout->addStretch(1);
     
     topLayout->addLayout(insertRemoveLayout);
@@ -246,6 +249,11 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
     // The data is not modified at the start.
     m_modified          = false;
+
+    // If the cursor starts at cell (0, 0), that is the header row and
+    // col, and the user isn't allowed to remove those.
+    m_removeRowButton->setEnabled( false );
+    m_removeColButton->setEnabled( false );
 
     // Add tooltips and WhatsThis help.
     addDocs();
@@ -549,6 +557,14 @@ void kchartDataEditor::removeCurrentRow()
 {
     int  row = m_table->currentRow();
     
+    // Can't remove the header row.
+    if ( row == 0 )
+	return;
+
+    // Need at least one data row.
+    if ( m_table->numRows() == 2 )
+	return;
+
     m_table->removeRow(row);
     m_rowsSB->setValue(m_table->numRows());
     
@@ -562,6 +578,14 @@ void kchartDataEditor::removeCurrentColumn()
 {
     int  col = m_table->currentColumn();
     
+    // Can't remove the header column.
+    if ( col == 0 )
+	return;
+
+    // Need at least one data column.
+    if ( m_table->numCols() == 2 )
+	return;
+
     m_table->removeColumn(col);
     m_colsSB->setValue(m_table->numCols());
     
@@ -762,6 +786,14 @@ void  kchartDataEditor::tableChanged(int row, int col)
 
     m_modified = true;
 }
+
+
+void  kchartDataEditor::currentChanged(int row, int col)
+{
+    m_removeRowButton->setEnabled( row != 0 && m_table->numRows() > 2 );
+    m_removeColButton->setEnabled( col != 0 && m_table->numCols() > 2 );
+}
+
 
 void kchartDataEditor::updateRowHeaders()
 {

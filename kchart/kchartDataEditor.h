@@ -134,10 +134,18 @@ private slots:
     // Called when something changes in the table.
     void  tableChanged(int row, int col);
 
+    // Called when the current cell is changed
+    void  currentChanged(int row, int col);
 
 private:
     // Widgets in the editor
     kchartDataTable    *m_table;
+
+    QPushButton        *m_insertRowButton;
+    QPushButton        *m_insertColButton;
+    QPushButton        *m_removeRowButton;
+    QPushButton        *m_removeColButton;
+
     QLabel             *m_rowsLA;
     kchartDataSpinBox  *m_rowsSB;
     QLabel             *m_colsLA;

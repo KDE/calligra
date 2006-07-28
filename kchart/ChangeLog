@@ -1,3 +1,16 @@
+2006-07-18  Inge Wallin  <inge@lysator.liu.se>
+
+	Clean up the data editor and fix bug 129553: kchart: crash / heavy
+	load with Row=0 in KChart Data Editor
+	* kchartDataEditor.{h,cc} (currentChanged): New method
+	(m_insertRowButton, m_removeRowButton, m_insertRowButton,
+	  m_removeRowButton): New members
+	* kchartDataEditor.cc (removeCurrentRow, removeCurrentCol): Don't
+	allow to remove a row or column if it's the first column or if
+	there are only 2 of them.
+
+	Some small cleaning.
+	
 2006-07-17  Inge Wallin  <inge@lysator.liu.se>
 
 	Add "first row/col as legend" checkboxes to data editor.
@@ -12,7 +25,7 @@
 	================================================================
 	KChart 1.5 released
 
-	<There are a lot of missed entries here.
+	<There are a lot of missed entries here.>
 
 	
 2005-09-15  Inge Wallin  <inge@lysator.liu.se>
