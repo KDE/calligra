@@ -416,6 +416,7 @@ class KSPREAD_EXPORT Value
 
     // comparison operator - returns true only if strictly identical, unlike equal()/compare()
     bool operator==( const Value& v ) const;
+    inline bool operator!=( const Value& other ) const { return !operator==( other ); }
 
     static int compare( double v1, double v2 );
     

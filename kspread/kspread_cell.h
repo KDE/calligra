@@ -101,6 +101,7 @@ struct Validity
     }
     return false;
   }
+  inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
 
     QString message;
     QString title;
@@ -849,6 +850,7 @@ public:
     bool operator < ( const Cell & ) const;
 
     bool operator==( const Cell& other ) const;
+    inline bool operator!=( const Cell& other ) const { return !operator==( other ); }
 
     void freeAllObscuredCells();
 

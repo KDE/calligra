@@ -7026,7 +7026,7 @@ void Sheet::maxRowCols( int & maxCols, int & maxRows )
 
 bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
 {
-  if ( !( *rowFormat( row1 ) == *rowFormat( row2 ) ) )
+  if ( *rowFormat( row1 ) != *rowFormat( row2 ) )
   {
 //     kdDebug() << "\t Formats of " << row1 << " and " << row2 << " are different" << endl;
     return false;
@@ -7034,7 +7034,7 @@ bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
   // FIXME Stefan: Make use of the cluster functionality.
   for ( int col = 1; col <= maxCols; ++col )
   {
-    if ( !( *cellAt( col, row1 ) == *cellAt( col, row2 ) ) )
+    if ( *cellAt( col, row1 ) != *cellAt( col, row2 ) )
     {
 //       kdDebug() << "\t Cell at column " << col << " in row " << row2 << " differs from the one in row " << row1 << endl;
       return false;
@@ -7444,7 +7444,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             break;
           }
 #endif
-          if ( !( *column == *nextColumn ) )
+          if ( *column != *nextColumn )
           {
             break;
           }
@@ -7549,7 +7549,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                 break;
               }
 #endif
-              if ( !( *row == *nextRow ) )
+              if ( *row != *nextRow )
               {
                 break;
               }

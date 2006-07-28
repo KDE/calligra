@@ -133,6 +133,7 @@ public:
 
   /** Returns true if both styles have the same properties */
   bool operator == (const Style& style) const;
+  inline bool operator!=( const Style& other ) const { return !operator==( other ); }
 
     static FormatType formatType( const QString &_format );
 
@@ -453,6 +454,7 @@ public:
   void removeProperty( Properties p );
 
   bool operator==( const CustomStyle& other ) const;
+  inline bool operator!=( const CustomStyle& other ) const { return !operator==( other ); }
 
  private:
   friend class StyleManager;
