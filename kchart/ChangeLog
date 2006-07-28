@@ -1,5 +1,10 @@
 2006-07-17  Inge Wallin  <inge@lysator.liu.se>
 
+	Add "first row/col as legend" checkboxes to data editor.
+	* kchartDataEditor.cc (kchartDataEditor): Enable existing code
+	* kchartDataEditor.cc (setData): Enable existing code
+	* kchartDataEditor.cc (getData): Enable existing code
+
 	Simplify paintContent():
 	* kchart_part.{h,cc} (createLabelsAndLegend): New function
 	(paintContent): call createLabelsAndLegend
