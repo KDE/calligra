@@ -1041,15 +1041,6 @@ Cell* Sheet::cellAt( int _column, int _row ) const
 
 Cell* Sheet::cellAt( int _column, int _row, bool _scrollbar_update )
 {
-  if ( _column > KS_colMax ) {
-    _column = KS_colMax;
-    kdDebug (36001) << "Sheet::cellAt: column range: (col: " << _column << ")" << endl;
-  }
-  if ( _row > KS_rowMax) {
-    kdDebug (36001) << "Sheet::cellAt: row out of range: (row: " << _row << ")" << endl;
-    _row = KS_rowMax;
-  }
-
   if ( _scrollbar_update && d->scrollBarUpdates )
   {
     checkRangeHBorder( _column );
@@ -2045,7 +2036,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   */
   if ( mode == Column )
   {
-    for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1); y++ )
+    for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1), y <= KS_rowMax; y++ )
     {
       cell = cellAt( _marker.x(), y );
 
@@ -2070,7 +2061,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   }
   else if(mode == Row)
   {
-    for ( x = _marker.x(); x <=(_marker.x() + numberOfCells - 1); x++ )
+    for ( x = _marker.x(); x <=(_marker.x() + numberOfCells - 1), x <= KS_colMax; x++ )
     {
       /* see the code above for a column series for a description of
          what is going on here. */
@@ -2130,6 +2121,10 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
         {
           y += cell->extraYCells();
         }
+        if ( y > KS_rowMax )
+        {
+          break;
+        }
       }
       else if (mode == Row)
       {
@@ -2137,6 +2132,10 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
         if (cell->doesMergeCells())
         {
           x += cell->extraXCells();
+        }
+        if ( x > KS_colMax )
+        {
+          break;
         }
       }
       else
@@ -2177,6 +2176,10 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
         {
           y += cell->extraYCells();
         }
+        if ( y > KS_rowMax )
+        {
+          break;
+        }
       }
       else if (mode == Row)
       {
@@ -2184,6 +2187,10 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
         if (cell->doesMergeCells())
         {
           x += cell->extraXCells();
+        }
+        if ( x > KS_colMax )
+        {
+          break;
         }
       }
       else
@@ -2223,6 +2230,10 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
         {
           y += cell->extraYCells();
         }
+        if ( y > KS_rowMax )
+        {
+          break;
+        }
       }
       else if (mode == Row)
       {
@@ -2230,6 +2241,10 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
         if (cell->doesMergeCells())
         {
           x += cell->extraXCells();
+        }
+        if ( x > KS_colMax )
+        {
+          break;
         }
       }
       else
