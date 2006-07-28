@@ -34,69 +34,34 @@
 
 KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
  : appearance(t)
-//moved , autonumberIcon( qembed_findData("autonumber.png") )
 {
 	clearVariables();
 	tv = t;
-//moved	pInsertItem = 0;
-
 	editOnDoubleClick = true;
 	pBufferPm = 0;
-//moved	deletionPolicy = KexiTableView::AskDelete;
 	disableDrawContents = false;
-//moved	readOnly = -1; //don't know
-//moved	insertingEnabled = -1; //don't know
-	
-//moved	contentsMousePressEvent_dblClick = false;
-//moved	isSortingEnabled = true;
 	navigatorEnabled = true;
 	contextMenuEnabled = true;
-//moved	filteringEnabled = true;
-//moved	navPanel = 0;
 	skipKeyPress = false;
 	vScrollBarValueChanged_enabled = true;
 	scrollbarToolTipsEnabled = true;
 	scrollBarTipTimerCnt = 0;
 	scrollBarTip = 0;
-//moved	inside_acceptEditor = false;
-//moved	internal_acceptsRowEditAfterCellAccepting = false;
-//moved	acceptsRowEditAfterCellAccepting = false;
-//moved	emptyRowInsertingEnabled = false;
-//moved	dragIndicatorLine = -1;
-//moved		rowWillBeDeleted = -1;
-//	dropsAtRowEnabled = false;
-//moved	initDataContentsOnShow = false;
-//moved	cursorPositionSetExplicityBeforeShow = false;
-//moved	verticalHeaderAlreadyAdded = false;
 	ensureCellVisibleOnShow = QPoint(-1,-1);
-//moved	spreadSheetMode = false;
 	internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height()/2;
 	highlightedRow = -1;
 	moveCursorOnMouseRelease = false;
+	horizontalHeaderVisible = true;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
 {
 	delete pBufferPm;
-//moved	delete pInsertItem;
-//moved	delete pRowEditBuffer;
 	delete scrollBarTip;
 }
 
 void KexiTableViewPrivate::clearVariables()
 {
 	// Initialize variables
-//moved	pEditor = 0;
-//	numRows = 0;
-//moved	curRow = -1;
-//moved	curCol = -1;
-//moved	pCurrentItem=0;
-//moved	pRowEditBuffer=0;
-//	pInsertItem = 0;
-//moved	rowEditing = false;
-//moved	newRowEditing = false;
-//	sortedColumn = -1;
-//	sortOrder = true;
-//	recordIndicator = false;
 }
 

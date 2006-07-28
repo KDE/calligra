@@ -49,7 +49,6 @@ class KexiDateTimeTableEdit : public KexiInputTableEdit
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
-//moved		QDateTime dateTimeValue();
 		bool textIsEmpty() const;
 
 		//! Used to format and convert date values
