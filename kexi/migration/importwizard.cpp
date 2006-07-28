@@ -400,7 +400,7 @@ bool ImportWizard::checkUserInput()
 
 	Kexi::ObjectStatus result;
 	KexiMigrate* sourceDriver = prepareImport(result);
-	if (sourceDriver->isSourceAndDestinationDataSourceTheSame())
+	if (sourceDriver && sourceDriver->isSourceAndDestinationDataSourceTheSame())
 	{
 		finishtxt = finishtxt + "<br>" + i18n("Source database is the same as destination.");
 	}
