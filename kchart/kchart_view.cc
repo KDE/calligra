@@ -201,7 +201,7 @@ void KChartView::editData()
         return;
     }
     if (!ed.modified())
-    return;
+	return;
 
     // Get the data and legend back.
     ed.getData(params, dat);

@@ -183,6 +183,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 			       bool /*transparent*/,
 			       double /*zoomX*/, double /*zoomY*/ )
 {
+    int  numDatasets;
+
     // If params is 0, initDoc() has not been called.
     Q_ASSERT( m_params != 0 );
 
@@ -198,94 +200,45 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
 
     // Create the displayData table.
-    createDisplayData();
+    numDatasets = createDisplayData();
 
-    // Create the axis labels and legend.
+
+    // Create and set the axis labels and legend.
     QStringList  longLabels;
     QStringList  shortLabels;
-
-    longLabels.clear();
-    shortLabels.clear();
-
-    const uint dataColumnCount = m_currentData.cols();
-    const uint dataRowCount = m_currentData.rows();
-    const uint columnLabelCount = m_colLabels.count();
-    const uint rowLabelCount = m_rowLabels.count();
-
-    if (m_params->dataDirection() == KChartParams::DataRows) {
-	// Data is handled in rows.  This is the way KDChart works also.
-
-	// Set X axis labels from column headers.
-	for ( uint col = 0; col < dataColumnCount; col++ ) {
-
-            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
-
-            longLabels  << label;
-	    shortLabels << label.left( 3 );
-	}
-
-	// Set legend from row headers.
-        for ( uint row = 0; row < dataRowCount; row++ ) {
-            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
-
-            m_params->setLegendText( row, label );
-        }
-    }
-    else {
-	// Data is handled in columns.
-
-	// Set X axis labels from row headers.
-	for ( uint row = 0; row < dataRowCount; row++ ) {
-
-            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
-
-            longLabels  << label;
-	    shortLabels << label.left( 3 );
-	}
-
-	// Set legend from column headers.
-        for ( uint col = 0; col < dataColumnCount ; col++ ) {
-            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
-
-            m_params->setLegendText( col, label );
-        }
-    }
-
-    // FIXME: In a HiLo chart, the Legend should be the same as the
-    //        labels on the X Axis.  Should we disable one of them?
-    if (m_params->chartType() == KChartParams::HiLo) {
-
-	// Set the correct X axis labels and legend.
-	longLabels.clear();
-	shortLabels.clear();
-	if (m_params->dataDirection() == KChartParams::DataRows) {
-
-	    // If data are in rows, then the X axis labels should be
-	    // taken from the row headers.
-	    for ( uint row = 0; row < dataRowCount ; row++ ) {
-
-                QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
-
-                longLabels  << label;
-		shortLabels << label.left( 3 );
-	    }
-	}
-	else {
-	    // If data are in columns, then the X axis labels should
-	    // be taken from the column headers.
-	    for ( uint col = 0; col < dataColumnCount; col++ ) {
-
-                QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
-
-                longLabels  << m_colLabels[col];
-		shortLabels << m_colLabels[col].left( 3 );
-	    }
-	}
-    }
-
-    // Actually set the axis labels.
+    createLabelsAndLegend(longLabels, shortLabels);
     bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
     m_params->setAxisParams(KDChartAxisParams::AxisPosBottom, bottomparms);
+
+
+    // Handle some types or subtypes of charts specially, notably:
+    //  - Bar charts with lines in them
+
+    if ( m_params->chartType() == KChartParams::Bar) {
+	if ( m_params->barNumLines() > 0 ) {
+
+	    // If this is a bar chart and the user wants a few lines in
+	    // it, we need to create an additional chart in the same
+	    // drawing area.
+
+	    // Specify that we want to have an additional chart.
+	    m_params->setAdditionalChartType( KDChartParams::Line );
+
+	    const int numBarDatasets = numDatasets - m_params->barNumLines();
+
+	    // Assign the datasets to the charts: DataEntry, from, to, chart#
+	    m_params->setChartSourceMode( KDChartParams::DataEntry,
+					  0, numBarDatasets - 1,
+					  0 ); // The bar chart
+	    m_params->setChartSourceMode( KDChartParams::DataEntry,
+					  numBarDatasets, numDatasets - 1,
+					  1 ); // The line chart
+	}
+	else {
+	    // Otherwise we don't want any extra chart.
+	    m_params->setAdditionalChartType( KDChartParams::NoType );
+	}
+    }
 
     // Ok, we have now created a data set for display, and params with
     // suitable legends and axis labels.  Now start the real painting.
@@ -323,6 +276,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 // account if the first row or line contains headers.  The chart type
 // HiLo demands special handling.
 //
+// Return number of datasets.
 //
 // Note: While the current KD Chart 1.1.3 version is still expecting data
 //       to be in rows, the upcoming KD Chart 2.0 release will be using
@@ -334,7 +288,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 //        get data directly without storing it into a KDChartData
 //        class first, so we might never need to.
 //
-void KChartPart::createDisplayData()
+int  KChartPart::createDisplayData()
 {
     int  rowOffset   = 0;
     int  colOffset   = 0;
@@ -394,27 +348,6 @@ void KChartPart::createDisplayData()
 	}
     }
 
-    if ( m_params->chartType() == KChartParams::Bar
-	 && m_params->barNumLines() > 0 ) {
-
-        // Specify that we want to have an additional chart.
-        m_params->setAdditionalChartType( KDChartParams::Line );
-
-        const int numBarDatasets = numDatasets - m_params->barNumLines();
-
-        // assign the datasets to the charts: DataEntry, from, to, chart#
-        m_params->setChartSourceMode( KDChartParams::DataEntry,
-                                      0, numBarDatasets - 1,
-                                      0 ); // The bar chart
-        m_params->setChartSourceMode( KDChartParams::DataEntry,
-                                      numBarDatasets, numDatasets - 1,
-                                      1 ); // The line chart
-    }
-    else {
-	// Otherwise we don't want any extra chart.
-        m_params->setAdditionalChartType( KDChartParams::NoType );
-    }
-
     // If this is a HiLo chart, we need to manually create the correct
     // values.  This is not done by KDChart.
     //
@@ -448,7 +381,95 @@ void KChartPart::createDisplayData()
 				  tmpData.cellVal(row, tmpData.usedCols() - 1).toDouble());
 	}
     }
+
+    return numDatasets;
 }
+
+
+void KChartPart::createLabelsAndLegend( QStringList  longLabels,
+					QStringList  shortLabels )
+{
+    longLabels.clear();
+    shortLabels.clear();
+
+    const uint dataColumnCount  = m_currentData.cols();
+    const uint dataRowCount     = m_currentData.rows();
+    const uint columnLabelCount = m_colLabels.count();
+    const uint rowLabelCount    = m_rowLabels.count();
+
+    // Handle HiLo charts separately.
+    if (m_params->chartType() == KChartParams::HiLo) {
+
+      // FIXME: In a HiLo chart, the Legend should be the same as the
+      //        labels on the X Axis.  Should we disable one of them?
+
+	// Set the correct X axis labels and legend.
+	longLabels.clear();
+	shortLabels.clear();
+	if (m_params->dataDirection() == KChartParams::DataRows) {
+
+	    // If data are in rows, then the X axis labels should be
+	    // taken from the row headers.
+	    for ( uint row = 0; row < dataRowCount ; row++ ) {
+
+                QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+
+                longLabels  << label;
+		shortLabels << label.left( 3 );
+	    }
+	}
+	else {
+	    // If data are in columns, then the X axis labels should
+	    // be taken from the column headers.
+	    for ( uint col = 0; col < dataColumnCount; col++ ) {
+
+                QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+
+                longLabels  << m_colLabels[col];
+		shortLabels << m_colLabels[col].left( 3 );
+	    }
+	}
+    }
+    else if (m_params->dataDirection() == KChartParams::DataRows) {
+	// Data is handled in rows.  This is the way KDChart works also.
+
+	// Set X axis labels from column headers.
+	for ( uint col = 0; col < dataColumnCount; col++ ) {
+
+            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+
+            longLabels  << label;
+	    shortLabels << label.left( 3 );
+	}
+
+	// Set legend from row headers.
+        for ( uint row = 0; row < dataRowCount; row++ ) {
+            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+
+            m_params->setLegendText( row, label );
+        }
+    }
+    else {
+	// Data is handled in columns.
+
+	// Set X axis labels from row headers.
+	for ( uint row = 0; row < dataRowCount; row++ ) {
+
+            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+
+            longLabels  << label;
+	    shortLabels << label.left( 3 );
+	}
+
+	// Set legend from column headers.
+        for ( uint col = 0; col < dataColumnCount ; col++ ) {
+            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+
+            m_params->setLegendText( col, label );
+        }
+    }
+}
+
 
 
 // ================================================================
@@ -932,8 +953,8 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
     styleStack.restore();
 #endif
 
-    // Load chart parameters parameters, most of these are stored in
-    // the chart:plot-area element within chart:chart.
+    // Load chart parameters, most of these are stored in the
+    // chart:plot-area element within chart:chart.
     QString  errorMessage;
     bool     ok = m_params->loadOasis( chartElem, loadingContext, errorMessage,
 				       store);

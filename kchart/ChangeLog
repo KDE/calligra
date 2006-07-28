@@ -1,3 +1,15 @@
+2006-07-17  Inge Wallin  <inge@lysator.liu.se>
+
+	Simplify paintContent():
+	* kchart_part.{h,cc} (createLabelsAndLegend): New function
+	(paintContent): call createLabelsAndLegend
+
+	================================================================
+	KChart 1.5 released
+
+	<There are a lot of missed entries here.
+
+	
 2005-09-15  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 108770: [PATCH] kchart should have a format menu
@@ -9,7 +21,7 @@
 2005-08-08  Inge Wallin  <inge@lysator.liu.se>
 
 	Code cleaning.
-	* kchartWizard.{h,cpp}: cleaning
+	* kchartWizard.{h,cc}: cleaning
 
 2005-07-28  Inge Wallin  <inge@lysator.liu.se>
 

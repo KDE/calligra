@@ -103,7 +103,10 @@ protected:
 
 private:
     // Helper methods for painting.
-    void         createDisplayData();
+    int          createDisplayData();
+    void         createLabelsAndLegend( QStringList  longLabels,
+					QStringList  shortLabels );
+
 
     QDomElement  createElement(const QString &tagName,
 			       const QFont &font,
