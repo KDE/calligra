@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998,  1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 - 2005 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -5227,6 +5227,26 @@ void Sheet::maxRowCols( int & maxCols, int & maxRows )
 }
 
 
+bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
+{
+  if ( !( *rowFormat( row1 ) == *rowFormat( row2 ) ) )
+  {
+//     kDebug() << "\t Formats of " << row1 << " and " << row2 << " are different" << endl;
+    return false;
+  }
+  // FIXME Stefan: Make use of the cluster functionality.
+  for ( int col = 1; col <= maxCols; ++col )
+  {
+    if ( !( *cellAt( col, row1 ) == *cellAt( col, row2 ) ) )
+    {
+//       kDebug() << "\t Cell at column " << col << " in row " << row2 << " differs from the one in row " << row1 << endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+
 void Sheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
 {
     QString headerLeft = print()->headLeft();
@@ -5758,7 +5778,24 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             if ( row->isHide() ) // never true for the default row
               xmlWriter.addAttribute( "table:visibility", "collapse" );
 
+            int j = i + 1;
+            while ( compareRows( i, j, maxCols ) && j <= maxRows )
+            {
+              j++;
+              repeated++;
+            }
+            if ( repeated > 1 )
+            {
+              kDebug() << "Sheet::saveOasisColRowCell: NON-empty row " << i << ' '
+                        << "repeated " << repeated << " times" << endl;
+
+              xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
+            }
+
             saveOasisCells( xmlWriter, mainStyles, i, maxCols, valStyle );
+
+            // copy the index for the next row to process
+            i = j - 1; /*it's already incremented in the for loop*/
         }
         xmlWriter.endElement();
     }

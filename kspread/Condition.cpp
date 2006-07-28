@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 - 2003 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -73,6 +73,23 @@ Conditional& Conditional::operator=( const Conditional& d )
   cond  = d.cond;
 
   return *this;
+}
+
+bool Conditional::operator==(const Conditional& other) const
+{
+  if ( cond == other.cond &&
+       val1 == other.val1 &&
+       val2 == other.val2 &&
+       *strVal1 == *other.strVal1 &&
+       *strVal2 == *other.strVal2 &&
+       *colorcond == *other.colorcond &&
+       *fontcond == *other.fontcond &&
+       *styleName == *other.styleName &&
+       *style == *other.style )
+  {
+    return true;
+  }
+  return false;
 }
 
 Conditions::Conditions( const Cell * ownerCell )
@@ -628,4 +645,26 @@ void Conditions::loadConditions( const QDomElement & element )
       kDebug(36001) << "Error loading condition " << conditionElement.nodeName()<< endl;
     }
   }
+}
+
+bool Conditions::operator==( const Conditions& other ) const
+{
+  if ( !( *m_matchedStyle == *other.m_matchedStyle ) )
+    return false;
+  if ( m_condList.count() != other.m_condList.count() )
+    return false;
+  QLinkedList<Conditional>::ConstIterator end( m_condList.end() );
+  for ( QLinkedList<Conditional>::ConstIterator it( m_condList.begin() ); it != end; ++it )
+  {
+    bool found = false;
+    QLinkedList<Conditional>::ConstIterator otherEnd( other.m_condList.end() );
+    for ( QLinkedList<Conditional>::ConstIterator otherIt( other.m_condList.begin() ); otherIt != otherEnd; ++otherIt )
+    {
+      if ( (*it) == (*otherIt) )
+        found = true;
+    }
+    if ( !found )
+      return false;
+  }
+  return true;
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 - 2003 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -63,6 +63,7 @@ public:
   ~Conditional();
   Conditional( const Conditional& );
   Conditional& operator=( const Conditional& );
+  bool operator==(const Conditional& other) const;
 };
 
 
@@ -126,6 +127,8 @@ class Conditions
   Style * matchedStyle() const { return m_matchedStyle; }
 
   void checkMatches();
+
+  bool operator==( const Conditions& other ) const;
 
  private:
   Conditions() {}

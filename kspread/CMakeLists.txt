@@ -138,6 +138,7 @@ SET (kspreadcommon_LIB_SRCS
 	SortManipulator.cpp
 	GeneralProperty.cpp
 	PropertyEditor.cpp
+	Validity.cpp
 	)
 
 kde4_automoc(${kspreadcommon_LIB_SRCS})

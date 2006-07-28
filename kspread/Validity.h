@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
@@ -79,17 +80,8 @@ namespace Action
 class Validity
 {
 public:
-  Validity()
-  {
-    valMin = 0.0;
-    valMax = 0.0;
-    m_cond = Conditional::None;
-    m_action = Action::Stop;
-    m_restriction = Restriction::None;
-    displayMessage = true;
-    allowEmptyCell = false;
-    displayValidationInformation = false;
-  };
+  Validity();
+  bool operator==( const Validity& other ) const;
 
   QString message;
   QString title;

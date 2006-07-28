@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-             (C) 1999-2005 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1297,6 +1297,7 @@ protected:
     void addText( const QString & text, KoXmlWriter & writer ) const;
 
     void maxRowCols( int & maxCols, int & maxRows );
+    bool compareRows( int row1, int row2, int & maxCols ) const;
 
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
