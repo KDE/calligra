@@ -815,6 +815,7 @@ public:
     bool operator < ( const Cell & ) const;
 
     bool operator==( const Cell& other ) const;
+    inline bool operator!=( const Cell& other ) const { return !operator==( other ); }
 
     void freeAllObscuredCells();
 

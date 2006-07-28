@@ -64,6 +64,7 @@ public:
   Conditional( const Conditional& );
   Conditional& operator=( const Conditional& );
   bool operator==(const Conditional& other) const;
+  inline bool operator!=( const Conditional& other ) const { return !operator==( other ); }
 };
 
 
@@ -129,6 +130,7 @@ class Conditions
   void checkMatches();
 
   bool operator==( const Conditions& other ) const;
+  inline bool operator!=( const Conditions& other ) const { return !operator==( other ); }
 
  private:
   Conditions() {}

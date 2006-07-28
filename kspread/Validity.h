@@ -82,6 +82,7 @@ class Validity
 public:
   Validity();
   bool operator==( const Validity& other ) const;
+  inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
 
   QString message;
   QString title;

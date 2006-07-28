@@ -6969,9 +6969,9 @@ bool Cell::operator==( const Cell& other ) const
 {
   if ( d->strText != other.d->strText )
     return false;
-  if ( !( d->value == other.d->value ) )
+  if ( d->value != other.d->value )
     return false;
-  if ( !( *d->format == *other.d->format ) )
+  if ( *d->format != *other.d->format )
     return false;
   if ( d->hasExtra() )
   {
@@ -6983,9 +6983,9 @@ bool Cell::operator==( const Cell& other ) const
       return false;
     if ( d->extra()->mergedYCells != other.d->extra()->mergedYCells )
       return false;
-    if ( !( *d->extra()->conditions == *other.d->extra()->conditions ) )
+    if ( *d->extra()->conditions != *other.d->extra()->conditions )
       return false;
-    if ( !( *d->extra()->validity == *other.d->extra()->validity ) )
+    if ( *d->extra()->validity != *other.d->extra()->validity )
       return false;
   }
   return true;

@@ -381,6 +381,7 @@ public:
     QFont font() const;
 
     bool operator==( const Format& other ) const;
+    inline bool operator!=( const Format& other ) const { return !operator==( other ); }
 
 protected:
     const QPen& rightBorderPen() const;
@@ -544,6 +545,7 @@ public:
     bool isHide()const { return m_bHide;}
 
     bool operator==( const RowFormat& other ) const;
+    inline bool operator!=( const RowFormat& other ) const { return !operator==( other ); }
 
 protected:
     /**
@@ -679,6 +681,7 @@ public:
     bool isHide()const { return m_bHide;}
 
     bool operator==( const ColumnFormat& other ) const;
+    inline bool operator!=( const ColumnFormat& other ) const { return !operator==( other ); }
 
 protected:
     /**
