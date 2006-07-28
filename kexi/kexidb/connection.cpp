@@ -1036,7 +1036,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	if (singleTable) {
 		//make sure we will have single table:
 		for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
-			if (querySchema.isColumnVisible(number) && f->table()->lookupFieldSchema( *f )) {
+			if (querySchema.isColumnVisible(number) && f->table() && f->table()->lookupFieldSchema( *f )) {
 				//uups, no, there's at least one left join
 				singleTable = false;
 				break;
@@ -1087,7 +1087,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 					sql += (QString::fromLatin1(" AS ") + aliasString);
 //! @todo add option that allows to omit "AS" keyword
 			}
-			LookupFieldSchema *lookupFieldSchema = f->table()->lookupFieldSchema( *f );
+			LookupFieldSchema *lookupFieldSchema = f->table() ? f->table()->lookupFieldSchema( *f ) : 0;
 			if (lookupFieldSchema) {
 				// Lookup field schema found
 				// Now we also need to fetch "visible" value from the lookup table, not only the value of binding.
