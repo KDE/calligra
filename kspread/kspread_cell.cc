@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
    Copyright 2004-2006 Inge Wallin <inge@lysator.liu.se>
@@ -7184,6 +7185,32 @@ bool Cell::operator < ( const Cell & cell ) const
       else
           return ( value().asString() ).lower().compare(cell.value().asString().lower()) < 0;
   }
+}
+
+bool Cell::operator==( const Cell& other ) const
+{
+  if ( d->strText != other.d->strText )
+    return false;
+  if ( !( d->value == other.d->value ) )
+    return false;
+  if ( !( *d->format == *other.d->format ) )
+    return false;
+  if ( d->hasExtra() )
+  {
+    if ( !other.d->hasExtra() )
+      return false;
+    if ( d->extra()->link != other.d->extra()->link )
+      return false;
+    if ( d->extra()->mergedXCells != other.d->extra()->mergedXCells )
+      return false;
+    if ( d->extra()->mergedYCells != other.d->extra()->mergedYCells )
+      return false;
+    if ( !( *d->extra()->conditions == *other.d->extra()->conditions ) )
+      return false;
+    if ( !( *d->extra()->validity == *other.d->extra()->validity ) )
+      return false;
+  }
+  return true;
 }
 
 QRect Cell::cellRect()

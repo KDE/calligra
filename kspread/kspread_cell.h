@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
@@ -75,6 +76,31 @@ struct Validity
       allowEmptyCell = false;
       displayValidationInformation = false;
   };
+
+  bool operator==( const Validity& other ) const
+  {
+    if ( message == other.message &&
+         title == other.title &&
+         titleInfo == other.titleInfo &&
+         messageInfo == other.messageInfo &&
+         valMin == other.valMin &&
+         valMax == other.valMax &&
+         m_cond == other.m_cond &&
+         m_action == other.m_action &&
+         m_restriction == other.m_restriction &&
+         timeMin == other.timeMin &&
+         timeMax == other.timeMax &&
+         dateMin == other.dateMin &&
+         dateMax == other.dateMax &&
+         displayMessage == other.displayMessage &&
+         allowEmptyCell == other.allowEmptyCell &&
+         displayValidationInformation == other.displayValidationInformation &&
+         listValidity == other.listValidity )
+    {
+      return true;
+    }
+    return false;
+  }
 
     QString message;
     QString title;
@@ -821,6 +847,8 @@ public:
      */
     bool operator > ( const Cell & ) const;
     bool operator < ( const Cell & ) const;
+
+    bool operator==( const Cell& other ) const;
 
     void freeAllObscuredCells();
 
