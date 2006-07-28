@@ -846,6 +846,18 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 	KexiTableViewColumn *colinfo = m_data->column(col);
+
+	if (item == m_insertItem && cell_value.isNull()) {
+		if (!colinfo->field()->defaultValue().isNull()) {
+			//display default value in the "insert row", if available
+			cell_value = colinfo->field()->defaultValue();
+		}
+		else {
+			//special case: boolean "not null" field - display "false" instead
+			cell_value = QVariant(false, 0);
+		}
+	}
+
 	if (edit) {
 		edit->setupContents( p, m_currentItem == item && col == m_curCol, 
 			cell_value, txt, align, x, y_offset, w, h );
@@ -909,10 +921,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 ///	bool autonumber = false;
-	if ((!m_newRowEditing &&item == m_insertItem) 
+	if ((!m_newRowEditing && item == m_insertItem) 
 		|| (m_newRowEditing && item == m_currentItem && cell_value.isNull())) {
 		//we're in "insert row"
-		if (m_data->column(col)->field()->isAutoIncrement()) {
+		if (colinfo->field()->isAutoIncrement()) {
 			//"autonumber" column
 //			txt = i18n("(autonumber)");
 //			autonumber = true;
@@ -2242,7 +2254,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 	if (!item)
 		return;
 	QFontMetrics fm(font());
-	int maxw = d->pTopHeader->isVisible() 
+	int maxw = horizontalHeaderVisible() //d->pTopHeader->isVisible() 
 		? fm.width( d->pTopHeader->label( colNum ) ) : 0;
 	if (maxw == 0 && m_data->isEmpty())
 		return; //nothing to adjust
@@ -2349,12 +2361,13 @@ void KexiTableView::setVerticalHeaderVisible(bool set)
 
 bool KexiTableView::horizontalHeaderVisible() const
 {
-	return d->pTopHeader->isVisible();
+	return d->horizontalHeaderVisible; //d->pTopHeader->isVisible();
 }
 
 void KexiTableView::setHorizontalHeaderVisible(bool set)
 {
 	int top_height;
+	d->horizontalHeaderVisible = set; //needed because isVisible() is not always accurate
 	if (set) {
 		d->pTopHeader->show();
 		top_height = d->pTopHeader->sizeHint().height();

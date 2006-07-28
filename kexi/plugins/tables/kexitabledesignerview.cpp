@@ -671,6 +671,13 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 		d->setPropertyValueIfNeeded( set, "type", (int)fieldType, changeDataTypeCommand,
 			false /*!forceAddCommand*/, true /*rememberOldValue*/);
 
+		// not null by default is reasonable for boolean type
+		if (fieldType == KexiDB::Field::Boolean) {
+//! @todo maybe this is good for other data types as well?
+			d->setPropertyValueIfNeeded( set, "notNull", QVariant(true, 1), changeDataTypeCommand,
+				false /*!forceAddCommand*/, false /*!rememberOldValue*/);
+		}
+
 /*		if (useListData) {
 		{
 			subTypeProperty->setListData( slist, nlist );
@@ -745,8 +752,8 @@ void KexiTableDesignerView::slotRowUpdated(KexiTableItem *item)
 		//-- create a new field:
 		KexiDB::Field::TypeGroup fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>( 
 			item->at(COLUMN_ID_TYPE).toInt()+1/*counting from 1*/ );
-		int fieldType = KexiDB::defaultTypeForGroup( fieldTypeGroup );
-		if (fieldType==0)
+		int intFieldType = KexiDB::defaultTypeForGroup( fieldTypeGroup );
+		if (intFieldType==0)
 			return;
 
 		QString description( item->at(COLUMN_ID_DESC).toString() );
@@ -754,11 +761,10 @@ void KexiTableDesignerView::slotRowUpdated(KexiTableItem *item)
 //todo: check uniqueness:
 		QString fieldName( KexiUtils::string2Identifier(fieldCaption) );
 
-		;
-
+		KexiDB::Field::Type fieldType = KexiDB::intToFieldType( intFieldType );
 		KexiDB::Field field( //tmp
 			fieldName,
-			KexiDB::intToFieldType( fieldType ),
+			fieldType,
 			KexiDB::Field::NoConstraints,
 			KexiDB::Field::NoOptions,
 			/*length*/0,
@@ -768,6 +774,10 @@ void KexiTableDesignerView::slotRowUpdated(KexiTableItem *item)
 			description,
 			/*width*/0);
 //		m_newTable->addField( field );
+
+		// not null by default is reasonable for boolean type
+		if (fieldType == KexiDB::Field::Boolean)
+			field.setNotNull( true );
 
 		kexipluginsdbg << "KexiTableDesignerView::slotRowUpdated(): " << field.debugString() << endl;
 
@@ -860,7 +870,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 	//clear PK when these properies were set to false:
 	CommandGroup *unsetIndexedOrUniquOrNotNullCommand = 0;
 	if ((pname=="indexed" || pname=="unique" || pname=="notNull") && property.value().toBool()==false) {
-//TODO: perhaps show a hint in help panel telling what happens?
+//! @todo perhaps show a hint in help panel telling what happens?
 		changePrimaryKey = true;
 		setPrimaryKey = false;
 		// this will be toplevel command 
@@ -869,7 +879,8 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 		toplevelCommand = unsetIndexedOrUniquOrNotNullCommand;
 		d->setPropertyValueIfNeeded( set, pname, QVariant(false,1), unsetIndexedOrUniquOrNotNullCommand );
 		if (pname=="notNull") {
-			d->setPropertyValueIfNeeded( set, "notNull", QVariant(true,1), unsetIndexedOrUniquOrNotNullCommand );
+//?			d->setPropertyValueIfNeeded( set, "notNull", QVariant(true,1), unsetIndexedOrUniquOrNotNullCommand );
+			d->setPropertyValueIfNeeded( set, "unique", QVariant(false,1), unsetIndexedOrUniquOrNotNullCommand );
 		}
 	}
 

@@ -114,12 +114,12 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVar
 	s = qMin( h-3, s );
 	s = qMin( w-3, s );//avoid too large box
 	QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
-	if (val.isNull())
+	if (val.isNull() && !field()->isNotNull())
 		p->setPen(QPen(palette().disabled().text(), 1));
 	else
 		p->setPen(QPen(colorGroup().text(), 1));
 	p->drawRect(r);
-	if (val.isNull()) {
+	if (val.isNull() && !field()->isNotNull()) {
 		p->drawText( r, Qt::AlignCenter, "?" );
 	}
 	else if (val.toBool()) {
@@ -128,6 +128,8 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVar
 //			p->drawLine(r.x() + 2, r.y() + 2, r.right() - 1, r.bottom() - 1);
 //			p->drawLine(r.x() + 2, r.bottom() - 2, r.right() - 1, r.y() + 1);
 	}
+
+	
 }
 
 void KexiBoolTableEdit::clickedOnContents()
