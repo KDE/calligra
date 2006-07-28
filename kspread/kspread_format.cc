@@ -2478,7 +2478,36 @@ const Format* Format::fallbackFormat( int, int row ) const
 
 bool Format::isDefault() const
 {
-  return true;
+  // NOTE Stefan: Don't compare sheet and cell.
+  //              Because of the comment we have to check m_mask.
+  if ( ( m_mask & PComment ) && m_strComment != 0 )
+    return false;
+#if 0 // These are copied in Style.
+  if ( m_mask ) // Properties
+    return false;
+  if ( m_flagsMask != 0 ) // FormatFlags
+    return false;
+#endif
+  if ( m_bNoFallBack != 0 )
+    return false;
+  return ( *m_pStyle == *m_pSheet->doc()->styleManager()->defaultStyle() );
+}
+
+bool Format::operator==( const Format& other ) const
+{
+  // NOTE Stefan: Don't compare sheet and cell.
+  //              Because of the comment we have to check m_mask.
+  if ( ( m_mask & other.m_mask & PComment ) && m_strComment != other.m_strComment )
+    return false;
+#if 0 // These are copied in Style.
+  if ( m_mask != other.m_mask ) // Properties
+    return false;
+  if ( m_flagsMask != other.m_flagsMask ) // FormatFlags
+    return false;
+#endif
+  if ( m_bNoFallBack != other.m_bNoFallBack )
+    return false;
+  return ( *m_pStyle == *other.m_pStyle );
 }
 
 /*****************************************************************************
@@ -2726,7 +2755,21 @@ const Format* RowFormat::fallbackFormat( int col, int ) const
 
 bool RowFormat::isDefault() const
 {
-    return m_bDefault;
+  if ( m_fHeight != s_rowHeight )
+    return false;
+  if ( m_bHide == true )
+    return false;
+  return Format::isDefault();
+}
+
+bool RowFormat::operator==( const RowFormat& other ) const
+{
+  // NOTE Stefan: Don't compare sheet and cell.
+  if ( m_fHeight != other.m_fHeight )
+    return false;
+  if ( m_bHide != other.m_bHide )
+    return false;
+  return Format::operator==( other );
 }
 
 /*****************************************************************************
@@ -2973,8 +3016,24 @@ const Format * ColumnFormat::fallbackFormat( int, int ) const
 
 bool ColumnFormat::isDefault() const
 {
-    return m_bDefault;
+  if ( m_fWidth != s_columnWidth )
+    return false;
+  if ( m_bHide == true )
+    return false;
+  return Format::isDefault();
 }
+
+bool ColumnFormat::operator==( const ColumnFormat& other ) const
+{
+  // NOTE Stefan: Don't compare sheet and cell.
+  if ( m_fWidth != other.m_fWidth )
+    return false;
+  if ( m_bHide != other.m_bHide )
+    return false;
+  return Format::operator==( other );
+}
+
+
 
 namespace Currency_LNS
 {

@@ -393,6 +393,8 @@ public:
     QString getCurrencySymbol() const;
     QFont font() const;
 
+    bool operator==( const Format& other ) const;
+
 protected:
     const QPen& rightBorderPen() const;
     const QPen& bottomBorderPen() const;
@@ -557,6 +559,8 @@ public:
     void setHide( bool _hide, bool repaint = true );
     bool isHide()const { return m_bHide;}
 
+    bool operator==( const RowFormat& other ) const;
+
 protected:
     /**
      * @reimp
@@ -694,6 +698,7 @@ public:
     void setHide( bool _hide );
     bool isHide()const { return m_bHide;}
 
+    bool operator==( const ColumnFormat& other ) const;
 
 protected:
     /**

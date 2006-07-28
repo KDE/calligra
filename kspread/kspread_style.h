@@ -452,6 +452,8 @@ public:
   void addProperty( Properties p );
   void removeProperty( Properties p );
 
+  bool operator==( const CustomStyle& other ) const;
+
  private:
   friend class StyleManager;
 
