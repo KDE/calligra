@@ -712,16 +712,16 @@ void CellFormatDialog::initGUI()
   brushColor = m_style->backGroundBrush().color();
   brushStyle = m_style->backGroundBrush().style();
 
-  bMultiRow     = m_style->hasProperty( Style::SMultiRow );
-  bVerticalText = m_style->hasProperty( Style::SVerticalText );
+  bMultiRow     = m_style->hasProperty( Style::PMultiRow );
+  bVerticalText = m_style->hasProperty( Style::PVerticalText );
   textRotation  = m_style->rotateAngle();
   formatType    = m_style->formatType();
   indent        = m_style->indent();
 
-  bDontPrintText = m_style->hasProperty( Style::SDontPrintText );
-  bHideFormula   = m_style->hasProperty( Style::SHideFormula );
-  bHideAll       = m_style->hasProperty( Style::SHideAll );
-  bIsProtected   = !m_style->hasProperty( Style::SNotProtected );
+  bDontPrintText = m_style->hasProperty( Style::PDontPrintText );
+  bHideFormula   = m_style->hasProperty( Style::PHideFormula );
+  bHideAll       = m_style->hasProperty( Style::PHideAll );
+  bIsProtected   = !m_style->hasProperty( Style::PNotProtected );
 
   widthSize  = defaultWidthSize;
   heightSize = defaultHeightSize;
@@ -1918,33 +1918,33 @@ void CellFormatPageProtection::apply( CustomStyle * style )
   if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked() )
   {
     if ( m_bDontPrint->isChecked() )
-      style->addProperty( Style::SDontPrintText );
+      style->addProperty( Style::PDontPrintText );
     else
-      style->removeProperty( Style::SDontPrintText );
+      style->removeProperty( Style::PDontPrintText );
   }
 
   if ( m_dlg->bIsProtected != m_bIsProtected->isChecked() )
   {
     if ( !m_bIsProtected->isChecked() )
-      style->addProperty( Style::SNotProtected );
+      style->addProperty( Style::PNotProtected );
     else
-      style->removeProperty( Style::SNotProtected );
+      style->removeProperty( Style::PNotProtected );
   }
 
   if ( m_dlg->bHideAll != m_bHideAll->isChecked() )
   {
     if ( m_bHideAll->isChecked() )
-      style->addProperty( Style::SHideAll );
+      style->addProperty( Style::PHideAll );
     else
-      style->removeProperty( Style::SHideAll );
+      style->removeProperty( Style::PHideAll );
   }
 
   if ( m_dlg->bHideFormula != m_bHideFormula->isChecked() )
   {
     if ( m_bHideFormula->isChecked() )
-      style->addProperty( Style::SHideFormula );
+      style->addProperty( Style::PHideFormula );
     else
-      style->removeProperty( Style::SHideFormula );
+      style->removeProperty( Style::PHideFormula );
   }
 }
 
@@ -2440,9 +2440,9 @@ void CellFormatPagePosition::apply( CustomStyle * style )
     if ( multi->isEnabled() )
     {
       if ( multi->isChecked() )
-        style->addProperty( Style::SMultiRow );
+        style->addProperty( Style::PMultiRow );
       else
-        style->removeProperty( Style::SMultiRow );
+        style->removeProperty( Style::PMultiRow );
     }
   }
 
@@ -2451,9 +2451,9 @@ void CellFormatPagePosition::apply( CustomStyle * style )
     if ( vertical->isEnabled() )
     {
       if ( vertical->isChecked() )
-        style->addProperty( Style::SVerticalText );
+        style->addProperty( Style::PVerticalText );
       else
-        style->removeProperty( Style::SVerticalText );
+        style->removeProperty( Style::PVerticalText );
     }
   }
 

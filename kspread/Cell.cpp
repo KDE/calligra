@@ -1343,12 +1343,12 @@ void Cell::textOffset( const QFontMetrics& fontMetrics )
       a = format()->align( d->column, d->row );
 
     if ( style->hasFeature( Style::SVerticalText, true ) )
-      tmpVerticalText = style->hasProperty( Style::SVerticalText );
+      tmpVerticalText = style->hasProperty( Style::PVerticalText );
     else
       tmpVerticalText = format()->verticalText( d->column, d->row );
 
     if ( style->hasFeature( Style::SMultiRow, true ) )
-      tmpMultiRow = style->hasProperty( Style::SMultiRow );
+      tmpMultiRow = style->hasProperty( Style::PMultiRow );
     else
       tmpMultiRow = format()->multiRow( d->column, d->row );
 
@@ -1578,7 +1578,7 @@ void Cell::textSize( const QFontMetrics& fm )
       tmpAngle = format()->getAngle( d->column, d->row );
 
     if ( style->hasFeature( Style::SVerticalText, true ) )
-      tmpVerticalText = style->hasProperty( Style::SVerticalText );
+      tmpVerticalText = style->hasProperty( Style::PVerticalText );
     else
       tmpVerticalText = format()->verticalText( d->column, d->row );
 
@@ -3231,12 +3231,12 @@ void Cell::paintText( QPainter& painter,
       tmpAngle = format()->getAngle( cellRef.x(), cellRef.y() );
 
     if ( matchedStyle->hasFeature( Style::SVerticalText, true ) )
-      tmpVerticalText = matchedStyle->hasProperty( Style::SVerticalText );
+      tmpVerticalText = matchedStyle->hasProperty( Style::PVerticalText );
     else
       tmpVerticalText = format()->verticalText( cellRef.x(), cellRef.y() );
 
     if ( matchedStyle->hasFeature( Style::SMultiRow, true ) )
-      tmpMultiRow = matchedStyle->hasProperty( Style::SMultiRow );
+      tmpMultiRow = matchedStyle->hasProperty( Style::PMultiRow );
     else
       tmpMultiRow = format()->multiRow( cellRef.x(), cellRef.y() );
   }

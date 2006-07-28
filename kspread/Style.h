@@ -202,7 +202,7 @@ public:
    */
   int usage() const { return m_usageCount; }
 
-  bool   hasProperty( Style::FlagsSet p ) const;
+  bool   hasProperty( Properties p ) const;
   bool   hasFeature( FlagsSet f, bool withoutParent ) const;
   uint   features() const { return m_featuresSet; }
 
@@ -265,8 +265,8 @@ public:
   Style * setPrefix( QString const & prefix );
   Style * setPostfix( QString const & postfix );
   Style * setCurrency( Currency const & currency );
-  Style * setProperty( FlagsSet p );
-  Style * clearProperty( FlagsSet p );
+  Style * setProperty( Properties p );
+  Style * clearProperty( Properties p );
 
   CustomStyle * parent() const;
   QString const & parentName() const { return m_parentName; }
@@ -473,8 +473,8 @@ public:
   void changePostfix( QString const & postfix );
   void changeCurrency( Currency const & currency );
 
-  void addProperty( FlagsSet p );
-  void removeProperty( FlagsSet p );
+  void addProperty( Properties p );
+  void removeProperty( Properties p );
 
   bool operator==( const CustomStyle& other ) const;
   inline bool operator!=( const CustomStyle& other ) const { return !operator==( other ); }

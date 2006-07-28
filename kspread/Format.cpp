@@ -385,10 +385,10 @@ QDomElement Format::saveFormat( QDomDocument& doc, bool force, bool copy ) const
     format.setAttribute( "bgcolor", m_pStyle->bgColor().name() );
 
   if ( ( hasProperty( Style::SMultiRow, true ) || hasNoFallBackProperties( Style::SMultiRow ) || force )
-       && m_pStyle->hasProperty( Style::SMultiRow ) )
+       && m_pStyle->hasProperty( Style::PMultiRow ) )
     format.setAttribute( "multirow", "yes" );
   if ( ( hasProperty( Style::SVerticalText, true ) || hasNoFallBackProperties( Style::SVerticalText ) || force )
-       && m_pStyle->hasProperty( Style::SVerticalText ) )
+       && m_pStyle->hasProperty( Style::PVerticalText ) )
     format.setAttribute( "verticaltext", "yes" );
 
   if ( hasProperty( Style::SPrecision, true ) || hasNoFallBackProperties( Style::SPrecision ) || force )
@@ -419,16 +419,16 @@ QDomElement Format::saveFormat( QDomDocument& doc, bool force, bool copy ) const
   if ( hasProperty( Style::SIndent, true ) || hasNoFallBackProperties( Style::SIndent ) || force )
     format.setAttribute( "indent", m_pStyle->indent() );
   if ( ( hasProperty( Style::SDontPrintText, true ) || hasNoFallBackProperties( Style::SDontPrintText ) || force )
-      && m_pStyle->hasProperty( Style::SDontPrintText ) )
+      && m_pStyle->hasProperty( Style::PDontPrintText ) )
     format.setAttribute( "dontprinttext", "yes" );
   if ( ( hasProperty( Style::SNotProtected, true ) || hasNoFallBackProperties( Style::SNotProtected )
-         || force ) && m_pStyle->hasProperty( Style::SNotProtected ) )
+         || force ) && m_pStyle->hasProperty( Style::PNotProtected ) )
     format.setAttribute( "noprotection", "yes" );
   if( ( hasProperty( Style::SHideAll, true ) || hasNoFallBackProperties( Style::SHideAll )
-        || force ) && m_pStyle->hasProperty( Style::SHideAll ) )
+        || force ) && m_pStyle->hasProperty( Style::PHideAll ) )
     format.setAttribute( "hideall", "yes" );
   if( ( hasProperty( Style::SHideFormula, true ) || hasNoFallBackProperties( Style::SHideFormula )
-        || force ) && m_pStyle->hasProperty( Style::SHideFormula ) )
+        || force ) && m_pStyle->hasProperty( Style::PHideFormula ) )
     format.setAttribute( "hideformula", "yes" );
   if ( hasProperty( Style::SFont, true ) || hasNoFallBackProperties( Style::SFont ) || force )
     format.appendChild( util_createElement( "font", m_pStyle->font(), doc ) );
@@ -1591,13 +1591,13 @@ void Format::setMultiRow( bool _b )
 {
   if ( _b == false )
   {
-    m_pStyle = m_pStyle->clearProperty( Style::SMultiRow );
+    m_pStyle = m_pStyle->clearProperty( Style::PMultiRow );
     clearProperty( Style::SMultiRow );
     setNoFallBackProperties( Style::SMultiRow );
   }
   else
   {
-    m_pStyle = m_pStyle->setProperty( Style::SMultiRow );
+    m_pStyle = m_pStyle->setProperty( Style::PMultiRow );
     setProperty( Style::SMultiRow );
     clearNoFallBackProperties( Style::SMultiRow );
   }
@@ -1608,13 +1608,13 @@ void Format::setVerticalText( bool _b )
 {
   if ( _b == false )
   {
-    m_pStyle = m_pStyle->clearProperty( Style::SVerticalText );
+    m_pStyle = m_pStyle->clearProperty( Style::PVerticalText );
     setNoFallBackProperties( Style::SVerticalText);
     clearFlag( Flag_VerticalText );
   }
   else
   {
-    m_pStyle = m_pStyle->setProperty( Style::SVerticalText );
+    m_pStyle = m_pStyle->setProperty( Style::PVerticalText );
     clearNoFallBackProperties( Style::SVerticalText);
     setFlag( Flag_VerticalText );
   }
@@ -1699,13 +1699,13 @@ void Format::setNotProtected( bool _b)
 {
   if ( _b == false )
   {
-    m_pStyle = m_pStyle->clearProperty( Style::SNotProtected );
+    m_pStyle = m_pStyle->clearProperty( Style::PNotProtected );
     setNoFallBackProperties( Style::SNotProtected );
     clearFlag( Flag_NotProtected );
   }
   else
   {
-    m_pStyle = m_pStyle->setProperty( Style::SNotProtected );
+    m_pStyle = m_pStyle->setProperty( Style::PNotProtected );
     clearNoFallBackProperties( Style::SNotProtected );
     setFlag( Flag_NotProtected );
   }
@@ -1716,13 +1716,13 @@ void Format::setDontPrintText( bool _b )
 {
   if ( _b == false )
   {
-    m_pStyle = m_pStyle->clearProperty( Style::SDontPrintText );
+    m_pStyle = m_pStyle->clearProperty( Style::PDontPrintText );
     setNoFallBackProperties(Style::SDontPrintText);
     clearFlag( Flag_DontPrintText );
   }
   else
   {
-    m_pStyle = m_pStyle->setProperty( Style::SDontPrintText );
+    m_pStyle = m_pStyle->setProperty( Style::PDontPrintText );
     clearNoFallBackProperties( Style::SDontPrintText);
     setFlag( Flag_DontPrintText );
   }
@@ -1733,13 +1733,13 @@ void Format::setHideAll( bool _b )
 {
   if ( _b == false )
   {
-    m_pStyle = m_pStyle->clearProperty( Style::SHideAll );
+    m_pStyle = m_pStyle->clearProperty( Style::PHideAll );
     setNoFallBackProperties(Style::SHideAll);
     clearFlag( Flag_HideAll );
   }
   else
   {
-    m_pStyle = m_pStyle->setProperty( Style::SHideAll );
+    m_pStyle = m_pStyle->setProperty( Style::PHideAll );
     clearNoFallBackProperties( Style::SHideAll);
     setFlag( Flag_HideAll );
   }
@@ -1750,13 +1750,13 @@ void Format::setHideFormula( bool _b )
 {
   if ( _b == false )
   {
-    m_pStyle = m_pStyle->clearProperty( Style::SHideFormula );
+    m_pStyle = m_pStyle->clearProperty( Style::PHideFormula );
     setNoFallBackProperties( Style::SHideFormula );
     clearFlag( Flag_HideFormula );
   }
   else
   {
-    m_pStyle = m_pStyle->setProperty( Style::SHideFormula );
+    m_pStyle = m_pStyle->setProperty( Style::PHideFormula );
     clearNoFallBackProperties( Style::SHideFormula );
     setFlag( Flag_HideFormula );
   }
@@ -2242,7 +2242,7 @@ bool Format::multiRow( int col, int row ) const
       return l->multiRow( col, row );
   }
 
-  return m_pStyle->hasProperty( Style::SMultiRow );
+  return m_pStyle->hasProperty( Style::PMultiRow );
 }
 
 bool Format::verticalText( int col, int row ) const
@@ -2254,7 +2254,7 @@ bool Format::verticalText( int col, int row ) const
       return l->verticalText( col, row );
   }
 
-  return m_pStyle->hasProperty( Style::SVerticalText );
+  return m_pStyle->hasProperty( Style::PVerticalText );
 }
 
 FormatType Format::getFormatType( int col, int row ) const
@@ -2330,7 +2330,7 @@ bool Format::getDontprintText( int col, int row ) const
       return l->getDontprintText( col, row );
   }
 
-  return m_pStyle->hasProperty( Style::SDontPrintText );
+  return m_pStyle->hasProperty( Style::PDontPrintText );
 }
 
 bool Format::isProtected( int col, int row ) const
@@ -2348,7 +2348,7 @@ bool Format::notProtected( int col, int row) const
       return l->notProtected( col, row );
   }
 
-  return m_pStyle->hasProperty( Style::SNotProtected );
+  return m_pStyle->hasProperty( Style::PNotProtected );
 }
 
 bool Format::isHideAll( int col, int row) const
@@ -2360,7 +2360,7 @@ bool Format::isHideAll( int col, int row) const
       return l->isHideAll( col, row );
   }
 
-  return m_pStyle->hasProperty( Style::SHideAll );
+  return m_pStyle->hasProperty( Style::PHideAll );
 }
 
 bool Format::isHideFormula( int col, int row) const
@@ -2372,7 +2372,7 @@ bool Format::isHideFormula( int col, int row) const
       return l->isHideFormula( col, row );
   }
 
-  return m_pStyle->hasProperty( Style::SHideFormula );
+  return m_pStyle->hasProperty( Style::PHideFormula );
 }
 
 bool Format::currencyInfo( Style::Currency & currency) const

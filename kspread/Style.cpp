@@ -422,7 +422,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
     {
-        setProperty( SMultiRow );
+        setProperty( PMultiRow );
         m_featuresSet |= SMultiRow;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "cell-protect" ) )
@@ -430,17 +430,17 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
         str = styleStack.attributeNS( KoXmlNS::style, "cell-protect" );
         if ( str=="hidden-and-protected" )
         {
-            setProperty( SHideAll );
+            setProperty( PHideAll );
             m_featuresSet |= SHideAll;
         }
         else if ( str == "protected Formula.hidden" )
         {
-            setProperty( SHideFormula );
+            setProperty( PHideFormula );
             m_featuresSet |= SHideFormula;
         }
         else if ( str == "protected" )
         {
-            setProperty( SNotProtected );
+            setProperty( PNotProtected );
             m_featuresSet |= SNotProtected;
         }
         else if ( str =="Formula.hidden" )
@@ -455,13 +455,13 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-content" ) && ( styleStack.attributeNS( KoXmlNS::style, "print-content" )=="false" ) )
     {
-        setProperty( SDontPrintText );
+        setProperty( PDontPrintText );
         m_featuresSet |= SDontPrintText;
 
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) && ( styleStack.attributeNS( KoXmlNS::style, "direction" )=="ttb" ) )
     {
-        setProperty( SVerticalText );
+        setProperty( PVerticalText );
         m_featuresSet |= SVerticalText;
 
     }
@@ -1267,9 +1267,9 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
         style.addProperty( "fo:background-color", colorName(m_bgColor) );
 
-    if ( featureSet( SMultiRow ) && hasProperty( SMultiRow ) )
+    if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
         style.addProperty( "fo:wrap-option", "wrap" );
-    if ( featureSet( SVerticalText ) && hasProperty( SVerticalText ) )
+    if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
     {
         style.addProperty( "style:direction", "ttb" );
         style.addProperty( "style:rotation-angle", "0" );
@@ -1303,20 +1303,20 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         //if ( a == HAlignUndefined )
         //currentCellStyle.addProperty("fo:text-align", "start" );
     }
-    if ( featureSet( SDontPrintText ) && hasProperty( SDontPrintText ) )
+    if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
         style.addProperty( "style:print-content", "false");
 
     bool hideAll = false;
     bool hideFormula = false;
     bool isNotProtected = false;
 
-    if ( featureSet( SNotProtected ) && hasProperty( SNotProtected ) )
+    if ( featureSet( SNotProtected ) && hasProperty( PNotProtected ) )
         isNotProtected = true;
 
-    if ( featureSet( SHideAll ) && hasProperty( SHideAll ) )
+    if ( featureSet( SHideAll ) && hasProperty( PHideAll ) )
         hideAll=true;
 
-    if ( featureSet( SHideFormula ) && hasProperty( SHideFormula ) )
+    if ( featureSet( SHideFormula ) && hasProperty( PHideFormula ) )
         hideFormula = true;
 
     if ( hideAll )
@@ -1456,10 +1456,10 @@ void Style::saveXML( QDomDocument & doc, QDomElement & format ) const
   if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
     format.setAttribute( "bgcolor", m_bgColor.name() );
 
-  if ( featureSet( SMultiRow ) && hasProperty( SMultiRow ) )
+  if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
     format.setAttribute( "multirow", "yes" );
 
-  if ( featureSet( SVerticalText ) && hasProperty( SVerticalText ) )
+  if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
     format.setAttribute( "verticaltext", "yes" );
 
   if ( featureSet( SPrecision ) )
@@ -1495,16 +1495,16 @@ void Style::saveXML( QDomDocument & doc, QDomElement & format ) const
   if ( featureSet( SIndent ) )
     format.setAttribute( "indent", m_indent );
 
-  if ( featureSet( SDontPrintText ) && hasProperty( SDontPrintText ) )
+  if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
     format.setAttribute( "dontprinttext", "yes" );
 
-  if ( featureSet( SNotProtected ) && hasProperty( SNotProtected ) )
+  if ( featureSet( SNotProtected ) && hasProperty( PNotProtected ) )
     format.setAttribute( "noprotection", "yes" );
 
-  if ( featureSet( SHideAll ) && hasProperty( SHideAll ) )
+  if ( featureSet( SHideAll ) && hasProperty( PHideAll ) )
     format.setAttribute( "hideall", "yes" );
 
-  if ( featureSet( SHideFormula ) && hasProperty( SHideFormula ) )
+  if ( featureSet( SHideFormula ) && hasProperty( PHideFormula ) )
     format.setAttribute( "hideformula", "yes" );
 
   if ( featureSet( SFontFamily ) )
@@ -1612,13 +1612,13 @@ bool Style::loadXML( QDomElement & format )
 
   if ( format.hasAttribute( "multirow" ) )
   {
-    setProperty( SMultiRow );
+    setProperty( PMultiRow );
     m_featuresSet |= SMultiRow;
   }
 
   if ( format.hasAttribute( "verticaltext" ) )
   {
-    setProperty( SVerticalText );
+    setProperty( PVerticalText );
     m_featuresSet |= SVerticalText;
   }
 
@@ -1700,25 +1700,25 @@ bool Style::loadXML( QDomElement & format )
   }
   if ( format.hasAttribute( "dontprinttext" ) )
   {
-    setProperty( SDontPrintText );
+    setProperty( PDontPrintText );
     m_featuresSet |= SDontPrintText;
   }
 
   if ( format.hasAttribute( "noprotection" ) )
   {
-    setProperty( SNotProtected );
+    setProperty( PNotProtected );
     m_featuresSet |= SNotProtected;
   }
 
   if ( format.hasAttribute( "hideall" ) )
   {
-    setProperty( SHideAll );
+    setProperty( PHideAll );
     m_featuresSet |= SHideAll;
   }
 
   if ( format.hasAttribute( "hideformula" ) )
   {
-    setProperty( SHideFormula );
+    setProperty( PHideFormula );
     m_featuresSet |= SHideFormula;
   }
 
@@ -1910,7 +1910,7 @@ void Style::addRef()
   ++m_usageCount;
 }
 
-bool Style::hasProperty( FlagsSet p ) const
+bool Style::hasProperty( Properties p ) const
 {
   FlagsSet f;
   switch( p )
@@ -2594,7 +2594,7 @@ Style * Style::setCurrency( Currency const & currency )
   return this;
 }
 
-Style * Style::setProperty( FlagsSet p )
+Style * Style::setProperty( Properties p )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
@@ -2663,7 +2663,7 @@ Style * Style::setProperty( FlagsSet p )
   return this;
 }
 
-Style * Style::clearProperty( FlagsSet p )
+Style * Style::clearProperty( Properties p )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
@@ -2783,20 +2783,20 @@ CustomStyle::CustomStyle( Style * parent, QString const & name )
   m_parent = 0;
 
   // one to one copy
-  if ( parent->hasProperty( SDontPrintText ) )
-    addProperty( SDontPrintText );
-  if ( parent->hasProperty( SCustomFormat ) )
-    addProperty( SCustomFormat );
-  if ( parent->hasProperty( SNotProtected ) )
-    addProperty( SNotProtected );
-  if ( parent->hasProperty( SHideAll ) )
-    addProperty( SHideAll );
-  if ( parent->hasProperty( SHideFormula ) )
-    addProperty( SHideFormula );
-  if ( parent->hasProperty( SMultiRow ) )
-    addProperty( SMultiRow );
-  if ( parent->hasProperty( SVerticalText ) )
-    addProperty( SVerticalText );
+  if ( parent->hasProperty( PDontPrintText ) )
+    addProperty( PDontPrintText );
+  if ( parent->hasProperty( PCustomFormat ) )
+    addProperty( PCustomFormat );
+  if ( parent->hasProperty( PNotProtected ) )
+    addProperty( PNotProtected );
+  if ( parent->hasProperty( PHideAll ) )
+    addProperty( PHideAll );
+  if ( parent->hasProperty( PHideFormula ) )
+    addProperty( PHideFormula );
+  if ( parent->hasProperty( PMultiRow ) )
+    addProperty( PMultiRow );
+  if ( parent->hasProperty( PVerticalText ) )
+    addProperty( PVerticalText );
 
   changeHAlign( parent->halign() );
   changeVAlign( parent->valign() );
@@ -3218,7 +3218,7 @@ void CustomStyle::changeCurrency( Currency const & currency )
   m_currency = currency;
 }
 
-void CustomStyle::addProperty( FlagsSet p )
+void CustomStyle::addProperty( Properties p )
 {
   m_properties |= (uint) p;
   switch( p )
@@ -3249,7 +3249,7 @@ void CustomStyle::addProperty( FlagsSet p )
   }
 }
 
-void CustomStyle::removeProperty( FlagsSet p )
+void CustomStyle::removeProperty( Properties p )
 {
   m_properties &= ~(uint) p;
   switch( p )
