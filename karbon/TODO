@@ -47,7 +47,7 @@ ODF support:
 
 Dockers:
 --------
-- port the transform docker to work on flake shapes (should be quite easy)
+- port the transform docker to work on flake shapes (should be quite easy) -> jaham
 - port the stroke docker to work with KoBorderModel (seems that shapes use that to draw their outline)
 
 Plugins:
