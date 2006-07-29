@@ -63,6 +63,9 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
 
 void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 {
+    // reset the map of OpenDocument Styles
+    m_oasisStyles.clear();
+
     // loading default style first
     const QDomElement* defStyle = oasisStyles.defaultStyle( "table-cell" );
     if ( defStyle )
@@ -73,6 +76,8 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     }
     else
       resetDefaultStyle();
+    // insert it into the the map sorted the OpenDocument name
+    m_oasisStyles["Default"] = defaultStyle();
 
     uint nStyles = oasisStyles.userStyles().count();
     kDebug() << " number of template style to load : " << nStyles << endl;
@@ -80,10 +85,10 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
         QDomElement styleElem = oasisStyles.userStyles()[item];
 
         // assume the name assigned by the application
-        QString name = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
+        const QString oasisName = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
 
         // then replace by user-visible one (if any)
-        name = styleElem.attributeNS( KoXmlNS::style, "display-name", name );
+        const QString name = styleElem.attributeNS( KoXmlNS::style, "display-name", oasisName );
 
         if ( !name.isEmpty() )
         {
@@ -97,22 +102,18 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 
             //fixme test return;
             style->loadOasis( oasisStyles, styleElem, name );
-            style->setType( Style::CUSTOM );
             insertStyle (style);
+            // insert it into the the map sorted the OpenDocument name
+            m_oasisStyles[oasisName] = style;
             kDebug() << "Style " << name << ": " << style << endl;
         }
     }
 
     // reparent all styles
-    QStringList names = styleNames ();
-    QStringList::iterator it;
-    for (it = names.begin(); it != names.end(); ++it) {
-      if (*it != "Default") {
-        CustomStyle * styleData = style (*it);
-        if ( !styleData->parent() && !styleData->parentName().isNull() )
-          styleData->setParent( m_styles[ styleData->parentName() ] );
-      }
-    }
+    foreach ( CustomStyle* style, m_styles )
+      if ( style->name() != "Default" )
+        if ( !style->parent() && !style->parentName().isNull() )
+          style->setParent( m_oasisStyles[ style->parentName() ] );
 }
 
 QDomElement StyleManager::save( QDomDocument & doc )
@@ -332,25 +333,37 @@ QStringList StyleManager::styleNames() const
   return list;
 }
 
-// static
 Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
 {
   Q3DictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
-  Styles styleElements;
+  Styles autoStyles;
   for (;it.current();++it)
   {
     if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
     {
       QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
       kDebug() << "Preloading style: " << name << endl;
-      styleElements.insert( name , new Style());
-      styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
+      autoStyles.insert( name , new Style());
+      autoStyles[name]->loadOasisStyle( oasisStyles , *(it.current()) );
+
+      if ( it.current()->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
+      {
+        QString parentStyleName = it.current()->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
+        if ( m_oasisStyles.contains( parentStyleName ) )
+        {
+          autoStyles[name]->setParent( m_oasisStyles[parentStyleName] );
+        }
+        kDebug() << "\t parent-style-name:" << parentStyleName << endl;
+      }
+      else
+      {
+        autoStyles[name]->setParent( m_defaultStyle );
+      }
     }
   }
-  return styleElements;
+  return autoStyles;
 }
 
-// static
 void StyleManager::releaseUnusedAutoStyles( Styles autoStyles )
 {
   foreach ( Style* style, autoStyles.values() )
@@ -358,4 +371,7 @@ void StyleManager::releaseUnusedAutoStyles( Styles autoStyles )
     if ( style->release() )
       delete style;
   }
+
+  // Now, we can clear the map of styles sorted by OpenDocument name.
+  m_oasisStyles.clear();
 }

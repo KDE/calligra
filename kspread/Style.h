@@ -29,9 +29,10 @@
 
 class QDomDocument;
 class QDomElement;
+class KoGenStyle;
 class KoGenStyles;
 class KoOasisStyles;
-class KoGenStyle;
+class KoStyleStack;
 
 namespace KSpread
 {
@@ -288,6 +289,10 @@ protected:
    */
   void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
 
+  void loadOasisDataStyle( KoOasisStyles& oasisStyles, const QDomElement& element );
+  void loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
+  void loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
+  void loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
 
   CustomStyle * m_parent;
   QString        m_parentName;

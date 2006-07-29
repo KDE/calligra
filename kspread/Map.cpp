@@ -364,7 +364,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
     }
 
     //pre-load auto styles
-    Styles autoStyles = StyleManager::loadOasisAutoStyles( oasisContext.oasisStyles() );
+    Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles( oasisContext.oasisStyles() );
 
     // load the sheet
     sheetNode = body.firstChild();
@@ -391,7 +391,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
     }
 
     //delete any styles which were not used
-    StyleManager::releaseUnusedAutoStyles( autoStyles );
+    doc()->styleManager()->releaseUnusedAutoStyles( autoStyles );
 
     // update all dependencies and recalc all cells
     d->dependencyManager->updateAllDependencies(this);

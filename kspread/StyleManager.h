@@ -75,7 +75,7 @@ class KSPREAD_EXPORT StyleManager
    * @param oasisStyles repository of styles
    * @return a hash of styles with the OpenDocument internal name as key
    */
-  static Styles loadOasisAutoStyles( KoOasisStyles& oasisStyles );
+  Styles loadOasisAutoStyles( KoOasisStyles& oasisStyles );
 
   /**
    * Releases unused auto styles.
@@ -86,7 +86,7 @@ class KSPREAD_EXPORT StyleManager
    *                   key
    * @see loadOasisAutoStyles
    */
-  static void releaseUnusedAutoStyles( Styles autoStyles );
+  void releaseUnusedAutoStyles( Styles autoStyles );
 
  private:
   friend class StyleDialog;
@@ -94,6 +94,10 @@ class KSPREAD_EXPORT StyleManager
 
   CustomStyle * m_defaultStyle;
   CustomStyles  m_styles; // builtin and custom made styles
+
+  // Same styles as above, but with the internal OpenDocument name as key.
+  // NOTE: Temporary! Only valid while loading OpenDocument files.
+  CustomStyles  m_oasisStyles;
 };
 
 } // namespace KSpread
