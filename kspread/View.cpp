@@ -1078,8 +1078,8 @@ void View::Private::initActions()
 
   actions->viewZoom = new KoZoomAction(KoZoomMode::ZOOM_CONSTANT, i18n( "Zoom" ),
                                         "viewmag", 0, ac, "view_zoom" );
-  connect( actions->viewZoom, SIGNAL( triggered( const QString & ) ),
-      view, SLOT( viewZoom( const QString & ) ) );
+  connect( actions->viewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
+      view, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
 
   actions->consolidate = new KAction( i18n("&Consolidate..."), ac, "consolidate" );
   connect(actions->consolidate, SIGNAL(triggered(bool)),view, SLOT( consolidate() ));
@@ -1586,7 +1586,7 @@ View::View( QWidget *_parent, const char *_name,
         setZoom( 100, true );
     }
 
-    viewZoom( QString::number( doc()->zoomInPercent() ) );
+    d->actions->viewZoom->setZoom( d->doc->zoomInPercent() );
 
     // ## Might be wrong, if doc isn't loaded yet
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
@@ -4999,15 +4999,12 @@ void View::togglePageBorders( bool mode )
   doc()->emitEndOperation( d->canvas->visibleCells() );
 }
 
-void View::viewZoom( const QString & s )
+void View::viewZoom( KoZoomMode::Mode mode, int zoom )
 {
-
   int oldZoom = doc()->zoomInPercent();
+  int newZoom = zoom;
 
-  bool ok = false;
-  QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
-  regexp.indexIn(s);
-  int newZoom=regexp.cap(1).toInt(&ok);
+  bool ok = ( mode == KoZoomMode::ZOOM_CONSTANT );
   if ( !ok || newZoom < 10 ) //zoom should be valid and >10
     newZoom = oldZoom;
   if ( newZoom != oldZoom )

@@ -8,9 +8,21 @@
       <Separator/>
     </Menu>
     <Menu name="view"><text>&amp;View</text>
+      <Action name="view_newview"/>
+      <ActionList name="view_closeallviews"/>
+      <Separator/>
+      <ActionList name="view_split"/>
+      <Separator/>
+      <Action name="view_zoom_out"/>
+      <Action name="view_zoom_in"/>
       <Action name="view_zoom"/>
       <Separator/>
       <Action name="view_palette_action_menu"/>
     </Menu>
   </MenuBar>
+  <ToolBar name="mainToolBar">
+    <Action name="view_zoom"/>
+    <Action name="view_zoom_out"/>
+    <Action name="view_zoom_in"/>
+  </ToolBar>
 </kpartgui>

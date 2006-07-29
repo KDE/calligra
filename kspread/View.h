@@ -38,6 +38,7 @@
 
 #include <KoPoint.h>
 #include <KoView.h>
+#include <KoZoomMode.h>
 
 class QAction;
 class QKeyEvent;
@@ -301,7 +302,7 @@ public slots:
     void togglePageBorders( bool );
     void toggleProtectSheet( bool );
     void toggleProtectDoc( bool );
-    void viewZoom( const QString & );
+    void viewZoom( KoZoomMode::Mode mode, int zoom );
     void find();
     void findNext();
     void findPrevious();

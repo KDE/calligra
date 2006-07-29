@@ -22,6 +22,9 @@
 
 #include <KoView.h>
 #include <KoShapeControllerBase.h>
+#include <KoZoomMode.h>
+
+class KAction;
 
 class KoShapeManager;
 class KoCanvasController;
@@ -72,7 +75,11 @@ class KivioView : public KoView, public KoShapeControllerBase
 
   protected Q_SLOTS:
     /// Called by the zoom action to set the zoom
-    void viewZoom(const QString& zoomStr);
+    void viewZoom(KoZoomMode::Mode mode, int zoom);
+    /// Called by the zoom in action... zoom +25%
+    void viewZoomIn();
+    /// Called by the zoom out action... zoom -25%
+    void viewZoomOut();
 
   protected:
     /// Creates and initializes the GUI.
@@ -89,6 +96,8 @@ class KivioView : public KoView, public KoShapeControllerBase
     KoCanvasController* m_canvasController;
     KoZoomHandler* m_zoomHandler;
 
+    KAction* m_viewZoomIn;
+    KAction* m_viewZoomOut;
     KoZoomAction* m_viewZoomAction;
 
     KivioAbstractPage* m_activePage;

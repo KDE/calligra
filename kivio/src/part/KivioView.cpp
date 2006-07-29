@@ -24,6 +24,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kstdaction.h>
 
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
@@ -104,11 +105,13 @@ void KivioView::initActions()
 {
   setXMLFile("kivio.rc");
 
+  m_viewZoomIn = KStdAction::zoomIn(this, SLOT(viewZoomIn()), actionCollection(), "view_zoom_in");
+  m_viewZoomOut = KStdAction::zoomOut(this, SLOT(viewZoomOut()), actionCollection(), "view_zoom_out");
   m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
                                        i18n("Zoom"), KIcon("viewmag"), 0,
                                        actionCollection(), "view_zoom");
-  connect(m_viewZoomAction, SIGNAL(zoomChanged(const QString&)),
-          this, SLOT(viewZoom(const QString&)));
+  connect(m_viewZoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
+          this, SLOT(viewZoom(KoZoomMode::Mode, int)));
 }
 
 KivioAbstractPage* KivioView::activePage() const
@@ -153,52 +156,43 @@ void KivioView::setZoom(int zoom)
   m_canvas->updateSize();
 }
 
-void KivioView::viewZoom(const QString& zoomStr)
+void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
 {
   // No point trying to zoom something that isn't there...
   if(m_activePage == 0) {
     return;
   }
 
-  bool ok = true;
-  int zoom = 0;
+  int newZoom = 0;
+  QString zoomString;
 
-  QString zoomString = zoomStr;
-  zoomString.replace("&",""); // hack to work around bug in KSelectAction
-
-  if(zoomString == KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH) ) {
+  if(mode == KoZoomMode::ZOOM_WIDTH) {
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+    zoomString = KoZoomMode::toString(mode);
     KoPageLayout layout = m_activePage->pageLayout();
-    zoom = qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) /
+    newZoom = qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) /
         (m_zoomHandler->resolutionX() * layout.ptWidth)) - 1;
-
-    ok = true;
-  } else if(zoomString == KoZoomMode::toString(KoZoomMode::ZOOM_PAGE)) {
+  } else if(mode == KoZoomMode::ZOOM_PAGE) {
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    zoomString = KoZoomMode::toString(mode);
     KoPageLayout layout = m_activePage->pageLayout();
     double height = m_zoomHandler->resolutionY() * layout.ptHeight;
     double width = m_zoomHandler->resolutionX() * layout.ptWidth;
-    zoom = qMin(qRound(static_cast<double>(m_canvasController->visibleHeight() * 100) / height),
+    newZoom = qMin(qRound(static_cast<double>(m_canvasController->visibleHeight() * 100) / height),
                 qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) / width)) - 1;
-
-    ok = true;
   } else {
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
-    QRegExp regexp(".*(\\d+).*"); // "Captured" non-empty sequence of digits
-    int pos = regexp.indexIn(zoomString);
-
-    if(pos > -1) {
-      zoom = regexp.cap(1).toInt(&ok);
-    }
+    newZoom = zoom;
+    zoomString = i18n("%1%", zoom);
   }
 
-  // Don't allow smaller zoom then 10%
-  if(!ok || (zoom < 10) || (zoom == m_zoomHandler->zoomInPercent())) {
+  // Don't allow smaller zoom then 10% or bigger then 2000%
+  if((newZoom < 10) || (newZoom > 2000) || (newZoom == m_zoomHandler->zoomInPercent())) {
     return;
   }
 
   m_viewZoomAction->setZoom(zoomString);
-  setZoom(zoom);
+  setZoom(newZoom);
   m_canvas->setFocus();
 }
 
@@ -206,11 +200,39 @@ void KivioView::resizeEvent(QResizeEvent* event)
 {
   Q_UNUSED(event);
 
-  if((m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH) ||
-        (m_zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE))
-  {
-    viewZoom(m_viewZoomAction->currentText());
+  if(m_zoomHandler->zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
+    viewZoom(m_zoomHandler->zoomMode(), 0);
   }
+}
+
+void KivioView::viewZoomIn()
+{
+  int zoom = m_zoomHandler->zoomInPercent();
+
+  if((zoom + 25) > 2000) {
+    zoom = 2000 - zoom;
+  } else {
+    zoom = 25;
+  }
+
+  zoom = m_zoomHandler->zoomInPercent() + zoom;
+  m_viewZoomAction->setZoom(i18n("%1%", zoom));
+  setZoom(zoom);
+}
+
+void KivioView::viewZoomOut()
+{
+  int zoom = m_zoomHandler->zoomInPercent();
+
+  if(zoom < 35) {
+    zoom = zoom - 10;
+  } else {
+    zoom = 25;
+  }
+
+  zoom = m_zoomHandler->zoomInPercent() - zoom;
+  m_viewZoomAction->setZoom(i18n("%1%", zoom));
+  setZoom(zoom);
 }
 
 #include "KivioView.moc"
