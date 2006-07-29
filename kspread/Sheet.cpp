@@ -4592,10 +4592,10 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        kDebug()<<" style of table :"<<stylename<<endl;
+        //kDebug()<<" style of table :"<<stylename<<endl;
         const QDomElement *style = oasisContext.oasisStyles().findStyle( stylename, "table" );
         Q_ASSERT( style );
-        kDebug()<<" style :"<<style<<endl;
+        //kDebug()<<" style :"<<style<<endl;
         if ( style )
         {
             QDomElement properties( KoDom::namedItemNS( *style, KoXmlNS::style, "table-properties" ) );
@@ -4610,20 +4610,20 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
             if ( style->hasAttributeNS( KoXmlNS::style, "master-page-name" ) )
             {
                 QString masterPageStyleName = style->attributeNS( KoXmlNS::style, "master-page-name", QString::null );
-                kDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
+                //kDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
                 QDomElement *masterStyle = oasisContext.oasisStyles().masterPages()[masterPageStyleName];
-                kDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
+                //kDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
                 if ( masterStyle )
                 {
                     loadSheetStyleFormat( masterStyle );
                     if ( masterStyle->hasAttributeNS( KoXmlNS::style, "page-layout-name" ) )
                     {
                         QString masterPageLayoutStyleName = masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
-                        kDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
+                        //kDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
                         const QDomElement *masterLayoutStyle = oasisContext.oasisStyles().findStyle( masterPageLayoutStyleName );
                       if ( masterLayoutStyle )
                       {
-                        kDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
+                        //kDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
                         KoStyleStack styleStack;
                         styleStack.setTypeProperties( "page-layout" );
                         styleStack.push( *masterLayoutStyle );
@@ -5586,8 +5586,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                                  int maxCols, int maxRows, GenValidationStyles &valStyle )
 {
     kDebug() << "Sheet::saveOasisColRowCell: " << d->name << endl;
-//     kDebug() << "maxCols: " << maxCols << endl;
-//     kDebug() << "maxRows: " << maxRows << endl;
+    kdDebug() << "\t Sheet dimension: " << maxCols << " x " << maxRows << endl;
 
     // saving the columns
     //

@@ -373,7 +373,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
         QDomElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
-            kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
+            //kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
             if( sheetElement.nodeName() == "table:table" )
             {
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
