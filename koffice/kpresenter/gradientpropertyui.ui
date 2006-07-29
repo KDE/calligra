@@ -1,0 +1,178 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>GradientPropertyUI</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>GradientPropertyUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>203</width>
+            <height>181</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Gradient</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout7</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KColorButton" row="1" column="2">
+                    <property name="name">
+                        <cstring>color2Chooser</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KComboBox" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>styleCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>styleLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Gradient:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>styleCombo</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>colorLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;olors:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>color1Chooser</cstring>
+                    </property>
+                </widget>
+                <widget class="KColorButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>color1Chooser</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout17</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>xFactorLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>X-fac&amp;tor:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>xSlider</cstring>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>unbalancedCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Un&amp;balanced:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>yFactorLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Y-factor:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>ySlider</cstring>
+                    </property>
+                </widget>
+                <widget class="QSlider" row="2" column="1">
+                    <property name="name">
+                        <cstring>ySlider</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>-200</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>200</number>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QSlider" row="1" column="1">
+                    <property name="name">
+                        <cstring>xSlider</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>-200</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>200</number>
+                    </property>
+                    <property name="value">
+                        <number>100</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>previewPanel</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>styleCombo</tabstop>
+    <tabstop>color1Chooser</tabstop>
+    <tabstop>color2Chooser</tabstop>
+    <tabstop>unbalancedCheckBox</tabstop>
+    <tabstop>xSlider</tabstop>
+    <tabstop>ySlider</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcolorbutton.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcolorbutton.h</includehint>
+</includehints>
+</UI>

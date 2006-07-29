@@ -1,0 +1,14 @@
+Kexi tests
+----------
+
+newapi/    New KexiDB API test in few aspects
+parser/    Interactive test of KEXISQL parser
+tableview/ Test for not-data-aware KexiTableView widget
+
+See README file in selected directory for details.
+
+In these files:
+- <driver_name> means selected name of a driver from kexidb/drivers,
+  eg. sqlite, mysql (case insensitive)
+- <new_db_name> mean any valid database name
+- <db_name> means any existing database name

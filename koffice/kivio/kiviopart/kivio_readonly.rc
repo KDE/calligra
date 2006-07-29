@@ -1,0 +1,30 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="2">
+<MenuBar>
+ <Menu name="edit"><text>&amp;Edit</text>
+   <Action name="copyStencil"/>
+   <Separator/>
+   <Action name="selectAllStencils"/>
+   <Action name="unselectAllStencils"/>
+ </Menu>
+ <Menu name="view"><text>&amp;View</text>
+   <Action name="showPageBorders"/>
+   <Action name="showPageMargins"/>
+   <Separator/>
+   <Action name="showRulers"/>
+   <Action name="showGrid"/>
+   <Action name="showGuides"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar"><text>View</text>
+  <Action name="copyStencil"/>
+  <Separator/>
+  <Action name="viewZoom"/>
+  <Separator lineSeparator="true" />
+  <Action name="showPageBorders"/>
+  <Action name="showPageMargins"/>
+  <Separator lineSeparator="true" />
+  <Action name="showRulers"/>
+  <Action name="showGrid"/>
+  <Action name="units"/>
+</ToolBar>
+</kpartgui>

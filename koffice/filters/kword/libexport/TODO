@@ -1,0 +1,2 @@
+- JJ: check that all kdebug areas are 30508
+- the non-inlined frames need to be available to the worker

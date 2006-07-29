@@ -1,0 +1,366 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Configuring &kplato;</title>
+
+<sect1 id="project-settings">
+<title>The <guilabel>Project Settings</guilabel> Dialog</title>
+
+<para>This dialog allows you to set some properties for your current project.
+You can access this dialog using the
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Edit Main Project...</guimenuitem></menuchoice> menu.</para>
+
+<screenshot>
+<screeninfo>The Project Settings dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="project-settings.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Project Settings dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>ID:</guilabel></term>
+<listitem><para>Enter a number. It sets the project
+identification and must be unique.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Name:</guilabel></term>
+<listitem><para>Enter the name of your project.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Leader:</guilabel></term>
+<listitem><para>Enter the name of the project leader. Clicking
+the <guibutton>Choose...</guibutton> button will bring your
+contact list from KAddressBook and you can choose a name here.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Scheduling</guilabel></term>
+<listitem><para>Here you define when the project will start or
+end. Choose either a start date or an end date.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Start Date:</guilabel></term>
+<listitem><para>If a start date is set, the project is scheduled forward
+from this time. When the project has been calculated, end time shows when the
+project is planned to end.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>End Date:</guilabel></term>
+<listitem><para>If a end date is set, the project is scheduled backwards
+from this time. When the project has been calculated, start time shows when the
+project must start in order to finish in time.</para></listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Project notes and summary:</guilabel></term>
+<listitem><para>You can write here various notes associated
+with the project or/and a project summary.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>Clicking the <guibutton>OK</guibutton> button will apply your changes and
+close the dialog and clicking the <guibutton>Cancel</guibutton> button will
+cancel any change you just made.</para>
+
+</sect1>
+
+<sect1 id="standard-worktime">
+<title>The <guilabel>Standard Worktime</guilabel> Dialog</title>
+<para>This dialog allows you to set the worktime in terms of hours.
+You can access this dialog using the
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Edit Standard Worktime...</guimenuitem></menuchoice> menu.</para>
+
+<screenshot>
+<screeninfo>The Standard Worktime dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edit-worktime.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Standard Worktime dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+ 
+<para>These values are used when you estimate the effort needed to
+complete a task. Defaults are the numbers of hours worked in a normal
+day/week/month and year.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Hours per year:</guilabel></term>
+<listitem><para>Set the hours worked per year.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Hours per month:</guilabel></term>
+<listitem><para>Set the hours worked per month.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Hours per week:</guilabel></term>
+<listitem><para>Set the hours worked per week.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Hours per day:</guilabel></term>
+<listitem><para>Set the hours worked per day.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>Clicking the <guibutton>OK</guibutton> button will apply your changes and
+close the dialog and clicking the <guibutton>Cancel</guibutton> button will
+cancel any change you just made.</para>
+
+</sect1>
+
+<sect1 id="edit-calendar">
+<title>The <guilabel>Calendar's Settings</guilabel> Dialog</title>
+<para>This dialog allows you to set a calendar for your current project.
+You can access this dialog using the
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Edit Calendar...</guimenuitem></menuchoice> menu.</para>
+
+<screenshot>
+<screeninfo>The Calendar's Settings dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edit-calendar.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Calendar's Settings dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+<para>You can have several calendars for your current project. First add a name
+for your first calendar using the <guibutton>Add</guibutton> button. The
+calendar view becomes active with the current day marked in a square
+when you click on the calendar name.</para>
+
+<screenshot>
+<screeninfo>Working with a calendar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edit-calendar1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Working with a calendar</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>You can set <guilabel>Working</guilabel> or <guilabel>Non-working</guilabel> days. Click on the days you want
+as Working days for example for your project and choose <guilabel>Working</guilabel> instead
+of <guilabel>Undefined</guilabel>. Set then the work interval by choosing the start and end
+times and click the <guibutton>Add interval</guibutton> button to add the
+working time. Click the <guibutton>Apply</guibutton> button to validate your
+choice.</para>
+
+<screenshot>
+<screeninfo>Working and non-working days</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edit-calendar2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Working and non-working days</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Here you can see the working days in blue and the non-working day
+in red.</para>
+
+<para>Clicking the <guibutton>OK</guibutton> button will apply your changes and
+close the dialog and clicking the <guibutton>Cancel</guibutton> button will
+cancel any change you just made.</para>
+
+</sect1>
+
+<sect1 id="edit-accounts">
+<title>The <guilabel>Edit Accounts</guilabel> Dialog</title>
+<para>Accounts are used to evaluate the project cost. This dialog allows you to
+set up the various accounts used in your current project.
+You can access this dialog using the
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Edit Accounts...</guimenuitem></menuchoice> menu.</para>
+
+<screenshot>
+<screeninfo>The Edit Accounts dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edit-accounts.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Edit Accounts dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>To create an account, click the <guibutton>New</guibutton> button.
+You can then enter the account name which you validate by using the Enter
+key. You can add a short description of this account by double-clicking
+in the description field.</para>
+<para>You can create sub-accounts of your main account or a new account. Remove
+any highlighted account using the <guibutton>Remove</guibutton> button.</para>
+<para>You can also set a default account by choosing the account name in
+the drop-down list.</para>
+
+<screenshot>
+<screeninfo>Creating accounts</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edit-accounts1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Creating accounts</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Clicking the <guibutton>OK</guibutton> button will apply your changes and
+close the dialog and clicking the <guibutton>Cancel</guibutton> button will
+cancel any change you just made.</para>
+
+</sect1>
+
+<sect1 id="edit-resources">
+<title>The <guilabel>Resources</guilabel> Dialog</title>
+<para>This dialog allows you to set the resources for your current project.
+You can access this dialog using the
+<menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Edit Resources...</guimenuitem></menuchoice> menu.</para>
+
+<screenshot>
+<screeninfo>The Resources dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edit-resources.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Resources dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>You need first to define a resource group by clicking the
+<guibutton>New</guibutton> button in the resource group area. Click on
+this group name and add a new resource by clicking the
+<guibutton>New</guibutton> button in the resource area. This will display
+the <guilabel>Resource Settings</guilabel> dialog.</para>
+
+<screenshot>
+<screeninfo>The Resources Settings dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edit-resources1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Resources Settings dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Clicking the <guibutton>OK</guibutton> button will apply your changes and
+close the dialog and clicking the <guibutton>Cancel</guibutton> button will
+cancel any change you just made.</para>
+
+</sect1>
+
+<sect1 id="configure-dialog">
+<title>The <guilabel>Configure &kplato;...</guilabel> Dialog</title>
+
+<para>This dialog allows you to set default options globally in &kplato;. You
+can access this dialog using the
+<menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure &kplato;...</guimenuitem></menuchoice> menu.</para>
+
+<para>On any widget in this dialog you can get a <guilabel>What's This
+</guilabel>help with <keycombo
+action="simul">&Shift;<keycap>F1</keycap></keycombo> or using the 
+<guiicon>Help</guiicon> icon.
+</para>
+
+<sect2 id="configure-task-defaults">
+<title><guilabel>Task Defaults</guilabel></title>
+
+<para>This set the options that will be used per default each time you add a
+new task.
+</para>
+
+<screenshot>
+<screeninfo>Task Defaults</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Task Defaults</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Responsible:</guilabel></term>
+<listitem><para>Insert the name of the person responsible for this task.
+This is not limited to persons available in a resource group but can be
+anyone.</para>
+<para>Clicking the <guibutton>Choose...</guibutton> button will allow you to
+insert a person from your address book.</para>
+<screenshot>
+<screeninfo>Addresses</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure2.1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Addresses</phrase></textobject>
+</mediaobject>
+</screenshot>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Timing</guilabel></term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Schedule:</guilabel></term>
+<listitem><para>Choose the scheduling constraint you would
+like as default. Depending on this constraint, the date fields
+become available if they need to be filled. These
+settings affect the actual scheduling of the task.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Estimate:</guilabel></term>
+<listitem><para>Estimates the predictions of the quantitative
+results. The estimation can be either effort based or duration based. If it is
+effort based, the final duration will depend on the resources assigned to the
+task. For duration based estimation, the assigned resources don't affect the
+fixed duration of the task, but only the costs.</para></listitem>
+</varlistentry>
+</variablelist>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Note:</guilabel></term>
+<listitem><para>Write here a note that you would like to be
+displayed as default on each new task.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>Clicking the <guibutton>Defaults</guibutton> button will reset the
+dialog to its defaults, while clicking <guibutton>Apply</guibutton> will apply
+your changes but leave the dialog open. Clicking the <guibutton>OK</guibutton>
+button will apply your changes and close the dialog and
+<guibutton>Cancel</guibutton> will cancel any change you just made.</para>
+
+</sect2>
+</sect1>
+
+</chapter>

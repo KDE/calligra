@@ -1,0 +1,10 @@
+This is a CSV filter for kspread.
+
+At first it was only an input filter, hence the files named "csvfilter*".
+Then I added an export filter and named it csvexport*
+
+Read DESIGN for the gory details, TODO for how to help, the source for why
+it screwed up your data.
+
+David Faure <faure@kde.org>   ( CSV import and export )
+Werner Trobin <wtrobin@carinthia.com>   ( CSV filter dialogs )

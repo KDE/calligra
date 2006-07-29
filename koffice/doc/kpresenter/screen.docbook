@@ -1,0 +1,44 @@
+<chapter id="screen-description">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>The &kpresenter; Screen</title>
+
+<para>Here is the default &kpresenter; Screen Layout.</para>
+
+<para>At the top there is the menubar.  All &kpresenter; functions are
+available from the menus, which are described in detail in <xref
+linkend="menu-items" />.</para>
+
+<para>Below the menubar are the toolbars.  There are several
+toolbars.  You may hide and show toolbars as you prefer.  The toolbars
+are described in detail in <xref linkend="toolbars" />.
+</para>
+
+<para>The <guilabel>Outline</guilabel> and
+<guilabel>Preview</guilabel> panes give an overview of your entire
+presentation.  The <guilabel>Preview</guilabel> pane provides
+thumbnails of each slide, and allows you to drag and drop to change
+the order.  The <guilabel>Outline</guilabel> pane provides a
+hierarchal tree of each slide, and also the objects inside the slides.
+As well as overview, this allows you to easily select objects which
+may be covered by others, or are otherwise difficult to grab directly on
+the slide.</para>
+
+</chapter>

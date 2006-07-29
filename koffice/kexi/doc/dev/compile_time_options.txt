@@ -1,0 +1,158 @@
+Compile-Time Options for Kexi
+-----------------------------
+
+(c) 2005, Jaroslaw Staniek, <js @ iidea . pl>
+
+
+See http://www.kexi-project.org/wiki/wikiview/index.php?AdvancedBuildNotes
+for explanation how to conveniently set compile-time options.
+
+List of available options
+-------------------------
+
+* KEXI_STANDALONE
+Type: defined/undefined
+Default: -
+Description: Can be defined globally in kexi_global.h.
+Defined for standalone Kexi releases (without KOffice, e.g. 1.0) and undefined 
+for releases bundled with KOffice,. e.g. 1.1.
+
+* KEXI_NO_UNFINISHED
+Type: defined/undefined
+Default: defined in kexi_export.h if KEXI_OPTIONS is undefined
+Description: If defined, unfinished Kexi features (for example a few features 
+within Table Designer) will be hidded for Kexi, to avoid user confusion.
+
+* KEXI_SHOW_UNIMPLEMENTED
+Type: defined/undefined
+Default: undefined
+Description: If defined, forces to show menu entries and dialogs just to give 
+impression about development plans of Kexi Team. 
+Only recommended for test/development versions.
+
+* KEXI_FORMS_SUPPORT
+Type: defined/undefined
+Default: defined in kexi_export.h if KEXI_OPTIONS is undefined
+Description: If defined, form plugin will be loaded; else: it will be 
+not loaded even if is compiled.
+
+* KEXI_REPORTS_SUPPORT
+Type: defined/undefined
+Like KEXI_FORMS_SUPPORT macro, but for enabling report plugin.
+Default: undefined
+
+* KEXI_SCRIPTS_SUPPORT
+Type: defined/undefined
+Like KEXI_FORMS_SUPPORT macro, but for enabling scripts plugin.
+Default: undefined
+
+* KEXI_KROSS_SUPPORT
+Type: defined/undefined
+If KEXI_SCRIPTS_SUPPORT is defined, this option defines that
+Kross, located at kexi/scripting{core|plugins}, should be
+compiled and used for scripting.
+Default: same as KEXI_SCRIPTS_SUPPORT
+
+* KEXI_SERVER_SUPPORT
+Type: defined/undefined
+Default: defined in kexidb/kexidb_export.h if KEXI_OPTIONS is undefined
+Description: If defined, server connections will be supported; else: support 
+for these will be disabled even if is compiled.
+
+* KEXI_NO_MIGRATION
+Type: defined/undefined
+Default: undefined
+Description: If defined, data/project migration support for Kexi 
+(available in Tools>Migration menu) will be disabled; else: support will 
+be enabled.
+
+* KEXI_CUSTOM_HARDCODED_CONNDATA
+Type: defined/undefined
+Default: undefined
+Description: If defined, you are forcing to add custom hardcoded connections 
+to the  KexiMigration::importWizard constructor and KexiStartupHandler::init().
+All you need is to create your own private "custom_connectiondata.h" file 
+in kexi/ directory, which will be included into Kexi source code and fill 
+it with code providing one or more hardcoded connections. 
+Example custom_connectiondata.h file for adding a single connection data: 
+---- custom_connectiondata.h, cut here -----
+	conndata = new KexiDB::ConnectionData();
+	conndata->connName = "My Custom Pgsql Connection";
+	conndata->driverName = "postgresql"; //can be also "sqlite3", "sqlite2", "mysql"
+	conndata->hostName = "myhost.example.com";
+	conndata->userName = "john";
+	conndata->password = "secret";
+	Kexi::connset().addConnectionData(conndata); //always call this to add 
+----- cut here ------------------------------
+Notes: 
+- security warning: if you provide your passwords in your code, it will 
+  be available in compiled binaries, so think twice before providine the binaries
+  for somebody else. The custom_connectiondata.h file will not be available 
+  in CVS, so don't worry.
+- this hardcoding will be removed when full handling of connectiondata arrives.
+- conndata is predefined as: KexiDB::ConnectionData* conndata;
+- See KexiDB::ConnectionData deocumentation for more information.
+- you can assign KUser().loginName() for username if you want to get current 
+  login.
+
+* KEXI_SHOW_DEBUG_ACTIONS
+Type: defined/undefined
+Default: undefined
+Description: If defined, additional toolbar "Show Form UI Code" action will 
+be available form form's design mode. This is useful for debugging: after 
+executing the action, a dialog with current (after changes) and original form's 
+GUI XML code will be presented in a tabbed dialog, so you can compare what changed 
+and look for possible problems. The "current" XML code will be saved when "save" 
+action is executed.
+
+* KEXI_USE_GRADIENT_WIDGET
+Type: defined/undefined
+Default: undefined
+Description: If defined, KexiGradientWidget is used as form's background. 
+Currently disabled due to problems with performance and child widget's palettes.
+
+
+* KEXI_NO_SUBFORM
+Type: defined/undefined, temporary
+Default: undefined
+Description: If defined, subform widget will not be available
+
+* KEXI_NO_AUTOFIELD_WIDGET
+Type: defined/undefined, temporary
+Default: undefined
+Description: If defined, atofield (KexiDBFieldEdit) widget will not be available, 
+nor dragging fields from "data source" will be available
+
+* KEXI_NO_IMAGEBOX_WIDGET
+Type: defined/undefined, temporary
+Default: undefined
+Description: If defined, image box (KexiImageBox) widget will not be available
+
+* CUSTOM_VERSION
+Type: defined/undefined
+Default: undefined
+Description: Defined means Kexi version compiled for standalone distribution 
+with some minor vendor-specific tweaks. Used for OOPL version.
+
+* KEXI_DEBUG_GUI
+Type: defined/undefined
+Default: defined (but should be undefined for releases)
+Description: If defined, showKexiDBDebugger=true (in [General] group) 
+can be specified to display KexiDB Debugger. 
+In the future the window will be probably used for debugging other features
+like scripts or macros. This option is useful for Kexi Developers.
+
+
+==== Obsolete, don't use ====
+
+* KDOCKWIDGET_P
+Type: defined/undefined
+Default: undefined
+Description: If defined, enables a hack for better handling property editor's 
+panel within KexiMainWindowImpl object. 
+
+* KEXI_OPTIONS
+Type: defined/undefined
+Default: undefined
+Description: Define this if you want override default compile time options 
+to use any of the options described below.

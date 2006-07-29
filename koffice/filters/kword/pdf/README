@@ -1,0 +1,21 @@
+PDF Importer for KWord
+----------------------
+Copyright (c) 2002-2003 Nicolas Hadacek (hadacek@kde.org)
+Distributed under the GNU General Public License
+
+
+This importer is more or less a wrapper around Xpdf code (see "xpdf"
+directory for details).
+
+
+Usage: once installed in the correct KDE directories, kword will be
+able to open PDF files transparently by using this module.
+
+
+Requirements: You need the following libraries and headers (found usually
+in the "devel" packages of distributions):
+
+- Qt >= 3.0
+- KDE >= 3.0
+- KOffice >= 1.2
+

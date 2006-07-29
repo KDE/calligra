@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MySQL
+X-KDE-Library=kexidb_mysqldriver
+ServiceTypes=Kexi/DBDriver
+Type=Service
+InitialPreference=8
+X-Kexi-DriverName=MySQL
+X-Kexi-DriverType=Network
+X-Kexi-KexiDBVersion=1.8

@@ -1,0 +1,510 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+          
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+   
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>A Step-By-Step Tutorial</title>
+
+<para>
+In this chapter, &kpresenter; is introduced using a simple tutorial. We
+shall walk through the most basic steps that are involved in creating a
+presentation, and adding some basic effects.
+</para>
+
+<sect1 id="start-new">
+<title>Start a new document</title>
+
+<para>
+When you start &kpresenter;, the usual &koffice; startup dialog appears.
+</para>
+
+<screenshot>
+<screeninfo>The <guilabel>&koffice;</guilabel>
+startup dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut01.png" format="PNG"/></imageobject>
+<textobject><phrase>The &koffice; startup dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Select <guilabel>Screen</guilabel> on the left then select the template labeled
+<guilabel>Title</guilabel> (highlighted in blue in the screenshot above) by
+clicking on it. You can check <guilabel>Always use this template</guilabel> to
+make it the default template.  
+</para>
+
+<para>
+Now click <guibutton>Use This Template</guibutton>. This brings up the slide
+editor window, where you can view and edit the slides (and objects contained in
+them) in your document. At the moment, we just have one slide, with one
+object on it, which is a text box.
+</para>
+
+<screenshot>
+<screeninfo>The slide editor</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut02.png" format="PNG"/></imageobject>
+<textobject><phrase>The slide editor</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Double-click the text box. The cursor changes to a vertical bar to show
+that you can now type some text and the background of the edited area
+becomes grey.
+</para>
+
+<screenshot>
+<screeninfo>The text insertion cursor</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut03.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The text insertion cursor</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Go ahead, type some text!
+</para>
+
+<screenshot>
+<screeninfo>Adding text</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut04.png" format="PNG"/></imageobject>
+<textobject><phrase>Adding text</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Click away from the text to de-select the text box when you are done
+typing.
+</para>
+
+</sect1>
+
+<sect1 id="insert-page">
+<title>Add a new page</title>
+
+<para>
+Let's now add a new slide to our document. To do so, click the
+<guimenu>Insert</guimenu> menu, and then click on
+<guimenuitem>Slide</guimenuitem>.
+</para>
+
+<screenshot>
+<screeninfo>Inserting a slide from the menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut05.png" format="PNG"/></imageobject>
+<textobject><phrase>Inserting a slide from the menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+This brings up the <guilabel>Insert Slide</guilabel> dialog.
+</para>
+
+<screenshot>
+<screeninfo>The <guilabel>Insert Slide</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut06.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guilabel>Insert Slide</guilabel>
+dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Click <guibutton>OK</guibutton> to accept the defaults, which will add a
+new page after page 1.
+</para>
+
+<para>
+The <guilabel>Create Document</guilabel> dialog comes up so that we can decide
+what the new slide should look like. This time, double click on the
+<guilabel>One Column</guilabel> template (highlighted in blue.)
+</para>
+
+<screenshot>
+<screeninfo>Choosing a template for the new page</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut07.png" format="PNG"/></imageobject>
+<textobject><phrase>Choosing a template for the new
+page</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The new slide now appears in the editing window. To change between pages
+of your presentation, you can select slides in the pane to the left
+(highlighted in blue for this screenshot).
+</para>
+
+<screenshot>
+<screeninfo>The slides list</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut08.png" format="PNG"/></imageobject>
+<textobject><phrase>The slides list</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The newly inserted slide has two text boxes. There is one for a title,
+and another to contain a bulleted list of items.
+</para>
+
+<screenshot>
+<screeninfo>The new slide</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut09.png" format="PNG"/></imageobject>
+<textobject><phrase>The new slide</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Double-click and type a title. Then double-click on the second text
+box. Note that a bullet automatically appears when you start
+typing. Type some text and end the paragraph by pressing the
+<keycap>Enter</keycap> or <keycap>Return</keycap> key. As you type new
+paragraphs, bullets automatically appear in front of them.
+</para>
+
+<screenshot>
+<screeninfo>Adding text to the second slide</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut10.png" format="PNG"/></imageobject>
+<textobject><phrase>Adding text to the second slide</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+You can de-select the text box by clicking away from it.
+</para>
+
+</sect1>
+
+<sect1 id="insert-pic">
+<title>Insert a picture</title>
+
+<para>
+Let's go back to the first slide now. Use the list of slides on the left
+of your screen.
+</para>
+
+<para>
+In this section, we'll liven our presentation up a bit by adding a nice
+logo to the title page. To do so, the first step is to click on the
+<guimenu>Insert</guimenu> menu item, and then on
+<guimenuitem>Picture</guimenuitem>.
+</para>
+
+<screenshot>
+<screeninfo>Using the menu to add an image</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut11.png" format="PNG"/></imageobject>
+<textobject><phrase>Using the menu to add an image</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+This brings up a file selection dialog. To learn about this or other
+standard &kde; dialog boxes in detail, please consult the &kde;
+documentation. You can browse by clicking on <guiicon>folder</guiicon>
+icons or by using the <guiicon>browser</guiicon> style buttons on the
+toolbar (highlighted in red.) Clicking the <guiicon>up arrow</guiicon>
+takes you up one folder level.
+</para>
+
+<para>
+Find the file named <filename>koffice-logo.png</filename>, which may be
+in a different folder than the one shown in the screenshot below. You
+can also choose any other graphic file if you like! Select the file, and
+click <guibutton>OK</guibutton>.
+</para>
+
+<screenshot>
+<screeninfo>Choosing a picture to add</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut12.png" format="PNG"/></imageobject>
+<textobject><phrase>Choosing a picture to add</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+You can now draw the logo where you want it to be with the mouse. The logo graphic is then visible where you put it. There are selection handles (little black squares) visible around the border of the graphic.
+</para>
+
+<screenshot>
+<screeninfo>The newly added image</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut13.png" format="PNG"/></imageobject>
+<textobject><phrase>The newly added image</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Place the mouse cursor anywhere in the middle of the logo, and drag it
+to the middle of the title page. Then use the selection handles to resize
+it correctly.
+</para>
+
+<screenshot>
+<screeninfo>Dragging and resizing the image</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut14.png" format="PNG"/></imageobject>
+<textobject><phrase>Dragging and resizing the image</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+That's it. Now you have a picture on the title page!
+</para>
+
+</sect1>
+
+<sect1 id="insert-object">
+<title>Insert a KOffice object</title>
+<para>Let's insert another &koffice; object under the picture, for example
+a chart.</para>
+
+<para>
+Every &koffice; supported document can be embedded in a &kpresenter; slide.
+Let's choose a chart from &kchart;. To do so, the first step is to click on the
+<guimenu>Insert</guimenu> menu item, and then
+on <guimenuitem>Object</guimenuitem>.
+</para>
+
+<screenshot>
+<screeninfo>The Insert Object menu</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut24.png" format="PNG"/></imageobject>
+<textobject><phrase>The Insert Object menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+A list of the &koffice; available components appears as submenu.
+Select <guilabel>Chart</guilabel> and then outline with your mouse the area you
+want to put your chart in on the &kpresenter; slide.
+</para>
+
+<screenshot>
+<screeninfo>Select the area where to put the chart</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject><phrase>Select the area where to put the chart</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<!--TODO check if the Open Document dialog should appear when the chart is
+created and not a blank chart-->
+
+<para>
+Once you release the mouse button, a blank chart is added on the slide. Whenever
+you work in the chart, the toolbars and menubar in &kpresenter; main window are
+replaced by those from &kchart;.
+</para>
+
+<screenshot>
+<screeninfo>&kchart; menus and toolbars embedded</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject><phrase>&kchart; menus and toolbars embedded</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>While you are in the chart, clicking with the &RMB; will bring the
+&kchart; settings menu which allows you to modify the parameters of the chart.
+Please see the &kchart; user manual to get more information on how to use
+&kchart;.</para>
+
+<para>Click anywhere with the &LMB; outside the chart to go back to
+&kpresenter; slide.</para>
+
+<para>A single click on the chart  will allow you to drag it to change its
+location and also to drag the borders to make it bigger as with any other
+&kpresenter; object. Double click on the chart to get into &kchart; mode and
+modify any of the chart property.</para>
+
+</sect1>
+
+<sect1 id="addshadow">
+<title>Add a shadow to the title text</title>
+
+<para>
+Let's continue enhancing our title page by adding a shadow
+behind the title. <mousebutton>Right</mousebutton> click anywhere on the
+title text. This achieves two things: the text box containing the title
+is selected, and a menu pops up.
+</para>
+
+<para>
+Select the <guimenuitem>Shadow</guimenuitem> option in the popup menu.
+</para>
+
+<screenshot>
+<screeninfo>The context menu</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut15.png" format="PNG"/></imageobject>
+<textobject><phrase>The context menu</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel>Shadow</guilabel> dialog pops up. The distance between the
+shadow and the text is currently 0 so the shadow cannot be seen (this
+part of the dialog box is highlighted in red.)
+</para>
+
+<screenshot>
+<screeninfo>The <guilabel>Shadow</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut16.png" format="PNG"/></imageobject>
+<textobject><phrase>The <guilabel>Shadow</guilabel>
+dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Increase the distance value to 3. The effect of changing the distance
+can be seen in the preview window. Now click <guibutton>OK</guibutton>.
+</para>
+
+<screenshot>
+<screeninfo>Adding a shadow to the title</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut17.png" format="PNG"/></imageobject>
+<textobject><phrase>Adding a shadow to the title</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now the title has a shadow!
+</para>
+
+<screenshot>
+<screeninfo>The new shadowed title</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut18.png" format="PNG"/></imageobject>
+<textobject><phrase>The new shadowed title</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+</sect1>
+
+<sect1 id="textcolor">
+<title>Change the color of the title text</title>
+
+<para>
+Let's finish by changing the color of the title text from black to
+blue. To do so, select the title text by double-clicking the text box.
+</para>
+
+<para>
+Change the color to blue by clicking on the <guiicon>dark blue A</guiicon>
+icon on the right side of the editing window (this icon has
+a Color... tooltip) or choose
+the <guimenu>Text</guimenu> menu and then click on
+<guimenuitem>Color...</guimenuitem>.</para>
+
+<screenshot>
+<screeninfo>The color palette</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut19.png" format="PNG"/></imageobject>
+<textobject><phrase>The color palette</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Click <guilabel>OK</guilabel> in the Select Color dialog. Changing the color of
+the selected text to blue changes its appearance. The exact color that
+highlighted text turns depends on your system color scheme.
+</para>
+
+<screenshot>
+<screeninfo>Highlighted text</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut20.png" format="PNG"/></imageobject>
+<textobject><phrase>Highlighted text</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now click away from the text to de-select it.
+</para>
+
+<screenshot>
+<screeninfo>The finished title</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut21.png" format="PNG"/></imageobject>
+<textobject><phrase>The finished title</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now that there are two slides, why not try a slide show! To start the
+slide show, press the <guiicon>play</guiicon> button (the gray arrow) on
+the top toolbar. The first slide should appear on your screen.
+</para>
+
+<screenshot>
+<screeninfo>The first slide</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut22.png" format="PNG"/></imageobject>
+<textobject><phrase>The first slide</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+To advance from the first slide to the next, just click anywhere on the
+screen, or use the <keycap>Page Down</keycap> key.
+</para>
+
+<screenshot>
+<screeninfo>The second slide</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="tut23.png" format="PNG"/></imageobject>
+<textobject><phrase>The second slide</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+To exit the slide show, <mousebutton>right</mousebutton> click, and then
+select the <guimenuitem>End</guimenuitem> option from the
+popup menu.
+</para>
+
+</sect1>
+
+</chapter>

@@ -1,0 +1,12 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Example" version="1">
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="copy"/>
+  <Action name="cut"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="editToolBar"><Text>Edit</Text>
+  <Action name="copy"/>
+  <Action name="cut"/>
+</ToolBar>
+</kpartgui>

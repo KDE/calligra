@@ -1,0 +1,284 @@
+% Attention : this files is not up to date anymore.
+% See the status.html file in this directory or at www.koffice.org (I/O filters->status->latex)
+% http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~/koffice/filters/kword/latex/status.html#export?content-type=text/html
+
+<PAPER>
+	- format			SUPORTED
+	- ptWidth			SUPORTED
+	- ptHeight			SUPORTED
+	- mmWidth ="210"		SUPORTED
+	- mmHeight="297"		SUPORTED
+	- inchWidth ="8.26772"		SUPORTED
+	- inchHeight="11.6929"		SUPORTED
+	- orientation			SUPORTED
+	- columns="1"			SUPORTED
+	- ptColumnspc="3"		ANALIZED
+	- mmColumnspc="1.05833"		ANALIZED
+	- inchColumnspc="0.0416667"	ANALIZED
+	- hType="0"			SUPORTED
+		0...On all pages (even/odd) the same headers	\chead
+		1...Different header only on first page
+		2...Different headers for even/odd pages	\fancyhead
+	- fType="0"			SUPORTED
+	- ptHeadBody="9"		SUPORTED
+	- ptFootBody="9"		SUPORTED
+	- mmHeadBody="3.5"		SUPORTED
+	- mmFootBody="3.5"		SUPORTED
+	- inchHeadBody="0.137795"	SUPORTED
+	- inchFootBody="0.137795"	SUPORTED
+
+	<PAPERBORDERS>			ALL SUPORTED EXCEPT FOR BOTTOM (don't exist)
+					SPECIAL USE FOR Right and Left.
+	- mmLeft="0"
+	- mmTop="0"
+	- mmRight="0"
+	- mmBottom="0"
+	- ptLeft="0"
+	- ptTop="0"
+	- ptRight="0"
+	- ptBottom="0"
+	- inchLeft="0"
+	- inchTop="0"
+	- inchRight="0"
+	- inchBottom="0"
+
+<ATTRIBUTES>
+	- processing="1"
+		0..."Normal" document (Wordprocessing)
+		1...DTP-document (DTPing)
+	- standardpage="1"
+	- hasHeader="0"
+	- hasFooter="0"
+	- unit="mm"
+<FOOTNOTEMGR>
+	<START value="1"/>
+		- value="1"
+	<FORMAT>
+		- superscript="1"
+		- type="1"
+	<FIRSTPARAG>
+		- ref="(null)"
+
+<FRAMESETS>
+
+<FRAMESET>
+	- frameType="1"
+		- 0...Base frame (for internal use only!!!)
+	   	- 1...Text frame
+	    	- 2...Picture frame
+	    	- 3...Part frame (e.g. KImage-Part)
+	- autoCreateNewFrame="1"
+	- frameInfo="0"			SUPORTED
+		- 0...Body
+		- 1...First header
+		- 2...Odd header
+		- 3...Even header
+		- 4...First footer
+		- 5...Odd footer
+		- 6...Even footer
+	- grpMgr="grpmgr_0"
+	- row="0"
+	- col="1"
+	- removeable="0"
+
+<FRAME>
+	left="28"
+	top="42"
+	right="566"
+	bottom="798"
+	runaround="1"
+		0...Don't run around frame
+		1...Run around bounding rectangle
+		2...Run around contur
+	runaGapPT="2"
+	runaGapMM="1"
+	runaGapINCH="0.0393701"
+	lWidth="1"
+	lRed="255"
+	lGreen="255"
+	lBlue="255"
+	lStyle="0"
+		0...Solid
+		1...Dash
+		2...Dot
+		3...Dash-Dot
+		4...Dash-Dot-Dot
+	rWidth="1"
+	rRed="255"
+	rGreen="255"
+	rBlue="255"
+	rStyle="0"
+	tWidth="1"
+	tRed="255"
+	tGreen="255"
+	tBlue="255"
+	tStyle="0"
+	bWidth="1"
+	bRed="255"
+	bGreen="255"
+	bBlue="255"
+	bStyle="0"
+	bkRed="255"
+	bkGreen="255"
+	bkBlue="255"
+	bleftpt="0"
+	bleftmm="0"
+	bleftinch="0"
+	brightpt="0"
+	brightmm="0"
+	brightinch="0"
+	btoppt="0"
+	btopmm="0"
+	btopinch="0"
+	bbottompt="0"
+	bbottommm="0"
+	bbottominch="0"
+
+<PARAGRAPH>
+	- <TEXT>		SUPORTED :))
+	- <NAME>		ANLYSED
+		- name="Footnote/Endnote_1"
+	<INFO>
+		- info="0"
+			- 0...No "special" information
+			- 1...Footnote (see <NAME>)
+	<HARDBRK>
+		- frame="0"
+			- 0...let it flow
+			- 1...hard brake -> next frame
+
+	<FORMATS>
+		- <FORMAT>
+			- id="1"	ANALYSED
+				- 0...none (mustn't be in a file)
+				- 1..."normal" text
+				- 2...a picture
+				- 3...tabulator
+				- 4...a variable
+				- 5...a footnote
+			- pos="0"
+			- len="5"
+
+   		- <FORMAT id="1" ...> texte
+			COLOR			SUPORTED
+			FONT			ANALYSED
+			SIZE			SUPORTED
+			WEIGHT			SUPORTED
+			ITALIC			SUPORTED
+			UNDERLINE		SUPORTED
+			VERTALIGN		SUPORTED
+
+		- <FORMAT id="2"...>
+			- <FILENAME value="/home/..."/>
+
+		- <FORMAT id="3"...>
+
+		- <FORMAT id="4"...>
+			- <TYPE type="0"/>
+				- 0...date (fix)
+				- 1...date (variable)
+				- 2...time (fix)
+				- 3...time (variable)
+				- 4...page number
+			- <POS frameSet="1" frame="1" pageNum="1"/>
+
+			- <DATE year="1999" month="8" day="22" fix="1"/>
+			- <FRMAT>
+			- <COLOR red="0" green="0" blue="0"/>
+			- <FONT name="times"/>
+			- <SIZE value="12"/>
+			- <WEIGHT value="50"/>
+			- <ITALIC value="0"/>
+			- <UNDERLINE value="0"/>
+			- <VERTALIGN value="0"/>
+			- </FRMAT>
+
+		- <FORMAT id="5"...>	ANALYSED
+			- <INTERNAL>
+			- <PART from="1" to="-1" space="-"/>
+			- </INTERNAL>
+			- <RANGE start="1" end="1"/>
+			- <TEXT before="[ " after=" ]"/>
+			- <DESCRIPT ref="Footnote/Endnote_1"/>
+			- <FRMAT>
+			- <COLOR red="0" green="0" blue="0"/>
+			- <FONT name="times"/>
+			- <SIZE value="12"/>
+			- <WEIGHT value="50"/>
+			- <ITALIC value="0"/>
+			- <UNDERLINE value="0"/>
+			- <VERTALIGN value="2"/>
+			- </FRMAT>
+
+<LAYOUT>
+	- <NAME>
+		- value="Standard"	SUPORTED
+	- <FOLLOWING>
+		- name="Standard"	SUPORTED
+	- <FLOW>			SUPORTED
+		- value="0"
+			- 0...left
+			- 1...right
+			- 2...center
+			- 3...block
+	- <OHEAD>
+		- pt="0"
+		- mm="0"
+		- inch="0"
+
+	- <OFOOT>
+		- pt="0"
+		- mm="0"
+		- inch="0"
+
+	- <IFIRST pt="0" mm="0" inch="0"/>
+	- <ILEFT pt="0" mm="0" inch="0"/>
+	- <LINESPACE pt="0" mm="0" inch="0"/>
+
+	- <COUNTER>
+		- type="0"			ANALYSED
+			- 0...none
+			- 1...arabic numbers (e.g. "1")
+			- 2...low letter (e.g. "a")
+			- 3...captial letter (e.g. "A")
+			- 4...low letters roman number (e.g. "ii")
+			- 5...cap. letters roman number (e.g. "IX")
+			- 6...bullet (e.g. "-")
+		- depth="0"			ANALYSED SUPORTED
+		- bullet="176"			ANALYSED
+		- start="1"
+		- numberingtype="1"		ANALYSED SUPORTED
+		- lefttext=""
+		- righttext=""
+		- bulletfont="times"
+
+	- <LEFTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+	- <RIGHTBORDER red="255" green="255" blue="255" style="0" width="0"/>
+	- <TOPBORDER red="255" green="255" blue="255" style="0" width="0"/>
+	- <BOTTOMBORDER red="255" green="255" blue="255" style="0" width="0"/>
+		- red, green, blue             color
+		- style="0"                    linestyle
+			- 0...solid
+			- 1...dash
+			- 2...dot
+			- 3...dash-dot-dash-dot-...
+			- 4...dash-dot-dot-dash-dot-dot-...
+		- width="0"
+
+<FORMAT>                     The format of this "style" (see <FORMAT>)
+ <COLOR red="0" green="0" blue="0"/>
+ <FONT name="times"/>
+ <SIZE value="12"/>
+ <WEIGHT value="50"/>
+ <ITALIC value="0"/>
+ <UNDERLINE value="0"/>
+ <VERTALIGN value="0"/>
+</FORMAT>
+
+	- <TABULATOR mmpos="64.2055" ptpos="182" inchpos="2.52778" type="0"/>
+		- type="0"
+			- 0...left
+			- 1...center
+			- 2...right
+			- 3...decimal point
+

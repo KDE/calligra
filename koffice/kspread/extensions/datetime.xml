@@ -1,0 +1,600 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Date &amp; Time</GroupName>
+
+    <Function>
+      <Name>WEEKDAY</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Date</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Method (optional)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The WEEKDAY() function returns the weekday of given date. If the method is 1 (default) WEEKDAY() returns 1 for sunday, 2 for monday,.. If the method is 2, monday is 1, tuesday 2, ... and if the method is 3 WEEKDAY() returns 0 for monday, 1 for tuesday,...</Text>
+	<Syntax>WEEKDAY(date; method)</Syntax>
+	<Example>WEEKDAY("2002-02-22"; 2) returns 5</Example>
+        <Related>DAYNAME</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DAYS360</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Date1</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Date2</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Method</Comment>
+	<Type>Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The DAYS360() function returns the number of days from date1 to date2 using a 360-day calendar in which all months are assumed to have 30 days. If method is false (default) the US method will be used, the European otherwise.</Text>
+	<Syntax>DAYS360(date1; date2; method)</Syntax>
+	<Example>DAYS360("2/22/2002"; "4/21/2002"; FALSE) returns 59</Example>
+        <Related>DAYS</Related>
+        <Related>MONTHS</Related>
+        <Related>WEEKS</Related>
+        <Related>YEARS</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TIMEVALUE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The TIMEVALUE() function returns a number (between 0 and 1) representing the time of day.</Text>
+	<Syntax>TIMEVALUE(time)</Syntax>
+	<Example>TIMEVALUE("10:05:02") returns 0.42</Example>
+        <Related>DATEVALUE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DATEVALUE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Date</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The DATEVALUE function returns a number representing the day, i.e the number of days elapsed since December 31, 1899.</Text>
+	<Syntax>DATEVALUE(date)</Syntax>
+	<Example>DATEVALUE("2/22/2002") returns 37309</Example>
+        <Related>TIMEVALUE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>EDATE</Name>
+      <Type>Date</Type>
+      <Parameter>
+	<Comment>Date</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Months</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The EDATE functions returns the date that is specified by a given date and a number of months before or after that date.</Text>
+	<Syntax>EDATE(date; months)</Syntax>
+	<Example>EDATE("2/22/2002"; 3) returns "5/22/2002"</Example>
+	<Example>EDATE("3/31/2002"; -1) returns "2/28/2002"</Example>
+        <Related>DATE</Related>
+        <Related>EOMONTH</Related>
+      </Help>
+    </Function>    
+
+    <Function>
+      <Name>EOMONTH</Name>
+      <Type>Date</Type>
+      <Parameter>
+	<Comment>Date</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Months</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The EOMONTH functions returns the last day in the month specified by a date and the number of months from that date.</Text>
+	<Syntax>EOMONTH(date; months)</Syntax>
+	<Example>EOMONTH("2/22/2002"; 3) returns "5/31/2002"</Example>
+	<Example>EOMONTH("3/12/2002"; -1) returns "2/28/2002"</Example>
+	<Example>EOMONTH("3/12/2002"; 0) returns "3/31/2002"</Example>
+        <Related>EDATE</Related>
+        <Related>MONTH</Related>
+      </Help>
+    </Function>    
+
+    <Function>
+      <Name>YEAR</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Date</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The YEAR functions returns the year of a date. If no parameter is specified the current year gets returned.</Text>
+	<Syntax>YEAR(date)</Syntax>
+	<Example>YEAR("2/22/2002") returns 2002</Example>
+	<Example>YEAR(2323.1285) returns 1906</Example>
+        <Related>DAY</Related>
+        <Related>MONTH</Related>
+      </Help>
+    </Function>    
+
+    <Function>
+      <Name>MONTH</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Date</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The MONTH functions returns the month of a date. If no parameter is specified the current month gets returned.</Text>
+	<Syntax>MONTH(date)</Syntax>
+	<Example>MONTH("2/22/2002") returns 2</Example>
+	<Example>MONTH(2323.1285) returns 5</Example>
+        <Related>DAY</Related>
+        <Related>YEAR</Related>
+      </Help>
+    </Function>    
+
+    <Function>
+      <Name>DAY</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Date</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The DAY functions returns the day of a date. If no parameter is specified the current day gets returned.</Text>
+	<Syntax>DAY(date)</Syntax>
+	<Example>DAY("2/22/2002") returns 22</Example>
+	<Example>DAY(2323.1285) returns 11</Example>
+        <Related>MONTH</Related>
+        <Related>YEAR</Related>
+      </Help>
+    </Function>    
+
+    <Function>
+      <Name>HOUR</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HOUR functions returns the hour of a time. If no parameter is specified the current hour gets returned.</Text>
+	<Syntax>HOUR(time)</Syntax>
+	<Example>HOUR("22:10:12") returns 22</Example>
+	<Example>HOUR(0.1285) returns 3</Example>
+        <Related>MINUTE</Related>
+        <Related>SECOND</Related>
+      </Help>
+    </Function>    
+
+    <Function>
+      <Name>MINUTE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The MINUTE functions returns the minutes of a time. If no parameter is specified the current minute is returned.</Text>
+	<Syntax>MINUTE(time)</Syntax>
+	<Example>MINUTE("22:10:12") returns 10</Example>
+	<Example>MINUTE(0.1234) returns 57</Example>
+        <Related>HOUR</Related>
+        <Related>SECOND</Related>
+      </Help>
+    </Function>    
+
+    <Function>
+      <Name>SECOND</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The SECOND functions returns the seconds of a time. If no parameter is specified the current second is returned.</Text>
+	<Syntax>SECOND(time)</Syntax>
+	<Example>SECOND("22:10:12") returns 12</Example>
+	<Example>SECOND(0.1234) returns 42</Example>
+        <Related>HOUR</Related>
+        <Related>MINUTE</Related>
+      </Help>
+    </Function>    
+
+    <Function>
+      <Name>WEEKS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First (earlier) date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Calculation mode</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The WEEKS() function returns the difference between two dates in weeks.The third parameter indicates the calculation mode: if the mode is 0, WEEKS() returns the maximal possible number of weeks between those days. If the mode is 1, it only returns the number of whole weeks in between.</Text>
+	<Syntax>WEEKS(date2; date1; mode)</Syntax>
+	<Example>WEEKS("2002-02-18"; "2002-02-26"; 0) returns 1, because there is one week and 1 day in between</Example>
+	<Example>WEEKS("2002-19-02"; "2002-19-02"; 1) returns 0, because there is not a whole week in between, starting at the first day of the week (monday or sunday, depending on your local settings)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MONTHS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First (earlier) date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Calculation mode</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The MONTHS() function returns the difference between two dates in months.The third parameter indicates the calculation mode: if the mode is 0, MONTHS() returns the maximal possible number of months between those days. If the mode is 1, it only returns the number of complete months in between.</Text>
+	<Syntax>MONTHS(date2; date1; mode)</Syntax>
+	<Example>MONTHS("2002-01-18"; "2002-02-26"; 0) returns 1, because there is 1 month and 8 days in between</Example>
+	<Example>MONTHS("2002-01-19"; "2002-02-26"; 1) returns 0, because there is not a whole month in between, starting at the first day of the month</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>YEARS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First (earlier) date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Calculation mode</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The YEARS() function returns the difference between two dates in years. The third parameter indicates the calculation mode: if the mode is 0, YEARS() returns the maximal possible number of years between those days. If the mode is 1, it only returns whole years, starting at the 1st Jan and ending on the 31st Dec.</Text>
+	<Syntax>YEARS(date2; date1; mode)</Syntax>
+	<Example>YEARS("2001-02-19"; "2002-02-26"; 0) returns 1, because there is one year and 7 days in between</Example>
+	<Example>YEARS("2002-02-19"; "2002-02-26"; 1) returns 0, because there is not a whole year in between, starting at the first day of the year</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DAYS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First (earlier) date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The DAYS() function returns the difference between two dates in days.</Text>
+	<Syntax>DAYS(date2; date1)</Syntax>
+	<Example>DAYS("2002-02-22"; "2002-02-26") returns 4</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DAYOFYEAR</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Month</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Day</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DAYOFYEAR() function returns the number of the day in the year (1...365).</Text>
+	<Syntax>DAYOFYEAR(year;month;date)</Syntax>
+	<Example>DAYOFYEAR(2000;12;1) returns 336</Example>
+	<Example>DAYOFYEAR(2000;2;29) returns 60</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DATE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Month</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Day</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DATE() function returns the date formatted with local parameters.</Text>
+	<Syntax>DATE(year;month;date)</Syntax>
+	<Example>DATE(2000;5;5) returns Friday 05 May 2000</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TIME</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Hours</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Minutes</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Seconds</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The TIME() function returns the time formatted with local parameters.</Text>
+	<Syntax>TIME(hours;minutes;seconds)</Syntax>
+	<Example>TIME(10;2;2) returns 10:02:02</Example>
+        <Example>TIME(10;70;0) returns 11:10:0</Example>
+        <Example>TIME(10;-40;0) returns 9:20:0</Example>
+      </Help>
+    </Function>
+    
+    <Function>
+     <Name>HOURS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The HOURS() function returns the value of the hours in a time expression.</Text>
+	<Syntax>HOURS(time)</Syntax>
+	<Example>HOURS("10:5:2") returns 10</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>ISLEAPYEAR</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The function ISLEAPYEAR() returns True if the given year is leap.</Text>
+	<Syntax>ISLEAPYEAR(year)</Syntax>
+	<Example>ISLEAPYEAR(2000) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>DAYSINMONTH</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Month</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The function DAYSINMONTH() returns number of days in the given year and month.</Text>
+	<Syntax>DAYSINMONTH(year;month)</Syntax>
+	<Example>DAYSINMONTH(2000;2) returns 29</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>DAYSINYEAR</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The function DAYSINYEAR() returns the number of days in the given year.</Text>
+	<Syntax>DAYSINYEAR(year)</Syntax>
+	<Example>DAYSINYEAR(2000) returns 366</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>WEEKSINYEAR</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Year</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The function WEEKSINYEAR() returns the number of weeks in the given year.</Text>
+	<Syntax>WEEKSINYEAR(year)</Syntax>
+	<Example>WEEKSINYEAR(2000) returns 52</Example>
+      </Help>
+    </Function>
+
+    <Function>	  
+     <Name>MINUTES</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The MINUTES() function returns the value of the minutes in a time expression.</Text>
+	<Syntax>MINUTES(time)</Syntax>
+	<Example>MINUTES("10:5:2") returns 5</Example>
+      </Help>
+    </Function>
+
+    <Function>
+     <Name>SECONDS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The SECONDS() function returns the value of the seconds in a time expression.</Text>
+	<Syntax>SECONDS(time)</Syntax>
+	<Example>SECONDS("10:5:2") returns 2</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DAYNAME</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number of day in week (1..7)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DAYNAME() function returns the name of the day of the week (1..7). In some countries the first day of the week is Monday, while in others the first day of the week is Sunday.</Text>
+	<Syntax>DAYNAME(weekday)</Syntax>
+	<Example>DAYNAME(1) returns Monday (if the week starts on Monday)</Example>
+        <Related>WEEKDAY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MONTHNAME</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number of month (1..12)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The MONTHNAME() function returns the name of the month (1...12).</Text>
+	<Syntax>MONTHNAME(number)</Syntax>
+	<Example>MONTHNAME(5) returns May</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CURRENTDATE</Name>
+      <Type>Date</Type>
+      <Help>
+	<Text>The CURRENTDATE() function returns the current date. It is equivalent to the TODAY function.</Text>
+	<Syntax>CURRENTDATE()</Syntax>
+	<Example>CURRENTDATE() returns "Saturday 13 April 2002"</Example>
+        <Related>CURRENTTIME</Related>
+        <Related>TODAY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TODAY</Name>
+      <Type>Date</Type>
+      <Help>
+	<Text>The TODAY() function returns the current date.</Text>
+	<Syntax>TODAY()</Syntax>
+	<Example>TODAY() returns "Saturday 13 April 2002"</Example>
+        <Related>CURRENTTIME</Related>
+        <Related>NOW</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NOW</Name>
+      <Type>Date</Type>
+      <Help>
+	<Text>The NOW() function returns the current date and time. It is identical with CURRENTDATETIME and provided for compatibility with other applications.</Text>
+	<Syntax>NOW()</Syntax>
+	<Example>NOW() returns "Saturday 13 April 2002 19:12:01"</Example>
+        <Related>CURRENTTIME</Related>
+        <Related>TODAY</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CURRENTDATETIME</Name>
+      <Type>Date</Type>
+      <Help>
+	<Text>The CURRENTDATETIME() function returns the current date and time.</Text>
+	<Syntax>CURRENTDATETIME()</Syntax>
+	<Example>CURRENTDATETIME() returns "Saturday 13 April 2002 19:12:01"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CURRENTTIME</Name>
+      <Type>Date</Type>
+      <Help>
+	<Text>The CURRENTTIME() function returns the current time formatted with local parameters.</Text>
+	<Syntax>CURRENTTIME()</Syntax>
+	<Example>CURRENTTIME() returns "19:12:01"</Example>
+      </Help>
+    </Function>
+
+	<Function>
+      <Name>EASTERSUNDAY</Name>
+      <Type>Date</Type>
+	  <Parameter>
+		<Comment>Year</Comment>
+		<Type>Int</Type>
+      </Parameter>
+      <Help>
+		<Text>The EASTERSUNDAY() function returns the date which corresponds to Easter Sunday in the year given as the parameter.</Text>
+		<Syntax>EASTERSUNDAY(year)</Syntax>
+		<Example>EASTERSUNDAY(2003) returns "20th April 2003"</Example>
+      </Help>
+    </Function>
+
+	<Function>
+      <Name>ISOWEEKNUM</Name>
+      <Type>Int</Type>
+	  <Parameter>
+		<Comment>Date</Comment>
+		<Type>String</Type>
+      </Parameter>
+      <Help>
+		<Text>The ISOWEEKNUM() function returns number of the week which the date falls into. Note that this function is compliant with the ISO8601 standard: a week always begins on a Monday, and ends on a Sunday. The first week of a year is that week which contains the first Thursday of the year.</Text>
+		<Syntax>ISOWEEKNUM(date)</Syntax>
+		<Example>ISOWEEKNUM(A1) returns 51 when A1 is "21st of Dec".</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

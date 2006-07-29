@@ -1,0 +1,240 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="30">
+<MenuBar>
+ <Menu name="file"><text>&amp;File</text>
+  <Separator/>
+  <Action name="createTemplate"/>
+ </Menu>
+ <Menu name="Edit"><text>&amp;Edit</text>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
+  <Separator/>
+  <Action name="cut"/>
+  <Action name="copy"/>
+  <Action name="paste"/>
+  <Action name="specialPaste"/>
+  <Action name="insertCellCopy"/>
+  <Menu name="Fill"><text>Fi&amp;ll</text>
+        <Action name="fillDown"/>
+        <Action name="fillRight"/>
+        <Action name="fillUp"/>
+        <Action name="fillLeft"/>
+  </Menu>      
+  <Separator/>
+  <Action name="edit_find"/>
+  <Action name="edit_find_next"/>
+  <Action name="edit_find_last"/>
+  <Action name="edit_replace"/>
+  <Menu name="Clear"><text>Clear</text>
+        <Action name="cleartext"/>
+        <Action name="clearcomment"/>
+        <Action name="clearvalidity"/>
+        <Action name="clearconditional"/>
+  </Menu>
+  <Action name="delete"/>
+  <Action name="removeHyperlink"/>
+  <Separator/>
+  <Action name="conditional"/>
+  <Action name="validity"/>
+  <Action name="editCell"/>
+<!--  <Separator/>
+  <Action name="transform"/>-->
+ </Menu>
+ <Menu name="View"><text>&amp;View</text>
+  <Action name="view_newview"/>
+  <ActionList name="view_closeallviews"/>
+  <Separator/>
+  <ActionList name="view_split" />
+  <Action name="gotoCell"/>
+  <Action name="showPageBorders"/>
+  <Action name="showCommentIndicator"/>
+  <Separator/>
+  <Action name="view_zoom"/>
+ </Menu>
+ <Menu name="Insert"><text>&amp;Insert</text>
+  <Action name="menuInserteheet"/>
+  <Separator/>       
+  <Menu name="Comment"><text>Cell Commen&amp;t</text>
+    <Action name="addmodifycomment"/>
+    <Action name="showcomment"/>
+    <Action name="removecomment"/>
+  </Menu>
+  <Action name="insertMathExpr"/>
+  <Action name="insertFormula"/>
+  <Action name="series"/>
+  <Action name="insertHyperlink"/>
+  <Action name="insertSpecialChar"/>
+  <Separator/>       
+  <Action name="insertPart"/>
+  <Action name="insertChart"/>
+  <Action name="insertPicture"/>
+  <Separator/>
+  <Menu name="ExternalData"><text>&amp;External Data</text>
+    <Action name="insertFromDatabase"/>
+    <Action name="insertFromTextfile"/>
+    <Action name="insertFromClipboard"/>
+  </Menu>        
+ </Menu>
+ <Menu name="Format"><text>F&amp;ormat</text>
+  <Action name="cellLayout"/>
+  <Action name="extra_properties"/>
+  <Action name="changeangle"/>
+  <Action name="decreaseindent"/>
+  <Action name="increaseindent"/>
+  <Action name="precplus"/>
+  <Action name="precminus"/>
+  <Separator/>
+  <Action name="adjust"/>
+  <Menu name="Row"><text>&amp;Row</text>
+    <Action name="resizeRow"/>
+    <Action name="equalizeRow"/>
+    <Action name="hideRow"/>
+    <Action name="showRow"/>
+  </Menu>
+  <Menu name="Column"><text>&amp;Column</text>
+    <Action name="resizeCol"/>
+    <Action name="equalizeCol"/>
+    <Action name="hideColumn"/>
+    <Action name="showColumn"/>
+  </Menu>
+  <Menu name="Sheet"><text>&amp;Sheet</text>
+  <Action name="removeSheet"/>
+  <Action name="hideSheet"/>
+  <Action name="showSheet"/>
+  <Separator/>
+  <Action name="sheetProperties" />
+  </Menu>
+  <Separator/>
+  <Action name="sheetFormat"/>
+  <Action name="styles"/>  
+  <Action name="stylemenu"/>
+  <Action name="createStyle"/>        
+  <Separator/>
+  <Action name="paperLayout"/>
+  <Menu name="Comment"><text>&amp;Print Range</text>
+    <Action name="definePrintRange"/>
+    <Action name="resetPrintRange"/>
+  </Menu>
+ </Menu>
+ <Menu name="Data"><text>&amp;Data</text>
+  <Action name="sort"/>
+  <Action name="textToColumns"/>
+  <Separator/>
+  <Action name="insertColumn"/>
+  <Action name="insertRow"/>
+  <Action name="deleteColumn"/>
+  <Action name="deleteRow"/>
+  <Separator/>
+  <Action name="insertCell"/>
+  <Action name="removeCell"/>
+  <Separator/>
+  <Action name="mergecell"/>
+  <Action name="dissociatecell"/>
+  <Separator/>
+  <Action name="showArea"/>
+  <Separator/>
+  <Action name="subtotals"/>
+  <Action name="goalSeek"/>
+  <Action name="consolidate"/>
+ </Menu>
+ <Menu name="tools"><text>&amp;Tools</text>
+  <Action name="spelling"/>
+  <Separator/>
+  <Action name="sortlist"/>
+  <Separator/>
+  <Action name="protectSheet"/>
+  <Action name="protectDoc"/>
+  <Separator/>
+  <Action name="RecalcWorkSheet"/>
+  <Action name="RecalcWorkBook"/>
+  <Separator/>
+ </Menu>
+ <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="showStatusBar" />
+  <Action name="showTabBar" />
+  <Action name="showFormulaBar"/>
+  <Separator group="settings_show"/>
+  <Action name="preference" group="settings_configure"/>
+ </Menu>
+</MenuBar>
+<Menu name="calc_popup">
+ <Action name="menu_none"/>
+ <Separator/>
+ <Action name="menu_average"/>
+ <Action name="menu_count"/>
+ <Action name="menu_counta"/>
+ <Action name="menu_max"/>
+ <Action name="menu_min"/>
+ <Action name="menu_sum"/>
+</Menu>
+<ToolBar fullWidth="true" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
+ <Action name="koffice_undo"/>
+ <Action name="koffice_redo"/>
+ <Separator/>
+ <Action name="cut"/>
+ <Action name="copy"/>
+ <Action name="paste"/>
+ <Separator/>
+ <Action name="insertHyperlink"/>
+ <Action name="autoSum"/>
+ <Action name="sortInc"/>
+ <Action name="sortDec"/>
+ <Separator/>
+ <Action name="insertChart"/>
+ <Action name="insertPart"/>
+ <Separator/>
+ <Action name="view_zoom"/>
+</ToolBar>
+<ToolBar fullWidth="true" hidden="true" name="navigationToolBar"><text>Navigation</text>
+ <Action name="firstSheet"/>
+ <Action name="previousSheet"/>
+ <Action name="nextSheet"/>
+ <Action name="lastSheet"/>
+</ToolBar>
+<ToolBar fullWidth="true" name="fontPropertyToolBar"><text>Format</text>
+ <Action name="selectFont"/>
+ <Action name="selectFontSize"/>
+ <Separator/>
+ <Action name="bold"/>
+ <Action name="italic"/>
+ <Action name="underline"/>
+ <Separator/>
+ <Action name="left"/>
+ <Action name="center"/>
+ <Action name="right"/>
+ <Separator/>
+ <Action name="top"/>
+ <Action name="middle"/>
+ <Action name="bottom"/>
+ <Action name="multiRow"/>
+ <Separator/>
+ <Action name="percent"/>
+ <Action name="precplus"/>
+ <Action name="precminus"/>
+ <Action name="money"/>
+</ToolBar>
+<ToolBar fullWidth="true" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
+ <Action name="borderLeft"/>
+ <Action name="borderTop"/>
+ <Action name="borderRight"/>
+ <Action name="borderBottom"/>
+ <Action name="borderOutline"/>
+ <Action name="borderAll"/>
+ <Action name="borderRemove"/>
+ <Action name="borderColor"/>
+ <Separator/>
+ <Action name="dissociatecell"/>
+ <Action name="mergecell"/>
+ <Separator/>
+ <Action name="textColor"/>
+ <Action name="backgroundColor"/>
+</ToolBar>
+<Menu name="menupage_popup">
+  <Action name="renameSheet"/>
+  <Action name="insertSheet"/>
+  <Action name="removeSheet"/>
+  <Action name="hideSheet"/>
+  <Action name="showSheet"/>
+  <Separator/>
+  <Action name="sheetProperties" />
+</Menu>
+</kpartgui>

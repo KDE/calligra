@@ -1,0 +1,1375 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&kchart;">
+  <!ENTITY package "koffice"> 
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+  <!ENTITY dataeditor "Data Editor">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &kchart; Handbook</title>
+
+<!-- CURRENTLY MAINTAINED BY RAPHAEL LANGERHORST -->
+
+<authorgroup>
+<author>
+&Jonathan.Drews; &Jonathan.Drews.mail;
+</author>
+<author>
+<firstname>Raphael</firstname>
+<surname>Langerhorst</surname>
+<email>raphael.langerhorst@kdemail.net</email>
+</author>
+<!-- 
+<othercredit role="developer">
+&Matthias.Kalle.Dalheimer; &Matthias.Kalle.Dalheimer.mail;
+<contrib>Developer</contrib>
+</othercredit>
+-->
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2006-01-30</date>
+<releaseinfo>1.5.0</releaseinfo>
+
+<abstract>
+<para>
+&kchart; is an application for visualizing numerical data. It has many
+different chart types available like bar graphs, line plots, pie charts,
+ring charts and more.
+</para>
+<para>
+&kchart; is a &koffice; component and is very well integrated with &kspread;
+to allow visualization of spreadsheet data. But it is also possible to use
+&kchart; as a standalone application or integrate it in other &koffice;
+components.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>kdeutils</keyword>
+<keyword>Kchart</keyword>
+<keyword>chart</keyword>
+<keyword>graph</keyword>
+<keyword>plot</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+
+<title>Introduction</title>
+
+<para>
+&kchart; is a tool for visualizing numerical data. It can be used
+as a standalone application with a simple &dataeditor;. But as a
+&koffice; component it offers very flexible integration. &kspread;
+uses the &kchart; component for charts and diagrams. &kspread;
+can be seen as a very powerful data provider for &kchart; input.
+</para>
+<para>
+But embedding is not limited to &kspread;. A &kchart; chart can
+be embedded in many of the &koffice; components like &kword;,
+&kpresenter; or &kivio;.
+</para>
+<para>
+To start with we will look at the user interface of &kchart;
+and how it can be used as a standalone application. When we
+are familiar with &kchart; we will investigate the charting
+capabilities it offers together with &kspread;.
+</para>
+</chapter>
+
+<chapter id="userinterface">
+<title>The User Interface</title>
+<sect1 id="mainuserinterface">
+<title>Main Application Interface</title>
+<para>
+We will take a look at a simple example to get to know &kchart;.
+Along the way we will also discuss the user interface at length
+so you will learn about many details of the component.
+</para>
+<para>
+When you start &kchart; as a standalone application you get
+the usual startup dialog where you can choose between different
+templates or load existing chart documents.
+</para>
+<screenshot>
+<screeninfo>&kchart; Startup Dialog</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-startupdialog.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+You can choose between various ways to startup &kchart;. On the left, you can
+see three options: <guilabel>Recent Documents</guilabel>, 
+<guilabel>Charts</guilabel> templates and <guilabel>Open Existing
+Document...</guilabel>. The first option lets you choose between
+recently opened charts, the second is for creating a
+new chart from various templates and the third is for opening an existing
+chart with a file dialog.
+</para>
+<para>
+For now we will start with the default template. Select
+<guilabel>Charts</guilabel> in the left area and then select
+<guilabel>Bar Chart</guilabel> in the main template area. Normally
+this template should already be selected after choosing
+<guilabel>Charts</guilabel>. 
+</para>
+<para>
+If you decide to always start &kchart; with a selected template as default
+you can also check <guilabel>Always use this template</guilabel>.
+</para>
+<para>
+Click  the <guibutton>Use This Template</guibutton>
+button on the right, under the template preview.
+</para>
+<screenshot>
+<screeninfo>&kchart; User Interface</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-default.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+As you can see, there is already some example data present. &kchart;
+offers the default toolbar for creating a new chart, saving, loading
+and printing the chart. The second toolbar offers icons for editing
+the data, configuring the chart or using a configuration wizard.
+You can also switch between different chart types with the rest
+of the icons. Note that some of these chart types also have subtypes.
+</para>
+<para>
+The menu offers all standard entries, including shortcut and
+toolbar configuration and page layout for printing.
+</para>
+<para>
+Note that data editing is not available if you use &kchart; from
+within &kspread; because all data is provided by the spreadsheet.
+As a standalone application the &dataeditor; is an important part
+of the application.
+</para>
+</sect1>
+<sect1 id="wizard">
+<title>Chart Wizard</title>
+<para>
+The wizard is actually a very useful part of &kchart; for quickly
+setting up some basic options like chart type and chart labelling
+in a few easy steps.
+</para>
+<para>
+You can run the wizard at any time, it will always preserve your data
+and other configuration. Also, you can change every single configuration
+you do with the wizard later as well, without losing anything. In fact
+the wizard is just a way to set some basic and important options
+in one go.
+</para>
+<para>
+To start the wizard simply click on the
+<inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-wizard.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+
+<sect2 id="wizard-data">
+<title>Step 0 - Choosing the Data source</title>
+<screenshot>
+<screeninfo>Wizard Step 0 - Data source</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard0.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The first step in the wizard is to actually choose the data source.
+If the selected data area does not match the data you want,
+select the data now.</para>
+<para>
+Include cells that you want to use as row and column labels,
+if you want them in the chart.</para>
+<para>
+Then go to the next step with the <guibutton>Next &gt;</guibutton> 
+button. You can also choose <guibutton>Finish</guibutton> at any step
+if you are already comfortable with the setup done so far.
+</para>
+</sect2>
+
+<sect2 id="wizard-charttype">
+<title>Step 1 - Choosing the Chart Type</title>
+<screenshot>
+<screeninfo>Wizard Step 1 - Chart Type</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard1.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The next step in the wizard is to actually choose the primary
+type of the chart. This selection has the most important
+impact on how your data will be presented. Thus it should
+be chosen well. You can change the type of the chart with the
+icons in the toolbar without losing any data or configuration
+later on. In fact it is even considered normal to test all the
+various chart types to find the best fitting.
+</para>
+<para>
+In this example we choose the <guilabel>Lines</guilabel> type. Depending on the
+chosen chart type different options are available in the
+following steps.
+</para>
+<para>
+After chosing the type you can get to the next step with
+the <guibutton>Next &gt;</guibutton> button.
+</para>
+</sect2>
+<sect2 id="wizard-chartsubtype">
+<title>Step 2 - Choosing the Subtype</title>
+<screenshot>
+<screeninfo>Wizard Step 2 - Chart Sub Type</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard2.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+In case the chosen chart type has various sub types you can
+choose it in the second step. If the chart type has no sub types,
+this step will be skipped automatically.
+</para>
+<para>
+If you decide to change the sub type later, you can do this
+in the appropriate configuration dialog which will be shown
+later.
+</para>
+<para>
+You can simply leave the default selection and go to the next
+step. Of course you can chose any desired sub type if you want.
+</para>
+</sect2>
+<sect2 id="wizard-labelsandlegend">
+<title>Step 3 - Labels and Legend, Fonts</title>
+<screenshot>
+<screeninfo>Wizard Step 3 - Labels and Legend</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard3.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+In the third step you can set the text for the chart title,
+the axes and the legend. You can also configure the desired
+font in detail for each of these.
+</para>
+</sect2>
+<sect2 id="wizard-axes">
+<title>Step 4 - Axes</title>
+<screenshot>
+<screeninfo>Wizard Step 4 - Axes</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard4.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The last step of the wizard lets you set various options for
+the axes and other options, depending on the chart type.
+</para>
+<para>
+You can either choose <guibutton>Finish</guibutton> to accept
+the options for your chart, go <guibutton>&lt; Back</guibutton> and
+change various things or simply dismiss all options from the
+wizard by choosing <guibutton>Cancel</guibutton>.
+</para>
+<para>
+If you choose <guibutton>Finish</guibutton> all your choices in the wizard will
+be integrated in the chart and you can continue to enter
+some data and do some fine tuning of various options.
+</para>
+<para>
+Remember that the chart configuration dialog has many more
+options available, we will discuss these later.
+</para>
+</sect2>
+</sect1>
+<sect1 id="dataeditorinterface">
+<title>The &dataeditor;</title>
+<para>
+The &dataeditor; can be reached by selecting <menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Edit Data...</guimenuitem>
+</menuchoice> from the menu or by clicking on the
+<inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-data.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+<screenshot>
+<screeninfo>&dataeditor; in standalone mode</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-dataeditor.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The &dataeditor; can be used to set all values. You can also define
+the number of rows and columns.
+</para>
+<para> Depending on the chart type rows and columns have different
+representations. Each row can generally be considered to be one data
+series or data set while each column represents the values of all
+data sets at a certain location.
+</para>
+<para>
+The name of a data set can be changed by clicking on the row header
+(left of the first column with values). The name of a column can
+be changed by clicking on the column header (above the first
+row).
+</para>
+<para>
+The number of rows and columns can be adjusted to fit the needs.
+Since version 1.4 the restriction to 16 rows and 16 columns has been
+eliminated.
+</para>
+</sect1>
+<sect1 id="configurationinterface">
+<title>Chart Configuration</title>
+<para>
+&kchart; offers many configuration options for the chart. These are
+available in standalone mode and when embedded in &kspread;
+</para>
+<para>
+Depending on the chart type you have selected, the available
+options are slightly different. Let's choose the line chart
+type by clicking on the <inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-chart_line.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+<para>
+To get to the chart configuration dialog, select <menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Chart...</guimenuitem>
+</menuchoice> from the menu or click on the
+<inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-options.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+You might need to click on the right or left arrow at the top of the
+dialog to get all pages if the width of the dialog is too small.</para>
+<sect2 id="config-rowcol">
+<title>Row and Column Swapping</title>
+<screenshot>
+<screeninfo>Configuration page 1 - Row/column swapping</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config1.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The first configuration page can be used to swap the
+interpretation of rows and columns.
+By default one row is considered to be a data set
+and each column holds the individual values of the data
+series. Here you can choose to have a each column hold
+one data set. Note that the values are not really swapped
+but only their interpretation.
+</para>
+</sect2>
+<sect2 id="config-subtype">
+<title>Chart Subtype</title>
+<screenshot>
+<screeninfo>Configuration page 2 - Chart Subtype</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config2.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The second page can be used to select the desired sub type of
+a chart. The available sub types depend on the chart type, in
+this case the line chart. Some chart types have no sub type
+at all in which case this configuration page is not shown.
+You also get a preview for each subtype.
+</para>
+<para>
+Remember that the chart type can be chosen from the toolbar while
+the subtype can be set through this configuration dialog.
+</para>
+</sect2>
+<sect2 id="config-titlefooter">
+<title>Header and Footer</title>
+<screenshot>
+<screeninfo>Configuration page 3 - Header and Footer</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config3.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+On the third page you can set the title, the subtitle and the footer of
+the chart, each with individual font settings.
+</para>
+</sect2>
+<sect2 id="config-legend">
+<title>Legend</title>
+<screenshot>
+<screeninfo>Configuration page 4 - Legend</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config4.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The legend configuration page lets you set all aspects of the legend.
+The legend contains the names for all data sets with the respective
+colors, this is important to identify the data on the chart.
+</para>
+<para>
+The <guilabel>General</guilabel> box holds the title of the legend, which is displayed
+at the top of the legend box.
+The <guilabel>Position</guilabel> box can be used to place the legend at various locations
+on the chart. Use the central button to hide the legend.
+</para>
+<para>
+The <guilabel>Font</guilabel> box can be used to set
+different fonts for the legend title and the individual entries.
+Additionally you can set different colors in the <guilabel>Color</guilabel> box.
+</para>
+</sect2>
+<sect2 id="config-axes">
+<title>Axes</title>
+<screenshot>
+<screeninfo>Configuration page 5 - Axes</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config5.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The <guilabel>Axes</guilabel> page holds configuration for the chart axes. This
+page highly depends on the chart type chosen. For the line
+chart you can set linear or logarithmic scales and turn the grid
+on and off.
+</para>
+</sect2>
+<sect2 id="config-colors">
+<title>Colors</title>
+<screenshot>
+<screeninfo>Configuration page 6 - Colors</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config6.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+On the <guilabel>Colors</guilabel> page you can choose the <guilabel>Colors</guilabel> for the individual
+data sets. You can also set <guilabel>Colors</guilabel> for some general chart parts
+like axes <guilabel>Line color</guilabel> and <guilabel>Grid color</guilabel>.
+</para>
+</sect2>
+<sect2 id="config-font">
+<title>Font</title>
+<screenshot>
+<screeninfo>Configuration page 7 - Font</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config7.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The <guilabel>Font</guilabel> page can be used to configure various fonts like
+titles, axes labels and so on. Some of these fonts can
+be set on other pages as well, but on the font page you
+have them all in one place.
+</para>
+</sect2>
+<sect2 id="config-background">
+<title>Background</title>
+<screenshot>
+<screeninfo>Configuration page 8 - Background </screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config8.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+On the <guilabel>Background</guilabel> page you will find various options for tweaking
+the background settings of the chart. You can either choose
+different background colors or even a background picture.
+</para>
+</sect2>
+<sect2 id="config-more">
+<title>More...</title>
+<para>
+This short overview of the configuration options gave you an
+introduction to the configuration possibilities of your chart,
+it is by no means complete. Different chart types like <guilabel>Bar</guilabel>,
+<guilabel>Line</guilabel> and <guilabel>Pie</guilabel>, have
+additional specialised configuration pages and you are welcome
+to look around, try different chart types and look at the
+configuration possibilities. Use the tooltips and read the
+What's This? help. To use the What's This? help simply
+click on the question mark on the window
+decoration and then click on the area of the configuration
+page you want get more information on.
+</para>
+</sect2>
+</sect1>
+</chapter>
+
+<chapter id="kchartstandalone">
+<title>&kchart; as a standalone Application</title>
+<para>
+The previous chapter described the user interface,
+various configuration options, data editing and the wizard
+in detail.
+</para>
+<para>
+This chapter gives real-life examples on how to use
+&kchart; in various situations as a standalone application.
+The purpose is to give you some understanding of the
+way &kchart; works and how various parts relate to each other.
+</para>
+<sect1 id="kchartexample-profit">
+<title>Presenting Sales Figures</title>
+<sect2>
+<title>Warming up</title>
+<para>
+This first example which might often be encountered in real
+life is presenting sales figures, or in this particular case
+profit.
+</para>
+<para>
+Imagine you own a company that has three main categories of
+business: sales, support and training. And you would like
+to present the profit of these categories over some years. Making
+a graphical statistics is certainly a good idea. &kchart; can
+help you here.
+</para>
+</sect2>
+<sect2>
+<title>Getting started</title>
+<para>
+Run &kchart; and select the <guilabel>Blank Worksheeet</guilabel>.
+</para>
+<screenshot>
+<screeninfo>Starting with a blank chart</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-1.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Hit the button <guibutton>Use This Template</guibutton> to get started. &kchart; will present to you
+a completely empty document. That's good, we just need to enter
+some data and do some basic configuration to get a nice chart.
+</para>
+<screenshot>
+<screeninfo>A blank chart</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-2.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect2>
+<sect2>
+<title>Getting the numbers in</title>
+<para>
+The first step, and probably the most important, is to get the
+actual data into the chart. This can easily be done with the
+&dataeditor;. As usual you can get to the data editor by
+clicking on the <inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-data.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+<para>
+You will notice that no data is present. Also note that
+the number of data rows and columns is set to a minimum,
+which is 1.
+</para>
+<para>
+Now, just enter the data you see in the next screenshot.
+Note that you can increase the number of rows and columns
+with the spin boxes in the lower left corner. The names
+of the rows and columns themselves can be changed by
+clicking on them.
+</para>
+<screenshot>
+<screeninfo>The Data</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-3.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Simply click the <guibutton>OK</guibutton> button when you are done. This will present
+to you a simple bar chart.
+</para>
+<screenshot>
+<screeninfo>Simple chart without fine tuning</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-4.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Read on to do some fine tuning!
+</para>
+</sect2>
+<sect2>
+<title>Fine Tuning</title>
+<para>
+We will now do some fine tuning and put a title on the chart.
+And, we will add a nice 3D effect to the bars as well.
+</para>
+<para>
+Start up the configuration dialog by clicking on the
+<inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-options.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+<sect3>
+<title>Title</title>
+<screenshot>
+<screeninfo>Options - Title</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-5.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Let's start with labeling. Go to the <guilabel>Header/Footer</guilabel>
+page and enter the text like in the above screenshot.
+</para>
+</sect3>
+<sect3>
+<title>X-Axis Font Settings</title>
+<para>
+The next step is to make the font of the x axis a bit bigger. You
+can do this on the <guilabel>Font</guilabel> page.
+</para>
+<screenshot>
+<screeninfo>Options - Fonts</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-6.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Choose the <guilabel>X-Axis</guilabel> item and click on the
+<guibutton>Font...</guibutton> button. Choose a somewhat
+larger font like in the following screenshot.
+</para>
+<screenshot>
+<screeninfo>Options - X-Axis Font</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-7.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+Note that the font size is set to <guilabel>Relative</guilabel>.
+This means that the font is automatically scaled according
+to the overall chart size. This is quite usefull and most
+of the time what the average user expects.
+</para>
+</sect3>
+<sect3>
+<title>Giving it a 3D Look</title>
+<para>
+Some types of charts like <guilabel>Bar</guilabel> and <guilabel>Pie</guilabel>
+have an additional configuration page.
+</para>
+<screenshot>
+<screeninfo>Options - 3D Parameters</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-8.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+To get a 3D effect for this type of chart, go to the <guilabel>Bar</guilabel>
+page and simply activate <guilabel>3D bar</guilabel>.
+</para>
+<para>
+That's all what we need for a reasonable looking chart. Note
+that much of this configuration could also have been achieved
+with the wizard. It's basically a matter of taste what you
+use. Experienced users will likely use the full option dialog
+we used in this example.
+</para>
+<para>
+Simply accept the settings by clicking on the <guibutton>OK</guibutton>
+button.
+</para>
+</sect3>
+</sect2>
+<sect2>
+<title>Final output</title>
+<para>
+The final chart will look like the next screenshot.
+</para>
+<screenshot>
+<screeninfo>Final Chart</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-example1-9.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+You might want to enlarge the application window to see the chart
+in full size. Note how the fonts get larger in relation to the
+chart size.
+</para>
+<para>
+There are certainly aspects to improve further for your personal
+taste. For example try to make the title font even bigger.
+Just experiment further, this way you will get to know a lot
+of the &kchart; application.
+</para>
+<para>
+Finally you can save the chart from the <guimenu>File</guimenu>
+menu and quit &kchart; with
+<menuchoice><guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice>
+</para>
+</sect2>
+<sect2>
+<title>Exporting to Graphic Formats: SVG, PNG, JPG, &krita;, &karbon14;, Gimp and
+more</title>
+<para>
+For further processing, the chart can also be exported as a graphics file.
+Many formats are available. Using either PNG, SVG, JPG or &krita; will likely
+produce the best result.
+</para>
+<para>
+To export your current chart simply choose
+<menuchoice><guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem></menuchoice>
+from the menu and select the desired file format from the filter box.
+</para>
+</sect2>
+</sect1>
+</chapter>
+
+
+<!-- HANDBOOK REWRITTEN UP TO HERE BY RAPHAEL LANGERHORST -->
+
+<!-- HANDBOOK WRITTEN FROM HERE BY JONATHAN DREWS -->
+<!-- HANDBOOK UPDATED FROM HERE BY RAPHAEL LANGERHORST -->
+
+
+<chapter id="kchartinkspread">
+
+<title>Using &kchart; in &kspread;</title>
+
+<para>
+In addition to standalone operation, &kchart; is designed to be used with
+&kspread;. This chapter describes how to create and manipulate charts
+from within &kspread;.
+</para>
+<para>
+Remember that &kchart; embedding into &kspread; is a very commonly
+used and well implemented feature, the examples in this chapter should
+just get you started.
+</para>
+<para>
+As soon as you have created a chart in &kspread; you can take full
+advantage of all the &kchart; features by double clicking on the
+chart area. This is necessary to get to all advanced configuration
+options. Keep in mind that the data editor is not available when
+&kchart; is embedded into &kspread;. This is obvious since &kspread;
+serves, from &kchart;'s point of view, as a powerful data
+provider.
+</para>
+<para>
+Swapping x and y is of particular interest when working with &kspread;.
+You can swap interpretation of x and y axis in &kchart; in the
+Data Format settings which can be accessed through the Edit menu
+or the context menu when right clicking on the chart itself. As noted
+above you need to be inside the &kchart; component in order to access
+these settings, which can be done by double clicking the embedded
+chart in your spreadsheet.
+</para>
+
+<sect1 id="main_window">
+<title>Plotting with &kchart;</title>
+<para>To plot with &kchart;, when it is embedded in &kspread;, do the following:</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kchart-kspread.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<itemizedlist>
+<listitem><para>
+Highlight the second row of numbers.
+</para></listitem>
+
+<listitem><para>
+Next click on the <guilabel>Chart</guilabel> button 
+<inlinemediaobject><imageobject><imagedata fileref="frame_chart.png"
+format="PNG"/></imageobject></inlinemediaobject> to create the chart.
+</para></listitem>
+
+<listitem><para>Select the options you want from the chart wizard. The
+chart Wizard will pop up after you insert the chart.</para></listitem>
+
+</itemizedlist>
+
+<para>
+The whole data could also be created using two columns instead of
+two rows. If using columns you might want to switch x and y axis
+in the &kchart; configuration as described above.
+</para>
+
+<para>To make a bar chart for individual items, put the numbers in a
+column, as shown below.</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kchart-kspread-bar.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>The orientation of the numbers determines how the plot will be
+made. </para>
+
+<itemizedlist>
+<listitem><para>
+A row of numbers defines the ordinates for a single plot.
+</para></listitem>
+
+<listitem><para>
+A column of numbers defines the heights for each bar, in a bar
+graph. It also determines the size of the slices in a pie chart.
+</para></listitem>
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<sect1 id="kchart-menus">
+<title>The Main &kchart; Window</title>
+
+<sect2>
+<title>The <guimenu>File</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a document</action></para></listitem>
+
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a recently saved document</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the chart to the current file.</action> If the chart
+has not yet been saved the file dialog is shown.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document, the file dialog is used.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reloads the document.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a document with any supported format.
+The original document will not be modified.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves a document to any supported format.</action>
+The original document will not be modified. You can also choose
+among many image formats like PNG, SVG, &krita;, Gimp or JPG.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Sends the chart as an email attachment.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import Data...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Imports values from a CSV (Comma Separated Values) file, much like
+the CSV import in &kspread;. Note that you can specify various
+options and different separators (not just commas).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Create Template From Document...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Create a &kchart; template
+based on this document.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Prints the document</action></para>
+<important><para>Make sure the proper print system is selected in the
+<guilabel>Print system currently used:</guilabel> section. This option can
+be seen after clicking on the <guibutton>Options &gt;&gt;</guibutton> button.</para></important></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Print Preview...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays a preview of what the printed
+document will look like.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a dialog box</action> where you can enter
+information about your chart.</para>
+<note><para>This document information will be
+displayed in the &konqueror; file browser as a tooltip. The tooltips
+are pop-ups that show the contents of a file when you move your mouse over
+the file icon.</para></note></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Closes the current chart.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quits</action> &kchart;</para></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2>
+<title>The <guimenu>Edit</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Edit Data...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the &dataeditor;.</action></para></listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2>
+<title>The <guimenu>Format</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Chart...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens</action> the <link linkend="configurationinterface">&kchart; Configuration</link>
+dialog.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect3>
+<title>The Configure Tabs</title>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data Format...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Swap row and colums (x/y flipping).</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Chart Sub-type...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Changes the arrangement of bar graphs.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Header &amp; Footer...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Enter the titles you want for your graph here.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Colors...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Select graph colors</action>, line colors, grid colors and
+axis title and axis label colors here.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Font...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Select font style and size</action> here. The
+series colors can be selected here also. The series refer to the
+individual graphs. Each graphed set of data is a series.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Background...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Select a color or a wallpaper</action> as background for your
+graph.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Legend...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Change title, font and location of the legend</action> box. The
+color of the legend box can be changed also.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Page Layout...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Set the <guilabel>Margins</guilabel> of the page</action> here.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect3>
+</sect2>
+
+<sect2>
+<title>The <guimenu>Settings</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Toolbars</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show/Hide various toolbars</action> (<guimenuitem>File</guimenuitem>,
+<guimenuitem>Actions</guimenuitem> and <guimenuitem>Types</guimenuitem>).</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure key shortcuts for &kchart;.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure the &kchart; toolbars.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect2>
+
+<sect2>
+<title>Configuring Shortcuts</title>
+
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem></menuchoice>
+allows you to specify shortcuts.</para>
+
+
+<para>Below is an example of how to configure a shortcut for opening
+the chart wizard.</para>
+
+<screenshot>
+<screeninfo>Picture of shortcut dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="shortcut.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<itemizedlist>
+<listitem><para>
+Click on <guilabel>Custom</guilabel>.
+</para></listitem>
+
+<listitem><para>
+Next click on <guilabel>Primary shortcut:</guilabel>.
+</para></listitem>
+
+<listitem><para>
+Do <userinput><keycombo
+action="seq">&Alt;&Ctrl;<keycap>W</keycap></keycombo></userinput>
+and the dialog should disappear. The shortcut is now entered. 
+</para></listitem>
+</itemizedlist>
+
+<para>Pressing the keys <userinput><keycombo
+action="seq">&Alt;&Ctrl;<keycap>W</keycap></keycombo></userinput>
+now opens the wizard.</para>
+</sect2>
+
+
+<sect2>
+<title>Configuring Toolbars</title>
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
+is used to add additional buttons to the toolbars.</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="toolbars.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<itemizedlist>
+
+<listitem>
+<para>To add a button to the <guilabel>File</guilabel> toolbar, 
+</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="file-toolbar.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>  make sure <guilabel>File
+  &lt;&koffice;&gt;</guilabel> is displayed in the top combo box.
+</para></listitem>
+
+<listitem><para>
+Click on one of the items in the left hand pane. This item will now be
+highlighted showing that it has been selected.
+</para></listitem>
+
+<listitem><para>
+Next click on the <guiicon>Right arrow</guiicon> button to place it in
+the right pane.
+</para></listitem>
+
+<listitem><para>
+Click on <userinput><guilabel>Apply</guilabel></userinput> and then
+click on <userinput><guilabel>OK</guilabel></userinput>
+</para></listitem>
+</itemizedlist>
+
+
+<para>The new Item should be in the toolbar. <inlinemediaobject><imageobject>
+	    <imagedata fileref="file-toolbar2.png" format="PNG"/>
+	  </imageobject></inlinemediaobject></para>
+
+
+</sect2>
+
+</sect1>
+</chapter>
+
+<chapter id="credits">
+<title>Credits and License</title>
+
+<para>
+&kchart;
+</para>
+<para>
+Program copyright 1998-2005 the &kchart; Team
+</para>
+<para>
+Original Authors:
+</para>
+<itemizedlist>
+<listitem><para>&Matthias.Kalle.Dalheimer; &Matthias.Kalle.Dalheimer.mail;
+</para></listitem>
+<listitem><para>Torben Weis <email>weis@kde.org</email></para>
+</listitem>
+</itemizedlist>
+<para>
+Contributors:
+</para>
+<itemizedlist>
+<listitem><para>Laurent Montel <email>lmontel@mandrakesoft.com</email></para>
+</listitem>
+<listitem><para>Karl-Heinz Zimmer <email>khz@kde.org</email></para>
+</listitem>
+<listitem><para>Inge Wallin <email>inge@lysator.liu.se</email></para>
+</listitem>
+</itemizedlist>
+
+<para>
+Documentation copyright 2002 &Jonathan.Drews; &Jonathan.Drews.mail;
+</para>
+<para>
+Documentation copyright 2005 Raphael Langerhorst
+<email>raphael.langerhorst@kdemail.net</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+&underGPL;
+
+</chapter>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+-->
+

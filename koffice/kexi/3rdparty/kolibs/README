@@ -1,0 +1,13 @@
+kexikolibs
+----------
+
+Maintained by: Jaroslaw Staniek, js at iidea . pl
+
+
+This is a tiny selection of kofficeui and kofficecore classes taken 
+to reuse Page Layout dialog.
+
+Will be removed when packagers realize kofficelibs package should 
+be really shared among KOffice apps.
+
+The source code is almost unchanged except adding #ifdef SIMPLE_KOLIBS.

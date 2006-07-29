@@ -1,0 +1,1410 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Statistical</GroupName>
+
+    <Function>
+      <Name>SKEW</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SKEW() function returns an estimate for skewness of a distribution</Text>
+	<Syntax>SKEW(number; number2; ...)</Syntax>
+	<Syntax>SKEW(range)</Syntax>
+	<Example>SKEW(11.4; 17.3; 21.3; 25.9; 40.1) returns 0.9768</Example>
+        <Related>SKEWP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SKEWP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SKEWP() function returns the population skewness of a distribution</Text>
+	<Syntax>SKEWP(number; number2; ...)</Syntax>
+	<Syntax>SKEWP(range)</Syntax>
+	<Example>SKEWP(11.4; 17.3; 21.3; 25.9; 40.1) returns 0.6552</Example>
+        <Related>SKEW</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MODE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Float</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The MODE() function returns the most frequently occuring value in the data set.</Text>
+	<Syntax>MODE(number; number2; ...)</Syntax>
+	<Syntax>MODE(range)</Syntax>
+	<Example>MODE(12; 14; 12; 15) returns 12</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CORREL</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The CORREL() function calculates the correlation coefficient of two cell ranges.</Text>
+	<Syntax>CORREL(range1; range2)</Syntax>
+  <Example>CORREL(A1:A3; B1:B3)</Example>
+  <Related>PEARSON</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PEARSON</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The PEARSON() function calculates the correlation coefficient of two cell ranges. It is the same as the CORREL function.</Text>
+	<Syntax>PEARSON(range1; range2)</Syntax>
+  <Example>PEARSON(A1:A3; B1:B3)</Example>
+  <Related>CORREL</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COVAR</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The COVAR() function calculates the covariance of two cell ranges.</Text>
+	<Syntax>COVAR(range1; range2)</Syntax>
+	<Example>COVAR(A1:A3; B1:B3)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LARGE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Position (from the largest)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The LARGE() function returns the k-th largest value from the data set.</Text>
+	<Syntax>LARGE(range; k)</Syntax>
+	<Example>A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2) returns 3</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SMALL</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cell range of values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Position (from the smallest)</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The SMALL() function returns the k-th smallest value from the data set.</Text>
+	<Syntax>SMALL(range; k)</Syntax>
+	<Example>A1: 3, A2: 1, A3: 5 => SMALL(A1:A3; 1) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>STANDARDIZE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Number to be normalized</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Mean of the distribution</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Standard deviation</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The STANDARDIZE() function calculates a normalized value.</Text>
+	<Syntax>STANDARDIZE(x; mean, stdev)</Syntax>
+	<Example>STANDARDIZE(4; 3; 7) returns 0.1429</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>KURT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The KURT() function calculates an unbiased estimate of the kurtosis of a data set. You have to provide at least 4 values, otherwise an error is returned.</Text>
+	<Syntax>KURT(value; value;...)</Syntax>
+	<Example>KURT(A1:A5)</Example>
+	<Example>KURT(21; 33; 54; 23) returns 1.344239</Example>
+        <Related>KURTP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>KURTP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The KURTP() function calculates an population kurtosis of a data set. You have to provide at least 4 values, otherwise an error is returned.</Text>
+	<Syntax>KURTP(value; value;...)</Syntax>
+	<Example>KURTP(A1:A5)</Example>
+	<Example>KURTP(21; 33; 54; 23) returns -1.021</Example>
+        <Related>KURT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DEVSQ</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The DEVSQ() function calculates the sum of squares of deviations.</Text>
+	<Syntax>DEVSQ(value; value;...)</Syntax>
+	<Example>DEVSQ(A1:A5)</Example>
+	<Example>DEVSQ(21; 33; 54; 23) returns 684.75</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HYPGEOMDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Number of success in the sample</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of trials</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of success overall</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Population size</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The HYPGEOMDIST() function returns the hypergeometric distribution.</Text>
+	<Syntax>HYPGEOMDIST(x; n; M; N)</Syntax>
+	<Example>HYPGEOMDIST(2; 5; 6; 20) returns 0.3522</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GEOMEAN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The GEOMEAN() function returns the geometric mean of the given arguments. This is equal to the Nth root of the product of the terms.</Text>
+	<Syntax>GEOMEAN(value; value;...)</Syntax>
+	<Example>GEOMEAN(A1:A5)</Example>
+	<Example>GEOMEAN(21; 33; 54; 23) returns 30.45886</Example>
+        <Related>HARMEAN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>HARMEAN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The HARMEAN() function returns the harmonic mean of the N data points (N divided by the sum of the inverses of the data points).</Text>
+	<Syntax>HARMEAN(value; value;...)</Syntax>
+	<Example>HARMEAN(A1:A5)</Example>
+	<Example>HARMEAN(21; 33; 54; 23) returns 28.588</Example>
+        <Related>GEOMEAN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NEGBINOMDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Number of failures</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of successful trials</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Probability of success</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The NEGBINOMDIST() function returns the negative binomial distribution.</Text>
+	<Syntax>NEGBINOMDIST(failures; success; prob_of_success)</Syntax>
+	<Example>NEGBINOMDIST(2;5;0.55) returns 0.152872629</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BINO</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Number of trials</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of successful trials</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Probability of success</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The BINO() function returns the binomial distribution.</Text>
+	<Text>The first parameter is the number of trials, the second parameter is the number of successes, and the third is the probability of success. The number of trials should be greater than the number of successes and the probability should be smaller or equal to 1.</Text>
+	<Syntax>BINO(trials;success;prob_of_success)</Syntax>
+	<Example>BINO(12;9;0.8) returns 0.236223201</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SUMPRODUCT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUMPRODUCT() function (SUM(X*Y)) returns the sum of the product of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
+	<Syntax>SUMPRODUCT(array1;array2)</Syntax>
+	<Example>SUMPRODUCT(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 31</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SUMX2PY2</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUMX2PY2() function (SUM(X^2+Y^2)) returns the sum of the squares of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
+	<Syntax>SUMX2PY2(array1;array2)</Syntax>
+	<Example>SUMX2PY2(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 63</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SUMX2MY2</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUMX2MY2() function (SUM(X^2-Y^2)) returns the difference of the squares of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
+	<Syntax>SUMX2MY2(array1;array2)</Syntax>
+	<Example>SUMX2MY2(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns -5</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SUM2XMY</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Value (array)</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUM2XMY() function (SUM((X-Y)^2)) returns the square of the differences of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
+	<Syntax>SUM2XMY(array1;array2)</Syntax>
+	<Example>SUM2XMY(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 1</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>INVBINO</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Number of trials</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of failures</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Probability of failure</Comment>
+	<Type>Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The INVBINO() function returns the negative binomial distribution. The first parameter is the number of trials, the second parameter is the number of failures, and the third is the probability of failure. The number of trials should be larger than the number of failures and the probability should be smaller or equal to 1.</Text>
+	<Syntax>INVBINO(trials;failure;prob_of_failure)</Syntax>
+	<Example>INVBINO(12;3;0.2) returns 0.236223201</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COMBIN</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Total number of elements</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of elements to choose</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The COMBIN() function calculates the count of possible combinations. The first parameter is the total count of elements. The second parameter is the count of elements to choose. Both parameters should be positive and the first parameter should not be less than the second. Otherwise the function returns an error.</Text>
+	<Syntax>COMBIN(total;chosen)</Syntax>
+	<Example>COMBIN(12;5) returns 792</Example>
+	<Example>COMBIN(5;5) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PERMUT</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Total number of elements</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of elements to permutate</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The PERMUT() function returns the number of permutations. The first parameter is the number of elements, and the second parameter is the number of elements used in the permutation.</Text>
+	<Syntax>PERMUT(total;permutated)</Syntax>
+	<Example>PERMUT(8;5) equals 6720</Example>
+	<Example>PERMUT(1;1) equals 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>AVERAGE</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The AVERAGE() function calculates the average of all the values given as parameters. You can calculate the average of a range AVERAGE(A1:B5) or a list of values like AVERAGE(12;5;12.5).</Text>
+	<Syntax>AVERAGE(value;value;...)</Syntax>
+	<Example>AVERAGE(12;5;7) equals 8</Example>
+	<Example>AVERAGE(12.5;2) equals 7.25</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>AVERAGEA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+	  <Parameter optional="true">
+	  <Comment>String values</Comment>
+	  <Type>String</Type>
+	  </Parameter>
+      <Help>
+	<Text>The AVERAGEA() calculates the average of the given arguments. Numbers, text and logical values are included in the calculation too. If the cell contains text or the argument evaluates to FALSE, it is counted as value zero (0). If the argument evaluates to TRUE, it is counted as one (1). Note that empty cells are not counted.</Text>
+	<Syntax>AVERAGEA(value;value;...)</Syntax>
+	<Example>AVERAGEA(11.4;17.3;"sometext";25.9;40.1) equals 18.94</Example>
+      </Help>
+    </Function>
+
+
+	<Function>
+	<Name>AVEDEV</Name>
+	<Type>Float</Type>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+	</Parameter>
+	<Help>
+	<Text>The AVEDEV() function calculates the average of the absolute deviations of a data set from their mean.</Text>
+	<Syntax>AVEDEV(value;value;...)</Syntax>
+	<Example>AVEDEV(11.4;17.3;21.3;25.9;40.1) returns 7.84</Example>
+	<Example>AVEDEV(A1:A5) ...</Example>
+	</Help>
+	</Function>
+
+    <Function>
+      <Name>MEDIAN</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point value or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values or range of values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The MEDIAN() function calculates the median of all the values given as parameters. You can calculate the median of a range like MEDIAN(A1:B5) or a list of values like MEDIAN(12; 5; 12.5). Blank cells will be considered as a zero, and cells with text will be ignored.</Text>
+	<Syntax>MEDIAN(value;value;...)</Syntax>
+	<Example>MEDIAN(12; 5; 5.5) equals 5.5</Example>
+	<Example>MEDIAN(12; 7; 8;2) equals 7.5</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>VAR</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The VAR() function calculates the estimates variance based on a sample.</Text>
+	<Syntax>VAR(value;value;...)</Syntax>
+	<Example>VAR(12;5;7) equals 13</Example>
+	<Example>VAR(15;80;3) equals 1716.333...</Example>
+	<Example>VAR(6;7;8) equals 1</Example>
+  <Related>VARIANCE</Related>
+  <Related>VARA</Related>
+  <Related>VARP</Related>
+  <Related>VARPA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>VARIANCE</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The VARIANCE() function calculates the estimates variance based on a sample. It's the same as the VAR function.</Text>
+	<Syntax>VARIANCE(value;value;...)</Syntax>
+	<Example>VARIANCE(12;5;7) equals 13</Example>
+	<Example>VARIANCE(15;80;3) equals 1716.333...</Example>
+	<Example>VARIANCE(6;7;8) equals 1</Example>
+	<Related>VAR</Related>
+	<Related>VARA</Related>
+  <Related>VARP</Related>
+	<Related>VARPA</Related>
+      </Help>
+    </Function>
+    <Function>
+      <Name>VARA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The VARA() function calculates the variance based on a sample.</Text>
+	<Syntax>VARA(value;value;...)</Syntax>
+	<Example>VARA(12;5;7) equals 13</Example>
+	<Example>VARA(15;80;3) equals 1716.333...</Example>
+	<Example>VARA(6;7;8) equals 1</Example>
+	<Related>VAR</Related>
+	<Related>VARP</Related>
+	<Related>VARPA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>VARP</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The VARP() function calculates the variance based on an entire population.</Text>
+	<Syntax>VARP(value;value;...)</Syntax>
+	<Example>VARP(12;5;7) equals 8.666...</Example>
+	<Example>VARP(15;80;3) equals 1144.22...</Example>
+	<Example>VARP(6;7;8) equals 0.6666667...</Example>
+	<Related>VAR</Related>
+	<Related>VARA</Related>
+	<Related>VARPA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>VARPA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The VARPA() function calculates the variance based on an entire population. Text and boolean values that evaluate to FALSE are counted as 0, boolean value that evaluate to TRUE are counted as 1.</Text>
+	<Syntax>VARPA(value;value;...)</Syntax>
+	<Example>VARPA(12;5;7) equals 8.666...</Example>
+	<Example>VARPA(15;80;3) equals 1144.22...</Example>
+	<Example>VARPA(6;7;8) equals 0.6666667...</Example>
+	<Related>VAR</Related>
+	<Related>VARA</Related>
+	<Related>VARP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>STDEV</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The STDEV() function returns the estimate standard deviation based on a sample. The standard deviation is a measure of how widely values are dispersed from the average value.</Text>
+	<Syntax>STDEV(value;value;...)</Syntax>
+	<Example>STDEV(6;7;8) equals 1</Example>
+	<Related>STDEVP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>STDEVA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The STDEVA() function returns the estimate standard deviation based on a sample. The standard deviation is a measure of how widely values are dispersed from the average value. If a referenced cell contains text or contains the boolean value FALSE, it is counted as 0. If the boolean value is TRUE it is counted as 1.</Text>
+	<Syntax>STDEVA(value;value;...)</Syntax>
+	<Example>STDEVA(6; 7; A1; 8) equals 1, if A1 is empty</Example>
+	<Example>STDEVA(6; 7; A1; 8) equals 3.109, if A1 is TRUE</Example>
+	<Related>STDEV</Related>
+	<Related>STDEVP</Related> 
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>STDEVP</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The STDEVP() function returns the standard deviation based on an entire population</Text>
+	<Syntax>STDEVP(value;value;...)</Syntax>
+	<Example>STDEVP(6;7;8) equals 0.816497...</Example>
+	<Related>STDEV</Related> 
+      </Help>
+    </Function>
+    
+    <Function>
+      <Name>STDEVPA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The STDEVPA() function returns standard deviation based on an entire population. If a referenced cell contains text or contains the boolean value FALSE, it is counted as 0. If the boolean value is TRUE it is counted as 1.</Text>
+	<Syntax>STDEVPA(value;value;...)</Syntax>
+	<Example>STDEVPA(6; 7; A1; 8) equals 0.816497..., if A1 is empty</Example>
+	<Example>STDEVPA(6; 7; A1; 8) equals 2.69..., if A1 is TRUE</Example>
+	<Example>STDEVPA(6; 7; A1; 8) equals 3.11..., if A1 is FALSE</Example>
+	<Related>STDEV</Related> 
+	<Related>STDEVP</Related> 
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GAUSS</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>The number for which the integral value of standard normal distribution is to be calculated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The GAUSS() function returns the integral values for the standard normal cumulative distribution.</Text>
+        <Syntax>GAUSS(value)</Syntax>
+        <Example>GAUSS(0.25) equals 0.098706</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PHI</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>The number for which the standard normal distribution is to be calculated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The PHI() function returns value of the distribution function for a standard normal distribution.</Text>
+        <Syntax>PHI(value)</Syntax>
+        <Example>PHI(0.25) equals 0.386668</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GAMMADIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Alpha parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Beta parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Cumulated flag</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The GAMMADIST() function returns the gamma distribution.</Text>
+        <Text>If the last parameter (cumulated) is 0, it calculates the density function; if it's 1, the distribution is returned.</Text>
+        <Text>The first three parameters must be positive.</Text>
+        <Syntax>GAMMADIST(number;alpha;beta;cumulated)</Syntax>
+        <Example>GAMMADIST(0.758;0.1;0.35;1) equals 0.995450</Example>
+        <Example>GAMMADIST(0.758;0.1;0.35;0) equals 0.017179</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>BETADIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Alpha parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Beta parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>Start</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>End</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The BETADIST() function returns the cumulative beta probability density function.</Text>
+        <Text>The last two parameters are optional. They set the lower and upper bounds, otherwise defaulting to 0.0 and 1.0 respectively.</Text>
+        <Syntax>BETADIST(number;alpha;beta;start;end)</Syntax>
+        <Example>BETADIST(0.2859;0.2606;0.8105) equals 0.675444</Example>
+        <Example>BETADIST(0.2859;0.2606;0.8105;0.2;0.9) equals 0.537856</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>FISHER</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The FISHER() function returns the Fisher transformation for x and creates a function close to a normal distribution.</Text>
+        <Syntax>FISHER(number)</Syntax>
+        <Example>FISHER(0.2859) equals 0.294096</Example>
+        <Example>FISHER(0.8105) equals 1.128485</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>FISHERINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The FISHERINV() function returns the inverse of the Fisher transformation for x and creates a function close to a normal distribution.</Text>
+        <Syntax>FISHERINV(number)</Syntax>
+        <Example>FISHERINV(0.2859) equals 0.278357</Example>
+        <Example>FISHERINV(0.8105) equals 0.669866</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NORMDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Linear middle of the distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Standard deviation of the distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>0 = density, 1 = distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The NORMDIST() function returns the normal cumulative distribution.</Text>
+        <Text>Number is the value of the distribution based on which the normal distribution is to be calculated.</Text>
+        <Text>MV is the linear middle of the distribution.</Text>
+        <Text>STD is the standard deviation of the distribution.</Text>
+        <Text>K = 0 calculates the density function; K = 1 calculates the distribution.</Text>
+        <Syntax>NORMDIST(Number;MV;STD;K)</Syntax>
+        <Example>NORMDIST(0.859;0.6;0.258;0) equals 0.934236</Example>
+        <Example>NORMDIST(0.859;0.6;0.258;1) equals 0.842281</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LOGNORMDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Probability value for which the standard logarithmic distribution is to be calculated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Mean value of the standard logarithmic distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Standard deviation of the standard logarithmic distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The LOGNORMDIST() function returns the cumulative lognormal distribution.</Text>
+        <Syntax>LOGNORMDIST(Number;MV;STD)</Syntax>
+        <Example>LOGNORMDIST(0.1;0;1) equals 0.01</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LOGINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Probability</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Mean value of the standard logarithmic distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Standard deviation of the standard logarithmic distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The LOGINV() function returns the inverse of the lognormal cumulative distribution.</Text>
+        <Syntax>LOGINV(p; mean; stdev)</Syntax>
+        <Example>LOGINV(0.1;0;1) equals 0.2776</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NORMSDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Value to which the standard normal distribution is calculated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The NORMSDIST() function returns the standard normal distribution.</Text>
+        <Syntax>NORMSDIST(Number)</Syntax>
+        <Example>NORMSDIST(1) equals 0.84</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>EXPONDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Lambda parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>0 = density, 1 = distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The EXPONDIST() function returns the exponential distribution.</Text>
+        <Text>The lambda parameter must be positive.</Text>
+        <Text>Cumulative = 0 calculates the density function; cumulative = 1 calculates the distribution.</Text>
+        <Syntax>EXPONDIST(number;lambda;cumulative)</Syntax>
+        <Example>EXPONDIST(3;0.5;0) equals 0.111565</Example>
+        <Example>EXPONDIST(3;0.5;1) equals 0.776870</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>WEIBULL</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Alpha parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Beta parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>0 = density, 1 = distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The WEIBULL() function returns the Weibull distribution.</Text>
+        <Text>The alpha and beta parameters must be positive, the number (first parameter) must be non-negative.</Text>
+        <Text>Cumulative = 0 calculates the density function; cumulative = 1 calculates the distribution.</Text>
+        <Syntax>WEIBULL(number;alpha;beta;cumulative)</Syntax>
+        <Example>WEIBULL(2;1;1;0) equals 0.135335</Example>
+        <Example>WEIBULL(2;1;1;1) equals 0.864665</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NORMSINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The NORMSINV() function returns the inverse of the standard normal cumulative distribution. The number must be between 0 and 1 (non-inclusive).</Text>
+        <Syntax>NORMSINV(Number)</Syntax>
+        <Example>NORMSINV(0.908789) returns 1.3333</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NORMINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Probability value for which the standard logarithmic distribution is to be calculated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Middle value in the normal distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Standard deviation of the normal distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The NORMINV() function returns the inverse of the normal cumulative distribution. The number must be between 0 and 1 (non-inclusive) and STD must be positive.</Text>
+        <Syntax>NORMINV(number;MV;STD)</Syntax>
+        <Example>NORMINV(0.9;63;5) equals 69.41</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GAMMALN</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The GAMMALN() function returns the natural logarithm of the gamma function: G(x). The number parameter must be positive.</Text>
+        <Syntax>GAMMALN(Number)</Syntax>
+        <Example>GAMMALN(2) returns 0</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>POISSON</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Lambda parameter (the middle value)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>0 = density, 1 = distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The POISSON() function returns the Poisson distribution.</Text>
+        <Text>The lambda and number parameters must be positive.</Text>
+        <Text>Cumulative = 0 calculates the density function; cumulative = 1 calculates the distribution.</Text>
+        <Syntax>POISSON(number;lambda;cumulative)</Syntax>
+        <Example>POISSON(60;50;0) equals 0.020105</Example>
+        <Example>POISSON(60;50;1) equals 0.927840</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CONFIDENCE</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Level of the confidence interval</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Standard deviation for the total population</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Size of the total population</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The CONFIDENCE() function returns the confidence interval for a population mean.</Text>
+        <Text>The alpha parameter must be between 0 and 1 (non-inclusive), stddev must be positive and size must be greater or equal to 1.</Text>
+        <Syntax>CONFIDENCE(alpha;stddev;size)</Syntax>
+        <Example>CONFIDENCE(0.05;1.5;100) equals 0.294059</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Degrees of freedom for the t-distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Mode (1 or 2)</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The TDIST() function returns the t-distribution.</Text>
+        <Text>Mode = 1 returns the one-tailed test, Mode = 2 returns the two-tailed test.</Text>
+        <Syntax>TDIST(number;degrees_freedom;mode)</Syntax>
+        <Example>TDIST(12;5;1) returns 0.000035</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>FDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Degrees of freedom 1</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Degrees of freedom 2</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The FDIST() function returns the f-distribution.</Text>
+        <Syntax>FDIST(number;degrees_freedom_1;degrees_freedom_2)</Syntax>
+        <Example>FDIST(0.8;8;12) yields 0.61</Example>
+      </Help>
+    </Function>
+    
+    <Function>
+      <Name>CHIDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Degrees of freedom</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The CHIDIST() function returns the probability value from the indicated Chi square that a hypothesis is confirmed.</Text>
+        <Text>CHIDIST compares the Chi square value to be given for a random sample that is calculated from the sum of (observed value-expected value)^2/expected value for all values with the theoretical Chi square distribution and determines from this the probability of error for the hypothesis to be tested.</Text>
+        <Syntax>CHIDIST(number;degrees_freedom)</Syntax>
+        <Example>CHIDIST(13.27;5) returns 0.021</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

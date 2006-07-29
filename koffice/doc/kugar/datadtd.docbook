@@ -1,0 +1,46 @@
+<!-- To validate this document separately, uncomment this prolog
+<?xml version="1.0" ?>
+<!DOCTYPE appendix PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+-->
+
+<sect1 id="kugardata-dtd">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title><sgmltag class="element">KugarData</sgmltag> Document Type
+Definition</title>
+
+<synopsis>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;!DOCTYPE KugarData [
+     &lt;!ELEMENT <link linkend="kugar-data-element">KugarData</link> (<link linkend="row-element">Row</link>*)&gt;
+     &lt;!ATTLIST KugarData
+         <link linkend="template-att">Template</link>  CDATA  #REQUIRED&gt;
+
+     &lt;!ELEMENT <link linkend="row-element">Row</link> EMPTY&gt;
+     &lt;!ATTLIST Row
+         <link linkend="level-att">level</link>     CDATA  #REQUIRED
+         <link linkend="column-att">col1</link>      CDATA  #IMPLIED
+         <link linkend="column-att">col2</link>      CDATA  #IMPLIED
+         <link linkend="column-att">...</link>       CDATA  #IMPLIED
+         <link linkend="column-att">coln</link>      CDATA  #IMPLIED&gt;
+ ]&gt;
+</synopsis>
+</sect1>

@@ -1,0 +1,31 @@
+This directory contains the source code for the upcoming KOffice 1.6.
+The 1.6 release is a kind of "in-between" release, and not every program
+will be actively developed here.  
+
+The maintainers of some programs have announced that they think that
+the release cycle for 2.0 is too long and want a feature release in
+between 1.5 and 2.0.  For all the rest of the programs, bugfixes that
+are committed in the 1.5 branch will be forward ported to 1.6 at the
+time of the release. 
+
+The real development will happen in trunk, and will eventually lead to
+KOffice version 2.0, which will be based on Qt4 and kdelibs4.
+
+Here is the list of applications and libraries that will be developed 
+in the 1.6 cycle:
+
+- lib/koproperty
+- lib/kross
+- kchart
+- kexi
+- krita
+- kdgantt
+- kplato
+- doc
+- kformula
+- lib/kformula
+
+It is up to the maintainer of those applications to merge their change
+with trunk, and with 1.5 for fixed bugs.  For all the rest of the
+applications / subdirectories, all changes for 1.5 will be forward
+ported as described above.

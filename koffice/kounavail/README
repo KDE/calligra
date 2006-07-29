@@ -1,0 +1,15 @@
+This is simply an empty part, that is loaded and displayed when a
+document contains an invalid part
+- either because the handler for this part isn't available
+- or because the embedded document is external (out of the store) and unavailable
+
+The goal of the part is to show a placeholder in the document, to tell
+about the unavailable part, but also to be able to save itself as it was,
+so that it's possible to edit a document with a missing child document
+without losing information.
+
+Test documents:
+test-kounavail.kwd points to an invalid mimetype (case 1)
+test-kounavail2.kwd points to a non-existing external document (case 2)
+
+David Faure <faure@kde.org>

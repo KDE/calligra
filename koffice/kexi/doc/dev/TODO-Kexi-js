@@ -1,0 +1,969 @@
+-----------------------------------------------------------------------------
+ Kexi Development TODO Document
+ From jstaniek's Point of View
+ 
+ Also includes: win32 porting and multiplatform 
+  features, planning, improving ideas, details
+ 
+ Copyright (C) 2003-2006 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
+ Kexi home page: http://www.kexi-project.org/
+-----------------------------------------------------------------------------
+
+TODO: rename KexiTabBrowser to KexiProjectWindow
+TODO: rename KexiBrowser to KexiProjectListView
+TODO: rename KexiBrowserItem to KexiProjectListViewItem
+TODO: rename KexiDialogBase to KexiWindowBase
+
+TODO: Kexi can use database as only medium for storing _all_ project's data
+	and then can treat .kexi files as:
+	 -just export/import format for Kexi projects
+	 -medium for storing projects that use sqlite driver
+	 -simply: shortcut to project stored in database
+
+HINT: DO NOT USE signals/slots for lowlevel data manipulation (e.g. loading data for tableviews)!
+
+TODO: add kexiinclude_HEADERS and kexiincludedir to Makefile.ams to install headers, see:
+http://developer.kde.org/documentation/other/makefile_am_howto.html
+
+TODO: after kexi main window is activated again (from minimized state), 
+     always 1st opened subwindow is activated
+TODO: when editor in table cell is active: after click outside of it, editor should be closed (accepted)
+
+TODO: FIX: QMetaObject::findSignal:KexiQueryPart: Conflict 
+	with KexiProjectHandler::itemListChanged(KexiProjectHandler*) in KexiView
+
+TODO: FIX vertical alignment in table view's cells based on corrent QFontMetrics (make tests for 
+    different font sizes and names)
+
+TODO: change texts in projectwizard to more descriptive:
+"Authentication" --> "Database server's user authentication"
+"Database Location" --> "Database Server Location"
+
+TODO: [complexity=small] add dynamic resize for dict members like Connection::m_tables
+TODO: [complexity=big] make KexiDB really ASYNC, multithreaded!
+TODO: [complexity=big] add command line kexi tools
+
+TODO: install kexi-specific icons in apps/kexi/icons not is global
+
+TODO(GUI):
+-add "Change data source" button in project wizard
+-after pressing this button, show "connections selection dialog"
+-create "connections selection dialog" instead of project wizard:
+--add "Always show me this advanced dialog" checkbox to connections selection dialog
+--add "Set selected connection as default" checkbox to connections selection dialog
+-old project wizard is now "connection wizard" (for creating new connection);
+ "connection" created by user stores full info needed to get databases list
+-connection data is a mime type of local xml file, so it can be used to create shortcuts
+-kexi project is just connection extended with providing database name and user (local)
+ settings for this given database
+-on startup: by default offer:
+--creating empty temporary db on startup with name "New database"
+--creating new database using database wizard
+--opening existing Kexi projects
+--importing existing non-kexi databases
+
+TODO: implement better references (foreign key information) between tables + storage
+TODO: implement WHERE clause + storage
+TODO: implement GROUP BY clause + storage
+TODO: add kexi driver version info
+TODO: add server version info retrieval
+TODO: add schema to kexi__* tables on createTable()
+TODO: add support for creation temporary databases
+
+
+TODO: use KShared and KSharedPtr for Transaction and DriverManger class instead
+TODO: add kexi's global.h 
+TODO: add Q_LLONG to kexi global.h is not exists
+
+TODO: add to field's properties list: input mask, validation rule, column width
+
+FIX: corrupted database can be created sometimes (eg. for tests/newapi sqlite dbcreation)
+        --reason: maybe file was not flushed and app too early exited?
+
+TODO: improove Expression class, add code for generating expression 
+ strings in Connection::queryStatement()
+
+<SQLITE>
+from: http://web.utk.edu/~jplyon/sqlite/SQLite_optimization_FAQ.html
+
+TODO: 
+"Although SQLite parses named transactions, the names are ignored. 
+SQLite does not support nested transactions. If you split the SQL statements in a transaction 
+over several sqlite_exec() calls, you must be prepared to handle failure in each of these calls. 
+If a failure occurs SQLite will return a non-zero value. After that, SQLite will revert to the 
+default behavior of giving each SQL statement its own transaction until a new transaction is started."
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---so: check if any sqlite_exec() failed and if so - update connection state as if rollback has been done.
+
+TODO: use callbacks for fetching data (to avoid data copying)
+TODO: "The SQLite library includes functions sqlite_encode_binary() and sqlite_decode_binary() 
+in "encode.c". They can be used to safely encode binary data in a string form suitable for storing 
+in SQLite, and safe for use in SQL queries. These functions are an "addition" to the SQLite library. 
+They are not compiled into the library by default, and are not present in the precompiled binaries 
+distributed on the download page."
+
+TODO: add possibility in cursor: "Operating in-place on data returned by sqlite_get_table()"
+
+TODO: for import data from native-sqlite databases: use "pragma table_info"
+TODO: maybe also use "pragma table_info" for sanity checking, or more in kexidb driver??
+TODO: add custom collation using sqlite3_create_collation() for:
+  - non-latin1 characters
+  - non-latin1 characters with NOCASE option
+TODO: add option for use ":memory:" special file. 
+  - Allow to use it also e.g. for migration, etc.
+  - Allow to attach it as special portion of db
+
+TODO: Use hints coming from "Understanding The Architecture Of SQLite" slides
+      (optimization, etc.), http://www.sqlite.org/php2004/slides-all.html
+
+TODO: table merge automaton:
+			Imagine you have a simple database with two tables, and a third to join them as a
+			many-to-many relationship. Someone sends me an SQLite database as a file which has the
+			same structure, but the data is different. I want to merge these two databases
+			together keeping all of the relationships intact, without duplicating data.
+
+			For example, if the tables were "customers" and "products" and the one in between
+			"orders", there is the possibility that some customers and/or products might be the
+			same, but with different primary keys. The problem is that since the databases were
+			independently created, a simple union will break the relationships since the primary
+			keys will overlap.
+			
+			I can think of brute force ways to do this, but I was wondering if anyone might have a
+			good algorithm or technique to accomplish this efficiently.
+			
+TODO: add support for PRAGMA page_size on new db creation, 
+			and e.g. propose default values for win32
+			http://www.sqlite.org/cvstrac/wiki?p=PerformanceTuningWindows
+			(see also other optimization mentioned here)
+
+TODO: In Memory database/tables: how to load an sqlite file to be entirely fit in the memory?
+   clever solution: "You could set the cache size as big as your database file (via pragma). 
+   This should load all (used) data into memory. This is probably not a good solution 
+   if your application does not run for a longer time. "
+TODO: add autovacuum support on SQLite db creation?
+</SQLITE>
+
+<RENAME_PROPOSALS>
+ALSO TODO: move all simple widget classes (e.g. KexiSettings, KexiTabBrowser) 
+from core, to more detailed dirs,
+and projectWizard/ to wizards/ (there will be more wizards soon)
+
+</RENAME_PROPOSALS>
+
+TODO:
+- add kexi__parts (p_id integer, p_type) table and appropriate part objects in kexi__objects
+
+
+
+MOST RECENT TODO:
+- reuse recent project tab as separate window for "More projects..." menu action [difficulty: 1]
+- implement contents update for "recentprojects" menu action [difficulty: 2]
+- implement: drag-and-drop of the project file to the outside of Kexi, [difficulty: 2]
+- saveas== saving another shortcut to a project if it is server-based [difficulty: 2]
+
+TODO: improve security for password information in .kexis files
+TODO: for .kexis files' conenction data - if password attr. is not present - ask for password
+IDEA: integrate password information in .kexis files with KWallet
+
+
+TODO: Put Connection::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
+
+TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
+- ODBC driver (hello mattr!)
+- Access -> Kexi migration tool (done)
+- scripting
+
+=== Kexi Parts TODO ===
+- kexipart.h: add KexiPart::AboutData : public KAboutData
+  and 
+  #define KEXIPART_EXPORT_COMPONENT_FACTORY( libname, partClass, aboutData ) \
+    K_EXPORT_COMPONENT_FACTORY( libname, KGenericFactory<partClass>(aboutData) )
+- add gui for viewing full part information
+
+=== General TODO ===
+- avoid using veryvery long names for objects
+- IDEA: Learning module. A special optional pane which shows what commands are sent to server 
+   for learning purposes.
+- IDEA: Server-side wrapper for db connections (very simple) that allows anonymous [1]
+  (or any predefined group of users [2])
+  -- wrapper handles connections by validating *virtual* usernames and passwords for [1] case, 
+     or providing unique virtual user names and passwords for [2] case
+  -- on the server side, wrapper connects to database server (it can be available locally or remotely)
+     using it's private user name and password. Thus, we only need one *physical* user name and password 
+     for multiple users. Virtual names/passwords are mapped to physical one.
+     This is a solution for hosted database servers where it's hard to create as many users 
+     as actually needed.
+  -- Priviledges are mapped as well, and translated. By default, user A could be able to create his/her
+     own database and drop it. He/she couldn't be able to do the same with user's B databases, 
+     until user B allow this. The same for creating tables, and writing data.
+  -- wrapper secures server from too large data sets being sent to server 
+     (parameters need to be configurable)
+  -- it's all dedicated for Kexi; so it's NOT a generic wrapper for any database client.
+
+=== USABILITY TODO ===
+-string2Identifier(): convert national chars like 'ï¿½' to similar latin-1, instead of '_'
+-add "Simple/Advanced Usage" global option
+--for simple usage:
+--use captions everywhere possible, instead of names (tables, fiels, etc.); names should be autogenerated
+
+=== i18n ===
+- plugins/forms/kexiformpart.cpp "Best Fit" instead of "To Fit" (pl=Najlepsze dopasowanie)
+- KexiQueryDesignerGuiEditor::initTableColumns(): i18n("Visible") --> i18n("Column visible", "Visible")
+- add comment for translators: i18n("'empty' is an adjective here", "Empty database")
+-"Could rename table \"%1\" using the same name."
+  --> "Could NOT rename table \"%1\" using the same name."
+
+I am using update_kexi_po to recreate kexi.po file. THis will run cd koffice/ && make -f admin/Makefile.common package-messages
+
+
+=== Import/Export Framework TODO ===
+-KEXIDB: add lower level functions like: "getting table names list", "getting table schema",
+  "getting index schema"
+
+=== Combo box editor TODO ====
+-we're completely dropping using regular combobox
+-new layout: a lineedit + dropdown button + popup tableview, when needed
+-use (and add few) methods for tableview to enable adjusting it for use it as dropdown tv
+--allow to hide the horizontal stripes
+--add scrolling for mouse dragging
+--add highlighting under mouse pointer
+-dropdown tv has to contain:
+--QSizeGrip at the bottom corner
+-in kexidb: implement combobox settings for the foreign field:
+--ordered set of fields that are visible in popup tableview (ie. just query that is bound with the column)
+-use one and multi-key relations from kexidb
+
+=== Table View TODO ====
+- do not accept when enterind "-" for unsigned numeric types
+- add a functions for moving/cutting/copying/pasting rows
+- extended support for enums (combo boxes)
+- add top-left button that allow select all rows
+- enable clicked vheader button to select given row
+- enable column dragging
+- add action "restore original column order"
+- add possibility of renaming column by 1) dbl-clicking header 2) "rename column" action
+- more actions (as in Format and Insert menus of MSA2k3)
+- add own impl. (based on Qt) for date/time editor because:
+-- no focusSection(), etc. is available in current impl.
+-- frames cannot be easily removed
+-store last sorting column (and type) and load it on KexiTableView::setData()
+ (not it's only cleared)
+- replace KexiDB::RowData usage in KexiTableItem with something faster
+- TODO RELATED TO CELL EDITORS:
+	- signal on situation when user e.g. pressed alpha key when only numeric chars is allowed
+	- signal when null/empty value forcell isn't permitted
+	- signal when repeated value isn't permitted
+	- add support for cut, copy & paste of cell's contents (get shortcuts from KStdAccel)
+HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
+	the problem was with repainting when hscrollbar disapperars....
+- KexiTableView loads all data from the table: very slow and consumes a lot of memory:
+	(e.g. for each record with 3 fields: 1 integer, 1 text and 1 float consumed ~350B)
+  - ctors and dtors are WAY TOO SLOW!
+  - add an option: for bigger tables load only part of the table data
+  - optimize MySQL record size
+- add focus rectangles for cells: 
+  http://mfc.dundas.com/mfc/grid/index.aspx?section=Grid&body=focusrectangles.htm
+- add more cell types & options:
+  http://mfc.dundas.com/mfc/grid/index.aspx?section=Grid&body=celltypes.htm
+	--including: red corner with a note; sliders; radio buttons
+- highlight sorted column's cells slightly darker, like in current KListView's impl.
+- clicking on a header section (to sort), it ensures current cell is visible, but 
+  only y-position should be changed, not x
+- add support for crossed out rows - that can be used for results of DELETE queries
+  (see http://www.gnome-db.org/images/screenshots/mergeant_table_data.png)
+- add combo boxes for fields filtering in column headers, 
+  as in http://www.sqlmanager.net/i/scr/mysql/manager/Main%20100.gif
+- display autonumber indicator in autonumbered column(s)
+- reimplement header widget to better show sorting indicators
+- display tooltip over cells that are to small to display entire contents
+- Add icons for conditional formatting: http://blogs.msdn.com/excel/archive/2006/05/09/594200.aspx
+  (displaying icons is already possible using custom properties, BTW)
+- display [null]  values in boolean fields, e.g. as [?]
+
+==== ALTER TABLE TODO: =============
+-add a function for editing indices (including multi-field indices)
+  2 methods: 1) in additional dock 2) in property editor
+-add all missing properties (even when most are not working)
+-add "index" information icon @ the left hand of line with key(s) that is/are indexed
+-in propeditor: auto-sync pkey, unique, required & indexed properties on changing;
+  add message boxes if needed
+-for 'column width' property: add 'default' value at the beginning
+-propose index key (ask for name) on saving tables without index (allow to bypass this message)
+- re-add "tablepart_toggle_pkey" action after shared toggle actions fix:
+--when propeditor is focused, there's a problem with syncing on/off state of toolbar button
+  of "tablepart_toggle_pkey" action 
+  --> altertable view doesn't receive the signal about toggling (because it's not focused)
+
+==== Forms TODO ====
+-add "datasheet view" to db-aware forms
+-add [NewFormDefaults] option group and:
+--add "autoTabStop" (bool) 
+^^^ implement above so Form::autoAssignTabStops() will be called before form saving 
+    and before switching to data mode (this is already performed in FormIO::saveFormToDom().
+- add setting expressions for data-aware widget's dataSource
+- add setting anonymous (not stored) queries as form's dataSource
+- display "Autonumber" string for data-aware widgets
+- implement shared action categories to filter out them in 'assigning actions to push buttons'
+- implement "restore default properties" action for widgets
+- allow form's surface resizing when there's global layout defined
+- fix repainting form's surface boundaries repainting when its size is changed by entering 
+  value in the propeditor
+- fix spring behaviour: it cannot be shrinked if its inside a layout
+- KTextEdit doesn't allow to set custom cursor (also in Qt Designer)
+- support for multiple widgets selection in the property editor (requires changes to kexiproperty)
+- handle older and newer formats in FormIO::loadFormFromDom()
+- KAcceleratorManager::setNoAccel(QWidget*) - use it in data mode, 
+    define "auto accels" form's property and if it's false
+- find a way to create more meaningfull default names for widgets than button1, button2.
+  Maybe convert widget text (if available) using string2Identifier()?
+  Maybe ask user to enter meaningfull name (+"do not ask this question again" checkbox)?
+  See also http://charlespetzold.com/etc/DoesVisualStudioRotTheMind.html
+- For newer widget types, add information for compatible widgets that 
+  can be used instead of them. For best flexibility save this information in a form XML. 
+  Example use: We have Kexi version N and N+1. In N+1 there's KexiFrame widget introduced that
+  extends QFrame with more features. Kexi N has no KexiFrame implemented but only QFrame.
+  When KexiFrame witget type has been encountered in the form's XML string, 
+  Kexi N it is able to insert QFrame instead of KexiFrame (unsupported properties will be just ignored).
+  The result of substitution may be not accurate, so thing twice before adding such information
+  for a given widget type.
+- add "buttonStyle" property for pushbutton widget with following values:
+-- Button - the deafult
+-- Hiperlink - clickable hiperlink will be displayed instead of button itself
+-- Image - an clickable image will be displayed instead of button itself
+   For this value, aditional properties will make sense: 
+--- image, mouseOverImage, mouseDownImage
+-- Thus, we'll have more consistent solution than MSA, which allows to 
+   mess the form by setting hiperlinks directly also in Image box and Label widgets
+- add "icon" property for pushbutton
+- For "OnCLick" property:
+-- allow to set hiperlink (and anchor) as value (i.e. so called "target location")
+  (see MSA's hiperlinkaddress, hiperlinksubaddress properties)
+- frame widget:
+-- add such fancy frame: http://www.themaninblue.com/writing/perspective/2004/08/05/
+- tab widget: add color property for setting particular tab 
+- add a Scratchpad as in QtDesigner4, allows to drag&drop widgets between forms...
+- Use RESET clause for Q_PROPERTY, eg. RESET unsetPalette for paletteBackgroundColor.
+  Then, use bool QMetaProperty::reset ( QObject * o ) const to reset property value in the propeditor.
+- Autoforms: allow to define groups of fields so the fileds can be displayed with nice groupo boxes.
+  (e.g. http://www.glom.org/screenshots/glom_data_details.png)
+  This definition shgould be made during table design, so we can reuse groupping information also in
+  autoreports and auto web forms. Especially usable for tables with lots of fields.
+  We could even define the groupping levels so top-level groups can be splitted using Tab Wigget.
+
+==== Property Editor TODO: =========
+- text does not fit well inside combobox editor
+- double editor should be klineedit with doublevalidator, not spinbox
+- add a hint for propertybuffer to allow properties to be displayed side-by-side
+  e.g. width, height properties ca be displayed this way. See also property editor 
+	at http://freshmeat.net/screenshots/41728/
+-KexiProperty: make it really shared (using QShared?)
+-for each row (property) allow to define double-click-action dependent on property type,
+ * e.g. bool editor: toggle true/false,
+ * enum editor: select next value (circularly),
+ * fire selection dialog for filename editor, color editor, pixmap editor, etc.
+ * expand children for cells of type like "Rect"
+ * other types- by default: just move cursor to editor
+- add support for "set" types (e.g. AlignTop|AlignBottom) and port form's objpropertybuffer to this
+- add "description" label on the bottom of the property editor; 
+  it should reuse Property::description() text
+
+==== Query GUI Designer TODO: ======
+- add tables dropping from the browser
+- add a dialog for inserting multiple tables at a time
+- fix connections drawing
+- make "1" and "inf" signs a bit larger (scalable)
+- 'criteria' and 'totals' are unused yet
+- update query after change in Connection cache
+- for queries like 'select * from a, b, c' allow to enter * in 'table' column
+--this should also work when we're recreating field rows on switching from SQL view to design view
+- query part: react on KexiProject::aboutItemDelete() and KexiProject::aboutItemRename() signals
+
+==== SQL Editor TODO: =====
+- intergrate editor's (KPart) actions with KexiMainWindow's Actions
+- win32: katepart on win32: void KateSyntaxDocument::setupModeList (bool force)
+   Works slowly for the 1st time because there is no cache. 
+   Workaround: removed most of apps/katepart/syntax/*.xml files
+- win32: fix freeze on 1st char entering
+- win32: fix mmap for win9x (InterlockedCompareExchange() replacement is needed 
+  -> see kdelibs/win/mmap.c)
+- call qApp->processEvents() on highlighting schema loading, 
+  so 'wait' cursor can be visible on 1st loading.
+- allow saving invalid queries (KexiQueryDesignerSQLView::storeNewData())
+  (for invelid queries, after opening SQL view should be shown automatically)
+
+
+==== Main window TODO ====
+- propeditor dock window is hidden when a window in data view mode is active 
+  (or no window is present). This feature is partially disabled 
+  (using PROPEDITOR_VISIBILITY_CHANGES), though,
+  --REENABLE when blinking and dock width changes will be removed in KMDI
+- add sorting projects information using KexiProjectData::lastOpened
+- also add this info as "Database>Open Recent" menu subentry
+- display errors when plugin library could not be instantiated due to a broken lib
+- Project Navigator: display multiline item names is needed
+- display progress bar (in the statusbar?) to indicate there're pending jobs
+
+TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
+
+CCPASTEUR: 
+	-perhaps we'd reuse KDE Menu editor GUI?
+
+=== KexiDB TODO ===
+- look at Connection::isReadOnly() to see if we can perform certain operations 
+   requiring write access (create db, update db props, etc.)
+- reuse ConnectionData::useLocalSocketFile for connections using socket file
+- Connection::alterTableName():
+--alter table name for server DB backends!
+--what about objects (queries/forms) that use old name?
+- PGSQL: use setval(sequence) to allow setting autonumber values by hand
+   http://www.postgresql.org/docs/7.4/interactive/functions-sequence.html
+- optioanlly, introduce EDITABLE_AUTONUMBER_FIELDS driver flag
+PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyway at db creation time as sequence = 0
+	js	PiggZ_: but users ofter want to enter it anyway
+	js	eg. sqlite increments its autonumber to 1001 if you enter 1000
+	js	we want nothing more that that
+	js	s/than that
+	PiggZ_	personally, i never want to enter a value into autonumber.....autonumber usually = pkey, so its best to let the db handle it
+	js	If use want strict sequences to be used, he can:
+	js	1) hide autonumber column at all
+	js	2) set it not-editable
+	js	3) or just do not touch this column
+	PiggZ_	well then, its probably best to set the value of the sequence if a value is manually entered...if possible
+
+- add an QAsciiDict of (reserved) SQL keywords and use it in Driver::escapeIdentifier()
+- add FieldType and move things like typeGroupString() there
+- CRASH: removing tables when a query still uses it. 
+  HOW TO FIX: Add TableSchema::Ptr, QuerySchema::Ptr, etc.
+-- related to above: add a possibility to return all objects (and optionally all opened objects)
+  thad depend on a given table
+-- we could also add a GUI tree to show these dependencies
+- add permissions information to connection : and - for sqlite - check if file is RO
+   and then set RO flag
+- add kexi__toremove table, and use it to remove objects on begin connection
+- [Kexi 0.2?] sometimes a user has got only one database availaliable on a server 
+  (eg. when server is commercially hosted). Somethime user isn't just able 
+  to create database because of insuffficient privileges. 
+  Solutions --> add a possibility of sharing multiple projects within the same database
+      * kexi__* tables will be shared
+      * prefixes can be needed for table names (add option to set or unset this)
+      * prefixes will be hidden (stripped out) by KexiDB from real names, eg. 'mydb_mytable' -> 'mytable'
+      * let's set default prefix equal to database name
+      * within a group of "projects sharing the same databse" it will be easier to:
+       ** mount (attach) external projects to an opened Kexi project
+       ** run queries using tables from many projects
+      * disadvantages:
+       ** decreased modularity and data encapsulation
+       ** possible problems with transactions and user access rights
+       ** custom table names can look weird outside Kexi
+       ** the feature adds another level of complexity to KexiDB
+-define "login timeout" setting (in seconds) so connecting can rely on this value.
+ The setting could be assigned to a given connection data, 
+ but could be also defined globally for the application. 
+ (note: db:login-timeout is defined by opendocument spec.)
+- take a look at agrep: http://www.tgries.de/agrep/ -- looks loke it manages to convert 
+  non latin1 characters to latin1, eg. '' to 'a':
+  "*  option -ia searches case-insensitive
+     ISO characters are mapped to the nearest lower ASCII equivalent."
+- support for COMPOUND KEYS, ie. keys with 2+ fields; http://en.wikipedia.org/wiki/Compound_key
+- OPTIMIZATION: use PREPARE and EXECUTE statements for some backends, eg. for pgsql:
+	(excerpt from http://www.postgresql.org/docs/8.0/interactive/sql-prepare.html)
+	1. Create a prepared query for an INSERT statement, and then execute it:
+		PREPARE fooplan (int, text, bool, numeric) AS
+			INSERT INTO foo VALUES($1, $2, $3, $4);
+		EXECUTE fooplan(1, 'Hunter Valley', 't', 200.00);
+	2. Create a prepared query for a SELECT statement, and then execute it:
+		PREPARE usrrptplan (int, date) AS
+			SELECT * FROM users u, logs l WHERE u.usrid=$1 AND u.usrid=l.usrid
+			AND l.date = $2;
+		EXECUTE usrrptplan(1, current_date);
+	3. For completnedd, provide KexiDB API for "DEALLOCATE" as well
+- Implement "copy table" feature. 
+  To copy table t1 as t2 with data use: "create table t2 as select * from t1"
+  To copy table t1 as t2 without data use: "create table t2 as select * from t1 limit 0"
+  NOTE: pkeys, triggers, default values are not copied?
+
+- BLOBs in MySQL: max_allowed_packet is 1MiB; read http://dev.mysql.com/doc/mysql/en/blob.html
+ and http://dev.mysql.com/doc/mysql/en/server-parameters.html
+-- http://bugs.mysql.com/bug.php?id=1605 "MySQL protocol (it does not send 'chunked streams'
+for blobs...The client has to read the _entire_ blob into memory."; use:
+ "select substring(document, 1, 10240) from documents where docid='3'"  this to get chunks:
+ "select substring(document, 10241, 10240) from documents where docid='3'"
+ ....
+-- Other approach: store binary data using two tables 1st for metainfo about the data, 
+ 2nd for data chunks (e.g. 64KiB each): http://php.dreamwerx.net/forums/viewtopic.php?t=6
+
+?????	is it possible to just use a database and store the kexi stuff in a .kexi file?
+	jstaniek	ruurd: you just dont want to create kexi__* tables on your database?
+	ruurd	yes, and use an existing database.
+	jstaniek	ruurd: that's planned but note:
+	jstaniek	this option doesn't offer you atomic changes to database schema, by definition, because two database conenctions are started concurrently.
+	jstaniek	So we'll need to behave with care...
+	jstaniek	ruurd: of course this is easier to do with read only databases or even databases where you don't plan to change schema (but just process db records)
+- add Connection::ping() or so, using http://dev.mysql.com/doc/mysql/en/mysql-ping.html
+  and use it after being idle for a while (eg. call it every minute; also add an option for the delay)
+- Move ObjectStatus to kexidb. Merge with Object.
+- Support for opening .sql files: just import it on opening to in-memory database and dump it back into
+  .sql text on exisitng. Add optional compressing.
+- Add support for compressed kexi files (better keep the same .kexi extension instead of .kexiz)
+- Implement tree structures using idea #5 described here http://www.depesz.com/various-sqltrees.php
+  (does pgsql require this hack?)
+
+=== KexiDB MySQL Driver TODO ===
+- use InnoDB instead of MyISAM tables because of transactions support
+
+=== KexiDB Parser TODO ===
+- add a method for replacing a single given table name in the statement (useful on table renames)
+- add clever query relatins parsing 
+      (needed for switching back to GUI editor from text mode)
+- add flexible support for date/time constants
+- store text position information (line, column) for every token so it can be used 
+   in SQL editor to place cursor in case of errors
+- add translation method for SQL operators to driver, 
+  so SQLite can return "CONCAT" and mysql return "||" for concatenation oeprator, and so on
+- improvement in terms of data recovery: 
+  assume you're entering a long record and db connection is dead before saving...
+  the record could be buffered locally before closing Kexi application... and on next startup, re-sent.
+  This can work in simple cases (when complex transactions are not involved).
+
+=== KEXIDB TESTS=== 
+- add tests for DatabaseProperties
+- add tests for PreparedStatement
+- add tests for migration
+
+=== Startup TODO ===
+- reuse KexiNameWidget in KexiNewProjectWizard!
+- use KPasswordDialog::disableCoreDumps() for security reasons
+- IDEA for connection shortcuts:
+  Mysql Query Browser has a simple xml file defined:
+  http://dev.mysql.com/doc/query-browser/en/mysql-gui-appendix-store-connections.html
+- allow to choose if the file should be locked (opened in EXCLUSIVE mode) or not
+  (THIS SHOULD BE DEFAULT BEHAVIOUR)
+- (linux) remove stupid message 'Please select the file to open' 
+   when opening exisiting server project and clicking 'OK'
+- database files accessed remotely: make it work without copying a file to temp. dir. 
+  (maybe even without copying entire file? - patching sqlite required)
+- add "Open read only" checkbox to the file browser
+  (Driver::ReadOnlyConnection option already allows to open in read only mode)
+
+=== CLI TODO ===
+- add kexicmd as a symlink to kexi binary, for totally non-gui usage
+- just drop all tables when database already exist 
+	(so recreating database will be available even 
+	if you have only access to one database).
+- GRANT privileges for non-root (current?) user for newly created db
+
+=== Mimetypes/icons TODO ===
+- new mimetypes: 
+   application/x-vnd.kexi.project.sqlite2
+   application/x-vnd.kexi.project.sqlite3
+   application/x-vnd.kexi.project.shortcut
+  other:
+   application/x-vnd.kexi.connections.shortcut
+   application/x-vnd.kexi.table.shortcut
+   application/x-vnd.kexi.query.shortcut
+- remove x-vnd.kexi.desktop in kdelibs
+- copy mimetypes and magic def. to kdelibs (keep it within Kexi for compat.)
+- remake kexi mime type svg icons
+- copy kexi mime icons to kdelibs, remove old one
+** Ask SQLite devs for a possibility for adding a field to indicate kexi-sqlite 
+   format without opening database
+
+
+=== Docs TODO ===
+
+-translate the current content from polish to english
+-?? migrate english content to wiki format
+-move polish content to .po translation file
+-Add this to the preface http://encyklopedia.helion.pl/index.php/Kartotekowa_baza_danych
+
+=== 2005 PRO TODO ===
+-greatly improve sql parser
+-greatly improve sql gui designer
+--totals (sum, avg)
+-more docs
+-more widgets for db-aware forms
+-add simple reporting
+-finish server support
+--connection creator
+--fix permission problems
+
+
+=== after-0.9 TODO ===
+TODO: add time zones support: 1994-11-05T08:15:30-05:00
+TODO: update to sqlite3.1 and use it's features http://www.sqlite.org/releasenotes310.html
+TODO: 0.2: reuse http://segfault.is-a-geek.net:8001/feedback-kinitiator/
+	gfx can be found here: http://cvs.sourceforge.net/viewcvs.py/kinitiator/
+
+TODO: look at recent Martin's stuff: http://homepages.cs.ncl.ac.uk/m.a.ellis/kexi/
+
+
+Core TODO:
+- update shared actons availability ONLY AFTER we've switched to other kexidialog base,
+  not just on LOST FOCUS
+- for now: clicking on empty menu bar's item (eg. "Format") causes to losing shared actions state
+- make core/ non-gui lib. Move data creation code out of KexiDialogBase.
+
+Reports TODO
+- reuse most of KexiFormPart code in KexiReportPart (eg. creating shared actions)
+- line widget should use special resize handle set -- with only two rectangles (Forms too)
+
+KMDI TODO
+- do not execute KMdiMainFrm::switchOffMaximizeModeForMenu() when true==QApplication::closingDown()
+
+QUICK TODO: 
+Forms:
+-change form's object caption to "caption" property, when changed and conversely!
+
+TODO:::::::
+1. test dipesh.kexi - ID column is not used on row updating!!!
+
+2. dipesh	np, I also found a crasher witch is maybe related.
+	dipesh	just change a value, go to design mode and switch back to dataview...
+	dipesh	[KCrash handler]
+	dipesh	#3 0xb59b156f in KexiFormScrollView::createEditor ()
+	dipesh	from /usr/lib/kde3/kexihandler_form.so
+	dipesh	#4 0xb7e5f502 in KexiDataAwareObjectInterface::startEditCurrentCell ()
+	dipesh	from /usr/lib/libkexidatatable.so.0
+	dipesh	#5 0xb59b276a in KexiFormScrollView::valueChanged ()
+	dipesh	from /usr/lib/kde3/kexihandler_form.so
+	dipesh	I look where the crasher is coming from.
+	dipesh	oh, in KexiFormScrollView::createEditor
+	dipesh	column( col ) returns NULL
+	jstaniek	dipesh: it's only within your example project...
+	dipesh	therefore column( col )->readOnly() crashes...
+
+reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-2003.ps
+
+=== CSV Import Dialog TODO ===
+- (1.0) add "skip empty columns" and "skip empty rows" option
+- add option for adding explicit primary key column with autonumber
+
+=== Interesting features ===
+- Add random names/surnames generator: http://www.ruf.rice.edu/~pound/
+  Good for generating good-looking random data for a given table.
+-- Autodetect 'name' columns or ask user to describe what he wants. 
+   Comply with data validation rules.
+-- use famous 'Lorem ipsum dolor sit amet...' test text for longtext types
+
+
+=== QUICK TODO ===
+
+TODO: in KexiMainWindowImpl::slotProjectOpen() add support for starting new kexi instance for selected conn data
+      (we need to remember from what filename has been a conndata loaded)
+TODO: move ConnectionData::savePassword to QMap<ConnectionData*,bool> KexiDBConnectionSet::savePasswordMap or so
+TODO: Forms: fix label width resizing when entering text within inline editor
+TODO: Forms copy more properties (like palette) to inline editor from e.g. text label
+TODO: Forms: fix: double clicking unselected widget doesn't switch us to inline editing mode
+TODO: Forms: object tree: enable sorting by name after clicking "name" header; 
+             enable sorting by class,name by clicking "class" header
+
+Startup TODO:
+- when using a startup item, touch the file for better sorting:
+http://www.koders.com/c/fid97791600CA5D0A2EA559490BD9444B0775B2370A.aspx
+
+- add "Save Special->Shortcut file for this project" action
+- add "Save Shortcut file for this connection" action
+- FOR SLOW CONNECTIONS: show progress bar on:
+-- retrieving a list of projects (in KexiProjectSelectorDialog)
+-- opening a project (in status bar?)
+- Also, add "cancel" button near the progress bar (reuse the one from KMail?)
+
+
+TODO: If a form has no focus, FormManager::windowChanged() and KexiFormView::setFocusInternal()
+ don't work properly (setFocus() is not available...)
+
+FORMS:
+-Image Box: 
+--pasting large images makes chooser button invisible; maybe place it on top of the widget?
+--set better default for focusPolicy, implement setFocus()
+--add filter property (using KImageEffect)
+--add QFrame container
+--make image-related actions undoable/redoable in design time
+--add 'print' action
+--add for movies/animations support using QMovie to KexiDBImageBox 
+  or (most probably) inherit KexiDBImageBox as KexiDBMovieBox
+---KexiBLOBBuffer::pixmap() shouldn't be used but data() should be used to create QMovie object 
+   in each movie widget itself because even if the same QMovie was used in many movie widgets:
+   a) speeds can vary between movie widgets, b) different forms can be opended in different moments
+   so playing starts in different moments, c) one or more movies can be stopped while others not
+---add following related properties: int playbackSpeed (in frames per second, 0==default), 
+   bool autoStart (true==default), playbackControls (false==default), bool loopPlayback (true==default)
+   bool pauseAfterEnd (0==nothing==default)
+-property pane: shrink widget name displayed at the top by adding "..." to avoid problems
+ with pane's size when selected widget has very long name
+- resize handles are always black: this is bad on black background!
+- use KURLLabel as an option for push button widget
+
+
+Combo Box Editor
+- ADD "restrict to list" OPTION: don't copy 1st row's value if there's no value in the combo
+  --> needed for 1st column of Query Designer
+
+KEXIDB:
+- ConnectionData: make local sockets default for unix, instead of tcp/ip
+
+GENERAL:
+- removed conflict between standalone and KOffice version by:
+-- inserting "standalone" word into module names, 
+   eg. kexidb_mysqldriver.so -> kexidb_mysqldriver_standalone.so
+-- renaming kexi to kexi-standalone
+- rename "data view mode" to "browse view mode" (as in Filemaker)
+- add "File->Mail..." action (requires closing and copying of the sqlite file, if locked)
+
+MARKETING:
+- add "Created With Kexi" page and a link to it from k-p.org and kexi.pl
+- when releasing new Kexi version publish: A first look at Kexi x.y" page, like this:
+  http://software.newsforge.com/article.pl?sid=05/09/28/1345228
+- short reasoning for using db abstraction layers: 
+  http://developers.slashdot.org/comments.pl?sid=164824&cid=13755151
+
+
+ACCESIBILITY - Mouseless Operation Problems (KOffice 1.4.1):
+- MORE: http://accessibility.kde.org/reports/koffice-1.4.1-accessibility-assessment.pdf
+- It is not possible to select the data type of a
+field in the table editor. Alt+DownArrow does not work.
+- When editing the fields of a table, it is not
+obvious how to flag a field as a primary key. 
+WORKAROUND: Use Popup Context Menu (Menu key) and select Primary Key, OR use Edit | Primary
+Key on the main menu, OR use Property Editor.
+- In the Property Editor, is not obvious how to
+change a boolean property. Alt+DownArrow does not work.
+- It is not possible to change the value of a
+property in the property editor that has a picklist of possible values, for example,
+SubType. Alt+DownArrow does not work.
+- When creating a query, it is not possible to add a table to the query.
+- Not possible to select a column, table,
+totals in Query Columns panel. Alt+DownArrow does not work.
+- It is not possible to add a widget to a form.
+- Pressing Tab key while focus is in the Form
+Editor window, but not on any widgets on the form, crashes Kexi.
+- It is not possible to change the size of a
+widget in the form editor without the mouse.
+
+TODO: 
+- update conn dialog gui
+example: http://www.ntpb.co.uk/kexi/msn.png
+
+
+Migration (Import Project Wizard) TODO:
+- change drivers comboboxes to KexiDBDriverList
+  (impl. this one with drv name and description columns)
+- close currently opened file-based project if it's the same as imported one
+  (do not save anything)
+- 'select source db type' page: change "sqlite/msa/mysql/pg" to "sqlite/msa/server database"
+  because type of server db is in fact selected on the next page (source conn selection)
+- set the same path for "destination" file browser as for "source" one
+- add "do not create system tables" option to the wizard
+
+MDB Migration:
+- add checks for "no space left on device" error (otherwise Kexi will crash)
+- fix currency converting
+- use MSysRelationdhips table to read MSA db relationships (easy, it's not encoded)
+
+=== Kexi Web Site TODO ===
+- move to mediawiki (JJ?)
+- Add "Features" page like this http://www.agata.org.br/us/index.php?file=features.php
+- Extend "Credits" page with Gold Users/Translators, etc. like here: 
+   http://www.agata.org.br/us/index.php?file=thanks.php
+
+AUTOFIELD:
+- copy/paste doesn't preserve caption text (maybe caption should be copied 
+  to from QueryColumnInfo to a property)
+
+KexiFrame:
+- fix highlight for data mode! (very old bug)
+
+Migration:
+- fix: server as destination is broken
+
+CSV Import TODO:
+- switch from dialog to wizard; add filedlg widget as the 1st page
+- add better detection for CSV data with \t delimiters (needed for pasting from spreadsheets)
+- add option for storing import settings
+- always test using e.g. this file: http://cvs.sourceforge.net/viewcvs.py/*checkout*/wcuniverse/priv/units/units.csv
+- change boolean "First row contains column names" to 3-value combo:
+  "Get column names:" ["None", "From the first row", "From the first imported row"]
+
+CSV Export TODO:
+- add "Include row count as first column - include row number in the first 
+   column of each row" option
+- add "Fixed columns width" option (can be extended to support "fixed width text" format
+- add "Set text to (null) on NULL value - use the string "(null)" to represent 
+   a NULL value in the document" option
+- MORE TODOs here: http://www.aquafold.com/docs-qw-save-results.html
+- by default, use delimiter=\t and quote=none for clipboard (needed for copying to spreadsheets)
+- add "Strip leading and trailing blanks off of text values" option
+
+KexiDB TODO:
+-implement QuerySchema::setOrderByColumnList()
+-implement Cursor::setOrderByColumnList()
+
+TableView TODO (before 1.0)
+- fix repainting cells when moving down/up arrow at the window boundaries 
+  (weird, win32 is not affected)
+
+General TODO:
+- handle KApplication::shutDown()
+
+TODO:
+- BUG! "edit->clear table" actions does not repaints tableview when it's in spreadsheet mode 
+  (e.g. in table/query designer)
+
+TODO:
+- on opening detect whether a table exists (empty table view should not be displayed)
+- Another Kexi instance started from KexiMainWindow using QProcess freezes after opening
+  3rd table or so. Move to KProcess on Linux.
+
+TODO: entering table/query name by hand doesn't work in 'form data source' combo
+
+TODO:
+- if you place e.g. a label in a container like a tabwidget and doubleclick it to edit the content, 
+  the label jumps around. ccpasteur said he fixed it last year ;)
+- only change bg color of tab widget, not its outer area; fix changing tabs bg color
+
+Import
+- error "BLOB/TEXT column 'isbn' used in key specification without a key length"
+  when importing books.mdb into a mysql db
+
+Forms:
+- after setting "auto" tab order, we need to close and open the form to get tab stops to work properly
+
+TODO: 
+- use KLineEdit::displayText() to get partially filled date or time values like 20__-__-__;
+  then use this for checking data validity (?)
+
+TODOs from Jeff Denman:
+- add command line option for performing a complete database import, especially for MSA files
+- instead of always displaying "object names" in the project navigator: 
+  display "captions" but offer an option to display "names" instead;
+   AND, optionally: offer a full-width window with the list of database objects
+- import bug for MSA: no values for this field after import:
+	Field Size:		Decimal
+	Precision:		10
+	Scale:		2
+	Decimal Places:	Auto
+
+TODO Data Types
+-Currency
+  MS Access: Currency values and numeric data used in mathematical calculations involving data 
+  with one to four decimal places. Accurate to 15 digits on the left side of the decimal separator 
+  and to 4 digits on the right side. 
+-Decimal Number (NUMERIC?)
+  MS Access: Decimal Stores numbers from –10^38–1 through 10^38–1 (.adp), 
+  from –10^28–1 through 10^28–1 (.mdb); decimal precision: 28 B, storage size: 12 B
+
+
+TODO Migration from Native SQLite3
+- use sqlite3_column_decltype() http://sqlite.org/capi3ref.html#sqlite3_column_decltype
+  and sqlite3_column_name() to know column names and types. 
+  Add reasonable case-insensitive mappings like "INTEGER|integer|INT|int" -> [integer]
+
+MDB Import
+- FIXME sometimes order of imported fields is invalid: PKEY field jumps to end.. (books2.mdb)
+
+TODO: table view
+- for FP numbers: allow to start entering value from "." or ","
+
+Forms TODO
+- add "navigationCaption" property to table and form, so "Records:" Label in the record nav. becomes e.g. "Bananas:"
+  see: http://blogs.msdn.com/thirdoffive/archive/2006/04/06/560454.aspx
+
+Forms TODO
+- Checkbox widget with focus policy set to Tab has problems with KexiDataAwareObjectInterface::acceptEditor() 
+  because m_editor is set to _currently focused_ widget (problem where there are e.g. >1 checkboxes)
+  Partially fixed by setting StrongFocus policy as default; 
+ FIX THIS for other focus policies too...
+
+TODO:
+table designer: 
+ fix setting PK
+
+
+KDElibs4 TODO:
+- wizard
+- do not require .la in libltdl
+
+== April 1 2007 TODO ==
+- show the screenshot of kexi displaying yes/no/maybe-dialogs, as for the "Woman edition"
+
+TODO:
+Kexi >2.0 (probably late 2007): Add SQLite >3.3 driver. Offer exporting similar to the one between 2.8->3.0.
+ Think about backporting the >3.3 driver to Kexi 1.1.
+
+
+
+- for table t1(a,b,c) delete column t1.c:
+
+CREATE TABLE t1_new(a,b);
+INSERT INTO t1_new SELECT a,b FROM t1;
+DROP TABLE t1;
+ALTER TABLE t1_new RENAME TO t1;
+
+- for table t1(a,b,c) rename column t1.c to t1.d:
+
+CREATE TABLE t1_new(a,b,d);
+INSERT INTO t1_new SELECT a,b,c FROM t1;
+DROP TABLE t1;
+ALTER TABLE t1_new RENAME TO t1;
+
+
+Forms
+- enable edit->copy, actions, etc. for Data View
+- ImageBox: show a tootip with large image and its name if the image was cropped
+  or only its name if the image is not cropped
+- AutoField: highlighting the label when the buddy is focused
+- AutoField: handle label editing after double clicking
+- AutoField: draw required field in bold (or optionally add (*)
+
+Table View
+- allow to select entire rows, columns and grids as in a spreadsheet; 
+  offer copy/cut/paste/copy-to-file/clear for such selections
+
+TODO:
+- inform Raphael about koffice.org/1.5/ url, give him the php code
+
+Table Designer TODO
+- i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)
+- add setting for default length of the text type
+
+Table Column Lookup XML Format:
+<lookup-column>
+ <row-source>
+  empty
+  | <type>table|query|sql</type>  #required because there can be table and query with the same name
+                              #TODO1: support "valuelist"
+                              #TODO2: support "fieldlist" (basically a list of column names of a table/query,
+                                      "Field List" as in MSA)
+  |<name>string</name> #not used for sql source type
+  |<sql>string</sql> #must be valid KEXISQL SELECT QUERY
+ </row-source>
+ <bound-column>
+  <number>number</number> #in later implementation there can be more columns
+ </bound-column>
+ <visible-column> #a column that has to be visible in the combo box
+  <number>number</number> #in later implementation there can be more columns
+ </visible-column>
+ <column-widths"> #column widths, -1 means 'default'
+   <number>int</number>
+   ...
+   <number>int</number>
+ </column-widths>
+ <show-column-headers>
+   <bool>true/false</bool>
+ </show-column-headers>
+ <list-rows>
+   <number>1..100</number>
+ </list-rows>
+ <limit-to-list>
+   <bool>true/false</bool>
+ </limit-to-list>
+ <display-widget>
+   <bool>"combobox"/"listbox"</bool>
+ </display-widget>
+</lookup-column>
+
+[todo]
+
+Combobox table edit TODO:
+- copy should handle "displayed" value, not the real one 
+  (maybe let's use a custom clipboard mimetype?)

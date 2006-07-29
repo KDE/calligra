@@ -1,0 +1,218 @@
+This is an outline of the files and directories in kword.
+(actual state of 2003-07-23)
+
+DIRECTORIES:
+  dtd:
+    the DTD definition for the kword file format
+    - kword.dtd
+      main document structure
+    - framstyles.dtd
+      borders, background
+    - tablestyles.dtd
+      borders, background and (text)style
+    - tabletemplates.dtd
+      pointers to a tablestyle for the first,
+      last row and column and body
+  pics:
+    application icons
+  horizontalline:
+    - line.png
+      horizontal line picture
+  data:
+    xml template files:
+    - framestyles.xml
+    - tablestyles.xml
+    - tabletemplates.xml
+  demos:
+    various example files for kword
+    (another interesting place for such files is the kofficetests 
+    module in kde cvs):
+    - bidi.kwd
+      variuous multilingual text examples
+    - chapters.kwd
+      demonstrates chapter headers and text spaces
+    - DTPTest.kwt
+      DTP frames template
+    - eurosign.kwd
+      the euro sign in different fonts
+    - flatland.kwd
+      a lengthy (English) text file
+      (Flatland: A Romance of Many Dimensions by Edwin A. Abbott)
+    - frametest.kwd
+      frame/subframe formatting demo
+    - statistics.kwd
+      test cases for KWord's statistics
+  expression:
+    - expression.xml
+      builtin expressions template file
+  filters:
+    currently only contains the old non-compiled code for the "mif"
+    filter
+    has been deprecated in favour of ../filters
+  mailmerge:
+    source to allow merging of a (large) number of email addresses 
+    into a single document
+    subdirectories:
+        kabc:
+            kwmailmerge_kabc.h/cc    - KABC addressbook interface
+        sql:
+            various QTSQL interface implementation files
+            to handle table selection and mailmerge data
+  templates:
+    various page layout templates
+        make_template.pl    - Perl script to create XML templates
+                            - from KWord-saved XML files
+    subdirectories
+    (icons, template frames, and desktop definitions):
+        CardsAndLabels:
+            BusinessCards10.*
+            Labels16.*
+        DTP:
+            Empty.*
+            fax.*
+            SimpleLayout.*
+        Envelopes:
+            EnvelopeC6.*
+            EnvelopeDL.*
+        Wordprocessing:
+            A4.*
+            Letter.*
+            Memo.*
+            PlainText.*
+            TwoColumns.*
+
+FILES:
+  dcop interface:
+    *IFace.h/cc                 - the dcop interface
+
+  misc app stuff:
+    main.cc                     - the main
+    kwaboutdata.h               - the appname, authors...
+                                - shared between main.cc and kwfactory.cc
+    kword.rc                    - xml-gui layout
+    kword.desktop               - application .desktop file
+
+  main document data structures:
+    defs.h                      - various global definitions
+                                - FrameSetType, TypeStructDocItem
+    kwdoc.h/cc                  - classes: command history, child,
+                                  and document (config, defaults, load,
+                                  save, frames helpers, and almost
+                                  everything else that links doc
+                                  with ui)
+  configuration dialogs:
+    kwconfig.h/cc               - config ui
+    configfootnotedia.h/cc      - footnotes configuration
+  core:
+    kwfactory.h/cc              - part factory + about data
+  commands:
+    kwcommand.h/cc              - base classes for undo / redo
+                                - (for core editing functionality)
+  misc ui:
+    resizehandles.h/cc          - ui helper (resize handles)
+  core/ui:
+    app:
+        kwcanvas.h/cc           - canvas (drawing area, mouse event
+                                  handlers)
+        kwview.h/cc             - actions (menus, toolbars)
+                                  and their implementation
+    painting:
+        kwtextparag.h/cc        - KWord's extension of KoTextParag
+                                  (e.g. for load and saving as xml)
+        kwtextdocument.h/cc     - KoTextDocument reimplementation
+        kwanchor.h/cc           - support for inline frames
+        kwanchorpos.h           - (ditto)
+    view mode:
+        kwviewmode.h/cc         - "page mode" / "preview mode" etc.
+    doc outline:
+        docstruct.h/cc          - gui for overall document structure
+    styles:
+        stylenames.cc           - contains builtin style names,
+                                  for translation purposes
+        kwstylemanager.h/cc     - KWStyleManager, extension to KoStyleManager
+                                  (the style editor is in libkotext)
+    OASIS loading, saving:
+        kwoasisloader.h/cc      - methods for OASIS loading
+        kwoasissaver.h/cc       - OASIS saving of a document fragment (paragraphs)
+
+    advanced editing:
+        kwinserthorizontallinedia.h/cc  - insert hor. line dialog
+        kwinsertpagedia.h/cc    - insert page dialog
+    tables:
+        kwtableframeset.h/cc    - all the table handling
+        kwtabletemplate.h/cc    - holds table templates
+        kwtabletemplateselector.h/cc    - manages table templates/ui
+        kwtablestyle.h/cc           - table styles handlers
+        kwtablestylemanager.h/cc    - table styles manager/ui
+    table dialogs:
+        tabledia.h/cc           - table insertion dialog
+        deldia.h/cc             - table row/column deletion dialog
+        insdia.h/cc             - table row/column insertion dialog
+        splitcellsdia.h/cc      - cell splitting dialog
+        resizetabledia.h/cc     - table resize dialog
+    frames:
+        framedia.h/cc           - frame dialog
+        kwframe.h/cc            - frame, framesets (picture/formula/...),
+                                - framesetedit objects for editing framesets
+        kwframelayout.h/cc      - the frame layout engine for headers/main
+                                  frames/footers/footnotes.
+                                  (this is a helper for KWDoc::recalcFrames)
+        kwtextframeset.h/cc        - text frameset
+        kwformulaframe.h/cc        - formula frames
+        kwpartframeset.h/cc        - frameset containing an embedded object
+    frame styles:
+        kwframestylemanager.h/cc    - manage frame styles
+                                    - (list, preview, etc.)
+        kwframestyle.h/cc        - frame style handling
+        kwimportstyledia.h/cc    - import frame styles
+    pics:
+        kwtextimage.h/cc        - old stuff
+                                - (inline image without frame)
+                                - (not available from the UI,
+                                - only from old files)
+        kwinsertpicdia.h/cc     - insert picture dialog
+
+  core features:
+    variables:
+        kwvariable.h/cc         - basic document variables
+                                - (Renamed variables.h/cc ???)
+    footnotes:
+        footnotedia.h/cc        - footnote insertion dialog
+        configfootnotedia.h/cc  - footnotes configuration
+    background spell checking:
+        kwbgspellcheck.h/cc
+    contents:
+        contents.h/cc           - table of contents
+    search:
+        searchdia.h/cc          - text find and replace
+
+  other features:
+    bookmarks:
+        KWCreateBookmarkDia.h/cc    - bookmarks dialogs
+        KWCreateBookmarkDiaBase.h/cc    - create a bookmark
+        KWSelectBookmarkDiaBase.h/cc    - select/rename/delete
+                                        - bookmark
+    mailmerge:
+        mailmerge.h/cc
+        mailmerge_actions.h/cc
+        kwordmailmergedatabaseiface.cc
+        mailmerge_interface.h/cc    - dcop
+        mailmerge_interface_skel.cc - (ditto)
+        kwmailmerge.desktop         - mailmerge .desktop file
+    expressions:
+        kweditpersonnalexpressiondia.h/cc
+    text sorting:
+        sortdia.h/cc            - sort text dialog
+
+  misc weird files: ;-)
+    kwstyle.h                   - Forwarder to kostyle.h,
+                                - they're the same thing now.
+    dummy.cc                    - empty file to compile as a
+                                - "kdeinit loadable module"
+
+MISC FILES:
+  Docs, hints, etc.:
+    DESIGN
+    DEBUG
+    TODO
+    HACKING

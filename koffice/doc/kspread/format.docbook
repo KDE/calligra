@@ -1,0 +1,695 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Raphael</firstname>
+<surname>Langerhorst</surname>
+<affiliation>
+<address><email>raphael.langerhorst@kdemail.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Spreadsheet Formatting</title>
+
+<sect1 id="formatcells">
+<!--<title>Fonts, Text, Borders and Colors</title>-->
+<title>Cell Format</title>
+<para>To change the format and appearance of selected cell(s), row(s) or column(s) use
+the <guimenuitem>Cell Format...</guimenuitem> option from the <guimenu>Format
+</guimenu> menu or from the <mousebutton>right</mousebutton> mouse button popup
+menu.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Right mouse button context menu.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>This will bring up the <guilabel>Cell Format</guilabel> dialog box
+which has several tabbed pages:</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title>Data Formats and Representation</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><guilabel>Data Format</guilabel> page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>The <guilabel>Data Format</guilabel> page of the <guilabel>Cell Format</guilabel> dialog box 
+lets you control how the values of cells are displayed.</para>
+<para>The top part of this page lets you select the format to be used when 
+displaying numeric values, dates or times. A <guilabel>Preview</guilabel> pane
+allows you to see the effect of the new format.
+</para>
+<para>You can set the same data format for a row or a column by selecting the
+row or column and calling the <guilabel>Cell Format</guilabel> dialog with the &RMB;.</para>
+<note><para>You can increase the precision decimal for any number in <guilabel>Generic</guilabel>,
+<guilabel>Number</guilabel>, <guilabel>Percent</guilabel>, <guilabel>Money</guilabel> or 
+<guilabel>Scientific</guilabel> formats using the <guiicon>Increase decimal
+precision</guiicon> icon in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject></inlinemediaobject></para>
+<para>You can decrease the precision decimal for any number in <guilabel>Generic</guilabel>, 
+<guilabel>Number</guilabel>, <guilabel>Percent</guilabel>, <guilabel>Money</guilabel> or 
+<guilabel>Scientific</guilabel> formats using the <guiicon>Decrease decimal precision</guiicon> icon
+in the <guilabel>Format</guilabel> toolbar: <inlinemediaobject><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject></inlinemediaobject></para>
+</note>
+<variablelist>
+<varlistentry>
+<term><guilabel>Generic</guilabel></term>
+<listitem><para>This is the default format and &kspread; autodetects the
+actual
+data type depending on the current cell data. By default, &kspread; right
+justifies numbers, dates and times within a cell and left justifies anything
+else.</para>
+<para>If the <guilabel>Generic</guilabel> format does not suit you, you can change to a specific
+format among the choices below.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Number</guilabel></term>
+<listitem><para>The number notation uses the notation you globally choose in
+&kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
+Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Numbers</guimenuitem></menuchoice>.
+Numbers are right justified by default.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Percent</guilabel></term>
+<listitem><para>When you have a number in the current cell and you switch the
+cell format from <guilabel>Generic</guilabel> to <guilabel>Percent</guilabel>, the current cell number will be multiplied
+by 100%.</para>
+<para>For example if you enter 2 and set the cell format to <guilabel>Percent</guilabel>, the number
+will then be 200 %. Switching back to <guilabel>Generic</guilabel> cell format will bring it back to
+2.</para>
+<para>You can also use the <guiicon>Percent</guiicon> icon in the <guilabel>Format</guilabel>
+Toolbar: <inlinemediaobject><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject></inlinemediaobject></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Money</guilabel></term>
+<listitem><para>The <guilabel>Money</guilabel> format converts your number into money notation using
+the settings globally fixed in &kcontrolcenter; in <menuchoice><guimenu>Regional
+&amp; Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Money</guimenuitem></menuchoice>. The
+currency symbol will be displayed and the precision will be the one set in
+&kcontrolcenter;.</para>
+<para>You can also use the <guiicon>Currency</guiicon> icon in the <guilabel>Format</guilabel> toolbar to set the
+cell formatting to look like your current currency:
+<inlinemediaobject><imageobject>
+<imagedata fileref="currency.png" format="PNG"/>
+</imageobject></inlinemediaobject></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Scientific</guilabel></term>
+<listitem><para>The <guilabel>Scientific</guilabel> format changes your number using the scientific
+notation. For example, 0.0012 will be changed to 1.2E-03. Going back using
+<guilabel>Generic</guilabel> cell format will display 0.0012 again. The <guilabel>Generic</guilabel> cell data format does
+not keep scientific notation so if you want this notation, you have to specify
+it using this menu item.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Fraction</guilabel></term>
+<listitem><para>The <guilabel>Fraction</guilabel> format changes your number into a fraction. For
+example, 0.1 can be changed to 1/8, 2/16, 1/10, &etc;. You define the type of
+fraction by choosing it in the field on the right. If the exact fraction is not
+possible in the fraction mode you choose, the nearest closest match is chosen. 
+For example: when we have 1.5 as number, we choose <guilabel>Fraction</guilabel>
+and <guilabel>Sixteenths 1/16</guilabel> the text displayed into cell is "1
+8/16" which is an exact fraction. If you have 1.4 as number in your cell and you
+choose <guilabel>Fraction</guilabel> and <guilabel>Sixteenths 1/16</guilabel>
+then the cell will display "1 6/16" which is the nearest closest Sixteenth
+fraction.</para>
+</listitem><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term><guilabel>Date format</guilabel></term>
+<listitem><para>To enter a date, you should enter it in one of the formats set
+in &kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
+Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Time &amp;
+Dates</guimenuitem></menuchoice>. There are two formats set here: the date format
+and the short date format.</para>
+<para>A random natural number NN will be transformed in the date from 30st
+December 1899 (which is 0) with the number of days NN added. For example if you
+have a cell with 100 and you choose Data Format -&gt; Date, "1900-04-09" will be
+displayed in the cell which is 100 days after 30st December 1899. This starting
+date is two days early as it was a bug in Lotus 123 and then it stayed that way
+in Excel in order to keep compatibility. Few people will need to calculate from
+1st January 1900 anyway and adding 9 days to 1st November 2000 for example will
+give you 10th November 2000 so all normal calculations on dates are
+correct.</para>
+<note><para>When a cell is in the <guilabel>Date format</guilabel>, you can drag this cell down as
+you do with numbers and the next cells will also get
+dates, each date being increased by one day.</para></note><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Time format</guilabel></term>
+<listitem><para>This formats your cell content as a time. To enter a time, you
+should enter it in the <guilabel>Time format</guilabel> set in &kcontrolcenter;
+in <menuchoice><guimenu>Regional &amp; Accessibility</guimenu><guisubmenu>Country/Region &amp; 
+Language</guisubmenu><guimenuitem>Time
+&amp; Dates</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
+dialog box you can set how the time should be displayed by choosing one of the
+available time format options. The default format is the system format set in
+&kcontrolcenter;. When the number in the cell does not make sense as a time,
+&kspread; will display 00:00 in the global format you have in
+&kcontrolcenter;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Text</guilabel></term>
+<listitem><para>This formats your cell content as text. This can be useful if
+you want a number treated as text instead as a number, for example for a ZIP
+code. Setting a number as text format will left justify it. When numbers are
+formatted as text, they cannot be used in calculations or formulas. It also
+change the way the cell is justified.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Custom</guilabel></term>
+<listitem><para>Does not work yet. To be enabled in the next release.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>The lower part of the <guilabel>Data Format</guilabel> page lets you add 
+a <guilabel>Prefix:</guilabel> such as a $ symbol at the start of each item or 
+a <guilabel>Postfix:</guilabel> such as $HK to the end. You can also control 
+how many digits are displayed after the decimal point for numeric values, 
+whether positive values are displayed with a leading + sign and whether 
+negative values are shown in red.
+</para>
+</sect2> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title>Fonts and Text Settings</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Font page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>The <guilabel>Font</guilabel> page lets you select the font family, <guilabel>Style:</guilabel>,
+<guilabel>Size:</guilabel>,  <guilabel>Weight:</guilabel>
+and <guilabel>Color:</guilabel> for the current cell, including some additional options like
+underlined or striked out text.
+The lower part of the page gives a <guilabel>Preview</guilabel> of the selected text format.</para>
+<para>The default font is set for all cells in the
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Style
+Manager</guimenuitem></menuchoice> menu with the currently used style.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term><guilabel>Family List box</guilabel></term>
+<listitem><para>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term><guilabel>Style:</guilabel></term>
+<listitem><para>Choose the style for your font for the currently selected cells.
+When you select several cells with different styles, the displayed style is set
+to <guilabel>Varying (No Change)</guilabel> and leaving it that way will keep
+all your current style settings for each cell. Changing to
+<guilabel>Roman</guilabel> for example will change all the selected cells style
+text to <guilabel>Roman</guilabel>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Size:</guilabel></term>
+<listitem><para>Choose the size for your font for the currently selected cells.
+When you select several cells with different sizes, the displayed size is set to
+<guilabel> </guilabel> (no number written) and leaving it that way will keep all
+your current size settings for each cell. Changing to <guilabel>14</guilabel>
+for example will change all the selected cells font size to
+<guilabel>14</guilabel>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Weight:</guilabel></term>
+<listitem><para>Choose the weight for your font for the currently selected
+cells. When you select several cells with different font weight, the displayed
+weight is set to <guilabel>Varying (No Change)</guilabel> and leaving it that
+way will keep all your current weight settings for each cell. Changing to
+<guilabel>Bold</guilabel> for example will change all the selected cells font
+weight to <guilabel>Bold</guilabel>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Color:</guilabel></term>
+<listitem><para>Choose the color for the currently selected cells' text.
+Clicking on the color bar will bring you the standard KDE <guilabel>Select Color</guilabel> dialog
+where you will be able to choose the new color. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Underline</guilabel></term>
+<listitem><para>Underlines the currently selected cells' text if checked. This
+is
+not checked per default.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Strike out</guilabel></term>
+<listitem><para>This will strike out the currently selected cells'  text if this
+is checked. This is not checked per default.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title>Text Position and Rotation</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Position page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>From the <guilabel>Position</guilabel> page you can control the position 
+of text within a cell by making suitable selections in the <guilabel>Horizontal
+</guilabel> and <guilabel>Vertical</guilabel> areas or by setting the 
+<guilabel>Indent</guilabel> value. You can also choose to have the text 
+appear vertically rather than horizontally, or even at an angle.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Horizontal</guilabel></term>
+<listitem><para>Set the content position horizontally in the cell. 
+<guilabel>Standard</guilabel> is default and is set from the data format you choose. 
+<guilabel>Left</guilabel> means the content will be displayed on the left of the cell.
+<guilabel>Center</guilabel> means the content will be in the center horizontally in the cell.
+<guilabel>Right</guilabel> means the content of the cell will be displayed on the right of the
+cell.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Vertical</guilabel></term>
+<listitem><para>Set the content position vertically in the cell. 
+<guilabel>Top</guilabel> means the content will be displayed on top of the cell.
+<guilabel>Middle</guilabel> means the content will be in the middle vertically in the cell.
+<guilabel>Bottom</guilabel> means the content of the cell will be displayed at the bottom of the
+cell.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Text Option</guilabel></term>
+<listitem><para>This is only available when the rotation is 0°. 
+<guilabel>Wrap text</guilabel> wraps the text so it fits in the previous cell size. If this is not
+checked, the text will stay on one line.</para>
+<para><guilabel>Vertical text</guilabel> puts your text vertically.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Rotation</guilabel></term>
+<listitem><para>Your text will appear oriented in the angle you set here.
+Positive values will move it counter-clockwise and negative values will move it
+clockwise.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Merge Cells</guilabel></term>
+<listitem><para>When checked, this has the same effect
+as <menuchoice><guimenu>Data</guimenu><guimenuitem>Merge
+Cells</guimenuitem></menuchoice>. You need to have at least two
+consecutive cells selected. Those consecutive cells are then merged into a
+bigger one.</para>
+<para>When a merged cell is selected and when you uncheck this, then all cells
+come back to their original size as before the merging. It has the same effect
+as <menuchoice><guimenu>Data</guimenu><guimenuitem>Dissociate
+Cells</guimenuitem></menuchoice>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Indent</guilabel></term>
+<listitem><para>Set the amount of indent that will be used in the cell when you
+choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Increase
+Indent</guimenuitem></menuchoice> or
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Decrease
+Indent</guimenuitem></menuchoice> menus.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Size of Cell</guilabel></term>
+<listitem><para>You set here the size of the cell, either a custom width and
+height or choose the default width and height.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title>Cell Border</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Border page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>The <guilabel>Border</guilabel> page lets you set the appearance of the
+cell borders. If you have selected more than one cell you can apply different
+styles to the borders between the cells and that surrounding the selected area.
+</para>
+<para>First select the pattern and color from the <guilabel>Pattern</guilabel>
+section of the <guilabel>Border</guilabel> page then apply that to
+different parts of the border by clicking on the appropriate button in the
+<guilabel>Border</guilabel> section, or on one of the <guilabel>Preselect
+</guilabel> buttons. The left hand button in the <guilabel>Preselect
+</guilabel> section will clear any previously applied border(s). Note that you 
+can also add a diagonal strike-through line to the cell(s).</para>
+</sect2>
+<sect2 id="formatbackground">
+<title>Cell Background</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Background page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>The cell background pattern and color can be selected from the 
+<guilabel>Background</guilabel> page.</para>
+<para>Simply choose a desired <guilabel>Pattern</guilabel>, then select the pattern 
+<guilabel>Color</guilabel> and the <guilabel>Background color</guilabel>.</para>
+<para>At the bottom of this page you can see a <guilabel>Preview</guilabel> of the configured
+cell background.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title>Cell Protection</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Cell protection page.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>You can change the way the content of a cell is protected in the
+<guilabel>Cell Protection</guilabel> page.</para>
+<para>All cells are protected by default (that means cell content cannot be
+changed) and for the cell protection to be active you also need to protect the
+sheet using the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document </guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+menu and to provide a password.
+You can also hide the cell formula in order to protect the way you calculate the
+formula. This also needs to enable sheet protection to work.
+You can hide the cell content with <guilabel>Hide all</guilabel> and again this needs sheet
+protection.
+You can learn more about all these settings in the <link
+linkend="protection">Advanced &kspread; chapter, Protection
+section</link>.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Hide all</guilabel></term>
+<listitem><para>This hides the cell content and works only when the sheet is
+protected which means that changing the <guilabel>Hide all</guilabel>
+attribute of a cell has no effect unless the sheet is protected. Whether the
+cell itself is protected or not does not matter.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat7.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Hide all.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>When <guilabel>Hide all</guilabel> is selected, <guilabel>Protected</guilabel> 
+and <guilabel>Hide formula</guilabel> are disabled as when the
+sheet is protected <guilabel>Hide all</guilabel> hides the cell content and the
+formula and thus masks and protects the cell content.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Protected</guilabel></term>
+<listitem><para>If checked, the cell content will be protected. This is
+the default behaviour. You need to protect the whole sheet using the
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document </guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+menu for this individual cell protection to work. When a cell is protected, its
+content cannot be changed.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Hide formula</guilabel></term>
+<listitem><para>When this is checked, the cell is still visible. However,
+its contents do not appear in the <guilabel>Formula</guilabel> bar. Hiding formula is only working
+for cells that contain formulae so the user cannot view the formula. And the
+sheet must be protected for this to work.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Do not print text</guilabel></term>
+<listitem><para>If you check <guilabel>Do not print text</guilabel> then the
+text in the cell will not be printed. This is unchecked per default which means
+that the cell text will always be printed by default.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title>Conditional Cell Attributes</title>
+<para>You can make the appearance of a cell change according to the value it 
+contains, useful perhaps if you are using &kspread; to keep track of your 
+household expenses and want to highlight any item greater than, say, one 
+thousand dollars.</para>
+<para>To do this select the cell(s) then choose <guimenuitem>Conditional Cell 
+Attributes...</guimenuitem> from the <guimenu>Edit</guimenu> menu. This will 
+bring up the <guilabel>Conditional Cell Attributes</guilabel> dialog box where 
+you can make the font type and color of a cell change when the value meets 
+one or more conditions. Note that the second and third conditions only apply 
+if the previous condition(s) are not met.</para>
+<para>Use <menuchoice><guisubmenu>Clear</guisubmenu><guimenuitem>Conditional 
+Cell Attributes</guimenuitem></menuchoice> from the <guimenu>Edit</guimenu> 
+menu to clear any conditional attributes from selected cells.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title>Changing Cell Sizes</title>
+<para>The <guilabel>Position</guilabel> page in the <guilabel>Cell Format
+</guilabel> dialog lets you alter the size of the selected cell(s). Note that 
+changing the height of a single cell will change the height for all cells in 
+that row, similarly changing the width will affect the entire column.</para>
+<para>You can also select the row(s) or column(s) to be changed then select 
+<guimenuitem>Resize Row...</guimenuitem> or <guimenuitem>Resize Column...
+</guimenuitem> from the <mousebutton>right</mousebutton> mouse button pop up 
+menu or from the <menuchoice><guimenu>Format</guimenu><guisubmenu>Row
+</guisubmenu></menuchoice> or <menuchoice><guimenu>Format</guimenu><guisubmenu>
+Column</guisubmenu></menuchoice> menu.</para>
+<para>If you move the mouse cursor so that its tip is over the line between 
+two of the row numbers at the left of &kspread;'s window the cursor will 
+change to show two parallel lines each with a short arrow headed line coming 
+from it. When the cursor is in this state you can hold the <mousebutton>left
+</mousebutton> mouse button down and drag the border between the two rows, 
+changing the height of the upper row. A similar technique can be used to 
+change the width of a column.</para>
+
+<para>To set the row height or column width to the minimum needed to
+display the contents, select the whole row or column, and right-click
+on the row or column label. In the menu which appears, select
+<guimenuitem>Adjust Row</guimenuitem> or <guimenuitem>Adjust
+Column</guimenuitem>. The row or column will resize to the minimum
+necessary. You can also select a single cell or range of cells, and
+click <guimenuitem>Adjust Row &amp; Column</guimenuitem> from either
+the right-click menu or the <guimenu>Format</guimenu> menu.</para>
+
+<para>You can make a number of adjacent rows or columns the same size by 
+selecting them then choosing <menuchoice><guimenu>Format</guimenu><guisubmenu>
+Row</guisubmenu><guimenuitem>Equalize Row</guimenuitem></menuchoice> or 
+<menuchoice><guimenu>Format</guimenu><guisubmenu>Column</guisubmenu>
+<guimenuitem>Equalize Column</guimenuitem></menuchoice>.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title>Merging Cells</title>
+<para>It is often convenient to have one cell that spreads across two or more 
+columns or down more than one row. This can be done by merging two or more 
+cells into one. Select the cells to be merged than choose <menuchoice><guimenu>
+Data</guimenu><guimenuitem>Merge Cells</guimenuitem></menuchoice>.</para>
+<para>To reverse this process, select the merged cell then choose <guimenuitem>
+Dissociate Cells</guimenuitem> from the <guimenu>Data</guimenu> menu.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title>Hiding Rows and Columns</title>
+<para>A finished spreadsheet can often be made to look more attractive by 
+hiding the cells containing intermediate calculations so that only the 
+important data input and result areas are shown.</para>
+<para>In &kspread; you can hide selected rows or columns by 
+using the <guimenuitem>Hide Rows</guimenuitem> and <guimenuitem>Hide 
+Columns</guimenuitem> options from the <menuchoice><guimenu>Format</guimenu>
+<guisubmenu>Row</guisubmenu></menuchoice>, <menuchoice><guimenu>Format
+</guimenu><guisubmenu>Column</guisubmenu></menuchoice> or 
+<mousebutton>right</mousebutton> mouse button menus. Hidden rows and columns 
+are not displayed on the screen or included in a print out.</para>
+<para>Hiding cells in this way also makes them slightly less prone to 
+accidental change.</para>
+<para>To un-hide a row or column select <menuchoice><guisubmenu>Row
+</guisubmenu><guimenuitem>Show Rows...</guimenuitem></menuchoice> or 
+<menuchoice><guisubmenu>Column</guisubmenu><guimenuitem>Show Columns...
+</guimenuitem></menuchoice> from the <guimenu>Format</guimenu>
+menu. In the dialog box which appears, you can select any number of
+rows to show (use <keycombo action="simul">&Ctrl;</keycombo> + click to select
+multiple rows or columns).</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title>Sheet properties</title>
+<para>You can access the current sheet properties either by right clicking
+on the sheet tab and choosing <guilabel>Sheet Properties</guilabel> or by
+using the <menuchoice><guimenu>Format</guimenu>
+<guisubmenu>Sheet</guisubmenu><guisubmenu>Sheet
+Properties</guisubmenu></menuchoice> menu. Please note that you can only
+access the sheet properties when the document or the sheet is not
+protected.</para>
+<para>You can set different properties that will be valid in the current
+sheet. Clicking on <guibutton>OK</guibutton> will validate your changes
+and <guibutton>Defaults</guibutton> will bring back the default settings.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Sheet Properties dialog.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Layout direction:</guilabel></term>
+<listitem><para>Let you choose the sheet orientation. Default is that the first
+column of the sheet is on the left. If you choose <guilabel>Right to Left</guilabel>, then the first
+column will be on the right and the others added from right to left.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Hide zero</guilabel></term>
+<listitem><para>If this box is checked any cell containing the value zero will
+appear blank.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Automatic recalculation</guilabel></term>
+<listitem><para> This setting controls whether formulae are recalculated
+automatically when the value of any cell they refer to changes.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show column as numbers</guilabel></term>
+<listitem><para>If this box is checked the column headings will show as numbers
+rather than as letters. Letters are default.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Use LC mode</guilabel></term>
+<listitem><para>If this box is checked the cell reference shown at the left end
+of the Formula Bar will be displayed in LC mode (i.e. L2C3) rather than in its
+normal form B3. This does not seem to be of much use at the moment.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Convert first letter to uppercase</guilabel></term>
+<listitem><para>Check this box and the first letter of any text you type in will
+automatically be converted to uppercase.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show grid</guilabel></term>
+<listitem><para>If checked the grid (the cell limits) will be shown. This is
+default. If you uncheck it, the grid will be hidden.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show page borders</guilabel></term>
+<listitem><para>If you check this option, the page borders will be drawn on your
+current sheet. Per default the page borders are not displayed. It is useful to
+see the page borders if you want to print your sheet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show formula</guilabel></term>
+<listitem><para>If this box is checked &kspread; will display the actual
+formulae in cells rather than the results.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show formula indicator</guilabel></term>
+<listitem><para>If this box is checked &kspread; will display a small blue
+triangle at the bottom left corner of cells containing formulae. This is useful
+if you want to protect cells with formulae.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show comment indicator</guilabel></term>
+<listitem><para>If this box is checked cells containing comments will be marked
+by a small red triangle at the top right corner.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

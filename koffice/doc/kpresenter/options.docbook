@@ -1,0 +1,1032 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Configuring &kpresenter;</title>
+
+<sect1  id="configure-autocorrection">
+<title>The <guilabel>Configure Autocorrection...</guilabel> Dialog</title>
+<para>Auto correction is a system for correcting common typing errors, converting abbreviations to their full spelling and adjusting capitalization. As you could guess from its name, this all occurs automatically, while you are editing your document.</para>
+
+<sect2 id="enabling-autocorrection">
+<title>Enabling/Disabling Autocorrection</title>
+
+<para>To toggle autocorrection on, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
+</para>
+
+<para>To toggle autocorrection off, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable Autocorrection</guimenuitem></menuchoice> from the menubar. When disabled, autocorrection changes are not made. You can, however, <link linkend="manually">apply autocorrection manually</link>, using the <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice> menu.
+</para>
+
+<para>To adjust the options for autocorrection, select <menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure Autocorrection...</guimenuitem></menuchoice> from the menubar.</para>
+
+<para>A dialog window appears to help you set your options, with four tabs: <link linkend="simple-autocorrection">Simple Autocorrection</link>, <link linkend="custom-quotes">Custom Quotes</link>, <link linkend="advanced-autocorrestion">Advanced Autocorrection</link> and <link linkend="exceptions">Exceptions</link>.</para>
+</sect2>
+
+<sect2 id="simple-autocorrection">
+<title><guilabel>Simple Autocorrection</guilabel></title>
+
+<screenshot>
+<screeninfo>Simple Autocorrection</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Simple Autocorrection</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Convert first letter of a sentence automatically to uppercase</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically capitalize the first letter after a period. You can tell &kpresenter; when not to alter capitalization in certain instances (ie “Sr.” or “Jr.”). For more details, see the section entitled  <link linkend="exceptions">Autocorrection Exceptions</link>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Convert two uppercase characters to one uppercase and one lowercase character</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically convert a double capital letter (a common typographical error), into a single capital letter. You can tell &kpresenter; when not to alter capitalization in certain instances. For more details, see the section entitled <link linkend="exceptions">Autocorrection Exceptions</link>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Autoformat URLs</guilabel></term>
+<listitem><para>When selected, &kpresenter; will scan text for patterns which suggest a certain section of text is a URL and automatically creates a link.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Suppress double spaces</guilabel></term>
+<listitem><para>When checked, &kpresenter; will ignore the second space typed. This prevents users from adding double spaces between words or sentences</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Remove spaces at the beginning and end of paragraphs</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically remove spaces at the beginning and/or the end of a line of text.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatically do bold and underline formatting</guilabel></term>
+<listitem><para>When selected, &kpresenter; will look for words surrounded by asterisks ( * ). It will remove the asterisks and change the font of all words in between the two asterisks to bold face.</para>
+<para>&kpresenter; will also look for words surrounded by underscores ( _ ). It will remove the underscores and underline all words in between the two underscores.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Replace 1/2... with ½...</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically change 1/2, 1/3 and 3/4 to their single character equivalents.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Use autonumbering for numbered paragraphs</guilabel></term>
+<listitem><para>If you start a paragraph with a number and a symbol ( <emphasis>1)</emphasis>  for example), &kpresenter; will automatically convert that paragraph to a numbered paragraph. All future paragraphs will be consecutively numbered.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Replace 1st with 1^st...</guilabel></term>
+<listitem><para>When selected, &kpresenter; will automatically change 1st to 1<superscript>st</superscript>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Capitalize name of days</guilabel></term>
+<listitem><para>Automatically capitalize the days of the week (Sunday, Monday, Tuesday, etc...).</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Use list-formatting for bulleted paragraphs</guilabel></term>
+<listitem><para>When selected, &kpresenter; will look for lines that begin with <emphasis>- </emphasis>, and automatically convert the paragraph style to a bulleted list.  The bullet is selected with the left button below this option.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+<sect2 id="custom-quotes">
+<title><guilabel>Custom Quotes</guilabel></title>
+
+<para>Select the tab labeled <guilabel>Custom Quotes</guilabel></para>
+
+<screenshot>
+<screeninfo>Custom Quotes</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Custom Quotes</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Replace double quotes with typographical quotes</guilabel></term>
+<listitem>
+<para>When selected, this option will replace the standard keyboard double
+quotes, with typographical quotation marks.  If you want to change the
+quotation character, click on one of the buttons. Clicking on
+<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Replace single quotes with typographical quotes</guilabel></term>
+<listitem>
+<para>When selected, this option will replace the standard keyboard single
+quotes, with typographical quotation marks.  If you want to change the
+quotation character, click on one of the buttons. Clicking on
+<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+<sect2 id="advanced-autocorrestion">
+<title><guilabel>Advanced Autocorrection</guilabel></title>
+
+<para>To switch to the Advanced Autocorrection, click on the tab labeled
+<guilabel>Advanced Autocorrection</guilabel>.</para>
+
+<screenshot>
+<screeninfo>Advanced Autocorrection</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection3.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Advanced Autocorrection</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>This allows you to automatically have &kpresenter; replace one string
+of text with another.  This can be useful for special symbols, commonly
+used abbreviations that you want spelled out, or common typing errors.</para>
+
+<para>&kpresenter; uses different autocorrection strings depending on the language.  
+Set the correct language using the combo box labeled 
+<guilabel>Replacement and exceptions for language:</guilabel>.</para>
+
+<para>The check box labeled <guilabel>Enable word replacement</guilabel> is used to 
+toggle on and off the autoreplacement features of &kpresenter;.  If there is no mark in the check box, 
+then &kpresenter; will not perform any autoreplacements from the list in this dialog.</para>
+
+<para>If there is a mark in the check box labeled <guilabel>Replace text with format</guilabel> 
+&kpresenter; will not only change the text when it finds a match, but it will change the formatting of the new text. 
+If there is no mark in this check box, then
+&kpresenter; uses the same formatting options for the replaced text as it found in the search text.  For more information 
+on setting the format options for replacement text, see the section on 
+<link linkend="autocorrection-format-options">Changing the format of the autocorrection string</link>.</para>
+
+<sect3>
+<title>Adding an autocorrection string</title>
+
+<para>To add an autocorrection string, simply type the text you want &kpresenter; to
+check for in the text box labeled
+<guilabel>Find:</guilabel>, then enter the text you want &kpresenter;
+to substitute in the text box labeled <guilabel>Replace:</guilabel>.</para>
+
+
+<note><para>If you want to insert symbols or special characters not available on your
+keyboard, you can click the
+buttons with three periods on them and select a special character from the table provided.</para></note>
+
+<para>When these are entered, click <guibutton>Add</guibutton>. Your text
+strings are now added to the table.</para>
+</sect3>
+
+<sect3>
+<title>Editing an autocorrection string</title>
+<para><emphasis>Changing the text you want to find.</emphasis></para>
+<para>&kpresenter; does not allow you to change the text to search for.
+This is to prevent disastrous mistakes.</para>
+<para>Instead, you must delete the current autocorrection rule and
+add a new text string with the corrected text to find.</para>
+
+<para><emphasis>Changing the text you want to replace.</emphasis></para>
+<para>Begin by clicking once on the string you want to edit.  It will be
+highlighted and the find and replace text will be listed in the text boxes
+above. You can alter the replacement text. When you
+are done, simply click on the <guibutton>Modify</guibutton> button.</para>
+
+</sect3>
+
+<sect3>
+<title>Deleting an autocorrection string</title>
+
+<para>Simply click on the string you want to delete.  Now click the
+<guibutton>Remove</guibutton> button.  The string is removed.</para>
+
+<warning>
+<para>Be aware that &kpresenter; does not give you a chance to back out once
+you have deleted a string.  Be sure you have selected the correct string
+<emphasis>before</emphasis> you click the <guibutton>Remove</guibutton>
+button.</para>
+</warning>
+</sect3>
+
+<sect3 id="autocorrection-format-options">
+<title>Changing the format of the autocorrection string</title>
+<note><para>Currently, you must create the autocorrection string <emphasis>before</emphasis> you can format it.</para></note>
+<para>Once the autocorrection string has been created, simply click on it once with the &LMB;.</para>
+<para>Now click on the <guibutton>Change Format...</guibutton> button.  A small dialog will appear:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="changeformat.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>You can use this dialog to select the format of the replaced text.</para>
+<para>The left column consists of 13 check boxes.  If there is a mark in the check box, then &kpresenter; will change
+any replaced text to match the property selected.
+If no mark is in the check box, &kpresenter; does not consider that property when replacing text.</para>
+
+<variablelist>
+
+<varlistentry>
+<term><guilabel>Family:</guilabel></term>
+<listitem>
+<para>Use this combo box to select the font family you want your replacement text to use.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Size:</guilabel></term>
+<listitem>
+<para>Use this spin box to set the font size you want &kpresenter; to use for your replaced text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Color:</guilabel> and <guilabel>Background color:</guilabel></term>
+<listitem>
+<para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
+you want &kpresenter; to use.  <!--For more information on selecting a color, see the
+section on <link linkend="select-colors">Selecting Colors from the Color Dialog</link>.--></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Bold:</guilabel> and <guilabel>Italic:</guilabel></term>
+<listitem>
+<para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio buttons to determine whether you want &kpresenter;
+to change the fonts to boldface or italicized fonts.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Strikeout:</guilabel></term>
+<listitem>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel> 
+or <guilabel>Simple Bold</guilabel> to use for the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Underline:</guilabel></term>
+<listitem>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, 
+<guilabel>Simple Bold</guilabel> or <guilabel>Wave</guilabel> to use for the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Vertical alignment:</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
+<guilabel>Subscript</guilabel> to determine what font alignment you want &kpresenter; to use.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Shadow:</guilabel> and <guilabel>Word by word:</guilabel></term>
+<listitem>
+<para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio buttons to determine whether you want &kpresenter;
+to use shadow text and/or word by word underlining and strikethrough in the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Capitalization:</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
+<guilabel>Small Caps</guilabel> to determine what capitalization to use for the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Language:</guilabel></term>
+<listitem>
+<para>You can select the language of the text you will use to replace the found text.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Once you have selected your options, click <guibutton>OK</guibutton> to accept your text options.</para>
+<para>Click <guibutton>Cancel</guibutton> to ignore all changes.</para>
+<para>Click <guibutton>Reset</guibutton> to restore the options dialog box to the initial values prior to making any changes.</para>
+<para>Click <guibutton>Clear</guibutton> to remove all marks from the checked options.</para>
+</sect3>
+
+</sect2>
+<sect2 id="exceptions">
+<title><guilabel>Exceptions</guilabel></title>
+
+<para>There are instances where &kpresenter; will make autocorrection changes
+that are inappropriate.  You can use the fourth tab of this dialog to define
+<emphasis>exceptions</emphasis> to the rules previously discussed.</para>
+<para>The dialog for exceptions is shown below:</para>
+
+<screenshot>
+<screeninfo>Exceptions</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocorrection4.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Exceptions</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>To prevent &kpresenter; from deciding an abbreviation or other text is
+the end of a sentence, simply enter the text fragment in the text box below
+<guilabel>Do not treat as the end of a sentence:</guilabel>.  Then click
+<guibutton>Add</guibutton>.</para>
+<para>As an example:  Adding <quote>Jr.</quote> to this dialog prevents</para>
+<para><quote>Robert Jones Jr. is a friend of the family.</quote></para>
+<para>from being changed to:</para>
+<para><quote>Robert Jones Jr. Is a friend of the family.</quote></para>
+<para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
+and click on the <guibutton>Remove</guibutton> button.</para>
+<para>The second set of boxes performs a similar function to the first except text entered in these boxes will allow two capital letters in a word if it 
+is entered in this text box.</para>
+<para>Simply enter the word in the text box below
+<guilabel>Accept two uppercase letters in:</guilabel>.  Then click
+<guibutton>Add</guibutton>.</para>
+<para>As an example:  Adding <quote>CD</quote> to this dialog prevents</para>
+<para><quote>CD</quote></para>
+<para>from being changed to:</para>
+<para><quote>Cd</quote></para>
+<para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
+and click on the <guibutton>Remove</guibutton> button.</para>
+
+</sect2>
+<sect2 id="manually">
+<title>Manually applying autocorrection</title>
+
+<para>If autocorrection is turned off in your document, you can manually enable autocorrection.</para>
+<para>To manually apply autocorrection, first configure your options by using the
+<link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
+<para>Then select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
+from the menubar.</para>
+<para>&kpresenter; will start at the beginning of the document and apply all selected autocorrection options to the entire document.</para>
+<para>When &kpresenter; is finished, it will return you to your document for further editing.</para>
+<para>For more information on enabling and disabling autocorrection,
+see <link linkend="enabling-autocorrection">Enabling/Disabling Autocorrection</link>.</para>
+
+</sect2>
+</sect1>
+
+<sect1  id="configure-completion">
+<title>The <guilabel>Configure Completion...</guilabel> Dialog</title>
+
+<para>Autocompletion allows you to type the first few letters of a commonly
+used word (often technical or job specific), and tells &kpresenter; to
+finish typing the word for you.  This is often very useful when you have lengthy technical words.</para>
+
+<sect2 id="autocomplete-using">
+<title>Using autocompletion</title>
+<para>Using autocompletion could not be easier.  Simply type the first few
+letters of the word you want &kpresenter; to finish, and press
+<keycombo>&Ctrl;<keycap>E</keycap></keycombo>. &kpresenter; will look 
+through the list of autocompletion words and if it finds a word which begins 
+with those letters, it will finish entering the remainder of the word.</para>
+<sect3 id="autocomplete-using-add">
+<title>Adding words to autocompletion</title>
+<para>&kpresenter; maintains a list of words for each user that will be used for autocompletion.</para>
+<para>You can add words to this list one of two ways:</para>
+<itemizedlist>
+<listitem><para>&kpresenter; can automatically add new words to the completion list for later approval.
+This is selected using <link linkend="autocomplete-dialog">the dialog</link>.</para></listitem>
+<listitem><para>Individual words can be added to the list by using 
+<link linkend="autocomplete-dialog">the dialog</link>.</para></listitem>
+</itemizedlist>
+</sect3>
+</sect2>
+
+<sect2 id="autocomplete-dialog">
+<title>Configuring autocomplete</title>
+<para>To configure autocompletion, select <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Completion...</guimenuitem></menuchoice>
+from the menubar.  This will bring up a dialog.</para>
+
+<screenshot>
+<screeninfo>Configure Completion... Dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="completion.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Configure Completion... Dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Enable word completion</guilabel></term>
+<listitem><para>It is used to toggle autocompletion on and off.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Add</guilabel></term>
+<listitem>
+<para>By clicking this button you can manually add 
+an individual word to the completion list.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Remove</guilabel></term>
+<listitem>
+<para>To remove words from the completion list, select the word with the &LMB;
+from the list, then click this button.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatically add new words to suggestion list</guilabel></term>
+<listitem>
+<para>This option will add any word equal to or longer than
+the <guilabel>Characters needed:</guilabel> to the list of proposed
+autocompletion words.</para>
+<para>The large listbox in the center of the dialog contains the current
+proposed list of autocompletion words.</para>
+<note><para>Not all words listed in the list box will be immediatly affected by
+autocompletion when entered into this dialog.</para></note>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show words in tooltip</guilabel></term>
+<listitem>
+<para>If this option is enabled, a tool tip box will appear when you type the
+beginning of a word that exists in the completion list. To complete the word,
+press the key you set to accept suggestions in the <guilabel>Key to accept
+suggestion:</guilabel> drop-down list.</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guilabel>Characters needed:</guilabel></term>
+<listitem>
+<para>Use this spinbox/slider combination to prevent &kpresenter; 
+from automatically adding short words to the completion list.   You can select
+any value from 5-100 and the words will need to be at least the number of
+characters set here to be added in the list.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Suggest words:</guilabel></term>
+<listitem>
+<para>This spinbox/slider combination can be adjusted to allow more or less
+words into the autocompletion list.  This option is most important when
+<guilabel>Automatically add new words to suggestion list</guilabel> is enabled.
+This option keeps the list from becoming too cumbersome. You can select any
+value from 1 to 500.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Append space</guilabel></term>
+<listitem>
+<para>If checked, it adds a single space to the end of a word after
+autocompletion, this means it is not necessary to add the space manually for the
+next word.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Key to accept suggestion:</guilabel></term>
+<listitem>
+<para>Set the key you want to use when an autocompleted word is suggested to you
+and you want to accept it. You can choose
+<keycap>Enter</keycap>, <keycap>Tab</keycap>, <keycap>Space</keycap>,
+<keycap>End</keycap> or <keycap>Right</keycap>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Make Default</guilabel></term>
+<listitem>
+<para>A word is not part of autocompletion until the list is
+<emphasis>saved</emphasis> to disk.  At that moment, &kpresenter; 
+will use that saved list for all autocompletion, until the list is replaced with
+another saved list.</para>
+<para>Some of the words in the autocompletion list may not have been saved
+yet.</para><para>To save the current list to disk and have &kpresenter; begin
+using this new list for autocompletion, click this button.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Click <guibutton>OK</guibutton> to save your options. Click
+<guibutton>Cancel</guibutton> to abort all changes. Click 
+<guibutton>Reset</guibutton> to reset to the state after you clicked on the 
+<guibutton>Make Default</guibutton> button.</para>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="configure-dialog">
+<title>The <guilabel>Configure &kpresenter;...</guilabel> Dialog</title>
+
+<sect2 id="configure-interface">
+<title><guilabel>Interface</guilabel></title>
+
+<screenshot>
+<screeninfo>Configure Interface</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Configure Interface</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Show rulers</guilabel></term>
+<listitem><para>This is checked by default and both a vertical and horizontal
+ruler are shown on &kpresenter;slides. When unchecked, the rulers are not shown
+anymore on any slide.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show status bar</guilabel></term>
+<listitem><para>Toggle the statusbar which is shown by default.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Number of recent files:</guilabel></term>
+<listitem><para>Set the number of recent files which will be opened using the
+<menuchoice><guimenu>File</guimenu><guimenuitem>Open
+Recent</guimenuitem></menuchoice> menu. Default is to remember 10 filenames. The
+maximum you can set is 20 and the minimum is 1.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Text indentation depth:</guilabel></term>
+<listitem><para>This setting is used in the <guimenu>Text</guimenu> menu by <guimenuitem>Increase Depth</guimenuitem> and <guimenuitem>Decrease Depth</guimenuitem> menu items to change the indentation depth. Default is 1 centimeter.</para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-color">
+<title><guilabel>Color</guilabel></title>
+
+<screenshot>
+<screeninfo>Color</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Color</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Background object color:</guilabel></term>
+<listitem><para>It changes the background color of the text box. The Text boxes background is white by default. If you had a dark
+background color and you wanted to put some white text over it, you
+could color the text box so that you could see what you were
+typing. When you have finished, the area around the text would revert
+to whatever the background color was. The
+<guibutton>Defaults</guibutton> button restores the original
+settings.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Grid color:</guilabel></term>
+<listitem><para>You can change here the grid color which is black as default.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-spelling">
+<title><guilabel>Spelling</guilabel></title>
+
+<para>This tab defines the spellchecker behavior.</para>
+
+<screenshot>
+<screeninfo>Spelling</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure3.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Spelling</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Default language:</guilabel></term>
+<listitem><para>You can choose here the language for the spellchecker. The languages listed come from aspell so if you want more spelling support languages, you should install the corresponding aspell-ISO packages.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Enable background spellchecking</guilabel> </term>
+<listitem><para>If it is checked, it will highlight in red mispelled words according to the dictionary selected above and it will spellcheck words as you type them. This is enabled by default. This option has the same effect as <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem></menuchoice> and both are checked/unchecked at the same time.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Skip all uppercase words</guilabel></term>
+<listitem><para>If this option is checked, the all uppercase words will not be checked for spelling. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
+<tip><para>This is useful if the document you are working on uses a large number of acronyms. If this box is left unchecked, most of those acronyms will be incorrectly marked. By placing a mark in this checkbox, &kpresenter; will not mark the acronyms as misspelled.</para></tip>
+</listitem></varlistentry>
+
+<varlistentry>
+<term><guilabel>Skip run-together words</guilabel></term>
+<listitem><para>If checked, the concatenated words made of existing words are not spellchecked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
+<para>Examples of such words are <emphasis>shutout</emphasis>,
+<emphasis>cannot</emphasis> and <emphasis>blackout</emphasis>.</para>
+<tip>
+<para>Checking this box will help prevent &kpresenter; from
+flagging website and email addresses for spelling errors.  These
+addresses often contain words run together.</para>
+</tip>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Ignore These Words</guilabel></term>
+<listitem><para>You can have here a list of words you want to ignore in all spellchecking. Write a word in the field then click on the <guilabel>Add</guilabel> button to add it in the list. All the words in the list will be ignored by the spellchecker.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Add</guilabel></term>
+<listitem><para>Type a word in the field then use this button to add it in the list. Once the word is added in the list, even if you click the <guibutton>Cancel</guibutton> button of the configuration dialog, it will stay in the list.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Remove</guilabel></term>
+<listitem><para>Highlight a word in the list then click on this button to remove it.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="configure-misc">
+<title><guilabel>Misc</guilabel></title>
+
+<screenshot>
+<screeninfo>Misc</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure4.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Misc</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title><guilabel>Misc</guilabel></title>
+<varlistentry>
+<term><guilabel>Undo/Redo limit:</guilabel></term>
+<listitem><para>Set the number of actions you can undo and redo (how many actions &kpresenter; keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 0. Any action that exceeds the number set will be forgotten.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Display links</guilabel></term>
+<listitem><para>When you want to include a link in your slide, you will use the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem></menuchoice> menu which allows you to insert URL, mail or file links. If the option <guilabel>Display links</guilabel> is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible (or not) both in the edited slides and in the slide show. A displayed link: <inlinemediaobject><imageobject>
+<imagedata fileref="configure4a.png" format="PNG"/></imageobject></inlinemediaobject> A non displayed link: <inlinemediaobject><imageobject>
+<imagedata fileref="configure4a1.png" format="PNG"/></imageobject></inlinemediaobject></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Underline all links</guilabel></term>
+<listitem><para>If this is checked, all links will be underlined. The option is checked per default. If it is not checked, the link will not be underlined. A displayed and underlined link: <inlinemediaobject><imageobject>
+<imagedata fileref="configure4b.png" format="PNG"/></imageobject></inlinemediaobject></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Display comments</guilabel></term>
+<listitem><para>Comments are inserted in the text at the cursor using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Comment...</guimenuitem></menuchoice> menu. Comments can only be viewed in editing mode and not in the slide show. If this option is checked (default) then each comment will be shown as a small yellow rectangle. You can then right click on it to edit it, remove it or copy its text. A displayed comment: <inlinemediaobject><imageobject>
+<imagedata fileref="configure4c.png" format="PNG"/>
+</imageobject></inlinemediaobject></para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guilabel>Display field code</guilabel></term>
+<listitem><para>In editor mode (not in slide show) this option will display all the variable codes. This is very useful to see what variable is displayed. Variables are inserted using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem></menuchoice> menu.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Print slide notes</guilabel></term>
+<listitem><para>If checked, all notes will be printed on paper. The notes will all be printed on a separate last page, from slide one to the last slide and finishing with the Master Page Note. You can see the notes for each slide using the <menuchoice><guimenu>View</guimenu><guimenuitem>Show Notebar</guimenuitem></menuchoice> menu.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist>
+<title><guilabel>Grid</guilabel></title>
+<varlistentry>
+<term><guilabel>Horizontal grid size:</guilabel></term>
+<listitem><para>Set the space in millimeters between two points on an horizontal line on the grid. Default is 5 millimeters.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Vertical grid size:</guilabel></term>
+<listitem><para>Set the space in millimeters between two points on a vertical line on the grid. Default is 5 millimeters.</para></listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="configure-document">
+<title><guilabel>Document</guilabel></title>
+
+<screenshot>
+<screeninfo>Document</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure5.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Document</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title><guilabel>Document Defaults</guilabel></title>
+<varlistentry>
+<term><guilabel>Default font:</guilabel></term>
+<listitem><para>Click on the <guibutton>Choose...</guibutton> button, and a new dialog will appear. Use this dialog to choose the default font. This setting determines the default font used by &kpresenter; until further formatting is done. You can revert any text to this default by selecting <menuchoice><guimenu>Text</guimenu><guimenuitem>Default Format</guimenuitem></menuchoice> from the menubar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Global language:</guilabel></term>
+<listitem><para>Use this drop down box to determine the default language for the document. This setting is used by the hyphenation and spelling tools.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatic hyphenation</guilabel></term>
+<listitem><para>Check this box if you want &kpresenter; to automatically hyphenate long words when it determines the word wrap in text frames. This is not set as default.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title><guilabel>Document Settings</guilabel></title>
+<varlistentry>
+<term><guilabel>Create backup file</guilabel></term>
+<listitem><para>If checked, this will create a <filename>.&lt;name&gt;.kpr.autosave.kpr</filename> in the dir where your file is. This backup file can then be used in case of a problem. The backup file is updated everytime you save your document or everytime there is an autosave.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Autosave (min):</guilabel></term>
+<listitem><para>You can use this to adjust how often &kpresenter; saves a temporary file. If you set this value to  <guilabel>No autosave</guilabel>, &kpresenter; will not autosave. You can adjust the autosave from 1 minute to 60 minutes.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Starting page number:</guilabel></term>
+<listitem><para>You can change here the number for the first page. It is set to 1 per default. </para>
+<tip><para>This is helpful if you have split a single document into multiple files.</para></tip></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Tab stop:</guilabel></term>
+<listitem><para>Each &kpresenter; document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default tabstops. You can use this text box to define the spacing between default tab stops.
+As an example, if you enter 1.5 in this text box, and the unit of measure is in centimeters, then the first default tab stop will be located 1.5 cm to the right of the left margin of the frame. The second default tab stop will be located at 3 cm from the left margin, etc.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist>
+<title><guilabel>Cursor</guilabel></title>
+<varlistentry>
+<term><guilabel>Cursor in protected area</guilabel></term>
+<listitem><para>When this box is checked and you click in a protected frame of your document, a cursor appears. When the mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Direct insert cursor</guilabel></term>
+<!-- FIXME: Is this the same as the type anywhere cursor? if so, why
+two names? -->
+<listitem><para>When this box is checked then you can select a section of text using your mouse. Move the mouse to a new place in your document and click once with the middle mouse button and a copy of the selected text is copied and pasted to the new location in the document.</para>
+<para>When there is no mark in this checkbox, in order to copy text from one section to another, you must select the text, manually copy the text in to the clipboard, then manually paste the text in the new location.
+</para></listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="configure-tools">
+<title><guilabel>Tools</guilabel></title>
+
+<para>This dialog sets the default tools settings. There are 5 tabs in this dialog.</para>
+
+<sect3 id="outline">
+<title>Outline</title>
+
+<screenshot>
+<screeninfo>The Outline tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Outline tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Line</guimenuitem></menuchoice> menu.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Color:</guilabel></term>
+<listitem><para>Set the color of the line. Clicking on the color will bring the standard KDE <guilabel>Select Color</guilabel> dialog.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Style:</guilabel></term>
+<listitem><para>Choose the line style from <guilabel>No Outline</guilabel> which will not draw any line to dotted lines and plain line.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Width:</guilabel></term>
+<listitem><para>Set the width of the line.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Arrow Style</guilabel></term>
+<listitem><para>Set the styles of the beginning and the end of your line for example you can choose an arrow at the end and a square dot at the beginning.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The last field displays a preview of your settings.</para>
+</sect3>
+
+<sect3 id="fill">
+<title>Fill</title>
+
+<screenshot>
+<screeninfo>The Fill tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6b.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Fill tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Type:</guilabel></term>
+<listitem><para>You can choose between <guilabel>Single Color</guilabel>, <guilabel>Gradient</guilabel> or <guilabel>Transparent</guilabel> as the type.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Style:</guilabel></term>
+<listitem><para>Choose the style or the pattern.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Color:</guilabel></term>
+<listitem><para>Choose the color. White is the default one. Clicking on the color will bring you the standard KDE <guilabel>Select Color</guilabel> dialog.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The last field displays a preview of your settings, provided the color is not white!</para>
+</sect3>
+
+<sect3 id="rectangle">
+<title>Rectangle</title>
+
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Rectangle</guimenuitem></menuchoice> menu.</para>
+
+<screenshot>
+<screeninfo>The Rectangle tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6c.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Rectangle tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>You can choose to keep the same ratio for the two settings below by having the <inlinemediaobject><imageobject>
+<imagedata fileref="link.png" format="PNG"/></imageobject></inlinemediaobject> icon or to separate the two settings by using the <inlinemediaobject><imageobject>
+<imagedata fileref="break.png" format="PNG"/></imageobject></inlinemediaobject> icon.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Vertical declination:</guilabel></term>
+<listitem><para>Set the vertical declination.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Horizontal declination:</guilabel></term>
+<listitem><para>Set the horizontal declination.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The last field displays a preview of your settings.</para>
+</sect3>
+
+<sect3 id="polygon">
+<title>Polygon</title>
+
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Convex/Concave Polygon</guimenuitem></menuchoice> menu.</para>
+
+<screenshot>
+<screeninfo>The Polygon tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6d.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Polygon tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Type:</guilabel></term>
+<listitem><para>You can choose <guilabel>Polygon</guilabel> or <guilabel>Convex/Concave</guilabel>.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Corners:</guilabel></term>
+<listitem><para>Set here the number of corners of the polygon.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Sharpness:</guilabel></term>
+<listitem><para>Increase or decrease the sharpness of the polygon.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The last field displays a preview of your settings.</para>
+</sect3>
+
+<sect3 id="pie">
+<title>Pie</title>
+
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Pie/Arc/Chord</guimenuitem></menuchoice> menu.</para>
+
+<screenshot>
+<screeninfo>The Pie tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure6e.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The Pie tab</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Type:</guilabel></term>
+<listitem><para>You can choose among three options in the dropdown box: <guilabel>Pie</guilabel>, <guilabel>Arc</guilabel> or <guilabel>Chord</guilabel>.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Start position:</guilabel></term>
+<listitem><para>Set here the start position.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Length:</guilabel></term>
+<listitem><para>Set the length of your pie.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The last field displays a preview of your settings.</para>
+</sect3>
+
+</sect2>
+
+<sect2 id="configure-paths">
+<title><guilabel>Paths</guilabel></title>
+
+<screenshot>
+<screeninfo>Paths</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure7.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Paths</phrase></textobject>
+</mediaobject>
+</screenshot>
+<para>There are two paths that are set here, the <guilabel>Backup Path</guilabel> and the <guilabel>Picture Path</guilabel>. The <guilabel>Backup Path</guilabel> is the directory where your backup files are saved and the <guilabel>Picture Path</guilabel> is the directory where your pictures are saved. Highlight a path in order to modify it and click on <guilabel>Modify Path...</guilabel>. A small dialog appears and if you uncheck <guilabel>Default path</guilabel>, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.</para>
+
+</sect2>
+
+<sect2 id="opt-tts"><title>TTS</title>
+
+<para>See the <link linkend="a11y-tts">Text-to-Speech</link> section 
+in the accessibility chapter for further details.</para>
+</sect2>
+
+
+</sect1>
+
+</chapter>

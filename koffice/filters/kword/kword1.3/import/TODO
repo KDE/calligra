@@ -1,0 +1,88 @@
+- OASIS thumbnail needs alpha channel
+- OASIS thumbnail seems to need some text property (according to freedesktop.org thumbnail spec.)
+- better picture numbering (direct at load?) instead of using the pointer to the KTempFile
+...
+
+=== Old Filter To-do ===
+KFormula (frameType==4)
+<PAPER>, <PAPERBORDERS>
+<ATTRIBUTES>
+Automatic styles for pictures
+Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?...)
+Tables (cell borders...)
+<COUNTER>, <FOOTNOTESETTINGS>. <ENDNOTESETTINGS>
+Variables/fields
+Footnote line (section 2.3 esp. 2.3.6)
+dir attribute of <FLOW>
+correctly define the default style (by default "Standard", if not, the 1st style) (see bug #45868)
+
+=== What the old filter knew ===
+KWord 0.8 character format
+KWord 0.8 layout <FLOW>, <ILEFT>, <IFIRST>
+Pictures
+Tables
+...
+
+=== Changelog of the old filter ===
+- Support for text images (created by KWord 0.8 or re-saved by KWord 1.2/1.3)
+- Improved character and paragraph formatting
+- Bookmarks
+- Notes (also known as annotations)
+- Tables
+
+
+=== Abiword's rtftest.rtf test file ===
+shadow (RTF import problem)
+wave (RTF import problem?)
+...
+
+=== Old OOWriter To-Do List ===
+Paragraph direction
+Paragraph bullets/counters
+Text boxes (framesets)
+Anchors (floating framesets/frames...)
+Mail merge
+"Sections" (e.g. table of contents)
+Table styles, frame styles [How?]
+Embedded objects
+Spellcheck settings?
+Cursor position [How?]
+
+=== KWord 0.8 ===
+Document settings
+<FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
+<FORMAT id="5"> (footnote)
+Attachement #4318 of bug #16430 (floating table, empty style name...)
+Underline?
+...
+
+=== KWord syntax variants ===
+Files where the supposed children of <VARIABLE> are directly children of <FORMAT id="4">
+
+=== OASIS questions ===
+How to transform "keepAspectRatio" for picture/image?
+
+=== File kofficetests/documents/export/kword/para/chapter.kwd ===
+[File of syntax 1]
+What are those (Table of content support?)
+<NAME> as child of <PARAGRAPH>
+<INFO>
+<CPARAGS>, <PARAG>
+
+=== File kofficetests/documents/export/kword/text/all.kwd ===
+[File of syntax 2]
+Floating image
+Formula
+Table
+...
+
+=== Low Priority ===
+<SERIALL>, <SAMPLE>, <DB>
+...
+
+=== Long term ===
+
+=== Raw Notes === (Raw ideas, may not apply to the problem)
+- preview image: a point for each character (if there is no preview in the original document. But do we need such a preview?)
+- the main frameset is not necessarily the first one (at least in recent files it seems.)
+- middle term solution for debug.xml (transform it in a sort of test case?)

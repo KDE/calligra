@@ -1,0 +1,21 @@
+These are some test files for Lotus AmiPro import filter.
+
+plain.sam
+  Just a simple, non-formatted paragraph
+
+format.sam
+  Shows various text formatting, such as bold, italic,
+  underline, etc.
+
+align.sam
+  Some variations on paragraph alignment (left-justified,
+  centered, right-justified, full-justified)
+
+textfrm.sam
+  A document with a few embedded text frames
+  NOTE: frames are not supported yet.
+
+umlaut.sam
+  Characters with umlaut
+
+Ariya Hidayat <ariyahidayat@yahoo.de>

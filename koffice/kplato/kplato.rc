@@ -1,0 +1,152 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="KPlato" version="4">
+    <MenuBar>
+        <Menu name="edit"><text>&amp;Edit</text>
+            <Action name="koffice_undo"/>
+            <Action name="koffice_redo"/>
+            <Separator/>
+<!--            <Action name="edit_cut"/>
+            <Action name="edit_copy"/>
+            <Action name="edit_paste"/>
+            <Separator/> -->
+            <Action name="delete_task"/>
+            <Action name="indent_task"/>
+            <Action name="unindent_task"/>
+            <Action name="move_task_up"/>
+            <Action name="move_task_down"/>
+            <Separator/>
+            <Action name="link_mode"/>
+        </Menu>
+        <Menu name="view"><text>&amp;View</text>
+            <Action name="view_expected"/>
+            <Action name="view_optimistic"/>
+            <Action name="view_pessimistic"/>
+            <Separator/>
+            <Action name="view_gantt"/>
+            <Action name="view_gantt_showResources"/>
+            <Action name="view_gantt_showTaskName"/>
+            <Action name="view_gantt_showTaskLinks"/>
+            <Action name="view_gantt_showProgress"/>
+            <Action name="view_gantt_showFloat"/>
+            <Action name="view_gantt_showCriticalPath"/>
+            <Action name="view_gantt_showCriticalTasks"/>
+            <Action name="view_task_appointments"/>
+            <Separator/>
+            <!--<Action name="view_pert"/> -->
+            <Separator/>
+            <Action name="view_resources"/>
+            <Action name="view_resource_appointments"/>
+            <Separator/>
+            <Action name="view_accounts"/>
+            <Separator/>
+            <Action name="view_reports"/>
+        </Menu>
+        <Menu name="insert"><text>&amp;Insert</text>
+            <Action name="add_task"/>
+            <Action name="add_sub_task"/>
+            <Action name="add_milestone"/>
+        </Menu>
+        <Menu name="project"><text>&amp;Project</text>
+            <Action name="project_edit"/>
+            <Action name="project_worktime"/>
+            <Action name="project_calendar"/>
+            <Action name="project_accounts"/>
+            <Action name="project_resources"/>
+            <Separator/>
+            <Menu name="Calculate"><text>&amp;Calculate</text>
+                <Action name="project_calculate_expected"/>
+                <Action name="project_calculate_optimistic"/>
+                <Action name="project_calculate_pessimistic"/>
+            </Menu>
+        </Menu>
+        <Menu name="tools"><text>&amp;Tools</text>
+            <Action name="tools_define_wbs"/>
+            <Action name="tools_generate_wbs"/>
+        </Menu>
+        <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="configure" group="settings_configure"/>
+        </Menu>
+    </MenuBar>
+    <ToolBar name="view" position="left"><Text>View</Text>
+        <Action name="view_gantt"/>
+        <!--<Action name="view_pert"/> -->
+        <Action name="view_resources"/>
+        <Action name="view_resourceuse"/>
+        <Action name="view_accounts"/>
+        <Action name="view_reports"/>
+    </ToolBar>
+    <ToolBar name="project" position="top"><Text>Project</Text>
+        <Action name="koffice_undo"/>
+        <Action name="koffice_redo"/>
+        <Separator/>
+        <Action name="project_edit"/>
+        <Action name="project_calculate">
+            <!-- These must be added (I think) programatically
+            <Action name="project_calculate_expected"/>
+            <Action name="project_calculate_optimistic"/>
+            <Action name="project_calculate_pessimistic"/> -->
+        </Action>
+        <Separator/>
+        <Action name="add_task"/>
+        <Action name="add_sub_task"/>
+        <Action name="add_milestone"/>
+        <Action name="delete_task"/>
+        <Separator/>
+        <Action name="indent_task"/>
+        <Action name="unindent_task"/>
+        <Action name="move_task_up"/>
+        <Action name="move_task_down"/>
+    </ToolBar>
+    <ToolBar name="report" position="top"><Text>Report</Text>
+        <Action name="go_firstpage"/>
+        <Action name="go_nextpage"/>
+        <Action name="go_prevpage"/>
+        <Action name="go_lastpage"/>
+    </ToolBar>
+    <Menu name="node_popup">
+<!--        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+        <Separator/> -->
+        <Action name="delete_task"/>
+        <Action name="indent_task"/>
+        <Action name="unindent_task"/>
+        <Action name="move_task_up"/>
+        <Action name="move_task_down"/>
+    </Menu>
+    <Menu name="task_popup">
+        <Action name="node_properties"/>
+        <Separator/>
+        <!--        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+        <Separator/> -->
+        <Action name="delete_task"/>
+        <Action name="indent_task"/>
+        <Action name="unindent_task"/>
+        <Action name="move_task_up"/>
+        <Action name="move_task_down"/>
+        <Separator/>
+        <Action name="task_progress"/>
+    </Menu>
+    <Menu name="summarytask_popup">
+        <Action name="node_properties"/>
+        <Separator/>
+        <!--        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+        <Separator/> -->
+        <Action name="delete_task"/>
+        <Action name="indent_task"/>
+        <Action name="unindent_task"/>
+        <Action name="move_task_up"/>
+        <Action name="move_task_down"/>
+    </Menu>
+    <Menu name="resource_popup">
+        <Action name="edit_resource"/>
+<!--        <Separator/>
+        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/> -->
+    </Menu>
+</kpartgui>

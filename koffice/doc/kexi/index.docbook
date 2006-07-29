@@ -1,0 +1,210 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY package "koffice">
+  <!ENTITY kappname "&kexi;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+
+  <!-- Chapters -->
+  <!ENTITY intro SYSTEM "intro.docbook">
+  <!ENTITY basics SYSTEM "basics.docbook">
+  <!ENTITY building SYSTEM "building.docbook">
+  <!ENTITY configuration SYSTEM "configuration.docbook">
+  <!ENTITY credits SYSTEM "credits.docbook">
+  <!ENTITY database SYSTEM "database.docbook">
+  <!ENTITY menus SYSTEM "menus.docbook">
+  <!-- Do not define any other entities; instead, use the entities
+       from entities/general.entities and $LANG/user.entities. -->
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>
+    The &kexi; Handbook
+</title>
+
+<authorgroup>
+  <author>
+    <personname>
+      <firstname>Martin</firstname>
+      <othername>A.</othername>
+      <surname>Ellis</surname>
+    </personname>
+    <email>martin.ellis@kdemail.net</email>
+  </author>
+  <author>
+    <personname>
+      <firstname>Jaroslaw</firstname>
+      <surname>Staniek</surname>
+    </personname>
+    <email>js@iidea.pl</email>
+  </author>
+  <!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+  <year>2004</year>
+  <year>2005</year>
+  <holder>Jaroslaw Staniek</holder>
+  <holder>Martin Ellis</holder>
+</copyright>
+
+<!-- Translators: put here the copyright notice of the translation -->
+<!-- Put here the FDL notice.  Read the explanation in fdl-notice.docbook
+     and in the FDL itself on how to use it. -->
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (YYYY-MM-DD) and of the version
+(V.MM.LL), it could be used by automation scripts.
+Do NOT change these in the translation. -->
+
+<date>2006-01-25</date>
+<releaseinfo>1.5</releaseinfo>
+
+<!-- Abstract about this handbook -->
+<abstract>
+  <para>
+    &kexi; is the application for creating databases and for data management
+    in the &koffice; productivity suite.
+  </para>
+</abstract>
+
+<!-- Keywords -->
+<keywordset>
+  <keyword>KDE</keyword>
+  <keyword>KOffice</keyword>
+  <keyword>Kexi</keyword>
+  <keyword>database</keyword>
+</keywordset>
+
+</bookinfo>
+
+<!-- The contents of the documentation begin here.  Label
+each chapter so with the id attribute. This is necessary for two reasons: it
+allows you to easily reference the chapter from other chapters of your
+document, and if there is no ID, the name of the generated HTML files will vary
+from time to time making it hard to manage for maintainers and for the CVS
+system. Any chapter labelled (OPTIONAL) may be left out at the author's
+discretion. Other chapters should not be left out in order to maintain a
+consistent documentation style across all KDE apps. -->
+
+&intro;
+&basics;
+&building;
+&configuration;
+&menus;
+&credits;
+&database;
+
+<appendix id="comparing">
+  <title>
+    Comparing &kexi; to other database applications
+  </title>
+  <para>
+    Although different database applications tend to provide similar
+    functionality, they often use different terminology.  For your
+    convenience, this appendix shows how the terminology used in
+    &kexi; corresponds to that used by other database applications.
+    Thus, this chapter may be useful when migrating databases to from
+    one application to another.
+  </para>
+  <sect1 id="comparing-data-types">
+    <title>
+      Data types
+    </title>
+      <para>
+	The table below shows how the data types in &kexi; correspond
+	to data types in other database applications.
+      </para>
+      <para>
+	Some of the data types listed here are
+	<firstterm>sub-types</firstterm> of other types.  For example,
+	the <firstterm>Long text</firstterm> type is a sub-type of the
+	<firstterm>Text</firstterm> type.  To use a sub-type in
+	&kexi;, you should select the corresponding basic type (in
+	this case, Text) in the table designer, and then select the
+	sub-type using the <guilabel>Subtype</guilabel> setting in the
+	<guilabel>Properties Editor</guilabel>.
+      </para>
+      <table>
+      <title>
+	Comparison of data types used in &kexi; and other database
+	applications
+      </title>
+      <tgroup cols="4">
+	<thead>
+	  <row>
+	    <entry>&kexi;</entry>
+	    <entry>MS Access</entry>
+	    <entry>dBase/FoxPro</entry>
+	    <entry>Paradox</entry>
+	  </row>
+	</thead>
+	<tbody>
+	  <row>
+	    <entry>Text (Text)</entry>
+	    <entry>Text</entry>
+	    <entry>Character</entry>
+	    <entry>Alphanumeric</entry>
+	  </row>
+	  <row>
+	    <entry>Long text (Long text)</entry>
+	    <entry>Memo</entry>
+	    <entry>Memo</entry>
+	    <entry>Memo</entry>
+	  </row>
+	  <row>
+	    <entry>Date/Time (Date/Time)</entry>
+	    <entry>Date, Time</entry>
+	    <entry>Date</entry>
+	    <entry>DateTime</entry>
+	  </row>
+<!-- Not visible in Kexi GUI yet.
+	  <row>
+	    <entry>Object (Object)</entry>
+	    <entry>OLE Object</entry>
+	    <entry>General</entry>
+	    <entry>OLE, Graphical Binary</entry>
+	  </row>
+-->
+	  <row>
+	    <entry>Integer Number (Integer Number)</entry>
+	    <entry>Number (Integer)</entry>
+	    <entry>Numeric</entry>
+	    <entry>Integer</entry>
+	  </row>
+	  <row>
+	    <entry>Big Integer Number (Big Integer Number)</entry>
+	    <entry>Long Integer</entry>
+	    <entry>Numeric</entry>
+	    <entry>Long Integer</entry>
+	  </row>
+	  <row>
+	    <entry>Floating Point Number (Floating Point Number)</entry>
+	    <entry>Single/Double precision number</entry>
+	    <entry>Float</entry>
+	    <entry>Number</entry>
+	  </row>
+	</tbody>
+      </tgroup>
+    </table>
+  </sect1>
+</appendix>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes: nil
+sgml-general-insert-case: lower
+End:
+
+vim:tabstop=2:shiftwidth=2:expandtab
+kate: space-indent on; indent-width 2; tab-width 2; indent-mode none;
+-->

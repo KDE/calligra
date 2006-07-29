@@ -1,0 +1,81 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KOfficePart
+X-KDE-Derived=KParts/ReadWritePart
+Comment=KOffice Component
+Comment[af]=Koffice Komponent
+Comment[ar]=مُكَوِّن KOffice
+Comment[az]=KOffice Komponenti
+Comment[bg]=Компонент на KOffice
+Comment[br]=Parzh KOffice
+Comment[bs]=KOffice komponenta
+Comment[ca]=Component de KOffice
+Comment[cs]=Komponenta KOffice
+Comment[cy]=Cydran KOffice 
+Comment[da]=KOffice-komponent
+Comment[de]=KOffice-Komponente
+Comment[el]=Συστατικό του KOffice
+Comment[eo]=KOficejo-komponento
+Comment[es]=Componente de KOffice
+Comment[et]=KOffice'i komponent
+Comment[eu]=KOffice-en osagaia
+Comment[fa]=KOffice اجزای
+Comment[fi]=KOffice-komponentti
+Comment[fr]=Composant KOffice
+Comment[ga]=Comhpháirt KOffice
+Comment[he]=רכיב של KOffice
+Comment[hi]=केऑफ़िस घटक
+Comment[hr]=KOffice komponenta
+Comment[hu]=KOffice-komponens
+Comment[id]=Komponen KOffice
+Comment[is]=KOffice hluti
+Comment[it]=Componente di KOffice
+Comment[ja]=KOfficeコンポーネント
+Comment[km]=សមាសភាគ KOffice
+Comment[lo]=ຄອມໂພເນນຕຂອງໂປຣແກມຊຸດສໍານັກງານ K 
+Comment[lt]=KOffice Komponentas
+Comment[lv]=KOffice Komponente
+Comment[mk]=KOffice компонента
+Comment[ms]=Komponen KOffice
+Comment[mt]=Komponent tal-KOffice
+Comment[nb]=KOffice-komponent
+Comment[nn]=KOffice-komponent
+Comment[pl]=Komponent KOffice
+Comment[pt]=Componente do KOffice
+Comment[pt_BR]=Componente do KOffice
+Comment[ro]=Componentă KOffice
+Comment[ru]=Компонент KOffice
+Comment[se]=Koffice-oassi
+Comment[sk]=Zložka Koffice
+Comment[sl]=Komponenta za KOffice
+Comment[sr]=KOffice-ова компонента
+Comment[sr@Latn]=KOffice-ova komponenta
+Comment[sv]=Koffice-komponent
+Comment[ta]=KOffice கூறு
+Comment[tg]=Компоненти KOffice
+Comment[th]=คอมโพเน็นต์ของโปรแกรมชุดสำนักงาน K
+Comment[tr]=KOffice Bileşeni
+Comment[uk]=Компонента KOffice
+Comment[uz]=KOffice компоненти
+Comment[ven]=Khomphonente ya ofisi ya K
+Comment[wa]=Componint Koffice
+Comment[xh]=Ingxenye ye KOffice
+Comment[zh_CN]=KOffice 组件
+Comment[zh_TW]=KOffice 元件
+Comment[zu]=Ingxenye ye KOffice
+
+# Name of the native mimetype (mandatory) - currently still the KOffice-1.3 one, e.g. application/x-kword
+[PropertyDef::X-KDE-NativeMimeType]
+Type=QString
+
+# Name of the OASIS native mimetype (temporary, and optional)
+[PropertyDef::X-KDE-NativeOasisMimeType]
+Type=QString
+
+# Name of the additional mimetypes that the application can load/save natively
+[PropertyDef::X-KDE-ExtraNativeMimeTypes]
+Type=QStringList
+
+[PropertyDef::X-KDE-NOTKoDocumentEmbeddable]
+Type=bool

@@ -1,0 +1,187 @@
+Some usefull stuff:              
+You can search the source code for FIXME and TODO entries with:
+find . -name "*.c*" -o -name "*.h" | xargs grep -E "(###|TODO|FIXME|todo)"
+
+Using -A and -B with grep gives you some additional context around the particular comment:
+find . -name "*.c*" -o -name "*.h" | xargs grep -A 3 -B 3 -E "(###|TODO|FIXME|todo)"
+
+
+The list is not sorted in any order, allthough more urgent things tend to
+gravitate to the top. Also it is not limited to what should be fixed 
+before the 1.5 release!
+--------------------------------------------------------------------------------
+Status      Description
+--------------------------------------------------------------------------------
+Taken       User manual (contact: raphael.langerhorst@kdemail.net)
+            
+            Find a solution for the durationwidget.
+            It's now a custom widget mainly comprised by QLineEdits.
+            This doesn't work well. One problem is that QLineEdit gives
+            sizehints of approx 14 charachters minimum and we use 2-3, so
+            it messes up layouting.
+            
+            Resourceuseview: Scrap existing and use KChart instead.
+            Removed for now. Charting probably not added until after release.
+            
+            Reports: Review if/how Kugar should be used and
+            design a few usefull reports.
+
+            Task details view: Improve, make it stand-alone? Convert to
+            a "infoview"? (as todos in KDE-PIM?)
+            
+            Cut, copy, paste.
+            
+            Start-to-finish relation.
+            
+            Improve menu- and toolbar structure.
+
+            Icons. Would be nice to have a set with a consistent look.
+            
+            Templates
+            
+            Add tooltips and what's this.
+            
+            Better handling of resources during scheduling.
+            - Use Overtime
+            - Allow/prohibit overbooking
+            - Resource leveling
+            - Monte carlo estimation
+            - etc
+            
+            Calendars:
+            - Timezone handling
+            - Default calendar (See also Bug 123682)
+            - Localized holiday files (as in kdepim)
+
+            Improve Progress info dialog/presentation.
+            Make it stand-alone, add to task context menu.
+
+            KDGantt:
+            - Static/global IDs for items and tasklink groups.
+            - Presentation of "week-ends" when it doesn't match scale.
+            - Time-now line.
+            - Progress for event (milestone) item.
+            
+            Settings/configuration
+
+            Implement periodic/repetitive tasks.
+            
+            Implement external events
+            
+            Implementing subproject editor-dialog
+            Subproject is not supported.
+            
+            Handle (re-)calculation of started/finished tasks.
+            
+            Restrict modification of started/finished tasks.
+
+            Interface to PIM
+            - Issue todos and docs
+            - Fetch freebusy info (Prob: how to sync if we recalculate?)
+
+            Decide on the final KPlato file format.
+            For now we have these options:
+              * leave the format the way it is
+              * create a new (OASIS?) specification
+              * use PMXML - http://www.projectoffice.com/xml/xml.asp
+              * or find a better suited "standard" format
+                  http://proj.chbs.dk/specifications/
+
+            
+            Make it possible to form resource teams.
+            
+            Make it possible to request resource allocations from groups.
+            
+            Write good doxygen compatible API docs in the source code!
+            
+            Taskjuggler???
+            
+            Change source filenames to 'classname'.cpp and d:o .h
+            Eg: kpttask.cc -> Task.cpp kpttask.h -> Task.h
+            Also remove the .ui filename prefix.
+------------------------------------------------------------------
+Done        Remove Networkview.
+
+Done        Resourceview: Improve
+            
+
+Done        Fix default values for "standard worktime" (and maybe a new name?).
+            This should maybe be part of templates.
+            
+Done        Implement embedding into other koffice apps.
+            
+Done        Fix 'embedding' into koshell.
+            
+Done        Calendars:
+            - Improve calendars dialogs
+            - Implement hierachical calendars
+
+Done        Autogenerate task id.
+            
+Done        Implement multiple scheduling. (Expected, optimistic, pessimistic)
+            
+Done        Make a summarytask dialog.
+            
+Done        Cost Breakdown Structure:
+            - Define account class/list and necessary dialogs.
+            - Task cost specification (which shall link to accounts, resources).
+            - Resource cost specification.
+            - Implement calculation of planned cost (part of calculating/scheduling 
+              the project).
+            
+Done        Remove KPT prefix from all KPlato classes (ask mailing list!)
+
+Done        Requirements specification
+
+Done        Data structuring and class creation 
+
+Done        Implementing basic view
+
+    
+Done        Implementing basic task/summarytasks
+
+    
+Done        Implementing Gantt view
+            Uses KDGanttView, which needs some improvements:
+            Context menu for links, possibility to present
+            progress in different ways (time-now, double taskbars...),
+            improved layout of links.
+
+Done        Implementing task editor-dialog
+
+Done        Implementing project editor-dialog 
+    
+    
+    
+Done        Implementing milestone editor-dialog
+            Uses task dialog. Milestone is a task with 0 duration.
+    
+
+Done        Resources (basic)
+            Note: Possibly redesign group/resource so that one resource
+                  can be member of multiple groups.
+                  
+            Calculations:
+Done        From given project start time.
+Done        From given project end time:
+            Based on task relations: 
+Done            Finish to start.
+Done            Start to start.
+Done            Finish to finish.
+            Based on constraints.
+Done            As soon as possible.
+Done            As late as possible.
+Done            Must start on.
+Done            Start not earlier than.
+Done            Finish not later than.
+                
+Done        Based on resource requests to specific resources.
+Done        Allocation of resources and calculates durations accordingly.
+
+            
+        Templates:
+Done    Plain
+        
+Done        Use KPlato namespace for all KPlato classes
+
+

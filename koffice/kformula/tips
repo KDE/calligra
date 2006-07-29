@@ -1,0 +1,66 @@
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can use Ctrl-U/Ctrl-L to create an index above or below
+the currently selected elements?</p>
+</html>
+</tip>
+
+<tip category="KFormula|Filters">
+<html>
+<p>...that you can import and export <em>MathML</em> files?</p>
+</html>
+</tip>
+
+<tip category="KFormula|General">
+<html>
+<p>...to get the most out of KFormula you need to install 
+the TrueType version of the famous TeX fonts.
+You can find them in <a href="http://www.ctan.org">ctan</a> at
+<a href="http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/?action=/tex-archive/fonts/cm/ps-type1/bakoma/">/tex-archive/fonts/cm/ps-type1/bakoma/</a>.
+However you don't need to install all of those. Right now the fonts
+<tt>cmbx10</tt>,
+<tt>cmex10</tt>,
+<tt>cmmi10</tt>,
+<tt>cmr10</tt>,
+<tt>cmsy10</tt>,
+<tt>msam10</tt>
+and
+<tt>msbm10</tt>
+are required.
+</p>
+</html>
+</tip>
+
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can use the keys <tt>^</tt> and <tt>_</tt> to create 
+right upper and lower indices? If you type <tt>Ctrl-^</tt> or 
+<tt>Ctrl-_</tt> instead, you will get a left index.
+</p>
+</html>
+</tip>
+
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can insert any of the many supported symbols by typing its
+name? Simply press the backslash key, type the symbol's name and press
+space.
+</p>
+</html>
+</tip>
+
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can insert Greek letters very easily by typing the
+corresponding latin letter and pressing Ctrl-G afterwards?
+</p>
+</html>
+</tip>
+
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can insert any number of lines using the <em>Multiline</em> element?
+By inserting <tt>&</tt> you can align these lines.
+</p>
+</html>
+</tip>

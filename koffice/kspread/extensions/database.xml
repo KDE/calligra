@@ -1,0 +1,298 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Database</GroupName>
+
+    <Function>
+      <Name>DSUM</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Sums up the numbers in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DSUM(Database; "Header"; Conditions)</Syntax>
+	<Example>DSUM(A1:C5; "Salary"; A9:A11)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DAVERAGE</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Calculates the average in a column of a database specified by a set of conditions for values that are numbers</Text>
+	<Syntax>DAVERAGE(Database; "Header"; Conditions)</Syntax>
+	<Example>DAVERAGE(A1:C5; "Salary"; A9:A11)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DCOUNT</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Counts the cells containing numeric values in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DCOUNT(Database; "Header"; Conditions)</Syntax>
+	<Example>DCOUNT(A1:C5; "Salary"; A9:A11)</Example>
+	<Related>DCOUNTA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DCOUNTA</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Counts the cells containing numeric or alphanumeric values in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DCOUNTA(Database; "Header"; Conditions)</Syntax>
+	<Example>DCOUNTA(A1:C5; "Salary"; A9:A11)</Example>
+	<Related>DCOUNT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DGET</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns a single value from a column of a database specified by a set of conditions. This function returns an error if no value or more than one value exist.</Text>
+	<Syntax>DGET(Database; "Header"; Conditions)</Syntax>
+	<Example>DGET(A1:C5; "Salary"; A9:A11)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DMAX</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the largest value in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DMAX(Database; "Header"; Conditions)</Syntax>
+	<Example>DMAX(A1:C5; "Salary"; A9:A11)</Example>
+	<Related>DMIN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DMIN</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the smallest values in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DMIN(Database; "Header"; Conditions)</Syntax>
+	<Example>DMIN(A1:C5; "Salary"; A9:A11)</Example>
+	<Related>DMAX</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DPRODUCT</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the product of all numeric  values in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DPRODUCT(Database; "Header"; Conditions)</Syntax>
+	<Example>DPRODUCT(A1:C5; "Salary"; A9:A11)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DSTDEV</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the estimate of the standard deviation of a population based on a sample using all numeric values in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DSTDEV(Database; "Header"; Conditions)</Syntax>
+	<Example>DSTDEV(A1:C5; "Salary"; A9:A11)</Example>
+	<Related>DSTDEVP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DSTDEVP</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the standard deviation of a population based on the entire population using all numeric values in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DSTDEVP(Database; "Header"; Conditions)</Syntax>
+	<Example>DSTDEVP(A1:C5; "Salary"; A9:A11)</Example>
+	<Related>DSTDEV</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DVAR</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the estimate of the variance of a population based on a sample using all numeric values in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DVAR(Database; "Header"; Conditions)</Syntax>
+	<Example>DVAR(A1:C5; "Salary"; A9:A11)</Example>
+	<Related>DVARP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DVARP</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+	<Comment>Range marking the database</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String marking the column in the database</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Range marking the conditions</Comment>
+	<Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the variance of a population based on the entire population using all numeric values in a column of a database specified by a set of conditions.</Text>
+	<Syntax>DVARP(Database; "Header"; Conditions)</Syntax>
+	<Example>DVARP(A1:C5; "Salary"; A9:A11)</Example>
+	<Related>DVAR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GETPIVOTDATA</Name>
+      <Type>FLOAT</Type>
+      <Parameter>
+        <Type range="true">String</Type>
+        <Comment>Range containing the pivot table</Comment>
+      </Parameter>
+      <Parameter>
+        <Type>String</Type>
+        <Comment>Name of the field of which you want the summary data</Comment>
+      </Parameter>
+      <Help>
+      <Text>Fetches summary data from a pivot table.</Text>
+      <Syntax>GETPIVOTDATA(Database; "Sales")</Syntax>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

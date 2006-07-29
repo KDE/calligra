@@ -1,0 +1,880 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Financial</GroupName>
+
+    <Function>
+      <Name>RECEIVED</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Investment</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Discount rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The RECEIVED function returns the amount received at the maturity date for a invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365. The settlement date must be before maturity date.</Text>
+	<Syntax>RECEIVED(settlement; maturity; investment; discount; basis)</Syntax>
+	<Example>RECEIVED("2/28/2001"; "8/31/2001"; 1000; 0.05; 0) returns 1,025.787</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TBILLEQ</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Discount rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The TBILLEQ functions returns the bond equivalent for a treasury bill. The maturity date must be after the settlement date but within 365 days.</Text>
+	<Syntax>TBILLEQ(settlement; maturity; discount)</Syntax>
+	<Example>TBILLEQ("2/28/2001"; "8/31/2001"; 0.1) returns 0.1068</Example>
+        <Related>TBILLPRICE</Related>
+        <Related>TBILLYIELD</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TBILLPRICE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Discount rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The TBILLPRICE functions returns the price per $100 value for a treasury bill. The maturity date must be after the settlement date but within 365 days. The discount rate must be positive.</Text>
+	<Syntax>TBILLPRICE(settlement; maturity; discount)</Syntax>
+	<Example>TBILLPRICE("2/28/2001"; "8/31/2001"; 0.05) returns 97.4444</Example>
+        <Related>TBILLEQ</Related>
+        <Related>TBILLYIELD</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TBILLYIELD</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Price per $100 face value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The TBILLYIELD functions returns the yield for a treasury bill. The maturity date must be after the settlement date but within 365 days. The price must be positive.</Text>
+	<Syntax>TBILLYIELD(settlement; maturity; price)</Syntax>
+	<Example>TBILLYIELD("2/28/2001"; "8/31/2001"; 600) returns -1.63</Example>
+        <Related>TBILLEQ</Related>
+        <Related>TBILLPRICE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ACCRINT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Issue date</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>First interest</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Annual rate of security</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Par value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of payments per year</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ACCRINT function returns accrued interest for a security which pays periodic interest. Allowed frequencies are 1 - annual, 2 - semi-annual or 4 - quarterly. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>ACCRINT(issue; first interest; settlement; rate; par; frequency; basis)</Syntax>
+	<Example>ACCRINT("2/28/2001"; "8/31/2001"; "5/1/2001"; 0.1; 1000; 2; 0) returns 16,944</Example>
+        <Related>ACCRINTM</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ACCRINTM</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Issue date</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Annual rate of security</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Par value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ACCRINTM function returns accrued interest for a security which pays interests at maturity date. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>ACCRINTM(issue; settlement; rate; par; basis)</Syntax>
+	<Example>ACCRINTM("2/28/2001"; "8/31/2001"; 0.1; 100) returns 5.0278</Example>
+        <Related>ACCRINT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INTRATE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Investment</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Redemption</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The INTRATE function returns the interest rate for a fully invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>INTRATE(settlement; maturity; investment; redemption; basis)</Syntax>
+	<Example>INTRATE("2/28/2001"; "8/31/2001"; 1000000; 2000000; 1) returns 1.98</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DISC</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Price per $100 face value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Redemption</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DISC function returns the discount rate for a security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>DISC(settlement; maturity; par; redemption; basis)</Syntax>
+	<Example>DISC("2/28/2001"; "8/31/2001"; 12; 14) returns 0.2841</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DOLLARDE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Fractional Dollar</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Fraction</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DOLLARDE() function returns a dollar price expressed as a decimal number. The fractional dollar is the number to be converted and the fraction is the denominator of the fraction</Text>
+	<Syntax>DOLLARDE(fractional dollar; fraction)</Syntax>
+	<Example>DOLLARDE(1.02; 16) - stands for 1 and 2/16 - returns 1.125</Example>
+        <Related>DOLLARDE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DOLLARFR</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Decimal Dollar</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Fraction</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The DOLLARFR() function returns a dollar price expressed as a fraction. The decimal dollar is the number to be converted and the fraction is the denominator of the fraction</Text>
+	<Syntax>DOLLARFR(fractional dollar; fraction)</Syntax>
+	<Example>DOLLARFR</Example>
+        <Related>DOLLARFR(1.125; 16) returns 1.02. (1 + 2/16)</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COUPNUM</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Frequency</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Day counting basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The COUPNUM function returns the number of coupons to be paid between the settlement and the maturity. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
+	<Syntax>COUPNUM(settlement; maturity; frequency; basis)</Syntax>
+	<Example>COUPNUM("2/28/2001"; "8/31/2001"; 2; 0) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>FV</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Present value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The FV() function returns the future value of an investment, given the yield and the time elapsed. If you have $1000 in a bank account earning 8% interest, after two years you will have FV(1000;0.08;2) or $1166.40.</Text>
+	<Syntax>FV(present value;yield;periods)</Syntax>
+	<Example>FV(1000;0.08;2) equals 1166.40</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DURATION</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present value (PV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future value (FV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the number of periods needed for an investment to retain a desired value.</Text>
+	<Syntax>DURATION(rate; pv; fv)</Syntax>
+ 	<Example>DURATION(0.1; 1000; 2000) returns 7.27</Example>
+        <Related>FV</Related>
+        <Related>PV</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NPER</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Payment</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present value (PV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future value (FV - optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Type (optional)</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the number of periods of an investment.</Text>
+	<Syntax>NPER(rate;payment;pv;fv;type)</Syntax>
+	<Example>NPER(0.1; -100; 1000) equals 11</Example>
+	<Example>NPER(0.06; 0; -10000; 20000 ;0) returns 11.906</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PMT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of periods (NPer)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present value (PV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future value (FV - optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Type (optional)</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Help>
+	<Text>PMT returns the amount of payment for a loan based on a constant interest rate and constant payments (each payment is equal amount).</Text>
+	<Syntax>PMT(rate; nper ; pv; fv; type)</Syntax>
+	<Example>PMT(0.1; 4; 10000) equals -3154.71</Example>
+        <Related>NPER</Related>
+	<Related>IPMT</Related>
+	<Related>PPMT</Related>
+        <Related>PV</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PV</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Future value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The PV() function returns the present value of an investment -- the value today of a sum of money in the future, given the rate of interest or inflation. For example if you need $1166.40 for your new computer and you want to buy it in two years while earning 8% interest, you need to start with PV(1166.4;0.08;2) or $1000.</Text>
+	<Syntax>PV(future value;rate;periods)</Syntax>
+	<Example>PV(1166.4;0.08;2) equals 1000</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PPMT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future value (optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Type (optional)</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Help>
+	<Text>PPMT calculates the amount of a payment of an annuity going towards principal.</Text>
+	<Text>Rate is the periodic interest rate.</Text>
+	<Text>Period is the amortizement period. 1 for the first and NPER for the last period.</Text>
+	<Text>NPER is the total number of periods during which annuity is paid.</Text>
+	<Text>PV is the present value in the sequence of payments.</Text>
+	<Text>FV (optional) is the desired (future) value.  default: 0.</Text>
+	<Text>Type (optional) defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</Text>
+	<Syntax>PPMT(Rate; Period; NPer; PV; FV; Type)</Syntax>
+	<Example>PPMT(0.0875;1;36;5000;8000;1) equals -18.48</Example>
+	<Related>IPMT</Related>
+        <Related>PMT</Related>
+        <Related>PV</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISPMT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of periods</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present values (PV)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>Calculates the interest paid on a given period of an investment.</Text>
+	<Text>Rate is the periodic interest rate.</Text>
+	<Text>Period is the amortizement period. 1 for the first and NPer for the last period.</Text>
+	<Text>NPer is the total number of periods during which annuity is paid.</Text>
+	<Text>PV is the present value in the sequence of payments.</Text>
+	<Syntax>ISPMT(Rate; Period; NPer; PV)</Syntax>
+	<Example>ISPMT(0.1; 1; 3; 8000000) equals -533333</Example>
+        <Related>PV</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IPMT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Number of periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Present values</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Future value (optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Type (optional)</Comment>
+	<Type>IntType</Type>
+      </Parameter>
+      <Help>
+	<Text>IPMT calculates the amount of a payment of an annuity going towards interest.</Text>
+	<Text>Rate is the periodic interest rate.</Text>
+	<Text>Period is the amortizement period. 1 for the first and NPER for the last period.</Text>
+	<Text>NPER is the total number of periods during which annuity is paid.</Text>
+	<Text>PV is the present value in the sequence of payments.</Text>
+	<Text>FV (optional) is the desired (future) value.  default: 0.</Text>
+	<Text>Type (optional) defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</Text>
+	<Text>The example shows the interest to pay in the last year of a three year loan. The interest rate is 10 percent.</Text>
+	<Syntax>IPMT(Rate; Period; NPer; PV; FV; Type)</Syntax>
+	<Example>IPMT(0.1;3;3;8000) equals -292.45</Example>
+        <Related>PPMT</Related>
+	<Related>PV</Related>
+	<Related>PMT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>PV_ANNUITY</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Payment per period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+     <Help>
+	<Text>The PV_ANNUITY() function returns the present value of an annuity or stream of payments. For example: a "million dollar" lottery ticket that pays $50,000 a year for 20 years, with an interest rate of 5%, is actually worth PV_ANNUITY(50000;0.05;20) or $623,111. This function assumes that payments are made at the end of each period.</Text>
+	<Syntax>PV_ANNUITY(amount;interest;periods)</Syntax>
+	<Example>PV_ANNUITY(1000;0.05;5) equals 4329.48</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>FV_ANNUITY</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Payment per period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The FV_ANNUITY() function returns the future value of a stream of payments given the amount of the payment, the interest rate and the number of periods. For example: If you receive $500 per year for 20 years, and invest it at 8%, the total after 20 years will be FV_annuity(500;0.08;20) or $22,880.98. This function assumes that payments are made at the end of each period.</Text>
+	<Syntax>FV_ANNUITY(amount;interest;periods)</Syntax>
+	<Example>FV_ANNUITY(1000;0.05;5) equals 5525.63</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COMPOUND</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Principal</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods per year</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Years</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The COMPOUND() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time. For example: $5000 at 12% interest compounded quarterly for 5 years will become COMPOUND(5000;0.12;4;5) or $9030.56.</Text>
+	<Syntax>COMPOUND(initial;interest;periods;periods_per_year)</Syntax>
+	<Example>COMPOUND(5000;0.12;4;5) equals 9030.56</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CONTINUOUS</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Principal</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Years</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The CONTINUOUS() function calculates the return on continuously compounded interest, given the principal, nominal rate and time in years. For example: $1000 earning 10% for 1 year becomes CONTINUOUS(1000;.1;1) or $1105.17.</Text>
+	<Syntax>CONTINOUS(principal;interest;years)</Syntax>
+	<Example>CONTINUOUS(1000;0.1;1) equals 1105.17</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>EFFECT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Nominal interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The EFFECT() function calculates the effective yield for a nominal interest rate (annual rate or APR). For example: 8% interest compounded monthly provides an effective yield of EFFECT(.08;12) or 8.3%.</Text>
+	<Syntax>EFFECT(nominal;periods)</Syntax>
+  <Example>EFFECT(0.08;12) equals 0.083</Example>
+  <Related>EFFECTIVE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>EFFECTIVE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Nominal interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods</Comment>
+  <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The EFFECTIVE() function calculates the effective yield for a nominal interest rate (annual rate or APR). It is the same as the EFFECT function.</Text>
+        <Syntax>EFFECTIVE(nominal;periods)</Syntax>
+        <Related>EFFECT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NOMINAL</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Effective interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Periods</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The NOMINAL() function calculates the nominal (stated) interest rate for an effective (annualized) interest rate compounded at given intervals. For example: to earn 8% on an account compounded monthly, you need a return of NOMINAL(.08;12) or 7.72%.</Text>
+	<Syntax>NOMINAL(effective;periods)</Syntax>
+	<Example>NOMINAL(0.08;12) equals 0.0772</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ZERO_COUPON</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Face value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Years</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The ZERO_COUPON() function calculates the value of a zero-coupon (pure discount) bond. For example: if the interest rate is 10%, a $1000 bond that matures in 20 years is worth ZERO_COUPON(1000;.1;20) or $148.64.</Text>
+	<Syntax>ZERO_COUPON(face value;rate;years)</Syntax>
+	<Example>ZERO_COUPON(1000;.1;20) equals 148.64</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LEVEL_COUPON</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Face value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Coupon rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Coupons per year</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Years</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Market interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The LEVEL_COUPON() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth LEVEL_COUPON(1000;.13;2;4;.1) or $1096.95.</Text>
+	<Syntax>LEVEL_COUPON(face value;rate;years)</Syntax>
+	<Example>LEVEL_COUPON(1000;.13;2;4;.1) equals 1096.95</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SLN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cost</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Salvage</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Life</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The SLN() function will determine the straight line depreciation of an asset for a single period. Cost is the amount you paid for the asset. Salvage is the value of the asset at the end of the period. Life is the number of periods over which the asset is depreciated. SLN divides the cost evenly over the life of an asset.</Text>
+	<Syntax>SLN(cost; salvage value; life)</Syntax>
+	<Example>SLN(10000;700;10) equals 930</Example>
+        <Related>SYD</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SYD</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cost</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Salvage</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Life</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+      <Text>The SYD() function will calculate the sum-of-years digits depreciation for an asset based on its cost, salvage value, anticipated life, and a particular period. This method accelerates the rate of the depreciation, so that more depreciation expense occurs in earlier periods than in later ones. The depreciable cost is the actual cost minus the salvage value. The useful life is the number of periods (typically years) over which the asset is depreciated.</Text>
+	<Syntax>SYD(cost; salvage value; life; period)</Syntax>
+	<Example>SYD(5000; 200; 5; 2) equals 1280</Example>
+        <Related>SLN</Related>
+      </Help>
+    </Function>
+
+
+    <Function>
+      <Name>DDB</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cost</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Salvage</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Life</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Factor</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The DDB() function calculates the depreciation of an asset for a given period using the arithmetic-declining method. The factor is optional, if omitted it is assumed to be 2. All the parameter must be greater than zero.</Text>
+	<Syntax>DDB(cost; salvage value; life; period [;factor])</Syntax>
+	<Example>DDB(75000;1;60;12;2) returns 1721.81</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DB</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Cost</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Salvage</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Life</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Period</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Month</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The DB() function will calculate the depreciation of an asset for a given period using the fixed-declining balance method. Month is optional, if omitted it is assumed to be 12.</Text>
+	<Syntax>DB(cost; salvage value; life; period [;month])</Syntax>
+	<Example>DB(8000;400;6;3) equals 1158.40</Example>
+	<Example>DB(8000;400;6;3;2) equals 1783.41</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>EURO</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Currency</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The EURO() function converts one Euro to a given national currency in the European monetary union. Currency is one of the following: ATS (Austria), BEF (Belgium), DEM (Germany), ESP (Spain), FIM (Finland), FRF (France), GRD (Greece), IEP (Ireland), ITL (Italy), LUF (Luxembourg), NLG (Netherlands), or PTE (Portugal).</Text>
+	<Syntax>EURO(currency)</Syntax>
+	<Example>EURO("DEM") equals 1.95583</Example>
+      </Help>
+    </Function>
+
+  </Group>
+</KSpreadFunctions>

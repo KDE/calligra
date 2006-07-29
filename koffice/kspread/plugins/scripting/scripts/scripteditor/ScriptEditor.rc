@@ -1,0 +1,9 @@
+<KrossScripting>
+    <ScriptAction
+      name="scripteditor"
+      version="3"
+      text="Script Editor"
+      icon="edit"
+      interpreter="python"
+      file="ScriptEditor.py" />
+</KrossScripting>

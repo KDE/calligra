@@ -1,0 +1,125 @@
+
+MS Write Import Filter for KWord - How to Perfect the Filter
+$Date$
+Clarence Dang <dang@kde.org>
+
+
+No import filter, let alone software or hardware, is perfect.  And this
+includes the MS Write Import Filter...
+
+This filter appears to be feature-complete, except for OLE and what is
+mentioned here.
+
+This document discusses where and why the filter is not perfect (! :)) and
+whether or not these problems should or can be fixed.  In the world of filter
+development, it is important to consider even minute details (within reason).
+
+
+Problems that could be fixed in the future
+------------------------------------------
+
+1. Linespacing
+
+MS Write renders text with an uncommon form of linespacing (where the
+text is aligned to the bottom).
+
+This has been discussed on koffice-devel and has resulted in a
+work-around: use of the OFFSETS tag to "fake" space before each line.
+Unfortunately, this is not perfect esp. the trailing linespacing at the
+end of the paragraph and where paragraphs span more than one line.
+This feature is now disabled by default and cannot be turned on because of
+stability problems with the dialog!
+
+Word97 can import this kind of linespacing, despite the fact that it too
+doesn't ordinarily do linespacing like MS Write does so perhaps this may be
+fixed in the future?
+
+2. Positioning of Headers, Footers & Main Text Frame
+
+The following things in an MS Write document are known:
+
+##########    <-- top of header
+# Header #
+##########
+
+##########    <-- top of body
+#        #
+#        #
+#  BODY  #
+#        #
+#        #
+##########    <-- bottom of body
+
+##########
+# Footer #
+##########    <-- bottom of footer
+
+If "Word Processing" mode is selected, spHeadBody and spFootBody would have
+to be specified.  From the information given above, however, these two cannot
+be computed in advance.  If "DTP" mode is selected, we would need KWord to
+support expanding frames upwards for the footer (since we only know the bottom
+of the footer but not the top).
+
+In other words, AFAIK, the current KWord file format does not allow the
+specification of the exact position of each frame.
+
+See my post "Specifying exact frame positions" to the koffice-devel mailinglist
+on 2002-01-27 and the number of responses I got to it.
+
+Also, the concept of Margins are different in MS Write.  In MS Write,
+the top and bottom margins of the document refer to the position of the
+body frame on the paper.  While in KWord, it refers to the position of
+the topmost text frame (which could be the header) and the bottom-most
+text frame (which could be the footer).  So the import filter adjusts
+the margins of the page, based on the positions of the header and footer.
+
+3. Image Positions
+
+In MS Write, the user can position an image a certain number of points
+from the left margin.
+
+In KWord, it is impossible to do this (for anchored images, which are
+required to maintain the relative positions of surrounding text and the
+image), at the moment (see my post "Images and Stores" to koffice-devel on
+2002-01-26).  So at the moment, paragraph indenting is used to emulate it.
+
+
+Problems that will probably never be fixed
+------------------------------------------
+
+1. Rendering Differences Between KWord and MS Write
+
+KWord renders with slightly more/less space than MS Write for images,
+text etc.  This is what I would call a fundamental difference between
+word-processors and so cannot be avoided (realistically) and the exact
+amount of spacing is not specified by MS anyway.
+
+Obviously, this would mean that KWord will read a document and produce
+more/less pages than MS Write would with the same document, leading on
+to point (2):
+
+2. Page Table is Ignored
+
+Some MS Write documents contain a "Page Table" (created when the user
+clicks "Repaginate"), which specifies where pages start and end esp. for
+printing purposes.  However due to the previous point (1) and the fact
+that the pageTable can get so out of sync with the document anyway esp. if
+the user doesn't "Repaginate" the document everytime s/he changes it,
+the pageTable is completely ignored in this import filter (see the empty
+MSWrite::Generator::writePageNew implementation).
+
+
+What you can do to help
+--------------------------------------------------------
+
+1. Contribute to LibMSWrite (http://sourceforge.net/projects/libmswrite/)
+
+2. Fix something in the KOffice end of the filter (mswriteimport.*)
+
+3. Send me an email telling me what I've done wrong
+
+All help is appreciated (just remember to send me an email so that efforts
+are not duplicated and so that I can add you to the credits section :)!
+
+
+--

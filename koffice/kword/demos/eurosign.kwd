@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE DOC ><DOC mime="application/x-kword" syntaxVersion="1" editor="KWord" >
+ <PAPER width="595" zoom="100" spHeadBody="9" format="1" height="841" fType="0" orientation="0" hType="0" columnspacing="2" spFootBody="9" columns="1" >
+  <PAPERBORDERS right="28" left="28" bottom="42" top="42" />
+ </PAPER>
+ <ATTRIBUTES standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="0" />
+ <FRAMESETS>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 1" visible="1" >
+   <FRAME runaround="1" right="567" left="28" bottom="799" top="42" />
+   <PARAGRAPH>
+    <TEXT>Euro symbol in arial (needs AntiAliasing) : €</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" pos="0" len="45" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>Euro symbol in fixed font: €</TEXT>
+    <FORMATS>
+     <FORMAT id="1" pos="0" len="28" >
+      <FONT name="fixed" />
+     </FORMAT>
+    </FORMATS>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" pos="0" len="28" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>Euro symbol in clearlyu font: €</TEXT>
+    <FORMATS>
+     <FORMAT id="1" pos="0" len="31" >
+      <FONT name="clearlyu" />
+      <SIZE value="14" />
+     </FORMAT>
+    </FORMATS>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" pos="0" len="31" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="1" name="TextFrameset 2" visible="1" >
+   <FRAME runaround="1" right="567" left="28" bottom="62" runaroundGap="2.83465" top="42" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="lucidux mono" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="3" name="TextFrameset 3" visible="1" >
+   <FRAME runaround="1" right="567" left="28" bottom="62" runaroundGap="2.83465" top="42" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="lucidux mono" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="2" name="TextFrameset 4" visible="1" >
+   <FRAME runaround="1" right="567" left="28" bottom="62" runaroundGap="2.83465" top="42" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="lucidux mono" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="4" name="TextFrameset 5" visible="1" >
+   <FRAME runaround="1" right="567" left="28" bottom="799" runaroundGap="2.83465" top="779" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="lucidux mono" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="6" name="TextFrameset 6" visible="1" >
+   <FRAME runaround="1" right="567" left="28" bottom="799" runaroundGap="2.83465" top="779" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="lucidux mono" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="5" name="TextFrameset 7" visible="1" >
+   <FRAME runaround="1" right="567" left="28" bottom="799" runaroundGap="2.83465" top="779" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="lucidux mono" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="7" name="Footnotes" visible="0" >
+   <FRAME runaround="1" right="567" left="28" bottom="799" runaroundGap="2.83465" top="779" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="lucidux mono" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+ </FRAMESETS>
+ <STYLES>
+  <STYLE>
+   <NAME value="Standard" />
+   <FLOW align="left" />
+   <COUNTER bullet="0" numberingtype="0" type="0" start="0" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="Arial" />
+    <SIZE value="11" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+ </STYLES>
+ <PIXMAPS/>
+</DOC>

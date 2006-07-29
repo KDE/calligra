@@ -1,0 +1,712 @@
+2006-07-18  Inge Wallin  <inge@lysator.liu.se>
+
+	Clean up the data editor and fix bug 129553: kchart: crash / heavy
+	load with Row=0 in KChart Data Editor
+	* kchartDataEditor.{h,cc} (currentChanged): New method
+	(m_insertRowButton, m_removeRowButton, m_insertRowButton,
+	  m_removeRowButton): New members
+	* kchartDataEditor.cc (removeCurrentRow, removeCurrentCol): Don't
+	allow to remove a row or column if it's the first column or if
+	there are only 2 of them.
+
+	Some small cleaning.
+	
+2006-07-17  Inge Wallin  <inge@lysator.liu.se>
+
+	Add "first row/col as legend" checkboxes to data editor.
+	* kchartDataEditor.cc (kchartDataEditor): Enable existing code
+	* kchartDataEditor.cc (setData): Enable existing code
+	* kchartDataEditor.cc (getData): Enable existing code
+
+	Simplify paintContent():
+	* kchart_part.{h,cc} (createLabelsAndLegend): New function
+	(paintContent): call createLabelsAndLegend
+
+	================================================================
+	KChart 1.5 released
+
+	<There are a lot of missed entries here.>
+
+	
+2005-09-15  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 108770: [PATCH] kchart should have a format menu
+	* kchart.rc (Format): New menu
+	(KChartTypes toolbar): place to the left
+	* kchart_view.cc (KChartView::KChartView): change strings for some
+	actions.
+
+2005-08-08  Inge Wallin  <inge@lysator.liu.se>
+
+	Code cleaning.
+	* kchartWizard.{h,cc}: cleaning
+
+2005-07-28  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 108461: Bug in generation of HiLo charts
+	* kchart_part.cc (paintContent): Add code to handle HiLo chart
+	separately.
+
+	General code cleaning.
+	
+2005-07-23  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix an old FIXME: Get rid of KChartPart::m_bLoading;
+	* kchart_part.{h,cc} (m_bLoading): removed
+	(isLoading): removed
+
+	Some code cleaning (improved comments).
+
+2005-07-??  David Faure
+
+	Fix bug 10xxxx: 
+	* ??
+	
+2005-07-03  David Faure
+
+	First steps for OASIS loading of charts.
+	Loads chart type, row and columns labels, and the data.
+	* kchart_part.{h,cc} (loadOasisData): New method
+	(loadOasis): New method
+	* kchart_params.{h,cc} (loadOasis): New method
+
+	Code cleaning.
+	* kchartWizardSelectChartTypePage.{h,cc} (KChartButton): take
+	const QPixmap& instead of QPixmap*.
+	
+	
+	================================================================
+	KChart 1.4 released
+
+	<There are some missed entries here.  I will try to find out what
+	they were. /ingwa>
+
+2005-05-10  Inge Wallin  <inge@lysator.liu.se>
+	
+	More work on bug 105356:
+	* kdchart/KDChartParams.h (lineColor): return _lineColor again.
+	* kdchart/KDChartParams_io.h (saveXML): Only save the line color
+	if it is non-null.
+	* kchart_part.cc (setAxisDefaults): Always set lineColor to
+	null. This compensates for the (now fixed) bug in saving when
+	reading back old charts.
+	
+2005-05-09  Fredrik Edemar  <f_edemar@linux.se>
+
+        Fix bug 105356: Lines in a line chart are all black
+        * kdchart/KDChartParams.h (lineColor()): always return an invalid
+	QColor object in order for KDChartLinesPainter to use the current
+	dataset color instead.
+
+2005-05-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 99995: KChart should be able to import CSV data
+	* kchart_part.{h,cc} (doSetData): new method broken out of setData()
+	(setData): Call doSetData
+	kchart_view.cc (importData): Get data from the dialog and call
+	KChartPart::doSetData()
+
+	Code cleaning
+	* csvimportdialog.{h,cc} (firstRowContainHeaders,
+	firstColContainHeaders, rows, cols, text): Follow the Qt naming
+	convention, and don't prefix the name with get...
+	* misc: Remove #if 0:ed stuff
+	
+2005-04-25  Inge Wallin  <inge@lysator.liu.se>
+
+	Continue on the CSV import
+	* csvimportdialog.{h,cc} (getFirstRowContainHeaders,
+	getFirstColContainHeaders): new methods
+
+	Fix bug 101007: Error in labels when reading back saved files.
+	* kchart_part.{h,cc} (setAxisDefaults): New method
+	(misc methods): call setAxisDefaults.
+
+2005-04-17  Fredrik Edemar  <f_edemar@linux.se>
+
+        * KDChartBarPainter.cpp (KDChartBarPainter): Prevent the arrow to
+	be drawn at the bottom of the lowest bar when dealing with
+	negative numbers in a 3D bar chart. If all bars are <= 0 the bars
+	with value 0 will still have an arrow.
+	
+        * kchart_part.cc (KChartPart), kchart_params.cc (KChartParams):
+	Make sure the excess arrow is solid by calling
+	setDrawSolidExcessArrows(true) after a chart has been loaded or
+	created.
+
+2005-04-13  Inge Wallin  <inge@lysator.liu.se>
+
+	CSV import: Disable irrelevant formats
+	* csvimportdialog.cc (CSVImportDialog): Disable formats Currency
+	and Date.
+
+	Disable "Import Data" if inside KSpread
+	* kchart_view.{h,cc} (m_importData): New member
+	(KChartView): Disable the KAction if data is unchangeable.
+
+2005-04-10  Inge Wallin  <inge@lysator.liu.se>
+
+	Get a file name for "Import Data" and actually read data.
+	(No new strings).
+	* kchart_view.cc (importData): Open a file dialog, and read data.
+	
+	----------------------------------------------------------------
+
+	Start on import data from Comma Separated Values files (CSV)
+	(Wish 99995)
+	* csvimportdialog.{h,cc}: new files
+	* csvimportdialogui.ui: new file
+	* Makefile.am: Add files above
+	* kchart.rc (File menu): Add Action import_data
+	* kchart_view.cc (import_data): new KAction
+	(importData): new slot
+	
+
+2005-04-10  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix the margins on the pie config page.
+	* kchartParameterPieConfigPage.cc (KChartParameterPieConfigPage):
+	Added a toplevel layout.
+
+2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
+
+        * kchart_part.cc (KChartPart): Set modified when the chart type is
+	changed.
+
+2005-04-07  Inge Wallin  <inge@lysator.liu.se>
+
+	* kchartWizardLabelsLegendPage.cc (KChartWizardLabelsLegendPage):
+	Reenable titles for X and Y axis.
+
+2005-04-07  Fredrik Edemar  <f_edemar@linux.se>
+
+	* kchart_part.cc (KChartPart): The decimal symbol and thousends
+	separator is the same as the rest of KDE.
+	* kchart_params.cc (KChartParams): Revert my last change: use
+	KDChart's default precision instead.
+	* KDChart (KDChartAxesPainter.cpp): The axis label: Use at most 6
+	digits after the decimal point.
+
+	----------------------------------------------------------------
+
+	Fix bug 103267: Unreasonable precison in axis values 
+	* kchartParameterConfigPage.{h,cc} (KChartParameterConfigPage):
+	Add settings for decimal precision for the left axis.
+	* kchart_params.cc (KChartParams): Set 2 as default decimal
+	precision.
+	* KDChart: If the totalLen property is >0, the text label should
+	be truncated at the position of totalLen.
+	* KDChart: Fixed an error in the documentation:
+	KDCHART_DATA_VALUE_AUTO_DIGITS-> AXIS_LABELS_AUTO_DIGITS.
+
+2005-04-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Enable axis titles again.
+	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Don't
+	disable xtitle and ytitle.
+	
+	----------------------------------------------------------------
+
+	Fix line specific settings
+	* kchartConfigDialog.{h,cc} (linepage3d): resurrected page
+	(all members except 
+	* kchartLine3dConfigPage.cc (lineMarkers): new method
+	(all 3d stuff): disabled
+	* kchartParameterConfigPage.cc (lineMarker): moved to the line
+	page.
+
+	----------------------------------------------------------------
+
+	Fix pie specific settings.
+	* kchartConfigDialog.cc (constructor): Move all type specific
+	settings immediately after the subtype page.
+	(constructor): disable the piepage.
+	* kchartParameterPieConfigPage.{h,cc} (explode): new member
+	(init, apply): set and use explode.
+	* kchartPieConfigPage (explose): Moved to kchartParameterPieConfigPage.
+	
+	Code cleaning
+	* kchartConfigDialog.cc (constructor): order initializations
+	logically
+	(all): Fix indentation and other smaller stuff.
+	* kchart_view.cc: Remove reduntant variable actionExtraCreateTemplate.
+
+2005-04-05  Fredrik Edemar  <f_edemar@linux.se>
+    * Use a better layout in KChartParameterPieConfigPage and KChartParameterPolarConfigPage.
+    * Keyboard navigation when editing cells in the data editor.
+
+2005-04-04  Fredrik Edemar  <f_edemar@linux.se>
+    * Add the "Create Template From Document" feature to the File menu.
+    * The activate-3D property is now the same for bar charts and pie charts so that it is possible to switch between those modes without loosing the setting (this is what the user expects IMHO).
+    * The height of the 3D effect for pie charts was not always set in the config dialog and this is fixed now.
+    * Bar chart mode: Do not show the flat arrows at the bottom of the lowest chart when dealing with negative numbers.
+    * KChartPart::initNullChart() will now generate an empty chart instead of a chart containing 1 cell with the value 0.
+    * KChartView::setupPrinter will not add the printing config page if it's only a preview.
+    * Not modifying anything in the data editor and pressing OK should not do anything.
+
+2005-04-03  Fredrik Edemar  <f_edemar@linux.se>
+	Changes in the data editor:
+    * If the data table only has 1 cell which is empty, the whole chart will be parsed as empty. This makes it possible for the user to clear all data.
+    * Allow the user to set an empty string as row/column label.
+
+    ----------------------------------------------------------------
+
+    * KChartPart::initTestChart() is renamed generateBarChartTemplate().
+    * Translate two strings in that function.
+    * Added commented code for calling generateBarChartTemplate() when the user chooses the bar char template. The advantage of this is that the row/column labels won't be translated otherwise. This feature will be activated in KOffice 1.5/2.0 as Inge thought it is too late for such changes before KOffice 1.4.
+
+2005-03-30 Fredrik Edemar <f_edemar@linux.se>
+    In KChartColorConfigPage: do not crash when the OK/Apply button is pressed and disable the KColorButton when there isn't any data to config.
+
+2005-03-25  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 102414: KChart shows the startup dialog even when embedded
+	into a spreadsheet. 
+	* kchart_part.cc (constructor): Initialize members but don't call
+	initDoc().
+	(initDoc): don't initialize members, and return immediately if
+	called for an embedded chart.
+
+2005-03-24  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 55606: [modified] tag doesn't work correctly.
+	* kchartDataEditor.{h,cc} (m_modified): new member
+	(modified): new method.
+	(tableChanged): new slot
+	(misc): set m_modified if data changed, including headers.
+	* kchart_part.{h,cc} (slotModified): new slot
+	(setData): connect wizard::finished() with slotModified
+	* kchart_view.cc (edit, apply, wizard): call setModified() in document
+
+2005-03-23  Inge Wallin  <inge@lysator.liu.se>
+
+	Implement wish 45358: KChart start up dialog?
+	* kchart_part.cc (initNullChart): New method
+	(initDoc): Call KoTemplateChooseDia().
+	* kchart_view.cc (KChartView): Don't initialize the standard chart.
+
+	----------------------------------------------------------------
+
+	Start with some simple support for templates.
+	* templates: new directory
+	* templates/Makefile.am: new file
+	* templates/BarChart.chrt: new file, example chart template.
+	
+	----------------------------------------------------------------
+
+	Bug fix.
+	* kchartDataEditor.cc (setCols): Set width for all new columns.
+	(misc): Code cleaning
+	
+	Code cleaning
+	* kchartDataEditor.{h,cc}: Move some methods, change What's This
+	strings, and add some comments.
+
+	Documentation.
+	* kchartDataEditor.{h,cc}: Document the reasons for the nice fix
+	of Fredrik below.
+
+2005-03-23  Fredrik Edemar <f_edemar@linux.se>
+
+	Fix a problem with the spinboxes in the data editor:
+	* kchartDataEditor.{h,cc} (kchartDataSpinBox): new class that
+	inherits QSpinBox.
+	(m_rowsSB, m_colsSB): Use kchartDataSpinBox instead of QSpinBox.
+
+2005-03-18  Inge Wallin  <inge@lysator.liu.se>
+
+	Improve layout for 3D bar chart parameters.
+	* kchartParameter3dConfigPage.cc (KChartParameter3dConfigPage):
+	Improve layout.
+
+2005-03-17  Inge Wallin  <inge@lysator.liu.se>
+
+	Remove the 3D Line Parameters page from the config dialog due to
+	general uselessness and uglyness.
+	* kchartConfigDialog.cc (KChartConfigDialog): Disabled 3D Line
+	page.
+	* kchartLine3dConfigPage.cc (constructor): Changed layout
+	somewhat, during the experiments.
+	
+	----------------------------------------------------------------
+
+	Fix the uglyness of the font config dialog.
+	* kchartFontConfigPage.cc (KChartFontConfigPage): Add some stretch
+	in suitable places.
+
+	----------------------------------------------------------------
+
+	Separate the toolbar for chart types from the actions.
+	* kchart.rc (Actions): Renamed from Chart
+	(Types): New toolbar.
+	
+2005-03-15  Fredrik Edemar <f_edemar@linux.se>
+
+	Changes in the data editor:
+	* Show the column names in the header column and the row names in
+	the header row. Click on a header column/row to rename it.
+	* Do not ask for confirmation when the user wants to remove an
+	empty row or column.
+	
+	Changes in KDChart:
+	* Fixed bug 101290 (KChart changes font for axes when Polar chart
+	is chosen).
+
+2005-03-14  Inge Wallin  <inge@lysator.liu.se>
+	
+	Remove more unnecessary files
+	* kchartBarConfigPage.{h,cc}: removed
+	* kchartGeometryConfigPage.{h,cc}: removed
+
+	----------------------------------------------------------------
+
+	Remove unused file:
+	* kchartBarConfigDialog.{h,cc}
+	
+	----------------------------------------------------------------
+
+	Don't include kchartDataEditor.h where is shouldn't be included.
+	* kchartBarConfigDialog.cc, kchartColorConfigPage.cc,
+	kchartDataConfigPage.cc: remove it, and include koChart.h instead
+
+2005-03-13  Inge Wallin  <inge@lysator.liu.se>
+
+	Make the page layout dialog better looking.
+	* kchartPageLayout.cc (constructor): Place settings inside a
+	button box.
+	
+	----------------------------------------------------------------
+
+	Clean out old cruft from the data editor.
+	*  kchartDataEditor.{h,cc} (setLegend): removed
+	(getLegend): removed
+	(setXLabel): removed
+	(getXLabel): removed
+	* kchart_part.h (axisLabelText{short,long}): removed
+	(m_longLabels, m_shortLabels): removed
+	* kchart_view.cc (edit): remove all stuff within #if 0 - #endif
+	
+	----------------------------------------------------------------
+
+	Fix problem with mixed plurals/singulars in chart names.
+	* kchart_view.cc (KChartView): Rename some actions.
+
+	The default chart is marked as modified even when it's not.
+	* kchart_part.cc (KChartPart): Remove call to setModified().
+
+2005-03-12  Inge Wallin  <inge@lysator.liu.se>
+
+	Remove the defaults button from the config dialog.  It wasn't
+	working anyway.
+	* kchartConfigDialog.cc (KChartConfigDialog): Disable the Defaults
+	button.
+
+	----------------------------------------------------------------
+
+	Grant wish 99391: Should be possible to select linear or
+	logarithmic axes.
+	* kchartParameterConfigPage.h (KChartParameterConfigPage::lin and
+	log): new members
+	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Add
+	new widgets to the Settings buttonbox (used to be Title)
+	(init): initialize the members from the params.
+	(apply): store the parameters from the values of the widgets
+
+	----------------------------------------------------------------
+
+	Fix the bad layout of the title buttonbox.
+	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Change
+	the layout slightly, and add row and col stretch.
+
+	----------------------------------------------------------------
+
+	Load row and column headers from XML file.
+	* kchart_part.cc (loadXML): Get the legend and axis label strings
+	from the KDChart parameters and store in the column and row
+	headers.
+
+	Lots of code cleaning and added comments.
+
+	----------------------------------------------------------------
+
+	Clean up the data editor and remove old cruft.
+	* kchartDataEditor.{h,cc}: Remove all #if 0:ed code.
+	* Makefile.am (libkchartpart_la_SOURCES): Removed parser.cc,
+	sheet.cc, sheetdlg.cc, table.cc qttableview.cpp
+	(noinst_HEADERS): Removed parser.h sheet.h sheetdlg.h table.h
+	qttableview.h 
+	Files mentioned above: Removed.
+
+2005-03-11  Inge Wallin  <inge@lysator.liu.se>
+
+	Move Tooltips and Whatsthis help from the old data editor to the
+	new one.
+	* kchartDataEditor.cc (addDocs): New method
+	(constructor): Clean up by moving all help generation to addDocs().
+
+	----------------------------------------------------------------
+
+	Enable "Finish" button for all pages in the wizard.
+	* kchartWizard.cc (KChartWizard): Enable Finish button for
+	"Subtypes" and "Labels & Legend" pages.
+
+2005-03-10  Inge Wallin  <inge@lysator.liu.se>
+
+	Make the table in the data editor shrink when number of rows/cols
+	are decreased in the spinboxes.
+	* kchartDataEditor.cc (askUserForConfirmation): new static
+	function.
+	(setRows, setCols): Handle shrinking
+
+2005-03-09  Inge Wallin  <inge@lysator.liu.se>
+
+	Make the table in the data editor grow when number of rows/cols
+	are increased in the spinboxes.
+	* kchartDataEditor.{h,cc} (setRows, setCols): new methods
+	(constructor): connect spinboxes with new methods.
+	
+	Sanity checks:
+	kchartDataEditor (constructor): make spinboxes have a min value of 1.
+
+	----------------------------------------------------------------
+
+	Make apply button in the data editor work.
+	* kchartDataEditor.{h,cc} (applyClicked): new signal
+	(slotApply): emit applyClicked with a parameter.
+	* kchart_view.{h,cc} (applyEdit): new slot
+	(edit): connect signal in data editor with slot in view.
+	(applyEdit): new slot.
+	
+	----------------------------------------------------------------
+
+	Cleaning
+	* kchart_part.cc (paintContent): break out common code out of an
+	if/else construction.
+	
+	----------------------------------------------------------------
+	
+	More experiments with visual appearance of the data editor
+	* kchartDataEditor.cc (setData): Set size of the table widget to
+	(600,300)
+	
+	----------------------------------------------------------------
+	
+	Experiment with visual appearance of the new data editor
+	* kchartDataEditor.cc (setData): Set column widths to 80.
+	
+	----------------------------------------------------------------
+	
+	Fix bug introduced by patch to fix bug 14971: Axes label handling
+	in connection with KSpread was broken.
+	* kchart_part.cc (setData): set m_rowLabels and m_colLabels
+	instead of storing axes labels to the params.
+
+2005-03-08  Inge Wallin  <inge@lysator.liu.se>
+
+	Initialize the chart in the document instead of the view.
+	* kchart_part.{h,cc} (initTestChart): Renamed from initRandomData
+	and enhanced to generate row and column headers as well.
+	* kchart_view.{h,cc}: (createTempData): removed
+	
+	----------------------------------------------------------------
+	
+	Store labels for rows and columns separately in the document.
+	This fixes bug 14971.
+	* kchart_part.h (m_rowLabels, m_colLabels): new members
+	(rowLabelTexts, colLabelTexts): new methods
+	* kchart_part.cc (paintContent): Paint using the new labels, both
+	for ordinary and transposed tables.
+	* kchartDataEditor.{h,cc} (setRowLabels): new method
+	 (getRowLabels): new method
+	 (setColLabels): new method
+	 (getColLabels): new method
+	* kchart_view.cc (edit): call new methods above in data editor,
+	and don't call old methods setLegend, getLegend, setXLabel, etc.
+
+2005-03-07  Inge Wallin  <inge@lysator.liu.se>
+
+	Start on bug 14971: kchart data import should flip X & Y data.
+	* kchart_part.{h,cc} (KChartAuxiliary): New struct.
+	(auxdata): new method in KChartPart.
+	(loadAuxiliary): new method in KChartPart.
+	(m_auxiliary): new member in KChartPart.
+	(paintContent): Paint data in rows or columns (labels not yet done).
+	(saveXML): Save auxiliary data (data direction) as well.
+	(loadXML): Call loadAuxiliary().
+	* kchartConfigDialog.{h,cc} (constructor): Take auxiliary data as 
+	parameter and send it to the DataConfigPage.
+	* kchartDataConfigPage.{h,cc} (constructor): Take aux data.
+	(apply): Set data direction in aux data
+	(init): Read data direction from aux data
+
+	----------------------------------------------------------------
+	
+	Cleaning:
+	* kchart_part.cc (loadOasis): remove parameter names to remove
+	warnings.
+
+	Reorder chart types to make it more logical order
+	* kchart.rc (Toolbar): Reorder chart types
+	* kchartWizardSelectChartTypePage.cc (constructor): Reorder chart
+	types into same order.
+
+2005-03-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Begin to support the Apply button in the data editor.
+	* kchartDataEditor.cc (kchartDataEditor): connect applyClicked()
+	to apply()
+	* kchartDataEditor.{h,cc} (apply): new method.
+
+2005-03-05  Inge Wallin  <inge@lysator.liu.se>
+
+	Ego stroking:
+	* kchart_aboutdata.h (newKChartAboutData): Add Inge Wallin as an
+	author.
+
+	Continue with the new data editor.
+	* kchartDataEditor.cc (setLegend): Always initialize the row
+	headers, not only the first time.
+	
+	Start fixing default handling in the config dialog.
+	* kchartConfigDialog.cc (defaults): Call datapage->defaults()
+	instead of init.
+	* kchartDataConfigPage.{h,cc} (defaults): New method.
+
+	Cleaning
+	* kcartDataEditor.{h,cc}: make all members follow the m_
+	convention.
+	
+2005-03-03  Inge Wallin  <inge@lysator.liu.se>
+
+	Start on bug 90892 - "Data editor looks bad", and bug 90878 -
+	"KChart: Crash when creating more than 16 rows or columns".
+	* kchartDataEditor.{h,cc}: First prototype of a new data editor.
+
+	Code cleaning.
+	* kchartFontConfigPage.cc (class KChartFontListBoxItem): Move from
+	kchartDataConfigPage.h.  That used to be an error.
+
+2005-02-25  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 99998: KChart: 3d Depth parameter has ludicrous max value
+	* kchartParameter3dConfigPage.cc (KChartParameter3dConfigPage):
+	Make the depth parameter go from 0 to 2.0 instead of 0 to 40.
+
+2005-02-24  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 99390: The background settings in the config dialog don't
+	work.
+	* kchartBackgroundPixmapConfigPage.{h,cc}: Remove the big unused
+	list to the left of the page.
+
+	Fix bug 99999: KChart: The wizard has settings for non-existent
+	parameters.
+	* kchartWizardLabelsLegendPage.{h,cc}: Remove everything that has
+	to do with second Y axis.
+	* kchartWizardSetupAxesPage.{h,cc}: Remove everything that has to
+	do with second Y axis.
+
+	Fix part of 99997: KChart: Configuration dialog have settings for
+	things that don't exist.
+	* kchartColorConfigPage.{h,cc]: Remove everything that has to do
+	with the second Y Axis.
+
+2005-02-23  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 99715: Chart subtypes are named differently in different
+	places.
+	* kchartSubTypeChartPage.h (KChartBarSubTypeChartPage): Rename
+	layer -> stacked and beside -> normal, and change the strings
+	accordingly. 
+
+2005-02-22  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 99765: "Chart Subtype" config page is missing for Pie,
+	Ring, Box&Whisker chart types.
+	* kchartConfigDialog.cc (initSubtypePage): Don't create a
+	configuration page for subtype if the type doesn't have a
+	subtype.  Applicable to Pie, Ring and Box&Whiskers.
+
+2005-02-19  Inge Wallin  <inge@lysator.liu.se>
+
+	Start of a new page in the config dialog for configuring Data.
+	This is not yet finished.
+	* kchartDataConfigPage.h: New file
+	* kchartDataConfigPage.cc: New file
+	* kchartConfigDialog.h (KChartConfigDialog::m_datapage): New member
+	* kchartConfigDialog.cc (KChartConfigDialog): Create the data page
+
+2005-01-07  Raphael Langerhorst <raphael-langerhorst@gmx.at>
+
+	Put all KChart classes into the KChart namespace
+	* KDChart classes not changed!
+	* QtTableView class not changed!
+
+2005-01-06  Raphael Langerhorst <raphael-langerhorst@gmx.at>
+
+	Improve Data Editor usability:
+	* sheet.cc: Add tooltips and what's this help.
+	* sheet.cc: Use a different color for first row and column
+	* sheetdlg.cc: Add tooltips and what's this help.
+	* sheetdlg.cc: Change order of widget initialization (better tab order).
+
+2004-11-16  Inge Wallin  <inge@lysator.liu.se>
+
+	Cleanup.
+	* kchartDataEditor.{h,cc}: Remove one constructor.
+	* table.h (class SheetTable): Reformatting for nicer looking code.
+
+2004-11-05  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 90895: save config is not needed
+	* kchart_view.cc (KChartView): Remove actions "loadconfig",
+	"saveconfig" and "defaultconfig".
+	* kchart.rc: Remove reference to them in the definition of the
+	Settings menu.
+	
+	Fix bug 90904: edit/configure is confusingly named 
+	* kchart.rc: Add a sub menu for editing only one aspect of the
+	chart.
+	* kchart_view.cc: Change shortcut for Edit Data
+	* kchart_view.cc: Change string for Configure Chart
+
+2004-10-07  Inge Wallin  <inge@lysator.liu.se>
+
+	* Cleanup of the following files.  Made the code more readable,
+	fixed indentation, added some comments:
+	- sheet.h
+	- sheet.cc
+
+2004-10-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 55603: Pressing Enter in Data Editor doesn't update any
+	changes.	
+	* sheetdlg.cc (SheetDlg): Make the OK button the default.
+
+	* Cleanup of the following files.  Made the code more readable,
+	fixed indentation, added some comments:
+	- parser.h
+	- parser.cc
+
+2004-10-04  Inge Wallin  <inge@lysator.liu.se>
+
+	* Cleaned the following files a little.  Made the code more
+	readable, fixed indentation, added (a few) comments:
+	(Man, there are a lot of coding styles in there...)
+	- kchart_part.h
+	- kchart_part.cc
+	
+	* Cleaned the following files a little.  Made the code more
+	readable, fixed indentation, added (a few) comments:
+	- kchart.la.cc
+	- main.cc
+	- kchart_dummy.cc
+	- kchart_aboutdata.h
+	- kchart_factory.h
+	- kchart_factory.cc
+	- kchart_params.h
+	- kchart_params.cc
+	- kchart_view.h
+	- kchart_view.cc
+
+

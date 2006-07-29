@@ -1,0 +1,654 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>&kword; Options</title>
+<indexterm><primary>&kword;</primary><secondary>options</secondary></indexterm>
+<indexterm><primary>configuring &kword;</primary></indexterm>
+
+<para>This section of the documentation will show you how to configure &kword; to suit your personal work style and preferences.</para>
+<para>&kword; can be modified in three separate ways:</para>
+<orderedlist>
+<listitem><para><link linkend="options-keybindings">Configure shortcuts</link></para></listitem>
+<listitem><para><link linkend="options-toolbars">Configure toolbars</link></para></listitem>
+<listitem><para><link linkend="options-kword">Miscellaneous options</link></para></listitem>
+</orderedlist>
+<sect1 id="options-keybindings">
+<title>Configure Key Bindings (keyboard shortcuts)</title>
+<indexterm><primary>configuring keyboard shortcuts</primary></indexterm>
+<indexterm><primary>keyboard shortcuts</primary><secondary>changing</secondary></indexterm>
+<indexterm><primary>configuring key binding</primary></indexterm>
+<indexterm><primary>keyboard key binding</primary><secondary>changing</secondary></indexterm>
+
+<para>To configure the keyboard shortcuts select <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...
+</guimenuitem></menuchoice> from the menubar.</para>
+
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="optkb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>To edit the shortcuts, the first thing you need to do is find
+the action you want to edit.  All of the possible actions are listed in
+the combo box labeled <guilabel>Action</guilabel>.  By using the
+scrollbar, locate the action you are interested in and click once with
+the &LMB;.</para>
+
+<para>Once you have selected the action, you can turn your attention to
+the bottom half of the dialog box. You use the bottom half of the dialog
+box to change the shortcuts.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>None</guilabel></term>
+<listitem>
+<para>By selecting this option, the currently selected action will not
+have any keyboard shortcut.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Default</guilabel></term>
+<listitem>
+<para>By selecting this option, the currently selected action will use
+the default shortcut.  Once this option is clicked, the default keyboard shortcut
+is listed below.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Custom</guilabel></term>
+<listitem>
+<para>By selecting this option, you can choose any keyboard combination
+as a shortcut for this action.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+
+<sect2 id="options-keybindings-custom"><title>Defining custom keyboard shortcuts</title>
+<para>You determine the key combination by clicking on the button with the current
+keyboard combination in it.  A second dialog will appear:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="optkb2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This dialog box allows you to determine two different key combinations
+which will trigger the desired action:  <guilabel>Primary shortcut:</guilabel> and <guilabel>Alternate shortcut:</guilabel>.</para>
+
+<sect3 id="custom-keybinding-single"><title>Defining simple keyboard shortcuts</title>
+<para>Begin by deciding if you want to specify the <guilabel>Primary shortcut:</guilabel> or <guilabel>Alternate shortcut:</guilabel>
+, by placing a mark in the appropriate radiobutton.</para>
+
+<para>The <inlinemediaobject><imageobject><imagedata
+fileref="clearright.png" format="PNG"/></imageobject></inlinemediaobject> button will clear the current keyboard shortcut.</para>
+
+<para>Now type the keyboard shortcut into the keyboard.  &kword; will use this keyboard combination as the new
+keyboard shortcut.  The window will close automatically.</para>
+
+<para>Once you have completed your entries, simply click on <guibutton>OK</guibutton>
+to accept the changes or <guibutton>Cancel</guibutton> to cancel your changes.</para>
+</sect3>
+
+<sect3 id="custom-keybinding-multi"><title>Defining multi-key keyboard shortcuts</title>
+
+<para>Multi-key keyboard shortcuts can be used when you run out of simple keyboard shortcuts.  </para>
+
+<para>Multi-key shortcuts are edited the same as simple keyboard shortcuts, except a mark is placed in the
+check box labeled <guilabel>Multi-key mode</guilabel> <emphasis>prior</emphasis> to entering the keyboard shortcut.</para>
+
+<para>You can now enter multiple keyboard characters for the keyboard shortcut.</para>
+
+<note><para>It is important to understand that keyboard <emphasis>combinations</emphasis> 
+(i.e.: <keycombo action="simul">&Alt; &Shift;
+<keycap>P</keycap></keycombo>) are still a <emphasis>single character</emphasis> because all the keys are
+depressed at the same time.</para>
+
+<para>An example of a multi-key combination would be if you press <keycombo action="simul">&Alt;
+<keycap>X</keycap></keycombo>, release both characters then type a 
+<keycap>W</keycap>.  This is a multi-key combination.</para></note>
+
+<para>Once you have completed your entries, simply click on <guibutton>OK</guibutton>
+to accept the changes or <guibutton>Cancel</guibutton> to cancel your changes.</para>
+</sect3>
+</sect2>
+</sect1>
+
+<sect1 id="options-toolbars">
+<title>Configure Toolbars</title>
+<indexterm><primary>configuring toolbars</primary></indexterm>
+
+<para>To configure &kword;'s toolbars
+select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
+Toolbars...</guimenuitem></menuchoice> from the menubar.</para>
+
+<para>This will bring up a dialog box. You can add or remove as many
+toolbar buttons to as many toolbars as you like. You can also move the
+buttons around on the toolbar using this dialog.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="opttb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<sect2>
+<title>Adding a button to a toolbar</title>
+
+<para>To add a button to a toolbar, you move it from the
+<guilabel>Available actions:</guilabel> box to the <guilabel>Current
+actions:</guilabel> column.</para>
+
+<para>First select the toolbar you want to add a button to by selecting
+the toolbar from the combo box labeled
+<guilabel>Toolbar:</guilabel></para>
+
+<para>Now select the action you want to add from the combo box labeled
+<guilabel>Available actions:</guilabel> by clicking once with the left
+mouse button.</para>
+
+<para>Click the blue arrow pointing to the
+right. <inlinemediaobject><imageobject><imagedata fileref="rarrow.png"
+format="PNG" /></imageobject></inlinemediaobject></para>
+
+<para>Once the <guibutton>OK</guibutton> button or the <guibutton>Apply</guibutton> button has been clicked, the toolbars
+will change.</para>
+
+</sect2>
+
+<sect2>
+<title>Deleting a button from a toolbar</title>
+
+<para>To delete a button from a toolbar, you move it from the
+<guilabel>Current actions:</guilabel> box to the <guilabel>Available
+actions:</guilabel> column.</para>
+
+<para>First select the toolbar you want to delete a button from by selecting
+the toolbar from the combo box labeled
+<guilabel>Toolbar:</guilabel></para>
+
+<para>Select the toolbar button you want to remove the button from
+the combo box labeled <guilabel>Current actions:</guilabel>.</para>
+
+<para>Click the blue arrow pointing to the
+left. <inlinemediaobject><imageobject><imagedata fileref="larrow.png"
+format="PNG"/></imageobject></inlinemediaobject></para>
+
+<para>Once the <guibutton>OK</guibutton> button or the <guibutton>Apply</guibutton> button has been clicked, the toolbars
+will change.</para>
+
+</sect2>
+
+<sect2>
+<title>Moving a button on a toolbar</title>
+
+<para>First select the toolbar you want to move a button on by selecting
+the toolbar from the combo box labeled
+<guilabel>Toolbar:</guilabel></para>
+
+<para>To move a button, simply click on the button you want to move with
+the <mousebutton>left</mousebutton> mouse button.</para>
+
+<para>Click the up or down arrows to move the button up or down the
+toolbar respectively.</para>
+
+<para>Once the <guibutton>OK</guibutton> button or the <guibutton>Apply</guibutton> button has been clicked, the toolbars
+will change.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="options-kword">
+<title>&kword; Options</title>
+<indexterm><primary>&kword;</primary><secondary>options</secondary></indexterm>
+
+<para>To configure options regarding spelling and the user interface
+select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
+&kword;...</guimenuitem></menuchoice> from the menubar.</para>
+
+<para>This will bring up a dialog box.</para>
+
+
+<sect2 id="opt-ui">
+<title>Configure &kword; User Interface</title>
+
+<para>Clicking <guibutton>Interface</guibutton> will allow you to change
+the following.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Units:</guilabel></term>
+<listitem><para>Select your preferred unit of measurement.  &kword; will use these units for all measurements.  See
+<link linkend="rulers">Using Rulers</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show status bar</guilabel></term>
+<listitem><para>Placing a mark in this check box makes the status bar visible in &kword;.  See
+<link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show scrollbar</guilabel></term>
+<listitem><para>Placing a mark in this check box makes the scrollbar visible in &kword;.  See
+<link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>PageUp/PageDown moves the caret</guilabel></term>
+<listitem><para>If this check box has a mark, then when you press the <keycap>PageUp</keycap> and <keycap>PageDown</keycap> keys
+on the keyboard, &kword; moves the text cursor (the caret) down one page.  If there is no mark in this check box 
+then &kword; moves the view, but does not change the position of the text cursor. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Number of recent files:</guilabel></term>
+<listitem>
+<para>This determines the maximum number of files that are listed under
+<menuchoice> <guimenu>File</guimenu><guimenuitem>Open
+Recent</guimenuitem></menuchoice> command. You can adjust this value
+from 1-20.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Horizontal grid size:</guilabel></term>
+<listitem><para>Determines the horizontal size of the grid.  When frames and tab stops are placed on the page, they
+are placed on a point in the grid.  This gives your document a more professional look because elements are effectively
+aligned.  You can reduce the grid size if you need finer control of your layout.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Vertical grid size:</guilabel></term>
+<listitem><para>Determines the vertical size of the grid.  When frames are placed on the page, they
+are placed on a point in the grid.  This gives your document a more professional look because elements are effectively
+aligned.  You can reduce the grid size if you need finer control of your layout.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Paragraph indent by toolbar buttons:</guilabel></term>
+<listitem><para>Use this spin box to determine how far the paragraph is indented when using the increase indent button
+(<inlinemediaobject><imageobject><imagedata fileref="incindbut.png"
+format="PNG"/></imageobject></inlinemediaobject>) and the decrease indent button
+(<inlinemediaobject><imageobject><imagedata fileref="decindbut.png"
+format="PNG"/></imageobject></inlinemediaobject>).</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Number of pages per row in preview mode:</guilabel></term>
+<listitem><para>Determines the number of pages per row in preview mode.
+This determines the size of the pages in preview mode.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
+values to their default values.</para>
+
+</sect2>
+
+<sect2 id="opt-document"><title>Configure document options</title>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt4.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<sect3 id="opt-document-defaults"><title>Document defaults</title>
+<variablelist>
+<varlistentry>
+<term><guilabel>Default column spacing</guilabel></term>
+<listitem>
+<para>Use this to adjust the default spacing between columns.  For more information on columns see
+<link linkend="columns">Columns</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Default font:</guilabel></term>
+<listitem>
+<para>Click on the <guibutton>Choose...</guibutton> button, and a new dialog will appear.  Use this dialog to
+choose the default font.  This setting determines the default font used by &kword; until further formatting is done.  You can
+revert any text to this default by selecting
+<menuchoice> <guimenu>Format</guimenu><guimenuitem>Default Format</guimenuitem></menuchoice> from
+the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Global language:</guilabel></term>
+<listitem>
+<para>Use this drop down box to determine the default language for the document.  This setting is used by the 
+hyphenation and spelling tools.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatic hyphenation</guilabel></term>
+<listitem>
+<para>Place a mark in this checkbox if you want &kword; to automatically hyphenate long words when it determines the word wrap 
+in text frames.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect3>
+
+<sect3 id="opt-document-settings"><title>Document settings</title>
+<variablelist>
+<varlistentry>
+<term><guilabel>Autosave every (min):</guilabel></term>
+<listitem>
+<para>You can use this to adjust how often &kword; saves a temporary
+file.  If you set this value to zero, &kword; will not autosave.  You
+can adjust the autosave from zero to 60 minutes.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Create backup file</guilabel></term>
+<listitem>
+<para>If there is a mark in this checkbox, &kword; will automatically create a backup file everytime you save your document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Starting page number:</guilabel></term>
+<listitem>
+<para>Use this text box to determine the starting page number.  For more information on page numbering see
+<link linkend="page-number">Page Numbering</link>.</para>
+<tip><para>This is helpful if you have split a single document into multiple files.</para></tip>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Tab stop:</guilabel></term>
+<listitem>
+<para>Each &kword; document has a default set of tab stops.  If you add tab stops to your document, the newly added 
+tab stops override the default tabstops.  You can use this text box to define the spacing between default tab stops.</para>
+<para>As an example.  If you enter <userinput>1.5</userinput> in this text box, and the unit of measure is in centimeters, then the 
+first default tab stop will be located 1.5 cm to the right of the left margin of the frame.  The second default tab stop will be located at 3 cm from the 
+left margin, etc....</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect3>
+<sect3 id="opt-document-cursor"><title>Cursor settings</title>
+<variablelist>
+<varlistentry>
+<term><guilabel>Cursor in protected area</guilabel></term>
+<listitem><para>  
+When there is a mark in this check box, and you click in a protected frame of your document, a cursor appears.  When the 
+mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para></listitem>
+</varlistentry>
+
+<!-- varlistentry>
+<term><guilabel>Direct insert cursor</guilabel></term>
+<listitem><para>  
+When there is a mark in this check box, and you can select a section of text using your mouse.  Move the mouse to a new place 
+in your document and click once with the middle mouse button and a copy of the selected text is copied and pasted to the new location 
+in the document.</para>
+<para>When there is no mark in this checkbox, in order to copy text from one section to another, you must select the text, 
+<link linkend="local-copy">manually copy the text in to the clipboard</link>, then manually paste the text in the new location.  </para></listitem>
+</varlistentry -->
+</variablelist>
+
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
+values to their default values.</para>
+</sect3>
+</sect2>
+
+
+
+<sect2 id="opt-spell">
+<title>Configure Spelling.</title>
+
+<para>To configure the options for the speller, click on the button
+labeled <guibutton>Spelling</guibutton>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Each option is detailed below.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Default language:</guilabel></term>
+<listitem><para>Used by the spelling application to choose the correct dictionary.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guilabel>Enable background spellchecking</guilabel></term>
+<listitem><para>If a mark is placed in this checkbox, &kword; will check the spelling of words in your document as you type them.  Words that 
+&kword; believes are misspelled will have a red line drawn under them.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guilabel>Skip all uppercase words</guilabel></term>
+<listitem><para>If a mark is placed in this checkbox, &kword; will not check the spelling of any word which consists of all capital letters.</para>
+<tip><para>This is useful if the document you are working on uses a large number of acronyms.  If this box is left unchecked, most of those acronyms 
+will be incorrectly marked.  By placing a mark in this checkbox, &kword; will not mark the acronyms as misspelled.</para></tip></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Skip run-together words</guilabel></term>
+<listitem><para>If this box is not checked, and &kword; finds a two words in its dictionary that are placed next to each other, it will be
+marked as misspelled.  If this box is checked, the combined word will be ignored.</para>
+<para>Examples of such words are <emphasis>shutout</emphasis>,
+<emphasis>cannot</emphasis>, and <emphasis>blackout</emphasis>.</para>
+<tip>
+<para>Leaving this check box unchecked will help prevent &kword; from
+flagging website and email addresses for spelling errors.  These
+addresses often contain words run together.</para>
+</tip></listitem>
+</varlistentry>
+</variablelist>
+<sect3><title>Ignoring words</title>
+<para>The bottom half of the dialog box allows you to designate specific words (they may be specialized terminology, proper names, etc) which
+should be ignored by the spelling program.</para>
+
+<sect4><title>Adding a word to the ignore list</title>
+<para>To add a word, type the word in the text box directly below the words <guilabel>Ignore 
+These Words</guilabel> and click the <guibutton>Add</guibutton> button.</para>
+</sect4>
+
+<sect4><title>Deleteing a word from the ignore list</title>
+<para>To remove a word, select the word in the listbox containing all the currently ignored words by clicking on it with 
+the &LMB;.  Now click the <guibutton>Remove</guibutton> button.</para>
+</sect4>
+
+<sect4><title>Changing the order a word appears in the list</title>
+<para>To move a word in the list, select the word in the listbox containing all the currently ignored words by clicking on it with 
+the &LMB;.  Now click the <guibutton>Move Up</guibutton> button or the <guibutton>Move Up</guibutton> button to move the word
+within the list.</para>
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
+values to their default values.</para>
+</sect4>
+</sect3>
+</sect2>
+
+
+
+<sect2 id="opt-formula"><title>Configure formula options</title>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt5.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Use this dialog to format the appearance of formulas in &kword;.  See the formula documentation for further details.</para>
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
+values to their default values.</para>
+
+</sect2>
+<sect2 id="opt-misc"><title>Configure miscellaneous options</title>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<sect3 id="opt-misc-misc"><title>Misc</title>
+<variablelist>
+
+<varlistentry>
+<term><guilabel>Undo/redo limit:</guilabel></term>
+<listitem><para>Use this spin box or slider to determine how many actions &kword; keeps in its Undo buffer.  Any action that exceeds 
+this number will be forgotten.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Display links</guilabel></term>
+<listitem><para>Placing a mark in this check box makes document links visible in &kword;. If there is no mark in this check box,
+document links will be hidden.  See
+<link linkend="links">Document links</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Underline all links</guilabel></term>
+<listitem><para>Placing a mark in this check box will have &kword; automatically underline a document link when it is created. See
+<link linkend="links">Document links</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Display comments</guilabel></term>
+<listitem><para>Placing a mark in this check box makes document comments visible in &kword;.  See
+<link linkend="comments">Document comments</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Display field code</guilabel></term>
+<listitem><para>If there is a mark in this check box, &kword; shows the variable name of document variables,
+rather than the content of the variable in the &kword;
+screen.  If this check box does not have a mark, then &kword; shows the contents of the variables. </para>
+<note><para>This option does not affect the printed output.  The contents of the variables are printed regardless of the state of this
+check box.</para></note>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect3>
+<sect3 id="opt-misc-viewformatting"><title>View Formatting</title>
+
+<para>You can use these four check boxes to determine what formatting characters are displayed when you have asked &kword; to
+<link linkend="view-formatting-menu">show formatting characters</link>.</para>
+<variablelist>
+
+<varlistentry>
+<term><guilabel>View formatting end paragraph</guilabel></term>
+<listitem><para>Toggles the display of paragraph marks (new-line characters) on and off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>View formatting space</guilabel></term>
+<listitem><para>Toggles the display of individual spaces on and off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>View formatting tabs</guilabel></term>
+<listitem><para>Toggles the display of tab stops on and off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>View formatting break</guilabel></term>
+<listitem><para>Toggles the display of frame breaks on and off.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
+values to their default values.</para>
+</sect3>
+</sect2>
+
+<sect2 id="opt-path"><title>Configure path options</title>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt6.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Use this dialog to set the <guilabel>Backup Path</guilabel> and the directory 
+for your <guilabel>Personal Expression</guilabel> in &kword;.</para>
+</sect2>
+
+<sect2 id="opt-tts"><title>Configure Text-To-Speech options</title>
+
+<para>See the <link linkend="a11y-tts">Text-to-Speech</link> section 
+in the accessibility chapter for further details.</para>
+</sect2>
+
+</sect1>
+</chapter>

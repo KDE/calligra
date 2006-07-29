@@ -1,0 +1,24 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KPlato" version="4">
+<MenuBar>
+    <Menu name="view"><text>&amp;View</text>
+        <Separator/>
+        <Action name="view_gantt"/>
+        <Separator/>
+        <Action name="view_gantt_showResources"/>
+        <Action name="view_gantt_showTaskName"/>
+        <Action name="view_gantt_showTaskLinks"/>
+        <Action name="view_gantt_showProgress"/>
+        <Action name="view_gantt_showFloat"/>
+        <Action name="view_gantt_showCriticalPath"/>
+        <Action name="view_gantt_showCriticalTasks"/>
+        <Separator/>
+        <Separator/>
+        <Action name="view_pert"/>
+        <Separator/>
+        <Action name="view_resources"/>
+        <Separator/>
+        <Action name="view_resourceuse"/>
+        <Separator/>
+    </Menu>
+</MenuBar>
+</kpartgui>

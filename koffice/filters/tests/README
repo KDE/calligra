@@ -1,0 +1,9 @@
+global-filter-test.sh allows to test filter which support import AND export.
+
+Usage: %s {kspread|kword|kpresenter} <file name> <type of filter>
+
+We can add other type.
+We can see all error with this scripts.
+
+2005-02-06
+Laurent Montel <montel@kde.org>

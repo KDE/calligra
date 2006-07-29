@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <include>KoPageLayout.h</include>
+  <include>kivioglobal.h</include>
+  <include>KoGlobal.h</include>
+  <include>kglobal.h</include>
+  <include>klocale.h</include>
+  <include>qfont.h</include>
+  <include>qcolor.h</include>
+  <kcfgfile name="kiviorc"/>
+  <group name="DefaultPageLayout">
+    <entry name="Format" type="String">
+      <label>The default page layout.</label>
+      <default code="true">Kivio::pageSizeString(KGlobal::locale()->pageSize())</default>
+    </entry>
+    <entry name="Orientation" type="String">
+      <label>The orientation of the page.</label>
+      <default>Portrait</default>
+    </entry>
+    <entry name="Width" type="Double">
+      <label>The width of the page.</label>
+      <default code="true">KoPageLayout::standardLayout().ptWidth</default>
+    </entry>
+    <entry name="Height" type="Double">
+      <label>The height of the page.</label>
+      <default code="true">KoPageLayout::standardLayout().ptHeight</default>
+    </entry>
+    <entry name="BorderTop" type="Double">
+      <label>The size of the border at the top of the page.</label>
+      <default code="true">KoPageLayout::standardLayout().ptTop</default>
+    </entry>
+    <entry name="BorderBottom" type="Double">
+      <label>The size of the border at the bottom of the page.</label>
+      <default code="true">KoPageLayout::standardLayout().ptBottom</default>
+    </entry>
+    <entry name="BorderLeft" type="Double">
+      <label>The size of the border at the left of the page.</label>
+      <default code="true">KoPageLayout::standardLayout().ptLeft</default>
+    </entry>
+    <entry name="BorderRight" type="Double">
+      <label>The size of the border at the right of the page.</label>
+      <default code="true">KoPageLayout::standardLayout().ptRight</default>
+    </entry>
+  </group>
+  <group name="Interface">
+    <entry name="ShowGrid" type="Bool">
+      <label>Show the grid.</label>
+      <default>false</default>
+    </entry>
+    <entry name="SnapGrid" type="Bool">
+      <label>Snap to the grid.</label>
+      <default>false</default>
+    </entry>
+    <entry name="GridColor" type="Color">
+      <label>Color of the grid lines.</label>
+      <default code="true">QColor(200, 200, 200)</default>
+    </entry>
+    <entry name="GridXSpacing" type="Double">
+      <label>Spacing between vertical grid lines.</label>
+      <default>10.0</default>
+    </entry>
+    <entry name="GridYSpacing" type="Double">
+      <label>Spacing between horizontal grid lines.</label>
+      <default>10.0</default>
+    </entry>
+    <entry name="GridXSnap" type="Double">
+      <label>Horizontal snap distance.</label>
+      <default>10.0</default>
+    </entry>
+    <entry name="GridYSnap" type="Double">
+      <label>Vertical snap distance.</label>
+      <default>10.0</default>
+    </entry>
+    <entry name="Unit" type="String">
+      <label>Unit</label>
+      <default code="true">Kivio::systemDefaultUnit()</default>
+    </entry>
+    <entry name="Font" type="Font">
+      <label>Default font.</label>
+      <default code="true">KoGlobal::defaultFont()</default>
+    </entry>
+  </group>
+  <group name="PageExport">
+    <entry name="LastFormat" type="String">
+      <label>Last used format.</label>
+      <default></default>
+    </entry>
+    <entry name="Crop" type="Bool">
+      <label>Crop image to the edges of the stencils.</label>
+      <default>false</default>
+    </entry>
+    <entry name="SelectedStencils" type="Bool">
+      <label>Export only the selected stencils.</label>
+      <default>false</default>
+    </entry>
+    <entry name="Border" type="Int">
+      <label>Border around the exported page.</label>
+      <default>0</default>
+    </entry>
+    <entry name="Quality" type="Int">
+      <label>Quality of the exported page in percent.</label>
+      <default>100</default>
+    </entry>
+  </group>
+</kcfg>

@@ -1,0 +1,139 @@
+<chapter id="configure-wbs">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Configuring the Work Breakdown Structure (WBS)</title>
+
+<para>The <link linkend="wbs">Work Breakdown Structure</link> introduces
+numbering for all tasks in the
+project, according to the task structure. The tasks are numbered in a fashion
+that reflects the structure of the project.
+The WBS is defined as a tree structure. 
+</para>
+
+<screenshot>
+<screeninfo>The WBS</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="wbs.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>The WBS</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<para>You can configure the way you want the WBS to look in your project. To do
+so, you can use the <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Define WBS Pattern...
+</guimenuitem></menuchoice> menu. This displays the <guilabel>WBS Definition</guilabel> Dialog.
+</para>
+
+<sect1 id="define-wbs">
+<title>The WBS Definition Dialog</title>
+
+<screenshot>
+<screeninfo>WBS Definition Dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="configure-wbs.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>WBS Definition Dialog</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Code</guilabel></term>
+<listitem><para>Default is <guilabel>Number</guilabel> but you can set the WBS
+code to be Roman Numbers or Letters, either upper case or
+lower case.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Separator</guilabel></term>
+<listitem><para>The default separator is a dot and can be set
+to anything else you want. The separator defines the way the
+tree will look. On the screenshot above, the separator is the
+dot.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>Instead of having the same code for all levels (for example 3.2.1)
+you can define a different code for each level. For this you can check
+<guilabel>Use Levels</guilabel> and then you define each level code and
+separator.</para>
+
+<para>For example if you want your tree to be 1:II-B you will set
+level 0 to Number and separator :, level 1 will be Roman upper case and
+separator - and level 2 will be Letter upper case.</para>
+
+<para>This is illustrated on the next screenshot.</para>
+
+<screenshot>
+<screeninfo>WBS levels definition</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="wbs1.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>WBS levels definition</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<para>To set a new level, choose the level number in the box near the
+<guibutton>Add Level</guibutton> button then click the <guibutton>Add
+Level</guibutton> button. Then choose the Code for the level and the
+separator.</para>
+
+<screenshot>
+<screeninfo>Add a level</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="wbs3.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Add a level</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<para>To remove a level, choose the level number in the first column of the
+list and click on it. The level row is then highlighted and the level number
+changes to bold. Then click the <guibutton>Remove</guibutton> button. This is
+demonstrated on the screenshot with Level 2.</para>
+
+<screenshot>
+<screeninfo>Remove a level</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="wbs2.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>Remove a level</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="generate-wbs-code">
+<title><guilabel>Generate WBS Code</guilabel></title>
+<para>The WBS code is auto-generated; simply choose <guimenuitem>Generate WBS
+Code</guimenuitem> from the <guimenu>Tools</guimenu> menu to generate the
+WBS code for the project.</para>
+<para>After you changed the WBS definition you will want to generate the
+new WBS.</para>
+</sect1>
+
+</chapter>

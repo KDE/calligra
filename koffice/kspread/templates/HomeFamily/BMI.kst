@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE spreadsheet PUBLIC "-//KDE//DTD kspread 1.2//EN" "http://www.koffice.org/DTD/kspread-1.2.dtd">
+<spreadsheet xmlns="http://www.koffice.org/DTD/kspread" mime="application/x-kspread" syntaxVersion="1" editor="KSpread" >
+ <map markerColumn="3" activeTable="Sheet1" markerRow="9" >
+  <table columnnumber="0" borders="0" hide="0" hidezero="0" grid="0" firstletterupper="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" showFormula="0" lcmode="0" name="Sheet1" borders1.2="1" printCommentIndicator="0" >
+   <paper format="A4" orientation="Portrait" >
+    <borders right="20" left="20" bottom="20" top="20" />
+    <head/>
+    <foot/>
+   </paper>
+   <printrange-rect left-rect="0" right-rect="0" top-rect="0" bottom-rect="0" />
+   <printrepeatcolumns right="0" left="0" />
+   <printrepeatrows bottom="0" top="0" />
+   <cell row="9" column="3" >
+    <format brushstyle="0" brushcolor="#ff0000" bgcolor="#cccccc" alignY="2" format="0" faktor="1" precision="1" align="4" >
+     <font bold="yes" weight="75" italic="yes" />
+     <pen width="0" style="1" color="#000000" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text>=#0#-2#*703/(#0#-6#*12+#0#-4#)/(#0#-6#*12+#0#-4#)</text>
+    <result dataType="Num" >22.1755348828239</result>
+   </cell>
+   <cell row="9" column="1" >
+    <format align="3" />
+    <text dataType="Str" >BMI</text>
+   </cell>
+   <cell row="5" column="3" >
+    <format brushstyle="0" brushcolor="#ff0000" bgcolor="#ffffff" alignY="2" format="0" faktor="1" precision="2" align="4" >
+     <font size="10" bold="yes" weight="75" />
+     <pen width="0" style="1" color="#000000" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text dataType="Num" >6.62</text>
+   </cell>
+   <cell row="7" column="3" >
+    <format>
+     <font size="10" bold="yes" weight="75" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text dataType="Num" >140</text>
+   </cell>
+   <cell row="7" column="1" >
+    <format align="3" />
+    <text dataType="Str" >Weight (pounds)</text>
+   </cell>
+   <cell row="5" column="1" >
+    <format align="3" />
+    <text dataType="Str" >Height (inches)</text>
+   </cell>
+   <cell row="3" column="3" >
+    <format>
+     <font size="10" bold="yes" weight="75" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text dataType="Num" >5</text>
+   </cell>
+   <cell row="3" column="1" >
+    <format align="3" />
+    <text dataType="Str" >Height (feet)</text>
+   </cell>
+   <cell row="1" column="1" >
+    <format>
+     <font size="16" bold="yes" weight="75" italic="yes" />
+    </format>
+    <text dataType="Str" >Body Mass Index (BMI) Calculator</text>
+   </cell>
+   <row row="11" height="20" >
+    <format/>
+   </row>
+   <row row="10" height="20" >
+    <format/>
+   </row>
+   <row row="6" height="25.5119" >
+    <format/>
+   </row>
+   <row row="4" height="25.5119" >
+    <format/>
+   </row>
+   <row row="15" height="20" >
+    <format/>
+   </row>
+   <row row="7" height="25.5119" >
+    <format/>
+   </row>
+   <row row="8" height="25.5119" >
+    <format/>
+   </row>
+   <row row="9" height="25.5119" >
+    <format/>
+   </row>
+   <row row="16" height="20" >
+    <format/>
+   </row>
+   <row row="17" height="20" >
+    <format/>
+   </row>
+   <row row="18" height="20" >
+    <format/>
+   </row>
+   <row row="5" height="25.5119" >
+    <format/>
+   </row>
+   <row row="1" height="42" >
+    <format/>
+   </row>
+   <row row="3" height="25.5119" >
+    <format/>
+   </row>
+   <row row="2" height="20" >
+    <format/>
+   </row>
+   <row row="26" height="20" >
+    <format/>
+   </row>
+   <row row="21" height="20" >
+    <format/>
+   </row>
+   <row row="22" height="20" >
+    <format/>
+   </row>
+   <row row="19" height="20" >
+    <format/>
+   </row>
+   <row row="12" height="20" >
+    <format/>
+   </row>
+   <row row="13" height="20" >
+    <format/>
+   </row>
+   <column width="60" column="8" >
+    <format/>
+   </column>
+   <column width="60" column="10" >
+    <format/>
+   </column>
+   <column width="60" column="11" >
+    <format/>
+   </column>
+   <column width="60" column="9" >
+    <format/>
+   </column>
+   <column width="60" column="6" >
+    <format/>
+   </column>
+   <column width="60" column="5" >
+    <format/>
+   </column>
+   <column width="60" column="4" >
+    <format/>
+   </column>
+   <column width="142" column="1" >
+    <format/>
+   </column>
+   <column width="79.3702" column="3" >
+    <format/>
+   </column>
+   <column width="18" column="2" >
+    <format/>
+   </column>
+   <column width="60" column="7" >
+    <format/>
+   </column>
+  </table>
+ </map>
+</spreadsheet>

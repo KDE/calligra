@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>KSpread Painting</title>
+</head>
+
+<body>
+
+<h1>KSpread Painting</h1>
+
+<p>This file describes how the painting of a spreadsheet works and is
+supposed to work. At present, it is not a complete description.</p>
+
+
+<h2>General</h2>
+
+<p>Painting is started by KSpreadCanvas::paintUpdates().  This method
+calls paintCell() on all visible cells, i.e. it always repaints the
+entire sheet.  This is inefficient, but is OK for most circumstances.
+There is a bug in bugzilla (#xxxx) which points this out.</p>
+
+<p>Each cell can paint itself.  If a number of cells are explicitly
+merged by the user, then the merged cell is painted by a single call
+to paintCell() on its upper left corner cell, the "master" cell of the
+merged group.  If paintCell() is called on any of the other cells in
+the group, a recursive call to paintCell is done on the master cell.
+<br>
+<b>NOTE</b>: This is not yet implemented.</p>
+
+<p>If the content of a cell is wider than the cell itself, then we say
+that this cell <i>overflows</i> and expands into its neighbors (see
+<b>Layout</b> below).  Currently this only happens for cells that are
+unmerged.  Cells that are merged never expand, but instead show a
+<i>more text</i> marker.  See more details about overflow below.</p>
+
+<p>A border between cells is painted twice:
+<ul>
+  <li>When the cell on one side of the border is drawn.
+  <li>When the cell on the other side is drawn.
+</ul>
+</p>
+
+
+<h2>Layout</h2>
+
+<p>Painting is a two-step process.  First, makeLayout() is called, which
+analyzes the content of the cell and checks if it fits into the cell.
+If it doesn't, two things can happen:</p>
+
+<ol>
+  <li>The cell will be painted with a <i>more text</i> marker (a red
+      arrow).
+
+  <li>If the cell is left aligned and the cell to the right is empty,
+      the cell can <i>expand</i> into the right cell and obscure it
+      with the content of this cell.  If the cell is right aligned,
+      the text can overflow to the left instead.  (This is currently
+      slightly buggy.)
+</ol>
+
+The layout code also takes into account if the cell has vertical text,
+if it is angled, indented text, and so on.</p>
+
+<p>The result of the layout process is the setting of the following
+variables in a cell:</p>
+
+<table cellspacing="0" cellpadding="3" border="1">
+<tr>
+  <th colspan="2">Values that are calculated during the paint process</th>
+</tr>
+<tr>
+ <td><pre>d->textX<br>d->textY</pre></td>
+ <td>Text position within the cell</td>
+</tr>
+<tr>
+  <td><pre>d->textWidth<br>d->textHeight</pre></td>
+  <td>The size of the text</td>
+</tr>
+<tr>
+  <td><pre>d->fmAscent</pre></td>
+  <td>Ascent value of the font metrics</td>
+</tr>
+<tr>
+  <td><pre>d->extra()->extraXCells<br>d->extra()->extraYCells</pre></td>
+  <td>Number of extra cells in X and Y direction</td>
+</tr>
+<tr>
+  <td><pre>d->extra()->extraWidth<br>d->extra()->extraHeight</pre></td>
+  <td>Extra width/height brought in by the extra cells</td>
+</tr>
+<tr>
+  <td><pre>d->extra()->nbLines</pre></td>
+  <td>Number of lines if multirow</td>
+</tr>
+<tr>
+  <td><pre>d->strOutText</pre></td>
+  <td>The text that is shown in the cell.</td>
+</tr>
+</pre>
+</table>
+
+<p>After the layout process, paintCell() uses these
+variables to position the text within the cell and also to paint "more
+text" markers, etc.</p>
+
+<p>The value of extra[XY]Cells and extraWidth/Height can be made non-zero
+in two ways:</p>
+<ol>
+  <li>The cell is the master cell of a merged group.
+
+  <li>The content is too wide/high, and the cell has expanded into
+      neighboring cells.
+</ol>
+
+<p>Currently these two cases never occur simultaneously.  That might
+change in the future.  So, as for now the two cases can be separated by
+checking if d->extra()->merged[XY]Cells are zero (case 2) or non-zero
+(case 1).</p>
+
+
+<h2>Overflow</h2>
+
+<p>In this context, the word <i>overflow</i> means that the content of
+a cell is wider than the cell itself.  In that case, the extra space
+that is demanded can be handled in several different ways:</p>
+
+<ul>
+  <li>The content can be partially shown, i.e. cut.
+
+  <li>The content can overflow into neighbor cell(s). Which cells that
+      are affected is dependent on alignment, if the neighbors are
+      empty, etc, etc.  </ul>
+
+<h3>Borders and overflow</h3>
+
+<p>A border that is defined for a cell should never be moved just
+because the content of the cell overflows.  The current version
+(1.4beta1) does that, but it has to be changed.</p>
+
+
+<h3>Other spreadsheets</h3>
+
+<p>Here follows a survey of how a number of spreadsheet programs
+handle overflow into other cells.</p>
+
+<table cellspacing="0" cellpadding="3" border="1">
+<tr>
+  <th colspan="2">Case</th>
+  <th>Excel</th>
+  <th>Gnumeric</th>
+  <th>Oocalc</th>
+  <th>KSpread 1.4<br><i>(Check these!)</i></th>
+  <th>Suggested behaviour</th>
+</tr>
+
+<tr>
+  <td rowspan="2"><b>Text in cell<br>Left aligned</b></td>
+
+  <td><i>Empty cell TtR</i></td>
+  <td>Overflows into cell TtR</td>
+  <td>Overflows into cell TtR</td>
+  <td>Overflows into cell TtR</td>
+  <td>Overflows into cell TtR</td>
+  <td>Overflows into cell TtR<br><b>OK</b></td>
+</tr>
+<tr>
+  <td><i>Non-empty cell TtR</i></td>
+  <td>Text is cut<br>no mark</td>
+  <td>Text is cut<br>no mark </td>
+  <td>Text is cut<br>arrow TtR </td>
+  <td>Text is cut<br>arrow TtR </td>
+  <td>Text is cut<br>arrow TtR<br><b>OK</b></td>
+</tr>
+
+<tr>
+  <td rowspan="3"><b>Text in Cell<br>Right aligned</b></td>
+
+  <td><i>Empty cell TtL</i></td>
+  <td>Overflows into cell TtL</td>
+  <td>Overflows into cell TtL</td>
+  <td>Overflows into cell TtL</td>
+  <td>Text is cut<br>arrow TtR</td>
+  <td>Overflows into cell TtL</td>
+</tr>
+<tr>
+  <td><i>Non-empty TtL<br>empty TtR</i></td>
+  <td>Text is cut<br>no mark</td>
+  <td>Text is cut<br>no mark</td>
+  <td>Text is left aligned(!),<br>overflows into cell TtR</td>
+  <td>Text is cut<br>arrow TtR</td>
+  <td>Text is cut<br>arrow TtR<br><b>OK</b></td>
+</tr>
+
+<tr>
+<td><i>Non-empty TtL<br>non-empty TtR</i></td>
+<td>Text is cut<br>no mark</td>
+<td>Text is cut<br>no mark</td>
+<td>Text is left aligned(!),<br>cut<br>arrow TtR</td>
+<td>Text is cut<br>arrow TtR</td>
+<td>Text is cut<br>arrow TtR<br><b>OK</b></td>
+</tr>
+
+<tr>
+  <td rowspan = "2"><b>Number in cell<br>Alignment doesn't matter</b></td>
+
+  <td><i>Generic format</i></td>
+  <td>Precision is reduced</td>
+  <td>Precision is reduced</td>
+  <td>"###" is shown</td>
+  <td>#############<br>(cell is filled)</td>
+  <td>#############<br>(For now)<br>Preciesion is reduced<br>(Long term)</td>
+</tr>
+<tr>
+  <td><i>Number format</i></td>
+  <td>#############<br>(cell is filled)</td>
+  <td>#############<br>(cell is filled)</td>
+  <td>"###" is shown</td>
+  <td>#############<br>(cell is filled)</td>
+  <td>#############<br>(cell is filled)</td>
+</tr>
+
+
+<tr>
+  <td rowspan="2"><b>Border and overflow<br>left aligned</b></td>
+
+  <td><i>Text format<br>ordinary cell</i></td>
+  <td>??</td> 
+  <td>Right border is not drawn<br>Text overflows TtR</td>
+  <td>Border stays on cell<br>Text overflows TtR<br>Text covers right border</td>
+  <td>??</td>
+  <td>Border stays on cell<br>Text overflows TtR<br>Text covers right border</td>
+</tr>
+
+<tr>
+  <td><i>Text format<br>merged cell</i></td>
+ 
+  <td>??</td>
+  <td>Gnumeric 1.2.8 can't merge<br>Test with Gnumeric 1.4</td>
+  <td>Border stays on cell<br>Text is cut</td>
+  <td>??</td>
+  <td>Border stays on cell<br>Text is cut(?)</td>
+ </tr>
+</table>
+
+<p></p>
+
+<table cellspacing="0" cellpadding="3" border="1">
+<tr>
+  <th colspan="2">Legend</th>
+</tr>
+
+<tr>
+  <td>LA</td><td>Left Aligned</td>
+</tr>
+<tr>
+  <td>RA</td><td>Right Aligned</td>
+</tr>
+<tr>
+  <td>TtR</td><td>To the Right</td>
+</tr>
+<tr>
+  <td>TtL</td><td>To the Left</td>
+</tr>
+
+</body>
+</html>

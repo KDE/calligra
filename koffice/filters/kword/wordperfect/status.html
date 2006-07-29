@@ -1,0 +1,325 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>WordPerfect Filter for KWord</title>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
+
+<h1>WordPerfect Filter for KWord</h1>
+
+<p><a href="mailto:ariya@kde.org">Ariya Hidayat</a> (ariya at kde.org)<br>
+Last update: 17 August 2002</p>
+
+<hr>
+
+<p>This is WordPerfect filter for KWord, which lets KWord
+imports and exports to WordPerfect document format.
+Currently, supported WordPerfect document is version 
+5.1, 5.2, 6, 7, or later (this includes the latest
+WordPerfect 2002).</p>
+
+<p>The filter itself is (always) in development
+stage so not all WordPerfect features are already
+supported. However, also expect some improvements
+which somehow may (or may not) happen over the time.
+The feature matrix provided below will help the users
+to track which features are supported and which aren't.
+</p>
+
+<p>For a complete reference on WordPerfect 7 file format,
+please visit <a 
+href="http://www.corel.com/partners_developers/ds/CO32SDK/docs/ff/A_FRNTFF.HTM">Corel 
+WordPerfect 7 file format</a> (at Corel website).
+In addition, <a href="http://www.wotsit.org/download.asp?f=wp51ref">WordPerfect 
+5.1 format</a> is also available (at wotsit.org). 
+Although the description of the file format is rather clear
+and concise, the implementation for a few parts can be hard and tricky.
+</p>
+
+<p>Comments, helps, and patches are all welcomed.</p>
+
+<h2>Feature Matrix</h2>
+
+<table cellspacing="1" cellpadding="2" border="1">
+<tr>
+  <td width="200">&nbsp;</td>           
+  <td align="center" colspan="2"><b>Import</b></td>
+  <td align="center" colspan="2"><b>Export</b></td>
+</tr>
+<tr>
+  <td width="200">&nbsp;</td>           
+  <td align="center" width="90">WP 5</td>
+  <td align="center" width="90">WP 6/7/8</td>
+  <td align="center" width="90">WP 5</td>
+  <td align="center" width="90">WP 6/7/8</td>
+</tr>
+<tr>
+  <td colspan="5"><b>Basic features</b></td>           
+</tr>
+<tr>
+  <td>Text formatting</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#008000">partial</td>
+  <td align="center" bgcolor="#008000">partial</td>
+</tr>
+<tr>
+  <td>Tables</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Styles</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Header/footer</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Frames</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Hypertext</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Graphics (WPG)</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Equation/formula</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Barcode</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+
+<tr>
+  <td colspan="5"><b>Character Properties</b></td>           
+</tr>
+<tr>
+  <td>Typeface</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Font size</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Color</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Background color (highlight)</td>
+  <td align="center" bgcolor="#808080">n/a</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#808080">n/a</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Bold</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Italic</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+
+<tr>
+  <td>Underline</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+
+<tr>
+  <td>Double underline</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Strikeout</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Subscript</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Superscript</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Extended character sets</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+
+<tr>
+  <td colspan="5"><b>Paragraph Properties</b></td>           
+</tr>
+<tr>
+  <td>Alignment</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+</tr>
+<tr>
+  <td>Linespacing</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Indentation</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Spacing before/after</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Tabulators</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Border</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+
+<tr>
+  <td colspan="5"><b>Page Properties</b></td>           
+</tr>
+<tr>
+  <td>Paper size</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Margins</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Borders</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+<tr>
+  <td>Page break</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+
+<tr>
+  <td width="200" colspan="5"><b>Document Properties</b></td>           
+</tr>
+<tr>
+  <td>Document summary</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#00ff00">yes</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+  <td align="center" bgcolor="#ff0000">no</td>
+</tr>
+
+</table>
+
+<h2>ChangeLog</h2>
+
+<pre>
+15 Jul 2002: very basic export filter
+19 Dec 2001: rewritten for better performance
+             added support for WP 6/7/8
+             able to cope with most WP extended characters
+29 Aug 2001: first version of import filter
+             support text with basic formatting
+             only handle WP 5.1 document
+</pre>
+
+<h2>Disclaimer</h2>
+
+<p>This product is not manufactured, 
+approved, or supported by Corel Corporation or 
+Corel Corporation Limited.</p>
+
+</body>
+</html>

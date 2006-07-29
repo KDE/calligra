@@ -1,0 +1,180 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>PicturePropertyUI</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>PicturePropertyUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>263</width>
+            <height>457</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Picture</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>depthGroup</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Depth</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>depth1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;1 bit color mode</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0">
+                    <property name="name">
+                        <cstring>depth8</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;8 bit color mode</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="3" column="0">
+                    <property name="name">
+                        <cstring>depth16</cstring>
+                    </property>
+                    <property name="text">
+                        <string>1&amp;6 bit color mode</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="4" column="0">
+                    <property name="name">
+                        <cstring>depth32</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;32 bit color mode</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>depth0</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Default color mode</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="KIntNumInput" row="3" column="1">
+            <property name="name">
+                <cstring>brightnessInput</cstring>
+            </property>
+            <property name="value">
+                <number>0</number>
+            </property>
+            <property name="minValue">
+                <number>-1000</number>
+            </property>
+            <property name="maxValue">
+                <number>1000</number>
+            </property>
+            <property name="suffix">
+                <string>%</string>
+            </property>
+            <property name="prefix">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>swapRGB</cstring>
+            </property>
+            <property name="text">
+                <string>Conv&amp;ert from RGB image to BRG image</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="2" column="0">
+            <property name="name">
+                <cstring>grayscale</cstring>
+            </property>
+            <property name="text">
+                <string>Gra&amp;yscale</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>brightnessLabel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Brightness:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>brightnessInput</cstring>
+            </property>
+        </widget>
+        <widget class="KPrPicturePreview" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>picturePreview</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>200</height>
+                </size>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>KPrPicturePreview</class>
+        <header location="global">KPrPicturePreview.h</header>>
+        <sizehint>
+            <width>200</width>
+            <height>200</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="826">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b00000301494441541895b59531681b5718c77f0e377c070e3c810a3a70e0041eac51852e0a19e45134830a1d9a4c69a04bc8928e990a693a640e1d0c8642b08742321894c1507991b484c890902bb8701a047760c3bd21701fe4201dde49b6a41a32b8df72dcbbeffdbefffbbfefbd5b1b0c07cce266ebe667ae2006c3c1dada0cdc3be87d6e6c35b0d692a409d9c7ec8b20d65ae29398d19b1114e7e3de4ce98b3f5e10dc0053cf0951b4506496e1b964bf7ce6c585d9054c62d01d617ca48be0596553cf496d8f2c8b01c5f795fc93904e85ec4c01a152857a5d9175d0b2805c872080f18595ccc1499a10a225d4e2fbc2877786fe81253ab6c04c8d106e09db5d43ab0d146e5c64d1a23938fb98a185cea1c33eecfd9eba49eb427dcb201e245365f2b7b2fb5b4a3a31dcb927178afe07d86901df870fefa4842aed6f6b74ba42e52b4014d580e1eb9cbd9d94de7e4aad16d2f9be02d805f0b5e532f927a1ffcacea1777f122a8105b164a7c25faf323a5d9f1f1fd600e1e5bec59e2d4b5c7ef5209d0ad17b8b31864e57c0b3e0815ac3ee33253ab664a770ff5185d1a1cb8d2267d3e58aa1dc7d2508cbe597d0e74fdd269aaaf0f52d414c4ea3e9762c996869e42560d7a72e41c4799a2586e74f95e8d8151481fa86efbe7b3398ac58b1a2b8527589f15451ad303ac2293542ad6648a796278f13a27185e4c4754310facb98c53a79e19a3fdc1426ff28c3d7399d1f7cb25343eb96106cf83c790ce9c4f2eb831855c55485663327992eb6dc8a6259874ed700b0b793323cccb9ffa842b30d6133e3e75fea989ac15a8b16ca76b746b0b92278d919774c5b6d48a78697fb29bbcf52468742a32120909c24e899ce67beed5be2db01e22d1e9485bb620e47f9ee9e606a21bd3f5d3744c7e7c54d55e87443867d8b554515ac5db4620e8e4f62263170fd1cdee90aad7640141992891b0f367c9adfe4049bb07d3b7022bd8c687c0978f46684ee084150b65ac1fcca94591b7a90a496e4c095164fb016a2b192a497795cc0f84817aebe25f7bf70ccc54a575c555c03f78ffa5fc0570d1f0c076bff0232285a09283782c80000000049454e44ae426082</data>
+    </image>
+</images>
+<tabstops>
+    <tabstop>depth0</tabstop>
+    <tabstop>depth1</tabstop>
+    <tabstop>depth8</tabstop>
+    <tabstop>depth16</tabstop>
+    <tabstop>depth32</tabstop>
+    <tabstop>swapRGB</tabstop>
+    <tabstop>grayscale</tabstop>
+    <tabstop>brightnessInput</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

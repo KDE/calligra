@@ -1,0 +1,33 @@
+<chapter id="introduction">
+<chapterinfo>
+<authorgroup>
+<author><firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Introduction</title>
+
+<sect1 id="what-is">
+<title>What is &kivio;?</title>
+
+<para>&kivio; is the &koffice; flowchart and diagram creation tool. It allows you to create accurate scale diagrams by arranging pre-drawn shapes and stencils on a page. The stencils might represent stages of a process, office furniture or components on an electronic circuit. &kivio; comes with a large collection of different stencils which are grouped into collections, known as stencil sets, by subject area.</para>
+</sect1>
+
+<sect1 id="this-document">
+<title>About this Document</title>
+<para>This document describes the features of &kivio; and how to use them. There are often several ways to perform a particular task. Where possible the appropriate menu option is described as this is the easiest to explain without the aid of screenshots. Users are encouraged to explore the menus and to try right-clicking on stencils to reveal shortcut menus.</para>
+</sect1>
+
+<sect1 id="contributing">
+<title>Contributing to &kivio;</title>
+<para>&kivio; is a volunteer project. Your contributions are welcome. If you find a bug whilst using the software please report it by selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>Report Bug...</guimenuitem></menuchoice>.</para>
+<para>Contributions to the documentation, stencils, translations into other languages and the code itself are welcome. Please see the &koffice; website for more information about how to contribute.</para>
+</sect1>
+</chapter>

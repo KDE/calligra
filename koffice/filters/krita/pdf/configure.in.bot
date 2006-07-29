@@ -1,0 +1,7 @@
+if test -z "$POPPLER_LIBS"; then
+  echo ""
+  echo "You're missing libpoppler 0.5.1 or later (binaries and/or headers)."
+  echo "krita won't be able to import pdf"
+  echo "note that the qt-binding of libpoppler is required"
+  echo ""
+fi

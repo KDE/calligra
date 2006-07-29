@@ -1,0 +1,127 @@
+<chapter id="colorspaces">
+<title>Colorspaces</title>
+
+<para>
+This chapter gives information on what colorspaces are, which colorspaces
+&krita; offers, and what you should keep in mind when using them.
+</para>
+
+<sect1 id="colorspaces-intro">
+<title>Introduction to colorspaces</title>
+
+<sect2 id="colorspaces-intro-whatis">
+<title>What is a colorspace?</title>
+
+<para>
+In short, a colorspace is a way to represent colors by specifying a number of
+parameters. As parameters, one can choose for example the amounts of red,
+green and blue light needed for the color, which results in the commonly known
+RGB colorspace. One can visualise this as a three-dimensional space, with each
+of the red, green, and blue light components being an axis in the colorspace.
+</para>
+<note><para>
+To be more precise, a colorspace is a combination of a color model (indicating
+which axes are present) and a mapping function (indicating which values
+correspond to which colors).
+</para></note>
+<para>
+Not every color can be represented in every colorspace. Some colorspaces
+define more, or different, colors than others. The set of colors that can be
+represented in a certain colorspace is called its gamut. Because gamuts
+can differ widely, it is not guaranteed that images in a certain colorspace
+can be converted to another colorspace without having to substitute certain
+colors for others, even if they are based on the same color model.
+</para>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="colorspaces-list">
+<title>Available colorspaces</title>
+
+<para>
+&krita; offers colorspaces based on the RGB, CMYK, Lab, LMS, and GRAY
+color models. These are shortly discussed in this section.
+</para>
+
+<sect2 id="colorspaces-list-rgb">
+<title>The RGB color models</title>
+
+<para>
+The abbreviation RGB stands for Red, Green, Blue, and the color model with
+this name refers to the three light components that are emitted in displays
+(televisions, computer monitors, etcetera) to create a certain color.
+</para><para>
+When defining a color in the RGB model, its red, green and blue components are
+specified. If all components are absent (each component is emitted at 0
+percent intensity, so no light at all), the color is pure black.  If all
+components are fully present (100 percent intensity), the color is pure white.
+If one component is present at full intensity and the other two are absent,
+the pure respective color is obtained.
+</para><para>
+Two more examples: if both red and green are emitted at 100 percent and blue
+is not emitted, pure yellow is obtained. A color with all three components at
+the same intensity is a shade of gray.
+</para><para>
+There are various colorspaces that implement the RGB model. For example, the
+so-called RGB8 colorspace represents each color with 8 bits per component.
+Since 8 bits allow for 256 distinct values, the total number of different
+colors that can be specified in this colorspace is 256 * 256 * 256, or about
+16.7 million colors. In &krita;, a couple of RGB colorspaces are available,
+for example RGB32, which is able to distinguish between 4.2 billion values per
+component.
+</para>
+
+</sect2>
+
+<sect2 id="colorspaces-list-cmyk">
+<title>The CMYK color model</title>
+
+<para>
+CMYK is the abbreviation for Cyan, Magenta, Yellow, blacK (although officially
+the K stands for Key, black is much more commonly used). This color model is
+based on ink: a color is specified by the amount of ink needed for a point
+to be perceived as having that color.
+</para><para>
+Since CMYK colors are used by printers while RGB colors are used on-screen,
+one wants to convert RGB colors to CMYK colors. As this cannot always be done
+correctly, printed images may turn out to look quite different.
+</para>
+
+</sect2>
+
+<sect2 id="colorspaces-list-lab">
+<title>The Lab color model</title>
+
+<para>
+This color model uses the three parameters luminance (L, 0 for black and
+100 for white), its position between red and green (a, negative for
+green and positive for red), and its position between yellow and blue (b,
+negative for blue and positive for yellow).
+</para>
+
+</sect2>
+
+<sect2 id="colorspaces-list-LMS">
+<title>The LMS color model</title>
+
+<para>
+This model is based on the contribution of actual wavelengths to the color. L,
+M and S stand for Long, Middle and Short wavelengths.
+</para>
+
+</sect2>
+
+<sect2 id="colorspaces-list-GRAY">
+<title>The GRAY color model</title>
+
+<para>
+The GRAY color model simply represents colors as shades of gray.
+</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>

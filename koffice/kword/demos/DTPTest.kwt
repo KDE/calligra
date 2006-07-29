@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE DOC ><DOC mime="application/x-kword" syntaxVersion="1" editor="KWord" >
+ <PAPER width="595" zoom="100" spHeadBody="9" format="1" height="841" fType="0" orientation="0" hType="0" columnspacing="3" spFootBody="9" columns="1" >
+  <PAPERBORDERS right="0" left="0" bottom="0" top="0" />
+ </PAPER>
+ <ATTRIBUTES standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="1" />
+ <FRAMESETS>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 1" visible="1" >
+   <FRAME runaround="1" right="300" left="28" bottom="600" runaroundGap="14" top="42" />
+   <FRAME runaround="1" right="500" left="310" bottom="600" runaroundGap="14" top="42" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 2" visible="1" >
+   <FRAME right="200" left="28" bottom="300" runaroundGap="2" top="100" autoCreateNewFrame="0" />
+   <FRAME right="300" left="200" bottom="510" runaroundGap="2" top="400" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="45" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="1" name="TextFrameset 3" visible="1" >
+   <FRAME right="594" left="0" bottom="19" runaroundGap="2" top="0" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="3" name="TextFrameset 4" visible="1" >
+   <FRAME right="594" left="0" bottom="19" runaroundGap="2" top="0" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="2" name="TextFrameset 5" visible="1" >
+   <FRAME right="594" left="0" bottom="19" runaroundGap="2" top="0" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="4" name="TextFrameset 6" visible="1" >
+   <FRAME right="594" left="0" bottom="840" runaroundGap="2" top="821" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="6" name="TextFrameset 7" visible="1" >
+   <FRAME right="594" left="0" bottom="840" runaroundGap="2" top="821" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="5" name="TextFrameset 8" visible="1" >
+   <FRAME right="594" left="0" bottom="840" runaroundGap="2" top="821" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="7" name="Footnotes" visible="0" >
+   <FRAME runaround="1" right="594" left="0" bottom="840" top="821" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+     <FORMAT id="1" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+ </FRAMESETS>
+ <STYLES>
+  <STYLE>
+   <NAME value="Standard" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" numberingtype="0" bulletfont="times" type="0" start="0" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="times" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 1" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" numberingtype="1" bulletfont="times" righttext="." type="1" start="1" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="helvetica" />
+    <SIZE value="24" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 2" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" numberingtype="1" bulletfont="times" righttext="." type="1" start="1" depth="1" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="helvetica" />
+    <SIZE value="16" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Head 3" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" numberingtype="1" bulletfont="times" righttext="." type="1" start="1" depth="2" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="helvetica" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Enumerated List" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" numberingtype="0" bulletfont="times" righttext="." type="1" start="1" depth="0" />
+   <FOLLOWING name="Enumerated List" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="times" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Alphabetical List" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" numberingtype="0" bulletfont="times" righttext=")" type="2" start="1" depth="0" />
+   <FOLLOWING name="Alphabetical List" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="times" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Bullet List" />
+   <FLOW align="left" />
+   <COUNTER bullet="0" numberingtype="0" type="10" start="1" depth="0" />
+   <FOLLOWING name="Bullet List" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="times" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Contents Title" />
+   <FLOW align="center" />
+   <TOPBORDER width="1" style="0" blue="0" red="0" green="0" />
+   <BOTTOMBORDER width="1" style="0" blue="0" red="0" green="0" />
+   <COUNTER bullet="183" numberingtype="0" bulletfont="symbol" type="0" start="0" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="helvetica" />
+    <SIZE value="20" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Contents Head 1" />
+   <FLOW align="left" />
+   <COUNTER bullet="183" numberingtype="0" bulletfont="symbol" type="0" start="0" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="helvetica" />
+    <SIZE value="16" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Contents Head 2" />
+   <FLOW align="left" />
+   <COUNTER bullet="183" numberingtype="0" bulletfont="symbol" type="0" start="0" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="75" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="helvetica" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <NAME value="Contents Head 3" />
+   <FLOW align="left" />
+   <COUNTER bullet="183" numberingtype="0" bulletfont="symbol" type="0" start="0" depth="0" />
+   <FOLLOWING name="Standard" />
+   <FORMAT id="1" >
+    <WEIGHT value="50" />
+    <COLOR blue="0" red="0" green="0" />
+    <FONT name="helvetica" />
+    <SIZE value="12" />
+    <ITALIC value="1" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+ </STYLES>
+ <PIXMAPS/>
+</DOC>

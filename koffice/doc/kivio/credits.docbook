@@ -1,0 +1,64 @@
+<chapter id="credits">
+<chapterinfo>
+<authorgroup>
+<author><firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
+<title>Credits and License</title>
+
+<para>
+&kivio;
+</para>
+
+<para>
+Program copyright 2000-2003 The &kivio; Team
+</para>
+
+<para>
+Current maintainer is Peter Simonsonn <email>psn@linux.se</email>.
+</para>
+
+<itemizedlist>
+<title>Contributors</title>
+
+<listitem>
+<para>Ian Reinhart Geiser <email>geiseri@kde.org</email></para>
+</listitem>
+
+<listitem>
+<para>Laurent Montel <email>montel@kde.org</email></para>
+</listitem>
+
+<listitem>
+<para>Frauke Oster <email>frauke@frsv.de</email></para>
+</listitem>
+
+<listitem>
+<para>Dave Marotti <email>lndshark@verticaladdiction.net</email></para>
+</listitem>
+
+<listitem>
+<para>The Kompany.com - "<trademark>Where Open Source is at Home</trademark>" <email>info@thekompany.com</email></para>
+</listitem>
+
+<listitem>
+<para>Current documentation is maintained by Ben Lamb
+<email>kde@zurgy.org</email></para>
+</listitem>
+
+</itemizedlist>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+&underGPL;
+
+</chapter>

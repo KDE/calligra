@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>KOffice filters status: HTML FILTER</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
+<A NAME="START">&nbsp;</A>
+
+<BR>
+<center>
+ <h1>
+  KOffice filters status: &nbsp;&nbsp;<i>HTML FILTER</i>
+ </h1>
+</center>
+
+<hr NOSHADE SIZE=2 WIDTH="70%">
+
+<font size="-1"><b>
+ <A HREF="#import">Import</A> |
+ <A HREF="#export">Export</A>
+</b></font>
+
+<BR><BR><BR>
+<center><a NAME="import"></a></center>
+
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000" WIDTH="100%">
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH="100%">
+
+    <tr BGCOLOR="#DDFFDD">
+     <td COLSPAN="2">
+      <center><b><i><font size="+1">
+       <BR>
+        Import HTML for KWord<BR>
+       <BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH="1%" NOWRAP><b><font size="+1">Last update</font></b></td>
+     <td>10 Sept 2001</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Features</font></b></td>
+     <td>
+        - Crude!<br>
+        - HTML: basic formatting, simple tables.<br>
+        - No stylesheets yet, no table size calculating yet<br>
+        - uses khtml<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Todo</font></b></td>
+     <td>
+        - &lt;font&gt;<br>
+        - table size calculation<br>
+        - images<br>
+        - implement CSS2, integrate with khtml's css implementation<br>
+        - many other tags<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">History</font></b></td>
+     <td>
+        20 Apr 2001 New (single pass) HTML filter<br>
+        07 May 2001 Removing code of the old import filter<br>
+        09 May 2001 Removing code of the former two pass filter system<br>
+        10 Sep 2001 Rewrite using KHTML as html parser, support (simple) tables<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Authors</font></b></td>
+     <td>
+      <a href="mailto:frank.dekervel@student.kuleuven.ac.be">Frank Dekervel</a><br>
+      <a href="mailto:goutte@kde.org">Nicolas Goutte</a>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Links</font></b></td>
+     <td>
+        <a href="http://www.w3.org/TR/html401">HTML 4.01</a><br>
+        <a href="http://www.w3.org/TR/xhtml1">XHTML 1.0</a><br>
+        <a href="http://www.w3.org/TR/REC-CSS2">Cascaded Style Sheets Level 2 (CSS2)</a><br>
+	<a href="http://developer.kde.org/documentation/library/2.1-api/classref/khtml/index.html">KHTML Documentation</a><br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Progress report </font></b></td>
+     <td>-</td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+
+<br><br><br>
+
+<hr NOSHADE SIZE=1>
+<br><br><br>
+
+
+<center>
+ <a NAME="export"></a>
+</center>
+
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000"  WIDTH="100%">
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH="100%">
+    <tr BGCOLOR="#FFDDDD">
+     <td COLSPAN="2">
+      <center><b><i><font size="+1">
+       <BR>Export KWord to HTML<BR><BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH="1%" NOWRAP><b><font size="+1">Last update</font></b></td>
+     <td>05 May 2002</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Features</font></b></td>
+     <td>
+        - Export to HTML 4.01 or XHTML 1.0 documents<br>
+        - UTF-8 or locale or other encoding<br>
+        - Three modes: light, basic and enhanced<br>
+        - Uses CSS2 in enhanced mode<br>
+        - Lists<br>
+        - Character formatting<br>
+        - Paragraph formatting<br>
+        - Links<br>
+        - Tables<br>
+        - Inline images<br>
+        - Inlined cliparts (transformed to SVG)<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Todo</font></b></td>
+     <td>
+        - Transform other inline images types into PNG<br>
+        - Non-inlined images<br>
+        - Non-inlined cliparts<br>
+        - Fix white space problems (space at start, space at end, multiple consecutive spaces)<br>
+        - Special treatement for paragraphs in fixed fonts (needed or not?)<br>
+        - Possibilty to save the class definitions in a separate file (for KOffice 1.3?)<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">History</font></b></td>
+     <td>
+        04 Feb 2001 Start of complete re-write.<br>
+        06 Feb 2001 First version that can export XHTML 1.0.<br>
+        ?? Nov 2001 New version with simplier dialog.<br>
+        13 Nov 2001 Links and full support for locale encoding<br>
+        16 Feb 2002 New modes and new naming of modes: light, basic, enhanced<br>
+        2? Feb 2002 Simplify the written file by avoiding redundant information<br>
+        15 Mar 2002 Export lists with more than one depth<br>
+        05 May 2002 Additional files are written in a sub-directory<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Authors</font></b></td>
+     <td>
+      <a href="mailto:goutte@kde.org">Nicolas GOUTTE</a>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Links</font></b></td>
+     <td>
+        <a href="http://www.w3.org/TR/html401">HTML 4.01</a><br>
+        <a href="http://www.w3.org/TR/xhtml1">XHTML 1.0</a><br>
+        <a href="http://www.w3.org/TR/REC-CSS2">Cascaded Style Sheets Level 2 (CSS2)</a><br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Comments</font></b></td>
+     <td>
+        NOTE: this status describes the version of the filter for KOffice 1.2 (CVS HEAD)<br><br>
+        <b>Modes:</b><br>
+        - Light: converts mainly the document structure; uses strict (X)HTML<br>
+        - Basic: converts most of the document; uses transitional (X)HTML<br>
+        - Enhanced: converts as much as possible of the document; uses strict (X)HTML with CSS2<br>
+     </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+
+</body>
+</html>

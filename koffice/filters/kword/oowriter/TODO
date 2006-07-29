@@ -1,0 +1,11 @@
+*** Import:
+Tables: header rows, sub tables
+Annotations (aka "note")
+Mail merge
+Table styles, frame styles
+Embedded objects
+Spellcheck settings?
+Cursor position, etc.
+
+*** Export:
+Connect/glue the unconnected variables (num of columns and non-inline framesets)

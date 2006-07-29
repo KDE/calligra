@@ -1,0 +1,544 @@
+<!-- If you want to validate or edit this document separately, uncomment
+this prolog
+
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
+-->
+
+<chapter id="prog-guide">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Programmer's Guide</title>
+
+<sect1 id="how-to-use-in-progs">
+<title>How to use &kugar; for reporting in your own programs</title>
+
+<itemizedlist>
+<title>There are several ways to use &kugar;</title>
+<listitem>
+<para>
+Create a temporary file and fill it with data, organized according to the
+<link linkend="kugardata-dtd">KugarData Document Type Definition</link>. Then
+call the <command>kugar</command> shell command (
+<cmdsynopsis>
+<command>kugar</command>
+<group>
+<option>-d <replaceable>Kugar data file</replaceable></option>
+</group>
+<group>
+<option>-r <replaceable>Kugar template file</replaceable></option>
+</group>
+</cmdsynopsis>
+) to preview and print the report.
+See <link linkend="prog-using-for-preview">Using &kugar; shell for previewing reports</link>
+for a detailed description.
+</para>
+</listitem>
+<listitem>
+<para>
+Use &kugar; directly in the application's code.
+See <link linkend="prog-using-widget">Using &kugar; classes for reporting</link>
+for a detailed description.
+</para>
+</listitem>
+<listitem>
+<para>
+Create a &Qt; designer plugin, use it to build the application &GUI; in the designer and
+link it to the program dynamically.
+See <link linkend="prog-designer-plugin">Creating a &Qt; designer plugin</link>
+for a detailed description.
+</para>
+</listitem>
+</itemizedlist>
+
+<para> The last two ways are acceptable for &Qt; and &kde; developers;
+but &kugar; is designed to be a report generator, independent from a
+programming language and/or <acronym>IDE</acronym>. It uses &XML;
+format for describing report templates and data files. So any program
+can produce output in &kugar; data file format as described in <link
+linkend="kugardata-dtd">KugarData <acronym>DTD</acronym></link> or
+even a report template file format (see <link
+linkend="template-dtd">KugarTemplate <acronym>DTD</acronym></link>).
+&kugar; shell (report viewer) can be used to preview and print the
+generated report.  </para>
+
+</sect1>
+
+<sect1 id="prog-using-for-preview">
+<title>Using &kugar; shell for previewing reports</title>
+
+<orderedlist>
+<title>The way to create and preview (print) a report is:</title>
+<listitem>
+<para>
+Create a report template file with &kudesigner;
+</para>
+</listitem>
+<listitem>
+<para>
+Create a data file with column values for detail bands of the report.
+Use <link linkend="kugardata-dtd">KugarData <acronym>DTD</acronym></link> to produce correct data files.
+</para>
+</listitem>
+<listitem>
+<para>
+Run &kugar; shell to preview and print a report. For example, to do this, in C or C++
+languages call:</para>
+
+<programlisting>
+<function>system(<option>"kugar -r <replaceable>template_file.ktf</replaceable>-d <replaceable>data_file.kdf</replaceable>"</option>)</function>.
+</programlisting>
+
+<para>
+Don't forget to include <filename class="headerfile">stdlib.h</filename>.
+</para>
+</listitem>
+</orderedlist>
+</sect1>
+
+<sect1 id="prog-using-widget">
+<title>Using &kugar; classes for reporting</title>
+<para>
+The &kugar; library includes two widgets for use.
+</para>
+<para>
+The <classname>KReportViewer</classname> class is designed for &kde;
+developers. It supports a &kde; printing system and &UNIX; localization
+via <function>i18n()</function> calls.
+</para>
+<para>
+The <classname>MReportViewer</classname> class is designed for &Qt;
+developers and provides real crossplatforming. It can be used not
+only on &UNIX; platforms, but also on &Windows; and &MacOS;.
+</para>
+<para>
+In order to build a program that uses the &kugar; library, it should be linked
+with <filename>libkugar.so</filename> shared library, which is provided with the &kugar; distribution on all
+&UNIX; platforms.
+</para>
+<para>
+Include files are <filename>kugarqt.h</filename> and <filename>kugar.h</filename>
+for &Qt; and &kde; programs respectively.
+</para>
+<para>For a detailed example of how &kugar; classes can be used, look in the <filename class="directory">/shell</filename>
+folder in the &kugar; sources.
+</para>
+<para>
+<classname>MReportViewer</classname> (and <classname>KReportViewer</classname> too)
+contains several public methods that can be used.
+</para>
+<funcsynopsis>
+<funcprototype>
+<funcdef>void <function>renderReport</function></funcdef>
+<void/>
+</funcprototype>
+<funcsynopsisinfo>Renders the report onto a screen.</funcsynopsisinfo>
+</funcsynopsis>
+
+<funcsynopsis>
+<funcprototype>
+<funcdef>void <function>printReport</function></funcdef>
+<void/>
+</funcprototype>
+<funcsynopsisinfo>Calls the print dialog to print the report.</funcsynopsisinfo>
+</funcsynopsis>
+
+<funcsynopsis>
+<funcprototype>
+<funcdef>void <function>clearReport</function></funcdef>
+<void/>
+</funcprototype>
+<funcsynopsisinfo>Clears the report on a screen and frees report data.
+Call this before opening the new report.</funcsynopsisinfo>
+</funcsynopsis>
+
+<funcsynopsis>
+<funcprototype>
+<funcdef>bool <function>setReportData</function></funcdef>
+<paramdef>const QString &amp;<parameter>data_file_name</parameter></paramdef>
+</funcprototype>
+<funcsynopsisinfo>Sets report data from <replaceable>data_file_name</replaceable> file.</funcsynopsisinfo>
+</funcsynopsis>
+
+<funcsynopsis>
+<funcprototype>
+<funcdef>bool <function>setReportData</function></funcdef>
+<paramdef>const QIODevice &amp;<parameter>data_io_device</parameter></paramdef>
+</funcprototype>
+<funcsynopsisinfo>Sets report data from <replaceable>data_io_device</replaceable> file.
+IO device can be any successor of the <classname>QIODevice</classname> class.
+For example, to fetch records directly from the database,
+create a <classname>QIODevice</classname> successor and redefine all necessary
+functionality.
+</funcsynopsisinfo>
+</funcsynopsis>
+
+<funcsynopsis>
+<funcprototype>
+<funcdef>bool <function>setReportTemplate</function></funcdef>
+<paramdef>const QString &amp;<parameter>template_file_name</parameter></paramdef>
+</funcprototype>
+<funcsynopsisinfo>Sets report template from <replaceable>template_file_name</replaceable> file.</funcsynopsisinfo>
+</funcsynopsis>
+
+<funcsynopsis>
+<funcprototype>
+<funcdef>bool <function>setReportTemplate</function></funcdef>
+<paramdef>const QIODevice &amp;<parameter>template_io_device</parameter></paramdef>
+</funcprototype>
+<funcsynopsisinfo>Sets report template from <replaceable>template_io_device</replaceable> file.
+IO device can be any successor of the <classname>QIODevice</classname> class.
+For example, to obtain a report template from network storage or database,
+create a QIODevice successor and redefine all necessary functionality.
+</funcsynopsisinfo>
+</funcsynopsis>
+
+</sect1>
+
+<sect1 id="prog-designer-plugin">
+<title>Creating &Qt; designer plugin</title>
+
+<para>
+This is the example code of how a designer plugin is created. The code below creates a plugin for
+a &kde; <classname>KReportViewer</classname> widget.
+</para>
+
+<para>
+If a &Qt;
+widget is desired, replace <classname>KReportViewer</classname> with
+<classname>MReportViewer</classname> and <filename>kugar.h</filename> with
+<filename>kugarqt.h</filename> in the plugin code.
+</para>
+
+<sect2 id="plugin-usage">
+<title>Plugin usage</title>
+<para>
+The designer plugin will allow the usage of &Qt; Designer to place a <classname>KReportViewer</classname>
+widget onto a window and preview it correctly.
+</para>
+
+<para>
+Programs that make use of this plugin must be linked dynamically with it.
+The corresponding library is called <filename>libkugar_plugin.so</filename>.
+Widgets or dialogs that include <classname>KReportViewer</classname>
+widget must include &lt;kugar.h&gt; in implementation and have a forward declaration
+of <classname>class KReportViewer</classname>. Includes can be done with &Qt;
+Designer's Object Explorer (Source tab).
+</para>
+
+<para>
+To build the plugin run:
+<cmdsynopsis>
+<command>qmake</command>
+<arg>kugar_plugin.pro</arg>
+</cmdsynopsis>
+<cmdsynopsis>
+<command>make</command>
+</cmdsynopsis>
+</para>
+
+</sect2>
+
+<sect2 id="plugin-code">
+<title>Plugin code</title>
+
+<segmentedlist>
+<title>The plugin code consists of three files:</title>
+<segtitle><link linkend="plugin-h-source">kugar_plugin.h</link></segtitle>
+<segtitle><link linkend="plugin-cpp-source">kugar_plugin.cpp</link></segtitle>
+<segtitle><link linkend="plugin-pro-source">kugar_plugin.pro</link></segtitle>
+<seglistitem>
+<seg>A header file for the <classname>KugarWidgetPlugin</classname>, <classname>QWidgetPlugin</classname> successor;</seg>
+<seg>A source file for the <classname>KugarWidgetPlugin</classname>, <classname>QWidgetPlugin</classname> successor;</seg>
+<seg>A project file for the <application>QMake</application> utility.</seg>
+</seglistitem>
+</segmentedlist>
+
+<sect3 id="plugin-h-source">
+<title>kugar_plugin.h</title>
+
+<programlisting>
+#include &lt;qwidgetplugin.h>&gt;
+
+class KugarWidgetPlugin:public QWidgetPlugin
+{
+public:
+  KugarWidgetPlugin ();
+
+  QStringList keys () const;
+  QWidget *create (const QString &amp; classname, QWidget * parent =
+                   0, const char *name = 0);
+  QString group (const QString &amp;) const;
+  QIconSet iconSet (const QString &amp;) const;
+  QString includeFile (const QString &amp;) const;
+  QString toolTip (const QString &amp;) const;
+  QString whatsThis (const QString &amp;) const;
+  bool isContainer (const QString &amp;) const;
+};
+</programlisting>
+</sect3>
+
+
+<sect3 id="plugin-cpp-source">
+<title>kugar_plugin.cpp</title>
+
+<programlisting>
+#include "kugar_plugin.h"
+#include &lt;kugar.h&gt;
+
+static const char *kugar_pixmap[] = {
+  "22 22 127 2",
+  ".d c #000000",
+  ".c c #131313",
+  ".b c #282828",
+  ".a c #434241",
+  ".e c #4e463a",
+  ".# c #595551",
+  ".G c #66553b",
+  "#F c #68635f",
+  "#R c #6b4f23",
+  "#q c #6e6862",
+  "#M c #6f5229",
+  ".n c #6f6146",
+  ".w c #735310",
+  ".V c #755c2a",
+  ".I c #775f34",
+  ".0 c #77694a",
+  "#n c #7e6434",
+  ".o c #806f50",
+  "#C c #835d2d",
+  ".P c #837c75",
+  "#B c #85653a",
+  "#k c #85827e",
+  ".x c #866d46",
+  ".U c #877967",
+  ".X c #888888",
+  ".F c #89724d",
+  "#x c #8b6d2a",
+  ".S c #8d7759",
+  ".z c #8e733b",
+  "#L c #906e49",
+  "#Q c #947b56",
+  ".r c #948058",
+  ".J c #957844",
+  ".4 c #987736",
+  ".q c #998969",
+  ".k c #999897",
+  ".R c #9a8a75",
+  "#i c #9f8348",
+  "#I c #a37c4b",
+  ".u c #a38d66",
+  ".E c #a58558",
+  "#A c #a8834b",
+  ".s c #a9967a",
+  ".t c #aa9467",
+  ".C c #ae9f8d",
+  "#6 c #afa49d",
+  "#5 c #afa9a4",
+  "#W c #b18e4d",
+  ".K c #b1935a",
+  ".B c #b39660",
+  "#V c #b49866",
+  "#a c #b49d6c",
+  "## c #b49d72",
+  ".j c #b5b4b4",
+  "#0 c #b7a597",
+  ".O c #b9b1a9",
+  ".L c #bb9c61",
+  ".M c #bb9e6b",
+  ".A c #bca778",
+  "#j c #bea46b",
+  ".T c #bfb37d",
+  ".v c #c0b391",
+  ".W c #c3a262",
+  ".i c #c4c4c4",
+  "#m c #c5b7aa",
+  "#8 c #c69f80",
+  ".D c #c6b79b",
+  "#3 c #c7a589",
+  ".7 c #c7a76c",
+  "#u c #c7bbaf",
+  ".6 c #c8ad74",
+  "#7 c #c8b7a9",
+  "#r c #c8beb5",
+  ".m c #c8c8c8",
+  "#U c #cbad96",
+  "#f c #ccb681",
+  "#h c #cdac6c",
+  "#P c #cdb49f",
+  "#X c #cdb8a6",
+  "#H c #ceb7a4",
+  ".y c #ceb892",
+  ".N c #cecac3",
+  "#Z c #cfb16f",
+  "#O c #cfbdad",
+  ".Z c #cfc7c0",
+  "#w c #d0bcab",
+  ".5 c #d1ad6b",
+  "#s c #d1bfb1",
+  ".h c #d5d5d5",
+  "#l c #d6cdc6",
+  "#D c #d8b36e",
+  ".H c #dac592",
+  "#t c #dbb977",
+  ".g c #dcdcdc",
+  ".1 c #e0dcc1",
+  ".f c #e0e0df",
+  "#1 c #e3c8b1",
+  "#S c #e4cdb9",
+  ".3 c #e4d9a3",
+  "#4 c #e6c1a1",
+  "#2 c #e7c4a5",
+  "#K c #e9c179",
+  "#g c #e9c47e",
+  "#Y c #e9c8ac",
+  ".2 c #eae6c0",
+  "#T c #ebcdb3",
+  ".Q c #ebd4b9",
+  "#E c #ecca87",
+  "#z c #ecd799",
+  ".l c #ececeb",
+  "#G c #efd7c2",
+  "#e c #efe3ab",
+  ".8 c #efe8e3",
+  "#v c #f1dcca",
+  "#. c #f2e2d4",
+  ".p c #f4f4f4",
+  "#y c #f5daa0",
+  "#J c #f6cf7f",
+  ".9 c #f7ede4",
+  "#p c #f9d995",
+  ".Y c #fcf9f6",
+  "#d c #fefcc5",
+  "#c c #fefdda",
+  "#b c #fefee1",
+  "#N c #ffd685",
+  "#o c #fff0a9",
+  "Qt c #ffffff",
+  "QtQtQtQtQtQt.#.a.a.a.b.b.b.c.c.d.d.dQtQtQtQt",
+  "QtQtQtQtQtQt.e.f.g.g.f.g.g.h.i.j.d.k.dQtQtQt",
+  "QtQtQtQtQtQt.a.gQtQtQtQtQtQt.l.f.c.m.k.dQtQt",
+  "QtQtQtQtQt.n.n.n.n.n.o.g.pQtQt.l.bQt.m.k.dQt",
+  "QtQtQt.q.q.r.q.s.t.r.q.u.u.g.pQt.a.fQt.m.k.d",
+  "QtQt.s.s.v.w.x.y.y.t.z.A.t.B.i.p.#.a.b.c.d.d",
+  "Qt.C.C.D.E.F.G.A.H.F.I.J.K.L.M.i.p.l.N.O.P.d",
+  "Qt.s.v.Q.q.R.S.T.A.R.U.V.L.W.W.X.g.Y.f.Z.k.d",
+  ".0.s.t.Q.1.U.R.2.3.S.U.4.5.6.6.7.j.8.9#..O.d",
+  ".G##.V#a#b.1#c#c#d#e#f#g#h#i#j.W#k#l.9#.#m.d",
+  ".G.4.F#n#c#c#c#d#d#o#p#g.x.w#i.L#q#r#.#.#s.d",
+  ".e.J.J.I.3#d.H#j.6#f#p#t#n.w.E.L#q#u#.#v#w.d",
+  ".G.A#x.z#y#z#A#B#B#C#D#E.4.4.6#h#F#m#v#G#H.d",
+  ".o.s.A#j#E#t#I#I#I#C#A#J#p#p#K#t#F#m#v#G#H.d",
+  "Qt##.A.6.7#I#I#A.E#L#M.W#N#J#K.a.U#O#G.Q#P.d",
+  "Qt#a.M.L.J#A#I.4.E#Q.x#R#D#J#g.#.C#S.Q#T#U.d",
+  "QtQt#V.K.z#Q.s.S.x.S#B#M#W#E.a.U#X.Q#T#Y#U.d",
+  "QtQtQt.M#i#B.r#Q#Q.r#Q.z#Z.a#q#0#1#T#Y#2#3.d",
+  "QtQtQtQtQt#j.L.L.W.5#t.a.#.U#0#1#T#Y#2#4#3.d",
+  "QtQtQtQtQtQt.d#F#q#q#q.P.C#O#S.Q#T#Y#2#4#3.d",
+  "QtQtQtQtQtQt.d#5#5#6#6#0#7#w#H#P#U#U#3#3#8.d",
+  "QtQtQtQtQtQt.d.d.d.d.d.d.d.d.d.d.d.d.d.d.d.d"
+};
+
+KugarWidgetPlugin::KugarWidgetPlugin ()
+{
+}
+
+QStringList KugarWidgetPlugin::keys () const
+{
+  QStringList list;
+  list &lt;&lt; "KReportViewer";
+  return list;
+}
+
+QWidget* KugarWidgetPlugin::create (const QString &amp; key, QWidget * parent,
+                                    const char *name)
+{
+  if (key == "KReportViewer")
+    return new KReportViewer (parent, name);
+  return 0;
+}
+
+QString KugarWidgetPlugin::group (const QString &amp; feature) const
+{
+  if (feature == "KReportViewer")
+    return "Display";
+  return QString::null;
+}
+
+QIconSet KugarWidgetPlugin::iconSet (const QString &amp;) const
+{
+  return QIconSet (QPixmap (kugar_pixmap));
+}
+
+QString KugarWidgetPlugin::includeFile (const QString &amp; feature) const
+{
+  if (feature == "KReportViewer")
+    return "kugar.h";
+  return QString::null;
+}
+
+QString KugarWidgetPlugin::toolTip (const QString &amp; feature) const
+{
+  if (feature == "KReportViewer")
+    return "Kugar report viewer widget";
+  return QString::null;
+}
+
+QString KugarWidgetPlugin::whatsThis (const QString &amp; feature) const
+{
+  if (feature == "KReportViewer")
+    return "A widget to view xml reports";
+  return QString::null;
+}
+
+bool KugarWidgetPlugin::isContainer (const QString &amp;) const
+{
+  return FALSE;
+}
+
+Q_EXPORT_PLUGIN( KugarWidgetPlugin )
+</programlisting>
+</sect3>
+
+<sect3 id="plugin-pro-source">
+<title>kugar_plugin.pro</title>
+
+<programlisting>
+SOURCES	+= kugar_plugin.cpp
+HEADERS	+= kugar_plugin.h
+
+DESTDIR = $(QTDIR)/plugins/designer
+TARGET  = kugar_plugin
+
+target.path=$$plugins.path
+isEmpty(target.path):target.path=$$QT_PREFIX/plugins
+PROJECTNAME = KugarPlugin
+TEMPLATE    = lib
+CONFIG	   += qt warn_on release plugin
+unix:LIBS  += -lkugar
+LANGUAGE    = C++
+</programlisting>
+</sect3>
+
+</sect2>
+
+</sect1>
+</chapter>

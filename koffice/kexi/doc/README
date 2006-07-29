@@ -1,0 +1,7 @@
+
+common/ - Common files for Doxygen-generated html documentation
+dev/ - Development Documentation: thoughts, ideas, notes
+handbook/ - temporary files for Kexi Handbook; do not look there
+            unless you're the Handbook author/reviewer
+kexidb/ - place for Doxygen-generated KexiDB Module Documentation
+plan/ - other file(s) related to development

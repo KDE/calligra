@@ -1,0 +1,210 @@
+New applications: krita, kexi
+
+Krita
+=====
+
+Krita is an image editor and paint application with a wide range of
+applications, from photo editing to the creation of original artwork.
+Sporting a clear and uncluttered interface (for a paint app...) it makes the
+features it delivers accessible and intuitive to use.
+
+This is the first public release of Krita and while it provides a coherent set
+of features, it is only the first stepping stone towards a flexible paint
+application for artists and image editors.
+
+Krita offers:
+
+* Layers (without fixed boundaries).
+* A familiar set of tools -- brushes, selection tools and shape tools.
+* Painting with filters.
+* An extensible system for the addition of new color and paint models.
+* Support for pressure sensitive tablets.
+* The ability to read most graphics file formats, including gimp and photoshop files.
+* Exporting to many graphics file formats (but not gimp or photoshop)
+* A complete colour management system based on lcms.
+* A useful set of filters (implemented as plugins, so the set of filters
+  is extensible) including a CImg based image restoration plugin.
+* The ability to use Gimp palettes, brushes, patterns and gradients
+
+Caveats:
+
+* In this beta version exif data embedded in jpeg images is not preserved.
+* Some tools and menu options do not yet function completely correctly.
+
+===============
+
+Kexi   [ this is from http://www.kexi-project.org/wiki/wikiview/index.php?AnnouncementForKOffice1.4 ]
+====
+
+KOffice 1.4 is the first official release to include Kexi - the KOffice database management application. 
+ Kexi is an integrated environment for managing data. It can be used for creating database schemas; inserting data; performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries and forms - are stored in the database, making it easy to share databases. 
+
+ Kexi is considered as a long awaited Open Source competitor for MS Access, Filemaker and Oracle Forms. Its development is motivated by the lack of Rapid Application Development (RAD) tools for database systems that are sufficiently powerful, inexpensive, open standards driven and portable across many OSes and hardware platforms.
+
+Overview 
+ Supports database storage in files and on database servers. 
+ Graphical interface for creating and altering table structures. 
+ Form entry, with visual form designer. 
+ Advanced tabular data view. 
+ Intuitive query designer - no knowledge of SQL required! 
+ Integrated SQL Editor available for advanced users.
+
+Data Processing and Access 
+ Data migration from MySQL, PostgreSQL and MS Access databases (MS Access available as an external plugin). 
+ KexiDB API available for developers for integration with other applications. 
+ Scripting support with Python language - hidden for 0.1 version. 
+ (JavaScript/ECMA-Script support is planned) 
+ Easy data report generation (planned). 
+
+Database Storage 
+ Kexi can store databases in files and on database servers, while providing a common user interface. Database drivers for the following database engines are available: 
+ - SQLite (Native file format: version 2 and 3) 
+ - PostgreSQL 
+ - MySQL 
+ Support for other database systems is planned for future versions, including the ODBC interface, for simpler and more flexible integration in corporate environments.
+
+===================
+
+KOffice Workspace (koshell):
+* New sidebar
+* Tab support
+
+KOffice-wide changes:
+* Document information dialog: Added keywords and subject for the document, as well as
+        position, company, and telephone (home/work) for the author
+* Make the default unit be inch or cm depending on the KDE-wide measure system (imperial or metric)
+* Improvements to the DCOP interface for loading and saving.
+* -dpi command line option to override the DPI detected by X. You can set one value for x and y, or use -dpi x,y
+* Improve filter chains to avoid absurd chains (e.g. kword -> plain text -> kspread)
+* Startup dialog: themeable icons, correct initial tab, hide non-existent recent local files
+* Page layout dialog: better preview, new GUI for margins
+* Rulers: made more readable at all resolutions, added tooltips
+
+kotext (shared by KWord and KPresenter):
+* Word completion with tooltip
+* Open links by clicking on them, use hand pointer, show link target in statusbar.
+* Tab/Shift+Tab for changing indentation in lists
+* Rewritten spell-checking support (based on kspell2, the main reason for the kdelibs >= 3.3 requirement)
+ which is much faster and solves many problems (e.g. KOffice-1.3's hanging right-click-menu)
+* Improved autocorrection (better URL detection among other things)
+
+KWord:
+* OASIS file format support (almost complete)
+* Copy/Paste and Drag-n-drop use the OASIS format.
+* Make it possible to select entire paragraphs from the left margin again.
+* Inline text frames can be navigated into using Left and Right keys.
+* New "statistic" variables (number of words, number of lines etc.)
+* "Select All Frames" features
+* Non-breaking hyphen, which can be inserted with Ctrl+Shift+Minus
+* Alt+Right and Alt+Left shortcuts for increasing/decreasing the numbering level
+* Removed non-working feature "Type anywhere cursor"
+* When dropping a link to an image, let the user choose between inserting a URL and the image
+* Rewritten "convert to text box" and "convert table to text" features so that they
+  don't use the clipboard anymore.
+* PageUp/PageDown now moves the caret by default (it's still configurable).
+* When saving a new document, suggest a file name based on the beginning of the document
+* Reorganized and simplified GUI of the configuration dialog
+* Support for "protect content" in all types of framesets
+* Support for different run-around-gaps on every side of the frame
+
+KPresenter:
+* Master page feature
+* Reworked property editor
+* Reworked object/page effects
+* Footer and headers can be shown/hidden in each page
+* Custom Slide Show
+* OASIS file format support (incomplete)
+* Flip now works as in Gimp. Horizontal flip flips on y-axis, vertical flip on x-axis
+* Group objects: The grouped object is now in the z-order of the upperst
+  object grouped and no longer on the top.
+* Ungroup object: The objects are now in the z-order where the group object
+  was and no longer on top.
+* If a page is shown more than once during a presentation add the time for
+  the duration instead of showing only the last duration.
+* Per-page presentation speed and per-object effect (animation) speed
+* PageUp/PageDown during presentation now goes to beginning of the next/previous slide
+* New "statistic" variables (number of words, number of lines etc.)
+
+KSpread:
+* OASIS file format support (incomplete)
+* Support for right-to-left spreadsheets
+* Calendar plugin
+* dependencies are handled correctly
+* much improved value parsing and formatting
+* Generic format support (the cell format remains 'generic' until explicitely set)
+* Cell validity
+    + new type added: list
+    + new data added: differentto
+    + Add Input help (allow to display help)
+    + Allow blanks cell
+* Conditional cell attribute:
+    + Add new data "differentto"
+* New functions:
+    + ACOT
+    + RANDNORM (gaussian random numbers)
+    + REGEXP
+    + REGEXPRE (regexp replace)
+    + SUMIF (conditional sum)
+* Multiple steps undo and redo
+* Improved handling of hyperlinks
+* Better icons for toolbar and templates
+
+KChart:
+* New maintainer. Many, *many* bugfixes.
+* Removed a lot of old non-working stuff. It will reappear, working, in future versions.
+* New, much improved, data editor
+* Same startup dialog as the rest of KOffice
+* Templates (only one so far)
+* Data as rows or columns
+* Linear or logarithmic scale
+* Export to PNG format
+* Export to SVG format
+* Import data from text files (not finished in the beta)
+* Much improved manual
+* Print support
+
+KFormula:
+* OASIS file format support (incomplete)
+
+Kivio:
+* Non blocking stencilset loading
+* Added Nassi Schneiderman stencils
+* Moving selected stencils with the keyboard
+* Added a docker for adding stencils to the document
+* Added a tool for adding connector targets to stencils
+* Added a polyline connector
+
+Karbon:
+* OASIS file format support (incomplete)
+* New color dialog
+* Small preview widget
+* ZoomIn/ZoomOut actions
+* Build system fixes
+
+Filters:
+* WordPerfect import filter for KWord: brand new, now based on libwpd
+
+* new Microsoft Excel import filter for KSpread
+
+* KWord HTML filter
+    + Ability to link an external stylesheet to a HTML page
+
+* Gnumeric import/export: now supports
+    + Text rotation
+    + Cell validation
+    + Print repeated columns
+    + Document information
+    + Area name
+
+* KSpread HTML export
+    + Sheets can be exported to separate HTML pages
+    + Sheets are browsable by a table of contents
+    + User can define which sheets to export
+    + Ability to link an external stylesheet to a HTML page
+    + The encoding of the HTML page is configurable
+    + Borders are optional
+    + The cell spacing is configurable
+
+* OoImpress:
+    + Custom slide show
+

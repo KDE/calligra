@@ -1,0 +1,61 @@
+IMPLEMENTED
+===========
+
+Workbook:
+
+Sheet:
+  name
+  visibility
+  margins (left, right, top, bottom)
+  header (left, center, right)
+  footer (left, center, right)
+
+Cell:
+  value (string, number, boolean)
+  merged cells (column and row spans)
+  formatting attributes
+
+Row:
+  height
+  visibility
+  formatting attributes
+
+Column:
+  width
+  visibility
+  formatting attributes
+
+Format:
+  horizontal alignment
+  vertical alignment
+  font (name, color, bold, italic, underline, strike)
+  borders
+  background (pattern, color)
+  text wrapping
+
+
+
+TODO
+====
+
+Sheet:
+  better parsing of header/footer
+  margins (header, footer)
+  page size, orientation
+
+Cell:
+  formula (!)
+  error code
+  hyperlink
+
+Format:
+  rotation angle
+  style
+
+
+INCOMPATIBLE
+============
+- exact width of column
+- border style: double, medium, slanted
+- alignment: repeat, justified, filled, distributed
+- header/footer fields, e.g &Z, font

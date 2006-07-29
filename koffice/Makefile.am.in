@@ -1,0 +1,19 @@
+## koffice/Makefile.am.in
+## (C) 1997 Stephan Kulow
+
+AUTOMAKE_OPTIONS = foreign 1.4
+COMPILE_FIRST = lib interfaces
+COMPILE_BEFORE_kexi = kword kugar
+COMPILE_BEFORE_kplato = kdgantt kugar
+# For kword/mailmerge/kspread
+COMPILE_BEFORE_kword = kspread
+COMPILE_BEFORE_ascend = kword
+COMPILE_LAST = filters
+DISTCLEANFILES = inst-apps
+
+MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 SUBDIRS
+
+include admin/deps.am
+
+include admin/Doxyfile.am
+

@@ -1,0 +1,201 @@
+<chapter id="usage">
+<chapterinfo>
+<authorgroup>
+<author><firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
+<title>Basic Usage</title>
+
+<sect1 id="starting">
+<title>Starting &kivio;</title>
+<para>Like other &koffice; applications, on startup &kivio; presents a Create Document dialog. The three tabs offer a choice of creating a new document, opening a saved document or choosing a document from a list of recently saved files.</para>
+<para>If you're new to &kivio; begin by creating an empty document by double-clicking on the <guilabel>Empty Document</guilabel> template.</para>
+<para>&kivio;'s main window contains a view of the current document. The page outline and margins are shown, as is a grid. Surrounding this view are horizontal and vertical rules. By default a tools toolbar is placed on the left-hand side and beneath the document view is a page selector. Beneath that is the status bar which shows the current position of the mouse pointer as a location on the page.</para>
+<para>At the top of the window are the two main toolbars. These contain buttons for the most commonly used features of &kivio;.</para>
+</sect1>
+
+<sect1 id="stencils">
+<title>Using Stencils</title>
+<para>Diagrams are created by placing different pre-drawn shapes and stencils on the page. Stencils can represent many different things and &kivio; comes with a wide selection. For ease of reference they are grouped into collections known as stencil sets. To use a stencil set select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Add Stencil Set</guimenuitem></menuchoice>. The stencil sets have been sub-divided into several groups; a sub-menu lists these. The shapes in the stencil set are shown on the left-hand side of the document view.</para>
+<para>Stencils are grouped into stencil sets for organizational purposes only; it is perfectly okay to add several stencil sets to a document and &kivio; allows you to mix and match stencils from different sets freely.</para>
+<para>To place a stencil onto the document simply drag it from the stencil area to the page.</para>
+
+<sect2>
+<title>Selecting Stencils</title>
+<para>
+&kivio; identifies the stencil currently being edited by displaying eight green squares on the corners and edges of a square around the stencil. Stencils shown in this manner are described as being selected. The green rectangles are known as handles.
+To change the currently selected stencil move the mouse pointer over the stencil you wish to select and press the &LMB;.
+To select all the stencils on the current page select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Select All</guimenuitem></menuchoice>.
+To deselect all stencils select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Deselect</guimenuitem></menuchoice>.
+</para>
+</sect2>
+
+<sect2>
+<title>Moving Stencils</title>
+<para>
+To move a stencil to another position on the page, select the stencil. Note the pointer will change to a cross with four arrows. Hold down the &LMB; and move the mouse to the new position. Release the mouse button, and the stencil will move to the new position.</para>
+</sect2>
+
+<sect2>
+<title>Resizing a Stencil</title>
+<para>Select the stencil, and then move the mouse pointer over one of the handles.  Note the mouse pointer change. Hold down the &LMB; and move the mouse. The coordinates of the stencil will be adjusted continuously as the mouse is moved. When you are happy with the new size release the mouse button and the stencil will be resized.</para>
+</sect2>
+
+<sect2>
+<title>Undoing a Mistake</title>
+<para>If at any time you are unhappy with a change you have made to the document you can select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem></menuchoice> to revert the change. There is also an icon on the toolbar.</para>
+<para>If you undo an action and decide that was a mistake, select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Redo</guimenuitem></menuchoice> to restore the change. &kivio; stores multiple actions to undo/redo several changes.</para>
+</sect2>
+
+<sect2>
+<title>Limitations of the Stencils</title>
+<para>Note that stencils cannot currently be rotated.</para>
+</sect2>
+
+<sect2>
+<title>Labeling Stencils</title>
+<para>Stencils can contain text to describe their function. To add text to a stencil move the mouse pointer over the stencil and double-click it. A dialog box will appear prompting for some text. Enter some text and click <guibutton>OK</guibutton>. The text should be shown inside the stencil.</para>
+<para>The font, size, alignment and style of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text...</guimenuitem></menuchoice>. Alternatively use the buttons on the Format toolbar.
+The adjustments will only affect the currently selected stencil.</para>
+</sect2>
+
+<sect2>
+<title>Selecting Several Stencils</title>
+<para>There are two ways to select multiple stencils in &kivio;.</para>
+<orderedlist>
+<listitem>
+<para>Click once inside the first stencil you wish to select.
+	Hold down shift as you click inside subsequent stencils.
+	All the stencils will be shown with handles around them.</para>
+</listitem>
+<listitem>
+<para>Move the mouse pointer to a blank area of the document near the stencils you want to select.</para>
+<para>Hold down the &LMB; and move the mouse to the other side of the stencils you want to select, drawing a rectangle around them.</para>
+<para>The rectangle must completely encompass the stencils for them to be selected.
+</para>
+</listitem>
+</orderedlist>
+</sect2>
+
+<sect2>
+<title>Adjusting the Fill Color and Line Color</title>
+<para>Stencils can be filled with a solid color and the color of the outline can be changed. Select a stencil then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils &amp; Connectors</guimenuitem></menuchoice>.</para>
+<!--para>There is also a <guibutton>Set Background Color</guibutton> button on the Format toolbar. Clicking on the arrow to the right-hand side of this button will display a drop-down color selector. Clicking on the button itself will display a color palette allowing you to choose any color. A similar toolbar button exists to adjust the line color.</para-->
+</sect2>
+
+<sect2>
+<title>Adjusting the Line Thickness</title>
+<para>The width of a stencil's border can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils &amp; Connectors</guimenuitem></menuchoice>. The line width can be entered in centimeters or increased/decreased using the arrows of the spin box. Or use the <guibutton>Line Width</guibutton> button on the <guilabel>Format</guilabel> toolbar. Select a width from the drop down box or select <guilabel>Custom...</guilabel> to open enter the width in the spin box.</para>
+</sect2>
+
+<sect2>
+<title>Connecting Shapes Together</title>
+<para>&kivio;'s connector tool allows lines to be drawn between shapes. The lines remain connected to the shapes even when the shapes are moved to new positions on the page.</para>
+<para>The Connector tool is available from the <guilabel>Tools</guilabel> toolbar; by default shown on the left-hand side of the window. Click on this tool to begin using it; the mouse pointer will change shape.</para>
+<para>Notice that all stencils have little blue crosses around their edges. These crosses mark points where connectors can be attached.</para>
+<para>To connect two stencils move to one of the connection points on the first stencil, hold down the &LMB; and drag a line to one of the connection points on the second stencil. The green square at the end of the line will change to red when it is over a connection point indicating that the line is attached to a stencil. </para>
+<para>When you have finished using the connector tool, click on the <guiicon>Arrow</guiicon> tool to regain normal selection functionality.</para>
+<note><para>A stencil can have multiple connectors attached to it, even at the same connection point.</para></note>
+<para>Various properties of the connector can be adjusted including line thickness and color, this is done in the same way as for stencils.</para>
+<para>Connectors may also be labeled with text. To add text to a connector simply double-click on it and enter the text in the dialog that appears. The text will be shown with a green handle next to it. Use this to modify the position of the text.</para>
+<para>Arrowheads can be added to either end of a connector. Select the connector and then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Arrowheads</guimenuitem></menuchoice>.</para>
+<para>Limitations: Connectors do not currently reroute around stencils, you need to adjust them manually. Text is always displayed horizontally; rotated text is not currently possible. </para>
+</sect2>
+
+<sect2>
+<title>Grouping Stencils</title>
+<para>Several stencils may be semi-permanently grouped together. Once this has been done any changes made to one stencil will affect the others in the group.</para>
+<para>To make a group select the stencils and select <menuchoice><guimenu>Format</guimenu><guimenuitem>Group Selection</guimenuitem></menuchoice>.</para>
+<para>The procedure can be reversed by selecting a group of stencils and select <menuchoice><guimenu>Format</guimenu><guimenuitem>Ungroup</guimenuitem></menuchoice>.</para>
+</sect2>
+
+<sect2>
+<title>Overlaying Stencils</title>
+<para>Stencils can be positioned on top of one another. A stencil drawn on top of another stencil will obscure the stencil underneath it. To adjust the drawing order select one of the stencils and select either <menuchoice><guimenu>Format</guimenu><guimenuitem>Bring to Front</guimenuitem></menuchoice> or <menuchoice><guimenu>Format</guimenu><guimenuitem>Send to Back</guimenuitem></menuchoice>.</para>
+<para><guimenuitem>Send to Back</guimenuitem> will cause the stencil to be obscured by any stencil which overlaps it. <guimenuitem>Bring to Front</guimenuitem> will cause the stencil to obscure any stencil which it overlaps.</para>
+</sect2>
+
+<sect2>
+<title>Locking Stencils</title>
+<para>A stencil's properties may be <quote>locked</quote> to prevent accidental changes. To alter a stencil's protection use the protection palette. This can be displayed by selecting <menuchoice><guimenu>View</guimenu><guisubmenu>Palettes</guisubmenu><guimenuitem>Show Protection</guimenuitem></menuchoice>. Select the stencil or stencils you wish to protect and then tick the properties you want to protect on the protection palette.</para>
+<para>The protections available are: <guilabel>Width</guilabel>, <guilabel>Height</guilabel>, <guilabel>Aspect ratio</guilabel>, <guilabel>X position</guilabel>, <guilabel>Y position</guilabel> and <guilabel>Deletion</guilabel>. Deletion prevents a stencil from being deleted from the document.</para>
+</sect2>
+
+<sect2>
+<title>Stencil Geometry</title>
+<para>For accurately specifying the dimensions of a stencil use the Geometry palette. To display the palette select <menuchoice><guimenu>View</guimenu><guisubmenu>Palettes</guisubmenu><guimenuitem>Show Geometry</guimenuitem></menuchoice>. The palette contains four spin boxes for specifying the horizontal (<guilabel>X:</guilabel>) and vertical (<guilabel>Y:</guilabel>) position of the stencil and the <guilabel>Width:</guilabel> and <guilabel>Height:</guilabel>.</para>
+
+<tip><para>Although the measurements are displayed in centmeters it is possible to enter other units into the textbox. For example, entering 2.5 mm will be converted into centimeter. Points (pt) and inches (in) are also accepted.</para></tip>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="viewing">
+<title>Viewing the Document</title>
+
+<sect2>
+<title>Zooming In and Out</title>
+<para>To adjust the zoom level select <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom Level</guimenuitem></menuchoice>. This submenu contains a list of percentages from 33% to 500%; selecting one of these magnify the document by that percentage.</para>
+<para>There is also a list of zoom levels in a spin box on the <guilabel>Edit</guilabel> toolbar, by default shown at the top of the screen.</para>
+<para>A second method of controlling the magnification is to use the zoom tool. This is available on the <guilabel>Tools</guilabel> toolbar. This tool can be used in two ways. Clicking on the document with the zoom tool active will increase the magnification. Holding down the &Shift; key whilst clicking will decrease the magnification, &ie; zoom out.</para>
+<para>Alternatively, holding down the &LMB; and dragging out a box then releasing the mouse button will increase the magnification so that that portion of the document fills the available space.</para>
+</sect2>
+
+<sect2>
+<title>Panning the Document</title>
+<para>The <guiicon>Pan</guiicon> tool lets you move the document around, adjusting the portion that is visible. This is very useful when working at high magnifications where the entire document is not completely visible. The <guiicon>Pan</guiicon> tool shares a button with the zoom tool on the <guilabel>Tools</guilabel> toolbar. Once activated the mouse pointer turns into a hand. To move the document move the mouse over the currently visible portion, hold down the &LMB; and drag.</para>
+</sect2>
+
+<sect2>
+<title>The Overview</title>
+<para>The <guilabel>Overview</guilabel> palette provides a quick way of adjusting the zoom level and moving around the document. To enable it select <menuchoice><guimenu>View</guimenu><guisubmenu>Palettes</guisubmenu><guimenuitem>Overview</guimenuitem></menuchoice>.</para>
+<para>A miniature representation of the document itself is shown underneath. A red rectangle indicates the portion that is currently visible. Clicking anywhere on this representation pans the view to that area. The rectangle can also be dragged.</para>
+<para>At the bottom of the docker there is a slider and a spin box for adjusting the zoom level.</para>
+</sect2>
+
+<sect2>
+<title>Using Palettes</title>
+<para>All palettes have a handle on the top side which enables them to be moved around and positioned on any edge of the main view. They can also float anywhere on the screen. To hide or show a palette select it from  <menuchoice><guimenu>View</guimenu><guisubmenu>Palettes</guisubmenu></menuchoice>.</para>
+</sect2>
+
+<sect2>
+<title>Multiple Views</title>
+<para>It is possible to have multiple views of the same document displayed simultaneously.</para>
+<para>Select <guimenuitem>New View</guimenuitem> from the <guimenu>View</guimenu> menu and a new &kivio; window showing the same document will appear. This is very useful for multiple monitor setups.</para>
+<para>The additional windows can be closed and &kivio; will only prompt you to save the document when the last window is closed. All windows pertaining to a particular document can be closed simultaneously by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice>.</para>
+</sect2>
+
+<sect2>
+<title>Split Views</title>
+<para>It is also possible to split the window into two or more portions which can be used to view two areas of a document at once.
+To split a window select <menuchoice><guimenu>View</guimenu><guimenuitem>Split View</guimenuitem></menuchoice>. The orientation of the split can be changed from horizontal to vertical using <menuchoice><guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem></menuchoice>. To restore the window to its original state select <menuchoice><guimenu>View</guimenu><guimenuitem>Remove View</guimenuitem></menuchoice>.</para>
+</sect2>
+
+<!--sect2>
+<title>The View Manager</title>
+<para>The View Manager allows you to store the current display settings, including zoom level and position. You can then adjust the view and still be able to revert back to the previous settings. A number of different settings can be stored and given names for ease of reference.</para>
+<para>To display the View Manager choose <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>View Manager</guimenuitem></menuchoice>. The docker contains five buttons and a list of stored views.</para>
+<para>The first button, <guibutton>Add Current View</guibutton>, stores the current display settings. Once the settings have been stored you can modify the display settings. To revert to any one of the stored settings click on its name in the list.</para>
+<para>By default &kivio; labels the settings with the page number and the magnification level, to enter a more descriptive name click on the middle button, <guibutton>Rename Item</guibutton>; this lets you enter your own text.</para>
+<para>The second button, <guibutton>Remove Item</guibutton>, removes the currently selected set of stored settings.</para>
+<para>The final two buttons, <guibutton>Move Item Up</guibutton> and <guibutton>Move Item Down</guibutton>, allow the order of the settings in the list to be adjusted.</para>
+</sect2-->
+
+<sect2>
+<title>Customizing the Display</title>
+<para>The <guimenu>View</guimenu> menu contains options for toggling the display of page margins, rulers, guides and the grid.</para>
+</sect2>
+
+</sect1>
+
+</chapter>

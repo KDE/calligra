@@ -1,0 +1,16 @@
+   AC_LANG_SAVE
+   AC_LANG_C
+   dnl Check for aspell library
+   KDE_CHECK_HEADERS([kspell2/broker.h])
+   if test "x$ac_cv_header_kspell2_broker_h" = "xyes"; then
+           dnl the header and the lib exist -> ok
+           dnl this is for config.h
+           AC_DEFINE(HAVE_LIBKSPELL2, 1, [If we are going to use libkspell2 for spell-checking])
+           LIBKSPELL2="-lkspell2"
+           AC_MSG_RESULT([found in $ac_kspell2_includes])
+   else
+           LIBKSPELL2=""
+           AC_MSG_RESULT([not found -- spell-checking will be disabled])
+   fi
+   AC_SUBST(LIBKSPELL2)
+   AC_LANG_RESTORE

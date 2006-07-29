@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE spreadsheet PUBLIC "-//KDE//DTD kspread 1.2//EN" "http://www.koffice.org/DTD/kspread-1.2.dtd">
+<spreadsheet xmlns="http://www.koffice.org/DTD/kspread" mime="application/x-kspread" syntaxVersion="1" editor="KSpread" >
+ <defaults row-height="13" col-width="65" />
+ <styles>
+  <style type="0" name="Default" >
+   <format brushstyle="0" brushcolor="#ff0000" bgcolor="#ffffff" float="3" format="0" floatcolor="2" font-flags="0" indent="0" precision="-1" angle="0" factor="1" font-size="10" >
+    <pen width="0" style="1" color="#000000" />
+    <left-border>
+     <pen width="1" style="0" color="#000000" />
+    </left-border>
+    <top-border>
+     <pen width="1" style="0" color="#000000" />
+    </top-border>
+    <right-border>
+     <pen width="1" style="0" color="#000000" />
+    </right-border>
+    <bottom-border>
+     <pen width="1" style="0" color="#000000" />
+    </bottom-border>
+    <fall-diagonal>
+     <pen width="1" style="0" color="#000000" />
+    </fall-diagonal>
+    <up-diagonal>
+     <pen width="1" style="0" color="#000000" />
+    </up-diagonal>
+   </format>
+  </style>
+ </styles>
+ <map markerColumn="1" activeTable="Sheet1" markerRow="1" >
+  <table columnnumber="0" printZoom="1" borders="0" printPageLimitX="0" hide="0" printPageLimitY="0" hidezero="0" grid="0" firstletterupper="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="0" showFormula="0" lcmode="0" name="Sheet1" borders1.2="1" printCommentIndicator="0" >
+   <paper format="A4" orientation="Portrait" >
+    <borders right="20" left="20" bottom="20" top="20" />
+    <head/>
+    <foot/>
+   </paper>
+   <printrange-rect left-rect="0" right-rect="0" top-rect="0" bottom-rect="0" />
+   <printrepeatcolumns right="0" left="0" />
+   <printrepeatrows bottom="0" top="0" />
+   <cell row="1" column="3" >
+    <format style-name="Default" />
+   </cell>
+   <cell row="1" column="2" >
+    <format parent="Default" >
+     <font size="10" bold="yes" weight="75" />
+    </format>
+   </cell>
+   <cell row="14" column="4" >
+    <format>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="14" column="3" >
+    <format>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="14" column="2" >
+    <format>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="13" column="4" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="13" column="3" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="13" column="2" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="12" column="4" >
+    <format>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+    </format>
+   </cell>
+   <cell row="11" column="4" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="11" column="3" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="11" column="2" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="10" column="4" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+    </format>
+   </cell>
+   <cell row="10" column="3" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="10" column="2" >
+    <format>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="7" column="7" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="7" column="6" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="7" column="5" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="7" column="4" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="7" column="3" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="7" column="2" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="6" column="7" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="6" column="6" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="6" column="5" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="6" column="4" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="6" column="3" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="6" column="2" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="5" column="7" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="5" column="6" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="5" column="5" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="5" column="4" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="5" column="3" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="5" column="2" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="4" column="7" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="4" column="6" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="4" column="5" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="4" column="4" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="4" column="3" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="4" column="2" >
+    <format parent="Default" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
+   <cell row="3" column="7" >
+    <format brushstyle="0" brushcolor="#ff0000" bgcolor="#ffffff" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" parent="Default" precision="-1" angle="0" align="2" >
+     <font size="11" bold="yes" weight="75" />
+     <pen width="0" style="1" color="#000000" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+     <fall-diagonal>
+      <pen width="1" style="0" color="#000000" />
+     </fall-diagonal>
+     <up-diagonal>
+      <pen width="1" style="0" color="#000000" />
+     </up-diagonal>
+    </format>
+    <text outStr="Fri" dataType="Str" >Fri</text>
+   </cell>
+   <cell row="3" column="6" >
+    <format brushstyle="0" brushcolor="#ff0000" bgcolor="#ffffff" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" parent="Default" precision="-1" angle="0" align="2" >
+     <font size="11" bold="yes" weight="75" />
+     <pen width="0" style="1" color="#000000" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+     <fall-diagonal>
+      <pen width="1" style="0" color="#000000" />
+     </fall-diagonal>
+     <up-diagonal>
+      <pen width="1" style="0" color="#000000" />
+     </up-diagonal>
+    </format>
+    <text outStr="Thu" dataType="Str" >Thu</text>
+   </cell>
+   <cell row="3" column="5" >
+    <format brushstyle="0" brushcolor="#ff0000" bgcolor="#ffffff" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" parent="Default" precision="-1" angle="0" align="2" >
+     <font size="11" bold="yes" weight="75" />
+     <pen width="0" style="1" color="#000000" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+     <fall-diagonal>
+      <pen width="1" style="0" color="#000000" />
+     </fall-diagonal>
+     <up-diagonal>
+      <pen width="1" style="0" color="#000000" />
+     </up-diagonal>
+    </format>
+    <text outStr="Wed" dataType="Str" >Wed</text>
+   </cell>
+   <cell row="3" column="4" >
+    <format brushstyle="0" brushcolor="#ff0000" bgcolor="#ffffff" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" parent="Default" precision="-1" angle="0" align="2" >
+     <font size="11" bold="yes" weight="75" />
+     <pen width="0" style="1" color="#000000" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+     <fall-diagonal>
+      <pen width="1" style="0" color="#000000" />
+     </fall-diagonal>
+     <up-diagonal>
+      <pen width="1" style="0" color="#000000" />
+     </up-diagonal>
+    </format>
+    <text outStr="Tue" dataType="Str" >Tue</text>
+   </cell>
+   <cell row="3" column="3" >
+    <format parent="Default" align="2" >
+     <font size="11" bold="yes" weight="75" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Mon" dataType="Str" >Mon</text>
+   </cell>
+   <cell row="3" column="2" >
+    <format parent="Default" align="2" >
+     <font size="11" bold="yes" weight="75" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Sun" dataType="Str" >Sun</text>
+   </cell>
+   <cell row="9" column="2" >
+    <format style-name="Default" />
+   </cell>
+   <cell row="4" column="1" >
+    <format parent="Default" align="3" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Breakfast" dataType="Str" >Breakfast</text>
+   </cell>
+   <cell row="5" column="1" >
+    <format parent="Default" align="3" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Lunch" dataType="Str" >Lunch</text>
+   </cell>
+   <cell row="6" column="1" >
+    <format parent="Default" align="3" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Dinner" dataType="Str" >Dinner</text>
+   </cell>
+   <cell row="7" column="1" >
+    <format parent="Default" align="3" >
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <right-border>
+      <pen width="1" style="1" color="#000000" />
+     </right-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Misc" dataType="Str" >Misc</text>
+   </cell>
+   <cell row="9" column="1" >
+    <format style-name="Default" />
+    <text outStr="Groceries List" dataType="Str" >Groceries List</text>
+   </cell>
+   <cell row="10" column="1" >
+    <format bgcolor="#e5e5e5" align="2" >
+     <font size="10" weight="50" italic="yes" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+    <text outStr="Produce" dataType="Str" >Produce</text>
+   </cell>
+   <cell row="11" column="1" >
+    <format bgcolor="#e5e5e5" align="2" >
+     <font size="10" weight="50" italic="yes" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Dairy" dataType="Str" >Dairy</text>
+   </cell>
+   <cell row="12" column="1" >
+    <format bgcolor="#e5e5e5" align="2" >
+     <font size="10" weight="50" italic="yes" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+    </format>
+    <text outStr="Beverages" dataType="Str" >Beverages</text>
+   </cell>
+   <cell row="13" column="1" >
+    <format bgcolor="#e5e5e5" align="2" >
+     <font size="10" weight="50" italic="yes" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Meat" dataType="Str" >Meat</text>
+   </cell>
+   <cell row="14" column="1" >
+    <format bgcolor="#e5e5e5" align="2" >
+     <font size="10" weight="50" italic="yes" />
+     <left-border>
+      <pen width="1" style="1" color="#000000" />
+     </left-border>
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+    <text outStr="Bread" dataType="Str" >Bread</text>
+   </cell>
+   <cell row="1" column="1" >
+    <format parent="Default" >
+     <font size="22" bold="yes" weight="75" />
+    </format>
+    <text outStr="Menu Plan" dataType="Str" >Menu Plan</text>
+   </cell>
+   <row row="2" height="13" >
+    <format style-name="Default" />
+   </row>
+   <row row="3" height="20" >
+    <format style-name="Default" />
+   </row>
+   <row row="4" height="45.3544" >
+    <format style-name="Default" />
+   </row>
+   <row row="5" height="45.3544" >
+    <format style-name="Default" />
+   </row>
+   <row row="6" height="45.3544" >
+    <format style-name="Default" />
+   </row>
+   <row row="7" height="45.3544" >
+    <format style-name="Default" />
+   </row>
+   <row row="8" height="20" >
+    <format style-name="Default" />
+   </row>
+   <row row="9" height="13" >
+    <format style-name="Default" />
+   </row>
+   <row row="10" height="42.5198" >
+    <format style-name="Default" />
+   </row>
+   <row row="11" height="42.5198" >
+    <format style-name="Default" />
+   </row>
+   <row row="12" height="42.5198" >
+    <format style-name="Default" />
+   </row>
+   <row row="13" height="42.5198" >
+    <format style-name="Default" />
+   </row>
+   <row row="14" height="42.5198" >
+    <format style-name="Default" />
+   </row>
+   <row row="15" height="20" >
+    <format style-name="Default" />
+   </row>
+   <row row="16" height="13" >
+    <format style-name="Default" />
+   </row>
+   <row row="17" height="20" >
+    <format style-name="Default" />
+   </row>
+   <row row="18" height="20" >
+    <format style-name="Default" />
+   </row>
+   <row row="20" height="20" >
+    <format style-name="Default" />
+   </row>
+   <row row="22" height="20" >
+    <format style-name="Default" />
+   </row>
+   <row row="24" height="20" >
+    <format style-name="Default" />
+   </row>
+   <row row="1" height="27" >
+    <format style-name="Default" />
+   </row>
+   <column width="60" column="14" >
+    <format style-name="Default" />
+   </column>
+   <column width="60" column="12" >
+    <format style-name="Default" />
+   </column>
+   <column width="60" column="11" >
+    <format style-name="Default" />
+   </column>
+   <column width="60" column="10" >
+    <format style-name="Default" />
+   </column>
+   <column width="60" column="9" >
+    <format style-name="Default" />
+   </column>
+   <column width="65" column="8" >
+    <format style-name="Default" />
+   </column>
+   <column width="65" column="7" >
+    <format style-name="Default" />
+   </column>
+   <column width="65" column="4" >
+    <format style-name="Default" />
+   </column>
+   <column width="66.4" column="1" >
+    <format style-name="Default" />
+   </column>
+   <column width="60" column="5" >
+    <format style-name="Default" />
+   </column>
+   <column width="60" column="6" >
+    <format style-name="Default" />
+   </column>
+   <column width="60" column="2" >
+    <format style-name="Default" />
+   </column>
+   <column width="60" column="3" >
+    <format style-name="Default" />
+   </column>
+  </table>
+ </map>
+</spreadsheet>

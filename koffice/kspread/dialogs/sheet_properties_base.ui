@@ -1,0 +1,258 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KSpread::SheetPropertiesBase</class>
+<comment>This file is part of the KDE project
+Copyright (C) 2004 Ariya Hidayat &lt;ariya@kde.org&gt;
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public
+License along with this library; see the file COPYING.LIB.  If not,
+write to the Free Software Foundation, Inc., 51 Franklin Street,
+Fifth Floor, Boston, MA 02110-1301, USA.</comment>
+<author>Ariya Hidayat &lt;ariya@kde.org&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SheetPropertiesBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>408</width>
+            <height>206</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>1</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>SheetPropertiesBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Layout direction:</string>
+                            </property>
+                        </widget>
+                        <widget class="KComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>Left to Right</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Right to Left</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>directionComboBox</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Defaut is that the first column of the sheet is on the left. If you choose Right to Left, then the first column will be on the right and the others added from right to left.</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout4</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="4" column="1">
+                    <property name="name">
+                        <cstring>showCommentIndicatorCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show c&amp;omment indicator</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If this box is checked cells containing comments will be marked by a small red triangle at the top right corner.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="0">
+                    <property name="name">
+                        <cstring>useLCModeCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Use &amp;LC mode</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If this box is checked the cell reference shown at the left end of the Formula Bar will be displayed in LC mode (i.e. L2C3) rather than in its normal form B3. This does not seem to be of much use at the moment.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>showPageBordersCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show page &amp;borders</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If you check this option, the page borders will be drawn on your current sheet. Per default the page borders are not displayed. It is useful to see the page borders if you want to print your sheet.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="4" column="0">
+                    <property name="name">
+                        <cstring>capitalizeFirstLetterCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Convert first letter to uppercase</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Check this box and the first letter of any text you type in will automatically be converted to uppercase.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>hideZeroCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Hide zero</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If this box is checked any cell containing the value zero will appear blank.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="1">
+                    <property name="name">
+                        <cstring>showFormulaCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show &amp;formula</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If this box is checked KSpread will display the actual formulae in cells rather than the results.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>showColumnAsNumbersCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show column as &amp;numbers</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If this box is checked the column headings will show as numbers rather than as letters. Letters are default.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="3" column="1">
+                    <property name="name">
+                        <cstring>showFormulaIndicatorCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show formula &amp;indicator</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If this box is checked KSpread will display a small blue triangle at the bottom left corner of cells containing formulae. This is useful if you want to protect cells with formulae.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>showGridCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show &amp;grid</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked the grid (the cell limits) will be shown. This is default. If you uncheck it, the grid willl be hidden.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>autoCalcCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Automatic recalculation</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This setting controls whether formulae are recalculated automatically when the value of any cell they refer to changes.</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+</includehints>
+</UI>

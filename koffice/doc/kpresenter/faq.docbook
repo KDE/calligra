@@ -1,0 +1,53 @@
+<chapter id="q-and-a">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Questions and Answers</title>
+<subtitle>&kpresenter; 1.3</subtitle>
+
+<para>Things you might like but &kpresenter; does not yet do (and what
+to do about it)</para>
+
+<!--
+ FIXME: Does video embedding via kmplayer or kaboodle work?
+
+<para>Movies or video. You cannot run video within &kpresenter;. If
+you really need to show a movie, make a link to it on your desktop,
+move &kpresenter; out of the way, click the link to the movie file and
+use <application>mplayer</application> (or similar) to view it.</para>
+  -->
+
+<para><application>Powerpoint</application> Files. &kpresenter; does
+attempt to import &Microsoft; <application>Powerpoint</application>
+files but it does not always work perfectly. It depends on the
+<application>Powerpoint</application> file version and what is in the
+file. You can always import pictures for the background image and
+re-type any text. It's not the ideal solution, re-doing the entire
+presentation. However, just bear in mind that
+<application>Powerpoint</application> does not even attempt to read
+&kpresenter; files.</para>
+
+<para>Taking notes or minutes. One piece of software allows you to
+make notes during the meeting and puts them into a word
+processor. If you are speaking, someone else should be taking notes. If
+you really must do this sort of thing, take a note pad and pencil.
+
+</para>
+
+</chapter>

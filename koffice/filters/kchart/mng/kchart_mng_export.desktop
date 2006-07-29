@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+X-KDE-Import=application/x-kchart
+X-KDE-Export=video/x-mng
+X-KDE-Weight=1
+X-KDE-Library=libkchartmngexport
+ServiceTypes=KOfficeFilter

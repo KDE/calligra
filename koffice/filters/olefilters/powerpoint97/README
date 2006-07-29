@@ -1,0 +1,47 @@
+The Powerpoint filter design has these components:
+
+powerpointfilter.h
+powerpoint.h
+pptdoc.h
+pptxml.h
+
+These are described in turn below.
+
+powerpointfilter.h
+==================
+
+This is the interface to the KOffice filter architecture. It is invoked from
+olefilter when an OLE file is detected to have a Powerpoint document in it.
+
+powerpoint.h
+============
+
+This is the actual parser. It is designed to walk the Powerpoint file and is
+not intended to have much embedded knowledge beyond that required to invoke
+a series of virtual functions when it recognises low level objects. See also
+pptdoc.h.
+
+In principle, each record in the Powerpoint file is modelled as a structure
+defined in powerpoint.h, as well as a virtual function callback to output it.
+In practice, this is true only of records that contain data. Records that are
+simply containers for other records don't have an associated structure, but
+instead have two callbacks, one each marking entry to and exit from the 
+container.
+
+pptdoc.h
+========
+
+The purpose of pptdoc.h is to take the output from powerpoint.h and create a
+high level interface to the Powerpoint file contents. The idea is that it can
+take the low output from powerpoint.h and aggregate it into objects at a more
+useful level of abstraction.
+
+The output of this is again via a series of virtual function callbacks.
+Subclasses of pptdoc.h can simply override the callbacks for the objects of 
+interest.
+
+pptxml.h
+========
+
+This is a subclass of pptdoc.h that produces kpresenter-compatible XML which
+is delivered to kpresenter via powerpointfilter.h.

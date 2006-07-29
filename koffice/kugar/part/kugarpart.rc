@@ -1,0 +1,21 @@
+<!DOCTYPE kpargui>
+<kpartgui name="kugar" >
+ <MenuBar>
+  <Menu name="view" >
+   <Text>&amp;View</Text>
+   <Separator/>
+   <Action name="kuPrevPage" />
+   <Action name="kuNextPage" />
+   <Separator/>
+   <Action name="kuFirstPage" />
+   <Action name="kuLastPage" />
+  </Menu>
+ </MenuBar>
+ <ToolBar name="Metaphrast-ToolBar" >
+   <Action name="kuPrevPage" />
+   <Action name="kuNextPage" />
+   <Action name="kuFirstPage" />
+   <Action name="kuLastPage" />
+ </ToolBar>
+<!-- <StatusBar/> -->
+</kpartgui>

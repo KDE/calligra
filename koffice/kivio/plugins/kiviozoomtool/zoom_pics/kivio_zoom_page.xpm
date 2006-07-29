@@ -1,0 +1,25 @@
+/* XPM */
+static const char *magick[] = {
+"16 16 5 1",
+"  c Gray0",
+". c Cyan",
+"X c #868686",
+"o c None",
+"O c Gray100",
+"oooooooooooooooo",
+"o             oo",
+"o OOOOOOOOOOO oo",
+"o OOOOOOOOOOO Xo",
+"o OOO   OOOOO Xo",
+"o OO .O. OOOO Xo",
+"o O .O.O. OOO Xo",
+"o O O.O.O OOO Xo",
+"o O .O.O. OOO Xo",
+"o OO .O. XOOO Xo",
+"o OOO   X XOO Xo",
+"o OOOOOOOX XO Xo",
+"o OOOOOOOOX X Xo",
+"o OOOOOOOOOX  Xo",
+"o OOOOOOOOOOO Xo",
+"o             Xo"
+};

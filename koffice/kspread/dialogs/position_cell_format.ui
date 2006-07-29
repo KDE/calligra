@@ -1,0 +1,411 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>PositionTab</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>PositionTab</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>349</width>
+            <height>337</height>
+        </rect>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>7</number>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0">
+            <property name="name">
+                <cstring>horizontalGroup</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Horizontal</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;qt&gt;Set the content position horizontally in the cell.
+&lt;b&gt;Standard&lt;/b&gt; is default and is set from the format you choose.
+&lt;b&gt;Left&lt;/b&gt; means the content will be displayed on the left of the cell.
+&lt;b&gt;Center&lt;/b&gt; means the content will be in the center horizontally in the cell.
+&lt;b&gt;Right&lt;/b&gt; means the content of the cell will be displayed on the right of the cell.&lt;/qt&gt;</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>standard</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Standard</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout1</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>left</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Left</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>center</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Center</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>right</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Right</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QButtonGroup" row="0" column="1">
+            <property name="name">
+                <cstring>buttonGroup2</cstring>
+            </property>
+            <property name="title">
+                <string>Vertical</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;qt&gt;Set the content position vertically in the cell.
+&lt;b&gt;Top&lt;/b&gt; means the content will be displayed on top of the cell.
+&lt;b&gt;Middle&lt;/b&gt; means the content will be in the middle vertically in the cell.
+&lt;b&gt;Bottom&lt;/b&gt; means the content of the cell will be displayed at the bottom of the cell.&lt;/qt&gt;</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>top</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Top</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>middle</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Middle</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>bottom</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Bottom</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox" row="1" column="1">
+            <property name="name">
+                <cstring>groupBox4</cstring>
+            </property>
+            <property name="title">
+                <string>Rotation</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Your text will appear oriented in the angle you set here. Positive values will move it counter-clockwise and negative values will move it clockwise.</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>angleRotation</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>-90</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>90</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>15</number>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>spinBox3</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string>°</string>
+                    </property>
+                    <property name="maxValue">
+                        <number>90</number>
+                    </property>
+                    <property name="minValue">
+                        <number>-90</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>1</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="1" column="0">
+            <property name="name">
+                <cstring>groupBox3</cstring>
+            </property>
+            <property name="title">
+                <string>Text Option</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>This is only available when the rotation is 0°.
+Wrap text wraps the text so it fits in the previous cell size. If this is not checked, the text will stay on one line and the cell size will be adjusted to contain the text.
+Vertical text puts your text vertically.</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>multi</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Wrap text</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>vertical</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Vertical text</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox" row="2" column="1">
+            <property name="name">
+                <cstring>indentGroup</cstring>
+            </property>
+            <property name="title">
+                <string>Indent</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Set the amount of indent that will be used in the cell when you choose the Format -&gt; Increase Indent or Format -&gt; Decrease Indent menus.</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0">
+            <property name="name">
+                <cstring>groupBox5</cstring>
+            </property>
+            <property name="title">
+                <string>Merge Cells</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>When checked, this has the same effect as Data -&gt;Merge Cells. You need to have at least two consecutive cells selected. Those consecutive cells are then merged into a bigger one.
+When a merged cell is selected and when you uncheck this, then all cells come back to their original size as before the merging. It has the same effect as Data -&gt; Dissociate Cells.</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>mergeCell</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Merge cells</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>sizeCellGroup</cstring>
+            </property>
+            <property name="title">
+                <string>Size of Cell</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The unit used here is the one set in Format -&gt; Page Layout.. dialog.</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>layout3</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>defaultHeight</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Default height (%1)</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If checked, the default height will be used for the cell instead of the value above.</string>
+                            </property>
+                        </widget>
+                        <spacer row="0" column="2">
+                            <property name="name">
+                                <cstring>spacer2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>MinimumExpanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>10</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Height:</string>
+                            </property>
+                        </widget>
+                        <widget class="QFrame" row="0" column="1">
+                            <property name="name">
+                                <cstring>m_heightPanel</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Raised</enum>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Set the height of the cell.</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>defaultWidth</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Default width (%1)</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If checked, the default width will be used for the cell instead of the value above.</string>
+                            </property>
+                        </widget>
+                        <spacer row="0" column="2">
+                            <property name="name">
+                                <cstring>spacer1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>MinimumExpanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>16</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QFrame" row="0" column="1">
+                            <property name="name">
+                                <cstring>m_widthPanel</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Raised</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Width:</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>angleRotation</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>spinBox3</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>spinBox3</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>angleRotation</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

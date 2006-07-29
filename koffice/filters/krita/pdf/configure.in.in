@@ -1,0 +1,4 @@
+# Compile the pdf import filter only if Poppler is available
+PKG_CHECK_MODULES(POPPLER, poppler-qt >= 0.5.1, have_poppler=yes, have_poppler=no)
+
+AM_CONDITIONAL(include_PDF, test "x$have_poppler" = xyes) 

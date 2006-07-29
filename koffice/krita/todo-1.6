@@ -1,0 +1,74 @@
+Things To Do for 1.6
+
+Please update & commit this list with every fix you make
+
+? = Alice Nonymus
+A = Adrian Page
+B = Casper Boemann
+C = Cyrille Berger
+R = Boudewijn Rempt
+P = Bart Coppens
+G = Gábor Level
+S = Sander Koning
+TZ = Thomas Zander (to refer to his ui hints)
+
+Colorspaces
+
+R  * Fix drying the wet colorspace
+R  * Fix fill in wet
+
+Core
+
+?  * Use the nextCol/nextRow of the line iterators wherever possible to get a speed boost.
+
+User interface
+
+?  * after hiding and reshowing all palettes, the wrong ones are active
+
+Plugins
+
+C  * finish, polish and document scripting support
+P  * Select By Color -> Sample Merged
+P  * Select plugins with sample merged -> default to sample merged when active layer is adj layer
+P  * See if it could be interesting to make the color select tool update while dragging
+
+Release
+
+R  * develop thorough test plan and exercise it on several installations
+     before release
+
+Bugs
+
+?  * Grow Selection doesn't seem to work on adj layers, investigate
+?  * Select Rect/Circle -> doesn't erase the XOR'ed outline on the KisCanvas
+?  * Selection Tools with Select All, Deselect and so don't play completely nicely with adj layers
+
+Also: see UIcomments!
+
+Michael's bugs:
+
+* Open an image, add image as new layer, resize layer, undo: undo removes the layer
+* open an image, add an adjustment layer to the image (I used the pixelize 
+  filter). Click on the original layer in the layer dialog box and paint 
+  something. The undo the painting and undo add layer. Krita's toolbox will 
+  become greyed out and you can't paint. I think this is already a bug and 
+  should be fixed. But next, try to add an adjustment layer again -> Krita 
+  crashes.
+* The shrink etc selection are enabled when there is no selection
+* select by colorrange does not actually set the selection (or something like that)
+
+Regressions
+
+? saving 16 bit grayscale to jpeg silently converts to 8 bit grayscale (actually it's not a regression, saving to both 8bits and 16bits jpeg with the same build is impossible with libjpeg)
+? zooming in leaves display artefacts (see Bart's mail)
+? rotate is broken for large images
+? rotate visitor is used where transform visitor should be used
+? undoing a rotation when a selection is active leads to weird results
+
+Painting with filters
+
+? sharpen: works badly, paints circles -- this used to be okay!
+? small tiles: makes circles, otherwise effect is fun
+
+Note: make kivio flowchart of what happens when painting with and without filters,
+with and without selection, direct or indirect, because I don't follow anymore

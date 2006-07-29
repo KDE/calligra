@@ -1,0 +1,138 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="kivio" version="29">
+  <MenuBar>
+    <Menu name="file">
+      <Action name="installStencilSet"/>
+      <Separator/>
+    </Menu>
+    <Menu name="Edit"><text>&amp;Edit</text>
+      <Action name="koffice_undo"/>
+      <Action name="koffice_redo"/>
+      <Separator/>
+      <Action name="cutStencil"/>
+      <Action name="copyStencil"/>
+      <Action name="pasteStencil"/>
+      <Action name="deleteObject"/>
+      <Separator/>
+      <Action name="selectAllStencils"/>
+      <Action name="unselectAllStencils"/>
+      <Separator/>
+    </Menu>
+    <Menu name="View"><text>&amp;View</text>
+      <Action name="view_newview"/>
+      <ActionList name="view_closeallviews"/>
+      <Separator/>
+      <ActionList name="view_split"/>
+      <Separator/>
+      <Action name="showPageMargins"/>
+      <Action name="showRulers"/>
+      <Action name="showGuides"/>
+      <Action name="addGuideLine"/>
+      <Action name="showGrid"/>
+      <Action name="snapGrid"/>
+      <Separator/>
+      <Action name="view_palette_action_menu"/>
+      </Menu>
+    <Menu name="Page"><text>P&amp;age</text>
+      <Action name="insertPage"/>
+      <Action name="removePage"/>
+      <Separator/>
+      <Action name="hidePage"/>
+      <Action name="showPage"/>
+    </Menu>
+    <Menu name="Format"><text>F&amp;ormat</text>
+      <Action name="textFormat"/>
+      <Action name="stencilFormat"/>
+      <Action name="arrowHeadFormat"/>
+      <Separator/>
+      <Action name="alignStencils"/>
+      <Separator/>
+      <Action name="groupStencils"/>
+      <Action name="ungroupStencils"/>
+      <Separator/>
+      <Action name="sendStencilToBack"/>
+      <Action name="bringStencilToFront"/>
+      <Separator/>
+      <Action name="paperLayout"/>
+    </Menu>
+    <Menu name="Tools"><text>&amp;Tools</text>
+      <Action name="addStencilSet"/>
+      <Separator/>
+    </Menu>
+    <Menu name="settings"><text>&amp;Settings</text>
+      <Separator group="settings_show"/>
+      <Action name="options" group="settings_configure"/>
+    </Menu>
+  </MenuBar>
+  
+  <ToolBar name="EditToolBar" fullWidth="false"><text>Edit</text>
+    <Action name="koffice_undo"/>
+    <Action name="koffice_redo"/>
+    <Separator/>
+    <Action name="cutStencil"/>
+    <Action name="copyStencil"/>
+    <Action name="pasteStencil"/>
+  </ToolBar>
+  
+  <ToolBar name="ToolsToolBar" fullWidth="false"><text>Tools</text>
+    <Action name="addStencilSet"/>
+    <Separator/>
+  </ToolBar>
+  
+  <ToolBar name="TextBar" fullWidth="false"><text>Text Format</text>
+    <Action name="setFontFamily"/>
+    <Action name="setFontSize"/>
+    <Separator/>
+    <Action name="setFontBold"/>
+    <Action name="setFontItalics"/>
+    <Action name="setFontUnderline"/>
+    <Separator/>
+    <Action name="setHTextAlignment"/>
+    <Action name="setVTextAlignment"/>
+    <Action name="textAlignLeft"/>
+    <Action name="textAlignCenter"/>
+    <Action name="textAlignRight"/>
+  </ToolBar>
+  
+  <ToolBar name="FormatToolBar" fullWidth="false"><text>Format</text>
+    <Action name="setTextColor"/>
+    <Action name="setFGColor"/>
+    <Action name="setBGColor"/>
+    <Separator/>
+    <Action name="arrowHeads"/>
+    <Action name="setLineWidth"/>
+    <Action name="setLineStyle"/>
+  </ToolBar>
+  
+  <Menu name="menupage_popup">
+    <Action name="renamePage"/>
+    <Action name="insertPage"/>
+    <Action name="removePage"/>
+  </Menu>
+  
+  <Menu name="PagePopup">
+    <Action name="cutStencil"/>
+    <Action name="copyStencil"/>
+    <Action name="pasteStencil"/>
+    <Separator/>
+    <Action name="paperLayout"/>
+  </Menu>
+  
+  <Menu name="StencilPopup">
+    <MergeLocal name="topMerge"/>
+    <Separator/>
+    <Action name="cutStencil"/>
+    <Action name="copyStencil"/>
+    <Action name="pasteStencil"/>
+    <Separator/>
+    <Action name="alignStencils"/>
+    <Separator/>
+    <Action name="groupStencils"/>
+    <Action name="ungroupStencils"/>
+    <Separator/>
+    <Action name="sendStencilToBack"/>
+    <Action name="bringStencilToFront"/>
+    <Separator/>
+    <MergeLocal/>
+  </Menu>
+</kpartgui>

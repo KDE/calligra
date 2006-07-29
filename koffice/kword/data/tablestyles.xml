@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TABLESTYLES>
+  <TABLESTYLE>
+      <NAME value="Plain"/>
+      <PFRAMESTYLE name="Plain"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Simple 1"/>
+      <PFRAMESTYLE name="Borders 1"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Simple 2"/>
+      <PFRAMESTYLE name="Borders 2"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Simple 3"/>
+      <PFRAMESTYLE name="Borders 3"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Row"/>
+      <PFRAMESTYLE name="Row"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Column"/>
+      <PFRAMESTYLE name="Column"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Header 1"/>
+      <PFRAMESTYLE name="Light Gray"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Header 2"/>
+      <PFRAMESTYLE name="Light Blue"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Header 3"/>
+      <PFRAMESTYLE name="Dark Gray"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+  <TABLESTYLE>
+      <NAME value="Header 4"/>
+      <PFRAMESTYLE name="Dark Blue"/>
+      <PSTYLE name="Standard"/>
+  </TABLESTYLE>
+</TABLESTYLES>

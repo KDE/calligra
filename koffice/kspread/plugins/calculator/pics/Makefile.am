@@ -1,0 +1,4 @@
+
+KDE_ICON = kspreadcalc
+
+

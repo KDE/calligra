@@ -1,0 +1,72 @@
+Notes about the use of the OpenDocument format in kword:
+-------------------------------------------------
+
+* Tables
+In OpenDocument, tables are treated like paragraphs.
+In KWord, tables are either "inline as character" or "at a fixed position".
+This gives three cases:
+  + inline table, alone in its paragraph -> can be saved the OpenDocument way.
+  + inline table with other things in the paragraph -> wrapper frame+textbox needed
+       The wrapper frame is marked with a koffice-specific attribute, koffice:is-wrapper-frame="true".
+       Upon loading, the wrapper textbox is removed if it doesn't contain anything else.
+  + fixed-position table -> wrapper frame+textbox would be needed here too.
+       But anyway those tables are very difficult to handle, and offer nothing
+       compared to "putting an inline table in a non-inline textbox", so I have disabled them.
+
+* Frame behavior on new pages
+KWord supports "What happens on new page: create a new frame and reconnect, no followup, make copy."
+OpenDocument doesn't, but this doesn't matter, it doesn't affect rendering of existing documents, only editing.
+So we save this with a koffice:frame-behavior-on-new-page attribute, possible values:
+followup, copy or none. Default value: copy for header/footers, none otherwise.
+
+* DTP
+KWord supports both the normal word processing (paragraphs directly inside the body)
+and the page-based DTP mode (page-sequence element).
+
+* Headers and footers
+OpenDocument supports odd/even headers and footers using "header" and "header-left".
+But for first page header/footer KWord should create a separate page layout,
+this is not done yet (it uses its own tag instead, as a temporary hack).
+Also OpenDocument doesn't allow a different style for header and header-left,
+so they must have the same min-size, border, margins...
+
+* Columns
+OpenDocument has "number of columns" and "space between columns", so it's OK for kword.
+OOo however also supports columns of different sizes and with different spaces, we can't load that.
+
+Notes about interoperability with OpenOffice.org-2.0:
+-----------------------------------------------------
+
+List of bugs in OOo-1.9.113 affecting interoperability:
+ - <text:notes-configuration text:note-class="footnote"...> uses 0-based values for text:start-value instead of 1-based (private mail sent)
+ - DTP mode not really supported; but even with single page, frames are misplaced (private mail sent)
+ - <text:numbered-paragraph> isn't loaded!!! http://www.openoffice.org/issues/show_bug.cgi?id=52127
+
+List of bugs in OOo-1.9.113 not affecting interoperability:
+ - style:text-underline-type="single" is missing for underlined text, only style is specified (code has workaround)
+ - display-levels not respected in chapters.odt
+
+List of features that KWord has, but OOo doesn't have, and which are in the OpenDocument standard:
+ - OOo doesn't load nor save the cursor-position processing instruction 
+ - DTP mode (page-sequence)
+ - frame break (we model it with fo:break-after="column" in the paragraph style)
+ - copy-frames (probably)
+ - hyphenation bool as character property, for more control (probably)
+ - diagonal lines in table cells (probably)
+ - line style for footnote separator (probably)
+ - table templates (probably)
+ - DTP mode using the draw:page element (probably)
+ - (after 1.0) border around a word or any run of text (probably)
+
+List of features that KWord doesn't have, and which OpenDocument has:
+ (that list would be quite long, but let's list the real-life interoperability problems)
+ - lack of section support (changes of page layout, but also changes of column settings
+   in the middle of a page)
+   We could at least keep section styles and section markers (begin/end),
+    so that load+save preserves it.
+ - some anchoring options are not supported, e.g. paragraph-anchored frames. We load
+    them as page-anchored frames, but this means the placement is wrong, obviously.
+
+Differences in rendering:
+ - In KWord endnotes are right under the end of the text; in OOo they are on a separate page.
+

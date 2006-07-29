@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>KOffice filters status: RTF FILTER</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
+<A NAME="START">&nbsp;</A>
+
+<BR>
+<center>
+ <h1>
+  KOffice filters status: &nbsp;&nbsp;<i>RTF FILTER</i>
+ </h1>
+</center>
+
+<hr NOSHADE SIZE=2 WIDTH="70%">
+
+<font size="-1"><b>
+ <A HREF="#import">Import</A> |
+ <A HREF="#export">Export</A>
+</b></font>
+
+<BR><BR><BR>
+<center><a NAME="import"></a></center>
+
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000" WIDTH="100%">
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH="100%">
+
+    <tr BGCOLOR="#DDFFDD">
+     <td COLSPAN="2">
+      <center><b><i><font size="+1">
+       <BR>
+        Import RTF for kword<BR>
+       <BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH="1%" NOWRAP><b><font size="+1">Last update</font></b></td>
+     <td>2003-09-01</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Features</font></b></td>
+     <td>
+       - Document information (author, title, comments, company).<br>
+       - Page size and margins.<br>
+       - Headers and footers (with margins).<br>
+       - Tables (including non-rectangular), horizontal alignment.<br>
+       - Table cell background color and borders (style, color, width).<br>
+       - Embedded pictures (JPEG/PNG/BMP) and clipart (EMF/WMF).<br>
+       - Word 97-2000 picture support.<br>
+       - Style sheet.<br>
+       - Character formatting (size, color, bold, italic, underline, strikeout, subscript, superscript...).<br>
+       - Font mapping (using QFont/QFontInfo).<br>
+       - Paragraph layout (horizontal alignment, indents, space before/after, frame break).<br>
+       - Paragraph borders (style, color, width).<br>
+       - Tabulators, automatic tabulator for hanging indent.<br>
+       - Unicode and codepages support.<br>
+       - Special characters.<br>
+       - Footnotes.<br>
+       - Fields (time, date, page number, symbol etc.).<br>
+       - Hyperlinks.<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Todo</font></b></td>
+     <td>
+       - Fix line spacing.<br>
+       - Columns.<br>
+       - Improve list handling.<br>
+       - Shaps, especially picture that are in shapes<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">History</font></b></td>
+     <td>
+       15 July 2001: First useful version (rewritten for QDom).<br>
+       18 July 2001: Fixed function <code>finishTable()</code> (some tables crashed KWord).<br>
+       23 July 2001: Added table alignment, background color and cell borders.<br>
+       31 August 2001: Faster version, uses read buffers and optimized XML output.<br>
+       2 October 2001: Clipart import fixed (requires libwmf).<br>
+       23 July 2002: Added field and hyperlink support, fixed embedded pictures.<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Authors&nbsp;</font></b></td>
+     <td>
+      <A HREF="mailto:ewald@rambo.its.tudelft.nl">Ewald Snel</A><br>
+      <A HREF="mailto:grotk@poczta.onet.pl">Tomasz Grobelny</A>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Links</font></b></td>
+     <td><A HREF="ftp://x2ftp.oulu.fi/pub/msdos/programming/formats/rtfspec.zip">Fileformat discription</A></td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Progress report </font></b></td>
+     <td>
+     The filter produces a useful KWord document from most RTF files.
+     </td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+
+<br><br><br>
+
+<hr NOSHADE SIZE=1>
+<br><br><br>
+
+
+<center>
+ <a NAME="export"></a>
+</center>
+
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000"  WIDTH="100%">
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH="100%">
+    <tr BGCOLOR="#FFDDDD">
+     <td COLSPAN="2">
+      <center><b><i><font size="+1">
+       <BR>Export kword to RTF<BR><BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH="1%" NOWRAP><b><font size="+1">Last update</font></b></td>
+     <td>
+	     2005-02-12
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Features</font></b></td>
+     <td>
+       - Character conversion, including Unicode.  <br>
+       - Text formatting. (font, size, weight, italic, underline, colour, etc.) <br>
+       - Table presentations (with cell borders). <br>
+       - Page sizes. <br>
+       - Margins. <br>
+       - Document information. (author, title, etc.).<br>
+       - Tabulator tags .<br>
+       - Page headers.<br>
+       - Page footers.<br>
+       - Date markers.<br>
+       - Time markers.<br>
+       - Page numbers.<br>
+       - Pictures.<br>
+       - Page hard breaks.<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Todo</font></b></td>
+     <td>
+       - Footnotes and endnotes(only partially done).<br>
+       - Multi column.<br>
+       - Text boxes.<br>
+       - Kpart inserts (kspread, kpresenter, etc.).<br>
+       - Identification of the ansi code page.<br>
+       - Multi-strike markup. (no current plans).<!-- What is that?--><br>
+       - Bidirectional markup. (no current plans).<br>
+       - Paragraph numbering. (Head 1,2,3 Numeric, Alpha, Roman, bullet)<br>
+       - Multi level paragraph numbering. (1.2.5, etc.)<br>
+       - Paragraph borders and coloured borders..<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">History</font></b></td>
+     <td>
+       - March 2001: First version pending test<br>
+       - April 2001: First working version. Modified for latest kword xml.<br>
+       - May   2001: Capabilities added - tab sets, colored text and borders, super/subscript, strikeout, page headers, time and date markers, page numbering. Paragraph numbering improved and underlined text fixed.<br>
+       - September 2002: new filter<br>
+       - February 2005: export all file information<br>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Authors</font></b></td>
+     <td>
+     -
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size="+1">Links</font></b></td>
+     <td><a href="http://www.koffice.org">-</a></td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size="+1">Progress report </font></b></td>
+     <td>
+     -
+     </td>
+    </tr>
+
+
+
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size="-1"><b>Up</b></font></A>
+
+</body>
+</html>

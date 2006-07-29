@@ -1,0 +1,221 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Logical</GroupName>
+
+    <Function>
+      <Name>FALSE</Name>
+      <Type>Boolean</Type>
+      <Help>
+	<Text>The FALSE() function returns the boolean value FALSE.</Text>
+	<Syntax>FALSE()</Syntax>
+	<Example>FALSE() returns FALSE</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TRUE</Name>
+      <Type>Boolean</Type>
+      <Help>
+	<Text>The TRUE() function returns the boolean value TRUE.</Text>
+	<Syntax>TRUE()</Syntax>
+	<Example>TRUE() returns TRUE</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>AND</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The AND() function returns True if all the values are true. Otherwise it returns False.</Text>
+	<Syntax>AND(value;value;...)</Syntax>
+	<Example>AND(true;true;true) returns True</Example>
+	<Example>AND(true;false) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>OR</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The OR() function returns True if at least one of the values is true. Otherwise it returns False.</Text>
+	<Syntax>OR(value;value;...)</Syntax>
+	<Example>OR(false;false;false) returns False</Example>
+	<Example>OR(true;false) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NAND</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The NAND() function returns True if at least one value is not true. Otherwise it returns False.</Text>
+	<Syntax>NAND(value;value;...)</Syntax>
+	<Example>NAND(true;false;false) returns True</Example>
+	<Example>NAND(true;true) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NOR</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The NOR() function returns True if all the values given as parameters are of boolean type and have the value false. Otherwise it returns False.</Text>
+	<Syntax>NOR(value;value;...)</Syntax>
+	<Example>NOR(true;false;false) returns False</Example>
+	<Example>NOR(false;false) returns True</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>XOR</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The XOR() function returns True if the number of True values is even. Otherwise it returns False.</Text>
+	<Syntax>XOR(value;value;...)</Syntax>
+	<Example>XOR(false;false;false) returns True</Example>
+	<Example>XOR(true;false) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>NOT</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Boolean value</Comment>
+	<Type>Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The NOT() function returns True if the value is False and returns False if the value is True.</Text>
+	<Syntax>NOT(bool)</Syntax>
+	<Example>NOT(false) returns True</Example>
+	<Example>NOT(true) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IF</Name>
+      <Type>Any</Type>
+      <Parameter>
+	<Comment>Condition</Comment>
+	<Type>Boolean</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>If true</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>If false</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The IF() function is a conditional function. This function returns the second parameter if the condition is True. Otherwise it returns the third parameter.</Text>
+	<Syntax>IF(condition;if_true;if_false)</Syntax>
+	<Example>A1=4;A2=6;IF(A1>A2;5;3) returns 3</Example>
+      </Help>
+    </Function>
+
+  </Group>
+
+</KSpreadFunctions>

@@ -1,0 +1,119 @@
+
+KDE_FIND_PATH(freetype-config, FREETYPE_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+  AC_MSG_WARN([Could not find libfreetype anywhere, check http://www.freetype.org/])
+])
+
+if test -n "$FREETYPE_CONFIG"; then
+  vers=`$FREETYPE_CONFIG --version 2>/dev/null | $SED -e 's/libfreetype //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 5000000
+  then
+     LIBFREETYPE_LIBS="`$FREETYPE_CONFIG --libs`"
+     LIBFREETYPE_RPATH=
+     for args in $LIBFREETYPE_LIBS; do
+	  case $args in
+	    -L*)
+  	       LIBFREETYPE_RPATH="$LIBFREETYPE_RPATH $args"
+ 	       ;;
+          esac
+     done
+     LIBFREETYPE_RPATH=`echo $LIBFREETYPE_RPATH | $SED -e "s/-L/-R/g"`
+     LIBFREETYPE_CFLAGS="`$FREETYPE_CONFIG --cflags`"
+  else
+     AC_MSG_WARN([You need at least libfreetype 5.0])
+  fi
+fi
+
+AC_SUBST(LIBFREETYPE_LIBS)
+AC_SUBST(LIBFREETYPE_CFLAGS)
+AC_SUBST(LIBFREETYPE_RPATH)
+
+
+KDE_FIND_PATH(libart2-config, LIBART_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+  AC_MSG_WARN([Could not find libart anywhere, check http://www.levien.com/libart/])
+])
+
+if test -n "$LIBART_CONFIG"; then
+  vers=`$LIBART_CONFIG --version 2>/dev/null | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 2003008
+  then
+     LIBART_LIBS="`$LIBART_CONFIG --libs`"
+     LIBART_RPATH=
+     for args in $LIBART_LIBS; do
+	  case $args in
+	    -L*)
+  	       LIBART_RPATH="$LIBART_RPATH $args"
+ 	       ;;
+          esac
+     done
+     LIBART_RPATH=`echo $LIBART_RPATH | $SED -e "s/-L/-R/g"`
+     LIBART_CFLAGS="`$LIBART_CONFIG --cflags`"
+
+     AC_DEFINE_UNQUOTED(HAVE_LIBART, 1, [Defines if your system has the libart library])
+  else
+     AC_MSG_WARN([You need at least libart 2.3.8])
+  fi
+fi
+
+AC_SUBST(LIBART_LIBS)
+AC_SUBST(LIBART_CFLAGS)
+AC_SUBST(LIBART_RPATH)
+
+
+# Check for fontconfig
+KDE_FIND_PATH(fontconfig-config, FONTCONFIG_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/bin /usr/local/bin /opt/local/bin], [
+        KDE_FIND_PATH(pkg-config, PKGCONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/bin /usr/local/bin /opt/local/bin], [
+            AC_MSG_WARN([Could not find neither pkg-config nor fontconfig-config, check http://www.fontconfig.org/ ])
+        ])
+])
+
+if test -n "$PKGCONFIG"; then
+  vers=`$PKGCONFIG fontconfig --modversion 2>/dev/null | $SED -e 's/libfontconfig //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 1000001
+  then
+     LIBFONTCONFIG_LIBS="`$PKGCONFIG fontconfig --libs`"
+     LIBFONTCONFIG_RPATH=
+     for args in $LIBFONTCONFIG_LIBS; do
+          case $args in
+            -L*)
+               LIBFONTCONFIG_RPATH="$LIBFONTCONFIG_RPATH $args"
+               ;;
+          esac
+     done
+     LIBFONTCONFIG_RPATH=`echo $LIBFONTCONFIG_RPATH | $SED -e "s/-L/-R/g"`
+     LIBFONTCONFIG_CFLAGS="`$PKGCONFIG fontconfig --cflags`"
+
+     AC_DEFINE_UNQUOTED(HAVE_FONTCONFIG, 1, [Defines if your system has the libfontconfig library])
+  fi
+fi
+
+if test -n "$FONTCONFIG_CONFIG"; then
+  vers=`$FONTCONFIG_CONFIG --version 2>/dev/null | $SED -e 's/libfontconfig //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 1000001
+  then
+     LIBFONTCONFIG_LIBS="`$FONTCONFIG_CONFIG --libs`"
+     LIBFONTCONFIG_RPATH=
+     for args in $LIBFONTCONFIG_LIBS; do
+          case $args in
+            -L*)
+               LIBFONTCONFIG_RPATH="$LIBFONTCONFIG_RPATH $args"
+               ;;
+          esac
+     done
+     LIBFONTCONFIG_RPATH=`echo $LIBFONTCONFIG_RPATH | $SED -e "s/-L/-R/g"`
+     LIBFONTCONFIG_CFLAGS="`$FONTCONFIG_CONFIG --cflags`"
+
+     AC_DEFINE_UNQUOTED(HAVE_FONTCONFIG, 1, [Defines if your system has the libfontconfig library])
+  fi
+fi
+
+AC_SUBST(LIBFONTCONFIG_LIBS)
+AC_SUBST(LIBFONTCONFIG_CFLAGS)
+AC_SUBST(LIBFONTCONFIG_RPATH)
+
+if test -z "$LIBART_LIBS"; then
+	DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
+fi
+
+if test -n "$LIBFREETYPE_LIBS" -a -n "$LIBFONTCONFIG_LIBS"; then
+	AC_DEFINE_UNQUOTED(HAVE_KARBONTEXT, 1, [Defines if your system has the fontconfig and freetype libraries])
+fi

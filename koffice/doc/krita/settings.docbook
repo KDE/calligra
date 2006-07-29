@@ -1,0 +1,219 @@
+<chapter id="settings">
+
+<title>Settings</title>
+
+<para>This chapter describes the various settings that affect the way &krita;
+functions and looks.</para>
+
+<sect1 id="settings-preferences">
+<title>The Preferences dialog</title>
+
+<para>
+A number of options to configure &krita; are available via the
+<guilabel>Preferences</guilabel> dialog, which is available via
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+&krita;...</guimenuitem></menuchoice>. The dialog is divided into several
+sections, which you can open via the sidebar at the left, shown below.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The available Preferences sections</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="preferences-sidebar.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The available Preferences sections</phrase>
+</textobject>
+<caption><para>The available Preferences sections</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<sect2 id="settings-preferences-general">
+<title>The General section</title>
+
+<para>
+<screenshot>
+<screeninfo>The General section</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="preferences-general.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The General section</phrase>
+</textobject>
+<caption><para>The General section</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This section offers three options. First of all, the setting in the
+<guilabel>Cursor shape:</guilabel> dropdown box determines what the drawing
+cursor looks like. You can choose between a cursor resembling the actual tool
+you are working with, a normal cursor, a crosshair, and a brush-shaped cursor.
+Then you can select the <guilabel>Palette Behavior</guilabel>. You can set
+here when palettes may be <quote>docked</quote> (set aside at a window
+border): always (<guilabel>Allow docking</guilabel>), never
+(<guilabel>Allow only floating</guilabel>), or when there is enough space
+(<guilabel>Allow docking only on large screens</guilabel>). The last option is
+<guilabel>Palette font size:</guilabel> which determines the text size used in
+the palettes. Set this to a larger value if you have trouble reading the text,
+with the side effect that the palettes will take more space.
+</para>
+
+</sect2>
+
+<sect2 id="settings-preferences-display">
+<title>The Display section</title>
+
+<para>
+<screenshot>
+<screeninfo>The Display section</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="preferences-display.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Display section</phrase>
+</textobject>
+<caption><para>The Display section</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This section contains just one option. If your graphics card and driver have
+OpenGL support, you can enable it here to make drawing faster (the
+processor of yor graphics card will take over part of the calculations). Be
+warned, though: there are a few cases where enabling OpenGL is known to
+introduce erratic behavior.
+</para>
+
+</sect2>
+
+<sect2 id="settings-preferences-colormanagement">
+<title>The Color Management section</title>
+
+<para>
+<screenshot>
+<screeninfo>The Color Management section</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="preferences-color.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Color Management section</phrase>
+</textobject>
+<caption><para>The Color Management section</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+Here you can set various options related to colorspaces in rendering, editing
+and printing of images. The topmost option can be used to set the default
+color model for creating new images (useful if you usually want to create CMYK
+images, for instance). Use the <guilabel>Display</guilabel> options to let
+&krita; know what color profile your monitor uses, and how rendering should be
+done. Under <guilabel>Printing</guilabel>, you can set the color model and
+profile for your printer. The next option determines what &krita; should do
+when you paste an image into it that was copied from another application. If
+<guilabel>Use Blackpoint compensation</guilabel> is checked, whenever a
+colorspace conversion is needed, the black points of the source and
+destination colorspaces are matched.
+</para>
+
+</sect2>
+
+<sect2 id="settings-preferences-performance">
+<title>The Performance section</title>
+
+<para>
+<screenshot>
+<screeninfo>The Performance section</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="preferences-performance.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Performance section</phrase>
+</textobject>
+<caption><para>The Performance section</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+Two options are available here. The <guilabel>Maximum number of tiles kept in
+memory</guilabel> setting indicates how many tiles (image subparts) &krita;
+will keep in memory. The default setting should be reasonable, if you are low
+or very high on memory, you may want to decrease or increase this option,
+respectively. The <guilabel>Swappiness:</guilabel> option determines how eager
+&krita; will be to swap to disk.
+</para>
+
+</sect2>
+
+<sect2 id="settings-preferences-tablet">
+<title>The Tablet section</title>
+
+<para>
+<screenshot>
+<screeninfo>The Tablet section</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="preferences-tablet.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tablet section</phrase>
+</textobject>
+<caption><para>The Tablet section</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+If you have a tablet device attached, you can enable it and set its pressure
+sensitivity in this section.
+</para>
+
+</sect2>
+
+<sect2 id="settings-preferences-grid">
+<title>The Grid section</title>
+
+<para>
+<screenshot>
+<screeninfo>The Grid section</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="preferences-grid.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Grid section</phrase>
+</textobject>
+<caption><para>The Grid section</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+In this section, you can fine-tune &krita;'s grid. The line styles for the
+grid can be set in the <guilabel>Styles</guilabel> option set.
+<guilabel>Colors</guilabel> allows you to choose the line colors for the grid.
+The horizontal and vertical spacing between the main lines can be set under
+<guilabel>Spacing</guilabel>, as well as the amount of subdivisions (in how
+many smaller parts a grid section is subdivided). Furthermore you can set the
+<guilabel>Offset</guilabel>: usually the grid is painted starting at the top
+left corner, if you want the first main grid lines not to start there, you can
+enter an offset (displacement) here.
+</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>

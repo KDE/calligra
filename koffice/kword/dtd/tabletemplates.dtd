@@ -1,0 +1,57 @@
+<!--
+        A tabletemplate holds pointers to a tablestyle for the first, last row and column and body.
+
+        Name is the name of the tablestyle.
+
+        With topleftcorner, toprightcorner, bottomleftcorner and bottomrightcorner attributes you
+        can tell KWord that particular corner belongs to that tablestyle. If you use them just give
+        a value of 1 to it, otherwise leave it out because KWord checks if the attribute is available.
+-->
+
+<!ELEMENT TABLETEMPLATES
+    (TABLETEMPLATE*)>
+
+<!ELEMENT TABLETEMPLATE
+    (NAME|FIRSTROW|LASTROW|FIRSTCOL|LASTCOL|BODYCELL)>
+
+<!ELEMENT FIRSTROW
+    EMPTY>
+<!ATTLIST FIRSTROW
+    name CDATA #REQUIRED
+    topleftcorner CDATA
+    toprightcorner CDATA>
+
+<!ELEMENT FIRSTCOL
+    EMPTY>
+<!ATTLIST FIRSTCOL
+    name CDATA #REQUIRED
+    topleftcorner CDATA
+    bottomleftcorner CDATA>
+
+<!ELEMENT LASTROW
+    EMPTY>
+<!ATTLIST LASTROW
+    name CDATA #REQUIRED
+    bottomleftcorner CDATA
+    bottomrightcorner CDATA>
+
+<!ELEMENT LASTCOL
+    EMPTY>
+<!ATTLIST LASTCOL
+    name CDATA #REQUIRED
+    toprightcorner CDATA
+    bottomrightcorner CDATA>
+
+<!ELEMENT BODYCELL
+    EMPTY>
+<!ATTLIST BODYCELL
+    name CDATA #REQUIRED>
+
+<!--
+        Copied from kword.dtd (01-06-2002)
+-->
+
+<!ELEMENT NAME
+    EMPTY>
+<!ATTLIST NAME
+    value CDATA #REQUIRED>

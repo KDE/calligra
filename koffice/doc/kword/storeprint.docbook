@@ -1,0 +1,476 @@
+<chapter id="store-print">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Detailed Guides: Document Creation, Storage, and Printing</title>
+
+<para>This section of the documentation will cover everything you need
+to know about starting a new document, saving a document, retrieving a
+saved document and printing a document.</para> 
+
+<sect1 id="new-doc">
+<title>Beginning a New Document</title>
+<indexterm><primary>create new document</primary></indexterm>
+<para>Starting a new document can be done 5 ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>You can <link linkend="starting-kword">start &kword; from the
+&kde; Panel</link>.</para>
+</listitem>
+
+<listitem>
+<para>You can <link linkend="starting-kword">start &kword; from the
+command line</link> by typing<screen><prompt>$</prompt><userinput><command>kword &amp;</command></userinput>
+</screen></para>
+</listitem>
+
+<listitem>
+<para>You can begin a new document in &kword; by selecting <menuchoice>
+<guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice> from
+the menubar.</para>
+</listitem>
+
+<listitem>
+<para>You can use the keyboard shortcut: <keycombo
+action="simul">&Ctrl;<keycap>N</keycap></keycombo></para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="filenew2.png" format="PNG"
+align="center"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+</listitem>
+
+</itemizedlist>
+
+<para>However you begin a new document, a dialog box appears:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="ChooseTempDia.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>This dialog box allows you to:</para>
+
+<itemizedlist spacing="compact">
+<listitem>
+<para><link linkend="new-doc-from-template">Start a new document from a
+template</link></para>
+</listitem>
+<listitem>
+<para><link linkend="loading-existing-doc">Open an existing
+document</link></para>
+</listitem>
+<listitem>
+<para><link linkend="loading-recent-doc">Open a recent
+document</link></para>
+</listitem>
+</itemizedlist>
+<para>&kword; remembers your previous choice.  That previous choice will be the current default option.</para>
+
+
+<sect2 id="new-doc-from-template">
+<title>Starting a new document from a template</title>
+
+<para>In order to start a new document based on a template, you must
+first choose which template you want to use.</para>
+
+<orderedlist>
+<listitem><para>Use the icons located along the left edge of the dialog box to select your template group.  Simply click with the &LMB; to select that group and 
+display all the available templates of that group.</para>
+
+<note>
+<para>Remember templates are either Text Oriented (Blank Document) or Page Layout
+templates. If you need to review the differences, click <link
+linkend="wp-vs-dtp">here</link>.</para>
+</note>
+<para>Once you have selected the icon, you are shown all the available
+templates, each with a title and a small icon which shows you the
+general layout of the template. </para>
+
+<tip>
+<para>&kword; comes with four standard template groups. You can add
+new icons by installing outside templates, or <link linkend="template-creation">creating templates of your
+own</link>.</para>
+</tip></listitem>
+
+<listitem><para>To select your template, click on it with the &LMB;.  The
+selected template will be highlighted.</para></listitem>  
+<listitem><para>Confirm your choice by clicking
+the <guibutton>Use This Template</guibutton> button. This will begin a new document
+with that template.</para></listitem>
+</orderedlist>
+
+<tip>
+<para>For faster access to a template, simply double click on the
+template, and &kword; will immediately load that template.</para>
+</tip>
+</sect2>
+
+<sect2 id="loading-existing-doc">
+<title>Opening an existing document</title>
+
+<para>Click on the <guibutton>Open Existing Document...</guibutton> button, and an new
+dialog box is revealed.  For more details on this dialog box refer to
+<link linkend="file-dialog">Using the file selection dialog</link>.</para>
+
+<sect3 id="loading-recent-doc">
+<title>Open a Recent Document</title>
+<para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by clicking on the icon labeled 
+<guilabel>Recent Documents</guilabel>. This will list the most recently edited files on the system.  Simply click on the icon of the desired file with the 
+&LMB; and click <guibutton>Open This Document</guibutton>.</para>
+
+</sect3>
+
+
+</sect2>
+
+</sect1>
+
+<sect1 id="saving">
+<title>Saving a Document</title>
+<indexterm><primary>saving a document</primary></indexterm>
+<para>Once you have entered text and data into a document, you will
+usually want to save this to a file on your hard drive.</para>
+
+<tip><para>&kword; can create a <literal role="extension">.pdf</literal> file for you.  For instructions see 
+<link linkend="qd-pdf">How do I create a <literal role="extension">.pdf</literal> file?</link></para></tip>
+
+<sect2 id="command-save">
+
+<title>The <guimenuitem>Save</guimenuitem> Command</title>
+<para>The <guimenuitem>Save</guimenuitem> command can be invoked 3 ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>By selecting <menuchoice>
+<guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> from
+the Menubar</para>
+</listitem>
+
+<listitem>
+<para>You can use the keyboard shortcut: <keycombo
+action="simul">&Ctrl;<keycap>S</keycap></keycombo></para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="filefloppy.png"
+format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>Any of these methods results in the same action by &kword;.</para>
+
+<important><para>By selecting the <guimenuitem>Save</guimenuitem> command, you are
+instructing &kword; to save the file under the current filename. You
+will not be given the option to change the filename or its location. If
+you want to change the name of the file, or where it is saved, you must
+select <link linkend="command-save-as"><menuchoice>
+<guimenu>File</guimenu><guimenuitem>Save
+As...</guimenuitem></menuchoice></link> from the Menubar.</para></important>
+
+<para>If you have not saved this file before, it does not have a
+filename.  &kword; automatically executes the <link
+linkend="command-save-as"><guimenuitem>Save As...</guimenuitem></link>
+command so you can provide a file name. </para>
+
+<para>&kword; does not report a successful save.  Therefore, if the file
+was saved without incident, &kword; will return you to editing your
+document.</para>
+
+<para>You can verify that the file was saved, by checking the titlebar.  
+If there are unsaved changes, the titlebar will have
+<emphasis>[modified]</emphasis> in the titlebar.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="saved2.png" format="PNG"/></imageobject>
+<!--<caption><para>The document still has unsaved changes</para></caption>-->
+</mediaobject>
+</screenshot>
+
+  <para>If the save was
+successful, only the filename will be in the titlebar.  If there is a
+problem with the save, an error box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="saved1.png" format="PNG"/></imageobject>
+<!--<caption><para>Saved Successfully</para></caption>-->
+</mediaobject>
+</screenshot>
+
+
+</sect2>
+
+<sect2 id="command-save-as">
+<title>The <guimenuitem>Save As...</guimenuitem> Command</title>
+<indexterm><primary>saving a document with new name</primary></indexterm>
+<sect3 id="command-save-as-general">
+<title>General</title>
+<para>The <guimenuitem>Save As...</guimenuitem> command can be invoked 2
+ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>By selecting <menuchoice> <guimenu>File</guimenu><guimenuitem>Save
+As...</guimenuitem></menuchoice> from the Menubar</para>
+</listitem>
+<listitem>
+<para>or by trying to <guimenuitem>Save</guimenuitem> a file which does
+not yet have a filename.</para>
+</listitem>
+</itemizedlist>
+
+<important><para>The difference between the <guimenuitem>Save</guimenuitem> and the
+<guimenuitem>Save As...</guimenuitem> command, is the <guimenuitem>Save
+As...</guimenuitem> command prompts you for a filename, and lets you
+select a different file format or location.  The
+<guimenuitem>Save</guimenuitem> command simply saves the file in the
+previous location.</para></important>
+</sect3>
+<sect3 id="command-save-as-dlg">
+<title>Using the dialog box</title>
+
+<para>When you select <guimenuitem>Save As...</guimenuitem> a dialog appears.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savedlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>For more information on using this dialog, see the section entitled
+<link linkend="file-dialog">Using the file selection dialog</link>.</para>
+
+<para>When you are in the folder you want to save the file in, type a filename into the
+<guilabel>Location:</guilabel> box.</para>
+<tip><para>&kword; can create a <literal role="extension">.pdf</literal> file for you.  For instructions see 
+<link linkend="qd-pdf">How do I create a <literal role="extension">.pdf</literal> file</link>.</para></tip>
+
+<tip><para> There is no need to put a <literal
+role="extension">.kwd</literal> at the end of your filename, &kword;
+will do this for you.</para></tip>
+
+<note>
+<para>&UNIX; filenames are more flexible than many other operating
+systems.  Filenames can:</para>
+
+<itemizedlist spacing="compact">
+<listitem><para>be of nearly any length</para></listitem>
+<listitem><para>be any combination of upper and lowercase letters</para></listitem>
+<listitem><para>include spaces and punctuation</para></listitem>
+</itemizedlist>
+
+<para>Filenames should not:</para>
+
+<itemizedlist spacing="compact">
+
+<listitem><para>begin with a space or period</para></listitem>
+<listitem><para>end with a common file extension (<literal
+role="extension">.ps</literal>,<literal
+role="extension">.pdf</literal>,etc). </para>
+</listitem>
+</itemizedlist>
+</note>
+
+<para>Once you have entered the correct information you can click on
+<guibutton>Save</guibutton> to complete the save.</para>
+
+<para>&kword; does not report a successful save.  Therefore, if the file
+was saved without incident, &kword; will return you to editing your
+document.  If there is a problem with the save, an error box will
+appear.</para>
+
+<note>
+<para>&kword; will only allow you to save your file where you are
+allowed to by the permissions listed by the operating system. If you try
+to save outside that area, &kword; will report an error.</para>
+</note>
+</sect3>
+</sect2>
+
+</sect1>
+
+<sect1 id="loading">
+<title>Retrieving a Saved Document</title>
+<indexterm><primary>loading a &kword; file</primary></indexterm>
+<para>
+The <guimenuitem>Open...</guimenuitem> command can be invoked 4 ways:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>By clicking the <guilabel>Open Existing Document</guilabel>
+tab when <link
+linkend="new-doc">Opening a New Document</link></para>
+</listitem>
+
+<listitem>
+<para>By selecting <menuchoice>
+<guimenu>File</guimenu><guimenuitem>Open...</guimenuitem></menuchoice> from
+the menubar</para>
+</listitem>
+
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo>&Ctrl;<keycap>O</keycap></keycombo></para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="fileopen.png" format="PNG"/></imageobject></inlinemediaobject>
+on the toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>Any of these methods results in the same action by &kword;.</para>
+<sect2 id="command-open-dlg">
+<title>Using the dialog box</title>
+<para>When trying to open a file, a dialog appears.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="opendlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>For more information on using this dialog, see the section entitled
+<link linkend="file-dialog">Using the file dialog</link>.</para>
+
+<para>Use this dialog to locate the document you want to load.  Once located, click
+once with the &LMB; on the filename. Once the filename is selected click <guibutton>OK</guibutton>.  The file will be loaded.</para>
+
+<para>There is a <guibutton>Cancel</guibutton> button, if you click this
+button, the load will be aborted.</para>
+</sect2>
+</sect1>
+
+<sect1 id="printing">
+<title>Printing A Document</title>
+<indexterm><primary>printing a document</primary></indexterm>
+<para>The <guimenuitem>Print...</guimenuitem> command can be invoked 3 ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>By selecting <menuchoice>
+<guimenu>File</guimenu><guimenuitem>Print...</guimenuitem></menuchoice>
+from the menubar</para>
+</listitem>
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo>&Ctrl;<keycap>P</keycap></keycombo></para>
+</listitem>
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="fileprint.png" format="PNG"/></imageobject></inlinemediaobject>
+on the toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>No matter how you do this, the &kde; print dialog will
+appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="pntdlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The top combo box labeled <guilabel>Name:</guilabel> shows the
+currently selected printer.  To configure this printer click on the
+<guibutton>Properties</guibutton> button.</para>
+
+<para>To select a different printer, click on the combo box and
+select the desired printer.</para>
+
+<para>If you want to print your output into a postscript file, to a PDF file, 
+a fax modem (to send it as a fax) or email the file as a PDF file, select
+the appropriate option from the combo box labeled <guilabel>Name</guilabel>. Once that option has been selected, enter
+the filename into the text box labled <guilabel>Output file:</guilabel>.</para>
+
+<para>The line labled <guilabel>State</guilabel> tells you if your printer is currently connected and if it is printing another page. You can not change any information on this line.</para>
+
+<para>The lines labled <guilabel>Type</guilabel> and <guilabel>Location</guilabel> tells you what type of printer is currently selected and where that printer is located. You can not change any information on these lines.</para>
+
+
+
+<para>The line labled <guilabel>Comment</guilabel> describes how
+&kword; interacts with your computer (what driver and print system it is using). You can not change anything on this line.  Complete setup of the &kde;
+printing system is beyond the scope of this document.  For more information see the &kde; 
+print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para>
+
+<para>If you want to print all pages of your document and only one copy, you can click 
+<guibutton>Print</guibutton>.  If you want to change the number of copies or only print selected
+pages, click the <guibutton>Options &gt;&gt;</guibutton> button.</para>
+
+<note><para>The <guibutton>System Options</guibutton> button allows a user to change the setup of the printers and &kde; print system.  This is also beyond the scope of this manual.  
+If you need to make changes please refer to the &kde; print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para></note>
+
+<note><para>Depending on which printing system your computer uses, you may find that you have 
+more printing options then those described below.  What is described here, is available on 
+<emphasis>most</emphasis> systems.</para></note>
+
+<para>Once you click <guibutton>Options &gt;&gt;</guibutton>, the dialog box changes to:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="pntdlg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Under <guilabel>Page Selection</guilabel>, you can select either
+to print the whole document (select <guilabel>All</guilabel>), print the page the cursor is
+located on (simply select <guilabel>Current</guilabel>), or print a range of pages.  If you select the
+<guilabel>Range</guilabel> option, enter your page range in the text box
+provided. (Example:  3-13)</para>
+
+<para>In the combo box labeled <guilabel>Page set:</guilabel> you can tell &kword; to
+print the <guilabel>Even Pages</guilabel>, the <guilabel>Odd Pages</guilabel> or 
+<guilabel>All Pages</guilabel>.</para>
+
+<para>In the box on the right labeled <guilabel>Copies:</guilabel>, you should set the number of copies
+you want printed.  You can either enter the number directly into the
+box, or use the arrows to adjust the number. &kword; can print a maximum
+of 999 copies at once.</para>
+
+<para>You can have &kde; collate your documents by clicking on the
+<guilabel>Collate</guilabel> check box.  If selected, &kde; will print
+all of the pages for copy 1, then print all the pages for copy 2, &etc;
+If not selected, &kde; will print all of the copies of the first page,
+then all of the copies of the second page, &etc;</para>
+
+<para>You can also determine if the document is printed in forward order
+(print first page first), or reverse order (print last page
+first).</para>
+
+<para>If you click on <guibutton>Options &lt;&lt;</guibutton>, the print dialog will
+compress down to the previous view.</para>
+
+<note><para>Depending on your systems setup, you may have additional options available to you.  These options are discussed at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para></note>
+
+<para>When you are satisfied with your selections, you can click
+<guibutton>OK</guibutton> to print.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, the printing will
+be aborted.</para>
+
+</sect1>
+
+</chapter>    

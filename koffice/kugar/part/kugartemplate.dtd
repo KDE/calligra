@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The DTD for a Kugar template. -->
+
+
+<!ELEMENT KugarTemplate (ReportHeader, PageHeader, DetailHeader*, Detail*, DetailFooter*, PageFooter, ReportFooter)>
+<!ATTLIST KugarTemplate
+	PageSize	CDATA #REQUIRED
+	PageOrientation	CDATA #REQUIRED
+	TopMargin	CDATA #REQUIRED
+	BottomMargin	CDATA #REQUIRED
+	LeftMargin	CDATA #REQUIRED
+	RightMargin	CDATA #REQUIRED>	
+
+<!ELEMENT ReportHeader (Line*, Label*, Special*)>
+<!ATTLIST ReportHeader 
+	Height		CDATA   #REQUIRED
+	PrintFrequency	CDATA	#REQUIRED>
+	
+<!ELEMENT PageHeader (Line*, Label*, Special*)>
+<!ATTLIST PageHeader 
+	Height		CDATA   #REQUIRED
+	PrintFrequency	CDATA	#REQUIRED>
+
+<!ELEMENT DetailHeader (Line*, Label*, Special*)>
+<!ATTLIST DetailHeader
+	Height		CDATA   #REQUIRED
+	Level		CDATA	#REQUIRED>
+
+<!ELEMENT Detail (Line*, Label*, Special*, Field*)>
+<!ATTLIST Detail 
+	Height		CDATA   #REQUIRED
+	Level		CDATA	#REQUIRED>
+
+<!ELEMENT DetailFooter (Line*, Label*, Special*)>
+<!ATTLIST DetailFooter
+	Height		CDATA   #REQUIRED
+	Level		CDATA	#REQUIRED>
+
+<!ELEMENT PageFooter (Line*, Label*, Special*)>
+<!ATTLIST PageFooter 
+	Height		CDATA   #REQUIRED
+	PrintFrequency	CDATA	#REQUIRED>
+
+<!ELEMENT ReportFooter (Line*, Label*, Special*, CalculatedField*)>
+<!ATTLIST ReportFooter 
+	Height		CDATA   #REQUIRED
+	PrintFrequency	CDATA	#REQUIRED>
+
+<!ELEMENT Line EMPTY>
+<!ATTLIST Line 
+	X1		CDATA   #REQUIRED
+	Y1		CDATA   #REQUIRED
+	X2		CDATA   #REQUIRED
+	Y2		CDATA   #REQUIRED
+	Width		CDATA   #REQUIRED
+	Color		CDATA   #REQUIRED
+	Style		CDATA   #REQUIRED>
+
+<!ELEMENT Label EMPTY>
+<!ATTLIST Label 
+	Text		CDATA   #REQUIRED
+	X		CDATA   #REQUIRED
+	Y		CDATA   #REQUIRED
+	Width		CDATA   #REQUIRED
+	Height		CDATA   #REQUIRED
+	BackgroundColor	CDATA   #REQUIRED
+	ForegroundColor	CDATA   #REQUIRED
+	BorderColor	CDATA   #REQUIRED
+	BorderWidth	CDATA   #REQUIRED
+	BorderStyle	CDATA   #REQUIRED
+	FontFamily	CDATA   #REQUIRED
+	FontSize	CDATA   #REQUIRED
+	FontWeight	CDATA   #REQUIRED
+	FontItalic	CDATA   #REQUIRED
+	HAlignment	CDATA   #REQUIRED
+	VAlignment	CDATA   #REQUIRED
+ 	WordWrap	CDATA   #REQUIRED>
+
+<!ELEMENT Field EMPTY>
+<!ATTLIST Field
+	Field		CDATA	#REQUIRED 
+	Text		CDATA   #REQUIRED
+	X		CDATA   #REQUIRED
+	Y		CDATA   #REQUIRED
+	Width		CDATA   #REQUIRED
+	Height		CDATA   #REQUIRED
+	BackgroundColor	CDATA   #REQUIRED
+	ForegroundColor	CDATA   #REQUIRED
+	BorderColor	CDATA   #REQUIRED
+	BorderWidth	CDATA   #REQUIRED
+	BorderStyle	CDATA   #REQUIRED
+	FontFamily	CDATA   #REQUIRED
+	FontSize	CDATA   #REQUIRED
+	FontWeight	CDATA   #REQUIRED
+	FontItalic	CDATA   #REQUIRED
+	HAlignment	CDATA   #REQUIRED
+	VAlignment	CDATA   #REQUIRED
+ 	WordWrap	CDATA   #REQUIRED
+	DataType	CDATA 	#REQUIRED
+	DateFormat	CDATA	#REQUIRED
+	Precision	CDATA	#REQUIRED
+	Currency	CDATA	#REQUIRED
+	NegValueColor	CDATA	#REQUIRED
+	CommaSeparator	CDATA	#REQUIRED>
+
+<!ELEMENT CalculatedField EMPTY>
+<!ATTLIST CalculatedField
+	CalculationType	CDATA	#REQUIRED
+	Field		CDATA	#REQUIRED 
+	Text		CDATA   #REQUIRED
+	X		CDATA   #REQUIRED
+	Y		CDATA   #REQUIRED
+	Width		CDATA   #REQUIRED
+	Height		CDATA   #REQUIRED
+	BackgroundColor	CDATA   #REQUIRED
+	ForegroundColor	CDATA   #REQUIRED
+	BorderColor	CDATA   #REQUIRED
+	BorderWidth	CDATA   #REQUIRED
+	BorderStyle	CDATA   #REQUIRED
+	FontFamily	CDATA   #REQUIRED
+	FontSize	CDATA   #REQUIRED
+	FontWeight	CDATA   #REQUIRED
+	FontItalic	CDATA   #REQUIRED
+	HAlignment	CDATA   #REQUIRED
+	VAlignment	CDATA   #REQUIRED
+ 	WordWrap	CDATA   #REQUIRED
+	DataType	CDATA 	#REQUIRED
+	DateFormat	CDATA	#REQUIRED
+	Precision	CDATA	#REQUIRED
+	Currency	CDATA	#REQUIRED
+	NegValueColor	CDATA	#REQUIRED
+	CommaSeparator	CDATA	#REQUIRED>
+
+<!ELEMENT Special EMPTY>
+<!ATTLIST Special
+	Type		CDATA	#REQUIRED 
+	Text		CDATA   #REQUIRED
+	X		CDATA   #REQUIRED
+	Y		CDATA   #REQUIRED
+	Width		CDATA   #REQUIRED
+	Height		CDATA   #REQUIRED
+	BackgroundColor	CDATA   #REQUIRED
+	ForegroundColor	CDATA   #REQUIRED
+	BorderColor	CDATA   #REQUIRED
+	BorderWidth	CDATA   #REQUIRED
+	BorderStyle	CDATA   #REQUIRED
+	FontFamily	CDATA   #REQUIRED
+	FontSize	CDATA   #REQUIRED
+	FontWeight	CDATA   #REQUIRED
+	FontItalic	CDATA   #REQUIRED
+	HAlignment	CDATA   #REQUIRED
+	VAlignment	CDATA   #REQUIRED
+ 	WordWrap	CDATA   #REQUIRED
+	DateFormat	CDATA	#REQUIRED>

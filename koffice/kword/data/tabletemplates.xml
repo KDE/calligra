@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TABLETEMPLATES>
+  <TABLETEMPLATE>
+      <NAME value="Plain"/>
+      <BODYCELL name="Plain"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Grid 1"/>
+      <BODYCELL name="Simple 1"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Grid 2"/>
+      <BODYCELL name="Simple 2"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Grid 3"/>
+      <BODYCELL name="Simple 3"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Blue Heading"/>
+      <FIRSTROW name="Header 2" topleftcorner="1" toprightcorner="1"/>
+      <BODYCELL name="Simple 1"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Gray Heading"/>
+      <FIRSTROW name="Header 1" topleftcorner="1" toprightcorner="1"/>
+      <BODYCELL name="Simple 1"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Blue Traditional"/>
+      <FIRSTROW name="Header 4" topleftcorner="1" toprightcorner="1"/>
+      <FIRSTCOL name="Header 2" bottomleftcorner="1"/>
+      <BODYCELL name="Simple 1"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Gray Traditional"/>
+      <FIRSTROW name="Header 3" topleftcorner="1" toprightcorner="1"/>
+      <FIRSTCOL name="Header 1" bottomleftcorner="1"/>
+      <BODYCELL name="Simple 1"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Blue Top and Bottom"/>
+      <FIRSTROW name="Header 4" topleftcorner="1" toprightcorner="1"/>
+      <LASTROW name="Header 2" bottomleftcorner="1" bottomrightcorner="1"/>
+      <BODYCELL name="Simple 1"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Gray Top and Bottom"/>
+      <FIRSTROW name="Header 3" topleftcorner="1" toprightcorner="1"/>
+      <LASTROW name="Header 1" bottomleftcorner="1" bottomrightcorner="1"/>
+      <BODYCELL name="Simple 1"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Columns 1"/>
+      <BODYCELL name="Column"/>
+  </TABLETEMPLATE>
+  <TABLETEMPLATE>
+      <NAME value="Columns 2"/>
+      <FIRSTROW name="Header 1" topleftcorner="1" toprightcorner="1"/>
+      <BODYCELL name="Column"/>
+  </TABLETEMPLATE>
+</TABLETEMPLATES>

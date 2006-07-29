@@ -1,0 +1,78 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KOfficeFilter
+Comment=KOffice Filter
+Comment[af]=Koffice Filter
+Comment[ar]=مِرْشَح KOffice
+Comment[az]=KOffice Süzgəci
+Comment[bg]=Филтър на KOffice
+Comment[br]=Sil KOffice
+Comment[bs]=KOffice filter
+Comment[ca]=Filtre de KOffice
+Comment[cs]=Filtr KOffice
+Comment[cy]=Hidlen KOffice
+Comment[da]=KOffice-filter
+Comment[de]=KOffice-Filter
+Comment[el]=Φίλτρο του KOffice
+Comment[eo]=KOficejo-filtrilo
+Comment[es]=Filtro de KOffice
+Comment[et]=KOffice'i filter
+Comment[eu]=KOffice iragazkia
+Comment[fa]=KOffice فیلتر
+Comment[fi]=KOffice-suodin
+Comment[fo]=KSkrivstovu-filtur
+Comment[fr]=Filtre KOffice
+Comment[ga]=Scagaire KOffice
+Comment[he]=מסנן של KOffice
+Comment[hi]=केऑफ़िस फ़िल्टर
+Comment[hr]=KOffice filter
+Comment[hu]=KOffice-szűrő
+Comment[id]=Filter KOffice
+Comment[is]=KOffice sía
+Comment[it]=Filtro di KOffice
+Comment[ja]=KOfficeフィルタ
+Comment[km]=តម្រង KOffice
+Comment[lo]=ຕົວກອງຂອງໂປຣແກມຊຸດສໍານັກງານ K
+Comment[lt]=KOffice Filtras
+Comment[lv]=KOffice Filtrs
+Comment[mk]=KOffice филтер
+Comment[ms]=Penapis KOffice
+Comment[mt]=Filtru KOffice
+Comment[nb]=KOffice-filter
+Comment[nn]=KOffice-filter
+Comment[pl]=Filtr KOffice
+Comment[pt]=Filtro do KOffice
+Comment[pt_BR]=Filtro do KOffice
+Comment[ro]=Filtru KOffice
+Comment[ru]=Фильтр KOffice
+Comment[se]=KOffice-silli
+Comment[sk]=Filter Koffice
+Comment[sl]=Filter za KOffice
+Comment[sr]=KOffice-ов филтер
+Comment[sr@Latn]=KOffice-ov filter
+Comment[sv]=Koffice-filter
+Comment[ta]=KOffice வடிகட்டி
+Comment[tg]=Филтри KOffice
+Comment[th]=ตัวกรองของโปรแกรมชุดสำนักงาน K
+Comment[tr]=KOffice Filtresi
+Comment[uk]=Фільтр KOffice
+Comment[uz]=KOffice филтери
+Comment[ven]=Filithara ya ofisi ya K
+Comment[wa]=Passete po KOffice
+Comment[xh]=Isihluzi se KOffice
+Comment[zh_CN]=KOffice 过滤器
+Comment[zh_TW]=KOffice 過濾程式
+Comment[zu]=Icebo lokuhlaziya ifayela yenimininigwane i KOffice
+
+[PropertyDef::X-KDE-Import]
+Type=QStringList
+
+[PropertyDef::X-KDE-Export]
+Type=QStringList
+
+[PropertyDef::X-KDE-Weight]
+Type=int
+
+[PropertyDef::X-KDE-Available]
+Type=QString

@@ -1,0 +1,46 @@
+All components:
+- set positions and dimensions in real dpi-independent units like santimeters, inches
+  and get rid of all other dpi dependecies
+
+Kudesigner:
+- Z-Ordering (right-click menu) for report items
+    default: all items are created with the same z-position 
+- print and print preview
+- open x-kugarmixed files ???
+- do not allow to move report items out of their section (Works, except when moved/resized with the property editor or during placing of new items)
+- make a grid for element placing
+- implement "smart" moving of elements (stick to borders)
+- automatic resize of property editor
+- save position and size of the property editor
+- undo / redo
+	redo items don't work afrer undo section!
+- cut / copy / paste
+- DCOP interface
+- more flexible uncompressed file save (maybe export filter)
+
+- optimizations:
+-- create property editor widgets only once
+-- do not repaint selected items during selection (review algo if (selectionStarted) in ReportCanvas::contentsMouseMoveEvent())
+-- remove unnesesary canvas_item->hide() and show() 	| code review
+-- same for canvas()->update()				| nesessary
+
+- CRUSHES
+-- undo item, undo section, redo item --> crush
+
+Kugar engine:
+-  More work on direct database support in the engine:
+   Allow merging existing data files and generated ones by MDatabaseReportEngine
+-  Review the progress updating in the engine - use either percentages or Page
+   n of m.  Integrate properly with the Konqueror status bar.
+-  The engine should also report (through signals) the current page and the
+   total number of pages so that the GUI can display them on the status line.
+-  Look at adding some chart types.
+-  For some template elements we want the user (ie. the data DTD) to be able
+   to optionally override them to give them some local control over the
+   format, eg. paper size (dont forget Vishakan's wishes).
+-  Improve the error reporting - particularly about bad XML.
+
+
+Kugar shell(part):
+- --print --from <number> --to <number> --copies <number> --printer <name>
+    AD: I have some pathes for kugar/lib and kugar/shell (deprecated shell)

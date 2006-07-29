@@ -1,0 +1,26 @@
+Food for thought:
+=================
+CAGD:
+- http://softsurfer.com/algorithms.htm
+- Guru's Lair Cubic Spline Library 
+  http://www.tinaja.com/cubic01.html
+- Graphics Gems Repository
+  http://www.acm.org/tog/GraphicsGems/
+- General polygon clipper library (gpc)
+  http://www.cs.man.ac.uk/~amurta/software/index.html
+- Magic Software
+  http://www.magic-software.com/
+- FAQ for comp.graphics.algorithms:
+  http://www.landfield.com/faqs/graphics/algorithms-faq/
+- NEC Research Index
+  http://citeseer.nj.nec.com/cs
+- Preprints
+  http://xxx.lanl.gov/archive/cs/intro.html
+- Graphics Paper
+  http://www.graphicspapers.com/
+
+Postscript:
+- Adobe Illustrator Fileformat Specification:
+  http://partners.adobe.com/asn/developer/PDFS/TN/5007.AI7FileFormat.pdf
+- Postscript Specs (since .AI is basically .PS):
+  http://partners.adobe.com/asn/developer/technotes.html#postscript

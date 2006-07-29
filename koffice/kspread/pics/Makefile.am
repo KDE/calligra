@@ -1,0 +1,3 @@
+
+KDE_ICON = kspread
+

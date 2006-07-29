@@ -1,0 +1,166 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>RotationPropertyUI</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>RotationPropertyUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>356</width>
+            <height>162</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Rotation</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QSlider" row="1" column="0">
+            <property name="name">
+                <cstring>angleSlider</cstring>
+            </property>
+            <property name="minValue">
+                <number>-180</number>
+            </property>
+            <property name="maxValue">
+                <number>180</number>
+            </property>
+            <property name="lineStep">
+                <number>5</number>
+            </property>
+            <property name="pageStep">
+                <number>15</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Below</enum>
+            </property>
+            <property name="tickInterval">
+                <number>90</number>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="2" column="0">
+            <property name="name">
+                <cstring>layout13</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>A&amp;ngle:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>angleSpinbox</cstring>
+                    </property>
+                </widget>
+                <widget class="KDoubleNumInput">
+                    <property name="name">
+                        <cstring>angleSpinbox</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="value">
+                        <number>0</number>
+                    </property>
+                    <property name="minValue">
+                        <number>-180</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>180</number>
+                    </property>
+                    <property name="suffix">
+                        <string> °</string>
+                    </property>
+                    <property name="precision">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer16</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>31</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="QFrame" row="0" column="1" rowspan="4" colspan="1">
+            <property name="name">
+                <cstring>previewPanel</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>160</width>
+                    <height>160</height>
+                </size>
+            </property>
+            <property name="frameShape">
+                <enum>Panel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+        </widget>
+        <spacer row="3" column="0">
+            <property name="name">
+                <cstring>spacer17</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QFrame" row="0" column="0">
+            <property name="name">
+                <cstring>angleFrame</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

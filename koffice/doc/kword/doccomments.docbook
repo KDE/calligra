@@ -1,0 +1,69 @@
+<sect1 id="comments">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Document Comments </title>
+<indexterm><primary>comments</primary></indexterm>
+
+<para>Document comments are included in &kword; to allow you to have your documents read by another 
+person. That person can make comments about the text and the comment will appear right next to the text. </para>
+
+<sect2 id="comments-add"><title>Adding a comment to a document</title>
+<para>To add a comment to a document, select the text you want the comment to apply to.</para>
+<para>Select <menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Comment...</guimenuitem>
+</menuchoice> from the menubar. This will bring up a small dialog box.</para>
+<para>Type the text of your comment in the dialog box provided. If you click on the 
+<guibutton>Add Author Name</guibutton>, the text will be signed, dated and the current time will be added.</para>
+<note><para>The authors name must be entered in the <link linkend="documentinfo">Document Information</link> 
+dialog or the name will not be included.</para></note>
+<para>When you have entered all of your text, click <guibutton>OK</guibutton> to add your comment.</para>
+<para>The comment will appear as a small yellow box at the cursor location.</para>
+</sect2>
+
+<sect2 id="comments-edit"><title>Adding to or changing the comment in a document</title>
+<para>To add more comments or change previous comments place the mouse pointer over the comment you
+want to edit.  Click once with the &RMB;.  A popup menu will appear.  Select <guilabel>Edit Comment...</guilabel>.</para>
+<para>You can now make your changes to the comment.</para>
+</sect2>
+
+<sect2 id="comments-delete"><title>Deleting a comment from a document</title>
+<para>To delete a comment, place the mouse pointer over the comment you
+want to edit.  Click once with the &RMB;.  A popup menu will appear.  Select <guilabel>Remove Comment</guilabel>.</para>
+<para>The comment is immediately deleted.</para>
+</sect2>
+
+<sect2 id="comments-hide"><title>Hiding all comments in a document</title>
+<para>To hide all comments, select <menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure KWord...</guimenuitem>
+</menuchoice> from the menubar. </para>
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="opt2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on <guilabel>Misc</guilabel>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="opt3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The check box labeled <guilabel>Display comments</guilabel> is used to toggle the comments on and off.</para>
+</sect2>
+
+</sect1>

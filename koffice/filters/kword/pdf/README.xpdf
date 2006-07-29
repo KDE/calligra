@@ -1,0 +1,31 @@
+
+This is Xpdf sources almost unmodified.
+
+XPDF
+version 2.00
+2002-nov-04
+
+----------------------------------------------------------
+Modifications in xpdf tree (cf diffs dir)
+
+Files added :
+- Makefile.am
+- configure.in.in
+- goo/aconf.h
+- goo/Makefile.am
+- xpdf/Makefile.am
+
+Files renamed :
+- xpdf/config.h -> xpdf/xpdf_config.h
+
+Files removed :
+- all "configure/make" files
+- all vms related files
+- xpdf/*.xbm
+- xpdf/*.xpm
+
+Applied patches :
+- gfile.diff : remove unsecure (and unused) tmpnam
+- includes.diff : change #include "config.h" to #include "config_xpdf.h"
+- TextOutputDev.diff : move TextBlock and TextLine declarations in header + add
+  some virtuals

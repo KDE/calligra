@@ -1,0 +1,114 @@
+<!DOCTYPE KWordExpression>
+<KWordExpression>
+	<Type>
+    		<TypeName>Personal</TypeName>
+			<Expression>
+				<Text>Hi!</Text>
+			</Expression>
+			<Expression>
+				<Text>Hello!</Text>
+			</Expression>	
+			<Expression>
+				<Text>Bye!</Text>
+			</Expression>
+			<Expression>
+				<Text>Good bye</Text>
+			</Expression>
+	</Type>
+	<Type>
+    		<TypeName>Professional</TypeName>	
+			<Expression>
+				<Text>Good Morning</Text>
+			</Expression>
+			<Expression>
+				<Text>Good Afternoon</Text>
+			</Expression>
+			<Expression>
+				<Text>Good Evening</Text>
+			</Expression>
+	</Type>
+    <Type>
+    		<TypeName>Email</TypeName>	
+			<Expression>
+				<Text>To:</Text>
+			</Expression>
+			<Expression>
+				<Text>From:</Text>
+			</Expression>
+			<Expression>
+				<Text>Subject:</Text>
+			</Expression>
+            <Expression>
+				<Text>CC:</Text>
+			</Expression>
+            <Expression>
+				<Text>BCC:</Text>
+			</Expression>
+            <Expression>
+				<Text>Fwd:</Text>
+			</Expression>
+	</Type>
+    <Type>
+    		<TypeName>Closing</TypeName>	
+			<Expression>
+				<Text>Best regards,</Text>
+			</Expression>
+			<Expression>
+				<Text>Best wishes</Text>
+			</Expression>
+			<Expression>
+				<Text>Cordially,</Text>
+			</Expression>
+            <Expression>
+				<Text>Love,</Text>
+			</Expression>
+            <Expression>
+				<Text>Regards,</Text>
+			</Expression>
+            <Expression>
+				<Text>Thank you,</Text>
+			</Expression>
+            <Expression>
+				<Text>Thanks,</Text>
+			</Expression>
+	</Type>
+    <Type>
+    		<TypeName>Subject</TypeName>	
+			<Expression>
+				<Text>Subject</Text>
+            </Expression>
+	</Type>
+    <Type>
+    		<TypeName>Salutation</TypeName>	
+			<Expression>
+				<Text>Dear Sir or Madam:</Text>
+            </Expression>
+            <Expression>
+				<Text>Ladies and Gentlemen:</Text>
+            </Expression>
+	</Type>
+        <Type>
+    		<TypeName>Attention</TypeName>	
+			<Expression>
+				<Text>Attention:</Text>
+            </Expression>
+            <Expression>
+				<Text>ATTN:</Text>
+            </Expression>
+	</Type>
+        <Type>
+    		<TypeName>Instructions</TypeName>	
+			<Expression>
+				<Text>CERTIFIED</Text>
+            </Expression>
+            <Expression>
+				<Text>CONFIDENTIAL</Text>
+            </Expression>
+            <Expression>
+				<Text>PERSONAL</Text>
+            </Expression>
+            <Expression>
+				<Text>FACSIMILE</Text>
+            </Expression>
+	</Type>
+</KWordExpression>

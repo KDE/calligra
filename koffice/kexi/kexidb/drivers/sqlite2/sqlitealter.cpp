@@ -1,0 +1,1 @@
+#include "../sqlite/sqlitealter.cpp"

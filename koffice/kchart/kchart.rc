@@ -1,0 +1,56 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="13">
+<MenuBar>
+ <Menu name="file"><text>&amp;File</text>
+    <Action name="import_data"/>
+    <Action name="extra_template"/>
+ </Menu>
+ <Menu name="Edit"><text>&amp;Edit</text>
+  <Action name="editdata"/>
+ </Menu>
+ <Menu name="Format"><text>F&amp;ormat</text>
+  <Action name="config"/>
+  <Separator />
+  <Action name="data_format"/>
+  <Action name="legend_subtype"/>
+  <Action name="headerfooter_subtype"/>
+  <Action name="color_config"/>
+  <Action name="font_config"/>
+  <Action name="back_config"/>
+  <Action name="legend_config"/>
+  <Separator />
+  <Action name="page_layout"/>
+ </Menu>
+ <Menu name="settings"><text>&amp;Settings</text>
+  <Separator group="settings_show"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="KChartToolBar" position="top"><Text>Actions</Text>
+ <Action name="editdata"/>
+ <Action name="config"/>
+ <Action name="wizard"/>
+</ToolBar>
+<ToolBar name="KChartTypes" position="left"><Text>Types</Text>
+ <Action name="barschart"/>
+ <Action name="linechart"/>
+ <Action name="areaschart"/>
+ <Action name="barlineschart"/>
+ <Action name="hilochart"/>
+ <Action name="bwchart"/>
+ <Action name="piechart"/>
+ <Action name="ringchart"/>
+ <Action name="polarchart"/>
+</ToolBar>
+<Menu name="action_popup">
+ <Action name="config"/>
+ <Separator />
+ <Action name="data_format"/>
+ <Action name="legend_subtype"/>
+ <Action name="headerfooter_subtype"/>
+ <Action name="legend_config"/>
+ <Action name="color_config"/>
+ <Action name="font_config"/>
+ <Action name="back_config"/>
+ <Separator />
+ <Action name="editdata"/>
+</Menu>
+</kpartgui>

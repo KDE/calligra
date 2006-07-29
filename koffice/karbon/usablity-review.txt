@@ -1,0 +1,216 @@
+Since I think the following link is closely related, I am including it here :
+
+http://dan.ostrowski.cc/suggestions.html
+
+Rob Buis <buis@kde.org>
+17-12-2003
+
+
+On 27-sept 2003 I did a usabiltiy review of karbon.
+This is during the feature and message freeze of KOffice (pending the 1.3 
+release) so many of these issues will probably have to wait. Hence this
+document in CVS.
+
+Issues are written down, and if possible to do without a ui file, a proposal
+is made.
+Naturally this file does not cover each part; items will be added by me when
+feedback seems positive and time permits.
+
+Please remove this file (or individual points from this file) when all stuff
+has been done/fiexed (which I hope is fast :)
+
+Thomas Zander <zander@kde.org>
+
+
+
+Starting up I notice that the toolbars are not persistent; the 'Tools' bar
+was left floating by me last time, now its docked at the top again.
+Since that makes the whole top-line of bars quite large I do think that
+the tools bar has to go to the left by default.  And the toolbars should
+be persistent naturally.
+
+Toolbar 'Tools'
+===============
+The toolbar is used to select the main tools by clicking on buttons (more
+radio buttons actually; since you keep it selected when you click it).
+To select extra options you click on the icon again, which brings up an
+options window.
+bug: the options window of the 'select tool' (top left) has a title 'insert star'.
+
+First problem I see is that it is hard to see which tool is currently selected,
+while this might be a problem in the style (KDE3.2 default) there is another
+problem that makes this problem really a problem instead of just an annoyance.
+It is not obvious that clicking on an already clicked item brings up a dialog,
+it is annoying to get that dialog if you just clicked the item to make sure
+you clicked it.
+Another bug makes it even worse; the '14' icon is clickable but does not notify
+the software that the formerly selected tool is not selected anymore. Selecting
+the formerly selected tool again brings up the options dialog again.
+
+I suggest to move the options dialog to a dockable toolbar which is brought to
+front, or simply displayed when dubble clicked. Notice that dubble clicking is
+different from the click twice action that happens now.
+
+Suggestion2:
+Add keyboard shortcuts to the buttons and show them in the tooltips. The keys
+should be single key (no modifier) shortcuts.
+Suggestion3:
+Add a new tool called a 'line' which creates a single non-closed line (and no
+options to make it curved) and put that in the place of the annoying '14'.
+Suggestion4:
+Make 'ESC' select the 'Select tool'
+
+
+
+Tool: Select tool
+=================
+With the select tool you can select elements like individual starts or groups.
+The way it currently works is that it takes the click and selects the first
+object that it falls into based on the algoritm of the complete square that
+contains the top left to the bottom right coordinate.
+selection can only be done via a square and all objects that have a presence
+in that square are selected.
+The problems I found are;
+
+When you have multiple objects you tend to select the wrong one.
+It is impossible to add or subtract objects from the current selection.
+It is impossible to select 3 objects from a four-in-a-row where the
+unselects is not one of the outside objects.
+It is impossible to select an object that is completely inside another.
+
+A perfect solution would:
+* make the 'hit area' based more on the outside of the shape.
+A line should not be selected when clicked more then pixels next to it.
+Text should be selected when clicked in the white area of a 'D'
+
+* Select extra objects when CTRL is used to select them.
+* Select extra objects that occupy the same spot (behind each other)
+when pressing CTRL and ALT
+* Select an object that is 1 layer deeper (behind the currently selected one)
+and unselect the current one by clicking CTRL and SHIFT.
+
+* An extra selection tool would be able to draw freehand on screen and all
+stuff inside that freehand selection would be selected.
+
+* When noting is selected and I point and drag an object (using the modifiers
+from above) directly drag that object.
+
+* Using 'shift' while dragging for a position for the text snaps the angle to
+an angle mod(45) i.e. 0,45,90,...
+
+Notice that the selection options proposed are taken from KWord.
+
+Tool: Select Nodes Tool
+=======================
+The goal is to select and modify individual nodes.
+With the current approuch you have to select an individual node by dragging a
+selection over it for the object you want to modify to show all of its nodes.
+Following that you can find the node you want to edit and select that one,
+again dragging a selection box over that node.
+
+With the current approuch it is not possible to;
+quickly find out which nodes exist on an object; on objects that don't have
+many nodes you quickly miss the nodes.  On top of that alternative
+applications allow the user to select a line with a single click. That user
+will take a number of tries to find a node to select and will probably not
+learn this approuch for quite some time.
+Selecting a node before you can edit it is also counter intuitive; I found
+myself clicking and dragging a node some times, only to see another node moving
+that I had selected before.
+
+I suggest:
+* Allow the user to select an object (to show all of its nodes) by clicking on
+a line; of the object.
+* If one (or more) objects were selected when the select nodes tool is invoked
+make those objects selected directly and draw all their nodes.  Possibly using
+an algoritm to not draw 'hidden' nodes. Hidden means ones that lie underneath
+other objects.
+* When a click is made missing all objects; don't unselect the object (thus
+removing node previews)
+
+* When a node itself is clicked on a selected object, select that one.
+* When a node itself is clicked and dragged on a selected object, drag that one.
+* Use the node selection algoritm that are the same as the object selection
+algorithm described above.
+* Allow a node to gain a knot when ctrl is used to drag it
+* Using 'shift' while dragging for a position for the text snaps the angle to
+an angle mod(45) i.e. 0,45,90,...
+
+
+
+Tool: Rotate
+============
+
+I don't get this one; there is a center 'dot' painted that stuff moves around,
+but that dot also moves when I rotate.  That should not be possible...
+I also did not find a way to set the center point..
+
+
+Tool: Shear Tool
+===============
+Is this suppost to actually do something?
+
+
+Tool: Text tool
+===============
+After I found out I could click twice, I understood it a bit more; but this one
+is still largely a mystory to me..
+
+I suggest:
+* Single click makes a horizontal text entry; drawing a horizontal line in
+light blue (for example).
+* Using 'shift' while dragging for a position for the text snaps the angle to
+an angle mod(45) i.e. 0,45,90,...
+* Popup a dialog, or allow in line editing as soon as a position is determined
+by the click or drag
+* Put a default text in the dialog when the application starts up so the first
+drag shows that text.
+
+
+Tool: Pattern tool
+==================
+As soon as I find out what it does..
+
+
+Tool: Zoom
+==============
+Please use 'alt' to zoom out again...
+
+
+Colors (in tools toolbar)
+========================
+Currently you have to double click to get the color dialog.  Make that use the
+KDE double click policy.
+The 'Stroke' tab is inacurately named since it also contains info on gradients.
+I suggest renaming it to 'Outline'
+
+Overview dock;
+==============
+it should be possible to make that tool larger, and it should really start larger by
+default.
+
+Layers:
+Put tooltips on
+- the checkbox by a layer (what is it for anyway)
+- The lock column (or each lock if you can't do it per column)
+- The visible column.
+Don't blank the preview of the object when it is set to non visible; make it
+grayed out.
+
+This looks really unfinished right now so I won't go into this and trample
+someones unfinished work.
+
+
+
+General content area
+====================
+There are keyboard navigation features added that are not quite the same as
+what artists from other packages are expecting.
+- Add 'del' to delete an object
+- allow 'SHIFT' arrow to move the item 1/4th of te distance.
+- Allow shift dragging to drag an item across a 45 degrees line. So only
+horizontally, vertically and the 45 and 135 degrees axis.
+- Allow shift scaling to keep aspect ratio.
+- Allow ctrl scaling to scale around the center instead of against the
+other edge
+

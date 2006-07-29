@@ -1,0 +1,102 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>ConfigBehaviorPanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ConfigBehaviorPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>307</width>
+            <height>163</height>
+        </rect>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>calculationGroup</cstring>
+            </property>
+            <property name="title">
+                <string>Calculation</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>calcManual</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Manual</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>calcImmedate</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Immediate on change</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>Constraints</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>allowOverbooking</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Allow overbooking of resources</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>calcManual</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ConfigBehaviorPanelBase</receiver>
+        <slot>slotChanged()</slot>
+    </connection>
+    <connection>
+        <sender>calcImmedate</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ConfigBehaviorPanelBase</receiver>
+        <slot>slotChanged()</slot>
+    </connection>
+    <connection>
+        <sender>allowOverbooking</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ConfigBehaviorPanelBase</receiver>
+        <slot>slotChanged()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">kptconfigbehaviorpanelbase.ui.h</include>
+</includes>
+<signals>
+    <signal>changed()</signal>
+</signals>
+<slots>
+    <slot>slotChanged()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

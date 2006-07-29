@@ -1,0 +1,111 @@
+<chapter id="layers">
+<title>Layers</title>
+
+<para>
+This chapter gives an overview of how layers work in &krita;, with special
+notice of adjustment layers.
+</para>
+
+<sect1 id="layers-background">
+<title>Background information on layers</title>
+
+<para>
+Extensive use of &krita; will almost require you to have some knowledge of
+layers. Using layers, you can work on one part of the image without touching
+the rest of it, and most effects are best applied on a layer, instead of on
+the whole image. Of course, if you do want to apply an effect to an entire
+image, &krita; does offer you that possibility, and there is nothing against
+it.
+</para><para>
+The idea behind layers is quite simple. As the name suggests, layers lie on
+top of each other, and together form the layer stack. The final resulting
+image is that what you see when looking through the stack from top to bottom.
+This means that usually the upper layers of your image will have more or less
+transparency, since you cannot look through a layer which has no transparency
+(or as &krita; denotes it, is 100 percent opaque). A layer higher in the stack
+gets applied later than one lower in the stack. For example, the effect that
+layer number 4 adds to the image, is applied to the result from applying
+layers 1 through 3.
+</para><para>
+Every image you edit in &krita; contains layers. When you create a new image,
+the layer box (usually shown at the bottom right of your screen, see <link
+linkend="commands-palettes-layers-layers">this section</link>) will contain
+one layer. The painting and editing you do is then applied to that layer. Once
+you add more layers, you can choose on which part of the image you want to
+work, by selecting the respective layer. All further painting is then applied
+to that layer.
+</para><para>
+Layers are also an excellent way to check whether adding certain effects (or
+applying certain image modifications) come out right. Add a layer which
+contains what you want to try out, and show or hide it with the eye icon in
+the layer box. You can especially profit from this method if you have multiple
+effects: show and hide them in any combination, and decide which you like
+best. And since you can move the layers around, you can also experiment with
+the order in which the effects are applied.
+</para><para>
+See the <link linkend="tutorial-select-layer">Selections and layers
+tutorial</link> for a small hands-on introduction.
+</para>
+</sect1>
+
+<sect1 id="layers-adjustment">
+<title>Adjustment Layers</title>
+
+<para>Adjustment Layers are layers that consist of a filter and an optional
+selection. The filter effect is applied to the composite image of all
+layers under the adjustmentlayer in the current layer group. The big
+thing is, adjustment layers apply these effects non-destructively. The
+original image data is not modified.
+</para><para>
+Almost all &krita; filters are suitable for use in adjustment
+layers -- even filters that would downgrade the image quality. For instance,
+the raindrops filter converts to 8-bit RGB before working its magic. If you
+would try to use this filter directly on a 16-bit L*a*b* layer, &krita; would
+warn you about the conversion to RGB and back again this filter would cause.
+Not so with adjustment layers: the original data isn't touched, so applying
+the filter is safe.
+</para><para>
+What about the colorspace of an adjustment layer then? In order to examine
+this issue, you need to know what happens when &krita; renders an adjustment
+layer.
+</para>
+
+<sect2 id="layers-adjustment-selections">
+<title>Adjustment Layers and selections</title>
+
+<para>If the currently active layer has an active selection, then that selection
+will be copied and used as a mask for the adjustment layer. If there is no
+active selection, then there will be no mask and the adjustment will apply to
+the entire extent of the layers under the adjustment layer in the current
+group. There is <emphasis>no</emphasis> way of adding a mask to an existing
+adjustment layer.
+</para><para>
+If there is a mask in the adjustment layer, you can edit the mask using the
+ordinary painting tools and painting operations.
+</para>
+
+</sect2>
+
+<sect2 id="layers-adjustment-projection">
+<title>A note on projections</title>
+
+<para>
+&krita; composites the layers bottom to top, within each layer group. The
+aggregate -- or the projection as we hackers call it -- is then filtered by
+the adjustment layer. If there are layers on top of the adjustment layer,
+those are composited onto the projection. &krita; converts all layer data before
+compositing, so if the bottom-most layer in an image is grayscale, all layers
+are converted to grayscale before compositing -- and that means that the
+adjustment layer projection will be grayscale, too.
+</para><para>
+With this knowledge you'll understand why &krita; can often offer better
+performance working with layers on top of an adjustmentlayer which is on top
+of a complex layer structure: &krita; uses the projection and doesn't even look
+anymore at the layers under the adjustment layer. Unless, of course, you
+change one of them.
+</para>
+</sect2>
+
+</sect1>
+
+</chapter>

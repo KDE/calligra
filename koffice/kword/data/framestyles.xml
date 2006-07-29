@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FRAMESTYLES>
+  <FRAMESTYLE red="255" green="255" blue="255">
+      <NAME value="Plain"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="0"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="255">
+      <NAME value="Borders 1"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="255">
+      <NAME value="Borders 2"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="2"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="2"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="2"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="2"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="255">
+      <NAME value="Borders 3"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="3"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="3"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="3"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="3"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="255">
+      <NAME value="Row"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="0"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="255">
+      <NAME value="Column"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="0"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="211" green="211" blue="211">
+      <NAME value="Light Gray"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="169" green="169" blue="169">
+      <NAME value="Dark Gray"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="0" green="0" blue="0">
+      <NAME value="Black"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="173" green="216" blue="230">
+      <NAME value="Light Blue"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="0" green="0" blue="139">
+      <NAME value="Dark Blue"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="0" blue="0">
+      <NAME value="Red"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="0">
+      <NAME value="Yellow"/>
+      <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="255" green="255" blue="0">
+      <NAME value="Colorful"/>
+      <TOPBORDER red="255" green="0" blue="0" style="0" width="1"/>
+      <BOTTOMBORDER red="255" green="0" blue="0" style="0" width="1"/>
+      <RIGHTBORDER red="255" green="0" blue="0" style="0" width="1"/>
+      <LEFTBORDER red="255" green="0" blue="0" style="0" width="1"/>
+  </FRAMESTYLE>
+  <FRAMESTYLE red="173" green="216" blue="230">
+      <NAME value="Bluish"/>
+      <TOPBORDER red="0" green="0" blue="139" style="0" width="1"/>
+      <BOTTOMBORDER red="0" green="0" blue="139" style="0" width="1"/>
+      <RIGHTBORDER red="0" green="0" blue="139" style="0" width="1"/>
+      <LEFTBORDER red="0" green="0" blue="139" style="0" width="1"/>
+  </FRAMESTYLE>
+</FRAMESTYLES>

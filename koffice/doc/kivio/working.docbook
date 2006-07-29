@@ -1,0 +1,217 @@
+<chapter id="working">
+<chapterinfo>
+<authorgroup>
+<author><firstname>Ben</firstname>
+<surname>Lamb</surname>
+<affiliation>
+<address>
+<email>kde@zurgy.org</email>
+</address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
+<title>Working with &kivio;</title>
+
+<sect1 id="opening">
+<title>Opening a Document</title>
+<para>To open a previously saved document select <menuchoice><guimenu>File</guimenu><guimenuitem>Open...</guimenuitem></menuchoice>, a standard &kde; file dialog box will appear.</para>
+<para>Recently used documents are listed under <menuchoice><guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem></menuchoice>.</para>
+</sect1>
+
+<sect1 id="saving">
+<title>Saving a Document</title>
+<para>To save the current document select <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> or <menuchoice><guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice> to give an existing file a different name.</para>
+<note><para>It is possible to save the document in a format that can be opened by earlier versions of &kivio;. Select the version you require from the <guilabel>Filter:</guilabel> combo box in the save file dialog.</para></note>
+</sect1>
+
+<sect1 id="printing">
+<title>Printing</title>
+<para>The document can be printed by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print...</guimenuitem></menuchoice>. The standard &kde; printing dialog appears. A preview of the printed output can be obtained by selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Print Preview...</guimenuitem></menuchoice>.</para>
+</sect1>
+
+<sect1 id="import-export">
+<title>Importing/Exporting Documents</title>
+<para>The <guimenuitem>Import...</guimenuitem> menu option on the <guimenu>File</guimenu> menu currently loads a &kivio; or &XML; document into a new &kivio; application.</para>
+<para>The <guimenuitem>Export...</guimenuitem> menu option on the <guimenu>File</guimenu> menu currently perform the same functions as <menuchoice><guimenu>File</guimenu> <guimenuitem>Save As...</guimenuitem></menuchoice>. These options let you save a document under a different name or into an other format.</para>
+</sect1>
+
+<sect1 id="multiple-pages">
+<title>Documents with Multiple Pages</title>
+<para>A &kivio; document can contain several pages of diagrams.</para>
+
+<sect2>
+<title>Adding Pages</title>
+<para>To <action>add additional pages</action> to a document select <menuchoice><guimenu>Page</guimenu><guimenuitem>Insert Page</guimenuitem></menuchoice>. The selector beneath the document view shows tabs for all the pages in the document that have not been hidden.</para>
+</sect2>
+
+<sect2>
+<title>Removing Pages</title>
+<para>Unwanted pages can be removed by selecting <menuchoice><guimenu>Page</guimenu><guimenuitem>Remove Page</guimenuitem></menuchoice>.</para>
+</sect2>
+
+<sect2>
+<title>Renaming Pages</title>
+<para>The names given to each page can be adjusted by double-clicking on the page name on the page selector, a dialog box will appear allowing the name to be edited.</para>
+</sect2>
+
+<sect2>
+<title>Working with Pages</title>
+<para>The order of the pages can be adjusted by dragging the tabs on the page selector bar.</para>
+<note><para>The arrow buttons on the page selector bar are for scrolling through the page tabs, they do not cycle through the pages themselves.</para></note>
+<para>If you have a lot of pages in a document and you do not want to see them all on the page selector you can hide pages by selecting <menuchoice><guimenu>Page</guimenu><guimenuitem>Hide Page</guimenuitem></menuchoice>. This will remove the currently selected page from the page selector bar.</para>
+<para>To reveal a hidden page select <menuchoice><guimenu>Page</guimenu><guimenuitem>Show Page</guimenuitem></menuchoice> and choose the page you want to see from the list box.</para>
+</sect2>
+
+</sect1>
+
+<sect1 id="page-export">
+<title>Exporting a Page</title>
+<para>Individual pages can be exported as bitmap graphics files. To export the current page select <menuchoice><guimenu>File</guimenu> <guimenuitem>Export...</guimenuitem></menuchoice> or <menuchoice><guimenu>File</guimenu> <guimenuitem>Save As...</guimenuitem></menuchoice>. A standard &kde; file dialog box appears. The export format is determined by the name extension you give the file, it must end with one of the extensions listed below.</para>
+<para>The following formats are supported:</para>
+
+<itemizedlist>
+<listitem><para>PNG Image (.png)</para></listitem>
+<listitem><para>JPEG Image (.jpg)</para></listitem>
+<listitem><para>&Windows; Bitmap (.bmp)</para></listitem>
+<listitem><para>Encapsulated Postscript Image (.eps)</para></listitem>
+<listitem><para>Portable Bitmap (.pbm)</para></listitem>
+<listitem><para>PCX Image (.pcx)</para></listitem>
+<listitem><para>Portable Pixmap Image (.ppm)</para></listitem>
+<listitem><para>SGI Image (RGB) (.rgb)</para></listitem>
+<listitem><para>X PixMap Image (.xpm)</para></listitem>
+<listitem><para>JPEG 2000 Image (.jp2)</para></listitem>
+<listitem><para>Krita Document (.kra)</para></listitem>
+<listitem><para>Adobe Illustrator Document (.ai)</para></listitem>
+<listitem><para>TIFF Image (.tiff)</para></listitem>
+<listitem><para>ILM EXR Image (.exr)</para></listitem>
+<listitem><para>GIF Image (.gif)</para></listitem>
+<listitem><para>Computer Graphics Metafile (.cgm)</para></listitem>
+<listitem><para>&Windows; Icon (.ico)</para></listitem>
+<listitem><para>Truevision Targa Image (.tga)</para></listitem>
+<listitem><para>X BitMap Image (.xbm)</para></listitem>
+<listitem><para>Adobe Photoshop Image (.psd)</para></listitem>
+<listitem><para>Karbon14 Document (.karbon)</para></listitem>
+<listitem><para>GIMP Native Image Format (.xcf)</para></listitem>
+<listitem><para>Scalable Vector Graphics (.svg)</para></listitem>
+<listitem><para>&Windows; MetaFile (.wmf)</para></listitem>
+</itemizedlist>
+
+<para>You have to confirm the export, because this may result in some loss of formatting. Click the button <guibutton>Save</guibutton> and the <guilabel>Export to Image</guilabel> dialog is displayed. In this dialog you can set some export options: <guilabel>Page:</guilabel> range, the <guilabel>Area to export:</guilabel>, the  <guilabel>Custom size (in pixels):</guilabel> and the <guilabel>Margin:</guilabel> of the page.</para>
+</sect1>
+
+<sect1 id="grid">
+<title>The Grid</title>	
+<para>&kivio; displays a regularly spaced grid over the document to aid stencil positioning. The visibility of the grid can be toggled by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Show Grid</guimenuitem></menuchoice>.</para>
+<para>Objects edges are snapped to the nearest point on the grid regardless of whether it is visible. To toggle this behavior select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Grid</guimenuitem></menuchoice>.</para>
+<para>To customize the grid select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kivio;...</guimenuitem></menuchoice> and click on the <guiicon>Grid</guiicon> on the icon list.</para>
+<para>This dialog box will let you adjust the color the grid is drawn in, the horizontal and vertical spacing and the snap distance.</para>
+<para>Tip: It is possible to have a non-square grid by specifying different horizontal and vertical spacings.</para>
+</sect1>
+
+<sect1 id="text-tool">
+<title>Freestanding Text</title>
+<para>The text tool can be used to add text to a document that is not associated with any object. This is useful for noting general information about a drawing.</para>
+<para>To add freestanding text make sure no object is selected by selecting <menuchoice><guimenu>Edit</guimenu><guimenuitem>Deselect </guimenuitem></menuchoice>, then activate the text tool by selecting <menuchoice><guimenu>Tools</guimenu><guimenuitem>Text Tool</guimenuitem></menuchoice>. The mouse pointer will change to indicate the text tool is activated.</para>
+<para>Drag a box to contain the text. A dialog box will appear prompting for the text, enter some text and click <guibutton>OK</guibutton>. The formatting of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text</guimenuitem></menuchoice> or by using the toolbars.</para>
+</sect1>
+
+<sect1 id="page-layout">
+<title>Page Layout</title>
+<para>The page size, margins and orientation, portrait or landscape, can be adjusted using the <guilabel>Page Size &amp; Margins</guilabel> dialog box. This is accessible by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>.</para>
+</sect1>
+
+<sect1 id="guides">
+<title>Using Guides</title>
+<para>Guides are lines used to help you position  stencils. Not only can you use guides as a visual reference when aligning items but, optionally, &kivio; will snap stencils to guides. This means that as soon as the edge of a stencil is within a certain distance to a guide it will immediately move to the guide's position.</para>
+
+<sect2>
+<title>Adding Guides</title>
+<para>To add a guide move the mouse pointer over either the horizontal or vertical ruler, depending on the type of guide you require. Hold down the &LMB; and drag the mouse over the document and release the mouse button where you want to position the guide. As you drag the mouse the guide will move accordingly.</para>
+</sect2>
+
+<sect2>
+<title>Repositioning Guides</title>
+<para>Once a guide is in place you can reposition it by moving the mouse over it, holding down the &LMB; and dragging. Release the mouse button when the guide is in its new position.</para>
+</sect2>
+
+<sect2>
+<title>Visibility and Snapping</title>
+<para>To hide guides select <menuchoice><guimenu>View</guimenu><guimenuitem>Guide Lines</guimenuitem></menuchoice>, this toggles the visibility.</para>
+<para>By default stencil edges are snapped to the nearest guide, to toggle this behavior select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Grid</guimenuitem></menuchoice>.</para>
+</sect2>
+
+</sect1>
+
+<sect1 id="layers">
+<title>Layers</title>
+<para>&kivio; allows complex diagrams to be split into multiple layers. The visibility of layers can be turned on and off. This functionality is useful if you have a basic diagram, for example a floorplan, and need to create several versions of it for different audiences. The information for each audience can be placed in a different layer.
+Each page of the document has its own set of layers.</para>
+
+<sect2>
+<title>The Layer Palette</title>
+<para>To adjust the current page's layers select <menuchoice><guimenu>View</guimenu><guisubmenu>Palettes</guisubmenu><guimenuitem>Show Layers </guimenuitem></menuchoice>. The layer palette allows layers to be created, deleted and renamed. It can also be used to adjust layer visibility, drawing order and select the current layer.</para>
+<para>&kivio; has the concept of the currently active layer which is the one affected by any editing actions. By default a page contains only one layer which is the active layer.</para>
+</sect2>
+
+<sect2>
+<title>Adding Layers</title>
+<para>Using the <guilabel>Layers</guilabel> docker you can add new layers by clicking the <guibutton>New Layer</guibutton> button, the first from the left. Layers can be deleted by clicking the second button, <guibutton>Remove Layer</guibutton>. &kivio; numbers the layers consecutively, to rename a layer select it in the list and click <guibutton>Rename Layer</guibutton>.</para>
+</sect2>
+
+<sect2>
+<title>Layer Settings</title>
+<para>Layers are drawn in the order they are listed. The drawing occurs from the top down so objects in the layer at the bottom of the list are drawn on top of objects in all the other layers. The order of the list can be changed by selecting a layer and using the <guibutton>Move Layer Up</guibutton> and <guibutton>Move Layer Down</guibutton> buttons to change its position.</para>
+<para>Each layer is listed with four small icons next to its name. From left
+to right they represent:</para>
+<variablelist>
+<varlistentry>
+<term>Visibility (shown as a small eye)</term>
+<listitem><para>Clicking on the icon will toggle the layer's visibility.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Printable (shown as a small printer)</term>
+<listitem><para>Toggles if the layer should be printed with the document or
+not.  You might use a non-printing layer to keep notes to yourself, or as a
+scrapbook to hold images you're not ready to use yet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Editable (shown as a small pencil)</term>
+<listitem><para>Toggles if you can edit a layer or not.  You might want to
+mark some layers non-editable while you work on others, to prevent
+inadvertant changes.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Connectable (shown as a small connector)</term>
+<listitem><para>You can permit connecting of items that lie on different
+layers with this icon.</para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+</sect1>
+
+<sect1 id="arranging">
+<title>Arranging Stencils</title>
+
+<sect2>
+<title>The Align Tool</title>
+<para>The <guilabel>Align</guilabel> tool rearranges a group of stencils so that they are aligned on one edge or on an invisible centerline. To use the tool select several stencils, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice>. If the stencils are arranged in a horizontal row you the choice of aligning along the top or bottom edges or the centerline. For stencils that are arranged in a vertical row the choice is left or right edge or the centerline.</para>
+</sect2>
+
+<sect2>
+<title>The Distribute Tool</title>
+<para>The <guilabel>Distribute</guilabel> tool arranges a group of stencils so that there is an even amount of spacing between each stencil.</para>
+<para>First select the stencils you want to rearrange, then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Align &amp; Distribute...</guimenuitem></menuchoice> and click on the <guilabel>Distribute</guilabel> tab in the tabbed window that appears.</para>
+<para>You can choose whether the items should be spaced so that there is equal spacing between two edges, for example, the distance between the lefthand edge of each stencil should be the same. Or, whether the gap between each item should be identical. Choose the <guilabel>Spacing</guilabel> option if you desire this.</para>
+<para>The second choice is whether the spacing should use the entire extent of the page or just the extent of the selection. If the latter is chosen the stencils will not occupy any more space than they did originally.</para>
+<note><para>The option to use the extent of the page takes the page margins into consideration.</para></note>
+</sect2>
+</sect1>
+
+</chapter>

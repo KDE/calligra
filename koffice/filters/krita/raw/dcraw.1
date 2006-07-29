@@ -1,0 +1,182 @@
+.\"
+.\" Man page for dcraw (Raw Photo Decoder)
+.\"
+.\" Copyright (c) 2005 by David Coffin
+.\"
+.\" You may distribute without restriction.
+.\"
+.\" David Coffin
+.\" dcoffin a cybercom o net
+.\" http://www.cybercom.net/~dcoffin
+.\"
+.TH dcraw 1 "September 29, 2005"
+.LO 1
+.SH NAME
+dcraw - convert raw digital photos to PPM format
+.SH SYNOPSIS
+.B dcraw 
+[\fIOPTION\fR]... [\fIFILE\fR]...
+.SH DESCRIPTION
+.B dcraw
+converts raw digital photos to
+.BR ppm (5)
+format.
+.SH OPTIONS
+.TP
+.B -v
+Print verbose messages.  The default is to print only warnings
+and errors.
+.TP
+.B -z
+Change the access and modification times of a JPEG or raw file to
+when the photo was taken, assuming that the camera clock was set
+to Universal Time.
+.TP
+.B -i
+Identify files but don't decode them.
+Exit status is 0 if
+.B dcraw
+can decode the last file, 1 if it can't.
+.TP
+.B ""
+.B dcraw
+cannot decode JPEG files!!
+.TP
+.B -c
+Write binary image data to standard output.
+By default,
+.B dcraw
+creates files with a ".ppm" extension.
+.TP
+.B -d
+Show the raw data as a grayscale image with no interpolation.
+Good for photographing black-and-white documents.
+.TP
+.B -q [0-3]
+Set the interpolation quality (default is 3):
+
+.B \t0
+\ \ Bilinear (very fast, low quality)
+.br
+.B \t1
+\ \ Reserved
+.br
+.B \t2
+\ \ Variable Number of Gradients (VNG)
+.br
+.B \t3
+\ \ Adaptive Homogeneity-Directed (AHD)
+.TP
+.B -h
+Output a half-size image.  Twice as fast as
+.BR -q\ 0 .
+.TP
+.B -f
+Interpolate RGB as four colors.  This blurs the image a little,
+but it eliminates false 2x2 mesh patterns.
+.TP
+.B -B sigma_domain sigma_range
+Use a bilateral filter to smooth noise while preserving edges.
+.B sigma_domain
+is in units of pixels, while
+.B sigma_range
+is in units of CIELab colorspace.
+Try
+.B -B\ 2\ 4
+to start.
+.TP
+.B -a
+Automatic color balance.  The default is to use a fixed
+color balance based on a white card photographed in sunlight.
+.TP
+.B -w
+Use the color balance specified by the camera.
+If this can't be found,
+.B dcraw
+prints a warning and reverts to the default.
+.TP
+.B -r red_mul -l blue_mul
+Further adjust the color balance by multiplying the red and
+blue output channels by these values.  Both default to 1.0.
+.TP
+.B -b brightness
+Change the output brightness.  Default is 1.0.
+.TP
+.B -k black
+Set the black point.  Default depends on the camera.
+.TP
+.B -n
+By default,
+.B dcraw
+clips all colors to prevent pink hues in the highlights.
+Combine this option with
+.B -b 0.25
+to leave the image data completely unclipped.
+.TP
+.B -m
+Write raw camera colors to the output file.  By default,
+.B dcraw
+converts to sRGB colorspace.
+.TP
+.B -j
+For Fuji\ Super\ CCD cameras, show the image tilted 45 degrees
+so that each output pixel corresponds to one raw pixel.
+.TP
+.B -s
+For Fuji\ Super\ CCD\ SR cameras, use the secondary sensors, in
+effect underexposing the image by four stops to reveal detail
+in the highlights.
+.TP
+.B ""
+For all other cameras,
+.B -j
+and
+.B -s
+are silently ignored.
+.TP
+.B -t [0-7]
+Flip the output image.  The most common flips are 5
+(90 degrees CCW) and 6 (90 degrees clockwise).  By default,
+dcraw tries to use the flip specified by the camera.
+.RB \^" -t\ 0 \^"
+forces
+.B dcraw
+not to flip images.
+.TP
+.B -2
+Write eight bits per color value with a 99th-percentile white
+point and the standard 0.45 gamma curve.  Double the height if
+necessary to correct the aspect ratio.  This is the default.
+.TP
+.B -4
+Write sixteen bits per color value.  Output is linear with
+input -- no white point, no gamma, same aspect ratio.
+.TP
+.B -3
+Same image as
+.BR -4 ,
+written in Adobe PhotoShop format.  File extension is ".psd".
+.SH "SEE ALSO"
+.BR ppm (5),
+.BR ppm2tiff (1),
+.BR pnmtotiff (1),
+.BR pnmtopng (1),
+.BR gphoto2 (1),
+.BR djpeg (1)
+.SH BUGS
+The
+.B -w
+option does not work with many cameras.
+.P
+No attempt is made to save camera settings or thumbnail images.
+.P
+The author stubbornly refuses to add more output formats.
+.P
+Don't expect
+.B dcraw
+to produce the same images as software provided by the camera
+vendor.  Sometimes
+.B dcraw
+gives better results!
+.SH AUTHOR
+Written by David Coffin, dcoffin a cybercom o net

@@ -1,0 +1,261 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>Kivio::ImageExportWidget</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>Kivio::ImageExportWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>342</width>
+            <height>181</height>
+        </rect>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_pageLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Page:</string>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="0" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_pageCombo</cstring>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="1" column="2" rowspan="1" colspan="2">
+            <item>
+                <property name="text">
+                    <string>Complete Page</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Area of Objects on Page</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>m_exportAreaCombo</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_exportAreaLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Area to export:</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>m_customSizeCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Custom size (in pixels):</string>
+            </property>
+        </widget>
+        <spacer row="3" column="0">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="4" column="0">
+            <property name="name">
+                <cstring>spacer1_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="4" column="1">
+            <property name="name">
+                <cstring>m_heightLabel</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>Height:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="1">
+            <property name="name">
+                <cstring>m_widthLabel</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>Width:</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="3" column="2">
+            <property name="name">
+                <cstring>m_widthSpinBox</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="maxValue">
+                <number>10000</number>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="4" column="2">
+            <property name="name">
+                <cstring>m_heightSpinBox</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="maxValue">
+                <number>10000</number>
+            </property>
+        </widget>
+        <spacer row="3" column="3">
+            <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>41</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="4" column="3">
+            <property name="name">
+                <cstring>spacer4_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>41</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="6" column="2">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="5" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_marginLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Margin:</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="5" column="2">
+            <property name="name">
+                <cstring>m_marginSpinBox</cstring>
+            </property>
+        </widget>
+        <spacer row="5" column="3">
+            <property name="name">
+                <cstring>spacer4_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>165</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+    <connection>
+        <sender>m_customSizeCheckBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_widthLabel</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_customSizeCheckBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_widthSpinBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_customSizeCheckBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_heightLabel</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>m_customSizeCheckBox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>m_heightSpinBox</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+</includehints>
+</UI>

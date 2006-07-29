@@ -1,0 +1,8 @@
+if test -z "$LIBPNG";  then
+  echo ""
+  echo "You're missing libpng (binaries and/or headers), krita won't be able"
+  echo "to import/export png"
+  echo ""
+  all_tests=bad
+fi
+

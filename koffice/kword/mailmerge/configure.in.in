@@ -1,0 +1,41 @@
+dnl only compile the sql plugin if qt was compiled with sql support
+
+
+AC_MSG_CHECKING([for SQL support in QT])
+
+LIBS_SAVE_KWSL="$LIBS"
+CXXFLAGS_SAVE_KWSL="$CXXFLAGS"
+CFLAGS_SAVE_KWSL="$CFLAGS"
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+LIBS="$all_libraries -lqimgio -lpng -lz $LIBJPEG $LIBQT"
+CXXFLAGS="$CXXFLAGS -I$qt_includes $all_includes"
+
+AC_TRY_COMPILE([
+#include <qglobal.h>
+],
+[
+#ifdef QT_NO_SQL
+#error "No QT-SQL support"
+#endif
+],
+ac_trycompile_kwsl_qtsql=yes,
+ac_trycompile_kwsl_qtsql=no)
+
+CXXFLAGS="$CXXFLAGS_SAVE_KWSL"
+LIBS="$LIBS_SAVE_KWSL"
+AC_LANG_RESTORE
+
+if eval "test \"`echo $ac_trycompile_kwsl_qtsql`\" = yes"; then
+  SQLDIR=sql
+  AC_SUBST(SQLDIR)
+  AC_MSG_RESULT([QT supports SQL - compile qtsqlmailmerge])
+else
+  SQLDIR=
+  AC_SUBST(SQLDIR)
+  AC_MSG_RESULT([QT supports SQL -- qtsqlmailmerge will not be built])
+fi
+
+AM_CONDITIONAL(include_sql, test -n "$SQLDIR")

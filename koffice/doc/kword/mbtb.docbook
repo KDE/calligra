@@ -1,0 +1,2628 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
+To work on this document standalone, uncomment the prolog.
+Comment it out again when you are done -->
+	
+<chapter id="menu-items">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>The Menu Items/Toolbars</title>
+
+<sect1 id="menu-intro">
+<title>Introduction to the Menubar and Toolbars</title>
+
+<para>The key to getting the most out of &kword;, is found in the menu
+bars and the toolbars.</para>
+
+<para>The menubar is organized into groups of functions (&eg; file
+functions, table functions, &etc;).  Below each of these groups, is a
+submenu of actions.  Some of these submenus will have sub menus of
+their own.</para>
+
+<para>The toolbars are also organized into groups.  Each toolbar
+consists of a set of buttons.  Each button performs a specific
+function.  The toolbars are designed to act as shortcuts for more
+commonly used functions.</para>
+
+<para>The first part of this section of the manual discusses the
+manipulation of &kword;'s toolbars to suit your needs.</para>
+
+<para>The second part of this section, takes a detailed look at each
+menubar function, and each standard toolbar button, and provides you with a
+brief summary of its action.  Many of these sections  also provide you with a link to more detailed
+information located elsewhere in the &kword; Handbook.</para>
+
+</sect1>
+
+<sect1 id="toolbars">
+<title>Hiding, Changing, and Moving Toolbars</title>
+<indexterm><primary>toolbars</primary><secondary>hiding</secondary></indexterm>
+
+<para>&kword; offers the user great flexibility when it comes to
+toolbars.  This first section will show you some of the many options
+you have for relocating, reformatting and removing toolbars.</para>
+
+<sect2 id="hide-toolbar">
+<title>Hiding Toolbars </title>
+
+<para>When you start &kword; for the first time, several toolbars
+are visible.  If you don't think you will need a toolbar, and want to
+reclaim that desktop space, you can hide any or all of the toolbars</para>
+
+<para>To hide a toolbar, Select <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Toolbars</guimenuitem></menuchoice> from
+the menubar.  This will bring up a submenu.  All of the toolbars are
+listed.  Simply select the toolbar you want to hide or restore.</para>
+
+</sect2>
+
+<sect2 id="move-toolbar">
+<title>Moving Toolbars around</title>
+<indexterm><primary>toolbars</primary><secondary>moving</secondary></indexterm>
+
+<para>Toolbars can be located on the screen in 5 places.</para>
+
+<orderedlist numeration="arabic">
+<listitem><para>Top</para></listitem>
+<listitem><para>Bottom</para></listitem>
+<listitem><para>Left</para></listitem>
+<listitem><para>Right</para></listitem>
+<listitem><para>Floating</para></listitem>
+</orderedlist>
+
+<para><guilabel>Top</guilabel>, <guilabel>Bottom</guilabel>,
+<guilabel>Left</guilabel> and <guilabel>Right</guilabel> refer to the
+edges of the &kword; screen.</para>
+
+<para>By locating a toolbar in the <guilabel>Bottom</guilabel>
+position, for example, you move the toolbar into a horizontal position
+below the Document Area, and along the bottom of the &kword;
+window. By locating a toolbar in the <guilabel>Left</guilabel>
+position,however, you move the toolbar into a vertical position to the
+left of the Document Area, and along the left edge of the &kword;
+window.</para>
+
+<para>Multiple toolbars can be located at each of these points in the
+screen.  (You could, for instance, move all the toolbars to the top of
+the screen).  &kword; will shuffle toolbars around, to fit in the most
+compact way at that location.</para>
+
+<para>There are two ways to move any toolbar.</para>
+
+<itemizedlist>
+
+<listitem>
+<para>Click on the striped area of the toolbar with the &LMB; and hold
+the button down.  Drag the toolbar to the desired location.  You will
+see a rectangular shape indicating the position and orientation of the
+toolbar.  When at the desired location, release the &LMB; and the
+toolbar will be inserted there.</para>
+
+<para>or</para>
+</listitem>
+
+<listitem>
+<para>Click on the toolbar with the &RMB;. A
+popup menu will appear.  Select
+<guimenuitem>Orientation</guimenuitem>. A small submenu will
+appear.  Select <guimenuitem>Top</guimenuitem>,
+<guimenuitem>Bottom</guimenuitem>, <guimenuitem>Left</guimenuitem>, 
+<guimenuitem>Right</guimenuitem>, <guimenuitem>Floating</guimenuitem> or
+<guimenuitem>Flat</guimenuitem>.</para>
+</listitem>
+</itemizedlist>
+
+<para>If you select <guilabel>Floating</guilabel> for any toolbar, a new window will be created just for that toolbar.  This window can be moved independently from the &kword; window.</para>
+
+<para>Finally, if you select <guilabel>Flat</guilabel> for any toolbar, the toolbar will be reduced to a horizontal section of lines located directly below the menubar.  To restore this menubar, simply double click with the &LMB; on the flattened toolbar and the toolbar will be restored to its original size and position.</para>
+</sect2>
+
+<sect2 id="toolbar-options">
+<title>Changing the look of your toolbars</title>
+<indexterm><primary>toolbars</primary><secondary>formatting</secondary></indexterm>
+
+<para>Toolbars can have their buttons displayed different ways.  Below
+are examples of the four options for the <emphasis>File</emphasis>
+toolbar.</para>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Icons Only</entry>
+<entry><inlinemediaobject><imageobject> <imagedata fileref="tb1.png"
+format="PNG"/></imageobject></inlinemediaobject></entry>
+</row>
+
+<row>
+<entry>Text Only</entry>
+<entry><inlinemediaobject><imageobject> <imagedata fileref="tb2.png"
+format="PNG"/></imageobject></inlinemediaobject></entry>
+</row>
+
+<row>
+<entry>Text Aside Icons</entry>
+<entry><inlinemediaobject><imageobject> <imagedata fileref="tb3.png"
+format="PNG"/></imageobject></inlinemediaobject></entry>
+</row>
+
+<row>
+<entry>Text Under Icons</entry>
+<entry><inlinemediaobject><imageobject> <imagedata fileref="tb4.png"
+format="PNG"/></imageobject> </inlinemediaobject></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>To change the appearance of a toolbar, place the cursor over on
+the toolbar you want to change, and click with the &RMB;.</para>
+
+<para>A small menu will appear at the mouse cursor.  Select
+<guimenuitem>Text Position</guimenuitem>. This will open a submenu,
+select your preference from the list.</para>
+
+<sect3 id="toolbar-options-size">
+<title>Changing Icon Size</title>
+<indexterm><primary>toolbars</primary><secondary>changing size</secondary></indexterm>
+
+<para>You can also select the size of the icons by clicking on the
+toolbar with the &RMB;.  A small popup menu will appear.  Select
+<guimenuitem>Icon Size</guimenuitem> and then your preferred icon
+size.</para>
+
+<note> 
+<para>Setting the look of one toolbar does not alter the look
+of another toolbar.</para> 
+</note>
+
+</sect3>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="basic-menubar">
+<title>Menubar</title>
+     
+<para>The Menubar contains all commands available to &kword;.  It is
+divided into 10 general categories.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="basic.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+     
+<sect2 id="file">
+<title><guimenu>File</guimenu> Menu</title>
+
+<para>By clicking on the <guimenu>File</guimenu> menu, you can begin
+new documents, load previously edited documents, print your documents,
+close the current document (so you can load another document), or quit
+&kword; entirely.</para>
+
+<variablelist>
+
+<varlistentry>
+<term id="menu-new">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice></term>
+<listitem>
+<para><action> Allows you to open new files for editing.</action> For
+Step by Step instructions see <link linkend="new-doc">Beginning a New
+Document</link>.</para>
+
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>N</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject>
+<imagedata fileref="filenew2.png"
+format="PNG"/></imageobject></inlinemediaobject> is equivalent to
+using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-open">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Open...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action> For opening previously created</action> &kword; files.
+For Step by Step instructions see <link linkend="loading">Retrieving a
+Saved Document</link>.</para>
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>O</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject> <imagedata fileref="fileopen.png"
+format="PNG"/> </imageobject></inlinemediaobject> is equivalent to
+using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-save">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Open
+Recent</guimenuitem></menuchoice></term>
+<listitem>
+<para><action>For opening the most recently edited files. Once you
+have clicked on this option, a list of recently edited files will
+appear. Select the file you want and &kword; will open the
+file. </action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut> 
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice></term>
+<listitem>
+<para><action>Saves your current file to disk.</action>  If you have
+not saved the file yet, you will be prompted for a filename. For more
+details, see <link linkend="saving">Saving a Document</link>.</para> 
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>S</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject><imagedata fileref="filefloppy.png"
+format="PNG"/> 
+</imageobject></inlinemediaobject> is equivalent to
+using the menubar. </para> 
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Save
+As...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to save your file under another name or another
+format.</action>  For more details, see <link linkend="command-save-as">Saving a
+Document</link>.</para> 
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-reload">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Reload</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Reloads the current file from disk, erasing any changes to the document since the last time it was saved.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-import">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Import...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Will load a file from another application.</action> &kword; attempts to decipher as much of the file as it can.  For many files, some information will be lost.  For more 
+information on the ability to import files from other applications, see the section on <link linkend="filters">filters</link> at the end of this documentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-export">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Export...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Will save a file using the format of another application.</action> &kword; attempts to save as much of the file as it can.  For many files, some information will be lost.  For more 
+information on the ability to export files to other applications, see the section on <link linkend="filters">filters</link> at the end of this documentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-send-file">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Mail...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Launches your email client so you can send the current file as an attachment.  The file must have been saved once before this option can be selected.</action></para> 
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-template-create">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Create Template From
+Document...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to save your file as a template, to use as a
+starting point for future documents.</action> For more details, see
+<link linkend="template-creation">Creating a new template</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-statistics">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Statistics</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para><action>Opens a window that counts the sentences, words,
+characters and syllables in your document.</action></para> <para>The
+number of sentences is not always absolutely correct, as &kword; has
+to guess if a dot really starts a new sentence or not. The number of
+syllables is estimated, &kword; therefore assumes that the text is
+written in English.</para>
+
+<para>The <guilabel>Flesch reading ease:</guilabel> score is a number
+between 0 and 100 which estimates how readable a text is. The higher
+the number, the easier the text can be read. Text with a score of
+70-80 should have fairly good readability.</para>
+
+<para>The Flesch formula uses the number of words per sentences and
+the number of syllables per word. It assumes that the use of short
+words and short sentences increases the readability of a text. It says
+nothing about grammar or meaning. As both the number of sentences and
+the number of syllables is estimated, the result is not absolutely
+precise. The text should be at least 200 words long, if it isn't the
+score will be marked as approximated.</para>
+
+<para>The Flesch score is defined for English text only, but the basic
+idea should work for many other languages, too.</para>
+
+<para>Click <guibutton>OK</guibutton> to dismiss the
+window.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-print">
+<menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>P</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Print...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Print the file.</action>  For an overview of printing
+options see <link linkend="printing">Printing a Document</link>.</para> 
+
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>P</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject><imagedata fileref="fileprint.png" format="PNG"/>
+</imageobject></inlinemediaobject> are equivalent to using
+the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-print-preview">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Print Preview...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Print the file, but sends the output to your postscript
+viewer, for your confirmation before sending it to the printer.  The
+operation of your postscript viewer will vary depending on which viewer
+you use.  Refer to the help files for your viewer for
+help.</action></para> 
+
+<para>Clicking <inlinemediaobject><imageobject>
+<imagedata fileref="fileprint2.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using
+the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-doc-info">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Opens a window that lets you enter information related to
+the document</action> (such as author's name, address, phone numbers,
+document abstract, &etc;). This information is saved with the document for later
+classification.</para> 
+<para>For more information, see <link linkend="documentinfo">Document Information</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-close">
+<menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>W</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Close</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Close the file you are currently working on. If you have
+not saved your most recent changes, you will be
+prompted.</action></para>
+<para>Typing <keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+is equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-quit">
+<menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>Q</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Quit</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Quits</action> &kword;.</para> 
+<para>Typing <keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="edit">
+<title><guimenu>Edit</guimenu> Menu</title>
+
+<para>By clicking on the <guimenu>Edit</guimenu> menu, you can
+cut/copy/paste text, undo or redo edits and perform searches and text
+replacement.</para>
+
+<variablelist>
+<varlistentry>
+<term id="menu-undo">
+<menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>Z</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para><action>Reverses the last action you performed.</action> Not all
+actions can be reversed.  If you are not able to Undo the last action,
+the <guimenuitem>Undo</guimenuitem> option will be displayed gray and is
+not accessible.  For a more thourough
+discussion of Undo/Redo, <link linkend="undo-redo">click
+here</link>.</para>
+
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>Z</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject><imagedata fileref="undo.png" format="PNG"/>
+</imageobject></inlinemediaobject> is equivalent to using
+the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-redo">
+<menuchoice><shortcut><keycombo
+action="simul">&Ctrl;<keycap>&Shift;</keycap><keycap>Z</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Redo</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Reverses the last Undo performed.</action> If the Redo
+option is unavailable, the Toolbar will display this items gray. For a more thourough discussion of Undo/Redo,
+<link linkend="undo-redo">click here</link>.</para>
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>&Shift;</keycap><keycap>Z</keycap></keycombo> 
+or clicking <inlinemediaobject><imageobject>
+<imagedata fileref="redo.png" format="PNG"/>
+</imageobject></inlinemediaobject> is
+equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-cut">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>X</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Cut</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Deletes the highlighted text from the document, and places
+a copy in the clipboard.</action>  For a more complete directions on
+cutting and pasting, and a full description of the clipboard, <link
+linkend="clipboard">click here</link>.</para>
+
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>X</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject>
+<imagedata fileref="editcut.png" format="PNG"/>
+</imageobject></inlinemediaobject>
+ is equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-copy">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Copy</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Places a copy of the highlighted text in the clipboard,
+without changing the text in the document.</action>  For a more complete
+directions on cutting and pasting, and a full description of the
+clipboard, <link linkend="clipboard">click here</link>.</para>
+ 
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>C</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject><imagedata fileref="editcopy.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using
+the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-paste">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Inserts a copy of the clipboard into the current cursor
+position.</action> If there is highlighted text, &kword; replaces
+replaces all highlighted text with the contents of the clipboard.  The
+clipboard is not altered.  For a more complete directions on cutting and pasting, 
+and a full description of the clipboard, <link
+linkend="clipboard">click here</link>.</para>
+
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>V</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject><imagedata fileref="editpaste.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using
+the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-select-all">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Select All</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Immediately highlights all text of the current
+frameset.</action></para>
+
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>A</keycap></keycombo> is equivalent to
+using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-select-all-frames">
+<menuchoice>
+
+<guimenu>Edit</guimenu><guimenuitem>Select All Frames</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Immediately selects all frames in the current document.</action></para>
+
+</listitem>
+
+</varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Select Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selects the current text frame in the document.</action></para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-find">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Find...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to search for a series of characters.</action>
+The find features of &kword; are covered in more detail under <link
+linkend="search-and-replace">Searching for Text</link>.</para>
+
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>F</keycap></keycombo> or clicking
+<inlinemediaobject><imageobject><imagedata fileref="find.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to
+using the menubar.</para></listitem></varlistentry>
+
+<varlistentry>
+<term id="menu-findnext">
+<menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F3</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Find Next</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Repeat the last search for characters starting at the current cursor position.</action>
+The find features of &kword; are covered in more detail under <link
+linkend="search-and-replace">Searching for Text</link>.</para>
+
+<para>Typing <keycombo action="simul"><keycap>F3</keycap></keycombo> is equivalent to
+using the menubar.</para></listitem></varlistentry>
+
+<varlistentry>
+<term id="menu-findprev">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F3</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Find Previous</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Repeat the last search for characters starting at the current cursor position and moving backwards.</action>
+The find features of &kword; are covered in more detail under <link
+linkend="search-and-replace">Searching for Text</link>.</para>
+
+<para>Typing <keycombo action="simul">&Shift;<keycap>F3</keycap></keycombo> is equivalent to
+using the menubar.</para></listitem></varlistentry>
+
+
+<varlistentry>
+<term id="menu-replace">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Replace...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to replace one or more characters with
+another set of characters.</action>  The find and replace features of &kword; are covered
+in more detail under <link linkend="replace">Replacing
+Text</link>.</para>
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>R</keycap></keycombo> is equivalent to
+using the menubar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-del-page">
+<menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Delete Page</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Delete the current page.</action>  </para></listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="view">
+<title><guimenu>View</guimenu> Menu</title><variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>New View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will create a new view of your document.</action>
+For more information on views, refer to the section entitled <link
+linkend="views">Using Multiple Views</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will close all views including the current view. This will also quit &kword;.</action> 
+For more information on views, refer to the section
+entitled <link linkend="views">Using Multiple Views</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Split View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will split the current view.</action>  The orientation of the
+split is determined by the <guimenuitem>Splitter
+Orientation</guimenuitem>.  For more information on views, refer to the
+section entitled <link linkend="views">Using Multiple
+Views</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Remove View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will close the current view.</action>  For more
+information on views, refer to the section entitled <link
+linkend="views">Using Multiple Views</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This determines whether split views are oriented
+horizontally or vertically.</action>  Click on this option, and you are
+presented with a submenu with 2 options:
+<guimenuitem>Vertical</guimenuitem> and
+<guimenuitem>Horizontal</guimenuitem>. For more information on views,
+refer to the section entitled <link linkend="views">Using Multiple
+Views</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Display Mode</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>When this option is selected, a submenu opens with 3 options:</para>
+<simplelist>
+<member><guilabel>Page Mode</guilabel> - &kword; will show you how your page looks in a WYSIWYG environment.  This is the standard view
+for editing your document.</member>
+<member><guilabel>Preview Mode</guilabel> - This changes &kword; from a single page view, to a multiple page view suitable for evaluating document flow and formatting. 
+The number of pages shown in preview mode <link linkend="opt-ui">can be adjusted</link>.</member>
+<member><guilabel>Text Mode</guilabel> - When this option is selected, &kword; will only show the text of your document.</member>
+</simplelist></listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="view-formatting-menu">
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Formatting Characters</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Clicking on this option toggles the display of formatting
+characters.  Selecting this option will display non-printable characters
+(spaces, character returns, and tab stops).  Selecting this option again
+will turn the display of these characters off.</action></para>
+<para>Which formatting characters are visible can be configured in the 
+<link linkend="opt-misc">&kword; configuration dialog</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Frame Borders</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Clicking on this option toggles the display of the borders
+to frames.  Normally, &kword; draws a gray line around each frame, so
+you can see the borders of the frames.  If you want this option turned
+off, you can select this option.  Selecting this option again will turn
+the borders back on.  </action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Show/Hide Doc Structure</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Clicking on this option toggles the display of the document
+structure window.</action> For more information, refer to the section entitled
+<link linkend="doc-structure">Document Structure</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Show/Hide Rulers</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle the rulers off.</action>
+Selecting this option again will turn rulers on.  More
+information on rulers can be found under <link
+linkend="rulers">Using rulers</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Show/Hide Grid</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle the grid on.</action>
+Selecting this option again will turn grid off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Snap to Grid</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle the snap to grid on.</action>
+Selecting this option again will turn snap to grid off. A checkmark before
+the menu entry will show you the current status of this option.</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term id="menu-zoom">
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will let you increase or decrease
+the page magnification.  Selecting a zoom value larger than 100 percent
+causes the text and pictures to appear larger.  Selecting a zoom value
+smaller than 100 percent will cause the text and pictures to appear
+smaller.</action></para>
+
+<important>
+<para>The zoom value does not affect the final output of the text or
+pictures.  This option is intended to help you edit and layout your
+documents.</para>
+</important>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="insert">
+<title><guimenu>Insert</guimenu> Menu</title>
+<variablelist>
+<varlistentry>
+<term id="menu-insert-special-character">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt; &Shift; <keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Special Character...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Opens a dialog box which allows you to select characters
+not found on the keyboard.</action></para> 
+<para>Typing <keycombo action="simul">&Alt; &Shift;
+<keycap>C</keycap></keycombo> is equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-insert-hard-frame-break">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Return</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Page Break</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will enter a special character which will force text
+into the next connected text frame (Page Layout Templates) or the next page (Text Oriented Templates).</action> More information can be
+found at <link linkend="hard-break">Page Breaks</link> located in the <link linkend="frames">Working with Frames</link>
+section.</para>
+
+<para>Typing <keycombo
+action="simul">&Ctrl;<keycap>Return</keycap></keycombo> is equivalent to
+using the menubar. </para> 
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-insert-page">
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Page</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This option will insert a new page at the current cursor position.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Footnote/Endnote...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will insert a footnote or endnote at the current cursor
+position.</action>  More detailed information can be found in <link
+linkend="endnotes-and-footnotes">Footnotes and Endnotes</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Table of Contents</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will insert or update a table of contents at the current cursor
+position.</action>  More detailed information can be found in <link
+linkend="toc">Table of Contents</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will allow you to insert page
+numbers, date, time, author information, &etc;</action> You can find
+specific information about page numbers <link
+linkend="page-number">here</link>.  More information about Date and
+Times can be found under <link linkend="date-time">Inserting the Date
+and Time</link>. More information on other variables can be found in <link
+linkend="variables">Document Variables</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Expression</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will allow you to insert common
+phrases.</action> The phrases are organized into categories. For
+information on using and adding expressions refer to the section
+entitled <link linkend="expressions">Expressions</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to connect text to an external web page,
+email address or files</action>
+For more information refer to the section entitled
+<link linkend="links">Document Links</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Comment...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to add comments to selected text.</action>
+For more information refer to the section entitled
+<link linkend="comments">Document Comments</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>File...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to insert another &kword; file within the document.</action>
+For more information refer to the section entitled
+<link linkend="insert-file">Inserting Files</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Bookmark...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to mark your place in the document for easy retrieval.</action>
+For more information refer to the section entitled
+<link linkend="bookmarks">Document Bookmarks</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-create-table">
+<menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F5</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Table...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to create a table in the current 
+cursor location.</action> For more information, please see the section entitled <link 
+linkend="tables">Tables</link>.</para> 
+
+<para>Typing <keycombo action="simul"><keycap>F5</keycap></keycombo> or
+clicking <inlinemediaobject><imageobject><imagedata
+fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are 
+equivalent to using the
+menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-insert-picture">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Picture...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action> This option will let you create a new frame, and
+automatically insert a picture from a file into the new frame.</action>
+After selecting this menu item or toolbar button, a dialog box will be
+opened, so you may select the picture file from your system. (For help
+with this dialog box, please see <link
+linkend="insert-graphics">Inserting Graphics</link>.)  Once you have
+selected the file you want, click on the <guibutton>OK</guibutton>
+button.  &kword; will close the dialog box, and your cursor will change
+to cross hairs.  Locate the cursor on the page where you would like to
+locate one corner of your picture.  Click and hold the
+&LMB;, then drag the mouse.
+This will create a border which represents the final size of the picture
+in your document.  When you are happy with the size of the picture,
+release the mouse button and the picture will be inserted in your new
+frame.</para>
+<para>Typing <keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo> or
+clicking <inlinemediaobject><imageobject><imagedata fileref="fpicture.png" 
+format="PNG"/></imageobject></inlinemediaobject>
+is equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-create-text-frame">
+<menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F10</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Text Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>To create a new text frame.</action>  After selecting this
+option, your cursor will change to cross hairs.  Choose the location of
+one corner of your new text frame.  Click on the
+&LMB; and hold the button down.
+Drag the mouse, until you have the desired text frame.  When you have
+the correct shape and size, release the mouse button. &kword; will now
+bring up a dialog box with options to connect this text frame to other
+frames in your document.  For more information on this subject, see
+<link linkend="frames">Working with Frames</link>.</para> 
+
+<para>Typing <keycombo action="simul"><keycap>F10</keycap></keycombo> or
+clicking <inlinemediaobject><imageobject><imagedata
+fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using the
+menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-create-formula">
+<menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F4</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Formula</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Insert a formula into the document.</action>  More
+information on formulas in &kword; can be found <link
+linkend="formulas">here</link>.</para> 
+
+<para>Typing <keycombo action="simul"><keycap>F4</keycap></keycombo> or
+clicking <inlinemediaobject><imageobject><imagedata
+fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are 
+equivalent to using
+the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-create-part">
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Object Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Creates a new frame, and opens a dialog box listing each
+of the &koffice; applications. This will allow you to insert any data
+into your &kword; document.</action></para>
+<para>Clicking <inlinemediaobject><imageobject><imagedata fileref="kpart.png"
+format="PNG"/></imageobject></inlinemediaobject> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-scan-image">
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Scan Image...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to access your scanner for inserting pictures into your document.</action> For more information see 
+the section entitled <link linkend="scan-graphics">Using a picture from a scanner</link>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="format">
+<title><guimenu>Format</guimenu> Menu</title><variablelist>
+
+<varlistentry>
+<term id="format-default">
+<menuchoice>
+
+<guimenu>Format</guimenu><guimenuitem>Default Format</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action> Automatically changes all formating back to the 
+default settings for the selected text.</action></para>
+<para>The default format can be set with the <link linkend="opt-document">Document Configuration</link> options.</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term id="format-font">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo>
+</shortcut>
+<guimenu>Format</guimenu><guimenuitem>Font...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action> Allows you to change the formatting characteristics of
+the selected text.</action> For more details, go to <link
+linkend="format-characters">Formating Characters</link></para>
+
+<para>Typing <keycombo
+action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>Format</guimenu>
+<guimenuitem>Paragraph...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>To change the indenting, spacing between paragraphs, text flow,
+tab stops, numbering and borders.</action> For more details, go to <link
+linkend="format-para">Formating Paragraphs</link>.</para>
+<para>Typing <keycombo
+action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo> is equivalent to
+using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Footnote...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to change the look of your footnotes.</action>
+For more information see <link linkend="endnotes-and-footnotes">
+Footnotes</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Formula</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to format the selected formula.</action>  For
+more information go to <link linkend="formulas">Formulas</link></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Style</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Allows you to select a style for the selected text.  Selecting this option shows a submenu
+listing all available paragraphs styles. Select the correct style and the paragraph style will be changed.</para>
+<para>For more
+information go to <link linkend="styles">Text Styles</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-format-stylist">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>Format</guimenu><guimenuitem>Style Manager...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Opens a dialog to allow you to format, add and delete
+styles.</action> For more information go to <link
+linkend="styles">Styles</link></para><para>Typing <keycombo
+action="simul">&Alt;&Ctrl;<keycap>S</keycap></keycombo> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-import-style">
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Import Styles...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to import a style.</action> For more information go to <link
+linkend="styles">Text Styles</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Create Style From Selection...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Uses the currently selected text to create a new style.</para>
+<para>For more
+information go to <link linkend="style-add-text">Text Styles</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Use this to alter the properties of the printed page,
+including size, headers and footers.</action> For more details, go to
+<link linkend="page-format">Formating the Page</link></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Headers</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle headers on.</action>
+Selecting this option again will turn headers off. More
+information on headers and footers can be found under <link
+linkend="headers-and-footers">Headers and Footers</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Footers</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle footers on.</action>
+Selecting this option again will turn footers off. More
+information on headers and footers can be found under <link
+linkend="headers-and-footers">Headers and Footers</link>.</para>
+</listitem>
+</varlistentry>
+
+
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="menu-frames">
+<title><guimenu>Frames</guimenu> Menu</title>
+
+<variablelist>
+<varlistentry>
+<term id="reconnect-frame">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to configure basic formating options for the
+frameset.</action> More information on this subject can be found in
+<link linkend="format-frame">Setting properties for
+frames</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Delete Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to delete the entire frame, and all of
+the text and objects contained within the frame.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-raise-frame">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Frames</guimenu><guimenuitem>Raise Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to raise the frame up one level.</action> For more information see the section entitled
+<link linkend="raise-frame">Raise and Lower frames</link>.</para>
+<para>Typing <keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-lower-frame">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo>
+</shortcut>
+<guimenu>Frames</guimenu><guimenuitem>Lower Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to lower the frame down one level.</action> For more information see the section entitled
+<link linkend="raise-frame">Raise and Lower frames</link>.</para>
+<para>Typing <keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-raise-front">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Bring to Front</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This raises the currently selected frame to the top of all overlapping frames.</action> For more information see the section entitled
+<link linkend="raise-frame">Raise and Lower frames</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-lower-back">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Send to Back</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This lowers the currently selected frame to the bottom of all overlapping frames.</action> For more information see the section entitled
+<link linkend="raise-frame">Raise and Lower frames</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-create-linked">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Create Linked Copy</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Creates a duplicate frame.  The contents of the new frame will automatically be updated to match the contents of the old frame.  As you continue to edit the document, changes to one of these frames will result in the same changes to the other frame.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-create-tb">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Convert to Text Box</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selected text is removed from the current frame.  A new frame is created to allow the selected text to be inserted, and the new text frame is inserted into the current document.  This is an easy way to remove a section of text and place it in a text box of its own.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-framestylist">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to edit the frame styles.</action> For more information see the section entitled
+<link linkend="framestyles">Using frame styles</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-framestyle-create">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Create Framestyle From Frame...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Create a new framestyle based on the currently selected frame.</action> For more information see the section entitled
+<link linkend="framestyles">Using Framestyles</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-framestyle">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Framestyle</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to format the selected frame(s) with a predefined framestyle.</action> For more information see the section entitled
+<link linkend="framestyles">Using frame styles</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame Background Color...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to change the background color of the current frame.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Configure Frame Border</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to change the border surrounding the current frame.  When selected, a submenu will 
+appear with all available border styles.  Select the correct style and the borders are instantly changed.</action></para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>
+ <anchor id="MenuCrTF"/>
+</para>
+
+</sect2>
+
+<sect2 id="table">
+<title><guimenu>Table</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term id="menu-table-properties">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Properties</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to change the number of rows and columns in a table.</action> For more
+on tables, <link linkend="tables">click here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-insert-row">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Insert Row...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to insert a row into a table.</action> For more
+on tables, <link linkend="tables">click here</link>.</para>
+<para>Clicking <inlinemediaobject><imageobject><imagedata
+fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject> is
+equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-delete-row">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Selected Rows...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Delete a row from a table.</action> For more on tables,
+<link linkend="tables">click here</link>.</para>
+
+<para>Clicking <inlinemediaobject><imageobject><imagedata
+fileref="rowout.png" format="PNG"/></imageobject></inlinemediaobject>
+is equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-insert-column">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Insert Column...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to insert a column into a table.</action> For
+more on tables, <link linkend="tables">click here</link>.</para>
+<para>Clicking <inlinemediaobject><imageobject><imagedata
+fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject> is
+equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-delete-column">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Selected Columns...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Delete a column from a table.</action> For more on tables,
+<link linkend="tables">click here</link>.</para> 
+<para>Clicking <inlinemediaobject><imageobject><imagedata
+fileref="colout.png" format="PNG"/></imageobject></inlinemediaobject>
+is equivalent to using the menubar.</para> 
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-resize-column">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Resize Column...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Change the width of the currently selected column.</action> For more on changing column widths,
+<link linkend="table-resize-column">click here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Join Cells</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will convert two (or more) separate cells into a
+single cell.</action> For more on tables, <link linkend="tables">click
+here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Split Cell...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will split one cell into multiple smaller cells.</action>  For more on tables, <link linkend="tables">click
+here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This prevent changes to the data in the selected cells.</action>  For more on tables, <link linkend="tables">click
+here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Ungroup Table</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Converts a table into a grid of individual frames.</action> These individual frames are not connected and can be moved independently around the page.  For more on tables, <link
+linkend="tables">click here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Delete Table</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Deletes the table the cursor is in.</action>  You can
+find more about tables in the section entitled <link linkend="tables">Tables</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Lets you edit tablestyles.</action>  You can
+find more about tables in the section entitled <link linkend="tablestyle">Using Tablestyle</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-tablestyle">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Tablestyle</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Lets you format the currently selected table using a preformatted template.</action>  You can
+find more about tables in the section entitled <link linkend="tablestyle">Using Tablestyle</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-table-to-text">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Convert Table to Text</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Converts data that is currently in the selected table to regular text.</action>.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="tools">
+<title><guimenu>Tools</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term id="menu-auto-spell">
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Will toggle <link linkend="auto-spell-check">automatic spellchecking</link> of the document on and off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-spell">
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Will <link linkend="spell-check"><action>check the spelling of</action></link> the document.</para>
+<para>Clicking <inlinemediaobject><imageobject><imagedata
+fileref="spell.png" format="PNG"/></imageobject></inlinemediaobject> is
+equivalent to using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable/Enable Autocorrection</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggles autocorrection on and off.</action>  
+For more information see the section entitled
+<link linkend="autocorrect">Autocorrection</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem>
+</menuchoice>
+</term>
+<listitem><para><action>&kword; will format your document according to specific rules.</action>
+For more information see <link linkend="autoformat">Manually Applying Autocorrection</link>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Change Case...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to set the case of all selected text.</action>
+For more information see <link linkend="change-font-case">
+Changing Font Case</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Sort Text...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Alphabetizes the selected paragraphs.  You will be given the option to sort in ascending or decending order</action>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Edit Personal Expressions...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This is for adding and editing expressions. </action>
+For information on using and adding expressions
+refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Add Expression</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Creates a new personal expression with the selected text.</action> For more information on personal expresions, 
+refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Custom Variables...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This is for editing custom document variables. </action>
+For information on using and adding expressions
+refer to the section entitled <link linkend="variables">Document variables</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Select Bookmark...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Jump to, rename or delete bookmarks.  For more information see the section entitled 
+<link linkend="bookmarks">Document Bookmarks</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Displays the <link linkend="mail-merge">Mail Merge Setup</link> Dialog.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="settings">
+<title><guimenu>Settings</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Toolbars</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to hide or reveal toolbars individually.</action>  For more information see 
+the section entitled <link linkend="toolbars">Hiding, Changing and Moving Toolbars</link>.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Type Anywhere Cursor</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>
+<indexterm><primary>Type Anywhere Cursor</primary></indexterm>
+Toggles the cursor between two distinct behaviors.</action></para>  
+<para>When Type Anywhere Cursor is not selected, and you click in an area of the document that does not currently have any text or whitespace, &kword; moves the cursor to the end of the previous line of text that exists.  This prevents the addition of whitespace where it is not needed.</para>  
+<para>When Type Anywhere Cursor is selected, &kword; inserts whitespace characters to make it possible for you to begin typing at that exact location.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to modify the autocorrection options.</action>
+For more on Autocorrection, <link linkend="autocorrect">click
+here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Completion...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to modify the autocompletion options.</action>
+For more see the section on <link linkend="autocomplete">Autocompletion</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to change the keyboard shortcuts.</action> For
+details, click <link linkend="options-keybindings">here</link></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to change the toolbars.</action> For details,
+click <link linkend="options-toolbars">here</link></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure &kword;...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to change miscellaneous</action> &kword;
+options.For details, click <link linkend="options-kword">here</link>.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="help">
+<title><guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect2>
+</sect1>
+
+
+<sect1 id="file-toolbar">
+<title><guilabel>File</guilabel> Toolbar</title>
+
+<para>The <guilabel>File</guilabel> toolbar consists of 5 buttons.  Each button performs a
+task from the menubar.  Click on that task for more details. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="filetb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry>
+<link linkend="menu-new"><inlinemediaobject><imageobject><imagedata fileref="filenew2.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-new">Open New File</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-open"><inlinemediaobject><imageobject><imagedata fileref="fileopen.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-open">Open Saved File</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-save"><inlinemediaobject><imageobject><imagedata fileref="filefloppy.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-save">Save File</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-print"><inlinemediaobject><imageobject><imagedata fileref="fileprint.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-print">Print File</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-print-preview"><inlinemediaobject><imageobject><imagedata fileref="fileprint2.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-print-preview">Print Preview</link>
+</entry></row>
+</tbody></tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="char-format-toolbar">
+<title><guilabel>Format</guilabel> ToolBar</title>
+
+<para>The <guilabel>Format</guilabel> toolbar consists of 9 buttons.  Each button
+performs a task from the <link linkend="change-font-dialog">format
+character dialog</link>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="cftb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Font Face</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Character Size</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Bold Text</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Italics</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Underline</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Strikeout</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Superscript Text</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Subscript Text</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry><para>Change Font Color</para>
+<para>Clicking on the letter changes the selected text to the color previewed in the underline.  Clicking the arrow to the right of the letter will let you select a new color.</para></entry></row>
+</tbody></tgroup>
+</informaltable>
+</sect1>
+
+
+<sect1 id="insert-toolbar">
+<title><guilabel>Insert</guilabel> Toolbar</title>
+
+<para>The <guilabel>Insert</guilabel> toolbar consists of 5 buttons.  Each button performs a
+task from the menubar.  Click on that task for more details. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="instb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry>
+<link linkend="menu-create-table"><inlinemediaobject><imageobject><imagedata fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-create-table">Insert Table</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-insert-picture"><inlinemediaobject><imageobject><imagedata fileref="fpicture.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-insert-picture">Insert Picture</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-create-text-frame"><inlinemediaobject><imageobject><imagedata fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-create-text-frame">Insert Text Frame</link>
+</entry></row><row><entry>
+<link linkend="menu-create-formula"><inlinemediaobject><imageobject><imagedata fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-create-formula">Insert Formula Frame</link>
+</entry></row><row><entry>
+<link linkend="menu-create-part"><inlinemediaobject><imageobject><imagedata fileref="kpart.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-create-part">Insert Object Frame</link>
+</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</sect1>
+
+<sect1 id="basic-edit-toolbar">
+<title><guilabel>Edit</guilabel> Toolbar</title>
+
+<para>The <guilabel>Edit</guilabel> toolbar consists of 8 buttons.  Each 
+button performs a task from the menubar.  Click on that
+task for more details. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="edittb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry>
+<link linkend="menu-undo"><inlinemediaobject><imageobject><imagedata fileref="undo.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-undo">Undo</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-redo"><inlinemediaobject><imageobject><imagedata fileref="redo.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-redo">Redo</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-cut"><inlinemediaobject><imageobject><imagedata fileref="editcut.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-cut">Cut</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-copy"><inlinemediaobject><imageobject><imagedata fileref="editcopy.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-copy">Copy</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-paste"><inlinemediaobject><imageobject><imagedata fileref="editpaste.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-paste">Paste</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-spell"><inlinemediaobject><imageobject><imagedata fileref="spell.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-spell">Spell Check</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-find"><inlinemediaobject><imageobject><imagedata fileref="find.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-find">Find</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-zoom"><inlinemediaobject><imageobject><imagedata fileref="zoom.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-zoom">Zoom</link>
+</entry></row>
+</tbody></tgroup>
+</informaltable>
+
+</sect1>
+
+<sect1 id="paragraph-toolbar">
+<title><guilabel>Paragraph</guilabel> Toolbar</title>
+
+<para>The <guilabel>Paragraph</guilabel> toolbar consists of 9 buttons.  Each button performs
+a task from the menubar.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="paratb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Character Style</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Left Text Align</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignCenter.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Center Text Align</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Right Text Align</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Justify Text</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="numtxtbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Numbered Text paragraphs</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bullist.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Bulleted Text paragraphs</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="decindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Reduce paragraph indent</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="incindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Increase Paragraph Indent</entry></row>
+</tbody></tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="table-edit-toolbar">
+<title><guilabel>Table</guilabel> Toolbar</title>
+
+<para>The <guilabel>Table</guilabel> toolbar consists of 5 buttons.  Each button
+performs a task from the menubar.  Click on that task for more
+details. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tedittb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry>
+<link linkend="menu-tablestyle"><inlinemediaobject><imageobject><imagedata fileref="tblsty.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-tablestyle">Set tablestyle</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-insert-row"><inlinemediaobject><imageobject><imagedata fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-insert-row">Insert Row</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-insert-column"><inlinemediaobject><imageobject><imagedata fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-insert-column">Insert Column</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-delete-row"><inlinemediaobject><imageobject><imagedata fileref="rowout.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-delete-row">Delete Row</link>
+</entry></row>
+<row><entry>
+<link linkend="menu-delete-column"><inlinemediaobject><imageobject><imagedata fileref="colout.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-delete-column">Delete Column</link>
+</entry></row>
+</tbody></tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="border-toolbar">
+<title><guilabel>Border</guilabel> Toolbar</title>
+
+<para>The <guilabel>Border</guilabel> toolbar consists of 10 buttons.  Each button performs a
+task from the menubar.  Click on that task for more details. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="bordtb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="tblsty.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Set framestyle</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle border outline</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Left Frame Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="rbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Right Frame Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="tbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Top Frame Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Bottom Frame Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdsizebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Border Size</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdselbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Border Style</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bkgdcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Border Color</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdcolorbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Background Color</entry></row>
+</tbody></tgroup></informaltable>
+
+</sect1>
+
+<sect1 id="formula-toolbar">
+<title><guilabel>Formula</guilabel> Toolbar</title>
+
+<para>The <guilabel>Formula</guilabel> toolbar consists of 26 buttons.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="formtb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
+<tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formsqrt.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add or Change Square Root</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formfrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Fraction</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add to Brackets</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formsbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add to Square Brackets</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formcbrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add to Curly Brackets</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formabs.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Absolute Value</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formover.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Overline</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formunder.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Underline</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="forminteg.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Integral</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formsum.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Change to Sum</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formprod.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Change to Product</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formmat.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Matrix</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formulind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Upper Left Index</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formllind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Lower Left Index</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formurind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Upper Right Index</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formlrind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Lower Right Index</entry></row>
+<row><entry>-</entry><entry>Right Facing Characters</entry></row>
+<row><entry>-</entry><entry>Left Facing Characters</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formspecchar.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Special Symbols</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kforminscol.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Insert Column</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kformappcol.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Append Column</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kformremcol.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Remove Column</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kforminsrow.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Insert Row</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kformapprow.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Append Row</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="kformremrow.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Remove Row</entry></row>
+</tbody></tgroup></informaltable>
+
+</sect1>
+
+<sect1 id="select-colors">
+<title>Selecting Colors from a <guilabel>Select Color</guilabel> dialog</title>
+<indexterm><primary>selecting a color</primary></indexterm>
+
+<para>&kword; uses a common dialog box any time the user needs to select a color for an object (text, backgrounds, borders, etc.).</para>
+<para>This section will go into some detail on how to use this color dialog to choose the best color for your object.</para>
+<para>When it is necessary to select a color, a dialog box appears.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="colorseldlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The color dialog is an incredibly flexible dialog box, which makes it possible to select colors in one of six different methods:</para>
+<variablelist>
+<varlistentry>
+<term>Spectrum selectors</term>
+<listitem><para>The spectrum selectors consists of a square to adjust <glossterm linkend="defhue">Hue</glossterm> and
+<glossterm linkend="defsaturation">Saturation</glossterm>, and a tall narrow box to adjust <glossterm linkend="defvalue">Value</glossterm>.</para>
+<para>The white cross hairs in the box show the currently selected color on the spectrum.  Drag the cross hairs up to increase
+<glossterm linkend="defsaturation">saturation</glossterm>.  Drag down to decrease <glossterm linkend="defsaturation">saturation</glossterm>.  Move the
+cross hairs left or right to change the <glossterm linkend="defhue">hue</glossterm>.</para>
+<para>To adjust the <glossterm linkend="defvalue">value</glossterm> of the color, use the tall, narrow box to move the black arrow.  Sliding the
+arrow up increases the color's <glossterm linkend="defvalue">value</glossterm>.  Sliding the arrow down decreases the color's
+<glossterm linkend="defvalue">value</glossterm>.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Hue, Saturation and Value</term>
+<listitem><para>Using the three spin boxes labeled <guilabel>H</guilabel>,<guilabel>S</guilabel> and <guilabel>V</guilabel>, a user can
+specify the <glossterm linkend="defhue">Hue</glossterm> (Range 0-359), <glossterm linkend="defsaturation">Saturation</glossterm> (Range 0-255) 
+and <glossterm linkend="defvalue">Value</glossterm> (Range 0-255)
+respectively.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Red, Green and Blue</term>
+<listitem><para>Using the three spin boxes labeled <guilabel>R</guilabel>,<guilabel>G</guilabel> and <guilabel>B</guilabel>, a user can
+specify the amount of Red, Green and Blue to be mixed to form the current color.  All three boxes can be set to any value from 0-255.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Palettes</term>
+<listitem><para>A palette is a group of related colors.  These colors are all made available for easy selection according to a meaningful
+association.</para>
+<para>To select a new palette, click on the combo box at the top of the palette selection area.  
+You will be presented with several choices:</para>
+<para><guilabel>Recent Colors</guilabel> - This is a list of the most recently used colors in your document.  You can use this palette to
+maintain consistency.  As each new color is selected, it is automatically added to the recent colors palette.</para>
+<para><guilabel>Custom Colors</guilabel> - You can create your own custom palette.  This is done by selecting a 
+color using one of the other
+color selection options, and clicking on <guibutton>Add to Custom Colors</guibutton>.  
+That color is now added to your custom color palette.</para>
+<para><guilabel>Forty Colors</guilabel> - This is a list of 40 commonly used colors.  This is a good palette to choose from if some of the people
+viewing your document will be on machines with limited color capability.</para>
+<para><guilabel>Web Colors</guilabel> - This is a predefined palette of colors that you might find useful for designing web pages.</para>
+<para><guilabel>Royal Colors</guilabel> - This is a predefined palette of colors including numerous shades of purple and yellow.</para>
+<para><guilabel>Named Colors</guilabel> - This is a list of color names.  The names are based on standard X server color
+names.  The names are designed to give descriptive names to each color.  Simply select the name you want. </para>
+<para>Once you have selected a palette, you will be presented with a small square showing each color available in the palette. To 
+select a color from the palette, simply click on the square of the desired color.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Eye dropper</term>
+<listitem><para>The eye dropper can be used to sample a color from the screen.  </para>
+<para>When the eye dropper button is clicked, the cursor becomes crosshairs.  Simply place the crosshairs over any spot on the screen
+and click once.  &kword; will detect the selected color and automatically change the current color to match the selection.</para>
+<para>This is especially useful for matching color elements between previously created elements and new items.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
+</listitem></varlistentry>
+<varlistentry>
+<term>HTML code</term>
+<listitem><para>If you know the HTML color code you want to use, you can enter it into the text box labeled 
+<guilabel>HTML:</guilabel>.</para>
+<para>For more information on HTML color codes, visit the
+<ulink url="http://hotwired.lycos.com/webmonkey/reference/color_codes/">Web monkey</ulink> color code page.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<para>Once the color is selected, click <guibutton>OK</guibutton> to make that the current color for your text, border, etc.</para>
+<para>Click <guibutton>Cancel</guibutton> to abort the color selection.</para>
+</sect1>
+<sect1 id="file-dialog">
+<title>Selecting files using the file dialog</title>
+<indexterm><primary>using file dialog</primary></indexterm>
+
+<para>&kword; uses a common dialog box for all file related actions (saving, loading, or selecting new files 
+for insertion into the document). An example is shown below.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savedlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>This section  will look more closely at this dialog and provided detailed information on its use.</para>
+
+<para>We will begin at the top of the dialog.</para>
+
+<para><emphasis>Toolbar</emphasis></para>
+
+<para>The current location on the drive is listed at the top-center of the dialog.  This example dialog shows the current folder is <filename
+class="directory">/home/mmcbride/kword</filename>. If you click on this drop
+down box, you will see common and recently visited folders.  By
+selecting one of these folders, you will be immediately moved to
+that folder and the dialog box will update the file list.</para>
+
+<para>In the upper left corner, is a blue arrow pointed up.  This
+arrow will take you up one level in the folder structure.</para>
+
+<para>The next two buttons are back and forward buttons.  These
+buttons work just like those in an Internet browser. You can use the <guiicon>Back</guiicon>
+button to travel to the previous folder, and the <guiicon>Forward</guiicon> button to
+advance into a folder you just came from.</para>
+
+<para>Next to the arrow buttons, is a <guiicon>Reload</guiicon> button.  Clicking this
+button, causes &kword; to reload the current folder if new files have been
+added or deleted.</para>
+
+<para>To the right of the <guiicon>Reload</guiicon> button, is a blue file folder with a starburst.  This button
+will let you create a new folder and name it.</para>
+
+<para>Next to the new folder button, is a button with a star on it.
+This button allows you to set and navigate through bookmarks.  This is
+a quick way to jump to commonly accessed folders.  By clicking
+this button, a submenu appears which allows you to add bookmarks or
+jump to a new bookmark.</para>
+
+<para>Next to the bookmark button, is a button with a wrench on it. 
+Clicking this button brings up a sub menu with several entries:</para>
+<para>
+<variablelist>
+<varlistentry>
+<term><guimenuitem>Sorting</guimenuitem></term>
+<listitem>
+<para>If this option is selected, a submenu will appear allowing you to sort your files by name, date or size.  You can sort them forward or reversed.  You can also determine if 
+folders should be listed before files, or mixed within the files.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Short View</guimenuitem></term>
+<listitem>
+<para>If this option is selected, only the names of the files and folders will be shown.</para>
+<para>Compare this to detailed view.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Detailed View</guimenuitem></term>
+<listitem>
+<para>If this option is selected, the names, sizes, dates, permisions, file owners and group ownerships are shown.</para>
+<para>Compare this to short view.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show Hidden Files</guimenuitem></term>
+<listitem>
+<para>This will toggle between revealing and hiding normally hidden files.  In most cases you will want to leave this option off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show/Hide Quick Access Navigation Panel</guimenuitem></term>
+<listitem>
+<para>The tall box along the left side of the dialog with a dark grey backround is the Quick Navigation Panel.  You can use this option to toggle whether it is visible or not.</para>
+<para>More detailed information about hte Quick Navigation Panel is avialable further down this page.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Show/Hide Preview</guimenuitem></term>
+<listitem>
+<para>You can use this option to toggle whether the preview panel is visible or not.  Typically, the preview panel is left off, but it can be useful when looking for a picture to insert into a document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Separate Folders</guimenuitem></term>
+<listitem>
+<para>Use this option to toggle between a 2 pane view of the filesystem and a one pane view of the filesystem.  
+Most people will not need to worry about this option as most people prefer the one pane view.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<para><emphasis>Quick Navigation Bar</emphasis></para>
+
+<para>Along the left side of the dialog box, is a column that contains
+several icons. You can think of each of these icons as a shortcut to
+another subfolder. If you click on an icon, you will be immediately
+moved to that location.</para>
+
+<para>You can add/edit or delete entries from the Location Bar.
+Simply click with the &RMB; and a small popup menu will appear.</para>
+
+<para><emphasis>File Name and Filters</emphasis></para>
+
+
+<para>The text box labeled <guilabel>Location:</guilabel> contains the current filename <filename>Resume.kwd</filename>. This text box will contain the 
+filename of the currently selected file when loading new documents or files into
+&kword;.  When saving a file, you will enter the desired filename in this text box.</para>
+
+<para>The text box labeled <guilabel>Filter:</guilabel> shows we are only looking
+at &kword; files.  By clicking on the combo box, you can select from several
+different file formats.  You can also select <guilabel>All Supported Files</guilabel> to display
+all files that are supported by &kword;.  The file types available will change depending on
+the specific task at hand.</para>
+
+<para>If there is a mark in the checkbox labeled <guilabel>Automatically select filename extension</guilabel>, 
+then &kword; will add the correct filename extension based on your selection in the <guilabel>Filter:</guilabel> 
+drop down box.  If there is no mark in this box, you are responsible for providing an extension.  Most users 
+will leave this box marked.</para>
+
+<para>There is a <guibutton>Cancel</guibutton> button, if you click this
+button, the action will be aborted, and you will return to editing the
+document.</para>
+
+<para>There is an <guibutton>OK</guibutton> button, which will be used
+when we have selected the correct filename.</para>
+
+<para>Using this dialog, you can move through the folder tree to find
+any location on your computer.</para>
+
+<para>To enter a folder click on that folder.  To exit that folder,
+click the blue up arrow button.</para>
+
+<note><para>This dialog box is used in many different tasks in &kword;.  The task will determine the exact effect
+of the information you have entered into this dialog box.  For more information on the exact effect, see the documentation on that task.
+</para></note>
+</sect1>
+</chapter>

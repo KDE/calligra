@@ -1,0 +1,37 @@
+The CSV import filter uses a hand-made state machine to parse the CSV file.
+This allows to handle quoted fields (such as those containing the CSV delimiter),
+as well as the double-quote character itself (which then appears twice, and
+always in a quoted field).
+Just to make sure about the vocabulary, I call a quoted field a field
+starting with " and finishing with ".
+
+Let's try to draw the graph of the state machine using ascii-art.
+
+
+         DEL or EOL
+            /--\            
+            |  |           
+            |  v    "     
+       /--[START]-------->[QUOTED_FIELD] (**)
+  other|   ^   ^            |        ^
+   (*) |   |   | DEL or     | "      | " (*)
+       |   |   | EOL        v        |
+       |   |   \----[MAYBE_END_OF_QUOTED_FIELD]
+       |   |                  |
+       |   | DEL or           |
+       |   | EOL              | other
+       |   |                  |
+       v   |   /------<-------|
+   [NORMAL_FIELD] (**)
+
+DEL : CSV delimiter (depends on locale !). Often comma, sometimes semicolon.
+EOL : End Of Line.
+(*) : added to the current field
+(**) : implicit loop on itself, labeled "other (*)"
+
+
+Ugly isn't it ? :) One can't be good in drawings AND in hacking :)
+
+That's all. For the rest, see csvfilter.cc
+
+David Faure <faure@kde.org>, 1999

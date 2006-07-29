@@ -1,0 +1,175 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>ExportPageDialogBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ExportPageDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>290</width>
+            <height>210</height>
+        </rect>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>ButtonGroup1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Export</string>
+            </property>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>m_radioSelectedStencils</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>48</y>
+                        <width>249</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;Selected stencils</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Export the selected stencils on the current page</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>&lt;b&gt;Selected Stencils&lt;/b&gt;&lt;br&gt;
+Export only the selected stencils to file.</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>m_radioFullPage</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>246</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;All stencils</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="buttonGroupId">
+                    <number>1</number>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Export all stencils on the current page</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>&lt;b&gt;All Stencils&lt;/b&gt;&lt;br&gt;
+This will cause the entire page to be exported to the file. This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported.</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>m_checkCrop</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>true</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>9</x>
+                        <y>82</y>
+                        <width>242</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>C&amp;rop picture to edges</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Don't export extra blank space to file</string>
+                </property>
+                <property name="whatsThis" stdset="0">
+                    <string>&lt;b&gt;Crop picture to edges&lt;/b&gt;&lt;br&gt;
+This will eliminate all blank portions of the drawing. The picture will only be as large as the stencils it contains. If your stencils are located in the upper right corner of the page, then only the upper right corner will be exported.</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Quality:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_spinQuality</cstring>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="1" column="1">
+            <property name="name">
+                <cstring>m_spinQuality</cstring>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="value">
+                <number>100</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>The higher the quality, the more space the file takes up.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Quality&lt;/b&gt;&lt;br&gt;
+Not all file formats use this. But for those that do, this affects the quality of the image that gets exported. 100 is the maximum quality. The higher the number, the better the picture looks. The downside is the higher the number, the larger the filesize.</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="2" column="1">
+            <property name="name">
+                <cstring>m_spinBorder</cstring>
+            </property>
+            <property name="maxValue">
+                <number>10000</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>An optional border of whitespace around the page, in pixels</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Border&lt;/b&gt;&lt;br&gt;
+Places a blank border around the edges of the image. This can be used if for one reason or another, the stencils don't fit into the export page with a 0-pixel border (default).</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Border:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_spinBorder</cstring>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>

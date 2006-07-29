@@ -1,0 +1,51 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>KPlato::TaskNotesPanelBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>TaskNotesPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>468</width>
+            <height>365</height>
+        </rect>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Project notes and summary:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>descriptionfield</cstring>
+                    </property>
+                </widget>
+                <widget class="QTextEdit">
+                    <property name="name">
+                        <cstring>descriptionfield</cstring>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </hbox>
+</widget>
+<slots>
+    <slot>scheduling_clicked( int schedulingType )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

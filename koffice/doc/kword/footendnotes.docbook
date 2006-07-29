@@ -1,0 +1,200 @@
+<sect1 id="endnotes-and-footnotes">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Footnotes and Endnotes</title>
+<indexterm><primary>footnotes</primary><secondary>introduction</secondary></indexterm>
+<indexterm><primary>endnotes</primary><secondary>introduction</secondary></indexterm>
+
+<para>&kword; has a complete set of tools to create and manage footnotes and endnotes.  When you assign a footnote, &kword; automatically 
+places the footnote at the bottom of the correct page.  When you assign an endnote, the notation is located in a numbered list at the end of your text.
+  If the footnote or endnote reference point is moved to a new page, the footnote automatically 
+follows and is renumbered as needed (if the user desires). </para>
+<para>&kword; also has the ability to separately manage endnotes and footnotes in the same document.</para>  
+<para>You have the option of having &kword; control the numbering of your footnotes.  Alternatively, you can manually specify each footnote.</para>
+<para>There are multiple automatic numbering schemes and your footnotes can be separated from the text with a dividing line. </para>
+
+<sect2 id="fn-add">
+<title>Add a new footnote or endnote</title>
+<indexterm><primary>footnotes</primary><secondary>creating</secondary></indexterm>
+<indexterm><primary>endnotes</primary><secondary>creating</secondary></indexterm>
+
+<para>To add a new footnote or endnote, place your cursor at the end of the text you want to reference.  Then select 
+<menuchoice><guimenu>Insert</guimenu><guimenuitem>Footnote/Endnote...</guimenuitem></menuchoice>
+from the menubar.  This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="footend.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+
+<para>If you want &kword; to automatically number your footnotes or endnotes for you, make sure that <guilabel>Automatic</guilabel> is selected.
+If you want to manually enter all footnotes in, then select <guilabel>Manual</guilabel> and enter the footnote or endnote entry in
+the text box to the right.</para>
+<tip><para>If at all possible, try to allow &kword; to automatically number the footnotes and endnotes for you.  If &kword; controls the numbering, and you 
+insert, delete or move footnotes, &kword; will automatically renumber or reorder the footnotes for you.</para></tip>
+
+<para>Then select either <guilabel>Footnote</guilabel> or <guilabel>Endnote</guilabel>.  Footnotes will appear at the bottom of the
+page where the notation occurs.  Endnotes will appear as an ordered list at the end of your document.</para>
+
+<para>Click <guibutton>Configure</guibutton> to <link linkend="fn-config">change the look</link> of your footnotes or endnotes.</para>
+<para>Click <guibutton>Cancel</guibutton> to return to your document without inserting a footnote or endnote.</para>
+
+<para>Click <guibutton>OK</guibutton> to insert the footnote or endnote.  &kword; will create the footnote or endnote
+entry, and place the cursor at the beginning of the entry for you to enter the desired reference information. 
+Type your reference information in the space provided.  </para>
+
+<para>When you have finished entering your footnote or endnote reference information, simply move your cursor over the footnote or endnote 
+number.  Click with the &RMB;.  A popup menu will appear.  Select <guilabel>Go to Footnote</guilabel> and &kword; will move the cursor back to the text 
+where the reference was made.</para>
+</sect2>
+
+<sect2 id="fn-edit">
+<title>Change reference of footnote</title>
+<indexterm><primary>footnotes</primary><secondary>editing</secondary></indexterm>
+<indexterm><primary>endnotes</primary><secondary>editing</secondary></indexterm>
+
+<para>There are two ways to change reference information for a footnote:</para>
+<itemizedlist>
+<listitem><para>Place the mouse pointer over the footnote you want to change, and click once with the &RMB;.  
+A popup menu will appear.  Select <guimenuitem>Edit Footnote</guimenuitem>.  &kword; will immediately move your 
+cursor to the appropriate footnote reference.</para></listitem>
+<listitem><para>Simply move to the bottom of the page (if it is a footnote) or the end of the document 
+(if it is an endnote).  Locate the footnote or endnote reference, and click once with the &LMB;.</para>
+<tip><para>You can jump to the end of the document by typing <keycombo action="simul">&Ctrl;<keycap>End</keycap></keycombo>.</para></tip></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="fn-delete">
+<title>Delete a footnote or endnote</title>
+<indexterm><primary>footnotes</primary><secondary>deleting</secondary></indexterm>
+<indexterm><primary>endnotes</primary><secondary>deleting</secondary></indexterm>
+
+<para>To delete a footnote, simply delete the footnote or endnote number.  &kword; will remove the reference information and resize the footnote frame.</para>
+</sect2>
+
+<sect2 id="fn-config">
+<title>Change the look of footnotes</title>
+<indexterm><primary>footnotes</primary><secondary>change appearance</secondary></indexterm>
+
+<para>To configure the appearance of footnotes, select <menuchoice> <guimenu>Format</guimenu>
+<guimenuitem>Footnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="footcfg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>There are 5 predefined numbering methods for footnotes.  Those methods are listed in the left 
+side of the dialog box. Begin by selecting the numbering method you want by clicking once with the &LMB;.</para>
+<para>In the text box labeled <guilabel>Prefix text:</guilabel>, you can enter any characters you want to
+appear <emphasis>before</emphasis> the footnote number.</para>
+<para>In the text box labeled <guilabel>Suffix text:</guilabel>, you can enter any characters you want to
+appear <emphasis>after</emphasis> the footnote number.</para>
+<para>You can adjust the starting position of the footnote counter using the spinbox labeled <guilabel>Start at:</guilabel>.</para>
+<!--</sect3> -->
+
+<sect3 id="fn-config-line">
+<title>Change the appearance of separator line</title>
+<para>To change the appearance of the separator line, click on the tab labeled <guilabel>Separator Line</guilabel>.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="footcfg3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can determine the alignment of the separator line by selecting <guilabel>Left</guilabel>,
+<guilabel>Centered</guilabel> or <guilabel>Right</guilabel></para>
+<para>Determine the length of the line using the spin box labeled <guilabel>Size on page:</guilabel>.</para>
+<para>The spinbox labeled <guilabel>Width:</guilabel> is used to determine the thickness of the seperator line.</para>
+<note><para>Do not confuse this option with the <guilabel>Size on page:</guilabel> option.  The <guilabel>Width:</guilabel> is used to set the thickness of the line, not its distance across the page.</para></note>
+<para>Use the combo box labeled <guilabel>Style</guilabel> to determine what kind of line is drawn.</para>
+<para>Click <guibutton>OK</guibutton> to change the look of all footnotes or click <guibutton>Cancel</guibutton> to keep 
+the previous options.</para>
+</sect3>
+</sect2>
+<sect2 id="fn-placement">
+<title>Change the placement of the footnotes</title>
+<para>You can determine how much space separates the main text frame and the footnotes.  Select 
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
+from the menubar. This will bring up a dialog:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wpfmtpg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on the tab labeled <guilabel>Header &amp; Footer</guilabel>. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wpfmtpg3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>At the bottom of the dialog is a text box is labeled
+<guilabel>Spacing between footnote and body</guilabel>.  As the label
+suggests, you can use this text box to specify the distance between
+the bottom edge of the main frame, and the top edge of the footnotes.
+When you have entered the desired spacing, click
+<guibutton>OK</guibutton>, and the footnotes will change position on
+the page.</para>
+
+<para>If both footnotes and endnotes are on the current page, the
+setting will apply to the space between the body and the
+footnotes.</para>
+
+</sect2>
+<sect2 id="en-config">
+<title>Change the look of endnote entries</title>
+<indexterm><primary>endnotes</primary><secondary>change appearance</secondary></indexterm>
+
+<para>To configure the appearance of endnotes, select <menuchoice> <guimenu>Format</guimenu>
+<guimenuitem>Footnote/Endnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="footcfg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Click on the tab labeled <guilabel>Endnotes</guilabel>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="footcfg2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>There are 5 predefined numbering methods for footnotes.  Those methods are listed in the left 
+side of the dialog box. Begin by selecting the numbering method you want by clicking once with the &LMB;.</para>
+<para>In the text box labeled <guilabel>Prefix text:</guilabel>, you can enter any characters you want to
+appear <emphasis>before</emphasis> the endnote number.</para>
+<para>In the text box labeled <guilabel>Suffix text:</guilabel>, you can enter any characters you want to
+appear <emphasis>before</emphasis> the endnote number.</para>
+<para>You can adjust the starting position of the endnote counter using the spinbox labeled <guilabel>Start at:</guilabel>.</para>
+
+<para>If you want a line seperating the text of the document from your endnotes, instructions 
+for this can be found in the section entitled <link linkend="fn-config-line">Change the appearance of separator line</link>.</para>
+
+</sect2>
+
+
+</sect1>

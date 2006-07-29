@@ -1,0 +1,504 @@
+This file describes the tasks at hand for making KSpread a better product.
+
+Legend
+======
+
+Status field
+
+----	No work has been done on this task yet.
+--	No work has been done on this subtask yet.
+DONE    Task is all done
+done    This subtask is done
+****	This (sub)task cannot be fixed with the current technology.
+        It has to wait until something in the internals is fixed.
+
+INGE	Inge is working on this task
+inge	Inge is working on this subtask
+RAPH	Raphael is working on this task
+raph	Raphael is working on this subtask
+TOMA	Tomas is working on this task (or planning to do so, at least ;))
+toma	Tomas is working on this subtask
+LAUR	Laurent is working on this task
+laur	Laurent is working on this subtask
+ARIY	Ariya is working on this task
+ariy	Ariya is working on this subtask
+JOHN	John is working on this task
+john	John is working on this subtask
+STEF	Stefan is working on this task
+stef	Stefan is working on this subtask
+
+...fill in your signatures here.
+
+
+Prio field
+
+S	Involves string changes.  Must be done before the freeze.
+1	Important task.  Should definitely be fixed.
+2	Semi-important task.  Should be fixed if possible, but can be
+	moved to 1.4.1 if necessary.
+3	Nice to have.  Should be fixed if there is time. (yeah, right)
+
+
+
+Things to do before the release of KOffice 1.5
+==============================================
+
+Item                                                               Prio Status
+------------------------------------------------------------------------------
+
+General bugs
+------------
+
+* Miscellaneous
+  + Format->"Increase indent" sets cell alignment to left	      2 DONE
+
+
+
+
+Things to do before the release of KOffice 1.4
+==============================================
+
+
+Item                                                               Prio Status
+------------------------------------------------------------------------------
+
+General bugs
+------------
+
+* Crashes
+
+* Painting
+
+* Printing
+
+* Format
+  + 87471: format of whole column does not change		      2 ----
+
+* Load & Save, Import & Export
+  + 87471: format of whole column does not change (actually import)   1 ----
+
+* Miscellaneous
+  + 59510: Handles large spreadsheets "extremely" poorly.	      2 ----
+	This is perhaps already (partly) fixed, but might be
+	very difficult to fix quickly if it isn't.
+  + 60458: Inserting a row always creates cell with default number    2 ----
+	   format.
+  + 70708: undo of series broken when range contains merged cells     2 ----
+  + 84738: Inserting a new line does not copy right settings to       2 ----
+	   new line.
+
+* Investigate further if these are important.
+  + 69285: Pasting directly into the cell edit box is not 	      2 ----
+	   subsequently saved when changing cells.
+
+Filter bugs
+-----------
+
+
+
+Things not in bugzilla
+----------------------
+
+* Printing
+  + printouts with zoom other than 100% (it's a missing feature, but  2 ----
+    the GUI is there... - page layout, options, Scale Printout )
+  + make print range work over more than 1 page			      2 ----
+  + Repeated rows and columns don't work if they don't start from     2 ----
+    row/column 1.   Also it is not possible to enter just one
+    row/column into the dialog, it always has to be a range (2:3).
+    - Make it possible to enter just one row/column into GUI, don't   2 --
+      force a range.
+
+
+* Features
+  + Add text frames and picture frames. It's currently not easy to    2 ----
+    insert pictures!
+
+* Plugins
+
+
+
+Things to do after the release of KOffice 1.4
+=============================================
+
+* Bugs
+  + If you select a row and chooses Data->"Remove columns", then      1 ----
+    everything is removed.  I think if entire rows are selected,
+    "Remove columns" should be disabled.  Besides, if you undo
+    the operation, KSpread crashes.
+  + If entire rows or columns are selected, then Data->"Insert cells"
+    should be disabled.
+
+* OASIS file format
+  + Read OASIS							      1 LAUR
+  + Write OASIS							      1 LAUR
+
+* Internals (See also DESIGN.html)
+  + Use the new StyleCluster.					      1 RAPH
+    This would dramatically reduce memory consumption and allows
+    styles for empty cells.
+    - Use new StyleCluster						--
+    - Remove old KSpreadFormat						--
+
+  + Speed up selection.						      1 RAPH
+    (probably improved with StyleCluster?)
+  + Non-continguous selection					      1 STEF
+
+  + Rich text in cells.						      1 ----
+	Use KoText.
+
+  + code cleanups to layout processing				      1 ----
+	(KSpreadCell::makeLayout/setCellText are nightmares!) (Tomas)
+	setCellText is no longer a nightmare, makeLayout still is ;)
+
+  + Evaluation of how best to increase floating point precision.      3 ----
+	Suggestion:  GnuMP.    (Tomas)
+	This will work by converting all functions to compute using
+	ValueCalc, and nothing else, then modifying Value* to
+	support GnuMP.  The conversion step shall be done as a part
+	of converting to the new parser.
+  + code cleanups						      3 ----
+    - Merge Cell::checkForNamedAreas(.) into Oasis::decodeFormula(.).
+    - Move Cell::convertFormulaToOasisFormat(..) to
+      Oasis::encodeFormula to reduce the size of kspread_cell.cc
+      and to have encoding/decoding in one place.
+    - Check if all logic of Point and Range is materialized in Region.
+      Replace all occurences of Point and Range by Region.
+    - All util_foo funtions that act on Point/Ranges should become
+      static members of Region.
+    - Move all util_foo(..) functions to Util namespace and remove
+      the prefix 'util_'.
+    - Reduce amount of parameters for methods which takes many of
+      them, e.g. Sheet::paste(). bools -> QFlags, static variables
+
+* GUI
+  + Sheet layout:						      2 ----
+    - Move sheet properties to separate dialog.
+      They are currently part of KSpread config dialog.
+  + Indent and multiline doesn't work together			      2 ----
+
+
+* General features
+  + Painting: Indent and multiline doesn't work together	      2 ----
+  + Insert manual page break					      2 ----
+  + Split view							      1 ----
+  + "Freeze/Unfreeze Panes"					      2 ----
+	Started but had some problems caused by the scrollbars, it
+	works, but not very nice (not committed (Norbert)).
+        Maybe not as important if we get split view to work correctly.
+
+  + Matrix operations              2 ----
+     Some exist - multiply, determinant. Inverse not implemented.
+
+  + Locked areas (for formulas with a matrix as result)		      2 TOMA
+
+* Major features (big effort)
+  + Script, Script-Editor (like VBA in Excel)			      2 ----
+  + Tools->Auditing:						      2 ----
+    - Trace Precedents						      2 --
+    - Trace Dependants						      2 --
+    - Trace Error						      2 --
+    - Remove all arrows						      2 --
+  + Pivot tables						      3 ----
+
+Other things: (please add the things you are working on!)
+(I don't understand these.  Please enter them under the correct heading /Inge)
+
+- Scenarios
+
+
+Not yet sorted (will be entered into categories above)
+
+- Multible Operations (in Excel: "Data"->"Table") (Norbert)
+- Pivot tables
+- more chart types
+- background spell check (necessary to use kotext)
+- links to cells in other kspread files
+- much more formulas (financial, database...)
+        String2Int, CurrentMonth, CurrentYear, CurrentDay
+        See list below
+- Insert pictures (Add support for object into kspread)
+- Insert basic drawings, autoforms (necessary to create a share lib from kpresenter)
+- Insert widgets like buttons, drop down lists,... + having the possibily to
+  define action if pressed, or selection changes,...
+- Transparancy for embedded objects
+- z-order for embedded objects (and possibility to change the order)
+- better handling of embedded objects: e.g. delete them just by marking them + Del-Key
+  not only in the context menu of the borders
+- Scrollbar that supports jumping one row/column forward or back
+- formula result: fit the precision to the width of the cell
+- other bug fixes                               (everybody, every time)
+- interface for mail merge
+
+*********
+* Taken:
+*********
+
+Philipp
+=======
+
+- Printing enhancements:
+  + Expand selection to page
+  + Fit selection to page
+  + Print selection only
+
+- Filter, Autofilter                                             (but will take long, haven't started yet)
+- Performance improvements at end of ranges - last column/row    (started)
+- Support "unlimited" columns/rows,
+  unlimited means a reasonable defined value                     (concept finished, will include after beta1)
+
+
+Norbert
+=======
+
+- solver (see gnumeric)  [isn't this done already?]
++ option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
++ CSV export dialog: define deliminers, Table(s), cell content in '"'
++ more than one currency
++ enhance the Gnumeric import filter
+- sync the Gnumeric export filter
++ Style support
++ StarCalc/OpenCalc import filter
+- StarCalc/OpenCalc filter for embedding/embedded objects
++ StarCalc/OpenCalc export filter
+- qsa support + recording
+- Button + Drop-Down-List support (within cells)
+- better AutoFormat dialog + better templates
+- new dialog for conditional cell attributes
+
+- Multiple Operations
++ Lookup & Reference functions (LOOKUP needs to fixed)
+- more information functions (Excel compatible)
+
+Ariya
+=====
+- more "Related Functions" in function help/desc text
+- improve function compatibility with MS Excel
+- dBASE export filter
+
+
+OpenCalc - filter
+=================
+- changing text angle should resize the cell height automatically
+- conditional cell attribute support is just poor in KSpread:
+  we should be able to assign complete styles (KSpreadLayout objects)
+- support for format strings (dd/mm/yyyy)       - Norbert
+- more font attributes (outline, shadow,...) + attributes for parts of the text
+- double borders
+- multiline header/footer support
+- for formulas: fit precision so the result fits in the cell or resize the cell
+- save m_strOutText in file => no parsing on load  (Norbert)
+- save formula results etc in a certain way in the cell (Norbert)
+
+
+Missing formulas (compared with XL)
+===================================
+
+Statistical:
+
+BETAINV
+BINOMDIST  (different from BINO?)
+CHIINV
+CHITEST
+CRITBINOM
+FINV
+FORECAST
+GAMMAINV
+GROWTH
+INTERCEPT
+LINEST
+LOGEST
+PEARSON
+PERCENTILE
+PERCENTRANK
+PROB
+QUARTILE
+RANK
+RSQ
+SLOPE
+STEYX
+TREND
+TRIMEAN
+TTEST
+ZTEST
+
+
+Lookup:
+
+HLOOKUP
+HYPERLINK
+MATCH
+OFFSET
+TRANSPOSE
+VLOOKUP
+
+
+Logic:
+
+
+Information:
+
+CELL
+ISERR
+ISERROR
+ISNA
+NA
+
+EXPRESSION
+GETENV
+SELECTION
+
+
+Engineering:
+
+IMLOG2
+IMLOG10
+
+
+Date & Time:
+
+NETWORKDAYS
+WEEKNUM
+WORKDAY
+YEARFRAC
+DATEDIF
+UNIX2DATE
+DATE2UNIX
+
+
+Math:
+
+MDETERM
+MINVERSE
+MMULT
+SERIESSUM
+SUMXMY2
+
+
+Financial:
+
+AMORDEGRC
+AMORLINC
+COUPDAYBC
+COUPDAYS
+COUPDAYSNC
+COUPNCD
+COUPPCD
+CUMIPMT
+CUMPRINC
+FVSCHEDULE
+MDURATION
+MIRR
+ODDFPRICE
+ODDFYIELD
+ODDLPRICE
+ODDLYIELD
+PRICE
+PRICEDISC
+PRICEMAT
+RATE
+VDB
+XIRR
+XNPV
+YIELD
+YIELDDISC
+YIELDMAT
+
+IRR
+NPV
+
+
+Trig:
+
+IMTAN
++ACOT
+
+
+***************************************************************************************
+
+Explanations to features:
+=========================
+
+Named areas:
+
+I would like to ask one thing about "Named areas". In Excel you can assign
+names to cells (you can do this in KSpread, too) like this:
+        A       B
+1       45      46
+2
+x=A1, y= B1
+
+Now, I would like to put
+"=x+y" in A2. This works with Excel but not in KSpread. But it is an important
+feature (I was told :-)
+So if you evaluate "=x+y", 'x' has be replaced by "A1" and 'y' by "B1"
+
+
+
+TODO-List:
+----------
+
+Please everyone working on KSpread:
+
+Get yourself a copy of Excel 97 or 2000 and create
+a really big sheet, and I mean really big and insert Graphs and
+lots of dependencies and regressions etc. use external add-ins if you have any
+and real time links. Make links between sheets and then see how
+well Excel behaves.
+
+1. UNDERSTAND that putting a spread->recalc() or spread->recalc(true) in
+your code is an abosolute NO-NO! Complex spreadsheets with possible
+heavy mathematical calculations via dll/so add-ins as well as real
+time feeds will not be managable if you do not painstakingly check
+wether spread->getAutoCalc() is true.
+
+
+2. Learn to understand that without the
+following short cut actions you are lost ( try to scroll
+down a list of 10,000 obersvations ...not using CTRL Down
+for example)
+
+CTRL Up/Down/Left/Right
+CTRL Shift Up/Down/Left/Right
+CTRL Home/End
+CTRL Shift Home/End
+Shift F9 versus F9
+
+Let's try to get them working well in Kspread as well. I tried my
+hand at it but wasn't able to get them to be efficient.
+
+3. Familiarize yourself with the concept of array formulas and why they
+are necessary (area protection, partial argument evaluation) Who would
+be willing to implement them? This will be an absolute must if we
+want to make progress on the mathematical/financial/statistical
+function side of things. I would be willing to implement a miriad
+of these functions but I believe doing that without having array
+formulae first will be a big mistake.
+
+(In case you wonder why I feel so strongly about these things:
+I am a professional user of Excel. I eat, sleap and work with Excel
+on my trading desk on Wall-Street.)
+
+
+Bernd <wuebben@kde.org>
+
+
+Improvement :
+-------------
+- Add zoom (Bernd: Yes, this is important. KSpread is much to cluttered
+up at this point. you can hardly do any real work with it even on a
+17inch screen. Torben? Please?)
+-create a script editor for execute script
+ (Use KWrite)
+
+Bug fix :
+---------
+-and also bug fix :)
+
+<montel@kde.org>
+
+Torbens TODO-List:
+------------------
+- Write-Protect cells
+
+

@@ -1,0 +1,100 @@
+<!--	This is the Document Type Definition for The KDE Planning Tool.
+	Version 0.epsilon. 20020401 (no, no joke).
+	Written by Bo Thorsen <bo@sonofthor.dk>
+-->
+
+<!--	A KPlato document consists of a projects, relations and
+	resources. TODO: It should probably also remember settings
+	for stuff like printing etc.
+
+	A node in a project can be a project, task, milestone or terminalnode.
+	Each node is given a unique identifier.
+	A relation is a time restraint on the correlation between two
+	nodes. These are identified by their identifier.
+	A resource is one of the resources available and needed for the
+	project. These could be persons, hardware, money etc.
+-->
+
+<!ELEMENT kplato (project)>
+<!ATTLIST kplato	author CDATA #IMPLIED
+			email  CDATA #IMPLIED
+			editor CDATA #IMPLIED
+			mime   CDATA "application/x-vnd.kde.kplato">
+
+<!--	The project description. This has the following fields:
+
+	name		Name of the project
+	leader		Person or group in charge of the project
+	description	Text describing the project briefly
+-->
+<!ELEMENT project (project|task|endnode|startnode|relation|resource-group|appointment)*>
+<!ATTLIST project	id CDATA #REQUIRED
+			name CDATA #IMPLIED
+			leader CDATA #IMPLIED
+			description CDATA #IMPLIED
+            project-start CDATA #IMPLIED
+            project-end CDATA #IMPLIED>
+
+<!--	Terminalnodes
+-->
+<!ELEMENT startnode EMPTY>
+<!ATTLIST startnode
+            earlieststart CDATA #IMPLIED
+            latestfinish CDATA #IMPLIED>
+
+<!ELEMENT endnode EMPTY>
+<!ATTLIST endnode
+            earlieststart CDATA #IMPLIED
+            latestfinish CDATA #IMPLIED>
+
+<!-- Resource group
+-->
+<!ELEMENT resource-group (resource)*>
+<!ATTLIST resource-group id CDATA #REQUIRED
+            type (work|material)
+			name CDATA #IMPLIED>
+
+<!-- Resource
+-->
+<!ELEMENT resource EMPTY
+<!ATTLIST resource id CDATA #REQUIRED
+			name CDATA #IMPLIED>
+
+<!--	Tasks can also be milestones (zero duration) or summary tasks (have children)
+-->
+<!ELEMENT task (project|task|terminalnode|resource-request)*>
+<!ATTLIST task		id CDATA #REQUIRED
+			name CDATA #IMPLIED
+			leader CDATA #IMPLIED
+			description CDATA #IMPLIED
+            earlieststart CDATA #IMPLIED
+            latestfinish CDATA #IMPLIED
+            scheduling="0"
+            start CDATA #IMPLIED
+            end CDATA #IMPLIED
+            duration CDATA #IMPLIED>
+
+<!--	Resource requests are made by tasks and referes to
+        the number of resources needed from a resource group
+-->
+<!ELEMENT resource-request EMPTY>
+<!ATTLIST resource-request	group-id CDATA #REQUIRED
+			limit CDATA #IMPLIED>
+
+
+<!--	Relations are described by the two IDs and the type of constraint
+        The ids are references to tasks, so all tasks must have been loaded
+-->
+<!ELEMENT relation EMPTY>
+<!ATTLIST relation	parent-id CDATA #REQUIRED
+			child-id CDATA #REQUIRED
+			type ("Finish-Start" | "Finish-Finish" | "Start-Start")
+				"Start-Start">
+
+<!--	Appointments between resources and tasks
+-->
+<!ELEMENT appointment EMPTY>
+<!ATTLIST appointment	resource-id CDATA #REQUIRED
+			task-id CDATA #REQUIRED
+            start CDATA #IMPLIED
+            duration CDATA #IMPLIED>

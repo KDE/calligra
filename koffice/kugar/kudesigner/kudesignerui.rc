@@ -1,0 +1,68 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kudesigner" version="2">
+<MenuBar>
+ <Menu name="Edit"><text>&amp;Edit</text>
+<!--   <Action name="koffice_undo"/>
+   <Action name="koffice_redo"/>
+   <Separator/>
+   <Action name="edit_cut"/>
+   <Action name="edit_copy"/>
+   <Action name="edit_paste"/>
+   <Separator/>
+   <Action name="edit_select_all"/>
+   <Separator/> -->
+   <Action name="edit_delete"/>
+ </Menu>
+  <Menu name="sections"><text>Sec&amp;tions</text>
+    <Action name="rheader"/>
+    <Action name="pheader"/>
+    <Action name="dheader"/>
+    <Action name="detail"/>
+    <Action name="dfooter"/>
+    <Action name="pfooter"/>
+    <Action name="rfooter"/>
+  </Menu>
+  <Menu name="items"><text>&amp;Items</text>
+    <Action name="nothing"/>
+    <Separator/>
+    <Action name="label"/>
+    <Action name="field"/>
+    <Action name="calcfield"/>
+    <Action name="special"/>
+    <Separator/>
+    <Action name="line"/>
+  </Menu>
+</MenuBar>
+<ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>
+<!--  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/> -->
+   <Action name="edit_delete"/>
+   <Separator/>
+   <Action name="gridlabel"/>
+   <Action name="gridaction"/>
+ </ToolBar>
+<ToolBar name="sectionsToolBar" position="bottom" noMerge="1"><text>Sections</text>
+    <Action name="rheader"/>
+    <Action name="pheader"/>
+    <Action name="dheader"/>
+    <Action name="detail"/>
+    <Action name="dfooter"/>
+    <Action name="pfooter"/>
+    <Action name="rfooter"/>
+</ToolBar>
+<ToolBar name="itemsToolBar" position="left" noMerge="1"><text>Items</text>
+    <Action name="nothing" group="item operations"/>
+    <Separator/>
+    <Action name="label" group="item operations"/>
+    <Action name="field" group="item operations"/>
+    <Action name="calcfield" group="item operations"/>
+    <Action name="special" group="item operations"/>
+    <Separator/>
+    <Action name="line" group="item operations"/>
+</ToolBar>
+</kpartgui>

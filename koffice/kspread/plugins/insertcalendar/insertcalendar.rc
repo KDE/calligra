@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KSpreadPluginInsertCalendar" library="libkspreadinsertcalendar" version="1">
+<MenuBar>
+ <Menu name="tools"><text>&amp;Tools</text>
+  <Action name="kspreadinsertcalendar" />
+ </Menu>
+</MenuBar>
+</kpartgui>

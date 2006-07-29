@@ -1,0 +1,207 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+  <Group>
+    <GroupName>Lookup &amp; Reference</GroupName>
+
+    <Function>
+      <Name>ADDRESS</Name>
+      <Type>String</Type>
+      <Parameter>
+        <Comment>Row number</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Column number</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Absolute number (optional)</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>A1 style (optional)</Comment>
+        <Type>Boolean</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Sheet name</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The ADDRESS creates a cell address. Parameter Row is the row number and Column is the column number.</Text>
+	<Text>Absolute number specifies the type of reference: 1 or omitted = Absolute, 2 = Absolute row, relative column,  3 = Relative row; absolute column and 4 = Relative.</Text>
+	<Text>A1 Style specifies the style of the address to return. If A1 is set to TRUE (default) the address is returned in A1 style if it is set to FALSE in R1C1 style.</Text>
+	<Text>Sheet name is the text specifying the name of the sheet.</Text>
+       <Syntax>ADDRESS(row; col; absolute; style; sheet name)</Syntax>
+       <Example>ADDRESS(6; 4) returns $D$6</Example>
+       <Example>ADDRESS(6; 4; 2) returns D$6</Example>
+       <Example>ADDRESS(6; 4; 2; FALSE; "Sheet1") returns Sheet1!R6C[4]</Example>
+       <Example>ADDRESS(6; 4; 1; FALSE; "Sheet1") returns Sheet1!R6C4</Example>
+       <Example>ADDRESS(6; 4; 4; TRUE; "Sheet1") returns Sheet1!D6</Example>
+      </Help>
+     </Function>
+
+    <Function>
+      <Name>AREAS</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type range="true">String</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the number of areas in the reference string. An area can be asingle cell or a set of cells.</Text>
+	<Syntax>AREAS(reference)</Syntax>
+	<Example>AREAS(A1) returns 1</Example>
+	<Example>AREAS((A1; A2:A4)) returns 2</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CHOOSE</Name>
+      <Parameter>
+        <Comment>Index</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Arguments</Comment>
+      </Parameter>
+      <Help>
+	<Text>Returns the parameter specified by the index.</Text>
+	<Syntax>CHOOSE(index; parameter1; parameter2;...)</Syntax>
+	<Example>CHOOSE(1; "1st"; "2nd") returns "1st"</Example>
+	<Example>CHOOSE(2; 3; 2; 4) returns 2</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COLUMN</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The COLUMN function returns the column of given cell reference. If no parameter is specified the column of the current cell gets returned.</Text>
+	<Syntax>COLUMN(reference)</Syntax>
+	<Example>COLUMN(A1) returns 1</Example>
+	<Example>COLUMN(D2) returns 4</Example>
+        <Related>COLUMNS</Related>
+        <Related>ROW</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>COLUMNS</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The COLUMNS function returns the number of columns in a reference.</Text>
+	<Syntax>COLUMNS(reference)</Syntax>
+	<Example>COLUMNS(A1:C3) returns 3</Example>
+	<Example>COLUMNS(D2) returns 1</Example>
+        <Related>COLUMN</Related>
+        <Related>ROWS</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INDEX</Name>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Row</Comment>
+        <Type>Integer</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Column</Comment>
+        <Type>Integer</Type>
+      </Parameter>
+      <Help>
+        <Text>If a range is given, returns value stored in a given row/column. If one cell is given, which contains an array, then one element of the array is returned.</Text>
+	<Syntax>INDEX(cell, row, column)</Syntax>
+	<Syntax>INDEX(range, row, column)</Syntax>
+	<Example>INDEX(A1:C3;2;2), returns contents of B2</Example>
+	<Example>INDEX(A1;2;2), if A1 is a result of array calculation, returns its (2,2) element.</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>INDIRECT</Name>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>A1 style (optional)</Comment>
+        <Type>Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>Returns the content of the cell specified by the reference text. The second parameter is optional.</Text>
+	<Syntax>INDIRECT(referenceText, a1 style)</Syntax>
+	<Example>INDIRECT(A1), A1 contains "B1", and B1 1 => returns 1</Example>
+	<Example>INDIRECT("A1"), returns content of A1</Example>        
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ROW</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROW function returns the row of given cell reference. If no parameter is specified the row of the current cell gets returned.</Text>
+	<Syntax>ROW(reference)</Syntax>
+	<Example>ROW(A1) returns 1</Example>
+	<Example>ROW(D2) returns 2</Example>
+        <Related>ROWS</Related>
+        <Related>COLUMN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ROWS</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>Reference</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROWS function returns the number of rows in a reference.</Text>
+	<Syntax>ROWS(reference)</Syntax>
+	<Example>ROWS(A1:C3) returns 3</Example>
+	<Example>ROWS(D2) returns 1</Example>
+        <Related>ROW</Related>
+        <Related>COLUMNS</Related>
+      </Help>
+    </Function>
+   <Function>
+     <Name>LOOKUP</Name>
+     <Parameter>
+       <Comment>Lookup value</Comment>
+       <Type>String/Numeric</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Lookup vector</Comment>
+       <Type>String/Numeric</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Result vector</Comment>
+       <Type>String/Numeric</Type>
+     </Parameter>
+     <Help>
+       <Text>The LOOKUP function looks up the first parameter in the lookup vector. It returns a value in the result Vector with the same index as the matching value in the lookup vector. If value is not in the lookup vector it takes the next lower one. If no value in the lookup vector matches an error is returned. The lookup vector must be in ascending order and lookup and result vector must have the same size. Numeric values, string and boolean values are recognized. Comparison between strings is case-insensitive.</Text>
+       <Syntax>LOOKUP(value, lookup vector, result vector)</Syntax>
+       <Example>LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1.</Example>
+     </Help>
+   </Function>
+                                                                                                                            
+  </Group>
+
+</KSpreadFunctions>

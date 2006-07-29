@@ -1,0 +1,290 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPlato::StandardWorktimeDialogBase</class>
+<author>Dag Andersen </author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>StandardWorktimeDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>417</width>
+            <height>368</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>StandardWorktime</string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>These values are used when you estimate the effort needed to complete a task.</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout10</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hours per day:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>day</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hours per month:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>month</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabe3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hours per week:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>week</cstring>
+                    </property>
+                </widget>
+                <widget class="KDoubleSpinBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>month</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
+                    </property>
+                    <property name="maxValue">
+                        <number>744</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Number of working hours in a normal month.</string>
+                    </property>
+                </widget>
+                <widget class="KDoubleSpinBox" row="3" column="1">
+                    <property name="name">
+                        <cstring>day</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
+                    </property>
+                    <property name="maxValue">
+                        <number>24</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Number of working hours in a normal day.</string>
+                    </property>
+                </widget>
+                <widget class="KDoubleSpinBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>year</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
+                    </property>
+                    <property name="maxValue">
+                        <number>8784</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Number of working hours in a normal year.</string>
+                    </property>
+                </widget>
+                <widget class="KDoubleSpinBox" row="2" column="1">
+                    <property name="name">
+                        <cstring>week</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
+                    </property>
+                    <property name="maxValue">
+                        <number>168</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Number of working hours in a normal week.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hours per year:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>year</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Workinghours</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Define standard weekly working hours.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The working hours defined here will be used
+when there is no calendar defined for a resource.</string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KListView">
+                    <column>
+                        <property name="text">
+                            <string>Weekday</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Hours</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>weekdayList</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>160</width>
+                            <height>210</height>
+                        </size>
+                    </property>
+                    <property name="selectionMode" stdset="0">
+                        <enum>Extended</enum>
+                    </property>
+                    <property name="itemMargin">
+                        <number>4</number>
+                    </property>
+                </widget>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>editBox</cstring>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="KComboBox" row="0" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>Non-working</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Working</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>state</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>bApply</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Apply</string>
+                            </property>
+                        </widget>
+                        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>intervalBox</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>GroupBoxPanel</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Sunken</enum>
+                            </property>
+                            <property name="lineWidth">
+                                <number>1</number>
+                            </property>
+                            <property name="title">
+                                <string></string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>day</tabstop>
+    <tabstop>weekdayList</tabstop>
+    <tabstop>state</tabstop>
+    <tabstop>bApply</tabstop>
+    <tabstop>year</tabstop>
+    <tabstop>month</tabstop>
+    <tabstop>week</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>kcombobox.h</includehint>
+</includehints>
+</UI>

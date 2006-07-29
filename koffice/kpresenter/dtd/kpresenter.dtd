@@ -1,0 +1,777 @@
+<!--	$Id$
+
+		This is an XML document type definition (DTD) for the
+		KPresenter document format.
+		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from
+		KPresenter's author Reginald Stadlbauer <reggie@kde.org>.
+-->
+
+<!-- Entity for <KEY>, <BACKPIXKEY>, <BACKCLIPKEY> and <BACKPICTUREKEY> -->
+<!ENTITY % key "day NMTOKEN #REQUIRED
+              filename CDATA #REQUIRED
+              hour NMTOKEN #REQUIRED
+              minute NMTOKEN #REQUIRED
+              month NMTOKEN #REQUIRED
+              msec NMTOKEN #REQUIRED
+              second NMTOKEN #REQUIRED
+              year NMTOKEN #REQUIRED" >
+
+
+
+<!--	A KPresenter document consists of a paper description, a
+		background description, a number of objects and information
+		about the screen presentation.
+
+		Attributes:
+
+		author:		The document's author
+		email:		The document's author's email address
+		editor:		The program this file was written with
+                syntaxVersion:  Integer version of the syntax. Currently 2.
+		mime:		The MIME type (must always have the value application/x-kpresenter)
+-->
+<!ELEMENT DOC (PAPER | BACKGROUND | VARIABLESETTINGS | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | STYLES | PICTURES | PIXMAPS | CLIPARTS | SHOWPRESENTATIONDURATION | HELPLINES | SPELLCHECKIGNORELIST | HEADERFOOTERBYPAGE)* >
+<!ATTLIST DOC   author CDATA #IMPLIED
+                email CDATA #IMPLIED
+                editor CDATA #IMPLIED
+                syntaxVersion NMTOKEN #IMPLIED
+                mime CDATA "application/x-kpresenter">
+
+<!--	Describes the page format. Can have no or one PAPERBORDERS child that 
+		describes the margins.
+
+		Attributes:
+
+		format:			integer value for the page format
+		width:			width in millimeters
+		height:			height in millimeters
+		orientation:	0 for landscape, 1 for portrait
+-->
+<!ELEMENT PAPER (PAPERBORDERS?)>
+<!ATTLIST PAPER	format NMTOKEN #REQUIRED
+                ptWidth NMTOKEN #REQUIRED
+                ptHeight NMTOKEN #REQUIRED
+                unit NMTOKEN #REQUIRED
+                orientation NMTOKEN #REQUIRED
+                tabStopValue NMTOKEN #REQUIRED>
+
+<!--	Describes the margins of the page.
+
+		Attributes:
+
+		left:			left margin in pixels
+		right:			right margin in pixels
+		top:			top margin in pixels
+		bottom:			bottom margin in pixels
+-->
+<!ELEMENT PAPERBORDERS EMPTY>
+<!ATTLIST PAPERBORDERS	ptLeft NMTOKEN #REQUIRED
+			ptRight NMTOKEN #REQUIRED
+			ptTop NMTOKEN #REQUIRED
+			ptBottom NMTOKEN #REQUIRED>
+
+
+<!--    Contains general attributes variables. Has no children.
+
+        Attributes:
+            startingPageNumber:     to the starting page number.
+-->
+<!ELEMENT VARIABLESETTINGS
+    EMPTY>
+<!ATTLIST VARIABLESETTINGS
+    startingPageNumber CDATA #REQUIRED>
+
+
+<!--    Contains general attributes. Has no children.
+
+        Attributes:
+            activePage:     select active page.
+            gridx:          distance between two points in grid (X value )
+            gridy:          distance between two points in grid (Y value )
+            snaptogrid:     0 don't snap to grid 1 snap to grid
+
+-->
+<!ELEMENT ATTRIBUTES
+    EMPTY>
+<!ATTLIST ATTRIBUTES
+    activePage CDATA #REQUIRED
+    gridx CDATA #REQUIRED 
+    gridy CDATA #REQUIRED
+    snaptogrid CDATA #REQUIRED>
+
+<!--	Contains all the objects on the pages.
+-->
+<!ELEMENT OBJECTS (OBJECT)*>
+
+
+<!--	Describes one object on the page.
+
+		Attributes:
+
+		type	0... picture
+                        1... line
+                        2... rect
+                        3... ellipse
+                        4... text
+                        5... autoform
+                        6... clipart
+                        7... undefined (never happens in a file)
+                        8... pie
+                        9... part
+                        10.. group
+                        11.. freehand
+                        12.. polyline
+                        13.. quadric bezier curve
+                        14.. cubic bezier curve
+                        15.. polygon
+                        16.. closed line
+
+		sticky	0... not sticky (default)
+                        1... sticky object
+
+-->
+<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR|TIMER|APPEARSOUNDEFFECT|DISAPPEARSOUNDEFFECT|OBJECTNAME|POINTS|SETTINGS|PICTURESETTINGS|PROTECT|RATIO|OBJECTSNAME)*>
+<!ATTLIST OBJECT
+          type	NMTOKEN #REQUIRED
+          sticky NMTOKEN #IMPLIED>
+
+<!--	The position of an object in the document.
+        Note that this is an absolute position, from the topleft corner
+        of the first page. The page on which the object is can be determined by
+        the formula: y / paper.height (in pt)
+
+		Attributes:
+
+		x		the x position
+		y		the y position
+-->
+<!ELEMENT ORIG EMPTY>
+<!ATTLIST ORIG
+		x		NMTOKEN #REQUIRED
+                y		NMTOKEN #REQUIRED>
+
+
+<!--	The object's size.
+
+		Attributes:
+
+		width	the object's width
+		height	the object's height
+-->
+<!ELEMENT SIZE EMPTY>
+<!ATTLIST SIZE
+		width	NMTOKEN #REQUIRED
+		height	NMTOKEN #REQUIRED>
+
+<!--	The effects for moving from page to page.
+
+		Attributes:
+
+		effect:			first effect
+		effect2:		second effect
+-->
+<!ELEMENT EFFECTS EMPTY>
+<!ATTLIST EFFECTS
+		effect	NMTOKEN #REQUIRED
+		effect2 NMTOKEN #REQUIRED>
+
+<!--    The timer of effect object
+                Attributes:
+                appearTimer              appear effect object's timer
+                disappearTimer           disappear effect object's timer
+-->
+
+<!ELEMENT TIMER EMPTY>
+<!ATTLIST TIMER
+                appearTimer     NMTOKEN #REQUIRED
+                disappearTimer  NMTOKEN #REQUIRED>
+
+<!--    The effect to play sound
+                Attributes:
+                appearSoundFileName      sound name (URL)
+                appearSoundEffect        use or don't use sound with appear object
+-->
+
+
+<!ELEMENT APPEARSOUNDEFFECT EMPTY>
+<!ATTLIST APPEARSOUNDEFFECT
+                appearSoundFileName  CDATA     #REQUIRED
+                appearSoundEffect    ( 0 | 1 )  #REQUIRED>
+
+<!--    The effect to play sound
+                Attributes:
+                disappearSoundFileName      sound name (URL)
+                disappearSoundEffect        use or don't use sound with disappear object
+-->
+
+
+<!ELEMENT DISAPPEARSOUNDEFFECT EMPTY>
+<!ATTLIST DISAPPEARSOUNDEFFECT
+                disappearSoundFileName  CDATA      #REQUIRED
+                disappearSoundEffect    ( 0 | 1 )  #REQUIRED>
+
+<!--    The name of a object
+                Attributes:
+                objectName      name of the object
+-->
+
+
+<!ELEMENT OBJECTNAME EMPTY>
+<!ATTLIST OBJECTNAME
+                objectName  CDATA      #REQUIRED>
+
+<!--	The "step" number in which the object appears, while showing the presentation.
+        This is relative to the current page.
+
+		Attributes:
+
+		value	the "step" number in the presentation.
+-->
+<!ELEMENT PRESNUM EMPTY>
+<!ATTLIST PRESNUM value NMTOKEN #REQUIRED>
+
+
+<!--	The angle of the page
+
+		Attributes:
+
+		value	the angle of the page
+-->
+<!ELEMENT ANGLE EMPTY>
+<!ATTLIST ANGLE value CDATA #REQUIRED>
+
+<!ELEMENT PROTECT EMPTY>
+<!ATTLIST PROTECT state CDATA      #REQUIRED>
+
+<!ELEMENT RATIO EMPTY>
+<!ATTLIST RATIO ratio CDATA      #REQUIRED>
+
+
+<!--	Describes a text object on the page.
+
+		Attributes:
+
+		lineSpacing	space between line, in pt
+		paragSpacing	space between parags, in pt
+		etc.
+                bleft, bright, btop, bbottom marge in pt
+                verticalAlign type of vertical alignment : center, top, bottom
+                verticalValue value of alignment (to add to top margins )
+
+-->
+<!ELEMENT TEXTOBJ (ENUMLISTTYPE|UNSORTEDLISTTYPE|P)*>
+<!ATTLIST TEXTOBJ
+                  lineSpacing NMTOKEN #REQUIRED
+                  bulletColor1 CDATA #REQUIRED
+                  bulletColor2 CDATA #REQUIRED 
+                  bulletColor3 CDATA #REQUIRED 
+                  bulletColor4 CDATA #REQUIRED
+                  bulletType1 NMTOKEN #REQUIRED 
+                  bulletType2 NMTOKEN #REQUIRED
+                  bulletType3 NMTOKEN #REQUIRED
+                  bulletType4 NMTOKEN #REQUIRED
+                  margin NMTOKEN #REQUIRED
+                  paragSpacing NMTOKEN #REQUIRED
+                  protectcontent NMTOKEN #REQUIRED
+                  bleft NMTOKEN #REQUIRED
+                  bright NMTOKEN #REQUIRED                  
+                  btop NMTOKEN #REQUIRED
+                  bbottom NMTOKEN #REQUIRED
+                  verticalAlign NMTOKEN #REQUIRED
+                  verticalValue NMTOKEN #REQUIRED>
+
+<!ELEMENT ENUMLISTTYPE EMPTY>
+<!ATTLIST ENUMLISTTYPE
+			type       CDATA #REQUIRED
+			before     CDATA #IMPLIED
+			after      CDATA #IMPLIED
+			start      CDATA #REQUIRED
+			family     CDATA #REQUIRED
+			pointSize  CDATA #REQUIRED
+			bold       CDATA #IMPLIED
+			italic     CDATA #IMPLIED
+			underline CDATA #IMPLIED
+			red        CDATA #IMPLIED
+			green      CDATA #IMPLIED
+			blue       CDATA #IMPLIED>
+
+<!ELEMENT UNSORTEDLISTTYPE EMPTY>
+<!ATTLIST UNSORTEDLISTTYPE
+			family	CDATA #REQUIRED
+			pointSize		CDATA #REQUIRED
+			bold	CDATA #IMPLIED
+			italic	CDATA #IMPLIED
+			underline		CDATA #IMPLIED
+			red		CDATA #IMPLIED
+			green	CDATA #IMPLIED
+			blue	CDATA #IMPLIED
+			chr		CDATA #REQUIRED>
+
+<!ENTITY % layout "TEXT|COUNTER|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|TABULATOR*|SHADOW|NAME">
+
+<!--	Describes a paragraph in a text object
+
+		Attributes:
+
+		align	1=left, 2=right, 4=center 8=justify
+		type	0=normal, 1=bullet-list, 2=enum-list
+		depth	list depth
+-->
+<!ELEMENT P (%layout;)*>
+<!ATTLIST P
+		align	NMTOKEN #REQUIRED
+		type	NMTOKEN #REQUIRED
+		depth	NMTOKEN #REQUIRED>
+
+<!--	Describes a text of a text object
+
+     family: font family name
+     pointSize: font size in pt
+     [...]
+     strikeoutstyleline: solid, dash, dot, dashdot, dashdotdot
+     underlinestyleline: solid, dash, dot, dashdot, dashdotdot
+     [...]
+     VERTALIGN: Super/sub script.
+             0 = Normal
+             1 = Subscript
+             2 = Superscript
+     relativetextsize
+             0.75 means 3/4 of the normal font size.
+     [...]
+      wordbyword: 0 or 1. If 1, spaces are not striked out. Opposite of fo:score-spaces.
+
+      text-shadow:
+        The value is the CSS specification for text-shadow (also used by XSL-FO).
+        http://www.w3.org/TR/REC-CSS2/text.html#text-shadow-props
+        KPresenter only supports a single shadow, and no blur radius, so it amounts to
+        either "none" or "color length length".
+TODO: finish documentation
+
+-->
+<!ELEMENT TEXT (#PCDATA)>
+<!ATTLIST TEXT
+		family	CDATA	#REQUIRED
+		pointSize NMTOKEN #REQUIRED
+		underline ( 0 | 1 | single | double|single-bold|wave ) #REQUIRED
+                underlinestyleline CDATA #REQUIRED
+                underlinecolor CDATA #REQUIRED
+                bold ( 0 | 1 ) #REQUIRED
+                italic ( 0 | 1 ) #REQUIRED
+                strikeOut (0 | 1| single | double|single-bold) #REQUIRED
+                strikeoutstyleline CDATA #REQUIRED
+                whitespace NMTOKEN #IMPLIED
+		color	CDATA	#REQUIRED
+                textbackcolor CDATA #REQUIRED
+                VERTALIGN CDATA #REQUIRED
+                relativetextsize CDATA #IMPLIED
+                offsetfrombaseline CDATA #IMPLIED
+                wordbyword CDATA #IMPLIED
+                fontattribute (none | upper | lower)#REQUIRED
+                language CDATA #IMPLIED
+                text-shadow CDATA #IMPLIED>
+
+<!-- 
+        A paragraph and a style can have counter data.
+        The document will do the counting of the paragraphs that use this.
+
+        type:   0 = None
+                1 = Numeral
+                2 = Alphabetical
+                3 = Alphabetical uppercase
+                4 = Roman numbering
+                5 = Roman numbering uppercase
+                6 = Custom bullet (one char, set by the 'bullet' attribute)
+                7 = Custom (complex string, see kword's dialog)
+                8 = Circle bullet (empty circle)
+                9 = Square bullet (full square)
+                10 = Disc bullet (full circle)
+                11 = Box bullet (empty square)
+
+        depth   The level of the numbering. 
+                Depth of 0 means the major numbering. (1, 2, 3...)
+                Depth of 1 is 1.1, 1.2, 1.3 etc.
+
+        start   The first used number in the numbering (usually 1).
+        numberingtype
+                0 = list numbering, 1 = chapter numbering.
+                List numbering starts at <start> everytime another list is used (everytime a 
+                non numbering paragraph has been used)
+                Chapter numbering is used throughout the whole document (in future throughout books)
+        lefttext
+                The text that is printed left of the first numeral
+        righttext
+                The text that is printed right of the last numeral
+                A usual value for this one is "." (dot).
+
+        bullet  The unicode character code that is the custom bullet (for type=6)
+        bulletfont
+                The font to use for the custom bullet can be found in (use "symbol" if in doubt)
+        customdef
+                Definition of a custom counter - not supported yet
+        restart
+                If "true" or "1", this paragraph is numbered as specified by start.
+                Otherwise (default) it will extend the current list (with equal type and depth).
+
+        text    The text shown by the counter in the document when it was saved.
+                This is redundant information, unused by KPresenter upon loading, but useful
+                for export filters.
+
+        align   Counter alignment. Possible values include:
+	            int(Qt::AlignAuto), //left for LTR text and right for RTL text
+		    int(Qt::AlignLeft),
+		    int(Qt::AlignRight).
+-->
+<!ELEMENT COUNTER
+    EMPTY>
+<!ATTLIST COUNTER
+    type CDATA #REQUIRED
+    depth CDATA #REQUIRED
+    bullet CDATA #IMPLIED
+    start CDATA #IMPLIED
+    numberingtype CDATA #REQUIRED
+    lefttext CDATA #IMPLIED
+    righttext CDATA #IMPLIED
+    bulletfont CDATA #IMPLIED
+    customdef CDATA #IMPLIED
+    restart CDATA #IMPLIED
+    text CDATA #IMPLIED
+    align CDATA #IMPLIED>
+
+<!-- INDENTS
+        first: indent (pt) from the left border (of the frame) of the first line of a paragraph
+        left: indent (pt) that is used for the other lines in a paragraph.
+        right: indent (pt) on the right of all lines in the paragraph
+-->
+<!ELEMENT INDENTS
+    EMPTY>
+<!ATTLIST INDENTS
+    first CDATA #REQUIRED
+    left CDATA #REQUIRED
+    right CDATA #REQUIRED>
+
+
+<!-- 
+        Linespacing defines the height of a line in a paragraph.
+        By default the line height is the height of the biggest character in the line.
+
+        The "type" can be "oneandhalf" for 1.5 * line_height and "double" for 2 * line_height.
+        More generally it can also be "multiple", where spacingvalue=3 means 3 * line_height.
+        Other values for the type are
+        "custom": spacingvalue is the distance between the lines in pt (added to the line height)
+        "atleast": the total line height is at least spacingvalue (in pt)
+        "fixed": spacingvalue is equal to the total line height (in pt).
+
+        See koffice/lib/kotext/koparaglayout.h for more details.
+
+        spacingvalue isn't used if type is "oneandhalf" or "double".
+-->
+<!ELEMENT LINESPACING
+    EMPTY>
+<!ATTLIST LINESPACING
+    type (oneandhalf|double|custom|atleast|multiple|fixed) #IMPLIED
+    spacingvalue CDATA #IMPLIED>
+
+<!--
+        The borders can be used on a frame and on a paragraph.
+        the border has a color, displayed in the RGB value.
+        The width is in points.
+        Style   0 = solid
+                1 = dashes
+                2 = dots
+                3 = dash - dot patterns
+                4 = dash dot dot patterns
+-->
+<!ELEMENT LEFTBORDER
+    EMPTY>
+<!ATTLIST LEFTBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT RIGHTBORDER
+    EMPTY>
+<!ATTLIST RIGHTBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT TOPBORDER
+    EMPTY>
+<!ATTLIST TOPBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT BOTTOMBORDER
+    EMPTY>
+<!ATTLIST BOTTOMBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+
+<!-- OFFSETS
+        before: space before the paragraph, or "head offset" (KWord-0.8), aka "top margin" (KWord-1.0) (pt)
+        after: space after the paragraph, or "foot offset" (KWord-0.8), aka "bottom margin" (KWord-1.0) (pt)
+-->
+<!ELEMENT OFFSETS
+    EMPTY>
+<!ATTLIST OFFSETS
+    before CDATA #IMPLIED
+    after CDATA #IMPLIED>
+
+
+<!--    Defines the position of a tabulation
+        Attributes:
+
+            type:               0 .. left
+                                1 .. center
+                                2 .. right
+                                3 .. alignment of decimal point
+
+            ptpos:              Position of the tabulation, in pt
+
+            filling:            0 .. blank
+                                1 .. dots
+                                2 .. line
+                                3 .. dash
+                                4 .. dash-dot
+                                5 .. dash-dot-dot
+
+            width:              Width of the filling, in pt
+-->
+<!ELEMENT TABULATOR
+    EMPTY>
+<!ATTLIST TABULATOR
+    type CDATA #REQUIRED
+    ptpos CDATA #REQUIRED
+    filling CDATA #IMPLIED
+    width CDATA #IMPLIED>
+
+<!ELEMENT PEN EMPTY>
+<!ATTLIST PEN	color   CDATA	#REQUIRED
+		width	NMTOKEN	#REQUIRED
+		style	NMTOKEN	#REQUIRED>
+
+<!ELEMENT BRUSH EMPTY>
+<!ATTLIST BRUSH	color   CDATA	#REQUIRED
+		style	NMTOKEN	#REQUIRED>
+
+<!ELEMENT RNDS EMPTY>
+<!ATTLIST RNDS	x		CDATA	#REQUIRED
+		y		CDATA	#REQUIRED>
+
+<!ELEMENT FILLTYPE EMPTY>
+<!ATTLIST FILLTYPE value CDATA #REQUIRED>
+
+<!ELEMENT GRADIENT EMPTY>
+<!ATTLIST GRADIENT	color1	CDATA	#REQUIRED
+			color2	CDATA	#REQUIRED
+                        unbalanced NMTOKEN #REQUIRED
+                        xfactor NMTOKEN #REQUIRED
+                        yfactor NMTOKEN #REQUIRED
+		        type	NMTOKEN	#REQUIRED>
+
+<!ELEMENT SETTINGS EMPTY>
+<!ATTLIST SETTINGS      checkConcavePolygon   ( 0 | 1 )  #REQUIRED
+                        cornersValue          NMTOKEN    #REQUIRED
+                        sharpnessValue        NMTOKEN    #REQUIRED>
+
+
+<!ELEMENT INFINITLOOP EMPTY>
+<!ATTLIST INFINITLOOP value NMTOKEN #REQUIRED>
+
+<!ELEMENT MANUALSWITCH EMPTY>
+<!ATTLIST MANUALSWITCH value NMTOKEN #REQUIRED>
+
+<!ELEMENT PRESSPEED EMPTY>
+<!ATTLIST PRESSPEED value NMTOKEN #REQUIRED>
+
+<!ELEMENT SHOWPRESENTATIONDURATION EMPTY>
+<!ATTLIST SHOWPRESENTATIONDURATION value NMTOKEN #REQUIRED>
+
+<!ELEMENT BACKGROUND (PAGE*) >
+<!ATTLIST BACKGROUND	rastX	NMTOKEN	#REQUIRED
+			rastY	NMTOKEN	#REQUIRED
+			color	CDATA	#REQUIRED>
+
+<!ELEMENT PAGE (BACKTYPE|BACKMASTER|BACKVIEW|BACKCOLOR1|BACKCOLOR2|BCTYPE|PGEFFECT|PGTIMER|PGSOUNDEFFECT|
+    BACKPIXKEY|BACKCLIPKEY|BACKPICTUREKEY|HEADERFOOTER)*>
+
+<!ELEMENT BACKTYPE EMPTY>
+<!ATTLIST BACKTYPE value CDATA #REQUIRED>
+
+<!ELEMENT BACKMASTER EMPTY>
+<!ATTLIST BACKMASTER useMasterBackground CDATA	#REQUIRED
+                     displayMasterPageObject CDATA	#REQUIRED
+		     displayBackground CDATA	#REQUIRED>
+
+<!ELEMENT BACKVIEW EMPTY>
+<!ATTLIST BACKVIEW value NMTOKEN #REQUIRED>
+
+<!-- Only for KPresenter 1.1 compactibility, otherwise use BACKPICTUREKEY -->
+<!ELEMENT BACKPIXKEY EMPTY>
+<!ATTLIST BACKPIXKEY %key; >
+
+<!-- Only for KPresenter 1.1 compactibility, otherwise use BACKPICTUREKEY -->
+<!ELEMENT BACKCLIPARTKEY EMPTY>
+<!ATTLIST BACKCLIPARTKEY %key; >
+
+<!ELEMENT BACKPICTUREKEY EMPTY>
+<!ATTLIST BACKPICTUREKEY %key; >
+
+<!ELEMENT BCTYPE EMPTY>
+<!ATTLIST BCTYPE value CDATA #REQUIRED>
+
+<!ELEMENT PGEFFECT EMPTY>
+<!ATTLIST PGEFFECT value NMTOKEN #REQUIRED>
+
+<!ELEMENT BACKCOLOR1 EMPTY>
+<!ATTLIST BACKCOLOR1	color		CDATA	#REQUIRED>
+
+<!ELEMENT BACKCOLOR2 EMPTY>
+<!ATTLIST BACKCOLOR2	red		CDATA	#REQUIRED
+			green		CDATA	#REQUIRED
+			blue		CDATA	#REQUIRED>
+
+<!ELEMENT PGTIMER EMPTY>
+<!ATTLIST PGTIMER timer NMTOKEN #REQUIRED>
+
+<!ELEMENT PGSOUNDEFFECT EMPTY>
+<!ATTLIST PGSOUNDEFFECT soundEffect    ( 0 | 1 )  #REQUIRED
+                        soundFileNmae  CDATA      #REQUIRED>
+
+<!ELEMENT HEADERFOOTER EMPTY>
+<!ATTLIST HEADERFOOTER header ( 0 | 1 )  #REQUIRED
+                       footer ( 0 | 1 )  #REQUIRED>
+
+<!ELEMENT DISAPPEAR EMPTY >
+<!ATTLIST DISAPPEAR doit NMTOKEN #REQUIRED
+                    effect NMTOKEN #REQUIRED
+                    num NMTOKEN #REQUIRED>
+
+
+<!ELEMENT FILENAME EMPTY >
+<!ATTLIST FILENAME value CDATA #REQUIRED >
+
+<!ELEMENT FOOTER ( ORIG, SIZE, PEN, TEXTOBJ ) >
+<!ATTLIST FOOTER show NMTOKEN #REQUIRED >
+
+<!ELEMENT HEADER ( ORIG, SIZE, PEN, TEXTOBJ ) >
+<!ATTLIST HEADER show NMTOKEN #REQUIRED >
+
+<!ELEMENT HEADERFOOTERBYPAGE EMPTY >
+<!ATTLIST HEADERFOOTERBYPAGE value CDATA #REQUIRED >
+
+<!ELEMENT KEY EMPTY >
+<!ATTLIST KEY %key;
+              name CDATA #IMPLIED >
+
+<!ELEMENT LINEBEGIN EMPTY >
+<!ATTLIST LINEBEGIN value NMTOKEN #REQUIRED >
+
+<!ELEMENT LINEEND EMPTY >
+<!ATTLIST LINEEND value NMTOKEN #REQUIRED >
+
+<!ELEMENT LINETYPE EMPTY >
+<!ATTLIST LINETYPE value NMTOKEN #REQUIRED >
+
+<!--
+        A style is a global setting that is used for all paragraphs which use that
+        style. As the markup is stored in one place (the style) changing the markup
+        throughout the document is simply a task of changing one or two styles.
+        Highly recommended for structured documents.
+
+        A style element contains the same child elements as the P tag
+        (all the paragraph properties), as well as a text format in the FORMAT tag.
+        It also contains the name of the following style, i.e. the one used when
+        the user presses Enter in a paragraph using this style.
+
+        Attributes:
+          outline   if "true", this style is part of the Table Of Contents.
+                    (by default it is not).
+-->
+<!ELEMENT STYLES
+    (STYLE*)>
+<!ELEMENT STYLE
+    (%layout;|FORMAT|FOLLOWING)*>
+<!ATTLIST STYLE
+    outline CDATA #IMPLIED>
+
+<!-- Description of text format inside a style -->
+<!ELEMENT FORMAT EMPTY>
+<!ATTLIST FORMAT
+    <!-- The exact same attributes as TEXT can have.
+         Is it possible to define an entity for a list of attributes? -->
+>
+
+<!ELEMENT PICTURES ( KEY* ) >
+
+<!-- Only for KPresenter 1.1 compactibility -->
+<!ELEMENT CLIPARTS ( KEY* ) >
+
+<!-- Only for KPresenter 1.1 compactibility -->
+<!ELEMENT PIXMAPS ( KEY* ) >
+
+<!ELEMENT PICTURESETTINGS EMPTY>
+<!ATTLIST PICTURESETTINGS   mirrorType    NMTOKEN    #REQUIRED
+                            depth         NMTOKEN    #REQUIRED
+                            swapRGB       ( 0 | 1 )  #REQUIRED
+                            grayscal      ( 0 | 1 )  #REQUIRED
+                            bright        NMTOKEN    #REQUIRED>
+
+<!ELEMENT SELSLIDES ( SLIDE+ ) >
+<!ELEMENT SLIDE EMPTY>
+<!ATTLIST SLIDE nr NMTOKEN #REQUIRED
+                show NMTOKEN #REQUIRED>
+
+<!ELEMENT CUSTOMSLIDESHOWCONFIG ( SLIDE+ ) >
+<!ELEMENT CUSTOMSLIDESHOW EMPTY>
+<!ATTLIST CUSTOMSLIDESHOW name NMTOKEN #REQUIRED
+                pages NMTOKEN #REQUIRED>
+
+<!ELEMENT DEFAULTCUSTOMSLIDESHOWNAME ANY>
+<!ATTLIST DEFAULTCUSTOMSLIDESHOWNAME name CDATA #REQUIRED>
+
+
+<!ELEMENT PAGETITLES ( Title+ ) >
+<!ELEMENT Title EMPTY>
+<!ATTLIST Title title CDATA #REQUIRED>
+
+<!ELEMENT PAGENOTES ( Note+ ) >
+<!ELEMENT Note EMPTY>
+<!ATTLIST Note note CDATA #REQUIRED>
+
+<!ELEMENT POINTS ( Point+ ) >
+<!ELEMENT Point EMPTY>
+<!ATTLIST Point point_x NMTOKEN #REQUIRED
+                point_y NMTOKEN #REQUIRED>
+
+<!ELEMENT HELPLINES (Vertical | Horizontal | HelpPoint)* >
+<!ATTLIST HELPLINES show NMTOKEN #REQUIRED >
+<!ELEMENT Vertical EMPTY>
+<!ATTLIST Vertical value NMTOKEN #REQUIRED >
+<!ELEMENT Horizontal EMPTY>
+<!ATTLIST Horizontal value NMTOKEN #REQUIRED >
+<!ELEMENT HelpPoint EMPTY>
+<!ATTLIST HelpPoint posX NMTOKEN #REQUIRED
+                    posY NMTOKEN #REQUIRED>
+
+<!ELEMENT SPELLCHECKIGNORELIST ( SPELLCHECKIGNOREWORD+ )>
+<!ATTLIST SPELLCHECKIGNORELIST >
+<!ELEMENT SPELLCHECKIGNOREWORD EMPTY>
+<!ATTLIST SPELLCHECKIGNOREWORD word NMTOKEN #REQUIRED >
+
+<!-- ### TODO: please verify! -->
+<!ELEMENT OBJECTSNAME ANY>
+<!ATTLIST OBJECTSNAME NAME CDATA #REQUIRED>
+
+<!--
+   Name of the style used by this paragraph
+-->
+<!ELEMENT NAME EMPTY>
+<!ATTLIST NAME value CDATA #REQUIRED>

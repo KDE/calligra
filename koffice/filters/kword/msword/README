@@ -1,0 +1,31 @@
+This filter is the new MS Word import filter, based on the wv2 library (an
+independent project). To build it you have to:
+
+1) Get recent wv2 sources via anonymous CVS access. Please check this page for
+   details: http://sourceforge.net/cvs/?group_id=10501
+   The module name is "wv2"
+2) Install the library by invoking ./autogen.sh, configure, make, and
+   make install (you might want to specify a --prefix when running configure)
+   It's also recommended to use --disable-debug for a release version to avoid
+   the excessive debug output of wv2.
+   If you want to check whether wv2 has been built successfully, you should
+   "make check" wv2 and run the tests in wv2/tests. They print a lot of debug
+   information, but as long as the exit code is 0 it worked.
+   Please report any problems with building wv2 to trobin@kde.org.
+3) (Re)Run make -f Makefile.cvs in the KOffice toplevel directory
+4) (Re)Run configure with your usual configure options. If you specified some
+   special --prefix for the wv2 library above, please add --with-libwv2=DIR
+   to your configure options.
+   The configure script should detect wv2, to verify that you should grep
+   config.h in the toplevel KOffice directory for "WV2".
+5) Build and install koffice/filters/kword/msword. If the build fails please
+   first try to update wv2 and the msword directory. If you're are using a CVS
+   version of wv2 (i.e. not a released version but current CVS HEAD) please
+   take a look at Makefile.am, you might have to uncomment some compile flags.
+   In case that doesn't fix your problem please send a bug report to
+   koffice@kde.org (you don't have to be subscribed to post there).
+6) Ensure that the file $KDEDIR/share/services/ole_winword97_import.desktop
+   doesn't exist on your system. If you installed all of KOffice HEAD it should
+   be gone already.
+
+Use it like any other KOffice filter.

@@ -1,0 +1,24 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="Karbon" version="2">
+<MenuBar>
+	<Menu name="edit">
+		<text>&amp;Edit</text>
+		<Action name="edit_copy"/>
+		<Action name="edit_select_all"/>
+		<Action name="edit_deselect_all"/>
+	</Menu>
+	<Menu name="view">
+		<text>&amp;View</text>
+		<Action name="view_zoom_in"/>
+		<Action name="view_zoom_out"/>
+		<Action name="view_zoom"/>
+		<Action name="view_mode"/>
+	</Menu>
+</MenuBar>
+<ToolBar name="view_toolbar" fullWidth="false">
+	<Text>View</Text>
+	<Separator/>
+	<Action name="view_mode"/>
+	<Action name="view_zoom"/>
+</ToolBar>
+</kpartgui>

@@ -1,0 +1,72 @@
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
+      "http://www.wapforum.org/DTD/wml_1.1.xml" >
+<wml>
+<card name="Test file for KWord">
+<p>The quick brown fox jumps over the lazy dog</p>
+</card>
+
+<card>
+<p>Here is the second card.</p>
+</card>
+
+<card>
+<p>Some formatting test:</p>
+<p><b>bold</b>, <i>italic</i>, <u>underline</u></p>
+</card>
+
+<card>
+<p align="left">left justify</p>
+<p align="center">center</p>
+<p align="right">right justify</p>
+</card>
+
+<card>
+<p>Hyperlink test, go to <a href="http://www.koffice.org">KOffice website</a></p>
+</card>
+
+<card>
+<p>Table</p>
+
+<table columns="2">
+<tr>
+  <td>top-left <b>bold</b> normal</td>
+  <td>top-right <i>italic</i> normal</td>
+</tr>
+<tr>
+  <td>bottom-left</td>
+  <td>bottom-right</td>
+</tr>
+</table>
+
+</card>
+
+<card>
+<p>Nested Table</p>
+
+<b>
+<table columns="2">
+<tr>
+  <td>top-left <b>bold</b> normal</td>
+  <td>top-right <i>italic</i> normal</td>
+</tr>
+<tr>
+  <td>bottom-left</td>
+  <td>
+  bottom-right
+
+  <table columns="1">
+  <tr><td>another cell</td></tr>
+  </table>
+
+  </td>
+</tr>
+</table>
+</b>
+
+</card>
+
+<card>
+<p>The very last card</p>
+</card>
+
+</wml>

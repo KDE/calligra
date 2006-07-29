@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="shadoweffectplugin" library="karbon_shadoweffectplugin">
+<MenuBar>
+	<Menu name="effects">
+		<Action name="object_shadow"/>
+	</Menu>
+</MenuBar>
+<ToolBar name="Effects" hidden="true" fullWidth="false">
+	<Action name="object_shadow"/>
+</ToolBar>
+</kpartplugin>

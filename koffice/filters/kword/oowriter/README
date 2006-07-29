@@ -1,0 +1,9 @@
+This is the OOWriter import filter.
+
+Format documentation: 
+http://xml.openoffice.org/general.html
+
+Tip for reading OO files: after unzipping them, run this script:
+for i in *.xml; do
+  xmllint --format $i -o xmllint.out && mv -f xmllint.out $i
+done

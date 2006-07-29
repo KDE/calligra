@@ -1,0 +1,287 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPlato::MainProjectPanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>MainProjectPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>550</width>
+            <height>335</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>ProjectPanelBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout14</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KLineEdit" row="2" column="1" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>leaderfield</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The project leader.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Leader:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>leaderfield</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The project leader.</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="5">
+                    <property name="name">
+                        <cstring>namefield</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The project name.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>N&amp;ame:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>namefield</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The project name.</string>
+                    </property>
+                </widget>
+                <spacer row="0" column="2">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>270</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>wbs</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>20</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Plain</enum>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="3">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;p align="right"&gt;&lt;/p&gt;ID:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>idfield</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The unique project identification</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="5">
+                    <property name="name">
+                        <cstring>chooseLeader</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Choose...</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Choose a project leader from your address book.</string>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="0" column="4" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>idfield</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The unique project identification</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>WBS:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>schedulingGroup</cstring>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="title">
+                <string>Scheduling</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Here you define when the project shall start or end.
+
+If start time is defined, the project is scheduled forward from this time. When the project has been calculated, end time shows when the project is planned to end.
+If end time is defined, the project is scheduled backwards from this time. When the project has been calculated, start time shows when the project must start in order to finish in time.</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KDateWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>startDate</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Define when the project shall start.</string>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="0" column="2">
+                    <property name="name">
+                        <cstring>startTime</cstring>
+                    </property>
+                </widget>
+                <widget class="QTimeEdit" row="1" column="2">
+                    <property name="name">
+                        <cstring>endTime</cstring>
+                    </property>
+                </widget>
+                <widget class="KDateWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>endDate</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Define when the project shall end.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>bEndDate</cstring>
+                    </property>
+                    <property name="text">
+                        <string>End date:</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>1</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Select this to schedule the project backward from end time.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>bStartDate</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Start date:</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>0</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Select this to schedule the project forward from start time.</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Project notes and summary:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>descriptionfield</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Various notes associated with the project or a project summary.
+
+Here you can enter any additional text you want to be stored with the project. This can for example be a short summary of the project or various notes.</string>
+            </property>
+        </widget>
+        <widget class="KTextEdit">
+            <property name="name">
+                <cstring>descriptionfield</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Various notes associated with the project or a project summary.
+
+Here you can enter any additional text you want to be stored with the project. This can for example be a short summary of the project or various notes.</string>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<tabstops>
+    <tabstop>namefield</tabstop>
+    <tabstop>leaderfield</tabstop>
+    <tabstop>chooseLeader</tabstop>
+    <tabstop>bStartDate</tabstop>
+    <tabstop>startTime</tabstop>
+    <tabstop>bEndDate</tabstop>
+    <tabstop>endTime</tabstop>
+    <tabstop>descriptionfield</tabstop>
+    <tabstop>idfield</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>ktextedit.h</includehint>
+</includehints>
+</UI>

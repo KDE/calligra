@@ -1,0 +1,319 @@
+<sect1 id="format-characters">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Formatting Characters</title>
+<indexterm><primary>text</primary><secondary>formatting</secondary></indexterm>
+<indexterm><primary>font</primary><secondary>formatting</secondary></indexterm>
+<indexterm><primary>formatting text</primary></indexterm>
+
+<para>This section will cover the changes that can be made to individual characters or
+blocks of characters including:</para>
+
+<itemizedlist>
+<listitem><para><link linkend="change-font">Character size</link></para></listitem>
+<listitem><para><link linkend="change-font">Font</link></para></listitem>
+<listitem><para><link linkend="change-font">Font style (italic, bold, etc).</link></para></listitem>
+<listitem><para><link linkend="change-font">Underlines, superscript, subscript, strikeout, etc.</link></para></listitem>
+<listitem><para><link linkend="change-font">Character color and background color.</link></para></listitem>
+<listitem><para><link linkend="change-font-case">Character case.</link></para></listitem>
+
+</itemizedlist>
+
+<sect2 id="change-font">
+<title>Changing Size, Font, Font Style, Text color and Background Color</title>
+<indexterm><primary>text</primary><secondary>change size</secondary></indexterm>
+<indexterm><primary>change text size</primary></indexterm>
+<indexterm><primary>text</primary><secondary>change font</secondary></indexterm>
+<indexterm><primary>change text font</primary></indexterm>
+<indexterm><primary>text</primary><secondary>change color</secondary></indexterm>
+<indexterm><primary>change text color</primary></indexterm>
+<indexterm><primary>text</primary><secondary>change background color</secondary></indexterm>
+<indexterm><primary>change text background color</primary></indexterm>
+<indexterm><primary>text</primary><secondary>bold</secondary></indexterm>
+<indexterm><primary>bold text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>italicized</secondary></indexterm>
+<indexterm><primary>italicized text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>underlined</secondary></indexterm>
+<indexterm><primary>underlined text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>strikethrough</secondary></indexterm>
+<indexterm><primary>strikethrough text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>superscript</secondary></indexterm>
+<indexterm><primary>superscript text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>subscript</secondary></indexterm>
+<indexterm><primary>subscript text</primary></indexterm>
+
+
+<sect3 id="change-font-keyboard">
+<title>Using the Keyboard or toolbars</title>
+
+<para>There are several keyboard shortcuts which you can use to make
+common changes to character formatting. After selecting the text, you
+can use these key combinations to toggle each attribute.</para>
+
+<para>The <guilabel>Format</guilabel> toolbar also has buttons which you can use to
+toggle these same attributes.  </para>
+
+<para>The following table details each attribute, the toolbar buttons
+and the keyboard shortcuts.</para>
+
+<informaltable frame="all"><tgroup cols="3" align="left">
+<thead>
+<row><entry align="right">Attribute</entry><entry align="center">Toolbar
+Button</entry><entry align="center">Key Combo</entry></row>
+</thead><tbody>
+<row><entry align="right">Font Size</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">
+<para>Decrease font size: <keycombo><keycap>Ctrl</keycap><keycap>&lt;</keycap></keycombo></para> <para>Increase font size: <keycombo><keycap>Ctrl</keycap><keycap>&gt;</keycap></keycombo></para></entry></row>
+<row><entry align="right">Font</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chfontbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Bold Face</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo>&Ctrl;<keycap>B</keycap></keycombo></entry></row>
+<row><entry align="right">Italics</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
+<row><entry align="right">Underline</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
+<row><entry align="right">Strikethrough</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Superscript</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Subscript</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Font Color</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+
+</tbody></tgroup></informaltable>
+
+<note>
+<para>You cannot change the all text attributes using the keyboard or a button on a 
+toolbar. For these attributes, you must <link linkend="change-font-dialog">use the dialog
+box</link>.</para>
+</note>
+
+</sect3>
+
+<sect3 id="change-font-dialog">
+<title>Using the Dialog Box</title>
+
+<para>If you have many changes to make, you can also use a dialog box to
+set these same attributes.</para>
+
+<para>You can open the <guilabel>Select Font</guilabel> dialog box in one of three
+ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>Select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Font...</guimenuitem></menuchoice>
+from the menubar.</para>
+</listitem>
+
+<listitem>
+<para>Click on the selected text with the &RMB;.  A small menu will appear.  Select <guimenuitem>Font...</guimenuitem> from the
+menu.</para>
+</listitem>
+
+
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo>&Alt;&Ctrl;<keycap>F</keycap></keycombo></para>
+</listitem>
+</itemizedlist>
+
+<para>Either method will open a dialog box</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Using this dialog box, you can select the font, size, 
+italics and boldface options from the top three list boxes.</para>
+
+<para>The preview box along the middle of the dialog, will show you how your current
+settings will appear.</para>
+
+<tip><para>If the default preview string is not appropriate, you can change it by clicking once
+inside the preview box with the &LMB;.  A text cursor will appear. You can edit the text to suit your needs.</para>
+<para>The sample sentence will revert to the default the next time you
+open this dialog.</para>
+</tip>
+
+<para>If you click the tab labeled <guilabel>Highlighting</guilabel>, the dialog changes to:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The subsection labeled <guilabel>Underlining:</guilabel> has two combo boxes and a color selector box. 
+In the left most combo box select between
+no underline (<guilabel>None</guilabel>), <guilabel>Single</guilabel>, <guilabel>Simple Bold</guilabel>, 
+<guilabel>Double</guilabel> or <guilabel>Wave</guilabel> underlining.  </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="exul.png" format="PNG"/></imageobject>
+<!--<caption><para>Examples of three underline styles</para></caption>-->
+</mediaobject>
+</screenshot>
+
+<para>Use the center combo box to select the style of underlining (Solid line, dashed line, etc.).</para>
+<para>Use the right color selector box to select a color for the underline using the
+<link linkend="select-colors">color selection dialog box</link>.  </para>
+
+<para>The subsection labeled <guilabel>Strikethrough:</guilabel> has two combo boxes.
+Use the left combo box to select between
+no strikethrough (<guilabel>None</guilabel>), <guilabel>Single</guilabel>, <guilabel>Double</guilabel> or 
+<guilabel>Simple Bold</guilabel> strikethrough.  Use the right combo box to select the line style.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="exst.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The checkbox labeled <guilabel>Word by word</guilabel> determines how underlining and strikethrough are drawn.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wbw.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The section labeled <guilabel>Capitalization</guilabel> lets you select one of four special capitalization options.  
+This will change the capitalization of the selected text.  Examples of each scheme are shown below.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chcase.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<note><para>The changes to capilalization will only affect the selected text at the current moment.  This formatting is not enforced after closing the dialog box.</para></note>
+
+<para>The third tab labeled <guilabel>Decoration</guilabel> allows you to change the color of the font, change the background color and create artificial shadows for your characters.  Click on the tab:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Using the buttons labeled <guilabel>Text color:</guilabel> and <guilabel>Background color:</guilabel> you can change the color of the text or the background behind the text.</para>
+
+<para>To create the illusion of a shadow behind your text, select the color you want your shadow by clicking the button labeled <guilabel>Shadow color:</guilabel>.  Then select the distance between the shadow and 
+the text using  the spin box labeld <guilabel>Shadow &amp; distance:</guilabel>.  Finally, select the direction of your shadow by 
+selecting one of the eight red squares.  A preview of your shadow appears at the bottom of the dialog box.</para>
+
+<para>The fourth tab labeled <guilabel>Layout</guilabel> allows you to create superscripts and subscripts.  It also lets you select automatic hyphenation on a character by character basis.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg4.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The section labeled <guilabel>Position</guilabel> has four radio buttons and two spin boxes.  Selecting <guilabel>Normal</guilabel>, produces text of normal height and at the normal vertical position.  Selecting <guilabel>Superscript</guilabel> or <guilabel>Subscript</guilabel> will convert the currently selected text.  If you select <guilabel>Custom</guilabel>, you can use the spin box labeled <guilabel>Offset:</guilabel> to move the selected text up or down relative to normal text alignment.  Look at the example below:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="exoffset.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Notice how a positive offset raises the text, and a negative offset lowers the text.</para>
+
+<para>You can also use the spinbox labeled <guilabel>Relative size:</guilabel> to make the selected font larger or smaller.</para>
+
+<para>The checkbox labeld <guilabel>Auto hyphenation</guilabel> is used to toggle automatic hyphenation on or off for the selected text.</para>
+
+<para>The fifth tab labeled <guilabel>Language</guilabel> allows you to change the language. Click on the tab:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg5.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can select the language to use on the selected text with the drop down box.  If the selected text allows for automatic hyphenation, 
+&kword; will use general rules of spelling for the selected language to automatically hyphenate the selected text.</para>
+
+<para>Clicking <guibutton>OK</guibutton> will commit your changes to the
+document and close the dialog box.</para>
+
+<para>Clicking <guibutton>Apply</guibutton> will commit your changes to the
+document but keep the dialog box open.</para>
+
+<para>Clicking <guibutton>Reset</guibutton> will restore the default settings to the selected text.</para>
+
+<para>Clicking <guibutton>Cancel</guibutton> will abort all changes
+made.</para>
+
+</sect3>
+</sect2>
+
+<sect2 id="change-font-case">
+<title>Changing Font Case</title>
+<indexterm><primary>text</primary><secondary>changing case</secondary></indexterm>
+<indexterm><primary>change case of text</primary></indexterm>
+
+<para>&kword; can change the case (uppercase or lowercase) of large blocks of text to one of five pre-defined styles.  
+Begin by selecting the block of text you want changed.  Select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Change Case...</guimenuitem></menuchoice>
+from the menubar.</para>
+<para>A small dialog box will appear with five options:</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Uppercase</guilabel></term>
+<listitem><para>Will convert all characters to uppercase.</para>
+<para>Example: KWORD WILL AUTOMATICALLY CHANGE CASES.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Lowercase</guilabel></term>
+<listitem><para>Will convert all characters to lowercase.</para>
+<para>Example: kword will automatically change cases.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Title case</guilabel></term>
+<listitem><para>Will capitalize every word.</para>
+<para>Example: Kword Will Automatically Change Cases.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Toggle case</guilabel></term>
+<listitem><para>Converts all lowercase letters to uppercase <emphasis>and</emphasis>
+converts all uppercase letters to lowercase.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Sentence case</guilabel></term>
+<listitem><para>Capitalizes the first character after a period.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>When you have selected the desired options click <guibutton>OK</guibutton> and &kword; will make the changes.</para>
+
+
+
+</sect2>
+
+
+</sect1>

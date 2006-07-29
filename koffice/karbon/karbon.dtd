@@ -1,0 +1,97 @@
+<!-- Document Type Definition for the Karbon14 Markup Language
+     the file format for Karbon.
+     version = 0.1  status = draft  date = 11/Mar/2002
+     syntax = XML author = dirk.schoenberger@sz-online.de -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+
+<!ELEMENT DOC (LAYER*) >
+<!ATTLIST DOC editor  CDATA "Karbon14"
+              mime   CDATA "application/x-karbon"
+              syntaxVersion CDATA #IMPLIED
+>
+
+<!--
+    The document is grouped by layers.
+-->
+
+<!ELEMENT LAYER (COMPOSITE*) >
+<!ATTLIST LAYER name  CDATA #IMPLIED
+               visible ( 0 | 1 ) "1"
+>
+
+<!--
+    A composite path.
+-->
+
+<!ELEMENT COMPOSITE (STROKE? FILL? PATH+) >
+<!ATTLIST COMPOSITE fillrule ( 0 | 1 ) "0"
+>
+
+<!--
+    Stroke mode and color.
+-->
+
+<!ELEMENT STROKE (COLOR) >
+<!ATTLIST STROKE lineWidth CDATA #IMPLIED
+                lineJoin ( 0 | 1 | 2 ) "0" 
+                lineCap ( 0 | 1 | 2 ) "0"
+                miterLimit CDATA #IMPLIED 
+>
+
+<!--
+    Fill mode and color.
+-->
+
+<!ELEMENT FILL (COLOR) >
+
+<!--
+    Color data.
+-->
+
+<!ELEMENT COLOR EMPTY >
+<!ATTLIST COLOR colorSpace ( 0 | 1 | 2 ) "0"
+               v1 CDATA #IMPLIED 
+               v2 CDATA #IMPLIED
+               v3 CDATA #IMPLIED
+               v4 CDATA #IMPLIED 
+>
+
+<!--
+    A path.
+-->
+
+<!ELEMENT PATH MOVE ( LINE | CURVE )+ >
+<!ATTLIST PATH isClosed ( 0 | 1 ) "1"
+>
+
+<!--
+    Path segment data.
+-->
+
+<!ELEMENT MOVE EMPTY >
+<!ATTLIST MOVE x CDATA #IMPLIED
+               y CDATA #IMPLIED  
+>
+
+<!ELEMENT LINE EMPTY >
+<!ATTLIST LINE x CDATA #IMPLIED
+               y CDATA #IMPLIED  
+>
+
+<!ELEMENT CURVE EMPTY >
+<!ATTLIST CURVE ctrlPointFixing ( 0 | 1 | 2 ) "0"
+               x1 CDATA #IMPLIED
+               y1 CDATA #IMPLIED  
+               x2 CDATA #IMPLIED
+               y2 CDATA #IMPLIED
+               x3 CDATA #IMPLIED
+               y3 CDATA #IMPLIED
+>
+
+<!-- ============================================================= -->
+<!--
+     End of DTD for Karbon
+-->
+

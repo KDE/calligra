@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE DOC ><DOC mime="application/x-kword" syntaxVersion="1" editor="KWord" >
+ <PAPER width="595" zoom="100" spHeadBody="9" format="1" height="841" fType="0" orientation="0" hType="0" columnspacing="2" spFootBody="9" columns="1" >
+  <PAPERBORDERS right="28" left="28" bottom="42" top="42" />
+ </PAPER>
+ <ATTRIBUTES standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="0" />
+ <FRAMESETS>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Frameset 1" visible="1" >
+   <FRAME runaround="1" right="566" left="28" bottom="798" runaroundGap="0" top="42" />
+   <PARAGRAPH>
+    <TEXT>Don't be surprised, this test uses debug output to fill in some text :)</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="71" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>Height=26kwo rd (formatting): KWTextFrameSet::updateFrames 0x8222128 setWidth=539</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="81" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>kword (formatting): KWTextFrameSet::updateFrames m_availableHeight=26</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="69" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>kword (formatting): KWTextFrameSet::updateFrames 0x8224710 setWidth=539</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="71" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>kword (formatting): KWTextFrameSet::updateFrames m_availableHeight=26</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="69" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>kword (formatting): KWTextFrameSet::updateFrames 0x82179b8 setWidth=539</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="71" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>kword (formatting): KWTextFrameSet::updateFrames m_availableHeight=26</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="69" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>This is a line of text.</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="23" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>And here is another line, which aims to be a little bit longer.</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="63" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>Short one.</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="10" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>I am afraid that somehow the lack of inspiration for what to write in this document must surely show :)</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="103" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>Well, it's quite fun to have all those frames floating around us. Maybe this document will also have a table later... Why not.</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="126" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>Here is another paragraph, shorter than the previous one.</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="57" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>Hey this stuff seems to work. Very cool, if you ask me.</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="55" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>acbdefghijklmnopqrstuvwxyz. 1234567890. kofficyet sdfgsdfgsdfgsdfg(libty koffitcecore): KoMainWindow::setRootDocument this = [KoMainWindow pointer (0x813ff28) to widget kword-mainwindow#1, geometry=894x723+0+0] doc = 0x8133470</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="226" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>kparts: found Plugin ::(formatting): KWTextFrameSet::formatMore finished</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="72" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>This is the last line of the document.</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="38" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="1" name="TextFrameset 2" visible="1" >
+   <FRAME right="566" left="28" bottom="61" runaroundGap="0" top="42" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="3" name="TextFrameset 3" visible="1" >
+   <FRAME right="566" left="28" bottom="61" runaroundGap="0" top="42" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="2" name="TextFrameset 4" visible="1" >
+   <FRAME right="566" left="28" bottom="61" runaroundGap="0" top="42" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="4" name="TextFrameset 5" visible="1" >
+   <FRAME right="566" left="28" bottom="798" runaroundGap="0" top="779" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="6" name="TextFrameset 6" visible="1" >
+   <FRAME right="566" left="28" bottom="798" runaroundGap="0" top="779" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="5" name="TextFrameset 7" visible="1" >
+   <FRAME right="566" left="28" bottom="798" runaroundGap="0" top="779" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="7" name="Footnotes" visible="0" >
+   <FRAME right="566" left="28" bottom="798" runaroundGap="0" top="779" autoCreateNewFrame="0" />
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="NORA (through)" visible="1" >
+   <FRAME right="356" left="126" bottom="168" runaroundGap="0" top="91" />
+   <FRAME right="356" left="126" bottom="1009" runaroundGap="0" top="932" />
+   <PARAGRAPH>
+    <TEXT>Run through (RA_NO)</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="19" >
+      <WEIGHT value="50" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="RunAround rect" visible="1" >
+   <FRAME runaround="1" right="542" left="412" bottom="391" runaroundGap="0" top="329" />
+   <FRAME runaround="1" right="524" left="394" bottom="1223" runaroundGap="0" top="1161" />
+   <PARAGRAPH>
+    <TEXT>Runaround rect (RA_BOUNDINGRECT)</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="32" >
+      <WEIGHT value="50" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="H" visible="1" >
+   <FRAME runaround="2" right="427" left="99" bottom="569" runaroundGap="0" top="443" />
+   <FRAME runaround="2" right="427" left="99" bottom="1410" runaroundGap="0" top="1284" />
+   <PARAGRAPH>
+    <TEXT>No runaround (RA_SKIP)</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="22" >
+      <WEIGHT value="50" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Runaround 2" visible="1" >
+   <FRAME runaround="1" right="172" left="48" bottom="395" top="288" />
+   <FRAME runaround="1" right="217" left="48" bottom="1236" top="1129" />
+   <PARAGRAPH>
+    <TEXT>Runaround rect (RA_BOUNDINGRECT)</TEXT>
+    <LAYOUT>
+     <NAME value="" />
+     <FLOW align="left" />
+     <FORMAT id="1" pos="0" len="32" >
+      <WEIGHT value="50" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+ </FRAMESETS>
+ <STYLES>
+  <STYLE>
+   <FOLLOWING name="Standard" />
+   <NAME value="Standard" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="50" />
+    <FONT name="times" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Standard" />
+   <NAME value="Head 1" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="." type="1" start="1" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="75" />
+    <FONT name="helvetica" />
+    <SIZE value="24" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Standard" />
+   <NAME value="Head 2" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="." type="1" start="1" depth="1" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="75" />
+    <FONT name="helvetica" />
+    <SIZE value="16" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Standard" />
+   <NAME value="Head 3" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="." type="1" start="1" depth="2" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="75" />
+    <FONT name="helvetica" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Enumerated List" />
+   <NAME value="Enumerated List" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="." type="1" start="1" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="50" />
+    <FONT name="times" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Alphabetical List" />
+   <NAME value="Alphabetical List" />
+   <FLOW align="left" />
+   <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext=")" type="2" start="1" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="50" />
+    <FONT name="times" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Bullet List" />
+   <NAME value="Bullet List" />
+   <FLOW align="left" />
+   <COUNTER bullet="0" lefttext="" numberingtype="0" bulletfont="" righttext="" type="10" start="1" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="50" />
+    <FONT name="times" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Standard" />
+   <NAME value="Contents Title" />
+   <FLOW align="center" />
+   <TOPBORDER width="1" style="0" blue="0" red="0" green="0" />
+   <BOTTOMBORDER width="1" style="0" blue="0" red="0" green="0" />
+   <COUNTER bullet="183" lefttext="" numberingtype="0" bulletfont="symbol" righttext="" type="0" start="0" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="75" />
+    <FONT name="helvetica" />
+    <SIZE value="20" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Standard" />
+   <NAME value="Contents Head 1" />
+   <FLOW align="left" />
+   <COUNTER bullet="183" lefttext="" numberingtype="0" bulletfont="symbol" righttext="" type="0" start="0" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="75" />
+    <FONT name="helvetica" />
+    <SIZE value="16" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Standard" />
+   <NAME value="Contents Head 2" />
+   <FLOW align="left" />
+   <COUNTER bullet="183" lefttext="" numberingtype="0" bulletfont="symbol" righttext="" type="0" start="0" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="75" />
+    <FONT name="helvetica" />
+    <SIZE value="12" />
+    <ITALIC value="0" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+  <STYLE>
+   <FOLLOWING name="Standard" />
+   <NAME value="Contents Head 3" />
+   <FLOW align="left" />
+   <COUNTER bullet="183" lefttext="" numberingtype="0" bulletfont="symbol" righttext="" type="0" start="0" depth="0" customdef="" />
+   <FORMAT id="1" pos="0" len="0" >
+    <WEIGHT value="50" />
+    <FONT name="helvetica" />
+    <SIZE value="12" />
+    <ITALIC value="1" />
+    <UNDERLINE value="0" />
+    <STRIKEOUT value="0" />
+    <VERTALIGN value="0" />
+   </FORMAT>
+  </STYLE>
+ </STYLES>
+ <PIXMAPS/>
+</DOC>

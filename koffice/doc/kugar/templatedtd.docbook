@@ -1,0 +1,188 @@
+<!-- If you want to validate or edit this document separately, uncomment
+this prolog
+
+<?xml version="1.0" ?>
+<!DOCTYPE appendix PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
+-->
+
+<sect1 id="template-dtd">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>The KugarTemplate Document Type Definition</title>
+
+<synopsis>
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;!DOCTYPE KugarTemplate [
+     &lt;!ELEMENT <link linkend="kugartemplate">KugarTemplate</link> (<link linkend="report-header-and-footer">ReportHeader</link>, <link linkend="page-header-and-footer">PageHeader</link>, <link linkend="detail-header-and-footer">DetailHeader</link>*, <link linkend="detail">Detail</link>*, <link linkend="detail-header-and-footer">DetailFooter</link>*, <link linkend="page-header-and-footer">PageFooter</link>, <link linkend="report-header-and-footer">ReportFooter</link>)&gt;
+      &lt;!ATTLIST KugarTemplate
+         <link linkend="kut-pagesize">PageSize</link>         CDATA #REQUIRED
+         <link linkend="kut-pageorient">PageOrientation</link>  CDATA #REQUIRED
+         <link linkend="kut-topmargin">TopMargin</link>        CDATA #REQUIRED
+         <link linkend="kut-botmargin">BottomMargin</link>     CDATA #REQUIRED
+         <link linkend="kut-leftmargin">LeftMargin</link>       CDATA #REQUIRED
+         <link linkend="kut-rightmargin">RightMargin</link>      CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="report-header-and-footer">ReportHeader</link> (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
+     &lt;!ATTLIST ReportHeader
+         <link linkend="rhf-height">Height</link>           CDATA #REQUIRED
+         <link linkend="rhf-printfrequency">PrintFrequency</link>   CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="page-header-and-footer">PageHeader</link> (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
+     &lt;!ATTLIST PageHeader
+         <link linkend="phf-height">Height</link>           CDATA #REQUIRED
+         <link linkend="phf-printfrequency">PrintFrequency</link>   CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="detail-header-and-footer">DetailHeader</link> (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
+     &lt;!ATTLIST DetailHeader
+         <link linkend="dhf-height">Height</link>           CDATA #REQUIRED
+         <link linkend="dhf-level">Level</link>            CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="detail">Detail</link> (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*, <link linkend="field-element">Field</link>*)&gt;
+     &lt;!ATTLIST Detail
+         <link linkend="d-height">Height</link>           CDATA #REQUIRED
+         <link linkend="d-level">Level</link>            CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="detail-header-and-footer">DetailFooter</link> (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
+     &lt;!ATTLIST DetailFooter
+         <link linkend="dhf-height">Height</link>           CDATA #REQUIRED
+         <link linkend="dhf-level">Level</link>            CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="page-header-and-footer">PageFooter</link> (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
+     &lt;!ATTLIST PageFooter
+         <link linkend="phf-height">Height</link>           CDATA #REQUIRED
+         <link linkend="phf-printfrequency">PrintFrequency</link>   CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="report-header-and-footer">ReportFooter</link> (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*, <link linkend="calculated-field-element">CalculatedField</link>*)&gt;
+     &lt;!ATTLIST ReportFooter
+         <link linkend="rhf-height">Height</link>           CDATA #REQUIRED
+         <link linkend="rhf-printfrequency">PrintFrequency</link>   CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="line-element">Line</link> EMPTY&gt;
+     &lt;!ATTLIST Line
+         <link linkend="l-x1">X1</link>               CDATA #REQUIRED
+         <link linkend="l-y1">Y1</link>               CDATA #REQUIRED
+         <link linkend="l-x2">X2</link>               CDATA #REQUIRED
+         <link linkend="l-y2">Y2</link>               CDATA #REQUIRED
+         <link linkend="l-width">Width</link>            CDATA #REQUIRED
+         <link linkend="l-color">Color</link>            CDATA #REQUIRED
+         <link linkend="l-style">Style</link>            CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="label-element">Label</link> EMPTY&gt;
+     &lt;!ATTLIST Label
+         <link linkend="la-text">Text</link>             CDATA #REQUIRED
+         <link linkend="la-x">X</link>                CDATA #REQUIRED
+         <link linkend="la-y">Y</link>                CDATA #REQUIRED
+         <link linkend="la-width">Width</link>            CDATA #REQUIRED
+         <link linkend="la-height">Height</link>           CDATA #REQUIRED
+         <link linkend="la-backgroundcolor">BackgroundColor</link>  CDATA #REQUIRED
+         <link linkend="la-foregroundcolor">ForegroundColor</link>  CDATA #REQUIRED
+         <link linkend="la-bordercolor">BorderColor</link>      CDATA #REQUIRED
+         <link linkend="la-borderwidth">BorderWidth</link>      CDATA #REQUIRED
+         <link linkend="la-borderstyle">BorderStyle</link>      CDATA #REQUIRED
+         <link linkend="la-fontfamily">FontFamily</link>       CDATA #REQUIRED
+         <link linkend="la-fontsize">FontSize</link>         CDATA #REQUIRED
+         <link linkend="la-fontweight">FontWeight</link>       CDATA #REQUIRED
+         <link linkend="la-fontitalic">FontItalic</link>       CDATA #REQUIRED
+         <link linkend="la-halignment">HAlignment</link>       CDATA #REQUIRED
+         <link linkend="la-valignment">VAlignment</link>       CDATA #REQUIRED
+         <link linkend="la-wordwrap">WordWrap</link>         CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="field-element">Field</link> EMPTY&gt;
+     &lt;!ATTLIST Field
+         <link linkend="f-field">Field</link>            CDATA #REQUIRED
+         <link linkend="f-text">Text</link>             CDATA #REQUIRED
+         <link linkend="f-x">X</link>                CDATA #REQUIRED
+         <link linkend="f-y">Y</link>                CDATA #REQUIRED
+         <link linkend="f-width">Width</link>            CDATA #REQUIRED
+         <link linkend="f-height">Height</link>           CDATA #REQUIRED
+         <link linkend="f-backgroundcolor">BackgroundColor</link>  CDATA #REQUIRED
+         <link linkend="f-foregroundcolor">ForegroundColor</link>  CDATA #REQUIRED
+         <link linkend="f-bordercolor">BorderColor</link>      CDATA #REQUIRED
+         <link linkend="f-borderwidth">BorderWidth</link>      CDATA #REQUIRED
+         <link linkend="f-borderstyle">BorderStyle</link>      CDATA #REQUIRED
+         <link linkend="f-fontfamily">FontFamily</link>       CDATA #REQUIRED
+         <link linkend="f-fontsize">FontSize</link>         CDATA #REQUIRED
+         <link linkend="f-fontweight">FontWeight</link>       CDATA #REQUIRED
+         <link linkend="f-fontitalic">FontItalic</link>       CDATA #REQUIRED
+         <link linkend="f-halignment">HAlignment</link>       CDATA #REQUIRED
+         <link linkend="f-valignment">VAlignment</link>       CDATA #REQUIRED
+         <link linkend="f-wordwrap">WordWrap</link>         CDATA #REQUIRED
+         <link linkend="f-datatype">DataType</link>         CDATA #REQUIRED
+         <link linkend="f-dateformat">DateFormat</link>       CDATA #REQUIRED
+         <link linkend="f-precision">Precision</link>        CDATA #REQUIRED
+         <link linkend="f-currency">Currency</link>         CDATA #REQUIRED
+         <link linkend="f-negvaluecolor">NegValueColor</link>    CDATA #REQUIRED
+         <link linkend="f-commaseparator">CommaSeparator</link>   CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="calculated-field-element">CalculatedField</link> EMPTY&gt;
+     &lt;!ATTLIST CalculatedField
+         <link linkend="c-calculationtype">CalculationType</link>  CDATA #REQUIRED
+         <link linkend="c-field">Field</link>            CDATA #REQUIRED
+         <link linkend="c-text">Text</link>             CDATA #REQUIRED
+         <link linkend="c-x">X</link>                CDATA #REQUIRED
+         <link linkend="c-y">Y</link>                CDATA #REQUIRED
+         <link linkend="c-width">Width</link>            CDATA #REQUIRED
+         <link linkend="c-height">Height</link>           CDATA #REQUIRED
+         <link linkend="c-backgroundcolor">BackgroundColor</link>  CDATA #REQUIRED
+         <link linkend="c-foregroundcolor">ForegroundColor</link>  CDATA #REQUIRED
+         <link linkend="c-bordercolor">BorderColor</link>      CDATA #REQUIRED
+         <link linkend="c-borderwidth">BorderWidth</link>      CDATA #REQUIRED
+         <link linkend="c-borderstyle">BorderStyle</link>      CDATA #REQUIRED
+         <link linkend="c-fontfamily">FontFamily</link>       CDATA #REQUIRED
+         <link linkend="c-fontsize">FontSize</link>         CDATA #REQUIRED
+         <link linkend="c-fontweight">FontWeight</link>       CDATA #REQUIRED
+         <link linkend="c-fontitalic">FontItalic</link>       CDATA #REQUIRED
+         <link linkend="c-halignment">HAlignment</link>       CDATA #REQUIRED
+         <link linkend="c-valignment">VAlignment</link>       CDATA #REQUIRED
+         <link linkend="c-wordwrap">WordWrap</link>         CDATA #REQUIRED
+         <link linkend="c-datatype">DataType</link>         CDATA #REQUIRED
+         <link linkend="c-dateformat">DateFormat</link>       CDATA #REQUIRED
+         <link linkend="c-precision">Precision</link>        CDATA #REQUIRED
+         <link linkend="c-currency">Currency</link>         CDATA #REQUIRED
+         <link linkend="c-negvaluecolor">NegValueColor</link>    CDATA #REQUIRED
+         <link linkend="c-commaseparator">CommaSeparator</link>   CDATA #REQUIRED&gt;
+
+    &lt;!ELEMENT <link linkend="special-element">Special</link> EMPTY&gt;
+     &lt;!ATTLIST Special
+         <link linkend="s-type">Type</link>             CDATA #REQUIRED
+         <link linkend="s-text">Text</link>             CDATA #REQUIRED
+         <link linkend="s-x">X</link>                CDATA #REQUIRED
+         <link linkend="s-y">Y</link>                CDATA #REQUIRED
+         <link linkend="s-width">Width</link>            CDATA #REQUIRED
+         <link linkend="s-height">Height</link>           CDATA #REQUIRED
+         <link linkend="s-backgroundcolor">BackgroundColor</link>  CDATA #REQUIRED
+         <link linkend="s-foregroundcolor">ForegroundColor</link>  CDATA #REQUIRED
+         <link linkend="s-bordercolor">BorderColor</link>      CDATA #REQUIRED
+         <link linkend="s-borderwidth">BorderWidth</link>      CDATA #REQUIRED
+         <link linkend="s-borderstyle">BorderStyle</link>      CDATA #REQUIRED
+         <link linkend="s-fontfamily">FontFamily</link>       CDATA #REQUIRED
+         <link linkend="s-fontsize">FontSize</link>         CDATA #REQUIRED
+         <link linkend="s-fontweight">FontWeight</link>       CDATA #REQUIRED
+         <link linkend="s-fontitalic">FontItalic</link>       CDATA #REQUIRED
+         <link linkend="s-halignment">HAlignment</link>       CDATA #REQUIRED
+         <link linkend="s-valignment">VAlignment</link>       CDATA #REQUIRED
+         <link linkend="s-wordwrap">WordWrap</link>         CDATA #REQUIRED
+         <link linkend="s-dateformat">DateFormat</link>       CDATA #REQUIRED&gt;
+ ]&gt;
+</synopsis>
+</sect1>

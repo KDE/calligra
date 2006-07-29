@@ -1,0 +1,11 @@
+How to debug KWord's DTD?
+
+You can debug this DTD with xmllint (from libxml2)
+
+First you have to unzip the KWord file.
+
+Then you can do:
+    xmllint --noout --dtdvalid kword.dtd maindoc.xml
+
+where kword.dtd is the URL to KWord's DTD.
+    

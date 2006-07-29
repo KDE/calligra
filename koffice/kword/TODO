@@ -1,0 +1,60 @@
+TODO-List
+=========
+
+Bugs:
+-----
+- textformatter: need to check for line-level breaking during the formatting of each line
+Currently we do it afterwards, so if the margins differ, where the line ends up, we can't notice.
+- solve problem with a change in the available width right in the middle of the
+character we're trying to place (e.g. and it needs to move down to where the width is bigger)
+Possible solution: let getMargins return a "valid for a height of ... only",
+and then kotextformatter needs to move down by that height if .... hmm done.
+- footnotes: check move to next page, endnotes
+- anything else that http://bugs.kde.org mentions ;)
+
+Differences with OO that ought to be fixed:
+-------------------------------------------
+- space above and below paragraphs is QMAX()ed indeed, like QRichText originally did.
+- offsetFromBaseline should be a % (of the font size) instead of an absolute pt value,
+  even in the GUI (which currently limits to +/- 9pt).
+
+Missing or incomplete stuff:
+----------------------------
+- Even/odd pages
+ - Add SheetSide config in framedia 
+- Tables should get a title (with positioning posibility)
+  This will basicly be a new frame placed on top or at bottom of table.
+  And it shouldn't be limited to tables - any frame could get that.
+
+Other missing features:
+
+Sideheads (for text)
+Split frames needs to be implemented.
+Styles have to be saved external (and/or an import/export facility).
+Books (collection of documents) should be implemented
+Implement complete DCOP interface
+Make everything scriptable
+Add "TopOfFrame"-TopOfPage" etc to styles.
+add "Keep this parag with the next/prev" options to styles.
+
+
+External files:
+--------------
+Included files (pictures/parts/formula's)
+- It should be possible to keep files external. Kword should also notice a changed file
+  (preferably at runtime) and reload it.
+
+OK-ing the stylist seems to apply style change to all styles, not just the changed ones...
+
+Add a RMB option on a copy-frame to update position of all copies in that FS.
+Add RMB option on text to copy current format to a (new) style. Including tab positions..
+
+- picture insertion point when pasting should be as an inline frame. Using default placing methods.
+- cut/paste of images do not work across documents (also in bugs.kde.org)
+- auto-update TOC before printing, so no doc is printed with an out-of-date TOC. It might alter the layout, ok, but an out-of-date TOC is just a waste of paper (besides being misleading...)
+- interaction with frame breaks are a bit strange. How do you remove it? You cannot select it, nor can you use backspace or del..
+- one should be able to introduce dependencies between styles, so if I want to change the general font of the text, I do not have to modify all the styles.
+- when writing bulks of text, when the cursor gets to the border of the window, it should not only scroll 1 line (to make sure the cursor stays in the visible portion of the document) but should be moved to the center of the window (like in emacs:-). So the average position of the cursor is the center of the window, rather than the bollom line.
+
+- interaction with KoParts is somehow strange. Especially positioning them in the document, as the size when using the handles is not the same as the end product. But I am not used to it in the Windows world either...
+  This is due to the problemsn that we don't zoom and dont allow easy moving in the parts. A square which representst the whole placed document when moving just the little screen would be nice.

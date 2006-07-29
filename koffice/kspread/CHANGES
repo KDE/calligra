@@ -1,0 +1,410 @@
+Changes for KSpread 1.5 Beta 1
+==============================
+
+Features
+--------
+Non-contiguous selection
+Rewritten dependency handling
+Embedded picture/image inside workbook
+Improved and faster formula calculation
+Manual line break (wish #9881)
+Syntax highlight and function autocomplete for formula editing 
+Custom sheet selection and ordering in print dialog
+
+Enhancements
+------------
+QWhatsThis help is available to various dialogs
+Updated dialog screenshot in the handbook
+Default autofill increment is set to 1 if only one cell is selected
+Sum button automatically selects a suitable cell range 	
+Percent operator in formula (wish #101217)
+Improved zoomed printouts (bug #115879)
+Use standard KDE font dialog in cell format dialog (bug #116991)
+Faster redraw of merged cells (bug #118248)
+
+Bug Fixes
+---------
+#120234: Freeze on circular reference
+#120232: Strange behaviour on creating new file
+#120204: Cell comment isn't wrapped
+#119675: Background brush color is not correctly loaded
+#119097: Right arrow for entry and validation
+#118769: Better wording cursor movement setting
+#117435: Incorrect result from COUNTIF function
+#117252: Fix date (and time) increment for autofill
+#116903: Indentation setting is not correctly handled in preferences
+#116901: Unclear unit setting in preferences 
+#116702: Fix freeze with certain spreadsheet content
+#116546: Endless dependency calculation
+#116444: Fix cell protection
+#116236: Crash on OpenDocument with external file cell references
+#116144: Incorrect return value of ISBLANK function
+#115948: Formatting problem in automerged cells
+#115362: Crash when spellchecking
+#114693: Comment indicator in sheet properties dialog
+#114961: Enter does not move cursor
+#114635: Endless loop while loading
+#109633: OASIS format wrongly changes vertical align to Bottom
+ #50192: Always allow date input in ISO 8601 format
+
+??#483630: Prevent hiding all rows/columns
+
+Developer-Visible Only
+----------------------
+Manipulators used in commands
+KSpread::Cell is associated with KSpread::Format, no longer inherits it
+Setter and getter methods for KSpread::Point
+
+
+
+since 1.4.1
+===========
+- Fix slow scrolling left/right (#110551, #101234)
+
+since 1.4.0
+===========
+- Fix potential crash when rendering obscured cells (#108659)
+- Don't automatically make cells left aligned when increasing indent.
+
+since 1.4-beta1
+===============
+- Use General/Blank Worksheet as default template.
+- KSpread crashes on exit if there is a chart in the sheet (#101915).
+- The data editor is disabled for charts which has been loaded.
+- Don't use 600 dpi as default resolution (the chart printing is much faster now).
+- The chart/object printing is simplified and works correctly now. Unfortunately
+  this breaks the transform feature but the ordinary rectangle printing is more
+  important.
+- Paint the child document after it has been inserted.
+
+since 1.3
+=========
+
+- fix bug #63332: Pasting into a cell that has spilled out, pastes
+  into all overwritten cells
+- fix bug #101926: kspread never prints the grid
+- Implement save/load Oasis format
+- Allow to sort without respect case
+- allow editing/removing of links
+- fixed bug 76861: bad rendering of hyperlink
+- Validation: allow to display or not message
+- Add new dcop function
+- Start to port KSpread_undo to kcommand
+- Add combobox to search area name
+- Add Help Message as in oocalc
+- multiple steps undo and redo
+- fix problem where hidden sheet is simply appended in the tab bar
+  (when it is shown again).
+- fix bug #81026: SUMIF() function added
+- sheet layout direction can be explicitly set (fix bug #46831)
+- new dependency manager
+- prevent a very wide Insert Link dialog
+- fix bug #59291: potential crash on loading new template
+
+changes for 1.3.4
+=================
+- fix bug #87369: ctrl+C in formula bar doesn't copy contents
+
+changes for 1.3.3
+=================
+- fix bug #78747: problem with duration format (hh:mm:ss)
+- fix bug #74091: wrong special paste from cell with formula
+- fix bug #76679: time shown with one second offset
+
+changes for 1.3.2
+=================
+- fix condition cell attribute (multi condition)
+- fix bug #69798: SEXDEC parse error
+- fix enable/disable action into validation dialogbox
+- fix disable/enable "show table" menu item
+- fix bug #69066: crash when viewing a KSpread document in Konqueror
+
+changes for 1.3.1
+=================
+- fix bug #77844: undo not working after deleting multiple cells
+- fix bug #45822: fixed crash when opening a file over the network
+
+since 1.3 RC1
+=============
+- fix display of text starting with a single quote
+- fix problem formatting the whole row (#65504)
+- make the top/middle/bottom alignment buttons work
+- fix problem with reference from another sheet (bug #60455)
+- show indicator of chosen/selected cells (bug #58098)
+- hide in-place cell editing when choosing other sheet
+- proper zoom and display of formatted hyperlink (#66214)
+- fix flickering problem with many hyperlinks (#65501)
+- don't crash when leaving the preview in Konq (#65928)
+- fix redraw problem with Print Preview (#60147)
+- support only one zoom for two or more views
+- fix painting problem with multiple views
+- prevent possible crash with conditional formatting (#58713)
+- fix dependency problem with automatic recalculation (#58097)
+- better adjustment of cell references on cut&paste
+- fix crash on csv import (#66047)
+- fix problem for cells copy/cut to clipboard (#58712)
+- show frame when embedded object is selected (#37152)
+- better handling of "nothing to print" warning (#60147)
+- when embedded, use real zoom instead of scaling (#45503)
+- fix data sorting (#63317)
+
+since 1.3 beta4
+===============
+- #64794: kspread problem with calculating dates
+- #61570: cell border does not work with merged cells
+- fix unsorted zoom values (#64154)
+
+since 1.3 beta3
+===============
+- KSpread is slow during text to column conversion (#59999)
+- fix problem cycling absolute cell reference with F4 key (#46959)
+- the calculator plugin saves its configuration now (#49954)
+- fix detection of sheet direction (for rtl support)
+
+since 1.3 beta2
+===============
+- KSpread crash when changing paper orientation (#60279)
+
+
+since 1.3 beta1
+===============
+- adjust print zoom to limit printout to m x n pages
+- new functions: GETPIVOTDATA, BESSELI, BESSELJ, BESSELK, BESSELY,
+  ERF, ERFC, CONVERT
+- new templates: Balance Sheet, Price Quotation, Packing Slip
+
+
+since 1.2 relase ( 'til 1.3 beta 1 :-)
+======================================
+
+- real more than one currency support
+- new date and time formats
+- enhanced the "Text to Columns", "Insert from file"
+  and "Insert from clipboard" dialog to support "ignore double delimiters"
+- "Insert from file" now also adjusts the column width depending on imported
+  cell content
+- enhanced the CSV import dlg
+    - to support "ignore double delimiters"
+    - to adjust cell width to imported cell content
+    - you can specify the column and row range for import
+- enhanced the CSV export dialog so that you can choose
+   - table to export
+   - delimiters between tables
+   - delimiter between cells
+   - character for quotes
+   - export selection only
+- Goal Seek message fixes + you can select the cells with the mouse now
+- enhanced Gnumeric import filter to support
+    - background (color + patterns), borders (colors + style)
+    - font formating, text alignment
+    - format parsing (date, time, numbers,...), cell height, width
+    - print range, page setup, hidden columns/row, comments
+- new OpenCalc export and import filter
+- Added subtotal dialog and formula
+- Paper layout can now be applied to all sheets
+- now you can define the default cell style
+- Autoscroll while selecting now also available for columns and row headers
+- When cell is too short, then the content is now available in the tooltip
+- Drag 'n' Drop of selections
+- Protection of sheets or of the document structure (with or without password)
+- Protection tab in layout dialog: you unprotect certain cells, hide their
+  contents, hide the formulas, or select them for not being printed
+- FindNext, FindPrevious cell enhancement for find
+- Fill: Fill area from right to left, left to right, bottom to top, top to bottom
+- Full zoom support
+- Printing:
+  + High resolution printing (600dpi)
+  + Improved WYSIWYG
+  + Zoom support on printout
+- New direction mode when pressing Enter: you can jump now to the first cell of the next row
+- hierachical style support
+  - builtin styles
+  - creation of custom styles
+  - creation of custom styles using a cell as template
+- insert special characters
+- smaller, more efficent file format
+- many performance enhancements
+- more powerful conditional cell attributes (you can assign a whole style if condition matches)
+- conditions can be used for text and numbers now (was numbers only before)
+- new templates: Body-Mass Index Calculator, Calendar 2003, Student ID Card,
+  Invoice, Expense Report
+
+
+New functions:
+
+Date/Time (16):
+- EDATE, EOMONTH, DAYS360, WEEKDAY, TIMEVALUE, DATEVALUE, YEAR,
+  MONTH, DAY, HOUR, MINUTE, SECOND, DAYNAME, MONTHNAME, EASTERSUNDAY,
+  ISOWEEKNUM
+
+Math (16):
+- SUBTOTAL, POWER, TRUNC, CEILING, PRODUCT (now Excel compatible),
+  KPRODUCT, RANDEXP, RANDBINOM, RANDNEGBINOM, RANDBERNOULLI,
+  RANDPOISSON, MROUND, COUNTA, MINA, MAXA, SUMA
+
+Statistical (24):
+- VARP, STDEV, VAR, STDEVP, GEOMEAN, HARMEAN,
+  KURT, LOGINV, DEVSQ, STANDARDIZE, HYPGEOMDIST,
+  NEGBINOMDIST, KURTP, CORREL, COVAR, SMALL, LARGE
+  STDEVA, STDEVPA, VARA, VARPA, SKEW, SKEWP, MODE
+
+Financial (19):
+- PPMT, DDB, DURATION, PMT, NPER,
+  ISPMT, IPMT, TBILLEQ, TBILLPRICE, TBILLYIELD,
+  ACCRINT, ACCRINTM, COUPNUM, DOLLARDE, DOLLARFR,
+  DISC, EFFECT, INTRATE, RECEIVED
+
+Database (12):
+- DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN,
+  DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP
+
+Reference & Lookup (8):
+- ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS,
+  INDIRECT, ROW, ROWS
+
+Engineering (2):
+- DELTA, GESTEP
+
+Logical (2):
+- FALSE, TRUE
+
+Information (2):
+- ISNONTEXT, ISNUMBER
+
+Obsolete formulas
+- stddev (was stddevp in fact)
+- day (is dayname now)
+- month (is monthname now)
+
+Obsolete but still usable formulas (do not show up in dialog )
+- variance, pow, isnottext, isnum, effective
+
+
+=====================================================
+After 1.2 above
+=====================================================
+
+
+Changes from 1.1 to 1.2
+=======================
+
+Since RC1:
+----------
+Bugfixes:
+- Fix display and printout with special files (offset by 1 pixel).
+- Fix printout of thick cell borders on page borders
+- Fix printout of children, when they overlap one page
+- Fix #45967, #31130
+- Fix #45944 (Normal): Paste special->text overwrite borders
+- Fix #42456 (Normal): merged cells with centered text do not survive insert/delete rows
+- Fix #45943 (Crash): crash after "money format"
+- Fix function documentation (YEAR(), FACTDOUBLE() )
+- Fix parsing and error checking for spreadsheet names.
+- Fix #46045 (Normal): serious errors in forumulas
+- Fix Embedded chart changes titles when opening again
+- Fix #44628 (Grave): 1.1 document not read with 1.2 - circular references
+- Fix #40150 (Normal): Precision problem in calculations
+- Fix #29524:  KSpread Formula editors tooltip should be changed
+- Fix #18083: KSpread rounding error
+- Fix #46530: crash on selecting validity
+- Fix #45395: Save as HTML is called "mime type"
+- Fix #34088: Precision of currency is too low or overflow is handled in a strange way
+- Fix #45324: consolidate function result reference area selecting unintuitive
+
+Until RC1:
+----------
+New:
+- Like all of KOffice: a readonly GUI for embedding into Konqueror
+- More DCOP calls
+
+Bugfixes:
+- bug fixes
+- Fix cancel add embedded document.
+- Fix mem leak
+- Fix copy/paste attribute.
+- Fix offset of rotated text in one case (top/middle)
+
+Until beta2:
+------------
+
+- bug fixes
+- perfomance enhancements
+- print functions:
+    - added option for print grid, comment indicator and formula indicator
+    - added print range definiton
+    - added repeat columns & rows on printout
+    - added "<pages>" macro in header/footer
+- paper layout now a property of sheet (not the whole workbook)
+- header/footer now a property of sheet (not the whole workbook)
+- Settings in paper layout are now undoable
+- Sort enhanced for
+    - sorting by up to three rows or columns
+    - possibility of putting the result of sorting some place else
+    - you can use a custom lists (like days of week) as a primary key
+    - option if you want to copy the layout or not
+    - you can define a row header which gets copied but not sorted
+- auto continuation support for every direction and all types supported in
+  KSpread and for more complex series like 1,3,4,6,...
+- just one "copy" instead of "copy" and "copy as text"
+- insertion of series supports now doubles and decreasing series
+- support for inserting data from SQL databases
+- implemented "Goal Seek"
+- implemented new shortcuts for cell formating
+- implemented "Insert from text file" and "Insert formated clipboard data"
+- Added "Text to Column"
+- improved Data Consolidate, with more choices: Sum, Average, Count,
+  Min, Max, Product, Standard Deviation, Variance.
+- fixed some functions to be Excel-compatibel (FIND, REPLACE,LEFT,
+  RIGHT,MID,REPT)
+- now it's "Sheet" everywhere, not more "Table"
+- added formula indicator (small blue rectangle on the corner,
+  when the cell holds a formula). idea from Quattro Pro
+- added Greek to EURO() function
+- new function category: Engineering
+- added support with templates
+- added support for changing row/col and table of named areas
+- Multiple views work for spreadsheets (can change tables, select different
+  parts of the sheet independantly in each open view or embedded object)
+- DCOP interface for a table has changed.  Many of the operations have been
+  moved to the 'view' class.  Current DCOP scripts will need to be updated
+- Zoom
+
+new functions added:
+ ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,
+ SEARCH, INFO, FILENAME, TYPE, COUNTBLANK, N, AVEDEV, ARABIC, AVERAGEA, ROT,
+ FIB, BASE, FACTDOUBLE, SQRTPI, QUOTIENT, MULTINOMIAL, COUNTIF
+
+Until beta1:
+------------
+
+- bug fixes
+- performance enhancements
+- support up to 2^15 columns and rows, formerly it was 676 columns and 10000
+  rows
+
+- add support for spell-check
+- many new built-in functions (see detailed list below)
+- function name is now case-insensitive
+- "Related Function" in formula editor
+- move functions in kspread_interpreter into several kspread_functions_*.cc
+
+New functions added:
+ conversion:
+   INT2BOOL, CharToAscii, AsciiToChar, BOOL2STRING, NUM2STRING,
+   BOOL2INT
+ math:
+   DIV, LCD, PRODUCT, LCM, TOGGLE, TRIM, ABS
+ text:
+   COMPARE, CLEAN, SLEEK, PROPER, REPLACE
+ date/time:
+   DAYS, WEEKS, MONTHS, YEARS
+ financial:
+   DB, SLN, SYD, EURO
+ logical:
+   XOR
+ statistical:
+   CHIDIST, FDIST, TDIST, CONFIDENCE, BETADIST, GAMMADIST,
+   PHI, GAUSS, MEDIAN, POISSON, GAMMALN, NORMINV, NORMSINV,
+   WEIBULL, EXPONDIST, NORMDIST, NORMSDIST, FISHER,
+   FISHERINV, LOGNORMDIST
+

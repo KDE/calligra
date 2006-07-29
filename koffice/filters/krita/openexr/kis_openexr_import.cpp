@@ -1,0 +1,160 @@
+/*
+ *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#include <qstring.h>
+#include <qfile.h>
+
+#include <kgenericfactory.h>
+#include <KoDocument.h>
+#include <KoFilterChain.h>
+
+#include <half.h>
+#include <ImfRgbaFile.h>
+//#include <ImfStringAttribute.h>
+//#include <ImfMatrixAttribute.h>
+//#include <ImfArray.h>
+//#include <drawImage.h>
+
+#include <iostream>
+
+#include "kis_types.h"
+#include "kis_openexr_import.h"
+#include "kis_doc.h"
+#include "kis_image.h"
+#include "kis_meta_registry.h"
+#include "kis_layer.h"
+#include "kis_paint_layer.h"
+#include "kis_annotation.h"
+#include "kis_colorspace_factory_registry.h"
+#include "kis_iterators_pixel.h"
+#include "kis_abstract_colorspace.h"
+#include "kis_rgb_f32_colorspace.h"
+#include "kis_rgb_f16half_colorspace.h"
+
+using namespace std;
+using namespace Imf;
+using namespace Imath;
+
+typedef KGenericFactory<KisOpenEXRImport, KoFilter> KisOpenEXRImportFactory;
+K_EXPORT_COMPONENT_FACTORY(libkrita_openexr_import, KisOpenEXRImportFactory("kofficefilters"))
+
+KisOpenEXRImport::KisOpenEXRImport(KoFilter *, const char *, const QStringList&) : KoFilter()
+{
+}
+
+KisOpenEXRImport::~KisOpenEXRImport()
+{
+}
+
+KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const QCString& to)
+{
+    if (from != "image/x-exr" || to != "application/x-krita") {
+        return KoFilter::NotImplemented;
+    }
+
+    kdDebug(41008) << "\n\n\nKrita importing from OpenEXR\n";
+
+    KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
+    if (!doc) {
+        return KoFilter::CreationError;
+    }
+
+    doc -> prepareForImport();
+
+    QString filename = m_chain -> inputFile();
+
+    if (filename.isEmpty()) {
+        return KoFilter::FileNotFound;
+    }
+
+    RgbaInputFile file(QFile::encodeName(filename));
+    Box2i dataWindow = file.dataWindow();
+    Box2i displayWindow = file.displayWindow();
+
+    kdDebug(41008) << "Data window: " << QRect(dataWindow.min.x, dataWindow.min.y, dataWindow.max.x - dataWindow.min.x + 1, dataWindow.max.y - dataWindow.min.y + 1) << endl;
+    kdDebug(41008) << "Display window: " << QRect(displayWindow.min.x, displayWindow.min.y, displayWindow.max.x - displayWindow.min.x + 1, displayWindow.max.y - displayWindow.min.y + 1) << endl;
+
+    int imageWidth = displayWindow.max.x - displayWindow.min.x + 1;
+    int imageHeight = displayWindow.max.y - displayWindow.min.y + 1;
+
+    QString imageName = "Imported from OpenEXR";
+
+    int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
+    int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
+
+    KisRgbF16HalfColorSpace *cs = static_cast<KisRgbF16HalfColorSpace *>((KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBAF16HALF", ""),"")));
+
+    if (cs == 0) {
+        return KoFilter::InternalError;
+    }
+
+    doc -> undoAdapter() -> setUndo(false);
+
+    KisImageSP image = new KisImage(doc->undoAdapter(), imageWidth, imageHeight, cs, imageName);
+
+    if (image == 0) {
+        return KoFilter::CreationError;
+    }
+
+    KisPaintLayerSP layer = dynamic_cast<KisPaintLayer*>(image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data());
+
+    if (layer == 0) {
+        return KoFilter::CreationError;
+    }
+
+    QMemArray<Rgba> pixels(dataWidth);
+
+    for (int y = 0; y < dataHeight; ++y) {
+
+        file.setFrameBuffer(pixels.data() - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
+        file.readPixels(dataWindow.min.y + y);
+
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, true);
+        Rgba *rgba = pixels.data();
+
+        while (!it.isDone()) {
+
+            // XXX: For now unmultiply the alpha, though compositing will be faster if we
+            // keep it premultiplied.
+            half unmultipliedRed = rgba -> r;
+            half unmultipliedGreen = rgba -> g;
+            half unmultipliedBlue = rgba -> b;
+
+            if (rgba -> a >= HALF_EPSILON) {
+                unmultipliedRed /= rgba -> a;
+                unmultipliedGreen /= rgba -> a;
+                unmultipliedBlue /= rgba -> a;
+            }
+
+            cs -> setPixel(it.rawData(), unmultipliedRed, unmultipliedGreen, unmultipliedBlue, rgba -> a);
+            ++it;
+            ++rgba;
+        }
+    }
+
+    layer->setDirty();
+    doc -> setCurrentImage(image);
+    doc -> undoAdapter() -> setUndo(true);
+    doc -> setModified(false);
+
+    return KoFilter::OK;
+}
+
+#include "kis_openexr_import.moc"
+

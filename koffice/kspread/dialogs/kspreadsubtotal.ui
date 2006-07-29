@@ -1,0 +1,222 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>KSpread::Subtotal</class>
+<comment>This file is part of the KDE project
+Copyright (C) 2002 Norbert Andres &lt;nandres@web.de&gt;
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public
+License along with this library; see the file COPYING.LIB.  If not, 
+write to the Free Software Foundation, Inc., 51 Franklin Street, 
+Fifth Floor, Boston, MA 02110-1301, USA.</comment>
+<author>Norbert Andres &lt;nandres@web.de&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KSpreadSubtotal</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>446</width>
+            <height>381</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Subtotal</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QTabWidget" row="0" column="0">
+            <property name="name">
+                <cstring>TabWidget2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Subtotal</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QComboBox" row="3" column="0">
+                        <property name="name">
+                            <cstring>m_functionBox</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="4" column="0">
+                        <property name="name">
+                            <cstring>m_addSubtotalToLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Add Subtotal to:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>m_useFunctionLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Use function:</string>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>m_columnBox</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>m_eachChangeLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>At each change in:</string>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="5" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Columns</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>false</bool>
+                            </property>
+                            <property name="resizeable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>m_columnList</cstring>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Options</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QCheckBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>m_replaceSubtotals</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Replace current Subtotals</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>m_pageBreak</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Page break between groups</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="2" column="0">
+                        <property name="name">
+                            <cstring>m_summaryBelow</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Summary below data</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="tristate">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="3" column="0">
+                        <property name="name">
+                            <cstring>m_summaryOnly</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Summary &amp;only</string>
+                        </property>
+                    </widget>
+                    <spacer row="5" column="0">
+                        <property name="name">
+                            <cstring>Spacer4</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>152</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QCheckBox" row="4" column="0">
+                        <property name="name">
+                            <cstring>m_IgnoreBox</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Ignore empty cells when looking for changes</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,0 +1,267 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY package "koffice">
+  <!ENTITY kappname "&kpresenter;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY screen SYSTEM "screen.docbook">
+  <!ENTITY guides SYSTEM "guides.docbook">
+  <!ENTITY great SYSTEM "great-presentations.docbook">
+  <!ENTITY menus SYSTEM "menus.docbook">
+  <!ENTITY options SYSTEM "options.docbook">
+  <!ENTITY a11y SYSTEM "a11y.docbook">
+  <!ENTITY faq SYSTEM "faq.docbook">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+]>
+
+<book lang="&language;">
+<bookinfo>
+<title>The &kpresenter; Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+
+<author>
+<firstname>Gary</firstname>
+<surname>Cramblitt</surname>
+<affiliation>
+<address><email>garycramblitt@comcast.net</email></address>
+</affiliation>
+</author>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<date>2006-01-24</date>
+<releaseinfo>1.5</releaseinfo>
+
+<copyright>
+<year>1999</year><year>2000</year>
+<holder>Krishna Tateneni</holder>
+</copyright>
+
+<copyright>
+<year>2001</year><year>2002</year>
+<holder>Neil Lucock</holder>
+</copyright>
+
+<copyright>
+<year>2005</year>
+<holder>Anne-Marie Mahfouf</holder>
+</copyright>
+
+<copyright>
+<year>2006</year>
+<holder>Gary Cramblitt</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<abstract>
+<para>
+&kpresenter; is the presentations program in the &koffice; suite of
+productivity applications.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KPresenter</keyword>
+<keyword>KOffice</keyword>
+<keyword>Graphics</keyword>
+<keyword>Presentations</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<important> <para>Please check <ulink
+url="http://docs.kde.org/en/HEAD/koffice/kpresenter/">http://docs.kde.org</ulink>
+for updated versions of this document.</para></important>
+
+<para>
+&kpresenter; is the presentations program in the &koffice; productivity
+suite. Using &kpresenter;, you can prepare a set of slides for use in an
+on-screen slideshow or for printing. Your slides can include text and
+graphics in a variety of formats, and of course, you can embed all sorts
+of objects using KParts.
+</para>
+
+<para>
+The &koffice; productivity suite consists of a number of applications
+which are designed to work together. Overview documentation for
+&koffice; is available, as well as manuals for each component of the
+suite. The components of &koffice; are:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+&kword; - a frames based wordprocessor.
+</para>
+</listitem>
+
+<listitem><para>
+&kspread; - a spreadsheet application.
+</para>
+</listitem>
+
+<listitem>
+<para>
+&kpresenter; - a presentations application.
+</para>
+</listitem>
+
+
+<listitem>
+<para>
+&kformula; - an editor for mathematical formulae.
+</para>
+</listitem>
+
+<listitem>
+<para>
+&kchart; - an application to draw charts and diagrams.
+</para>
+</listitem>
+
+
+</itemizedlist>
+
+<para>
+&koffice; is a free (or open-source) software project which is
+released under the terms of the &GNU; General Public
+License.
+</para>
+
+</chapter>
+
+&tutorial;
+
+&screen;
+
+&guides;
+
+&great;
+
+&menus;
+
+&options;
+
+&a11y;
+
+&faq;
+
+<chapter id="credits">
+<title>Credits and License</title>
+
+<para>
+&kpresenter;
+</para>
+
+<para>
+Program copyright 1998-2000 by Reginald Stadlbauer
+<email>reggie@kde.org</email>
+</para>
+
+<para>
+Current maintainer is Laurent Montel <email>montel@kde.org</email>.
+</para>
+
+
+<itemizedlist>
+<title>Contributors</title>
+
+<listitem>
+<para>
+Werner Trobin <email>trobin@kde.org</email>.
+</para>
+</listitem>
+
+<listitem>
+<para>
+David Faure <email>dfaure@kde.org</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Toshitaka Fujioka <email>fujioka@kde.org</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Luk&aacute;&scaron; Tinkl <email>lukas@kde.org</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Thorsten Zachmann <email>t.zachmann@zagge.de</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Ariya Hidayat <email>ariya@kde.org</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Percy Leonhardt <email>percy@eris23.de</email>
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+Documentation based on the work copyright 1999-2000 by Krishna
+Tateneni.  Portions are copyright 2000-2002 Neil Lucock
+<email>neil@nlucock.freeserve.co.uk</email>
+and 2005 Anne-Marie Mahfouf  <email>annemarie.mahfouf@free.fr</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+&underGPL;
+
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+&install.intro.documentation;
+
+&install.compile.documentation;
+
+</appendix>
+
+&documentation.index; 
+
+</book>
+

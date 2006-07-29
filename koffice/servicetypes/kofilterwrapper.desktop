@@ -1,0 +1,55 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KOfficeGenericFilter
+Comment=KOffice Filter Wrapper
+Comment[ar]=مُغَلِّف مِرْشَح KOffice
+Comment[bg]=Обвивка за филтър на KOffice
+Comment[ca]=Filtre de l'embolcall de KOffice
+Comment[cs]=Obecný filtr KOffice
+Comment[cy]=Lapiad Hidlen KOffice
+Comment[da]=KOffice-filteromslag
+Comment[de]=KOffice-Filter-Wrapper
+Comment[el]=Περίβλημα φίλτρου του KOffice
+Comment[es]=Filtro de interfaz (wrapper) de KOffice
+Comment[et]=KOffice'i filtrirakendus
+Comment[eu]=KOffice iragazkiaren zorroa
+Comment[fi]=KOfficen suotimien välitysohjelma
+Comment[fr]=Conteneur de filtre KOffice
+Comment[he]=עטיפת מסנן של KOffice
+Comment[hi]=के-ऑफ़िस फ़िल्टर रैपर
+Comment[hr]=KOffice filter omotač
+Comment[hu]=KOffice-szűrőprogram
+Comment[is]=KOffice síuhluti
+Comment[it]=Adattatore per filtri di KOffice
+Comment[ja]=KOfficeフィルタラッパー
+Comment[km]=គ្រឿង​ខ្ចប់​តម្រង KOffice
+Comment[lo]=ຕົວກອງຂອງໂປຣແກມຊຸດສໍານັກງານ K
+Comment[lv]=KOffice Filtra Apstrādātājs
+Comment[ms]=Pembalut Penapis KOffice
+Comment[nb]=KOffice-filterinnpakning
+Comment[nl]=KOffice Filterwrapper
+Comment[nn]=KOffice-filteromslag
+Comment[pl]=Pojemnik grupujący filtry dla KOffice
+Comment[pt]=Interface para um Filtro do KOffice
+Comment[pt_BR]=Filtro Wrapper do KOffice
+Comment[ru]=Обработчик фильтра KOffice
+Comment[se]=KOffice-silleskuvdu
+Comment[sk]=Obálka filtrov KOffice
+Comment[sl]=Skupek filtrov za KOffice
+Comment[sr]=KOffice-ов омотач филтера
+Comment[sr@Latn]=KOffice-ov omotač filtera
+Comment[sv]=Koffice-filteromgivning
+Comment[ta]=Kஅலுவலக வடிகட்டி முடி
+Comment[tg]=Рӯмуқоваи Филтри KOffice
+Comment[tr]=KOffice Filtre Kaydırması
+Comment[uk]=Обгортка фільтрів KOffice
+Comment[xh]=Isisongeli Sesihluzi se KOffice
+Comment[zh_CN]=KOffice 过滤器包装
+Comment[zh_TW]=KOffice 過濾器包裝
+
+[PropertyDef::X-KDE-Wrapper-Import]
+Type=QString
+
+[PropertyDef::X-KDE-Wrapper-Export]
+Type=QString
