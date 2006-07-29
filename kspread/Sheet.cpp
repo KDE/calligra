@@ -5586,7 +5586,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                                  int maxCols, int maxRows, GenValidationStyles &valStyle )
 {
     kDebug() << "Sheet::saveOasisColRowCell: " << d->name << endl;
-    kdDebug() << "\t Sheet dimension: " << maxCols << " x " << maxRows << endl;
+    kDebug() << "\t Sheet dimension: " << maxCols << " x " << maxRows << endl;
 
     // saving the columns
     //
@@ -5705,7 +5705,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //               kDebug() << "Sheet::saveOasisColRowCell: first row loop:"
 //                         << " i: " << i
 //                         << " row: " << row->row() << endl;
-            bool isHidden = row->isHide();
+            //bool isHidden = row->isHide();
             bool isDefault = row->isDefault();
             int j = i + 1;
 
