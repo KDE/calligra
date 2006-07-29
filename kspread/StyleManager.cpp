@@ -53,7 +53,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     QStringList::iterator it;
     for (it = names.begin(); it != names.end(); ++it) {
       if (*it != "Default") {
-        kdDebug() << "StyleManager: Saving common cell style " << it.key() <<endl;
+        kdDebug() << "StyleManager: Saving common cell style " << *it <<endl;
         CustomStyle * styleData = style (*it);
         KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
         styleData->saveOasis( customStyle, mainStyles );
