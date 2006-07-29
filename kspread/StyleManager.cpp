@@ -53,7 +53,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     QStringList::iterator it;
     for (it = names.begin(); it != names.end(); ++it) {
       if (*it != "Default") {
-        kdDebug() << "StyleManager: Saving common cell style " << *it <<endl;
+        kDebug() << "StyleManager: Saving common cell style " << *it <<endl;
         CustomStyle * styleData = style (*it);
         KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
         styleData->saveOasis( customStyle, mainStyles );
@@ -70,7 +70,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     const QDomElement* defStyle = oasisStyles.defaultStyle( "table-cell" );
     if ( defStyle )
     {
-      kdDebug() << "StyleManager: Loading default cell style" << endl;
+      kDebug() << "StyleManager: Loading default cell style" << endl;
       defaultStyle()->loadOasis( oasisStyles, *defStyle, "Default" );
       defaultStyle()->setType( Style::BUILTIN );
     }
@@ -88,7 +88,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 
         // then replace by user-visible one (if any)
         const QString name = styleElem.attributeNS( KoXmlNS::style, "display-name", oasisName );
-        kdDebug() << " StyleManager: Loading common cell style: " << oasisName << " (display name: " << name << ")" << endl;
+        kDebug() << " StyleManager: Loading common cell style: " << oasisName << " (display name: " << name << ")" << endl;
 
         if ( !name.isEmpty() )
         {
