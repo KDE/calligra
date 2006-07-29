@@ -69,7 +69,6 @@
 #include "vcleanupcmd.h"
 #include "vclipartcmd.h"
 #include "vclosepathcmd.h"
-#include "vdeletecmd.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
 #include "vtransformcmd.h"
@@ -611,14 +610,17 @@ void
 KarbonView::editDeleteSelection()
 {
 	debugView("KarbonView::editDeleteSelection()");
-	//kDebug(38000) << "*********" << endl;
 
-	if( part()->document().selection()->objects().count() > 0 )
-	{
-		part()->addCommand(
-			new VDeleteCmd( &part()->document() ),
-			true );
-	}
+	KoSelection* selection = m_canvas->shapeManager()->selection();
+	if( ! selection )
+		return;
+
+	KoSelectionSet selectedShapes = selection->selectedShapes();
+	if( selectedShapes.count() < 1)
+		return;
+
+	KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes );
+	part()->commandHistory()->addCommand( cmd, true );
 }
 
 void
