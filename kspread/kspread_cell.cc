@@ -7205,10 +7205,20 @@ bool Cell::operator==( const Cell& other ) const
       return false;
     if ( d->extra()->mergedYCells != other.d->extra()->mergedYCells )
       return false;
-    if ( *d->extra()->conditions != *other.d->extra()->conditions )
-      return false;
-    if ( *d->extra()->validity != *other.d->extra()->validity )
-      return false;
+    if ( d->extra()->conditions )
+    {
+      if ( !other.d->extra()->conditions )
+        return false;
+      if ( *d->extra()->conditions != *other.d->extra()->conditions )
+        return false;
+    }
+    if ( d->extra()->validity )
+    {
+      if ( !other.d->extra()->validity )
+        return false;
+      if ( *d->extra()->validity != *other.d->extra()->validity )
+        return false;
+    }
   }
   return true;
 }
