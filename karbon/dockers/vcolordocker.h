@@ -67,7 +67,6 @@ protected:
 private:
 	KarbonPart *m_part;
 	KarbonView *m_view;
-	VFillCmd *m_fillCmd;
 	VStrokeCmd *m_strokeCmd;
 };
 

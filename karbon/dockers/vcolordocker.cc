@@ -58,7 +58,6 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	m_isStrokeDocker = false;
 	setWindowTitle( i18n( "Color Chooser" ) );
 
-	m_fillCmd = 0;
 	m_strokeCmd = 0;
 
 	/* ##### HSV WIDGET ##### */

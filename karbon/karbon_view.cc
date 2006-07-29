@@ -66,12 +66,10 @@
 #include <KoSelection.h>
 
 // Commands.
-#include "valigncmd.h"
 #include "vcleanupcmd.h"
 #include "vclipartcmd.h"
 #include "vclosepathcmd.h"
 #include "vdeletecmd.h"
-#include "vdistributecmd.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
 #include "vtransformcmd.h"
@@ -104,7 +102,6 @@
 #include "vtool.h"
 #include "vtoolcontroller.h"
 #include "vcomposite.h"
-#include "vgroup.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
 #include "vstrokefillpreview.h"
