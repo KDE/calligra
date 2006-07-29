@@ -12,9 +12,6 @@
             <height>87</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KisWdgOptionsJPEG</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -120,9 +117,6 @@
             </property>
             <property name="text">
                 <string>Pr&amp;ogressive</string>
-            </property>
-            <property name="accel">
-                <string>Alt+O</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Use progressive when publishing on the Internet</string>

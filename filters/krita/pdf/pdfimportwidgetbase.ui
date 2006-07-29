@@ -264,9 +264,6 @@
                     <property name="text">
                         <string>&amp;All pages</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
@@ -274,9 +271,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;First page</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+F</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -288,9 +282,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Selection of page</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
                     </property>
                 </widget>
                 <widget class="KListBox">
