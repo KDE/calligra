@@ -63,6 +63,28 @@ class KSPREAD_EXPORT StyleManager
   QStringList styleNames() const;
   int count() const { return m_styles.count(); }
 
+  /**
+   * Loads OpenDocument auto styles.
+   * The auto styles are preloaded, because an auto style could be shared
+   * among cells. So, preloading prevents a multiple loading of the same
+   * auto style.
+   * This method is called before the cell loading process.
+   * @param oasisStyles repository of styles
+   * @return a hash of styles with the OpenDocument internal name as key
+   */
+  QDict<Style> loadOasisAutoStyles( KoOasisStyles& oasisStyles );
+
+  /**
+   * Releases unused auto styles.
+   * If there are auto styles, which are not used by any cell (uncommon case)
+   * this method makes sure, that these get deleted.
+   * This method is called after the cell loading porcess.
+   * @param autoStyles a hash of styles with the OpenDocument internal name as
+   *                   key
+   * @see loadOasisAutoStyles
+   */
+  void releaseUnusedAutoStyles( QDict<Style> autoStyles );
+
  private:
   friend class StyleDlg;
   friend class View;
@@ -70,6 +92,10 @@ class KSPREAD_EXPORT StyleManager
 
   CustomStyle * m_defaultStyle;
   Styles               m_styles; // builtin and custom made styles
+
+  // Same styles as above, but with the internal OpenDocument name as key.
+  // NOTE: Temporary! Only valid while loading OpenDocument files.
+  Styles  m_oasisStyles;
 };
 
 } // namespace KSpread

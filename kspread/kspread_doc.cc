@@ -63,7 +63,6 @@
 #include "kspread_map.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
-#include "kspread_style.h"
 #include "kspread_style_manager.h"
 #include "kspread_undo.h"
 #include "kspread_util.h"
@@ -1051,22 +1050,8 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     loadOasisAreaName( body );
     loadOasisCellValidation( body );
 
-    //pre-load auto styles
-    QDictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
-    QDict<Style> styleElements;
-    for (;it.current();++it)
-    {
-	if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
-	{
-		QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
-		kdDebug() << "Preloading style: " << name << endl;
-		styleElements.insert( name , new Style());
-		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
-	}
-    }
-
     // all <sheet:sheet> goes to workbook
-    if ( !map()->loadOasis( body, context, styleElements ) )
+    if ( !map()->loadOasis( body, context ) )
     {
         d->isLoading = false;
         deleteLoadingInfo();
@@ -1081,16 +1066,6 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     emit sigProgress( 90 );
     initConfig();
     emit sigProgress(-1);
-
-    //delete any styles which were not used
-    QDictIterator<Style> styleIt( styleElements );
-    for (;styleIt.current();++styleIt)
-    {
-	Style* style = styleIt.current();
-	if (style->release())
-		delete style;
-    }
-
 
     //display loading time
     kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;

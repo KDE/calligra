@@ -71,6 +71,7 @@ Style::Style()
 
   QPen pen( Qt::black, 1, Qt::NoPen );
 
+  m_textPen         = pen;
   m_leftBorderPen   = pen;
   m_topBorderPen    = pen;
   m_rightBorderPen  = pen;
@@ -182,511 +183,373 @@ bool Style::operator == (const Style& style) const
 
 void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element )
 {
-    kdDebug()<<"void Style::loadOasisStyle( const QDomElement & element )**************: name :"<<endl;
-    KoStyleStack styleStack;
-    styleStack.push( element );
-    styleStack.setTypeProperties( "table-cell" );
-    QString str;
-    if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
+  // NOTE Stefan: Don't fill the style stack with the parent styles!
+  KoStyleStack styleStack;
+  styleStack.push( element );
+  styleStack.setTypeProperties( "table-cell" );
+  loadOasisTableCellProperties( oasisStyles, styleStack );
+  styleStack.setTypeProperties( "text" );
+  loadOasisTextProperties( oasisStyles, styleStack );
+  styleStack.setTypeProperties( "paragraph" );
+  loadOasisParagraphProperties( oasisStyles, styleStack );
+
+  loadOasisDataStyle( oasisStyles, element );
+}
+
+void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const QDomElement& element )
+{
+  QString str;
+  if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
+  {
+//     kdDebug()<<"element.attribute( style:data-style-name ) :"<<element.attributeNS( KoXmlNS::style, "data-style-name", QString::null )<<endl;
+//     kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr<<endl;
+//     kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
+//     kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
+
+    const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
+    if (oasisStyles.dataFormats().contains(styleName) &&
+        oasisStyles.numericFormats().contains(styleName))
     {
-        //kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<element.attributeNS( KoXmlNS::style, "data-style-name", QString::null )<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
+      const KoOasisStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
+      const KoOasisNumericFormat numFormat = oasisStyles.numericFormats()[styleName];
 
-        const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null);
-        if (oasisStyles.dataFormats().contains(styleName) &&
-            oasisStyles.numericFormats().contains(styleName))
-        {
-          const KoOasisStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
-          const KoOasisNumericFormat numFormat = oasisStyles.numericFormats()[styleName];
-
-          QString tmp = dataStyle.prefix;
-          if ( !tmp.isEmpty() )
+      QString tmp = dataStyle.prefix;
+      if ( !tmp.isEmpty() )
+      {
+        m_prefix = tmp;
+        m_featuresSet |= SPrefix;
+      }
+      tmp = dataStyle.suffix;
+      if ( !tmp.isEmpty() )
+      {
+        m_postfix = tmp;
+        m_featuresSet |= SPostfix;
+      }
+      // determine data formatting
+      switch (numFormat.type)
+      {
+        case KoOasisNumericFormat::Number:
+          m_formatType = Number_format;
+          m_featuresSet |= SFormatType;
+          break;
+        case KoOasisNumericFormat::Scientific:
+          m_formatType = Scientific_format;
+          m_featuresSet |= SFormatType;
+          break;
+        case KoOasisNumericFormat::Currency:
+          kdDebug() << " currency-symbol: " << numFormat.currencySymbol << endl;
+          if (!numFormat.currencySymbol.isEmpty())
           {
-            m_prefix = tmp;
-            m_featuresSet |= SPrefix;
+            Currency currency(numFormat.currencySymbol);
+            m_currency.type = currency.getIndex();
+            m_currency.symbol = currency.getDisplayCode();
           }
-          tmp = dataStyle.suffix;
-          if ( !tmp.isEmpty() )
-          {
-            m_postfix = tmp;
-            m_featuresSet |= SPostfix;
-          }
-          // determine data formatting
-          switch (numFormat.type)
-          {
-            case KoOasisNumericFormat::Number:
-              m_formatType = Number_format;
-              m_featuresSet |= SFormatType;
-              break;
-            case KoOasisNumericFormat::Scientific:
-              m_formatType = Scientific_format;
-              m_featuresSet |= SFormatType;
-              break;
-            case KoOasisNumericFormat::Currency:
-              kdDebug() << " currency-symbol: " << numFormat.currencySymbol << endl;
-              if (!numFormat.currencySymbol.isEmpty())
-              {
-                Currency currency(numFormat.currencySymbol);
-                m_currency.type = currency.getIndex();
-                m_currency.symbol = currency.getDisplayCode();
-              }
-              m_formatType = Money_format;
-              m_featuresSet |= SFormatType;
-              break;
-            case KoOasisNumericFormat::Percentage:
-              m_formatType = Percentage_format;
-              m_featuresSet |= SFormatType;
-              break;
-            case KoOasisNumericFormat::Fraction:
-            case KoOasisNumericFormat::Date:
-            case KoOasisNumericFormat::Time:
+          m_formatType = Money_format;
+          m_featuresSet |= SFormatType;
+          break;
+        case KoOasisNumericFormat::Percentage:
+          m_formatType = Percentage_format;
+          m_featuresSet |= SFormatType;
+          break;
+        case KoOasisNumericFormat::Fraction:
+        case KoOasisNumericFormat::Date:
+        case KoOasisNumericFormat::Time:
               // determine format of fractions, dates and times by using the
               // formatting string
-              tmp = dataStyle.formatStr;
-              if ( !tmp.isEmpty() )
-              {
-                m_formatType = Style::formatType( tmp );
-                m_featuresSet |= SFormatType;
-              }
-              break;
-            case KoOasisNumericFormat::Boolean:
-              m_formatType = Number_format;
-              m_featuresSet |= SFormatType;
-              break;
-            case KoOasisNumericFormat::Text:
-              m_formatType = Text_format;
-              m_featuresSet |= SFormatType;
-              break;
-          }
-
-          if (numFormat.precision > -1)
+          tmp = dataStyle.formatStr;
+          if ( !tmp.isEmpty() )
           {
-            m_precision = numFormat.precision;
-            m_featuresSet |= SPrecision;
+            m_formatType = Style::formatType( tmp );
+            m_featuresSet |= SFormatType;
           }
-        }
+          break;
+        case KoOasisNumericFormat::Boolean:
+          m_formatType = Number_format;
+          m_featuresSet |= SFormatType;
+          break;
+        case KoOasisNumericFormat::Text:
+          m_formatType = Text_format;
+          m_featuresSet |= SFormatType;
+          break;
+      }
+
+      if (numFormat.precision > -1)
+      {
+        m_precision = numFormat.precision;
+        m_featuresSet |= SPrecision;
+      }
     }
+  }
+}
 
-    styleStack.setTypeProperties( "text" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
+void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
+{
+  Q_UNUSED( oasisStyles );
+  kdDebug() << "\t paragraph-properties" << endl;
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
+  {
+    QString str = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
+    if ( str == "center" )
+      m_alignX = Format::Center;
+    else if ( str == "end" )
+      m_alignX = Format::Right;
+    else if ( str == "start" )
+      m_alignX = Format::Left;
+    else
+      m_alignX = Format::Undefined;
+    m_featuresSet |= SAlignX;
+    kdDebug() << "\t\t text-align: " << str << endl;
+  }
+}
+
+void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
+{
+  QString str;
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
+  {
+    m_alignY = Format::UndefinedY;
+
+    str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
+    if ( str == "bottom" )
+      m_alignY = Format::Bottom;
+    else if ( str =="top" )
+      m_alignY = Format::Top;
+    else if ( str =="middle" )
+      m_alignY = Format::Middle;
+
+    if (m_alignY != Format::UndefinedY) // file's property is invalid
+      m_featuresSet |= SAlignY;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
+  {
+    m_bgColor = QColor(  styleStack.attributeNS( KoXmlNS::fo, "background-color" ) );
+    if ( m_bgColor.isValid() && m_bgColor != Qt::white )
+      m_featuresSet |= SBackgroundColor;
+  }
+
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
+  {
+    setProperty( PMultiRow );
+    m_featuresSet |= SMultiRow;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "cell-protect" ) )
+  {
+    str = styleStack.attributeNS( KoXmlNS::style, "cell-protect" );
+    if ( str=="hidden-and-protected" )
     {
-        m_fontFamily = styleStack.attributeNS( KoXmlNS::fo, "font-family" );
-        kdDebug()<<"styleStack.hasAttribute( fo:font-family ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" )<<endl;
-        m_featuresSet |= SFontFamily;
-        m_featuresSet |= SFont;
-        m_featuresSet |= SFontFlag;
+      setProperty( PHideAll );
+      m_featuresSet |= SHideAll;
     }
-//fo:font-size="13pt" fo:font-style="italic" style:text-underline="double" style:text-underline-color="font-color" fo:font-weight="bold"
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
+    else if ( str == "protected formula-hidden" )
     {
-        m_fontSize = (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ), 10.0 );
-        m_featuresSet |= SFont;
-        m_featuresSet |= SFontSize;
-        m_featuresSet |= SFontFlag;
+      setProperty( PHideFormula );
+      m_featuresSet |= SHideFormula;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) && styleStack.attributeNS( KoXmlNS::fo, "font-style" ) =="italic")
+    else if ( str == "protected" )
     {
-#if 0
-        QDomElement font = format.namedItem( "font" ).toElement();
-        if ( !font.isNull() )
-        {
-            QFont f( util_toFont( font ) );
-            m_fontFamily = f.family();
-            m_fontSize = f.pointSize();
-            if ( f.italic() )
-                m_fontFlags |= FItalic;
-            if ( f.bold() )
-                m_fontFlags |= FBold;
-            if ( f.underline() )
-                m_fontFlags |= FUnderline;
-            if ( f.strikeOut() )
-                m_fontFlags |= FStrike;
-
-            m_featuresSet |= SFont;
-            m_featuresSet |= SFontFamily;
-            m_featuresSet |= SFontFlag;
-            m_featuresSet |= SFontSize;
-        }
-
-        if ( format.hasAttribute( "font-family" ) )
-        {
-            m_fontFamily = format.attribute( "font-family" );
-            m_featuresSet |= SFont;
-            m_featuresSet |= SFontFamily;
-        }
-#endif
-        m_fontFlags |= FItalic;
-        m_featuresSet |= SFontFlag;
-
+      setProperty( PNotProtected );
+      m_featuresSet |= SNotProtected;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
+    else if ( str =="formula-hidden" )
     {
-        m_fontFlags |= FBold;
-    }
-
-    //TODO "style:text-underline-width"/""style:text-underline-color"
-    if ( ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline-style" ) &&styleStack.attributeNS( KoXmlNS::fo, "text-underline-style" )!="none" )
-         || ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) && styleStack.attributeNS( KoXmlNS::style, "text-underline-style" )!="none") )
-    {
-        m_fontFlags |= FUnderline;
-        m_featuresSet |= SFontFlag;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) )
-    {
-        //FIXME
-        m_featuresSet |= STextPen;
-        m_textPen=QPen( QColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) ) );
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-color" ) )
-    {
-        //TODO
-    }
-
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" ) && styleStack.attributeNS( KoXmlNS::style, "text-line-through-style" )!="none"
-         /*&& styleStack.attributeNS("text-line-through-style")=="solid"*/ )
-    {
-        m_fontFlags |= FStrike;
-        m_featuresSet |= SFontFlag;
-    }
-
-
-    styleStack.setTypeProperties( "paragraph" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
-    {
-
-        str = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
-        kdDebug()<<"str :"<<str<<endl;
-        if ( str == "center" )
-            m_alignX = Format::Center;
-        else if ( str == "end" )
-            m_alignX = Format::Right;
-        else if ( str == "start" )
-            m_alignX = Format::Left;
-        else
-            m_alignX = Format::Undefined;
-        m_featuresSet |= SAlignX;
-    }
-
-// NOTE Stefan: IMHO the formatting of numbers is always done
-//              by evaluating OASIS data styles
-#if 0
-    if ( styleStack.hasAttributeNS( KoXmlNS::office, "value-type" ) )
-    {
-      m_formatType = Generic_format;
-
-      str = styleStack.attributeNS( KoXmlNS::office, "value-type" );
-      kdDebug()<<"str :"<<str<<endl<<endl;
-      if ( str == "float" ) // TODO
-        m_formatType = Number_format;
-      else if ( str == "time" ) // TODO
-        m_formatType = Time_format;
-      else if ( str == "date" ) // TODO
-        m_formatType = TextDate_format;
-      else if ( str == "percentage" )
-        m_formatType = Percentage_format;
-      else if ( str == "currency" )
-        m_formatType = Money_format;
-      else if ( str == "boolean" ) // TODO
-        ;
-      else if ( str == "string" ) //TODO
-        m_formatType = Text_format;
-
-      if ( m_formatType != Generic_format )
-        m_featuresSet |= SFormatType;
-    }
-#endif
-
-    styleStack.setTypeProperties( "table-cell" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
-    {
-        m_alignY = Format::UndefinedY;
-
-        str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
-        if ( str == "bottom" )
-            m_alignY = Format::Bottom;
-        else if ( str =="top" )
-            m_alignY = Format::Top;
-        else if ( str =="middle" )
-            m_alignY = Format::Middle;
-
-        if (m_alignY != Format::UndefinedY) // file's property is invalid
-            m_featuresSet |= SAlignY;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
-    {
-        m_bgColor = QColor(  styleStack.attributeNS( KoXmlNS::fo, "background-color" ) );
-        if ( m_bgColor.isValid() && m_bgColor != Qt::white )
-          m_featuresSet |= SBackgroundColor;
-    }
-
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
-    {
-        setProperty( PMultiRow );
-        m_featuresSet |= SMultiRow;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "cell-protect" ) )
-    {
-        str = styleStack.attributeNS( KoXmlNS::style, "cell-protect" );
-        if ( str=="hidden-and-protected" )
-        {
-            setProperty( PHideAll );
-            m_featuresSet |= SHideAll;
-        }
-        else if ( str == "protected formula-hidden" )
-        {
-            setProperty( PHideFormula );
-            m_featuresSet |= SHideFormula;
-        }
-        else if ( str == "protected" )
-        {
-            setProperty( PNotProtected );
-            m_featuresSet |= SNotProtected;
-        }
-        else if ( str =="formula-hidden" )
-        {
             //FIXME !!!!
 #if 0
             setNotProtected( true );
             setHideFormula( true );
             setHideAll( false );
 #endif
-        }
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-content" ) && ( styleStack.attributeNS( KoXmlNS::style, "print-content" )=="false" ) )
-    {
-        setProperty( PDontPrintText );
-        m_featuresSet |= SDontPrintText;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-content" ) && ( styleStack.attributeNS( KoXmlNS::style, "print-content" )=="false" ) )
+  {
+    setProperty( PDontPrintText );
+    m_featuresSet |= SDontPrintText;
 
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) && ( styleStack.attributeNS( KoXmlNS::style, "direction" )=="ttb" ) )
-    {
-        setProperty( PVerticalText );
-        m_featuresSet |= SVerticalText;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) && ( styleStack.attributeNS( KoXmlNS::style, "direction" )=="ttb" ) )
+  {
+    setProperty( PVerticalText );
+    m_featuresSet |= SVerticalText;
 
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "rotation-angle" ) )
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "rotation-angle" ) )
+  {
+    bool ok;
+    int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
+    kdDebug()<<" rotation-angle :"<<a<<endl;
+    if ( a != 0 )
     {
-        bool ok;
-        int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
-        kdDebug()<<" rotation-angle :"<<a<<endl;
-        if ( a != 0 )
-        {
-            m_rotateAngle= ( -a  );
-            m_featuresSet |= SAngle;
-        }
+      m_rotateAngle= ( -a  );
+      m_featuresSet |= SAngle;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
-    {
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
+  {
         //todo fix me
-        setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
-        m_featuresSet |= SIndent;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border" ) )
-    {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border" );
-        QPen pen = convertOasisStringToPen( str );
-        m_featuresSet |= SLeftBorder;
-        m_featuresSet |= SRightBorder;
-        m_featuresSet |= STopBorder;
-        m_featuresSet |= SBottomBorder;
-        m_leftBorderPen = pen;
-        m_topBorderPen = pen;
-        m_bottomBorderPen = pen;
-        m_rightBorderPen = pen;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-left" ) )
-    {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border-left" );
-        m_leftBorderPen = convertOasisStringToPen( str );
-        m_featuresSet |= SLeftBorder;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-right" ) )
-    {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border-right" );
-        m_rightBorderPen = convertOasisStringToPen( str );
-        m_featuresSet |= SRightBorder;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-top" ) )
-    {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border-top" );
-        m_topBorderPen = convertOasisStringToPen( str );
-        m_featuresSet |= STopBorder;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
-    {
-        str=styleStack.attributeNS( KoXmlNS::fo, "border-bottom" );
-        m_bottomBorderPen = convertOasisStringToPen( str );
-        m_featuresSet |= SBottomBorder;
-    }
-    if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-tl-br" ) )
-    {
-        str=styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" );
-        m_fallDiagonalPen = convertOasisStringToPen( str );
-        m_featuresSet |= SFallDiagonal;
-    }
-    if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-bl-tr" ) )
-    {
-        str=styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" );
-        m_goUpDiagonalPen = convertOasisStringToPen( str );
-        m_featuresSet |= SGoUpDiagonal;
-    }
+    setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
+    m_featuresSet |= SIndent;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border" ) )
+  {
+    str=styleStack.attributeNS( KoXmlNS::fo, "border" );
+    QPen pen = convertOasisStringToPen( str );
+    m_featuresSet |= SLeftBorder;
+    m_featuresSet |= SRightBorder;
+    m_featuresSet |= STopBorder;
+    m_featuresSet |= SBottomBorder;
+    m_leftBorderPen = pen;
+    m_topBorderPen = pen;
+    m_bottomBorderPen = pen;
+    m_rightBorderPen = pen;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-left" ) )
+  {
+    str=styleStack.attributeNS( KoXmlNS::fo, "border-left" );
+    m_leftBorderPen = convertOasisStringToPen( str );
+    m_featuresSet |= SLeftBorder;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-right" ) )
+  {
+    str=styleStack.attributeNS( KoXmlNS::fo, "border-right" );
+    m_rightBorderPen = convertOasisStringToPen( str );
+    m_featuresSet |= SRightBorder;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-top" ) )
+  {
+    str=styleStack.attributeNS( KoXmlNS::fo, "border-top" );
+    m_topBorderPen = convertOasisStringToPen( str );
+    m_featuresSet |= STopBorder;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
+  {
+    str=styleStack.attributeNS( KoXmlNS::fo, "border-bottom" );
+    m_bottomBorderPen = convertOasisStringToPen( str );
+    m_featuresSet |= SBottomBorder;
+  }
+  if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-tl-br" ) )
+  {
+    str=styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" );
+    m_fallDiagonalPen = convertOasisStringToPen( str );
+    m_featuresSet |= SFallDiagonal;
+  }
+  if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-bl-tr" ) )
+  {
+    str=styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" );
+    m_goUpDiagonalPen = convertOasisStringToPen( str );
+    m_featuresSet |= SGoUpDiagonal;
+  }
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
-    {
-        kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+  if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+  {
+    kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
-        const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
-        kdDebug()<<" style :"<<style<<endl;
-      if ( style )
+    const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
+    kdDebug()<<" style :"<<style<<endl;
+    if ( style )
+    {
+      KoStyleStack drawStyleStack;
+      drawStyleStack.push( *style );
+      drawStyleStack.setTypeProperties( "graphic" );
+      if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
       {
-        KoStyleStack drawStyleStack;
-        drawStyleStack.push( *style );
-        drawStyleStack.setTypeProperties( "graphic" );
-        if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
-        {
-            const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
-            kdDebug()<<" load object gradient fill type :"<<fill<<endl;
+        const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
+        kdDebug()<<" load object gradient fill type :"<<fill<<endl;
 
-            if ( fill == "solid" || fill == "hatch" )
-            {
-                kdDebug()<<" Style ******************************************************\n";
-                m_backGroundBrush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
-                m_featuresSet |= SBackgroundBrush;
-            }
-            else
-                kdDebug()<<" fill style not supported into kspread : "<<fill<<endl;
+        if ( fill == "solid" || fill == "hatch" )
+        {
+          kdDebug()<<" Style ******************************************************\n";
+          m_backGroundBrush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
+          m_featuresSet |= SBackgroundBrush;
         }
+        else
+          kdDebug()<<" fill style not supported into kspread : "<<fill<<endl;
       }
     }
+  }
+}
 
-#if 0
-    bool ok;
-    if ( format.hasAttribute( "type" ) )
+void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
+{
+  Q_UNUSED( oasisStyles );
+  // fo:font-size="13pt"
+  // fo:font-style="italic"
+  // style:text-underline="double"
+  // style:text-underline-color="font-color"
+  // fo:font-weight="bold"
+  kdDebug() << "\t text-properties" << endl;
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
+  {
+    m_fontFamily = styleStack.attributeNS( KoXmlNS::fo, "font-family" ); // FIXME Stefan: sanity check
+    m_featuresSet |= SFontFamily;
+    m_featuresSet |= SFont;
+    kdDebug() << "\t\t fo:font-family: " << m_fontFamily << endl;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
+  {
+    m_fontSize = (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ), 10.0 ); // FIXME Stefan: fallback to default
+    m_featuresSet |= SFontSize;
+    m_featuresSet |= SFont;
+    kdDebug() << "\t\t fo:font-size: " << m_fontSize << endl;
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
+  {
+    if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ) // "normal", "oblique"
     {
-        m_type = (StyleType) format.attribute( "type" ).toInt( &ok );
-        if ( !ok )
-            return false;
+      m_fontFlags |= FItalic;
+      m_featuresSet |= SFontFlag;
+      m_featuresSet |= SFont;
+      kdDebug() << "\t\t fo:font-style: " << "italic" << endl;
     }
-
-    if ( format.hasAttribute( "precision" ) )
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
+  {
+    if ( styleStack.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold" ) // "normal", "100", "200", ...
     {
-        int i = format.attribute( "precision" ).toInt( &ok );
-        if ( i < -1 )
-        {
-            kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
-            return false;
-        }
-        m_precision = i;
-        m_featuresSet |= SPrecision;
+      m_fontFlags |= FBold;
+      m_featuresSet |= SFontFlag;
+      m_featuresSet |= SFont;
+      kdDebug() << "\t\t fo:font-weight: " << "bold" << endl;
     }
-
-    if ( format.hasAttribute( "float" ) )
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) )
+  {
+    if ( styleStack.attributeNS( KoXmlNS::style, "text-underline-style" ) != "none" )
     {
-        Format::FloatFormat a = (Format::FloatFormat)format.attribute( "float" ).toInt( &ok );
-        if ( !ok )
-            return false;
-        if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
-        {
-            m_floatFormat = a;
-            m_featuresSet |= SFloatFormat;
-        }
+      m_fontFlags |= FUnderline;
+      m_featuresSet |= SFontFlag;
+      m_featuresSet |= SFont;
+      kdDebug() << "\t\t style:text-underline-style: " << "solid (actually: !none)" << endl;
     }
-
-    if ( format.hasAttribute( "floatcolor" ) )
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-width" ) )
+  {
+        //TODO
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-color" ) )
+  {
+        //TODO
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) )
+  {
+    QColor color = QColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) );
+    if ( color.isValid() )
     {
-        Format::FloatColor a = (Format::FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
-        if ( !ok ) return false;
-        if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
-        {
-            m_floatColor = a;
-            m_featuresSet |= SFloatColor;
-        }
+      m_featuresSet |= STextPen;
+      m_textPen = QPen( color );
+      kdDebug() << "\t\t fo:color: " << color.name() << endl;
     }
-
-    if ( format.hasAttribute( "custom" ) )
+  }
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" ) )
+  {
+    if ( styleStack.attributeNS( KoXmlNS::style, "text-line-through-style" ) != "none"
+         /*&& styleStack.attributeNS("text-line-through-style")=="solid"*/ )
     {
-        m_strFormat = format.attribute( "custom" );
-        m_featuresSet |= SCustomFormat;
+      m_fontFlags |= FStrike;
+      m_featuresSet |= SFontFlag;
+      m_featuresSet |= SFont;
+      kdDebug() << "\t\t text-line-through-style: " << "solid (actually: !none)" << endl;
     }
-    if ( m_formatType == Format::Money )
-    {
-        if ( format.hasAttribute( "type" ) )
-        {
-            m_currency.type   = format.attribute( "type" ).toInt( &ok );
-            if (!ok)
-                m_currency.type = 1;
-        }
-        if ( format.hasAttribute( "symbol" ) )
-        {
-            m_currency.symbol = format.attribute( "symbol" );
-        }
-    }
-
-    // TODO: remove that...
-    QDomElement font = format.namedItem( "font" ).toElement();
-    if ( !font.isNull() )
-    {
-        QFont f( util_toFont( font ) );
-        m_fontFamily = f.family();
-        m_fontSize = f.pointSize();
-        if ( f.italic() )
-            m_fontFlags |= FItalic;
-        if ( f.bold() )
-            m_fontFlags |= FBold;
-        if ( f.underline() )
-            m_fontFlags |= FUnderline;
-        if ( f.strikeOut() )
-            m_fontFlags |= FStrike;
-
-        m_featuresSet |= SFont;
-        m_featuresSet |= SFontFamily;
-        m_featuresSet |= SFontFlag;
-        m_featuresSet |= SFontSize;
-    }
-
-    if ( format.hasAttribute( "font-family" ) )
-    {
-        m_fontFamily = format.attribute( "font-family" );
-        m_featuresSet |= SFont;
-        m_featuresSet |= SFontFamily;
-    }
-
-
-    if ( format.hasAttribute( "font-flags" ) )
-    {
-        m_fontFlags = format.attribute( "font-flags" ).toInt( &ok );
-        if ( !ok )
-            return false;
-        m_featuresSet |= SFont;
-        m_featuresSet |= SFontFlag;
-    }
-
-    if ( format.hasAttribute( "brushcolor" ) )
-    {
-        m_backGroundBrush.setColor( QColor( format.attribute( "brushcolor" ) ) );
-        m_featuresSet |= SBackgroundBrush;
-    }
-
-    if ( format.hasAttribute( "brushstyle" ) )
-    {
-        m_backGroundBrush.setStyle( (Qt::BrushStyle) format.attribute( "brushstyle" ).toInt( &ok )  );
-        if ( !ok )
-            return false;
-        m_featuresSet |= SBackgroundBrush;
-    }
-
-    QDomElement pen = format.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
-    {
-        m_textPen = util_toPen( pen );
-        m_featuresSet |= STextPen;
-    }
-
-    return true;
-
-#endif
+  }
 }
 
 FormatType Style::formatType( const QString &_format )
@@ -1221,7 +1084,6 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         // FIXME this is not the OASIS parent style's name. it's its display name!
         style.addAttribute( "style:parent-style-name", m_parent->name() );
 
-
     if ( featureSet( SAlignX ) && alignX() != Format::Undefined )
     {
         QString value;
@@ -1270,6 +1132,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 
     if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
         style.addProperty( "fo:wrap-option", "wrap" );
+
     if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
     {
         style.addProperty( "style:direction", "ttb" );
@@ -1292,21 +1155,24 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         format.setAttribute( "symbol", m_currency.symbol );
     }
 #endif
-    if ( featureSet( SAngle ) )
+    if ( featureSet( SAngle ) && m_rotateAngle != 0 )
     {
         style.addProperty( "style:rotation-align", "none" );
         style.addProperty( "style:rotation-angle", QString::number( -1.0 *m_rotateAngle  ) );
     }
-    if ( featureSet( SIndent ) )
+
+    if ( featureSet( SIndent ) && m_indent != 0.0 )
     {
         style.addPropertyPt("fo:margin-left", m_indent, KoGenStyle::ParagraphType );
         //FIXME
         //if ( a == Format::Undefined )
         //currentCellStyle.addProperty("fo:text-align", "start" );
     }
+
     if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
         style.addProperty( "style:print-content", "false");
 
+    // protection
     bool hideAll = false;
     bool hideFormula = false;
     bool isNotProtected = false;
@@ -1330,7 +1196,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
             style.addProperty( "style:cell-protect", "formula-hidden" );
         else if ( hideFormula )
             style.addProperty( "style:cell-protect", "protected formula-hidden" );
-        else if ( featureSet( SNotProtected ) )// !isNotProtected
+        else if ( featureSet( SNotProtected ) && !hasProperty( PNotProtected ) )
             // write out, only if it is explicity set
             style.addProperty( "style:cell-protect", "protected" );
     }
@@ -1376,21 +1242,22 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     }
 
     // font
-    if ( featureSet( SFontFamily ) )
+    if ( featureSet( SFontFamily ) ) // !m_fontFamily.isEmpty() == true
     {
         style.addProperty("fo:font-family", m_fontFamily, KoGenStyle::TextType );
     }
-    if ( featureSet( SFontSize ) )
+    if ( featureSet( SFontSize ) ) // m_fontSize != 0
     {
         style.addPropertyPt("fo:font-size",m_fontSize, KoGenStyle::TextType  );
     }
 
-    if (m_fontFlags & (uint) FBold )
+    if ( featureSet( SFontFlag ) && m_fontFlags & (uint) FBold )
         style.addProperty("fo:font-weight","bold", KoGenStyle::TextType );
-    if ( m_fontFlags & (uint) FItalic )
+
+    if ( featureSet( SFontFlag ) && m_fontFlags & (uint) FItalic )
         style.addProperty("fo:font-style", "italic", KoGenStyle::TextType );
 
-    if ( m_fontFlags & (uint) FUnderline )
+    if ( featureSet( SFontFlag ) && m_fontFlags & (uint) FUnderline )
     {
         //style:text-underline-style="solid" style:text-underline-width="auto"
         style.addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
@@ -1399,13 +1266,14 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         style.addProperty( "style:text-underline-color", "font-color", KoGenStyle::TextType );
     }
 
-    if ( m_fontFlags & (uint) FStrike )
+    if ( featureSet( SFontFlag ) && m_fontFlags & (uint) FStrike )
         style.addProperty( "style:text-line-through-style", "solid", KoGenStyle::TextType );
 
-    if ( featureSet( STextPen ) && m_textPen.color().isValid() )
+    if ( featureSet( STextPen ) && m_textPen.color().isValid() ) // always save; default: m_textPen.style() == Qt::NoPen
     {
         style.addProperty("fo:color", colorName(m_textPen.color()), KoGenStyle::TextType );
     }
+
     //I don't think there is a reason why the background brush should be saved if it is null,
     //but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
     if ( featureSet( SBackgroundBrush ) && (m_backGroundBrush.style() != Qt::NoBrush) )
@@ -1414,18 +1282,17 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         if ( !tmp.isEmpty() )
             style.addProperty("draw:style-name", tmp );
     }
+
     QString _prefix;
     QString _postfix;
     int _precision = -1;
     if ( featureSet( SPrefix ) && !prefix().isEmpty() )
         _prefix = m_prefix;
-
     if ( featureSet( SPostfix ) && !postfix().isEmpty() )
         _postfix = m_postfix;
-    if ( featureSet( SPrecision ) )
+    if ( featureSet( SPrecision ) && m_precision != -1 )
     {
-        if ( m_precision > -1 )
-            style.addAttribute( "style:decimal-places", m_precision );
+        style.addAttribute( "style:decimal-places", m_precision );
         _precision =  m_precision;
     }
 
@@ -2602,8 +2469,6 @@ Style * Style::setProperty( Properties p )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
-    kdDebug() << k_funcinfo << endl;
-    kdDebug() << "m_type != AUTO || m_usageCount > 1" << endl;
     Style * style = new Style( this );
     style->m_properties |= (uint) p;
     switch( p )
@@ -2645,8 +2510,6 @@ Style * Style::setProperty( Properties p )
     m_featuresSet |= SCustomFormat;
     break;
    case PNotProtected:
-     kdDebug() << k_funcinfo << endl;
-     kdDebug() << "case PNotProtected" << endl;
      m_featuresSet |= SNotProtected;
     break;
    case PHideAll:

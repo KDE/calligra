@@ -28,6 +28,7 @@
 #include <KoDom.h>
 #include <KoGenStyles.h>
 #include <KoOasisSettings.h>
+#include <KoOasisStyles.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
@@ -36,6 +37,8 @@
 #include "kspread_genvalidationstyle.h"
 #include "kspread_locale.h"
 #include "kspread_sheet.h"
+#include "kspread_style.h"
+#include "kspread_style_manager.h"
 #include "kspread_view.h"
 #include "KSpreadMapIface.h"
 
@@ -270,7 +273,7 @@ QDomElement Map::save( QDomDocument& doc )
   return mymap;
 }
 
-bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContext, QDict<Style>& styleMap )
+bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContext )
 {
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
@@ -307,6 +310,9 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
         sheetNode = sheetNode.nextSibling();
     }
 
+    //pre-load auto styles
+    QDict<Style> autoStyles = doc()->styleManager()->loadOasisAutoStyles( oasisContext.oasisStyles() );
+
     // load the sheet
     sheetNode = body.firstChild();
     while ( !sheetNode.isNull() )
@@ -322,12 +328,15 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
                     QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString::null );
                     Sheet* sheet = findSheet( name );
                     if( sheet )
-                        sheet->loadOasis( sheetElement , oasisContext , styleMap);
+                        sheet->loadOasis( sheetElement, oasisContext, autoStyles );
                 }
             }
         }
         sheetNode = sheetNode.nextSibling();
     }
+
+    //delete any styles which were not used
+    doc()->styleManager()->releaseUnusedAutoStyles( autoStyles );
 
     return true;
 }

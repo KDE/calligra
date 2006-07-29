@@ -264,6 +264,10 @@ protected:
    */
   void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
 
+  void loadOasisDataStyle( KoOasisStyles& oasisStyles, const QDomElement& styleStack );
+  void loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack );
+  void loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack );
+  void loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack );
 
   CustomStyle * m_parent;
   QString        m_parentName;

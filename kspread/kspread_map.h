@@ -77,7 +77,7 @@ public:
 
     bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj );
 
-  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext , QDict<Style>& styleMap );
+  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext );
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 
