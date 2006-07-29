@@ -80,6 +80,8 @@ class KivioView : public KoView, public KoShapeControllerBase
     void viewZoomIn();
     /// Called by the zoom out action... zoom -25%
     void viewZoomOut();
+    /// Called when the zoom mode needs a recalculation of the zoom
+    void recalculateZoom();
 
   protected:
     /// Creates and initializes the GUI.

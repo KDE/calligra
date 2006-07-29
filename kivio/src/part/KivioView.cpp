@@ -21,6 +21,7 @@
 
 #include <QGridLayout>
 #include <QScrollBar>
+#include <QTimer>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -163,7 +164,7 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
     return;
   }
 
-  int newZoom = 0;
+  int newZoom = zoom;
   QString zoomString;
 
   if(mode == KoZoomMode::ZOOM_WIDTH) {
@@ -172,6 +173,12 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
     KoPageLayout layout = m_activePage->pageLayout();
     newZoom = qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) /
         (m_zoomHandler->resolutionX() * layout.ptWidth)) - 1;
+
+    if((newZoom != m_zoomHandler->zoomInPercent()) &&
+        m_canvasController->verticalScrollBar()->isHidden())
+    {
+      QTimer::singleShot(0, this, SLOT(recalculateZoom()));
+    }
   } else if(mode == KoZoomMode::ZOOM_PAGE) {
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PAGE);
     zoomString = KoZoomMode::toString(mode);
@@ -182,7 +189,6 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
                 qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) / width)) - 1;
   } else {
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
-    newZoom = zoom;
     zoomString = i18n("%1%", zoom);
   }
 
@@ -198,10 +204,10 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
 
 void KivioView::resizeEvent(QResizeEvent* event)
 {
-  Q_UNUSED(event);
+  KoView::resizeEvent(event);
 
   if(m_zoomHandler->zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
-    viewZoom(m_zoomHandler->zoomMode(), 0);
+    recalculateZoom();
   }
 }
 
@@ -233,6 +239,11 @@ void KivioView::viewZoomOut()
   zoom = m_zoomHandler->zoomInPercent() - zoom;
   m_viewZoomAction->setZoom(i18n("%1%", zoom));
   setZoom(zoom);
+}
+
+void KivioView::recalculateZoom()
+{
+  viewZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoomInPercent());
 }
 
 #include "KivioView.moc"
