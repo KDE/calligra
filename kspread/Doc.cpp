@@ -75,7 +75,7 @@
 #include "Damages.h"
 #include "Formula.h"
 #include "Functions.h"
-#include "Ksploadinginfo.h"
+#include "LoadingInfo.h"
 #include "Selection.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -108,7 +108,7 @@ public:
   ValueCalc *calc;
 
   Sheet *activeSheet;
-  KSPLoadingInfo *loadingInfo;
+  LoadingInfo *loadingInfo;
   static QList<Doc*> s_docs;
   static int s_docId;
 
@@ -276,7 +276,7 @@ QList<Doc*> Doc::documents()
 
 void Doc::openTemplate (const KUrl& url)
 {
-    d->loadingInfo = new KSPLoadingInfo;
+    d->loadingInfo = new LoadingInfo;
     d->loadingInfo->setLoadTemplate( true );
     KoDocument::openTemplate( url );
     deleteLoadingInfo();
@@ -850,7 +850,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
 bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store)
 {
     if ( !d->loadingInfo )
-        d->loadingInfo = new KSPLoadingInfo;
+        d->loadingInfo = new LoadingInfo;
 
     QTime dt;
     dt.start();
@@ -2142,7 +2142,7 @@ void Doc::setDisplaySheet(Sheet *_sheet )
     d->activeSheet = _sheet;
 }
 
-KSPLoadingInfo * Doc::loadingInfo() const
+LoadingInfo * Doc::loadingInfo() const
 {
     return d->loadingInfo;
 }

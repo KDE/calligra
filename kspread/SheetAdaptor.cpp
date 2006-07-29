@@ -39,7 +39,7 @@
 // #include "KSpreadCellIface.h"
 #include "Region.h"
 
-#include "KSpreadSheetAdaptor.h"
+#include "SheetAdaptor.h"
 
 using namespace KSpread;
 
@@ -433,4 +433,4 @@ bool SheetAdaptor::isProtected() const
     return m_sheet->isProtected();
 }
 
-#include "KSpreadSheetAdaptor.moc"
+#include "SheetAdaptor.moc"

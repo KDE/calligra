@@ -30,11 +30,11 @@ namespace KSpread
 class Sheet;
 
 /// Temporary information used only during loading
-class KSPLoadingInfo
+class LoadingInfo
 {
 public:
-    KSPLoadingInfo() { m_loadTemplate = false;}
-    ~KSPLoadingInfo() {}
+    LoadingInfo() { m_loadTemplate = false;}
+    ~LoadingInfo() {}
     void addWordInAreaList( const QString & word) { m_areaNamed.append( word ); }
     bool findWordInAreaList(const QString & word) const { return (m_areaNamed.indexOf( word ) != -1);}
     void appendValidation( const QString &name, const QDomElement &element){ m_validationList.insert( name, element);}

@@ -42,7 +42,7 @@
 #include "StyleManager.h"
 #include "View.h"
 
-#include "KSpreadMapAdaptor.h"
+#include "MapAdaptor.h"
 #include <QtDBus/QtDBus>
 
 #include "Map.h"

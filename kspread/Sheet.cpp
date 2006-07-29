@@ -64,7 +64,7 @@
 #include "Commands.h"
 #include "DependencyManager.h"
 #include "Selection.h"
-#include "Ksploadinginfo.h"
+#include "LoadingInfo.h"
 #include "Canvas.h"
 #include "Cluster.h"
 #include "Condition.h"
@@ -86,7 +86,7 @@
 #include "RowColumnManipulators.h"
 
 
-#include "KSpreadSheetAdaptor.h"
+#include "SheetAdaptor.h"
 #include <QtDBus/QtDBus>
 
 

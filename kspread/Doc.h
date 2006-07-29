@@ -74,7 +74,7 @@ class Map;
 class Region;
 class StyleManager;
 class UndoAction;
-class KSPLoadingInfo;
+class LoadingInfo;
 class EmbeddedObject;
 
 struct Reference
@@ -695,7 +695,7 @@ public:
    * \ingroup NativeFormat
    * @return the loading info
    */
-  KSPLoadingInfo* loadingInfo() const;
+  LoadingInfo* loadingInfo() const;
 
   /**
    * \ingroup OpenDocument

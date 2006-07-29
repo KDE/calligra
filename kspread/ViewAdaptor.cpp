@@ -34,8 +34,8 @@
 #include "Sheet.h"
 #include "View.h"
 
-#include "KSpreadMapAdaptor.h"
-#include "KSpreadViewAdaptor.h"
+#include "MapAdaptor.h"
+#include "ViewAdaptor.h"
 
 using namespace KSpread;
 
@@ -460,4 +460,4 @@ void ViewAdaptor::decreaseFontSize()
     m_view->decreaseFontSize();
 }
 
-#include "KSpreadViewAdaptor.moc"
+#include "ViewAdaptor.moc"

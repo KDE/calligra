@@ -63,7 +63,7 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "Util.h"
-#include "Ksploadinginfo.h"
+#include "LoadingInfo.h"
 #include "GenValidationStyle.h"
 #include "Locale.h"
 #include "Value.h"

@@ -31,7 +31,7 @@
 #include "Map.h"
 #include "Sheet.h"
 
-#include "KSpreadMapAdaptor.h"
+#include "MapAdaptor.h"
 
 using namespace KSpread;
 
@@ -119,4 +119,4 @@ QString MapAdaptor::insertSheet( const QString& name )
 //     return true;
 // }
 
-#include "KSpreadMapAdaptor.moc"
+#include "MapAdaptor.moc"

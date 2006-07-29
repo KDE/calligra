@@ -106,7 +106,7 @@
 #include "DependencyManager.h"
 #include "Digest.h"
 #include "inspector.h"
-#include "Ksploadinginfo.h"
+#include "LoadingInfo.h"
 #include "Border.h"
 #include "Canvas.h"
 #include "Editors.h"
@@ -165,7 +165,7 @@
 #include "dialogs/SheetPropertiesDialog.h"
 
 // KSpread DCOP
-#include "KSpreadViewAdaptor.h"
+#include "ViewAdaptor.h"
 #include <QtDBus/QtDBus>
 
 #include "View.h"
@@ -2408,7 +2408,7 @@ void View::initialPosition()
     double offsetX = 0;
     double offsetY = 0;
     // Set the initial X and Y offsets for the view.
-    if (KSPLoadingInfo* loadingInfo = doc()->loadingInfo())
+    if (LoadingInfo* loadingInfo = doc()->loadingInfo())
     {
       kDebug() << "View::initialPosition(): setting initial position" << endl;
       d->savedAnchors = loadingInfo->cursorPositions();

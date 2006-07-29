@@ -23,12 +23,14 @@ SET (dialogs_DIR_SRCS
 	dialogs/ConsolidateDialog.cpp
 	dialogs/CSVDialog.cpp
 	dialogs/DatabaseDialog.cpp
+	dialogs/FindDialog.cpp
 	dialogs/FormatDialog.cpp
 	dialogs/FormulaDialog.cpp
 	dialogs/GoalSeekDialog.cpp
 	dialogs/GotoDialog.cpp
 	dialogs/InsertDialog.cpp
 	dialogs/LayoutDialog.cpp
+	dialogs/LinkDialog.cpp
 	dialogs/ListDialog.cpp
 	dialogs/PaperLayoutDialog.cpp
 	dialogs/PasteInsertDialog.cpp
@@ -36,6 +38,8 @@ SET (dialogs_DIR_SRCS
 	dialogs/ReferenceDialog.cpp
 	dialogs/Resize2Dialog.cpp
 	dialogs/SeriesDialog.cpp
+	dialogs/SheetPropertiesDialog.cpp
+	dialogs/SheetSelectPage.cc
 	dialogs/ShowDialog.cpp
 	dialogs/ShowColRowDialog.cpp
 	dialogs/SortDialog.cpp
@@ -43,10 +47,6 @@ SET (dialogs_DIR_SRCS
 	dialogs/StylesDialog.cpp
 	dialogs/SubtotalDialog.cpp
 	dialogs/ValidityDialog.cpp
-	dialogs/LinkDialog.cpp
-	dialogs/SheetPropertiesDialog.cpp
-	dialogs/FindDialog.cpp
-	dialogs/SheetSelectPage.cc
 	)
 
 
@@ -86,59 +86,59 @@ SET (functions_DIR_SRCS
 	)
 
 SET (kspreadcommon_LIB_SRCS
-	${dialogs_DIR_SRCS}
-	${tests_DIR_SRCS}
-	${functions_DIR_SRCS}
-	Digest.cpp
-	Commands.cpp
-	Damages.cpp
-	DependencyManager.cpp
-	Formula.cpp
-	Functions.cpp
 	AutoFill.cpp
 	Border.cpp
 	Canvas.cpp
 	Cell.cpp
 	Cluster.cpp
+	Commands.cpp
 	Condition.cpp
+	Damages.cpp
+	DataManipulators.cpp
+	DependencyManager.cpp
+	Digest.cpp
 	Doc.cpp
 	Editors.cpp
 	Events.cpp
 	Factory.cpp
 	Format.cpp
+	FormatManipulators.cpp
+	Formula.cpp
+	Functions.cpp
+	GeneralProperty.cpp
+	GenValidationStyle.cpp
 	Handler.cpp
 	Locale.cpp
+	Manipulator.cpp
 	Map.cpp
-	KSpreadMapAdaptor.cpp
+	MapAdaptor.cpp
 	Numformat.cpp
 	Object.cpp
+	PropertyEditor.cpp
 	RecalcManager.cpp
+	Region.cpp
+	RowColumnManipulators.cpp
+	Selection.cpp
+	Sheet.cpp
+	SheetAdaptor.cpp
+	SheetPrint.cpp
+	SortManipulator.cpp
 	Style.cpp
 	StyleManager.cpp
-	Undo.cpp
-	Value.cpp
-	View.cpp
-	KSpreadViewAdaptor.cpp
-	Sheet.cpp
-	KSpreadSheetAdaptor.cpp
-	SheetPrint.cpp
-	Util.cpp
 	Toolbox.cpp
+	Undo.cpp
+	Util.cpp
+	Validity.cpp
+	Value.cpp
 	ValueCalc.cpp
 	ValueConverter.cpp
 	ValueFormatter.cpp
 	ValueParser.cpp
-	GenValidationStyle.cpp
-	Region.cpp
-	Selection.cpp
-	Manipulator.cpp
-	DataManipulators.cpp
-	FormatManipulators.cpp
-	RowColumnManipulators.cpp
-	SortManipulator.cpp
-	GeneralProperty.cpp
-	PropertyEditor.cpp
-	Validity.cpp
+	View.cpp
+	ViewAdaptor.cpp
+	${dialogs_DIR_SRCS}
+	${tests_DIR_SRCS}
+	${functions_DIR_SRCS}
 	)
 
 kde4_automoc(${kspreadcommon_LIB_SRCS})
