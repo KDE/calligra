@@ -2239,7 +2239,7 @@ virtual void KPrCanvas::closeEvent( QCloseEvent * e )
 {
     if ( editMode )
     {
-        return QWidget::closeEvent(e);
+        QWidget::closeEvent(e);
     }
     else
     {
