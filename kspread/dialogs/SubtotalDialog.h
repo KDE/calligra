@@ -28,7 +28,7 @@
 
 #include <kdialog.h>
 
-#include "ui_kspreadsubtotal.h"
+#include "ui_SubtotalWidget.h"
 
 class QLineEdit;
 

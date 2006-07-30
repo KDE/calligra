@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 </comment>
  <exportmacro></exportmacro>
- <class>KSpread::SpecialPaste</class>
- <widget class="QWidget" name="KSpread::SpecialPaste" >
+ <class>KSpread::SpecialPasteWidget</class>
+ <widget class="QWidget" name="SpecialPasteWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>

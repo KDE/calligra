@@ -46,9 +46,9 @@
 #include "Format.h"
 #include "Doc.h"
 #include "Value.h"
-#include "ui_position_cell_format.h"
-#include "ui_font_cell_format.h"
-#include "ui_protection_cell_format.h"
+#include "ui_FontWidget.h"
+#include "ui_PositionWidget.h"
+#include "ui_ProtectionWidget.h"
 
 #include <QPushButton>
 #include <QCheckBox>

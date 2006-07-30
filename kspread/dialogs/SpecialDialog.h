@@ -36,7 +36,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class SpecialPasteDialog : public KDialog, public Ui::SpecialPaste
+class SpecialPasteDialog : public KDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT
 public:

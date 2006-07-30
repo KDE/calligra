@@ -51,13 +51,13 @@ SET (dialogs_DIR_SRCS
 
 
 kde4_add_ui_files(dialogs_DIR_SRCS
-	dialogs/kspreadsubtotal.ui
-	dialogs/sheet_properties_base.ui
-	dialogs/position_cell_format.ui
-	dialogs/font_cell_format.ui
-	dialogs/protection_cell_format.ui
+	dialogs/FontWidget.ui
+	dialogs/PositionWidget.ui
+	dialogs/ProtectionWidget.ui
+	dialogs/SheetPropertiesWidget.ui
 	dialogs/SheetSelectWidget.ui
 	dialogs/SpecialPasteWidget.ui
+	dialogs/SubtotalWidget.ui
 	)
 
 
