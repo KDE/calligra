@@ -23,6 +23,7 @@
 #include <KoView.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
+#include <KoZoomMode.h>
 
 #include <QWidget>
 
@@ -32,7 +33,7 @@ class KWGui;
 class KWPage;
 
 class KoShape;
-class KSelectAction;
+class KoZoomAction;
 
 class QResizeEvent;
 
@@ -82,12 +83,10 @@ private:
     /// Update the menu to have the choices the current viewmode provide.
     void changeZoomMenu();
     void updateZoomControls();
-    void showZoom( int zoom ); ///< update the combo to the right zoom value
-    void showZoom( const QString& zoom ); ///< update the combo to the right zoom value
     KWPage *currentPage();
 
 private slots:
-    void viewZoom( const QString &zoom );
+    void viewZoom( KoZoomMode::Mode mode, int zoom );
     void updateZoom();
     void editFrameProperties();
 
@@ -98,7 +97,7 @@ private:
     KoZoomHandler m_zoomHandler;
     KWPage *m_currentPage;
 
-    KSelectAction *m_actionViewZoom;
+    KoZoomAction *m_actionViewZoom;
     KAction *m_actionFormatFrameSet;
 };
 

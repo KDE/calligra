@@ -31,11 +31,11 @@
 #include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoZoomAction.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
 #include <QTimer>
-#include <kselectaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -76,16 +76,20 @@ void KWView::updateReadWrite(bool readWrite) {
 }
 
 void KWView::setupActions() {
-    m_actionViewZoom = new KSelectAction( KIcon("viewmag"), i18n( "Zoom" ), actionCollection(), "view_zoom" );
-    m_actionViewZoom->setEditable(true);
-    changeZoomMenu();
-    m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY());
+    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
+
+    if ( kwcanvas() && kwcanvas()->viewMode()->hasPages() )
+        modes |= KoZoomMode::ZOOM_PAGE;
+
+    m_actionViewZoom = new KoZoomAction( modes, "viewmag", i18n( "Zoom" ),
+                                         0, actionCollection(), "view_zoom" );
+    m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     m_zoomHandler.setZoomMode( m_document->zoomMode() );
     m_zoomHandler.setZoom( m_document->zoom() );
     updateZoomControls();
     QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
-    connect( m_actionViewZoom, SIGNAL( triggered( const QString & ) ),
-             this, SLOT( viewZoom( const QString & ) ) );
+    connect( m_actionViewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
+            this, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
 
     m_actionFormatFrameSet = new KAction( i18n( "Frame/Frameset Properties" ),
             actionCollection(), "format_frameset");
@@ -107,85 +111,50 @@ void KWView::setZoom( int zoom ) {
     kwcanvas()->updateSize();
 }
 
-void KWView::viewZoom( const QString &zoomStr )
+void KWView::viewZoom( KoZoomMode::Mode mode, int zoom )
 {
-    kDebug() << " viewZoom '" << zoomStr << "'" << endl;
-    bool ok=false;
-    int zoom = 0;
+    kDebug() << " viewZoom '" << KoZoomMode::toString( mode ) << ", " << zoom << "'" << endl;
 
-    QString zoomString = zoomStr;
-zoomString.replace("&",""); // hack to work around bug in KSelectAction
-    if ( m_currentPage && zoomString == KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH) ) {
+    if ( !m_currentPage )
+        return;
+
+    int newZoom = zoom;
+
+    if ( mode == KoZoomMode::ZOOM_WIDTH ) {
         m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
-        zoom = qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / (m_zoomHandler.resolutionX() * m_currentPage->width() ) ) - 1;
+        newZoom = qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / (m_zoomHandler.resolutionX() * m_currentPage->width() ) ) - 1;
 
-        if(zoom != m_zoomHandler.zoomInPercent() && !m_gui->verticalScrollBarVisible()) {
+        if(newZoom != m_zoomHandler.zoomInPercent() && !m_gui->verticalScrollBarVisible()) {
             // we have to do this twice to take into account a possibly appearing vertical scrollbar
             QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
         }
-        ok = true;
     }
-    else if ( zoomString == KoZoomMode::toString(KoZoomMode::ZOOM_PAGE) ) {
+    else if ( mode == KoZoomMode::ZOOM_PAGE ) {
         m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_PAGE);
         double height = m_zoomHandler.resolutionY() * m_currentPage->height();
         double width = m_zoomHandler.resolutionX() * m_currentPage->width();
-        zoom = qMin( qRound( static_cast<double>(m_gui->visibleHeight() * 100 ) / height ),
+        newZoom = qMin( qRound( static_cast<double>(m_gui->visibleHeight() * 100 ) / height ),
                      qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / width ) ) - 1;
-
-        ok = true;
     }
     else {
         m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_CONSTANT);
-        QRegExp regexp(".*(\\d+).*"); // "Captured" non-empty sequence of digits
-        int pos = regexp.indexIn(zoomString);
-        if (pos > -1)
-            zoom=regexp.cap(1).toInt(&ok);
     }
 
-    if( !ok || zoom < 10 || zoom == m_zoomHandler.zoomInPercent()) //zoom should be valid and >10
+    if( newZoom < 10 || newZoom == m_zoomHandler.zoomInPercent()) //zoom should be valid and >10
         return;
-    if ( !KoZoomMode::isConstant(zoomString) )
-        showZoom( zoomString ); //set current menu item
-    else
-        showZoom( zoom ); //set current menu item
 
-    setZoom( zoom );
+    setZoom( newZoom );
+    updateZoomControls();
     canvas()->setFocus();
 }
 
 void KWView::changeZoomMenu() {
-    QStringList lst;
-    lst << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
-    bool pageBased=( kwcanvas() && kwcanvas()->viewMode()->hasPages());
-    if ( pageBased )
-        lst << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
+    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
 
-    lst << i18n("%1%", 33);
-    lst << i18n("%1%", 50);
-    lst << i18n("%1%", 75);
-    lst << i18n("%1%", 100);
-    lst << i18n("%1%", 125);
-    lst << i18n("%1%", 150);
-    lst << i18n("%1%", 200);
-    lst << i18n("%1%", 250);
-    lst << i18n("%1%", 350);
-    lst << i18n("%1%", 400);
-    lst << i18n("%1%", 450);
-    lst << i18n("%1%", 500);
-    m_actionViewZoom->setItems( lst );
-}
+    if ( kwcanvas() && kwcanvas()->viewMode()->hasPages() )
+        modes |= KoZoomMode::ZOOM_PAGE;
 
-void KWView::showZoom( int zoom )
-{
-    QStringList list = m_actionViewZoom->items();
-    QString zoomStr( i18n("%1%", zoom ) );
-    m_actionViewZoom->setCurrentItem( list.indexOf(zoomStr)  );
-}
-
-void KWView::showZoom( const QString& zoom )
-{
-    QStringList list = m_actionViewZoom->items();
-    m_actionViewZoom->setCurrentItem( list.indexOf( zoom )  );
+    m_actionViewZoom->setZoomModes( modes );
 }
 
 void KWView::updateZoomControls()
@@ -194,26 +163,24 @@ void KWView::updateZoomControls()
     {
         case KoZoomMode::ZOOM_WIDTH:
         case KoZoomMode::ZOOM_PAGE:
-            showZoom( KoZoomMode::toString(m_zoomHandler.zoomMode()) );
+            m_actionViewZoom->setZoom( KoZoomMode::toString( m_zoomHandler.zoomMode() ) );
             break;
         case KoZoomMode::ZOOM_CONSTANT:
-            changeZoomMenu();
-            showZoom( m_zoomHandler.zoomInPercent() );
+            m_actionViewZoom->setZoom( m_zoomHandler.zoomInPercent() );
             break;
     }
 }
 
 void KWView::updateZoom( ) {
-    viewZoom(m_actionViewZoom->currentText());
+    viewZoom( m_zoomHandler.zoomMode(), m_zoomHandler.zoomInPercent() );
 }
 
 void KWView::resizeEvent( QResizeEvent *e )
 {
     QWidget::resizeEvent( e );
-    QString s = m_actionViewZoom->currentText();
-    s.replace("&", ""); // hack to work around bug in KSelectAction
-    if ( !KoZoomMode::isConstant(s) )
-        viewZoom( s );
+
+    if ( m_zoomHandler.zoomMode() != KoZoomMode::ZOOM_CONSTANT )
+        updateZoom();
 }
 
 void KWView::editFrameProperties() {
