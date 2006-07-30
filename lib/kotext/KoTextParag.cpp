@@ -2706,7 +2706,7 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
         QCharRef ch = text[r];
 
         // check for space, tab, line feed, carriage return
-        if ( ch == 0x0020 || ch == 0x0009 ||ch == 0x000A ||  ch == 0x000D)
+        if ( ch == ' ' || ch == '\t' ||ch == '\r' ||  ch == '\n')
         {
             // if we were lead by whitespace in some parent or previous sibling element,
             // we completely collapse this space
