@@ -584,21 +584,18 @@ void Conditions::loadOasisValidationValue( const QStringList &listVal, Condition
 
 void Conditions::loadConditions( const KoXmlElement & element )
 {
-#ifdef KOXML_USE_QDOM
-  KoXmlNodeList nodeList = element.childNodes();
   Conditional newCondition;
   bool ok;
   StyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
-  for ( int i = 0; i < (int)(nodeList.length()); ++i )
+  KoXmlElement conditionElement;
+  forEachElement ( conditionElement, element )
   {
     newCondition.strVal1   = 0;
     newCondition.strVal2   = 0;
     newCondition.styleName = 0;
     newCondition.fontcond  = 0;
     newCondition.colorcond = 0;
-
-    KoXmlElement conditionElement = nodeList.item( i ).toElement();
 
     ok = conditionElement.hasAttribute( "cond" );
 
@@ -646,10 +643,6 @@ void Conditions::loadConditions( const KoXmlElement & element )
       kDebug(36001) << "Error loading condition " << conditionElement.nodeName()<< endl;
     }
   }
-#else
-#warning Problem with KoXmlReader conversion!
-  kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
 }
 
 bool Conditions::operator==( const Conditions& other ) const

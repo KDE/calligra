@@ -3421,7 +3421,6 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
     int errorLine;
     int errorColumn;
     KoXmlDocument doc;
-#ifdef KOXML_USE_QDOM
     if ( !doc.setContent( b, false, &errorMsg, &errorLine, &errorColumn ) )
     {
       // an error occurred
@@ -3430,10 +3429,6 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
                << ' ' << errorMsg << endl;
       return;
     }
-#else
-#warning Problem with KoXmlReader conversion!
-    kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
 
     int mx = pasteArea.left();
     int my = pasteArea.top();
@@ -3739,7 +3734,6 @@ bool Sheet::testAreaPasteInsert() const
     int errorLine;
     int errorColumn;
     KoXmlDocument d;
-#ifdef KOXML_USE_QDOM
     if ( !d.setContent( byteArray, false, &errorMsg, &errorLine, &errorColumn ) )
     {
       // an error occurred
@@ -3748,10 +3742,6 @@ bool Sheet::testAreaPasteInsert() const
                << ' ' << errorMsg << endl;
       return false;
     }
-#else
-#warning Problem with KoXmlReader conversion!
-    kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
 
     KoXmlElement e = d.documentElement();
     if ( !e.namedItem( "columns" ).toElement().isNull() )
