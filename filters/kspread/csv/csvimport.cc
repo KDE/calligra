@@ -142,7 +142,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
         {
             value += step;
             emit sigProgress(value);
-            const QString text( dialog->getText( row, col ) );
+            const QString text( dialog->getText( row, col ).utf8() );
 
             // ### FIXME: how to calculate the width of numbers (as they might not be in the right format)
             const double len = fm.width( text );
