@@ -2235,7 +2235,7 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     buffer.resize( size() );
 }
 
-virtual void KPrCanvas::closeEvent( QCloseEvent * e )
+void KPrCanvas::closeEvent( QCloseEvent * e )
 {
     if ( editMode )
     {
