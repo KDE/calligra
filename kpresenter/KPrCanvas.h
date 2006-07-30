@@ -508,6 +508,7 @@ protected:
     virtual void mouseDoubleClickEvent( QMouseEvent *e );
     virtual void wheelEvent( QWheelEvent *e );
     virtual void resizeEvent( QResizeEvent *e );
+    virtual bool close( bool alsoDelete );
     /**
      * Returns the object at position pos
      * @param pos the position in the document on which to look
