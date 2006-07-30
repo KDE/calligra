@@ -18,7 +18,6 @@
 */
 
 #include <qpainter.h>
-#include <qpixmap.h>
 #include <QDropEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
@@ -28,26 +27,12 @@
 #include <QDragEnterEvent>
 #include <QSizeF>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
 #include "karbon_drag.h"
 #include "vcanvas.h"
-#include "vdocument.h"
-#include "vpainter.h"
-#include "vqpainter.h"
-#include "vpainterfactory.h"
-#include "vselection.h"
-#include "vtoolcontroller.h"
-#include "vtool.h"
 
 #include "KoZoomHandler.h"
 #include "KoShapeManager.h"
 #include "KoTool.h"
-#include "KoPathShape.h"
-#include "KoRectangleShape.h"
-#include <QLinearGradient>
-#include "KoLineBorder.h"
-#include "KoShapeGroup.h"
 #include "KoPointerEvent.h"
 
 #include <kdebug.h>

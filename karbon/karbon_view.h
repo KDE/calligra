@@ -55,7 +55,6 @@ class VRuler;
 class KoPaletteManager;
 class VDocumentTab;
 class VLayersTab;
-class VHistoryTab;
 class VStrokeDocker;
 class VColorDocker;
 class VStyleDocker;
@@ -214,7 +213,6 @@ protected:
 
 	void createDocumentTabDock();
 	void createLayersTabDock();
-	void createHistoryTabDock();
 	void createStrokeDock();
 	void createColorDock();
 	void createTransformDock();
@@ -267,7 +265,6 @@ private:
 	KoPaletteManager	*m_pPaletteManager;
 	VDocumentTab		*m_DocumentTab;
 	VLayersTab			*m_LayersTab;
-	VHistoryTab			*m_HistoryTab;
 	VColorDocker		*m_ColorManager;
 	VStrokeDocker		*m_strokeDocker;
 	VStyleDocker		*m_styleDocker;

@@ -60,7 +60,6 @@ Filters:
 
 Cleanup:
 --------
-- removing of the command history docker (the undo/redo actions show a popup menu with the last commands)
 - remove dead code as we replace it with new code
 - get rid of qt3support classes whereever we can with our limited resources
 

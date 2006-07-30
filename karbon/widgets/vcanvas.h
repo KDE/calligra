@@ -21,8 +21,6 @@
 #define __VCANVAS_H__
 
 
-#include <QAbstractScrollArea>
-#include <QPixmap>
 #include <QResizeEvent>
 #include <QEvent>
 #include <QDragEnterEvent>
@@ -38,18 +36,11 @@
 #include <KoViewConverter.h>
 #include <KoShape.h>
 
-#include <KoShapeContainer.h>
-
-#include <QColor>
-#include <QRect>
 #include <QBrush>
 #include <QPainter>
 
 class QPointF;
 class QRectF;
-class KarbonPart;
-class KarbonView;
-class VPainter;
 class KoViewConverter;
 class KoShapeManager;
 class KoTool;
@@ -99,8 +90,6 @@ protected:
     void mousePressEvent(QMouseEvent *e);
 
 private:
-    QImage buffer;
-
     KoShapeManager* m_shapeManager;
     KoZoomHandler m_zoomHandler;
 

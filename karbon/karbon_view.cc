@@ -164,7 +164,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	m_DocumentTab = 0L;
 	m_LayersTab = 0L;
-	m_HistoryTab = 0L;
 	m_strokeFillPreview = 0L;
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
@@ -220,7 +219,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		createTransformDock();
 		createDocumentTabDock();
 		createLayersTabDock();
-		createHistoryTabDock();
 		createResourceDock();
 
 		// TODO: proper use of the toolbox once it is ready
@@ -1720,15 +1718,6 @@ void KarbonView::createLayersTabDock()
 	m_LayersTab = new VLayersTab(this, this);
 	m_LayersTab->setWindowTitle(i18n("Layers"));
 	paletteManager()->addWidget(m_LayersTab, "LayersTabDock", "DocumentPanel");
-}
-
-void KarbonView::createHistoryTabDock()
-{
-	debugView("KarbonView::createHistoryTabDock()");
-
-	m_HistoryTab = new VHistoryTab(part(), this);
-	m_HistoryTab->setWindowTitle(i18n("History"));
-	paletteManager()->addWidget(m_HistoryTab, "HistoryTabDock", "DocumentPanel");
 }
 
 void KarbonView::createStrokeDock()
