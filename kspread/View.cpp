@@ -3903,7 +3903,7 @@ void View::paste()
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
 
     KoOasisStore oasisStore( store );
-    QDomDocument doc;
+    KoXmlDocument doc;
     QString errorMessage;
     bool ok = oasisStore.loadAndParse( "content.xml", doc, errorMessage );
     if ( !ok ) {
@@ -3912,7 +3912,7 @@ void View::paste()
     }
 
     KoOasisStyles oasisStyles;
-    QDomDocument stylesDoc;
+    KoXmlDocument stylesDoc;
     (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
     // Load styles from style.xml
     oasisStyles.createStyleMap( stylesDoc, true );
@@ -3920,19 +3920,19 @@ void View::paste()
     oasisStyles.createStyleMap( doc, false );
 
     // from KSpreadDoc::loadOasis:
-    QDomElement content = doc.documentElement();
-    QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement content = doc.documentElement();
+    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
       kDebug() << "Invalid OASIS OpenDocument file. No office:body tag found." << endl;
       return;
     }
-    QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
+    KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
 
     if ( body.isNull() )
     {
       kError(32001) << "No office:spreadsheet found!" << endl;
-      QDomElement childElem;
+      KoXmlElement childElem;
       QString localName;
       forEachElement( childElem, realBody ) {
         localName = childElem.localName();

@@ -80,8 +80,8 @@
 #include <KoRect.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
-#include <KoXmlWriter.h>
 #include <KoOasisStyles.h>
+#include <KoXmlWriter.h>
 
 #include <kmessagebox.h>
 
@@ -467,7 +467,7 @@ const Value Cell::value() const
 //
 void Cell::setValue( const Value& value )
 {
-  kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
   if (value.type() != Value::Error)
     clearAllErrors();
 
@@ -1982,7 +1982,7 @@ void Cell::calculateTextParameters()
 
 bool Cell::makeFormula()
 {
-  kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
 
   d->formula = new KSpread::Formula (sheet(), this);
   d->formula->setExpression (d->strText);
@@ -4523,7 +4523,7 @@ void Cell::setNumber( double number )
 
 void Cell::setCellText( const QString& _text, bool asText )
 {
-  kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
 
   // Clears the formula and updates the dependencies, if a formula exist.
   clearFormula();
@@ -4557,7 +4557,7 @@ void Cell::setCellText( const QString& _text, bool asText )
 
 void Cell::setDisplayText( const QString& _text )
 {
-  kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
   const bool isLoading = format()->sheet()->isLoading();
 
   if ( !isLoading )
@@ -4967,7 +4967,7 @@ void Cell::convertToDate ()
 
 void Cell::checkTextInput()
 {
-  kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
   // Goal of this method: determine the value of the cell
   clearAllErrors();
 
@@ -5434,13 +5434,13 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
   };
 }
 
-void Cell::loadOasisConditional( QDomElement * style )
+void Cell::loadOasisConditional( KoXmlElement * style )
 {
-    //kDebug()<<" void Cell::loadOasisConditional( QDomElement * style  :"<<style<<endl;
+    //kDebug()<<" void Cell::loadOasisConditional( KoXmlElement * style  :"<<style<<endl;
     if ( style )//safe
     {
         //TODO fixme it doesn't work :(((
-        QDomElement e;
+        KoXmlElement e;
         forEachElement( e, style->toElement() )
         {
 //             kDebug()<<"e.localName() :"<<e.localName()<<endl;
@@ -5458,24 +5458,24 @@ void Cell::loadOasisConditional( QDomElement * style )
     }
 }
 
-bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisContext , Style* style )
+bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasisContext , Style* style )
 {
   kDebug() << "*** Loading cell properties ***** at " << column() << ',' << row () << endl;
 
     QString text;
     kDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
 
-    QDomElement* cellStyle=0;
+    KoXmlElement* cellStyle=0;
 
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
 
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        cellStyle = const_cast<QDomElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
+        cellStyle = const_cast<KoXmlElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
 
   if ( cellStyle )
-    loadOasisConditional( const_cast<QDomElement *>( cellStyle ) );
+    loadOasisConditional( const_cast<KoXmlElement *>( cellStyle ) );
    }
 
     if (style)
@@ -5706,14 +5706,14 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
     //
     // cell comment/annotation
     //
-    QDomElement annotationElement = KoDom::namedItemNS( element, KoXmlNS::office, "annotation" );
+    KoXmlElement annotationElement = KoDom::namedItemNS( element, KoXmlNS::office, "annotation" );
     if ( !annotationElement.isNull() )
     {
         QString comment;
-        QDomNode node = annotationElement.firstChild();
+        KoXmlNode node = annotationElement.firstChild();
         while( !node.isNull() )
         {
-            QDomElement commentElement = node.toElement();
+            KoXmlElement commentElement = node.toElement();
             if( !commentElement.isNull() )
                 if( commentElement.localName() == "p" && commentElement.namespaceURI() == KoXmlNS::text )
                 {
@@ -5728,7 +5728,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             format()->setComment( comment );
     }
 
-    QDomElement frame = KoDom::namedItemNS( element, KoXmlNS::draw, "frame" );
+    KoXmlElement frame = KoDom::namedItemNS( element, KoXmlNS::draw, "frame" );
     if ( !frame.isNull() )
       loadOasisObjects( frame, oasisContext );
 
@@ -5739,10 +5739,10 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
     return true;
 }
 
-void Cell::loadOasisCellText( const QDomElement& parent )
+void Cell::loadOasisCellText( const KoXmlElement& parent )
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break
-    QDomElement textParagraphElement;
+    KoXmlElement textParagraphElement;
     QString cellText;
 
     bool multipleTextParagraphsFound=false;
@@ -5761,7 +5761,7 @@ void Cell::loadOasisCellText( const QDomElement& parent )
                 multipleTextParagraphsFound=true;
             }
 
-            QDomElement textA = KoDom::namedItemNS( textParagraphElement, KoXmlNS::text, "a" );
+            KoXmlElement textA = KoDom::namedItemNS( textParagraphElement, KoXmlNS::text, "a" );
             if( !textA.isNull() )
             {
                 if ( textA.hasAttributeNS( KoXmlNS::xlink, "href" ) )
@@ -5791,14 +5791,14 @@ void Cell::loadOasisCellText( const QDomElement& parent )
     }
 }
 
-void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& oasisContext )
+void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& oasisContext )
 {
-    for( QDomElement e = parent; !e.isNull(); e = e.nextSibling().toElement() )
+    for( KoXmlElement e = parent; !e.isNull(); e = e.nextSibling().toElement() )
     {
         if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
         {
           EmbeddedObject *obj = 0;
-          QDomNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
+          KoXmlNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
           {
             if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null).isNull() )
@@ -5808,7 +5808,7 @@ void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& o
           }
           else
           {
-            QDomNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
+            KoXmlNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
             if ( !image.isNull() )
               obj = new EmbeddedPictureObject( sheet(), sheet()->doc()->pictureCollection() );
             else
@@ -5855,7 +5855,7 @@ void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& o
 
 void Cell::loadOasisValidation( const QString& validationName )
 {
-    QDomElement element = sheet()->doc()->loadingInfo()->validation( validationName);
+    KoXmlElement element = sheet()->doc()->loadingInfo()->validation( validationName);
     removeValidity ();
     Validity *validity = this->validity (true);
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
@@ -5979,7 +5979,7 @@ void Cell::loadOasisValidation( const QString& validationName )
         //todo what is it ?
     }
 
-    QDomElement help = KoDom::namedItemNS( element, KoXmlNS::table, "help-message" );
+    KoXmlElement help = KoDom::namedItemNS( element, KoXmlNS::table, "help-message" );
     if ( !help.isNull() )
     {
         if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
@@ -5992,7 +5992,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             kDebug()<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             validity->displayValidationInformation = ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false );
         }
-        QDomElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
+        KoXmlElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
         {
             kDebug()<<"help text :"<<attrText.text()<<endl;
@@ -6000,7 +6000,7 @@ void Cell::loadOasisValidation( const QString& validationName )
         }
     }
 
-    QDomElement error = KoDom::namedItemNS( element, KoXmlNS::table, "error-message" );
+    KoXmlElement error = KoDom::namedItemNS( element, KoXmlNS::table, "error-message" );
     if ( !error.isNull() )
     {
         if ( error.hasAttributeNS( KoXmlNS::table, "title" ) )
@@ -6023,7 +6023,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             kDebug()<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             validity->displayMessage = (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true");
         }
-        QDomElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
+        KoXmlElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
             validity->message = attrText.text();
     }
@@ -6142,7 +6142,7 @@ void Cell::loadOasisValidationCondition( QString &valExpression )
 }
 
 
-bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
+bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
                  Paste::Mode pm, Paste::Operation op, bool paste )
 {
     bool ok;
@@ -6171,7 +6171,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     //
     // Load formatting information.
     //
-    QDomElement formatElement = cell.namedItem( "format" ).toElement();
+    KoXmlElement formatElement = cell.namedItem( "format" ).toElement();
     if ( !formatElement.isNull()
           && ( (pm == Paste::Normal) || (pm == Paste::Format) || (pm == Paste::NoBorder) ) )
     {
@@ -6227,7 +6227,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     //
     // Load the condition section of a cell.
     //
-    QDomElement conditionsElement = cell.namedItem( "condition" ).toElement();
+    KoXmlElement conditionsElement = cell.namedItem( "condition" ).toElement();
     if ( !conditionsElement.isNull())
     {
       if (d->hasExtra())
@@ -6246,10 +6246,10 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
       }
     }
 
-    QDomElement validityElement = cell.namedItem( "validity" ).toElement();
+    KoXmlElement validityElement = cell.namedItem( "validity" ).toElement();
     if ( !validityElement.isNull())
     {
-        QDomElement param = validityElement.namedItem( "param" ).toElement();
+        KoXmlElement param = validityElement.namedItem( "param" ).toElement();
         Validity *validity = this->validity (true);
         if(!param.isNull())
         {
@@ -6300,43 +6300,43 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             validity->listValidity = param.attribute("listvalidity").split(';', QString::SkipEmptyParts );
           }
         }
-        QDomElement inputTitle = validityElement.namedItem( "inputtitle" ).toElement();
+        KoXmlElement inputTitle = validityElement.namedItem( "inputtitle" ).toElement();
         if (!inputTitle.isNull())
         {
             validity->titleInfo = inputTitle.text();
         }
-        QDomElement inputMessage = validityElement.namedItem( "inputmessage" ).toElement();
+        KoXmlElement inputMessage = validityElement.namedItem( "inputmessage" ).toElement();
         if (!inputMessage.isNull())
         {
             validity->messageInfo = inputMessage.text();
         }
 
-        QDomElement title = validityElement.namedItem( "title" ).toElement();
+        KoXmlElement title = validityElement.namedItem( "title" ).toElement();
         if (!title.isNull())
         {
             validity->title = title.text();
         }
-        QDomElement message = validityElement.namedItem( "message" ).toElement();
+        KoXmlElement message = validityElement.namedItem( "message" ).toElement();
         if (!message.isNull())
         {
             validity->message = message.text();
         }
-        QDomElement timeMin = validityElement.namedItem( "timemin" ).toElement();
+        KoXmlElement timeMin = validityElement.namedItem( "timemin" ).toElement();
         if ( !timeMin.isNull()  )
         {
             validity->timeMin = toTime(timeMin);
         }
-        QDomElement timeMax = validityElement.namedItem( "timemax" ).toElement();
+        KoXmlElement timeMax = validityElement.namedItem( "timemax" ).toElement();
         if ( !timeMax.isNull()  )
         {
             validity->timeMax = toTime(timeMax);
         }
-        QDomElement dateMin = validityElement.namedItem( "datemin" ).toElement();
+        KoXmlElement dateMin = validityElement.namedItem( "datemin" ).toElement();
         if ( !dateMin.isNull()  )
         {
             validity->dateMin = toDate(dateMin);
         }
-        QDomElement dateMax = validityElement.namedItem( "datemax" ).toElement();
+        KoXmlElement dateMax = validityElement.namedItem( "datemax" ).toElement();
         if ( !dateMax.isNull()  )
         {
             validity->dateMax = toDate(dateMax);
@@ -6351,7 +6351,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     //
     // Load the comment
     //
-    QDomElement comment = cell.namedItem( "comment" ).toElement();
+    KoXmlElement comment = cell.namedItem( "comment" ).toElement();
     if ( !comment.isNull() && ( pm == Paste::Normal || pm == Paste::Comment || pm == Paste::NoBorder ))
     {
         QString t = comment.text();
@@ -6365,7 +6365,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     //
     // TODO: make this suck less. We set data twice, in loadCellData, and
     // also here. Not good.
-    QDomElement text = cell.namedItem( "text" ).toElement();
+    KoXmlElement text = cell.namedItem( "text" ).toElement();
 
     if ( !text.isNull() &&
           ( pm == Paste::Normal || pm == Paste::Text || pm == Paste::NoBorder || pm == Paste::Result ) )
@@ -6373,10 +6373,15 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
       /* older versions mistakenly put the datatype attribute on the cell
          instead of the text.  Just move it over in case we're parsing
          an old document */
+#ifdef KOXML_USE_QDOM
       if ( cell.hasAttribute( "dataType" ) ) // new docs
         text.setAttribute( "dataType", cell.attribute( "dataType" ) );
+#else
+#warning Problem with KoXmlReader conversion!
+      kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
 
-      QDomElement result = cell.namedItem( "result" ).toElement();
+      KoXmlElement result = cell.namedItem( "result" ).toElement();
       QString txt = text.text();
       if ((pm == Paste::Result) && (txt[0] == '='))
         // paste text of the element, if we want to paste result
@@ -6479,7 +6484,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     return true;
 }
 
-bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
+bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
 {
   //TODO: use converter()->asString() to generate strText
 
@@ -6686,7 +6691,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
   return true;
 }
 
-QTime Cell::toTime(const QDomElement &element)
+QTime Cell::toTime(const KoXmlElement &element)
 {
     //TODO: can't we use tryParseTime (after modification) instead?
     QString t = element.text();
@@ -6704,7 +6709,7 @@ QTime Cell::toTime(const QDomElement &element)
     return value().asTime();
 }
 
-QDate Cell::toDate(const QDomElement &element)
+QDate Cell::toDate(const KoXmlElement &element)
 {
     QString t = element.text();
     int pos;

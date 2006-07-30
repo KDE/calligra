@@ -3420,7 +3420,8 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
     QString errorMsg;
     int errorLine;
     int errorColumn;
-    QDomDocument doc;
+    KoXmlDocument doc;
+#ifdef KOXML_USE_QDOM
     if ( !doc.setContent( b, false, &errorMsg, &errorLine, &errorColumn ) )
     {
       // an error occurred
@@ -3429,6 +3430,10 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
                << ' ' << errorMsg << endl;
       return;
     }
+#else
+#warning Problem with KoXmlReader conversion!
+    kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
 
     int mx = pasteArea.left();
     int my = pasteArea.top();
@@ -3437,7 +3442,7 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
                    mode, operation, insert, insertTo, pasteFC );
 }
 
-bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
+bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
                           int _xshift, int _yshift, bool makeUndo,
                           Paste::Mode mode, Paste::Operation operation, bool insert,
                           int insertTo, bool pasteFC)
@@ -3449,7 +3454,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
     loadSelectionUndo( doc, pasteArea, _xshift, _yshift, insert, insertTo );
   }
 
-  QDomElement root = doc.documentElement(); // "spreadsheet-snippet"
+  KoXmlElement root = doc.documentElement(); // "spreadsheet-snippet"
 
   int rowsInClpbrd    =  root.attribute( "rows" ).toInt();
   int columnsInClpbrd =  root.attribute( "columns" ).toInt();
@@ -3472,7 +3477,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
 //   kDebug() << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
 
   Region recalcRegion;
-  QDomElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
+  KoXmlElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
   for (; !e.isNull(); e = e.nextSibling().toElement())
   {
     // entire columns given
@@ -3493,7 +3498,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
         }
 
         // Insert column formats
-        QDomElement c = e.firstChild().toElement();
+        KoXmlElement c = e.firstChild().toElement();
         for ( ; !c.isNull(); c = c.nextSibling().toElement() )
         {
             if ( c.tagName() == "column" )
@@ -3525,7 +3530,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
         }
 
         // Insert row formats
-        QDomElement c = e.firstChild().toElement();
+        KoXmlElement c = e.firstChild().toElement();
         for( ; !c.isNull(); c = c.nextSibling().toElement() )
         {
             if ( c.tagName() == "row" )
@@ -3616,11 +3621,11 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
     return true;
 }
 
-void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
+void Sheet::loadSelectionUndo(const KoXmlDocument& d, const QRect& loadArea,
                               int _xshift, int _yshift,
                               bool insert, int insertTo)
 {
-  QDomElement root = d.documentElement(); // "spreadsheet-snippet"
+  KoXmlElement root = d.documentElement(); // "spreadsheet-snippet"
 
   int rowsInClpbrd    = root.attribute( "rows" ).toInt();
   int columnsInClpbrd = root.attribute( "columns" ).toInt();
@@ -3639,9 +3644,9 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
   uint numRows = 0;
 
   Region region;
-  for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
+  for (KoXmlNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
   {
-    QDomElement e = n.toElement(); // "columns", "rows" or "cell"
+    KoXmlElement e = n.toElement(); // "columns", "rows" or "cell"
     if (e.tagName() == "columns")
     {
       _yshift = 0;
@@ -3733,7 +3738,8 @@ bool Sheet::testAreaPasteInsert() const
     QString errorMsg;
     int errorLine;
     int errorColumn;
-    QDomDocument d;
+    KoXmlDocument d;
+#ifdef KOXML_USE_QDOM
     if ( !d.setContent( byteArray, false, &errorMsg, &errorLine, &errorColumn ) )
     {
       // an error occurred
@@ -3742,15 +3748,19 @@ bool Sheet::testAreaPasteInsert() const
                << ' ' << errorMsg << endl;
       return false;
     }
+#else
+#warning Problem with KoXmlReader conversion!
+    kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
 
-    QDomElement e = d.documentElement();
+    KoXmlElement e = d.documentElement();
     if ( !e.namedItem( "columns" ).toElement().isNull() )
         return false;
 
     if ( !e.namedItem( "rows" ).toElement().isNull() )
         return false;
 
-    QDomElement c = e.firstChild().toElement();
+    KoXmlElement c = e.firstChild().toElement();
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
         if ( c.tagName() == "cell" )
@@ -4448,16 +4458,16 @@ void Sheet::checkContentDirection( QString const & name )
   emit sig_refreshView();
 }
 
-bool Sheet::loadSheetStyleFormat( QDomElement *style )
+bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
 {
     QString hleft, hmiddle, hright;
     QString fleft, fmiddle, fright;
-    QDomNode header = KoDom::namedItemNS( *style, KoXmlNS::style, "header" );
+    KoXmlNode header = KoDom::namedItemNS( *style, KoXmlNS::style, "header" );
 
     if ( !header.isNull() )
     {
         kDebug() << "Header exists" << endl;
-        QDomNode part = KoDom::namedItemNS( header, KoXmlNS::style, "region-left" );
+        KoXmlNode part = KoDom::namedItemNS( header, KoXmlNS::style, "region-left" );
         if ( !part.isNull() )
         {
             hleft = getPart( part );
@@ -4479,31 +4489,31 @@ bool Sheet::loadSheetStyleFormat( QDomElement *style )
         }
     }
     //TODO implement it under kspread
-    QDomNode headerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "header-left" );
+    KoXmlNode headerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "header-left" );
     if ( !headerleft.isNull() )
     {
-        QDomElement e = headerleft.toElement();
+        KoXmlElement e = headerleft.toElement();
         if ( e.hasAttributeNS( KoXmlNS::style, "display" ) )
             kDebug()<<"header.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style, "display" )<<endl;
         else
             kDebug()<<"header left doesn't has attribute  style:display  \n";
     }
     //TODO implement it under kspread
-    QDomNode footerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "footer-left" );
+    KoXmlNode footerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "footer-left" );
     if ( !footerleft.isNull() )
     {
-        QDomElement e = footerleft.toElement();
+        KoXmlElement e = footerleft.toElement();
         if ( e.hasAttributeNS( KoXmlNS::style, "display" ) )
             kDebug()<<"footer.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style, "display" )<<endl;
         else
             kDebug()<<"footer left doesn't has attribute  style:display  \n";
     }
 
-    QDomNode footer = KoDom::namedItemNS( *style, KoXmlNS::style, "footer" );
+    KoXmlNode footer = KoDom::namedItemNS( *style, KoXmlNS::style, "footer" );
 
     if ( !footer.isNull() )
     {
-        QDomNode part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-left" );
+        KoXmlNode part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-left" );
         if ( !part.isNull() )
         {
             fleft = getPart( part );
@@ -4536,16 +4546,16 @@ void Sheet::replaceMacro( QString & text, const QString & old, const QString & n
 }
 
 
-QString Sheet::getPart( const QDomNode & part )
+QString Sheet::getPart( const KoXmlNode & part )
 {
   QString result;
-  QDomElement e = KoDom::namedItemNS( part, KoXmlNS::text, "p" );
+  KoXmlElement e = KoDom::namedItemNS( part, KoXmlNS::text, "p" );
   while ( !e.isNull() )
   {
     QString text = e.text();
     kDebug() << "PART: " << text << endl;
 
-    QDomElement macro = KoDom::namedItemNS( e, KoXmlNS::text, "time" );
+    KoXmlElement macro = KoDom::namedItemNS( e, KoXmlNS::text, "time" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<time>" );
 
@@ -4584,7 +4594,7 @@ QString Sheet::getPart( const QDomNode & part )
 }
 
 
-bool Sheet::loadOasis( const QDomElement& sheetElement,
+bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                        KoOasisLoadingContext& oasisContext,
                        const Styles& styleMap )
 {
@@ -4593,12 +4603,12 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
     {
         QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
         //kDebug()<<" style of table :"<<stylename<<endl;
-        const QDomElement *style = oasisContext.oasisStyles().findStyle( stylename, "table" );
+        const KoXmlElement *style = oasisContext.oasisStyles().findStyle( stylename, "table" );
         Q_ASSERT( style );
         //kDebug()<<" style :"<<style<<endl;
         if ( style )
         {
-            QDomElement properties( KoDom::namedItemNS( *style, KoXmlNS::style, "table-properties" ) );
+            KoXmlElement properties( KoDom::namedItemNS( *style, KoXmlNS::style, "table-properties" ) );
             if ( !properties.isNull() )
             {
                 if ( properties.hasAttributeNS( KoXmlNS::table, "display" ) )
@@ -4611,7 +4621,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
             {
                 QString masterPageStyleName = style->attributeNS( KoXmlNS::style, "master-page-name", QString::null );
                 //kDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
-                QDomElement *masterStyle = oasisContext.oasisStyles().masterPages()[masterPageStyleName];
+                KoXmlElement *masterStyle = oasisContext.oasisStyles().masterPages()[masterPageStyleName];
                 //kDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
                 if ( masterStyle )
                 {
@@ -4620,7 +4630,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
                     {
                         QString masterPageLayoutStyleName = masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
                         //kDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
-                        const QDomElement *masterLayoutStyle = oasisContext.oasisStyles().findStyle( masterPageLayoutStyleName );
+                        const KoXmlElement *masterLayoutStyle = oasisContext.oasisStyles().findStyle( masterPageLayoutStyleName );
                       if ( masterLayoutStyle )
                       {
                         //kDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
@@ -4641,14 +4651,14 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
     const int overallRowCount = workbook()->overallRowCount();
     int rowIndex = 1;
     int indexCol = 1;
-    QDomNode rowNode = sheetElement.firstChild();
+    KoXmlNode rowNode = sheetElement.firstChild();
     // Some spreadsheet programs may support more rows than
     // KSpread so limit the number of repeated rows.
     // FIXME POSSIBLE DATA LOSS!
     while( !rowNode.isNull() && rowIndex <= KS_rowMax )
     {
         kDebug()<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol<<endl;
-        QDomElement rowElement = rowNode.toElement();
+        KoXmlElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
         {
             kDebug()<<" Sheet::loadOasis rowElement.tagName() :"<<rowElement.localName()<<endl;
@@ -4662,7 +4672,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
                 }
                 else if ( rowElement.localName() == "table-header-rows" )
                 {
-                  QDomNode headerRowNode = rowElement.firstChild();
+                  KoXmlNode headerRowNode = rowElement.firstChild();
                   while ( !headerRowNode.isNull() )
                   {
                     // NOTE Handle header rows as ordinary ones
@@ -4683,7 +4693,12 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
             }
         }
         rowNode = rowNode.nextSibling();
+#ifdef KOXML_USE_QDOM
         doc()->emitProgress( 100 * rowIndex / overallRowCount );
+#else
+#warning Problem with KoXmlReader conversion!
+        kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
     }
 
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
@@ -4714,17 +4729,17 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
 }
 
 
-void Sheet::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& oasisContext )
+void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& oasisContext )
 {
-    QDomElement e;
-    QDomNode n = parent.firstChild();
+    KoXmlElement e;
+    KoXmlNode n = parent.firstChild();
     while( !n.isNull() )
     {
         e = n.toElement();
         if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
         {
           EmbeddedObject *obj = 0;
-          QDomNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
+          KoXmlNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
           {
             if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null).isNull() )
@@ -4734,7 +4749,7 @@ void Sheet::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& 
           }
           else
           {
-            QDomNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
+            KoXmlNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
             if ( !image.isNull() )
               obj = new EmbeddedPictureObject( this, doc()->pictureCollection() );
             else
@@ -4898,12 +4913,12 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 }
 
 
-bool Sheet::loadColumnFormat(const QDomElement& column,
+bool Sheet::loadColumnFormat(const KoXmlElement& column,
                              const KoOasisStyles& oasisStyles, int & indexCol,
                              const Styles& styleMap)
 {
   Q_UNUSED(styleMap)
-//   kDebug()<<"bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
+//   kDebug()<<"bool Sheet::loadColumnFormat(const KoXmlElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
     bool isNonDefaultColumn = false;
 
@@ -4952,7 +4967,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
     if ( column.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
       QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
-      const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
+      const KoXmlElement *style = oasisStyles.findStyle( str, "table-column" );
       if ( style )
       {
         styleStack.push( *style );
@@ -5011,11 +5026,11 @@ bool Sheet::loadColumnFormat(const QDomElement& column,
 }
 
 
-bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
+bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                            KoOasisLoadingContext& oasisContext,
                            const Styles& styleMap )
 {
-//    kDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
+//    kDebug()<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
 
     int backupRow = rowIndex;
     bool isNonDefaultRow = false;
@@ -5024,7 +5039,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
       QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
-      const QDomElement *style = oasisContext.oasisStyles().findStyle( str, "table-row" );
+      const KoXmlElement *style = oasisContext.oasisStyles().findStyle( str, "table-row" );
       if ( style )
       {
         styleStack.push( *style );
@@ -5119,13 +5134,13 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
     }
 
     int columnIndex = 0;
-    QDomNode cellNode = row.firstChild();
+    KoXmlNode cellNode = row.firstChild();
     int endRow = qMin(backupRow+number,KS_rowMax);
 
 
     while( !cellNode.isNull() )
     {
-        QDomElement cellElement = cellNode.toElement();
+        KoXmlElement cellElement = cellNode.toElement();
         if( !cellElement.isNull() )
         {
             columnIndex++;
@@ -5380,7 +5395,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
                     addText( text, xmlWriter );
                     //text:p><text:date style:data-style-name="N2" text:date-value="2005-10-02">02/10/2005</text:date>, <text:time>10:20:12</text:time></text:p> "add style" => create new style
 #if 0 //FIXME
-                    QDomElement t = dd.createElement( "text:date" );
+                    KoXmlElement t = dd.createElement( "text:date" );
                     t.setAttribute( "text:date-value", "0-00-00" );
                     // todo: "style:data-style-name", "N2"
                     t.appendChild( dd.createTextNode( QDate::currentDate().toString() ) );
@@ -5825,7 +5840,7 @@ void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int
     }
 }
 
-bool Sheet::loadXML( const QDomElement& sheet )
+bool Sheet::loadXML( const KoXmlElement& sheet )
 {
     bool ok = false;
     QString sname = sheetName();
@@ -5979,14 +5994,14 @@ bool Sheet::loadXML( const QDomElement& sheet )
     }
 
     // Load the paper layout
-    QDomElement paper = sheet.namedItem( "paper" ).toElement();
+    KoXmlElement paper = sheet.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
     {
       QString format = paper.attribute( "format" );
       QString orientation = paper.attribute( "orientation" );
 
       // <borders>
-      QDomElement borders = paper.namedItem( "borders" ).toElement();
+      KoXmlElement borders = paper.namedItem( "borders" ).toElement();
       if ( !borders.isNull() )
       {
         float left = borders.attribute( "left" ).toFloat();
@@ -5998,30 +6013,30 @@ bool Sheet::loadXML( const QDomElement& sheet )
       QString hleft, hright, hcenter;
       QString fleft, fright, fcenter;
       // <head>
-      QDomElement head = paper.namedItem( "head" ).toElement();
+      KoXmlElement head = paper.namedItem( "head" ).toElement();
       if ( !head.isNull() )
       {
-        QDomElement left = head.namedItem( "left" ).toElement();
+        KoXmlElement left = head.namedItem( "left" ).toElement();
         if ( !left.isNull() )
           hleft = left.text();
-        QDomElement center = head.namedItem( "center" ).toElement();
+        KoXmlElement center = head.namedItem( "center" ).toElement();
         if ( !center.isNull() )
         hcenter = center.text();
-        QDomElement right = head.namedItem( "right" ).toElement();
+        KoXmlElement right = head.namedItem( "right" ).toElement();
         if ( !right.isNull() )
           hright = right.text();
       }
       // <foot>
-      QDomElement foot = paper.namedItem( "foot" ).toElement();
+      KoXmlElement foot = paper.namedItem( "foot" ).toElement();
       if ( !foot.isNull() )
       {
-        QDomElement left = foot.namedItem( "left" ).toElement();
+        KoXmlElement left = foot.namedItem( "left" ).toElement();
         if ( !left.isNull() )
           fleft = left.text();
-        QDomElement center = foot.namedItem( "center" ).toElement();
+        KoXmlElement center = foot.namedItem( "center" ).toElement();
         if ( !center.isNull() )
           fcenter = center.text();
-        QDomElement right = foot.namedItem( "right" ).toElement();
+        KoXmlElement right = foot.namedItem( "right" ).toElement();
         if ( !right.isNull() )
           fright = right.text();
       }
@@ -6029,7 +6044,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     }
 
       // load print range
-      QDomElement printrange = sheet.namedItem( "printrange-rect" ).toElement();
+      KoXmlElement printrange = sheet.namedItem( "printrange-rect" ).toElement();
       if ( !printrange.isNull() )
       {
         int left = printrange.attribute( "left-rect" ).toInt();
@@ -6080,10 +6095,10 @@ bool Sheet::loadXML( const QDomElement& sheet )
       }
 
     // Load the cells
-    QDomNode n = sheet.firstChild();
+    KoXmlNode n = sheet.firstChild();
     while( !n.isNull() )
     {
-        QDomElement e = n.toElement();
+        KoXmlElement e = n.toElement();
         if ( !e.isNull() )
         {
             QString tagName=e.tagName();
@@ -6140,7 +6155,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
 
     // load print repeat columns
-    QDomElement printrepeatcolumns = sheet.namedItem( "printrepeatcolumns" ).toElement();
+    KoXmlElement printrepeatcolumns = sheet.namedItem( "printrepeatcolumns" ).toElement();
     if ( !printrepeatcolumns.isNull() )
     {
         int left = printrepeatcolumns.attribute( "left" ).toInt();
@@ -6149,7 +6164,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     }
 
     // load print repeat rows
-    QDomElement printrepeatrows = sheet.namedItem( "printrepeatrows" ).toElement();
+    KoXmlElement printrepeatrows = sheet.namedItem( "printrepeatrows" ).toElement();
     if ( !printrepeatrows.isNull() )
     {
         int top = printrepeatrows.attribute( "top" ).toInt();

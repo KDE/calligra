@@ -436,10 +436,10 @@ QDomElement Conditions::saveConditions( QDomDocument & doc ) const
   }
 }
 
-void Conditions::loadOasisConditions( const QDomElement & element )
+void Conditions::loadOasisConditions( const KoXmlElement & element )
 {
-    kDebug()<<"void Conditions::loadOasisConditions( const QDomElement & element )\n";
-    QDomElement elementItem( element );
+    kDebug()<<"void Conditions::loadOasisConditions( const KoXmlElement & element )\n";
+    KoXmlElement elementItem( element );
     StyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
     while ( !elementItem.isNull() )
@@ -582,9 +582,10 @@ void Conditions::loadOasisValidationValue( const QStringList &listVal, Condition
 }
 
 
-void Conditions::loadConditions( const QDomElement & element )
+void Conditions::loadConditions( const KoXmlElement & element )
 {
-  QDomNodeList nodeList = element.childNodes();
+#ifdef KOXML_USE_QDOM
+  KoXmlNodeList nodeList = element.childNodes();
   Conditional newCondition;
   bool ok;
   StyleManager * manager = m_cell->sheet()->doc()->styleManager();
@@ -597,7 +598,7 @@ void Conditions::loadConditions( const QDomElement & element )
     newCondition.fontcond  = 0;
     newCondition.colorcond = 0;
 
-    QDomElement conditionElement = nodeList.item( i ).toElement();
+    KoXmlElement conditionElement = nodeList.item( i ).toElement();
 
     ok = conditionElement.hasAttribute( "cond" );
 
@@ -624,7 +625,7 @@ void Conditions::loadConditions( const QDomElement & element )
     if ( conditionElement.hasAttribute( "color" ) )
       newCondition.colorcond = new QColor( conditionElement.attribute( "color" ) );
 
-    QDomElement font = conditionElement.namedItem( "font" ).toElement();
+    KoXmlElement font = conditionElement.namedItem( "font" ).toElement();
     if ( !font.isNull() )
       newCondition.fontcond = new QFont( util_toFont( font ) );
 
@@ -645,6 +646,10 @@ void Conditions::loadConditions( const QDomElement & element )
       kDebug(36001) << "Error loading condition " << conditionElement.nodeName()<< endl;
     }
   }
+#else
+#warning Problem with KoXmlReader conversion!
+  kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
 }
 
 bool Conditions::operator==( const Conditions& other ) const

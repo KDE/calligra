@@ -26,6 +26,7 @@
 #include <QStringList>
 
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 
 class KoStore;
 class KoOasisLoadingContext;
@@ -98,12 +99,12 @@ public:
   /**
    * \ingroup OpenDocument
    */
-  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext );
+  bool loadOasis( const KoXmlElement& mymap, KoOasisLoadingContext& oasisContext );
 
   /**
    * \ingroup NativeFormat
    */
-  bool loadXML( const QDomElement& mymap );
+  bool loadXML( const KoXmlElement& mymap );
 
   /**
    * \ingroup NativeFormat

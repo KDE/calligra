@@ -67,7 +67,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     m_oasisStyles.clear();
 
     // loading default style first
-    const QDomElement* defStyle = oasisStyles.defaultStyle( "table-cell" );
+    const KoXmlElement* defStyle = oasisStyles.defaultStyle( "table-cell" );
     if ( defStyle )
     {
       kDebug() << "StyleManager: Loading default cell style" << endl;
@@ -81,7 +81,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 
     uint nStyles = oasisStyles.userStyles().count();
     for (unsigned int item = 0; item < nStyles; item++) {
-        QDomElement styleElem = oasisStyles.userStyles()[item];
+        KoXmlElement styleElem = oasisStyles.userStyles()[item];
 
         // assume the name assigned by the application
         const QString oasisName = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
@@ -137,9 +137,9 @@ QDomElement StyleManager::save( QDomDocument & doc )
   return styles;
 }
 
-bool StyleManager::loadXML( QDomElement const & styles )
+bool StyleManager::loadXML( KoXmlElement const & styles )
 {
-  QDomElement e = styles.firstChild().toElement();
+  KoXmlElement e = styles.firstChild().toElement();
   while ( !e.isNull() )
   {
     QString name;
@@ -335,7 +335,7 @@ QStringList StyleManager::styleNames() const
 
 Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
 {
-  Q3DictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
+  Q3DictIterator<KoXmlElement> it( oasisStyles.styles("table-cell") );
   Styles autoStyles;
   for (;it.current();++it)
   {

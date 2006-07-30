@@ -24,6 +24,7 @@
 #include <QStringList>
 
 #include <KoPoint.h>
+#include <KoXmlReader.h>
 
 namespace KSpread
 {
@@ -37,8 +38,8 @@ public:
     ~LoadingInfo() {}
     void addWordInAreaList( const QString & word) { m_areaNamed.append( word ); }
     bool findWordInAreaList(const QString & word) const { return (m_areaNamed.indexOf( word ) != -1);}
-    void appendValidation( const QString &name, const QDomElement &element){ m_validationList.insert( name, element);}
-    QDomElement validation( const QString &name) { return m_validationList[name];}
+    void appendValidation( const QString &name, const KoXmlElement &element){ m_validationList.insert( name, element);}
+    KoXmlElement validation( const QString &name) { return m_validationList[name];}
 
     /**
      * @return the cursor positions
@@ -69,7 +70,7 @@ public:
 
 private:
     QStringList m_areaNamed;
-    QMap<QString,QDomElement> m_validationList;
+    QMap<QString,KoXmlElement> m_validationList;
     QMap<Sheet*, QPoint> m_cursorPositions;
     QMap<Sheet*, KoPoint> m_scrollingOffsets;
     bool m_loadTemplate;

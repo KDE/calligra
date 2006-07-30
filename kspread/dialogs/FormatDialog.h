@@ -34,6 +34,7 @@
 #include <QFont>
 //Added by qt3to4:
 #include <QLabel>
+#include <KoXmlReader.h>
 
 class QComboBox;
 class QLabel;
@@ -60,7 +61,7 @@ private slots:
     void slotOk();
 
 private:
-    bool parseXML( const QDomDocument& doc );
+    bool parseXML( const KoXmlDocument& doc );
 
     QComboBox* m_combo;
     QLabel* m_label;

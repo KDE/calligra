@@ -182,7 +182,7 @@ bool Style::operator == (const Style& style) const
   return true;
 }
 
-void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element )
+void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & element )
 {
   // NOTE Stefan: Don't fill the style stack with the parent styles!
   KoStyleStack styleStack;
@@ -197,7 +197,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
   loadOasisDataStyle( oasisStyles, element );
 }
 
-void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const QDomElement& element )
+void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element )
 {
   QString str;
   if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
@@ -207,7 +207,7 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const QDomElement& e
 //     kDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
 //     kDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
 
-    const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name" );
+    const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name", QString() );
     if ( oasisStyles.dataFormats().contains(styleName) )
     {
       const KoOasisStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
@@ -442,7 +442,7 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
   {
     kDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
-    const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
+    const KoXmlElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
     kDebug()<<" style :"<<style<<endl;
     if ( style )
     {
@@ -1436,7 +1436,7 @@ void Style::saveXML( QDomDocument & doc, QDomElement & format ) const
   }
 }
 
-bool Style::loadXML( QDomElement & format )
+bool Style::loadXML( KoXmlElement & format )
 {
   bool ok;
   if ( format.hasAttribute( "type" ) )
@@ -1590,7 +1590,7 @@ bool Style::loadXML( QDomElement & format )
   }
 
   // TODO: remove that...
-  QDomElement font = format.namedItem( "font" ).toElement();
+  KoXmlElement font = format.namedItem( "font" ).toElement();
   if ( !font.isNull() )
   {
     QFont f( util_toFont( font ) );
@@ -1653,7 +1653,7 @@ bool Style::loadXML( QDomElement & format )
 	m_featuresSet |= SBackgroundBrush;
   }
 
-  QDomElement pen = format.namedItem( "pen" ).toElement();
+  KoXmlElement pen = format.namedItem( "pen" ).toElement();
   if ( !pen.isNull() )
   {
     m_textPen = util_toPen( pen );
@@ -1661,10 +1661,10 @@ bool Style::loadXML( QDomElement & format )
 	m_featuresSet |= STextPen;
   }
 
-  QDomElement left = format.namedItem( "left-border" ).toElement();
+  KoXmlElement left = format.namedItem( "left-border" ).toElement();
   if ( !left.isNull() )
   {
-    QDomElement pen = left.namedItem( "pen" ).toElement();
+    KoXmlElement pen = left.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
       m_leftBorderPen = util_toPen( pen );
@@ -1673,10 +1673,10 @@ bool Style::loadXML( QDomElement & format )
     }
   }
 
-  QDomElement top = format.namedItem( "top-border" ).toElement();
+  KoXmlElement top = format.namedItem( "top-border" ).toElement();
   if ( !top.isNull() )
   {
-    QDomElement pen = top.namedItem( "pen" ).toElement();
+    KoXmlElement pen = top.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
       m_topBorderPen = util_toPen( pen );
@@ -1685,10 +1685,10 @@ bool Style::loadXML( QDomElement & format )
     }
   }
 
-  QDomElement right = format.namedItem( "right-border" ).toElement();
+  KoXmlElement right = format.namedItem( "right-border" ).toElement();
   if ( !right.isNull() )
   {
-    QDomElement pen = right.namedItem( "pen" ).toElement();
+    KoXmlElement pen = right.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
       m_rightBorderPen = util_toPen( pen );
@@ -1697,10 +1697,10 @@ bool Style::loadXML( QDomElement & format )
     }
   }
 
-  QDomElement bottom = format.namedItem( "bottom-border" ).toElement();
+  KoXmlElement bottom = format.namedItem( "bottom-border" ).toElement();
   if ( !bottom.isNull() )
   {
-    QDomElement pen = bottom.namedItem( "pen" ).toElement();
+    KoXmlElement pen = bottom.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
       m_bottomBorderPen = util_toPen( pen );
@@ -1709,10 +1709,10 @@ bool Style::loadXML( QDomElement & format )
     }
   }
 
-  QDomElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
+  KoXmlElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
   if ( !fallDiagonal.isNull() )
   {
-    QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
+    KoXmlElement pen = fallDiagonal.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
       m_fallDiagonalPen = util_toPen( pen );
@@ -1721,10 +1721,10 @@ bool Style::loadXML( QDomElement & format )
     }
   }
 
-  QDomElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
+  KoXmlElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
   if ( !goUpDiagonal.isNull() )
   {
-    QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
+    KoXmlElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
       m_goUpDiagonalPen = util_toPen( pen );
@@ -2734,7 +2734,7 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
         return mainStyles.lookup( style, "custom-style" );
 }
 
-void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const QDomElement& style, const QString & name )
+void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& style, const QString & name )
 {
     setName (name);
     if ( style.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
@@ -2765,7 +2765,7 @@ void CustomStyle::save( QDomDocument & doc, QDomElement & styles )
   styles.appendChild( style );
 }
 
-bool CustomStyle::loadXML( QDomElement const & style, QString const & name )
+bool CustomStyle::loadXML( KoXmlElement const & style, QString const & name )
 {
   setName (name);
 
@@ -2780,7 +2780,7 @@ bool CustomStyle::loadXML( QDomElement const & style, QString const & name )
   if ( !ok )
     return false;
 
-  QDomElement f( style.namedItem( "format" ).toElement() );
+  KoXmlElement f( style.namedItem( "format" ).toElement() );
   if ( !f.isNull() )
     if ( !Style::loadXML( f ) )
       return false;

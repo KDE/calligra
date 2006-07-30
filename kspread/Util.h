@@ -27,6 +27,7 @@
 #include <QLinkedList>
 
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 
 #include "Global.h"
 #include "Value.h"
@@ -337,12 +338,12 @@ QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomD
 /**
  * \ingroup NativeFormat
  */
-QFont       util_toFont( QDomElement & element );
+QFont       util_toFont( KoXmlElement & element );
 
 /**
  * \ingroup NativeFormat
  */
-QPen        util_toPen( QDomElement & element );
+QPen        util_toPen( KoXmlElement & element );
 // TODO Stefan: used nowhere
 int         util_penCompare( QPen const & pen1, QPen const & pen2 );
 

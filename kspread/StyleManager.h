@@ -21,6 +21,7 @@
 #define __kspread_style_manager__
 
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 
 #include <Style.h>
 
@@ -44,7 +45,7 @@ class KSPREAD_EXPORT StyleManager
   ~StyleManager();
 
   QDomElement save( QDomDocument & doc );
-  bool loadXML( QDomElement const & styles );
+  bool loadXML( KoXmlElement const & styles );
 
   void saveOasis( KoGenStyles &mainStyles );
   void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles );

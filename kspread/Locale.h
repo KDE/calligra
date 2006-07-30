@@ -22,6 +22,7 @@
 #define KSPREAD_LOCALE_H
 
 #include <klocale.h>
+#include <KoXmlReader.h>
 
 class QDomElement;
 class QDomDocument;
@@ -34,7 +35,7 @@ class Locale : public KLocale
 public:
     Locale();
 
-    void load( const QDomElement& element );
+    void load( const KoXmlElement& element );
     QDomElement save( QDomDocument& doc ) const;
     void defaultSystemConfig();
 };

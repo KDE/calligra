@@ -129,7 +129,7 @@ QDomElement KSpread::util_createElement( const QString & tagname, const QPen & p
   return e;
 }
 
-QFont KSpread::util_toFont( QDomElement & element )
+QFont KSpread::util_toFont( KoXmlElement & element )
 {
   QFont f;
   f.setFamily( element.attribute( "family" ) );
@@ -167,7 +167,7 @@ QFont KSpread::util_toFont( QDomElement & element )
   return f;
 }
 
-QPen KSpread::util_toPen( QDomElement & element )
+QPen KSpread::util_toPen( KoXmlElement & element )
 {
   bool ok;
   QPen p;

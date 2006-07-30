@@ -25,6 +25,7 @@
 #include <QLinkedList>
 
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 
 class QColor;
 class QDomDocument;
@@ -115,9 +116,9 @@ class Conditions
    * Takes a parsed DOM element and recreates the conditions structure out of
    * it
    */
-  void loadConditions( const QDomElement & element );
+  void loadConditions( const KoXmlElement & element );
 
-  void loadOasisConditions( const QDomElement & element );
+  void loadOasisConditions( const KoXmlElement & element );
 
     void saveOasisConditions( KoGenStyle &currentCellStyle );
 

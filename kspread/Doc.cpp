@@ -468,6 +468,7 @@ QDomDocument Doc::saveXML()
         }
     }
 
+#ifdef KOXML_USE_QDOM
     SavedDocParts::const_iterator iter = d->savedDocParts.begin();
     SavedDocParts::const_iterator end  = d->savedDocParts.end();
     while ( iter != end )
@@ -476,6 +477,10 @@ QDomDocument Doc::saveXML()
       spread.appendChild( iter.value() );
       ++iter;
     }
+#else
+#warning Problem with KoXmlReader conversion!
+    kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
 
     QDomElement defaults = doc.createElement( "defaults" );
     defaults.setAttribute( "row-height", Format::globalRowHeight() );
@@ -725,7 +730,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     return true;
 }
 
-void Doc::loadOasisSettings( const QDomDocument&settingsDoc )
+void Doc::loadOasisSettings( const KoXmlDocument&settingsDoc )
 {
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
@@ -847,7 +852,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     delete stylesWriter;;
 }
 
-bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store)
+bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const KoXmlDocument& settings, KoStore* store)
 {
     if ( !d->loadingInfo )
         d->loadingInfo = new LoadingInfo;
@@ -861,20 +866,20 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 
     d->refs.clear();
 
-    QDomElement content = doc.documentElement();
-    QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement content = doc.documentElement();
+    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ));
         deleteLoadingInfo();
         return false;
     }
-    QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
+    KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
 
     if ( body.isNull() )
     {
         kError(32001) << "No office:spreadsheet found!" << endl;
-        QDomElement childElem;
+        KoXmlElement childElem;
         QString localName;
         forEachElement( childElem, realBody ) {
             localName = childElem.localName();
@@ -893,7 +898,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     styleManager()->loadOasisStyleTemplate( oasisStyles );
 
     // load default column style
-    const QDomElement* defaultColumnStyle = oasisStyles.defaultStyle( "table-column" );
+    const KoXmlElement* defaultColumnStyle = oasisStyles.defaultStyle( "table-column" );
     if ( defaultColumnStyle )
     {
 //       kDebug() << "style:default-style style:family=\"table-column\"" << endl;
@@ -912,7 +917,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     }
 
     // load default row style
-    const QDomElement* defaultRowStyle = oasisStyles.defaultStyle( "table-row" );
+    const KoXmlElement* defaultRowStyle = oasisStyles.defaultStyle( "table-row" );
     if ( defaultRowStyle )
     {
 //       kDebug() << "style:default-style style:family=\"table-row\"" << endl;
@@ -955,7 +960,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     return true;
 }
 
-bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
+bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
 {
   QTime dt;
   dt.start();
@@ -964,7 +969,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   d->isLoading = true;
   d->spellListIgnoreAll.clear();
   // <spreadsheet>
-  QDomElement spread = doc.documentElement();
+  KoXmlElement spread = doc.documentElement();
 
   if ( spread.attribute( "mime" ) != "application/x-kspread" && spread.attribute( "mime" ) != "application/vnd.kde.kspread" )
   {
@@ -988,13 +993,13 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   }
 
   // <locale>
-  QDomElement loc = spread.namedItem( "locale" ).toElement();
+  KoXmlElement loc = spread.namedItem( "locale" ).toElement();
   if ( !loc.isNull() )
       ((Locale *) locale())->load( loc );
 
   emit sigProgress( 5 );
 
-  QDomElement defaults = spread.namedItem( "defaults" ).toElement();
+  KoXmlElement defaults = spread.namedItem( "defaults" ).toElement();
   if ( !defaults.isNull() )
   {
     bool ok = false;
@@ -1013,14 +1018,14 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
 
   d->refs.clear();
   //<areaname >
-  QDomElement areaname = spread.namedItem( "areaname" ).toElement();
+  KoXmlElement areaname = spread.namedItem( "areaname" ).toElement();
   if ( !areaname.isNull())
     loadAreaName(areaname);
 
-  QDomElement ignoreAll = spread.namedItem( "SPELLCHECKIGNORELIST").toElement();
+  KoXmlElement ignoreAll = spread.namedItem( "SPELLCHECKIGNORELIST").toElement();
   if ( !ignoreAll.isNull())
   {
-      QDomElement spellWord=spread.namedItem("SPELLCHECKIGNORELIST").toElement();
+      KoXmlElement spellWord=spread.namedItem("SPELLCHECKIGNORELIST").toElement();
 
       spellWord=spellWord.firstChild().toElement();
       while ( !spellWord.isNull() )
@@ -1038,7 +1043,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   qDeleteAll(map()->sheetList());
   map()->sheetList().clear();
 
-  QDomElement styles = spread.namedItem( "styles" ).toElement();
+  KoXmlElement styles = spread.namedItem( "styles" ).toElement();
   if ( !styles.isNull() )
   {
     if ( !styleManager()->loadXML( styles ) )
@@ -1050,7 +1055,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   }
 
   // <map>
-  QDomElement mymap = spread.namedItem( "map" ).toElement();
+  KoXmlElement mymap = spread.namedItem( "map" ).toElement();
   if ( mymap.isNull() )
   {
       setErrorMessage( i18n("Invalid document. No map tag.") );
@@ -1066,7 +1071,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   //Backwards compatibility with older versions for paper layout
   if ( d->syntaxVersion < 1 )
   {
-    QDomElement paper = spread.namedItem( "paper" ).toElement();
+    KoXmlElement paper = spread.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
     {
       loadPaper( paper );
@@ -1075,7 +1080,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
 
   emit sigProgress( 85 );
 
-  QDomElement element( spread.firstChild().toElement() );
+  KoXmlElement element( spread.firstChild().toElement() );
   while ( !element.isNull() )
   {
     QString tagName( element.tagName() );
@@ -1085,7 +1090,12 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
          && tagName != "paper" )
     {
       // belongs to a plugin, load it and save it for later use
+#ifdef KOXML_USE_QDOM
       d->savedDocParts[ tagName ] = element;
+#else
+#warning Problem with KoXmlReader conversion!
+      kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
     }
 
     element = element.nextSibling().toElement();
@@ -1102,14 +1112,14 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   return true;
 }
 
-void Doc::loadPaper( QDomElement const & paper )
+void Doc::loadPaper( KoXmlElement const & paper )
 {
   // <paper>
   QString format = paper.attribute( "format" );
   QString orientation = paper.attribute( "orientation" );
 
   // <borders>
-  QDomElement borders = paper.namedItem( "borders" ).toElement();
+  KoXmlElement borders = paper.namedItem( "borders" ).toElement();
   if ( !borders.isNull() )
   {
     float left = borders.attribute( "left" ).toFloat();
@@ -1128,30 +1138,30 @@ void Doc::loadPaper( QDomElement const & paper )
   QString hleft, hright, hcenter;
   QString fleft, fright, fcenter;
   // <head>
-  QDomElement head = paper.namedItem( "head" ).toElement();
+  KoXmlElement head = paper.namedItem( "head" ).toElement();
   if ( !head.isNull() )
   {
-    QDomElement left = head.namedItem( "left" ).toElement();
+    KoXmlElement left = head.namedItem( "left" ).toElement();
     if ( !left.isNull() )
       hleft = left.text();
-    QDomElement center = head.namedItem( "center" ).toElement();
+    KoXmlElement center = head.namedItem( "center" ).toElement();
     if ( !center.isNull() )
       hcenter = center.text();
-    QDomElement right = head.namedItem( "right" ).toElement();
+    KoXmlElement right = head.namedItem( "right" ).toElement();
     if ( !right.isNull() )
       hright = right.text();
   }
   // <foot>
-  QDomElement foot = paper.namedItem( "foot" ).toElement();
+  KoXmlElement foot = paper.namedItem( "foot" ).toElement();
   if ( !foot.isNull() )
   {
-    QDomElement left = foot.namedItem( "left" ).toElement();
+    KoXmlElement left = foot.namedItem( "left" ).toElement();
     if ( !left.isNull() )
       fleft = left.text();
-    QDomElement center = foot.namedItem( "center" ).toElement();
+    KoXmlElement center = foot.namedItem( "center" ).toElement();
     if ( !center.isNull() )
       fcenter = center.text();
-    QDomElement right = foot.namedItem( "right" ).toElement();
+    KoXmlElement right = foot.namedItem( "right" ).toElement();
     if ( !right.isNull() )
       fright = right.text();
   }
@@ -1190,12 +1200,16 @@ bool Doc::completeLoading( KoStore* /* _store */ )
 
 bool Doc::docData( QString const & xmlTag, QDomElement & data )
 {
+#ifdef KOXML_USE_QDOM
   SavedDocParts::iterator iter = d->savedDocParts.find( xmlTag );
   if ( iter == d->savedDocParts.end() )
     return false;
-
   data = iter.value();
   d->savedDocParts.erase( iter );
+#else
+#warning Problem with KoXmlReader conversion!
+  kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
 
   return true;
 }
@@ -1887,19 +1901,19 @@ QDomElement Doc::saveAreaName( QDomDocument& doc )
    return element;
 }
 
-void Doc::loadOasisCellValidation( const QDomElement&body )
+void Doc::loadOasisCellValidation( const KoXmlElement&body )
 {
-    QDomNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
-    kDebug()<<"void Doc::loadOasisCellValidation( const QDomElement&body ) \n";
+    KoXmlNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
+    kDebug()<<"void Doc::loadOasisCellValidation( const KoXmlElement&body ) \n";
     kDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
     if ( !validation.isNull() )
     {
-        QDomNode n = validation.firstChild();
+        KoXmlNode n = validation.firstChild();
         for( ; !n.isNull(); n = n.nextSibling() )
         {
             if ( n.isElement() )
             {
-                QDomElement element = n.toElement();
+                KoXmlElement element = n.toElement();
                 //kDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
                 if ( element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table ) {
                     d->loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString::null ), element );
@@ -1933,17 +1947,17 @@ void Doc::saveOasisAreaName( KoXmlWriter & xmlWriter )
     }
 }
 
-void Doc::loadOasisAreaName( const QDomElement& body )
+void Doc::loadOasisAreaName( const KoXmlElement& body )
 {
-    kDebug()<<"void Doc::loadOasisAreaName( const QDomElement& body ) \n";
-    QDomNode namedAreas = KoDom::namedItemNS( body, KoXmlNS::table, "named-expressions" );
+    kDebug()<<"void Doc::loadOasisAreaName( const KoXmlElement& body ) \n";
+    KoXmlNode namedAreas = KoDom::namedItemNS( body, KoXmlNS::table, "named-expressions" );
     if ( !namedAreas.isNull() )
     {
         kDebug()<<" area name exist \n";
-        QDomNode area = namedAreas.firstChild();
+        KoXmlNode area = namedAreas.firstChild();
         while ( !area.isNull() )
         {
-            QDomElement e = area.toElement();
+            KoXmlElement e = area.toElement();
             if ( e.isNull() || !e.hasAttributeNS( KoXmlNS::table, "name" ) || !e.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
             {
                 kDebug() << "Reading in named area failed" << endl;
@@ -1981,9 +1995,9 @@ void Doc::loadOasisAreaName( const QDomElement& body )
     }
 }
 
-void Doc::loadAreaName( const QDomElement& element )
+void Doc::loadAreaName( const KoXmlElement& element )
 {
-  QDomElement tmp=element.firstChild().toElement();
+  KoXmlElement tmp=element.firstChild().toElement();
   for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
   {
     if ( tmp.tagName() == "reference" )
@@ -1994,17 +2008,17 @@ void Doc::loadAreaName( const QDomElement& element )
         int right=0;
         int top=0;
         int bottom=0;
-        QDomElement sheetName = tmp.namedItem( "tabname" ).toElement();
+        KoXmlElement sheetName = tmp.namedItem( "tabname" ).toElement();
         if ( !sheetName.isNull() )
         {
           tabname=sheetName.text();
         }
-        QDomElement referenceName = tmp.namedItem( "refname" ).toElement();
+        KoXmlElement referenceName = tmp.namedItem( "refname" ).toElement();
         if ( !referenceName.isNull() )
         {
           refname=referenceName.text();
         }
-        QDomElement rect =tmp.namedItem( "rect" ).toElement();
+        KoXmlElement rect =tmp.namedItem( "rect" ).toElement();
         if (!rect.isNull())
         {
           bool ok;

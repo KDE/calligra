@@ -33,6 +33,7 @@
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
+#include <KoXmlReader.h>
 
 //#include "AutoFill.h"
 #include "Cell.h"
@@ -208,16 +209,16 @@ public:
     /**
      * Loads the sheet and all it's children in XML format
      */
-    virtual bool loadXML( const QDomElement& );
+    virtual bool loadXML( const KoXmlElement& );
 
-    virtual bool loadOasis( const QDomElement& sheet,
+    virtual bool loadOasis( const KoXmlElement& sheet,
                             KoOasisLoadingContext& oasisContext,
                             const Styles& styleMap );
 
     virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* manifestWriter, int & indexObj, int &partIndexObj );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
 
-    void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
+    void loadOasisObjects( const KoXmlElement& e, KoOasisLoadingContext& oasisContext );
     void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
     void saveOasisPrintStyleLayout( KoGenStyle &style ) const;
@@ -950,12 +951,12 @@ public:
     * insertTo used just for insert/paste an area
      * @see paste
      */
-    bool loadSelection( const QDomDocument& doc, const QRect &pasteArea,
+    bool loadSelection( const KoXmlDocument& doc, const QRect &pasteArea,
                         int _xshift, int _yshift, bool makeUndo,
                         Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
                         bool insert = false, int insertTo = 0, bool paste = false );
 
-    void loadSelectionUndo( const QDomDocument & doc, const QRect &loadArea,
+    void loadSelectionUndo( const KoXmlDocument & doc, const QRect &loadArea,
                             int _xshift, int _yshift,bool insert,int insertTo);
 
     /**
@@ -1275,7 +1276,7 @@ protected:
      */
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
-    bool loadRowFormat( const QDomElement& row, int &rowIndex,
+    bool loadRowFormat( const KoXmlElement& row, int &rowIndex,
                         KoOasisLoadingContext& oasisContext,
                         const Styles& styleMap );
 
@@ -1283,10 +1284,10 @@ protected:
      * Loads the properties of a column from a table:table-column element in an OASIS XML file
      * defaultColumnCellStyles is a map from column indicies to the default cell style for that column
      */
-    bool loadColumnFormat(const QDomElement& row,
+    bool loadColumnFormat(const KoXmlElement& row,
                           const KoOasisStyles& oasisStyles, int & indexCol,
                           const Styles& styleMap);
-    bool loadSheetStyleFormat( QDomElement *style );
+    bool loadSheetStyleFormat( KoXmlElement *style );
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 
     QString saveOasisSheetStyleName( KoGenStyles &mainStyles );
@@ -1299,7 +1300,7 @@ protected:
     void maxRowCols( int & maxCols, int & maxRows );
     bool compareRows( int row1, int row2, int & maxCols ) const;
 
-    QString getPart( const QDomNode & part );
+    QString getPart( const KoXmlNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
 
     void insertObject( EmbeddedObject *_obj );

@@ -30,7 +30,7 @@ Locale::Locale()
 	insertCatalog("koffice");
 }
 
-void Locale::load( const QDomElement& element )
+void Locale::load( const KoXmlElement& element )
 {
     if ( element.hasAttribute( "weekStartsMonday" ) )
     {

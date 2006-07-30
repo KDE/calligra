@@ -485,7 +485,7 @@ QDomElement Format::save( QDomDocument & doc, int _col, int _row, bool force, bo
   return format;
 }
 
-bool Format::loadFormat( const QDomElement & f, Paste::Mode pm, bool paste )
+bool Format::loadFormat( const KoXmlElement & f, Paste::Mode pm, bool paste )
 {
     if ( f.hasAttribute( "style-name" ) )
     {
@@ -647,60 +647,60 @@ bool Format::loadFormat( const QDomElement & f, Paste::Mode pm, bool paste )
     if ( f.hasAttribute( "brushcolor" ) )
         setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
 
-    QDomElement pen( f.namedItem( "pen" ).toElement() );
+    KoXmlElement pen( f.namedItem( "pen" ).toElement() );
     if ( !pen.isNull() )
         setTextPen( util_toPen( pen ) );
 
-    QDomElement font( f.namedItem( "font" ).toElement() );
+    KoXmlElement font( f.namedItem( "font" ).toElement() );
     if ( !font.isNull() )
         setTextFont( util_toFont( font ) );
 
     if ( ( pm != Paste::NoBorder ) && ( pm != Paste::Text ) && ( pm != Paste::Comment ) )
     {
-        QDomElement left( f.namedItem( "left-border" ).toElement() );
+        KoXmlElement left( f.namedItem( "left-border" ).toElement() );
         if ( !left.isNull() )
         {
-            QDomElement pen( left.namedItem( "pen" ).toElement() );
+            KoXmlElement pen( left.namedItem( "pen" ).toElement() );
             if ( !pen.isNull() )
                 setLeftBorderPen( util_toPen( pen ) );
         }
 
-        QDomElement top( f.namedItem( "top-border" ).toElement() );
+        KoXmlElement top( f.namedItem( "top-border" ).toElement() );
         if ( !top.isNull() )
         {
-            QDomElement pen( top.namedItem( "pen" ).toElement() );
+            KoXmlElement pen( top.namedItem( "pen" ).toElement() );
             if ( !pen.isNull() )
                 setTopBorderPen( util_toPen( pen ) );
         }
 
-        QDomElement right( f.namedItem( "right-border" ).toElement() );
+        KoXmlElement right( f.namedItem( "right-border" ).toElement() );
         if ( !right.isNull() )
         {
-            QDomElement pen( right.namedItem( "pen" ).toElement() );
+            KoXmlElement pen( right.namedItem( "pen" ).toElement() );
             if ( !pen.isNull() )
                 setRightBorderPen( util_toPen( pen ) );
         }
 
-        QDomElement bottom( f.namedItem( "bottom-border" ).toElement() );
+        KoXmlElement bottom( f.namedItem( "bottom-border" ).toElement() );
         if ( !bottom.isNull() )
         {
-            QDomElement pen( bottom.namedItem( "pen" ).toElement() );
+            KoXmlElement pen( bottom.namedItem( "pen" ).toElement() );
             if ( !pen.isNull() )
                 setBottomBorderPen( util_toPen( pen ) );
         }
 
-        QDomElement fallDiagonal( f.namedItem( "fall-diagonal" ).toElement() );
+        KoXmlElement fallDiagonal( f.namedItem( "fall-diagonal" ).toElement() );
         if ( !fallDiagonal.isNull() )
         {
-            QDomElement pen( fallDiagonal.namedItem( "pen" ).toElement() );
+            KoXmlElement pen( fallDiagonal.namedItem( "pen" ).toElement() );
             if ( !pen.isNull() )
                 setFallDiagonalPen( util_toPen( pen ) );
         }
 
-        QDomElement goUpDiagonal( f.namedItem( "up-diagonal" ).toElement() );
+        KoXmlElement goUpDiagonal( f.namedItem( "up-diagonal" ).toElement() );
         if ( !goUpDiagonal.isNull() )
         {
-            QDomElement pen( goUpDiagonal.namedItem( "pen" ).toElement() );
+            KoXmlElement pen( goUpDiagonal.namedItem( "pen" ).toElement() );
             if ( !pen.isNull() )
                 setGoUpDiagonalPen( util_toPen( pen ) );
         }
@@ -714,7 +714,7 @@ bool Format::loadFormat( const QDomElement & f, Paste::Mode pm, bool paste )
     return true;
 }
 
-bool Format::load( const QDomElement & f, Paste::Mode pm, bool paste )
+bool Format::load( const KoXmlElement & f, Paste::Mode pm, bool paste )
 {
     if ( !loadFormat( f, pm, paste ) )
         return false;
@@ -765,7 +765,7 @@ bool Format::loadFontOasisStyle( KoStyleStack & font )
     return true;
 }
 
-void Format::loadOasisStyle( /*const QDomElement& style,*/ KoOasisLoadingContext& /*context*/ )
+void Format::loadOasisStyle( /*const KoXmlElement& style,*/ KoOasisLoadingContext& /*context*/ )
 {
   /*QString str; // multi purpose string
   KoOasisStyles& oasisStyles = context.oasisStyles();
@@ -866,7 +866,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
 
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {
-        const QDomElement * font = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::style, "font-name" ) );
+        const KoXmlElement * font = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::style, "font-name" ) );
         if ( font )
         {
             styleStack.save();
@@ -1051,7 +1051,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
     {
         //kDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
-      const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
+      const KoXmlElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
       if ( style )
       {
         //kDebug()<<" style :"<<style<<endl;
@@ -2616,12 +2616,12 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
     return row;
 }
 
-bool RowFormat::loadOasis( const QDomElement& /*row*/, QDomElement * /*rowStyle*/ )
+bool RowFormat::loadOasis( const KoXmlElement& /*row*/, KoXmlElement * /*rowStyle*/ )
 {
     return true;
 }
 
-bool RowFormat::load( const QDomElement & row, int yshift, Paste::Mode sp, bool paste )
+bool RowFormat::load( const KoXmlElement & row, int yshift, Paste::Mode sp, bool paste )
 {
     bool ok;
 
@@ -2658,7 +2658,7 @@ bool RowFormat::load( const QDomElement & row, int yshift, Paste::Mode sp, bool 
            return false;
     }
 
-    QDomElement f( row.namedItem( "format" ).toElement() );
+    KoXmlElement f( row.namedItem( "format" ).toElement() );
 
     if ( !f.isNull() && ( sp == Paste::Normal || sp == Paste::Format || sp == Paste::NoBorder ) )
     {
@@ -2875,7 +2875,7 @@ QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
   return col;
 }
 
-bool ColumnFormat::load( const QDomElement & col, int xshift, Paste::Mode sp, bool paste )
+bool ColumnFormat::load( const KoXmlElement & col, int xshift, Paste::Mode sp, bool paste )
 {
     bool ok;
     if ( col.hasAttribute( "width" ) )
@@ -2912,7 +2912,7 @@ bool ColumnFormat::load( const QDomElement & col, int xshift, Paste::Mode sp, bo
             return false;
     }
 
-    QDomElement f( col.namedItem( "format" ).toElement() );
+    KoXmlElement f( col.namedItem( "format" ).toElement() );
 
     if ( !f.isNull() && ( sp == Paste::Normal || sp == Paste::Format || sp == Paste::NoBorder ))
     {

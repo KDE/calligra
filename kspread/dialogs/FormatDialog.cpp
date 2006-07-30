@@ -159,7 +159,7 @@ void FormatDialog::slotOk()
 
     QFile file( xml );
     file.open( QIODevice::ReadOnly );
-    QDomDocument doc;
+    KoXmlDocument doc;
     doc.setContent( &file );
     file.close();
 
@@ -331,7 +331,7 @@ void FormatDialog::slotOk()
     accept();
 }
 
-bool FormatDialog::parseXML( const QDomDocument& doc )
+bool FormatDialog::parseXML( const KoXmlDocument& doc )
 {
     for( int i = 0; i < 16; ++i )
     {
@@ -339,7 +339,7 @@ bool FormatDialog::parseXML( const QDomDocument& doc )
 	m_cells[ i ] = 0;
     }
 
-    QDomElement e = doc.documentElement().firstChild().toElement();
+    KoXmlElement e = doc.documentElement().firstChild().toElement();
     for( ; !e.isNull(); e = e.nextSibling().toElement() )
     {
 	if ( e.tagName() == "cell" )

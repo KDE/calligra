@@ -95,13 +95,13 @@ void EmbeddedObject::resizeBy( double _dx, double _dy)
   m_geometry.setSize( KoSize( m_geometry.width()+_dx, m_geometry.height()+_dy) );
 } // call (possibly reimplemented) setSize
 
-bool EmbeddedObject::load( const QDomElement& /*element*/ )
+bool EmbeddedObject::load( const KoXmlElement& /*element*/ )
 {
     kDebug() << "Loading EmbeddedObject" << endl;
     return false;
 }
 
-void EmbeddedObject::loadOasis(const QDomElement &element, KoOasisLoadingContext & context )
+void EmbeddedObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context )
 {
   if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
     m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
@@ -413,7 +413,7 @@ const char * EmbeddedKOfficeObject::getOasisElementName() const
     return "draw:frame";
 }
 
-bool EmbeddedKOfficeObject::load( const QDomElement& element )
+bool EmbeddedKOfficeObject::load( const KoXmlElement& element )
 {
     kDebug() << "Loading EmbeddedKOfficeObject" << endl;
     bool result = embeddedObject()->load( element );
@@ -421,12 +421,12 @@ bool EmbeddedKOfficeObject::load( const QDomElement& element )
     return result;
 }
 
-void EmbeddedKOfficeObject::loadOasis(const QDomElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
+void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kDebug()<<"void EmbeddedKOfficeObject::loadOasis(const QDomElement &element)******************\n";
+    kDebug()<<"void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element)******************\n";
     EmbeddedObject::loadOasis( element, context );
 
-    QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
+    KoXmlElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     m_embeddedObject->loadOasis( element, objectElement );
     if( element.hasAttributeNS( KoXmlNS::draw, "name" ) )
         m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
@@ -574,7 +574,7 @@ const char * EmbeddedChart::getOasisElementName() const
     return "draw:frame";
 }
 
-bool EmbeddedChart::load( const QDomElement& element )
+bool EmbeddedChart::load( const KoXmlElement& element )
 {
     kDebug() << "Loading EmbeddedChart" << endl;
     if ( !EmbeddedKOfficeObject::load( element ) )
@@ -597,12 +597,12 @@ bool EmbeddedChart::load( const QDomElement& element )
     return true;
 }
 
-void EmbeddedChart::loadOasis(const QDomElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
+void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kDebug()<<"void EmbeddedChart::loadOasis(const QDomElement &element)******************\n";
+    kDebug()<<"void EmbeddedChart::loadOasis(const KoXmlElement &element)******************\n";
     EmbeddedKOfficeObject::loadOasis( element, context );
 
-    QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
+    KoXmlElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     QString str_range = objectElement.attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null);
 
     if ( !str_range.isNull() )
@@ -737,7 +737,7 @@ EmbeddedPictureObject::~EmbeddedPictureObject()
 {
 }
 
-bool EmbeddedPictureObject::load( const QDomElement& /*element*/ )
+bool EmbeddedPictureObject::load( const KoXmlElement& /*element*/ )
 {
     return false;
 }
@@ -983,12 +983,12 @@ void EmbeddedPictureObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles&
      saveOasisPictureElement( styleObjectAuto );
 }
 
-void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoadingContext & context/*, KPRLoadingInfo *info*/)
+void EmbeddedPictureObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context/*, KPRLoadingInfo *info*/)
 {
     //load it into kpresenter_doc
     EmbeddedObject::loadOasis( element, context );
     loadOasisPictureEffect( context );
-    QDomNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
+    KoXmlNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString::null) );
     kDebug()<<" href: "<<href<<endl;
     if ( !href.isEmpty() /*&& href[0] == '#'*/ )
@@ -1017,10 +1017,10 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 }
 
 
-// double EmbeddedPictureObject::load(const QDomElement &element)
+// double EmbeddedPictureObject::load(const KoXmlElement &element)
 // {
 //     double offset=KP2DObject::load(element);
-//     QDomElement e=element.namedItem("KEY").toElement();
+//     KoXmlElement e=element.namedItem("KEY").toElement();
 //     if(!e.isNull()) {
 //         KoPictureKey key;
 //         key.loadAttributes( e );

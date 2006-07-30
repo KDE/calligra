@@ -27,6 +27,7 @@
 #include <QPen>
 
 #include <koffice_export.h>
+#include <KoXmlReader.h>
 
 #include "Global.h"
 #include "Style.h"
@@ -110,13 +111,13 @@ public:
     //
     ////////////////////////////////
 
-    bool load( const QDomElement & f, Paste::Mode pm, bool paste = false );
-    bool loadFormat( const QDomElement & f, Paste::Mode pm = Paste::Normal, bool paste = false );
+    bool load( const KoXmlElement & f, Paste::Mode pm, bool paste = false );
+    bool loadFormat( const KoXmlElement & f, Paste::Mode pm = Paste::Normal, bool paste = false );
     QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
 
-    void loadOasisStyle(/* const QDomElement& element,*/ KoOasisLoadingContext& context );
+    void loadOasisStyle(/* const KoXmlElement& element,*/ KoOasisLoadingContext& context );
     bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
     bool loadFontOasisStyle( KoStyleStack & font );
     /**
@@ -456,8 +457,8 @@ public:
     DCOPObject* dcopObject();
 
     QDomElement save( QDomDocument&, int yshift = 0, bool copy = false ) const;
-    bool load( const QDomElement& row, int yshift = 0, Paste::Mode sp = Paste::Normal, bool paste = false );
-    bool loadOasis( const QDomElement& row, QDomElement * rowStyle );
+    bool load( const KoXmlElement& row, int yshift = 0, Paste::Mode sp = Paste::Normal, bool paste = false );
+    bool loadOasis( const KoXmlElement& row, KoXmlElement * rowStyle );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -592,7 +593,7 @@ public:
     ~ColumnFormat();
 
     QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;
-    bool load( const QDomElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
+    bool load( const KoXmlElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
     DCOPObject* dcopObject();
 
     /**

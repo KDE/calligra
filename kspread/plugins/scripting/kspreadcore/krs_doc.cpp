@@ -24,6 +24,8 @@
 #include <Map.h>
 #include <Sheet.h>
 
+#include <kdebug.h>
+
 namespace Kross { namespace KSpreadCore {
 
 Doc::Doc(KSpread::Doc* doc)
@@ -68,9 +70,14 @@ QStringList Doc::sheetNames()
 }
 
 bool Doc::loadNativeXML(const QString& xml) {
-	QDomDocument doc;
+	KoXmlDocument doc;
+#ifdef KOXML_USE_QDOM
 	if(! doc.setContent(xml, true))
 		return false;
+#else
+#warning Problem with KoXmlReader conversion!
+	kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
 	return m_doc->loadXML(0, doc);
 }
 

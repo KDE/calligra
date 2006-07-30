@@ -324,7 +324,7 @@ QDomElement Map::save( QDomDocument& doc )
   return mymap;
 }
 
-bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContext )
+bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisContext )
 {
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
@@ -338,14 +338,14 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
         d->strPassword = passwd;
     }
 
-    QDomNode sheetNode = KoDom::namedItemNS( body, KoXmlNS::table, "table" );
+    KoXmlNode sheetNode = KoDom::namedItemNS( body, KoXmlNS::table, "table" );
     // sanity check
     if ( sheetNode.isNull() ) return false;
 
     d->overallRowCount = 0;
     while ( !sheetNode.isNull() )
     {
-        QDomElement sheetElement = sheetNode.toElement();
+        KoXmlElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
             //kDebug()<<"  Map::loadOasis tableElement is not null \n";
@@ -356,7 +356,12 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
                 {
                     Sheet* sheet = addNewSheet();
                     sheet->setSheetName( sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
+#ifdef KOXML_USE_QDOM
                     d->overallRowCount += sheetElement.childNodes().count();
+#else
+#warning Problem with KoXmlReader conversion!
+                    kWarning() << "Problem with KoXmlReader conversion!" << endl;
+#endif
                 }
             }
         }
@@ -370,7 +375,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
     sheetNode = body.firstChild();
     while ( !sheetNode.isNull() )
     {
-        QDomElement sheetElement = sheetNode.toElement();
+        KoXmlElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
             //kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
@@ -401,7 +406,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
 }
 
 
-bool Map::loadXML( const QDomElement& mymap )
+bool Map::loadXML( const KoXmlElement& mymap )
 {
   QString activeSheet   = mymap.attribute( "activeTable" );
   d->initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
@@ -409,7 +414,7 @@ bool Map::loadXML( const QDomElement& mymap )
   d->initialXOffset      = mymap.attribute( "xOffset" ).toDouble();
   d->initialYOffset      = mymap.attribute( "yOffset" ).toDouble();
 
-  QDomNode n = mymap.firstChild();
+  KoXmlNode n = mymap.firstChild();
   if ( n.isNull() )
   {
       // We need at least one sheet !
@@ -418,7 +423,7 @@ bool Map::loadXML( const QDomElement& mymap )
   }
   while( !n.isNull() )
   {
-    QDomElement e = n.toElement();
+    KoXmlElement e = n.toElement();
     if ( !e.isNull() && e.tagName() == "table" )
     {
       Sheet *t = addNewSheet();

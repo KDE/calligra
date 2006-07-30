@@ -39,6 +39,8 @@
 #include <QLinkedList>
 #include <QList>
 
+#include <KoXmlReader.h>
+
 #include "Condition.h"
 #include "Global.h"
 
@@ -226,7 +228,7 @@ public:
     /**
      * \ingroup NativeFormat
      */
-    bool load( const QDomElement& cell,
+    bool load( const KoXmlElement& cell,
                int _xshift, int _yshift,
                Paste::Mode pm = Paste::Normal,
                Paste::Operation op = Paste::OverWrite,
@@ -278,11 +280,11 @@ public:
      * @param oasisContext The loading context assoiated with the XML element
      * @param style preloaded cell style
      */
-    bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext , Style* style);
+    bool loadOasis( const KoXmlElement & element, KoOasisLoadingContext &oasisContext , Style* style);
 
 
-    QTime toTime(const QDomElement &element);
-    QDate toDate(const QDomElement &element);
+    QTime toTime(const KoXmlElement &element);
+    QDate toDate(const KoXmlElement &element);
 
     /**
      * Copies the format from the Cell @p cell .
@@ -1053,12 +1055,12 @@ protected:
      * Load the text paragraphs from an OASIS XML cell description.
      * @param parent The DOM element representing the cell.
      */
-    void loadOasisCellText( const QDomElement& parent );
+    void loadOasisCellText( const KoXmlElement& parent );
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
+    void loadOasisObjects( const KoXmlElement& e, KoOasisLoadingContext& oasisContext );
 
     /**
      * \ingroup OpenDocument
@@ -1078,7 +1080,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisConditional( QDomElement * style );
+    void loadOasisConditional( KoXmlElement * style );
 
 private:
     class Extra;
@@ -1206,7 +1208,7 @@ private:
 
 
   /* helper functions to the load/save routines */
-  bool loadCellData(const QDomElement &text, Paste::Operation op);
+  bool loadCellData(const KoXmlElement &text, Paste::Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
                        QString str );
   int effAlignX();

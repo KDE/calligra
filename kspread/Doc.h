@@ -36,6 +36,7 @@
 #include <kglobalsettings.h>
 
 #include <KoDocument.h>
+#include <KoXmlReader.h>
 #include <KoZoomHandler.h>
 
 #include "Global.h"
@@ -484,7 +485,7 @@ public:
    * \ingroup NativeFormat
    * Main loading method.
    */
-  virtual bool loadXML( QIODevice *, const QDomDocument& doc );
+  virtual bool loadXML( QIODevice *, const KoXmlDocument& doc );
 
   /**
    * \ingroup NativeFormat
@@ -494,7 +495,7 @@ public:
   /**
    * \ingroup NativeFormat
    */
-  void loadAreaName( const QDomElement& element );
+  void loadAreaName( const KoXmlElement& element );
 
 
   bool savingWholeDocument();
@@ -534,8 +535,8 @@ public:
    * Main loading method.
    * @see Map::loadOasis
    */
-  virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
-                          const QDomDocument& settings, KoStore* );
+  virtual bool loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles,
+                          const KoXmlDocument& settings, KoStore* );
 
   /**
    * \ingroup OpenDocument
@@ -545,12 +546,12 @@ public:
   /**
    * \ingroup OpenDocument
    */
-  void loadOasisAreaName( const QDomElement& element );
+  void loadOasisAreaName( const KoXmlElement& element );
 
   /**
    * \ingroup OpenDocument
    */
-  void loadOasisCellValidation( const QDomElement&body );
+  void loadOasisCellValidation( const KoXmlElement&body );
 
 
   virtual int supportedSpecialFormats() const;
@@ -653,7 +654,7 @@ public:
   /**
    * @deprecated
    */
-  static QString getAttribute(const QDomElement &element, const char *attributeName, const QString &defaultValue)
+  static QString getAttribute(const KoXmlElement &element, const char *attributeName, const QString &defaultValue)
   {
     return element.attribute( attributeName, defaultValue );
   }
@@ -661,7 +662,7 @@ public:
   /**
    * @deprecated
    */
-  static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
+  static int getAttribute(const KoXmlElement &element, const char *attributeName, int defaultValue)
   {
     QString value;
     if ( ( value = element.attribute( attributeName ) ) != QString::null )
@@ -673,7 +674,7 @@ public:
   /**
    * @deprecated
    */
-  static double getAttribute(const QDomElement &element, const char *attributeName, double defaultValue)
+  static double getAttribute(const KoXmlElement &element, const char *attributeName, double defaultValue)
   {
     QString value;
       if ( ( value = element.attribute( attributeName ) ) != QString::null )
@@ -791,7 +792,7 @@ private:
                    View* view, const QRect &paintRegion,
                    const Sheet* sheet);
 
-  void loadPaper( QDomElement const & paper );
+  void loadPaper( KoXmlElement const & paper );
 
   /**
    * \ingroup OpenDocument
@@ -807,7 +808,7 @@ private:
    * The actual loading takes place in Map::loadOasisSettings.
    * @see Map::loadOasisSettings
    */
-  void loadOasisSettings( const QDomDocument&settingsDoc );
+  void loadOasisSettings( const KoXmlDocument&settingsDoc );
 
   /**
    * \ingroup OpenDocument

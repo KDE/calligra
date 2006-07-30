@@ -25,6 +25,7 @@
 #include <QFont>
 #include <QPen>
 
+#include <KoXmlReader.h>
 //#include "Format.h"
 
 class QDomDocument;
@@ -178,7 +179,7 @@ public:
   StyleType type() const { return m_type; }
 
   void saveXML( QDomDocument & doc, QDomElement & format ) const;
-  bool loadXML( QDomElement & format );
+  bool loadXML( KoXmlElement & format );
 
   /**
    * Saves an OASIS automatic style.
@@ -186,7 +187,7 @@ public:
    * @return always QString::null
    */
   virtual QString saveOasis( KoGenStyle& style, KoGenStyles& mainStyles);
-  void loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element );
+  void loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & element );
   static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
 
   /**
@@ -289,7 +290,7 @@ protected:
    */
   void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
 
-  void loadOasisDataStyle( KoOasisStyles& oasisStyles, const QDomElement& element );
+  void loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element );
   void loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
   void loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
   void loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
@@ -441,9 +442,9 @@ public:
    * @param style the DOM element defining the style
    * @param name the style's new name
    */
-  void loadOasis( KoOasisStyles& oasisStyles, const QDomElement & style, const QString & name );
+  void loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement & style, const QString & name );
 
-  bool loadXML( QDomElement const & style, QString const & name );
+  bool loadXML( KoXmlElement const & style, QString const & name );
 
   void setType( StyleType type ) { m_type = type; }
 
