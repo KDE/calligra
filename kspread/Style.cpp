@@ -1782,25 +1782,25 @@ bool Style::hasProperty( Properties p ) const
   FlagsSet f;
   switch( p )
   {
-   case SDontPrintText:
+   case PDontPrintText:
     f = SDontPrintText;
     break;
-   case SCustomFormat:
+   case PCustomFormat:
     f = SCustomFormat;
     break;
-   case SNotProtected:
+   case PNotProtected:
     f = SNotProtected;
     break;
-   case SHideAll:
+   case PHideAll:
     f = SHideAll;
     break;
-   case SHideFormula:
+   case PHideFormula:
     f = SHideFormula;
     break;
-   case SMultiRow:
+   case PMultiRow:
     f = SMultiRow;
     break;
-   case SVerticalText:
+   case PVerticalText:
     f = SVerticalText;
     break;
    default:
@@ -2469,25 +2469,25 @@ Style * Style::setProperty( Properties p )
     style->m_properties |= (uint) p;
     switch( p )
     {
-     case SDontPrintText:
+     case PDontPrintText:
       style->m_featuresSet |= SDontPrintText;
       break;
-     case SCustomFormat:
+     case PCustomFormat:
       style->m_featuresSet |= SCustomFormat;
       break;
-     case SNotProtected:
+     case PNotProtected:
       style->m_featuresSet |= SNotProtected;
       break;
-     case SHideAll:
+     case PHideAll:
       style->m_featuresSet |= SHideAll;
       break;
-     case SHideFormula:
+     case PHideFormula:
       style->m_featuresSet |= SHideFormula;
       break;
-     case SMultiRow:
+     case PMultiRow:
       style->m_featuresSet |= SMultiRow;
       break;
-     case SVerticalText:
+     case PVerticalText:
       style->m_featuresSet |= SVerticalText;
       break;
      default:
@@ -2499,25 +2499,25 @@ Style * Style::setProperty( Properties p )
   m_properties |= (uint) p;
   switch( p )
   {
-   case SDontPrintText:
+   case PDontPrintText:
     m_featuresSet |= SDontPrintText;
     break;
-   case SCustomFormat:
+   case PCustomFormat:
     m_featuresSet |= SCustomFormat;
     break;
-   case SNotProtected:
+   case PNotProtected:
      m_featuresSet |= SNotProtected;
     break;
-   case SHideAll:
+   case PHideAll:
     m_featuresSet |= SHideAll;
     break;
-   case SHideFormula:
+   case PHideFormula:
     m_featuresSet |= SHideFormula;
     break;
-   case SMultiRow:
+   case PMultiRow:
     m_featuresSet |= SMultiRow;
     break;
-   case SVerticalText:
+   case PVerticalText:
     m_featuresSet |= SVerticalText;
     break;
    default:
@@ -2534,25 +2534,25 @@ Style * Style::clearProperty( Properties p )
     style->m_properties &= ~(uint) p;
     switch( p )
     {
-     case SDontPrintText:
+     case PDontPrintText:
       style->m_featuresSet |= SDontPrintText;
       break;
-     case SCustomFormat:
+     case PCustomFormat:
       style->m_featuresSet |= SCustomFormat;
       break;
-     case SNotProtected:
+     case PNotProtected:
       style->m_featuresSet |= SNotProtected;
       break;
-     case SHideAll:
+     case PHideAll:
       style->m_featuresSet |= SHideAll;
       break;
-     case SHideFormula:
+     case PHideFormula:
       style->m_featuresSet |= SHideFormula;
       break;
-     case SMultiRow:
+     case PMultiRow:
       style->m_featuresSet |= SMultiRow;
       break;
-     case SVerticalText:
+     case PVerticalText:
       style->m_featuresSet |= SVerticalText;
       break;
      default:
@@ -2564,25 +2564,25 @@ Style * Style::clearProperty( Properties p )
   m_properties &= ~(uint) p;
   switch( p )
   {
-   case SDontPrintText:
+   case PDontPrintText:
     m_featuresSet |= SDontPrintText;
     break;
-   case SCustomFormat:
+   case PCustomFormat:
     m_featuresSet |= SCustomFormat;
     break;
-   case SNotProtected:
+   case PNotProtected:
     m_featuresSet |= SNotProtected;
     break;
-   case SHideAll:
+   case PHideAll:
     m_featuresSet |= SHideAll;
     break;
-   case SHideFormula:
+   case PHideFormula:
     m_featuresSet |= SHideFormula;
     break;
-   case SMultiRow:
+   case PMultiRow:
     m_featuresSet |= SMultiRow;
     break;
-   case SVerticalText:
+   case PVerticalText:
     m_featuresSet |= SVerticalText;
     break;
    default:
@@ -3086,25 +3086,25 @@ void CustomStyle::addProperty( Properties p )
   m_properties |= (uint) p;
   switch( p )
   {
-   case SDontPrintText:
+   case PDontPrintText:
     m_featuresSet |= SDontPrintText;
     break;
-   case SCustomFormat:
+   case PCustomFormat:
     m_featuresSet |= SCustomFormat;
     break;
-   case SNotProtected:
+   case PNotProtected:
     m_featuresSet |= SNotProtected;
     break;
-   case SHideAll:
+   case PHideAll:
     m_featuresSet |= SHideAll;
     break;
-   case SHideFormula:
+   case PHideFormula:
     m_featuresSet |= SHideFormula;
     break;
-   case SMultiRow:
+   case PMultiRow:
     m_featuresSet |= SMultiRow;
     break;
-   case SVerticalText:
+   case PVerticalText:
     m_featuresSet |= SVerticalText;
     break;
    default:
@@ -3117,25 +3117,25 @@ void CustomStyle::removeProperty( Properties p )
   m_properties &= ~(uint) p;
   switch( p )
   {
-   case SDontPrintText:
+   case PDontPrintText:
     m_featuresSet &= SDontPrintText;
     break;
-   case SCustomFormat:
+   case PCustomFormat:
     m_featuresSet &= SCustomFormat;
     break;
-   case SNotProtected:
+   case PNotProtected:
     m_featuresSet &= SNotProtected;
     break;
-   case SHideAll:
+   case PHideAll:
     m_featuresSet &= SHideAll;
     break;
-   case SHideFormula:
+   case PHideFormula:
     m_featuresSet &= SHideFormula;
     break;
-   case SMultiRow:
+   case PMultiRow:
     m_featuresSet &= SMultiRow;
     break;
-   case SVerticalText:
+   case PVerticalText:
     m_featuresSet &= SVerticalText;
     break;
    default:
