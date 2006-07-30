@@ -2218,6 +2218,19 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     buffer.resize( size() );
 }
 
+bool KPrCanvas::close( bool alsoDelete )
+{
+    if ( editMode )
+    {
+        return QWidget::close(alsoDelete);
+    }
+    else
+    {
+        m_view->screenStop();
+        return false;
+    }
+}
+
 KPrObject * KPrCanvas::getObjectAt( const KoPoint &pos, bool withoutProtected )
 {
     KPrObject *object = m_activePage->getObjectAt( pos, withoutProtected );
