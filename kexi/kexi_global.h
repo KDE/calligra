@@ -38,6 +38,7 @@
 #define kexipluginswarn kWarning(44021)
 
 /* useful macros */
+#undef foreach
 
 /*! a shortcut for iterating over lists or maps, eg. QMap, QValueList */
 #define foreach(_class, _variable, _list) \

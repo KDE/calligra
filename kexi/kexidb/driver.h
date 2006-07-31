@@ -130,9 +130,9 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return List of created connections. */
 		const Q3PtrList<Connection> connectionsList() const;
 
-//		/*! \return a name equal to the service name (X-Kexi-DriverName) 
-//		 stored in given service .desktop file. */
-//		QString driverName() { return m_driverName; }
+		/*! \return a name ofthe driver, equal to the service name (X-Kexi-DriverName) 
+		 stored in given service .desktop file. */
+		const char* name() const { return objectName().toLatin1().constData(); }
 
 		/*! \return a name of MIME type of files handled by this driver 
 		 if it is a file-based database's driver 

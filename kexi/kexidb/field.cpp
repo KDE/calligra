@@ -35,6 +35,8 @@
 
 #include <assert.h>
 
+#include "kexi_global.h"
+
 using namespace KexiDB;
 
 Field::FieldTypeNames Field::m_typeNames;
@@ -395,7 +397,7 @@ Field::setDefaultValue(const QVariant& def)
 }
 
 bool
-Field::setDefaultValue(const Q3CString& def)
+Field::setDefaultValue(const QByteArray& def)
 {
 	if (def.isNull()) {
 		m_defaultValue = QVariant();
@@ -613,7 +615,8 @@ QString Field::debugString()
 				first = false;
 			else
 				dbg += ", ";
-			dbg += QString("%1 = %2 (%3)").arg(it.key()).arg(it.data().toString()).arg(it.data().typeName());
+			dbg += QString("%1 = %2 (%3)").arg(QString(it.key())).arg(it.data().toString())
+				.arg(it.data().typeName());
 		}
 	}
 	return dbg;
@@ -635,7 +638,7 @@ void Field::setExpression(KexiDB::BaseExpr *expr)
 	m_expr = expr;
 }
 
-QVariant Field::customProperty(const Q3CString& propertyName,
+QVariant Field::customProperty(const QByteArray& propertyName,
 	const QVariant& defaultValue)
 {
 	if (!m_customProperties)
@@ -646,7 +649,7 @@ QVariant Field::customProperty(const Q3CString& propertyName,
 	return it.data();
 }
 
-void Field::setCustomProperty(const Q3CString& propertyName, const QVariant& value)
+void Field::setCustomProperty(const QByteArray& propertyName, const QVariant& value)
 {
 	if (propertyName.isEmpty())
 		return;

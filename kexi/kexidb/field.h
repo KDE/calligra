@@ -419,11 +419,11 @@ class KEXI_DB_EXPORT Field
 
 		void setDefaultValue(const QVariant& def);
 
-		/*! Sets default value decoded from QCString. 
+		/*! Sets default value decoded from QByteArray. 
 			Decoding errors are detected (value is strictly checked against field type) 
 			- if one is encountered, default value is cleared (defaultValue()==QVariant()). 
 			\return true if given value was valid for field type. */
-		bool setDefaultValue(const Q3CString& def);
+		bool setDefaultValue(const QByteArray& def);
 
 		/*! Sets auto increment flag. Only available to set true, 
 		 if isAutoIncrementAllowed() is true. */
@@ -528,13 +528,13 @@ class KEXI_DB_EXPORT Field
 
 		/*! \return custom property \a propertyName.
 		 If there is no such a property, \a defaultValue is returned. */
-		QVariant customProperty(const Q3CString& propertyName,
+		QVariant customProperty(const QByteArray& propertyName,
 			const QVariant& defaultValue = QVariant());
 
 		//! Sets value \a value for custom property \a propertyName
-		void setCustomProperty(const Q3CString& propertyName, const QVariant& value);
+		void setCustomProperty(const QByteArray& propertyName, const QVariant& value);
 
-		typedef QMap<Q3CString,QVariant> CustomPropertiesMap;
+		typedef QMap<QByteArray,QVariant> CustomPropertiesMap;
 
 		//! \return all custom properties
 		inline const CustomPropertiesMap customProperties() const {

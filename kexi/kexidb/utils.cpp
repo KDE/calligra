@@ -561,7 +561,7 @@ bool KexiDB::splitToTableAndFieldParts(const QString& string,
 	QString& tableName, QString& fieldName,
 	SetFieldNameIfNoTableNameOptions option)
 {
-	const int id = string.find('.');
+	const int id = string.indexOf('.');
 	if (option & SetFieldNameIfNoTableName && id==-1) {
 		tableName = QString::null;
 		fieldName = string;
@@ -628,7 +628,7 @@ bool KexiDB::isBuiltinTableFieldProperty( const QByteArray& propertyName )
 {
 	if (!KexiDB_builtinFieldProperties) {
 		KexiDB_builtinFieldPropertiesDeleter.setObject( KexiDB_builtinFieldProperties, new QSet<QByteArray>() );
-#define ADD(name) KexiDB_builtinFieldProperties->insert(name, (char*)1)
+#define ADD(name) KexiDB_builtinFieldProperties->insert(name)
 		ADD("primaryKey");
 		ADD("autoIncrement");
 		ADD("unique");
@@ -646,7 +646,7 @@ bool KexiDB::isBuiltinTableFieldProperty( const QByteArray& propertyName )
 //! @todo always update this when new builtins appear!
 #undef ADD
 	}
-	return KexiDB_builtinFieldProperties->find( propertyName );
+	return KexiDB_builtinFieldProperties->contains( propertyName );
 }
 
 bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>& values )
@@ -719,7 +719,7 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>&
 static KStaticDeleter< QSet<QByteArray> > KexiDB_extendedPropertiesDeleter;
 QSet<QByteArray>* KexiDB_extendedProperties = 0;
 
-bool KexiDB::isExtendedTableProperty( const QByteArray& propertyName )
+bool KexiDB::isExtendedTableFieldProperty( const QByteArray& propertyName )
 {
 	if (!KexiDB_extendedProperties) {
 		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QSet<QByteArray>() );
@@ -817,7 +817,7 @@ bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, con
 
 int KexiDB::loadIntPropertyValueFromXML( const QDomNode& node, bool* ok )
 {
-	Q3CString valueType = node.nodeName().latin1();
+	QByteArray valueType = node.nodeName().toLatin1();
 	if (valueType.isEmpty() || valueType!="number") {
 		if (ok)
 			*ok = false;
@@ -830,7 +830,7 @@ int KexiDB::loadIntPropertyValueFromXML( const QDomNode& node, bool* ok )
 
 QString KexiDB::loadStringPropertyValueFromXML( const QDomNode& node, bool* ok )
 {
-	Q3CString valueType = node.nodeName().latin1();
+	QByteArray valueType = node.nodeName().toLatin1();
 	if (valueType!="string") {
 		if (ok)
 			*ok = false;
@@ -841,7 +841,7 @@ QString KexiDB::loadStringPropertyValueFromXML( const QDomNode& node, bool* ok )
 
 QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 {
-	Q3CString valueType = node.nodeName().latin1();
+	QByteArray valueType = node.nodeName().toLatin1();
 	if (valueType.isEmpty())
 		return QVariant();
 	const QString text( node.firstChild().toElement().text() );
@@ -850,10 +850,10 @@ QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 		return text;
 	}
 	else if (valueType == "cstring") {
-		return Q3CString(text.latin1());
+		return text.toLatin1();
 	}
 	else if (valueType == "number") { // integer or double
-		if (text.find('.')!=-1) {
+		if (text.indexOf('.')!=-1) {
 			double val = text.toDouble(&ok);
 			if (ok)
 				return val;
@@ -868,7 +868,7 @@ QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 		}
 	}
 	else if (valueType == "bool") {
-		return QVariant(text.lower()=="true" || text=="1", 1);
+		return QVariant(text.toLower()=="true" || text=="1");
 	}
 //! @todo add more QVariant types
 	KexiDBWarn << "loadPropertyValueFromXML(): unknown type '" << valueType << "'" << endl;

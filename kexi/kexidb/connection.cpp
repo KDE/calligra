@@ -1630,8 +1630,8 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 		return false;
 	}
 	const QString oldTableName = tableSchema.name();
-	const QString newTableName = newName.lower().stripWhiteSpace();
-	if (oldTableName.lower().stripWhiteSpace() == newTableName) {
+	const QString newTableName = newName.lower().trimmed();
+	if (oldTableName.lower().trimmed() == newTableName) {
 		setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.",
 			newTableName));
 		return false;
@@ -2402,7 +2402,9 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 
 		// add custom properties
 		const Field::CustomPropertiesMap customProperties(f->customProperties());
-		foreach( Field::CustomPropertiesMap::ConstIterator, itCustom, customProperties ) {
+		for( Field::CustomPropertiesMap::ConstIterator itCustom = customProperties.constBegin();
+			itCustom!=customProperties.constEnd(); ++itCustom ) 
+		{
 			addFieldPropertyToExtendedTableSchemaData( 
 				f, itCustom.key(), itCustom.data(), doc, 
 				extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty, /*custom*/true );
@@ -2582,7 +2584,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 
 		Field *f = new Field(
 			cursor->value(2).toString(), (Field::Type)f_type, f_constr, f_opts, f_len, f_prec );
-		f->setDefaultValue( QVariant( cursor->value(7).toCString() ) );
+		f->setDefaultValue( QVariant( cursor->value(7).toByteArray() ) );
 		f->m_caption = cursor->value(9).toString();
 		f->m_desc = cursor->value(10).toString();
 		t->addField(f);
