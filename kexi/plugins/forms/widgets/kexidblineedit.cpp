@@ -167,6 +167,8 @@ QVariant KexiDBLineEdit::value()
 		return text().toFloat();
 	case KexiDB::Field::Double:
 		return text().toDouble();
+	default:
+		return QVariant();
 	}
 //! @todo more data types!
 

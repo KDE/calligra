@@ -366,6 +366,7 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::updateTableSchema(TableSc
 */
 tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn, TableSchema &table)
 {
+	Q_UNUSED(conn);
 	Field *field = table.field( fieldName() );
 	if (!field) {
 		//! @todo errmsg

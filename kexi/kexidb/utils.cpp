@@ -235,12 +235,12 @@ TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
 const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
 {
 	if (m_table)
-		return m_table->query()->fieldsExpanded();
+		return m_table->query()->fieldsExpanded(unique ? QuerySchema::Unique : QuerySchema::Default);
 	
 	if (m_query)
-		return m_query->fieldsExpanded(QuerySchema::Unique);
+		return m_query->fieldsExpanded(unique ? QuerySchema::Unique : QuerySchema::Default);
 
-	kdWarning() << "TableOrQuery::fields() : no query or table specified!" << endl;
+	kdWarning() << "TableOrQuerySchema::column() : no query or table specified!" << endl;
 	return QueryColumnInfo::Vector();
 }
 

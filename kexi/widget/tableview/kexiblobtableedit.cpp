@@ -435,6 +435,8 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const KURL& url)
 
 void KexiBlobTableEdit::handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
 {
+	Q_UNUSED(origFilename);
+	Q_UNUSED(fileExtension);
 	dataIsEmpty = valueIsEmpty();
 //! @todo no fname stored for now
 }

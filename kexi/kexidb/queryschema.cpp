@@ -230,13 +230,13 @@ class QuerySchemaPrivate
 		/*! Temporary field vector containing internal fields used for lookup columns. */
 		QueryColumnInfo::Vector *internalFields;
 
-		/*! Temporary, used to cache sum of expanded fields and internal fields used for lookup columns. 
-		 Contains not auto-deleted items.*/
-		QueryColumnInfo::Vector *fieldsExpandedWithInternal;
-
 		/*! Temporary, used to cache sum of expanded fields and internal fields (+rowid) used for lookup columns. 
 		 Contains not auto-deleted items.*/
 		QueryColumnInfo::Vector *fieldsExpandedWithInternalAndRowID;
+
+		/*! Temporary, used to cache sum of expanded fields and internal fields used for lookup columns. 
+		 Contains not auto-deleted items.*/
+		QueryColumnInfo::Vector *fieldsExpandedWithInternal;
 
 		/*! A list of fields for ORDER BY section. @see QuerySchema::orderByColumnList(). */
 		QueryColumnInfo::Vector *orderByColumnList;
@@ -386,7 +386,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 			<<"' must contain table information!" <<endl;
 		return *this;
 	}
-	if (fieldCount()>=(int)d->visibility.size()) {
+	if (fieldCount()>=d->visibility.size()) {
 		d->visibility.resize(d->visibility.size()*2);
 		d->tablesBoundToColumns.resize(d->tablesBoundToColumns.size()*2);
 	}
@@ -443,7 +443,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 
 int QuerySchema::tableBoundToColumn(uint columnPosition) const
 {
-	if (columnPosition > (int)d->tablesBoundToColumns.count()) {
+	if (columnPosition > d->tablesBoundToColumns.count()) {
 		KexiDBWarn << "QuerySchema::tableBoundToColumn(): columnPosition (" << columnPosition
 			<< ") out of range" << endl;
 		return -1;
