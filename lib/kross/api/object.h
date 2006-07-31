@@ -34,12 +34,6 @@ namespace Kross { namespace Api {
     // Forward declaration.
     class List;
 
-    //FIXME We forward declare class Exception here while it's
-    //     used at the static fromObject() template-method.
-    //     Could that provide probs on !=gcc? Maybe that method
-    //     should go into it's own sourcefile anyway...
-    class Exception;
-
     /**
      * The common Object class all other object-classes are
      * inheritated from.
@@ -124,13 +118,7 @@ namespace Kross { namespace Api {
              * \return The to a instance from template type T
              *         casted Object.
              */
-            template<class T> static T* fromObject(Object::Ptr object)
-            {
-                T* t = (T*) object.data();
-                if(! t)
-                    throw KSharedPtr<Exception>( new Exception(QString("Object \"%1\" invalid.").arg(object ? object->getClassName() : "")) );
-                return t;
-            }
+            template<class T> static T* fromObject(Object::Ptr object);
 
             /**
              * This method got used by the \a ProxyFunction classes
@@ -145,6 +133,20 @@ namespace Kross { namespace Api {
     };
 
 }}
+
+#include "exception.h"
+
+namespace Kross { namespace Api {
+
+template<class T> inline T* Object::fromObject(Object::Ptr object)
+{
+    T* t = (T*) object.data();
+    if(! t)
+        throw KSharedPtr<Exception>( new Exception(QString("Object \"%1\" invalid.").arg(object ? object->getClassName() : "")) );
+    return t;
+}
+
+}} 
 
 #endif
 
