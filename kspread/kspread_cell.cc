@@ -5686,17 +5686,13 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
 {
     kdDebug() << "*** Loading cell properties ***** at " << column() << "," << row () << endl;
 
-    QString text;
-    kdDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
-
-    QDomElement* cellStyle=0;
-
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
+        kdDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
         oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
 
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        cellStyle = const_cast<QDomElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
+        QDomElement* cellStyle = const_cast<QDomElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
 
         if ( cellStyle )
             loadOasisConditional( const_cast<QDomElement *>( cellStyle ) );

@@ -6930,20 +6930,16 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
             {
                 //kdDebug() << "Loading cell #" << cellCount << endl;
 
-                Cell* cell = nonDefaultCell( columnIndex, backupRow );
-                bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
-
                 Style* style = 0;
-
+                const bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
                 if ( cellHasStyle )
                 {
                     style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];
                 }
 
+                Cell* const cell = nonDefaultCell( columnIndex, backupRow ); // FIXME Stefan: if empty, delete afterwards
                 cell->loadOasis( cellElement, oasisContext, style );
 
-
-                bool haveStyle = cellHasStyle;
                 int cols = 1;
 
                 // Copy this cell across & down, if it has repeated rows or columns, but only
@@ -6954,24 +6950,22 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
                     int n = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
 
                     if (ok)
-                        // Some spreadsheet programs may support more rows than
-                        // KSpread so limit the number of repeated rows.
+                        // Some spreadsheet programs may support more columns than
+                        // KSpread so limit the number of repeated columns.
                         // FIXME POSSIBLE DATA LOSS!
                         cols = QMIN( n, KS_colMax - columnIndex + 1 );
 
-                    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
+                    if ( !cellHasStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
                         // just increment it
-                        columnIndex +=cols - 1;
+                        columnIndex += cols - 1;
                     }
                     else
                     {
-                        for (int k = cols ; k ; --k )
+                        for ( int k = cols ; k ; --k )
                         {
-                            if (k != cols)
+                            if ( k != cols )
                                 columnIndex++;
-
-                            Style* targetStyle = style;
 
                             for ( int newRow = backupRow; newRow < endRow; ++newRow )
                             {
