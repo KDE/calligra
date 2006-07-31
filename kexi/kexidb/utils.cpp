@@ -612,6 +612,36 @@ static bool setIntToFieldType( Field& field, const QVariant& value )
 	return true;
 }
 
+//! for KexiDB::isBuiltinTableFieldProperty()
+static KStaticDeleter< QAsciiDict<char> > KexiDB_builtinFieldPropertiesDeleter;
+//! for KexiDB::isBuiltinTableFieldProperty()
+QAsciiDict<char>* KexiDB_builtinFieldProperties = 0;
+
+bool KexiDB::isBuiltinTableFieldProperty( const QCString& propertyName )
+{
+	if (!KexiDB_builtinFieldProperties) {
+		KexiDB_builtinFieldPropertiesDeleter.setObject( KexiDB_builtinFieldProperties, new QAsciiDict<char>(499) );
+#define ADD(name) KexiDB_builtinFieldProperties->insert(name, (char*)1)
+		ADD("primaryKey");
+		ADD("autoIncrement");
+		ADD("unique");
+		ADD("notNull");
+		ADD("allowEmpty");
+		ADD("unsigned");
+		ADD("name");
+		ADD("caption");
+		ADD("description");
+		ADD("length");
+		ADD("precision");
+		ADD("defaultValue");
+		ADD("width");
+		ADD("visibleDecimalPlaces");
+//! @todo always update this when new builtins appear!
+#undef ADD
+	}
+	return KexiDB_builtinFieldProperties->find( propertyName );
+}
+
 bool KexiDB::setFieldProperties( Field& field, const QMap<QCString, QVariant>& values )
 {
 	QMapConstIterator<QCString, QVariant> it;
@@ -675,19 +705,28 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QCString, QVariant>& v
 	if (!ok)
 		return false;
 
+	// set custom properties
+	typedef QMap<QCString, QVariant> PropertiesMap;
+	foreach( PropertiesMap::ConstIterator, it, values ) {
+		if (!isBuiltinTableFieldProperty( it.key() ) && !isExtendedTableFieldProperty( it.key() )) {
+			field.setCustomProperty( it.key(), it.data() );
+		}
+	}
 	return true;
 }
 
-//! for isExtendedTableProperty()
+//! for KexiDB::isExtendedTableFieldProperty()
 static KStaticDeleter< QAsciiDict<char> > KexiDB_extendedPropertiesDeleter;
+//! for KexiDB::isExtendedTableFieldProperty()
 QAsciiDict<char>* KexiDB_extendedProperties = 0;
 
-bool KexiDB::isExtendedTableProperty( const QCString& propertyName )
+bool KexiDB::isExtendedTableFieldProperty( const QCString& propertyName )
 {
 	if (!KexiDB_extendedProperties) {
 		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QAsciiDict<char>(499) );
 #define ADD(name) KexiDB_extendedProperties->insert(name, (char*)1)
 		ADD("visibleDecimalPlaces");
+#undef ADD
 	}
 	return KexiDB_extendedProperties->find( propertyName );
 }
@@ -709,9 +748,11 @@ bool KexiDB::setFieldProperty( Field& field, const QCString& propertyName, const
 			field.method( ival ); \
 			return true; \
 		}
+	if (propertyName.isEmpty())
+		return false;
 
 	bool ok;
-	if (KexiDB::isExtendedTableProperty(propertyName)) {
+	if (KexiDB::isExtendedTableFieldProperty(propertyName)) {
 		//a little speedup: identify extended property in O(1)
 		if ( "visibleDecimalPlaces" == propertyName
 		  && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()) )
@@ -767,10 +808,37 @@ bool KexiDB::setFieldProperty( Field& field, const QCString& propertyName, const
 		}
 		if ( "width" == propertyName )
 			GET_INT( setWidth );
+
+		// last chance that never fails: custom field property
+		field.setCustomProperty(propertyName, value);
 	}
 
 	KexiDBWarn << "KexiDB::setFieldProperty() property \"" << propertyName << "\" not found!" << endl;
 	return false;
+}
+
+int KexiDB::loadIntPropertyValueFromXML( const QDomNode& node, bool* ok )
+{
+	QCString valueType = node.nodeName().latin1();
+	if (valueType.isEmpty() || valueType!="number") {
+		if (ok)
+			*ok = false;
+		return 0;
+	}
+	const QString text( node.firstChild().toElement().text() );
+	int val = text.toInt(ok);
+	return val;
+}
+
+QString KexiDB::loadStringPropertyValueFromXML( const QDomNode& node, bool* ok )
+{
+	QCString valueType = node.nodeName().latin1();
+	if (valueType!="string") {
+		if (ok)
+			*ok = false;
+		return 0;
+	}
+	return node.firstChild().toElement().text();
 }
 
 QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
@@ -783,7 +851,7 @@ QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 	if (valueType == "string") {
 		return text;
 	}
-	if (valueType == "cstring") {
+	else if (valueType == "cstring") {
 		return QCString(text.latin1());
 	}
 	else if (valueType == "number") { // integer or double

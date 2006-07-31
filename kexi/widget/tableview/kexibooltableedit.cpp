@@ -34,21 +34,16 @@
 KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent)
  : KexiTableEdit(column, parent, "KexiBoolTableEdit")
 {
-	init();
+	kdDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
+	kdDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
+	m_hasFocusableWidget = false;
+	m_acceptEditorAfterDeleteContents = true;
 }
 
 KexiBoolTableEdit::~KexiBoolTableEdit()
 {
 }
 
-void KexiBoolTableEdit::init()
-{
-	kdDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
-	kdDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
-
-	m_hasFocusableWidget = false;
-}
-	
 void KexiBoolTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
 	m_currentValue = m_origValue;
@@ -80,7 +75,10 @@ QVariant KexiBoolTableEdit::value()
 
 void KexiBoolTableEdit::clear()
 {
-	m_currentValue = QVariant();
+	if (field()->isNotNull())
+		m_currentValue = QVariant(false, 0);
+	else
+		m_currentValue = QVariant();
 }
 
 bool KexiBoolTableEdit::cursorAtStart()
@@ -114,10 +112,10 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVar
 	s = QMIN( h-3, s );
 	s = QMIN( w-3, s );//avoid too large box
 	QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
-	if (val.isNull() && !field()->isNotNull())
-		p->setPen(QPen(palette().disabled().text(), 1));
-	else
-		p->setPen(QPen(colorGroup().text(), 1));
+//sometimes unreadable	if (val.isNull() && !field()->isNotNull())
+//	p->setPen(QPen(palette().disabled().text(), 1));
+//	else
+	p->setPen(QPen(colorGroup().text(), 1));
 	p->drawRect(r);
 	if (val.isNull() && !field()->isNotNull()) {
 		p->drawText( r, Qt::AlignCenter, "?" );
@@ -134,7 +132,15 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVar
 
 void KexiBoolTableEdit::clickedOnContents()
 {
-	m_currentValue = QVariant( !m_currentValue.toBool(), 0 );
+	if (field()->isNotNull())
+		m_currentValue = QVariant( !m_currentValue.toBool(), 0 );
+	else {
+		// null allowed: use the cycle: true -> false -> null
+		if (m_currentValue.isNull())
+			m_currentValue = QVariant( true, 1 );
+		else
+			m_currentValue = m_currentValue.toBool() ? QVariant( false, 1 ) : QVariant();
+	}
 }
 
 void KexiBoolTableEdit::handleAction(const QString& actionName)

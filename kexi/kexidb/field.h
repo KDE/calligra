@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -366,8 +366,6 @@ class KEXI_DB_EXPORT Field
 		//! if the type has the unsigned attribute
 		inline bool isUnsigned() const { return m_options & Unsigned; }
 
-//		virtual bool isBinary() const;
-
 		/*! \return true if this field has EMPTY property (i.e. it is of type
 		string or is a BLOB). */
 		inline bool hasEmptyProperty() const { return Field::hasEmptyProperty(type()); }
@@ -525,6 +523,20 @@ class KEXI_DB_EXPORT Field
 		void setEnumHints(const QValueVector<QString> &l) { m_hints = l; }
 //</TMP>
 
+		/*! \return custom property \a propertyName.
+		 If there is no such a property, \a defaultValue is returned. */
+		QVariant customProperty(const QCString& propertyName,
+			const QVariant& defaultValue = QVariant());
+
+		//! Sets value \a value for custom property \a propertyName
+		void setCustomProperty(const QCString& propertyName, const QVariant& value);
+
+		typedef QMap<QCString,QVariant> CustomPropertiesMap;
+
+		//! \return all custom properties
+		inline const CustomPropertiesMap customProperties() const {
+			return m_customProperties ? *m_customProperties : CustomPropertiesMap(); }
+
 	protected:
 		/*! @internal Used by constructors. */
 		void init();
@@ -546,6 +558,7 @@ class KEXI_DB_EXPORT Field
 		QValueVector<QString> m_hints;
 
 		KexiDB::BaseExpr *m_expr;
+		CustomPropertiesMap* m_customProperties;
 
 		class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString> {
 			public:

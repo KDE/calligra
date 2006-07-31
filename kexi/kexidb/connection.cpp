@@ -2333,8 +2333,10 @@ int Connection::resultCount(const QString& sql)
 
 //! @internal used by storeExtendedTableSchemaData()
 static void addFieldPropertyToExtendedTableSchemaData( 
-	Field *f, char* propertyName, const QVariant& propertyValue, 
-	QDomDocument& doc, QDomElement& extendedTableSchemaMainEl, bool& extendedTableSchemaStringIsEmpty )
+	Field *f, const char* propertyName, const QVariant& propertyValue, 
+	QDomDocument& doc, QDomElement& extendedTableSchemaMainEl, 
+	bool& extendedTableSchemaStringIsEmpty,
+	bool custom = false )
 {
 	if (extendedTableSchemaStringIsEmpty) {//init document
 		extendedTableSchemaMainEl = doc.createElement("EXTENDED_TABLE_SCHEMA");
@@ -2345,6 +2347,8 @@ static void addFieldPropertyToExtendedTableSchemaData(
 	QDomElement extendedTableSchemaFieldEl = doc.createElement("field");
 	extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
 	extendedTableSchemaFieldEl.setAttribute("name", f->name());
+	if (custom)
+		extendedTableSchemaFieldEl.setAttribute("custom", "true");
 	QDomElement extendedTableSchemaFieldPropertyEl = doc.createElement("property");
 	extendedTableSchemaFieldEl.appendChild( extendedTableSchemaFieldPropertyEl );
 	extendedTableSchemaFieldPropertyEl.setAttribute("name", propertyName);
@@ -2387,7 +2391,17 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 	for (Field::ListIterator it( *tableSchema.fields() ); (f = it.current()); ++it) {
 		if (f->visibleDecimalPlaces()>=0 && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
 			addFieldPropertyToExtendedTableSchemaData( 
-				f, "visibleDecimalPlaces", f->visibleDecimalPlaces(), doc, extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty );
+				f, "visibleDecimalPlaces", f->visibleDecimalPlaces(), doc, 
+				extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty );
+		}
+		// boolean field with "not null"
+
+		// add custom properties
+		const Field::CustomPropertiesMap customProperties(f->customProperties());
+		foreach( Field::CustomPropertiesMap::ConstIterator, itCustom, customProperties ) {
+			addFieldPropertyToExtendedTableSchemaData( 
+				f, itCustom.key(), itCustom.data(), doc, 
+				extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty, /*custom*/true );
 		}
 	}
 
@@ -2427,7 +2441,8 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 	{ setError(i18n("Error while loading extended table schema information."), details); \
 	  return false; }
 #define loadExtendedTableSchemaData_ERR3(data) \
-	{ setError(i18n("Error while loading extended table schema information."), i18n("Invalid XML data: ") + data.left(1024) ); \
+	{ setError(i18n("Error while loading extended table schema information."), \
+	  i18n("Invalid XML data: ") + data.left(1024) ); \
 	  return false; }
 
 	// Load extended schema information, if present (see ExtendedTableSchemaInformation in Kexi Wiki)
@@ -2482,11 +2497,15 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 					int intValue;
 					if (propEl.tagName()=="property") {
 						QCString propertyName = propEl.attribute("name").latin1();
-						QVariant value = KexiDB::loadPropertyValueFromXML( propEl.firstChild() );
-						if (propertyName == "visibleDecimalPlaces"
+						if (propEl.attribute("custom")=="true") {
+							//custom property
+							f->setCustomProperty(propertyName, 
+								KexiDB::loadPropertyValueFromXML( propEl.firstChild() ));
+						}
+						else if (propertyName == "visibleDecimalPlaces"
 							&& KexiDB::supportsVisibleDecimalPlacesProperty(f->type()))
 						{
-							intValue = value.toInt(&ok);
+							intValue = KexiDB::loadIntPropertyValueFromXML( propEl.firstChild(), &ok );
 							if (ok)
 								f->setVisibleDecimalPlaces(intValue);
 						}

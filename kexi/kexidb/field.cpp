@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -79,6 +79,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_desc(description)
 	,m_width(width)
 	,m_expr(0)
+	,m_customProperties(0)
 	,m_type(ctype)
 {
 	setConstraints(cconst);
@@ -92,6 +93,9 @@ Field::Field(const QString& name, Type ctype,
 Field::Field(const Field& f)
 {
 	(*this) = f;
+	if (f.m_customProperties)
+		m_customProperties = new CustomPropertiesMap( f.customProperties() );
+
 	if (f.m_expr) {//deep copy the expresion
 //TODO		m_expr = new BaseExpr(*f.m_expr);
 
@@ -103,6 +107,7 @@ Field::Field(const Field& f)
 Field::~Field()
 {
 	delete m_expr;
+	delete m_customProperties;
 }
 
 void Field::init()
@@ -118,6 +123,7 @@ void Field::init()
 	m_order = -1;
 	m_width = 0;
 	m_expr = 0;
+	m_customProperties = 0;
 }
 
 Field::Type Field::type() const
@@ -597,6 +603,17 @@ QString Field::debugString()
 		dbg += " NOTEMPTY";
 	if (m_expr)
 		dbg += " EXPRESSION=" + m_expr->debugString();
+	if (m_customProperties && !m_customProperties->isEmpty()) {
+		dbg += QString(" CUSTOM PROPERTIES (%1): ").arg(m_customProperties->count());
+		bool first = true;
+		foreach (CustomPropertiesMap::ConstIterator, it, *m_customProperties) {
+			if (first)
+				first = false;
+			else
+				dbg += ", ";
+			dbg += QString("%1 = %2 (%3)").arg(it.key()).arg(it.data().toString()).arg(it.data().typeName());
+		}
+	}
 	return dbg;
 }
 
@@ -614,6 +631,26 @@ void Field::setExpression(KexiDB::BaseExpr *expr)
 		delete m_expr;
 	}
 	m_expr = expr;
+}
+
+QVariant Field::customProperty(const QCString& propertyName,
+	const QVariant& defaultValue)
+{
+	if (!m_customProperties)
+		return defaultValue;
+	CustomPropertiesMap::ConstIterator it(m_customProperties->find(propertyName));
+	if (it==m_customProperties->constEnd())
+		return defaultValue;
+	return it.data();
+}
+
+void Field::setCustomProperty(const QCString& propertyName, const QVariant& value)
+{
+	if (propertyName.isEmpty())
+		return;
+	if (!m_customProperties)
+		m_customProperties = new CustomPropertiesMap();
+	m_customProperties->insert(propertyName, value);
 }
 
 //-------------------------------------------------------

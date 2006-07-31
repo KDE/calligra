@@ -7,19 +7,48 @@
 -----------------------------------------------------------------------------
 
 For most important commits use: CCMAIL:kexi-devel@kde.org
-
 For interesting commits use: 
 FEATURE: <desctiption>
 CCMAIL:danny@commit-digest.org
-
 For bugfixes use CCMAIL:###-done@bugs.kde.org
+Legend:
+= -a fix for recently introduced bug or a minor/too technical fix not worth mentioning 
+   in the public changelog
+
+2006-07-31
+KexiDB
+= custom properties can be set for Field objects
+Table View
+- deleting cell contents containing Yes/No values
+
+2006-07-28
+Table Designer
+- fields of Yes/No type have "not null" set by default
+- fixed clearing "not null" property
+2.0: merged
+Table View
+- boolean "not null" field displays "false" instead of null in the new row
+= fixed column width adjustment
+= unused code removed
+2.0: merged
+
+2006-07-26..27
+Property Editor
+- fixed image scaling in the image editor
+2.0: merged
+Forms
+- image box: (in data view) do not allow to show context menu using keyboard 
+  for static image (i.e. if no data source is assigned); 
+  such a widget also ignores focus events (effective focus policy is NoFocus then);
+  focus frame is painted when needed
+2.0: merged
 
 2006-07-24
 Main Window
 - fixed setting focus after switching between views
 2.0: merged
 
-2006-07-18..2006-07-24
+2006-07-18..2006-07-25
 KexiDB
 - added support for db-aware lookup fields
 2.0: merged
@@ -69,6 +98,7 @@ Table View
 2.0: merged
 
 ~~~~~~~~~~~~~~~~ 1.0.2 bugfix release (with KOffice 1.5.2)  ~~~~~~~~~~~~~~~~
+~ Nowm as 1.0.x is closed for changes, all the changes are merged into 2.0 only ~~
 
 2006-07-06
 Forms

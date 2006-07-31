@@ -1107,8 +1107,8 @@ void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
 		m_editor->clear();
 		return;
 	}
-	if (columnType(m_curCol) == KexiDB::Field::Boolean)
-		return;
+//js	if (columnType(m_curCol) == KexiDB::Field::Boolean)
+//js		return;
 //	ensureVisible(columnPos(m_curCol), rowPos(m_curRow) + rowHeight(), 
 //		columnWidth(m_curCol), rowHeight());
 //OK?
@@ -1119,7 +1119,7 @@ void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
 	m_editor->clear();
 	if (m_editor->acceptEditorAfterDeleteContents())
 		acceptEditor();
-	if (!m_editor->hasFocusableWidget())
+	if (!m_editor || !m_editor->hasFocusableWidget())
 		updateCell(m_curRow, m_curCol);
 }
 

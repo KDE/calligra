@@ -967,3 +967,6 @@ Table Column Lookup XML Format:
 Combobox table edit TODO:
 - copy should handle "displayed" value, not the real one 
   (maybe let's use a custom clipboard mimetype?)
+
+Forms TODO
+- implement combo box widget

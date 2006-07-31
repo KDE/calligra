@@ -175,7 +175,15 @@ kexi__gallery_folders
 
 -----------------------------------------------------------------
 
-4. DEPRECATED TABLES
+4. Extended table schema information:
+
+Docs available online:
+- http://kexi-project.org/wiki/wikiview/index.php?ExtendedTableSchemaInformation
+- Table Column Lookup: http://kexi-project.org/wiki/wikiview/index.php?KexiDBLookupColumns
+
+-----------------------------------------------------------------
+
+5. DEPRECATED TABLES
 
 //This table contains additional information for query schemas
 kexi__querydata
