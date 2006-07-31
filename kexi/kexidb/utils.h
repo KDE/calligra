@@ -266,8 +266,11 @@ namespace KexiDB
 	 @see KexiDB::Field::visibleDecimalPlaces() */
 	KEXI_DB_EXPORT QString formatNumberForVisibleDecimalPlaces(double value, int decimalPlaces);
 
+	//! \return true if \a propertyName is a builtin field property.
+	KEXI_DB_EXPORT bool isBuiltinTableFieldProperty( const QByteArray& propertyName );
+
 	//! \return true if \a propertyName is an extended field property.
-	KEXI_DB_EXPORT bool isExtendedTableProperty( const QByteArray& propertyName );
+	KEXI_DB_EXPORT bool isExtendedTableFieldProperty( const QByteArray& propertyName );
 
 	/*! \return type of field for integer value \a type. 
 	 If \a type cannot be casted to KexiDB::Field::Type, KexiDB::Field::InvalidType is returned.
@@ -283,7 +286,9 @@ namespace KexiDB
 
 	/*! Sets property value for \a field. \return true if the property has been found and 
 	 the value is valid for this property. On failure contents of \a field is undefined.
-	 Properties coming from extended schema are also supported.
+	 Properties coming from extended schema are also supported as well as
+	 		QVariant customProperty(const QString& propertyName) const;
+
 	 This function is used e.g. by AlterTableHandler when property information comes in form of text.
 	 */
 	KEXI_DB_EXPORT bool setFieldProperty(Field& field, const QByteArray& propertyName, 
@@ -294,6 +299,12 @@ namespace KexiDB
 	 "string", "cstring", "bool", "number". For invalid values null QVariant is returned.
 	 You can check the validity of the returned value using QVariant::type(). */
 	KEXI_DB_EXPORT QVariant loadPropertyValueFromXML( const QDomNode& node );
+
+	/*! Convenience version of loadPropertyValueFromXML(). \return int value. */
+	KEXI_DB_EXPORT int loadIntPropertyValueFromXML( const QDomNode& node, bool* ok );
+
+	/*! Convenience version of loadPropertyValueFromXML(). \return QString value. */
+	KEXI_DB_EXPORT QString loadStringPropertyValueFromXML( const QDomNode& node, bool* ok );
 }
 
 #endif

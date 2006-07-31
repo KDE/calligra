@@ -71,7 +71,6 @@ class KexiBoolTableEdit : public KexiTableEdit
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 
 		void showHintButton();
-		void init();
 
 		//! We've no editor widget that would store current value, so we do this here
 		QVariant m_currentValue;

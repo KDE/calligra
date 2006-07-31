@@ -619,6 +619,36 @@ static bool setIntToFieldType( Field& field, const QVariant& value )
 	return true;
 }
 
+//! for KexiDB::isBuiltinTableFieldProperty()
+static KStaticDeleter< QSet<QByteArray> > KexiDB_builtinFieldPropertiesDeleter;
+//! for KexiDB::isBuiltinTableFieldProperty()
+QSet<QByteArray>* KexiDB_builtinFieldProperties = 0;
+
+bool KexiDB::isBuiltinTableFieldProperty( const QByteArray& propertyName )
+{
+	if (!KexiDB_builtinFieldProperties) {
+		KexiDB_builtinFieldPropertiesDeleter.setObject( KexiDB_builtinFieldProperties, new QSet<QByteArray>() );
+#define ADD(name) KexiDB_builtinFieldProperties->insert(name, (char*)1)
+		ADD("primaryKey");
+		ADD("autoIncrement");
+		ADD("unique");
+		ADD("notNull");
+		ADD("allowEmpty");
+		ADD("unsigned");
+		ADD("name");
+		ADD("caption");
+		ADD("description");
+		ADD("length");
+		ADD("precision");
+		ADD("defaultValue");
+		ADD("width");
+		ADD("visibleDecimalPlaces");
+//! @todo always update this when new builtins appear!
+#undef ADD
+	}
+	return KexiDB_builtinFieldProperties->find( propertyName );
+}
+
 bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>& values )
 {
 	QMap<QByteArray, QVariant>::ConstIterator it;
@@ -716,9 +746,11 @@ bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, con
 			field.method( ival ); \
 			return true; \
 		}
+	if (propertyName.isEmpty())
+		return false;
 
 	bool ok;
-	if (KexiDB::isExtendedTableProperty(propertyName)) {
+	if (KexiDB::isExtendedTableFieldProperty(propertyName)) {
 		//a little speedup: identify extended property in O(1)
 		if ( "visibleDecimalPlaces" == propertyName
 		  && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()) )
@@ -774,10 +806,37 @@ bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, con
 		}
 		if ( "width" == propertyName )
 			GET_INT( setWidth );
+
+		// last chance that never fails: custom field property
+		field.setCustomProperty(propertyName, value);
 	}
 
 	KexiDBWarn << "KexiDB::setFieldProperty() property \"" << propertyName << "\" not found!" << endl;
 	return false;
+}
+
+int KexiDB::loadIntPropertyValueFromXML( const QDomNode& node, bool* ok )
+{
+	Q3CString valueType = node.nodeName().latin1();
+	if (valueType.isEmpty() || valueType!="number") {
+		if (ok)
+			*ok = false;
+		return 0;
+	}
+	const QString text( node.firstChild().toElement().text() );
+	int val = text.toInt(ok);
+	return val;
+}
+
+QString KexiDB::loadStringPropertyValueFromXML( const QDomNode& node, bool* ok )
+{
+	Q3CString valueType = node.nodeName().latin1();
+	if (valueType!="string") {
+		if (ok)
+			*ok = false;
+		return 0;
+	}
+	return node.firstChild().toElement().text();
 }
 
 QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
@@ -790,7 +849,7 @@ QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 	if (valueType == "string") {
 		return text;
 	}
-	if (valueType == "cstring") {
+	else if (valueType == "cstring") {
 		return Q3CString(text.latin1());
 	}
 	else if (valueType == "number") { // integer or double
