@@ -89,6 +89,7 @@
 #include <KoRect.h>
 
 // KSpread
+#include "CellView.h"
 #include "Commands.h"
 #include "Doc.h"
 #include "Editors.h"
@@ -638,7 +639,6 @@ void Canvas::slotScrollHorz( int _value )
     _value = horzScrollBar()->maximum() - _value;
 
   double unzoomedValue = d->view->doc()->unzoomItXOld( _value );
-  double dwidth = d->view->doc()->unzoomItXOld( width() );
 
   d->view->doc()->emitBeginOperation(false);
 
@@ -968,13 +968,13 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     QString anchor;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
-      anchor = cell->testAnchor( d->view->doc()->zoomItXOld( cell->dblWidth() - ev_PosX + xpos ),
-                                 d->view->doc()->zoomItYOld( ev_PosY - ypos ) );
+      anchor = cell->cellView()->testAnchor( d->view->doc()->zoomItXOld( cell->dblWidth() - ev_PosX + xpos ),
+                                             d->view->doc()->zoomItYOld( ev_PosY - ypos ) );
     }
     else
     {
-      anchor = cell->testAnchor( d->view->doc()->zoomItXOld( ev_PosX - xpos ),
-                                 d->view->doc()->zoomItYOld( ev_PosY - ypos ) );
+      anchor = cell->cellView()->testAnchor( d->view->doc()->zoomItXOld( ev_PosX - xpos ),
+                                             d->view->doc()->zoomItYOld( ev_PosY - ypos ) );
     }
     if ( !anchor.isEmpty() && anchor != d->anchor )
     {
@@ -4037,10 +4037,10 @@ void Canvas::paintUpdates()
         if (!cell->isDefault())
         {
           if (cell->testFlag(Cell::Flag_LayoutDirty))
-            cell->makeLayout( x, y );
+            cell->cellView()->makeLayout( x, y );
         }
 
-        Cell::Borders paintBorder = Cell::NoBorder;
+        CellView::Borders paintBorder = CellView::NoBorder;
 
         QPen bottomPen( cell->effBottomBorderPen( x, y ) );
         QPen rightPen( cell->effRightBorderPen( x, y ) );
@@ -4053,11 +4053,11 @@ void Canvas::paintUpdates()
         //   on the left
         if ( x >= KS_colMax )
         {
-          paintBorder = paintBorder | Cell::RightBorder;
+          paintBorder = paintBorder | CellView::RightBorder;
         }
         else
         {
-          paintBorder = paintBorder | Cell::RightBorder;
+          paintBorder = paintBorder | CellView::RightBorder;
           if ( cell->effRightBorderValue( x, y ) <
                sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
@@ -4067,11 +4067,11 @@ void Canvas::paintUpdates()
         // bottom border:
         if ( y >= KS_rowMax )
         {
-          paintBorder = paintBorder | Cell::BottomBorder;
+          paintBorder = paintBorder | CellView::BottomBorder;
         }
         else
         {
-          paintBorder = paintBorder | Cell::BottomBorder;
+          paintBorder = paintBorder | CellView::BottomBorder;
           if ( cell->effBottomBorderValue( x, y ) <
                sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
@@ -4080,11 +4080,11 @@ void Canvas::paintUpdates()
         // left border:
         if ( x == 1 )
         {
-          paintBorder = paintBorder | Cell::LeftBorder;
+          paintBorder = paintBorder | CellView::LeftBorder;
         }
         else
         {
-          paintBorder = paintBorder | Cell::LeftBorder;
+          paintBorder = paintBorder | CellView::LeftBorder;
           if ( cell->effLeftBorderValue( x, y ) <
                sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
@@ -4093,20 +4093,20 @@ void Canvas::paintUpdates()
         // top border:
         if ( y == 1 )
         {
-          paintBorder = paintBorder | Cell::TopBorder;
+          paintBorder = paintBorder | CellView::TopBorder;
         }
         else
         {
-          paintBorder = paintBorder | Cell::TopBorder;
+          paintBorder = paintBorder | CellView::TopBorder;
           if ( cell->effTopBorderValue( x, y ) <
                sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
 
-	cell->paintCell( unzoomedRect, painter, d->view, dblCorner,
-			 QPoint( x, y), paintBorder,
-			 rightPen,bottomPen,leftPen,topPen,
-			 mergedCellsPainted);
+        cell->cellView()->paintCell( unzoomedRect, painter, d->view, dblCorner,
+                                     QPoint( x, y), paintBorder,
+                                     rightPen,bottomPen,leftPen,topPen,
+                                     mergedCellsPainted);
 
 
         dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );

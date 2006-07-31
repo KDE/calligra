@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "CellView.h"
 #include "Format.h"
 #include "Sheet.h"
 #include "Selection.h"
@@ -548,27 +549,27 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                   topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
               }
 
-              Cell::Borders paintBorder = Cell::NoBorder;
-              if (paintBordersLeft) paintBorder |= Cell::LeftBorder;
-	      if (paintBordersRight) paintBorder |= Cell::RightBorder;
-              if (paintBordersTop) paintBorder |= Cell::TopBorder;
-              if (paintBordersBottom) paintBorder |= Cell::BottomBorder;
+              CellView::Borders paintBorder = CellView::NoBorder;
+              if (paintBordersLeft) paintBorder   |= CellView::LeftBorder;
+	      if (paintBordersRight) paintBorder  |= CellView::RightBorder;
+              if (paintBordersTop) paintBorder    |= CellView::TopBorder;
+              if (paintBordersBottom) paintBorder |= CellView::BottomBorder;
 
 	      QPen highlightPen;
 
             if ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
-              cell->paintCell( rect, painter, 0,
-                               KoPoint( view.width() - xpos -
-                                   col_lay->dblWidth(), ypos ), QPoint( x, y ),
-                               paintBorder,
-                               rightPen, bottomPen, leftPen, topPen,
-			       mergedCellsPainted);
+              cell->cellView()->paintCell( rect, painter, 0,
+                                           KoPoint( view.width() - xpos -
+                                           col_lay->dblWidth(), ypos ), QPoint( x, y ),
+                                           paintBorder,
+                                           rightPen, bottomPen, leftPen, topPen,
+                                           mergedCellsPainted);
             else
-              cell->paintCell( rect, painter, 0,
-                               KoPoint( xpos, ypos ), QPoint( x, y ),
-                               paintBorder,
-                               rightPen, bottomPen, leftPen, topPen,
-			       mergedCellsPainted);
+              cell->cellView()->paintCell( rect, painter, 0,
+                                           KoPoint( xpos, ypos ), QPoint( x, y ),
+                                           paintBorder,
+                                           rightPen, bottomPen, leftPen, topPen,
+                                           mergedCellsPainted);
 
             xpos += col_lay->dblWidth();
         }

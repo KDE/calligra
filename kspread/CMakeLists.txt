@@ -90,6 +90,7 @@ SET (kspreadcommon_LIB_SRCS
 	Border.cpp
 	Canvas.cpp
 	Cell.cpp
+	CellView.cpp
 	Cluster.cpp
 	Commands.cpp
 	Condition.cpp

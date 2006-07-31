@@ -21,7 +21,7 @@
 
 #include <float.h>
 
-#include "Cell.h"
+#include "CellView.h"
 #include "Format.h"
 #include "Sheet.h"
 #include "Value.h"
@@ -502,8 +502,8 @@ bool AdjustColumnRowManipulator::preProcessing()
 double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 {
   double long_max = 0.0;
-  cell->calculateTextParameters();
-  if ( cell->textWidth() > long_max )
+  cell->cellView()->calculateTextParameters();
+  if ( cell->cellView()->textWidth() > long_max )
   {
     double indent = 0.0;
     Style::HAlign alignment = cell->format()->align(cell->column(), cell->row());
@@ -523,7 +523,7 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
     {
       indent = cell->format()->getIndent( cell->column(), cell->row() );
     }
-    long_max = indent + cell->textWidth()
+    long_max = indent + cell->cellView()->textWidth()
         + cell->format()->leftBorderWidth( cell->column(), cell->row() )
         + cell->format()->rightBorderWidth( cell->column(), cell->row() );
   }
@@ -543,10 +543,10 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell)
 {
   double long_max = 0.0;
-  cell->calculateTextParameters();
-  if ( cell->textHeight() > long_max )
+  cell->cellView()->calculateTextParameters();
+  if ( cell->cellView()->textHeight() > long_max )
   {
-    long_max = cell->textHeight()
+    long_max = cell->cellView()->textHeight()
         + cell->format()->topBorderWidth(cell->column(), cell->row())
         + cell->format()->bottomBorderWidth(cell->column(), cell->row());
   }

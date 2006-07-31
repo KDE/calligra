@@ -60,27 +60,27 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include "CellView.h"
 #include "Canvas.h"
+#include "Commands.h"
+#include "Damages.h"
+#include "Formula.h"
+#include "Functions.h"
+#include "LoadingInfo.h"
 #include "Locale.h"
 #include "Map.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "Undo.h"
 #include "Util.h"
-#include "View.h"
-
-#include "Commands.h"
-#include "Damages.h"
-#include "Formula.h"
-#include "Functions.h"
-#include "LoadingInfo.h"
-#include "Selection.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 #include "ValueParser.h"
+#include "View.h"
 
 // #include "KSpreadDocIface.h"
 
@@ -1717,7 +1717,7 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       bool paintBordersLeft   = false;
       bool paintBordersTop    = false;
 #endif
-      Cell::Borders paintBorder = Cell::NoBorder;
+      CellView::Borders paintBorder = CellView::NoBorder;
 
       QPen rightPen( cell->effRightBorderPen( x, y ) );
       QPen leftPen( cell->effLeftBorderPen( x, y ) );
@@ -1732,15 +1732,15 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       // right border:
       if ( x >= KS_colMax )
         //paintBordersRight = true;
-        paintBorder |= Cell::RightBorder;
+        paintBorder |= CellView::RightBorder;
       else if ( x == regionRight ) {
-  paintBorder |= Cell::RightBorder;
+  paintBorder |= CellView::RightBorder;
   if ( cell->effRightBorderValue( x, y )
        < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
     rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
       }
       else {
-  paintBorder |= Cell::RightBorder;
+  paintBorder |= CellView::RightBorder;
   if ( cell->effRightBorderValue( x, y )
        < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
     rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
@@ -1749,15 +1749,15 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       // Similiar for other borders...
       // bottom border:
       if ( y >= KS_rowMax )
-        paintBorder |= Cell::BottomBorder;
+        paintBorder |= CellView::BottomBorder;
       else if ( y == regionBottom ) {
-  paintBorder |= Cell::BottomBorder;
+  paintBorder |= CellView::BottomBorder;
   if ( cell->effBottomBorderValue( x, y )
        < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
     bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
       else {
-        paintBorder |= Cell::BottomBorder;
+        paintBorder |= CellView::BottomBorder;
         if ( cell->effBottomBorderValue( x, y )
        < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
           bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
@@ -1765,15 +1765,15 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
 
       // left border:
       if ( x == 1 )
-        paintBorder |= Cell::LeftBorder;
+        paintBorder |= CellView::LeftBorder;
       else if ( x == regionLeft ) {
-  paintBorder |= Cell::LeftBorder;
+  paintBorder |= CellView::LeftBorder;
   if ( cell->effLeftBorderValue( x, y )
        < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
     leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
       else {
-        paintBorder |= Cell::LeftBorder;
+        paintBorder |= CellView::LeftBorder;
         if ( cell->effLeftBorderValue( x, y )
        < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
           leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
@@ -1781,15 +1781,15 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
 
       // top border:
       if ( y == 1 )
-        paintBorder |= Cell::TopBorder;
+        paintBorder |= CellView::TopBorder;
       else if ( y == regionTop ) {
-  paintBorder |= Cell::TopBorder;
+  paintBorder |= CellView::TopBorder;
   if ( cell->effTopBorderValue( x, y )
        < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
     topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
       else {
-        paintBorder |= Cell::TopBorder;
+        paintBorder |= CellView::TopBorder;
         if ( cell->effTopBorderValue( x, y )
        < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
           topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
@@ -1806,7 +1806,7 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       QPen highlightPen;
 #endif
 
-      cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
+      cell->cellView()->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
            paintBorder,
            rightPen, bottomPen, leftPen, topPen,
            mergedCellsPainted );

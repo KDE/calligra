@@ -62,6 +62,7 @@ class KoOasisLoadingContext;
 
 namespace KSpread
 {
+class CellView;
 class Canvas;
 class ConditionalDialog;
 class Format;
@@ -84,6 +85,7 @@ class View;
  */
 class KSPREAD_EXPORT Cell
 {
+  friend class CellView;
   friend class Conditions;
 public:
 
@@ -94,6 +96,8 @@ public:
      * @see #sheetDies
      */
     ~Cell();
+
+    CellView* cellView() const;
 
     /**
      * Returns the worksheet which owns this cell.
@@ -305,46 +309,6 @@ public:
      */
     void copyAll(Cell *cell);
 
-    enum Border
-    {
-      NoBorder     = 0x0,
-      LeftBorder   = 0x1,
-      RightBorder  = 0x2,
-      TopBorder    = 0x4,
-      BottomBorder = 0x8,
-    };
-    Q_DECLARE_FLAGS(Borders, Border)
-
-    /**
-     * \ingroup Painting
-     * Paints the cell.
-     *
-     * @param rect the portion of the canvas that is actually in view
-     * @param painter the painter object to paint on
-     * @param view the view of this data.  This may be 0, but no selection
-     *        will be included with the painting.
-     * @param coordinate coordinates on the painter where the top left corner
-     *                    of the cell should be painted plus width and height
-     * @param cellRef the column/row coordinates of the cell.
-     * @param paintBorder a combination of flags from the Cell::Border
-     *                    enum which specifies which cell borders to paint
-     * @param rightPen pen to use to draw the right border
-     *                 if @p paintBorder includes the RightBorder flag
-     * @param bottomPen pen to use to draw the bottom border
-     *                  if @p paintBorder includes the BottomBorder flag
-     * @param leftPen pen to use to draw the left border
-     *                if @p paintBorder includes the LeftBorder flag
-     * @param topPen pen to use to draw the top border
-     *               if @p paintBorder includes the TopBorder flag
-     * @param mergedCellsPainted list of merged cells being painted
-     */
-    void paintCell( const KoRect & rect, QPainter & painter,
-                    View * view, const KoPoint & coordinate,
-                    const QPoint & cellRef, Borders paintBorder,
-                    QPen& rightPen, QPen& bottomPen,
-                    QPen& leftPen,  QPen& topPen,
-                    QLinkedList<QPoint> &mergedCellsPainted );
-
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -380,6 +344,7 @@ public:
      */
     double dblHeight( int _row = -1, const Canvas *_canvas = 0 ) const;
 
+    // TODO Stefan: Replace with a position() method!!!
     /**
      * @return a QRect for this cell (i.e., a 1x1 rect).  @see zoomedCellRect
      */
@@ -590,11 +555,6 @@ public:
     /** converts content to date format */
     void convertToDate ();
 
-    /** return width of the text */
-    double textWidth() const;
-    /** return height of the text */
-    double textHeight() const;
-
 
     /**
     * Refreshing chart
@@ -603,8 +563,6 @@ public:
     * it's used when you paste cell
     */
     bool updateChart(bool refresh=true);
-
-    QString testAnchor( int _x, int _y ) const;
 
     /**
      * Starts calculating.
@@ -615,17 +573,6 @@ public:
      * @return true on success and false on error.
      */
     bool calc(bool delay = true);
-
-    /**
-     * Notify this cell that another cell is depending, or no longer depending on this cell's value
-     *
-     * @param col the column of the cell
-     * @param row the row of the cell
-     * @param sheet the sheet that the cell is on
-     * @param isDepending true if the cell is now depending on this one, false if it is not any longer
-     *                    depending on it.
-     */
-    void NotifyDepending( int col, int row, Sheet* sheet, bool isDepending );
 
     /**
      * Causes the format to be recalculated when the cell is drawn next time.
@@ -643,16 +590,19 @@ public:
      *                  just a temporary obscure (text overlap).
      */
     void obscure( Cell *cell, bool isForcing = false);
+
     /**
      * Tells this cell that it is no longer obscured.
      *
      * @param cell the cell that is no longer obscuring this one.
      */
     void unobscure(Cell* cell);
+
     /**
      * @return true if this cell is obscured by another.
      */
     bool isObscured() const;
+
     /**
      * If this cell is part of a merged cell, then the marker may
      * never reside on this cell.
@@ -786,23 +736,6 @@ public:
     bool testValidity() const;
 
     /**
-     * \ingroup Layout
-     * Calculates the layout of the cell.
-     *
-     * I.e. recalculates the text to be shown, its dimensions, its offset,
-     * breaks lines of the text to fit it into the cell, obscures neighbouring
-     * cells, if necessary.
-     */
-    void makeLayout( int _col, int _row );
-
-    /**
-     * \ingroup Layout
-     * Calculates the text dimensions and the offset
-     * for the current displayed text.
-     */
-    void calculateTextParameters();
-
-    /**
      * return align X when align is undefined
      */
     int defineAlignX();
@@ -914,113 +847,6 @@ public:
 
 protected:
     /**
-     * \ingroup Layout
-     * Determines the space needed for the text to be displayed.
-     *
-     * This depends on the following variables:
-     * \li text direction (horizontal or vertical)
-     * \li text angle
-     * \li wether the text is underlined
-     * \li vertical alignment
-     *
-     * There's a special treatment for bottom aligned, underlined text. For
-     * all other combinations of these two variables the dimension is the same.
-     *
-     * \internal Called from makeLayout() and calculateTextParameters().
-     */
-    void textSize( const QFontMetrics& fontMetrics );
-
-    /**
-     * \ingroup Layout
-     * Determines the text offset relative to the cell's top left corner.
-     *
-     * This depends on the following variables:
-     * \li horizontal alignment
-     * \li vertical alignment
-     * \li text angle
-     * \li text direction (horizontal or vertical)
-     * \li text width and height
-     * \li single or multiple rows
-     * \li cell width and height, including obscured cells
-     * \li thickness of the border pens
-     *
-     * \internal Called from makeLayout() and calculateTextParameters().
-     */
-    void textOffset( const QFontMetrics& fontMetrics );
-
-    /**
-     * \ingroup Layout
-     * Checks wether the cell text could be wrapped
-     * and does so, if it's necessary.
-     *
-     * \internal Called from makeLayout().
-     */
-    void breakLines( const QFontMetrics& fontMetrics );
-
-    /**
-     * \ingroup Layout
-     * Determines the dimension of this cell including any merged cells.
-     * Does NOT consider space, which is available from empty neighbours,
-     * and would be able to be obscured.
-     *
-     * \internal Called from makeLayout().
-     */
-    void calculateCellDimension() const;
-
-    /**
-     * \ingroup Layout
-     * Checks, wether horizontal neighbours could be obscured
-     * and does so, if necessary.
-     *
-     * \internal Called from makeLayout().
-     */
-    void obscureHorizontalCells();
-
-    /**
-     * \ingroup Layout
-     * Checks, wether vertical neighbours could be obscured
-     * and does so, if necessary.
-     *
-     * \internal Called from makeLayout().
-     */
-    void obscureVerticalCells();
-
-    /**
-     * \ingroup Layout
-     * \ingroup Painting
-     * Determines the font to be used by evaluating the font settings
-     * and applies the zoom factor on the font size.
-     *
-     * This depends on the following variables:
-     * \li font family
-     * \li font size
-     * \li font flags
-     * \li zoom factor
-     * \li conditional formatting
-     *
-     * \return the zoomed font
-     *
-     * \internal
-     */
-    QFont zoomedFont( int _col, int _row ) const;
-
-    /**
-     * \ingroup Painting
-     * Adjust the output text, so that it only holds the part that can be
-     * displayed. The altered text is only temporary stored. It is restored
-     * after the paint event has been processed.
-     *
-     * This depends on the following variables:
-     * \li horizontal alignment
-     * \li value format
-     * \li text direction (horizontal or vertical)
-     * \li indentation
-     *
-     * \internal Called from paintText().
-     */
-    QString textDisplaying( const QFontMetrics& fontMetrics );
-
-    /**
      * Cleans up formula stuff.
      * Call this before you store a new formula or to delete the
      * formula.
@@ -1088,109 +914,6 @@ private:
     Private * const d;
     // static const char* s_dataTypeToString[];
 
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintCellBorders( QPainter& painter, const KoRect &rect,
-                           const KoRect &cellRect, const QPoint &cellRef,
-                           Borders paintBorder,
-                           QPen & rightPen, QPen & bottomPen,
-                           QPen & leftPen, QPen & topPen );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintPageBorders( QPainter& painter, const KoRect &cellRect,
-                           const QPoint &cellRef, Borders paintBorder );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintText( QPainter& painter, const KoRect &cellRect,
-                    const QPoint &cellRef );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintMoreTextIndicator( QPainter& painter, const KoRect &cellRect,
-                                 QColor &backgroundColor );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintCommentIndicator( QPainter& painter, const KoRect &cellRect,
-                                const QPoint &cellRef, QColor &backgroundColor );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintFormulaIndicator( QPainter& painter, const KoRect &cellRect,
-                                QColor &backgroundColor );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintDefaultBorders( QPainter& painter, const KoRect &rect,
-                              const KoRect &cellRect, const QPoint &cellRef,
-                              Borders paintBorder,
-                              QPen const & rightPen, QPen const & bottomPen,
-                              QPen const & leftPen, QPen const & topPen );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintBackground( QPainter& painter, const KoRect &cellRect,
-                          const QPoint &cellRef, bool selected,
-                          QColor &backgroundColor );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintObscuredCells( const KoRect& rect, QPainter& painter,
-                             View* view, const KoRect &cellRect,
-                             const QPoint &cellRef, Borders paintBorder,
-                             QPen & rightPen, QPen & bottomPen,
-                             QPen & leftPen, QPen & topPen,
-                             QLinkedList<QPoint> &mergedCellsPainted );
-
-    /**
-     * \ingroup Painting
-     * helper function for paintCell() function
-     * @see paintCell()
-     * @internal
-     */
-    void paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
-                                 const QPoint &cellRef );
-
-
-
 
   /** handle the fact that a cell has been updated - calls cellUpdated()
   in the parent Sheet object */
@@ -1225,7 +948,6 @@ private:
   void loadOasisValidationValue( const QStringList &listVal );
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::Borders)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::StatusFlags)
 
 } // namespace KSpread
