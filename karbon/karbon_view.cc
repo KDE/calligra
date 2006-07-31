@@ -634,12 +634,7 @@ KarbonView::editPurgeHistory()
 			KStdGuiItem::del(),
 			"edit_purge_history" ) )
 	{
-		// Use the VCleanUp command to remove "deleted"
-		// objects from all layers.
-		VCleanUpCmd cmd( &part()->document() );
-		cmd.execute();
-
-		part()->clearHistory();
+		part()->commandHistory()->clear();
 	}
 }
 
