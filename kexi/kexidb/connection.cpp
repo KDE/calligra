@@ -2428,14 +2428,6 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 	return true;
 }
 
-//! @internal used by loadExtendedTableSchemaData()
-static QVariant loadFieldPropertyFromExtendedTableSchemaData(
-	const QDomElement& propEl, QByteArray& propertyName)
-{
-	propertyName = propEl.attribute("name").latin1();
-	return KexiDB::loadPropertyValueFromXML( propEl.firstChild() );
-}
-
 bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 {
 #define loadExtendedTableSchemaData_ERR \

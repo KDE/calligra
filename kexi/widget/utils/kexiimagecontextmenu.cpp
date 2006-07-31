@@ -130,7 +130,6 @@ void KexiImageContextMenu::insertFromFile()
 		KRecentDirs::add(":LastVisitedImagePath", url.directory());
 #endif
 
-	bool ok = true;
 	emit insertFromFileRequested(url);
 	if (focusWidget) {
 		focusWidget->raise();

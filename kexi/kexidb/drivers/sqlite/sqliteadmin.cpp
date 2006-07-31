@@ -40,6 +40,8 @@ bool SQLiteAdminTools::vacuum(const KexiDB::ConnectionData& data, const QString&
 {
 	clearError();
 #ifdef SQLITE2
+	Q_UNUSED(data);
+	Q_UNUSED(databaseName);
 	return false;
 #else
 	KexiDB::DriverManager manager;

@@ -3650,6 +3650,7 @@ void KexiMainWindowImpl::importantInfo(bool /*onStartup*/)
 
 void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
 {
+	Q_UNUSED(noMessage);
 	Kexi::tempShowForms() = show;
 #if 0
 	d->config->setGroup("Unfinished");
