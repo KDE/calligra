@@ -39,7 +39,7 @@
 using namespace KexiDB;
 
 QueryColumnInfo::QueryColumnInfo(Field *f, QCString _alias, bool _visible)
- : field(f), alias(_alias), indexForVisibleLookupValue(-1)
+ : field(f), alias(_alias), m_indexForVisibleLookupValue(-1)
  , visible(_visible)
 {
 }
@@ -1024,7 +1024,7 @@ void QuerySchema::computeFieldsExpanded()
 	}
 
 	//remove duplicates for lookup fields
-	QDict<uint> lookup_dict; //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue
+	QDict<uint> lookup_dict; //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue()
 	                         // (a mapping from table.name string to uint* lookupFieldIndex
 	lookup_dict.setAutoDelete(true);
 	i=0;
@@ -1062,7 +1062,7 @@ void QuerySchema::computeFieldsExpanded()
 		d->internalFields->insert(i, it.current());
 		d->fieldsOrder->insert(it.current(), list.count()+i);
 	}
-	//update QueryColumnInfo::indexForVisibleLookupValue cache for columns
+	//update QueryColumnInfo::indexForVisibleLookupValue() cache for columns
 	d->fieldsExpanded->count();
 	for (i=0; i < d->fieldsExpanded->size(); i++) {
 		QueryColumnInfo* ci = d->fieldsExpanded->at(i);
@@ -1078,7 +1078,7 @@ void QuerySchema::computeFieldsExpanded()
 				QString visibleTableAndFieldName( visibleField->table()->name()+"."+visibleField->name() );
 				uint *index = lookup_dict[ visibleTableAndFieldName ];
 				if (index)
-					ci->indexForVisibleLookupValue = d->fieldsExpanded->size() + *index;
+					ci->setIndexForVisibleLookupValue( d->fieldsExpanded->size() + *index );
 			}
 		}
 	}

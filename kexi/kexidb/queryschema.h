@@ -65,14 +65,22 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		Field *field;
 		QCString alias;
 
-		/*! Index of column with visible lookup value within the 'fields expanded' vector.
+		/*! \return index of column with visible lookup value within the 'fields expanded' vector.
 		 -1 means no visible lookup value is available because there is no lookup for the column.
 		 Cached for efficiency as we use this information frequently.
 		 @see LookupFieldSchema::visibleVolumn() */
-		int indexForVisibleLookupValue;
+		inline int indexForVisibleLookupValue() const { return m_indexForVisibleLookupValue; }
+
+		/*! Sets index of column with visible lookup value within the 'fields expanded' vector. */
+		inline void setIndexForVisibleLookupValue(int index) { m_indexForVisibleLookupValue = index; }
 
 		//! true if this column is visible to the user
 		bool visible : 1;
+
+	private:
+		/*! Index of column with visible lookup value within the 'fields expanded' vector.
+		 @see indexForVisibleLookupValue() */
+		int m_indexForVisibleLookupValue;
 };
 
 /*! KexiDB::QuerySchema provides information about database query

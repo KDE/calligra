@@ -355,24 +355,24 @@ void KexiComboBoxTableEdit::showFocus( const QRect& r, bool readOnly )
 //	d->button->move( pos().x()+ width(), pos().y() );
 	updateFocus( r );
 	d->button->setEnabled(!readOnly);
-	d->button->show();
+	if (readOnly)
+		d->button->hide();
+	else
+		d->button->show();
 }
 
 void KexiComboBoxTableEdit::resize(int w, int h)
 {
 	d->totalSize = QSize(w,h);
-	QWidget::resize(w - d->button->width(), h);
-	d->button->resize( h, h );
-	m_rightMargin = d->parentRightMargin + d->button->width();
-//	int xx = m_scrollView->contentsX();
+	if (column()->isReadOnly()) {
+		d->button->resize( h, h );
+		QWidget::resize(w - d->button->width(), h);
+	}
+	m_rightMargin = d->parentRightMargin + (column()->isReadOnly() ? 0 : d->button->width());
 	QRect r( pos().x(), pos().y(), w+1, h+1 );
-//	r.moveBy(m_scrollView->contentsX(),0);
 	r.moveBy(m_scrollView->contentsX(),m_scrollView->contentsY());
 	updateFocus( r );
 	if (d->popup) {
-//		KexiTableView *tv = static_cast<KexiTableView*>(m_scrollView);
-//		d->popup->move( tv->viewport()->mapToGlobal(pos()) + QPoint(0,height()) );//+ rect().bottomLeft() ) );
-//		d->popup->resize(w, d->popup->height());
 		d->popup->updateSize();
 	}
 }
@@ -380,15 +380,12 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 // internal
 void KexiComboBoxTableEdit::updateFocus( const QRect& r )
 {
-	if (d->button->width() > r.width())
-		moveChild(d->button, r.right() + 1, r.top());
-	else
-		moveChild(d->button, r.right() - d->button->width(), r.top() );
-
-/*	if (d->button->width() > r.width())
-		d->button->move( r.right() + 1, r.top() );
-	else
-		d->button->move( r.right() - d->button->width(), r.top() );*/
+	if (!column()->isReadOnly()) {
+		if (d->button->width() > r.width())
+			moveChild(d->button, r.right() + 1, r.top());
+		else
+			moveChild(d->button, r.right() - d->button->width(), r.top() );
+	}
 }
 
 void KexiComboBoxTableEdit::hideFocus()
@@ -514,8 +511,10 @@ bool KexiComboBoxTableEdit::valueIsEmpty()
 void KexiComboBoxTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h )
 {
 	d->currentEditorWidth = w;
-	if (w > d->button->width())
-		w -= d->button->width();
+	if (!column()->isReadOnly()) {
+		if (w > d->button->width())
+			w -= d->button->width();
+	}
 	p->drawRect(x, y, w, h);
 }
 
@@ -523,7 +522,7 @@ void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, const QVar
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
 	KexiInputTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
-	if (focused && (w > d->button->width()))
+	if (!column()->isReadOnly() && focused && (w > d->button->width()))
 		w -= (d->button->width() - x);
 	if (!val.isNull()) {
 		KexiTableViewData *relData = column()->relatedData();
@@ -550,26 +549,20 @@ void KexiComboBoxTableEdit::slotButtonClicked()
 {
 	// this method is sometimes called by hand: 
 	// do not allow to simulate clicks when the button is disabled
-	if (!d->button->isEnabled())
+	if (column()->isReadOnly() || !d->button->isEnabled())
 		return;
 
-	if (d->mouseBtnPressedWhenPopupVisible) {// && !d->button->isOn()) {
+	if (d->mouseBtnPressedWhenPopupVisible) {
 		d->mouseBtnPressedWhenPopupVisible = false;
 		d->button->setOn(false);
 		return;
 	}
 	kdDebug() << "KexiComboBoxTableEdit::slotButtonClicked()" << endl;
-//	if (!d->popup || !d->popup->isVisible()) {
-	if (!d->popup || !d->popup->isVisible()) { // || d->button->isOn()) {
+	if (!d->popup || !d->popup->isVisible()) {
 		kdDebug() << "SHOW POPUP" << endl;
 		showPopup();
 		d->button->setOn(true);
 	}
-/*	else {
-		d->popup->hide();
-		//TODO: cancel selection
-		d->button->setOn(false);
-	}*/
 }
 
 void KexiComboBoxTableEdit::showPopup()
@@ -648,25 +641,19 @@ void KexiComboBoxTableEdit::slotPopupHidden()
 	d->button->setOn(false);
 }
 
-/*int KexiComboBoxTableEdit::rightMargin()
-{
-	return d->button->width();
-}*/
-
 void KexiComboBoxTableEdit::hide()
 {
 	KexiInputTableEdit::hide();
 	if (d->popup)
 		d->popup->hide();
 	d->button->setOn(false);
-//	d->button->hide();
 }
 
 void KexiComboBoxTableEdit::show()
 {
 	KexiInputTableEdit::show();
-	d->button->show();
-//js	d->button->setOn(false);
+	if (!column()->isReadOnly())
+		d->button->show();
 }
 
 void KexiComboBoxTableEdit::slotRowAccepted(KexiTableItem * item, int /*row*/)
@@ -681,8 +668,8 @@ void KexiComboBoxTableEdit::slotRowAccepted(KexiTableItem * item, int /*row*/)
 bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 {
 	const int k = ke->key();
-	if ((ke->state()==NoButton && k==Key_F4)
-		|| (ke->state()==AltButton && k==Key_Down))
+	if ((ke->state()==NoButton && k==Qt::Key_F4)
+		|| (ke->state()==AltButton && k==Qt::Key_Down))
 	{
 		//show popup
 		slotButtonClicked();
@@ -708,41 +695,41 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 			highlightedOrSelectedRow = d->popup->tableView()->currentRow();
 
 		switch (k) {
-		case Key_Up:
+		case Qt::Key_Up:
 	//			d->popup->tableView()->selectPrevRow();
 				d->popup->tableView()->setHighlightedRow( 
 					QMAX(highlightedOrSelectedRow-1, 0) );
 				updateTextForHighlightedRow();
 				return true;
-		case Key_Down:
+		case Qt::Key_Down:
 	//			d->popup->tableView()->selectNextRow();
 				d->popup->tableView()->setHighlightedRow( 
 					QMIN(highlightedOrSelectedRow+1, d->popup->tableView()->rows()-1) );
 				updateTextForHighlightedRow();
 				return true;
-		case Key_PageUp:
+		case Qt::Key_PageUp:
 	//			d->popup->tableView()->selectPrevPage();
 				d->popup->tableView()->setHighlightedRow( 
 					QMAX(highlightedOrSelectedRow-d->popup->tableView()->rowsPerPage(), 0) );
 				updateTextForHighlightedRow();
 				return true;
-		case Key_PageDown:
+		case Qt::Key_PageDown:
 	//			d->popup->tableView()->selectNextPage();
 				d->popup->tableView()->setHighlightedRow( 
 					QMIN(highlightedOrSelectedRow+d->popup->tableView()->rowsPerPage(), 
 					 d->popup->tableView()->rows()-1) );
 				updateTextForHighlightedRow();
 				return true;
-		case Key_Home:
+		case Qt::Key_Home:
 				d->popup->tableView()->setHighlightedRow( 0 );
 				updateTextForHighlightedRow();
 				return true;
-		case Key_End:
+		case Qt::Key_End:
 				d->popup->tableView()->setHighlightedRow( d->popup->tableView()->rows()-1 );
 				updateTextForHighlightedRow();
 				return true;
-		case Key_Enter:
-		case Key_Return: //accept
+		case Qt::Key_Enter:
+		case Qt::Key_Return: //accept
 				//select row that is highlighted
 				if (d->popup->tableView()->highlightedRow()>=0)
 					d->popup->tableView()->selectRow( d->popup->tableView()->highlightedRow() );
@@ -826,9 +813,12 @@ int KexiComboBoxTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )
 
 bool KexiComboBoxTableEdit::eventFilter( QObject *o, QEvent *e )
 {
-	if (e->type()==QEvent::MouseButtonPress) {
-		QPoint gp = static_cast<QMouseEvent*>(e)->globalPos() + QPoint(m_scrollView->childX(d->button), m_scrollView->childY(d->button));
-		QRect r(d->button->mapToGlobal(d->button->geometry().topLeft()), d->button->mapToGlobal(d->button->geometry().bottomRight()));
+
+	if (!column()->isReadOnly() && e->type()==QEvent::MouseButtonPress) {
+		QPoint gp = static_cast<QMouseEvent*>(e)->globalPos() 
+			+ QPoint(m_scrollView->childX(d->button), m_scrollView->childY(d->button));
+		QRect r(d->button->mapToGlobal(d->button->geometry().topLeft()), 
+			d->button->mapToGlobal(d->button->geometry().bottomRight()));
 		if (o==d->popup && d->popup->isVisible() && r.contains( gp )) {
 			d->mouseBtnPressedWhenPopupVisible = true;
 		}
