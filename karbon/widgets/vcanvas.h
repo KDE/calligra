@@ -81,7 +81,6 @@ public:
 
 protected:
     void paintEvent(QPaintEvent * ev);
-    void wheelEvent(QWheelEvent *e);
     void mouseEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void keyReleaseEvent (QKeyEvent *e);

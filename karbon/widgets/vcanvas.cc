@@ -49,6 +49,9 @@ KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
     , m_snapToGrid(false)
     , m_unit( KoUnit::U_PT )
 {
+    m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY());
+    m_zoomHandler.setZoom(100);
+
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
 
@@ -71,18 +74,10 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     gc.setClipRect(ev->rect());
 
     m_shapeManager->paint( gc, m_zoomHandler, false );
-    if( m_tool )
-        m_tool->paint( gc, m_zoomHandler );
+    m_tool->paint( gc, m_zoomHandler );
+
 
     gc.end();
-}
-
-void KarbonCanvas::wheelEvent(QWheelEvent *e)
-{
-    double steps = e->delta() / 240.0;
-    // TODO: zoomhandler doesn't have a zoom() function, not sure how to replace it at the moment, so disable it till it's fixed (tbscope)
-    // int zoom = qRound(m_zoomHandler.zoom() / (float) pow(2.0, steps));
-    //zoomChanged( qMax(10, qMin(1000, zoom)) );
 }
 
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)

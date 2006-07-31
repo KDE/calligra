@@ -30,7 +30,7 @@ class MockTextShape : public KoShape {
     MockTextShape() {
         setUserData(new KoTextShapeData());
     }
-    void paint(QPainter &painter, KoViewConverter &converter) {
+    void paint(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }

@@ -29,7 +29,7 @@ KoRegularPolygonShape::KoRegularPolygonShape() : KoShape()
 	m_points = 5;
 }
 
-void KoRegularPolygonShape::paint(QPainter &painter, KoViewConverter &converter) {
+void KoRegularPolygonShape::paint(QPainter &painter, const KoViewConverter &converter) {
 	QPolygonF polygon;
 
 	double angle = 2 *M_PI / m_points;

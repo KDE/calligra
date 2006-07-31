@@ -40,7 +40,7 @@ private:
     class MockShape : public KoShape {
         public:
             MockShape() : KoShape() {}
-            void paint(QPainter &p, KoViewConverter&c) { Q_UNUSED(p); Q_UNUSED(c); }
+            void paint(QPainter &p, const KoViewConverter&c) { Q_UNUSED(p); Q_UNUSED(c); }
     };
 };
 

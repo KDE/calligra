@@ -43,7 +43,7 @@ class KARBONBASE_EXPORT KoLayerShape : public KoShapeContainer
 {
 public:
 	KoLayerShape();
-    virtual void paintComponent(QPainter &, KoViewConverter &) {};
+    virtual void paintComponent(QPainter &, const KoViewConverter &) {};
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const;
 	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
 	void load( const QDomElement& element );
