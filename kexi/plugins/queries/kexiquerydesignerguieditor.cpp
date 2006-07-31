@@ -585,12 +585,15 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 		return 0;
 	}
 	QString errMsg;
-	if (!buildSchema(&errMsg)) {
-		KMessageBox::sorry(this, errMsg);
-		cancel = true;
-		return 0;
-	}
 	KexiQueryPart::TempData * temp = tempData();
+	if (!(viewMode()==Kexi::DesignViewMode && !temp->queryChangedInPreviousView)) {
+		//only rebuild schema if it has not been rebuilt previously
+		if (!buildSchema(&errMsg)) {
+			KMessageBox::sorry(this, errMsg);
+			cancel = true;
+			return 0;
+		}
+	}
 	(KexiDB::SchemaData&)*temp->query() = sdata; //copy main attributes
 
 	bool ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *temp->query(), true /*newObject*/ );
