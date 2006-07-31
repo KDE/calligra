@@ -34,6 +34,7 @@
 #include "KoShapeManager.h"
 #include "KoTool.h"
 #include "KoPointerEvent.h"
+#include <KoGlobal.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -44,10 +45,10 @@
 
 KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
     : QWidget()
-    , m_tool(0)
     , m_zoomHandler()
-    , m_snapToGrid(false)
+    , m_tool(0)
     , m_unit( KoUnit::U_PT )
+    , m_snapToGrid(false)
 {
     m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY());
     m_zoomHandler.setZoom(100);
