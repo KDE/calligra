@@ -625,6 +625,7 @@ Value::Format Value::format() const
 
 void Value::setFormat (Value::Format fmt)
 {
+  detach();
   d->format = fmt;
 }
 
