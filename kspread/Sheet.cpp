@@ -5128,67 +5128,67 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     int endRow = qMin(backupRow+number,KS_rowMax);
 
 
-    while( !cellNode.isNull() )
+    while ( !cellNode.isNull() )
     {
         KoXmlElement cellElement = cellNode.toElement();
-        if( !cellElement.isNull() )
+        if ( !cellElement.isNull() )
         {
             columnIndex++;
             QString localName = cellElement.localName();
 
-      if( ((localName == "table-cell") || (localName == "covered-table-cell")) && cellElement.namespaceURI() == KoXmlNS::table)
+            if ( ((localName == "table-cell") || (localName == "covered-table-cell")) && cellElement.namespaceURI() == KoXmlNS::table)
             {
-  //  kDebug() << "Loading cell #" << cellCount << endl;
+                //kDebug() << "Loading cell #" << cellCount << endl;
 
                 Cell* cell = nonDefaultCell( columnIndex, backupRow );
-    bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
+                bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
 
-    Style* style = 0;
+                Style* style = 0;
 
-    if ( cellHasStyle )
-    {
-      style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];
-    }
+                if ( cellHasStyle )
+                {
+                    style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];
+                }
 
                 cell->loadOasis( cellElement, oasisContext, style );
 
 
-    bool haveStyle = cellHasStyle;
+                bool haveStyle = cellHasStyle;
                 int cols = 1;
 
-    //Copy this cell across & down if it has repeated rows or columns, but only
-    //if the cell has some content or a style associated with it.
-                if( (number > 1) || cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
+                // Copy this cell across & down, if it has repeated rows or columns, but only
+                // if the cell has some content or a style associated with it.
+                if ( (number > 1) || cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
                     int n = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
 
                     if (ok)
-                      // Some spreadsheet programs may support more rows than
-                      // KSpread so limit the number of repeated rows.
-                      // FIXME POSSIBLE DATA LOSS!
-                      cols = qMin( n, KS_colMax - columnIndex + 1 );
+                        // Some spreadsheet programs may support more rows than
+                        // KSpread so limit the number of repeated rows.
+                        // FIXME POSSIBLE DATA LOSS!
+                        cols = qMin( n, KS_colMax - columnIndex + 1 );
 
-        if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
+                    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
-                        //just increment it
-                        columnIndex +=cols - 1;
+                        // just increment it
+                        columnIndex += cols - 1;
                     }
                     else
                     {
-                            for(int k = cols ; k ; --k )
+                        for (int k = cols ; k ; --k )
+                        {
+                            if (k != cols)
+                                columnIndex++;
+
+                            for ( int newRow = backupRow; newRow < endRow; ++newRow )
                             {
-        if (k != cols)
-          columnIndex++;
+                                Cell* target = nonDefaultCell( columnIndex, newRow );
 
-        for ( int newRow = backupRow; newRow < endRow;++newRow )
-        {
-                                      Cell* target = nonDefaultCell( columnIndex, newRow );
-
-          if (cell != target)
-            target->copyAll( cell );
-                                }
-          }
+                                if (cell != target)
+                                    target->copyAll( cell );
+                            }
+                        }
                     }
                 }
             }

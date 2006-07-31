@@ -5460,7 +5460,7 @@ void Cell::loadOasisConditional( KoXmlElement * style )
 
 bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasisContext , Style* style )
 {
-  kDebug() << "*** Loading cell properties ***** at " << column() << ',' << row () << endl;
+    kDebug() << "*** Loading cell properties ***** at " << column() << ',' << row () << endl;
 
     QString text;
     kDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
@@ -5474,13 +5474,13 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         cellStyle = const_cast<KoXmlElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
 
-  if ( cellStyle )
-    loadOasisConditional( const_cast<KoXmlElement *>( cellStyle ) );
-   }
+        if ( cellStyle )
+            loadOasisConditional( const_cast<KoXmlElement *>( cellStyle ) );
+    }
 
     if (style)
     {
-      format()->setStyle( style );
+        format()->setStyle( style );
     }
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
