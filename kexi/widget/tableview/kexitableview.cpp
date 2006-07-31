@@ -864,7 +864,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 //<temp>
 		//show visible lookup value instead
-		if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue!=-1) {
+		if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue()!=-1) {
 			const QVariant *visibleFieldValue = 0;
 			if (m_currentItem == item && m_data->rowEditBuffer())
 				visibleFieldValue = m_data->rowEditBuffer()->at( *colinfo->visibleLookupColumnInfo );
@@ -873,7 +873,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 				//(use bufferedValueAt() - try to get buffered visible value for lookup field)
 				txt = visibleFieldValue->toString();
 			else
-				txt = item->at( edit->columnInfo()->indexForVisibleLookupValue ).toString();
+				txt = item->at( edit->columnInfo()->indexForVisibleLookupValue() ).toString();
 		}
 //</temp>
 	}

@@ -2957,7 +2957,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			+ m_driver->valueToSQL(Field::BigInteger, data[data.size()-1]));
 	}
 	m_sql += (sqlset + " WHERE " + sqlwhere);
-	KexiDBDbg << " -- SQL == " << m_sql << endl;
+	KexiDBDbg << " -- SQL == " << ((m_sql.length() > 400) ? (m_sql.left(400)+"[.....]") : m_sql) << endl;
 
 	if (!executeSQL(m_sql)) {
 		setError(ERR_UPDATE_SERVER_ERROR, i18n("Row updating on the server failed."));

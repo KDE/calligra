@@ -251,9 +251,9 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 		KexiDB::QueryColumnInfo *ci = fields[i];
 		if (ci->visible) {
 			KexiDB::QueryColumnInfo *visibleLookupColumnInfo = 0;
-			if (ci->indexForVisibleLookupValue != -1) {
+			if (ci->indexForVisibleLookupValue() != -1) {
 				//Lookup field is defined
-				visibleLookupColumnInfo = m_cursor->query()->expandedOrInternalField( ci->indexForVisibleLookupValue );
+				visibleLookupColumnInfo = m_cursor->query()->expandedOrInternalField( ci->indexForVisibleLookupValue() );
 				if (visibleLookupColumnInfo) {
 					// 2. Create a KexiTableViewData object for each found lookup field
 					

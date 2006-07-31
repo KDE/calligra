@@ -247,7 +247,7 @@ KexiBlobTableEdit::value()
 void KexiBlobTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h )
 {
 //	d->currentEditorWidth = w;
-	if (w > d->button->width())
+	if (!d->readOnly && w > d->button->width())
 		w -= d->button->width();
 	p->drawRect(x, y, w, h);
 }
@@ -515,16 +515,21 @@ void KexiBlobTableEdit::showFocus( const QRect& r, bool readOnly )
 	d->readOnly = readOnly; //cache for slotUpdateActionsAvailabilityRequested() 
 //	d->button->move( pos().x()+ width(), pos().y() );
 	updateFocus( r );
-	d->button->setEnabled(!readOnly);
-	d->button->show();
+//	d->button->setEnabled(!readOnly);
+	if (d->readOnly) 
+		d->button->hide();
+	else
+		d->button->show();
 }
 
 void KexiBlobTableEdit::resize(int w, int h)
 {
 	d->totalSize = QSize(w,h);
-	QWidget::resize(w - d->button->width(), h);
-	d->button->resize( h, h );
-	m_rightMargin = d->parentRightMargin + d->button->width();
+	const int addWidth = d->readOnly ? 0 : d->button->width();
+	QWidget::resize(w - addWidth, h);
+	if (!d->readOnly)
+		d->button->resize( h, h );
+	m_rightMargin = d->parentRightMargin + addWidth;
 	QRect r( pos().x(), pos().y(), w+1, h+1 );
 	r.moveBy(m_scrollView->contentsX(),m_scrollView->contentsY());
 	updateFocus( r );
@@ -535,10 +540,12 @@ void KexiBlobTableEdit::resize(int w, int h)
 
 void KexiBlobTableEdit::updateFocus( const QRect& r )
 {
-	if (d->button->width() > r.width())
-		moveChild(d->button, r.right() + 1, r.top());
-	else
-		moveChild(d->button, r.right() - d->button->width(), r.top() );
+	if (!d->readOnly) {
+		if (d->button->width() > r.width())
+			moveChild(d->button, r.right() + 1, r.top());
+		else
+			moveChild(d->button, r.right() - d->button->width(), r.top() );
+	}
 }
 
 void KexiBlobTableEdit::hideFocus()
@@ -571,14 +578,16 @@ bool KexiBlobTableEdit::handleKeyPress( QKeyEvent* ke, bool editorActive )
 
 	const int k = ke->key();
 	KKey kkey(ke);
-	if ((ke->state()==Qt::NoButton && k==Qt::Key_F4)
-		|| (ke->state()==Qt::AltButton && k==Qt::Key_Down)) {
-		d->button->animateClick();
-		QMouseEvent me( QEvent::MouseButtonPress, QPoint(2,2), Qt::LeftButton, Qt::NoButton );
-		QApplication::sendEvent( d->button, &me );
-	}
-	else if ((ke->state()==NoButton && (k==Qt::Key_F2 || k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return))) {
-		d->popup->insertFromFile();
+	if (!d->readOnly) {
+		if ((ke->state()==Qt::NoButton && k==Qt::Key_F4)
+			|| (ke->state()==Qt::AltButton && k==Qt::Key_Down)) {
+			d->button->animateClick();
+			QMouseEvent me( QEvent::MouseButtonPress, QPoint(2,2), Qt::LeftButton, Qt::NoButton );
+			QApplication::sendEvent( d->button, &me );
+		}
+		else if ((ke->state()==NoButton && (k==Qt::Key_F2 || k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return))) {
+			d->popup->insertFromFile();
+		}
 	}
 	else
 		return false;
