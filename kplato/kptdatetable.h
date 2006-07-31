@@ -342,7 +342,7 @@ protected:
 
     int weekday(int col) {
         int day = col - m_dateStartCol + KGlobal::locale()->weekStartDay();
-        if (day > 7) day % 7;
+        if (day > 7) day %= 7;
         return day;
     }
 
