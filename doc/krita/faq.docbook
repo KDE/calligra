@@ -2,18 +2,26 @@
 <title>Questions and Answers</title>
 
 <para>
-Stuff does not work, sometimes. &krita; can crash, sometimes — not all
-that often, these days, but still. So you will need some help. The first thing
-to do is try to determine what was going on, exactly. Then you can create a
-bug report: go to the <guimenu>Help</guimenu> menu and select
-<guimenuitem>Report Bug</guimenuitem>. That way we know exactly which version of
+Sometimes, stuff does not work as one would like. &krita; can crash — not all
+that often, these days, but still. So you might need some help. The first thing
+to do is trying to determine what was going on, exactly. Try to reproduce the
+problem and write down what you did before the problem occurred.
+</para><para>
+Then you can create a bug report: go to the <guimenu>Help</guimenu> menu and select
+<guimenuitem>Report Bug</guimenuitem>. That way, we know exactly which version of
 &krita; you are using. Please try to make reasonably sure that your problem has
-not been reported already! You can also, if it is just that you cannot figure
-out how to do something that you can do using Photoshop using &krita; or some
-other question, mail the &krita; developers at our mailing list
-<email>kde-kimageshop@kde.org</email>, or mail the maintainer directly:
-<email>boud@valdyas.org</email>.
+not been reported already! Also, please try to be as complete as possible in
+describing your problem.
+</para><para>
+You can also, if it is just that you cannot figure out how to do something
+that you can do using Photoshop (or any other drawing program) using &krita;,
+or if you have some other question, e-mail the &krita; developers at our
+mailing list <email>kimageshop@kde.org</email>, or e-mail the maintainer
+or documentation maintainer directly at <email>boud@valdyas.org</email> or
+<email>sanderkoning@kde.nl</email>, respectively.
 </para>
+
+<!-- TODO Add a set of Q&As? -->
 
 &reporting.bugs;
 &updating.documentation;
