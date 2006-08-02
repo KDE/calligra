@@ -187,7 +187,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 
 			private:
 				//! Performs physical execution of this action.
-				virtual tristate execute(Connection &conn, TableSchema &table) { return true; }
+				virtual tristate execute(Connection& /*conn*/, TableSchema& /*table*/) { return true; }
 
 				//! requirements for altering; used internally by AlterTableHandler object
 				int m_alteringRequirements;

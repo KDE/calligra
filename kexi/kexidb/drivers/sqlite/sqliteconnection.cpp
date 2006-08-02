@@ -114,7 +114,7 @@ bool SQLiteConnection::drv_disconnect()
 bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 {
 	//this is one-db-per-file database
-	list.append( m_data->fileName() ); //more consistent than dbFileName() ?
+	list.append( data()->fileName() ); //more consistent than dbFileName() ?
 	return true;
 }
 
@@ -151,7 +151,7 @@ bool SQLiteConnection::drv_createDatabase( const QString &dbName )
 	// SQLite creates a new db is it does not exist
 	return drv_useDatabase(dbName);
 #if 0
-	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
+	d->data = sqlite_open( QFile::encodeName( data()->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );
 	d->storeResult();
 	return d->data != 0;
@@ -162,11 +162,11 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	MessageHandler* msgHandler )
 {
 	Q_UNUSED(dbName);
-//	KexiDBDrvDbg << "drv_useDatabase(): " << m_data->fileName() << endl;
+//	KexiDBDrvDbg << "drv_useDatabase(): " << data()->fileName() << endl;
 #ifdef SQLITE2
 	Q_UNUSED(cancelled);
 	Q_UNUSED(msgHandler);
-	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
+	d->data = sqlite_open( QFile::encodeName( data()->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );
 	d->storeResult();
 	return d->data != 0;
@@ -179,8 +179,8 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	const bool wasReadOnly = Connection::isReadOnly();
 
 	d->res = sqlite3_open( 
-		//QFile::encodeName( m_data->fileName() ), 
-		m_data->fileName().utf8(), /* unicode expected since SQLite 3.1 */
+		//QFile::encodeName( data()->fileName() ), 
+		data()->fileName().utf8(), /* unicode expected since SQLite 3.1 */
 		&d->data,
 		exclusiveFlag,
 		allowReadonly /* If 1 and locking fails, try opening in read-only mode */
@@ -192,7 +192,7 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 		if (KMessageBox::Continue != 
 			askQuestion( 
 			i18n("Do you want to open file \"%1\" as read-only?")
-				.arg(QDir::convertSeparators(m_data->fileName()))
+				.arg(QDir::convertSeparators(data()->fileName()))
 			+ "\n\n"
 			+ i18n("The file is probably already open on this or another computer.") + " "
 			+ i18n("Could not gain exclusive access for writing the file."),
@@ -252,9 +252,11 @@ bool SQLiteConnection::drv_closeDatabase()
 
 bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 {
-	if (QFile(m_data->fileName()).exists() && !QDir().remove(m_data->fileName())) {
+	Q_UNUSED(dbName); // Each database is one single SQLite file.
+	const QString filename = data()->fileName();
+	if (QFile(filename).exists() && !QDir().remove(filename)) {
 		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\".")
-			.arg(QDir::convertSeparators(dbName)) + " "
+			.arg(QDir::convertSeparators(filename)) + " "
 			+ i18n("Check the file's permissions and whether it is already opened and locked by another application."));
 		return false;
 	}

@@ -70,10 +70,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual ~Connection();
 
 		/*! \return parameters that were used to create this connection. */
-		ConnectionData* data() const { return m_data; }
+		ConnectionData* data() const;
 
 		/*! \return the driver used for this connection. */
-		Driver* driver() const { return m_driver; }
+		inline Driver* driver() const { return m_driver; }
 
 		/*! 
 		\brief Connects to driver with given parameters. 
@@ -152,7 +152,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		
 		\return name of currently used database for this connection or empty string
 			if there is no used database */
-		QString currentDatabase() { return m_usedDatabase; }
+		inline QString currentDatabase() const;
 
 		/*! \brief Drops database with name \a dbName.
 		
@@ -185,10 +185,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 to build the database. */
 		static const QStringList& kexiDBSystemTableNames();
 
-		//! Version information for this connection. Only valid when database is used.
-		//! It's usually compared to drivers' and KexiDB library version.
-		int versionMajor() const;
-		int versionMinor() const;
+		/*! Version information for this connection. Only valid when database is used.
+		It's usually compared to drivers' and KexiDB library version. */
+		int versionMajor() const; //!< The major version. E.g. "1" on "1.8"
+		int versionMinor() const; //!< The minor version. E.g. "8" on "1.8"
 
 		/*! \return DatabaseProperties obejct allowing to read and write global database properties 
 		 for this connection. */
@@ -750,7 +750,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 */
 		virtual bool drv_createTable( const TableSchema& tableSchema );
 
-		/*! */
+		/*! Prepare a SQL statement and return a \a PreparedStatement instance. */
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
 			FieldList& fields) = 0;
 
@@ -1016,12 +1016,13 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Used internally by querySchema() methods. */
 		QuerySchema* setupQuerySchema( const RowData &data );
 
+		/*! Update a row. */
 		bool updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool useROWID = false);
-
+		/*! Insert a new row. */
 		bool insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool getROWID = false);
-
+		/*! Delete an existing row. */
 		bool deleteRow(QuerySchema &query, RowData& data, bool useROWID = false);
-
+		/*! Delete all existing rows. */
 		bool deleteAllRows(QuerySchema &query);
 
 		/*! Allocates all needed table KexiDB system objects for kexi__* KexiDB liblary's
@@ -1052,7 +1053,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		inline QString escapeIdentifier(const QString& id, 
 			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const {
-			return m_driver->escapeIdentifier(id, drvEscaping);
+				return m_driver->escapeIdentifier(id, drvEscaping);
 		}
 		
 		/*! Called by TableSchema -- signals destruction to Connection object
@@ -1092,34 +1093,25 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		/* This is a part of alter table interface implementing lower-level operations 
+		/*! This is a part of alter table interface implementing lower-level operations 
 		 used to perform table schema altering. Used by AlterTableHandler.
 		
-		 Changes value of field property. 
+		 Changes value of field property.
 		 \return true on success, false on failure, cancelled if the action has been cancelled.
 
-		 Note for driver developers: implement this if the driver has to supprot the altering.
-		 */
+		 Note for driver developers: implement this if the driver has to support the altering. */
 		virtual tristate drv_changeFieldProperty(TableSchema &table, Field& field, 
 			const QString& propertyName, const QVariant& value) {
 			Q_UNUSED(table); Q_UNUSED(field); Q_UNUSED(propertyName); Q_UNUSED(value);
 			return cancelled; }
 
-		QGuardedPtr<ConnectionData> m_data;
-		QString m_name;
-		QString m_usedDatabase; //!< database name that is opened now
-
-		//! Table schemas retrieved on demand with tableSchema()
-		QIntDict<TableSchema> m_tables;
-		QDict<TableSchema> m_tables_byname;
-		QIntDict<QuerySchema> m_queries;
-		QDict<QuerySchema> m_queries_byname;
-
-		//! used just for removing system TableSchema objects on db close.
-		QPtrDict<TableSchema> m_kexiDBSystemTables;
-
 		//! cursors created for this connection
 		QPtrDict<KexiDB::Cursor> m_cursors;
+
+	private:
+		ConnectionPrivate* const d; //!< @internal d-pointer class.
+		Driver* const m_driver; //!< The driver this \a Connection instance uses.
+		bool m_destructor_started : 1; //!< helper: true if destructor is started.
 
 	friend class KexiDB::Driver;
 	friend class KexiDB::Cursor;
@@ -1127,11 +1119,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	friend class KexiDB::DatabaseProperties; //!< for setError()
 	friend class ConnectionPrivate;
 	friend class KexiDB::AlterTableHandler;
-
-		ConnectionPrivate *d;
-	private:
-		Driver *m_driver;
-		bool m_destructor_started : 1; //!< helper: true if destructor is started
 };
 
 } //namespace KexiDB

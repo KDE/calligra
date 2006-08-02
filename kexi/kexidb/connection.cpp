@@ -65,12 +65,16 @@ ConnectionInternal::~ConnectionInternal()
 class ConnectionPrivate
 {
 	public:
-		ConnectionPrivate(Connection *conn)
+		ConnectionPrivate(Connection* const conn, ConnectionData &conn_data)
 		 : conn(conn)
+		 , conn_data(&conn_data)
 		 , tableSchemaChangeListeners(101)
 		 , versionMajor(-1)
 		 , versionMinor(-1)
 		 , m_parser(0)
+		 , m_tables_byname(101, false)
+		 , m_queries_byname(101, false)
+		 , m_kexiDBSystemTables(101)
 		 , dont_remove_transactions(false)
 		 , skip_databaseExists_check_in_useDatabase(false)
 		 , default_trans_started_inside(false)
@@ -79,6 +83,16 @@ class ConnectionPrivate
 		{
 			tableSchemaChangeListeners.setAutoDelete(true);
 			obsoleteQueries.setAutoDelete(true);
+
+			m_tables.setAutoDelete(true);
+			m_tables_byname.setAutoDelete(false);//m_tables is owner, not me
+			m_kexiDBSystemTables.setAutoDelete(true);//only system tables
+			m_queries.setAutoDelete(true);
+			m_queries_byname.setAutoDelete(false);//m_queries is owner, not me
+
+			//reasonable sizes: TODO
+			m_tables.resize(101);
+			m_queries.resize(101);
 		}
 		~ConnectionPrivate()
 		{
@@ -95,7 +109,8 @@ class ConnectionPrivate
 
 		inline Parser *parser() { return m_parser ? m_parser : (m_parser = new Parser(conn)); }
 
-		Connection *conn;
+		Connection* const conn; //!< The \a Connection instance this \a ConnectionPrivate belongs to.
+		QGuardedPtr<ConnectionData> conn_data; //!< the \a ConnectionData used within that connection.
 
 		/*! Default transaction handle.
 		If transactions are supported: Any operation on database (e.g. inserts)
@@ -116,10 +131,20 @@ class ConnectionPrivate
 
 		Parser *m_parser;
 
+		//! Table schemas retrieved on demand with tableSchema()
+		QIntDict<TableSchema> m_tables;
+		QDict<TableSchema> m_tables_byname;
+		QIntDict<QuerySchema> m_queries;
+		QDict<QuerySchema> m_queries_byname;
+
+		//! used just for removing system TableSchema objects on db close.
+		QPtrDict<TableSchema> m_kexiDBSystemTables;
+
 		//! Database properties
 		DatabaseProperties* dbProperties;
 
 		QString availableDatabaseName; //!< used by anyAvailableDatabaseName()
+		QString usedDatabase; //!< database name that is opened now (the currentDatabase() name)
 
 		//! true if rollbackTransaction() and commitTransaction() shouldn't remove
 		//! the transaction object from m_transactions list; used by closeDatabase()
@@ -158,25 +183,14 @@ QStringList KexiDB_kexiDBSystemTableNames;
 Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	: QObject()
 	,KexiDB::Object()
-	,m_data(&conn_data)
-	,m_tables_byname(101, false)
-	,m_queries_byname(101, false)
-	,m_kexiDBSystemTables(101)
-	,d(new ConnectionPrivate(this))
+	,d(new ConnectionPrivate(this, conn_data))
 	,m_driver(driver)
 	,m_destructor_started(false)
 {
 	d->dbProperties = new DatabaseProperties(this);
-	m_tables.setAutoDelete(true);
-	m_tables_byname.setAutoDelete(false);//m_tables is owner, not me
-	m_kexiDBSystemTables.setAutoDelete(true);//only system tables
-	m_queries.setAutoDelete(true);
-	m_queries_byname.setAutoDelete(false);//m_queries is owner, not me
 	m_cursors.setAutoDelete(true);
 //	d->transactions.setAutoDelete(true);
 	//reasonable sizes: TODO
-	m_tables.resize(101);
-	m_queries.resize(101);
 	m_cursors.resize(101);
 //	d->transactions.resize(101);//woohoo! so many transactions?
 	m_sql.reserve(0x4000);
@@ -195,17 +209,21 @@ Connection::~Connection()
 //	KexiDBDbg << "Connection::~Connection()" << endl;
 	delete d->dbProperties;
 	delete d;
-	d = 0;
 /*	if (m_driver) {
 		if (m_is_connected) {
 			//delete own table schemas
-			m_tables.clear();
+			d->m_tables.clear();
 			//delete own cursors:
 			m_cursors.clear();
 		}
 		//do not allow the driver to touch me: I will kill myself.
 		m_driver->m_connections.take( this );
 	}*/
+}
+
+ConnectionData* Connection::data() const
+{
+	return d->conn_data;
 }
 
 bool Connection::connect()
@@ -218,15 +236,15 @@ bool Connection::connect()
 
 	if (!(d->isConnected = drv_connect())) {
 		setError(m_driver->isFileDriver() ?
-			i18n("Could not open \"%1\" project file.").arg(QDir::convertSeparators(m_data->fileName()))
-			: i18n("Could not connect to \"%1\" database server.").arg(m_data->serverInfoString()) );
+			i18n("Could not open \"%1\" project file.").arg(QDir::convertSeparators(d->conn_data->fileName()))
+			: i18n("Could not connect to \"%1\" database server.").arg(d->conn_data->serverInfoString()) );
 	}
 	return d->isConnected;
 }
 
 bool Connection::isDatabaseUsed() const
 {
-	return !m_usedDatabase.isEmpty() && d->isConnected && drv_isDatabaseUsed();
+	return !d->usedDatabase.isEmpty() && d->isConnected && drv_isDatabaseUsed();
 }
 
 void Connection::clearError()
@@ -344,23 +362,23 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
 //js: moved from useDatabase():
-		QFileInfo file(m_data->fileName());
+		QFileInfo file(d->conn_data->fileName());
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
 				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.")
-				.arg(QDir::convertSeparators(m_data->fileName())) );
+				.arg(QDir::convertSeparators(d->conn_data->fileName())) );
 			return false;
 		}
 		if (!file.isReadable()) {
 			if (!ignoreErrors)
 				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.")
-				.arg(QDir::convertSeparators(m_data->fileName())) );
+				.arg(QDir::convertSeparators(d->conn_data->fileName())) );
 			return false;
 		}
 		if (!file.isWritable()) {
 			if (!ignoreErrors)
 				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.")
-				.arg(QDir::convertSeparators(m_data->fileName())) );
+				.arg(QDir::convertSeparators(d->conn_data->fileName())) );
 			return false;
 		}
 		return true;
@@ -412,7 +430,7 @@ bool Connection::createDatabase( const QString &dbName )
 	}
 	if (m_driver->isFileDriver()) {
 		//update connection data if filename differs
-		m_data->setFileName( dbName );
+		d->conn_data->setFileName( dbName );
 	}
 
 	QString tmpdbName;
@@ -442,7 +460,7 @@ bool Connection::createDatabase( const QString &dbName )
 	}
 	else {
 		//just for the rule
-		m_usedDatabase = dbName;
+		d->usedDatabase = dbName;
 	}
 
 	Transaction trans;
@@ -460,7 +478,7 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 
 	//-physically create system tables
-	for (QPtrDictIterator<TableSchema> it(m_kexiDBSystemTables); it.current(); ++it) {
+	for (QPtrDictIterator<TableSchema> it(d->m_kexiDBSystemTables); it.current(); ++it) {
 		if (!drv_createTable( it.current()->name() ))
  			createDatabase_ERROR;
 	}
@@ -514,7 +532,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible, bool *
 //		if (!db_lst.isEmpty())
 //			my_dbName = db_lst.first();
 //	}
-	if (m_usedDatabase == my_dbName)
+	if (d->usedDatabase == my_dbName)
 		return true; //already used
 
 	if (!d->skip_databaseExists_check_in_useDatabase) {
@@ -522,10 +540,10 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible, bool *
 			return false; //database must exist
 	}
 
-	if (!m_usedDatabase.isEmpty() && !closeDatabase()) //close db if already used
+	if (!d->usedDatabase.isEmpty() && !closeDatabase()) //close db if already used
 		return false;
 
-	m_usedDatabase = "";
+	d->usedDatabase = "";
 
 	if (!drv_useDatabase( my_dbName, cancelled, msgHandler )) {
 		if (cancelled && *cancelled)
@@ -579,13 +597,13 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible, bool *
 			//js TODO: CONVERSION CODE HERE (or signal that conversion is needed)
 		}
 	}
-	m_usedDatabase = my_dbName;
+	d->usedDatabase = my_dbName;
 	return true;
 }
 
 bool Connection::closeDatabase()
 {
-	if (m_usedDatabase.isEmpty())
+	if (d->usedDatabase.isEmpty())
 		return true; //no db used
 	if (!checkConnected())
 		return true;
@@ -614,16 +632,21 @@ bool Connection::closeDatabase()
 	//delete own cursors:
 	m_cursors.clear();
 	//delete own schemas
-	m_tables.clear();
-	m_kexiDBSystemTables.clear();
-	m_queries.clear();
+	d->m_tables.clear();
+	d->m_kexiDBSystemTables.clear();
+	d->m_queries.clear();
 
 	if (!drv_closeDatabase())
 		return false;
 
-	m_usedDatabase = "";
+	d->usedDatabase = "";
 //	KexiDBDbg << "Connection::closeDatabase(): " << ret << endl;
 	return ret;
+}
+
+QString Connection::currentDatabase() const
+{
+	return d->usedDatabase;
 }
 
 bool Connection::useTemporaryDatabaseIfNeeded(QString &tmpdbName)
@@ -656,18 +679,18 @@ bool Connection::dropDatabase( const QString &dbName )
 		return false;
 
 	QString dbToDrop;
-	if (dbName.isEmpty() && m_usedDatabase.isEmpty()) {
+	if (dbName.isEmpty() && d->usedDatabase.isEmpty()) {
 		if (!m_driver->isFileDriver()
-		 || (m_driver->isFileDriver() && m_data->fileName().isEmpty()) ) {
+		 || (m_driver->isFileDriver() && d->conn_data->fileName().isEmpty()) ) {
 			setError(ERR_NO_NAME_SPECIFIED, i18n("Cannot drop database - name not specified.") );
 			return false;
 		}
 		//this is a file driver so reuse previously passed filename
-		dbToDrop = m_data->fileName();
+		dbToDrop = d->conn_data->fileName();
 	}
 	else {
 		if (dbName.isEmpty()) {
-			dbToDrop = m_usedDatabase;
+			dbToDrop = d->usedDatabase;
 		} else {
 			if (m_driver->isFileDriver()) //lets get full path
 				dbToDrop = QFileInfo(dbName).absFilePath();
@@ -686,7 +709,7 @@ bool Connection::dropDatabase( const QString &dbName )
 		return false;
 	}
 
-	if (isDatabaseUsed() && m_usedDatabase == dbToDrop) {
+	if (isDatabaseUsed() && d->usedDatabase == dbToDrop) {
 		//we need to close database because cannot drop used this database
 		if (!closeDatabase())
 			return false;
@@ -1309,7 +1332,7 @@ bool Connection::storeMainFieldSchema(Field *field)
 {
 	if (!field || !field->table())
 		return false;
-	FieldList *fl = createFieldListForKexi__Fields(m_tables_byname["kexi__fields"]);
+	FieldList *fl = createFieldListForKexi__Fields(d->m_tables_byname["kexi__fields"]);
 	if (!fl)
 		return false;
 
@@ -1385,7 +1408,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	KexiDB::TableSchema *existingTable = 0;
 	if (replaceExisting) {
 		//get previous table (do not retrieve, though)
-		existingTable = m_tables_byname[tableName];
+		existingTable = d->m_tables_byname[tableName];
 		if (existingTable) {
 			if (existingTable == tableSchema) {
 				clearError();
@@ -1411,7 +1434,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 
 /*	if (replaceExisting) {
 	//get previous table (do not retrieve, though)
-	KexiDB::TableSchema *existingTable = m_tables_byname.take(name);
+	KexiDB::TableSchema *existingTable = d->m_tables_byname.take(name);
 	if (oldTable) {
 	}*/
 
@@ -1428,14 +1451,14 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		if (!storeObjectSchemaData( *tableSchema, true ))
 			createTable_ERR;
 
-		TableSchema *ts = m_tables_byname["kexi__fields"];
+		TableSchema *ts = d->m_tables_byname["kexi__fields"];
 		if (!ts)
 			return false;
 		//for sanity: remove field info (if any) for this table id
 		if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id()))
 			return false;
 
-		FieldList *fl = createFieldListForKexi__Fields(m_tables_byname["kexi__fields"]);
+		FieldList *fl = createFieldListForKexi__Fields(d->m_tables_byname["kexi__fields"]);
 		if (!fl)
 			return false;
 
@@ -1456,7 +1479,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	//finally:
 /*	if (replaceExisting) {
 		if (existingTable) {
-			m_tables.take(existingTable->id());
+			d->m_tables.take(existingTable->id());
 			delete existingTable;
 		}
 	}*/
@@ -1474,8 +1497,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 				removeTableSchemaInternal(tableSchema);
 			}
 			//store one schema object locally:
-			m_tables.insert(tableSchema->id(), tableSchema);
-			m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
+			d->m_tables.insert(tableSchema->id(), tableSchema);
+			d->m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
 		}
 		//ok, this table is not created by the connection
 		tableSchema->m_conn = this;
@@ -1485,16 +1508,16 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 
 void Connection::removeTableSchemaInternal(TableSchema *tableSchema)
 {
-	m_tables_byname.remove(tableSchema->name());
-	m_tables.remove(tableSchema->id());
+	d->m_tables_byname.remove(tableSchema->name());
+	d->m_tables.remove(tableSchema->id());
 }
 
 bool Connection::removeObject( uint objId )
 {
 	clearError();
 	//remove table schema from kexi__* tables
-	if (!KexiDB::deleteRow(*this, m_tables_byname["kexi__objects"], "o_id", objId) //schema entry
-		|| !KexiDB::deleteRow(*this, m_tables_byname["kexi__objectdata"], "o_id", objId)) {//data blocks
+	if (!KexiDB::deleteRow(*this, d->m_tables_byname["kexi__objects"], "o_id", objId) //schema entry
+		|| !KexiDB::deleteRow(*this, d->m_tables_byname["kexi__objectdata"], "o_id", objId)) {//data blocks
 		setError(ERR_DELETE_SERVER_ERROR, i18n("Could not remove object's data."));
 		return false;
 	}
@@ -1557,7 +1580,7 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemov
 			return false;
 	}
 
-	TableSchema *ts = m_tables_byname["kexi__fields"];
+	TableSchema *ts = d->m_tables_byname["kexi__fields"];
 	if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id())) //field entries
 		return false;
 
@@ -1617,7 +1640,7 @@ tristate Connection::alterTable( TableSchema& tableSchema, TableSchema& newTable
 bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName, bool replace)
 {
 	clearError();
-	if (&tableSchema!=m_tables[tableSchema.id()]) {
+	if (&tableSchema!=d->m_tables[tableSchema.id()]) {
 		setError(ERR_OBJECT_NOT_FOUND, i18n("Unknown table \"%1\"").arg(tableSchema.name()));
 		return false;
 	}
@@ -1675,9 +1698,9 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 	}
 
 	//update tableSchema:
-	m_tables_byname.take(tableSchema.name());
+	d->m_tables_byname.take(tableSchema.name());
 	tableSchema.setName(newTableName);
-	m_tables_byname.insert(tableSchema.name(), &tableSchema);
+	d->m_tables_byname.insert(tableSchema.name(), &tableSchema);
 	return true;
 }
 
@@ -1719,15 +1742,15 @@ bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 	if (!beginAutoCommitTransaction(tg))
 		return false;
 
-/*	TableSchema *ts = m_tables_byname["kexi__querydata"];
+/*	TableSchema *ts = d->m_tables_byname["kexi__querydata"];
 	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
 		return false;
 
-	ts = m_tables_byname["kexi__queryfields"];
+	ts = d->m_tables_byname["kexi__queryfields"];
 	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
 		return false;
 
-	ts = m_tables_byname["kexi__querytables"];
+	ts = d->m_tables_byname["kexi__querytables"];
 	if (!KexiDB::deleteRow(*this, ts, "q_id", querySchema->id()))
 		return false;*/
 
@@ -1737,8 +1760,8 @@ bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 	}
 
 //TODO(js): update any structure that depend on this table!
-	m_queries_byname.remove(querySchema->name());
-	m_queries.remove(querySchema->id());
+	d->m_queries_byname.remove(querySchema->name());
+	d->m_queries.remove(querySchema->id());
 
 	return commitAutoCommitTransaction(tg.transaction());
 }
@@ -1764,7 +1787,7 @@ bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 
 bool Connection::drv_createTable( const QString& tableSchemaName )
 {
-	TableSchema *ts = m_tables_byname[tableSchemaName];
+	TableSchema *ts = d->m_tables_byname[tableSchemaName];
 	if (!ts)
 		return false;
 	return drv_createTable(*ts);
@@ -2128,7 +2151,7 @@ tristate Connection::loadObjectSchemaData( int objectType, const QString& object
 
 bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 {
-	TableSchema *ts = m_tables_byname["kexi__objects"];
+	TableSchema *ts = d->m_tables_byname["kexi__objects"];
 	if (!ts)
 		return false;
 	if (newObject) {
@@ -2602,15 +2625,15 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		return 0;
 	}
 	//store locally:
-	m_tables.insert(t->m_id, t);
-	m_tables_byname.insert(t->m_name.lower(), t);
+	d->m_tables.insert(t->m_id, t);
+	d->m_tables_byname.insert(t->m_name.lower(), t);
 	return t;
 }
 
 TableSchema* Connection::tableSchema( const QString& tableName )
 {
 	QString m_tableName = tableName.lower();
-	TableSchema *t = m_tables_byname[m_tableName];
+	TableSchema *t = d->m_tables_byname[m_tableName];
 	if (t)
 		return t;
 	//not found: retrieve schema
@@ -2625,7 +2648,7 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 
 TableSchema* Connection::tableSchema( int tableId )
 {
-	TableSchema *t = m_tables[tableId];
+	TableSchema *t = d->m_tables[tableId];
 	if (t)
 		return t;
 	//not found: retrieve schema
@@ -2709,15 +2732,15 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 		delete query;
 		return 0;
 	}
-	m_queries.insert(query->m_id, query);
-	m_queries_byname.insert(query->m_name, query);
+	d->m_queries.insert(query->m_id, query);
+	d->m_queries_byname.insert(query->m_name, query);
 	return query;
 }
 
 QuerySchema* Connection::querySchema( const QString& queryName )
 {
 	QString m_queryName = queryName.lower();
-	QuerySchema *q = m_queries_byname[m_queryName];
+	QuerySchema *q = d->m_queries_byname[m_queryName];
 	if (q)
 		return q;
 	//not found: retrieve schema
@@ -2732,7 +2755,7 @@ QuerySchema* Connection::querySchema( const QString& queryName )
 
 QuerySchema* Connection::querySchema( int queryId )
 {
-	QuerySchema *q = m_queries[queryId];
+	QuerySchema *q = d->m_queries[queryId];
 	if (q)
 		return q;
 	//not found: retrieve schema
@@ -2751,8 +2774,8 @@ bool Connection::setQuerySchemaObsolete( const QString& queryName )
 	if (!oldQuery)
 		return false;
 	d->obsoleteQueries.append(oldQuery);
-	m_queries_byname.take(queryName);
-	m_queries.take(oldQuery->id());
+	d->m_queries_byname.take(queryName);
+	d->m_queries.take(oldQuery->id());
 	return true;
 }
 
@@ -2765,7 +2788,7 @@ TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 
 bool Connection::isInternalTableSchema(const QString& tableName)
 {
-	return (m_kexiDBSystemTables[ m_tables_byname[tableName] ]) 
+	return (d->m_kexiDBSystemTables[ d->m_tables_byname[tableName] ]) 
 		// these are here for compatiblility because we're no longer instantiate 
 		// them but can exist in projects created with previous Kexi versions:
 		|| tableName=="kexi__final" || tableName=="kexi__useractions";
@@ -2774,14 +2797,14 @@ bool Connection::isInternalTableSchema(const QString& tableName)
 void Connection::insertInternalTableSchema(TableSchema *tableSchema)
 {
 	tableSchema->setKexiDBSystem(true);
-	m_kexiDBSystemTables.insert(tableSchema, tableSchema);
-	m_tables_byname.insert(tableSchema->name(), tableSchema);
+	d->m_kexiDBSystemTables.insert(tableSchema, tableSchema);
+	d->m_tables_byname.insert(tableSchema->name(), tableSchema);
 }
 
 //! Creates kexi__* tables.
 bool Connection::setupKexiDBSystemSchema()
 {
-	if (!m_kexiDBSystemTables.isEmpty())
+	if (!d->m_kexiDBSystemTables.isEmpty())
 		return true; //already set up
 
 	TableSchema *t_objects = newKexiDBSystemTableSchema("kexi__objects");
@@ -2862,9 +2885,9 @@ bool Connection::setupKexiDBSystemSchema()
 void Connection::removeMe(TableSchema *ts)
 {
 	if (ts && !m_destructor_started) {
-		m_tables.take(ts->id());
-		m_tables.take(ts->id());
-		m_tables_byname.take(ts->name());
+		d->m_tables.take(ts->id());
+		d->m_tables.take(ts->id());
+		d->m_tables_byname.take(ts->name());
 	}
 }
 
