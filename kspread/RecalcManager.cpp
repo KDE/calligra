@@ -189,7 +189,8 @@ int RecalcManager::computeDepth(Cell* cell) const
         if (!d->depManager->dependencies().contains(referencedPoint))
         {
           // no further references
-          // depth stays as is
+          // depth is one at least
+          depth = qMax(depth, 1);
           continue;
         }
 

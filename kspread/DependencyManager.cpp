@@ -74,8 +74,13 @@ public:
    */
   Region computeDependencies(const Cell* cell) const;
 
+  /**
+   * Removes the circular dependency flag from \p region and all their dependencies.
+   */
+  void removeCircularDependencyFlags(const Region& region);
+
   /** debug */
-  void dump();
+  void dump() const;
 
   /** dependencies of each cell */
   QMap<Region::Point, Region> dependencies;
@@ -89,7 +94,7 @@ public:
 
 // This is currently not called - but it's really convenient to call it from
 // gdb or from debug output to check that everything is set up ok.
-void DependencyManager::Private::dump()
+void DependencyManager::Private::dump() const
 {
   QMap<Region::Point, Region>::ConstIterator mend(dependencies.end());
   for ( QMap<Region::Point, Region>::ConstIterator mit(dependencies.begin()); mit != mend; ++mit )
@@ -311,6 +316,12 @@ void DependencyManager::Private::removeDependencies(const Cell* cell)
       itr.value().remove (point);
   }
 
+  // clear the circular dependency flags
+//   if (cell->testFlag(Cell::Flag_CircularCalculation))
+  {
+    removeCircularDependencyFlags(dependencies.value(point));
+  }
+
   // finally, remove the entry about this cell
   dependencies.remove(point);
 }
@@ -318,7 +329,7 @@ void DependencyManager::Private::removeDependencies(const Cell* cell)
 void DependencyManager::Private::generateDependencies(const Cell* cell)
 {
   //new dependencies only need to be generated if the cell contains a formula
-  if( cell->isDefault() )
+  if (cell->isDefault())
     return;
   if (!cell->isFormula())
     return;
@@ -375,4 +386,33 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
     }
   }
   return region;
+}
+
+void DependencyManager::Private::removeCircularDependencyFlags(const Region& region)
+{
+  Region::ConstIterator end(region.constEnd());
+  for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
+  {
+    const QRect range = (*it)->rect();
+    const Sheet* sheet = (*it)->sheet();
+    for (int col = range.left(); col <= range.right(); ++col)
+    {
+      for (int row = range.top(); row <= range.bottom(); ++row)
+      {
+        Cell* cell = sheet->cellAt(col, row);
+
+        if (cell->testFlag(Cell::Flag_UpdatingDeps))
+          continue;
+        cell->setFlag(Cell::Flag_UpdatingDeps);
+
+        cell->clearFlag(Cell::Flag_CircularCalculation);
+
+        Region::Point point(col, row);
+        point.setSheet(cell->sheet());
+        removeCircularDependencyFlags(dependencies.value(point));
+
+        cell->clearFlag(Cell::Flag_UpdatingDeps);
+      }
+    }
+  }
 }

@@ -31,11 +31,8 @@ class Region;
 class Sheet;
 
 /**
-This class manages dependencies.
-No need to inherit from DocBase here, at least not yet.
-TODO: describe how it works and why there are two types of dependencies
-*/
-
+ * This class manages cell dependencies.
+ */
 class KSPREAD_EXPORT DependencyManager
 {
   friend class RecalcManager;
