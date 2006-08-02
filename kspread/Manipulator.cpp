@@ -39,29 +39,6 @@
 
 using namespace KSpread;
 
-//BEGIN Non-contiguous selection adaption todos
-// TODO Stefan: InsertColumn
-// TODO Stefan: InsertRow
-// TODO Stefan: DeleteColumn
-// TODO Stefan: DeleteRow
-
-// TODO Stefan: SortInc
-// TODO Stefan: SortDec
-// TODO Stefan: FillSelection ?
-
-// TODO Stefan: Validity (works, but not a manipulator yet)
-// TODO Stefan: Conditional (works, but not a manipulator yet)
-// TODO Stefan: Copy (works, but not a manipulator yet)
-// TODO Stefan: Delete (works, but not a manipulator yet)
-// TODO Stefan: Cut (works, but not a manipulator yet)
-// TODO Stefan: Paste (works, but not a manipulator yet)
-// TODO Stefan: Paste Special (works, but not a manipulator yet)
-// TODO Stefan: Paste with insertion (works, but not a manipulator yet)
-
-// TODO Stefan: more ????
-//END
-
-
 //BEGIN NOTE Stefan: some words on operations
 //
 // 1. SubTotal
