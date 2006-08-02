@@ -39,19 +39,19 @@ zoomed in):
 </screenshot>
 
 <para>
-Now try to select the outline of the head with the select outline tool: 
+Now try to select the outline of the head with the <guilabel>Select Outline</guilabel> tool: 
 </para>
 
 <screenshot>
-<screeninfo>The Outline Tool</screeninfo>
+<screeninfo>The <guilabel>Select Outline</guilabel> tool</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-2.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Outline Tool</phrase>
+<phrase>The <guilabel>Select Outline</guilabel> tool</phrase>
 </textobject>
-<caption><para>The Outline Tool</para></caption>
+<caption><para>The <guilabel>Select Outline</guilabel> tool</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -73,36 +73,36 @@ After you select it, it should look a bit like this picture:
 </screenshot>
 
 <para>
-If you accidently select too much, you can cut that part easily off by switching the tool to subtract mode: 
+If you accidently select too much, you can cut that part easily off by switching the tool to <guilabel>Subtract</guilabel> mode: 
 </para>
 
 <screenshot>
-<screeninfo>The Subtract Mode</screeninfo>
+<screeninfo>The <guilabel>Subtract</guilabel> mode</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-4.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Subtract Mode</phrase>
+<phrase>The <guilabel>Subtract</guilabel> mode</phrase>
 </textobject>
-<caption><para>The Subtract Mode</para></caption>
+<caption><para>The <guilabel>Subtract</guilabel> mode</para></caption>
 </mediaobject>
 </screenshot>
 
 <para>
-Now it's time to make the edges of the selection a bit fuzzy. This can be done by applying feather to the selection. 
+Now it's time to make the edges of the selection a bit fuzzy. This can be done by applying <guilabel>Feather</guilabel> to the selection. 
 </para>
 
 <screenshot>
-<screeninfo>Feather Selection</screeninfo>
+<screeninfo><guilabel>Feather</guilabel> selection</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-5.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>Feather Selection</phrase>
+<phrase><guilabel>Feather</guilabel> selection</phrase>
 </textobject>
-<caption><para>Feather Selection</para></caption>
+<caption><para><guilabel>Feather</guilabel> selection</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -119,15 +119,15 @@ Size...</guimenuitem></menuchoice> dialog for this.
 </para>
 
 <screenshot>
-<screeninfo>The Image Size dialog</screeninfo>
+<screeninfo>The <guilabel>Image Size</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-6.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Image Size dialog</phrase>
+<phrase>The <guilabel>Image Size</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Image Size dialog</para></caption>
+<caption><para>The <guilabel>Image Size</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -139,68 +139,69 @@ Now we are going to select the area around the head with a contiguous select
 </para>
 
 <screenshot>
-<screeninfo>The Contiguous Select Tool</screeninfo>
+<screeninfo>The <guilabel>Select Contiguous</guilabel> tool</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-7.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Contiguous Select Tool</phrase>
+<phrase>The <guilabel>Select Contiguous</guilabel> tool</phrase>
 </textobject>
-<caption><para>The Contiguous Select Tool</para></caption>
+<caption><para>The <guilabel>Select Contiguous</guilabel> tool</para></caption>
 </mediaobject>
 </screenshot>
 
 <para>
-Make sure to select "Sample merged" in the tool options:
+Make sure to select <guilabel>Sample merged</guilabel> in the tool options:
 </para>
 
 <screenshot>
-<screeninfo>The Sample Merged option</screeninfo>
+<screeninfo>The <guilabel>Sample merged</guilabel> option</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-8.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Sample Merged option</phrase>
+<phrase>The <guilabel>Sample merged</guilabel> option</phrase>
 </textobject>
-<caption><para>The Sample Merged option</para></caption>
+<caption><para>The <guilabel>Sample merged</guilabel> option</para></caption>
 </mediaobject>
 </screenshot>
 
 <para>
 Feather the selection again, and invert it.
-Select the contiguous fill tool (this is different from the contiguous select tool) and use it on the layer. 
+Select the <guilabel>Contiguous Fill</guilabel> tool (this is a different tool than
+the <guilabel>Contiguous Select</guilabel> tool) and use it on the layer. 
 </para>
 
 <screenshot>
-<screeninfo>The Contiguous Fill Tool</screeninfo>
+<screeninfo>The <guilabel>Contiguous Fill</guilabel> tool</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-9.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Contiguous Fill Tool</phrase>
+<phrase>The <guilabel>Contiguous Fill</guilabel> tool</phrase>
 </textobject>
-<caption><para>The Contiguous Fill Tool</para></caption>
+<caption><para>The <guilabel>Contiguous Fill</guilabel> tool</para></caption>
 </mediaobject>
 </screenshot>
 
 <para>
 Deselect with <menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem></menuchoice>.
-You'll notice some artefacts of the feathering at the sides. You can select them easily with a rectangular select and then cut them.
+You'll notice some artefacts of the feathering at the sides. You can select them easily with a rectangular selection and then cut them.
 </para>
 
 <screenshot>
-<screeninfo>The Rectangular Select Tool</screeninfo>
+<screeninfo>The <guilabel>Select Rectangular</guilabel> tool</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-10.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Rectangular Select Tool</phrase>
+<phrase>The <guilabel>Select Rectangular</guilabel> tool</phrase>
 </textobject>
-<caption><para>The Rectangular Select Tool</para></caption>
+<caption><para>The <guilabel>Select Rectangular</guilabel> tool</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -222,19 +223,19 @@ Move the shadow layer a bit down and to the right to make it look nice.
 </screenshot>
 
 <para>
-Now you can use the crop tool to make the image better fit around the head.
+Now you can use the <guilabel>Crop</guilabel> tool to make the image better fit around the head.
 </para>
 
 <screenshot>
-<screeninfo>The Crop Tool</screeninfo>
+<screeninfo>The <guilabel>Crop</guilabel> tool</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-12.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Crop Tool</phrase>
+<phrase>The <guilabel>Crop</guilabel> tool</phrase>
 </textobject>
-<caption><para>The Crop Tool</para></caption>
+<caption><para>The <guilabel>Crop</guilabel> tool</para></caption>
 </mediaobject>
 </screenshot>
 

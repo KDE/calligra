@@ -18,15 +18,15 @@ current tool.</para>
 
 <para>
 <screenshot>
-<screeninfo>The Overview tab</screeninfo>
+<screeninfo>The <guilabel>Overview</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-overview.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Overview tab</phrase>
+<phrase>The <guilabel>Overview</guilabel> tab</phrase>
 </textobject>
-<caption><para>The Overview tab</para></caption>
+<caption><para>The <guilabel>Overview</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -43,15 +43,15 @@ exposure level for OpenEXR images. Furthermore, the <guilabel>X</guilabel> and
 
 <para>
 <screenshot>
-<screeninfo>The Histogram tab</screeninfo>
+<screeninfo>The <guilabel>Histogram</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-histogram.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Histogram tab</phrase>
+<phrase>The <guilabel>Histogram</guilabel> tab</phrase>
 </textobject>
-<caption><para>The Histogram tab</para></caption>
+<caption><para>The <guilabel>Histogram</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -72,15 +72,15 @@ Zoom have no options, the others are discussed below.</para>
 <title><guilabel>Brush</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Brush</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Brush</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-brush.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Brush</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Brush</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Brush</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Brush</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -104,15 +104,15 @@ when using relative low opacity values.</para>
 <title><guilabel>Line</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Line</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Line</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-line.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Line</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Line</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Line</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Line</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -127,7 +127,7 @@ the usage of modifier keys.</para>
 <title><guilabel>Rectangle</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Rectangle</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Rectangle</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-rectangle.png" format="PNG" />
@@ -174,15 +174,15 @@ are available here.</para>
 <title><guilabel>Star</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Star</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Star</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-star.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Star</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Star</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Star</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Star</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -212,15 +212,15 @@ are available here.</para>
 <title><guilabel>Paint with Filters</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Paint with Filters</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Paint with Filters</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-paintwithfilters.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Paint with Filters</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Paint with Filters</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Paint with Filters</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Paint with Filters</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -234,15 +234,15 @@ chapter</link> for more information.</para> </sect4>
 <title><guilabel>Transform</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Transform</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Transform</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-transform.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Transform</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Transform</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Transform</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Transform</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -258,15 +258,15 @@ you can decide upon a transformation algorithm in the
 <title><guilabel>Crop</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Crop</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Crop</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-crop.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Crop</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Crop</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Crop</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Crop</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -285,15 +285,15 @@ outside the area in the image.</para>
 <title><guilabel>Contiguous Fill</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Contiguous Fill</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Contiguous Fill</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-contiguousfill.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Contiguous Fill</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Contiguous Fill</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Contiguous Fill</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Contiguous Fill</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -323,15 +323,15 @@ entire selection will be filled instead of only the neighboring area.
 <title><guilabel>Gradient</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Gradient</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Gradient</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-gradient.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Gradient</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Gradient</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Gradient</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Gradient</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -363,15 +363,15 @@ determines how smooth the gradient will become.
 <title><guilabel>Text</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Text</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Text</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-text.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Text</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Text</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Text</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Text</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -384,18 +384,18 @@ which shows the font that will be used for the text. Click the
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-colorpicker">
-<title><guilabel>Color picker</guilabel></title>
+<title><guilabel>Color Picker</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Color picker</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Color Picker</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-colorpicker.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Color picker</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Color Picker</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Color picker</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Color Picker</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -429,20 +429,20 @@ area with the chosen radius that is centered around the chosen pixel.
 <title><guilabel>Select</guilabel> tools</title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Select tools</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Select</guilabel> tools</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-select.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Select tools</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Select</guilabel> tools</phrase>
 </textobject>
-<caption><para>The Tool tab for Select tools</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Select</guilabel> tools</para></caption>
 </mediaobject>
 </screenshot>
 </para>
-<para>The Paint selection, Erase selection, Select rectangular, Select
-elliptical, Select polygonal and Select outline tools have one option:
+<para>The <guilabel>Paint Selection</guilabel>, <guilabel>Erase Selection</guilabel>,
+<guilabel>Select Rectangular</guilabel>, <guilabel>Select Elliptical</guilabel>, <guilabel>Select Polygonal</guilabel> and <guilabel>Select Outline</guilabel> tools have one option:
 the <guilabel>Action:</guilabel> to perform. You can choose between <guilabel>Add</guilabel> to, or
 <guilabel>Subtract</guilabel> from the selection.</para>
 </sect4>
@@ -451,15 +451,15 @@ the <guilabel>Action:</guilabel> to perform. You can choose between <guilabel>Ad
 <title><guilabel>Select Contiguous Area</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Select contiguous</screeninfo>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Select Contiguous</guilabel></screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-selectcontiguous.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Select contiguous</phrase>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Select Contiguous</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Select contiguous</para></caption>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Select Contiguous</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -506,15 +506,15 @@ white) by clicking the small black/white icon.
 <title><guilabel>HSV</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The HSV tab</screeninfo>
+<screeninfo>The <guilabel>HSV</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-colors-hsv.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The HSV tab</phrase>
+<phrase>The <guilabel>HSV</guilabel> tab</phrase>
 </textobject>
-<caption><para>The HSV tab</para></caption>
+<caption><para>The <guilabel>HSV</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -542,15 +542,15 @@ black, a value of 255 gives the pure color.
 <title><guilabel>RGB</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The RGB tab</screeninfo>
+<screeninfo>The <guilabel>RGB</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-colors-rgb.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The RGB tab</phrase>
+<phrase>The <guilabel>RGB</guilabel> tab</phrase>
 </textobject>
-<caption><para>The RGB tab</para></caption>
+<caption><para>The <guilabel>RGB</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -568,15 +568,15 @@ altering the corresponding value.
 <title><guilabel>Gray</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Gray tab</screeninfo>
+<screeninfo>The <guilabel>Gray</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-colors-gray.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Gray tab</phrase>
+<phrase>The <guilabel>Gray</guilabel> tab</phrase>
 </textobject>
-<caption><para>The Gray tab</para></caption>
+<caption><para>The <guilabel>Gray</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -590,15 +590,15 @@ the usual designation for black).</para>
 <title><guilabel>Palettes</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Palettes tab</screeninfo>
+<screeninfo>The <guilabel>Palettes</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-colors-palettes.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Palettes tab</phrase>
+<phrase>The <guilabel>Palettes</guilabel> tab</phrase>
 </textobject>
-<caption><para>The Palettes tab</para></caption>
+<caption><para>The <guilabel>Palettes</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -612,15 +612,15 @@ box at the top.</para>
 <title><guilabel>Watercolors</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Watercolors tab</screeninfo>
+<screeninfo>The <guilabel>Watercolors</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-colors-watercolors.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Watercolors tab</phrase>
+<phrase>The <guilabel>Watercolors</guilabel> tab</phrase>
 </textobject>
-<caption><para>The Watercolors tab</para></caption>
+<caption><para>The <guilabel>Watercolors</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -644,15 +644,15 @@ applied. You can dry the paint later.
 <title><guilabel>Layers</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Layers tab</screeninfo>
+<screeninfo>The <guilabel>Layers</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-layers-layers.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Layers tab</phrase>
+<phrase>The <guilabel>Layers</guilabel> tab</phrase>
 </textobject>
-<caption><para>The Layers tab</para></caption>
+<caption><para>The <guilabel>Layers</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -689,19 +689,19 @@ instead, you will get a text field so that you can rename the layer.
 <title><guilabel>Scripts Manager</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Scripts Manager tab</screeninfo>
+<screeninfo>The <guilabel>Script Manager</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-layers-scriptsmanager.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Scripts Manager tab</phrase>
+<phrase>The <guilabel>Script Manager</guilabel> tab</phrase>
 </textobject>
-<caption><para>The Scripts Manager tab</para></caption>
+<caption><para>The <guilabel>Script Manager</guilabel> tab</para></caption>
 </mediaobject>
 </screenshot>
 </para>
-<para>This tab is a smaller version of the <guilabel>Scripts
+<para>This tab is a smaller version of the <guilabel>Script
 Manager</guilabel> dialog. See the description over there for more
 information.
 </para>

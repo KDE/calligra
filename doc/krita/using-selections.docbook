@@ -7,8 +7,8 @@ This chapter gives a short introduction on selections.
 You can select a part of an image masking off the rest. This is handy when
 you want to cut, copy or just modify a part of the image without affecting
 the rest. For processing selected objects &krita; applies a mask. Each pixel of
-the selection is processed based on a value of its mask, or the "level
-of the selection", that can range from 0 (unselected) to 255
+the selection is processed based on a value of its mask, or the <quote>level
+of the selection</quote>, that can range from 0 (unselected) to 255
 (selected). Yes, that is right, you can have fractionally selected pixels.
 And by working on individual pixels you can <quote>paint</quote> your selection.
 </para><para>
@@ -26,7 +26,7 @@ A whole range of tools exist to make selections. From rectangles, ellipses
 and freehand to the more exotic like color range select. When you make
 several selections they add up. So a rectangle select followed by an
 ellipse select select both areas. Later on, you can subtract areas from
-the selection by using, for example, the Erase Selection tool.
+the selection by using, for example, the <guilabel>Erase Selection</guilabel> tool.
 </para><para>
 To get back to normal (no active selection), choose
 <menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem>
@@ -60,27 +60,27 @@ be a square or a circle respectively.
 </para>
 
 <screenshot>
-<screeninfo>Painting a selection.</screeninfo>
+<screeninfo>Painting a selection</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="using-selections-1.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>Painting a selection.</phrase>
+<phrase>Painting a selection</phrase>
 </textobject>
-<caption><para>Painting a selection.</para></caption>
+<caption><para>Painting a selection</para></caption>
 </mediaobject>
 </screenshot>
 <screenshot>
-<screeninfo>Painting a selection.</screeninfo>
+<screeninfo>Painting a selection</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="using-selections-2.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>Painting a selection.</phrase>
+<phrase>Painting a selection</phrase>
 </textobject>
-<caption><para>Painting a selection.</para></caption>
+<caption><para>Painting a selection</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -96,15 +96,15 @@ tools.
 </para>
 
 <screenshot>
-<screeninfo>Unselecting.</screeninfo>
+<screeninfo>Unselecting</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="using-selections-3.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>Unselecting.</phrase>
+<phrase>Unselecting</phrase>
 </textobject>
-<caption><para>Unselecting.</para></caption>
+<caption><para>Unselecting</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -122,7 +122,7 @@ first need to deselect the active selection. Choose
 <sect1 id="selections-contigious">
 <title>Selecting a contiguous area (magic wand)</title>
 <para>
-To follow the analogy of painting your selection Krita also provides an
+To follow the analogy of painting your selection &krita; also provides an
 equivalent to filling a contiguous area. Some paint applications call this
 selection tool the magic wand tool. What it does is select the nearby
 pixels as long as they have nearly the same color as the pixel you click
@@ -132,28 +132,28 @@ flooding stops.
 </para>
 
 <screenshot>
-<screeninfo>Before the magic wand.</screeninfo>
+<screeninfo>Before the magic wand</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="using-selections-4.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>Before the magic wand.</phrase>
+<phrase>Before the magic wand</phrase>
 </textobject>
-<caption><para>Before the magic wand.</para></caption>
+<caption><para>Before the magic wand</para></caption>
 </mediaobject>
 </screenshot>
 
 <screenshot>
-<screeninfo>A magic wand selection.</screeninfo>
+<screeninfo>A magic wand selection</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="using-selections-5.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>A magic wand selection.</phrase>
+<phrase>A magic wand selection</phrase>
 </textobject>
-<caption><para>A magic wand selection.</para></caption>
+<caption><para>A magic wand selection</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -162,23 +162,23 @@ flooding stops.
 <sect1 id="selections-similar">
 <title>Selecting similar colors</title>
 <para>
-The Select Similar tool lets you pick a pixel and then select all pixels that
+The <guilabel>Select Similar</guilabel> tool lets you pick a pixel and then select all pixels that
 have a similar color. Picking a color in one corner of the image may select a
 pixel in another corner if they have similar color.
-In the fuzziness option you can set how similar the colors must be to be
+With the <guilabel>Fuzziness</guilabel> option you can set how similar the colors must be to become
 selected.
 </para>
 
 <screenshot>
-<screeninfo>Selecting similar colors.</screeninfo>
+<screeninfo>Selecting similar colors</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="using-selections-6.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>Selecting similar colors.</phrase>
+<phrase>Selecting similar colors</phrase>
 </textobject>
-<caption><para>Selecting similar colors.</para></caption>
+<caption><para>Selecting similar colors</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>

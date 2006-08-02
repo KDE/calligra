@@ -9,19 +9,19 @@ This section describes &krita;'s dialog windows.
 <title>Dialogs for working with images</title>
 
 <sect3 id="commands-dialogs-images-colorrange">
-<title>The Color Range dialog</title>
+<title>The <guilabel>Color Range</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Color Range dialog</screeninfo>
+<screeninfo>The <guilabel>Color Range</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-colorrange.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Color Range dialog</phrase>
+<phrase>The <guilabel>Color Range</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Color Range dialog</para></caption>
+<caption><para>The <guilabel>Color Range</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -32,8 +32,8 @@ dropdown box, choose which color range you want to select. Pixels will be
 selected according to their color value on this scale (&eg; a fully yellow
 pixel would score maximally on the yellow scale and on the red and green scales).
 If you check the <guilabel>Invert</guilabel> box, the selection becomes inverted:
-pixels will be more selected if they have a lower value in the specified range.
-You can choose if the current selection should be
+pixels will become selected if they have a lower value in the specified range instead.
+You can choose whether the current selection should be
 added to or subtracted from the color range selection by clicking the
 respective option: <guilabel>Add to current selection</guilabel> or
 <guilabel>Subtract from current selection</guilabel>. Choose
@@ -44,19 +44,19 @@ respective option: <guilabel>Add to current selection</guilabel> or
 </sect3>
 
 <sect3 id="commands-dialogs-image-convertimagetype">
-<title>The Convert Image Type dialog</title>
+<title>The <guilabel>Convert Image Type</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Convert Image Type dialog</screeninfo>
+<screeninfo>The <guilabel>Convert Image Type</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-convertimagetype.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Convert Image Type dialog</phrase>
+<phrase>The <guilabel>Convert Image Type</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Convert Image Type dialog</para></caption>
+<caption><para>The <guilabel>Convert Image Type</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -87,19 +87,19 @@ which may result in unwanted changes to near colors.
 </sect3>
 
 <sect3 id="commands-dialogs-image-imageproperties">
-<title>The Image Properties dialog</title>
+<title>The <guilabel>Image Properties</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Image Properties dialog</screeninfo>
+<screeninfo>The <guilabel>Image Properties</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-imageproperties.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Image Properties dialog</phrase>
+<phrase>The <guilabel>Image Properties</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Image Properties dialog</para></caption>
+<caption><para>The <guilabel>Image Properties</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -119,19 +119,19 @@ the image.
 </sect3>
 
 <sect3 id="commands-dialogs-image-imagesize">
-<title>The Image Size dialog</title>
+<title>The <guilabel>Image Size</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Image Size dialog</screeninfo>
+<screeninfo>The <guilabel>Image Size</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-imagesize.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Image Size dialog</phrase>
+<phrase>The <guilabel>Image Size</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Image Size dialog</para></caption>
+<caption><para>The <guilabel>Image Size</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -163,32 +163,32 @@ The <guilabel>Filter:</guilabel> dropdown box can be used to select a
 different algorithm for determining the colors of the pixels in the newly
 resized image that did not correspond to a pixel in the old image (the
 calculated corresponding location in the old image was located in between
-pixels). BSpline uses a 4 x 4 pixel grid and results into a quite high
-blurring. Bell is quite fast while resulting in a reasonably smooth image.
-Box is the fastest method, but yields the least appealing result. Hermite
+pixels). <guilabel>BSpline</guilabel> uses a 4 x 4 pixel grid and results into a quite high
+blurring. <guilabel>Bell</guilabel> is quite fast while resulting in a reasonably smooth image.
+<guilabel>Box</guilabel> is the fastest method, but yields the least appealing result. <guilabel>Hermite</guilabel>
 keeps the image quite sharp, while smoothing it as well, and is reasonably
-fast. Lanczos3 results in sharp images, but is very slow.  Mitchell (the
+fast. <guilabel>Lanczos3</guilabel> results in sharp images, but is very slow.  <guilabel>Mitchell</guilabel> (the
 default) is not very fast, but often yields a good intermediate result.
-Triangle/Bilinear uses the 2 x 2 pixel grid around the calculated location,
+<guilabel>Triangle/Bilinear</guilabel> uses the 2 x 2 pixel grid around the calculated location
 resulting in relatively sharp lines. 
 </para>
 
 </sect3>
 
 <sect3 id="commands-dialogs-image-rotateimage">
-<title>The Rotate Image dialog</title>
+<title>The <guilabel>Rotate Image</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Rotate Image dialog</screeninfo>
+<screeninfo>The <guilabel>Rotate Image</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-rotateimage.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Rotate Image dialog</phrase>
+<phrase>The <guilabel>Rotate Image</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Rotate Image dialog</para></caption>
+<caption><para>The <guilabel>Rotate Image</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -206,19 +206,19 @@ the <guilabel>Custom</guilabel> spin box.
 </sect3>
 
 <sect3 id="commands-dialogs-image-separateimage">
-<title>The Separate Image dialog</title>
+<title>The <guilabel>Separate Image</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Separate Image dialog</screeninfo>
+<screeninfo>The <guilabel>Separate Image</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-separateimage.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Separate Image dialog</phrase>
+<phrase>The <guilabel>Separate Image</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Separate Image dialog</para></caption>
+<caption><para>The <guilabel>Separate Image</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -254,19 +254,19 @@ values).
 </sect3>
 
 <sect3 id="commands-dialogs-image-shearimage">
-<title>The Shear Image dialog</title>
+<title>The <guilabel>Shear Image</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Shear Image dialog</screeninfo>
+<screeninfo>The <guilabel>Shear Image</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-shearimage.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Shear Image dialog</phrase>
+<phrase>The <guilabel>Shear Image</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Shear Image dialog</para></caption>
+<caption><para>The <guilabel>Shear Image</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -287,19 +287,19 @@ The X and Y shearing angles can be set using the two spin boxes.
 <title>Dialogs for working with layers</title>
 
 <sect3 id="commands-dialogs-layers-convertlayertype">
-<title>The Convert Layer Type dialog</title>
+<title>The <guilabel>Convert Layer Type</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Convert Layer Type dialog</screeninfo>
+<screeninfo>The <guilabel>Convert Layer Type</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-convertlayertype.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Convert Layer Type dialog</phrase>
+<phrase>The <guilabel>Convert Layer Type</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Convert Layer Type dialog</para></caption>
+<caption><para>The <guilabel>Convert Layer Type</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -314,19 +314,19 @@ single layer. See the description there for details.
 </sect3>
 
 <sect3 id="commands-dialogs-layers-dropshadow">
-<title>The Drop Shadow dialog</title>
+<title>The <guilabel>Drop Shadow</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Drop Shadow dialog</screeninfo>
+<screeninfo>The <guilabel>Drop Shadow</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-dropshadow.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Drop Shadow dialog</phrase>
+<phrase>The <guilabel>Drop Shadow</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Drop Shadow dialog</para></caption>
+<caption><para>The <guilabel>Drop Shadow</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -347,19 +347,19 @@ resized in order to give it a shadow.
 </sect3>
 
 <sect3 id="commands-dialogs-layers-histogram">
-<title>The Histogram dialog</title>
+<title>The <guilabel>Histogram</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Histogram dialog</screeninfo>
+<screeninfo>The <guilabel>Histogram</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-histogram.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Histogram dialog</phrase>
+<phrase>The <guilabel>Histogram</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Histogram dialog</para></caption>
+<caption><para>The <guilabel>Histogram</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -378,19 +378,19 @@ activated for 16-bit colorspace layers.
 </sect3>
 
 <sect3 id="commands-dialogs-layers-layerproperties">
-<title>The Layer Properties dialog</title>
+<title>The <guilabel>Layer Properties</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Layer Properties dialog</screeninfo>
+<screeninfo>The <guilabel>Layer Properties</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-layerproperties.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Layer Properties dialog</phrase>
+<phrase>The <guilabel>Layer Properties</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Layer Properties dialog</para></caption>
+<caption><para>The <guilabel>Layer Properties</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -404,19 +404,19 @@ shown, though, to keep the information complete.
 </sect3>
 
 <sect3 id="commands-dialogs-layers-layersize">
-<title>The Layer Size dialog</title>
+<title>The <guilabel>Layer Size</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Layer Size dialog</screeninfo>
+<screeninfo>The <guilabel>Layer Size</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-layersize.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Layer Size dialog</phrase>
+<phrase>The <guilabel>Layer Size</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Layer Size dialog</para></caption>
+<caption><para>The <guilabel>Layer Size</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -438,19 +438,19 @@ layer.
 </sect3>
 
 <sect3 id="commands-dialogs-layers-newadjustmentlayer">
-<title>The New Adjustment Layer dialog</title>
+<title>The <guilabel>New Adjustment Layer</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The New Adjustment Layer dialog</screeninfo>
+<screeninfo>The <guilabel>New Adjustment Layer</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-newadjustmentlayer.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The New Adjustment Layer dialog</phrase>
+<phrase>The <guilabel>New Adjustment Layer</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The New Adjustment Layer dialog</para></caption>
+<caption><para>The <guilabel>New Adjustment Layer</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -477,19 +477,19 @@ descriptions.
 </sect3>
 
 <sect3 id="commands-dialogs-layers-newlayer">
-<title>The New Layer dialog</title>
+<title>The <guilabel>New Layer</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The New Layer dialog</screeninfo>
+<screeninfo>The <guilabel>New Layer</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-newlayer.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The New Layer dialog</phrase>
+<phrase>The <guilabel>New Layer</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The New Layer dialog</para></caption>
+<caption><para>The <guilabel>New Layer</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -500,27 +500,27 @@ descriptive name for your layer, you can fill one in at
 <guilabel>Name:</guilabel>. You can select the desired colorspace for the new
 layer from the <guilabel>Colorspace:</guilabel> list, and the specific
 color profile for that colorspace at <guilabel>Profile:</guilabel>.
-You can preset the layer's opacity (you can change it later with the slider in
-the layer box), and choose the mode with which the layer should be composited
+You can preset the layer's <guilabel>Opacity</guilabel> (you can change it later with the slider in
+the <guilabel>Layer</guilabel> box), and choose the mode with which the layer should be composited
 onto the final image.
 </para>
 
 </sect3>
 
 <sect3 id="commands-dialogs-layers-rotatelayer">
-<title>The Rotate Layer dialog</title>
+<title>The <guilabel>Rotate Layer</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Rotate Layer dialog</screeninfo>
+<screeninfo>The <guilabel>Rotate Layer</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-rotatelayer.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Rotate Layer dialog</phrase>
+<phrase>The <guilabel>Rotate Layer</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Rotate Layer dialog</para></caption>
+<caption><para>The <guilabel>Rotate Layer</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -535,19 +535,19 @@ direction in which to rotate and the amount to rotate the layer by.
 </sect3>
 
 <sect3 id="commands-dialogs-layers-shearlayer">
-<title>The Shear Layer dialog</title>
+<title>The <guilabel>Shear Layer</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Shear Layer dialog</screeninfo>
+<screeninfo>The <guilabel>Shear Layer</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-shearlayer.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Shear Layer dialog</phrase>
+<phrase>The <guilabel>Shear Layer</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Shear Layer dialog</para></caption>
+<caption><para>The <guilabel>Shear Layer</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -580,19 +580,19 @@ preview yourself.
 </para>
 
 <sect3 id="commands-dialogs-filters-brightnesscontrast">
-<title>The Brightness / Contrast dialog</title>
+<title>The <guilabel>Brightness / Contrast</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Brightness / Contrast dialog</screeninfo>
+<screeninfo>The <guilabel>Brightness / Contrast</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-brightnesscontrast.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Brightness / Contrast dialog</phrase>
+<phrase>The <guilabel>Brightness / Contrast</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Brightness / Contrast dialog</para></caption>
+<caption><para>The <guilabel>Brightness / Contrast</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -622,19 +622,19 @@ currently selected handle.
 </sect3>
 
 <sect3 id="commands-dialogs-filters-bumpmap">
-<title>The Bumpmap dialog</title>
+<title>The <guilabel>Bumpmap</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Bumpmap dialog</screeninfo>
+<screeninfo>The <guilabel>Bumpmap</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-bumpmap.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Bumpmap dialog</phrase>
+<phrase>The <guilabel>Bumpmap</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Bumpmap dialog</para></caption>
+<caption><para>The <guilabel>Bumpmap</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -683,25 +683,25 @@ relative amount of ambient (environmental) light.
 </sect3>
 
 <sect3 id="commands-dialogs-filters-coloradjustment">
-<title>The Color Adjustment dialog</title>
+<title>The <guilabel>Color Adjustment</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Color Adjustment dialog</screeninfo>
+<screeninfo>The <guilabel>Color Adjustment</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-coloradjustment.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Color Adjustment dialog</phrase>
+<phrase>The <guilabel>Color Adjustment</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Color Adjustment dialog</para></caption>
+<caption><para>The <guilabel>Color Adjustment</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
 
 <para>
-This dialog allows you to customize the Color Adjustment filter. You can use
+This dialog allows you to customize the <guilabel>Color Adjustment</guilabel> filter. You can use
 the curve (see the section on <link
 linkend="commands-dialogs-filters-brightnesscontrast">Brightness /
 Contrast</link> for a description on the curve) to determine the mapping
@@ -711,19 +711,19 @@ from old to new color levels, for each of the channels separately.
 </sect3>
 
 <sect3 id="commands-dialogs-filters-cubism">
-<title>The Cubism filter</title>
+<title>The <guilabel>Cubism</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Cubism filter</screeninfo>
+<screeninfo>The <guilabel>Cubism</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-cubism.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Cubism filter</phrase>
+<phrase>The <guilabel>Cubism</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Cubism filter</para></caption>
+<caption><para>The Cubism dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -738,19 +738,19 @@ sets the color saturation of the tiles.
 </sect3>
 
 <sect3 id="commands-dialogs-filters-customconvolution">
-<title>The Custom Convolution filter</title>
+<title>The <guilabel>Custom Convolution</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Custom Convolution filter</screeninfo>
+<screeninfo>The <guilabel>Custom Convolution</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-customconvolution.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Custom Convolution filter</phrase>
+<phrase>The <guilabel>Custom Convolution</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Custom Convolution filter</para></caption>
+<caption><para>The <guilabel>Custom Convolution</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -776,19 +776,19 @@ a factor of -1, so subtracted by a factor of 1).
 </sect3>
 
 <sect3 id="commands-dialogs-filters-emboss">
-<title>The Emboss dialog</title>
+<title>The <guilabel>Emboss</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Emboss dialog</screeninfo>
+<screeninfo>The <guilabel>Emboss</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-emboss.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Emboss dialog</phrase>
+<phrase>The <guilabel>Emboss</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Emboss dialog</para></caption>
+<caption><para>The <guilabel>Emboss</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -801,19 +801,19 @@ and spinbox which determines the depth of the embossing effect.
 </sect3>
 
 <sect3 id="commands-dialogs-filters-filtersgallery">
-<title>The Filters Gallery dialog</title>
+<title>The <guilabel>Filters Gallery</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Filters Gallery dialog</screeninfo>
+<screeninfo>The <guilabel>Filters Gallery</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-filtersgallery.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Filters Gallery dialog</phrase>
+<phrase>The <guilabel>Filters Gallery</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Filters Gallery dialog</para></caption>
+<caption><para>The <guilabel>Filters Gallery</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -829,19 +829,19 @@ See the description of the respective filter for details.
 </sect3>
 
 <sect3 id="commands-dialogs-filters-imagerestauration">
-<title>The Image Restauration dialog</title>
+<title>The <guilabel>Image Restauration</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Image Restauration dialog</screeninfo>
+<screeninfo>The <guilabel>Image Restauration</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-imagerestoration.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Image Restauration dialog</phrase>
+<phrase>The <guilabel>Image Restauration</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Image Restauration dialog</para></caption>
+<caption><para>The <guilabel>Image Restauration</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -858,19 +858,19 @@ behaviour.
 </sect3>
 
 <sect3 id="commands-dialogs-filters-oilpaint">
-<title>The Oilpaint filter</title>
+<title>The <guilabel>Oilpaint</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Oilpaint filter</screeninfo>
+<screeninfo>The <guilabel>Oilpaint</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-oilpaint.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Oilpaint filter</phrase>
+<phrase>The <guilabel>Oilpaint</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Oilpaint filter</para></caption>
+<caption><para>The <guilabel>Oilpaint</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -887,19 +887,19 @@ smoothness).
 </sect3>
 
 <sect3 id="commands-dialogs-filters-pixelize">
-<title>The Pixelize dialog</title>
+<title>The <guilabel>Pixelize</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Pixelize dialog</screeninfo>
+<screeninfo>The <guilabel>Pixelize</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-pixelize.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Pixelize dialog</phrase>
+<phrase>The <guilabel>Pixelize</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Pixelize dialog</para></caption>
+<caption><para>The <guilabel>Pixelize</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -914,19 +914,19 @@ area that should be taken together and averaged to form one new, large
 </sect3>
 
 <sect3 id="commands-dialogs-filters-raindrops">
-<title>The Raindrops filter</title>
+<title>The <guilabel>Raindrops</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Raindrops filter</screeninfo>
+<screeninfo>The <guilabel>Raindrops</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-raindrops.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Raindrops filter</phrase>
+<phrase>The <guilabel>Raindrops</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Raindrops filter</para></caption>
+<caption><para>The <guilabel>Raindrops</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -943,19 +943,19 @@ raindrop effects).
 </sect3>
 
 <sect3 id="commands-dialogs-filters-roundcorners">
-<title>The Round Corners dialog</title>
+<title>The <guilabel>Round Corners</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Round Corners dialog</screeninfo>
+<screeninfo>The <guilabel>Round Corners</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-roundcorners.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Round Corners dialog</phrase>
+<phrase>The <guilabel>Round Corners</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Round Corners dialog</para></caption>
+<caption><para>The <guilabel>Round Corners</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -972,19 +972,19 @@ This dialog has one setting: the radius of the rounded corners.
 <title>Miscellaneous dialogs</title>
 
 <sect3 id="commands-dialogs-misc-addpalette">
-<title>The Add Palette dialog</title>
+<title>The <guilabel>Add Palette</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Add Palette dialog</screeninfo>
+<screeninfo>The <guilabel>Add Palette</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-addpalette.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Add Palette dialog</phrase>
+<phrase>The <guilabel>Add Palette</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Add Palette dialog</para></caption>
+<caption><para>The <guilabel>Add Palette</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -1002,19 +1002,19 @@ just choose <guibutton>OK</guibutton> when you're done.
 </sect3>
 
 <sect3 id="commands-dialogs-misc-documentinformation">
-<title>The Document Information dialog</title>
+<title>The <guilabel>Document Information</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Document Information dialog</screeninfo>
+<screeninfo>The <guilabel>Document Information</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-documentinformation.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Document Information dialog</phrase>
+<phrase>The <guilabel>Document Information</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Document Information dialog</para></caption>
+<caption><para>The <guilabel>Document Information</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>

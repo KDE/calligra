@@ -17,7 +17,7 @@
 </mediaobject>
 </screenshot>
 
-<para>Select the <guiicon>Select a rectangular area</guiicon> tool in the
+<para>Select the <guiicon>Select Rectangular</guiicon> tool in the
 &krita; toolbar.</para>
 
 <screenshot>
@@ -48,16 +48,16 @@ outside area grey.</para>
 menu item or <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo> to
 copy the selected area.</para>
 
-<para>Click again on the Edit menu.</para>
-<para>Use the Paste into new image item.</para>
+<para>Click again on the <guimenu>Edit</guimenu> menu.</para>
+<para>Use the <guimenuitem>Paste into new image</guimenuitem> item.</para>
 
 <screenshot>
-<screeninfo>The Edit menu</screeninfo>
+<screeninfo>The <guimenu>Edit</guimenu> menu</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-quick-starts4.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>The Edit menu</phrase></textobject>
+<textobject><phrase>The <guimenu>Edit</guimenu> menu</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -116,12 +116,12 @@ menu.</para>
 <guilabel>Brushes and Stuff</guilabel> toolbar.</para>
 
 <screenshot>
-<screeninfo>The Brush shapes icon</screeninfo>
+<screeninfo>The <guiicon>Brush Shapes</guiicon> icon</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-quick-starts8.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>The Brush shapes icon</phrase></textobject>
+<textobject><phrase>The <guiicon>Brush Shapes</guiicon> icon</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -142,16 +142,16 @@ brushes.</para>
 rectangle.</para>
 
 <screenshot>
-<screeninfo>Selecting the Draw a rectangle icon</screeninfo>
+<screeninfo>Selecting the <guiicon>Rectangle</guiicon> icon</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-quick-starts10.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>Selecting the Draw a rectangle icon</phrase></textobject>
+<textobject><phrase>Selecting the <guiicon>Rectangle</guiicon> icon</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para>In the Colors palette, select the color you want by clicking on one of the
+<para>In the <guilabel>Colors</guilabel> palette, select the color you want by clicking on one of the
 tabs and then choosing the color.</para>
 
 <screenshot>

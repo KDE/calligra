@@ -1,5 +1,5 @@
 <sect1 id="tutorial-starting">
-<title>Starting to know Krita</title>
+<title>Starting to know &krita;</title>
 
 <para>
 So, let's show you all the niceties. You can start &krita; either on its own
@@ -17,15 +17,15 @@ A little later, you'll be greeted by a dialog:
 
 <para>
 <screenshot>
-<screeninfo>The Create Document dialog</screeninfo>
+<screeninfo>The <guilabel>Create Document</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="createdocument.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Create Document dialog</phrase>
+<phrase>The <guilabel>Create Document</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The Create Document dialog</para></caption>
+<caption><para>The <guilabel>Create Document</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -39,20 +39,20 @@ is a very flexible application and can handle many different types of images:
 the web, <acronym>RGB</acronym> images with high channel depths for
 photographers, watercolor images for painters &mdash; and more. For now, choose
 <guilabel>Custom Document</guilabel>. That will allow
-us to see the New Image dialog box:
+us to see the <guilabel>New Image</guilabel> dialog box:
 </para>
 
 <para>
 <screenshot>
-<screeninfo>The New Image dialog</screeninfo>
+<screeninfo>The <guilabel>New Image</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="newimage.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The New Image dialog</phrase>
+<phrase>The <guilabel>New Image</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The New Image dialog</para></caption>
+<caption><para>The <guilabel>New Image</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>

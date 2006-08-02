@@ -6,7 +6,7 @@
 functions and looks.</para>
 
 <sect1 id="settings-preferences">
-<title>The Preferences dialog</title>
+<title>The <guilabel>Preferences</guilabel> dialog</title>
 
 <para>
 A number of options to configure &krita; are available via the
@@ -18,33 +18,33 @@ sections, which you can open via the sidebar at the left, shown below.
 
 <para>
 <screenshot>
-<screeninfo>The available Preferences sections</screeninfo>
+<screeninfo>The available <guilabel>Preferences</guilabel> sections</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="preferences-sidebar.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The available Preferences sections</phrase>
+<phrase>The available <guilabel>Preferences</guilabel> sections</phrase>
 </textobject>
-<caption><para>The available Preferences sections</para></caption>
+<caption><para>The available <guilabel>Preferences</guilabel> sections</para></caption>
 </mediaobject>
 </screenshot>
 </para>
 
 <sect2 id="settings-preferences-general">
-<title>The General section</title>
+<title>The <guilabel>General</guilabel> section</title>
 
 <para>
 <screenshot>
-<screeninfo>The General section</screeninfo>
+<screeninfo>The <guilabel>General</guilabel> section</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="preferences-general.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The General section</phrase>
+<phrase>The <guilabel>General</guilabel> section</phrase>
 </textobject>
-<caption><para>The General section</para></caption>
+<caption><para>The <guilabel>General</guilabel> section</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -67,19 +67,19 @@ with the side effect that the palettes will take more space.
 </sect2>
 
 <sect2 id="settings-preferences-display">
-<title>The Display section</title>
+<title>The <guilabel>Display</guilabel> section</title>
 
 <para>
 <screenshot>
-<screeninfo>The Display section</screeninfo>
+<screeninfo>The <guilabel>Display</guilabel> section</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="preferences-display.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Display section</phrase>
+<phrase>The <guilabel>Display</guilabel> section</phrase>
 </textobject>
-<caption><para>The Display section</para></caption>
+<caption><para>The <guilabel>Display</guilabel> section</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -95,19 +95,19 @@ introduce erratic behavior.
 </sect2>
 
 <sect2 id="settings-preferences-colormanagement">
-<title>The Color Management section</title>
+<title>The <guilabel>Color Management</guilabel> section</title>
 
 <para>
 <screenshot>
-<screeninfo>The Color Management section</screeninfo>
+<screeninfo>The <guilabel>Color Management</guilabel> section</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="preferences-color.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Color Management section</phrase>
+<phrase>The <guilabel>Color Management</guilabel> section</phrase>
 </textobject>
-<caption><para>The Color Management section</para></caption>
+<caption><para>The <guilabel>Color Management</guilabel> section</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -129,19 +129,19 @@ destination colorspaces are matched.
 </sect2>
 
 <sect2 id="settings-preferences-performance">
-<title>The Performance section</title>
+<title>The <guilabel>Performance</guilabel> section</title>
 
 <para>
 <screenshot>
-<screeninfo>The Performance section</screeninfo>
+<screeninfo>The <guilabel>Performance</guilabel> section</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="preferences-performance.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Performance section</phrase>
+<phrase>The <guilabel>Performance</guilabel> section</phrase>
 </textobject>
-<caption><para>The Performance section</para></caption>
+<caption><para>The <guilabel>Performance</guilabel> section</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -158,19 +158,19 @@ respectively. The <guilabel>Swappiness:</guilabel> option determines how eager
 </sect2>
 
 <sect2 id="settings-preferences-tablet">
-<title>The Tablet section</title>
+<title>The <guilabel>Tablet</guilabel> section</title>
 
 <para>
 <screenshot>
-<screeninfo>The Tablet section</screeninfo>
+<screeninfo>The <guilabel>Tablet</guilabel> section</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="preferences-tablet.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tablet section</phrase>
+<phrase>The <guilabel>Tablet</guilabel> section</phrase>
 </textobject>
-<caption><para>The Tablet section</para></caption>
+<caption><para>The <guilabel>Tablet</guilabel> section</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -183,19 +183,19 @@ sensitivity in this section.
 </sect2>
 
 <sect2 id="settings-preferences-grid">
-<title>The Grid section</title>
+<title>The <guilabel>Grid</guilabel> section</title>
 
 <para>
 <screenshot>
-<screeninfo>The Grid section</screeninfo>
+<screeninfo>The <guilabel>Grid</guilabel> section</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="preferences-grid.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Grid section</phrase>
+<phrase>The <guilabel>Grid</guilabel> section</phrase>
 </textobject>
-<caption><para>The Grid section</para></caption>
+<caption><para>The <guilabel>Grid</guilabel> section</para></caption>
 </mediaobject>
 </screenshot>
 </para>
