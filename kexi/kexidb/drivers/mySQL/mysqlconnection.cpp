@@ -50,7 +50,7 @@ MySqlConnection::~MySqlConnection() {
 }
 
 bool MySqlConnection::drv_connect() {
-  return d->db_connect(*m_data);
+  return d->db_connect( * data() );
 }
 
 bool MySqlConnection::drv_disconnect() {

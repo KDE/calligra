@@ -85,7 +85,7 @@ void Cursor::init()
 	m_result = -1;
 
 	m_containsROWIDInfo = (m_query && m_query->masterTable()) 
-		&& m_conn->m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false;
+		&& m_conn->driver()->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false;
 
 	if (m_query) {
 		//get list of all fields

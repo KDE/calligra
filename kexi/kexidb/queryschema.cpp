@@ -41,8 +41,7 @@
 using namespace KexiDB;
 
 QueryColumnInfo::QueryColumnInfo(Field *f, Q3CString _alias, bool _visible)
- : field(f), alias(_alias), m_indexForVisibleLookupValue(-1)
- , visible(_visible)
+ : field(f), alias(_alias), visible(_visible), m_indexForVisibleLookupValue(-1)
 {
 }
 

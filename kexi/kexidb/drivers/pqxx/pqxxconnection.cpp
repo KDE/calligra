@@ -155,9 +155,9 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	QString socket;
 	QStringList sockets;
 
-	if (m_data->hostName.isEmpty() || m_data->hostName == "localhost")
+	if (data()->hostName.isEmpty() || data()->hostName == "localhost")
 	{
-		if (m_data->localSocketFileName.isEmpty())
+		if (data()->localSocketFileName.isEmpty())
 		{
 			sockets.append("/tmp/.s.PGSQL.5432");
 
@@ -172,33 +172,32 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 		}
 		else
 		{
-			socket=m_data->localSocketFileName; //m_data->fileName();
+			socket=data()->localSocketFileName; //data()->fileName();
 		}
 	}
 	else
 	{
-		conninfo = "host='" + m_data->hostName + "'";
+		conninfo = "host='" + data()->hostName + "'";
 	}
 
 	//Build up the connection string
-	if (m_data->port == 0)
-		m_data->port = 5432;
+	if (data()->port == 0)
+		data()->port = 5432;
 
-	conninfo += QString::fromLatin1(" port='%1'").arg(m_data->port);
+	conninfo += QString::fromLatin1(" port='%1'").arg(data()->port);
 
 	conninfo += QString::fromLatin1(" dbname='%1'").arg(dbName);
 
-	if (!m_data->userName.isNull())
-		conninfo += QString::fromLatin1(" user='%1'").arg(m_data->userName);
+	if (!data()->userName.isNull())
+		conninfo += QString::fromLatin1(" user='%1'").arg(data()->userName);
 
-	if (!m_data->password.isNull())
-		conninfo += QString::fromLatin1(" password='%1'").arg(m_data->password);
+	if (!data()->password.isNull())
+		conninfo += QString::fromLatin1(" password='%1'").arg(data()->password);
 
 	try
 	{
 		d->m_pqxxsql = new pqxx::connection( conninfo.latin1() );
 		drv_executeSQL( "SET DEFAULT_WITH_OIDS TO ON" ); //Postgres 8.1 changed the default to no oids but we need them
-		m_usedDatabase = dbName;
 		return true;
 	}
 	catch(const std::exception &e)

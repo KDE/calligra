@@ -193,5 +193,7 @@ LookupFieldSchema *LookupFieldSchema::loadFromXML(const QDomElement& lookupEl)
 /* static */
 void LookupFieldSchema::saveToXML(LookupFieldSchema& lookupSchema, QDomElement& parentEl)
 {
+	Q_UNUSED(lookupSchema);
+	Q_UNUSED(parentEl);
 	//todo
 }
