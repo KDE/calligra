@@ -27,8 +27,6 @@
 #include <qcursor.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QWheelEvent>
 #include <Q3PtrList>
 #include <QDragMoveEvent>
@@ -4687,7 +4685,7 @@ void KPrView::refreshCustomMenu()
             if ( !lst.contains( varName) )
             {
                 lst.append( varName );
-                Q3CString name = QString("custom-action_%1").arg(i).toLatin1();
+                QByteArray name = "custom-action_"+QByteArray::number(i);
                 act = new KAction( varName, actionCollection(), name );
                 connect(act, SIGNAL(triggered(bool)), SLOT( insertCustomVariable() ));
                 act->setShortcut(shortCuts[varName]);
@@ -5769,7 +5767,7 @@ void KPrView::duplicateObj()
         m_canvas->setToolEditMode( TEM_MOUSE );
         deSelectAllObjects();
         QMimeSource *data = QApplication::clipboard()->data();
-        Q3CString clip_str = KoStoreDrag::mimeType("application/x-kpresenter");
+        QByteArray clip_str = KoStoreDrag::mimeType("application/x-kpresenter");
         if ( data->provides( clip_str ) )
         {
             m_canvas->activePage()->pasteObjs( data->encodedData(clip_str),

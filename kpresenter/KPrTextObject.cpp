@@ -67,7 +67,6 @@
 #include <QKeyEvent>
 #include <QDropEvent>
 #include <QDragMoveEvent>
-#include <Q3CString>
 #include <Q3PtrList>
 
 #include <KoParagCounter.h>
@@ -2377,7 +2376,7 @@ bool KPrTextView::canDecode( QMimeSource *e )
 Q3DragObject * KPrTextView::newDrag( QWidget * parent )
 {
     QBuffer buffer;
-    const Q3CString mimeType = "application/vnd.oasis.opendocument.text";
+    const QByteArray mimeType = "application/vnd.oasis.opendocument.text";
     KoStore * store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );

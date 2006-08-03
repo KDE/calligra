@@ -48,8 +48,6 @@
 #include <qfileinfo.h>
 #include <qdom.h>
 #include <q3dict.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <Q3PtrList>
 #include <Q3ValueList>
 #include <QPixmap>
@@ -1405,7 +1403,7 @@ void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
     for ( QDomNode element = settingsDoc.firstChild(); !element.isNull(); element = element.nextSibling() )
     {
         QDomElement e = element.toElement();
-        Q3CString tagName = e.tagName().toLatin1();
+        QByteArray tagName = e.tagName().toLatin1();
         //kDebug()<<" tagName :"<<tagName<<endl;
         if ( tagName == "show" && e.namespaceURI() == KoXmlNS::presentation )
         {
@@ -2139,7 +2137,7 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
     for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
-        Q3CString tagName = e.tagName().toLatin1();
+        QByteArray tagName = e.tagName().toLatin1();
         if ( ! tagName.isEmpty() ) // only tags that open
         {
             const bool isPresentationNS = e.namespaceURI() == KoXmlNS::presentation;

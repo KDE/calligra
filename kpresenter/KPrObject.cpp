@@ -34,7 +34,6 @@
 #include <QRegExp>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 #include <kapplication.h>
 #include <KoOasisContext.h>
