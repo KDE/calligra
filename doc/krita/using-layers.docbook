@@ -21,11 +21,12 @@ The idea behind layers is quite simple. As the name suggests, layers lie on
 top of each other, and together form the layer stack. The final resulting
 image is that what you see when looking through the stack from top to bottom.
 This means that usually the upper layers of your image will have more or less
-transparency, since you cannot look through a layer which has no transparency
-(or as &krita; denotes it, is 100 percent opaque). A layer higher in the stack
-gets applied later than one lower in the stack. For example, the effect that
-layer number 4 adds to the image, is applied to the result from applying
-layers 1 through 3.
+transparency, since you cannot look through a layer which has no transparency.
+(&krita; works with opaqueness instead of transparency. A layer that is 100
+percent opaque is 0 percent transparent, and vice versa.) A layer higher in
+the stack gets applied later than one lower in the stack. For example, the
+effect that layer number 4 adds to the image, is applied to the result from
+applying layers 1 through 3.
 </para><para>
 Every image you edit in &krita; contains layers. When you create a new image,
 the layer box (usually shown at the bottom right of your screen, see <link
@@ -48,12 +49,83 @@ tutorial</link> for a small hands-on introduction.
 </para>
 </sect1>
 
+<sect1 id="layers-layerbox">
+<title>The layer box</title>
+
+<para>The layer box is the instrument you will use most to work with layers. It
+gives an overview of the layers that are present in your image, and using it
+you can manage layers by adding, removing, reordering or modifying them.
+</para><para>
+The layer box consists of three parts. The middle part gives an overview of the
+layers in the image. At the top, you can set some properties for the current
+layer. At the bottom, a couple of layer management options can be found. The
+next sections describe these three parts in more detail.
+</para>
+
+<sect2 id="layers-layerbox-overview"> 
+<title>Layer overview</title>
+
+<para>This part shows you which layers are present in your image. In a tree-like
+structure, the layer group hierarchy is shown: layers that are contained within
+a layer group are displayed a bit to the right to indicate their belonging to
+that group. 
+</para><para>
+For each layer, a thumbnail preview and its name are shown. The layer name
+is preceded by a folder icon if it is a group layer. Furthermore, two
+indicators are present: the eye icon shows whether the layer is currently
+visible (an open eye indicates that the layer is visible, a closed eye
+indicates that it is not), and the lock icon shows whether the layer is
+locked. No changes can be made to a locked layer.
+</para><para>
+When you click on a layer's eye icon, its visibility is switched from on to
+off or vice versa. Clicking on the lock icon enables or disables editing of
+that layer. You can click on the name of the current layer to rename it.
+Note that to rename a layer, it has to be the current one. You do not need to
+activate a layer in order to make it (in)visible or (un)locked via the eye and
+lock icons, respectively: these work directly.
+</para><para>
+Doubleclick on a layer entry in the list to open the <link
+linkend="commands-dialogs-layers-layerproperties"><guilabel>Layer
+Properties</guilabel></link> dialog. This dialog shows a layer's colorspace and
+profile. You can also change its name, opacity and composite mode here.
+</para>
+
+</sect2>
+
+<sect2 id="layers-layerbox-options"> 
+<title>Layer options</title>
+<para>
+The top of the layer box contains two controls for setting properties of the
+currently selected layer. The list box at the left allows you to quickly set
+the layer's composite mode. The spin field and slider at the right can be used
+to change the layer's opacity.
+</para><para>
+At the bottom of the layer box, there are five buttons. From left to right,
+these are as follows. The <guibutton>New Layer</guibutton> icon brings up a
+submenu from which you can choose which type of layer you want to add. This
+menu can also be opened by clicking with the &RMB; on the layer box. The
+<guibutton>Move Layer Down</guibutton> and <guibutton>Move Layer Up</guibutton>
+buttons move the current layer one level down and up, respectively, within the
+current layer group. If the layer is already the last or first within the
+layer group, trying to move it further will move it out of the layer group.
+The <guibutton>Layer Properties</guibutton> button opens the <link
+linkend="commands-dialogs-layers-layerproperties"><guilabel>Layer
+Properties</guilabel></link> dialog, just as when you would have doubleclicked
+on the layer. The <guibutton>Delete Layer</guibutton> button deletes the
+current layer.
+</para>
+</sect2>
+
+
+
+</sect1>
+
 <sect1 id="layers-adjustment">
 <title>Adjustment Layers</title>
 
-<para>Adjustment Layers are layers that consist of a filter and an optional
+<para>Adjustment layers are layers that consist of a filter and an optional
 selection. The filter effect is applied to the composite image of all
-layers under the adjustmentlayer in the current layer group. The big
+layers under the adjustment layer in the current layer group. The big
 thing is, adjustment layers apply these effects non-destructively. The
 original image data is not modified.
 </para><para>
@@ -71,7 +143,7 @@ layer.
 </para>
 
 <sect2 id="layers-adjustment-selections">
-<title>Adjustment Layers and selections</title>
+<title>Adjustment layers and selections</title>
 
 <para>If the currently active layer has an active selection, then that selection
 will be copied and used as a mask for the adjustment layer. If there is no
@@ -99,7 +171,7 @@ are converted to grayscale before compositing -- and that means that the
 adjustment layer projection will be grayscale, too.
 </para><para>
 With this knowledge you'll understand why &krita; can often offer better
-performance working with layers on top of an adjustmentlayer which is on top
+performance working with layers on top of an adjustment layer which is on top
 of a complex layer structure: &krita; uses the projection and doesn't even look
 anymore at the layers under the adjustment layer. Unless, of course, you
 change one of them.
