@@ -23,7 +23,7 @@
 #include <q3valuestack.h>
 #include <QFile>
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QPolygon>
 #include <Q3PtrList>
 
 const char ATFInterpreter::PNT_BG[]   = "POINT {";
@@ -116,14 +116,14 @@ void ATFInterpreter::load(const QString & fileName)
     }
 }
 
-Q3PointArray ATFInterpreter::getPointArray(int wid,int heig)
+QPolygon ATFInterpreter::getPointArray(int wid,int heig)
 {
     unsigned int px = 0,py = 0,a = 0,b = 0,c = 0,d = 0,e = 0,f = 0;
     unsigned int tmp = 0,num = 0;
     bool calc = false,res = false;
     char op = OP_EQUAL,var = VAR_1;
     Q3PtrList<Sign> slp;
-    Q3PointArray pntArray(coordList.count());
+    QPolygon pntArray(coordList.count());
 
     if (!coordList.isEmpty())
     {

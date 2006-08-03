@@ -84,7 +84,7 @@ public:
     void load(const QString &);
 
     // get pointarray/attribute list/points
-    Q3PointArray getPointArray(int,int);
+    QPolygon getPointArray(int,int);
     Q3PtrList<AttribList> getAttribList();
 
 protected:
