@@ -7,12 +7,10 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3GridLayout>
-#include <Q3Frame>
 #include <kvbox.h>
 
 #include "kchart_params.h"
 
-class Q3Frame;
 class QPushButton;
 class Q3ButtonGroup;
 

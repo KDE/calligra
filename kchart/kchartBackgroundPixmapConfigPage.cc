@@ -41,7 +41,6 @@
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3Frame>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 #include <kcolorbutton.h>

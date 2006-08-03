@@ -8,8 +8,7 @@
 #include <QCheckBox>
 #include <q3buttongroup.h>
 #include <QLabel>
-//Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 
 namespace KChart
 {
@@ -78,10 +77,10 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   tmpQLabel->setText( i18n("Use first column as description") );
   tmpQLabel->setAlignment( 1313 );
 
-  Q3Frame* tmpQFrame;
-  tmpQFrame = new Q3Frame( this, "Frame_1" );
+  QFrame* tmpQFrame;
+  tmpQFrame = new QFrame( this);
   tmpQFrame->setGeometry( 10, 10, 240, 220 );
-  tmpQFrame->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+  tmpQFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   tmpQFrame->setLineWidth( 2 );
 
   /*
