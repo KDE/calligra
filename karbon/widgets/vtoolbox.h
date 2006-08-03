@@ -20,13 +20,13 @@
 
 #ifndef __VTOOLBOX_H__
 #define __VTOOLBOX_H__
-#include <KoToolBox.h>
+#include "oldtoolbox.h"
 #include <kinstance.h>
 class VTool;
 
 /// This class...
 
-class VToolBox : public KoToolBox
+class VToolBox : public OldToolBox
 {
 	Q_OBJECT
 

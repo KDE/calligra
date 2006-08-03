@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-VToolBox::VToolBox( KMainWindow *mainWin, const char* name, KInstance* instance ) : KoToolBox( mainWin, name, instance, 5 )
+VToolBox::VToolBox( KMainWindow *mainWin, const char* name, KInstance* instance ) : OldToolBox( mainWin, name, instance, 5 )
 {
 }
 
@@ -31,14 +31,14 @@ void
 VToolBox::registerTool( VTool *tool )
 {
 	kDebug(38000) << "VToolBox::registerTool : " << tool->objectName() << endl;
-	KoToolBox::registerTool( tool->action(), tool->toolType(), tool->priority() );
+	OldToolBox::registerTool( tool->action(), tool->toolType(), tool->priority() );
 }
 
 void
 VToolBox::setupTools()
 {
 	kDebug(38000) << k_funcinfo << endl;
-	KoToolBox::setupTools();
+	OldToolBox::setupTools();
 }
 
 #include "vtoolbox.moc"

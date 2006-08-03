@@ -14,6 +14,8 @@ set(karbonwidgets_SRCS
     vtoolbox.cc
     vtypebuttonbox.cc
     vruler.cc
+
+    oldtoolbox.cc
     )
 
 kde4_automoc(${karbonwidgets_SRCS})
