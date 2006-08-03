@@ -82,7 +82,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     double originY = (double)m_marginY + qMin( 0.0, m_contentRect.top() );
     m.translate( originX, originY );
     gc.setMatrix( m );
-	gc.save();
+
     gc.setPen( Qt::black );
     gc.drawRect( m_zoomHandler.documentToView( m_documentRect ) );
 
