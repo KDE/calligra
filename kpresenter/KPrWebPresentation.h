@@ -31,7 +31,7 @@
 #include <QLabel>
 #include <QTextStream>
 #include <kvbox.h>
-
+#include <kurl.h>
 
 class KPrDocument;
 class KPrView;
@@ -191,6 +191,7 @@ protected slots:
     virtual void finish();
     void pageChanged();
     void slotChoosePath(const QString &);
+    void slotChoosePath(const KUrl &);
     void slideTitleChanged( const QString & );
     void slideTitleChanged( Q3ListViewItem * );
 

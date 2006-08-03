@@ -739,8 +739,8 @@ void KPrWebPresentationWizard::setupPage1()
 
     connect(path, SIGNAL(textChanged(const QString&)),
             this,SLOT(slotChoosePath(const QString&)));
-    connect(path, SIGNAL(urlSelected( const QString& )),
-            this,SLOT(slotChoosePath(const QString&)));
+    connect(path, SIGNAL(urlSelected( const KUrl& )),
+            this,SLOT(slotChoosePath(const KUrl&)));
 
     addPage( page1, i18n( "Step 1: General Information" ) );
 
@@ -1127,6 +1127,11 @@ void KPrWebPresentationWizard::closeEvent( QCloseEvent *e )
 {
     view->enableWebPres();
     K3Wizard::closeEvent( e );
+}
+
+void KPrWebPresentationWizard::slotChoosePath(const KUrl &text)
+{
+        webPres.setPath(text);
 }
 
 void KPrWebPresentationWizard::slotChoosePath(const QString &text)

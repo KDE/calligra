@@ -204,8 +204,8 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     picChoose->setMode( KFile::ExistingOnly );
     connect( picChoose, SIGNAL( openFileDialog( KUrlRequester * ) ),
              SLOT( aboutToSelectPic() ) );
-    connect( picChoose, SIGNAL( urlSelected( const QString & ) ),
-             SLOT( afterSelectPic( const QString & ) ) );
+    connect( picChoose, SIGNAL( urlSelected( const KUrl& ) ),
+             SLOT( afterSelectPic( const KUrl& ) ) );
 
     picChooseLabel->setBuddy( picChoose );
 
@@ -413,7 +413,7 @@ void KPrBackDialog::aboutToSelectPic()
     picChoose->fileDialog()->setPreviewWidget( new KoPictureFilePreview( picChoose->fileDialog() ) );
 }
 
-void KPrBackDialog::afterSelectPic( const QString &url )
+void KPrBackDialog::afterSelectPic( const KUrl &url )
 {
     KoPicture picture;
     picture.setKeyAndDownloadPicture(url, tabWidget);

@@ -322,8 +322,8 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
 
     connect( path, SIGNAL( textChanged(const QString&) ),
              this, SLOT( slotChoosePath(const QString&) ) );
-    connect( path, SIGNAL( urlSelected( const QString&) ),
-             this, SLOT( slotChoosePath(const QString&) ) );
+    connect( path, SIGNAL( urlSelected( const KUrl&) ),
+             this, SLOT( slotChoosePath(const KUrl&) ) );
 
 
     QLabel *lable1 = new QLabel( i18n("Title:"), this, "lable1" );
@@ -492,7 +492,7 @@ void KPrMSPresentationSetup::finish()
 
 }
 
-void KPrMSPresentationSetup::slotChoosePath(const QString &text)
+void KPrMSPresentationSetup::slotChoosePath(const KUrl &text)
 {
     msPres.setPath(text);
 }

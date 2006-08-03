@@ -33,7 +33,7 @@
 #include <QLabel>
 #include <QCloseEvent>
 #include <kvbox.h>
-
+#include <kurl.h>
 
 class KPrDocument;
 class KPrView;
@@ -125,7 +125,7 @@ protected:
     KUrlRequester *path;
 
 protected slots:
-    void slotChoosePath(const QString &);
+    void slotChoosePath(const KUrl &);
     virtual void finish();
     virtual void helpMe();
     void showColourGroup(bool on);

@@ -120,7 +120,7 @@ private:
 
 private slots:
     void aboutToSelectPic();
-    void afterSelectPic( const QString & );
+    void afterSelectPic( const KUrl & );
     void updateConfiguration();
 
     void ok() { emit backOk( this, false ); }
