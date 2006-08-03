@@ -74,6 +74,22 @@ KoLayerShape::hitTest( const QPointF &position ) const
     return false;
 }
 
+QRectF
+KoLayerShape::boundingRect() const
+{
+	QRectF bb;
+
+	foreach( KoShape* shape, iterator() )
+	{
+		if( bb.isEmpty() )
+			bb = shape->boundingRect();
+		else
+			bb = bb.unite( shape->boundingRect() );
+	}
+
+	return bb;
+}
+
 //  ############# LayerMembers #############
 KoLayerShape::LayerMembers::LayerMembers() 
 {

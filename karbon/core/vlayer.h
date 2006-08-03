@@ -50,6 +50,7 @@ public:
 	void accept( VVisitor& visitor );
 
     bool hitTest( const QPointF &position ) const;
+    virtual QRectF boundingRect() const;
 private:
     class LayerMembers: public KoGraphicsContainerModel {
         public:

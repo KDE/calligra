@@ -119,7 +119,7 @@
 
 // Uncomment the #define below to print lots of debug information about the view.
 // Or use the -DKARBON_DEBUG_VIEW flag when using cmake, so the code stays the same.
-// #define KARBON_DEBUG_VIEW
+#define KARBON_DEBUG_VIEW
 
 #ifdef KARBON_DEBUG_VIEW
 #define debugView(text) kDebug() << "KARBON_DEBUG_VIEW: " << text << endl
@@ -131,7 +131,7 @@ const int rulerWidth = 20;  // vertical ruler width
 const int rulerHeight = 20; // horizontal ruler height
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
-		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
+		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p ), m_canvas( 0L )
 {
 	debugView("KarbonView::KarbonView");
 
@@ -193,14 +193,15 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_vertRuler->setUnit(p->unit());
 	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
 
-	m_canvas = new KarbonCanvas( p->document().shapes() ); //, this, p );
+	m_canvas = new KarbonCanvas( p->document() );
 	m_canvas->setCommandHistory( p->commandHistory() );
+
 	connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
 	m_canvasView = new KoCanvasController(this);
 	m_canvasView->setCanvas(m_canvas);
-	m_canvasView->centerCanvas( true );
+	m_canvasView->centerCanvas( false );
 
 	layout->addWidget(m_canvasView, 0, 0);
 
@@ -398,6 +399,8 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	if(!m_canvas)
 		return;
 
+	QSize maxSize = m_canvasView->maximumViewportSize();
+	m_canvas->setVisibleSize( maxSize.width(), maxSize.height() );
 	zoomChanged();
 	reorganizeGUI();
 }
@@ -980,6 +983,18 @@ void
 KarbonView::zoomChanged( const QPointF &p )
 {
 	debugView(QString("KarbonView::zoomChanged( QPointF(%1, %2) )").arg(p.x()).arg(p.y()));
+	
+	if( m_canvas )
+	{
+		double zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
+		if( zoomFactor == 0.0 ) return;
+
+		KoZoomHandler *zoomHandler = (KoZoomHandler*)m_canvas->viewConverter();
+		zoomHandler->setZoom( zoomFactor );
+		KoView::setZoom( zoomFactor );
+		m_canvas->adjustSize();
+	}
+	else KoView::setZoom( 1.0 );
 
 // TODO: this should be done by the cavasview and the canvas itself
 
@@ -1039,6 +1054,8 @@ KarbonView::zoomChanged( const QPointF &p )
 		m_zoomAction->changeItem( m_zoomAction->currentItem(), " 2000%" );
 	}
 
+	KoZoomHandler *zoomHandler = (KoZoomHandler*)m_canvas->viewConverter();
+	zoomHandler->setZoom( zoomFactor );
 	KoView::setZoom( zoomFactor );
 
 	m_canvas->viewport()->setUpdatesEnabled( false );

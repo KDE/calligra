@@ -40,24 +40,31 @@
 #include <kcolormimedata.h>
 #include <kcommand.h>
 
-#include "vlayer.h"
+#include "vdocument.h"
 
-KarbonCanvas::KarbonCanvas(const QList<KoShape*> &objects)
+const int defaultMargin = 50;
+
+KarbonCanvas::KarbonCanvas( VDocument &document )
     : QWidget()
     , m_zoomHandler()
     , m_tool(0)
     , m_unit( KoUnit::U_PT )
     , m_snapToGrid(false)
+    , m_doc( &document )
+    , m_marginX( defaultMargin )
+    , m_marginY( defaultMargin )
+    , m_visibleWidth( 500 )
+    , m_visibleHeight( 500 )
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
 
-    m_shapeManager = new KoShapeManager(this, objects);
+    m_shapeManager = new KoShapeManager(this, m_doc->shapes() );
     setMouseTracking(true);
 
     //connect( m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
     setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
-    setMinimumSize(800, 600);
+    adjustSize();
 }
 
 KarbonCanvas::~KarbonCanvas()
@@ -70,9 +77,17 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     gc.setRenderHint(QPainter::Antialiasing);
     gc.setClipRect(ev->rect());
 
+    QWMatrix m;
+    double originX = (double)m_marginX + qMin( 0.0, m_contentRect.left() );
+    double originY = (double)m_marginY + qMin( 0.0, m_contentRect.top() );
+    m.translate( originX, originY );
+    gc.setMatrix( m );
+	gc.save();
+    gc.setPen( Qt::black );
+    gc.drawRect( m_zoomHandler.documentToView( m_documentRect ) );
+
     m_shapeManager->paint( gc, m_zoomHandler, false );
     m_tool->paint( gc, m_zoomHandler );
-
 
     gc.end();
 }
@@ -118,6 +133,34 @@ void KarbonCanvas::updateCanvas(const QRectF& rc) {
     QRect clipRect(m_zoomHandler.documentToView(rc).toRect());
     clipRect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
     update(clipRect);
+}
+
+void KarbonCanvas::setVisibleSize( int visibleWidth, int visibleHeight ) {
+   m_visibleWidth = visibleWidth;
+   m_visibleHeight = visibleHeight;
+   adjustSize();
+}
+
+void KarbonCanvas::adjustSize() {
+    m_contentRect = m_doc->boundingRect();
+    m_documentRect.setRect( 0.0, 0.0, m_doc->width(), m_doc->height() );
+
+    // calculate how much space we need with the current zoomed doc size and default margins
+    QRectF zoomedRect = m_zoomHandler.documentToView( m_contentRect );
+    int newWidth = (int)zoomedRect.width() + 2 * defaultMargin;
+    int newHeight = (int)zoomedRect.height() + 2 * defaultMargin;
+
+    // if the new size is smaller as the visible size, adjust the margins
+    if( newWidth < m_visibleWidth )
+        m_marginX = defaultMargin + int(0.5 * float(m_visibleWidth - newWidth));
+    else
+        m_marginX = defaultMargin;
+    if( newHeight < m_visibleHeight )
+        m_marginY = defaultMargin + int(0.5 * float(m_visibleHeight - newHeight));
+    else
+        m_marginY = defaultMargin;
+
+    setMinimumSize( (int)zoomedRect.width() + 2 * m_marginX, (int)zoomedRect.height() + 2 * m_marginY );
 }
 
 #include "vcanvas.moc"

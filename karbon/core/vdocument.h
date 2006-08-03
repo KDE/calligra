@@ -306,6 +306,8 @@ public:
 	 */
 	KarbonGridData &grid() { return m_gridData; }
 
+    QRectF boundingRect();
+
 private:
 	/**
 	 * Document width.

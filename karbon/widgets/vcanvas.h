@@ -46,13 +46,14 @@ class KoShapeManager;
 class KoTool;
 class KCommand;
 class KCommandHistory;
+class VDocument;
 
 class KarbonCanvas: public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 
 public:
-    KarbonCanvas(const QList<KoShape*> &objects);
+    KarbonCanvas( VDocument &document );
     virtual ~KarbonCanvas();
 
     void gridSize(double *horizontal, double *vertical) const;
@@ -79,6 +80,17 @@ public:
 
     void setCommandHistory( KCommandHistory* history ) { m_commandHistory = history; }
 
+    /**
+     * Tell the canvas that it has to adjust its size.
+     * The new size depends on the current document size and the actual zoom factor. 
+     * If the new calculated size is smaller than the visible size set
+     * by setVisibleSize, the visible size is used as the new size.
+     */
+    void adjustSize();
+
+    /** Sets the available visible size. */
+    void setVisibleSize( int visibleWidth, int visibleHeight );
+
 protected:
     void paintEvent(QPaintEvent * ev);
     void mouseEvent(QMouseEvent *e);
@@ -93,11 +105,19 @@ private:
     KoZoomHandler m_zoomHandler;
 
     KCommandHistory *m_commandHistory;
-	
+
     KoTool *m_tool;
     KoUnit::Unit m_unit;
 
     bool m_snapToGrid;
+
+    VDocument *m_doc;
+    QRectF m_contentRect;
+    QRectF m_documentRect;
+    int m_marginX;
+    int m_marginY;
+    int m_visibleWidth;
+    int m_visibleHeight;
 };
 
 #endif

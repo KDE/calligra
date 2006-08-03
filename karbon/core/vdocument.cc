@@ -330,3 +330,15 @@ VDocument::objectName( const KoShape *obj ) const
 	QMap<const KoShape *, QString>::ConstIterator it = m_objectNames.find( obj );
 	return it == m_objectNames.end() ? 0L : it.value();
 }
+
+QRectF 
+VDocument::boundingRect()
+{
+	QRectF bb( 0, 0, m_width, m_height );
+	foreach( KoShape* layer, m_layers )
+	{
+		bb = bb.unite(  layer->boundingRect() );
+	}
+
+	return bb;
+}
