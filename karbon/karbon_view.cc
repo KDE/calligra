@@ -224,9 +224,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		// TODO: proper use of the toolbox once it is ready
 		// plug the toolbox as a docker for now to have something
 		KoToolManager::instance()->addControllers( m_canvasView, p );
-		QWidget *tb = KoToolManager::instance()->toolBox();
+		QDockWidget *tb = KoToolManager::instance()->toolBox();
 		tb->setWindowTitle( "Toolbox" );
-		paletteManager()->addWidget( tb, "ToolBox", "ToolBox" );
+		shell()->addDockWidget( Qt::LeftDockWidgetArea, tb);
 
 		// for testing: manually set a shape id of the shape to be created
 		KoCreateShapesTool *createTool = KoToolManager::instance()->shapeCreatorTool( m_canvas );
