@@ -591,6 +591,22 @@ SheetPrint* Sheet::print() const
     return d->print;
 }
 
+void Sheet::setDefaultHeight( double height )
+{
+  if ( isProtected() )
+    NO_MODIFICATION_POSSIBLE;
+
+  d->defaultRowFormat->setDblHeight( height );
+}
+
+void Sheet::setDefaultWidth( double width )
+{
+  if ( isProtected() )
+    NO_MODIFICATION_POSSIBLE;
+
+  d->defaultColumnFormat->setDblWidth( width );
+}
+
 double Sheet::sizeMaxX() const
 {
   return d->sizeMaxX;

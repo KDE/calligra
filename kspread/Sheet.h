@@ -564,6 +564,8 @@ public:
      */
     RowFormat* firstRow() const;
 
+    void setDefaultHeight( double height );
+
     //
     //END Methods related to row formats
     //
@@ -595,6 +597,8 @@ public:
      * \return the first non-default row format
      */
     ColumnFormat* firstCol() const;
+
+    void setDefaultWidth( double width );
 
     //
     //END Methods related to column formats
