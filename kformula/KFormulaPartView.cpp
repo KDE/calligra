@@ -83,6 +83,8 @@ void KFormulaPartView::setupActions()
 
     m_addBracketAction = new KAction( KIcon("paren"), i18n("Add Bracket"),
 		                      actionCollection(), "addbracket" );
+//    connect();
+//    m_addBracketAction->set... ;
     m_addFractionAction = new KAction( KIcon("frac"), i18n("Add Fraction"),
 		                       actionCollection(), "addfraction" );
     m_addRootAction = new KAction( KIcon("sqrt"), i18n("Add Root"),
@@ -104,8 +106,6 @@ void KFormulaPartView::setupActions()
     m_removeEnclosingAction;*/
 
     KStdAction::preferences( this, SLOT(configure()), actionCollection(), "configure" );
-
-//    KAction* m_formulaStringAction;
 }
 
 void KFormulaPartView::focusInEvent( QFocusEvent* )

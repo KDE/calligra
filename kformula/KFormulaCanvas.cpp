@@ -38,18 +38,19 @@ KFormulaCanvas::~KFormulaCanvas()
 
 void KFormulaCanvas::paintEvent( QPaintEvent* event )
 {
-/*    QPainter p;
+    QPainter p;
 
-    if( m_dirtyBuffer )
+/*    if( m_dirtyBuffer )
     {
-	 m_paintBuffer = QPixmap();// m_formulaShape->size() );
+	 m_paintBuffer = QPixmap( m_formulaShape->size() );
          p.begin( &m_painBuffer );
-//	 m_formulaShape->draw( &p );
+         m_formulaShape->paint( &p );
 	 p.end();
     }
 	 
     p.begin( this );
-    p.drawPixmap( event->rect(), m_paintBuffer, event->rect() );
+    width()
+    p.drawPixmap(  );
     p.end();*/
 }
 
