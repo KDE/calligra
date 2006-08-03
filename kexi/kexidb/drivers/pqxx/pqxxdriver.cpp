@@ -60,7 +60,7 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 	d->typeNames[Field::BigInteger]="BIGINT";
 	d->typeNames[Field::Boolean]="BOOLEAN";
 	d->typeNames[Field::Date]="DATE";
-	d->typeNames[Field::DateTime]="DATETIME";
+	d->typeNames[Field::DateTime]="TIMESTAMP";
 	d->typeNames[Field::Time]="TIME";
 	d->typeNames[Field::Float]="REAL";
 	d->typeNames[Field::Double]="DOUBLE PRECISION";
