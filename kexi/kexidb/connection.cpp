@@ -212,6 +212,7 @@ Connection::~Connection()
 //	KexiDBDbg << "Connection::~Connection()" << endl;
 	delete d->dbProperties;
 	delete d;
+	d = 0;
 /*	if (m_driver) {
 		if (m_is_connected) {
 			//delete own table schemas
@@ -2788,11 +2789,6 @@ TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 	TableSchema *ts = new TableSchema(tsname.toLower());
 	insertInternalTableSchema( ts );
 	return ts;
-}
-
-QString Connection::escapeIdentifier(const QString& id, int drvEscaping) const
-{
-	return m_driver->escapeIdentifier(id, drvEscaping);
 }
 
 bool Connection::isInternalTableSchema(const QString& tableName)

@@ -477,8 +477,10 @@ tristate AlterTableHandler::RemoveFieldAction::updateTableSchema(TableSchema &ta
 	return true;
 }
 
-tristate AlterTableHandler::RemoveFieldAction::execute(Connection& /*conn*/, TableSchema& /*table*/)
+tristate AlterTableHandler::RemoveFieldAction::execute(Connection& conn, TableSchema& table)
 {
+	Q_UNUSED(conn);
+	Q_UNUSED(table);
 	//! @todo
 	return true;
 }
@@ -613,8 +615,10 @@ tristate AlterTableHandler::InsertFieldAction::updateTableSchema(TableSchema &ta
 	return true;
 }
 
-tristate AlterTableHandler::InsertFieldAction::execute(Connection& /*conn*/, TableSchema& /*table*/)
+tristate AlterTableHandler::InsertFieldAction::execute(Connection& conn, TableSchema& table)
 {
+	Q_UNUSED(conn);
+	Q_UNUSED(table);
 	//! @todo
 	return true;
 }
@@ -655,8 +659,10 @@ void AlterTableHandler::MoveFieldPositionAction::simplifyActions(ActionDictDict 
 	//! @todo
 }
 
-tristate AlterTableHandler::MoveFieldPositionAction::execute(Connection& /*conn*/, TableSchema& /*table*/)
+tristate AlterTableHandler::MoveFieldPositionAction::execute(Connection& conn, TableSchema& table)
 {
+	Q_UNUSED(conn);
+	Q_UNUSED(table);
 	//! @todo
 	return true;
 }

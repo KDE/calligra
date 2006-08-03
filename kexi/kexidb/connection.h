@@ -1111,7 +1111,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		Q3PtrDict<KexiDB::Cursor> m_cursors;
 
 	private:
-		ConnectionPrivate* const d; //!< @internal d-pointer class.
+		ConnectionPrivate* d; //!< @internal d-pointer class.
 		Driver* const m_driver; //!< The driver this \a Connection instance uses.
 		bool m_destructor_started : 1; //!< helper: true if destructor is started.
 
