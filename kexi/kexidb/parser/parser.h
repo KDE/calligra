@@ -36,7 +36,7 @@ class TableSchema;
 class Field;
 
 /**
- * Class which contains detailed i18n'ed error description for the \a Parser .
+ * Provides detailed i18n'ed error description about the \a Parser .
  */
 class KEXI_DB_EXPORT ParserError
 {
@@ -90,23 +90,23 @@ class ParserPrivate;
 /**
  * Parser for SQL statements.
  *
- * The best and preffered way to do queries is using the KexiDB::Parser functionality
- * and pass it as QuerySchema since it offers a database-backend independend way to
- * deal with SQL statements on the one hand and offers high level functionality on
- * the other. Also BLOBs like images are handled that way as well.
+ * The best and prefeerred way to run queries is using the KexiDB::Parser functionality
+ * and use the resulting QuerySchema object since this offers a database-backend-independent 
+ * way to deal with SQL statements on the one hand and offers high level 
+ * functionality on the other. Also BLOBs like images are handled that way.
  *
- * As example if we like to use the SELECT-statement
+ * For example if we like to use the SELECT statement
  * "SELECT dir.path, media.filename FROM dir, media WHERE dir.id=media.dirId AND media.id=%s"
  * we are able to use the \a Connection::prepareStatement method which takes the type of
  * the statement (in our case \a PreparedStatement::SelectStatement ), a list of fields (in
  * our case dir.path and media.filename) and returns a \a PreparedStatement::Ptr instance.
  * By using the \a QuerySchema::addRelationship and \a QuerySchema::addToWhereExpression methods
- * the SQL statement could be extended with relationships and where-expressions.
+ * the SQL statement could be extended with relationships and WHERE expressions.
  *
- * For an example see \a KexiDB::PreparedStatement and \a Connection::selectStatement . A more
- * complex example that looks at what the user has defined and builds a \a KexiDB::Schema
- * carefully include the where-expression is in use at the Query Designer in the method
- * \a KexiQueryDesignerGuiEditor::buildSchema .
+ * For more, see \a KexiDB::PreparedStatement and \a Connection::selectStatement() . A more
+ * complex example that looks at what the user has defined and carefully builds 
+ * \a KexiDB::QuerySchema object, including the WHERE expression can be found in 
+ * the Query Designer's source code in the method \a KexiQueryDesignerGuiEditor::buildSchema().
  */
 class KEXI_DB_EXPORT Parser
 {
