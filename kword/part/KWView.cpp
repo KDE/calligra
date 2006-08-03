@@ -32,6 +32,8 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
+#include <KoToolManager.h>
+#include <KoMainWindow.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -57,6 +59,9 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
 
     m_currentPage = m_document->pageManager()->page(m_document->startPage());
 
+    QDockWidget *w = KoToolManager::instance()->toolBox();
+    w->setWindowTitle("KWord");
+    shell()->addDockWidget(Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox());
     setupActions();
 }
 
@@ -107,13 +112,13 @@ void KWView::setZoom( int zoom ) {
     //    m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
 
     // Also set the zoom in KoView (for embedded views)
-    kDebug() << "KWView::setZoom " << zoom << " setting koview zoom to " << m_zoomHandler.zoomedResolutionY() << endl;
+    //kDebug() << "KWView::setZoom " << zoom << " setting koview zoom to " << m_zoomHandler.zoomedResolutionY() << endl;
     kwcanvas()->updateSize();
 }
 
 void KWView::viewZoom( KoZoomMode::Mode mode, int zoom )
 {
-    kDebug() << " viewZoom '" << KoZoomMode::toString( mode ) << ", " << zoom << "'" << endl;
+    //kDebug() << " viewZoom '" << KoZoomMode::toString( mode ) << ", " << zoom << "'" << endl;
 
     if ( !m_currentPage )
         return;

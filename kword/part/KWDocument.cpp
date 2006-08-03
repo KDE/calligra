@@ -62,8 +62,6 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     foreach(KoID id, KoShapeRegistry::instance()->listKeys())
         KoShapeRegistry::instance()->get(id)->setOptionPanels(panels);
 
-    KoToolManager::instance()->toolBox()->show();
-
     // print error if kotext not available
     if( KoShapeRegistry::instance()->get(KoTextShape_SHAPEID) == 0 ) {
          KMessageBox::error(parentWidget,
