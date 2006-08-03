@@ -2429,7 +2429,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     if ( !isEmpty() && link().isEmpty() )
     {
         xmlwriter.startElement( "text:p" );
-        xmlwriter.addTextNode(strOutText());
+        xmlwriter.addTextNode( strOutText().toUtf8() );
         xmlwriter.endElement();
     }
 
