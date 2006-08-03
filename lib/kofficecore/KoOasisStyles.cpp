@@ -35,8 +35,6 @@ public:
     // The key of the map is the family
     QMap<QString, QDict<QDomElement> > m_styles;
     QMap<QString, QDict<QDomElement> > m_stylesAutoStyles;
-
-    NumericFormatsMap numericFormats;
 };
 
 KoOasisStyles::KoOasisStyles()
@@ -228,23 +226,23 @@ void KoOasisStyles::insertStyle( const QDomElement& e, bool styleAutoStyles )
 // lacking long-textual forms.
 void KoOasisStyles::importDataStyle( const QDomElement& parent )
 {
-    KoOasisNumericFormat dataStyle;
+    NumericStyleFormat dataStyle;
 
     const QString localName = parent.localName();
     if (localName == "number-style")
-      dataStyle.type = KoOasisNumericFormat::Number;
+      dataStyle.type = NumericStyleFormat::Number;
     else if (localName == "currency-style")
-      dataStyle.type = KoOasisNumericFormat::Currency;
+      dataStyle.type = NumericStyleFormat::Currency;
     else if (localName == "percentage-style")
-      dataStyle.type = KoOasisNumericFormat::Percentage;
+      dataStyle.type = NumericStyleFormat::Percentage;
     else if (localName == "boolean-style")
-      dataStyle.type = KoOasisNumericFormat::Boolean;
+      dataStyle.type = NumericStyleFormat::Boolean;
     else if (localName == "text-style")
-      dataStyle.type = KoOasisNumericFormat::Text;
+      dataStyle.type = NumericStyleFormat::Text;
     else if (localName == "date-style")
-      dataStyle.type = KoOasisNumericFormat::Date;
+      dataStyle.type = NumericStyleFormat::Date;
     else if (localName == "time-style")
-      dataStyle.type = KoOasisNumericFormat::Time;
+      dataStyle.type = NumericStyleFormat::Time;
 
     QString format;
     int precision = -1;
@@ -341,8 +339,8 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             }
         }
         else if ( localName == "scientific-number" ) {
-            if (dataStyle.type == KoOasisNumericFormat::Number)
-                dataStyle.type = KoOasisNumericFormat::Scientific;
+            if (dataStyle.type == NumericStyleFormat::Number)
+                dataStyle.type = NumericStyleFormat::Scientific;
             int exp = 2;
 
             if ( e.hasAttributeNS( KoXmlNS::number, "decimal-places" ) )
@@ -393,8 +391,8 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             for ( i = 0; i < exp; ++i )
                 format+='0';
         } else if ( localName == "fraction" ) {
-                if (dataStyle.type == KoOasisNumericFormat::Number)
-                    dataStyle.type = KoOasisNumericFormat::Fraction;
+                if (dataStyle.type == NumericStyleFormat::Number)
+                    dataStyle.type = NumericStyleFormat::Fraction;
                 int integer = 0;
                 int numerator = 1;
                 int denominator = 1;
@@ -470,19 +468,13 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
         else
             suffix = QString::null;
     }
-    NumericStyleFormat numeric;
-    numeric.formatStr=format;
-    numeric.prefix=prefix;
-    numeric.suffix=suffix;
-    kdDebug()<<" finish insert format :"<<format<<" prefix :"<<prefix<<" suffix :"<<suffix<<endl;
-    m_dataFormats.insert( styleName, numeric );
-    dataStyle.precision = precision;
-    d->numericFormats.insert( styleName, dataStyle );
-}
 
-const KoOasisStyles::NumericFormatsMap& KoOasisStyles::numericFormats() const
-{
-    return d->numericFormats;
+    dataStyle.formatStr = format;
+    dataStyle.prefix    = prefix;
+    dataStyle.suffix    = suffix;
+    dataStyle.precision = precision;
+    kdDebug()<<" finish insert format :"<<format<<" prefix :"<<prefix<<" suffix :"<<suffix<<endl;
+    m_dataFormats.insert( styleName, dataStyle );
 }
 
 #define addTextNumber( text, elementWriter ) { \
@@ -662,7 +654,8 @@ bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & f
     return changed;
 }
 
-QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat )
+QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
+                                           const QString & _prefix, const QString & _suffix )
 {
     kdDebug(30003)<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -811,7 +804,8 @@ void KoOasisStyles::parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & 
     addTextNumber( text, elementWriter );
 }
 
-QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat )
+QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
+                                           const QString & _prefix, const QString & _suffix )
 {
     kdDebug(30003)<<"QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
     QString format( _format );
@@ -1221,7 +1215,9 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     return mainStyles.lookup( currentStyle, "N" );
 }
 
-QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix, const QString &_suffix )
+QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles,
+                                               const QString & _format, const QString &symbol,
+                                               const QString &_prefix, const QString &_suffix )
 {
 
     //<number:currency-style style:name="N107P0" style:volatile="true">
@@ -1255,11 +1251,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
     }
     while ( format.length() > 0 );
 
-    // NOTE Stefan: Misusing the prefix for the currency symbol.
-    //              It was not used before. If somebody complains about missing
-    //              prefixes for the currency in the 1.5 series, we've got a
-    //              probably a problem. For KOffice 2.0 I added a separate arg.
-    text =  QString::null; // _prefix ;
+    text = _prefix ;
     addTextNumber(text, elementWriter );
 
     elementWriter.startElement( "number:number" );
@@ -1274,8 +1266,8 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
 
     elementWriter.startElement( "number:currency-symbol" );
-    kdDebug(30003)<<" currency-symbol: "<<_prefix<<endl;
-    elementWriter.addTextNode( _prefix );
+    kdDebug(30003) << " currency-symbol: " << symbol << endl;
+    elementWriter.addTextNode( symbol.utf8() );
     elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );

@@ -720,6 +720,7 @@ bool Format::load( const QDomElement & f, Paste::Mode pm, bool paste )
 }
 
 
+#if 0
 bool Format::loadFontOasisStyle( KoStyleStack & font )
 {
     font.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
@@ -1079,6 +1080,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
 
     return true;
 }
+#endif
 
 
 /////////////
@@ -2621,10 +2623,12 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
     return row;
 }
 
+#if 0
 bool RowFormat::loadOasis( const QDomElement& /*row*/, QDomElement * /*rowStyle*/ )
 {
     return true;
 }
+#endif
 
 bool RowFormat::load( const QDomElement & row, int yshift, Paste::Mode sp, bool paste )
 {
