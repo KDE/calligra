@@ -1,5 +1,15 @@
 project(karbon)
 
+#Set the correct compiler options
+IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
+   # For x86 processors
+   MESSAGE(STATUS "Karbon detected that you use a x86 processor.")
+ELSE(CMAKE_SIZEOF_VOID_P EQUAL 4)
+   # For AMD64 processors
+   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+   MESSAGE(STATUS "Karbon detected that you use an AMD64 processor. Added -fPIC to the CXX_FLAGS.")
+ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
+
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
 
