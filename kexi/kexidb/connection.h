@@ -154,7 +154,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		
 		\return name of currently used database for this connection or empty string
 			if there is no used database */
-		inline QString currentDatabase() const;
+		QString currentDatabase() const;
 
 		/*! \brief Drops database with name \a dbName.
 		
