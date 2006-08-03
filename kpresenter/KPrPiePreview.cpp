@@ -24,10 +24,10 @@
 
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 
 KPrPiePreview::KPrPiePreview( QWidget* parent )
-    : Q3Frame( parent )
+    : QFrame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
     setBackgroundColor( Qt::white );

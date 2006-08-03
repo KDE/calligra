@@ -23,13 +23,13 @@
 #ifndef PIEPREVIEW_H
 #define PIEPREVIEW_H
 
-#include <q3frame.h>
+#include <QFrame>
 #include <qpen.h>
 #include <qbrush.h>
 
 #include "global.h"
 
-class KPrPiePreview : public Q3Frame
+class KPrPiePreview : public QFrame
 {
     Q_OBJECT
 

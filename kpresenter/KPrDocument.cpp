@@ -356,8 +356,8 @@ void KPrDocument::initConfig()
     QColor oldGridColor = Qt::black;
     if ( config->hasGroup( "KPresenter Color" ) ) {
         config->setGroup( "KPresenter Color" );
-        setTxtBackCol(config->readColorEntry( "BackgroundColor", &oldBgColor ));
-        setGridColor(config->readColorEntry( "GridColor", &oldGridColor ));
+        setTxtBackCol(config->readEntry( "BackgroundColor", oldBgColor ));
+        setGridColor(config->readEntry( "GridColor", oldGridColor ));
     }
 
 
@@ -390,7 +390,7 @@ void KPrDocument::initConfig()
 
     // Load personal dict
     KConfigGroup group( KoGlobal::kofficeConfig(), "Spelling" );
-    m_spellCheckPersonalDict = group.readListEntry( "PersonalDict" );
+    m_spellCheckPersonalDict = group.readEntry( "PersonalDict",QStringList() );
 
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );

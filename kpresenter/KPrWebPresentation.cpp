@@ -228,9 +228,9 @@ void KPrWebPresentation::loadConfig()
         }
     }
 
-    backColor = cfg.readColorEntry( "BackColor", &backColor );
-    titleColor = cfg.readColorEntry( "TitleColor", &titleColor );
-    textColor = cfg.readColorEntry( "TextColor", &textColor );
+    backColor = cfg.readEntry( "BackColor", backColor );
+    titleColor = cfg.readEntry( "TitleColor", titleColor );
+    textColor = cfg.readEntry( "TextColor", textColor );
     path = cfg.readPathEntry( "Path", path );
     xml = cfg.readEntry( "XML", xml );
     m_bWriteHeader = cfg.readEntry( "WriteHeader", m_bWriteHeader );
