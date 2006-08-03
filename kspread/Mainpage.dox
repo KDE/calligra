@@ -45,7 +45,7 @@
 
 /**
  * \defgroup NativeFormat
- * Classes and methods related to the KSpread's native file format loading/saving.
+ * Classes and methods related to the KSpread's old native file format loading/saving.
  */
 
 /**
@@ -57,6 +57,11 @@
 /**
  * \defgroup Plugins
  * Classes and methods related to the plugins.
+ */
+
+/**
+ * \defgroup Embedding
+ * Classes and methods related to the embedding of objects (charts, pictures, ...).
  */
 
 EXAMPLE_PATH=. doc

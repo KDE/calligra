@@ -93,6 +93,7 @@ class SheetAdaptor;
  ********************************************************************/
 
 /**
+ * \ingroup Embedding
  * @short This is an abstract base class only.
  */
 class CellBinding : public QObject
@@ -127,6 +128,9 @@ protected:
     bool m_bIgnoreChanges;
 };
 
+/**
+ * \ingroup Embedding
+ */
 class ChartBinding : public CellBinding
 {
     Q_OBJECT
@@ -149,6 +153,7 @@ private:
  ********************************************************************/
 
 /**
+ * A sheet contains several cells.
  */
 class KSPREAD_EXPORT Sheet : public QObject
 {
@@ -158,20 +163,40 @@ class KSPREAD_EXPORT Sheet : public QObject
     Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
 
 public:
-    enum Direction { Right, Left, Up, Down };
-    enum SortingOrder{ Increase, Decrease };
-    enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
-    enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
-
+    enum Direction       { Right, Left, Up, Down };
+    enum SortingOrder    { Increase, Decrease };
+    enum ChangeRef       { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
+    enum TestType        { Text, Validity, Comment, ConditionalCellAttribute };
     enum LayoutDirection { LeftToRight, RightToLeft };
 
-    Sheet ( Map* map, const QString &sheetName, const char *_name=0 );
-    ~Sheet();
-
-    virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
+    /**
+     * Creates a sheet in \p map with the name \p sheetName . The internal
+     * name, for scripting, is set by \p name .
+     */
+    Sheet ( Map* map, const QString &sheetName, const char* name = 0 );
 
     /**
-     * Return the name of this sheet.
+     * Destructor.
+     */
+    ~Sheet();
+
+    /**
+     * \return the map this sheet belongs to
+     */
+    Map* workbook() const;
+
+    /**
+     * \return the document this sheet belongs to
+     */
+    Doc* doc() const;
+
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to sheet properties
+    //
+
+    /**
+     * \return the name of this sheet
      */
     QString sheetName() const;
 
@@ -199,75 +224,10 @@ public:
      */
     bool setSheetName( const QString& name, bool init = false, bool makeUndo=true );
 
-    Map* workbook() const;
-    Doc* doc() const;
-
     /**
-     * Saves the sheet and all it's children in XML format
+     * \return \c true , if a document is currently loading
      */
-    virtual QDomElement saveXML( QDomDocument& );
-    /**
-     * Loads the sheet and all it's children in XML format
-     */
-    virtual bool loadXML( const KoXmlElement& );
-
-    virtual bool loadOasis( const KoXmlElement& sheet,
-                            KoOasisLoadingContext& oasisContext,
-                            const Styles& styleMap );
-
-    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* manifestWriter, int & indexObj, int &partIndexObj );
-    void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
-
-    void loadOasisObjects( const KoXmlElement& e, KoOasisLoadingContext& oasisContext );
-    void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
-    void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
-    void saveOasisPrintStyleLayout( KoGenStyle &style ) const;
-
-    /**
-     * Saves a children
-     */
-    virtual bool saveChildren( KoStore* _store, const QString &_path );
-    bool saveOasisObjects( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj );
-    /**
-     * Loads a children
-     */
-    virtual bool loadChildren( KoStore* _store );
-
     bool isLoading();
-
-
-    /**
-     * @brief Get a list of all selected objects
-     *
-     * @return list of selected objets.
-     */
-    QList<EmbeddedObject*> getSelectedObjects();
-
-
-    /**
-     * @brief get the rect for the objects
-     *
-     * @param all true if the rect for all objects should be returned
-     *        false if only the rect for selected objects sould be returned
-     *
-     * @return rect of the objects
-     */
-    KoRect getRealRect( bool all );
-
-    //return command when we move object
-    KCommand *moveObject(View *_view, double diffx, double diffy);
-    KCommand *moveObject(View *m_view,const KoPoint &_move,bool key);
-
-    /**
-     * @brief Create a unique name for an object.
-     *
-     * Create a unique name for the object. If no name is set for the object
-     * a name according to its type is created. If the name already exists
-     * append ' (x)'. // FIXME: not allowed by I18N
-     *
-     * @param object to work on
-     */
-    void unifyObjectName( EmbeddedObject *object );
 
     /**
      * Returns the layout direction of the sheet.
@@ -280,25 +240,318 @@ public:
      */
     void setLayoutDirection( LayoutDirection dir );
 
+    /**
+     * Returns, if the grid shall be shown on the screen
+     */
+    bool getShowGrid() const;
+
+    /**
+     * Sets, if the grid shall be shown on the screen
+     */
+    void setShowGrid( bool _showGrid );
+
+    /**
+     * Sets, if formula shall be shown instead of the result
+     */
+    bool getShowFormula() const;
+
+    void setShowFormula(bool _showFormula);
+
+    /**
+     * Sets, if indicator must be shown when the cell holds a formula
+     */
+    bool getShowFormulaIndicator() const;
+
+    void setShowFormulaIndicator(bool _showFormulaIndicator);
+
+    /**
+     * Returns true if comment indicator is visible.
+     */
+    bool getShowCommentIndicator() const;
+
+    /**
+     * If b is true, comment indicator is visible, otherwise
+     * it will be hidden.
+     */
+    void setShowCommentIndicator( bool b );
+
+    bool getLcMode() const;
+
+    void setLcMode(bool _lcMode);
+
+    bool getAutoCalc() const;
+
+    void setAutoCalc(bool _AutoCalc);
+
+    bool getShowColumnNumber() const;
+
+    void setShowColumnNumber(bool _showColumnNumber);
+
+    bool getHideZero() const;
+
+    void setHideZero(bool _hideZero);
+
+    bool getFirstLetterUpper() const;
+
+    void setFirstLetterUpper(bool _firstUpper);
+
+    /**
+     * @return true if this sheet is hidden
+     */
+    bool isHidden()const;
+
+    /**
+     * Hides or shows this sheets
+     */
+    void setHidden( bool hidden );
+
+    /**
+     * @return a flag that indicates whether the sheet should paint the page breaks.
+     *
+     * @see setShowPageBorders
+     * @see Sheet::Private::showPageBorders
+     */
+    bool isShowPageBorders() const;
+
+    /**
+     * Turns the page break lines on or off.
+     *
+     * @see isShowPageBorders
+     * @see Sheet::Private::showPageBorders
+     */
+    void setShowPageBorders( bool _b );
+
+    //
+    //END Methods related to sheet properties
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to KSpread's old file format
+    //
+
+    /**
+     * \ingroup NativeFormat
+     * Saves the sheet and all it's children in XML format
+     */
+    QDomElement saveXML( QDomDocument& );
+
+    /**
+     * \ingroup NativeFormat
+     * Loads the sheet and all it's children in XML format
+     */
+    bool loadXML( const KoXmlElement& );
+
+    /**
+     * \ingroup NativeFormat
+     * Saves a children
+     */
+    bool saveChildren( KoStore* _store, const QString &_path );
+
+    /**
+     * \ingroup NativeFormat
+     * Loads a children
+     */
+    bool loadChildren( KoStore* _store );
+
+    //
+    //END Methods related to KSpread's old file format
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to the OpenDocument file format
+    //
+
+    /**
+     * \ingroup OpenDocument
+     */
+    bool loadOasis( const KoXmlElement& sheet,
+                    KoOasisLoadingContext& oasisContext,
+                    const Styles& styleMap );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    bool saveOasis( KoXmlWriter& xmlWriter, KoGenStyles& mainStyles,
+                    GenValidationStyles& valStyle, KoStore* store,
+                    KoXmlWriter* manifestWriter,
+                    int& indexObj, int& partIndexObj );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOasisObjects( const KoXmlElement& e, KoOasisLoadingContext& oasisContext );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void saveOasisPrintStyleLayout( KoGenStyle &style ) const;
+
+    /**
+     * \ingroup OpenDocument
+     */
+    bool saveOasisObjects( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj );
+
+    //
+    //END Methods related to the OpenDocument file format
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to embedded objects
+    //
+
+    /**
+     * \ingroup Embedding
+     * @brief Get a list of all selected objects
+     *
+     * @return list of selected objets.
+     */
+    QList<EmbeddedObject*> getSelectedObjects();
+
+    /**
+     * \ingroup Embedding
+     * @brief get the rect for the objects
+     *
+     * @param all true if the rect for all objects should be returned
+     *        false if only the rect for selected objects sould be returned
+     *
+     * @return rect of the objects
+     */
+    KoRect getRealRect( bool all );
+
+    /**
+     * \ingroup Embedding
+     * Moves the selected object.
+     * \return command for undo
+     */
+    KCommand *moveObject(View *_view, double diffx, double diffy);
+
+    /**
+     * \ingroup Embedding
+     * Moves the selected object.
+     * \return command for undo
+     */
+    KCommand *moveObject(View *m_view,const KoPoint &_move,bool key);
+
+    /**
+     * \ingroup Embedding
+     * @brief Create a unique name for an object.
+     *
+     * Create a unique name for the object. If no name is set for the object
+     * a name according to its type is created. If the name already exists
+     * append ' (x)'. // FIXME: not allowed by I18N
+     *
+     * @param object to work on
+     */
+    void unifyObjectName( EmbeddedObject *object );
+
+    /**
+     * \ingroup Embedding
+     */
+    bool insertChild( const KoRect& _geometry, KoDocumentEntry&, QWidget* );
+
+    /**
+     * \ingroup Embedding
+     */
+    bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data, QWidget* );
+
+    /**
+     * \ingroup Embedding
+     * Creates a new embedded picture object and inserts it into the sheet next to the currently
+     * selected cell.
+     *
+     * TODO:  Remove this method in future and provide a better way of opening pictures and inserting
+     * them into the sheet.
+     *
+     * @param file The URL of the file to insert.
+     * @param point The the top-left point in the sheet where the picture should be inserted.
+     */
+    bool insertPicture( const KoPoint& point , const KUrl& file );
+
+    /**
+     * \ingroup Embedding
+     * Creates a new embedded picture object and inserts it into the sheet at the specified position.
+     *
+     * @param point The top-left position for the new picture object in the sheet
+     * @param pixmap The source pixmap for the new picture
+     */
+    bool insertPicture( const KoPoint& point, const QPixmap& pixmap );
+
+    /**
+     * \ingroup Embedding
+     */
+    void changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _geometry );
+
+    /**
+     * \ingroup Embedding
+     * @brief Get the amount of selected objects that belong to this sheet
+     *
+     * @return the amount of select objects in this sheet
+     */
+    int numberSelectedObjects() const;
+
+    //
+    //END Methods related to embedded objects
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to protection
+    //
+
+    /**
+     * \ingroup Protection
+     */
     void password( QByteArray & passwd ) const ;
+
+    /**
+     * \ingroup Protection
+     */
     bool isProtected() const;
+
+    /**
+     * \ingroup Protection
+     */
     void setProtected( QByteArray const & passwd );
+
+    /**
+     * \ingroup Protection
+     */
     bool checkPassword( QByteArray const & passwd ) const;
 
-    void setDefaultHeight( double height );
-    void setDefaultWidth( double width );
+    //
+    //END Methods related to protection
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to row formats
+    //
 
-    const ColumnFormat* columnFormat( int _column ) const;
-    ColumnFormat* columnFormat( int _column );
     /**
-     * If no special ColumnFormat exists for this column, then a new one is created.
-     *
-     * @return a non default ColumnFormat for this column.
+     * \return the row format of row \p _row . The default row format,
+     * if no special one exists.
      */
-    ColumnFormat* nonDefaultColumnFormat( int _column, bool force_creation = true );
-
     const RowFormat* rowFormat( int _row ) const;
+
+    /**
+     * \return the row format of row \p _row . The default row format,
+     * if no special one exists.
+     */
     RowFormat* rowFormat( int _row );
+
     /**
      * If no special RowFormat exists for this row, then a new one is created.
      *
@@ -307,15 +560,61 @@ public:
     RowFormat* nonDefaultRowFormat( int _row, bool force_creation = true );
 
     /**
-     * @return the first cell of this sheet.
+     * \return the first non-default row format
+     */
+    RowFormat* firstRow() const;
+
+    //
+    //END Methods related to row formats
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to column formats
+    //
+
+    /**
+     * \return the column format of column \p _column . The default column format,
+     * if no special one exists.
+     */
+    const ColumnFormat* columnFormat( int _column ) const;
+
+    /**
+     * \return the column format of column \p _column . The default column format,
+     * if no special one exists.
+     */
+    ColumnFormat* columnFormat( int _column );
+
+    /**
+     * If no special ColumnFormat exists for this column, then a new one is created.
+     *
+     * @return a non default ColumnFormat for this column.
+     */
+    ColumnFormat* nonDefaultColumnFormat( int _column, bool force_creation = true );
+
+    /**
+     * \return the first non-default row format
+     */
+    ColumnFormat* firstCol() const;
+
+    //
+    //END Methods related to column formats
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to accessing cells
+    //
+
+    /**
+     * @return the first non-default cell
      */
     Cell* firstCell() const;
 
-    RowFormat* firstRow() const;
-
-    ColumnFormat* firstCol() const;
-
+    /**
+     * @param column the cell's column index
+     * @param row the cell's row index
+     */
     Cell* cellAt( int _column, int _row ) const;
+
     /**
      * @param column the cell's column index
      * @param row the cell's row index
@@ -368,15 +667,130 @@ public:
     Cell* nonDefaultCell( QPoint const & cellRef )
       { return nonDefaultCell( cellRef.x(), cellRef.y() ); }
 
+    /**
+     * Retrieve the first used cell in a given column.  Can be used in conjunction
+     * with getNextCellDown to loop through a column.
+     *
+     * @param col The column to get the first cell from
+     *
+     * @return Returns a pointer to the cell, or 0 if there are no used cells
+     *         in this column
+     */
+    Cell* getFirstCellColumn(int col) const;
+
+    /**
+     * Retrieve the last used cell in a given column.  Can be used in conjunction
+     * with getNextCellUp to loop through a column.
+     *
+     * @param col The column to get the cell from
+     *
+     * @return Returns a pointer to the cell, or 0 if there are no used cells
+     *         in this column
+     */
+    Cell* getLastCellColumn(int col) const;
+
+    /**
+     * Retrieve the first used cell in a given row.  Can be used in conjunction
+     * with getNextCellRight to loop through a row.
+     *
+     * @param row The row to get the first cell from
+     *
+     * @return Returns a pointer to the cell, or 0 if there are no used cells
+     *         in this row
+     */
+    Cell* getFirstCellRow(int row) const;
+
+    /**
+     * Retrieve the last used cell in a given row.  Can be used in conjunction
+     * with getNextCellLeft to loop through a row.
+     *
+     * @param row The row to get the last cell from
+     *
+     * @return Returns a pointer to the cell, or 0 if there are no used cells
+     *         in this row
+     */
+    Cell* getLastCellRow(int row) const;
+
+    /**
+     * Retrieves the next used cell above the given col/row pair.  The given
+     * col/row pair does not need to reference a used cell.
+     *
+     * @param col column to start looking through
+     * @param row the row above which to start looking.
+     *
+     * @return Returns the next used cell above this one, or 0 if there are none
+     */
+    Cell* getNextCellUp(int col, int row) const;
+
+    /**
+     * Retrieves the next used cell below the given col/row pair.  The given
+     * col/row pair does not need to reference a used cell.
+     *
+     * @param col column to start looking through
+     * @param row the row below which to start looking.
+     *
+     * @return Returns the next used cell below this one, or 0 if there are none
+     */
+    Cell* getNextCellDown(int col, int row) const;
+
+    /**
+     * Retrieves the next used cell to the right of the given col/row pair.
+     * The given col/row pair does not need to reference a used cell.
+     *
+     * @param col the column after which should be searched
+     * @param row the row to search through
+     *
+     * @return Returns the next used cell to the right of this one, or 0 if
+     * there are none
+     */
+    Cell* getNextCellLeft(int col, int row) const;
+
+    /**
+     * Retrieves the next used cell to the left of the given col/row pair.
+     * The given col/row pair does not need to reference a used cell.
+     *
+     * @param col the column before which should be searched
+     * @param row the row to search through
+     *
+     * @return Returns the next used cell to the left of this one, or 0 if
+     * there are none
+     */
+    Cell* getNextCellRight(int col, int row) const;
+
+    /**
+     * \return the default cell
+     */
     Cell* defaultCell() const;
 
+    //
+    //END Methods related to accessing cells
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN UNSORTED METHODS !!!
+    //
+
+    /**
+     * \return the default
+     */
     Format* defaultFormat();
+
+    /**
+     * \return the default
+     */
     const Format* defaultFormat() const;
 
     /** retrieve a value */
     Value value (int col, int row) const;
+
     /** retrieve a range of values */
     Value valueRange (int col1, int row1, int col2, int row2) const;
+
+    /**
+     * Sets the contents of the cell at row,column to text
+     */
+    void setText( int row, int column, const QString& text,
+                  bool asString = false );
 
     /**
      * Determines the row for a given position \p _ypos . If the position is
@@ -471,11 +885,12 @@ public:
     double dblRowPos( int _row, const Canvas *_canvas = 0 ) const;
 
     /**
-     * @return the maximum size of the column range
+     * @return the maximum horizontal size
      */
-    double sizeMaxX() const ;
+    double sizeMaxX() const;
+
     /**
-     * @return the maximum size of the row range
+     * @return the maximum vertical size
      */
     double sizeMaxY() const;
 
@@ -520,31 +935,33 @@ public:
     void formulaChanged(Cell *cell);
 
     /**
-    * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
-    * This is used, for example, by the Data Sort dialog, to guess the names of columns
-    * within the selected area.  An empty string may be returned if guessColumnTitle does not think
-    * that column @p col has a title.
-    * @param area The area within the sheet to guess from
-    * @param col The column to find the title (or 'header') for.
-    */
+     * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
+     * This is used, for example, by the Data Sort dialog, to guess the names of columns
+     * within the selected area.  An empty string may be returned if guessColumnTitle does not think
+     * that column @p col has a title.
+     * @param area The area within the sheet to guess from
+     * @param col The column to find the title (or 'header') for.
+     */
     QString guessColumnTitle(QRect& area, int col);
 
     /**
-    * Attempts to guess the title (or 'header') of a row, within a given area of the sheet
-    * This is used, for example, by the Data Sort dialog, to guess the names of rows within the selected area.
-    * An empty string may be returned if guessRowTitle does not think that row @p row has a title.
-    * @param area The area within the sheet to guess from
-    * @param row The row to find the title (or 'header') for.
-    */
+     * Attempts to guess the title (or 'header') of a row, within a given area of the sheet
+     * This is used, for example, by the Data Sort dialog, to guess the names of rows within the selected area.
+     * An empty string may be returned if guessRowTitle does not think that row @p row has a title.
+     * @param area The area within the sheet to guess from
+     * @param row The row to find the title (or 'header') for.
+     */
     QString guessRowTitle(QRect& area, int row);
 
-    /**
-     * Sets the contents of the cell at row,column to text
-     */
-    void setText( int row, int column, const QString& text,
-                  bool asString = false );
-    void setArrayFormula (Selection* selection, const QString &_text);
+    //
+    //END UNSORTED METHODS
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to manipulations of selected cells
+    //
 
+    void setArrayFormula (Selection* selection, const QString &_text);
 
     void setSelectionFont( Selection* selection,
                            const char *_font = 0, int _size = -1,
@@ -630,6 +1047,49 @@ public:
     QString getWordSpelling(Selection* selection );
 
     /**
+     * @param selection the selection of cells to work on
+     */
+    void defaultSelection( Selection* selection );
+
+    /**
+     * Install borders
+     */
+    void borderLeft( Selection* selection, const QColor &_color );
+    void borderTop( Selection* selection, const QColor &_color );
+    void borderBottom( Selection* selection, const QColor &_color );
+    void borderRight( Selection* selection, const QColor &_color );
+    void borderOutline( Selection* selection, const QColor &_color );
+    void borderAll( Selection* selection, const QColor &_color );
+
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void borderRemove( Selection* selection );
+
+    void setConditional( Selection* selection,
+                         QLinkedList<Conditional> const & newConditions );
+
+    void setValidity( Selection* selection, const KSpread::Validity& tmp );
+
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void increaseIndent( Selection* selection );
+
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void decreaseIndent( Selection* selection );
+
+    //
+    //END Methods related to manipulations of selected cells
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to cut & paste
+    //
+
+    /**
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
@@ -637,19 +1097,23 @@ public:
                 Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
                 bool insert = false, int insertTo = 0, bool pasteFC = false,
                 QClipboard::Mode clipboardMode = QClipboard::Clipboard );
+
     void paste( const QByteArray & data, const QRect & pasteArea,
                 bool makeUndo = false, Paste::Mode= Paste::Normal, Paste::Operation = Paste::OverWrite,
                 bool insert = false, int insertTo = 0, bool pasteFC = false );
 
     /**
-     * @param selection the selection of cells to work on
-     */
-    void defaultSelection( Selection* selection );
-
-    /**
      * A function which allows to paste a text plain from the clipboard
      */
     void pasteTextPlain( QString &_text, QRect pasteArea);
+
+    //
+    //END Methods related to cut & paste
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN UNSORTED METHODS !!!
+    //
 
     /**
      * Moves all cells of the row _marker.y() which are in
@@ -715,81 +1179,9 @@ public:
     void adjustRow(const Region&);
 
     /**
-     * Install borders
+     * \todo TODO Stefan: remove after Undo.cpp|h and Commands.cpp|h are obsolete
+     * \deprecated use MergeManipulator
      */
-    void borderLeft( Selection* selection, const QColor &_color );
-    void borderTop( Selection* selection, const QColor &_color );
-    void borderOutline( Selection* selection, const QColor &_color );
-    void borderAll( Selection* selection, const QColor &_color );
-
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void borderRemove( Selection* selection );
-    void borderBottom( Selection* selection, const QColor &_color );
-    void borderRight( Selection* selection, const QColor &_color );
-
-    void setConditional( Selection* selection,
-       QLinkedList<Conditional> const & newConditions );
-
-    void setValidity( Selection* selection, const KSpread::Validity& tmp );
-
-    /**
-     * Returns, if the grid shall be shown on the screen
-     */
-    bool getShowGrid() const;
-
-    /**
-     * Sets, if the grid shall be shown on the screen
-     */
-    void setShowGrid( bool _showGrid );
-
-    /**
-     * Sets, if formula shall be shown instead of the result
-     */
-    bool getShowFormula() const;
-
-    void setShowFormula(bool _showFormula);
-
-    /**
-     * Sets, if indicator must be shown when the cell holds a formula
-     */
-    bool getShowFormulaIndicator() const;
-
-    void setShowFormulaIndicator(bool _showFormulaIndicator);
-
-    /**
-     * Returns true if comment indicator is visible.
-     */
-    bool getShowCommentIndicator() const;
-
-    /**
-     * If b is true, comment indicator is visible, otherwise
-     * it will be hidden.
-     */
-    void setShowCommentIndicator( bool b );
-
-    bool getLcMode() const;
-
-    void setLcMode(bool _lcMode);
-
-    bool getAutoCalc() const;
-
-    void setAutoCalc(bool _AutoCalc);
-
-    bool getShowColumnNumber() const;
-
-    void setShowColumnNumber(bool _showColumnNumber);
-
-    bool getHideZero() const;
-
-    void setHideZero(bool _hideZero);
-
-    bool getFirstLetterUpper() const;
-
-    void setFirstLetterUpper(bool _firstUpper);
-
-    // TODO Stefan: remove after Undo.cpp|h and Commands.cpp|h are obsolete
     void changeMergedCell( int /*m_iCol*/, int /*m_iRow*/, int /*m_iExtraX*/, int /*m_iExtraY*/) {}
 
     /**
@@ -800,16 +1192,6 @@ public:
     void mergeCells( const Region& region, bool hor = false, bool ver = false );
     void dissociateCells( const Region &region );
 
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void increaseIndent( Selection* selection );
-
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void decreaseIndent( Selection* selection );
-
     bool areaIsEmpty(const Region& area, TestType _type = Text) ;
 
     void refreshPreference() ;
@@ -817,8 +1199,6 @@ public:
     void hideSheet(bool _hide);
 
     void removeSheet();
-
-    QRect selectionCellMerged(const QRect &_sel);
 
     /**
      * Change name of reference when the user inserts or removes a column,
@@ -845,6 +1225,7 @@ public:
 
 
     /**
+     * \ingroup Embedding
      * Update chart when you insert or remove row or column
      *
      * @param pos the point of insertion (only one coordinate may be used, depending
@@ -859,32 +1240,6 @@ public:
      * Refresh merged cell when you insert or remove row or column
      */
     void refreshMergedCell();
-
-    /**
-     * @return true if this sheet is hidden
-     */
-    bool isHidden()const;
-
-    /**
-     * Hides or shows this sheets
-     */
-    void setHidden( bool hidden );
-
-    /**
-     * @return a flag that indicates whether the sheet should paint the page breaks.
-     *
-     * @see setShowPageBorders
-     * @see Sheet::Private::showPageBorders
-     */
-    bool isShowPageBorders() const;
-
-    /**
-     * Turns the page break lines on or off.
-     *
-     * @see isShowPageBorders
-     * @see Sheet::Private::showPageBorders
-     */
-    void setShowPageBorders( bool _b );
 
     /**
      * Adds the CellBinding @p bind to the sheet's list of bindings.
@@ -945,10 +1300,10 @@ public:
     QDomDocument saveCellRegion(const Region&, bool copy = false, bool era = false);
 
     /**
-    * insertTo defined if you insert to the bottom or right
-    * insert to bottom if insertTo==1
-    * insert to right if insertTo ==-1
-    * insertTo used just for insert/paste an area
+     * insertTo defined if you insert to the bottom or right
+     * insert to bottom if insertTo==1
+     * insert to right if insertTo ==-1
+     * insertTo used just for insert/paste an area
      * @see paste
      */
     bool loadSelection( const KoXmlDocument& doc, const QRect &pasteArea,
@@ -960,11 +1315,11 @@ public:
                             int _xshift, int _yshift,bool insert,int insertTo);
 
     /**
-    * Used when you insert and paste cell
-    * return true if it's a area
-    * false if it's a column/row
-    * it's used to select if you want to insert at the bottom or right
-    * @see paste
+     * Used when you insert and paste cell
+     * return true if it's a area
+     * false if it's a column/row
+     * it's used to select if you want to insert at the bottom or right
+     * @see paste
      */
     bool testAreaPasteInsert()const;
 
@@ -1003,38 +1358,16 @@ public:
     void autofill( QRect &src, QRect &dest );
 
 
-    bool insertChild( const KoRect& _geometry, KoDocumentEntry&, QWidget* );
-
-    bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data, QWidget* );
-
-
-    /**
-     * Creates a new embedded picture object and inserts it into the sheet next to the currently
-     * selected cell.
-     *
-     * TODO:  Remove this method in future and provide a better way of opening pictures and inserting
-     * them into the sheet.
-     *
-     * @param file The URL of the file to insert.
-     * @param point The the top-left point in the sheet where the picture should be inserted.
-     */
-    bool insertPicture( const KoPoint& point , const KUrl& file );
+    //
+    //END UNSORTED METHODS
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to scrollbars
+    //
 
     /**
-     * Creates a new embedded picture object and inserts it into the sheet at the specified position.
-     *
-     * @param point The top-left position for the new picture object in the sheet
-     * @param pixmap The source pixmap for the new picture
-     */
-    bool insertPicture( const KoPoint& point, const QPixmap& pixmap );
-
-    void changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _geometry );
-
-    int id() const;
-
-    /**
-     * Return the currently maximum defined column of the horizontal scrollbar.
-     * It's always 10 times higher than the maximum access column.
+     * Returns the maximum column ever accessed.
      * In an empty sheet it starts with 256.
      */
     int maxColumn() const ;
@@ -1048,8 +1381,7 @@ public:
     void checkRangeHBorder ( int _column );
 
     /**
-     * Return the currently maximum defined row of the vertical scrollbar.
-     * It's always 10 times higher than the maximum access row.
+     * Returns the maximum row ever accessed.
      * In an empty sheet it starts with 256.
      */
     int maxRow() const ;
@@ -1062,22 +1394,45 @@ public:
      */
     void checkRangeVBorder ( int _row );
 
-
     void enableScrollBarUpdates( bool _enable );
 
-    static Sheet* find( int _id );
-
-#ifndef NDEBUG
-    void printDebug();
-#endif
+    //
+    //END Methods related to scrollbars
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to painting
+    //
 
     /**
+     * \ingroup Painting
+     * set a region of the spreadsheet to be 'paint dirty' meaning it
+     * needs repainted.  This is not a flag on the cell itself since quite
+     * often this needs set on a default cell
+     */
+    void setRegionPaintDirty(const Region & region);
+
+    /**
+     * \ingroup Painting
+     * Remove all records of 'paint dirty' cells
+     */
+    void clearPaintDirtyData();
+
+    /**
+     * \ingroup Painting
+     * Test whether a cell needs repainted
+     */
+    const Region& paintDirtyData() const;
+
+    /**
+     * \ingroup Painting
      * Marks the Cell at @p col , @p row as dirty.
      * \deprecated use setRegionPaintDirty
      */
     void updateCell( Cell* cell, int col, int row );
 
     /**
+     * \ingroup Painting
      * Like updateCell except it works on a range of cells.  Use this function
      * rather than calling updateCell(..) on several adjacent cells so there
      * will be one paint event instead of several
@@ -1086,23 +1441,35 @@ public:
     void updateCellArea(const Region& cellArea);
 
     /**
+     * \ingroup Painting
      * Updates every cell on the sheet
      * \deprecated use setRegionPaintDirty
      */
     void update();
 
     /**
+     * \ingroup Painting
      * repaints all visible cells
      */
     void updateView();
 
     /**
+     * \ingroup Painting
      * repaints all visible cells in \p region
      */
     void updateView(const Region& region);
 
+    //
+    //END Methods related to painting
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN UNSORTED METHODS !!!
+    //
+
     /**
      * used to refresh cells when you make redodelete
+     * \note Deletes (!) the cells in the region.
      */
     void refreshView(const Region& region);
 
@@ -1122,126 +1489,16 @@ public:
     void updateLocale();
 
 
-  /**
-   * set a region of the spreadsheet to be 'paint dirty' meaning it
-   * needs repainted.  This is not a flag on the cell itself since quite
-   * often this needs set on a default cell
-   */
-  void setRegionPaintDirty(const Region & region);
-
-  /**
-   * Remove all records of 'paint dirty' cells
-   */
-  void clearPaintDirtyData();
-
-  /**
-   * Test whether a cell needs repainted
-   */
-  const Region& paintDirtyData() const;
-
-  /**
-   * Retrieve the first used cell in a given column.  Can be used in conjunction
-   * with getNextCellDown to loop through a column.
-   *
-   * @param col The column to get the first cell from
-   *
-   * @return Returns a pointer to the cell, or 0 if there are no used cells
-   *         in this column
-   */
-  Cell* getFirstCellColumn(int col) const;
-
-  /**
-   * Retrieve the last used cell in a given column.  Can be used in conjunction
-   * with getNextCellUp to loop through a column.
-   *
-   * @param col The column to get the cell from
-   *
-   * @return Returns a pointer to the cell, or 0 if there are no used cells
-   *         in this column
-   */
-  Cell* getLastCellColumn(int col) const;
-
-  /**
-   * Retrieve the first used cell in a given row.  Can be used in conjunction
-   * with getNextCellRight to loop through a row.
-   *
-   * @param row The row to get the first cell from
-   *
-   * @return Returns a pointer to the cell, or 0 if there are no used cells
-   *         in this row
-   */
-  Cell* getFirstCellRow(int row) const;
-
-  /**
-   * Retrieve the last used cell in a given row.  Can be used in conjunction
-   * with getNextCellLeft to loop through a row.
-   *
-   * @param row The row to get the last cell from
-   *
-   * @return Returns a pointer to the cell, or 0 if there are no used cells
-   *         in this row
-   */
-  Cell* getLastCellRow(int row) const;
-
-  /**
-   * Retrieves the next used cell above the given col/row pair.  The given
-   * col/row pair does not need to reference a used cell.
-   *
-   * @param col column to start looking through
-   * @param row the row above which to start looking.
-   *
-   * @return Returns the next used cell above this one, or 0 if there are none
-   */
-  Cell* getNextCellUp(int col, int row) const;
-
-  /**
-   * Retrieves the next used cell below the given col/row pair.  The given
-   * col/row pair does not need to reference a used cell.
-   *
-   * @param col column to start looking through
-   * @param row the row below which to start looking.
-   *
-   * @return Returns the next used cell below this one, or 0 if there are none
-   */
-  Cell* getNextCellDown(int col, int row) const;
-
-  /**
-   * Retrieves the next used cell to the right of the given col/row pair.
-   * The given col/row pair does not need to reference a used cell.
-   *
-   * @param col the column after which should be searched
-   * @param row the row to search through
-   *
-   * @return Returns the next used cell to the right of this one, or 0 if
-   * there are none
-   */
-  Cell* getNextCellLeft(int col, int row) const;
-
-  /**
-   * Retrieves the next used cell to the left of the given col/row pair.
-   * The given col/row pair does not need to reference a used cell.
-   *
-   * @param col the column before which should be searched
-   * @param row the row to search through
-   *
-   * @return Returns the next used cell to the left of this one, or 0 if
-   * there are none
-   */
-  Cell* getNextCellRight(int col, int row) const;
-
   SheetPrint * print() const;
 
-  /**
-   * @brief Get the amount of selected objects that belong to this sheet
-             *
-             * @return the amount of select objects in this sheet
-   */
-  int numSelected() const;
+#ifndef NDEBUG
+    void printDebug();
+#endif
 
-//return command when we move object
-//     KCommand *moveObject(KSpreadView *_view, double diffx, double diffy);
-//     KCommand *moveObject(KSpreadView *m_view,const KoPoint &_move,bool key);
-
+    //
+    //END UNSORTED METHODS
+    //
+    //////////////////////////////////////////////////////////////////////////
 
 signals:
     void sig_refreshView();
@@ -1276,33 +1533,94 @@ protected:
      */
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Methods related to the OpenDocument file format
+    //
+
+    /**
+     * \ingroup OpenDocument
+     */
     bool loadRowFormat( const KoXmlElement& row, int &rowIndex,
                         KoOasisLoadingContext& oasisContext,
                         const Styles& styleMap );
 
     /**
+     * \ingroup OpenDocument
      * Loads the properties of a column from a table:table-column element in an OASIS XML file
      * defaultColumnCellStyles is a map from column indicies to the default cell style for that column
      */
     bool loadColumnFormat(const KoXmlElement& row,
                           const KoOasisStyles& oasisStyles, int & indexCol,
                           const Styles& styleMap);
+
+    /**
+     * \ingroup OpenDocument
+     */
     bool loadSheetStyleFormat( KoXmlElement *style );
+
+    /**
+     * \ingroup OpenDocument
+     */
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 
+    /**
+     * \ingroup OpenDocument
+     */
     QString saveOasisSheetStyleName( KoGenStyles &mainStyles );
-    void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, GenValidationStyles &valStyle );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
+                              int maxCols, int maxRows, GenValidationStyles &valStyle );
+
+    /**
+     * \ingroup OpenDocument
+     */
     void saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                          int row, int maxCols, GenValidationStyles &valStyle );
+
+    /**
+     * \ingroup OpenDocument
+     */
     void convertPart( const QString & part, KoXmlWriter & writer ) const;
+
+    /**
+     * \ingroup OpenDocument
+     */
     void addText( const QString & text, KoXmlWriter & writer ) const;
 
+    /**
+     * \ingroup OpenDocument
+     */
     void maxRowCols( int & maxCols, int & maxRows );
+
+    /**
+     * \ingroup OpenDocument
+     */
     bool compareRows( int row1, int row2, int & maxCols ) const;
 
+    /**
+     * \ingroup OpenDocument
+     */
     QString getPart( const KoXmlNode & part );
+
+    /**
+     * \ingroup OpenDocument
+     */
     void replaceMacro( QString & text, const QString & old, const QString & newS );
 
+    //
+    //END Methods related to the OpenDocument file format
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+
+    /**
+     * \ingroup Embedding
+     */
     void insertObject( EmbeddedObject *_obj );
 
     /**
@@ -1313,6 +1631,8 @@ protected:
                        const QList<AutoFillSequence*>& _seqList,
                        bool down = true );
 
+
+    static Sheet* find( int _id );
     static int s_id;
     static QHash<int,Sheet*>* s_mapSheets;
 
@@ -1356,10 +1676,16 @@ protected:
 
 private:
     /**
+     * \ingroup Embedding
      * Inserts a picture into the sheet and the given position.  The picture should be added to the
      * document's picture collection before calling this method.
      */
     bool insertPicture( const KoPoint& point, KoPicture& picture );
+
+    /**
+     * \ingroup Embedding
+     */
+    bool objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list );
 
     bool fillSequenceWithInterval( const QList<Cell*>& _srcList,
                                    const QList<Cell*>& _destList,
@@ -1372,7 +1698,6 @@ private:
 
     void convertObscuringBorders();
     void checkContentDirection( QString const & name );
-    bool objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list );
 
     class Private;
     Private* d;

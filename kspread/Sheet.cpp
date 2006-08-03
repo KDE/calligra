@@ -375,11 +375,6 @@ Doc* Sheet::doc() const
   return d->workbook->doc();
 }
 
-int Sheet::id() const
-{
-  return d->id;
-}
-
 Sheet::LayoutDirection Sheet::layoutDirection() const
 {
   return d->layoutDirection;
@@ -505,15 +500,6 @@ bool Sheet::isShowPageBorders() const
     return d->showPageBorders;
 }
 
-bool Sheet::isEmpty( unsigned long int x, unsigned long int y ) const
-{
-  const Cell* c = cellAt( x, y );
-  if ( !c || c->isEmpty() )
-    return true;
-
-  return false;
-}
-
 Cell* Sheet::defaultCell() const
 {
     return d->defaultCell;
@@ -605,22 +591,6 @@ SheetPrint* Sheet::print() const
     return d->print;
 }
 
-void Sheet::setDefaultHeight( double height )
-{
-  if ( isProtected() )
-    NO_MODIFICATION_POSSIBLE;
-
-  d->defaultRowFormat->setDblHeight( height );
-}
-
-void Sheet::setDefaultWidth( double width )
-{
-  if ( isProtected() )
-    NO_MODIFICATION_POSSIBLE;
-
-  d->defaultColumnFormat->setDblWidth( width );
-}
-
 double Sheet::sizeMaxX() const
 {
   return d->sizeMaxX;
@@ -656,7 +626,7 @@ const QColor& Sheet::emptyColor() const
   return d->emptyColor;
 }
 
-int Sheet::numSelected() const
+int Sheet::numberSelectedObjects() const
 {
     int num = 0;
 
@@ -1512,18 +1482,22 @@ void Sheet::setSelectionfirstLetterUpper( Selection* selectionInfo)
   manipulator->execute ();
 }
 
-struct SetSelectionVerticalTextWorker : public Sheet::CellWorker {
+struct SetSelectionVerticalTextWorker : public Sheet::CellWorker
+{
     bool _b;
     SetSelectionVerticalTextWorker( bool b ) : Sheet::CellWorker( ), _b( b ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region )
+    {
         QString title=i18n("Vertical Text");
         return new UndoCellFormat( doc, sheet, region, title );
     }
-    bool testCondition( Cell* cell ) {
+    bool testCondition( Cell* cell )
+    {
   return ( !cell->isPartOfMerged() );
     }
-    void doWork( Cell* cell, bool, int, int ) {
+    void doWork( Cell* cell, bool, int, int )
+    {
   cell->format()->setVerticalText( _b );
   cell->format()->setMultiRow( false );
   cell->format()->setAngle( 0 );

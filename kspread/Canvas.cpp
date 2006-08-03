@@ -3269,7 +3269,7 @@ void Canvas::selectAllObjects()
 
 void Canvas::deselectAllObjects()
 {
-  if( activeSheet()->numSelected() == 0 )
+  if( activeSheet()->numberSelectedObjects() == 0 )
     return;
 
   //lowerObject();
@@ -3543,7 +3543,7 @@ void Canvas::raiseObject( EmbeddedObject *object )
 
     if ( d->m_objectDisplayAbove == 0 )
     {
-        if ( activeSheet()->numSelected() == 1 )
+        if ( activeSheet()->numberSelectedObjects() == 1 )
         {
             d->m_objectDisplayAbove = object;
         }
