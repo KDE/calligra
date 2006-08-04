@@ -114,8 +114,10 @@ KexiDBConnectionData* KexiDBDriverManager::createConnectionDataByFile(const QStr
                 break;
             }
         }
-        if(groupkey.isNull())
+        if(groupkey.isNull()) {
+            kdDebug() << "No groupkey in KexiDBDriverManager::createConnectionDataByFile filename=" << filename << endl;
             return 0;
+        }
 
         config.setGroup(groupkey);
         //QString type( config.readEntry("type", "database").lower() );
@@ -151,8 +153,10 @@ KexiDBConnectionData* KexiDBDriverManager::createConnectionDataByFile(const QStr
     }
 
     QString const drivername = driverManager().lookupByMime(mimename);
-    if(! drivername)
+    if(! drivername) {
+        kdDebug() << "No driver in KexiDBDriverManager::createConnectionDataByFile filename=" << filename << " mimename=" << mimename << endl;
         return 0;
+    }
 
     ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
     data->setFileName(filename);
