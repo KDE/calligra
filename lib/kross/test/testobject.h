@@ -29,7 +29,7 @@ class TestObject : public QObject
 {
         Q_OBJECT
 
-        //Q_PROPERTY(QString testProperty READ testProperty WRITE setTestProperty)
+        Q_PROPERTY(QString testProperty READ testProperty WRITE setTestProperty)
 
     public:
         TestObject();
@@ -41,9 +41,8 @@ class TestObject : public QObject
         QString func3(QString, int);
         const QString& func4(const QString&, int) const;
 
-        //QString m_prop;
-        //QString testProperty() const { return m_prop; }
-        //void setTestProperty(QString prop) { m_prop = prop; }
+        QString testProperty() const { return m_prop; }
+        void setTestProperty(QString prop) { m_prop = prop; }
 
     signals:
         void testSignal();
@@ -55,8 +54,13 @@ class TestObject : public QObject
         void testSlot2();
         void stdoutSlot(const QString&);
         void stderrSlot(const QString&);
+
+        QObject* self() { return this; }
+
     private slots:
         void testSignalSlot();
+    private:
+        QString m_prop;
 };
 
 #endif

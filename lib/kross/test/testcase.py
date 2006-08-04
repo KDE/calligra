@@ -59,9 +59,13 @@ class TestPlugin(unittest.TestCase):
 	def setUp(self):
 		import krosstestpluginmodule
 		self.pluginobject1 = krosstestpluginmodule.testpluginobject1()
-		self.pluginobject2 = krosstestpluginmodule.testpluginobject2()
 		self.assert_( self.pluginobject1 )
+
+		self.pluginobject2 = krosstestpluginmodule.testpluginobject2()
 		self.assert_( self.pluginobject2 )
+
+		self.testqobject1 = krosstestpluginmodule.testqobject1()
+		self.assert_( self.testqobject1 )
 
 	def testBasicDataTypes(self):
 		self.assert_( self.pluginobject1.uintfunc(177321) == 177321 )
@@ -76,8 +80,8 @@ class TestPlugin(unittest.TestCase):
 
 		#TODO
 		#self.assert_( self.pluginobject1.stringfunc( unicode(" Unicode test ") ) == " Unicode test " )
-
 		#self.assert_( self.pluginobject1.stringfunc(unicode(" Another Test! ")) == unicode(" Another Test! ") )
+
 		self.assert_( self.pluginobject1.stringstringfunc("MyString1", "MyString2") == "MyString1" )
 		self.assert_( self.pluginobject1.uintdoublestringfunc(8529,285.246,"String") == 8529 )
 		self.assert_( self.pluginobject1.stringlistbooluintdouble(["s1","s2"],True,6,7.0,"String") == ["s1","s2"] )
@@ -88,6 +92,8 @@ class TestPlugin(unittest.TestCase):
 		self.assert_( self.pluginobject1.stringlistfunc( ("Theird Item"," Forth Item ","Fifth Item") ) == ["Theird Item"," Forth Item ","Fifth Item"] )
 
 	def testVariant(self):
+		self.assert_( self.pluginobject1.variantfunc(True) == True )
+		self.assert_( self.pluginobject1.variantfunc(False) == False )
 		self.assert_( self.pluginobject1.variantfunc(187937) == 187937 )
 		self.assert_( self.pluginobject1.variantfunc(-69825) == -69825 )
 		self.assert_( self.pluginobject1.variantfunc(8632.274) == 8632.274 )
@@ -95,9 +101,25 @@ class TestPlugin(unittest.TestCase):
 		self.assert_( self.pluginobject1.variantfunc(" Test \n\r This String $%&\"") == " Test \n\r This String $%&\"")
 
 	def testObjects(self):
+		print "-----------------1"
 		newobjref = self.pluginobject1.objectfunc(self.pluginobject2)
+		print "-----------------2"
+		print str(newobjref)
+
 		#self.assert_( newobjref.myuniqueid == self.pluginobject2.myuniqueid )
 		#print "===========> %s" % self.pluginobject2.myName()
+
+		print "testqobject1 properties=%s" % self.testqobject1.propertyNames()
+		print "testqobject1 slots=%s" % self.testqobject1.slotNames()
+		print "testqobject1 signals=%s" % self.testqobject1.signalNames()
+		print "-----------------3"
+		print "DIR=>%s" % dir(self.testqobject1)
+
+		print "===================> slotcall-result: %s" % self.testqobject1.slot("self()")
+
+		#testobject = newobjref.get("TestObject")
+		#print testobject
+		print "-----------------9"
 
 	def testDefaultArguments(self):
 		self.assert_( self.pluginobject1.uintfunc_defarg(98765) == 98765 )
@@ -114,6 +136,9 @@ class TestPlugin(unittest.TestCase):
 		#self.assertRaises(ValueError, self.pluginobject1.uintfunc)
 		#self.assert_( self.pluginobject1.uintfunc() != 8465 )
 
-print "__name = %s" % __name__
+print "__name__ = %s" % __name__
+#print "self = %s" % self
+#print self.get("TestObject")
+
 suite = unittest.makeSuite(TestPlugin)
 unittest.TextTestRunner(verbosity=2).run(suite)

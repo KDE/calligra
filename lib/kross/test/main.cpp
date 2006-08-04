@@ -51,6 +51,8 @@
 
 KApplication *app = 0;
 
+
+
 static KCmdLineOptions options[] =
 {
     { "interpreter <interpretername>", I18N_NOOP("Name of the interpreter being used"), "python" },
