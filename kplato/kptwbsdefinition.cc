@@ -28,7 +28,6 @@
 #include <qpair.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 namespace KPlato
 {
@@ -129,16 +128,16 @@ QString WBSDefinition::code(CodeDef &def, uint index) {
         if (index > 26) {
             index = 0;
         }
-        return QString("%1").arg(Letters[index].upper());
+        return QString("%1").arg(Letters[index].toUpper());
     }
     return QString();
 }
 
 // Nicked from koparagcounter.cc
-const Q3CString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-const Q3CString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-const Q3CString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-const Q3CString RNThousands[] = {"", "m", "mm", "mmm"};
+const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+const QByteArray RNThousands[] = {"", "m", "mm", "mmm"};
 
 QString WBSDefinition::toRoman( int n, bool upper )
 {
@@ -147,7 +146,7 @@ QString WBSDefinition::toRoman( int n, bool upper )
                                          RNHundreds[ ( n / 100 ) % 10 ] +
                                          RNTens[ ( n / 10 ) % 10 ] +
                                          RNUnits[ ( n ) % 10 ] );
-        return upper ? s.upper() : s;
+        return upper ? s.toUpper() : s;
         
     } else { // should never happen, but better not crash if it does
         kWarning()<< k_funcinfo << " n=" << n << endl;

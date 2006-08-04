@@ -26,8 +26,6 @@
 #include "kptresource.h"
 
 #include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 namespace KPlato
 {
@@ -296,7 +294,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(bool children, Q3CString indent);
+    void printDebug(bool children, QByteArray indent);
 #endif
 
 };

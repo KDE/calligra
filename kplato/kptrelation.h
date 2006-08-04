@@ -24,8 +24,6 @@
 #include "kptduration.h"
 
 #include <QString>
-//Added by qt3to4:
-#include <Q3CString>
 
 class Q3Canvas;
 class QDomElement;
@@ -97,7 +95,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(Q3CString indent);
+    void printDebug(QByteArray indent);
 #endif
 
 };

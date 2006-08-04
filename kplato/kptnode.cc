@@ -27,8 +27,6 @@
 
 #include <q3ptrlist.h>
 #include <qdom.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -879,7 +877,7 @@ int Effort::pessimisticRatio() const {
 
 // Debugging
 #ifndef NDEBUG
-void Node::printDebug(bool children, Q3CString indent) {
+void Node::printDebug(bool children, QByteArray indent) {
     kDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
@@ -930,7 +928,7 @@ void Node::printDebug(bool children, Q3CString indent) {
 
 
 #ifndef NDEBUG
-void Effort::printDebug(Q3CString indent) {
+void Effort::printDebug(QByteArray indent) {
     kDebug()<<indent<<"  Effort:"<<endl;
     indent += "  ";
     kDebug()<<indent<<"  Expected: "<<m_expectedEffort.toString()<<endl;

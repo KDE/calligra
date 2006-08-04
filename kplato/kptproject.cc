@@ -34,8 +34,6 @@
 #include <qbrush.h>
 #include <q3canvas.h>
 #include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kdatetimewidget.h>
 #include <kdebug.h>
@@ -1015,7 +1013,7 @@ MainSchedule *Project::createSchedule(QString name, Schedule::Type type) {
 }
 
 #ifndef NDEBUG
-void Project::printDebug(bool children, Q3CString indent) {
+void Project::printDebug(bool children, QByteArray indent) {
 
     kDebug()<<indent<<"+ Project node: "<<name()<<endl;
     indent += "!";
@@ -1025,7 +1023,7 @@ void Project::printDebug(bool children, Q3CString indent) {
 
     Node::printDebug(children, indent);
 }
-void Project::printCalendarDebug(Q3CString indent) {
+void Project::printCalendarDebug(QByteArray indent) {
     kDebug()<<indent<<"-------- Calendars debug printout --------"<<endl;
     Q3PtrListIterator<Calendar> it = m_calendars;
     for (; it.current(); ++it) {

@@ -26,8 +26,6 @@
 
 #include <qdom.h>
 #include <QString>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -622,7 +620,7 @@ void NodeSchedule::printDebug(QString indent) {
     kDebug()<<indent<<"Not scheduled="<<notScheduled<<endl;
     kDebug()<<indent<<"Start time: "<<startTime.toString()<<endl;
     kDebug()<<indent<<"End time: " <<endTime.toString()<<endl;
-    kDebug()<<indent<<"Duration: "<<duration.seconds()<<Q3CString(" secs")<<" ("<<duration.toString()<<")"<<endl;
+    kDebug()<<indent<<"Duration: "<<duration.seconds()<<QByteArray(" secs")<<" ("<<duration.toString()<<")"<<endl;
     kDebug()<<indent<<"Earliest start: "<<earliestStart.toString()<<endl;
     kDebug()<<indent<<"Latest finish: " <<latestFinish.toString()<<endl;
 
@@ -661,7 +659,7 @@ void MainSchedule::printDebug(QString indent) {
     kDebug()<<indent<<"Not scheduled="<<notScheduled<<endl;
     kDebug()<<indent<<"Start time: "<<startTime.toString()<<endl;
     kDebug()<<indent<<"End time: " <<endTime.toString()<<endl;
-    kDebug()<<indent<<"Duration: "<<duration.seconds()<<Q3CString(" secs")<<" ("<<duration.toString()<<")"<<endl;
+    kDebug()<<indent<<"Duration: "<<duration.seconds()<<QByteArray(" secs")<<" ("<<duration.toString()<<")"<<endl;
     kDebug()<<indent<<"Earliest start: "<<earliestStart.toString()<<endl;
     kDebug()<<indent<<"Latest finish: " <<latestFinish.toString()<<endl;
 

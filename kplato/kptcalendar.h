@@ -26,8 +26,6 @@
 #include <qdatetime.h>
 #include <qpair.h>
 #include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class QDomElement;
 class QDateTime;
@@ -107,7 +105,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug(Q3CString indent="");
+    void printDebug(QByteArray indent="");
 #endif
 };
 
@@ -181,7 +179,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug(Q3CString indent="");
+    void printDebug(QByteArray indent="");
 #endif
 };
 
@@ -328,7 +326,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug(Q3CString indent="");
+    void printDebug(QByteArray indent="");
 #endif
 };
 
@@ -389,7 +387,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(Q3CString indent="");
+    void printDebug(QByteArray indent="");
 #endif
 };
 

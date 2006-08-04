@@ -567,14 +567,13 @@ Q3ValueList<int> ResourceView::listOffsets(int pageHeight) const {
 
 void ResourceView::print(KPrinter &printer) {
     //kDebug()<<k_funcinfo<<endl;
-    Q3PaintDeviceMetrics m = Q3PaintDeviceMetrics ( &printer );
     uint top, left, bottom, right;
     printer.margins(&top, &left, &bottom, &right);
     //kDebug()<<m.width()<<"x"<<m.height()<<" : "<<top<<", "<<left<<", "<<bottom<<", "<<right<<" : "<<size()<<endl;
     QPainter p;
     p.begin(&printer);
-    p.setViewport(left, top, m.width()-left-right, m.height()-top-bottom);
-    p.setClipRect(left, top, m.width()-left-right, m.height()-top-bottom);
+    p.setViewport(left, top, printer.width()-left-right, printer.height()-top-bottom);
+    p.setClipRect(left, top, printer.width()-left-right, printer.height()-top-bottom);
     QRect preg = p.clipRegion().boundingRect();
     //kDebug()<<"p="<<preg<<endl;
     //p.drawRect(preg.x(), preg.y(), preg.width()-1, preg.height()-1);

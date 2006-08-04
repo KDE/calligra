@@ -265,10 +265,9 @@ private:
     Q3Dict<Calendar> calendarIdDict;
     
 #ifndef NDEBUG
-#include <q3cstring.h>
 public:
-    void printDebug(bool children, Q3CString indent);
-    void printCalendarDebug(Q3CString indent="");
+    void printDebug(bool children, QByteArray indent);
+    void printCalendarDebug(QByteArray indent="");
 #ifdef DEBUGPERT
     static void pert_test();
     static void printTree(Node *n, QString s);

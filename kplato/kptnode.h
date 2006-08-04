@@ -31,9 +31,6 @@
 #include <q3ptrlist.h>
 #include <QString>
 #include <q3canvas.h>
-//Added by qt3to4:
-#include <Q3CString>
-
 #include <vector>
 
 class QDomElement;
@@ -541,7 +538,7 @@ private:
         
 #ifndef NDEBUG
 public:
-    virtual void printDebug(bool children, Q3CString indent);
+    virtual void printDebug(bool children, QByteArray indent);
 #endif
 
 };
@@ -629,7 +626,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(Q3CString indent);
+    void printDebug(QByteArray indent);
 #endif
 
 };

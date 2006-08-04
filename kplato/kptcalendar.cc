@@ -24,8 +24,6 @@
 
 #include <qdom.h>
 #include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -968,7 +966,7 @@ void StandardWorktime::save(QDomElement &element) const {
 }
 
 #ifndef NDEBUG
-void CalendarDay::printDebug(Q3CString indent) {
+void CalendarDay::printDebug(QByteArray indent) {
     QString s[] = {"None", "Non-working", "Working"};
     kDebug()<<indent<<" "<<m_date.toString()<<" = "<<s[m_state]<<endl;
     if (m_state == Map::Working) {
@@ -980,7 +978,7 @@ void CalendarDay::printDebug(Q3CString indent) {
     }
     
 }
-void CalendarWeekdays::printDebug(Q3CString indent) {
+void CalendarWeekdays::printDebug(QByteArray indent) {
     kDebug()<<indent<<"Weekdays ------"<<endl;
     Q3PtrListIterator<CalendarDay> it = m_weekdays;
     for (char c='0'; it.current(); ++it) {
@@ -988,7 +986,7 @@ void CalendarWeekdays::printDebug(Q3CString indent) {
     }
 
 }
-void Calendar::printDebug(Q3CString indent) {
+void Calendar::printDebug(QByteArray indent) {
     kDebug()<<indent<<"Calendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
     kDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : "No parent")<<endl;
     m_weekdays->printDebug(indent + "  ");
@@ -999,7 +997,7 @@ void Calendar::printDebug(Q3CString indent) {
     }
 }
 
-void StandardWorktime::printDebug(Q3CString indent) {
+void StandardWorktime::printDebug(QByteArray indent) {
     kDebug()<<indent<<"StandardWorktime "<<endl;
     kDebug()<<indent<<"Year: "<<m_year.toString()<<endl;
     kDebug()<<indent<<"Month: "<<m_month.toString()<<endl;

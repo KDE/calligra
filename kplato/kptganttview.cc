@@ -1032,7 +1032,6 @@ void GanttView::print(KPrinter &prt) {
     //   anyway (it's the PS driver that takes care of the printer resolution).
     //But KSpread uses fixed 300 dpis, so we can use it.
 
-    Q3PaintDeviceMetrics metrics( &prt );
     uint top, left, bottom, right;
     prt.margins(&top, &left, &bottom, &right);
     //kDebug()<<m.width()<<"x"<<m.height()<<" : "<<top<<", "<<left<<", "<<bottom<<", "<<right<<" : "<<size()<<endl;
@@ -1044,22 +1043,22 @@ void GanttView::print(KPrinter &prt) {
 
     QPainter p;
     p.begin( &prt );
-    p.setViewport(left, top, metrics.width()-left-right, metrics.height()-top-bottom);
-    p.setClipRect(left, top, metrics.width()-left-right, metrics.height()-top-bottom);
+    p.setViewport(left, top, prt.width()-left-right, prt.height()-top-bottom);
+    p.setClipRect(left, top, prt.width()-left-right, prt.height()-top-bottom);
 
     // Make a simple header
-    p.drawRect(0,0,metrics.width(),metrics.height());
+    p.drawRect(0,0,prt.width(),prt.height());
     QString text;
     int hei = 0;
     text = KGlobal::locale()->formatDateTime(QDateTime::currentDateTime());
-    QRect r = p.boundingRect(metrics.width()-1,0,0,0, Qt::AlignRight, text );
+    QRect r = p.boundingRect(prt.width()-1,0,0,0, Qt::AlignRight, text );
     p.drawText( r, Qt::AlignRight, text );
     hei = r.height();
     //kDebug()<<"Date r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
     if (m_project)
     {
       QRect re = p.boundingRect(1,0,0,0, Qt::AlignLeft, text );
-      re.setWidth(metrics.width()-r.width()-5); // don't print on top of date
+      re.setWidth(prt.width()-r.width()-5); // don't print on top of date
       p.drawText( re, Qt::AlignLeft, m_project->name() );
       hei = r.height();
       //kDebug()<<"Project r="<<re.left()<<","<<re.top()<<" "<<re.width()<<"x"<<re.height()<<": "<<endl;
@@ -1067,11 +1066,11 @@ void GanttView::print(KPrinter &prt) {
     }
 
     hei++;
-    p.drawLine(0,hei,metrics.width(),hei);
+    p.drawLine(0,hei,prt.width(),hei);
     hei += 3;
     // compute the scale
-    float dx = (float) (metrics.width()-2)  / (float)size.width();
-    float dy  = (float)(metrics.height()-hei) / (float)size.height();
+    float dx = (float) (prt.width()-2)  / (float)size.width();
+    float dy  = (float)(prt.height()-hei) / (float)size.height();
     float scale;
     // scale to fit the width or height of the paper
     if ( dx < dy )

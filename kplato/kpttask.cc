@@ -31,7 +31,6 @@
 #include <qdom.h>
 #include <qbrush.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <Q3PtrList>
 #include <kdebug.h>
 
@@ -1547,7 +1546,7 @@ void Task::setCurrentSchedule(long id) {
 
 
 #ifndef NDEBUG
-void Task::printDebug(bool children, Q3CString indent) {
+void Task::printDebug(bool children, QByteArray indent) {
     kDebug()<<indent<<"+ Task node: "<<name()<<" type="<<type()<<endl;
     indent += "!  ";
     kDebug()<<indent<<"Requested resources (total): "<<units()<<"%"<<endl;
