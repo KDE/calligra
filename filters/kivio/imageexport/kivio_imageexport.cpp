@@ -20,7 +20,6 @@
 #include "kivio_imageexport.h"
 
 #include <qdom.h>
-#include <q3cstring.h>
 #include <QPixmap>
 #include <QPainter>
 #include <QSize>
