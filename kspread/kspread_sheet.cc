@@ -7109,17 +7109,14 @@ void Sheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
     }
     else
     {
-
        xmlWriter.startElement( "text:p" );
 
        xmlWriter.startElement( "text:sheet-name" );
        xmlWriter.addTextNode( "Page " ); // ???
+       xmlWriter.endElement();
 
        xmlWriter.startElement( "text:page-number" );
        xmlWriter.addTextNode( "1" ); // ???
-       xmlWriter.endElement();
-
-
        xmlWriter.endElement();
 
        xmlWriter.endElement();
