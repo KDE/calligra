@@ -35,6 +35,7 @@
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
 #include <KoPageLayout.h>
+#include <KoMainWindow.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
@@ -95,7 +96,7 @@ void KivioView::initGUI()
   layout->addWidget(m_canvasController, 0, 0);
 
   KoToolManager::instance()->addControllers(m_canvasController, this);
-  KoToolManager::instance()->toolBox()->show();
+  shell()->addDockWidget(Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox("Kivio"));
 
   KoShapeSelector *selector = new KoShapeSelector(0, m_canvasController, ".*");
   selector->resize(QSize(100, 200));
