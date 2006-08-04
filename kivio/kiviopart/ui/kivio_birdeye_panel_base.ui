@@ -74,10 +74,10 @@
             <property name="name">
                 <cstring>m_zoomSlider</cstring>
             </property>
-            <property name="minValue">
+            <property name="minimum">
                 <number>25</number>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>2000</number>
             </property>
             <property name="pageStep">

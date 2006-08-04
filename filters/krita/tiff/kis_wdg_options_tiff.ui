@@ -299,10 +299,10 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                         <property name="name">
                                             <cstring>qualityLevel</cstring>
                                         </property>
-                                        <property name="minValue">
+                                        <property name="minimum">
                                             <number>0</number>
                                         </property>
-                                        <property name="maxValue">
+                                        <property name="maximum">
                                             <number>100</number>
                                         </property>
                                         <property name="lineStep">
@@ -428,10 +428,10 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                         <property name="name">
                                             <cstring>compressionLevelDeflate</cstring>
                                         </property>
-                                        <property name="minValue">
+                                        <property name="minimum">
                                             <number>1</number>
                                         </property>
-                                        <property name="maxValue">
+                                        <property name="maximum">
                                             <number>9</number>
                                         </property>
                                         <property name="pageStep">
@@ -631,10 +631,10 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                         <property name="name">
                                             <cstring>compressionLevelPixarLog</cstring>
                                         </property>
-                                        <property name="minValue">
+                                        <property name="minimum">
                                             <number>1</number>
                                         </property>
-                                        <property name="maxValue">
+                                        <property name="maximum">
                                             <number>9</number>
                                         </property>
                                         <property name="pageStep">

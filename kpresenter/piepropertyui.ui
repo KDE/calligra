@@ -73,7 +73,7 @@
             <property name="suffix">
                 <string> °</string>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>360</number>
             </property>
             <property name="lineStep">
@@ -90,7 +90,7 @@
             <property name="suffix">
                 <string> °</string>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>360</number>
             </property>
             <property name="lineStep">

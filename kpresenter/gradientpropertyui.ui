@@ -117,10 +117,10 @@
                     <property name="name">
                         <cstring>ySlider</cstring>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>-200</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>200</number>
                     </property>
                     <property name="value">
@@ -134,10 +134,10 @@
                     <property name="name">
                         <cstring>xSlider</cstring>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>-200</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>200</number>
                     </property>
                     <property name="value">

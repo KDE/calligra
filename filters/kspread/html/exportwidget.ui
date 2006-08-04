@@ -254,7 +254,7 @@
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>25</number>
                             </property>
                             <property name="whatsThis" stdset="0">

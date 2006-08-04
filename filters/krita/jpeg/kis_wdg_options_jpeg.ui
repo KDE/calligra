@@ -53,10 +53,10 @@
                             <property name="name">
                                 <cstring>qualityLevel</cstring>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>0</number>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>100</number>
                             </property>
                             <property name="lineStep">
