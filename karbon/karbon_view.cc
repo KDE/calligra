@@ -644,14 +644,14 @@ KarbonView::selectionAlignHorizontalLeft()
 {
 	debugView("KarbonView::selectionAlignHorizontalLeft()");
 
-	selectionAlign(KoShapeAlignCommand::ALIGN_HORIZONTAL_LEFT);
+	selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);
 }
 void
 KarbonView::selectionAlignHorizontalCenter()
 {
 	debugView("KarbonView::selectionAlignHorizontalCenter()");
 
-	selectionAlign(KoShapeAlignCommand::ALIGN_HORIZONTAL_CENTER);
+	selectionAlign(KoShapeAlignCommand::HorizontalCenterAlignment);
 }
 
 void
@@ -659,7 +659,7 @@ KarbonView::selectionAlignHorizontalRight()
 {
 	debugView("KarbonView::selectionAlignHorizontalRight()");
 
-	selectionAlign(KoShapeAlignCommand::ALIGN_HORIZONTAL_RIGHT);
+	selectionAlign(KoShapeAlignCommand::HorizontalRightAlignment);
 }
 
 void
@@ -667,7 +667,7 @@ KarbonView::selectionAlignVerticalTop()
 {
 	debugView("KarbonView::selectionAlignVerticalTop()");
 
-	selectionAlign(KoShapeAlignCommand::ALIGN_VERTICAL_TOP);
+	selectionAlign(KoShapeAlignCommand::VerticalTopAlignment);
 }
 
 void
@@ -675,7 +675,7 @@ KarbonView::selectionAlignVerticalCenter()
 {
 	debugView("KarbonView::selectionAlignVerticalCenter()");
 
-	selectionAlign(KoShapeAlignCommand::ALIGN_VERTICAL_CENTER);
+	selectionAlign(KoShapeAlignCommand::VerticalCenterAlignment);
 }
 
 void
@@ -683,7 +683,7 @@ KarbonView::selectionAlignVerticalBottom()
 {
 	debugView("KarbonView::selectionAlignVerticalBottom()");
 
-	selectionAlign(KoShapeAlignCommand::ALIGN_VERTICAL_BOTTOM);
+	selectionAlign(KoShapeAlignCommand::VerticalBottomAlignment);
 }
 
 void
@@ -707,7 +707,7 @@ KarbonView::selectionDistributeHorizontalCenter()
 {
 	debugView("KarbonView::selectionDistributeHorizontalCenter()");
 
-	selectionDistribute(KoShapeDistributeCommand::DISTRIBUTE_HORIZONTAL_CENTER);
+	selectionDistribute(KoShapeDistributeCommand::HorizontalCenterDistribution);
 }
 
 void
@@ -715,7 +715,7 @@ KarbonView::selectionDistributeHorizontalGap()
 {
 	debugView("KarbonView::selectionDistributeHorizontalGap()");
 
-	selectionDistribute(KoShapeDistributeCommand::DISTRIBUTE_HORIZONTAL_GAP);
+	selectionDistribute(KoShapeDistributeCommand::HorizontalGapsDistribution);
 }
 
 void
@@ -723,7 +723,7 @@ KarbonView::selectionDistributeHorizontalLeft()
 {
 	debugView("KarbonView::selectionDistributeHorizontalLeft()");
 
-	selectionDistribute(KoShapeDistributeCommand::DISTRIBUTE_HORIZONTAL_LEFT);
+	selectionDistribute(KoShapeDistributeCommand::HorizontalLeftDistribution);
 }
 
 void
@@ -731,7 +731,7 @@ KarbonView::selectionDistributeHorizontalRight()
 {
 	debugView("KarbonView::selectionDistributeHorizontalRight()");
 
-	selectionDistribute(KoShapeDistributeCommand::DISTRIBUTE_HORIZONTAL_RIGHT);
+	selectionDistribute(KoShapeDistributeCommand::HorizontalRightDistribution);
 }
 
 void
@@ -739,7 +739,7 @@ KarbonView::selectionDistributeVerticalCenter()
 {
 	debugView("KarbonView::selectionDistributeVerticalCenter()");
 
-	selectionDistribute(KoShapeDistributeCommand::DISTRIBUTE_VERTICAL_CENTER);
+	selectionDistribute(KoShapeDistributeCommand::VerticalCenterDistribution);
 }
 
 void
@@ -747,7 +747,7 @@ KarbonView::selectionDistributeVerticalGap()
 {
 	debugView("KarbonView::selectionDistributeVerticalGap()");
 
-	selectionDistribute(KoShapeDistributeCommand::DISTRIBUTE_VERTICAL_GAP);
+	selectionDistribute(KoShapeDistributeCommand::VerticalGapsDistribution);
 }
 
 void
@@ -755,7 +755,7 @@ KarbonView::selectionDistributeVerticalBottom()
 {
 	debugView("KarbonView::selectionDistributeVerticalBottom()");
 
-	selectionDistribute(KoShapeDistributeCommand::DISTRIBUTE_VERTICAL_BOTTOM);
+	selectionDistribute(KoShapeDistributeCommand::VerticalBottomDistribution);
 }
 
 void
@@ -763,7 +763,7 @@ KarbonView::selectionDistributeVerticalTop()
 {
 	debugView("KarbonView::selectionDistributeVerticalTop()");
 
-	selectionDistribute(KoShapeDistributeCommand::DISTRIBUTE_VERTICAL_TOP);
+	selectionDistribute(KoShapeDistributeCommand::VerticalTopDistribution);
 }
 
 void
