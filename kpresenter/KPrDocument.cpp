@@ -1662,7 +1662,8 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         kdDebug()<<" node.isNull() :"<<node.isNull()<< ", " << masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null ) << endl;
         // add the correct styles
         const QDomElement* masterPageStyle = context.oasisStyles().findStyleAutoStyle( masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null ), "drawing-page" );
-        context.styleStack().push( *masterPageStyle );
+        if (masterPageStyle)
+            context.styleStack().push( *masterPageStyle );
 
         context.setUseStylesAutoStyles( true );
         m_masterPage->loadOasis( context );
