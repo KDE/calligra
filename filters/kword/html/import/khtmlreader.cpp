@@ -124,9 +124,8 @@ void KHTMLReader::startNewLayout(bool startNewFormat) {
 }
 
 void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) {
-	if (!(_writer->getText(state()->paragraph).isEmpty())) {
-		startNewParagraph(startNewFormat,true);
-	}
+        kdDebug() << "entering startNewLayout" << endl;
+	startNewParagraph(startNewFormat,true);
 	state()->layout=_writer->setLayout(state()->paragraph,layout);
 }
 
@@ -274,6 +273,7 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 
 
 void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
+        kdDebug() << "Entering startNewParagraph" << endl;
 
 	QDomElement qf=state()->format;
 	QDomElement ql=state()->layout;
@@ -337,6 +337,7 @@ bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
         {
               _writer->layoutAttribute(state()->paragraph,"NAME","value",e.getAttribute("class").string());
         }
+        kdDebug(30503) << "leaving parse_CommonAttributes" << endl;
         return true;
 }
 
@@ -360,15 +361,10 @@ bool KHTMLReader::parse_a(DOM::Element e) {
 bool KHTMLReader::parse_p(DOM::Element e) {
         // For every starting paragraph, a line break has to be inserted.
         // exception: the first paragraph, e.g. if the <body> starts with a <p>.
+        kdDebug() << "entering parse_p" << endl;
         static bool firstparagraph=true;
-        if (firstparagraph)
-        {
-          firstparagraph=false;
-        }
-        else {
-	  startNewParagraph();
-	}
 	parse_CommonAttributes(e);
+        kdDebug() << "leaving parse_p" << endl;
 	return true;
 }
 

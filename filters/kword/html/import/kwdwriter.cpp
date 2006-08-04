@@ -376,6 +376,7 @@ QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClon
 }
 
 QDomElement KWDWriter::formatAttribute(QDomElement paragraph, QString name, QString attrName, QString attr) {
+        kdDebug() << "Entering KWDWriter::formatAttribute" << endl;
 	QDomElement lastformat=currentFormat(paragraph,true);
 	QDomNodeList qdnl= lastformat.elementsByTagName(name);
 	if (qdnl.length()) {
@@ -402,7 +403,9 @@ QString KWDWriter::getLayoutAttribute(QDomElement paragraph, QString name, QStri
 	return QString::null;
 }
 
-QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QString attrName, QString attr) {
+QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QString attrName, QString attr) 
+{
+        kdDebug() << "Entering KWDWriter::layoutAttribute" << endl;
 	QDomElement currentLayout=paragraph.elementsByTagName("LAYOUT").item(0).toElement();
 	QDomNodeList qdnl= currentLayout.elementsByTagName(name);
 
