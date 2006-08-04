@@ -247,7 +247,7 @@
                     <property name="suffix">
                         <string>%</string>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>9999</number>
                     </property>
                 </widget>

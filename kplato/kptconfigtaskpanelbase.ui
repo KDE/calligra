@@ -255,10 +255,10 @@ The estimation can be either effort based or duration based. If it is effort bas
                             <property name="suffix">
                                 <string>%</string>
                             </property>
-                            <property name="maxValue">
+                            <property name="maximum">
                                 <number>0</number>
                             </property>
-                            <property name="minValue">
+                            <property name="minimum">
                                 <number>-99</number>
                             </property>
                         </widget>

@@ -77,10 +77,10 @@
             <property name="focusPolicy">
                 <enum>Qt::WheelFocus</enum>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>8784</number>
             </property>
-            <property name="minValue">
+            <property name="minimum">
                 <number>1</number>
             </property>
             <property name="toolTip" stdset="0">
@@ -94,10 +94,10 @@
             <property name="focusPolicy">
                 <enum>Qt::WheelFocus</enum>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>744</number>
             </property>
-            <property name="minValue">
+            <property name="minimum">
                 <number>1</number>
             </property>
             <property name="toolTip" stdset="0">
@@ -111,10 +111,10 @@
             <property name="focusPolicy">
                 <enum>Qt::WheelFocus</enum>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>168</number>
             </property>
-            <property name="minValue">
+            <property name="minimum">
                 <number>1</number>
             </property>
             <property name="toolTip" stdset="0">
@@ -128,10 +128,10 @@
             <property name="focusPolicy">
                 <enum>Qt::WheelFocus</enum>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>24</number>
             </property>
-            <property name="minValue">
+            <property name="minimum">
                 <number>1</number>
             </property>
             <property name="toolTip" stdset="0">
