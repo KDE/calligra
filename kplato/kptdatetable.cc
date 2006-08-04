@@ -23,7 +23,7 @@
 #include "kptmap.h"
 
 #include <kapplication.h>
-#include <knotifyclient.h>
+#include <knotification.h>
 #include <kcalendarsystem.h>
 
 #include <qdatetime.h>
@@ -330,7 +330,7 @@ void DateTable::keyPressEvent( QKeyEvent *e ) {
         return;
     }
 
-    KNotifyClient::beep();
+    KNotification::beep();
 }
 
 void DateTable::viewportResizeEvent(QResizeEvent * e) {
@@ -721,7 +721,7 @@ DateInternalWeekSelector::weekEnteredSlot()
   week=text().toInt(&ok);
   if(!ok)
     {
-      KNotifyClient::beep();
+      KNotification::beep();
       return;
     }
   result=week;
@@ -820,7 +820,7 @@ DateInternalMonthPicker::contentsMousePressEvent(QMouseEvent *e)
 {
   if(!isEnabled() || e->button() != Qt::LeftButton)
     {
-      KNotifyClient::beep();
+      KNotification::beep();
       return;
     }
   // -----
@@ -935,13 +935,13 @@ DateInternalYearSelector::yearEnteredSlot()
   year=text().toInt(&ok);
   if(!ok)
     {
-      KNotifyClient::beep();
+      KNotification::beep();
       return;
     }
   date.setYMD(year, 1, 1);
   if(!date.isValid())
     {
-      KNotifyClient::beep();
+      KNotification::beep();
       return;
     }
   result=year;

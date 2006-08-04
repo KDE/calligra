@@ -45,7 +45,7 @@
 #include <klineedit.h>
 #include <qvalidator.h>
 #include <kdebug.h>
-#include <knotifyclient.h>
+#include <knotification.h>
 
 namespace KPlato
 {
@@ -315,7 +315,7 @@ CalendarPanel::selectWeekClicked()
       // ----- set this date
       setDate(date);
     } else {
-         KNotifyClient::beep();
+         KNotification::beep();
     }
   delete popup;
 }
@@ -345,7 +345,7 @@ CalendarPanel::selectMonthClicked()
       // ----- set this month
       setDate(date);
     } else {
-      KNotifyClient::beep();
+      KNotification::beep();
     }
   delete popup;
 }
@@ -375,7 +375,7 @@ CalendarPanel::selectYearClicked()
       // ----- set this month
       setDate(date);
     } else {
-      KNotifyClient::beep();
+      KNotification::beep();
     }
   delete popup;
 }
@@ -408,7 +408,7 @@ CalendarPanel::lineEnterPressed()
         emit(dateEntered(temp));
         setDate(temp);
     } else {
-      KNotifyClient::beep();
+      KNotification::beep();
       //kDebug() << "CalendarPanel::lineEnterPressed: invalid date entered." << endl;
     }
 }
