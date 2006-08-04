@@ -32,23 +32,13 @@ namespace Kross { namespace Api {
 namespace Kross { 
 
 /**
- * Wrapper around the Kexi::KexiDB classes.
- *
- * Only \a Kross::Api is used. So, this wrapper is independend
- * to the used scripting backend and any interpreter who wraps
- * the Kross-Api should be able to make such wrappers accessible
- * from within scripting-languages.
+ * KrossKexiDB provides access to the KexiDB database functionality.
  */
 namespace KexiDB {
 
     /**
-     * The KexiDBModule wrapper around KexiDB.
-     *
-     * This class implementates a \a Kross::Api::Module to wrap
-     * those parts of KexiDB that should be accessible for
-     * the different scripting languages. All work will be done
-     * and presented in the common Kross::Api and therefore
-     * is independend of any used scripting-backend.
+     * \internal
+     * The KexiDBModule is the implementation of a kross-module.
      */
     class KexiDBModule : public Kross::Api::Module
     {
@@ -58,6 +48,7 @@ namespace KexiDB {
             virtual const QString getClassName() const;
 
             /**
+             * \internal
              * Variable module-method use to call transparent some functionality
              * the module provides.
              * 

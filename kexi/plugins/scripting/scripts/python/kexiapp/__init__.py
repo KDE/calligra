@@ -19,3 +19,7 @@ except ImportError, e:
 
 def get(modulename):
 	return krosskexiapp.get(modulename)
+
+def currentConnection():
+	mainwindow = krosskexiapp.get("KexiAppMainWindow")
+	return mainwindow.getConnection()
