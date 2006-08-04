@@ -5582,13 +5582,13 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     // saving the columns
     //
     int i = 1;
-    ColumnFormat* column = columnFormat( i );
-    ColumnFormat* nextColumn = d->columns.next( i );
-    while ( !column->isDefault() || nextColumn )
+    while ( i <= maxCols )
     {
 //         kDebug() << "Sheet::saveOasisColRowCell: first col loop:"
 //                   << " i: " << i
 //                   << " column: " << column->column() << endl;
+        ColumnFormat* column = columnFormat( i );
+
         KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
         currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );
         currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
@@ -5599,22 +5599,31 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         bool hide = column->isHide();
         bool refColumnIsDefault = column->isDefault();
-        int j = i + 1;
+        int j = i;
         int repeated = 1;
 
-        while ( nextColumn )
+        while ( j <= maxCols )
         {
 //           kDebug() << "Sheet::saveOasisColRowCell: second col loop:"
 //                     << " j: " << j
 //                     << " column: " << nextColumn->column() << endl;
-          // not the adjacent column?
-          if ( nextColumn->column() != j )
+          ColumnFormat* nextColumn = d->columns.next( j++ );
+
+          // no next or not the adjacent column?
+          if ( !nextColumn || nextColumn->column() != j )
           {
             if ( refColumnIsDefault )
             {
               // if the origin column was a default column,
               // we count the default columns
-              repeated = nextColumn->column() - j + 1;
+              if ( !nextColumn )
+              {
+                repeated = maxCols - i + 1;
+              }
+              else
+              {
+                repeated = nextColumn->column() - j + 1;
+              }
             }
             // otherwise we just stop here to process the adjacent
             // column in the next iteration of the outer loop
@@ -5640,7 +5649,6 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             break;
           }
           ++repeated;
-          nextColumn = d->columns.next( j++ );
         }
 
         xmlWriter.startElement( "table:table-column" );
@@ -5662,11 +5670,6 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         kDebug() << "Sheet::saveOasisColRowCell: column " << i << ' '
                   << "repeated " << repeated << " time(s)" << endl;
         i += repeated;
-
-        if ( i > maxCols )
-          break;
-        column = columnFormat( i );
-        nextColumn = d->columns.next( i );
     }
 
     // saving the rows and the cells
@@ -5754,6 +5757,11 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
             if ( row->isHide() ) // never true for the default row
               xmlWriter.addAttribute( "table:visibility", "collapse" );
+
+            // NOTE Stefan: Even if paragraph 8.1 states, that rows may be empty, the
+            //              RelaxNG schema does not allow that.
+            xmlWriter.startElement( "table:table-cell" );
+            xmlWriter.endElement();
 
             kDebug() << "Sheet::saveOasisColRowCell: empty row " << i << ' '
                       << "repeated " << repeated << " time(s)" << endl;
