@@ -59,9 +59,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
 
     m_currentPage = m_document->pageManager()->page(m_document->startPage());
 
-    QDockWidget *w = KoToolManager::instance()->toolBox();
-    w->setWindowTitle("KWord");
-    shell()->addDockWidget(Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox());
+    shell()->addDockWidget(Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox("KWord"));
     setupActions();
 }
 
