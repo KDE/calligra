@@ -57,8 +57,6 @@ class TestObject : public QObject
 
         QObject* self() { return this; }
 
-    private slots:
-        void testSignalSlot();
     private:
         QString m_prop;
 };
