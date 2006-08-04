@@ -2,8 +2,7 @@
 <title>Layers</title>
 
 <para>
-This chapter gives an overview of how layers work in &krita;, with special
-notice of adjustment layers.
+This chapter gives an overview of how layers work in &krita;.
 </para>
 
 <sect1 id="layers-background">
@@ -24,7 +23,8 @@ This means that usually the upper layers of your image will have more or less
 transparency, since you cannot look through a layer which has no transparency.
 (&krita; works with opaqueness instead of transparency. A layer that is 100
 percent opaque is 0 percent transparent, and vice versa.) A layer higher in
-the stack gets applied later than one lower in the stack. For example, the
+the stack gets applied later than one lower in the stack. For example, if your
+image contains four layers, numbered from 1 (lowest) to 3 (highest), the
 effect that layer number 4 adds to the image, is applied to the result from
 applying layers 1 through 3.
 </para><para>
@@ -34,15 +34,15 @@ linkend="commands-palettes-layers-layers">this section</link>) will contain
 one layer. The painting and editing you do is then applied to that layer. Once
 you add more layers, you can choose on which part of the image you want to
 work, by selecting the respective layer. All further painting is then applied
-to that layer.
+to that layer, until you select another one.
 </para><para>
 Layers are also an excellent way to check whether adding certain effects (or
 applying certain image modifications) come out right. Add a layer which
 contains what you want to try out, and show or hide it with the eye icon in
 the layer box. You can especially profit from this method if you have multiple
-effects: show and hide them in any combination, and decide which you like
-best. And since you can move the layers around, you can also experiment with
-the order in which the effects are applied.
+effects to check out: show and hide them in any combination, and decide which
+you like best. And since you can move the layers around, you can also
+experiment with the order in which the effects are applied.
 </para><para>
 See the <link linkend="tutorial-select-layer">Selections and layers
 tutorial</link> for a small hands-on introduction.
@@ -89,7 +89,6 @@ linkend="commands-dialogs-layers-layerproperties"><guilabel>Layer
 Properties</guilabel></link> dialog. This dialog shows a layer's colorspace and
 profile. You can also change its name, opacity and composite mode here.
 </para>
-
 </sect2>
 
 <sect2 id="layers-layerbox-options"> 
@@ -115,8 +114,6 @@ on the layer. The <guibutton>Delete Layer</guibutton> button deletes the
 current layer.
 </para>
 </sect2>
-
-
 
 </sect1>
 
@@ -163,7 +160,7 @@ ordinary painting tools and painting operations.
 
 <para>
 &krita; composites the layers bottom to top, within each layer group. The
-aggregate -- or the projection as we hackers call it -- is then filtered by
+aggregate -- or the projection as it is also called -- is then filtered by
 the adjustment layer. If there are layers on top of the adjustment layer,
 those are composited onto the projection. &krita; converts all layer data before
 compositing, so if the bottom-most layer in an image is grayscale, all layers
@@ -176,6 +173,358 @@ of a complex layer structure: &krita; uses the projection and doesn't even look
 anymore at the layers under the adjustment layer. Unless, of course, you
 change one of them.
 </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="layers-composite">
+<title>Compositing modes</title>
+
+<para>
+Layers can be composited in various ways, each yielding a different effect.
+This section describes the available compositing modes. Each description is
+accompanied by an example: on top of an original image (see below), a rainbow
+gradient is added.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The original image</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-original.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The original image</phrase>
+</textobject>
+<caption><para>The original image</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<sect2 id="layers-composite-normal">
+<title><guilabel>Normal</guilabel></title>
+
+<para>
+The <guilabel>Normal</guilabel> mode does nothing special. It adds the layer
+to the image, and if no other special effects like opacity are changed, the
+underlying layers will only be visible at places where the new layer is
+itself transparent.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Normal</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-normal.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Normal</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Normal</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="layers-composite-multiply">
+<title><guilabel>Multiply</guilabel></title>
+
+<para>
+The <guilabel>Multiply</guilabel> mode blends the two layers so that the
+bottom layer gets <quote>colorized</quote> by the new layer. The resulting
+image is generally quite dark.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Multiply</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-multiply.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Multiply</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Multiply</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="layers-composite-burn">
+<title><guilabel>Burn</guilabel>, <guilabel>Dodge</guilabel>,
+<guilabel>Divide</guilabel> and <guilabel>Screen</guilabel></title>
+
+<para>
+The <guilabel>Burn</guilabel>, <guilabel>Dodge</guilabel>,
+<guilabel>Divide</guilabel> and <guilabel>Screen</guilabel> modes all add an
+extra <quote>burning</quote> effect by following contours instead of using
+straight lines. In addition, <guilabel>Burn</guilabel> and
+<guilabel>Divide</guilabel> use the inverted colors instead of the actual
+colors of the composited layer.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Burn</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-burn.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Burn</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Burn</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Dodge</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-dodge.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Dodge</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Dodge</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Divide</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-divide.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Divide</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Divide</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Screen</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-screen.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Screen</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Screen</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="layers-composite-overlay">
+<title><guilabel>Overlay</guilabel></title>
+
+<para>
+Like <guilabel>Multiply</guilabel>, the <guilabel>Overlay</guilabel> mode
+colorizes the underlying layer. The resulting image is about as light as
+the original layer.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Overlay</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-overlay.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Overlay</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Overlay</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="layers-composite-darken">
+<title><guilabel>Darken</guilabel></title>
+
+<para>
+The <guilabel>Darken</guilabel> mode darkens the underlying layer while
+colorizing it to match the colors in the composited layer.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Darken</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-darken.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Darken</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Darken</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="layers-composite-lighten">
+<title><guilabel>Lighten</guilabel></title>
+
+<para>
+The <guilabel>Lighten</guilabel> mode lightens the underlying layer while
+colorizing it to match the colors in the composited layer.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Lighten</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-lighten.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Lighten</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Lighten</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="layers-composite-hue">
+<title><guilabel>Hue</guilabel>, <guilabel>Saturation</guilabel> and
+<guilabel>Value</guilabel></title>
+
+<para>
+The <guilabel>Hue</guilabel>, <guilabel>Saturation</guilabel> and
+<guilabel>Value</guilabel> modes respectively apply the hue, saturation and
+value components of the composited layer to the underlying layer.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Hue</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-hue.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Hue</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Hue</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Saturation</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-saturation.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Saturation</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Saturation</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Value</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-value.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Value</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Value</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="layers-composite-color">
+<title><guilabel>Color</guilabel></title>
+
+<para>
+The <guilabel>Color</guilabel> mode colorizes the underlying layer, yielding
+very strong colors.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The gradient applied with the <guilabel>Color</guilabel> compositing
+mode</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mountains-color.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The gradient applied with the <guilabel>Color</guilabel> compositing
+mode</phrase>
+</textobject>
+<caption><para>The gradient applied with the <guilabel>Color</guilabel> compositing
+mode</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
 </sect2>
 
 </sect1>
