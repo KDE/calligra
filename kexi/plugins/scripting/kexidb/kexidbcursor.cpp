@@ -20,6 +20,9 @@
 #include "kexidbcursor.h"
 #include "kexidbconnection.h"
 
+#include <kexidb/tableschema.h>
+#include <kexidb/queryschema.h>
+
 #include <kdebug.h>
 
 using namespace Kross::KexiDB;
@@ -41,12 +44,25 @@ KexiDBCursor::KexiDBCursor(::KexiDB::Cursor* cursor)
     this->addFunction0<Kross::Api::Variant>("at", this, &KexiDBCursor::at );
     this->addFunction0<Kross::Api::Variant>("fieldCount", this, &KexiDBCursor::fieldCount );
     this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("value", this, &KexiDBCursor::value );
+    this->addFunction2<Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant>("setValue", this, &KexiDBCursor::setValue );
+    this->addFunction0<Kross::Api::Variant>("save", this, &KexiDBCursor::save );
 }
 
 KexiDBCursor::~KexiDBCursor()
 {
     ///@todo check ownership
     //delete m_cursor;
+
+    clearBuffers();
+}
+
+void KexiDBCursor::clearBuffers()
+{
+    QMap<Q_LLONG, Record*>::ConstIterator
+        it( m_modifiedrecords.constBegin() ), end( m_modifiedrecords.constEnd() );
+    for( ; it != end; ++it)
+        delete it.data();
+    m_modifiedrecords.clear();
 }
 
 const QString KexiDBCursor::getClassName() const
@@ -58,12 +74,66 @@ bool KexiDBCursor::open() { return m_cursor->open(); }
 bool KexiDBCursor::isOpened() { return m_cursor->isOpened(); }
 bool KexiDBCursor::reopen() { return m_cursor->reopen(); }
 bool KexiDBCursor::close() { return m_cursor->close(); }
+
 bool KexiDBCursor::moveFirst() { return m_cursor->moveFirst(); }
 bool KexiDBCursor::moveLast() { return m_cursor->moveLast(); }
 bool KexiDBCursor::movePrev() { return m_cursor->movePrev(); }
 bool KexiDBCursor::moveNext() { return m_cursor->moveNext(); }
+
 bool KexiDBCursor::bof() { return m_cursor->bof(); }
 bool KexiDBCursor::eof() { return m_cursor->eof(); }
+
 Q_LLONG KexiDBCursor::at() { return m_cursor->at(); }
 uint KexiDBCursor::fieldCount() { return m_cursor->fieldCount(); }
-QVariant KexiDBCursor::value(uint index) { return m_cursor->value(index); }
+
+QVariant KexiDBCursor::value(uint index)
+{
+    return m_cursor->value(index);
+}
+
+bool KexiDBCursor::setValue(uint index, QVariant value)
+{
+    ::KexiDB::QuerySchema* query = m_cursor->query();
+    if(! query) {
+        kdDebug() << "Invalid query in KexiDBCursor::setValue index=" << index << " value=" << value << endl;
+        return false;
+    }
+
+    ::KexiDB::QueryColumnInfo* column = query->fieldsExpanded().at(index);
+    if(! column) {
+        kdDebug() << "Invalid column in KexiDBCursor::setValue index=" << index << " value=" << value << endl;
+        return false;
+    }
+
+    const Q_LLONG position = m_cursor->at();
+    if(! m_modifiedrecords.contains(position))
+        m_modifiedrecords.replace(position, new Record(m_cursor));
+    m_modifiedrecords[position]->buffer->insert(*column, value);
+    return true;
+}
+
+bool KexiDBCursor::save()
+{
+    if(m_modifiedrecords.count() < 1)
+        return true;
+
+    //It is needed to close the cursor before we are able to update the rows
+    //since else the database could be locked (e.g. at the case of SQLite a
+    //KexiDB: Object ERROR: 6: SQLITE_LOCKED would prevent updating).
+    //Maybe it works fine with other drivers like MySQL or Postqre?
+    m_cursor->close();
+
+    bool ok = true;
+    QMap<Q_LLONG, Record*>::ConstIterator
+        it( m_modifiedrecords.constBegin() ), end( m_modifiedrecords.constEnd() );
+    for( ; it != end; ++it) {
+        bool b = m_cursor->updateRow(it.data()->rowdata, * it.data()->buffer, m_cursor->isBuffered());
+        if(ok) {
+            ok = b;
+            //break;
+        }
+    }
+    //m_cursor->close();
+    clearBuffers();
+    return ok;
+}
