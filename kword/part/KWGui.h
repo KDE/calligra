@@ -43,6 +43,7 @@ public:
      * @param parent the parent view
      */
     KWGui( const QString& viewMode, KWView *parent );
+    ~KWGui();
 
     /**
      * Return the canvas child.

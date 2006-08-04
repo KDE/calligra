@@ -46,6 +46,9 @@ selector->show();
 
     gridLayout->addWidget( m_canvasController, 0, 0 );
 }
+KWGui::~KWGui() {
+    KoToolManager::instance()->removeCanvasController(m_canvasController);
+}
 
 int KWGui::visibleWidth() const {
     return m_canvasController->visibleWidth();
