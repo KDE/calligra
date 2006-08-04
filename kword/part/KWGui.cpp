@@ -39,7 +39,6 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     m_canvasController = new KoCanvasController(this);
     m_canvasController->setCanvas(m_canvas);
     KoToolManager::instance()->addControllers(m_canvasController, static_cast<KWDocument*>(parent->koDocument()));
-KoToolManager::instance()->shapeCreatorTool(m_canvas)->setShapeId("TextShapeID");
 
 KoShapeSelector *selector = new KoShapeSelector(0, m_canvasController, ".*");
 selector->resize(QSize(100, 200));

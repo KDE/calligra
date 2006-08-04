@@ -36,6 +36,7 @@
 #include <KoToolManager.h>
 #include <KoTextShape.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeFactory.h>
 
 // KDE + Qt includes
 #include <klocale.h>

@@ -34,6 +34,7 @@
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
+#include <KoToolBox.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>

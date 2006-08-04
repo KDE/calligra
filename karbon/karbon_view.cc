@@ -48,6 +48,8 @@
 #include <kcommand.h>
 
 #include <KoMainWindow.h>
+#include <KoToolBox.h>
+#include <KoCreateShapesTool.h>
 #include <KoFilterManager.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
@@ -210,7 +212,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	// set up factory
 	m_painterFactory = new VPainterFactory;
 	//m_painterFactory->setPainter( m_canvas->pixmap(), m_canvas->contentsWidth(), m_canvas->contentsHeight() );
-	m_painterFactory->setEditPainter( m_canvas->canvasWidget(), m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height() );
+	//m_painterFactory->setEditPainter( m_canvas->canvasWidget(), m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height() );
 
 	if( shell() )
 	{
@@ -222,12 +224,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		createLayersTabDock();
 		createResourceDock();
 
-		// TODO: proper use of the toolbox once it is ready
-		// plug the toolbox as a docker for now to have something
 		KoToolManager::instance()->addControllers( m_canvasView, p );
-		QDockWidget *tb = KoToolManager::instance()->toolBox();
-		tb->setWindowTitle( "Toolbox" );
-		shell()->addDockWidget( Qt::LeftDockWidgetArea, tb);
+		shell()->addDockWidget( Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox("Karbon"));
 
 		// for testing: manually set a shape id of the shape to be created
 		KoCreateShapesTool *createTool = KoToolManager::instance()->shapeCreatorTool( m_canvas );
