@@ -1,3 +1,10 @@
+2006-08-04  Inge Wallin  <inge@lysator.liu.se>
+
+	Let the Data Editor use icons for it's buttons.
+	* kchartDataEditor.cc (kchartDataEditor): Make the insert / delete
+	row / col buttons show an icon instead of text.
+	* kchartDataEditor.cc (addDocs): Add ToolTips to the buttons.
+
 2006-07-18  Inge Wallin  <inge@lysator.liu.se>
 
 	Clean up the data editor and fix bug 129553: kchart: crash / heavy

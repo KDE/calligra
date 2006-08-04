@@ -13,9 +13,11 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kiconloader.h>
 
 #include "kdchart/KDChartAxisParams.h"
 #include "kchart_params.h"
+#include "kchart_factory.h"
 
 #include "kchartDataEditor.h"
 #include "kchartDataEditor.moc"
@@ -199,20 +201,42 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), page);
 #endif
 
-    //Buttons for Inserting / Removing rows & columns 
-    m_insertRowButton = new QPushButton( i18n("Insert Row") , page);
+    // Buttons for Inserting / Removing rows & columns 
+    // The icon images are taken from the standard 
+    m_insertRowButton = new QPushButton( page);
+    // In 2.0; this is supposed to be just KIcon("name").pixmap(32).
+    m_insertRowButton->setPixmap( BarIcon( QString("insert_table_row"),
+					   KIcon::SizeMedium,
+					   KIcon::DefaultState,
+					   KChartFactory::global() ) );
+    //m_insertRowButton = new QPushButton( i18n("Insert Row") , page);
     connect( m_insertRowButton, SIGNAL( clicked() ),
 	     this,              SLOT( insertRow() ) );
     
-    m_insertColButton = new QPushButton( i18n("Insert Column") , page);
-    connect( m_insertColButton, SIGNAL( clicked() ),
-	     this,              SLOT( insertColumn() ) );
-    
-    m_removeRowButton = new QPushButton( i18n("Remove Row") , page);
+    m_removeRowButton = new QPushButton( page );
+    m_removeRowButton->setPixmap( BarIcon( QString("delete_table_row"),
+					   KIcon::SizeMedium,
+					   KIcon::DefaultState,
+					   KChartFactory::global() ) );
+    //m_removeRowButton = new QPushButton( i18n("Remove Row") , page);
     connect( m_removeRowButton, SIGNAL( clicked() ),
 	     this,              SLOT( removeCurrentRow() ) );
     
-    m_removeColButton = new QPushButton( i18n("Remove Column") , page);
+    m_insertColButton = new QPushButton( page );
+    m_insertColButton->setPixmap( BarIcon( QString("insert_table_col"),
+					   KIcon::SizeMedium,
+					   KIcon::DefaultState,
+					   KChartFactory::global() ) );
+    //m_insertColButton = new QPushButton( i18n("Insert Column") , page);
+    connect( m_insertColButton, SIGNAL( clicked() ),
+	     this,              SLOT( insertColumn() ) );
+    
+    m_removeColButton = new QPushButton( page );
+    m_removeColButton->setPixmap( BarIcon( QString("delete_table_col"),
+					   KIcon::SizeMedium,
+					   KIcon::DefaultState,
+					   KChartFactory::global() ) );
+    //m_removeColButton = new QPushButton( i18n("Remove Column") , page);
     connect( m_removeColButton, SIGNAL( clicked() ),
 	     this,              SLOT( removeCurrentColumn() ) );
 
@@ -223,8 +247,8 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
    
     insertRemoveLayout->setSpacing(5);
     insertRemoveLayout->addWidget(m_insertRowButton);
-    insertRemoveLayout->addWidget(m_insertColButton);
     insertRemoveLayout->addWidget(m_removeRowButton);
+    insertRemoveLayout->addWidget(m_insertColButton);
     insertRemoveLayout->addWidget(m_removeColButton);
     insertRemoveLayout->addStretch(1);
     
@@ -347,6 +371,11 @@ void kchartDataEditor::addDocs()
     " of columns defines the number of value sets.  In a ring diagram each"
     " column is one ring.</p>"));
 #endif
+
+    QToolTip::add( m_insertRowButton, i18n("Insert row") );
+    QToolTip::add( m_removeRowButton, i18n("Delete row") );
+    QToolTip::add( m_insertColButton, i18n("Insert column") );
+    QToolTip::add( m_removeColButton, i18n("Delete column") );
 }
 
 
