@@ -412,40 +412,36 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Prop
 	kdDebug() << "!!!!! KexiMacroDesignView::propertyChanged() propertyname=" << property.name() << endl;
 	setDirty();
 
-#if 0
-	if(d->reloadsProperties) { // be sure to don't update properties if we are still on reloading.
+	/*
+	if(d->reloadsProperties) // be sure to don't update properties if we are still on reloading.
 		return;
-	}
-
-	//KoProperty::Set& set = *d->propertyset->currentPropertySet();
-	int row = d->propertyset->currentRow();
-
-	const QCString name = property.name();
-	if(row < 0 || uint(row) >= macro()->items().count()) { // prevent invalid rows
-		kdWarning() << "KexiMacroDesignView::propertyChanged() name=" << name << " out of bounds." << endl;
-		return;
-	}
-
-	kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << " row=" << row << endl;
 	d->reloadsProperties = true;
 
-	// The MacroItem which should be changed.
-	KSharedPtr<KoMacro::MacroItem> macroitem = macro()->items()[row];
-	// The MacroItem may point to an action.
-	KSharedPtr<KoMacro::Action> action = macroitem->action();
+	const int row = d->propertyset->currentRow();
+	const QCString name = property.name();
+	kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << " row=" << row << endl;
 
-	// Set the new value. MacroItem will take care of calling
-	// action->notifyUpdated().
-	if(! macroitem->setVariant(name, property.value())) {
-		d->reloadsProperties = false;
-		return;
+	//TODO reload is only needed if something changed!
+	bool dirty = true; bool reload = true;//dirtyvarnames.count()>0;
+
+	if(dirty || reload) { // Only reload properties if it's really needed.
+		setDirty();
+		if(reload) {
+			// The MacroItem which should be changed.
+			KSharedPtr<KoMacro::MacroItem> macroitem = macro()->items()[row];
+			// Update the properties.
+			updateProperties(row, &set, macroitem);
+		}
+		// It's needed to call the reload delayed cause in KoProperty::Editor
+		// QTimer::singleShot(10, this, SLOT(selectItemLater())); may lead
+		// to crashes if we are to fast.
+		QTimer::singleShot(50, this, SLOT(reloadPropertyLater()));
 	}
 
-//TODO reload is only needed if something changed!
-bool dirty = true; bool reload = true;//dirtyvarnames.count()>0;
+	d->reloadsProperties = false;
+	*/
 
-#endif
-#if 0
+	/*
 	QStringList dirtyvarnames = macroitem->setVariable(name, KSharedPtr<KoMacro::Variable>(pv));
 	bool dirty = false;
 	bool reload = false;
@@ -489,24 +485,8 @@ bool dirty = true; bool reload = true;//dirtyvarnames.count()>0;
 		if(action.data() && action->hasVariable(setit.currentKey())) continue; // the property is still valid
 		reload = true; // we like to reload the whole set
 	}
-#endif
-#if 0
-	// Only reload properties if it's really needed.
-	if(dirty || reload) {
-		setDirty();
-		if(reload) {
-			updateProperties(row, &set, macroitem);
-		}
-		// It's needed to call the reload delayed cause in KoProperty::Editor
-		// QTimer::singleShot(10, this, SLOT(selectItemLater())); may lead
-		// to crashes if we are to fast.
-		QTimer::singleShot(50, this, SLOT(reloadPropertyLater()));
-	}
-
-	d->reloadsProperties = false;
-#endif
+	*/
 }
-
 
 void KexiMacroDesignView::reloadPropertyLater()
 {

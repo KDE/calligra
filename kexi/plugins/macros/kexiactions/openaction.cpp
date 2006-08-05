@@ -95,27 +95,22 @@ OpenAction::~OpenAction()
 bool OpenAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name)
 {
 	kdDebug()<<"OpenAction::notifyUpdated() name="<<name<<" macroitem.action="<<(macroitem->action() ? macroitem->action()->name() : "NOACTION")<<endl;
-
-	KSharedPtr<KoMacro::Variable> variable = macroitem->variable(name, true);
+	KSharedPtr<KoMacro::Variable> variable = macroitem->variable(name, false);
 	if(! variable) {
 		kdWarning()<<"OpenAction::notifyUpdated() No such variable="<<name<<" in macroitem."<<endl;
 		return false;
 	}
 
-	variable->children().clear();
+	variable->clearChildren();
 	if(name == OBJECT) {
 		const QString objectvalue = macroitem->variant(OBJECT, true).toString(); // e.g. "table" or "query"
-		const QString objectname = macroitem->variant(NAME, true).toString();
-		const QString viewname = macroitem->variant(VIEW, true).toString();
+		const QString objectname = macroitem->variant(NAME, true).toString(); // e.g. "table1" or "table2" if objectvalue above is "table"
+		const QString viewname = macroitem->variant(VIEW, true).toString(); // "data", "design" or "text"
 
-		kdDebug()<<"OpenAction::notifyUpdated() objectvalue="<<objectvalue<<" objectname="<<objectname<<" viewname="<<viewname<<endl;
-
-		variable->children().append(
-			KSharedPtr<KoMacro::Variable>(new ObjectNameVariable<OpenAction>(this, objectvalue, objectname))
-		);
-		variable->children().append(
-			KSharedPtr<KoMacro::Variable>(new ViewVariable<OpenAction>(this, objectvalue, viewname))
-		);
+		macroitem->variable(NAME, true)->setChildren(
+			KoMacro::Variable::List() << KSharedPtr<KoMacro::Variable>(new ObjectNameVariable<OpenAction>(this, objectvalue, objectname)) );
+		macroitem->variable(VIEW, true)->setChildren(
+			KoMacro::Variable::List() << KSharedPtr<KoMacro::Variable>(new ViewVariable<OpenAction>(this, objectvalue, viewname)) );
 	}
 
 	return true;

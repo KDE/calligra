@@ -97,7 +97,7 @@ class KexiMacroProperty
 		class Private;
 		/** \internal d-pointer instance. */
 		Private* const d;
-
+		/** \internal initializer method. */
 		inline void init();
 };
 

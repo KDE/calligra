@@ -31,6 +31,11 @@
 
 using namespace KexiMacro;
 
+namespace KexiMacro {
+	static const QString OBJECT = "object";
+	static const QString NAME = "name";
+}
+
 ExecuteAction::ExecuteAction()
 	: KexiAction("execute", i18n("Execute"))
 {
@@ -45,24 +50,25 @@ ExecuteAction::~ExecuteAction()
 {
 }
 
-#if 0
-KoMacro::Variable::List ExecuteAction::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
+bool ExecuteAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name)
 {
-	Q_UNUSED(variablename);
-	Q_UNUSED(variablemap);
-	//kdDebug()<<"OpenObject::ExecuteAction() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
-	KoMacro::Variable::List list;
-
-	if(variablename == "object") {
-		const QString objectname = variablemap["object"]->variant().toString(); // e.g. "table" or "query"
-
-		const QString name = variablemap.contains("name") ? variablemap["name"]->variant().toString() : QString::null;
-		list.append( KSharedPtr<KoMacro::Variable>(new ObjectNameVariable<ExecuteAction>(this, objectname, name)) );
+	kdDebug()<<"ExecuteAction::notifyUpdated() name="<<name<<" macroitem.action="<<(macroitem->action() ? macroitem->action()->name() : "NOACTION")<<endl;
+	KSharedPtr<KoMacro::Variable> variable = macroitem->variable(name, false);
+	if(! variable) {
+		kdWarning()<<"ExecuteAction::notifyUpdated() No such variable="<<name<<" in macroitem."<<endl;
+		return false;
 	}
 
-	return list;
+	variable->clearChildren();
+	if(name == OBJECT) {
+		const QString objectvalue = macroitem->variant(OBJECT, true).toString(); // e.g. "macro" or "script"
+		const QString objectname = macroitem->variant(NAME, true).toString(); // e.g. "macro1" or "macro2" if objectvalue above is "macro"
+		macroitem->variable(NAME, true)->setChildren(
+			KoMacro::Variable::List() << KSharedPtr<KoMacro::Variable>(new ObjectNameVariable<ExecuteAction>(this, objectvalue, objectname)) );
+	}
+
+	return true;
 }
-#endif
 
 void ExecuteAction::activate(KSharedPtr<KoMacro::Context> context)
 {

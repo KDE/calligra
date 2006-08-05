@@ -201,11 +201,6 @@ bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 	return true;
 }
 
-bool MacroItem::setVariable(const QString& name, const QVariant& variant)
-{
-	return setVariant(name, variant);
-}
-
 KSharedPtr<Variable> MacroItem::addVariable(const QString& name, const QVariant& variant)
 {
 	Q_ASSERT(! d->variables.contains(name) );

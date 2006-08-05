@@ -125,11 +125,6 @@ namespace KoMacro {
 			bool setVariant(const QString& name, const QVariant& variant);
 
 			/**
-			* @deprecated Use setVariant above.
-			*/
-			bool setVariable(const QString& name, const QVariant& variant);
-
-			/**
 			* Add a new variable with the vaiablename @param name and the given
 			* @a QVariant @param variant to our @a MacroItem instance.
 			*/

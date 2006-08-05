@@ -174,8 +174,29 @@ namespace KoMacro {
 			/**
 			* @return the optional list of @a Variable instances
 			* that are children of this @a Variable .
+			*
+			* @note that the list is returned call-by-reference. The
+			* list is accessed as getter/setter (read/write). So,
+			* don't set this method to const!
 			*/
-			Variable::List& children() const;
+			Variable::List children() const;
+
+			/**
+			* Append a @a Variable to the list of children this
+			* @a Variable has.
+			*/
+			void appendChild(KSharedPtr<Variable> variable);
+
+			/**
+			* Clear the list of children this @a Variable has.
+			*/
+			void clearChildren();
+
+			/**
+			* Set the children this @a Variable has.
+			*/
+			void setChildren(const Variable::List& children);
+
 #if 0
 			/**
 			* @return true if this @a Variable is enabled else

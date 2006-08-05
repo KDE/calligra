@@ -213,10 +213,26 @@ int Variable::toInt() const
 	return variant().toInt();
 }
 
-Variable::List& Variable::children() const
+Variable::List Variable::children() const
 {
 	return d->children;
 }
+
+void Variable::appendChild(KSharedPtr<Variable> variable)
+{
+	d->children.append(variable);
+}
+
+void Variable::clearChildren()
+{
+	d->children.clear();
+}
+
+void Variable::setChildren(const Variable::List& children)
+{
+	d->children = children;
+}
+
 /*
 bool Variable::isEnabled() const
 {

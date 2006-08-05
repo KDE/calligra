@@ -114,7 +114,7 @@ void KexiMacroProperty::setValue(const QVariant &value, bool rememberOldValue)
 	// this-value() and cause we already set it above, m_property->setValue()
 	// will be aborted. Well, we don't touch the properties value and handle
 	// it all via our CustomProperty class anyway. So, just ignore the property.
-	//c->setValue(this->value(), rememberOldValue, false/*useCustomProperty*/);
+	//m_property->setValue(this->value(), rememberOldValue, false/*useCustomProperty*/);
 
 	emit valueChanged();
 }
@@ -175,7 +175,7 @@ KexiMacroPropertyFactory::~KexiMacroPropertyFactory()
 
 KoProperty::CustomProperty* KexiMacroPropertyFactory::createCustomProperty(KoProperty::Property* parent)
 {
-	kdDebug()<<"====================> KexiMacroPropertyFactory::createCustomProperty parent="<<parent->name()<<endl;
+	kdDebug()<<"KexiMacroPropertyFactory::createCustomProperty parent="<<parent->name()<<endl;
 
 	KoProperty::CustomProperty* customproperty = parent->customProperty();
 	KexiMacroProperty* parentcustomproperty = dynamic_cast<KexiMacroProperty*>(customproperty);
@@ -200,7 +200,7 @@ KoProperty::CustomProperty* KexiMacroPropertyFactory::createCustomProperty(KoPro
 
 KoProperty::Widget* KexiMacroPropertyFactory::createCustomWidget(KoProperty::Property* property)
 {
-	kdDebug()<<"====================> KexiMacroPropertyFactory::createCustomWidget property="<<property->name()<<endl;
+	kdDebug()<<"KexiMacroPropertyFactory::createCustomWidget property="<<property->name()<<endl;
 	return new KexiMacroPropertyWidget(property);
 }
 
@@ -226,18 +226,21 @@ class ListBoxItem : public QListBoxText
 {
 	public:
 		ListBoxItem(QListBox* listbox)
-			: QListBoxText(listbox) {}
+			: QListBoxText(listbox), m_enabled(true) {}
 		ListBoxItem(QListBox* listbox, const QString& text, QListBoxItem* after)
-			: QListBoxText(listbox, text, after) {}
+			: QListBoxText(listbox, text, after), m_enabled(true) {}
 		virtual ~ListBoxItem() {}
+		void setEnabled(bool enabled) { m_enabled = enabled; }
 		virtual int width(const QListBox* lb) const {
 			Q_ASSERT( dynamic_cast<KComboBox*>( lb->parent() ) );
 			return static_cast<KComboBox*>( lb->parent() )->lineEdit()->width() + 2;
 		}
 		virtual int height(const QListBox* lb) const {
 			Q_ASSERT( dynamic_cast<KComboBox*>( lb->parent() ) );
-			return static_cast<KComboBox*>( lb->parent() )->height() + 2;
+			return m_enabled ? static_cast<KComboBox*>( lb->parent() )->height() + 2 : 0;
 		}
+	private:
+		bool m_enabled;
 };
 
 /**
@@ -271,8 +274,9 @@ class EditListBoxItem : public ListBoxItem
 		}
 
 		KoProperty::Widget* widget() const { return m_widget; }
+		KSharedPtr<KoMacro::MacroItem> macroItem() const { return m_macroproperty->macroItem(); }
 		KSharedPtr<KoMacro::Variable> variable() const { return m_macroproperty->variable(); }
-		KSharedPtr<KoMacro::Action> action() const { return m_action; }
+		KSharedPtr<KoMacro::Action> action() const { return m_macroproperty->macroItem()->action(); }
 
 	protected:
 		virtual void paint(QPainter* p) {
@@ -288,8 +292,8 @@ class EditListBoxItem : public ListBoxItem
 		void init() {
 			KSharedPtr<KoMacro::MacroItem> macroitem = m_macroproperty->macroItem();
 			Q_ASSERT( macroitem.data() );
-			m_action = m_macroproperty->macroItem()->action();
-			if(! m_action.data()) {
+			KSharedPtr<KoMacro::Action> action = m_macroproperty->macroItem()->action();
+			if(! action.data()) {
 				kdWarning() << "EditListBoxItem::EditListBoxItem() Skipped cause there exists no action for macroproperty=" << m_macroproperty->name() << endl;
 				return;
 			}
@@ -306,7 +310,7 @@ class EditListBoxItem : public ListBoxItem
 
 			QVariant variant = variable->variant();
 
-			KSharedPtr<KoMacro::Variable> actionvariable = m_action->variable(m_macroproperty->name());
+			KSharedPtr<KoMacro::Variable> actionvariable = action->variable(m_macroproperty->name());
 			if(actionvariable.data()) {
 				QVariant actionvariant = actionvariable->variant();
 				Q_ASSERT( ! actionvariant.isNull() );
@@ -354,7 +358,6 @@ class EditListBoxItem : public ListBoxItem
 		KexiMacroProperty* m_macroproperty;
 		KoProperty::Property* m_prop;
 		KoProperty::Widget* m_widget;
-		KSharedPtr<KoMacro::Action> m_action;
 };
 
 /**
@@ -366,70 +369,96 @@ class ListBox : public QListBox
 	public:
 		ListBox(KComboBox* parent, KexiMacroProperty* macroproperty)
 			: QListBox(parent)
+			, m_macroproperty(macroproperty)
+			, m_edititem(0)
 		{
 			viewport()->setBackgroundMode(PaletteBackground);
 			setVariableHeight(true);
+			update();
+		}
 
-			m_edititem = new EditListBoxItem(this, macroproperty);
+		virtual ~ListBox() {}
+
+		void update() {
+			m_items.clear();
+			delete m_edititem;
+			m_edititem = 0;
+			clear();
+
+			m_edititem = new EditListBoxItem(this, m_macroproperty);
 			Q_ASSERT( m_edititem->widget() != 0 );
 
-			KSharedPtr<KoMacro::Variable> variable = m_edititem->variable();
-			if(variable.data()) {
-				// try to handle the children the variable has.
-				KoMacro::Variable::List children;
+			const QString name = m_macroproperty->name();
+			KoMacro::Variable::List children;
+			{
+				KoMacro::Variable::List actionchildren;
 
-				{ // let's first add the list of children inherited from the action.
-					KSharedPtr<KoMacro::Action> action = m_edititem->action();
-					if(action.data()) {
-						KSharedPtr<KoMacro::Variable> v = action->variable( macroproperty->name() );
-							if(v.data())
-								children = v->children();
+				KSharedPtr<KoMacro::Variable> itemvar = m_macroproperty->macroItem()->variable(name,false);
+				//kdDebug() << "KexiMacroProperty::ListBox::update() itemvar="<<(itemvar.data() ? "name:"+itemvar->name()+" value:"+itemvar->toString() : "NULL")<<endl;
+				if(itemvar.data())
+					actionchildren = itemvar->children();
+
+				KSharedPtr<KoMacro::Action> action = m_edititem->action();
+				KSharedPtr<KoMacro::Variable> actionvar = action.data() ? action->variable(name) : KSharedPtr<KoMacro::Variable>();
+				//kdDebug() << "KexiMacroProperty::ListBox::update() actionvar="<<(actionvar.data() ? "name:"+actionvar->name()+" value:"+actionvar->toString() : "NULL")<<endl;
+				if(actionvar.data())
+					actionchildren += actionvar->children();
+
+				KoMacro::Variable::List::ConstIterator it(actionchildren.constBegin()), end(actionchildren.constEnd());
+				for(; it != end; ++it) {
+					if(name == (*it)->name()) {
+						KoMacro::Variable::List list = (*it)->children();
+						KoMacro::Variable::List::ConstIterator listit(list.constBegin()), listend(list.constEnd());
+						for(; listit != listend; ++listit)
+							children.append( *listit );
 					}
 				}
 
-				/*
-				{ // then add the variables that are children of our variable.
-					KoMacro::Variable::List list = variable->children();
-					KoMacro::Variable::List::ConstIterator listit(list.constBegin()), listend(list.constEnd());
-					for(; listit != listend; ++listit) {
-						children.append( *listit );
-					}
-				}
-				*/
+				if(children.count() <= 0)
+					children = actionchildren;
+			}
 
-				if(children.count() > 0) {
-					KoMacro::Variable::List::Iterator childit(children.begin()), childend(children.end());
-					for(; childit != childend; ++childit) {
-						const QString n = (*childit)->name();
-						//if(! n.startsWith("@")) continue;
+			/*
+			kdDebug() << "KexiMacroProperty::ListBox::update() name="<<name<<" childcount="<<children.count()<<endl;
+			KoMacro::Variable::List::ConstIterator listit(children.constBegin()), listend(children.constEnd());
+			for(; listit != listend; ++listit) {
+				kdDebug()<<"    child name="<<(*listit)->name()<<" value="<<(*listit)->toString()<<" childcount="<<(*listit)->children().count()<<endl;
+			}
+			*/
 
-						const QVariant v = (*childit)->variant();
-						switch( v.type() ) {
-							/* case QVariant::Map: {
-								const QMap<QString,QVariant> map = v.toMap();
-								for(QMap<QString,QVariant>::ConstIterator it = map.constBegin(); it != map.constEnd(); ++it)
-									m_items.append(it.key());
-							} break; */
-							case QVariant::List: {
-								const QValueList<QVariant> list = v.toList();
-								for(QValueList<QVariant>::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
-									const QString s = (*it).toString().stripWhiteSpace();
-									if(! s.isEmpty())
-										m_items.append(s);
-								}
-							} break;
-							case QVariant::StringList: {
-								const QStringList list = v.toStringList();
-								for(QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
-									if(! (*it).isEmpty())
-										m_items.append(*it);
-							} break;
-							default: {
-								const QString s = v.toString().stripWhiteSpace();
+			if(children.count() > 0) {
+				KoMacro::Variable::List::Iterator childit(children.begin()), childend(children.end());
+				for(; childit != childend; ++childit) {
+					const QString n = (*childit)->name();
+					//if(! n.startsWith("@")) continue;
+					const QVariant v = (*childit)->variant();
+
+					//kdDebug() << "  child name=" << n << " value=" << v << endl;
+					switch( v.type() ) {
+						/* case QVariant::Map: {
+							const QMap<QString,QVariant> map = v.toMap();
+							for(QMap<QString,QVariant>::ConstIterator it = map.constBegin(); it != map.constEnd(); ++it)
+								m_items.append(it.key());
+						} break; */
+						case QVariant::List: {
+							const QValueList<QVariant> list = v.toList();
+							for(QValueList<QVariant>::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
+								const QString s = (*it).toString().stripWhiteSpace();
 								if(! s.isEmpty())
 									m_items.append(s);
-							} break;
-						}
+							}
+						} break;
+						case QVariant::StringList: {
+							const QStringList list = v.toStringList();
+							for(QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
+								if(! (*it).isEmpty())
+									m_items.append(*it);
+						} break;
+						default: {
+							const QString s = v.toString().stripWhiteSpace();
+							if(! s.isEmpty())
+								m_items.append(s);
+						} break;
 					}
 				}
 			}
@@ -440,12 +469,22 @@ class ListBox : public QListBox
 				item = new ListBoxItem(this, m_items[i], item);
 		}
 
-		virtual ~ListBox() {}
-
 		EditListBoxItem* editItem() const { return m_edititem; }
 		QStringList items() const { return m_items; }
 
+		virtual void hide () {
+			QListBox::hide();
+			for(uint i = 0; i < count(); i++)
+				static_cast<ListBoxItem*>( item(i) )->setEnabled(false);
+		}
+		virtual void show() {
+			update();
+			adjustSize();
+			QListBox::show();
+		}
+
 	private:
+		KexiMacroProperty* m_macroproperty;
 		EditListBoxItem* m_edititem;
 		QStringList m_items;
 };
@@ -556,6 +595,7 @@ void KexiMacroPropertyWidget::slotComboBoxChanged()
 	kdDebug()<<"KexiMacroPropertyWidget::slotComboBoxChanged()"<<endl;
 	const QVariant v = d->combobox->currentText();
 	d->macroproperty->setValue(v, true);
+	//emit valueChanged(this);
 }
 
 void KexiMacroPropertyWidget::slotComboBoxActivated()
@@ -567,15 +607,11 @@ void KexiMacroPropertyWidget::slotComboBoxActivated()
 		: d->combobox->text(index);
 	kdDebug()<<"KexiMacroPropertyWidget::slotComboBoxActivated() index="<<index<<" text="<<text<<endl;
 	d->combobox->setCurrentText(text);
-	//emit valueChanged(this);
+	slotWidgetValueChanged();
 }
 
 void KexiMacroPropertyWidget::slotWidgetValueChanged()
 {
-	/* Q_ASSERT( d->listbox->editItem()->widget() );
-	QVariant value = d->listbox->editItem()->widget()->value();
-	kdDebug()<<"KexiMacroPropertyWidget::slotWidgetValueChanged() value="<<value<<endl;
-	slotComboBoxActivated(); //d->combobox->setCurrentText( value.toString() ); */
 	d->macroproperty->emitPropertyChanged();
 }
 

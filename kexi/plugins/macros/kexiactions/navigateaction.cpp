@@ -47,7 +47,7 @@ namespace KexiMacro {
 			{
 				QStringList list;
 				list << "first" << "previous" << "next" << "last" << "goto";
-				this->children().append( KSharedPtr<KoMacro::Variable>( new KoMacro::Variable(list, "@list") ) );
+				this->appendChild( KSharedPtr<KoMacro::Variable>( new KoMacro::Variable(list, "@list") ) );
 
 				/*TODO should this actions belong to navigate? maybe it would be more wise to have
 				such kind of functionality in an own e.g. "Modify" action to outline, that
@@ -79,39 +79,28 @@ NavigateAction::~NavigateAction()
 {
 }
 
-#if 0
-bool NavigateAction::notifyUpdated(const QString& variablename, KoMacro::MacroItem* macroitem)
+bool NavigateAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name)
 {
-	Q_UNUSED(variablename);
-	Q_UNUSED(variablemap);
-	//kdDebug()<<"OpenObject::NavigateAction() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
-	KoMacro::Variable::List list;
-
-	const QString record = variablemap.contains("record") ? variablemap["record"]->variant().toString() : QString::null;
-
-	if(record == "goto") {
-		if(variablename == "record") {
-			KoMacro::Variable* rowvar = new KexiVariable<NavigateAction>(this, "rownr", i18n("Row"));
-			const int rownr = variablemap.contains("rownr") ? variablemap["rownr"]->variant().toInt() : 0;
-			rowvar->setVariant(rownr);
-			list.append( KSharedPtr<KoMacro::Variable>(rowvar) );
-			setVariable(KSharedPtr<KoMacro::Variable>( rowvar ));
-
-			KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "colnr", i18n("Column"));
-			const int colnr = variablemap.contains("colnr") ? variablemap["colnr"]->variant().toInt() : 0;
-			colvar->setVariant(colnr);
-			list.append( KSharedPtr<KoMacro::Variable>(colvar) );
-			setVariable(KSharedPtr<KoMacro::Variable>( colvar ));
-		}
-		return list;
+	kdDebug()<<"NavigateAction::notifyUpdated() name="<<name<<" macroitem.action="<<(macroitem->action() ? macroitem->action()->name() : "NOACTION")<<endl;
+	KSharedPtr<KoMacro::Variable> variable = macroitem->variable(name, false);
+	if(! variable) {
+		kdWarning()<<"NavigateAction::notifyUpdated() No such variable="<<name<<" in macroitem."<<endl;
+		return false;
 	}
 
-	removeVariable("rownr");
-	removeVariable("colnr");
+	variable->clearChildren();
+	if(name == "goto") {
+		const int rownr = macroitem->variant("rownr", true).toInt(); // e.g. "macro" or "script"
+		const int colnr = macroitem->variant("colnr", true).toInt(); // e.g. "macro1" or "macro2" if objectvalue above is "macro"
 
-	return list;
+		macroitem->variable("rownr", true)->setChildren(
+			KoMacro::Variable::List() << KSharedPtr<KoMacro::Variable>(new KoMacro::Variable(rownr)) );
+		macroitem->variable("colnr", true)->setChildren(
+			KoMacro::Variable::List() << KSharedPtr<KoMacro::Variable>(new KoMacro::Variable(colnr)) );
+	}
+
+	return true;
 }
-#endif
 
 void NavigateAction::activate(KSharedPtr<KoMacro::Context> context)
 {
