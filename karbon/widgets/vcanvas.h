@@ -114,6 +114,7 @@ private:
     VDocument *m_doc;
     QRectF m_contentRect;
     QRectF m_documentRect;
+    QPoint m_origin;
     int m_marginX;
     int m_marginY;
     int m_visibleWidth;
