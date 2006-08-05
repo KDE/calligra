@@ -113,7 +113,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 		QMap<KexiDB::Field*,int> tmpDuplicatedItems;
 		QMapIterator<KexiDB::Field*,int> it_dup;
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			if (!it.current()->columnInfo()->field)
+			if (!it.current()->columnInfo() || !it.current()->columnInfo()->field)
 				continue;
 			kdDebug() << " ** " << it.current()->columnInfo()->field->name() << endl;
 			it_dup = tmpDuplicatedItems.find( it.current()->columnInfo()->field );
@@ -133,7 +133,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 			}
 		}
 	}
-	if (m_duplicatedItems->find( item->columnInfo()->field )) {
+	if (item->columnInfo() && m_duplicatedItems->find( item->columnInfo()->field )) {
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			if (it.current()!=item && item->columnInfo()->field == it.current()->columnInfo()->field) {
 				kexipluginsdbg << "- setting a copy of value for item '" 
