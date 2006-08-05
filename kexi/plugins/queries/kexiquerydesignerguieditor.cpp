@@ -593,6 +593,8 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 	}
 	QString errMsg;
 	KexiQueryPart::TempData * temp = tempData();
+	if(! temp->query())
+		buildSchema();
 	if (!(viewMode()==Kexi::DesignViewMode && !temp->queryChangedInPreviousView)) {
 		//only rebuild schema if it has not been rebuilt previously
 		if (!buildSchema(&errMsg)) {
