@@ -1878,6 +1878,11 @@ bool Style::hasFeature( FlagsSet f, bool withoutParent ) const
   return b;
 }
 
+void Style::clearFeature( FlagsSet f )
+{
+  m_featuresSet &= ~(uint)f;
+}
+
 QFont Style::font() const
 {
   QString family = fontFamily();

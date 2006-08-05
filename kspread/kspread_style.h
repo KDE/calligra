@@ -196,6 +196,7 @@ public:
 
   bool   hasProperty( Properties p ) const;
   bool   hasFeature( FlagsSet f, bool withoutParent ) const;
+  void   clearFeature( FlagsSet f );
   uint   features() const { return m_featuresSet; }
 
   uint bottomPenValue() const { return m_bottomPenValue; }
