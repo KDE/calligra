@@ -84,6 +84,7 @@
 #include <k3listview.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
+#include <kicon.h>
 
 // KOffice includes
 #include <tkcoloractions.h>

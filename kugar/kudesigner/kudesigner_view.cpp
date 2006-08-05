@@ -43,7 +43,7 @@
 #include <kstdaction.h>
 #include <klocale.h>
 #include <kdebug.h>
-
+#include <kicon.h>
 #include <KoMainWindow.h>
 
 #include <commdefs.h>
