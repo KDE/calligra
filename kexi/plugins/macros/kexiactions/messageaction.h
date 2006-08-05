@@ -44,8 +44,6 @@ namespace KexiMacro {
 
 			/**
 			* Constructor.
-			*
-			* @param mainwin Kexi's main window implementation.
 			*/
 			MessageAction();
 			

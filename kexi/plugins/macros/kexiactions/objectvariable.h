@@ -48,7 +48,8 @@ namespace KexiMacro {
 
 			enum Conditions {
 				VisibleInNav = 1,
-				Executable = 2
+				Executable = 2,
+				DataExport = 4
 			};
 
 			ObjectVariable(ACTIONIMPL* actionimpl, int conditions = VisibleInNav, const QString& objectname = QString::null)
@@ -61,6 +62,8 @@ namespace KexiMacro {
 					if(conditions & VisibleInNav && ! info->isVisibleInNavigator())
 						continue;
 					if(conditions & Executable && ! info->isExecuteSupported())
+						continue;
+					if(conditions & DataExport && ! info->isDataExportSupported())
 						continue;
 
 					const QString name = info->objectName(); //info->groupName();

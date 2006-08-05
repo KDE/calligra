@@ -7,7 +7,8 @@ libkeximacroactions_la_SOURCES = \
     openaction.cpp \
     executeaction.cpp \
     navigateaction.cpp \
-    messageaction.cpp
+    messageaction.cpp \
+    datatableaction.cpp
 
 libkeximacroactions_la_CXXFLAGS = $(USE_EXCEPTIONS)
 

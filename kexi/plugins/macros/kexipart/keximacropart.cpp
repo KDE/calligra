@@ -43,6 +43,7 @@
 #include "../kexiactions/executeaction.h"
 #include "../kexiactions/navigateaction.h"
 #include "../kexiactions/messageaction.h"
+#include "../kexiactions/datatableaction.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -111,6 +112,7 @@ void KexiMacroPart::initPartActions()
 	KoMacro::Manager::init(m_mainWin);
 	new KexiMacro::OpenAction;
 	new KexiMacro::ExecuteAction;
+	new KexiMacro::DataTableAction;
 	new KexiMacro::NavigateAction;
 	new KexiMacro::MessageAction;
 }

@@ -1,8 +1,6 @@
 /***************************************************************************
  * This file is part of the KDE project
  * copyright (C) 2006 by Sebastian Sauer (mail@dipe.org)
- * copyright (C) 2006 by Bernd Steindorff (bernd@itii.de)
- * copyright (C) 2006 by Sascha Kupper (kusato@kfnv.de)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,8 +16,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KEXIMACRO_EXECUTEACTION_H
-#define KEXIMACRO_EXECUTEACTION_H
+#ifndef KEXIMACRO_DATATABLEACTION_H
+#define KEXIMACRO_DATATABLEACTION_H
 
 #include "kexiaction.h"
 
@@ -32,11 +30,11 @@ namespace KoMacro {
 namespace KexiMacro {
 
 	/**
-	* The ExecuteAction class implements a @a KoMacro::Action
-	* to provide functionality to execute an object like
-	* e.g. a script or a macro.
+	* The DataTableAction class implements a @a KoMacro::Action
+	* to provide functionality to import or export a datatable.
+	* The datatable is used to deal with comma separated values.
 	*/
-	class ExecuteAction : public KexiAction
+	class DataTableAction : public KexiAction
 	{
 			Q_OBJECT
 		public:
@@ -44,12 +42,12 @@ namespace KexiMacro {
 			/**
 			* Constructor.
 			*/
-			ExecuteAction();
+			DataTableAction();
 			
 			/**
 			* Destructor.
 			*/
-			virtual ~ExecuteAction();
+			virtual ~DataTableAction();
 
 			/**
 			* This function is called, when the @a KoMacro::Variable
