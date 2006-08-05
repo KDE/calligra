@@ -32,7 +32,7 @@
 #include <kaction.h>
 #include <ktip.h>
 #include <klocale.h>
-
+#include <kicon.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 

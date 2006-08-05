@@ -3,7 +3,7 @@
  * Kalle Dalheimer <kalle@kde.org>
  */
 
-
+#include <kicon.h>
 #include <QFile>
 #include <qpainter.h>
 #include <qcursor.h>

@@ -30,7 +30,7 @@
 #include <Q3PtrList>
 
 #include <assert.h>
-
+#include <kicon.h>
 #include "koshell_shell.h"
 #include "koshellsettings.h"
 

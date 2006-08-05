@@ -19,7 +19,7 @@
 */
 
 #include <kprinter.h>
-
+#include <kicon.h>
 #include <kglobalsettings.h>
 #include <qpainter.h>
 #include <qscrollbar.h>

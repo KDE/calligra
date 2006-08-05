@@ -33,7 +33,7 @@
 #include "KPrVariableCollection.h"
 #include "KPrCanvas.h"
 #include <tkcoloractions.h>
-
+#include <kicon.h>
 
 #include <q3groupbox.h>
 #include <QLabel>
