@@ -281,6 +281,29 @@ The X and Y shearing angles can be set using the two spin boxes.
 
 </sect3>
 
+<sect3 id="commands-dialogs-image-substrate">
+<title>The <guilabel>Substrate</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Substrate</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-substrate.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Substrate</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Substrate</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+</para>
+
+</sect3>
+
 </sect2>
 
 <sect2 id="commands-dialogs-layers">

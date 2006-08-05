@@ -104,9 +104,10 @@ will be lost.</para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Import...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens an existing document.</action> (For the moment,
-this is the same as
-<menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>.)
+<listitem><para><action>Opens an existing document.</action> Unlike 
+<menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>,
+this does not load the actual document, but only its contents: you receive a
+copy of the chosen file as a new document.
 </para></listitem>
 </varlistentry>
 
@@ -207,8 +208,9 @@ action="simul">&Ctrl;<keycap>Z</keycap></keycombo></shortcut>
 <listitem><para><action>Undoes the last action carried out.</action> Actions
 (like painting a stroke, filling an area, etcetera) are stored on
 a <quote>stack</quote>. The last action you did will be undone, and the image is
-restored to the state before that. Choosing <guimenuitem>Undo</guimenuitem> 
-again will undo the action before that, etcetera.</para></listitem>
+restored to the state before that. Immediately choosing
+<guimenuitem>Undo</guimenuitem> again will undo the action that was carried
+out before the one just undone, etcetera.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -533,6 +535,26 @@ grid lines.</action> The available spacing options are
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
+<guisubmenu>Show Perspective Grid</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Toggles display of the perspective grid on and off.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Clear Perspective Grid</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Clears the perspective grid.</action> (All grid lines
+that were created, are deleted.)</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
 <guisubmenu>Palettes</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Allows you to toggle the
@@ -697,6 +719,14 @@ profile and description.</action></para></listitem>
 size of the currently active layer.</action></para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guisubmenu>Substrate...</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-image-substrate"><guilabel>Substrate</guilabel> dialog</link>.</action></para></listitem>
+</varlistentry>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
@@ -1032,6 +1062,77 @@ the current layer in the image editing window.</action></para></listitem>
 
 <varlistentry>
 <term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mask</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains actions for working with layer masks.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mask</guisubmenu>
+<guimenuitem>Create Mask</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mask</guisubmenu>
+<guimenuitem>Mask From Selection</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mask</guisubmenu>
+<guimenuitem>Mask To Selection</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mask</guisubmenu>
+<guimenuitem>Apply Mask</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mask</guisubmenu>
+<guimenuitem>Remove Mask</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mask</guisubmenu>
+<guimenuitem>Edit Mask</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Mask</guisubmenu>
+<guimenuitem>Show Mask</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
 <shortcut><keycombo
 action="simul">&Ctrl;<keycap>]</keycap></keycombo></shortcut>
 <guimenu>Layer</guimenu>
@@ -1119,7 +1220,7 @@ here.</para></listitem>
 <shortcut><keycombo
 action="simul">&Ctrl;<keycap>E</keycap></keycombo></shortcut>
 <guimenu>Layer</guimenu>
-<guimenuitem>Merge Layer</guimenuitem>
+<guimenuitem>Merge with Layer Below</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Merges the current layer
 with the one below it.</action></para></listitem>
@@ -1130,17 +1231,9 @@ with the one below it.</action></para></listitem>
 <shortcut><keycombo
 action="simul">&Ctrl;&Shift;<keycap>E</keycap></keycombo></shortcut>
 <guimenu>Layer</guimenu>
-<guimenuitem>Merge Visible Layers</guimenuitem>
+<guimenuitem>Flatten Image</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Merges all visible layers.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guimenuitem>Merge All Layers</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Merges all layers together.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1218,7 +1311,7 @@ rendering intent.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
-<guimenuitem>Change Layer Size...</guimenuitem>
+<guimenuitem>Scale Layer...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
 linkend="commands-dialogs-layers-layersize"><guilabel>Layer
@@ -1329,10 +1422,44 @@ a soft border around it.)</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Select</guimenu>
+<guimenuitem>Similar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>H</keycap></keycombo></shortcut>
+<guimenu>Select</guimenu>
 <guisubmenu>Hide Selection</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Hides the selection.</action> The selection is still
 active, but it is not made visible anymore.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Select</guimenu>
+<guisubmenu>Grow Selection...</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Grows the selection.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Select</guimenu>
+<guisubmenu>Shrink Selection...</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Shrinks the selection.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Select</guimenu>
+<guisubmenu>Border Selection...</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Borders the selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1418,6 +1545,17 @@ painting is done with usual colors.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Invert</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Inverts the image or
+selection.</action> (Black becomes white, blue becomes yellow,
+etcetera.)</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu>
 <guimenuitem>Color Adjustment...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
@@ -1436,7 +1574,7 @@ contribution of red, green, and blue to the total image).</para></listitem>
 <quote>artistic</quote> actions.</para></listitem>
 </varlistentry>
 
-<varlistentry>
+<!--<varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Artistic</guisubmenu>
@@ -1446,7 +1584,7 @@ contribution of red, green, and blue to the total image).</para></listitem>
 linkend="commands-dialogs-filters-cubism"><guilabel>Cubism</guilabel>
 dialog</link>.</action> This allows you to add a cubism effect to the
 selection or image.</para></listitem>
-</varlistentry>
+</varlistentry>-->
 
 <varlistentry>
 <term><menuchoice>
@@ -1458,6 +1596,18 @@ selection or image.</para></listitem>
 linkend="commands-dialogs-filters-oilpaint"><guilabel>Oilpaint</guilabel>
 dialog</link> to add
 an oilpaint effect to the selection or image.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu>
+<guimenuitem>Pixelize...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-pixelize"><guilabel>Pixelize</guilabel>
+dialog</link> to pixelize the image.</action> (A block of pixels is
+changed so that they all become the same, averaged color.)</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1502,18 +1652,6 @@ selection.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
-<guisubmenu>Blur</guisubmenu>
-<guimenuitem>Pixelize...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the <link
-linkend="commands-dialogs-filters-pixelize"><guilabel>Pixelize</guilabel>
-dialog</link> to pixelize the image.</action> (A block of pixels is
-changed so that they all become the same, averaged color.)</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Filter</guimenu>
 <guisubmenu>Colors</guisubmenu>
 </menuchoice></term>
 <listitem><para>Contains filters that change the image colors.</para></listitem>
@@ -1523,30 +1661,36 @@ changed so that they all become the same, averaged color.)</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Colors</guisubmenu>
-<guimenuitem>Invert</guimenuitem>
+<guimenuitem>Color to Alpha</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inverts the image or
-selection.</action> (Black becomes white, blue becomes yellow,
-etcetera.)</para></listitem> </varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Filter</guimenu>
-<guisubmenu>Decor</guisubmenu>
-</menuchoice></term>
-<listitem><para>Contains decorative filters.</para></listitem>
+<listitem><para><action></action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
-<guisubmenu>Decor</guisubmenu>
-<guimenuitem>Round Corners...</guimenuitem>
+<guisubmenu>Colors</guisubmenu>
+<guimenuitem>Color Transfer</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <link
-linkend="commands-dialogs-filters-roundcorners"><guilabel>Round
-Corners</guilabel> dialog</link> to round off the corners of the image or
-selection.</action></para></listitem>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Colors</guisubmenu>
+<guimenuitem>Maximize Channel</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Colors</guisubmenu>
+<guimenuitem>Minimize Channel</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1620,11 +1764,31 @@ filters.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Enhance</guisubmenu>
+<guimenuitem>CImg Image Restoration...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-imagerestauration"><guilabel>Image
+Restauration</guilabel> dialog</link>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
 <guimenuitem>Custom Convolution...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
 linkend="commands-dialogs-filters-customconvolution"><guilabel>Custom
 Convolution</guilabel> dialog</link>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu>
+<guimenuitem>Gaussian Noise Reduction...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1650,9 +1814,9 @@ borders.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Enhance</guisubmenu>
-<guimenuitem>Simple Noise Reduction</guimenuitem>
+<guimenuitem>Unsharp Mask</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Reduces noise in the image or
+<listitem><para><action>Applies an unsharp mask to the image or
 selection.</action></para></listitem>
 </varlistentry>
 
@@ -1747,6 +1911,29 @@ only.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Map</guisubmenu>
+<guimenuitem>Bumpmap...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-bumpmap"><guilabel>Bumpmap</guilabel>
+dialog</link>.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Map</guisubmenu>
+<guimenuitem>Round Corners...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-roundcorners"><guilabel>Round
+Corners</guilabel> dialog</link> to round off the corners of the image or
+selection.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Map</guisubmenu>
 <guimenuitem>Small Tiles...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Shrinks the image or selection and then tiles
@@ -1765,23 +1952,38 @@ it.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu>
-<guimenuitem>Bumpmap...</guimenuitem>
+<guimenuitem>Lens Correction...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <link
-linkend="commands-dialogs-filters-bumpmap"><guilabel>Bumpmap</guilabel>
-dialog</link>.</action></para></listitem>
+<listitem><para><action></action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu>
-<guimenuitem>CImg Image Restoration...</guimenuitem>
+<guimenuitem>Random Noise...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <link
-linkend="commands-dialogs-filters-imagerestauration"><guilabel>Image
-Restauration</guilabel> dialog</link>.</action></para></listitem>
+<listitem><para><action></action></para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu>
+<guimenuitem>Random Pick...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu>
+<guimenuitem>Wave...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para></listitem>
+</varlistentry>
+
 
 <varlistentry>
 <term><menuchoice>
