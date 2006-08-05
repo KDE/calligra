@@ -144,6 +144,8 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 
 QVariant KexiDBLineEdit::value()
 {
+	if (! m_columnInfo)
+		return QVariant();
 	const KexiDB::Field::Type t = m_columnInfo->field->type();
 	switch (t) {
 	case KexiDB::Field::Text:
