@@ -59,7 +59,7 @@
 #include <kglobalsettings.h>
 #include <kstatusbar.h>
 #include <kinputdialog.h>
-#include <knotifyclient.h>
+#include <knotification.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -619,7 +619,7 @@ void KivioView::renamePage()
     {
         if ( (newName.trimmed()).isEmpty() ) // Page name is empty.
         {
-            KNotifyClient::beep();
+            KNotification::beep();
             KMessageBox::information( this, i18n("Page name cannot be empty."),
                 i18n("Change Page Name") );
             // Recursion
@@ -630,7 +630,7 @@ void KivioView::renamePage()
              // Is the name already used
              if ( !m_pActivePage->setPageName( newName ) )
              {
-                KNotifyClient::beep();
+                KNotification::beep();
                 KMessageBox::information( this, i18n("This name is already used."),
                     i18n("Change Page Name") );
                 // Recursion
