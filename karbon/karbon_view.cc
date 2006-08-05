@@ -46,7 +46,7 @@
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <kcommand.h>
-
+#include <kicon.h>
 #include <KoMainWindow.h>
 #include <KoToolBox.h>
 #include <KoCreateShapesTool.h>
