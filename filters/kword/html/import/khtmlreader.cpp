@@ -128,9 +128,7 @@ void KHTMLReader::startNewLayout(bool startNewFormat) {
 }
 
 void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) {
-	if (!(_writer->getText(state()->paragraph).isEmpty())) {
-		startNewParagraph(startNewFormat,true);
-	}
+	startNewParagraph(startNewFormat,true);
 	state()->layout=_writer->setLayout(state()->paragraph,layout);
 }
 
@@ -364,14 +362,6 @@ bool KHTMLReader::parse_a(DOM::Element e) {
 bool KHTMLReader::parse_p(DOM::Element e) {
         // For every starting paragraph, a line break has to be inserted.
         // exception: the first paragraph, e.g. if the <body> starts with a <p>.
-        static bool firstparagraph=true;
-        if (firstparagraph)
-        {
-          firstparagraph=false;
-        }
-        else {
-	  startNewParagraph();
-	}
 	parse_CommonAttributes(e);
 	return true;
 }
