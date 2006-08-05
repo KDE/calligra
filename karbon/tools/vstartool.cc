@@ -19,6 +19,7 @@
 
 #include <QLabel>
 #include <q3groupbox.h>
+#include <kicon.h>
 
 #include <klocale.h>
 #include <knuminput.h>

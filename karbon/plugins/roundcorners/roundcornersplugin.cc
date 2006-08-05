@@ -27,6 +27,7 @@
 #include <qgroupbox.h>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <kicon.h>
 
 #include <knuminput.h>
 

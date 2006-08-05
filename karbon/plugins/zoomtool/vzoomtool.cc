@@ -21,6 +21,7 @@
 #include <qcursor.h>
 #include <qevent.h>
 #include <QRectF>
+#include <kicon.h>
 
 #include <klocale.h>
 

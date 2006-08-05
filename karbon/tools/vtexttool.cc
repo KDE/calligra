@@ -36,6 +36,7 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QPaintEvent>
+#include <kicon.h>
 
 #include <kdebug.h>
 #include <kfontdialog.h>

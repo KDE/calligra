@@ -19,6 +19,7 @@
 */
 
 #include <qcursor.h>
+#include <kicon.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kdebug.h>

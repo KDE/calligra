@@ -39,6 +39,7 @@
 #include <QResizeEvent>
 #include <QPaintEvent>
 #include <QDockWidget>
+#include <kicon.h>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <klocale.h>

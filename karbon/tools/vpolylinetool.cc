@@ -22,6 +22,7 @@
 #include <qevent.h>
 #include <QLabel>
 #include <QPointF>
+#include <kicon.h>
 
 #include <klocale.h>
 

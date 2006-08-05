@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <QPointF>
 #include <QRectF>
+#include <kicon.h>
 
 #include <karbon_part.h>
 #include <karbon_view.h>

@@ -30,6 +30,7 @@
 #include <QPointF>
 #include <Q3PtrList>
 #include <QVBoxLayout>
+#include <kicon.h>
 
 #include <kiconloader.h>
 #include <KoResourceChooser.h>

@@ -20,6 +20,7 @@
 
 #include <q3groupbox.h>
 #include <QLabel>
+#include <kicon.h>
 
 #include <klocale.h>
 #include "KoUnitWidgets.h"

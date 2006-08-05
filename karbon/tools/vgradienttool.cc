@@ -21,6 +21,7 @@
 #include <QLabel>
 #include <QRectF>
 #include <QPointF>
+#include <kicon.h>
 
 #include <klocale.h>
 

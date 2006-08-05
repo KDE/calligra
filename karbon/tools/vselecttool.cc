@@ -27,6 +27,7 @@
 
 #include <QPointF>
 #include <QRectF>
+#include <kicon.h>
 #include <kdebug.h>
 
 #include <karbon_part.h>

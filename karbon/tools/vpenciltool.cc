@@ -29,6 +29,7 @@
 #include <q3widgetstack.h>
 #include <QPointF>
 #include <Q3PtrList>
+#include <kicon.h>
 
 #include <klocale.h>
 #include <knuminput.h>

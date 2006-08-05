@@ -168,6 +168,7 @@
 // KSpread DCOP
 #include "ViewAdaptor.h"
 #include <QtDBus/QtDBus>
+#include <kicon.h>
 
 #include "View.h"
 
