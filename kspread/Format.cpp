@@ -168,14 +168,14 @@ bool Format::testFlag( FormatFlags flag ) const
 void Format::clearProperties()
 {
     m_mask = 0;
-
+    m_pStyle->clearFeature( (Style::FlagsSet) ~(uint)0 );
     formatChanged();
 }
 
 void Format::clearProperty( Style::FlagsSet p )
 {
     m_mask &= ~(uint)p;
-
+    m_pStyle->clearFeature( p );
     formatChanged();
 }
 
