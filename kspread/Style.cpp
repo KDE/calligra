@@ -795,12 +795,6 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
       }
       break;
     }
-    if ( !valueType.isEmpty() )
-    {
-      kDebug() << "addProperty ParagraphType" << endl;
-      KoGenStyle::PropertyType pt = KoGenStyle::ParagraphType;
-      style.addProperty( "office:value-type", valueType, pt );
-    }
     if ( !styleName.isEmpty() )
     {
       style.addAttribute( "style:data-style-name", styleName );
@@ -1160,7 +1154,10 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
             break;
         }
         if ( !value.isEmpty() )
+        {
+            style.addProperty( "style:text-align-source", "fix" ); // table-cell-properties
             style.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
+        }
     }
 
     if ( featureSet( SVAlign ) )
@@ -1346,10 +1343,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     if ( featureSet( SPostfix ) && !postfix().isEmpty() )
         _postfix = m_postfix;
     if ( featureSet( SPrecision ) && m_precision != -1 )
-    {
-        style.addAttribute( "style:decimal-places", m_precision );
         _precision =  m_precision;
-    }
 
     QString symbol;
     if ( featureSet( SFormatType ) && m_formatType == Money_format )
