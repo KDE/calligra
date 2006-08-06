@@ -39,7 +39,7 @@ public:
 				double zoomX = 1.0, double zoomY = 1.0 );
 
     // Methods unique to KChart, and available in the new interface
-    // (see /interfaces/koChart.h.)
+    // (see ../interfaces/koChart.h.)
 
     virtual void  resizeData( int rows, int columns );
     virtual void  setCellData( int row, int column, const QVariant &);

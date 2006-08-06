@@ -195,7 +195,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_colsSB->resize( m_colsSB->sizeHint() );
     m_colsSB->setMinValue(1);
     
-#if 1
+#if 0
     // The row/column as label checkboxes. 
     m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), page);
     m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), page);
@@ -269,7 +269,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     hbl1->setMargin(10);
     topLayout->addLayout(hbl1);
 
-#if 1
+#if 0
     // Last, the checkboxes with "First row/column as label"
     QHBoxLayout  *hbl2 = new QHBoxLayout(  );
     hbl2->addWidget(m_firstRowAsLabel);
@@ -413,14 +413,14 @@ void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
     // Initiate widgets with the correct rows and columns.
     m_rowsSB->setValue(rowsCount);
     m_colsSB->setValue(colsCount);
-#if 1
+#if 0
     m_firstRowAsLabel->setChecked( params->firstRowAsLabel() );
     m_firstColAsLabel->setChecked( params->firstColAsLabel() );
 #endif
-    m_table->setNumRows(rowsCount);
-    m_table->setNumCols(colsCount);
 
     // Fill the data from the chart into the editor.
+    m_table->setNumRows(rowsCount);
+    m_table->setNumCols(colsCount);
     for (unsigned int row = headerRows(); row < rowsCount; row++) {
         for (unsigned int col = headerCols(); col < colsCount; col++) {
             QVariant t = dat->cellVal(row-headerRows(), col-headerCols());
@@ -497,7 +497,7 @@ void kchartDataEditor::getData( KChartParams *params, KDChartTableData *dat )
         }
     }
 
-#if 1
+#if 0
     params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
     params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
 #endif

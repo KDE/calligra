@@ -100,6 +100,11 @@ void KChartParams::setFirstRowAsLabel( bool _val )
 {
     m_firstRowAsLabel = _val;
 
+    // The rest of this method is only applicable if the data is from
+    // an external source, e.g. from kspread.
+    if ( m_part->canChangeValue() )
+	return;
+
     m_part->doSetData( *m_part->data(),
 		       m_firstRowAsLabel, m_firstColAsLabel );
 }
@@ -107,6 +112,11 @@ void KChartParams::setFirstRowAsLabel( bool _val )
 void KChartParams::setFirstColAsLabel( bool _val )
 {
     m_firstColAsLabel = _val;
+
+    // The rest of this method is only applicable if the data is from
+    // an external source, e.g. kspread.
+    if ( m_part->canChangeValue() )
+	return;
 
     m_part->doSetData( *m_part->data(),
 		       m_firstRowAsLabel, m_firstColAsLabel );

@@ -22,6 +22,35 @@ Item								   Prio Status
 
 
 
+Next
+----
+
+Fix bug 128758: misinterpretation of the checkbox "first row as label":
+
+Think about doing it in one of these ways:
+
+1 Change storage from a table for the data and QStringLists for the
+  headers to storing everything in the table.  The first row and
+  column will always be used for headers, and if they are empty, then
+  either KDChart will have to autogenerate tables or we will provide
+  empty ones (not decided yet).
+
+  + Remove m_rowLabels and m_colLabels and make them locals in
+    paintContent() (static?).
+  + Rewrite painting to take this into account.
+    - The translation code for the matrix can be taken from doSetData().
+  + Remove doSetData, since it isn't necessary any more.
+    - Check what LegendAutomatic does first, though.
+  + Fix it so that when loading and saving, (old, standard, OASIS), 
+    this will work.
+
+2 Change paintContent() so that it takes into account if the data is
+  external and that the first row or column contains or not contains
+  headers.  This means that it will perhaps have to skip the first row
+  or column when displayData is generated.
+
+
+
 After the feature freeze
 ------------------------
 

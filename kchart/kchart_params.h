@@ -64,6 +64,7 @@ class KChartParams : public KDChartParams
 
     KChartParams( KChartPart *_part );
     ~KChartParams();
+
     // Reimplementation of selected KDChartParams methods
     ChartType  chartType() const            { return m_chartType; }
     void       setChartType( ChartType _type ) {
@@ -85,6 +86,7 @@ class KChartParams : public KDChartParams
     void       setFirstRowAsLabel( bool _val );
     bool       firstColAsLabel() const { return m_firstColAsLabel; }
     void       setFirstColAsLabel( bool _val );
+
 
     // ----------------------------------------------------------------
     // BAR CHART EXTENSIONS TO SUPPORT OPENDOCUMENT
