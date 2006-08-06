@@ -989,10 +989,6 @@ public:
 
     void setSelectionAngle(Selection* selection, int _value );
 
-    void setSelectionTextColor( Selection* selection,
-                                const QColor &tbColor );
-    void setSelectionbgColor( Selection* selection,
-                              const QColor &bg_Color );
     void setSelectionBorderColor( Selection* selection,
                                   const QColor &bd_Color );
 
@@ -1036,21 +1032,6 @@ public:
      * @param selection the selection of cells to work on
      */
     void defaultSelection( Selection* selection );
-
-    /**
-     * Install borders
-     */
-    void borderLeft( Selection* selection, const QColor &_color );
-    void borderTop( Selection* selection, const QColor &_color );
-    void borderBottom( Selection* selection, const QColor &_color );
-    void borderRight( Selection* selection, const QColor &_color );
-    void borderOutline( Selection* selection, const QColor &_color );
-    void borderAll( Selection* selection, const QColor &_color );
-
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void borderRemove( Selection* selection );
 
     void setConditional( Selection* selection,
                          QLinkedList<Conditional> const & newConditions );

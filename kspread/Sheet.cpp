@@ -1540,31 +1540,6 @@ void Sheet::clearComment( Selection* selectionInfo )
 }
 
 
-void Sheet::setSelectionTextColor( Selection* selectionInfo,
-                                   const QColor &tb_Color )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Text Color") );
-  manipulator->setProperty(Style::STextPen);
-  manipulator->setTextColor(tb_Color);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::setSelectionbgColor( Selection* selectionInfo,
-                                 const QColor &bg_Color )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Background Color") );
-  manipulator->setProperty(Style::SBackgroundColor);
-  manipulator->setBackgroundColor(bg_Color);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-
 struct SetSelectionBorderColorWorker : public Sheet::CellWorker {
     const QColor& bd_Color;
     SetSelectionBorderColorWorker( const QColor& _bd_Color ) : Sheet::CellWorker( false ), bd_Color( _bd_Color ) { }
@@ -2320,90 +2295,6 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
     }
 }
 #endif
-
-void Sheet::borderBottom( Selection* selectionInfo, const QColor &_color )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::borderRight( Selection* selectionInfo, const QColor &_color )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::borderLeft( Selection* selectionInfo, const QColor &_color )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::borderTop( Selection* selectionInfo, const QColor &_color )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::borderOutline( Selection* selectionInfo, const QColor &_color )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::borderAll( Selection * selectionInfo,
-                       const QColor & _color )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->setHorizontalPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->setVerticalPen(QPen(_color, 1, Qt::SolidLine));
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::borderRemove( Selection* selectionInfo )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen(Qt::NoPen));
-  manipulator->setBottomBorderPen(QPen(Qt::NoPen));
-  manipulator->setLeftBorderPen(QPen(Qt::NoPen));
-  manipulator->setRightBorderPen(QPen(Qt::NoPen));
-  manipulator->setHorizontalPen(QPen(Qt::NoPen));
-  manipulator->setVerticalPen(QPen(Qt::NoPen));
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
 
 void Sheet::refreshPreference()
 {

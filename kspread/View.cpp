@@ -2748,44 +2748,42 @@ void View::oszilloscope()
 
 void View::changeTextColor()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation(false);
-    d->activeSheet->setSelectionTextColor( selectionInfo(), d->actions->textColor->color() );
-    doc()->emitEndOperation( d->canvas->visibleCells() );
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Text Color") );
+  manipulator->setTextColor( d->actions->textColor->color() );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionTextColor(const QColor &txtColor)
 {
-  if (d->activeSheet != 0)
-  {
-    doc()->emitBeginOperation(false);
-    d->activeSheet->setSelectionTextColor( selectionInfo(), txtColor );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Text Color") );
+  manipulator->setTextColor( txtColor );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::changeBackgroundColor()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation(false);
-    d->activeSheet->setSelectionbgColor( selectionInfo(), d->actions->bgColor->color() );
-    doc()->emitEndOperation( d->canvas->visibleCells() );
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Background Color") );
+  manipulator->setBackgroundColor( d->actions->bgColor->color() );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionBackgroundColor(const QColor &bgColor)
 {
-  if (d->activeSheet != 0)
-  {
-    doc()->emitBeginOperation(false);
-    d->activeSheet->setSelectionbgColor( selectionInfo(), bgColor );
-    doc()->emitEndOperation( d->canvas->visibleCells() );
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Background Color") );
+  manipulator->setBackgroundColor( bgColor );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::changeBorderColor()
@@ -3311,171 +3309,165 @@ void View::sortDec()
 
 void View::borderBottom()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-
-    d->activeSheet->borderBottom( d->selection, d->actions->borderColor->color() );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setBottomBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionBottomBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->borderBottom( selectionInfo(), color );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setBottomBorderPen( QPen( color, 1, Qt::SolidLine ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::borderRight()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-      d->activeSheet->borderLeft( d->selection, d->actions->borderColor->color() );
-    else
-      d->activeSheet->borderRight( d->selection, d->actions->borderColor->color() );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+    manipulator->setLeftBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+  else
+    manipulator->setRightBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionRightBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-      d->activeSheet->borderLeft( selectionInfo(), color );
-    else
-      d->activeSheet->borderRight( selectionInfo(), color );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+    manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
+  else
+    manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::borderLeft()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-      d->activeSheet->borderRight( d->selection, d->actions->borderColor->color() );
-    else
-      d->activeSheet->borderLeft( d->selection, d->actions->borderColor->color() );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+    manipulator->setRightBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+  else
+    manipulator->setLeftBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionLeftBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-      d->activeSheet->borderRight( selectionInfo(), color );
-    else
-      d->activeSheet->borderLeft( selectionInfo(), color );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+    manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
+  else
+    manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::borderTop()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->borderTop( d->selection, d->actions->borderColor->color() );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setTopBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionTopBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->borderTop( selectionInfo(), color );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setTopBorderPen( QPen( color, 1, Qt::SolidLine ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::borderOutline()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->borderOutline( d->selection, d->actions->borderColor->color() );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setTopBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->setBottomBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->setLeftBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->setRightBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionOutlineBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->borderOutline( selectionInfo(), color );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setTopBorderPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->setBottomBorderPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->setLeftBorderPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->setRightBorderPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::borderAll()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->borderAll( d->selection, d->actions->borderColor->color() );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setTopBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->setBottomBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->setLeftBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->setRightBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->setHorizontalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->setVerticalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionAllBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->borderAll( selectionInfo(), color );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setTopBorderPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->setBottomBorderPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->setLeftBorderPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->setRightBorderPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->setHorizontalPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->setVerticalPen(QPen( color, 1, Qt::SolidLine));
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::borderRemove()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation(false);
-    d->activeSheet->borderRemove( d->selection );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Border") );
+  manipulator->setTopBorderPen(QPen(Qt::NoPen));
+  manipulator->setBottomBorderPen(QPen(Qt::NoPen));
+  manipulator->setLeftBorderPen(QPen(Qt::NoPen));
+  manipulator->setRightBorderPen(QPen(Qt::NoPen));
+  manipulator->setHorizontalPen(QPen(Qt::NoPen));
+  manipulator->setVerticalPen(QPen(Qt::NoPen));
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::addSheet( Sheet * _t )
