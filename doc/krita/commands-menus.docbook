@@ -1979,7 +1979,7 @@ it.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu>
-<guimenuitem>Wave...</guimenuitem>
+<guimenuitem>Lens Correction...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action></action></para></listitem>
 </varlistentry>

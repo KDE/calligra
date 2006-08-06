@@ -2,35 +2,72 @@
 <title>Filters</title>
 
 <para>
-This chapter describes the various filters in detail. To illustrate the result
-of applying the filters, each description is accompanied by an sample image
-with the respective filter applied to it. The original image (with thanks to the
-photographer, Christian Peper) is shown below at half of the original size. The
-sample images demonstrating the results of applying the filters, with the original
-image at the left and the modified image at the right, are shown at 25% of the
-original size.
+&krita; comes with a number of filters. These can be used to enhance or
+otherwise modify the image, either in whole or in part. Some filters are
+applied directly, others are customizable, meaning that you are presented with
+a dialog in which you can tune the result to your liking before the filter is
+applied. If a selection is active, a filter is applied on the selected part of
+the image. If no selection is active, the entire image is modified.
+</para><para>
+This chapter describes the available filters in detail. To make comparing the
+filters easier, each filter has been applied to the same image and each description
+contains a comparison image, showing the result of applying the filter described.
+The original image (with thanks to the photographer, Christian Peper) is shown
+below at half the original size. The sample images demonstrating the
+results of applying the filters, with the original image at the left and the
+modified image at the right, are shown at 25% of the original size.
 </para>
 <note><para>Some filters yield reasonable results for most images. For
 other filters though, quite some tweaking needs to be done before the desired
 outcome is achieved. If a filter does not do what you want, it might need
 more or less customising.</para></note>
 <para>
-See the <link linkend="commands-dialogs">Dialogs</link> chapter for more
-information on the dialog windows containing the filter settings.
+Tip: If you want to apply a filter to everything except a certain part of your
+image (for example, you want to desaturate your image except for the centre),
+select the part you do not want to apply the filter to, use the
+<menuchoice><guimenu>Select</guimenu><guimenuitem>Invert</guimenuitem></menuchoice>
+menu option, and then apply the filter.
+</para>
+<para>
+See the <link linkend="commands-dialogs-filters">Dialogs for working with
+filters</link> section for descriptions of the settings available for the
+customizable filters.
 </para>
 
 <screenshot>
-<screeninfo>The original image.</screeninfo>
+<screeninfo>The original image</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The original image.</phrase>
+<phrase>The original image</phrase>
 </textobject>
-<caption><para>The original image.</para></caption>
+<caption><para>The original image</para></caption>
 </mediaobject>
 </screenshot>
+
+<sect1 id="filters-autocontrast">
+<title>The Auto Contrast filter</title>
+<para>
+The Auto Contrast filter changes the contrast of your image to what should be
+the best settings. Usually this works out fine, but in some cases (for example
+photos taken under unusual lighting circumstances), the filter will not yield
+satisfying results.
+</para>
+<screenshot>
+<screeninfo>The image with the Auto Contrast filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-autocontrast.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Auto Contrast filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Auto Contrast filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
 
 <sect1 id="filters-bumpmap">
 <title>The Bumpmap filter</title>
@@ -45,15 +82,15 @@ Alternatively, the same layer can be used as both object layer and bumpmap
 layer.
 </para>
 <screenshot>
-<screeninfo>The image with the Bumpmap filter applied to it.</screeninfo>
+<screeninfo>The image with the Bumpmap filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-bumpmap.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Bumpmap filter applied to it.</phrase>
+<phrase>The image with the Bumpmap filter applied to it</phrase>
 </textobject>
-<caption><para>The image with the Bumpmap filter applied to it.</para></caption>
+<caption><para>The image with the Bumpmap filter applied to it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -72,16 +109,16 @@ edges) and will therefore obtain a different resulting image.
 </para>
 <screenshot>
 <screeninfo>The image with the Bottom Edge Detection filter applied to
-it.</screeninfo>
+it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-edgebottom.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Bottom Edge Detection filter applied to it.</phrase>
+<phrase>The image with the Bottom Edge Detection filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Bottom Edge Detection filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -95,30 +132,30 @@ are given a certain <quote>height level</quote>, which is made visible by using
 grayscale borders, making the image look like it is three-dimensional.
 </para>
 <screenshot>
-<screeninfo>The image with the Emboss All filter applied to it.</screeninfo>
+<screeninfo>The image with the Emboss All filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-embossall.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Emboss All filter applied to it.</phrase>
+<phrase>The image with the Emboss All filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Emboss All filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 <screenshot>
 <screeninfo>The image with the Emboss Variable filter applied to
-it.</screeninfo>
+it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-embossvariable.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Emboss Variable filter applied to it.</phrase>
+<phrase>The image with the Emboss Variable filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Emboss Variable filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -131,16 +168,16 @@ way. A gaussian algorithm is used for finding the extent to which each part of
 the image should be blurred.
 </para>
 <screenshot>
-<screeninfo>The image with the Gaussian Blur filter applied to it.</screeninfo>
+<screeninfo>The image with the Gaussian Blur filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-gaussianblur.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Gaussian Blur filter applied to it.</phrase>
+<phrase>The image with the Gaussian Blur filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Gaussian Blur filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -154,15 +191,15 @@ becomes purple, and blue becomes yellow. The resulting values form the new
 pixel color.
 </para>
 <screenshot>
-<screeninfo>The image with the Invert filter applied to it.</screeninfo>
+<screeninfo>The image with the Invert filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-invert.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Invert filter applied to it.</phrase>
+<phrase>The image with the Invert filter applied to it</phrase>
 </textobject>
-<caption><para>The image with the Invert filter applied to it.</para></caption>
+<caption><para>The image with the Invert filter applied to it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -174,16 +211,16 @@ This filter sharpens the image by changing the colors of neighboring pixels
 with approximately the same color, so that small differences are evened out.
 </para>
 <screenshot>
-<screeninfo>The image with the Mean Removal filter applied to it.</screeninfo>
+<screeninfo>The image with the Mean Removal filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-meanremoval.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Mean Removal filter applied to it.</phrase>
+<phrase>The image with the Mean Removal filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Mean Removal filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -195,16 +232,16 @@ An oilpaint effect is given to the image by creating patch-shaped areas in which
 the most important color is applied to the entire area.
 </para>
 <screenshot>
-<screeninfo>The image with the Oilpaint filter applied to it.</screeninfo>
+<screeninfo>The image with the Oilpaint filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-oilpaint.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Oilpaint filter applied to it.</phrase>
+<phrase>The image with the Oilpaint filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Oilpaint filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -216,16 +253,16 @@ The image is pixelated by taking a square area and giving it the mean color
 value of the pixels it contains.
 </para>
 <screenshot>
-<screeninfo>The image with the Pixelize filter applied to it.</screeninfo>
+<screeninfo>The image with the Pixelize filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-pixelize.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Pixelize filter applied to it.</phrase>
+<phrase>The image with the Pixelize filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Pixelize filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -239,16 +276,16 @@ at the image through a real raindrop. Some raindrops will have a fish-eye lens
 effect.
 </para>
 <screenshot>
-<screeninfo>The image with the Raindrops filter applied to it.</screeninfo>
+<screeninfo>The image with the Raindrops filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-raindrops.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Raindrops filter applied to it.</phrase>
+<phrase>The image with the Raindrops filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Raindrops filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -260,16 +297,16 @@ This filter just rounds off the corners of the image. This is done by making
 the outside of the rounded corner transparent.
 </para>
 <screenshot>
-<screeninfo>The image with the Round Corners filter applied to it.</screeninfo>
+<screeninfo>The image with the Round Corners filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-roundcorners.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Round Corners filter applied to it.</phrase>
+<phrase>The image with the Round Corners filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Round Corners filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -280,15 +317,15 @@ it.</para></caption>
 This filter sharpens the image.
 </para>
 <screenshot>
-<screeninfo>The image with the Sharpen filter applied to it.</screeninfo>
+<screeninfo>The image with the Sharpen filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-sharpen.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Sharpen filter applied to it.</phrase>
+<phrase>The image with the Sharpen filter applied to it</phrase>
 </textobject>
-<caption><para>The image with the Sharpen filter applied to it.</para></caption>
+<caption><para>The image with the Sharpen filter applied to it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -302,16 +339,16 @@ general view of the image when this is hampered by too many unnecessary details.
 </para>
 <screenshot>
 <screeninfo>The image with the Simple Noise Reduction filter applied to
-it.</screeninfo>
+it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-simplenoise.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Simple Noise Reduction filter applied to it.</phrase>
+<phrase>The image with the Simple Noise Reduction filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Simple Noise Reduction filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
@@ -322,16 +359,16 @@ it.</para></caption>
 The picture is reduced in size and repeated multiple times.
 </para>
 <screenshot>
-<screeninfo>The image with the Small Tiles filter applied to it.</screeninfo>
+<screeninfo>The image with the Small Tiles filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-tiles.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Small Tiles filter applied to it.</phrase>
+<phrase>The image with the Small Tiles filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Small Tiles filter applied to
-it.</para></caption>
+it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
