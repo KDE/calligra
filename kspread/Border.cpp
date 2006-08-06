@@ -354,7 +354,7 @@ void VBorder::mouseDoubleClickEvent(QMouseEvent*)
   if ( !m_pView->koDocument()->isReadWrite() || sheet->isProtected() )
     return;
 
-  sheet->adjustRow(*m_pCanvas->selectionInfo());
+  m_pView->adjustRow();
 }
 
 
@@ -1009,7 +1009,7 @@ void HBorder::mouseDoubleClickEvent(QMouseEvent*)
   if ( !m_pView->koDocument()->isReadWrite() || sheet->isProtected() )
     return;
 
-  sheet->adjustColumn(*m_pCanvas->selectionInfo());
+  m_pView->adjustColumn();
 }
 
 void HBorder::mouseMoveEvent( QMouseEvent * _ev )

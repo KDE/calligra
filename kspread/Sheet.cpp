@@ -82,7 +82,6 @@
 #include "Validity.h"
 #include "View.h"
 #include "DataManipulators.h"
-#include "FormatManipulators.h"
 #include "RowColumnManipulators.h"
 
 
@@ -2570,34 +2569,6 @@ void Sheet::decreaseIndent( Selection* selectionInfo )
 
     DecreaseIndentWorker w( tmpIndent, valIndent );
     workOnCells( selectionInfo, w );
-}
-
-void Sheet::adjustArea(const Region& region)
-{
-  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
-  manipulator->setSheet(this);
-  manipulator->setAdjustColumn(true);
-  manipulator->setAdjustRow(true);
-  manipulator->add(region);
-  manipulator->execute();
-}
-
-void Sheet::adjustColumn(const Region& region)
-{
-  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
-  manipulator->setSheet(this);
-  manipulator->setAdjustColumn(true);
-  manipulator->add(region);
-  manipulator->execute();
-}
-
-void Sheet::adjustRow(const Region& region)
-{
-  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
-  manipulator->setSheet(this);
-  manipulator->setAdjustRow(true);
-  manipulator->add(region);
-  manipulator->execute();
 }
 
 void Sheet::clearText( Selection* selectionInfo )

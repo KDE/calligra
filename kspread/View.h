@@ -375,6 +375,8 @@ public slots:
     void autoSum();
     void resizeRow();
     void resizeColumn();
+    void adjustColumn();
+    void adjustRow();
     void increaseFontSize();
     void decreaseFontSize();
     void setSelectionFontSize(int size);
@@ -520,12 +522,6 @@ protected slots:
      * popup menu is selected.
      */
     void slotPopupDeleteChild();
-
-    /**
-     * Border popup menu
-     */
-    void slotPopupAdjustColumn();
-    void slotPopupAdjustRow();
 
     /**
      * list from list choose

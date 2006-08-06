@@ -1127,19 +1127,6 @@ public:
     void showColumn(const Region&);
 
     /**
-     * Adjust columns and rows of a region
-     */
-    void adjustArea(const Region&);
-    /**
-     * Adjust columns of a region
-     */
-    void adjustColumn(const Region&);
-    /**
-     * Adjust rows of a region
-     */
-    void adjustRow(const Region&);
-
-    /**
      * \todo TODO Stefan: remove after Undo.cpp|h and Commands.cpp|h are obsolete
      * \deprecated use MergeManipulator
      */

@@ -104,6 +104,7 @@
 // KSpread includes
 #include "Commands.h"
 #include "Damages.h"
+#include "DataManipulators.h"
 #include "DependencyManager.h"
 #include "Digest.h"
 #include "FormatManipulators.h"
@@ -118,14 +119,14 @@
 #include "Locale.h"
 #include "Map.h"
 #include "RecalcManager.h"
+#include "RowColumnManipulators.h"
 #include "Selection.h"
 #include "SheetPrint.h"
+#include "SortManipulator.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "Undo.h"
-#include "DataManipulators.h"
-#include "SortManipulator.h"
 #include "testrunner.h"
+#include "Undo.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
@@ -4025,10 +4026,12 @@ void View::setSelectionAngle( int angle )
   manipulator->add( *selectionInfo() );
   manipulator->execute();
 
-  if ( d->activeSheet != 0 )
-  {
-    d->activeSheet->adjustArea(*selectionInfo());
-  }
+  AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator();
+  manipulator2->setSheet( d->activeSheet );
+  manipulator2->setAdjustColumn(true);
+  manipulator2->setAdjustRow(true);
+  manipulator2->add( *selectionInfo() );
+  manipulator2->execute();
 }
 
 void View::mergeCell()
@@ -5387,7 +5390,7 @@ void View::popupColumnMenu( const QPoint & _point )
       }
 
       d->popupColumn->addAction( d->actions->resizeColumn );
-      d->popupColumn->addAction( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
+      d->popupColumn->addAction( i18n("Adjust Column"), this, SLOT( adjustColumn() ) );
       d->popupColumn->addSeparator();
       d->popupColumn->addAction( d->actions->insertColumn );
       d->popupColumn->addAction( d->actions->deleteColumn );
@@ -5441,14 +5444,6 @@ void View::popupColumnMenu( const QPoint & _point )
     d->popupColumn->popup( _point );
 }
 
-void View::slotPopupAdjustColumn()
-{
-  if ( !d->activeSheet )
-      return;
-
-  d->activeSheet->adjustColumn(*selectionInfo());
-}
-
 void View::popupRowMenu( const QPoint & _point )
 {
     assert( d->activeSheet );
@@ -5483,7 +5478,7 @@ void View::popupRowMenu( const QPoint & _point )
       }
 
       d->popupRow->addAction( d->actions->resizeRow );
-      d->popupRow->addAction( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
+      d->popupRow->addAction( i18n("Adjust Row"), this, SLOT( adjustRow() ) );
       d->popupRow->addSeparator();
       d->popupRow->addAction( d->actions->insertRow );
       d->popupRow->addAction( d->actions->deleteRow );
@@ -5533,14 +5528,6 @@ void View::popupRowMenu( const QPoint & _point )
 
     connect( d->popupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     d->popupRow->popup( _point );
-}
-
-void View::slotPopupAdjustRow()
-{
-  if ( !d->activeSheet )
-      return;
-
-  d->activeSheet->adjustRow(*selectionInfo());
 }
 
 
@@ -5825,10 +5812,12 @@ void View::deleteSelectedObjects()
 
 void View::adjust()
 {
-  if ( !d->activeSheet )
-    return;
-
-  d->activeSheet->adjustArea(*selectionInfo());
+  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setAdjustColumn(true);
+  manipulator->setAdjustRow(true);
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::clearTextSelection()
@@ -6027,6 +6016,24 @@ void View::resizeColumn()
     ResizeColumn dlg( this );
     dlg.exec();
   }
+}
+
+void View::adjustRow()
+{
+  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setAdjustRow(true);
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
+}
+
+void View::adjustColumn()
+{
+  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setAdjustColumn(true);
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::equalizeRow()
