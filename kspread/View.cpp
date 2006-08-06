@@ -3061,16 +3061,14 @@ void View::firstLetterUpper()
 
 void View::verticalText(bool b)
 {
-  if ( !d->activeSheet  )
-    return;
-
-  doc()->emitBeginOperation( false );
-  d->activeSheet->setSelectionVerticalText( selectionInfo(), b );
-  d->activeSheet->adjustArea(*selectionInfo());
-  updateEditWidget(); // TODO Stefan: nescessary?
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Vertical Text" ) );
+  manipulator->setVerticalText( b );
+  manipulator->setMultiRow( false );
+  manipulator->setAngle( 0 );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::insertSpecialChar()
@@ -4014,30 +4012,23 @@ void View::removeComment()
 
 void View::changeAngle()
 {
-  if ( !d->activeSheet )
-    return;
-
-  AngleDialog dlg( this, "Angle" ,
-                    QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ));
-  if ( dlg.exec() )
-  {
-    // the actual angle manipulation is performed in AngleDialog::slotOk()
-    d->activeSheet->adjustArea(*selectionInfo());
-  }
+  AngleDialog dlg( this, "Angle", selectionInfo()->marker() );
+  dlg.exec();
 }
 
 void View::setSelectionAngle( int angle )
 {
-  doc()->emitBeginOperation( false );
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Angle") );
+  manipulator->setAngle( angle );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 
   if ( d->activeSheet != 0 )
   {
-    d->activeSheet->setSelectionAngle( selectionInfo(), angle );
     d->activeSheet->adjustArea(*selectionInfo());
   }
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
 }
 
 void View::mergeCell()
@@ -5085,16 +5076,12 @@ void View::addModifyComment()
 
 void View::setSelectionComment( QString comment )
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-
-    d->activeSheet->setSelectionComment( selectionInfo(), comment.trimmed() );
-    updateEditWidget();
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Add Comment" ) );
+  manipulator->setComment( comment.trimmed() );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::editCell()

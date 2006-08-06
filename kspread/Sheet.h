@@ -981,13 +981,7 @@ public:
      */
     void setSelectionfirstLetterUpper( Selection* selection);
 
-    void setSelectionVerticalText( Selection* selection, bool _b);
-
-    void setSelectionComment( Selection* selection,
-                              const QString &_comment);
     void clearComment(Selection* selection);
-
-    void setSelectionAngle(Selection* selection, int _value );
 
     void setSelectionBorderColor( Selection* selection,
                                   const QColor &bd_Color );

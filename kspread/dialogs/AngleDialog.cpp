@@ -80,11 +80,7 @@ AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
 
 void AngleDialog::slotOk()
 {
-    m_pView->doc()->emitBeginOperation( false );
-    m_pView->activeSheet()->setSelectionAngle(m_pView->selectionInfo(), -m_pAngle->value());
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-    // m_pView->doc()->emitEndOperation();
-
+    m_pView->setSelectionAngle( -m_pAngle->value() );
     accept();
 }
 
