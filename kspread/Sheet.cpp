@@ -2590,33 +2590,6 @@ void Sheet::defaultSelection( Selection* selectionInfo )
 }
 
 
-struct SetConditionalWorker : public Sheet::CellWorker
-{
-  QLinkedList<Conditional> conditionList;
-  SetConditionalWorker( QLinkedList<Conditional> _tmp ) :
-    Sheet::CellWorker( ), conditionList( _tmp ) { }
-
-  class UndoAction* createUndoAction( Doc* doc,
-                                      Sheet* sheet, const KSpread::Region& region )
-  {
-    return new UndoConditional( doc, sheet, region );
-  }
-
-  bool testCondition( Cell* )
-  {
-    return true;
-  }
-
-  void doWork( Cell* cell, bool, int, int )
-  {
-    if ( !cell->isObscured() ) // TODO: isPartOfMerged()???
-    {
-      cell->setConditionList(conditionList);
-    }
-  }
-};
-
-
 /**
  * Here we define two manipulators - GetWordSpellingManipulator and
  * SetWordSpellingManipulator. This is not ideal, but these two are so specific

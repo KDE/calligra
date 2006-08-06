@@ -182,13 +182,9 @@ bool Manipulator::process(Element* element)
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell* cell = m_creation ? sheet->nonDefaultCell(col, row) : sheet->cellAt(col, row);
-/* (Tomas) don't force working on obscurring cells - most manipulators don't want this, and those that do can do that manually ... Plus I think that no manipulator should do it anyway ...
-        if ( cell->isPartOfMerged() )
-        {
-          cell = cell->obscuringCells().first();
-        }
-*/
-        //if (testCondition(cell))
+
+        // NOTE Stefan: Don't process cells covered due to merging. WYSIWYG!
+        if ( !cell->isPartOfMerged() )
         {
           if (!process(cell))
           {
@@ -656,38 +652,35 @@ ValidityManipulator::ValidityManipulator()
 
 bool ValidityManipulator::process( Cell* cell )
 {
-  if ( !cell->isObscured() )
+  if ( !m_reverse )
   {
-    if ( !m_reverse )
+    // create undo
+    if ( m_firstrun )
     {
-      // create undo
-      if ( m_firstrun )
+      if ( Validity* validity = cell->validity() )
       {
-        if ( Validity* validity = cell->validity() )
-        {
-          m_undoData[cell->column()][cell->row()] = *validity;
-        }
-      }
-
-      if ( m_validity.m_restriction == Restriction::None )
-      {
-        cell->removeValidity();
-      }
-      else
-      {
-        *cell->validity(true) = m_validity;
+        m_undoData[cell->column()][cell->row()] = *validity;
       }
     }
-    else // m_reverse
+
+    if ( m_validity.m_restriction == Restriction::None )
     {
-      if ( m_undoData[cell->column()][cell->row()].m_restriction == Restriction::None )
-      {
-        cell->removeValidity();
-      }
-      else
-      {
-        *cell->validity(true) = m_undoData[cell->column()][cell->row()];
-      }
+      cell->removeValidity();
+    }
+    else
+    {
+      *cell->validity(true) = m_validity;
+    }
+  }
+  else // m_reverse
+  {
+    if ( m_undoData[cell->column()][cell->row()].m_restriction == Restriction::None )
+    {
+      cell->removeValidity();
+    }
+    else
+    {
+      *cell->validity(true) = m_undoData[cell->column()][cell->row()];
     }
   }
   return true;
