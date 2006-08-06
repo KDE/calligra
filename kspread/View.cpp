@@ -5874,16 +5874,11 @@ void View::clearCommentSelection()
 
 void View::clearValiditySelection()
 {
-    if (!activeSheet())
-      return;
-
-    doc()->emitBeginOperation( false );
-    d->activeSheet->clearValidity( selectionInfo() );
-
-    updateEditWidget();
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
+  ValidityManipulator* manipulator = new ValidityManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setValidity( Validity() ); // empty object removes validity
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::clearConditionalSelection()

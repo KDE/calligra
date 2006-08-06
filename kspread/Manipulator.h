@@ -21,6 +21,7 @@
 #ifndef KSPREAD_MANIPULATOR
 #define KSPREAD_MANIPULATOR
 
+#include <QHash>
 #include <QLinkedList>
 #include <QRect>
 #include <QString>
@@ -32,6 +33,7 @@
 
 #include "Undo.h"
 #include "Region.h"
+#include "Validity.h"
 
 namespace KSpread
 {
@@ -39,7 +41,6 @@ class Cell;
 class ColumnFormat;
 class RowFormat;
 class Sheet;
-
 
 /**
  * \class Manipulator
@@ -267,18 +268,26 @@ private:
 };
 
 /**
- * \class ValidityRemovalManipulator
- * \brief Removes the validity checks of a cell region.
+ * \class ValidityManipulator
+ * \brief Adds/Removes validity checks to/of a cell region.
  */
-class ValidityRemovalManipulator : public RemovalManipulator
+class ValidityManipulator : public Manipulator
 {
 public:
+  ValidityManipulator();
+
+  void setValidity( const Validity& validity ) { m_validity = validity; }
 
 protected:
   virtual bool process( Cell* cell );
-  virtual QString name() const { return i18n( "Remove Validity" ); }
+
+  virtual bool preProcessing();
+
+  virtual QString name() const;
 
 private:
+  Validity m_validity;
+  QHash<int, QHash<int, Validity> > m_undoData;
 };
 
 } // namespace KSpread

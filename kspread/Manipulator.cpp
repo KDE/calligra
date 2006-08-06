@@ -609,8 +609,94 @@ bool ConditionRemovalManipulator::process( Cell* cell )
   return true;
 }
 
-bool ValidityRemovalManipulator::process( Cell* cell )
+
+
+/***************************************************************************
+  class ValidityManipulator
+****************************************************************************/
+
+ValidityManipulator::ValidityManipulator()
+  : Manipulator()
 {
-  cell->removeValidity();
+  m_format = false;
+}
+
+bool ValidityManipulator::process( Cell* cell )
+{
+  if ( !cell->isObscured() )
+  {
+    if ( m_validity.m_restriction == Restriction::None )
+    {
+      cell->removeValidity();
+    }
+    else
+    {
+      *cell->validity(true) = m_validity;
+    }
+  }
   return true;
+}
+
+bool ValidityManipulator::preProcessing()
+{
+  if ( !m_reverse )
+  {
+    if ( m_firstrun )
+    {
+      // create undo
+      ConstIterator endOfList = constEnd();
+      for (ConstIterator it = constBegin(); it != endOfList; ++it)
+      {
+        Element* element = *it;
+        QRect range = element->rect();
+        int right = range.right();
+        int bottom = range.bottom();
+        for (int row = range.top(); row <= bottom; ++row)
+        {
+          for (int col = range.left(); col <= right; ++col)
+          {
+            if ( Validity* validity = m_sheet->cellAt(col, row)->validity() )
+            {
+              m_undoData[col][row] = *validity;
+            }
+          }
+        }
+      }
+    }
+  }
+  else // m_reverse
+  {
+    // undo
+    ConstIterator endOfList = constEnd();
+    for (ConstIterator it = constBegin(); it != endOfList; ++it)
+    {
+      Element* element = *it;
+      QRect range = element->rect();
+      int right = range.right();
+      int bottom = range.bottom();
+      for (int row = range.top(); row <= bottom; ++row)
+      {
+        for (int col = range.left(); col <= right; ++col)
+        {
+          if ( m_undoData[col][row].m_restriction == Restriction::None )
+          {
+            *m_sheet->cellAt(col, row)->validity(true) = m_undoData[col][row];
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
+
+QString ValidityManipulator::name() const
+{
+  if ( m_validity.m_restriction == Restriction::None )
+  {
+    return i18n( "Remove Validity" );
+  }
+  else
+  {
+    return i18n( "Add Validity" );
+  }
 }

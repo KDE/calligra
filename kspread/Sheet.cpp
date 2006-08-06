@@ -2546,17 +2546,6 @@ void Sheet::clearText( Selection* selectionInfo )
   manipulator->execute();
 }
 
-void Sheet::clearValidity( Selection* selectionInfo )
-{
-  if (areaIsEmpty(*selectionInfo, Validity))
-    return;
-
-  Manipulator* manipulator = new ValidityRemovalManipulator();
-  manipulator->setSheet(this);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
 void Sheet::clearCondition( Selection* selectionInfo )
 {
   Manipulator* manipulator = new ConditionRemovalManipulator();
@@ -2667,53 +2656,6 @@ void Sheet::setConditional( Selection* selectionInfo,
   }
 
   emit sig_updateView( this, *selectionInfo );
-}
-
-
-struct SetValidityWorker : public Sheet::CellWorker {
-    Validity tmp;
-    SetValidityWorker( const Validity& _tmp ) : Sheet::CellWorker( ), tmp( _tmp ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
-  return new UndoConditional( doc, sheet, region );
-    }
-    bool testCondition( Cell* ) {
-        return true;
-    }
-    void doWork( Cell* cell, bool, int, int ) {
-  if ( !cell->isObscured() ) {
-      if ( tmp.m_restriction==Restriction::None )
-    cell->removeValidity();
-      else
-      {
-    Validity *tmpValidity = cell->validity();
-    tmpValidity->message=tmp.message;
-    tmpValidity->title=tmp.title;
-    tmpValidity->valMin=tmp.valMin;
-    tmpValidity->valMax=tmp.valMax;
-    tmpValidity->m_cond=tmp.m_cond;
-    tmpValidity->m_action=tmp.m_action;
-    tmpValidity->m_restriction=tmp.m_restriction;
-    tmpValidity->timeMin=tmp.timeMin;
-    tmpValidity->timeMax=tmp.timeMax;
-    tmpValidity->dateMin=tmp.dateMin;
-    tmpValidity->dateMax=tmp.dateMax;
-                tmpValidity->displayMessage=tmp.displayMessage;
-                tmpValidity->allowEmptyCell=tmp.allowEmptyCell;
-                tmpValidity->displayValidationInformation=tmp.displayValidationInformation;
-                tmpValidity->titleInfo=tmp.titleInfo;
-                tmpValidity->messageInfo=tmp.messageInfo;
-                tmpValidity->listValidity=tmp.listValidity;
-      }
-    }
-  }
-};
-
-void Sheet::setValidity(Selection* selectionInfo,
-                        const KSpread::Validity& tmp )
-{
-    SetValidityWorker w( tmp );
-    workOnCells( selectionInfo, w );
 }
 
 

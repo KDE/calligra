@@ -1008,11 +1008,6 @@ public:
     /**
      * @param selection the selection of cells to work on
      */
-    void clearValidity(Selection* selection );
-
-    /**
-     * @param selection the selection of cells to work on
-     */
     void clearCondition(Selection* selection );
 
     void setWordSpelling(Selection* selection,const QString _listWord );
@@ -1029,8 +1024,6 @@ public:
 
     void setConditional( Selection* selection,
                          QLinkedList<Conditional> const & newConditions );
-
-    void setValidity( Selection* selection, const KSpread::Validity& tmp );
 
     /**
      * @param selection the selection of cells to work on

@@ -40,6 +40,8 @@
 #include "Canvas.h"
 #include "Doc.h"
 #include "Locale.h"
+#include "Manipulator.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "View.h"
 
@@ -826,9 +828,12 @@ void DlgValidity::OkPressed()
   result.messageInfo= messageHelp->text();
   result.titleInfo = titleHelp->text();
 
-  m_pView->doc()->emitBeginOperation( false );
-  m_pView->activeSheet()->setValidity( m_pView->selectionInfo(),  result);
-  m_pView->slotUpdateView( m_pView->activeSheet() );
+  ValidityManipulator* manipulator = new ValidityManipulator();
+  manipulator->setSheet( m_pView->activeSheet() );
+  manipulator->setValidity( result );
+  manipulator->add( *m_pView->selectionInfo() );
+  manipulator->execute();
+
   accept();
 }
 
