@@ -799,7 +799,7 @@ void View::Private::initActions()
   actions->hideColumn->setToolTip(i18n("Hide the column from view"));
 
   actions->showColumn = new KAction( KIcon( "show_table_column" ), i18n("Show Columns..."), ac, "showColumn" );
-  connect(actions->showColumn, SIGNAL(triggered(bool)), view, SLOT( showColumn() ));
+  connect(actions->showColumn, SIGNAL(triggered(bool)), view, SLOT( slotShowColumnDialog() ));
 
   actions->showColumn->setToolTip(i18n("Show hidden columns"));
 
@@ -809,7 +809,7 @@ void View::Private::initActions()
   actions->equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size"));
 
   actions->showSelColumns = new KAction( KIcon( "show_sheet_column" ), i18n("Show Columns"), ac, "showSelColumns" );
-  connect(actions->showSelColumns, SIGNAL(triggered(bool)), view, SLOT( showSelColumns() ));
+  connect(actions->showSelColumns, SIGNAL(triggered(bool)), view, SLOT( showColumns() ));
 
   actions->showSelColumns->setToolTip(i18n("Show hidden columns in the selection"));
   actions->showSelColumns->setEnabled(false);
@@ -835,7 +835,7 @@ void View::Private::initActions()
   actions->hideRow->setToolTip(i18n("Hide a row from view"));
 
   actions->showRow = new KAction( KIcon( "show_table_row" ), i18n("Show Rows..."), ac, "showRow" );
-  connect(actions->showRow, SIGNAL(triggered(bool)), view, SLOT( showRow() ));
+  connect(actions->showRow, SIGNAL(triggered(bool)), view, SLOT( slotShowRowDialog() ));
   actions->showRow->setToolTip(i18n("Show hidden rows"));
 
   actions->equalizeRow = new KAction( KIcon( "adjustrow" ), i18n("Equalize Row"), ac, "equalizeRow" );
@@ -843,7 +843,7 @@ void View::Private::initActions()
   actions->equalizeRow->setToolTip(i18n("Resizes selected rows to be the same size"));
 
   actions->showSelRows = new KAction( KIcon( "show_table_row" ), i18n("Show Rows"), ac, "showSelRows" );
-  connect(actions->showSelRows, SIGNAL(triggered(bool)), view, SLOT( showSelRows() ));
+  connect(actions->showSelRows, SIGNAL(triggered(bool)), view, SLOT( showRow() ));
 
   actions->showSelRows->setEnabled(false);
   actions->showSelRows->setToolTip(i18n("Show hidden rows in the selection"));
@@ -2904,24 +2904,36 @@ void View::hideColumn()
     return;
   }
 
-  d->activeSheet->hideColumn(*selectionInfo());
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setManipulateColumns(true);
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::showColumn()
+{
+  if ( d->selection->isRowSelected() )
+  {
+    KMessageBox::error( this, i18n( "Area is too large." ) );
+    return;
+  }
+
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setManipulateColumns(true);
+  manipulator->setReverse( true );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
+}
+
+void View::slotShowColumnDialog()
 {
   if ( !d->activeSheet )
     return;
 
   ShowColRow dlg( this, "showCol", ShowColRow::Column );
   dlg.exec();
-}
-
-void View::showSelColumns()
-{
-  if ( !d->activeSheet )
-    return;
-
-  d->activeSheet->showColumn(*selectionInfo());
 }
 
 void View::insertRow()
@@ -2950,24 +2962,36 @@ void View::hideRow()
     return;
   }
 
-  d->activeSheet->hideRow(*selectionInfo());
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setManipulateRows(true);
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::showRow()
+{
+  if ( d->selection->isColumnSelected() )
+  {
+    KMessageBox::error( this, i18n( "Area is too large." ) );
+    return;
+  }
+
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setManipulateRows(true);
+  manipulator->setReverse(true);
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
+}
+
+void View::slotShowRowDialog()
 {
   if ( !d->activeSheet )
     return;
 
   ShowColRow dlg( this, "showRow", ShowColRow::Row );
   dlg.exec();
-}
-
-void View::showSelRows()
-{
-  if ( !d->activeSheet )
-    return;
-
-  d->activeSheet->showRow(*selectionInfo());
 }
 
 void View::fontSelected( const QString & _font )

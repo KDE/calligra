@@ -351,10 +351,8 @@ public slots:
     void insertRow();
     void hideRow();
     void showRow();
-    void showSelRows();
     void hideColumn();
     void showColumn();
-    void showSelColumns();
     void insertMathExpr();
     void formulaSelection( const QString &_math );
     void changeTextColor();
@@ -511,6 +509,9 @@ protected slots:
     void slotInsertCellCopy();
     void slotRemove();
     void slotRename();
+
+    void slotShowColumnDialog();
+    void slotShowRowDialog();
 
     /**
      * Invoked if the popup menu for an embedded document should be opened.

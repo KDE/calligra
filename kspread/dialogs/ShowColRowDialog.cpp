@@ -36,6 +36,7 @@
 #include "Util.h"
 #include "View.h"
 #include "Region.h"
+#include "RowColumnManipulators.h"
 
 // Local
 #include "ShowColRowDialog.h"
@@ -149,14 +150,19 @@ void ShowColRow::slotOk()
     }
   }
 
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet( m_pView->activeSheet() );
   if (typeShow == Column)
   {
-    m_pView->activeSheet()->showColumn(region);
+    manipulator->setManipulateColumns(true);
   }
   if (typeShow == Row)
   {
-    m_pView->activeSheet()->showRow(region);
+    manipulator->setManipulateRows(true);
   }
+  manipulator->setReverse(true);
+  manipulator->add(region);
+  manipulator->execute();
 
   accept();
 }

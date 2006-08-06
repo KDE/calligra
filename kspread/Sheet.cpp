@@ -82,7 +82,6 @@
 #include "Validity.h"
 #include "View.h"
 #include "DataManipulators.h"
-#include "RowColumnManipulators.h"
 
 
 #include "SheetAdaptor.h"
@@ -1884,39 +1883,10 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
     emit sig_updateView( this );
 }
 
-void Sheet::hideRow(const Region& region)
-{
-  HideShowManipulator* manipulator = new HideShowManipulator();
-  manipulator->setSheet(this);
-  manipulator->setManipulateRows(true);
-  manipulator->add(region);
-  manipulator->execute();
-}
-
 void Sheet::emitHideRow()
 {
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
-}
-
-void Sheet::showRow(const Region& region)
-{
-  HideShowManipulator* manipulator = new HideShowManipulator();
-  manipulator->setSheet(this);
-  manipulator->setManipulateRows(true);
-  manipulator->setReverse(true);
-  manipulator->add(region);
-  manipulator->execute();
-}
-
-
-void Sheet::hideColumn(const Region& region)
-{
-  HideShowManipulator* manipulator = new HideShowManipulator();
-  manipulator->setSheet(this);
-  manipulator->setManipulateColumns(true);
-  manipulator->add(region);
-  manipulator->execute();
 }
 
 void Sheet::emitHideColumn()
@@ -1924,17 +1894,6 @@ void Sheet::emitHideColumn()
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }
-
-void Sheet::showColumn(const Region& region)
-{
-  HideShowManipulator* manipulator = new HideShowManipulator();
-  manipulator->setSheet(this);
-  manipulator->setManipulateColumns(true);
-  manipulator->setReverse(true);
-  manipulator->add(region);
-  manipulator->execute();
-}
-
 
 void Sheet::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref)
 {

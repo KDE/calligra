@@ -1113,18 +1113,14 @@ public:
     void removeRow( int row, int nbRow=0, bool makeUndo=true );
 
     /**
-    * hide row
-    */
-    void hideRow(const Region&);
+     * Updates vertical border and view.
+     */
     void emitHideRow();
-    void showRow(const Region&);
 
     /**
-    * hide column
-    */
-    void hideColumn(const Region&);
+     * Updates horizontal border and view.
+     */
     void emitHideColumn();
-    void showColumn(const Region&);
 
     /**
      * \todo TODO Stefan: remove after Undo.cpp|h and Commands.cpp|h are obsolete

@@ -283,7 +283,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
             else
             {
-              sheet->hideRow(*m_pView->selectionInfo());
+              m_pView->hideRow();
             }
           }
 
@@ -316,7 +316,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
 
             if ( hiddenRows.count() > 0 )
-              sheet->showRow(*m_pView->selectionInfo());
+              m_pView->showRow();
         }
     }
 
@@ -938,7 +938,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
             else
             {
-              sheet->hideColumn(*m_pView->selectionInfo());
+              m_pView->hideColumn();
             }
           }
 
@@ -971,7 +971,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
 
             if ( hiddenCols.count() > 0 )
-              sheet->showColumn(*m_pView->selectionInfo());
+              m_pView->showColumn();
         }
     }
 
