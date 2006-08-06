@@ -57,7 +57,7 @@ public:
   /**
    * Destructor.
    */
-  virtual ~RecalcManager();
+  ~RecalcManager();
 
   /**
    * Recalculates the cells refering to cells in \p region .
