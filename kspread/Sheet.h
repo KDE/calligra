@@ -967,23 +967,8 @@ public:
 
     void setArrayFormula (Selection* selection, const QString &_text);
 
-    void setSelectionFont( Selection* selection,
-                           const char *_font = 0, int _size = -1,
-                           signed char _bold = -1, signed char _italic = -1,
-                           signed char _underline = -1,
-                           signed char _strike = -1 );
-
-    void setSelectionAlign( Selection* selection,
-                            Style::HAlign _align );
-    void setSelectionAlignY( Selection* selection,
-                             Style::VAlign _alignY );
     void setSelectionPrecision( Selection* selection, int _delta );
     void setSelectionStyle( Selection* selection, Style * style );
-
-    /**
-    * setSelectionSize increase or decrease font size
-    */
-    void setSelectionSize( Selection* selection, int _size );
 
     /**
      *change string to upper case if _type equals 1

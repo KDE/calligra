@@ -1430,44 +1430,6 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
   return result;
 }
 
-void Sheet::setSelectionFont( Selection* selectionInfo,
-                              const char *_font, int _size,
-                              signed char _bold, signed char _italic,
-                              signed char _underline, signed char _strike)
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setProperty(Style::SFont);
-  manipulator->setFontFamily(_font);
-  manipulator->setFontSize(_size);
-  manipulator->setFontBold(_bold);
-  manipulator->setFontItalic(_italic);
-  manipulator->setFontStrike(_strike);
-  manipulator->setFontUnderline(_underline);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::setSelectionSize(Selection* selectionInfo,
-                              int _size)
-{
-  // TODO Stefan: Increase/Decrease font size still used?
-  int size;
-  Cell* c;
-  QPoint marker(selectionInfo->marker());
-  c = cellAt(marker);
-  size = c->format()->textFontSize(marker.x(), marker.y());
-
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setProperty(Style::SFont);
-  manipulator->setFontSize(_size+size);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
 void Sheet::setSelectionUpperLower( Selection* selectionInfo, int _type )
 {
   CaseManipulator::CaseMode m;
@@ -2617,31 +2579,6 @@ QString Sheet::guessRowTitle(QRect& area, int row)
   Value cellValue=value(area.left(),row);
   return cellValue.asString();
 }
-
-void Sheet::setSelectionAlign( Selection* selectionInfo,
-                               Style::HAlign _align )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Horizontal Alignment") );
-  manipulator->setProperty(Style::SHAlign);
-  manipulator->setHorizontalAlignment(_align);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-void Sheet::setSelectionAlignY( Selection* selectionInfo,
-                                Style::VAlign _alignY )
-{
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName( i18n("Change Vertical Alignment") );
-  manipulator->setProperty(Style::SVAlign);
-  manipulator->setVerticalAlignment(_alignY);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
 
 struct SetSelectionPrecisionWorker : public Sheet::CellWorker {
     int _delta;

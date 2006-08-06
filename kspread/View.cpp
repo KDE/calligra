@@ -2976,9 +2976,12 @@ void View::fontSelected( const QString & _font )
   if ( d->toolbarLock )
     return;
 
-  doc()->emitBeginOperation(false);
-  if ( d->activeSheet != 0 )
-    d->activeSheet->setSelectionFont( d->selection, _font.toLatin1() );
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Font") );
+  manipulator->setFontFamily( _font.toLatin1() );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 
   // Dont leave the focus in the toolbars combo box ...
   if ( d->canvas->editor() )
@@ -2989,9 +2992,6 @@ void View::fontSelected( const QString & _font )
   }
   else
     d->canvas->setFocus();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
 }
 
 void View::decreaseFontSize()
@@ -3004,12 +3004,21 @@ void View::increaseFontSize()
   setSelectionFontSize( 1 );
 }
 
-void View::setSelectionFontSize( int size )
+void View::setSelectionFontSize( int deltaSize )
 {
-  if ( d->activeSheet != 0 )
-  {
-    d->activeSheet->setSelectionSize( selectionInfo(), size );
-  }
+  if ( d->toolbarLock )
+    return;
+
+  const QPoint marker = selectionInfo()->marker();
+  const Cell* cell = d->activeSheet->cellAt(marker);
+  const int size = cell->format()->textFontSize(marker.x(), marker.y());
+
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Font") );
+  manipulator->setFontSize( size + deltaSize );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::lower()
@@ -3146,10 +3155,12 @@ void View::fontSizeSelected( int _size )
   if ( d->toolbarLock )
     return;
 
-  doc()->emitBeginOperation( false );
-
-  if ( d->activeSheet != 0 )
-    d->activeSheet->setSelectionFont( selectionInfo(), 0, _size );
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Font") );
+  manipulator->setFontSize(_size);
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 
   // Dont leave the focus in the toolbars combo box ...
   if ( d->canvas->editor() )
@@ -3161,78 +3172,69 @@ void View::fontSizeSelected( int _size )
   }
   else
     d->canvas->setFocus();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
 }
 
 void View::bold( bool b )
 {
   if ( d->toolbarLock )
     return;
-  if ( d->activeSheet == 0 )
-    return;
 
-  doc()->emitBeginOperation( false );
-
-  int col = d->canvas->markerColumn();
-  int row = d->canvas->markerRow();
-  d->activeSheet->setSelectionFont( selectionInfo(), 0, -1, b );
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Font") );
+  manipulator->setFontBold( b );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 
   if ( d->canvas->editor() )
   {
+    int col = d->canvas->markerColumn();
+    int row = d->canvas->markerRow();
     Cell * cell = d->activeSheet->cellAt( col, row );
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
 }
 
 void View::underline( bool b )
 {
   if ( d->toolbarLock )
     return;
-  if ( d->activeSheet == 0 )
-    return;
 
-  doc()->emitBeginOperation( false );
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Font") );
+  manipulator->setFontUnderline( b );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 
-  int col = d->canvas->markerColumn();
-  int row = d->canvas->markerRow();
-
-  d->activeSheet->setSelectionFont( selectionInfo(), 0, -1, -1, -1 ,b );
   if ( d->canvas->editor() )
   {
+    int col = d->canvas->markerColumn();
+    int row = d->canvas->markerRow();
     Cell * cell = d->activeSheet->cellAt( col, row );
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
 }
 
 void View::strikeOut( bool b )
 {
   if ( d->toolbarLock )
     return;
-  if ( d->activeSheet == 0 )
-    return;
 
-  doc()->emitBeginOperation( false );
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Font") );
+  manipulator->setFontStrike( b );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 
-  int col = d->canvas->markerColumn();
-  int row = d->canvas->markerRow();
-
-  d->activeSheet->setSelectionFont( selectionInfo(), 0, -1, -1, -1 ,-1, b );
   if ( d->canvas->editor() )
   {
+    int col = d->canvas->markerColumn();
+    int row = d->canvas->markerRow();
     Cell * cell = d->activeSheet->cellAt( col, row );
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
 }
 
 
@@ -3240,23 +3242,21 @@ void View::italic( bool b )
 {
   if ( d->toolbarLock )
     return;
-  if ( d->activeSheet == 0 )
-    return;
 
-  doc()->emitBeginOperation( false );
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Font") );
+  manipulator->setFontItalic( b );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 
-  int col = d->canvas->markerColumn();
-  int row = d->canvas->markerRow();
-
-  d->activeSheet->setSelectionFont( selectionInfo(), 0, -1, -1, b );
   if ( d->canvas->editor() )
   {
+    int col = d->canvas->markerColumn();
+    int row = d->canvas->markerRow();
     Cell * cell = d->activeSheet->cellAt( col, row );
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
 }
 
 void View::sortInc()
@@ -6198,19 +6198,12 @@ void View::alignLeft( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( !b )
-      d->activeSheet->setSelectionAlign( selectionInfo(),
-                                   Style::HAlignUndefined );
-    else
-      d->activeSheet->setSelectionAlign( selectionInfo(),
-                                   Style::Left );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Horizontal Alignment") );
+  manipulator->setHorizontalAlignment( b ? Style::Left : Style::HAlignUndefined );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::alignRight( bool b )
@@ -6218,17 +6211,12 @@ void View::alignRight( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( !b )
-      d->activeSheet->setSelectionAlign( selectionInfo(), Style::HAlignUndefined );
-    else
-      d->activeSheet->setSelectionAlign( selectionInfo(), Style::Right );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Horizontal Alignment") );
+  manipulator->setHorizontalAlignment( b ? Style::Right : Style::HAlignUndefined );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::alignCenter( bool b )
@@ -6236,17 +6224,12 @@ void View::alignCenter( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( !b )
-      d->activeSheet->setSelectionAlign( selectionInfo(), Style::HAlignUndefined );
-    else
-      d->activeSheet->setSelectionAlign( selectionInfo(), Style::Center );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Horizontal Alignment") );
+  manipulator->setHorizontalAlignment( b ? Style::Center : Style::HAlignUndefined );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::alignTop( bool b )
@@ -6254,17 +6237,12 @@ void View::alignTop( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::VAlignUndefined );
-    else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::Top );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Vertical Alignment") );
+  manipulator->setVerticalAlignment( b ? Style::Top : Style::VAlignUndefined );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::alignBottom( bool b )
@@ -6272,17 +6250,12 @@ void View::alignBottom( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::VAlignUndefined );
-    else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::Bottom );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Vertical Alignment") );
+  manipulator->setVerticalAlignment( b ? Style::Bottom : Style::VAlignUndefined );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::alignMiddle( bool b )
@@ -6290,17 +6263,12 @@ void View::alignMiddle( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::VAlignUndefined );
-    else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::Middle );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n("Change Vertical Alignment") );
+  manipulator->setVerticalAlignment( b ? Style::Middle : Style::VAlignUndefined );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::moneyFormat(bool b)
