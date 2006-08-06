@@ -281,25 +281,6 @@ protected:
 private:
 };
 
-
-
-
-/**
- * \class ManipulatorManager
- * \todo To implement of not to implement. That's the question.
- */
-class ManipulatorManager
-{
-  public:
-    static ManipulatorManager* self();
-    ~ManipulatorManager();
-    Manipulator* create(const QString&);
-
-  private:
-    ManipulatorManager();
-    static ManipulatorManager* m_self;
-};
-
 } // namespace KSpread
 
 #endif // KSPREAD_MANIPULATOR
