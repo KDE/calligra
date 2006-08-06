@@ -212,46 +212,6 @@ private:
 };
 
 
-// TODO: storing undo information by doing an XML dump is a bad idea, replace
-// with something that only stores relevant data
-/**
- * \class RemovalManipulator
- * \brief Abstract class for removing cell attributes.
- */
-class RemovalManipulator : public Manipulator
-{
-public:
-
-protected:
-  virtual bool process( Cell* ) = 0;
-
-  virtual bool preProcessing();
-  virtual bool mainProcessing();
-  virtual bool postProcessing();
-
-  void saveCellRegion( QByteArray& bytearray );
-
-  QByteArray m_redoData;
-  QByteArray m_undoData;
-
-private:
-};
-
-/**
- * \class CommentRemovalManipulator
- * \brief Removes the comments of a cell region.
- */
-class CommentRemovalManipulator : public RemovalManipulator
-{
-public:
-
-protected:
-  virtual bool process( Cell* cell );
-  virtual QString name() const { return i18n( "Remove Comment" ); }
-
-private:
-};
-
 /**
  * \class ConditionalManipulator
  * \brief Adds/Removes condtional formatting to/of a cell region.

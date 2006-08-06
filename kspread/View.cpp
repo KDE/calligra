@@ -767,13 +767,11 @@ void View::Private::initActions()
   actions->addModifyComment->setToolTip(i18n("Edit a comment for this cell"));
 
   actions->removeComment = new KAction( KIcon("removecomment" ), i18n("&Remove Comment"), ac, "removecomment" );
-  connect(actions->removeComment, SIGNAL(triggered(bool)),  view, SLOT( removeComment() ));
-
+  connect(actions->removeComment, SIGNAL(triggered(bool)),  view, SLOT( clearCommentSelection() ));
   actions->removeComment->setToolTip(i18n("Remove this cell's comment"));
 
   actions->clearComment = new KAction( i18n("Comment"), ac, "clearcomment" );
   connect(actions->clearComment, SIGNAL(triggered(bool)),view, SLOT( clearCommentSelection() ));
-
   actions->clearComment->setToolTip(i18n("Remove this cell's comment"));
 
   // -- column & row actions --
@@ -4021,20 +4019,6 @@ void View::specialPaste()
   }
 }
 
-void View::removeComment()
-{
-  if ( !d->activeSheet )
-        return;
-
-  doc()->emitBeginOperation(false);
-  d->activeSheet->clearComment( selectionInfo() );
-  updateEditWidget();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
-}
-
-
 void View::changeAngle()
 {
   AngleDialog dlg( this, "Angle", selectionInfo()->marker() );
@@ -5860,16 +5844,12 @@ void View::clearTextSelection()
 
 void View::clearCommentSelection()
 {
-    if (!activeSheet())
-      return;
-
-    doc()->emitBeginOperation( false );
-    d->activeSheet->clearComment( selectionInfo() );
-
-    updateEditWidget();
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Remove Comment" ) );
+  manipulator->setComment( QString() );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::clearValiditySelection()

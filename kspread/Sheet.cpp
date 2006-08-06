@@ -1460,17 +1460,6 @@ void Sheet::setSelectionfirstLetterUpper( Selection* selectionInfo)
   manipulator->execute ();
 }
 
-void Sheet::clearComment( Selection* selectionInfo )
-{
-  if (areaIsEmpty(*selectionInfo, Comment))
-    return;
-
-  Manipulator* manipulator = new CommentRemovalManipulator();
-  manipulator->setSheet(this);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
 
 struct SetSelectionBorderColorWorker : public Sheet::CellWorker {
     const QColor& bd_Color;

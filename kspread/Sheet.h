@@ -981,8 +981,6 @@ public:
      */
     void setSelectionfirstLetterUpper( Selection* selection);
 
-    void clearComment(Selection* selection);
-
     void setSelectionBorderColor( Selection* selection,
                                   const QColor &bd_Color );
 

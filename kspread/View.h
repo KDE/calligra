@@ -399,7 +399,6 @@ public slots:
     void verticalText(bool );
     void addModifyComment();
     void setSelectionComment(QString comment);
-    void removeComment();
     void changeAngle();
     void setSelectionAngle(int angle);
 
