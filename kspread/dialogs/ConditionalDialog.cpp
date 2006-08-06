@@ -27,6 +27,7 @@
 #include "Canvas.h"
 #include "Cell.h"
 #include "Doc.h"
+#include "Manipulator.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -288,6 +289,8 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
 
   setButtonsOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
+
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 
   init();
 }
@@ -643,7 +646,6 @@ void ConditionalDialog::slotOk()
 
   kDebug() << "Input data is valid" << endl;
 
-  m_view->doc()->emitBeginOperation( false );
   StyleManager * manager = m_view->doc()->styleManager();
 
   QLinkedList<Conditional> newList;
@@ -663,8 +665,11 @@ void ConditionalDialog::slotOk()
     newList.append( newCondition );
 
   kDebug() << "Setting conditional list" << endl;
-  m_view->activeSheet()->setConditional( m_view->selectionInfo(), newList );
-  m_view->slotUpdateView( m_view->activeSheet(), *m_view->selectionInfo() );
+  ConditionalManipulator* manipulator = new ConditionalManipulator();
+  manipulator->setSheet( m_view->activeSheet() );
+  manipulator->setConditionList( newList );
+  manipulator->add( *m_view->selectionInfo() );
+  manipulator->execute();
 
   accept();
 }

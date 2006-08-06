@@ -2546,14 +2546,6 @@ void Sheet::clearText( Selection* selectionInfo )
   manipulator->execute();
 }
 
-void Sheet::clearCondition( Selection* selectionInfo )
-{
-  Manipulator* manipulator = new ConditionRemovalManipulator();
-  manipulator->setSheet(this);
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
 struct DefaultSelectionWorker : public Sheet::CellWorker {
     DefaultSelectionWorker( ) : Sheet::CellWorker( true, false, true ) { }
 
@@ -2623,40 +2615,6 @@ struct SetConditionalWorker : public Sheet::CellWorker
     }
   }
 };
-
-void Sheet::setConditional( Selection* selectionInfo,
-                                   QLinkedList<Conditional> const & newConditions)
-{
-  if ( !doc()->undoLocked() )
-  {
-    UndoConditional * undo = new UndoConditional(doc(), this, *selectionInfo);
-    doc()->addCommand( undo );
-  }
-
-  Region::ConstIterator endOfList = selectionInfo->constEnd();
-  for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
-  {
-    QRect range = (*it)->rect();
-
-    int l = range.left();
-    int r = range.right();
-    int t = range.top();
-    int b = range.bottom();
-
-    Cell * cell;
-    Style * s = doc()->styleManager()->defaultStyle();
-    for (int x = l; x <= r; ++x)
-    {
-      for (int y = t; y <= b; ++y)
-      {
-        cell = nonDefaultCell( x, y, s );
-        cell->setConditionList( newConditions );
-      }
-    }
-  }
-
-  emit sig_updateView( this, *selectionInfo );
-}
 
 
 /**

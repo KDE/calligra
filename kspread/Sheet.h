@@ -1005,11 +1005,6 @@ public:
      */
     void clearText( Selection* selection );
 
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void clearCondition(Selection* selection );
-
     void setWordSpelling(Selection* selection,const QString _listWord );
 
     /**
@@ -1021,9 +1016,6 @@ public:
      * @param selection the selection of cells to work on
      */
     void defaultSelection( Selection* selection );
-
-    void setConditional( Selection* selection,
-                         QLinkedList<Conditional> const & newConditions );
 
     /**
      * @param selection the selection of cells to work on

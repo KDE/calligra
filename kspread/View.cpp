@@ -5883,16 +5883,11 @@ void View::clearValiditySelection()
 
 void View::clearConditionalSelection()
 {
-    if (!activeSheet())
-      return;
-
-    doc()->emitBeginOperation( false );
-    d->activeSheet->clearCondition( selectionInfo() );
-
-    updateEditWidget();
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
+  ConditionalManipulator* manipulator = new ConditionalManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setConditionList( QLinkedList<Conditional>() );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::fillRight()

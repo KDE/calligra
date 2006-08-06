@@ -181,7 +181,7 @@ bool Manipulator::process(Element* element)
       sheet->enableScrollBarUpdates(false);
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
-        Cell* cell = sheet->cellAt(col, row);
+        Cell* cell = m_creation ? sheet->nonDefaultCell(col, row) : sheet->cellAt(col, row);
 /* (Tomas) don't force working on obscurring cells - most manipulators don't want this, and those that do can do that manually ... Plus I think that no manipulator should do it anyway ...
         if ( cell->isPartOfMerged() )
         {
@@ -190,13 +190,6 @@ bool Manipulator::process(Element* element)
 */
         //if (testCondition(cell))
         {
-          if (cell == sheet->defaultCell() && m_creation)
-          {
-            Style* style = sheet->doc()->styleManager()->defaultStyle();
-            cell = new Cell(sheet, style, col, row);
-            sheet->insertCell(cell);
-          }
-
           if (!process(cell))
           {
             return false;
@@ -603,10 +596,50 @@ bool CommentRemovalManipulator::process( Cell* cell )
   return true;
 }
 
-bool ConditionRemovalManipulator::process( Cell* cell )
+
+
+/***************************************************************************
+  class ConditionalManipulator
+****************************************************************************/
+
+ConditionalManipulator::ConditionalManipulator()
+  : Manipulator()
 {
-  cell->setConditionList( QLinkedList<Conditional>() );
+  m_format = false;
+}
+
+bool ConditionalManipulator::process( Cell* cell )
+{
+  if ( !m_reverse )
+  {
+    // create undo
+    if ( m_firstrun )
+    {
+      if ( !cell->conditionList().isEmpty() )
+      {
+        m_undoData[cell->column()][cell->row()] = cell->conditionList();
+      }
+    }
+
+    cell->setConditionList( m_conditions );
+  }
+  else // m_reverse
+  {
+    cell->setConditionList( m_undoData[cell->column()][cell->row()] );
+  }
   return true;
+}
+
+QString ConditionalManipulator::name() const
+{
+  if ( m_conditions.isEmpty() )
+  {
+    return i18n( "Remove Conditional Formatting" );
+  }
+  else
+  {
+    return i18n( "Add Conditional Formatting" );
+  }
 }
 
 

@@ -253,18 +253,24 @@ private:
 };
 
 /**
- * \class ConditionRemovalManipulator
- * \brief Removes the conditional formattings of a cell region.
+ * \class ConditionalManipulator
+ * \brief Adds/Removes condtional formatting to/of a cell region.
  */
-class ConditionRemovalManipulator : public RemovalManipulator
+class ConditionalManipulator : public Manipulator
 {
 public:
+  ConditionalManipulator();
+
+  void setConditionList( const QLinkedList<Conditional>& list ) { m_conditions = list; }
 
 protected:
   virtual bool process( Cell* cell );
-  virtual QString name() const { return i18n( "Remove Conditional Formatting" ); }
+
+  virtual QString name() const;
 
 private:
+  QLinkedList<Conditional> m_conditions;
+  QHash<int, QHash<int, QLinkedList<Conditional> > > m_undoData;
 };
 
 /**
