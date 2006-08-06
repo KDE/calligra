@@ -367,10 +367,10 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 		i18n("Shows data for table or query associated with this page setup."));
 	m_contents->openDataLink->setToolTip( 
 		i18n("Shows data for table or query associated with this page setup."));
-	connect(m_contents->openDataLink, SIGNAL(leftClickedURL()), this, SLOT(slotOpenData())); 
+	connect(m_contents->openDataLink, SIGNAL(leftClickedUrl()), this, SLOT(slotOpenData())); 
 
 	Q3WhatsThis::add(m_contents->saveSetupLink, i18n("Saves settings for this setup as default."));
-	connect(m_contents->saveSetupLink, SIGNAL(leftClickedURL()), this, SLOT(slotSaveSetup()));
+	connect(m_contents->saveSetupLink, SIGNAL(leftClickedUrl()), this, SLOT(slotSaveSetup()));
 #if !KDE_IS_VERSION(3,5,1) && !defined(Q_WS_WIN)
 	//a fix for problems with focusable KUrlLabel on KDElibs<=3.5.0
 	m_contents->openDataLink->setFocusPolicy(NoFocus);
