@@ -1435,8 +1435,9 @@ void Sheet::setSelectionFont( Selection* selectionInfo,
                               signed char _bold, signed char _italic,
                               signed char _underline, signed char _strike)
 {
-  FontManipulator* manipulator = new FontManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Font") );
   manipulator->setProperty(Style::SFont);
   manipulator->setFontFamily(_font);
   manipulator->setFontSize(_size);
@@ -1458,8 +1459,9 @@ void Sheet::setSelectionSize(Selection* selectionInfo,
   c = cellAt(marker);
   size = c->format()->textFontSize(marker.x(), marker.y());
 
-  FontManipulator* manipulator = new FontManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Font") );
   manipulator->setProperty(Style::SFont);
   manipulator->setFontSize(_size+size);
   manipulator->add(*selectionInfo);
@@ -1555,8 +1557,9 @@ void Sheet::setSelectionComment( Selection* selectionInfo,
 void Sheet::setSelectionAngle( Selection* selectionInfo,
                                int _value )
 {
-  AngleManipulator* manipulator = new AngleManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Angle") );
   manipulator->setProperty(Style::SAngle);
   manipulator->setAngle(_value);
   manipulator->add(*selectionInfo);
@@ -1578,8 +1581,9 @@ void Sheet::clearComment( Selection* selectionInfo )
 void Sheet::setSelectionTextColor( Selection* selectionInfo,
                                    const QColor &tb_Color )
 {
-  FontColorManipulator* manipulator = new FontColorManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Text Color") );
   manipulator->setProperty(Style::STextPen);
   manipulator->setTextColor(tb_Color);
   manipulator->add(*selectionInfo);
@@ -1589,8 +1593,9 @@ void Sheet::setSelectionTextColor( Selection* selectionInfo,
 void Sheet::setSelectionbgColor( Selection* selectionInfo,
                                  const QColor &bg_Color )
 {
-  BackgroundColorManipulator* manipulator = new BackgroundColorManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Background Color") );
   manipulator->setProperty(Style::SBackgroundColor);
   manipulator->setBackgroundColor(bg_Color);
   manipulator->add(*selectionInfo);
@@ -2356,8 +2361,9 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
 
 void Sheet::borderBottom( Selection* selectionInfo, const QColor &_color )
 {
-  BorderManipulator* manipulator = new BorderManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Border") );
   manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -2365,8 +2371,9 @@ void Sheet::borderBottom( Selection* selectionInfo, const QColor &_color )
 
 void Sheet::borderRight( Selection* selectionInfo, const QColor &_color )
 {
-  BorderManipulator* manipulator = new BorderManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Border") );
   manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -2374,8 +2381,9 @@ void Sheet::borderRight( Selection* selectionInfo, const QColor &_color )
 
 void Sheet::borderLeft( Selection* selectionInfo, const QColor &_color )
 {
-  BorderManipulator* manipulator = new BorderManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Border") );
   manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -2383,8 +2391,9 @@ void Sheet::borderLeft( Selection* selectionInfo, const QColor &_color )
 
 void Sheet::borderTop( Selection* selectionInfo, const QColor &_color )
 {
-  BorderManipulator* manipulator = new BorderManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Border") );
   manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -2392,8 +2401,9 @@ void Sheet::borderTop( Selection* selectionInfo, const QColor &_color )
 
 void Sheet::borderOutline( Selection* selectionInfo, const QColor &_color )
 {
-  BorderManipulator* manipulator = new BorderManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Border") );
   manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
@@ -2405,8 +2415,9 @@ void Sheet::borderOutline( Selection* selectionInfo, const QColor &_color )
 void Sheet::borderAll( Selection * selectionInfo,
                        const QColor & _color )
 {
-  BorderManipulator* manipulator = new BorderManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Border") );
   manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
@@ -2419,8 +2430,9 @@ void Sheet::borderAll( Selection * selectionInfo,
 
 void Sheet::borderRemove( Selection* selectionInfo )
 {
-  BorderManipulator* manipulator = new BorderManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Border") );
   manipulator->setTopBorderPen(QPen(Qt::NoPen));
   manipulator->setBottomBorderPen(QPen(Qt::NoPen));
   manipulator->setLeftBorderPen(QPen(Qt::NoPen));
@@ -2609,8 +2621,9 @@ QString Sheet::guessRowTitle(QRect& area, int row)
 void Sheet::setSelectionAlign( Selection* selectionInfo,
                                Style::HAlign _align )
 {
-  HorAlignManipulator* manipulator = new HorAlignManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Horizontal Alignment") );
   manipulator->setProperty(Style::SHAlign);
   manipulator->setHorizontalAlignment(_align);
   manipulator->add(*selectionInfo);
@@ -2620,8 +2633,9 @@ void Sheet::setSelectionAlign( Selection* selectionInfo,
 void Sheet::setSelectionAlignY( Selection* selectionInfo,
                                 Style::VAlign _alignY )
 {
-  VerAlignManipulator* manipulator = new VerAlignManipulator();
+  FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(this);
+  manipulator->setName( i18n("Change Vertical Alignment") );
   manipulator->setProperty(Style::SVAlign);
   manipulator->setVerticalAlignment(_alignY);
   manipulator->add(*selectionInfo);
