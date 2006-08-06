@@ -281,8 +281,6 @@ public:
 protected:
   virtual bool process( Cell* cell );
 
-  virtual bool preProcessing();
-
   virtual QString name() const;
 
 private:

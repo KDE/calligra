@@ -625,64 +625,35 @@ bool ValidityManipulator::process( Cell* cell )
 {
   if ( !cell->isObscured() )
   {
-    if ( m_validity.m_restriction == Restriction::None )
-    {
-      cell->removeValidity();
-    }
-    else
-    {
-      *cell->validity(true) = m_validity;
-    }
-  }
-  return true;
-}
-
-bool ValidityManipulator::preProcessing()
-{
-  if ( !m_reverse )
-  {
-    if ( m_firstrun )
+    if ( !m_reverse )
     {
       // create undo
-      ConstIterator endOfList = constEnd();
-      for (ConstIterator it = constBegin(); it != endOfList; ++it)
+      if ( m_firstrun )
       {
-        Element* element = *it;
-        QRect range = element->rect();
-        int right = range.right();
-        int bottom = range.bottom();
-        for (int row = range.top(); row <= bottom; ++row)
+        if ( Validity* validity = cell->validity() )
         {
-          for (int col = range.left(); col <= right; ++col)
-          {
-            if ( Validity* validity = m_sheet->cellAt(col, row)->validity() )
-            {
-              m_undoData[col][row] = *validity;
-            }
-          }
+          m_undoData[cell->column()][cell->row()] = *validity;
         }
       }
-    }
-  }
-  else // m_reverse
-  {
-    // undo
-    ConstIterator endOfList = constEnd();
-    for (ConstIterator it = constBegin(); it != endOfList; ++it)
-    {
-      Element* element = *it;
-      QRect range = element->rect();
-      int right = range.right();
-      int bottom = range.bottom();
-      for (int row = range.top(); row <= bottom; ++row)
+
+      if ( m_validity.m_restriction == Restriction::None )
       {
-        for (int col = range.left(); col <= right; ++col)
-        {
-          if ( m_undoData[col][row].m_restriction == Restriction::None )
-          {
-            *m_sheet->cellAt(col, row)->validity(true) = m_undoData[col][row];
-          }
-        }
+        cell->removeValidity();
+      }
+      else
+      {
+        *cell->validity(true) = m_validity;
+      }
+    }
+    else // m_reverse
+    {
+      if ( m_undoData[cell->column()][cell->row()].m_restriction == Restriction::None )
+      {
+        cell->removeValidity();
+      }
+      else
+      {
+        *cell->validity(true) = m_undoData[cell->column()][cell->row()];
       }
     }
   }
