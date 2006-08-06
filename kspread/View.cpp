@@ -106,6 +106,7 @@
 #include "Damages.h"
 #include "DependencyManager.h"
 #include "Digest.h"
+#include "FormatManipulators.h"
 #include "inspector.h"
 #include "LoadingInfo.h"
 #include "Border.h"
@@ -6182,12 +6183,14 @@ void View::wrapText( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->setSelectionMultiRow( selectionInfo(), b );
-    doc()->emitEndOperation( d->canvas->visibleCells() );
-  }
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Wrap Text" ) );
+  manipulator->setMultiRow( b );
+  manipulator->setVerticalText( false );
+  manipulator->setAngle( 0 );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::alignLeft( bool b )
@@ -6305,13 +6308,13 @@ void View::moneyFormat(bool b)
   if ( d->toolbarLock )
     return;
 
-  doc()->emitBeginOperation( false );
-  if ( d->activeSheet != 0 )
-    d->activeSheet->setSelectionMoneyFormat( selectionInfo(), b );
-  updateEditWidget();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Format Money" ) );
+  manipulator->setFormatType( b ? Money_format : Generic_format );
+  manipulator->setPrecision( b ?  d->doc->locale()->fracDigits() : 0 );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::createStyleFromCell()
@@ -6402,13 +6405,12 @@ void View::percent( bool b )
   if ( d->toolbarLock )
     return;
 
-  doc()->emitBeginOperation( false );
-  if ( d->activeSheet != 0 )
-    d->activeSheet->setSelectionPercent( selectionInfo() ,b );
-  updateEditWidget();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Format Percent" ) );
+  manipulator->setFormatType( b ? Percentage_format : Generic_format );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 

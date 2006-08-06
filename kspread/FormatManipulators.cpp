@@ -520,6 +520,10 @@ void FormatManipulator::doWork(Format* format,
     {
       format->setCurrency(m_currencyType, m_currencySymbol);
     }
+    else if (m_formatType == Percentage_format)
+    {
+      format->setFormatType(Percentage_format);
+    }
   }
   if (m_properties & Style::SComment)
   {

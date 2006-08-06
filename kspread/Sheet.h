@@ -973,14 +973,11 @@ public:
                            signed char _underline = -1,
                            signed char _strike = -1 );
 
-    void setSelectionMoneyFormat( Selection* selection, bool b );
     void setSelectionAlign( Selection* selection,
                             Style::HAlign _align );
     void setSelectionAlignY( Selection* selection,
                              Style::VAlign _alignY );
     void setSelectionPrecision( Selection* selection, int _delta );
-    void setSelectionPercent( Selection* selection, bool b );
-    void setSelectionMultiRow( Selection* selection, bool enable );
     void setSelectionStyle( Selection* selection, Style * style );
 
     /**

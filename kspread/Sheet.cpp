@@ -1634,42 +1634,6 @@ void Sheet::setSelectionBorderColor( Selection* selectionInfo,
     workOnCells( selectionInfo, w );
 }
 
-struct SetSelectionPercentWorker : public Sheet::CellWorkerTypeA
-{
-    bool b;
-    SetSelectionPercentWorker( bool _b ) : b( _b ) { }
-
-    QString getUndoTitle() { return i18n("Format Percent"); }
-    bool testCondition( RowFormat* ) {
-        //TODO: no idea what to put here, now that factor's gone :(
-        return ( true );
-    }
-    void doWork( RowFormat* rw ) {
-  //rw->setPrecision( 0 );
-  rw->setFormatType( b ? Percentage_format : Generic_format);
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setFormatType( b ? Percentage_format : Generic_format);
-    }
-    void prepareCell( Cell* cell ) {
-  cell->format()->clearProperty(Style::SFormatType);
-  cell->format()->clearNoFallBackProperties( Style::SFormatType );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isPartOfMerged() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-      Q_UNUSED(cellRegion)
-  cell->format()->setFormatType( b ? Percentage_format : Generic_format);
-    }
-};
-
-void Sheet::setSelectionPercent( Selection* selectionInfo, bool b )
-{
-    SetSelectionPercentWorker w( b );
-    workOnCells( selectionInfo, w );
-}
-
 void Sheet::slotAreaModified (const QString &name)
 {
   d->workbook->dependencyManager()->areaModified (name);
@@ -2591,38 +2555,6 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
   return true;
 }
 
-struct SetSelectionMultiRowWorker : public Sheet::CellWorker
-{
-  bool enable;
-  SetSelectionMultiRowWorker( bool _enable )
-    : Sheet::CellWorker( ), enable( _enable ) { }
-
-  class UndoAction* createUndoAction( Doc * doc, Sheet * sheet, const KSpread::Region& region )
-  {
-    QString title = i18n("Multirow");
-    return new UndoCellFormat( doc, sheet, region, title );
-  }
-
-  bool testCondition( Cell * cell )
-  {
-    return ( !cell->isPartOfMerged() );
-  }
-
-  void doWork( Cell * cell, bool, int, int )
-  {
-    cell->format()->setMultiRow( enable );
-    cell->format()->setVerticalText( false );
-    cell->format()->setAngle( 0 );
-  }
-};
-
-void Sheet::setSelectionMultiRow( Selection* selectionInfo,
-                                         bool enable )
-{
-    SetSelectionMultiRowWorker w( enable );
-    workOnCells( selectionInfo, w );
-}
-
 QString Sheet::guessColumnTitle(QRect& area, int col)
 {
   //Verify range
@@ -2764,49 +2696,6 @@ void Sheet::setSelectionStyle( Selection * selectionInfo, Style * style )
     SetSelectionStyleWorker w( style );
     workOnCells( selectionInfo, w );
 }
-
-struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
-{
-    bool b;
-    Doc *m_pDoc;
-    SetSelectionMoneyFormatWorker( bool _b,Doc* _doc ) : b( _b ), m_pDoc(_doc) { }
-    QString getUndoTitle() { return i18n("Format Money"); }
-    bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Style::SFormatType )
-     || rw->hasProperty( Style::SPrecision ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setFormatType( b ? Money_format : Generic_format );
-  rw->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setFormatType( b ? Money_format : Generic_format );
-  cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
-    }
-    void prepareCell( Cell* c ) {
-  c->format()->clearProperty( Style::SPrecision );
-  c->format()->clearNoFallBackProperties( Style::SPrecision );
-  c->format()->clearProperty( Style::SFormatType );
-  c->format()->clearNoFallBackProperties( Style::SFormatType );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isPartOfMerged() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-      Q_UNUSED(cellRegion);
-  cell->format()->setFormatType( b ? Money_format : Generic_format );
-  cell->format()->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
-    }
-};
-
-
-void Sheet::setSelectionMoneyFormat( Selection* selectionInfo,
-                                            bool b )
-{
-    SetSelectionMoneyFormatWorker w( b,doc() );
-    workOnCells( selectionInfo, w );
-}
-
 
 struct IncreaseIndentWorker : public Sheet::CellWorkerTypeA {
     double   tmpIndent;
