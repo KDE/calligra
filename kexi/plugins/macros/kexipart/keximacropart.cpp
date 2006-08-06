@@ -167,6 +167,6 @@ QString KexiMacroPart::i18nMessage(const QCString& englishMessage) const
 	return englishMessage;
 }
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_macro, KGenericFactory<KexiMacroPart>("kexihandler_script") )
+K_EXPORT_COMPONENT_FACTORY( kexihandler_macro, KGenericFactory<KexiMacroPart>("kexihandler_macro") )
 
 #include "keximacropart.moc"
