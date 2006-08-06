@@ -2352,32 +2352,6 @@ QString Sheet::guessRowTitle(QRect& area, int row)
   return cellValue.asString();
 }
 
-struct SetSelectionPrecisionWorker : public Sheet::CellWorker {
-    int _delta;
-    SetSelectionPrecisionWorker( int delta ) : Sheet::CellWorker( ), _delta( delta ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
-        QString title=i18n("Change Precision");
-  return new UndoCellFormat( doc, sheet, region, title );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isPartOfMerged() );
-    }
-    void doWork( Cell* cell, bool, int, int ) {
-  if ( _delta == 1 )
-      cell->incPrecision();
-  else
-      cell->decPrecision();
-    }
-};
-
-void Sheet::setSelectionPrecision( Selection* selectionInfo,
-                                          int _delta )
-{
-    SetSelectionPrecisionWorker w( _delta );
-    workOnCells( selectionInfo, w );
-}
-
 struct SetSelectionStyleWorker : public Sheet::CellWorkerTypeA
 {
   Style * m_style;

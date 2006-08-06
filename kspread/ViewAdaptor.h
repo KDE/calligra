@@ -102,7 +102,6 @@ public Q_SLOTS: // METHODS
     virtual void copyAsText();
 
     virtual void setSelectionMoneyFormat( bool b );
-    virtual void setSelectionPrecision( int delta );
     virtual void setSelectionPercent( bool b );
     virtual void setSelectionMultiRow( bool enable );
     virtual void setSelectionSize(int size);
@@ -130,6 +129,8 @@ public Q_SLOTS: // METHODS
 
     virtual void increaseIndent();
     virtual void decreaseIndent();
+    virtual void increasePrecision();
+    virtual void decreasePrecision();
 
     void subtotals();
     void sortInc();

@@ -333,11 +333,10 @@ public slots:
     void alignMiddle( bool b );
     void alignBottom( bool b );
     void wrapText( bool b );
-    void precisionMinus();
-    void precisionPlus();
+    void decreasePrecision();
+    void increasePrecision();
     void createStyleFromCell();
     void styleSelected( const QString & );
-    void setSelectionPrecision(int delta);
     void percent(bool b);
     void fontSelected( const QString &_font );
     void fontSizeSelected( int size );

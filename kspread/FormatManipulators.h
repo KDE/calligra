@@ -175,6 +175,17 @@ class FormatManipulator : public Manipulator
     FormatType m_formatType;
 };
 
+class IncreasePrecisionManipulator :public Manipulator
+{
+public:
+  IncreasePrecisionManipulator();
+
+protected:
+  virtual bool process( Cell* cell );
+
+  virtual QString name() const;
+};
+
 }  // namespace KSpread
 
 #endif // KSPREAD_MANIPULATOR_FORMAT

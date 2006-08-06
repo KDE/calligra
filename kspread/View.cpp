@@ -605,12 +605,12 @@ void View::Private::initActions()
   actions->percent->setToolTip(i18n("Set the cell formatting to look like a percentage"));
 
   actions->precplus = new KAction( KIcon( "prec_plus" ), i18n("Increase Precision"), ac, "precplus");
-  connect(actions->precplus, SIGNAL(triggered(bool)), view, SLOT( precisionPlus() ));
+  connect(actions->precplus, SIGNAL(triggered(bool)), view, SLOT( increasePrecision() ));
 
   actions->precplus->setToolTip(i18n("Increase the decimal precision shown onscreen"));
 
   actions->precminus = new KAction( KIcon( "prec_minus" ), i18n("Decrease Precision"), ac, "precminus");
-  connect(actions->precminus, SIGNAL(triggered(bool)), view, SLOT( precisionMinus() ));
+  connect(actions->precminus, SIGNAL(triggered(bool)), view, SLOT( decreasePrecision() ));
 
   actions->precminus->setToolTip(i18n("Decrease the decimal precision shown onscreen"));
 
@@ -6326,26 +6326,21 @@ void View::styleSelected( const QString & style )
   }
 }
 
-void View::precisionPlus()
+void View::increasePrecision()
 {
-  setSelectionPrecision( 1 );
+  IncreasePrecisionManipulator* manipulator = new IncreasePrecisionManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
-void View::precisionMinus()
+void View::decreasePrecision()
 {
-  setSelectionPrecision( -1 );
-}
-
-void View::setSelectionPrecision( int delta )
-{
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->setSelectionPrecision( selectionInfo(), delta );
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
+  IncreasePrecisionManipulator* manipulator = new IncreasePrecisionManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setReverse( true );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::percent( bool b )

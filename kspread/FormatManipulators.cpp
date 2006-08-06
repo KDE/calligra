@@ -570,3 +570,38 @@ void FormatManipulator::prepareCell(Cell* cell)
 }
 
 
+
+/***************************************************************************
+  class IncreasePrecisionManipulator
+****************************************************************************/
+
+IncreasePrecisionManipulator::IncreasePrecisionManipulator()
+  : Manipulator()
+{
+  m_format = false;
+}
+
+bool IncreasePrecisionManipulator::process( Cell* cell )
+{
+  if ( !m_reverse )
+  {
+    cell->incPrecision();
+  }
+  else // m_reverse
+  {
+    cell->decPrecision();
+  }
+  return true;
+}
+
+QString IncreasePrecisionManipulator::name() const
+{
+  if ( !m_reverse )
+  {
+    return i18n( "Increase Precision" );
+  }
+  else
+  {
+    return i18n( "Decrease Precision" );
+  }
+}

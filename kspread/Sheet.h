@@ -967,7 +967,6 @@ public:
 
     void setArrayFormula (Selection* selection, const QString &_text);
 
-    void setSelectionPrecision( Selection* selection, int _delta );
     void setSelectionStyle( Selection* selection, Style * style );
 
     /**

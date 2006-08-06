@@ -304,11 +304,6 @@ void ViewAdaptor::setSelectionMoneyFormat( bool b )
   m_view->moneyFormat(b);
 }
 
-void ViewAdaptor::setSelectionPrecision( int delta )
-{
-  m_view->setSelectionPrecision(delta);
-}
-
 void ViewAdaptor::setSelectionPercent( bool b )
 {
   m_view->percent(b);
@@ -427,6 +422,16 @@ void ViewAdaptor::increaseIndent()
 void ViewAdaptor::decreaseIndent()
 {
   m_view->increaseIndent();
+}
+
+void ViewAdaptor::increasePrecision()
+{
+  m_view->increasePrecision();
+}
+
+void ViewAdaptor::decreasePrecision()
+{
+  m_view->decreasePrecision();
 }
 
 void ViewAdaptor::subtotals()
