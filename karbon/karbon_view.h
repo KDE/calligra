@@ -30,6 +30,7 @@
 #include <kxmlguibuilder.h>
 #include <KoUnit.h>
 #include <KoCommand.h>
+#include <KoZoomMode.h>
 #include <koffice_export.h>
 //Added by qt3to4:
 #include <QDropEvent>
@@ -47,6 +48,7 @@ class KToggleAction;
 class KoContextHelpAction;
 class KoLineStyleAction;
 class KoCanvasController;
+class KoZoomAction;
 
 class KoUnitDoubleSpinComboBox;
 class QRectF;
@@ -202,6 +204,9 @@ protected slots:
 
 	void canvasContentsMoving( int x, int y );
 
+	/// Called by the zoom action to set the zoom
+	void zoomChanged( KoZoomMode::Mode mode, int zoom );
+
 signals:
 	void zoomChanged( double );
 	void selectionChange();
@@ -248,7 +253,7 @@ private:
 	KAction			*m_closePath;
 
 	// actions:
-	KSelectAction		*m_zoomAction;
+	KoZoomAction		*m_zoomAction;
 	KSelectAction		*m_viewAction;
 	KAction				*m_configureAction;
 	KToggleAction		*m_showRulerAction;

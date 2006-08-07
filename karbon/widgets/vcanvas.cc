@@ -55,6 +55,8 @@ KarbonCanvas::KarbonCanvas( VDocument &document )
     , m_marginY( defaultMargin )
     , m_visibleWidth( 500 )
     , m_visibleHeight( 500 )
+    , m_fitMarginX( 20 )
+    , m_fitMarginY( 20 )
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
@@ -62,7 +64,7 @@ KarbonCanvas::KarbonCanvas( VDocument &document )
     m_shapeManager = new KoShapeManager(this, m_doc->shapes() );
     setMouseTracking(true);
 
-    //connect( m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
+    connect( m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(adjustSize()) );
     setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
     adjustSize();
 }
@@ -131,14 +133,41 @@ void KarbonCanvas::updateCanvas(const QRectF& rc) {
 }
 
 void KarbonCanvas::setVisibleSize( int visibleWidth, int visibleHeight ) {
-   m_visibleWidth = visibleWidth;
-   m_visibleHeight = visibleHeight;
-   adjustSize();
+    m_visibleWidth = visibleWidth;
+    m_visibleHeight = visibleHeight;
+    adjustSize();
+}
+
+void KarbonCanvas::setFitMargin( int fitMarginX, int fitMarginY ) {
+    m_fitMarginX = fitMarginX;
+    m_fitMarginY = fitMarginY;
 }
 
 void KarbonCanvas::adjustSize() {
     m_contentRect = m_doc->boundingRect();
     m_documentRect.setRect( 0.0, 0.0, m_doc->width(), m_doc->height() );
+
+    if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_PAGE ) 
+    {
+        double zoomX = double( m_visibleWidth-2*m_fitMarginX ) / double( m_zoomHandler.resolutionX() * m_documentRect.width() );
+        double zoomY = double( m_visibleHeight-2*m_fitMarginY ) / double( m_zoomHandler.resolutionY() * m_documentRect.height() );
+
+        double zoom = 1.0;
+        if(zoomX < 0.0 && zoomY > 0.0 )
+            zoom = zoomY;
+        else if(zoomX > 0.0 && zoomY < 0.0 )
+            zoom = zoomX;
+        else if(zoomX < 0.0 && zoomY < 0.0)
+            zoom = 0.0001;
+        else
+            zoom = qMin( zoomX, zoomY );
+        m_zoomHandler.setZoom( zoom );
+    }
+    else if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_WIDTH ) 
+    {
+        double zoom = double( m_visibleWidth-2*m_fitMarginX ) / double( m_zoomHandler.resolutionX() * m_documentRect.width() );
+        m_zoomHandler.setZoom( zoom );
+    }
 
     // calculate how much space we need with the current zoomed doc size and default margins
     QRect zoomedRect = m_zoomHandler.documentToView( m_contentRect ).toRect();

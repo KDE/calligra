@@ -65,6 +65,7 @@
 #include <KoShapeGroup.h>
 #include <KoCommand.h>
 #include <KoSelection.h>
+#include <KoZoomAction.h>
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -976,11 +977,31 @@ KarbonView::viewZoomOut()
 	setZoomAt( zoom() * 0.75 );
 }
 
+void 
+KarbonView::zoomChanged( KoZoomMode::Mode mode, int zoom )
+{
+	debugView(QString("KarbonView::zoomChanged( mode = %1, zoom = %2) )").arg(mode).arg(zoom));
+
+	KoZoomHandler *zoomHandler = (KoZoomHandler*)m_canvas->viewConverter();
+
+	if( mode == KoZoomMode::ZOOM_CONSTANT )
+	{
+		double zoomF = zoom / 100.0;
+		if( zoomF == 0.0 ) return;
+		KoView::setZoom( zoomF );
+		zoomHandler->setZoom( zoomF );
+	}
+	
+	zoomHandler->setZoomMode( mode );
+	m_canvas->adjustSize();
+	// TODO adjust the scrollbar positions of the canvas view
+}
+
 void
 KarbonView::zoomChanged( const QPointF &p )
 {
 	debugView(QString("KarbonView::zoomChanged( QPointF(%1, %2) )").arg(p.x()).arg(p.y()));
-	
+
 	if( m_canvas )
 	{
 		double zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
@@ -991,7 +1012,8 @@ KarbonView::zoomChanged( const QPointF &p )
 		KoView::setZoom( zoomFactor );
 		m_canvas->adjustSize();
 	}
-	else KoView::setZoom( 1.0 );
+	else
+		KoView::setZoom( 1.0 );
 
 // TODO: this should be done by the cavasview and the canvas itself
 
@@ -1151,36 +1173,10 @@ KarbonView::initActions()
 	m_viewAction = new KSelectAction(i18n("View &Mode"), actionCollection(), "view_mode");
 	connect(m_viewAction, SIGNAL(triggered()), this, SLOT(viewModeChanged()));
 
-	m_zoomAction = new KSelectAction(KIcon("viewmag"), i18n("&Zoom"), actionCollection(), "view_zoom");
-	connect(m_zoomAction, SIGNAL(triggered()), this, SLOT(zoomChanged()));
-
-	QStringList mstl;
-	mstl << i18n( "Normal" ) << i18n( "Wireframe" );
-	m_viewAction->setItems( mstl );
-	m_viewAction->setCurrentItem( 0 );
-	m_viewAction->setEditable( false );
-
-	QStringList stl;
-        // xgettext:no-c-format
-	stl << i18n( "25%" );
-        // xgettext:no-c-format
-	stl << i18n( "50%" );
-        // xgettext:no-c-format
-	stl << i18n( "100%" );
-        // xgettext:no-c-format
-	stl << i18n( "200%" );
-        // xgettext:no-c-format
-	stl << i18n( "300%" );
-        // xgettext:no-c-format
-	stl << i18n( "400%" );
-        // xgettext:no-c-format
-	stl << i18n( "800%" );
-	stl << i18n( "Whole Page" )
-            << i18n( "Zoom Width" );
-
-	m_zoomAction->setItems( stl );
-	m_zoomAction->setEditable( true );
-	m_zoomAction->setCurrentItem( 7 );
+	m_zoomAction = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT|KoZoomMode::ZOOM_PAGE|KoZoomMode::ZOOM_WIDTH, 
+	i18n("Zoom"), KIcon("14_zoom"), 0, actionCollection(), "view_zoom");
+	connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
+          this, SLOT(zoomChanged(KoZoomMode::Mode, int)));
 
 	KStdAction::zoomIn( this, SLOT( viewZoomIn() ), actionCollection(), "view_zoom_in" );
 	KStdAction::zoomOut( this, SLOT( viewZoomOut() ), actionCollection(), "view_zoom_out" );

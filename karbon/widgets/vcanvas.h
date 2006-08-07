@@ -80,6 +80,14 @@ public:
 
     void setCommandHistory( KCommandHistory* history ) { m_commandHistory = history; }
 
+    /** Sets the maximal available visible size. */
+    void setVisibleSize( int visibleWidth, int visibleHeight );
+
+    /** Sets the margins in pixel used when fitting to page or to width. */
+    void setFitMargin( int fitMarginX, int fitMarginY );
+
+public slots:
+
     /**
      * Tell the canvas that it has to adjust its size.
      * The new size depends on the current document size and the actual zoom factor. 
@@ -87,9 +95,6 @@ public:
      * by setVisibleSize, the visible size is used as the new size.
      */
     void adjustSize();
-
-    /** Sets the available visible size. */
-    void setVisibleSize( int visibleWidth, int visibleHeight );
 
 protected:
     void paintEvent(QPaintEvent * ev);
@@ -112,13 +117,15 @@ private:
     bool m_snapToGrid;
 
     VDocument *m_doc;
-    QRectF m_contentRect;
-    QRectF m_documentRect;
-    QPoint m_origin;
-    int m_marginX;
-    int m_marginY;
-    int m_visibleWidth;
-    int m_visibleHeight;
+    QRectF m_contentRect;  ///< the content rect around all content of the document (>=m_documentRect)
+    QRectF m_documentRect; ///< the doument page rect defining the documents page size
+    QPoint m_origin;       ///< the origin of the document page rect
+    int m_marginX;         ///< the minimum x margin around the document page rect
+    int m_marginY;         ///< the minimum y margin around the document page rect
+    int m_visibleWidth;    ///< available space in x-direction used for calulating zoom fit and margins
+    int m_visibleHeight;   ///< available space in y-direction used for calulating zoom fit and margins
+    int m_fitMarginX;      ///< x-margin used when zoom fitting to page or width
+    int m_fitMarginY;      ///< y-margin used when zoom fitting to page or width
 };
 
 #endif
