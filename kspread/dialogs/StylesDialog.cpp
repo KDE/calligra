@@ -193,32 +193,11 @@ void StyleDialog::slotOk()
     return;
   }
 
-  CustomStyle * s = 0;
-
   QString name( item->text( 0 ) );
   if ( name == i18n( "Default" ) )
-    s = m_styleManager->defaultStyle();
+    m_view->setDefaultStyle();
   else
-    s = m_styleManager->style( name );
-
-  if ( !s )
-  {
-    accept();
-    return;
-  }
-
-  if ( m_view )
-  {
-    Sheet * sheet = m_view->activeSheet();
-
-    if ( sheet )
-    {
-      m_view->doc()->emitBeginOperation( false );
-      sheet->setSelectionStyle( m_view->selectionInfo(), s );
-    }
-
-    m_view->slotUpdateView( m_view->activeSheet() );
-  }
+    m_view->setStyle( name );
   accept();
 }
 

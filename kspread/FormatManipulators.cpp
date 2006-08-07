@@ -17,9 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "FormatManipulators.h"
+#include <kdebug.h>
+
 #include "Cell.h"
 #include "Sheet.h"
+
+#include "FormatManipulators.h"
 
 using namespace KSpread;
 
@@ -572,6 +575,73 @@ void FormatManipulator::prepareCell(Cell* cell)
 
 
 /***************************************************************************
+  class IncreaseIndentManipulator
+****************************************************************************/
+
+IncreaseIndentManipulator::IncreaseIndentManipulator()
+  : Manipulator()
+{
+}
+
+bool IncreaseIndentManipulator::process( Cell* cell )
+{
+  if ( !m_reverse )
+  {
+    cell->format()->setIndent( cell->format()->getIndent(cell->column(), cell->row()) + m_sheet->doc()->indentValue() );
+  }
+  else // m_reverse
+  {
+    cell->format()->setIndent( cell->format()->getIndent(cell->column(), cell->row()) - m_sheet->doc()->indentValue() );
+  }
+  return true;
+}
+
+bool IncreaseIndentManipulator::process( Format* format )
+{
+  if ( !m_reverse )
+  {
+    if ( dynamic_cast<ColumnFormat*>(format) )
+    {
+      const ColumnFormat* columnFormat = dynamic_cast<ColumnFormat*>(format);
+      format->setIndent( format->getIndent( columnFormat->column(), 0 ) + m_sheet->doc()->indentValue() );
+    }
+    else
+    {
+      const RowFormat* rowFormat = dynamic_cast<RowFormat*>(format);
+      format->setIndent( format->getIndent( 0, rowFormat->row() ) + m_sheet->doc()->indentValue() );
+    }
+  }
+  else // m_reverse
+  {
+    if ( dynamic_cast<ColumnFormat*>(format) )
+    {
+      const ColumnFormat* columnFormat = dynamic_cast<ColumnFormat*>(format);
+      format->setIndent( format->getIndent( columnFormat->column(), 0 ) - m_sheet->doc()->indentValue() );
+    }
+    else
+    {
+      const RowFormat* rowFormat = dynamic_cast<RowFormat*>(format);
+      format->setIndent( format->getIndent( 0, rowFormat->row() ) - m_sheet->doc()->indentValue() );
+    }
+  }
+  return true;
+}
+
+QString IncreaseIndentManipulator::name() const
+{
+  if ( !m_reverse )
+  {
+    return i18n( "Increase Indentation" );
+  }
+  else
+  {
+    return i18n( "Decrease Indentation" );
+  }
+}
+
+
+
+/***************************************************************************
   class IncreasePrecisionManipulator
 ****************************************************************************/
 
@@ -603,5 +673,105 @@ QString IncreasePrecisionManipulator::name() const
   else
   {
     return i18n( "Decrease Precision" );
+  }
+}
+
+
+
+/***************************************************************************
+  class StyleApplicator
+****************************************************************************/
+
+StyleApplicator::StyleApplicator()
+  : Manipulator()
+  , m_style(0)
+{
+}
+
+bool StyleApplicator::process( Cell* cell )
+{
+  if ( !m_reverse )
+  {
+    if ( m_firstrun )
+    {
+      m_undoData[cell->column()][cell->row()] = cell->format()->style();
+      m_undoData[cell->column()][cell->row()]->addRef();
+    }
+
+    if ( m_style )
+    {
+      kDebug() << "Aplying style at " << cell->name() << endl;
+      cell->format()->setStyle( m_style );
+    }
+    else
+    {
+      kDebug() << "Aplying default style at " << cell->name() << endl;
+      cell->defaultStyle();
+    }
+  }
+  else // m_reverse
+  {
+    cell->format()->setStyle( m_undoData[cell->column()][cell->row()] );
+    m_undoData[cell->column()][cell->row()]->release();
+  }
+  return true;
+}
+
+bool StyleApplicator::process( Format* format )
+{
+  if ( !m_reverse )
+  {
+    if ( m_firstrun )
+    {
+      if ( dynamic_cast<ColumnFormat*>(format) )
+      {
+        const ColumnFormat* columnFormat = dynamic_cast<ColumnFormat*>(format);
+        m_undoData[columnFormat->column()][0] = columnFormat->style();
+        m_undoData[columnFormat->column()][0]->addRef();
+      }
+      else
+      {
+        const RowFormat* rowFormat = dynamic_cast<RowFormat*>(format);
+        m_undoData[0][rowFormat->row()] = rowFormat->style();
+        m_undoData[0][rowFormat->row()]->addRef();
+      }
+    }
+
+    if ( m_style )
+    {
+     format->setStyle( m_style );
+    }
+    else
+    {
+      format->defaultStyleFormat();
+    }
+  }
+  else // m_reverse
+  {
+    if ( dynamic_cast<ColumnFormat*>(format) )
+    {
+      ColumnFormat* const columnFormat = dynamic_cast<ColumnFormat*>(format);
+      columnFormat->setStyle( m_undoData[columnFormat->column()][0] );
+      m_undoData[columnFormat->column()][0]->release();
+    }
+    else
+    {
+      RowFormat* const rowFormat = dynamic_cast<RowFormat*>(format);
+      rowFormat->setStyle( m_undoData[0][rowFormat->row()] );
+      m_undoData[0][rowFormat->row()]->release();
+    }
+  }
+  return true;
+}
+
+QString StyleApplicator::name() const
+{
+  if ( m_style )
+  {
+    return i18n( "Apply Style" );
+  }
+  else
+  {
+    return i18n( "Apply Default Style" );
   }
 }

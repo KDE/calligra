@@ -2387,12 +2387,12 @@ Style * Style::setIndent( double indent )
   if ( m_type != AUTO || m_usageCount > 1 )
   {
     Style * style = new Style( this );
-    style->m_indent = indent;
+    style->m_indent = qMax( 0.0, indent );
     style->m_featuresSet |= SIndent;
     return style;
   }
 
-  m_indent = indent;
+  m_indent = qMax( 0.0, indent );
   m_featuresSet |= SIndent;
   return this;
 }

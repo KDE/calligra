@@ -1660,7 +1660,7 @@ void Format::setAngle( int _angle )
 
 void Format::setIndent( double _indent )
 {
-  if ( _indent == 0.0 )
+  if ( _indent <= 0.0 )
   {
     clearProperty( Style::SIndent );
     setNoFallBackProperties( Style::SIndent );

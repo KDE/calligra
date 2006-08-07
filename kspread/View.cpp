@@ -499,7 +499,7 @@ void View::Private::initActions()
 
 
   actions->defaultFormat = new KAction( i18n("Default"), ac, "default" );
-  connect(actions->defaultFormat, SIGNAL(triggered(bool)),view, SLOT( defaultSelection() ));
+  connect(actions->defaultFormat, SIGNAL(triggered(bool)),view, SLOT( setDefaultStyle() ));
 
   actions->defaultFormat->setToolTip( i18n("Resets to the default format") );
 
@@ -683,7 +683,7 @@ void View::Private::initActions()
   actions->selectStyle = new KSelectAction( i18n( "St&yle" ), ac, "stylemenu" );
   actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
   connect( actions->selectStyle, SIGNAL( triggered( const QString & ) ),
-                    view, SLOT( styleSelected( const QString & ) ) );
+           view, SLOT( setStyle( const QString & ) ) );
 
   actions->createStyle = new KAction( i18n( "Create Style From Cell..." ), ac, "createStyle" );
   connect(actions->createStyle, SIGNAL(triggered(bool)),view, SLOT( createStyleFromCell()));
@@ -807,7 +807,7 @@ void View::Private::initActions()
   actions->equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size"));
 
   actions->showSelColumns = new KAction( KIcon( "show_sheet_column" ), i18n("Show Columns"), ac, "showSelColumns" );
-  connect(actions->showSelColumns, SIGNAL(triggered(bool)), view, SLOT( showColumns() ));
+  connect(actions->showSelColumns, SIGNAL(triggered(bool)), view, SLOT( showColumn() ));
 
   actions->showSelColumns->setToolTip(i18n("Show hidden columns in the selection"));
   actions->showSelColumns->setEnabled(false);
@@ -4077,34 +4077,19 @@ void View::dissociateCell()
 
 void View::increaseIndent()
 {
-  if ( !d->activeSheet )
-    return;
-
-  doc()->emitBeginOperation( false );
-  d->activeSheet->increaseIndent( d->selection );
-  updateEditWidget();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  IncreaseIndentManipulator* manipulator = new IncreaseIndentManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::decreaseIndent()
 {
-  if ( !d->activeSheet )
-    return;
-
-  doc()->emitBeginOperation( false );
-  int column = d->canvas->markerColumn();
-  int row = d->canvas->markerRow();
-
-  d->activeSheet->decreaseIndent( d->selection );
-  Cell * cell = d->activeSheet->cellAt( column, row );
-  if ( cell )
-    if ( !d->activeSheet->isProtected() )
-      d->actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  IncreaseIndentManipulator* manipulator = new IncreaseIndentManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setReverse( true );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::goalSeek()
@@ -5918,18 +5903,13 @@ void View::fillDown()
   fm->execute ();
 }
 
-void View::defaultSelection()
+void View::setDefaultStyle()
 {
-  if (!activeSheet())
-  return;
-
-  doc()->emitBeginOperation( false );
-  d->activeSheet->defaultSelection( selectionInfo() );
-
-  updateEditWidget();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  StyleApplicator* manipulator = new StyleApplicator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setStyle( 0 );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::slotInsert()
@@ -6309,20 +6289,19 @@ void View::createStyleFromCell()
   d->actions->selectStyle->setItems( lst );
 }
 
-void View::styleSelected( const QString & style )
+void View::setStyle( const QString & stylename )
 {
-  if (d->activeSheet )
+  kDebug() << "View::setStyle( " << stylename << " )" << endl;
+
+  Style* style = doc()->styleManager()->style( stylename );
+
+  if ( style )
   {
-    Style * s = doc()->styleManager()->style( style );
-
-    if ( s )
-    {
-      doc()->emitBeginOperation(false);
-      d->activeSheet->setSelectionStyle( selectionInfo(), s );
-
-      markSelectionAsDirty();
-      doc()->emitEndOperation();
-    }
+    StyleApplicator* manipulator = new StyleApplicator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setStyle( style );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
   }
 }
 

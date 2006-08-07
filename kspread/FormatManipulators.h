@@ -175,7 +175,26 @@ class FormatManipulator : public Manipulator
     FormatType m_formatType;
 };
 
-class IncreasePrecisionManipulator :public Manipulator
+
+
+class IncreaseIndentManipulator : public Manipulator
+{
+public:
+  IncreaseIndentManipulator();
+
+protected:
+  virtual bool process( Cell* cell );
+  virtual bool process( Format* format );
+
+  virtual QString name() const;
+
+private:
+  double m_deltaIndent;
+};
+
+
+
+class IncreasePrecisionManipulator : public Manipulator
 {
 public:
   IncreasePrecisionManipulator();
@@ -184,6 +203,26 @@ protected:
   virtual bool process( Cell* cell );
 
   virtual QString name() const;
+};
+
+
+
+class StyleApplicator : public Manipulator
+{
+public:
+  StyleApplicator();
+
+  void setStyle( Style* style ) { m_style = style; }
+
+protected:
+  virtual bool process( Cell* cell );
+  virtual bool process( Format* format );
+
+  virtual QString name() const;
+
+private:
+  Style* m_style;
+  QHash<int, QHash<int, Style*> > m_undoData;
 };
 
 }  // namespace KSpread

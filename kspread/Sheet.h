@@ -967,8 +967,6 @@ public:
 
     void setArrayFormula (Selection* selection, const QString &_text);
 
-    void setSelectionStyle( Selection* selection, Style * style );
-
     /**
      *change string to upper case if _type equals 1
      * or change string to lower if _type equals -1
@@ -1008,21 +1006,6 @@ public:
      * @param selection the selection of cells to work on
      */
     QString getWordSpelling(Selection* selection );
-
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void defaultSelection( Selection* selection );
-
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void increaseIndent( Selection* selection );
-
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void decreaseIndent( Selection* selection );
 
     //
     //END Methods related to manipulations of selected cells

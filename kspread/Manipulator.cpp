@@ -211,6 +211,12 @@ bool Manipulator::mainProcessing()
   return successfully;
 }
 
+
+
+/***************************************************************************
+  class MacroManipulator
+****************************************************************************/
+
 void MacroManipulator::execute ()
 {
   QList<Manipulator *>::iterator it;
@@ -237,6 +243,8 @@ void MacroManipulator::add (Manipulator *manipulator)
   manipulator->setRegisterUndo (false);
   manipulators.push_back (manipulator);
 }
+
+
 
 /***************************************************************************
   class ProtectedCheck

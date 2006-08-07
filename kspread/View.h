@@ -289,7 +289,6 @@ public slots:
     void setAreaName();
     void showAreaName();
     void adjust();
-    void defaultSelection();
     void paperLayoutDlg();
     void styleDialog();
     void definePrintRange();
@@ -336,7 +335,8 @@ public slots:
     void decreasePrecision();
     void increasePrecision();
     void createStyleFromCell();
-    void styleSelected( const QString & );
+    void setDefaultStyle();
+    void setStyle( const QString & );
     void percent(bool b);
     void fontSelected( const QString &_font );
     void fontSizeSelected( int size );
