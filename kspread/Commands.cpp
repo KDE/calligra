@@ -56,6 +56,7 @@ QString UndoWrapperCommand::name() const
   return undoAction->getName();
 }
 
+#if 0
 // ----- MergeCellsCommand -----
 
 MergeCellCommand::MergeCellCommand( Cell* c, int cs, int rs )
@@ -121,6 +122,7 @@ void DissociateCellCommand::unexecute()
   if( !sheet ) return;
   sheet->changeMergedCell( cell->column(), cell->row(), oldColSpan, oldRowSpan);
 }
+#endif
 
 // ----- RenameSheetCommand -----
 

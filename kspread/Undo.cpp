@@ -428,13 +428,14 @@ void UndoInsertRow::redo()
 }
 
 
+#if 0
 /****************************************************************************
  *
  * UndoHideRow
  *
  ***************************************************************************/
 
-/*UndoHideRow::UndoHideRow( Doc *_doc, Sheet *_sheet, int _row, int _nbRow , QValueList<int>_listRow) :
+UndoHideRow::UndoHideRow( Doc *_doc, Sheet *_sheet, int _row, int _nbRow , QValueList<int>_listRow) :
     UndoAction( _doc )
 {
     name=i18n("Hide Rows");
@@ -482,7 +483,7 @@ void UndoHideRow::redo()
     doc()->setUndoLocked( true );
     sheet->hideRow(0,-1, listRow );
     doc()->setUndoLocked( false );
-}*/
+}
 
 /****************************************************************************
  *
@@ -490,7 +491,7 @@ void UndoHideRow::redo()
  *
  ***************************************************************************/
 
-/*UndoHideColumn::UndoHideColumn( Doc *_doc, Sheet *_sheet, int _column, int _nbCol, QValueList<int>_listCol ) :
+UndoHideColumn::UndoHideColumn( Doc *_doc, Sheet *_sheet, int _column, int _nbCol, QValueList<int>_listCol ) :
     UndoAction( _doc )
 {
     name=i18n("Hide Columns");
@@ -539,7 +540,7 @@ void UndoHideColumn::redo()
     doc()->setUndoLocked( true );
     sheet->hideColumn(0,-1,listCol);
     doc()->setUndoLocked( false );
-}*/
+}
 
 /****************************************************************************
  *
@@ -547,7 +548,7 @@ void UndoHideColumn::redo()
  *
  ***************************************************************************/
 
-/*UndoShowRow::UndoShowRow( Doc *_doc, Sheet *_sheet, int _row, int _nbRow, QValueList<int>_listRow ) :
+UndoShowRow::UndoShowRow( Doc *_doc, Sheet *_sheet, int _row, int _nbRow, QValueList<int>_listRow ) :
     UndoAction( _doc )
 {
     name=i18n("Show Rows");
@@ -596,7 +597,7 @@ void UndoShowRow::redo()
     doc()->setUndoLocked( true );
     sheet->showRow(0,-1,listRow);
     doc()->setUndoLocked( false );
-}*/
+}
 
 /****************************************************************************
  *
@@ -604,7 +605,7 @@ void UndoShowRow::redo()
  *
  ***************************************************************************/
 
-/*UndoShowColumn::UndoShowColumn( Doc *_doc, Sheet *_sheet, int _column, int _nbCol,QValueList<int>_listCol ) :
+UndoShowColumn::UndoShowColumn( Doc *_doc, Sheet *_sheet, int _column, int _nbCol,QValueList<int>_listCol ) :
     UndoAction( _doc )
 {
     name=i18n("Show Columns");
@@ -654,7 +655,8 @@ void UndoShowColumn::redo()
     doc()->setUndoLocked( true );
     sheet->showColumn(0,-1,listCol);
     doc()->setUndoLocked( false );
-}*/
+}
+#endif
 
 
 /****************************************************************************

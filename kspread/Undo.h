@@ -211,7 +211,7 @@ protected:
     int m_iNbRow;
 };
 
-
+#if 0
 class UndoHideColumn : public UndoAction
 {
 public:
@@ -279,7 +279,7 @@ protected:
     int m_iNbRow;
     QLinkedList<int> listRow;
 };
-
+#endif
 
 class UndoPaperLayout : public UndoAction
 {
