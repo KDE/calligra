@@ -1,6 +1,7 @@
 project(kwordpart)
 
-add_subdirectory( tests frame/tests )
+add_subdirectory( frame/tests )
+add_subdirectory( tests )
 
 include_directories( ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
