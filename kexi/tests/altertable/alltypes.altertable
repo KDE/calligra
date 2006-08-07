@@ -1,0 +1,85 @@
+openDatabase 1.kexi
+
+# This test checks creating tables of all types and tests inserting a new field in the middle
+# - insert a new text field at row #2, remove field at row #4
+# - insert fields of all possible types in rows #5, #6, and so on
+designTable cars #initially there are 3rows
+ insertEmptyRow 2 
+ insertField 2 textField
+ removeField 4
+ insertField 4 longTextField
+ changeFieldProperty 4 type string longText
+ insertField 5 byteField
+ changeFieldProperty 5 type string byte
+ insertField 6 shortIntField
+ changeFieldProperty 6 type string shortInteger
+ insertField 7 intField
+ changeFieldProperty 7 type string integer
+ insertField 8 bigIntField
+ changeFieldProperty 8 type string bigInteger
+ insertField 9 booleanField
+ changeFieldProperty 9 type string boolean
+ insertField 10 dateField
+ changeFieldProperty 10 type string date
+ insertField 11 dateTimeField
+ changeFieldProperty 11 type string dateTime
+ insertField 12 timeField
+ changeFieldProperty 12 type string time
+ insertField 13 floatField
+ changeFieldProperty 13 type string float
+ insertField 14 doubleField
+ changeFieldProperty 14 type string double
+ insertField 15 blobField
+ changeFieldProperty 15 type string blob
+ showSchema
+ checkSchema
+  id  UNSIGNED Integer AUTOINC UNIQUE PKEY NOTNULL NOTEMPTY
+  textfield Text(200)
+  owner  UNSIGNED Integer
+  longtextfield Text
+  bytefield Integer
+  shortintfield Integer
+  intfield Integer
+  bigintfield Integer
+  booleanfield Boolean NOTNULL
+  datefield Date
+  datetimefield Date
+  timefield Date
+  floatfield Float
+  doublefield Float
+  blobfield BLOB
+ endSchema
+
+ showActions
+ 
+ checkActions
+  Insert table field "textfield" at position 1 (textfield Text(200))
+  Remove table field "model"
+  Insert table field "longtextfield" at position 3 (longtextfield Text(200))
+  Insert table field "bytefield" at position 4 (bytefield Integer)
+  Insert table field "shortintfield" at position 5 (shortintfield Integer)
+  Insert table field "intfield" at position 6 (intfield Integer)
+  Insert table field "bigintfield" at position 7 (bigintfield Integer)
+  Insert table field "booleanfield" at position 8 (booleanfield Boolean NOTNULL)
+  Insert table field "datefield" at position 9 (datefield Date)
+  Insert table field "datetimefield" at position 10 (datetimefield Date)
+  Insert table field "timefield" at position 11 (timefield Date)
+  Insert table field "floatfield" at position 12 (floatfield Float)
+  Insert table field "doublefield" at position 13 (doublefield Float)
+  Insert table field "blobfield" at position 14 (blobfield BLOB)
+ endActions
+
+#todo
+ saveTableDesign #executes Alter Table
+
+ showTableData
+
+ checkTableData
+  "ID"	"Car owner"	"Car model"
+  1	2	"Fiat"
+  2	2	"Syrena"
+  3	3	"Chrysler"
+  5	4	"Volvo"
+  6	3	"BMW"
+ endTableData
+

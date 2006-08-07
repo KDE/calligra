@@ -1547,7 +1547,17 @@ void KexiTableDesignerView::clearRow(int row, bool addCommand)
 	d->sets->remove( row );
 	//clear row in table view (just clear value in COLUMN_ID_TYPE column)
 //	for (int i=0; i < (int)d->view->data()->columnsCount(); i++) {
+	if (!addCommand) {
+		d->addHistoryCommand_in_slotRowUpdated_enabled = false;
+		d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
+		d->slotBeforeCellChanged_enabled = false;
+	}
 	d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, QVariant());
+	if (!addCommand) {
+		d->addHistoryCommand_in_slotRowUpdated_enabled = true;
+		d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
+		d->slotBeforeCellChanged_enabled = true;
+	}
 	d->view->data()->saveRowChanges(*item, true);
 }
 
