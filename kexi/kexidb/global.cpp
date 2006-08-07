@@ -45,3 +45,7 @@ void ServerVersionInfo::clear()
 	release = 0;
 	string = QString::null;
 }
+
+//------------------------
+
+DatabaseVersionInfo KexiDB::version() { return KEXIDB_VERSION; }

@@ -123,7 +123,7 @@ bool DriverManagerInternal::lookupDrivers()
 
 		QString srv_ver_str = ptr->property("X-Kexi-KexiDBVersion").toString();
 		QStringList lst( QStringList::split(".", srv_ver_str) );
-		int minor_ver, major_ver;
+		uint minor_ver, major_ver;
 		bool ok = (lst.count() == 2);
 		if (ok)
 			major_ver = lst[0].toUInt(&ok);
