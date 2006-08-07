@@ -30,7 +30,7 @@
 
 class QLabel;
 class QLineEdit;
-class Q3TextEdit;
+class QTextEdit;
 class QComboBox;
 class QPushButton;
 class QCheckBox;
@@ -65,14 +65,14 @@ protected:
   QComboBox *chooseAction;
   QComboBox *chooseType;
   QLineEdit * title;
-  Q3TextEdit *message;
+  QTextEdit *message;
   Validity result;
   QCheckBox *displayMessage;
   QCheckBox *allowEmptyCell;
     QCheckBox *displayHelp;
-    Q3TextEdit *messageHelp;
+    QTextEdit *messageHelp;
     QLineEdit *titleHelp;
-    Q3TextEdit *validityList;
+    QTextEdit *validityList;
     QLabel *validityLabelList;
 };
 

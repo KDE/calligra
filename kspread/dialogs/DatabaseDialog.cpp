@@ -55,7 +55,7 @@
 #include <QVariant>
 #include <QWidget>
 //Added by qt3to4:
-#include <q3textedit.h>
+#include <QTextEdit>
 
 using namespace KSpread;
 
@@ -401,7 +401,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   TextLabel17->setText( i18n( "SQL query:" ) );
   Frame5_2_2_3Layout->addWidget( TextLabel17, 0, 0 );
 
-  m_sqlQuery = new Q3TextEdit( Frame5_2_2_3, "m_sqlQuery" );
+  m_sqlQuery = new QTextEdit( Frame5_2_2_3, "m_sqlQuery" );
   Frame5_2_2_3Layout->addWidget( m_sqlQuery, 1, 0 );
 
   QFrame * Frame12 = new QFrame( Frame5_2_2_3 );

@@ -25,7 +25,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
-#include <q3textedit.h>
+#include <QTextEdit>
 #include <QLayout>
 #include <q3buttongroup.h>
 //Added by qt3to4:
@@ -153,7 +153,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   edit2->setText( i18n( "Number:" ) );
   grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
 
-  validityList = new Q3TextEdit( tmpQButtonGroup );
+  validityList = new QTextEdit( tmpQButtonGroup );
   grid1->addWidget(validityList,2, 4,1, 1);
 
   validityLabelList = new QLabel( tmpQButtonGroup );
@@ -199,7 +199,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQLabel->setText(i18n("Message:" ));
   grid2->addWidget(tmpQLabel,3,0);
 
-  message =new Q3TextEdit( tmpQButtonGroup);
+  message =new QTextEdit( tmpQButtonGroup);
   grid2->addWidget(message,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
   message->setTextFormat( Qt::PlainText );
@@ -231,7 +231,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQLabel->setText(i18n("Message:" ));
   grid3->addWidget(tmpQLabel,3,0);
 
-  messageHelp =new Q3TextEdit( tmpQButtonGroup);
+  messageHelp =new QTextEdit( tmpQButtonGroup);
   grid3->addWidget(messageHelp,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
   messageHelp->setTextFormat( Qt::PlainText );

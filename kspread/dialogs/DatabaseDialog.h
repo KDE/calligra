@@ -43,7 +43,7 @@ class QLineEdit;
 class Q3ListViewItem;
 class QHBoxLayout;
 class QRadioButton;
-class Q3TextEdit;
+class QTextEdit;
 class QVBoxLayout;
 class QWidget;
 
@@ -128,7 +128,7 @@ class DatabaseDialog : public K3Wizard
   QComboBox    * m_sortMode_2;
   QCheckBox    * m_distinct;
   QWidget      * m_result;
-  Q3TextEdit    * m_sqlQuery;
+  QTextEdit    * m_sqlQuery;
   QRadioButton * m_startingRegion;
   QLineEdit    * m_cell;
   QLineEdit    * m_region;
