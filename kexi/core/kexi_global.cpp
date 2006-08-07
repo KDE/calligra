@@ -1,8 +1,7 @@
 /* This file is part of the KOffice libraries
-    Copyright (c) 2003 Kexi Team
+    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
-    Version information based on kofficeversion.h,
-    Copyright (c) 2003 KOffice Team
+    (version information based on kofficeversion.h)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public

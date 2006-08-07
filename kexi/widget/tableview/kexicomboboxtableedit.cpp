@@ -368,7 +368,7 @@ void KexiComboBoxTableEdit::showFocus( const QRect& r, bool readOnly )
 void KexiComboBoxTableEdit::resize(int w, int h)
 {
 	d->totalSize = QSize(w,h);
-	if (column()->isReadOnly()) {
+	if (!column()->isReadOnly()) {
 		d->button->resize( h, h );
 		QWidget::resize(w - d->button->width(), h);
 	}

@@ -1068,7 +1068,7 @@ void QuerySchema::computeFieldsExpanded()
 	for (i=0; i < d->fieldsExpanded->size(); i++) {
 		QueryColumnInfo* ci = d->fieldsExpanded->at(i);
 //! @todo QuerySchema itself will also support lookup fields...
-		LookupFieldSchema *lookupFieldSchema = ci->field->table()->lookupFieldSchema( *ci->field );
+		LookupFieldSchema *lookupFieldSchema = ci->field->table() ? ci->field->table()->lookupFieldSchema( *ci->field ) : 0;
 		if (lookupFieldSchema) {
 			TableSchema *lookupTable = connection()->tableSchema( lookupFieldSchema->rowSource() );
 			Field *visibleField = 0;

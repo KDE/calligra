@@ -131,7 +131,7 @@ PropertyCommand::unexecute()
 
 		WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widg);
 		QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widg;
-		if (-1!=subWidget->metaObject()->findProperty( m_property, TRUE ))
+		if (-1!=subWidget->metaObject()->findProperty( m_property, true ))
 			subWidget->setProperty(m_property, it.data());
 	}
 

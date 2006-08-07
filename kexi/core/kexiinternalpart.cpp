@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -165,6 +165,47 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 	if (! (part->uniqueDialog() && !part->m_uniqueWidget.isNull()))
 		delete w;
 	return 0;
+}
+
+//static 
+bool KexiInternalPart::executeCommand(const char* partName, 
+	KexiMainWindow* mainWin, const char* commandName, QMap<QString,QString>* args)
+{
+	KexiInternalPart *part = internalPartManager.findPart(0, partName);
+	if (!part) {
+		kdDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
+		return 0; //fatal!
+	}
+	return part->executeCommand(mainWin, commandName, args);
+}
+
+QWidget* KexiInternalPart::createWidget(const char* widgetClass, KexiMainWindow* mainWin, 
+	QWidget * parent, const char * objName, QMap<QString,QString>* args)
+{
+	Q_UNUSED(widgetClass);
+	Q_UNUSED(mainWin);
+	Q_UNUSED(parent);
+	Q_UNUSED(objName);
+	Q_UNUSED(args);
+	return 0;
+}
+
+KexiViewBase* KexiInternalPart::createView(KexiMainWindow* mainWin, QWidget * parent,
+ const char * objName)
+{
+	Q_UNUSED(mainWin);
+	Q_UNUSED(parent);
+	Q_UNUSED(objName);
+	return 0;
+}
+
+bool KexiInternalPart::executeCommand(KexiMainWindow* mainWin, const char* commandName, 
+	QMap<QString,QString>* args)
+{
+	Q_UNUSED(mainWin);
+	Q_UNUSED(commandName);
+	Q_UNUSED(args);
+	return false;
 }
 
 #include "kexiinternalpart.moc"

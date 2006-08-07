@@ -295,7 +295,7 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 }
 
 void
-KexiRelationView::slotTableScrolling(QString table)
+KexiRelationView::slotTableScrolling(const QString& table)
 {
 	KexiRelationViewTableContainer *c = m_tables[table];
 

@@ -35,6 +35,7 @@
 
 #include <qfile.h>
 #include <qdir.h>
+#include <qregexp.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -99,9 +100,16 @@ SQLiteConnection::~SQLiteConnection()
 	KexiDBDrvDbg << "SQLiteConnection::~SQLiteConnection() ok" << endl;
 }
 
-bool SQLiteConnection::drv_connect()
+bool SQLiteConnection::drv_connect(KexiDB::ServerVersionInfo& version)
 {
 	KexiDBDrvDbg << "SQLiteConnection::connect()" << endl;
+	version.string = QString(SQLITE_VERSION); //defined in sqlite3.h
+	QRegExp re("(\\d+)\\.(\\d+)\\.(\\d+)");
+	if (re.exactMatch(version.string)) {
+		version.major = re.cap(1).toUInt();
+		version.minor = re.cap(2).toUInt();
+		version.release = re.cap(3).toUInt();
+	}
 	return true;
 }
 

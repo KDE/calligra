@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
-    
-    begin                : Sun Jun  9 12:15:11 CEST 2002
-    copyright            : (C) 2003 by lucijan busch, Joseph Wenninger
-    email                : lucijan@gmx.at, jowenn@kde.org
-   
+
+   begin : Sun Jun  9 12:15:11 CEST 2002
+
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
@@ -22,82 +22,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kapplication.h>
-#include <dcopclient.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <kmimetype.h>
-#include <kiconloader.h>
-#include <kstandarddirs.h>
-
-#include <core/kexiproject.h>
-#include <core/kexidialogbase.h>
-#include <core/kexi.h>
+#include <qapplication.h>
 #include <main/keximainwindowimpl.h>
-#include <main/startup/KexiStartup.h>
-#include <kexiutils/utils.h>
 
 extern "C" int kdemain(int argc, char *argv[])
 {
-	Kexi::initCmdLineArgs( argc, argv );
+	int result = KexiMainWindowImpl::create(argc, argv);
+	if (!qApp)
+		return result;
 
-	bool GUIenabled = true;
-	QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindowImpl is created
-//! @todo switch GUIenabled off when needed
-	KApplication app(true, GUIenabled);
-#ifdef KEXI_STANDALONE
-	KGlobal::locale()->removeCatalog("kexi");
-	KGlobal::locale()->insertCatalog("standalone_kexi");
-#endif
-	KGlobal::locale()->insertCatalog("koffice");
-	KGlobal::locale()->insertCatalog("koproperty");
-
-	if (GUIenabled) {
-		dummyWidget = new QWidget();
-		dummyWidget->setIcon( DesktopIcon( "kexi" ) );
-		app.setMainWidget(dummyWidget);
-	}
-
-#ifdef KEXI_DEBUG_GUI
-	QWidget* debugWindow = 0;
-	app.config()->setGroup("General");
-	if (app.config()->readBoolEntry("showKexiDBDebugger", false))
-		debugWindow = KexiUtils::createDebugWindow(0);
-#endif
-
-	tristate res = Kexi::startupHandler().init(argc, argv);
-	if (!res)
-		return 1;
-	if (~res)
-		return 0;
-	
-	kDebug() << "startupActions OK" <<endl;
-
-	/* Exit requested, e.g. after database removing. */
-	if (Kexi::startupHandler().action() == KexiStartupData::Exit)
-		return 0;
-
-#ifdef CUSTOM_VERSION
-# include "custom_exec.h"
-#endif
-
-	KexiMainWindowImpl *win = new KexiMainWindowImpl();
-	app.setMainWidget(win);
-	delete dummyWidget;
-
-	if (true != win->startup()) {
-		delete win;
-		return 1;
-	}
-
-	win->show();
-	app.processEvents();//allow refresh our app
-
-	int r = app.exec();
-
-#ifdef KEXI_DEBUG_GUI
-	delete debugWindow;
-#endif
-	return r;
+	result = qApp->exec();
+	delete qApp;
+	return result;
 }

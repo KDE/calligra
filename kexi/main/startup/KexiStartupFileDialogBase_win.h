@@ -33,7 +33,7 @@ class KexiStartupFileDialogBase : public Q3FileDialog
 {
 public:
 	KexiStartupFileDialogBase(const QString & dirName, const QString & filter = QString::null, 
-		QWidget * parent = 0, const char * name = 0, bool modal = FALSE );
+		QWidget * parent = 0, const char * name = 0, bool modal = false );
 	~KexiStartupFileDialogBase();
 
 	QPushButton * okButton() const { return m_okBtn; }

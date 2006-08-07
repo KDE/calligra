@@ -125,7 +125,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public Q3ScrollView
 		/*! Hides all tables except \a tables. */
 		void hideAllTablesExcept( KexiDB::TableSchema::List* tables );
 
-		void slotTableScrolling(QString);
+		void slotTableScrolling(const QString&);
 
 		//! removes selected table or connection
 		void removeSelectedObject();

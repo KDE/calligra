@@ -258,8 +258,7 @@ class KEXI_DB_EXPORT AdminTools::Private
 //! Driver's static version information (implementation), 
 //! with KLibFactory symbol declaration.
 #define KEXIDB_DRIVER_INFO( class_name, internal_name ) \
-	int class_name::versionMajor() const { return KEXIDB_VERSION_MAJOR; } \
-	int class_name::versionMinor() const { return KEXIDB_VERSION_MINOR; } \
+	DatabaseVersionInfo class_name::version() const { return KEXIDB_VERSION; } \
 	K_EXPORT_COMPONENT_FACTORY(kexidb_ ## internal_name ## driver, KGenericFactory<KexiDB::class_name>( "kexidb_" #internal_name ))
 
 #endif

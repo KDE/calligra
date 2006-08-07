@@ -524,7 +524,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 						return false;
 					}
 					bool cancel = false;
-					const bool showConnectionDialog = !args->isSet("skip-dialog");
+					const bool showConnectionDialog = !args->isSet("skip-conn-dialog");
 					while (true) {
 						if (showConnectionDialog) {
 							//show connection dialog, so user can change parameters
@@ -646,7 +646,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	if (!m_projectData) {
 		cdata = KexiDB::ConnectionData(); //clear
 
-		if (!KexiStartupDialog::shouldBeShown())
+		if (args->isSet("skip-startup-dialog") || !KexiStartupDialog::shouldBeShown())
 			return true;
 
 		if (!d->startupDialog) {

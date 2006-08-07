@@ -187,12 +187,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 to build the database. */
 		static const QStringList& kexiDBSystemTableNames();
 
-		/*! Version information for this connection. Only valid when database is used.
-		It's usually compared to drivers' and KexiDB library version. */
-		int versionMajor() const; //!< The major version. E.g. "1" on "1.8"
-		int versionMinor() const; //!< The minor version. E.g. "8" on "1.8"
+		/*! \return server version information for this connection. 
+		 If database is not connected (i.e. isConnected() is false) 0 is returned. */
+		KexiDB::ServerVersionInfo* serverVersion() const;
 
-		/*! \return DatabaseProperties obejct allowing to read and write global database properties 
+		/*! \return version information for this connection. 
+		 If database is not used (i.e. isDatabaseUsed() is false) 0 is returned. 
+		 It can be compared to drivers' and KexiDB library version to maintain 
+		 backward/upward compatiblility. */
+		KexiDB::DatabaseVersionInfo* databaseVersion() const;
+
+		/*! \return DatabaseProperties object allowing to read and write global database properties 
 		 for this connection. */
 		DatabaseProperties& databaseProperties();
 
@@ -773,9 +778,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 the original table schema (even if it is no longer points to any real data). */
 		tristate dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemoveSchema);
 
-		/*! For reimplemenation: connects to database
+		/*! For reimplemenation: connects to database. \a version should be set to real
+		 server's version.
 			\return true on success. */
-		virtual bool drv_connect() = 0;
+		virtual bool drv_connect(KexiDB::ServerVersionInfo& version) = 0;
 
 		/*! For reimplemenation: disconnects database
 			\return true on success. */

@@ -78,7 +78,7 @@ class KexiQueryDesignerSQLHistory : public Q3ScrollView
 		QString selectedStatement() const;
 
 	public slots:
-		void addEvent(QString q, bool s, const QString &error);
+		void addEvent(const QString& q, bool s, const QString &error);
 
 		void slotToClipboard();
 		void slotEdit();

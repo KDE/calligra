@@ -85,7 +85,7 @@ void DriverPrivate::initInternalProperties()
 	propertyCaptions["transaction_nested"] = i18n("Nested transactions support");
 
 	properties["kexidb_driver_version"] =
-	  QString("%1.%2").arg(versionMajor()).arg(versionMinor());
+	  QString("%1.%2").arg(version().major).arg(version().minor);
 	propertyCaptions["kexidb_driver_version"] =
 	  i18n("KexiDB driver version");
 }

@@ -49,8 +49,20 @@ MySqlConnection::~MySqlConnection() {
 	destroy();
 }
 
-bool MySqlConnection::drv_connect() {
-  return d->db_connect( * data() );
+bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo& version) {
+  const bool ok = d->db_connect(*data());
+  if (!ok)
+    return false;
+
+  //retrieve server version info
+  version.string = mysql_get_host_info(d->mysql);
+  unsigned long v = mysql_get_server_version(d->mysql);
+  // v - a number that represents the MySQL server version in this format
+  // = major_version*10000 + minor_version *100 + sub_version
+  version.major = v/10000;
+  version.minor = (v - version.major*10000)/100;
+  version.release = v - version.major*10000 - version.minor*100;
+  return true;
 }
 
 bool MySqlConnection::drv_disconnect() {

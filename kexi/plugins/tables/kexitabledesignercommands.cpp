@@ -143,7 +143,8 @@ QString RemoveFieldCommand::name() const
 
 void RemoveFieldCommand::execute()
 {
-	m_view->deleteField( m_fieldIndex );
+//	m_view->deleteField( m_fieldIndex );
+	m_view->deleteRow( m_fieldIndex );
 }
 
 void RemoveFieldCommand::unexecute()

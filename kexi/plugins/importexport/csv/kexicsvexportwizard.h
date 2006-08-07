@@ -17,10 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_CSVEXPORTEIZARD_H
-#define KEXI_CSVEXPORTEIZARD_H
+#ifndef KEXI_CSVEXPORTWIZARD_H
+#define KEXI_CSVEXPORTWIZARD_H
 
 #include <k3wizard.h>
+
+#include "kexicsvexport.h"
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 
@@ -44,19 +47,7 @@ class KexiCSVExportWizard : public K3Wizard
 	Q_OBJECT
 
 	public:
-		//! Exporting mode: a file or clipboard
-		enum Mode { Clipboard, File };
-
-		//! Options used in KexiCSVExportWizard contructor.
-		class Options {
-			public:
-				Options();
-				Mode mode;
-				int itemId; //!< Table or query ID
-				QString forceDelimiter; //!< Used for "clipboard" mode
-		};
-
-		KexiCSVExportWizard( const Options& options, KexiMainWindow* mainWin, 
+		KexiCSVExportWizard( const KexiCSVExport::Options& options, KexiMainWindow* mainWin, 
 			QWidget * parent = 0, const char * name = 0 );
 
 		virtual ~KexiCSVExportWizard();
@@ -74,9 +65,6 @@ class KexiCSVExportWizard : public K3Wizard
 	protected:
 		//! reimplemented to add "Defaults" button on the left hand
 		virtual void layOutButtonRow( Q3HBoxLayout * layout );
-
-		//! Exporting, returns false on failure.
-		bool exportData();
 
 		//! \return default delimiter depending on mode.
 		QString defaultDelimiter() const;
@@ -105,7 +93,7 @@ class KexiCSVExportWizard : public K3Wizard
 		//! Helper like \ref writeEntry(const char *, bool), but for deleting config entry.
 		void deleteEntry(const char *key);
 
-		Options m_options;
+		KexiCSVExport::Options m_options;
 //		Mode m_mode;
 //		int m_itemId;
 		KexiMainWindow* m_mainWin;

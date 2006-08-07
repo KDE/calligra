@@ -78,6 +78,10 @@ static KCmdLineOptions options[] =
 	"be performed without write support. This option\n"
 	"is ignored when \"createdb\" option is present,\n"
 	"otherwise the database could not be created."), 0 },
+  { "skip-startup-dialog", I18N_NOOP(
+	"Skip displaying startup dialog window.\n"
+	"If there is no project name specified to open,\n"
+	"empty application window will appear."), 0 },
 
   { ":", I18N_NOOP("Options related to opening objects within a project:"), 0 },
   { "open [<object_type>:]<object_name>", I18N_NOOP(
@@ -159,7 +163,7 @@ static KCmdLineOptions options[] =
 	"to be used for connecting to a database\n"
 	"project. Ignored if a shortcut filename\n"
 	"is provided."), 0 },
-  { "skip-dialog", I18N_NOOP(
+  { "skip-conn-dialog", I18N_NOOP(
 	"Skip displaying connection dialog window\n"
 	"and connect directly. Available when\n"
 	"opening .kexic or .kexis shortcut files."), 0 },

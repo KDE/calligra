@@ -194,20 +194,22 @@ QString Field::typeGroupString(uint typeGroup)
 	return (typeGroup <= LastTypeGroup) ? m_typeGroupNames.at((int)LastTypeGroup+1 + typeGroup) : QString("TypeGroup%1").arg(typeGroup);
 }
 
-Field::Type Field::typeForString(const QString typeString)
+Field::Type Field::typeForString(const QString& typeString)
 {
 	m_typeNames.init();
-	if (m_typeNames.str2num.find(typeString)==m_typeNames.str2num.end())
+	QMap<QString,Type>::ConstIterator it = m_typeNames.str2num.find(typeString.lower());
+	if (it==m_typeNames.str2num.end())
 		return InvalidType;
-	return m_typeNames.str2num[typeString];
+	return it.data();
 }
 
-Field::TypeGroup Field::typeGroupForString(const QString typeGroupString)
+Field::TypeGroup Field::typeGroupForString(const QString& typeGroupString)
 {
 	m_typeGroupNames.init();
-	if (m_typeGroupNames.str2num.find(typeGroupString)==m_typeGroupNames.str2num.end())
+	QMap<QString,TypeGroup>::ConstIterator it = m_typeGroupNames.str2num.find(typeGroupString.lower());
+	if (it==m_typeGroupNames.str2num.end())
 		return InvalidGroup;
-	return m_typeGroupNames.str2num[typeGroupString];
+	return it.data();
 }
 
 bool Field::isIntegerType( uint type )
@@ -661,10 +663,10 @@ void Field::setCustomProperty(const QByteArray& propertyName, const QVariant& va
 //-------------------------------------------------------
 #define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \
 	this->at(Field::type+Field::LastType+1) = str; \
-	str2num.insert(str, type)
+	str2num.insert(QString::fromLatin1(str).lower(), type)
 #define ADDGROUP(type, i18, str) this->at(Field::type) = i18; \
 	this->at(Field::type+Field::LastTypeGroup+1) = str; \
-	str2num.insert(str, type)
+	str2num.insert(QString::fromLatin1(str).lower(), type)
 
 Field::FieldTypeNames::FieldTypeNames()
  : Q3ValueVector<QString>()

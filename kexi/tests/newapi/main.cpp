@@ -60,19 +60,19 @@ static KCmdLineOptions options[] =
 {
 	{ "test <test_name>",
 		"Available tests:\n"
-		" cursors: test for cursors behaviour\n"
-		" schema: test for db schema retrieving\n"
-		" dbcreation: test for new db creation\n"
-		" tables: test for tables creation and data\n"
-		"  inserting\n"
+		"- cursors: test for cursors behaviour\n"
+		"- schema: test for db schema retrieving\n"
+		"- dbcreation: test for new db creation\n"
+		"- tables: test for tables creation and data\n"
+		"   inserting\n"
 #ifndef NO_GUI
-		" tableview: test for KexiDataTableView data-aware\n"
-		" widget\n"
+		"- tableview: test for KexiDataTableView data-aware\n"
+		"   widget\n"
 #endif
-		" parser: test for parsing sql statements,\n"
-		"  returns debug string for a given\n"
-		"  sql statement or error message\n"
-		" dr_prop: shows properties of selected driver"
+		"- parser: test for parsing sql statements,\n"
+		"   returns debug string for a given\n"
+		"   sql statement or error message\n"
+		"- dr_prop: shows properties of selected driver"
 		, 0},
 	{ "buffered-cursors",
 		"Optional switch :turns cursors used in any tests\n"
@@ -254,4 +254,3 @@ int main(int argc, char** argv)
 
 	RETURN(r);
 }
-

@@ -93,6 +93,13 @@ class KexiTableDesignerViewPrivate
 			bool forceAddCommand = false, bool rememberOldValue = true,
 			QStringList* const slist = 0, QStringList* const nlist = 0);
 
+		/*! Like above but allows to specify \a oldValue. */
+		void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded( 
+			const KoProperty::Set& set, const QCString& propertyName, 
+			const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup, 
+			bool forceAddCommand = false, bool rememberOldValue = true,
+			QStringList* const slist = 0, QStringList* const nlist = 0);
+
 		/*! @internal
 		 Used in updatePropertiesVisibility().
 		 Does nothing if visibility should not be changed, i.e. when prop->isVisible()==visible,
@@ -149,7 +156,12 @@ class KexiTableDesignerViewPrivate
 //! @tood temp; remove this:
 		//! Temporary flag, used for testingu the Alter Table machinery. Affects storeData()
 		//! Used in slotExecuteRealAlterTable() to switch on real alter table for a while.
-		bool tempStoreDataUsingRealAlterTable;
+		bool tempStoreDataUsingRealAlterTable : 1;
+
+		/*! Set to a recent result of calling \ref tristate KexiTableDesignerView::storeData(bool dontAsk).
+		 Then, it is used in \ref void KexiTableDesignerView::executeRealAlterTable()
+		 to know what return value should be. */
+		tristate recentResultOfStoreData;
 
 		KActionCollection* historyActionCollection;
 		CommandHistory* history;

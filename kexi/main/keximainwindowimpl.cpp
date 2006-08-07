@@ -147,6 +147,86 @@
 
 //-------------------------------------------------
 
+//static
+int KexiMainWindowImpl::create(int argc, char *argv[], KAboutData* aboutdata)
+{
+	Kexi::initCmdLineArgs( argc, argv, aboutdata );
+
+	bool GUIenabled = true;
+	QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindowImpl is created
+//! @todo switch GUIenabled off when needed
+	KApplication* app = new KApplication(true, GUIenabled);
+#ifdef KEXI_STANDALONE
+	KGlobal::locale()->removeCatalogue("kexi");
+	KGlobal::locale()->insertCatalogue("standalone_kexi");
+#endif
+	KGlobal::locale()->insertCatalogue("koffice");
+	KGlobal::locale()->insertCatalogue("koproperty");
+
+#ifdef KEXI_DEBUG_GUI
+	QWidget* debugWindow = 0;
+#endif
+	if (GUIenabled) {
+		dummyWidget = new QWidget();
+		dummyWidget->setIcon( DesktopIcon( "kexi" ) );
+		app->setMainWidget(dummyWidget);
+#ifdef KEXI_DEBUG_GUI
+		app->config()->setGroup("General");
+		if (app->config()->readBoolEntry("showKexiDBDebugger", false)) {
+			debugWindow = KexiUtils::createDebugWindow(0);
+		}
+#endif
+	}
+
+	tristate res = Kexi::startupHandler().init(argc, argv);
+	if (!res || ~res) {
+#ifdef KEXI_DEBUG_GUI
+		delete debugWindow;
+#endif
+		delete app;
+		return (~res) ? 0 : 1;
+	}
+	
+	kdDebug() << "startupActions OK" <<endl;
+
+	/* Exit requested, e.g. after database removing. */
+	if (Kexi::startupHandler().action() == KexiStartupData::Exit) {
+#ifdef KEXI_DEBUG_GUI
+		delete debugWindow;
+#endif
+		delete app;
+		return 0;
+	}
+
+#ifdef CUSTOM_VERSION
+# include "custom_exec.h"
+#endif
+
+	KexiMainWindowImpl *win = new KexiMainWindowImpl();
+	app->setMainWidget(win);
+#ifdef KEXI_DEBUG_GUI
+	//if (debugWindow)
+		//debugWindow->reparent(win, QPoint(1,1));
+#endif
+	delete dummyWidget;
+
+	if (true != win->startup()) {
+		delete win;
+		delete app;
+		return 1;
+	}
+
+	win->show();
+	app->processEvents();//allow refresh our app
+
+//#ifdef KEXI_DEBUG_GUI
+//	delete debugWindow;
+//#endif
+	return 0;
+}
+
+//-------------------------------------------------
+
 KexiMainWindowImpl::KexiMainWindowImpl()
  : KexiMainWindow()
  , KexiGUIMessageHandler(this)
@@ -310,7 +390,7 @@ void KexiMainWindowImpl::setWindowMenu(Q3PopupMenu *menu)
 		menuBar()->removeItemAt(i);
 		menuBar()->insertItem(txt, m_pWindowMenu, id, count-3);
 	}
-	m_pWindowMenu->setCheckable(TRUE);
+	m_pWindowMenu->setCheckable(true);
 	QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 }
 
@@ -414,6 +494,11 @@ Q3PopupMenu* KexiMainWindowImpl::findPopupMenu(const char *popupName)
 KActionPtrList KexiMainWindowImpl::allActions() const
 {
 	return actionCollection()->actions();
+}
+
+KexiDialogBase* KexiMainWindowImpl::currentDialog() const
+{
+	return d->curDialog;
 }
 
 void KexiMainWindowImpl::initActions()
@@ -1181,6 +1266,7 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 		d->nav->updateGeometry();
 	}
 	qApp->processEvents();
+	emit projectOpened();
 }
 
 tristate KexiMainWindowImpl::closeProject()
@@ -2163,7 +2249,7 @@ KexiMainWindowImpl::slotProjectNew()
 		if (fileName.isEmpty())
 			return;
 		args << new_data->databaseName() << fileName;
-		//args << "--skip-dialog"; //user does not expect conn. dialog to be shown here
+		//args << "--skip-conn-dialog"; //user does not expect conn. dialog to be shown here
 	}
 	else {
 		//file based
@@ -2374,12 +2460,12 @@ tristate KexiMainWindowImpl::openProjectInExternalKexiInstance(const QString& aF
 	// (we have no other simple way to provide the startup data to a new process)
 	if (fileName.isEmpty()) { //try .kexic file
 		if (!fileNameForConnectionData.isEmpty())
-			args << "--skip-dialog"; //user does not expect conn. dialog to be shown here
+			args << "--skip-conn-dialog"; //user does not expect conn. dialog to be shown here
 
-		if (dbName.isEmpty()) { //use 'kexi --skip-dialog file.kexic'
+		if (dbName.isEmpty()) { //use 'kexi --skip-conn-dialog file.kexic'
 			fileName = fileNameForConnectionData;
 		}
-		else { //use 'kexi --skip-dialog --connection file.kexic dbName'
+		else { //use 'kexi --skip-conn-dialog --connection file.kexic dbName'
 			args << "--connection" << fileNameForConnectionData;
 			fileName = dbName;
 		}

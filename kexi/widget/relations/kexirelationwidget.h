@@ -57,7 +57,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 		const ConnectionList* connections() const;
 
 //		KexiRelationView	*relationView() const { return m_relationView; }
-		void addTable(QString t);
+		void addTable(const QString& t);
 
 //		void openTable(KexiDB::TableSchema* table, bool designMode);
 

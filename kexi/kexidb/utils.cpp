@@ -629,7 +629,9 @@ bool KexiDB::isBuiltinTableFieldProperty( const QByteArray& propertyName )
 	if (!KexiDB_builtinFieldProperties) {
 		KexiDB_builtinFieldPropertiesDeleter.setObject( KexiDB_builtinFieldProperties, new QSet<QByteArray>() );
 #define ADD(name) KexiDB_builtinFieldProperties->insert(name)
+		ADD("type");
 		ADD("primaryKey");
+		ADD("indexed");
 		ADD("autoIncrement");
 		ADD("unique");
 		ADD("notNull");
@@ -664,9 +666,11 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>&
 	}
 	
 	uint constraints = field.constraints();
-	bool ok;
+	bool ok = true;
 	if ( (it = values.find("primaryKey")) != values.constEnd() )
 		SET_BOOLEAN_FLAG(PrimaryKey, (*it).toBool());
+	if ( (it = values.find("indexed")) != values.constEnd() )
+		SET_BOOLEAN_FLAG(Indexed, (*it).toBool());
 	if ( (it = values.find("autoIncrement")) != values.constEnd() 
 		&& KexiDB::Field::isAutoIncrementAllowed(field.type()) )
 		SET_BOOLEAN_FLAG(AutoInc, (*it).toBool());
@@ -693,22 +697,22 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>&
 	if ( (it = values.find("description")) != values.constEnd())
 		field.setDescription( (*it).toString() );
 	if ( (it = values.find("length")) != values.constEnd())
-		field.setLength( (*it).toUInt(&ok) );
+		field.setLength( (*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok) );
 	if (!ok)
 		return false;
 	if ( (it = values.find("precision")) != values.constEnd())
-		field.setPrecision( (*it).toUInt(&ok) );
+		field.setPrecision( (*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok) );
 	if (!ok)
 		return false;
 	if ( (it = values.find("defaultValue")) != values.constEnd())
 		field.setDefaultValue( *it );
 	if ( (it = values.find("width")) != values.constEnd())
-		field.setWidth( (*it).toUInt(&ok) );
+		field.setWidth( (*it).isNull() ? 0/*default*/ : (*it).toUInt(&ok) );
 	if (!ok)
 		return false;
 	if ( (it = values.find("visibleDecimalPlaces")) != values.constEnd() 
 	  && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()) )
-		field.setVisibleDecimalPlaces( (*it).toUInt(&ok) );
+		field.setVisibleDecimalPlaces( (*it).isNull() ? -1/*default*/ : (*it).toUInt(&ok) );
 	if (!ok)
 		return false;
 
@@ -763,6 +767,8 @@ bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, con
 		uint constraints = field.constraints();
 		if ( "primaryKey" == propertyName )
 			SET_BOOLEAN_FLAG(PrimaryKey, value.toBool());
+		if ( "indexed" == propertyName )
+			SET_BOOLEAN_FLAG(Indexed, value.toBool());
 		if ( "autoIncrement" == propertyName
 			&& KexiDB::Field::isAutoIncrementAllowed(field.type()) )
 			SET_BOOLEAN_FLAG(AutoInc, value.toBool());

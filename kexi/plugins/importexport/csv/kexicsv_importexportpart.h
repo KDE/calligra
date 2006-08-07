@@ -21,6 +21,7 @@
 #define KEXI_MIGRATION_PART_H
 
 #include <core/kexiinternalpart.h>
+#include "kexicsvexportwizard.h"
 
 /*! Internal part for CSV data import/export dialogs. */
 class KexiCSVImportExportPart : public KexiInternalPart
@@ -29,10 +30,15 @@ class KexiCSVImportExportPart : public KexiInternalPart
 		KexiCSVImportExportPart(QObject *parent, const char *name, const QStringList &args);
 		virtual ~KexiCSVImportExportPart();
 
-		/*! Reimplement this if your internal part has to return widgets 
-		 or QDialog objects. */
+		/*! Reimplemented to return wizard object. */
 		virtual QWidget *createWidget(const char* widgetClass, KexiMainWindow* mainWin, 
 		 QWidget *parent, const char *objName = 0, QMap<QString,QString>* args = 0);
+
+		/*! Reimplemented to execute a command \a commandName (nonvisual). The result are put into the \a args. */
+		virtual bool executeCommand(KexiMainWindow* mainWin, const char* commandName, 
+			QMap<QString,QString>* args = 0);
+
+	protected:
 };
 
 #endif
