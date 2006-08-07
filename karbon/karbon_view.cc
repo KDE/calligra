@@ -594,11 +594,9 @@ KarbonView::editDeselectAll()
 {
 	debugView("KarbonView::editDeselectAll()");
 
-	if( part()->document().selection()->objects().count() > 0 )
-	{
-		part()->document().selection()->clear();
-		part()->repaintAllViews();
-	}
+	KoSelection* selection = m_canvas->shapeManager()->selection();
+	if( selection )
+		selection->deselectAll();
 
 	selectionChanged();
 }
@@ -692,9 +690,12 @@ KarbonView::selectionAlign(KoShapeAlignCommand::Align align)
 		return;
 
 	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-	if( selectedShapes.count() < 2) return;  // TODO: handle case count = 1
+	if( selectedShapes.count() < 1)
+		return;
 
-	KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, selection->boundingRect());
+	QRectF bRect;
+	bRect= (selectedShapes.count() == 1) ? part()->document().boundingRect() : selection->boundingRect();
+	KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, bRect);
 
 	part()->commandHistory()->addCommand( cmd, true );
 }
