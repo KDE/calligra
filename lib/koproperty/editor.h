@@ -77,7 +77,7 @@ class KOPROPERTY_EXPORT Editor : public KListView
 
 		virtual QSize sizeHint() const;
 		virtual void setFocus();
-		virtual void setSorting( int column, bool ascending = TRUE );
+		virtual void setSorting( int column, bool ascending = true );
 
 	public slots:
 		/*! Populates the editor with an item for each property in the List.
