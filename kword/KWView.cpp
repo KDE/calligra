@@ -122,7 +122,6 @@
 #include <QApplication>
 #include <QTimer>
 #include <QBuffer>
-#include <Q3CString>
 #include <Q3ValueList>
 #include <QMap>
 
@@ -1456,8 +1455,8 @@ void KWView::addVariableActions( int type, const QStringList & texts,
             VariableDef v;
             v.type = type;
             v.subtype = i;
-            Q3CString actionName;
-            actionName.sprintf( "var-action-%d-%d", type, i );
+            QByteArray actionName;
+            actionName = "var-action-" + QByteArray::number(type)+ "-" + QByteArray::number(i);
             KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
                                          actionCollection(), actionName );
             // Mainly for KEditToolbar
