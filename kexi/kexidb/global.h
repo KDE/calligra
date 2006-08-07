@@ -117,7 +117,7 @@ class KEXI_DB_EXPORT DatabaseVersionInfo
 };
 
 //! \return KexiDB version info
-DatabaseVersionInfo version() { return KEXIDB_VERSION; }
+KEXI_DB_EXPORT DatabaseVersionInfo version();
 
 /*! @short Contains version information about a database backend. */
 class KEXI_DB_EXPORT ServerVersionInfo

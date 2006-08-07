@@ -137,7 +137,7 @@ bool DriverManagerInternal::lookupDrivers()
 			KexiDBWarn << QString("DriverManagerInternal::lookupDrivers(): '%1' driver"
 				" has version '%2' but required KexiDB driver version is '%3.%4'\n"
 				" -- skipping this driver!").arg( srv_name ).arg( srv_ver_str )
-				.arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor()) << endl;
+				.arg(KexiDB::version().major).arg(KexiDB::version().minor) << endl;
 			possibleProblems += QString("\"%1\" database driver has version \"%2\" "
 				"but required driver version is \"%3.%4\"")
 				.arg( srv_name ).arg( srv_ver_str )
