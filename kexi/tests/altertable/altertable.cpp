@@ -35,6 +35,7 @@
 #include <core/kexipartitem.h>
 #include <core/kexitabledesignerinterface.h>
 #include <core/kexiinternalpart.h>
+#include <kexiutils/utils.h>
 #include <koproperty/set.h>
 
 QString testFilename;
@@ -126,7 +127,7 @@ tristate readLineFromTestFile(const QString& expectedCommandName = QString::null
 
 bool checkItemsNumber(int expectedNumberOfItems)
 {
-	if (expectedNumberOfItems>0 && expectedNumberOfItems!=testFileLine.count()) {
+	if (expectedNumberOfItems>0 && expectedNumberOfItems!=(int)testFileLine.count()) {
 		showError( QString("Invalid number of args (%1) for command '%2', expected: %3")
 			.arg(testFileLine.count()-1).arg(testFileLine[0]).arg(expectedNumberOfItems-1) );
 		return false;
@@ -244,6 +245,7 @@ bool AlterTableTester::showSchema(KexiDialogBase* dlg)
 bool AlterTableTester::checkInternal(KexiDialogBase* dlg,
 	QString& debugString, const QString& endCommand, bool skipColons)
 {
+	Q_UNUSED(dlg);
 	QTextStream resultStream(&debugString, IO_ReadOnly);
 	// Load expected result, compare
 	QString expectedLine, resultLine;
@@ -300,7 +302,7 @@ bool AlterTableTester::getActionsDump(KexiDialogBase* dlg, QString& actionsDebug
 		return false;
 	tristate result = designerIface->simulateAlterTableExecution(&actionsDebugString);
 	if (true!=result) {
-		showError( QString("Computing simplified actions for table failed.").arg(dlg->partItem()->name()) );
+		showError( QString("Computing simplified actions for table '%1'  failed.").arg(dlg->partItem()->name()) );
 		return false;
 	}
 	return true;
@@ -350,7 +352,7 @@ bool AlterTableTester::getTableDataDump(KexiDialogBase* dlg, QString& dataString
 
 	QMap<QString,QString> args;
 	QTextStream ts( &dataString, IO_WriteOnly );
-	args["textStream"] = QString::number((Q_ULLONG)(&ts));
+	args["textStream"] = KexiUtils::ptrToString<QTextStream>( &ts );
 	args["destinationType"]="file";
 	args["delimiter"]="\t";
 	args["itemId"] = QString::number(dlg->partItem()->identifier());
@@ -493,13 +495,15 @@ int quit(int result)
 	return result;
 }
 
-extern "C" int kdemain(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	// args: <.altertable test filename>
-	if (argc < 2)
+	if (argc < 2) {
 		kdWarning() << "Please specify test filename.\nOptions: \n"
 		"\t-close - closes the main window when test finishes" << endl;
-
+		return quit(1);
+	}
+	
 	// options:
 	const bool closeOnFinish = argc > 2 && 0==qstrcmp(argv[1], "-close");
 		
@@ -508,6 +512,7 @@ extern "C" int kdemain(int argc, char *argv[])
 	testFile.setName(testFilename);
 	if (!testFile.open(IO_ReadOnly)) {
 		kdWarning() << QString("Opening test file %1 failed.").arg(testFilename) << endl;
+		return quit(1);
 	}
 	//load db name
 	testFileStream.setDevice( &testFile );

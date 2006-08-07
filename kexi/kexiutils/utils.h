@@ -175,8 +175,36 @@ namespace KexiUtils
 	//! Used in KexiDBImageBox and KexiBlobTableEdit.
 	KEXIUTILS_EXPORT void drawPixmap( QPainter& p, int lineWidth, const QRect& rect,
 		const QPixmap& pixmap, int alignment, bool scaledContents, bool keepAspectRatio);
-}
 
+	//! \return a pointer \a ptr safely serialized to string
+	template<class type>
+	KEXIUTILS_EXPORT QString ptrToString(type *ptr)
+	{
+		QString str;
+		QTextStream ts_ptr( &str, IO_WriteOnly );
+		unsigned char* cstr_ptr = (unsigned char*)&ptr;
+		for (uint i=0; i<sizeof(type*); i++)
+			ts_ptr << (unsigned short)(cstr_ptr[i]);
+		return str;
+	}
+	
+	//! \return a pointer of type \a type safely deserialized from \a str
+	template<class type>
+	KEXIUTILS_EXPORT type* stringToPtr(const QString& str)
+	{
+		QString str_(str);
+		QTextStream ts_ptr( &str_, IO_ReadOnly );
+		unsigned char cstr_ptr[ sizeof(type*) ];
+		signed short s;
+		for (uint i=0; i<sizeof(type*); i++) {
+			if (ts_ptr.atEnd())
+				return 0;
+			ts_ptr >> s;
+			cstr_ptr[i]=(unsigned char)s;
+		}
+		return *(type**)cstr_ptr;
+	}
+}
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
 //! a widget that must be instantiated by hand.

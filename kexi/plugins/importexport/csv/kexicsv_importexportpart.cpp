@@ -22,6 +22,7 @@
 #include "kexicsvexportwizard.h"
 #include <core/keximainwindow.h>
 #include <core/kexiproject.h>
+#include <kexiutils/utils.h>
 
 #include <kgenericfactory.h>
 
@@ -74,10 +75,9 @@ bool KexiCSVImportExportPart::executeCommand(KexiMainWindow* mainWin, const char
 			return false;
 		KexiDB::TableOrQuerySchema tableOrQuery(
 			mainWin->project()->dbConnection(), options.itemId);
-		bool ok;
 		QTextStream *stream = 0;
 		if (args->contains("textStream"))
-			stream = (QTextStream *)(*args)["textStream"].toULongLong(&ok);
+			stream = KexiUtils::stringToPtr<QTextStream>( (*args)["textStream"] );
 		return KexiCSVExport::exportData(tableOrQuery, options, -1, stream);
 	}
 	return false;
