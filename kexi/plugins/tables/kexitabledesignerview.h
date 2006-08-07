@@ -96,7 +96,7 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		/*! Changes property \a propertyName to \a newValue for a field at row \a row.
 		 If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
 		 If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
-		virtual void KexiTableDesignerView::changeFieldPropertyForRow( int row,
+		virtual void changeFieldPropertyForRow( int row,
 		 const QCString& propertyName, const QVariant& newValue, 
 		 KoProperty::Property::ListData* const listData, bool addCommand );
 

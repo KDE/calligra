@@ -94,7 +94,7 @@ class KexiTableDesignerViewPrivate
 			QStringList* const slist = 0, QStringList* const nlist = 0);
 
 		/*! Like above but allows to specify \a oldValue. */
-		void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded( 
+		void setPropertyValueIfNeeded( 
 			const KoProperty::Set& set, const QCString& propertyName, 
 			const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup, 
 			bool forceAddCommand = false, bool rememberOldValue = true,

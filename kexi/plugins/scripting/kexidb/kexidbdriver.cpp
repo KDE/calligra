@@ -60,8 +60,8 @@ const QString KexiDBDriver::getClassName() const
 }
 
 bool KexiDBDriver::isValid() { return m_driver->isValid(); }
-int KexiDBDriver::versionMajor() { return m_driver->versionMajor(); }
-int KexiDBDriver::versionMinor() { return m_driver->versionMinor(); }
+int KexiDBDriver::versionMajor() { return m_driver->version().major; }
+int KexiDBDriver::versionMinor() { return m_driver->version().minor; }
 QString KexiDBDriver::escapeString(const QString& s) { return m_driver->escapeString(s); }
 bool KexiDBDriver::isFileDriver() { return m_driver->isFileDriver(); }
 QString KexiDBDriver::fileDBDriverMimeType() { return m_driver->fileDBDriverMimeType(); }
