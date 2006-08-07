@@ -24,7 +24,6 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <q3popupmenu.h>
-#include <q3paintdevicemetrics.h>
 #include <qpainter.h>
 #include <QResizeEvent>
 #include <QPixmap>
@@ -450,11 +449,10 @@ KarbonView::print( KPrinter &printer )
 	// TODO : ultimately use plain QPainter here as that is better suited to print system
 	//kDebug(38000) << "KarbonView::print" << endl;
 	
-	Q3PaintDeviceMetrics metrics( ( QPaintDevice * ) & printer );
 	printer.setFullPage( true );
 	
 	// we are using 72 dpi internally
-	double zoom = metrics.logicalDpiX() / 72.0;
+	double zoom = printer.logicalDpiX() / 72.0;
 
 	QMatrix mat;
 	mat.scale( 1, -1 );
