@@ -712,7 +712,7 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>&
 		return false;
 	if ( (it = values.find("visibleDecimalPlaces")) != values.constEnd() 
 	  && KexiDB::supportsVisibleDecimalPlacesProperty(field.type()) )
-		field.setVisibleDecimalPlaces( (*it).isNull() ? -1/*default*/ : (*it).toUInt(&ok) );
+		field.setVisibleDecimalPlaces( (*it).isNull() ? -1/*default*/ : (*it).toInt(&ok) );
 	if (!ok)
 		return false;
 
