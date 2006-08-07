@@ -91,7 +91,12 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 			\sa FieldList::clear() */
 		virtual void clear();
 
-		/*! \return String for debugging purposes. */
+		/*! \return String for debugging purposes, if \a includeTableName is true,
+		 table name, caption, etc. is prepended, else only debug string for 
+		 the fields are returned. */
+		QString debugString(bool includeTableName);
+
+		/*! \return String for debugging purposes. Equal to debugString(true). */
 		virtual QString debugString();
 
 		/*! \return connection object if table was created/retrieved using a connection, 

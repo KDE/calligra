@@ -174,10 +174,10 @@ class KEXI_DB_EXPORT Field
 		static QString typeString(uint type);
 
 		/*! \return type for a given \a typeString */
-		static Type typeForString(const QString typeString);
+		static Type typeForString(const QString& typeString);
 
 		/*! \return type group for a given \a typeGroupString */
-		static TypeGroup typeGroupForString(const QString typeGroupString);
+		static TypeGroup typeGroupForString(const QString& typeGroupString);
 
 		/*! \return group for \a type */
 		static TypeGroup typeGroup(uint type);
@@ -309,7 +309,8 @@ class KEXI_DB_EXPORT Field
 
 		inline QVariant defaultValue() const { return m_defaultValue; }
 		
-		/*! \return length of text, only meaningful if the field type is text. */
+		/*! \return length of text, only meaningful if the field type is text. 
+		 0 means "default length". */
 		inline uint length() const { return m_length; }
 
 		/*! \return precision for numeric and other fields that have both length (scale)
@@ -396,7 +397,7 @@ class KEXI_DB_EXPORT Field
 		void setConstraints(uint c);
 
 		/*! Sets length for this field. Only works for Text Type (even not LongText!). 
-		 @see length() */
+		 0 means "default length". @see length() */
 		void setLength(uint l);
 
 		/*! Sets scale for this field. Only works for floating-point types. 

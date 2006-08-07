@@ -1,7 +1,7 @@
 include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexicore.la
-libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
+libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp kexiaboutdata.cpp \
 	keximainwindow.cpp \
 	kexidbconnectionset.cpp kexiprojectset.cpp \
 	kexiactionproxy.cpp kexisharedactionhost.cpp \
@@ -13,7 +13,8 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
 	kexistartupdata.cpp kexiguimsghandler.cpp kexitextmsghandler.cpp \
 	kexidataiteminterface.cpp kexievents.cpp \
 	kexidbshortcutfile.cpp \
-	kexiblobbuffer.cpp kexistaticpart.cpp
+	kexiblobbuffer.cpp kexistaticpart.cpp \
+	kexitabledesignerinterface.cpp
 
 #kexipartdatasource.cpp
 

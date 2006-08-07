@@ -17,11 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIALTERTABLEDIALOG_H
-#define KEXIALTERTABLEDIALOG_H
+#ifndef KEXITABLEDESIGNERINTERVIEW_H
+#define KEXITABLEDESIGNERINTERVIEW_H
 
 #include <koproperty/property.h>
 #include <kexidb/alter.h>
+#include <core/kexitabledesignerinterface.h>
 
 #include <kexidatatable.h>
 #include "kexitablepart.h"
@@ -52,7 +53,7 @@ namespace KoProperty {
  Saving changes made to table containing data requires use of the AlterTableHandler
  functionality.
 */
-class KexiTableDesignerView : public KexiDataTable
+class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInterface
 {
 	Q_OBJECT
 
@@ -64,43 +65,67 @@ class KexiTableDesignerView : public KexiDataTable
 
 		KexiTablePart::TempData* tempData() const;
 
-		/*! Clears field informaton entered for row. 
+		/*! Clears field information entered for row. 
 		 This is performed by removing values from caption and data type columns.
 		 Used by InsertFieldCommand to undo inserting a new field. */
-		void clearRow(int row);
+		virtual void clearRow(int row, bool addCommand = false);
+
+		/*! Inserts a new field with \a caption for \a row. 
+		 Property set is also created.  */
+		virtual void insertField(int row, const QString& caption, bool addCommand = false);
 
 		/*! Inserts a new \a field for \a row. 
-		 Property set is also created. If \a set is not 0 (the default), 
-		 it will be copied into the new set.
+		 Property set is also created. \a set will be deeply-copied into the new set.
 		 Used by InsertFieldCommand to insert a new field. */
-		void insertField( int row/*, const KexiDB::Field& field*/, KoProperty::Set& set);
+		virtual void insertField(int row, KoProperty::Set& set, bool addCommand = false);
 
 		/*! Inserts a new empty row at position \a row. 
 		 Used by RemoveFieldCommand as a part of undo inserting a new field;
 		 also used by InsertEmptyRowCommand. */
-		void insertEmptyRow( int row );
+		virtual void insertEmptyRow( int row, bool addCommand = false );
 
-		/*! Deleted \a row from the table view; used for undoing InsertEmptyRowCommand. */
-		void deleteRow( int row );
+		/*! Deletes \a row from the table view. Property set is also deleted.
+		 All the subsequent fields are moved up. Used for undoing InsertEmptyRowCommand
+		 and by RemoveFieldCommand to remove a field. */
+		virtual void deleteRow( int row, bool addCommand = false );
 
-		/*! Inserts a field for \a row. All the subsequent fields are moved up.
-		 Property set is also deleted.
+		/*! Deletes a field for \a row. Property set is also deleted.
 		 Used by RemoveFieldCommand to remove a field. */
-		void deleteField( int row );
+//		virtual void deleteField( int row );
 
-		/*! Changes property \a propertyName to \a newValue for a field pointed by \a fieldUID.
+		/*! Changes property \a propertyName to \a newValue for a field at row \a row.
 		 If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
-		 If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called.
+		 If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
+		virtual void KexiTableDesignerView::changeFieldPropertyForRow( int row,
+		 const QCString& propertyName, const QVariant& newValue, 
+		 KoProperty::Property::ListData* const listData, bool addCommand );
+
+		/*! Changes property \a propertyName to \a newValue.
+		 Works exactly like changeFieldPropertyForRow() except the field is pointed by \a fieldUID.
 		 Used by ChangeFieldPropertyCommand to change field's property. */
 		void changeFieldProperty( int fieldUID, const QCString& propertyName, 
-			const QVariant& newValue, KoProperty::Property::ListData* const listData = 0 );
+			const QVariant& newValue, KoProperty::Property::ListData* const listData = 0, 
+			bool addCommand = false );
 
 		/*! Changes visibility of property \a propertyName to \a visible for a field pointed by \a fieldUID.
 		 Used by ChangePropertyVisibilityCommand. */
 		void changePropertyVisibility( int fieldUID, const QCString& propertyName, bool visible );
 
 		/*! Builds table field's schema by looking at the \a set. */
-		KexiDB::Field * buildField( const KoProperty::Set &set );
+		KexiDB::Field * buildField( const KoProperty::Set &set ) const;
+
+		/*! Creates temporary table for the current design and returns debug string for it. */
+		virtual QString debugStringForCurrentTableSchema(tristate& result);
+
+		/*! Simulates execution of alter table, and puts debug into \a debugTarget. 
+		 A case when debugTarget is not 0 is true for the alter table test suite. */
+		virtual tristate simulateAlterTableExecution(QString *debugTarget);
+
+	public slots:
+		/*! Real execution of the Alter Table. For debugging of the real alter table. 
+		 \return true on success, false on failure and cancelled if user has cancelled 
+		 execution. */
+		virtual tristate executeRealAlterTable();
 
 	protected slots:
 		/*! Equivalent to updateActions(false). Called on row insert/delete
@@ -145,9 +170,6 @@ class KexiTableDesignerView : public KexiDataTable
 		/*! Simulates real execution of the Alter Table. For debugging. */
 		void slotSimulateAlterTableExecution();
 
-		/*! Real execution of the Alter Table. For debugging the real alter table. */
-		void slotExecuteRealAlterTable();
-
 	protected:
 		virtual void updateActions(bool activated);
 
@@ -180,8 +202,13 @@ class KexiTableDesignerView : public KexiDataTable
 		*/
 		virtual tristate storeData(bool dontAsk = false);
 
-		/*! Builds table schema by looking at the current design. Used in storeNewData() */
-		tristate buildSchema(KexiDB::TableSchema &schema);
+		/*! Builds table schema by looking at the current design. Used in storeNewData()
+		 and storeData().
+		 If \a beSilent is true, no message boxes are used to show questions or warnings.
+		 This is used in the altertable test suite (kexi/tests/altertable). 
+		 \return true on successful schema creating, false on failure and cancelled when there 
+		 was a problem with user's design (and user has been informed about it). */
+		tristate buildSchema(KexiDB::TableSchema &schema, bool beSilent = false);
 
 		/*! Builds action list usable for KexiDB::AlterTableHandler by looking at undo buffer 
 		 of commands' history. Used in storeData() */
@@ -199,6 +226,8 @@ class KexiTableDesignerView : public KexiDataTable
 		void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup, 
 			QStringList& stringsList, QStringList& namesList);
 
+		/*! Adds history command \a command to the undo/redo buffer. 
+		 If \a execute is true, the command is executed afterwards. */
 		void addHistoryCommand( KCommand* command, bool execute );
 
 		//! Updates undo/redo shared actions availability by looking at command history's action
@@ -207,6 +236,12 @@ class KexiTableDesignerView : public KexiDataTable
 #ifdef KEXI_DEBUG_GUI
 		void debugCommand( KCommand* command, int nestingLevel );
 #endif
+
+		/*! Inserts a new \a field for \a row. 
+		 Property set is also created. If \a set is not 0 (the default), 
+		 it will be copied into the new set. Used by insertField(). */
+		void insertFieldInternal(int row, KoProperty::Set* set,	const QString& caption, bool addCommand);
+
 
 	private:
 		KexiTableDesignerViewPrivate *d;

@@ -24,6 +24,7 @@
 #include <qdatetime.h>
 #include <qdict.h>
 
+#include <kexidb/global.h>
 #include <kexidb/object.h>
 #include <kexidb/field.h>
 
@@ -208,11 +209,10 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 and proper error message is set properly on any error. */
 		virtual bool isValid();
 	
-		/*! Driver's static version information, it is automatically defined
-		 in implementation using KEXIDB_DRIVER macro (see driver_p.h) */
-		virtual int versionMajor() const = 0;
-
-		virtual int versionMinor() const = 0;
+		/*! Driver's static version information (major part), it is automatically defined
+		 in implementation by KEXIDB_DRIVER macro (see driver_p.h) 
+		 It's usually compared to drivers' and KexiDB library version. */
+		virtual DatabaseVersionInfo version() const = 0;
 
 		/*! Escapes and converts value \a v (for type \a ftype) 
 		 to string representation required by SQL commands.
@@ -377,8 +377,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
  Put this into driver class declaration just like Q_OBJECT macro. */
 #define KEXIDB_DRIVER \
 	public: \
-	virtual int versionMajor() const; \
-	virtual int versionMinor() const;
+	virtual DatabaseVersionInfo version() const;
 
 #endif
 

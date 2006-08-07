@@ -205,7 +205,7 @@ KexiRelationWidget::addConnection(const SourceConnection& conn)
 }
 
 void
-KexiRelationWidget::addTable(QString t)
+KexiRelationWidget::addTable(const QString& t)
 {
 	for(int i=0; i < m_tableCombo->count(); i++)
 	{

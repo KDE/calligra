@@ -65,7 +65,6 @@ TODO(GUI):
 TODO: implement better references (foreign key information) between tables + storage
 TODO: implement WHERE clause + storage
 TODO: implement GROUP BY clause + storage
-TODO: add kexi driver version info
 TODO: add server version info retrieval
 TODO: add schema to kexi__* tables on createTable()
 TODO: add support for creation temporary databases
@@ -508,9 +507,6 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
 - Implement tree structures using idea #5 described here http://www.depesz.com/various-sqltrees.php
   (does pgsql require this hack?)
 
-=== KexiDB MySQL Driver TODO ===
-- use InnoDB instead of MyISAM tables because of transactions support
-
 === KexiDB Parser TODO ===
 - add a method for replacing a single given table name in the statement (useful on table renames)
 - add clever query relatins parsing 
@@ -926,47 +922,26 @@ Table Designer TODO
 - i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)
 - add setting for default length of the text type
 
-Table Column Lookup XML Format:
-<lookup-column>
- <row-source>
-  empty
-  | <type>table|query|sql</type>  #required because there can be table and query with the same name
-                              #TODO1: support "valuelist"
-                              #TODO2: support "fieldlist" (basically a list of column names of a table/query,
-                                      "Field List" as in MSA)
-  |<name>string</name> #not used for sql source type
-  |<sql>string</sql> #must be valid KEXISQL SELECT QUERY
- </row-source>
- <bound-column>
-  <number>number</number> #in later implementation there can be more columns
- </bound-column>
- <visible-column> #a column that has to be visible in the combo box
-  <number>number</number> #in later implementation there can be more columns
- </visible-column>
- <column-widths"> #column widths, -1 means 'default'
-   <number>int</number>
-   ...
-   <number>int</number>
- </column-widths>
- <show-column-headers>
-   <bool>true/false</bool>
- </show-column-headers>
- <list-rows>
-   <number>1..100</number>
- </list-rows>
- <limit-to-list>
-   <bool>true/false</bool>
- </limit-to-list>
- <display-widget>
-   <bool>"combobox"/"listbox"</bool>
- </display-widget>
-</lookup-column>
-
-[todo]
-
 Combobox table edit TODO:
 - copy should handle "displayed" value, not the real one 
   (maybe let's use a custom clipboard mimetype?)
 
 Forms TODO
 - implement combo box widget
+
+TODO
+- cancelled -> canceled
+
+=== KexiDB MySQL Driver TODO ===
+- use InnoDB instead of MyISAM tables because of transactions support
+ http://dev.mysql.com/doc/refman/5.0/en/ansi-diff-transactions.html
+ Kexi's MySQL driver uses MyISAM engine, but transaction support needs InnoDB
+ (there should be also an option available to set on CREATE TABLE, and on an default for CREATE DATABASE)
+
+=== KexiDB PostgreSQL Driver TODO ===
+- port to libpq
+- set version information in drv_useDatabase()
+
+=== KexiDB TODO ===
+- add setValue() to cursors: this will REQUIRE a buffered cursor, since we cannot run sql 
+  before fetching is done... See http://kexi-project.org/cgi-bin/irclogger_log/kexi?date=2006-08-03,Thu&sel=229#l225

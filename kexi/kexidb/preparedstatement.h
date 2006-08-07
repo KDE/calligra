@@ -77,8 +77,8 @@ class KEXI_DB_EXPORT PreparedStatement : public KShared
 
 		//! Defines type of the prepared statement.
 		enum StatementType {
-			SelectStatement, //!< SELECT statement wil be prepared end executed
-			InsertStatement  //!< INSERT statement wil be prepared end executed
+			SelectStatement, //!< SELECT statement will be prepared end executed
+			InsertStatement  //!< INSERT statement will be prepared end executed
 		};
 
 		//! Creates Prepared statement. In your code use KexiDB::Connection:prepareStatement() instead.

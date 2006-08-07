@@ -56,6 +56,11 @@ using namespace KexiTableDesignerCommands;
 CommandHistory::CommandHistory(KActionCollection *actionCollection, bool withMenus)
  : KCommandHistory(actionCollection, withMenus)
 {
+	// We need ALL the commands because we'll collect reuse their 
+	// data before performing alter table, so set that to the maximum, 
+	// as KCommandHistory has default = 50.
+	setUndoLimit(INT_MAX);
+	setRedoLimit(INT_MAX);
 }
 
 void CommandHistory::addCommand(KCommand *command, bool execute)
@@ -115,13 +120,13 @@ int KexiTableDesignerViewPrivate::generateUniqueId()
 	return ++uniqueIdCounter;
 }
 
-void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded( const KoProperty::Set& set, const QCString& propertyName, 
-	const QVariant& newValue, CommandGroup* commandGroup, 
+void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded( 
+	const KoProperty::Set& set, const QCString& propertyName, 
+	const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup, 
 	bool forceAddCommand, bool rememberOldValue,
 	QStringList* const slist, QStringList* const nlist)
 {
 	KoProperty::Property& property = set[propertyName];
-	QVariant oldValue( property.value() );
 
 	KoProperty::Property::ListData *oldListData = property.listData() ? 
 		new KoProperty::Property::ListData(*property.listData()) : 0; //remember because we'll change list data soon
@@ -139,7 +144,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded( const KoProperty::S
 	const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled 
 		= addHistoryCommand_in_slotPropertyChanged_enabled; //remember
 	addHistoryCommand_in_slotPropertyChanged_enabled = false;
-	if (oldValue != newValue)
+	if (property.value() != newValue)
 		property.setValue( newValue, rememberOldValue );
 	if (commandGroup) {
 		commandGroup->addCommand(
@@ -149,6 +154,18 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded( const KoProperty::S
 	delete oldListData;
 	addHistoryCommand_in_slotPropertyChanged_enabled 
 		= prev_addHistoryCommand_in_slotPropertyChanged_enabled; //restore
+}
+
+void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded( 
+	const KoProperty::Set& set, const QCString& propertyName, 
+	const QVariant& newValue, CommandGroup* commandGroup, 
+	bool forceAddCommand, bool rememberOldValue,
+	QStringList* const slist, QStringList* const nlist)
+{
+	KoProperty::Property& property = set[propertyName];
+	QVariant oldValue( property.value() );
+	setPropertyValueIfNeeded( set, propertyName, newValue, property.value(), 
+		commandGroup, forceAddCommand, rememberOldValue, slist, nlist);
 }
 
 void KexiTableDesignerViewPrivate::setVisibilityIfNeeded( const KoProperty::Set& set, KoProperty::Property* prop, 

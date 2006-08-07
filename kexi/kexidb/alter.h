@@ -132,7 +132,8 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 
 			/* Only changes to extended table schema required,
 			 this does not require physical changes for the table; 
-			 e.g. changing value of the "visibleDecimalPlaces" property. */
+			 e.g. changing value of the "visibleDecimalPlaces" property
+			 or any of the custom properties. */
 			ExtendedSchemaAlteringRequired = 8,
 
 			/*! Convenience flag, changes to the main or extended schema is required. */
@@ -167,8 +168,25 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				//! for temporarily collecting actions that have no effect at all.
 				bool isNull() const { return m_null; }
 
-				virtual QString debugString() { return "ActionBase"; }
-				void debug() { KexiDBDbg << debugString() << " (req = " << alteringRequirements() << ")" << endl; }
+				//! Controls debug options for actions. Used in debugString() and debug().
+				class DebugOptions
+				{
+					public:
+						DebugOptions() : showUID(true), showFieldDebug(false) {}
+
+						//! true if UID should be added to the action debug string (the default)
+						bool showUID : 1;
+
+						//! true if the field associated with the action (if exists) should 
+						//! be appended to the debug string (default is false)
+						bool showFieldDebug : 1;
+				};
+
+				virtual QString debugString(const DebugOptions& debugOptions = DebugOptions()) { 
+					Q_UNUSED(debugOptions); return "ActionBase"; }
+				void debug(const DebugOptions& debugOptions = DebugOptions()) { 
+					KexiDBDbg << debugString(debugOptions) 
+						<< " (req = " << alteringRequirements() << ")" << endl; }
 
 			protected:
 				//! Sets requirements for altering; used internally by AlterTableHandler object
@@ -250,7 +268,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 
 				QString propertyName() const { return m_propertyName; }
 				QVariant newValue() const { return m_newValue; }
-				virtual QString debugString();
+				virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
 
@@ -274,7 +292,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				RemoveFieldAction(bool);
 				virtual ~RemoveFieldAction();
 
-				virtual QString debugString();
+				virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
 
@@ -300,7 +318,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				int index() const { return m_index; }
 				KexiDB::Field& field() const { return *m_field; }
 				void setField(KexiDB::Field* field);
-				virtual QString debugString();
+				virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
 
@@ -328,7 +346,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual ~MoveFieldPositionAction();
 
 				int index() const { return m_index; }
-				virtual QString debugString();
+				virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
 
@@ -380,14 +398,21 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		 Sets \a result to true on success, to false on failure or when the above requirements are not met
 		 (then, you can detailed get error message from KexiDB::Object). 
 		 When the action has been cancelled (stopped), \a result is set to cancelled value. 
+		 If \a debugString is not 0, it will be filled with 
 		 \return the new table schema object created as a result of schema altering.
 		 The old table is returned if recreating table schema was not necessary or \a simulate is true. 
 		 0 is returned if \a result is not true. */
-		TableSchema* execute(const QString& tableName, tristate& result, bool simulate = false );
+		TableSchema* execute(const QString& tableName, tristate& result, bool simulate = false);
 
 		void debug();
 
+		/*! Like execute() with simulate set to true, but debug is directed to debugString. 
+		 This function is used only in the alter table test suite. */
+		tristate simulateExecution(const QString& tableName, QString& debugString);
+
 	protected:
+		TableSchema* executeInternal(const QString& tableName, tristate& result, bool simulate = false,
+			QString* debugString = 0);
 
 		class Private;
 		Private *d;

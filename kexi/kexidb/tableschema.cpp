@@ -297,7 +297,15 @@ unsigned int TableSchema::fieldCount() const
 
 QString TableSchema::debugString()
 {
-	QString s = QString("TABLE ") + schemaDataDebugString() + "\n" + FieldList::debugString();
+	return debugString(true);
+}
+
+QString TableSchema::debugString(bool includeTableName)
+{
+	QString s;
+	if (includeTableName)
+		s = QString("TABLE ") + schemaDataDebugString() + "\n";
+	s.append( FieldList::debugString() );
 
 	Field *f;
 	for (Field::ListIterator it(m_fields); (f = it.current()); ++it) {

@@ -122,7 +122,7 @@ NArgExpr::NArgExpr(int aClass, int token)
  : BaseExpr(token)
 {
 	m_cl = aClass;
-	list.setAutoDelete(TRUE);
+	list.setAutoDelete(true);
 }
 
 NArgExpr::~NArgExpr()

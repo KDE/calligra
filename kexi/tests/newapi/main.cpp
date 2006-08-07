@@ -58,17 +58,17 @@ static KCmdLineOptions options[] =
 {
 	{ "test <test_name>",
 		"Available tests:\n"
-		" cursors: test for cursors behaviour\n"
-		" schema: test for db schema retrieving\n"
-		" dbcreation: test for new db creation\n"
-		" tables: test for tables creation and data\n"
-		"  inserting\n"
-		" tableview: test for KexiDataTableView data-aware\n"
-		" widget\n"
-		" parser: test for parsing sql statements,\n"
-		"  returns debug string for a given\n"
-		"  sql statement or error message\n"
-		" dr_prop: shows properties of selected driver"
+		"- cursors: test for cursors behaviour\n"
+		"- schema: test for db schema retrieving\n"
+		"- dbcreation: test for new db creation\n"
+		"- tables: test for tables creation and data\n"
+		"   inserting\n"
+		"- tableview: test for KexiDataTableView data-aware\n"
+		"   widget\n"
+		"- parser: test for parsing sql statements,\n"
+		"   returns debug string for a given\n"
+		"   sql statement or error message\n"
+		"- dr_prop: shows properties of selected driver"
 		, 0},
 	{ "buffered-cursors",
 		"Optional switch :turns cursors used in any tests\n"
@@ -115,8 +115,8 @@ int main(int argc, char** argv)
 	KCmdLineArgs::init(argc, argv, 
 		new KAboutData( prgname, "KexiDBTest",
 			"0.1.2", "", KAboutData::License_GPL,
-			"(c) 2003-2004, Kexi Team\n"
-			"(c) 2003-2004, OpenOffice Polska Ltd.\n",
+			"(c) 2003-2006, Kexi Team\n"
+			"(c) 2003-2006, OpenOffice Polska Ltd.\n",
 			"",
 			"http://www.koffice.org/kexi",
 			"submit@bugs.kde.org"
@@ -245,4 +245,3 @@ int main(int argc, char** argv)
 
 	RETURN(r);
 }
-

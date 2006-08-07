@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -107,6 +107,11 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 			QMap<QString,QString>* args = 0)
 		{ return createModalDialogInstance(partName, 0, msgHdr, mainWin, objName, args); }
 
+		/*! Executes a command \a commandName (usually nonvisual) using part called \a partName.
+		 The result can be put into the \a args. \return true on successful calling. */
+		static bool executeCommand(const char* partName, 
+			KexiMainWindow* mainWin, const char* commandName, QMap<QString,QString>* args = 0);
+
 		/*! \return internal part of a name \a partName. Shouldn't be usable. */
 		static const KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const char* partName);
 
@@ -125,26 +130,30 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 
 		/*! Reimplement this if your internal part has to return widgets 
 		 or QDialog objects. */
-		virtual QWidget *createWidget(const char* /*widgetClass*/, KexiMainWindow* /*mainWin*/, 
-		 QWidget * /*parent*/, const char * /*objName*/ =0, QMap<QString,QString>* /*args*/ = 0) { return 0; }
+		virtual QWidget *createWidget(const char* widgetClass, KexiMainWindow* mainWin, 
+			QWidget * parent, const char * objName = 0, QMap<QString,QString>* args = 0);
 		
 //		//! Reimplement this if your internal part has to return dialogs
 //		virtual KexiDialogBase *createDialog(KexiMainWindow* /*mainWin*/, 
 //		 const char * /*objName*/ =0)
 //		 { return 0; }
 		
-		virtual KexiViewBase *createView(KexiMainWindow* /*mainWin*/, QWidget * /*parent*/,
-		 const char * /*objName */=0) { return 0; }
-		
+		/*! Reimplement this if your internal part has to return a view object. */
+		virtual KexiViewBase *createView(KexiMainWindow* mainWin, QWidget * parent,
+			const char *objName = 0);
+
+		/*! Reimplement this if your internal part has to execute a command \a commandName 
+		 (usually nonvisual). Arguments are put into \a args and the result can be put into the \a args.
+		 \return true on successful calling. */
+		virtual bool executeCommand(KexiMainWindow* mainWin, const char* commandName, 
+			QMap<QString,QString>* args = 0);
+
 		//! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
 		QGuardedPtr<QWidget> m_uniqueWidget; 
 		
 		bool m_uniqueDialog : 1; //!< true if createDialogInstance() should return only one dialog
 
-		bool m_cancelled : 1;
-	
-	//friend class KexiInternalPart;
+		bool m_cancelled : 1; //!< Used in cancelled()
 };
 
 #endif
-

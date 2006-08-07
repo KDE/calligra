@@ -187,10 +187,13 @@ void AlterTableHandler::ChangeFieldPropertyAction::updateAlteringRequirements()
 	setAlteringRequirements( alteringTypeForProperty( m_propertyName.latin1() ) );
 }
 
-QString AlterTableHandler::ChangeFieldPropertyAction::debugString()
+QString AlterTableHandler::ChangeFieldPropertyAction::debugString(const DebugOptions& debugOptions)
 {
-	return QString("Set \"%1\" property for table field \"%2\" to \"%3\" (UID=%4)")
-		.arg(m_propertyName).arg(fieldName()).arg(m_newValue.toString()).arg(m_fieldUID);
+	QString s = QString("Set \"%1\" property for table field \"%2\" to \"%3\"")
+		.arg(m_propertyName).arg(fieldName()).arg(m_newValue.toString());
+	if (debugOptions.showUID)
+		s.append(QString(" (UID=%1)").arg(m_fieldUID));
+	return s;
 }
 
 static AlterTableHandler::ActionDict* createActionDict( 
@@ -203,18 +206,32 @@ static AlterTableHandler::ActionDict* createActionDict(
 }
 
 static void debugAction(AlterTableHandler::ActionBase *action, int nestingLevel, 
-  bool simulate, const QString& prependString = QString::null)
+  bool simulate, const QString& prependString = QString::null, QString* debugTarget = 0)
 {
-	QString debugString = prependString;
-	if (action)
-		debugString += action->debugString();
-	else
-		debugString += "[No action]"; //hmm
-	KexiDBDbg << debugString << endl;
+	QString debugString;
+	if (!debugTarget)
+		debugString = prependString;
+	if (action) {
+		AlterTableHandler::ActionBase::DebugOptions debugOptions;
+		debugOptions.showUID = debugTarget==0;
+		debugOptions.showFieldDebug = debugTarget!=0;
+		debugString += action->debugString( debugOptions );
+	}
+	else {
+		if (!debugTarget)
+			debugString += "[No action]"; //hmm
+	}
+	if (debugTarget) {
+		if (!debugString.isEmpty())
+			*debugTarget += debugString + '\n';
+	}
+	else {
+		KexiDBDbg << debugString << endl;
 #ifdef KEXI_DEBUG_GUI
-	if (simulate)
-		KexiUtils::addAlterTableActionDebug(debugString, nestingLevel);
+		if (simulate)
+			KexiUtils::addAlterTableActionDebug(debugString, nestingLevel);
 #endif
+	}
 }
 
 static void debugActionDict(AlterTableHandler::ActionDict *dict, int fieldUID, bool simulate)
@@ -447,9 +464,12 @@ void AlterTableHandler::RemoveFieldAction::updateAlteringRequirements()
 	//! @todo
 }
 
-QString AlterTableHandler::RemoveFieldAction::debugString()
+QString AlterTableHandler::RemoveFieldAction::debugString(const DebugOptions& debugOptions)
 {
-	return QString("Remove table field \"%1\" (UID=%2)").arg(fieldName()).arg(uid());
+	QString s = QString("Remove table field \"%1\"").arg(fieldName());
+	if (debugOptions.showUID)
+		s.append(QString(" (UID=%1)").arg(uid()));
+	return s;
 }
 
 /*! 
@@ -531,10 +551,15 @@ void AlterTableHandler::InsertFieldAction::updateAlteringRequirements()
 	//! @todo
 }
 
-QString AlterTableHandler::InsertFieldAction::debugString()
+QString AlterTableHandler::InsertFieldAction::debugString(const DebugOptions& debugOptions)
 {
-	return QString("Insert table field \"%1\" at position %2 (UID=%3)")
-		.arg(m_field->name()).arg(m_index).arg(m_fieldUID);
+	QString s = QString("Insert table field \"%1\" at position %2")
+		.arg(m_field->name()).arg(m_index);
+	if (debugOptions.showUID)
+		s.append(QString(" (UID=%1)").arg(m_fieldUID));
+	if (debugOptions.showFieldDebug)
+		s.append(QString(" (%1)").arg(m_field->debugString()));
+	return s;
 }
 
 /*! 
@@ -647,10 +672,13 @@ void AlterTableHandler::MoveFieldPositionAction::updateAlteringRequirements()
 	//! @todo
 }
 
-QString AlterTableHandler::MoveFieldPositionAction::debugString()
+QString AlterTableHandler::MoveFieldPositionAction::debugString(const DebugOptions& debugOptions)
 {
-	return QString("Move table field \"%1\" to position %2 (UID=%3)")
-		.arg(fieldName()).arg(m_index).arg(uid());
+	QString s = QString("Move table field \"%1\" to position %2")
+		.arg(fieldName()).arg(m_index);
+	if (debugOptions.showUID)
+		s.append(QString(" (UID=%1)").arg(uid()));
+	return s;
 }
 
 void AlterTableHandler::MoveFieldPositionAction::simplifyActions(ActionDictDict &fieldActions)
@@ -719,7 +747,8 @@ void AlterTableHandler::debug()
 		it.current()->debug();
 }
 
-TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &result, bool simulate)
+TableSchema* AlterTableHandler::executeInternal(const QString& tableName, tristate& result, bool simulate,
+	QString* debugString)
 {
 	result = false;
 	if (!d->conn) {
@@ -740,7 +769,8 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &resu
 		return 0;
 	}
 
-	debug();
+	if (!debugString)
+		debug();
 
 	// Find a sum of requirements...
 	int allActionsCount = 0;
@@ -788,7 +818,8 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &resu
 		action->simplifyActions( fieldActions );
 	}
 
-	debugFieldActions(fieldActions, simulate);
+	if (!debugString)
+		debugFieldActions(fieldActions, simulate);
 
 	// Prepare actions for execution ----
 	// - Sort actions by order
@@ -826,7 +857,7 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &resu
 		KexiUtils::addAlterTableActionDebug(dbg, 0);
 #endif
 	for (int i=0; i<allActionsCount; i++) {
-		debugAction(actionsVector[i], 1, simulate, QString("%1: ").arg(i+1));
+		debugAction(actionsVector[i], 1, simulate, QString("%1: ").arg(i+1), debugString);
 	}
 
 	if (requirements == 0) {//nothing to do
@@ -989,4 +1020,16 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &resu
 
 	result = true;
 	return newTable;
+}
+
+TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &result, bool simulate)
+{
+	return executeInternal( tableName, result, simulate, 0 );
+}
+
+tristate AlterTableHandler::simulateExecution(const QString& tableName, QString& debugString)
+{
+	tristate result;
+	(void)executeInternal( tableName, result, true/*simulate*/, &debugString );
+	return result;
 }

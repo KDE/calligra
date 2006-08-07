@@ -172,6 +172,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 */
 		KexiDB::Connection *dbConnection() const;
 
+		/**
+		 * @return the project's data
+		 */
 		KexiProjectData *data() const;
 
 		/*! Opens object pointed by \a item in a view \a viewMode.

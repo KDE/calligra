@@ -50,11 +50,14 @@ class pqxxSqlConnectionInternal : public ConnectionInternal
 		//! stores last result's message
 		virtual void storeResult();
 
-		pqxx::connection* m_pqxxsql;
-		pqxx::result* m_res;
+		pqxx::connection* pqxxsql;
+		pqxx::result* res;
+
+		KexiDB::ServerVersionInfo *version; //!< this is set in drv_connect(), so we can use it in drv_useDatabase()
+		                                    //!< because pgsql really connects after "USE".
 
 		QString errmsg; //!< server-specific message of last operation
-		int res; //!< result code of last operation on server
+		int resultCode; //!< result code of last operation on server
 };
 }
 #endif

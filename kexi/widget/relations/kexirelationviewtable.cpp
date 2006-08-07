@@ -426,26 +426,4 @@ QRect KexiRelationViewTable::drawItemHighlighter(QPainter *painter, QListViewIte
 	return itemRect(item);
 }
 
-//void KexiRelationViewTable::slotItemDoubleClicked( QListViewItem *i, const QPoint &, int )
-//{
-//}
-
-
-//=====================================================================================
-
-#if 0
-KexiRelationViewTableItem::KexiRelationViewTableItem(
-	QListView *parent, QListViewItem *after, QString key, QString field)
-	: KListViewItem(parent, after, key, field)
-{
-}
-
-void KexiRelationViewTableItem::paintFocus (QPainter * , const QColorGroup &, const QRect &)
-{
-}
-#endif
-
-//=====================================================================================
-
-
 #include "kexirelationviewtable.moc"

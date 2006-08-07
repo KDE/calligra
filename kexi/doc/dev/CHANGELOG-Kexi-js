@@ -12,14 +12,57 @@ FEATURE: <desctiption>
 CCMAIL:danny@commit-digest.org
 For bugfixes use CCMAIL:###-done@bugs.kde.org
 Legend:
-= -a fix for recently introduced bug or a minor/too technical fix not worth mentioning 
-   in the public changelog
+= -a fix for recently introduced bug or a minor/too technical fix not worth 
+   mentioning in the public changelog
+
+2006-08-07
+KexiDB
+= improved version-related parts of the API
+= server version information is retrieved
+2.0: merged
+
+2006-08-03
+KexiDB
+= PostgreSQL: use TIMESTAMP, not DATETIME for date/time data type
+2.0: merged
+
+2006-08-02
+CSV Export
+= GUI-less exporting is supported in the API (usable for tests)
+2.0: merged
+General
+- "skip-startup-dialog" command line option added
+2.0: merged
+KexiDB
+= Field::typeForString() and Field::typeGroupForString() are now case-insensitive.
+= added missing support for "indexed" and "type" properties for functions 
+  like KexiDB::setFieldProperty()
+2.0: merged
+KoProperty
+= Property::oldValue() should not return value() if no value is available.
+2.0: merged
+Table Designer
+= fixed setting types and subtypes
+= fixed a crash when there are more than 50 "alter table" actions 
+2.0: merged
+
+2006-08-01
+Table Designer
+= A test suite added for table altering
+2.0: merged
 
 2006-07-31
 KexiDB
 = custom properties can be set for Field objects
+2.0: merged
 Table View
 - deleting cell contents containing Yes/No values
+- do not display drop-down buttons for read-only data
+2.0: merged
+Query Designer
+- possible crash fixed when new design is saved in the data view: 
+  only rebuild schema if it has not been rebuilt previously
+1.0/2.0: ported
 
 2006-07-28
 Table Designer
@@ -2702,7 +2745,7 @@ KexiDB
 - kexi__query* tables removed (to complicated, not needed since we 
   are primarily using kexi__objectdata and xml)
 - Driver::IgnoreTransactions flag added: transactions are silently bypassed,
-  (temporary, useful for current mysql driver implemntation)
+  (temporary, useful for current mysql driver implementation)
 - Query Schema: QueryFieldInfo introduced:
   "select a as one, a as two from table" is now possible
   (two different aliases for the same field); 

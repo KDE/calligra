@@ -99,7 +99,7 @@ pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement,
 	Cursor(conn,statement, options)
 {
 //	KexiDBDrvDbg << "PQXXSQLCURSOR: constructor for query statement" << endl;
-	my_conn = static_cast<pqxxSqlConnection*>(conn)->d->m_pqxxsql;
+	my_conn = static_cast<pqxxSqlConnection*>(conn)->d->pqxxsql;
 	m_options = Buffered;
 	m_res = 0;
 //	m_tran = 0;
@@ -112,7 +112,7 @@ pqxxSqlCursor::pqxxSqlCursor(Connection* conn, QuerySchema& query, uint options 
 	: Cursor( conn, query, options )
 {
 //	KexiDBDrvDbg << "PQXXSQLCURSOR: constructor for query schema" << endl;
-	my_conn = static_cast<pqxxSqlConnection*>(conn)->d->m_pqxxsql;
+	my_conn = static_cast<pqxxSqlConnection*>(conn)->d->pqxxsql;
 	m_options = Buffered;
 	m_res = 0;
 //	m_tran = 0;

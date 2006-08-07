@@ -21,6 +21,7 @@
 #include "kexicsvimportdialog.h"
 #include "kexicsvexportwizard.h"
 #include <core/keximainwindow.h>
+#include <core/kexiproject.h>
 
 #include <kgenericfactory.h>
 
@@ -50,16 +51,9 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass, KexiMain
 	else if (0==qstrcmp(widgetClass, "KexiCSVExportWizard")) {
 		if (!args)
 			return 0;
-		KexiCSVExportWizard::Options options;
-		options.mode = (args && (*args)["destinationType"]=="file")
-			? KexiCSVExportWizard::File : KexiCSVExportWizard::Clipboard;
-		bool ok;
-		options.itemId = (*args)["itemId"].toInt(&ok);
-		if (!ok || options.itemId<=0)
+		KexiCSVExport::Options options;
+		if (!options.assign( *args ))
 			return 0;
-		if (args && args->contains("forceDelimiter")) {
-			options.forceDelimiter = (*args)["forceDelimiter"];
-		}
 		KexiCSVExportWizard *dlg = new KexiCSVExportWizard( options, mainWin, parent, objName);
 		m_cancelled = dlg->cancelled();
 		if (m_cancelled) {
@@ -69,6 +63,24 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass, KexiMain
 		return dlg;
 	}
 	return 0;
+}
+
+bool KexiCSVImportExportPart::executeCommand(KexiMainWindow* mainWin, const char* commandName, 
+	QMap<QString,QString>* args)
+{
+	if (0==qstrcmp(commandName, "KexiCSVExport")) {
+		KexiCSVExport::Options options;
+		if (!options.assign( *args ))
+			return false;
+		KexiDB::TableOrQuerySchema tableOrQuery(
+			mainWin->project()->dbConnection(), options.itemId);
+		bool ok;
+		QTextStream *stream = 0;
+		if (args->contains("textStream"))
+			stream = (QTextStream *)(*args)["textStream"].toULongLong(&ok);
+		return KexiCSVExport::exportData(tableOrQuery, options, -1, stream);
+	}
+	return false;
 }
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_csv_importexport, 

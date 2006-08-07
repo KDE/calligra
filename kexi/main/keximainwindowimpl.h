@@ -58,6 +58,14 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		KexiMainWindowImpl();
 		virtual ~KexiMainWindowImpl();
 
+		/*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
+		 kdemain() has to destroy the latter on exit.
+		 \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
+		static int create(int argc, char *argv[], KAboutData* aboutdata = 0);
+
+		//! \return KexiMainWindowImpl singleton (if it is instantiated)
+		static KexiMainWindowImpl* self() { return dynamic_cast<KexiMainWindowImpl*>(qApp->mainWidget()); }
+
 		//! Project data of currently opened project or NULL if no project here yet.
 		virtual KexiProject *project();
 
@@ -85,6 +93,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		/*! Implemented for KexiMainWindow. */
 		virtual KActionPtrList allActions() const;
+
+		/*! \return currently active dialog (window) od 0 if there is no active dialog. 
+		 Implemented for KexiMainWindow. */
+		virtual KexiDialogBase* currentDialog() const;
 
 		/**
 		 * @returns a pointer to the relation parts loads it if needed
@@ -143,6 +155,44 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Implemented for KexiMainWindow */
 		virtual void highlightObject(const QCString& mime, const QCString& name);
 
+		/*! Opens project pointed by \a projectData, \return true on success.
+		 Application state (e.g. actions) is updated. 
+		 \a projectData is copied into a project structures. 
+		 \return true on success */
+		tristate openProject(const KexiProjectData& projectData);
+
+		/*! Helper. Opens project pointed by \a aFileName.
+		 If \a aFileName is empty, a connection shortcut (.kexic file name) is obtained from 
+		 global connection set using \a cdata (if present). 
+		 In this case:
+		 * If connection shortcut has been found and \a dbName (a server database name) is provided
+		  'kexi --skip-dialog --connection file.kexic dbName' is executed (or the project 
+		  is opened directly if there's no project opened in the current Kexi main window.
+		 * If connection shortcut has been found and \a dbName is not provided,
+		  'kexi --skip-dialog file.kexic' is executed (or the connection is opened 
+		  directly if there's no porject opened in the current Kexi main window. */
+		tristate openProject(const QString& aFileName, KexiDB::ConnectionData *cdata, 
+			const QString& dbName = QString::null);
+
+		/*! Helper. Opens project pointed by \a aFileName.
+		 Like above but \a fileNameForConnectionData can be passed instead of 
+		 a pointer to connection data itself. 
+		 \return false if \a fileNameForConnectionData is not empty but there is no such
+		 connection in Kexi::connset() for this filename. 
+		 \a fileNameForConnectionData can be empty. */
+		tristate openProject(const QString& aFileName, 
+			const QString& fileNameForConnectionData, const QString& dbName = QString::null);
+
+		/*! Closes current project, \return true on success.
+		 Application state (e.g. actions) is updated.
+		 \return true on success.
+		 If closing was cancelled by user, cancelled is returned. */
+		tristate closeProject();
+
+	signals:
+		//! Emitted after opening a project, even after slotAutoOpenObjectsLater().
+		void projectOpened();
+
 	protected:
 		/*! Initialises final mode: constructs window according to kexi__final database
 		 and loads the specified part.
@@ -190,40 +240,6 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 These actions only depend on curently selected dialog and currently selected view
 		 (KexiViewBase derived object) within this dialog. */
 		void invalidateViewModeActions();
-
-		/*! Opens project pointed by \a projectData, \return true on success.
-		 Application state (e.g. actions) is updated. 
-		 \a projectData is copied into a project structures. 
-		 \return true on success */
-		tristate openProject(const KexiProjectData& projectData);
-
-		/*! Helper. Opens project pointed by \a aFileName.
-		 If \a aFileName is empty, a connection shortcut (.kexic file name) is obtained from 
-		 global connection set using \a cdata (if present). 
-		 In this case:
-		 * If connection shortcut has been found and \a dbName (a server database name) is provided
-		  'kexi --skip-dialog --connection file.kexic dbName' is executed (or the project 
-		  is opened directly if there's no project opened in the current Kexi main window.
-		 * If connection shortcut has been found and \a dbName is not provided,
-		  'kexi --skip-dialog file.kexic' is executed (or the connection is opened 
-		  directly if there's no porject opened in the current Kexi main window. */
-		tristate openProject(const QString& aFileName, KexiDB::ConnectionData *cdata, 
-			const QString& dbName = QString::null);
-
-		/*! Helper. Opens project pointed by \a aFileName.
-		 Like above but \a fileNameForConnectionData can be passed instead of 
-		 a pointer to connection data itself. 
-		 \return false if \a fileNameForConnectionData is not empty but there is no such
-		 connection in Kexi::connset() for this filename. 
-		 \a fileNameForConnectionData can be empty. */
-		tristate openProject(const QString& aFileName, 
-			const QString& fileNameForConnectionData, const QString& dbName = QString::null);
-
-		/*! Closes current project, \return true on success.
-		 Application state (e.g. actions) is updated.
-		 \return true on success.
-		 If closing was cancelled by user, cancelled is returned. */
-		tristate closeProject();
 
 		/*! Shows dialog for creating new blank project,
 		 and creates one. Dialog is not shown if option for automatic creation

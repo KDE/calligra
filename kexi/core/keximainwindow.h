@@ -69,6 +69,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 in your windows by hand but user methods from KexiViewBase! */
 		virtual KActionPtrList allActions() const = 0;
 
+		/*! \return currently active dialog (window) od 0 if there is no active dialog. */
+		virtual KexiDialogBase* currentDialog() const = 0;
+
 	signals:
 		//! Emitted to make sure the project can be close. 
 		//! Connect a slot here and set \a cancel to true to cancel the closing.

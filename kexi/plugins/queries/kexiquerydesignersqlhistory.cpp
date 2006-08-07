@@ -115,7 +115,7 @@ KexiQueryDesignerSQLHistory::contentsMouseDoubleClickEvent(QMouseEvent * e)
 }
 
 void
-KexiQueryDesignerSQLHistory::addEvent(QString q, bool s, const QString &error)
+KexiQueryDesignerSQLHistory::addEvent(const QString& q, bool s, const QString &error)
 {
 	HistoryEntry *he=m_history->last();
 	if (he) {

@@ -55,7 +55,7 @@ class SQLiteConnection : public Connection
 		/*! Used by driver */
 		SQLiteConnection( Driver *driver, ConnectionData &conn_data );
 
-		virtual bool drv_connect();
+		virtual bool drv_connect(KexiDB::ServerVersionInfo& version);
 		virtual bool drv_disconnect();
 		virtual bool drv_getDatabasesList( QStringList &list );
 

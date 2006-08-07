@@ -130,27 +130,10 @@ namespace Kexi
 
 }//namespace Kexi
 
-//! displays information that feature "feature_name" is not availabe in the current application version
-inline void KEXI_UNFINISHED(QString feature_name, QString extra_text = QString::null) 
-{
-	QString msg;
-	if (feature_name.isEmpty())
-		msg = i18n("This function is not available for version %1 of %2 application.")
-			.arg(KEXI_VERSION_STRING)
-			.arg(KEXI_APP_NAME); 
-	else 
-		msg = i18n("\"%1\" function is not available for version %2 of %3 application.")
-			.arg(feature_name.replace("&",""))
-			.arg(KEXI_VERSION_STRING)
-			.arg(KEXI_APP_NAME); 
+//! Displays information that feature "feature_name" is not availabe in the current application version
+KEXICORE_EXPORT void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text = QString::null);
 
-	if (!extra_text.isEmpty())
-		extra_text.prepend("\n");
-
-	KMessageBox::sorry(0, msg + extra_text);
-}
-
-//! like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
+//! Like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
 	KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString::null)
 
