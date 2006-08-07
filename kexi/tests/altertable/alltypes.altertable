@@ -70,7 +70,7 @@ designTable cars #initially there are 3rows
  endActions
 
 #todo
- saveTableDesign #executes Alter Table
+# saveTableDesign #executes Alter Table
 
  showTableData
 

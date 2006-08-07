@@ -309,4 +309,30 @@ void KexiUtils::drawPixmap( QPainter& p, int lineWidth, const QRect& rect,
 
 #endif
 
+QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
+{
+	QString str;
+	unsigned char* cstr_ptr = (unsigned char*)&ptr;
+	for (uint i=0; i<size; i++) {
+		QString s;
+		s.sprintf("%2.2x", cstr_ptr[i]);
+		str.append( s );
+	}
+	return str;
+}
+
+void* KexiUtils::stringToPtrInternal(const QString& str, uint size)
+{
+	QByteArray array(size);
+	if ((str.length()/2)<size)
+		return 0;
+	bool ok;
+	for (uint i=0; i<size; i++) {
+		array[i]=(unsigned char)(str.mid(i*2, 2).toUInt(&ok, 16));
+		if (!ok)
+			return 0;
+	}
+	return *(void**)(array.data());
+}
+
 #include "utils_p.moc"
