@@ -1,2 +1,0 @@
-dnl Do we have Python? 
-KDE_CHECK_PYTHON
