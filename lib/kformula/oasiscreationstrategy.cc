@@ -36,6 +36,7 @@
 #include "operatorelement.h"
 #include "stringelement.h"
 #include "paddedelement.h"
+#include "errorelement.h"
 
 #include "oasiscreationstrategy.h"
 
@@ -45,20 +46,9 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
 {
     
     // TODO
-    // merror
-    // mpadded
     // mphantom
-    // mfenced
     // menclose
-    // csymbol
-    // vector
-    // apply
-    // fn
-    // lambda
-    // piecewise
-    // piece
-    // otherwise
-    // declare
+    // Content elements
     kdDebug( DEBUGID ) << type << endl;
     if      ( type == "mi" )               return new IdentifierElement();
     else if ( type == "mo" )               return createOperatorElement( element );
@@ -95,6 +85,7 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     else if ( type == "mrow"
               || type == "mtd" )           return new SequenceElement();
     else if ( type == "mpadded" )          return new PaddedElement();
+    else if ( type == "merror" )           return new ErrorElement();
     return 0;
 }
 

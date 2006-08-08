@@ -267,7 +267,7 @@ bool BasicElement::readAttributesFromMathMLDom(const QDomElement& )
  */
 int BasicElement::readContentFromMathMLDom(QDomNode&)
 {
-    return 0;
+    return 1;
 }
 
 QString BasicElement::toLatex()
