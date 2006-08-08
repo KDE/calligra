@@ -420,7 +420,7 @@ QColor StyleAttributes::background() const
 {
     if ( m_background.empty() ) {
 //        kdWarning( DEBUGID ) << "Background stack is empty.\n";
-        return QColor( Qt::white );
+        return QColor( Qt::color0 );
     }
     return m_background.top();
 }
