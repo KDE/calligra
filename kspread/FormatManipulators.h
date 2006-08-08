@@ -59,12 +59,12 @@ class FormatManipulator : public Manipulator
 
 // SetSelectionFontWorker
 // SetSelectionSizeWorker
-    void setFontFamily(const QString& font) { m_properties |= Style::SFont; m_font = font; }
-    void setFontSize(int size) { m_properties |= Style::SFont; m_size = size; }
-    void setFontBold(uint bold) { m_properties |= Style::SFont; m_bold = bold; }
-    void setFontItalic(uint italic) { m_properties |= Style::SFont; m_italic = italic; }
-    void setFontStrike(uint strike) { m_properties |= Style::SFont; m_strike = strike; }
-    void setFontUnderline(uint underline) { m_properties |= Style::SFont; m_underline = underline; }
+    void setFontFamily(const QString& font) { m_properties |= Style::SFontFamily; m_font = font; }
+    void setFontSize(int size) { m_properties |= Style::SFontSize; m_size = size; }
+    void setFontBold(uint bold) { m_properties |= Style::SFontFlag; m_bold = bold; }
+    void setFontItalic(uint italic) { m_properties |= Style::SFontFlag; m_italic = italic; }
+    void setFontStrike(uint strike) { m_properties |= Style::SFontFlag; m_strike = strike; }
+    void setFontUnderline(uint underline) { m_properties |= Style::SFontFlag; m_underline = underline; }
 // SetSelectionAngleWorker
     void setAngle(int angle) { m_properties |= Style::SAngle; m_angle = angle; }
 // SetSelectionTextColorWorker

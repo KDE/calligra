@@ -32,17 +32,31 @@ using namespace KSpread;
 ****************************************************************************/
 
 FormatManipulator::FormatManipulator()
+  : m_properties( 0 )
+  , m_size( 0 )
+  , m_bold( -1 )
+  , m_italic( -1 )
+  , m_strike( -1 )
+  , m_underline( -1 )
+  , m_angle( 0 )
+  , m_precision( 0 )
+  , m_currencyType( 0 )
+  , m_indent( 0.0 )
+  , m_multiRow( false )
+  , m_verticalText( false )
+  , m_dontPrintText( false )
+  , m_notProtected( false )
+  , m_hideAll( false )
+  , m_hideFormula( false )
+  , m_topBorderPen( QPen(QColor(), 0, Qt::NoPen) )
+  , m_bottomBorderPen( QPen(QColor(), 0, Qt::NoPen) )
+  , m_leftBorderPen( QPen(QColor(), 0, Qt::NoPen) )
+  , m_rightBorderPen( QPen(QColor(), 0, Qt::NoPen) )
+  , m_horizontalPen( QPen(QColor(), 0, Qt::NoPen) )
+  , m_verticalPen( QPen(QColor(), 0, Qt::NoPen) )
+  , m_fallDiagonalPen( QPen(QColor(), 0, Qt::NoPen) )
+  , m_goUpDiagonalPen( QPen(QColor(), 0, Qt::NoPen) )
 {
-  m_properties = 0;
-  // initialize pens with invalid color
-  m_topBorderPen = QPen(QColor(), 0, Qt::NoPen);
-  m_bottomBorderPen = QPen(QColor(), 0, Qt::NoPen);
-  m_leftBorderPen = QPen(QColor(), 0, Qt::NoPen);
-  m_rightBorderPen = QPen(QColor(), 0, Qt::NoPen);
-  m_horizontalPen = QPen(QColor(), 0, Qt::NoPen);
-  m_verticalPen = QPen(QColor(), 0, Qt::NoPen);
-  m_fallDiagonalPen = QPen(QColor(), 0, Qt::NoPen);
-  m_goUpDiagonalPen = QPen(QColor(), 0, Qt::NoPen);
 }
 
 FormatManipulator::~FormatManipulator()
@@ -368,12 +382,18 @@ void FormatManipulator::doWork(Format* format,
 {
   // SetSelectionFontWorker
   // SetSelectionSizeWorker
-  if (m_properties & Style::SFont)
+  if (m_properties & Style::SFontFamily)
   {
     if ( !m_font.isEmpty() )
       format->setTextFontFamily( m_font );
+  }
+  if (m_properties & Style::SFontSize)
+  {
     if ( m_size > 0 )
       format->setTextFontSize( m_size );
+  }
+  if (m_properties & Style::SFontFlag)
+  {
     if ( m_italic >= 0 )
       format->setTextFontItalic( (bool)m_italic );
     if ( m_bold >= 0 )
