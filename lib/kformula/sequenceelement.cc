@@ -685,6 +685,21 @@ void SequenceElement::goInside(FormulaCursor* cursor)
 
 // children
 
+    /**
+     * Insert a new child in the sequence
+     * 
+     * @returns true if succesful, i.e. if index is in range, otherwise returns
+     * false. The valid range is 0 to count(). The child is appended if index == count().
+     *
+     * @param index position in the sequence to insert the child
+     * @param child the child to insert in the sequence
+     */
+
+bool SequenceElement::insert( uint index, BasicElement *child )
+{
+    return children.insert( index, child );
+}
+
 /**
  * Removes the child. If this was the main child this element might
  * request its own removal.

@@ -34,6 +34,7 @@
 #include "tokenelement.h"
 #include "identifierelement.h"
 #include "operatorelement.h"
+#include "stringelement.h"
 
 #include "oasiscreationstrategy.h"
 
@@ -61,8 +62,8 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     if      ( type == "mi" )               return new IdentifierElement();
     else if ( type == "mo" )               return createOperatorElement( element );
     else if ( type == "mn"
-              || type == "mtext"
-              || type == "ms" )            return new TokenElement();
+              || type == "mtext" )         return new TokenElement();
+    else if ( type == "ms" )               return new StringElement();
 	else if ( type == "mstyle" )           return new StyleElement();
 	else if ( type == "ci"
               || type == "cn"

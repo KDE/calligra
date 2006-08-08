@@ -421,6 +421,16 @@ protected:
      */
     virtual bool isFirstOfToken( BasicElement* child );
 
+    /**
+     * Insert a new child in the sequence
+     * 
+     * @returns true if succesful, i.e. if index is in range, otherwise returns
+     * false. The valid range is 0 to count(). The child is appended if index == count().
+     *
+     * @param index position in the sequence to insert the child
+     * @param child the child to insert in the sequence
+     */
+    bool insert( uint index, BasicElement *child );
 
 private:
 

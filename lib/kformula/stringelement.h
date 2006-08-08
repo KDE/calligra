@@ -17,27 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TOKENELEMENT_H
-#define TOKENELEMENT_H
+#ifndef STRINGELEMENT_H
+#define STRINGELEMENT_H
 
-#include "formulacursor.h"
-#include "tokenstyleelement.h"
-#include "sequenceelement.h"
-#include "contextstyle.h"
+#include "tokenelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-class TokenElement : public TokenStyleElement {
-    typedef TokenStyleElement inherited;
+class StringElement : public TokenElement {
+    typedef TokenElement inherited;
 public:
-    TokenElement( BasicElement* parent = 0 );
+    StringElement( BasicElement* parent = 0 );
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
-virtual QString getCharFromEntity( const QString& entity );
+
 protected:
-    virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat = false );
-    QString getCharFromEntity( const QString& entity );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat );
 };
 
 KFORMULA_NAMESPACE_END
 
-#endif // TOKENELEMENT_H
+#endif // IDENTIFIERELEMENT_H
