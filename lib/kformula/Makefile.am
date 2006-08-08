@@ -18,7 +18,7 @@ libkformulalib_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	symbolaction.cc fontstyle.cc creationstrategy.cc \
 	oasiscreationstrategy.cc tokenstyleelement.cc tokenelement.cc \
 	identifierelement.cc operatorelement.cc glyphelement.cc styleelement.cc \
-	stringelement.cc
+	stringelement.cc paddedelement.cc
 
 #include_HEADERS = kformulacontainer.h kformuladocument.h kformulaview.h \
 #	kformuladefs.h kformulaconfigpage.h
