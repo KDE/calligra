@@ -15,6 +15,10 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-08-08
+General
+= operator tristate::bool() removed (unsafe, comparison with false was broken)
+
 2006-08-07
 KexiDB
 = improved version-related parts of the API
