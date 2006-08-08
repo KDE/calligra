@@ -917,6 +917,32 @@ bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
             }
         }
     }
+    QString columnwidthStr = element.attribute( "columnwidth" ).lower();
+    if ( columnwidthStr.isNull() ) {
+        QStringList list = QStringList::split( ' ', columnwidthStr );
+        for ( QStringList::iterator it = list.begin(); it != list.end(); it++ ) {
+            SizeType type = NoSize;
+            double length;
+            if ( *it == "auto" ) {
+                type = AutoSize;
+            }
+            else if ( *it == "fit" ) {
+                type = FitSize;
+            }
+            else {
+                length = getSize( columnwidthStr, &type );
+                if ( type == NoSize ) {
+                    type = getSpace( columnwidthStr );
+                }
+            }
+            if ( type != NoSize ) {
+                m_columnWidthType.append( type );
+                if ( type == RelativeSize || type == AbsoluteSize || type == PixelSize ) {
+                    m_columnWidth.append( length );
+                }
+            }
+        }
+    }
     QString rowlinesStr = element.attribute( "rowlines" ).lower();
     if ( ! rowlinesStr.isNull() ) {
         QStringList list = QStringList::split( ' ', rowlinesStr );
@@ -1258,6 +1284,78 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
     }
     if ( ! alignmentscope.isNull() ) {
         element.setAttribute( "alignmentscope", alignmentscope.stripWhiteSpace() );
+    }
+    QString columnwidth;
+    QValueList< double >::iterator lengthIt = m_columnWidth.begin();
+    for ( QValueList< SizeType >::iterator typeIt = m_columnWidthType.begin();
+          typeIt != m_columnWidthType.end(); typeIt ++ ) {
+        switch ( *typeIt ) {
+        case AutoSize:
+            columnwidth.append( "auto " );
+            break;
+        case FitSize:
+            columnwidth.append( "fit " );
+            break;
+        case AbsoluteSize:
+            columnwidth.append( QString( "%1pt " ).arg( *lengthIt ) );
+            lengthIt++;
+            break;
+        case RelativeSize:
+            columnwidth.append( QString( "%1% " ).arg( *lengthIt * 100.0 ) );
+            lengthIt++;
+            break;
+        case PixelSize:
+            columnwidth.append( QString( "%1px " ).arg( *lengthIt ) );
+            lengthIt++;
+            break;
+        case NegativeVeryVeryThinMathSpace:
+            columnwidth.append( "negativeveryverythinmathspace " );
+            break;
+        case NegativeVeryThinMathSpace:
+            columnwidth.append( "negativeverythinmathspace " );
+            break;
+        case NegativeThinMathSpace:
+            columnwidth.append( "negativethinmathspace " );
+            break;
+        case NegativeMediumMathSpace:
+            columnwidth.append( "negativemediummathspace " );
+            break;
+        case NegativeThickMathSpace:
+            columnwidth.append( "negativethickmathspace " );
+            break;
+        case NegativeVeryThickMathSpace:
+            columnwidth.append( "negativeverythickmathspace " );
+            break;
+        case NegativeVeryVeryThickMathSpace:
+            columnwidth.append( "negativeveryverythickmathspace " );
+            break;
+        case VeryVeryThinMathSpace:
+            columnwidth.append( "veryverythinmathspace " );
+            break;
+        case VeryThinMathSpace:
+            columnwidth.append( "verythinmathspace " );
+            break;
+        case ThinMathSpace:
+            columnwidth.append( "thinmathspace " );
+            break;
+        case MediumMathSpace:
+            columnwidth.append( "mediummathspace " );
+            break;
+        case ThickMathSpace:
+            columnwidth.append( "thickmathspace " );
+            break;
+        case VeryThickMathSpace:
+            columnwidth.append( "verythickmathspace " );
+            break;
+        case VeryVeryThickMathSpace:
+            columnwidth.append( "veryverythickmathspace " );
+            break;
+        default:
+            break;
+        }
+    }
+    if ( ! columnwidth.isNull() ) {
+        element.setAttribute( "columnwidth", columnwidth.stripWhiteSpace() );
     }
     QString rowlines;
     for ( QValueList< LineType >::iterator it = m_rowLines.begin(); it != m_rowLines.end(); it++ )

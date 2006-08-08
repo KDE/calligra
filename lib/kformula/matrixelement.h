@@ -266,6 +266,8 @@ private:
     QValueList< VerticalAlign > m_rowAlign;
     QValueList< HorizontalAlign > m_columnAlign;
     QValueList< bool > m_alignmentScope;
+    QValueList< SizeType > m_columnWidthType;
+    QValueList< double > m_columnWidth;
     QValueList< LineType > m_rowLines;
     QValueList< LineType > m_columnLines;
     LineType m_frame;
