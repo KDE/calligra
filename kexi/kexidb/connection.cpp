@@ -2160,7 +2160,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		return false;
 	if (newObject) {
 		int existingID;
-		if (querySingleNumber(QString::fromLatin1(
+		if (true == querySingleNumber(QString::fromLatin1(
 			"SELECT o_id FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
 			.arg(sdata.type()).arg(m_driver->valueToSQL(Field::Text, sdata.name().lower())), existingID))
 		{

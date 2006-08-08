@@ -883,7 +883,7 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		newTable->setName( tempDestTableName );
 	}
 	oldTable->debug();
-	if (recreateTable)
+	if (recreateTable && !debugString)
 		newTable->debug();
 
 	// Update table schema in memory ----

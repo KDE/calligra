@@ -1185,7 +1185,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 			names.insert( name, &dummy ); //remember
 		}
 	}
-	if (res && no_fields) {//no fields added
+	if (res == true && no_fields) {//no fields added
 		if (beSilent) {
 			kexipluginswarn << 
 				"KexiTableDesignerView::buildSchema(): no field defined..." << endl;
@@ -1196,7 +1196,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 		}
 		res = cancelled;
 	}
-	if (res && b && i<(int)d->sets->size()) {//found a duplicate
+	if (res == true && b && i<(int)d->sets->size()) {//found a duplicate
 		if (beSilent) {
 			kexipluginswarn << 
 				QString("KexiTableDesignerView::buildSchema(): duplicated field name '%1'")
@@ -1213,7 +1213,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 		}
 		res = cancelled;
 	}
-	if (res) {
+	if (res == true) {
 		//for every field, create KexiDB::Field definition
 		for (i=0;i<(int)d->sets->size();i++) {
 			KoProperty::Set *s = d->sets->at(i);
@@ -1275,7 +1275,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
 	cancel = ~res;
 
 	//FINALLY: create table:
-	if (res) {
+	if (res == true) {
 		//todo
 		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 		res = conn->createTable(tempData()->table);
@@ -1283,7 +1283,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
 			parentDialog()->setStatus(conn, "");
 	}
 
-	if (res) {
+	if (res == true) {
 		//we've current schema
 		tempData()->tableSchemaChangedInPreviousView = true;
 //not needed; KexiProject emits newItemStored signal //let project know the table is created
@@ -1342,17 +1342,18 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 		newTable->debug();
 	}
 
-	if (res) {
+	if (res == true) {
 		res = KexiTablePart::askForClosingObjectsUsingTableSchema(
 			this, *conn, *tempData()->table,
 			i18n("You are about to change the design of table \"%1\" "
 			"but following objects using this table are opened:")
 			.arg(tempData()->table->name()));
 	}
-	if (res) {
+	if (res == true) {
 		if (d->tempStoreDataUsingRealAlterTable) {
 			newTable = alterTableHandler->execute(tempData()->table->name(), res);
-			kexipluginsdbg << "KexiTableDesignerView::storeData() : ALTER TABLE EXECUTE:" << res << endl;
+			kexipluginsdbg << "KexiTableDesignerView::storeData() : ALTER TABLE EXECUTE: " 
+				<< res.toString() << endl;
 			if (!res)
 				parentDialog()->setStatus(alterTableHandler, "");
 		//! @todo: result?
@@ -1364,7 +1365,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 			if (!res)
 				parentDialog()->setStatus(conn, "");
 		}
-		if (res) {
+		if (res == true) {
 			//change current schema
 			tempData()->table = newTable;
 			tempData()->tableSchemaChangedInPreviousView = true;
@@ -1693,15 +1694,15 @@ void KexiTableDesignerView::changeFieldPropertyForRow( int row,
 			}
 		}
 		else if (propertyName == "type") {
-			if (!addCommand) {
+/*			if (!addCommand) {
 				d->slotBeforeCellChanged_enabled = false;
 			}
-			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, 
-				int( KexiDB::Field::typeGroup( newValue.toInt() ) )-1);
+//?			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, 
+//?				int( KexiDB::Field::typeGroup( newValue.toInt() ) )-1);
 			if (!addCommand) {
 				d->slotBeforeCellChanged_enabled = true;
 			}
-			d->view->data()->saveRowChanges(*item);
+			d->view->data()->saveRowChanges(*item); */
 		}
 		else if (propertyName == "description") {
 			if (!addCommand) {

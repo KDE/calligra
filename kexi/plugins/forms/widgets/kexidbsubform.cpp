@@ -111,10 +111,10 @@ KexiDBSubForm::setFormName(const QString &name)
 
 	// and load the sub form
 	QString data;
-	bool ok = conn->loadDataBlock(id, data, QString::null);
-	if (ok)
-		ok = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
-	if(!ok) {
+	tristate res = conn->loadDataBlock(id, data, QString::null);
+	if (res == true)
+		res = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
+	if(res != true) {
 		delete m_widget;
 		m_widget = 0;
 		updateScrollBars();

@@ -113,7 +113,7 @@ void WidgetInfo::setAutoSyncForProperty(const char *propertyName, tristate flag)
 		m_propertiesWithDisabledAutoSync->remove(propertyName);
 	}
 	else {
-		m_propertiesWithDisabledAutoSync->insert(propertyName, flag ? (char*)1 : (char*)2);
+		m_propertiesWithDisabledAutoSync->insert(propertyName, flag==true ? (char*)1 : (char*)2);
 	}
 }
 

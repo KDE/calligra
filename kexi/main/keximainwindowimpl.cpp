@@ -1686,7 +1686,7 @@ KexiMainWindowImpl::queryClose()
 	if (~res)
 		return false;
 
-	if (res)
+	if (res==true)
 		storeSettings();
 
 	return ! ~res;
@@ -2325,11 +2325,11 @@ KexiMainWindowImpl::createBlankProject()
 
 	createKexiProject( new_data );
 
-	bool ok = d->prj->create(true /*overwrite*/ );
-	if (!ok) {
+	tristate res = d->prj->create(true /*overwrite*/ );
+	if (res != true) {
 		delete d->prj;
 		d->prj = 0;
-		return false;
+		return res;
 	}
 	kdDebug() << "KexiMainWindowImpl::slotProjectNew(): new project created --- " << endl;
 	initNavigator();
@@ -2427,7 +2427,7 @@ tristate KexiMainWindowImpl::openProject(const QString& aFileName,
 		return false;
 	const tristate res = openProject(*projectData);
 	if (deleteAfterOpen) //projectData object has been copied
-		return projectData;
+		delete projectData;
 	return res;
 }
 
