@@ -35,7 +35,7 @@ using namespace KSpread;
 ToolBox::ToolBox( QWidget* parent, const char* /*name*/ )
     : QFrame( parent, Qt::WType_TopLevel | Qt::WStyle_Tool )
 {
-    KWin::setType( winId(), NET::Tool );
+    KWin::setType( winId(), NET::Toolbar );
 
     setFrameShape( Panel );
     setFrameShadow( Raised );
