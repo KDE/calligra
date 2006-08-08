@@ -273,6 +273,8 @@ private:
     double m_width;
     QValueList< SizeType > m_rowSpacingType;
     QValueList< double > m_rowSpacing;
+    QValueList< SizeType > m_columnSpacingType;
+    QValueList< double > m_columnSpacing;
     QValueList< LineType > m_rowLines;
     QValueList< LineType > m_columnLines;
     LineType m_frame;

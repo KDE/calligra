@@ -967,13 +967,14 @@ bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
             }
         }
     }
+    QString columnspacingStr = element.attribute( "columnspacing" ).lower();
     if ( ! columnspacingStr.isNull() ) {
         QStringList list = QStringList::split( ' ', columnspacingStr );
         for ( QStringList::iterator it = list.begin(); it != list.end(); it++ ) {
             SizeType type;
             double length = getSize( *it, &type );
             if ( type == NoSize ) {
-                type = getSpace( columspacingStr );
+                type = getSpace( columnspacingStr );
             }
             if ( type != NoSize ) {
                 m_columnSpacingType.append( type );
@@ -1428,9 +1429,9 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         break;
     }
     QString rowspacing;
-    for ( QValueList< SizeType >::iterator typeIt = m_rowSpacingType.begin(),
-              lengthIt = m_rowSpacing.begin(); 
-          typeit != m_rowSpacingType.end(); typeIt++, lengthIt++ ) {
+    lengthIt = m_rowSpacing.begin();
+    for ( QValueList< SizeType >::iterator typeIt = m_rowSpacingType.begin();
+          typeIt != m_rowSpacingType.end(); typeIt++, lengthIt++ ) {
         switch ( *typeIt ) {
         case AbsoluteSize:
             rowspacing.append( QString( "%1pt " ).arg( *lengthIt ) );
@@ -1451,7 +1452,7 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
     QString columnspacing;
     lengthIt = m_columnSpacing.begin(); 
     for ( QValueList< SizeType >::iterator typeIt = m_columnSpacingType.begin();
-          typeit != m_columnSpacingType.end(); typeIt++ ) {
+          typeIt != m_columnSpacingType.end(); typeIt++ ) {
         switch ( *typeIt ) {
         case AbsoluteSize:
             columnspacing.append( QString( "%1pt " ).arg( *lengthIt ) );
