@@ -132,14 +132,6 @@ bool PaddedElement::readAttributesFromMathMLDom(const QDomElement& element)
     return true;
 }
 
-void PaddedElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mpadded" : "mpadded" );
-    writeMathMLAttributes( de );
-    writeMathMLContent( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
 void PaddedElement::writeMathMLAttributes( QDomElement& element )
 {
     writeSizeAttribute( element, "width", m_widthType, m_width );

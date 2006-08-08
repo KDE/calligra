@@ -284,14 +284,7 @@ bool SpaceElement::readAttributesFromMathMLDom(const QDomElement& element)
     return true;
 }
 
-void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mspace" : "mspace" );
-    writeMathMLAttributes( de );
-    parent.appendChild( de );
-}
-
-void SpaceElement::writeMathMLAttributes( QDomElement& element )
+void SpaceElement::writeMathMLAttributes( QDomElement& element ) const
 {
     switch ( m_widthType ) {
     case AbsoluteSize:

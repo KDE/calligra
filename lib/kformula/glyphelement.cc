@@ -149,15 +149,7 @@ void GlyphElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                       text );
 }
     
-
-void GlyphElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mglyph" : "mglyph" );
-    writeMathMLAttributes( de );
-    parent.appendChild( de );
-}
-
-void GlyphElement::writeMathMLAttributes( QDomElement& element )
+void GlyphElement::writeMathMLAttributes( QDomElement& element ) const
 {
     element.setAttribute( "fontfamily", m_fontFamily );
     element.setAttribute( "index", m_char.unicode() );

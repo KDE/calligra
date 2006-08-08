@@ -42,11 +42,11 @@ public:
 protected:
     virtual bool readAttributesFromMathMLDom(const QDomElement& element);
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+private:
+    virtual QString getElementName() const { return "mpadded"; }
     virtual void writeMathMLAttributes( QDomElement& element );
     virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat );
 
-private:
     double readSizeAttribute( const QString& str, SizeType* st );
     double getSize( const QString& str, SizeType* st );
     double str2size( const QString& str, SizeType* st, SizeType type );

@@ -266,8 +266,6 @@ public:
     // the upper right index is the only one we show
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
 
     //Save/load support
@@ -282,6 +280,10 @@ protected:
      */
     virtual void writeDom(QDomElement element);
 
+    virtual QString getElementName() const ;
+    virtual void writeMathMLContent( QDomDocument& doc, 
+                                     QDomElement& element,
+                                     bool oasisFormat ) const ;
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.

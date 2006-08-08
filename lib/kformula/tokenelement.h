@@ -34,7 +34,6 @@ public:
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 virtual QString getCharFromEntity( const QString& entity );
 protected:
-    virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat = false );
     QString getCharFromEntity( const QString& entity );
 };
 

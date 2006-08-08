@@ -120,8 +120,6 @@ public:
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
 
     /**
@@ -129,6 +127,9 @@ protected:
      */
     virtual void writeDom(QDomElement element);
 
+    virtual void writeMathMLContent( QDomDocument& doc, 
+                                     QDomElement& element,
+                                     bool oasisFormat ) const;
     /**
      * Reads our content from the node. Sets the node to the next node
      * that needs to be read.
@@ -218,8 +219,6 @@ public:
 					   StyleAttributes& style,
 					   const LuPixelPoint& parentOrigin );
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
 
     //Save/load support
@@ -237,6 +236,8 @@ protected:
 
     virtual void writeDom(QDomElement element);
 
+    virtual QString getElementName() const { return "mfenced"; }
+    virtual void writeMathMLAttributes( QDomElement& element ) const;
     /**
      * Reads our attributes from the MathML element.
      * Returns false if it failed.

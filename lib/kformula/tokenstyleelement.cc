@@ -260,7 +260,7 @@ bool TokenStyleElement::readAttributesFromMathMLDom( const QDomElement& element 
     return true;
 }
 
-void TokenStyleElement::writeMathMLAttributes( QDomElement& element )
+void TokenStyleElement::writeMathMLAttributes( QDomElement& element ) const
 {
     // mathvariant attribute
     if ( customMathVariant() ) {

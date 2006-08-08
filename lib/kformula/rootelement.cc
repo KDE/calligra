@@ -661,23 +661,13 @@ QString RootElement::formulaString()
     return "sqrt(" + content->formulaString() + ")";
 }
 
-void RootElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void RootElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
 {
-    QDomElement de;
-
-    if( hasIndex() )
-        de = doc.createElement( oasisFormat ? "math:mroot" : "mroot" );
-    else
-        de = doc.createElement( oasisFormat ? "math:msqrt" : "msqrt" );
-
-    content->writeMathML( doc, de, oasisFormat );
-
+    content->writeMathML( doc, element, oasisFormat );
     if( hasIndex() )
     {
-        index->writeMathML( doc, de, oasisFormat );
+        index->writeMathML( doc, element, oasisFormat );
     }
-
-    parent.appendChild( de );
 }
 
 KFORMULA_NAMESPACE_END

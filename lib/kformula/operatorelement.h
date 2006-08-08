@@ -33,8 +33,9 @@ public:
     OperatorElement( BasicElement* parent = 0 );
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 
-protected:
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat );
+private:
+    virtual QString getElementName() const { return "mo"; }
+
 };
 
 KFORMULA_NAMESPACE_END

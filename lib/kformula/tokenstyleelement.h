@@ -52,7 +52,7 @@ public:
 
 protected:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
-    virtual void writeMathMLAttributes( QDomElement& element );
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     void setAbsoluteSize( double s, bool fontsize = false );
     void setRelativeSize( double s, bool fontsize = false );

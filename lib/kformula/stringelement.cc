@@ -65,15 +65,7 @@ int StringElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDom
     return count;
 }
 
-void StringElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:ms" : "ms" );
-    writeMathMLAttributes( de );
-    writeMathMLContent( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
-void StringElement::writeMathMLAttributes( QDomElement& element )
+void StringElement::writeMathMLAttributes( QDomElement& element ) const
 {
     inherited::writeMathMLAttributes( element );
     if ( m_customLquote ) {
@@ -84,12 +76,11 @@ void StringElement::writeMathMLAttributes( QDomElement& element )
     }
 }
 
-void StringElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
+void StringElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
 {
-    iterator it = begin();
-    iterator itEnd = end();
-    for ( it++, itEnd--; it != itEnd; it++ ) {
-        it->writeMathML( doc, element, oasisFormat );
+    for ( uint i = 1; i < countChildren() - 1; ++i ) {
+        const BasicElement* e = getChild( i );
+        e->writeMathML( doc, element, oasisFormat );
     }
 }
 

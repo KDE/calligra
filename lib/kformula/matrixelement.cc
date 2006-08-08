@@ -728,6 +728,19 @@ void MatrixElement::selectChild(FormulaCursor* cursor, BasicElement* child)
     }
 }
 
+const MatrixSequenceElement* MatrixElement::getElement( uint row, uint column ) const
+{
+    QPtrListIterator< QPtrList < MatrixSequenceElement > > rows( content );
+    rows += row;
+    if ( ! rows.current() )
+        return 0;
+
+    QPtrListIterator< MatrixSequenceElement > cols ( *rows.current() );
+    cols += column;
+    return cols.current();
+}
+
+
 bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column)
 {
     uint rows = getRows();
@@ -1239,32 +1252,7 @@ SequenceElement* MatrixElement::elementAt(uint row, uint column)
     return getElement( row, column );
 }
 
-
-void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
-    QDomElement row;
-    QDomElement cell;
-
-    uint rows = getRows();
-    uint cols = getColumns();
-
-    for ( uint r = 0; r < rows; r++ )
-    {
-        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
-        de.appendChild( row );
-        for ( uint c = 0; c < cols; c++ )
-        {
-            cell = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
-            row.appendChild( cell );
-    	    getElement(r,c)->writeMathML( doc, cell, oasisFormat );
-	}
-    }
-
-    parent.appendChild( de );
-}
-
-void MatrixElement::writeMathMLAttributes( QDomElement& element )
+void MatrixElement::writeMathMLAttributes( QDomElement& element ) const
 {
     QString rownumber;
     if ( m_rowNumber ) {
@@ -1290,7 +1278,7 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         break;
     }
     QString rowalign;
-    for ( QValueList< VerticalAlign >::iterator it = m_rowAlign.begin(); it != m_rowAlign.end(); it++ )
+    for ( QValueList< VerticalAlign >::const_iterator it = m_rowAlign.begin(); it != m_rowAlign.end(); it++ )
     {
         switch ( *it ) {
         case TopAlign:
@@ -1316,7 +1304,7 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         element.setAttribute( "rowalign", rowalign.stripWhiteSpace() );
     }
     QString columnalign;
-    for ( QValueList< HorizontalAlign >::iterator it = m_columnAlign.begin(); it != m_columnAlign.end(); it++ )
+    for ( QValueList< HorizontalAlign >::const_iterator it = m_columnAlign.begin(); it != m_columnAlign.end(); it++ )
     {
         switch ( *it ) {
         case LeftHorizontalAlign:
@@ -1336,7 +1324,7 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         element.setAttribute( "columnalign", columnalign.stripWhiteSpace() );
     }
     QString alignmentscope;
-    for ( QValueList< bool >::iterator it = m_alignmentScope.begin(); it != m_alignmentScope.end(); it++ )
+    for ( QValueList< bool >::const_iterator it = m_alignmentScope.begin(); it != m_alignmentScope.end(); it++ )
     {
         if ( *it ) {
             alignmentscope.append( "true " );
@@ -1349,8 +1337,8 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         element.setAttribute( "alignmentscope", alignmentscope.stripWhiteSpace() );
     }
     QString columnwidth;
-    QValueList< double >::iterator lengthIt = m_columnWidth.begin();
-    for ( QValueList< SizeType >::iterator typeIt = m_columnWidthType.begin();
+    QValueList< double >::const_iterator lengthIt = m_columnWidth.begin();
+    for ( QValueList< SizeType >::const_iterator typeIt = m_columnWidthType.begin();
           typeIt != m_columnWidthType.end(); typeIt ++ ) {
         switch ( *typeIt ) {
         case AutoSize:
@@ -1438,7 +1426,7 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
     }
     QString rowspacing;
     lengthIt = m_rowSpacing.begin();
-    for ( QValueList< SizeType >::iterator typeIt = m_rowSpacingType.begin();
+    for ( QValueList< SizeType >::const_iterator typeIt = m_rowSpacingType.begin();
           typeIt != m_rowSpacingType.end(); typeIt++, lengthIt++ ) {
         switch ( *typeIt ) {
         case AbsoluteSize:
@@ -1459,7 +1447,7 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
     }
     QString columnspacing;
     lengthIt = m_columnSpacing.begin(); 
-    for ( QValueList< SizeType >::iterator typeIt = m_columnSpacingType.begin();
+    for ( QValueList< SizeType >::const_iterator typeIt = m_columnSpacingType.begin();
           typeIt != m_columnSpacingType.end(); typeIt++ ) {
         switch ( *typeIt ) {
         case AbsoluteSize:
@@ -1524,7 +1512,7 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         element.setAttribute( "rowspacing", rowspacing.stripWhiteSpace() );
     }
     QString rowlines;
-    for ( QValueList< LineType >::iterator it = m_rowLines.begin(); it != m_rowLines.end(); it++ )
+    for ( QValueList< LineType >::const_iterator it = m_rowLines.begin(); it != m_rowLines.end(); it++ )
     {
         switch ( *it ) {
         case NoneLine:
@@ -1544,7 +1532,7 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         element.setAttribute( "rowlines", rowlines.stripWhiteSpace() );
     }
     QString columnlines;
-    for ( QValueList< LineType >::iterator it = m_columnLines.begin(); it != m_columnLines.end(); it++ )
+    for ( QValueList< LineType >::const_iterator it = m_columnLines.begin(); it != m_columnLines.end(); it++ )
     {
         switch ( *it ) {
         case NoneLine:
@@ -1769,6 +1757,29 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         break;
     default:
         break;
+    }
+}
+
+void MatrixElement::writeMathMLContent( QDomDocument& doc, 
+                                        QDomElement& element,
+                                        bool oasisFormat ) const
+{
+    QDomElement row;
+    QDomElement cell;
+
+    uint rows = getRows();
+    uint cols = getColumns();
+
+    for ( uint r = 0; r < rows; r++ )
+    {
+        row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
+        element.appendChild( row );
+        for ( uint c = 0; c < cols; c++ )
+        {
+            cell = doc.createElement( oasisFormat ? "math:mtd" : "mtd" );
+            row.appendChild( cell );
+    	    getElement(r,c)->writeMathML( doc, cell, oasisFormat );
+        }
     }
 }
 

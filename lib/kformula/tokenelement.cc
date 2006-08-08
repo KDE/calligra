@@ -81,13 +81,6 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
     return 1;
 }
 
-void TokenElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
-{
-    for ( iterator it = begin(); it != end(); it++ ) {
-        it->writeMathML( doc, element, oasisFormat );
-    }
-}
-
 QString TokenElement::getCharFromEntity( const QString& entity )
 {
     QChar ch = QChar::null;

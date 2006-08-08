@@ -41,10 +41,8 @@ public:
 					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 private:
-    void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat );
+    virtual QString getElementName() const { return "merror"; }
 
 };
 

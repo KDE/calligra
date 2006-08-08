@@ -202,8 +202,6 @@ public:
 
     SequenceElement* elementAt(uint row, uint column);
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
 
     //Save/load support
@@ -218,6 +216,11 @@ protected:
      */
     virtual void writeDom(QDomElement element);
 
+    virtual QString getElementName() const { return "mtable"; }
+    virtual void writeMathMLAttributes( QDomElement& element ) const;
+    virtual void writeMathMLContent( QDomDocument& doc, 
+                                     QDomElement& element,
+                                     bool oasisFormat ) const;
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -246,6 +249,8 @@ private:
 
     MatrixSequenceElement* getElement(uint row, uint column)
         { return content.at(row)->at(column); }
+
+    const MatrixSequenceElement* getElement( uint row, uint column ) const;
 
     /**
      * Searches through the matrix for the element. Sets the

@@ -375,8 +375,9 @@ public:
 
     /**
      * Same as above, just MathML.
+     * It shouldn't be redefined but for exceptional cases, use the general writeMathML* API instead
      */
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false ) const ;
 
     /**
      * Set this element attribute, build children and
@@ -420,6 +421,12 @@ protected:
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement element);
+
+    virtual QString getElementName() const { return ""; };
+    virtual void writeMathMLAttributes( QDomElement& /*element*/ ) const {};
+    virtual void writeMathMLContent( QDomDocument& /*doc*/, 
+                                     QDomElement& /*element*/,
+                                     bool /*oasisFormat*/ ) const {};
 
     /**
      * Reads our attributes from the element.

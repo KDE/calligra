@@ -1497,31 +1497,20 @@ QString SequenceElement::formulaString()
 }
 
 
-void SequenceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void SequenceElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
 {
-    QDomElement de = doc.createElement( oasisFormat ? "math:mrow" : "mrow" );
-
-    BasicElement* last = children.last();
-    if ( last != 0 ) {
-        // Create a list (right order!)
-        QPtrList<ElementType> tokenList;
-        ElementType* token = last->getElementType();
-        while ( token != 0 ) {
-            // Add to the list.
-            tokenList.prepend( token );
-            token = token->getPrev();
-        }
-
-        if ( tokenList.count() == 1 ) {
-            tokenList.first()->saveMathML( this, doc, parent.toElement(), oasisFormat );
-            return;
-        }
-
-        for ( uint i = 0; i < tokenList.count(); ++i ) {
-            tokenList.at( i )->saveMathML( this, doc, de, oasisFormat );
-        }
+    QPtrListIterator<BasicElement> it( children );
+    for ( BasicElement *child = it.current(); child; ++it ){
+        child->writeMathML( doc, element, oasisFormat );
     }
-    parent.appendChild( de );
+}
+
+
+const BasicElement* SequenceElement::getChild( uint i ) const
+{
+    QPtrListIterator<BasicElement> it( children );
+    it += i;
+    return it.current();
 }
 
 
@@ -1743,18 +1732,6 @@ bool NameSequence::isValidSelection( FormulaCursor* cursor )
         return false;
     }
     return sequence->onlyTextSelected( cursor );
-}
-
-void NameSequence::writeMathML( QDomDocument& doc, QDomNode& parent,bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
-    QString value;
-    for ( int i = 0; i < countChildren(); ++i ) {
-        // these are supposed to by TextElements
-        value += getChild( i )->getCharacter();
-    }
-    de.appendChild( doc.createTextNode( value ) );
-    parent.appendChild( de );
 }
 
 int SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {

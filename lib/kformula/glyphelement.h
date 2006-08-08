@@ -50,13 +50,12 @@ public:
 					   StyleAttributes& style,
                        const LuPixelPoint& parentOrigin );
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
 
 private:
-    void writeMathMLAttributes( QDomElement& element );
+    virtual QString getElementName() const { return "mglyph"; }
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     QChar m_char;         // Char to be shown
     QString m_fontFamily; // Font family to use

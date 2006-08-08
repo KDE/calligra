@@ -301,13 +301,11 @@ public:
 
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
     /**
      * @returns the child at position i.
      */
     BasicElement* getChild(uint i) { return children.at(i); }
-    //const BasicElement* getChild(uint i) const { return children.at(i); }
+    const BasicElement* getChild(uint i) const;
 
     int childPos( BasicElement* child ) { return children.find( child ); }
     int childPos( const BasicElement* child ) const;
@@ -380,6 +378,10 @@ protected:
      */
     virtual void writeDom(QDomElement element);
 
+    virtual QString getElementName() const { return "mrow"; }
+    virtual void writeMathMLContent( QDomDocument& doc, 
+                                     QDomElement& element,
+                                     bool oasisFormat ) const;
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -559,8 +561,6 @@ public:
      */
     static bool isValidSelection( FormulaCursor* cursor );
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
 
     /**
@@ -568,6 +568,7 @@ protected:
      */
     virtual QString getTagName() const { return "NAMESEQUENCE"; }
 
+    virtual QString getElementName() const { return "mi"; }
     /**
      * Creates a new element with the given type.
      *

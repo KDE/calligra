@@ -34,13 +34,13 @@ public:
 protected:
 
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-    virtual void writeMathMLAttributes( QDomElement& element );
 
     virtual void setStyleVariant( StyleAttributes& style );
     virtual void setStyleBackground( StyleAttributes& style );
 
 private:
+    virtual QString getElementName() const { return "mstyle"; }
+    virtual void writeMathMLAttributes( QDomElement& element );
 
     void readSizeAttribute( const QString& str, SizeType* st, double* s );
     void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );

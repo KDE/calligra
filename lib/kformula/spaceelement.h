@@ -109,8 +109,6 @@ public:
      */
     virtual QString toLatex();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
 
     //Save/load support
@@ -146,7 +144,8 @@ protected:
 
 private:
 
-    void writeMathMLAttributes( QDomElement& element );
+    virtual QString getElementName() const { return "mspace"; }
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     /**
      * Whether this space behaves like a tab.

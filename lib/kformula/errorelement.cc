@@ -48,19 +48,4 @@ void ErrorElement::draw( QPainter& painter, const LuPixelRect& r,
     inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
 }
     
-
-void ErrorElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:merror" : "merror" );
-    writeMathMLContent( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
-void ErrorElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
-{
-    for ( iterator it = begin(); it != end(); it++ ) {
-        it->writeMathML( doc, element, oasisFormat );
-    }
-}
-
 KFORMULA_NAMESPACE_END

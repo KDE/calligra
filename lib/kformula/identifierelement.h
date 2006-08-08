@@ -30,9 +30,12 @@ public:
     IdentifierElement( BasicElement* parent = 0 );
 
 protected:
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
 
     virtual void setStyleVariant( StyleAttributes& style );
+
+private:
+    virtual QString getElementName() const { return "mi"; }
+    
 };
 
 KFORMULA_NAMESPACE_END

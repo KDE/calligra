@@ -572,16 +572,7 @@ QString FractionElement::formulaString()
     return "(" + numerator->formulaString() + ")/(" + denominator->formulaString() + ")";
 }
 
-void FractionElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
-    writeMathMLAttributes( de );
-    numerator->writeMathML( doc, de, oasisFormat );
-    denominator->writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
-void FractionElement::writeMathMLAttributes( QDomElement& element )
+void FractionElement::writeMathMLAttributes( QDomElement& element ) const
 {
     switch ( m_lineThicknessType ) {
     case AbsoluteSize:
@@ -628,6 +619,14 @@ void FractionElement::writeMathMLAttributes( QDomElement& element )
     if ( m_customBevelled ) {
         element.setAttribute( "bevelled", m_bevelled ? "true" : "false" );
     }
+}
+
+void FractionElement::writeMathMLContent( QDomDocument& doc, 
+                                          QDomElement& element,
+                                          bool oasisFormat ) const
+{
+    numerator->writeMathML( doc, element, oasisFormat );
+    denominator->writeMathML( doc, element, oasisFormat );
 }
 
 double FractionElement::lineThickness( const ContextStyle& context, double factor )

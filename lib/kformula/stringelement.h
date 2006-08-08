@@ -32,12 +32,12 @@ public:
 
 protected:
     virtual bool readAttributesFromMathMLDom(const QDomElement& element);
-    virtual void writeMathMLAttributes( QDomElement& element );
-
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-    virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat );
 
 private:
+    virtual QString getElementName() const { return "ms"; }
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
+    virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const ;
+
     QString m_lquote;
     QString m_rquote;
     bool m_customLquote;

@@ -123,14 +123,6 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
     return inherited::readAttributesFromMathMLDom( element );
 }
 
-void StyleElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mstyle" : "mstyle" );
-    writeMathMLAttributes( de );
-    SequenceElement::writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
 void StyleElement::writeMathMLAttributes( QDomElement& element )
 {
     if ( m_customScriptLevel ) {

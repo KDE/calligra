@@ -174,10 +174,12 @@ QDomElement BasicElement::getElementDom( QDomDocument& doc)
 }
 
 
-void BasicElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool /*oasisFormat*/ )
+void BasicElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat ) const
 {
-    parent.appendChild( doc.createComment( QString( "MathML Error in %1" )
-                                           .arg( getTagName() ) ) );
+    QDomElement de = doc.createElement( oasisFormat ? "math:" + getElementName() : getElementName() );
+    writeMathMLAttributes( de );
+    writeMathMLContent( doc, de, oasisFormat );
+    parent.appendChild( de );
 }
 
 bool BasicElement::buildFromDom(QDomElement element)

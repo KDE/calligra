@@ -206,9 +206,9 @@ int SingleContentElement::readContentFromMathMLDom( QDomNode& node )
     return 1;
 }
 
-void SingleContentElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void SingleContentElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
 {
-    content->writeMathML( doc, parent, oasisFormat );
+    content->writeMathML( doc, element, oasisFormat );
 }
 
 
@@ -747,19 +747,15 @@ int BracketElement::searchOperator( const QDomNode& node )
 }
 
 
-void BracketElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void BracketElement::writeMathMLAttributes( QDomElement& element ) const
 {
-    QDomElement de = doc.createElement( oasisFormat ? "math:mfenced" : "mfenced" );
     if ( left->getType() != LeftRoundBracket ||
          right->getType() != RightRoundBracket )
     {
-        de.setAttribute( "open",  QString( QChar( leftType ) ) );
-        de.setAttribute( "close", QString( QChar( rightType ) ) );
+        element.setAttribute( "open",  QString( QChar( leftType ) ) );
+        element.setAttribute( "close", QString( QChar( rightType ) ) );
     }
-    SingleContentElement::writeMathML( doc, de, oasisFormat );
-    parent.appendChild( de );
 }
-
 
 OverlineElement::OverlineElement( BasicElement* parent )
     : SingleContentElement( parent )

@@ -26,14 +26,6 @@ KFORMULA_NAMESPACE_BEGIN
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent ) {
 }
 
-void IdentifierElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mi" : "mi" );
-    writeMathMLAttributes( de );
-    writeMathMLContent( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
 void IdentifierElement::setStyleVariant( StyleAttributes& style )
 {
     if ( customMathVariant() ) {

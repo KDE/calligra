@@ -21,7 +21,8 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-PhantomElement::PhantomElement( BasicElement* parent ) : SequenceElement( parent ) {
+PhantomElement::PhantomElement( BasicElement* parent ) : SequenceElement( parent ) 
+{
 }
 
 /**
@@ -33,21 +34,6 @@ void PhantomElement::draw( QPainter&, const LuPixelRect&, const ContextStyle&,
                            ContextStyle::TextStyle, ContextStyle::IndexStyle,
                            StyleAttributes&, const LuPixelPoint& )
 {
-}
-    
-
-void PhantomElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mphantom" : "mphantom" );
-    writeMathMLContent( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
-void PhantomElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
-{
-    for ( iterator it = begin(); it != end(); it++ ) {
-        it->writeMathML( doc, element, oasisFormat );
-    }
 }
 
 KFORMULA_NAMESPACE_END

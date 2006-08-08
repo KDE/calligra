@@ -278,6 +278,7 @@ protected:
      * @returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "EMPTY"; }
+
 };
 
 

@@ -1474,102 +1474,84 @@ QString IndexElement::formulaString()
     return index;
 }
 
-void IndexElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+QString IndexElement::getElementName() const
+{
+    if ( hasUpperMiddle() && hasLowerMiddle() )
+        return "munderover";
+    if ( hasUpperMiddle() )
+        return "mover";
+    if ( hasLowerMiddle() )
+        return "munder";
+    if ( hasLowerLeft() || hasUpperLeft() )
+        return "mmultiscripts";
+    if ( hasLowerRight() || hasUpperRight() ) {
+        if ( ! hasUpperRight() )
+            return "msub";
+        if ( ! hasUpperRight() )
+            return "msup";
+    }
+    return "msubsup";
+}
+
+void IndexElement::writeMathMLContent( QDomDocument& doc, 
+                                       QDomElement& element,
+                                       bool oasisFormat ) const
 {
     QDomElement de;
-    QDomElement uo;
-    bool uoscripts = true;
 
+    content->writeMathML( doc, element, oasisFormat ); // base
     if ( hasUpperMiddle() && hasLowerMiddle() )
     {
-        uo = doc.createElement( "munderover" );
-        content->writeMathML( doc, uo, oasisFormat ); // base
-        lowerMiddle->writeMathML( doc, uo, oasisFormat );
-        upperMiddle->writeMathML( doc, uo,oasisFormat );
+        lowerMiddle->writeMathML( doc, element, oasisFormat );
+        upperMiddle->writeMathML( doc, element,oasisFormat );
     }
     else if ( hasUpperMiddle() )
     {
-        uo = doc.createElement( "mover" );
-        content->writeMathML( doc, uo,oasisFormat ); // base
-        upperMiddle->writeMathML( doc, uo,oasisFormat );
+        upperMiddle->writeMathML( doc, element,oasisFormat );
     }
     else if ( hasLowerMiddle() )
     {
-        uo = doc.createElement( "munder" );
-        content->writeMathML( doc, uo, oasisFormat ); // base
-        lowerMiddle->writeMathML( doc, uo,oasisFormat );
+        lowerMiddle->writeMathML( doc, element,oasisFormat );
     }
-    else // no over- or underscripts
-        uoscripts = false;
-
 
     if ( hasLowerLeft() || hasUpperLeft() )
     {
-        de = doc.createElement( "mmultiscripts" );
-        if ( !uoscripts ) // base
-            content->writeMathML( doc, de, oasisFormat );
-        else
-            de.appendChild( uo );
-
         if ( hasLowerRight() )
-            lowerRight->writeMathML( doc, de, oasisFormat );
+            lowerRight->writeMathML( doc, element, oasisFormat );
         else
-            de.appendChild( doc.createElement( "none" ) );
+            element.appendChild( doc.createElement( "none" ) );
 
         if ( hasUpperRight() )
-            upperRight->writeMathML( doc, de, oasisFormat );
+            upperRight->writeMathML( doc, element, oasisFormat );
         else
-            de.appendChild( doc.createElement( "none" ) );
-
-        de.appendChild( doc.createElement( "mprescripts" ) );
+            element.appendChild( doc.createElement( "none" ) );
+        
+        element.appendChild( doc.createElement( "mprescripts" ) );
 
         if ( hasLowerLeft() )
-            lowerLeft->writeMathML( doc, de, oasisFormat );
+            lowerLeft->writeMathML( doc, element, oasisFormat );
         else
-            de.appendChild( doc.createElement( "none" ) );
+            element.appendChild( doc.createElement( "none" ) );
 
         if ( hasUpperLeft() )
-            upperLeft->writeMathML( doc, de, oasisFormat );
+            upperLeft->writeMathML( doc, element, oasisFormat );
         else
-            de.appendChild( doc.createElement( "none" ) );
+            element.appendChild( doc.createElement( "none" ) );
     }
     else if ( hasLowerRight() || hasUpperRight() )
     {
-        if ( !hasUpperRight() )
-        {
-            de = doc.createElement( "msub" );
-            if ( !uoscripts ) // base
-                content->writeMathML( doc, de, oasisFormat );
-            else
-                de.appendChild( uo );
-            lowerRight->writeMathML( doc, de, oasisFormat );
+        if ( !hasUpperRight() ) {
+            lowerRight->writeMathML( doc, element, oasisFormat );
         }
-        else if ( !hasLowerRight() )
-        {
-            de = doc.createElement( "msup" );
-            if ( !uoscripts ) // base
-                content->writeMathML( doc, de, oasisFormat );
-            else
-                de.appendChild( uo );
-            upperRight->writeMathML( doc, de, oasisFormat );
+        else if ( !hasLowerRight() ) {
+            upperRight->writeMathML( doc, element, oasisFormat );
         }
         else // both
         {
-            de = doc.createElement( "msubsup" );
-            if ( !uoscripts ) // base
-                content->writeMathML( doc, de, oasisFormat );
-            else
-                de.appendChild( uo );
-            lowerRight->writeMathML( doc, de, oasisFormat );
-            upperRight->writeMathML( doc, de,oasisFormat );
+            lowerRight->writeMathML( doc, element, oasisFormat );
+            upperRight->writeMathML( doc, element,oasisFormat );
         }
     }
-    else // no mmultiscripts, msubsup, msub or msup
-        de = uo;
-
-
-    parent.appendChild( de );
-
 }
 
 KFORMULA_NAMESPACE_END

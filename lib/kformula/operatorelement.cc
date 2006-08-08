@@ -92,12 +92,4 @@ int OperatorElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QD
     return 1;
 }
 
-void OperatorElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
-{
-    QDomElement de = doc.createElement( oasisFormat ? "math:mo" : "mo" );
-    writeMathMLAttributes( de );
-    writeMathMLContent( doc, de, oasisFormat );
-    parent.appendChild( de );
-}
-
 KFORMULA_NAMESPACE_END

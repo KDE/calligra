@@ -188,8 +188,6 @@ public:
 
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
 
     //Save/load support
@@ -231,7 +229,11 @@ protected:
 	virtual int readContentFromMathMLDom(QDomNode& node);
 
 private:
-    void writeMathMLAttributes( QDomElement& element );
+    virtual QString getElementName() const { return "mfrac"; }
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
+    virtual void writeMathMLContent( QDomDocument& doc, 
+                                     QDomElement& element,
+                                     bool oasisFormat ) const ;
 
     double lineThickness( const ContextStyle& context, double factor );
 

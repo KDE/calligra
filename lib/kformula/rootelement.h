@@ -181,8 +181,6 @@ public:
 
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
-
 protected:
 
     //Save/load support
@@ -225,6 +223,11 @@ protected:
     virtual int readContentFromMathMLDom(QDomNode& node);
 
 private:
+
+    virtual QString getElementName() const { return hasIndex() ? "mroot" : "msqrt"; }
+    virtual void writeMathMLContent( QDomDocument& doc, 
+                                     QDomElement& element,
+                                     bool oasisFormat ) const ;
 
     class RootElementIndex : public ElementIndex {
     public:
