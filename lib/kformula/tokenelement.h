@@ -32,7 +32,7 @@ class TokenElement : public TokenStyleElement {
 public:
     TokenElement( BasicElement* parent = 0 );
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
-virtual QString getCharFromEntity( const QString& entity );
+
 protected:
     QString getCharFromEntity( const QString& entity );
 };
