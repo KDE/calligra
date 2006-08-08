@@ -466,7 +466,24 @@ protected:
 
     virtual QString formulaString() { return ""; }
 
+    /**
+     * Utility function that sets the size type and returns the size value from
+     * a MathML attribute string with unit as defined in Section 2.4.4.2
+     *
+     * @returns the size value
+     *
+     * @param str the attribute string.
+     * @param st size type container. It will be properly assigned to its size
+     * type or NoSize if str is invalid
+     */
+    double getSize( const QString& str, SizeType* st );
+
 private:
+
+    /**
+     * Used internally by getSize()
+     */
+    double str2size( const QString& str, SizeType* st, uint index, SizeType type );
 
     /**
      * Our parent.

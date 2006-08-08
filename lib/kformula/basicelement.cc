@@ -275,4 +275,76 @@ QString BasicElement::toLatex()
     return "{}";
 }
 
+/**
+ * Utility function that sets the size type and returns the size value from
+ * a MathML attribute string with unit as defined in Section 2.4.4.2
+ *
+ * @returns the size value
+ *
+ * @param str the attribute string.
+ * @param st size type container. It will be properly assigned to its size
+ * type or NoSize if str is invalid
+ */
+double BasicElement::getSize( const QString& str, SizeType* st )
+{
+    int index = str.find( "%" );
+    if ( index != -1 ) {
+        return str2size( str, st, index, RelativeSize ) / 100.0;
+    }
+    index = str.find( "pt", 0, false );
+    if ( index != -1 ) {
+        return str2size( str, st, index, AbsoluteSize );
+    }
+    index = str.find( "mm", 0, false );
+    if ( index != -1 ) {
+        return str2size( str, st, index, AbsoluteSize ) * 72.0 / 20.54;
+    }
+    index = str.find( "cm", 0, false );
+    if ( index != -1 ) {
+        return str2size( str, st, index, AbsoluteSize ) * 72.0 / 2.54;
+    }
+    index = str.find( "in", 0, false );
+    if ( index != -1 ) {
+        return str2size( str, st, index, AbsoluteSize ) * 72.0;
+    }
+    index = str.find( "em", 0, false );
+    if ( index != -1 ) {
+        return str2size( str, st, index, RelativeSize );
+    }
+    index = str.find( "ex", 0, false );
+    if ( index != -1 ) {
+        return str2size( str, st, index, RelativeSize );
+    }
+    index = str.find( "pc", 0, false );
+    if ( index != -1 ) {
+        return str2size( str, st, index, AbsoluteSize ) * 12.0;
+    }
+    index = str.find( "px", 0, false );
+    if ( index != -1 ) {
+        return str2size( str, st, index, PixelSize );
+    }
+    // If there's no unit, assume 'pt'
+    return str2size( str, st, str.length(),AbsoluteSize );
+}
+
+/**
+ * Used internally by getSize()
+ */
+double BasicElement::str2size( const QString& str, SizeType *st, uint index, SizeType type )
+{
+    QString num = str.left( index );
+    bool ok;
+    double size = num.toDouble( &ok );
+    if ( ok ) {
+        if ( st ) {
+            *st = type;
+        }
+        return size;
+    }
+    if ( st ) {
+        *st = NoSize;
+    }
+    return -1;
+}
+
 KFORMULA_NAMESPACE_END

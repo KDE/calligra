@@ -35,8 +35,6 @@ KFORMULA_NAMESPACE_BEGIN
 class TokenStyleElement : public SequenceElement {
     typedef SequenceElement inherited;
 public:
-	
-    enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
 
     TokenStyleElement( BasicElement* parent = 0 );
 
@@ -125,9 +123,6 @@ protected:
 
     void setStyleColor( StyleAttributes& style );
     virtual void setStyleBackground( StyleAttributes& style );
-
-    double str2size( const QString& str, SizeType* st, uint index, SizeType type );
-    double getSize( const QString& str, SizeType* st );
 
     /**
      * Return RGB string from HTML Colors. See HTML Spec, section 6.5

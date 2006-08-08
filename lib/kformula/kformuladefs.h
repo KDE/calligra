@@ -56,7 +56,7 @@ typedef KoRect PtRect;
 typedef int pixel;
 typedef QPoint PixelPoint;
 typedef QRect PixelRect;
-typedef QSize PixelSize;
+//typedef QSize PixelSize;
 
 /**
  * Layout Unit. That's the values we store to get
@@ -174,6 +174,11 @@ enum Direction { beforeCursor, afterCursor };
  * The types of space we know.
  */
 enum SpaceWidth { THIN, MEDIUM, THICK, QUAD, NEGTHIN };
+
+/**
+ * The types of MathML horizontal or vertical sizes we know
+ */
+enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
 
 /**
  * each index has its own number.
