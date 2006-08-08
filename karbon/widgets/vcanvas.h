@@ -105,6 +105,11 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
+    QPoint widgetToView( const QPoint& p ) const;
+    QRect widgetToView( const QRect& r ) const;
+    QPoint viewToWidget( const QPoint& p ) const;
+    QRect viewToWidget( const QRect& r ) const;
+
 private:
     KoShapeManager* m_shapeManager;
     KoZoomHandler m_zoomHandler;

@@ -79,6 +79,7 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 	p->drawRect( m_width, - 2, 2, m_height );
 	p->drawRect( 0, - 2, m_width, 2 );
 	//p->drawRect( 0, m_height - 1, m_width, 1 );
+	/*
 	// Draw Grid
 	if( m_gridData.isShow )
 	{
@@ -108,6 +109,7 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 			p0.ry() += dy;
 		}
 	}
+	*/
 	// Draw page margins
 	if( showPageMargins )
 	{

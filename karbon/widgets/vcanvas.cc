@@ -83,6 +83,9 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     gc.setPen( Qt::black );
     gc.drawRect( m_zoomHandler.documentToView( m_documentRect ) );
 
+    if( m_doc->grid().visible() )
+        m_doc->grid().paint( gc, m_zoomHandler, m_zoomHandler.viewToDocument( widgetToView( ev->rect() ) ) );
+
     m_shapeManager->paint( gc, m_zoomHandler, false );
     m_tool->paint( gc, m_zoomHandler );
 
@@ -91,19 +94,19 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
 
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, m_zoomHandler.viewToDocument(e->pos() - m_origin ) );
+    KoPointerEvent ev(e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
     m_tool->mouseMoveEvent( &ev );
 }
 
 void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, m_zoomHandler.viewToDocument(e->pos() - m_origin ) );
+    KoPointerEvent ev(e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
     m_tool->mousePressEvent( &ev );
 }
 
 void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, m_zoomHandler.viewToDocument(e->pos() - m_origin ) );
+    KoPointerEvent ev(e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
     m_tool->mouseReleaseEvent( &ev );
 }
 
@@ -116,8 +119,7 @@ void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
 }
 
 void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
-    *horizontal = 14.173; // approx 0.5 cm grid size.
-    *vertical = 14.173;
+    m_doc->grid().spacing( horizontal, vertical );
 }
 
 void KarbonCanvas::addCommand(KCommand *command, bool execute) {
@@ -127,7 +129,7 @@ void KarbonCanvas::addCommand(KCommand *command, bool execute) {
 }
 
 void KarbonCanvas::updateCanvas(const QRectF& rc) {
-    QRect clipRect(m_zoomHandler.documentToView(rc).toRect().translated( m_origin) );
+    QRect clipRect( viewToWidget( m_zoomHandler.documentToView(rc).toRect() ) );
     clipRect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
     update(clipRect);
 }
@@ -188,6 +190,22 @@ void KarbonCanvas::adjustSize() {
 
     m_origin.setX( m_marginX - zoomedRect.left() );
     m_origin.setY( m_marginY - zoomedRect.top() );
+}
+
+QPoint KarbonCanvas::widgetToView( const QPoint& p ) const {
+    return p - m_origin;
+}
+
+QRect KarbonCanvas::widgetToView( const QRect& r ) const {
+    return r.translated( - m_origin );
+}
+
+QPoint KarbonCanvas::viewToWidget( const QPoint& p ) const {
+    return p + m_origin;
+}
+
+QRect KarbonCanvas::viewToWidget( const QRect& r ) const {
+    return r.translated( m_origin );
 }
 
 #include "vcanvas.moc"

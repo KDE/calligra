@@ -19,15 +19,15 @@
  */
 
 #include "karbon_grid_data.h"
+#include <KoViewConverter.h>
 #include <qdom.h>
+#include <QPainter>
+#include <QRectF>
 
 KarbonGridData::KarbonGridData()
+    : m_spacing( 14.173, 14.173 ), m_snap( 20, 20 ), m_color( 228, 228, 228 )
+    , m_isSnap( false ), m_isShow( false )
 {
-	color = QColor( 228, 228, 228 );
-	freq = QSizeF( 20, 20 );
-	snap = QSizeF( 20, 20 );
-	isSnap = false;
-	isShow = false;
 }
 
 KarbonGridData::~KarbonGridData()
@@ -57,3 +57,64 @@ void KarbonGridData::load(const QDomElement& /*element*/, const QString& /*name*
   isShow = (bool)element.attribute(name + "IsShow", "1").toInt();*/
 }
 
+void KarbonGridData::setSpacing( double spacingX, double spacingY )
+{
+    m_spacing.setWidth( spacingX );
+    m_spacing.setHeight( spacingY );
+}
+
+void KarbonGridData::spacing( double *spacingX, double *spacingY )
+{
+    if( spacingX ) 
+        *spacingX = m_spacing.width();
+    if( spacingY )
+        *spacingY = m_spacing.height();
+}
+
+void KarbonGridData::setSnap( double snapX, double snapY )
+{
+    m_snap.setWidth( snapX );
+    m_snap.setHeight( snapY );
+}
+
+void KarbonGridData::snap( double *snapX, double *snapY )
+{
+    if( snapX ) 
+        *snapX = m_snap.width();
+    if( snapY )
+        *snapY = m_snap.height();
+}
+
+void KarbonGridData::paint( QPainter &painter, const KoViewConverter &converter, const QRectF &area )
+{
+    painter.setPen( m_color );
+    double x = 0.0;
+    do {
+        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ), 
+                          converter.documentToView( QPointF( x, area.bottom() ) ) );
+        x += m_spacing.width();
+    } while( x <= area.right() );
+
+    x = - m_spacing.width();
+    while( x >= area.left() )
+    {
+        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
+                          converter.documentToView( QPointF( x, area.bottom() ) ) );
+        x -= m_spacing.width();
+    };
+
+    double y = 0.0;
+    do {
+        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ), 
+                          converter.documentToView( QPointF( area.right(), y ) ) );
+        y += m_spacing.height();
+    } while( y <= area.bottom() );
+
+    y = - m_spacing.width();
+    while( y >= area.top() )
+    {
+        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ), 
+                          converter.documentToView( QPointF( area.right(), y ) ) );
+        y -= m_spacing.width();
+    };
+}

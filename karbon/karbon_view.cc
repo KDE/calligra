@@ -1486,7 +1486,8 @@ KarbonView::showGrid()
 {
 	debugView("KarbonView::showGrid()");
 
-	m_part->document().grid().isShow = m_showGridAction->isChecked();
+	m_part->document().grid().setVisible( m_showGridAction->isChecked() );
+	m_canvas->update();
 }
 
 void
@@ -1494,7 +1495,8 @@ KarbonView::snapToGrid()
 {
 	debugView("KarbonView::snapToGrid()");
 
-	m_part->document().grid().isSnap = m_snapGridAction->isChecked();
+	m_part->document().grid().setSnapping( m_snapGridAction->isChecked() );
+	m_canvas->update();
 }
 
 void

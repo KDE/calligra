@@ -24,21 +24,39 @@
 #include <QColor>
 
 class QDomElement;
+class QPainter;
+class QRectF;
+class KoViewConverter;
 
 class KarbonGridData
 {
 public:
-  KarbonGridData();
-  ~KarbonGridData();
+    KarbonGridData();
+    ~KarbonGridData();
 
-  void save(QDomElement&, const QString&);
-  void load(const QDomElement&, const QString&);
+    void save(QDomElement&, const QString&);
+    void load(const QDomElement&, const QString&);
+    void paint( QPainter &painter, const KoViewConverter &converter, const QRectF &area );
+    void setSnapping( bool enable = true ) { m_isSnap = enable; };
+    bool snapping() { return m_isSnap; };
+    void setVisible( bool visible ) { m_isShow = visible; };
+    bool visible() { return m_isShow; };
 
-  QSizeF freq;
-  QSizeF snap;
-  QColor color;
-  bool isSnap;
-  bool isShow;
+    void setSpacing( double spacingX, double spacingY );
+    void spacing( double *spacingX, double *spacingY );
+
+    void setSnap( double snapX, double snapY );
+    void snap( double *snapX, double *snapY );
+
+    const QColor& color() { return m_color; };
+    void setColor( const QColor &color ) { m_color = color; };
+
+private:
+    QSizeF m_spacing;
+    QSizeF m_snap;
+    QColor m_color;
+    bool m_isSnap;
+    bool m_isShow;
 };
 
 #endif

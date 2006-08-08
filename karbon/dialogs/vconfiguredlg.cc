@@ -304,17 +304,16 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	KarbonGridData &gd = view->part()->document().grid();
 	double pgw = view->part()->document().width();
 	double pgh = view->part()->document().height();
-	double fw = gd.freq.width();
-	double fh = gd.freq.height();
-	double sw = gd.snap.width();
-	double sh = gd.snap.height();
+	double fw, fh, sw, sh;
+	gd.spacing( &fw, &fh );
+	gd.snap( &sw, &sh );
 
 	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), this );
-	m_gridChBox->setChecked( gd.isShow );
+	m_gridChBox->setChecked( gd.visible() );
 	m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), this );
-	m_snapChBox->setChecked( gd.isSnap );
+	m_snapChBox->setChecked( gd.snapping() );
 	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), this);
-	m_gridColorBtn = new KColorButton( gd.color, this );
+	m_gridColorBtn = new KColorButton( gd.color(), this );
 	gridColorLbl->setBuddy( m_gridColorBtn );
 
 	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), this );
@@ -381,13 +380,11 @@ void VConfigGridPage::slotUnitChanged( int u )
 void VConfigGridPage::apply()
 {
 	KarbonGridData &gd = m_view->part()->document().grid();
-	gd.freq.setWidth( m_spaceHorizUSpin->value() );
-	gd.freq.setHeight( m_spaceVertUSpin->value() );
-	gd.snap.setWidth( m_snapHorizUSpin->value() );
-	gd.snap.setHeight( m_snapVertUSpin->value() );
-	gd.isShow = m_gridChBox->isChecked();
-	gd.isSnap = m_snapChBox->isChecked();
-	gd.color = m_gridColorBtn->color();
+	gd.setSpacing( m_spaceHorizUSpin->value(), m_spaceVertUSpin->value() );
+	gd.setSnap( m_snapHorizUSpin->value(), m_snapVertUSpin->value() );
+	gd.setVisible( m_gridChBox->isChecked() );
+	gd.setSnapping( m_snapChBox->isChecked() );
+	gd.setColor( m_gridColorBtn->color() );
 	m_view->repaintAll();
 }
 
