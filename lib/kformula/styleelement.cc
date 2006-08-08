@@ -263,7 +263,7 @@ void StyleElement::writeSizeAttribute( QDomElement element, const QString& str, 
         element.setAttribute( str, QString( "%1%" ).arg( s * 100.0 ) );
         break;
     case PixelSize:
-        element.setAttribute( str, QString( "%3px" ).arg( s ) );
+        element.setAttribute( str, QString( "%1px" ).arg( s ) );
         break;
     }
 }

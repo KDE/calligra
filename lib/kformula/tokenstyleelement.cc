@@ -337,7 +337,7 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element )
         element.setAttribute( "mathsize", QString( "%1%" ).arg( m_mathSize * 100.0 ) );
         break;
     case PixelSize:
-        element.setAttribute( "mathsize", QString( "%3px" ).arg( m_mathSize ) );
+        element.setAttribute( "mathsize", QString( "%1px" ).arg( m_mathSize ) );
         break;
     }
 
