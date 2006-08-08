@@ -268,6 +268,10 @@ private:
     QValueList< bool > m_alignmentScope;
     QValueList< SizeType > m_columnWidthType;
     QValueList< double > m_columnWidth;
+    SizeType m_widthType;
+    double m_width;
+    QValueList< SizeType > m_rowSpacingType;
+    QValueList< double > m_rowSpacing;
     QValueList< LineType > m_rowLines;
     QValueList< LineType > m_columnLines;
     LineType m_frame;
