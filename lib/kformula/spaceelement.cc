@@ -223,6 +223,7 @@ bool SpaceElement::readAttributesFromMathMLDom(const QDomElement& element)
             m_lineBreak = BadBreak;
         }
     }
+    return true;
 }
 
 void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
