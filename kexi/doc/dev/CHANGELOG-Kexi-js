@@ -18,6 +18,7 @@ Legend:
 2006-08-08
 General
 = operator tristate::bool() removed (unsafe, comparison with false was broken)
+2.0: merged
 
 2006-08-07
 KexiDB
