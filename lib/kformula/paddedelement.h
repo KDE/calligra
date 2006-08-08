@@ -30,6 +30,15 @@ class PaddedElement : public SequenceElement {
 public:
     PaddedElement( BasicElement* parent = 0 );
 
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes( const ContextStyle& style,
+						    ContextStyle::TextStyle tstyle,
+						    ContextStyle::IndexStyle istyle,
+							StyleAttributes& style );
+
 protected:
     virtual bool readAttributesFromMathMLDom(const QDomElement& element);
 
@@ -38,10 +47,13 @@ protected:
     virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat );
 
 private:
-    void readSizeAttribute( const QString& str, SizeType* st, double* s );
+    double readSizeAttribute( const QString& str, SizeType* st );
     double getSize( const QString& str, SizeType* st );
     double str2size( const QString& str, SizeType* st, uint index, SizeType type );
     void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );
+    luPixel calcSize( const ContextStyle& context, SizeType type,
+                      double length, luPixel width, 
+                      luPixel height, luPixel defvalue );
 
     SizeType m_widthType;
     double m_width;

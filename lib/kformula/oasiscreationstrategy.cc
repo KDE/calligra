@@ -35,6 +35,7 @@
 #include "identifierelement.h"
 #include "operatorelement.h"
 #include "stringelement.h"
+#include "paddedelement.h"
 
 #include "oasiscreationstrategy.h"
 
@@ -93,6 +94,7 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     else if ( type == "interval" )         return new BracketElement();
     else if ( type == "mrow"
               || type == "mtd" )           return new SequenceElement();
+    else if ( type == "mpadded" )          return new PaddedElement();
     return 0;
 }
 
