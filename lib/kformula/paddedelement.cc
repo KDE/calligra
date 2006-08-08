@@ -80,6 +80,10 @@ void PaddedElement::calcSizes( const ContextStyle& context,
     luPixel right = calcSize( context, m_widthType, m_width, width, height, width ) + left;
     luPixel down = calcSize( context, m_depthType, m_depth, width, height, depth );
     luPixel up = calcSize( context, m_heightType, m_height, width, height, height );
+
+    // Check borders
+    if ( right < 0 ) right = 0;
+    if ( up + down < 0 ) up = down = 0;
     
     if ( ! isEmpty() ) {
         width = left;
