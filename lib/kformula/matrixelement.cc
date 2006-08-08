@@ -885,6 +885,21 @@ bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
             }
         }
     }
+    QString columnalignStr = element.attribute( "columnalign" ).lower();
+    if ( ! columnalignStr.isNull() ) {
+        QStringList list = QStringList::split( ' ', columnalignStr );
+        for ( QStringList::iterator it = list.begin(); it != list.end(); it++ ) {
+            if ( *it == "left" ) {
+                m_columnAlign.append( LeftHorizontalAlign );
+            }
+            else if ( *it == "center" ) {
+                m_columnAlign.append( CenterHorizontalAlign );
+            }
+            else if ( *it == "right" ) {
+                m_columnAlign.append( RightHorizontalAlign );
+            }
+        }
+    }
     return true;
 }
 
@@ -1106,6 +1121,26 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
     }
     if ( ! rowalign.isNull() ) {
         element.setAttribute( "rowalign", rowalign.stripWhiteSpace() );
+    }
+    QString columnalign;
+    for ( QValueList< HorizontalAlign >::iterator it = m_columnAlign.begin(); it != m_columnAlign.end(); it++ )
+    {
+        switch ( *it ) {
+        case LeftHorizontalAlign:
+            rowalign.append( "left " );
+            break;
+        case CenterHorizontalAlign:
+            rowalign.append( "center " );
+            break;
+        case RightHorizontalAlign:
+            rowalign.append( "right " );
+            break;
+        default:
+            break;
+        }
+    }
+    if ( ! columnalign.isNull() ) {
+        element.setAttribute( "columnalign", columnalign.stripWhiteSpace() );
     }
 }
 
