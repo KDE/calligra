@@ -170,7 +170,15 @@ public:
     /**
      * Tells whether the fraction should be drawn with a line.
      */
-    void showLine(bool line) { withLine = line; }
+    void showLine(bool line) { 
+        m_lineThicknessType = RelativeSize;
+        if ( line ) {
+            m_lineThickness = 1.0;
+        }
+        else {
+            m_lineThickness = 0.0;
+        }
+    }
 
     /**
      * @returns the latex representation of the element and
@@ -210,6 +218,12 @@ protected:
     virtual bool readContentFromDom(QDomNode& node);
 
     /**
+     * Reads our attributes from the MathML element.
+     * Returns false if it failed.
+     */
+	virtual bool readAttributesFromMathMLDom(const QDomElement& element);
+
+    /**
      * Reads our content from the MathML node. Sets the node to the next node
      * that needs to be read.
      * Returns false if it failed.
@@ -218,10 +232,17 @@ protected:
 
 private:
 
+    bool withLine() { return m_lineThicknessType != RelativeSize || m_lineThickness != 0.0; }
+
     SequenceElement* numerator;
     SequenceElement* denominator;
 
-    bool withLine;
+    SizeType m_lineThicknessType;
+    double m_lineThickness;
+    HorizontalAlign m_numAlign;
+    HorizontalAlign m_denomAlign;
+    bool m_customBevelled;
+    bool m_bevelled;
 };
 
 KFORMULA_NAMESPACE_END

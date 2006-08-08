@@ -181,6 +181,11 @@ enum SpaceWidth { THIN, MEDIUM, THICK, QUAD, NEGTHIN };
 enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
 
 /**
+ * The types of horizontal align
+ */
+enum HorizontalAlign { NoAlign, LeftAlign, CenterAlign, RightAlign };
+
+/**
  * each index has its own number.
  */
 enum IndexPosition {

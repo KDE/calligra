@@ -32,8 +32,11 @@
 KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
-FractionElement::FractionElement(BasicElement* parent)
-        : BasicElement(parent), withLine(true)
+FractionElement::FractionElement(BasicElement* parent) : BasicElement(parent),
+                                                         m_lineThicknessType( NoSize ),
+                                                         m_numAlign( NoAlign ),
+                                                         m_denomAlign( NoAlign ),
+                                                         m_customBevelled( false )
 {
     numerator = new SequenceElement(this);
     denominator = new SequenceElement(this);
@@ -46,7 +49,13 @@ FractionElement::~FractionElement()
 }
 
 FractionElement::FractionElement( const FractionElement& other )
-    : BasicElement( other ), withLine( other.withLine )
+    : BasicElement( other ),
+      m_lineThicknessType( other.m_lineThicknessType ),
+      m_lineThickness( other.m_lineThickness ),
+      m_numAlign( other.m_numAlign ),
+      m_denomAlign( other.m_denomAlign ),
+      m_customBevelled( other.m_customBevelled ),
+      m_bevelled( other.m_bevelled )
 {
     numerator = new SequenceElement( *( other.numerator ) );
     denominator = new SequenceElement( *( other.denominator ) );
@@ -169,7 +178,8 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
                            myPos);
     }
 
-    if ( withLine ) {
+    if ( withLine() ) {
+        // TODO: thickness
         double factor = style.sizeFactor();
         painter.setPen( QPen( context.getDefaultColor(),
                               context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
@@ -399,7 +409,7 @@ void FractionElement::writeDom(QDomElement element)
     BasicElement::writeDom(element);
 
     QDomDocument doc = element.ownerDocument();
-    if (!withLine) element.setAttribute("NOLINE", 1);
+    if (!withLine()) element.setAttribute("NOLINE", 1);
 
     QDomElement num = doc.createElement("NUMERATOR");
     num.appendChild(numerator->getElementDom(doc));
@@ -421,8 +431,74 @@ bool FractionElement::readAttributesFromDom(QDomElement element)
     }
     QString lineStr = element.attribute("NOLINE");
     if(!lineStr.isNull()) {
-        withLine = lineStr.toInt() == 0;
+        m_lineThicknessType = RelativeSize;
+        m_lineThickness = lineStr.toInt();
     }
+    return true;
+}
+
+/**
+ * Reads our attributes from the MathML element.
+ * Returns false if it failed.
+ */
+bool FractionElement::readAttributesFromMathMLDom(const QDomElement& element)
+{
+    if ( ! BasicElement::readAttributesFromMathMLDom( element ) ) {
+        return false;
+    }
+    QString linethicknessStr = element.attribute( "linethickness" ).lower();
+    if ( ! linethicknessStr.isNull() ) {
+        if ( linethicknessStr == "thin" ) {
+            m_lineThicknessType = RelativeSize;
+            m_lineThickness = 0.8; // ### Arbitrary size
+        }
+        else if ( linethicknessStr == "medium" ) {
+            m_lineThicknessType = RelativeSize;
+            m_lineThickness = 1.0;
+        }
+        else if ( linethicknessStr == "thick" ) {
+            m_lineThicknessType = RelativeSize;
+            m_lineThickness = 1.2; // ### Arbitrary size
+        }
+        else {
+            m_lineThickness = getSize( linethicknessStr, &m_lineThicknessType );
+        }
+    }
+    QString numalignStr = element.attribute( "numalign" ).lower();
+    if ( ! numalignStr.isNull() ) {
+        if ( numalignStr == "left" ) {
+            m_numAlign = LeftAlign;
+        }
+        else if ( numalignStr == "center" ) {
+            m_numAlign = CenterAlign;
+        }
+        else if ( numalignStr == "right" ) {
+            m_numAlign = RightAlign;
+        }
+    }
+    QString denomalignStr = element.attribute( "denomalign" ).lower();
+    if ( ! denomalignStr.isNull() ) {
+        if ( denomalignStr == "left" ) {
+            m_denomAlign = LeftAlign;
+        }
+        else if ( denomalignStr == "center" ) {
+            m_denomAlign = CenterAlign;
+        }
+        else if ( denomalignStr == "right" ) {
+            m_denomAlign = RightAlign;
+        }
+    }
+    QString bevelledStr = element.attribute( "bevelled" ).lower();
+    if ( ! bevelledStr.isNull() ) {
+        m_customBevelled = true;
+        if ( bevelledStr == "true" ) {
+            m_bevelled = true;
+        }
+        else {
+            m_bevelled = false;
+        }
+    }
+
     return true;
 }
 
@@ -480,7 +556,7 @@ int FractionElement::readContentFromMathMLDom(QDomNode& node)
 
 QString FractionElement::toLatex()
 {
-    if ( withLine ) {
+    if ( withLine() ) {
         return "\\frac{" + numerator->toLatex() +"}{" + denominator->toLatex() + "}";
     }
     else {
@@ -496,7 +572,7 @@ QString FractionElement::formulaString()
 void FractionElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
-    if ( !withLine ) // why is this no function?
+    if ( !withLine() ) // why is this no function?
         de.setAttribute( "linethickness", 0 );
     numerator->writeMathML( doc, de, oasisFormat );
     denominator->writeMathML( doc, de, oasisFormat );
