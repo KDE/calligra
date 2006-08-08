@@ -37,6 +37,7 @@
 #include "stringelement.h"
 #include "paddedelement.h"
 #include "errorelement.h"
+#include "phantomelement.h"
 
 #include "oasiscreationstrategy.h"
 
@@ -46,7 +47,6 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
 {
     
     // TODO
-    // mphantom
     // menclose
     // Content elements
     kdDebug( DEBUGID ) << type << endl;
@@ -86,6 +86,7 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
               || type == "mtd" )           return new SequenceElement();
     else if ( type == "mpadded" )          return new PaddedElement();
     else if ( type == "merror" )           return new ErrorElement();
+    else if ( type == "mphantom" )         return new PhantomElement();
     return 0;
 }
 
