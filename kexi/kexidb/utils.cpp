@@ -25,6 +25,7 @@
 #include <qthread.h>
 #include <qdom.h>
 #include <qbuffer.h>
+#include <qpixmap.h>
 #include <QMutex>
 #include <QSet>
 
@@ -731,6 +732,7 @@ bool KexiDB::isExtendedTableFieldProperty( const QByteArray& propertyName )
 		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QSet<QByteArray>() );
 #define ADD(name) KexiDB_extendedProperties->insert(name)
 		ADD("visibleDecimalPlaces");
+#undef ADD
 	}
 	return KexiDB_extendedProperties->contains( propertyName );
 }
@@ -885,14 +887,14 @@ QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 }
 
 //! Used in KexiDB::emptyValueForType()
-static KStaticDeleter< QValueVector<QVariant> > KexiDB_emptyValueForTypeCacheDeleter;
-QValueVector<QVariant> *KexiDB_emptyValueForTypeCache = 0;
+static KStaticDeleter< Q3ValueVector<QVariant> > KexiDB_emptyValueForTypeCacheDeleter;
+Q3ValueVector<QVariant> *KexiDB_emptyValueForTypeCache = 0;
 
 QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
 {
 	if (!KexiDB_emptyValueForTypeCache) {
 		KexiDB_emptyValueForTypeCacheDeleter.setObject( KexiDB_emptyValueForTypeCache, 
-			new QValueVector<QVariant>(int(Field::LastType)+1) );
+			new Q3ValueVector<QVariant>(int(Field::LastType)+1) );
 #define ADD(t, value) (*KexiDB_emptyValueForTypeCache)[t]=value;
 		ADD(Field::Byte, 0);
 		ADD(Field::ShortInteger, 0);
@@ -923,27 +925,27 @@ QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
 }
 
 //! Used in KexiDB::notEmptyValueForType()
-static KStaticDeleter< QValueVector<QVariant> > KexiDB_notEmptyValueForTypeCacheDeleter;
-QValueVector<QVariant> *KexiDB_notEmptyValueForTypeCache = 0;
+static KStaticDeleter< Q3ValueVector<QVariant> > KexiDB_notEmptyValueForTypeCacheDeleter;
+Q3ValueVector<QVariant> *KexiDB_notEmptyValueForTypeCache = 0;
 
 QVariant KexiDB::notEmptyValueForType( KexiDB::Field::Type type )
 {
 	if (!KexiDB_notEmptyValueForTypeCache) {
 		KexiDB_notEmptyValueForTypeCacheDeleter.setObject( KexiDB_notEmptyValueForTypeCache, 
-			new QValueVector<QVariant>(int(Field::LastType)+1) );
+			new Q3ValueVector<QVariant>(int(Field::LastType)+1) );
 #define ADD(t, value) (*KexiDB_notEmptyValueForTypeCache)[t]=value;
 		// copy most of the values
 		for (int i = int(Field::InvalidType) + 1; i<=Field::LastType; i++) {
 			if (i==Field::Date || i==Field::DateTime || i==Field::Time)
 				continue; //'current' value will be returned
 			if (i==Field::Text || i==Field::LongText) {
-				ADD(i, QString::null);
+				ADD(i, QVariant(QString("")));
 				continue;
 			}
 			if (i==Field::BLOB) {
 //! @todo blobs will contain other mime types too
 				QByteArray ba;
-				QBuffer buffer( ba );
+				QBuffer buffer( &ba );
 				buffer.open( IO_WriteOnly );
 				QPixmap pm(SmallIcon("filenew"));
 				pm.save( &buffer, "PNG"/*! @todo default? */ );
