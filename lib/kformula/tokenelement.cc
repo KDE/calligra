@@ -92,7 +92,7 @@ QString TokenElement::getCharFromEntity( const QString& entity )
 {
     QChar ch = QChar::null;
     if ( entity.left( 3 ) == "&#x" ) {
-        ch = QChar( entity.mid( 3, entity.length() - 1 ).toUShort( NULL, 16 ) );
+        ch = QChar( entity.mid( 3, entity.length() - 4 ).toUShort( NULL, 16 ) );
     }
     return ch;
 }
