@@ -277,6 +277,7 @@ luPixel PaddedElement::calcSize( const ContextStyle& context, SizeType type,
             value += length * value;
         else
             value *= length;
+        break;
     case WidthRelativeSize:
         if ( m_relative )
             value += length * width;
