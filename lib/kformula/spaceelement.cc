@@ -227,51 +227,116 @@ bool SpaceElement::readAttributesFromMathMLDom(const QDomElement& element)
 
 void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
-
     QDomElement de = doc.createElement( oasisFormat ? "math:mspace" : "mspace" );
-    QString width;
+    writeMathMLAttributes( de );
+    parent.appendChild( de );
+}
 
-    switch ( spaceWidth ) {
-    case NEGTHIN:
-        width = "-3/18em";
+void SpaceElement::writeMathMLAttributes( QDomElement& element )
+{
+    switch ( m_widthType ) {
+    case AbsoluteSize:
+        element.setAttribute( "width", QString( "%1pt" ).arg( m_width ) );
         break;
-    case THIN:
-        width = "thinmathspace";
+    case RelativeSize:
+        element.setAttribute( "width", QString( "%1%" ).arg( m_width * 100.0 ) );
         break;
-    case MEDIUM:
-        width = "mediummathspace";
+    case PixelSize:
+        element.setAttribute( "width", QString( "%1px" ).arg( m_width ) );
         break;
-    case THICK:
-        width = "thickmathspace";
+    case NegativeVeryVeryThinMathSpace:
+        element.setAttribute( "width", "negativeveryverythinmathspace" );
         break;
-    case QUAD:
-        width = "veryverythickmathspace"; // double 'very' is appropriate.
+    case NegativeVeryThinMathSpace:
+        element.setAttribute( "width", "negativeverythinmathspace" );
+        break;
+    case NegativeThinMathSpace:
+        element.setAttribute( "width", "negativethinmathspace" );
+        break;
+    case NegativeMediumMathSpace:
+        element.setAttribute( "width", "negativemediummathspace" );
+        break;
+    case NegativeThickMathSpace:
+        element.setAttribute( "width", "negativethickmathspace" );
+        break;
+    case NegativeVeryThickMathSpace:
+        element.setAttribute( "width", "negativeverythickmathspace" );
+        break;
+    case NegativeVeryVeryThickMathSpace:
+        element.setAttribute( "width", "negativeveryverythickmathspace" );
+        break;
+    case VeryVeryThinMathSpace:
+        element.setAttribute( "width", "veryverythinmathspace" );
+        break;
+    case VeryThinMathSpace:
+        element.setAttribute( "width", "verythinmathspace" );
+        break;
+    case ThinMathSpace:
+        element.setAttribute( "width", "thinmathspace" );
+        break;
+    case MediumMathSpace:
+        element.setAttribute( "width", "mediummathspace" );
+        break;
+    case ThickMathSpace:
+        element.setAttribute( "width", "thickmathspace" );
+        break;
+    case VeryThickMathSpace:
+        element.setAttribute( "width", "verythickmathspace" );
+        break;
+    case VeryVeryThickMathSpace:
+        element.setAttribute( "width", "veryverythickmathspace" );
+        break;
+    default:
         break;
     }
-
-    de.setAttribute( "width", width );
-
-    parent.appendChild( de );
-
-
-    /* // worked, but I redecided.
-    switch ( spaceWidth )
-    {
-    case NEGTHIN:
-        return doc.createEntityReference( "NegativeThinSpace" );
-    case THIN:
-        return doc.createEntityReference( "ThinSpace" );
-    case MEDIUM:
-        return doc.createEntityReference( "MediumSpace" );
-    case THICK:
-        return doc.createEntityReference( "ThickSpace" );
-    case QUAD:
-        //return doc.createEntityReference( "Space" ); // misused &Space;???
-        QDomElement de = doc.createElement( "mspace" );
-        de.setAttribute( "width", "veryverythickmathspace" );
-        return de;
-    }*/
-
+    switch ( m_heightType ) {
+    case AbsoluteSize:
+        element.setAttribute( "height", QString( "%1pt" ).arg( m_height ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( "height", QString( "%1%" ).arg( m_height * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( "height", QString( "%1px" ).arg( m_height ) );
+        break;
+    default:
+        break;
+    }
+    switch ( m_depthType ) {
+    case AbsoluteSize:
+        element.setAttribute( "depth", QString( "%1pt" ).arg( m_depth ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( "depth", QString( "%1%" ).arg( m_depth * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( "depth", QString( "%1px" ).arg( m_depth ) );
+        break;
+    default:
+        break;
+    }
+    switch ( m_lineBreak ) {
+    case AutoBreak:
+        element.setAttribute( "linebreak", "auto" );
+        break;
+    case NewLineBreak:
+        element.setAttribute( "linebreak", "newline" );
+        break;
+    case IndentingNewLineBreak:
+        element.setAttribute( "linebreak", "indentingnewline" );
+        break;
+    case NoBreak:
+        element.setAttribute( "linebreak", "nobreak" );
+        break;
+    case GoodBreak:
+        element.setAttribute( "linebreak", "goodbreak" );
+        break;
+    case BadBreak:
+        element.setAttribute( "linebreak", "badbreak" );
+        break;
+    default:
+        break;
+    }
 }
 
 QString SpaceElement::toLatex()

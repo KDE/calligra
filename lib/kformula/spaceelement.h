@@ -146,6 +146,8 @@ protected:
 
 private:
 
+    void writeMathMLAttributes( QDomElement& element );
+
     SpaceWidth spaceWidth;
 
     /**
