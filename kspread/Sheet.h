@@ -978,9 +978,6 @@ public:
      */
     void setSelectionfirstLetterUpper( Selection* selection);
 
-    void setSelectionBorderColor( Selection* selection,
-                                  const QColor &bd_Color );
-
     /**
      * @param selection the selection of cells to work on
      * @param undo create undo entry, if @c true

@@ -2787,22 +2787,20 @@ void View::setSelectionBackgroundColor(const QColor &bgColor)
 
 void View::changeBorderColor()
 {
-  if ( d->activeSheet != 0 )
-  {
-    doc()->emitBeginOperation(false);
-    d->activeSheet->setSelectionBorderColor( selectionInfo(), d->actions->borderColor->color() );
-    doc()->emitEndOperation( d->canvas->visibleCells() );
-  }
+  BorderColorManipulator* manipulator = new BorderColorManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setColor( d->actions->borderColor->color() );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::setSelectionBorderColor(const QColor &bdColor)
 {
-  if (d->activeSheet != 0)
-  {
-    doc()->emitBeginOperation(false);
-    d->activeSheet->setSelectionBorderColor( selectionInfo(), bdColor );
-    doc()->emitEndOperation( d->canvas->visibleCells() );
-  }
+  BorderColorManipulator* manipulator = new BorderColorManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setColor( bdColor );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::helpUsing()

@@ -177,6 +177,28 @@ class FormatManipulator : public Manipulator
 
 
 
+class BorderColorManipulator : public Manipulator
+{
+public:
+  BorderColorManipulator();
+
+  void setColor( const QColor& color ) { m_color = color; }
+
+protected:
+  virtual bool process( Cell* cell );
+  virtual bool process( Format* format );
+
+  virtual QString name() const { return i18n( "Change Border Color" ); }
+
+  void processHelper( Format* const format, int column, int row );
+
+private:
+  QColor m_color;
+  QHash<int, QHash<int, QHash<Style::FlagsSet, QColor> > > m_undoData;
+};
+
+
+
 class IncreaseIndentManipulator : public Manipulator
 {
 public:
@@ -187,9 +209,6 @@ protected:
   virtual bool process( Format* format );
 
   virtual QString name() const;
-
-private:
-  double m_deltaIndent;
 };
 
 

@@ -925,7 +925,7 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
 
   //refresh anchor
   if ((!_text.isEmpty()) && (_text.at(0)=='!'))
-    emit sig_updateView( this, Region(_column,_row,_column,_row) );
+    emit sig_updateView( this, Region( _column, _row, this ) );
 }
 
 void Sheet::setArrayFormula (Selection *selectionInfo, const QString &_text)
@@ -1458,43 +1458,6 @@ void Sheet::setSelectionfirstLetterUpper( Selection* selectionInfo)
   manipulator->changeMode (CaseManipulator::FirstUpper);
   manipulator->add (*selectionInfo);
   manipulator->execute ();
-}
-
-
-struct SetSelectionBorderColorWorker : public Sheet::CellWorker {
-    const QColor& bd_Color;
-    SetSelectionBorderColorWorker( const QColor& _bd_Color ) : Sheet::CellWorker( false ), bd_Color( _bd_Color ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
-        QString title=i18n("Change Border Color");
-  return new UndoCellFormat( doc, sheet, region, title );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isPartOfMerged() );
-    }
-    void doWork( Cell* cell, bool, int, int ) {
-  int it_Row = cell->row();
-  int it_Col = cell->column();
-  if ( cell->format()->topBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-    cell->format()->setTopBorderColor( bd_Color );
-  if ( cell->format()->leftBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-    cell->format()->setLeftBorderColor( bd_Color );
-  if ( cell->format()->fallDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
-    cell->format()->setFallDiagonalColor( bd_Color );
-  if ( cell->format()->goUpDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
-    cell->format()->setGoUpDiagonalColor( bd_Color );
-  if ( cell->format()->bottomBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-    cell->format()->setBottomBorderColor( bd_Color );
-  if ( cell->format()->rightBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-    cell->format()->setRightBorderColor( bd_Color );
-    }
-};
-
-void Sheet::setSelectionBorderColor( Selection* selectionInfo,
-                                            const QColor &bd_Color )
-{
-    SetSelectionBorderColorWorker w( bd_Color );
-    workOnCells( selectionInfo, w );
 }
 
 void Sheet::slotAreaModified (const QString &name)

@@ -21,6 +21,7 @@
 
 #include "Cell.h"
 #include "Sheet.h"
+#include "Style.h"
 
 #include "FormatManipulators.h"
 
@@ -636,6 +637,93 @@ QString IncreaseIndentManipulator::name() const
   else
   {
     return i18n( "Decrease Indentation" );
+  }
+}
+
+
+
+/***************************************************************************
+  class BorderColorManipulator
+****************************************************************************/
+
+BorderColorManipulator::BorderColorManipulator()
+  : Manipulator()
+{
+}
+
+bool BorderColorManipulator::process( Cell* cell )
+{
+  const int row = cell->row();
+  const int col = cell->column();
+
+  processHelper( cell->format(), col, row );
+  return true;
+}
+
+bool BorderColorManipulator::process( Format* format )
+{
+  if ( dynamic_cast<ColumnFormat*>(format) )
+  {
+    ColumnFormat* const columnFormat = dynamic_cast<ColumnFormat*>(format);
+    const int col = columnFormat->column();
+    processHelper( columnFormat, col, 0 );
+  }
+  else
+  {
+    RowFormat* const rowFormat = dynamic_cast<RowFormat*>(format);
+    const int row = rowFormat->row();
+    processHelper( rowFormat, 0, row );
+  }
+  return true;
+}
+
+void BorderColorManipulator::processHelper( Format* const format, int col, int row )
+{
+  if ( !m_reverse )
+  {
+    if ( m_firstrun )
+    {
+      if ( format->hasProperty( Style::STopBorder ) )
+        m_undoData[col][row][Style::STopBorder] = format->topBorderColor( col, row );
+      if ( format->hasProperty( Style::SLeftBorder ) )
+        m_undoData[col][row][Style::SLeftBorder] = format->leftBorderColor( col, row );
+      if ( format->hasProperty( Style::SFallDiagonal ) )
+        m_undoData[col][row][Style::SFallDiagonal] = format->fallDiagonalColor( col, row );
+      if ( format->hasProperty( Style::SGoUpDiagonal ) )
+        m_undoData[col][row][Style::SGoUpDiagonal] = format->goUpDiagonalColor( col, row );
+      if ( format->hasProperty( Style::SBottomBorder ) )
+        m_undoData[col][row][Style::SBottomBorder] = format->bottomBorderColor( col, row );
+      if ( format->hasProperty( Style::SRightBorder ) )
+        m_undoData[col][row][Style::SRightBorder] = format->rightBorderColor( col, row );
+    }
+
+    if ( format->hasProperty( Style::STopBorder ) )
+      format->setTopBorderColor( m_color );
+    if ( format->hasProperty( Style::SLeftBorder ) )
+      format->setLeftBorderColor( m_color );
+    if ( format->hasProperty( Style::SFallDiagonal ) )
+      format->setFallDiagonalColor( m_color );
+    if ( format->hasProperty( Style::SGoUpDiagonal ) )
+      format->setGoUpDiagonalColor( m_color );
+    if ( format->hasProperty( Style::SBottomBorder ) )
+      format->setBottomBorderColor( m_color );
+    if ( format->hasProperty( Style::SRightBorder ) )
+      format->setRightBorderColor( m_color );
+  }
+  else
+  {
+    if ( format->hasProperty( Style::STopBorder ) )
+      format->setTopBorderColor( m_undoData[col][row][Style::STopBorder] );
+    if ( format->hasProperty( Style::SLeftBorder ) )
+      format->setLeftBorderColor( m_undoData[col][row][Style::SLeftBorder] );
+    if ( format->hasProperty( Style::SFallDiagonal ) )
+      format->setFallDiagonalColor( m_undoData[col][row][Style::SFallDiagonal] );
+    if ( format->hasProperty( Style::SGoUpDiagonal ) )
+      format->setGoUpDiagonalColor( m_undoData[col][row][Style::SGoUpDiagonal] );
+    if ( format->hasProperty( Style::SBottomBorder ) )
+      format->setBottomBorderColor( m_undoData[col][row][Style::SBottomBorder] );
+    if ( format->hasProperty( Style::SRightBorder ) )
+      format->setRightBorderColor( m_undoData[col][row][Style::SRightBorder] );
   }
 }
 
