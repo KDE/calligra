@@ -183,7 +183,12 @@ enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
 /**
  * The types of horizontal align
  */
-enum HorizontalAlign { NoAlign, LeftAlign, CenterAlign, RightAlign };
+enum HorizontalAlign { 
+    NoHorizontalAlign, 
+    LeftHorizontalAlign, 
+    CenterHorizontalAlign, 
+    RightHorizontalAlign 
+};
 
 /**
  * each index has its own number.

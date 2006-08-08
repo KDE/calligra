@@ -34,8 +34,8 @@ using namespace std;
 
 FractionElement::FractionElement(BasicElement* parent) : BasicElement(parent),
                                                          m_lineThicknessType( NoSize ),
-                                                         m_numAlign( NoAlign ),
-                                                         m_denomAlign( NoAlign ),
+                                                         m_numAlign( NoHorizontalAlign ),
+                                                         m_denomAlign( NoHorizontalAlign ),
                                                          m_customBevelled( false )
 {
     numerator = new SequenceElement(this);
@@ -470,25 +470,25 @@ bool FractionElement::readAttributesFromMathMLDom(const QDomElement& element)
     QString numalignStr = element.attribute( "numalign" ).lower();
     if ( ! numalignStr.isNull() ) {
         if ( numalignStr == "left" ) {
-            m_numAlign = LeftAlign;
+            m_numAlign = LeftHorizontalAlign;
         }
         else if ( numalignStr == "center" ) {
-            m_numAlign = CenterAlign;
+            m_numAlign = CenterHorizontalAlign;
         }
         else if ( numalignStr == "right" ) {
-            m_numAlign = RightAlign;
+            m_numAlign = RightHorizontalAlign;
         }
     }
     QString denomalignStr = element.attribute( "denomalign" ).lower();
     if ( ! denomalignStr.isNull() ) {
         if ( denomalignStr == "left" ) {
-            m_denomAlign = LeftAlign;
+            m_denomAlign = LeftHorizontalAlign;
         }
         else if ( denomalignStr == "center" ) {
-            m_denomAlign = CenterAlign;
+            m_denomAlign = CenterHorizontalAlign;
         }
         else if ( denomalignStr == "right" ) {
-            m_denomAlign = RightAlign;
+            m_denomAlign = RightHorizontalAlign;
         }
     }
     QString bevelledStr = element.attribute( "bevelled" ).lower();
@@ -596,25 +596,25 @@ void FractionElement::writeMathMLAttributes( QDomElement& element )
     }
 
     switch ( m_numAlign ) {
-    case LeftAlign:
+    case LeftHorizontalAlign:
         element.setAttribute( "numalign", "left" );
         break;
-    case CenterAlign:
+    case CenterHorizontalAlign:
         element.setAttribute( "numalign", "center" );
         break;
-    case RightAlign:
+    case RightHorizontalAlign:
         element.setAttribute( "numalign", "right" );
         break;
     }
 
     switch ( m_denomAlign ) {
-    case LeftAlign:
+    case LeftHorizontalAlign:
         element.setAttribute( "denomalign", "left" );
         break;
-    case CenterAlign:
+    case CenterHorizontalAlign:
         element.setAttribute( "denomalign", "center" );
         break;
-    case RightAlign:
+    case RightHorizontalAlign:
         element.setAttribute( "denomalign", "right" );
         break;
     }
