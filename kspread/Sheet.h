@@ -989,6 +989,39 @@ public:
      */
     QString getWordSpelling(Selection* selection );
 
+    /**
+     * @return @c true if there are text value in cell
+     * so you can create list selection
+     * @param selection the selection of cells to work on
+     */
+    bool testListChoose(Selection* selection);
+
+    /**
+     * returns the text to be copied to the clipboard
+     * @param selection the selection of cells to work on
+     */
+    QString copyAsText(Selection* selection);
+
+    /**
+     * @param region the region to merge
+     * @param hor merge horizontally
+     * @param ver merge vertically
+     */
+    void mergeCells( const Region& region, bool hor = false, bool ver = false );
+    void dissociateCells( const Region &region );
+
+    bool areaIsEmpty(const Region& area, TestType _type = Text) ;
+
+    /**
+     * Deletes all cells in the given rectangle.
+     * The display is NOT updated by this function.
+     * This function can be used to clear an area before you paste something from the clipboard
+     * in this area.
+     *
+     * @param region The region that contains the cells that should be deleted
+     */
+    void deleteCells(const Region& region);
+
     //
     //END Methods related to manipulations of selected cells
     //
@@ -1020,7 +1053,7 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN UNSORTED METHODS !!!
+    //BEGIN Methods related to column/row operations
     //
 
     /**
@@ -1069,21 +1102,19 @@ public:
      */
     void emitHideColumn();
 
+    //
+    //END Methods related column/row operations
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN UNSORTED METHODS !!!
+    //
+
     /**
      * \todo TODO Stefan: remove after Undo.cpp|h and Commands.cpp|h are obsolete
      * \deprecated use MergeManipulator
      */
     void changeMergedCell( int /*m_iCol*/, int /*m_iRow*/, int /*m_iExtraX*/, int /*m_iExtraY*/) {}
-
-    /**
-     * @param region the region to merge
-     * @param hor merge horizontally
-     * @param ver merge vertically
-     */
-    void mergeCells( const Region& region, bool hor = false, bool ver = false );
-    void dissociateCells( const Region &region );
-
-    bool areaIsEmpty(const Region& area, TestType _type = Text) ;
 
     void refreshPreference() ;
 
@@ -1213,30 +1244,6 @@ public:
      * @see paste
      */
     bool testAreaPasteInsert()const;
-
-    /**
-     * Deletes all cells in the given rectangle.
-     * The display is NOT updated by this function.
-     * This function can be used to clear an area before you paste something from the clipboard
-     * in this area.
-     *
-     * @param region The region that contains the cells that should be deleted
-     */
-    void deleteCells(const Region& region);
-
-
-    /**
-     * @return @c true if there are text value in cell
-     * so you can create list selection
-     * @param selection the selection of cells to work on
-     */
-    bool testListChoose(Selection* selection);
-
-    /**
-     * returns the text to be copied to the clipboard
-     * @param selection the selection of cells to work on
-     */
-    QString copyAsText(Selection* selection);
 
     /**
      * Assume that the retangle 'src' was already selected. Then the user clicked on the
