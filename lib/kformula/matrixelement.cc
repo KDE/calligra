@@ -270,7 +270,9 @@ KFCInsertColumn::KFCInsertColumn( const QString& name, Container* document, Matr
 
 
 MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
-    : BasicElement(parent)
+    : BasicElement(parent),
+      m_rowNumber( 0 ),
+      m_align( NoAlign )
 {
     for (uint r = 0; r < rows; r++) {
         QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
@@ -834,6 +836,37 @@ bool MatrixElement::readContentFromDom(QDomNode& node)
     return true;
 }
 
+bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
+{
+    if ( ! BasicElement::readAttributesFromMathMLDom( element ) ) {
+        return false;
+    }
+
+    QString alignStr = element.attribute( "align" ).lower();
+    if ( ! alignStr.isNull() ) {
+        if ( alignStr.find( "top" ) != -1 ) {
+            m_align = TopAlign;
+        }
+        else if ( alignStr.find( "bottom" ) != -1 ) {
+            m_align = BottomAlign;
+        }
+        else if ( alignStr.find( "center" ) != -1 ) {
+            m_align = CenterAlign;
+        }
+        else if ( alignStr.find( "baseline" ) != -1 ) {
+            m_align = BaselineAlign;
+        }
+        else if ( alignStr.find( "axis" ) != -1 ) {
+            m_align = AxisAlign;
+        }
+        int index = alignStr.findRev( ' ' );
+        if ( index != -1 ) {
+            m_rowNumber = alignStr.right( index + 1 ).toUInt();
+        }
+    }
+    return true;
+}
+
 /**
  * Reads our content from the MathML node. Sets the node to the next node
  * that needs to be read. It is sometimes needed to read more than one node
@@ -1000,6 +1033,33 @@ void MatrixElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasis
     }
 
     parent.appendChild( de );
+}
+
+void MatrixElement::writeMathMLAttributes( QDomElement& element )
+{
+    QString rownumber;
+    if ( m_rowNumber ) {
+        rownumber = QString( " %1" ).arg( m_rowNumber );
+    }
+    switch ( m_align ) {
+    case TopAlign:
+        element.setAttribute( "align", "top" + rownumber );
+        break;
+    case BottomAlign:
+        element.setAttribute( "align", "bottom" + rownumber );
+        break;
+    case CenterAlign:
+        element.setAttribute( "align", "center" + rownumber );
+        break;
+    case BaselineAlign:
+        element.setAttribute( "align", "baseline" + rownumber );
+        break;
+    case AxisAlign:
+        element.setAttribute( "align", "axis" + rownumber );
+        break;
+    default:
+        break;
+    }
 }
 
 

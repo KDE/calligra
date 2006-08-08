@@ -39,6 +39,7 @@ class MatrixElement : public BasicElement {
     friend class KFCRemoveRow;
     friend class MatrixSequenceElement;
 
+    enum VerticalAlign { NoAlign, TopAlign, BottomAlign, CenterAlign, BaselineAlign, AxisAlign };
     MatrixElement& operator=( const MatrixElement& ) { return *this; }
 public:
     MatrixElement(uint rows = 1, uint columns = 1, BasicElement* parent = 0);
@@ -227,6 +228,8 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    virtual bool readAttributesFromMathMLDom( const QDomElement& element );
+
     /**
      * Reads our content from the MathML node. Sets the node to the next node
      * that needs to be read. It is sometimes needed to read more than one node
@@ -236,6 +239,7 @@ protected:
 	virtual int readContentFromMathMLDom(QDomNode& node);
 
 private:
+    void writeMathMLAttributes( QDomElement& element );
 
     MatrixSequenceElement* getElement(uint row, uint column)
         { return content.at(row)->at(column); }
@@ -251,6 +255,13 @@ private:
      * The elements we contain.
      */
     QPtrList< QPtrList< MatrixSequenceElement > > content;
+
+    /**
+     * MathML Attributes. See Section 3.5.1.2
+     */
+    int m_rowNumber;
+    VerticalAlign m_align;
+
 };
 
 
