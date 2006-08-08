@@ -593,6 +593,8 @@ void FractionElement::writeMathMLAttributes( QDomElement& element )
     case PixelSize:
         element.setAttribute( "linethickness", QString( "%1px" ).arg( m_lineThickness ) );
         break;
+    default:
+        break;
     }
 
     switch ( m_numAlign ) {
@@ -605,6 +607,8 @@ void FractionElement::writeMathMLAttributes( QDomElement& element )
     case RightHorizontalAlign:
         element.setAttribute( "numalign", "right" );
         break;
+    default:
+        break;
     }
 
     switch ( m_denomAlign ) {
@@ -616,6 +620,8 @@ void FractionElement::writeMathMLAttributes( QDomElement& element )
         break;
     case RightHorizontalAlign:
         element.setAttribute( "denomalign", "right" );
+        break;
+    default:
         break;
     }
 
@@ -637,7 +643,7 @@ double FractionElement::lineThickness( const ContextStyle& context, double facto
     case PixelSize:
         linethickness = m_lineThickness;
         break;
-    case NoSize:
+    default:
         break;
     }
     return linethickness;

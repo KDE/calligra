@@ -164,6 +164,8 @@ bool TokenStyleElement::readAttributesFromMathMLDom( const QDomElement& element 
             case PixelSize:
                 setPixelSize( s );
                 break;
+            default:
+                break;
             }
         }
     }
@@ -211,6 +213,8 @@ bool TokenStyleElement::readAttributesFromMathMLDom( const QDomElement& element 
                 break;
             case PixelSize:
                 setPixelSize( s, true );
+                break;
+            default:
                 break;
             }
         }
@@ -346,6 +350,8 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element )
     case PixelSize:
         element.setAttribute( "mathsize", QString( "%1px" ).arg( m_mathSize ) );
         break;
+    default:
+        break;
     }
 
     // mathcolor attribute
@@ -369,6 +375,8 @@ void TokenStyleElement::writeMathMLAttributes( QDomElement& element )
         break;
     case PixelSize:
         element.setAttribute( "fontsize", QString( "%3px" ).arg( m_fontSize ) );
+        break;
+    default:
         break;
     }
 
@@ -534,9 +542,11 @@ double TokenStyleElement::sizeFactor( const ContextStyle& context, double factor
             return m_fontSize;
         case PixelSize:
             return context.pixelYToPt( m_fontSize ) / basesize;
-        case NoSize:
+        default:
             return factor;
         }
+    default:
+        break;
     }
     kdWarning( DEBUGID ) << k_funcinfo << " Unknown SizeType\n";
     return factor;

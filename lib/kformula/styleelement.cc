@@ -265,6 +265,8 @@ void StyleElement::writeSizeAttribute( QDomElement element, const QString& str, 
     case PixelSize:
         element.setAttribute( str, QString( "%1px" ).arg( s ) );
         break;
+    default:
+        break;
     }
 }
 

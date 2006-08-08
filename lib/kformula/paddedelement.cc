@@ -257,6 +257,8 @@ void PaddedElement::writeSizeAttribute( QDomElement element, const QString& str,
     case PixelSize:
         element.setAttribute( str, prefix + QString( "%1px" ).arg( s ) );
         break;
+    default:
+        break;
     }
 }
 
