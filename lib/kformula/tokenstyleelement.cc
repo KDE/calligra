@@ -444,13 +444,19 @@ void TokenStyleElement::setPixelSize( double px, bool fontsize )
 
 void TokenStyleElement::setStyleVariant( StyleAttributes& style )
 {
-    if ( customMathVariant() ) {
-        style.setCharFamily ( charFamily() );
-        style.setCharStyle( charStyle() );
+    if ( customMathVariant() || style.customMathVariant() ) {
         style.setCustomMathVariant ( true );
         style.setCustomFontWeight( false );
         style.setCustomFontStyle( false );
         style.setCustomFont( false );
+        if ( customMathVariant() ) {
+            style.setCharFamily ( charFamily() );
+            style.setCharStyle( charStyle() );
+        }
+        else {
+            style.setCharFamily( style.charFamily() );
+            style.setCharStyle( style.charStyle() );
+        }
     }
     else {
         style.setCustomMathVariant( false );
