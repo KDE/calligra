@@ -572,11 +572,53 @@ QString FractionElement::formulaString()
 void FractionElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mfrac": "mfrac" );
-    if ( !withLine() ) // why is this no function?
-        de.setAttribute( "linethickness", 0 );
+    writeMathMLAttributes( de );
     numerator->writeMathML( doc, de, oasisFormat );
     denominator->writeMathML( doc, de, oasisFormat );
     parent.appendChild( de );
+}
+
+void FractionElement::writeMathMLAttributes( QDomElement& element )
+{
+    switch ( m_lineThicknessType ) {
+    case AbsoluteSize:
+        element.setAttribute( "linethickness", QString( "%1pt" ).arg( m_lineThickness ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( "linethickness", QString( "%1%" ).arg( m_lineThickness * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( "linethickness", QString( "%1px" ).arg( m_lineThickness ) );
+        break;
+    }
+
+    switch ( m_numAlign ) {
+    case LeftAlign:
+        element.setAttribute( "numalign", "left" );
+        break;
+    case CenterAlign:
+        element.setAttribute( "numalign", "center" );
+        break;
+    case RightAlign:
+        element.setAttribute( "numalign", "right" );
+        break;
+    }
+
+    switch ( m_denomAlign ) {
+    case LeftAlign:
+        element.setAttribute( "denomalign", "left" );
+        break;
+    case CenterAlign:
+        element.setAttribute( "denomalign", "center" );
+        break;
+    case RightAlign:
+        element.setAttribute( "denomalign", "right" );
+        break;
+    }
+
+    if ( m_customBevelled ) {
+        element.setAttribute( "bevelled", m_bevelled ? "true" : "false" );
+    }
 }
 
 KFORMULA_NAMESPACE_END

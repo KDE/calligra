@@ -231,6 +231,7 @@ protected:
 	virtual int readContentFromMathMLDom(QDomNode& node);
 
 private:
+    void writeMathMLAttributes( QDomElement& element );
 
     bool withLine() { return m_lineThicknessType != RelativeSize || m_lineThickness != 0.0; }
 
