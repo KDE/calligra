@@ -41,6 +41,7 @@ private:
     void readSizeAttribute( const QString& str, SizeType* st, double* s );
     double getSize( const QString& str, SizeType* st );
     double str2size( const QString& str, SizeType* st, uint index, SizeType type );
+    void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );
 
     SizeType m_widthType;
     double m_width;

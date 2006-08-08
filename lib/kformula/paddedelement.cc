@@ -66,6 +66,10 @@ void PaddedElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasis
 
 void PaddedElement::writeMathMLAttributes( QDomElement& element )
 {
+    writeSizeAttribute( element, "width", m_widthType, m_width );
+    writeSizeAttribute( element, "lspace", m_lspaceType, m_lspace );
+    writeSizeAttribute( element, "height", m_heightType, m_height );
+    writeSizeAttribute( element, "depth", m_depthType, m_depth );
 }
 
 void PaddedElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
@@ -155,6 +159,30 @@ double PaddedElement::str2size( const QString& str, SizeType *st, uint index, Si
         *st = NoSize;
     }
     return -1;
+}
+
+void PaddedElement::writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s )
+{
+    QString prefix;
+    if ( m_relative ) {
+        s < 0 ? prefix = "-" : prefix = "+" ;
+    }
+    switch ( st ) {
+    case WidthRelativeSize:
+        element.setAttribute( str, prefix + QString( "%1 width" ).arg( s ) );
+        break;
+    case HeightRelativeSize:
+        element.setAttribute( str, prefix + QString( "%1 height" ).arg( s ) );
+    case AbsoluteSize:
+        element.setAttribute( str, prefix + QString( "%1pt" ).arg( s ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( str, prefix + QString( "%1%" ).arg( s * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( str, prefix + QString( "%1px" ).arg( s ) );
+        break;
+    }
 }
 
 KFORMULA_NAMESPACE_END
