@@ -275,6 +275,8 @@ MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
       m_align( NoAlign ),
       m_widthType( NoSize ),
       m_frame( NoLine ),
+      m_frameHSpacing( NoSize ),
+      m_frameVSpacing( NoSize ),
       m_side( NoSide ),
       m_customEqualRows( false ),
       m_customEqualColumns( false ),
@@ -1023,6 +1025,20 @@ bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
             m_frame = DashedLine;
         }
     }
+    QString framespacingStr = element.attribute( "framespacing" );
+    if ( ! framespacingStr.isNull() ) {
+        QStringList list = QStringList::split( ' ', framespacingStr );
+        m_frameHSpacing = getSize( list[0], &m_frameHSpacingType );
+        if ( m_frameHSpacingType == NoSize ) {
+            m_frameHSpacingType = getSpace( list[0] );
+        }
+        if ( list.count() > 1 ) {
+            m_frameVSpacing = getSize( list[1], &m_frameVSpacingType );
+            if ( m_frameVSpacingType == NoSize ) {
+                m_frameVSpacingType = getSpace( list[1] );
+            }
+        }
+    }
     QString equalrowsStr = element.attribute( "equalrows" ).stripWhiteSpace().lower();
     if ( ! equalrowsStr.isNull() ) {
         m_customEqualRows = true;
@@ -1550,6 +1566,120 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         break;
     default:
         break;
+    }
+    QString framespacing;
+    switch ( m_frameHSpacingType ) {
+    case AbsoluteSize:
+        framespacing.append( QString( "%1pt " ).arg( m_frameHSpacing ) );
+        break;
+    case RelativeSize:
+        framespacing.append( QString( "%1% " ).arg( m_frameHSpacing * 100.0 ) );
+        break;
+    case PixelSize:
+        framespacing.append( QString( "%1px " ).arg( m_frameHSpacing ) );
+        break;
+    case NegativeVeryVeryThinMathSpace:
+        framespacing.append( "negativeveryverythinmathspace " );
+        break;
+    case NegativeVeryThinMathSpace:
+        framespacing.append( "negativeverythinmathspace " );
+        break;
+    case NegativeThinMathSpace:
+        framespacing.append( "negativethinmathspace " );
+        break;
+    case NegativeMediumMathSpace:
+        framespacing.append( "negativemediummathspace " );
+        break;
+    case NegativeThickMathSpace:
+        framespacing.append( "negativethickmathspace " );
+        break;
+    case NegativeVeryThickMathSpace:
+        framespacing.append( "negativeverythickmathspace " );
+        break;
+    case NegativeVeryVeryThickMathSpace:
+        framespacing.append( "negativeveryverythickmathspace " );
+        break;
+    case VeryVeryThinMathSpace:
+        framespacing.append( "veryverythinmathspace " );
+        break;
+    case VeryThinMathSpace:
+        framespacing.append( "verythinmathspace " );
+        break;
+    case ThinMathSpace:
+        framespacing.append( "thinmathspace " );
+        break;
+    case MediumMathSpace:
+        framespacing.append( "mediummathspace " );
+        break;
+    case ThickMathSpace:
+        framespacing.append( "thickmathspace " );
+        break;
+    case VeryThickMathSpace:
+        framespacing.append( "verythickmathspace " );
+        break;
+    case VeryVeryThickMathSpace:
+        framespacing.append( "veryverythickmathspace " );
+        break;
+    default:
+        break;
+    }
+    switch ( m_frameVSpacingType ) {
+    case AbsoluteSize:
+        framespacing.append( QString( "%1pt " ).arg( m_frameVSpacing ) );
+        break;
+    case RelativeSize:
+        framespacing.append( QString( "%1% " ).arg( m_frameVSpacing * 100.0 ) );
+        break;
+    case PixelSize:
+        framespacing.append( QString( "%1px " ).arg( m_frameVSpacing ) );
+        break;
+    case NegativeVeryVeryThinMathSpace:
+        framespacing.append( "negativeveryverythinmathspace " );
+        break;
+    case NegativeVeryThinMathSpace:
+        framespacing.append( "negativeverythinmathspace " );
+        break;
+    case NegativeThinMathSpace:
+        framespacing.append( "negativethinmathspace " );
+        break;
+    case NegativeMediumMathSpace:
+        framespacing.append( "negativemediummathspace " );
+        break;
+    case NegativeThickMathSpace:
+        framespacing.append( "negativethickmathspace " );
+        break;
+    case NegativeVeryThickMathSpace:
+        framespacing.append( "negativeverythickmathspace " );
+        break;
+    case NegativeVeryVeryThickMathSpace:
+        framespacing.append( "negativeveryverythickmathspace " );
+        break;
+    case VeryVeryThinMathSpace:
+        framespacing.append( "veryverythinmathspace " );
+        break;
+    case VeryThinMathSpace:
+        framespacing.append( "verythinmathspace " );
+        break;
+    case ThinMathSpace:
+        framespacing.append( "thinmathspace " );
+        break;
+    case MediumMathSpace:
+        framespacing.append( "mediummathspace " );
+        break;
+    case ThickMathSpace:
+        framespacing.append( "thickmathspace " );
+        break;
+    case VeryThickMathSpace:
+        framespacing.append( "verythickmathspace " );
+        break;
+    case VeryVeryThickMathSpace:
+        framespacing.append( "veryverythickmathspace " );
+        break;
+    default:
+        break;
+    }
+    if ( ! framespacing.isNull() ) {
+        element.setAttribute( "framespacing", framespacing.stripWhiteSpace() );
     }
     if ( m_customEqualRows ) {
         element.setAttribute( "equalrows", m_equalRows ? "true" : "false" );

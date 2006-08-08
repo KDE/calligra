@@ -276,6 +276,10 @@ private:
     QValueList< LineType > m_rowLines;
     QValueList< LineType > m_columnLines;
     LineType m_frame;
+    SizeType m_frameHSpacingType;
+    double m_frameHSpacing;
+    SizeType m_frameVSpacingType;
+    double m_frameVSpacing;
     SideType m_side;
     bool m_equalRows;
     bool m_customEqualRows;
