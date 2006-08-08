@@ -996,38 +996,6 @@ void Sheet::formulaChanged(Cell *cell)
     d->workbook->dependencyManager()->regionChanged (region);
 }
 
-void Sheet::setSelectionUpperLower( Selection* selectionInfo, int _type )
-{
-  CaseManipulator::CaseMode m;
-  QString name;
-  if (_type == -1) {
-    m = CaseManipulator::Lower;
-    name = i18n ("Switch to lowercase");
-  }
-  else if (_type == 1) {
-    m = CaseManipulator::Upper;
-    name = i18n ("Switch to uppercase");
-  }
-  else
-    return;  // wrong type
-  CaseManipulator *manipulator = new CaseManipulator;
-  manipulator->setSheet (this);
-  manipulator->setName (name);
-  manipulator->changeMode (m);
-  manipulator->add (*selectionInfo);
-  manipulator->execute ();
-}
-
-void Sheet::setSelectionfirstLetterUpper( Selection* selectionInfo)
-{
-  CaseManipulator *manipulator = new CaseManipulator;
-  manipulator->setSheet (this);
-  manipulator->setName (i18n ("First letter uppercase"));
-  manipulator->changeMode (CaseManipulator::FirstUpper);
-  manipulator->add (*selectionInfo);
-  manipulator->execute ();
-}
-
 void Sheet::slotAreaModified (const QString &name)
 {
   d->workbook->dependencyManager()->areaModified (name);

@@ -968,17 +968,6 @@ public:
     void setArrayFormula (Selection* selection, const QString &_text);
 
     /**
-     *change string to upper case if _type equals 1
-     * or change string to lower if _type equals -1
-     */
-    void setSelectionUpperLower( Selection* selection, int _type );
-
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void setSelectionfirstLetterUpper( Selection* selection);
-
-    /**
      * @param selection the selection of cells to work on
      * @param undo create undo entry, if @c true
      */

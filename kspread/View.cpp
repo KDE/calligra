@@ -3042,42 +3042,32 @@ void View::setSelectionFontSize( int deltaSize )
 
 void View::lower()
 {
-  if ( !d->activeSheet  )
-    return;
-
-  doc()->emitBeginOperation( false );
-
-  d->activeSheet->setSelectionUpperLower( selectionInfo(), -1 );
-  updateEditWidget();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  CaseManipulator* manipulator = new CaseManipulator;
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Switch to lowercase" ) );
+  manipulator->changeMode( CaseManipulator::Lower );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::upper()
 {
-  if ( !d->activeSheet  )
-    return;
-
-  doc()->emitBeginOperation( false );
-
-  d->activeSheet->setSelectionUpperLower( selectionInfo(), 1 );
-  updateEditWidget();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  CaseManipulator* manipulator = new CaseManipulator;
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Switch to uppercase" ) );
+  manipulator->changeMode( CaseManipulator::Upper );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::firstLetterUpper()
 {
-  if ( !d->activeSheet  )
-    return;
-  doc()->emitBeginOperation( false );
-  d->activeSheet->setSelectionfirstLetterUpper( selectionInfo() );
-  updateEditWidget();
-
-  markSelectionAsDirty();
-  doc()->emitEndOperation();
+  CaseManipulator *manipulator = new CaseManipulator;
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "First letter uppercase" ) );
+  manipulator->changeMode( CaseManipulator::FirstUpper );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::verticalText(bool b)
