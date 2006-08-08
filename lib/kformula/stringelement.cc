@@ -25,6 +25,28 @@ KFORMULA_NAMESPACE_BEGIN
 StringElement::StringElement( BasicElement* parent ) : TokenElement( parent ) {
 }
 
+bool StringElement::readAttributesFromMathMLDom(const QDomElement& element)
+{
+    if ( ! BasicElement::readAttributesFromMathMLDom( element ) ) {
+        return false;
+    }
+
+    if ( ! inherited::readAttributesFromMathMLDom( element ) ) {
+        return false;
+    }
+
+    m_lquote = element.attribute( "lquote" );
+    if ( ! m_lquote.isNull() ) {
+        m_customLquote = true;
+    }
+    m_rquote = element.attribute( "rquote" );
+    if ( ! m_rquote.isNull() ) {
+        m_customRquote = true;
+    }
+
+    return true;
+}
+
 int StringElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) 
 {
     int count = inherited::buildChildrenFromMathMLDom( list, n );
@@ -49,6 +71,17 @@ void StringElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasis
     writeMathMLAttributes( de );
     writeMathMLContent( doc, de, oasisFormat );
     parent.appendChild( de );
+}
+
+void StringElement::writeMathMLAttributes( QDomElement& element )
+{
+    inherited::writeMathMLAttributes( element );
+    if ( m_customLquote ) {
+        element.setAttribute( "lquote", m_lquote );
+    }
+    if ( m_customRquote ) {
+        element.setAttribute( "rquote", m_rquote );
+    }
 }
 
 void StringElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
