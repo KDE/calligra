@@ -117,6 +117,9 @@ void TextElement::calcSizes( const ContextStyle& context,
     luPt mySize = context.getAdjustedSize( tstyle, factor );
     kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
+    setCharStyle( style.charStyle() );
+    setCharFamily( style.charFamily() );
+
     QFont font = getFont( context, style );
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
 
