@@ -820,6 +820,11 @@ DatabaseProperties& Connection::databaseProperties()
 	return *d->dbProperties;
 }
 
+Q3ValueList<int> Connection::tableIds()
+{
+	return objectIds(KexiDB::TableObjectType);
+}
+
 Q3ValueList<int> Connection::queryIds()
 {
 	return objectIds(KexiDB::QueryObjectType);

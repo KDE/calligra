@@ -127,13 +127,17 @@ static int alteringTypeForProperty(const QCString& propertyName)
 #define I(name, type) \
 	KexiDB_alteringTypeForProperty->insert(QCString(name).lower(), (int)AlterTableHandler::type)
 #define I2(name, type1, type2) \
-	KexiDB_alteringTypeForProperty->insert(QCString(name).lower(), (int)AlterTableHandler::type1|(int)AlterTableHandler::type2)
+	flag = (int)AlterTableHandler::type1|(int)AlterTableHandler::type2; \
+	if (flag & AlterTableHandler::PhysicalAlteringRequired) \
+		flag |= AlterTableHandler::MainSchemaAlteringRequired; \
+	KexiDB_alteringTypeForProperty->insert(QCString(name).lower(), flag)
 
 	/* useful links: 
 		http://dev.mysql.com/doc/refman/5.0/en/create-table.html
 	*/
 		// ExtendedSchemaAlteringRequired is here because when the field is renamed, 
 		// we need to do the same rename in extended table schema: <field name="...">
+		int flag;
 		I2("name", PhysicalAlteringRequired, MainSchemaAlteringRequired);
 		I2("type", PhysicalAlteringRequired, DataConversionRequired);
 		I("caption", MainSchemaAlteringRequired);
@@ -609,12 +613,17 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
 			KexiDB::Field f = field();
 			if (KexiDB::setFieldProperties( f, values )) {
 				field() = f;
+				field().debug();
 #ifdef KEXI_DEBUG_GUI
 				KexiUtils::addAlterTableActionDebug(
 					QString("** Property-set actions moved to field definition itself:\n")+field().debugString(), 0);
 #endif
 			}
 			else {
+#ifdef KEXI_DEBUG_GUI
+				KexiUtils::addAlterTableActionDebug(
+					QString("** Failed to set properties for field ")+field().debugString(), 0);
+#endif
 				KexiDBWarn << "AlterTableHandler::InsertFieldAction::simplifyActions(): KexiDB::setFieldProperties() failed!" << endl;
 			}
 		}
@@ -632,9 +641,8 @@ tristate AlterTableHandler::InsertFieldAction::updateTableSchema(TableSchema &ta
 	QMap<QString, QString>& fieldMap)
 {
 	//in most cases we won't add the field to fieldMap
-	Q_UNUSED(fieldMap);
 	Q_UNUSED(field);
-//! @todo add it only when there should be fixed value (e.g .default) set for this new field...
+//! @todo add it only when there should be fixed value (e.g. default) set for this new field...
 	fieldMap.remove( this->field().name() );
 	table.insertField(index(), new Field(this->field()));
 	return true;
@@ -899,16 +907,22 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 			continue;
 		//remember the current Field object because soon we may be unable to find it by name:
 		FieldActionBase *fieldAction = dynamic_cast<FieldActionBase*>(action);
-		if (!fieldAction)
+		if (!fieldAction) {
 			currentField = 0;
+		}
 		else {
 			if (lastUID != fieldAction->uid()) {
 				currentField = newTable->field( fieldAction->fieldName() );
 				lastUID = currentField ? fieldAction->uid() : -1;
 			}
+			InsertFieldAction *insertFieldAction = dynamic_cast<InsertFieldAction*>(action);
+			if (insertFieldAction && insertFieldAction->index()>(int)newTable->fieldCount()) {
+				//update index: there can be empty rows
+				insertFieldAction->setIndex(newTable->fieldCount());
+			}
 		}
 		result = action->updateTableSchema(*newTable, currentField, fieldMap);
-		if (!result || ~result) {
+		if (result!=true) {
 			if (recreateTable)
 				delete newTable;
 			return 0;
@@ -955,14 +969,41 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		// The order is based on the order of the source table fields.
 		// Notes:
 		// -Some source fields can be skipped in case when there are deleted fields.
-		// -Some destination fields can be skipped in case when there are new empty fields without fixed/default value.
+		// -Some destination fields can be skipped in case when there 
+		//  are new empty fields without fixed/default value.
 		QString sql = QString("INSERT INTO %1 (").arg(d->conn->escapeIdentifier(newTable->name()));
 		//insert list of dest. fields
 		bool first = true;
 		QString sourceFields;
 		foreach_list( Field::ListIterator, it, newTable->fieldsIterator() ) {
-			QString renamedFieldName( fieldMap[ it.current()->name() ] );
+			Field * const f = it.current();
+			QString renamedFieldName( fieldMap[ f->name() ] );
+			QString sourceSQLString;
 			if (!renamedFieldName.isEmpty()) {
+				//this field should be renamed
+				sourceSQLString = d->conn->escapeIdentifier(renamedFieldName);
+			}
+			else if (!f->defaultValue().isNull()) {
+				//this field has a default value defined
+//! @todo support expressions (eg. TODAY()) as a default value
+//! @todo this field can be notNull or notEmpty - check whether the default is ok 
+//!       (or do this checking also in the Table Designer?)
+				sourceSQLString = d->conn->driver()->valueToSQL( f->type(), f->defaultValue() );
+			}
+			else if (f->isNotNull()) {
+				//this field cannot be null
+				sourceSQLString = d->conn->driver()->valueToSQL( 
+					f->type(), KexiDB::emptyValueForType( f->type() ) );
+			}
+			else if (f->isNotEmpty()) {
+				//this field cannot be empty - use any nonempty value..., e.g. " " for text or 0 for number
+				sourceSQLString = d->conn->driver()->valueToSQL( 
+					f->type(), KexiDB::notEmptyValueForType( f->type() ) );
+			}
+//! @todo support unique, validatationRule, unsigned flags...
+//! @todo check for foreignKey values...
+
+			if (!sourceSQLString.isEmpty()) {
 				if (first) {
 					first = false;
 				}
@@ -970,8 +1011,8 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 					sql.append( ", " );
 					sourceFields.append( ", " );
 				}
-				sql.append( d->conn->escapeIdentifier( it.current()->name() ) );
-				sourceFields.append( d->conn->escapeIdentifier(renamedFieldName) );
+				sql.append( d->conn->escapeIdentifier( f->name() ) );
+				sourceFields.append( sourceSQLString );
 			}
 		}
 		sql.append(QString(") SELECT ") + sourceFields + " FROM " + oldTable->name());
@@ -1007,7 +1048,7 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 			foreach_list(QDictIterator<char>, it, fieldsWithChangedMainSchema) {
 				Field *f = newTable->field( it.currentKey() );
 				if (f) {
-					if (d->conn->storeMainFieldSchema(f)) {
+					if (!d->conn->storeMainFieldSchema(f)) {
 						setError(d->conn);
 			//! @todo delete newTable...
 						result = false;
