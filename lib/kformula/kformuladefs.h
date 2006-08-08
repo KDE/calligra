@@ -178,7 +178,28 @@ enum SpaceWidth { THIN, MEDIUM, THICK, QUAD, NEGTHIN };
 /**
  * The types of MathML horizontal or vertical sizes we know
  */
-enum SizeType { NoSize, AbsoluteSize, RelativeSize, PixelSize };
+enum SizeType { 
+    NoSize, 
+    AutoSize, 
+    FitSize, 
+    RelativeSize, 
+    AbsoluteSize, 
+    PixelSize,
+    NegativeVeryVeryThinMathSpace,
+    NegativeVeryThinMathSpace,
+    NegativeThinMathSpace,
+    NegativeMediumMathSpace,
+    NegativeThickMathSpace,
+    NegativeVeryThickMathSpace,
+    NegativeVeryVeryThickMathSpace,
+    VeryVeryThinMathSpace,
+    VeryThinMathSpace,
+    ThinMathSpace,
+    MediumMathSpace,
+    ThickMathSpace,
+    VeryThickMathSpace,
+    VeryVeryThickMathSpace
+};
 
 /**
  * The types of horizontal align

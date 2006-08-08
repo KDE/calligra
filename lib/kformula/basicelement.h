@@ -478,6 +478,8 @@ protected:
      */
     double getSize( const QString& str, SizeType* st );
 
+    SizeType getSpace( const QString& str );
+
 private:
 
     /**

@@ -327,6 +327,54 @@ double BasicElement::getSize( const QString& str, SizeType* st )
     return str2size( str, st, str.length(),AbsoluteSize );
 }
 
+SizeType BasicElement::getSpace( const QString& str )
+{
+    if ( str == "negativeveryverythinmathspace" ) {
+        return NegativeVeryVeryThinMathSpace;
+    }
+    if ( str == "negativeverythinmathspace" ) {
+        return NegativeVeryThinMathSpace;
+    }
+    if ( str == "negativethinmathspace" ) {
+        return NegativeThinMathSpace;
+    }
+    if ( str == "negativemediummathspace" ) {
+        return NegativeMediumMathSpace;
+    }
+    if ( str == "negativethickmathspace" ) {
+        return NegativeThickMathSpace;
+    }
+    if ( str == "negativeverythickmathspace" ) {
+        return NegativeVeryThickMathSpace;
+    }
+    if ( str == "negativeveryverythickmathspace" ) {
+        return NegativeVeryVeryThickMathSpace;
+    }
+    if ( str == "veryverythinmathspace" ) {
+        return VeryVeryThinMathSpace;
+    }
+    if ( str == "verythinmathspace" ) {
+        return VeryThinMathSpace;
+    }
+    if ( str == "thinmathspace" ) {
+        return ThinMathSpace;
+    }
+    if ( str == "mediummathspace" ) {
+        return MediumMathSpace;
+    }
+    if ( str == "thickmathspace" ) {
+        return ThickMathSpace;
+    }
+    if ( str == "verythickmathspace" ) {
+        return VeryThickMathSpace;
+    }
+    if ( str == "veryverythickmathspace" ) {
+        return VeryVeryThickMathSpace;
+    }
+    return NoSize;
+}
+
+
 /**
  * Used internally by getSize()
  */
