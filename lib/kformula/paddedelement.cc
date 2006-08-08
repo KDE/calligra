@@ -168,63 +168,62 @@ double PaddedElement::readSizeAttribute( const QString& str, SizeType* st )
     if ( index != -1 ) {
         int index2 = str.find( "%" );
         if ( index2 != -1 ) {
-            return str2size( str, st, index2, WidthRelativeSize ) / 100.0;
+            return str2size( str.left( index2 ).stripWhiteSpace(), st, WidthRelativeSize ) / 100.0;
         }
-        return str2size( str, st, index, WidthRelativeSize );
+        return str2size( str.left( index ).stripWhiteSpace(), st, WidthRelativeSize );
     }
     index = str.find( "height" );
     if ( index != -1 ) {
         int index2 = str.find( "%" );
         if ( index2 != -1 ) {
-            return str2size( str, st, index2, HeightRelativeSize ) / 100.0;
+            return str2size( str.left( index2 ).stripWhiteSpace(), st, HeightRelativeSize ) / 100.0;
         }
-        return str2size( str, st, index, HeightRelativeSize );
+        return str2size( str.left( index ).stripWhiteSpace(), st, HeightRelativeSize );
     }
     index = str.find( "%" );
     if ( index != -1 ) {
-        return str2size( str, st, index, RelativeSize ) / 100.0;
+        return str2size( str.left( index ).stripWhiteSpace(), st, RelativeSize ) / 100.0;
     }
     index = str.find( "pt", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, AbsoluteSize );
+        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize );
     }
     index = str.find( "mm", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, AbsoluteSize ) * 72.0 / 20.54;
+        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize ) * 72.0 / 20.54;
     }
     index = str.find( "cm", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, AbsoluteSize ) * 72.0 / 2.54;
+        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize ) * 72.0 / 2.54;
     }
     index = str.find( "in", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, AbsoluteSize ) * 72.0;
+        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize ) * 72.0;
     }
     index = str.find( "em", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, RelativeSize );
+        return str2size( str.left( index ).stripWhiteSpace(), st, RelativeSize );
     }
     index = str.find( "ex", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, RelativeSize );
+        return str2size( str.left( index ).stripWhiteSpace(), st, RelativeSize );
     }
     index = str.find( "pc", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, AbsoluteSize ) * 12.0;
+        return str2size( str.left( index ).stripWhiteSpace(), st, AbsoluteSize ) * 12.0;
     }
     index = str.find( "px", 0, false );
     if ( index != -1 ) {
-        return str2size( str, st, index, PixelSize );
+        return str2size( str.left( index ).stripWhiteSpace(), st, PixelSize );
     }
     // If there's no unit, assume 'pt'
-    return str2size( str, st, str.length(), AbsoluteSize );
+    return str2size( str, st, AbsoluteSize );
 }
 
-double PaddedElement::str2size( const QString& str, SizeType *st, uint index, SizeType type )
+double PaddedElement::str2size( const QString& str, SizeType *st, SizeType type )
 {
-    QString num = str.left( index );
     bool ok;
-    double size = num.toDouble( &ok );
+    double size = str.toDouble( &ok );
     if ( ok ) {
         if ( st ) {
             *st = type;

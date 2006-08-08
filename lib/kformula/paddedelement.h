@@ -49,7 +49,7 @@ protected:
 private:
     double readSizeAttribute( const QString& str, SizeType* st );
     double getSize( const QString& str, SizeType* st );
-    double str2size( const QString& str, SizeType* st, uint index, SizeType type );
+    double str2size( const QString& str, SizeType* st, SizeType type );
     void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );
     luPixel calcSize( const ContextStyle& context, SizeType type,
                       double length, luPixel width, 
