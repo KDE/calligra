@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,13 +34,27 @@ KFORMULA_NAMESPACE_BEGIN
 
 
 SpaceElement::SpaceElement( SpaceWidth space, bool tab, BasicElement* parent )
-    : BasicElement( parent ), spaceWidth( space ), m_tab( tab )
+    : BasicElement( parent ), 
+      spaceWidth( space ), 
+      m_tab( tab ),
+      m_widthType( NoSize ),
+      m_heightType( NoSize ),
+      m_depthType( NoSize ),
+      m_lineBreak( NoBreakType )
 {
 }
 
 
 SpaceElement::SpaceElement( const SpaceElement& other )
-    : BasicElement( other ), spaceWidth( other.spaceWidth )
+    : BasicElement( other ),
+      spaceWidth( other.spaceWidth ),
+      m_widthType( other.m_widthType ),
+      m_width( other.m_width ),
+      m_heightType( other.m_heightType ),
+      m_height( other.m_height ),
+      m_depthType( other.m_depthType ),
+      m_depth( other.m_depth ),
+      m_lineBreak( other.m_lineBreak )
 {
 }
 
@@ -164,6 +179,50 @@ bool SpaceElement::readAttributesFromDom( QDomElement element )
 bool SpaceElement::readContentFromDom(QDomNode& node)
 {
     return BasicElement::readContentFromDom( node );
+}
+
+bool SpaceElement::readAttributesFromMathMLDom(const QDomElement& element)
+{
+    if ( ! BasicElement::readAttributesFromMathMLDom( element ) ) {
+        return false;
+    }
+
+    QString widthStr = element.attribute( "width" ).stripWhiteSpace().lower();
+    if ( ! widthStr.isNull() ) {
+        m_width = getSize( widthStr, &m_widthType );
+        if ( m_widthType == NoSize ) {
+            m_widthType = getSpace( widthStr );
+        }
+    }
+    QString heightStr = element.attribute( "height" ).stripWhiteSpace().lower();
+    if ( ! heightStr.isNull() ) {
+        m_height = getSize( heightStr, &m_heightType );
+    }
+    QString depthStr = element.attribute( "depth" ).stripWhiteSpace().lower();
+    if ( ! depthStr.isNull() ) {
+        m_depth = getSize( depthStr, &m_depthType );
+    }
+    QString linebreakStr = element.attribute( "linebreak" ).stripWhiteSpace().lower();
+    if ( ! linebreakStr.isNull() ) {
+        if ( linebreakStr == "auto" ) {
+            m_lineBreak = AutoBreak;
+        }
+        else if ( linebreakStr == "newline" ) {
+            m_lineBreak = NewLineBreak;
+        }
+        else if ( linebreakStr == "indentingnewline" ) {
+            m_lineBreak = IndentingNewLineBreak;
+        }
+        else if ( linebreakStr == "nobreak" ) {
+            m_lineBreak = NoBreak;
+        }
+        else if ( linebreakStr == "goodbreak" ) {
+            m_lineBreak = GoodBreak;
+        }
+        else if ( linebreakStr == "badbreak" ) {
+            m_lineBreak = BadBreak;
+        }
+    }
 }
 
 void SpaceElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )

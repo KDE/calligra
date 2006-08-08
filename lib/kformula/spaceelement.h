@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,6 +36,15 @@ KFORMULA_NAMESPACE_BEGIN
  * A element that represents a space.
  */
 class SpaceElement : public BasicElement {
+    enum LineBreakType {
+        NoBreakType,
+        AutoBreak,
+        NewLineBreak,
+        IndentingNewLineBreak,
+        NoBreak,
+        GoodBreak,
+        BadBreak
+    };
     SpaceElement operator=( const SpaceElement& ) { return *this; }
 public:
 
@@ -128,6 +138,12 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    /**
+     * Reads our attributes from the MathML element.
+     * Returns false if it failed.
+     */
+	virtual bool readAttributesFromMathMLDom(const QDomElement& element);
+
 private:
 
     SpaceWidth spaceWidth;
@@ -136,6 +152,15 @@ private:
      * Whether this space behaves like a tab.
      */
     bool m_tab;
+
+    // MathML Attributes, Section 3.2.7.2
+    SizeType m_widthType;
+    double m_width;
+    SizeType m_heightType;
+    double m_height;
+    SizeType m_depthType;
+    double m_depth;
+    LineBreakType m_lineBreak;
 };
 
 KFORMULA_NAMESPACE_END
