@@ -272,7 +272,12 @@ KFCInsertColumn::KFCInsertColumn( const QString& name, Container* document, Matr
 MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
     : BasicElement(parent),
       m_rowNumber( 0 ),
-      m_align( NoAlign )
+      m_align( NoAlign ),
+      m_frame( NoLine ),
+      m_side( NoSide ),
+      m_customEqualRows( false ),
+      m_customEqualColumns( false ),
+      m_customDisplayStyle( false )
 {
     for (uint r = 0; r < rows; r++) {
         QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
@@ -900,6 +905,105 @@ bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
             }
         }
     }
+    QString alignmentscopeStr = element.attribute( "alignmentscope" ).lower();
+    if ( ! alignmentscopeStr.isNull() ) {
+        QStringList list = QStringList::split( ' ', alignmentscopeStr );
+        for ( QStringList::iterator it = list.begin(); it != list.end(); it++ ) {
+            if ( *it == "true" ) {
+                m_alignmentScope.append( true );
+            }
+            else if ( *it == "false" ) {
+                m_alignmentScope.append( false );
+            }
+        }
+    }
+    QString rowlinesStr = element.attribute( "rowlines" ).lower();
+    if ( ! rowlinesStr.isNull() ) {
+        QStringList list = QStringList::split( ' ', rowlinesStr );
+        for ( QStringList::iterator it = list.begin(); it != list.end(); it++ ) {
+            if ( *it == "none" ) {
+                m_rowLines.append( NoneLine );
+            }
+            else if ( *it == "solid" ) {
+                m_rowLines.append( SolidLine );
+            }
+            else if ( *it == "dashed" ) {
+                m_rowLines.append( DashedLine );
+            }
+        }
+    }
+    QString columnlinesStr = element.attribute( "columnlines" ).lower();
+    if ( ! columnlinesStr.isNull() ) {
+        QStringList list = QStringList::split( ' ', columnlinesStr );
+        for ( QStringList::iterator it = list.begin(); it != list.end(); it++ ) {
+            if ( *it == "none" ) {
+                m_columnLines.append( NoneLine );
+            }
+            else if ( *it == "solid" ) {
+                m_columnLines.append( SolidLine );
+            }
+            else if ( *it == "dashed" ) {
+                m_columnLines.append( DashedLine );
+            }
+        }
+    }
+    QString frameStr = element.attribute( "frame" ).stripWhiteSpace().lower();
+    if ( ! frameStr.isNull() ) {
+        if ( frameStr == "none" ) {
+            m_frame = NoneLine;
+        }
+        else if ( frameStr == "solid" ) {
+            m_frame = SolidLine;
+        }
+        else if ( frameStr == "dashed" ) {
+            m_frame = DashedLine;
+        }
+    }
+    QString equalrowsStr = element.attribute( "equalrows" ).stripWhiteSpace().lower();
+    if ( ! equalrowsStr.isNull() ) {
+        m_customEqualRows = true;
+        if ( equalrowsStr == "false" ) {
+            m_equalRows = false;
+        }
+        else {
+            m_equalRows = true;
+        }
+    }
+    QString equalcolumnsStr = element.attribute( "equalcolumns" ).stripWhiteSpace().lower();
+    if ( ! equalcolumnsStr.isNull() ) {
+        m_customEqualColumns = true;
+        if ( equalcolumnsStr == "false" ) {
+            m_equalColumns = false;
+        }
+        else {
+            m_equalColumns = true;
+        }
+    }
+    QString displaystyleStr = element.attribute( "displaystyle" ).stripWhiteSpace().lower();
+    if ( ! displaystyleStr.isNull() ) {
+        m_customDisplayStyle = true;
+        if ( displaystyleStr == "false" ) {
+            m_displayStyle = false;
+        }
+        else {
+            m_displayStyle = true;
+        }
+    }
+    QString sideStr = element.attribute( "side" ).stripWhiteSpace().lower();
+    if ( ! sideStr.isNull() ) {
+        if ( sideStr == "left" ) {
+            m_side = LeftSide;
+        }
+        else if ( sideStr == "right" ) {
+            m_side = RightSide;
+        }
+        else if ( sideStr == "leftoverlap" ) {
+            m_side = LeftOverlapSide;
+        }
+        else if ( sideStr == "rightoverlap" ) {
+            m_side = RightOverlapSide;
+        }
+    }
     return true;
 }
 
@@ -1141,6 +1245,97 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
     }
     if ( ! columnalign.isNull() ) {
         element.setAttribute( "columnalign", columnalign.stripWhiteSpace() );
+    }
+    QString alignmentscope;
+    for ( QValueList< bool >::iterator it = m_alignmentScope.begin(); it != m_alignmentScope.end(); it++ )
+    {
+        if ( *it ) {
+            alignmentscope.append( "true " );
+        }
+        else {
+            alignmentscope.append( "false " );
+        }
+    }
+    if ( ! alignmentscope.isNull() ) {
+        element.setAttribute( "alignmentscope", alignmentscope.stripWhiteSpace() );
+    }
+    QString rowlines;
+    for ( QValueList< LineType >::iterator it = m_rowLines.begin(); it != m_rowLines.end(); it++ )
+    {
+        switch ( *it ) {
+        case NoneLine:
+            rowlines.append( "none " );
+            break;
+        case SolidLine:
+            rowlines.append( "solid " );
+            break;
+        case DashedLine:
+            rowlines.append( "dashed " );
+            break;
+        default:
+            break;
+        }
+    }
+    if ( ! rowlines.isNull() ) {
+        element.setAttribute( "rowlines", rowlines.stripWhiteSpace() );
+    }
+    QString columnlines;
+    for ( QValueList< LineType >::iterator it = m_columnLines.begin(); it != m_columnLines.end(); it++ )
+    {
+        switch ( *it ) {
+        case NoneLine:
+            columnlines.append( "none " );
+            break;
+        case SolidLine:
+            columnlines.append( "solid " );
+            break;
+        case DashedLine:
+            columnlines.append( "dashed " );
+            break;
+        default:
+            break;
+        }
+    }
+    if ( ! columnlines.isNull() ) {
+        element.setAttribute( "columnlines", columnlines.stripWhiteSpace() );
+    }
+    switch ( m_frame ) {
+    case NoneLine:
+        element.setAttribute( "frame", "none" );
+        break;
+    case SolidLine:
+        element.setAttribute( "frame", "solid" );
+        break;
+    case DashedLine:
+        element.setAttribute( "frame", "dashed" );
+        break;
+    default:
+        break;
+    }
+    if ( m_customEqualRows ) {
+        element.setAttribute( "equalrows", m_equalRows ? "true" : "false" );
+    }
+    if ( m_customEqualColumns ) {
+        element.setAttribute( "equalcolumns", m_equalColumns ? "true" : "false" );
+    }
+    if ( m_customDisplayStyle ) {
+        element.setAttribute( "displaystyle", m_displayStyle ? "true" : "false" );
+    }
+    switch ( m_side ) {
+    case LeftSide:
+        element.setAttribute( "side", "left" );
+        break;
+    case RightSide:
+        element.setAttribute( "side", "right" );
+        break;
+    case LeftOverlapSide:
+        element.setAttribute( "side", "leftoverlap" );
+        break;
+    case RightOverlapSide:
+        element.setAttribute( "side", "rightoverlap" );
+        break;
+    default:
+        break;
     }
 }
 

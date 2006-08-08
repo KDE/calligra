@@ -40,6 +40,8 @@ class MatrixElement : public BasicElement {
     friend class MatrixSequenceElement;
 
     enum VerticalAlign { NoAlign, TopAlign, BottomAlign, CenterAlign, BaselineAlign, AxisAlign };
+    enum LineType { NoLine, NoneLine, SolidLine, DashedLine };
+    enum SideType { NoSide, LeftSide, RightSide, LeftOverlapSide, RightOverlapSide };
     MatrixElement& operator=( const MatrixElement& ) { return *this; }
 public:
     MatrixElement(uint rows = 1, uint columns = 1, BasicElement* parent = 0);
@@ -263,7 +265,17 @@ private:
     VerticalAlign m_align;
     QValueList< VerticalAlign > m_rowAlign;
     QValueList< HorizontalAlign > m_columnAlign;
-
+    QValueList< bool > m_alignmentScope;
+    QValueList< LineType > m_rowLines;
+    QValueList< LineType > m_columnLines;
+    LineType m_frame;
+    SideType m_side;
+    bool m_equalRows;
+    bool m_customEqualRows;
+    bool m_equalColumns;
+    bool m_customEqualColumns;
+    bool m_displayStyle;
+    bool m_customDisplayStyle;
 };
 
 
