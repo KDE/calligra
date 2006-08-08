@@ -861,7 +861,7 @@ bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
         }
         int index = alignStr.findRev( ' ' );
         if ( index != -1 ) {
-            m_rowNumber = alignStr.right( index + 1 ).toUInt();
+            m_rowNumber = alignStr.right( index + 1 ).toInt();
         }
     }
     QString rowalignStr = element.attribute( "rowalign" ).lower();
