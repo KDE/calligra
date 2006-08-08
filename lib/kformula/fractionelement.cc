@@ -184,7 +184,7 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
         // TODO: thickness
         double factor = style.sizeFactor();
         double linethickness = lineThickness( context, factor );
-        painter.setPen( QPen( context.getDefaultColor(),
+        painter.setPen( QPen( style.color(),
                               context.layoutUnitToPixelY( linethickness ) ) );
         painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y() + axis( context, tstyle, factor ) ),
