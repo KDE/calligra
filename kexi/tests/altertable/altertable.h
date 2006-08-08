@@ -23,6 +23,7 @@
 #include <qurloperator.h>
 #include <qnetwork.h>
 #include <qnetworkprotocol.h>
+#include <kexiutils/tristate.h>
 
 class KexiTableDesignerInterface;
 class KexiDialogBase;
@@ -34,7 +35,7 @@ class AlterTableTester : public QObject
 		AlterTableTester();
 		~AlterTableTester();
 
-		bool run();
+		tristate run();
 
 	protected slots:
 		void slotFinishedCopying(QNetworkOperation*);
