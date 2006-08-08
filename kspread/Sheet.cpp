@@ -1852,23 +1852,6 @@ QString Sheet::guessRowTitle(QRect& area, int row)
 }
 
 
-void Sheet::clearText( Selection* selectionInfo )
-{
-  if (areaIsEmpty(*selectionInfo))
-    return;
-
-  DataManipulator* manipulator = new DataManipulator();
-  manipulator->setSheet(this);
-  manipulator->setName (i18n ("Clear Text"));
-  // parsing gets set only so that setCellText is called as it should be,
-  // no actual parsing shall be done
-  manipulator->setParsing (true);
-  manipulator->setValue (Value (""));
-  manipulator->add(*selectionInfo);
-  manipulator->execute();
-}
-
-
 /**
  * Here we define two manipulators - GetWordSpellingManipulator and
  * SetWordSpellingManipulator. This is not ideal, but these two are so specific

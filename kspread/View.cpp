@@ -5803,20 +5803,27 @@ void View::adjust()
 
 void View::clearTextSelection()
 {
-    if (!activeSheet())
-      return;
+  // TODO Stefan: Actually this check belongs into the manipulator!
+  if ( d->activeSheet->areaIsEmpty( *selectionInfo() ) )
+    return;
 
-    doc()->emitBeginOperation( false );
-    d->activeSheet->clearText( selectionInfo() );
-
-    updateEditWidget();
-
-    markSelectionAsDirty();
-    doc()->emitEndOperation();
+  DataManipulator* manipulator = new DataManipulator();
+  manipulator->setSheet( d->activeSheet );
+  manipulator->setName( i18n( "Clear Text" ) );
+  // parsing gets set only so that setCellText is called as it should be,
+  // no actual parsing shall be done
+  manipulator->setParsing( true );
+  manipulator->setValue( Value( "" ) );
+  manipulator->add( *selectionInfo() );
+  manipulator->execute();
 }
 
 void View::clearCommentSelection()
 {
+  // TODO Stefan: Actually this check belongs into the manipulator!
+  if ( d->activeSheet->areaIsEmpty( *selectionInfo(), Sheet::Comment ) )
+    return;
+
   FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setName( i18n( "Remove Comment" ) );
@@ -5827,6 +5834,10 @@ void View::clearCommentSelection()
 
 void View::clearValiditySelection()
 {
+  // TODO Stefan: Actually this check belongs into the manipulator!
+  if ( d->activeSheet->areaIsEmpty( *selectionInfo(), Sheet::Validity ) )
+    return;
+
   ValidityManipulator* manipulator = new ValidityManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setValidity( Validity() ); // empty object removes validity
@@ -5836,6 +5847,10 @@ void View::clearValiditySelection()
 
 void View::clearConditionalSelection()
 {
+  // TODO Stefan: Actually this check belongs into the manipulator!
+  if ( d->activeSheet->areaIsEmpty( *selectionInfo(), Sheet::ConditionalCellAttribute ) )
+    return;
+
   ConditionalManipulator* manipulator = new ConditionalManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setConditionList( QLinkedList<Conditional>() );

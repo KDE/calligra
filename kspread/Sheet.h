@@ -981,10 +981,6 @@ public:
      * @param selection the selection of cells to work on
      */
     void cutSelection( Selection* selection );
-    /**
-     * @param selection the selection of cells to work on
-     */
-    void clearText( Selection* selection );
 
     void setWordSpelling(Selection* selection,const QString _listWord );
 
