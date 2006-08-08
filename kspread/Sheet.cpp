@@ -2672,32 +2672,32 @@ void Sheet::dissociateCells(const Region& region)
 
 bool Sheet::testListChoose(Selection* selectionInfo)
 {
-   QRect selection( selectionInfo->selection() );
-   QPoint marker( selectionInfo->marker() );
+   const QPoint marker( selectionInfo->marker() );
+   const QString text = cellAt( marker.x(), marker.y() )->text();
 
-   Cell *cell = cellAt( marker.x(), marker.y() );
-   QString tmp=cell->text();
-
-   Cell* c = firstCell();
-   bool different=false;
-   int col;
-   for( ;c; c = c->nextCell() )
-     {
-       col = c->column();
-       if ( selection.left() <= col && selection.right() >= col &&
-            !c->isPartOfMerged() &&
-            !(col==marker.x() && c->row()==marker.y()))
+   Region::ConstIterator end( selectionInfo->constEnd() );
+   for ( Region::ConstIterator it( selectionInfo->constBegin() ); it != end; ++it )
    {
-     if(!c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty()
-        && !c->isTime() &&!c->isDate() )
+     const QRect range = (*it)->rect();
+     for ( int col = range.left(); col <= range.right(); ++col )
+     {
+       for ( int row = range.top(); row <= range.bottom(); ++row )
        {
-                 if(c->text()!=tmp)
-                     different=true;
+         const Cell* cell = cellAt( col, row );
+         if ( !cell->isPartOfMerged() && !( col == marker.x() && row == marker.y() ) )
+         {
+           if ( !cell->isFormula() && !cell->value().isNumber() &&
+                !cell->value().asString().isEmpty() &&
+                !cell->isTime() && !cell->isDate() )
+           {
+             if ( cell->text() != text )
+               return true;
+           }
+         }
        }
-
-   }
      }
-   return different;
+   }
+   return false;
 }
 
 
