@@ -233,7 +233,9 @@ protected:
 private:
     void writeMathMLAttributes( QDomElement& element );
 
-    bool withLine() { return m_lineThicknessType != RelativeSize || m_lineThickness != 0.0; }
+    double lineThickness( const ContextStyle& context, double factor );
+
+    bool withLine() { return m_lineThickness != 0.0; }
 
     SequenceElement* numerator;
     SequenceElement* denominator;

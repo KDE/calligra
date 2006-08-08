@@ -138,10 +138,12 @@ void FractionElement::calcSizes( const ContextStyle& context,
 
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
 
+    double linethickness = lineThickness( context, factor );
+
     setWidth( QMAX( numerator->getWidth(), denominator->getWidth() ) );
     setHeight( numerator->getHeight() + denominator->getHeight() +
-               2*distY + context.getLineWidth( factor ) );
-    setBaseline( qRound( numerator->getHeight() + distY + .5*context.getLineWidth( factor ) 
+               2*distY + linethickness );
+    setBaseline( qRound( numerator->getHeight() + distY + .5*linethickness 
                          + context.axisHeight( tstyle, factor ) ) );
 
     numerator->setX( ( getWidth() - numerator->getWidth() ) / 2 );
@@ -181,8 +183,9 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
     if ( withLine() ) {
         // TODO: thickness
         double factor = style.sizeFactor();
+        double linethickness = lineThickness( context, factor );
         painter.setPen( QPen( context.getDefaultColor(),
-                              context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
+                              context.layoutUnitToPixelY( linethickness ) ) );
         painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y() + axis( context, tstyle, factor ) ),
                           context.layoutUnitToPixelX( myPos.x() + getWidth() ),
@@ -450,7 +453,7 @@ bool FractionElement::readAttributesFromMathMLDom(const QDomElement& element)
     if ( ! linethicknessStr.isNull() ) {
         if ( linethicknessStr == "thin" ) {
             m_lineThicknessType = RelativeSize;
-            m_lineThickness = 0.8; // ### Arbitrary size
+            m_lineThickness = 0.5; // ### Arbitrary size
         }
         else if ( linethicknessStr == "medium" ) {
             m_lineThicknessType = RelativeSize;
@@ -458,7 +461,7 @@ bool FractionElement::readAttributesFromMathMLDom(const QDomElement& element)
         }
         else if ( linethicknessStr == "thick" ) {
             m_lineThicknessType = RelativeSize;
-            m_lineThickness = 1.2; // ### Arbitrary size
+            m_lineThickness = 2.0; // ### Arbitrary size
         }
         else {
             m_lineThickness = getSize( linethicknessStr, &m_lineThicknessType );
@@ -620,5 +623,25 @@ void FractionElement::writeMathMLAttributes( QDomElement& element )
         element.setAttribute( "bevelled", m_bevelled ? "true" : "false" );
     }
 }
+
+double FractionElement::lineThickness( const ContextStyle& context, double factor )
+{
+    double linethickness = context.getLineWidth( factor );
+    switch ( m_lineThicknessType ) {
+    case AbsoluteSize:
+        linethickness = context.ptToLayoutUnitPixX( m_lineThickness );
+        break;
+    case RelativeSize:
+        linethickness *= m_lineThickness;
+        break;
+    case PixelSize:
+        linethickness = m_lineThickness;
+        break;
+    case NoSize:
+        break;
+    }
+    return linethickness;
+}
+        
 
 KFORMULA_NAMESPACE_END
