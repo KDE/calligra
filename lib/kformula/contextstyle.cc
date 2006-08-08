@@ -473,6 +473,44 @@ bool StyleAttributes::customFont() const
     return m_customFontFamily.top();
 }
 
+// TODO: These length should depend on style
+double StyleAttributes::getSpace( SizeType type, double length ) const
+{
+    switch ( type ) {
+    case NegativeVeryVeryThinMathSpace:
+        return - 1 / 18;
+    case NegativeVeryThinMathSpace:
+        return - 2 / 18;
+    case NegativeThinMathSpace:
+        return - 3 / 18;
+    case NegativeMediumMathSpace:
+        return - 4 / 18;
+    case NegativeThickMathSpace:
+        return - 5 / 18;
+    case NegativeVeryThickMathSpace:
+        return - 6 / 18;
+    case NegativeVeryVeryThickMathSpace:
+        return - 7 / 18;
+    case VeryVeryThinMathSpace:
+        return 1 / 18;
+    case VeryThinMathSpace:
+        return 2 / 18;
+    case ThinMathSpace:
+        return 3 / 18;
+    case MediumMathSpace:
+        return 4 / 18;
+    case ThickMathSpace:
+        return 5 / 18;
+    case VeryThickMathSpace:
+        return 6 / 18;
+    case VeryVeryThickMathSpace:
+        return 7 / 18;
+    default:
+        break;
+    }
+    return length;
+}
+
 void StyleAttributes::reset()
 {
     if ( ! m_size.empty() ) {

@@ -148,8 +148,6 @@ private:
 
     void writeMathMLAttributes( QDomElement& element );
 
-    SpaceWidth spaceWidth;
-
     /**
      * Whether this space behaves like a tab.
      */

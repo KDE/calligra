@@ -351,6 +351,8 @@ class StyleAttributes {
     bool customFontStyle() const ;
     bool customFont() const ;
 
+    double getSpace( SizeType type, double length ) const ;
+
     void setSizeFactor( double s ) { m_size.push( s ); }
     void setCustomMathVariant( bool cmv ) { m_customMathVariant.push( cmv ); }
     void setCharStyle( CharStyle cs ) { m_charStyle.push( cs ); }

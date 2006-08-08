@@ -35,19 +35,35 @@ KFORMULA_NAMESPACE_BEGIN
 
 SpaceElement::SpaceElement( SpaceWidth space, bool tab, BasicElement* parent )
     : BasicElement( parent ), 
-      spaceWidth( space ), 
       m_tab( tab ),
       m_widthType( NoSize ),
       m_heightType( NoSize ),
       m_depthType( NoSize ),
       m_lineBreak( NoBreakType )
 {
+    // Backwards compatibility with KFO format
+    switch ( space ) {
+    case NEGTHIN:
+        m_widthType = NegativeThinMathSpace;
+        break;
+    case THIN:
+        m_widthType = ThinMathSpace;
+        break;
+    case MEDIUM:
+        m_widthType = MediumMathSpace;
+        break;
+    case THICK:
+        m_widthType = ThickMathSpace;
+        break;
+    case QUAD:
+        m_widthType = VeryVeryThickMathSpace;
+        break;
+    }
 }
 
 
 SpaceElement::SpaceElement( const SpaceElement& other )
     : BasicElement( other ),
-      spaceWidth( other.spaceWidth ),
       m_widthType( other.m_widthType ),
       m_width( other.m_width ),
       m_heightType( other.m_heightType ),
@@ -72,18 +88,40 @@ void SpaceElement::calcSizes( const ContextStyle& context,
 {
     double factor = style.sizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
-
     QFont font = context.getDefaultFont();
     font.setPointSize( mySize );
 
     QFontMetrics fm( font );
-    QChar ch = 'x';
-    LuPixelRect bound = fm.boundingRect( ch );
+    QChar w = 'M';
+    LuPixelRect hbound = fm.boundingRect( w );
+    QChar h = 'x';
+    LuPixelRect vbound = fm.boundingRect( h );
 
-    setWidth( context.getSpace( tstyle, spaceWidth, factor ) );
-    setHeight( bound.height() );
-    setBaseline( -bound.top() );
-    //setMidline( getBaseline() - fm.strikeOutPos() );
+    double width = style.getSpace( m_widthType, m_width );
+    if ( m_widthType == AbsoluteSize ) {
+        width = m_width / context.layoutUnitPtToPt( context.getBaseSize() );
+    }
+    else if ( m_widthType == PixelSize ) {
+        width = context.pixelYToPt( m_width ) / context.layoutUnitPtToPt( context.getBaseSize() );
+    }
+    double height = style.getSpace( m_heightType, m_height );
+    if ( m_heightType == AbsoluteSize ) {
+        height = m_height / context.layoutUnitPtToPt( context.getBaseSize() );
+    }
+    else if ( m_heightType == PixelSize ) {
+        height = context.pixelYToPt( m_height ) / context.layoutUnitPtToPt( context.getBaseSize() );
+    }
+    double depth = style.getSpace( m_depthType, m_depth );
+    if ( m_depthType == AbsoluteSize ) {
+        depth = m_depth / context.layoutUnitPtToPt( context.getBaseSize() );
+    }
+    else if ( m_depthType == PixelSize ) {
+        depth = context.pixelYToPt( m_depth ) / context.layoutUnitPtToPt( context.getBaseSize() );
+    }
+
+    setWidth( hbound.width() * width );
+    setHeight( vbound.height() * height + vbound.height() * depth );
+    setBaseline( vbound.height() * height );
 
     if ( m_tab ) {
         getParent()->registerTab( this );
@@ -123,21 +161,41 @@ void SpaceElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 void SpaceElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
-    switch ( spaceWidth ) {
-    case NEGTHIN:
+    switch ( m_widthType ) {
+    case NegativeVeryVeryThinMathSpace:
+    case NegativeVeryThinMathSpace:
+    case NegativeThinMathSpace:
+    case NegativeMediumMathSpace:
+    case NegativeThickMathSpace:
+    case NegativeVeryThickMathSpace:
+    case NegativeVeryVeryThickMathSpace:
         element.setAttribute( "WIDTH", "negthin" );
         break;
-    case THIN:
+    case VeryVeryThinMathSpace:
+    case VeryThinMathSpace:
+    case ThinMathSpace:
         element.setAttribute( "WIDTH", "thin" );
         break;
-    case MEDIUM:
+    case MediumMathSpace:
         element.setAttribute( "WIDTH", "medium" );
         break;
-    case THICK:
+    case ThickMathSpace:
         element.setAttribute( "WIDTH", "thick" );
         break;
-    case QUAD:
+    case VeryThickMathSpace:
+    case VeryVeryThickMathSpace:
         element.setAttribute( "WIDTH", "quad" );
+        break;
+    case AbsoluteSize:
+    case RelativeSize:
+    case PixelSize:
+        if ( m_width < 0 ) {
+            element.setAttribute( "WIDTH", "negthin" );
+        }
+        else {
+            element.setAttribute( "WIDTH", "thin" );
+        }
+    default:
         break;
     }
     if ( m_tab ) {
@@ -153,19 +211,19 @@ bool SpaceElement::readAttributesFromDom( QDomElement element )
     QString widthStr = element.attribute( "WIDTH" );
     if( !widthStr.isNull() ) {
         if ( widthStr.lower() == "quad" ) {
-            spaceWidth = QUAD;
+            m_widthType = VeryVeryThickMathSpace;
         }
         else if ( widthStr.lower() == "thick" ) {
-            spaceWidth = THICK;
+            m_widthType = ThickMathSpace;
         }
         else if ( widthStr.lower() == "medium" ) {
-            spaceWidth = MEDIUM;
+            m_widthType = MediumMathSpace;
         }
         else if ( widthStr.lower() == "negthin" ) {
-            spaceWidth = NEGTHIN;
+            m_widthType = NegativeThinMathSpace;
         }
         else {
-            spaceWidth = THIN;
+            m_widthType = ThinMathSpace;
         }
     }
     else {
@@ -342,12 +400,37 @@ void SpaceElement::writeMathMLAttributes( QDomElement& element )
 
 QString SpaceElement::toLatex()
 {
-    switch ( spaceWidth ) {
-    case NEGTHIN: return "\\!";
-    case THIN:    return "\\,";
-    case MEDIUM:  return "\\>";
-    case THICK:   return "\\;";
-    case QUAD:    return "\\quad ";
+    switch ( m_widthType ) {
+    case NegativeVeryVeryThinMathSpace:
+    case NegativeVeryThinMathSpace:
+    case NegativeThinMathSpace:
+    case NegativeMediumMathSpace:
+    case NegativeThickMathSpace:
+    case NegativeVeryThickMathSpace:
+    case NegativeVeryVeryThickMathSpace:
+        return "\\!";
+    case VeryVeryThinMathSpace:
+    case VeryThinMathSpace:
+    case ThinMathSpace:
+        return "\\,";
+    case MediumMathSpace:
+        return "\\>";
+    case ThickMathSpace:
+        return "\\;";
+    case VeryThickMathSpace:
+    case VeryVeryThickMathSpace:
+        return "\\quad ";
+    case AbsoluteSize:
+    case RelativeSize:
+    case PixelSize:
+        if ( m_width < 0 ) {
+            return "\\!";
+        }
+        else {
+            return "\\,";
+        }
+    default:
+        break;
     }
     return "";
 }
