@@ -261,6 +261,7 @@ private:
      */
     int m_rowNumber;
     VerticalAlign m_align;
+    QValueList< VerticalAlign > m_rowAlign;
 
 };
 

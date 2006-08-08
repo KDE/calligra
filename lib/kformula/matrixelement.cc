@@ -864,6 +864,27 @@ bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
             m_rowNumber = alignStr.right( index + 1 ).toUInt();
         }
     }
+    QString rowalignStr = element.attribute( "rowalign" ).lower();
+    if ( ! rowalignStr.isNull() ) {
+        QStringList list = QStringList::split( ' ', rowalignStr );
+        for ( QStringList::iterator it = list.begin(); it != list.end(); it++ ) {
+            if ( *it == "top" ) {
+                m_rowAlign.append( TopAlign );
+            }
+            else if ( *it == "bottom" ) {
+                m_rowAlign.append( BottomAlign );
+            }
+            else if ( *it == "center" ) {
+                m_rowAlign.append( CenterAlign );
+            }
+            else if ( *it == "baseline" ) {
+                m_rowAlign.append( BaselineAlign );
+            }
+            else if ( *it == "axis" ) {
+                m_rowAlign.append( AxisAlign );
+            }
+        }
+    }
     return true;
 }
 
@@ -1059,6 +1080,32 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         break;
     default:
         break;
+    }
+    QString rowalign;
+    for ( QValueList< VerticalAlign >::iterator it = m_rowAlign.begin(); it != m_rowAlign.end(); it++ )
+    {
+        switch ( *it ) {
+        case TopAlign:
+            rowalign.append( "top " );
+            break;
+        case BottomAlign:
+            rowalign.append( "bottom " );
+            break;
+        case CenterAlign:
+            rowalign.append( "center " );
+            break;
+        case BaselineAlign:
+            rowalign.append( "baseline " );
+            break;
+        case AxisAlign:
+            rowalign.append( "axis " );
+            break;
+        default:
+            break;
+        }
+    }
+    if ( ! rowalign.isNull() ) {
+        element.setAttribute( "rowalign", rowalign.stripWhiteSpace() );
     }
 }
 
