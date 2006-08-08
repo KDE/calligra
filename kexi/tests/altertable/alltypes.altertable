@@ -4,11 +4,12 @@ openDatabase 1.kexi
 # - insert a new text field at row #2, remove field at row #4
 # - insert fields of all possible types in rows #5, #6, and so on
 designTable cars #initially there are 3rows
- insertEmptyRow 2 
+/* insertEmptyRow 2 
  insertField 2 textField
- removeField 4
+ removeField 4*/
  insertField 4 longTextField
  changeFieldProperty 4 type string longText
+ stop
  insertField 5 byteField
  changeFieldProperty 5 type string byte
  insertField 6 shortIntField
@@ -31,27 +32,32 @@ designTable cars #initially there are 3rows
  changeFieldProperty 14 type string double
  insertField 15 blobField
  changeFieldProperty 15 type string blob
+
  showSchema
+ stop
+
  checkSchema
   id  UNSIGNED Integer AUTOINC UNIQUE PKEY NOTNULL NOTEMPTY
   textfield Text(200)
   owner  UNSIGNED Integer
-  longtextfield Text
-  bytefield Integer
-  shortintfield Integer
+  longtextfield LongText
+  bytefield Byte
+  shortintfield ShortInteger
   intfield Integer
-  bigintfield Integer
+  bigintfield BigInteger
   booleanfield Boolean NOTNULL
   datefield Date
-  datetimefield Date
+  datetimefield DateTime
   timefield Date
   floatfield Float
-  doublefield Float
+  doublefield Double
   blobfield BLOB
  endSchema
 
  showActions
- 
+
+ stop
+
  checkActions
   Insert table field "textfield" at position 1 (textfield Text(200))
   Remove table field "model"
@@ -70,7 +76,9 @@ designTable cars #initially there are 3rows
  endActions
 
 #todo
-# saveTableDesign #executes Alter Table
+ saveTableDesign #executes Alter Table
+
+#####ERR: cars_temp482329.booleanfield may not be NULL?????????????????????????
 
  showTableData
 

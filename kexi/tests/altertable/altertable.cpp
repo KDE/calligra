@@ -70,7 +70,7 @@ tristate readLineFromTestFile(const QString& expectedCommandName = QString::null
 		testLineNumber++;
 		s = testFileStream.readLine().stripWhiteSpace();
 		if (blockComment) {
-			if (s.startsWith("*/"))
+			if (s.endsWith("*/"))
 				blockComment = false;
 			continue;
 		}
@@ -384,16 +384,19 @@ bool AlterTableTester::checkTableData(KexiDialogBase* dlg)
 }
 
 //! Processes test file
-bool AlterTableTester::run()
+tristate AlterTableTester::run()
 {
 	while (!m_finishedCopying)
 		qApp->processEvents(300);
 
 	kdDebug() << "Database copied to temporary: " << dbFilename << endl;
 
-	tristate res = win->openProject( dbFilename, 0 );
-	if (true != res || !checkItemsNumber(2))
+	if (!checkItemsNumber(2))
 		return false;
+
+	tristate res = win->openProject( dbFilename, 0 );
+	if (true != res)
+		return res;
 	prj = win->project();
 
 	//open table in design mode
@@ -537,9 +540,11 @@ int main(int argc, char *argv[])
 	AlterTableTester tester;
 	//QObject::connect(win, SIGNAL(projectOpened()), &tester, SLOT(run()));
 
-	if (!tester.run()) {
-		kdWarning() << QString("Running test for file '%1' failed.").arg(testFilename) << endl;
-		return quit(1);
+	res = tester.run();
+	if (true != res) {
+		if (false == res)
+			kdWarning() << QString("Running test for file '%1' failed.").arg(testFilename) << endl;
+		return quit(res==false ? 1 : 0);
 	}
 	kdDebug() << QString("Tests from file '%1': OK").arg(testFilename) << endl;
 	result = closeOnFinish ? 0 : qApp->exec();
