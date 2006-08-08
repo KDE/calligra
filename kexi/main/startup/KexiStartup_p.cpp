@@ -103,8 +103,8 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 	kDebug() << process->isRunning() << " " << process->exitStatus() << endl;
 	m_dlg->close();
 	result = !process->isRunning() && 0==process->exitStatus();//m_process->normalExit();
-	kDebug() << result << endl;
-	if (result) {
+	kDebug() << result.toString() << endl;
+	if (result == true) {
 		if (m_restoreStat) {
 			//restore permissions for m_filePath
 			chmod(QFile::encodeName(m_filePath), m_st.st_mode);
@@ -115,7 +115,7 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 
 void SQLite2ToSQLite3Migration::cancelClicked()
 {
-	kDebug() << result << " cancelClicked() " <<m_process->isRunning() << " " 
+	kDebug() << result.toString() << " cancelClicked() " <<m_process->isRunning() << " " 
 		<< m_process->exitStatus() << endl;
 	if (!m_process->isRunning() && 0==m_process->exitStatus())
 		return;
