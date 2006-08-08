@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -137,12 +137,6 @@ public:
 	}
 
 	/**
-	 * Casting to bool type: true is only returned 
-	 * if the original tristate value is equal to true. 
-	 */
-	operator bool() const { return m_value==True; }
-
-	/**
 	 * Casting to bool type with negation: true is only returned 
 	 * if the original tristate value is equal to false. 
 	 */
@@ -156,7 +150,12 @@ public:
 
 	tristate& operator=(const tristate& tsValue) { m_value = tsValue.m_value; return *this; }
 
+	friend inline bool operator==(bool boolValue, tristate tsValue);
+
+	friend inline bool operator==(tristate tsValue, bool boolValue);
+
 	friend inline bool operator!=(bool boolValue, tristate tsValue);
+
 	friend inline bool operator!=(tristate tsValue, bool boolValue);
 
 	/**
@@ -206,6 +205,32 @@ inline bool operator!=(tristate tsValue, bool boolValue)
 {
 	return !( (tsValue.m_value==tristate::True && boolValue) 
 	|| (tsValue.m_value==tristate::False && !boolValue) );
+}
+
+/**
+	* Equality operator comparing a tristate value @p tsValue and a bool value @p boolValue.
+	* \return true if both 
+	* - both @p tsValue value and @p boolValue are true, or
+	* - both @p tsValue value and @p boolValue are false
+	* If the tristate value has value of cancelled, false is returned.
+	*/
+inline bool operator==(tristate tsValue, bool boolValue)
+{
+	return (tsValue.m_value==tristate::True && boolValue) 
+	|| (tsValue.m_value==tristate::False && !boolValue);
+}
+
+/**
+	* Equality operator comparing a bool value @p boolValue and a tristate value @p tsValue.
+	* \return true if both 
+	* - both @p tsValue value and @p boolValue are true, or
+	* - both @p tsValue value and @p boolValue are false
+	* If the tristate value has value of cancelled, false is returned.
+	*/
+inline bool operator==(bool boolValue, tristate tsValue)
+{
+	return (tsValue.m_value==tristate::True && boolValue) 
+	|| (tsValue.m_value==tristate::False && !boolValue);
 }
 
 #endif

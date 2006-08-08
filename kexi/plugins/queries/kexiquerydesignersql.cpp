@@ -492,7 +492,7 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
 	tristate res = KexiViewBase::storeData(dontAsk);
 	if (~res)
 		return res;
-	if (res) {
+	if (res == true) {
 		res = storeDataBlock( d->editor->text(), "sql" );
 #if 0
 		bool queryOK = slotCheckQuery();
@@ -507,7 +507,7 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
 		}
 #endif
 	}
-	if (res) {
+	if (res == true) {
 		QString empty_xml;
 		res = storeDataBlock( empty_xml, "query_layout" ); //clear
 	}

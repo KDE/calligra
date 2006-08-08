@@ -916,7 +916,6 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 	cancelled = false;
 	KexiProject *prj = new KexiProject( new KexiProjectData(*data), handler );
 
-	bool ok = true;
 	tristate res = prj->create(false);
 	if (~res) {
 //! @todo move to KexiMessageHandler
@@ -933,8 +932,7 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 		}
 		res = prj->create(true/*overwrite*/);
 	}
-	ok = res;
-	if (!ok) {
+	if (res != true) {
 		delete prj;
 		return 0;
 	}

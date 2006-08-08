@@ -172,8 +172,8 @@ KexiSubReport::setReportName(const QString &name)
 
 	// and load the sub form
 	QString data;
-	bool ok = view->connection()->loadDataBlock(id, data , QString::null);
-	if(!ok)
+	tristate res = view->connection()->loadDataBlock(id, data , QString::null);
+	if(res != true)
 		return;
 
 	KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);

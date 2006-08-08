@@ -123,7 +123,7 @@ bool KexiTablePart::remove(KexiMainWindow *win, KexiPart::Item &item)
 			win, *conn, *sch, 
 			i18n("You are about to remove table \"%1\" but following objects using this table are opened:")
 			.arg(sch->name()));
-		return conn->dropTable( sch );
+		return true == conn->dropTable( sch );
 	}
 	//last chance: just remove item
 	return conn->removeObject( item.identifier() );

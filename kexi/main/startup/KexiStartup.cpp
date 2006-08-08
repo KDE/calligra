@@ -629,7 +629,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	else if (dropDB) {
 		KexiGUIMessageHandler gui;
 		tristate res = KexiProject::dropProject(projectData(), &gui, false/*ask*/);
-		if (res)
+		if (res==true)
 			KMessageBox::information( 0, i18n("Project \"%1\" dropped successfully.")
 				.arg( QDir::convertSeparators(projectData()->databaseName()) ));
 		return res!=false;
@@ -865,7 +865,7 @@ tristate KexiStartupHandler::detectActionForFile(
 				.arg(QDir::convertSeparators(dbFileName)).arg(newFileFormat) );
 			//continue...
 		}
-		if (res)
+		if (res==true)
 			detectedDriverName = newFileFormat;
 	}
 //	action.driverName = detectedDriverName;
