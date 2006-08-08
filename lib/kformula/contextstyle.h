@@ -347,6 +347,8 @@ class StyleAttributes {
     QFont font() const ;
     bool fontWeight() const ;
     bool customFontWeight() const ;
+    bool fontStyle() const ;
+    bool customFontStyle() const ;
     bool customFont() const ;
 
     void setSizeFactor( double s ) { m_size.push( s ); }
@@ -359,6 +361,8 @@ class StyleAttributes {
     void setCustomFont( bool cf ) { m_customFontFamily.push ( cf ); }
     void setCustomFontWeight( bool cfw ) { m_customFontWeight.push( cfw ); }
     void setFontWeight( bool fw ) { m_fontWeight.push( fw ); }
+    void setCustomFontStyle( bool cfs ) { m_customFontStyle.push( cfs ); }
+    void setFontStyle( bool fs ) { m_fontStyle.push( fs ); }
 
     void reset();
 
@@ -392,6 +396,12 @@ class StyleAttributes {
 
     // Whether a custom fontweight attribute is in use
     QValueStack<bool> m_customFontWeight;
+
+    // Font Style (fontstyle)
+    QValueStack<bool> m_fontStyle;
+
+    // Whether a custom fontstyle attribute is in use
+    QValueStack<bool> m_customFontStyle;
 };
 
 KFORMULA_NAMESPACE_END

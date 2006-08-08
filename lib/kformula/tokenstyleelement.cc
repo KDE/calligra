@@ -432,6 +432,7 @@ void TokenStyleElement::setStyleVariant( StyleAttributes& style )
         style.setCharStyle( charStyle() );
         style.setCustomMathVariant ( true );
         style.setCustomFontWeight( false );
+        style.setCustomFontStyle( false );
         style.setCustomFont( false );
     }
     else {
@@ -445,18 +446,26 @@ void TokenStyleElement::setStyleVariant( StyleAttributes& style )
         if ( customFontWeight() || style.customFontWeight() ) {
             style.setCustomFontWeight( true );
             if ( customFontWeight() ) {
-                style.setFontWeight( fontWeight() );
                 fontweight = fontWeight();
             }
             else {
-                fontweight = style.customFontWeight();
+                fontweight = style.fontWeight();
             }
+            style.setFontWeight( fontweight );
         }
         else {
             style.setCustomFontWeight( false );
         }
 
         bool fontstyle = false;
+        if ( style.customFontStyle() ) {
+            style.setCustomFontStyle( true );
+            fontstyle = style.fontStyle();
+            style.setFontStyle( fontstyle );
+        }
+        else {
+            style.setCustomFontStyle( false );
+        }
         if ( customFontStyle() ) {
             fontstyle = fontStyle();
         }

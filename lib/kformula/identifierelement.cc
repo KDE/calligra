@@ -41,6 +41,7 @@ void IdentifierElement::setStyleVariant( StyleAttributes& style )
         style.setCharStyle( charStyle() );
         style.setCustomMathVariant ( true );
         style.setCustomFontWeight( false );
+        style.setCustomFontStyle( false );
         style.setCustomFont( false );
     }
     else {
@@ -54,12 +55,12 @@ void IdentifierElement::setStyleVariant( StyleAttributes& style )
         if ( customFontWeight() || style.customFontWeight() ) {
             style.setCustomFontWeight( true );
             if ( customFontWeight() ) {
-                style.setFontWeight( fontWeight() );
                 fontweight = fontWeight();
             }
             else {
                 fontweight = style.customFontWeight();
             }
+            style.setFontWeight( fontweight );
         }
         else {
             style.setCustomFontWeight( false );

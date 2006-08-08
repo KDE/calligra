@@ -157,6 +157,67 @@ void StyleElement::writeMathMLAttributes( QDomElement& element )
     inherited::writeMathMLAttributes( element );
 }
 
+void StyleElement::setStyleVariant( StyleAttributes& style )
+{
+    if ( customMathVariant() ) {
+        style.setCharFamily ( charFamily() );
+        style.setCharStyle( charStyle() );
+        style.setCustomMathVariant ( true );
+        style.setCustomFontWeight( false );
+        style.setCustomFont( false );
+    }
+    else {
+        style.setCustomMathVariant( false );
+        if ( customFontFamily() ) {
+            style.setCustomFont( true );
+            style.setFont( QFont(fontFamily()) );
+        }
+
+        bool fontweight = false;
+        if ( customFontWeight() || style.customFontWeight() ) {
+            style.setCustomFontWeight( true );
+            if ( customFontWeight() ) {
+                fontweight = fontWeight();
+            }
+            else {
+                fontweight = style.fontWeight();
+            }
+            style.setFontWeight( fontweight );
+        }
+        else {
+            style.setCustomFontWeight( false );
+        }
+
+        bool fontstyle = false;
+        if ( customFontStyle() || style.customFontStyle() ) {
+            style.setCustomFontStyle( true );
+            if ( customFontStyle() ) {
+                fontstyle = fontStyle();
+            }
+            else {
+                fontstyle = style.fontStyle();
+            }
+            style.setFontStyle( fontstyle );
+        }
+        else {
+            style.setCustomFontStyle( false );
+        }
+
+        if ( fontweight && fontstyle ) {
+            style.setCharStyle( boldItalicChar );
+        }
+        else if ( fontweight && ! fontstyle ) {
+            style.setCharStyle( boldChar );
+        }
+        else if ( ! fontweight && fontstyle ) {
+            style.setCharStyle( italicChar );
+        }
+        else {
+            style.setCharStyle( normalChar );
+        }
+    }
+}
+
 void StyleElement::setStyleBackground( StyleAttributes& style )
 {
     if ( customMathBackground() ) {

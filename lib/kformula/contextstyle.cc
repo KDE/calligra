@@ -449,6 +449,22 @@ bool StyleAttributes::customFontWeight() const
     return m_customFontWeight.top();
 }
 
+bool StyleAttributes::fontStyle() const
+{
+    if ( m_fontStyle.empty() ) {
+        return false;
+    }
+    return m_fontStyle.top();
+}
+
+bool StyleAttributes::customFontStyle() const
+{
+    if ( m_customFontStyle.empty() ) {
+        return false;
+    }
+    return m_customFontStyle.top();
+}
+
 bool StyleAttributes::customFont() const
 {
     if ( m_customFontFamily.empty() ) {
@@ -485,6 +501,13 @@ void StyleAttributes::reset()
         if ( m_customFontWeight.pop() ) {
             if ( ! m_fontWeight.empty() ) {
                 m_fontWeight.pop();
+            }
+        }
+    }
+    if ( ! m_customFontStyle.empty() ) {
+        if ( m_customFontStyle.pop() ) {
+            if ( ! m_fontStyle.empty() ) {
+                m_fontStyle.pop();
             }
         }
     }
