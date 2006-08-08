@@ -183,8 +183,8 @@ bool KexiDBConnection::createDatabase(const QString& dbname) { return connection
 bool KexiDBConnection::dropDatabase(const QString& dbname) { return connection()->dropDatabase(dbname); }
 
 bool KexiDBConnection::createTable(KexiDBTableSchema* tableschema) { return connection()->createTable(tableschema->tableschema(), false); }
-bool KexiDBConnection::dropTable(const QString& tablename) { return connection()->dropTable(tablename); }
-bool KexiDBConnection::alterTable(KexiDBTableSchema* fromschema, KexiDBTableSchema* toschema) { return connection()->alterTable(*fromschema->tableschema(), *toschema->tableschema()); }
+bool KexiDBConnection::dropTable(const QString& tablename) { return true == connection()->dropTable(tablename); }
+bool KexiDBConnection::alterTable(KexiDBTableSchema* fromschema, KexiDBTableSchema* toschema) { return true == connection()->alterTable(*fromschema->tableschema(), *toschema->tableschema()); }
 bool KexiDBConnection::alterTableName(KexiDBTableSchema* tableschema, const QString& newtablename) { return connection()->alterTableName(*tableschema->tableschema(), newtablename); }
 
 KexiDBTableSchema* KexiDBConnection::tableSchema(const QString& tablename) const {
