@@ -226,7 +226,7 @@ QString Driver::defaultSQLTypeName(int id_t)
 		dflt_typeNames[Field::Float]="Float";
 		dflt_typeNames[Field::Double]="Double";
 		dflt_typeNames[Field::Text]="Text";
-		dflt_typeNames[Field::LongText]="Text";
+		dflt_typeNames[Field::LongText]="LongText";
 		dflt_typeNames[Field::BLOB]="BLOB";
 	}
 	return dflt_typeNames[id_t];
