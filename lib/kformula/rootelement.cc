@@ -264,14 +264,14 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (content->getHeight() + distY)/ 3;
 
-    painter.setPen( QPen( context.getDefaultColor(),
+    painter.setPen( QPen( style.color(),
                           context.layoutUnitToPixelX( 2*context.getLineWidth( factor ) ) ) );
     painter.drawLine( context.layoutUnitToPixelX( x+unit/3 ),
                       context.layoutUnitToPixelY( y+unit+distY/3 ),
                       context.layoutUnitToPixelX( x+unit/2+unit/3 ),
                       context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
 
-    painter.setPen( QPen( context.getDefaultColor(),
+    painter.setPen( QPen( style.color(),
                           context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
 
     painter.drawLine( context.layoutUnitToPixelX( x+unit+unit/3 ),
