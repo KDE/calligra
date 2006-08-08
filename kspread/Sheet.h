@@ -1542,44 +1542,6 @@ protected:
     static int s_id;
     static QHash<int,Sheet*>* s_mapSheets;
 
-public:
-    // see Sheet.cpp for an explanation of this
-    // this is for type B and also for type A (better use CellWorkerTypeA for that)
-    struct CellWorker
-    {
-  const bool create_if_default;
-  const bool emit_signal;
-  const bool type_B;
-
-  CellWorker( bool cid=true, bool es=true, bool tb=true ) : create_if_default( cid ), emit_signal( es ), type_B( tb ) { }
-  virtual ~CellWorker() { }
-
-  virtual class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const Region& region ) =0;
-
-  // these are only needed for type A
-  virtual bool testCondition( RowFormat* ) { return false; }
-  virtual void doWork( RowFormat* ) { }
-  virtual void doWork( ColumnFormat* ) { }
-  virtual void prepareCell( Cell* ) { }
-
-  // these are needed in all CellWorkers
-  virtual bool testCondition( Cell* cell ) =0;
-  virtual void doWork( Cell* cell, bool cellRegion, int x, int y ) =0;
-    };
-
-    // this is for type A (surprise :))
-    struct CellWorkerTypeA : public CellWorker
-    {
-  CellWorkerTypeA( ) : CellWorker( true, true, false ) { }
-  virtual QString getUndoTitle( ) =0;
-  class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const Region& region );
-    };
-
-protected:
-    typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
-    SelectionType workOnCells( Selection* selection,
-                               CellWorker& worker );
-
 private:
     /**
      * \ingroup Embedding
