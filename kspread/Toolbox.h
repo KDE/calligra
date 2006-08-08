@@ -35,7 +35,7 @@ class KoDocumentChild;
 namespace KSpread
 {
 
-class KOFFICEUI_EXPORT ToolBox : public QFrame
+class KSPREAD_EXPORT ToolBox : public QFrame
 {
     Q_OBJECT
 public:
@@ -56,7 +56,7 @@ private:
     QPoint m_startPos;
 };
 
-class KOFFICEUI_EXPORT KoTransformToolBox : public ToolBox
+class KSPREAD_EXPORT KoTransformToolBox : public ToolBox
 {
     Q_OBJECT
 public:
