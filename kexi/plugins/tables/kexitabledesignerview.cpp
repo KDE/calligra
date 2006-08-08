@@ -223,6 +223,9 @@ void KexiTableDesignerView::initData()
 	d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
 	d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
 	d->view->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
+	const int minCaptionColumnWidth = d->view->fontMetrics().width("wwwwwwwwwww");
+	if (minCaptionColumnWidth > d->view->columnWidth(COLUMN_ID_CAPTION))
+		d->view->setColumnWidth(COLUMN_ID_CAPTION, minCaptionColumnWidth);
 
 	setDirty(false);
 	d->view->setCursorPosition(0, COLUMN_ID_CAPTION); //set @ name column
@@ -610,7 +613,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 		}
 
 		KoProperty::Set *propertySetForItem = d->sets->findPropertySetForItem(*item);
-		if (!propertySetForItem) //propertySet())
+		if (!propertySetForItem)
 			return;
 
 		KoProperty::Set &set = *propertySetForItem; //propertySet();
@@ -670,10 +673,12 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 		d->setPropertyValueIfNeeded( set, "type", (int)fieldType, changeDataTypeCommand,
 			false /*!forceAddCommand*/, true /*rememberOldValue*/);
 
-		// not null by default is reasonable for boolean type
+		// notNull and defaultValue=false is reasonable for boolean type
 		if (fieldType == KexiDB::Field::Boolean) {
 //! @todo maybe this is good for other data types as well?
 			d->setPropertyValueIfNeeded( set, "notNull", QVariant(true, 1), changeDataTypeCommand,
+				false /*!forceAddCommand*/, false /*!rememberOldValue*/);
+			d->setPropertyValueIfNeeded( set, "defaultValue", QVariant(false, 1), changeDataTypeCommand,
 				false /*!forceAddCommand*/, false /*!rememberOldValue*/);
 		}
 
@@ -1354,9 +1359,11 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 			newTable = alterTableHandler->execute(tempData()->table->name(), res);
 			kexipluginsdbg << "KexiTableDesignerView::storeData() : ALTER TABLE EXECUTE: " 
 				<< res.toString() << endl;
-			if (!res)
+			if (!res) {
+				alterTableHandler->debugError();
 				parentDialog()->setStatus(alterTableHandler, "");
-		//! @todo: result?
+			}
+//! @todo: result?
 		}
 		else {
 //! @tood temp; remove this:
@@ -1667,21 +1674,36 @@ void KexiTableDesignerView::changeFieldPropertyForRow( int row,
 	KoProperty::Set* set = d->sets->at( row );
 	if (!set || !set->contains(propertyName))
 		return;
+	KoProperty::Property &property = set->property(propertyName);
+	if (listData) {
+		if (listData->keys.isEmpty())
+			property.setListData( 0 );
+		else
+			property.setListData( new KoProperty::Property::ListData(*listData) );
+	}
+	if (propertyName != "type") //delayed type update (we need to have subtype set properly)
+		property.setValue(newValue);
+	KexiTableItem *item = d->view->itemAt(row);
+	Q_ASSERT(item);
+
+	if (propertyName == "type") {
+	//	d->addHistoryCommand_in_slotRowUpdated_enabled = false;
+//		d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
+		d->slotPropertyChanged_subType_enabled = false;
+			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, 
+				int( KexiDB::Field::typeGroup( newValue.toInt() ) )-1);
+			d->view->data()->saveRowChanges(*item);
+		d->addHistoryCommand_in_slotRowUpdated_enabled = true;
+//		d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
+	//	d->slotPropertyChanged_subType_enabled = true;
+		property.setValue(newValue); //delayed type update (we need to have subtype set properly)
+	}
+
 	if (!addCommand) {
 		d->addHistoryCommand_in_slotRowUpdated_enabled = false;
 		d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
 		d->slotPropertyChanged_subType_enabled = false;
 	}
-		KoProperty::Property &property = set->property(propertyName);
-		if (listData) {
-			if (listData->keys.isEmpty())
-				property.setListData( 0 );
-			else
-				property.setListData( new KoProperty::Property::ListData(*listData) );
-		}
-		property.setValue(newValue);
-		KexiTableItem *item = d->view->itemAt(row);
-		Q_ASSERT(item);
 		//special cases: properties displayed within the data grid:
 		if (propertyName == "caption") {
 			if (!addCommand) {
@@ -1692,17 +1714,6 @@ void KexiTableDesignerView::changeFieldPropertyForRow( int row,
 			if (!addCommand) {
 				d->slotBeforeCellChanged_enabled = true;
 			}
-		}
-		else if (propertyName == "type") {
-/*			if (!addCommand) {
-				d->slotBeforeCellChanged_enabled = false;
-			}
-//?			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, 
-//?				int( KexiDB::Field::typeGroup( newValue.toInt() ) )-1);
-			if (!addCommand) {
-				d->slotBeforeCellChanged_enabled = true;
-			}
-			d->view->data()->saveRowChanges(*item); */
 		}
 		else if (propertyName == "description") {
 			if (!addCommand) {

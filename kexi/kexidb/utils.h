@@ -304,6 +304,25 @@ namespace KexiDB
 
 	/*! Convenience version of loadPropertyValueFromXML(). \return QString value. */
 	KEXI_DB_EXPORT QString loadStringPropertyValueFromXML( const QDomNode& node, bool* ok );
+
+	/*! \return an empty value that can be set for a database field of type \a type having 
+	 "null" property set. Empty string is returned for text type, 0 for integer 
+	 or floating-point types, false for boolean type, empty null byte array for BLOB type.
+	 For date, time and date/time types current date, time, date+time is returned, respectively.
+	 Returns null QVariant for unsupported values like KexiDB::Field::InvalidType.
+	 This function is efficient (uses a cache) and is heavily used by the AlterTableHandler
+	 for filling new columns. */
+	KEXI_DB_EXPORT QVariant emptyValueForType( KexiDB::Field::Type type );
+
+	/*! \return a value that can be set for a database field of type \a type having 
+	 "notEmpty" property set. It works in a similar way as 
+	 @ref QVariant emptyValueForType( KexiDB::Field::Type type ) with the following differences:
+	 - " " string (a single space) is returned for Text and LongText types
+	 - a byte array with saved "filenew" PNG image (icon) for BLOB type
+	 Returns null QVariant for unsupported values like KexiDB::Field::InvalidType. 
+	 This function is efficient (uses a cache) and is heavily used by the AlterTableHandler
+	 for filling new columns. */
+	KEXI_DB_EXPORT QVariant notEmptyValueForType( KexiDB::Field::Type type );
 }
 
 #endif

@@ -836,10 +836,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			//display default value in the "insert row", if available
 			cell_value = colinfo->field()->defaultValue();
 		}
-		else if (colinfo->field()->type()==KexiDB::Field::Boolean && colinfo->field()->isNotNull()) {
+/*		else if (colinfo->field()->type()==KexiDB::Field::Boolean && colinfo->field()->isNotNull()) {
 			//special case: boolean "not null" field - display "false" instead
 			cell_value = QVariant(false, 0);
-		}
+		}*/
 	}
 
 	if (edit) {

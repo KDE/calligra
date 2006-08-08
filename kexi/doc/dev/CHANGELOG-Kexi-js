@@ -19,6 +19,11 @@ Legend:
 General
 = operator tristate::bool() removed (unsafe, comparison with false was broken)
 2.0: merged
+Table Designer, KexiDB
+- fields of type yes/no have default value set to false (by default)
+= schema editing improved; on table altering, default values are inserted 
+  and not-empty values are used is there's no default
+2.0: merged
 
 2006-08-07
 KexiDB

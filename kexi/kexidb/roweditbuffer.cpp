@@ -95,7 +95,7 @@ bool RowEditBuffer::isEmpty() const
 void RowEditBuffer::debug()
 {
 	if (isDBAware()) {
-		kdDebug() << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() <<" items"<< endl;
+		KexiDBDbg << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() <<" items"<< endl;
 		for (DBMap::ConstIterator it = m_dbBuffer->constBegin(); it!=m_dbBuffer->constEnd(); ++it) {
 			kdDebug() << "* field name=" <<it.key()->field->name()<<" val="
 				<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) <<endl;

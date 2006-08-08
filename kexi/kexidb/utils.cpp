@@ -24,6 +24,8 @@
 #include <qmap.h>
 #include <qthread.h>
 #include <qdom.h>
+#include <qintdict.h>
+#include <qbuffer.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -717,6 +719,7 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QCString, QVariant>& v
 		}
 	}
 	return true;
+#undef SET_BOOLEAN_FLAG
 }
 
 //! for KexiDB::isExtendedTableFieldProperty()
@@ -737,7 +740,6 @@ bool KexiDB::isExtendedTableFieldProperty( const QCString& propertyName )
 
 bool KexiDB::setFieldProperty( Field& field, const QCString& propertyName, const QVariant& value )
 {
-#undef SET_BOOLEAN_FLAG
 #define SET_BOOLEAN_FLAG(flag, value) { \
 			constraints |= KexiDB::Field::flag; \
 			if (!value) \
@@ -821,6 +823,8 @@ bool KexiDB::setFieldProperty( Field& field, const QCString& propertyName, const
 
 	KexiDBWarn << "KexiDB::setFieldProperty() property \"" << propertyName << "\" not found!" << endl;
 	return false;
+#undef SET_BOOLEAN_FLAG
+#undef GET_INT
 }
 
 int KexiDB::loadIntPropertyValueFromXML( const QDomNode& node, bool* ok )
@@ -880,6 +884,91 @@ QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 	}
 //! @todo add more QVariant types
 	KexiDBWarn << "loadPropertyValueFromXML(): unknown type '" << valueType << "'" << endl;
+	return QVariant();
+}
+
+//! Used in KexiDB::emptyValueForType()
+static KStaticDeleter< QValueVector<QVariant> > KexiDB_emptyValueForTypeCacheDeleter;
+QValueVector<QVariant> *KexiDB_emptyValueForTypeCache = 0;
+
+QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
+{
+	if (!KexiDB_emptyValueForTypeCache) {
+		KexiDB_emptyValueForTypeCacheDeleter.setObject( KexiDB_emptyValueForTypeCache, 
+			new QValueVector<QVariant>(int(Field::LastType)+1) );
+#define ADD(t, value) (*KexiDB_emptyValueForTypeCache)[t]=value;
+		ADD(Field::Byte, 0);
+		ADD(Field::ShortInteger, 0);
+		ADD(Field::Integer, 0);
+		ADD(Field::BigInteger, 0);
+		ADD(Field::Boolean, QVariant(false, 0));
+		ADD(Field::Float, 0.0);
+		ADD(Field::Double, 0.0);
+//! @ok? we have no better defaults
+		ADD(Field::Text, QString(" "));
+		ADD(Field::LongText, QString(" "));
+		ADD(Field::BLOB, QByteArray());
+#undef ADD
+	}
+	const QVariant val( KexiDB_emptyValueForTypeCache->at(type) );
+	if (!val.isNull())
+		return val;
+	else { //special cases
+		if (type==Field::Date)
+			return QDate::currentDate();
+		if (type==Field::DateTime)
+			return QDateTime::currentDateTime();
+		if (type==Field::Time)
+			return QTime::currentTime();
+	}
+	KexiDBWarn << "KexiDB::emptyValueForType() no value for type " << Field::typeName(type) << endl;
+	return QVariant();
+}
+
+//! Used in KexiDB::notEmptyValueForType()
+static KStaticDeleter< QValueVector<QVariant> > KexiDB_notEmptyValueForTypeCacheDeleter;
+QValueVector<QVariant> *KexiDB_notEmptyValueForTypeCache = 0;
+
+QVariant KexiDB::notEmptyValueForType( KexiDB::Field::Type type )
+{
+	if (!KexiDB_notEmptyValueForTypeCache) {
+		KexiDB_notEmptyValueForTypeCacheDeleter.setObject( KexiDB_notEmptyValueForTypeCache, 
+			new QValueVector<QVariant>(int(Field::LastType)+1) );
+#define ADD(t, value) (*KexiDB_notEmptyValueForTypeCache)[t]=value;
+		// copy most of the values
+		for (int i = int(Field::InvalidType) + 1; i<=Field::LastType; i++) {
+			if (i==Field::Date || i==Field::DateTime || i==Field::Time)
+				continue; //'current' value will be returned
+			if (i==Field::Text || i==Field::LongText) {
+				ADD(i, QString::null);
+				continue;
+			}
+			if (i==Field::BLOB) {
+//! @todo blobs will contain other mime types too
+				QByteArray ba;
+				QBuffer buffer( ba );
+				buffer.open( IO_WriteOnly );
+				QPixmap pm(SmallIcon("filenew"));
+				pm.save( &buffer, "PNG"/*! @todo default? */ );
+				ADD(i, ba);
+				continue;
+			}
+			ADD(i, KexiDB::emptyValueForType((Field::Type)i));
+		}
+#undef ADD
+	}
+	const QVariant val( KexiDB_notEmptyValueForTypeCache->at(type) );
+	if (!val.isNull())
+		return val;
+	else { //special cases
+		if (type==Field::Date)
+			return QDate::currentDate();
+		if (type==Field::DateTime)
+			return QDateTime::currentDateTime();
+		if (type==Field::Time)
+			return QTime::currentTime();
+	}
+	KexiDBWarn << "KexiDB::notEmptyValueForType() no value for type " << Field::typeName(type) << endl;
 	return QVariant();
 }
 

@@ -4,12 +4,12 @@ openDatabase 1.kexi
 # - insert a new text field at row #2, remove field at row #4
 # - insert fields of all possible types in rows #5, #6, and so on
 designTable cars #initially there are 3rows
-/* insertEmptyRow 2 
+ insertEmptyRow 2
  insertField 2 textField
- removeField 4*/
+# removeField 4
  insertField 4 longTextField
  changeFieldProperty 4 type string longText
- stop
+ changeFieldProperty 4 defaultValue string abc
  insertField 5 byteField
  changeFieldProperty 5 type string byte
  insertField 6 shortIntField
@@ -34,6 +34,7 @@ designTable cars #initially there are 3rows
  changeFieldProperty 15 type string blob
 
  showSchema
+ saveTableDesign #executes Alter Table
  stop
 
  checkSchema
@@ -45,7 +46,7 @@ designTable cars #initially there are 3rows
   shortintfield ShortInteger
   intfield Integer
   bigintfield BigInteger
-  booleanfield Boolean NOTNULL
+#  booleanfield Boolean NOTNULL
   datefield Date
   datetimefield DateTime
   timefield Date

@@ -55,7 +55,9 @@ Available commands of the test suite
 1. Commands for altering table fields:
 
 * insertField <rownumber(int)> <fieldname(string)>
-  Inserts a new table field with default properties (text type) and 'fieldname' name
+  Inserts a new table field with default properties (text type) and 'fieldname' name.
+  Note that the inserted field can *replace* an existing field. To avoid this, use 
+  insertEmptyRow command before insertField to add an empty row.
   Example use: insertField 2 abc
 
 * insertEmptyRow <rownumber(int)>

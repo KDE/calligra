@@ -316,6 +316,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual ~InsertFieldAction();
 
 				int index() const { return m_index; }
+				void setIndex( int index ) { m_index = index; }
 				KexiDB::Field& field() const { return *m_field; }
 				void setField(KexiDB::Field* field);
 				virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
