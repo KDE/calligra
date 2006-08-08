@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qpainter.h>
+
 #include "basicelement.h"
 #include "tokenstyleelement.h"
 
@@ -63,6 +65,11 @@ void TokenStyleElement::draw( QPainter& painter, const LuPixelRect& r,
     setStyleVariant( style );
     setStyleColor( style );
     setStyleBackground( style );
+    painter.fillRect( context.layoutUnitToPixelX( parentOrigin.x() + getX() ),
+                      context.layoutUnitToPixelY( parentOrigin.y() + getY() ),
+                      context.layoutUnitToPixelX( getWidth() ),
+                      context.layoutUnitToPixelY( getHeight() ),
+                      style.background() );
     inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
     style.reset();
 }

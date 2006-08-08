@@ -224,11 +224,6 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                 // baseline==0 glyphs without yet another flag.
                 bl = -( getHeight()/2 + context.axisHeight( tstyle, factor ) );
             }
-            painter.fillRect( context.layoutUnitToPixelX( myPos.x() ),
-                              context.layoutUnitToPixelY( myPos.y() ),
-                              context.layoutUnitToPixelX( getWidth() ),
-                              context.layoutUnitToPixelY( getHeight() ),
-                              style.background() );
             painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                               context.layoutUnitToPixelY( myPos.y()+bl ),
                               ch );
