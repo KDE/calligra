@@ -283,6 +283,8 @@ private:
     SizeType m_frameVSpacingType;
     double m_frameVSpacing;
     SideType m_side;
+    SizeType m_minLabelSpacingType;
+    double m_minLabelSpacing;
     bool m_equalRows;
     bool m_customEqualRows;
     bool m_equalColumns;

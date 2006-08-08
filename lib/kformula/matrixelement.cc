@@ -278,6 +278,7 @@ MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
       m_frameHSpacing( NoSize ),
       m_frameVSpacing( NoSize ),
       m_side( NoSide ),
+      m_minLabelSpacingType( NoSize ),
       m_customEqualRows( false ),
       m_customEqualColumns( false ),
       m_customDisplayStyle( false )
@@ -1085,6 +1086,13 @@ bool MatrixElement::readAttributesFromMathMLDom( const QDomElement& element )
             m_side = RightOverlapSide;
         }
     }
+    QString minlabelspacingStr = element.attribute( "minlabelspacing" ).stripWhiteSpace().lower();
+    if ( ! minlabelspacingStr.isNull() ) {
+        m_minLabelSpacing = getSize( minlabelspacingStr, &m_minLabelSpacingType );
+        if ( m_minLabelSpacingType == NoSize ) {
+            m_minLabelSpacingType = getSpace( minlabelspacingStr );
+        }
+    }
     return true;
 }
 
@@ -1703,6 +1711,61 @@ void MatrixElement::writeMathMLAttributes( QDomElement& element )
         break;
     case RightOverlapSide:
         element.setAttribute( "side", "rightoverlap" );
+        break;
+    default:
+        break;
+    }
+    switch ( m_minLabelSpacingType ) {
+    case AbsoluteSize:
+        element.setAttribute( "minlabelspacing", QString( "%1pt" ).arg( m_minLabelSpacing ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( "minlabelspacing", QString( "%1%" ).arg( m_minLabelSpacing * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( "minlabelspacing", QString( "%1px" ).arg( m_minLabelSpacing ) );
+        break;
+    case NegativeVeryVeryThinMathSpace:
+        element.setAttribute( "minlabelspacing", "negativeveryverythinmathspace" );
+        break;
+    case NegativeVeryThinMathSpace:
+        element.setAttribute( "minlabelspacing", "negativeverythinmathspace" );
+        break;
+    case NegativeThinMathSpace:
+        element.setAttribute( "minlabelspacing", "negativethinmathspace" );
+        break;
+    case NegativeMediumMathSpace:
+        element.setAttribute( "minlabelspacing", "negativemediummathspace" );
+        break;
+    case NegativeThickMathSpace:
+        element.setAttribute( "minlabelspacing", "negativethickmathspace" );
+        break;
+    case NegativeVeryThickMathSpace:
+        element.setAttribute( "minlabelspacing", "negativeverythickmathspace" );
+        break;
+    case NegativeVeryVeryThickMathSpace:
+        element.setAttribute( "minlabelspacing", "negativeveryverythickmathspace" );
+        break;
+    case VeryVeryThinMathSpace:
+        element.setAttribute( "minlabelspacing", "veryverythinmathspace" );
+        break;
+    case VeryThinMathSpace:
+        element.setAttribute( "minlabelspacing", "verythinmathspace" );
+        break;
+    case ThinMathSpace:
+        element.setAttribute( "minlabelspacing", "thinmathspace" );
+        break;
+    case MediumMathSpace:
+        element.setAttribute( "minlabelspacing", "mediummathspace" );
+        break;
+    case ThickMathSpace:
+        element.setAttribute( "minlabelspacing", "thickmathspace" );
+        break;
+    case VeryThickMathSpace:
+        element.setAttribute( "minlabelspacing", "verythickmathspace" );
+        break;
+    case VeryVeryThickMathSpace:
+        element.setAttribute( "minlabelspacing", "veryverythickmathspace" );
         break;
     default:
         break;
