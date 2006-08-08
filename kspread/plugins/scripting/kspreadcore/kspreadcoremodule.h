@@ -26,7 +26,6 @@
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 
 #include <api/module.h>
-#include <api/event.h>
 
 namespace Kross { namespace Api {
     class Manager;
