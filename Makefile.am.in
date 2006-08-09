@@ -1,7 +1,7 @@
 ## koffice/Makefile.am.in
 ## (C) 1997 Stephan Kulow
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 1.6.1
 COMPILE_FIRST = lib interfaces
 COMPILE_BEFORE_kexi = kword kugar
 COMPILE_BEFORE_kplato = kdgantt kugar
