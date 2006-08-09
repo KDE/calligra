@@ -15,9 +15,11 @@ This chapter gives information on what colorspaces are, which colorspaces
 <para>
 In short, a colorspace is a way to represent colors by specifying a number of
 parameters. As parameters, one can choose for example the amounts of red,
-green and blue light needed for the color, which results in the commonly known
+green and blue light needed for the color. This results in the commonly known
 RGB colorspace. One can visualise this as a three-dimensional space, with each
 of the red, green, and blue light components being an axis in the colorspace.
+A color then corresponds to a certain point in this colorspace, defined by its
+coordinates on the three axes.
 </para>
 <note><para>
 To be more precise, a colorspace is a combination of a color model (indicating
@@ -41,7 +43,7 @@ colors for others, even if they are based on the same color model.
 <title>Available colorspaces</title>
 
 <para>
-&krita; offers colorspaces based on the RGB, CMYK, Lab, LMS, and GRAY
+&krita; offers colorspaces based on RGB, CMYK, Lab, LMS, YCbCr, and Gray
 color models. These are shortly discussed in this section.
 </para>
 
@@ -51,7 +53,8 @@ color models. These are shortly discussed in this section.
 <para>
 The abbreviation RGB stands for Red, Green, Blue, and the color model with
 this name refers to the three light components that are emitted in displays
-(televisions, computer monitors, etcetera) to create a certain color.
+(televisions, computer monitors, etcetera) to create a certain color. This
+color model is used by default in virtually any standard painting application.
 </para><para>
 When defining a color in the RGB model, its red, green and blue components are
 specified. If all components are absent (each component is emitted at 0
@@ -67,10 +70,10 @@ the same intensity is a shade of gray.
 There are various colorspaces that implement the RGB model. For example, the
 so-called RGB8 colorspace represents each color with 8 bits per component.
 Since 8 bits allow for 256 distinct values, the total number of different
-colors that can be specified in this colorspace is 256 * 256 * 256, or about
-16.7 million colors. In &krita;, a couple of RGB colorspaces are available,
-for example RGB32, which is able to distinguish between 4.2 billion values per
-component.
+colors that can be specified in this colorspace is 256 (red) * 256 (green) *
+256 (blue), or about 16.7 million colors. In &krita;, a couple of RGB
+colorspaces are available, for example RGB32, which is able to distinguish
+between 4.2 billion values per component.
 </para>
 
 </sect2>
@@ -85,20 +88,23 @@ based on ink: a color is specified by the amount of ink needed for a point
 to be perceived as having that color.
 </para><para>
 Since CMYK colors are used by printers while RGB colors are used on-screen,
-one wants to convert RGB colors to CMYK colors. As this cannot always be done
-correctly, printed images may turn out to look quite different.
+one often wants to convert RGB colors to CMYK colors. As this cannot always be
+done correctly, printed images may turn out to look quite different than what
+is perceived on-screen.
 </para>
 
 </sect2>
 
 <sect2 id="colorspaces-list-lab">
-<title>The Lab color model</title>
+<title>The L*a*b* color model</title>
 
 <para>
-This color model uses the three parameters luminance (L, 0 for black and
-100 for white), its position between red and green (a, negative for
-green and positive for red), and its position between yellow and blue (b,
-negative for blue and positive for yellow).
+This color model uses three parameters for a color: its
+luminance or lightness (L*, which lies between 0 for black and
+100 for white), its position between absolute red and absolute green (a*,
+which is negative for colors closer to green and positive for colors closer to
+red), and its position between yellow and blue (b*, which is negative for
+colors closer to blue and positive for colors closer to yellow).
 </para>
 
 </sect2>
@@ -107,17 +113,33 @@ negative for blue and positive for yellow).
 <title>The LMS color model</title>
 
 <para>
-This model is based on the contribution of actual wavelengths to the color. L,
-M and S stand for Long, Middle and Short wavelengths.
+This model is based on the contribution of actual light wave lengths to the
+color. The human eye is sensitive to three types of light waves, distinguished
+by their wave lengths: long (L), middle (M) and short (S) waves. The eye's
+sensitivity for a certain color on these three wavelengths can be expressed in
+L, M and S coordinates.
 </para>
 
 </sect2>
 
-<sect2 id="colorspaces-list-GRAY">
-<title>The GRAY color model</title>
+<sect2 id="colorspaces-list-YCbCr">
+<title>The YCbCr color model</title>
 
 <para>
-The GRAY color model simply represents colors as shades of gray.
+The YCbCr model is often used for video systems. The Y parameter indicates the
+luminance or lightness of the color (which can be seen as a gray-tone), the Cb
+and Cr parameters indicate the chrominance (color tone): Cb places the color
+on a scale between blue and yellow, Cr indicates the place of the color
+between red and green.
+</para>
+
+</sect2>
+
+<sect2 id="colorspaces-list-Gray"><title>The Gray color model</title>
+
+<para>
+The Gray color model simply represents colors as shades of gray (with black
+and white being the extremes).
 </para>
 
 </sect2>

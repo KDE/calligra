@@ -55,6 +55,10 @@ the best settings. Usually this works out fine, but in some cases (for example
 photos taken under unusual lighting circumstances), the filter will not yield
 satisfying results.
 </para>
+<para>
+You can find the Auto Contrast filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu></menuchoice> menu. This filter is not customizable.
+</para>
 <screenshot>
 <screeninfo>The image with the Auto Contrast filter applied to it</screeninfo>
 <mediaobject>
@@ -68,6 +72,44 @@ satisfying results.
 </mediaobject>
 </screenshot>
 </sect1>
+
+<sect1 id="filters-blur">
+<title>The Blur filter</title>
+<para>
+</para>
+<screenshot>
+<screeninfo>The image with the filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-">
+<title>The filter</title>
+<para>
+</para>
+<screenshot>
+<screeninfo>The image with the filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+
 
 <sect1 id="filters-bumpmap">
 <title>The Bumpmap filter</title>
