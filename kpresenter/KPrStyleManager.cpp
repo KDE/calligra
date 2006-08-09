@@ -23,12 +23,12 @@
 #include "KPrStyleManager.moc"
 #include <KoUnit.h>
 #include <kdebug.h>
-#include <KoStyleManager.h>
+#include <KoStyleDialog.h>
 #include <KoStyleCollection.h>
 
 KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPrDocument *_doc,
                                   const KoStyleCollection& styleCollection, const QString & activeStyleName)
-    : KoStyleManager(_parent,unit,styleCollection,activeStyleName)
+    : KoStyleDialog(_parent,unit,styleCollection,activeStyleName)
 {
     m_doc = _doc;
 }

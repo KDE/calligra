@@ -23,13 +23,13 @@
 
 #include <kdialog.h>
 #include <qstringlist.h>
-#include <KoStyleManager.h>
+#include <KoStyleDialog.h>
 
 class KPrDocument;
 class KoParagStyle;
 class KoUnit;
 
-class KPrStyleManager : public KoStyleManager
+class KPrStyleManager : public KoStyleDialog
 {
     Q_OBJECT
 
