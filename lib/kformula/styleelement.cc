@@ -45,8 +45,11 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
     
     QString scriptlevelStr = element.attribute( "scriptlevel" );
     if ( ! scriptlevelStr.isNull() ) {
+        if ( scriptlevelStr[0] == '+' || scriptlevelStr[0] == '-' ) {
+            m_relativeScriptLevel = true;
+        }
         bool ok;
-        m_scriptLevel = scriptlevelStr.toUInt( &ok );
+        m_scriptLevel = scriptlevelStr.toInt( &ok );
         if ( ! ok ) {
             kdWarning( DEBUGID ) << "Invalid scriptlevel attribute value: " 
                                  << scriptlevelStr << endl;
@@ -126,7 +129,11 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
 void StyleElement::writeMathMLAttributes( QDomElement& element )
 {
     if ( m_customScriptLevel ) {
-        element.setAttribute( "scriptlevel", QString( "%1" ).arg( m_scriptLevel ) );
+        QString prefix;
+        if ( m_relativeScriptLevel && m_scriptLevel >= 0 ) {
+            prefix = "+";
+        }
+        element.setAttribute( "scriptlevel", prefix + QString( "%1" ).arg( m_scriptLevel ) );
     }
     if ( m_customDisplayStyle ) {
         element.setAttribute( "displaystyle", m_displayStyle ? "true" : "false" );

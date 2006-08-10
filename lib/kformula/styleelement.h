@@ -45,7 +45,7 @@ private:
     void readSizeAttribute( const QString& str, SizeType* st, double* s );
     void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );
 
-    uint m_scriptLevel;
+    int m_scriptLevel;
     SizeType m_scriptMinSizeType;
     double m_scriptSizeMultiplier;
     double m_scriptMinSize;
@@ -66,6 +66,7 @@ private:
     double m_veryVeryThickMathSpace;
     bool m_displayStyle;
     bool m_customScriptLevel;
+    bool m_relativeScriptLevel;
     bool m_customDisplayStyle;
     bool m_customScriptSizeMultiplier;
     bool m_customBackground;
