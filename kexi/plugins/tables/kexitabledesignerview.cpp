@@ -330,9 +330,10 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 #endif
 
 	set->addProperty( prop 
-		= new KoProperty::Property("defaultValue", field.defaultValue(), i18n("Default Value")));
-//! @todo show this after we get properly working editor for QVariant
-	prop->setVisible(false);
+		= new KoProperty::Property("defaultValue", field.defaultValue(), i18n("Default Value"),
+			QString::null, (KoProperty::PropertyType)field.variantType()) );
+	prop->setOption("3rdState", i18n("None"));
+//	prop->setVisible(false);
 
 	set->addProperty(prop 
 		= new KoProperty::Property("primaryKey", QVariant(field.isPrimaryKey(), 4), i18n("Primary Key")));
@@ -886,6 +887,11 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 		}
 	}
 
+	if (pname=="defaultValue") {
+		KexiDB::Field::Type type = (KexiDB::Field::Type)set["type"].value().toInt();
+		set["defaultValue"].setType((KoProperty::PropertyType)KexiDB::Field::variantType(type));
+	}
+
 	if (pname=="subType" && d->slotPropertyChanged_subType_enabled) {
 		d->slotPropertyChanged_subType_enabled = false;
 		if (set["primaryKey"].value().toBool()==true 
@@ -1052,48 +1058,6 @@ KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set ) 
 		return 0;
 	}
 	return field;
-/*moved to KexiDB::setFieldProperties()
-	kexipluginsdbg << set["subType"].value().toString() << endl;
-	QString subTypeString( set["subType"].value().toString() );
-	KexiDB::Field::Type type = KexiDB::Field::typeForString(subTypeString);
-	if (type <= (int)KexiDB::Field::InvalidType || type > (int)KexiDB::Field::LastType) {//for sanity
-		type = KexiDB::Field::Text;
-		kexipluginswarn << "KexiTableDesignerView::buildSchema(): invalid type " << type 
-			<< ", moving back to Text type" << endl;
-	}
-
-	uint constraints = 0;
-	uint options = 0;
-	if (set["primaryKey"].value().toBool())
-		constraints |= KexiDB::Field::PrimaryKey;
-	if (set["autoIncrement"].value().toBool() && KexiDB::Field::isAutoIncrementAllowed(type))
-		constraints |= KexiDB::Field::AutoInc;
-	if (set["unique"].value().toBool())
-		constraints |= KexiDB::Field::Unique;
-	if (set["notnull"].value().toBool())
-		constraints |= KexiDB::Field::NotNull;
-	if (!set["allowEmpty"].value().toBool())
-		constraints |= KexiDB::Field::NotEmpty;
-
-	if (set["unsigned"].value().toBool())
-		options |= KexiDB::Field::Unsigned;
-
-	KexiDB::Field *f = new KexiDB::Field(
-		set["name"].value().toString(),
-		type,
-		constraints,
-		options,
-		set["length"].value().toInt(),
-		set["precision"].value().toInt(),
-		set["defaultValue"].value(),
-		set["caption"].value().toString(),
-		set["description"].value().toString(),
-		set["width"].value().toInt()
-	);
-	if (KexiDB::supportsVisibleDecimalPlacesProperty(f->type()) && set.contains("visibleDecimalPlaces"))
-		f->setVisibleDecimalPlaces(set["visibleDecimalPlaces"].value().toInt());
-
-	return f;*/
 }
 
 tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool beSilent)
@@ -1105,7 +1069,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 	//check for pkey; automatically add a pkey if user wanted
 	if (!d->primaryKeyExists) {
 		if (beSilent) {
-			kexipluginswarn << "KexiTableDesignerView::buildSchema(): no primay key defined..." << endl;
+			kexipluginsdbg << "KexiTableDesignerView::buildSchema(): no primay key defined..." << endl;
 		}
 		else {
 			const int questionRes = KMessageBox::questionYesNoCancel(this,
@@ -1536,7 +1500,7 @@ QString KexiTableDesignerView::debugStringForCurrentTableSchema(tristate& result
 	KexiDB::TableSchema tempTable;
 	//copy schema data
 	static_cast<KexiDB::SchemaData&>(tempTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
-	result = buildSchema(tempTable);
+	result = buildSchema(tempTable, true /*beSilent*/);
 	if (true!=result)
 		return QString::null;
 	return tempTable.debugString(false /*without name*/);

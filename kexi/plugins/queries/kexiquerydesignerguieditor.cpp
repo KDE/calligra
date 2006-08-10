@@ -395,7 +395,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			}
 			if (tableName.isEmpty()) {
 				if ((*set)["isExpression"].value().toBool()==true) {
-					//add expresion column
+					//add expression column
 					int dummyToken;
 					KexiDB::BaseExpr *columnExpr = parseExpressionString(fieldName, dummyToken, false/*!allowRelationalOperator*/);
 					if (!columnExpr) {
@@ -403,8 +403,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 							*errMsg = i18n("Invalid expression \"%1\"").arg(fieldName);
 						return false;
 					}
-					KexiDB::Field *f = new KexiDB::Field(temp->query(), columnExpr);
-					temp->query()->addField(f, fieldVisible);
+					temp->query()->addExpression(columnExpr, fieldVisible);
 					if (fieldVisible)
 						fieldsFound = true;
 					if (!alias.isEmpty())

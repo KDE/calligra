@@ -35,7 +35,7 @@ class AlterTableTester : public QObject
 		AlterTableTester();
 		~AlterTableTester();
 
-		tristate run();
+		tristate run(bool &closeAppRequested);
 
 	protected slots:
 		void slotFinishedCopying(QNetworkOperation*);
@@ -43,17 +43,18 @@ class AlterTableTester : public QObject
 	private:
 		bool changeFieldProperty(KexiTableDesignerInterface* designerIface);
 		bool getSchemaDump(KexiDialogBase* dlg, QString& schemaDebugString);
-		bool showSchema(KexiDialogBase* dlg);
+		bool showSchema(KexiDialogBase* dlg, bool copyToClipboard);
 		bool checkSchema(KexiDialogBase* dlg);
 		bool getActionsDump(KexiDialogBase* dlg, QString& actionsDebugString);
-		bool showActions(KexiDialogBase* dlg);
+		bool showActions(KexiDialogBase* dlg, bool copyToClipboard);
 		bool checkActions(KexiDialogBase* dlg);
 		bool checkInternal(KexiDialogBase* dlg, QString& debugString, 
 			const QString& endCommand, bool skipColons);
 		bool saveTableDesign(KexiDialogBase* dlg);
 		bool getTableDataDump(KexiDialogBase* dlg, QString& dataString);
-		bool showTableData(KexiDialogBase* dlg);
+		bool showTableData(KexiDialogBase* dlg, bool copyToClipboard);
 		bool checkTableData(KexiDialogBase* dlg);
+		bool closeWindow(KexiDialogBase* dlg);
 
 		QUrlOperator m_copyOperator;
 		bool m_finishedCopying;

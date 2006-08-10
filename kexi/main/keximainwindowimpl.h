@@ -131,8 +131,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Implemented for KexiMainWindow */
 		virtual tristate closeDialog(KexiDialogBase *dlg);
 
-		/*! Implemented for KexiMainWindow */
-		tristate closeDialog(KexiDialogBase *dlg, bool layoutTaskBar);
+		/*! Internal implementation. If \a doNotSaveChanges is true, 
+		 messages asking for saving the will be skipped and the changes will be dropped. 
+		 This should not be usually used, maybe except for test suites 
+		 (see kexi/tests/altertable/ directory). */
+		tristate closeDialog(KexiDialogBase *dlg, bool layoutTaskBar, bool doNotSaveChanges = false);
 
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
