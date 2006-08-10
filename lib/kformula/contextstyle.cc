@@ -569,38 +569,37 @@ bool StyleAttributes::customDisplayStyle() const
     return m_customDisplayStyle.top();
 }
 
-// TODO: These length should depend on style
 double StyleAttributes::getSpace( SizeType type, double length ) const
 {
     switch ( type ) {
     case NegativeVeryVeryThinMathSpace:
-        return - 1 / 18;
+        return - veryVeryThinMathSpace();
     case NegativeVeryThinMathSpace:
-        return - 2 / 18;
+        return - veryThinMathSpace();
     case NegativeThinMathSpace:
-        return - 3 / 18;
+        return - thinMathSpace();
     case NegativeMediumMathSpace:
-        return - 4 / 18;
+        return - mediumMathSpace();
     case NegativeThickMathSpace:
-        return - 5 / 18;
+        return - thickMathSpace();
     case NegativeVeryThickMathSpace:
-        return - 6 / 18;
+        return - veryThickMathSpace();
     case NegativeVeryVeryThickMathSpace:
-        return - 7 / 18;
+        return - veryVeryThickMathSpace();
     case VeryVeryThinMathSpace:
-        return 1 / 18;
+        return veryVeryThinMathSpace();
     case VeryThinMathSpace:
-        return 2 / 18;
+        return veryThinMathSpace();
     case ThinMathSpace:
-        return 3 / 18;
+        return thinMathSpace();
     case MediumMathSpace:
-        return 4 / 18;
+        return mediumMathSpace();
     case ThickMathSpace:
-        return 5 / 18;
+        return thickMathSpace();
     case VeryThickMathSpace:
-        return 6 / 18;
+        return veryThickMathSpace();
     case VeryVeryThickMathSpace:
-        return 7 / 18;
+        return veryVeryThickMathSpace();
     default:
         break;
     }
