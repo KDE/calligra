@@ -39,6 +39,7 @@ class KWPage;
 class KWFrameSet;
 
 class KoOasisStyles;
+class KoStyleManager;
 
 class KLocalizedString;
 class QDomDocument;
@@ -245,6 +246,8 @@ private:
     KWPageSettings m_pageSettings;
     KWFrameLayout m_frameLayout;
     QMap<KoShape*, KWFrame*> m_frameMap;
+
+    KoStyleManager *m_styleManager;
 };
 
 class PageProcessingQueue : public QObject {

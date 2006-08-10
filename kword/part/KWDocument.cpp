@@ -26,6 +26,7 @@
 #include "KWPage.h"
 #include "KWDLoader.h"
 #include "frame/KWFrameSet.h"
+#include "frame/KWTextFrameSet.h"
 #include "frame/KWFrame.h"
 #include "frame/KWFrameLayout.h"
 #include "dialog/KWFrameDialog.h"
@@ -37,6 +38,7 @@
 #include <KoTextShape.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
+#include <KoStyleManager.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -54,6 +56,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     m_zoom(100),
     m_frameLayout(pageManager(), m_frameSets, pageSettings())
 {
+    m_styleManager = new KoStyleManager(this);
     m_zoomMode = KoZoomMode::ZOOM_WIDTH;
 
     connect (&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
@@ -143,6 +146,11 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     m_frameSets.append(fs);
     foreach(KWFrame *frame, fs->frames())
         addFrame(frame);
+
+    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+    if(tfs)
+        m_styleManager->add( tfs->document() );
+
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
     emit frameSetAdded(fs);
@@ -362,6 +370,8 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 #endif
 
     // Note that more stuff will happen in completeLoading
+
+    setModified(false);
 }
 
 

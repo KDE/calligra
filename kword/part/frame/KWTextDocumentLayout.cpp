@@ -187,10 +187,14 @@ kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
         // kDebug() << "   layout block" << endl;
         if(!block.isValid())
             break;
+        int x=0, width = frame->shape()->size().width();
         QTextBlockFormat blockFormat = block.blockFormat();
         if(blockFormat.isValid()) {
             if(!firstParag)
                 offset += blockFormat.topMargin();
+            x = blockFormat.leftMargin();
+            width -= blockFormat.leftMargin() + blockFormat.rightMargin();
+            width = qMax(width, 20);
         }
         QTextLayout *layout = block.layout();
         layout->beginLayout();
@@ -206,9 +210,9 @@ kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
             QTextLine line = layout->createLine();
             if (!line.isValid())
                 break;
-            line.setLineWidth(frame->shape()->size().width());
+            line.setLineWidth(width);
             offset += fontMetrics.leading();
-            line.setPosition(QPoint(0, offset));
+            line.setPosition(QPoint(x, offset));
             offset += fontMetrics.height();
             position += line.textLength();
         }
