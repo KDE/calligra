@@ -358,11 +358,14 @@ bool KHTMLReader::parse_a(DOM::Element e) {
 	return true; /* stop parsing recursively */
 }
 
-bool KHTMLReader::parse_p(DOM::Element e) {
+bool KHTMLReader::parse_p(DOM::Element e) 
+{
         // For every starting paragraph, a line break has to be inserted.
         // exception: the first paragraph, e.g. if the <body> starts with a <p>.
         kdDebug() << "entering parse_p" << endl;
         static bool firstparagraph=true;
+        if (!(_writer->getText(state()->paragraph).isEmpty())) 
+          startNewParagraph(false,false); 
 	parse_CommonAttributes(e);
         kdDebug() << "leaving parse_p" << endl;
 	return true;
@@ -477,8 +480,6 @@ void KHTMLReader::parseStyle(DOM::Element e) {
     if ( s1.getPropertyValue("text-align").string() != QString() )
     {
       state()->layout=_writer->setLayout(state()->paragraph,state()->layout);
-      if (!(_writer->getText(state()->paragraph).isEmpty())) 
-        startNewParagraph(false,false); 
       _writer->layoutAttribute(state()->paragraph, "FLOW","align",s1.getPropertyValue("text-align").string());
     }
   // done
