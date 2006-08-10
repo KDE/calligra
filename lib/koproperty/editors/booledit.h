@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,8 +23,9 @@
 #define KPROPERTY_BOOLEDIT_H
 
 #include "../widget.h"
+#include <qpixmap.h>
 
-class QToolButton;
+class BoolEditButton;
 
 namespace KoProperty {
 
@@ -37,20 +39,21 @@ class KOPROPERTY_EXPORT BoolEdit : public Widget
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);
-
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 	protected slots:
-		void  slotValueChanged(bool state);
+		void  slotValueChanged(int state);
 
 	protected:
 		virtual void setReadOnlyInternal(bool readOnly);
-		void setState(bool state);
+		void setState(int state);
 		virtual void resizeEvent(QResizeEvent *ev);
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 
 	private:
-		QToolButton   *m_toggle;
+		BoolEditButton *m_toggle;
+		QPixmap m_yesIcon, m_noIcon, m_nullIcon; //!< icons for m_toggle
+		QString m_3rdStateText; //! used for 3rd state
 };
 
 }

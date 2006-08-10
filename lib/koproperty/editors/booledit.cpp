@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 */
 
 #include "booledit.h"
+#include "../property.h"
 
 #ifndef QT_ONLY
 #include <kiconloader.h>
@@ -29,27 +31,46 @@
 #include <qpainter.h>
 #include <qvariant.h>
 #include <qlayout.h>
+#include <qbitmap.h>
 
 #include <kdebug.h>
 
 using namespace KoProperty;
 
+//! @internal reimplemented to allow setting tristate mode
+class BoolEditButton : public QToolButton
+{
+    public:
+        BoolEditButton( QWidget * parent )
+        : QToolButton( parent )
+        {
+        }
+        virtual void setToggleType( ToggleType type ) { QToolButton::setToggleType(type); }
+        virtual void setState( ToggleState s ) { QToolButton::setState(s); }
+};
+
 BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
+ , m_yesIcon( SmallIcon("button_ok") )
+ , m_noIcon( SmallIcon("button_no") )
 {
-    m_toggle = new QToolButton(this);
+    QVariant thirdState = property ? property->option("3rdState") : QVariant();
+    if (!thirdState.toString().isEmpty()) {
+        m_3rdStateText = thirdState.toString();
+        m_nullIcon = QPixmap( m_noIcon.size() ); //transparent pixmap of appropriate size
+        m_nullIcon.setMask(QBitmap(m_noIcon.size(), true));
+    }
+    m_toggle = new BoolEditButton(this);
+    m_toggle->setToggleType( m_3rdStateText.isEmpty() ? QButton::Toggle : QButton::Tristate );
     m_toggle->setFocusPolicy(QWidget::WheelFocus);
-    m_toggle->setToggleButton(true);
     m_toggle->setUsesTextLabel(true);
     m_toggle->setTextPosition(QToolButton::Right);
     m_toggle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     //we're not using layout to because of problems with button size
     m_toggle->move(0, 0);
     m_toggle->resize(width(), height());
-//    m_toggle->show();
-
     setFocusWidget(m_toggle);
-    connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
+    connect(m_toggle, SIGNAL(stateChanged(int)), this, SLOT(slotValueChanged(int)));
 }
 
 BoolEdit::~BoolEdit()
@@ -59,6 +80,8 @@ BoolEdit::~BoolEdit()
 QVariant
 BoolEdit::value() const
 {
+    if (m_toggle->state()==QButton::NoChange)
+        return QVariant();
     return QVariant(m_toggle->isOn(), 4);
 }
 
@@ -66,15 +89,20 @@ void
 BoolEdit::setValue(const QVariant &value, bool emitChange)
 {
     m_toggle->blockSignals(true);
-    m_toggle->setOn(value.toBool());
-    setState(value.toBool());
+    QButton::ToggleState s = (value.isNull() && !m_3rdStateText.isEmpty()) ? QButton::NoChange 
+        : (value.toBool() ? QButton::On : QButton::Off);
+    if (s!=QButton::NoChange)
+        m_toggle->setOn(value.toBool());
+    else
+        m_toggle->setState( s );
+    setState( s );
     m_toggle->blockSignals(false);
     if (emitChange)
         emit valueChanged(this);
 }
 
 void
-BoolEdit::slotValueChanged(bool state)
+BoolEdit::slotValueChanged(int state)
 {
     setState(state);
     emit valueChanged(this);
@@ -87,28 +115,33 @@ BoolEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVa
     QRect r2(r);
     r2.moveLeft(KIcon::SizeSmall + 6);
 
-    if(value.toBool()) {
-        p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, SmallIcon("button_ok"));
+    if(value.isNull()) {
+        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, m_3rdStateText);
+    }
+    else if(value.toBool()) {
+        p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, m_yesIcon);
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("Yes"));
     }
     else  {
-        p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, SmallIcon("button_no"));
+        p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, m_noIcon);
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("No"));
     }
 }
 
 void
-BoolEdit::setState(bool state)
+BoolEdit::setState(int state)
 {
-    if(state)
-    {
-        m_toggle->setIconSet(QIconSet(SmallIcon("button_ok")));
+    if(QButton::On == state) {
+        m_toggle->setIconSet(QIconSet(m_yesIcon));
         m_toggle->setTextLabel(i18n("Yes"));
     }
-    else
-    {
-        m_toggle->setIconSet(QIconSet(SmallIcon("button_no")));
+    else if (QButton::Off == state) {
+        m_toggle->setIconSet(QIconSet(m_noIcon));
         m_toggle->setTextLabel(i18n("No"));
+    }
+    else {
+        m_toggle->setIconSet(QIconSet(m_nullIcon));
+        m_toggle->setTextLabel(m_3rdStateText);
     }
 }
 
@@ -135,7 +168,7 @@ BoolEdit::eventFilter(QObject* watched, QEvent* e)
 void
 BoolEdit::setReadOnlyInternal(bool readOnly)
 {
-	setVisibleFlag(!readOnly);
+    setVisibleFlag(!readOnly);
 }
 
 #include "booledit.moc"
