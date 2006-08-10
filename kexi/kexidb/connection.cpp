@@ -1239,7 +1239,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		}
 		s_where += s_where_sub;
 	}
-	//EXPLICITY SPECIFIER WHERE EXPRESION
+	//EXPLICITY SPECIFIED WHERE EXPRESSION
 	if (querySchema.whereExpression()) {
 		if (wasWhere) {
 //TODO: () are not always needed
@@ -1331,7 +1331,10 @@ void buildValuesForKexi__Fields(QValueList<QVariant>& vals, Field* f)
 	<< QVariant(f->isFPNumericType() ? f->precision() : 0)
 	<< QVariant(f->constraints())
 	<< QVariant(f->options())
-	<< QVariant(f->defaultValue())
+		// KexiDB::variantToString() is needed here because the value can be of any QVariant type, 
+		// depending on f->type()
+	<< (f->defaultValue().isNull() 
+			? QVariant() : QVariant(KexiDB::variantToString( f->defaultValue() ))) 
 	<< QVariant(f->order())
 	<< QVariant(f->caption())
 	<< QVariant(f->description());
@@ -2586,10 +2589,13 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 	while (!cursor->eof()) {
 //		KexiDBDbg<<"@@@ f_name=="<<cursor->value(2).asCString()<<endl;
 
-		int f_type = cursor->value(1).toInt(&ok);
+		int f_int_type = cursor->value(1).toInt(&ok);
+		if (f_int_type<=Field::InvalidType || f_int_type>Field::LastType)
+			ok = false;
 		if (!ok)
 			break;
-		int f_len = cursor->value(3).toInt(&ok);
+		Field::Type f_type = (Field::Type)f_int_type;
+		int f_len = QMAX( 0, cursor->value(3).toInt(&ok) );
 		if (!ok)
 			break;
 		int f_prec = cursor->value(4).toInt(&ok);
@@ -2610,8 +2616,15 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		}
 
 		Field *f = new Field(
-			cursor->value(2).asString(), (Field::Type)f_type, f_constr, f_opts, f_len, f_prec );
-		f->setDefaultValue( cursor->value(7).toCString() );
+			cursor->value(2).asString(), f_type, f_constr, f_opts, f_len, f_prec );
+
+		f->setDefaultValue( KexiDB::stringToVariant(cursor->value(7).toString(), Field::variantType( f_type ), ok) );
+		if (!ok) {
+			KexiDBWarn << "Connection::setupTableSchema() problem with KexiDB::stringToVariant(" 
+				<< cursor->value(7).toString() << ")" << endl;
+		}
+		ok = true; //problem with defaultValue is not critical
+
 		f->m_caption = cursor->value(9).asString();
 		f->m_desc = cursor->value(10).asString();
 		t->addField(f);

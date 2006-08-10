@@ -20,6 +20,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver_p.h>
+#include <kexidb/utils.h>
 
 #include "sqlite.h"
 #include "sqlitedriver.h"
@@ -133,7 +134,7 @@ QCString SQLiteDriver::escapeString(const QCString& str) const
 
 QString SQLiteDriver::escapeBLOB(const QByteArray& array) const
 {
-	return escapeBLOBInternal(array, BLOB_ESCAPING_TYPE_USE_X);
+	return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeXHex);
 }
 
 QString SQLiteDriver::drv_escapeIdentifier( const QString& str) const

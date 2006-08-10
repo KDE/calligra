@@ -381,7 +381,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 		return *this;
 	}
 	if (!field->isQueryAsterisk() && !field->isExpression() && !field->table()) {
-		KexiDBWarn << "QuerySchema::addField(): WARNING: field '"<<field->name()
+		KexiDBWarn << "QuerySchema::insertField(): WARNING: field '"<<field->name()
 			<<"' must contain table information!" <<endl;
 		return *this;
 	}
@@ -471,6 +471,11 @@ void QuerySchema::removeField(KexiDB::Field *field)
 	}
 //TODO: should we also remove table for this field or asterisk?
 	FieldList::removeField(field);
+}
+
+FieldList& QuerySchema::addExpression(BaseExpr* expr, bool visible)
+{
+	return addField( new Field(this, expr), visible );
 }
 
 bool QuerySchema::isColumnVisible(uint position) const

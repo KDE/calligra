@@ -133,17 +133,20 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/* Like above method, but you can also explicity bound the new column
 		 to specific position on tables list. 
+		 If \a visible is true (the default), the field will be visible. 
 		 If bindToTable==-1, no particular table should be bound.
 		 @see tableBoundToColumn(uint columnPosition) */
 		FieldList& insertField(uint position, Field *field, 
 			int bindToTable, bool visible = true);
 		
-		/*! Adds \a field to the columns list.
+		/*! Adds \a field to the columns list. 
+		 If \a visible is true (the default), the field will be visible. 
 		 \sa insertField() */
 		FieldList& addField(Field* field, bool visible = true);
 		
 		/*! Adds \a field to the columns list. Also binds to a table 
 		 at \a bindToTable position. Use bindToTable==-1 if no table should be bound.
+		 If \a visible is true (the default), the field will be visible. 
 		 \sa insertField()
 		 \sa tableBoundToColumn(uint columnPosition)
 		*/
@@ -152,6 +155,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! Removes field from the columns list. Use with care. */
 		virtual void removeField(Field *field);
+
+		/*! Adds a field built on top of \a expr expression. 
+		 This creates a new Field object and adds it to the query schema using addField(). */
+		FieldList& addExpression(BaseExpr* expr, bool visible = true);
 
 		/*! \return visibility flag for column at \a position. 
 		 By default column is visible. */

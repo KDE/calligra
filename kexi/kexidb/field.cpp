@@ -96,7 +96,7 @@ Field::Field(const Field& f)
 	if (f.m_customProperties)
 		m_customProperties = new CustomPropertiesMap( f.customProperties() );
 
-	if (f.m_expr) {//deep copy the expresion
+	if (f.m_expr) {//deep copy the expression
 //TODO		m_expr = new BaseExpr(*f.m_expr);
 
 //		m_expr->m_field = this;
@@ -603,6 +603,8 @@ QString Field::debugString()
 		dbg += " NOTNULL";
 	if (m_constraints & Field::NotEmpty)
 		dbg += " NOTEMPTY";
+	if (!m_defaultValue.isNull())
+		dbg += QString(" DEFAULT=[%1]").arg(m_defaultValue.typeName()) + KexiDB::variantToString(m_defaultValue);
 	if (m_expr)
 		dbg += " EXPRESSION=" + m_expr->debugString();
 	if (m_customProperties && !m_customProperties->isEmpty()) {

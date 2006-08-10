@@ -37,6 +37,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "mysqlconnection.h"
 #include <kexidb/field.h>
 #include <kexidb/driver_p.h>
+#include <kexidb/utils.h>
 
 using namespace KexiDB;
 
@@ -181,7 +182,7 @@ QString MySqlDriver::escapeString(const QString& str) const
 
 QString MySqlDriver::escapeBLOB(const QByteArray& array) const
 {
-	return escapeBLOBInternal(array, BLOB_ESCAPING_TYPE_USE_0x);
+	return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
 }
 
 QCString MySqlDriver::escapeString(const QCString& str) const

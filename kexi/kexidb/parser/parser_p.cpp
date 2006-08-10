@@ -259,8 +259,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 	}
 
 	//it's complex expression
-	Field *field = new Field(parseInfo.querySchema, columnExpr);
-	parseInfo.querySchema->addField(field);
+	parseInfo.querySchema->addExpression(columnExpr);
 
 #if 0
 	KexiDBDbg << "found variable name: " << varName << endl;

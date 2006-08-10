@@ -348,14 +348,6 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 eventually delete it. Better use Connection destructor. */
 		Connection* removeConnection( Connection *conn );
 
-		/*! Helper, used in escapeBLOB(). 
-		 * use \a type == BLOB_ESCAPING_TYPE_USE_X to get escaping like X'ABCD0' (used by sqlite)
-		 * use \a type == BLOB_ESCAPING_TYPE_USE_0x to get escaping like 0xABCD0 (used by mysql)
-		 * use \a type == BLOB_ESCAPING_TYPE_USE_OCTAL to get escaping like '\\253\\315\\000' 
-		     (used by pgsql)
-		*/
-		QString escapeBLOBInternal(const QByteArray& array, int type) const;
-
 	friend class Connection;
 	friend class Cursor;
 	friend class DriverManagerInternal;
