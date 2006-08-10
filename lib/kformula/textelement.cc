@@ -115,13 +115,15 @@ void TextElement::calcSizes( const ContextStyle& context,
 {
     double factor = style.sizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
-    kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     setCharStyle( style.charStyle() );
     setCharFamily( style.charFamily() );
 
     QFont font = getFont( context, style );
-    font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
+    double fontsize = context.layoutUnitPtToPt( mySize );
+    double scriptsize = pow( style.scriptSizeMultiplier(), style.scriptLevel() );
+    double size = fontsize * scriptsize;
+    font.setPointSizeFloat( size < style.scriptMinSize() ? style.scriptMinSize() : size );
 
     QFontMetrics fm( font );
     if ( character == applyFunctionChar || character == invisibleTimes || character == invisibleComma ) {
@@ -150,9 +152,6 @@ void TextElement::calcSizes( const ContextStyle& context,
             }
         }
     }
-        
-    kdDebug( DEBUGID ) << "height: " << getHeight() << endl;
-    kdDebug( DEBUGID ) << "width: " << getWidth() << endl;
 }
 
 /**
@@ -185,7 +184,10 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     double factor = style.sizeFactor();
     luPt mySize = context.getAdjustedSize( tstyle, factor );
     QFont font = getFont( context, style );
-    font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
+    double fontsize = context.layoutUnitPtToPt( mySize );
+    double scriptsize = pow( style.scriptSizeMultiplier(), style.scriptLevel() );
+    double size = fontsize * scriptsize;
+    font.setPointSizeFloat( size < style.scriptMinSize() ? style.scriptMinSize() : size );
     painter.setFont( font );
 
     //kdDebug( DEBUGID ) << "TextElement::draw font=" << font.rawName() << endl;

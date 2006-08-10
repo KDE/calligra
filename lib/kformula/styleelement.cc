@@ -32,6 +32,8 @@ StyleElement::StyleElement( BasicElement* parent ) : TokenStyleElement( parent )
                                                      m_veryThickMathSpaceType( NoSize ),
                                                      m_veryVeryThickMathSpaceType( NoSize ),
                                                      m_customDisplayStyle( false ),
+                                                     m_customScriptLevel( false ),
+                                                     m_relativeScriptLevel( false ),
                                                      m_customScriptSizeMultiplier( false ),
                                                      m_customBackground( false )
 {
@@ -188,10 +190,23 @@ void StyleElement::setStyleSize( const ContextStyle& context, StyleAttributes& s
     else {
         style.setScriptSizeMultiplier( style.scriptSizeMultiplier() );
     }
-    style.setScriptMinSize( sizeFactor( context, m_scriptMinSizeType, 
-                                        m_scriptMinSize, 
-                                        style.scriptMinSize() ) );
-                                        
+
+    // Get scriptminsize attribute in absolute units, so we don't depend on 
+    // context to get the default value
+    double basesize = context.layoutUnitPtToPt( context.getBaseSize() );
+    double size = style.scriptMinSize();
+    switch ( m_scriptMinSizeType ) {
+    case AbsoluteSize:
+        size = m_scriptMinSize;
+    case RelativeSize:
+        size = m_scriptMinSize * basesize;
+    case PixelSize:
+        size = context.pixelXToPt( m_scriptMinSize );
+    default:
+        break;
+    }
+    style.setScriptMinSize( size );
+
     style.setVeryVeryThinMathSpace( sizeFactor( context, 
                                                 m_veryVeryThinMathSpaceType,
                                                 m_veryVeryThinMathSpace,
