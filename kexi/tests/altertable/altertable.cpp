@@ -25,6 +25,7 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qregexp.h>
+#include <qclipboard.h>
 
 #include <kdebug.h>
 
@@ -37,6 +38,8 @@
 #include <core/kexiinternalpart.h>
 #include <kexiutils/utils.h>
 #include <koproperty/set.h>
+#include <kexidb/connection.h>
+#include <kexidb/utils.h>
 
 QString testFilename;
 QFile testFile;
@@ -44,6 +47,7 @@ QTextStream testFileStream;
 QStringList testFileLine;
 uint testLineNumber = 0;
 QString origDbFilename, dbFilename;
+int variableI = 1; // simple variable 'i' support
 int newArgc;
 char** newArgv;
 KexiMainWindowImpl* win = 0;
@@ -125,29 +129,84 @@ tristate readLineFromTestFile(const QString& expectedCommandName = QString::null
 	return true;
 }
 
-bool checkItemsNumber(int expectedNumberOfItems)
+bool checkItemsNumber(int expectedNumberOfItems, int optionalNumberOfItems = -1)
 {
-	if (expectedNumberOfItems>0 && expectedNumberOfItems!=(int)testFileLine.count()) {
-		showError( QString("Invalid number of args (%1) for command '%2', expected: %3")
-			.arg(testFileLine.count()-1).arg(testFileLine[0]).arg(expectedNumberOfItems-1) );
+	bool ok = expectedNumberOfItems==(int)testFileLine.count();
+	if (optionalNumberOfItems>0)
+		ok = ok || optionalNumberOfItems==(int)testFileLine.count();
+	if (!ok) {
+		QString msg = QString("Invalid number of args (%1) for command '%2', expected: %3")
+			.arg(testFileLine.count()).arg(testFileLine[0]).arg(expectedNumberOfItems);
+		if (optionalNumberOfItems>0)
+			msg.append( QString(" or %1").arg(optionalNumberOfItems) );
+		showError( msg );
 		return false;
 	}
 	return true;
 }
 
-QVariant::Type typeNameToQVariantType(const QCString& name)
+QVariant::Type typeNameToQVariantType(const QCString& name_)
 {
+	QCString name( name_.lower() );
 	if (name=="string")
 		return QVariant::String;
 	if (name=="int")
 		return QVariant::Int;
-	if (name=="boolean")
+	if (name=="bool" || name=="boolean")
 		return QVariant::Bool;
-	if (name=="double")
+	if (name=="double" || name=="float")
 		return QVariant::Double;
+	if (name=="date")
+		return QVariant::Date;
+	if (name=="datetime")
+		return QVariant::DateTime;
+	if (name=="time")
+		return QVariant::Time;
+	if (name=="bytearray")
+		return QVariant::ByteArray;
+	if (name=="longlong")
+		return QVariant::LongLong;
 //todo more types
-	showError(QString("Invalid type '%1'").arg(name));
+	showError(QString("Invalid type '%1'").arg(name_));
 	return QVariant::Invalid;
+}
+
+// casts string to QVariant
+bool castStringToQVariant( const QString& string, const QCString& type, QVariant& result )
+{
+	if (string.lower()=="<null>") {
+		result = QVariant();
+		return true;
+	}
+	if (string=="\"\"") {
+		result = QString("");
+		return true;
+	}
+	const QVariant::Type vtype = typeNameToQVariantType( type );
+	bool ok;
+	result = KexiDB::stringToVariant( string, vtype, ok );
+	return ok;
+}
+
+// returns a number parsed from argument; if argument is i or i++, variableI is used
+// 'ok' is set to false on failure
+static int getNumber(const QString& argument, bool& ok)
+{
+	int result;
+	ok = true;
+	if (argument=="i" || argument=="i++") {
+		result = variableI;
+		if (argument=="i++")
+			variableI++;
+	}
+	else {
+		result = argument.toInt(&ok);
+		if (!ok) {
+			showError(QString("Invalid value '%1'").arg(argument));
+			return -1;
+		}
+	}
+	return result;
 }
 
 //---------------------------------------
@@ -187,17 +246,17 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
 	if (propertyName=="type")
 		newValue = (int)KexiDB::Field::typeForString(testFileLine[4]);
 	else {
-		newValue = propertyValueString;
-		QVariant::Type vtype = typeNameToQVariantType( propertyType );
-		if (QVariant::Invalid==vtype)
-			return false;
-		if (!newValue.cast( vtype )) {
+		if (!castStringToQVariant(propertyValueString, propertyType, newValue)) {
 			showError( QString("Could not set property '%1' value '%2' of type '%3'")
 				.arg(propertyName).arg(propertyValueString).arg(propertyType) );
 			return false;
 		}
 	}
-	designerIface->changeFieldPropertyForRow( testFileLine[1].toInt()-1, propertyName, newValue, 0, true );
+	bool ok;
+	int row = getNumber(testFileLine[1], ok)-1;
+	if (!ok)
+		return false;
+	designerIface->changeFieldPropertyForRow( row, propertyName, newValue, 0, true );
 	if (propertyName=="type") {
 		//clean subtype name, e.g. from "longText" to "LongText", because dropdown list is case-sensitive
 		QString realSubTypeName;
@@ -206,8 +265,7 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
 			realSubTypeName = "image";
 		else
 			realSubTypeName = KexiDB::Field::typeString( KexiDB::Field::typeForString(testFileLine[4]) );
-		designerIface->changeFieldPropertyForRow( testFileLine[1].toInt()-1, 
-			"subType", realSubTypeName, 0, true );
+		designerIface->changeFieldPropertyForRow( row, "subType", realSubTypeName, 0, true );
 	}
 	return true;
 }
@@ -232,18 +290,21 @@ bool AlterTableTester::getSchemaDump(KexiDialogBase* dlg, QString& schemaDebugSt
 	return true;
 }
 
-bool AlterTableTester::showSchema(KexiDialogBase* dlg)
+bool AlterTableTester::showSchema(KexiDialogBase* dlg, bool copyToClipboard)
 {
 	QString schemaDebugString;
 	if (!getSchemaDump(dlg, schemaDebugString))
 		return false;
-	kdDebug() << QString("Schema for '%1' table:\n").arg(dlg->partItem()->name())
-		+ schemaDebugString + "\nendSchema" << endl;
+	if (copyToClipboard)
+		QApplication::clipboard()->setText( schemaDebugString );
+	else
+		kdDebug() << QString("Schema for '%1' table:\n").arg(dlg->partItem()->name())
+			+ schemaDebugString + "\nendSchema" << endl;
 	return true;
 }
 
 bool AlterTableTester::checkInternal(KexiDialogBase* dlg,
-	QString& debugString, const QString& endCommand, bool skipColons)
+	QString& debugString, const QString& endCommand, bool skipColonsAndStripWhiteSpace)
 {
 	Q_UNUSED(dlg);
 	QTextStream resultStream(&debugString, IO_ReadOnly);
@@ -253,11 +314,13 @@ bool AlterTableTester::checkInternal(KexiDialogBase* dlg,
 		const bool testFileStreamAtEnd = testFileStream.atEnd();
 		if (!testFileStreamAtEnd) {
 			testLineNumber++;
-			expectedLine = testFileStream.readLine().stripWhiteSpace();
-			if (skipColons)
+			expectedLine = testFileStream.readLine();
+			if (skipColonsAndStripWhiteSpace) {
+				expectedLine = expectedLine.stripWhiteSpace();
 				expectedLine.remove(QRegExp(",$")); //no need to have "," at the end of lines
+			}
 		}
-		if (testFileStreamAtEnd || endCommand==expectedLine) {
+		if (testFileStreamAtEnd || endCommand==expectedLine.stripWhiteSpace()) {
 			if (!resultStream.atEnd()) {
 				showError( "Test file ends unexpectedly." );
 				return false;
@@ -270,9 +333,11 @@ bool AlterTableTester::checkInternal(KexiDialogBase* dlg,
 				+ expectedLine +"'" );
 			return false;
 		}
-		resultLine = resultStream.readLine().stripWhiteSpace();
-		if (skipColons)
+		resultLine = resultStream.readLine();
+		if (skipColonsAndStripWhiteSpace) {
+			resultLine = resultLine.stripWhiteSpace();
 			resultLine.remove(QRegExp(",$")); //no need to have "," at the end of lines
+		}
 		if (resultLine!=expectedLine) {
 			showError(
 				QString("Result differs from the expected:\nExpected: ")
@@ -288,7 +353,7 @@ bool AlterTableTester::checkSchema(KexiDialogBase* dlg)
 	QString schemaDebugString;
 	if (!getSchemaDump(dlg, schemaDebugString))
 		return false;
-	bool result = checkInternal(dlg, schemaDebugString, "endSchema", true /*skipColons*/);
+	bool result = checkInternal(dlg, schemaDebugString, "endSchema", true /*skipColonsAndStripWhiteSpace*/);
 	kdDebug() << QString("Schema check for table '%1': %2").arg(dlg->partItem()->name())
 		.arg(result ? "OK" : "Failed") << endl;
 	return result;
@@ -308,13 +373,16 @@ bool AlterTableTester::getActionsDump(KexiDialogBase* dlg, QString& actionsDebug
 	return true;
 }
 
-bool AlterTableTester::showActions(KexiDialogBase* dlg)
+bool AlterTableTester::showActions(KexiDialogBase* dlg, bool copyToClipboard)
 {
 	QString actionsDebugString;
 	if (!getActionsDump(dlg, actionsDebugString))
 		return false;
-	kdDebug() << QString("Simplified actions for altering table '%1':\n").arg(dlg->partItem()->name())
-		+actionsDebugString+"\n" << endl;
+	if (copyToClipboard)
+		QApplication::clipboard()->setText( actionsDebugString );
+	else
+		kdDebug() << QString("Simplified actions for altering table '%1':\n").arg(dlg->partItem()->name())
+			+ actionsDebugString+"\n" << endl;
 	return true;
 }
 
@@ -323,7 +391,7 @@ bool AlterTableTester::checkActions(KexiDialogBase* dlg)
 	QString actionsDebugString;
 	if (!getActionsDump(dlg, actionsDebugString))
 		return false;
-	bool result = checkInternal(dlg, actionsDebugString, "endActions", true /*skipColons*/);
+	bool result = checkInternal(dlg, actionsDebugString, "endActions", true /*skipColonsAndStripWhiteSpace*/);
 		kdDebug() << QString("Actions check for table '%1': %2").arg(dlg->partItem()->name())
 		.arg(result ? "OK" : "Failed") << endl;
 	return result;
@@ -355,7 +423,9 @@ bool AlterTableTester::getTableDataDump(KexiDialogBase* dlg, QString& dataString
 	args["textStream"] = KexiUtils::ptrToString<QTextStream>( &ts );
 	args["destinationType"]="file";
 	args["delimiter"]="\t";
-	args["itemId"] = QString::number(dlg->partItem()->identifier());
+	args["textQuote"]="\"";
+	args["itemId"] = QString::number( 
+		prj->dbConnection()->tableSchema( dlg->partItem()->name() )->id() );
 	if (!KexiInternalPart::executeCommand("csv_importexport", win, "KexiCSVExport", &args)) {
 		showError( "Error exporting table contents." );
 		return false;
@@ -363,12 +433,15 @@ bool AlterTableTester::getTableDataDump(KexiDialogBase* dlg, QString& dataString
 	return true;
 }
 
-bool AlterTableTester::showTableData(KexiDialogBase* dlg)
+bool AlterTableTester::showTableData(KexiDialogBase* dlg, bool copyToClipboard)
 {
 	QString dataString;
 	if (!getTableDataDump(dlg, dataString))
 		return false;
-	kdDebug() << QString("Contents of table '%1':\n").arg(dlg->partItem()->name())+dataString+"\n" << endl;
+	if (copyToClipboard)
+		QApplication::clipboard()->setText( dataString );
+	else
+		kdDebug() << QString("Contents of table '%1':\n").arg(dlg->partItem()->name())+dataString+"\n" << endl;
 	return true;
 }
 
@@ -377,15 +450,27 @@ bool AlterTableTester::checkTableData(KexiDialogBase* dlg)
 	QString dataString;
 	if (!getTableDataDump(dlg, dataString))
 		return false;
-	bool result = checkInternal(dlg, dataString, "endTableData", false /*!skipColons*/);
+	bool result = checkInternal(dlg, dataString, "endTableData", false /*!skipColonsAndStripWhiteSpace*/);
 		kdDebug() << QString("Table '%1' contents: %2").arg(dlg->partItem()->name())
 			.arg(result ? "OK" : "Failed") << endl;
 	return result;
 }
 
-//! Processes test file
-tristate AlterTableTester::run()
+bool AlterTableTester::closeWindow(KexiDialogBase* dlg)
 {
+	if (!dlg)
+		return true;
+	QString name = dlg->partItem()->name();
+	tristate result = true == win->closeDialog(dlg, true/*layoutTaskBar*/, true/*doNotSaveChanges*/);
+	kdDebug() << QString("Closing window for table '%1': %2").arg(name)
+		.arg(result==true ? "OK" : (result==false ? "Failed" : "Cancelled")) << endl;
+	return result == true;
+}
+
+//! Processes test file
+tristate AlterTableTester::run(bool &closeAppRequested)
+{
+	closeAppRequested = false;
 	while (!m_finishedCopying)
 		qApp->processEvents(300);
 
@@ -421,62 +506,137 @@ tristate AlterTableTester::run()
 	if (!designerIface)
 		return false;
 
+	//dramatic speedup: temporary hide the window and propeditor
+	QWidget * propeditor 
+		= KexiUtils::findFirstChild<QWidget>(qApp->mainWidget(), "KexiPropertyEditorView");
+	if (propeditor)
+		propeditor->hide();
+	dlg->hide();
+
+	bool designTable = true;
 	while (!testFileStream.atEnd()) {
 		res = readLineFromTestFile();
 		if (true != res)
 			return ~res;
 		QString command( testFileLine[0] );
-		if (command=="removeField") {
-			if (!checkItemsNumber(2))
-				return false;
-			designerIface->deleteRow( testFileLine[1].toInt()-1, true );
+		if (designTable) {
+			//subcommands available within "designTable" commands
+			if (command=="endDesign") {
+				if (!checkItemsNumber(1))
+					return false;
+				//end of the design session: unhide the window and propeditor
+				dlg->show();
+				if (propeditor)
+					propeditor->show();
+				designTable = false;
+				continue;
+			}
+			else if (command=="removeField") {
+				if (!checkItemsNumber(2))
+					return false;
+				bool ok;
+				int row = getNumber(testFileLine[1], ok)-1;
+				if (!ok)
+					return false;
+				designerIface->deleteRow( row, true );
+				continue;
+			}
+			else if (command=="insertField") {
+				if (!checkItemsNumber(3))
+					return false;
+				bool ok;
+				int row = getNumber(testFileLine[1], ok)-1;
+				if (!ok)
+					return false;
+				designerIface->insertField( row, testFileLine[2], true );
+				continue;
+			}
+			else if (command=="insertEmptyRow") {
+				if (!checkItemsNumber(2))
+					return false;
+				bool ok;
+				int row = getNumber(testFileLine[1], ok)-1;
+				if (!ok)
+					return false;
+				designerIface->insertEmptyRow( row, true );
+				continue;
+			}
+			else if (command=="changeFieldProperty") {
+				if (!checkItemsNumber(5) || !changeFieldProperty(designerIface))
+					return false;
+				continue;
+			}
+			else if (command.startsWith("i=")) {
+				bool ok;
+				variableI = command.mid(2).toInt(&ok);
+				if (!ok) {
+					showError(QString("Invalid variable initialization '%1'").arg(command));
+					return false;
+				}
+				continue;
+			}
+			else if (command.startsWith("i++")) {
+				variableI++;
+				continue;
+			}
 		}
-		else if (command=="insertField") {
-			if (!checkItemsNumber(3))
-				return false;
-			designerIface->insertField( testFileLine[1].toInt()-1, testFileLine[2], true );
+		else {
+			//top-level commands available outside of "designTable"
+			if (command=="showSchema") {
+				if (!checkItemsNumber(1, 2) || !showSchema(dlg, testFileLine[1]=="clipboard"))
+					return false;
+				continue;
+			}
+			else if (command=="checkSchema") {
+				if (!checkItemsNumber(1) || !checkSchema(dlg))
+					return false;
+				continue;
+			}
+			else if (command=="showActions") {
+				if (!checkItemsNumber(1, 2) || !showActions(dlg, testFileLine[1]=="clipboard"))
+					return false;
+				continue;
+			}
+			else if (command=="checkActions") {
+				if (!checkItemsNumber(1) || !checkActions(dlg))
+					return false;
+				continue;
+			}
+			else if (command=="saveTableDesign") {
+				if (!checkItemsNumber(1) || !saveTableDesign(dlg))
+					return false;
+				continue;
+			}
+			else if (command=="showTableData") {
+				if (!checkItemsNumber(1, 2) || !showTableData(dlg, testFileLine[1]=="clipboard"))
+					return false;
+				continue;
+			}
+			else if (command=="checkTableData") {
+				if (!checkItemsNumber(1) || !checkTableData(dlg))
+					return false;
+				continue;
+			}
 		}
-		else if (command=="insertEmptyRow") {
-			if (!checkItemsNumber(2))
-				return false;
-			designerIface->insertEmptyRow( testFileLine[1].toInt()-1, true );
-		}
-		else if (command=="changeFieldProperty") {
-			if (!checkItemsNumber(5) || !changeFieldProperty(designerIface))
-				return false;
-		}
-		else if (command=="showSchema") {
-			if (!checkItemsNumber(1) || !showSchema(dlg))
-				return false;
-		}
-		else if (command=="checkSchema") {
-			if (!checkItemsNumber(1) || !checkSchema(dlg))
-				return false;
-		}
-		else if (command=="showActions") {
-			if (!checkItemsNumber(1) || !showActions(dlg))
-				return false;
-		}
-		else if (command=="checkActions") {
-			if (!checkItemsNumber(1) || !checkActions(dlg))
-				return false;
-		}
-		else if (command=="saveTableDesign") {
-			if (!checkItemsNumber(1) || !saveTableDesign(dlg))
-				return false;
-		}
-		else if (command=="showTableData") {
-			if (!checkItemsNumber(1) || !showTableData(dlg))
-				return false;
-		}
-		else if (command=="checkTableData") {
-			if (!checkItemsNumber(1) || !checkTableData(dlg))
-				return false;
-		}
-		else if (command=="stop") {
+		//common commands
+		if (command=="stop") {
 			if (!checkItemsNumber(1))
 				return false;
 			kdDebug() << QString("Test STOPPED at line %1.").arg(testLineNumber) << endl;
+			break;
+		}
+		else if (command=="closeWindow") {
+			if (!checkItemsNumber(1) || !closeWindow(dlg))
+				return false;
+			else
+				dlg = 0;
+			continue;
+		}
+		else if (command=="quit") {
+			if (!checkItemsNumber(1) || !closeWindow(dlg))
+				return false;
+			closeAppRequested = true;
+			kdDebug() << QString("Quitting the application...") << endl;
 			break;
 		}
 		else {
@@ -540,14 +700,15 @@ int main(int argc, char *argv[])
 	AlterTableTester tester;
 	//QObject::connect(win, SIGNAL(projectOpened()), &tester, SLOT(run()));
 
-	res = tester.run();
+	bool closeAppRequested;
+	res = tester.run(closeAppRequested);
 	if (true != res) {
 		if (false == res)
 			kdWarning() << QString("Running test for file '%1' failed.").arg(testFilename) << endl;
 		return quit(res==false ? 1 : 0);
 	}
 	kdDebug() << QString("Tests from file '%1': OK").arg(testFilename) << endl;
-	result = closeOnFinish ? 0 : qApp->exec();
+	result = (closeOnFinish || closeAppRequested) ? 0 : qApp->exec();
 	quit(result);
 	return result;
 }

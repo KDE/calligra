@@ -2878,7 +2878,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg)
 	return closeDialog(dlg, true);
 }
 
-tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
+tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar, bool doNotSaveChanges)
 {
 	if (!dlg) 
 		return true;
@@ -2899,12 +2899,8 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 		}
 	}
 
-/*this crashes but is nice:
-	QWidget *www = guiFactory()->container("query", dlg->commonGUIClient());
-	delete www;*/
-
 	bool remove_on_closing = dlg->partItem() ? dlg->partItem()->neverSaved() : false;
-	if (dlg->dirty() && !d->forceDialogClosing) {
+	if (dlg->dirty() && !d->forceDialogClosing && !doNotSaveChanges) {
 		//more accurate tool tips and what's this
 		KGuiItem saveChanges( KStdGuiItem::save() ); 
 		saveChanges.setToolTip(i18n("Save changes"));
@@ -2980,7 +2976,6 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 			d->nav->updateItemName( *dlg->partItem(), false );
 	}
 
-//	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
 	d->removeDialog(dlg_id); //don't remove -KMDI will do that
 	//also remove from 'print setup dialogs' cache, if needed
 	int printedObjectID = 0;
@@ -3050,17 +3045,6 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 #endif
 	return true;
 }
-
-/*
-KexiRelationPart *
-KexiMainWindowImpl::relationPart()
-{
-	if(d->relationPart)
-		return d->relationPart;
-
-	d->relationPart = KParts::ComponentFactory::createInstanceFromLibrary<KexiRelationPart>("kexihandler_relation", this, "prel");
-	return d->relationPart;
-}*/
 
 void KexiMainWindowImpl::detachWindow(KMdiChildView *pWnd,bool bShow)
 {

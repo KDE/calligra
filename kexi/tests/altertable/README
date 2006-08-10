@@ -52,7 +52,11 @@ Available commands of the test suite
 #TODO: support server databases
   Example use: openDatabase 1.kexi
 
-1. Commands for altering table fields:
+* designTable <tablename> \n <block> \n endDesign
+  Opens table in design mode. <block> contains one or more schema altering 
+  commands described in 2.
+
+2. Commands for altering table fields (during the design mode, within "designTable" command):
 
 * insertField <rownumber(int)> <fieldname(string)>
   Inserts a new table field with default properties (text type) and 'fieldname' name.
@@ -70,16 +74,38 @@ Available commands of the test suite
 
 * changeFieldProperty <rownumber(int)> <propertyname(string)> <valuetype(string)> <value(string)>
   Changes property of table field at a specified row.
-  'valuetype' can be int, string, bool, double, and type. 'type' property means a field datatype, 
-  where value can be any of the names in KexiDB::Field::Type enum, written as string, 
-  e.g. "integer","text", "date", etc. 
-  Example use: changeFieldProperty 0 type string date
+  'valuetype' can be int, string, bool, double/float, bool/boolean, data, dateTime, time, 
+  bytearray, longlong. 
+  <value(string)> should be a string representation of the value. Special cases are:
+  byteArray: hexadecimal string like 'fd1a5c', dateTime: yyyy-mm-ddThh:mm:ss string 
+  like '2005-11-05T12:34:56'.
+  Null values should be specified as <null> string. Empty string values should be specified as "".
+  'type' property means a field datatype, where value can be any of the names 
+  in KexiDB::Field::Type enum, written as string, e.g. "integer","text", "date", etc. 
+  Example use: changeFieldProperty 1 type string date
 
-2. Commands related to altered (not saved) table schema:
+* i++
+  Increases "i" variable by 1. This integer variable is initialized to 1 before test is executed.
+  Can be used as an argument for <rownumber(int)> for above field-related commands.
+ 
+* i=<number(int)>
+  Sets "i" variable to <number(int)>.
+  Example use: shows that using the variable instead of constants allows to insert 
+  a command without a need for managing subsequent arguments.
+	i=3
+	removeField i
+	insertField i textField
+	changeFieldProperty i type string text
+	i++ #i is now 4
+	insertField i longTextField
+	changeFieldProperty i type string longText
 
-* showSchema
+3. Commands related to altered (not saved) table schema:
+
+* showSchema [clipboard]
   Shows schema dump as returned by KexiTableDesignerInterface::debugStringForCurrentTableSchema().
   Useful for creating "checkSchema" checks: Just paste the output to the test file.
+  You can use "clipboard" word to copy prepare the schema dump to clipboard.
 
 * checkSchema \n <block> \n endSchema
   Checks validity of the not yet saved schema altered in the Table Designer using the
@@ -97,11 +123,12 @@ Available commands of the test suite
   booleanfield Boolean NOTNULL
  endSchema
 
-3. Commands related to simplified list of Alter Table actions (simulated, before real saving):
+4. Commands related to simplified list of Alter Table actions (simulated, before real saving):
 
-* showActions
+* showActions [clipboard]
   Shows the list of simplified Alter Table actions that are result of commands related to table fields, 
   mentioned in 1.
+  You can use "clipboard" word to copy prepare the expected actions dump to clipboard.
 
 * checkActions \n <block> \n endActions
   Checks validity of the list of simplified Alter Table actions. 
@@ -116,21 +143,27 @@ Available commands of the test suite
   Insert table field "longtextfield" at position 3 (longtextfield Text(200))
  endActions
 
-4. Commands related to physical schema saving (altering) and checking its result
+5. Commands related to physical schema saving (altering) and checking its result
 
 * saveTableDesign
   Executes the final Alter Table function. Table design will be altered and data should 
   be preserved. After this command it is usable to run "checkTableData" test to see 
   whether the data looks as expected.
 
-* showTableData
-  Shows current table contents in tab-separated CSV format (one row per record);
-  text is encoded in utf-8.
+* showTableData [clipboard]
+  Shows current table contents in tab-separated CSV format (one row per record) 
+  on the stderr; text is encoded in utf-8. The data is printed to the stderr.
+  If optional "clipboard" word is present, the data is copied to clipboard instead.
+  Table dumps can be sometimes large and hard to prepare by hand, so you can use 
+  "clipboard" word to prepare the expected table dump by pasting the text to 
+  a .altertable file.
+  For details about the output format in the description "checkTableData".
 
 * checkTableData \n <block> \n endTableData
   Compares the current contents of table with expected contents, line by line.
   The data has to be in tab-separated CSV format (one row per record); 
-  text has to be encoded in utf-8. Column names should be included as a first row.
+  text has to be encoded in utf-8 and enclosed in " quotes. 
+  Column names should be included as a first row.
   You can use showTableData command first and then copy the results to your test file for later.
   Example use:
    checkTableData
@@ -139,11 +172,17 @@ Available commands of the test suite
     2	Al	Pacino
    endTableData
 
-5. Other commands.
+6. Other commands.
+
+* closeWindow
+  Closes the currently opened table designer window without asking for saving changes.
 
 * stop
   Stops processing immediately. For example, this can be inserted temporarily to stop testing 
-  (with success result)
+  (with success result). This command is available in any place.
+
+* quit
+  Executes "closeWindow" command and quits the application (with success result).
 
 6. Comments
 

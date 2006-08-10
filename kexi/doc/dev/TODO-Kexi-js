@@ -941,6 +941,8 @@ TODO
 === KexiDB PostgreSQL Driver TODO ===
 - port to libpq
 - set version information in drv_useDatabase()
+  There's connection_base::server_version() in libpqxx trunk - 
+  http://thaiopensource.org/development/libpqxx/file/trunk/include/pqxx/connection_base.hxx
 
 === KexiDB TODO ===
 - add setValue() to cursors: this will REQUIRE a buffered cursor, since we cannot run sql 

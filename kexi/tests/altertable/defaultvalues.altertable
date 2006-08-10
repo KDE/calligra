@@ -1,0 +1,129 @@
+openDatabase 1.kexi
+
+/* 
+ This test checks:
+ - creating table fields of all possible types with specific default values
+ - adding new fields to the table with preserving the original content
+
+ All the existing columns are removed
+
+ Used tables: cars
+*/
+
+designTable cars #initially there are 3rows
+ removeField 1
+ removeField 1
+ removeField 1
+ i=1
+ insertField i textField
+ changeFieldProperty i type string text
+ changeFieldProperty i defaultValue string abc
+ i++
+ insertField i longTextField
+ changeFieldProperty i type string longText
+ changeFieldProperty i defaultValue string def
+ i++
+ insertField i byteField
+ changeFieldProperty i type string byte
+ changeFieldProperty i defaultValue int 11
+ i++
+ insertField i shortIntField
+ changeFieldProperty i type string shortInteger
+ changeFieldProperty i defaultValue int 22
+ i++
+ insertField i intField
+ changeFieldProperty i type string integer
+ changeFieldProperty i defaultValue int 333
+ i++
+ insertField i bigIntField
+ changeFieldProperty i type string bigInteger
+ changeFieldProperty i defaultValue longlong 1234567891011
+ i++
+ insertField i booleanField
+ changeFieldProperty i type string boolean
+ changeFieldProperty i defaultValue bool true
+ i++
+ insertField i dateField
+ changeFieldProperty i type string date
+ changeFieldProperty i defaultValue date 2006-08-09
+ i++
+ insertField i dateTimeField
+ changeFieldProperty i type string dateTime
+ changeFieldProperty i defaultValue dateTime 2006-08-09T10:36:01
+ i++
+ insertField i timeField
+ changeFieldProperty i type string time
+ changeFieldProperty i defaultValue time 10:36:02
+ i++
+ insertField i floatField
+ changeFieldProperty i type string float
+ changeFieldProperty i defaultValue float 1.98
+ i++
+ insertField i doubleField
+ changeFieldProperty i type string double
+ changeFieldProperty i defaultValue double 3.1415926
+ i++
+ insertField i blobField
+ changeFieldProperty i type string blob
+ changeFieldProperty i defaultValue byteArray fdfeff
+endDesign
+
+ showSchema
+
+ checkSchema
+  textfield Text(200) DEFAULT=[QString]abc,
+  longtextfield LongText DEFAULT=[QString]def,
+  bytefield Byte DEFAULT=[int]11,
+  shortintfield ShortInteger DEFAULT=[int]22,
+  intfield Integer DEFAULT=[int]333,
+  bigintfield BigInteger DEFAULT=[Q_LLONG]1234567891011,
+  booleanfield Boolean NOTNULL DEFAULT=[bool]true,
+  datefield Date DEFAULT=[QDate]2006-08-09,
+  datetimefield DateTime DEFAULT=[QDateTime]2006-08-09T10:36:01,
+  timefield Time DEFAULT=[QTime]10:36:02,
+  floatfield Float DEFAULT=[double]1.98,
+  doublefield Double DEFAULT=[double]3.1415926,
+  blobfield BLOB DEFAULT=[QByteArray]FDFEFF
+ endSchema
+
+ showActions
+
+ checkActions
+Remove table field "id"
+Remove table field "owner"
+Remove table field "model"
+Insert table field "textfield" at position 0 (textfield Text(200) DEFAULT=[QString]abc)
+Insert table field "longtextfield" at position 1 (longtextfield LongText DEFAULT=[QString]def)
+Insert table field "bytefield" at position 2 (bytefield Byte DEFAULT=[int]11)
+Insert table field "shortintfield" at position 3 (shortintfield ShortInteger DEFAULT=[int]22)
+Insert table field "intfield" at position 4 (intfield Integer DEFAULT=[int]333)
+Insert table field "bigintfield" at position 5 (bigintfield BigInteger DEFAULT=[Q_LLONG]1234567891011)
+Insert table field "booleanfield" at position 6 (booleanfield Boolean NOTNULL DEFAULT=[bool]true)
+Insert table field "datefield" at position 7 (datefield Date DEFAULT=[QDate]2006-08-09)
+Insert table field "datetimefield" at position 8 (datetimefield DateTime DEFAULT=[QDateTime]2006-08-09T10:36:01)
+Insert table field "timefield" at position 9 (timefield Time DEFAULT=[QTime]10:36:02)
+Insert table field "floatfield" at position 10 (floatfield Float DEFAULT=[double]1.98)
+Insert table field "doublefield" at position 11 (doublefield Double DEFAULT=[double]3.1415926)
+Insert table field "blobfield" at position 12 (blobfield BLOB DEFAULT=[QByteArray]FDFEFF)
+ endActions
+
+# saveTableDesign #executes Alter Table
+
+#closeWindow
+
+#stop
+#quit
+
+# copyTableDataToClipboard
+# showTableData
+ stop
+
+ checkTableData
+"ID"	"textField"	"Car owner"	"longTextField"	"byteField"	"shortIntField"	"intField"	"bigIntField"	"booleanField"	"dateField"	"dateTimeField"	"timeField"	"floatField"	"doubleField"	"blobField"
+1		2						false						
+2		2						false						
+3		3						false						
+5		4						false						
+6		3						false						
+ endTableData
+
