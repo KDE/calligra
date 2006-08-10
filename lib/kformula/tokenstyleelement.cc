@@ -46,12 +46,12 @@ void TokenStyleElement::calcSizes( const ContextStyle& context,
                               ContextStyle::IndexStyle istyle,
                               StyleAttributes& style )
 {
-    style.setSizeFactor( sizeFactor( context, style.sizeFactor() ) );
+    setStyleSize( context, style );
     setStyleVariant( style );
     setStyleColor( style );
     setStyleBackground( style );
     inherited::calcSizes( context, tstyle, istyle, style );
-    style.reset();
+    resetStyle( style );
 }
 
 void TokenStyleElement::draw( QPainter& painter, const LuPixelRect& r,
@@ -61,7 +61,7 @@ void TokenStyleElement::draw( QPainter& painter, const LuPixelRect& r,
                          StyleAttributes& style,
                          const LuPixelPoint& parentOrigin )
 {
-    style.setSizeFactor( sizeFactor( context, style.sizeFactor() ) );
+    setStyleSize( context, style );
     setStyleVariant( style );
     setStyleColor( style );
     setStyleBackground( style );
@@ -73,7 +73,7 @@ void TokenStyleElement::draw( QPainter& painter, const LuPixelRect& r,
                           style.background() );
     }
     inherited::draw( painter, r, context, tstyle, istyle, style, parentOrigin );
-    style.reset();
+    resetStyle( style );
 }
 
 bool TokenStyleElement::readAttributesFromMathMLDom( const QDomElement& element )
@@ -442,6 +442,11 @@ void TokenStyleElement::setPixelSize( double px, bool fontsize )
         }
 }
 
+void TokenStyleElement::setStyleSize( const ContextStyle& context, StyleAttributes& style )
+{
+    style.setSizeFactor( sizeFactor( context, style.sizeFactor() ) );
+}
+
 void TokenStyleElement::setStyleVariant( StyleAttributes& style )
 {
     if ( customMathVariant() || style.customMathVariant() ) {
@@ -529,6 +534,18 @@ void TokenStyleElement::setStyleBackground( StyleAttributes& style )
     else {
         style.setBackground( style.background() );
     }
+}
+
+void TokenStyleElement::resetStyle( StyleAttributes& style )
+{
+    style.resetSize();
+    style.resetCharStyle();
+    style.resetCharFamily();
+    style.resetColor();
+    style.resetBackground();
+    style.resetFontFamily();
+    style.resetFontWeight();
+    style.resetFontStyle();
 }
 
 double TokenStyleElement::sizeFactor( const ContextStyle& context, double factor )

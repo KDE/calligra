@@ -114,6 +114,7 @@ protected:
     bool customFontFamily() const { return m_customFontFamily; }
     bool customColor() const { return m_customColor; }
 
+    virtual void setStyleSize( const ContextStyle& context, StyleAttributes& style );
     /**
      * Set the mathvariant related info in style stacks, including info for
      * deprecated attributes. It may be redefined by token elements whose
@@ -124,6 +125,7 @@ protected:
     void setStyleColor( StyleAttributes& style );
     virtual void setStyleBackground( StyleAttributes& style );
 
+    virtual void resetStyle( StyleAttributes& style );
     /**
      * Return RGB string from HTML Colors. See HTML Spec, section 6.5
      */

@@ -35,8 +35,10 @@ protected:
 
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
 
+    virtual void setStyleSize( const ContextStyle& context, StyleAttributes& style );
     virtual void setStyleVariant( StyleAttributes& style );
     virtual void setStyleBackground( StyleAttributes& style );
+    virtual void resetStyle( StyleAttributes& style );
 
 private:
     virtual QString getElementName() const { return "mstyle"; }
@@ -44,6 +46,8 @@ private:
 
     void readSizeAttribute( const QString& str, SizeType* st, double* s );
     void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );
+
+    double sizeFactor( const ContextStyle& context, SizeType st, double length, double defvalue );
 
     int m_scriptLevel;
     SizeType m_scriptMinSizeType;

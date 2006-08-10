@@ -156,6 +156,85 @@ void StyleElement::writeMathMLAttributes( QDomElement& element )
     inherited::writeMathMLAttributes( element );
 }
 
+
+void StyleElement::setStyleSize( const ContextStyle& context, StyleAttributes& style )
+{
+    if ( m_customScriptLevel ) {
+        if ( m_relativeScriptLevel ) {
+            style.setScriptLevel( style.scriptLevel() + m_scriptLevel );
+        }
+        else {
+            style.setScriptLevel( m_scriptLevel );
+        }
+    }
+    else {
+        style.setScriptLevel( style.scriptLevel() );
+    }
+    if ( m_customDisplayStyle || style.customDisplayStyle() ) {
+        style.setCustomDisplayStyle( true );
+        if ( m_customDisplayStyle ) {
+            style.setDisplayStyle( m_displayStyle );
+        }
+        else {
+            style.setDisplayStyle( style.displayStyle() );
+        }
+    }
+    else {
+        style.setCustomDisplayStyle( false );
+    }
+    if ( m_customScriptSizeMultiplier ) {
+        style.setScriptSizeMultiplier( m_scriptSizeMultiplier );
+    }
+    else {
+        style.setScriptSizeMultiplier( style.scriptSizeMultiplier() );
+    }
+    style.setScriptMinSize( sizeFactor( context, m_scriptMinSizeType, 
+                                        m_scriptMinSize, 
+                                        style.scriptMinSize() ) );
+                                        
+    style.setVeryVeryThinMathSpace( sizeFactor( context, 
+                                                m_veryVeryThinMathSpaceType,
+                                                m_veryVeryThinMathSpace,
+                                                style.veryVeryThinMathSpace() ));
+    style.setVeryThinMathSpace( sizeFactor( context,  m_veryThinMathSpaceType,
+                                            m_veryThinMathSpace,
+                                            style.veryThinMathSpace() ));
+    style.setThinMathSpace( sizeFactor( context, m_thinMathSpaceType,
+                                        m_thinMathSpace, 
+                                        style.thinMathSpace() ));
+    style.setMediumMathSpace( sizeFactor( context, m_mediumMathSpaceType,
+                                          m_mediumMathSpace,
+                                          style.mediumMathSpace() ));
+    style.setThickMathSpace( sizeFactor( context,  m_thickMathSpaceType,
+                                         m_thickMathSpace,
+                                         style.thickMathSpace() ));
+    style.setVeryThickMathSpace( sizeFactor( context, m_veryThickMathSpaceType,
+                                             m_veryThickMathSpace,
+                                             style.veryThickMathSpace() ));
+    style.setVeryVeryThickMathSpace( sizeFactor( context, 
+                                                 m_veryVeryThickMathSpaceType,
+                                                 m_veryVeryThickMathSpace,
+                                                 style.veryVeryThickMathSpace() ));
+    inherited::setStyleSize( context, style );
+}
+
+double StyleElement::sizeFactor( const ContextStyle& context, SizeType st, 
+                                 double length, double defvalue )
+{
+    double basesize = context.layoutUnitPtToPt( context.getBaseSize() );
+    switch ( st ) {
+    case AbsoluteSize:
+        return length / basesize;
+    case RelativeSize:
+        return length;
+    case PixelSize:
+        return context.pixelXToPt( length ) / basesize;
+    default:
+        break;
+    }
+    return defvalue;
+}
+
 void StyleElement::setStyleVariant( StyleAttributes& style )
 {
     if ( customMathVariant() ) {
@@ -235,6 +314,22 @@ void StyleElement::setStyleBackground( StyleAttributes& style )
     else {
         style.setBackground( style.background() );
     }
+}
+
+void StyleElement::resetStyle( StyleAttributes& style )
+{
+    inherited::resetStyle( style );
+    style.resetScriptLevel();
+    style.resetScriptSizeMultiplier();
+    style.resetScriptMinSize();
+    style.resetVeryVeryThinMathSpace();
+    style.resetVeryThinMathSpace();
+    style.resetThinMathSpace();
+    style.resetMediumMathSpace();
+    style.resetThickMathSpace();
+    style.resetVeryThickMathSpace();
+    style.resetVeryVeryThickMathSpace();
+    style.resetDisplayStyle();
 }
 
 void StyleElement::readSizeAttribute( const QString& str, SizeType* st, double* s )

@@ -335,6 +335,16 @@ private:
     QString m_fontStyleName;
 };
 
+// Section 3.3.4.2, default values
+const double scriptsizemultiplier   = 0.71;
+const double scriptminsize          = 8;
+const double veryverythinmathspace  = 0.0555556;
+const double verythinmathspace      = 0.111111;
+const double thinmathspace          = 0.166667;
+const double mediummathspace        = 0.222222;
+const double thickmathspace         = 0.277778;
+const double verythickmathspace     = 0.333333;
+const double veryverythickmathspace = 0.388889;
 
 class StyleAttributes {
  public:
@@ -351,6 +361,19 @@ class StyleAttributes {
     bool customFontStyle() const ;
     bool customFont() const ;
 
+    int scriptLevel() const ;
+    double scriptSizeMultiplier() const ;
+    double scriptMinSize() const ;
+    double veryVeryThinMathSpace() const ;
+    double veryThinMathSpace() const ;
+    double thinMathSpace() const ;
+    double mediumMathSpace() const ;
+    double thickMathSpace() const ;
+    double veryThickMathSpace() const ;
+    double veryVeryThickMathSpace() const ;
+    bool displayStyle() const ;
+    bool customDisplayStyle() const ;
+
     double getSpace( SizeType type, double length ) const ;
 
     void setSizeFactor( double s ) { m_size.push( s ); }
@@ -366,7 +389,40 @@ class StyleAttributes {
     void setCustomFontStyle( bool cfs ) { m_customFontStyle.push( cfs ); }
     void setFontStyle( bool fs ) { m_fontStyle.push( fs ); }
 
+    void setScriptLevel( int s ) { m_scriptLevel.push( s ); }
+    void setScriptSizeMultiplier( double s ) { m_scriptSizeMultiplier.push( s ); }
+    void setScriptMinSize( double s ) { m_scriptMinSize.push( s ); }
+    void setVeryVeryThinMathSpace( double s ) { m_veryVeryThinMathSpace.push( s ); }
+    void setVeryThinMathSpace( double s ) { m_veryThinMathSpace.push( s ); }
+    void setThinMathSpace( double s ) { m_thinMathSpace.push( s ); }
+    void setMediumMathSpace( double s ) { m_mediumMathSpace.push( s ); }
+    void setThickMathSpace( double s ) { m_thickMathSpace.push( s ); }
+    void setVeryThickMathSpace( double s ) { m_veryThickMathSpace.push( s ); }
+    void setVeryVeryThickMathSpace( double s ) { m_veryVeryThickMathSpace.push( s ); }
+    void setDisplayStyle( bool ds ) { m_displayStyle.push( ds ); }
+    void setCustomDisplayStyle( bool cds ) { m_customDisplayStyle.push( cds ); }
+
     void reset();
+    void resetSize();
+    void resetCharStyle();
+    void resetCharFamily();
+    void resetColor();
+    void resetBackground();
+    void resetFontFamily();
+    void resetFontWeight();
+    void resetFontStyle();
+
+    void resetScriptLevel();
+    void resetScriptSizeMultiplier();
+    void resetScriptMinSize();
+    void resetVeryVeryThinMathSpace();
+    void resetVeryThinMathSpace();
+    void resetThinMathSpace();
+    void resetMediumMathSpace();
+    void resetThickMathSpace();
+    void resetVeryThickMathSpace();
+    void resetVeryVeryThickMathSpace();
+    void resetDisplayStyle();
 
  private:
     // Size of the font in points (mathsize / fontsize)
@@ -404,6 +460,19 @@ class StyleAttributes {
 
     // Whether a custom fontstyle attribute is in use
     QValueStack<bool> m_customFontStyle;
+
+    QValueStack<int> m_scriptLevel;
+    QValueStack<double> m_scriptSizeMultiplier;
+    QValueStack<double> m_scriptMinSize;
+    QValueStack<double> m_veryVeryThinMathSpace;
+    QValueStack<double> m_veryThinMathSpace;
+    QValueStack<double> m_thinMathSpace;
+    QValueStack<double> m_mediumMathSpace;
+    QValueStack<double> m_thickMathSpace;
+    QValueStack<double> m_veryThickMathSpace;
+    QValueStack<double> m_veryVeryThickMathSpace;
+    QValueStack<bool> m_displayStyle;
+    QValueStack<bool> m_customDisplayStyle;
 };
 
 KFORMULA_NAMESPACE_END

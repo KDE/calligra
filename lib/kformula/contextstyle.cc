@@ -473,6 +473,102 @@ bool StyleAttributes::customFont() const
     return m_customFontFamily.top();
 }
 
+int StyleAttributes::scriptLevel() const
+{
+    if ( m_scriptLevel.empty() ) {
+        return 0;
+    }
+    return m_scriptLevel.top();
+}
+
+double StyleAttributes::scriptSizeMultiplier() const
+{
+    if ( m_scriptSizeMultiplier.empty() ) {
+        return scriptsizemultiplier;
+    }
+    return m_scriptSizeMultiplier.top();
+}
+
+double StyleAttributes::scriptMinSize() const
+{
+    if ( m_scriptMinSize.empty() ) {
+        return scriptminsize;
+    }
+    return m_scriptMinSize.top();
+}
+
+double StyleAttributes::veryVeryThinMathSpace() const
+{
+    if ( m_veryVeryThinMathSpace.empty() ) {
+        return veryverythinmathspace;
+    }
+    return m_veryVeryThinMathSpace.top();
+}
+
+double StyleAttributes::veryThinMathSpace() const
+{
+    if ( m_veryThinMathSpace.empty() ) {
+        return verythinmathspace;
+    }
+    return m_veryThinMathSpace.top();
+}
+
+double StyleAttributes::thinMathSpace() const
+{
+    if ( m_thinMathSpace.empty() ) {
+        return thinmathspace;
+    }
+    return m_thinMathSpace.top();
+}
+
+double StyleAttributes::mediumMathSpace() const
+{
+    if ( m_mediumMathSpace.empty() ) {
+        return mediummathspace;
+    }
+    return m_mediumMathSpace.top();
+}
+
+double StyleAttributes::thickMathSpace() const
+{
+    if ( m_thickMathSpace.empty() ) {
+        return thickmathspace;
+    }
+    return m_thickMathSpace.top();
+}
+
+double StyleAttributes::veryThickMathSpace() const
+{
+    if ( m_veryThickMathSpace.empty() ) {
+        return verythickmathspace;
+    }
+    return m_veryThickMathSpace.top();
+}
+
+double StyleAttributes::veryVeryThickMathSpace() const
+{
+    if ( m_veryVeryThickMathSpace.empty() ) {
+        return veryverythickmathspace;
+    }
+    return m_veryVeryThickMathSpace.top();
+}
+
+bool StyleAttributes::displayStyle() const
+{
+    if ( m_displayStyle.empty() ) {
+        return true;
+    }
+    return m_displayStyle.top();
+}
+
+bool StyleAttributes::customDisplayStyle() const
+{
+    if ( m_customDisplayStyle.empty() ) {
+        return false;
+    }
+    return m_customDisplayStyle.top();
+}
+
 // TODO: These length should depend on style
 double StyleAttributes::getSpace( SizeType type, double length ) const
 {
@@ -511,23 +607,43 @@ double StyleAttributes::getSpace( SizeType type, double length ) const
     return length;
 }
 
-void StyleAttributes::reset()
+void StyleAttributes::resetSize()
 {
     if ( ! m_size.empty() ) {
         m_size.pop();
     }
+}
+
+void StyleAttributes::resetCharStyle()
+{
     if ( ! m_charStyle.empty() ) {
         m_charStyle.pop();
     }
+}
+
+void StyleAttributes::resetCharFamily()
+{
     if ( ! m_charFamily.empty() ) {
         m_charFamily.pop();
     }
+}
+
+void StyleAttributes::resetColor()
+{
     if ( ! m_color.empty() ) {
         m_color.pop();
     }
+}
+
+void StyleAttributes::resetBackground()
+{
     if ( ! m_background.empty() ) {
         m_background.pop();
     }
+}
+
+void StyleAttributes::resetFontFamily()
+{
     if ( ! m_customFontFamily.empty() ) {
         if ( m_customFontFamily.pop() ) {
             if ( ! m_font.empty() ) {
@@ -535,6 +651,10 @@ void StyleAttributes::reset()
             }
         }
     }
+}
+
+void StyleAttributes::resetFontWeight()
+{
     if ( ! m_customFontWeight.empty() ) {
         if ( m_customFontWeight.pop() ) {
             if ( ! m_fontWeight.empty() ) {
@@ -542,6 +662,10 @@ void StyleAttributes::reset()
             }
         }
     }
+}
+
+void StyleAttributes::resetFontStyle()
+{
     if ( ! m_customFontStyle.empty() ) {
         if ( m_customFontStyle.pop() ) {
             if ( ! m_fontStyle.empty() ) {
@@ -551,6 +675,86 @@ void StyleAttributes::reset()
     }
 }
 
+void StyleAttributes::resetScriptLevel()
+{
+    if ( ! m_scriptLevel.empty() ) {
+        m_scriptLevel.pop();
+    }
+}
+
+void StyleAttributes::resetScriptSizeMultiplier()
+{
+    if ( ! m_scriptSizeMultiplier.empty() ) {
+        m_scriptSizeMultiplier.pop();
+    }
+}
+
+void StyleAttributes::resetScriptMinSize()
+{
+    if ( ! m_scriptMinSize.empty() ) {
+        m_scriptMinSize.pop();
+    }
+}
+
+void StyleAttributes::resetVeryVeryThinMathSpace()
+{
+    if ( ! m_veryVeryThinMathSpace.empty() ) {
+        m_veryVeryThinMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetVeryThinMathSpace()
+{
+    if ( ! m_veryThinMathSpace.empty() ) {
+        m_veryThinMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetThinMathSpace()
+{
+    if ( ! m_thinMathSpace.empty() ) {
+        m_thinMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetMediumMathSpace()
+{
+    if ( ! m_mediumMathSpace.empty() ) {
+        m_mediumMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetThickMathSpace()
+{
+    if ( ! m_thickMathSpace.empty() ) {
+        m_thickMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetVeryThickMathSpace()
+{
+    if ( ! m_veryThickMathSpace.empty() ) {
+        m_veryThickMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetVeryVeryThickMathSpace()
+{
+    if ( ! m_veryVeryThickMathSpace.empty() ) {
+        m_veryVeryThickMathSpace.pop();
+    }
+}
+
+void StyleAttributes::resetDisplayStyle()
+{
+    if ( ! m_customDisplayStyle.empty() ) {
+        if ( m_customDisplayStyle.pop() ) {
+            if ( ! m_displayStyle.empty() ) {
+                m_displayStyle.pop();
+            }
+        }
+    }
+}
 
 
 KFORMULA_NAMESPACE_END
