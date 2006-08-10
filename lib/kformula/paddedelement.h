@@ -47,12 +47,13 @@ private:
     virtual void writeMathMLAttributes( QDomElement& element );
     virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat );
 
-    double readSizeAttribute( const QString& str, SizeType* st );
+    double readSizeAttribute( const QString& str, SizeType* st, bool* relative );
     double getSize( const QString& str, SizeType* st );
     double str2size( const QString& str, SizeType* st, SizeType type );
-    void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );
+    void writeSizeAttribute( QDomElement element, const QString& str,
+                             SizeType st, bool relative, double s );
     luPixel calcSize( const ContextStyle& context, SizeType type,
-                      double length, luPixel width, 
+                      bool relative, double length, luPixel width,
                       luPixel height, luPixel defvalue );
 
     SizeType m_widthType;
@@ -64,7 +65,10 @@ private:
     SizeType m_depthType;
     double m_depth;
 
-    bool m_relative;
+    bool m_widthRelative;
+    bool m_lspaceRelative;
+    bool m_heightRelative;
+    bool m_depthRelative;
 };
 
 KFORMULA_NAMESPACE_END

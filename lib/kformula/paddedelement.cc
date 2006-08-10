@@ -27,7 +27,10 @@ PaddedElement::PaddedElement( BasicElement* parent ) : SequenceElement( parent )
                                                        m_lspaceType( NoSize ),
                                                        m_heightType( NoSize ),
                                                        m_depthType( NoSize ),
-                                                       m_relative( false )
+                                                       m_widthRelative( false ),
+                                                       m_lspaceRelative( false ),
+                                                       m_heightRelative( false ),
+                                                       m_depthRelative( false )
 {
 }
 
@@ -76,10 +79,10 @@ void PaddedElement::calcSizes( const ContextStyle& context,
         depth = 0;
     }
 
-    luPixel left = calcSize( context, m_lspaceType, m_lspace, width, height, 0 );
-    luPixel right = calcSize( context, m_widthType, m_width, width, height, width ) + left;
-    luPixel down = calcSize( context, m_depthType, m_depth, width, height, depth );
-    luPixel up = calcSize( context, m_heightType, m_height, width, height, height );
+    luPixel left = calcSize( context, m_lspaceType, m_lspaceRelative, m_lspace, width, height, 0 );
+    luPixel right = calcSize( context, m_widthType, m_widthRelative, m_width, width, height, width ) + left;
+    luPixel down = calcSize( context, m_depthType, m_depthRelative, m_depth, width, height, depth );
+    luPixel up = calcSize( context, m_heightType, m_heightRelative, m_height, width, height, height );
 
     // Check borders
     if ( right < 0 ) right = 0;
@@ -114,19 +117,19 @@ bool PaddedElement::readAttributesFromMathMLDom(const QDomElement& element)
 
     QString widthStr = element.attribute( "width" ).stripWhiteSpace().lower();
     if ( ! widthStr.isNull() ) {
-        m_width = readSizeAttribute( widthStr, &m_widthType );
+        m_width = readSizeAttribute( widthStr, &m_widthType, &m_widthRelative );
     }
     QString lspaceStr = element.attribute( "lspace" ).stripWhiteSpace().lower();
     if ( ! lspaceStr.isNull() ) {
-        m_lspace = readSizeAttribute( lspaceStr, &m_lspaceType );
+        m_lspace = readSizeAttribute( lspaceStr, &m_lspaceType, &m_lspaceRelative );
     }
     QString heightStr = element.attribute( "height" ).stripWhiteSpace().lower();
     if ( ! heightStr.isNull() ) {
-        m_height = readSizeAttribute( heightStr, &m_heightType );
+        m_height = readSizeAttribute( heightStr, &m_heightType, &m_heightRelative );
     }
     QString depthStr = element.attribute( "depth" ).stripWhiteSpace().lower();
     if ( ! depthStr.isNull() ) {
-        m_depth = readSizeAttribute( depthStr, &m_depthType );
+        m_depth = readSizeAttribute( depthStr, &m_depthType, &m_depthRelative );
     }
 
     return true;
@@ -134,10 +137,10 @@ bool PaddedElement::readAttributesFromMathMLDom(const QDomElement& element)
 
 void PaddedElement::writeMathMLAttributes( QDomElement& element )
 {
-    writeSizeAttribute( element, "width", m_widthType, m_width );
-    writeSizeAttribute( element, "lspace", m_lspaceType, m_lspace );
-    writeSizeAttribute( element, "height", m_heightType, m_height );
-    writeSizeAttribute( element, "depth", m_depthType, m_depth );
+    writeSizeAttribute( element, "width", m_widthType, m_width, m_widthRelative );
+    writeSizeAttribute( element, "lspace", m_lspaceType, m_lspace, m_lspaceRelative );
+    writeSizeAttribute( element, "height", m_heightType, m_height, m_heightRelative );
+    writeSizeAttribute( element, "depth", m_depthType, m_depth, m_depthRelative );
 }
 
 void PaddedElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
@@ -148,13 +151,13 @@ void PaddedElement::writeMathMLContent( QDomDocument& doc, QDomElement& element,
 }
 
 
-double PaddedElement::readSizeAttribute( const QString& str, SizeType* st )
+double PaddedElement::readSizeAttribute( const QString& str, SizeType* st, bool* relative )
 {
     if ( st == 0 ){
         return -1;
     }
     if ( str[0] == '+' || str[0] == '-' ) {
-        m_relative = true;
+        *relative = true;
     }
     int index = str.find( "width" );
     if ( index != -1 ) {
@@ -228,10 +231,11 @@ double PaddedElement::str2size( const QString& str, SizeType *st, SizeType type 
     return -1;
 }
 
-void PaddedElement::writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s )
+void PaddedElement::writeSizeAttribute( QDomElement element, const QString& str,
+                                        SizeType st, bool relative, double s )
 {
     QString prefix;
-    if ( m_relative ) {
+    if ( relative ) {
         s < 0 ? prefix = "-" : prefix = "+" ;
     }
     switch ( st ) {
@@ -255,37 +259,37 @@ void PaddedElement::writeSizeAttribute( QDomElement element, const QString& str,
 }
 
 luPixel PaddedElement::calcSize( const ContextStyle& context, SizeType type, 
-                                 double length, luPixel width, 
+                                 bool relative, double length, luPixel width,
                                  luPixel height, luPixel defvalue )
 {
     luPixel value = defvalue;
     switch ( type ) {
     case AbsoluteSize:
-        if ( m_relative )
+        if ( relative )
             value += context.ptToLayoutUnitPt ( length );
         else
             value = context.ptToLayoutUnitPt( length );
         break;
     case RelativeSize:
-        if ( m_relative )
+        if ( relative )
             value += length * value;
         else
             value *= length;
         break;
     case WidthRelativeSize:
-        if ( m_relative )
+        if ( relative )
             value += length * width;
         else
             value = length * width;
         break;
     case HeightRelativeSize:
-        if ( m_relative )
+        if ( relative )
             value += length * height;
         else
             value = length * height;
         break;
     case PixelSize:
-        if ( m_relative )
+        if ( relative )
             value += context.pixelToLayoutUnitX( length );
         else
             value = context.pixelToLayoutUnitX( length );
