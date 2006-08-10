@@ -20,6 +20,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver_p.h>
+#include <kexidb/utils.h>
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"
 #include <string>
@@ -160,7 +161,7 @@ Q3CString pqxxSqlDriver::drv_escapeIdentifier( const Q3CString& str) const {
 //
 QString pqxxSqlDriver::escapeBLOB(const QByteArray& array) const
 {
-	return escapeBLOBInternal(array, BLOB_ESCAPING_TYPE_USE_OCTAL);
+	return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeOctal);
 }
 
 QString pqxxSqlDriver::valueToSQL( uint ftype, const QVariant& v ) const

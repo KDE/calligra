@@ -921,6 +921,8 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 				insertFieldAction->setIndex(newTable->fieldCount());
 			}
 		}
+		if (!currentField)
+			continue;
 		result = action->updateTableSchema(*newTable, currentField, fieldMap);
 		if (result!=true) {
 			if (recreateTable)

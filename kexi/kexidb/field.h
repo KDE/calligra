@@ -128,6 +128,7 @@ class KEXI_DB_EXPORT Field
 			LastTypeGroup = 6 // This line should be at the end of the enum!
 		};
 
+		/*! Possible constraints defined for a field. */
 		enum Constraints
 		{
 			NoConstraints = 0,
@@ -140,16 +141,22 @@ class KEXI_DB_EXPORT Field
 			Indexed = 64
 		};
 
+		/*! Possible options defined for a field. */
 		enum Options
 		{
 			NoOptions = 0,
 			Unsigned = 1
 		};
 
+		/*! Creates a database field as a child of \a tableSchema table
+		 No other properties are set (even the name), so these should be set later. */
 		Field(TableSchema *tableSchema);
-		Field(QuerySchema *querySchema, BaseExpr* expr = 0);
+
+		/*! Creates a database field without any properties set. 
+		 These should be set later. */
 		Field();
 
+		/*! Creates a database field with specified properties. */
 		Field(const QString& name, Type ctype,
 			uint cconst=NoConstraints,
 			uint options = NoOptions,
@@ -164,7 +171,7 @@ class KEXI_DB_EXPORT Field
 
 		virtual ~Field();
 
-		//! Converts field \a type to QVariant equivalent as accurate as possible
+		//! Converts type \a type to QVariant equivalent as accurate as possible
 		static QVariant::Type variantType(uint type);
 
 		/*! \return a i18n'd type name for \a type (\a type has to be an element from Field::Type, 
@@ -283,33 +290,42 @@ class KEXI_DB_EXPORT Field
 
 		void setOptions(uint options) { m_options = options; }
 
+		//! Converts field's type to QVariant equivalent as accurate as possible
 		inline QVariant::Type variantType() const { return variantType(type()); }
 
-		/*! Return a type for this field. If there's expression assigned,
+		/*! \return a type for this field. If there's expression assigned,
 		 type of the expression is returned instead. */
 		Type type() const;
 
+		//! \return a i18n'd type name for this field 
 		inline QString typeName() const { return Field::typeName(type()); }
 
+		//! \return type group for this field
 		inline TypeGroup typeGroup() const { return Field::typeGroup(type()); }
 
+		//! \return a i18n'd type group name for this field
 		inline QString typeGroupName() const { return Field::typeGroupName(type()); }
 
+		//! \return a type string for this field, 
+		//! for example "Integer" string for Field::Integer type.
 		inline QString typeString() const { return Field::typeString(type()); }
 
+		//! \return a type group string for this field, 
+		//! for example "Integer" string for Field::IntegerGroup.
 		inline QString typeGroupString() const { return Field::typeGroupString(type()); }
 
 		/*! \return (optional) subtype for this field. 
 		 Subtype is a string providing additional hint for field's type. 
 		 E.g. for BLOB type, it can be a MIME type or certain QVariant type name, 
-		 for example: "QPixmap", "QColor" or "QFont"
-		 */
+		 for example: "QPixmap", "QColor" or "QFont" */
 		inline QString subType() const { return m_subType; }
 
 		/*! Sets (optional) subtype for this field. 
 		 \sa subType() */
 		inline void setSubType(const QString& subType) { m_subType = subType; }
 
+		//! \return default value for this field. Null value means there 
+		//! is no default value declared. The variant value is compatible with field's type.
 		inline QVariant defaultValue() const { return m_defaultValue; }
 		
 		/*! \return length of text, only meaningful if the field type is text. 
@@ -414,10 +430,11 @@ class KEXI_DB_EXPORT Field
 		/*! Sets scale for this field. Only works for floating-point types. */
 		void setPrecision(uint p);
 
+		/*! Sets unsigned flag for this field. Only works for integer types. */
 		void setUnsigned(bool u);
 
-//		void setBinary(bool b);
-
+		/*! Sets default value for this field. Setting null value removes the default value. 
+		 @see defaultValue() */
 		void setDefaultValue(const QVariant& def);
 
 		/*! Sets default value decoded from QByteArray. 
@@ -432,7 +449,6 @@ class KEXI_DB_EXPORT Field
 
 		/*! Specifies whether the field is single-field primary key or not 
 		 (KexiDB::PrimeryKey item). 
-
 		 Use this with caution. Setting this to true implies setting:
 		 - setUniqueKey(true)
 		 - setNotNull(true)
@@ -476,10 +492,14 @@ class KEXI_DB_EXPORT Field
 		 do setIndexed(true) for the same reason. */
 		void setIndexed(bool s);
 
+		/*! Sets caption for this field to \a caption. */
 		void setCaption(const QString& caption) { m_caption=caption; }
 
+		/*! Sets description for this field to \a description. */
 		void setDescription(const QString& description) { m_desc=description; }
 		
+		/*! Sets visible width for this field to \a w 
+		 (usually in pixels or points). 0 means there is no hint for the width. */
 		void setWidth(uint w) { m_width=w; }
 
 		/*! There can be added asterisks (QueryAsterisk objects) 
@@ -499,7 +519,7 @@ class KEXI_DB_EXPORT Field
 		void debug();
 
 		/*! \return KexiDB::BaseExpr object if the field value is an
-		 expression.  Unless the expression is set with setExpresion(), it is null.
+		 expression.  Unless the expression is set with setExpression(), it is null.
 		*/
 		inline KexiDB::BaseExpr *expression() { return m_expr; }
 
@@ -535,6 +555,7 @@ class KEXI_DB_EXPORT Field
 		//! Sets value \a value for custom property \a propertyName
 		void setCustomProperty(const QByteArray& propertyName, const QVariant& value);
 
+		//! A data type used for handling custom properties of a field
 		typedef QMap<QByteArray,QVariant> CustomPropertiesMap;
 
 		//! \return all custom properties
@@ -542,6 +563,13 @@ class KEXI_DB_EXPORT Field
 			return m_customProperties ? *m_customProperties : CustomPropertiesMap(); }
 
 	protected:
+		/*! Creates a database field as a child of \a querySchema table
+		 Assigns \a expr expression to this field, if present.
+		 Used internally by query schemas, e.g. to declare asterisks or 
+		 to add expression columns.
+		 No other properties are set, so these should be set later. */
+		Field(QuerySchema *querySchema, BaseExpr* expr = 0);
+
 		/*! @internal Used by constructors. */
 		void init();
 
@@ -564,6 +592,7 @@ class KEXI_DB_EXPORT Field
 		KexiDB::BaseExpr *m_expr;
 		CustomPropertiesMap* m_customProperties;
 
+		//! @internal Used in m_typeNames member to handle i18n'd type names
 		class KEXI_DB_EXPORT FieldTypeNames : public Q3ValueVector<QString> {
 			public:
 				FieldTypeNames();
@@ -572,6 +601,8 @@ class KEXI_DB_EXPORT Field
 			protected:
 				bool m_initialized : 1;
 		};
+
+		//! @internal Used in m_typeGroupNames member to handle i18n'd type group names
 		class KEXI_DB_EXPORT FieldTypeGroupNames : public Q3ValueVector<QString> {
 			public: 
 				FieldTypeGroupNames();

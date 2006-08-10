@@ -76,7 +76,10 @@ namespace KexiDB
 	{
 		if (!table || !KexiDB::deleteRow(conn, table, keyname, keyval))
 			return false;
-		return conn.executeSQL("INSERT INTO " + table->name() + " (" + keyname + "," + valname + ") VALUES (" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ) + "," + conn.driver()->valueToSQL( ftype, val) + ")");
+		return conn.executeSQL("INSERT INTO " + table->name() 
+			+ " (" + keyname + "," + valname + ") VALUES (" 
+			+ conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ) + "," 
+			+ conn.driver()->valueToSQL( ftype, val) + ")");
 	}
 
 	typedef Q3ValueList<uint> TypeGroupList;
@@ -324,6 +327,37 @@ namespace KexiDB
 	 This function is efficient (uses a cache) and is heavily used by the AlterTableHandler
 	 for filling new columns. */
 	KEXI_DB_EXPORT QVariant notEmptyValueForType( KexiDB::Field::Type type );
+
+	//! Escaping types used in escapeBLOB().
+	enum BLOBEscapingType {
+		BLOBEscapeXHex = 1,        //!< escaping like X'1FAD', used by sqlite (hex numbers)
+		BLOBEscape0xHex,           //!< escaping like 0x1FAD, used by mysql (hex numbers)
+		BLOBEscapeHex,              //!< escaping like 1FAD without quotes or prefixes
+		BLOBEscapeOctal           //!< escaping like 'zk\\000$x', used by pgsql 
+		                           //!< (only non-printable characters are escaped using octal numbers)
+		                           //!< See http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
+	};
+
+//! @todo reverse function for BLOBEscapeOctal is available: processBinaryData() in pqxxcursor.cpp - move it here
+	/*! \return a string containing escaped, printable representation of \a array.
+	 Escaping is controlled by \a type. For empty array QString::null is returned, 
+	 so if you want to use this function in an SQL statement, empty arrays should be 
+	 detected and "NULL" string should be put instead.
+	 This is helper, used in Driver::escapeBLOB() and KexiDB::variantToString(). */
+	KEXI_DB_EXPORT QString escapeBLOB(const QByteArray& array, BLOBEscapingType type);
+
+	/*! \return string value serialized from a variant value \a v.
+	 This functions works like QVariant::toString() except the case when \a v is of type ByteArray.
+	 In this case KexiDB::escapeBLOB(v.toByteArray(), KexiDB::BLOBEscapeHex) is used. 
+	 This function is needed for handling values of random type, for example "defaultValue" 
+	 property of table fields can contain value of any type. 
+	 Note: the returned string is an unescaped string. */
+	KEXI_DB_EXPORT QString variantToString( const QVariant& v );
+
+	/*! \return variant value of type \a type for a string \a s that was previously serialized using 
+	 \ref variantToString( const QVariant& v ) function.
+	 \a ok is set to the result of the operation. */
+	KEXI_DB_EXPORT QVariant stringToVariant( const QString& s, QVariant::Type type, bool &ok );
 }
 
 #endif

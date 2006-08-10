@@ -34,8 +34,8 @@ using namespace KexiDB;
 pqxxSqlConnectionInternal::pqxxSqlConnectionInternal(Connection *conn)
  : ConnectionInternal(conn)
  , pqxxsql(0)
- , version(0)
  , res(0)
+ , version(0)
 {
 }
 

@@ -909,7 +909,8 @@ QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
 		ADD(Field::BLOB, QByteArray());
 #undef ADD
 	}
-	const QVariant val( KexiDB_emptyValueForTypeCache->at(type) );
+	const QVariant val( KexiDB_emptyValueForTypeCache->at(
+		(type<=Field::LastType) ? type : Field::InvalidType) );
 	if (!val.isNull())
 		return val;
 	else { //special cases
@@ -920,7 +921,8 @@ QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
 		if (type==Field::Time)
 			return QTime::currentTime();
 	}
-	KexiDBWarn << "KexiDB::emptyValueForType() no value for type " << Field::typeName(type) << endl;
+	KexiDBWarn << "KexiDB::emptyValueForType() no value for type " 
+		<< Field::typeName(type) << endl;
 	return QVariant();
 }
 
@@ -956,7 +958,8 @@ QVariant KexiDB::notEmptyValueForType( KexiDB::Field::Type type )
 		}
 #undef ADD
 	}
-	const QVariant val( KexiDB_notEmptyValueForTypeCache->at(type) );
+	const QVariant val( KexiDB_notEmptyValueForTypeCache->at(
+		(type<=Field::LastType) ? type : Field::InvalidType) );
 	if (!val.isNull())
 		return val;
 	else { //special cases
@@ -967,8 +970,100 @@ QVariant KexiDB::notEmptyValueForType( KexiDB::Field::Type type )
 		if (type==Field::Time)
 			return QTime::currentTime();
 	}
-	KexiDBWarn << "KexiDB::notEmptyValueForType() no value for type " << Field::typeName(type) << endl;
+	KexiDBWarn << "KexiDB::notEmptyValueForType() no value for type " 
+		<< Field::typeName(type) << endl;
 	return QVariant();
+}
+
+QString KexiDB::escapeBLOB(const QByteArray& array, BLOBEscapingType type)
+{
+	const int size = array.size();
+	if (size==0)
+		return QString::null;
+	int escaped_length = size*2;
+	if (type == BLOBEscape0xHex || type == BLOBEscapeOctal)
+		escaped_length += 2/*0x or X'*/;
+	else if (type == BLOBEscapeXHex)
+		escaped_length += 3; //X' + '
+	QString str;
+	str.reserve(escaped_length);
+	if (str.capacity() < (uint)escaped_length) {
+		KexiDBWarn << "KexiDB::Driver::escapeBLOB(): no enough memory (cannot allocate "<< 
+			escaped_length<<" chars)" << endl;
+		return QString::null;
+	}
+	if (type == BLOBEscapeXHex)
+		str = QString::fromLatin1("X'");
+	else if (type == BLOBEscape0xHex)
+		str = QString::fromLatin1("0x");
+	else if (type == BLOBEscapeOctal)
+		str = QString::fromLatin1("'");
+	
+	int new_length = str.length(); //after X' or 0x, etc.
+	if (type == BLOBEscapeOctal) {
+		// only escape nonprintable characters as in Table 8-7:
+		// http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
+		// i.e. escape for bytes: < 32, >= 127, 39 ('), 92(\). 
+		for (int i = 0; i < size; i++) {
+			const unsigned char val = array[i];
+			if (val<32 || val>=127 || val==39 || val==92) {
+				str[new_length++] = '\\';
+				str[new_length++] = '\\';
+				str[new_length++] = '0' + val/64;
+				str[new_length++] = '0' + (val % 64) / 8;
+				str[new_length++] = '0' + val % 8;
+			}
+			else {
+				str[new_length++] = val;
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < size; i++) {
+			const unsigned char val = array[i];
+			str[new_length++] = (val/16) < 10 ? ('0'+(val/16)) : ('A'+(val/16)-10);
+			str[new_length++] = (val%16) < 10 ? ('0'+(val%16)) : ('A'+(val%16)-10);
+		}
+	}
+	if (type == BLOBEscapeXHex || type == BLOBEscapeOctal)
+		str[new_length++] = '\'';
+	return str;
+}
+
+QString KexiDB::variantToString( const QVariant& v )
+{
+	if (v.type()==QVariant::ByteArray)
+		return KexiDB::escapeBLOB(v.toByteArray(), KexiDB::BLOBEscapeHex);
+	return v.toString();
+}
+
+QVariant KexiDB::stringToVariant( const QString& s, QVariant::Type type, bool &ok )
+{
+	if (QVariant::Invalid==type) {
+		ok = false;
+		return QVariant();
+	}
+	if (type==QVariant::ByteArray) {//special case: hex string
+		const uint len = s.length();
+		QByteArray ba(len/2 + len%2);
+		for (uint i=0; i<(len-1); i+=2) {
+			int c = s.mid(i,2).toInt(&ok, 16);
+			if (!ok) {
+				KexiDBWarn << "KexiDB::stringToVariant(): Error in digit " << i << endl;
+				return QVariant();
+			}
+			ba[i/2] = (char)c;
+		}
+		ok = true;
+		return ba;
+	}
+	QVariant result(s);
+	if (!result.cast( type )) {
+		ok = false;
+		return QVariant();
+	}
+	ok = true;
+	return result;
 }
 
 #include "utils_p.moc"
