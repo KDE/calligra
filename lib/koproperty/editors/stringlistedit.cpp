@@ -27,16 +27,11 @@
 #include <qvariant.h>
 #include <qpushbutton.h>
 
-#ifndef QT_ONLY
 #include <keditlistbox.h>
 #include <kdialogbase.h>
 #include <kstdguiitem.h>
 #include <klocale.h>
 #include <kdebug.h>
-#else
-#include "qeditlistbox.h"
-#include <compat_tools.h>
-#endif
 
 #include "property.h"
 
@@ -92,36 +87,6 @@ StringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
 void
 StringListEdit::showEditor()
 {
-#ifdef QT_ONLY
-	QDialog* dia = new QDialog(this, "stringlist_dialog", true);
-	QVBoxLayout *dv = new QVBoxLayout(dia, 2);
-	QEditListBox *select = new QEditListBox(dia, "select_char");
-	dv->addWidget(select);
-
-	QHBoxLayout *dh = new QHBoxLayout(dv, 6);
-	QPushButton *pbOk = new QPushButton(i18n("Ok"), dia);
-	QPushButton *pbCancel = new QPushButton(i18n("Cancel"), dia);
-
-	QSpacerItem *si = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-	connect(pbOk, SIGNAL(clicked()), dia, SLOT(accept()));
-	connect(pbCancel, SIGNAL(clicked()), dia, SLOT(reject()));
-
-	dh->addItem(si);
-	dh->addWidget(pbOk);
-	dh->addWidget(pbCancel);
-
-	select->insertStringList(m_list);
-
-	if (dia->exec() == QDialog::Accepted) {
-		m_list = select->items();
-		m_edit->setText(select->items().join(", "));
-		emit valueChanged(this);
-	}
-	delete dia;
-
-#else
-
 	KDialogBase dialog(this->topLevelWidget(), "stringlist_dialog", true, i18n("Edit List of Items"),
 	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
@@ -135,8 +100,6 @@ StringListEdit::showEditor()
 		m_edit->setText(m_list.join(", "));
 		emit valueChanged(this);
 	}
-
-#endif
 }
 
 void

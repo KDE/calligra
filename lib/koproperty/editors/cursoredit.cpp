@@ -24,12 +24,8 @@
 #include <qvariant.h>
 #include <qcursor.h>
 
-#ifdef QT_ONLY
-// \tdo
-#else
 #include <klocale.h>
 #include <kdebug.h>
-#endif
 
 #include "property.h"
 

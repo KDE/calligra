@@ -38,14 +38,11 @@
 #include <qtimer.h>
 #include <qlabel.h>
 
-#ifdef QT_ONLY
-#else
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdeversion.h>
 #include <kapplication.h>
-#endif
 
 namespace KoProperty {
 

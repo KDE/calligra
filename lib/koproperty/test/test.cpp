@@ -63,6 +63,8 @@ Test::Test()
 	m_set->addProperty(new Property("Int", 2, "Int"), group);
 	m_set->addProperty(new Property("Double", 3.1415,"Double"), group);
 	m_set->addProperty(new Property("Bool", QVariant(true, 4), "Bool"), group);
+	m_set->addProperty(p = new Property("3 States", QVariant(), "3 States", "", Boolean), group);
+	p->setOption("3rdState", "None");
 	m_set->addProperty(p = new Property("Date", QDate::currentDate(),"Date"), group);
 	p->setIcon("date");
 	m_set->addProperty(new Property("Time", QTime::currentTime(),"Time"), group);

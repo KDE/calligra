@@ -25,12 +25,8 @@
 #include <qsizepolicy.h>
 #include <qpoint.h>
 
-#ifdef QT_ONLY
-// \todo
-#else
 #include <klocale.h>
 #include <kdebug.h>
-#endif
 
 using namespace KoProperty;
 

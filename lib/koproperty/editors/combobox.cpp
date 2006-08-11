@@ -24,12 +24,8 @@
 #include <qvariant.h>
 #include <qpainter.h>
 
-#ifdef QT_ONLY
-#iinclude <qcombobox.h>
-#else
 #include <kcombobox.h>
 #include <kdebug.h>
-#endif
 
 #include "property.h"
 
@@ -40,11 +36,7 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
  , m_setValueEnabled(true)
 {
 	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-#ifdef QT_ONLY
-	m_edit = new QComboBox(this);
-#else
 	m_edit = new KComboBox(this);
-#endif
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);
@@ -53,9 +45,7 @@ ComboBox::ComboBox(Property *property, QWidget *parent, const char *name)
 	m_edit->setInsertionPolicy(QComboBox::NoInsertion);
 	m_edit->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
 	m_edit->setAutoCompletion(true);
-#ifndef QT_ONLY
 	m_edit->setContextMenuEnabled(false);
-#endif
 
 	if (this->property()->listData()) {
 		fillBox();
@@ -154,11 +144,9 @@ ComboBox::fillBox()
 	}
 
 	m_edit->insertStringList(property()->listData()->names);
-#ifndef QT_ONLY
 	KCompletion *comp = m_edit->completionObject();
 	comp->insertItems(property()->listData()->names);
 	comp->setCompletionMode(KGlobalSettings::CompletionShell);
-#endif
 }
 
 void

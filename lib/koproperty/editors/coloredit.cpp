@@ -25,13 +25,7 @@
 #include <qcolor.h>
 #include <qpainter.h>
 
-#ifdef QT_ONLY
-#include <qcolordialog.h>
-#include <qpushbutton.h>
-#include <qpixmap.h>
-#else
 #include <kcolorcombo.h>
-#endif
 
 using namespace KoProperty;
 
@@ -39,14 +33,9 @@ ColorButton::ColorButton(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
 	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-#ifdef QT_ONLY
-	m_edit = new QPushButton(this);
-	connect(m_edit, SIGNAL(clicked()), this, SLOT(selectColor()));
-#else
 	m_edit = new KColorCombo(this);
 	m_edit->setFocusPolicy(QWidget::NoFocus);
 	connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
-#endif
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);
@@ -59,28 +48,15 @@ ColorButton::~ColorButton()
 QVariant
 ColorButton::value() const
 {
-#ifdef QT_ONLY
-	return m_color;
-#else
 	return m_edit->color();
-#endif
 }
 
 void
 ColorButton::setValue(const QVariant &value, bool emitChange)
 {
-#ifdef QT_ONLY
-	m_color = value.toColor();
-	m_edit->setText(m_color.name());
-	QPixmap px;
-	px.resize(14,14);
-	px.fill(m_color);
-	m_edit->setIconSet(px);
-#else
 	m_edit->blockSignals(true);
 	m_edit->setColor(value.toColor());
 	m_edit->blockSignals(false);
-#endif
 	if (emitChange)
 		emit valueChanged(this);
 }
@@ -99,20 +75,6 @@ ColorButton::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const 
 }
 
 void
-ColorButton::selectColor()
-{
-#ifdef QT_ONLY
-	m_color = QColorDialog::getColor(m_color,this);
-	emit valueChanged(this);
-	m_edit->setText(m_color.name());
-	QPixmap px;
-	px.resize(14,14);
-	px.fill(m_color);
-	m_edit->setIconSet(px);
-#endif
-}
-
-void
 ColorButton::slotValueChanged(int)
 {
 	emit valueChanged(this);
@@ -122,15 +84,6 @@ ColorButton::slotValueChanged(int)
 bool
 ColorButton::eventFilter(QObject* watched, QEvent* e)
 {
-#ifdef QT_ONLY
-	if(e->type() == QEvent::KeyPress) {
-		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-		if(ev->key() == Key_Space) {
-			m_edit->animteClick();
-			return true;
-		}
-	}
-#endif
 	return Widget::eventFilter(watched, e);
 }
 

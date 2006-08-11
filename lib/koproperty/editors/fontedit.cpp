@@ -34,12 +34,7 @@
 #include <kdeversion.h>
 #include <kfontrequester.h>
 #include <kaccelmanager.h>
-
-#ifdef QT_ONLY
-//! \todo
-#else
 #include <klocale.h>
-#endif
 
 //! @internal
 //! reimplemented to better button and label's positioning

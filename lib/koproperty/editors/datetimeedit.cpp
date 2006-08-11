@@ -27,12 +27,8 @@
 #include <qpainter.h>
 #include <qvariant.h>
 
-#ifdef QT_ONLY
-// \todo
-#else
 #include <klocale.h>
 #include <kglobal.h>
-#endif
 
 using namespace KoProperty;
 
@@ -73,14 +69,9 @@ void
 DateTimeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 	p->eraseRect(r);
-#ifdef QT_ONLY
-	Widget::drawViewer(p, cg, r, value.toDateTime().toString(Qt::LocalDate));
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toDateTime().toString(Qt::LocalDate));
-#else
 	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDateTime(value.toDateTime(), true /* use short format*/, false /*no sec */ ));
 //	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
 //		KGlobal::locale()->formatDateTime(value.toDateTime(), true /* use short format*/, false /*no sec */ ));
-#endif
 }
 
 void

@@ -46,10 +46,7 @@
 #include <qvaluelist.h>
 #include <qintdict.h>
 
-#ifdef QT_ONLY
-#else
 #include <kdebug.h>
-#endif
 
 static KStaticDeleter<KoProperty::FactoryManager> m_managerDeleter;
 static KoProperty::FactoryManager* m_manager = 0;
@@ -168,8 +165,14 @@ FactoryManager::createWidgetForProperty(Property *property)
 			return new IntEdit(property);
 		case Double:
 			return new DoubleEdit(property);
-		case Boolean:
-			return new BoolEdit(property);
+		case Boolean: {
+			//boolean editors can optionally accept 3rd state:
+			QVariant thirdState = property ? property->option("3rdState") : QVariant();
+			if (thirdState.toString().isEmpty())
+				return new BoolEdit(property);
+			else
+				return new ThreeStateBoolEdit(property);
+		}
 		case Date:
 			return new DateEdit(property);
 		case Time:

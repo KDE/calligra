@@ -28,11 +28,7 @@
 #include <qmap.h>
 #include <qtooltip.h>
 
-#ifdef QT_ONLY
-// \todo
-#else
 #include <klocale.h>
-#endif
 
 using namespace KoProperty;
 

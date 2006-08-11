@@ -24,11 +24,9 @@
 #include <qpainter.h>
 #include <qvariant.h>
 
-#ifndef QT_ONLY
 #include <kcharselect.h>
 #include <klocale.h>
 #include <kdialogbase.h>
-#endif
 
 #include "symbolcombo.h"
 
@@ -51,10 +49,6 @@ SymbolCombo::SymbolCombo(Property *property, QWidget *parent, const char *name)
 	m_select->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
 	m_select->setMinimumHeight(5);
 	l->addWidget(m_select);
-
-#ifdef QT_ONLY
-	m_select->hide();
-#endif
 
 	connect(m_select, SIGNAL(clicked()), this, SLOT(selectChar()));
 	connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
@@ -100,7 +94,6 @@ SymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, cons
 void
 SymbolCombo::selectChar()
 {
-#ifndef QT_ONLY
 	KDialogBase dialog(this->topLevelWidget(), "charselect_dialog", true, i18n("Select Char"),
 	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
@@ -112,7 +105,6 @@ SymbolCombo::selectChar()
 
 	if (dialog.exec() == QDialog::Accepted)
 		m_edit->setText(select->chr());
-#endif
 }
 
 void

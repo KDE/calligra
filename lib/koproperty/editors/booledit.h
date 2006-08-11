@@ -23,9 +23,10 @@
 #define KPROPERTY_BOOLEDIT_H
 
 #include "../widget.h"
+#include "combobox.h"
 #include <qpixmap.h>
 
-class BoolEditButton;
+class QToolButton;
 
 namespace KoProperty {
 
@@ -51,9 +52,24 @@ class KOPROPERTY_EXPORT BoolEdit : public Widget
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 
 	private:
-		BoolEditButton *m_toggle;
-		QPixmap m_yesIcon, m_noIcon, m_nullIcon; //!< icons for m_toggle
-		QString m_3rdStateText; //! used for 3rd state
+		QToolButton *m_toggle;
+		QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
+};
+
+class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
+{
+	Q_OBJECT
+
+	public:
+		ThreeStateBoolEdit(Property *property, QWidget *parent=0, const char *name=0);
+		virtual ~ThreeStateBoolEdit();
+
+		virtual QVariant value() const;
+		virtual void setValue(const QVariant &value, bool emitChange=true);
+
+		virtual void setProperty(Property *property);
+		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+		QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 };
 
 }

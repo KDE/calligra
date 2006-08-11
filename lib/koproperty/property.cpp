@@ -24,9 +24,7 @@
 #include "set.h"
 #include "factory.h"
 
-#ifndef QT_ONLY
 #include <kdebug.h>
-#endif
 
 #include <qobject.h>
 #include <qptrdict.h>

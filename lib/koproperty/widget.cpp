@@ -26,12 +26,8 @@
 #include <qpainter.h>
 #include <qvariant.h>
 
-#ifdef QT_ONLY
-#include <qlistview.h>
-#else
 #include <klistview.h>
 #include <kdebug.h>
-#endif
 
 using namespace KoProperty;
 

@@ -26,15 +26,10 @@
 #include <qobjectlist.h>
 #include <qvariant.h>
 #include <qpainter.h>
+#include <qlineedit.h>
 
 #include <kglobal.h>
 #include <klocale.h>
-
-#ifdef QT_ONLY
-//! \todo
-#else
-#include <qlineedit.h>
-#endif
 
 using namespace KoProperty;
 

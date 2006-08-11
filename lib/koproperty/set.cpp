@@ -27,12 +27,8 @@
 #include <qasciidict.h>
 //#include <qvaluelist.h>
 
-#ifdef QT_ONLY
-// \todo
-#else
 #include <kdebug.h>
 #include <klocale.h>
-#endif
 
 typedef QMap<QCString, QValueList<QCString> > StringListMap;
 typedef QMapIterator<QCString, QStringList> StringListMapIterator;

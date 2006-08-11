@@ -25,12 +25,7 @@
 #include <qguardedptr.h>
 #include "koproperty_global.h"
 
-#ifdef QT_ONLY
-#include <qlistview.h>
-#else
 #include <klistview.h>
-//#define QListView KListView
-#endif
 
 class QSize;
 
