@@ -530,10 +530,10 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
         int nodeNum = searchOperator( node );
         if ( nodeNum == -1 ) // Closing bracket not found
             return -1;
-        if ( nodeNum == 1 ) { // Empty content
+        if ( nodeNum == 0 ) { // Empty content
             empty = true;
         }
-        if ( nodeNum > 2 ) { // More than two elements inside, infer a mrow
+        if ( nodeNum > 1 ) { // More than two elements inside, infer a mrow
             kdWarning() << "NodeNum: " << nodeNum << endl;
             QDomDocument doc = node.ownerDocument();
             QDomElement de = doc.createElement( "mrow" );
