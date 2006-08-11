@@ -65,7 +65,7 @@ public:
     FormulaCursor& operator= (const FormulaCursor&);
 
     // where the cursor and the mark are
-    int getPos() const { return cursorPos; }
+    uint getPos() const { return cursorPos; }
     int getMark() const { return markPos; }
 
     /**
@@ -214,9 +214,9 @@ public:
      * If there is a selection and you don't provide a mark the
      * current mark won't change.
      */
-    void setTo(BasicElement* element, int cursor, int mark=-1);
+    void setTo(BasicElement* element, uint cursor, int mark=-1);
 
-    void setPos(int pos);
+    void setPos(uint pos);
     void setMark(int mark);
 
 
@@ -309,14 +309,14 @@ public:
     class CursorData {
         friend class FormulaCursor;
         BasicElement* current;
-        int cursorPos;
+        uint cursorPos;
         int markPos;
         bool selectionFlag;
         bool linearMovement;
         bool readOnly;
 
         CursorData(BasicElement* c,
-                   int pos, int mark, bool selection, bool linear, bool ro)
+                   uint pos, int mark, bool selection, bool linear, bool ro)
             : current(c), cursorPos(pos), markPos(mark),
               selectionFlag(selection), linearMovement(linear),
               readOnly(ro) {}
@@ -407,7 +407,7 @@ private:
      *
      * This is where new elements are put in.
      */
-    int cursorPos;
+    uint cursorPos;
 
     /**
      * The position of the mark. If we are in selection mode this

@@ -1124,8 +1124,8 @@ int MatrixElement::readContentFromMathMLDom( QDomNode& node )
         return -1;
     }
 
-    int rows = 0;
-    int cols = 0;
+    uint rows = 0;
+    uint cols = 0;
     QDomNode n = node;
     while ( !n.isNull() ) {
         if ( n.isElement() ) {

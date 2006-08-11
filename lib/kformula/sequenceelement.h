@@ -240,7 +240,7 @@ public:
     /**
      * @returns the number of children we have.
      */
-    int countChildren() const { return children.count(); }
+    uint countChildren() const { return children.count(); }
 
     /**
      * @returns whether the child has the given number.

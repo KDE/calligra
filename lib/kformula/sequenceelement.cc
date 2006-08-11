@@ -1718,7 +1718,7 @@ BasicElement* NameSequence::createElement( QString type )
 QString NameSequence::buildName()
 {
     QString name;
-    for ( int i = 0; i < countChildren(); i++ ) {
+    for ( uint i = 0; i < countChildren(); i++ ) {
         name += getChild( i )->getCharacter();
     }
     return name;

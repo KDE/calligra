@@ -42,7 +42,7 @@ FormulaCursor::FormulaCursor(FormulaElement* element)
     element->goInside( this );
 }
 
-void FormulaCursor::setTo(BasicElement* element, int cursor, int mark)
+void FormulaCursor::setTo(BasicElement* element, uint cursor, int mark)
 {
     hasChangedFlag = true;
     current = element;
@@ -57,7 +57,7 @@ void FormulaCursor::setTo(BasicElement* element, int cursor, int mark)
 }
 
 
-void FormulaCursor::setPos(int pos)
+void FormulaCursor::setPos(uint pos)
 {
     hasChangedFlag = true;
     cursorPos = pos;
