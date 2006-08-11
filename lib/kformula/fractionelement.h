@@ -237,7 +237,7 @@ private:
 
     double lineThickness( const ContextStyle& context, double factor );
 
-    bool withLine() { return m_lineThickness != 0.0; }
+    bool withLine() { return m_lineThicknessType == NoSize || m_lineThickness != 0.0; }
 
     SequenceElement* numerator;
     SequenceElement* denominator;
