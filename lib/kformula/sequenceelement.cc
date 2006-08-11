@@ -1499,9 +1499,8 @@ QString SequenceElement::formulaString()
 
 void SequenceElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
 {
-    QPtrListIterator<BasicElement> it( children );
-    for ( BasicElement *child = it.current(); child; ++it ){
-        child->writeMathML( doc, element, oasisFormat );
+    for ( QPtrListIterator<BasicElement> it( children ); it.current(); ++it ) {
+        it.current()->writeMathML( doc, element, oasisFormat );
     }
 }
 

@@ -132,11 +132,6 @@ protected:
     QString getHtmlColor( const QString& colorStr );
 
 private:
-    /**
-     * Nobody should access this member, neither from outside nor from derived
-     * classes. Token Elements must take care of saving by themselves.
-     */
-    virtual void writeMathML( QDomDocument& , QDomNode& , bool ) {}
 
     double sizeFactor( const ContextStyle& context, double factor );
 

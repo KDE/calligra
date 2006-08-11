@@ -313,7 +313,7 @@ QString FormulaElement::toLatex()
     return inherited::toLatex();   //Consider $$ sorround
 }
 
-void FormulaElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void FormulaElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat ) const
 {
     QDomElement de;
     if ( !oasisFormat )

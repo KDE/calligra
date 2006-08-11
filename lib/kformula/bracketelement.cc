@@ -847,7 +847,7 @@ QString OverlineElement::formulaString()
     return getContent()->formulaString();
 }
 
-void OverlineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void OverlineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat ) const
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mover" : "mover" );
     SingleContentElement::writeMathML( doc, de, oasisFormat );
@@ -951,7 +951,7 @@ QString UnderlineElement::formulaString()
     return getContent()->formulaString();
 }
 
-void UnderlineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void UnderlineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat ) const
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:munder" : "munder" );
     SingleContentElement::writeMathML( doc, de, oasisFormat );

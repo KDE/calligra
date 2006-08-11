@@ -129,7 +129,7 @@ public:
 
     virtual QString formulaString();
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false ) const ;
 
 protected:
 

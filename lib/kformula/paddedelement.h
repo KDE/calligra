@@ -44,14 +44,13 @@ protected:
 
 private:
     virtual QString getElementName() const { return "mpadded"; }
-    virtual void writeMathMLAttributes( QDomElement& element );
-    virtual void writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat );
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     double readSizeAttribute( const QString& str, SizeType* st, bool* relative );
     double getSize( const QString& str, SizeType* st );
     double str2size( const QString& str, SizeType* st, SizeType type );
     void writeSizeAttribute( QDomElement element, const QString& str,
-                             SizeType st, bool relative, double s );
+                             SizeType st, bool relative, double s ) const ;
     luPixel calcSize( const ContextStyle& context, SizeType type,
                       bool relative, double length, luPixel width,
                       luPixel height, luPixel defvalue );

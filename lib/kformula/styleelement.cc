@@ -31,9 +31,9 @@ StyleElement::StyleElement( BasicElement* parent ) : TokenStyleElement( parent )
                                                      m_thickMathSpaceType( NoSize ),
                                                      m_veryThickMathSpaceType( NoSize ),
                                                      m_veryVeryThickMathSpaceType( NoSize ),
-                                                     m_customDisplayStyle( false ),
                                                      m_customScriptLevel( false ),
                                                      m_relativeScriptLevel( false ),
+                                                     m_customDisplayStyle( false ),
                                                      m_customScriptSizeMultiplier( false ),
                                                      m_customBackground( false )
 {
@@ -128,7 +128,7 @@ bool StyleElement::readAttributesFromMathMLDom( const QDomElement& element )
     return inherited::readAttributesFromMathMLDom( element );
 }
 
-void StyleElement::writeMathMLAttributes( QDomElement& element )
+void StyleElement::writeMathMLAttributes( QDomElement& element ) const
 {
     if ( m_customScriptLevel ) {
         QString prefix;
@@ -369,7 +369,7 @@ void StyleElement::readSizeAttribute( const QString& str, SizeType* st, double* 
     }
 }
 
-void StyleElement::writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s )
+void StyleElement::writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s ) const
 {
     switch ( st ) {
     case AbsoluteSize:

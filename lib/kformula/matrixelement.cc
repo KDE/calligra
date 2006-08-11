@@ -1842,7 +1842,7 @@ public:
     /// Return the position of tab i.
     int tabPos( uint i );
 
-    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false );
+    virtual void writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat = false ) const ;
 
 private:
 
@@ -2107,7 +2107,7 @@ int MultilineSequenceElement::tabPos( uint i )
 
 
 void MultilineSequenceElement::writeMathML( QDomDocument& doc,
-                                            QDomNode& parent, bool oasisFormat )
+                                            QDomNode& parent, bool oasisFormat ) const
 {
     // parent is required to be a <mtr> tag
 
@@ -2587,19 +2587,19 @@ void MultilineElement::writeDom(QDomElement element)
     }
 }
 
-void MultilineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat )
+void MultilineElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat ) const
 {
     QDomElement de = doc.createElement( oasisFormat ? "math:mtable" : "mtable" );
     QDomElement row; QDomElement cell;
 
-    for ( uint i = 0; i < content.count(); ++i ) {
+    for ( QPtrListIterator < MultilineSequenceElement > it( content ); it.current(); ++it ) {
         row = doc.createElement( oasisFormat ? "math:mtr" : "mtr" );
         de.appendChild( row );
         //cell = doc.createElement( "mtd" );
         //row.appendChild( cell );
 
         //content.at( i )->writeMathML( doc, cell );
-        content.at( i )->writeMathML( doc, row, oasisFormat );
+        it.current()->writeMathML( doc, row, oasisFormat );
     }
 
     parent.appendChild( de );

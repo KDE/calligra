@@ -42,10 +42,10 @@ protected:
 
 private:
     virtual QString getElementName() const { return "mstyle"; }
-    virtual void writeMathMLAttributes( QDomElement& element );
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
 
     void readSizeAttribute( const QString& str, SizeType* st, double* s );
-    void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s );
+    void writeSizeAttribute( QDomElement element, const QString& str, SizeType st, double s ) const ;
 
     double sizeFactor( const ContextStyle& context, SizeType st, double length, double defvalue );
 

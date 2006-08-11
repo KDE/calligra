@@ -135,21 +135,13 @@ bool PaddedElement::readAttributesFromMathMLDom(const QDomElement& element)
     return true;
 }
 
-void PaddedElement::writeMathMLAttributes( QDomElement& element )
+void PaddedElement::writeMathMLAttributes( QDomElement& element ) const
 {
     writeSizeAttribute( element, "width", m_widthType, m_width, m_widthRelative );
     writeSizeAttribute( element, "lspace", m_lspaceType, m_lspace, m_lspaceRelative );
     writeSizeAttribute( element, "height", m_heightType, m_height, m_heightRelative );
     writeSizeAttribute( element, "depth", m_depthType, m_depth, m_depthRelative );
 }
-
-void PaddedElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat )
-{
-    for ( iterator it = begin(); it != end(); it++ ) {
-        it->writeMathML( doc, element, oasisFormat );
-    }
-}
-
 
 double PaddedElement::readSizeAttribute( const QString& str, SizeType* st, bool* relative )
 {
@@ -232,7 +224,7 @@ double PaddedElement::str2size( const QString& str, SizeType *st, SizeType type 
 }
 
 void PaddedElement::writeSizeAttribute( QDomElement element, const QString& str,
-                                        SizeType st, bool relative, double s )
+                                        SizeType st, bool relative, double s ) const
 {
     QString prefix;
     if ( relative ) {
