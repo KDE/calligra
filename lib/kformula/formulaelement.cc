@@ -321,8 +321,10 @@ void FormulaElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasi
                                               "math" );
     else
         de =doc.createElement( "math:semantics" );
-
-    inherited::writeMathML( doc, de, oasisFormat );
+    for ( uint i = 0; i < countChildren(); ++i ) {
+        const BasicElement* e = getChild( i );
+        e->writeMathML( doc, de, oasisFormat );
+    }
     parent.appendChild( de );
 }
 
