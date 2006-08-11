@@ -132,7 +132,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   // 4. Block: Orientation
   orientationGroup = new QVButtonGroup( i18n("Orientation"), this );
-  QWhatsThis::add(orientationGroup, i18n("Select, if the legend's items should be dxrawn next to each other, or below each other."));
+  QWhatsThis::add(orientationGroup, i18n("Select, if the legend's items should be drawn next to each other, or below each other."));
   orientationGroup->setRadioButtonExclusive(true);
   orientationGroup->layout()->setSpacing(KDialog::spacingHint());
   orientationGroup->layout()->setMargin(KDialog::marginHint());
