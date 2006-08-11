@@ -2,6 +2,7 @@ include_directories(
         ${KOTEXT_INCLUDES}
         ${KOFFICECORE_INCLUDES}
         ${KOPAINTER_INCLUDES}
+	${FLAKE_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon
         ${CMAKE_SOURCE_DIR}/karbon/core
         ${CMAKE_SOURCE_DIR}/karbon/visitors

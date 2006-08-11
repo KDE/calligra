@@ -33,7 +33,6 @@
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 #include <KoStore.h>
-
 #include "epsexport.h"
 #include "epsexportdlg.h"
 #include "vcolor.h"
@@ -160,7 +159,7 @@ EpsExport::visitVDocument( VDocument& document )
 	document.selection()->append();
 
 	// Get the bounding box of all selected objects.
-	const KoRect& rect = document.selection()->boundingBox();
+	const QRectF& rect = document.selection()->boundingBox();
 
 	// Print a header.
 	*m_stream <<

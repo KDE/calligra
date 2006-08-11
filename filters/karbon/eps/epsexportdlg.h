@@ -20,13 +20,13 @@
 #ifndef __VEPSEXPORTDLG_H__
 #define __VEPSEXPORTDLG_H__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
 class Q3ButtonGroup;
 
 
-class EpsExportDlg : public KDialogBase
+class EpsExportDlg : public KDialog
 {
 	Q_OBJECT
 
