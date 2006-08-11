@@ -1,3 +1,10 @@
+2006-08-11  Inge Wallin  <inge@lysator.liu.se>
+
+	Only show checkboxes in config dialog if applicable.
+	* kchart_params.h (KChartParams::part): new method
+	* kchartDataConfigPage.cc: Only show the checkboxes "First row/col
+	as headers" if we have external data.
+
 2006-08-06  Inge Wallin  <inge@lysator.liu.se>
 
 	Disable "First row/col as label in the data editor.

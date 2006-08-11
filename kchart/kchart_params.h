@@ -65,6 +65,8 @@ class KChartParams : public KDChartParams
     KChartParams( KChartPart *_part );
     ~KChartParams();
 
+    KChartPart * part() const { return m_part; }
+
     // Reimplementation of selected KDChartParams methods
     ChartType  chartType() const            { return m_chartType; }
     void       setChartType( ChartType _type ) {

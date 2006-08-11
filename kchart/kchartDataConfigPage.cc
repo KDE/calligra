@@ -55,26 +55,28 @@ namespace KChart
 KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 					    QWidget* parent, 
 					    KDChartTableData *dat) 
-    : QWidget( parent ), m_params( params ), data(dat)
+    : QWidget( parent ), m_params( params ), data(dat),
+      m_firstRowAsLabel(0), m_firstColAsLabel(0)
 {
     QGridLayout *grid1 = new QGridLayout(this, 4, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
 
     // The Data Area
-    QButtonGroup *gb1 = new QVButtonGroup( i18n( "Data Area" ), this );
+    if ( !m_params->part()->canChangeValue() ) {
+	QButtonGroup *gb1 = new QVButtonGroup( i18n( "Data Area" ), this );
 
-    // ================================================================
-    // This code is copied from kchartWizardSelectDataFormatPage.cc
-    QHBox   *hbox = new QHBox( gb1 );
-    (void) new QLabel( i18n("Area: "), hbox);
-    m_dataArea = new QLineEdit( hbox );
-    //grid1->addWidget(gb1, 0, 0);
+	// ================================================================
+	// This code is copied from kchartWizardSelectDataFormatPage.cc
+	QHBox   *hbox = new QHBox( gb1 );
+	(void) new QLabel( i18n("Area: "), hbox);
+	m_dataArea = new QLineEdit( hbox );
 
-    // The row/column as label checkboxes. 
-    m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), gb1);
-    m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), gb1);
+	// The row/column as label checkboxes. 
+	m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), gb1);
+	m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), gb1);
 
-    grid1->addWidget(gb1, 0, 0);
+	grid1->addWidget(gb1, 0, 0);
+    }
 
     // The Data Format button group
     QButtonGroup *gb = new QVButtonGroup( i18n( "Data Format" ), this );
@@ -106,16 +108,21 @@ void KChartDataConfigPage::init()
     else
 	m_colMajor->setChecked(true);
 
-    m_firstRowAsLabel->setChecked( m_params->firstRowAsLabel() );
-    m_firstColAsLabel->setChecked( m_params->firstColAsLabel() );
+    if ( !m_params->part()->canChangeValue() ) {
+	m_firstRowAsLabel->setChecked( m_params->firstRowAsLabel() );
+	m_firstColAsLabel->setChecked( m_params->firstColAsLabel() );
+    }
 }
 
 
 void KChartDataConfigPage::defaults()
 {
     m_colMajor->setChecked( true );
-    m_firstRowAsLabel->setChecked( false );
-    m_firstColAsLabel->setChecked( false );
+
+    if ( !m_params->part()->canChangeValue() ) {
+	m_firstRowAsLabel->setChecked( false );
+	m_firstColAsLabel->setChecked( false );
+    }
 }
 
 
@@ -126,8 +133,10 @@ void KChartDataConfigPage::apply()
     else
 	m_params->setDataDirection( KChartParams::DataColumns );
 
-    m_params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
-    m_params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
+    if ( !m_params->part()->canChangeValue() ) {
+	m_params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
+	m_params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
+    }
 }
 
 
