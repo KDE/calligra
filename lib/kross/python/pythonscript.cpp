@@ -311,7 +311,7 @@ Kross::Api::Object::Ptr PythonScript::execute()
         // Free interpreter lock
         PyGILState_Release(gilstate);
 
-        if(! pyresult) {
+        if(! pyresult || PyErr_Occurred()) {
             krosswarning("Kross::Python::PythonScript::execute(): Failed to PyEval_EvalCode");
             throw Py::Exception();
         }
