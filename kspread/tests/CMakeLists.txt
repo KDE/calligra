@@ -18,6 +18,17 @@ target_link_libraries(formulatest  kspreadcommon )
 
 add_test(formula ${EXECUTABLE_OUTPUT_PATH}/formulatest)
 
+########### next target ###############
+
+set(rtree_SRCS rtreeperformancetest.cpp)
+
+kde4_automoc(${rtree_SRCS})
+
+kde4_add_executable(rtreeperformancetest RUN_UNINSTALLED ${rtree_SRCS})
+
+target_link_libraries(rtreeperformancetest kdecore)
+
+# add_test(R-Tree rtreeperformancetest)
 
 ########### next target ###############
 
