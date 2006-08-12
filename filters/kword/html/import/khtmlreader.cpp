@@ -362,6 +362,8 @@ bool KHTMLReader::parse_a(DOM::Element e) {
 bool KHTMLReader::parse_p(DOM::Element e) {
         // For every starting paragraph, a line break has to be inserted.
         // exception: the first paragraph, e.g. if the <body> starts with a <p>.
+        if (!(_writer->getText(state()->paragraph).isEmpty()))
+          startNewParagraph(false,false);
 	parse_CommonAttributes(e);
 	return true;
 }
@@ -434,8 +436,7 @@ static const QColor parsecolor(const QString& colorstring) {
 
 void KHTMLReader::parseStyle(DOM::Element e) {
   // styles are broken broken broken broken broken broken.
-  //FIXME: wait until getComputedStyle is more than
-  // 'return 0' in khtml
+  // FIXME: use getComputedStyle - note: it only returns 0, but works nevertheless
   kDebug(30503) << "entering parseStyle" << endl;
   DOM::CSSStyleDeclaration s1=e.style();
   DOM::Document doc=_html->document();
@@ -474,8 +475,6 @@ void KHTMLReader::parseStyle(DOM::Element e) {
   if ( s1.getPropertyValue("text-align").string() != QString() )
   {
     state()->layout=_writer->setLayout(state()->paragraph,state()->layout);
-    if (!(_writer->getText(state()->paragraph).isEmpty()))
-      startNewParagraph(false,false);
     _writer->layoutAttribute(state()->paragraph, "FLOW","align",s1.getPropertyValue("text-align").string());
   }
   // done
