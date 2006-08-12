@@ -595,12 +595,38 @@ generic part, at the right. The generic part contains a preview window, which
 you can configure using the controls below it. Choose
 <guilabel>Preview</guilabel> or <guilabel>Original</guilabel> depending on
 whether you want the preview window to show the preview of the filter effect
-or the original image. You can zoom in and zoom out, and refresh the preview,
-with the three buttons at the bottom right. Furthermore, the option
+or the original image. The four buttons at the bottom right allow you to zoom
+in and zoom out, set the zooming factor to 100% (this shows the image at its
+original size), and refresh the preview, respectively. Furthermore, the option
 <guilabel>Autoupdate</guilabel> determines if the preview window is updated
 automatically. If you uncheck this checkbox, you will have to refresh the
 preview yourself.
 </para>
+
+<sect3 id="commands-dialogs-filters-blur">
+<title>The <guilabel>Blur</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Blur</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-blur.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Blur</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Blur</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This dialog is still to be described.)
+</para>
+
+</sect3>
+
 
 <sect3 id="commands-dialogs-filters-brightnesscontrast">
 <title>The <guilabel>Brightness / Contrast</guilabel> dialog</title>

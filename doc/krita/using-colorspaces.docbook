@@ -16,7 +16,7 @@ This chapter gives information on what colorspaces are, which colorspaces
 In short, a colorspace is a way to represent colors by specifying a number of
 parameters. As parameters, one can choose for example the amounts of red,
 green and blue light needed for the color. This results in the commonly known
-RGB colorspace. One can visualise this as a three-dimensional space, with each
+RGB colorspace. One can visualize this as a three-dimensional space, with each
 of the red, green, and blue light components being an axis in the colorspace.
 A color then corresponds to a certain point in this colorspace, defined by its
 coordinates on the three axes.

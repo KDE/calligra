@@ -76,40 +76,55 @@ You can find the Auto Contrast filter in the <menuchoice><guimenu>Filter</guimen
 <sect1 id="filters-blur">
 <title>The Blur filter</title>
 <para>
+You can use the Blur filter to blur your image (give it a fuzzy look).
 </para>
-<screenshot>
-<screeninfo>The image with the filter applied to it</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="crocusses-.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The image with the filter applied to it</phrase>
-</textobject>
-<caption><para>The image with the filter applied to it</para></caption>
-</mediaobject>
-</screenshot>
-</sect1>
-
-<sect1 id="filters-">
-<title>The filter</title>
 <para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Blur</guisubmenu></menuchoice> menu.
+See the section on <link linkend="commands-dialogs-filters-blur">the
+<guilabel>Blur</guilabel> dialog</link>
+for more information on its settings.
 </para>
 <screenshot>
-<screeninfo>The image with the filter applied to it</screeninfo>
+<screeninfo>The image with the Blur filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="crocusses-.png" format="PNG" />
+<imagedata fileref="crocusses-blur.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the filter applied to it</phrase>
+<phrase>The image with the Blur filter applied to it</phrase>
 </textobject>
-<caption><para>The image with the filter applied to it</para></caption>
+<caption><para>The image with the Blur filter applied to it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
 
-
+<sect1 id="filters-brightnesscontrast">
+<title>The Brightness / Contrast filter</title>
+<para>
+With this filter, you can adjust the brightness and contrast of your image.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-brightnesscontrast">the
+<guilabel>Brightness / Contrast </guilabel>dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Brightness / Contrast filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-brightnesscontrast.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Brightness / Contrast filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Brightness / Contrast filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
 
 <sect1 id="filters-bumpmap">
 <title>The Bumpmap filter</title>
