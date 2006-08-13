@@ -13,7 +13,7 @@ kde4_add_plugin(karbon_zoomtoolplugin ${karbon_zoomtoolplugin_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_zoomtoolplugin )
 
-target_link_libraries(karbon_zoomtoolplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
+target_link_libraries(karbon_zoomtoolplugin  ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
 
 install(TARGETS karbon_zoomtoolplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
