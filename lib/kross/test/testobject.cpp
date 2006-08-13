@@ -81,11 +81,6 @@ void TestObject::testSlot2()
     Kross::krossdebug("TestObject::testSlot2 called");
 }
 
-void TestObject::testSignalSlot()
-{
-    Kross::krossdebug("TestObject::testSignalSlot called");
-}
-
 void TestObject::stdoutSlot(const QString& s)
 {
     Kross::krossdebug(QString("stdout: %1").arg(s));
