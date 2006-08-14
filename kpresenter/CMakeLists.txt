@@ -6,7 +6,6 @@ include_directories(
 		${KOFFICEUI_INCLUDES}
 		${KOPAINTER_INCLUDES})
 
-add_subdirectory( autoformEdit )
 add_subdirectory( autoforms )
 add_subdirectory( pics )
 add_subdirectory( templates )
