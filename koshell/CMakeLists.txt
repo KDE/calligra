@@ -26,6 +26,6 @@ install( FILES  koshell.desktop  DESTINATION ${XDG_APPS_DIR})
 install( FILES  koshell.kcfg  DESTINATION ${KCFG_INSTALL_DIR})
 install( FILES  koshellui.rc  DESTINATION ${DATA_INSTALL_DIR}/koshell)
 
-kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
+kde4_install_icons( ${ICON_INSTALL_DIR}   )
 
 

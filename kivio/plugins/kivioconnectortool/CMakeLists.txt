@@ -26,8 +26,7 @@ install( FILES  kivio_connector_cursor1.png kivio_connector_cursor2.png  DESTINA
 install( FILES  kivioconnectortool.rc  DESTINATION ${DATA_INSTALL_DIR}/kivio/kpartplugins)
 install( FILES  kivioconnectortool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/kivio/icons crystalsvg )
-kde4_install_icons( ${DATA_INSTALL_DIR}/kivio/icons hicolor)
+kde4_install_icons( ${DATA_INSTALL_DIR}/kivio/icons )
 
 
 

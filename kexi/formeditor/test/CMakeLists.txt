@@ -38,7 +38,7 @@ install( FILES  kformdesigner_part.rc kformdesigner_part_shell.rc  DESTINATION $
 install( FILES  kfd_mainwindow.rc  DESTINATION ${DATA_INSTALL_DIR}/kformdesigner)
 install( FILES  kformdesigner.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Development)
 
-kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
+kde4_install_icons( ${ICON_INSTALL_DIR}   )
 
 
 
