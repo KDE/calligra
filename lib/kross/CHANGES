@@ -7,6 +7,7 @@
 * Removed Argument class.
 * Refactor of the tree-handling to improve the performance.
 * Tweaks on Object and Value to improve the performance.
+* Python: Fixed crasher in PyEval_EvalCode
 
 1.5.2
 * API: Fix possible crash in Manager::getInterpreternameForFile()
