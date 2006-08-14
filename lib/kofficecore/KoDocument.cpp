@@ -1695,7 +1695,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         int errorColumn;
         QDomDocument doc;
         bool res;
-        if ( doc.setContent( &in, &errorMsg, &errorLine, &errorColumn ) )
+        if ( doc.setContent( &in, true, &errorMsg, &errorLine, &errorColumn ) )
         {
             res = loadXML( &in, doc );
             if ( res )
