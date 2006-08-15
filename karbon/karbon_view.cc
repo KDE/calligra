@@ -66,6 +66,7 @@
 #include <KoCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
+#include <KoShapeSelector.h>
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -224,6 +225,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		createLayersTabDock();
 		createResourceDock();
 
+		KoShapeSelector *selector = new KoShapeSelector( this, m_canvasView, "" );
+		selector->setWindowTitle(i18n("Shapes"));
+		paletteManager()->addWidget( selector, "ToolTabDock", "ShapePanel" );
+
 		KoToolManager::instance()->addControllers( m_canvasView, p );
 		shell()->addDockWidget( Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox("Karbon"));
 
@@ -234,9 +239,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 			QList<KoID> shapeIdList = KoShapeRegistry::instance()->listKeys();
 			if( shapeIdList.count() > 0 )
 				createTool->setShapeId( shapeIdList.first().id() );
-			//createTool->setShapeId( "KoRegularPolygonShape" );
-			//createTool->setShapeId( "43751" );
-			//createTool->setShapeId( "TextShapeID" );
 			createTool->setShapeController( p );
 		}
 
