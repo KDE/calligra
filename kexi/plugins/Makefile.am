@@ -10,6 +10,6 @@ if compile_kross
   SCRIPTINGDIR=scripting
 endif
 
-SUBDIRS = tables relations migration queries forms $(REPORTS) $(MACRODIR) $(SCRIPTINGDIR) importexport
+SUBDIRS = tables relations migration queries forms $(MACRODIR) $(SCRIPTINGDIR) importexport
 
-#importwizard relations
+#$(REPORTS) importwizard relations
