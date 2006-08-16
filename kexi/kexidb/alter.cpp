@@ -921,8 +921,8 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 				insertFieldAction->setIndex(newTable->fieldCount());
 			}
 		}
-		if (!currentField)
-			continue;
+		//if (!currentField)
+		//	continue;
 		result = action->updateTableSchema(*newTable, currentField, fieldMap);
 		if (result!=true) {
 			if (recreateTable)
@@ -1027,21 +1027,22 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		}
 
 		const QString oldTableName = oldTable->name();
-		result = d->conn->dropTable( oldTable );
+/*		result = d->conn->dropTable( oldTable );
 		if (!result || ~result) {
 			setError(d->conn);
 //! @todo delete newTable...
 			return 0;
 		}
-		oldTable = 0;
+		oldTable = 0;*/
 
-		// Replace the old table with the new one
-		if (!d->conn->alterTableName(*newTable, oldTableName, false /*!replace*/)) {
+		// Replace the old table with the new one (oldTable will be destroyed)
+		if (!d->conn->alterTableName(*newTable, oldTableName, true /*replace*/)) {
 			setError(d->conn);
 //! @todo delete newTable...
 			result = false;
 			return 0;
 		}
+		oldTable = 0;
 	}
 
 	if (!recreateTable) {

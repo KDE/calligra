@@ -536,11 +536,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //! @todo (js): update any structure (e.g. query) that depend on this table!
 		tristate alterTable( TableSchema& tableSchema, TableSchema& newTableSchema);
 
-		/*! Alters table's described \a tableSchema name to \a newName. 
-		 If \a replace is true, destination table is replaced, if present.
+		/*! Alters name of table described by \a tableSchema to \a newName. 
+		 If \a replace is true, destination table is completely dropped and replaced 
+		 by \a tableSchema, if present. In this case, identifier of 
+		 \a tableSchema becomes equal to the dropped table's id, what can be useful
+		 if \a tableSchema was created with a temporary name and ID (used in AlterTableHandler).
+
 		 If \a replace is false (the default) and destination table is present 
 		 -- false is returned and ERR_OBJECT_EXISTS error is set.
-		 \a tableSchema is updated on success.
+		 The schema of \a tableSchema is updated on success.
 		 \return true on success. */
 		bool alterTableName(TableSchema& tableSchema, const QString& newName, bool replace = false);
 
@@ -952,9 +956,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 what's supported by SQLite >= 3.2, PostgreSQL, MySQL.
 		 Backends lacking ALTER TABLE, for example SQLite2, reimplement this with by an inefficient 
 		 data copying to a new table. In any case, renaming is performed at the backend.
-		 It's food idea to keep the operation within a transaction. 
+		 It's good idea to keep the operation within a transaction. 
 		 \return true on success. */
-		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName, bool replace = false);
+		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName);
 
 		/*! Internal, for handling autocommited transactions:
 		 begins transaction if one is supported.

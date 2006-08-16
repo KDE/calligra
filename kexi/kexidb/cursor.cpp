@@ -454,7 +454,7 @@ bool Cursor::getNextRecord()
 
 bool Cursor::updateRow(RowData& data, RowEditBuffer& buf, bool useROWID)
 {
-//TODO: doesn't update cursor's buffer YET!
+//! @todo doesn't update cursor's buffer YET!
 	clearError();
 	if (!m_query)
 		return false;
@@ -463,7 +463,7 @@ bool Cursor::updateRow(RowData& data, RowEditBuffer& buf, bool useROWID)
 
 bool Cursor::insertRow(RowData& data, RowEditBuffer& buf, bool getROWID)
 {
-//TODO: doesn't update cursor's buffer YET!
+//! @todo doesn't update cursor's buffer YET!
 	clearError();
 	if (!m_query)
 		return false;
@@ -472,7 +472,7 @@ bool Cursor::insertRow(RowData& data, RowEditBuffer& buf, bool getROWID)
 
 bool Cursor::deleteRow(RowData& data, bool useROWID)
 {
-//TODO: doesn't update cursor's buffer YET!
+//! @todo doesn't update cursor's buffer YET!
 	clearError();
 	if (!m_query)
 		return false;
@@ -481,7 +481,7 @@ bool Cursor::deleteRow(RowData& data, bool useROWID)
 
 bool Cursor::deleteAllRows()
 {
-//TODO: doesn't update cursor's buffer YET!
+//! @todo doesn't update cursor's buffer YET!
 	clearError();
 	if (!m_query)
 		return false;
