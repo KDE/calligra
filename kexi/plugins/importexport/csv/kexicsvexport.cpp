@@ -156,16 +156,20 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 	const uint fieldsCount = fields.count();
 	const QCString delimiter( options.delimiter.left(1).latin1() );
 	const bool hasTextQuote = !options.textQuote.isEmpty();
-	const QCString textQuote( options.textQuote.left(1).latin1() );
+	const QString textQuote( options.textQuote.left(1) );
 	const QCString escapedTextQuote( textQuote + textQuote ); //ok?
 	//cache for faster checks
 	bool *isText = new bool[fieldsCount]; 
 	bool *isDateTime = new bool[fieldsCount]; 
+	bool *isTime = new bool[fieldsCount]; 
+	bool *isBLOB = new bool[fieldsCount]; 
 //	bool isInteger[fieldsCount]; //cache for faster checks
 //	bool isFloatingPoint[fieldsCount]; //cache for faster checks
 	for (uint i=0; i<fieldsCount; i++) {
 		isText[i] = fields[i]->field->isTextType();
 		isDateTime[i] = fields[i]->field->type()==KexiDB::Field::DateTime;
+		isTime[i] = fields[i]->field->type()==KexiDB::Field::Time;
+		isBLOB[i] = fields[i]->field->type()==KexiDB::Field::BLOB;
 //		isInteger[i] = fields[i]->field->isIntegerType() 
 //			|| fields[i]->field->type()==KexiDB::Field::Boolean;
 //		isFloatingPoint[i] = fields[i]->field->isFPNumericType();
@@ -177,9 +181,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 			if (i>0)
 				APPEND( delimiter );
 			if (hasTextQuote){
-				APPEND( textQuote );
-				APPEND( fields[i]->captionOrAliasOrName().replace(textQuote, escapedTextQuote) );
-				APPEND( textQuote );
+				APPEND( textQuote + fields[i]->captionOrAliasOrName().replace(textQuote, escapedTextQuote) + textQuote );
 			}
 			else {
 				APPEND( fields[i]->captionOrAliasOrName() );
@@ -201,16 +203,27 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 				APPEND( delimiter );
 			if (cursor->value(i).isNull())
 				continue;
-			if (hasTextQuote && isText[i]) {
-				APPEND( textQuote );
-				APPEND( QString(cursor->value(i).toString()).replace(textQuote, escapedTextQuote) );
-				APPEND( textQuote );
+			if (isText[i]) {
+				if (hasTextQuote)
+					APPEND( textQuote + QString(cursor->value(i).toString()).replace(textQuote, escapedTextQuote) + textQuote );
+				else
+					APPEND( cursor->value(i).toString() );
 			}
 			else if (isDateTime[i]) { //avoid "T" in ISO DateTime
 				APPEND( cursor->value(i).toDateTime().date().toString(Qt::ISODate)+" "
 					+ cursor->value(i).toDateTime().time().toString(Qt::ISODate) );
 			}
-			else {
+			else if (isTime[i]) { //time is temporarily stored as null date + time...
+				APPEND( cursor->value(i).toTime().toString(Qt::ISODate) );
+			}
+			else if (isBLOB[i]) { //BLOB is escaped in a special way
+				if (hasTextQuote)
+//! @todo add options to suppport other types from KexiDB::BLOBEscapingType enum...
+					APPEND( textQuote + KexiDB::escapeBLOB(cursor->value(i).toByteArray(), KexiDB::BLOBEscapeHex) + textQuote );
+				else
+					APPEND( KexiDB::escapeBLOB(cursor->value(i).toByteArray(), KexiDB::BLOBEscapeHex) );
+			}
+			else {//other types
 				APPEND( cursor->value(i).toString() );
 			}
 		}
@@ -229,6 +242,9 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 		kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
 
 	delete [] isText;
+	delete [] isDateTime;
+	delete [] isTime;
+	delete [] isBLOB;
 
 	if (kSaveFile) {
 		if (!kSaveFile->close()) {
