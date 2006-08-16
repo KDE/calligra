@@ -47,7 +47,7 @@ void KexiDBTextWidgetInterface::paintEvent( Q3Frame *w, bool textIsEmpty, int al
 			p.setPen(KexiUtils::blendedColors(m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
 		}
 		const int m = w->lineWidth()+w->midLineWidth();
-		KexiDisplayUtils::drawAutonumberSign(*m_autonumberDisplayParameters, &p,
+		KexiDisplayUtils::paintAutonumberSign(*m_autonumberDisplayParameters, &p,
 			2+m+w->margin(), m, w->width()-m*2 -2-2, w->height()-m*2 -2, alignment, hasFocus);
 	}
 }

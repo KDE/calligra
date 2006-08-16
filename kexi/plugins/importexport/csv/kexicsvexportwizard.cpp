@@ -295,7 +295,8 @@ void KexiCSVExportWizard::next()
 void KexiCSVExportWizard::done(int result)
 {
 	if (QDialog::Accepted == result) {
-		m_options.fileName = m_fileSavePage->currentFileName();
+		if (m_fileSavePage)
+			m_options.fileName = m_fileSavePage->currentFileName();
 		m_options.delimiter = m_delimiterWidget->delimiter();
 		m_options.textQuote = m_textQuote->textQuote();
 		m_options.addColumnNames = m_addColumnNamesCheckBox->isChecked();

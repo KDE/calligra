@@ -63,7 +63,7 @@ class ChangeFieldPropertyCommand : public Command
 	public:
 		/*! Creates the ChangeFieldPropertyCommand object. 
 		 Note: we use internal "uid" property of a field (set["uid"]) to avoid problems with looking 
-		 for field by name when more than one filed exists with the same name 
+		 for field by name when more than one field exists with the same name 
 		 (it's invalid but allowed in design time). 
 		 \a oldlistData and and \a newListData can be specified so Property::setListData() will be called
 		 on execute() and unexecute().
@@ -145,7 +145,7 @@ class ChangePropertyVisibilityCommand : public Command
 	public:
 		/*! Creates the ChangePropertyVisibilityCommand object. 
 		 Note: we use internal "uid" property of a field (set["uid"]) to avoid problems with looking 
-		 for field by name when more than one filed exists with the same name 
+		 for field by name when more than one field exists with the same name 
 		 (it's invalid but allowed in design time). 
 		*/
 		ChangePropertyVisibilityCommand( KexiTableDesignerView* view,
