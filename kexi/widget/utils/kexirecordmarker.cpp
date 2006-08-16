@@ -101,8 +101,8 @@ public:
 	 , currentRow(-1)
 	 , highlightedRow(-1)
 	 , editRow(-1)
-	 , selectionBackgroundColor(qApp->palette().active().highlight())
 	 , rows(0)
+	 , selectionBackgroundColor(qApp->palette().active().highlight())
 	 , showInsertRow(true)
 	{
 	}
@@ -191,13 +191,17 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 		last = d->rows-1+(d->showInsertRow?1:0);
 
 	QColorGroup selectedColorGroup(colorGroup());
-	selectedColorGroup.setColor( QColorGroup::Background, 
+	selectedColorGroup.setColor( QColorGroup::Button, 
 		KexiUtils::blendedColors( selectedColorGroup.color(QColorGroup::Background), 
 			d->selectionBackgroundColor, 2, 1) );
+	selectedColorGroup.setColor( QColorGroup::Background, 
+		selectedColorGroup.color(QColorGroup::Button) ); //set background color as well (e.g. for thinkeramik)
 	QColorGroup highlightedColorGroup(colorGroup());
-	highlightedColorGroup.setColor( QColorGroup::Background, 
+	highlightedColorGroup.setColor( QColorGroup::Button, 
 		KexiUtils::blendedColors( highlightedColorGroup.color(QColorGroup::Background), 
 			d->selectionBackgroundColor, 4, 1) );
+	highlightedColorGroup.setColor( QColorGroup::Background, 
+		highlightedColorGroup.color(QColorGroup::Button) ); //set background color as well (e.g. for thinkeramik)
 	for(int i=first; i <= last; i++)
 	{
 		int y = ((d->rowHeight * i)-d->offset);
@@ -219,6 +223,7 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 	{
 		//show marker
 		p.setBrush(colorGroup().foreground());
+		p.setPen(QPen(Qt::NoPen));
 		Q3PointArray points(3);
 		int ofs = d->rowHeight / 4;
 		int ofs2 = (width() - ofs) / 2 -1;

@@ -10,7 +10,9 @@ set(kexihandler_csv_importexport_PART_SRCS
    kexicsvimportdialog.cpp 
    kexicsvimportoptionsdlg.cpp 
    kexicsvwidgets.cpp 
-   kexicsvexportwizard.cpp )
+   kexicsvexportwizard.cpp
+   kexicsvexport.cpp
+)
 
 kde4_automoc(${kexihandler_csv_importexport_PART_SRCS})
 
