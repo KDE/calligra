@@ -1673,7 +1673,9 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 //TODO: alter table name for server DB backends!
 //TODO: what about objects (queries/forms) that use old name?
 //TODO
-	const bool destTableExists = this->tableSchema( newName ) != 0;
+	TableSchema *tableToReplace = this->tableSchema( newName );
+	const bool destTableExists = tableToReplace != 0;
+	const int origID = destTableExists ? tableToReplace->id() : -1; //will be reused in the new table
 	if (!replace && destTableExists) {
 		setError(ERR_OBJECT_EXISTS,
 			i18n("Could not rename table \"%1\" to \"%2\". Table \"%3\" already exists.",
@@ -1689,7 +1691,33 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 	if (!beginAutoCommitTransaction(tg))
 		return false;
 
-	if (!drv_alterTableName(tableSchema, newTableName, replace)) {
+	// drop the table replaced (with schema)
+	if (destTableExists) {
+		if (!replace) {
+			return false;
+		}
+		if (!dropTable( newName )) {
+			return false;
+		}
+
+		// the new table owns the previous table's id:
+		if (!executeSQL(QString::fromLatin1("UPDATE kexi__objects SET o_id=%1 WHERE o_id=%2 AND o_type=%3")
+			.arg(origID).arg(tableSchema.id()).arg((int)TableObjectType)))
+		{
+			return false;
+		}
+		if (!executeSQL(QString::fromLatin1("UPDATE kexi__fields SET t_id=%1 WHERE t_id=%2")
+			.arg(origID).arg(tableSchema.id())))
+		{
+			return false;
+		}
+		d->tables.take(tableSchema.id());
+		d->tables.insert(origID, &tableSchema);
+		//maintain table ID
+		tableSchema.m_id = origID;
+	}
+
+	if (!drv_alterTableName(tableSchema, newTableName)) {
 		alterTableName_ERR;
 		return false;
 	}
@@ -1719,29 +1747,15 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 	return true;
 }
 
-bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& newName, bool replace)
+bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& newName)
 {
 	const QString oldTableName = tableSchema.name();
-	const bool destTableExists = this->tableSchema( newName ) != 0;
-
-	// drop the table
-	if (destTableExists) {
-		if (!replace)
-			return false;
-		if (!drv_dropTable( newName ))
-			return false;
-	}
-
 	tableSchema.setName(newName);
-
-//helper:
-#define drv_alterTableName_ERR \
-		tableSchema.setName(oldTableName) //restore old name
 
 	if (!executeSQL(QString::fromLatin1("ALTER TABLE %1 RENAME TO %2")
 		.arg(escapeIdentifier(oldTableName)).arg(escapeIdentifier(newName))))
 	{
-		drv_alterTableName_ERR;
+		tableSchema.setName(oldTableName); //restore old name
 		return false;
 	}
 	return true;
@@ -2911,7 +2925,6 @@ void Connection::removeMe(TableSchema *ts)
 {
 	if (ts && !m_destructor_started) {
 		d->tables.take(ts->id());
-		d->tables.take(ts->id());
 		d->tables_byname.take(ts->name());
 	}
 }
@@ -3051,9 +3064,21 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	m_sql = "INSERT INTO " + escapeIdentifier(mt->name()) + " (";
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 
-	if (buf.dbBuffer().isEmpty()) {
+	// add default values, if available (for any column without value explicity set)
+	const QueryColumnInfo::Vector fieldsExpanded( query.fieldsExpanded( QuerySchema::Unique ) );
+	for (uint i=0; i<fieldsExpanded.count(); i++) {
+		QueryColumnInfo *ci = fieldsExpanded.at(i);
+		if (ci->field && !ci->field->defaultValue().isNull() && !b.contains( ci )) {
+			KexiDBDbg << "Connection::insertRow(): adding default value '" << ci->field->defaultValue().toString()
+				<< "' for column '" << ci->field->name() << "'" << endl;
+			b.insert( ci, ci->field->defaultValue() );
+		}
+	}
+
+	if (b.isEmpty()) {
+		// empty row inserting requested:
 		if (!getROWID && !pkey) {
-			KexiDBWarn << " -- WARNING: MASTER TABLE's PKEY REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
+			KexiDBWarn << "MASTER TABLE's PKEY REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
 			setError(ERR_INSERT_NO_MASTER_TABLES_PKEY,
 				i18n("Could not insert row because master table has no primary key defined."));
 			return false;
@@ -3062,7 +3087,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			Q3ValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
 //			KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 			if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
-				KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
+				KexiDBWarn << "NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
 				setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY,
 					i18n("Could not insert row because it does not contain entire master table's primary key."));
 				return false;
@@ -3072,7 +3097,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		Field *anyField = mt->anyNonPKField();
 		if (!anyField) {
 			if (!pkey) {
-				KexiDBWarn << " -- WARNING: NO FILED AVAILABLE TO SET IT TO NULL" << endl;
+				KexiDBWarn << "WARNING: NO FIELD AVAILABLE TO SET IT TO NULL" << endl;
 				return false;
 			}
 			else {
@@ -3084,6 +3109,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		sqlvals += m_driver->valueToSQL(anyField,QVariant()/*NULL*/);
 	}
 	else {
+		// non-empty row inserting requested:
 		for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 			if (!sqlcols.isEmpty()) {
 				sqlcols+=",";

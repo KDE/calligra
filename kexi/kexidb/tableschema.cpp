@@ -313,7 +313,7 @@ QString TableSchema::debugString(bool includeTableName)
 	for (Field::ListIterator it(m_fields); (f = it.current()); ++it) {
 		LookupFieldSchema *lookupSchema = lookupFieldSchema( *f );
 		if (lookupSchema)
-			s.append( lookupSchema->debugString() );
+			s.append( QString("\n") + lookupSchema->debugString() );
 	}
 	return s;
 }
