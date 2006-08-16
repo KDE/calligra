@@ -678,7 +678,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 				return false;
 			}
 		}
-		else {
+		else { // row updating
 //			if (m_containsROWIDInfo)
 //				ROWID = item[columns.count()].toULongLong();
 			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *m_pRowEditBuffer,
@@ -691,7 +691,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 			}
 		}
 	}
-	else {//js UNTESTED!!! - not db-aware version
+	else {//not db-aware version
 		KexiDB::RowEditBuffer::SimpleMap b = m_pRowEditBuffer->simpleBuffer();
 		for (KexiDB::RowEditBuffer::SimpleMap::ConstIterator it = b.constBegin();it!=b.constEnd();++it) {
 			uint i=0;

@@ -6,7 +6,6 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,6 +37,7 @@ class KPopupMenu;
 class KexiTableItem;
 class KexiTableViewData;
 class KexiRecordMarker;
+class KexiTableViewHeader;
 class KexiRecordNavigator;
 #include <kexidataiteminterface.h>
 
@@ -367,6 +367,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 widget at column \a col. Can return -1 if there's no such column. */
 		virtual int fieldNumberForColumn(int col) { return col; }
 
+		bool hasDefaultValueAt(const KexiTableViewColumn& tvcol);
+
 		const QVariant* bufferedValueAt(int col);
 
 		//! \return a type of column \a col - one of KexiDB::Field::Type
@@ -687,6 +689,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 //! @todo make generic interface out of KexiRecordMarker
 		KexiRecordMarker *m_verticalHeader;
+
+//! @todo make generic interface out of KexiTableViewHeader
+		KexiTableViewHeader *m_horizontalHeader;
 
 		KexiDataItemInterface *m_editor;
 //		KexiTableEdit *m_editor;

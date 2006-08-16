@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002 Till Busch <till@bux.at>
+   Copyright (C) 2002 Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,9 +18,6 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-
-   Original Author:  Till Busch <till@bux.at>
-   Original Project: buX (www.bux.at)
 */
 
 #include "kexirecordmarker.h"
@@ -29,9 +27,12 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qimage.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <kstaticdeleter.h>
+
+#include <kexiutils/utils.h>
 
 static KStaticDeleter<QImage> KexiRecordMarker_pen_deleter, KexiRecordMarker_plus_deleter;
 QImage* KexiRecordMarker_pen = 0, *KexiRecordMarker_plus = 0;
@@ -86,20 +87,45 @@ static void initRecordMarkerImages()
 	}
 }
 
-KexiRecordMarker::KexiRecordMarker(QWidget *parent, const char* name)
-:QWidget(parent, name)
+//----------------------------------------------------------------
+
+//! @internal
+class KexiRecordMarker::Private
 {
-	m_rowHeight = 1;
-	m_offset=0;
-	m_currentRow=-1;
-	m_editRow=-1;
-	m_pointerColor = QColor(99,0,0);
-	m_rows = 0;
-	m_showInsertRow = true;//false;
-	
-//	getImg(m_penImg, img_pen_data, 0);
-//	getImg(m_plusImg, img_plus_data, 1);
+public:
+	Private()
+	 : rowHeight(1)
+	 , offset(0)
+	 , currentRow(-1)
+	 , highlightedRow(-1)
+	 , editRow(-1)
+	 , selectionBackgroundColor(qApp->palette().active().highlight())
+	 , rows(0)
+	 , showInsertRow(true)
+	{
+	}
+	int rowHeight;
+	int offset;
+	int currentRow;
+	int highlightedRow;
+	int editRow;
+	int rows;
+	QColor selectionBackgroundColor;
+	bool showInsertRow : 1;
+};
+
+//----------------------------------------------------------------
+
+KexiRecordMarker::KexiRecordMarker(QWidget *parent, const char* name)
+ : QWidget(parent, name)
+ , d( new Private() )
+{
 	initRecordMarkerImages();
+}
+
+KexiRecordMarker::~KexiRecordMarker()
+{
+	delete d;
 }
 
 QImage* KexiRecordMarker::penImage()
@@ -114,21 +140,17 @@ QImage* KexiRecordMarker::plusImage()
 	return KexiRecordMarker_plus;
 }
 
-KexiRecordMarker::~KexiRecordMarker()
-{
-}
-
 void KexiRecordMarker::addLabel(bool upd)
 {
-	m_rows++;
+	d->rows++;
 	if (upd)
 		update();
 }
 
 void KexiRecordMarker::removeLabel(bool upd)
 {
-	if (m_rows > 0) {
-		m_rows--;
+	if (d->rows > 0) {
+		d->rows--;
 		if (upd)
 			update();
 	}
@@ -136,24 +158,24 @@ void KexiRecordMarker::removeLabel(bool upd)
 
 void KexiRecordMarker::addLabels(int num, bool upd)
 {
-	m_rows += num;
+	d->rows += num;
 	if (upd)
 		update();
 }
 
 void KexiRecordMarker::clear(bool upd)
 {
-	m_rows=0;
+	d->rows=0;
 	if (upd)
 		update();
 }
 
 int KexiRecordMarker::rows() const
 {
-	if (m_showInsertRow)
-		return m_rows +1;
+	if (d->showInsertRow)
+		return d->rows +1;
 	else
-		return m_rows;
+		return d->rows;
 }
 
 void KexiRecordMarker::paintEvent(QPaintEvent *e)
@@ -161,90 +183,120 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 	QPainter p(this);
 	QRect r(e->rect());
 
-	int first = (r.top()    + m_offset) / m_rowHeight;
-	int last  = (r.bottom() + m_offset) / m_rowHeight;
-	if(last > (m_rows-1+(m_showInsertRow?1:0)))
-		last = m_rows-1+(m_showInsertRow?1:0);
+	int first = (r.top()    + d->offset) / d->rowHeight;
+	int last  = (r.bottom() + d->offset) / d->rowHeight;
+	if(last > (d->rows-1+(d->showInsertRow?1:0)))
+		last = d->rows-1+(d->showInsertRow?1:0);
 
+	QColorGroup selectedColorGroup(colorGroup());
+	selectedColorGroup.setColor( QColorGroup::Background, 
+		KexiUtils::blendedColors( selectedColorGroup.color(QColorGroup::Background), 
+			d->selectionBackgroundColor, 2, 1) );
+	QColorGroup highlightedColorGroup(colorGroup());
+	highlightedColorGroup.setColor( QColorGroup::Background, 
+		KexiUtils::blendedColors( highlightedColorGroup.color(QColorGroup::Background), 
+			d->selectionBackgroundColor, 4, 1) );
 	for(int i=first; i <= last; i++)
 	{
-		int y = ((m_rowHeight * i)-m_offset);
-		QRect r(0, y, width(), m_rowHeight);
+		int y = ((d->rowHeight * i)-d->offset);
+		QRect r(0, y, width(), d->rowHeight);
 		p.drawRect(r);
 		style().drawPrimitive( QStyle::PE_HeaderSection, &p, r,
-			colorGroup(), QStyle::Style_Raised |
-			(isEnabled() ? QStyle::Style_Enabled : 0));
+			(d->currentRow == i) ? selectedColorGroup : (d->highlightedRow == i ? highlightedColorGroup : colorGroup()), 
+			QStyle::Style_Raised | (isEnabled() ? QStyle::Style_Enabled : 0));
 	}
-	if (m_editRow!=-1 && m_editRow >= first && m_editRow <= (last/*+1 for insert row*/)) {
+	if (d->editRow!=-1 && d->editRow >= first && d->editRow <= (last/*+1 for insert row*/)) {
 		//show pen when editing
-		int ofs = m_rowHeight / 4;
-		int pos = ((m_rowHeight*(m_currentRow>=0?m_currentRow:0))-m_offset)-ofs/2+1;
-		p.drawImage((m_rowHeight-KexiRecordMarker_pen->width())/2,
-			(m_rowHeight-KexiRecordMarker_pen->height())/2+pos,*KexiRecordMarker_pen);
+		int ofs = d->rowHeight / 4;
+		int pos = ((d->rowHeight*(d->currentRow>=0?d->currentRow:0))-d->offset)-ofs/2+1;
+		p.drawImage((d->rowHeight-KexiRecordMarker_pen->width())/2,
+			(d->rowHeight-KexiRecordMarker_pen->height())/2+pos,*KexiRecordMarker_pen);
 	}
-	else if (m_currentRow >= first && m_currentRow <= last 
-		&& (!m_showInsertRow || (m_showInsertRow && m_currentRow < last)))/*don't display marker for 'insert' row*/ 
+	else if (d->currentRow >= first && d->currentRow <= last 
+		&& (!d->showInsertRow || (d->showInsertRow && d->currentRow < last)))/*don't display marker for 'insert' row*/ 
 	{
 		//show marker
 		p.setBrush(colorGroup().foreground());
 		QPointArray points(3);
-		int ofs = m_rowHeight / 4;
+		int ofs = d->rowHeight / 4;
 		int ofs2 = (width() - ofs) / 2 -1;
-		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+2;
+		int pos = ((d->rowHeight*d->currentRow)-d->offset)-ofs/2+2;
 		points.putPoints(0, 3, ofs2, pos+ofs, ofs2 + ofs, pos+ofs*2, 
 			ofs2,pos+ofs*3);
 		p.drawPolygon(points);
 //		kdDebug() <<"KexiRecordMarker::paintEvent(): POLYGON" << endl;
-/*		int half = m_rowHeight / 2;
+/*		int half = d->rowHeight / 2;
 		points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);*/
 	}
-	if (m_showInsertRow && m_editRow < last
-		&& last == (m_rows-1+(m_showInsertRow?1:0)) ) {
+	if (d->showInsertRow && d->editRow < last
+		&& last == (d->rows-1+(d->showInsertRow?1:0)) ) {
 		//show plus sign
-		int pos = ((m_rowHeight*last)-m_offset)+(m_rowHeight-KexiRecordMarker_plus->height())/2;
-//		p.drawImage((width()-m_plusImg.width())/2-1, pos, m_plusImg);
+		int pos = ((d->rowHeight*last)-d->offset)+(d->rowHeight-KexiRecordMarker_plus->height())/2;
+//		p.drawImage((width()-d->plusImg.width())/2-1, pos, d->plusImg);
 		p.drawImage((width()-KexiRecordMarker_plus->width())/2, pos, *KexiRecordMarker_plus);
 	}
 }
 
 void KexiRecordMarker::setCurrentRow(int row)
 {
-	int oldRow = m_currentRow;
-	m_currentRow=row;
+	if (row == d->currentRow)
+		return;
+	int oldRow = d->currentRow;
+	d->currentRow=row;
 	
-	update(0,(m_rowHeight*(oldRow))-m_offset-1, width()+2, m_rowHeight+2);
-	update(0,(m_rowHeight*row)-m_offset-1, width()+2, m_rowHeight+2);
+	if (oldRow != -1)
+		update(0,(d->rowHeight*(oldRow))-d->offset-1, width()+2, d->rowHeight+2);
+	if (d->currentRow != -1)
+		update(0,(d->rowHeight*d->currentRow)-d->offset-1, width()+2, d->rowHeight+2);
+}
+
+void KexiRecordMarker::setHighlightedRow(int row)
+{
+	if (row == d->highlightedRow)
+		return;
+	int oldRow = d->highlightedRow;
+	d->highlightedRow = row;
+
+	if (oldRow != -1)
+		update(0,(d->rowHeight*(oldRow))-d->offset-1, width()+2, d->rowHeight+2);
+	if (d->currentRow != -1)
+		update(0,(d->rowHeight*d->highlightedRow)-d->offset-1, width()+2, d->rowHeight+2);
 }
 
 void KexiRecordMarker::setOffset(int offset)
 {
-	int oldOff = m_offset;
-	m_offset = offset;
+	int oldOff = d->offset;
+	d->offset = offset;
 	scroll(0,oldOff-offset);
 }
 
 void KexiRecordMarker::setCellHeight(int cellHeight)
 {
-	m_rowHeight = cellHeight;
+	d->rowHeight = cellHeight;
 }
 
 void KexiRecordMarker::setEditRow(int row)
 {
-	m_editRow = row;
+	d->editRow = row;
 //TODO: update only needed area!
 	update();
 }
 
 void KexiRecordMarker::showInsertRow(bool show)
 {
-	m_showInsertRow = show;
+	d->showInsertRow = show;
 //TODO: update only needed area!
 	update();
 }
 
-void KexiRecordMarker::setColor(const QColor &newcolor)
+void KexiRecordMarker::setSelectionBackgroundColor(const QColor &color)
 {
-	m_pointerColor = newcolor;
+	d->selectionBackgroundColor = color;
+}
+
+QColor KexiRecordMarker::selectionBackgroundColor() const
+{
+	return d->selectionBackgroundColor;
 }
 
 #include "kexirecordmarker.moc"

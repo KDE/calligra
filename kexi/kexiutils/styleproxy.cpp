@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,37 +17,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXITABLEHEADER_H
-#define KEXITABLEHEADER_H
+#include "styleproxy.h"
 
-#include <qheader.h>
+using namespace KexiUtils;
 
-class QPainter;
-
-class KEXIDATATABLE_EXPORT KexiTableHeader : public QHeader
+StyleProxy::StyleProxy(QStyle* parentStyle) 
+ : QStyle()
 {
-	Q_OBJECT
+	setParentStyle(parentStyle);
+}
 
-	public:
-		KexiTableHeader(QWidget *parent, const char *name=0);
-		~KexiTableHeader();
-		
-		void		setCurrentRow(int row=-1);
-		void		setInsertRow(int row=-1);
-		
-		void		setCellHeight(int height=14);
-//		void	set
+StyleProxy::~StyleProxy()
+{
+	delete m_style;
+}
 
-	protected:
-		void		paintEvent(QPaintEvent *ev);
-		void		paintSectionLabel(QPainter *p, int index, const QRect & fr);
+void StyleProxy::setParentStyle(QStyle* style)
+{
+	m_style = QStyleFactory::create(style->name());
+}
 
-		int		m_currentRow; 
-		int		m_insertRow;
-
-		int		m_cellHeight;
-
-		QPainter	*m_painter;
-};
-
-#endif
+QStyle* StyleProxy::parentStyle() const
+{
+	return m_style;
+}
