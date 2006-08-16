@@ -64,13 +64,14 @@ public:
     /// reimplemented to always return 1
     int pageCount () const;
 
+    void layout();
+
 protected:
     /// reimplemented
     void documentChanged(int position, int charsRemoved, int charsAdded);
 
 private:
     friend class KWTextFrameSet;
-    void layout();
     //void layout(QTextLayout &layout, bool recalc=false);
     bool layout(KWTextFrame *frame, double offset);
 

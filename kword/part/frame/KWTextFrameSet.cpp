@@ -35,13 +35,17 @@ KWTextFrameSet::KWTextFrameSet()
     m_textFrameSetType( KWord::OtherTextFrameSet )
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
+    m_document->setUseDesignMetrics(true);
 }
 
 KWTextFrameSet::KWTextFrameSet(KWord::TextFrameSetType type)
     : m_document( new QTextDocument() ),
+    m_protectContent(false),
+    m_layoutTriggered(false),
     m_textFrameSetType( type )
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
+    m_document->setUseDesignMetrics(true);
     switch(m_textFrameSetType) {
         case KWord::FirstPageHeaderTextFrameSet:
             setName(i18n("First Page Header"));
@@ -81,7 +85,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
     // TODO sort frames
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
     Q_ASSERT(data);
-    if(frameCount() == 1 && m_document->isEmpty()) {
+    if(frameCount() == 1 && m_document->isEmpty()) { // just added first frame...
         delete m_document;
         m_document = data->document();
         m_document->setDocumentLayout(new KWTextDocumentLayout(this));
@@ -92,7 +96,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
         data->faul();
         requestLayout();
     }
-    connect (data, SIGNAL(relayout()), this, SLOT(requestLayout()));
+    connect (data, SIGNAL(relayout()), this, SLOT(requestLayout())); 
 }
 
 void KWTextFrameSet::requestLayout() {

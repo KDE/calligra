@@ -29,11 +29,44 @@
 #include <QTextLayout>
 #include <QTextLine>
 #include <QPainter>
+#include <QPaintDevice>
+
+#include <limits.h>
+
+class PostscriptPaintDevice : public QPaintDevice {
+public:
+    PostscriptPaintDevice() {
+    }
+//   int devType () const {
+//   }
+    QPaintEngine *paintEngine () const {
+        return 0;
+    }
+    int metric (PaintDeviceMetric metric) const {
+        switch(metric) {
+            case QPaintDevice::PdmWidth:
+            case QPaintDevice::PdmHeight:
+            case QPaintDevice::PdmWidthMM:
+            case QPaintDevice::PdmHeightMM:
+            case QPaintDevice::PdmNumColors:
+                return INT_MAX;
+            case QPaintDevice::PdmDepth:
+                return 32;
+            case QPaintDevice::PdmDpiX:
+            case QPaintDevice::PdmDpiY:
+            case QPaintDevice::PdmPhysicalDpiX:
+            case QPaintDevice::PdmPhysicalDpiY:
+                return 72;
+        }
+    }
+};
+
 
 KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
 : QAbstractTextDocumentLayout(frameSet->document())
 , m_frameSet(frameSet)
 {
+    setPaintDevice( new PostscriptPaintDevice() );
 }
 
 KWTextDocumentLayout::~KWTextDocumentLayout() {
@@ -61,7 +94,7 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
     QTextBlock block = document()->begin();
     while(block.isValid()) {
         QTextLayout *layout = block.layout();
-        if(! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty())
+        if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty())
             layout->draw(painter, QPointF(0,0));
         block = block.next();
     }
@@ -133,6 +166,112 @@ void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 }
 
 void KWTextDocumentLayout::layout() {
+kDebug() << "KWTextDocumentLayout::layout" << endl;
+    class State {
+      public:
+        State(KWTextFrameSet *fs) : m_frameSet(fs) {
+            frameNumber = 0;
+            m_y = 0;
+            layout = 0;
+            shape = m_frameSet->frames()[frameNumber]->shape();
+            m_block = m_frameSet->document()->begin();
+            nextParag();
+        }
+
+        double width() {
+            double ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
+            return ptWidth;
+        }
+
+        double x() {
+            return m_format.leftMargin();
+        }
+
+        double y() {
+            return m_y;
+        }
+
+        /// when a line is added, update internal vars.  Return true if line does not fit in shape
+        bool addLine(const QTextLine &line) {
+            if(m_fragmentIterator.atEnd())
+                return false; // no text in block.
+            double height=0.0;
+//kDebug() << "a: " << m_fragmentIterator.fragment().position() << endl;
+//kDebug() << "b: " << line.textStart() << endl;
+            height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+            while(! (m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
+                            line.textStart() + line.textLength()))) {
+                height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                m_fragmentIterator++;
+//kDebug() << "   next fragment\n";
+            }
+//kDebug() << "height: " << (height*1.2) << endl;
+            Q_ASSERT(height > 0.0); // if this is called then a parag does not have a proper fontsize
+            m_y += height * 1.2;
+            // if not fits in shape {
+                //data->setEndPosition(position);
+                // return true;
+            // }
+            return false;
+        }
+
+        bool nextParag() {
+            if(layout != 0) { // first time
+                layout->endLayout();
+                m_block = m_block.next();
+            }
+            else {
+                m_y += m_format.bottomMargin();
+            }
+            if(! m_block.isValid())
+                return false;
+            m_format = m_block.blockFormat();
+            m_y += m_format.topMargin();
+            layout = m_block.layout();
+            layout->beginLayout();
+            m_fragmentIterator = m_block.begin();
+            return true;
+        }
+
+        int frameNumber;
+        KoShape *shape;
+        QTextLayout *layout;
+
+      private:
+        KWTextFrameSet *m_frameSet;
+
+        double m_y;
+        QTextBlock m_block;
+        QTextBlockFormat m_format;
+        QTextBlock::Iterator m_fragmentIterator;
+    };
+
+    State state(m_frameSet);
+    if(m_frameSet->frameCount() <= state.frameNumber)
+        return;
+    while(1) {
+        QTextLine line = state.layout->createLine();
+        if (!line.isValid()) { // end of parag
+            if(! state.nextParag())
+                return;
+            continue;
+        }
+
+        line.setLineWidth(state.width());
+//kDebug() << "New line at point " << state.x() << "," << state.y() << endl;
+        QPointF p(state.x(), state.y());
+        line.setPosition(QPointF(state.x(), state.y()));
+//kDebug() << "         reading: " << line.position().x() << "," << line.position().y() << endl;
+        if(state.addLine(line)) {
+            line.setPosition(QPointF(state.x(), state.y()));
+        }
+//kDebug() << "Line has " << line.textLength() << " chars" << endl;
+//kDebug() << "     width: " << line.width() << ", height: " << line.height() << endl;
+    }
+}
+
+/*
+void KWTextDocumentLayout::layout() {
     double offset = 0.0;
     double previousOffset = offset;
     bool reLayout = false;
@@ -159,7 +298,8 @@ kDebug() << "  reLayout: " << reLayout << endl;
         offset += frame->shape()->size().height() + 10;
     }
 }
-
+*/
+/*
 bool KWTextDocumentLayout::layout(KWTextFrame *frame, double offset) {
 kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
     bool firstParag = true;
@@ -184,7 +324,7 @@ kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
     // do layout
     bool started=false;
     while(1) {
-        // kDebug() << "   layout block" << endl;
+        kDebug() << "   layout block" << endl;
         if(!block.isValid())
             break;
         int x=0, width = frame->shape()->size().width();
@@ -201,7 +341,7 @@ kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
         QFontMetricsF fontMetrics(block.charFormat().font());
         int position = block.position();
         while(1) {
-            // kDebug() << "     new line" << endl;
+            kDebug() << "     new line" << endl;
             if(offset + fontMetrics.lineSpacing() > bottom) {
                 layout->endLayout();
                 data->setEndPosition(position);
@@ -210,6 +350,7 @@ kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
             QTextLine line = layout->createLine();
             if (!line.isValid())
                 break;
+kDebug() << "width: " << width << endl;
             line.setLineWidth(width);
             offset += fontMetrics.leading();
             line.setPosition(QPoint(x, offset));
@@ -222,7 +363,6 @@ kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
     }
 }
 
-/*
 void KWTextDocumentLayout::layout(QTextLayout &layout, bool recalc) {
     if(!recalc && layout.lineCount() > 0)
         return;

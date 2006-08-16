@@ -193,6 +193,9 @@ public:
     /// return a suggestion for a new frameset name that does not collide with known ones.
     QString uniqueFrameSetName( const QString& suggestion );
 
+    KoStyleManager *styleManager() { return m_styleManager; }
+    const KoStyleManager *styleManager() const { return m_styleManager; }
+
 #ifndef NDEBUG
     /// Use a log of kDebug calls to print out the internal state of the document and its members
     void printDebug();

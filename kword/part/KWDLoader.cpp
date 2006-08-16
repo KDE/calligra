@@ -27,6 +27,8 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoTextShape.h>
+#include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
 
 // KDE + Qt includes
 #include <QDomDocument>
@@ -519,8 +521,59 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
     QDomElement paragraph = framesetElem.firstChild().toElement();
     for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
-        if ( paragraph.tagName() == "PARAGRAPH" )
-        {
+        if ( paragraph.tagName() == "PARAGRAPH" ) {
+            QDomElement layout = paragraph.firstChildElement("LAYOUT");
+            if(!layout.isNull()) {
+                QTextBlockFormat bf = cursor.blockFormat();
+                QString styleName = layout.firstChildElement("NAME").attribute("value");
+                KoParagraphStyle *style = m_document->styleManager()->paragraphStyle(styleName);
+                if(style)
+                    style->applyStyle(bf);
+
+                QString align = layout.firstChildElement("FLOW").attribute("align", "auto");
+                if(align == "left") {
+                    bf.setAlignment( Qt::AlignLeft | Qt::AlignAbsolute );
+                } else if(align == "right") {
+                    bf.setAlignment( Qt::AlignRight | Qt::AlignAbsolute );
+                } else if(align == "center") {
+                    bf.setAlignment( Qt::AlignCenter | Qt::AlignAbsolute );
+                } else if(align == "justify") {
+                    bf.setAlignment( Qt::AlignJustify );
+                } else {
+                    bf.setAlignment( Qt::AlignLeft );
+                }
+
+                QDomElement element = layout.firstChildElement( "INDENTS" );
+                if ( !element.isNull() ) {
+                    bf.setTextIndent(element.attribute("first").toDouble());
+                    bf.setLeftMargin(element.attribute("left").toDouble());
+                    bf.setRightMargin(element.attribute("right").toDouble());
+                }
+                element = layout.firstChildElement( "OFFSETS" );
+                if ( !element.isNull() ) {
+                    bf.setTopMargin(element.attribute("before").toDouble());
+                    bf.setBottomMargin(element.attribute("after").toDouble());
+                }
+                // TODO read rest of properties
+                // LINESPACING
+                // PAGEBREAKING
+                // LEFTBORDER
+                // RIGHTBORDER
+                // TOPBORDER
+                // BOTTOMBORDER
+                // COUNTER
+                // FORMAT
+                // TABULATOR
+
+                // OHEAD, OFOOT, IFIRST, ILEFT
+
+
+                cursor.setBlockFormat(bf);
+            }
+
+QTextCharFormat cf = cursor.charFormat();
+cf.setFont(QFont("Arial"));
+cursor.setCharFormat(cf);
             cursor.insertText( paragraph.firstChildElement("TEXT").text() );
             cursor.insertText("\n");
 /*
