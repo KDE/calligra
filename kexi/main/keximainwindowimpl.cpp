@@ -2722,6 +2722,7 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 	d->curDialogViewGUIClient=viewClient; //remember
 
 	d->updatePropEditorVisibility(viewMode);
+	invalidateProjectWideActions();
 	invalidateSharedActions();
 	return true;
 }
