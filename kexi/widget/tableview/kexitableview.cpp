@@ -77,6 +77,7 @@
 #include "kexicomboboxtableedit.h"
 #include "kexiblobtableedit.h"
 #include "kexibooltableedit.h"
+#include "kexitableviewheader.h"
 #include "kexitableview_p.h"
 #include <widget/utils/kexirecordmarker.h>
 #include <widget/utils/kexidisplayutils.h>
@@ -107,88 +108,6 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
 	gridEnabled = true;
 }
 
-
-//-----------------------------------------
-
-TableViewHeader::TableViewHeader(QWidget * parent, const char * name) 
-	: Q3Header(parent, name)
-	, m_lastToolTipSection(-1)
-{
-	installEventFilter(this);
-	connect(this, SIGNAL(sizeChange(int,int,int)), 
-		this, SLOT(slotSizeChange(int,int,int)));
-}
-
-int TableViewHeader::addLabel ( const QString & s, int size )
-{
-	m_toolTips += "";
-	slotSizeChange(0,0,0);//refresh
-	return Q3Header::addLabel(s, size);
-}
-
-int TableViewHeader::addLabel ( const QIcon & iconset, const QString & s, int size )
-{
-	m_toolTips += "";
-	slotSizeChange(0,0,0);//refresh
-	return Q3Header::addLabel(iconset, s, size);
-}
-
-void TableViewHeader::removeLabel( int section )
-{
-	if (section < 0 || section >= count())
-		return;
-	QStringList::Iterator it = m_toolTips.begin();
-	it += section;
-	m_toolTips.remove(it);
-	slotSizeChange(0,0,0);//refresh
-	Q3Header::removeLabel(section);
-}
-
-void TableViewHeader::setToolTip( int section, const QString & toolTip )
-{
-	if (section < 0 || section >= (int)m_toolTips.count())
-		return;
-	m_toolTips[ section ] = toolTip;
-}
-
-bool TableViewHeader::eventFilter(QObject * watched, QEvent * e)
-{
-	if (e->type()==QEvent::MouseMove) {
-		const int section = sectionAt( static_cast<QMouseEvent*>(e)->x() );
-		if (section != m_lastToolTipSection && section >= 0 && section < (int)m_toolTips.count()) {
-			QToolTip::remove(this, m_toolTipRect);
-			QString tip = m_toolTips[ section ];
-			if (tip.isEmpty()) { //try label
-				QFontMetrics fm(font());
-				int minWidth = fm.width( label( section ) ) + style().pixelMetric( QStyle::PM_HeaderMargin );
-				QIcon *iset = iconSet( section );
-				if (iset)
-					minWidth += (2+iset->pixmap( QIcon::Small, QIcon::Normal ).width()); //taken from QHeader::sectionSizeHint()
-				if (minWidth > sectionSize( section ))
-					tip = label( section );
-			}
-			if (tip.isEmpty()) {
-				m_lastToolTipSection = -1;
-			}
-			else {
-				this->setToolTip( m_toolTipRect = sectionRect(section), tip);
-				m_lastToolTipSection = section;
-			}
-		}
-	}
-//			if (e->type()==QEvent::MouseButtonPress) {
-//	todo
-//			}
-	return Q3Header::eventFilter(watched, e);
-}
-
-void TableViewHeader::slotSizeChange(int /*section*/, int /*oldSize*/, int /*newSize*/ )
-{
-	if (m_lastToolTipSection>0)
-		QToolTip::remove(this, m_toolTipRect);
-	m_lastToolTipSection = -1; //tooltip's rect is now invalid
-}
-
 //-----------------------------------------
 
 //! @internal A special What's This class displaying information about a given column
@@ -205,7 +124,7 @@ class KexiTableView::WhatsThis : public Q3WhatsThis
 		virtual QString text( const QPoint & pos)
 		{
 			const int leftMargin = m_tv->verticalHeaderVisible() ? m_tv->verticalHeader()->width() : 0;
-			//const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
+			//const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->m_verticalHeader->height() : 0;
 			//const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
 			if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
 				return i18n("Contains a pointer to the currently selected row");
@@ -339,11 +258,11 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
 	// Create headers
-	d->pTopHeader = new TableViewHeader(this, "topHeader");
-	d->pTopHeader->setOrientation(Qt::Horizontal);
-	d->pTopHeader->setTracking(false);
-	d->pTopHeader->setMovingEnabled(false);
-	connect(d->pTopHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotTopHeaderSizeChange(int,int,int)));
+	m_verticalHeader = new TableViewHeader(this, "topHeader");
+	m_verticalHeader->setOrientation(Qt::Horizontal);
+	m_verticalHeader->setTracking(false);
+	m_verticalHeader->setMovingEnabled(false);
+	connect(m_verticalHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotTopHeaderSizeChange(int,int,int)));
 
 	m_verticalHeader = new KexiRecordMarker(this, "rm");
 	m_verticalHeader->setCellHeight(d->rowHeight);
@@ -351,8 +270,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	m_verticalHeader->setCurrentRow(-1);
 
 	setMargins(
-		qMin(d->pTopHeader->sizeHint().height(), d->rowHeight),
-		d->pTopHeader->sizeHint().height(), 0, 0);
+		qMin(m_verticalHeader->sizeHint().height(), d->rowHeight),
+		m_verticalHeader->sizeHint().height(), 0, 0);
 
 	setupNavigator();
 
@@ -376,11 +295,11 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	viewport()->setAcceptDrops(true);
 
 	// Connect header, table and scrollbars
-	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), d->pTopHeader, SLOT(setOffset(int)));
+	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), m_horizontalHeader, SLOT(setOffset(int)));
 	connect(verticalScrollBar(), SIGNAL(valueChanged(int)), m_verticalHeader, SLOT(setOffset(int)));
-	connect(d->pTopHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnWidthChanged(int, int, int)));
-	connect(d->pTopHeader, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotSectionHandleDoubleClicked(int)));
-	connect(d->pTopHeader, SIGNAL(clicked(int)), this, SLOT(sortColumnInternal(int)));
+	connect(m_horizontalHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnWidthChanged(int, int, int)));
+	connect(m_horizontalHeader, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotSectionHandleDoubleClicked(int)));
+	connect(m_horizontalHeader, SIGNAL(clicked(int)), this, SLOT(sortColumnInternal(int)));
 
 	connect(d->pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
 	
@@ -444,10 +363,10 @@ void KexiTableView::initDataContents()
 
 void KexiTableView::addHeaderColumn(const QString& caption, const QString& description, int width)
 {
-	const int nr = d->pTopHeader->count();
-	d->pTopHeader->addLabel(caption, width);
+	const int nr = m_horizontalHeader->count();
+	m_horizontalHeader->addLabel(caption, width);
 	if (!description.isEmpty())
-		d->pTopHeader->setToolTip(nr, description);
+		m_horizontalHeader->setToolTip(nr, description);
 }
 
 void KexiTableView::updateWidgetContentsSize()
@@ -491,12 +410,13 @@ void KexiTableView::updateFonts(bool repaint)
 //	if(d->rowHeight < 22)
 //		d->rowHeight = 22;
 	setMargins(
-		qMin(d->pTopHeader->sizeHint().height(), d->rowHeight),
-		d->pTopHeader->sizeHint().height(), 0, 0);
+		qMin(m_verticalHeader->sizeHint().height(), d->rowHeight),
+		m_verticalHeader->sizeHint().height(), 0, 0);
 //	setMargins(14, d->rowHeight, 0, 0);
 	m_verticalHeader->setCellHeight(d->rowHeight);
 
 	KexiDisplayUtils::initDisplayForAutonumberSign(d->autonumberSignDisplayParameters, this);
+	KexiDisplayUtils::initDisplayForDefaultValue(d->defaultValueDisplayParameters, this);
 
 	if (repaint)
 		updateContents();
@@ -510,7 +430,7 @@ void KexiTableView::updateAllVisibleRowsBelow(int row)
 		r = rows()+1+(isInsertingEnabled()?1:0);
 	}
 	//update all visible rows below 
-	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
+	int leftcol = m_horizontalHeader->sectionAt( m_horizontalHeader->offset() );
 //	int row = m_curRow;
 	updateContents( columnPos( leftcol ), rowPos(row), 
 		clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
@@ -518,8 +438,8 @@ void KexiTableView::updateAllVisibleRowsBelow(int row)
 
 void KexiTableView::clearColumnsInternal(bool /*repaint*/)
 {
-	while(d->pTopHeader->count()>0)
-		d->pTopHeader->removeLabel(0);
+	while(m_horizontalHeader->count()>0)
+		m_horizontalHeader->removeLabel(0);
 }
 
 void KexiTableView::slotUpdate()
@@ -546,9 +466,9 @@ void KexiTableView::slotUpdate()
 
 int KexiTableView::currentLocalSortingOrder() const
 {
-	if (d->pTopHeader->sortIndicatorSection()==-1)
+	if (m_verticalHeader->sortIndicatorSection()==-1)
 		return 0;
-	return (d->pTopHeader->sortIndicatorOrder() == Qt::AscendingOrder) ? 1 : -1;
+	return (m_verticalHeader->sortIndicatorOrder() == Qt::AscendingOrder) ? 1 : -1;
 }
 
 void KexiTableView::setLocalSortingOrder(int col, int order)
@@ -556,12 +476,12 @@ void KexiTableView::setLocalSortingOrder(int col, int order)
 	if (order == 0)
 		col = -1;
 	if (col>=0)
-		d->pTopHeader->setSortIndicator(col, (order==1) ? Qt::AscendingOrder : Qt::DescendingOrder);
+		m_verticalHeader->setSortIndicator(col, (order==1) ? Qt::AscendingOrder : Qt::DescendingOrder);
 }
 
 int KexiTableView::currentLocalSortColumn() const
 {
-	return d->pTopHeader->sortIndicatorSection();
+	return m_verticalHeader->sortIndicatorSection();
 }
 
 void KexiTableView::updateGUIAfterSorting()
@@ -824,6 +744,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	int align = Qt::TextSingleLine | Qt::AlignVCenter;
 	QString txt; //text to draw
 
+	KexiTableViewColumn *tvcol = m_data->column(col);
+	bool cursorAtInsertRowOrEditingNewRow = (item == m_insertItem || (m_newRowEditing && m_currentItem == item));
+
 	QVariant cell_value;
 	if ((uint)col < item->count()) {
 		if (m_currentItem == item) {
@@ -837,6 +760,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			}
 			else {
 				//we're displaying values from edit buffer, if available
+				// this assignment will also get default value if there's no actual value set
 				cell_value = *bufferedValueAt(col);
 			}
 		}
@@ -845,17 +769,14 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		}
 	}
 
-	KexiTableViewColumn *colinfo = m_data->column(col);
+	bool defaultValueDisplayed = hasDefaultValueAt(*tvcol) && cursorAtInsertRowOrEditingNewRow;
 
-	if (item == m_insertItem && cell_value.isNull()) {
-		if (!colinfo->field()->defaultValue().isNull()) {
+	if ((item == m_insertItem /*|| m_newRowEditing*/) && cell_value.isNull()) {
+		if (!tvcol->field()->defaultValue().isNull()) {
 			//display default value in the "insert row", if available
-			cell_value = colinfo->field()->defaultValue();
+			cell_value = tvcol->field()->defaultValue();
+			defaultValueDisplayed = true;
 		}
-/*		else if (colinfo->field()->type()==KexiDB::Field::Boolean && colinfo->field()->isNotNull()) {
-			//special case: boolean "not null" field - display "false" instead
-			cell_value = QVariant(false, 0);
-		}*/
 	}
 
 	if (edit) {
@@ -867,7 +788,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue()!=-1) {
 			const QVariant *visibleFieldValue = 0;
 			if (m_currentItem == item && m_data->rowEditBuffer())
-				visibleFieldValue = m_data->rowEditBuffer()->at( *colinfo->visibleLookupColumnInfo );
+				visibleFieldValue = m_data->rowEditBuffer()->at( *tvcol->visibleLookupColumnInfo );
 			
 			if (visibleFieldValue)
 				//(use bufferedValueAt() - try to get buffered visible value for lookup field)
@@ -880,7 +801,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	if (!d->appearance.gridEnabled)
 		y_offset++; //correction because we're not drawing cell borders
 
-	const bool columnReadOnly = colinfo->isReadOnly();
+	const bool columnReadOnly = tvcol->isReadOnly();
 
 	const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
 		= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections 
@@ -924,12 +845,12 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	if ((!m_newRowEditing && item == m_insertItem) 
 		|| (m_newRowEditing && item == m_currentItem && cell_value.isNull())) {
 		//we're in "insert row"
-		if (colinfo->field()->isAutoIncrement()) {
+		if (tvcol->field()->isAutoIncrement()) {
 			//"autonumber" column
 //			txt = i18n("(autonumber)");
 //			autonumber = true;
 //		if (autonumber) {
-			KexiDisplayUtils::drawAutonumberSign(d->autonumberSignDisplayParameters, p, 
+			KexiDisplayUtils::paintAutonumberSign(d->autonumberSignDisplayParameters, p, 
 				x, y_offset, w - x - x - ((align & Qt::AlignLeft)?2:0), h, align);
 //		}
 		}
@@ -937,13 +858,20 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	
 	// draw text
 	if (!txt.isEmpty()) {
-		if (d->appearance.fullRowSelection && (row == d->highlightedRow || (row == m_curRow && d->highlightedRow==-1)) ) 
-			p->setPen(d->appearance.rowHighlightingTextColor); //special case
+		if (defaultValueDisplayed) {
+			p->setFont( d->defaultValueDisplayParameters.font );
+			if (col == m_curCol && row == m_curRow)
+				p->setPen( d->defaultValueDisplayParameters.selectedTextColor );
+			else
+				p->setPen( d->defaultValueDisplayParameters.textColor );
+		}
+		else if (d->appearance.fullRowSelection && (row == d->highlightedRow || (row == m_curRow && d->highlightedRow==-1)) ) 
+			p->setPen(d->appearance.rowHighlightingTextColor); //special case: highlighted row
 		else if (d->appearance.fullRowSelection && row == m_curRow) 
 			p->setPen(d->appearance.textColor); //special case for full row selection
 		else if (m_currentItem == item && col == m_curCol && !columnReadOnly 
 			 && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
-			p->setPen(colorGroup().highlightedText());
+			p->setPen(colorGroup().highlightedText()); //selected text
 		else if (d->appearance.rowHighlightingEnabled && row == m_curRow /*d->highlightedRow*/ && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			p->setPen(d->appearance.rowHighlightingTextColor);
 		else if (d->appearance.rowMouseOverHighlightingEnabled && row == d->highlightedRow && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
@@ -1219,6 +1147,7 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 				//currently selected (not necessary highlighted) row needs to be repainted
 				updateRow(m_curRow);
 //			}
+			m_verticalHeader->setHighlightedRow(d->highlightedRow);
 		}
 	}
 
@@ -1549,8 +1478,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	}
 	//finally: we've printable char:
 	if (printable && !ro) {
-		KexiTableViewColumn *colinfo = m_data->column(curCol);
-		if (colinfo->acceptsFirstChar(e->text()[0])) {
+		KexiTableViewColumn *tvcol = m_data->column(curCol);
+		if (tvcol->acceptsFirstChar(e->text()[0])) {
 			kDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==true" << endl;
 	//			if (e->text()[0].isPrint())
 			createEditor(curRow, curCol, e->text(), true);
@@ -1636,9 +1565,6 @@ void KexiTableView::editorShowFocus( int /*row*/, int col )
 
 void KexiTableView::slotEditRequested()
 {
-//	KexiTableEdit *edit = editor( m_curCol );
-//	if (edit) {
-
 	createEditor(m_curRow, m_curCol);
 }
 
@@ -1670,8 +1596,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			//'insert' row editing: show another row after that:
 			m_data->append( m_insertItem );
 			//new empty 'inserting' item
-			m_insertItem = m_data->createItem(); //new KexiTableItem(dataColumns());
-//			updateContents();
+			m_insertItem = m_data->createItem();
 			m_verticalHeader->addLabel();
 			m_verticalHeaderAlreadyAdded = true;
 			updateWidgetContentsSize();
@@ -1742,12 +1667,12 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 		slotUpdate();
 		triggerUpdate();
 	}
-//	d->pTopHeader->repaint();
+//	m_verticalHeader->repaint();
 
 
 /*		m_navPanel->setGeometry(
 			frameWidth(),
-			viewport()->height() +d->pTopHeader->height() 
+			viewport()->height() +m_verticalHeader->height() 
 			-(horizontalScrollBar()->isVisible() ? 0 : horizontalScrollBar()->sizeHint().height())
 			+frameWidth(),
 			m_navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
@@ -1907,7 +1832,7 @@ void KexiTableView::updateRow(int row)
 //	kDebug(44021) << "updateRow("<<row<<")"<<endl;
 	if (row < 0 || row >= (rows() + 2/* sometimes we want to refresh the row after last*/ ))
 		return;
-	//int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
+	//int leftcol = m_verticalHeader->sectionAt( m_verticalHeader->offset() );
 
 	//kDebug() << contentsX() << " " << contentsY() << endl;
 	//kDebug() << QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) << endl;
@@ -1956,11 +1881,11 @@ void KexiTableView::slotSectionHandleDoubleClicked( int section )
 void KexiTableView::updateGeometries()
 {
 	QSize ts = tableSize();
-	if (d->pTopHeader->offset() && ts.width() < (d->pTopHeader->offset() + d->pTopHeader->width()))
-		horizontalScrollBar()->setValue(ts.width() - d->pTopHeader->width());
+	if (m_horizontalHeader->offset() && ts.width() < (m_horizontalHeader->offset() + m_horizontalHeader->width()))
+		horizontalScrollBar()->setValue(ts.width() - m_horizontalHeader->width());
 
 //	m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
-	d->pTopHeader->setGeometry(leftMargin() + 1, 1, visibleWidth(), topMargin());
+	m_horizontalHeader->setGeometry(leftMargin() + 1, 1, visibleWidth(), topMargin());
 	m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
 }
 
@@ -1969,7 +1894,7 @@ int KexiTableView::columnWidth(int col) const
 	if (!hasData())
 		return 0;
 	int vcID = m_data->visibleColumnID( col );
-	return (vcID==-1) ? 0 : d->pTopHeader->sectionSize( vcID );
+	return (vcID==-1) ? 0 : m_horizontalHeader->sectionSize( vcID );
 }
 
 int KexiTableView::rowHeight() const
@@ -1988,8 +1913,8 @@ int KexiTableView::columnPos(int col) const
 	if (c<0)
 		return 0;
 	if (c==col)
-		return d->pTopHeader->sectionPos(vcID);
-	return d->pTopHeader->sectionPos(vcID)+d->pTopHeader->sectionSize(vcID);
+		return m_horizontalHeader->sectionPos(vcID);
+	return m_horizontalHeader->sectionPos(vcID)+m_horizontalHeader->sectionSize(vcID);
 }
 
 int KexiTableView::rowPos(int row) const
@@ -2001,7 +1926,7 @@ int KexiTableView::columnAt(int pos) const
 {
 	if (!hasData())
 		return -1;
-	int r = d->pTopHeader->sectionAt(pos);
+	int r = m_horizontalHeader->sectionAt(pos);
 	if (r<0)
 		return r;
 	return m_data->globalColumnID( r );
@@ -2178,7 +2103,8 @@ KexiTableView::print(KPrinter &/*printer*/)
 	{
 		p.fillRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, QBrush(Qt::gray));
 		p.drawRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight);
-		p.drawText(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, Qt::AlignLeft | Qt::AlignVCenter, d->pTopHeader->label(col));
+		p.drawText(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, Qt::AlignLeft | Qt::AlignVCenter, 
+			m_verticalHeader->label(col));
 		width = width + columnWidth(col);
 	}
 
@@ -2226,7 +2152,7 @@ KexiTableView::print(KPrinter &/*printer*/)
 
 QString KexiTableView::columnCaption(int colNum) const
 {
-	return d->pTopHeader->label(colNum);
+	return m_horizontalHeader->label(colNum);
 }
 
 KexiDB::Field* KexiTableView::field(int colNum) const
@@ -2254,8 +2180,8 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 	if (!item)
 		return;
 	QFontMetrics fm(font());
-	int maxw = horizontalHeaderVisible() //d->pTopHeader->isVisible() 
-		? fm.width( d->pTopHeader->label( colNum ) ) : 0;
+	int maxw = horizontalHeaderVisible()
+		? fm.width( m_horizontalHeader->label( colNum ) ) : 0;
 	if (maxw == 0 && m_data->isEmpty())
 		return; //nothing to adjust
 
@@ -2281,9 +2207,9 @@ void KexiTableView::setColumnWidth(int colNum, int width)
 {
 	if (columns()<=colNum || colNum < 0)
 		return;
-	const int oldWidth = d->pTopHeader->sectionSize( colNum );
-	d->pTopHeader->resizeSection( colNum, width );
-	slotTopHeaderSizeChange( colNum, oldWidth, d->pTopHeader->sectionSize( colNum ) );
+	const int oldWidth = m_horizontalHeader->sectionSize( colNum );
+	m_horizontalHeader->resizeSection( colNum, width );
+	slotTopHeaderSizeChange( colNum, oldWidth, m_horizontalHeader->sectionSize( colNum ) );
 }
 
 void KexiTableView::maximizeColumnsWidth( const Q3ValueList<int> &columnList )
@@ -2292,7 +2218,7 @@ void KexiTableView::maximizeColumnsWidth( const Q3ValueList<int> &columnList )
 		d->maximizeColumnsWidthOnShow += columnList;
 		return;
 	}
-	if (width() <= d->pTopHeader->headerWidth())
+	if (width() <= m_horizontalHeader->headerWidth())
 		return;
 	//sort the list and make it unique
 	Q3ValueList<int>::const_iterator it;
@@ -2307,14 +2233,14 @@ void KexiTableView::maximizeColumnsWidth( const Q3ValueList<int> &columnList )
 		}
 	}
 	//resize
-	int sizeToAdd = (width() - d->pTopHeader->headerWidth()) / cl.count() - verticalHeader()->width();
+	int sizeToAdd = (width() - m_horizontalHeader->headerWidth()) / cl.count() - verticalHeader()->width();
 	if (sizeToAdd<=0)
 		return;
 	end = cl.constEnd();
 	for ( it = cl.constBegin(); it != end; ++it) {
-		int w = d->pTopHeader->sectionSize(*it);
+		int w = m_horizontalHeader->sectionSize(*it);
 		if (w>0) {
-			d->pTopHeader->resizeSection(*it, w+sizeToAdd);
+			m_horizontalHeader->resizeSection(*it, w+sizeToAdd);
 		}
 	}
 	updateContents();
@@ -2323,12 +2249,12 @@ void KexiTableView::maximizeColumnsWidth( const Q3ValueList<int> &columnList )
 
 void KexiTableView::adjustHorizontalHeaderSize()
 {
-	d->pTopHeader->adjustHeaderSize();
+	m_horizontalHeader->adjustHeaderSize();
 }
 
 void KexiTableView::setColumnStretchEnabled( bool set, int colNum )
 {
-	d->pTopHeader->setStretchEnabled( set, colNum );
+	m_horizontalHeader->setStretchEnabled( set, colNum );
 }
 
 void KexiTableView::setEditableOnDoubleClick(bool set)
@@ -2350,18 +2276,18 @@ void KexiTableView::setVerticalHeaderVisible(bool set)
 	int left_width;
 	if (set) {
 		m_verticalHeader->show();
-		left_width = qMin(d->pTopHeader->sizeHint().height(), d->rowHeight);
+		left_width = qMin(m_verticalHeader->sizeHint().height(), d->rowHeight);
 	}
 	else {
 		m_verticalHeader->hide();
 		left_width = 0;
 	}
-	setMargins( left_width, horizontalHeaderVisible() ? d->pTopHeader->sizeHint().height() : 0, 0, 0);
+	setMargins( left_width, horizontalHeaderVisible() ? m_verticalHeader->sizeHint().height() : 0, 0, 0);
 }
 
 bool KexiTableView::horizontalHeaderVisible() const
 {
-	return d->horizontalHeaderVisible; //d->pTopHeader->isVisible();
+	return d->horizontalHeaderVisible;
 }
 
 void KexiTableView::setHorizontalHeaderVisible(bool set)
@@ -2369,11 +2295,11 @@ void KexiTableView::setHorizontalHeaderVisible(bool set)
 	int top_height;
 	d->horizontalHeaderVisible = set; //needed because isVisible() is not always accurate
 	if (set) {
-		d->pTopHeader->show();
-		top_height = d->pTopHeader->sizeHint().height();
+		m_horizontalHeader->show();
+		top_height = m_horizontalHeader->sizeHint().height();
 	}
 	else {
-		d->pTopHeader->hide();
+		m_horizontalHeader->hide();
 		top_height = 0;
 	}
 	setMargins( verticalHeaderVisible() ? m_verticalHeader->width() : 0, top_height, 0, 0);
@@ -2549,9 +2475,11 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				updateRow(oldRow);
 				const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
 					= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections;
-				if (oldRow!=m_curRow && m_curRow>=0 && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted) {
-					//no highlight for now: show selection again
-					updateRow(m_curRow);
+				if (oldRow!=m_curRow && m_curRow>=0) {
+					if (!dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
+						//no highlight for now: show selection again
+						updateRow(m_curRow);
+					m_verticalHeader->setHighlightedRow(-1);
 				}
 			}
 		}
@@ -2649,6 +2577,11 @@ void KexiTableView::setBottomMarginInternal(int pixels)
 
 void KexiTableView::paletteChange( const QPalette & )
 {
+	//update:
+	if (m_verticalHeader)
+		m_verticalHeader->setSelectionBackgroundColor( palette().active().highlight() );
+	if (m_horizontalHeader)
+		m_horizontalHeader->setSelectionBackgroundColor( palette().active().highlight() );
 }
 
 KexiTableView::Appearance KexiTableView::appearance() const
@@ -2667,10 +2600,10 @@ void KexiTableView::setAppearance(const Appearance& a)
 	}
 	if (m_verticalHeader)
 		m_verticalHeader->setCellHeight(d->rowHeight);
-	if (d->pTopHeader) {
+	if (m_verticalHeader) {
 		setMargins(
-			qMin(d->pTopHeader->sizeHint().height(), d->rowHeight),
-			d->pTopHeader->sizeHint().height(), 0, 0);
+			qMin(m_verticalHeader->sizeHint().height(), d->rowHeight),
+			m_verticalHeader->sizeHint().height(), 0, 0);
 	}
 //	}
 	if (a.rowHighlightingEnabled)

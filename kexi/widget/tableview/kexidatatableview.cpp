@@ -30,7 +30,6 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-#include "kexitableheader.h"
 #include "kexidatatableview.h"
 
 

@@ -15,9 +15,6 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-
-   Original Author:  Till Busch <till@bux.at>
-   Original Project: buX (www.bux.at)
 */
 
 #include "kexidisplayutils.h"
@@ -29,6 +26,9 @@
 
 #include <klocale.h>
 #include <kstaticdeleter.h>
+
+// a color for displaying default values or autonumbers
+#define SPECIAL_TEXT_COLOR Qt::blue
 
 static KStaticDeleter<QPixmap> KexiDisplayUtils_autonum_deleter;
 QPixmap* KexiDisplayUtils_autonum = 0;
@@ -90,7 +90,8 @@ void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWid
 {
 	initDisplayUtilsImages();
 
-	par.textColor = Qt::blue;
+	par.textColor = SPECIAL_TEXT_COLOR;
+	par.selectedTextColor = SPECIAL_TEXT_COLOR; //hmm, unused anyway
 	par.font = widget->font();
 	par.font.setItalic(true);
 	QFontMetrics fm(par.font);
@@ -98,7 +99,15 @@ void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWid
 	par.textHeight = fm.height();
 }
 
-void KexiDisplayUtils::drawAutonumberSign(const DisplayParameters& par, QPainter* painter, 
+void KexiDisplayUtils::initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget)
+{
+	par.textColor = SPECIAL_TEXT_COLOR;
+	par.selectedTextColor = widget->palette().active().highlightedText();
+	par.font = widget->font();
+	par.font.setItalic(true);
+}
+
+void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainter* painter, 
 	int x, int y, int width, int height, int align, bool overrideColor)
 {
 	painter->save();
@@ -143,9 +152,6 @@ void KexiDisplayUtils::drawAutonumberSign(const DisplayParameters& par, QPainter
 		if (!overrideColor)
 			painter->drawPixmap( x + (width - par.textWidth)/2 - KexiDisplayUtils_autonum->width() - 4,
 				y_pixmap_pos, *KexiDisplayUtils_autonum );
-	}
-	else if (align & Qt::AlignJustify) {
-		//! @todo
 	}
 
 	painter->drawText(x, y, width, height, align, i18n("(autonumber)"));

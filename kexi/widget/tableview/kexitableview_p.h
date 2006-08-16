@@ -28,7 +28,6 @@
 #define KEXITABLEVIEW_P_H
 
 #include "kexitableview.h"
-#include "kexitableheader.h"
 
 #include <kexidb/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
@@ -52,7 +51,7 @@ class KexiTableItem;
 class KexiTableRM;
 class KexiTableEdit;
 class QLabel;
-class TableViewHeader;
+class KexiTableViewHeader;
 
 /*! KexiTableView internal data
  @internal */
@@ -68,7 +67,7 @@ class KexiTableViewPrivate
 	KexiTableView *tv;
 
 	// foreign widgets
-	TableViewHeader *pTopHeader;
+//moved to m_horizontalHeader	KexiTableViewHeader *pTopHeader;
 
 	//! editors: one for each column (indexed by KexiTableViewColumn)
 	Q3PtrDict<KexiTableEdit> editors;
@@ -110,7 +109,7 @@ class KexiTableViewPrivate
 	/*! True, if vscrollbar tooltips are enabled (true by default) */
 	bool scrollbarToolTipsEnabled : 1;
 
-	/*! Needed because pTopHeader->isVisible() is not always accurate. True by default.  */
+	/*! Needed because m_horizontalHeader->isVisible() is not always accurate. True by default.  */
 	bool horizontalHeaderVisible : 1;
 
 	/*! true if cursor should be moved on mouse release evenr rather than mouse press 
@@ -127,7 +126,11 @@ class KexiTableViewPrivate
 	//! brushes, fonts
 	QBrush diagonalGrayPattern;
 
+	//! Parameters for displaying autonumbers
 	KexiDisplayUtils::DisplayParameters autonumberSignDisplayParameters;
+
+	//! Parameters for displaying default values
+	KexiDisplayUtils::DisplayParameters defaultValueDisplayParameters;
 
 	//! Used by delayed mode of maximizeColumnsWidth() 
 	Q3ValueList<int> maximizeColumnsWidthOnShow;

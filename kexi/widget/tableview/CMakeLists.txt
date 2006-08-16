@@ -12,7 +12,7 @@ set(kexidatatable_LIB_SRCS
    kexidatatableview.cpp 
    kexicelleditorfactory.cpp 
    kexitableedit.cpp 
-   kexitableheader.cpp 
+   kexitableviewheader.cpp 
    kexitableitem.cpp 
    kexitableviewdata.cpp 
    kexidatetableedit.cpp 
@@ -56,7 +56,7 @@ install(TARGETS kexidatatable  DESTINATION ${LIB_INSTALL_DIR})
 #	kexiinputtableedit.cpp kexiblobtableedit.cpp kexibooltableedit.cpp \
 #	kexicomboboxtableedit.cpp kexicomboboxpopup.cpp kexidataawarepropertyset.cpp
 #
-#noinst_HEADERS = kexitableview_p.h kexidatetimeeditor_p.h
+#noinst_HEADERS = kexitableview_p.h
 #
 #libkexidatatable_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 #libkexidatatable_la_LIBADD =  $(top_builddir)/kexi/core/libkexicore.la $(top_builddir)/kexi/widget/utils/libkexiguiutils.la \

@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002 Till Busch <till@bux.at>
    Copyright (C) 2002 Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,9 +18,6 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-
-   Original Author:  Till Busch <till@bux.at>
-   Original Project: buX (www.bux.at)
 */
 
 #ifndef KEXIRECORDMARKER_H
@@ -32,9 +30,6 @@
 class QImage;
 
 //! \brief Record marker, usually displayed at the left side of a table view or a continuous form.
-/*!
- Original Author: Till Busch
-*/
 class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
 {
 	Q_OBJECT
@@ -52,11 +47,14 @@ class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
 		void setOffset(int offset);
 		void setCellHeight(int cellHeight);
 		void setCurrentRow(int row);
+		void setHighlightedRow(int row);
 
 		/*! Sets 'edit row' flag for \a row. Use row==-1 if you want to switch the flag off. */
 		void setEditRow(int row);
 		void showInsertRow(bool show);
-		void setColor(const QColor &color);
+
+		QColor selectionBackgroundColor() const;
+		void setSelectionBackgroundColor(const QColor &color);
 
 		void addLabel(bool upd=true);
 		void removeLabel(bool upd=true);
@@ -69,15 +67,8 @@ class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
 	protected:
 		virtual void paintEvent(QPaintEvent *e);
 		
-		int m_rowHeight;
-		int m_offset;
-		int m_currentRow;
-		int m_editRow;
-		int m_rows;
-		bool m_showInsertRow : 1;
-
-		QColor m_pointerColor;
-//		QImage m_penImg, m_plusImg;
+		class Private;
+		Private * const d;
 };
 
 #endif

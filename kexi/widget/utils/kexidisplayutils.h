@@ -15,9 +15,6 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-
-   Original Author:  Till Busch <till@bux.at>
-   Original Project: buX (www.bux.at)
 */
 
 #ifndef KEXIDISPUTILS_H
@@ -34,18 +31,20 @@ class KEXIGUIUTILS_EXPORT KexiDisplayUtils
 		class DisplayParameters
 		{
 			public:
-				QColor textColor;
-			protected:
+				QColor textColor, selectedTextColor;
 				QFont font;
 				int textWidth, textHeight;
-			
-			friend class KexiDisplayUtils;
 		};
 
+		//! Initializes display parameters for autonumber sign
 		static void initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget);
 
-		static void drawAutonumberSign(const DisplayParameters& par, QPainter* painter, 
+		//! Paints autonumber sign using \a par parameters
+		static void paintAutonumberSign(const DisplayParameters& par, QPainter* painter, 
 			int x, int y, int width, int height, int align, bool overrideColor = false);
+
+		//! Initializes display parameters for default value
+		static void initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget);
 };
 
 #endif

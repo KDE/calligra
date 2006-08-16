@@ -118,7 +118,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
 	const bool sorting = m_dataAwareObject->isSortingEnabled();
 	const int rows = m_dataAwareObject->rows();
 
-	setAvailable("edit_delete", !ro && !(inserting && row==rows));
+	setAvailable("edit_delete", !ro); // && !(inserting && row==rows));
 	setAvailable("edit_delete_row", !ro && !(deleting && row==rows));
 	setAvailable("edit_insert_empty_row", !ro && emptyInserting);
 	setAvailable("edit_clear_table", !ro && deleting && rows>0);

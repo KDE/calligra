@@ -6,7 +6,6 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +32,8 @@
 #include <Q3ValueList>
 #include <Q3Frame>
 
+#include <kmessagebox.h>
+
 #include <kexi.h>
 #include <kexiutils/validator.h>
 #include <widget/utils/kexirecordnavigator.h>
@@ -40,7 +41,7 @@
 #include <kexidb/roweditbuffer.h>
 #include <kexidataiteminterface.h>
 
-#include <kmessagebox.h>
+#include "kexitableviewheader.h"
 
 using namespace KexiUtils;
 
@@ -61,6 +62,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_initDataContentsOnShow = false;
 	m_cursorPositionSetExplicityBeforeShow = false;
 	m_verticalHeader = 0;
+	m_horizontalHeader = 0;
 	m_insertItem = 0;
 	m_rowEditBuffer = 0;
 	m_spreadSheetMode = false;
@@ -291,6 +293,8 @@ bool KexiDataAwareObjectInterface::sort()
 	editorShowFocus( m_curRow, m_curCol );
 	if (m_verticalHeader)
 		m_verticalHeader->setCurrentRow(m_curRow);
+	if (m_horizontalHeader)
+		m_horizontalHeader->setSelectedSection(m_curCol);
 	if (m_navPanel)
 		m_navPanel->setCurrentRecordNumber(m_curRow+1);
 	return true;
@@ -477,6 +481,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 	if(rows() <= 0) {
 		if (m_verticalHeader)
 			m_verticalHeader->setCurrentRow(-1);
+		if (m_horizontalHeader)
+			m_horizontalHeader->setSelectedSection(-1);
 		if (isInsertingEnabled()) {
 			m_currentItem=m_insertItem;
 			newrow=0;
@@ -594,6 +600,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 //		ensureVisible(columnPos(d->curCol), rowPos(d->curRow) - contentsY(), columnWidth(d->curCol), rh);
 		if (m_verticalHeader && oldRow != m_curRow)
 			m_verticalHeader->setCurrentRow(m_curRow);
+		if (m_horizontalHeader && oldCol != m_curCol)
+			m_horizontalHeader->setSelectedSection(m_curCol);
 
 		if (m_updateEntireRowWhenMovingToOtherRow)
 			updateRow( m_curRow );
@@ -1498,21 +1506,29 @@ KexiTableViewColumn* KexiDataAwareObjectInterface::column(int col)
 	return m_data->column(col);
 }
 
+bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiTableViewColumn& tvcol)
+{
+	if (m_rowEditing && m_data->rowEditBuffer() && m_data->rowEditBuffer()->isDBAware()) {
+		return m_data->rowEditBuffer()->hasDefaultValueAt( *tvcol.columnInfo );
+	}
+	return false;
+}
+
 const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col)
 {
 	if (m_rowEditing && m_data->rowEditBuffer())
 	{
-//		KexiTableViewColumn* tvcol = m_data->column(col);
 		KexiTableViewColumn* tvcol = column(col);
 		if (tvcol->isDBAware) {
-//			QVariant *cv = m_data->rowEditBuffer()->at( *static_cast<KexiDBTableViewColumn*>(tvcol)->field );
+			//db-aware data: first, try to find a buffered value (or default one)
 			const QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->columnInfo );
 			if (cv)
 				return cv;
-
+			//now, get the stored value
 			const int realFieldNumber = fieldNumberForColumn(col);
 			if (realFieldNumber < 0) {
-				kWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): fieldNumberForColumn(m_curCol) < 0" << endl;
+				kWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): "
+					"fieldNumberForColumn(m_curCol) < 0" << endl;
 				return 0;
 			}
 			return &m_currentItem->at( realFieldNumber );
@@ -1521,9 +1537,11 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col)
 		if (cv)
 			return cv;
 	}
+	//not db-aware data:
 	const int realFieldNumber = fieldNumberForColumn(col);
 	if (realFieldNumber < 0) {
-		kWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): fieldNumberForColumn(m_curCol) < 0" << endl;
+		kWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): "
+			"fieldNumberForColumn(m_curCol) < 0" << endl;
 		return 0;
 	}
 	return &m_currentItem->at( realFieldNumber );

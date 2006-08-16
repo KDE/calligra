@@ -27,9 +27,6 @@
 #ifndef KEXITABLEVIEW_H
 #define KEXITABLEVIEW_H
 
-//we want to have kde-support:
-#define USE_KDE
-
 #include <q3scrollview.h>
 #include <qtimer.h>
 #include <qvariant.h>
@@ -213,6 +210,7 @@ public:
 
 	//! \return true if the vertical header is visible
 	bool verticalHeaderVisible() const;
+
 	//! Sets vertical header's visibility
 	void setVerticalHeaderVisible(bool set);
 
@@ -607,49 +605,11 @@ protected:
 //	//! Called to repaint contents after a row is deleted.
 //	void repaintAfterDelete();
 
-	inline KexiRecordMarker* verticalHeader() const { return m_verticalHeader; }
-
-	//--------------------------
-
 	KexiTableViewPrivate *d;
 
 	class WhatsThis;
 	friend class KexiTableItem;
 	friend class WhatsThis;
-};
-
-/*! A header with additional actions.
- Displays field description (Field::description()) text as tool tip, if available.
- Displays tool tips if a pointed section is not wide enough to fit its label text.
-
- \todo react on indexChange ( int section, int fromIndex, int toIndex ) signal
-*/
-class KEXIDATATABLE_EXPORT TableViewHeader : public Q3Header
-{
-	Q_OBJECT
-
-	public:
-		TableViewHeader(QWidget * parent = 0, const char * name = 0);
-
-		int addLabel ( const QString & s, int size = -1 );
-
-		int addLabel ( const QIcon & iconset, const QString & s, int size = -1 );
-
-		void removeLabel( int section );
-
-		/*! Sets \a toolTip for \a section. */
-		void setToolTip( int section, const QString & toolTip );
-
-		virtual bool eventFilter(QObject * watched, QEvent * e);
-
-	protected slots:
-		void slotSizeChange(int section, int oldSize, int newSize );
-
-	protected:
-		int m_lastToolTipSection;
-		QRect m_toolTipRect;
-
-		QStringList m_toolTips;
 };
 
 #endif
