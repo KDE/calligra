@@ -458,7 +458,7 @@ private:
     /**
      * Prints a rect of cells defined by printRect at the position topLeft.
      */
-    void printRect( QPainter &painter, const KoPoint& topLeft,
+    void printRect( QPainter &painter, const QPointF& topLeft,
                     const QRect& printRect, const KoRect& view,
                     QRegion &clipRegion );
 

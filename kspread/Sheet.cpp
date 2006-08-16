@@ -62,18 +62,19 @@
 #include <KoXmlWriter.h>
 
 #include "Commands.h"
+#include "DataManipulators.h"
 #include "DependencyManager.h"
-#include "Selection.h"
-#include "LoadingInfo.h"
 #include "Canvas.h"
 #include "Cluster.h"
 #include "Condition.h"
 #include "Doc.h"
 #include "Global.h"
+#include "LoadingInfo.h"
 #include "Locale.h"
 #include "Map.h"
 #include "Object.h"
 #include "RecalcManager.h"
+#include "Selection.h"
 #include "SheetPrint.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -81,7 +82,6 @@
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
-#include "DataManipulators.h"
 
 
 #include "SheetAdaptor.h"

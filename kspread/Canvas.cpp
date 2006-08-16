@@ -4001,7 +4001,11 @@ void Canvas::paintUpdates()
   painter.save();
   clipoutChildren( painter );
 
-  KoRect unzoomedRect = d->view->doc()->unzoomRectOld( QRect( 0, 0, width(), height() ) );
+  painter.setRenderHint( QPainter::Antialiasing );
+  painter.setRenderHint( QPainter::TextAntialiasing );
+  painter.scale( d->view->doc()->zoomedResolutionX(), d->view->doc()->zoomedResolutionY() );
+
+  QRectF unzoomedRect = ( QRectF( 0, 0, width(), height() ) );
   // unzoomedRect.translate( xOffset(), yOffset() );
 
 #if 0
@@ -4221,7 +4225,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
   painter.restore();
 }
 
-void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)
+void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*/)
 {
   QList<QColor> colors = choice()->colors();
   QBrush nullBrush;
@@ -4284,7 +4288,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
   }
 }
 
-void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
+void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
 {
   //Only the active element (the one with the anchor) will be drawn with a border
 
@@ -4293,6 +4297,13 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 
   if (d->cellEditor)
 	return;
+
+  painter.save();
+  painter.setRenderHint( QPainter::Antialiasing, false );
+
+  QLineF line;
+  QPen pen( Qt::black, doc()->unzoomItX( 2 ) );
+  painter.setPen( pen );
 
   const Selection* selection = selectionInfo();
   const QRect currentRange = QRect(selection->anchor(), selection->marker()).normalized();
@@ -4305,8 +4316,6 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
   	bool paintSides[4];
 
     bool current = (currentRange == range);
-    QPen pen( Qt::black, 2 );
-    painter.setPen( pen );
 
     retrieveMarkerInfo( range, viewRect, positions, paintSides );
 
@@ -4330,37 +4339,39 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 
     if ( paintTop )
     {
-      painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,      d->view->doc()->zoomItYOld( top ),
-                        d->view->doc()->zoomItXOld( right ) + l, d->view->doc()->zoomItYOld( top ) );
+      line = QLineF( left - l, top, right + l, top );
+      painter.drawLine( line );
     }
     if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
     {
       if ( paintRight )
       {
-        painter.drawLine( d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( top ),
-                          d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( bottom ) );
+        line = QLineF( ( right ), ( top ), ( right ), ( bottom ) );
+        painter.drawLine( line );
       }
       if ( paintLeft && paintBottom && current )
       {
         /* then the 'handle' in the bottom left corner is visible. */
-        painter.drawLine( d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( top ),
-                          d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( bottom ) - 3 );
-        painter.drawLine( d->view->doc()->zoomItXOld( left ) + 4,  d->view->doc()->zoomItYOld( bottom ),
-                          d->view->doc()->zoomItXOld( right ) + l + 1, d->view->doc()->zoomItYOld( bottom ) );
-        painter.fillRect( d->view->doc()->zoomItXOld( left ) - 2, d->view->doc()->zoomItYOld( bottom ) -2, 5, 5,
-                          painter.pen().color() );
+        line = QLineF( left, top, left, bottom - doc()->unzoomItY( 3 ) );
+        painter.drawLine( line );
+        line = QLineF( left + doc()->unzoomItX( 4 ),  bottom, right + l + doc()->unzoomItY( 1 ), bottom );
+        painter.drawLine( line );
+        painter.fillRect( QRectF( left - doc()->unzoomItX( 2 ), bottom - doc()->unzoomItY( 2 ),
+                                  doc()->unzoomItX( 5 ), doc()->unzoomItY( 5 ) ), painter.pen().color() );
       }
       else
       {
         if ( paintLeft )
         {
-          painter.drawLine( d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( top ),
-                            d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( bottom ) );
+          line = QLineF( ( left ), ( top ),
+                            ( left ), ( bottom ) );
+          painter.drawLine( line );
         }
         if ( paintBottom )
         {
-          painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,  d->view->doc()->zoomItYOld( bottom ),
-                            d->view->doc()->zoomItXOld( right ) + l, d->view->doc()->zoomItYOld( bottom ));
+          line = QLineF( ( left ) - l,  ( bottom ),
+                            ( right ) + l, ( bottom ));
+          painter.drawLine( line );
         }
       }
     }
@@ -4368,34 +4379,38 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
     {
       if ( paintLeft )
       {
-        painter.drawLine( d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( top ),
-                          d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( bottom ) );
+        line = QLineF( ( left ), ( top ),
+                          ( left ), ( bottom ) );
+        painter.drawLine( line );
       }
       if ( paintRight && paintBottom && current )
       {
         /* then the 'handle' in the bottom right corner is visible. */
-        painter.drawLine( d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( top ),
-                          d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( bottom ) - 3 );
-        painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,  d->view->doc()->zoomItYOld( bottom ),
-                          d->view->doc()->zoomItXOld( right ) - 3, d->view->doc()->zoomItYOld( bottom ) );
-        painter.fillRect( d->view->doc()->zoomItXOld( right ) - 2, d->view->doc()->zoomItYOld( bottom ) - 2, 5, 5,
-                          painter.pen().color() );
+        line = QLineF( right, top, right, bottom - doc()->unzoomItY( 3 ) );
+        painter.drawLine( line );
+        line = QLineF( left - l, bottom, right - doc()->unzoomItX( 3 ), bottom );
+        painter.drawLine( line );
+        painter.fillRect( QRectF( right - doc()->unzoomItX( 2 ), bottom - doc()->unzoomItY( 2 ),
+                          doc()->unzoomItX( 5 ), doc()->unzoomItY( 5 ) ), painter.pen().color() );
       }
       else
       {
         if ( paintRight )
         {
-          painter.drawLine( d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( top ),
-                            d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( bottom ) );
+          line = QLineF( ( right ), ( top ),
+                            ( right ), ( bottom ) );
+          painter.drawLine( line );
         }
         if ( paintBottom )
         {
-          painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,  d->view->doc()->zoomItYOld( bottom ),
-                            d->view->doc()->zoomItXOld( right ) + l, d->view->doc()->zoomItYOld( bottom ) );
+          line = QLineF( ( left ) - l,  ( bottom ),
+                            ( right ) + l, ( bottom ) );
+          painter.drawLine( line );
         }
       }
     }
   }
+  painter.restore();
 }
 
 void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
@@ -4470,7 +4485,7 @@ void Canvas::sheetAreaToVisibleRect( const QRect& sheetArea,
 }
 
 void Canvas::retrieveMarkerInfo( const QRect &marker,
-                                        const KoRect &viewRect,
+                                        const QRectF &viewRect,
                                         double positions[],
                                         bool paintSides[] )
 {

@@ -562,18 +562,11 @@ void VBorder::paintEvent( QPaintEvent* event )
 
   // the painter
   QPainter painter( this );
-
-  // pens
-  const QPen pen( Qt::black, 1 );
-  painter.setPen( pen );
+  painter.scale( m_pCanvas->d->view->doc()->zoomedResolutionX(), m_pCanvas->d->view->doc()->zoomedResolutionY() );
+  painter.setRenderHint( QPainter::TextAntialiasing );
 
   // fonts
   QFont normalFont( painter.font() );
-  if ( m_pCanvas->d->view->doc()->zoomInPercent() < 100 )
-  {
-    normalFont.setPointSizeF( 0.01 * m_pCanvas->d->view->doc()->zoomInPercent() *
-                                  normalFont.pointSizeF() );
-  }
   QFont boldFont( normalFont );
   boldFont.setBold( true );
 
@@ -586,45 +579,37 @@ void VBorder::paintEvent( QPaintEvent* event )
   selectionColor.setAlpha( 127 );
   const QBrush selectionBrush( selectionColor );
 
-
-  // painter.setBackgroundColor( QColorGroup(palette()).base() );
-
-  // painter.eraseRect( paintRect );
-
-  //QFontMetrics fm = painter.fontMetrics();
-  // Matthias Elter: This causes a SEGFAULT in ~QPainter!
-  // Only god and the trolls know why ;-)
-  // bah...took me quite some time to track this one down...
-
   painter.setClipRect( paintRect );
 
   double yPos;
-  //Get the top row and the current y-position
+  // Get the top row and the current y-position
   int y = sheet->topRow( (m_pCanvas->d->view->doc()->unzoomItYOld( paintRect.y() ) + m_pCanvas->yOffset()), yPos );
-  //Align to the offset
+  // Align to the offset
   yPos = yPos - m_pCanvas->yOffset();
-  int width = m_pCanvas->d->view->doc()->zoomItXOld( YBORDER_WIDTH );
+  double width = YBORDER_WIDTH;
 
   const QSet<int> selectedRows = m_pView->selectionInfo()->rowsSelected();
   const QSet<int> affectedRows = m_pView->selectionInfo()->rowsAffected();
-  //Loop through the rows, until we are out of range
+  // Loop through the rows, until we are out of range
   while ( yPos <= m_pCanvas->d->view->doc()->unzoomItYOld( paintRect.bottom() ) )
   {
     const bool selected = (selectedRows.contains(y));
     const bool highlighted = (!selected && affectedRows.contains(y));
 
     const RowFormat* rowFormat = sheet->rowFormat( y );
-    const int zoomedYPos = m_pCanvas->d->view->doc()->zoomItYOld( yPos );
-    const int height = m_pCanvas->d->view->doc()->zoomItYOld( yPos + rowFormat->dblHeight() ) - zoomedYPos;
-
-    qDrawPlainRect ( &painter, 0, zoomedYPos, width, height + 1,
-                     backgroundColor.dark(150), 1, &backgroundBrush );
+    const double height = rowFormat->dblHeight();
 
     if ( selected || highlighted )
     {
-      qDrawPlainRect( &painter, 0, zoomedYPos, width, height + 1,
-                      selectionColor.dark(150), 1, &selectionBrush );
+      painter.setPen( selectionColor.dark(150) );
+      painter.setBrush( selectionBrush );
     }
+    else
+    {
+      painter.setPen( backgroundColor.dark(150) );
+      painter.setBrush( backgroundBrush );
+    }
+    painter.drawRect( QRectF( 0, yPos, width, height ) );
 
     QString rowText = QString::number( y );
 
@@ -637,9 +622,9 @@ void VBorder::paintEvent( QPaintEvent* event )
     else if ( highlighted )
       painter.setFont( boldFont );
 
-    int len = painter.fontMetrics().width( rowText );
+    double len = painter.fontMetrics().width( rowText );
     if (!rowFormat->isHide())
-        painter.drawText( ( width-len )/2, zoomedYPos +
+        painter.drawText( ( width-len )/2, yPos +
                           ( height + painter.fontMetrics().ascent() -
                             painter.fontMetrics().descent() ) / 2, rowText );
 
@@ -1295,18 +1280,11 @@ void HBorder::paintEvent( QPaintEvent* event )
 
   // the painter
   QPainter painter( this );
-
-  // pens
-  const QPen pen( Qt::black, 1 );
-  painter.setPen( pen );
+  painter.scale( m_pCanvas->d->view->doc()->zoomedResolutionX(), m_pCanvas->d->view->doc()->zoomedResolutionY() );
+  painter.setRenderHint( QPainter::TextAntialiasing );
 
   // fonts
   QFont normalFont( painter.font() );
-  if ( m_pCanvas->d->view->doc()->zoomInPercent() < 100 )
-  {
-    normalFont.setPointSizeF( 0.01 * m_pCanvas->d->view->doc()->zoomInPercent() *
-        normalFont.pointSizeF() );
-  }
   QFont boldFont( normalFont );
   boldFont.setBold( true );
 
@@ -1347,8 +1325,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     xPos = xPos - m_pCanvas->xOffset();
   }
 
-  int height = m_pCanvas->d->view->doc()->zoomItYOld( painter.font().pointSizeF() + 5 );
-
+  double height = painter.font().pointSizeF() + 5;
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
@@ -1366,17 +1343,19 @@ void HBorder::paintEvent( QPaintEvent* event )
       bool highlighted = (!selected && affectedColumns.contains(x));
 
       const ColumnFormat * col_lay = sheet->columnFormat( x );
-      int zoomedXPos = m_pCanvas->d->view->doc()->zoomItXOld( xPos );
-      int width = m_pCanvas->d->view->doc()->zoomItXOld( xPos + col_lay->dblWidth() ) - zoomedXPos;
-
-      qDrawPlainRect ( &painter, zoomedXPos, 0, width + 1, height,
-                       backgroundColor.dark(150), 1, &backgroundBrush );
+      double width = xPos + col_lay->dblWidth() - xPos;
 
       if ( selected || highlighted )
       {
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width + 1, height,
-                         selectionColor.dark(150), 1, &selectionBrush );
+        painter.setPen( selectionColor.dark(150) );
+        painter.setBrush( selectionBrush );
       }
+      else
+      {
+        painter.setPen( backgroundColor.dark(150) );
+        painter.setBrush( backgroundBrush );
+      }
+      painter.drawRect( QRectF( xPos, 0, width, height ) );
 
       // Reset painter
       painter.setFont( normalFont );
@@ -1389,18 +1368,18 @@ void HBorder::paintEvent( QPaintEvent* event )
       if ( !sheet->getShowColumnNumber() )
       {
         QString colText = Cell::columnName( x );
-        int len = painter.fontMetrics().width( colText );
+        double len = painter.fontMetrics().width( colText );
         if ( !col_lay->isHide() )
-          painter.drawText( zoomedXPos + ( width - len ) / 2,
+          painter.drawText( xPos + ( width - len ) / 2,
                             ( height + painter.fontMetrics().ascent() -
                               painter.fontMetrics().descent() ) / 2, colText );
       }
       else
       {
         QString tmp;
-        int len = painter.fontMetrics().width( tmp.setNum(x) );
+        double len = painter.fontMetrics().width( tmp.setNum(x) );
         if (!col_lay->isHide())
-          painter.drawText( zoomedXPos + ( width - len ) / 2,
+          painter.drawText( xPos + ( width - len ) / 2,
                             ( height + painter.fontMetrics().ascent() -
                               painter.fontMetrics().descent() ) / 2,
                             tmp.setNum(x) );
@@ -1420,19 +1399,21 @@ void HBorder::paintEvent( QPaintEvent* event )
       bool highlighted = (!selected && affectedColumns.contains(x));
 
       const ColumnFormat *col_lay = sheet->columnFormat( x );
-      int zoomedXPos = m_pCanvas->d->view->doc()->zoomItXOld( xPos );
-      int width = m_pCanvas->d->view->doc()->zoomItXOld( xPos + col_lay->dblWidth() ) - zoomedXPos;
+      double width = col_lay->dblWidth();
 
       QColor backgroundColor = palette().window().color();
-      qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height,
-                       backgroundColor.dark(150), 1, &backgroundBrush );
 
       if ( selected || highlighted )
       {
-        QBrush fillSelected( selectionColor );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, selectionColor.dark(),
-           1, &fillSelected );
+        painter.setPen( selectionColor.dark(150) );
+        painter.setBrush( selectionBrush );
       }
+      else
+      {
+        painter.setPen( backgroundColor.dark(150) );
+        painter.setBrush( backgroundBrush );
+      }
+      painter.drawRect( QRectF( xPos, 0, width, height ) );
 
       // Reset painter
       painter.setFont( normalFont );
@@ -1447,7 +1428,7 @@ void HBorder::paintEvent( QPaintEvent* event )
         QString colText = Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
         if (!col_lay->isHide())
-          painter.drawText( zoomedXPos + ( width - len ) / 2,
+          painter.drawText( xPos + ( width - len ) / 2,
                             ( height + painter.fontMetrics().ascent() -
                               painter.fontMetrics().descent() ) / 2, colText );
       }
@@ -1456,7 +1437,7 @@ void HBorder::paintEvent( QPaintEvent* event )
         QString tmp;
         int len = painter.fontMetrics().width( tmp.setNum(x) );
         if (!col_lay->isHide())
-          painter.drawText( zoomedXPos + ( width - len ) / 2,
+          painter.drawText( xPos + ( width - len ) / 2,
                             ( height + painter.fontMetrics().ascent() -
                               painter.fontMetrics().descent() ) / 2,
                             tmp.setNum(x) );

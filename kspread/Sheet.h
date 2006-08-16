@@ -1556,7 +1556,14 @@ private:
                                const QList<Cell*>& _destList,
                                bool down);
 
+    /**
+     * \ingroup NativeFormat
+     */
     void convertObscuringBorders();
+
+    /**
+     * \ingroup NativeFormat
+     */
     void checkContentDirection( QString const & name );
 
     class Private;

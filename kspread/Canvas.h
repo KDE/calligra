@@ -492,7 +492,7 @@ private:
   void startTheDrag();
 
   /* helpers for the paintUpdates function */
-  void paintNormalMarker(QPainter& painter, const KoRect &viewRect);
+  void paintNormalMarker(QPainter& painter, const QRectF &viewRect);
 
   /**
   * Paint the highlighted ranges of cells.  When the user is editing a formula in a text box, cells and ranges referenced
@@ -500,7 +500,7 @@ private:
   * @param painter The painter on which to draw the highlighted ranges
   * @param viewRect The area currently visible on the canvas
   */
-  void paintHighlightedRanges(QPainter& painter, const KoRect& viewRect);
+  void paintHighlightedRanges(QPainter& painter, const QRectF& viewRect);
 
   /**
   * Calculates the visible region on the canvas occupied by a range of cells on the currently active sheet.
@@ -541,7 +541,7 @@ private:
    *                   Again, these are in the order left, top, right, bottom.
    *                   This should be preallocated with a size of at least 4.
    */
-  void retrieveMarkerInfo( const QRect &marker, const KoRect &viewRect,
+  void retrieveMarkerInfo( const QRect &marker, const QRectF &viewRect,
                            double positions[], bool paintSides[] );
 
 

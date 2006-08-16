@@ -39,6 +39,8 @@
 #include <QLinkedList>
 #include <QPainter>
 #include <QPixmap>
+#include <QPointF>
+#include <QRectF>
 
 #include <pwd.h>
 #include <unistd.h>
@@ -392,7 +394,7 @@ void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
         QRect _printRect( m_printRepeatColumns.first, m_printRepeatRows.first,
                           m_printRepeatColumns.second - m_printRepeatColumns.first + 1,
                           m_printRepeatRows.second - m_printRepeatRows.first + 1);
-        KoPoint _topLeft( 0.0, 0.0 );
+        QPointF _topLeft( 0.0, 0.0 );
 
         printRect( _painter, _topLeft, _printRect, view, clipRegion );
     }
@@ -403,7 +405,7 @@ void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
         QRect _printRect( page_range.left(), m_printRepeatRows.first,
                           page_range.right() - page_range.left() + 1,
                           m_printRepeatRows.second - m_printRepeatRows.first + 1);
-        KoPoint _topLeft( _childOffset.x(), 0.0 );
+        QPointF _topLeft( _childOffset.x(), 0.0 );
 
         printRect( _painter, _topLeft, _printRect, view, clipRegion );
     }
@@ -414,22 +416,22 @@ void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
         QRect _printRect( m_printRepeatColumns.first, page_range.top(),
                           m_printRepeatColumns.second - m_printRepeatColumns.first + 1,
                           page_range.bottom() - page_range.top() + 1);
-        KoPoint _topLeft( 0.0, _childOffset.y() );
+        QPointF _topLeft( 0.0, _childOffset.y() );
 
         printRect( _painter, _topLeft, _printRect, view, clipRegion );
     }
 
 
     //Print the cells (right data rect)
-    KoPoint _topLeft( _childOffset.x(), _childOffset.y() );
+    QPointF _topLeft( _childOffset.x(), _childOffset.y() );
 
     printRect( _painter, _topLeft, page_range, view, clipRegion );
 }
 
 
-void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
-                                   const QRect& printRect, const KoRect& view,
-                                   QRegion &clipRegion )
+void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
+                            const QRect& printRect, const KoRect& view,
+                            QRegion& clipRegion )
 {
     //
     // Draw the cells.
@@ -447,14 +449,16 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     int regionTop    = printRect.top();
 
     //Calculate the output rect
-    KoPoint bottomRight( topLeft );
+    QPointF bottomRight( topLeft );
     for ( int x = regionLeft; x <= regionRight; ++x )
         bottomRight.setX( bottomRight.x()
                           + m_pSheet->columnFormat( x )->dblWidth() );
     for ( int y = regionTop; y <= regionBottom; ++y )
         bottomRight.setY( bottomRight.y()
                           + m_pSheet->rowFormat( y )->dblHeight() );
-    KoRect rect( topLeft, bottomRight );
+    QRectF rect;
+    rect.setTopLeft( topLeft );
+    rect.setBottomRight( bottomRight );
 
     QLinkedList<QPoint> mergedCellsPainted;
     for ( int y = regionTop; y <= regionBottom; ++y )

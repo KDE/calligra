@@ -38,7 +38,9 @@
 #include <QLinkedList>
 
 // KOffice
-#include <KoRect.h>
+#include <KoPoint.h>
+
+class QRectF;
 
 namespace KSpread
 {
@@ -84,7 +86,7 @@ public:
    *               if @p paintBorder includes the TopBorder flag
    * @param mergedCellsPainted list of merged cells being painted
    */
-  void paintCell( const KoRect & rect, QPainter & painter,
+  void paintCell( const QRectF & rect, QPainter & painter,
                   View * view, const KoPoint & coordinate,
                   const QPoint & cellRef, Borders paintBorder,
                   QPen& rightPen, QPen& bottomPen,
@@ -196,21 +198,19 @@ private:
   /**
    * \ingroup Layout
    * \ingroup Painting
-   * Determines the font to be used by evaluating the font settings
-   * and applies the zoom factor on the font size.
+   * Determines the font to be used by evaluating the font settings.
    *
    * This depends on the following variables:
    * \li font family
    * \li font size
    * \li font flags
-   * \li zoom factor
    * \li conditional formatting
    *
-   * \return the zoomed font
+   * \return the effective font
    *
    * \internal
    */
-  QFont zoomedFont( int _col, int _row ) const;
+  QFont effectiveFont( int _col, int _row ) const;
 
   /**
    * \ingroup Painting
@@ -234,8 +234,8 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCellBorders( QPainter& painter, const KoRect &rect,
-                         const KoRect &cellRect, const QPoint &cellRef,
+  void paintCellBorders( QPainter& painter, const QRectF &rect,
+                         const QRectF &cellRect, const QPoint &cellRef,
                          Borders paintBorder,
                          QPen & rightPen, QPen & bottomPen,
                          QPen & leftPen, QPen & topPen );
@@ -246,7 +246,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintPageBorders( QPainter& painter, const KoRect &cellRect,
+  void paintPageBorders( QPainter& painter, const QRectF &cellRect,
                          const QPoint &cellRef, Borders paintBorder );
 
   /**
@@ -255,7 +255,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintText( QPainter& painter, const KoRect &cellRect,
+  void paintText( QPainter& painter, const QRectF &cellRect,
                   const QPoint &cellRef );
 
   /**
@@ -264,7 +264,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintMoreTextIndicator( QPainter& painter, const KoRect &cellRect,
+  void paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect,
                                QColor &backgroundColor );
 
   /**
@@ -273,7 +273,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCommentIndicator( QPainter& painter, const KoRect &cellRect,
+  void paintCommentIndicator( QPainter& painter, const QRectF &cellRect,
                               const QPoint &cellRef, QColor &backgroundColor );
 
   /**
@@ -282,7 +282,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintFormulaIndicator( QPainter& painter, const KoRect &cellRect,
+  void paintFormulaIndicator( QPainter& painter, const QRectF &cellRect,
                               QColor &backgroundColor );
 
   /**
@@ -291,8 +291,8 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintDefaultBorders( QPainter& painter, const KoRect &rect,
-                            const KoRect &cellRect, const QPoint &cellRef,
+  void paintDefaultBorders( QPainter& painter, const QRectF &rect,
+                            const QRectF &cellRect, const QPoint &cellRef,
                             Borders paintBorder,
                             QPen const & rightPen, QPen const & bottomPen,
                             QPen const & leftPen, QPen const & topPen );
@@ -303,7 +303,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintBackground( QPainter& painter, const KoRect &cellRect,
+  void paintBackground( QPainter& painter, const QRectF &cellRect,
                         const QPoint &cellRef, bool selected,
                         QColor &backgroundColor );
 
@@ -313,8 +313,8 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintObscuredCells( const KoRect& rect, QPainter& painter,
-                           View* view, const KoRect &cellRect,
+  void paintObscuredCells( const QRectF& rect, QPainter& painter,
+                           View* view, const QRectF &cellRect,
                            const QPoint &cellRef, Borders paintBorder,
                            QPen & rightPen, QPen & bottomPen,
                            QPen & leftPen, QPen & topPen,
@@ -326,7 +326,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
+  void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect,
                                const QPoint &cellRef );
 
   class Private;

@@ -1806,7 +1806,9 @@ void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
       QPen highlightPen;
 #endif
 
-      cell->cellView()->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
+
+      const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
+      cell->cellView()->paintCell( viewRegionF, painter, view, dblCurrentCellPos, cellRef,
            paintBorder,
            rightPen, bottomPen, leftPen, topPen,
            mergedCellsPainted );

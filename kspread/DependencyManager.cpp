@@ -360,7 +360,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
   if (f==0)
   {
     kDebug() << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
-    Q_ASSERT(cell->formula());
+//     Q_ASSERT(cell->formula());
     return Region();
   }
 
