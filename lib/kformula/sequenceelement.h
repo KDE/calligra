@@ -434,6 +434,8 @@ protected:
      */
     bool insert( uint index, BasicElement *child );
 
+    static ElementCreationStrategy* getCreationStrategy() { return creationStrategy; }
+
 private:
 
     /**

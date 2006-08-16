@@ -38,6 +38,7 @@
 #include "paddedelement.h"
 #include "errorelement.h"
 #include "phantomelement.h"
+#include "actionelement.h"
 
 #include "oasiscreationstrategy.h"
 
@@ -70,7 +71,6 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
               || type == "mtr"
               || type == "maligngroup"
               || type == "malignmark" 
-              || type == "maction"
               || type == "matrix"
               || type == "matrixrow" )     return new MatrixElement();
     else if ( type == "msub"
@@ -87,6 +87,7 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     else if ( type == "mpadded" )          return new PaddedElement();
     else if ( type == "merror" )           return new ErrorElement();
     else if ( type == "mphantom" )         return new PhantomElement();
+    else if ( type == "maction" )          return new ActionElement();
     return 0;
 }
 

@@ -23,6 +23,7 @@
 
 
 #include <qstring.h>
+#include <qdom.h>
 
 #include "kformuladefs.h"
 
