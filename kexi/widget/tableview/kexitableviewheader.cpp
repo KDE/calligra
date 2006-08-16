@@ -44,7 +44,8 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 		{
 			if (pe==QStyle::PE_HeaderSection) {
 				QColorGroup newCg(cg);
-				newCg.setColor(QColorGroup::Background, m_backgroundColor);
+				newCg.setColor(QColorGroup::Button, m_backgroundColor);
+				newCg.setColor(QColorGroup::Background, m_backgroundColor); //set background color as well (e.g. for thinkeramik)
 				m_style->drawPrimitive( pe, p, r, newCg, flags, option );
 				return;
 			}
@@ -62,8 +63,9 @@ KexiTableViewHeader::KexiTableViewHeader(QWidget * parent, const char * name)
 	, m_lastToolTipSection(-1)
 	, m_selectionBackgroundColor(qApp->palette().active().highlight())
 	, m_selectedSection(-1)
+	, m_styleChangeEnabled(true)
 {
-	setStyle( new KexiTableViewHeaderStyle(&style(), this) );
+	styleChange( style() );
 	installEventFilter(this);
 	connect(this, SIGNAL(sizeChange(int,int,int)), 
 		this, SLOT(slotSizeChange(int,int,int)));
@@ -71,6 +73,16 @@ KexiTableViewHeader::KexiTableViewHeader(QWidget * parent, const char * name)
 
 KexiTableViewHeader::~KexiTableViewHeader()
 {
+}
+
+void KexiTableViewHeader::styleChange( QStyle& oldStyle )
+{
+	QHeader::styleChange( oldStyle );
+	if (!m_styleChangeEnabled)
+		return;
+	m_styleChangeEnabled = false;
+	setStyle( new KexiTableViewHeaderStyle(&qApp->style(), this) );
+	m_styleChangeEnabled = true;
 }
 
 int KexiTableViewHeader::addLabel ( const QString & s, int size )

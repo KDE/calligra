@@ -157,7 +157,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 	const QCString delimiter( options.delimiter.left(1).latin1() );
 	const bool hasTextQuote = !options.textQuote.isEmpty();
 	const QString textQuote( options.textQuote.left(1) );
-	const QCString escapedTextQuote( textQuote + textQuote ); //ok?
+	const QCString escapedTextQuote( (textQuote + textQuote).latin1() ); //ok?
 	//cache for faster checks
 	bool *isText = new bool[fieldsCount]; 
 	bool *isDateTime = new bool[fieldsCount]; 

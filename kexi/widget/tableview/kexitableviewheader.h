@@ -22,6 +22,8 @@
 
 #include <qheader.h>
 
+class QStyle;
+
 //! @short A table view header with additional actions.
 /*! Displays field description (Field::description()) text as tool tip, if available.
  Displays tool tips if a pointed section is not wide enough to fit its label text.
@@ -59,6 +61,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public QHeader
 
 	protected:
 		virtual void paintSection ( QPainter * p, int index, const QRect & fr );
+		virtual void styleChange( QStyle& oldStyle );
 
 		int m_lastToolTipSection;
 		QRect m_toolTipRect;
@@ -66,6 +69,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public QHeader
 		QStringList m_toolTips;
 		QColor m_selectionBackgroundColor;
 		int m_selectedSection;
+		bool m_styleChangeEnabled : 1;
 };
 
 #endif
