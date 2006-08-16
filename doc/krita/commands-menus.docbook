@@ -1767,8 +1767,8 @@ filters.</para></listitem>
 <guimenuitem>CImg Image Restoration...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="commands-dialogs-filters-imagerestauration"><guilabel>Image
-Restauration</guilabel> dialog</link>.</action></para></listitem>
+linkend="commands-dialogs-filters-imagerestoration"><guilabel>Image
+Restoration</guilabel> dialog</link>.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>

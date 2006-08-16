@@ -877,26 +877,26 @@ See the description of the respective filter for details.
 
 </sect3>
 
-<sect3 id="commands-dialogs-filters-imagerestauration">
-<title>The <guilabel>Image Restauration</guilabel> dialog</title>
+<sect3 id="commands-dialogs-filters-imagerestoration">
+<title>The <guilabel>Image Restoration</guilabel> dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The <guilabel>Image Restauration</guilabel> dialog</screeninfo>
+<screeninfo>The <guilabel>Image Restoration</guilabel> dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="dialogs-imagerestoration.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The <guilabel>Image Restauration</guilabel> dialog</phrase>
+<phrase>The <guilabel>Image Restoration</guilabel> dialog</phrase>
 </textobject>
-<caption><para>The <guilabel>Image Restauration</guilabel> dialog</para></caption>
+<caption><para>The <guilabel>Image Restoration</guilabel> dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
 
 <para>
-Using this dialog, you can specify exactly how the image restauration should
+Using this dialog, you can specify exactly how the image restoration should
 be done. This filter tries to increase the quality of an image, for instance
 by removing scratches. Various options are available to customize its
 behaviour.

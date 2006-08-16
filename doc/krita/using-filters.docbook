@@ -133,10 +133,16 @@ The Bumpmap filter takes two layers and uses one of these to convert the other
 one so that it will give an illusion of depth. The object layer (the layer to be
 transformed) is the actual layer that should receive the three-dimensional
 looks. The bumpmap layer is a grayscale layer, which is read and used to
-determine the height for each point of the object layer.
-</para><para>
-Alternatively, the same layer can be used as both object layer and bumpmap
-layer.
+determine the height for each point of the object layer.  Alternatively, the
+same layer can be used as both object layer and bumpmap layer.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Map</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-bumpmap">the
+<guilabel>Bumpmap</guilabel>dialog</link> for more information on its
+settings.
 </para>
 <screenshot>
 <screeninfo>The image with the Bumpmap filter applied to it</screeninfo>
@@ -148,6 +154,52 @@ layer.
 <phrase>The image with the Bumpmap filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Bumpmap filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-cimg">
+<title>The CImg Image Restoration filter</title>
+<para>
+With this filter, you can perform minor enhancements to your image, for
+example removing small scratches or adding a slight blur. The difference
+between our sample original image and the result of applying this filter with
+standard settings is virtually none.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-imagerestoration">the
+<guilabel>Image Restoration</guilabel>dialog</link>
+for more information on its settings.
+</para>
+</sect1>
+
+<sect1 id="filters-coloradjustment">
+<title>The Color Adjustment filter</title>
+<para>
+This filter allows you to change the looks of your image by increasing or
+decreasing the abundance of certain colors.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-coloradjustment">the
+<guilabel>Color Adjustment</guilabel>dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Color Adjustment filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-coloradjustment.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Color Adjustment filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Color Adjustment filter applied to it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
