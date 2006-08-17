@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cc -o $podir/kounavail.pot
+$XGETTEXT rc.cpp *.cc -o $podir/kounavail.pot
