@@ -17,6 +17,8 @@
 #include <kdebug.h>
 #include <kinstance.h>
 
+#define ROUNDING 0.126
+
 
 void TestDocumentLayout::initTestCase() {
     //  To get around this error
@@ -124,9 +126,25 @@ void TestDocumentLayout::testLineBreaking() {
 }
 
 void TestDocumentLayout::testMultiFrameLineBreaking() {
-    /// Test breaking lines for frames with different widths.
-    // TODO
-    initForNewTest();
+    initForNewTest(loremIpsum);
+    shape1->resize(QSizeF(200, 41)); // fits 3 lines.
+    KoShape *shape2 = new MockTextShape();
+    shape2->resize(QSizeF(120, 1000));
+    new KWTextFrame(shape2, frameSet);
+
+    layout->layout();
+    QCOMPARE(blockLayout->lineCount(), 24);
+    QCOMPARE(blockLayout->lineAt(0).width(), 200.0);
+    QCOMPARE(blockLayout->lineAt(1).width(), 200.0);
+    QCOMPARE(blockLayout->lineAt(2).width(), 200.0);
+    QCOMPARE(blockLayout->lineAt(3).width(), 120.0);
+    QCOMPARE(blockLayout->lineAt(4).width(), 120.0);
+
+    QTextLine line = blockLayout->lineAt(3);
+    QVERIFY(line.y() > shape1->size().height()); // it has to be outside of shape1
+    const double topOfFrame2 = line.y();
+    line = blockLayout->lineAt(4);
+    QVERIFY(qAbs( line.y() - topOfFrame2 - 14.4) < 0.125);
 }
 
 void TestDocumentLayout::testBasicLineSpacing() {
@@ -156,7 +174,7 @@ void TestDocumentLayout::testBasicLineSpacing() {
         // considerations, and offers general performance benefits across all
         // platforms.
         //qDebug() << qAbs(line.y() - i * lineSpacing12);
-        QVERIFY(qAbs(line.y() - i * lineSpacing12) < 0.0126);
+        QVERIFY(qAbs(line.y() - i * lineSpacing12) < ROUNDING);
     }
 
     // make first word smaller, should have zero effect on lineSpacing.
@@ -168,7 +186,7 @@ void TestDocumentLayout::testBasicLineSpacing() {
     for(int i=0; i < 16; i++) {
         line = blockLayout->lineAt(i);
         //qDebug() << i << qAbs(line.y() - i * lineSpacing12);
-        QVERIFY(qAbs(line.y() - i * lineSpacing12) < 0.0126);
+        QVERIFY(qAbs(line.y() - i * lineSpacing12) < ROUNDING);
     }
 
     // make first word on second line word bigger, should move that line down a little.
@@ -181,12 +199,12 @@ void TestDocumentLayout::testBasicLineSpacing() {
     line = blockLayout->lineAt(0);
     QCOMPARE(line.y(), 0.0);
     line = blockLayout->lineAt(1);
-    QVERIFY(qAbs(line.y() - lineSpacing12) < 0.0126);
+    QVERIFY(qAbs(line.y() - lineSpacing12) < ROUNDING);
 
     for(int i=2; i < 15; i++) {
         line = blockLayout->lineAt(i);
 //qDebug() << "i: " << i << " gives: " << line.y() << " + " <<  line.ascent() << ", " << line.descent() << " = " << line.height();
-        QVERIFY(qAbs(line.y() - (lineSpacing12 + lineSpacing18 + (i-2) * lineSpacing12)) < 0.0126);
+        QVERIFY(qAbs(line.y() - (lineSpacing12 + lineSpacing18 + (i-2) * lineSpacing12)) < ROUNDING);
     }
 // Test widget to show what we have
 /*
@@ -252,7 +270,59 @@ void TestDocumentLayout::testMargins() {
     QTextLine firstLineOfParag2 =  layout->lineAt(0);
     const double FONTSIZE = 12.0;
     const double BottomParag1 = lastLineOfParag1.y() + (FONTSIZE * 1.2);
-    QVERIFY(qAbs(firstLineOfParag2.y() - BottomParag1  - 12.0) < 0.0126);
+    QVERIFY(qAbs(firstLineOfParag2.y() - BottomParag1  - 12.0) < ROUNDING);
+}
+
+void TestDocumentLayout::testMultipageMargins() {
+    initForNewTest("123456789\nparagraph 2\n");
+    QTextCursor cursor(doc);
+    QTextBlockFormat bf = cursor.blockFormat();
+    bf.setTopMargin(100.0);
+    bf.setBottomMargin(20.0);
+    cursor.setBlockFormat(bf);
+    cursor.setPosition(11);
+    cursor.setBlockFormat(bf); // set style for second parag as well.
+    QTextBlock last = doc->end();
+    cursor.setPosition(22); // after parag 2
+    cursor.setBlockFormat(bf); // and same for last parag
+    cursor.insertText(loremIpsum);
+
+    shape1->resize(QSizeF(200, 14.4 + 100 + 20 + 12 + 5)); // 5 for fun..
+    KoShape *shape2 = new MockTextShape();
+    shape2->resize(QSizeF(120, 1000));
+    new KWTextFrame(shape2, frameSet);
+
+    layout->layout();
+
+    /* The above has 3 parags with a very tall top margin and a bottom margin
+     * The first line is expected to be displayed at top of the page because we
+     * never show the topMargin on new pages.
+     * The second parag will then be 100 + 20 points lower.
+     * The shape will not have enough space for the bottom margin of this second parag,
+     * but that does not move it to the second shape!
+     * The 3th parag is then displayed at the top of the second shape.
+     */
+
+    QTextBlock block = doc->begin();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // first parag
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // second parag
+    //qDebug() << blockLayout->lineAt(0).y() << "=" << (12.0 * 1.2 + 100.0 + 20.0);
+    QVERIFY( qAbs(blockLayout->lineAt(0).y() - (12.0 * 1.2 + 100.0 + 20.0)) < ROUNDING);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // thirth parag
+    // the 10 in the next line is hardcoded distance between frames.
+    //qDebug() << blockLayout->lineAt(0).y() << "=" << shape1->size().height() + 10.0;
+    QVERIFY( qAbs(blockLayout->lineAt(0).y() - (shape1->size().height() + 10.0)) < ROUNDING);
+
+    /* TODO
+        - top margin at new page is honoured when the style used has a
+         'page break before' set to true.
+     */
 }
 
 void TestDocumentLayout::testTextIndent() {

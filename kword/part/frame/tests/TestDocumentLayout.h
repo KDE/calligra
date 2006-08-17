@@ -35,7 +35,9 @@ private slots:
     void testBasicLineSpacing();
 
 // Block styles
+    /// Test top, left, right and bottom margins of paragraphs.
     void testMargins();
+    void testMultipageMargins();
     void testTextIndent();
     void testTextAlignments();
     // page breaks

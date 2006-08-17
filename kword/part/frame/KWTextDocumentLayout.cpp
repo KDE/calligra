@@ -170,10 +170,10 @@ void KWTextDocumentLayout::layout() {
     class State {
       public:
         State(KWTextFrameSet *fs) : m_frameSet(fs) {
-            frameNumber = 0;
             m_y = 0;
             layout = 0;
-            shape = m_frameSet->frames()[frameNumber]->shape();
+            frameNumber = -1;
+            nextFrame();
             m_block = m_frameSet->document()->begin();
             nextParag();
         }
@@ -193,6 +193,7 @@ void KWTextDocumentLayout::layout() {
 
         /// when a line is added, update internal vars.  Return true if line does not fit in shape
         bool addLine(const QTextLine &line) {
+            m_newShape = false;
             if(m_fragmentIterator.atEnd())
                 return false; // no text in block.
             double height=0.0;
@@ -206,26 +207,37 @@ void KWTextDocumentLayout::layout() {
             }
             if(height < 0.01) height = 12; // default size for uninitialized styles.
 //kDebug() << "   h: " << height << endl;
+            if(m_data->documentOffset() + shape->size().height() < m_y + height) {
+//kDebug() << "   NEXT frame" << endl;
+                // line does not fit.
+                m_data->setEndPosition(line.textStart()-1);
+                m_y = m_data->documentOffset() + shape->size().height() + 10.0;
+                m_data->wipe();
+                nextFrame();
+                if(m_data) {
+                    m_data->setDocumentOffset(m_y);
+                    m_data->setPosition(line.textStart());
+                }
+                return true;
+            }
             m_y += height * 1.2;
-            // if not fits in shape {
-                //data->setEndPosition(position);
-                // return true;
-            // }
             return false;
         }
 
         bool nextParag() {
-            if(layout != 0) { // first time
+            if(layout != 0) { // guard against first time
                 layout->endLayout();
                 m_block = m_block.next();
-            }
-            else {
-                m_y += m_format.bottomMargin();
+                if(!m_newShape) { // ignore bottomMargin when we went to a new shape anyway.
+                    m_y += m_format.bottomMargin();
+                }
             }
             if(! m_block.isValid())
                 return false;
             m_format = m_block.blockFormat();
-            m_y += m_format.topMargin();
+            if(! m_newShape) { // ignore margins at top of shape
+                m_y += m_format.topMargin();
+            }
             layout = m_block.layout();
             layout->beginLayout();
             m_fragmentIterator = m_block.begin();
@@ -237,18 +249,33 @@ void KWTextDocumentLayout::layout() {
         QTextLayout *layout;
 
       private:
+        void nextFrame() {
+            frameNumber++;
+            if(frameNumber >= m_frameSet->frameCount()) {
+                shape = 0;
+                m_data = 0;
+                return;
+            }
+            shape = m_frameSet->frames()[frameNumber]->shape();
+            m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
+            m_newShape = true;
+        }
+
+      private:
         KWTextFrameSet *m_frameSet;
 
         double m_y;
         QTextBlock m_block;
         QTextBlockFormat m_format;
         QTextBlock::Iterator m_fragmentIterator;
+        KoTextShapeData *m_data;
+        bool m_newShape;
     };
 
     State state(m_frameSet);
     if(m_frameSet->frameCount() <= state.frameNumber)
         return;
-    while(1) {
+    while(state.shape) {
         QTextLine line = state.layout->createLine();
         if (!line.isValid()) { // end of parag
             if(! state.nextParag())
@@ -258,10 +285,14 @@ void KWTextDocumentLayout::layout() {
 
         line.setLineWidth(state.width());
 //kDebug() << "New line at point " << state.x() << "," << state.y() << endl;
-        QPointF p(state.x(), state.y());
         line.setPosition(QPointF(state.x(), state.y()));
 //kDebug() << "         reading: " << line.position().x() << "," << line.position().y() << endl;
-        if(state.addLine(line)) {
+        while(state.addLine(line)) {
+            if(state.shape == 0) { // no more shapes to put the text in!
+                line.setPosition(QPointF(0, state.y()+20));
+                return;
+            }
+            line.setLineWidth(state.width());
             line.setPosition(QPointF(state.x(), state.y()));
         }
 //kDebug() << "Line has " << line.textLength() << " chars" << endl;
