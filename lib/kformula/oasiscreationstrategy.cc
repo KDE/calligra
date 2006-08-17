@@ -49,30 +49,34 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     
     // TODO
     // menclose
+    // mlabeledtr
+    // maligngroup
+    // malignmark
     // Content elements
+    // mtr and mtd are currently managed inside MatrixElement
     kdDebug( DEBUGID ) << type << endl;
+
+    // Token Elements ( Section 3.1.6.1 )
     if      ( type == "mi" )               return new IdentifierElement();
     else if ( type == "mo" )               return createOperatorElement( element );
     else if ( type == "mn"
               || type == "mtext" )         return new TokenElement();
     else if ( type == "ms" )               return new StringElement();
-	else if ( type == "mstyle" )           return new StyleElement();
-	else if ( type == "ci"
-              || type == "cn"
-              || type == "list" 
-              || type == "set" )           return new NameSequence();
-    else if ( type == "mglyph" )           return new GlyphElement();
     else if ( type == "mspace" )           return new SpaceElement();
+    else if ( type == "mglyph" )           return new GlyphElement();
+
+    // General Layout Schemata ( Section 3.1.6.2 )
+    else if ( type == "mrow" )             return new SequenceElement();
+    else if ( type == "mfrac" )            return new FractionElement();
     else if ( type == "msqrt"
               || type == "mroot" )         return new RootElement();
+	else if ( type == "mstyle" )           return new StyleElement();
+    else if ( type == "merror" )           return new ErrorElement();
+    else if ( type == "mpadded" )          return new PaddedElement();
+    else if ( type == "mphantom" )         return new PhantomElement();
     else if ( type == "mfenced" )          return new BracketElement();
-    else if ( type == "mtable" 
-              || type == "mlabeledtr"
-              || type == "mtr"
-              || type == "maligngroup"
-              || type == "malignmark" 
-              || type == "matrix"
-              || type == "matrixrow" )     return new MatrixElement();
+
+    // Script and Limit Schemata ( Section 3.1.6.3 )
     else if ( type == "msub"
               || type == "msup"
               || type == "msubsup"
@@ -80,13 +84,11 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
               || type == "mover"
               || type == "munderover"
               || type == "mmultiscripts" ) return new IndexElement();
-    else if ( type == "mfrac" )            return new FractionElement();
-    else if ( type == "interval" )         return new BracketElement();
-    else if ( type == "mrow"
-              || type == "mtd" )           return new SequenceElement();
-    else if ( type == "mpadded" )          return new PaddedElement();
-    else if ( type == "merror" )           return new ErrorElement();
-    else if ( type == "mphantom" )         return new PhantomElement();
+
+    // Tables and Matrices ( Section 3.1.6.4 )
+    else if ( type == "mtable" )           return new MatrixElement();
+
+    // Enlivening Expressions ( Section 3.1.6.5 )
     else if ( type == "maction" )          return new ActionElement();
     return 0;
 }
