@@ -104,15 +104,15 @@ void ProjectDialog::slotSchedulingChanged(int activated) {
             break;
         case 2: // Start not earlier then
             label = label.arg(i18n("Start not Earlier then"));
-            label = label.arg(i18n(""));
+            label = label.arg(QString());
             break;
         case 3: // Finish not later then
             label = label.arg(i18n("Finish not Later then"));
-            label = label.arg(i18n(""));
+            label = label.arg(QString());
             break;
         case 4: // Must start on
             label = label.arg(i18n("Must Start on"));
-            label = label.arg(i18n(""));
+            label = label.arg(QString());
             break;
         default: // error ...
             dia->lSchedulingExplain->setText("");
