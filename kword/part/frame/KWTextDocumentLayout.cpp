@@ -166,7 +166,7 @@ void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 }
 
 void KWTextDocumentLayout::layout() {
-kDebug() << "KWTextDocumentLayout::layout" << endl;
+//kDebug() << "KWTextDocumentLayout::layout" << endl;
     class State {
       public:
         State(KWTextFrameSet *fs) : m_frameSet(fs) {
@@ -196,17 +196,16 @@ kDebug() << "KWTextDocumentLayout::layout" << endl;
             if(m_fragmentIterator.atEnd())
                 return false; // no text in block.
             double height=0.0;
-//kDebug() << "a: " << m_fragmentIterator.fragment().position() << endl;
-//kDebug() << "b: " << line.textStart() << endl;
+//kDebug() << "a: " << m_fragmentIterator.fragment().position() << "+" << m_fragmentIterator.fragment().length() << ", b:" << line.textStart() << "+" << line.textLength() << endl;
             height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
             while(! (m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
-                            line.textStart() + line.textLength()))) {
-                height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                           m_block.position() + line.textStart() + line.textLength() -1))) {
                 m_fragmentIterator++;
+                height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
 //kDebug() << "   next fragment\n";
             }
-//kDebug() << "height: " << (height*1.2) << endl;
-            Q_ASSERT(height > 0.0); // if this is called then a parag does not have a proper fontsize
+            if(height < 0.01) height = 12; // default size for uninitialized styles.
+//kDebug() << "   h: " << height << endl;
             m_y += height * 1.2;
             // if not fits in shape {
                 //data->setEndPosition(position);

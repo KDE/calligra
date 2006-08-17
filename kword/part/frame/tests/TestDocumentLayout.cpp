@@ -148,21 +148,27 @@ void TestDocumentLayout::testBasicLineSpacing() {
     QCOMPARE(blockLayout->lineCount(), 16);
     QCOMPARE(blockLayout->lineForTextPosition(1).width(), 200.0);
     QTextLine line;
-    for(int i=0; i < 20; i++) {
+    for(int i=0; i < 16; i++) {
         line = blockLayout->lineAt(i);
-        QCOMPARE(line.y(), i * lineSpacing12);
+        // The reason for this weird check is that the values are stored internally
+        // as 26.6 fixed point integers. The entire internal text layout is
+        // actually done using fixed point arithmetic. This is due to embedded
+        // considerations, and offers general performance benefits across all
+        // platforms.
+        //qDebug() << qAbs(line.y() - i * lineSpacing12);
+        QVERIFY(qAbs(line.y() - i * lineSpacing12) < 0.0126);
     }
 
-    // make first word smaller, should have zero effect on lineSpacing12.
+    // make first word smaller, should have zero effect on lineSpacing.
     cursor.setPosition(0);
     cursor.setPosition(11, QTextCursor::KeepAnchor);
     charFormat.setFontPointSize(10);
     cursor.mergeCharFormat(charFormat);
     layout->layout();
-    for(int i=0; i < 20; i++) {
+    for(int i=0; i < 16; i++) {
         line = blockLayout->lineAt(i);
-        QCOMPARE(line.y(), i * 21.0);
-        QCOMPARE(line.y() + line.height(), (i+1) * lineSpacing12);
+        //qDebug() << i << qAbs(line.y() - i * lineSpacing12);
+        QVERIFY(qAbs(line.y() - i * lineSpacing12) < 0.0126);
     }
 
     // make first word on second line word bigger, should move that line down a little.
@@ -175,13 +181,12 @@ void TestDocumentLayout::testBasicLineSpacing() {
     line = blockLayout->lineAt(0);
     QCOMPARE(line.y(), 0.0);
     line = blockLayout->lineAt(1);
-    QCOMPARE(line.y(), lineSpacing12);
-    QCOMPARE(line.height(), lineSpacing18);
+    QVERIFY(qAbs(line.y() - lineSpacing12) < 0.0126);
 
-    for(int i=2; i < 19; i++) {
+    for(int i=2; i < 15; i++) {
         line = blockLayout->lineAt(i);
 //qDebug() << "i: " << i << " gives: " << line.y() << " + " <<  line.ascent() << ", " << line.descent() << " = " << line.height();
-        QCOMPARE(line.y(), lineSpacing12 + lineSpacing18 + (i-2) * lineSpacing12);
+        QVERIFY(qAbs(line.y() - (lineSpacing12 + lineSpacing18 + (i-2) * lineSpacing12)) < 0.0126);
     }
 // Test widget to show what we have
 /*
@@ -246,7 +251,8 @@ void TestDocumentLayout::testMargins() {
     QTextLine lastLineOfParag1 =  blockLayout->lineAt(blockLayout->lineCount()-1);
     QTextLine firstLineOfParag2 =  layout->lineAt(0);
     const double FONTSIZE = 12.0;
-    QCOMPARE(lastLineOfParag1.y() + (FONTSIZE * 1.2) - firstLineOfParag2.y(), 12.0);
+    const double BottomParag1 = lastLineOfParag1.y() + (FONTSIZE * 1.2);
+    QVERIFY(qAbs(firstLineOfParag2.y() - BottomParag1  - 12.0) < 0.0126);
 }
 
 void TestDocumentLayout::testTextIndent() {
