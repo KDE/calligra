@@ -693,7 +693,7 @@ void Canvas::slotScrollVert( int _value )
   sheet->enableScrollBarUpdates( false );
 
   // Relative movement
-  int dy = d->view->doc()->zoomItYOld( d->yOffset - _value );
+  int dy = d->yOffset - _value;
 
   // New absolute position
   d->yOffset = _value;
@@ -976,12 +976,11 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   }
 
   // Test wether mouse is over the Selection.handle
-  QRect selectionHandle = d->view->selectionInfo()->selectionHandleArea();
-  if ( selectionHandle.contains( QPoint( d->view->doc()->zoomItXOld( ev_PosX ),
-                                         d->view->doc()->zoomItYOld( ev_PosY ) ) ) )
+  const QRectF selectionHandle = d->view->selectionInfo()->selectionHandleArea();
+  if ( selectionHandle.contains( QPointF( ev_PosX, ev_PosY ) ) )
   {
     //If the cursor is over the handle, than it might be already on the next cell.
-    //Recalculate the cell!
+    //Recalculate the cell position!
     col  = sheet->leftColumn( ev_PosX - d->view->doc()->unzoomItXOld( 2 ), xpos );
     row  = sheet->topRow( ev_PosY - d->view->doc()->unzoomItYOld( 2 ), ypos );
 
@@ -1295,8 +1294,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 //   d->scrollTimer->start( 50 );
 
   // Did we click in the lower right corner of the marker/marked-area ?
-  if ( selectionInfo()->selectionHandleArea().contains( QPoint( d->view->doc()->zoomItXOld( ev_PosX ),
-                                                                d->view->doc()->zoomItYOld( ev_PosY ) ) ) )
+  if ( selectionInfo()->selectionHandleArea().contains( QPointF( ev_PosX, ev_PosY ) ) )
   {
     processClickSelectionHandle( _ev );
     return;
@@ -1520,42 +1518,41 @@ void Canvas::paintEvent( QPaintEvent* event )
   if (sheet->paintDirtyData().isEmpty())
   {
 
-  // painting rectangle
-  const QRect paintRect( event->rect() );
+    // painting rectangle
+    const QRect paintRect( event->rect() );
 
-  // ElapsedTime et( "Canvas::paintEvent" );
+    // ElapsedTime et( "Canvas::paintEvent" );
 
-  double dwidth = d->view->doc()->unzoomItXOld( width() );
-  KoRect rect = d->view->doc()->unzoomRectOld( paintRect & QWidget::rect() );
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
-    rect.moveBy( -xOffset(), yOffset() );
-  else
-    rect.moveBy( xOffset(), yOffset() );
+    double dwidth = d->view->doc()->unzoomItXOld( width() );
+    KoRect rect = d->view->doc()->unzoomRectOld( paintRect & QWidget::rect() );
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+      rect.moveBy( -xOffset(), yOffset() );
+    else
+      rect.moveBy( xOffset(), yOffset() );
 
-  KoPoint tl = rect.topLeft();
-  KoPoint br = rect.bottomRight();
+    KoPoint tl = rect.topLeft();
+    KoPoint br = rect.bottomRight();
 
-  double tmp;
-  int left_col;
-  int right_col;
-  //Philipp: I don't know why we need the +1, but otherwise we don't get it correctly
-  //Testcase: Move a dialog slowly up left. Sometimes the top/left most points are not painted
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
-  {
-    right_col = sheet->leftColumn( dwidth - tl.x(), tmp );
-    left_col  = sheet->rightColumn( dwidth - br.x() + 1.0 );
-  }
-  else
-  {
-    left_col  = sheet->leftColumn( tl.x(), tmp );
-    right_col = sheet->rightColumn( br.x() + 1.0 );
-  }
-  int top_row = sheet->topRow( tl.y(), tmp );
-  int bottom_row = sheet->bottomRow( br.y() + 1.0 );
+    double tmp;
+    int left_col;
+    int right_col;
+    //Philipp: I don't know why we need the +1, but otherwise we don't get it correctly
+    //Testcase: Move a dialog slowly up left. Sometimes the top/left most points are not painted
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    {
+      right_col = sheet->leftColumn( dwidth - tl.x(), tmp );
+      left_col  = sheet->rightColumn( dwidth - br.x() + 1.0 );
+    }
+    else
+    {
+      left_col  = sheet->leftColumn( tl.x(), tmp );
+      right_col = sheet->rightColumn( br.x() + 1.0 );
+    }
+    int top_row = sheet->topRow( tl.y(), tmp );
+    int bottom_row = sheet->bottomRow( br.y() + 1.0 );
 
-  QRect vr( QPoint(left_col, top_row),
-            QPoint(right_col, bottom_row) );
-  sheet->setRegionPaintDirty( vr );
+    QRect vr( QPoint(left_col, top_row), QPoint(right_col, bottom_row) );
+    sheet->setRegionPaintDirty( vr );
   }
   paintUpdates();
   event->accept();
@@ -3993,7 +3990,7 @@ void Canvas::paintUpdates()
   painter.setRenderHint( QPainter::TextAntialiasing );
   painter.scale( d->view->doc()->zoomedResolutionX(), d->view->doc()->zoomedResolutionY() );
 
-  QRectF unzoomedRect = ( QRectF( 0, 0, width(), height() ) );
+  QRectF unzoomedRect = d->view->doc()->viewToDocument( QRectF( 0, 0, width(), height() ) );
   // unzoomedRect.translate( xOffset(), yOffset() );
 
 #if 0

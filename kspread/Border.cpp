@@ -557,7 +557,7 @@ void VBorder::paintEvent( QPaintEvent* event )
     return;
 
   // painting rectangle
-  const QRect paintRect( event->rect() );
+  const QRectF paintRect = m_pCanvas->d->view->doc()->viewToDocument( event->rect() );
 
   // the painter
   QPainter painter( this );
@@ -582,7 +582,7 @@ void VBorder::paintEvent( QPaintEvent* event )
 
   double yPos;
   // Get the top row and the current y-position
-  int y = sheet->topRow( (m_pCanvas->d->view->doc()->unzoomItYOld( paintRect.y() ) + m_pCanvas->yOffset()), yPos );
+  int y = sheet->topRow( paintRect.y() + m_pCanvas->yOffset(), yPos );
   // Align to the offset
   yPos = yPos - m_pCanvas->yOffset();
   double width = YBORDER_WIDTH;
@@ -590,7 +590,7 @@ void VBorder::paintEvent( QPaintEvent* event )
   const QSet<int> selectedRows = m_pView->selectionInfo()->rowsSelected();
   const QSet<int> affectedRows = m_pView->selectionInfo()->rowsAffected();
   // Loop through the rows, until we are out of range
-  while ( yPos <= m_pCanvas->d->view->doc()->unzoomItYOld( paintRect.bottom() ) )
+  while ( yPos <= paintRect.bottom() )
   {
     const bool selected = (selectedRows.contains(y));
     const bool highlighted = (!selected && affectedRows.contains(y));
@@ -1275,7 +1275,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     return;
 
   // painting rectangle
-  const QRect paintRect( event->rect() );
+  const QRectF paintRect = m_pView->doc()->viewToDocument( event->rect() );
 
   // the painter
   QPainter painter( this );
@@ -1296,15 +1296,7 @@ void HBorder::paintEvent( QPaintEvent* event )
   selectionColor.setAlpha( 127 );
   const QBrush selectionBrush( selectionColor );
 
-
   painter.setClipRect( paintRect );
-
-  // painter.eraseRect( paintRect );
-
-  //QFontMetrics fm = painter.fontMetrics();
-  // Matthias Elter: This causes a SEGFAULT in ~QPainter!
-  // Only god and the trolls know why ;-)
-  // bah...took me quite some time to track this one down...
 
   double xPos;
   int x;
@@ -1312,14 +1304,14 @@ void HBorder::paintEvent( QPaintEvent* event )
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     //Get the left column and the current x-position
-    x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItXOld( width() ) - m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.x() ) + m_pCanvas->xOffset() ), xPos );
+    x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItXOld( width() ) - paintRect.x() + m_pCanvas->xOffset() ), xPos );
     //Align to the offset
     xPos = m_pCanvas->d->view->doc()->unzoomItXOld( width() ) - xPos + m_pCanvas->xOffset();
   }
   else
   {
     //Get the left column and the current x-position
-    x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.x() ) + m_pCanvas->xOffset() ), xPos );
+    x = sheet->leftColumn( int( paintRect.x() + m_pCanvas->xOffset() ), xPos );
     //Align to the offset
     xPos = xPos - m_pCanvas->xOffset();
   }
@@ -1336,7 +1328,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     const QSet<int> selectedColumns = m_pView->selectionInfo()->columnsSelected();
     const QSet<int> affectedColumns = m_pView->selectionInfo()->columnsAffected();
     //Loop through the columns, until we are out of range
-    while ( xPos <= m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.right() ) )
+    while ( xPos <= paintRect.right() )
     {
       bool selected = (selectedColumns.contains(x));
       bool highlighted = (!selected && affectedColumns.contains(x));
@@ -1393,7 +1385,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     const QSet<int> selectedColumns = m_pView->selectionInfo()->columnsSelected();
     const QSet<int> affectedColumns = m_pView->selectionInfo()->columnsAffected();
     //Loop through the columns, until we are out of range
-    while ( xPos <= m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.right() ) )
+    while ( xPos <= paintRect.right() )
     {
       bool selected = (selectedColumns.contains(x));
       bool highlighted = (!selected && affectedColumns.contains(x));

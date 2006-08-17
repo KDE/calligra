@@ -157,7 +157,7 @@ public:
   /**
    * @return the area that the 'handle' of the selection is located in painting coordinates
    */
-  QRect selectionHandleArea() const;
+  QRectF selectionHandleArea() const;
 
   /**
    * @return the name of the region (e.g. "A1:A2")

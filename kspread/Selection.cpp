@@ -675,7 +675,7 @@ bool Selection::isSingular() const
   return Region::isSingular();
 }
 
-QRect Selection::selectionHandleArea() const
+QRectF Selection::selectionHandleArea() const
 {
   int column, row;
 
@@ -697,13 +697,13 @@ QRect Selection::selectionHandleArea() const
   double width = cell->dblWidth( column );
   double height = cell->dblHeight( row );
 
-  QPoint rightBottom( d->view->doc()->zoomItXOld( xpos + width ),
-                      d->view->doc()->zoomItYOld( ypos + height ) );
+  const double unzoomedXPixel = d->view->doc()->unzoomItX( 1.0 );
+  const double unzoomedYPixel = d->view->doc()->unzoomItY( 1.0 );
 
-  QRect handle( ( rightBottom.x() - 2 ),
-                  ( rightBottom.y() - 2 ),
-                  ( 5 ),
-                  ( 5 ) );
+  QRectF handle( xpos + width - 2 * unzoomedXPixel,
+                ypos + height - 2 * unzoomedYPixel,
+                5 * unzoomedXPixel,
+                5 * unzoomedYPixel );
   return handle;
 }
 
