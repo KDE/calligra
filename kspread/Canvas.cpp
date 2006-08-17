@@ -554,8 +554,7 @@ void Canvas::scrollToCell(QPoint location) const
 
     // Do we need to scroll left?
     if ( xpos > minX )
-      horzScrollBar()->setValue( horzScrollBar()->maximum() -
-                                  d->view->doc()->zoomItXOld( xOffset() - xpos + minX ) );
+      horzScrollBar()->setValue( horzScrollBar()->maximum() - xOffset() - xpos + minX );
 
     // Do we need to scroll right?
     else if ( xpos < maxX )
@@ -567,8 +566,7 @@ void Canvas::scrollToCell(QPoint location) const
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
 
-      horzScrollBar()->setValue( horzScrollBar()->maximum() -
-                                  d->view->doc()->zoomItXOld( horzScrollBarValue ) );
+      horzScrollBar()->setValue( horzScrollBar()->maximum() - horzScrollBarValue );
     }
   }
   else {
@@ -579,7 +577,7 @@ void Canvas::scrollToCell(QPoint location) const
 
     // Do we need to scroll left?
     if ( xpos < minX )
-      horzScrollBar()->setValue( d->view->doc()->zoomItXOld( xOffset() + xpos - minX ) );
+      horzScrollBar()->setValue( xOffset() + xpos - minX );
 
     // Do we need to scroll right?
     else if ( xpos > maxX )
@@ -591,7 +589,7 @@ void Canvas::scrollToCell(QPoint location) const
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
 
-      horzScrollBar()->setValue( d->view->doc()->zoomItXOld( horzScrollBarValue ) );
+      horzScrollBar()->setValue( horzScrollBarValue );
     }
   }
 
@@ -610,7 +608,7 @@ void Canvas::scrollToCell(QPoint location) const
 
   // do we need to scroll up
   if ( ypos < minY )
-    vertScrollBar()->setValue( d->view->doc()->zoomItYOld( yOffset() + ypos - minY ) );
+    vertScrollBar()->setValue( yOffset() + ypos - minY );
 
   // do we need to scroll down
   else if ( ypos > maxY )
@@ -622,7 +620,7 @@ void Canvas::scrollToCell(QPoint location) const
     if ( vertScrollBarValue > vertScrollBarValueMax )
       vertScrollBarValue = vertScrollBarValueMax;
 
-    vertScrollBar()->setValue( d->view->doc()->zoomItYOld( vertScrollBarValue ) );
+    vertScrollBar()->setValue( vertScrollBarValue );
   }
 }
 
@@ -638,29 +636,27 @@ void Canvas::slotScrollHorz( int _value )
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     _value = horzScrollBar()->maximum() - _value;
 
-  double unzoomedValue = d->view->doc()->unzoomItXOld( _value );
-
   d->view->doc()->emitBeginOperation(false);
 
-  if ( unzoomedValue < 0.0 ) {
+  if ( _value < 0.0 ) {
     kDebug (36001)
-      << "Canvas::slotScrollHorz: value out of range (unzoomedValue: "
-      << unzoomedValue << ')' << endl;
-    unzoomedValue = 0.0;
+      << "Canvas::slotScrollHorz: value out of range (_value: "
+      << _value << ')' << endl;
+    _value = 0.0;
   }
 
   double xpos = sheet->dblColumnPos( qMin( KS_colMax, sheet->maxColumn()+10 ) ) - d->xOffset;
-  if ( unzoomedValue > ( xpos + d->xOffset ) )
-    unzoomedValue = xpos + d->xOffset;
+  if ( _value > ( xpos + d->xOffset ) )
+    _value = xpos + d->xOffset;
 
   sheet->enableScrollBarUpdates( false );
 
   // Relative movement
-  int dx = d->view->doc()->zoomItXOld( d->xOffset - unzoomedValue );
+  int dx = d->xOffset - _value;
 
   // New absolute position
   kDebug(36001) << "slotScrollHorz(): XOffset before setting: " << d->xOffset << endl;
-  d->xOffset = unzoomedValue;
+  d->xOffset = _value;
   kDebug(36001) << "slotScrollHorz(): XOffset after setting: " << d->xOffset << endl;
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
@@ -682,26 +678,25 @@ void Canvas::slotScrollVert( int _value )
     return;
 
   d->view->doc()->emitBeginOperation(false);
-  double unzoomedValue = d->view->doc()->unzoomItYOld( _value );
 
-  if ( unzoomedValue < 0 )
+  if ( _value < 0 )
   {
-    unzoomedValue = 0;
-    kDebug (36001) << "Canvas::slotScrollVert: value out of range (unzoomedValue: " <<
-                       unzoomedValue << ')' << endl;
+    _value = 0;
+    kDebug (36001) << "Canvas::slotScrollVert: value out of range (_value: " <<
+                       _value << ')' << endl;
   }
 
   double ypos = sheet->dblRowPos( qMin( KS_rowMax, sheet->maxRow()+10 ) );
-  if ( unzoomedValue > ypos )
-      unzoomedValue = ypos;
+  if ( _value > ypos )
+      _value = ypos;
 
   sheet->enableScrollBarUpdates( false );
 
   // Relative movement
-  int dy = d->view->doc()->zoomItYOld( d->yOffset - unzoomedValue );
+  int dy = d->view->doc()->zoomItYOld( d->yOffset - _value );
 
   // New absolute position
-  d->yOffset = unzoomedValue;
+  d->yOffset = _value;
   scroll( 0, dy );
   vBorderWidget()->scroll( 0, dy );
 
@@ -725,7 +720,7 @@ void Canvas::slotMaxColumn( int _max_column )
   if ( xpos > sizeMaxX - xOffset() - unzoomWidth )
     xpos = sizeMaxX - xOffset() - unzoomWidth;
 
-  horzScrollBar()->setRange( 0, d->view->doc()->zoomItXOld( xpos + xOffset() ) );
+  horzScrollBar()->setRange( 0, xpos + xOffset() );
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
@@ -745,7 +740,7 @@ void Canvas::slotMaxRow( int _max_row )
   if ( ypos > sizeMaxY - yOffset() - unzoomHeight )
     ypos = sizeMaxY - yOffset() - unzoomHeight;
 
-  vertScrollBar()->setRange( 0, d->view->doc()->zoomItYOld( ypos + yOffset() ) );
+  vertScrollBar()->setRange( 0, ypos + yOffset() );
 }
 
 void Canvas::mouseMoveEvent( QMouseEvent * _ev )
@@ -1824,7 +1819,7 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         if ( ( xOffset() + ev_Width ) >
                d->view->doc()->zoomItXOld( sheet->sizeMaxX() ) )
         {
-          horzScrollBar()->setRange( 0, d->view->doc()->zoomItXOld( sheet->sizeMaxX() - ev_Width ) );
+          horzScrollBar()->setRange( 0, sheet->sizeMaxX() - ev_Width );
           if ( sheet->layoutDirection()==Sheet::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
@@ -1837,7 +1832,7 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         if ( horzScrollBar()->maximum() ==
              int( d->view->doc()->zoomItXOld( sheet->sizeMaxX() ) - ev_Width ) )
         {
-          horzScrollBar()->setRange( 0, d->view->doc()->zoomItXOld( sheet->sizeMaxX() - ev_Width ) );
+          horzScrollBar()->setRange( 0, sheet->sizeMaxX() - ev_Width );
           if ( sheet->layoutDirection()==Sheet::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
@@ -1849,7 +1844,7 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         if ( ( yOffset() + ev_Height ) >
              d->view->doc()->zoomItYOld( sheet->sizeMaxY() ) )
         {
-            vertScrollBar()->setRange( 0, d->view->doc()->zoomItYOld( sheet->sizeMaxY() - ev_Height ) );
+            vertScrollBar()->setRange( 0, sheet->sizeMaxY() - ev_Height );
         }
     }
     // If we lower vertically, then check if the range should represent the maximum range
@@ -1858,7 +1853,7 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         if ( vertScrollBar()->maximum() ==
              int( d->view->doc()->zoomItYOld( sheet->sizeMaxY() ) - ev_Height ) )
         {
-          vertScrollBar()->setRange( 0, d->view->doc()->zoomItYOld( sheet->sizeMaxY() - ev_Height ) );
+          vertScrollBar()->setRange( 0, sheet->sizeMaxY() - ev_Height );
         }
     }
 }

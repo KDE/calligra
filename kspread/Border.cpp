@@ -391,15 +391,14 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     m_pView->selectionInfo()->update(newMarker);
 
     if ( _ev->pos().y() < 0 )
-      m_pCanvas->vertScrollBar()->setValue( m_pCanvas->d->view->doc()->zoomItYOld( ev_PosY ) );
+      m_pCanvas->vertScrollBar()->setValue( ev_PosY );
     else if ( _ev->pos().y() > m_pCanvas->height() )
     {
       if ( row < KS_rowMax )
       {
-        RowFormat *rl = sheet->rowFormat( row + 1 );
+        RowFormat* rowFormat = sheet->rowFormat( row + 1 );
         y = sheet->dblRowPos( row + 1 );
-        m_pCanvas->vertScrollBar()->setValue ((int) (m_pCanvas->d->view->doc()->zoomItYOld
-              (ev_PosY + rl->dblHeight()) - dHeight));
+        m_pCanvas->vertScrollBar()->setValue( (int) ( ev_PosY + rowFormat->dblHeight() - dHeight) );
       }
     }
   }
@@ -412,7 +411,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     double y;
     int tmpRow = sheet->topRow( m_pCanvas->yOffset(), y );
 
-    while ( y < m_pCanvas->d->view->doc()->unzoomItYOld( height() ) + m_pCanvas->yOffset() )
+    while ( y < dHeight + m_pCanvas->yOffset() )
     {
       double h = sheet->rowFormat( tmpRow )->dblHeight();
       //if col is hide and it's the first column
@@ -1042,24 +1041,23 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
       {
         ColumnFormat *cl = sheet->columnFormat( col + 1 );
         x = sheet->dblColumnPos( col + 1 );
-        m_pCanvas->horzScrollBar()->setValue ( m_pCanvas->horzScrollBar()->maximum() - (int)
-            (m_pCanvas->d->view->doc()->zoomItXOld (ev_PosX + cl->dblWidth()) - m_pCanvas->d->view->doc()->unzoomItXOld( m_pCanvas->width() )));
+        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->horzScrollBar()->maximum()
+                                              - (int) ( ( ev_PosX + cl->dblWidth() ) - dWidth ) );
       }
       else if ( _ev->pos().x() > width() )
-        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->horzScrollBar()->maximum() - m_pCanvas->d->view->doc()->zoomItXOld( ev_PosX - dWidth + m_pCanvas->d->view->doc()->unzoomItXOld( m_pCanvas->width() ) ) );
+        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->horzScrollBar()->maximum() - ( ev_PosX - dWidth + m_pCanvas->d->view->doc()->unzoomItXOld( m_pCanvas->width() ) ) );
     }
     else
     {
       if ( _ev->pos().x() < 0 )
-        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->d->view->doc()->zoomItXOld( ev_PosX ) );
+        m_pCanvas->horzScrollBar()->setValue( ev_PosX );
       else if ( _ev->pos().x() > m_pCanvas->width() )
       {
         if ( col < KS_colMax )
         {
           ColumnFormat *cl = sheet->columnFormat( col + 1 );
           x = sheet->dblColumnPos( col + 1 );
-          m_pCanvas->horzScrollBar()->setValue ((int)
-              (m_pCanvas->d->view->doc()->zoomItXOld (ev_PosX + cl->dblWidth()) - dWidth));
+          m_pCanvas->horzScrollBar()->setValue((int) (ev_PosX + cl->dblWidth()) - dWidth );
         }
       }
     }
