@@ -759,6 +759,54 @@ from old to new color levels, for each of the channels separately.
 
 </sect3>
 
+<sect3 id="commands-dialogs-filters-colortoalpha">
+<title>The <guilabel>Color to Alpha</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Color to Alpha</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-colortoalpha.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Color to Alpha</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Color to Alpha</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This dialog is still to be described.)
+</para>
+
+</sect3>
+<sect3 id="commands-dialogs-filters-colortransfer">
+<title>The <guilabel>Color Transfer</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Color Transfer</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-colortransfer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Color Transfer</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Color Transfer</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This dialog is still to be described.)
+</para>
+
+</sect3>
+
+<!--
 <sect3 id="commands-dialogs-filters-cubism">
 <title>The <guilabel>Cubism</guilabel> dialog</title>
 
@@ -785,6 +833,7 @@ sets the color saturation of the tiles.
 </para>
 
 </sect3>
+-->
 
 <sect3 id="commands-dialogs-filters-customconvolution">
 <title>The <guilabel>Custom Convolution</guilabel> dialog</title>
@@ -873,6 +922,54 @@ filters do. The filters are in turn applied to the current image and the
 results are put in the left list box as thumbnails. If you select one, its
 options become available in the <guilabel>Configuration</guilabel> section.
 See the description of the respective filter for details.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-gaussiannoise">
+<title>The <guilabel>Gaussian Noise Reduction</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Gaussian Noise Reduction</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-gaussiannoise.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Gaussian Noise Reduction</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Gaussian Noise Reduction</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-lenscorrection">
+<title>The <guilabel>Lens Correction</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Lens Correction</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-lenscorrection.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Lens Correction</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Lens Correction</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
 </para>
 
 </sect3>

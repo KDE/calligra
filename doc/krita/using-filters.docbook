@@ -20,7 +20,9 @@ modified image at the right, are shown at 25% of the original size.
 <note><para>Some filters yield reasonable results for most images. For
 other filters though, quite some tweaking needs to be done before the desired
 outcome is achieved. If a filter does not do what you want, it might need
-more or less customising.</para></note>
+more or less customising. The examples in this chapter are exaggerated to
+give a good impression of the filters. You will usually want to have more
+<quote>gentle</quote> modifications.</para></note>
 <para>
 Tip: If you want to apply a filter to everything except a certain part of your
 image (for example, you want to desaturate your image except for the centre),
@@ -109,7 +111,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Adjust</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-brightnesscontrast">the
-<guilabel>Brightness / Contrast </guilabel>dialog</link>
+<guilabel>Brightness / Contrast</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -141,7 +143,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Map</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-bumpmap">the
-<guilabel>Bumpmap</guilabel>dialog</link> for more information on its
+<guilabel>Bumpmap</guilabel> dialog</link> for more information on its
 settings.
 </para>
 <screenshot>
@@ -171,7 +173,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-imagerestoration">the
-<guilabel>Image Restoration</guilabel>dialog</link>
+<guilabel>Image Restoration</guilabel> dialog</link>
 for more information on its settings.
 </para>
 </sect1>
@@ -187,7 +189,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Adjust</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-coloradjustment">the
-<guilabel>Color Adjustment</guilabel>dialog</link>
+<guilabel>Color Adjustment</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -204,6 +206,116 @@ for more information on its settings.
 </screenshot>
 </sect1>
 
+<sect1 id="filters-colortoalpha">
+<title>The Color to Alpha filter</title>
+<para>
+This filter changes a color or color range in your image to become
+transparent, effectively clearing regions with those colors.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Colors</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-colortoalpha">the
+<guilabel>Color to Alpha</guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Color to Alpha filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-colortoalpha.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Color to Alpha filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Color to Alpha filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-colortransfer">
+<title>The Color Transfer filter</title>
+<para>
+With this filter, you can re-color an image using the colors from another
+image. Each color in your current image will be replaced by the most alike
+color used in the other image.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Colors</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-colortransfer">the
+<guilabel>Color Transfer</guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Color Transfer filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-colortransfer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Color Transfer filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Color Transfer filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-customconvolution">
+<title>The Custom Convolution filter</title>
+<para>
+This filter allows you to distort your image by setting a number of
+parameters.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-customconvolution">the
+<guilabel>Custom Convolution</guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Custom Convolution filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-customconvolution.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Custom Convolution filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Custom Convolution filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-desaturate">
+<title>The Desaturate filter</title>
+<para>
+This filter converts your image to grayscale by setting the saturation of each
+pixel's color to zero.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu></menuchoice> menu. 
+This filter is not customizable.
+</para>
+<screenshot>
+<screeninfo>The image with the Desaturate filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-desaturate.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Desaturate filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Desaturate filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
 <sect1 id="filters-edgedetection">
 <title>The Edge Detection filters</title>
 <para>
@@ -215,6 +327,11 @@ image will then get a three-dimensional look.
 There are four edge detection filters available. Each of these detects edges
 from a different side (possibly considering other parts of the image as being
 edges) and will therefore obtain a different resulting image.
+</para>
+<para>
+You can find the filters in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Edge Detection</guisubmenu></menuchoice> menu. 
+These filters are not customizable.
 </para>
 <screenshot>
 <screeninfo>The image with the Bottom Edge Detection filter applied to
@@ -239,6 +356,15 @@ Emboss filters work somewhat like edge detection filters, with the difference
 that embossed images are entirely gray. Areas in the picture are detected and
 are given a certain <quote>height level</quote>, which is made visible by using
 grayscale borders, making the image look like it is three-dimensional.
+</para>
+<para>
+You can find the filters in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Emboss</guisubmenu></menuchoice> menu. 
+Except for the Emboss with Variable Depth filter, these filters are not
+customizable. See the section on <link
+linkend="commands-dialogs-filters-emboss">the
+<guilabel>Emboss</guilabel> dialog</link>
+for more information on the settings of the Emboss with Variable Depth filter.
 </para>
 <screenshot>
 <screeninfo>The image with the Emboss All filter applied to it</screeninfo>
@@ -276,6 +402,11 @@ This filter makes the image a little fuzzy by blurring it in a pseudo-random
 way. A gaussian algorithm is used for finding the extent to which each part of
 the image should be blurred.
 </para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Blur</guisubmenu></menuchoice> menu. 
+This filter is not customizable.
+</para>
 <screenshot>
 <screeninfo>The image with the Gaussian Blur filter applied to it</screeninfo>
 <mediaobject>
@@ -291,6 +422,33 @@ it</para></caption>
 </screenshot>
 </sect1>
 
+<sect1 id="filters-gaussiannoise">
+<title>The Gaussian Noise Reduction filter</title>
+<para>
+With this filter, you can remove noise from your image.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-gaussiannoise">the
+<guilabel>Gaussian Noise Reduction</guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Gaussian Noise Reduction filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-gaussiannoise.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Gaussian Noise Reduction filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Gaussian Noise Reduction filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
 <sect1 id="filters-invert">
 <title>The Invert filter</title>
 <para>
@@ -298,6 +456,11 @@ This filter inverts all colors. The Red, Green and Blue component of each pixel
 are taken and subtracted from 255. This means that red becomes cyan, green
 becomes purple, and blue becomes yellow. The resulting values form the new
 pixel color.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu></menuchoice> menu. 
+This filter is not customizable.
 </para>
 <screenshot>
 <screeninfo>The image with the Invert filter applied to it</screeninfo>
@@ -309,6 +472,34 @@ pixel color.
 <phrase>The image with the Invert filter applied to it</phrase>
 </textobject>
 <caption><para>The image with the Invert filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-lenscorrection">
+<title>The Lens Correction filter</title>
+<para>
+This filter can fix distortions in your image resulting from for example
+<quote>pincushion</quote> lens effects, and modify some lighting.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-lenscorrection">the
+<guilabel>Lens Correction</guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Lens Correction filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-lenscorrection.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Lens Correction filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Lens Correction filter applied to it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
