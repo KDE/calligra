@@ -1,9 +1,10 @@
 #
 
 #
-# Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
+# Copyright (C) 2004,2006 Nicolas GOUTTE <goutte@kde.org>
 # License: LGPL 2.0
 #
+
 
 sub writei18n
 {
@@ -16,7 +17,7 @@ sub writei18n
         s/&quot;/\"/g;
         s/&amp;/&/g;
         s/\"/\\\"/g;
-        print "i18n( \"". @_[0] . "\", \"" . $_ . "\" );";
+        print "i18nc( \"". @_[0] . "\", \"" . $_ . "\" );";
         if ( @_[2] )
         {
             print " // " . @_[2];
