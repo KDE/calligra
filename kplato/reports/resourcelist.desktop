@@ -1,27 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=List of Resources
-Name[ca]=Llista de recursos
-Name[da]=Liste af ressourcer
-Name[de]=List von Ressourcen
-Name[el]=Λίστα πόρων
-Name[es]=Lista de recursos
-Name[et]=Ressursside nimekiri
-Name[hu]=Erőforráslista
-Name[is]=Listi yfir auðlindir
-Name[it]=Elenco di risorse
-Name[ja]=リソースのリスト
-Name[nl]=Lijst van gegevensbronnen
-Name[pl]=Lista zasobów
-Name[pt]=Acoplador de Histórico
-Name[pt_BR]=Acoplador de Histórico
-Name[ru]=Список ресурсов
-Name[sl]=Seznam virov
-Name[sr]=Листа ресурсâ
-Name[sr@Latn]=Lista resursâ
-Name[sv]=Resurslista
-Name[uk]=Список ресурсів
-Name[zh_CN]=资源列表
 Type=Link
 URL= .source/resourcelist.ktf
 X-KDE-Hidden=false
