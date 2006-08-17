@@ -803,24 +803,20 @@ public:
      *
      * \param _ypos the position for which the row should be determined
      * \param _top the offset between the coordinate system root and the upper row border
-     * \param canvas If not 0, the position and offset are treated as document coordinates
-     *               (unzoomed). Otherwise screen coordinates are assumed.
      *
      * \return the row for the given position \p _ypos
      */
-    int topRow( double _ypos, double &_top, const Canvas *_canvas = 0 ) const;
+    int topRow( double _ypos, double &_top ) const;
 
     /**
      * Determines the row for a given position \p _ypos . If the position is
      * on the border between two cells, the lower row is returned.
      *
      * \param _ypos the position for which the row should be determined
-     * \param _canvas If not 0, the position and offset are treated as document coordinates
-     *                (unzoomed). Otherwise screen coordinates are assumed.
      *
      * \return the row for the given position \p _ypos
      */
-    int bottomRow( double _ypos, const Canvas *_canvas = 0 ) const;
+    int bottomRow( double _ypos ) const;
 
     /**
      * Determines the column for a given position \p _xpos . If the position is
@@ -829,64 +825,48 @@ public:
      *
      * \param _xpos the position for which the column should be determined
      * \param _left the offset between the coordinate system root and the left column border
-     * \param canvas If not 0, the position and offset are treated as document coordinates
-     *               (unzoomed). Otherwise screen coordinates are assumed.
      *
      * \return the column for the given position \p _xpos
      */
-    int leftColumn( double _xpos, double &_left, const Canvas *_canvas = 0 ) const;
+    int leftColumn( double _xpos, double &_left ) const;
 
     /**
      * Determines the column for a given position \p _xpos . If the position is
      * on the border between two cells, the right column is returned.
      *
      * \param _xpos the position for which the column should be determined
-     * \param canvas If not 0, the position and offset are treated as document coordinates
-     *               (unzoomed). Otherwise screen coordinates are assumed.
      *
      * \return the column for the given position \p _xpos
      */
-    int rightColumn( double _xpos, const Canvas *_canvas = 0 ) const;
+    int rightColumn( double _xpos ) const;
 
     /**
      * @return the left corner of the column as int.
      * @param col the column's index
-     * @param canvas If not 0 then the returned position is in screen
-     *               coordinates. Otherwise the point (0|0) is in the upper
-     *               left corner of the sheet.
      */
-    int columnPos( int col, const Canvas *canvas = 0 ) const;
+    int columnPos( int col ) const;
 
     /**
      * @return the left corner of the column as double.
      * Use this method, when you later calculate other positions depending on this one
      * to avoid rounding problems
      * @param col the column's index
-     * @param canvas If not 0 then the returned position is in screen
-     *               coordinates. Otherwise the point (0|0) is in the upper
-     *               left corner of the sheet.
      */
-    double dblColumnPos( int col, const Canvas *canvas = 0 ) const;
+    double dblColumnPos( int col ) const;
 
     /**
      * @return the top corner of the row as int.
      * @param _row the row's index
-     * @param _canvas If not 0 then the returned position is in screen
-     *                coordinates. Otherwise the point (0|0) is in the upper
-     *                top corner of the sheet.
      */
-    int rowPos( int _row, const Canvas *_canvas = 0 ) const;
+    int rowPos( int _row ) const;
 
     /**
      * @return the top corner of the row as double.
      * Use this method, when you later calculate other positions depending on this one
      * to avoid rounding problems
      * @param _row the row's index
-     * @param _canvas If not 0 then the returned position is in screen
-     *                coordinates. Otherwise the point (0|0) is in the upper
-     *                top corner of the sheet.
      */
-    double dblRowPos( int _row, const Canvas *_canvas = 0 ) const;
+    double dblRowPos( int _row ) const;
 
     /**
      * @return the maximum horizontal size

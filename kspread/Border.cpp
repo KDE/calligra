@@ -546,8 +546,8 @@ void VBorder::updateRows( int from, int to )
     if (!sheet)
         return;
 
-    int y0 = sheet->rowPos( from, m_pCanvas );
-    int y1 = sheet->rowPos( to+1, m_pCanvas );
+    int y0 = sheet->doc()->zoomItY( sheet->rowPos( from ) );
+    int y1 = sheet->doc()->zoomItY( sheet->rowPos( to + 1 ) );
     update( 0, y0, width(), y1-y0 );
 }
 
@@ -1264,8 +1264,8 @@ void HBorder::updateColumns( int from, int to )
     if (!sheet)
         return;
 
-    int x0 = sheet->columnPos( from, m_pCanvas );
-    int x1 = sheet->columnPos( to+1, m_pCanvas );
+    int x0 = sheet->doc()->zoomItX( sheet->columnPos( from ) );
+    int x1 = sheet->doc()->zoomItX( sheet->columnPos( to + 1 ) );
     update( x0, 0, x1-x0, height() );
 }
 

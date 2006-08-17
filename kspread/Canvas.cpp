@@ -659,11 +659,9 @@ void Canvas::slotScrollHorz( int _value )
   int dx = d->view->doc()->zoomItXOld( d->xOffset - unzoomedValue );
 
   // New absolute position
-  kDebug(36001) << "slotScrollHorz(): XOffset before setting: "
-		 << d->xOffset << endl;
+  kDebug(36001) << "slotScrollHorz(): XOffset before setting: " << d->xOffset << endl;
   d->xOffset = unzoomedValue;
-  kDebug(36001) << "slotScrollHorz(): XOffset after setting: "
-		 << d->xOffset << endl;
+  kDebug(36001) << "slotScrollHorz(): XOffset after setting: " << d->xOffset << endl;
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     dx = -dx;
@@ -1668,20 +1666,19 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   }
 #endif
   const QPoint dragAnchor = selectionInfo()->boundingRect().topLeft();
-  double dwidth = d->view->doc()->unzoomItXOld( width() );
   double xpos = sheet->dblColumnPos( dragAnchor.x() );
   double ypos = sheet->dblRowPos( dragAnchor.y() );
-  double width  = sheet->columnFormat( dragAnchor.x() )->dblWidth( this );
-  double height = sheet->rowFormat( dragAnchor.y() )->dblHeight( this );
+  double width  = sheet->columnFormat( dragAnchor.x() )->dblWidth();
+  double height = sheet->rowFormat( dragAnchor.y() )->dblHeight();
 
   // consider also the selection rectangle
-  const QRect noGoArea((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
+  const QRectF noGoArea( xpos - 1, ypos - 1, width + 3, height + 3 );
 
   // determine the current position
   double eventPosX;
   if (sheet->layoutDirection()==Sheet::RightToLeft)
   {
-    eventPosX = dwidth - d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
+    eventPosX = this->width() - d->view->doc()->unzoomItXOld( event->pos().x() ) + xOffset();
   }
   else
   {
@@ -1689,9 +1686,9 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   }
   double eventPosY = d->view->doc()->unzoomItYOld( event->pos().y() ) + yOffset();
 
-  if ( noGoArea.contains( QPoint((int) eventPosX, (int) eventPosY) ) )
+  if ( noGoArea.contains( QPointF( eventPosX, eventPosY ) ) )
   {
-    event->ignore( noGoArea );
+    event->ignore( noGoArea.toRect() );
     return;
   }
 
@@ -1726,25 +1723,24 @@ void Canvas::dropEvent( QDropEvent * _ev )
     return;
   }
 
-  double dwidth = d->view->doc()->unzoomItXOld( width() );
   double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
   double ypos = sheet->dblRowPos( selectionInfo()->lastRange().top() );
-  double width  = sheet->columnFormat( selectionInfo()->lastRange().left() )->dblWidth( this );
-  double height = sheet->rowFormat( selectionInfo()->lastRange().top() )->dblHeight( this );
+  double width  = sheet->columnFormat( selectionInfo()->lastRange().left() )->dblWidth();
+  double height = sheet->rowFormat( selectionInfo()->lastRange().top() )->dblHeight();
 
-  QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
+  const QRectF noGoArea( xpos - 1, ypos - 1, width + 3, height + 3 );
 
   double ev_PosX;
-  if (sheet->layoutDirection()==Sheet::RightToLeft)
-    ev_PosX = dwidth - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
+  if ( sheet->layoutDirection() == Sheet::RightToLeft )
+    ev_PosX = this->width() - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   else
     ev_PosX = d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
 
   double ev_PosY = d->view->doc()->unzoomItYOld( _ev->pos().y() ) + yOffset();
 
-  if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
+  if ( noGoArea.contains( QPointF( ev_PosX, ev_PosY ) ) )
   {
-    _ev->ignore( );
+    _ev->ignore();
     return;
   }
   else
@@ -2756,8 +2752,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
   if ( _ev->key() == KGlobalSettings::contextMenuKey() ) {
     int row = markerRow();
     int col = markerColumn();
-    KoPoint kop(sheet->columnPos(col, this), sheet->rowPos(row, this));
-    QPoint p = d->view->doc()->zoomPointOld(kop);
+    QPoint p(sheet->columnPos(col), sheet->rowPos(row));
     p = mapToGlobal(p);
     d->view->openPopupMenu( p );
   }
@@ -3913,13 +3908,13 @@ void Canvas::equalizeRow()
     return;
 
   QRect s( selectionInfo()->lastRange() );
-  RowFormat *rl = sheet->rowFormat(s.top());
-  int size=rl->height(this);
+  RowFormat* rowFormat = sheet->rowFormat(s.top());
+  int size = rowFormat->height();
   if ( s.top() == s.bottom() )
       return;
-  for(int i=s.top()+1;i<=s.bottom();i++)
+  for ( int i = s.top() + 1; i <= s.bottom(); i++ )
   {
-      size=qMax(sheet->rowFormat(i)->height(this),size);
+      size = qMax( sheet->rowFormat(i)->height(), size );
   }
   d->view->vBorderWidget()->equalizeRow(size);
 }
@@ -3931,14 +3926,14 @@ void Canvas::equalizeColumn()
     return;
 
   QRect s( selectionInfo()->lastRange() );
-  ColumnFormat *cl = sheet->columnFormat(s.left());
-  int size=cl->width(this);
+  ColumnFormat* columnFormat = sheet->columnFormat(s.left());
+  int size = columnFormat->width();
   if ( s.left() == s.right() )
       return;
 
   for(int i=s.left()+1;i<=s.right();i++)
   {
-    size=qMax(sheet->columnFormat(i)->width(this),size);
+    size = qMax( sheet->columnFormat(i)->width(), size );
   }
   d->view->hBorderWidget()->equalizeColumn(size);
 }

@@ -2552,52 +2552,42 @@ void RowFormat::setMMHeight( double _h )
   setDblHeight( MM_TO_POINT ( _h ) );
 }
 
-void RowFormat::setHeight( int _h, const Canvas * _canvas )
+void RowFormat::setHeight( int _h )
 {
-  setDblHeight( (double) _h, _canvas );
+  setDblHeight( (double) _h );
 }
 
-void RowFormat::setDblHeight( double _h, const Canvas * _canvas )
+void RowFormat::setDblHeight( double height )
 {
-  Sheet *_sheet = _canvas ? _canvas->activeSheet() : m_pSheet;
-
   // avoid unnecessary updates
-  if ( qAbs( _h - dblHeight( _canvas ) ) < DBL_EPSILON )
+  if ( qAbs( height - dblHeight() ) < DBL_EPSILON )
     return;
 
-//  UPDATE_BEGIN;
-
   // Lower maximum size by old height
-  _sheet->adjustSizeMaxY ( - dblHeight() );
+  m_pSheet->adjustSizeMaxY ( - dblHeight() );
 
-  if ( _canvas )
-    m_fHeight = ( _h / _canvas->zoom() );
-  else
-    m_fHeight = _h;
+  m_fHeight = height;
 
   // Rise maximum size by new height
-  _sheet->adjustSizeMaxY ( dblHeight() );
-  _sheet->print()->updatePrintRepeatRowsHeight();
-  _sheet->print()->updateNewPageListY ( row() );
+  m_pSheet->adjustSizeMaxY ( dblHeight() );
+  m_pSheet->print()->updatePrintRepeatRowsHeight();
+  m_pSheet->print()->updateNewPageListY ( row() );
 
-  _sheet->emit_updateRow(this,m_iRow);
-//  UPDATE_END;
+  m_pSheet->emit_updateRow( this, m_iRow );
 }
 
-int RowFormat::height( const Canvas *_canvas ) const
+int RowFormat::height() const
 {
-  return (int) dblHeight( _canvas );
+  return (int) dblHeight();
 }
 
-double RowFormat::dblHeight( const Canvas *_canvas ) const
+double RowFormat::dblHeight() const
 {
+    if (m_iRow == 0)
+        return s_rowHeight;
     if( m_bHide )
         return 0.0;
-
-    if ( _canvas )
-        return _canvas->zoom() * (m_iRow == 0) ? s_rowHeight : m_fHeight;
-    else
-        return (m_iRow == 0) ? s_rowHeight : m_fHeight;
+    return m_fHeight;
 }
 
 double RowFormat::mmHeight() const
@@ -2810,52 +2800,42 @@ void ColumnFormat::setMMWidth( double _w )
   setDblWidth( MM_TO_POINT ( _w ) );
 }
 
-void ColumnFormat::setWidth( int _w, const Canvas * _canvas )
+void ColumnFormat::setWidth( int _w )
 {
-  setDblWidth( (double)_w, _canvas );
+  setDblWidth( (double)_w );
 }
 
-void ColumnFormat::setDblWidth( double _w, const Canvas * _canvas )
+void ColumnFormat::setDblWidth( double width )
 {
-  Sheet *_sheet = _canvas ? _canvas->activeSheet() : m_pSheet;
-
   // avoid unnecessary updates
-  if ( qAbs( _w - dblWidth( _canvas ) ) < DBL_EPSILON )
+  if ( qAbs( width - dblWidth() ) < DBL_EPSILON )
     return;
 
- // UPDATE_BEGIN;
-
   // Lower maximum size by old width
-  _sheet->adjustSizeMaxX ( - dblWidth() );
+  m_pSheet->adjustSizeMaxX ( - dblWidth() );
 
-  if ( _canvas )
-      m_fWidth = ( _w / _canvas->zoom() );
-  else
-      m_fWidth = _w;
+  m_fWidth = width;
 
   // Rise maximum size by new width
-  _sheet->adjustSizeMaxX ( dblWidth() );
-  _sheet->print()->updatePrintRepeatColumnsWidth();
-  _sheet->print()->updateNewPageListX ( column() );
+  m_pSheet->adjustSizeMaxX ( dblWidth() );
+  m_pSheet->print()->updatePrintRepeatColumnsWidth();
+  m_pSheet->print()->updateNewPageListX ( column() );
 
-  _sheet->emit_updateColumn(this,m_iColumn);
- // UPDATE_END;
+  m_pSheet->emit_updateColumn( this, m_iColumn );
 }
 
-int ColumnFormat::width( const Canvas * _canvas ) const
+int ColumnFormat::width() const
 {
-  return (int) dblWidth( _canvas );
+  return (int) dblWidth();
 }
 
-double ColumnFormat::dblWidth( const Canvas * _canvas ) const
+double ColumnFormat::dblWidth() const
 {
+  if (m_iColumn == 0)
+    return s_columnWidth;
   if ( m_bHide )
     return 0.0;
-
-  if ( _canvas )
-      return _canvas->zoom() * (m_iColumn == 0) ? s_columnWidth : m_fWidth;
-  else
-      return (m_iColumn == 0) ? s_columnWidth : m_fWidth;
+  return m_fWidth;
 }
 
 double ColumnFormat::mmWidth() const

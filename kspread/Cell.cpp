@@ -1170,19 +1170,10 @@ int Cell::effAlignX()
 }
 
 
-double Cell::dblWidth( int _col, const Canvas *_canvas ) const
+double Cell::dblWidth( int _col ) const
 {
   if ( _col < 0 )
     _col = d->column;
-
-  if ( _canvas )
-  {
-    if ( testFlag(Flag_Merged) )
-      return d->extra()->extraWidth;
-
-    const ColumnFormat *cl = format()->sheet()->columnFormat( _col );
-    return cl->dblWidth( _canvas );
-  }
 
   if ( testFlag(Flag_Merged) )
     return d->extra()->extraWidth;
@@ -1191,24 +1182,15 @@ double Cell::dblWidth( int _col, const Canvas *_canvas ) const
   return cl->dblWidth();
 }
 
-int Cell::width( int _col, const Canvas *_canvas ) const
+int Cell::width( int _col ) const
 {
-  return int( dblWidth( _col, _canvas ) );
+  return int( dblWidth( _col ) );
 }
 
-double Cell::dblHeight( int _row, const Canvas *_canvas ) const
+double Cell::dblHeight( int _row ) const
 {
   if ( _row < 0 )
     _row = d->row;
-
-  if ( _canvas )
-  {
-    if ( testFlag(Flag_Merged) )
-      return d->extra()->extraHeight;
-
-    const RowFormat *rl = format()->sheet()->rowFormat( _row );
-    return rl->dblHeight( _canvas );
-  }
 
   if ( testFlag(Flag_Merged) )
     return d->extra()->extraHeight;
@@ -1217,9 +1199,9 @@ double Cell::dblHeight( int _row, const Canvas *_canvas ) const
   return rl->dblHeight();
 }
 
-int Cell::height( int _row, const Canvas *_canvas ) const
+int Cell::height( int _row ) const
 {
-  return int( dblHeight( _row, _canvas ) );
+  return int( dblHeight( _row ) );
 }
 
 ///////////////////////////////////////////
@@ -2894,21 +2876,21 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
               continue;
 
             KoRect geometry = obj->geometry();
-            geometry.setLeft( geometry.left() + sheet()->columnPos( d->column, 0 ) );
-            geometry.setTop( geometry.top() + sheet()->rowPos( d->row, 0 ) );
+            geometry.setLeft( geometry.left() + sheet()->columnPos( d->column ) );
+            geometry.setTop( geometry.top() + sheet()->rowPos( d->row ) );
 
             QString str = e.attributeNS( KoXmlNS::table, "end-x", QString::null );
             if ( !str.isNull() )
             {
               uint end_x = (uint) KoUnit::parseValue( str );
-              geometry.setRight( sheet()->columnPos( point.column(), 0) + end_x );
+              geometry.setRight( sheet()->columnPos( point.column() ) + end_x );
             }
 
             str = e.attributeNS( KoXmlNS::table, "end-y", QString::null );
             if ( !str.isNull() )
             {
               uint end_y = (uint) KoUnit::parseValue( str );
-              geometry.setBottom( sheet()->rowPos( point.row(), 0) + end_y );
+              geometry.setBottom( sheet()->rowPos( point.row() ) + end_y );
             }
 
             obj->setGeometry( geometry );

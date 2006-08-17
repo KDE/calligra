@@ -313,36 +313,32 @@ public:
     /**
      * @param _col the column this cell is assumed to be in.
      *             This parameter defaults to the return value of @ref #column.
-     * @param _canvas the canvas this cell is assumed to be in.
      *
      * @return the width of this cell as int
      */
-    int width( int _col = -1, const Canvas *_canvas = 0 ) const;
+    int width( int _col = -1 ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
-     * @param _canvas the canvas this cell is assumed to be in.
      *
      * @return the height of this cell as int
      */
-    int height( int _row = -1, const Canvas *_canvas = 0 ) const;
+    int height( int _row = -1 ) const;
 
     /**
-     * @param _canvas the canvas this cell is assumed to be in.
      * @param _col the column this cell is assumed to be in.
      *             This parameter defaults to the return value of @ref #column.
      *
      * @return the width of this cell as double
      */
-    double dblWidth( int _col = -1, const Canvas *_canvas = 0 ) const;
+    double dblWidth( int _col = -1 ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
-     * @param _canvas the canvas this cell is assumed to be in.
      *
      * @return the height of this cell as double
      */
-    double dblHeight( int _row = -1, const Canvas *_canvas = 0 ) const;
+    double dblHeight( int _row = -1 ) const;
 
     // TODO Stefan: Replace with a position() method!!!
     /**

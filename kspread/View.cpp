@@ -5571,9 +5571,9 @@ void View::slotListChoosePopupMenu( )
   if ( itemList.isEmpty() )
     return;
   RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
-  double tx = d->activeSheet->dblColumnPos( d->canvas->markerColumn(), d->canvas );
-  double ty = d->activeSheet->dblRowPos(d->canvas->markerRow(), d->canvas );
-  double h = rl->dblHeight( d->canvas );
+  double tx = d->activeSheet->dblColumnPos( d->canvas->markerColumn() );
+  double ty = d->activeSheet->dblRowPos( d->canvas->markerRow() );
+  double h = rl->dblHeight();
   if ( cell->extraYCells() )
     h = cell->extraHeight();
   ty += h;

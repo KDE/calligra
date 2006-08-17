@@ -653,42 +653,32 @@ int Sheet::numberSelectedObjects() const
     return num;
 }
 
-int Sheet::leftColumn( double _xpos, double &_left,
-                              const Canvas *_canvas ) const
+int Sheet::leftColumn( double _xpos, double &_left ) const
 {
-    if ( _canvas )
-    {
-        _xpos += _canvas->xOffset();
-        _left = -_canvas->xOffset();
-    }
-    else
-        _left = 0.0;
+    _left = 0.0;
 
     int col = 1;
-    double x = columnFormat( col )->dblWidth( _canvas );
+    double x = columnFormat( col )->dblWidth();
     while ( x < _xpos )
     {
         // Should never happen
         if ( col >= KS_colMax )
-  {
-      kDebug(36001) << "Sheet:leftColumn: invalid column (col: " << col + 1 << ')' << endl;
-      return KS_colMax + 1; //Return out of range value, so other code can react on this
-  }
-        _left += columnFormat( col )->dblWidth( _canvas );
+        {
+            kDebug(36001) << "Sheet:leftColumn: invalid column (col: " << col + 1 << ')' << endl;
+            return KS_colMax + 1; //Return out of range value, so other code can react on this
+        }
+        _left += columnFormat( col )->dblWidth();
         col++;
-        x += columnFormat( col )->dblWidth( _canvas );
+        x += columnFormat( col )->dblWidth();
     }
 
     return col;
 }
 
-int Sheet::rightColumn( double _xpos, const Canvas *_canvas ) const
+int Sheet::rightColumn( double _xpos ) const
 {
-    if ( _canvas )
-        _xpos += _canvas->xOffset();
-
     int col = 1;
-    double x = columnFormat( col )->dblWidth( _canvas );
+    double x = columnFormat( col )->dblWidth();
     while ( x <= _xpos )
     {
         // Should never happen
@@ -697,26 +687,19 @@ int Sheet::rightColumn( double _xpos, const Canvas *_canvas ) const
             kDebug(36001) << "Sheet:rightColumn: invalid column (col: " << col << ')' << endl;
                   return KS_colMax + 1; //Return out of range value, so other code can react on this
         }
-        x += columnFormat( col )->dblWidth( _canvas );
+        x += columnFormat( col )->dblWidth();
         col++;
     }
 
     return col;
 }
 
-int Sheet::topRow( double _ypos, double & _top,
-                          const Canvas *_canvas ) const
+int Sheet::topRow( double _ypos, double & _top ) const
 {
-    if ( _canvas )
-    {
-        _ypos += _canvas->yOffset();
-        _top = -_canvas->yOffset();
-    }
-    else
-        _top = 0.0;
+    _top = 0.0;
 
     int row = 1;
-    double y = rowFormat( row )->dblHeight( _canvas );
+    double y = rowFormat( row )->dblHeight();
     while ( y < _ypos )
     {
         // Should never happen
@@ -725,21 +708,18 @@ int Sheet::topRow( double _ypos, double & _top,
             kDebug(36001) << "Sheet:topRow: invalid row (row: " << row + 1 << ')' << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
-        _top += rowFormat( row )->dblHeight( _canvas );
+        _top += rowFormat( row )->dblHeight();
         row++;
-        y += rowFormat( row )->dblHeight( _canvas );
+        y += rowFormat( row )->dblHeight();
     }
 
     return row;
 }
 
-int Sheet::bottomRow( double _ypos, const Canvas *_canvas ) const
+int Sheet::bottomRow( double _ypos ) const
 {
-    if ( _canvas )
-        _ypos += _canvas->yOffset();
-
     int row = 1;
-    double y = rowFormat( row )->dblHeight( _canvas );
+    double y = rowFormat( row )->dblHeight();
     while ( y <= _ypos )
     {
         // Should never happen
@@ -748,63 +728,59 @@ int Sheet::bottomRow( double _ypos, const Canvas *_canvas ) const
             kDebug(36001) << "Sheet:bottomRow: invalid row (row: " << row << ')' << endl;
                   return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
-        y += rowFormat( row )->dblHeight( _canvas );
+        y += rowFormat( row )->dblHeight();
         row++;
     }
 
     return row;
 }
 
-double Sheet::dblColumnPos( int _col, const Canvas *_canvas ) const
+double Sheet::dblColumnPos( int _col ) const
 {
     double x = 0.0;
-    if ( _canvas )
-      x -= _canvas->xOffset();
     for ( int col = 1; col < _col; col++ )
     {
         // Should never happen
         if ( col > KS_colMax )
-  {
-      kDebug(36001) << "Sheet:columnPos: invalid column (col: " << col << ')' << endl;
+        {
+            kDebug(36001) << "Sheet:columnPos: invalid column (col: " << col << ')' << endl;
             return x;
-  }
+        }
 
-        x += columnFormat( col )->dblWidth( _canvas );
+        x += columnFormat( col )->dblWidth();
     }
 
     return x;
 }
 
-int Sheet::columnPos( int _col, const Canvas *_canvas ) const
+int Sheet::columnPos( int _col ) const
 {
-    return (int)dblColumnPos( _col, _canvas );
+    return (int)dblColumnPos( _col );
 }
 
 
-double Sheet::dblRowPos( int _row, const Canvas *_canvas ) const
+double Sheet::dblRowPos( int _row ) const
 {
     double y = 0.0;
-    if ( _canvas )
-      y -= _canvas->yOffset();
 
     for ( int row = 1 ; row < _row ; row++ )
     {
         // Should never happen
         if ( row > KS_rowMax )
-  {
-      kDebug(36001) << "Sheet:rowPos: invalid row (row: " << row << ')' << endl;
+        {
+            kDebug(36001) << "Sheet:rowPos: invalid row (row: " << row << ')' << endl;
             return y;
-  }
+        }
 
-        y += rowFormat( row )->dblHeight( _canvas );
+        y += rowFormat( row )->dblHeight();
     }
 
     return y;
 }
 
-int Sheet::rowPos( int _row, const Canvas *_canvas ) const
+int Sheet::rowPos( int _row ) const
 {
-    return (int)dblRowPos( _row, _canvas );
+    return (int)dblRowPos( _row );
 }
 
 

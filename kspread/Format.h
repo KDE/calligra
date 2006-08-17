@@ -461,37 +461,36 @@ public:
     bool loadOasis( const KoXmlElement& row, KoXmlElement * rowStyle );
 
     /**
-     * @param _canvas is needed to get information about the zooming factor.
-     *
      * @return the height in zoomed pixels as integer value.
      */
-    int height( const Canvas *_canvas = 0 ) const;
+    int height() const;
+
     /**
-     * @param _canvas is needed to get information about the zooming factor.
-     *
      * @return the height in zoomed pixels as double value.
      * Use this function, if you want to work with height without having rounding problems.
      */
-    double dblHeight( const Canvas *_canvas = 0 ) const;
+    double dblHeight() const;
+
     /**
      * @return the height in millimeters.
      */
     double mmHeight() const;
+
     /**
      * Sets the height to _h zoomed pixels.
      *
      * @param _h is calculated in display pixels as integer value. The function cares for zooming.
-     * @param _canvas is needed to get information about the zooming factor.
      */
-    void setHeight( int _h, const Canvas *_canvas = 0 );
+    void setHeight( int _h );
+
     /**
      * Sets the height to _h zoomed pixels.
      *
      * @param _h is calculated in display pixels as double value. The function cares for zooming.
      * Use this function when setting the height, to not get rounding problems.
-     * @param _canvas is needed to get information about the zooming factor.
      */
-    void setDblHeight( double _h, const Canvas *_canvas = 0 );
+    void setDblHeight( double _h );
+
     /**
      * Sets the height.
      *
@@ -503,6 +502,7 @@ public:
      * Use this function to tell this format that it is the default format.
      */
     void setDefault() { m_bDefault = true; }
+
     /**
      * @reimp
      */
@@ -601,7 +601,7 @@ public:
      *
      * @return the width in zoomed pixels as integer.
      */
-    int width( const Canvas *_canvas = 0 ) const;
+    int width() const;
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *
@@ -609,7 +609,7 @@ public:
      * Use this function, if you want to use the width and later restore it back,
      * so you don't get rounding problems
      */
-    double dblWidth( const Canvas *_canvas = 0 ) const;
+    double dblWidth() const;
     /**
      * @return the width in millimeters.
      */
@@ -621,7 +621,7 @@ public:
      *           zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setWidth( int _w, const Canvas *_canvas = 0 );
+    void setWidth( int _w );
     /**
      * Sets the width to _w zoomed pixels as double value.
      * Use this function to set the width without getting rounding problems.
@@ -630,7 +630,7 @@ public:
      *           zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setDblWidth( double _w, const Canvas *_canvas = 0 );
+    void setDblWidth( double _w );
     /**
      * Sets the width.
      *
