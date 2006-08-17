@@ -1,2 +1,3 @@
 #! /bin/sh
-$XGETTEXT rc.cpp *.cc -o $podir/kspreadinsertcalendar.pot
+$EXTRACTRC *.ui *.rc > rc.cpp || exit 11
+$XGETTEXT *.cpp -o $podir/kspreadinsertcalendar.pot
