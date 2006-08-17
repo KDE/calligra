@@ -120,7 +120,7 @@ public:
    */
   double textHeight() const;
 
-  QString testAnchor( int _x, int _y ) const;
+  QString testAnchor( double x, double y ) const;
 
 private:
   /**

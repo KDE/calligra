@@ -104,19 +104,13 @@ double CellView::textHeight() const
   return d->textHeight;
 }
 
-QString CellView::testAnchor( int x, int y ) const
+QString CellView::testAnchor( double x, double y ) const
 {
   if( d->cell->link().isEmpty() )
     return QString::null;
 
-  const Doc* doc = d->cell->sheet()->doc();
-  int x1 = doc->zoomItXOld( d->textX );
-  int y1 = doc->zoomItXOld( d->textY - d->textHeight );
-  int x2 = doc->zoomItXOld( d->textX + d->textWidth );
-  int y2 = doc->zoomItXOld( d->textY );
-
-  if( x > x1 ) if( x < x2 )
-      if( y > y1 ) if( y < y2 )
+  if( x > d->textX ) if( x < d->textX + d->textWidth )
+      if( y > d->textY - d->textHeight ) if( y < d->textY )
           return d->cell->link();
 
   return QString::null;
@@ -1932,18 +1926,12 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
 
   if ( d->cell->effFallDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen ) {
     painter.setPen( d->cell->effFallDiagonalPen( cellRef.x(), cellRef.y() ) );
-    painter.drawLine( cellRect.x(),
-                      cellRect.y(),
-                      cellRect.right(),
-                      cellRect.bottom() );
+    painter.drawLine( QLineF( cellRect.x(), cellRect.y(), cellRect.right(), cellRect.bottom() ) );
   }
 
   if ( d->cell->effGoUpDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen ) {
     painter.setPen( d->cell->effGoUpDiagonalPen( cellRef.x(), cellRef.y() ) );
-    painter.drawLine( cellRect.x(),
-                      cellRect.bottom(),
-                      cellRect.right(),
-                      cellRect.y() );
+    painter.drawLine( QLineF( cellRect.x(), cellRect.bottom(), cellRect.right(), cellRect.y() ) );
   }
 }
 

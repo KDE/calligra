@@ -968,13 +968,11 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     QString anchor;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
-      anchor = cell->cellView()->testAnchor( d->view->doc()->zoomItXOld( cell->dblWidth() - ev_PosX + xpos ),
-                                             d->view->doc()->zoomItYOld( ev_PosY - ypos ) );
+      anchor = cell->cellView()->testAnchor( cell->dblWidth() - ev_PosX + xpos, ev_PosY - ypos );
     }
     else
     {
-      anchor = cell->cellView()->testAnchor( d->view->doc()->zoomItXOld( ev_PosX - xpos ),
-                                             d->view->doc()->zoomItYOld( ev_PosY - ypos ) );
+      anchor = cell->cellView()->testAnchor( ev_PosX - xpos, ev_PosY - ypos );
     }
     if ( !anchor.isEmpty() && anchor != d->anchor )
     {
