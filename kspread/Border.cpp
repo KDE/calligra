@@ -546,9 +546,9 @@ void VBorder::updateRows( int from, int to )
     if (!sheet)
         return;
 
-    int y0 = sheet->doc()->zoomItY( sheet->rowPos( from ) );
-    int y1 = sheet->doc()->zoomItY( sheet->rowPos( to + 1 ) );
-    update( 0, y0, width(), y1-y0 );
+    double y0 = sheet->doc()->zoomItY( sheet->dblRowPos( from ) );
+    double y1 = sheet->doc()->zoomItY( sheet->dblRowPos( to + 1 ) );
+    update( 0, (int) y0, width(), (int) (y1-y0) );
 }
 
 void VBorder::paintEvent( QPaintEvent* event )
@@ -624,9 +624,10 @@ void VBorder::paintEvent( QPaintEvent* event )
 
     double len = painter.fontMetrics().width( rowText );
     if (!rowFormat->isHide())
-        painter.drawText( ( width-len )/2, yPos +
-                          ( height + painter.fontMetrics().ascent() -
-                            painter.fontMetrics().descent() ) / 2, rowText );
+        painter.drawText( QPointF( ( width - len ) / 2,
+                                   yPos + ( height + painter.fontMetrics().ascent()
+                                                   - painter.fontMetrics().descent() ) / 2 ),
+                          rowText );
 
     yPos += rowFormat->dblHeight();
     y++;
@@ -1264,9 +1265,9 @@ void HBorder::updateColumns( int from, int to )
     if (!sheet)
         return;
 
-    int x0 = sheet->doc()->zoomItX( sheet->columnPos( from ) );
-    int x1 = sheet->doc()->zoomItX( sheet->columnPos( to + 1 ) );
-    update( x0, 0, x1-x0, height() );
+    double x0 = sheet->doc()->zoomItX( sheet->dblColumnPos( from ) );
+    double x1 = sheet->doc()->zoomItX( sheet->dblColumnPos( to + 1 ) );
+    update( (int) x0, 0, (int) (x1-x0), height() );
 }
 
 void HBorder::paintEvent( QPaintEvent* event )
@@ -1370,18 +1371,19 @@ void HBorder::paintEvent( QPaintEvent* event )
         QString colText = Cell::columnName( x );
         double len = painter.fontMetrics().width( colText );
         if ( !col_lay->isHide() )
-          painter.drawText( xPos + ( width - len ) / 2,
-                            ( height + painter.fontMetrics().ascent() -
-                              painter.fontMetrics().descent() ) / 2, colText );
+          painter.drawText( QPointF( xPos + ( width - len ) / 2,
+                                     ( height + painter.fontMetrics().ascent() -
+                                                painter.fontMetrics().descent() ) / 2 ),
+                            colText );
       }
       else
       {
         QString tmp;
         double len = painter.fontMetrics().width( tmp.setNum(x) );
         if (!col_lay->isHide())
-          painter.drawText( xPos + ( width - len ) / 2,
-                            ( height + painter.fontMetrics().ascent() -
-                              painter.fontMetrics().descent() ) / 2,
+          painter.drawText( QPointF( xPos + ( width - len ) / 2,
+                                     ( height + painter.fontMetrics().ascent() -
+                                                painter.fontMetrics().descent() ) / 2 ),
                             tmp.setNum(x) );
       }
       xPos += col_lay->dblWidth();
@@ -1428,18 +1430,19 @@ void HBorder::paintEvent( QPaintEvent* event )
         QString colText = Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
         if (!col_lay->isHide())
-          painter.drawText( xPos + ( width - len ) / 2,
-                            ( height + painter.fontMetrics().ascent() -
-                              painter.fontMetrics().descent() ) / 2, colText );
+          painter.drawText( QPointF( xPos + ( width - len ) / 2,
+                                     ( height + painter.fontMetrics().ascent() -
+                                                painter.fontMetrics().descent() ) / 2 ),
+                            colText );
       }
       else
       {
         QString tmp;
         int len = painter.fontMetrics().width( tmp.setNum(x) );
         if (!col_lay->isHide())
-          painter.drawText( xPos + ( width - len ) / 2,
-                            ( height + painter.fontMetrics().ascent() -
-                              painter.fontMetrics().descent() ) / 2,
+          painter.drawText( QPointF( xPos + ( width - len ) / 2,
+                                     ( height + painter.fontMetrics().ascent() -
+                                                painter.fontMetrics().descent() ) / 2 ),
                             tmp.setNum(x) );
       }
       xPos += col_lay->dblWidth();
