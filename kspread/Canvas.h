@@ -513,8 +513,7 @@ private:
   * @param visibleRect This is set to the visible region occupied by the given range of cells
   *
   */
-  void sheetAreaToVisibleRect( const QRect& sheetArea,
-			       KoRect& visibleRect );
+  void sheetAreaToVisibleRect( const QRect& sheetArea, QRectF& visibleRect );
 
   /**
   * Calculates the physical region on the canvas widget occupied by a range of cells on

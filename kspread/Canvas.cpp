@@ -1147,8 +1147,8 @@ void Canvas::processLeftClickAnchor()
 
 bool Canvas::highlightRangeSizeGripAt(double x, double y)
 {
-  if (!d->chooseCell)
-		return 0;
+  if ( !d->chooseCell )
+    return false;
 
   Region::ConstIterator end = choice()->constEnd();
   for (Region::ConstIterator it = choice()->constBegin(); it != end; ++it)
@@ -4212,8 +4212,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 
 void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*/)
 {
-  QList<QColor> colors = choice()->colors();
-  QBrush nullBrush;
+  const QList<QColor> colors = choice()->colors();
   int index = 0;
   Region::ConstIterator end(choice()->constEnd());
   for (Region::ConstIterator it = choice()->constBegin(); it != end; ++it)
@@ -4225,50 +4224,36 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*
       continue;
     }
 
-    QRect region = (*it)->rect();
+    const QRect range = (*it)->rect();
 
-		//double positions[4];
-		//bool paintSides[4];
-		KoRect unzoomedRect;
+    QRectF unzoomedRect;
 
-		sheetAreaToVisibleRect(region,unzoomedRect);
-		//Convert region from sheet coordinates to canvas coordinates for use with the painter
-		//retrieveMarkerInfo(region,viewRect,positions,paintSides);
+    sheetAreaToVisibleRect( range, unzoomedRect );
+    //Convert region from sheet coordinates to canvas coordinates for use with the painter
+    //retrieveMarkerInfo(region,viewRect,positions,paintSides);
 
-    QPen highlightPen( colors[(index) % colors.size()] ); // (*it)->color() );
-		painter.setPen(highlightPen);
+    painter.setPen( colors[(index) % colors.size()] );
 
-		//Adjust the canvas coordinate - rect to take account of zoom level
+    //Now adjust the highlight rectangle is slightly inside the cell borders (this means that multiple highlighted cells
+    //look nicer together as the borders do not clash)
+    const double unzoomedXPixel = d->view->doc()->unzoomItX( 1.0 );
+    const double unzoomedYPixel = d->view->doc()->unzoomItY( 1.0 );
 
-		QRect zoomedRect;
+    unzoomedRect.adjust( unzoomedXPixel, unzoomedYPixel, -unzoomedXPixel, -unzoomedYPixel );
 
-		zoomedRect.setCoords (	d->view->doc()->zoomItXOld(unzoomedRect.left()),
-					d->view->doc()->zoomItYOld(unzoomedRect.top()),
-					d->view->doc()->zoomItXOld(unzoomedRect.right()),
-					d->view->doc()->zoomItYOld(unzoomedRect.bottom()) );
+    painter.setBrush( QBrush() );
+    painter.drawRect( unzoomedRect );
 
-		//Now adjust the highlight rectangle is slightly inside the cell borders (this means that multiple highlighted cells
-		//look nicer together as the borders do not clash)
+    //Now draw the size grip (the little rectangle on the bottom right-hand corner of the range which the user can
+    //click and drag to resize the region)
 
-		zoomedRect.setLeft(zoomedRect.left()+1);
-		zoomedRect.setTop(zoomedRect.top()+1);
-		zoomedRect.setRight(zoomedRect.right()-1);
-		zoomedRect.setBottom(zoomedRect.bottom()-1);
+    painter.setPen( Qt::white );
+    painter.setBrush( colors[(index) % colors.size()] );
 
-		painter.setBrush(nullBrush);
-		painter.drawRect(zoomedRect);
-
-		//Now draw the size grip (the little rectangle on the bottom right-hand corner of the range which the user can
-		//click and drag to resize the region)
-
-
-    QBrush sizeGripBrush( colors[(index) % colors.size()] ); // (*it)->color());
-		QPen sizeGripPen( Qt::white );
-
-		painter.setPen(sizeGripPen);
-		painter.setBrush(sizeGripBrush);
-
-		painter.drawRect(zoomedRect.right()-3,zoomedRect.bottom()-3,6,6);
+    painter.drawRect( unzoomedRect.right() - 3 * unzoomedXPixel,
+                      unzoomedRect.bottom() - 3 * unzoomedYPixel,
+                      6 * unzoomedXPixel,
+                      6 * unzoomedYPixel );
     index++;
   }
 }
@@ -4420,8 +4405,7 @@ void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
 
 }
 
-void Canvas::sheetAreaToVisibleRect( const QRect& sheetArea,
-					    KoRect& visibleRect )
+void Canvas::sheetAreaToVisibleRect( const QRect& sheetArea, QRectF& visibleRect )
 {
 	Sheet* sheet=activeSheet();
 
@@ -4479,8 +4463,8 @@ void Canvas::retrieveMarkerInfo( const QRect &marker,
 
 	if (!sheet) return;
 
-	KoRect visibleRect;
-	sheetAreaToVisibleRect(marker,visibleRect);
+	QRectF visibleRect;
+	sheetAreaToVisibleRect( marker,visibleRect );
 
 
  /* register Sheet * const sheet = activeSheet();
