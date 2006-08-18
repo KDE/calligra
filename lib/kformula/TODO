@@ -116,8 +116,6 @@ NOTE: Only Presentation Markup is considered here.
 
 = menclose =
 
-* Support for <menclose> element: loading, saving, rendering ( Section 3.3.9 )
-* Support for attribute notation: loading, saving, rendering ( Section 3.3.9.2 )
 * Support for longdiv value ( Section 3.3.9.2 ) OPTIONAL
 * Support for actuarial value ( Section 3.3.9.2) OPTIONAL
 * Support for radical value ( Section 3.3.9.2 ) OPTIONAL

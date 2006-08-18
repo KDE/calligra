@@ -39,6 +39,7 @@
 #include "errorelement.h"
 #include "phantomelement.h"
 #include "actionelement.h"
+#include "encloseelement.h"
 
 #include "oasiscreationstrategy.h"
 
@@ -48,7 +49,6 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
 {
     
     // TODO
-    // menclose
     // mlabeledtr
     // maligngroup
     // malignmark
@@ -75,6 +75,7 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     else if ( type == "mpadded" )          return new PaddedElement();
     else if ( type == "mphantom" )         return new PhantomElement();
     else if ( type == "mfenced" )          return new BracketElement();
+    else if ( type == "menclose" )        return new EncloseElement();
 
     // Script and Limit Schemata ( Section 3.1.6.3 )
     else if ( type == "msub"
