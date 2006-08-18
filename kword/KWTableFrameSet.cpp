@@ -107,7 +107,10 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
     double dx = position.x() - m_colPositions[0];
     double dy = position.y() - m_rowPositions[0];
 
-    int oldPageNumber = cell(0,0)->frame(0)->pageNumber();
+    KWTableFrameSet::Cell *daCell = cell(0,0);
+    Q_ASSERT(daCell);
+    if (! daCell) return; //hack to work around https://bugs.kde.org/show_bug.cgi?id=67216
+    int oldPageNumber = daCell->frame(0)->pageNumber();
     // TODO multi-page case
 
     moveBy( dx, dy );
