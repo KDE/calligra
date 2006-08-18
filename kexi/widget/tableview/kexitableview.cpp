@@ -144,6 +144,77 @@ class KexiTableView::WhatsThis : public Q3WhatsThis
 
 //-----------------------------------------
 
+KexiTableViewCellToolTip::KexiTableViewCellToolTip( KexiTableView * tableView )
+ : QToolTip(tableView->viewport())
+ , m_tableView(tableView)
+{
+}
+
+KexiTableViewCellToolTip::~KexiTableViewCellToolTip()
+{
+	remove(parentWidget());
+}
+
+void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
+{
+	const QPoint cp( m_tableView->viewportToContents( p ) );
+	const int row = m_tableView->rowAt( cp.y() );
+	const int col = m_tableView->columnAt( cp.x() );
+
+	//show tooltip if needed
+	if (col>=0 && row>=0) {
+		KexiTableEdit *editor = m_tableView->tableEditorWidget( col );
+		KexiTableItem *item = (m_tableView->isInsertingEnabled() && row==m_tableView->rows()) 
+			? m_tableView->m_insertItem : m_tableView->itemAt( row );
+		if (editor && item && (col < (int)item->count())) {
+			int w = m_tableView->columnWidth( col );
+			int h = m_tableView->rowHeight();
+			int x = 0;
+			int y_offset = 0;
+			int align = SingleLine | AlignVCenter;
+			QString txtValue;
+			editor->setupContents( 0, m_tableView->selectedItem() == item && col == m_tableView->currentColumn(), 
+				item->at(col), txtValue, align, x, y_offset, w, h );
+			QRect realRect(m_tableView->cellGeometry( row, col ));
+			realRect.moveBy(-m_tableView->contentsX(), -m_tableView->contentsY());
+
+			if (editor->showToolTipIfNeeded(
+				txtValue.isEmpty() ? item->at(col) : QVariant(txtValue), 
+				realRect, m_tableView->fontMetrics()))
+			{
+				QString squeezedTxtValue;
+				if (txtValue.length() > 50)
+					squeezedTxtValue = txtValue.left(100) + "...";
+				else
+					squeezedTxtValue = txtValue;
+				tip( realRect, squeezedTxtValue );
+			}
+		}
+	}
+/*
+			if (editor->showToolTipIfNeeded(
+				txtValue.isEmpty() ? item->at(col) : QVariant(txtValue), 
+				QRect( x + e->x() - contentsX(), 
+					y_offset + e->y() - contentsY(), w, h ), 
+				fontMetrics()))
+			{
+				d->recentCellWithToolTip = QPoint( col, row );
+				clearRecentCellWithToolTip = false;
+			}
+		}
+	}
+
+    QRect cr = m_tableView->cellGeometry( row, col );
+    cr.moveTopLeft( m_tableView->contentsToViewport( cr.topLeft() ) );
+    tip( cr, tipString, "This is a cell in a table" );
+*/
+//	QRect r(100,100, 100, 100)
+//	r.moveTopLeft( m_tableView->contentsToViewport( r.topLeft() ) );
+//	tip( r, "aaaaaaaaaaaaaaaaaaaaaaaaa");
+}
+
+//-----------------------------------------
+
 bool KexiTableView_cellEditorFactoriesInitialized = false;
 
 // Initializes standard editor cell editor factories
@@ -316,6 +387,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //will be updated by setAppearance:	updateFonts();
 	setAppearance(d->appearance); //refresh
 
+	d->cellToolTip = new KexiTableViewCellToolTip(this);
 	new WhatsThis(this);
 }
 
@@ -734,7 +806,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		return;
 	}
 
-	KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( col, /*ignoreMissingEditor=*/true ) );
+	KexiTableEdit *edit = tableEditorWidget( col, /*ignoreMissingEditor=*/true );
 //	if (!edit)
 //		return;
 
@@ -748,7 +820,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	bool cursorAtInsertRowOrEditingNewRow = (item == m_insertItem || (m_newRowEditing && m_currentItem == item));
 
 	QVariant cell_value;
-	if ((uint)col < item->count()) {
+	if (col < (int)item->count()) {
 		if (m_currentItem == item) {
 			if (m_editor && row == m_curRow && col == m_curCol 
 				&& !m_editor->hasFocusableWidget())
@@ -962,7 +1034,7 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 	if(m_currentItem)
 	{
 		if(d->editOnDoubleClick && columnEditable(m_curCol) && columnType(m_curCol) != KexiDB::Field::Boolean) {
-			KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol, /*ignoreMissingEditor=*/true ) );
+			KexiTableEdit *edit = tableEditorWidget( m_curCol, /*ignoreMissingEditor=*/true );
 			if (edit && edit->handleDoubleClick()) {
 				//nothing to do: editors like BLOB editor has custom handling of double clicking
 			}
@@ -1124,32 +1196,65 @@ void KexiTableView::showContextMenu(const QPoint& _pos)
 
 void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 {
-	if (d->appearance.rowMouseOverHighlightingEnabled /*rowHighlightingEnabled*/) {
-		int row;
-		if (columnAt(e->x())<0) {
-			row = -1;
-		} else {
-			row = rowAt( e->y(), true /*ignoreEnd*/ );
-			if (row > (rows() - 1 + (isInsertingEnabled()?1:0)))
-				row = -1; //no row to paint
-		}
-
-//	const col = columnAt(e->x());
-//	columnPos(col) + columnWidth(col)
-//	columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
-
+	int row;
+	const int col = columnAt(e->x());
+	if (col < 0) {
+		row = -1;
+	} else {
+		row = rowAt( e->y(), true /*ignoreEnd*/ );
+		if (row > (rows() - 1 + (isInsertingEnabled()?1:0)))
+			row = -1; //no row to paint
+	}
+	kexidbg << " row="<<row<< " col="<<col<<endl;
+	//update row highlight if needed
+	if (d->appearance.rowMouseOverHighlightingEnabled) {
 		if (row != d->highlightedRow) {
 			const int oldRow = d->highlightedRow;
 			d->highlightedRow = row;
 			updateRow(oldRow);
 			updateRow(d->highlightedRow);
-//			if (m_curRow>=0 && oldRow!=m_curRow && d->highlightedRow!=m_curRow && !d->appearance.persistentSelections) {
-				//currently selected (not necessary highlighted) row needs to be repainted
-				updateRow(m_curRow);
-//			}
+			//currently selected (not necessary highlighted) row needs to be repainted
+			updateRow(m_curRow);
 			m_verticalHeader->setHighlightedRow(d->highlightedRow);
 		}
 	}
+
+/*
+	//show tooltip if needed
+	bool theSameCell = QPoint(col, row)==d->recentCellWithToolTip;
+	if (!theSameCell && d->recentCellWithToolTip.x()!=-1)
+		QToolTip::remove(this);
+
+	bool clearRecentCellWithToolTip = !theSameCell;
+	if (col>=0 && row>=0 && (d->recentCellWithToolTip.x()==-1 || !theSameCell)) {
+		KexiTableEdit *editor = tableEditorWidget( col );
+		KexiTableItem *item = (isInsertingEnabled() && row==rows()) ? m_insertItem : itemAt( row );
+		if (editor && item && (col < (int)item->count())) {
+			int w = columnWidth( col );
+			int h = rowHeight();
+			int x = 0;
+			int y_offset = 0;
+			int align = SingleLine | AlignVCenter;
+			QString txtValue;
+			editor->setupContents( 0, m_currentItem == item && col == m_curCol, 
+				item->at(col), txtValue, align, x, y_offset, w, h );
+			QToolTip::remove(this);
+			if (editor->showToolTipIfNeeded(
+				txtValue.isEmpty() ? item->at(col) : QVariant(txtValue), 
+				QRect( x + e->x() - contentsX(), 
+					y_offset + e->y() - contentsY(), w, h ), 
+				fontMetrics()))
+			{
+				d->recentCellWithToolTip = QPoint( col, row );
+				clearRecentCellWithToolTip = false;
+			}
+		}
+	}
+
+	if (clearRecentCellWithToolTip) {
+		QToolTip::remove(this);
+		d->recentCellWithToolTip = QPoint(-1,-1);
+	}*/
 
 #if 0//(js) doesn't work!
 
@@ -1454,7 +1559,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			showContextMenu();
 		}
 		else {
-			KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+			KexiTableEdit *edit = tableEditorWidget( m_curCol );
 			if (edit && edit->handleKeyPress(e, m_editor==edit)) {
 				//try to handle the event @ editor's level
 				e->accept();
@@ -2187,7 +2292,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 
 //! \todo js: this is NOT EFFECTIVE for big data sets!!!!
 
-	KexiTableEdit *ed = dynamic_cast<KexiTableEdit*>( editor( colNum ) );
+	KexiTableEdit *ed = tableEditorWidget( colNum );
 //	KexiDB::Field *f = m_data->column( colNum )->field;
 	if (ed) {
 //		KexiDB::Field *f = m_data->column(colNum)->field;
@@ -2390,7 +2495,7 @@ void KexiTableView::moveToFirstRecordRequested()
 void KexiTableView::copySelection()
 {
 	if (m_currentItem && m_curCol!=-1) {
-		KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+		KexiTableEdit *edit = tableEditorWidget( m_curCol );
 		if (edit)
 			edit->handleCopyAction( m_currentItem->at( m_curCol ) );
 	}
@@ -2400,7 +2505,7 @@ void KexiTableView::copySelection()
 void KexiTableView::cutSelection()
 {
 	//try to handle @ editor's level
-	KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+	KexiTableEdit *edit = tableEditorWidget( m_curCol );
 	if (edit)
 		edit->handleAction("edit_cut");
 }
@@ -2409,7 +2514,7 @@ void KexiTableView::cutSelection()
 void KexiTableView::paste()
 {
 	//try to handle @ editor's level
-	KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+	KexiTableEdit *edit = tableEditorWidget( m_curCol );
 	if (edit)
 		edit->handleAction("edit_paste");
 }
@@ -2426,7 +2531,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 			int s = ke->state();
 			//cell editor's events:
 			//try to handle the event @ editor's level
-			KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
+			KexiTableEdit *edit = tableEditorWidget( m_curCol );
 			if (edit && edit->handleKeyPress(ke, m_editor==edit)) {
 				ke->accept();
 				return true;
@@ -2483,6 +2588,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				}
 			}
 		}
+		d->recentCellWithToolTip = QPoint(-1,-1);
 	}
 /*	else if (e->type()==QEvent::FocusOut && o->inherits("QWidget")) {
 		//hp==true if currently focused widget is a child of this table view

@@ -17,40 +17,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIARROWTIP_H
-#define KEXIARROWTIP_H
+#ifndef KEXITOOLTIP_H
+#define KEXITOOLTIP_H
 
-#include "kexitooltip.h"
+#include <qwidget.h>
+#include <qvariant.h>
 
-//! \brief A tooltip-like widget with additional arrow
-/*! The widget also suppors fade in and fade out effect, 
- if the underlying display system supports this.
-*/
-class KEXIGUIUTILS_EXPORT KexiArrowTip : public KexiToolTip
+//! \brief A tooltip that can display rich content
+class KEXIGUIUTILS_EXPORT KexiToolTip : public QWidget
 {
 	Q_OBJECT
 	public:
-		KexiArrowTip(const QString& text, QWidget* parent);
-		virtual ~KexiArrowTip();
+		KexiToolTip(const QVariant& value, QWidget* parent);
+		virtual ~KexiToolTip();
 
-		inline QString text() const { return m_value.toString(); }
-		virtual bool close() { return close(false); }
-		virtual bool close( bool alsoDelete );
+		virtual QSize sizeHint() const;
 
 	public slots:
 		virtual void show();
-		virtual void hide();
-
-	protected slots:
-		void increaseOpacity();
-		void decreaseOpacity();
 
 	protected:
+		virtual void paintEvent( QPaintEvent *pev );
 		virtual void drawFrame(QPainter& p);
 		virtual void drawContents(QPainter& p);
 
-		int m_arrowHeight;
-		double m_opacity;
+		QVariant m_value;
 };
 
 #endif

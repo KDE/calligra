@@ -30,6 +30,7 @@
 #include <q3scrollview.h>
 #include <qtimer.h>
 #include <qvariant.h>
+#include <qtooltip.h>
 #include <q3ptrlist.h>
 #include <q3header.h>
 //Added by qt3to4:
@@ -60,6 +61,7 @@ class KAction;
 
 class KexiTableHeader;
 class KexiTableItem;
+class KexiTableView;
 class KexiTableEdit;
 class KexiTableViewPrivate;
 class KActionCollection;
@@ -521,6 +523,9 @@ protected:
 	/*! Implementation for KexiDataAwareObjectInterface */
 	virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false );
 
+	inline KexiTableEdit *tableEditorWidget(  int col, bool ignoreMissingEditor = false )
+	{ return dynamic_cast<KexiTableEdit*>( editor( col, ignoreMissingEditor ) ); }
+
 	/*! Implementation for KexiDataAwareObjectInterface */
 	virtual void editorShowFocus( int row, int col );
 
@@ -610,6 +615,7 @@ protected:
 	class WhatsThis;
 	friend class KexiTableItem;
 	friend class WhatsThis;
+	friend class KexiTableViewCellToolTip;
 };
 
 #endif

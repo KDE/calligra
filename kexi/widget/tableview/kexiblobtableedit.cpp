@@ -265,7 +265,7 @@ KexiBlobTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val
 	x = 0;
 	w -= 1; //a place for border
 	h -= 1; //a place for border
-	if (val.canCast(QVariant::ByteArray) && pixmap.loadFromData(val.toByteArray())) {
+	if (p && val.canCast(QVariant::ByteArray) && pixmap.loadFromData(val.toByteArray())) {
 		KexiUtils::drawPixmap( *p, 0/*lineWidth*/, QRect(x, y_offset, w, h), 
 			pixmap, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/);
 	}

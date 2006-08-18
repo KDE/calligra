@@ -1039,6 +1039,10 @@ QString KexiDB::variantToString( const QVariant& v )
 
 QVariant KexiDB::stringToVariant( const QString& s, QVariant::Type type, bool &ok )
 {
+	if (s.isNull()) {
+		ok = true;
+		return QVariant();
+	}
 	if (QVariant::Invalid==type) {
 		ok = false;
 		return QVariant();

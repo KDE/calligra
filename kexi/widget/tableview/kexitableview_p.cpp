@@ -52,6 +52,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 	highlightedRow = -1;
 	moveCursorOnMouseRelease = false;
 	horizontalHeaderVisible = true;
+	recentCellWithToolTip = QPoint(-1,-1);
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

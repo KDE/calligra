@@ -131,12 +131,19 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 
 		/*! \return width of \a value. For the default implementation \a val is converted to a string 
 		 and width of this string is returned. */
-		virtual int widthForValue( QVariant &val, QFontMetrics &fm );
+		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );
 
 		/*! \return total size of this editor, including any buttons, etc. (if present). 
 		 Reimpelment this if you want to return more appropriate size. This impelmentation just
 		 returns QWidget::size(). */
 		virtual QSize totalSize() { return QWidget::size(); }
+
+		/*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit inside \a rect
+		 for a given font metrics \a fm. 
+		 \return true a normal tooltip should be displayed (using QToolTip,) and false if 
+		 no tooltip should be displayed or a custom tooltip was displayed internally (not yet supported).
+		 Default implementation does nothing and returns false. */
+		virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm);
 
 	signals:
 		void editRequested();

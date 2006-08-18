@@ -29,6 +29,7 @@
 #include <qpainter.h>
 #include <qapplication.h>
 #include <qclipboard.h>
+#include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <QPaintEvent>
@@ -155,7 +156,7 @@ QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& ad
 //! @todo (js): get decimal places settings here...
 			QStringList sl = QStringList::split(".", text);
 			if (text.isEmpty()) {
-//					m_lineedit->setText("");
+				//nothing
 			}
 			else if (sl.count()==2) {
 				kDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
@@ -368,7 +369,6 @@ KexiInputTableEdit::backspace()
 }
 #endif
 
-
 void
 KexiInputTableEdit::clear()
 {
@@ -417,6 +417,17 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
 		}
 		m_lineedit->cut();
 	}
+}
+
+bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm)
+{
+	QString text( value.type()==QVariant::String ? value.toString()
+		: valueToText(value, QString::null, false /*!setValidator*/) );
+	QRect internalRect(rect);
+	internalRect.setLeft(rect.x()+leftMargin());
+	internalRect.setWidth(internalRect.width()-rightMargin()-2*3);
+	kexidbg << rect << " " << internalRect << " " << fm.width(text) << endl;
+	return fm.width(text) > internalRect.width();
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

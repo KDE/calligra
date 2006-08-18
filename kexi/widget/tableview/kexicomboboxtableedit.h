@@ -74,7 +74,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 		virtual bool handleKeyPress( QKeyEvent *ke, bool editorActive );
 
-		virtual int widthForValue( QVariant &val, QFontMetrics &fm );
+		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );
 
 	public:
 		virtual void hide();

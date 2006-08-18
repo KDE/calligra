@@ -161,8 +161,8 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, const QVa
 	if (realField->isFPNumericType()) {
 //js TODO: ADD OPTION to displaying NULL VALUES as e.g. "(null)"
 		if (!val.isNull()) {
-			txt = KexiDB::formatNumberForVisibleDecimalPlaces(
-				val.toDouble(), realField->visibleDecimalPlaces());
+				txt = KexiDB::formatNumberForVisibleDecimalPlaces(
+					val.toDouble(), realField->visibleDecimalPlaces());
 			//txt = KGlobal::locale()->formatNumber(val.toDouble(), 10);
 		}
 		w -= 6;
@@ -253,7 +253,7 @@ void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/,
 	}
 }
 
-int KexiTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )
+int KexiTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
 {
 	return fm.width( val.toString() );
 }
@@ -264,5 +264,12 @@ void KexiTableEdit::repaintRelatedCell()
 		dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView)->updateCurrentCell();
 }
 
+bool KexiTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm)
+{
+	Q_UNUSED(value);
+	Q_UNUSED(rect);
+	Q_UNUSED(fm);
+	return false;
+}
 
 #include "kexitableedit.moc"

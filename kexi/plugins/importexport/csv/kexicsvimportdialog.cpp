@@ -5,9 +5,9 @@
    and will be merged back with KOffice libraries.
 
    Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
-			 (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
-			 (C) 2002	  Laurent Montel <montel@kde.org>
-			 (C) 1999 David Faure <faure@kde.org>
+   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2002 Laurent Montel <montel@kde.org>
+   Copyright (C) 1999 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -551,30 +551,104 @@ void KexiCSVImportDialog::fillTable()
 
 QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(QTextStream& inputStream)
 {
-	QChar detectedDelimiter;
+	m_file->at(0);
+
 	// try to detect delimiter
 	// \t has priority, then ; then ,
 	const QIODevice::Offset origOffset = inputStream.device()->at();
-	QChar c;
-	m_file->at(0);
+	QChar c, prevChar=0;
+	int detectedDelimiter = 0;
+	bool insideQuote = false;
+
+	//characters by priority
+	const int CH_TAB_AFTER_QUOTE = 500;
+	const int CH_SEMICOLON_AFTER_QUOTE = 499;
+	const int CH_COMMA_AFTER_QUOTE = 498;
+	const int CH_TAB = 200; // \t
+	const int CH_SEMICOLON = 199; // ;
+	const int CH_COMMA = 198; // ,
+
+	Q3ValueList<int> tabsPerLine, semicolonsPerLine, commasPerLine;
+	int tabs = 0, semicolons = 0, commas = 0;
+	int line = 0;
 	for (uint i=0; !inputStream.atEnd() && i < MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER; i++) {
 		(*m_inputStream) >> c; // read one char
-		if (c=='\t') {
-			detectedDelimiter = c;
-			break;
+		if (prevChar=='"') {
+			if (c!='"') //real quote (not double "")
+				insideQuote = !insideQuote;
 		}
-		else if (c==';' && detectedDelimiter!='\t') {
-			detectedDelimiter = c;
-			break;
+		if (insideQuote) {
+			prevChar = c;
+			continue;
 		}
-		else if (c==',' && detectedDelimiter!='\t' && detectedDelimiter!=';') {
-			detectedDelimiter = c;
+		if (c==' ')
+			continue;
+		if (c=='\n') {//end of line
+			//remember # of tabs/semicolons/commas in this line
+			tabsPerLine += tabs;
+			tabs = 0;
+			semicolonsPerLine += semicolons;
+			semicolons = 0;
+			commasPerLine += commas;
+			commas = 0;
+			line++;
 		}
+		else if (c=='\t') {
+			tabs++;
+			detectedDelimiter = QMAX( prevChar=='"' ? CH_TAB_AFTER_QUOTE : CH_TAB, detectedDelimiter );
+		}
+		else if (c==';') {
+			semicolons++;
+			detectedDelimiter = QMAX( prevChar=='"' ? CH_SEMICOLON_AFTER_QUOTE : CH_SEMICOLON, detectedDelimiter );
+		}
+		else if (c==',') {
+			commas++;
+			detectedDelimiter = QMAX( prevChar=='"' ? CH_COMMA_AFTER_QUOTE : CH_COMMA, detectedDelimiter );
+		}
+		prevChar = c;
 	}
+
 	inputStream.device()->at(origOffset); //restore orig. offset
-	if (detectedDelimiter.isNull())
-		return KEXICSV_DEFAULT_FILE_DELIMITER; //<-- default
-	return QString( detectedDelimiter );
+
+	//now, try to find a delimiter character that exists the same number of times in all the checked lines
+	//this detection method has priority over others
+	Q3ValueList<int>::ConstIterator it;
+	if (tabsPerLine.count()>1) {
+		tabs = tabsPerLine.isEmpty() ? 0 : tabsPerLine.first();
+		for (it=tabsPerLine.constBegin(); it!=tabsPerLine.constEnd(); ++it) {
+			if (tabs != *it)
+				break;
+		}
+		if (tabs>0 && it==tabsPerLine.constEnd())
+			return "\t";
+	}
+	if (semicolonsPerLine.count()>1) {
+		semicolons = semicolonsPerLine.isEmpty() ? 0 : semicolonsPerLine.first();
+		for (it=semicolonsPerLine.constBegin(); it!=semicolonsPerLine.constEnd(); ++it) {
+			if (semicolons != *it)
+				break;
+		}
+		if (semicolons > 0 && it==semicolonsPerLine.constEnd())
+			return ";";
+	}
+	if (commasPerLine.count()>1) {
+		commas = commasPerLine.first();
+		for (it=commasPerLine.constBegin(); it!=commasPerLine.constEnd(); ++it) {
+			if (commas != *it)
+				break;
+		}
+		if (commas > 0 && it==commasPerLine.constEnd())
+			return ",";
+	}
+	//now return the winning character by looking at CH_* symbol
+	if (detectedDelimiter == CH_TAB_AFTER_QUOTE || detectedDelimiter == CH_TAB)
+		return "\t";
+	if (detectedDelimiter == CH_SEMICOLON_AFTER_QUOTE || detectedDelimiter == CH_SEMICOLON)
+		return ";";
+	if (detectedDelimiter == CH_COMMA_AFTER_QUOTE || detectedDelimiter == CH_COMMA)
+		return ",";
+
+	return KEXICSV_DEFAULT_FILE_DELIMITER; //<-- default
 }
 
 tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, int &maxColumn, 
@@ -660,7 +734,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			}
 			else if (x == '\n')
 			{
-				if (!inGUI) {
+ 				if (!inGUI) {
 					//fill remaining empty fields (database wants them explicity)
 					for (int additionalColumn = column; additionalColumn <= maxColumn; additionalColumn++) {
 						setText(row - m_startline, additionalColumn, QString::null, inGUI);
@@ -1192,6 +1266,8 @@ void KexiCSVImportDialog::textquoteSelected(int)
 		m_textquote = 0;
 	else
 		m_textquote = tq[0];
+
+	kexipluginsdbg << "KexiCSVImportDialog::textquoteSelected(): " << m_textquote << endl;
 
 	//delayed, otherwise combobox won't be repainted
 	QTimer::singleShot(10, this, SLOT(fillTable()));

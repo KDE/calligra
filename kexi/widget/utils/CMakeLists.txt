@@ -13,6 +13,7 @@ set(kexiguiutils_LIB_SRCS
    kexidisplayutils.cpp 
    kexiflowlayout.cpp
    kexidatetimeformatter.cpp
+   kexitooltip.cpp
    kexiarrowtip.cpp
    kexiimagecontextmenu.cpp
 )

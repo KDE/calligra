@@ -50,13 +50,6 @@ void KexiBoolTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeO
 	//nothing to do more...
 }
 
-/*bool KexiBoolTableEdit::valueChanged()
-{
-	if (m_lineedit->text()!=m_origText)
-		return true;
-	return KexiTableEdit::valueChanged();
-}*/
-
 bool KexiBoolTableEdit::valueIsNull()
 {
 	return m_currentValue.isNull();
@@ -91,13 +84,6 @@ bool KexiBoolTableEdit::cursorAtEnd()
 	return true;
 }
 
-/*QSize KexiBoolTableEdit::totalSize()
-{
-	if (!m_lineedit)
-		return size();
-	return m_lineedit->size();
-}*/
-
 void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVariant& val, 
 	QString &/*txt*/, int &/*align*/, int &/*x*/, int &y_offset, int &w, int &h  )
 {
@@ -108,26 +94,21 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVar
 //	x = 1;
 	y_offset = 0;
 #endif
-	int s = qMax(h - 5, 12);
-	s = qMin( h-3, s );
-	s = qMin( w-3, s );//avoid too large box
-	QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
-//sometimes unreadable	if (val.isNull() && !field()->isNotNull())
-//		p->setPen(QPen(palette().disabled().text(), 1));
-//	else
-	p->setPen(QPen(colorGroup().text(), 1));
-	p->drawRect(r);
-	if (val.isNull() && !field()->isNotNull()) {
-		p->drawText( r, Qt::AlignCenter, "?" );
+	if (p) {
+		int s = qMax(h - 5, 12);
+		s = qMin( h-3, s );
+		s = qMin( w-3, s );//avoid too large box
+		QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
+		p->setPen(QPen(colorGroup().text(), 1));
+		p->drawRect(r);
+		if (val.isNull() && !field()->isNotNull()) {
+			p->drawText( r, Qt::AlignCenter, "?" );
+		}
+		else if (val.toBool()) {
+			p->drawLine(r.x(), r.y(), r.right(), r.bottom());
+			p->drawLine(r.x(), r.bottom(), r.right(), r.y());
+		}
 	}
-	else if (val.toBool()) {
-		p->drawLine(r.x(), r.y(), r.right(), r.bottom());
-		p->drawLine(r.x(), r.bottom(), r.right(), r.y());
-//			p->drawLine(r.x() + 2, r.y() + 2, r.right() - 1, r.bottom() - 1);
-//			p->drawLine(r.x() + 2, r.bottom() - 2, r.right() - 1, r.y() + 1);
-	}
-
-	
 }
 
 void KexiBoolTableEdit::clickedOnContents()
@@ -176,6 +157,12 @@ void KexiBoolTableEdit::handleCopyAction(const QVariant& value)
 		qApp->clipboard()->setText(value.toBool() ? "1" : "0");
 	else
 		qApp->clipboard()->setText(QString::null);
+}
+
+int KexiBoolTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
+{
+	Q_UNUSED(fm);
+	return val.toPixmap().width();
 }
 
 //======================================================

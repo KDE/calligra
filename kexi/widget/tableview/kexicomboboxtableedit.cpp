@@ -802,7 +802,7 @@ void KexiComboBoxTableEdit::updateTextForHighlightedRow()
 	}
 }
 
-int KexiComboBoxTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )
+int KexiComboBoxTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
 {
 	Q3ValueVector<QString> hints = field()->enumHints();
 	bool ok;

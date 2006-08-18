@@ -5,9 +5,9 @@
    and will be merged back with KOffice libraries.
 
    Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
-			 (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
-			 (C) 2002	  Laurent Montel <montel@kde.org>
-			 (C) 1999 David Faure <faure@kde.org>
+   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2002 Laurent Montel <montel@kde.org>
+   Copyright (C) 1999 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -149,19 +149,40 @@ class KexiCSVImportDialog : public KDialogBase
   void updateColumnText(int col);
   void updateRowCountInfo();
   tristate loadRows(QString &field, int &row, int &columnm, int &maxColumn, bool inGUI);
-  //! Used by loadRows().
-  QString detectDelimiterByLookingAtFirstBytesOfFile(QTextStream& inputStream);
 
-  /*! Callback, called whenever row is loaded in loadRows(). When inGUI is true, 
-   nothing is performed, else database buffer is written back to the database. */
-  bool saveRow(bool inGUI);
+	/*! Detects delimiter by looking at first 4K bytes of the data. Used by loadRows().
+	The used algorithm:
+	1. Look byte by byte and locate special characters that can be delimiters.
+	  Special fact is taken into account: if there are '"' quotes used for text values,
+	  delimiters that follow directly the closing quote has higher priority than the one
+	  that follows other character. We do not assume that every text value is quoted.
+	  Summing up, there is following hierarchy (from highest to lowest): 
+	  quote+tab, quote+semicolon, quote+comma, tab, semicolon, comma.
+	  Space characters are skipped. Text inside quotes is skipped, as well as double 
+	  (escaped) quotes.
+	2. While scanning the data, for every row following number of tabs, semicolons and commas
+	  (only these outside of the quotes) are computed. On every line the values are appended
+	  to a separate list (Q3ValueList<int>).
+	3. After scanning, all the values are checked on the Q3ValueList<int> of tabs. 
+	  If the list has more one element (so there was more than one row) and all the values 
+	  (numbers of tabs) are equal, it's very probable the tab is a delimiter. 
+	  So, this character is returned as a delimiter.
+	  3a. The same algorithm as in 3. is performed for semicolon character.
+	  3b. The same algorithm as in 3. is performed for comma character.
+	4. If the step 3. did not return a delimiter, a character found in step 1. with 
+	  the highest priority is retured as delimiter. */
+	QString detectDelimiterByLookingAtFirstBytesOfFile(QTextStream& inputStream);
 
-  bool m_cancelled;
-  int m_adjustRows;
-  int m_startline;
-  QChar m_textquote;
-  QString m_clipboardData;
-  QByteArray m_fileArray;
+	/*! Callback, called whenever row is loaded in loadRows(). When inGUI is true, 
+	nothing is performed, else database buffer is written back to the database. */
+	bool saveRow(bool inGUI);
+
+	bool m_cancelled;
+	int m_adjustRows;
+	int m_startline;
+	QChar m_textquote;
+	QString m_clipboardData;
+	QByteArray m_fileArray;
 	Mode m_mode;
 	int m_prevSelectedCol;
 
