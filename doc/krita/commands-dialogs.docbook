@@ -1085,8 +1085,55 @@ added to the image), and <guilabel>Fish eyes:</guilabel> (the percentage of
 raindrops that should be rendered as fisheye lens effects instead of plain
 raindrop effects).
 </para>
+</sect3>
+
+<sect3 id="commands-dialogs-filters-randomnoise">
+<title>The <guilabel>Random Noise</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Random Noise</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-randomnoise.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Random Noise</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Random Noise</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
+</para>
 
 </sect3>
+<sect3 id="commands-dialogs-filters-randompick">
+<title>The <guilabel>Random Pick</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Random Pick</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-randompick.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Random Pick</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Random Pick</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
+</para>
+
+</sect3>
+
 
 <sect3 id="commands-dialogs-filters-roundcorners">
 <title>The <guilabel>Round Corners</guilabel> dialog</title>
@@ -1108,6 +1155,126 @@ raindrop effects).
 
 <para>
 This dialog has one setting: the radius of the rounded corners.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-smalltiles">
+<title>The <guilabel>Small Tiles</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Small Tiles</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-smalltiles.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Small Tiles</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Small Tiles</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-sobel">
+<title>The <guilabel>Sobel</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Sobel</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-sobel.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Sobel</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Sobel</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-unsharpmask">
+<title>The <guilabel>Unsharp Mask</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Unsharp Mask</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-unsharpmask.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Unsharp Mask</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Unsharp Mask</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-wave">
+<title>The <guilabel>Wave</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Wave</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-wave.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Wave</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Wave</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-waveletnoise">
+<title>The <guilabel>Wavelet Noise Reduction</guilabel> dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Wavelet Noise Reduction</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-waveletnoise.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Wavelet Noise Reduction</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Wavelet Noise Reduction</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+(This filter is still to be described.)
 </para>
 
 </sect3>

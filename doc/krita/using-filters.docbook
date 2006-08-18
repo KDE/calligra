@@ -504,11 +504,42 @@ for more information on its settings.
 </screenshot>
 </sect1>
 
+<sect1 id="filters-maximizechannel">
+<title>The Maximize Channel filter</title>
+<para>
+This filter gives each pixel in your image a new color: only the color channel
+that contributes the most to the color of a pixel is retained (except for
+gray pixels, which are kept gray).
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Color</guisubmenu></menuchoice> menu. 
+This filter is not customizable.
+</para>
+<screenshot>
+<screeninfo>The image with the Maximize Channel filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-maximizechannel.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Maximize Channel filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Maximize Channel filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
 <sect1 id="filters-meanremoval">
 <title>The Mean Removal filter</title>
 <para>
 This filter sharpens the image by changing the colors of neighboring pixels
 with approximately the same color, so that small differences are evened out.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
+This filter is not customizable.
 </para>
 <screenshot>
 <screeninfo>The image with the Mean Removal filter applied to it</screeninfo>
@@ -525,11 +556,45 @@ it</para></caption>
 </screenshot>
 </sect1>
 
+<sect1 id="filters-minimizechannel">
+<title>The Minimize Channel filter</title>
+<para>
+This filter gives each pixel in your image a new color: the color channel
+that contributes the most to the color of a pixel is removed (except for
+gray pixels, which are kept gray).
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Color</guisubmenu></menuchoice> menu. 
+This filter is not customizable.
+</para>
+<screenshot>
+<screeninfo>The image with the Minimize Channel filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-minimizechannel.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Minimize Channel filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Minimize Channel filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
 <sect1 id="filters-oilpaint">
 <title>The Oilpaint filter</title>
 <para>
 An oilpaint effect is given to the image by creating patch-shaped areas in which
 the most important color is applied to the entire area.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-oilpaint">the
+<guilabel></guilabel> dialog</link>
+for more information on its settings.
 </para>
 <screenshot>
 <screeninfo>The image with the Oilpaint filter applied to it</screeninfo>
@@ -551,6 +616,14 @@ it</para></caption>
 <para>
 The image is pixelated by taking a square area and giving it the mean color
 value of the pixels it contains.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-pixelize">the
+<guilabel></guilabel> dialog</link>
+for more information on its settings.
 </para>
 <screenshot>
 <screeninfo>The image with the Pixelize filter applied to it</screeninfo>
@@ -575,6 +648,14 @@ drop-shaped areas with a lens-like effect as one would see when looking
 at the image through a real raindrop. Some raindrops will have a fish-eye lens
 effect.
 </para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-raindrops">the
+<guilabel></guilabel> dialog</link>
+for more information on its settings.
+</para>
 <screenshot>
 <screeninfo>The image with the Raindrops filter applied to it</screeninfo>
 <mediaobject>
@@ -590,11 +671,73 @@ it</para></caption>
 </screenshot>
 </sect1>
 
+<sect1 id="filters-randomnoise">
+<title>The Random Noise filter</title>
+<para>
+With this filter, random noise can be added to your image.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-randomnoise">the
+<guilabel></guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Random Noise filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-randomnoise.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Random Noise filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Random Noise filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-randompick">
+<title>The Random Pick filter</title>
+<para>
+This filter distorts the image by interchanging pixels.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-randompick">the
+<guilabel></guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Random Pick filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-randompick.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Random Pick filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Random Pick filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
 <sect1 id="filters-roundcorners">
 <title>The Round Corners filter</title>
 <para>
 This filter just rounds off the corners of the image. This is done by making
 the outside of the rounded corner transparent.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Map</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-roundcorners">the
+<guilabel></guilabel> dialog</link>
+for more information on its settings.
 </para>
 <screenshot>
 <screeninfo>The image with the Round Corners filter applied to it</screeninfo>
@@ -616,6 +759,11 @@ it</para></caption>
 <para>
 This filter sharpens the image.
 </para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
+This filter is not customizable.
+</para>
 <screenshot>
 <screeninfo>The image with the Sharpen filter applied to it</screeninfo>
 <mediaobject>
@@ -630,39 +778,24 @@ This filter sharpens the image.
 </screenshot>
 </sect1>
 
-<sect1 id="filters-simplenoise">
-<title>The Simple Noise Reduction filter</title>
-<para>
-This filter reduces noise in the image by giving loose pixels a color close to
-the surrounding area. This causes small details to be lost, but can enhance the
-general view of the image when this is hampered by too many unnecessary details.
-</para>
-<screenshot>
-<screeninfo>The image with the Simple Noise Reduction filter applied to
-it</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="crocusses-simplenoise.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The image with the Simple Noise Reduction filter applied to it</phrase>
-</textobject>
-<caption><para>The image with the Simple Noise Reduction filter applied to
-it</para></caption>
-</mediaobject>
-</screenshot>
-</sect1>
-
-<sect1 id="filters-tiles">
+<sect1 id="filters-smalltiles">
 <title>The Small Tiles filter</title>
 <para>
 The picture is reduced in size and repeated multiple times.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Map</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-smalltiles">the
+<guilabel>Small Tiles</guilabel> dialog</link>
+for more information on its settings.
 </para>
 <screenshot>
 <screeninfo>The image with the Small Tiles filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="crocusses-tiles.png" format="PNG" />
+<imagedata fileref="crocusses-smalltiles.png" format="PNG" />
 </imageobject>
 <textobject>
 <phrase>The image with the Small Tiles filter applied to it</phrase>
@@ -672,5 +805,119 @@ it</para></caption>
 </mediaobject>
 </screenshot>
 </sect1>
+
+<sect1 id="filters-sobel">
+<title>The Sobel filter</title>
+<para>
+This is a more enhanced edge detection filter.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Edge Detection</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-sobel">the
+<guilabel></guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Sobel filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-sobel.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Sobel filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Sobel filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-unsharpmask">
+<title>The Unsharp Mask filter</title>
+<para>
+This filter sharpens part of your image. (The name <quote>unsharp</quote> is
+historical: parts would be masked off while the rest would be made less sharp.)
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-unsharpmask">the
+<guilabel></guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Unsharp Mask filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-unsharpmask.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Unsharp Mask filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Unsharp Mask filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-wave">
+<title>The Wave filter</title>
+<para>
+This filter transforms your image into a wave shape.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Other</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-wave">the
+<guilabel>Wave</guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Wave filter applied to it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-wave.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Wave filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Wave filter applied to it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id="filters-waveletnoise">
+<title>The Wavelet Noise Reduction filter</title>
+<para>
+This filter reduces noise in the image by giving loose pixels a color close to
+the surrounding area. This causes small details to be lost, but can enhance the
+general view of the image when this is hampered by too many unnecessary details.
+</para>
+<para>
+You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
+<guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
+See the section on <link
+linkend="commands-dialogs-filters-waveletnoise">the
+<guilabel>Wavelet Noise Reduction</guilabel> dialog</link>
+for more information on its settings.
+</para>
+<screenshot>
+<screeninfo>The image with the Wavelet Noise Reduction filter applied to
+it</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="crocusses-waveletnoise.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The image with the Wavelet Noise Reduction filter applied to it</phrase>
+</textobject>
+<caption><para>The image with the Wavelet Noise Reduction filter applied to
+it</para></caption>
+</mediaobject>
+</screenshot>
+</sect1>
+
 
 </chapter>
