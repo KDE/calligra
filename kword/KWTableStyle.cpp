@@ -176,8 +176,10 @@ void KWTableStyle::saveOasis( KoGenStyles& mainStyles, KoSavingContext& /*saving
 {
     KoGenStyle tableCellStyle( KWDocument::STYLE_TABLE_CELL_USER, "table-cell" );
     tableCellStyle.addAttribute( "style:display-name", displayName() );
-    tableCellStyle.addProperty( "koffice:frame-style-name", m_frameStyle->name() );
-    tableCellStyle.addProperty( "koffice:paragraph-style-name", m_paragStyle->name() );
+    if ( m_frameStyle )
+        tableCellStyle.addProperty( "koffice:frame-style-name", m_frameStyle->name() );
+    if ( m_paragStyle )
+        tableCellStyle.addProperty( "koffice:paragraph-style-name", m_paragStyle->name() );
 
     // try to preserve existing internal name, if it looks adequate (no spaces)
     // ## TODO: check XML-Schemacs NCName conformity
