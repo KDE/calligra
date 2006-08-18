@@ -231,6 +231,24 @@ void TestDocumentLayout::testBasicLineSpacing() {
     m_app->exec(); */
 }
 
+void TestDocumentLayout::testBasicLineSpacing2() {
+    initForNewTest(loremIpsum);
+    QTextCursor cursor (doc);
+    cursor.insertText("foo\n\n"); // insert empty parag;
+
+    layout->layout();
+    QTextBlock block = doc->begin().next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    QCOMPARE(blockLayout->lineCount(), 1);
+
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 28.8) < ROUNDING);
+}
+
 void TestDocumentLayout::testAdvancedLineSpacing() {
     initForNewTest("Line1\nLine2\nLine3\nLine4\nLine5\nLine6\nLine7");
     QTextCursor cursor(doc);

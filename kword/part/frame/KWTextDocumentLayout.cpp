@@ -195,8 +195,6 @@ void KWTextDocumentLayout::layout() {
         /// when a line is added, update internal vars.  Return true if line does not fit in shape
         bool addLine(const QTextLine &line) {
             m_newShape = false;
-            if(m_fragmentIterator.atEnd())
-                return false; // no text in block.
             double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
             bool useFixedLineHeight = height != 0.0;
             bool useFontProperties = !m_format.boolProperty(KoParagraphStyle::FontIndependentLineSpacing);
@@ -204,12 +202,17 @@ void KWTextDocumentLayout::layout() {
                 if(useFontProperties)
                     height = line.height();
                 else {
-                    // read max font height
-                    height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                    while(! (m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
-                                   m_block.position() + line.textStart() + line.textLength() -1))) {
-                        m_fragmentIterator++;
-                        height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                    if(m_fragmentIterator.atEnd()) // no text in parag.
+                        height = m_block.charFormat().fontPointSize();
+                    else {
+                        // read max font height
+                        height = qMax(height,
+                                m_fragmentIterator.fragment().charFormat().fontPointSize());
+                        while(! (m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
+                                       m_block.position() + line.textStart() + line.textLength() -1))) {
+                            m_fragmentIterator++;
+                            height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                        }
                     }
                     if(height < 0.01) height = 12; // default size for uninitialized styles.
                 }

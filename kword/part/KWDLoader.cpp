@@ -33,6 +33,7 @@
 // KDE + Qt includes
 #include <QDomDocument>
 #include <QTextCursor>
+#include <QTextBlock>
 #include <klocale.h>
 
 KWDLoader::KWDLoader(KWDocument *parent)
@@ -518,44 +519,74 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
 
     QTextCursor cursor(fs->document());
     // <PARAGRAPH>
+    bool firstParag = true;
     QDomElement paragraph = framesetElem.firstChild().toElement();
     for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
         if ( paragraph.tagName() == "PARAGRAPH" ) {
+            if(! firstParag)
+                cursor.insertText("\n");
+            firstParag = false;
             QDomElement layout = paragraph.firstChildElement("LAYOUT");
             if(!layout.isNull()) {
                 QTextBlockFormat bf = cursor.blockFormat();
                 QString styleName = layout.firstChildElement("NAME").attribute("value");
                 KoParagraphStyle *style = m_document->styleManager()->paragraphStyle(styleName);
-                if(style)
-                    style->applyStyle(bf);
+                if(!style)
+                    style = m_document->styleManager()->defaultParagraphStyle();
+                KoParagraphStyle paragStyle(*style); // tmp style.
 
                 QString align = layout.firstChildElement("FLOW").attribute("align", "auto");
                 if(align == "left") {
-                    bf.setAlignment( Qt::AlignLeft | Qt::AlignAbsolute );
+                    paragStyle.setAlignment( Qt::AlignLeft | Qt::AlignAbsolute );
                 } else if(align == "right") {
-                    bf.setAlignment( Qt::AlignRight | Qt::AlignAbsolute );
+                    paragStyle.setAlignment( Qt::AlignRight | Qt::AlignAbsolute );
                 } else if(align == "center") {
-                    bf.setAlignment( Qt::AlignCenter | Qt::AlignAbsolute );
+                    paragStyle.setAlignment( Qt::AlignCenter | Qt::AlignAbsolute );
                 } else if(align == "justify") {
-                    bf.setAlignment( Qt::AlignJustify );
+                    paragStyle.setAlignment( Qt::AlignJustify );
                 } else {
-                    bf.setAlignment( Qt::AlignLeft );
+                    paragStyle.setAlignment( Qt::AlignLeft );
                 }
 
                 QDomElement element = layout.firstChildElement( "INDENTS" );
                 if ( !element.isNull() ) {
-                    bf.setTextIndent(element.attribute("first").toDouble());
-                    bf.setLeftMargin(element.attribute("left").toDouble());
-                    bf.setRightMargin(element.attribute("right").toDouble());
+                    paragStyle.setTextIndent(element.attribute("first").toDouble());
+                    paragStyle.setLeftMargin(element.attribute("left").toDouble());
+                    paragStyle.setRightMargin(element.attribute("right").toDouble());
                 }
                 element = layout.firstChildElement( "OFFSETS" );
                 if ( !element.isNull() ) {
-                    bf.setTopMargin(element.attribute("before").toDouble());
-                    bf.setBottomMargin(element.attribute("after").toDouble());
+                    paragStyle.setTopMargin(element.attribute("before").toDouble());
+                    paragStyle.setBottomMargin(element.attribute("after").toDouble());
+                }
+                element = layout.firstChildElement( "LINESPACING" );
+                if ( !element.isNull() ) {
+                    QString type = element.attribute("type", "fixed");
+                    double spacing = element.attribute("spacingValue").toDouble();
+                    if(type == "oneandhalf")
+                        paragStyle.setLineHeightPercent(150);
+                    else if(type == "double")
+                        paragStyle.setLineHeightPercent(200);
+                    else if(type == "custom") {
+                        if(spacing == 0.0) {
+                            // see if kword 1.1 compatibility is needed
+                            if(element.attribute("value") == "double")
+                                paragStyle.setLineHeightPercent(200);
+                            else if(element.attribute("value") == "oneandhalf")
+                                paragStyle.setLineHeightPercent(150);
+                        }
+                        else
+                            paragStyle.setLineSpacing(spacing);
+                    }
+                    else if(type == "atleast")
+                        paragStyle.setMinimumLineHeight(spacing);
+                    else if(type == "multiple")
+                        paragStyle.setLineHeightPercent(qRound(100 * spacing));
+                    else if(type == "fixed")
+                        paragStyle.setLineHeightAbsolute(spacing);
                 }
                 // TODO read rest of properties
-                // LINESPACING
                 // PAGEBREAKING
                 // LEFTBORDER
                 // RIGHTBORDER
@@ -566,23 +597,11 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                 // TABULATOR
 
                 // OHEAD, OFOOT, IFIRST, ILEFT
-
-
-                cursor.setBlockFormat(bf);
+                QTextBlock block = cursor.block();
+                paragStyle.applyStyle(block);
             }
-
-QTextCharFormat cf = cursor.charFormat();
-cf.setFont(QFont("Arial"));
-cursor.setCharFormat(cf);
             cursor.insertText( paragraph.firstChildElement("TEXT").text() );
-            cursor.insertText("\n");
-/*
-            KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
-            parag->load( paragraph );
-            if ( !lastParagraph )        // First parag
-                textDocument()->setFirstParag( parag );
-            lastParagraph = parag;
-            m_doc->progressItemLoaded(); */
+            //m_doc->progressItemLoaded();
         }
     }
 }
