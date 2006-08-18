@@ -43,11 +43,9 @@ private slots:
     void testMargins();
     void testMultipageMargins();
     void testTextIndent();
+    void testBasicTextAlignments();
     void testTextAlignments();
-    // page breaks
-    // tabs
-    /// Test fo:line-height, style:lineheight-at-least and style:line-spacing properties (15.5.1)
-    void testLineSpacing();
+    void testPageBreak();
 
     //etc
 

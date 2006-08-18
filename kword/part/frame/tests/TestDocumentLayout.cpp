@@ -422,19 +422,101 @@ void TestDocumentLayout::testMultipageMargins() {
 }
 
 void TestDocumentLayout::testTextIndent() {
-    // TODO
-    initForNewTest();
+    initForNewTest(loremIpsum);
+    QTextCursor cursor(doc);
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setTextIndent(20);
+    cursor.setBlockFormat(format);
+
+    layout->layout();
+
+    QCOMPARE(blockLayout->lineAt(0).x(), 20.0);
+    QCOMPARE(blockLayout->lineAt(1).x(), 0.0);
+}
+
+void TestDocumentLayout::testBasicTextAlignments() {
+    initForNewTest("Left\nCenter\nRight");
+
+    QTextCursor cursor(doc);
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setAlignment(Qt::AlignLeft);
+    cursor.setBlockFormat(format);
+    cursor.setPosition(6);
+    format.setAlignment(Qt::AlignHCenter);
+    cursor.setBlockFormat(format);
+    cursor.setPosition(13);
+    format.setAlignment(Qt::AlignRight);
+    cursor.setBlockFormat(format);
+
+    layout->layout();
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
+
+    QTextBlock block = doc->begin().next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+
+    QRectF rect = blockLayout->lineAt(0).naturalTextRect();
+    QVERIFY(rect.x() > 60);
+    QCOMPARE(rect.x() * 2 + rect.width(), 200.0);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    rect = blockLayout->lineAt(0).naturalTextRect();
+    QVERIFY(rect.x() > 150);
+    QCOMPARE(rect.right(), 200.0);
 }
 
 void TestDocumentLayout::testTextAlignments() {
     // TODO
-    initForNewTest();
+    // justified
+    // justified, last line
+    // RTL text
+
+    initForNewTest(loremIpsum);
+    KoParagraphStyle style;
+    style.setAlignment(Qt::AlignJustify);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
 }
 
-void TestDocumentLayout::testLineSpacing() {
-    /// Test fo:line-height, style:lineheight-at-least and style:line-spacing properties (15.5.1)
-    // TODO
-    initForNewTest();
+void TestDocumentLayout::testPageBreak() {
+    initForNewTest("line\nParag2\nSimple Parag\nLast");
+    KoParagraphStyle style;
+    style.setBreakAfter(true);
+    QTextBlock block = doc->begin().next();
+    QVERIFY(block.isValid());
+    style.applyStyle(block);
+    block = block.next();
+    QVERIFY(block.isValid());
+    block = block.next();
+    QVERIFY(block.isValid());
+    style.setBreakBefore(false);
+    style.setBreakBefore(true);
+    style.applyStyle(block);
+
+    shape1->resize(QSizeF(200, 40));
+    KoShape *shape2 = new MockTextShape();
+    shape2->resize(QSizeF(200, 100));
+    new KWTextFrame(shape2, frameSet);
+    KoShape *shape3 = new MockTextShape();
+    shape3->resize(QSizeF(200, 100));
+    new KWTextFrame(shape3, frameSet);
+
+    layout->layout();
+
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    block = doc->begin().next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 2
+    QCOMPARE(blockLayout->lineAt(0).y(), 50.0);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 3
+    QVERIFY( qAbs(blockLayout->lineAt(0).y() - 61.4) < ROUNDING);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 4
+    QCOMPARE(blockLayout->lineAt(0).y(), 160.0);
 }
 
 QTEST_MAIN(TestDocumentLayout)

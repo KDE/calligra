@@ -181,11 +181,13 @@ void KWTextDocumentLayout::layout() {
 
         double width() {
             double ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
+            if(m_newParag)
+                ptWidth -= m_format.textIndent();
             return ptWidth;
         }
 
         double x() {
-            return m_format.leftMargin();
+            return (m_newParag?m_format.textIndent():0.0) + m_format.leftMargin();
         }
 
         double y() {
@@ -194,7 +196,6 @@ void KWTextDocumentLayout::layout() {
 
         /// when a line is added, update internal vars.  Return true if line does not fit in shape
         bool addLine(const QTextLine &line) {
-            m_newShape = false;
             double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
             bool useFixedLineHeight = height != 0.0;
             bool useFontProperties = !m_format.boolProperty(KoParagraphStyle::FontIndependentLineSpacing);
@@ -250,6 +251,8 @@ void KWTextDocumentLayout::layout() {
             if(minimum > 0.0)
                 height = qMax(height, minimum);
             m_y += height;
+            m_newShape = false;
+            m_newParag = false;
             return false;
         }
 
@@ -268,8 +271,13 @@ void KWTextDocumentLayout::layout() {
                 m_y += m_format.topMargin();
             }
             layout = m_block.layout();
+            QTextOption options = layout->textOption();
+            options.setAlignment(m_format.alignment());
+            layout->setTextOption(options);
+
             layout->beginLayout();
             m_fragmentIterator = m_block.begin();
+            m_newParag = true;
             return true;
         }
 
@@ -298,7 +306,7 @@ void KWTextDocumentLayout::layout() {
         QTextBlockFormat m_format;
         QTextBlock::Iterator m_fragmentIterator;
         KoTextShapeData *m_data;
-        bool m_newShape;
+        bool m_newShape, m_newParag;
     };
 
     State state(m_frameSet);
@@ -313,9 +321,7 @@ void KWTextDocumentLayout::layout() {
         }
 
         line.setLineWidth(state.width());
-//kDebug() << "New line at point " << state.x() << "," << state.y() << endl;
         line.setPosition(QPointF(state.x(), state.y()));
-//kDebug() << "         reading: " << line.position().x() << "," << line.position().y() << endl;
         while(state.addLine(line)) {
             if(state.shape == 0) { // no more shapes to put the text in!
                 line.setPosition(QPointF(0, state.y()+20));
@@ -324,116 +330,5 @@ void KWTextDocumentLayout::layout() {
             line.setLineWidth(state.width());
             line.setPosition(QPointF(state.x(), state.y()));
         }
-//kDebug() << "Line has " << line.textLength() << " chars" << endl;
-//kDebug() << "     width: " << line.width() << ", height: " << line.height() << endl;
     }
 }
-
-/*
-void KWTextDocumentLayout::layout() {
-    double offset = 0.0;
-    double previousOffset = offset;
-    bool reLayout = false;
-    foreach(KWFrame *frame, m_frameSet->frames()) {
-kDebug() << "frame [" << offset << "]"  << frame->shape()->position().x() << "," << frame->shape()->position().y() << endl;
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
-        Q_ASSERT(data); // only TextShapes are allowed on a KWTextFrameSet
-        if(reLayout || data->isDirty())
-            // relayout all frames from here.
-            reLayout = true;
-kDebug() << "  reLayout: " << reLayout << endl;
-        //if(reLayout) {
-            frame->shape()->repaint();
-            if(frame->isCopy()) {
-                data->setDocumentOffset(previousOffset);
-                data->wipe();
-                continue;
-            }
-            data->setDocumentOffset(offset);
-            reLayout = layout(static_cast<KWTextFrame*> (frame), offset);
-            data->wipe();
-        //}
-        previousOffset = offset;
-        offset += frame->shape()->size().height() + 10;
-    }
-}
-*/
-/*
-bool KWTextDocumentLayout::layout(KWTextFrame *frame, double offset) {
-kDebug() << "KWTextDocumentLayout::layout TxtFrame " << offset << endl;
-    bool firstParag = true;
-    const double bottom = offset + frame->shape()->size().height();
-
-    // find first block to layout
-    QTextBlock block = document()->begin();
-    while(block.isValid()) {
-        if(block.length() > 0 && block.layout()->lineCount() == 0)
-            // not marked up yet, the boundingRect will return 0x0
-            break;
-        if(offset <= block.layout()->boundingRect().bottom())
-            break;
-        block = block.next();
-    }
-
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
-//    if(!data->isDirty() && data->documentOffset() == offset)
-//        return false;
-    data->setPosition(block.position());
-
-    // do layout
-    bool started=false;
-    while(1) {
-        kDebug() << "   layout block" << endl;
-        if(!block.isValid())
-            break;
-        int x=0, width = frame->shape()->size().width();
-        QTextBlockFormat blockFormat = block.blockFormat();
-        if(blockFormat.isValid()) {
-            if(!firstParag)
-                offset += blockFormat.topMargin();
-            x = blockFormat.leftMargin();
-            width -= blockFormat.leftMargin() + blockFormat.rightMargin();
-            width = qMax(width, 20);
-        }
-        QTextLayout *layout = block.layout();
-        layout->beginLayout();
-        QFontMetricsF fontMetrics(block.charFormat().font());
-        int position = block.position();
-        while(1) {
-            kDebug() << "     new line" << endl;
-            if(offset + fontMetrics.lineSpacing() > bottom) {
-                layout->endLayout();
-                data->setEndPosition(position);
-                return true;
-            }
-            QTextLine line = layout->createLine();
-            if (!line.isValid())
-                break;
-kDebug() << "width: " << width << endl;
-            line.setLineWidth(width);
-            offset += fontMetrics.leading();
-            line.setPosition(QPoint(x, offset));
-            offset += fontMetrics.height();
-            position += line.textLength();
-        }
-        layout->endLayout();
-        block = block.next();
-        firstParag = false;
-    }
-}
-
-void KWTextDocumentLayout::layout(QTextLayout &layout, bool recalc) {
-    if(!recalc && layout.lineCount() > 0)
-        return;
-    layout.setCacheEnabled(true);
-    layout.beginLayout();
-    QTextLine line = layout.createLine();
-double y=10.0;
-    while(line.isValid()) {
-        line.setLineWidth(200.0);
-        line.setPosition(QPointF(0, y));
-        y+= 20;
-        line = layout.createLine();
-    }
-    layout.endLayout();
-} */
