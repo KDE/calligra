@@ -70,7 +70,22 @@ void RecalcManager::regionChanged(const Region& region)
   ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
   {
     ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
-    recalcRegion(region);
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
+    {
+      const QRect range = (*it)->rect();
+      const Sheet* sheet = (*it)->sheet();
+      const int right = range.right();
+      const int bottom = range.bottom();
+      for (int col = range.left(); col <= right; ++col)
+      {
+        for (int row = range.top(); row <= bottom; ++row)
+        {
+          Cell* cell = sheet->cellAt(col, row);
+          recalcRegion(d->depManager->getDependants(cell));
+        }
+      }
+    }
   }
   recalc();
   d->busy = false;
@@ -129,7 +144,6 @@ void RecalcManager::recalcMap()
 
 void RecalcManager::recalc()
 {
-  dump();
   ElapsedTime et( "Recalculating cells", ElapsedTime::PrintOnlyTime );
   foreach (Cell* cell, d->depths)
   {
