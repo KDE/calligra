@@ -505,10 +505,7 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
             else // TODO: Check for entity references
                 rightType = LeftRoundBracket;
         }
-        QString separatorStr = element.attribute( "separators" ).stripWhiteSpace();
-        if ( !separatorStr.isNull() ) {
-            m_separators = QStringList::split( ' ', separatorStr );
-        }
+        m_separators = element.attribute( "separators" ).simplifyWhiteSpace();
     }
     return true;
 }
@@ -555,20 +552,25 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
             QDomDocument doc = node.ownerDocument();
             QDomNode parent = node.parentNode();
             QDomElement de = doc.createElement( "mrow" );
-            QStringList::Iterator it = m_separators.begin();
+            uint pos = 0;
             while ( !node.isNull() ) {
                 QDomNode no = node.nextSibling();
                 de.appendChild( node.toElement() );
-                if ( ! no.isNull() ) {
+                if ( ! no.isNull() && ( m_separators.isNull() || ! m_separators.isEmpty() ) ) {
                     QDomElement sep = doc.createElement( "mo" );
                     de.appendChild( sep );
-                    if ( it != m_separators.end() ) {
-                        sep.appendChild( doc.createTextNode( *it ) );
-                    }
-                    else {
+                    if ( m_separators.isNull() ) {
                         sep.appendChild( doc.createTextNode( "," ) );
                     }
-                    it++;
+                    else {
+                        if ( m_separators.at( pos ).isSpace() ) {
+                            pos++;
+                        }
+                        sep.appendChild( doc.createTextNode( QString ( m_separators.at( pos ) ) ) );
+                    }
+                    if ( pos < m_separators.length() - 1 ) {
+                        pos++;
+                    }
                 }
                 node = no;
             }
@@ -754,6 +756,9 @@ void BracketElement::writeMathMLAttributes( QDomElement& element ) const
     {
         element.setAttribute( "open",  QString( QChar( leftType ) ) );
         element.setAttribute( "close", QString( QChar( rightType ) ) );
+    }
+    if ( ! m_separators.isNull() ) {
+        element.setAttribute( "separators", m_separators );
     }
 }
 

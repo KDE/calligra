@@ -289,7 +289,7 @@ private:
     SymbolType leftType;
     SymbolType rightType;
 
-    QStringList m_separators;
+    QString m_separators;
     bool m_operator;
     bool m_customLeft;
     bool m_customRight;

@@ -113,8 +113,6 @@ NOTE: Only Presentation Markup is considered here.
 
 * Support for arbitrary string in attribute open ( Section 3.3.8.2 )
 * Support for arbitrary string in attribute close ( Section 3.3.8.2 )
-* Support for attribute separators without spaces ( Section 3.3.8.2 )
-* Support repeating last separator if too few ( Section 3.3.8.2 )
 
 = menclose =
 
