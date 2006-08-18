@@ -64,6 +64,9 @@ class KexiBoolTableEdit : public KexiTableEdit
 		 Reimplemented after KexiTableEdit. */
 		virtual void handleCopyAction(const QVariant& value);
 
+		/*! \return width of \a value. Reimplemented  after KexiTableEdit. */
+		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );
+
 	protected slots:
 
 	protected:

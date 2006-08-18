@@ -947,3 +947,12 @@ TODO
 === KexiDB TODO ===
 - add setValue() to cursors: this will REQUIRE a buffered cursor, since we cannot run sql 
   before fetching is done... See http://kexi-project.org/cgi-bin/irclogger_log/kexi?date=2006-08-03,Thu&sel=229#l225
+
+=== Kexi Table View TODO ===
+- tooltips: 
+-- implement tooltip manager (this will allow to create custom tooltips)
+-- use  if ( QApplication::isEffectEnabled( UI_AnimateTooltip ) == FALSE ||....
+   as in qtooltip.cpp:564
+-- implement custom tooltip for large texts and BLOB, add "zoom" option at the bottom of the tooltip
+   (zooming should not show a modal dialog but rather a widget inside the TV)
+-- add the same zoom option to the context menu

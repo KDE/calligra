@@ -32,6 +32,7 @@
 #include <qvariant.h>
 #include <qptrlist.h>
 #include <qheader.h>
+#include <qtooltip.h>
 
 #include <kdebug.h>
 
@@ -48,6 +49,7 @@ class KAction;
 
 class KexiTableHeader;
 class KexiTableItem;
+class KexiTableView;
 class KexiTableEdit;
 class KexiTableViewPrivate;
 class KActionCollection;
@@ -509,6 +511,9 @@ protected:
 	/*! Implementation for KexiDataAwareObjectInterface */
 	virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false );
 
+	inline KexiTableEdit *tableEditorWidget(  int col, bool ignoreMissingEditor = false )
+	{ return dynamic_cast<KexiTableEdit*>( editor( col, ignoreMissingEditor ) ); }
+
 	/*! Implementation for KexiDataAwareObjectInterface */
 	virtual void editorShowFocus( int row, int col );
 
@@ -598,6 +603,7 @@ protected:
 	class WhatsThis;
 	friend class KexiTableItem;
 	friend class WhatsThis;
+	friend class KexiTableViewCellToolTip;
 };
 
 #endif

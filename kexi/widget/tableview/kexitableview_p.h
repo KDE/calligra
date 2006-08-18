@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -48,6 +48,19 @@ class KexiTableRM;
 class KexiTableEdit;
 class QLabel;
 class KexiTableViewHeader;
+
+//! @short a dynamic tooltip for table view cells
+/*! @internal */
+class KexiTableViewCellToolTip : public QToolTip
+{
+	public:
+		KexiTableViewCellToolTip( KexiTableView * tableView );
+		virtual ~KexiTableViewCellToolTip();
+	protected:
+		virtual void maybeTip( const QPoint & p );
+
+		KexiTableView *m_tableView;
+};
 
 /*! KexiTableView internal data
  @internal */
@@ -144,6 +157,13 @@ class KexiTableViewPrivate
 
 	/*! Id of context menu key (cached). */
 	int contextMenuKey;
+
+	/*! Specifies currently displayed cell tooltip. 
+	 Value of QPoint(-1,-1) means "no tooltip". */
+	QPoint recentCellWithToolTip;
+
+	/*! Table cell tooltip */
+	KexiTableViewCellToolTip *cellToolTip;
 };
 
 #endif

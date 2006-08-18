@@ -70,6 +70,14 @@ class KexiInputTableEdit : public KexiTableEdit
 		 Reimplemented after KexiTableEdit. */
 		virtual void handleCopyAction(const QVariant& value);
 
+		/*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit inside \a rect
+		 for a given font metrics \a fm. 
+		 \return true a normal tooltip should be displayed (using QToolTip,) and false if 
+		 no tooltip should be displayed or a custom tooltip was displayed internally (not yet supported).
+		 This implementation converts the value to text using valueToText() if \a calue is not string to see
+		 whether it can fit inside the cell's \a rect. */
+		virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm);
+
 	protected slots:
 		void setRestrictedCompletion();
 		void completed(const QString &);

@@ -23,7 +23,6 @@
 #include <qbitmap.h>
 #include <qpainter.h>
 #include <qimage.h>
-#include <qwidget.h>
 #include <qtooltip.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
@@ -31,40 +30,29 @@
 
 
 KexiArrowTip::KexiArrowTip(const QString& text, QWidget* parent)
- : QWidget(parent, "KexiArrowTip", Qt::WStyle_Customize | Qt::WType_Popup | Qt::WStyle_NoBorder 
-	| Qt::WX11BypassWM | Qt::WDestructiveClose)
- , m_text(text)
+ : KexiToolTip(text, parent)
  , m_opacity(0.0)
 {
-	QPalette pal( QToolTip::palette() );
+	QPalette pal( palette() );
 	QColorGroup cg(pal.active());
 	cg.setColor(QColorGroup::Foreground, Qt::red);
 	pal.setActive(cg);
 	setPalette(pal);
 
-	setFocusPolicy(QWidget::NoFocus);
-
 	QFontMetrics fm(font());
-	QSize sz(fm.boundingRect(m_text).size());
+	QSize sz(fm.boundingRect(m_value.toString()).size());
 	sz += QSize(14, 10); //+margins
 	m_arrowHeight = sz.height()/2;
 	sz += QSize(0, m_arrowHeight); //+arrow height
 	resize(sz);
 
-//	setMargin(2);
 	setAutoMask( false );
-//	setFrameStyle( QFrame::Plain | QFrame::Box );
-//	setLineWidth( 2 );
-//	setAlignment( Qt::AlignAuto | Qt::AlignTop );
-//	setIndent(0);
-//	polish();
-//	adjustSize();
 
 	//generate mask
 	QPixmap maskPm(size());
 	maskPm.fill( black );
 	QPainter maskPainter(&maskPm);
-	draw(maskPainter);
+	drawFrame(maskPainter);
 	QImage maskImg( maskPm.convertToImage() );
 	QBitmap bm;
 	bm = maskImg.createHeuristicMask();
@@ -82,7 +70,7 @@ void KexiArrowTip::show()
 
 	m_opacity = 0.0;
 	setWindowOpacity(0.0);
-	QWidget::show();
+	KexiToolTip::show();
 	increaseOpacity();
 }
 
@@ -105,7 +93,7 @@ void KexiArrowTip::increaseOpacity()
 void KexiArrowTip::decreaseOpacity()
 {
 	if (m_opacity<=0.0) {
-		QWidget::close();
+		KexiToolTip::close();
 		m_opacity = 0.0;
 		return;
 	}
@@ -114,83 +102,62 @@ void KexiArrowTip::decreaseOpacity()
 	QTimer::singleShot(25, this, SLOT(decreaseOpacity()));
 }
 
-//virtual bool close( bool alsoDelete );
-
 bool KexiArrowTip::close ( bool alsoDelete )
 {
 	if (!isVisible()) {
-		return QWidget::close(alsoDelete);
+		return KexiToolTip::close(alsoDelete);
 	}
 	if (m_opacity>0.0)
 		decreaseOpacity();
 	else
-		return QWidget::close(alsoDelete);
+		return KexiToolTip::close(alsoDelete);
 	return m_opacity<=0.0;
 }
 
-/*void KexiArrowTip::closeEvent( QCloseEvent *  )
+void KexiArrowTip::drawContents(QPainter& p)
 {
-}*/
-
-void KexiArrowTip::paintEvent( QPaintEvent *pev )
-{
-	QWidget::paintEvent(pev);
-	QPainter p(this);
+	p.setPen( QPen(palette().active().foreground(), 1) );
 	p.drawText(QRect(0,m_arrowHeight,width(),height()-m_arrowHeight), 
-		Qt::AlignCenter, m_text);
-	draw(p);
+		Qt::AlignCenter, m_value.toString());
 }
 
-void KexiArrowTip::draw(QPainter& p)
+void KexiArrowTip::drawFrame(QPainter& p)
 {
-	p.setPen( Qt::red );
+	QPen pen(palette().active().foreground(), 1, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+	p.setPen( pen );
 	/*
 	   /\
 	 +-  -----+
 	 |  text  |
 	 +--------+
 	*/
-	//left, bottom, right borders
-	p.drawLine(0, m_arrowHeight, 0, height()-1);
-	p.drawLine(0, height()-1, width()-1, height()-1);
-	p.drawLine(width()-1, height()-1, width()-1, m_arrowHeight);
-	//-2nd line
-	p.drawLine(1, m_arrowHeight, 1, height()-2);
-	p.drawLine(1, height()-2, width()-2, height()-2);
-	p.drawLine(width()-2, height()-2, width()-2, m_arrowHeight);
-	//arrow + top border
+	//1st line
 	const int arrowOffset = 5; //5 pixels to right
-	p.drawLine(0, m_arrowHeight-1, arrowOffset, m_arrowHeight-1);
-	p.drawLine(arrowOffset, m_arrowHeight-1, arrowOffset+m_arrowHeight-1, 0);
-	p.drawLine(arrowOffset+m_arrowHeight-1, 0, arrowOffset+m_arrowHeight+m_arrowHeight-2, m_arrowHeight-1);
-	p.drawLine(arrowOffset+m_arrowHeight+m_arrowHeight-2, m_arrowHeight-1, width()-1, m_arrowHeight-1);
-	//-2nd line
-	p.drawLine(0, m_arrowHeight, arrowOffset, m_arrowHeight);
-	p.drawLine(arrowOffset+1, m_arrowHeight-1, arrowOffset+m_arrowHeight-1, 1);
-	p.drawLine(arrowOffset+m_arrowHeight-1, 1, arrowOffset+m_arrowHeight+m_arrowHeight-2, m_arrowHeight);
-	p.drawLine(arrowOffset+m_arrowHeight+m_arrowHeight-2, m_arrowHeight, width()-1, m_arrowHeight);
-	//-3rd line for arrow only
-	p.drawLine(arrowOffset+1, m_arrowHeight, arrowOffset+m_arrowHeight-1, 2);
-	p.drawLine(arrowOffset+m_arrowHeight-1, 2, arrowOffset+m_arrowHeight+m_arrowHeight-3, m_arrowHeight);
+	QPointArray pa(8);
+	pa.setPoint(0, 0, m_arrowHeight-1);
+	pa.setPoint(1, 0, height()-1);
+	pa.setPoint(2, width()-1, height()-1);
+	pa.setPoint(3, width()-1, m_arrowHeight-1);
+	pa.setPoint(4, arrowOffset+m_arrowHeight+m_arrowHeight-2, m_arrowHeight-1);
+	pa.setPoint(5, arrowOffset+m_arrowHeight-1, 0);
+	pa.setPoint(6, arrowOffset, m_arrowHeight-1);
+	pa.setPoint(7, 0, m_arrowHeight-1);
+	p.drawPolyline(pa);
+	//-2nd, internal line
+	pa.resize(12);
+	pa.setPoint(0, 1, m_arrowHeight);
+	pa.setPoint(1, 1, height()-2);
+	pa.setPoint(2, width()-2, height()-2);
+	pa.setPoint(3, width()-2, m_arrowHeight);
+	pa.setPoint(4, arrowOffset+m_arrowHeight+m_arrowHeight-2, m_arrowHeight);
+	pa.setPoint(5, arrowOffset+m_arrowHeight-1, 1);
+	pa.setPoint(6, arrowOffset, m_arrowHeight);
+	pa.setPoint(7, 0, m_arrowHeight);
+	pa.setPoint(8, arrowOffset+1, m_arrowHeight);
+	pa.setPoint(9, arrowOffset+m_arrowHeight-1, 2);
+	pa.setPoint(10, arrowOffset+m_arrowHeight+m_arrowHeight-3, m_arrowHeight);
+	pa.setPoint(11, width()-2, m_arrowHeight);
+	p.drawPolyline(pa);
 }
-
-/*
-QImage img( "F:\\a.png" );
-QPixmap p;
-p.convertFromImage( img );
-    if ( !p.mask() )
-	if ( img.hasAlphaBuffer() ) {
-	    QBitmap bm;
-	    bm = img.createAlphaMask();
-	    p.setMask( bm );
-	} else {
-	    QBitmap bm;
-	    bm = img.createHeuristicMask();
-	    p.setMask( bm );
-	}
-setBackgroundPixmap( p );
-if ( p.mask() )
-	setMask( *p.mask() );
-*/
 
 #include "kexiarrowtip.moc"

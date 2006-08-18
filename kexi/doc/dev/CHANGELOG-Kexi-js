@@ -15,6 +15,14 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-08-17
+Table View
+- tooltips are displayed for cells with too large contents
+CSV Import Dialog
+- delimiter detection is now even more clever, allowing to import more complex data: 
+  characters outside quotes have higher priority; additional algorithm counting 
+  number of candidates for delimiters is used.
+
 2006-08-14
 Table View
 - default values are displayed and work properly with editing
