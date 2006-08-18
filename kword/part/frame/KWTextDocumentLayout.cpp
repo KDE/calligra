@@ -22,6 +22,7 @@
 #include "KWTextFrame.h"
 
 #include <KoTextShapeData.h>
+#include <KoParagraphStyle.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
@@ -196,17 +197,24 @@ void KWTextDocumentLayout::layout() {
             m_newShape = false;
             if(m_fragmentIterator.atEnd())
                 return false; // no text in block.
-            double height=0.0;
-//kDebug() << "a: " << m_fragmentIterator.fragment().position() << "+" << m_fragmentIterator.fragment().length() << ", b:" << line.textStart() << "+" << line.textLength() << endl;
-            height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-            while(! (m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
-                           m_block.position() + line.textStart() + line.textLength() -1))) {
-                m_fragmentIterator++;
-                height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-//kDebug() << "   next fragment\n";
+            double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+            bool useFixedLineHeight = height != 0.0;
+            bool useFontProperties = !m_format.boolProperty(KoParagraphStyle::FontIndependentLineSpacing);
+            if(! useFixedLineHeight) {
+                if(useFontProperties)
+                    height = line.height();
+                else {
+                    // read max font height
+                    height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                    while(! (m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
+                                   m_block.position() + line.textStart() + line.textLength() -1))) {
+                        m_fragmentIterator++;
+                        height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                    }
+                    if(height < 0.01) height = 12; // default size for uninitialized styles.
+                }
             }
-            if(height < 0.01) height = 12; // default size for uninitialized styles.
-//kDebug() << "   h: " << height << endl;
+
             if(m_data->documentOffset() + shape->size().height() < m_y + height) {
 //kDebug() << "   NEXT frame" << endl;
                 // line does not fit.
@@ -220,7 +228,25 @@ void KWTextDocumentLayout::layout() {
                 }
                 return true;
             }
-            m_y += height * 1.2;
+
+            // add linespacing
+            if(! useFixedLineHeight) {
+                double linespacing = 0.0;
+                int percent = m_format.intProperty(KoParagraphStyle::FixedLineHeight);
+                if(percent != 0)
+                    linespacing = height * ((percent - 100) / 100.0);
+                else {
+                    linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);
+                    if(linespacing == 0.0)
+                        linespacing = height * 0.2; // default
+                }
+                height += linespacing;
+            }
+
+            double minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
+            if(minimum > 0.0)
+                height = qMax(height, minimum);
+            m_y += height;
             return false;
         }
 

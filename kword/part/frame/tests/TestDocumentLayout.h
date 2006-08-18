@@ -33,6 +33,8 @@ private slots:
     void testMultiFrameLineBreaking();
     /// Tests incrementing Y pos based on the font size
     void testBasicLineSpacing();
+    /// Tests advanced linespacing options provided in our style.
+    void testAdvancedLineSpacing();
 
 // Block styles
     /// Test top, left, right and bottom margins of paragraphs.

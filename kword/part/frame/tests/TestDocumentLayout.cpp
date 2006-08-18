@@ -4,7 +4,7 @@
 #include <KWTextFrameSet.h>
 #include <KWTextDocumentLayout.h>
 
-#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
 
 #include <QTextDocument>
 #include <QTextBlock>
@@ -62,7 +62,8 @@ void TestDocumentLayout::initForNewTest(const QString &initText) {
     if(initText.length() > 0) {
         QTextCursor cursor(doc);
         cursor.insertText(initText);
-        KoCharacterStyle style;
+        KoParagraphStyle style;
+        style.setStyleId(101); // needed to do manually since we don't use the stylemanager
         style.applyStyle(block);
     }
     blockLayout = block.layout();
@@ -144,6 +145,7 @@ void TestDocumentLayout::testMultiFrameLineBreaking() {
     QVERIFY(line.y() > shape1->size().height()); // it has to be outside of shape1
     const double topOfFrame2 = line.y();
     line = blockLayout->lineAt(4);
+    //qDebug() << line.y() - topOfFrame2 - 14.4;
     QVERIFY(qAbs( line.y() - topOfFrame2 - 14.4) < 0.125);
 }
 
@@ -227,6 +229,82 @@ void TestDocumentLayout::testBasicLineSpacing() {
     mw.setCentralWidget(new Widget(layout));
     mw.show();
     m_app->exec(); */
+}
+
+void TestDocumentLayout::testAdvancedLineSpacing() {
+    initForNewTest("Line1\nLine2\nLine3\nLine4\nLine5\nLine6\nLine7");
+    QTextCursor cursor(doc);
+
+    KoParagraphStyle style;
+    style.setLineHeightPercent(80);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+
+    // check if styles do their work ;)
+    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::FixedLineHeight), 80);
+
+    block = block.next();
+    QVERIFY(block.isValid()); //line2
+    style.setLineHeightAbsolute(28.0); // removes the percentage
+    style.applyStyle(block);
+
+    block = block.next();
+    QVERIFY(block.isValid()); // line3
+    style.setMinimumLineHeight(40.0);
+    style.setLineHeightPercent(120);
+    style.applyStyle(block);
+
+    block = block.next();
+    QVERIFY(block.isValid()); // line4
+    style.setMinimumLineHeight(5.0);
+    style.applyStyle(block);
+
+    block = block.next();
+    QVERIFY(block.isValid()); // line5
+    style.setMinimumLineHeight(0.0);
+    style.setLineSpacing(8.0); // implicitly will ignore the other two
+    style.applyStyle(block);
+
+    block = block.next();
+    QVERIFY(block.isValid()); // line6
+    style.setFontIndependentLineSpacing(false);
+    style.setLineHeightPercent(100);
+    style.applyStyle(block);
+
+    layout->layout();
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    block = doc->begin().next(); // line2
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (12.0 * 0.8)) < ROUNDING);
+    block = block.next(); // line3
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.6 + 28.0)) < ROUNDING);
+    block = block.next(); // line4
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (37.6 + 40)) < ROUNDING);
+    block = block.next(); // line5
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (77.6 + qMax(12 * 1.2, 5.0))) < ROUNDING);
+    block = block.next(); // line6
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QCOMPARE(blockLayout->lineAt(0).y(), 92.0 + 12 + 8);
+
+    double height = blockLayout->lineAt(0).height();
+    block = block.next(); // line 7
+    QVERIFY(block.isValid());
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QCOMPARE(blockLayout->lineAt(0).y(), 112 + height);
 }
 
 void TestDocumentLayout::testMargins() {
@@ -340,7 +418,6 @@ void TestDocumentLayout::testLineSpacing() {
     // TODO
     initForNewTest();
 }
-
 
 QTEST_MAIN(TestDocumentLayout)
 #include "TestDocumentLayout.moc"
