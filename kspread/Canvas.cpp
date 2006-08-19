@@ -881,9 +881,8 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( ( obj = getObject( p, sheet ) ) && obj->isSelected() )
     {
       KoRect const bound = obj->geometry();
-      QRect zoomedBound = doc()->zoomRectOld( KoRect(bound.left(), bound.top(),
-      bound.width(),
-      bound.height() ) );
+      QRect zoomedBound = doc()->zoomRectOld( KoRect( bound.left(), bound.top(),
+                                                      bound.width(), bound.height() ) );
       zoomedBound.translate( (int)(-xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ));
       setCursor( obj->getCursor( p, d->modType, zoomedBound ) );
       return;
@@ -3930,28 +3929,26 @@ void Canvas::equalizeColumn()
   d->view->hBorderWidget()->equalizeColumn(size);
 }
 
-QRect Canvas::cellsInArea( const QRect area ) const
+QRect Canvas::viewToCellCoordinates( const QRectF& viewRegion ) const
 {
   register Sheet * const sheet = activeSheet();
   if (!sheet)
     return QRect();
 
-  KoRect unzoomedRect = d->view->doc()->unzoomRectOld( area );
-  unzoomedRect.moveBy( (int)xOffset(), (int)yOffset() );
+  const QRectF unzoomedRect = doc()->viewToDocument( viewRegion ).translated( xOffset(), yOffset() );
 
-  	double tmp;
-  	int left_col = sheet->leftColumn( unzoomedRect.left(), tmp );
-  	int right_col = sheet->rightColumn( unzoomedRect.right() );
-  	int top_row = sheet->topRow( unzoomedRect.top(), tmp );
-  	int bottom_row = sheet->bottomRow( unzoomedRect.bottom() );
+  double tmp;
+  const int left = sheet->leftColumn( unzoomedRect.left(), tmp );
+  const int right = sheet->rightColumn( unzoomedRect.right() );
+  const int top = sheet->topRow( unzoomedRect.top(), tmp );
+  const int bottom = sheet->bottomRow( unzoomedRect.bottom() );
 
-  	return QRect( left_col, top_row,
-                right_col - left_col + 1, bottom_row - top_row + 1 );
+  return QRect( left, top, right - left + 1, bottom - top + 1 );
 }
 
 QRect Canvas::visibleCells() const
 {
-  return cellsInArea( QRect( 0, 0, width(), height() ) );
+  return viewToCellCoordinates( QRectF( 0, 0, width(), height() ) );
 }
 
 
@@ -3970,7 +3967,6 @@ void Canvas::paintUpdates()
   QPainter painter(this);
 
   //Save clip region
-  QRegion rgnComplete( painter.clipRegion() );
   QMatrix matrix;
   if ( d->view )
   {
@@ -4114,7 +4110,6 @@ void Canvas::paintUpdates()
 
   //restore clip region with children area
   painter.restore();
-  //painter.setClipRegion( rgnComplete );
 }
 
 
@@ -4184,7 +4179,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 	   canvasRelativeGeometry.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
 			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
 
-	   const QRect cellsUnderObject=cellsInArea( canvasRelativeGeometry );
+	   const QRect cellsUnderObject = viewToCellCoordinates( canvasRelativeGeometry );
 	   bool redraw=false;
 
       Region paintDirtyList = sheet->paintDirtyData();

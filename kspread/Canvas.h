@@ -470,11 +470,11 @@ private:
 
     /**
      * Returns the range of cells which appear in the specified area of the Canvas widget
-     * For example, cellsInArea( QRect(0,0,width(),height()) ) returns a range containing all visible cells
+     * For example, viewToCellCoordinates( QRect(0,0,width(),height()) ) returns a range containing all visible cells
      *
      * @param area The area (in pixels) on the Canvas widget
      */
-    QRect cellsInArea( const QRect area ) const;
+    QRect viewToCellCoordinates( const QRectF& area ) const;
 
     /**
      * Paints the children
