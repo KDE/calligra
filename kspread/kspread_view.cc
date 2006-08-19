@@ -6997,12 +6997,14 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   {
     // Activate or deactivate some actions.
     d->actions->insertRow->setEnabled( !colSelected );
+    d->actions->deleteRow->setEnabled( !colSelected );
     d->actions->resizeRow->setEnabled( !colSelected );
     d->actions->equalizeRow->setEnabled( !colSelected );
     d->actions->hideRow->setEnabled( !colSelected );
     d->actions->validity->setEnabled( !colSelected && !rowSelected);
     d->actions->conditional->setEnabled( !colSelected && !rowSelected);
     d->actions->insertColumn->setEnabled( !rowSelected );
+    d->actions->deleteColumn->setEnabled( !rowSelected );
     d->actions->resizeColumn->setEnabled( !rowSelected );
     d->actions->equalizeColumn->setEnabled( !rowSelected );
     d->actions->hideColumn->setEnabled( !rowSelected );
