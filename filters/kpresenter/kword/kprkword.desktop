@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter KWord Filter
+Name[x-test]=xxKPresenter KWord Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Weight=1
 X-KDE-Export=application/x-kword

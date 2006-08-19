@@ -3,5 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/BarChart.chrt
 Name=Bar Chart
+Name[x-test]=xxBar Chartxx
 Comment=An example of a bar chart
+Comment[x-test]=xxAn example of a bar chartxx
 Icon=template_barchart

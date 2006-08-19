@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=KWord StarWriter 5.x Import Filter
+Name[x-test]=xxKWord StarWriter 5.x Import Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-kword

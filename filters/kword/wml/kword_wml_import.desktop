@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord WML Import Filter
+Name[x-test]=xxKWord WML Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=text/vnd.wap.wml
 X-KDE-Weight=1

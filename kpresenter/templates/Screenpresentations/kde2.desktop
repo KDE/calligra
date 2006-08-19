@@ -3,5 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/kde2.kpt
 Name=KDE 2
+Name[x-test]=xxKDE 2xx
 Comment=A presentation with KDE 2 theming
+Comment[x-test]=xxA presentation with KDE 2 themingxx
 Icon=template_kde2

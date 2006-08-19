@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_savannah
 Name=Savannah
+Name[x-test]=xxSavannahxx
 Comment=Savannah by dannya
+Comment[x-test]=xxSavannah by dannyaxx
 Type=Link
 URL=.source/savannah.kpt
 X-KDE-Hidden=false

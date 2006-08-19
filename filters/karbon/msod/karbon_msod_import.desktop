@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon's MS Office Drawing Import Filter
+Name[x-test]=xxKarbon's MS Office Drawing Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/x-msod
 X-KDE-Weight=1

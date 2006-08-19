@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=PostgreSQL
+Name[x-test]=xxPostgreSQLxx
 Comment=PostgreSQL Migration Driver for Kexi
+Comment[x-test]=xxPostgreSQL Migration Driver for Kexixx
 X-KDE-Library=keximigrate_pqxx
 ServiceTypes=Kexi/MigrationDriver
 Type=Service

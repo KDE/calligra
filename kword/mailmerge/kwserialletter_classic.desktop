@@ -4,7 +4,9 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=Internal Storage
+Name[x-test]=xxInternal Storagexx
 Comment=This datasource type stores the data directly in the KWord file
+Comment[x-test]=xxThis datasource type stores the data directly in the KWord filexx
 
 X-KDE-Library=kwmailmerge_classic
 X-KDE-Capabilities=edit,create

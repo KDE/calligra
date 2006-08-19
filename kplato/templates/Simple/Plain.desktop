@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Plain.kplatot
 Name=Plain
+Name[x-test]=xxPlainxx
 Icon=template_timechart

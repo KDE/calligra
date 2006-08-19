@@ -4,7 +4,9 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Tables
+GenericName[x-test]=xxTablesxx
 Name=Tables
+Name[x-test]=xxTablesxx
 X-KDE-Library=kexihandler_table
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

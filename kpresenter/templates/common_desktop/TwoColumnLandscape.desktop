@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_twocolumnlandscape
 Name=Two Column
+Name[x-test]=xxTwo Columnxx
 Comment=Presentation with a page title and two text columns
+Comment[x-test]=xxPresentation with a page title and two text columnsxx
 Type=Link
 URL=.source/TwoColumnLandscape.kpt
 X-KDE-Hidden=false

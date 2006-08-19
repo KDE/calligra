@@ -5,3 +5,4 @@ MimeType=application/x-kexiproject-shortcut
 Icon=kexiproject_shortcut
 Patterns=*.kexis
 Comment=Shortcut to Kexi Project on Database Server
+Comment[x-test]=xxShortcut to Kexi Project on Database Serverxx

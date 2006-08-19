@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Example Application
+Name[x-test]=xxKOffice Example Applicationxx
 Exec=example
 MimeType=application/x-example
 Type=Application

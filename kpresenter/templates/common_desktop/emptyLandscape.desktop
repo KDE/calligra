@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_emptylandscape
 Name=Empty
+Name[x-test]=xxEmptyxx
 Comment=Empty presentation
+Comment[x-test]=xxEmpty presentationxx
 Type=Link
 URL=.source/emptyLandscape.kpt
 X-KDE-Hidden=false

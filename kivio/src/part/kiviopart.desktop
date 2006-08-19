@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Flowchart & Diagram Editing Component
+Name[x-test]=xxKOffice Flowchart & Diagram Editing Componentxx
 X-KDE-Library=libkiviopart
 MimeType=application/x-kivio
 Type=Service
@@ -8,4 +9,5 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kivio
 Categories=Qt;KDE;Office;
 GenericName=Flowchart & Diagram
+GenericName[x-test]=xxFlowchart & Diagramxx
 Icon=kivio

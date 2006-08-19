@@ -2,4 +2,5 @@
 Encoding=UTF-8
 X-KDE-Library=libkiviozoomtool
 Name=ZoomTool for Kivio
+Name[x-test]=xxZoomTool for Kivioxx
 Type=Service

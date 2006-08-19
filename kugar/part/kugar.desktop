@@ -1,12 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Kugar
+Name[x-test]=xxKugarxx
 Exec=kugar %u
 Icon=kugar
 MimeType=application/x-kugar;application/x-vnd.kde.kugar.mixed
 Type=Application
 DocPath=kugar/index.html
 GenericName=Report Generator
+GenericName[x-test]=xxReport Generatorxx
 Terminal=false
 X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed
 Categories=Qt;KDE;Office;X-KDE-More;

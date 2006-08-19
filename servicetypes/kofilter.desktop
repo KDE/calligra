@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOfficeFilter
 Comment=KOffice Filter
+Comment[x-test]=xxKOffice Filterxx
 
 [PropertyDef::X-KDE-Import]
 Type=QStringList

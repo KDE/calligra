@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Zoom Tool
+Name[x-test]=xxZoom Toolxx
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_zoomtoolplugin

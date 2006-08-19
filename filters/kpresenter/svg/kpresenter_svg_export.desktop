@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter SVG Export Filter
+Name[x-test]=xxKPresenter SVG Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1

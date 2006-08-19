@@ -4,7 +4,9 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Migration Plugin
+GenericName[x-test]=xxMigration Pluginxx
 Name=Migration Plugin
+Name[x-test]=xxMigration Pluginxx
 X-KDE-Library=kexihandler_migration
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Generic KOffice Filter
+Name[x-test]=xxGeneric KOffice Filterxx
 X-KDE-Export=application/x-kpresenter
 X-KDE-Import=application/x-magicpoint
 X-KDE-Weight=1

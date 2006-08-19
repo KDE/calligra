@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Calc Import Filter for KSpread
+Name[x-test]=xxOpenOffice.org Calc Import Filter for KSpreadxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/vnd.sun.xml.calc,application/vnd.sun.xml.calc.template
 X-KDE-Weight=1

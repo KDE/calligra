@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord ASCII Import Filter
+Name[x-test]=xxKWord ASCII Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=text/plain
 X-KDE-Weight=1

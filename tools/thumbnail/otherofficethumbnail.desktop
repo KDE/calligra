@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Other Office Files
+Name[x-test]=xxOther Office Filesxx
 ServiceTypes=ThumbCreator
 MimeTypes=application/illustrator,application/msexcel,application/mspowerpoint,application/msword,application/vnd.palm,application/wordperfect,application/x-abiword,application/x-amipro,application/x-applixgraphics,application/x-applixspread,application/x-applixword,application/x-gnumeric,application/x-quattropro,image/x-msod,text/rtf,text/vnd.wap.wml
 X-KDE-Library=kofficethumbnail

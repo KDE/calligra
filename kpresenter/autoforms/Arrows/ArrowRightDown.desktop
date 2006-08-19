@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowRightDown.atf
 Name=Arrow Right/Down
+Name[x-test]=xxArrow Right/Downxx
 Icon=.icon/ArrowRightDown.png

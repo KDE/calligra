@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOfficePlugin
 Comment=KOffice Plugin
+Comment[x-test]=xxKOffice Pluginxx
 
 [PropertyDef::MenuEntries]
 Type=QStringList

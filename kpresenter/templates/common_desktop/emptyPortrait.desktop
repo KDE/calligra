@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_emptyportrait
 Name=Empty Portrait
+Name[x-test]=xxEmpty Portraitxx
 Comment=Empty presentation (portrait-oriented)
+Comment[x-test]=xxEmpty presentation (portrait-oriented)xx
 Type=Link
 URL=.source/emptyPortrait.kpt
 X-KDE-Hidden=false

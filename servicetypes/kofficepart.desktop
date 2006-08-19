@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOfficePart
 X-KDE-Derived=KParts/ReadWritePart
 Comment=KOffice Component
+Comment[x-test]=xxKOffice Componentxx
 
 # Name of the native mimetype (mandatory) - currently still the KOffice-1.3 one, e.g. application/x-kword
 [PropertyDef::X-KDE-NativeMimeType]

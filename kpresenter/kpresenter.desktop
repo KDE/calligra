@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KPresenter
+Name[x-test]=xxKPresenterxx
 Exec=kpresenter %u
 GenericName=Slide Presentations
+GenericName[x-test]=xxSlide Presentationsxx
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/mspowerpoint
 Type=Application
 Icon=kpresenter

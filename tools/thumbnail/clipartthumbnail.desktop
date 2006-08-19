@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Clipart
+Name[x-test]=xxClipartxx
 ServiceTypes=ThumbCreator
 MimeTypes=image/wmf
 X-KDE-Library=clipartthumbnail

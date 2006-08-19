@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita
+Name[x-test]=xxKritaxx
 Exec=krita %u
 GenericName=Painting and Image Editing Application
+GenericName[x-test]=xxPainting and Image Editing Applicationxx
 MimeType=image/x-raw
 Type=Application
 Icon=krita

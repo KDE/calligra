@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon14 EPS Export Filter
+Name[x-test]=xxKarbon14 EPS Export Filterxx
 X-KDE-Export=image/x-eps
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1

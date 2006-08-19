@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/DLE.ktm
 Name=DLE
+Name[x-test]=xxDLExx
 Icon=template_us

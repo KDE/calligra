@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Legal.ktm
 Name=Legal
+Name[x-test]=xxLegalxx
 Icon=template_us

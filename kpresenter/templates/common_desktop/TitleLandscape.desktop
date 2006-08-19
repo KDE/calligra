@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_titlelandscape
 Name=Title
+Name[x-test]=xxTitlexx
 Comment=Presentation with a page title
+Comment[x-test]=xxPresentation with a page titlexx
 Type=Link
 URL=.source/TitleLandscape.kpt
 X-KDE-Hidden=false

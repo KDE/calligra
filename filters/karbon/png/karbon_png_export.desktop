@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Karbon14 PNG Export Filter
+Name[x-test]=xxKarbon14 PNG Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/png

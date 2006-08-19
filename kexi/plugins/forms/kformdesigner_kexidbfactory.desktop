@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi DB Widgets
+Name[x-test]=xxKexi DB Widgetsxx
 
 X-KDE-Library=kformdesigner_kexidbwidgets
 X-KFormDesigner-FactoryGroup=kexi

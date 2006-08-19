@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord's KWord 1.3 Import Filter
+Name[x-test]=xxKWord's KWord 1.3 Import Filterxx
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-kword
 X-KDE-Weight=20

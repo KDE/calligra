@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_totallynewproduct
 Name=Totally New Product
+Name[x-test]=xxTotally New Productxx
 Comment=An informal, green-swirl presentation
+Comment[x-test]=xxAn informal, green-swirl presentationxx
 Type=Link
 URL=.source/TotallyNewProduct.kpt
 X-KDE-Hidden=false

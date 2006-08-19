@@ -4,4 +4,6 @@ Type=Link
 URL=.source/empty.karbon
 Icon=template_empty
 Name=Empty Document
+Name[x-test]=xxEmpty Documentxx
 Comment=Creates an empty document
+Comment[x-test]=xxCreates an empty documentxx

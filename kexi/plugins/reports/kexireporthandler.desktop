@@ -4,7 +4,9 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Reports
+GenericName[x-test]=xxReportsxx
 Name=Reports
+Name[x-test]=xxReportsxx
 X-KDE-Library=kexihandler_report
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

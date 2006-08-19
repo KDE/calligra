@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita PNG Export Filter
+Name[x-test]=xxKrita PNG Export Filterxx
 X-KDE-Export=image/png
 ServiceTypes=KOfficeFilter
 Type=Service

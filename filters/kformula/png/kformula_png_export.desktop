@@ -7,6 +7,7 @@ X-KDE-Import=application/x-kformula
 X-KDE-Weight=1
 ImportDescription=KFormula
 Name=KFormula PNG Export Filter
+Name[x-test]=xxKFormula PNG Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libkfopngexport

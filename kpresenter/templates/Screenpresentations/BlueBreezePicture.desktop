@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_bluebreezepicture
 Name=Blue Breeze Picture
+Name[x-test]=xxBlue Breeze Picturexx
 Comment=A peaceful presentation with a title and picture area
+Comment[x-test]=xxA peaceful presentation with a title and picture areaxx
 Type=Link
 URL=.source/BlueBreezePicture.kpt
 X-KDE-Hidden=false

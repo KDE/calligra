@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KFormDesigner/WidgetFactory
 Comment=Widget Factory Base
+Comment[x-test]=xxWidget Factory Basexx
 
 [PropertyDef::X-KFormDesigner-FactoryGroup]
 Type=QString

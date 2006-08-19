@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KSpread Applix Spreadsheet Import Filter
+Name[x-test]=xxKSpread Applix Spreadsheet Import Filterxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-applixspread
 X-KDE-Weight=1

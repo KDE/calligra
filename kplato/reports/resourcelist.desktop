@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=List of Resources
+Name[x-test]=xxList of Resourcesxx
 Type=Link
 URL= .source/resourcelist.ktf
 X-KDE-Hidden=false

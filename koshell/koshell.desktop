@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Workspace
+Name[x-test]=xxKOffice Workspacexx
 DocPath=koshell/index.html
 Exec=koshell
 GenericName=Office Suite
+GenericName[x-test]=xxOffice Suitexx
 Type=Application
 Icon=koshell
 X-KDE-StartupNotify=true

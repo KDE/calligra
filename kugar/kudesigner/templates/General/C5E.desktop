@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/C5E.ktm
 Name=C5E
+Name[x-test]=xxC5Exx
 Icon=template_iso

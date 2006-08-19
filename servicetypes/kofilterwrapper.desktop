@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOfficeGenericFilter
 Comment=KOffice Filter Wrapper
+Comment[x-test]=xxKOffice Filter Wrapperxx
 
 [PropertyDef::X-KDE-Wrapper-Import]
 Type=QString

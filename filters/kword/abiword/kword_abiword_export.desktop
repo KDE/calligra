@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord AbiWord Export Filter
+Name[x-test]=xxKWord AbiWord Export Filterxx
 X-KDE-Export=application/x-abiword
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1

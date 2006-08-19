@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=ODBC
+Name[x-test]=xxODBCxx
 Comment=Kexi Open Database Connectivity Driver
+Comment[x-test]=xxKexi Open Database Connectivity Driverxx
 X-KDE-Library=kexidb_odbcdriver
 ServiceTypes=Kexi/DBDriver
 Type=Service

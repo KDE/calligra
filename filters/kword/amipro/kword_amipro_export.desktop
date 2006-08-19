@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord AmiPro Export Filter
+Name[x-test]=xxKWord AmiPro Export Filterxx
 X-KDE-Export=application/x-amipro
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1

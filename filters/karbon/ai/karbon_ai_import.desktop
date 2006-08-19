@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon14 Illustrator Import Filter
+Name[x-test]=xxKarbon14 Illustrator Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=application/illustrator
 X-KDE-Weight=1

@@ -4,7 +4,9 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=KSpread Table Source
+Name[x-test]=xxKSpread Table Sourcexx
 Comment=This datasource type lets you use your entries from a kspread file.
+Comment[x-test]=xxThis datasource type lets you use your entries from a kspread file.xx
 
 X-KDE-Library=kwmailmerge_kspread
 X-KDE-Capabilities=open

@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/8HourDay-40HourWeek.kplatot
 Name=8 hour day, 40 hour week
+Name[x-test]=xx8 hour day, 40 hour weekxx
 Icon=template_timechart

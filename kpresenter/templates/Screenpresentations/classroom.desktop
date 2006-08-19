@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_classroom
 Name=Classroom
+Name[x-test]=xxClassroomxx
 Comment=Classroom by dannya
+Comment[x-test]=xxClassroom by dannyaxx
 Type=Link
 URL=.source/classroom.kpt
 X-KDE-Hidden=false

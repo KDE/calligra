@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Document...
+Name[x-test]=xxText Document...xx
 Comment=New KWord document:
+Comment[x-test]=xxNew KWord document:xx
 Type=Link
 URL=.source/TextDocument.kwt
 Icon=kword_kwd

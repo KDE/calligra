@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon XFig Import Filter
+Name[x-test]=xxKarbon XFig Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/x-xfig
 X-KDE-Weight=1

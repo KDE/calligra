@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/BalanceSheet.kst
 Name=Balance Sheet
+Name[x-test]=xxBalance Sheetxx
 Icon=template_balancesheet

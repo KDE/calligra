@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Impress Export Filter for KPresenter
+Name[x-test]=xxOpenOffice.org Impress Export Filter for KPresenterxx
 X-KDE-Export=application/vnd.sun.xml.impress
 X-KDE-Import=application/x-kpresenter
 X-KDE-Weight=1

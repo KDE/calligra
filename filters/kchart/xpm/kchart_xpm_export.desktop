@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart XPM Export Filter
+Name[x-test]=xxKChart XPM Export Filterxx
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-xpm
 X-KDE-Weight=1

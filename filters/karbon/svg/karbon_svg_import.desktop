@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon SVG Import Filter
+Name[x-test]=xxKarbon SVG Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/svg+xml
 X-KDE-Weight=1

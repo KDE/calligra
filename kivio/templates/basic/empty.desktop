@@ -4,4 +4,6 @@ Type=Link
 URL=.source/empty.kft
 Icon=template_empty
 Name=Empty Document
+Name[x-test]=xxEmpty Documentxx
 Comment=Creates a document with no stencils loaded.
+Comment[x-test]=xxCreates a document with no stencils loaded.xx

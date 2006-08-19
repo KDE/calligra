@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord Palm Doc Export Filter
+Name[x-test]=xxKWord Palm Doc Export Filterxx
 X-KDE-Export=application/vnd.palm
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1

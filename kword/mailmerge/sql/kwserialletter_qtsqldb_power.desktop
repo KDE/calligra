@@ -4,7 +4,9 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=Qt-SQL Source (power user)
+Name[x-test]=xxQt-SQL Source (power user)xx
 Comment=This datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).
+Comment[x-test]=xxThis datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).xx
 
 X-KDE-Library=kwmailmerge_qtsqldb_power
 X-KDE-Capabilities=edit,open

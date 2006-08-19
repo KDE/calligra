@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Kivio Image Export Filter
+Name[x-test]=xxKivio Image Export Filterxx
 X-KDE-Import=application/x-kivio
 X-KDE-Export=image/png,image/jpeg,image/x-bmp,image/x-eps,image/x-portable-bitmap,image/x-pcx,image/x-portable-pixmap,image/x-rgb,image/x-xpm,image/jp2
 X-KDE-Weight=1

@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Container Widgets
+Name[x-test]=xxContainer Widgetsxx
 
 X-KDE-Library=kformdesigner_containers
 X-KFormDesigner-FactoryGroup=

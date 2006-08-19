@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita RAW Import Filter
+Name[x-test]=xxKrita RAW Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-raw
 X-KDE-Weight=1

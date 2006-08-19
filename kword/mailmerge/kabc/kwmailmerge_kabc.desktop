@@ -4,7 +4,9 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=KDE Addressbook Plugin
+Name[x-test]=xxKDE Addressbook Pluginxx
 Comment=This datasource type lets you use your KDE Address Book entries.
+Comment[x-test]=xxThis datasource type lets you use your KDE Address Book entries.xx
 
 X-KDE-Library=kwmailmerge_kabc
 X-KDE-Capabilities=open

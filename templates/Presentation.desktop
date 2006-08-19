@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Presentation Document...
+Name[x-test]=xxPresentation Document...xx
 Comment=New KPresenter presentation document:
+Comment[x-test]=xxNew KPresenter presentation document:xx
 Type=Link
 URL=.source/Presentation.kpt
 Icon=kpresenter_kpr

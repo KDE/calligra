@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/VacationChecklist.kst
 Name=Vacation Checklist
+Name[x-test]=xxVacation Checklistxx
 Icon=template_vacationchecklist

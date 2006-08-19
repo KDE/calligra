@@ -2,4 +2,5 @@
 Encoding=UTF-8
 X-KDE-Library=libkiviotexttool
 Name=TextTool for Kivio
+Name[x-test]=xxTextTool for Kivioxx
 Type=Service

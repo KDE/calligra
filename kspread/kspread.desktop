@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KSpread
+Name[x-test]=xxKSpreadxx
 Exec=kspread %u
 GenericName=Spreadsheets
+GenericName[x-test]=xxSpreadsheetsxx
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/msexcel;text/x-csv;application/x-quattropro
 Type=Application
 Icon=kspread

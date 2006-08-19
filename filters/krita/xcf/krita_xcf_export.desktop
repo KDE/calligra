@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita XCF Export Filter
+Name[x-test]=xxKrita XCF Export Filterxx
 X-KDE-Export=image/x-xcf-gimp
 ServiceTypes=KOfficeFilter
 Type=Service

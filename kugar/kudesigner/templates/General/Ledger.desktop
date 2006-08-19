@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Ledger.ktm
 Name=Ledger
+Name[x-test]=xxLedgerxx
 Icon=template_us

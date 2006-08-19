@@ -5,5 +5,6 @@ Actions=Print;
 
 [Desktop Action Print]
 Name=Print...
+Name[x-test]=xxPrint...xx
 Exec=kword --print %U
 Icon=filequickprint

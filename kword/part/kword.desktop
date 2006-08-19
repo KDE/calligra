@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Type=Application
 Name=KWord
+Name[x-test]=xxKWordxx
 Exec=kword %u
 GenericName=Word Processing
+GenericName[x-test]=xxWord Processingxx
 Comment=Write text documents
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 Icon=kword

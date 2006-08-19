@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Example Component
+Name[x-test]=xxKOffice Example Componentxx
 X-KDE-Library=libexamplepart
 MimeType=application/x-example
 Type=Service

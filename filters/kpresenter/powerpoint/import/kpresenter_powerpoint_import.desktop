@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Microsoft PowerPoint Import Filter for KPresenter
+Name[x-test]=xxMicrosoft PowerPoint Import Filter for KPresenterxx
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/mspowerpoint
 X-KDE-Weight=1

@@ -1,11 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KFormDesigner
+Name[x-test]=xxKFormDesignerxx
 Exec=kformdesigner %i %m -caption "%c"
 Icon=kformdesigner
 Type=Application
 DocPath=kformdesigner/kformdesigner.html
 GenericName=Form Designer
+GenericName[x-test]=xxForm Designerxx
 MimeType=application/x-designer;
 Terminal=false
 Categories=Qt;KDE;Development;

@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ExpenseReport.kst
 Name=Expense Report
+Name[x-test]=xxExpense Reportxx
 Icon=template_expensereport

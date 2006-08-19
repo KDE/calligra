@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/PackingSlip.kst
 Name=Packing Slip
+Name[x-test]=xxPacking Slipxx
 Icon=template_packingslip

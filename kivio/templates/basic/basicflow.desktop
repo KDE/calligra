@@ -4,4 +4,6 @@ Type=Link
 URL=.source/basicflow.kft
 Icon=template_basicflow
 Name=Basic Flowcharting
+Name[x-test]=xxBasic Flowchartingxx
 Comment=Creates a document with the basic stencils for flowcharting loaded.
+Comment[x-test]=xxCreates a document with the basic stencils for flowcharting loaded.xx

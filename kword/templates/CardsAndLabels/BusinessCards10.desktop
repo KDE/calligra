@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_businesscards10
 Name=Business Cards 10
+Name[x-test]=xxBusiness Cards 10xx
 Type=Link
 URL=.source/BusinessCards10.kwt
 X-KDE-Hidden=false

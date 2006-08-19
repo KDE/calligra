@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SQLite2
+Name[x-test]=xxSQLite2xx
 Comment=SQLite is default Kexi embedded SQL engine
+Comment[x-test]=xxSQLite is default Kexi embedded SQL enginexx
 X-KDE-Library=kexidb_sqlite2driver
 ServiceTypes=Kexi/DBDriver
 Type=Service

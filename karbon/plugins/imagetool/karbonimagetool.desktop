@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Image Tool
+Name[x-test]=xxImage Toolxx
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_imagetoolplugin

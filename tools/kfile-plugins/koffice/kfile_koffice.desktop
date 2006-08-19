@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Info
+Name[x-test]=xxKOffice Infoxx
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_koffice
 MimeType=application/x-kword;application/x-kpresenter;application/x-kspread;application/x-karbon

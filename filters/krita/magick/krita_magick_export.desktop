@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita Magick Export Filter
+Name[x-test]=xxKrita Magick Export Filterxx
 X-KDE-Export=image/gif,image/cgm,image/x-bmp,image/x-ico,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xpm,image/x-rgb
 ServiceTypes=KOfficeFilter
 Type=Service

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_envelopedl
 Name=Envelope DL
+Name[x-test]=xxEnvelope DLxx
 Type=Link
 URL=.source/EnvelopeDL.kwt
 X-KDE-Hidden=false

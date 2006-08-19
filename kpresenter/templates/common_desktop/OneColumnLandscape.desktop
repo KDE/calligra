@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_onecolumnlandscape
 Name=One Column
+Name[x-test]=xxOne Columnxx
 Comment=Presentation with a page title and single large text area
+Comment[x-test]=xxPresentation with a page title and single large text areaxx
 Type=Link
 URL=.source/OneColumnLandscape.kpt
 X-KDE-Hidden=false

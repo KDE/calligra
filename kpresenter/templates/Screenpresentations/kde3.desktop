@@ -3,5 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/kde3.kpt
 Name=KDE 3
+Name[x-test]=xxKDE 3xx
 Comment=A presentation with KDE 3 theming
+Comment[x-test]=xxA presentation with KDE 3 themingxx
 Icon=template_kde3

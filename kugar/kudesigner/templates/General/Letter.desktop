@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Letter.ktm
 Name=US Letter
+Name[x-test]=xxUS Letterxx
 Icon=template_us

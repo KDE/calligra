@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Comm10E.ktm
 Name=Comm10E
+Name[x-test]=xxComm10Exx
 Icon=template_us

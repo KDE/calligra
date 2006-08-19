@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Invoice.kst
 Name=Invoice
+Name[x-test]=xxInvoicexx
 Icon=template_invoice

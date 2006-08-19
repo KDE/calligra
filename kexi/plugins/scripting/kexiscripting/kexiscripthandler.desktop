@@ -4,7 +4,9 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Scripts
+GenericName[x-test]=xxScriptsxx
 Name=Scripts
+Name[x-test]=xxScriptsxx
 X-KDE-Library=kexihandler_script
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2

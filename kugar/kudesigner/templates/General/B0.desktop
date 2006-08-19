@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/B0.ktm
 Name=B0
+Name[x-test]=xxB0xx
 Icon=template_iso

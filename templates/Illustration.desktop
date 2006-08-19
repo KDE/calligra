@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Illustration Document...
+Name[x-test]=xxIllustration Document...xx
 Comment=New Karbon14 document:
+Comment[x-test]=xxNew Karbon14 document:xx
 Type=Link
 URL=.source/Illustration.karbon
 Icon=karbon_karbon

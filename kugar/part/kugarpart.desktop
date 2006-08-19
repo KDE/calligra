@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Report Generator Component
+Name[x-test]=xxKOffice Report Generator Componentxx
 MimeType=application/x-kugar;application/x-vnd.kde.kugar.mixed
 Type=Service
 Terminal=false
@@ -8,6 +9,7 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,Browser/View
 X-KDE-Library=libkugarpart
 X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed
 GenericName=Report Generator
+GenericName[x-test]=xxReport Generatorxx
 Icon=kugar
 # Not ready for public consumption, so hide it from the menus and from koshell
 NoDisplay=true

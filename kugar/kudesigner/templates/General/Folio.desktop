@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Folio.ktm
 Name=Folio
+Name[x-test]=xxFolioxx
 Icon=template_us

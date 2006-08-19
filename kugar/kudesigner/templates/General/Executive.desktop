@@ -3,4 +3,5 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Executive.ktm
 Name=Executive
+Name[x-test]=xxExecutivexx
 Icon=template_us

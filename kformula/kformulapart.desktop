@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Formula Component
+Name[x-test]=xxKOffice Formula Componentxx
 X-KDE-Library=libkformulapart
 MimeType=application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;application/x-kformula
 Type=Service
@@ -9,4 +10,5 @@ X-KDE-NativeMimeType=application/x-kformula
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.formula
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.formula,application/vnd.oasis.opendocument.formula-template
 GenericName=Formula Editor
+GenericName[x-test]=xxFormula Editorxx
 Icon=kformula

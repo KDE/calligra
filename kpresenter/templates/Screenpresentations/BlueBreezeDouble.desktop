@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_bluebreezedouble
 Name=Blue Breeze Double
+Name[x-test]=xxBlue Breeze Doublexx
 Comment=A peaceful presentation with a title and two text columns
+Comment[x-test]=xxA peaceful presentation with a title and two text columnsxx
 Type=Link
 URL=.source/BlueBreezeDouble.kpt
 X-KDE-Hidden=false

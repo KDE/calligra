@@ -8,6 +8,7 @@ X-KDE-Weight=1
 X-KDE-Available=check
 ImportDescription=KWord
 Name=KOffice XSLT Export Filter
+Name[x-test]=xxKOffice XSLT Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libxsltexport

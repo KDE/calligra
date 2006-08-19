@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Word Processing Component
+Name[x-test]=xxKOffice Word Processing Componentxx
 X-KDE-Library=libkwordpart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.text
@@ -9,5 +10,6 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template,appl
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Text Documents
+GenericName[x-test]=xxText Documentsxx
 Icon=kword
 InitialPreference=3

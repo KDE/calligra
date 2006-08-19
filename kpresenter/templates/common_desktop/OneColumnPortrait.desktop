@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Icon=template_onecolumnportrait
 Name=One Column Portrait
+Name[x-test]=xxOne Column Portraitxx
 Comment=Presentation with a page title and single large text area (portrait-oriented)
+Comment[x-test]=xxPresentation with a page title and single large text area (portrait-oriented)xx
 Type=Link
 URL=.source/OneColumnPortrait.kpt
 X-KDE-Hidden=false

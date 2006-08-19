@@ -3,5 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/BMI.kst
 Name=BMI Calculator
+Name[x-test]=xxBMI Calculatorxx
 Comment=Simple Body Mass Index Calculator
+Comment[x-test]=xxSimple Body Mass Index Calculatorxx
 Icon=template_bmi

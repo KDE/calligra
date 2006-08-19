@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord HTML Import Filter
+Name[x-test]=xxKWord HTML Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=text/html
 X-KDE-Weight=1

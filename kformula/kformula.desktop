@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KFormula
+Name[x-test]=xxKFormulaxx
 Exec=kformula %u
 GenericName=Formula Editor
+GenericName[x-test]=xxFormula Editorxx
 MimeType=application/vnd.oasis.opendocument.formula;application/x-kformula
 Type=Application
 Icon=kformula
