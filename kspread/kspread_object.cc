@@ -628,6 +628,9 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
         rangeName.prepend( sheet()->sheetName() + "." );
         sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );
     }
+    else {
+        kdDebug() << "EmbeddedChart::saveOasisPart m_pBinding is NULL" << endl;
+    }
     sc.xmlWriter.endElement();
 
     return true;
