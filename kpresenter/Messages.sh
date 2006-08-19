@@ -1,2 +1,3 @@
 #! /bin/sh
-$XGETTEXT rc.cpp */*.cpp *.cpp *.h KPrAboutData.h -o $podir/kpresenter.pot
+$EXTRACTRC *.ui *.rc >> rc.cpp || exit 11
+$XGETTEXT */*.cpp *.cpp *.h KPrAboutData.h -o $podir/kpresenter.pot
