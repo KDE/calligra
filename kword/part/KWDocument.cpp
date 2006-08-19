@@ -20,6 +20,7 @@
 
 // kword includes
 #include "KWDocument.h"
+#include "KWFactory.h"
 #include "KWView.h"
 #include "KWCanvas.h"
 #include "KWPageManager.h"
@@ -58,6 +59,9 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
 {
     m_styleManager = new KoStyleManager(this);
     m_zoomMode = KoZoomMode::ZOOM_WIDTH;
+
+    setInstance( KWFactory::instance(), false );
+    setTemplateType( "kword_template" );
 
     connect (&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
 
