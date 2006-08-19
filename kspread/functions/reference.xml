@@ -197,7 +197,7 @@
      </Parameter>
      <Help>
        <Text>The LOOKUP function looks up the first parameter in the lookup vector. It returns a value in the result Vector with the same index as the matching value in the lookup vector. If value is not in the lookup vector it takes the next lower one. If no value in the lookup vector matches an error is returned. The lookup vector must be in ascending order and lookup and result vector must have the same size. Numeric values, string and boolean values are recognized. Comparison between strings is case-insensitive.</Text>
-       <Syntax>LOOKUP(value, lookup vector, result vector)</Syntax>
+       <Syntax>LOOKUP(value; lookup vector; result vector)</Syntax>
        <Example>LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1.</Example>
      </Help>
    </Function>
