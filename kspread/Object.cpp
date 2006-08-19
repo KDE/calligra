@@ -621,14 +621,14 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
 
     EmbeddedKOfficeObject::saveOasisObjectAttributes( sc );
 
-    QRect dataArea = m_pBinding->dataArea();
-    QString rangeName = util_rangeName( dataArea);
-    rangeName.insert( rangeName.indexOf(':') +1, sheet()->sheetName() + '.' );
-    rangeName.prepend( sheet()->sheetName() + '.' );
-    sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );
-
+    if(m_pBinding) { // see http://bugs.kde.org/show_bug.cgi?id=120395
+        QRect dataArea = m_pBinding->dataArea();
+        QString rangeName = util_rangeName( dataArea);
+        rangeName.insert( rangeName.indexOf(':') +1, sheet()->sheetName() + '.' );
+        rangeName.prepend( sheet()->sheetName() + '.' );
+        sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );
+    }
     sc.xmlWriter.endElement();
-
 
     return true;
 }
