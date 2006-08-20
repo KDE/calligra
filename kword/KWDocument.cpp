@@ -874,6 +874,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 maxBottom = qMax(maxBottom, fit.current()->bottom());
         }
         KWPage *last = pageManager()->page(lastPage());
+	Q_ASSERT(last);
         double docHeight = last->offsetInDocument() + last->height();
         while(docHeight <= maxBottom) {
             last = pageManager()->appendPage();

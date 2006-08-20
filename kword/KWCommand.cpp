@@ -1846,7 +1846,9 @@ void KWInsertRemovePageCommand::doRemove(int pageNumber) {
          (*cmdIter)->execute();
 
     // next move all frames up that are on higher pagenumbers
-    const double pageHeight = m_doc->pageManager()->page(pageNumber)->height();
+    KWPage* page = m_doc->pageManager()->page(pageNumber);
+    Q_ASSERT(page);
+    const double pageHeight = page->height();
     const double topOfPage = m_doc->pageManager()->topOfPage(pageNumber);
     m_doc->pageManager()->removePage( pageNumber );
 
