@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Kexi Import Filter for KSpread
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=application/x-kspread
+X-KDE-Import=application/x-kexiproject-sqlite3
+X-KDE-Library=libkspreadkexiimport
+X-KDE-Weight=50

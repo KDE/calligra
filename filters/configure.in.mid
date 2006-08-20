@@ -23,6 +23,7 @@ for args in $SUBDIRLIST ; do
         kugar) COMPILE_FILTER_KUGAR="$args " ;;
         krita) COMPILE_FILTER_KRITA="$args " ;;
 	kivio) COMPILE_FILTER_KIVIO="$args " ;;
+	kexi) COMPILE_FILTER_KEXI="$args " ;;
     esac
 done
 
@@ -38,6 +39,7 @@ for args in $DO_NOT_COMPILE ; do
         kugar) COMPILE_FILTER_KUGAR= ;;
         krita) COMPILE_FILTER_KRITA= ;;
 	kivio) COMPILE_FILTER_KIVIO= ;;
+	kexi) COMPILE_FILTER_KEXI= ;;
     esac
 done
 
@@ -53,4 +55,4 @@ AM_CONDITIONAL(compile_filter_KFORMULA, test -n "$COMPILE_FILTER_KFORMULA")
 AM_CONDITIONAL(compile_filter_KUGAR, test -n "$COMPILE_FILTER_KUGAR")
 AM_CONDITIONAL(compile_filter_KRITA, test -n "$COMPILE_FILTER_KRITA")
 AM_CONDITIONAL(compile_filter_KIVIO, test -n "$COMPILE_FILTER_KIVIO")
-
+AM_CONDITIONAL(compile_filter_KEXI, test -n "$COMPILE_FILTER_KEXI")
