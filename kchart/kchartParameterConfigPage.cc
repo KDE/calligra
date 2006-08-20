@@ -44,11 +44,13 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
                                                       QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
+    // toplevel layout
     QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
 
     QGridLayout* layout = new QGridLayout( 1, 3 );
     toplevel->addLayout( layout );
 
+    // The "Parameters" button group
     QButtonGroup* gb1 = new QButtonGroup( 0, Qt::Vertical, i18n("Parameters"), this );
     gb1->layout()->setSpacing(KDialog::spacingHint());
     gb1->layout()->setMargin(KDialog::marginHint());
@@ -57,16 +59,19 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
     QWhatsThis::add(grid, i18n("If this is checked, the grid is shown. If you uncheck this option, the grid will not be displayed anymore."));
     grid1->addWidget(grid, 0, 0);
+    //gb1->insert(grid);
 
     yaxis = new QCheckBox( i18n( "Y-axis" ), gb1);
     QWhatsThis::add(yaxis, i18n("If this is checked, the Y-axis is shown. If you uncheck this option, the Y-axis and the Y grid lines will not be displayed anymore."));
     connect( yaxis, SIGNAL( clicked() ), this, SLOT( axisChanged() ) );
     grid1->addWidget(yaxis, 1, 0);
+    //gb1->insert(yaxis);
 
     xaxis = new QCheckBox( i18n( "X-axis" ), gb1 );
     QWhatsThis::add(xaxis, i18n("If this is checked, the X-axis is shown. If you uncheck this option, the X-axis and the X grid lines will not be displayed anymore."));
     connect( xaxis, SIGNAL( clicked() ), this, SLOT( axisChanged() ) );
     grid1->addWidget(xaxis, 2, 0);
+    //gb1->insert(xaxis);
 
 #if 0
     xlabel = new QCheckBox( i18n( "Has X-label" ), gb1 );
@@ -85,13 +90,16 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid1->addWidget(llabel,6,0);
 #endif
 
+    // The "Settings" button group
     QButtonGroup* gb2 = new QButtonGroup( 0, Qt::Vertical, 
-                      i18n("Settings"), this );
+					  i18n("Settings"), this );
     gb2->layout()->setSpacing(KDialog::spacingHint());
     gb2->layout()->setMargin(KDialog::marginHint());
     QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,1);
 
-    QHBoxLayout * top = new QHBoxLayout( this );
+    QBoxLayout * l = new QVBoxLayout( grid2 );
+
+    QHBoxLayout * top = new QHBoxLayout( l );
     // The X axis title
     QLabel *tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
     top->addWidget(tmpLabel);
@@ -99,18 +107,13 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
     top->addWidget(tmpLabel);
 
-    QHBoxLayout * bottom = new QHBoxLayout( this );
+    QHBoxLayout * bottom = new QHBoxLayout( l );
     xtitle= new QLineEdit( gb2 );
     QWhatsThis::add(xtitle, i18n("Write the title for the X-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
     bottom->addWidget(xtitle);
-    QBoxLayout * l = new QVBoxLayout( this );
     ytitle= new QLineEdit( gb2 );
     QWhatsThis::add(ytitle, i18n("Write the title for the Y-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
     bottom->addWidget(ytitle);
-
-    l->addLayout(top);
-    l->addLayout(bottom);
-    grid2->addLayout(l, 0, 0);
 
     // Linear or logarithmic scale
     QVButtonGroup *scaletype = new QVButtonGroup(i18n("Scale Types"), gb2);
