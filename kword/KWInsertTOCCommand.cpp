@@ -194,6 +194,10 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
                     break;
                 }
             }
+            if(! p) { // see bug #131122
+                p = prev;
+                continue;
+            }
             p->setPrev( prev );
         }
         p = p->prev();
