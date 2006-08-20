@@ -26,7 +26,6 @@
 
 #include <karbon_view.h>
 #include <karbon_part.h>
-#include <shapes/vrectangle.h>
 #include "vroundrecttool.h"
 #include "KoUnitWidgets.h"
 
