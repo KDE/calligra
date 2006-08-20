@@ -1447,8 +1447,12 @@ void KWCanvas::terminateEditing( KWFrameSet *fs )
         terminateCurrentEdit();
     // Also deselect the frames from this frameset
     Q3PtrListIterator<KWFrame> frameIt = fs->frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
-        m_frameViewManager->view(frameIt.current())->setSelected(false);
+    for ( ; frameIt.current(); ++frameIt ) {
+        KWFrameView* view = m_frameViewManager->view(frameIt.current());
+        Q_ASSERT(view);
+        if(view) view->setSelected(false);
+    }		    
+
 }
 
 KWTextFrameSetEdit* KWCanvas::currentTextEdit() const
