@@ -978,13 +978,16 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
             }
         }
         KWPage *last = pageManager()->page(lastPage());
-        double docHeight = last->offsetInDocument() + last->height();
-        while(docHeight <= maxBottom) {
-            last = pageManager()->appendPage();
-            docHeight += last->height();
+        Q_ASSERT(last);
+        if(last) { // hack to work around bug #132338
+            double docHeight = last->offsetInDocument() + last->height();
+            while(docHeight <= maxBottom) {
+                last = pageManager()->appendPage();
+                docHeight += last->height();
+            }
+            if ( toPage == -1 )
+                toPage = pageCount() - 1;
         }
-        if ( toPage == -1 )
-            toPage = pageCount() - 1;
         KWFrameList::recalcFrames(this, fromPage, toPage);
     }
     kdDebug(32002) << "            ~recalcFrames" << endl;
