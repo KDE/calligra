@@ -7302,6 +7302,12 @@ bool Cell::testFlag( CellFlags flag ) const
 
 void Cell::checkForNamedAreas( QString & formula ) const
 {
+  KSPLoadingInfo* loadinginfo = sheet()->doc()->loadingInfo();
+  if(! loadinginfo) {
+    kdDebug() << "Cell::checkForNamedAreas loadinginfo is NULL" << endl;
+    return;
+  }
+
   int l = formula.length();
   int i = 0;
   QString word;
@@ -7316,7 +7322,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
     }
     if ( !word.isEmpty() )
     {
-      if ( sheet()->doc()->loadingInfo()->findWordInAreaList(word) )
+      if ( loadinginfo->findWordInAreaList(word) )
       {
         formula = formula.replace( start, word.length(), "'" + word + "'" );
         l = formula.length();
@@ -7331,7 +7337,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
   }
   if ( !word.isEmpty() )
   {
-    if ( sheet()->doc()->loadingInfo()->findWordInAreaList(word) )
+    if ( loadinginfo->findWordInAreaList(word) )
     {
       formula = formula.replace( start, word.length(), "'" + word + "'" );
       l = formula.length();
