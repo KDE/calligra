@@ -48,8 +48,6 @@ KarbonCanvas::KarbonCanvas( VDocument &document )
     : QWidget()
     , m_zoomHandler()
     , m_tool(0)
-    , m_unit( KoUnit::U_PT )
-    , m_snapToGrid(false)
     , m_doc( &document )
     , m_marginX( defaultMargin )
     , m_marginY( defaultMargin )
@@ -120,6 +118,10 @@ void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
 
 void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
     m_doc->grid().spacing( horizontal, vertical );
+}
+
+bool KarbonCanvas::snapToGrid() const {
+    return m_doc->grid().snapping();
 }
 
 void KarbonCanvas::addCommand(KCommand *command, bool execute) {
@@ -206,6 +208,10 @@ QPoint KarbonCanvas::viewToWidget( const QPoint& p ) const {
 
 QRect KarbonCanvas::viewToWidget( const QRect& r ) const {
     return r.translated( m_origin );
+}
+
+KoUnit::Unit KarbonCanvas::unit() {
+    return m_doc->unit();
 }
 
 #include "vcanvas.moc"

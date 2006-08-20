@@ -56,8 +56,10 @@ public:
     KarbonCanvas( VDocument &document );
     virtual ~KarbonCanvas();
 
-    void gridSize(double *horizontal, double *vertical) const;
-    bool snapToGrid() const { return m_snapToGrid; }
+    // from KoCanvasBase
+    virtual void gridSize(double *horizontal, double *vertical) const;
+    virtual bool snapToGrid() const;
+    virtual KoUnit::Unit unit();
 
     void addCommand(KCommand *command, bool execute = true);
 
@@ -75,8 +77,6 @@ public:
     KoViewConverter *viewConverter() { return &m_zoomHandler; }
 
     QWidget *canvasWidget() { return this; }
-
-    virtual KoUnit::Unit unit() { return m_unit; };
 
     void setCommandHistory( KCommandHistory* history ) { m_commandHistory = history; }
 
@@ -117,9 +117,6 @@ private:
     KCommandHistory *m_commandHistory;
 
     KoTool *m_tool;
-    KoUnit::Unit m_unit;
-
-    bool m_snapToGrid;
 
     VDocument *m_doc;
     QRectF m_contentRect;  ///< the content rect around all content of the document (>=m_documentRect)
