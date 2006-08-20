@@ -285,7 +285,7 @@ void TestDocumentLayout::testAdvancedLineSpacing() {
 
     block = block.next();
     QVERIFY(block.isValid()); // line6
-    style.setFontIndependentLineSpacing(false);
+    style.setLineSpacingFromFont(true);
     style.setLineHeightPercent(100);
     style.applyStyle(block);
 
@@ -482,16 +482,16 @@ void TestDocumentLayout::testTextAlignments() {
 void TestDocumentLayout::testPageBreak() {
     initForNewTest("line\nParag2\nSimple Parag\nLast");
     KoParagraphStyle style;
-    style.setBreakAfter(true);
-    QTextBlock block = doc->begin().next();
-    QVERIFY(block.isValid());
-    style.applyStyle(block);
-    block = block.next();
-    QVERIFY(block.isValid());
-    block = block.next();
-    QVERIFY(block.isValid());
-    style.setBreakBefore(false);
     style.setBreakBefore(true);
+    style.setBreakAfter(true);
+    QTextBlock block = doc->begin();
+    style.applyStyle(block); // break before Line (ignored) and after, moving Parag2 to a new shape
+    block = block.next();
+    QVERIFY(block.isValid());
+    block = block.next();
+    QVERIFY(block.isValid());
+    style.setBreakBefore(false); // break after 'simple parag' moving 'Last' to a new shape
+    style.setBreakAfter(true);
     style.applyStyle(block);
 
     shape1->resize(QSizeF(200, 40));
@@ -508,11 +508,13 @@ void TestDocumentLayout::testPageBreak() {
     block = doc->begin().next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 2
+    QCOMPARE(blockLayout->lineCount(), 1);
     QCOMPARE(blockLayout->lineAt(0).y(), 50.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 3
-    QVERIFY( qAbs(blockLayout->lineAt(0).y() - 61.4) < ROUNDING);
+    //qDebug() << qAbs(blockLayout->lineAt(0).y());
+    QVERIFY( qAbs(blockLayout->lineAt(0).y() - 64.4) < ROUNDING);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 4

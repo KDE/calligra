@@ -174,6 +174,7 @@ void KWTextDocumentLayout::layout() {
             m_y = 0;
             layout = 0;
             frameNumber = -1;
+            m_data = 0;
             nextFrame();
             m_block = m_frameSet->document()->begin();
             nextParag();
@@ -198,7 +199,7 @@ void KWTextDocumentLayout::layout() {
         bool addLine(const QTextLine &line) {
             double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
             bool useFixedLineHeight = height != 0.0;
-            bool useFontProperties = !m_format.boolProperty(KoParagraphStyle::FontIndependentLineSpacing);
+            bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
             if(! useFixedLineHeight) {
                 if(useFontProperties)
                     height = line.height();
@@ -223,13 +224,9 @@ void KWTextDocumentLayout::layout() {
 //kDebug() << "   NEXT frame" << endl;
                 // line does not fit.
                 m_data->setEndPosition(line.textStart()-1);
-                m_y = m_data->documentOffset() + shape->size().height() + 10.0;
-                m_data->wipe();
                 nextFrame();
-                if(m_data) {
-                    m_data->setDocumentOffset(m_y);
+                if(m_data)
                     m_data->setPosition(line.textStart());
-                }
                 return true;
             }
 
@@ -257,11 +254,17 @@ void KWTextDocumentLayout::layout() {
         }
 
         bool nextParag() {
-            if(layout != 0) { // guard against first time
+            if(layout) { // guard against first time
                 layout->endLayout();
                 m_block = m_block.next();
-                if(!m_newShape) { // ignore bottomMargin when we went to a new shape anyway.
+                if(!m_newShape) {// this parag is first line on new shape
                     m_y += m_format.bottomMargin();
+                    if(m_format.boolProperty(KoParagraphStyle::BreakAfter)) {
+                        m_data->setEndPosition(m_block.position()-1);
+                        nextFrame();
+                        if(m_data)
+                            m_data->setPosition(m_block.position());
+                    }
                 }
             }
             if(! m_block.isValid())
@@ -269,6 +272,12 @@ void KWTextDocumentLayout::layout() {
             m_format = m_block.blockFormat();
             if(! m_newShape) { // ignore margins at top of shape
                 m_y += m_format.topMargin();
+                if(m_format.boolProperty(KoParagraphStyle::BreakBefore)) {
+                    m_data->setEndPosition(m_block.position()-1);
+                    nextFrame();
+                    if(m_data)
+                        m_data->setPosition(m_block.position());
+                }
             }
             layout = m_block.layout();
             QTextOption options = layout->textOption();
@@ -288,14 +297,20 @@ void KWTextDocumentLayout::layout() {
       private:
         void nextFrame() {
             frameNumber++;
+            m_newShape = true;
             if(frameNumber >= m_frameSet->frameCount()) {
                 shape = 0;
                 m_data = 0;
                 return;
             }
+
+            if(m_data) {
+                m_y = m_data->documentOffset() + shape->size().height() + 10.0;
+                m_data->wipe();
+            }
             shape = m_frameSet->frames()[frameNumber]->shape();
             m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
-            m_newShape = true;
+            m_data->setDocumentOffset(m_y);
         }
 
       private:
