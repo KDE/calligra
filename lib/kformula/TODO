@@ -134,19 +134,6 @@ NOTE: Only Presentation Markup is considered here.
 
 == Script and Limit Schemata ==
 
-= msub =
-
-* Support for attribute subscriptshift: loading, saving, rendering ( Section 3.4.1.2 )
-
-= msup =
-
-* Support for attribute superscriptshift: loading, saving, rendering ( Section 3.4.2.2 )
-
-= msubsup =
-
-* Support for attribute subscriptshift: loading, saving, rendering ( Section 3.4.3.2 )
-* Support for attribute superscriptshift: loading, saving, rendering ( Section 3.4.3.2 )
-
 = munder =
 
 * Support for attribute accentunder: loading, saving, rendering ( Section 3.4.4.2 )

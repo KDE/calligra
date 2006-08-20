@@ -91,7 +91,9 @@ KCommand* IndexSequenceElement::buildCommand( Container* container, Request* req
 
 
 IndexElement::IndexElement(BasicElement* parent)
-    : BasicElement(parent)
+    : BasicElement(parent),
+      m_subScriptShiftType( NoSize ),
+      m_superScriptShiftType( NoSize )
 {
     content = new IndexSequenceElement( this );
 
@@ -458,6 +460,36 @@ void IndexElement::calcSizes(const ContextStyle& context,
         llOffset = QMAX(content->getHeight()-llMidline, toMidline);
         lrOffset = QMAX(content->getHeight()-lrMidline, toMidline);
     }
+
+    // Add more offset if defined in attributes
+    switch ( m_superScriptShiftType ) {
+    case AbsoluteSize:
+        urOffset += context.ptToLayoutUnitPt( m_superScriptShift );
+        break;
+    case RelativeSize:
+        urOffset += urOffset * m_superScriptShift;
+        break;
+    case PixelSize:
+        urOffset += context.pixelToLayoutUnitY( m_superScriptShift );
+        break;
+    default:
+        break;
+    }
+
+    switch ( m_subScriptShiftType ) {
+    case AbsoluteSize:
+        lrOffset += context.ptToLayoutUnitPt( m_subScriptShift );
+        break;
+    case RelativeSize:
+        lrOffset += lrOffset * m_subScriptShift;
+        break;
+    case PixelSize:
+        lrOffset += context.pixelToLayoutUnitY( m_subScriptShift );
+        break;
+    default:
+        break;
+    }
+
     luPixel height = QMAX(umHeight, QMAX(ulOffset, urOffset));
 
     // the upper half
@@ -470,7 +502,7 @@ void IndexElement::calcSizes(const ContextStyle& context,
         upperMiddle->setY(height-umHeight);
     }
     if (hasUpperRight()) {
-        upperRight->setY(height-urOffset);
+        upperRight->setY( height - urOffset );
     }
 
     // the lower half
@@ -481,7 +513,7 @@ void IndexElement::calcSizes(const ContextStyle& context,
         lowerMiddle->setY(height+content->getHeight()+distY);
     }
     if (hasLowerRight()) {
-        lowerRight->setY(height+lrOffset);
+        lowerRight->setY( height + lrOffset );
     }
 
     fromMidline += QMAX(QMAX(llHeight+llOffset, lrHeight+lrOffset) - content->getHeight(), lmHeight);
@@ -1303,6 +1335,24 @@ bool IndexElement::readContentFromDom(QDomNode& node)
         lowerLeftRead || lowerMiddleRead || lowerRightRead;
 }
 
+bool IndexElement::readAttributesFromMathMLDom( const QDomElement& element )
+{
+    QString tag = element.tagName().stripWhiteSpace().lower();
+    if ( tag == "msub" || tag == "msubsup" ) {
+        QString subscriptshiftStr = element.attribute( "subscriptshift" );
+        if ( ! subscriptshiftStr.isNull() ) {
+            m_subScriptShift = getSize( subscriptshiftStr, &m_subScriptShiftType );
+        }
+    }
+    if ( tag == "msup" || tag == "msubsup" ) {
+        QString superscriptshiftStr = element.attribute( "superscriptshift" );
+        if ( ! superscriptshiftStr.isNull() ) {
+            m_superScriptShift = getSize( superscriptshiftStr, &m_superScriptShiftType );
+        }
+    }
+    return true;
+}
+
 /**
  * Reads our content from the MathML node. Sets the node to the next node
  * that needs to be read. It is sometimes needed to read more than one node
@@ -1493,6 +1543,39 @@ QString IndexElement::getElementName() const
     return "msubsup";
 }
 
+void IndexElement::writeMathMLAttributes( QDomElement& element ) const
+{
+    if ( getElementName() == "msub" || getElementName() == "msubsup" ) {
+        switch ( m_subScriptShiftType ) {
+        case AbsoluteSize:
+            element.setAttribute( "subscriptshift", QString( "%1pt" ).arg( m_subScriptShift ) );
+            break;
+        case RelativeSize:
+            element.setAttribute( "subscriptshift", QString( "%1%" ).arg( m_subScriptShift * 100.0 ) );
+            break;
+        case PixelSize:
+            element.setAttribute( "subscriptshift", QString( "%1px" ).arg( m_subScriptShift ) );
+            break;
+        default:
+            break;
+        }
+    }
+    if ( getElementName() == "msup" || getElementName() == "msubsup" ) {
+        switch ( m_superScriptShiftType ) {
+        case AbsoluteSize:
+            element.setAttribute( "superscriptshift", QString( "%1pt" ).arg( m_superScriptShift ) );
+            break;
+        case RelativeSize:
+            element.setAttribute( "superscriptshift", QString( "%1%" ).arg( m_superScriptShift * 100.0 ) );
+            break;
+        case PixelSize:
+            element.setAttribute( "superscriptshift", QString( "%1px" ).arg( m_superScriptShift ) );
+            break;
+        default:
+            break;
+        }
+    }
+}
 void IndexElement::writeMathMLContent( QDomDocument& doc, 
                                        QDomElement& element,
                                        bool oasisFormat ) const

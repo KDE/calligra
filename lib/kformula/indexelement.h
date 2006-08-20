@@ -281,6 +281,7 @@ protected:
     virtual void writeDom(QDomElement element);
 
     virtual QString getElementName() const ;
+    virtual void writeMathMLAttributes( QDomElement& element ) const ;
     virtual void writeMathMLContent( QDomDocument& doc, 
                                      QDomElement& element,
                                      bool oasisFormat ) const ;
@@ -297,6 +298,7 @@ protected:
      */
     virtual bool readContentFromDom(QDomNode& node);
 
+    virtual bool readAttributesFromMathMLDom( const QDomElement& element );
     /**
      * Reads our content from the MathML node. Sets the node to the next node
      * that needs to be read. It is sometimes needed to read more than one node
@@ -421,6 +423,14 @@ private:
     SequenceElement* lowerLeft;
     SequenceElement* lowerMiddle;
     SequenceElement* lowerRight;
+
+    /**
+     * MathML attributes.
+     */
+    SizeType m_subScriptShiftType;
+    double m_subScriptShift;
+    SizeType m_superScriptShiftType;
+    double m_superScriptShift;
 };
 
 KFORMULA_NAMESPACE_END
