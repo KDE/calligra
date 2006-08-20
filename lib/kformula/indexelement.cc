@@ -93,7 +93,9 @@ KCommand* IndexSequenceElement::buildCommand( Container* container, Request* req
 IndexElement::IndexElement(BasicElement* parent)
     : BasicElement(parent),
       m_subScriptShiftType( NoSize ),
-      m_superScriptShiftType( NoSize )
+      m_superScriptShiftType( NoSize ),
+      m_customAccentUnder( false ),
+      m_customAccent ( false )
 {
     content = new IndexSequenceElement( this );
 
@@ -118,7 +120,15 @@ IndexElement::~IndexElement()
 
 
 IndexElement::IndexElement( const IndexElement& other )
-    : BasicElement( other )
+    : BasicElement( other ),
+      m_subScriptShiftType( other.m_subScriptShiftType ),
+      m_subScriptShift( other.m_subScriptShift ),
+      m_superScriptShiftType( other.m_superScriptShiftType ),
+      m_superScriptShift( other.m_superScriptShift ),
+      m_customAccentUnder( other.m_customAccentUnder ),
+      m_accentUnder( other.m_accentUnder ),
+      m_customAccent ( other.m_customAccent ),
+      m_accent( other.m_accent )      
 {
     content = new IndexSequenceElement( *dynamic_cast<IndexSequenceElement*>( other.content ) );
 
@@ -1337,17 +1347,56 @@ bool IndexElement::readContentFromDom(QDomNode& node)
 
 bool IndexElement::readAttributesFromMathMLDom( const QDomElement& element )
 {
+    if ( !BasicElement::readAttributesFromMathMLDom( element ) ) {
+        return false;
+    }
+
     QString tag = element.tagName().stripWhiteSpace().lower();
     if ( tag == "msub" || tag == "msubsup" ) {
-        QString subscriptshiftStr = element.attribute( "subscriptshift" );
+        QString subscriptshiftStr = element.attribute( "subscriptshift" ).stripWhiteSpace().lower();
         if ( ! subscriptshiftStr.isNull() ) {
             m_subScriptShift = getSize( subscriptshiftStr, &m_subScriptShiftType );
         }
     }
     if ( tag == "msup" || tag == "msubsup" ) {
-        QString superscriptshiftStr = element.attribute( "superscriptshift" );
+        QString superscriptshiftStr = element.attribute( "superscriptshift" ).stripWhiteSpace().lower();
         if ( ! superscriptshiftStr.isNull() ) {
             m_superScriptShift = getSize( superscriptshiftStr, &m_superScriptShiftType );
+        }
+    }
+
+    if ( tag == "munder" || tag == "munderover" ) {
+        QString accentunderStr = element.attribute( "accentunder" ).stripWhiteSpace().lower();
+        if ( ! accentunderStr.isNull() ) {
+            if ( accentunderStr == "true" ) {
+                m_customAccentUnder = true;
+                m_accentUnder = true;
+            }
+            else if ( accentunderStr == "false" ) {
+                m_customAccentUnder = true;
+                m_accentUnder = false;
+            }
+            else {
+                kdWarning( DEBUGID ) << "Invalid value for attribute `accentunder': " 
+                                     << accentunderStr << endl;
+            }
+        }
+    }
+    if ( tag == "mover" || tag == "munderover" ) {
+        QString accentStr = element.attribute( "accent" ).stripWhiteSpace().lower();
+        if ( ! accentStr.isNull() ) {
+            if ( accentStr == "true" ) {
+                m_customAccent = true;
+                m_accent = true;
+            }
+            else if ( accentStr == "false" ) {
+                m_customAccent = true;
+                m_accent = false;
+            }
+            else {
+                kdWarning( DEBUGID ) << "Invalid value for attribute `accent': " 
+                                     << accentStr << endl;
+            }
         }
     }
     return true;
@@ -1545,7 +1594,8 @@ QString IndexElement::getElementName() const
 
 void IndexElement::writeMathMLAttributes( QDomElement& element ) const
 {
-    if ( getElementName() == "msub" || getElementName() == "msubsup" ) {
+    QString tag = getElementName();
+    if ( tag == "msub" || tag == "msubsup" ) {
         switch ( m_subScriptShiftType ) {
         case AbsoluteSize:
             element.setAttribute( "subscriptshift", QString( "%1pt" ).arg( m_subScriptShift ) );
@@ -1560,7 +1610,7 @@ void IndexElement::writeMathMLAttributes( QDomElement& element ) const
             break;
         }
     }
-    if ( getElementName() == "msup" || getElementName() == "msubsup" ) {
+    if ( tag == "msup" || tag == "msubsup" ) {
         switch ( m_superScriptShiftType ) {
         case AbsoluteSize:
             element.setAttribute( "superscriptshift", QString( "%1pt" ).arg( m_superScriptShift ) );
@@ -1575,7 +1625,19 @@ void IndexElement::writeMathMLAttributes( QDomElement& element ) const
             break;
         }
     }
+    if ( tag == "munder" || tag == "munderover" ) {
+        if ( m_customAccentUnder ) {
+            element.setAttribute( "accentunder", m_accentUnder ? "true" : "false" );
+        }
+    }
+    if ( tag == "mover" || tag == "munderover" ) {
+        if ( m_customAccent ) {
+            element.setAttribute( "accent", m_accent ? "true" : "false" );
+        }
+    }
 }
+
+
 void IndexElement::writeMathMLContent( QDomDocument& doc, 
                                        QDomElement& element,
                                        bool oasisFormat ) const

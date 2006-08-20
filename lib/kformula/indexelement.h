@@ -431,6 +431,10 @@ private:
     double m_subScriptShift;
     SizeType m_superScriptShiftType;
     double m_superScriptShift;
+    bool m_accentUnder;
+    bool m_customAccentUnder;
+    bool m_accent;
+    bool m_customAccent;
 };
 
 KFORMULA_NAMESPACE_END

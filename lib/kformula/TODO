@@ -136,18 +136,18 @@ NOTE: Only Presentation Markup is considered here.
 
 = munder =
 
-* Support for attribute accentunder: loading, saving, rendering ( Section 3.4.4.2 )
+* Support for attribute accentunder: rendering ( Section 3.4.4.2 )
 * Proper rendering of underscript element
 
 = mover =
 
-* Support for attribute accent: loading, saving, rendering ( Section 3.4.5.2 )
+* Support for attribute accent: rendering ( Section 3.4.5.2 )
 * Proper rendering of overscript element
 
 = munderover =
 
-* Support for attribute accent: loading, saving, rendering ( Section 3.4.6.2, 3.4.5.2 )
-* Support for attribute accentunder: loading, saving, rendering ( Section 3.4.6.2, 3.4.4.2 )
+* Support for attribute accent: rendering ( Section 3.4.6.2, 3.4.5.2 )
+* Support for attribute accentunder: rendering ( Section 3.4.6.2, 3.4.4.2 )
 * Proper rendering of overscript element
 * Proper rendering of underscript element
 
