@@ -4101,7 +4101,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
 
   KSPLoadingInfo* loadinginfo = sheet()->doc()->loadingInfo();
   if(! loadinginfo) {
-    kdDebug() << "Cell::checkForNamedAreas loadinginfo is NULL" << endl;
+    kDebug() << "Cell::checkForNamedAreas loadinginfo is NULL" << endl;
     return;
   }
 
