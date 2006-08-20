@@ -753,7 +753,7 @@ protected slots:
   virtual void openTemplate( const KUrl& url );
 
 protected:
-  KoView* createViewInstance( QWidget* parent, const char* name );
+  KoView* createViewInstance( QWidget* parent );
 
   void makeUsedPixmapList();
   void insertPixmapKey( KoPictureKey key );

@@ -406,11 +406,9 @@ KCompletion& Doc::completion()
   return d->listCompletion;
 }
 
-KoView* Doc::createViewInstance( QWidget* parent, const char* name )
+KoView* Doc::createViewInstance( QWidget* parent)
 {
-    if ( name == 0 )
-        name = "View";
-    return new View( parent, name, this );
+    return new View( parent, this );
 }
 
 bool Doc::saveChildren( KoStore* _store )

@@ -1477,9 +1477,8 @@ QAbstractButton* View::Private::newIconButton( const char *_file, bool _kbutton,
  *
  *****************************************************************************/
 
-View::View( QWidget *_parent, const char *_name,
-    Doc *_doc )
-  : KoView( _doc, _parent, _name )
+View::View( QWidget *_parent, Doc *_doc )
+  : KoView( _doc, _parent )
 {
     ElapsedTime et( "View constructor" );
     kDebug(36001) << "sizeof(Cell)=" << sizeof(Cell) <<endl;

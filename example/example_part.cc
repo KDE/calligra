@@ -29,9 +29,9 @@ ExamplePart::ExamplePart( QWidget *parentWidget, QObject* parent, bool singleVie
     setInstance( ExampleFactory::global(), false );
 }
 
-KoView* ExamplePart::createViewInstance( QWidget* parent, const char* name )
+KoView* ExamplePart::createViewInstance( QWidget* parent )
 {
-    return new ExampleView( this, parent, name );
+    return new ExampleView( this, parent );
 }
 
 bool ExamplePart::loadXML( QIODevice *, const QDomDocument & )

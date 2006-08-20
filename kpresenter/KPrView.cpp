@@ -214,8 +214,8 @@ static const char * const pagedown_xpm[] = {
     "##############"
 };
 
-KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
-    : KoView( _doc, _parent, _name )
+KPrView::KPrView( KPrDocument* _doc, QWidget *_parent )
+    : KoView( _doc, _parent )
 {
 
     setInstance( KPrFactory::global() );

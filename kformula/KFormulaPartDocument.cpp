@@ -114,12 +114,9 @@ bool KFormulaPartDocument::loadXML(QIODevice *, const QDomDocument& doc)
       return false;
 }
 
-KoView* KFormulaPartDocument::createViewInstance( QWidget* _parent, const char *name )
+KoView* KFormulaPartDocument::createViewInstance( QWidget* parent )
 {
-    if( name == "" )
-	    name = "KFormulaPartView";
-    
-    return new KFormulaPartView( this, _parent, name );
+    return new KFormulaPartView( this, parent );
 }
 
 void KFormulaPartDocument::commandExecuted()

@@ -60,7 +60,6 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
 
     m_currentPage = m_document->pageManager()->page(m_document->startPage());
 
-    shell()->addDockWidget(Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox("KWord"));
     setupActions();
 }
 
@@ -197,6 +196,10 @@ void KWView::editFrameProperties() {
     KWFrameDialog *frameDialog = new KWFrameDialog(frames, m_document, this);
     frameDialog->exec();
     delete frameDialog;
+}
+
+QDockWidget *KWView::createToolBox() {
+    return KoToolManager::instance()->toolBox("KWord");
 }
 
 #include "KWView.moc"

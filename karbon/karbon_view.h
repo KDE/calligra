@@ -82,8 +82,7 @@ class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
 	Q_OBJECT
 
 public:
-	KarbonView( KarbonPart* part, QWidget* parent = 0L,
-				const char* name = 0L );
+	KarbonView( KarbonPart* part, QWidget* parent = 0 );
 	virtual ~KarbonView();
 
 	KarbonPart *part() const { return m_part; }
@@ -128,6 +127,8 @@ public:
 
 	VStrokeFillPreview* strokeFillPreview()
 		{ return m_strokeFillPreview; }
+
+	QDockWidget *createToolBox();
 
 public slots:
 	// editing:

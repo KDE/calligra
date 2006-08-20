@@ -3776,12 +3776,12 @@ void KPrDocument::makeUsedSoundFileList()
     }
 }
 
-KoView* KPrDocument::createViewInstance( QWidget* parent, const char* name )
+KoView* KPrDocument::createViewInstance( QWidget* parent)
 {
     //the page numbers have to be recalced for the sticky objects
     //as it could not be done during the constructor of KPrView
     recalcPageNum();
-    return new KPrView( this, parent, name );
+    return new KPrView( this, parent );
 }
 
 void KPrDocument::paintContent( QPainter& painter, const QRect& rect,

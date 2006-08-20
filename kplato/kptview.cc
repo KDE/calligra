@@ -104,8 +104,8 @@
 namespace KPlato
 {
 
-View::View(Part* part, QWidget* parent, const char* /*name*/)
-    : KoView(part, parent, "Main View"),
+View::View(Part* part, QWidget* parent)
+    : KoView(part, parent),
     m_ganttview(0),
     m_ganttlayout(0),
     m_pertview(0),

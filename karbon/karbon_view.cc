@@ -133,8 +133,8 @@
 const int rulerWidth = 20;  // vertical ruler width
 const int rulerHeight = 20; // horizontal ruler height
 
-KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
-		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p ), m_canvas( 0L )
+KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
+		: KoView( p, parent ), KXMLGUIBuilder( shell() ), m_part( p ), m_canvas( 0L )
 {
 	debugView("KarbonView::KarbonView");
 
@@ -160,7 +160,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_cursorCoords->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 	m_cursorCoords->setMinimumWidth( 50 );
 	addStatusBarItem( m_cursorCoords, 0 );
-	m_smallPreview = new VSmallPreview( this, name );
+	m_smallPreview = new VSmallPreview( this );
 	addStatusBarItem( m_smallPreview );
 
 	initActions();
@@ -230,7 +230,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		paletteManager()->addWidget( selector, "ToolTabDock", "ShapePanel" );
 
 		KoToolManager::instance()->addControllers( m_canvasView, p );
-		shell()->addDockWidget( Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox("Karbon"));
 
 		// for testing: manually set a shape id of the shape to be created
 		KoCreateShapesTool *createTool = KoToolManager::instance()->shapeCreatorTool( m_canvas );
@@ -1771,6 +1770,11 @@ void KarbonView::createResourceDock()
 	m_styleDocker->setWindowTitle(i18n("Resources"));
 	paletteManager()->addWidget(m_styleDocker, "ResourceTabDock", "ResourcePanel");
 }
+
+QDockWidget *KarbonView::createToolBox() {
+	return KoToolManager::instance()->toolBox("Karbon");
+}
+
 
 VToolController *
 KarbonView::toolController()

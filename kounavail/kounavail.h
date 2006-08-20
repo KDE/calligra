@@ -62,7 +62,7 @@ public:
     QString realURL() const { return m_url.url(); }
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent, const char* name );
+    virtual KoView* createViewInstance( QWidget* parent);
 
     QDomDocument m_doc;
     QByteArray m_mimetype;
@@ -75,7 +75,7 @@ class KoUnavailView : public KoView
 {
     Q_OBJECT
 public:
-    KoUnavailView( KoUnavailPart* part, QWidget* parent = 0, const char* name = 0 );
+    KoUnavailView( KoUnavailPart* part, QWidget* parent = 0 );
 
 protected:
     virtual void paintEvent( QPaintEvent* );

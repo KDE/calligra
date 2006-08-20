@@ -113,7 +113,7 @@ public slots:
 	void slotUnitChanged( KoUnit::Unit unit );
 
 protected:
-	virtual KoView* createViewInstance( QWidget* parent, const char* name );
+	virtual KoView* createViewInstance( QWidget* parent );
 	virtual void removeView( KoView *view );
 	void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
 	void loadOasisSettings( const QDomDocument&settingsDoc );

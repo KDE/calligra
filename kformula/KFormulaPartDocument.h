@@ -74,7 +74,7 @@ protected slots:
 
 protected:
     virtual QString configFile() const;
-    virtual KoView* createViewInstance(QWidget* parent, const char* name);
+    virtual KoView* createViewInstance(QWidget* parent);
 
 private:
     /// The undo stack

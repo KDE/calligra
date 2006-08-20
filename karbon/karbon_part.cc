@@ -110,9 +110,9 @@ KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit )
 }
 
 KoView*
-KarbonPart::createViewInstance( QWidget* parent, const char* name )
+KarbonPart::createViewInstance( QWidget* parent )
 {
-	KarbonView *result = new KarbonView( this, parent, name );
+	KarbonView *result = new KarbonView( this, parent );
 	return result;
 }
 

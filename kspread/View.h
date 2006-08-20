@@ -95,8 +95,7 @@ class KSPREAD_EXPORT View : public KoView
 public:
 
     /** Creates a new view */
-    View( QWidget *_parent, const char *_name,
-        Doc *doc );
+    View( QWidget *_parent, Doc *doc );
 
     /** Destroys the view */
     ~View();

@@ -74,6 +74,9 @@ public:
     KoViewConverter *viewConverter() { return &m_zoomHandler; }
     void setZoom( int zoom ); ///< change the zoom value
 
+    /// overwritten method from superclass
+    QDockWidget *createToolBox();
+
 protected:
     /// overwritten method from superclass
     void resizeEvent( QResizeEvent *e );

@@ -30,8 +30,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-ExampleView::ExampleView( ExamplePart* part, QWidget* parent, const char* name )
-    : KoView( part, parent, name )
+ExampleView::ExampleView( ExamplePart* part, QWidget* parent )
+    : KoView( part, parent)
 {
     setInstance( ExampleFactory::global() );
     if ( !part->isReadWrite() ) // readonly case, e.g. when embedded into konqueror

@@ -131,7 +131,7 @@ class KPRESENTER_EXPORT KPrView : public KoView
     Q_OBJECT
 
 public:
-    KPrView( KPrDocument* _doc, QWidget *_parent = 0, const char *_name = 0 );
+    KPrView( KPrDocument* _doc, QWidget *_parent = 0 );
     ~KPrView();
 
     void initGui();

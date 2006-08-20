@@ -38,7 +38,7 @@ public:
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent, const char* name );
+    virtual KoView* createViewInstance( QWidget* parent );
 };
 
 #endif

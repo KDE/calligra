@@ -37,9 +37,9 @@ KoUnavailPart::KoUnavailPart( QWidget *parentWidget, QObject* parent )
     setReadWrite( false );
 }
 
-KoView* KoUnavailPart::createViewInstance( QWidget* parent, const char* name )
+KoView* KoUnavailPart::createViewInstance( QWidget* parent)
 {
-    return new KoUnavailView( this, parent, name );
+    return new KoUnavailView( this, parent );
 }
 
 bool KoUnavailPart::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocument&, KoStore* )
@@ -106,8 +106,8 @@ void KoUnavailPart::paintContent( QPainter& painter, const QRect& rect, bool /*t
     painter.restore();
 }
 
-KoUnavailView::KoUnavailView( KoUnavailPart* part, QWidget* parent, const char* name )
-    : KoView( part, parent, name )
+KoUnavailView::KoUnavailView( KoUnavailPart* part, QWidget* parent)
+    : KoView( part, parent )
 {
     setInstance( KoUnavailFactory::global() );
     //setXMLFile( "kounavail.rc" );

@@ -63,7 +63,7 @@ class View : public KoView {
     Q_OBJECT
 
 public:
-    View(Part* part, QWidget* parent=0, const char* name=0);
+    View(Part* part, QWidget* parent=0);
     ~View();
     /**
      * Support zooming.

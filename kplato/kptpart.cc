@@ -89,8 +89,8 @@ Part::~Part() {
 }
 
 
-KoView *Part::createViewInstance(QWidget *parent, const char *name) {
-    m_view = new View(this, parent, name);
+KoView *Part::createViewInstance(QWidget *parent) {
+    m_view = new View(this, parent);
     connect(m_view,SIGNAL(destroyed()),this,SLOT(slotViewDestroyed()));
 
     // If there is a project dialog this should be deleted so it will

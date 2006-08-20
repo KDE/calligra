@@ -36,13 +36,12 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent,
-                                                               const char* name )
-        : KoView( doc, parent, name )
+KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
+        : KoView( doc, parent )
 {
     m_partDocument = doc;
     m_formulaCanvas = new KFormulaCanvas( this );
-	
+
     m_dbus = new KFormulaPartViewAdaptor( this );
     QDBus::sessionBus().registerObject( "/" + objectName(), this );
 
@@ -55,7 +54,7 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent,
         setXMLFile("kformula_readonly.rc");
     else
         setXMLFile("kformula.rc");
-	
+
     setupActions();
 
     KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );

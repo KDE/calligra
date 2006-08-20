@@ -83,7 +83,7 @@ public:
 
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
 protected:
-    virtual KoView* createViewInstance(QWidget* parent, const char* name);
+    virtual KoView* createViewInstance(QWidget* parent);
 
 protected slots:
     void slotDocumentRestored();
