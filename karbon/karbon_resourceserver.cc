@@ -47,7 +47,6 @@
 #include "vqpainter.h"
 #include "vtransformcmd.h"
 #include "shapes/vellipse.h"
-#include "shapes/vrectangle.h"
 #include "shapes/vsinus.h"
 #include "shapes/vspiral.h"
 #include "shapes/vstar.h"

@@ -4,7 +4,7 @@ set(karbonshapes_SRCS
     vellipse.cc 
     vpolyline.cc 
     vpolygon.cc 
-    vrectangle.cc 
+    #vrectangle.cc 
     vsinus.cc 
     vspiral.cc 
     vstar.cc
