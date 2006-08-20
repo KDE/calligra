@@ -1276,8 +1276,11 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
             Cell *daCell = cell(j,i);
             if(daCell && daCell!=firstCell) {
                 listFrameSet.append(daCell);
-                listCopyFrame.append(daCell->frame(0)->getCopy());
-                daCell->deleteFrame( daCell->frame(0));
+                KWFrame* frame = daCell->frame(0);
+                Q_ASSERT(frame);
+                if(! frame) continue; // see bug #132642
+                listCopyFrame.append(frame->getCopy());
+                daCell->deleteFrame(frame);
             }
         }
     }
