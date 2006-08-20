@@ -109,6 +109,8 @@ private:
 
     QTextCodec* m_codec; // QTextCodec in which the file will be written
     QString m_eol; // End of line character(s)
+    QStringList m_automaticNotes; // Automatic foot-/endnotes
+    QString m_manualNotes; // Manual foot-/endnotes
 
 #if 0
     CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
@@ -172,7 +174,21 @@ bool ASCIIWorker::doOpenDocument(void)
 
 bool ASCIIWorker::doCloseDocument(void)
 {
-    // We have nothing to do, but to give our OK to continue
+    // Add foot-/endnotes
+    if (!m_automaticNotes.empty())
+    {
+        *m_streamOut << m_eol;
+        int noteNumber = 1;
+        for (QStringList::Iterator it = m_automaticNotes.begin(); it != m_automaticNotes.end(); ++it)
+        {
+            *m_streamOut << "[" << noteNumber << "] " << *it;
+            noteNumber++;
+        }
+    }
+
+    if (!m_manualNotes.isEmpty())
+        *m_streamOut << m_eol << m_manualNotes;
+
     return true;
 }
 
@@ -377,23 +393,46 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                 case 1: // Normal text
                 {
                     QString strText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
-
-                    // Replace line feeds by line ends
-                    int pos;
-                    int oldpos=0;
-                    while ((pos=strText.find(QChar(10),oldpos))>-1)
-                    {
-                        strText.replace(pos,1,m_eol);
-                        oldpos=pos+1;
-                    }
-
+                    strText = strText.replace(QChar(10), m_eol, true);
                     *m_streamOut << strText;
                     break;
                 }
                 case 4: // Variable
                 {
-                    // Just write the result of the variable
-                    *m_streamOut << (*paraFormatDataIt).variable.m_text;
+                    if (11==(*paraFormatDataIt).variable.m_type)
+                    {
+                        // Footnote
+                        QString value = (*paraFormatDataIt).variable.getFootnoteValue();
+                        bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
+                        Q3ValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
+                        if (paraList)
+                        {
+                            QString notestr;
+                            Q3ValueList<ParaData>::ConstIterator it;
+                            Q3ValueList<ParaData>::ConstIterator end(paraList->end());
+                            for (it=paraList->begin();it!=end;++it)
+                                notestr += (*it).text.stripWhiteSpace().replace(QChar(10), m_eol, true) + m_eol;
+
+                            *m_streamOut << "[";
+                            if (automatic) {
+                                // Automatic footnote
+                                *m_streamOut << m_automaticNotes.count() + 1;
+                                m_automaticNotes.append(notestr);
+                            }
+                            else
+                            {
+                                // Manual footnote
+                                *m_streamOut << value;
+                                m_manualNotes += "[" + value + "] " + notestr;
+                            }
+                            *m_streamOut << "]";
+                        }
+                    }
+                    else
+                    {
+                        // Generic variable
+                        *m_streamOut << (*paraFormatDataIt).variable.m_text;
+                    }
                     break;
                 }
                 case 6: // Frame Anchor
