@@ -340,6 +340,8 @@ void KWFootNoteVariable::loadOasis( const QDomElement& footNoteTag, KoOasisConte
 
 void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
+    if(! m_frameset) return; // see bug #126007
+
     //<text:note text:id="ftn0" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body><text:p text:style-name="Footnote"/></text:note-body></text:note>
     //<text:note text:id="ftn1" text:note-class="endnote"><text:note-citation>i</text:note-citation><text:note-body><text:p text:style-name="Endnote"/></text:note-body></text:note>
     //<text:note text:id="ftn2" text:note-class="footnote"><text:note-citation text:label="vv">vv</text:note-citation><text:note-body><text:p text:style-name="Footnote"/></text:note-body></text:note>
