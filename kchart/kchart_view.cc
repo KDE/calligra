@@ -53,8 +53,8 @@ namespace KChart
 {
 
 
-KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
-    : KoView( part, parent, name )
+KChartView::KChartView( KChartPart* part, QWidget* parent )
+    : KoView( part, parent )
 {
 
     // No flicker

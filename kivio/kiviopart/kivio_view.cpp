@@ -135,8 +135,8 @@
 
 using namespace Kivio;
 
-KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
-: KoView( doc, _parent, _name )
+KivioView::KivioView( QWidget *_parent, KivioDoc* doc )
+: KoView( doc, _parent )
 {
   m_bShowGuides = true;
   m_bSnapGuides = true;

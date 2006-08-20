@@ -139,9 +139,9 @@ bool KivioDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
   return true;
 }
 
-KoView* KivioDocument::createViewInstance(QWidget* parent, const char* name)
+KoView* KivioDocument::createViewInstance(QWidget* parent)
 {
-  return new KivioView(this, parent, name);
+  return new KivioView(this, parent);
 }
 
 void KivioDocument::addCommand(KCommand* command, bool execute)

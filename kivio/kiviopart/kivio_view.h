@@ -88,7 +88,7 @@ class KIVIO_EXPORT KivioView : public KoView
   friend class KivioCanvas;
 
   public:
-    KivioView( QWidget *_parent, const char *_name, KivioDoc *_doc );
+    KivioView( QWidget *_parent, KivioDoc *_doc );
     ~KivioView();
 
     virtual DCOPObject* dcopObject();

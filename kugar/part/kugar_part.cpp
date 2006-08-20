@@ -105,9 +105,9 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
     return ok;
 }
 
-KoView* KugarPart::createViewInstance( QWidget* parent, const char* name )
+KoView* KugarPart::createViewInstance( QWidget* parent)
 {
-    KugarView * v = new KugarView( this, parent, name );
+    KugarView * v = new KugarView( this, parent );
     if ( m_templateOk )
         v->renderReport();
     return v;

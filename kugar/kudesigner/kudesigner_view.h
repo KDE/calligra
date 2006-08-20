@@ -63,7 +63,7 @@ class KudesignerView: public KoView
     friend class Kudesigner::View;
 
 public:
-    KudesignerView( KudesignerDoc* part, QWidget* parent = 0, const char* name = 0 );
+    KudesignerView( KudesignerDoc* part, QWidget* parent = 0);
     virtual ~KudesignerView();
 
     Kudesigner::View *view()

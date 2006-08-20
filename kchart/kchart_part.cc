@@ -169,9 +169,9 @@ void KChartPart::generateBarChartTemplate()
 }
 
 
-KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
+KoView* KChartPart::createViewInstance( QWidget* parent )
 {
-    return new KChartView( this, parent, name );
+    return new KChartView( this, parent );
 }
 
 

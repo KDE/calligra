@@ -76,9 +76,9 @@ void KudesignerDoc::initEmpty()
     setModified(false);
 }
 
-KoView* KudesignerDoc::createViewInstance( QWidget* parent, const char* name )
+KoView* KudesignerDoc::createViewInstance( QWidget* parent)
 {
-    return new KudesignerView( this, parent, name );
+    return new KudesignerView( this, parent);
 }
 
 bool KudesignerDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )

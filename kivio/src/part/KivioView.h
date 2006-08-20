@@ -40,7 +40,7 @@ class KivioView : public KoView, public KoShapeControllerBase
   Q_OBJECT
 
   public:
-    KivioView(KivioDocument* document, QWidget* parent, const char* name);
+    KivioView(KivioDocument* document, QWidget* parent);
     ~KivioView();
 
     /// Returns the canvas widget.

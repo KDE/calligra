@@ -73,7 +73,7 @@ public slots:
     virtual void initEmpty();
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent, const char* name );
+    virtual KoView* createViewInstance( QWidget* parent );
     virtual bool completeSaving( KoStore* store );
     virtual bool completeLoading( KoStore* store );
 

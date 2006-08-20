@@ -42,8 +42,8 @@
 #include "KivioAbstractPage.h"
 #include "KivioPage.h"
 
-KivioView::KivioView(KivioDocument* document, QWidget* parent, const char* name)
-  : KoView(document, parent, name), m_document(document)
+KivioView::KivioView(KivioDocument* document, QWidget* parent)
+  : KoView(document, parent), m_document(document)
 {
   m_activePage = 0;
   m_zoomHandler = new KoZoomHandler;

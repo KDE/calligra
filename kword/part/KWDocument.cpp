@@ -109,7 +109,7 @@ bool KWDocument::saveOasis(KoStore*, KoXmlWriter*) {
     // TODO
 }
 
-KoView* KWDocument::createViewInstance(QWidget* parent, const char*) {
+KoView* KWDocument::createViewInstance(QWidget* parent) {
     KWView *view = new KWView(m_viewMode, this, parent);
     foreach(KWFrameSet *fs, m_frameSets) {
         foreach(KWFrame *frame, fs->frames()) {

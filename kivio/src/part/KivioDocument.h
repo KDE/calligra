@@ -110,7 +110,7 @@ class KivioDocument : public KoDocument
 
   protected:
     /// Creates a KivioView instance and returns it
-    virtual KoView* createViewInstance(QWidget* parent, const char* name);
+    virtual KoView* createViewInstance(QWidget* parent);
 
     /** Load OpenDoc master pages
       * @return true if loading was successful else false

@@ -30,8 +30,8 @@
 
 // The view ctor.
 
-KugarView::KugarView( KugarPart *part, QWidget *parent, const char *name )
-        : KoView( part, parent, name )
+KugarView::KugarView( KugarPart *part, QWidget *parent)
+        : KoView( part, parent)
 {
     setInstance( KugarFactory::global() );
 

@@ -17,7 +17,7 @@ class KugarView: public KoView
     Q_OBJECT
 
 public:
-    KugarView( KugarPart *part, QWidget *parent, const char *name );
+    KugarView( KugarPart *part, QWidget *parent);
     virtual ~KugarView();
 
     void setForcedUserTemplate( const QString &name );

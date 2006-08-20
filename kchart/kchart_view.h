@@ -28,7 +28,7 @@ class KChartView : public KoView
 {
     Q_OBJECT
 public:
-    KChartView( KChartPart* part, QWidget* parent = 0, const char* name = 0 );
+    KChartView( KChartPart* part, QWidget* parent = 0 );
     ~KChartView();
 
     void updateGuiTypeOfChart();

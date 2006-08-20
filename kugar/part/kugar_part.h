@@ -42,7 +42,7 @@ public:
     }
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent, const char* name );
+    virtual KoView* createViewInstance( QWidget* parent );
 
 public slots:
     void setForcedUserTemplate( const QString &/*name*/ )

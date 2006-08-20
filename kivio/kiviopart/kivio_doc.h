@@ -189,7 +189,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
     void loadOasisSettings( const QDomDocument&settingsDoc );
 
-    KoView* createViewInstance( QWidget* parent, const char* name );
+    KoView* createViewInstance( QWidget* parent );
 
     /**
     * List of stencil spawner sets

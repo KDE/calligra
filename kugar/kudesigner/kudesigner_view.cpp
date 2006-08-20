@@ -73,8 +73,8 @@
 
 using namespace Kudesigner;
 
-KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char* name )
-        : KoView( part, parent, name ), m_propertyEditor( 0 ), m_doc( part )
+KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent)
+        : KoView( part, parent ), m_propertyEditor( 0 ), m_doc( part )
 {
     setInstance( KudesignerFactory::global() );
     if ( !part->isReadWrite() )  // readonly case, e.g. when embedded into konqueror

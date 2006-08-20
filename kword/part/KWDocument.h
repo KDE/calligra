@@ -102,7 +102,7 @@ public:
     /// reimplemented from KoDocument
     bool saveOasis(KoStore*, KoXmlWriter*);
     /// reimplemented from KoDocument
-    KoView* createViewInstance(QWidget*, const char*);
+    KoView* createViewInstance(QWidget*);
 
 
     // others

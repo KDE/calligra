@@ -245,13 +245,9 @@ void KivioDoc::initEmpty()
   KoDocument::initEmpty();
 }
 
-KoView* KivioDoc::createViewInstance( QWidget* parent, const char* name )
+KoView* KivioDoc::createViewInstance( QWidget* parent )
 {
-  if (!name) {
-    name = "View";
-  }
-
-  return new KivioView( parent, name, this );
+  return new KivioView( parent, this );
 }
 
 QDomDocument KivioDoc::saveXML()

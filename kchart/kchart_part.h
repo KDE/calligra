@@ -93,7 +93,7 @@ signals:
     void docChanged();
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent, const char* name );
+    virtual KoView* createViewInstance( QWidget* parent );
     bool  loadOldXML( const QDomDocument& doc );
     bool  loadAuxiliary( const QDomDocument& doc );
     bool  loadData( const QDomDocument& doc, KDChartTableData& currentData );
