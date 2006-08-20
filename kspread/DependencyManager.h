@@ -63,15 +63,30 @@ public:
    */
   Region getDependants(const Cell* cell);
 
+  /**
+   * Adjusts formulas after cut & paste operations or column/row insertions/deletions.
+   *
+   * \param movedRegion the region, that was moved
+   * \param destination the new upper left corner of the region
+   */
+  void regionMoved( const Region& movedRegion, const Region::Point& destination );
+
 protected:
   QMap<Region::Point, Region> dependencies() const;
 
-  /** local d-pointer */
+  /**
+   * \param cell the cell which formula should  be altered
+   * \param oldLocation the location/range, that was cut
+   * \param offset the relative movement and new sheet, if applicable
+   *
+   * \see regionMoved()
+   */
+  void updateFormula( Cell* cell, const Region::Element* oldLocation, const Region::Point& offset );
+
   class Private;
   Private * const d;
 };
 
-//end of namespace
-}
+} // namespace KSpread
 
 #endif // KSPREAD_DEPENDENCIES

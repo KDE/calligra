@@ -2024,6 +2024,7 @@ void Sheet::copySelection( Selection* selectionInfo )
 void Sheet::cutSelection( Selection* selectionInfo )
 {
     QDomDocument doc = saveCellRegion(*selectionInfo, true, true);
+    doc.documentElement().setAttribute( "cut", selectionInfo->Region::name() );
 
     // Save to buffer
     QBuffer buffer;
@@ -2146,6 +2147,16 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
   }
 
   KoXmlElement root = doc.documentElement(); // "spreadsheet-snippet"
+  if ( root.hasAttribute( "cut" ) )
+  {
+    const Region cutRegion( workbook(), root.attribute( "cut" ), this );
+    if ( cutRegion.isValid() )
+    {
+      Region::Point destination( pasteArea.topLeft() );
+      destination.setSheet( this );
+      workbook()->dependencyManager()->regionMoved( cutRegion, destination );
+    }
+  }
 
   int rowsInClpbrd    =  root.attribute( "rows" ).toInt();
   int columnsInClpbrd =  root.attribute( "columns" ).toInt();

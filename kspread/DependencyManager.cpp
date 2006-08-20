@@ -214,6 +214,91 @@ QMap<KSpread::Region::Point, KSpread::Region> DependencyManager::dependencies() 
   return d->dependencies;
 }
 
+void DependencyManager::regionMoved( const Region& movedRegion, const Region::Point& destination )
+{
+  Region::Point locationOffset( destination.pos() - movedRegion.boundingRect().topLeft() );
+
+  Region::ConstIterator end( movedRegion.constEnd() );
+  for ( Region::ConstIterator it( movedRegion.constBegin() ); it != end; ++it )
+  {
+    Sheet* const sheet = (*it)->sheet();
+    locationOffset.setSheet( ( sheet == destination.sheet() ) ? 0 : destination.sheet() );
+    const QRect range = (*it)->rect();
+
+    if ( d->dependants.contains( sheet ) )
+    {
+      const QRectF rangeF = QRectF( range ).adjusted( 0, 0, -0.1, -0.1 );
+      QList<Region::Point> dependantLocations = d->dependants[sheet]->intersects( rangeF );
+
+      for ( int i = 0; i < dependantLocations.count(); ++i )
+      {
+        const Region::Point location = dependantLocations[i];
+        Cell* const cell = location.sheet()->cellAt( location.pos().x(), location.pos().y() );
+        updateFormula( cell, (*it), locationOffset );
+      }
+    }
+  }
+}
+
+void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLocation, const Region::Point& offset )
+{
+  // Not a formula -> no dependencies
+  if (!cell->isFormula())
+    return;
+
+  // Broken formula -> meaningless dependencies
+  // (tries to avoid cell->formula() being null)
+  if (cell->testFlag(Cell::Flag_ParseError))
+    return;
+
+  const Formula* formula = cell->formula();
+  if ( !formula )
+  {
+    kDebug() << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
+    return;
+  }
+
+  Tokens tokens = formula->tokens();
+
+  //return empty list if the tokens aren't valid
+  if (!tokens.valid())
+    return;
+
+  QString expression = "=";
+  Sheet* sheet = cell->sheet();
+  Region region;
+  for( int i = 0; i < tokens.count(); i++ )
+  {
+    Token token = tokens[i];
+    Token::Type tokenType = token.type();
+
+    //parse each cell/range and put it to our RangeList
+    if (tokenType == Token::Cell || tokenType == Token::Range)
+    {
+      const Region region( sheet->workbook(), token.text(), sheet );
+      const Region::Element* element = *region.constBegin();
+
+      kDebug() << region.name() << endl;
+      // the offset contains a sheet, only if it was an intersheet move.
+      if ( ( oldLocation->sheet() == element->sheet() ) &&
+           ( oldLocation->rect().contains( element->rect() ) ) )
+      {
+        const Region yetAnotherRegion( element->rect().translated( offset.pos() ), offset.sheet() ? offset.sheet() : sheet );
+        expression.append( yetAnotherRegion.name( sheet ) );
+      }
+      else
+      {
+        expression.append( token.text() );
+      }
+    }
+    else
+    {
+      expression.append( token.text() );
+    }
+  }
+  cell->setCellText( expression );
+}
+
 void DependencyManager::Private::reset ()
 {
   dependencies.clear();
