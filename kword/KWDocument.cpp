@@ -985,9 +985,9 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 last = pageManager()->appendPage();
                 docHeight += last->height();
             }
-            if ( toPage == -1 )
-                toPage = pageCount() - 1;
         }
+        if ( toPage == -1 )
+            toPage = pageCount() - 1;
         KWFrameList::recalcFrames(this, fromPage, toPage);
     }
     kdDebug(32002) << "            ~recalcFrames" << endl;
