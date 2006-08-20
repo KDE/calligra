@@ -6,4 +6,5 @@ Icon=kexiproject_sqlite2
 Patterns=*.kexi
 X-KDE-IsAlso=application/x-sqlite2
 Comment=Kexi Database File-Based Project
+Comment[fr]=Projet de base de données Kexi basé sur un fichier
 Comment[x-test]=xxKexi Database File-Based Projectxx

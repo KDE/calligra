@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord PDF Import Filter
+Name[fr]=Filtre d'importation PDF de KWord
 Name[x-test]=xxKWord PDF Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/pdf

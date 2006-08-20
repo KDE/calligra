@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_savannah
 Name=Savannah
+Name[fr]=Savane
 Name[x-test]=xxSavannahxx
 Comment=Savannah by dannya
+Comment[fr]=Savane par Dannya
 Comment[x-test]=xxSavannah by dannyaxx
 Type=Link
 URL=.source/savannah.kpt

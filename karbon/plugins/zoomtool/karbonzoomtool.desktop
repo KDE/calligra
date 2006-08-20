@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Zoom Tool
+Name[fr]=Outil de zoom
 Name[x-test]=xxZoom Toolxx
 ServiceTypes=Karbon/CoreModule
 Type=Service

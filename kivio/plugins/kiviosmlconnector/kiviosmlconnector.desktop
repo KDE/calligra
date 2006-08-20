@@ -2,5 +2,6 @@
 Encoding=UTF-8
 X-KDE-Library=libkiviosmlconnector
 Name=SML Based ConnectorTool for Kivio
+Name[fr]=Outil connexion, basé sur SML, pour Kivio
 Name[x-test]=xxSML Based ConnectorTool for Kivioxx
 Type=Service

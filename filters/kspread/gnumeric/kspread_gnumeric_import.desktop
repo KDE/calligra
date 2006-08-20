@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=GNUMERIC Import Filter for KSpread
+Name[fr]=Filtre d'importation GNUmeric de KSpread
 Name[x-test]=xxGNUMERIC Import Filter for KSpreadxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-gnumeric

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=mgp2kpr.py
 Name=Magicpoint Import Filter for KPresenter
+Name[fr]=Filtre d'importation Magicpoint pour KPresenter
 Name[x-test]=xxMagicpoint Import Filter for KPresenterxx
 X-KDE-Wrapper-Export=application/x-kpresenter
 X-KDE-Wrapper-Import=application/x-magicpoint

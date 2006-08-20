@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita OpenEXR Export Filter
+Name[fr]=Filtre d'exportation OpenEXR de Krita
 Name[x-test]=xxKrita OpenEXR Export Filterxx
 X-KDE-Export=image/x-exr
 ServiceTypes=KOfficeFilter

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Worksheet.kst
 Name=Blank Worksheet
+Name[fr]=Feuille de travail blanche
 Name[x-test]=xxBlank Worksheetxx
 Icon=template_worksheet
 X-KDE-DefaultTemplate=true

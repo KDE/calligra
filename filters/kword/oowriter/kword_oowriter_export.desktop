@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Writer Export Filter for KWord
+Name[fr]=Filtre d'exportation OpenOffice.org Writer pour KWord
 Name[x-test]=xxOpenOffice.org Writer Export Filter for KWordxx
 X-KDE-Export=application/vnd.sun.xml.writer
 X-KDE-Import=application/x-kword

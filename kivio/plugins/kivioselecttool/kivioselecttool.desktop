@@ -2,5 +2,6 @@
 Encoding=UTF-8
 X-KDE-Library=libkivioselecttool
 Name=SelectTool for Kivio
+Name[fr]=Outil sélection pour Kivio
 Name[x-test]=xxSelectTool for Kivioxx
 Type=Service

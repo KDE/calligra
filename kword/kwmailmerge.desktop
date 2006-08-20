@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KWord/MailMergePlugin
 Comment=KWord mailmerge plugin
+Comment[fr]=Module fusion de courrier pour KWord
 Comment[x-test]=xxKWord mailmerge pluginxx
 
 [PropertyDef::X-KDE-Capabilities]

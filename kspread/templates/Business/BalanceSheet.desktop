@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/BalanceSheet.kst
 Name=Balance Sheet
+Name[fr]=Feuille balance comptable
 Name[x-test]=xxBalance Sheetxx
 Icon=template_balancesheet

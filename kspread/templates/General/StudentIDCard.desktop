@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/StudentIDCard.kst
 Name=Student ID Card
+Name[fr]=Carte d'étudiant
 Name[x-test]=xxStudent ID Cardxx
 Icon=template_studentidcard

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_envelopec6
 Name=Envelope C6
+Name[fr]=Enveloppe C6
 Name[x-test]=xxEnvelope C6xx
 Type=Link
 URL=.source/EnvelopeC6.kwt

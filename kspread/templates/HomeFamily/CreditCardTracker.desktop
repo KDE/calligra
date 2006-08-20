@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/CreditCardTracker.kst
 Name=Credit Card Tracker
+Name[fr]=Traqueur de carte de crédit
 Name[x-test]=xxCredit Card Trackerxx
 Icon=template_creditcardtracker

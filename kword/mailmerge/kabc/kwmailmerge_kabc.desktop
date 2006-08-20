@@ -4,8 +4,10 @@ Type=Service
 ServiceTypes=KWord/MailMergePlugin
 
 Name=KDE Addressbook Plugin
+Name[fr]=Module externe de carnet d'adresses de KDE
 Name[x-test]=xxKDE Addressbook Pluginxx
 Comment=This datasource type lets you use your KDE Address Book entries.
+Comment[fr]=Ce type de source de données vous permet d'utiliser votre carnet d'adresses KDE.
 Comment[x-test]=xxThis datasource type lets you use your KDE Address Book entries.xx
 
 X-KDE-Library=kwmailmerge_kabc

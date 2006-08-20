@@ -7,6 +7,7 @@ X-KDE-Import=application/x-kformula
 X-KDE-Weight=1
 ImportDescription=KFormula
 Name=KFormula SVG Export Filter
+Name[fr]=Filtre d'exportation SVG de KFormula
 Name[x-test]=xxKFormula SVG Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

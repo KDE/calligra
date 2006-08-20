@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_twocolumnportrait
 Name=Two Column Portrait
+Name[fr]=Deux colonnes, portrait
 Name[x-test]=xxTwo Column Portraitxx
 Comment=Presentation with a page title and two text columns (portrait-oriented)
+Comment[fr]=Présentation avec un titre de page et deux colonnes de texte (portrait)
 Comment[x-test]=xxPresentation with a page title and two text columns (portrait-oriented)xx
 Type=Link
 URL=.source/TwoColumnPortrait.kpt

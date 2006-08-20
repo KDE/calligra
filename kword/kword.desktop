@@ -5,6 +5,7 @@ Name=KWord
 Name[x-test]=xxKWordxx
 Exec=kword %u
 GenericName=Word Processing
+GenericName[fr]=Traitement de texte
 GenericName[x-test]=xxWord Processingxx
 Comment=Write text documents
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite

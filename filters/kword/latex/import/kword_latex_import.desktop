@@ -7,6 +7,7 @@ X-KDE-Import=text/x-tex
 X-KDE-Weight=1
 ImportDescription=LATEX
 Name=KWord Latex Import Filter
+Name[fr]=Filtre d'importation LaTeX de KWord
 Name[x-test]=xxKWord Latex Import Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

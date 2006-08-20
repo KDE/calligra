@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Kexi/MigrationDriver
 Comment=Kexi Data Migration Driver
+Comment[fr]=Pilote de migration de données de Kexi
 Comment[x-test]=xxKexi Data Migration Driverxx
 
 [PropertyDef::X-Kexi-FileMigrationDriverMime]

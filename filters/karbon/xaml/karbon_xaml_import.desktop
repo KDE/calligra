@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon XAML Import Filter
+Name[fr]=Filtre d'importation XAML de Karbon 14
 Name[x-test]=xxKarbon XAML Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/wvg+xml

@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_classroom
 Name=Classroom
+Name[fr]=Salle de classe
 Name[x-test]=xxClassroomxx
 Comment=Classroom by dannya
+Comment[fr]=Salle de classe, par Dannya
 Comment[x-test]=xxClassroom by dannyaxx
 Type=Link
 URL=.source/classroom.kpt

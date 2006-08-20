@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord WordPerfect Export Filter
+Name[fr]=Filtre d'exportation WordPerfect de KWord
 Name[x-test]=xxKWord WordPerfect Export Filterxx
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1

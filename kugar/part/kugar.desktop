@@ -8,6 +8,7 @@ MimeType=application/x-kugar;application/x-vnd.kde.kugar.mixed
 Type=Application
 DocPath=kugar/index.html
 GenericName=Report Generator
+GenericName[fr]=Générateur de rapports
 GenericName[x-test]=xxReport Generatorxx
 Terminal=false
 X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed

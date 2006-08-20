@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowUp.atf
 Name=Arrow Up
+Name[fr]=Flèche haute
 Name[x-test]=xxArrow Upxx
 Icon=.icon/ArrowUp.png

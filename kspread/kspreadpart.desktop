@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Spreadsheet Component
+Name[fr]=Composant tableur de KOffice
 Name[x-test]=xxKOffice Spreadsheet Componentxx
 X-KDE-Library=libkspreadpart
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/x-kspread;application/msexcel;text/x-csv;application/x-quattropro
@@ -10,5 +11,6 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread
 GenericName=Spreadsheets
+GenericName[fr]=Tableurs
 GenericName[x-test]=xxSpreadsheetsxx
 Icon=kspread

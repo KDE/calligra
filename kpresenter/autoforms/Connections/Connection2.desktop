@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Connection2.atf
 Name=Connection 02
+Name[fr]=Connexion 02
 Name[x-test]=xxConnection 02xx
 Icon=.icon/Connection2.png

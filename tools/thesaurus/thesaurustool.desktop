@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Icon=
 Name=Thesaurus Tool
+Name[fr]=Outil Thésaurus
 Name[x-test]=xxThesaurus Toolxx
 X-KDE-Library=libthesaurustool
 Type=Service
 Commands=thesaurus
 Comment=Show Related Words
+Comment[fr]=Afficher les mots liés
 Comment[x-test]=xxShow Related Wordsxx
 ServiceTypes=KDataTool
 DataType=QString

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Unavailable KOffice Document
+Name[fr]=Document KOffice non disponible
 Name[x-test]=xxUnavailable KOffice Documentxx
 X-KDE-Library=libkounavailpart
 Type=Service

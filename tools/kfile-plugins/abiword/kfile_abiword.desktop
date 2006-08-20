@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Abiword Info
+Name[fr]=Informations sur Abiword
 Name[x-test]=xxAbiword Infoxx
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_abiword

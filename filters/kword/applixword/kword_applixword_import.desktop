@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord Applixword Import Filter
+Name[fr]=Filtre d'importation Applix Word de KWord
 Name[x-test]=xxKWord Applixword Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/x-applixword

@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_bluebreezedouble
 Name=Blue Breeze Double
+Name[fr]=Brise bleue, double
 Name[x-test]=xxBlue Breeze Doublexx
 Comment=A peaceful presentation with a title and two text columns
+Comment[fr]=Une présentation apaisée avec un titre et deux colonnes de texte
 Comment[x-test]=xxA peaceful presentation with a title and two text columnsxx
 Type=Link
 URL=.source/BlueBreezeDouble.kpt

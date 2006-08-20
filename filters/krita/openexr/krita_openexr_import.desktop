@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita OpenEXR Import Filter
+Name[fr]=Filtre d'importation OpenEXT de Krita
 Name[x-test]=xxKrita OpenEXR Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-exr

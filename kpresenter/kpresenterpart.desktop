@@ -10,5 +10,6 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.presentation
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.presentation
 X-KDE-ExtraNativeMimeTypes=application/x-kpresenter,application/vnd.oasis.opendocument.presentation-template
 GenericName=Slide Presentations
+GenericName[fr]=Présentations par diapositives
 GenericName[x-test]=xxSlide Presentationsxx
 Icon=kpresenter

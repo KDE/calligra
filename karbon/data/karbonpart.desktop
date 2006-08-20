@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Scalable Graphics Component
+Name[fr]=Composant graphiques vectoriels de KOffice
 Name[x-test]=xxKOffice Scalable Graphics Componentxx
 X-KDE-Library=libkarbonpart
 MimeType=application/x-karbon;application/illustrator;image/x-eps;application/postscript;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template
@@ -12,5 +13,6 @@ X-KDE-NativeMimeType=application/x-karbon
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template
 GenericName=Scalable Graphics
+GenericName[fr]=Graphiques vectoriels
 GenericName[x-test]=xxScalable Graphicsxx
 Icon=karbon

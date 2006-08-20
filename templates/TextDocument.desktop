@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Text Document...
+Name[fr]=Document texte...
 Name[x-test]=xxText Document...xx
 Comment=New KWord document:
+Comment[fr]=Nouveau document KWord :
 Comment[x-test]=xxNew KWord document:xx
 Type=Link
 URL=.source/TextDocument.kwt

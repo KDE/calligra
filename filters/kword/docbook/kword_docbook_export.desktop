@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord SGML DocBook Export Filter
+Name[fr]=Filtre d'exportation SGML DocBook de KWord
 Name[x-test]=xxKWord SGML DocBook Export Filterxx
 X-KDE-Export=text/sgml
 X-KDE-Import=application/x-kword

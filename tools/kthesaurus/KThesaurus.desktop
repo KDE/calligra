@@ -1,11 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KThesaurus
+Name[fr]=KThésaurus
 Name[x-test]=xxKThesaurusxx
 Type=Application
 Icon=kthesaurus
 Exec=kthesaurus
 GenericName=Related Words
+GenericName[fr]=Mots liés
 GenericName[x-test]=xxRelated Wordsxx
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;X-KDE-More;

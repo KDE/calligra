@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart SVG Export Filter
+Name[fr]=Filtre d'exportation SVG de KChart
 Name[x-test]=xxKChart SVG Export Filterxx
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/svg+xml

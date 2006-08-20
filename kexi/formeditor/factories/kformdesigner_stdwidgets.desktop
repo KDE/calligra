@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Basic Widgets
+Name[fr]=Éléments graphiques basiques
 Name[x-test]=xxBasic Widgetsxx
 
 X-KDE-Library=kformdesigner_stdwidgets

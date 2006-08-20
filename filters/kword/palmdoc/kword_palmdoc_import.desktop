@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord Palm Doc Import Filter
+Name[fr]=Filtre d'importation Palm Doc de KWord
 Name[x-test]=xxKWord Palm Doc Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/vnd.palm

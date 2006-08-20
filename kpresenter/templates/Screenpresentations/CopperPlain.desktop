@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_copperplain
 Name=Copper Plain
+Name[fr]=Cuivre brut
 Name[x-test]=xxCopper Plainxx
 Comment=An elegant, uplifting presentation
+Comment[fr]=Une présentation élégante et joyeuse
 Comment[x-test]=xxAn elegant, uplifting presentationxx
 Type=Link
 URL=.source/CopperPlain.kpt

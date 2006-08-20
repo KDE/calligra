@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KWord AmiPro Import Filter
+Name[fr]=Filtre d'importation AmiPro de KWord
 Name[x-test]=xxKWord AmiPro Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/x-amipro

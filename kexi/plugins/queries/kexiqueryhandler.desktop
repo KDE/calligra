@@ -4,8 +4,10 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 GenericName=Queries
+GenericName[fr]=Requêtes
 GenericName[x-test]=xxQueriesxx
 Name=Queries
+Name[fr]=Requêtes
 Name[x-test]=xxQueriesxx
 X-KDE-Library=kexihandler_query
 X-KDE-ParentApp=kexi

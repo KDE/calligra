@@ -3,6 +3,7 @@ Categories=Qt;KDE;Office;Graphics;
 Encoding=UTF-8
 Exec=krita %u
 GenericName=Application for Drawing and Handling of Images
+GenericName[fr]=Application pour dessiner et manipuler des images
 GenericName[x-test]=xxApplication for Drawing and Handling of Imagesxx
 Icon=krita
 MimeType=image/jpeg

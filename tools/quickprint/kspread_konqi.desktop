@@ -5,6 +5,7 @@ Actions=Print;
 
 [Desktop Action Print]
 Name=Print...
+Name[fr]=Impression...
 Name[x-test]=xxPrint...xx
 Exec=kspread --print %U
 Icon=filequickprint

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Spread Sheet Document...
+Name[fr]=Document Feuille de calcul...
 Name[x-test]=xxSpread Sheet Document...xx
 Comment=New KSpread document:
+Comment[fr]=Nouveau document KSpread :
 Comment[x-test]=xxNew KSpread document:xx
 Type=Link
 URL=.source/SpreadSheet.kst

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon14 EPS Import Filter
+Name[fr]=Filtre d'importation EPS de Karbon 14
 Name[x-test]=xxKarbon14 EPS Import Filterxx
 X-KDE-Export=application/illustrator
 X-KDE-Import=application/postscript

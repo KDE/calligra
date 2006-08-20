@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_labelsl16
 Name=Labels L16
+Name[fr]=Étiquettes L16
 Name[x-test]=xxLabels L16xx
 Type=Link
 URL=.source/LabelsL16.kwt

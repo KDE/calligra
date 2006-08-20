@@ -2,5 +2,6 @@
 Encoding=UTF-8
 X-KDE-Library=libkivioconnectortool
 Name=ConnectorTool for Kivio
+Name[fr]=Outil connexion pour Kivio
 Name[x-test]=xxConnectorTool for Kivioxx
 Type=Service

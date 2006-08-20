@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_snowymountains
 Name=Snowy Mountains
+Name[fr]=Montagnes enneigées
 Name[x-test]=xxSnowy Mountainsxx
 Comment=A cool and smooth presentation
+Comment[fr]=Une présentation fraîche et plaisante
 Comment[x-test]=xxA cool and smooth presentationxx
 Type=Link
 URL=.source/SnowyMountains.kpt

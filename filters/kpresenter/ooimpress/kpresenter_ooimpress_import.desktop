@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Impress Import Filter for KPresenter
+Name[fr]=Filtre d'importation OpenOffice.org Impress pour KPresenter
 Name[x-test]=xxOpenOffice.org Impress Import Filter for KPresenterxx
 X-KDE-Export=application/x-kpresenter
 X-KDE-Import=application/vnd.sun.xml.impress,application/vnd.sun.xml.impress.template

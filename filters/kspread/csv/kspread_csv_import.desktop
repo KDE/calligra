@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=CSV Import Filter for KSpread
+Name[fr]=Filtre d'importation CSV de KSpread
 Name[x-test]=xxCSV Import Filter for KSpreadxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=text/x-csv,text/plain

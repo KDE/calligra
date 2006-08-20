@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Krita TIFF Export Filter
+Name[fr]=Filtre d'exportation TIFF de Krita
 Name[x-test]=xxKrita TIFF Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

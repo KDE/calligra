@@ -1,8 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Presentation Document...
+Name[fr]=Document de présentation...
 Name[x-test]=xxPresentation Document...xx
 Comment=New KPresenter presentation document:
+Comment[fr]=Nouveau document de présentation KPresenter :
 Comment[x-test]=xxNew KPresenter presentation document:xx
 Type=Link
 URL=.source/Presentation.kpt

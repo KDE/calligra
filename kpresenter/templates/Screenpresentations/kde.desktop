@@ -5,5 +5,6 @@ URL=.source/kde.kpt
 Name=KDE
 Name[x-test]=xxKDExx
 Comment=A presentation with original KDE theming
+Comment[fr]=Une présentation avec un thème KDE original
 Comment[x-test]=xxA presentation with original KDE themingxx
 Icon=template_kde

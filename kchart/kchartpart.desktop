@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Chart Component
+Name[fr]=Composant diagramme de KOffice
 Name[x-test]=xxKOffice Chart Componentxx
 X-KDE-Library=libkchartpart
 Type=Service
@@ -10,5 +11,6 @@ X-KDE-NativeMimeType=application/x-kchart
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.chart,application/vnd.oasis.opendocument.chart-template
 GenericName=Chart
+GenericName[fr]=Diagramme
 GenericName[x-test]=xxChartxx
 Icon=kchart

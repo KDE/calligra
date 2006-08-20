@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/ArrowLeftDown.atf
 Name=Arrow Left/Down
+Name[fr]=Flèche gauche / basse
 Name[x-test]=xxArrow Left/Downxx
 Icon=.icon/ArrowLeftDown.png

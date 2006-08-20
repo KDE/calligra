@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Connection10.atf
 Name=Connection 10
+Name[fr]=Connexion 10
 Name[x-test]=xxConnection 10xx
 Icon=.icon/Connection10.png

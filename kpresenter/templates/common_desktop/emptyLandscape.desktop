@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_emptylandscape
 Name=Empty
+Name[fr]=Neutre
 Name[x-test]=xxEmptyxx
 Comment=Empty presentation
+Comment[fr]=Présentation vide
 Comment[x-test]=xxEmpty presentationxx
 Type=Link
 URL=.source/emptyLandscape.kpt

@@ -6,4 +6,5 @@ Hidden=true
 Icon=kexiproject_sqlite
 Patterns=
 Comment=Kexi Database File-Based Project
+Comment[fr]=Projet de base de données Kexi basé sur un fichier
 Comment[x-test]=xxKexi Database File-Based Projectxx

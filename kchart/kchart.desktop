@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=KChart
 Name[x-test]=xxKChartxx
 GenericName=Chart
+GenericName[fr]=Diagramme
 GenericName[x-test]=xxChartxx
 Comment=Create graphics and charts
 Exec=kchart %u

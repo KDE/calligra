@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/PriceQuotation.kst
 Name=Price Quotation
+Name[fr]=Chiffrage
 Name[x-test]=xxPrice Quotationxx
 Icon=template_pricequotation

@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_bluebreezesingle
 Name=Blue Breeze Single
+Name[fr]=Brise bleue, simple
 Name[x-test]=xxBlue Breeze Singlexx
 Comment=A peaceful presentation with a title and single large text area
+Comment[fr]=Une présentation apaisée avec un titre et un seul grand texte
 Comment[x-test]=xxA peaceful presentation with a title and single large text areaxx
 Type=Link
 URL=.source/BlueBreezeSingle.kpt

@@ -2,5 +2,6 @@
 Encoding=UTF-8
 X-KDE-Library=libkiviotargettool
 Name=Target Tool for Kivio
+Name[fr]=Outil cible pour Kivio
 Name[x-test]=xxTarget Tool for Kivioxx
 Type=Service

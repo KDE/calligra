@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Karbon14 PNG Export Filter
+Name[fr]=Filtre d'exportation PNG de Karbon 14
 Name[x-test]=xxKarbon14 PNG Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

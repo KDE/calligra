@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Icon=template_titleportrait
 Name=Title Portrait
+Name[fr]=Titre, portrait
 Name[x-test]=xxTitle Portraitxx
 Comment=Presentation with a page title (portrait-oriented)
+Comment[fr]=Présentation avec un titre de page (portrait)
 Comment[x-test]=xxPresentation with a page title (portrait-oriented)xx
 Type=Link
 URL=.source/TitlePortrait.kpt

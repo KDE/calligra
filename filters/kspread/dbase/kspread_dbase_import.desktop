@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KSpread dBASE Import Filter
+Name[fr]=Filtre d'importation dBASE de Kspread
 Name[x-test]=xxKSpread dBASE Import Filterxx
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-dbase

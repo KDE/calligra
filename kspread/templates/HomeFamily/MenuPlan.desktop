@@ -3,5 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/MenuPlan.kst
 Name=Menu Plan
+Name[fr]=Plan du menu
 Name[x-test]=xxMenu Planxx
 Icon=template_menuplan
