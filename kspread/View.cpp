@@ -5222,7 +5222,7 @@ KoDocument * View::hitTest( const QPoint& /*pos*/ )
 
 int View::leftBorder() const
 {
-  return int( d->canvas->doc()->zoomItXOld( YBORDER_WIDTH ) );
+  return d->vBorderWidget->width();
 }
 
 int View::rightBorder() const
@@ -5232,7 +5232,7 @@ int View::rightBorder() const
 
 int View::topBorder() const
 {
-  return d->toolWidget->height() + int( d->canvas->doc()->zoomItXOld( Format::globalRowHeight() + 2 ) );
+  return d->toolWidget->height() + d->hBorderWidget->height();
 }
 
 int View::bottomBorder() const

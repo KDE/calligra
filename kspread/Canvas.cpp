@@ -554,7 +554,7 @@ void Canvas::scrollToCell(QPoint location) const
 
     // Do we need to scroll left?
     if ( xpos > minX )
-      horzScrollBar()->setValue( horzScrollBar()->maximum() - xOffset() - xpos + minX );
+      horzScrollBar()->setValue( (int) (horzScrollBar()->maximum() - xOffset() - xpos + minX ) );
 
     // Do we need to scroll right?
     else if ( xpos < maxX )
@@ -566,7 +566,7 @@ void Canvas::scrollToCell(QPoint location) const
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
 
-      horzScrollBar()->setValue( horzScrollBar()->maximum() - horzScrollBarValue );
+      horzScrollBar()->setValue( (int) (horzScrollBar()->maximum() - horzScrollBarValue ) );
     }
   }
   else {
@@ -577,7 +577,7 @@ void Canvas::scrollToCell(QPoint location) const
 
     // Do we need to scroll left?
     if ( xpos < minX )
-      horzScrollBar()->setValue( xOffset() + xpos - minX );
+      horzScrollBar()->setValue( (int) (xOffset() + xpos - minX ) );
 
     // Do we need to scroll right?
     else if ( xpos > maxX )
@@ -589,7 +589,7 @@ void Canvas::scrollToCell(QPoint location) const
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
 
-      horzScrollBar()->setValue( horzScrollBarValue );
+      horzScrollBar()->setValue( (int) horzScrollBarValue );
     }
   }
 
@@ -608,7 +608,7 @@ void Canvas::scrollToCell(QPoint location) const
 
   // do we need to scroll up
   if ( ypos < minY )
-    vertScrollBar()->setValue( yOffset() + ypos - minY );
+    vertScrollBar()->setValue( (int) (yOffset() + ypos - minY ) );
 
   // do we need to scroll down
   else if ( ypos > maxY )
@@ -620,7 +620,7 @@ void Canvas::scrollToCell(QPoint location) const
     if ( vertScrollBarValue > vertScrollBarValueMax )
       vertScrollBarValue = vertScrollBarValueMax;
 
-    vertScrollBar()->setValue( vertScrollBarValue );
+    vertScrollBar()->setValue( (int) vertScrollBarValue );
   }
 }
 
@@ -642,17 +642,17 @@ void Canvas::slotScrollHorz( int _value )
     kDebug (36001)
       << "Canvas::slotScrollHorz: value out of range (_value: "
       << _value << ')' << endl;
-    _value = 0.0;
+    _value = 0;
   }
 
   double xpos = sheet->dblColumnPos( qMin( KS_colMax, sheet->maxColumn()+10 ) ) - d->xOffset;
   if ( _value > ( xpos + d->xOffset ) )
-    _value = xpos + d->xOffset;
+    _value = (int) ( xpos + d->xOffset );
 
   sheet->enableScrollBarUpdates( false );
 
   // Relative movement
-  int dx = d->xOffset - _value;
+  int dx = (int) ( d->xOffset - _value );
 
   // New absolute position
   kDebug(36001) << "slotScrollHorz(): XOffset before setting: " << d->xOffset << endl;
@@ -688,12 +688,12 @@ void Canvas::slotScrollVert( int _value )
 
   double ypos = sheet->dblRowPos( qMin( KS_rowMax, sheet->maxRow()+10 ) );
   if ( _value > ypos )
-      _value = ypos;
+    _value = (int) ypos;
 
   sheet->enableScrollBarUpdates( false );
 
   // Relative movement
-  int dy = d->yOffset - _value;
+  int dy = (int) ( d->yOffset - _value );
 
   // New absolute position
   d->yOffset = _value;
@@ -720,7 +720,7 @@ void Canvas::slotMaxColumn( int _max_column )
   if ( xpos > sizeMaxX - xOffset() - unzoomWidth )
     xpos = sizeMaxX - xOffset() - unzoomWidth;
 
-  horzScrollBar()->setRange( 0, xpos + xOffset() );
+  horzScrollBar()->setRange( 0, (int) ( xpos + xOffset() ) );
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
@@ -740,7 +740,7 @@ void Canvas::slotMaxRow( int _max_row )
   if ( ypos > sizeMaxY - yOffset() - unzoomHeight )
     ypos = sizeMaxY - yOffset() - unzoomHeight;
 
-  vertScrollBar()->setRange( 0, ypos + yOffset() );
+  vertScrollBar()->setRange( 0, (int) ( ypos + yOffset() ) );
 }
 
 void Canvas::mouseMoveEvent( QMouseEvent * _ev )
@@ -1790,8 +1790,8 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
   if (!sheet)
     return;
 
-    double ev_Width = d->view->doc()->unzoomItXOld( _ev->size().width() );
-    double ev_Height = d->view->doc()->unzoomItYOld( _ev->size().height() );
+    double ev_Width = d->view->doc()->unzoomItX( _ev->size().width() );
+    double ev_Height = d->view->doc()->unzoomItY( _ev->size().height() );
 
     // workaround to allow horizontal resizing and zoom changing when sheet
     // direction and interface direction don't match (e.g. an RTL sheet on an
@@ -1812,11 +1812,10 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     {
         int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
 
-        if ( ( xOffset() + ev_Width ) >
-               d->view->doc()->zoomItXOld( sheet->sizeMaxX() ) )
+        if ( ( xOffset() + ev_Width ) > sheet->sizeMaxX() )
         {
-          horzScrollBar()->setRange( 0, sheet->sizeMaxX() - ev_Width );
-          if ( sheet->layoutDirection()==Sheet::RightToLeft )
+          horzScrollBar()->setRange( 0, (int) ( sheet->sizeMaxX() - ev_Width ) );
+          if ( sheet->layoutDirection() == Sheet::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
     }
@@ -1825,11 +1824,10 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     {
         int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
 
-        if ( horzScrollBar()->maximum() ==
-             int( d->view->doc()->zoomItXOld( sheet->sizeMaxX() ) - ev_Width ) )
+        if ( horzScrollBar()->maximum() == int( sheet->sizeMaxX() - ev_Width ) )
         {
-          horzScrollBar()->setRange( 0, sheet->sizeMaxX() - ev_Width );
-          if ( sheet->layoutDirection()==Sheet::RightToLeft )
+          horzScrollBar()->setRange( 0, (int) (sheet->sizeMaxX() - ev_Width ) );
+          if ( sheet->layoutDirection() == Sheet::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
     }
@@ -1837,19 +1835,17 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     // If we rise vertically, then check if we are still within the valid area (KS_rowMax)
     if ( _ev->size().height() > _ev->oldSize().height() )
     {
-        if ( ( yOffset() + ev_Height ) >
-             d->view->doc()->zoomItYOld( sheet->sizeMaxY() ) )
+        if ( ( yOffset() + ev_Height ) > sheet->sizeMaxY() )
         {
-            vertScrollBar()->setRange( 0, sheet->sizeMaxY() - ev_Height );
+            vertScrollBar()->setRange( 0, (int) (sheet->sizeMaxY() - ev_Height ) );
         }
     }
     // If we lower vertically, then check if the range should represent the maximum range
     else if ( _ev->size().height() < _ev->oldSize().height() )
     {
-        if ( vertScrollBar()->maximum() ==
-             int( d->view->doc()->zoomItYOld( sheet->sizeMaxY() ) - ev_Height ) )
+        if ( vertScrollBar()->maximum() == int( sheet->sizeMaxY() - ev_Height ) )
         {
-          vertScrollBar()->setRange( 0, sheet->sizeMaxY() - ev_Height );
+            vertScrollBar()->setRange( 0, (int) ( sheet->sizeMaxY() - ev_Height ) );
         }
     }
 }
@@ -4245,10 +4241,10 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*
     painter.setPen( Qt::white );
     painter.setBrush( colors[(index) % colors.size()] );
 
-    painter.drawRect( unzoomedRect.right() - 3 * unzoomedXPixel,
-                      unzoomedRect.bottom() - 3 * unzoomedYPixel,
-                      6 * unzoomedXPixel,
-                      6 * unzoomedYPixel );
+    painter.drawRect( QRectF( unzoomedRect.right() - 3 * unzoomedXPixel,
+                              unzoomedRect.bottom() - 3 * unzoomedYPixel,
+                              6 * unzoomedXPixel,
+                              6 * unzoomedYPixel ) );
     index++;
   }
 }
@@ -4624,27 +4620,24 @@ void Canvas::showToolTip( const QPoint& p )
     }
 
     // Get the cell dimensions
-    QRect marker;
+    QRectF marker;
     bool insideMarker = false;
-
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
-      KoRect unzoomedMarker( dwidth - u - xpos + xOffset(),
+      QRectF unzoomedMarker( dwidth - u - xpos + xOffset(),
                              ypos - yOffset(),
                              u,
                              v );
-
-      marker = doc()->zoomRectOld( unzoomedMarker );
+      marker = doc()->documentToView( unzoomedMarker );
       insideMarker = marker.contains( p );
     }
     else
     {
-      KoRect unzoomedMarker( xpos - xOffset(),
+      QRectF unzoomedMarker( xpos - xOffset(),
                              ypos - yOffset(),
                              u,
                              v );
-
-      marker = doc()->zoomRectOld( unzoomedMarker );
+      marker = doc()->documentToView( unzoomedMarker );
       insideMarker = marker.contains( p );
     }
 
@@ -4693,7 +4686,7 @@ void Canvas::showToolTip( const QPoint& p )
     }
 
     // Now we shows the tip
-    QToolTip::showText( marker.bottomRight(), tipText, this );
+    QToolTip::showText( marker.toRect().bottomRight(), tipText, this );
 
     // Here we try to find the tip label again
     // Reason: the previous tip_findLabel might fail if no tip has ever shown yet
