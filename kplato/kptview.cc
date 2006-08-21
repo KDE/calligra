@@ -124,7 +124,7 @@ View::View(Part* part, QWidget* parent)
         setXMLFile("kplato.rc");
 
     m_dbus = new ViewAdaptor(this);
-    QDBus::sessionBus().registerObject( "/" + objectName(), this);
+    QDBusConnection::sessionBus().registerObject( "/" + objectName(), this);
 
     m_tab = new Q3WidgetStack(this);
     Q3VBoxLayout *layout = new Q3VBoxLayout(this);

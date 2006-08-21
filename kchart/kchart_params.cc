@@ -63,7 +63,7 @@ KChartParams::KChartParams( KChartPart *_part )
     //dcopObject(); // build it
 
     new KChartParamsAdaptor(this);
-    QDBus::sessionBus().registerObject( "/params", this);
+    QDBusConnection::sessionBus().registerObject( "/params", this);
 }
 
 

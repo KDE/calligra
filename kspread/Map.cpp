@@ -102,7 +102,7 @@ Map::Map ( Doc* doc, const char* name)
   d->overallRowCount = 0;
 
   new MapAdaptor(this);
-  QDBus::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
+  QDBusConnection::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
 }
 
 Map::~Map()

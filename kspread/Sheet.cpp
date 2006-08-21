@@ -315,7 +315,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->name = sheetName;
 
   new SheetAdaptor(this);
-  QDBus::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName, this);
+  QDBusConnection::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName, this);
 
   d->cells.setAutoDelete( true );
   d->rows.setAutoDelete( true );

@@ -82,7 +82,7 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 	}
 
 	new LatexExportAdaptor(this);
-    QDBus::sessionBus().registerObject("/filter/latex", this);
+    QDBusConnection::sessionBus().registerObject("/filter/latex", this);
 
 	
 	/* All these items inserted must not be translated so they are inserted here 
