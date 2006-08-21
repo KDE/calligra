@@ -152,7 +152,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
   ),
 	m_mainWin(mainWin),
 	m_cancelled( false ),
-	m_adjustRows( 0 ),
+	m_adjustRows( true ),
 	m_startline( 0 ),
 	m_textquote( QString(KEXICSV_DEFAULT_FILE_TEXT_QUOTE)[0] ),
 	m_mode(mode),
@@ -210,6 +210,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 
 	// Delimiter: comma, semicolon, tab, space, other
 	m_delimiterWidget = new KexiCSVDelimiterWidget(true /*lineEditOnBottom*/, page);
+	m_detectDelimiter = true;
 	glyr->addMultiCellWidget( m_delimiterWidget, 1, 2, 0, 0 );
 
 	QLabel *delimiterLabel = new QLabel(m_delimiterWidget, i18n("Delimiter:"), page);
@@ -666,9 +667,11 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			if (codec)
 				m_inputStream->setCodec(codec); //QTextCodec::codecForName("CP1250"));
 		}
-		const QString delimiter( detectDelimiterByLookingAtFirstBytesOfFile(*m_inputStream) );
-		if (m_delimiterWidget->delimiter() != delimiter)
-			m_delimiterWidget->setDelimiter( delimiter );
+		if (m_detectDelimiter) {
+			const QString delimiter( detectDelimiterByLookingAtFirstBytesOfFile(*m_inputStream) );
+			if (m_delimiterWidget->delimiter() != delimiter)
+				m_delimiterWidget->setDelimiter( delimiter );
+		}
 	}
 	const QChar delimiter(m_delimiterWidget->delimiter()[0]);
 	m_stoppedAt_MAX_BYTES_TO_PREVIEW = false;
@@ -1182,7 +1185,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 		//else
 //			m_table->setNumRows(m_maximumRowsForPreview);
 		m_table->verticalHeader()->setLabel(0, i18n("Column name")+"   ");
-		m_adjustRows=1;
+		m_adjustRows=true;
 	}
 
 	m_table->setText(row - 1, col - 1, (m_options.stripWhiteSpaceInTextValuesChecked ? text.stripWhiteSpace() : text));
@@ -1210,7 +1213,7 @@ void KexiCSVImportDialog::adjustRows(int iRows)
 	if (m_adjustRows)
 	{
 		m_table->setNumRows( iRows );
-		m_adjustRows=0;
+		m_adjustRows=false;
 		for (int i = 0; i<iRows; i++)
 			m_table->adjustRow(i);
 	}
@@ -1242,8 +1245,9 @@ void KexiCSVImportDialog::delimiterChanged(const QString& delimiter)
 {
 	Q_UNUSED(delimiter);
 	m_columnsAdjusted = false;
+	m_detectDelimiter = false; //selected by hand: do not detect in the future
 	//delayed, otherwise combobox won't be repainted
-	QTimer::singleShot(10, this, SLOT(fillTable()));
+	fillTableLater();
 }
 
 void KexiCSVImportDialog::textquoteSelected(int)
@@ -1257,6 +1261,12 @@ void KexiCSVImportDialog::textquoteSelected(int)
 	kexipluginsdbg << "KexiCSVImportDialog::textquoteSelected(): " << m_textquote << endl;
 
 	//delayed, otherwise combobox won't be repainted
+	fillTableLater();
+}
+
+void KexiCSVImportDialog::fillTableLater()
+{
+	m_table->setNumRows( 0 );
 	QTimer::singleShot(10, this, SLOT(fillTable()));
 }
 
@@ -1266,7 +1276,7 @@ void KexiCSVImportDialog::startlineSelected(int startline)
 	if (m_startline == (startline-1))
 		return;
 	m_startline = startline-1;
-	m_adjustRows=1;
+	m_adjustRows=true;
 	fillTable();
 	m_table->setFocus();
 }
@@ -1586,7 +1596,7 @@ void KexiCSVImportDialog::ignoreDuplicatesChanged(int)
 
 void KexiCSVImportDialog::slot1stRowForFieldNamesChanged(int)
 {
-	m_adjustRows=1;
+	m_adjustRows=true;
 	if (m_1stRowForFieldNames->isChecked() && m_startline>0 && m_startline>=(m_startAtLineSpinBox->maxValue()-1))
 		m_startline--;
 	fillTable();
