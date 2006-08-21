@@ -1684,6 +1684,30 @@ bool KoDocument::loadNativeFormat( const QString & file )
         }
         // ### TODO: allow UTF-16
         isRawXML = (strncasecmp( buf, "<?xm", 4 ) == 0);
+        if ( !isRawXML ) {
+            // Still check for broken MathML files, which seem to be rather common
+            in.reset();
+            // Remove spaces
+            do {
+                if ( in.readBlock( buf , 1 ) < 1 ) 
+                {
+                    QApplication::restoreOverrideCursor();
+                    in.close();
+                    d->lastErrorMessage = i18n( "Could not read the beginning of the file." );
+                    return false;
+                }
+            } while ( QChar( buf[0] ).isSpace() );
+            if ( buf[0] == '<' ) { // First not-space character
+                if ( in.readBlock( buf , 4 ) < 4 ) 
+                {
+                    QApplication::restoreOverrideCursor();
+                    in.close();
+                    d->lastErrorMessage = i18n( "Could not read the beginning of the file." );
+                    return false;
+                }
+                isRawXML = (strncasecmp( buf, "math", 4 ) == 0); // file begins with <math ?
+            }
+        }
         //kdDebug(30003) << "PATTERN=" << buf << endl;
     }
     // Is it plain XML?
