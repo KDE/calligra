@@ -20,18 +20,15 @@
 #ifndef OPERATORELEMENT_H
 #define OPERATORELEMENT_H
 
-//#include "formulacursor.h"
 #include "tokenelement.h"
-//#include "sequenceelement.h"
-//#include "contextstyle.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
 class OperatorElement : public TokenElement {
     typedef TokenElement inherited;
-    enum FormType { NoForm, PrefixForm, InfixForm, PostfixForm };
 public:
     OperatorElement( BasicElement* parent = 0 );
+    void setForm( FormType type );
 
 private:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );

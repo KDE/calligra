@@ -213,6 +213,11 @@ enum HorizontalAlign {
 };
 
 /**
+ * Type of forms in operators
+ */
+enum FormType { NoForm, PrefixForm, InfixForm, PostfixForm };
+
+/**
  * each index has its own number.
  */
 enum IndexPosition {

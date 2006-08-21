@@ -28,6 +28,7 @@
 KFORMULA_NAMESPACE_BEGIN
 
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent ),
+                                                           m_form( InfixForm ),
                                                            m_customForm( false ),
                                                            m_customFence( false ),
                                                            m_customSeparator( false ),
@@ -41,6 +42,11 @@ OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent 
                                                            m_customMovableLimits( false ),
                                                            m_customAccent( false )
 {
+}
+
+void OperatorElement::setForm( FormType type )
+{
+    m_form = type;
 }
 
 bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )

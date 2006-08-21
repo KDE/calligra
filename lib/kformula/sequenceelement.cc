@@ -51,6 +51,7 @@
 #include "symbolelement.h"
 #include "symboltable.h"
 #include "textelement.h"
+#include "operatorelement.h"
 
 #include <assert.h>
 
@@ -1777,6 +1778,16 @@ int SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QD
                 return -1;
             }
             n = n.nextSibling();
+        }
+    }
+    // If the sequence contains more than one element, if the first or last
+    // element are operators, they have to be marked as such
+    if ( list.count() > 1 ) {
+        if ( list.getFirst()->getElementName() == "mo" ) {
+            static_cast<OperatorElement*>( list.getFirst() )->setForm( PrefixForm );
+        }
+        if ( list.getLast()->getElementName() == "mo" ) {
+            static_cast<OperatorElement*>( list.getLast() )->setForm( PostfixForm );
         }
     }
 	parse();
