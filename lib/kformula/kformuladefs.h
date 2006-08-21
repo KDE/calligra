@@ -181,7 +181,8 @@ enum SpaceWidth { THIN, MEDIUM, THICK, QUAD, NEGTHIN };
 enum SizeType { 
     NoSize, 
     AutoSize, 
-    FitSize, 
+    FitSize,
+    InfinitySize,
     RelativeSize, 
     AbsoluteSize, 
     PixelSize,

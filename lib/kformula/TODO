@@ -7,18 +7,18 @@ NOTE: Only Presentation Markup is considered here.
 = mo =
 
 * Support for Operator Dictionary ( Section 3.2.5.7.1, Appendix F )
-* Support for attribute form: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute fence: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute separator: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute lspace: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute rspace: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute stretchy: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
-* Support for attribute symmetric: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
-* Support for attribute maxsize: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
-* Support for attribute minsize: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
-* Support for attribute largeop: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.9 )
-* Support for attribute movablelimits: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.9 )
-* Support for attribute accent: loading, saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute form: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute fence: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute separator: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute lspace: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute rspace: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute stretchy: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
+* Support for attribute symmetric: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
+* Support for attribute maxsize: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
+* Support for attribute minsize: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
+* Support for attribute largeop: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.9 )
+* Support for attribute movablelimits: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.9 )
+* Support for attribute accent: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
 
 = mtext =
 
