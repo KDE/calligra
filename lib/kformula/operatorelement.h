@@ -36,6 +36,8 @@ public:
 private:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
     virtual QString getElementName() const { return "mo"; }
+    void writeMathMLAttributes( QDomElement& element ) const ;
+    void writeSizeAttribute( QDomElement& element, const QString &attr, SizeType type, double length ) const ;
 
     FormType m_form;
     SizeType m_lspaceType;

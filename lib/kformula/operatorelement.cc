@@ -204,4 +204,118 @@ bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
     return true;
 }
 
+void OperatorElement::writeMathMLAttributes( QDomElement& element ) const
+{
+    if ( m_customForm ) {
+        switch ( m_form ) {
+        case PrefixForm:
+            element.setAttribute( "form", "prefix" );
+            break;
+        case InfixForm:
+            element.setAttribute( "form", "infix" );
+            break;
+        case PostfixForm:
+            element.setAttribute( "form", "postfix" );
+        default:
+            break;
+        }
+    }
+    if ( m_customFence ) {
+        element.setAttribute( "fence", m_fence ? "true" : "false" );
+    }
+    if ( m_customSeparator ) {
+        element.setAttribute( "separator", m_separator ? "true" : "false" );
+    }
+    if ( m_customLSpace ) {
+        writeSizeAttribute( element, "lspace", m_lspaceType, m_lspace );
+    }
+    if ( m_customRSpace ) {
+        writeSizeAttribute( element, "rspace", m_rspaceType, m_rspace );
+    }
+    if ( m_customStretchy ) {
+        element.setAttribute( "stretchy", m_stretchy ? "true" : "false" );
+    }
+    if ( m_customSymmetric ) {
+        element.setAttribute( "symmetric", m_symmetric ? "true" : "false" );
+    }
+    if ( m_customMaxSize ) {
+        writeSizeAttribute( element, "maxsize", m_maxSizeType, m_maxSize );
+    }
+    if ( m_customMinSize ) {
+        writeSizeAttribute( element, "minsize", m_minSizeType, m_minSize );
+    }
+    if ( m_customLargeOp ) {
+        element.setAttribute( "largeop", m_largeOp ? "true" : "false" );
+    }
+    if ( m_customMovableLimits ) {
+        element.setAttribute( "movablelimits", m_movableLimits ? "true" : "false" );
+    }
+    if ( m_customAccent ) {
+        element.setAttribute( "accent", m_accent ? "true" : "false" );
+    }
+}
+
+void OperatorElement::writeSizeAttribute( QDomElement& element, const QString &attr, SizeType type, double length ) const
+{
+    switch ( type ) {
+    case InfinitySize:
+        element.setAttribute( attr, "infinity" );
+        break;
+    case AbsoluteSize:
+        element.setAttribute( attr, QString( "%1pt" ).arg( length ) );
+        break;
+    case RelativeSize:
+        element.setAttribute( attr, QString( "%1% " ).arg( length * 100.0 ) );
+        break;
+    case PixelSize:
+        element.setAttribute( attr, QString( "%1px " ).arg( length ) );
+        break;
+    case NegativeVeryVeryThinMathSpace:
+        element.setAttribute( attr, "negativeveryverythinmathspace" );
+        break;
+    case NegativeVeryThinMathSpace:
+        element.setAttribute( attr, "negativeverythinmathspace" );
+        break;
+    case NegativeThinMathSpace:
+        element.setAttribute( attr, "negativethinmathspace" );
+        break;
+    case NegativeMediumMathSpace:
+        element.setAttribute( attr, "negativemediummathspace" );
+        break;
+    case NegativeThickMathSpace:
+        element.setAttribute( attr, "negativethickmathspace" );
+        break;
+    case NegativeVeryThickMathSpace:
+        element.setAttribute( attr, "negativeverythickmathspace" );
+        break;
+    case NegativeVeryVeryThickMathSpace:
+        element.setAttribute( attr, "negativeveryverythickmathspace" );
+        break;
+    case VeryVeryThinMathSpace:
+        element.setAttribute( attr, "veryverythinmathspace" );
+        break;
+    case VeryThinMathSpace:
+        element.setAttribute( attr, "verythinmathspace" );
+        break;
+    case ThinMathSpace:
+        element.setAttribute( attr, "thinmathspace" );
+        break;
+    case MediumMathSpace:
+        element.setAttribute( attr, "mediummathspace" );
+        break;
+    case ThickMathSpace:
+        element.setAttribute( attr, "thickmathspace" );
+        break;
+    case VeryThickMathSpace:
+        element.setAttribute( attr, "verythickmathspace" );
+        break;
+    case VeryVeryThickMathSpace:
+        element.setAttribute( attr, "veryverythickmathspace" );
+        break;
+    default:
+        break;
+    }
+}
+
+
 KFORMULA_NAMESPACE_END

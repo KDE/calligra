@@ -7,18 +7,19 @@ NOTE: Only Presentation Markup is considered here.
 = mo =
 
 * Support for Operator Dictionary ( Section 3.2.5.7.1, Appendix F )
-* Support for attribute form: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute fence: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute separator: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute lspace: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute rspace: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
-* Support for attribute stretchy: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
-* Support for attribute symmetric: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
-* Support for attribute maxsize: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
-* Support for attribute minsize: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
-* Support for attribute largeop: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.9 )
-* Support for attribute movablelimits: saving, rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.9 )
-* Support for attribute accent: saving, rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for proper form value derived from position in <mrow> ( Section 3.2.5.7.2 )
+* Support for attribute form: rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute fence: rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute separator: rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute lspace: rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute rspace: rendering ( Section 3.2.5.2, 3.2.5.7 )
+* Support for attribute stretchy: rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
+* Support for attribute symmetric: rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
+* Support for attribute maxsize: rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
+* Support for attribute minsize: rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.8 )
+* Support for attribute largeop: rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.9 )
+* Support for attribute movablelimits: rendering ( Section 3.2.5.2, 3.2.5.7, 3.2.5.9 )
+* Support for attribute accent: rendering ( Section 3.2.5.2, 3.2.5.7 )
 
 = mtext =
 
