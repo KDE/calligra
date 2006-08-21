@@ -1,5 +1,3 @@
-
-
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kspread 
 	${KOTEXT_INCLUDES} 
@@ -8,11 +6,14 @@ include_directories(
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
-add_subdirectory( kspreadcore )
+#disabled for now till ported to kross2
+##add_subdirectory( kspreadcore )
+
+add_subdirectory( scripts )
 
 ########### next target ###############
 
-set(kspreadscripting_PART_SRCS scripting.cc )
+set(kspreadscripting_PART_SRCS scripting.cpp )
 
 kde4_automoc(${kspreadscripting_PART_SRCS})
 
@@ -20,42 +21,11 @@ kde4_add_plugin(kspreadscripting ${kspreadscripting_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadscripting )
 
-target_link_libraries(kspreadscripting  ${KDE4_KDECORE_LIBS} kspreadcommon krossmain )
+target_link_libraries(kspreadscripting  ${KDE4_KDECORE_LIBS} kspreadcommon krosscore )
 
-install(TARGETS kspreadscripting  DESTINATION ${PLUGIN_INSTALL_DIR})
-
+install(TARGETS kspreadscripting DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
 install( FILES  kspreadscripting.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  scripting.rc  DESTINATION ${DATA_INSTALL_DIR}/kspread/kpartplugins)
-
-
-
-
-
-#original Makefile.am contents follow:
-
-##SUBDIRS = kspreadcore samples
-#SUBDIRS = kspreadcore
-#
-#INCLUDES = -I$(top_builddir)/lib/kross/main \
-#           -I$(top_srcdir)/kspread \
-#           $(KROSS_INCLUDES) \
-#           $(KOFFICE_INCLUDES) \
-#           $(all_includes)
-#
-#kspreadscripting_la_SOURCES = scripting.cc
-#
-#kde_module_LTLIBRARIES = kspreadscripting.la
-#noinst_HEADERS = scripting.h
-#
-#kspreadscripting_la_METASOURCES = AUTO
-#
-#kspreadscripting_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kspreadscripting_la_LIBADD = $(top_builddir)/kspread/libkspreadcommon.la $(top_builddir)/lib/kross/main/libkrossmain.la
-#
-#kde_services_DATA = kspreadscripting.desktop
-#
-#kspreadrcdir = $(kde_datadir)/kspread/kpartplugins
-#kspreadrc_DATA = scripting.rc

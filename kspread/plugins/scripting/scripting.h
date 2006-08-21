@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2006 ISaac Clerencia <isaac@warp.es>
+ * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,24 +26,17 @@
 #include <kparts/plugin.h>
 #include <View.h>
 
-namespace Kross {
-    namespace Api {
-        class ScriptGUIClient;
-        class ScriptAction;
-    }
-}
-
 class Scripting : public KParts::Plugin
 {
-    Q_OBJECT
+        Q_OBJECT
     public:
         Scripting(QObject *parent, const QStringList &);
         virtual ~Scripting();
     private slots:
-        void executionFinished(const Kross::Api::ScriptAction*);
+        void executionFinished();
     private:
-        KSpread::View * m_view;
-        Kross::Api::ScriptGUIClient* m_scriptguiclient;
+        class Private;
+        Private* const d;
 };
 
 
