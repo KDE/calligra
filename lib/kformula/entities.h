@@ -1,5 +1,5 @@
 //
-// Created: Mon Aug 21 19:05:36 2006
+// Created: Tue Aug 22 00:35:01 2006
 //      by: bynames.py
 //    from: byalpha.html
 //
@@ -23,7 +23,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 
 
 #ifndef ENTITIES_H

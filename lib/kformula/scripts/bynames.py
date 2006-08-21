@@ -49,7 +49,6 @@ def write_header( f ):
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 '''
 
 def write_h( f ):
@@ -121,12 +120,15 @@ def parse( fr, fw ):
 		line = fr.readline().strip()
 
 	entries.reverse()
+	fd_list = open( 'entity.list', 'w' )
 	while True:
 		e = entries.pop()
+		fd_list.write( e[0] + ' ' + e[1] + '\n')
 		print >> fw, '     {"' + e[0] + '", ' + e[1] + '}',
 		if len( entries ) == 0:
 			break
 		print >> fw, ','
+	fd_list.close()
 	
 if __name__ == '__main__':
 	fh = open( '../entities.h', 'w' )
