@@ -31,7 +31,6 @@ class OperatorElement : public TokenElement {
     typedef TokenElement inherited;
 public:
     OperatorElement( BasicElement* parent = 0 );
-	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 
 private:
     virtual QString getElementName() const { return "mo"; }

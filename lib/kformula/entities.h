@@ -1,5 +1,5 @@
 //
-// Created: Mon Aug 21 18:25:25 2006
+// Created: Mon Aug 21 19:05:36 2006
 //      by: bynames.py
 //    from: byalpha.html
 //
@@ -34,6 +34,7 @@
 KFORMULA_NAMESPACE_BEGIN
 	
 struct entityMap {
+    static int size();
     int operator<( const char* right ) const {
 	    return strcmp( name, right ) < 0;
     }

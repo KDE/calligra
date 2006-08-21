@@ -1,5 +1,5 @@
 //
-// Created: Mon Aug 21 18:25:25 2006
+// Created: Mon Aug 21 19:05:36 2006
 //      by: bynames.py
 //    from: byalpha.html
 //
@@ -2027,6 +2027,12 @@ const entityMap entities[] = {
      {"Zscr", 0x1D4B5} ,
      {"zscr", 0x1D4CF} 
 };
+
+// Needed since sizeof is a macro and we cannot be used until size is known
+int entityMap::size()
+{
+    return sizeof( entities );
+}
 
 KFORMULA_NAMESPACE_END
 	

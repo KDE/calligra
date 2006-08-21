@@ -62,6 +62,7 @@ def write_h( f ):
 KFORMULA_NAMESPACE_BEGIN
 	
 struct entityMap {
+    static int size();
     int operator<( const char* right ) const {
 	    return strcmp( name, right ) < 0;
     }
@@ -88,6 +89,12 @@ const entityMap entities[] = {'''
 	
 	print >> fw, '''
 };
+
+// Needed since sizeof is a macro and we cannot be used until size is known
+int entityMap::size()
+{
+    return sizeof( entities );
+}
 
 KFORMULA_NAMESPACE_END
 	'''

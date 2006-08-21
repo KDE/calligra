@@ -17,8 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <algorithm>
+
 #include <qpainter.h>
 
+#include "entities.h"
 #include "elementtype.h"
 #include "sequenceelement.h"
 #include "textelement.h"
@@ -42,7 +45,22 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
                 child->setCharFamily( charFamily() );
                 child->setCharStyle( charStyle() );
                 list.append(child);
-                n = n.nextSibling();
+            }
+        }
+        else if ( n.isEntityReference() ) {
+            QString entity = n.toEntityReference().nodeName();
+            const entityMap* begin = entities;
+            const entityMap* end = entities + entityMap::size() / sizeof( entityMap );
+            const entityMap* pos = std::lower_bound( begin, end, entity.ascii() );
+            if ( pos == end || QString( pos->name ) != entity ) {
+                kdWarning() << "Invalid entity refererence: " << entity << endl;
+            }
+            else {
+                TextElement* child = new TextElement( QChar( pos->unicode ) );
+                child->setParent(this);
+                child->setCharFamily( charFamily() );
+                child->setCharStyle( charStyle() );
+                list.append(child);
             }
         }
         else if ( n.isElement() ) {
@@ -60,11 +78,11 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
                 return -1;
             }
             list.append( child );
-            n = n.nextSibling();
         }
         else {
-            return -1;
+            kdWarning() << "Invalid content in TokenElement\n";
         }
+        n = n.nextSibling();
     }
 //	parse();
 	kdWarning() << "Num of children " << list.count() << endl;
