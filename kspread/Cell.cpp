@@ -4099,7 +4099,7 @@ bool Cell::testFlag( StatusFlag flag ) const
 void Cell::checkForNamedAreas( QString & formula ) const
 {
 
-  KSPLoadingInfo* loadinginfo = sheet()->doc()->loadingInfo();
+  LoadingInfo* loadinginfo = sheet()->doc()->loadingInfo();
   if(! loadinginfo) {
     kDebug() << "Cell::checkForNamedAreas loadinginfo is NULL" << endl;
     return;
