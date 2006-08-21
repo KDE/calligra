@@ -28,6 +28,7 @@ class KWPageSettings;
 class KWPageManager;
 class KWTextFrameSet;
 class KoParagraphStyle;
+class KoCharacterStyle;
 class QDomElement;
 
 /// KWDocument delegates to this class the loading of (old style) KWD documents
@@ -67,6 +68,7 @@ private:
     void fill(KWTextFrameSet *fs, QDomElement framesetElem);
     /// fill the data of style with the info from the element
     void fill(KoParagraphStyle *style, QDomElement layoutElem);
+    void fill(KoCharacterStyle *style, QDomElement formatElem);
 
 private:
     KWDocument *m_document;

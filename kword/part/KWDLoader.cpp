@@ -29,6 +29,7 @@
 #include <KoTextShape.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KoCharacterStyle.h>
 
 // KDE + Qt includes
 #include <QDomDocument>
@@ -540,6 +541,47 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                 paragStyle.applyStyle(block);
             }
             cursor.insertText( paragraph.firstChildElement("TEXT").text() );
+
+            QDomElement formats = paragraph.firstChildElement("FORMATS");
+            if(!formats.isNull()) {
+                KoCharacterStyle *style = m_document->styleManager()->characterStyle(
+                        cursor.charFormat().intProperty(KoCharacterStyle::StyleId));
+                KoCharacterStyle defaultStyle;
+                if(style == 0) // parag is not based on any style, just text.
+                    style = &defaultStyle;
+
+                QTextBlock block = cursor.block();
+                QDomElement format = formats.firstChildElement("FORMAT");
+                while(! format.isNull()) {
+                    QString id = format.attribute("id", "0");
+                    if(id == "1") {
+                        fill(style, format);
+                        int pos = format.attribute("pos", "-1").toInt();
+                        if(format.hasAttribute("pos") && pos >= 0) {
+                            int length = format.attribute("len").toInt();
+                            if(length > 0) {
+                                cursor.setPosition(block.position() + pos);
+                                cursor.setPosition(block.position() + pos + length,
+                                        QTextCursor::KeepAnchor);
+                                style->applyStyle(&cursor);
+                                cursor.setPosition(block.position() + block.length()-1);
+                            }
+                            else
+                                kWarning("Format has missing or invalid 'len' value, ignoring\n");
+                        } else
+                            kWarning("Format has missing or invalid 'pos' value, ignoring\n");
+                    } else if(id == "2") {
+                        kWarning("File to old, image can not be recovered\n");
+                    } else if(id == "4") {
+                        // load variable // TODO
+                    } else if(id == "5") {
+                        kWarning("File to old, footnote can not be recovered\n");
+                    } else if(id == "6") {
+                        // anchor for floating frame. TODO
+                    }
+                    format = format.nextSiblingElement("FORMAT");
+                }
+            }
             //m_doc->progressItemLoaded();
         }
     }
@@ -596,8 +638,21 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
         else if(type == "fixed")
             style->setLineHeightAbsolute(spacing);
     }
+
+    element = layout.firstChildElement( "PAGEBREAKING" );
+    if ( !element.isNull() ) {
+        if ( element.attribute( "linesTogether" ) == "true" )
+            style->setNonBreakableLines(true);
+        if ( element.attribute( "hardFrameBreak" ) == "true" )
+            style->setBreakBefore(true);
+        if ( element.attribute( "hardFrameBreakAfter" ) == "true" )
+            style->setBreakAfter(true);
+    }
+    element = layout.firstChildElement( "HARDBRK" ); // KWord-0.8
+    if ( !element.isNull() )
+        style->setBreakBefore(true);
+
     // TODO read rest of properties
-    // PAGEBREAKING
     // LEFTBORDER
     // RIGHTBORDER
     // TOPBORDER
@@ -607,6 +662,71 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
     // TABULATOR
 
     // OHEAD, OFOOT, IFIRST, ILEFT
+}
+
+void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
+    QDomElement element = formatElem.firstChildElement( "COLOR" );
+    if( !element.isNull() ) {
+        QColor color(element.attribute("red").toInt(),
+                element.attribute("green").toInt(),
+                element.attribute("blue").toInt());
+        QBrush fg = style->foreground();
+        fg.setColor(color);
+        style->setForeground(fg);
+    }
+    element = formatElem.firstChildElement( "FONT" );
+    if( !element.isNull() )
+        style->setFontFamily(element.attribute("name", "Serif"));
+    element = formatElem.firstChildElement( "SIZE" );
+    if( !element.isNull() )
+        style->setFontPointSize(element.attribute("value", "12").toDouble());
+    element = formatElem.firstChildElement( "WEIGHT" );
+    if( !element.isNull() )
+        style->setFontWeight(element.attribute("value", "80").toInt());
+    element = formatElem.firstChildElement( "ITALIC" );
+    if( !element.isNull() )
+        style->setFontItalic(element.attribute("value", "0") == "1");
+    element = formatElem.firstChildElement( "STRIKEOUT" );
+    if( !element.isNull() ) {
+        QString value = element.attribute("value", "0");
+        // TODO store other properties
+        style->setFontStrikeOut(value != "0");
+    }
+    element = formatElem.firstChildElement( "UNDERLINE" );
+    if( !element.isNull() ) {
+        QTextCharFormat::UnderlineStyle underline;
+        QString value = element.attribute("value", "0");
+        if(value == "0")
+            underline = QTextCharFormat::NoUnderline;
+        else if(value == "1" || value=="single")
+            underline = QTextCharFormat::SingleUnderline;
+        else if(value == "double")
+            underline = QTextCharFormat::SingleUnderline; // TODO support double underline!
+        else if(value == "single-bold")
+            underline = QTextCharFormat::SingleUnderline; // TODO support single-bold underline!
+        else if(value == "wave")
+            underline = QTextCharFormat::WaveUnderline;
+
+        QString type = element.attribute("styleline", "solid");
+        if(type == "solid" || underline != QTextCharFormat::SingleUnderline) ; // default, do nothing
+        else if(type == "dash")
+            underline = QTextCharFormat::DashUnderline;
+        else if(type == "dot")
+            underline = QTextCharFormat::DotLine;
+        else if(type == "dashdot")
+            underline = QTextCharFormat::DashDotLine;
+        else if(type == "dashdotdot")
+            underline = QTextCharFormat::DashDotDotLine;
+
+        //style->setFontUnderline(underline != QTextCharFormat::NoUnderline);
+        style->setUnderlineStyle(underline);
+    }
+       //VERTALIGN
+       //SHADOW
+       //FONTATTRIBUTE
+       //LANGUAGE
+       //TEXTBACKGROUNDCOLOR
+       //OFFSETFROMBASELINE
 }
 
 #include "KWDLoader.moc"
