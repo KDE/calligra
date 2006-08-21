@@ -34,19 +34,6 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
     while ( ! n.isNull() ) {
         if ( n.isText() ) {
             QString textelements = n.toText().data();
-            int entityBegin;
-            int entityEnd;
-            do {
-                entityBegin = textelements.find( '&' );
-                if ( entityBegin != -1 ) {
-                    entityEnd = textelements.find( ';', entityBegin );
-                    if ( entityEnd != -1 ) {
-                        uint len = entityEnd - entityBegin + 1;
-                        QString entity = textelements.mid( entityBegin, len );
-                        textelements.replace( (uint) entityBegin, (uint) len, getCharFromEntity( entity ) );
-                    }
-                }
-            } while ( entityBegin != -1 && entityEnd != -1 );
             textelements = textelements.stripWhiteSpace();
                 
             for (uint i = 0; i < textelements.length(); i++) {
@@ -75,19 +62,13 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
             list.append( child );
             n = n.nextSibling();
         }
+        else {
+            return -1;
+        }
     }
 //	parse();
 	kdWarning() << "Num of children " << list.count() << endl;
     return 1;
-}
-
-QString TokenElement::getCharFromEntity( const QString& entity )
-{
-    QChar ch = QChar::null;
-    if ( entity.left( 3 ) == "&#x" ) {
-        ch = QChar( entity.mid( 3, entity.length() - 4 ).toUShort( NULL, 16 ) );
-    }
-    return ch;
 }
 
 
