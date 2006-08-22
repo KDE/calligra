@@ -30,7 +30,10 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-TokenElement::TokenElement( BasicElement* parent ) : TokenStyleElement( parent ) {}
+TokenElement::TokenElement( BasicElement* parent ) : TokenStyleElement( parent ),
+                                                     m_textOnly( true )
+{
+}
 
 int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) 
 {
@@ -64,6 +67,7 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
             }
         }
         else if ( n.isElement() ) {
+            m_textOnly = false;
             // Only mglyph element is allowed
             QDomElement e = n.toElement();
             if ( e.tagName().lower() != "mglyph" ) {

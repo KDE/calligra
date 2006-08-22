@@ -81,7 +81,7 @@ KFORMULA_NAMESPACE_BEGIN
 	
 struct DictionaryKey
 {
-    int operator!=( const DictionaryKey& right ) const {
+    int operator==( const DictionaryKey& right ) const {
         if ( qstrcmp( name, right.name ) || qstrcmp( form, right.form ) ) {
             return false;
         }

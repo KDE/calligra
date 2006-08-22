@@ -17,18 +17,33 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <algorithm>
+
 #include <qpainter.h>
 
 #include "elementtype.h"
 #include "sequenceelement.h"
 #include "textelement.h"
 #include "fontstyle.h"
+#include "operatordictionary.h"
 #include "operatorelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent ),
-                                                           m_form( InfixForm ),
+                                                           m_form( NoForm ),
+                                                           m_lspaceType( ThickMathSpace ),
+                                                           m_rspaceType( ThickMathSpace ),
+                                                           m_maxSizeType( InfinitySize ),
+                                                           m_minSizeType( RelativeSize ),
+                                                           m_minSize( 1 ),
+                                                           m_fence( false ),
+                                                           m_separator( false ),
+                                                           m_stretchy( false ),
+                                                           m_symmetric( true ),
+                                                           m_largeOp( false ),
+                                                           m_movableLimits( false ),
+                                                           m_accent( false ),
                                                            m_customForm( false ),
                                                            m_customFence( false ),
                                                            m_customSeparator( false ),
@@ -46,7 +61,89 @@ OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent 
 
 void OperatorElement::setForm( FormType type )
 {
-    m_form = type;
+    if ( ! m_customForm ) { // Set by an attribute has higher priority
+        m_form = type;
+    }
+    
+    if ( ! isTextOnly() ) { // Only text content can be dictionary keys
+        return;
+    }
+    QString text;
+    for ( uint i = 0; i < countChildren(); i++ ) {
+        text.append( getChild( i )->getCharacter() );
+    }
+    QString form;
+    switch ( m_form ) {
+    case PrefixForm:
+        form = "prefix";
+        break;
+    case InfixForm:
+        form = "infix";
+        break;
+    case PostfixForm:
+        form = "postfix";
+        break;
+    default:
+        // Should not happen
+        kdWarning( DEBUGID ) << "Invalid `form' attribute value\n";
+        return;
+    }
+    DictionaryKey key = { text.utf8(), form.ascii() };
+    const OperatorDictionary* begin = operators;
+    const OperatorDictionary* end = operators + OperatorDictionary::size();
+    const OperatorDictionary* pos = std::lower_bound( begin, end, key );
+    if ( pos != end && pos->key == key ) { // Entry found !
+        if ( ! m_customFence ) {
+            m_fence = pos->fence;
+        }
+        if ( ! m_customSeparator ) {
+            m_separator = pos->separator;
+        }
+        if ( ! m_customLSpace ) {
+            m_lspace = getSize( pos->lspace, &m_lspaceType );
+            if ( m_lspaceType == NoSize ) {
+                m_lspaceType = getSpace( pos->lspace );
+            }
+        }
+        if ( ! m_customRSpace ) {
+            m_rspace = getSize( pos->rspace, &m_rspaceType );
+            if ( m_rspaceType == NoSize ) {
+                m_rspaceType = getSpace( pos->rspace );
+            }
+        }
+        if ( ! m_customStretchy ) {
+            m_stretchy = pos->stretchy;
+        }
+        if ( ! m_customSymmetric ) {
+            m_symmetric = pos->symmetric;
+        }
+        if ( ! m_customMaxSize ) {
+            if ( qstrcmp( pos->maxsize, "infinity" ) == 0 ) {
+                m_maxSizeType = InfinitySize;
+            }
+            else {
+                m_maxSize = getSize( pos->maxsize, &m_maxSizeType );
+                if ( m_maxSizeType == NoSize ) {
+                    m_maxSizeType = getSpace( pos->maxsize );
+                }
+            }
+        }
+        if ( ! m_customMinSize ) {
+            m_minSize = getSize( pos->minsize, &m_minSizeType );
+            if ( m_minSizeType == NoSize ) {
+                m_minSizeType = getSpace( pos->minsize );
+            }
+        }
+        if ( ! m_customLargeOp ) {
+            m_largeOp = pos->largeop;
+        }
+        if ( ! m_customMovableLimits ) {
+            m_movableLimits = pos->movablelimits;
+        }
+        if ( ! m_customAccent ) {
+            m_accent = pos->accent;
+        }
+    }
 }
 
 bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )

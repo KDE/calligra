@@ -35,6 +35,14 @@ public:
 
 protected:
     QString getCharFromEntity( const QString& entity );
+
+    /**
+     * @returns true if the sequence contains only text.
+     */
+    virtual bool isTextOnly() const { return m_textOnly; }
+
+private:
+    bool m_textOnly;
 };
 
 KFORMULA_NAMESPACE_END

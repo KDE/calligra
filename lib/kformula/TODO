@@ -6,7 +6,6 @@ NOTE: Only Presentation Markup is considered here.
 
 = mo =
 
-* Support for Operator Dictionary ( Section 3.2.5.7.1, Appendix F )
 * Support for attribute form: rendering ( Section 3.2.5.2, 3.2.5.7 )
 * Support for attribute fence: rendering ( Section 3.2.5.2, 3.2.5.7 )
 * Support for attribute separator: rendering ( Section 3.2.5.2, 3.2.5.7 )
