@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Icon=
 Name=Kexi Import Filter for KSpread
+Name[es]=Filtro de importación de Kexi para KSpread
+Name[et]=KSpreadi Kexi impordifilter
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-kspread
