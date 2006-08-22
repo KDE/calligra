@@ -92,9 +92,6 @@
                         <property name="text">
                             <string>Custom Quer&amp;y</string>
                         </property>
-                        <property name="accel">
-                            <string>Alt+Y</string>
-                        </property>
                     </widget>
                     <widget class="QTextEdit">
                         <property name="name">
@@ -161,9 +158,6 @@
                                 <property name="text">
                                     <string>&amp;Let KSpread Choose</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+L</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -216,9 +210,6 @@
                     <property name="text">
                         <string>&amp;Open</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+O</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Insert the calendar at the currently selected cell.</string>
                         <comment>Tooltip for the insert button of the insert calendar plugin</comment>
@@ -234,9 +225,6 @@
                     </property>
                     <property name="text">
                         <string>C&amp;ancel</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Don't insert a calendar.</string>
