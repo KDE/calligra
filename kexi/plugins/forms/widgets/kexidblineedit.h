@@ -77,6 +77,12 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		/*! \return 'readOnly' flag for this widget. */
 		virtual bool isReadOnly() const;
 
+		/*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
+		 is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
+		 \a widget is equal to 'this'.
+		 Reimplemented after KexiFormDataItemInterface. */
+		virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+
 		/*! \return the view widget of this item, e.g. line edit widget. */
 		virtual QWidget* widget();
 
@@ -95,6 +101,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		virtual void setReadOnly( bool readOnly );
+
+		//! Reimplemented, so "undo" means the same as "cancelEditor" action
+		virtual void undo();
 
 	protected slots:
 		void slotTextChanged(const QString&);

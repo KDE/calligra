@@ -20,6 +20,7 @@
 #ifndef KEXIFORMDATAITEMINTERFACE_H
 #define KEXIFORMDATAITEMINTERFACE_H
 
+#include <widget/utils/kexidisplayutils.h>
 #include <kexidataiteminterface.h>
 #include <qwidget.h>
 
@@ -52,6 +53,17 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		 Data source usually means here a "kexi/table" or "kexi/query".
 		 @see dataSourceMimeType() */
 		inline void setDataSourceMimeType(const QCString &ds) { m_dataSourceMimeType = ds; }
+
+		/*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
+		 is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
+		 \a widget is equal to 'this'.
+		 You can reimplement this in the widget. Always call the superclass' implementation. 
+		 setDisplayDefaultValue(.., false) is called in KexiFormScrollView::valueChanged()
+		 as a response on data change performed by user. */
+		virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+
+		/*! \return true if default value is displayed for this item. */
+		virtual bool hasDisplayedDefaultValue() const { return m_displayDefaultValue; }
 
 		/*! Convenience function: casts this item to a QWidget.
 		 Can return 0 if the item is not a QWidget-derived object. */
@@ -89,8 +101,16 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		/*! Does nothing, because within forms, widgets are always visible. */
 		virtual void showWidget() { }
 
-		/*! Undoes changes made to this item - just resets to original value. */
+		/*! Undoes changes made to this item - just resets the widget to original value. 
+		 Note: This is internal method called by KexiFormScrollView::cancelEditor(). 
+		 To cancel editing of the widget's data from the widget's code,
+		 use KexiFormDataItemInterface::cancelEditor(). */
 		void undoChanges();
+
+		/* Cancels editing of the widget's data. This method just looks for 
+		 the (grand)parent KexiFormScrollView object and calls
+		 KexiFormScrollView::cancelEditor(). */
+		void cancelEditor();
 
 		/*! @internal
 		 Called by top-level form on key press event.
@@ -105,6 +125,9 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		QString m_dataSource;
 		QCString m_dataSourceMimeType;
 		KexiDB::QueryColumnInfo* m_columnInfo;
+		KexiDisplayUtils::DisplayParameters *m_displayParametersForEnteredValue; //!< used in setDisplayDefaultValue()
+		KexiDisplayUtils::DisplayParameters *m_displayParametersForDefaultValue; //!< used in setDisplayDefaultValue()
+		bool m_displayDefaultValue : 1; //!< used by setDisplayDefaultValue()
 
 	friend class KexiDBAutoField;
 };

@@ -15,13 +15,40 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-08-22
+Forms
+- display default values in the new row; 
+  default text is displayed with a special style (italic blue) as in table view;
+  cancelling changes in a widget reverts its contents to default value 
+  (if available); the special style is removed as soon as the editing starts
+- "redo" action removed from the data-aware widgets' context menu 
+  (to avoid problems with data handling)
+Table Designer
+= fixed setting subtype by user
+
+2006-08-21
+CSV Import Dialog
+= fixed delimiter change using the combo box (introduced by the prev commit)
+= unnecessary rows are removed after delimiter changes
+2.0: merged
+Table View
+- do not display default values for autonumbered fields
+- do not fill default values for already filled fields
+= boolean editor in tristate mode: fixed switching between true/false/NULL values
+- display default boolean values in blue
+- display tooltip with row number when the vertical scrollbar is dragged
+= fixed displaying tooltips for default values in the "insert" row
+2.0: merged
+
 2006-08-17
 Table View
 - tooltips are displayed for cells with too large contents
+2.0: merged
 CSV Import Dialog
 - delimiter detection is now even more clever, allowing to import more complex data: 
   characters outside quotes have higher priority; additional algorithm counting 
   number of candidates for delimiters is used.
+2.0: merged
 
 2006-08-14
 Table View
@@ -59,7 +86,7 @@ KoProperty
   means there is no "defaultValue" specified.
 Table Designer
 - Added "defaultValue" property to the designer
-= Alter Table Test Suite: added "i" variable support (includign operator++), 
+= Alter Table Test Suite: added "i" variable support (including operator++), 
   closeWindow command, quit command, and optional "clipboard" flag 
   for showSchema, showActions, showTableData. Improved showTableData command.
   Added "defaultvalues" test.
@@ -114,6 +141,8 @@ Table Designer
 Table Designer
 = A test suite added for table altering
 2.0: merged
+
+~~~~~~~~~~~~ 1.1 alpha 1 release (with KOffice 1.6 alpha 1)  ~~~~~~~~~~~~
 
 2006-07-31
 KexiDB
@@ -205,7 +234,7 @@ Table View
 2.0: merged
 
 ~~~~~~~~~~~~~~~~ 1.0.2 bugfix release (with KOffice 1.5.2)  ~~~~~~~~~~~~~~~~
-~ Nowm as 1.0.x is closed for changes, all the changes are merged into 2.0 only ~~
+~ Now, as 1.0.x is closed for changes, all the changes are merged into 2.0 only ~~
 
 2006-07-06
 Forms

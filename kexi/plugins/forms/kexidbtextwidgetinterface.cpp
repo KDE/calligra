@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,16 @@
 #include <qframe.h>
 #include <qpainter.h>
 
+KexiDBTextWidgetInterface::KexiDBTextWidgetInterface()
+ : m_autonumberDisplayParameters(0)
+{
+}
+
+KexiDBTextWidgetInterface::~KexiDBTextWidgetInterface()
+{
+	delete m_autonumberDisplayParameters;
+}
+
 void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w)
 {
 	if (cinfo->field->isAutoIncrement()) {
@@ -33,20 +43,23 @@ void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QW
 	}
 }
 
-void KexiDBTextWidgetInterface::paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus  )
+void KexiDBTextWidgetInterface::paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus )
 {
 	KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
-	if (dataItemIface && dataItemIface->columnInfo() && dataItemIface->columnInfo()->field
-		&& dataItemIface->columnInfo()->field->isAutoIncrement()
-		&& m_autonumberDisplayParameters && dataItemIface->cursorAtNewRow() && textIsEmpty)
-	{
+	KexiDB::QueryColumnInfo *columnInfo = dataItemIface ? dataItemIface->columnInfo() : 0;
+	if (columnInfo && columnInfo->field && dataItemIface->cursorAtNewRow() && textIsEmpty) {
 		QPainter p(w);
-		if (w->hasFocus()) {
-			p.setPen(KexiUtils::blendedColors(m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
+		const int margin = w->lineWidth() + w->midLineWidth();
+		if (columnInfo->field->isAutoIncrement() && m_autonumberDisplayParameters) {
+			if (w->hasFocus()) {
+				p.setPen(
+					KexiUtils::blendedColors(
+						m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
+			}
+			KexiDisplayUtils::paintAutonumberSign(*m_autonumberDisplayParameters, &p,
+				2 + margin + w->margin(), margin, w->width() - margin*2 -2-2, 
+				w->height() - margin*2 -2, alignment, hasFocus);
 		}
-		const int m = w->lineWidth()+w->midLineWidth();
-		KexiDisplayUtils::paintAutonumberSign(*m_autonumberDisplayParameters, &p,
-			2+m+w->margin(), m, w->width()-m*2 -2-2, w->height()-m*2 -2, alignment, hasFocus);
 	}
 }
 

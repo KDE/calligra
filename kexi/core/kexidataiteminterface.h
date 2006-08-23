@@ -41,10 +41,10 @@ class KEXICORE_EXPORT KexiDataItemChangesListener
 		 Called by KexiDataItemInterface::valueChanged() */
 		virtual void valueChanged(KexiDataItemInterface* item) = 0;
 
-		/*! Implement this to return information whether we're currently at new row or now.
+		/*! Implement this to return information whether we're currently at new row or not.
 		 This can be used e.g. by data-aware widgets to determine if "(autonumber)" 
 		 label should be displayed. */
-		virtual bool cursorAtNewRow() = 0;
+		virtual bool cursorAtNewRow() const = 0;
 };
 
 //! An interface for declaring widgets to be data-aware.
@@ -167,7 +167,7 @@ class KEXICORE_EXPORT KexiDataItemInterface
 
 		inline virtual void setFocus() { if (widget()) widget()->setFocus(); }
 
-		inline bool cursorAtNewRow() { return m_listener ? m_listener->cursorAtNewRow() : false; }
+		inline bool cursorAtNewRow() const { return m_listener ? m_listener->cursorAtNewRow() : false; }
 
 		/*! Sets a pointer to a Parent Data Item Interface. This pointer is 0 by default, 
 		 but can be set by parent widget if this interface is a building block of a larger data widget. 

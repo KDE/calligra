@@ -72,7 +72,6 @@ KexiDBLineEdit::~KexiDBLineEdit()
 {
 	delete m_dateFormatter;
 	delete m_timeFormatter;
-//	delete m_autonumberDisplayParameters;
 }
 
 void KexiDBLineEdit::setInvalidState( const QString& displayText )
@@ -399,6 +398,23 @@ void KexiDBLineEdit::handleAction(const QString& actionName)
 		cut();
 	}
 	//! @todo ?
+}
+
+void KexiDBLineEdit::setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue)
+{
+	KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
+	// initialize display parameters for default / entered value
+	KexiDisplayUtils::DisplayParameters * const params 
+		= displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
+	setFont(params->font);
+	QPalette pal(palette());
+	pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+	setPalette(pal);
+}
+
+void KexiDBLineEdit::undo()
+{
+	cancelEditor();
 }
 
 #include "kexidblineedit.moc"

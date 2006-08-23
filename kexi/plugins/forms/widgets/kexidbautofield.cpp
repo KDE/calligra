@@ -813,6 +813,13 @@ bool KexiDBAutoField::eventFilter( QObject *o, QEvent *e )
 	return QWidget::eventFilter(o, e);
 }
 
+void KexiDBAutoField::setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue)
+{
+	KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
+	if (dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget))
+		dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget)->setDisplayDefaultValue(m_subwidget, displayDefaultValue);
+}
+
 /*
 int KexiDBAutoField::lineWidth () const
 {

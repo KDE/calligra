@@ -903,17 +903,15 @@ DROP TABLE t1;
 ALTER TABLE t1_new RENAME TO t1;
 
 
-Forms
+== Forms TODO ==
+- implement combo box widget
 - enable edit->copy, actions, etc. for Data View
 - ImageBox: show a tootip with large image and its name if the image was cropped
   or only its name if the image is not cropped
 - AutoField: highlighting the label when the buddy is focused
 - AutoField: handle label editing after double clicking
 - AutoField: draw required field in bold (or optionally add (*)
-
-Table View
-- allow to select entire rows, columns and grids as in a spreadsheet; 
-  offer copy/cut/paste/copy-to-file/clear for such selections
+- display default values in other widgets showing text
 
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
@@ -921,16 +919,12 @@ TODO:
 Table Designer TODO
 - i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)
 - add setting for default length of the text type
+- allow to set default values for BLOB types (requires a change in KoProperty as well)
 
 Combobox table edit TODO:
 - copy should handle "displayed" value, not the real one 
   (maybe let's use a custom clipboard mimetype?)
 
-Forms TODO
-- implement combo box widget
-
-TODO
-- cancelled -> canceled
 
 === KexiDB MySQL Driver TODO ===
 - use InnoDB instead of MyISAM tables because of transactions support
@@ -949,6 +943,8 @@ TODO
   before fetching is done... See http://kexi-project.org/cgi-bin/irclogger_log/kexi?date=2006-08-03,Thu&sel=229#l225
 
 === Kexi Table View TODO ===
+- allow to select entire rows, columns and grids as in a spreadsheet; 
+  offer copy/cut/paste/copy-to-file/clear for such selections
 - tooltips: 
 -- implement tooltip manager (this will allow to create custom tooltips)
 -- use  if ( QApplication::isEffectEnabled( UI_AnimateTooltip ) == FALSE ||....
@@ -956,3 +952,11 @@ TODO
 -- implement custom tooltip for large texts and BLOB, add "zoom" option at the bottom of the tooltip
    (zooming should not show a modal dialog but rather a widget inside the TV)
 -- add the same zoom option to the context menu
+-- also show tooltips when the content is only partially visible
+- fix horizontal scrollbar's width updating: large tables like 'tabkodypocztowe1' hide the 'last' and 'new' buttons
+- display default values for BLOB types
+
+KoProperty TODO
+- add "None" option for editors supporting 3rdState, e.g. int, string (needed for "default"
+  property of the Table Designer)
+
