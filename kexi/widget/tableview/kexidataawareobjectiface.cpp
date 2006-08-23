@@ -972,8 +972,8 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
 	//try to get the value entered:
 	if (res == Validator::Ok) {
-		if (!setNull && !valueChanged
-			|| setNull && m_currentItem->at( realFieldNumber ).isNull()) {
+		if ((!setNull && !valueChanged)
+			|| (m_editor->field()->type()!=KexiDB::Field::Boolean && setNull && m_currentItem->at( realFieldNumber ).isNull())) {
 			kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): VALUE NOT CHANGED." << endl;
 			removeEditor();
 			m_inside_acceptEditor = false;
@@ -1517,19 +1517,23 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col)
 	{
 		KexiTableViewColumn* tvcol = column(col);
 		if (tvcol->isDBAware) {
-			//db-aware data: first, try to find a buffered value (or default one)
-			const QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->columnInfo );
-			if (cv)
-				return cv;
-			//now, get the stored value
+			//get the stored value
 			const int realFieldNumber = fieldNumberForColumn(col);
 			if (realFieldNumber < 0) {
 				kdWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): "
 					"fieldNumberForColumn(m_curCol) < 0" << endl;
 				return 0;
 			}
-			return &m_currentItem->at( realFieldNumber );
+			QVariant *storedValue = &m_currentItem->at( realFieldNumber );
+		
+			//db-aware data: now, try to find a buffered value (or default one)
+			const QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->columnInfo, 
+				storedValue->isNull() /*useDefaultValueIfPossible*/);
+			if (cv)
+				return cv;
+			return storedValue;
 		}
+		//not db-aware data:
 		const QVariant *cv = m_data->rowEditBuffer()->at( tvcol->field()->name() );
 		if (cv)
 			return cv;

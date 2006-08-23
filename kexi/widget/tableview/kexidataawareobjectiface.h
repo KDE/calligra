@@ -414,6 +414,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 otherwise starts editing (startEditCurrentCell()). */
 		void startEditOrToggleValue();
 
+		/*! \return true if new row is edited; implies: rowEditing==true. */
+		inline bool newRowEditing() const { return m_newRowEditing; }
+
 		/*! Reaction on toggling a boolean value of a cell: 
 		 we're starting to edit the cell and inverting it's state. */
 		virtual void boolToggled();
@@ -625,8 +628,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! true if currently selected row is edited */
 		bool m_rowEditing : 1;
 
-		/*! true if currently selected, new row is edited;
-		 implies: rowEditing==true. */
+		/*! true if new row is edited; implies: rowEditing==true. */
 		bool m_newRowEditing : 1;
 
 		/*! 'sorting by column' availability flag for widget */

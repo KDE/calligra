@@ -38,6 +38,7 @@ KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *p
 	kdDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
 	m_hasFocusableWidget = false;
 	m_acceptEditorAfterDeleteContents = true;
+	m_usesSelectedTextColor = false;
 }
 
 KexiBoolTableEdit::~KexiBoolTableEdit()
@@ -84,9 +85,13 @@ bool KexiBoolTableEdit::cursorAtEnd()
 	return true;
 }
 
-void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVariant& val, 
-	QString &/*txt*/, int &/*align*/, int &/*x*/, int &y_offset, int &w, int &h  )
+void KexiBoolTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
+	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
+	Q_UNUSED(focused);
+	Q_UNUSED(txt);
+	Q_UNUSED(align);
+	Q_UNUSED(x);
 #ifdef Q_WS_WIN
 //	x = 1;
 	y_offset = -1;
@@ -99,7 +104,7 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVar
 		s = QMIN( h-3, s );
 		s = QMIN( w-3, s );//avoid too large box
 		QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
-		p->setPen(QPen(colorGroup().text(), 1));
+//already set ouotside:		p->setPen(QPen(colorGroup().text(), 1));
 		p->drawRect(r);
 		if (val.isNull() && !field()->isNotNull()) {
 			p->drawText( r, Qt::AlignCenter, "?" );

@@ -40,6 +40,7 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
  ,m_view(0)
 // ,m_hasFocusableWidget(true)
 // ,m_acceptEditorAfterDeleteContents(false)
+ , m_usesSelectedTextColor(true)
 {
 	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
 	installEventFilter(this);
