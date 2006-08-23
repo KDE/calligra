@@ -40,8 +40,15 @@ public:
    * Depth means the maximum depth of all cells this cell depends on plus one,
    * while a cell which has a formula without cell references has a depth
    * of zero.
-   * E.g. A1: '=1.0'; A2: '=A1+A1'; A3: '=A1+A1+A2';
-   *      depth(A1) = 0; depth(A2) = 1; depth(A3) = 2
+   *
+   * Examples:
+   * \li A1: '=1.0'
+   * \li A2: '=A1+A1'
+   * \li A3: '=A1+A1+A2'
+   *
+   * \li depth(A1) = 0
+   * \li depth(A2) = 1
+   * \li depth(A3) = 2
    */
   QHash<Cell*, int> cells;
   QMap<int, Cell*> depths;
@@ -69,23 +76,7 @@ void RecalcManager::regionChanged(const Region& region)
   kDebug() << "RecalcManager::regionChanged " << region.name() << endl;
   ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
   {
-    ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
-    Region::ConstIterator end(region.constEnd());
-    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
-    {
-      const QRect range = (*it)->rect();
-      const Sheet* sheet = (*it)->sheet();
-      const int right = range.right();
-      const int bottom = range.bottom();
-      for (int col = range.left(); col <= right; ++col)
-      {
-        for (int row = range.top(); row <= bottom; ++row)
-        {
-          Cell* cell = sheet->cellAt(col, row);
-          recalcRegion(d->depManager->getDependants(cell));
-        }
-      }
-    }
+    recalcRegion(region);
   }
   recalc();
   d->busy = false;
@@ -147,7 +138,6 @@ void RecalcManager::recalc()
   ElapsedTime et( "Recalculating cells", ElapsedTime::PrintOnlyTime );
   foreach (Cell* cell, d->depths)
   {
-    // FIXME Stefan: zero depths may occur, skip them?!
     recalcCell(cell);
   }
 

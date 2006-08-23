@@ -100,8 +100,14 @@ protected:
    * while a cell, which do not refer to other cells, has a depth
    * of zero.
    *
-   * E.g. A1: '=1.0'; A2: '=A1+A1'; A3: '=A1+A1+A2';
-   *      depth(A1) = 0; depth(A2) = 1; depth(A3) = 2
+   * Examples:
+   * \li A1: '=1.0'
+   * \li A2: '=A1+A1'
+   * \li A3: '=A1+A1+A2'
+   *
+   * \li depth(A1) = 0
+   * \li depth(A2) = 1
+   * \li depth(A3) = 2
    */
   int computeDepth(Cell* cell) const;
 
