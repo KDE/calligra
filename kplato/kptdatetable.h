@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
     Copyright (C) 1997 Tim D. Gilman (tdgilman@best.org)
               (C) 1998-2001 Mirko Boehm (mirko@kde.org)
-              (C) 2004 Dag Andersen <danders@get2net.dk>
+              (C) 2004-2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -332,20 +332,17 @@ protected:
     void updateMarkedCells();
     void updateCells();
 
-    QDate getDate(int pos) { return QDate(date.year(), date.month(), 1).addDays(pos-firstday); }
-
+    QDate getDate(int pos) const;
+    
     /**
      *  pos can be 1..42
      * row starts at 1, col depends on wether weeks are presented (in col 0)
      */
     int position(int row, int col) { return ((7 * (row - 1)) + col - m_dateStartCol + 1); }
 
-    int weekday(int col) {
-        int day = col - m_dateStartCol + KGlobal::locale()->weekStartDay();
-        if (day > 7) day %= 7;
-        return day;
-    }
-
+    int weekday(int col) const;
+    int column(int weekday) const;
+    
     void paintWeekday(QPainter *painter, int col);
     void paintWeekNumber(QPainter *painter, int row);
     void paintDay(QPainter *painter, int row, int col);
