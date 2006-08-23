@@ -27,9 +27,10 @@
 #include <QRectF>
 #include <QSizeF>
 
-class QTextLayout;
 class KWTextFrameSet;
 class KWTextFrame;
+class KoStyleManager;
+class QTextLayout;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -76,6 +77,7 @@ private:
     bool layout(KWTextFrame *frame, double offset);
 
     KWTextFrameSet *m_frameSet;
+    KoStyleManager *m_styleManager;
 };
 
 #endif

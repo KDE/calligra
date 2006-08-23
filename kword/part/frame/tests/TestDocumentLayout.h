@@ -49,6 +49,8 @@ private slots:
 
 // Lists
     void testBasicList();
+    void testNumberedList();
+// nested lists.
 
     //etc
 

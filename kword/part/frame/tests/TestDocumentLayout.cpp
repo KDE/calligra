@@ -528,25 +528,79 @@ void TestDocumentLayout::testBasicList() {
     KoListStyle listStyle;
     style.setListStyle(listStyle);
     style.applyStyle(block); // make this a listStyle
+    QVERIFY(block.textList());
+    QVERIFY(block.textList()->format().intProperty(KoListStyle::ListStyle) == KoListStyle::DiscItem);
     block = block.next();
     QVERIFY(block.isValid());
     style.applyStyle(block); // make this a listStyle
 
     layout->layout();
 
-    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     block = doc->begin().next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 2
-    QCOMPARE(blockLayout->lineAt(0).y(), 50.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 12.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 3
-    QCOMPARE(blockLayout->lineAt(0).y(), 50.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 12.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 4
-    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
+}
+
+void TestDocumentLayout::testNumberedList() {
+    initForNewTest("Base\nListItem1\nListItem2\nListItem3\nListItem4\nListItem5\nListItem6\nListItem6\nListItem7\nListItem8\nListItem9\nListItem10\nListItem11\nListItem12\n");
+
+    KoParagraphStyle style;
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+    block = block.next();
+    QVERIFY(block.isValid());
+
+    KoListStyle listStyle;
+    listStyle.setStyle(KoListStyle::DecimalItem);
+    listStyle.setListItemSuffix(".");
+    style.setListStyle(listStyle);
+
+    for(int i=1; i <= 9; i++) {
+        QVERIFY(block.isValid());
+        style.applyStyle(block);
+        qDebug() << "->" << block.text();
+        block = block.next();
+    }
+    layout->layout();
+
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
+    QTextBlock blok = doc->begin().next();
+    double indent = blok.layout()->lineAt(0).x();
+    QVERIFY(indent > 0.0);
+    for(int i=1; i <= 9; i++) {
+        qDebug() << "=>" << blok.text();
+        QCOMPARE(blok.layout()->lineAt(0).x(), indent); // all the same indent.
+        blok = blok.next();
+    }
+
+    // now make number of listitems be more than 10, so we use 2 digits.
+    for(int i=9; i <= 12; i++) {
+        QVERIFY(block.isValid());
+        style.applyStyle(block);
+        qDebug() << "->" << block.text();
+        block = block.next();
+    }
+    layout->layout();
+
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
+    blok = doc->begin().next();
+    double indent2 = blok.layout()->lineAt(0).x();
+    QVERIFY(indent2 > indent); // since it takes an extra digit
+    for(int i=2; i <= 12; i++) {
+        qDebug() << "=>" << blok.text();
+        QCOMPARE(blok.layout()->lineAt(0).x(), indent2); // all the same indent.
+        blok = blok.next();
+    }
 }
 
 QTEST_MAIN(TestDocumentLayout)
