@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -85,6 +85,17 @@ static void initDisplayUtilsImages()
 }
 
 //-----------------
+
+KexiDisplayUtils::DisplayParameters::DisplayParameters()
+{
+}
+
+KexiDisplayUtils::DisplayParameters::DisplayParameters(QWidget *w)
+{
+	textColor = w->palette().active().foreground();
+	selectedTextColor = w->palette().active().highlightedText();
+	font = w->font();
+}
 
 void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget)
 {

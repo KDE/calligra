@@ -580,13 +580,13 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 		<< colnum << " = " << newval.toString() << endl;
 //	KexiTableViewColumn* col = columns.at(colnum);
 	if (!col) {
-		kDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
+		kWarning() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
 			<< colnum << " not found! col==0" << endl;
 		return false;
 	}
 	if (m_pRowEditBuffer->isDBAware()) {
 		if (!(col->columnInfo)) {
-			kDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
+			kWarning() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
 				<< colnum << " not found!" << endl;
 			return false;
 		}
@@ -616,7 +616,9 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 //get a new value (of present in the buffer), or the old one, otherwise
 //(taken here for optimization)
 #define GET_VALUE if (!val) { \
-	val = m_cursor ? m_pRowEditBuffer->at( *it_f.current()->columnInfo ) : m_pRowEditBuffer->at( *f ); \
+	val = m_cursor \
+				? m_pRowEditBuffer->at( *it_f.current()->columnInfo, false /* !useDefaultValueIfPossible */ ) \
+				: m_pRowEditBuffer->at( *f ); \
 	if (!val) \
 		val = &(*it_r); /* get old value */ \
 	}

@@ -64,6 +64,13 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		//! (extended information, comparing to field()).
 		inline KexiTableViewColumn *column() const { return m_column; }
 
+		/*! \return displayed field. This is equal field() in typical case but can return a different field
+		 definition if the column contains a lookup field. This distiction is especially used for 
+		 displaying dependent on the type and specifics of the field definition 
+		 (e.g. text type versus integer type). Note that we're computing the editor's value, 
+		 we still use field(). */
+		KexiDB::Field *displayedField() const;
+
 		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
 
@@ -85,19 +92,32 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 Sets up and paints cell's contents using context of \a val value. 
 		 \a focused is true if the cell is focused. \a align is set using Qt::AlignmentFlags.
 		 Some additional things may be painted using \a p,
-		 it's not needed to paint the text (this is done automatically outside.
+		 but it is not needed to paint the text (this is done automatically outside of this method).
 
 		 Before calling, \a x, \a y_offset, \a w, \a h parameters are initialized,
 		 but you can tune these values depending on the context. 
 		 You should set \a txt to a text representation of \a val, 
-		 otherwise no text will be painted. */
+		 otherwise no text will be painted. 
+
+		 \a p can be 0 - in this case no painting should be performed, becasue caller only expects 
+		 that \a x, \a y_offset, \a w, \a h, \a txt paramaters are tuned, if needed.
+		 \a p painter's pen is set to foreground color (usually black) that should be used to paint 
+		 foreground information, if needed. For example boolean editor widget paints 
+		 a rectangle using this color. */
 		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
+		/*! \return true if "selected text" color should be used to paint contents of the editor.
+		 True by default. It's false e.g. in boolean editor, where no selection is painted 
+		 using paintSelectionBackground().
+		 This flag is set in editor's constructor and checked in KexiTableView::paintCell().
+		 Depending on it, appropriate ("text" or "selected text" color is set for painter) before 
+		 setupContents() is called. */
+		bool usesSelectedTextColor() const { return m_usesSelectedTextColor; }
+
 		/*! For reimplementation.
 		 Paints selection's background using \a p. Most parameters are similar to these from 
-		 setupContents().
-		*/
+		 setupContents(). */
 		virtual void paintSelectionBackground( QPainter *p, bool focused, const QString& txt, 
 			int align, int x, int y_offset, int w, int h, const QColor& fillColor,
 			bool readOnly, bool fullRowSelection );
@@ -166,17 +186,11 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 displayed by a QWidget but rather by table view cell itself, for example KexiBlobTableEdit. */
 		void repaintRelatedCell();
 
-		/*! \return displayed field. This is equal field() in typical case but can return a different field
-		 definition if the column contains a lookup field. This distiction is especially used for 
-		 displaying dependent on the type and specifics of the field definition 
-		 (e.g. text type versus integer type). Note that we're computing the editor's value, 
-		 we still use field(). */
-		KexiDB::Field *displayedField() const;
-
 		KexiTableViewColumn *m_column;
 		int m_leftMargin;
 		int m_rightMargin;
 		Q3ScrollView* m_scrollView;
+		bool m_usesSelectedTextColor : 1; //!< set in ctor, @see usesSelectedTextColor()
 
 	private:
 		QWidget* m_view;

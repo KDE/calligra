@@ -124,7 +124,7 @@ class KexiTableView::WhatsThis : public Q3WhatsThis
 		virtual QString text( const QPoint & pos)
 		{
 			const int leftMargin = m_tv->verticalHeaderVisible() ? m_tv->verticalHeader()->width() : 0;
-			//const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->m_verticalHeader->height() : 0;
+			//const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
 			//const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
 			if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
 				return i18n("Contains a pointer to the currently selected row");
@@ -158,14 +158,14 @@ KexiTableViewCellToolTip::~KexiTableViewCellToolTip()
 void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 {
 	const QPoint cp( m_tableView->viewportToContents( p ) );
-	const int row = m_tableView->rowAt( cp.y() );
+	const int row = m_tableView->rowAt( cp.y(), true/*ignoreEnd*/ );
 	const int col = m_tableView->columnAt( cp.x() );
 
 	//show tooltip if needed
 	if (col>=0 && row>=0) {
 		KexiTableEdit *editor = m_tableView->tableEditorWidget( col );
-		KexiTableItem *item = (m_tableView->isInsertingEnabled() && row==m_tableView->rows()) 
-			? m_tableView->m_insertItem : m_tableView->itemAt( row );
+		const bool insertRowSelected = m_tableView->isInsertingEnabled() && row==m_tableView->rows();
+		KexiTableItem *item = insertRowSelected ? m_tableView->m_insertItem : m_tableView->itemAt( row );
 		if (editor && item && (col < (int)item->count())) {
 			int w = m_tableView->columnWidth( col );
 			int h = m_tableView->rowHeight();
@@ -174,7 +174,8 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 			int align = SingleLine | AlignVCenter;
 			QString txtValue;
 			editor->setupContents( 0, m_tableView->selectedItem() == item && col == m_tableView->currentColumn(), 
-				item->at(col), txtValue, align, x, y_offset, w, h );
+				insertRowSelected ? editor->displayedField()->defaultValue() : item->at(col), //display default value if available
+				txtValue, align, x, y_offset, w, h );
 			QRect realRect(m_tableView->cellGeometry( row, col ));
 			realRect.moveBy(-m_tableView->contentsX(), -m_tableView->contentsY());
 
@@ -191,31 +192,11 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 			}
 		}
 	}
-/*
-			if (editor->showToolTipIfNeeded(
-				txtValue.isEmpty() ? item->at(col) : QVariant(txtValue), 
-				QRect( x + e->x() - contentsX(), 
-					y_offset + e->y() - contentsY(), w, h ), 
-				fontMetrics()))
-			{
-				d->recentCellWithToolTip = QPoint( col, row );
-				clearRecentCellWithToolTip = false;
-			}
-		}
-	}
-
-    QRect cr = m_tableView->cellGeometry( row, col );
-    cr.moveTopLeft( m_tableView->contentsToViewport( cr.topLeft() ) );
-    tip( cr, tipString, "This is a cell in a table" );
-*/
-//	QRect r(100,100, 100, 100)
-//	r.moveTopLeft( m_tableView->contentsToViewport( r.topLeft() ) );
-//	tip( r, "aaaaaaaaaaaaaaaaaaaaaaaaa");
 }
 
 //-----------------------------------------
 
-bool KexiTableView_cellEditorFactoriesInitialized = false;
+static bool KexiTableView_cellEditorFactoriesInitialized = false;
 
 // Initializes standard editor cell editor factories
 void KexiTableView::initCellEditorFactories()
@@ -304,6 +285,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	d->scrollBarTip->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
 	d->scrollBarTip->setLineWidth(1);
 	connect(verticalScrollBar(),SIGNAL(sliderReleased()),this,SLOT(vScrollBarSliderReleased()));
+	connect(verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(vScrollBarValueChanged(int)));
 	connect(&d->scrollBarTipTimer,SIGNAL(timeout()),this,SLOT(scrollBarTipTimeout()));
 	
 	//context menu
@@ -329,20 +311,22 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
 	// Create headers
-	m_verticalHeader = new TableViewHeader(this, "topHeader");
-	m_verticalHeader->setOrientation(Qt::Horizontal);
-	m_verticalHeader->setTracking(false);
-	m_verticalHeader->setMovingEnabled(false);
-	connect(m_verticalHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotTopHeaderSizeChange(int,int,int)));
+	m_horizontalHeader = new KexiTableViewHeader(this, "topHeader");
+	m_horizontalHeader->setSelectionBackgroundColor( palette().active().highlight() );
+	m_horizontalHeader->setOrientation(Qt::Horizontal);
+	m_horizontalHeader->setTracking(false);
+	m_horizontalHeader->setMovingEnabled(false);
+	connect(m_horizontalHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotTopHeaderSizeChange(int,int,int)));
 
 	m_verticalHeader = new KexiRecordMarker(this, "rm");
+	m_verticalHeader->setSelectionBackgroundColor( palette().active().highlight() );
 	m_verticalHeader->setCellHeight(d->rowHeight);
 //	m_verticalHeader->setFixedWidth(d->rowHeight);
 	m_verticalHeader->setCurrentRow(-1);
 
 	setMargins(
-		qMin(m_verticalHeader->sizeHint().height(), d->rowHeight),
-		m_verticalHeader->sizeHint().height(), 0, 0);
+		qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
+		m_horizontalHeader->sizeHint().height(), 0, 0);
 
 	setupNavigator();
 
@@ -482,8 +466,8 @@ void KexiTableView::updateFonts(bool repaint)
 //	if(d->rowHeight < 22)
 //		d->rowHeight = 22;
 	setMargins(
-		qMin(m_verticalHeader->sizeHint().height(), d->rowHeight),
-		m_verticalHeader->sizeHint().height(), 0, 0);
+		qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
+		m_horizontalHeader->sizeHint().height(), 0, 0);
 //	setMargins(14, d->rowHeight, 0, 0);
 	m_verticalHeader->setCellHeight(d->rowHeight);
 
@@ -538,9 +522,9 @@ void KexiTableView::slotUpdate()
 
 int KexiTableView::currentLocalSortingOrder() const
 {
-	if (m_verticalHeader->sortIndicatorSection()==-1)
+	if (m_horizontalHeader->sortIndicatorSection()==-1)
 		return 0;
-	return (m_verticalHeader->sortIndicatorOrder() == Qt::AscendingOrder) ? 1 : -1;
+	return (m_horizontalHeader->sortIndicatorOrder() == Qt::AscendingOrder) ? 1 : -1;
 }
 
 void KexiTableView::setLocalSortingOrder(int col, int order)
@@ -548,12 +532,12 @@ void KexiTableView::setLocalSortingOrder(int col, int order)
 	if (order == 0)
 		col = -1;
 	if (col>=0)
-		m_verticalHeader->setSortIndicator(col, (order==1) ? Qt::AscendingOrder : Qt::DescendingOrder);
+		m_horizontalHeader->setSortIndicator(col, (order==1) ? Qt::AscendingOrder : Qt::DescendingOrder);
 }
 
 int KexiTableView::currentLocalSortColumn() const
 {
-	return m_verticalHeader->sortIndicatorSection();
+	return m_horizontalHeader->sortIndicatorSection();
 }
 
 void KexiTableView::updateGUIAfterSorting()
@@ -818,6 +802,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 	KexiTableViewColumn *tvcol = m_data->column(col);
 	bool cursorAtInsertRowOrEditingNewRow = (item == m_insertItem || (m_newRowEditing && m_currentItem == item));
+	const bool hasDefaultValue = hasDefaultValueAt(*tvcol);
 
 	QVariant cell_value;
 	if (col < (int)item->count()) {
@@ -841,17 +826,66 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		}
 	}
 
-	bool defaultValueDisplayed = hasDefaultValueAt(*tvcol) && cursorAtInsertRowOrEditingNewRow;
+	bool defaultValueDisplayed = hasDefaultValue && cursorAtInsertRowOrEditingNewRow && !tvcol->field()->isAutoIncrement();
 
 	if ((item == m_insertItem /*|| m_newRowEditing*/) && cell_value.isNull()) {
-		if (!tvcol->field()->defaultValue().isNull()) {
+		if (!tvcol->field()->isAutoIncrement() && !tvcol->field()->defaultValue().isNull()) {
 			//display default value in the "insert row", if available
+			//(but not if there is autoincrement flag set)
 			cell_value = tvcol->field()->defaultValue();
 			defaultValueDisplayed = true;
 		}
 	}
 
+	const bool columnReadOnly = tvcol->isReadOnly();
+	const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
+		= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections 
+			&& m_curRow /*d->highlightedRow*/ >= 0 && row != m_curRow; //d->highlightedRow;
+
+	// setup default pen
+	QPen defaultPen;
+	const bool usesSelectedTextColor = edit && edit->usesSelectedTextColor();
+	if (defaultValueDisplayed) {
+		if (col == m_curCol && row == m_curRow && usesSelectedTextColor)
+			defaultPen = d->defaultValueDisplayParameters.selectedTextColor;
+		else
+			defaultPen = d->defaultValueDisplayParameters.textColor;
+	}
+	else if (d->appearance.fullRowSelection 
+		&& (row == d->highlightedRow || (row == m_curRow && d->highlightedRow==-1)) 
+		&& usesSelectedTextColor )
+	{
+		defaultPen = d->appearance.rowHighlightingTextColor; //special case: highlighted row
+	}
+	else if (d->appearance.fullRowSelection && row == m_curRow && usesSelectedTextColor)
+	{
+		defaultPen = d->appearance.textColor; //special case for full row selection
+	}
+	else if (m_currentItem == item && col == m_curCol && !columnReadOnly 
+		&& !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
+		&& usesSelectedTextColor)
+	{
+		defaultPen = colorGroup().highlightedText(); //selected text
+	}
+	else if (d->appearance.rowHighlightingEnabled && row == m_curRow 
+		&& !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
+		&& usesSelectedTextColor)
+	{
+		defaultPen = d->appearance.rowHighlightingTextColor;
+	}
+	else if (d->appearance.rowMouseOverHighlightingEnabled && row == d->highlightedRow 
+		&& !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
+		&& usesSelectedTextColor)
+	{
+		defaultPen = d->appearance.rowMouseOverHighlightingTextColor;
+	}
+	else
+		defaultPen = d->appearance.textColor;
+
 	if (edit) {
+		if (defaultValueDisplayed)
+			p->setFont( d->defaultValueDisplayParameters.font );
+		p->setPen( defaultPen );
 		edit->setupContents( p, m_currentItem == item && col == m_curCol, 
 			cell_value, txt, align, x, y_offset, w, h );
 
@@ -872,12 +906,6 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 	if (!d->appearance.gridEnabled)
 		y_offset++; //correction because we're not drawing cell borders
-
-	const bool columnReadOnly = tvcol->isReadOnly();
-
-	const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
-		= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections 
-			&& m_curRow /*d->highlightedRow*/ >= 0 && row != m_curRow; //d->highlightedRow;
 
 	if (d->appearance.fullRowSelection && d->appearance.fullRowSelection) {
 //		p->fillRect(x, y_offset, x+w-1, y_offset+h-1, red);
@@ -930,26 +958,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	
 	// draw text
 	if (!txt.isEmpty()) {
-		if (defaultValueDisplayed) {
+		if (defaultValueDisplayed)
 			p->setFont( d->defaultValueDisplayParameters.font );
-			if (col == m_curCol && row == m_curRow)
-				p->setPen( d->defaultValueDisplayParameters.selectedTextColor );
-			else
-				p->setPen( d->defaultValueDisplayParameters.textColor );
-		}
-		else if (d->appearance.fullRowSelection && (row == d->highlightedRow || (row == m_curRow && d->highlightedRow==-1)) ) 
-			p->setPen(d->appearance.rowHighlightingTextColor); //special case: highlighted row
-		else if (d->appearance.fullRowSelection && row == m_curRow) 
-			p->setPen(d->appearance.textColor); //special case for full row selection
-		else if (m_currentItem == item && col == m_curCol && !columnReadOnly 
-			 && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
-			p->setPen(colorGroup().highlightedText()); //selected text
-		else if (d->appearance.rowHighlightingEnabled && row == m_curRow /*d->highlightedRow*/ && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
-			p->setPen(d->appearance.rowHighlightingTextColor);
-		else if (d->appearance.rowMouseOverHighlightingEnabled && row == d->highlightedRow && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
-			p->setPen(d->appearance.rowMouseOverHighlightingTextColor);
-		else
-			p->setPen(d->appearance.textColor);
+		p->setPen( defaultPen );
 		p->drawText(x, y_offset, w - (x + x)- ((align & Qt::AlignLeft)?2:0)/*right space*/, h,
 			align, txt);
 	}
@@ -1219,43 +1230,6 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 		}
 	}
 
-/*
-	//show tooltip if needed
-	bool theSameCell = QPoint(col, row)==d->recentCellWithToolTip;
-	if (!theSameCell && d->recentCellWithToolTip.x()!=-1)
-		QToolTip::remove(this);
-
-	bool clearRecentCellWithToolTip = !theSameCell;
-	if (col>=0 && row>=0 && (d->recentCellWithToolTip.x()==-1 || !theSameCell)) {
-		KexiTableEdit *editor = tableEditorWidget( col );
-		KexiTableItem *item = (isInsertingEnabled() && row==rows()) ? m_insertItem : itemAt( row );
-		if (editor && item && (col < (int)item->count())) {
-			int w = columnWidth( col );
-			int h = rowHeight();
-			int x = 0;
-			int y_offset = 0;
-			int align = SingleLine | AlignVCenter;
-			QString txtValue;
-			editor->setupContents( 0, m_currentItem == item && col == m_curCol, 
-				item->at(col), txtValue, align, x, y_offset, w, h );
-			QToolTip::remove(this);
-			if (editor->showToolTipIfNeeded(
-				txtValue.isEmpty() ? item->at(col) : QVariant(txtValue), 
-				QRect( x + e->x() - contentsX(), 
-					y_offset + e->y() - contentsY(), w, h ), 
-				fontMetrics()))
-			{
-				d->recentCellWithToolTip = QPoint( col, row );
-				clearRecentCellWithToolTip = false;
-			}
-		}
-	}
-
-	if (clearRecentCellWithToolTip) {
-		QToolTip::remove(this);
-		d->recentCellWithToolTip = QPoint(-1,-1);
-	}*/
-
 #if 0//(js) doesn't work!
 
 	// do the same as in mouse press
@@ -1442,27 +1416,35 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		e->ignore();
 	}
 	else if (k == Qt::Key_Up && nobtn) {
-		selectPrevRow();
+		d->vScrollBarValueChanged_enabled = false; //disable tooltip
+			selectPrevRow();
+		d->vScrollBarValueChanged_enabled = true;
 		e->accept();
 		return;
 	}
 	else if (k == Qt::Key_Down && nobtn) {
 //			curRow = qMin(rows() - 1 + (isInsertingEnabled()?1:0), curRow + 1);
-		selectNextRow();
+		d->vScrollBarValueChanged_enabled = false; //disable tooltip
+			selectNextRow();
+		d->vScrollBarValueChanged_enabled = true;
 		e->accept();
 		return;
 	}
 	else if (k == Qt::Key_PageUp && nobtn) {
 //			curRow -= visibleHeight() / d->rowHeight;
 //			curRow = qMax(0, curRow);
-		selectPrevPage();
+		d->vScrollBarValueChanged_enabled = false; //disable tooltip
+			selectPrevPage();
+		d->vScrollBarValueChanged_enabled = true;
 		e->accept();
 		return;
 	}
 	else if (k == Qt::Key_PageDown && nobtn) {
 //			curRow += visibleHeight() / d->rowHeight;
 //			curRow = qMin(rows() - 1 + (isInsertingEnabled()?1:0), curRow);
-		selectNextPage();
+		d->vScrollBarValueChanged_enabled = false; //disable tooltip
+			selectNextPage();
+		d->vScrollBarValueChanged_enabled = true;
 		e->accept();
 		return;
 	}
@@ -1715,17 +1697,17 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		}
 	}	
 
-	m_editor = editor( col );
-	QWidget *m_editorWidget = dynamic_cast<QWidget*>(m_editor);
-	if (!m_editorWidget)
+	KexiTableEdit *editorWidget = tableEditorWidget( col );
+	m_editor = editorWidget;
+	if (!editorWidget)
 		return;
 
 	m_editor->setValue(*bufferedValueAt(col), addText, removeOld);
 	if (m_editor->hasFocusableWidget()) {
-		moveChild(m_editorWidget, columnPos(m_curCol), rowPos(m_curRow));
+		moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
 
-		m_editorWidget->resize(columnWidth(m_curCol)-1, rowHeight()-1);
-		m_editorWidget->show();
+		editorWidget->resize(columnWidth(m_curCol)-1, rowHeight()-1);
+		editorWidget->show();
 
 		m_editor->setFocus();
 	}
@@ -1772,12 +1754,12 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 		slotUpdate();
 		triggerUpdate();
 	}
-//	m_verticalHeader->repaint();
+//	d->pTopHeader->repaint();
 
 
 /*		m_navPanel->setGeometry(
 			frameWidth(),
-			viewport()->height() +m_verticalHeader->height() 
+			viewport()->height() +d->pTopHeader->height() 
 			-(horizontalScrollBar()->isVisible() ? 0 : horizontalScrollBar()->sizeHint().height())
 			+frameWidth(),
 			m_navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
@@ -1937,7 +1919,7 @@ void KexiTableView::updateRow(int row)
 //	kDebug(44021) << "updateRow("<<row<<")"<<endl;
 	if (row < 0 || row >= (rows() + 2/* sometimes we want to refresh the row after last*/ ))
 		return;
-	//int leftcol = m_verticalHeader->sectionAt( m_verticalHeader->offset() );
+	//int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
 
 	//kDebug() << contentsX() << " " << contentsY() << endl;
 	//kDebug() << QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) << endl;
@@ -1963,11 +1945,11 @@ void KexiTableView::slotColumnWidthChanged( int, int, int )
 	}
 
 //	updateContents(0, 0, d->pBufferPm->width(), d->pBufferPm->height());
-	QWidget *m_editorWidget = dynamic_cast<QWidget*>(m_editor);
-	if (m_editorWidget)
+	QWidget *editorWidget = dynamic_cast<QWidget*>(m_editor);
+	if (editorWidget)
 	{
-		m_editorWidget->resize(columnWidth(m_curCol)-1, rowHeight()-1);
-		moveChild(m_editorWidget, columnPos(m_curCol), rowPos(m_curRow));
+		editorWidget->resize(columnWidth(m_curCol)-1, rowHeight()-1);
+		moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
 	}
 	updateGeometries();
 	updateScrollBars();
@@ -2209,7 +2191,7 @@ KexiTableView::print(KPrinter &/*printer*/)
 		p.fillRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, QBrush(Qt::gray));
 		p.drawRect(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight);
 		p.drawText(width, topMargin - d->rowHeight, columnWidth(col), d->rowHeight, Qt::AlignLeft | Qt::AlignVCenter, 
-			m_verticalHeader->label(col));
+			m_horizontalHeader->label(col));
 		width = width + columnWidth(col);
 	}
 
@@ -2381,13 +2363,13 @@ void KexiTableView::setVerticalHeaderVisible(bool set)
 	int left_width;
 	if (set) {
 		m_verticalHeader->show();
-		left_width = qMin(m_verticalHeader->sizeHint().height(), d->rowHeight);
+		left_width = qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight);
 	}
 	else {
 		m_verticalHeader->hide();
 		left_width = 0;
 	}
-	setMargins( left_width, horizontalHeaderVisible() ? m_verticalHeader->sizeHint().height() : 0, 0, 0);
+	setMargins( left_width, horizontalHeaderVisible() ? m_horizontalHeader->sizeHint().height() : 0, 0, 0);
 }
 
 bool KexiTableView::horizontalHeaderVisible() const
@@ -2610,10 +2592,10 @@ void KexiTableView::vScrollBarValueChanged(int v)
 {
 	if (!d->vScrollBarValueChanged_enabled)
 		return;
-	kDebug(44021) << "VCHANGED: " << v << " / " << horizontalScrollBar()->maxValue() <<  endl;
+//	kDebug(44021) << "VCHANGED: " << v << " / " << horizontalScrollBar()->maxValue() <<  endl;
 	
 //	updateContents();
-	m_verticalHeader->update(); //<-- dirty but needed
+///	m_verticalHeader->update(); //<-- dirty but needed
 
 	if (d->scrollbarToolTipsEnabled) {
 		QRect r = verticalScrollBar()->sliderRect();
@@ -2644,10 +2626,10 @@ void KexiTableView::vScrollBarValueChanged(int v)
 		}
 	}
 	//update bottom view region
-	if (m_navPanel && (contentsHeight() - contentsY() - clipper()->height()) <= qMax(d->rowHeight,m_navPanel->height())) {
+/*	if (m_navPanel && (contentsHeight() - contentsY() - clipper()->height()) <= qMax(d->rowHeight,m_navPanel->height())) {
 		slotUpdate();
 		triggerUpdate();
-	}
+	}*/
 }
 
 void KexiTableView::vScrollBarSliderReleased()
@@ -2659,7 +2641,7 @@ void KexiTableView::vScrollBarSliderReleased()
 void KexiTableView::scrollBarTipTimeout()
 {
 	if (d->scrollBarTip->isVisible()) {
-		kDebug(44021) << "TIMEOUT! - hide" << endl;
+//		kDebug(44021) << "TIMEOUT! - hide" << endl;
 		if (d->scrollBarTipTimerCnt>0) {
 			d->scrollBarTipTimerCnt=0;
 			d->scrollBarTipTimer.start(500, true);
@@ -2706,10 +2688,10 @@ void KexiTableView::setAppearance(const Appearance& a)
 	}
 	if (m_verticalHeader)
 		m_verticalHeader->setCellHeight(d->rowHeight);
-	if (m_verticalHeader) {
+	if (m_horizontalHeader) {
 		setMargins(
-			qMin(m_verticalHeader->sizeHint().height(), d->rowHeight),
-			m_verticalHeader->sizeHint().height(), 0, 0);
+			qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
+			m_horizontalHeader->sizeHint().height(), 0, 0);
 	}
 //	}
 	if (a.rowHighlightingEnabled)

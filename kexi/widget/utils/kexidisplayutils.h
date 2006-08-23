@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,12 +28,19 @@ class QWidget;
 class KEXIGUIUTILS_EXPORT KexiDisplayUtils
 {
 	public:
-		class DisplayParameters
+		//! Stores set of display parameters used in utility functions
+		class KEXIGUIUTILS_EXPORT DisplayParameters
 		{
 			public:
+				//! Creates uninitialized parameters
+				DisplayParameters();
+
+				//! Copies properties from \a w.
+				DisplayParameters(QWidget *w);
+
 				QColor textColor, selectedTextColor;
 				QFont font;
-				int textWidth, textHeight;
+				int textWidth, textHeight; //!< used for "(autonumber)" text only
 		};
 
 		//! Initializes display parameters for autonumber sign
