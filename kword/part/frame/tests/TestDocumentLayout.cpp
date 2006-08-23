@@ -5,14 +5,9 @@
 #include <KWTextDocumentLayout.h>
 
 #include <KoParagraphStyle.h>
+#include <KoListStyle.h>
 
-#include <QTextDocument>
-#include <QTextBlock>
-#include <QTextLayout>
-#include <QTextLine>
-#include <QApplication>
-#include <QPainter>
-#include <QMainWindow>
+#include <QtGui>
 
 #include <kdebug.h>
 #include <kinstance.h>
@@ -519,6 +514,39 @@ void TestDocumentLayout::testPageBreak() {
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 4
     QCOMPARE(blockLayout->lineAt(0).y(), 160.0);
+}
+
+void TestDocumentLayout::testBasicList() {
+    initForNewTest("Base\nListItem\nListItem2\nNormal\nNormal");
+
+    KoParagraphStyle style;
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+    block = block.next();
+    QVERIFY(block.isValid());
+
+    KoListStyle listStyle;
+    style.setListStyle(listStyle);
+    style.applyStyle(block); // make this a listStyle
+    block = block.next();
+    QVERIFY(block.isValid());
+    style.applyStyle(block); // make this a listStyle
+
+    layout->layout();
+
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    block = doc->begin().next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 2
+    QCOMPARE(blockLayout->lineAt(0).y(), 50.0);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 3
+    QCOMPARE(blockLayout->lineAt(0).y(), 50.0);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 4
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
 }
 
 QTEST_MAIN(TestDocumentLayout)
