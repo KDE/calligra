@@ -58,113 +58,103 @@ class KEXIUTILS_EXPORT StyleProxy : public QStyle
 		void setParentStyle(QStyle* style);
 
 		virtual void polish( QWidget *w ) { m_style->polish(w); }
-		virtual void unPolish( QWidget *w ) { m_style->unPolish(w); }
+		virtual void unpolish( QWidget *w ) { m_style->unpolish(w); }
 
 		virtual void polish( QApplication *a ) { m_style->polish(a); }
-		virtual void unPolish( QApplication *a ) { m_style->unPolish(a); }
+		virtual void unpolish( QApplication *a ) { m_style->unpolish(a); }
 
 		virtual void polish( QPalette &p ) { m_style->polish(p); };
 
-		virtual void polishPopupMenu( QPopupMenu* p ) { m_style->polishPopupMenu(p); }
-
-		virtual QRect itemRect( QPainter *p, const QRect &r,
-			int flags, bool enabled, const QPixmap *pixmap, const QString &text, int len = -1 ) const
+		virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r,
+			int flags, bool enabled, const QString &text) const
 		{
-			return m_style->itemRect( p, r, flags, enabled, pixmap, text, len );
+			return m_style->itemTextRect(fm, r, flags, enabled, text);
 		}
 
-		virtual void drawItem( QPainter *p, const QRect &r,
-			int flags, const QColorGroup &g, bool enabled, const QPixmap *pixmap, const QString &text,
-			int len = -1, const QColor *penColor = 0 ) const
+		virtual QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const
 		{
-			m_style->drawItem( p, r, flags, g, enabled, pixmap, text, len, penColor );
+			return m_style->itemPixmapRect(r, flags, pixmap);
 		}
 
-		virtual void drawPrimitive( PrimitiveElement pe,
-			QPainter *p, const QRect &r, const QColorGroup &cg, SFlags flags = Style_Default,
-			const QStyleOption& option = QStyleOption::Default ) const
+		virtual void drawItemText(QPainter *painter, const QRect &rect,
+			int flags, const QPalette &pal, bool enabled,
+			const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const
 		{
-			m_style->drawPrimitive( pe, p, r, cg, flags, option );
+			m_style->drawItemText(painter, rect, flags, pal, enabled, text, textRole);
 		}
 
-		virtual void drawControl( ControlElement element,
-			QPainter *p, const QWidget *widget, const QRect &r, const QColorGroup &cg,
-			SFlags how = Style_Default, const QStyleOption& option = QStyleOption::Default ) const
+		virtual void drawItemPixmap(QPainter *painter, const QRect &rect,
+			int alignment, const QPixmap &pixmap) const
 		{
-			m_style->drawControl( element, p, widget, r, cg, how, option );
+			m_style->drawItemPixmap(painter, rect, alignment, pixmap);
 		}
 
-		virtual void drawControlMask( ControlElement element,
-			QPainter *p, const QWidget *widget, const QRect &r, 
-			const QStyleOption& option = QStyleOption::Default ) const
+		virtual QPalette standardPalette() const { return m_style->standardPalette(); }
+
+		virtual void drawControl(ControlElement element, const QStyleOption *opt, 
+			QPainter *p, const QWidget *w = 0) const
 		{
-			m_style->drawControlMask( element, p, widget, r, option );
+			m_style->drawControl(element, opt, p, w);
 		}
 
-		virtual QRect subRect( SubRect r, const QWidget *widget ) const
+		virtual QRect subElementRect(SubElement subElement, const QStyleOption *option,
+																	const QWidget *widget = 0) const
 		{
-			return m_style->subRect( r, widget );
+			return m_style->subElementRect(subElement, option, widget);
 		}
-
-		virtual void drawComplexControl( ComplexControl control,
-			QPainter *p, const QWidget *widget, const QRect &r,
-			const QColorGroup &cg, SFlags how = Style_Default,
-#ifdef Q_QDOC
-			SCFlags sub = SC_All,
-#else
-			SCFlags sub = (uint)SC_All,
-#endif
-			SCFlags subActive = SC_None, const QStyleOption& option = QStyleOption::Default ) const
+	
+		virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
+			QPainter *p, const QWidget *widget = 0) const
 		{
-			drawComplexControl( control, p, widget, r, cg, how, sub, subActive, option );
+			m_style->drawComplexControl(cc, opt, p, widget);
 		}
-
-		virtual void drawComplexControlMask( ComplexControl control,
-			QPainter *p, const QWidget *widget, const QRect &r,
-			const QStyleOption& option = QStyleOption::Default ) const
+		
+		virtual SubControl hitTestComplexControl(ComplexControl cc,
+			const QStyleOptionComplex *opt, const QPoint &pt, const QWidget *widget = 0) const
 		{
-			m_style->drawComplexControlMask( control, p, widget, r, option );
+			return m_style->hitTestComplexControl(cc, opt, pt, widget);
 		}
-
-		virtual QRect querySubControlMetrics( ComplexControl control,
-			const QWidget *widget, SubControl sc, 
-			const QStyleOption& option = QStyleOption::Default ) const
+		
+		virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
+			SubControl sc, const QWidget *widget = 0) const
 		{
-			return m_style->querySubControlMetrics( control, widget, sc, option );
+			return m_style->subControlRect(cc, opt, sc, widget);
 		}
-
-		virtual SubControl querySubControl( ComplexControl control,
-			const QWidget *widget, const QPoint &pos, 
-			const QStyleOption& option = QStyleOption::Default ) const
+	
+		virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
+			const QWidget *widget = 0) const
 		{
-			return m_style->querySubControl( control, widget, pos, option );
+			return m_style->pixelMetric(metric, option, widget);
 		}
-
-		virtual int pixelMetric( PixelMetric metric,
-			const QWidget *widget = 0 ) const
+	
+		virtual QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
+			const QSize &contentsSize, const QWidget *w = 0) const
 		{
-			return m_style->pixelMetric( metric, widget );
+			return m_style->sizeFromContents(ct, opt, contentsSize, w);
 		}
-
-		virtual QSize sizeFromContents( ContentsType contents,
-			const QWidget *widget, const QSize &contentsSize,
-			const QStyleOption& option = QStyleOption::Default ) const
+	
+		virtual int styleHint(StyleHint stylehint, const QStyleOption *opt = 0,
+			const QWidget *widget = 0, QStyleHintReturn* returnData = 0) const
 		{
-			return m_style->sizeFromContents( contents, widget, contentsSize, option );
+			return m_style->styleHint(stylehint, opt, widget, returnData);
 		}
-
-		virtual int styleHint( StyleHint stylehint,
-			const QWidget *widget = 0, const QStyleOption& option = QStyleOption::Default,
-			QStyleHintReturn* returnData = 0 ) const
+	
+		virtual QPixmap standardPixmap(StandardPixmap standardPixmap, 
+			const QStyleOption *opt = 0, const QWidget *widget = 0) const
 		{
-			return m_style->styleHint( stylehint, widget, option, returnData );
+			return m_style->standardPixmap(standardPixmap, opt, widget);
 		}
-
-		virtual QPixmap stylePixmap( StylePixmap stylepixmap,
-				const QWidget *widget = 0,
-				const QStyleOption& option = QStyleOption::Default ) const
+	
+		QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = 0,
+			const QWidget *widget = 0) const
 		{
-			return m_style->stylePixmap( stylepixmap, widget, option );
+			return m_style->standardIcon(standardIcon, option, widget);
+		}
+	
+		virtual QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
+			const QStyleOption *opt) const
+		{
+			return m_style->generatedIconPixmap(iconMode, pixmap, opt);
 		}
 
 	protected:
