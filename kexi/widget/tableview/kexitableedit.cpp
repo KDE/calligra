@@ -230,10 +230,10 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 
 void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/, 
 	const QString& txt, int align, int x, int y_offset, int w, int h, const QColor& fillColor,
-	bool readOnly, bool fullRowSelection )
+	const QFontMetrics &fm, bool readOnly, bool fullRowSelection )
 {
 	if (!readOnly && !fullRowSelection && !txt.isEmpty()) {
-		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, align, txt);
+		QRect bound=fm.boundingRect(x, y_offset, w - (x+x), h, align, txt);
 		bound.setY(0);
 		bound.setWidth( QMIN( bound.width()+2, w - (x+x)+1 ) );
 		if (align & Qt::AlignLeft) {

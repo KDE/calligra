@@ -117,7 +117,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 setupContents(). */
 		virtual void paintSelectionBackground( QPainter *p, bool focused, const QString& txt, 
 			int align, int x, int y_offset, int w, int h, const QColor& fillColor,
-			bool readOnly, bool fullRowSelection );
+			const QFontMetrics &fm, bool readOnly, bool fullRowSelection );
 
 		/*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
 		 dropdown button at the right side. \return left margin's size; 
