@@ -2,8 +2,12 @@
 Encoding=UTF-8
 Icon=
 Name=Kexi Import Filter for KSpread
+Name[de]=Kexi-Importfilter für KSpread
 Name[es]=Filtro de importación de Kexi para KSpread
 Name[et]=KSpreadi Kexi impordifilter
+Name[it]=Filtro di importazione Kexi per KSpread
+Name[sv]=Kexi-importfilter för Kspread
+Name[zh_TW]=Kexi 的 KSpread 匯入過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-kspread
