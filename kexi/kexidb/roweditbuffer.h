@@ -27,7 +27,8 @@
 
 namespace KexiDB {
 
-/*! KexiDB::EditBuffer provides data for single edited row, 
+/*!  @short provides data for single edited database row
+	KexiDB::RowEditBuffer provides data for single edited row, 
 	needed to perform update at the database backend.
 	Its advantage over pasing e.g. KexiDB::FieldList object is that 
 	EditBuffer contains only changed values.
@@ -70,8 +71,6 @@ namespace KexiDB {
 	Notes: added fields should come from the same (common) QuerySchema object.
 	However, this isn't checked at QValue& EditBuffer::operator[]( const Field& f ) level.
 */
-
-
 class KEXI_DB_EXPORT RowEditBuffer {
 public:
 	typedef QMap<QString,QVariant> SimpleMap;
@@ -100,11 +99,12 @@ public:
 
 	/*! Useful only for db-aware buffer. \return value for column \a ci
 	 If there is no value assigned for the buffer, this method tries to return
-	 default value obtained from \a ci. */
-	const QVariant* at( QueryColumnInfo& ci ) const;
+	 default value obtained from \a ci if \a useDefaultValueIfPossible is true. */
+	const QVariant* at( QueryColumnInfo& ci, bool useDefaultValueIfPossible = true ) const;
 	
 	//! Useful only for not-db-aware buffer. \return value for field \a f
 	const QVariant* at( Field& f ) const;
+
 	//! Useful only for not-db-aware buffer. \return value for field \a fname
 	const QVariant* at( const QString& fname ) const;
 

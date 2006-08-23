@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -101,12 +101,13 @@ void KexiFormScrollView::selectCellInternal()
 	//m_currentItem is already set by KexiDataAwareObjectInterface::setCursorPosition()
 	if (m_currentItem) {
 		if (m_currentItem!=m_previousItem) {
-			fillDataItems(*m_currentItem);
+			fillDataItems(*m_currentItem, cursorAtNewRow());
 			m_previousItem = m_currentItem;
 		}
 	}
-	else
-			m_previousItem = 0;
+	else {
+		m_previousItem = 0;
+	}
 }
 
 void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
@@ -447,9 +448,12 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
 		startEditCurrentCell();
 	}
 	fillDuplicatedDataItems(dynamic_cast<KexiFormDataItemInterface*>(item), item->value());
+	
+	//value changed: clear 'default value' mode (e.g. a blue italic text)
+	dynamic_cast<KexiFormDataItemInterface*>(item)->setDisplayDefaultValue(dynamic_cast<QWidget*>(item), false);
 }
 
-bool KexiFormScrollView::cursorAtNewRow()
+bool KexiFormScrollView::cursorAtNewRow() const
 {
 	return isInsertingEnabled() && ( m_currentItem==m_insertItem || m_newRowEditing );
 }
@@ -477,6 +481,14 @@ KexiTableViewColumn* KexiFormScrollView::column(int col)
 	return (id >= 0) ? m_data->column( id ) : 0;
 }
 
+bool KexiFormScrollView::shouldDisplayDefaultValueForItem(KexiFormDataItemInterface* itemIface) const
+{
+	return cursorAtNewRow()
+		&& !itemIface->columnInfo()->field->defaultValue().isNull() 
+//??		&& (m_editor ? m_editor->value()==itemIface->columnInfo()->field->defaultValue() : true)
+		&& !itemIface->columnInfo()->field->isAutoIncrement(); // default value defined
+}
+
 void KexiFormScrollView::cancelEditor()
 {
 	if (!dynamic_cast<KexiFormDataItemInterface*>(m_editor))
@@ -485,8 +497,15 @@ void KexiFormScrollView::cancelEditor()
 	if (m_errorMessagePopup)
 		m_errorMessagePopup->close();
 
-	dynamic_cast<KexiFormDataItemInterface*>(m_editor)->undoChanges();
-	fillDuplicatedDataItems(dynamic_cast<KexiFormDataItemInterface*>(m_editor), m_editor->value());
+	KexiFormDataItemInterface *itemIface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
+	itemIface->undoChanges();
+
+	const bool displayDefaultValue = shouldDisplayDefaultValueForItem(itemIface);
+	// now disable/enable "display default value" if needed (do it after setValue(), before setValue() turns it off)
+	if (itemIface->hasDisplayedDefaultValue() != displayDefaultValue)
+		itemIface->setDisplayDefaultValue( dynamic_cast<QWidget*>(itemIface), displayDefaultValue );
+
+	fillDuplicatedDataItems(itemIface, m_editor->value());
 }
 
 void KexiFormScrollView::updateAfterCancelRowEdit()
@@ -497,7 +516,11 @@ void KexiFormScrollView::updateAfterCancelRowEdit()
 				<< dynamic_cast<QWidget*>(it.current())->className() << " " 
 				<< dynamic_cast<QWidget*>(it.current())->name() << endl;
 		}
-		it.current()->undoChanges();
+		KexiFormDataItemInterface *itemIface = it.current();
+		const bool displayDefaultValue = shouldDisplayDefaultValueForItem(itemIface);
+		itemIface->undoChanges();
+		if (itemIface->hasDisplayedDefaultValue() != displayDefaultValue)
+			itemIface->setDisplayDefaultValue( dynamic_cast<QWidget*>(itemIface), displayDefaultValue );
 	}
 	recordNavigator()->showEditingIndicator(false);
 	dbFormWidget()->editedItem = 0;
@@ -510,7 +533,7 @@ void KexiFormScrollView::updateAfterAcceptRowEdit()
 	recordNavigator()->showEditingIndicator(false);
 	dbFormWidget()->editedItem = 0;
 	//update visible data because there could be auto-filled (eg. autonumber) fields
-	fillDataItems(*m_currentItem);
+	fillDataItems(*m_currentItem, cursorAtNewRow());
 	m_previousItem = m_currentItem;
 }
 

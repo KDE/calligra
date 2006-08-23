@@ -102,6 +102,12 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		bool hasAutoCaption() const;
 		void setAutoCaption(bool autoCaption);
 
+		/*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
+		 is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
+		 \a widget is equal to 'this'.
+		 Reimplemented after KexiFormDataItemInterface. */
+		virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+
 		QWidget* editor() const;
 		QLabel* label() const;
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -231,7 +231,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		 \return information whether we're currently at new row or now.
 		 This can be used e.g. by data-aware widgets to determine if "(autonumber)" 
 		 label should be displayed. */
-		virtual bool cursorAtNewRow();
+		virtual bool cursorAtNewRow() const;
 
 		//! Implementation for KexiDataAwareObjectInterface
 		//! Called by KexiDataAwareObjectInterface::setCursorPosition() 
@@ -256,6 +256,9 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		/*! @internal
 		 Used to invoke copy/paste/cut etc. actions at the focused widget's level. */
 		void handleDataWidgetAction(const QString& actionName);
+
+		/*! @internal */
+		bool shouldDisplayDefaultValueForItem(KexiFormDataItemInterface* itemIface) const;
 
 		//virtual bool focusNextPrevChild( bool next );
 

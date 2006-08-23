@@ -43,7 +43,7 @@ RowEditBuffer::~RowEditBuffer()
 	delete m_dbBufferIt;
 }
 
-const QVariant* RowEditBuffer::at( QueryColumnInfo& ci ) const
+const QVariant* RowEditBuffer::at( QueryColumnInfo& ci, bool useDefaultValueIfPossible ) const
 {
 	if (!m_dbBuffer) {
 		KexiDBWarn << "RowEditBuffer::at(QueryColumnInfo&): not db-aware buffer!" << endl;
@@ -53,14 +53,16 @@ const QVariant* RowEditBuffer::at( QueryColumnInfo& ci ) const
 	QVariant* result = 0;
 	if (*m_dbBufferIt!=m_dbBuffer->end())
 		result = &(*m_dbBufferIt).data();
-	if ((!result || result->isNull()) && ci.field && !ci.field->defaultValue().isNull()) {
-		if (!hasDefaultValueAt(ci)) {
-			//no buffered or stored value: try to get a default value declared in a field, so user can modify it
-			if (!result)
-				m_dbBuffer->insert(&ci, ci.field->defaultValue() );
-			result = &(*m_dbBuffer)[ &ci ];
-			m_defaultValuesDbBuffer->insert(&ci, true);
-		}
+	if ( useDefaultValueIfPossible 
+		&& (!result || result->isNull()) 
+		&& ci.field && !ci.field->defaultValue().isNull()
+		&& !hasDefaultValueAt(ci) )
+	{
+		//no buffered or stored value: try to get a default value declared in a field, so user can modify it
+		if (!result)
+			m_dbBuffer->insert(&ci, ci.field->defaultValue() );
+		result = &(*m_dbBuffer)[ &ci ];
+		m_defaultValuesDbBuffer->insert(&ci, true);
 	}
 	return (const QVariant*)result;
 }

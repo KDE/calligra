@@ -927,7 +927,10 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 		d->setPropertyValueIfNeeded( set, "subType", property.value(), property.oldValue(),
 			changeFieldTypeCommand );
 		
-		d->updatePropertiesVisibility(KexiDB::Field::typeForString(property.value().toString()), set);
+		kexipluginsdbg << set["type"].value() << endl;
+		const KexiDB::Field::Type newType = KexiDB::Field::typeForString(property.value().toString());
+		set["type"].setValue( newType );
+		d->updatePropertiesVisibility(newType, set);
 		//properties' visiblility changed: refresh prop. set
 		propertySetReloaded(true);
 		d->slotPropertyChanged_subType_enabled = true;
@@ -1038,6 +1041,7 @@ void KexiTableDesignerView::slotAboutToDeleteRow(
 KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set ) const
 {
 	//create a map of property values
+	kexipluginsdbg << set["type"].value() << endl;
 	QMap<QCString, QVariant> values = KoProperty::propertyValues(set);
 	//remove internal values, to avoid creating custom field's properties
 	QMap<QCString, QVariant>::Iterator it = values.begin();
@@ -1660,7 +1664,7 @@ void KexiTableDesignerView::changeFieldPropertyForRow( int row,
 		d->addHistoryCommand_in_slotRowUpdated_enabled = true;
 //		d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
 	//	d->slotPropertyChanged_subType_enabled = true;
-		property.setValue(newValue); //delayed type update (we need to have subtype set properly)
+		property.setValue(newValue); //delayed type update (we needed to have subtype set properly)
 	}
 
 	if (!addCommand) {

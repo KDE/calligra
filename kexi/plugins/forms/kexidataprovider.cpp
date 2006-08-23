@@ -92,15 +92,26 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 	}
 }
 
-void KexiFormDataProvider::fillDataItems(KexiTableItem& row)
+void KexiFormDataProvider::fillDataItems(KexiTableItem& row, bool cursorAtNewRow)
 {
 	kexidbg << "KexiFormDataProvider::fillDataItems() cnt=" << row.count() << endl;
- 	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin(); 
+	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin(); 
 		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
 	{
-		kexipluginsdbg << "fill data of '" << it.key()->dataSource() <<  "' at idx=" << it.data() 
-			<< " data=" << row.at(it.data()) << endl;
-		it.key()->setValue( row.at(it.data()) );
+		const QVariant value( row.at(it.data()) );
+		KexiFormDataItemInterface *itemIface = it.key();
+		kexipluginsdbg << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.data() 
+			<< " data=" << value << endl;
+		const bool displayDefaultValue = cursorAtNewRow && value.isNull() 
+			&& !itemIface->columnInfo()->field->defaultValue().isNull() 
+			&& !itemIface->columnInfo()->field->isAutoIncrement(); //no value to set but there is default value defined
+		if (displayDefaultValue)
+			itemIface->setValue( itemIface->columnInfo()->field->defaultValue() );
+		else
+			itemIface->setValue( value );
+		// now disable/enable "display default value" if needed (do it after setValue(), before setValue() turns it off)
+		if (itemIface->hasDisplayedDefaultValue() != displayDefaultValue)
+			itemIface->setDisplayDefaultValue( dynamic_cast<QWidget*>(itemIface), displayDefaultValue );
 	}
 }
 
@@ -151,7 +162,7 @@ void KexiFormDataProvider::valueChanged(KexiDataItemInterface* item)
 	Q_UNUSED( item );
 }
 
-bool KexiFormDataProvider::cursorAtNewRow()
+bool KexiFormDataProvider::cursorAtNewRow() const
 {
 	return false;
 }

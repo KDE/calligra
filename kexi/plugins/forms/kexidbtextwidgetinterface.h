@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,21 +30,25 @@ namespace KexiDB {
 }
 class Q3Frame;
 
-//! Interface for a few text editor's features
+//! @short An interface providing common text editor's functionality
+/*! Widgets (e.g. KexiDBLineEdit, KexiDBTextEdit) implementing KexiFormDataItemInterface 
+ use this interface to customize painting and data handling. */
 class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
 {
 	public:
-		KexiDBTextWidgetInterface()
-		 : m_autonumberDisplayParameters(0)
-		{
-		}
-		~KexiDBTextWidgetInterface() {
-			delete m_autonumberDisplayParameters;
-		}
+		KexiDBTextWidgetInterface();
+		~KexiDBTextWidgetInterface();
+
+		//! Called from KexiFormDataItemInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo) implementation.
 		void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
+
+		//! Called from paintEvent( QPaintEvent *pe ) method of the data aware widget.
 		void paintEvent( Q3Frame *w, bool textIsEmpty, int alignment, bool hasFocus );
+
+		//! Called from event( QEvent * e ) method of the data aware widget.
 		void event( QEvent * e, QWidget *w, bool textIsEmpty );
 
+	protected:
 		//! parameters for displaying autonumber sign
 		KexiDisplayUtils::DisplayParameters *m_autonumberDisplayParameters;
 };

@@ -73,6 +73,11 @@ void KexiDBWidgetContextMenuExtender::updatePopupMenuActions()
 		enum { IdUndo, IdRedo, IdSep1, IdCut, IdCopy, IdPaste, IdClear, IdSep2, IdSelectAll }; //from qlineedit.h
 		const bool readOnly = m_iface->isReadOnly();
 		const int id = m_contextMenu->idAt(m_contextMenuHasTitle ? 1 : 0);
+
+//! @todo maybe redo will be enabled one day?
+		m_contextMenu->removeItem(id-(int)IdRedo);
+
+		// update cut/copy/paste
 		m_contextMenu->setItemEnabled(id-(int)IdCut, !readOnly);
 		m_contextMenu->setItemEnabled(id-(int)IdPaste, !readOnly);
 		m_contextMenu->setItemEnabled(id-(int)IdClear, !readOnly);

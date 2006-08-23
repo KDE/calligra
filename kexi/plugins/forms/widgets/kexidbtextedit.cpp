@@ -31,6 +31,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent, const char *name)
  , KexiDBTextWidgetInterface()
  , KexiFormDataItemInterface()
  , m_menuExtender(this, this)
+ , m_slotTextChanged_enabled(true)
 {
 	connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
@@ -69,6 +70,8 @@ QVariant KexiDBTextEdit::value()
 
 void KexiDBTextEdit::slotTextChanged()
 {
+	if (!m_slotTextChanged_enabled)
+		return;
 	signalValueChanged();
 }
 
@@ -146,6 +149,32 @@ QPopupMenu * KexiDBTextEdit::createPopupMenu(const QPoint & pos)
 	QPopupMenu *contextMenu = KTextEdit::createPopupMenu(pos);
 	m_menuExtender.createTitle(contextMenu);
 	return contextMenu;
+}
+
+void KexiDBTextEdit::undo()
+{
+	cancelEditor();
+}
+
+void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue)
+{
+	KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
+	// initialize display parameters for default / entered value
+	KexiDisplayUtils::DisplayParameters * const params 
+		= displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
+	QPalette pal(palette());
+	pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+	setPalette(pal);
+	setFont(params->font);
+//! @todo support rich text...
+/*	m_slotTextChanged_enabled = false;
+		//for rich text...
+		const QString origText( text() );
+		KTextEdit::setText(QString::null);
+		setCurrentFont(params->font);
+		setColor(params->textColor);
+		KTextEdit::setText(origText);
+	m_slotTextChanged_enabled = true;*/
 }
 
 #include "kexidbtextedit.moc"

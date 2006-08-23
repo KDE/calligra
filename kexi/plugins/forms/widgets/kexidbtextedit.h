@@ -70,11 +70,21 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
+		/*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
+		 is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
+		 \a widget is equal to 'this'.
+		 Reimplemented after KexiFormDataItemInterface. */
+		virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		virtual void setReadOnly( bool readOnly );
 		virtual void setText( const QString & text, const QString & context );
+
+		//! Reimplemented, so "undo" means the same as "cancelEditor" action
+//! @todo enable "real" undo internally so user can use ctrl+z while editing
+		virtual void undo();
 
 	protected slots:
 		void slotTextChanged();
@@ -86,6 +96,9 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 
 		//! Used for extending context menu
 		KexiDBWidgetContextMenuExtender m_menuExtender;
+
+		//! Used to disable slotTextChanged()
+		bool m_slotTextChanged_enabled : 1;
 };
 
 #endif

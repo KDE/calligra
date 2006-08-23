@@ -58,8 +58,9 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 
 		//unused Q3PtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
 
-		/*! Fills data items with appropriate data fetched from \a cursor. */
-		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);
+		/*! Fills data items with appropriate data fetched from \a cursor. 
+		 \a newRowEditing == true means that we are at new (not yet inserted) database row. */
+		void fillDataItems(KexiTableItem& row, bool cursorAtNewRow);
 
 		/*! Implementation for KexiDataItemChangesListener. 
 		 Reaction for change of \a item. Does nothing here. */
@@ -69,7 +70,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		 Implement this to return information whether we're currently at new row or now.
 		 This can be used e.g. by data-aware widgets to determine if "(autonumber)" 
 		 label should be displayed. Returns false here. */
-		virtual bool cursorAtNewRow();
+		virtual bool cursorAtNewRow() const;
 
 		/*! Invalidates data sources collected by this provided.
 		 \a invalidSources is the list of data sources that should 

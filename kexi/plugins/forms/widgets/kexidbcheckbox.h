@@ -71,6 +71,9 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 		void setTristate(Tristate tristate);
 		Tristate isTristate() const;
 
+		/*! Reimplemented after KexiFormDataItemInterface. */
+		virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+
 	public slots:
 		void setDataSource(const QString &ds);
 		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }

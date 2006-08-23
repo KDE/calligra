@@ -63,9 +63,10 @@ KexiDBCheckBox::setReadOnly(bool readOnly)
 	setEnabled(!readOnly);
 }
 
-void KexiDBCheckBox::setValueInternal(const QVariant &add, bool )
+void KexiDBCheckBox::setValueInternal(const QVariant &add, bool removeOld)
 {
 	Q_UNUSED(add);
+	Q_UNUSED(removeOld);
 	if (isTristateInternal())
 		setState( m_origValue.isNull() ? NoChange : (m_origValue.toBool() ? On : Off) );
 	else
@@ -156,6 +157,19 @@ void KexiDBCheckBox::setDataSource(const QString &ds)
 {
 	KexiFormDataItemInterface::setDataSource(ds);
 	updateTristate();
+}
+
+void KexiDBCheckBox::setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue)
+{
+	KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
+	// initialize display parameters for default / entered value
+	KexiDisplayUtils::DisplayParameters * const params 
+		= displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
+//	setFont(params->font);
+	QPalette pal(palette());
+//	pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+	pal.setColor(QPalette::Active, QColorGroup::Foreground, params->textColor);
+	setPalette(pal);
 }
 
 #include "kexidbcheckbox.moc"
