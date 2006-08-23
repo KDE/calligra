@@ -33,14 +33,14 @@
 //KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QScrollView* parent, const char* name)
 KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, const char* name)
 : QWidget(parent->viewport(), name)
-, m_column(&column)
+ ,m_column(&column)
 // ,m_field(&f)
 // ,m_type(f.type()) //copied because the rest of code uses m_type
  ,m_scrollView(parent)
+ ,m_usesSelectedTextColor(true)
  ,m_view(0)
 // ,m_hasFocusableWidget(true)
 // ,m_acceptEditorAfterDeleteContents(false)
- , m_usesSelectedTextColor(true)
 {
 	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
 	installEventFilter(this);

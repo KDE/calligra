@@ -109,7 +109,7 @@ void KexiDataAwareView::initActions()
 void KexiDataAwareView::slotUpdateRowActions(int row)
 {
 	const bool ro = m_dataAwareObject->isReadOnly();
-	const bool inserting = m_dataAwareObject->isInsertingEnabled();
+//	const bool inserting = m_dataAwareObject->isInsertingEnabled();
 	const bool deleting = m_dataAwareObject->isDeleteEnabled();
 	const bool emptyInserting = m_dataAwareObject->isEmptyRowInsertingEnabled();
 	const bool editing = m_dataAwareObject->rowEditing();

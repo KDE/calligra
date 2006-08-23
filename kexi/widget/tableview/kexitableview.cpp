@@ -2573,6 +2573,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 
 void KexiTableView::vScrollBarValueChanged(int v)
 {
+	Q_UNUSED(v);
 	if (!d->vScrollBarValueChanged_enabled)
 		return;
 //	kdDebug(44021) << "VCHANGED: " << v << " / " << horizontalScrollBar()->maxValue() <<  endl;
