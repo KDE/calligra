@@ -914,7 +914,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		if (edit && ((d->appearance.rowHighlightingEnabled && !d->appearance.fullRowSelection) || (row == m_curRow && d->highlightedRow==-1 && d->appearance.fullRowSelection))) //!dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
 				isEnabled() ? colorGroup().highlight() : QColor(200,200,200),//d->grayColor,
-				columnReadOnly, d->appearance.fullRowSelection );
+				p->fontMetrics(), columnReadOnly, d->appearance.fullRowSelection );
 	}
 
 	if (!edit) {
