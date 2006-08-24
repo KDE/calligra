@@ -1780,14 +1780,29 @@ int SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QD
             n = n.nextSibling();
         }
     }
+    // Operator elements inside a sequence have to be parsed to get proper form
+    // value. Form value is needed to access operator dictionary and has to be
+    // obtained after sequence parsing since its value depends on position
+    // inside the sequence.
+
     // If the sequence contains more than one element, if the first or last
-    // element are operators, they have to be marked as such
+    // element are operators, they have to be marked differently
     if ( list.count() > 1 ) {
         if ( list.getFirst()->getElementName() == "mo" ) {
             static_cast<OperatorElement*>( list.getFirst() )->setForm( PrefixForm );
         }
         if ( list.getLast()->getElementName() == "mo" ) {
             static_cast<OperatorElement*>( list.getLast() )->setForm( PostfixForm );
+        }
+        for ( uint i = 1; i < list.count() - 1; i++ ) {
+            if ( list.at( i )->getElementName() == "mo" ) {
+                static_cast<OperatorElement*>( list.at( i ) )->setForm( InfixForm );
+            }
+        }
+    }
+    else if ( list.count() == 1 ) {
+        if ( list.getFirst()->getElementName() == "mo" ) {
+            static_cast<OperatorElement*>( list.getFirst() )->setForm( InfixForm );
         }
     }
 	parse();
