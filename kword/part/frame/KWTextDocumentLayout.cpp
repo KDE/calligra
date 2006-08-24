@@ -103,8 +103,21 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
     QTextBlock block = document()->begin();
     while(block.isValid()) {
         QTextLayout *layout = block.layout();
-        if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty())
+        if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
+            KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+            if(data && data->hasCounterData()) {
+                painter->save();
+                painter->setBrush(QBrush(Qt::black));
+                QFont font(block.charFormat().font(), paintDevice());
+                painter->setFont(font);
+                QFontMetricsF fm(font);
+                QPointF orig = data->counterPosition();
+                orig.setY(orig.y() + fm.ascent());
+                painter->drawText(orig, data->counterText());
+                painter->restore();
+            }
             layout->draw(painter, QPointF(0,0));
+        }
         block = block.next();
     }
 }
@@ -192,16 +205,19 @@ void KWTextDocumentLayout::layout() {
             double ptWidth = shape->size().width() - m_format.leftMargin() - m_format.rightMargin();
             if(m_newParag)
                 ptWidth -= m_format.textIndent();
-            if(m_newParag && m_block.textList()) { // is a listItem
+            if(m_newParag && m_block.textList()) // is a listItem
                 ptWidth -= listIndent();
-            }
             return ptWidth;
         }
 
         double x() {
             double result = (m_newParag?m_format.textIndent():0.0) + m_format.leftMargin();
             if(m_newParag && m_block.textList()) { // is a listItem
-                result += listIndent();
+                double indent = listIndent();
+                KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (m_block.userData());
+                Q_ASSERT(data);
+                data->setCounterPosition(QPointF(result, y()));
+                result += indent;
             }
             return result;
         }
@@ -302,6 +318,8 @@ void KWTextDocumentLayout::layout() {
             layout->beginLayout();
             m_fragmentIterator = m_block.begin();
             m_newParag = true;
+
+//kDebug() << "nextParag " << m_block.textList() << " for " << m_block.text() << endl;
             return true;
         }
 
@@ -347,26 +365,6 @@ void KWTextDocumentLayout::layout() {
                         m_format.intProperty(KoParagraphStyle::StyleId));
                 if(ps)
                     charStyle = ps->characterStyle();
-            }
-            switch( static_cast<KoListStyle::Style> (format.style())) {
-                case KoListStyle::SquareItem:
-                case KoListStyle::DiscItem:
-                case KoListStyle::CircleItem:
-                case KoListStyle::BoxItem: {
-                    double paragSize = 0.0;
-                    if(charStyle)
-                        paragSize = charStyle->fontPointSize();
-                    if(paragSize == 0.0)
-                        paragSize  = format.doubleProperty(QTextFormat::FontPointSize);
-                    if(paragSize > 0.0)
-                        return paragSize;
-                    return 12.0;
-                }
-                case KoListStyle::CustomCharItem:
-                    return 10.1; // TODO
-                case KoListStyle::NoItem:
-                    return 10.0; // simple indenting
-                default: ;// let the rest fall through.
             }
 
             KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (m_block.userData());
@@ -441,6 +439,7 @@ ListItemsHelper::~ListItemsHelper() {
     delete d;
 }
 
+/// is meant to take a QTextList and set the indent plus the string to render on each listitem
 void ListItemsHelper::recalculate() {
     double width = 0.0;
     int index = d->textList->format().intProperty(KoListStyle::StartValue);
@@ -465,6 +464,21 @@ void ListItemsHelper::recalculate() {
             case KoListStyle::UpperRomanItem:
                 // TODO;
                 break;
+            case KoListStyle::SquareItem:
+            case KoListStyle::DiscItem:
+            case KoListStyle::CircleItem:
+            case KoListStyle::BoxItem:
+                width = d->fm.height() * 0.66;
+                i = INT_MAX-1; // break for loop
+                break;
+            case KoListStyle::CustomCharItem:
+                width =  19.0; //  TODO
+                i = INT_MAX-1; // break for loop
+                break;
+            case KoListStyle::NoItem:
+                width =  10.0; // simple indenting
+                i = INT_MAX-1; // break for loop
+                break;
             default:; // others we ignore.
         }
         index++;
@@ -478,6 +492,6 @@ void ListItemsHelper::recalculate() {
         }
         data->setCounterWidth(width);
         // kDebug() << "    setCounterWidth: " << width <<  "  (" << data->counterWidth() << ")" << endl;
-        data->setCounterText("X");
+        data->setCounterText("o");
     }
 }

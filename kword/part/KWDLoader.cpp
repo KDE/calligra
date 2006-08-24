@@ -678,17 +678,23 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
            case 9: lstyle->setStyle(KoListStyle::SquareItem); break;
            case 10: lstyle->setStyle(KoListStyle::DiscItem); break;
            case 11: lstyle->setStyle(KoListStyle::BoxItem); break;
-           default: lstyle->setStyle(KoListStyle::NoItem); break;
+           default: {
+                delete lstyle;
+                lstyle = 0;
+            }
         }
-
-        lstyle->setLevel( element.attribute("depth").toInt() + 1);
-        lstyle->setStartValue( element.attribute("start", "1").toInt());
-        lstyle->setConsecutiveNumbering( element.attribute("numberingtype") == "1");
-        lstyle->setListItemPrefix( element.attribute("lefttext"));
-        lstyle->setListItemSuffix( element.attribute("righttext"));
-        lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
-        // TODO restart
-        style->setListStyle(*lstyle);
+        if(lstyle) {
+            lstyle->setLevel( element.attribute("depth").toInt() + 1);
+            lstyle->setStartValue( element.attribute("start", "1").toInt());
+            lstyle->setConsecutiveNumbering( element.attribute("numberingtype") == "1");
+            lstyle->setListItemPrefix( element.attribute("lefttext"));
+            lstyle->setListItemSuffix( element.attribute("righttext"));
+            lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
+            // TODO restart
+            style->setListStyle(*lstyle);
+        }
+        else
+            style->removeListStyle();
         delete lstyle;
     }
 
