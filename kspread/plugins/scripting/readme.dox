@@ -1,0 +1,54 @@
+/** @mainpage KSpread Scripting Plugin
+*
+* The KSpread scripting plugin offers flexible access to the
+* Kross scripting framework. Languages like Python or Ruby
+* could be used to script KSpread, extend the functionality
+* with script-packages, automate tasks or control the
+* runtime-environment.
+*
+* The \a ScriptingPart class implements a KPart component
+* to integrate scripting into KSpread.
+* The \a ScriptingModule class enables access to the KSpread
+* functionality from within the scripting backends.
+*
+* \see http://www.koffice.org/kspread
+* \see http://kross.dipe.org
+*
+***************************************************************************
+*
+* @section Examples
+*
+* Python example to uppercase a sheetname;
+* @code
+* # Import the KSpread module.
+* import KSpread
+* # Print a list of avaible sheets.
+* print KSpread.sheetNames()
+* # Get the current sheet.
+* sheet = KSpread.currentSheet()
+* # Change the name of the current sheet to uppercase.
+* sheet.setSheetName( str( sheet.name() ).upper() )
+* @endcode
+*
+***************************************************************************
+*
+* @section Legal
+*
+* @li Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+* @li Copyright (c) 2006 ISaac Clerencia <isaac@warp.es>
+* @li Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/

@@ -6,19 +6,17 @@ include_directories(
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
-#disabled for now till ported to kross2
+#the code in the kspreadcore-directory is currently unused.
 ##add_subdirectory( kspreadcore )
 
 add_subdirectory( scripts )
 
 ########### next target ###############
 
-set(kspreadscripting_PART_SRCS scripting.cpp )
+set(kspreadscripting_PART_SRCS ScriptingModule.cpp ScriptingPart.cpp )
 
 kde4_automoc(${kspreadscripting_PART_SRCS})
-
 kde4_add_plugin(kspreadscripting ${kspreadscripting_PART_SRCS})
-
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadscripting )
 
 target_link_libraries(kspreadscripting  ${KDE4_KDECORE_LIBS} kspreadcommon krosscore )

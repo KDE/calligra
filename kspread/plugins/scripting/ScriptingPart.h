@@ -20,24 +20,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SCRIPTING_H
-#define SCRIPTING_H
+#ifndef SCRIPTINGPART_H
+#define SCRIPTINGPART_H
 
 #include <kparts/plugin.h>
 #include <View.h>
 
-class Scripting : public KParts::Plugin
+/**
+* The ScriptingPart class implements a KPart component
+* to integrate scripting into KSpread.
+*/
+class ScriptingPart : public KParts::Plugin
 {
-        Q_OBJECT
-    public:
-        Scripting(QObject *parent, const QStringList &);
-        virtual ~Scripting();
-    private slots:
-        void executionFinished();
-    private:
-        class Private;
-        Private* const d;
-};
+		Q_OBJECT
+	public:
+		ScriptingPart(QObject* parent, const QStringList&);
+		virtual ~ScriptingPart();
 
+	private:
+		class Private;
+		Private* const d;
+};
 
 #endif
