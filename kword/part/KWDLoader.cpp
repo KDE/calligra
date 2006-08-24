@@ -686,7 +686,7 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
         if(lstyle) {
             lstyle->setLevel( element.attribute("depth").toInt() + 1);
             lstyle->setStartValue( element.attribute("start", "1").toInt());
-            lstyle->setConsecutiveNumbering( element.attribute("numberingtype") == "1");
+            lstyle->setConsecutiveNumbering( element.attribute("numberingtype") != "1");
             lstyle->setListItemPrefix( element.attribute("lefttext"));
             lstyle->setListItemSuffix( element.attribute("righttext"));
             lstyle->setDisplayLevel( element.attribute("display-levels").toInt());

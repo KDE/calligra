@@ -106,15 +106,20 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
         if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
             KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
             if(data && data->hasCounterData()) {
-                painter->save();
-                painter->setBrush(QBrush(Qt::black));
-                QFont font(block.charFormat().font(), paintDevice());
-                painter->setFont(font);
+                QTextCursor cursor(block); // I know this is longwinded, but just using the blocks
+                cursor.setPosition(block.position()+1); // charformat does not work, apparantly
+                QFont font(cursor.charFormat().font(), paintDevice());
+
+                QTextLayout layout(data->counterText(), font, paintDevice());
+                layout.setCacheEnabled(true);
+                QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
+                option.setTextDirection(block.blockFormat().layoutDirection());
+                layout.setTextOption(option);
+                layout.beginLayout();
+                layout.createLine();
+                layout.endLayout();
                 QFontMetricsF fm(font);
-                QPointF orig = data->counterPosition();
-                orig.setY(orig.y() + fm.ascent());
-                painter->drawText(orig, data->counterText());
-                painter->restore();
+                layout.draw(painter, data->counterPosition());
             }
             layout->draw(painter, QPointF(0,0));
         }
@@ -429,11 +434,11 @@ public:
     ListItemsPrivate(QTextList *tl, const QFont &font)
         : textList( tl ),
           fm( font, textList->document()->documentLayout()->paintDevice() ),
-          font(font) {
+          displayFont(font) {
     }
     QTextList *textList;
     QFontMetricsF fm;
-    QFont font;
+    QFont displayFont;
 };
 
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font) {
@@ -504,7 +509,7 @@ void ListItemsHelper::recalculate() {
             case KoListStyle::DiscItem:
             case KoListStyle::CircleItem:
             case KoListStyle::BoxItem: {
-                width = d->font.pointSizeF();
+                width = d->displayFont.pointSizeF();
                 int percent = format.intProperty(KoListStyle::BulletSize);
                 if(percent > 0)
                     width = width * (percent / 100.0);
