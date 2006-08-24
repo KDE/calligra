@@ -529,7 +529,7 @@ void TestDocumentLayout::testBasicList() {
     style.setListStyle(listStyle);
     style.applyStyle(block); // make this a listStyle
     QVERIFY(block.textList());
-    QVERIFY(block.textList()->format().intProperty(KoListStyle::ListStyle) == KoListStyle::DiscItem);
+    QVERIFY(block.textList()->format().intProperty(QTextListFormat::ListStyle) == KoListStyle::DiscItem);
     block = block.next();
     QVERIFY(block.isValid());
     style.applyStyle(block); // make this a listStyle
@@ -568,7 +568,7 @@ void TestDocumentLayout::testNumberedList() {
     for(int i=1; i <= 9; i++) {
         QVERIFY(block.isValid());
         style.applyStyle(block);
-        qDebug() << "->" << block.text();
+        //qDebug() << "->" << block.text();
         block = block.next();
     }
     layout->layout();
@@ -578,7 +578,7 @@ void TestDocumentLayout::testNumberedList() {
     double indent = blok.layout()->lineAt(0).x();
     QVERIFY(indent > 0.0);
     for(int i=1; i <= 9; i++) {
-        qDebug() << "=>" << blok.text();
+        //qDebug() << "=>" << blok.text();
         QCOMPARE(blok.layout()->lineAt(0).x(), indent); // all the same indent.
         blok = blok.next();
     }
@@ -587,7 +587,7 @@ void TestDocumentLayout::testNumberedList() {
     for(int i=9; i <= 12; i++) {
         QVERIFY(block.isValid());
         style.applyStyle(block);
-        qDebug() << "->" << block.text();
+        //qDebug() << "->" << block.text();
         block = block.next();
     }
     layout->layout();
@@ -597,7 +597,7 @@ void TestDocumentLayout::testNumberedList() {
     double indent2 = blok.layout()->lineAt(0).x();
     QVERIFY(indent2 > indent); // since it takes an extra digit
     for(int i=2; i <= 12; i++) {
-        qDebug() << "=>" << blok.text();
+        //qDebug() << "=>" << blok.text();
         QCOMPARE(blok.layout()->lineAt(0).x(), indent2); // all the same indent.
         blok = blok.next();
     }

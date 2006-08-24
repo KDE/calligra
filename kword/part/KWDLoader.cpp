@@ -30,6 +30,7 @@
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
+#include <KoListStyle.h>
 
 // KDE + Qt includes
 #include <QDomDocument>
@@ -651,13 +652,51 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
     element = layout.firstChildElement( "HARDBRK" ); // KWord-0.8
     if ( !element.isNull() )
         style->setBreakBefore(true);
+    element = layout.firstChildElement( "COUNTER" );
+    if ( !element.isNull() ) {
+        KoListStyle *orig = style->listStyle();
+        KoListStyle *lstyle;
+        if(orig)
+            lstyle = new KoListStyle(*orig);
+        else
+            lstyle = new KoListStyle();
+
+        int type = element.attribute("type").toInt();
+        switch(type) {
+           case 1: lstyle->setStyle(KoListStyle::DecimalItem); break;
+           case 2: lstyle->setStyle(KoListStyle::AlphaLowerItem); break;
+           case 3: lstyle->setStyle(KoListStyle::UpperAlphaItem); break;
+           case 4: lstyle->setStyle(KoListStyle::RomanLowerItem); break;
+           case 5: lstyle->setStyle(KoListStyle::UpperRomanItem); break;
+           case 6: lstyle->setStyle(KoListStyle::CustomCharItem);
+                // TODO
+                break;
+           case 7: lstyle->setStyle(KoListStyle::CustomCharItem);
+                // TODO
+                break;
+           case 8: lstyle->setStyle(KoListStyle::CircleItem); break;
+           case 9: lstyle->setStyle(KoListStyle::SquareItem); break;
+           case 10: lstyle->setStyle(KoListStyle::DiscItem); break;
+           case 11: lstyle->setStyle(KoListStyle::BoxItem); break;
+           default: lstyle->setStyle(KoListStyle::NoItem); break;
+        }
+
+        lstyle->setLevel( element.attribute("depth").toInt() + 1);
+        lstyle->setStartValue( element.attribute("start", "1").toInt());
+        lstyle->setConsecutiveNumbering( element.attribute("numberingtype") == "1");
+        lstyle->setListItemPrefix( element.attribute("lefttext"));
+        lstyle->setListItemSuffix( element.attribute("righttext"));
+        lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
+        // TODO restart
+        style->setListStyle(*lstyle);
+        delete lstyle;
+    }
 
     // TODO read rest of properties
     // LEFTBORDER
     // RIGHTBORDER
     // TOPBORDER
     // BOTTOMBORDER
-    // COUNTER
     // FORMAT
     // TABULATOR
 

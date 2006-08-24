@@ -80,4 +80,16 @@ private:
     KoStyleManager *m_styleManager;
 };
 
+class ListItemsPrivate;
+/// helper class for calculating text-lists prefixes and indents
+class KWORD_TEST_EXPORT ListItemsHelper {
+public:
+    ListItemsHelper(QTextList *textList, const QFont &font);
+    ~ListItemsHelper();
+    void recalculate();
+
+private:
+    ListItemsPrivate *d;
+};
+
 #endif

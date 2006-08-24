@@ -310,6 +310,7 @@ void KWTextDocumentLayout::layout() {
         QTextLayout *layout;
 
       private:
+        /// move to next frame (aka shape)
         void nextFrame() {
             frameNumber++;
             m_newShape = true;
@@ -328,6 +329,11 @@ void KWTextDocumentLayout::layout() {
             m_data->setDocumentOffset(m_y);
         }
 
+        /**
+         * return the list-indenting (in pt) of the current block.
+         * This is also known as the space available for the counter of this list item.
+         * Should only be called for blocks that _are_ a counter.
+         */
         double listIndent() {
             Q_ASSERT(m_block.textList());
             QTextList *textList = m_block.textList();
@@ -342,7 +348,7 @@ void KWTextDocumentLayout::layout() {
                 if(ps)
                     charStyle = ps->characterStyle();
             }
-            switch( static_cast<KoListStyle::Style> (format.intProperty(KoListStyle::ListStyle))) {
+            switch( static_cast<KoListStyle::Style> (format.style())) {
                 case KoListStyle::SquareItem:
                 case KoListStyle::DiscItem:
                 case KoListStyle::CircleItem:
@@ -371,55 +377,12 @@ void KWTextDocumentLayout::layout() {
                             charStyle->fontWeight(), charStyle->fontItalic());
                 else
                     font = m_block.charFormat().font();
-                calculateListItems(textList, font);
+                ListItemsHelper lih(textList, font);
+                lih.recalculate();
                 data = dynamic_cast<KoTextBlockData*> (m_block.userData());
             }
             Q_ASSERT(data);
             return data->counterWidth();
-        }
-
-        void calculateListItems(QTextList *textList, const QFont &font) {
-            Q_ASSERT(textList);
-
-            QFontMetricsF fm(font, m_frameSet->document()->documentLayout()->paintDevice());
-            double width = 0.0;
-            int index = textList->format().intProperty(KoListStyle::StartValue);
-            for(int i=0; i < textList->count(); i++) {
-                QTextBlock tb = textList->item(i);
-                int paragIndex = tb.blockFormat().intProperty( KoListStyle::ExplicitListValue);
-                if(paragIndex > 0)
-                    index = paragIndex;
-                switch( static_cast<KoListStyle::Style> (
-                            textList->format().intProperty(KoListStyle::ListStyle))) {
-                    case KoListStyle::DecimalItem:
-                        width = qMax(width, fm.width(QString::number(index)));
-                        break;
-                    case KoListStyle::AlphaLowerItem:
-                        // TODO;
-                        break;
-                    case KoListStyle::UpperAlphaItem:
-                        // TODO;
-                        break;
-                    case KoListStyle::RomanLowerItem:
-                        // TODO;
-                        break;
-                    case KoListStyle::UpperRomanItem:
-                        // TODO;
-                        break;
-                    default:; // others we ignore.
-                }
-                index++;
-            }
-            for(int i=0; i < textList->count(); i++) {
-                QTextBlock tb = textList->item(i);
-                KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
-                if(!data) {
-                    data = new KoTextBlockData();
-                    tb.setUserData(data);
-                }
-                data->setCounterWidth(width);
-                data->setCounterText("X");
-            }
         }
 
       private:
@@ -455,5 +418,67 @@ void KWTextDocumentLayout::layout() {
             line.setLineWidth(state.width());
             line.setPosition(QPointF(state.x(), state.y()));
         }
+    }
+}
+
+
+// ------------------- ListItemsHelper ------------
+class ListItemsPrivate {
+public:
+    ~ListItemsPrivate() {
+        delete fm;
+    }
+    QTextList *textList;
+    QFontMetricsF *fm;
+};
+
+ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font) {
+    d = new ListItemsPrivate();
+    d->textList = textList;
+    d->fm = new QFontMetricsF(font, textList->document()->documentLayout()->paintDevice());
+}
+
+ListItemsHelper::~ListItemsHelper() {
+    delete d;
+}
+
+void ListItemsHelper::recalculate() {
+    double width = 0.0;
+    int index = d->textList->format().intProperty(KoListStyle::StartValue);
+    for(int i=0; i < d->textList->count(); i++) {
+        QTextBlock tb = d->textList->item(i);
+        int paragIndex = tb.blockFormat().intProperty( KoListStyle::ExplicitListValue);
+        if(paragIndex > 0)
+            index = paragIndex;
+        switch( static_cast<KoListStyle::Style> ( d->textList->format().style() )) {
+            case KoListStyle::DecimalItem:
+                width = qMax(width, d->fm->width(QString::number(index)));
+                break;
+            case KoListStyle::AlphaLowerItem:
+                // TODO;
+                break;
+            case KoListStyle::UpperAlphaItem:
+                // TODO;
+                break;
+            case KoListStyle::RomanLowerItem:
+                // TODO;
+                break;
+            case KoListStyle::UpperRomanItem:
+                // TODO;
+                break;
+            default:; // others we ignore.
+        }
+        index++;
+    }
+    for(int i=0; i < d->textList->count(); i++) {
+        QTextBlock tb = d->textList->item(i);
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
+        if(!data) {
+            data = new KoTextBlockData();
+            tb.setUserData(data);
+        }
+        data->setCounterWidth(width);
+        // kDebug() << "    setCounterWidth: " << width <<  "  (" << data->counterWidth() << ")" << endl;
+        data->setCounterText("X");
     }
 }
