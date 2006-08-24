@@ -42,6 +42,8 @@ public:
     KWTextDocumentLayout(KWTextFrameSet *frameSet);
     ~KWTextDocumentLayout();
 
+    void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
+
     /// Returns the bounding rectangle of block.
     QRectF blockBoundingRect ( const QTextBlock & block ) const;
     /**

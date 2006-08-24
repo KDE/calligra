@@ -6,6 +6,8 @@
 
 #include <KoParagraphStyle.h>
 #include <KoListStyle.h>
+#include <KoTextBlockData.h>
+#include <KoStyleManager.h>
 
 #include <QtGui>
 
@@ -38,6 +40,8 @@ void TestDocumentLayout::cleanupTestCase() {
     shape1 = 0;
     doc = 0;
     layout = 0;
+    delete styleManager;
+    styleManager = 0;
 }
 
 void TestDocumentLayout::initForNewTest(const QString &initText) {
@@ -52,6 +56,8 @@ void TestDocumentLayout::initForNewTest(const QString &initText) {
     Q_ASSERT(doc);
     layout = dynamic_cast<KWTextDocumentLayout*> (doc->documentLayout());
     Q_ASSERT(layout);
+    styleManager = new KoStyleManager();
+    layout->setStyleManager(styleManager);
 
     QTextBlock block = doc->begin();
     if(initText.length() > 0) {
@@ -555,6 +561,7 @@ void TestDocumentLayout::testNumberedList() {
     initForNewTest("Base\nListItem1\nListItem2\nListItem3\nListItem4\nListItem5\nListItem6\nListItem6\nListItem7\nListItem8\nListItem9\nListItem10\nListItem11\nListItem12\n");
 
     KoParagraphStyle style;
+    styleManager->add(&style);
     QTextBlock block = doc->begin();
     style.applyStyle(block);
     block = block.next();
@@ -562,7 +569,6 @@ void TestDocumentLayout::testNumberedList() {
 
     KoListStyle listStyle;
     listStyle.setStyle(KoListStyle::DecimalItem);
-    listStyle.setListItemSuffix(".");
     style.setListStyle(listStyle);
 
     for(int i=1; i <= 9; i++) {
@@ -601,6 +607,111 @@ void TestDocumentLayout::testNumberedList() {
         QCOMPARE(blok.layout()->lineAt(0).x(), indent2); // all the same indent.
         blok = blok.next();
     }
+
+    // now to make sure the text is actually properly set.
+    block = doc->begin().next();
+    int i=1;
+    while(block.isValid() && i < 14) {
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+        QVERIFY(data);
+        QCOMPARE(data->counterText(), QString::number(i++));
+        block = block.next();
+    }
+
+    listStyle.setListItemSuffix(".");
+    listStyle.setStartValue(4);
+    style.setListStyle(listStyle);
+
+    QTextCursor cursor(doc);
+    cursor.setPosition(40); // listItem4
+    block = cursor.block();
+    QVERIFY(block.textList() != 0);
+    style.applyStyle(block);
+    QCOMPARE(block.textList()->format().intProperty(KoListStyle::StartValue), 4);
+
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setProperty(KoListStyle::ExplicitListValue, 12);
+    cursor.setBlockFormat(format);
+
+    // at this point we start numbering at 4. Have 4, 5, 6, 12, 13, 14, 15 etc
+    layout->layout();
+
+    // now to make sur the text is actually properly set.
+    block = doc->begin().next();
+    i=4;
+    while(block.isValid() && i < 22) {
+        if(i == 7) i = 12;
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+        QVERIFY(data);
+        QCOMPARE(data->counterText(), QString::number(i++) + ".");
+        block = block.next();
+    }
+}
+
+void TestDocumentLayout::testInterruptedLists() {
+    initForNewTest("ListItem1\nListItem2\nNormal Parag\nAnother parag\nListItem3\n");
+
+    KoParagraphStyle style;
+    KoListStyle listStyle;
+    listStyle.setStyle(KoListStyle::DecimalItem);
+    listStyle.setConsecutiveNumbering(true);
+    listStyle.setListItemSuffix(".");
+    style.setListStyle(listStyle);
+
+    QTextBlock block = doc->begin();
+    style.applyStyle(block);
+    block = block.next();
+    style.applyStyle(block);
+    block = block.next();
+    block = block.next();
+    block = block.next();
+    style.applyStyle(block);
+
+    layout->layout();
+
+    block = doc->begin();
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QVERIFY(data->counterText() == "1.");
+    block = block.next();
+    data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QVERIFY(data->counterText() == "2.");
+    block = block.next();
+    QCOMPARE(block.layout()->lineAt(0).x(), 0.0);
+    QVERIFY(block.userData() ==  0);
+    block = block.next();
+    QCOMPARE(block.layout()->lineAt(0).x(), 0.0);
+    QVERIFY(block.userData() ==  0);
+    block = block.next(); // list item 3
+    data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QVERIFY(data->counterText() == "3.");
+
+    // now the other way around
+    block = doc->begin();
+    listStyle.setConsecutiveNumbering(false);
+    listStyle.applyStyle(block);
+    layout->layout();
+
+    data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QVERIFY(data->counterText() == "1.");
+    block = block.next();
+    data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QVERIFY(data->counterText() == "2.");
+    block = block.next();
+    QCOMPARE(block.layout()->lineAt(0).x(), 0.0);
+    QVERIFY(block.userData() ==  0);
+    block = block.next();
+    QCOMPARE(block.layout()->lineAt(0).x(), 0.0);
+    QVERIFY(block.userData() ==  0);
+    block = block.next(); // list item 3
+    data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    qDebug() << data->counterText();
+    QVERIFY(data->counterText() == "1.");
 }
 
 QTEST_MAIN(TestDocumentLayout)

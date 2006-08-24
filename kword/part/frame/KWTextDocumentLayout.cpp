@@ -373,8 +373,11 @@ void KWTextDocumentLayout::layout() {
                 if(charStyle)
                     font = QFont(charStyle->fontFamily(), qRound(charStyle->fontPointSize()),
                             charStyle->fontWeight(), charStyle->fontItalic());
-                else
-                    font = m_block.charFormat().font();
+                else {
+                    QTextCursor cursor(m_block);
+                    cursor.setPosition(m_block.position()+1); // get font of first char as fallback
+                    font = cursor.charFormat().font();
+                }
                 ListItemsHelper lih(textList, font);
                 lih.recalculate();
                 data = dynamic_cast<KoTextBlockData*> (m_block.userData());
@@ -425,10 +428,12 @@ class ListItemsPrivate {
 public:
     ListItemsPrivate(QTextList *tl, const QFont &font)
         : textList( tl ),
-          fm( font, textList->document()->documentLayout()->paintDevice() ) {
+          fm( font, textList->document()->documentLayout()->paintDevice() ),
+          font(font) {
     }
     QTextList *textList;
     QFontMetricsF fm;
+    QFont font;
 };
 
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font) {
@@ -442,15 +447,46 @@ ListItemsHelper::~ListItemsHelper() {
 /// is meant to take a QTextList and set the indent plus the string to render on each listitem
 void ListItemsHelper::recalculate() {
     double width = 0.0;
-    int index = d->textList->format().intProperty(KoListStyle::StartValue);
+    QTextListFormat format = d->textList->format();
+
+    // when true don't let non-numbering parags restart numbering
+    bool consecutiveNumbering = format.boolProperty(KoListStyle::ConsecutiveNumbering);
+    int index = format.intProperty(KoListStyle::StartValue);
+    int level = qMax(1, format.intProperty(KoListStyle::Level));
+    QString prefix = format.stringProperty( KoListStyle::ListItemPrefix );
+    QString suffix = format.stringProperty( KoListStyle::ListItemSuffix );
     for(int i=0; i < d->textList->count(); i++) {
         QTextBlock tb = d->textList->item(i);
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
+        if(!data) {
+            data = new KoTextBlockData();
+            tb.setUserData(data);
+        }
         int paragIndex = tb.blockFormat().intProperty( KoListStyle::ExplicitListValue);
         if(paragIndex > 0)
             index = paragIndex;
+
+        if(! consecutiveNumbering) { // check if before this parag there was a lower-level list
+// from ODF spec: text:consecutive-numbering
+// The text:consecutive-numbering attribute specifies whether or not the list style uses consecutive numbering for all list levels or whether each list level restarts the numbering.
+            QTextBlock b = tb.previous();
+            while(b.isValid()) {
+                if(b.textList() == d->textList)
+                    break; // all fine
+                if(b.textList() == 0 || b.textList()->format().intProperty(KoListStyle::Level)
+                        < level) {
+                    index = format.intProperty(KoListStyle::StartValue);
+                    break;
+                }
+                b = b.previous();
+            }
+        }
+
+        QString item("");
         switch( static_cast<KoListStyle::Style> ( d->textList->format().style() )) {
             case KoListStyle::DecimalItem:
-                width = qMax(width, d->fm.width(QString::number(index)));
+                item = QString::number(index);
+                width = qMax(width, d->fm.width(item));
                 break;
             case KoListStyle::AlphaLowerItem:
                 // TODO;
@@ -467,31 +503,29 @@ void ListItemsHelper::recalculate() {
             case KoListStyle::SquareItem:
             case KoListStyle::DiscItem:
             case KoListStyle::CircleItem:
-            case KoListStyle::BoxItem:
-                width = d->fm.height() * 0.66;
-                i = INT_MAX-1; // break for loop
+            case KoListStyle::BoxItem: {
+                width = d->font.pointSizeF();
+                int percent = format.intProperty(KoListStyle::BulletSize);
+                if(percent > 0)
+                    width = width * (percent / 100.0);
                 break;
+            }
             case KoListStyle::CustomCharItem:
                 width =  19.0; //  TODO
-                i = INT_MAX-1; // break for loop
                 break;
             case KoListStyle::NoItem:
                 width =  10.0; // simple indenting
-                i = INT_MAX-1; // break for loop
                 break;
             default:; // others we ignore.
         }
+        data->setCounterText(prefix + item + suffix);
         index++;
     }
+    double other = d->fm.width(prefix) + d->fm.width(suffix);
     for(int i=0; i < d->textList->count(); i++) {
         QTextBlock tb = d->textList->item(i);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
-        if(!data) {
-            data = new KoTextBlockData();
-            tb.setUserData(data);
-        }
-        data->setCounterWidth(width);
+        data->setCounterWidth(other + width);
         // kDebug() << "    setCounterWidth: " << width <<  "  (" << data->counterWidth() << ")" << endl;
-        data->setCounterText("o");
     }
 }

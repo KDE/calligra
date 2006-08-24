@@ -9,6 +9,7 @@
 
 class QPainter;
 class KoViewConverter;
+class KoStyleManager;
 class KWTextFrameSet;
 class MockTextShape;
 class QTextDocument;
@@ -50,7 +51,9 @@ private slots:
 // Lists
     void testBasicList();
     void testNumberedList();
+    void testInterruptedLists(); // consecutiveNumbering
 // nested lists.
+// relativeBulletSize
 
     //etc
 
@@ -66,6 +69,7 @@ private:
     KWTextDocumentLayout *layout;
     QTextLayout *blockLayout;
     QString loremIpsum;
+    KoStyleManager *styleManager;
 };
 
 class MockTextShape : public KoShape {
