@@ -21,7 +21,7 @@ AM_CONDITIONAL(compile_kross_python,
 # Check for Ruby
 
 if test "x$compile_kross" = "xyes" ; then
-  AC_CHECK_PROG([RUBY], [ruby ruby1.8 ruby18], ruby)
+  AC_CHECK_PROGS([RUBY], [ruby ruby1.8 ruby18], ruby)
 
   if test -n "$RUBY"; then
     AC_MSG_CHECKING(for Ruby dirs)
