@@ -425,17 +425,16 @@ void KWTextDocumentLayout::layout() {
 // ------------------- ListItemsHelper ------------
 class ListItemsPrivate {
 public:
-    ~ListItemsPrivate() {
-        delete fm;
+    ListItemsPrivate(QTextList *tl, const QFont &font)
+        : textList( tl ),
+          fm( font, textList->document()->documentLayout()->paintDevice() ) {
     }
     QTextList *textList;
-    QFontMetricsF *fm;
+    QFontMetricsF fm;
 };
 
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font) {
-    d = new ListItemsPrivate();
-    d->textList = textList;
-    d->fm = new QFontMetricsF(font, textList->document()->documentLayout()->paintDevice());
+    d = new ListItemsPrivate(textList, font);
 }
 
 ListItemsHelper::~ListItemsHelper() {
@@ -452,7 +451,7 @@ void ListItemsHelper::recalculate() {
             index = paragIndex;
         switch( static_cast<KoListStyle::Style> ( d->textList->format().style() )) {
             case KoListStyle::DecimalItem:
-                width = qMax(width, d->fm->width(QString::number(index)));
+                width = qMax(width, d->fm.width(QString::number(index)));
                 break;
             case KoListStyle::AlphaLowerItem:
                 // TODO;
