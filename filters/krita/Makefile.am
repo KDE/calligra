@@ -2,11 +2,11 @@ if have_openexr
 OPENEXR_SUBDIR=openexr
 endif
 
-if include_graphicsmagick_filter
+if include_imagemagick_filter
 IMAGEMAGICK_SUBDIR=magick
 endif
 
-if include_imagemagick_filter
+if include_graphicsmagick_filter
 GRAPHICSMAGICK_SUBDIR=gmagick
 endif
 
