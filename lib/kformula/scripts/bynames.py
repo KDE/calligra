@@ -92,7 +92,7 @@ const entityMap entities[] = {'''
 // Needed since sizeof is a macro and we cannot be used until size is known
 int entityMap::size()
 {
-    return sizeof( entities );
+    return sizeof( entities ) / sizeof( entityMap );
 }
 
 KFORMULA_NAMESPACE_END

@@ -1,5 +1,5 @@
 //
-// Created: Wed Aug 23 00:48:16 2006
+// Created: Sat Aug 26 20:12:37 2006
 //      by: oper-dict.py
 //    from: appendixf.html
 //
@@ -4259,7 +4259,7 @@ const OperatorDictionary operators[] = {
 // Needed since sizeof is a macro and we cannot be used until size is known
 int OperatorDictionary::size()
 {
-    return sizeof( operators );
+    return sizeof( operators ) / sizeof( OperatorDictionary );
 }
 
 KFORMULA_NAMESPACE_END

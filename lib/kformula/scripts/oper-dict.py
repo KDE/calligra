@@ -138,7 +138,7 @@ const OperatorDictionary operators[] = {'''
 // Needed since sizeof is a macro and we cannot be used until size is known
 int OperatorDictionary::size()
 {
-    return sizeof( operators );
+    return sizeof( operators ) / sizeof( OperatorDictionary );
 }
 
 KFORMULA_NAMESPACE_END

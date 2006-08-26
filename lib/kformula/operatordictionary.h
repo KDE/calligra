@@ -1,5 +1,5 @@
 //
-// Created: Wed Aug 23 00:48:16 2006
+// Created: Sat Aug 26 20:12:37 2006
 //      by: oper-dict.py
 //    from: appendixf.html
 //
