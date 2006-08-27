@@ -470,7 +470,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
 
   // parsing state
   enum { Start, Finish, Bad, InNumber, InDecimal, InExpIndicator, InExponent,
-    InString, InIdentifier, InCell, InRange, InSheetName } state;
+    InString, InIdentifier, InCell, InRange, InSheetOrAreaName } state;
 
   // use locale settings if specified
   QString thousand = locale ? locale->thousandsSeparator() : "";
@@ -528,12 +528,12 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
          state = InIdentifier;
        }
 
-       // aposthrophe (') marks sheet name for 3-d cell, e.g 'Sales Q3'!A4
-       else if ( ch.unicode() == 39 )
+       // aposthrophe (') marks sheet name for 3-d cell, e.g 'Sales Q3'!A4, or a named range
+       else if ( ch.unicode() == '\'' )
        {
          i++;
-         state = InSheetName;
-         tokenText.append( QChar( 39 ) );
+         state = InSheetOrAreaName;
+         tokenText.append( QChar( '\'' ) );
        }
 
        // decimal dot ?
@@ -597,26 +597,13 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            state = InCell;
          else
          {
-           bool gotNamed = false;
-           // check for named areas ...
-           if (d->sheet) {
-             const QList<Reference> areas = d->sheet->doc()->listArea();
-             QList<Reference>::const_iterator it;
-             for (it = areas.begin(); it != areas.end(); ++it) {
-               if ((*it).ref_name.toLower() == tokenText.toLower()) {
-                 // we got a named area
+             if ( isNamedArea( tokenText ) )
                  tokens.append (Token (Token::Range, tokenText, tokenStart));
-                 gotNamed = true;
-                 break;
-                }
-              }
-           }
-           if (!gotNamed)
-             tokens.append (Token (Token::Identifier, tokenText,
-               tokenStart));
-           tokenStart = i;
-           tokenText = "";
-           state = Start;
+             else
+                 tokens.append (Token (Token::Identifier, tokenText, tokenStart));
+             tokenStart = i;
+             tokenText = "";
+             state = Start;
          }
        }
        break;
@@ -684,10 +671,10 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
        }
        break;
 
-    case InSheetName:
+    case InSheetOrAreaName:
 
        // consume until '
-       if( ch.unicode() != 39 ) tokenText.append( ex[i++] );
+       if( ch.unicode() != '\'' ) tokenText.append( ex[i++] );
 
        else
        {
@@ -698,30 +685,19 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            tokenText.append( ex[i++] );
            state = InCell;
          }
-         else {
-	   // this is the same as the check in InIdentifier ... TODO merge
-           bool gotNamed = false;
-           // check for named areas ...
-           if (d->sheet) {
-	     QString txt = tokenText.mid(1, tokenText.length() - 2).toLower();
-             const QList<Reference> areas = d->sheet->doc()->listArea();
-             QList<Reference>::const_iterator it;
-             for (it = areas.begin(); it != areas.end(); ++it) {
-               if ((*it).ref_name.toLower() == txt) {
-                 // we got a named area
+         else
+         {
+             if ( isNamedArea( tokenText ) )
+             {
+                 tokenText.remove( 0, 1 );
                  tokens.append (Token (Token::Range, tokenText, tokenStart));
-                 gotNamed = true;
-                 break;
-                }
-              }
-           }
-           if (!gotNamed)
-             tokens.append (Token (Token::Identifier, tokenText,
-               tokenStart));
-           tokenStart = i;
-           tokenText = "";
-           state = Start;
-	 }
+             }
+             else
+                 tokens.append (Token (Token::Identifier, tokenText, tokenStart));
+             tokenStart = i;
+             tokenText = "";
+             state = Start;
+         }
        }
        break;
 
@@ -1141,6 +1117,24 @@ void Formula::compile( const Tokens& tokens ) const
     d->constants.clear();
     d->codes.clear();
   }
+}
+
+bool Formula::isNamedArea( const QString& expr ) const
+{
+    QString tokenText( expr );
+    // check for named areas ...
+    if (d->sheet) {
+        QString txt = tokenText.mid(1, tokenText.length() - 2).toLower();
+        const QList<Reference> areas = d->sheet->doc()->listArea();
+        QList<Reference>::const_iterator it;
+        for (it = areas.begin(); it != areas.end(); ++it) {
+            if ((*it).ref_name.toLower() == txt) {
+                 // we got a named area
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 

@@ -314,6 +314,11 @@ class KSPREAD_EXPORT Formula
 
     void compile( const Tokens& tokens ) const;
 
+    /**
+     * helper function: return true for valid named area
+     */
+    bool isNamedArea( const QString& expr ) const;
+
   private:
     class Private;
     Private *d;
