@@ -691,7 +691,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
          {
            if ( isNamedArea( tokenText ) )
            {
-             tokenText.remove( 0, 1 );
+             tokenText = tokenText.mid( 1, tokenText.length() - 2 );
              tokens.append (Token (Token::Range, tokenText, tokenStart));
            }
            else
@@ -1129,8 +1129,8 @@ bool Formula::isNamedArea( const QString& expr ) const
     QString tokenText( expr );
     // check for named areas ...
     if (d->sheet) {
-        if ( tokenText[0] == QChar( '\'' ) )
-            tokenText.remove( 0, 1 );
+        if ( tokenText[0] == '\'' )
+            tokenText = tokenText.mid( 1, tokenText.length() - 2 );
         const QValueList<Reference> areas = d->sheet->doc()->listArea();
         QValueList<Reference>::const_iterator it;
         for (it = areas.begin(); it != areas.end(); ++it) {
