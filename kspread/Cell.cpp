@@ -321,13 +321,13 @@ void Cell::setValue( const Value& value )
 
 void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &txt)
 {
-  if (!txt.isEmpty())
-    d->strText = txt;
-  else
-    d->strText = sheet()->doc()->converter()->asString (value).asString();
-  if (fmtType != No_format)
-    format()->setFormatType (fmtType);
-  setValue (value);
+    if ( !txt.isNull() )
+        d->strText = txt;
+    else if ( !isFormula() )
+        d->strText = sheet()->doc()->converter()->asString( value ).asString();
+    if ( fmtType != No_format )
+        format()->setFormatType( fmtType );
+    setValue( value );
 }
 
 // FIXME: Continue commenting and cleaning here (ingwa)
@@ -2576,8 +2576,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             if( ( val == "true" ) || ( val == "false" ) )
             {
                 bool value = val == "true";
-                setValue( value );
-                if (!isFormula) setCellText( value ? i18n("True") : i18n("False" ) );
+                setCellValue( value );
             }
         }
 
@@ -2586,9 +2585,8 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
         {
             bool ok = false;
             double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
-            if ( !isFormula )
-                if( ok )
-                    setCellValue( value );
+            if( ok )
+                setCellValue( value );
 
             if ( !isFormula && d->strText.isEmpty())
             {
@@ -2604,14 +2602,13 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
-                if ( !isFormula )
-                    setCellValue( value );
+                setCellValue( value, Money_format );
+
                 if (element.hasAttributeNS( KoXmlNS::office, "currency" ) )
                 {
                   Currency currency(element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
                   format()->setCurrency( currency.getIndex(), currency.getDisplayCode() );
                 }
-                format()->setFormatType (Money_format);
             }
         }
         else if( valuetype == "percentage" )
