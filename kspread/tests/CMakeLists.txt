@@ -1,5 +1,3 @@
-
-
 if(KDE4_BUILD_TESTS)
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOFFICEUI_INCLUDES} )
@@ -12,11 +10,11 @@ set(formulatest_SRCS test_formula.cc ${libtests_SRCS})
 
 kde4_automoc(${formulatest_SRCS})
 
-kde4_add_executable(formulatest ${formulatest_SRCS})
+kde4_add_executable(formulatest RUN_UNINSTALLED ${formulatest_SRCS})
 
 target_link_libraries(formulatest  kspreadcommon )
 
-add_test(formula ${EXECUTABLE_OUTPUT_PATH}/formulatest)
+add_test(formula formulatest)
 
 ########### next target ###############
 

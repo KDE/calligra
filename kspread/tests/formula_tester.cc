@@ -397,8 +397,7 @@ void FormulaOasisConversionTester::checkOasis( const char *file, int line, const
   locale.setDecimalSymbol(",");
 
   // KSpread -> OpenDocument
-  QString formula = localeFormula;
-  Oasis::encodeFormula( formula, &locale );
+  QString formula = Oasis::encodeFormula( localeFormula, &locale );
 
   if( formula != oasisFormula )
   {
