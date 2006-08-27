@@ -240,9 +240,9 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "45+45/3", Value(60) );
   CHECK_EVAL( "4+3*2-1", Value(9) );
 
-  // power operator is right associative
+  // power operator is left associative
   CHECK_EVAL( "2^3", Value(8) );
-  CHECK_EVAL( "2^3^2", Value(512) );
+  CHECK_EVAL( "2^3^2", Value(64) );
 
   // lead to division by zero
   CHECK_EVAL( "0/0", Value::errorDIV0() );
