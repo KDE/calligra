@@ -1074,7 +1074,10 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
        // decimal dot ?
        else if ( ch == '.' )
        {
-         state = InNumber;
+           if ( ex[i+1].isDigit() )
+               state = InNumber;
+           else
+               state = InReference;
        }
 
        // look for operator match
@@ -1121,21 +1124,26 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
        // consume as long as alpha, dollar sign, underscore, or digit, or colon
        if( isIdentifier( ch )  || ch.isDigit() || ch == ':' )
          result.append( ex[i] );
-       else if ( ch == '.' && ex[i-1] != '[' && ex[i-1] != ':' )
+       else if ( ch == '.' && i > 0 && ex[i-1] != '[' && ex[i-1] != ':' )
          result.append( '!' );
        else if( ch == ']' )
          state = Start;
-       else if ( ch.unicode() == 39 )
+       else if ( ch == '\'' )
        {
          result.append( ex[i] );
          state = InSheetName;
+       }
+       else if ( ch != '.' )
+       {
+           state = Start;
+           break;
        }
        ++i;
        break;
     }
     case InSheetName:
     {
-      if ( ch.unicode() == 39 )
+      if ( ch == '\'' )
         state = InReference;
       result.append( ex[i] );
       ++i;

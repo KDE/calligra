@@ -2071,37 +2071,52 @@ void Doc::loadOasisAreaName( const QDomElement& body )
         while ( !area.isNull() )
         {
             QDomElement e = area.toElement();
-            if ( e.isNull() || !e.hasAttributeNS( KoXmlNS::table, "name" ) || !e.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
+
+            if ( e.localName() == "named-range" )
             {
-                kdDebug() << "Reading in named area failed" << endl;
-                area = area.nextSibling();
-                continue;
+                if ( !e.hasAttributeNS( KoXmlNS::table, "name" ) || !e.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
+                {
+                    kdDebug() << "Reading in named area failed" << endl;
+                    area = area.nextSibling();
+                    continue;
+                }
+
+                // TODO: what is: sheet:base-cell-address
+                QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
+                QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
+                kdDebug()<<"area name : "<<name<<" range :"<<range<<endl;
+                d->m_loadingInfo->addWordInAreaList( name );
+                kdDebug() << "Reading in named area, name: " << name << ", area: " << range << endl;
+
+                range = Oasis::decodeFormula( range );
+
+                if ( range.find( ':' ) == -1 )
+                {
+                    Point p( range );
+
+                    int n = range.find( '!' );
+                    if ( n > 0 )
+                        range = range + ":" + range.right( range.length() - n - 1);
+
+                    kdDebug() << "=> Area: " << range << endl;
+                }
+
+                if ( range.contains( '!' ) && range[0] == '$' )
+                {
+                    // cut absolute sheet indicator
+                    range.remove( 0, 1 );
+                }
+
+                Range p( range );
+
+                addAreaName( p.range(), name, p.sheetName() );
+                kdDebug() << "Area range: " << p.toString() << endl;
             }
-
-            // TODO: what is: sheet:base-cell-address
-            QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
-            QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
-            kdDebug()<<"area name : "<<name<<" range :"<<range<<endl;
-            d->m_loadingInfo->addWordInAreaList( name );
-            kdDebug() << "Reading in named area, name: " << name << ", area: " << range << endl;
-
-            range = Oasis::decodeFormula( range );
-
-            if ( range.find( ':' ) == -1 )
+            else if ( e.localName() == "named-expression" )
             {
-                Point p( range );
-
-                int n = range.find( '!' );
-                if ( n > 0 )
-                    range = range + ":" + range.right( range.length() - n - 1);
-
-                kdDebug() << "=> Area: " << range << endl;
+                kdDebug() << "Named expression found." << endl;
+                // TODO
             }
-
-            Range p( range );
-
-            addAreaName( p.range(), name, p.sheetName() );
-            kdDebug() << "Area range: " << p.sheetName() << endl;
 
             area = area.nextSibling();
         }

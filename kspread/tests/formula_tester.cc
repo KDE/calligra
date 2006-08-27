@@ -362,9 +362,14 @@ void FormulaOasisConversionTester::run()
   errorList.clear();
 
   // cell references
-  CHECK_OASIS( "A1", "[.A1]" );
+  CHECK_OASIS( "A1", ".A1" );
+  CHECK_OASIS( "A1:A4", ".A1:.A4" );
+  CHECK_OASIS( "A$1:$A4", ".A$1:.$A4" );
+  CHECK_OASIS( "Sheet2!A1", "Sheet2.A1" );
+  CHECK_OASIS( "'Sheet 2'!A1", "'Sheet 2'.A1" );
   CHECK_OASIS( "=A1", "=[.A1]" );
   CHECK_OASIS( "=A1:A4", "=[.A1:A4]" );
+  CHECK_OASIS( "=A$1:$A4", "=[.A$1:$A4]" );
   CHECK_OASIS( "=Sheet2!A1", "=[Sheet2.A1]" );
   CHECK_OASIS( "='Sheet 2'!A1", "=['Sheet 2'.A1]" );
 
