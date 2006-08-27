@@ -306,7 +306,7 @@ class KSPREAD_EXPORT Formula
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.
      */
-    Tokens scan( const QString& expr, KLocale* locale = 0 ) const;
+    Tokens scan( const QString& expr, const KLocale* locale = 0 ) const;
 
     QString dump() const;
 

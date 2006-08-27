@@ -1183,110 +1183,78 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
   return result;
 }
 
-QString KSpread::Oasis::encodeFormula(const QString& expr, const KLocale* locale)
+QString KSpread::Oasis::encodeFormula( const QString& expr, const KLocale* locale )
 {
-  // TODO Stefan: rewrite to use an adopted tokenizer as in Oasis::decodeFormula
+    // use locale settings
+    const QString decimal = locale ? locale->decimalSymbol() : ".";
 
-  // use locale settings
-  QString decimal = locale ? locale->decimalSymbol() : ".";
+    const bool isFormula = ( !expr.isEmpty() && expr[0] == '=' ) ? true : false;
+    QString result;
 
-  QString s;
-  QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
-  int n = exp.indexIn( expr, 0 );
-  kDebug() << "Exp: " << expr << ", n: " << n << ", Length: " << expr.length()
-      << ", Matched length: " << exp.matchedLength() << endl;
+    Formula formula;
+    Tokens tokens = formula.scan( ( isFormula ? "" : "=" ) + expr, locale );
 
-  bool inQuote1 = false;
-  bool inQuote2 = false;
-  int i = 0;
-  int l = (int) expr.length();
-  if ( l <= 0 )
-    return expr;
-  while ( i < l )
-  {
-    if ( ( n != -1 ) && ( n < i ) )
-    {
-      n = exp.indexIn( expr, i );
-      kDebug() << "Exp: " << expr.right( l - i ) << ", n: " << n << endl;
-    }
-    if ( expr[i] == '"' )
-    {
-      inQuote1 = !inQuote1;
-      s += expr[i];
-      ++i;
-      continue;
-    }
-    if ( expr[i] == '\'' )
-    {
-            // named area
-      inQuote2 = !inQuote2;
-      ++i;
-      continue;
-    }
-    if ( inQuote1 || inQuote2 )
-    {
-      s += expr[i];
-      ++i;
-      continue;
-    }
-    if ( ( expr[i] == '=' ) && ( i + 1 < l && expr[i + 1] == '=' ) )
-    {
-      s += '=';
-      ++i;++i;
-      continue;
-    }
-    if ( expr[i] == '!' )
-    {
-      QChar c;
-      int j = (int) s.length() - 1;
+    if ( !tokens.valid() || tokens.count() == 0 )
+        return expr; // no altering on error
 
-      while ( j >= 0 )
-      {
-        c = s[j];
-        if ( c == ' ' )
-          s[j] = '_';
-        if ( !(c.isLetterOrNumber() || c == ' ' || c == '.'
-               || c == '_') )
+    if ( isFormula ) result.append( '=' );
+
+    for ( int i = 0; i < tokens.count(); ++i )
+    {
+        const QString tokenText = tokens[i].text();
+        const Token::Type type = tokens[i].type();
+
+        switch ( type )
         {
-          s.insert( j + 1, '[' );
-          break;
+        case Token::Cell:
+        case Token::Range:
+        {
+            if ( isFormula ) result.append( '[' );
+
+            const int sheetDelimiter = tokenText.lastIndexOf( '!' );
+            if ( sheetDelimiter > 0 )
+                result.append( tokenText.left( sheetDelimiter ) );
+
+            const int rangeDelimiter = tokenText.lastIndexOf( ':' );
+            if ( rangeDelimiter > sheetDelimiter )
+            {
+                result.append( '.' );
+                result.append( tokenText.mid( sheetDelimiter + 1, rangeDelimiter - sheetDelimiter - 1 ) );
+                result.append( ':' );
+                result.append( '.' );
+                result.append( tokenText.mid( rangeDelimiter + 1 ) );
+            }
+            else
+            {
+                result.append( '.' );
+                result.append( tokenText.mid( sheetDelimiter + 1 ) );
+            }
+
+            if ( isFormula ) result.append( ']' );
+            break;
         }
-        --j;
-      }
-      s += '.';
-      ++i;
-      continue;
+        case Token::Float:
+        {
+            QString tmp( tokenText );
+            result.append( tmp.replace( decimal, "." ) );
+            break;
+        }
+        case Token::Operator:
+        {
+            if ( tokens[i].asOperator() == Token::Equal )
+                result.append( '=' );
+            else
+                result.append( tokenText );
+            break;
+        }
+        case Token::Boolean:
+        case Token::Integer:
+        case Token::String:
+        case Token::Identifier:
+        default:
+            result.append( tokenText );
+            break;
+        }
     }
-    if ( QString(expr[i]) == decimal ) // FIXME Stefan: support multi char dec. sep.
-    {
-      s += '.';
-      ++i;
-      continue;
-    }
-    if ( n == i )
-    {
-      int ml = exp.matchedLength();
-      if ( i + ml < l && expr[ i + ml ] == '!' )
-      {
-        kDebug() << "No cell ref but sheet name" << endl;
-        s += expr[i];
-        ++i;
-        continue;
-      }
-      if ( ( i > 0 ) && ( expr[i - 1] != '!' ) )
-        s += "[.";
-      for ( int j = 0; j < ml; ++j )
-      {
-        s += expr[i];
-        ++i;
-      }
-      s += ']';
-      continue;
-    }
-
-    s += expr[i];
-    ++i;
-  }
-
-  return s;
+    return result;
 }

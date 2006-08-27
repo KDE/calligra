@@ -463,7 +463,7 @@ Tokens Formula::tokens() const
   return scan( d->expression, locale );
 }
 
-Tokens Formula::scan( const QString& expr, KLocale* locale ) const
+Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
 {
   // to hold the result
   Tokens tokens;
@@ -678,8 +678,9 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
 
        else
        {
+         // the aposthrophe itself
+         tokenText.append( ex[i++] );
          // must be followed by '!', otherwise we have a string in ''
-         i++;
          if( ex[i] == '!' )
          {
            tokenText.append( ex[i++] );

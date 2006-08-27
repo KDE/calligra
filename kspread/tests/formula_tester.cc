@@ -368,8 +368,8 @@ void FormulaOasisConversionTester::run()
   CHECK_OASIS( "Sheet2!A1", "Sheet2.A1" );
   CHECK_OASIS( "'Sheet 2'!A1", "'Sheet 2'.A1" );
   CHECK_OASIS( "=A1", "=[.A1]" );
-  CHECK_OASIS( "=A1:A4", "=[.A1:A4]" );
-  CHECK_OASIS( "=A$1:$A4", "=[.A$1:$A4]" );
+  CHECK_OASIS( "=A1:A4", "=[.A1:.A4]" );
+  CHECK_OASIS( "=A$1:$A4", "=[.A$1:.$A4]" );
   CHECK_OASIS( "=Sheet2!A1", "=[Sheet2.A1]" );
   CHECK_OASIS( "='Sheet 2'!A1", "=['Sheet 2'.A1]" );
 
@@ -395,6 +395,7 @@ void FormulaOasisConversionTester::checkOasis( const char *file, int line, const
 
   KLocale locale("en_US");
   locale.setDecimalSymbol(",");
+  locale.setThousandsSeparator(" ");
 
   // KSpread -> OpenDocument
   QString formula = Oasis::encodeFormula( localeFormula, &locale );
