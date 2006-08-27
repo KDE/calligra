@@ -240,10 +240,23 @@ public:
      * Sets the value for this cell.
      */
     void setValue( const Value& value );
-    /** Like setValue, but also sets formatting and input text. Can therefore
-    be used as a replacement for setCellText, if we don't need to parse. */
-    void setCellValue (const Value &v, FormatType fmtType = No_format,
-  const QString &txt = QString::null);
+
+    /**
+     * Sets the value for this cell and its formatting and input text, if
+     * appropriate. Can therefore be used as a replacement for setCellText,
+     * if we don't need to parse.
+     *
+     * If \p inputText is empty and the cell has NO formula, the input text
+     * is created from \p value .
+     *
+     * \param value the new cell value
+     * \param fmtType the formatting type
+     * \param inputText the new input text
+     *
+     * \note Calls setValue() after setting the formatting and input text.
+     */
+    void setCellValue (const Value& value, FormatType fmtType = No_format,
+                       const QString& inputText = QString::null);
 
     Cell* previousCell() const;
     Cell* nextCell() const;
