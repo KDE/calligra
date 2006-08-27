@@ -146,6 +146,7 @@
  </ToolBar>
 -->
  <ToolBar name="Symbol"><Text>Symbol</Text>
+  <Action name="formula_tokenelement"/>
   <Action name="formula_symbolnames"/>
   <Action name="formula_insertsymbol"/>
  </ToolBar>

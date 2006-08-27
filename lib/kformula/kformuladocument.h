@@ -349,6 +349,7 @@ public:
     KToggleAction* getFormatItalicAction() { return m_formatItalicAction; }
 
     KSelectAction* getFontFamilyAction() { return m_fontFamily; }
+    KSelectAction* getTokenElementAction() { return m_tokenElement; }
 
     SymbolType leftBracketChar() const  { return m_leftBracketChar; }
     SymbolType rightBracketChar() const { return m_rightBracketChar; }
@@ -414,6 +415,7 @@ public slots:
     void symbolNames();
 
     void fontFamily();
+    void tokenElement();
 
 private:
 
@@ -471,6 +473,7 @@ private:
     SymbolAction* m_symbolNamesAction;
 
     KSelectAction* m_fontFamily;
+    KSelectAction* m_tokenElement;
 
     SymbolType m_leftBracketChar;
     SymbolType m_rightBracketChar;

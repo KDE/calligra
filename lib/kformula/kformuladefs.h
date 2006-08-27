@@ -151,6 +151,13 @@ enum CharFamily {
     anyFamily
 };
 
+enum TokenElementType {
+    identifierElement,
+    operatorElement,
+    numberElement,
+    textElement,
+    anyElement
+};
 
 /**
  * The struct used to store static font data.
@@ -304,7 +311,8 @@ enum RequestID {
     req_removeRow,
     req_formatBold,
     req_formatItalic,
-    req_formatFamily
+    req_formatFamily,
+    req_formatTokenElement
 };
 
 
@@ -391,6 +399,13 @@ class CharFamilyRequest : public Request {
 public:
     CharFamilyRequest( CharFamily cf ) : Request( req_formatFamily ), m_charFamily( cf ) {}
     CharFamily charFamily() const { return m_charFamily; }
+};
+
+class TokenElementRequest : public Request {
+    TokenElementType m_tokenElement;
+public:
+    TokenElementRequest( TokenElementType te ) : Request( req_formatTokenElement ), m_tokenElement( te ) {}
+    TokenElementType tokenElement() const { return m_tokenElement; }
 };
 
 

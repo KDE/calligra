@@ -656,6 +656,17 @@ void DocumentWrapper::createActions( KActionCollection* collection )
                                          collection, "formula_fontfamily");
     m_fontFamily->setItems( ff );
     m_fontFamily->setEnabled( false );
+
+    QStringList et;
+    et.append( i18n( "Identifier" ) );
+    et.append( i18n( "Operator" ) );
+    et.append( i18n( "Number" ) );
+    et.append( i18n( "Text" ) );
+    m_tokenElement = new KSelectAction( i18n( "Token Type" ),
+                                     0, this, SLOT( tokenElement() ),
+                                     collection, "formula_tokenelement" );
+    m_tokenElement->setItems( et );
+//    m_tokenElements->setEnabled( true );
 }
 
 
@@ -1101,6 +1112,23 @@ void DocumentWrapper::fontFamily()
         case 3: cf = doubleStruckFamily; break;
         }
         CharFamilyRequest r( cf );
+        formula()->performRequest( &r );
+    }
+}
+
+
+void DocumentWrapper::tokenElement()
+{
+    if ( hasFormula() ) {
+        int i = m_tokenElement->currentItem();
+        TokenElementType te = anyElement;
+        switch( i ) {
+        case 0: te = identifierElement; break;
+        case 1: te = operatorElement; break;
+        case 2: te = numberElement; break;
+        case 3: te = textElement; break;
+        }
+        TokenElementRequest r( te );
         formula()->performRequest( &r );
     }
 }
