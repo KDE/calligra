@@ -461,16 +461,11 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
     // We already owned the cursor. Ask next child then.
     else if (from == this) {
         if (cursor->getPos() > 0) {
-            if (cursor->isSelectionMode()) {
-                cursor->setTo(this, cursor->getPos()-1);
+            cursor->setTo(this, cursor->getPos()-1);
 
-                // invisible elements are not visible so we move on.
-                if (children.at(cursor->getPos())->isInvisible()) {
-                    moveLeft(cursor, this);
-                }
-            }
-            else {
-                children.at(cursor->getPos()-1)->moveLeft(cursor, this);
+            // invisible elements are not visible so we move on.
+            if (children.at(cursor->getPos())->isInvisible()) {
+                moveLeft(cursor, this);
             }
         }
         else {
@@ -488,7 +483,12 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
     // something is wrong.
     else {
         int fromPos = children.find(from);
-        cursor->setTo(this, fromPos);
+        if ( fromPos > 0 ) {
+            children.at( fromPos - 1)->moveLeft( cursor, this );
+        }
+        else {
+            cursor->setTo(this, fromPos);
+        }
         if (cursor->isSelectionMode()) {
             cursor->setMark(fromPos+1);
         }
@@ -519,17 +519,12 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         uint pos = cursor->getPos();
 		kdWarning() << "Cursor position: " << pos << endl;
         if (pos < children.count()) {
-            if (cursor->isSelectionMode()) {
-                kdWarning() << "Cursor pos++\n";
-                cursor->setTo(this, pos+1);
-
-                // invisible elements are not visible so we move on.
-                if (children.at(pos)->isInvisible()) {
-                    moveRight(cursor, this);
-                }
-            }
-            else {
-                children.at(pos)->moveRight(cursor, this);
+            kdWarning() << "Cursor pos++\n";
+            cursor->setTo(this, pos+1);
+            
+            // invisible elements are not visible so we move on.
+            if (children.at(pos)->isInvisible()) {
+                moveRight(cursor, this);
             }
         }
         else {
@@ -547,7 +542,12 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     // something is wrong.
     else {
         int fromPos = children.find(from);
-        cursor->setTo(this, fromPos+1);
+        if ( fromPos < children.count() ) {
+            children.at( fromPos + 1 )->moveDown( cursor, this );
+        }
+        else {
+            cursor->setTo(this, fromPos+1);
+        }
         if (cursor->isSelectionMode()) {
             cursor->setMark(fromPos);
         }
@@ -601,6 +601,20 @@ void SequenceElement::moveUp(FormulaCursor* cursor, BasicElement* from)
     if (from == getParent()) {
         moveRight(cursor, this);
     }
+    else if ( from == this ) {
+        if ( getParent() != 0 ) {
+            uint pos = cursor->getPos();
+            if ( pos < (children.count() - 1) / 2 ) {
+                getParent()->moveLeft( cursor, this );
+            }
+            else {
+                getParent()->moveRight( cursor, this );
+            }
+        }
+        else {
+                formula()->moveOutAbove( cursor );
+        }
+    }
     else {
         if (getParent() != 0) {
             getParent()->moveUp(cursor, this);
@@ -619,14 +633,23 @@ void SequenceElement::moveUp(FormulaCursor* cursor, BasicElement* from)
 void SequenceElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 {
     if (from == getParent()) {
-        moveRight(cursor, this);
+        cursor->setTo(this, 0);
+        from->entered( this );
+    }
+    else if (from == this) {
+        uint pos = cursor->getPos();
+        if (pos < children.count()) {
+                children.at(pos)->moveDown(cursor, this);
+        }
     }
     else {
         if (getParent() != 0) {
             getParent()->moveDown(cursor, this);
         }
         else {
-            formula()->moveOutBelow( cursor );
+            cursor->setTo( this, children.count() );
+            from->entered( this );
+//            formula()->moveOutBelow( cursor );
         }
     }
 }
