@@ -26,6 +26,7 @@
 
 #include <qdom.h>
 #include <qstring.h>
+#include <qstringlist.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -132,6 +133,17 @@ void Schedule::calcResourceOverbooked() {
             break;
         }
     }
+}
+
+QStringList Schedule::overbookedResources() const {
+    QStringList rl;
+    QPtrListIterator<Appointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        if (it.current()->resource()->isOverbooked(it.current()->startTime(), it.current()->endTime())) {
+            rl += it.current()->resource()->resource()->name();
+        }
+    }
+    return rl;
 }
 
 bool Schedule::loadXML(const QDomElement &sch) {
@@ -615,10 +627,12 @@ void NodeSchedule::printDebug(QString indent) {
     kdDebug()<<indent<<"Earliest start: "<<earliestStart.toString()<<endl;
     kdDebug()<<indent<<"Latest finish: " <<latestFinish.toString()<<endl;
 
-    kdDebug()<<indent<<"Resource overbooked="<<resourceOverbooked<<endl;
     kdDebug()<<indent<<"resourceError="<<resourceError<<endl;
     kdDebug()<<indent<<"schedulingError="<<schedulingError<<endl;
     kdDebug()<<indent<<"resourceNotAvailable="<<resourceNotAvailable<<endl;
+    kdDebug()<<indent<<"Resource overbooked="<<resourceOverbooked<<endl;
+    kdDebug()<<indent<<"  "<<overbookedResources()<<endl;
+
     kdDebug()<<indent<<"inCriticalPath="<<inCriticalPath<<endl;
     kdDebug()<<indent<<endl;
     kdDebug()<<indent<<"workStartTime="<<workStartTime.toString()<<endl;

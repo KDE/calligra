@@ -55,6 +55,7 @@
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qstringlist.h>
 #include <qvaluelist.h>
 #include <qpainter.h> 
 #include <qpaintdevicemetrics.h> 
@@ -607,10 +608,6 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
             sts += "\n" + i18n("No resource assigned");
             ok = false;
         }
-        if (task->resourceOverbooked()) {
-            sts += "\n" + i18n("Resource overbooked");
-            ok = false;
-        }
         if (task->resourceNotAvailable()) {
             sts += "\n" + i18n("Resource not available");
             ok = false;
@@ -618,6 +615,16 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         if (task->schedulingError()) {
             sts += "\n" + i18n("Scheduling conflict");
             ok = false;
+        }
+        if (task->effortMetError()) {
+            sts += "\n" + i18n("Requested effort could not be met");
+            ok = false;
+        }
+        if (task->resourceOverbooked()) {
+            ok = false;
+            QStringList rl = task->overbookedResources();
+            sts += "\n" + i18n("arg: list of resources", "Resource overbooked: %1").arg(rl.join(","));
+            
         }
         if (!m_showNoInformation && m_project && m_project->notScheduled()) {
             ok = false;

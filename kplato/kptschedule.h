@@ -28,6 +28,7 @@
 #include <qstring.h>
 
 class QDomElement;
+class QStringList;
 
 namespace KPlato
 {
@@ -101,7 +102,8 @@ public:
     
     virtual bool isOverbooked() const { return false; }
     virtual bool isOverbooked(const DateTime &/*start*/, const DateTime &/*end*/) const { return false; }
-
+    virtual QStringList overbookedResources() const;
+    
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const;
         
     /// Returns the total planned effort for this task (or subtasks) 
