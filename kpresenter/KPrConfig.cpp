@@ -976,7 +976,7 @@ void KPrConfigurePathPage::slotModifyPath()
             KUrlRequesterDlg * dlg = new KUrlRequesterDlg( item->text(1), 0L);
             dlg->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
             if ( dlg->exec() )
-                item->setText( 1, dlg->selectedURL().path());
+                item->setText( 1, dlg->selectedUrl().path());
             delete dlg;
         }
         else if ( item->text(0)==i18n("Backup Path"))

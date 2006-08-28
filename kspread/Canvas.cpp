@@ -1115,7 +1115,7 @@ void Canvas::processLeftClickAnchor()
     bool isLocalLink = (d->anchor.indexOf("file:") == 0);
     if ( !isRefLink )
     {
-	QString type=KMimeType::findByURL(d->anchor, 0, isLocalLink)->name();
+	QString type=KMimeType::findByUrl(d->anchor, 0, isLocalLink)->name();
 
 	if ( KRun::isExecutableFile( d->anchor , type ) )
 	{

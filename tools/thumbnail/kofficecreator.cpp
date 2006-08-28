@@ -109,7 +109,7 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
 
 void KOfficeCreator::timerEvent(QTimerEvent *)
 {
-    m_doc->closeURL();
+    m_doc->closeUrl();
     m_completed = true;
 }
 

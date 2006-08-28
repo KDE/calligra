@@ -168,7 +168,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
     return false;
   }*/
   
-  KMimeType::Ptr mimeType = KMimeType::findByURL( url );
+  KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().toLatin1() );
 
   KTempFile* tmpFile = 0;

@@ -133,8 +133,8 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     for( QStringList::ConstIterator it = fileList.begin();it != fileList.end(); ++it )
     {
         KDesktopFile f(*it, true /* read only */);
-        if ( !f.readURL().isEmpty() )
-            recentFile->insertItem( index++, f.readURL() );
+        if ( !f.readUrl().isEmpty() )
+            recentFile->insertItem( index++, f.readUrl() );
     }
     if( recentFile->count()==0 )
     {
