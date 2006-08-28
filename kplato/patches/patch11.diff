@@ -1,0 +1,43 @@
+Index: kpttask.cc
+===================================================================
+--- kpttask.cc	(revision 576253)
++++ kpttask.cc	(working copy)
+@@ -1461,8 +1461,11 @@
+ }
+ 
+ Duration Task::positiveFloat() {
+-    if (m_currentSchedule == 0)
++    if (m_currentSchedule == 0 || 
++        m_currentSchedule->schedulingError ||
++        effortMetError()) {
+         return Duration::zeroDuration;
++    }
+     Duration f;
+     if (type() == Node::Type_Milestone) {
+         if (m_currentSchedule->startTime < m_currentSchedule->latestFinish) {
+@@ -1546,6 +1549,12 @@
+     Node::setCurrentSchedule(id);
+ }
+ 
++bool Task::effortMetError() const {
++    if (m_currentSchedule->notScheduled) {
++        return false;
++    }
++    return m_currentSchedule->plannedEffort() < effort()->effort(static_cast<Effort::Use>(m_currentSchedule->type()));
++}
+ 
+ #ifndef NDEBUG
+ void Task::printDebug(bool children, QCString indent) {
+Index: kpttask.h
+===================================================================
+--- kpttask.h	(revision 576253)
++++ kpttask.h	(working copy)
+@@ -247,6 +247,8 @@
+     /// Set current schedule to schedule with identity id, for me nd my children
+     virtual void setCurrentSchedule(long id);
+     
++    virtual bool effortMetError() const;
++    
+     struct Progress {
+         Progress() { started = finished = false; percentFinished = 0; }
+         bool operator==(struct Progress &p) {

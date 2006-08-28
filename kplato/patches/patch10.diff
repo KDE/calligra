@@ -1,0 +1,32 @@
+Index: kptcalendar.cc
+===================================================================
+--- kptcalendar.cc	(revision 578030)
++++ kptcalendar.cc	(revision 578031)
+@@ -723,7 +723,8 @@
+     if (m_parent && !m_parent->isDeleted()) {
+         return m_parent->effort(date, start, end);
+     }
+-    return Duration::zeroDuration;
++    // Check default calendar
++    return project()->defaultCalendar()->effort(date, start, end);
+ }
+ 
+ Duration Calendar::effort(const DateTime &start, const DateTime &end) const {
+@@ -768,7 +769,7 @@
+     if (m_parent && !m_parent->isDeleted()) {
+         return m_parent->firstInterval(date, startTime, endTime);
+     }
+-    return QPair<QTime, QTime>(QTime(), QTime());
++    return project()->defaultCalendar()->firstInterval(date, startTime, endTime);
+ }
+ 
+ QPair<DateTime, DateTime> Calendar::firstInterval(const DateTime &start, const DateTime &end) const {
+@@ -821,7 +822,7 @@
+     if (m_parent && !m_parent->isDeleted()) {
+         return m_parent->hasInterval(date, startTime, endTime);
+     }
+-    return false;
++    return project()->defaultCalendar()->hasInterval(date, startTime, endTime);
+ }
+ 
+ bool Calendar::hasInterval(const DateTime &start, const DateTime &end) const {
