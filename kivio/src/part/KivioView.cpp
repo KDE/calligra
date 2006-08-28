@@ -96,7 +96,7 @@ void KivioView::initGUI()
   layout->addWidget(m_canvasController, 0, 0);
 
   KoToolManager::instance()->addControllers(m_canvasController, this);
-  shell()->addDockWidget(Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox("Kivio"));
+  shell()->addDockWidget(Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox(this, "Kivio"));
 
   KoShapeSelector *selector = new KoShapeSelector(0, m_canvasController, ".*");
   selector->resize(QSize(100, 200));

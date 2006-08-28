@@ -1772,7 +1772,7 @@ void KarbonView::createResourceDock()
 }
 
 QDockWidget *KarbonView::createToolBox() {
-	return KoToolManager::instance()->toolBox("Karbon");
+	return KoToolManager::instance()->toolBox(this, "Karbon");
 }
 
 

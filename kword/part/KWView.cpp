@@ -199,7 +199,7 @@ void KWView::editFrameProperties() {
 }
 
 QDockWidget *KWView::createToolBox() {
-    return KoToolManager::instance()->toolBox("KWord");
+    return KoToolManager::instance()->toolBox(this, "KWord");
 }
 
 #include "KWView.moc"
