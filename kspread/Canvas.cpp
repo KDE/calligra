@@ -94,7 +94,7 @@
 #include "Doc.h"
 #include "Editors.h"
 #include "Global.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Map.h"
 #include "Format.h"
 #include "Selection.h"

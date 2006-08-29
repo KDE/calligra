@@ -19,7 +19,7 @@
 
 #include "ValueConverter.h"
 
-#include "Locale.h"
+#include "Localization.h"
 #include "ValueParser.h"
 
 using namespace KSpread;

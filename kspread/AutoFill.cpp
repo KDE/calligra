@@ -38,7 +38,7 @@
 #include <kinstance.h>
 
 #include "Doc.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Sheet.h"
 #include "Undo.h"
 #include "Value.h"

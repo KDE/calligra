@@ -36,7 +36,7 @@
 #include "DependencyManager.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "RecalcManager.h"
 #include "Sheet.h"
 #include "StyleManager.h"

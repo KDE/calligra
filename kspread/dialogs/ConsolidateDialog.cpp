@@ -49,7 +49,7 @@
 #include <Canvas.h>
 #include <Doc.h>
 #include <Global.h>
-#include <Locale.h>
+#include <Localization.h>
 #include <Sheet.h>
 #include <Util.h>
 #include <View.h>

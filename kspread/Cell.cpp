@@ -65,7 +65,7 @@
 #include "Util.h"
 #include "LoadingInfo.h"
 #include "GenValidationStyle.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Value.h"
 #include "View.h"
 #include "Value.h"

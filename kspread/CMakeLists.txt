@@ -109,7 +109,7 @@ SET (kspreadcommon_LIB_SRCS
 	GeneralProperty.cpp
 	GenValidationStyle.cpp
 	Handler.cpp
-	Locale.cpp
+	Localization.cpp
 	Manipulator.cpp
 	Map.cpp
 	MapAdaptor.cpp

@@ -67,7 +67,7 @@
 #include "Formula.h"
 #include "Functions.h"
 #include "LoadingInfo.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -180,7 +180,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->loadingInfo = 0;
 
   d->map = new Map( this, "Map" );
-  d->locale = new Locale;
+  d->locale = new Localization;
   d->styleManager = new StyleManager();
 
   d->parser = new ValueParser( d->locale );
@@ -445,7 +445,7 @@ QDomDocument Doc::saveXML()
     spread.setAttribute( "mime", "application/x-kspread" );
     spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
 
-    QDomElement dlocale = ((Locale *)locale())->save( doc );
+    QDomElement dlocale = ((Localization *)locale())->save( doc );
     spread.appendChild( dlocale );
 
     if (d->refs.count() != 0 )
@@ -993,7 +993,7 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
   // <locale>
   KoXmlElement loc = spread.namedItem( "locale" ).toElement();
   if ( !loc.isNull() )
-      ((Locale *) locale())->load( loc );
+      ((Localization *) locale())->load( loc );
 
   emit sigProgress( 5 );
 

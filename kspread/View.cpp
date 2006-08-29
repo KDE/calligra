@@ -116,7 +116,7 @@
 #include "Events.h"
 #include "Global.h"
 #include "Handler.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Map.h"
 #include "RecalcManager.h"
 #include "RowColumnManipulators.h"

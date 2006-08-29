@@ -32,7 +32,7 @@
 #include "View.h"
 #include "Sheet.h"
 #include "Selection.h"
-#include "Locale.h"
+#include "Localization.h"
 
 #include <QVariant>
 #include <QComboBox>

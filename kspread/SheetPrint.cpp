@@ -23,7 +23,7 @@
 #include "Format.h"
 #include "Sheet.h"
 #include "Selection.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Doc.h"
 #include "Undo.h"
 

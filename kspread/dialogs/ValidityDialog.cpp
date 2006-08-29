@@ -39,7 +39,7 @@
 
 #include "Canvas.h"
 #include "Doc.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Manipulator.h"
 #include "Selection.h"
 #include "Sheet.h"

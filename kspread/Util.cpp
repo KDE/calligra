@@ -27,7 +27,7 @@
 
 #include "Formula.h"
 #include "Doc.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "Style.h"

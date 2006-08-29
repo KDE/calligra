@@ -22,7 +22,7 @@
 #include "Damages.h"
 #include "Canvas.h"
 #include "Doc.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "Undo.h"

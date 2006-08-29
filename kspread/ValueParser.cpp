@@ -22,7 +22,7 @@
 
 #include "Cell.h"
 #include "Format.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Value.h"
 
 using namespace KSpread;

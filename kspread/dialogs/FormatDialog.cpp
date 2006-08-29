@@ -41,7 +41,7 @@
 #include "FormatDialog.h"
 #include "Cell.h"
 #include "Doc.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Sheet.h"
 #include "Format.h"
 #include "Style.h"

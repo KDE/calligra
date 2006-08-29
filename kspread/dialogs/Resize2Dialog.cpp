@@ -43,7 +43,7 @@
 #include <Canvas.h>
 #include <Doc.h>
 #include <Global.h>
-#include <Locale.h>
+#include <Localization.h>
 #include <Format.h>
 #include <Sheet.h>
 #include <Undo.h>

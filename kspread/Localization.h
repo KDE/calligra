@@ -21,14 +21,6 @@
 #ifndef KSPREAD_LOCALE_H
 #define KSPREAD_LOCALE_H
 
-#ifdef __APPLE__
-/* FIXME: the proper fix is to rename Locale.h, it conflicts
-with <locale.h> on case-insensitive filesystems but for
-now I just want to make it work */
-
-#include_next <locale.h>
-#endif
-
 #include <klocale.h>
 #include <KoXmlReader.h>
 
@@ -38,10 +30,10 @@ class QDomDocument;
 namespace KSpread
 {
 
-class Locale : public KLocale
+class Localization : public KLocale
 {
 public:
-    Locale();
+    Localization();
 
     void load( const KoXmlElement& element );
     QDomElement save( QDomDocument& doc ) const;

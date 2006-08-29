@@ -36,7 +36,7 @@
 
 #include "AutoFill.h"
 #include "Factory.h"
-#include "Locale.h"
+#include "Localization.h"
 
 #include "ListDialog.h"
 

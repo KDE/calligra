@@ -63,7 +63,7 @@
 #include "Cell.h"
 #include "Canvas.h"
 #include "LayoutDialog.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"

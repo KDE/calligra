@@ -21,7 +21,7 @@
 #include "Cell.h"
 #include "Doc.h"
 #include "Global.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Map.h"
 #include "Format.h"
 #include "Sheet.h"

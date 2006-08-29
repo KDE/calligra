@@ -31,7 +31,7 @@
 
 #include "Canvas.h"
 #include "Doc.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Util.h"
 #include "View.h"
 #include "Selection.h"

@@ -37,7 +37,7 @@
 #include "Util.h"
 #include "Editors.h"
 #include "Doc.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"

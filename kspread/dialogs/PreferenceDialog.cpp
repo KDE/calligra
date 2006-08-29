@@ -49,7 +49,7 @@
 #include "Canvas.h"
 #include "Border.h"
 #include "View.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Editors.h"
 
 #include "PreferenceDialog.h"
@@ -184,7 +184,7 @@ void parameterLocale::apply()
 void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale=true;
-    static_cast<Locale*>(m_pView->doc()->locale())->defaultSystemConfig( );
+    static_cast<Localization*>(m_pView->doc()->locale())->defaultSystemConfig( );
     KLocale* locale=m_pView->doc()->locale();
     updateToMatchLocale( locale );
 }

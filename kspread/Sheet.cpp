@@ -70,7 +70,7 @@
 #include "Doc.h"
 #include "Global.h"
 #include "LoadingInfo.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Map.h"
 #include "Object.h"
 #include "RecalcManager.h"

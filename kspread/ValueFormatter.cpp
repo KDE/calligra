@@ -21,7 +21,7 @@
 #include "ValueFormatter.h"
 
 #include "Cell.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Util.h"
 #include "ValueConverter.h"
 

@@ -30,7 +30,7 @@
 #include <kmessagebox.h>
 
 #include "Doc.h"
-#include "Locale.h"
+#include "Localization.h"
 #include "Sheet.h"
 #include "View.h"
 #include "Selection.h"
