@@ -759,13 +759,15 @@ Value func_round (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: EVEN
 Value func_even (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->isEven (args[0]);
+  const Value value = calc->roundUp (args[0], 0);
+  return calc->isZero( calc->mod(value, 2) ) ? value : calc->add(value, 1);
 }
 
 // Function: ODD
 Value func_odd (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return (!calc->isEven (args[0]));
+  const Value value = calc->roundUp (args[0], 0);
+  return calc->isZero( calc->mod(value, 2) ) ? calc->add(value, 1) : value;
 }
 
 Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
