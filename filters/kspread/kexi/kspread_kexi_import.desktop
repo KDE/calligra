@@ -10,6 +10,7 @@ Name[it]=Filtro di importazione Kexi per KSpread
 Name[ja]=KSpread Kexi インポートフィルタ
 Name[nl]=Kexi-importfilter voor KSpread
 Name[pt_BR]=Filtro de importação do Kexi para o KSpread
+Name[sk]=Kexi filter pre import do KSpread
 Name[sv]=Kexi-importfilter för Kspread
 Name[zh_TW]=Kexi 的 KSpread 匯入過濾程式
 ServiceTypes=KOfficeFilter
