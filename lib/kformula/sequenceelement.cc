@@ -542,7 +542,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     // something is wrong.
     else {
         int fromPos = children.find(from);
-        if ( fromPos < children.count() ) {
+        if ( fromPos < children.count() - 1 ) {
             children.at( fromPos + 1 )->moveDown( cursor, this );
         }
         else {
