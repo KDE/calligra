@@ -63,7 +63,7 @@ KFORMULA_NAMESPACE_BEGIN
 struct entityMap {
     static int size();
     int operator<( const char* right ) const {
-	    return strcmp( name, right ) < 0;
+	    return qstrcmp( name, right ) < 0;
     }
 	const char* name;
 	const uint unicode;
@@ -98,6 +98,15 @@ int entityMap::size()
 KFORMULA_NAMESPACE_END
 	'''
 	
+def name_cmp( a, b ):
+
+	if a[0] < b[0]:
+		return -1
+	if a[0] > b[0]:
+		return 1
+	print 'WARNING: Same name in entity: ' + a[0] + ', ' + b[0]
+	return 0;
+
 def parse( fr, fw ):
 	line = fr.readline()
 	while line != "" and string.find( line, '<pre>' ) == -1:
@@ -119,7 +128,7 @@ def parse( fr, fw ):
 			entries.append( [name, '0x' + number[1:]] )
 		line = fr.readline().strip()
 
-	entries.reverse()
+	entries.sort( name_cmp, None, True )
 	fd_list = open( 'entity.list', 'w' )
 	while True:
 		e = entries.pop()
