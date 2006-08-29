@@ -53,7 +53,7 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
         else if ( n.isEntityReference() ) {
             QString entity = n.toEntityReference().nodeName();
             const entityMap* begin = entities;
-            const entityMap* end = entities + entityMap::size() / sizeof( entityMap );
+            const entityMap* end = entities + entityMap::size();
             const entityMap* pos = std::lower_bound( begin, end, entity.ascii() );
             if ( pos == end || QString( pos->name ) != entity ) {
                 kdWarning() << "Invalid entity refererence: " << entity << endl;
