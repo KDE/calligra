@@ -1,5 +1,7 @@
 project(karbon)
 
+find_package(LCMS)
+
 #Set the correct compiler options
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
    # 32 bit
@@ -35,7 +37,8 @@ include_directories(
 		${CMAKE_BINARY_DIR}/karbon/dockers 
 		${CMAKE_SOURCE_DIR}/karbon/dialogs 
 		${CMAKE_BINARY_DIR}/karbon/dialogs
-		${FREETYPE_INCLUDE_DIR})
+		${FREETYPE_INCLUDE_DIR}
+		${LCMS_INCLUDE_DIR})
 
 add_subdirectory( commands )
 add_subdirectory( visitors )
