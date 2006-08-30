@@ -49,6 +49,7 @@ GenericName[uz]=Маълумот база яратувчи
 GenericName[zh_CN]=数据库创建器
 GenericName[zh_TW]=資料庫建立程式
 Comment=Develop desktop database applications
+Comment[ca]=Aplicacions de desenvolupament de bases de dades d'escriptori
 Comment[da]=Udvikl databaseprogrammer for desktoppen
 Comment[de]=Desktop-Datenbankanwendungen entwickeln
 Comment[es]=Desarrollo de aplicaciones de escritorio para base de datos
