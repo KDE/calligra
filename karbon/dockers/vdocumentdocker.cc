@@ -56,10 +56,7 @@
 #include "vqpainter.h"
 #include "vlayer.h"
 #include "vlayercmd.h"
-#include "vdeletecmd.h"
 #include "vzordercmd.h"
-#include "vgroupcmd.h"
-#include "vungroupcmd.h"
 #include "vselection.h"
 #include "vstroke.h"
 #include "vcanvas.h"
@@ -1148,11 +1145,12 @@ void
 VLayersTab::slotCommandExecuted( VCommand* command )
 {
 	// sync listview on changing layers or deleting/undeleting or grouping/ungrouping objects
+/* TODO Port to flake
 	if( dynamic_cast<VLayerCmd*>( command ) 
 	|| dynamic_cast<VDeleteCmd*>( command ) 
 	|| dynamic_cast<VGroupCmd*>( command ) 
 	|| dynamic_cast<VUnGroupCmd*>( command ) 
 	|| dynamic_cast<VZOrderCmd*>( command ) )
-		updateLayers();
+		updateLayers();*/
 }
 #include "vdocumentdocker.moc"

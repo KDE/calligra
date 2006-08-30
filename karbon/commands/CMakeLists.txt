@@ -1,17 +1,13 @@
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOPAINTER_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon )
 
 set(karboncommands_SRCS
-    valigncmd.cc 
     vbooleancmd.cc 
     vcleanupcmd.cc 
     vclipartcmd.cc 
     vclosepathcmd.cc 
     vcommand.cc 
-    vdeletecmd.cc 
-    vdistributecmd.cc 
     vfillcmd.cc 
     vflattencmd.cc 
-    vgroupcmd.cc 
     vdeletenodescmd.cc 
     vlayercmd.cc 
     vreplacingcmd.cc 
@@ -19,7 +15,6 @@ set(karboncommands_SRCS
     vstrokecmd.cc 
     vtransformcmd.cc 
     vinsertcmd.cc 
-    vungroupcmd.cc 
     vzordercmd.cc
     )
 
