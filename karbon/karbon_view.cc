@@ -558,6 +558,7 @@ KarbonView::editDeleteSelection()
 	KoSelectionSet selectedShapes = selection->selectedShapes();
 	if( selectedShapes.count() < 1)
 		return;
+	selection->deselectAll();
 
 	KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes );
 	part()->commandHistory()->addCommand( cmd, true );
