@@ -57,8 +57,8 @@ bool KHTMLReader::filter(KUrl url) {
 	_html->setPluginsEnabled(false);
 	_html->setJavaEnabled(false);
 	_html->setMetaRefreshEnabled(false);
-	if (_html->openURL(url) == false) {
-		kWarning(30503) << "openURL returned false" << endl;
+	if (_html->openUrl(url) == false) {
+		kWarning(30503) << "openUrl returned false" << endl;
 		return false;
 	}
 
