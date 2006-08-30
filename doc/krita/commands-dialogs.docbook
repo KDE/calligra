@@ -195,8 +195,8 @@ resulting in relatively sharp lines.
 
 <para>
 With this dialog, you can rotate the image. The top part of the dialog shows
-the result of the rotation in the form of a change in dimension (if any) and
-visual feedback. Under <guilabel>Direction</guilabel> you can choose between 
+the result of the rotation in the form of a change in dimension (if any).
+Under <guilabel>Direction</guilabel> you can choose between 
 rotating clockwise and counter-clockwise. Under <guilabel>Angle</guilabel>,
 you can set the amount of rotation. 90, 180 and 270 degrees can be selected
 using the respective option button, other amounts need to be specified with
@@ -300,6 +300,7 @@ The X and Y shearing angles can be set using the two spin boxes.
 </para>
 
 <para>
+(This dialog is still to be described.)
 </para>
 
 </sect3>
@@ -622,7 +623,13 @@ preview yourself.
 </para>
 
 <para>
-(This dialog is still to be described.)
+This dialog allows you to customize the way your image is blurred. The
+<guilabel>Half-width</guilabel> and <guilabel>Half-height</guilabel> spinboxes
+determine the size of the areas of your image that are consecutively blurred.
+With the <guilabel>Strength</guilabel> spinbox you can set how hard the
+blurring should be applied, and with the <guilabel>Angle</guilabel> spinbox
+you can add a rotation to the area. The <guilabel>Shape</guilabel> setting,
+finally, allows you to choose between circular and rectangular areas
 </para>
 
 </sect3>
@@ -778,7 +785,14 @@ from old to new color levels, for each of the channels separately.
 </para>
 
 <para>
-(This dialog is still to be described.)
+With this dialog, you can make parts of the image having a certain color
+transparent (officially <quote>alpha-transparent</quote>). You can select the
+color you want to remove from the image (replacing it with transparency) with
+the <guilabel>Color</guilabel> swatch, and how much a color may differ from
+the selected one before it is considered not to match, with the
+<guilabel>Threshold</guilabel> spinbox. Setting a threshold of zero (0)
+ensures that only pixels with the exact matching color will be made
+transparent, higher thresholds will make other colors match as well.
 </para>
 
 </sect3>
@@ -801,7 +815,10 @@ from old to new color levels, for each of the channels separately.
 </para>
 
 <para>
-(This dialog is still to be described.)
+This dialog lets you copy the colors from one image (the <guilabel>Reference
+Image</guilabel>) to the current one. The colors in both image are compared
+and each color in the one you are working with, will be replaced by the
+nearest one in the reference image.
 </para>
 
 </sect3>
@@ -945,7 +962,11 @@ See the description of the respective filter for details.
 </para>
 
 <para>
-(This filter is still to be described.)
+This dialog allows you to customize a Gaussian noise reduction. The
+<guilabel>Threshold</guilabel> setting is a measure for how much noise should
+be removed (&ie; how quickly a <quote>lonely</quote> pixel should be made
+equal to its surroundings), while the <guilabel>Window Size</guilabel> setting
+determines the radius of the area considered when changing pixels.
 </para>
 
 </sect3>
@@ -969,7 +990,17 @@ See the description of the respective filter for details.
 </para>
 
 <para>
-(This filter is still to be described.)
+With this dialog, you can fix an image which is distorted due to common lens
+anomalies. You can specify a <guilabel>Distortion correction</guilabel>,
+indicating how much the image should be corrected if its
+concaveness / convexness is not right, for areas near the center and areas
+near the edges. If you want an asymmetrical correction, you can specify
+different <guilabel>X</guilabel> and <guilabel>Y</guilabel> coordinates for
+the center (in percentages of the total width and height, measured from the
+top left).
+</para><para>
+You can also correct a too light or too dark image with the
+<guilabel>Brightness correction</guilabel> spinbox.
 </para>
 
 </sect3>
@@ -1106,7 +1137,11 @@ raindrop effects).
 </para>
 
 <para>
-(This filter is still to be described.)
+This filter adds random noise (speckles, or something similar) to your image.
+There are two customizable settings: the amount of noise
+(<guilabel>Level</guilabel> (as a percentage) and the
+<guilabel>Opacity</guilabel> of the noise (should the original color still be
+a bit visible or not).
 </para>
 
 </sect3>
@@ -1129,7 +1164,12 @@ raindrop effects).
 </para>
 
 <para>
-(This filter is still to be described.)
+In this dialog, you can specify parameters for the <guilabel>Random Pick</guilabel>
+filter. The <guilabel>Level</guilabel> setting determines how much pixels will
+be affected (measured as a percentage), the area which is looked in to take a
+new color for a pixel is set with the <guilabel>Size of the window</guilabel>
+setting, and the <guilabel>Opacity</guilabel> of the modifications can be set as
+well.
 </para>
 
 </sect3>
@@ -1178,7 +1218,8 @@ This dialog has one setting: the radius of the rounded corners.
 </para>
 
 <para>
-(This filter is still to be described.)
+In this dialog, you can set the amount of subdivisions with the
+<guilabel>Number of tiles</guilabel> settings.
 </para>
 
 </sect3>
@@ -1202,7 +1243,12 @@ This dialog has one setting: the radius of the rounded corners.
 </para>
 
 <para>
-(This filter is still to be described.)
+Here, you can set the parameters for the <guilabel>Sobel</guilabel> edge
+detection filter. First of all you can determine which directions to sobel in:
+horizontally, vertically, or both. The <guilabel>Keep sign of
+result</guilabel> setting does not affect regular images.
+<guilabel>Make image opaque</guilabel> determines whether the resulting image
+is opaque or transparent.
 </para>
 
 </sect3>
@@ -1226,7 +1272,10 @@ This dialog has one setting: the radius of the rounded corners.
 </para>
 
 <para>
-(This filter is still to be described.)
+This dialog offers three options for the sharpening filter
+<guilabel>Unsharp Mask</guilabel>: the radius (<guilabel>Half-size</guilabel>)
+of the mask, the <guilabel>Amount</guilabel> of sharpening that should be
+done, and the <guilabel>Threshold</guilabel> level.
 </para>
 
 </sect3>
@@ -1250,7 +1299,15 @@ This dialog has one setting: the radius of the rounded corners.
 </para>
 
 <para>
-(This filter is still to be described.)
+For both the horizontal and the vertical components of the wave distortion
+(note: a vertical wave means that the vertical position is dependent on the
+horizontal one, and hence looks like a <quote>W</quote>),
+you can determine four settings here. The <guilabel>Wavelength</guilabel> (a
+shorter wavelength means a more erratical wave), the
+<guilabel>Shift</guilabel> (which point of the wave should be started at), the
+<guilabel>Amplitude</guilabel> (the amount of distortion), and the
+<guilabel>Shape</guilabel> (<guilabel>Sinusoidale</guilabel> or rounded,
+versus <guilabel>Triangle</guilabel> or pointy).
 </para>
 
 </sect3>
@@ -1274,7 +1331,8 @@ This dialog has one setting: the radius of the rounded corners.
 </para>
 
 <para>
-(This filter is still to be described.)
+The only setting here, <guilabel>Threshold</guilabel>, indicates how easily pixels
+are seen as noise that should be removed and made equal to the surrounding area.
 </para>
 
 </sect3>

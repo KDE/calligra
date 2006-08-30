@@ -1672,7 +1672,9 @@ selection.</action></para></listitem>
 <guisubmenu>Colors</guisubmenu>
 <guimenuitem>Color Transfer</guimenuitem>
 </menuchoice></term>
-<listitem><para><action></action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-colortransfer">Color Transfer</link> dialog
+to give the image a new look.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1681,7 +1683,8 @@ selection.</action></para></listitem>
 <guisubmenu>Colors</guisubmenu>
 <guimenuitem>Maximize Channel</guimenuitem>
 </menuchoice></term>
-<listitem><para><action></action></para></listitem>
+<listitem><para><action>Adjusts the colors of each pixel by removing color
+channels that are less abundant.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1690,7 +1693,8 @@ selection.</action></para></listitem>
 <guisubmenu>Colors</guisubmenu>
 <guimenuitem>Minimize Channel</guimenuitem>
 </menuchoice></term>
-<listitem><para><action></action></para></listitem>
+<listitem><para><action>Adjusts the colors of each pixel by removing color
+channels that are abundant.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1954,7 +1958,9 @@ it.</action></para></listitem>
 <guisubmenu>Other</guisubmenu>
 <guimenuitem>Lens Correction...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action></action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-lenscorrection">Lens Correction</link>
+dialog to correct for lens anomalies.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1963,7 +1969,9 @@ it.</action></para></listitem>
 <guisubmenu>Other</guisubmenu>
 <guimenuitem>Random Noise...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action></action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-randomnoise">Random Noise</link> dialog to add
+random noise to the image.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1972,16 +1980,20 @@ it.</action></para></listitem>
 <guisubmenu>Other</guisubmenu>
 <guimenuitem>Random Pick...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action></action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-randompick">Random Pick</link> dialog to
+distort the image.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu>
-<guimenuitem>Lens Correction...</guimenuitem>
+<guimenuitem>Wave...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action></action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-wave">Wave</link> dialog to distort the
+image</action></para></listitem>
 </varlistentry>
 
 
