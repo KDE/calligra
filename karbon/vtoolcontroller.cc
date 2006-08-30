@@ -22,7 +22,6 @@
 #include <vselection.h>
 #include "vtoolcontroller.h"
 #include "vtool.h"
-#include "vtoolbox.h"
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QEvent>
@@ -62,7 +61,7 @@ VToolController::setCurrentTool( VTool *tool )
 		m_currentTool->action()->setChecked( true );
 		m_currentTool->action()->trigger();
 	}
-	m_toolBox->slotSetTool( tool->objectName() );
+	//m_toolBox->slotSetTool( tool->objectName() );
 }
 
 void
@@ -106,6 +105,7 @@ VToolController::keyEvent( QEvent* event )
 	return m_currentTool->keyEvent( event );
 }
 
+#if 0
 void
 VToolController::setUp( KActionCollection *ac, VToolBox * toolbox )
 {
@@ -149,6 +149,7 @@ VToolController::resetToolBox( VToolBox * toolbox )
 		m_currentTool = 0;
 	}
 }
+#endif
 
 VTool *
 VToolController::findTool( const QString &toolName ) const
@@ -161,10 +162,12 @@ VToolController::findTool( const QString &toolName ) const
 	return tool;
 }
 
+#if 0
 void
 VToolController::youAintGotNoToolBox()
 {
 	m_toolBox = 0;
 	//m_currentTool = currentTool();
 }
+#endif
 

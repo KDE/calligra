@@ -111,7 +111,6 @@
 #include "vstatebutton.h"
 #include "vcanvas.h"
 #include "KoCanvasController.h"
-#include "vtoolbox.h"
 #include "karbon_drag.h"
 // #include "vselectnodestool.h"
 
@@ -138,7 +137,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 {
 	debugView("KarbonView::KarbonView");
 
-	m_toolbox = 0L;
 	m_toolController = new VToolController( this );
 	m_toolController->init();
 
@@ -225,6 +223,23 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		createLayersTabDock();
 		createResourceDock();
 
+		m_strokeFillPreview = new VStrokeFillPreview( part() );
+		paletteManager()->addWidget( m_strokeFillPreview, "StrokeFillTab", "ColorPanel" );
+	//	m_typeButtonBox = new VTypeButtonBox( part(), m_toolbox );
+
+		//connect( m_strokeFillPreview, SIGNAL( fillSelected() ), m_typeButtonBox, SLOT( setFill() ) );
+		//connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_typeButtonBox, SLOT( setStroke() ) );
+
+		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( slotStrokeChanged( const VStroke & ) ) );
+		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( slotFillChanged( const VFill & ) ) );
+
+		connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
+		connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+
+			//create toolbars
+// 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
+// 			mainWindow()->addToolBar( m_selectToolBar );
+
 		KoShapeSelector *selector = new KoShapeSelector( this, m_canvasView, "" );
 		selector->setWindowTitle(i18n("Shapes"));
 		paletteManager()->addWidget( selector, "ToolTabDock", "ShapePanel" );
@@ -306,78 +321,6 @@ static Qt::ToolBarArea stringToDock( const QString& attrPosition )
 	return Qt::TopToolBarArea;
 
 }
-
-QWidget *
-KarbonView::createContainer( QWidget *parent, int index, const QDomElement &element, int &id )
-{
-	debugView(QString("KarbonView::createContainer(parent = QWidget, index = %1, element = %2, id = %3)").arg(index).arg(element.tagName()).arg(id));
-
-	if( element.attribute( "name" ) == "Tools" )
-	{
-		m_toolbox = new VToolBox( mainWindow(), "Tools", KarbonFactory::instance() );
-		toolController()->setUp( actionCollection(), m_toolbox );
-
-		kDebug() << "Toolbox position: " << element.attribute( "position" ) << "\n";
-	        Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).toLower() );
-
-	        /* TODO: Port to KDE/Qt 4
-		
-		mainWindow()->addDockWindow( m_toolbox, dock, false);
-	        mainWindow()->moveDockWindow( m_toolbox, dock, false, 0, 0 );
-		*/
-
-
-		//connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
-
-		if( shell() )
-		{
-			m_strokeFillPreview = new VStrokeFillPreview( part(), m_toolbox );
-			m_typeButtonBox = new VTypeButtonBox( part(), m_toolbox );
-
-			connect( m_strokeFillPreview, SIGNAL( fillSelected() ), m_typeButtonBox, SLOT( setFill() ) );
-			connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_typeButtonBox, SLOT( setStroke() ) );
-
-			connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( slotStrokeChanged( const VStroke & ) ) );
-			connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( slotFillChanged( const VFill & ) ) );
-
-			connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
-			connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
-			selectionChanged();
-
-			//create toolbars
-// 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
-// 			mainWindow()->addToolBar( m_selectToolBar );
-		}
-	}
-
-	return KXMLGUIBuilder::createContainer( parent, index, element, id );
-}
-
-void
-KarbonView::removeContainer( QWidget *container, QWidget *parent,
-							 QDomElement &element, int id )
-{
-	debugView(QString("KarbonView::removeContainer(container = QWidget, parent = QWidget, element = %1, id = %2)").arg(element.tagName()).arg(id));
-
-	if( container )
-		kDebug(38000) << container << endl;
-
-	if( shell() && container == m_toolbox )
-	{
-		delete m_toolbox;
-		m_toolbox = 0L;
-		m_toolController->youAintGotNoToolBox();
-//		delete m_strokeFillPreview;
-		m_strokeFillPreview = 0;
-//		delete m_typeButtonBox;
-		m_typeButtonBox = 0;
-// 		delete m_selectToolBar;
-// 		m_selectToolBar = 0L;
-	}
-	else
-		KXMLGUIBuilder::removeContainer( container, parent, element, id );
-}
-
 
 QWidget*
 KarbonView::canvas() const

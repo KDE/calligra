@@ -74,7 +74,6 @@ class VStrokeFillPreview;
 class VTypeButtonBox;
 
 class VTool;
-class VToolBox;
 class VToolController;
 
 class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
@@ -224,9 +223,6 @@ protected:
 	void createTransformDock();
 	void createResourceDock();
 
-	//KXMLGUIBuilder
-	virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );
-	virtual void removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id );
 	void addSelectionToClipboard() const;
 
 private:
@@ -245,8 +241,6 @@ private:
 	VPainterFactory		*m_painterFactory;
 	VStrokeFillPreview	*m_strokeFillPreview;
 	VTypeButtonBox		*m_typeButtonBox;
-
-	VToolBox		*m_toolbox;
 
 	KAction			*m_groupObjects;
 	KAction			*m_ungroupObjects;

@@ -29,7 +29,6 @@ class QEvent;
 
 class VTool;
 class KarbonView;
-class VToolBox;
 
 class VToolController
 {
@@ -50,8 +49,8 @@ public:
 
 	const Q3Dict<VTool> &tools() { return m_tools; }
 
-	void setUp( KActionCollection *ac, VToolBox * toolbox );
-	void resetToolBox( VToolBox * toolbox );
+//	void setUp( KActionCollection *ac, VToolBox * toolbox );
+//	void resetToolBox( VToolBox * toolbox );
 	VTool *findTool( const QString &toolName ) const;
 
 	// Called when the toolbox is deleted because the view was made inactive in favour of another view
@@ -61,7 +60,7 @@ private:
 	KarbonView		*m_view;
 	VTool			*m_currentTool;
 	Q3Dict<VTool>		 m_tools;
-	VToolBox 		*m_toolBox;
+//	VToolBox 		*m_toolBox;
 	bool			 m_setup;
 };
 

@@ -11,11 +11,8 @@ set(karbonwidgets_SRCS
     vselecttoolbar.cc
     vsmallpreview.cc
     vstatebutton.cc
-    vtoolbox.cc
     vtypebuttonbox.cc
     vruler.cc
-
-    oldtoolbox.cc
     )
 
 kde4_automoc(${karbonwidgets_SRCS})
