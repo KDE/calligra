@@ -161,7 +161,7 @@ namespace KoMacro {
 			* @return true if the update was successfully else false
 			* is returned.
 			*/
-			virtual bool notifyUpdated(KSharedPtr<MacroItem> macroitem, const QString& name) {
+			virtual bool notifyUpdated(const KSharedPtr<MacroItem> &macroitem, const QString& name) {
 				Q_UNUSED(macroitem);
 				Q_UNUSED(name);
 				return true; // The default implementation does nothing.

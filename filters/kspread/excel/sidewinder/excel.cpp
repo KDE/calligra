@@ -6005,7 +6005,7 @@ void ExcelReader::mergeTokens( UStringStack* stack, int count, const char* merge
     // sanity check
     if(stack->size() == 0) break;
     
-    d->mergedTokens.prepend(stack->at( stack->size()-1 ));
+    d->mergedTokens.prepend((*stack)[ stack->size()-1 ]);
     if( count )
       d->mergedTokens.prepend(mergeString);
     stack->resize( stack->size()-1 );
@@ -6028,7 +6028,7 @@ void ExcelReader::mergeTokens( UStringStack* stack, int count, const char mergeC
     // sanity check
     if(stack->size() == 0) break;
     
-    d->mergedTokens.prepend(stack->at( stack->size()-1 ));
+    d->mergedTokens.prepend((*stack)[ stack->size()-1 ]);
     if( count )
       d->mergedTokens.prepend(mergeChar);
     stack->resize( stack->size()-1 );

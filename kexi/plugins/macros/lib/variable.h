@@ -179,7 +179,7 @@ namespace KoMacro {
 			* list is accessed as getter/setter (read/write). So,
 			* don't set this method to const!
 			*/
-			Variable::List children() const;
+			List children() const;
 
 			/**
 			* Append a @a Variable to the list of children this
@@ -195,7 +195,7 @@ namespace KoMacro {
 			/**
 			* Set the children this @a Variable has.
 			*/
-			void setChildren(const Variable::List& children);
+			void setChildren(const List& children);
 
 #if 0
 			/**
