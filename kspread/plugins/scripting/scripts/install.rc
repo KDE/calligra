@@ -1,0 +1,8 @@
+<KrossScripting>
+	<ScriptAction
+		name="pyunittest"
+		text="Unittest for Python"
+		description="Test the KSpread Python functionality"
+		interpreter="python"
+		file="unittest.py" />
+</KrossScripting>
