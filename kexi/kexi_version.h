@@ -35,7 +35,7 @@
 
 #define KEXI_VERSION_MAJOR 1
 #define KEXI_VERSION_MINOR 0
-#define KEXI_VERSION_RELEASE 89
+#define KEXI_VERSION_RELEASE 90
 
 #define KEXI_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 
