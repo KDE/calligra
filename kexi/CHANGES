@@ -1,7 +1,14 @@
 == Kexi CHANGES ==
 
+1.1 "Access Granted" - within KOffice 1.6
+   (alpha 1: 2006-07-01, beta 1: 2006-09-11, stable: 2006-??-??)
+ * Object data type and data-aware image form widget
+ * Improvements in Auto Field form widget
+ * Table design altering without removing the existing data
+ * Support for Data-aware combo boxes in the Table View
+
 1.0 "Black Mamba" - within KOffice 1.5 
-    (beta 1: 2006-01-31, beta1: 2006-03-07, stable: 2006-04-11)
+   (beta 1: 2006-01-31, beta 2: 2006-03-11, rc 1: 2006-03-29, stable: 2006-04-11)
  * Improved data-aware forms. 
  * Form Designer's Data Source Pane for assigning data source to forms and
     widgets. Object tree view for easier navigating within widgets hierarchy. 
