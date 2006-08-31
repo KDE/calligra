@@ -27,8 +27,18 @@ KFORMULA_NAMESPACE_BEGIN
 class OperatorElement : public TokenElement {
     typedef TokenElement inherited;
 public:
-    OperatorElement( BasicElement* parent = 0 );
+    OperatorElement( QChar ch = ' ', BasicElement* parent = 0 );
     void setForm( FormType type );
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets chosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual KCommand* buildCommand( Container*, Request* );
 
 private:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );

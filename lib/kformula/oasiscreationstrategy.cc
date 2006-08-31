@@ -192,4 +192,19 @@ BasicElement* OasisCreationStrategy::createOperatorElement( const QDomElement& e
     return new OperatorElement();
 }
 
+IdentifierElement* OasisCreationStrategy::createIdentifierElement( const QChar& ch )
+{
+    return new IdentifierElement( ch );
+}
+
+OperatorElement* OasisCreationStrategy::createOperatorElement( const QChar& ch )
+{
+    return new OperatorElement( ch );
+}
+
+TokenElement* OasisCreationStrategy::createNumberElement( const QChar& ch )
+{
+    return new TokenElement( ch );
+}
+
 KFORMULA_NAMESPACE_END

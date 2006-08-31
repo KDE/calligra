@@ -17,13 +17,70 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <klocale.h>
+
 #include "kformuladefs.h"
 #include "textelement.h"
 #include "identifierelement.h"
+#include "kformulacommand.h"
+#include "kformulacontainer.h"
+#include "kformuladocument.h"
+#include "formulaelement.h"
+#include "creationstrategy.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent ) {
+IdentifierElement::IdentifierElement( QChar ch, BasicElement* parent ) : TokenElement( ch, parent ) {
+}
+
+/*
+ * Token elements' content has to be of homogeneous type. Every token element
+ * must (TODO: check this) appear inside a non-token sequence, and thus, if
+ * the command asks for a different content, a new element has to be created in
+ * parent sequence.
+ */
+KCommand* IdentifierElement::buildCommand( Container* container, Request* request )
+{
+    FormulaCursor* cursor = container->activeCursor();
+    if ( cursor->isReadOnly() ) {
+        formula()->tell( i18n( "write protection" ) );
+        return 0;
+    }
+
+    switch ( *request ) {
+    case req_addText: {
+        KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
+        TextRequest* tr = static_cast<TextRequest*>( request );
+        for ( uint i = 0; i < tr->text().length(); i++ ) {
+            command->addElement( creationStrategy->createTextElement( tr->text()[i] ) );
+        }
+        return command;
+    }
+    case req_addTextChar: {
+        KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
+        TextCharRequest* tr = static_cast<TextCharRequest*>( request );
+        TextElement* element = creationStrategy->createTextElement( tr->ch(), tr->isSymbol() );
+        command->addElement( element );
+        return command;
+    }
+
+    case req_addOperator:
+    case req_addNumber:
+    case req_addEmptyBox:
+    case req_addNameSequence:
+    case req_addBracket:
+    case req_addSpace:
+    case req_addFraction:
+    case req_addRoot:
+    case req_addSymbol:
+    case req_addOneByTwoMatrix:
+    case req_addMatrix:
+        return getParent()->buildCommand( container, request );
+
+    default:
+        return SequenceElement::buildCommand( container, request );
+    }
+    return 0;
 }
 
 void IdentifierElement::setStyleVariant( StyleAttributes& style )

@@ -27,11 +27,30 @@ KFORMULA_NAMESPACE_BEGIN
 class IdentifierElement : public TokenElement {
     typedef TokenElement inherited;
 public:
-    IdentifierElement( BasicElement* parent = 0 );
+    IdentifierElement( QChar ch = ' ', BasicElement* parent = 0 );
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets chosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual KCommand* buildCommand( Container*, Request* );
 
 protected:
 
     virtual void setStyleVariant( StyleAttributes& style );
+    /**
+     * Space around sequence
+     */
+    virtual luPt getSpaceBefore( const ContextStyle& context, 
+                                 ContextStyle::TextStyle tstyle,
+                                 double factor ) { return 0; }
+    virtual luPt getSpaceAfter( const ContextStyle& context, 
+                                 ContextStyle::TextStyle tstyle,
+                                double factor ) { return 0; }
 
 private:
     virtual QString getElementName() const { return "mi"; }

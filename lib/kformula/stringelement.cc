@@ -22,7 +22,7 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-StringElement::StringElement( BasicElement* parent ) : TokenElement( parent ) {
+StringElement::StringElement( QChar ch, BasicElement* parent ) : TokenElement( ch, parent ) {
 }
 
 bool StringElement::readAttributesFromMathMLDom(const QDomElement& element)

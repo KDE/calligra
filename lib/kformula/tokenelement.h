@@ -30,9 +30,21 @@ KFORMULA_NAMESPACE_BEGIN
 class TokenElement : public TokenStyleElement {
     typedef TokenStyleElement inherited;
 public:
-    TokenElement( BasicElement* parent = 0 );
+    TokenElement( QChar ch = ' ', BasicElement* parent = 0 );
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets chosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual KCommand* buildCommand( Container*, Request* );
+
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 
+    virtual QString getElementName() const { return "mn"; }
 protected:
     QString getCharFromEntity( const QString& entity );
 

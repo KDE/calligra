@@ -295,6 +295,8 @@ enum RequestID {
     req_addTabMark,
     req_addText,
     req_addTextChar,
+    req_addOperator,
+    req_addNumber,
     req_addEmptyBox,
     req_appendColumn,
     req_appendRow,
@@ -368,6 +370,20 @@ public:
     TextCharRequest( QChar ch, bool isSymbol=false ) : Request( req_addTextChar ), m_ch( ch ), m_isSymbol( isSymbol ) {}
     QChar ch() const { return m_ch; }
     bool isSymbol() const { return m_isSymbol; }
+};
+
+class OperatorRequest: public Request {
+    QChar m_ch;
+public:
+    OperatorRequest( QChar ch ) : Request( req_addOperator ), m_ch( ch ) {}
+    QChar ch() const { return m_ch; }
+};
+
+class NumberRequest: public Request {
+    QChar m_ch;
+public:
+    NumberRequest( QChar ch ) : Request( req_addNumber ), m_ch( ch ) {}
+    QChar ch() const { return m_ch; }
 };
 
 class TextRequest : public Request {

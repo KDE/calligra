@@ -23,13 +23,16 @@
 #include "creationstrategy.h"
 #include "elementtype.h"
 #include "fractionelement.h"
+#include "identifierelement.h"
 #include "indexelement.h"
 #include "matrixelement.h"
+#include "operatorelement.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
 #include "spaceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
+#include "tokenelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -120,6 +123,22 @@ IndexElement* OrdinaryCreationStrategy::createIndexElement()
 {
     return new IndexElement;
 }
+
+IdentifierElement* OrdinaryCreationStrategy::createIdentifierElement( const QChar& ch )
+{
+    return new IdentifierElement( ch );
+}
+
+OperatorElement* OrdinaryCreationStrategy::createOperatorElement( const QChar& ch )
+{
+    return new OperatorElement( ch );
+}
+
+TokenElement* OrdinaryCreationStrategy::createNumberElement( const QChar& ch )
+{
+    return new TokenElement( ch );
+}
+
 
 
 KFORMULA_NAMESPACE_END

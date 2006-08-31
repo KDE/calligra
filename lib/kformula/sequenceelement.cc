@@ -51,6 +51,8 @@
 #include "symbolelement.h"
 #include "symboltable.h"
 #include "textelement.h"
+#include "tokenelement.h"
+#include "identifierelement.h"
 #include "operatorelement.h"
 
 #include <assert.h>
@@ -701,6 +703,16 @@ void SequenceElement::goInside(FormulaCursor* cursor)
     cursor->setTo(this, 0);
 }
 
+/**
+ * Sets the cursor inside this element to its end position.
+ * For most elements that is the main child.
+ */
+void SequenceElement::goInsideLast(FormulaCursor* cursor)
+{
+    cursor->setSelection(false);
+    cursor->setTo(this, children.count());
+}
+
 
 // children
 
@@ -940,20 +952,72 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
 
     switch ( *request ) {
     case req_addText: {
-        KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
-        TextRequest* tr = static_cast<TextRequest*>( request );
-        for ( uint i = 0; i < tr->text().length(); i++ ) {
-            command->addElement( creationStrategy->createTextElement( tr->text()[i] ) );
+        if ( cursor->getElement() == this && cursor->getPos() > 0 && !cursor->isSelection() ) {
+            IdentifierElement* element =
+                dynamic_cast<IdentifierElement*>( children.at( cursor->getPos()-1 ) );
+            if ( element != 0 ) {
+                element->goInsideLast( cursor );
+                return element->buildCommand( container, request );
+            }
         }
-        return command;
+        else {
+            KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
+            TextRequest* tr = static_cast<TextRequest*>( request );
+            for ( uint i = 0; i < tr->text().length(); i++ ) {
+                command->addElement( creationStrategy->createIdentifierElement( tr->text()[i] ) );
+            }
+            return command;
+        }
+        return 0;
     }
     case req_addTextChar: {
+        if ( cursor->getElement() == this && cursor->getPos() > 0 && !cursor->isSelection() ) {
+            IdentifierElement* element =
+                dynamic_cast<IdentifierElement*>( children.at( cursor->getPos()-1 ) );
+            if ( element != 0 ) {
+                element->goInsideLast( cursor );
+                return element->buildCommand( container, request );
+            }
+        }
         KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextCharRequest* tr = static_cast<TextCharRequest*>( request );
-        TextElement* element = creationStrategy->createTextElement( tr->ch(), tr->isSymbol() );
+        IdentifierElement* element = creationStrategy->createIdentifierElement( tr->ch() );
         command->addElement( element );
         return command;
     }
+
+    case req_addOperator: {
+        if ( cursor->getElement() == this && cursor->getPos() > 0 && !cursor->isSelection() ) {
+            OperatorElement* element =
+                dynamic_cast<OperatorElement*>( children.at( cursor->getPos()-1 ) );
+            if ( element != 0 ) {
+                element->goInsideLast( cursor );
+                return element->buildCommand( container, request );
+            }
+        }
+        KFCReplace* command = new KFCReplace( i18n("Add Operator"), container );
+        OperatorRequest* opr = static_cast<OperatorRequest*>( request );
+        OperatorElement* element = creationStrategy->createOperatorElement( opr->ch() );
+        command->addElement( element );
+        return command;
+    }
+
+    case req_addNumber: {
+        if ( cursor->getElement() == this && cursor->getPos() > 0 && !cursor->isSelection() ) {
+            TokenElement* element =
+                dynamic_cast<TokenElement*>( children.at( cursor->getPos()-1 ) );
+            if ( element != 0 && element->getElementName() == "mn" ) {
+                element->goInsideLast( cursor );
+                return element->buildCommand( container, request );
+            }
+        }
+        KFCReplace* command = new KFCReplace( i18n("Add Number"), container );
+        NumberRequest* nr = static_cast<NumberRequest*>( request );
+        TokenElement* element = creationStrategy->createNumberElement( nr->ch() );
+        command->addElement( element );
+        return command;
+    }
+
     case req_addEmptyBox: {
         EmptyElement* element = creationStrategy->createEmptyElement();
         if ( element != 0 ) {
@@ -1083,8 +1147,8 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
             IndexElement* element =
                 dynamic_cast<IndexElement*>( children.at( cursor->getPos()-1 ) );
             if ( element != 0 ) {
-                element->getMainChild()->goInside( cursor );
-                return element->getMainChild()->buildCommand( container, request );
+                element->goInside( cursor );
+                return element->buildCommand( container, request );
             }
         }
         IndexElement* element = creationStrategy->createIndexElement();
@@ -1324,11 +1388,12 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
         singlePipe = true;
         return buildCommand( container, &r );
     }
+        /*
     case ' ': {
         Request r( req_compactExpression );
         singlePipe = true;
         return buildCommand( container, &r );
-    }
+        }*/
     case '}': {
         Request r( req_addEmptyBox );
         singlePipe = true;
@@ -1344,8 +1409,16 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
         return buildCommand( container, &r );
     }
     default: {
-        TextCharRequest r( ch );
         singlePipe = true;
+        if ( ch.isPunct() || ch.isSymbol() ) {
+            OperatorRequest r( ch );
+            return buildCommand( container, &r );
+        }
+        if ( ch.isNumber() ) {
+            NumberRequest r( ch );
+            return buildCommand( container, &r );
+        }
+        TextCharRequest r( ch );
         return buildCommand( container, &r );
     }
     }

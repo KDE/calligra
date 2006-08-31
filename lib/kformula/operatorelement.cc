@@ -21,16 +21,23 @@
 
 #include <qpainter.h>
 
+#include <klocale.h>
+
 #include "elementtype.h"
 #include "sequenceelement.h"
 #include "textelement.h"
 #include "fontstyle.h"
 #include "operatordictionary.h"
 #include "operatorelement.h"
+#include "kformulacommand.h"
+#include "kformulacontainer.h"
+#include "kformuladocument.h"
+#include "formulaelement.h"
+#include "creationstrategy.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent ),
+OperatorElement::OperatorElement( QChar ch, BasicElement* parent ) : TokenElement( ch, parent ),
                                                            m_form( NoForm ),
                                                            m_lspaceType( ThickMathSpace ),
                                                            m_rspaceType( ThickMathSpace ),
@@ -145,6 +152,50 @@ void OperatorElement::setForm( FormType type )
         }
     }
 }
+
+/*
+ * Token elements' content has to be of homogeneous type. Every token element
+ * must (TODO: check this) appear inside a non-token sequence, and thus, if
+ * the command asks for a different content, a new element has to be created in
+ * parent sequence.
+ */
+KCommand* OperatorElement::buildCommand( Container* container, Request* request )
+{
+    FormulaCursor* cursor = container->activeCursor();
+    if ( cursor->isReadOnly() ) {
+        formula()->tell( i18n( "write protection" ) );
+        return 0;
+    }
+
+    switch ( *request ) {
+    case req_addOperator: {
+        KFCReplace* command = new KFCReplace( i18n("Add Operator"), container );
+        OperatorRequest* opr = static_cast<OperatorRequest*>( request );
+        TextElement* element = creationStrategy->createTextElement( opr->ch(), true );
+        command->addElement( element );
+        return command;
+    }
+
+    case req_addText:
+    case req_addTextChar:
+    case req_addNumber:
+    case req_addEmptyBox:
+    case req_addNameSequence:
+    case req_addBracket:
+    case req_addSpace:
+    case req_addFraction:
+    case req_addRoot:
+    case req_addSymbol:
+    case req_addOneByTwoMatrix:
+    case req_addMatrix:
+        return getParent()->buildCommand( container, request );
+
+    default:
+        return SequenceElement::buildCommand( container, request );
+    }
+    return 0;
+}
+
 
 bool OperatorElement::readAttributesFromMathMLDom( const QDomElement &element )
 {

@@ -21,18 +21,72 @@
 
 #include <qpainter.h>
 
+#include <klocale.h>
+
 #include "entities.h"
 #include "elementtype.h"
 #include "sequenceelement.h"
 #include "textelement.h"
 #include "glyphelement.h"
 #include "tokenelement.h"
+#include "kformulacommand.h"
+#include "kformulacontainer.h"
+#include "kformuladocument.h"
+#include "formulaelement.h"
+#include "creationstrategy.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-TokenElement::TokenElement( BasicElement* parent ) : TokenStyleElement( parent ),
-                                                     m_textOnly( true )
+TokenElement::TokenElement( QChar ch, BasicElement* parent ) : TokenStyleElement( parent ),
+                                                               m_textOnly( true )
 {
+    TextElement* child = new TextElement( ch );
+    child->setParent( this );
+    insert( 0, child );
+}
+
+/*
+ * Token elements' content has to be of homogeneous type. Every token element
+ * must (TODO: check this) appear inside a non-token sequence, and thus, if
+ * the command asks for a different content, a new element has to be created in
+ * parent sequence.
+ */
+KCommand* TokenElement::buildCommand( Container* container, Request* request )
+{
+    FormulaCursor* cursor = container->activeCursor();
+    if ( cursor->isReadOnly() ) {
+        formula()->tell( i18n( "write protection" ) );
+        return 0;
+    }
+
+    switch ( *request ) {
+    case req_addNumber: {
+        KFCReplace* command = new KFCReplace( i18n("Add Number"), container );
+        NumberRequest* nr = static_cast<NumberRequest*>( request );
+        TextElement* element = creationStrategy->createTextElement( nr->ch(), false );
+        command->addElement( element );
+        return command;
+    }
+
+    case req_addText:
+    case req_addTextChar:
+    case req_makeGreek: 
+    case req_addOperator:
+    case req_addEmptyBox:
+    case req_addNameSequence:
+    case req_addBracket:
+    case req_addSpace:
+    case req_addFraction:
+    case req_addRoot:
+    case req_addSymbol:
+    case req_addOneByTwoMatrix:
+    case req_addMatrix:
+        return getParent()->buildCommand( container, request );
+
+    default:
+        return SequenceElement::buildCommand( container, request );
+    }
+    return 0;
 }
 
 int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) 

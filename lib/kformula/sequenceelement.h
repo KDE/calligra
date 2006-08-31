@@ -195,6 +195,12 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
+    /**
+     * Sets the cursor inside this element to its last position.
+     * For most elements that is the main child.
+     */
+    virtual void goInsideLast(FormulaCursor* cursor);
+
 
     // children
 
@@ -442,6 +448,8 @@ protected:
     virtual luPt getSpaceBefore( const ContextStyle&, ContextStyle::TextStyle, double ) { return 0; }
     virtual luPt getSpaceAfter( const ContextStyle&, ContextStyle::TextStyle, double ) { return 0; }
 
+    static ElementCreationStrategy* creationStrategy;
+    
 private:
 
     /**
@@ -466,8 +474,6 @@ private:
      */
     bool textSequence;
 
-    static ElementCreationStrategy* creationStrategy;
-    
     bool singlePipe; //The key '|' produces one '|' not '| |', '||' produces '| |'
 
 	StyleElement *style;

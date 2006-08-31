@@ -64,6 +64,9 @@ public:
     virtual SymbolElement* createSymbolElement( SymbolType type );
     virtual MatrixElement* createMatrixElement( uint rows, uint columns );
     virtual IndexElement* createIndexElement();
+    virtual IdentifierElement* createIdentifierElement( const QChar& ch );
+    virtual OperatorElement* createOperatorElement( const QChar& ch );
+    virtual TokenElement* createNumberElement( const QChar& ch );
 	virtual QString type() const { return "Oasis"; }
 
     BasicElement* createOperatorElement( const QDomElement& element );
