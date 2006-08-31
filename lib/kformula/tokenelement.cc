@@ -93,5 +93,24 @@ int TokenElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomN
     return 1;
 }
 
+luPt TokenElement::getSpaceBefore( const ContextStyle& context, 
+                                   ContextStyle::TextStyle tstyle,
+                                   double factor )
+{
+    if ( !context.isScript( tstyle ) ) {
+        return context.getMediumSpace( tstyle, factor );
+    }
+    return 0;
+}
+
+luPt TokenElement::getSpaceAfter( const ContextStyle& context, 
+                                  ContextStyle::TextStyle tstyle,
+                                  double factor )
+{
+    if ( !context.isScript( tstyle ) ) {
+        return context.getThinSpace( tstyle, factor );
+    }
+    return 0;
+}
 
 KFORMULA_NAMESPACE_END

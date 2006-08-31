@@ -48,16 +48,13 @@ void PaddedElement::calcSizes( const ContextStyle& context,
     luPixel width = 0;
     luPixel height = 0;
     luPixel depth = 0;
-    luPixel spaceBefore = 0;
 
     if ( !isEmpty() ) {
         // First, get content height and width
         for ( iterator it = begin(); it != end(); ++it ) {
+            luPixel spaceBefore = 0;
             if ( it == begin() ) {
-                spaceBefore =
-                    context.ptToPixelX( it->getElementType()->getSpaceBefore( context,
-                                                                              tstyle,
-                                                                              factor ) );
+                spaceBefore = context.ptToPixelX( getSpaceBefore( context, tstyle, factor ) );
             }
             it->calcSizes( context, tstyle, istyle, style );
             width += it->getWidth() + spaceBefore;
@@ -92,6 +89,10 @@ void PaddedElement::calcSizes( const ContextStyle& context,
         width = left;
         // Let's do all normal elements that have a base line.
         for ( iterator it = begin(); it != end(); ++it ) {
+            luPixel spaceBefore = 0;
+            if ( it == begin() ) {
+                spaceBefore = context.ptToPixelX( getSpaceBefore( context, tstyle, factor ) );
+            }
             it->calcSizes( context, tstyle, istyle, style );
             it->setX( width + spaceBefore );
             width += it->getWidth() + spaceBefore;

@@ -436,6 +436,12 @@ protected:
 
     static ElementCreationStrategy* getCreationStrategy() { return creationStrategy; }
 
+    /**
+     * Space around sequence
+     */
+    virtual luPt getSpaceBefore( const ContextStyle&, ContextStyle::TextStyle, double ) { return 0; }
+    virtual luPt getSpaceAfter( const ContextStyle&, ContextStyle::TextStyle, double ) { return 0; }
+
 private:
 
     /**

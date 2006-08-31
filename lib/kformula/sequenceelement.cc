@@ -185,23 +185,17 @@ void SequenceElement::calcSizes( const ContextStyle& context,
         luPixel toBaseline = 0;
         luPixel fromBaseline = 0;
 
+        width += context.ptToPixelX( getSpaceBefore( context, tstyle, factor ) );
+
         // Let's do all normal elements that have a base line.
         QPtrListIterator<BasicElement> it( children );
         for ( ; it.current(); ++it ) {
             BasicElement* child = it.current();
 
-            luPixel spaceBefore = 0;
-            if ( isFirstOfToken( child ) ) {
-                spaceBefore =
-                    context.ptToPixelX( child->getElementType()->getSpaceBefore( context,
-                                                                                 tstyle,
-                                                                                 factor ) );
-            }
-
             if ( !child->isInvisible() ) {
                 child->calcSizes( context, tstyle, istyle, style );
-                child->setX( width + spaceBefore );
-                width += child->getWidth() + spaceBefore;
+                child->setX( width );
+                width += child->getWidth();
 
                 luPixel childBaseline = child->getBaseline();
                 if ( childBaseline > -1 ) {
@@ -216,10 +210,11 @@ void SequenceElement::calcSizes( const ContextStyle& context,
                 }
             }
             else {
-                width += spaceBefore;
                 child->setX( width );
             }
         }
+
+        width += context.ptToPixelX( getSpaceAfter( context, tstyle, factor ) );
 
         setWidth(width);
         setHeight(toBaseline+fromBaseline);

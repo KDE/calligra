@@ -41,6 +41,15 @@ protected:
      */
     virtual bool isTextOnly() const { return m_textOnly; }
 
+    /**
+     * Space around sequence
+     */
+    virtual luPt getSpaceBefore( const ContextStyle& context, 
+                                 ContextStyle::TextStyle tstyle,
+                                 double factor );
+    virtual luPt getSpaceAfter( const ContextStyle& context, 
+                                 ContextStyle::TextStyle tstyle,
+                                 double factor );
 private:
     bool m_textOnly;
 };
