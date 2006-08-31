@@ -845,7 +845,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 				"Click \"Cancel\" to cancel setting autonumber.")+"</p>");
 
 			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
-				i18n("Setting autonumber field"),
+				i18n("Setting Autonumber Field"),
 				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
 			{
 				changePrimaryKey = true;
@@ -1495,7 +1495,7 @@ void KexiTableDesignerView::slotAboutToShowContextMenu()
 		d->contextMenuTitle->setTitle( i18n("Table field \"%1\"").arg(captionOrName) );
 	}
 	else {
-		d->contextMenuTitle->setTitle( i18n("Empty table row", "Empty row") );
+		d->contextMenuTitle->setTitle( i18n("Empty table row", "Empty Row") );
 	}
 }
 

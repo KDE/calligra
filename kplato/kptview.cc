@@ -194,13 +194,13 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     
 //    actionViewGanttNotScheduled = new KToggleAction(i18n("Not Scheduled"), 0, 0, this, SLOT(slotViewGanttNotScheduled()), actionCollection(), "view_gantt_showNotScheduled");
     
-    actionViewTaskAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewTaskAppointments()), actionCollection(), "view_task_appointments");
+    actionViewTaskAppointments = new KToggleAction(i18n("Show Allocations"), 0, 0, this, SLOT(slotViewTaskAppointments()), actionCollection(), "view_task_appointments");
 
     actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
     
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
     
-    actionViewResourceAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewResourceAppointments()), actionCollection(), "view_resource_appointments");
+    actionViewResourceAppointments = new KToggleAction(i18n("Show Allocations"), 0, 0, this, SLOT(slotViewResourceAppointments()), actionCollection(), "view_resource_appointments");
 
     actionViewAccounts = new KAction(i18n("Accounts"), "accounts", 0, this, SLOT(slotViewAccounts()), actionCollection(), "view_accounts");
 

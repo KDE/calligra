@@ -174,7 +174,7 @@
                                         <cstring>radioCamera</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>From Camera</string>
+                                        <string>From camera</string>
                                     </property>
                                     <property name="accel">
                                         <string></string>

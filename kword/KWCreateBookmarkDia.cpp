@@ -42,7 +42,7 @@ KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, QWidget *pa
 KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, const QString & _name, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
-    setCaption( i18n("Rename Bookmark...") );
+    setCaption( i18n("Rename Bookmark") );
     listBookMark = _list;
     init();
     m_bookmarkName->setText(_name);

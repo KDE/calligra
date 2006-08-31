@@ -40,7 +40,7 @@
                         <cstring>buttonRename</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Rename</string>
+                        <string>&amp;Rename...</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="1" column="1">

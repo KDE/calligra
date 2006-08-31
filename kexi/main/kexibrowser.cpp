@@ -160,14 +160,14 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 
 	m_editTextAction = new KAction(i18n("Open in &Text View"), "", 0, this, 
 		SLOT(slotEditTextObject()), this, "editText_object");
-	m_editTextAction->setToolTip(i18n("Open object in Text View"));
-	m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in Text View"));
+	m_editTextAction->setToolTip(i18n("Open object in text view"));
+	m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in text view"));
 	m_editTextAction->plug(m_itemPopup);
 	m_editTextAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 
 	m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
-	m_editTextAction->setToolTip(i18n("Open object in Text View"));
-	m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in Text View"));
+	m_editTextAction->setToolTip(i18n("Open object in text view"));
+	m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in text view"));
 	m_newObjectAction->plug(m_itemPopup);
 //	m_newObjectToolbarAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
 //	m_toolbar->insertSeparator();
@@ -200,7 +200,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_executeAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 
 	m_exportActionMenu = new KActionMenu(i18n("Export"));
-	m_dataExportAction = new KAction(i18n("Export->To File As Data &Table... ", "To &File As Data Table..."), 
+	m_dataExportAction = new KAction(i18n("Export->To File as Data &Table... ", "To &File as Data Table..."), 
 		"table", 0, this, SLOT(slotExportAsDataTable()), this, "exportAsDataTable");
 	m_dataExportAction->setWhatsThis(
 		i18n("Exports data from the currently selected table or query data to a file."));

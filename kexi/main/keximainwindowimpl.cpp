@@ -576,8 +576,8 @@ void KexiMainWindowImpl::initActions()
 	d->action_tools_data_migration = new KAction(
 		i18n("&Import Database..."), "database_import", 0,
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
-	d->action_tools_data_migration->setToolTip(i18n("Import entire database as a Kexi Project"));
-	d->action_tools_data_migration->setWhatsThis(i18n("Imports entire database as a Kexi Project."));
+	d->action_tools_data_migration->setToolTip(i18n("Import entire database as a Kexi project"));
+	d->action_tools_data_migration->setWhatsThis(i18n("Imports entire database as a Kexi project."));
 
 	d->action_tools_compact_database = new KAction(
 		i18n("&Compact Database..."), "", 0,
@@ -646,7 +646,7 @@ void KexiMainWindowImpl::initActions()
 
 	d->action_edit_copy_special_data_table =
 		new KAction(i18n("Copy Special->Table or Query Data...", 
-			"Table or Query As Data Table..."),
+			"Table or Query as Data Table..."),
 		"table", 0, this, SLOT(slotEditCopySpecialDataTable()),
 		actionCollection(), "edit_copy_special_data_table");
 	d->action_edit_copy_special_data_table->setToolTip(
@@ -692,22 +692,22 @@ void KexiMainWindowImpl::initActions()
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
-	d->action_view_data_mode->setToolTip(i18n("Switch to Data View"));
-	d->action_view_data_mode->setWhatsThis(i18n("Switches to Data View."));
+	d->action_view_data_mode->setToolTip(i18n("Switch to data view"));
+	d->action_view_data_mode->setWhatsThis(i18n("Switches to data view."));
 
 	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Key_F7,
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
 	d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
-	d->action_view_design_mode->setToolTip(i18n("Switch to Design View"));
-	d->action_view_design_mode->setWhatsThis(i18n("Switches to Design View."));
+	d->action_view_design_mode->setToolTip(i18n("Switch to design view"));
+	d->action_view_design_mode->setWhatsThis(i18n("Switches to design view."));
 
 	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Key_F8,
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
 	d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
 	d->action_view_text_mode->setExclusiveGroup("view_mode");
-	d->action_view_text_mode->setToolTip(i18n("Switch to Text View"));
-	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View."));
+	d->action_view_text_mode->setToolTip(i18n("Switch to text view"));
+	d->action_view_text_mode->setWhatsThis(i18n("Switches to text view."));
 
 	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");

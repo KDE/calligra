@@ -46,7 +46,7 @@
                             <cstring>textLabel1</cstring>
                         </property>
                         <property name="text">
-                            <string>Table/query</string>
+                            <string>Table/Query</string>
                         </property>
                     </widget>
                     <widget class="KListView">
@@ -90,7 +90,7 @@
                             <cstring>m_customQueryCheck</cstring>
                         </property>
                         <property name="text">
-                            <string>Custom Quer&amp;y</string>
+                            <string>Custom quer&amp;y</string>
                         </property>
                     </widget>
                     <widget class="QTextEdit">
@@ -156,7 +156,7 @@
                                     <cstring>m_convKSRadio</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Let KSpread Choose</string>
+                                    <string>&amp;Let KSpread choose</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>
@@ -224,7 +224,7 @@
                         <cstring>m_cancelButton</cstring>
                     </property>
                     <property name="text">
-                        <string>C&amp;ancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Don't insert a calendar.</string>

@@ -24,7 +24,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Dimensions:</string>
+                <string>Dimensions</string>
             </property>
             <vbox>
                 <property name="name">
@@ -251,7 +251,7 @@
                 <cstring>buttonGroup1</cstring>
             </property>
             <property name="title">
-                <string>Pages:</string>
+                <string>Pages</string>
             </property>
             <vbox>
                 <property name="name">
