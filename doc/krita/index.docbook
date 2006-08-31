@@ -19,8 +19,9 @@
   <!ENTITY commands-menus SYSTEM "commands-menus.docbook">
   <!ENTITY commands-dialogs SYSTEM "commands-dialogs.docbook">
   <!ENTITY settings SYSTEM "settings.docbook">
-  <!ENTITY scripting SYSTEM "scripting.docbook">
   <!ENTITY developers SYSTEM "developers.docbook">
+  <!ENTITY developers-scripting SYSTEM "developers-scripting.docbook">
+  <!ENTITY developers-plugins SYSTEM "developers-plugins.docbook">
   <!ENTITY faq SYSTEM "faq.docbook">
   <!ENTITY credits SYSTEM "credits.docbook">
   <!ENTITY installation SYSTEM "installation.docbook">
@@ -75,8 +76,8 @@
 
 <!-- Date and version information of the documentation -->
 
-<date>2006-08-16</date>
-<releaseinfo>1.6-pre</releaseinfo>
+<date>2006-08-31</date>
+<releaseinfo>1.6</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -109,7 +110,6 @@ continually working on extending &krita; and making it better in every respect.
 &colorspaces;
 &commands;
 &settings;
-&scripting; 
 &developers; 
 &faq;
 &credits;

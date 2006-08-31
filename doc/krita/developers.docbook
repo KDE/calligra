@@ -2,8 +2,12 @@
 <title>Developer's information</title>
 
 <para>
-This chapter will describe developer information for &krita;.
+This chapter contains information for developers or other enthousiasts that
+want to get more out of &krita;.
 </para>
+
+&developers-scripting;
+&developers-plugins;
 
 </chapter>
 

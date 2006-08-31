@@ -1,0 +1,48 @@
+<sect1 id="developers-plugins">
+<title>Developing &krita; Plugins</title>
+
+<sect2 id="developers-plugins-introduction">
+<title>Introduction</title>
+
+<para>
+&krita; is infinitely extensible with plugins. Tools, filters, large
+chunks of the user interface and even colorspaces are plugins. In fact,
+&krita; recognizes these six types of plugins:
+</para>
+
+<itemizedlist>
+<listitem><para>colorspaces — these define the channels that constitute a
+single pixel</para></listitem>
+<listitem><para>tools — anything that is done with a mouse or tablet input
+device</para></listitem>
+<listitem><para>paint operations — pluggable painting effects for
+tools</para></listitem>
+<listitem><para>image filters — change all pixels, or just the selected pixels
+in a layer</para></listitem>
+<listitem><para>viewplugins — extend Krita’s user interface with new dialog
+boxes, palettes and operations</para></listitem>
+<listitem><para>import/export filters — read and write all kinds of image
+formats</para></listitem>
+</itemizedlist>
+
+<para>
+&krita; itself consists of three layered libraries and a directory with some
+common support classes: <classname>kritacolor</classname>,
+<classname>kritaimage</classname>, and <classname>kritaui</classname>. Within
+&krita;, objects can by identified by a <classname>KisID</classname>, that is
+the combination of a unique untranslated string (used when saving, for
+instance) and a translated string for GUI purposes.
+</para><para>
+A word on compatibility: &krita; is still in development. From &krita; 1.5 to
+1.6 not many API changes are expected, but there may be some. From &krita; 1.6
+to 2.0 we will move from &Qt;3 to &Qt;4, from &kde;3 to &kde;4, from
+<command>automake</command> to <command>cmake</command>: many changes are to
+be expected. If you develop a plugin for &krita; and choose to do so in
+&krita;’s subversion repository, chances are excellent that we’ll help you
+porting. These changes may also render parts of this document out of date.
+Always check with the latest API documentation or the header files installed
+on your system.
+</para>
+
+</sect2>
+</sect1>

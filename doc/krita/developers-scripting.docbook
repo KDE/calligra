@@ -1,4 +1,4 @@
-<chapter id="scripting">
+<sect1 id="developers-scripting">
 <title>Scripting</title>
 
 <para>
@@ -12,7 +12,7 @@ Some examples are distributed with &krita;, and you might find them in
 <filename>/opt/kde/share/apps/krita/scripts</filename>).
 </para>
 
-<sect1 id="scripting-variables">
+<sect2 id="developers-scripting-variables">
 <title>Variables in the <classname>Krosskritacore</classname> module</title>
 
 <itemizedlist>
@@ -31,9 +31,9 @@ script = Krosskritacore::get("KritaScript")
 </programlisting>
 </para>
 
-</sect1>
+</sect2>
 
-<sect1 id="scripting-functions">
+<sect2 id="developers-scripting-functions">
 <title>Functions in the <classname>Krosskritacore</classname> module</title>
 
 <itemizedlist>
@@ -120,9 +120,9 @@ Krosskritacore::newRGBColor(255,0,0) # create a red color
 Krosskritacore::newRGBColor(255,255,255) # create a white color
 </programlisting></para></listitem>
 </itemizedlist>
-</sect1>
+</sect2>
 
-<sect1 id="scripting-objects">
+<sect2 id="developers-scripting-objects">
 <title>Descriptions and function lists for various objects in
 <classname>Krosskritacore</classname></title>
 
@@ -513,9 +513,9 @@ available).</para></listitem>
 </listitem>
 </itemizedlist>
 
-</sect1>
+</sect2>
 
-<sect1 id="scripting-resources">
+<sect2 id="developers-scripting-resources">
 <title>Resources</title>
 
 <para>
@@ -525,10 +525,10 @@ For <classname>Brush</classname> and <classname>Pattern</classname>: You can get
 the name and the associated brush or pattern from the selector in &krita;'s
 toolbar.
 </para><para>
-A list of ids for colorspaces in &krita; 1.5: LABA, RGBA, RGBA16, RGBAF32,
+A list of ids for colorspaces in &krita;: LABA, RGBA, RGBA16, RGBAF32,
 RGBAF16HALF, LMSAF32, GRAYA, GRAYA16, CMYK, CMYKA16.
 </para>
-</sect1>
+</sect2>
 
-</chapter>
+</sect1>
 
