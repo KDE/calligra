@@ -142,6 +142,10 @@ can be specified to display KexiDB Debugger.
 In the future the window will be probably used for debugging other features
 like scripts or macros. This option is useful for Kexi Developers.
 
+* KEXI_DB_COMBOBOX_WIDGET
+Type: defined/undefined
+Default: undefined
+Description: Defined means Kexi offers combo box form widget.
 
 ==== Obsolete, don't use ====
 

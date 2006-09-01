@@ -18,6 +18,12 @@ Legend:
 
 ~~~~~~~~~~~~ 1.1 beta 1 release (with KOffice 1.6 beta 1)  ~~~~~~~~~~~~
 
+2006-09-01
+Forms
+= added KEXI_DB_COMBOBOX_WIDGET define required 
+  to add support for combobox form widget (disabled by default for beta 1)
+2.0: merged
+
 2006-08-29
 General
 - Added unicode->latin1 mappings for Czech characters
@@ -30,7 +36,7 @@ Forms
 = fixed displaying widget names for unbound auto fields 
   and image boxes while in design mode
 = fixed setting data source for auto field
--	 initial version of the combo box widget (will be disabled for beta 1)
+- initial version of the combo box widget (will be disabled for beta 1)
 2.0: merged
 
 2006-08-24
