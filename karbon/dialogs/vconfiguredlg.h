@@ -110,7 +110,7 @@ private:
 	bool m_oldSaveAsPath;
 };
 
-class VConfigGridPage : public KVBox
+class VConfigGridPage : public QWidget
 {
 	Q_OBJECT
 

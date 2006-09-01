@@ -144,20 +144,27 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view, char* name )
 		m_oldCopyOffset = m_config->readEntry("CopyOffset", m_oldCopyOffset);
 	}
 
+	QVBoxLayout *grpLayout = new QVBoxLayout( tmpQGroupBox );
+
 	m_showStatusBar = new QCheckBox( i18n( "Show status bar" ), tmpQGroupBox );
 	m_showStatusBar->setChecked( oldShowStatusBar );
+	grpLayout->addWidget( m_showStatusBar );
 
 	m_recentFiles = new KIntNumInput( m_oldRecentFiles, tmpQGroupBox );
 	m_recentFiles->setRange( 1, 20, 1 );
 	m_recentFiles->setLabel( i18n( "Number of recent files:" ) );
+	grpLayout->addWidget( m_recentFiles );
 
 	m_copyOffset = new KIntNumInput( m_oldCopyOffset, tmpQGroupBox );
 	m_copyOffset->setRange( 1, 50, 1 );
 	m_copyOffset->setLabel( i18n( "Copy offset:" ) );
+	grpLayout->addWidget( m_copyOffset );
 
 	m_dockerFontSize = new KIntNumInput( m_oldDockerFontSize, tmpQGroupBox );
 	m_dockerFontSize->setRange( 5, 20, 1 );
 	m_dockerFontSize->setLabel( i18n( "Palette font size:" ) );
+	grpLayout->addWidget( m_dockerFontSize );
+	grpLayout->addStretch();
 }
 
 void VConfigInterfacePage::apply()
@@ -250,7 +257,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, char* name )
     m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
     m_undoRedo->setRange( 10, 60, 1 );
 
-    grid->addWidget( m_undoRedo, 0, 0, 0, 1 );
+    grid->addWidget( m_undoRedo, 0, 0, 1, 2 );
 
     grid->addWidget( new QLabel(  i18n(  "Units:" ), tmpQGroupBox ), 1, 0 );
 
@@ -259,6 +266,8 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, char* name )
     grid->addWidget( m_unit, 1, 1 );
     m_oldUnit = KoUnit::unit( unitType );
     m_unit->setCurrentIndex( m_oldUnit );
+
+    grid->setRowStretch( 2, 1 );
 
     tmpQGroupBox->setLayout(grid);
 
@@ -308,16 +317,22 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	gd.spacing( &fw, &fh );
 	gd.snap( &sw, &sh );
 
-	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), this );
+	QGroupBox* generalGrp = new QGroupBox( i18n("Grid"), this );
+	QGridLayout *layoutGeneral = new QGridLayout( generalGrp );
+	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), generalGrp );
 	m_gridChBox->setChecked( gd.visible() );
-	m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), this );
+	m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), generalGrp );
 	m_snapChBox->setChecked( gd.snapping() );
-	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), this);
-	m_gridColorBtn = new KColorButton( gd.color(), this );
+	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), generalGrp);
+	m_gridColorBtn = new KColorButton( gd.color(), generalGrp );
 	gridColorLbl->setBuddy( m_gridColorBtn );
+	layoutGeneral->addWidget( m_gridChBox, 0, 0 );
+	layoutGeneral->addWidget( m_snapChBox, 1, 0 );
+	layoutGeneral->addWidget( gridColorLbl, 2, 0 );
+	layoutGeneral->addWidget( m_gridColorBtn, 2, 1 );
 
 	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), this );
-	QGridLayout* layoutSpacingGrp = new QGridLayout;
+	QGridLayout* layoutSpacingGrp = new QGridLayout( spacingGrp );
 	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ) );
 	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, fw, unit );
 	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
@@ -328,10 +343,9 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	layoutSpacingGrp->addWidget(m_spaceHorizUSpin, 0, 1);
 	layoutSpacingGrp->addWidget(spaceVertLbl, 1, 0);
 	layoutSpacingGrp->addWidget(m_spaceVertUSpin, 1, 1);
-	spacingGrp->setLayout(layoutSpacingGrp);
 
 	QGroupBox* snapGrp = new QGroupBox( i18n( "Snap Distance" ), this );
-	QGridLayout* layoutSnapGrp = new QGridLayout;
+	QGridLayout* layoutSnapGrp = new QGridLayout( snapGrp );
 	QLabel* snapHorizLbl = new QLabel( i18n( "H&orizontal:" ) );
 	m_snapHorizUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fw, 0.1, sw, unit );
 	snapHorizLbl->setBuddy( m_snapHorizUSpin );
@@ -343,16 +357,14 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	layoutSnapGrp->addWidget(snapVertLbl, 1, 0);
 	layoutSnapGrp->addWidget(m_snapVertUSpin, 1, 1);
 
-	QGridLayout* gl = new QGridLayout();
+	QGridLayout* gl = new QGridLayout( this );
 	gl->setSpacing( KDialog::spacingHint() );
-	gl->addWidget( m_gridChBox, 0, 0, 0, 2 );
-	gl->addWidget( m_snapChBox, 1, 1, 0, 2 );
-	gl->addWidget( gridColorLbl, 2, 0) ;
-	gl->addWidget( m_gridColorBtn, 2, 1 );
-	gl->addItem( new QSpacerItem( 0, 0 ), 2, 2 );
-	gl->addWidget( spacingGrp, 3, 3, 0, 2 );
-	gl->addWidget( snapGrp, 4, 4, 0, 2 );
-	gl->addItem( new QSpacerItem( 0, 0 ), 5, 5, 0, 2 );
+	gl->setMargin(KDialog::marginHint());
+	gl->addWidget( generalGrp, 0, 0, 1, 2 );
+	gl->addItem( new QSpacerItem( 0, 0 ), 1, 1 );
+	gl->addWidget( spacingGrp, 2, 0, 1, 2 );
+	gl->addWidget( snapGrp, 3, 0, 1, 2 );
+	gl->addItem( new QSpacerItem( 0, 0 ), 4, 0, 1, 2 );
 
 	connect( m_spaceHorizUSpin, SIGNAL( valueChanged( double ) ), SLOT( setMaxHorizSnap( double ) ) );
 	connect( m_spaceVertUSpin, SIGNAL( valueChanged( double ) ), SLOT( setMaxVertSnap( double ) ) ) ;
@@ -408,11 +420,10 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view, char* name )
 
     m_config = KarbonFactory::instance()->config();
 
-    QGroupBox* gbDocumentSettings = new QGroupBox(
-        i18n( "Document Settings" ), this );
-    // TODO: needs porting:
-    //gbDocumentSettings->setMargin( KDialog::marginHint() );
-    //gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
+    QGroupBox* gbDocumentSettings = new QGroupBox( i18n( "Document Settings" ), this );
+    QVBoxLayout *layout = new QVBoxLayout( gbDocumentSettings );
+    layout->setSpacing(KDialog::spacingHint());
+    layout->setMargin(KDialog::marginHint());
 
     m_oldAutoSave = m_view->part()->defaultAutoSave() / 60;
 
@@ -433,12 +444,16 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view, char* name )
     m_autoSave->setLabel( i18n( "Auto save (min):" ) );
     m_autoSave->setSpecialValueText( i18n( "No auto save" ) );
     m_autoSave->setSuffix( i18n( "min" ) );
+    layout->addWidget( m_autoSave );
 
     m_createBackupFile = new QCheckBox( i18n( "Create backup file" ), gbDocumentSettings );
     m_createBackupFile->setChecked( m_oldBackupFile );
+    layout->addWidget( m_createBackupFile );
 
     m_saveAsPath = new QCheckBox( i18n( "Save as path" ), gbDocumentSettings );
     m_saveAsPath->setChecked( m_oldSaveAsPath );
+    layout->addWidget( m_saveAsPath );
+    layout->addStretch();
 }
 
 void VConfigDefaultPage::apply()
