@@ -55,7 +55,7 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* parent, 
+KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* parent,
 		const char* name_, bool modal, Qt::WFlags fl )
     : LatexExportDia( parent, name_, modal, fl ), _in( in )
 {
@@ -84,8 +84,8 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 	new LatexExportAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/filter/latex", this);
 
-	
-	/* All these items inserted must not be translated so they are inserted here 
+
+	/* All these items inserted must not be translated so they are inserted here
 	 * without i18n() method. */
 	/*qualityComboBox->insertItem("final");
   qualityComboBox->insertItem("draft");*/
@@ -175,7 +175,7 @@ void KSpreadLatexExportDiaImpl::accept()
 	hide();
 	kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> BEGIN" << endl;
 	Config* config = Config::instance();
-	
+
 	/* Document tab */
 	if(embededButton == typeGroup->selected())
 		config->setEmbeded(true);
@@ -193,12 +193,12 @@ void KSpreadLatexExportDiaImpl::accept()
 	else
 		config->setQuality("draft");
 	config->setDefaultFontSize(defaultFontSize->value());
-	
+
 	/* Pictures tab */
 	if(pictureCheckBox->isChecked())
 		config->convertPictures();
-	config->setPicturesDir(pathPictures->url());
-	
+	config->setPicturesDir(pathPictures->url().path());
+
 	/* Language tab */
 	config->setEncoding(encodingComboBox->currentText());
 	for(unsigned int index = 0; index < langUsedList->count(); index++)
@@ -206,7 +206,7 @@ void KSpreadLatexExportDiaImpl::accept()
 		kDebug(30522) << "lang. : " << langUsedList->item(index)->text() << endl;
 		config->addLanguage(langUsedList->item(index)->text());
 	}
-	
+
 	/* The default language is the first language in the list */
 	if(langUsedList->item(0) != NULL)
 		config->setDefaultLanguage(langUsedList->item(0)->text());
@@ -216,7 +216,7 @@ void KSpreadLatexExportDiaImpl::accept()
 		config->setDefaultLanguage(langUsedList->currentText());
 	}
 
-	Document doc(_in, _fileOut);	
+	Document doc(_in, _fileOut);
 	kDebug(30522) << "---------- analyse file -------------" << endl;
 	doc.analyse();
 	kDebug(30522) << "---------- generate file -------------" << endl;

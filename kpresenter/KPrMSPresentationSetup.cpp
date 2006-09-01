@@ -313,7 +313,7 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     QLabel *lable2 = new QLabel( i18n("Path:"), this );
     lable2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     path=new KUrlRequester( this );
-    path->setMode( KFile::Directory);
+    path->setMode( KFile::Directory | KFile::LocalOnly );
     path->lineEdit()->setText(msPres.getPath());
     lable2->setBuddy(path);
     Q3HBoxLayout *pathLayout = new Q3HBoxLayout;
@@ -494,7 +494,7 @@ void KPrMSPresentationSetup::finish()
 
 void KPrMSPresentationSetup::slotChoosePath(const KUrl &text)
 {
-    msPres.setPath(text);
+    msPres.setPath(text.path());
 }
 
 

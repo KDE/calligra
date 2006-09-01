@@ -289,6 +289,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
 
     lSoundEffect = new QLabel( i18n( "File name:" ), soundgrp );
     requester = new KUrlRequester( soundgrp );
+    requester->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
     requester->setUrl( soundFileName );
     connect( requester, SIGNAL( openFileDialog( KUrlRequester * ) ),
              this, SLOT( slotRequesterClicked( KUrlRequester * ) ) );
@@ -411,15 +412,13 @@ void KPrTransEffectDia::slotRequesterClicked( KUrlRequester * )
     // find the first "sound"-resource that contains files
     QStringList soundDirs = KGlobal::dirs()->resourceDirs( "sound" );
     if ( !soundDirs.isEmpty() ) {
-        KUrl soundURL;
         QDir dir;
         dir.setFilter( QDir::Files | QDir::Readable );
         QStringList::ConstIterator it = soundDirs.begin();
         while ( it != soundDirs.end() ) {
             dir = *it;
             if ( dir.isReadable() && dir.count() > 2 ) {
-                soundURL.setPath( *it );
-                requester->fileDialog()->setUrl( soundURL );
+                requester->fileDialog()->setUrl( KUrl::fromPath(*it) );
                 break;
             }
             ++it;
@@ -438,7 +437,7 @@ void KPrTransEffectDia::slotSoundFileChanged( const QString& text )
 void KPrTransEffectDia::playSound()
 {
     delete soundPlayer;
-    soundPlayer = new KPrSoundPlayer( requester->url() );
+    soundPlayer = new KPrSoundPlayer( requester->url().path() );
     soundPlayer->play();
 
     buttonTestPlaySoundEffect->setEnabled( false );

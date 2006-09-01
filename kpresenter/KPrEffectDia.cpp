@@ -177,6 +177,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     upperRow->addWidget( lSoundEffect1, 6, 0 );
 
     requester1 = new KUrlRequester( grp1 );
+    requester1->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
     requester1->setUrl( obj->getAppearSoundEffectFileName() );
     upperRow->addWidget( requester1, 6, 1 );
 
@@ -284,6 +285,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
 
     requester2 = new KUrlRequester( grp2 );
     requester2->setUrl( obj->getDisappearSoundEffectFileName() );
+    requester2->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
     lowerRow->addWidget( requester2, 5, 1 );
 
     connect( requester2, SIGNAL( openFileDialog( KUrlRequester * ) ),
@@ -361,8 +363,8 @@ void KPrEffectDia::slotEffectDiaOk()
     eff.disappearTimer = timerOfDisappear->value();
     eff.appearSoundEffect = (requester1->url().isEmpty() ? false : appearSoundEffect->isChecked());
     eff.disappearSoundEffect = (requester2->url().isEmpty() ? false : disappearSoundEffect->isChecked());
-    eff.a_fileName = requester1->url();
-    eff.d_fileName = requester2->url();
+    eff.a_fileName = requester1->url().path();
+    eff.d_fileName = requester2->url().path();
 
     KPrEffectCmd *effectCmd = new KPrEffectCmd( i18n( "Assign Object Effects" ), objs, oldEffects, eff );
     effectCmd->execute();
@@ -471,7 +473,7 @@ void KPrEffectDia::slotDisappearFileChanged( const QString &text )
 void KPrEffectDia::playSound1()
 {
     delete soundPlayer1;
-    soundPlayer1 = new KPrSoundPlayer( requester1->url() );
+    soundPlayer1 = new KPrSoundPlayer( requester1->url().path() );
     soundPlayer1->play();
 
     buttonTestPlaySoundEffect1->setEnabled( false );
@@ -481,7 +483,7 @@ void KPrEffectDia::playSound1()
 void KPrEffectDia::playSound2()
 {
     delete soundPlayer2;
-    soundPlayer2 = new KPrSoundPlayer( requester2->url() );
+    soundPlayer2 = new KPrSoundPlayer( requester2->url().path() );
     soundPlayer2->play();
 
     buttonTestPlaySoundEffect2->setEnabled( false );

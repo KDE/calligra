@@ -79,8 +79,6 @@ public:
 
     /**
      * @brief Return a DBUS interface for this page
-     /*
-    /* 
      * deactivate code using KPrPageAdaptor
     virtual KPrPageAdaptor* dbusObject();
     */

@@ -89,7 +89,7 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
     kDebug(30503) << "Encoding: " << strCodec << endl;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
     if ( codec )
@@ -138,9 +138,9 @@ HtmlExportDialog::Mode HtmlExportDialog::getMode(void) const
     return DefaultCSS;//Our default
 }
 
-QString HtmlExportDialog::cssURL(void) const
+QString HtmlExportDialog::cssURL() const
 {
-  return m_dialog->KURL_ExternalCSS->url();
+    return m_dialog->KURL_ExternalCSS->url().url();
 }
 
 #include <ExportDialog.moc>

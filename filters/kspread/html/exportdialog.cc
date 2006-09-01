@@ -82,13 +82,13 @@ bool ExportDialog::separateFiles() const
   return m_mainwidget->mSeparateFiles->isChecked();
 }
 
-QString ExportDialog::customStyleURL() const
+KUrl ExportDialog::customStyleURL() const
 {
-  QString url = m_mainwidget->mCustomURL->url();
-  if( m_mainwidget->mCustomButton->isChecked() && KUrl( url ).isValid() )
+  KUrl url = m_mainwidget->mCustomURL->url();
+  if( m_mainwidget->mCustomButton->isChecked() && url.isValid() )
     return url;
 
-  return QString::null;
+  return KUrl();
 }
 
 void ExportDialog::setSheets( const QStringList &list )

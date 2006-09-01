@@ -147,6 +147,7 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     // set up sound
     m_dialog->soundCheckBox->setChecked( m_soundEffect );
     m_dialog->soundRequester->setUrl( m_soundFileName );
+    m_dialog->soundRequester->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
     soundEffectChanged();
     m_dialog->playButton->setIconSet( SmallIconSet( "player_play" ) );
     m_dialog->stopButton->setIconSet( SmallIconSet( "player_stop" ) );
@@ -332,7 +333,7 @@ void KPrSlideTransitionDia::apply( bool global )
 
     EffectSpeed effectSpeed = static_cast<EffectSpeed>( m_dialog->speedCombo->currentIndex() );
     bool soundEffect = m_dialog->soundCheckBox->isChecked();
-    QString soundFileName = m_dialog->soundRequester->url();
+    QString soundFileName = m_dialog->soundRequester->url().path();
     int slideTime = m_dialog->automaticTransitionInput->value();
 
     if ( effect != m_effect ||
@@ -393,7 +394,7 @@ void KPrSlideTransitionDia::playSound()
 {
     delete m_soundPlayer;
 
-    m_soundPlayer = new KPrSoundPlayer( m_dialog->soundRequester->url() );
+    m_soundPlayer = new KPrSoundPlayer( m_dialog->soundRequester->url().path() );
     m_soundPlayer->play();
 
     m_dialog->playButton->setEnabled( false );

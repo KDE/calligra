@@ -197,7 +197,7 @@ void HTMLExport::openPage( Sheet *sheet, KoDocument *document, QString &str )
   if( !m_dialog->customStyleURL().isEmpty() )
   {
     str += "<link ref=\"stylesheet\" type=\"text/css\" href=\"";
-    str += m_dialog->customStyleURL();
+    str += m_dialog->customStyleURL().url();
     str += "\" title=\"Style\" >\n";
   }
 

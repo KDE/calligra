@@ -41,9 +41,9 @@ class ExportDialog : public KDialog
 
     /**
       Returns a valid URL if the custom button was selected.
-      Else, it will return QString::null.
+      Else, it will return KUrl().
     */
-    QString customStyleURL() const;
+    KUrl customStyleURL() const;
 
     /**
       Returns true if borders should be shown, false if borders

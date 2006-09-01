@@ -725,7 +725,7 @@ void KPrWebPresentationWizard::setupPage1()
     layout->addWidget( email, 4, 1 );
 
     path=new KUrlRequester( canvas );
-    path->setMode( KFile::Directory);
+    path->setMode( KFile::Directory | KFile::LocalOnly );
     path->lineEdit()->setText(webPres.getPath());
     path->setWhatsThis( i18n("The value entered for the path is the directory "
                                 "where the presentation will be saved. If it does "
@@ -1129,9 +1129,9 @@ void KPrWebPresentationWizard::closeEvent( QCloseEvent *e )
     K3Wizard::closeEvent( e );
 }
 
-void KPrWebPresentationWizard::slotChoosePath(const KUrl &text)
+void KPrWebPresentationWizard::slotChoosePath(const KUrl &url)
 {
-        webPres.setPath(text);
+    webPres.setPath(url.path());
 }
 
 void KPrWebPresentationWizard::slotChoosePath(const QString &text)
