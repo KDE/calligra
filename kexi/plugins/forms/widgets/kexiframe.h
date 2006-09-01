@@ -22,7 +22,7 @@
 
 #include <q3frame.h>
 
-+ //! Frame widget for Kexi forms
+//! @short Frame widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiFrame : public Q3Frame
 {
 	Q_OBJECT

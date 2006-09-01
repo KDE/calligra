@@ -55,7 +55,7 @@ class KexiFormScrollView;
 	QApplication::sendEvent( widget, &fe ); \
 	QFocusEvent::resetReason(); }
 
-//! A DB-aware form widget, acting as form's toplevel widget
+//! @short A DB-aware form widget, acting as form's toplevel widget
 class KEXIFORMUTILS_EXPORT KexiDBForm : 
 	public KexiDBFormBase,
 	public KFormDesigner::FormWidget,

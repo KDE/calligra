@@ -53,6 +53,22 @@ namespace KexiUtils
 		return static_cast<type*>(o);
 	}
 
+	//! Const version of findParent()
+	template<class type>
+	inline type* findParentConst(const QObject* const o, const char* className)
+	{
+		const QObject * obj = o;
+		if (!obj || !className || className[0]=='\0')
+			return 0;
+		while ( ((obj=obj->parent())) && !obj->inherits(className) )
+			;
+		return static_cast<type*>(obj);
+	}
+
+	/*! \return first found child of \a o, that inherit \a className.
+	 If objName is 0 (the default), all object names match. 
+	 Returned pointer type is casted. */
+
 	//! \return first found child of \a o, that inherit \a className.
 	//! If objName is 0 (the default), all object names match. 
 	//! Returned pointer type is casted.

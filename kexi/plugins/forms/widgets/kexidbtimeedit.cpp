@@ -22,6 +22,8 @@
 
 #include <qtoolbutton.h>
 #include <qlayout.h>
+#include <qpainter.h>
+
 #include <kmenu.h>
 #include <kdatepicker.h>
 #include <kdatetable.h>

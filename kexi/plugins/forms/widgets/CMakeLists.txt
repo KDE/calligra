@@ -34,7 +34,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/plugins/f
 #  kexidbdateedit.cpp \
 #  kexidblineedit.cpp \
 #  kexidbcheckbox.cpp \
-#  kexidbtextedit.cpp 
+#  kexidbtextedit.cpp \
+#  kexidbcombobox.cpp
 #
 #libkexiformutilswidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 #libkexiformutilswidgets_la_LIBADD = 

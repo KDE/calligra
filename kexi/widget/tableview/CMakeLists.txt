@@ -21,6 +21,7 @@ set(kexidatatable_LIB_SRCS
    kexiinputtableedit.cpp 
    kexiblobtableedit.cpp 
    kexibooltableedit.cpp 
+   kexicomboboxbase.cpp 
    kexicomboboxtableedit.cpp 
    kexicomboboxpopup.cpp 
    kexidataawarepropertyset.cpp

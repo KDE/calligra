@@ -492,6 +492,11 @@ protected:
 	 Adds another sections within horizontal header. */
 	virtual void addHeaderColumn(const QString& caption, const QString& description, int size);
 
+	/*! @internal \return true if the row defined by \a item has default 
+	 value at column \a col. If this is the case and \a value is not NULL,
+	 *value is set to the default value. */
+	bool isDefaultValueDisplayed(KexiTableItem *item, int col, QVariant* value = 0);
+
 	//! painting and layout
 	void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 	void createBuffer(int width, int height);
@@ -506,6 +511,7 @@ protected:
 	// event handling
 	virtual void contentsMousePressEvent(QMouseEvent*);
 	virtual void contentsMouseReleaseEvent(QMouseEvent*);
+	//! @internal called by contentsMouseOrEvent() contentsMouseReleaseEvent() to move cursor
 	bool handleContentsMousePressOrRelease(QMouseEvent* e, bool release);
 	virtual void contentsMouseMoveEvent(QMouseEvent*);
 	virtual void contentsMouseDoubleClickEvent(QMouseEvent*);

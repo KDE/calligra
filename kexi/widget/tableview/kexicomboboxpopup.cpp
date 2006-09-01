@@ -118,7 +118,15 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &colum
 {
 	init();
 	//setup tv data
-	setData(column);
+	setData(&column, 0);
+}
+
+KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field)
+ : Q3Frame( parent, "KexiComboBoxPopup", WType_Popup )
+{
+	init();
+	//setup tv data
+	setData(0, &field);
 }
 
 KexiComboBoxPopup::~KexiComboBoxPopup()
@@ -149,43 +157,34 @@ void KexiComboBoxPopup::init()
 //	lyr->addWidget(d->tv);
 }
 
-void KexiComboBoxPopup::setData(KexiDB::Field &f)
+void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *field)
 {
-	d->tv->setColumnStretchEnabled( true, -1 ); //only needed when using single column
-
-//j: TODO: THIS IS PRIMITIVE: we'd need to employ KexiDB::Reference here!
-	d->int_f = new KexiDB::Field(f.name(), KexiDB::Field::Text);
-	KexiTableViewData *data = new KexiTableViewData();
-//	data->setReadOnly( true );
-	data->addColumn( new KexiTableViewColumn( *d->int_f ) );
-	Q3ValueVector<QString> hints = f.enumHints();
-	for(uint i=0; i < hints.size(); i++) {
-		KexiTableItem *item = data->createItem();//new KexiTableItem(1);
-		(*item)[0]=QVariant(hints[i]);
-		kDebug() << "added: '" << hints[i] <<"'"<<endl;
-		data->append( item );
-	}
-	setDataInternal( data, true );
-}
-
-void KexiComboBoxPopup::setData(KexiTableViewColumn &column)
-{
-	if (column.relatedData()) {
-		d->tv->setColumnStretchEnabled( true, -1 ); //only needed when using single column
-		setDataInternal( column.relatedData(), false /*!owner*/ );
+	if (column && !field)
+		field = column->field();
+	if (!field) {
+		kexiwarn << "KexiComboBoxPopup::setData(): !field" << endl;
 		return;
 	}
+
+	// case 1: simple related data
+	if (column && column->relatedData()) {
+		d->tv->setColumnStretchEnabled( true, -1 ); //only needed when using single column
+		setDataInternal( column->relatedData(), false /*!owner*/ );
+		return;
+	}
+
+	// case 2: lookup field
 	KexiDB::LookupFieldSchema *lookupFieldSchema = 0;
-	if (column.field() && column.field()->table())
-		lookupFieldSchema = column.field()->table()->lookupFieldSchema( *column.field() );
+	if (field->table())
+		lookupFieldSchema = field->table()->lookupFieldSchema( *field );
 	if (lookupFieldSchema) {
 //! @todo support more RowSourceType's, not only table
 		KexiDB::TableSchema *lookupTable 
-			= column.field()->table()->connection()->tableSchema( lookupFieldSchema->rowSource() );
+			= field->table()->connection()->tableSchema( lookupFieldSchema->rowSource() );
 		if (!lookupTable)
 //! @todo errmsg
 			return;
-		KexiDB::Cursor *cursor = column.field()->table()->connection()->prepareQuery( *lookupTable );
+		KexiDB::Cursor *cursor = field->table()->connection()->prepareQuery( *lookupTable );
 		if (!cursor)
 //! @todo errmsg
 			return;
@@ -199,8 +198,24 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn &column)
 		return;
 	}
 	
-	kWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)" << endl;
-	setData(*column.field());
+	kdWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)" << endl;
+
+	// case 3: enum hints
+	d->tv->setColumnStretchEnabled( true, -1 ); //only needed when using single column
+
+//j: TODO: THIS IS PRIMITIVE: we'd need to employ KexiDB::Reference here!
+	d->int_f = new KexiDB::Field(field->name(), KexiDB::Field::Text);
+	KexiTableViewData *data = new KexiTableViewData();
+//	data->setReadOnly( true );
+	data->addColumn( new KexiTableViewColumn( *d->int_f ) );
+	QValueVector<QString> hints = field->enumHints();
+	for(uint i=0; i < hints.size(); i++) {
+		KexiTableItem *item = data->createItem();//new KexiTableItem(1);
+		(*item)[0]=QVariant(hints[i]);
+		kdDebug() << "added: '" << hints[i] <<"'"<<endl;
+		data->append( item );
+	}
+	setDataInternal( data, true );
 }
 
 void KexiComboBoxPopup::setDataInternal( KexiTableViewData *data, bool owner )

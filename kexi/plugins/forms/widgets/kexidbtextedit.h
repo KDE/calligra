@@ -29,7 +29,7 @@
 #include <Q3CString>
 #include <QPaintEvent>
 
-//! Multiline edit widget for Kexi forms
+//! @short Multiline edit widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 	public KTextEdit,
 	protected KexiDBTextWidgetInterface,

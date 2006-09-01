@@ -1334,7 +1334,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 //! @todo: result?
 		}
 		else {
-//! @tood temp; remove this:
+//! @todo temp; remove this:
 			//keep old behaviour
 			res = conn->alterTable(*tempData()->table, *newTable);
 			if (!res)

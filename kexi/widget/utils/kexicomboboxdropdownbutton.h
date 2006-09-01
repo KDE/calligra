@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,27 +17,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiPushButton_H
-#define KexiPushButton_H
+#ifndef KexiComboBoxDropDownButton_H
+#define KexiComboBoxDropDownButton_H
 
 #include <kpushbutton.h>
 
-//! @short Push Button widget for Kexi forms
-class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
+//! @short A drop-down button for combo box widgets
+/*! Used in KexiComboBoxTableEdit. 
+*/
+class KEXIGUIUTILS_EXPORT KexiComboBoxDropDownButton : public KPushButton
 {
-	Q_OBJECT
-	Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction DESIGNABLE true)
-
 	public:
-		KexiPushButton( const QString & text, QWidget * parent, const char * name = 0 );
-		~KexiPushButton();
-
-	public slots:
-		QString onClickAction() const { return m_onClickAction; }
-		void setOnClickAction(const QString& actionName) { m_onClickAction = actionName; }
+		KexiComboBoxDropDownButton( QWidget *parent );
+		virtual ~KexiComboBoxDropDownButton();
 
 	protected:
-		QString m_onClickAction;
+		/*! Reimplemented after @ref KPushButton to draw drop-down arrow. */
+		virtual void drawButton(QPainter *p);
+
+		/*! Reimplemented after @ref KPushButton to adapt size to style changes. */
+		virtual void styleChange( QStyle & oldStyle );
+
+		int m_fixForHeight;
+		bool m_drawComplexControl : 1;
 };
 
 #endif

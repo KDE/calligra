@@ -16,6 +16,7 @@ set(kexiguiutils_LIB_SRCS
    kexitooltip.cpp
    kexiarrowtip.cpp
    kexiimagecontextmenu.cpp
+   kexicomboboxdropdownbutton.cpp
 )
 
 kde4_automoc(${kexiguiutils_LIB_SRCS})

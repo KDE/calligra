@@ -40,9 +40,8 @@ class QPainter;
 class QTimer;
 class KexiDBInternalLabel;
 
-/**
- An extended, data-aware, read-only text label.
- It's text may have a drop-shadow.
+//! @short An extended, data-aware, read-only text label.
+/*! It's text may have a drop-shadow.
 
  @author Christian Nitschkowski, Jaroslaw Staniek
 */

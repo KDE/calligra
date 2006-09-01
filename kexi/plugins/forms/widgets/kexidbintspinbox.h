@@ -27,7 +27,7 @@
 #include <Q3CString>
 #include <knuminput.h>
 
-//! A db-aware int spin box
+//! @short A db-aware int spin box
 class KEXIFORMUTILS_EXPORT KexiDBIntSpinBox : public KIntSpinBox, public KexiFormDataItemInterface
 {
 	Q_OBJECT

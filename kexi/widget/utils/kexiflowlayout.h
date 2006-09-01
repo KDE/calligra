@@ -23,6 +23,7 @@
 #include <qlayout.h>
 #include <q3ptrlist.h>
 
+//! @short a special "flow" layout
 class KEXIGUIUTILS_EXPORT KexiFlowLayout : public QLayout
 {
 	public:

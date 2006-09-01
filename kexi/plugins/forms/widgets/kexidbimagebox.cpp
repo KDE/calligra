@@ -648,8 +648,12 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 		QFont f(qApp->font());
 		p2.setFont(f);
 		p2.setPen( KexiUtils::contrastColor( bg ) );
+		; 
+
 		p2.drawText(pm.rect(), Qt::AlignCenter|Qt::WordBreak, 
-			dataSource().isEmpty() ? i18n("No Image") : dataSource());
+			dataSource().isEmpty() 
+				? QString::fromLatin1(name())+"\n"+i18n("Unbound Image Box", "(unbound)") //i18n("No Image")
+				: dataSource());
 		p2.end();
 		bitBlt(this, m, m, &pm);
 	}
