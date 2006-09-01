@@ -167,6 +167,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 //	setInternalProperty("KexiDBImageBox", "forceShowAdvancedProperty:pixmap", "1");
 #endif
 
+#ifdef KEXI_DB_COMBOBOX_WIDGET
 	wi = new KexiDataAwareWidgetInfo(
 		this, "stdwidgets", "KComboBox" /*we're inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("combo");
@@ -177,6 +178,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "comboBox"));
 	wi->setDescription(i18n("A combo box widget"));
 	addClass(wi);
+#endif
 
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QCheckBox");
 	wi->setPixmap("check");
