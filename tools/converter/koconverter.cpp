@@ -125,7 +125,7 @@ int main( int argc, char **argv )
         {
             QString mime = QString::fromLatin1( args->getOption("mimetype") );
             outputMimetype = KMimeType::mimeType( mime );
-            if ( outputMimetype->name() == KMimeType::defaultMimeType() )
+            if ( ! outputMimetype )
             {
                 kError() << i18n("Mimetype not found %1",mime) << endl;
                 return 1;
