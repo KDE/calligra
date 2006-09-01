@@ -591,6 +591,19 @@ KarbonPart::initConfig()
 		setUnit( KoUnit::unit( config->readEntry( "Units", defaultUnit ) ) );
 		m_doc.setUnit( unit() );
 	}
+	if( config->hasGroup( "Grid" ) )
+	{
+		KarbonGridData defGrid;
+		config->setGroup( "Grid" );
+		double spacingX = config->readEntry<double>( "SpacingX", defGrid.spacingX() );
+		double spacingY = config->readEntry<double>( "SpacingY", defGrid.spacingY() );
+		m_doc.grid().setSpacing( spacingX, spacingY );
+		double snapX = config->readEntry<double>( "SnapX", defGrid.snapX() );
+		double snapY = config->readEntry<double>( "SnapY", defGrid.snapY() );
+		m_doc.grid().setSnap( snapX, snapY );
+		QColor color = config->readEntry<QColor>( "Color", defGrid.color() );
+		m_doc.grid().setColor( color );
+	}
 	if( undos != -1 )
 		setUndoRedoLimit( undos );
 }

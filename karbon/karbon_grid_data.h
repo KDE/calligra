@@ -38,17 +38,21 @@ public:
     void load(const QDomElement&, const QString&);
     void paint( QPainter &painter, const KoViewConverter &converter, const QRectF &area );
     void setSnapping( bool enable = true ) { m_isSnap = enable; };
-    bool snapping() { return m_isSnap; };
+    bool snapping() const { return m_isSnap; };
     void setVisible( bool visible ) { m_isShow = visible; };
-    bool visible() { return m_isShow; };
+    bool visible() const { return m_isShow; };
 
     void setSpacing( double spacingX, double spacingY );
-    void spacing( double *spacingX, double *spacingY );
+    void spacing( double *spacingX, double *spacingY ) const;
+    double spacingX() const;
+    double spacingY() const;
 
     void setSnap( double snapX, double snapY );
-    void snap( double *snapX, double *snapY );
+    void snap( double *snapX, double *snapY ) const;
+    double snapX() const;
+    double snapY() const;
 
-    const QColor& color() { return m_color; };
+    const QColor& color() const { return m_color; };
     void setColor( const QColor &color ) { m_color = color; };
 
 private:

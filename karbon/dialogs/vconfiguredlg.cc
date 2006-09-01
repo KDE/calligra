@@ -24,7 +24,6 @@
 #include <QLayout>
 #include <QGroupBox>
 #include <QComboBox>
-#include <q3grid.h>
 #include <QGridLayout>
 
 #include <kiconloader.h>
@@ -33,7 +32,6 @@
 #include <knuminput.h>
 #include <kcolorbutton.h>
 #include <KoUnitWidgets.h>
-#include <kvbox.h>
 #include <kinstance.h>
 #include <kicon.h>
 
@@ -75,6 +73,7 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 	item->setIcon(KIcon(BarIcon("document", K3Icon::SizeMedium)));
 
 	connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
+	connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
 }
 
 void VConfigureDlg::slotApply()
@@ -97,21 +96,6 @@ void VConfigureDlg::slotDefault()
 		m_gridPage->slotDefault();
 	else if( curr == m_defaultDocPage )
 		m_defaultDocPage->slotDefault();
-	/*
-	switch( activePageIndex() )
-	{
-		case 0: m_interfacePage->slotDefault();
-			break;
-		case 1: m_miscPage->slotDefault();
-			break;
-		case 2: m_gridPage->slotDefault();
-			break;
-		case 3: m_defaultDocPage->slotDefault();
-			break;
-		default:
-			break;
-	}
-	*/
 }
 
 
@@ -283,8 +267,8 @@ void VConfigMiscPage::apply()
     if( m_oldUnit != m_unit->currentIndex() )
     {
         m_oldUnit = m_unit->currentIndex();
-	part->setUnit( static_cast<KoUnit::Unit>( m_oldUnit ) );
-	part->document().setUnit(part->unit());
+        part->setUnit( static_cast<KoUnit::Unit>( m_oldUnit ) );
+        part->document().setUnit(part->unit());
         m_config->writeEntry( "Units", KoUnit::unitName( part->unit() ) );
     }
 
@@ -307,6 +291,8 @@ void VConfigMiscPage::slotDefault()
 VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 {
 	setObjectName(name);
+
+	m_config = KarbonFactory::instance()->config();
 
 	m_view = view;
 	KoUnit::Unit unit = view->part()->document().unit();
@@ -366,8 +352,10 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	gl->addWidget( snapGrp, 3, 0, 1, 2 );
 	gl->addItem( new QSpacerItem( 0, 0 ), 4, 0, 1, 2 );
 
-	connect( m_spaceHorizUSpin, SIGNAL( valueChanged( double ) ), SLOT( setMaxHorizSnap( double ) ) );
-	connect( m_spaceVertUSpin, SIGNAL( valueChanged( double ) ), SLOT( setMaxVertSnap( double ) ) ) ;
+	setValuesFromGrid( view->part()->document().grid() );
+
+	connect( m_spaceHorizUSpin, SIGNAL( valueChangedPt( double ) ), SLOT( setMaxHorizSnap( double ) ) );
+	connect( m_spaceVertUSpin, SIGNAL( valueChangedPt( double ) ), SLOT( setMaxVertSnap( double ) ) ) ;
 }
 
 void VConfigGridPage::setMaxHorizSnap( double v )
@@ -398,18 +386,41 @@ void VConfigGridPage::apply()
 	gd.setSnapping( m_snapChBox->isChecked() );
 	gd.setColor( m_gridColorBtn->color() );
 	m_view->repaintAll();
+
+	m_config->setGroup( "Grid" );
+	m_config->writeEntry( "SpacingX", gd.spacingX() );
+	m_config->writeEntry( "SpacingY", gd.spacingY() );
+	m_config->writeEntry( "SnapX", gd.snapX() );
+	m_config->writeEntry( "SnapY", gd.snapY() );
+	m_config->writeEntry( "Color", gd.color() );
 }
 
 void VConfigGridPage::slotDefault()
 {
-	KoUnit::Unit unit = m_view->part()->document().unit();
-	m_spaceHorizUSpin->setValue( KoUnit::toUserValue( 20.0, unit ) );
-	m_spaceVertUSpin->setValue( KoUnit::toUserValue( 20.0, unit ) );
-	m_snapHorizUSpin->setValue( KoUnit::toUserValue( 20.0, unit ) );
-	m_snapVertUSpin->setValue( KoUnit::toUserValue( 20.0, unit ) );
-	m_gridChBox->setChecked( true );
-	m_snapChBox->setChecked( true );
-	m_gridColorBtn->setColor( QColor( 228, 228, 228 ) );
+	KarbonGridData defGrid;
+	setValuesFromGrid( defGrid );
+}
+
+void VConfigGridPage::setValuesFromGrid( const KarbonGridData &grid )
+{
+	double docW = m_view->part()->document().width();
+	double docH = m_view->part()->document().height();
+
+	m_spaceHorizUSpin->setMaximum( docW );
+	m_spaceHorizUSpin->changeValue( grid.spacingX() );
+
+	m_spaceVertUSpin->setMaximum( docH );
+	m_spaceVertUSpin->changeValue( grid.spacingY() );
+
+	m_snapHorizUSpin->setMaximum( grid.spacingX() );
+	m_snapHorizUSpin->changeValue( grid.snapX() );
+
+	m_snapVertUSpin->setMaximum( grid.spacingY() );
+	m_snapVertUSpin->changeValue( grid.snapY() );
+
+	m_gridChBox->setChecked( grid.visible() );
+	m_snapChBox->setChecked( grid.snapping() );
+	m_gridColorBtn->setColor( grid.color() );
 }
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view, char* name )

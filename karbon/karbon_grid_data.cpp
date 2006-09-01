@@ -63,12 +63,21 @@ void KarbonGridData::setSpacing( double spacingX, double spacingY )
     m_spacing.setHeight( spacingY );
 }
 
-void KarbonGridData::spacing( double *spacingX, double *spacingY )
+void KarbonGridData::spacing( double *spacingX, double *spacingY ) const
 {
     if( spacingX ) 
         *spacingX = m_spacing.width();
     if( spacingY )
         *spacingY = m_spacing.height();
+}
+
+double KarbonGridData::spacingX() const
+{
+    return m_spacing.width();
+}
+double KarbonGridData::spacingY() const
+{
+    return m_spacing.height();
 }
 
 void KarbonGridData::setSnap( double snapX, double snapY )
@@ -77,12 +86,22 @@ void KarbonGridData::setSnap( double snapX, double snapY )
     m_snap.setHeight( snapY );
 }
 
-void KarbonGridData::snap( double *snapX, double *snapY )
+void KarbonGridData::snap( double *snapX, double *snapY ) const
 {
     if( snapX ) 
         *snapX = m_snap.width();
     if( snapY )
         *snapY = m_snap.height();
+}
+
+double KarbonGridData::snapX() const
+{
+    return m_snap.width();
+}
+
+double KarbonGridData::snapY() const
+{
+    return m_snap.height();
 }
 
 void KarbonGridData::paint( QPainter &painter, const KoViewConverter &converter, const QRectF &area )

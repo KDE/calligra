@@ -110,6 +110,8 @@ private:
 	bool m_oldSaveAsPath;
 };
 
+class KarbonGridData;
+
 class VConfigGridPage : public QWidget
 {
 	Q_OBJECT
@@ -129,6 +131,8 @@ protected slots:
 	void setMaxVertSnap( double v );
 
 private:
+	void setValuesFromGrid( const KarbonGridData &grid );
+
 	KarbonView* m_view;
 	KoUnitDoubleSpinBox* m_spaceHorizUSpin;
 	KoUnitDoubleSpinBox* m_spaceVertUSpin;
@@ -137,6 +141,7 @@ private:
 	QCheckBox* m_gridChBox;
 	QCheckBox* m_snapChBox;
 	KColorButton* m_gridColorBtn;
+	KConfig* m_config;
 };
 
 class VConfigureDlg : public KPageDialog
