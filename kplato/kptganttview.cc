@@ -622,7 +622,9 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         }
         if (task->resourceOverbooked()) {
             ok = false;
-            QStringList rl = task->overbookedResources();
+            QStringList rl;
+#warning FIXME
+//          rl = task->overbookedResources();
             sts += "\n" + i18n("arg: list of resources", "Resource overbooked: %1").arg(rl.join(","));
             
         }
