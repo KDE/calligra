@@ -107,7 +107,7 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
             KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
             if(data && data->hasCounterData()) {
                 QTextCursor cursor(block); // I know this is longwinded, but just using the blocks
-                cursor.setPosition(block.position()+1); // charformat does not work, apparantly
+                                           // charformat does not work, apparantly
                 QFont font(cursor.charFormat().font(), paintDevice());
 
                 QTextLayout layout(data->counterText(), font, paintDevice());
@@ -451,6 +451,7 @@ ListItemsHelper::~ListItemsHelper() {
 
 /// is meant to take a QTextList and set the indent plus the string to render on each listitem
 void ListItemsHelper::recalculate() {
+    //kDebug() << "ListItemsHelper::recalculate" << endl;
     double width = 0.0;
     QTextListFormat format = d->textList->format();
 
@@ -526,11 +527,13 @@ void ListItemsHelper::recalculate() {
         data->setCounterText(prefix + item + suffix);
         index++;
     }
-    double other = d->fm.width(prefix) + d->fm.width(suffix);
+    width += d->fm.width(" "+ prefix + suffix); // same for all
     for(int i=0; i < d->textList->count(); i++) {
         QTextBlock tb = d->textList->item(i);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
-        data->setCounterWidth(other + width);
-        // kDebug() << "    setCounterWidth: " << width <<  "  (" << data->counterWidth() << ")" << endl;
+        data->setCounterWidth(width);
+        //kDebug() << tb.text() << endl;
+        //kDebug() << "    setCounterWidth: " << width << endl;
     }
+    kDebug() << endl;
 }
