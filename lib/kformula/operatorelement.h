@@ -27,7 +27,8 @@ KFORMULA_NAMESPACE_BEGIN
 class OperatorElement : public TokenElement {
     typedef TokenElement inherited;
 public:
-    OperatorElement( QChar ch = ' ', BasicElement* parent = 0 );
+    OperatorElement( BasicElement* parent = 0 );
+    OperatorElement( QChar ch, BasicElement* parent = 0 );
     void setForm( FormType type );
 
     /**

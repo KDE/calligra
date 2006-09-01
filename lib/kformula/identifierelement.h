@@ -27,7 +27,8 @@ KFORMULA_NAMESPACE_BEGIN
 class IdentifierElement : public TokenElement {
     typedef TokenElement inherited;
 public:
-    IdentifierElement( QChar ch = ' ', BasicElement* parent = 0 );
+    IdentifierElement( BasicElement* parent = 0 );
+    IdentifierElement( QChar ch, BasicElement* parent = 0 );
 
     /**
      * This is called by the container to get a command depending on

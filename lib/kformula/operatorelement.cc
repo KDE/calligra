@@ -37,6 +37,35 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
+OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent ),
+                                                           m_form( NoForm ),
+                                                           m_lspaceType( ThickMathSpace ),
+                                                           m_rspaceType( ThickMathSpace ),
+                                                           m_maxSizeType( InfinitySize ),
+                                                           m_minSizeType( RelativeSize ),
+                                                           m_minSize( 1 ),
+                                                           m_fence( false ),
+                                                           m_separator( false ),
+                                                           m_stretchy( false ),
+                                                           m_symmetric( true ),
+                                                           m_largeOp( false ),
+                                                           m_movableLimits( false ),
+                                                           m_accent( false ),
+                                                           m_customForm( false ),
+                                                           m_customFence( false ),
+                                                           m_customSeparator( false ),
+                                                           m_customLSpace( false ),
+                                                           m_customRSpace( false ),
+                                                           m_customStretchy( false ),
+                                                           m_customSymmetric( false ),
+                                                           m_customMaxSize( false ),
+                                                           m_customMinSize( false ),
+                                                           m_customLargeOp( false ),
+                                                           m_customMovableLimits( false ),
+                                                           m_customAccent( false )
+{
+}
+
 OperatorElement::OperatorElement( QChar ch, BasicElement* parent ) : TokenElement( ch, parent ),
                                                            m_form( NoForm ),
                                                            m_lspaceType( ThickMathSpace ),

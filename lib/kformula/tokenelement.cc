@@ -37,6 +37,11 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
+TokenElement::TokenElement( BasicElement* parent ) : TokenStyleElement( parent ),
+                                                     m_textOnly( true )
+{
+}
+
 TokenElement::TokenElement( QChar ch, BasicElement* parent ) : TokenStyleElement( parent ),
                                                                m_textOnly( true )
 {

@@ -30,8 +30,9 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-IdentifierElement::IdentifierElement( QChar ch, BasicElement* parent ) : TokenElement( ch, parent ) {
-}
+IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent ) {}
+
+IdentifierElement::IdentifierElement( QChar ch, BasicElement* parent ) : TokenElement( ch, parent ) {}
 
 /*
  * Token elements' content has to be of homogeneous type. Every token element
