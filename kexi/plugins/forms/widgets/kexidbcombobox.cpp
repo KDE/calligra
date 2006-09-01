@@ -118,83 +118,10 @@ void KexiDBComboBox::paintEvent( QPaintEvent * )
 	}
 
 	bool reverse = QApplication::reverseLayout();
-/*    if ( !d->usingListBox() &&
-	 style().styleHint(QStyle::SH_GUIStyle) == Qt::MotifStyle) {			// motif 1.x style
-	int dist, buttonH, buttonW;
-	dist     = 8;
-	buttonH  = 7;
-	buttonW  = 11;
-	int xPos;
-	int x0;
-	int w = width() - dist - buttonW - 1;
-	if ( reverse ) {
-	    xPos = dist + 1;
-	    x0 = xPos + 4;
-	} else {
-	    xPos = w;
-	    x0 = 4;
-	}
-	qDrawShadePanel( &p, rect(), g, FALSE,
-			 style().pixelMetric(QStyle::PM_DefaultFrameWidth, this),
-			 &g.brush( QColorGroup::Button ) );
-	qDrawShadePanel( &p, xPos, (height() - buttonH)/2,
-			 buttonW, buttonH, g, FALSE,
-			 style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) );
-	QRect clip( x0, 2, w - 2 - 4 - 5, height() - 4 );
-	QString str = d->popup()->text( this->d->current );
-	if ( !str.isNull() ) {
-	    p.drawText( clip, AlignCenter | SingleLine, str );
-	}
-
-	QPixmap *pix = d->popup()->pixmap( this->d->current );
-	QIconSet *iconSet = d->popup()->iconSet( this->d->current );
-	if (pix || iconSet) {
-	    QPixmap pm = ( pix ? *pix : iconSet->pixmap() );
-	    p.setClipRect( clip );
-	    p.drawPixmap( 4, (height()-pm.height())/2, pm );
-	    p.setClipping( FALSE );
-	}
-
-	if ( hasFocus() )
-	    p.drawRect( xPos - 5, 4, width() - xPos + 1 , height() - 8 );
-    } else if(!d->usingListBox()) {
-	style().drawComplexControl( QStyle::CC_ComboBox, &p, this, rect(), g,
-				    flags, (uint)QStyle::SC_All,
-				    (d->arrowDown ?
-				     QStyle::SC_ComboBoxArrow :
-				     QStyle::SC_None ));
-
-	QRect re = style().querySubControlMetrics( QStyle::CC_ComboBox, this,
-						   QStyle::SC_ComboBoxEditField );
-	re = QStyle::visualRect(re, this);
-	p.setClipRect( re );
-
-	QString str = d->popup()->text( this->d->current );
-	QPixmap *pix = d->popup()->pixmap( this->d->current );
-	if ( !str.isNull() ) {
-	    p.save();
-	    p.setFont(font());
-	    QFontMetrics fm(font());
-	    int x = re.x(), y = re.y() + fm.ascent();
-	    if( pix )
-		x += pix->width() + 5;
-	    p.drawText( x, y, str );
-	    p.restore();
-	}
-	if ( pix ) {
-	    p.fillRect( re.x(), re.y(), pix->width() + 4, re.height(),
-			colorGroup().brush( QColorGroup::Base ) );
-	    p.drawPixmap( re.x() + 2, re.y() +
-			  ( re.height() - pix->height() ) / 2, *pix );
-	}
-    } else {*/
 	style().drawComplexControl( QStyle::CC_ComboBox, &p, d->paintedCombo /*this*/, rect(), cg,
 		flags, (uint)QStyle::SC_All, 
 		(d->buttonPressed ? QStyle::SC_ComboBoxArrow : QStyle::SC_None )
 	);
-
-//	QRect rect( editorGeometry() );
-//	p.setClipRect( rect );
 
 	if (d->isEditable) {
 		//if editable, editor paints itself, nothing to do
@@ -210,25 +137,6 @@ void KexiDBComboBox::paintEvent( QPaintEvent * )
 		}
 		//todo
 	}
-/*	if ( !d->ed ) {
-	    QListBoxItem * item = d->listBox()->item( d->current );
-	    if ( item ) {
-		int itemh = item->height( d->listBox() );
-		p.translate( re.x(), re.y() + (re.height() - itemh)/2  );
-		item->paint( &p );
-	    }
-	} else if ( d->listBox() && d->listBox()->item( d->current ) ) {
-	    QListBoxItem * item = d->listBox()->item( d->current );
-	    const QPixmap *pix = item->pixmap();
-	    if ( pix ) {
-		p.fillRect( re.x(), re.y(), pix->width() + 4, re.height(),
-			    colorGroup().brush( QColorGroup::Base ) );
-		p.drawPixmap( re.x() + 2, re.y() +
-			      ( re.height() - pix->height() ) / 2, *pix );
-	    }
-	}*/
-//	p.setClipping( false );
-//    }
 }
 
 QRect KexiDBComboBox::editorGeometry() const
