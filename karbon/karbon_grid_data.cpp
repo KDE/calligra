@@ -110,11 +110,11 @@ void KarbonGridData::paint( QPainter &painter, const KoViewConverter &converter,
         y += m_spacing.height();
     } while( y <= area.bottom() );
 
-    y = - m_spacing.width();
+    y = - m_spacing.height();
     while( y >= area.top() )
     {
         painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ), 
                           converter.documentToView( QPointF( area.right(), y ) ) );
-        y -= m_spacing.width();
+        y -= m_spacing.height();
     };
 }
