@@ -153,7 +153,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Workinghours</string>
+                <string>Working Hours</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Define standard weekly working hours.</string>

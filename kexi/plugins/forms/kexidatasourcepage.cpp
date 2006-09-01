@@ -132,7 +132,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	QToolTip::add(m_clearDSButton, i18n("Clear data source"));
 	hlyr->addWidget(m_clearDSButton);
 	connect(m_clearDSButton, SIGNAL(clicked()), this, SLOT(clearDataSourceSelection()));
-	
+
 	m_dataSourceCombo = new KexiDataSourceComboBox(contents, "dataSourceCombo");
 	m_dataSourceLabel->setBuddy(m_dataSourceCombo);
 	contentsVlyr->addWidget(m_dataSourceCombo);
@@ -156,7 +156,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 
 	//2. Inserting fields
-	container = new KoProperty::GroupContainer(i18n("Inserting fields"), this);
+	container = new KoProperty::GroupContainer(i18n("Inserting Fields"), this);
 	vlyr->addWidget(container, 1);
 
 	//helper info
@@ -196,7 +196,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	hlyr->addWidget(m_addField);
 	connect(m_addField, SIGNAL(clicked()), this, SLOT(slotInsertSelectedFields()));
 
-	m_fieldListView = new KexiFieldListView(contents, "fieldListView", 
+	m_fieldListView = new KexiFieldListView(contents, "fieldListView",
 		KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection );
 //	m_fieldListView->header()->show();
 	m_fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
@@ -231,7 +231,7 @@ void KexiDataSourcePage::clearDataSourceSelection(bool alsoClearComboBox)
 		return;
 	m_insideClearDataSourceSelection = true;
 	if (alsoClearComboBox && !m_dataSourceCombo->selectedName().isEmpty())
-		m_dataSourceCombo->setDataSource("", ""); 
+		m_dataSourceCombo->setDataSource("", "");
 //	if (!m_dataSourceCombo->currentText().isEmpty()) {
 //		m_dataSourceCombo->setCurrentText("");
 //		emit m_dataSourceCombo->dataSourceSelected();
@@ -281,7 +281,7 @@ void KexiDataSourcePage::slotInsertSelectedFields()
 	if (selectedFields.isEmpty())
 		return;
 
-	emit insertAutoFields(m_fieldListView->schema()->table() ? "kexi/table" : "kexi/query", 
+	emit insertAutoFields(m_fieldListView->schema()->table() ? "kexi/table" : "kexi/query",
 		m_fieldListView->schema()->name(), selectedFields);
 #endif
 }
@@ -356,8 +356,8 @@ void KexiDataSourcePage::slotFieldSelected()
 	m_clearWidgetDSButton->setEnabled( !m_sourceFieldCombo->fieldOrExpression().isEmpty() );
 
 	emit dataSourceFieldOrExpressionChanged(
-		m_sourceFieldCombo->fieldOrExpression(), 
-		m_sourceFieldCombo->fieldOrExpressionCaption(), 
+		m_sourceFieldCombo->fieldOrExpression(),
+		m_sourceFieldCombo->fieldOrExpressionCaption(),
 		dataType
 	);
 }

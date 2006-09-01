@@ -104,7 +104,7 @@ VGradientTool::deactivate()
 QString
 VGradientTool::statusText()
 {
-	return i18n( "Gradient tool" );
+	return i18n( "Gradient Tool" );
 }
 
 QString 

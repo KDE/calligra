@@ -38,10 +38,10 @@ WBSDefinition::WBSDefinition() {
     m_defaultDef.separator = ".";
     
     m_codeLists.append(qMakePair(QString("Number"), i18n("Number")));
-    m_codeLists.append(qMakePair(QString("Roman, upper case"), i18n("Roman, upper case")));
-    m_codeLists.append(qMakePair(QString("Roman, lower case"), i18n("Roman, lower case")));
-    m_codeLists.append(qMakePair(QString("Letter, upper case"), i18n("Letter, upper case")));
-    m_codeLists.append(qMakePair(QString("Letter, lower case"), i18n("Letter, lower case")));
+    m_codeLists.append(qMakePair(QString("Roman, upper case"), i18n("Roman, Upper Case")));
+    m_codeLists.append(qMakePair(QString("Roman, lower case"), i18n("Roman, Lower Case")));
+    m_codeLists.append(qMakePair(QString("Letter, upper case"), i18n("Letter, Upper Case")));
+    m_codeLists.append(qMakePair(QString("Letter, lower case"), i18n("Letter, Lower Case")));
 }
 
 WBSDefinition::~WBSDefinition() {

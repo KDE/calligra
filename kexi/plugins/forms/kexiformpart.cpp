@@ -82,10 +82,10 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	m_registeredPartID = (int)KexiPart::FormObjectType;
 
 	kexipluginsdbg << "KexiFormPart::KexiFormPart()" << endl;
-	m_names["instanceName"] 
+	m_names["instanceName"]
 		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
-		"If you cannot use latin characters in your language, use english word.", 
+		"If you cannot use latin characters in your language, use english word.",
 		"form");
 	m_names["instanceCaption"] = i18n("Form");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
@@ -94,7 +94,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 	// Only create form manager if it's not yet created.
 	// KexiReportPart could have created is already.
 	KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
-	if (!formManager) 
+	if (!formManager)
 		formManager = new KexiFormManager(this, "kexi_form_and_report_manager");
 
 	// Create and store a handle to forms' library. Reports will have their own library too.
@@ -138,7 +138,7 @@ void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 {
 	if (mode==Kexi::DesignViewMode) {
 		KFormDesigner::FormManager::self()->createActions(col, 0);
-		new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), col, "taborder");
+		new KAction(i18n("Edit Tab Order..."), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), col, "taborder");
 		new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(ajustWidgetSize()), col, "adjust");
 	}
 	//TODO
@@ -165,7 +165,7 @@ void KexiFormPart::initInstanceActions()
 	connect( col->action("widget_assign_action"), SIGNAL(activated()), this, SLOT(slotAssignAction()));
 
 	createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"), "editclear", 0, "formpart_clear_contents");
-	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
+	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order..."), "tab_order", 0, "formpart_taborder");
 //TODO	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");
 //TODO	createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), "connections", 0, "formpart_connections");
 
@@ -478,7 +478,7 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow*
 			KFormDesigner::FormManager::self(), SLOT(setFormDataSource(const QCString&, const QCString&)));
 		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
 			KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(const QString&, const QString&, KexiDB::Field::Type)));
-		connect(d->dataSourcePage, SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)), 
+		connect(d->dataSourcePage, SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)),
 			KFormDesigner::FormManager::self(), SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));
 	}
 
