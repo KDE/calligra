@@ -27,7 +27,7 @@
 
 class QDateTimeEditor;
 
-//! A db-aware time editor
+//! @short A db-aware time editor
 class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public QTimeEdit, public KexiFormDataItemInterface
 {
 	Q_OBJECT

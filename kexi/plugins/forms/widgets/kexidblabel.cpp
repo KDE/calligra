@@ -464,7 +464,9 @@ void KexiDBLabel::updatePixmap() {
 	repaint();
 }
 
-void KexiDBLabel::paintEvent( QPaintEvent* e ) {
+void KexiDBLabel::paintEvent( QPaintEvent* e )
+{
+	QPainter p( this );
 	if ( d->shadowEnabled ) {
 		/*!
 		If required, update the pixmap-cache.
@@ -481,7 +483,6 @@ void KexiDBLabel::paintEvent( QPaintEvent* e ) {
 		the widgets border.
 		*/
 		if ( !d->pixmapDirty && e->rect().contains( d->shadowPosition ) && !d->shadowPixmap.isNull()) {
-			QPainter p( this );
 			QRect clipRect = QRect(
 				QMAX( e->rect().x() - d->shadowPosition.x(), 0 ),
 				QMAX( e->rect().y() - d->shadowPosition.y(), 0 ),
@@ -490,8 +491,7 @@ void KexiDBLabel::paintEvent( QPaintEvent* e ) {
 			p.drawPixmap( d->internalLabel->m_shadowRect.topLeft(), d->shadowPixmap, clipRect );
 		}
 	}
-
-	KexiDBTextWidgetInterface::paintEvent( this, text().isEmpty(), alignment(), false );
+	KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), false );
 	QLabel::paintEvent( e );
 }
 

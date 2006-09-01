@@ -40,6 +40,7 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/utils.h>
+#include <kexiutils/utils.h>
 #include <kexidragobjects.h>
 #include <kexiproject.h>
 
@@ -207,7 +208,9 @@ void KexiFieldComboBox::slotReturnPressed(const QString & text)
 void KexiFieldComboBox::focusOutEvent( QFocusEvent *e )
 {
 	KComboBox::focusOutEvent( e );
-	slotReturnPressed(currentText());
+	// accept changes if the focus is moved
+	if (!KexiUtils::hasParent(this, focusWidget())) //(a check needed because drop-down listbox also causes a focusout)
+		slotReturnPressed(currentText());
 }
 
 #include "kexifieldcombobox.moc"

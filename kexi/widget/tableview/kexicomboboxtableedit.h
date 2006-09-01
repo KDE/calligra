@@ -23,6 +23,7 @@
 
 #include "kexidb/field.h"
 #include "kexiinputtableedit.h"
+#include "kexicomboboxbase.h"
 #include <kexidb/lookupfieldschema.h>
 
 class KPushButton;
@@ -31,10 +32,9 @@ class KexiComboBoxPopup;
 class KexiTableItem;
 class KexiTableViewColumn;
 
-/**
- * 
- **/
-class KexiComboBoxTableEdit : public KexiInputTableEdit
+/*! @short Drop-down cell editor.
+*/
+class KexiComboBoxTableEdit : public KexiInputTableEdit, KexiComboBoxBase
 {
 	Q_OBJECT
 
@@ -42,16 +42,24 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		KexiComboBoxTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
 		virtual ~KexiComboBoxTableEdit();
 
-		//! Note: Generally in current implementation this is integer > 0; may be null if no value is set
-		virtual QVariant value();
+		//! Implemented for KexiComboBoxBase
+		virtual KexiTableViewColumn *column() const { return m_column; }
+
+		//! Implemented for KexiComboBoxBase
+		virtual KexiDB::Field *field() const { return m_column->field(); }
+
+		//! Implemented for KexiComboBoxBase
+		virtual QVariant origValue() const { return m_origValue; }
+
+		virtual QVariant value() { return KexiComboBoxBase::value(); }
 
 		virtual void clear();
 //		virtual bool cursorAtStart();
 //		virtual bool cursorAtEnd();
 
 		virtual bool valueChanged();
-		virtual bool valueIsNull();
-		virtual bool valueIsEmpty();
+//moved		virtual bool valueIsNull();
+//moved		virtual bool valueIsEmpty();
 		virtual QVariant visibleValueForLookupField();
 
 		/*! Reimplemented: resizes a view(). */
@@ -81,18 +89,18 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 	protected slots:
 		void slotButtonClicked();
-		void createPopup(bool show);
-		void showPopup();
-		void slotRowAccepted(KexiTableItem *item, int row);
-		void slotItemSelected(KexiTableItem*);
-		void slotLineEditTextChanged(const QString &newtext);
+//moved		void createPopup(bool show);
+//moved		void showPopup();
+		void slotRowAccepted(KexiTableItem *item, int row) { KexiComboBoxBase::slotRowAccepted(item, row); }
+		void slotItemSelected(KexiTableItem* item) { KexiComboBoxBase::slotItemSelected(item); }
+		void slotLineEditTextChanged(const QString &newtext) { KexiComboBoxBase::slotLineEditTextChanged(newtext); }
 		void slotPopupHidden();
 
 	protected:
 		//! internal
 		void updateFocus( const QRect& r );
 
-		virtual void setValueInternal(const QVariant& add, bool removeOld);
+//moved		virtual void setValueInternal(const QVariant& add, bool removeOld);
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
@@ -100,7 +108,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 		//! Used to select row item for an user-entered text \a str.
 		//! Only for "lookup table" mode.
-		KexiTableItem* selectItemForStringInLookupTable(const QString& str);
+//moved		KexiTableItem* selectItemForStringInLookupTable(const QString& str);
 
 //		//! \return value (col #1 of related data) - only reasonable for 'related table data' model
 //		QString valueForID(const QVariant& val);
@@ -110,17 +118,44 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		 \a str is returned.
 		 Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string 
 		 for column #1 for id-column #0 */
-		QString valueForString(const QString& str, int* row, uint lookInColumn, 
-			uint returnFromColumn, bool allowNulls = false);
+//moved		QString valueForString(const QString& str, int* row, uint lookInColumn, 
+//moved			uint returnFromColumn, bool allowNulls = false);
 
 
 		//! sets \a text for the line edit without setting a flag (d->userEnteredText) that indicates that 
 		//! the text has been entered by hand (by a user)
-		void setLineEditText(const QString& text);
+//moved		void setLineEditText(const QString& text);
 
-		KexiDB::LookupFieldSchema* lookupFieldSchema() const;
+//moved		KexiDB::LookupFieldSchema* lookupFieldSchema() const;
 
-		int rowToHighlightForLookupTable() const;
+//moved		int rowToHighlightForLookupTable() const;
+
+		//! Implemented for KexiComboBoxBase
+		virtual QWidget *internalEditor() const;
+
+		//! Implemented for KexiComboBoxBase
+		virtual void moveCursorToEndInInternalEditor();
+
+		//! Implemented for KexiComboBoxBase
+		virtual void selectAllInInternalEditor();
+
+		//! Implemented for KexiComboBoxBase
+		virtual void setValueInInternalEditor(const QVariant& value);
+
+		//! Implemented for KexiComboBoxBase
+		virtual QVariant valueFromInternalEditor() const;
+
+		//! Implemented for KexiComboBoxBase
+		virtual void editRequested() { KexiInputTableEdit::editRequested(); }
+
+		//! Implemented for KexiComboBoxBase
+		virtual void acceptRequested() { KexiInputTableEdit::acceptRequested(); }
+
+		//! Implemented for KexiComboBoxBase
+		virtual QPoint mapFromParentToGlobal(const QPoint& pos) const;
+
+		//! Implemented for KexiComboBoxBase
+		virtual int popupWidthHint() const;
 
 		class Private;
 		Private *d;

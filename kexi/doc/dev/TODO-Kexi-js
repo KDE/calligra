@@ -960,3 +960,6 @@ KoProperty TODO
 - add "None" option for editors supporting 3rdState, e.g. int, string (needed for "default"
   property of the Table Designer)
 
+
+Kexi 1.6 MUST HAVE TODOs:
+- use transliteration script: http://bugs.kde.org/show_bug.cgi?id=133170

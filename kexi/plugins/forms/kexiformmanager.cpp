@@ -169,8 +169,8 @@ void KexiFormManager::setDataSourceFieldOrExpression(const QString& string, cons
 		if (set->contains("fieldCaptionInternal"))
 			(*set)["fieldCaptionInternal"].setValue(caption);
 	}
-	if (type!=KexiDB::Field::InvalidType 
-		&& set->contains("widgetType") && (*set)["widgetType"].value().toString()=="Auto")
+	if (//type!=KexiDB::Field::InvalidType && 
+		set->contains("widgetType") && (*set)["widgetType"].value().toString()=="Auto")
 	{
 		if (set->contains("fieldTypeInternal"))
 			(*set)["fieldTypeInternal"].setValue(type);

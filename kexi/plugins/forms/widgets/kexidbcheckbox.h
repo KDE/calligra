@@ -24,7 +24,7 @@
 #include "kexiformdataiteminterface.h"
 #include <qcheckbox.h>
 
-//! A db-aware check box
+//! @short A db-aware check box
 class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDataItemInterface
 {
 	Q_OBJECT

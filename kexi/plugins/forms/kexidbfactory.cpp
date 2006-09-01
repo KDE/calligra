@@ -56,6 +56,7 @@
 #include "widgets/kexidblabel.h"
 #include "widgets/kexidblineedit.h"
 #include "widgets/kexidbtextedit.h"
+#include "widgets/kexidbcombobox.h"
 #include "widgets/kexipushbutton.h"
 #include "widgets/kexidbform.h"
 #include "widgets/kexidbsubform.h"
@@ -161,6 +162,17 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	setInternalProperty("KexiDBImageBox", "dontStartEditingOnInserting", "1");
 //	setInternalProperty("KexiDBImageBox", "forceShowAdvancedProperty:pixmap", "1");
 #endif
+
+	wi = new KexiDataAwareWidgetInfo(
+		this, "stdwidgets", "KComboBox" /*we're inheriting to get i18n'd strings already translated there*/);
+	wi->setPixmap("combo");
+	wi->setClassName("KexiDBComboBox");
+	wi->addAlternateClassName("KComboBox", true/*override*/);
+	wi->setName(i18n("Combo Box"));
+	wi->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "comboBox"));
+	wi->setDescription(i18n("A combo box widget"));
+	addClass(wi);
 
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QCheckBox");
 	wi->setPixmap("check");
@@ -279,7 +291,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propValDesc["Time"] = KexiDB::Field::typeName(KexiDB::Field::Time);
 	m_propValDesc["DateTime"] = KexiDB::Field::typeName(KexiDB::Field::DateTime);
 	m_propValDesc["MultiLineText"] = i18n("AutoField editor's type", "Multiline Text");
-	m_propValDesc["Enum"] = i18n("AutoField editor's type", "List of Values"); 
+	m_propValDesc["ComboBox"] = i18n("AutoField editor's type", "Drop-Down List"); 
 	m_propValDesc["Image"] = i18n("AutoField editor's type", "Image");
 
 //	m_propDesc["labelCaption"] = i18n("Label Text");
@@ -298,12 +310,9 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propDesc["scaledContents"] = i18n("Scaled Contents");
 	m_propDesc["keepAspectRatio"] = i18n("Keep Aspect Ratio (short)", "Keep Ratio");
 
-#ifdef KEXI_NO_UNFINISHED
-	//we don't want not-fully implemented/usable classes:
+	//hide classes that are repalced by db-aware versions
 	hideClass("KexiPictureLabel");
-	//hideClass("KIntSpinBox");
 	hideClass("KComboBox");
-#endif
 
 	//used in labels, frames...
 	m_propDesc["frameColor"] = i18n("Frame Color");
@@ -362,6 +371,8 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 #endif
 	else if(c == "KexiDBCheckBox")
 		w = new KexiDBCheckBox(text, p, n);
+	else if(c == "KexiDBComboBox")
+		w = new KexiDBComboBox(p, n, designMode);
 /*	else if(c == "KexiDBTimeEdit")
 		w = new KexiDBTimeEdit(QTime::currentTime(), p, n);
 	else if(c == "KexiDBDateEdit")
@@ -566,12 +577,18 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 	}
 	else if(classname == "KexiDBLineEdit")
 		ok = property!="urlDropsEnabled"
-			&& property != "vAlign"
+			&& property!="vAlign"
 #ifdef KEXI_NO_UNFINISHED
 			&& property!="inputMask"
 			&& property!="maxLength" //!< we may want to integrate this with db schema
 #endif
 		;
+	else if(classname == "KexiDBComboBox")
+		ok = property!="autoCaption"
+			&& property!="labelPosition"
+			&& property!="widgetType"
+			&& property!="fieldTypeInternal"
+			&& property!="fieldCaptionInternal"; //hide properties that come with KexiDBAutoField
 	else if(classname == "KexiDBTextEdit")
 		ok = property!="undoDepth"
 			&& property!="undoRedoEnabled" //always true!

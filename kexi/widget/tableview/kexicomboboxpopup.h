@@ -37,10 +37,15 @@ class KexiComboBoxPopup : public QFrame
 	Q_OBJECT
 	public:
 //js TODO: more ctors!
-		/*! Constructor for creating simple one-column enum-defined popup
-		 using definition from \a f. */
-//unused		KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f);
+		/*! Constructor for creating a popup using definition from \a column. 
+		 If the column is lookup column, it's definition is used to display
+		 one or more column within the popup. Otherwise column.field() is used
+		 to display single-column data. */
 		KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column);
+
+		/*! Alternative constructor supporting lookup fields and enum hints. */
+		KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field);
+
 		virtual ~KexiComboBoxPopup();
 
 		KexiTableView* tableView();
@@ -71,8 +76,11 @@ class KexiComboBoxPopup : public QFrame
 
 	protected:
 		void init();
-		void setData(KexiDB::Field &f);
-		void setData(KexiTableViewColumn &column);
+		//! The main function for setting data; data can be set either by passing \a column or \a field.
+		//! The second case is used for lookup
+		void setData(KexiTableViewColumn *column, KexiDB::Field *field);
+
+		//! used by setData()
 		void setDataInternal( KexiTableViewData *data, bool owner = true ); //!< helper
 
 		KexiComboBoxPopupPrivate *d;

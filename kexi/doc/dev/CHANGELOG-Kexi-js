@@ -15,7 +15,30 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
-2006-08-22
+
+~~~~~~~~~~~~ 1.1 beta 1 release (with KOffice 1.6 beta 1)  ~~~~~~~~~~~~
+
+2006-08-29
+General
+- Added unicode->latin1 mappings for Czech characters
+2.0: merged
+
+2006-08-25
+Table View
+= tooltips are displayed also for "insert" row, if needed
+Forms
+= fixed displaying widget names for unbound auto fields 
+  and image boxes while in design mode
+= fixed setting data source for auto field
+-	 initial version of the combo box widget (will be disabled for beta 1)
+2.0: merged
+
+2006-08-24
+Table View
+= displaying cell's selection background fixed for nonstandard font
+2.0: merged
+
+2006-08-22..23
 Forms
 - display default values in the new row; 
   default text is displayed with a special style (italic blue) as in table view;
@@ -23,8 +46,10 @@ Forms
   (if available); the special style is removed as soon as the editing starts
 - "redo" action removed from the data-aware widgets' context menu 
   (to avoid problems with data handling)
+2.0: merged
 Table Designer
 = fixed setting subtype by user
+2.0: merged
 
 2006-08-21
 CSV Import Dialog

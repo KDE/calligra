@@ -743,6 +743,22 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 	paintEmptyArea(p, cx, cy, cw, ch);
 }
 
+bool KexiTableView::isDefaultValueDisplayed(KexiTableItem *item, int col, QVariant* value)
+{
+	const bool cursorAtInsertRowOrEditingNewRow = (item == m_insertItem || (m_newRowEditing && m_currentItem == item));
+	KexiTableViewColumn *tvcol;
+	if (cursorAtInsertRowOrEditingNewRow 
+		&& (tvcol = m_data->column(col)) 
+		&& hasDefaultValueAt(*tvcol) 
+		&& !tvcol->field()->isAutoIncrement())
+	{
+		if (value)
+			*value = tvcol->field()->defaultValue();
+		return true;
+	}
+	return false;
+}
+
 void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print)
 {
 	p->save();
@@ -784,8 +800,6 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	QString txt; //text to draw
 
 	KexiTableViewColumn *tvcol = m_data->column(col);
-	bool cursorAtInsertRowOrEditingNewRow = (item == m_insertItem || (m_newRowEditing && m_currentItem == item));
-	const bool hasDefaultValue = hasDefaultValueAt(*tvcol);
 
 	QVariant cell_value;
 	if (col < (int)item->count()) {
@@ -809,7 +823,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		}
 	}
 
-	bool defaultValueDisplayed = hasDefaultValue && cursorAtInsertRowOrEditingNewRow && !tvcol->field()->isAutoIncrement();
+	bool defaultValueDisplayed = this->isDefaultValueDisplayed(item, col);
 
 	if ((item == m_insertItem /*|| m_newRowEditing*/) && cell_value.isNull()) {
 		if (!tvcol->field()->isAutoIncrement() && !tvcol->field()->defaultValue().isNull()) {
@@ -1120,7 +1134,6 @@ void KexiTableView::contentsMouseReleaseEvent( QMouseEvent* e )
 	emit itemMouseReleased(m_currentItem, m_curRow, m_curCol);
 }
 
-//! @internal called by contentsMouseOrEvent() contentsMouseReleaseEvent() to move cursor
 bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool release)
 {
 	// remember old focus cell
@@ -1595,7 +1608,7 @@ KexiDataItemInterface *KexiTableView::editor( int col, bool ignoreMissingEditor 
 
 	//not found: create
 //	editor = KexiCellEditorFactory::createEditor(*m_data->column(col)->field, this);
-	editor = KexiCellEditorFactory::createEditor(*m_data->column(col), this);
+	editor = KexiCellEditorFactory::createEditor(*tvcol, this);
 	if (!editor) {//create error!
 		if (!ignoreMissingEditor) {
 			//js TODO: show error???
@@ -2461,12 +2474,15 @@ void KexiTableView::copySelection()
 {
 	if (m_currentItem && m_curCol!=-1) {
 		KexiTableEdit *edit = tableEditorWidget( m_curCol );
+		QVariant defaultValue;
+		const bool defaultValueDisplayed 
+			= isDefaultValueDisplayed(m_currentItem, m_curCol, &defaultValue);
 		if (edit)
-			edit->handleCopyAction( m_currentItem->at( m_curCol ) );
+			edit->handleCopyAction( 
+				defaultValueDisplayed ? defaultValue : m_currentItem->at( m_curCol ) );
 	}
 }
 
-//! Cut current selection to a clipboard (e.g. cell)
 void KexiTableView::cutSelection()
 {
 	//try to handle @ editor's level
@@ -2475,7 +2491,6 @@ void KexiTableView::cutSelection()
 		edit->handleAction("edit_cut");
 }
 
-//! Paste current clipboard contents (e.g. to a cell)
 void KexiTableView::paste()
 {
 	//try to handle @ editor's level

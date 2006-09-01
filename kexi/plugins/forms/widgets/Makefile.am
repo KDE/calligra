@@ -13,7 +13,8 @@ libkexiformutilswidgets_la_SOURCES = \
   kexiframe.cpp \
   kexidblineedit.cpp \
   kexidbcheckbox.cpp \
-  kexidbtextedit.cpp 
+  kexidbtextedit.cpp \
+  kexidbcombobox.cpp
 
 libkexiformutilswidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiformutilswidgets_la_LIBADD = 

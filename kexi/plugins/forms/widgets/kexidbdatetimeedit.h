@@ -28,7 +28,7 @@ class KDatePicker;
 class QDateTimeEditor;
 class KPopupMenu;
 
-//! A db-aware datetime editor
+//! @short A db-aware datetime editor
 class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormDataItemInterface
 {
 	Q_OBJECT

@@ -20,9 +20,11 @@
 
 #include "kexidbtextedit.h"
 #include "kexidblineedit.h"
-
 #include <kexidb/queryschema.h>
+
 #include <kapplication.h>
+
+#include <qpainter.h>
 
 KexiDBTextEdit::KexiDBTextEdit(QWidget *parent, const char *name)
  : KTextEdit(parent, name)
@@ -139,7 +141,8 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 void KexiDBTextEdit::paintEvent ( QPaintEvent *pe )
 {
 	KTextEdit::paintEvent( pe );
-	KexiDBTextWidgetInterface::paintEvent( this, text().isEmpty(), alignment(), hasFocus() );
+	QPainter p(this);
+	KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
 }
 
 QPopupMenu * KexiDBTextEdit::createPopupMenu(const QPoint & pos)

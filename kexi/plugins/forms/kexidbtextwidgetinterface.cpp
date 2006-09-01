@@ -43,20 +43,19 @@ void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QW
 	}
 }
 
-void KexiDBTextWidgetInterface::paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus )
+void KexiDBTextWidgetInterface::paint( QFrame *w, QPainter* p, bool textIsEmpty, int alignment, bool hasFocus )
 {
 	KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
 	KexiDB::QueryColumnInfo *columnInfo = dataItemIface ? dataItemIface->columnInfo() : 0;
 	if (columnInfo && columnInfo->field && dataItemIface->cursorAtNewRow() && textIsEmpty) {
-		QPainter p(w);
 		const int margin = w->lineWidth() + w->midLineWidth();
 		if (columnInfo->field->isAutoIncrement() && m_autonumberDisplayParameters) {
 			if (w->hasFocus()) {
-				p.setPen(
+				p->setPen(
 					KexiUtils::blendedColors(
 						m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
 			}
-			KexiDisplayUtils::paintAutonumberSign(*m_autonumberDisplayParameters, &p,
+			KexiDisplayUtils::paintAutonumberSign(*m_autonumberDisplayParameters, p,
 				2 + margin + w->margin(), margin, w->width() - margin*2 -2-2, 
 				w->height() - margin*2 -2, alignment, hasFocus);
 		}

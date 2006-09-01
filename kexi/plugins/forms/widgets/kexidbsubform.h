@@ -24,7 +24,7 @@
 #include <qscrollview.h>
 #include <formeditor/form.h>
 
-//! A form embedded as a widget inside other form
+//! @short A form embedded as a widget inside other form
 class KEXIFORMUTILS_EXPORT KexiDBSubForm : public QScrollView
 {
 	Q_OBJECT

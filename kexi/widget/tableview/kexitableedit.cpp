@@ -140,9 +140,12 @@ void KexiTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, in
 	p->drawRect(x, y, w, h);
 }
 
-void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, const QVariant& val, 
-	QString &txt, int &align, int &/*x*/, int &y_offset, int &w, int &/*h*/  )
+void KexiTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
+	QString &txt, int &align, int &/*x*/, int &y_offset, int &w, int &h  )
 {
+	Q_UNUSED(p);
+	Q_UNUSED(focused);
+	Q_UNUSED(h);
 	KexiDB::Field *realField = displayedField();
 
 #ifdef Q_WS_WIN
@@ -153,77 +156,26 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, const QVa
 	y_offset = 0;
 #endif
 
-//	const int ctype = columnType(col);
-//	align = SingleLine | AlignVCenter;
-//	QString txt; //text to draw
 	if (realField->isFPNumericType()) {
-//js TODO: ADD OPTION to displaying NULL VALUES as e.g. "(null)"
+//! @todo ADD OPTION to displaying NULL VALUES as e.g. "(null)"
 		if (!val.isNull()) {
 				txt = KexiDB::formatNumberForVisibleDecimalPlaces(
 					val.toDouble(), realField->visibleDecimalPlaces());
-			//txt = KGlobal::locale()->formatNumber(val.toDouble(), 10);
 		}
 		w -= 6;
 		align |= AlignRight;
 	}
 	else if (realField->isIntegerType()) {
 		Q_LLONG num = val.toLongLong();
-/*#ifdef Q_WS_WIN
-		x = 1;
-#else
-		x = 0;
-#endif*/
 		w -= 6;
 		align |= AlignRight;
 		if (!val.isNull())
 			txt = QString::number(num);
 	}
-/*MOVE TO Date editor!!!!
-else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
-#ifdef Q_WS_WIN
-		x = 5;
-#else
-		x = 5;
-#endif
-		if(cell_value.toDate().isValid())
-		{
-#ifdef USE_KDE
-			txt = KGlobal::locale()->formatDate(cell_value.toDate(), true);
-#else
-			if (!cell_value.isNull())
-				txt = cell_value.toDate().toString(Qt::LocalDate);
-#endif
-		}
-		align |= AlignLeft;
-	}*/
 	else {//default:
-/*#ifdef Q_WS_WIN
-		x = 5;
-//		y_offset = -1;
-#else
-		x = 5;
-//		y_offset = 0;
-#endif*/
-//		switch (realField->type()) {
-/*moved		case KexiDB::Field::Time:
-			//it was QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-			if (!val.isNull()) {
-				txt = val.toTime().toString(Qt::LocalDate);
-			}
-			break;
-		case KexiDB::Field::Date:
-			if (val.toDate().isValid())
-				txt = val.toDate().toString(Qt::LocalDate);
-			break;
-		case KexiDB::Field::DateTime:
-			if (!val.toDateTime().isNull())
-				txt = val.toDate().toString(Qt::LocalDate) + " " + val.toTime().toString(Qt::LocalDate);
-			break;*/
-//		default:
 		if (!val.isNull()) {
 			txt = val.toString();
 		}
-//		}
 		align |= AlignLeft;
 	}
 }

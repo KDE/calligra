@@ -29,7 +29,7 @@
 
 class KexiDropDownButton;
 
-//! A data-aware, editable image box.
+//! @short A data-aware, editable image box.
 /*! Can also act as a normal static image box.
 */
 class KEXIFORMUTILS_EXPORT KexiDBImageBox : 

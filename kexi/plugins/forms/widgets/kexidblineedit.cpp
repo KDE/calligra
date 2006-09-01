@@ -26,6 +26,7 @@
 #include <kdatetbl.h>
 
 #include <qpopupmenu.h>
+#include <qpainter.h>
 
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
@@ -359,10 +360,16 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 	KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
 
+/*todo
+void KexiDBLineEdit::paint( QPainter *p )
+{
+	KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
+}*/
+
 void KexiDBLineEdit::paintEvent ( QPaintEvent *pe )
 {
 	KLineEdit::paintEvent( pe );
-	KexiDBTextWidgetInterface::paintEvent( this, text().isEmpty(), alignment(), hasFocus() );
+	QPainter p(this);
 }
 
 bool KexiDBLineEdit::event( QEvent * e )

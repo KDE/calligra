@@ -37,6 +37,7 @@
 #include "kexidblabel.h"
 #include "kexidblineedit.h"
 #include "kexidbtextedit.h"
+#include "kexidbcombobox.h"
 #include "kexipushbutton.h"
 #include "kexidbform.h"
 
@@ -46,6 +47,7 @@
 
 #define KexiDBAutoField_SPACING 10 //10 pixel for spacing between a label and an editor widget
 
+//! @internal
 class KexiDBAutoField::Private
 {
 	public:
@@ -53,7 +55,7 @@ class KexiDBAutoField::Private
 		{
 		}
 
-		WidgetType widgetType; //!< internal: equal to m_widgetType_property ir equal to result 
+		WidgetType widgetType; //!< internal: equal to m_widgetType_property or equal to result 
 		                       //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
 		WidgetType  widgetType_property; //!< provides widget type or Auto
 		LabelPosition  lblPosition;
@@ -82,14 +84,14 @@ KexiDBAutoField::KexiDBAutoField(const QString &text, WidgetType type, LabelPosi
 	init(text, type, pos);
 }
 
-KexiDBAutoField::KexiDBAutoField(QWidget *parent, const char *name, bool designMode)
+KexiDBAutoField::KexiDBAutoField(QWidget *parent, const char *name, bool designMode, LabelPosition pos)
  : QWidget(parent, name)
  , KexiFormDataItemInterface()
  , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
  , d( new Private() )
 {
 	d->designMode = designMode;
-	init(QString::null/*i18n("Auto Field")*/, Auto, Left);
+	init(QString::null/*i18n("Auto Field")*/, Auto, pos);
 }
 
 KexiDBAutoField::~KexiDBAutoField()
@@ -105,14 +107,14 @@ KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
 	m_subwidget = 0;
 	d->label = new QLabel(text, this);
 	d->label->installEventFilter( this );
-	QFontMetrics fm( font() );
+	//QFontMetrics fm( font() );
 	//d->label->setFixedWidth( fm.width("This is a test string length") );
 	d->autoCaption = true;
 	d->focusPolicyChanged = false;
 	d->widgetType = Auto;
 	d->widgetType_property = (type==Auto ? Text : type); //to force "differ" to be true in setWidgetType()
-	setWidgetType(type);
 	setLabelPosition(pos);
+	setWidgetType(type);
 	d->baseColor = palette().active().base();
 	d->textColor = palette().active().text();
 }
@@ -145,7 +147,6 @@ KexiDBAutoField::createEditor()
 	QWidget *newSubwidget;
 	switch( d->widgetType ) {
 		case Text:
-		case Enum: //! @todo using kexitableview combo box editor when it's ready
 		case Double: //! @todo setup validator
 		case Integer: //! @todo setup validator
 		case Date:
@@ -162,30 +163,12 @@ KexiDBAutoField::createEditor()
 			newSubwidget = new KexiDBCheckBox(dataSource(), this, QCString("KexiDBAutoField_KexiDBCheckBox:")+name());
 			connect( newSubwidget, SIGNAL(stateChanged()), this, SLOT(slotValueChanged()));
 			break;
-		//! \todo create db-aware spinboxes, date, time edit, etc
-/*		case Date:
-			newSubwidget = new KexiDBDateEdit(QDate::currentDate(), this);
-			connect( newSubwidget, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotValueChanged() ) );
-			break;
-		case DateTime:
-			newSubwidget = new KexiDBDateTimeEdit(QDateTime::currentDateTime(), this);
-			connect( newSubwidget, SIGNAL(dateTimeChanged()), this, SLOT( slotValueChanged() ) );
-			break;
-		case Time:
-			newSubwidget = new KexiDBTimeEdit(QTime::currentTime(), this);
-			connect( newSubwidget, SIGNAL( valueChanged( const QTime& ) ), this, SLOT( slotValueChanged() ) );
-			break;*/
-/*		case Double:
-			newSubwidget = new KexiDBDoubleSpinBox(this);
-			connect( newSubwidget, SIGNAL( valueChanged(double) ), this, SLOT( slotValueChanged() ) );
-			break;
-		case Integer:
-			newSubwidget = new KexiDBIntSpinBox(this);
-			connect( newSubwidget, SIGNAL(valueChanged(int)), this, SLOT( slotValueChanged() ) );
-			break;*/
 		case Image:
 			newSubwidget = new KexiDBImageBox(d->designMode, this, QCString("KexiDBAutoField_KexiDBImageBox:")+name());
 //			connect( newSubwidget, SIGNAL(pixmapChanged()), this, SLOT( slotValueChanged() ) );
+			break;
+		case ComboBox:
+			newSubwidget = new KexiDBComboBox(this, QCString("KexiDBAutoField_KexiDBComboBox:")+name(), d->designMode);
 			break;
 		default:
 			newSubwidget = 0;
@@ -263,14 +246,18 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 			align |= AlignVCenter;
 		}
 		d->label->setAlignment(align);
-		if(d->widgetType == Boolean || (d->widgetType == Auto && fieldTypeInternal() == KexiDB::Field::InvalidType))
+		if(d->widgetType == Boolean 
+			|| (d->widgetType == Auto && fieldTypeInternal() == KexiDB::Field::InvalidType && !d->designMode))
+		{
 			d->label->hide();
-		else
+		}
+		else {
 			d->label->show();
+		}
 		d->layout->addWidget(d->label);
 		if(position == Left && d->widgetType != Boolean)
 			d->layout->addSpacing(KexiDBAutoField_SPACING);
-		d->layout->addWidget(m_subwidget);
+		d->layout->addWidget(m_subwidget, 1);
 		KexiSubwidgetInterface *subwidgetInterface = dynamic_cast<KexiSubwidgetInterface*>((QWidget*)m_subwidget);
 		if (subwidgetInterface) {
 			if (subwidgetInterface->appendStretchRequired(this))
@@ -299,6 +286,10 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 	//a hack to force layout to be refreshed (any better idea for this?)
 	resize(size()+QSize(1,0));
 	resize(size()-QSize(1,0));
+	if (dynamic_cast<KexiDBAutoField*>((QWidget*)m_subwidget)) {
+		//needed for KexiDBComboBox
+		dynamic_cast<KexiDBAutoField*>((QWidget*)m_subwidget)->setLabelPosition(position);
+	}
 }
 
 void
@@ -474,11 +465,21 @@ void
 KexiDBAutoField::setFieldTypeInternal(int kexiDBFieldType)
 {
 	d->fieldTypeInternal = (KexiDB::Field::Type)kexiDBFieldType;
-	WidgetType type = KexiDBAutoField::widgetTypeForFieldType(
-		d->fieldTypeInternal==KexiDB::Field::InvalidType ? KexiDB::Field::Text : d->fieldTypeInternal);
+	KexiDB::Field::Type fieldType;
+	//find real fied type to use
+	if (d->fieldTypeInternal==KexiDB::Field::InvalidType) {
+		if (columnInfo())
+			fieldType = KexiDB::Field::Text;
+		else
+			fieldType = KexiDB::Field::InvalidType;
+	}
+	else
+		fieldType = d->fieldTypeInternal;
 
-	if(d->widgetType != type) {
-		d->widgetType = type;
+	const WidgetType newWidgetType = KexiDBAutoField::widgetTypeForFieldType( fieldType );
+
+	if(d->widgetType != newWidgetType) {
+		d->widgetType = newWidgetType;
 		createEditor();
 	}
 	setFieldCaptionInternal(d->fieldCaptionInternal);
@@ -552,7 +553,7 @@ KexiDBAutoField::widgetTypeForFieldType(KexiDB::Field::Type type)
 		case KexiDB::Field::LongText:
 			return MultiLineText;
 		case KexiDB::Field::Enum:
-			return Enum;
+			return ComboBox;
 		case KexiDB::Field::InvalidType:
 			return Auto;
 		case KexiDB::Field::BLOB:
@@ -570,7 +571,7 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 	bool unbound = false;
 	if (d->autoCaption && (d->widgetType==Auto || dataSource().isEmpty())) {
 		if (d->designMode)
-			realText = QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", " (unbound)");
+			realText = QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", "(unbound)");
 		else
 			realText = QString::null;
 		unbound = true;
@@ -593,6 +594,10 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 			realText = text;
 	}
 
+	if (unbound)
+		d->label->setAlignment( Qt::AlignCenter | Qt::WordBreak );
+	else
+		d->label->setAlignment( Qt::AlignCenter );
 //	QWidget* widgetToAlterForegroundColor;
 	if(d->widgetType == Boolean) {
 		static_cast<QCheckBox*>((QWidget*)m_subwidget)->setText(realText);

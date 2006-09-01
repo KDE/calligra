@@ -25,7 +25,7 @@
 #include <qwidget.h>
 #include <knuminput.h>
 
-//! A db-aware int spin box
+//! @short A db-aware int spin box
 class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox, public KexiFormDataItemInterface
 {
 	Q_OBJECT

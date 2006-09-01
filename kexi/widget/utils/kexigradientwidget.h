@@ -28,10 +28,9 @@
 
 #define REBUILD_DELAY 100
 
-/**
-A simple QWidget that can use different types of gradients as the background.
-
-@author Christian Nitschkowski
+//! @short A simple widget that can use different types of gradients as the background.
+/*! 
+  @author Christian Nitschkowski
 */
 class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
 	typedef QPtrList<QWidget> WidgetList;

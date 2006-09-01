@@ -59,11 +59,13 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 
 	public:
 		enum WidgetType { Auto = 100, Text, Integer, Double, Boolean, Date, Time, DateTime,
-			MultiLineText, Enum, Image };
+			MultiLineText, ComboBox, Image };
 		enum LabelPosition { Left = 300, Top, NoLabel };
 
-		KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos, QWidget *parent = 0, const char *name = 0, bool designMode = true);
-		KexiDBAutoField(QWidget *parent = 0, const char *name = 0, bool designMode = true);
+		KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos, 
+			QWidget *parent = 0, const char *name = 0, bool designMode = true);
+		KexiDBAutoField(QWidget *parent = 0, const char *name = 0, bool designMode = true,
+			LabelPosition pos = Left);
 
 		virtual ~KexiDBAutoField();
 
@@ -91,7 +93,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		void setWidgetType(WidgetType type);
 
 		LabelPosition labelPosition() const;
-		void setLabelPosition(LabelPosition position);
+		virtual void setLabelPosition(LabelPosition position);
 
 		QString caption() const;
 		void setCaption(const QString &caption);
@@ -172,7 +174,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 	protected:
 		virtual void setValueInternal(const QVariant&add, bool removeOld);
 		void init(const QString &text, WidgetType type, LabelPosition pos);
-		void createEditor();
+		virtual void createEditor();
 		void changeText(const QString &text, bool beautify = true);
 //		virtual void paintEvent( QPaintEvent* pe );
 		void updateInformationAboutUnboundField();
@@ -181,6 +183,9 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		void copyPropertiesToEditor();
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
+
+		//! Used by @ref setLabelPositionInternal(LabelPosition)
+		void setLabelPositionInternal(LabelPosition position, bool noLabel);
 	private:
 		class Private;
 		Private *d;

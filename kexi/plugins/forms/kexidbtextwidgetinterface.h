@@ -40,7 +40,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
 		void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
 
 		//! Called from paintEvent( QPaintEvent *pe ) method of the data aware widget.
-		void paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus );
+		void paint( QFrame *w, QPainter *p, bool textIsEmpty, int alignment, bool hasFocus );
 
 		//! Called from event( QEvent * e ) method of the data aware widget.
 		void event( QEvent * e, QWidget *w, bool textIsEmpty );
