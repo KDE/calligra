@@ -147,11 +147,10 @@ kde4_automoc(${kspreadcommon_LIB_SRCS})
 kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
-	${KDE4_KDECORE_LIBS}
 	${QT_QTSQL_LIBRARY}
 	kofficecore kofficeui kochart
 	${KDE4_KDE3SUPPORT_LIBS}
-	kspell2 )
+	${KDE4_KSPELL2_LIBS} )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kspreadcommon  DESTINATION ${LIB_INSTALL_DIR})
@@ -193,85 +192,3 @@ install( FILES  kspread.rc kspread_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/
 install( FILES  kspreadpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
 
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#KDE_CXXFLAGS = $(USE_RTTI)
-#INCLUDES  = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) \
-#	-I$(srcdir)/tests \
-#	-Idialogs \
-#	-I$(top_srcdir)/interfaces \
-#	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
-#
-#lib_LTLIBRARIES = libkspreadcommon.la
-#kde_module_LTLIBRARIES = libkspreadpart.la
-#
-#libkspreadcommon_la_SOURCES = Digest.cpp Commands.cpp Damages.cpp Dependencies.cpp \
-#	Formula.cpp 	Functions.cpp AutoFill.cpp Canvas.cpp \
-#	Cell.cpp Cluster.cpp Condition.cpp Doc.cpp \
-#	Editors.cpp Events.cpp Factory.cpp Format.cpp \
-#	functions/conversion.cc functions/database.cc functions/datetime.cc \
-#	functions/engineering.cc functions/financial.cc Functions.helper.cc \
-#	functions/information.cc functions/logic.cc functions/math.cc \
-#	functions/reference.cc functions/statistical.cc functions/text.cc \
-#	functions/trig.cc Handler.cpp Locale.cpp Map.cpp \
-#	Numformat.cpp Object.cpp Style.cpp StyleManager.cpp \
-#	Undo.cpp Value.cpp View.cpp Sheet.cpp SheetPrint.cpp \
-#	Util.cpp Toolbox.cpp 	ValueCalc.cpp 	ValueConverter.cpp 	ValueFormatter.cpp \
-#		ValueParser.cpp KSpreadAppIface.cpp KSpreadAppIface.skel KSpreadCellIface.cpp \
-#	KSpreadCellIface.skel KSpreadColumnIface.skel KSpreadColumnIface.cpp KSpreadDocIface.cpp \
-#	KSpreadDocIface.skel KSpreadLayoutIface.skel KSpreadLayoutIface.cpp KSpreadMapIface.cpp \
-#	KSpreadMapIface.skel KSpreadRowIface.skel KSpreadRowIface.cpp KSpreadTableIface.cpp \
-#	KSpreadTableIface.skel KSpreadViewIface.skel KSpreadViewIface.cpp \
-#		GenValidationStyle.cpp Region.cpp Selection.cpp Manipulator.cpp DataManipulators.cpp \
-#	GeneralProperty.cpp PropertyEditor.cpp
-#
-#libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
-#libkspreadcommon_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
-#	dialogs/libdialogs.la tests/libtests.la \
-#	$(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell
-#
-#libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-#libkspreadpart_la_LIBADD  = libkspreadcommon.la
-#libkspreadpart_la_SOURCES = Factory_init.cpp
-#
-#
-#METASOURCES = AUTO
-#
-### The kdeinit loadable module and the executable
-#kdeinit_LTLIBRARIES = kspread.la
-#bin_PROGRAMS =
-#kspread_la_SOURCES = Main.cpp
-#kspread_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kspread_la_LIBADD = $(LIB_KOFFICECORE)
-#
-#kdelnk_DATA = kspread.desktop
-#kdelnkdir = $(kde_appsdir)/Office
-#
-#kde_services_DATA = kspreadpart.desktop
-#
-#rcdir = $(kde_datadir)/kspread
-#rc_DATA = kspread.rc kspread_readonly.rc
-#
-#SUBDIRS = dialogs tests . plugins pics dtd toolbar functions sheetstyles templates
-#
-#parser:
-#	flex lex.l
-#	yacc -d yacc.y
-#	flex -Pdep lex.dep.l
-#	bison -p dep -b dep -d yacc.dep.y
-#
-#messages: rc.cpp
-#	$(EXTRACTRC) --tag-group=koffice functions/*.xml > xml_doc.cc
-#	$(EXTRACTRC) dialogs/*.ui >> rc.cpp
-#	$(XGETTEXT) rc.cpp *.cc AboutData.h dialogs/*.cc tests/*.cc -o $(podir)/kspread.pot
-#	-rm xml_doc.cc
-#
-#include ../admin/Doxyfile.am
-#
-#noinst_HEADERS =
