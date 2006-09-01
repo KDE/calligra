@@ -24,7 +24,7 @@
 #include <qpainter.h>
 
 #include "kexicomboboxtableedit.h"
-#include "kexicomboboxdropdownbutton.h"
+#include <widget/utils/kexicomboboxdropdownbutton.h>
 #include "kexicomboboxpopup.h"
 #include "kexitableview.h"
 #include "kexitableitem.h"

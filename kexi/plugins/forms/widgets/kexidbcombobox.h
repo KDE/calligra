@@ -22,7 +22,7 @@
 
 #include "kexidbutils.h"
 #include "kexidbautofield.h"
-#include "kexicomboboxbase.h"
+#include <widget/tableview/kexicomboboxbase.h>
 
 //! @short Combo box widget for Kexi forms
 /*! This widget is implemented on top of KexiDBAutoField, 
