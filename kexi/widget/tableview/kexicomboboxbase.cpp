@@ -24,7 +24,7 @@
 #include <qpainter.h>
 
 #include "kexicomboboxbase.h"
-#include "kexicomboboxdropdownbutton.h"
+#include <widget/utils/kexicomboboxdropdownbutton.h>
 #include "kexicomboboxpopup.h"
 #include "kexitableview.h"
 #include "kexitableitem.h"
@@ -59,7 +59,6 @@ public:
 
 KexiComboBoxBase::KexiComboBoxBase()
 {
-	Q_UNUSED(column); //this arg will be used in implementation
 //moved	connect(m_lineedit, SIGNAL(textChanged(const QString&)), this, SLOT(slotLineEditTextChanged(const QString&)));
 
 	m_popup = 0;
