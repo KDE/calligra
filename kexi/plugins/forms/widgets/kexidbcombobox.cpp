@@ -56,6 +56,7 @@ class KexiDBComboBox::Private
 
 KexiDBComboBox::KexiDBComboBox(QWidget *parent, const char *name, bool designMode)
  : KexiDBAutoField(parent, name, designMode, NoLabel)
+ , KexiComboBoxBase()
  , d(new Private())
 // , m_menuExtender(this, this)
 // , m_slotTextChanged_enabled(true)

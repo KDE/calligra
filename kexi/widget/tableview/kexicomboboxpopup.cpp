@@ -244,7 +244,7 @@ void KexiComboBoxPopup::updateSize(int minWidth)
 
 	KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
 	const int width = QMAX( d->tv->tableSize().width(), 
-		(te ? te->totalSize().width() : parentWidget()->width()/*sanity*/) );
+		(te ? te->totalSize().width() : (parentWidget()?parentWidget()->width():0/*sanity*/)) );
 	kexidbg << size() << endl;
 	resize( QMAX(minWidth, width)+1, d->tv->rowHeight() * rows +2 );
 }
