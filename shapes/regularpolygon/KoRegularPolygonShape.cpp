@@ -29,7 +29,8 @@ KoRegularPolygonShape::KoRegularPolygonShape() : KoShape()
 	m_points = 5;
 }
 
-void KoRegularPolygonShape::paint(QPainter &painter, const KoViewConverter &converter) {
+void KoRegularPolygonShape::paint(QPainter &painter, const KoViewConverter &converter)
+{
 	QPolygonF polygon;
 
 	double angle = 2 *M_PI / m_points;
@@ -62,7 +63,8 @@ void KoRegularPolygonShape::paint(QPainter &painter, const KoViewConverter &conv
 	painter.drawPolygon(polygon);
 }
 
-const QPainterPath KoRegularPolygonShape::outline() const {
+const QPainterPath KoRegularPolygonShape::outline() const
+{
 	QPolygonF polygon;
 
 	double angle = 2 *M_PI / m_points;
@@ -96,6 +98,7 @@ const QPainterPath KoRegularPolygonShape::outline() const {
 	return path;
 }
 
-void KoRegularPolygonShape::setPoints(int points) {
+void KoRegularPolygonShape::setPoints(int points)
+{
 	m_points = points;
 }

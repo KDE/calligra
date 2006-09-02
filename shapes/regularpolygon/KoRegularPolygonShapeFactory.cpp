@@ -51,7 +51,8 @@ KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent, cons
 	addTemplate(t);
 }
 
-KoShape *KoRegularPolygonShapeFactory::createDefaultShape() {
+KoShape *KoRegularPolygonShapeFactory::createDefaultShape()
+{
 	KoRegularPolygonShape *s = new KoRegularPolygonShape();
 	s->setPoints(5);
 	s->resize(QSizeF(100,100));
@@ -59,7 +60,8 @@ KoShape *KoRegularPolygonShapeFactory::createDefaultShape() {
 	return s;
 }
 
-KoShape *KoRegularPolygonShapeFactory::createShape(const KoProperties* props) const {
+KoShape *KoRegularPolygonShapeFactory::createShape(const KoProperties* props) const
+{
 	KoRegularPolygonShape *s = new KoRegularPolygonShape();
 	bool ok;
 	int points = props->getProperty("points").toUInt(&ok);
