@@ -11,23 +11,23 @@ chunks of the user interface and even colorspaces are plugins. In fact,
 </para>
 
 <itemizedlist>
-<listitem><para>colorspaces — these define the channels that constitute a
-single pixel</para></listitem>
-<listitem><para>tools — anything that is done with a mouse or tablet input
-device</para></listitem>
-<listitem><para>paint operations — pluggable painting effects for
+<listitem><para>colorspaces &mdash; these define the channels that constitute
+a single pixel</para></listitem>
+<listitem><para>tools &mdash; anything that is done with a mouse or tablet
+input device</para></listitem>
+<listitem><para>paint operations &mdash; pluggable painting effects for
 tools</para></listitem>
-<listitem><para>image filters — change all pixels, or just the selected pixels
-in a layer</para></listitem>
-<listitem><para>viewplugins — extend Krita’s user interface with new dialog
-boxes, palettes and operations</para></listitem>
-<listitem><para>import/export filters — read and write all kinds of image
-formats</para></listitem>
+<listitem><para>image filters &mdash; change all pixels, or just the selected
+pixels in a layer</para></listitem>
+<listitem><para>viewplugins &mdash; extend Krita’s user interface with new
+dialog boxes, palettes and operations</para></listitem>
+<listitem><para>import/export filters &mdash; read and write all kinds of
+image formats</para></listitem>
 </itemizedlist>
 
 <para>
 &krita; itself consists of three layered libraries and a directory with some
-common support classes: kritacolor, kritaimage and kritaui.. Within
+common support classes: kritacolor, kritaimage and kritaui. Within
 &krita;, objects can by identified by a <classname>KisID</classname>, that is
 the combination of a unique untranslated string (used when saving, for
 instance) and a translated string for GUI purposes.
@@ -207,12 +207,12 @@ kritaextensioncolorsfilters_la_METASOURCES = AUTO
 </programlisting>
 
 This is the makefile for a filter plugin. Replace
-<replaceable>LIBRARYNAME</replaceable> with the name of your work, and you're
+<replaceable>LIBRARYNAME</replaceable> with the name of your work, and you are
 set.
 </para><para>
 If your plugin is a viewplugin, you will likely also install a <literal
 role="extension">.rc</literal> file with entries for menubars and toolbars.
-Likewise, you may need to install cursors and icons. That's all done through
+Likewise, you may need to install cursors and icons. That is all done through
 the ordinary &kde; <filename>Makefile.am</filename> magic incantantions:
 
 <programlisting>
@@ -377,7 +377,7 @@ Colorspaces the colorspace registry (with some complications):
    }
 </programlisting>
 </para><para>
-View plugins don't have to register themselves, and they get access to a
+View plugins do not have to register themselves, and they get access to a
 <classname>KisView</classname> object:
 <programlisting>
    if ( parent->inherits("KisView") )
@@ -429,7 +429,7 @@ Implementing a colorspace is pretty easy. The general principle is that
 colorspaces work on a simple array of bytes. The interpretation of these bytes
 is up to the colorspace. For instance, a pixel in 16-bit GrayA consists of
 four bytes: two bytes for the gray value and two bytes for the alpha value.
-You're free to use a struct to work with the memory layout of a pixel in your
+You are free to use a struct to work with the memory layout of a pixel in your
 colorspace implementation, but that representation is not exported. The only
 way the rest of &krita; can know what channels and types of channels your
 colorspace pixels consist of is through the
@@ -624,15 +624,15 @@ the location of the pixels they return.
 (2) We create the destination iterator with the <literal>write</literal>
 setting to <literal>true</literal>. This means that if the destination paint
 device is smaller than the rect we write, it will automatically be enlarged to
-fit every pixel we iterate over. Note that we've got a potential bug here: if
-<varname>dst</varname> and <varname>src</varname> are not the same device,
+fit every pixel we iterate over. Note that we have got a potential bug here:
+if <varname>dst</varname> and <varname>src</varname> are not the same device,
 then it is quite possible that the pixels returned by the iterators do not
 correspond. For every position in the iterator, <varname>src</varname> may be,
 for example, at 165,200, while <varname>dst</varname> could be at 20,8 &mdash;
 and therefore the copy we perform below may distort the image...
 </para></callout>
 <callout arearefs="invert3"><para>
-Want to know if a pixel is selected? That's easy &mdash; use the
+Want to know if a pixel is selected? That is easy &mdash; use the
 <methodname>isSelected</methodname> method. But selectedness is not a binary
 property of a pixel, a pixel can be half selected, barely selected or almost
 completely selected. That value you can also got from the iterator. Selections
@@ -648,8 +648,8 @@ As noted above, this <literal>memcpy</literal> is a big bad bug...
 <methodname>rawData()</methodname> returns the array of bytes which is the
 current state of the pixel; <methodname>oldRawData()</methodname> returns the
 array of bytes as it was before we created the iterator. However, we may be
-copying the wrong pixel here. In actual practice, that won't happen too often,
-unless <varname>dst</varname> already exists and isn't aligned with
+copying the wrong pixel here. In actual practice, that will not happen too
+often, unless <varname>dst</varname> already exists and is not aligned with
 <varname>src</varname>.
 </para></callout>
 <callout arearefs="invert5"><para>
@@ -1283,7 +1283,8 @@ cursor.
 </programlisting>
 
 <para>
-We don’t change the pixels of a paint device directly: instead we create a small paint device, a dab, and composite that onto the current paint device.
+We don’t change the pixels of a paint device directly: instead we create a
+small paint device, a dab, and composite that onto the current paint device.
 </para>
 
 <programlisting>
@@ -1373,7 +1374,7 @@ the histogram tab is a view plugin, as is the rotate dialog.
 <title>Import/Export filters</title>
 
 <para>
-&krita; works with the ordinary &koffice; file filter architecture. There's a
+&krita; works with the ordinary &koffice; file filter architecture. There is a
 tutorial, a bit old, but still useful, at: <ulink
 url="http://koffice.org/developer/filters/oldfaq.php" />. It is probably best
 to cooperate with the &krita; team when developing file filters and do the
@@ -1397,7 +1398,7 @@ METASOURCES = AUTO
 </programlisting>
 
 <para>
-Whether you're building an import filter or an export filter, your work always
+Whether you are building an import filter or an export filter, your work always
 boils down to implementing the following function:
 </para>
 
@@ -1406,7 +1407,7 @@ virtual KoFilter::ConversionStatus convert(const QCString&amp; from, const QCStr
 </programlisting>
 
 <para>
-It's the settings in the <literal role="extension">.desktop</literal> files
+It is the settings in the <literal role="extension">.desktop</literal> files
 that determine which way a filter converts:
 </para><para>
 Import:
@@ -1516,22 +1517,22 @@ KoFilter::ConversionStatus XXXImport::convert(const QCString&amp;, const QCStrin
 
 <calloutlist>
 <callout arearefs="import1"><para>This is supposed to be an importfilter, so
-if it's not called to convert to a &krita; image, then something is
+if it is not called to convert to a &krita; image, then something is
 wrong.</para></callout>
 <callout arearefs="import2"><para>The filter chain already has created an
 output document for us. We need to cast it to <classname>KisDocM</classname>,
-because &krita; documents need special treatment. It wouldn't, actually, be
+because &krita; documents need special treatment. It would not, actually, be
 all that bad an idea to check whether the result of the cast is not 0, because
 if it is, importing will fail.</para></callout>
 <callout arearefs="import3"><para>If we call this filter from the GUI, we try
-to get the view. If there's a view, the conversion code can try to update the
+to get the view. If there is a view, the conversion code can try to update the
 progressbar.</para></callout>
 <callout arearefs="import4"><para>The filter has the filename for our input
 file for us.</para></callout>
 <callout arearefs="import5"><para><classname>KisDoc</classname> needs to be
 prepared for import. Certain settings are initialized and undo is disabled.
 Otherwise you could undo the adding of layers performed by the import filter
-and that's weird behaviour.</para></callout>
+and that is weird behaviour.</para></callout>
 <callout arearefs="import6"><para>I have chosed to implement the actual
 importing code in a separate class that I instantiate here. You can also put
 all your code right in this method, but that would be a bit
@@ -1541,7 +1542,7 @@ can then use to set the status of the import filter. &koffice; takes care of
 showing error messages.</para></callout>
 <callout arearefs="import8"><para>(8) If creating the
 <classname>KisImage</classname> has succeeded we set the document's current
-image to our newly created image. Then we're done: <literal>return
+image to our newly created image. Then we are done: <literal>return
 KoFilter::OK;</literal>.</para></callout>
 </calloutlist>
 
