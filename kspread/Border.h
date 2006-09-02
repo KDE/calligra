@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class QLabel;
+class QRubberBand;
 
 namespace KSpread
 {
@@ -58,7 +59,7 @@ protected:
     virtual void wheelEvent( QWheelEvent* );
     virtual void focusOutEvent( QFocusEvent* ev );
     virtual void resizeEvent( QResizeEvent * _ev );
-    void paintSizeIndicator( int mouseX, bool firstTime );
+    void paintSizeIndicator( int mouseX );
 
 private:
     Canvas *m_pCanvas;
@@ -110,6 +111,8 @@ private:
      */
     bool m_bMousePressed;
 
+    QRubberBand* m_rubberband;
+
 private:
 };
 
@@ -142,7 +145,7 @@ protected:
     virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
     virtual void wheelEvent( QWheelEvent* );
     virtual void focusOutEvent( QFocusEvent* ev );
-    void paintSizeIndicator( int mouseY, bool firstTime );
+    void paintSizeIndicator( int mouseY );
 
 private:
     Canvas *m_pCanvas;
@@ -163,6 +166,8 @@ private:
      * True when the mouse button is pressed
      */
     bool m_bMousePressed;
+
+    QRubberBand* m_rubberband;
 };
 
 } // namespace KSpread

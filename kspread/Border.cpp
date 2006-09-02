@@ -47,6 +47,7 @@
 #include <QLabel>
 #include <QScrollBar>
 #include <QPainter>
+#include <QRubberBand>
 #include <QToolTip>
 
 // KDE
@@ -84,6 +85,7 @@ VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
   m_pView = _view;
   m_pCanvas = _canvas;
   m_lSize = 0;
+  m_rubberband = 0;
 
   setAttribute( Qt::WA_StaticContents );
 
@@ -170,7 +172,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
     double tmp;
     m_iResizedRow = sheet->topRow( ev_PosY - 1, tmp );
     if ( !sheet->isProtected() )
-      paintSizeIndicator( _ev->pos().y(), true );
+      paintSizeIndicator( _ev->pos().y() );
   }
   else
   {
@@ -233,11 +235,11 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
     if ( m_bResize )
     {
         // Remove size indicator painted by paintSizeIndicator
-        QPainter painter;
-        painter.begin( m_pCanvas );
-        painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
-        painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
-        painter.end();
+        if ( m_rubberband )
+        {
+            delete m_rubberband;
+            m_rubberband = 0;
+        }
 
         int start = m_iResizedRow;
         int end = m_iResizedRow;
@@ -374,7 +376,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
   if ( m_bResize )
   {
     if ( !sheet->isProtected() )
-      paintSizeIndicator( _ev->pos().y(), false );
+      paintSizeIndicator( _ev->pos().y() );
   }
   // The button is pressed and we are selecting ?
   else if ( m_bSelection )
@@ -477,18 +479,11 @@ void VBorder::wheelEvent( QWheelEvent* _ev )
 }
 
 
-void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
+void VBorder::paintSizeIndicator( int mouseY )
 {
     register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
-	    return;
-
-    QPainter painter;
-    painter.begin( m_pCanvas );
-    painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
-
-    if ( !firstTime )
-      painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
+        return;
 
     m_iResizePos = mouseY;
 
@@ -497,9 +492,13 @@ void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
     if ( m_iResizePos < y + 2 )
         m_iResizePos = (int) y;
 
-    painter.drawLine( QLineF( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos ) );
-
-    painter.end();
+    if ( !m_rubberband )
+    {
+        m_rubberband = new QRubberBand( QRubberBand::Line, m_pCanvas );
+        m_rubberband->setGeometry( 0, m_iResizePos, m_pCanvas->width(), 2 );
+        m_rubberband->show();
+    }
+    m_rubberband->move( 0, m_iResizePos );
 
     QString tmpSize;
     if ( m_iResizePos != y )
@@ -507,35 +506,25 @@ void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
     else
         tmpSize = i18n( "Hide Row" );
 
-    painter.begin( this );
-    int len = painter.fontMetrics().width( tmpSize );
-    int hei = painter.fontMetrics().height();
-    painter.end();
-
     if ( !m_lSize )
     {
-          m_lSize = new QLabel( m_pCanvas );
-
-          if ( sheet->layoutDirection()==Sheet::RightToLeft )
-            m_lSize->setGeometry( m_pCanvas->width() - len - 5,
-                                                  (int) y + 3, len + 2, hei + 2 );
-          else
-            m_lSize->setGeometry( 3, (int) y + 3, len + 2,hei + 2 );
-
-          m_lSize->setAlignment( Qt::AlignVCenter );
-          m_lSize->setText( tmpSize );
-          m_lSize->setPalette( QToolTip::palette() );
-          m_lSize->show();
+        m_lSize = new QLabel( m_pCanvas );
+        m_lSize->setAlignment( Qt::AlignVCenter );
+        m_lSize->setPalette( QToolTip::palette() );
+        m_lSize->setText( tmpSize );
+        if ( sheet->layoutDirection()==Sheet::RightToLeft )
+            m_lSize->move( m_pCanvas->width() - m_lSize->width() - 3, (int)y + 3 );
+        else
+            m_lSize->move( 3, (int)y + 3 );
+        m_lSize->show();
     }
     else
     {
-          if ( sheet->layoutDirection()==Sheet::RightToLeft )
-            m_lSize->setGeometry( m_pCanvas->width() - len - 5,
-                                  (int) y + 3, len + 2, hei + 2 );
-          else
-            m_lSize->setGeometry( 3, (int) y + 3, len + 2, hei + 2 );
-
-          m_lSize->setText( tmpSize );
+        m_lSize->setText( tmpSize );
+        if ( sheet->layoutDirection()==Sheet::RightToLeft )
+            m_lSize->move( m_pCanvas->width() - m_lSize->width() - 3, (int)y + 3 );
+        else
+            m_lSize->move( 3, (int)y + 3 );
     }
 }
 
@@ -655,6 +644,7 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
   m_pView = _view;
   m_pCanvas = _canvas;
   m_lSize = 0;
+  m_rubberband = 0;
 
   setAttribute( Qt::WA_StaticContents );
 
@@ -791,14 +781,14 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
       // kDebug() << "RColumn: " << m_iResizedColumn << ", PosX: " << ev_PosX << endl;
 
       if ( !sheet->isProtected() )
-        paintSizeIndicator( _ev->pos().x(), true );
+        paintSizeIndicator( _ev->pos().x() );
     }
     else
     {
       m_iResizedColumn = sheet->leftColumn( ev_PosX - 1, tmp );
 
       if ( !sheet->isProtected() )
-        paintSizeIndicator( _ev->pos().x(), true );
+        paintSizeIndicator( _ev->pos().x() );
     }
 
     // kDebug() << "Column: " << m_iResizedColumn << endl;
@@ -865,11 +855,11 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         double ev_PosX;
 
         // Remove size indicator painted by paintSizeIndicator
-        QPainter painter;
-        painter.begin( m_pCanvas );
-        painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
-        painter.drawLine( QLineF( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() ) );
-        painter.end();
+        if ( m_rubberband )
+        {
+            delete m_rubberband;
+            m_rubberband = 0;
+        }
 
         int start = m_iResizedColumn;
         int end   = m_iResizedColumn;
@@ -1018,7 +1008,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
   if ( m_bResize )
   {
     if ( !sheet->isProtected() )
-        paintSizeIndicator( _ev->pos().x(), false );
+        paintSizeIndicator( _ev->pos().x() );
   }
   // The button is pressed and we are selecting ?
   else if ( m_bSelection )
@@ -1183,18 +1173,11 @@ void HBorder::resizeEvent( QResizeEvent* _ev )
   }
 }
 
-void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
+void HBorder::paintSizeIndicator( int mouseX )
 {
     register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
-	    return;
-
-    QPainter painter;
-    painter.begin( m_pCanvas );
-    painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
-
-    if ( !firstTime )
-      painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
+        return;
 
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
       m_iResizePos = mouseX + m_pCanvas->width() - width();
@@ -1217,9 +1200,13 @@ void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
           m_iResizePos = (int) x;
     }
 
-    painter.drawLine( QLineF( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() ) );
-
-    painter.end();
+    if ( !m_rubberband )
+    {
+        m_rubberband = new QRubberBand( QRubberBand::Line, m_pCanvas );
+        m_rubberband->setGeometry( m_iResizePos, 0, 2, m_pCanvas->height() );
+        m_rubberband->show();
+    }
+    m_rubberband->move( m_iResizePos, 0 );
 
     QString tmpSize;
     if ( m_iResizePos != x )
@@ -1227,33 +1214,25 @@ void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
     else
         tmpSize = i18n( "Hide Column" );
 
-    painter.begin( this );
-    int len = painter.fontMetrics().width( tmpSize );
-    int hei = painter.fontMetrics().height();
-    painter.end();
-
     if ( !m_lSize )
     {
         m_lSize = new QLabel( m_pCanvas );
-
-        if ( sheet->layoutDirection()==Sheet::RightToLeft )
-          m_lSize->setGeometry( (int) x - len - 5, 3, len + 2, hei + 2 );
-        else
-          m_lSize->setGeometry( (int) x + 3, 3, len + 2, hei + 2 );
-
         m_lSize->setAlignment( Qt::AlignVCenter );
-        m_lSize->setText( tmpSize );
         m_lSize->setPalette( QToolTip::palette() );
+        m_lSize->setText( tmpSize );
+        if ( sheet->layoutDirection()==Sheet::RightToLeft )
+            m_lSize->move( (int) x - m_lSize->width() - 3, 3 );
+        else
+            m_lSize->move( (int) x - 3, 3 );
         m_lSize->show();
     }
     else
     {
-        if ( sheet->layoutDirection()==Sheet::RightToLeft )
-          m_lSize->setGeometry( (int) x - len - 5, 3, len + 2, hei + 2 );
-        else
-          m_lSize->setGeometry( (int) x + 3, 3, len + 2, hei + 2 );
-
         m_lSize->setText( tmpSize );
+        if ( sheet->layoutDirection()==Sheet::RightToLeft )
+            m_lSize->move( (int) x - m_lSize->width() - 3, 3 );
+        else
+            m_lSize->move( (int) x - 3, 3 );
     }
 }
 
