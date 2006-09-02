@@ -587,6 +587,15 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
           state = InCell;
        }
 
+       // a '(' ? then this must be a function identifier
+       else if( ch == '(' )
+       {
+           tokens.append (Token (Token::Identifier, tokenText, tokenStart));
+           tokenStart = i;
+           tokenText = "";
+           state = Start;
+       }
+
        // we're done with identifier
        else
        {
