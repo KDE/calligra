@@ -27,8 +27,7 @@ formats</para></listitem>
 
 <para>
 &krita; itself consists of three layered libraries and a directory with some
-common support classes: <classname>kritacolor</classname>,
-<classname>kritaimage</classname>, and <classname>kritaui</classname>. Within
+common support classes: kritacolor, kritaimage and kritaui.. Within
 &krita;, objects can by identified by a <classname>KisID</classname>, that is
 the combination of a unique untranslated string (used when saving, for
 instance) and a translated string for GUI purposes.
@@ -44,5 +43,483 @@ Always check with the latest API documentation or the header files installed
 on your system.
 </para>
 
+<sect3 id="developers-plugins-introduction-kritacolor">
+<title>KritaColor</title>
+
+<para>
+The first library is kritacolor. This library loads the colorspace plugins.
+</para><para>
+A colorspace plugin should implement the <classname>KisColorSpace</classname>
+abstract class or, if the basic capabilities of the new colorspace will be
+implemented by <command>lcms</command> (<ulink url="http://www.littlecms.com/"
+/>), extend <classname>KisAbstractColorSpace</classname>. The kritacolor
+library could be used from other applications and does not depend on
+&koffice;.
+</para>
+</sect3>
+
+<sect3 id="developers-plugins-introduction-kritaimage">
+<title>KritaImage</title>
+
+<para>
+The libkritaimage library loads the filter and paintop plugins and is
+responsible for working with image data: changing pixels, compositing and
+painting. Brushes, palettes, gradients and patterns are also loaded by
+libkritaimage. It is our stated goal to make libkritaimage independent of
+&koffice;, but we currently share the gradient loading code with &koffice;.
+</para><para>
+It is not easy at the moment to add new types of resources such as brushes,
+palettes, gradients or patterns to &krita;. (Adding new brushes, palettes,
+gradients and patterns is easy, of course.) &krita; follows the guidelines of
+the Create project (<ulink url="http://create.freedesktop.org/" />) for these.
+Adding support for Photoshop's brush file format needs libkritaimage hacking;
+adding more gimp brush data files not.
+</para><para>
+<classname>KritaImage</classname> loads the following types of plugins:
+</para>
+
+<itemizedlist>
+<listitem><para>&krita; filters must extend and implement the abstract class
+<classname>KisFilter</classname>,
+<classname>KisFilterConfiguration</classname> and possibly
+<classname>KisFilterConfigurationWidget</classname>.
+An example of a filter is Unsharp Mask.</para></listitem>
+<listitem><para>Paint operations or paintops are the set of operations
+painting tools suchs as freehand or circle have access to. Examples of
+paintops are pen, airbrush or eraser. Paintops should extend the
+<classname>KisPaintop</classname> base class. Examples of new paintops could
+be a chalk brush, an oilpaint brush or a complex programmable
+brush.</para></listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3 id="developers-plugins-introduction-kritaui">
+<title>KritaUI</title>
+
+<para>
+The libkritaui library loads the tool and viewplugins. This library is a
+&koffice; Part, but also contains a number of widgets that are useful for
+graphics applications. Maybe we will have to split this library in kritapart
+and kritaui in the 2.0 release. For now, script writers are not given access
+to this library and plugin writers are only allowed to use this library when
+writing tools or viewplugins. <classname>KritaUI</classname> loads the
+following types of plugins:
+</para>
+
+<itemizedlist>
+<listitem><para>Tools are derived from <classname>KisTool</classname> or one
+of the specialized tool base classes such as
+<classname>KisToolPaint</classname>, <classname>KisToolNonPaint</classname> or
+<classname>KisToolFreehand</classname>. A new tool could be a foreground
+object selection tool. Painting tools (and that includes tools that paint on
+the selection) can use any paintop to determine the way pixels are
+changed.</para></listitem>
+<listitem><para>Viewplugins are ordinary KParts that use
+<command>kxmlgui</command> to insinuate themselves into &krita;'s user
+interface. Menu options, dialogs, toolbars &mdash; any kind of user interface
+extension can be a viewplugin. In fact, important functionality like &krita;'s
+scripting support is written as a viewplugin.</para></listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3 id="developers-plugins-introduction-importexport">
+<title>Import/Export filters</title>
+
+<para>
+Import/Export filters are &koffice; filters, subclasses of
+<classname>KoFilter</classname>. Filters read and write image data in any of
+the myriad image formats in existence. And example of a new &krita;
+import/export filter could be a PDF filter. Filters are loaded by the
+&koffice; libraries.
+</para>
+
+</sect3>
+
 </sect2>
+
+<sect2 id="developers-plugins-creating">
+<title>Creating plugins</title>
+
+<para>
+Plugins are written in C++ and can use all of &kde; and &Qt; and the &krita;
+developer API. Only viewplugins should use the &koffice; API. Don’t worry:
+&krita;’s API’s are quite clear and rather extensively documented (for free
+software) and coding your first filter is really easy.
+</para><para>
+If you do not want to use C++, you can write scripts in Python or Ruby; that
+is a different thing altogether, though, and you cannot currently write tools,
+colorspaces, paintops or import/export filters as scripts.
+</para><para>
+&krita; plugins use &kde;'s parts mechanism for loading, so the parts
+documentation at <ulink url="http://developer.kde.org" /> is relevant here, too.
+</para><para>
+Your distribution should have either installed the relevant header files with
+&krita; itself, or might have split the header files into either a &koffice;
+dev or a &krita; dev package. You can find the API documentation for &krita;'s
+public API at <ulink url="http://koffice.org/developer/apidocs/krita/html/" />.
+</para>
+
+<sect3 id="developers-plugins-creating-automake">
+<title>Automake (and CMake)</title>
+
+<para>
+&kde; 3.x and thus &koffice; 1.5 and 1.6 use <command>automake</command>;
+&kde; 4.0 and &koffice; 2.0 use <command>cmake</command>. This tutorial
+describes the <command>automake</command> way of creating plugins. 
+<!-- If I have not updated this manual when we release KOffice 2.0, please
+remind me to do so. -->
+</para><para>
+Plugins are &kde; modules and should be tagged as such in their
+<filename>Makefile.am</filename>. Filters, tools, paintops, colorspaces and
+import/export filters need <literal role="extension">.desktop</literal> files;
+viewplugins need a <application>KXMLGui</application>
+<filename>pluginname.rc</filename> file in addition. The easiest way to get
+started is to checkout the krita-plugins project from the &koffice; Subversion
+repository and use it as the basis for your own project. We intend to prepare
+a skeleton &krita; plugin pack for KDevelop, but haven’t had the time to do
+so yet.
+</para>
+
+<sect4 id="d-p-c-a-makefile">
+<title><filename>Makefile.am</filename></title>
+
+<para>
+Let's look at the skeleton for a plugin module. First, the
+<filename>Makefile.am</filename>. This is what &kde; uses to generate the
+makefile that builds your plugin:
+
+<programlisting>
+kde_services_DATA = kritaLIBRARYNAME.desktop
+
+INCLUDES = $(all_includes)
+
+kritaLIBRARYNAME_la_SOURCES = sourcefile1.cc sourcefile2.cc
+
+kde_module_LTLIBRARIES = kritaLIBRARYNAME.la
+noinst_HEADERS = header1.h header2.h
+
+kritaLIBRARYNAME_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kritaLIBRARY_la_LIBADD = -lkritacommon
+
+kritaextensioncolorsfilters_la_METASOURCES = AUTO
+</programlisting>
+
+This is the makefile for a filter plugin. Replace
+<replaceable>LIBRARYNAME</replaceable> with the name of your work, and you're
+set.
+</para><para>
+If your plugin is a viewplugin, you will likely also install a <literal
+role="extension">.rc</literal> file with entries for menubars and toolbars.
+Likewise, you may need to install cursors and icons. That's all done through
+the ordinary &kde; <filename>Makefile.am</filename> magic incantantions:
+
+<programlisting>
+kritarcdir = $(kde_datadir)/krita/kritaplugins
+kritarc_DATA = LIBRARYNAME.rc
+EXTRA_DIST = $(kritarc_DATA)
+
+kritapics_DATA = \
+   bla.png \
+   bla_cursor.png
+kritapicsdir = $(kde_datadir)/krita/pics
+</programlisting>
+
+</para>
+</sect4>
+
+<sect4 id="d-p-c-a-desktop">
+<title>Desktop files</title>
+
+<para>
+The <literal role="extension">.desktop</literal> file announces the type of plugin:
+
+<programlisting>
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=User-visible Name
+ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritaLIBRARYNAME
+X-KDE-Version=2
+</programlisting>
+</para><para>
+Possible ServiceTypes are:
+</para>
+
+<itemizedlist>
+<listitem><para>Krita/Filter</para></listitem>
+<listitem><para>Krita/Paintop</para></listitem>
+<listitem><para>Krita/ViewPlugin</para></listitem>
+<listitem><para>Krita/Tool</para></listitem>
+<listitem><para>Krita/ColorSpace</para></listitem>
+</itemizedlist>
+
+<para>
+File import and export filters use the generic &koffice; filter framework and
+need to be discussed separately.
+</para>
+</sect4>
+
+<sect4 id="d-p-c-a-boilerplate">
+<title>Boilerplate</title>
+
+<para>
+You also need a bit of boilerplate code that is called by the &kde; part
+framework to instantiate the plugin &mdash; a header file and an implementation file.
+</para><para>
+A header file:
+<programlisting>
+#ifndef TOOL_STAR_H_
+#define TOOL_STAR_H_
+
+#include &lt;kparts/plugin.h&gt;
+
+/**
+* A module that provides a star tool.
+*/
+class ToolStar : public KParts::Plugin
+{
+   Q_OBJECT
+public:
+   ToolStar(QObject *parent, const char *name, const QStringList &amp;);
+   virtual ~ToolStar();
+
+};
+
+#endif // TOOL_STAR_H_
+</programlisting>
+</para>
+
+<para>
+And an implementation file:
+<programlisting>
+#include &lt;kinstance.h&gt;
+#include &lt;kgenericfactory.h&gt;
+
+#include &lt;kis_tool_registry.h&gt;
+
+#include "tool_star.h"
+#include "kis_tool_star.h"
+
+
+typedef KGenericFactory&lt;ToolStar&gt; ToolStarFactory;
+K_EXPORT_COMPONENT_FACTORY( kritatoolstar, ToolStarFactory( "krita" ) )
+
+
+ToolStar::ToolStar(QObject *parent, const char *name, const QStringList &amp;)
+   : KParts::Plugin(parent, name)
+{
+   setInstance(ToolStarFactory::instance());
+   if ( parent->inherits("KisToolRegistry") )
+   {
+       KisToolRegistry * r = dynamic_cast&lt;KisToolRegistry*&gt;( parent );
+       r -> add(new KisToolStarFactory());
+   }
+
+}
+
+ToolStar::~ToolStar()
+{
+}
+
+#include "tool_star.moc"
+</programlisting>
+</para>
+</sect4>
+
+<sect4 id="d-p-c-a-registries">
+<title>Registries</title>
+
+<para>
+Tools are loaded by the tool registry and register themselves with the tool
+registry. Plugins like tools, filters and paintops are loaded only once: view
+plugins are loaded for every view that is created. Note that we register
+factories, generally speaking. For instance, with tools a new instance of a
+tool is created for every pointer (mouse, stylus, eraser) for every few. And a
+new paintop is created whenever a tool gets a mouse-down event.
+</para>
+
+<para>
+Filters call the filter registry: 
+<programlisting>
+   if (parent->inherits("KisFilterRegistry")) {
+       KisFilterRegistry * manager = dynamic_cast&lt;KisFilterRegistry *&gt;(parent);
+       manager->add(new KisFilterInvert());
+   }
+</programlisting>
+</para><para>
+Paintops the paintop registry:
+<programlisting>
+   if ( parent->inherits("KisPaintOpRegistry") ) {
+           KisPaintOpRegistry * r = dynamic_cast&lt;KisPaintOpRegistry*&gt;(parent);
+           r -> add ( new KisSmearyOpFactory );
+   }
+</programlisting>
+</para><para>
+Colorspaces the colorspace registry (with some complications):
+<programlisting>
+   if ( parent->inherits("KisColorSpaceFactoryRegistry") ) {
+	KisColorSpaceFactoryRegistry * f = dynamic_cast&lt;isColorSpaceFactoryRegistry*&gt;(parent);
+
+       KisProfile *defProfile = new KisProfile(cmsCreate_sRGBProfile());
+       f->addProfile(defProfile);
+
+       KisColorSpaceFactory * csFactory = new KisRgbColorSpaceFactory();
+       f->add(csFactory);
+   
+       KisColorSpace * colorSpaceRGBA = new KisRgbColorSpace(f, 0);
+       KisHistogramProducerFactoryRegistry::instance() -> add(
+               new KisBasicHistogramProducerFactory&lt;KisBasicU8HistogramProducer&gt;
+               (KisID("RGB8HISTO", i18n("RGB8 Histogram")), colorSpaceRGBA) );
+   }
+</programlisting>
+</para><para>
+View plugins don't have to register themselves, and they get access to a
+<classname>KisView</classname> object:
+<programlisting>
+   if ( parent->inherits("KisView") )
+   {
+       setInstance(ShearImageFactory::instance());
+       setXMLFile(locate("data","kritaplugins/shearimage.rc"), true);
+
+       (void) new KAction(i18n("&amp;Shear Image..."), 0, 0, this, SLOT(slotShearImage()), actionCollection(), "shearimage");
+       (void) new KAction(i18n("&amp;Shear Layer..."), 0, 0, this, SLOT(slotShearLayer()), actionCollection(), "shearlayer");
+
+       m_view = (KisView*) parent;
+   }
+</programlisting>
+</para><para>
+Remember that this means that a view plugin will be created for every view the
+user creates: splitting a view means loading all view plugins again.
+</para>
+</sect4>
+
+<sect4 id="d-p-c-a-versioning">
+<title>Plugin versioning</title>
+
+<para>
+&krita; 1.5 loads plugins with <literal>X-KDE-Version=2</literal> set in the
+<literal role="extension">.desktop</literal> file. &krita; 1.6 plugins will
+probably be binary incompatible with 1.5 plugins and will need the version
+number 3. &krita; 2.0 plugins will need the version number 3. Yes, this is not
+entirely logical.
+</para>
+
+</sect4>
+</sect3>
+</sect2>
+
+<sect2 id="developers-plugins-colorspaces">
+<title>Colorspaces</title>
+
+<para>
+Colorspaces implement the <classname>KisColorSpace</classname> pure virtual
+class. There are two types of colorspaces: those that can use
+<command>lcms</command> for transformations between colorspaces, and those
+that are too weird for <command>lcms</command> to handle. Examples of the
+first are cmyk, rgb, yuv. An example of the latter is watercolor or wet &amp;
+sticky. Colorspaces that use <command>lcms</command> can be derived from
+<classname>KisAbstractColorSpace</classname>, or of one of the base classes
+that are specialized for a certain number of bits per channel.
+</para><para>
+Implementing a colorspace is pretty easy. The general principle is that
+colorspaces work on a simple array of bytes. The interpretation of these bytes
+is up to the colorspace. For instance, a pixel in 16-bit GrayA consists of
+four bytes: two bytes for the gray value and two bytes for the alpha value.
+You're free to use a struct to work with the memory layout of a pixel in your
+colorspace implementation, but that representation is not exported. The only
+way the rest of &krita; can know what channels and types of channels your
+colorspace pixels consist of is through the
+<classname>KisChannelInfo</classname> class.
+</para><para>
+Filters and paintops make use of the rich set of methods offered by
+<classname>KisColorSpace</classname> to do their work. In many cases, the
+default implementation in <classname>KisAbstractColorSpace</classname> will
+work, but more slowly than a custom implementation in your own colorspace
+because <classname>KisAbstractColorSpace</classname> will convert all pixels
+to 16-bit L*a*b and back.
+</para>
+
+<sect3 id="developers-plugins-colorspaces-kischannelinfo">
+<title><classname>KisChannelInfo</classname></title>
+
+<programlisting>
+(http://websvn.kde.org/trunk/koffice/krita/kritacolor/kis_channelinfo.h)
+</programlisting>
+<para>
+This class defines the channels that make up a single pixel in a particular
+colorspace. A channel has the following important characteristics:
+</para>
+<itemizedlist>
+<listitem><para>a name for display in the user interface</para></listitem>
+<listitem><para>a position: the byte where the bytes representing this channel
+start in the pixel.</para></listitem>
+<listitem><para>a type: color, alpha, substance or substrate. Color is plain
+color, alpha is see-throughishness, substance is a representation of amount of
+pigment or things like that, substrate is the representation of the canvas.
+(Note that this may be refactored at the drop of a hat.)</para></listitem>
+<listitem><para>a valuetype: byte, short, integer, float — or
+other.</para></listitem>
+<listitem><para>size: the number of bytes this channel takes</para></listitem>
+<listitem><para>color: a <classname>QColor</classname> representation of this
+channel for user interface visualization, for instance in
+histograms.</para></listitem>
+<listitem><para>an abbreviaton for use in the GUI when there’s not much
+space</para></listitem>
+</itemizedlist>
+</sect3>
+
+<sect3 id="developers-plugins-colorspaces-kiscompositeop">
+<title><classname>KisCompositeOp</classname></title>
+
+<para>
+As per original Porter-Duff, there are many ways of combining pixels to get a
+new color. The <classname>KisCompositeOp</classname> class defines most of
+them: this set is not easily extensible except by hacking the kritacolor
+library.
+</para><para>
+A colorspace plugin can support any subset of these possible composition
+operations, but the set must always include "OVER" (same as "NORMAL") and
+"COPY". The rest are more or less optional, although more is better, of
+course.
+</para>
+</sect3>
+
+<sect3 id="developers-plugins-colorspaces-kiscolorspace">
+<title><classname>KisColorSpace</classname></title>
+
+<para>
+The methods in the <classname>KisColorSpace</classname> pure virtual classs
+can be divided into a number of groups: conversion, identification and
+manipulation.
+</para><para>
+All classes must be able to convert a pixel from and to 8 bit RGB (i.e., a
+<classname>QColor</classname>), and preferably also to and from 16 bit L*a*b.
+Additionally, there is a method to convert to any colorspace from the current
+colorspace.
+</para><para>
+Colorspaces are described by the <classname>KisChannelInfo</classname> vector,
+number of channels, number of bytes in a single pixel, whether it supports
+High Dynamic Range images and more.
+</para><para>
+Manipulation is for instance the combining of two pixels in a new
+pixel: bitBlt, darkening or convolving of pixels.
+</para><para>
+Please consult the API documentation for a full description of all methods you
+need to implement in a colorspace.
+</para><para>
+<classname>KisAbstractColorSpace</classname> implements many of the virtual
+methods of <classname>KisColorSpace</classname> using functions from the
+<command>lcms</command> library. On top of
+<classname>KisAbstractColorSpace</classname> there are base colorspace classes
+for 8 and 16 bit integer and 16 and 32 bit float colorspaces that define
+common operations to move between bit depths.
+</para>
+
+</sect3>
+</sect2>
+
 </sect1>
