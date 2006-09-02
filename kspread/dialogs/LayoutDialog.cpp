@@ -1318,7 +1318,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     connect(textFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
     connect(customFormat,SIGNAL(clicked()),this,SLOT(slotChangeState()));
 
-    connect(listFormat,SIGNAL(Selection.hanged ()),this,SLOT(makeformat()));
+    connect(listFormat,SIGNAL(selectionChanged ()),this,SLOT(makeformat()));
     connect(precision,SIGNAL(valueChanged(int)),this,SLOT(slotChangeValue(int)));
     connect(prefix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
     connect(postfix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
