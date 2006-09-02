@@ -420,30 +420,35 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Executes \a sql query and stores first record's data inside \a data.
 		 This is convenient method when we need only first record from query result,
 		 or when we know that query result has only one record.
-		 Adds a LIMIT clause to the query, \a sql should not include one already.
+		 If \a addLimitTo1 is true (the default), adds a LIMIT clause to the query, 
+		 so \a sql should not include one already.
 		 \return true if query was successfully executed and first record has been found,
 		 false on data retrieving failure, and cancelled if there's no single record available. */
-		tristate querySingleRecord(const QString& sql, RowData &data);
+		tristate querySingleRecord(const QString& sql, RowData &data, bool addLimitTo1 = true);
 
 		/*! Like tristate querySingleRecord(const QString& sql, RowData &data)
-		 but uses QuerySchema object. */
-		tristate querySingleRecord(QuerySchema& query, RowData &data);
+		 but uses QuerySchema object. 
+		 If \a addLimitTo1 is true (the default), adds a LIMIT clause to the query. */
+		tristate querySingleRecord(QuerySchema& query, RowData &data, bool addLimitTo1 = true);
 
 		/*! Executes \a sql query and stores first record's field's (number \a column) string value 
 		 inside \a value. For efficiency it's recommended that a query defined by \a sql
 		 should have just one field (SELECT one_field FROM ....). 
-		 Adds a LIMIT clause to the query, so \a sql should not include one already.
+		 If \a addLimitTo1 is true (the default), adds a LIMIT clause to the query,
+		 so \a sql should not include one already.
 		 \return true if query was successfully executed and first record has been found,
 		 false on data retrieving failure, and cancelled if there's no single record available.
 		 \sa queryStringList() */
-		tristate querySingleString(const QString& sql, QString &value, uint column = 0);
+		tristate querySingleString(const QString& sql, QString &value, uint column = 0, 
+			bool addLimitTo1 = true);
 
 		/*! Convenience function: executes \a sql query and stores first 
 		 record's field's (number \a column) value inside \a number. \sa querySingleString(). 
-		 Note: "LIMIT 1" is appended to \a sql statement 
+		 Note: "LIMIT 1" is appended to \a sql statement if \a addLimitTo1 is true (the default).
 		 \return true if query was successfully executed and first record has been found,
 		 false on data retrieving failure, and cancelled if there's no single record available. */
-		tristate querySingleNumber(const QString& sql, int &number, uint column = 0);
+		tristate querySingleNumber(const QString& sql, int &number, uint column = 0, 
+			bool addLimitTo1 = true);
 
 		/*! Executes \a sql query and stores first record's first field's string value 
 		 inside \a list. The list is initially cleared.
@@ -458,8 +463,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Does not fetch any records. \a success will be set to false 
 		 on query execution errors (true otherwise), so you can see a difference between 
 		 "no results" and "query execution error" states. 
-		 Note: real executed query is: "SELECT 1 FROM (\a sql) LIMIT 1" */
-		bool resultExists(const QString& sql, bool &success);
+		 Note: real executed query is: "SELECT 1 FROM (\a sql) LIMIT 1"
+		 if \a addLimitTo1 is true (the default). */
+		bool resultExists(const QString& sql, bool &success, bool addLimitTo1 = true);
 
 		/*! \return true if there is at least one record in \a table. */
 		bool isEmpty( TableSchema& table, bool &success );
@@ -1077,8 +1083,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 else, sets appropriate error with a message and returns false. */
 		bool checkIfColumnExists(Cursor *cursor, uint column);
 
-		/*! @internal used by querySingleRecord() methods. */
-		tristate querySingleRecordInternal(RowData &data, const QString* sql, QuerySchema* query);
+		/*! @internal used by querySingleRecord() methods.
+		 Note: "LIMIT 1" is appended to \a sql statement if \a addLimitTo1 is true (the default). */
+		tristate querySingleRecordInternal(RowData &data, const QString* sql, 
+			QuerySchema* query, bool addLimitTo1 = true);
 
 		/*! @internal used by Driver::createConnection(). 
 		 Only works if connection is not yet established. */
