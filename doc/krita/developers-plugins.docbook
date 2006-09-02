@@ -522,4 +522,1031 @@ common operations to move between bit depths.
 </sect3>
 </sect2>
 
+<sect2 id="developers-plugins-filters">
+<title>Filters</title>
+
+<para>
+Filters are plugins that examine the pixels in a layer and them make changes
+to them. Although &krita; uses an efficient tiled memory backend to store
+pixels, filter writers do not have to bother with that. When writing a filter
+plugin for the &Java; imaging API, Photoshop or The Gimp, you need to take care
+of tile edges and <quote>cobble</quote> tiles together: &krita; hides that
+implementation detail.
+</para>
+<note><para>Note that it is theoretically easy to replace the current tile
+image data storage backend with another backend, but that backens are not true
+plugins at the moment, for performance reasons.</para></note>
+<para>
+&krita; uses iterators to read and write pixel values. Alternatively, you can
+read a block of pixels into a memory buffer, mess with it and then write it
+back as a block. But that is not necessarily more efficient, it may even be
+slower than using the iterators; it may just be more convenient. See the API
+documentation.
+</para><para>
+&krita; images are composed of layers, of which there are currently four
+kinds: paint layers, group layers, adjustment layers (that contain a filter
+that is applied dynamically to layers below the adjustment layer) and part
+layers. Filters always operate on paint layers. Paint layers contain paint
+devices, of the class <classname>KisPaintDevice</classname>. A paint device in
+its turn gives access to the actual pixels.
+</para><para>
+<classname>PaintDevice</classname>s are generally passed around wrapped in
+shared pointers. A shared pointer keeps track of in how many places the paint
+device is currently used and deletes the paint device when it is no longer
+used anywhere. You recognize the shared pointer version of a paint device
+through its <literal>SP</literal> suffix. Just remember that you never have to
+explicitly delete a <classname>KisPaintDeviceSP</classname>.
+</para><para>
+Let's examine a very simple filter, one that inverts every pixel. The code for
+this filter is in the <filename
+class="directory">koffice/krita/plugins/filters/example</filename> directory. 
+The main method is 
+<programlisting>
+KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                        KisFilterConfiguration* /*config*/, const QRect&amp; rect).
+</programlisting>
+The function gets passed two paint devices, a configuration object (which is
+not used in this simple filter) and a <varname>rect</varname>. The
+<varname>rect</varname> describes the area of the
+paint device which the filter should act on. This area is described by
+integers, which means no sub-pixel accuracy.
+</para><para>
+The <varname>src</varname> paint device is for reading from, the
+<varname>dst</varname> paint device for writing to. These parameters may point
+to the same actual paint device, or be two different paint devices. (Note:
+this may change to only one paint device in the future.)
+</para><para>
+Now, let's look at the code line by line:
+</para>
+<programlisting>
+void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                             KisFilterConfiguration* /*config*/, const QRect&amp; rect)
+{
+   Q_ASSERT(src != 0);
+   Q_ASSERT(dst != 0);
+
+   KisRectIteratorPixel srcIt = src->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), false); <co id="invert1" />
+   KisRectIteratorPixel dstIt = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height(), true ); <co id="invert2" />
+
+   int pixelsProcessed = 0;
+   setProgressTotalSteps(rect.width() * rect.height());
+
+   KisColorSpace * cs = src->colorSpace();
+   Q_INT32 psize = cs->pixelSize();
+
+   while( ! srcIt.isDone() )
+   {
+       if(srcIt.isSelected()) <co id="invert3" />
+       {
+           memcpy(dstIt.rawData(), srcIt.oldRawData(), psize); <co id="invert4" />
+
+           cs->invertColor( dstIt.rawData(), 1); <co id="invert5" />
+       }
+       setProgress(++pixelsProcessed);
+       ++srcIt;
+       ++dstIt;
+   }
+   setProgressDone(); // Must be called even if you don't really support progression
+}
+</programlisting>
+
+<calloutlist>
+<callout arearefs="invert1">
+<para>This creates an iterator to read the existing pixels. Krita has three
+types of iterators: horizontal, vertical and rectangular. The rect iterator
+takes the most efficient path through the image data, but does not guarantee
+anything about the location of the next pixel it returns. That means that you
+cannot be sure that the pixel you will retrieve next will be adjacent to the
+pixel you just got. The horizontal and vertical line iterators do guarantee
+the location of the pixels they return.
+</para></callout>
+<callout arearefs="invert2"><para>
+(2) We create the destination iterator with the <literal>write</literal>
+setting to <literal>true</literal>. This means that if the destination paint
+device is smaller than the rect we write, it will automatically be enlarged to
+fit every pixel we iterate over. Note that we've got a potential bug here: if
+<varname>dst</varname> and <varname>src</varname> are not the same device,
+then it is quite possible that the pixels returned by the iterators do not
+correspond. For every position in the iterator, <varname>src</varname> may be,
+for example, at 165,200, while <varname>dst</varname> could be at 20,8 &mdash;
+and therefore the copy we perform below may distort the image...
+</para></callout>
+<callout arearefs="invert3"><para>
+Want to know if a pixel is selected? That's easy &mdash; use the
+<methodname>isSelected</methodname> method. But selectedness is not a binary
+property of a pixel, a pixel can be half selected, barely selected or almost
+completely selected. That value you can also got from the iterator. Selections
+are actually a mask paint device with a range between 0 and 255, where 0 is
+completely unselected and 255 completely selected. The iterator has two
+methods: <methodname>isSelected()</methodname> and
+<methodname>selectedNess()</methodname>. The first returns true if a pixel is
+selected to any extent (i.e., the mask value is greater than 1), the other
+returns the maskvalue.
+</para></callout>
+<callout arearefs="invert4"><para>
+As noted above, this <literal>memcpy</literal> is a big bad bug...
+<methodname>rawData()</methodname> returns the array of bytes which is the
+current state of the pixel; <methodname>oldRawData()</methodname> returns the
+array of bytes as it was before we created the iterator. However, we may be
+copying the wrong pixel here. In actual practice, that won't happen too often,
+unless <varname>dst</varname> already exists and isn't aligned with
+<varname>src</varname>.
+</para></callout>
+<callout arearefs="invert5"><para>
+But this is correct: instead of figuring out which byte represents which
+channel, we use a function supplied by all colorspaces to invert the current
+pixel. The colorspaces have a lot of pixel operations you can make use of.
+</para></callout>
+</calloutlist>
+
+<para>
+This is not all there is to creating a filter. Filters have two other
+important components: a configuration object and a configuration widget. The
+two interact closely. The configuration widget creates a configuration object,
+but can also be filled from a pre-existing configuration object. Configuration
+objects can represtent themselves as XML and can be created from XML. That is
+what makes adjustment layers possible.
+</para>
+
+<sect3 id="developers-plugins-filters-iterators">
+<title>Iterators</title>
+
+<para>
+There are three types of iterators: 
+</para>
+
+<itemizedlist>
+<listitem><para>Horizontal lines</para></listitem>
+<listitem><para>Vertical lines</para></listitem>
+<listitem><para>Rectangular iterors</para></listitem>
+</itemizedlist>
+
+<para>
+The horizontal and vertical line iterators have a method to move the iterator
+to the next row or column: <methodname>nextRow()</methodname> and
+<methodname>nextCol()</methodname>. Using these is much faster than creating a
+new iterator for every line or column.
+</para><para>
+Iterators are thread-safe in &krita;, so it is possible to divide the work
+over multiple threads. However, future versions of &krita; will use the
+<methodname>supportsThreading()</methodname> method to determine whether your
+filter can be applied to chunks of the image (&ie;, all pixels modified
+independently, instead of changed by some value determined from an examination
+of all pixels in the image) and automatically thread the execution your
+filter.
+</para>
+</sect3>
+
+<sect3 id="developers-plugins-filters-kisfilterconfiguration">
+<title><classname>KisFilterConfiguration</classname></title>
+
+<para>
+<classname>KisFilterConfiguration</classname> is a structure that is used to
+save filter settings to disk, for instance for adjustment layers. The
+scripting plugin uses the property map that’s at the back of
+<classname>KisFilterConfigaration</classname> to make it possible to script
+filters. Filters can provide a custom widget that &krita; will show in the
+filters gallery, the filter preview dialog or the tool option tab of the
+paint-with-filters tool.
+</para>
+<para>
+An example, taken from the oilpaint effect filter:
+</para>
+<programlisting>
+class KisOilPaintFilterConfiguration : public KisFilterConfiguration
+{
+
+public:
+
+   KisOilPaintFilterConfiguration(Q_UINT32 brushSize, Q_UINT32 smooth)
+       : KisFilterConfiguration( "oilpaint", 1 )
+       {
+           setProperty("brushSize", brushSize);
+           setProperty("smooth", smooth);
+       };
+public:
+
+   inline Q_UINT32 brushSize() { return getInt("brushSize"); };
+   inline Q_UINT32 smooth() {return getInt("smooth"); };
+
+};
+</programlisting>
+</sect3>
+
+<sect3 id="developers-plugins-filters-kisfilterconfigurationwidget">
+<title><classname>KisFilterConfigurationWidget</classname></title>
+
+<para>
+Most filters can be tweaked by the user. You can create a configuration widget
+that Krita will use where-ever your filter is used. An example:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Oilpaint</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-oilpaint.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Oilpaint</guilabel> dialog</phrase>
+</textobject>
+<caption><para>The <guilabel>Oilpaint</guilabel> dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+Note that only the left-hand side of this dialog is your responsibility:
+&krita; takes care of the rest. There are three ways of going about creating
+an option widget:
+</para>
+
+<itemizedlist>
+<listitem><para>Use &Qt; Designer to create a widget base, and subclass it for
+your filter</para></listitem>
+<listitem><para>Use one of the simple widgets that show a number of sliders
+for lists of integers, doubles or bools. These are useful if, like the above
+screenshot, your filter can be configured by a number of integers, doubles or
+bools. See the API dox for <classname>KisMultiIntegerFilterWidget</classname>,
+<classname>KisMultiDoubleFilterWidget</classname> and
+<classname>KisMultiBoolFilterWidget</classname>.</para></listitem>
+<listitem><para>Hand-code a widget. This is not recommended, and if you do so
+and want your filter to become part of &krita;’s official release, then I’ll ask
+you to replate your hand-coded widget with a &Qt; Designer
+widget.</para></listitem>
+</itemizedlist>
+
+<para>
+The oilpaint filter uses the multi integer widget:
+</para>
+
+<programlisting>
+KisFilterConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP /*dev*/)
+{
+   vKisIntegerWidgetParam param;
+   param.push_back( KisIntegerWidgetParam( 1, 5, 1, i18n("Brush size"), "brushSize" ) );
+   param.push_back( KisIntegerWidgetParam( 10, 255, 30, i18n("Smooth"), "smooth" ) );
+   return new KisMultiIntegerFilterWidget(parent, id().id().ascii(), id().id().ascii(), param );
+}
+
+KisFilterConfiguration* KisOilPaintFilter::configuration(QWidget* nwidget)
+{
+   KisMultiIntegerFilterWidget* widget = (KisMultiIntegerFilterWidget*) nwidget;
+   if( widget == 0 )
+   {
+       return new KisOilPaintFilterConfiguration( 1, 30);
+   } else {
+       return new KisOilPaintFilterConfiguration( widget->valueAt( 0 ), widget->valueAt( 1 ) );
+   }
+}
+
+std::list&lt;KisFilterConfiguration*&gt; KisOilPaintFilter::listOfExamplesConfiguration(KisPaintDeviceSP )
+{
+   std::list&lt;KisFilterConfiguration*&gt; list;
+   list.insert(list.begin(), new KisOilPaintFilterConfiguration( 1, 30));
+   return list;
+}
+</programlisting>
+
+<para>
+You can see how it works: fill a vector with your integer parameters and
+create the widget. The <methodname>configuration()</methodname> method
+inspects the widget and creates the right filter configuration object, in this
+case, of course, <classname>KisOilPaintFilterConfiguration</classname>. The
+<methodname>listOfExamplesConfiguration</methodname> method (which should be
+renamed to correct English...) returns a list with example configuration
+objects for the filters gallery dialog.
+</para>
+</sect3>
+
+<sect3 id="developers-plugins-filters-conclusion">
+<title>Filters conclusion</title>
+
+<para>
+There’s more to coding interesting filters, of course, but with this
+explanation, the API documentation and access to our source code, you should
+be able to get started. Don’t hesitate to contact the &krita; developers on
+IRC or on the mailing list.
+</para>
+</sect3>
+
+</sect2>
+
+<sect2 id="developers-plugins-tools">
+<title>Tools</title>
+
+<para>
+Tools appear in &krita;’s toolbox. This means that there is limited space for
+new tools &mdash; think carefully whether a paint operation isn’t enough for
+your purposes. Tools can use the mouse/tablet and keyboard in complex ways,
+which paint operations cannot. This is the reason that Duplicate is a tool,
+but airbrush a paint operation.
+</para><para>
+Be careful with static data in your tool: a new instance of your tool is
+created for every input device: mouse, stylus, eraser, airbrush &mdash; whatever.
+Tools come divided into logical groups:
+</para>
+<itemizedlist>
+<listitem><para>shape drawing tools (circle, rect)</para></listitem>
+<listitem><para>freehand drawing tools (brush)</para></listitem>
+<listitem><para>transform tools that mess up the geometry of a
+layer</para></listitem>
+<listitem><para>fill tools (like bucket fill or gradient)</para></listitem>
+<listitem><para>view tools (that don’t change pixels, but alter the way you
+view the canvas, such as zoom)</para></listitem>
+<listitem><para>select tools (that change the selection
+mask)</para></listitem>
+</itemizedlist>
+
+<para>
+The tool interface is described in the API documentation for
+<classname>KisTool</classname>. There are three subclasses:
+<classname>KisToolPaint</classname>, <classname>KisToolNonPaint</classname>
+and <classname>KisToolShape</classname> (which is actually a subclass of
+<classname>KisToolPaint</classname>) that specialize
+<classname>KisTool</classname> for painting tasks (i.e., changing pixels) ,
+non-painting tasks and shape painting tasks.
+</para><para>
+A tool has an option widget, just like filters. Currently, the option widgets
+are shown in a tab in a dock window. We may change that to a strip under the
+main menu (which then replaces the toolbar) for &krita; 2.0, but for now,
+design your option widget to fit in a tab. As always, it’s best to use &Qt;
+Designer for the design of the option widget.
+</para><para>
+A good example of a tool is the star tool:
+</para>
+
+<screen>
+kis_tool_star.cc       Makefile.am   tool_star_cursor.png  wdg_tool_star.ui
+kis_tool_star.h        Makefile.in   tool_star.h           
+kritatoolstar.desktop  tool_star.cc  tool_star.png         
+</screen>
+
+<para>
+As you see, you need two images: one for the cursor and one for the toolbox.
+<filename>tool_star.cc</filename> is just the plugin loader, similar to what
+we have seen above. The real meat is in the implementation:
+</para>
+
+<programlisting>
+KisToolStar::KisToolStar()
+   : KisToolShape(i18n("Star")),
+     m_dragging (false),
+     m_currentImage (0)
+{
+   setName("tool_star");
+   setCursor(KisCursor::load("tool_star_cursor.png", 6, 6));
+   m_innerOuterRatio=40;
+   m_vertices=5;
+}
+</programlisting>
+
+<para>
+The constructor sets the internal name &mdash; which is not translated
+&mdash; and the call to the superclass sets the visible name. We also load the
+cursor image and set a number of variables.
+</para>
+
+<programlisting>
+void KisToolStar::update (KisCanvasSubject *subject)
+{
+   KisToolShape::update (subject);
+   if (m_subject)
+       m_currentImage = m_subject->currentImg();
+}
+</programlisting>
+
+<para>
+The <methodname>update()</methodname> method is called when the tool is
+selected. This is not a <classname>KisTool</classname> method, but a
+<classname>KisCanvasObserver</classname> method. Canvas observers are notified
+whenever something changes in the view, which can be useful for tools.
+</para><para>
+The following methods (<methodname>buttonPress</methodname>,
+<methodname>move</methodname> and <methodname>buttonRelease</methodname>) are
+called by &krita; when the input device (mouse, stylus, eraser etc.) is
+pressed down, moved or released. Note that you also get move events if the
+mouse button isn’t pressed. The events are not the regular &Qt; events, but
+synthetic &krita; events because we make use of low-level trickery to get
+enough events to draw a smooth line. By default, toolkits like &Qt; (and GTK)
+drop events if they are too busy to handle them, and we want them all.
+</para>
+
+<programlisting>
+void KisToolStar::buttonPress(KisButtonPressEvent *event)
+{
+   if (m_currentImage &amp;&amp; event->button() == LeftButton) {
+       m_dragging = true;
+       m_dragStart = event->pos();
+       m_dragEnd = event->pos();
+       m_vertices = m_optWidget->verticesSpinBox->value();
+       m_innerOuterRatio = m_optWidget->ratioSpinBox->value();
+   }
+}
+
+void KisToolStar::move(KisMoveEvent *event)
+{
+   if (m_dragging) {
+       // erase old lines on canvas
+       draw(m_dragStart, m_dragEnd);
+       // move (alt) or resize star
+       if (event->state() &amp; Qt::AltButton) {
+           KisPoint trans = event->pos() - m_dragEnd;
+           m_dragStart += trans;
+           m_dragEnd += trans;
+       } else {
+           m_dragEnd = event->pos();
+       }
+       // draw new lines on canvas
+       draw(m_dragStart, m_dragEnd);
+   }
+}
+
+void KisToolStar::buttonRelease(KisButtonReleaseEvent *event)
+{
+   if (!m_subject || !m_currentImage)
+       return;
+
+   if (m_dragging &amp;&amp; event->button() == LeftButton) {
+       // erase old lines on canvas
+       draw(m_dragStart, m_dragEnd);
+       m_dragging = false;
+
+       if (m_dragStart == m_dragEnd)
+           return;
+
+       if (!m_currentImage)
+           return;
+
+       if (!m_currentImage->activeDevice())
+           return;
+       
+       KisPaintDeviceSP device = m_currentImage->activeDevice ();;
+       KisPainter painter (device);
+       if (m_currentImage->undo()) painter.beginTransaction (i18n("Star"));
+
+       painter.setPaintColor(m_subject->fgColor());
+       painter.setBackgroundColor(m_subject->bgColor());
+       painter.setFillStyle(fillStyle());
+       painter.setBrush(m_subject->currentBrush());
+       painter.setPattern(m_subject->currentPattern());
+       painter.setOpacity(m_opacity);
+       painter.setCompositeOp(m_compositeOp);
+       KisPaintOp * op =
+	   KisPaintOpRegistry::instance()->paintOp(m_subject->currentPaintop(), m_subject->currentPaintopSettings(), &amp;painter);
+       painter.setPaintOp(op); // Painter takes ownership
+
+       vKisPoint coord = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());
+
+       painter.paintPolygon(coord);
+       
+       device->setDirty( painter.dirtyRect() );
+       notifyModified();
+
+       if (m_currentImage->undo()) {
+           m_currentImage->undoAdapter()->addCommand(painter.endTransaction());
+       }
+   }
+}
+</programlisting>
+
+<para>
+The <methodname>draw()</methodname> method is an internal method of
+<classname>KisToolStar</classname> and draws the outline of the star. We call
+this from the <methodname>move()</methodname> method to give the user feedback
+of the size and shape of their star. Note that we use the
+<varname>Qt::NotROP</varname> raster operation, which means that calling
+<methodname>draw()</methodname> a second time with the same start and end
+point the previously drawn star will be deleted.
+</para>
+
+<programlisting>
+void KisToolStar::draw(const KisPoint&amp; start, const KisPoint&amp; end )
+{
+   if (!m_subject || !m_currentImage)
+       return;
+
+   KisCanvasController *controller = m_subject->canvasController();
+   KisCanvas *canvas = controller->kiscanvas();
+   KisCanvasPainter p (canvas);
+   QPen pen(Qt::SolidLine);
+
+   KisPoint startPos;
+   KisPoint endPos;
+   startPos = controller->windowToView(start);
+   endPos = controller->windowToView(end);
+
+   p.setRasterOp(Qt::NotROP);
+
+   vKisPoint points = starCoordinates(m_vertices, startPos.x(), startPos.y(), endPos.x(), endPos.y());
+
+   for (uint i = 0; i &lt; points.count() - 1; i++) {
+       p.drawLine(points[i].floorQPoint(), points[i + 1].floorQPoint());
+   }
+   p.drawLine(points[points.count() - 1].floorQPoint(), points[0].floorQPoint());
+
+   p.end ();
+}
+</programlisting>
+
+<para>
+The <methodname>setup()</methodname> method is essential: here we create the
+action that will be plugged into the toolbox so users can actually select the
+tool. We also assign a shortcut key. Note that there’s some hackery going on:
+remember that we create an instance of the tool for every input device. This
+also means that we call <methodname>setup()</methodname> for every input
+device and that means that an action with the same name is added several times
+to the action collection. However, everything seems to work, so why worry?
+</para>
+
+<programlisting>
+void KisToolStar::setup(KActionCollection *collection)
+{
+   m_action = static_cast&lt;KRadioAction *&gt;(collection->action(name()));
+
+   if (m_action == 0) {
+       KShortcut shortcut(Qt::Key_Plus);
+       shortcut.append(KShortcut(Qt::Key_F9));
+       m_action = new KRadioAction(i18n("&amp;Star"),
+                                   "tool_star",
+                                   shortcut,
+                                   this,
+                                   SLOT(activate()),
+                                   collection,
+                                   name());
+       Q_CHECK_PTR(m_action);
+
+       m_action->setToolTip(i18n("Draw a star"));
+       m_action->setExclusiveGroup("tools");
+       m_ownAction = true;
+   }
+}
+</programlisting>
+
+<para>
+The <methodname>starCoordinates()</methodname> method contains some funky math
+&mdash; but is not too interesting for the discussion of how to create a tool
+plugins.
+</para>
+
+<programlisting>
+KisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
+{
+   double R=0, r=0;
+   Q_INT32 n=0;
+   double angle;
+
+   vKisPoint starCoordinatesArray(2*N);
+
+   // the radius of the outer edges
+   R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
+
+   // the radius of the inner edges
+   r=R*m_innerOuterRatio/100.0;
+
+   // the angle
+   angle=-atan2((x-mx),(y-my));
+
+   //set outer edges
+   for(n=0;n&lt;N;n++){
+       starCoordinatesArray[2*n] = KisPoint(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));
+   }
+
+   //set inner edges
+   for(n=0;n&lt;N;n++){
+       starCoordinatesArray[2*n+1] = KisPoint(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle));
+   }
+
+   return starCoordinatesArray;
+}
+</programlisting>
+
+<para>
+The <methodname>createOptionWidget()</methodname> method is called to create
+the option widget that &krita; will show in the tab. Since there is a tool per
+input device per view, the state of a tool can be kept in the tool. This
+method is only called once: the option widget is stored and retrieved the next
+time the tool is activated.
+</para>
+
+<programlisting>
+QWidget* KisToolStar::createOptionWidget(QWidget* parent)
+{
+   QWidget *widget = KisToolShape::createOptionWidget(parent);
+
+   m_optWidget = new WdgToolStar(widget);
+   Q_CHECK_PTR(m_optWidget);
+
+   m_optWidget->ratioSpinBox->setValue(m_innerOuterRatio);
+
+   QGridLayout *optionLayout = new QGridLayout(widget, 1, 1);
+   super::addOptionWidgetLayout(optionLayout);
+
+   optionLayout->addWidget(m_optWidget, 0, 0);
+
+   return widget;
+}
+</programlisting>
+
+<sect3 id="developers-plugins-tools-conclusions">
+<title>Tool Conclusions</title>
+
+<para>
+Tools are relatively simple plugins to create. You need to combine the
+<classname>KisTool</classname> and <classname>KisCanvasObserver</classname>
+interfaces in order to effectively create a tool. 
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="developers-plugins-paintoperations">
+<title>Paint operations</title>
+
+<para>
+PaintOps are one of the more innovative types of plugins in Krita (together
+with pluggable colorspaces). A paint operation defines how tools change the
+pixels they touch. Airbrush, aliased pencil or antialiased pixel brush: these
+are all paint operations. But you could &mdash; with a lot of work &mdash;
+create a paintop that reads Corel Painter XML brush definitions and uses those
+to determine how painting is done.
+</para><para>
+Paint operations are instantiated when a paint tool receives a
+<literal>mouseDown</literal> event and are deleted when the mouseUp event is
+received by a paint tool. In between, the paintop can keep track of previous
+positions and other data, such as pressure levels if the user uses a tablet.
+</para><para>
+The basic operation of a paint operation is to change pixels at the cursor
+position of a paint tool. That can be done only once, or the paint op can
+demand to be run at regular intervals, using a timer. The first would be
+useful for a pencil-type paint op, the second, of course,  for an
+airbrush-type paintop.
+</para><para>
+Paintops can have a small configuration widget which is placed in a toolbar.
+Thus, paintop configuration widgets need to have a horizontal layout of
+widgets that are not higher than a toolbar button. Otherwise, &krita; will
+look very funny.
+</para><para>
+Let’s look at a simple paintop plugin, one that shows a little bit of
+programmatic intelligence. First, in the header file, there’s a factory
+defined. This factory creates a paintop when the active tool needs one:
+</para>
+
+<programlisting>
+public:
+   KisSmearyOpFactory() {}
+   virtual ~KisSmearyOpFactory() {}
+
+   virtual KisPaintOp * createOp(const KisPaintOpSettings *settings, KisPainter * painter);
+   virtual KisID id() { return KisID("paintSmeary", i18n("Smeary Brush")); }
+   virtual bool userVisible(KisColorSpace * ) { return false; }
+   virtual QString pixmap() { return ""; }
+
+};
+</programlisting>
+
+<para>
+The factory also contains the <classname>KisID</classname> with the public and
+private name for the paintop &mdash; make sure your paintop’s private name
+does not clash with another paintop! &mdash; and may optionally return a
+pixmap. &krita; can then show the pixmap together with the name for visual
+identifcation of your paintop. For instance, a painter’s knife paintop would
+have the image of such an implement.
+</para><para>
+The implementation of a paintop is very straightforward:
+</para>
+
+<programlisting>
+KisSmearyOp::KisSmearyOp(KisPainter * painter)
+   : KisPaintOp(painter)
+{
+}
+
+KisSmearyOp::~KisSmearyOp()
+{
+}
+void KisSmearyOp::paintAt(const KisPoint &amp;pos, const KisPaintInformation&amp; info)
+{
+</programlisting>
+
+<para>
+The <methodname>paintAt()</methodname> method really is where it’s at, with
+paintops. This method receives two parameters: the current position (which is
+in floats, not in whole pixels) and a
+<classname>KisPaintInformation</classname> object. which contains the
+pressure, x and y tilt, and movement vector, and may in the future be extended
+with other information.
+</para>
+
+<programlisting>
+   if (!m_painter->device()) return;
+
+   KisBrush *brush = m_painter->brush();
+</programlisting>
+
+<para>
+A <classname>KisBrush</classname> is the representation of a Gimp brush file:
+that is a mask, either a single mask or a series of masks. Actually, we don’t
+use the brush here, except to determine the <quote>hotspot</quote> under the
+cursor.
+</para>
+
+<programlisting>
+   Q_ASSERT(brush);
+
+   if (!brush) return;
+
+   if (! brush->canPaintFor(info) )
+       return;
+
+   KisPaintDeviceSP device = m_painter->device();
+   KisColorSpace * colorSpace = device->colorSpace();
+   KisColor kc = m_painter->paintColor();
+   kc.convertTo(colorSpace);
+
+   KisPoint hotSpot = brush->hotSpot(info);
+   KisPoint pt = pos - hotSpot;
+
+   // Split the coordinates into integer plus fractional parts. The integer
+   // is where the dab will be positioned and the fractional part determines
+   // the sub-pixel positioning.
+   Q_INT32 x, y;
+   double xFraction, yFraction;
+
+   splitCoordinate(pt.x(), &amp;x, &amp;xFraction);
+   splitCoordinate(pt.y(), &amp;y, &amp;yFraction);
+
+   KisPaintDeviceSP dab = new KisPaintDevice(colorSpace, "smeary dab");
+   Q_CHECK_PTR(dab);
+</programlisting>
+
+<para>
+We don’t change the pixels of a paint device directly: instead we create a small paint device, a dab, and composite that onto the current paint device.
+</para>
+
+<programlisting>
+   m_painter->setPressure(info.pressure);
+</programlisting>
+
+<para>
+As the comments say, the next bit code does some programmatic work to create
+the actual dab. In this case, we draw a number of lines. When I am done with
+this paintop, the length, position and thickness of the lines will be
+dependent on pressure and paint load, and we’ll have create a stiff, smeary
+oilpaint brush. But I haven’t had time to finish this yet.
+</para>
+
+<programlisting>
+   // Compute the position of the tufts. The tufts are arranged in a line
+   // perpendicular to the motion of the brush, i.e, the straight line between
+   // the current position and the previous position.
+   // The tufts are spread out through the pressure
+
+   KisPoint previousPoint = info.movement.toKisPoint();
+   KisVector2D brushVector(-previousPoint.y(), previousPoint.x());
+   KisVector2D currentPointVector = KisVector2D(pos);
+   brushVector.normalize();
+
+   KisVector2D vl, vr;
+
+   for (int i = 0; i &lt; (NUMBER_OF_TUFTS / 2); ++i) {
+       // Compute the positions on the new vector.
+       vl = currentPointVector + i * brushVector;
+       KisPoint pl = vl.toKisPoint();
+       dab->setPixel(pl.roundX(), pl.roundY(), kc);
+
+       vr = currentPointVector - i * brushVector;
+       KisPoint pr = vr.toKisPoint();
+       dab->setPixel(pr.roundX(), pr.roundY(), kc);
+   }
+
+   vr = vr - vl;
+   vr.normalize();
+</programlisting>
+
+<para>
+Finally we blt the dab onto the original paint device and tell the painter
+that we’ve dirtied a small rectangle of the paint device.
+</para>
+
+<programlisting>
+   if (m_source->hasSelection()) {
+       m_painter->bltSelection(x - 32, y - 32, m_painter->compositeOp(), dab.data(),
+                               m_source->selection(), m_painter->opacity(), x - 32, y -32, 64, 64);
+   }
+   else {
+       m_painter->bitBlt(x - 32, y - 32, m_painter->compositeOp(), dab.data(), m_painter->opacity(), x - 32, y -32, 64, 64);
+   }
+
+   m_painter->addDirtyRect(QRect(x -32, y -32, 64, 64));
+}
+
+
+KisPaintOp * KisSmearyOpFactory::createOp(const KisPaintOpSettings */*settings*/, KisPainter * painter)
+{
+   KisPaintOp * op = new KisSmearyOp(painter);
+   Q_CHECK_PTR(op);
+   return op;
+}
+</programlisting>
+
+<para>
+That’s all: paintops are easy and fun!
+</para>
+
+</sect2>
+
+<sect2 id="developers-plugins-viewplugins">
+<title>View plugins</title>
+
+<para>
+View plugins are the weirdest of the bunch: a view plugin is an ordinary KPart
+that can provide a bit of user interface and some functionality. For instance,
+the histogram tab is a view plugin, as is the rotate dialog.
+</para>
+
+</sect2>
+
+<sect2 id="developers-plugins-importexport">
+<title>Import/Export filters</title>
+
+<para>
+&krita; works with the ordinary &koffice; file filter architecture. There's a
+tutorial, a bit old, but still useful, at: <ulink
+url="http://koffice.org/developer/filters/oldfaq.php" />. It is probably best
+to cooperate with the &krita; team when developing file filters and do the
+development in the &koffice; filter tree. Note that you can test your filters
+without running &krita; using the <command>koconverter</command> utility.
+</para><para>
+Filters have two sides: importing and exporting. These are usually two
+different plugins that may share some code.
+</para><para>
+The important <filename>Makefile.am</filename> entries are:
+</para>
+
+<programlisting>
+service_DATA = krita_XXX_import.desktop krita_XXX_export.desktop
+servicedir = $(kde_servicesdir)
+kdelnk_DATA = krita_XXX.desktop
+kdelnkdir = $(kde_appsdir)/Office
+libkritaXXXimport_la_SOURCES = XXXimport.cpp
+libkritaXXXexport_la_SOURCES = XXXexport.cpp
+METASOURCES = AUTO
+</programlisting>
+
+<para>
+Whether you're building an import filter or an export filter, your work always
+boils down to implementing the following function:
+</para>
+
+<programlisting>
+virtual KoFilter::ConversionStatus convert(const QCString&amp; from, const QCString&amp; to);
+</programlisting>
+
+<para>
+It's the settings in the <literal role="extension">.desktop</literal> files
+that determine which way a filter converts:
+</para><para>
+Import:
+</para>
+
+<programlisting>
+X-KDE-Export=application/x-krita
+X-KDE-Import=image/x-xcf-gimp
+X-KDE-Weight=1
+X-KDE-Library=libkritaXXXimport
+ServiceTypes=KOfficeFilter
+</programlisting>
+
+<para>
+Export:
+</para>
+
+<programlisting>
+X-KDE-Export=image/x-xcf-gimp
+X-KDE-Import=application/x-krita
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Weight=1
+X-KDE-Library=libkritaXXXexport
+</programlisting>
+
+<para>
+And yes, the mimetype chosen for the example is a hint. Please, pretty please,
+implement an xcf filter?
+</para>
+
+<sect3 id="plugins-developers-importexport-import">
+<title>Import</title>
+
+<para>
+The big problem with import filters is of course your code to read the data on
+disk. The boilerplate for calling that code is fairly simple:
+</para>
+
+<note><para>Note: we really, really should find a way to enable &krita; to keep
+a file open and only read data on a as-needed basis, instead of copying the
+entire contents to the internal paint device representation. But that would
+mean datamanager backends that know about tiff files and so on, and is not
+currently implemented. It would be ideal if some file filters could implement
+a class provisionally named <classname>KisFileDataManager</classname>, create
+an object of that instance with the current file and pass that to KisDoc.  But
+&krita; handles storage per layer, not per document, so this would be a hard
+refactor to do.</para></note>
+
+<programlisting>
+KoFilter::ConversionStatus XXXImport::convert(const QCString&amp;, const QCString&amp; to)
+{
+   if (to != "application/x-krita") <co id="import1" />
+       return KoFilter::BadMimeType;
+
+   KisDoc * doc = dynamic_cast&lt;KisDoc*&gt;(m_chain -> outputDocument()); <co id="import2" />
+   KisView * view = static_cast&lt;KisView*&gt;(doc -> views().getFirst()); <co id="import3" />
+   
+   QString filename = m_chain -> inputFile(); <co id="import4" />
+   
+   if (!doc)
+       return KoFilter::CreationError;
+
+   doc -> prepareForImport(); <co id="import5" />
+
+   if (!filename.isEmpty()) {
+   
+       KURL url(filename);
+
+       if (url.isEmpty())
+           return KoFilter::FileNotFound;
+           
+       KisImageXXXConverter ib(doc, doc -> undoAdapter()); <co id="import6" />
+
+       if (view != 0)
+           view -> canvasSubject() ->  progressDisplay() -> setSubject(&amp;ib, false, true);
+
+       switch (ib.buildImage(url)) <co id="import7" /> {
+           case KisImageBuilder_RESULT_UNSUPPORTED:
+               return KoFilter::NotImplemented;
+               break;
+           case KisImageBuilder_RESULT_INVALID_ARG:
+               return KoFilter::BadMimeType;
+               break;
+           case KisImageBuilder_RESULT_NO_URI:
+           case KisImageBuilder_RESULT_NOT_LOCAL:
+               return KoFilter::FileNotFound;
+               break;
+           case KisImageBuilder_RESULT_BAD_FETCH:
+           case KisImageBuilder_RESULT_EMPTY:
+               return KoFilter::ParsingError;                
+               break;
+           case KisImageBuilder_RESULT_FAILURE:
+               return KoFilter::InternalError;
+               break;
+           case KisImageBuilder_RESULT_OK:
+               doc -> setCurrentImage( ib.image()); <co id="import8" />
+               return KoFilter::OK;
+           default:
+               break;
+       }
+
+   }
+   return KoFilter::StorageCreationError;
+}
+</programlisting>
+
+<calloutlist>
+<callout arearefs="import1"><para>This is supposed to be an importfilter, so
+if it's not called to convert to a &krita; image, then something is
+wrong.</para></callout>
+<callout arearefs="import2"><para>The filter chain already has created an
+output document for us. We need to cast it to <classname>KisDocM</classname>,
+because &krita; documents need special treatment. It wouldn't, actually, be
+all that bad an idea to check whether the result of the cast is not 0, because
+if it is, importing will fail.</para></callout>
+<callout arearefs="import3"><para>If we call this filter from the GUI, we try
+to get the view. If there's a view, the conversion code can try to update the
+progressbar.</para></callout>
+<callout arearefs="import4"><para>The filter has the filename for our input
+file for us.</para></callout>
+<callout arearefs="import5"><para><classname>KisDoc</classname> needs to be
+prepared for import. Certain settings are initialized and undo is disabled.
+Otherwise you could undo the adding of layers performed by the import filter
+and that's weird behaviour.</para></callout>
+<callout arearefs="import6"><para>I have chosed to implement the actual
+importing code in a separate class that I instantiate here. You can also put
+all your code right in this method, but that would be a bit
+messy.</para></callout>
+<callout arearefs="import7"><para>(7) My importer returns a statuscode that I
+can then use to set the status of the import filter. &koffice; takes care of
+showing error messages.</para></callout>
+<callout arearefs="import8"><para>(8) If creating the
+<classname>KisImage</classname> has succeeded we set the document's current
+image to our newly created image. Then we're done: <literal>return
+KoFilter::OK;</literal>.</para></callout>
+</calloutlist>
+
+</sect3>
+
+</sect2>
+
 </sect1>
