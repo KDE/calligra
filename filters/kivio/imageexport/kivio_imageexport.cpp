@@ -157,16 +157,16 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
   KivioScreenPainter kpainter;
   kpainter.start(&pixmap);
 
-  int translationX = border;
-  int translationY = border;
+  float translationX = border;
+  float translationY = border;
 
   if(!dlg.usePageBorders()) {
     QPoint point = zoom.zoomPoint(page->getRectForAllStencils().topLeft());
-    translationX += point.x();
-    translationY += point.y();
+    translationX -= point.x();
+    translationY -= point.y();
   }
 
-  kpainter.setTranslation(-translationX, -translationY);
+  kpainter.setTranslation(translationX, translationY);
   page->printContent(kpainter, &zoom);
 
   if(!pixmap.save(m_chain->outputFile(), format.local8Bit())) {
