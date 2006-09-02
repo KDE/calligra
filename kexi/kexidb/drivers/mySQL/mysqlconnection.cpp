@@ -2,7 +2,7 @@
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
                       Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger<jowenn@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <qvariant.h>
 #include <qfile.h>
 #include <qdict.h>
+#include <qregexp.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -49,20 +50,34 @@ MySqlConnection::~MySqlConnection() {
 	destroy();
 }
 
-bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo& version) {
-  const bool ok = d->db_connect(*data());
-  if (!ok)
-    return false;
+bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo& version)
+{
+	const bool ok = d->db_connect(*data());
+	if (!ok)
+		return false;
 
-  //retrieve server version info
-  version.string = mysql_get_host_info(d->mysql);
-  unsigned long v = mysql_get_server_version(d->mysql);
-  // v - a number that represents the MySQL server version in this format
-  // = major_version*10000 + minor_version *100 + sub_version
-  version.major = v/10000;
-  version.minor = (v - version.major*10000)/100;
-  version.release = v - version.major*10000 - version.minor*100;
-  return true;
+	version.string = mysql_get_host_info(d->mysql);
+
+	//retrieve server version info
+#if 0 //this only works for client version >= 4.1 :(
+	unsigned long v = mysql_get_server_version(d->mysql);
+	// v - a number that represents the MySQL server version in this format
+	// = major_version*10000 + minor_version *100 + sub_version
+	version.major = v/10000;
+	version.minor = (v - version.major*10000)/100;
+	version.release = v - version.major*10000 - version.minor*100;
+#else //better way to get the version info: use 'version' built-in variable:
+//! @todo this is hardcoded for now; define api for retrieving variables and use this API...
+	QString versionString;
+	const tristate res = querySingleString("SELECT @@version", versionString, /*column*/0, false /*!addLimitTo1*/);
+	QRegExp versionRe("(\\d+)\\.(\\d+)\\.(\\d+)");
+	if (res==true && versionRe.exactMatch(versionString)) { // (if querySingleString failed, the version will be 0.0.0...
+		version.major = versionRe.cap(1).toInt();
+		version.minor = versionRe.cap(2).toInt();
+		version.release = versionRe.cap(3).toInt();
+	}
+#endif
+	return true;
 }
 
 bool MySqlConnection::drv_disconnect() {

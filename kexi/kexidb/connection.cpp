@@ -236,6 +236,7 @@ bool Connection::connect()
 		return false;
 	}
 
+	d->serverVersion.clear();
 	if (!(d->isConnected = drv_connect(d->serverVersion))) {
 		setError(m_driver->isFileDriver() ?
 			i18n("Could not open \"%1\" project file.").arg(QDir::convertSeparators(d->conn_data->fileName()))
@@ -2229,12 +2230,13 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
 }
 
-tristate Connection::querySingleRecordInternal(RowData &data, const QString* sql, QuerySchema* query)
+tristate Connection::querySingleRecordInternal(RowData &data, const QString* sql, QuerySchema* query, 
+	bool addLimitTo1)
 {
 	Q_ASSERT(sql || query);
 //! @todo does not work with non-SQL data sources
 	if (sql)
-		m_sql = *sql + " LIMIT 1"; // is this safe?
+		m_sql = addLimitTo1 ? (*sql + " LIMIT 1") : *sql; // is this safe?
 	KexiDB::Cursor *cursor;
 	if (!(cursor = sql ? executeQuery( m_sql ) : executeQuery( *query ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
@@ -2251,14 +2253,14 @@ tristate Connection::querySingleRecordInternal(RowData &data, const QString* sql
 	return deleteCursor(cursor);
 }
 
-tristate Connection::querySingleRecord(const QString& sql, RowData &data)
+tristate Connection::querySingleRecord(const QString& sql, RowData &data, bool addLimitTo1)
 {
-	return querySingleRecordInternal(data, &sql, 0);
+	return querySingleRecordInternal(data, &sql, 0, addLimitTo1);
 }
 
-tristate Connection::querySingleRecord(QuerySchema& query, RowData &data)
+tristate Connection::querySingleRecord(QuerySchema& query, RowData &data, bool addLimitTo1)
 {
-	return querySingleRecordInternal(data, 0, &query);
+	return querySingleRecordInternal(data, 0, &query, addLimitTo1);
 }
 
 bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
@@ -2270,10 +2272,10 @@ bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
 	return true;
 }
 
-tristate Connection::querySingleString(const QString& sql, QString &value, uint column)
+tristate Connection::querySingleString(const QString& sql, QString &value, uint column, bool addLimitTo1)
 {
 	KexiDB::Cursor *cursor;
-	m_sql = sql + " LIMIT 1"; // is this safe?;
+	m_sql = addLimitTo1 ? (sql + " LIMIT 1") : sql; // is this safe?;
 	if (!(cursor = executeQuery( m_sql ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
 		return false;
@@ -2292,11 +2294,11 @@ tristate Connection::querySingleString(const QString& sql, QString &value, uint 
 	return deleteCursor(cursor);
 }
 
-tristate Connection::querySingleNumber(const QString& sql, int &number, uint column)
+tristate Connection::querySingleNumber(const QString& sql, int &number, uint column, bool addLimitTo1)
 {
 	static QString str;
 	static bool ok;
-	const tristate result = querySingleString(sql, str, column);
+	const tristate result = querySingleString(sql, str, column, addLimitTo1);
 	if (result!=true)
 		return result;
 	number = str.toInt(&ok);
@@ -2334,19 +2336,19 @@ bool Connection::queryStringList(const QString& sql, QStringList& list, uint col
 	return deleteCursor(cursor);
 }
 
-bool Connection::resultExists(const QString& sql, bool &success)
+bool Connection::resultExists(const QString& sql, bool &success, bool addLimitTo1)
 {
 	KexiDB::Cursor *cursor;
 	//optimization
 	if (m_driver->beh->SELECT_1_SUBQUERY_SUPPORTED) {
 		//this is at least for sqlite
-		if (sql.left(6).upper() == "SELECT")
+		if (addLimitTo1 && sql.left(6).upper() == "SELECT")
 			m_sql = QString("SELECT 1 FROM (") + sql + ") LIMIT 1"; // is this safe?;
 		else
 			m_sql = sql;
 	}
 	else {
-		if (sql.left(6).upper() == "SELECT")
+		if (addLimitTo1 && sql.left(6).upper() == "SELECT")
 			m_sql = sql + " LIMIT 1"; //not always safe!
 		else
 			m_sql = sql;

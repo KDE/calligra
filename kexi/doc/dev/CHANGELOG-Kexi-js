@@ -23,6 +23,14 @@ Forms
 = added KEXI_DB_COMBOBOX_WIDGET define required 
   to add support for combobox form widget (disabled by default for beta 1)
 2.0: merged
+KexiDB
+= dependency on newer (>=4.1) client library removed:
+  MySQL driver now uses 'SELECTG @@version' SQL statement instead of dedicated 
+  API function
+= added possibility for switching off "LIMIT 1" optmization 
+  for methods like Connection::querySingleString() 
+  (e.g. needed for 'SELECT @@version')
+2.0: merged
 
 2006-08-29
 General
