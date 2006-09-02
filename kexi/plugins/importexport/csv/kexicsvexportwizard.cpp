@@ -97,7 +97,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 		}
 	}
 	else {
-		msgh.showErrorMessage(m_mainWin->project()->dbConnection(), 
+		msgh.showErrorMessage(m_mainWin->project()->dbConnection(),
 			i18n("Could not open data for exporting."));
 		m_cancelled = true;
 		return;
@@ -117,12 +117,12 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 		m_fileSavePage->setDefaultExtension("csv");
 		m_fileSavePage->setLocationText( KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()) );
 		connect(m_fileSavePage, SIGNAL(rejected()), this, SLOT(reject()));
-		addPage(m_fileSavePage, i18n("Enter the Name of the File You Want To Save the Data To"));
+		addPage(m_fileSavePage, i18n("Enter Name of File You Want to Save Data To"));
 	}
 
 	// 2. Export options
 	m_exportOptionsPage = new QWidget(this, "m_exportOptionsPage");
-	Q3GridLayout *exportOptionsLyr = new Q3GridLayout( m_exportOptionsPage, 6, 3, 
+	Q3GridLayout *exportOptionsLyr = new Q3GridLayout( m_exportOptionsPage, 6, 3,
 		KDialogBase::marginHint(), KDialogBase::spacingHint(), "exportOptionsLyr");
 	m_infoLblFrom = new KexiCSVInfoLabel( infoLblFromText, m_exportOptionsPage );
 	KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType(
@@ -179,17 +179,17 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 	m_characterEncodingCombo = new KexiCharacterEncodingComboBox( exportOptionsSectionWidget );
 	m_characterEncodingCombo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	exportOptionsSectionLyr->addWidget( m_characterEncodingCombo, 2, 1 );
-	QLabel *characterEncodingLabel = new QLabel(m_characterEncodingCombo, i18n("Text encoding:"), 
+	QLabel *characterEncodingLabel = new QLabel(m_characterEncodingCombo, i18n("Text encoding:"),
 		exportOptionsSectionWidget);
 	exportOptionsSectionLyr->addWidget( characterEncodingLabel, 2, 0 );
 
 	// - checkboxes
-	m_addColumnNamesCheckBox = new QCheckBox(i18n("Add column names as the first row"), 
+	m_addColumnNamesCheckBox = new QCheckBox(i18n("Add column names as the first row"),
 		exportOptionsSectionWidget);
 	m_addColumnNamesCheckBox->setChecked(true);
 	exportOptionsSectionLyr->addWidget( m_addColumnNamesCheckBox, 3, 1 );
 //! @todo 1.1: for copying use "Always use above options for copying" string
-	m_alwaysUseCheckBox = new QCheckBox(i18n("Always use above options for exporting"), 
+	m_alwaysUseCheckBox = new QCheckBox(i18n("Always use above options for exporting"),
 		m_exportOptionsPage);
 	exportOptionsLyr->addMultiCellWidget(m_alwaysUseCheckBox, 4, 4, 0, 1);
 //	exportOptionsSectionLyr->addWidget( m_alwaysUseCheckBox, 4, 1 );
@@ -222,14 +222,14 @@ KexiCSVExportWizard::KexiCSVExportWizard( const KexiCSVExport::Options& options,
 		s = readEntry("DefaultEncodingForExportingCSVFiles");
 		if (!s.isEmpty())
 			m_characterEncodingCombo->setSelectedEncoding(s);
-		m_addColumnNamesCheckBox->setChecked( 
+		m_addColumnNamesCheckBox->setChecked(
 			readBoolEntry("AddColumnNamesForExportingCSVFiles", true) );
 	}
 
 	updateGeometry();
 
 	// -keep widths equal on page #2:
-	int width = qMax( m_infoLblFrom->leftLabel()->sizeHint().width(), 
+	int width = qMax( m_infoLblFrom->leftLabel()->sizeHint().width(),
 		m_infoLblTo->leftLabel()->sizeHint().width());
 	m_infoLblFrom->leftLabel()->setFixedWidth(width);
 	m_infoLblTo->leftLabel()->setFixedWidth(width);
@@ -245,7 +245,7 @@ bool KexiCSVExportWizard::cancelled() const
 	return m_cancelled;
 }
 
-void KexiCSVExportWizard::showPage ( QWidget * page ) 
+void KexiCSVExportWizard::showPage ( QWidget * page )
 {
 	if (page == m_fileSavePage) {
 		m_fileSavePage->setFocus();

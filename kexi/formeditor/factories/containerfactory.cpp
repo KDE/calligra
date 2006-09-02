@@ -286,8 +286,8 @@ SubForm::setFormName(const QString &name)
 		return;
 
 	QFileInfo info(name);
-	if(!info.exists() 
-		|| (KFormDesigner::FormManager::self()->activeForm() 
+	if(!info.exists()
+		|| (KFormDesigner::FormManager::self()->activeForm()
 			&& (info.fileName() == KFormDesigner::FormManager::self()->activeForm()->filename()) ) )
 		return; // we check if this is valid form
 
@@ -461,7 +461,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 }
 
 QWidget*
-ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n, 
+ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 	KFormDesigner::Container *container, int options)
 {
 	if(c == "QButtonGroup")
@@ -479,7 +479,7 @@ ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 		tab->setTabReorderingEnabled(true);
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
 #endif
-		container->form()->objectTree()->addItem(container->objectTree(), 
+		container->form()->objectTree()->addItem(container->objectTree(),
 			new KFormDesigner::ObjectTreeItem(
 				container->form()->library()->displayName(c), n, tab, container));
 //		m_manager = container->form()->manager();
@@ -521,8 +521,8 @@ ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 		Q3WidgetStack *stack = new Q3WidgetStack(p, n);
 		stack->setLineWidth(2);
 		stack->setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Raised);
-		container->form()->objectTree()->addItem( container->objectTree(), 
-			new KFormDesigner::ObjectTreeItem( 
+		container->form()->objectTree()->addItem( container->objectTree(),
+			new KFormDesigner::ObjectTreeItem(
 				container->form()->library()->displayName(c), n, stack, container));
 
 		if(container->form()->interactiveMode())
@@ -618,7 +618,7 @@ ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w, Q3Po
 		}
 
 		int id = menu->insertItem(SmallIconSet("tab_new"), i18n("Add Page"), this, SLOT(addTabPage()) );
-		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page"), this, SLOT(renameTabPage()));
+		id = menu->insertItem(SmallIconSet("edit"), i18n("Rename Page..."), this, SLOT(renameTabPage()));
 		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
 //		if( dynamic_cast<TabWidgetBase*>(m_widget)->count() == 1)
 		if( dynamic_cast<TabWidgetBase*>(widget())->count() == 1)
@@ -630,7 +630,7 @@ ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w, Q3Po
 		//m_widget = w->parentWidget();
 		Q3WidgetStack *stack = (Q3WidgetStack*)w->parentWidget(); //m_widget;
 		setWidget(
-			w->parentWidget(), 
+			w->parentWidget(),
 			container->form()->objectTree()->lookup(stack->name())->parent()->container()
 		);
 //		m_container = container->form()->objectTree()->lookup(m_widget->name())->parent()->container();
@@ -824,7 +824,7 @@ void ContainerFactory::renameTabPage()
 
 void ContainerFactory::reorderTabs(int oldpos, int newpos)
 {
-	KFormDesigner::ObjectTreeItem *tab 
+	KFormDesigner::ObjectTreeItem *tab
 		= KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(sender()->name());
 	if(!tab)
 		return;
