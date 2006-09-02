@@ -1223,7 +1223,7 @@ void HBorder::paintSizeIndicator( int mouseX )
         if ( sheet->layoutDirection()==Sheet::RightToLeft )
             m_lSize->move( (int) x - m_lSize->width() - 3, 3 );
         else
-            m_lSize->move( (int) x - 3, 3 );
+            m_lSize->move( (int) x + 3, 3 );
         m_lSize->show();
     }
     else
@@ -1232,7 +1232,7 @@ void HBorder::paintSizeIndicator( int mouseX )
         if ( sheet->layoutDirection()==Sheet::RightToLeft )
             m_lSize->move( (int) x - m_lSize->width() - 3, 3 );
         else
-            m_lSize->move( (int) x - 3, 3 );
+            m_lSize->move( (int) x + 3, 3 );
     }
 }
 
