@@ -134,6 +134,11 @@ void FormulaParserTester::run()
   CHECK_PARSE( "Sheet1!A1:B100", "r" );
   CHECK_PARSE( "'Sheet One'!A1:B100", "r" );
   CHECK_PARSE( "SIN", "x" );
+  // log2 and log10 are cell references and function identifiers
+  CHECK_PARSE( "LOG2", "c" );
+  CHECK_PARSE( "LOG10:11", "r" );
+  CHECK_PARSE( "LOG2(2)", "xoio" );
+  CHECK_PARSE( "LOG10(10)", "xoio" );
 
   // operators
   CHECK_PARSE( "+", "o" );
