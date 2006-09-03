@@ -3978,8 +3978,7 @@ void Canvas::paintUpdates()
   painter.save();
   clipoutChildren( painter );
 
-  painter.setRenderHint( QPainter::Antialiasing );
-  painter.setRenderHint( QPainter::TextAntialiasing );
+  painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
   painter.scale( d->view->doc()->zoomedResolutionX(), d->view->doc()->zoomedResolutionY() );
 
   QRectF unzoomedRect = d->view->doc()->viewToDocument( QRectF( 0, 0, width(), height() ) );

@@ -2124,8 +2124,7 @@ QFont CellView::effectiveFont( int _col, int _row ) const
 #endif
 
   // Scale the font size according to the current zoom.
-//   tmpFont.setPointSizeF( 0.01 * d->cell->sheet()->doc()->zoomInPercent()
-//            * tmpFont.pointSizeF() );
+  tmpFont.setPointSizeF( tmpFont.pointSizeF() / d->cell->sheet()->doc()->resolutionY() );
 
   return tmpFont;
 }
