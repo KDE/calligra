@@ -95,7 +95,7 @@ The default font is set for all cells in the Format -> Style Manager menu with t
           <item rowspan="1" row="4" column="0" colspan="2" >
             <widget class="QCheckBox" name="underline" >
               <property name="text" >
-                <string>Qt::TextUnderline</string>
+                <string>Underline</string>
               </property>
               <property name="whatsThis" stdset="0" >
                 <string>If this is checked, the current cell text wil be underlined.</string>
