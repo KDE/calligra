@@ -1189,7 +1189,7 @@ void CellView::paintText( QPainter& painter,
   // FIXME: Make this dependent on the height as well.
   //
   if ( d->cell->testFlag( Cell::Flag_CellTooShortX ) ) {
-    d->cell->strOutText() = textDisplaying( painter.fontMetrics() );
+    d->cell->d->strOutText = textDisplaying( painter.fontMetrics() );
 
     // Recalculate the text dimensions and the offset.
     textSize( painter.fontMetrics() );
@@ -1210,7 +1210,7 @@ void CellView::paintText( QPainter& painter,
   //
   if ( columnFormat->isHide() || ( cellRect.height() <= 2 ) ) {
     d->cell->freeAllObscuredCells();  /* TODO: This looks dangerous...must check when I have time */
-    d->cell->strOutText() = "";
+    d->cell->d->strOutText = "";
   }
 
   double indent = 0.0;
@@ -1378,17 +1378,17 @@ void CellView::paintText( QPainter& painter,
 
   // Check for too short cell and set the outText for future reference.
   if ( d->cell->testFlag( Cell::Flag_CellTooShortX ) ) {
-    d->cell->strOutText() = tmpText;
+    d->cell->d->strOutText = tmpText;
     d->textHeight = tmpHeight;
     d->textWidth  = tmpWidth;
   }
 
   if ( d->cell->sheet()->getHideZero() && d->cell->value().isNumber()
       && d->cell->value().asFloat() == 0 )
-    d->cell->strOutText() = tmpText;
+    d->cell->d->strOutText = tmpText;
 
   if ( columnFormat->isHide() || ( cellRect.height() <= 2 ) )
-    d->cell->strOutText() = tmpText;
+    d->cell->d->strOutText = tmpText;
 }
 
 
@@ -1978,14 +1978,14 @@ QString CellView::textDisplaying( const QFontMetrics& fm )
 
       if (isNumeric)
       {
-    //For numeric values, we can cut off digits after the decimal point to make it fit,
-    //but not the integer part of the number.
-    //If this number still contains a fraction part then we don't need to do anything, if we have run
-    //out of space to fit even the integer part of the number then display #########
-    //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
+        //For numeric values, we can cut off digits after the decimal point to make it fit,
+        //but not the integer part of the number.
+        //If this number still contains a fraction part then we don't need to do anything, if we have run
+        //out of space to fit even the integer part of the number then display #########
+        //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
 
         if (!tmp.contains('.'))
-          d->cell->strOutText()=QString().fill('#',20);
+          d->cell->d->strOutText = QString().fill('#',20);
       }
 
       // 4 equal length of red triangle +1 point.
@@ -2601,7 +2601,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
     }
     else
     {
-      d->cell->strOutText() = "";
+      d->cell->d->strOutText = "";
 
       // Make sure that we have a space at the end.
       outText += ' ';
