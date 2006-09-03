@@ -110,13 +110,85 @@ more at less detail. </para>
 </screenshot>
 </para>
 
-<para>This toolbar contains painting operations and tools, as well as
-editing and selecting tools. The available actions and some controls are listed
-below. You can change the behaviour of most tools (and with that, usually the
-resulting effect) by setting tool options in the
-<link linkend="commands-palettes-controlbox">Control box palette</link>.</para>
+<para>
+This toolbar contains painting operations and tools, as well as editing and
+selecting tools. The available actions and some controls are listed below. You
+can change the behaviour of most tools (and with that, usually the resulting
+effect) by setting their <link
+linkend="commands-palettes-controlbox-tool">options</link>.
+</para>
 
 <variablelist>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-bezier.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Bezier</guilabel></term>
+<listitem><para>
+You can draw Bezier curves by using this tool. Click the &LMB; to indicate the
+starting point of the curve, then click again for consecutive control points
+of the curve. 
+</para>
+<para>
+<screenshot>
+<screeninfo>Drawing a Bezier curve</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tool-bezier-example.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Drawing a Bezier curve</phrase>
+</textobject>
+<caption><para>Drawing a Bezier curve</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>
+&krita; will show a blue line with two handles when you add a control point.
+You can drag these handles to change the direction of the curve in that point.
+</para>
+<para>
+<screenshot>
+<screeninfo>Modifying a Bezier curve</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tool-bezier-example2.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Modifying a Bezier curve</phrase>
+</textobject>
+<caption><para>Modifying a Bezier curve</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>
+You can click on a previous control point to modify it. With an intermediate
+control point (&ie; a point that is not the starting point and not the ending
+point), you can move the direction handles seperately to have the curve enter
+and leave the point in different directions. After editing a point, you can
+just click on the canvas to continue adding points to the curve.
+</para>
+<para>
+Pressing <keycap>Delete</keycap> will remove the currently selected control
+point from the curve. Double-click the &LMB; on any point of the curve or
+press &Enter; to finish drawing, or press &Esc; to cancel the entire curve.
+You can use &Ctrl; while keeping the &LMB; pressed to move the entire curve to
+a different position.
+</para>
+<para>
+<screenshot>
+<screeninfo>A finished Bezier curve</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tool-bezier-example3.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>A finished Bezier curve</phrase>
+</textobject>
+<caption><para>A finished Bezier curve</para></caption>
+</mediaobject>
+</screenshot>
+</para></listitem></varlistentry>
+
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
 fileref="tool-brush.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Brush</guilabel></term>
@@ -192,16 +264,17 @@ fileref="tool-polygon.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Polygon</guilabel></term>
 <listitem><para>
 With this tool you can draw polygons. Click the &LMB; to indicate the
-starting point and successive vertices, then click the &RMB; to connect the last
-vertex to the starting point.
+starting point and successive vertices, then double-click or press &Enter; to
+connect the last vertex to the starting point.
 </para></listitem></varlistentry>
 
 <varlistentry> <term><inlinemediaobject><imageobject><imagedata
 fileref="tool-polyline.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Polyline</guilabel></term>
 <listitem><para>
-Polylines are drawn like polygons, but the &RMB; click indicating the
-end of the polyline does not connect the last vertex to the first one.
+Polylines are drawn like polygons, with the difference that the double-click
+indicating the end of the polyline does not connect the last vertex to the
+first one.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -219,16 +292,19 @@ different location.
 fileref="tool-duplicate.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Duplicate</guilabel></term>
 <listitem><para>
-You can use this tool to duplicate parts of an image. Click with the &RMB; on
-the location you want to duplicate from. &krita; will indicate this location by
-an outline of your current brush. Then click with the &LMB; to designate the
-location where you want to duplicate to, and drag with the mouse. You will then
-duplicate whatever is at the source location to the current (destination)
-location.
+You can use this tool to duplicate parts of an image. Press &Shift; and click
+with the &LMB; on the location you want to duplicate from. &krita; will
+indicate this location by an outline of your current brush. Then click with
+the &LMB; to designate the location where you want to duplicate to, and drag
+with the mouse. You will then duplicate whatever is at the source location to
+the current (destination) location.
 </para><para>
 While you are painting the duplicate, both your cursor in the destination
 location and the brush outline in the source location will move, in order to
 give you visual feedback.
+</para><para>
+You can also use this tool to correct colors in a part of the image: use the
+<guilabel>Healing</guilabel> option for that.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -236,7 +312,23 @@ fileref="tool-paintwithfilters.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Paint with
 filters</guilabel></term>
 <listitem><para>
-This tool allows you to pick a filter and draw with it.
+This tool allows you to pick a filter and draw with it. The image below shows
+the effect of using a large circular brush and painting with, from left to
+right, the Maximize Channel, Minimize Channel, Invert, and Desaturate filters.
+</para>
+<para>
+<screenshot>
+<screeninfo>Painting with filters</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tool-paintwithfilters-example.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Painting with filters</phrase>
+</textobject>
+<caption><para>Painting with filters</para></caption>
+</mediaobject>
+</screenshot>
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -244,9 +336,10 @@ This tool allows you to pick a filter and draw with it.
 format="PNG"></imagedata> </imageobject></inlinemediaobject> Transform</term>
 <listitem><para>
 With this tool you can quickly transform the current selection or layer.
-Handles will appear at the corners and sides, with which you can scale the
-selection or layer. You can also click anywhere in the selection or layer and
-to move it by dragging the mouse.
+Handles will appear at the corners and sides, with which you can resize the
+selection or layer. You can perform rotations by moving the mouse above or to
+the left of the handles and dragging it. You can also click anywhere inside
+the selection or layer and move it by dragging the mouse.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -259,13 +352,21 @@ outline with 8 handles. You can then use the handles to change the size of the
 area which the image or layer is to be cropped to. You can also click and drag
 inside the area to move the outline in its entirety.
 </para><para>
-Doubleclick outside the area (i.e. on a part of the image that is to be removed)
+Double-click outside the area (i.e. on a part of the image that is to be removed)
 to confirm the cropping operation.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-perspectivetransform.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Perspective Transform</guilabel></term>
+<listitem><para>
+This tool allows you to change the perspective of an image.
+=== To be completed ===
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
 fileref="tool-contiguousfill.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> <guilabel>Contiguous fill</guilabel></term>
+</imageobject></inlinemediaobject> <guilabel>Contiguous Fill</guilabel></term>
 <listitem><para>
 Use this tool to fill a contiguous area of one color with the current
 foreground color or a pattern. Simply click to fill up the area.
@@ -324,6 +425,14 @@ fileref="tool-colorpicker.png" format="PNG"></imagedata>
 With this tool you can find the color values of a point. Click the &LMB;
 somewhere in the image to see color information about that point in the
 <guilabel>Control box</guilabel>.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-perspectivegrid.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Perspective Grid</guilabel></term>
+<listitem><para>
+You can create and edit a perspective grid with this tool.
+=== To be completed ===
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -406,6 +515,25 @@ With this tool you can select multiple areas with the same color. Detection is
 done the same as with the contiguous fill, but the areas do not need to be
 adjacent.
 </para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectbezier.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Select Bezier</guilabel></term>
+<listitem><para>
+With this tool you can select an area by drawing a Bezier outline. See the
+description of the Bezier tool for details.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectmagnetic.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Magnetic Selection</guilabel></term>
+<listitem><para>
+With this tool you can easily select a visually distinct area. Click with the
+&LMB; and drag the mouse around the area that you want to select. If the area
+has a well enough defined boundary, the selection will be drawn nicely around
+it.
+</para></listitem></varlistentry>
+
 </variablelist>
 
 </sect2>
