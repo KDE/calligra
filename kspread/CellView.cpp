@@ -182,8 +182,8 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 
   // Handle right-to-left layout.
   // In an RTL sheet the cells have to be painted at their opposite horizontal
-  // location on the canvas, meaning that d->cell->column() A will be the rightmost d->cell->column()
-  // on screen, d->cell->column() B will be to the left of it and so on. Here we change
+  // location on the canvas, meaning that column A will be the rightmost column
+  // on screen, column B will be to the left of it and so on. Here we change
   // the horizontal coordinate at which we start painting the cell in case the
   // sheet's direction is RTL. We do this only if paintingObscured is 0,
   // otherwise the cell's painting location will flip back and forth in
@@ -385,7 +385,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 
     //kDebug(36001) << "painting cells that obscure " << name() << endl;
 
-    // Store the obscuringCells list in a list of QPoint(d->cell->column(), d->cell->row())
+    // Store the obscuringCells list in a list of QPoint(column, row)
     // This avoids crashes during the iteration through
     // obscuringCells, when the cells may get non valid or the list
     // itself gets changed during a call of obscuringCell->paintCell
@@ -596,7 +596,7 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
         // Check if the upper and lower borders should be painted, and
         // if so which pens we should use.  There used to be a nasty
         // bug here (#61452).
-        // Check top pen.  Only check if this is not on the top d->cell->row().
+        // Check top pen.  Only check if this is not on the top row.
         topPen         = _topPen;
         if ( row > 1 && !cell->isPartOfMerged() ) {
           Cell  *cellUp = d->cell->sheet()->cellAt( column, row - 1 );
@@ -1182,7 +1182,7 @@ void CellView::paintText( QPainter& painter,
   double   tmpHeight = d->textHeight;
   double   tmpWidth  = d->textWidth;
 
-  // If the cell is to nard->cell->row() to paint the whole contents, then pick
+  // If the cell is to narrow to paint the whole contents, then pick
   // out a part of the content that we paint.  The result of this is
   // dependent on the data type of the content.
   //
@@ -1203,7 +1203,7 @@ void CellView::paintText( QPainter& painter,
     d->cell->strOutText().clear();
   }
 
-  // Clear extra cell if d->cell->column() or d->cell->row() is hidden
+  // Clear extra cell if column or row is hidden
   //
   // FIXME: I think this should be done before the call to
   // textDisplaying() above.
@@ -1275,14 +1275,14 @@ void CellView::paintText( QPainter& painter,
     tmpVerticalText = d->cell->format()->verticalText( cellRef.x(), cellRef.y() );
     tmpMultiRow     = d->cell->format()->multiRow( cellRef.x(), cellRef.y() );
   }
-  // force multiple d->cell->row()s on explicitly set line breaks
+  // force multiple rows on explicitly set line breaks
   tmpMultiRow = tmpMultiRow || d->cell->strOutText().contains( '\n' );
 
   // Actually paint the text.
   //    There are 4 possible cases:
   //        - One line of text , horizontal
   //        - Angled text
-  //        - Multiple d->cell->row()s of text , horizontal
+  //        - Multiple rows of text , horizontal
   //        - Vertical text
   if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle ) {
     // Case 1: The simple case, one line, no angle.
@@ -1315,7 +1315,7 @@ void CellView::paintText( QPainter& painter,
     painter.rotate( -angle );
   }
   else if ( tmpMultiRow && !tmpVerticalText ) {
-    // Case 3: Multiple d->cell->row()s, but horizontal.
+    // Case 3: Multiple rows, but horizontal.
 
     QString text;
     int i;
@@ -2170,7 +2170,7 @@ void CellView::makeLayout( int _col, int _row )
     d->cell->mergeCells( d->cell->column(), d->cell->row(), d->cell->mergedXCells(), d->cell->mergedYCells() );
   }
 
-  // If the d->cell->column() for this cell is hidden or the d->cell->row() is too low,
+  // If the column for this cell is hidden or the row is too low,
   // there is no use in remaking the layout.
   ColumnFormat  *cl1 = d->cell->sheet()->columnFormat( _col );
   RowFormat     *rl1 = d->cell->sheet()->rowFormat( _row );
@@ -2763,7 +2763,7 @@ void CellView::obscureVerticalCells()
 
   // Do we have to occupy additional cells at the bottom ?
   //
-  // FIXME: Setting to make the current cell gd->cell->row().
+  // FIXME: Setting to make the current cell grow.
   //
   if ( d->cell->strOutText().contains( '\n' ) &&
        d->textHeight > ( height - 2 * s_borderSpace
