@@ -71,7 +71,7 @@ DONE      * Removing widget layouts
 DONE      * Size policies for widgets within a layout
 DONE    5.4.10. Setting widgets size and position by hand
 DONE    5.4.11. Setting the tab order
-  5.5. Entering data using forms
+DONE  5.5. Entering data using forms
 6. Advanced database topics
   6.1. Sharing a Kexi database project with others
     6.1.1. File-based database
@@ -89,7 +89,7 @@ DONE    5.4.11. Setting the tab order
   7.3. Data exporting
     7.3.1. Exporting data to CSV files
     7.3.2. copying CSV data to the clipboard
-  7.4. Exporting databse projects
+  7.4. Exporting database projects
   7.5. Working with multiple database projects
 DONE 8. Adjusting Kexi application to your needs
 DONE   8.1. Changing the graphical interface mode
