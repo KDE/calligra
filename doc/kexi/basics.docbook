@@ -152,7 +152,7 @@ mode it contains floating windows.
 <para><emphasis>Properties pane</emphasis></para>
 <para>
 contains a list of properties of currently activated database object.
-For certain objects (e.g. form's widgets) it can have several tabs.
+For certain objects (&eg; form's widgets) it can have several tabs.
 </para>
 </listitem>
 
@@ -460,7 +460,7 @@ pane in appendix Property Editor pane.
         <para>
           <emphasis>Note about database files accessed remotely.</emphasis>
           You may want to open a database file that is located on a remote
-          source (e.g. a web or FTP server or a MS Windows network share).
+          source (&eg; a web or FTP server or a MS Windows network share).
           K Desktop Environment allows you to open files from remote sources
           directly in applications and to save changes back to the source, but
           this is not the case with database files. By clicking on a database

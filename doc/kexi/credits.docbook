@@ -7,7 +7,7 @@
 <title>Credits and License</title>
 
 <para>
-  &kexi; Copyright 2002-2005 The &kexi; Team:
+  &kexi; Copyright 2002-2006 The &kexi; Team:
   <itemizedlist>
     <title>&kexi; Developers:</title>
     <listitem>
@@ -59,6 +59,6 @@
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
 &underFDL;               <!-- FDL: do not remove -->
-&underLGPL;               <!-- GPL License -->
+&underLGPL;               <!-- LGPL License -->
 
 </chapter>

@@ -239,7 +239,7 @@ many more ways of entering the same address. Surely you can think of many
 other ways.
 </para>
 <para>
-The above problem shows that e.g. when searching the telephone number of a
+The above problem shows that &eg; when searching the telephone number of a
 person whose address is "Western Gate 1, Warsaw" you will not get a full
 result. You will get only one line instead of three. Moreover You will also
 not find all the telephone numbers searching for the value "Joan Smith" in
@@ -262,7 +262,7 @@ number</guilabel> and <guilabel>City</guilabel>.
 </para></listitem>
 <listitem><para>
 <emphasis>Guaranteeing data correctness:</emphasis> by ensuring that no fields
-are empty, e.g. you must always enter house number.
+are empty, &eg; you must always enter house number.
 </para></listitem>
 </orderedlist>
 
@@ -333,7 +333,7 @@ can lead to mistakes. For example, while calculating sums you may think you
 have 100 rows of data while in fact there are 20 rows more hidden.
 </para>
 <para>
-If you want to work on a small subset of data, e.g. to send it for others to edit, you can copy and paste it to another spreadsheet and after editing paste the changed data back to the main spreadsheet. Such "manual" editing may cause data loss or incorect calculations.
+If you want to work on a small subset of data, &eg; to send it for others to edit, you can copy and paste it to another spreadsheet and after editing paste the changed data back to the main spreadsheet. Such "manual" editing may cause data loss or incorect calculations.
 </para>
 <para>
 To limit the <emphasis>data view</emphasis> database applications offer
@@ -379,7 +379,7 @@ the previously described table <guilabel>Persons</guilabel>:
 
 <para>
 Let's assume that the newly introduced column <guilabel>Income</guilabel>
-contains confidential data. How can you share e.g. contact details of the
+contains confidential data. How can you share &eg; contact details of the
 persons with your coworkers but without <emphasis>revealing their
 income</emphasis>? It is possible if <emphasis>you share only a query and
 not the whole table</emphasis>. The query could select all columns except
@@ -431,7 +431,7 @@ advantage of databases.
 <para>
 The latest editions of applications for creating spreadsheets enable you
 to design data-entry forms. Such forms are most useful if your data cannot
-be conveniently displayed in tabular view, e.g. if the text occupies
+be conveniently displayed in tabular view, &eg; if the text occupies
 too many lines or if all the columns do not fit on the screen.
 </para>
 <para>
@@ -582,7 +582,7 @@ going into much detail about specific applications for designing them.
 </para>
 <para>
 The first databases were built together with large mainframe computers
-in the 60s, e.g. IBM System/360. Those were not the days of PCs,
+in the 60s, &eg; IBM System/360. Those were not the days of PCs,
 therefore these databases required a highly specialized personnel.
 Although the old computers' hardware was unreliable, they were immeasurably
 slower and had less storage capacity, one feature of databases still remains
@@ -639,7 +639,7 @@ and Macintosh platforms, offered since 1985.
 - a multiplatform application (Unix/Linux, Windows, Mac OS X) designed in 2003, 
 developed according to OpenSource principles, part of the global
 <ulink url="http://www.kde.org/">K Desktop Environment</ulink> project,
-i.e. graphic environment for Unix/Linux systems. A significant contributor
+&ie; graphic environment for Unix/Linux systems. A significant contributor
 to &kexi;'s development is the OpenOffice Poland company.
 </para></listitem>
 </itemizedlist>

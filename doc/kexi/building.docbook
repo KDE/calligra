@@ -18,13 +18,14 @@ See chapter <a href="04_03_00_creating_database.html">4.3.
 Creating a new database project</a> for information how to do this.
 -->
 </para>
-<itemizedlist>
-<title>Having a new empty database project, perform the following steps:</title>
-<listitem><para>Design database tables. Read section <!--<a href="05_01_00_table_designing.html">5.1</a>--></para></listitem>
-<listitem><para>Enter data to tables. Read section <!--<a href="05_02_00_data_entering_into_tables.html">5.2</a>--></para></listitem>
-<listitem><para>Design database queries. Read section <!-- <a href="05_03_00_query_designing.html">5.3</a> --></para></listitem>
-<listitem><para>Design forms. Read section <!-- <a href="05_04_00_form_designing.html">5.4</a> --></para></listitem>
-</itemizedlist>
+
+<para>Having a new empty database project, perform the following steps:</para>
+<procedure>
+<step><para>Design database tables. Read section (TODO)<!--<a href="05_01_00_table_designing.html">5.1</a>--></para></step>
+<step><para>Enter data to tables. Read section (TODO)<!--<a href="05_02_00_data_entering_into_tables.html">5.2</a>--></para></step>
+<step><para>Design database queries. Read section (TODO)<!-- <a href="05_03_00_query_designing.html">5.3</a> --></para></step>
+<step><para>Design forms. Read section (TODO)<!-- <a href="05_04_00_form_designing.html">5.4</a> --></para></step>
+</procedure>
 </sect1>
 
 <sect1 id="designing-tables">
@@ -38,16 +39,17 @@ A layout for <emphasis>Persons</emphasis> can be found in section
 <link linkend="data-integrity-and-validity">Data integrity and validity</link>
 in that chapter.
 </para>
-<itemizedlist>
-<listitem>
+
+<procedure>
+<step>
 <para>
 Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Table</guimenuitem>
 </menuchoice> from the Menubar. You can also use the button <guilabel>Create
 object: table</guilabel> on the <link linkend="project-navigator-pane">Project
 Navigator's toolbar</link>.
 </para>
-</listitem>
-<listitem>
+</step>
+<step>
 <para>
 The Table Designer's window will appear. Looking at the top of designer's window
 you will notice that Kexi proposed you a generic name like
@@ -56,8 +58,8 @@ yet so you will be able to assign more proper name later. Moreover, because of
 the same reason, the table name is not yet visible in the
 <link linkend="project-navigator-pane">Project Navigator</link>.
 </para>
-</listitem>
-</itemizedlist>
+</step>
+</procedure>
 
 
 <sect2 id="design-window">
@@ -92,9 +94,10 @@ mode</emphasis> because the <!-- <img src="icons/state_edit.png" class="icon"> -
 the main &kexi; toolbar.
 </para>
 
-<itemizedlist>
-<title>To start entering the <emphasis>Persons</emphasis> table design:</title>
-<listitem><para>
+
+<procedure>
+<title>Designing the <emphasis>Persons</emphasis> table</title>
+<step><para>
 In the first row click on the cell in the <emphasis>Field name</emphasis>
 column and enter <emphasis>name</emphasis> as field name.
 </para>
@@ -120,8 +123,9 @@ For &kexi; the database name &quot;Persons&quot; is the same as
 &quot;persons&quot;.
 </para></listitem>
 </itemizedlist>
-</listitem>
-<listitem>
+</step>
+
+<step>
 <itemizedlist>
 <title>In a similar way, enter the following fields into the table design:</title>
 <listitem><para><guilabel>surname</guilabel></para></listitem>
@@ -129,8 +133,9 @@ For &kexi; the database name &quot;Persons&quot; is the same as
 <listitem><para>house_number</para></listitem>
 <listitem><para>city</para></listitem>
 </itemizedlist>
-</listitem>
-<listitem><para>
+</step>
+
+<step><para>
 All the above fields, except <emphasis>house_number</emphasis>, are of type
 <emphasis>text</emphasis>.
 Change <emphasis>house_number</emphasis> field's type to <emphasis>integer
@@ -146,30 +151,34 @@ of data types will appear. Select the <emphasis>Integer number</emphasis> type.
 -->
 </para><para>
 From now on, the <emphasis>house_number</emphasis> field only accepts numbers.
-</para></listitem>
+</para></step>
+
 <!-- TODO setting additional properties: e.g. caption -->
-<listitem><para>
-<emphasis>Persons</emphasis> table desgin is ready. Click <!-- <img src="icons/state_data.png" class="icon">-->
+<step><para>
+<emphasis>Persons</emphasis> table design is ready. Click <!-- <img src="icons/state_data.png" class="icon">-->
 <guilabel>Switch to Data View</guilabel> button on the toolbar to finish
 designing and switch to Data View for the table. This allows you entering
 data into the table.
-</para></listitem>
-<listitem><para>
+</para></step>
+
+<step><para>
 As the design is not yet saved in the database, the &quot;Save Object As&quot;
 dialog window appears. You need to specify the name for the new table.
 <!--
  <br><img src="img/05_01_01_entering_table_name.png">
  <br>Entering table name before saving its design<br><br>
 -->
-</para><para>
+</para>
+<para>
 &kexi; offers a generic name like <emphasis>Table1</emphasis>.
 To change the name, enter <emphasis>Persons</emphasis> into the
 <emphasis>Caption</emphasis> field and press the <keycombo>
 <keycap>Enter</keycap></keycombo> key or click the <guilabel>OK</guilabel>
 button. The <emphasis>Caption</emphasis> field will be used to display the
-table to database end-users, e.g. as a form. Unlike the name, the caption can
+table to database end-users, &eg; as a form. Unlike the name, the caption can
 contain any characters including spaces and special characters.
-</para><para>
+</para>
+<para>
 Note that filling the <emphasis>Caption</emphasis> field automatically fills
 the <emphasis>Name</emphasis> field. For your convenience the rule for using
 only letters, numbers and the &quot;_&quot; character is kept. You
@@ -178,8 +187,9 @@ can alter contents of the <emphasis>Name</emphasis> field if you want to.
  <br><img src="img/05_01_01_automatic_names.png">
  <br>Example of automatically filled Name field<br><br>
 -->
-</para></listitem>
-<listitem><para>
+</para></step>
+
+<step><para>
 You are asked about an agreement for automatic adding of primary key to the table.
 <!--The idea of primary keys is described in <a href=""> -->
 <!-- TODO chapter # chapter 6</a>.--> Click <guilabel>Add primary key</guilabel>
@@ -188,31 +198,35 @@ button to continue.
  <br><img src="img/05_01_01_pkey_recommended.png">
  <br>A question about automatic adding a primary key<br><br>
 -->
-</para></listitem>
-<listitem><para>
+</para></step>
+
+<step><para>
 The <emphasis>Persons</emphasis> table has been created and opened in Data View.
 Its name appears in the Project Navigator pane.
 <!-- <br><img src="img/05_01_01_table_created.png">
  <br><em>Persons</em> table in the Project Navigator pane<br><br>
 -->
-</para></listitem>
-<listitem><para>
+</para></step>
+
+<step><para>
 Create <emphasis>phone_numbers</emphasis> table, in a similar
 way as <emphasis>persons</emphasis> table.
-</para></listitem>
-<listitem><para>
+</para></step>
+
+<step><para>
 Create <emphasis>person</emphasis> field of type <emphasis>Integer
 number</emphasis> and <emphasis>phone</emphasis> of type <emphasis>Text</emphasis>.
 Do not use a number type here because phone numbers can have many different
 forms and prefixes.
-</para></listitem>
-<listitem><para>
+</para></step>
+
+<step><para>
 Click <!--<img src="icons/state_data.png" class="icon"> --> <guilabel>Switch to
 Data View</guilabel> button on the toolbar and enter <emphasis>Phones</emphasis>
 caption for the table. As for your previous table, allow Kexi to automatically
 create primary key.
-</para></listitem>
-</itemizedlist>
+</para></step>
+</procedure>
 
 </sect2>
 
