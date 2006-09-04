@@ -102,6 +102,7 @@ Chapter 3: Building Simple Databases (Raphael)
 05_02_00_entering_data_into_tables.html     Ready for conversion
 05_03_00_query_designing.html               Ready for conversion
 05_04_00_form_designing.html                NOT READY FOR CONVERSION YET; TODO: polish source changed - UPDATE!
+05_05_00_data_entering_into_forms.html
 
 Chapter 4. Advanced database topics
 06_01_00_kexi_project_sharing.html           NOT READY FOR CONVERSION YET

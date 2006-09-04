@@ -2,12 +2,16 @@ Kexi Handbook: README
 ---------------------
 
 0. Notes
-- For now let's leave <img> tags untouched. We will need to prepare english 
-  screenshots because for now only polish version exists.
+- For more info contact Jaroslaw Staniek, js at iidea.pl (project maintainer)
+- Original html content is strored temporary in html.tmp/ subdirectory.
+- For now let's LEAVE <img> and <a href..> tags untouched - enclose them with 
+  <!-- --> comments. We will prepare english screenshots later; for now only polish version exists.
+  Do not remove any existing <!-- --> comments.
 - Development version of this handbook generated out of the docbook sources:
   http://docs.kde.org/development/en/koffice/kexi/index.html
-- Current version from Martin:
-  http://www.ntpb.co.uk/koffice/manual/index.html
+- For steps (e.g. in tutorial) rather use <procedure> tag instead of <itemizedlist>.
+  <title> subtag is available as well for <procedure>. Details:
+  http://www.docbook.org/tdg/en/html/procedure.html
 
 1. States:
 -DONE
@@ -19,7 +23,7 @@ Kexi Handbook: README
 
 3. Translation status:
 Note: the numbering is taken from original Polish HTML version:
-      http://iidea.pl/~js/kexi/manual/pl/html/contents.html
+      http://kexi.pl/doc/pl/contents.html
 
 DONE 1. Introduction to databases
 DONE  1.1. What is a database?
@@ -45,25 +49,28 @@ DONE  4.6. Main application elements
 DONE  4.6.1. Project Navigator pane
 DONE  4.6.2. Database object windows
 DONE  4.6.3. Property pane
-DONE  5. Building simple databases
-DONE    5.1. Designing database tables
-DONE      5.1.1. Table Designer window
+DONE 5. Building simple databases
+DONE  5.1. Designing database tables
+DONE    5.1.1. Table Designer window
 DONE  5.2. Entering data into tables
 DONE  5.3. Designing database queries
 DONE  5.4. Designing forms
 DONE    5.4.1. Most important terms
 DONE    5.4.2. Forms versus tables
 DONE    5.4.3. Working with form design
-DONE    5.4.4. Inserting fields
-DONE    5.4.5. Assigning data sources
-    5.4.6. Inserting text labels
-    5.4.7. Actions
-      * Assigning actions to form buttons
-    5.4.8. Widget layouts
-      * Using springs in widget layouts
-      * Advanced widget layouts
-    5.4.9. Setting widgets size and position
-    5.4.10. Setting the tab order
+DONE    5.4.4. Using the "Widgets" tab
+DONE    5.4.5. Inserting widgets - text fields
+DONE    5.4.6. Assigning data sources
+DONE    5.4.7. Inserting text labels
+DONE    5.4.8. Actions
+DONE      * Assigning actions to form buttons
+DONE    5.4.9. Widget layouts
+DONE      * Springs in widget layouts
+DONE      * Advanced widget layouts
+DONE      * Removing widget layouts
+DONE      * Size policies for widgets within a layout
+DONE    5.4.10. Setting widgets size and position by hand
+DONE    5.4.11. Setting the tab order
   5.5. Entering data using forms
 6. Advanced database topics
   6.1. Sharing a Kexi database project with others

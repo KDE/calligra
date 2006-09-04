@@ -6,21 +6,21 @@
 <H3>5.4.1. Most important terms</H2>
 <p>
 <ul>
-<li><b>Form</b> - a window provided to easy data entry and presentation on the computer screen. 
+<li><b>Form</b> - a window provided for easy data entry and presentation on the computer screen. 
 </li>
-<li><b>Form data source</b> - database table or query providing data displayed in the form. The data source is needed because forms itself are only <b>tools</b> for displaying and entering data, while tables and queries are the source of data. New, empty forms have no data source assigned, so they are not displaying any data from your database.</li>
+<li><b>Form's data source</b> - database table or query providing data displayed in the form. The data source is needed because forms itself are only <b>tools</b> for displaying and entering data, while tables and queries are the source of data. New, empty forms have no data source assigned, so they are not displaying any data from your database unless you assign a data source to them.</li>
 <li><b>Form field</b> - direct equivalent of column in a table or query. Most frequently used are fields for displaying text and numbers. Entering a new value or changing the existing value of such a field causes a change in <em>bound</em> table or query column (after accepting the change).</li>
 <li><b>Form design</b> - tasks you are performing to define appearance and functions of the form. To do this, you need to provide data source, insert form fields of various types and place them at the appropriate location.</li>
  <li><b>Form widget</b> - form's element. Main widget types are:
  <ul>
  <li>Widgets displaying information, e.g. text box or image box. Each widget of this type can be <em>bound</em> to a data source field (a table or a query column). Therefore, such widgets are called in short <em>form fields</em>.</li>
- <li>Widgets able to perform a specified action, e.g. a push button that can close the current form. Within other applications this widget type is sometimes called <em>form control</em> because it can perform previously defined action of <b>controlling</b> your database application's behaviour.</li>
+ <li>Widgets able to perform a specified action, e.g. a push button that can close the current form. Within other applications this widget type is sometimes called <em>form control</em> because it can perform previously defined action of <b>controlling</b> your database application's behavior.</li>
  <li>Other widgets allowing to enrich form's appearance, e.g. &quot;line widget&quot; can visually separate two form areas.</li>
  </ul>
 </li>
 <li><p>
 <a name="widget_containers"></a>
-<b>Container widget</b> - a widget taht can <b>contain</b> other widgets within its area. For example, frame widget or tab widget are containers. Form's surface itself is a container as well. Command button cannot be called as container because it is not possible to insert a widget inside it. In more complex cases, container widget can inserted inside a container, so nesting is possible.
+<b>Container widget</b> - a widget that can <b>contain</b> other widgets within its area. For example, frame widget or tab widget are containers. Form's surface itself is a container as well. Command button cannot be called as container because it is not possible to insert a widget inside it. In more complex cases, container widget can inserted inside a container, so nesting is possible.
 
  <br><img src="img/05_04_01_widget_containers.png">
  <br>Example container widgets<br><br>
@@ -37,7 +37,7 @@ In chapter <a href="05_02_00_entering_data_into_tables.html">5.2</a> you learned
 <ul>
 <li>Table can contain too many columns to display them on your screen. Form can display such data using multiple rows.</li>
 <li>Form allows to visually split data fields into logical groups, thus increasing readability.
-Labels with additional infromation can be inserted to give users more hints how to use the form or what given data fields mean.</li>
+Labels with additional information can be inserted to give users more hints how to use the form or what given data fields mean.</li>
 <li>Command buttons can be used within forms for commonly used commands so users can use forms in a similar way as standalone applications they know.</li>
 <li>In data sheet view displaying multi-row data text fields or images is as easy as within forms.</li>
 </ul>
@@ -50,11 +50,11 @@ As with table or query design, you are able to use <em>Data View</em> and <em>De
 </p>
 <ol>
 <li>
-To create a new empty form, select <em>Insert</em> -&gt; <nobr><img src="icons/form_newobj.png" class="icon"> <em>Form</em></nobr> from the menubar. Optionally, you can use <nobr><img src="icons/form_newobj.png" class="icon"> <em>New Form</em></nobr> command from drop-down button on the Project Navigator's toolbar.
+To create a new empty form, select <em>Insert</em> -&gt; <nobr><img src="icons/form_newobj.png" class="icon"> <em>Form</em></nobr> from the Menubar. Optionally, you can use <nobr><img src="icons/form_newobj.png" class="icon"> <em>New Form</em></nobr> command from drop-down button on the Project Navigator's toolbar.
 </li>
 <li>
 A new window with empty rectangular from surface will appear. Beyond the surface outer area is placed, separated from the surface using borders. You can move the borders to resize the form surface.
-THe surface is covered with a grid painted using dots which simplifies accurate widgets positioning.<br><br>
+The surface is covered with a grid painted using dots which simplifies accurate widgets positioning.<br><br>
  <br><img src="img/05_04_03_new_empty_form.png">
  <br>A window with design of a new form<br><br>
 </p>
@@ -62,10 +62,10 @@ THe surface is covered with a grid painted using dots which simplifies accurate 
 </ol>
 
 <p>
-As with table design, Form Designer provides <b>property pane</b>. To save some space on the screen, the pane has been splitted with three tabs related to the currently selected form:
+As with table design, Form Designer provides <b>Property pane</b>. To save some space on the screen, the pane has been splitted with three tabs related to the currently selected form:
 <ol>
 <li><em>Property tab</em> containing a list of properties for the currently selected widgets</li>
-<li><em><nobr><img src="icons/property_pane_datasource_tab.png" class="icon"> Data source</nobr></em> tab containing properties related specifically to <b>data source</b> of the curently selected widget or the form itself.</li>
+<li><em><nobr><img src="icons/property_pane_datasource_tab.png" class="icon"> Data source</nobr></em> tab containing properties related specifically to <b>data source</b> of the currently selected widget or the form itself.</li>
 <li><em><nobr><img src="icons/property_pane_widget_tab.png" class="icon"> Widgets</nobr></em> tab containing a hierarchy of all widgets of the form. The list simplifies widgets lookup by name and navigation between them.</li>
 </ol>
 There is information about currently selected widget's name and type displayed on the first and second tab.
@@ -74,263 +74,437 @@ There is information about currently selected widget's name and type displayed o
 Additional toolbars are also available:
  <ul>
  <li><em>Widgets</em> toolbar used for inserting new widgets into the form</li>
- <li><em>Format</em> toolbar used to format form's elements (e.g. adjusting widget's size, groupping). Formatting commands are also available in <em>Format</em> menu. More about these commands can be found in appendix <a href="aa_05_00_menu.html#menu_format">A.6. Format Menu</a>.</li>
+ <li><em>Format</em> toolbar used to format form's elements (e.g. adjusting widget's size, grouping). Formatting commands are also available in the <em>Format</em> menu. More about these commands can be found in appendix <a href="aa_05_00_menu.html#menu_format">A.6. Format Menu</a>.</li>
  </ul>
 </li>
 </ol>
 
-___________
+<a name="widgets_tab"></a>
+<H3>5.4.4. Using the &quot;Widgets&quot; tab</H3>
+<p>
+The "Widgets" tab in the Property pane provides a list of form widgets and their hierarchy. Each widget is presented within the hierarchy beside other widgets being on the same level (the same parent container). Child widgets (inside containers) are presented using indented names.
+</p>
 
+<p>
+On the picture below, the form (a container) contains two widgets: &quot;groupBox2&quot; and &quot;options&quot; command button. In turn,  &quot;groupBox2&quot; (being a container itself) contains two check box widgets.<br><br>
+
+ <img src="img/05_04_04_widgets_tab.png">
+ <br>Using the &quot;Widgets&quot; tab<br><br>
+
+Each widget has displayed its name and type. The type has also an icon displayed - the same as the one displayed on the toolbar used while form designing is performed.
+</p>
+
+<H4>Notes</H4>
+<ul>
+<li>Changing the current selection on the list causes appropriate selection on the designed form. This allows for easier widget lookup by name and easier navigation. For example, it is possible to select a widget by name, and then switch to the &quot;Properties&quot; tab to change the widget's properties.</li>
+<li>Keeping the <kbd>Ctrl</kbd> key pressed while an item on the widgets list is being selected allows to select multiple widgets at a time. Keeping the <kbd>Shift</kbd> key allows to select entire lists of widgets</li>
+<li>When widget is inserted, it is recommended to give it a reasonable name. For example, &quot;green&quot; check box widget has been named specifically for its meaning, using the &quot;Properties&quot; tab (<em>Name</em> property has been used to do that). Such change can make it easier to find a widget within the list.<br><br>
+ <img src="img/05_04_04_renaming_widgets.png">
+ <br>Naming the widget as &quot;green&quot;<br><br>
+Giving widgets reasonable names can be useful but is not mandatory. Note that widget's name is a property that is not visible to the user of your form. Users will can only see a widget text, provided by <em>Text</em> property or similar.
+</li>
+</ul>
 
 <a name="fields_inserting"></a>
-<H3>5.4.4. Inserting fields</H3>
-<p>Let's create a form providing infromation about persons, i.e. a form connected it with <em>Persons</em> table.
+<H3>5.4.5. Inserting widgets - text fields</H3>
+<p>Let's create a form providing information about persons, i.e. a form connected it with <em>Persons</em> table.
 </p>
 <p>
-If the form being designed should present data obtained from the database, you need to place appropriate <em>fields</em> on it. To do this, use <em>Widgets</em> toolbar containing a set of toggleable buttons. Each button corresponds with a single widget type.
+If the form being designed should present data obtained from the database, you need to place appropriate <em>fields</em> on it. To do this, use <em>Widgets</em> toolbar containing a set of togglable buttons. Each button corresponds with a single widget type.
 </p>
 
 <p>
 <ol>
 <li>
 Click <nobr><img src="icons/lineedit.png" class="icon"> <em>Text Box</em></nobr> button on the <em>Widgets</em> toolbar.</li>
-<li>Click on the form surface with &LMB;. New text box widget will be palced in the place when you clicked. Before you release &LMB; you can drag your mouse to specify a desred size for the widget.</li>
-<li>If needed, move the inserted widget using drag &amp; drop to a desired position. You can resize the widget afterwards by dragging one of the small boxes appearing near its corners. Note that the boxes are only visible when the widget is selected. If you deselect the widget by clicking another widget or the form surface, the boxes disappear.</li>
-<li>Click <em>Text Box</em> toolbar button again and click on the form surface to insert another widget. Repeat this action once again until you get three text boxes inserted in yourto form. For sake of simplicity we will limit ourselves to three data fields.</li>
+<li>Click on the form surface with &LMB;. New text box widget will be placed in the point where you clicked. Before you release &LMB; you can drag your mouse to specify a desired size for the widget.</li>
+<li>If needed, move the inserted widget using drag &amp; drop to a desired position. You can resize the widget afterwards by dragging one of the small boxes appearing near its corners. Note that the boxes are only visible when the widget is selected. If you select another widget or the form surface, the boxes disappear.</li>
+<li>Click <em>Text Box</em> toolbar button again and click on the form surface to insert another widget. Repeat this action once again until you get three text boxes inserted in your form. For sake of simplicity we will limit ourselves to three data fields.</li>
 </ol>
+</p>
+
+<H4>Notes</H4>
+<p>
+<ul>
+<li>There is context menu available in form's design mode, activated by &RMB; click on selected widget or form's surface. The menu offers commands like <nobr><img src="icons/editcut.png" class="icon"> <em>Cut</em></nobr>, <nobr><img src="icons/editcopy.png" class="icon"> <em>Copy</em></nobr>, <nobr><img src="icons/editpaste.png" class="icon"> <em>Paste</em></nobr>, <nobr><img src="icons/editdelete.png" class="icon"> <em>Delete</em></nobr> and other, more complex. Many of the commands are also provided in the Menubar, usually <em>Edit</em>. Keyboard shortcuts are also available for these commands. Some of the commands are only available for certain types of widgets.</li>
+<li>Commands <nobr><img src="icons/editcut.png" class="icon"> <em>Cut</em></nobr>, <nobr><img src="icons/editcopy.png" class="icon"> <em>Copy</em></nobr> and <nobr><img src="icons/editpaste.png" class="icon"> <em>Paste</em></nobr> makes it possible to move or copy widgets between forms, even between separate database projects.</li>
+<li>Holding the <kbd>Ctrl</kbd> key down while clicking a widget allows to select multiple widgets.</li>
+<li>Instead of using <nobr><img src="icons/editcopy.png" class="icon"> <em>Copy</em></nobr> and <nobr><img src="icons/editpaste.png" class="icon"> <em>Paste</em></nobr> commands, to duplicate a widget within the same form you can hold down the <kbd>Ctrl</kbd> key while moving the widget. After the <kbd>Ctrl</kbd> key is released, the dragged widget will not be moved but copied in the new location.</li>
+</ul>
 </p>
 
 <a name="data_sources"></a>
-<H3>5.4.5. Assigning data sources</H3>
-
+<H3>5.4.6. Assigning data sources</H3>
 <p>
-******TODO update polish docs for data source pane, first***********
-
-Wstawione przez Ciebie pola formularza nie maj± jeszcze przypisanych <em>¼róde³ danych</em>, zatem nie s± w stanie wy¶wietliæ informacji z bazy danych. Do ustalania ¼róde³ danych u¿ywa siê panelu w³a¶ciwo¶ci.
+The fields you inserted have no <em>data source</em> assigned yet, so these are not able to display information from the database. To assign data source, <nobr><img src="icons/database.png" class="icon"> <em>Data Source</em></nobr> tab of the <em>Property pane</em>.
 </p>
 
 <p>
-Pierwsz± czynno¶ci± bêdzie ustalenie <em>¼ród³a danych formularza</em>, czyli tabeli z której maj± byæ pobierane dane dostêpne na formularzu. Jak ju¿ wspomnieli¶my, korzystamy z tabeli osoby.
-</p>
-
-<p>
-<ol>
-<li>Kliknij na powierzchni formularza, tak aby w panelu w³a¶ciwo¶ci pojawi³y siê jego w³a¶ciwo¶ci.</li>
-<li>W panelu w³a¶ciwo¶ci znajd¼ w³a¶ciwo¶æ <em>¬ród³o danych</em>. Umie¶æ tam kursor i wpisz nazwê <em>osoby</em></li>
-</ol>
-</p>
-
-<p>
-Formularz ma ju¿ przypisane ¼ród³o danych. Teraz kolej na ¼ród³a danych dla pól tekstowych. 
+The very first step is to specify the <em>form's data source</em>, i.e. a place the displayed data will be fetched from. As mentioned above, you will use table <em>persons</em> as a data source for your new form.
 </p>
 
 <p>
 <ol>
-<li>Kliknij pojedyncze pole tekstowe. W panelu w³a¶ciwo¶ci pojawi± siê jego w³a¶ciwo¶ci.</li>
-<li>W panelu w³a¶ciwo¶ci znajd¼ w³a¶ciwo¶æ <em>¬ród³o danych</em>. Umie¶æ tam kursor i wpisz nazwê pola <em>imie</em>.
- <br><img src="img/05_04_05_entering_text_field_data_source.png">
- <br>Wpisywanie ¼ród³a danych pola ,,imie''<br><br>
+<li>Click on the form's surface, as you will alter its properties.</li>
+<li>Switch to the <nobr><img src="icons/database.png" class="icon"> <em>Data Source</em></nobr> tab and enter <em>persons</em> table name in the <em>Form's data source</em> drop down list. Alternatively, you can select this name from the drop down list.<br>
+ <br><img src="img/05_04_05_entering_form_data_source.png">
+ <br>Entering form's data source name<br><br>
 </li>
-<li>Kliknij nastêpne pole tekstowe i w podobny sposób wpisz nazwê <em>nazwisko</em> jako jego ¼ród³o danych.</li>
-<li>Wpisz nazwê <em>ulica</em> dla ostatniego pola tekstowego.</li>
+</ol>
+</p>
+
+<p>
+You have assigned form's data source. Now you need to do specify field widget's data source. 
+</p>
+
+<p>
+<ol>
+<li>Click the first text field widget at the top of the form.</li>
+<li>In the <nobr><img src="icons/database.png" class="icon"> <em>Data Source</em></nobr> tab of the property pane enter field name <em>name</em> in the <em>data source</em> drop down list. Alternatively, you can select this name from the drop down list.<br>
+ <br><img src="img/05_04_05_entering_text_field_data_source.png">
+ <br>Entering field's data source &quot;name&quot;<br><br>
+</li>
+<li>Click next text field widget and enter <em>surname</em> as the data source.</li>
+<li>Enter data sources for <em>street</em>, <em>house_number</em> and <em>city</em> text fields in a similar way.</li>
 </ol>
 </p>
 <p>
-Mimo, ¿e nie jest to konieczne do przetestowania formularza, mo¿esz teraz zachowaæ projekt formularza w bazie danych. Kliknij przycisk <nobr><img src="icons/filesave.png" class="icon"> <em>Zapisz zmiany obiektu</em></nobr> znajduj±cy siê na pasku narzêdzi lub wykonaj pole <em>Zapisz</em> z menu <em>Plik</em>. Zostaniesz zapytany o tytu³ formularza. Wpisz tytu³ <em>Osoby</em> i kliknij przycisk <em>OK</em> - nazwa uzupe³ni siê samoczynnie.
+You can now save the form's design (this is not mandatory however to test the form in action). To save, click the <nobr><img src="icons/filesave.png" class="icon"> <em>Save object changes</em></nobr> toolbar button or use the <nobr><img src="icons/filesave.png" class="icon"> <em>File -&gt; Save</em></nobr> menu command. Upon saving you will be asked for entering the form's name. Enter <em>Persons</em> as caption and click <em>OK</em> button. Form's name will be filled automatically.
 </p>
 <p>
-Teraz jest odpowiedni moment na przetestowanie Twojego formularza. 
-Kliknij przycisk <nobr><img src="icons/state_data.png" class="icon"> <em>Prze³±cz do widoku danych</em></nobr> na pasku narzêdzi. Je¶li nie pope³ni³e¶ b³êdu przy wpisywaniu ¼róde³ danych, pola formularza zostan± wype³nione danymi z tabeli <em>osoby</em>.
+It is right moment for testing your form. Click the <nobr><img src="icons/state_data.png" class="icon"> <em>Switch to data view</em></nobr> toolbar button. Unless you made a mistake when while entering data sources, you should see form's fields filled with data from the <em>persons</em> table.<br>
  <br><img src="img/05_04_06_form_with_text_fields.png">
- <br>Formularz w widoku danych po wstawieniu pól tekstowych i ¼róde³ danych<br><br>
+ <br>The <em>Persons</em> form in data view after inserting text fields and assigning data sources<br><br>
 </p>
+
+<H4>Notes</H4>
+<p>
+<ul>
+<li>If you want to remove data source assignment for a form widget, you can use <em><img src="icons/clear_left.png" class="icon"> Clear widget's data source</em> button near the <em>Source field</em> drop down list. Similarly, you can use <em><img src="icons/clear_left.png" class="icon"> Clear data source</em> button near the <em>Form's data source</em> drop down list.<br>
+ <br><img src="img/05_04_05_data_source_actions.png">
+ <br>
+</li>
+<li>Use <em><nobr><img src="icons/goto.png" class="icon"> Go to selected data source</nobr></em> button to select appropriate table or query in the <em>Project Navigator</em>, so you can quickly open a table or query being the data source of the form.</li>
+<!-- TODO: mention about creating Auto Fields by using drag & drop -->
+</ul>
+</p>
+
 
 <a name="text_labels"></a>
-<H3>5.4.6. Wstawianie etykiet tekstowych</H3>
+<H3>5.4.7. Inserting text labels</H3>
 <p>
-Aby u¿ytkownik formularza by³ w stanie okre¶liæ przeznaczenie ka¿dego pola, powinny one mieæ do³±czone etykiety z tytu³ami pól. Do wykonania etykiet u¿ywa siê wid¿etu <nobr><img src="icons/label.png" class="icon"> <em>etykiety tekstowej</em></nobr>.
+To make it easier for the form's user to identify meaning of every field widget, these should have added text labels with appropriate titles. To create text labels <nobr><img src="icons/label.png" class="icon"> <em>Label</em></nobr> widget is used.
 </p>
 <p>
-Wstaw trzy etykiety tekstowe do formularza, umieszczaj±c je po lewych stronach pól tekstowych. Przy wstawianiu ka¿dej nowej etykiety pojawia siê wewn±trz niej kursor, za pomoc± którego mo¿esz wpisaæ ¿±dany tytu³, czyli kolejno: <em>imiê</em>, <em>nazwisko</em> oraz <em>ulica</em>. Dodatkowo, na górze formularza wstaw etykietê tekstow± z jego nazw±, czyli ,,Osoby''. Powiêksz czcionkê w tej etykiecie za pomoc± polecenia <a href="aa_05_00_menu.html#menu_format_font">Czcionka</a> w menu <em>Format</em>.
+Insert three text label widgets onto the form, placing them on the left hand of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting every new label, a text cursor appears inside where you can enter desired title. Enter consecutively: <em>Name</em>, <em>Surname</em> and <em>Street</em>. Additionally, on the top of the form insert another label displaying name of the form, i.e. &quot;Persons&quot;. Enlarge this label's size and set larger font for it using <a href="aa_00_00_menu.html#menu_format_font">Format -&gt; Font</a> menu command.
 </p>
 <p>
  <br><img src="img/05_04_06_form_with_labels.png">
- <br>Gotowy formularz po dodaniu etykiet tekstowych<br><br>
+ <br>Ready to use form after adding text labels<br><br>
 </p>
-<!-- TODO: update this topic then we've auto-labels -->
+<!-- TODO: update this topic then we've got auto-labels -->
+
 
 <a name="actions"></a>
-<H3>5.4.7. Akcje</H3>
+<H3>5.4.8. Actions</H3>
 
 <p>
-<b>Akcja</b> jest pojedyncz± czynno¶ci± wyodrêbnion± w aplikacji, która mo¿e byæ wykonana przez u¿ytkownika lub uruchomiona automatycznie w wyniku jakiego¶ zdarzenia.
+<b>Action</b> is a single activity isolates in the application, available for user to execute. It can be also executed automatically as an reaction for a given event (e.g. after opening a form).
 </p>
 <!-- TODO: co to jest zdarzenie -->
 
 <a name="assigning_actions_to_buttons"></a>
-<H4>Przypisywanie akcji do przycisków formularza</H4>
+<H4>Assigning actions to form buttons</H4>
 <p>
-Wiêkszo¶æ akcji mo¿na przypisaæ do przycisku formularza tak, by by³a wykonywana po jego klikniêciu. Aby to zrobiæ:
+Most actions can be assigned to form button. Assigned action is executed after button is clicked. 
 </p>
 <p>
+To assign action:
 <ol>
-<li>Na powierzchniê formularza wstaw wid¿et przycisku.</li>
-<li>W widoku projektu formularza zaznacz przycisk poprzez jego klikniêcie.</li>
-<li>Kliknij przycisk prawym klawiszem myszy, aby pokaza³o siê menu kontekstowe.</li>
-<li>Wybierz polecenie <nobr><img src="icons/form_action.png" class="icon"> <em>Przypisz akcjê</em>.</li>
-<li>Pojawi siê okno z list± akcji. Jedna z nich jest zaznaczona, o ile wskazany przycisk mia³ ju¿ przypisan± jak±¶ akcjê.</li>
-<li>Zaznacz jedn± z akcji na li¶cie (np. ,,Usuñ wiersz'') lub liniê <em>&lt;brak akcji&gt;</em>, je¶li nie chcesz przypisywaæ ¿adnej akcji.</li>
-<li>Kliknij przycisk <em>OK</em> lub naci¶nij klawisz <em>Enter</em>.</li>
+<li>Switch to form's design view if you have not done so.</li>
+<li>Select the existing button widget by clicking it or put a new button widget onto the form. If you inserted a new button, enter its title and press <kbd>Enter</kbd> key.</li>
+<li>Click the button widget with the &RMB; to display context menu.</li>
+<li>From the context menu select <nobr><img src="icons/form_action.png" class="icon"> <em>Assign action...</em> command.</li>
+<li>An <em>Assigning Action to Command Button</em> dialog window will appear presenting a list of available actions. One of the actions is selected if the widget already has action assigned. Otherwise the <em>Action type</em> drop down list has <em>No type</em> item selected.</li>
+<li>From the <em>Action type</em> drop down list select <em>Application</em> item. Available application-wide actions will be listed.</li>
+<li>Select one of the actions on the list (e.g. &quot;Delete Row&quot;).</li>
+<li>Click <em>OK</em> button or press <kbd>Enter</kbd> key to accept your selection.</li>
 </ol>
 </p>
 <p>
  <img src="img/05_04_07_assigning_action_to_button.png">
- <br>Przypisywanie akcji ,,Usuñ wiersz'' do przycisku<br><br>
+ <br>Assigning &quot;Delete Row&quot; action to a form's button<br><br>
 </p>
 
 <p>
-Po prze³±czeniu sie do widoku danych formularza mo¿esz sprawdziæ dzia³anie akcji, któr± przypisa³e¶ do przycisku. Je¶li np. przypisa³e¶ akcjê ,,Usuñ wiersz'', po naci¶nieciu przycisku zostaniesz poproszony o potwierdzenie usuniêcia wiersza, zupe³nie tak samo, jakby¶ wywo³a³ polecenie <em>Edycja &gt; Usuñ wiersz</em>.
+After switching to the form's <em>data view</em> you can try whether the action works. For example, if you assigned &quot;Delete Row&quot; action, clicking the button, the current database row will be deleted, quite similarly to executing <em>Edit &gt; Delete Row</em> menu command (depending on your settings you may be asked to confirm the removal).
 </p>
-<p>
-Uwaga: zauwa¿, ¿e nie ka¿da akcja ma sens, gdy j± przypiszemy do przycisku, np. akcja <em>Czcionka...</em> jest nie dostêpna w widoku danych formularza, wiêc je¶li j± przypiszemy, klikanie w przycisk nie bêdzie mia³o ¿adnego efektu.
-</p>
+<H4>Notes</H4>
+<ul>
+<li>To remove action assignment, select <em>No type</em> item from the <em>Action type</em> drop down list of the <em>Assigning Action to Command Button</em> dialog window.</li>
+<li>Action only work in the form's <em>data view</em>. Not every action's assignment is reasonable. For example, <em>Font...</em> actions is not available in the form's data view, so having it assigned to the button has no effect.</li>
+</ul>
 
 <a name="form_layouts"></a>
-<H3>5.4.8. Uk³ady wid¿etów</H3>
+<H3>5.4.9. Widget layouts</H3>
 <p>
-W wiêkszo¶ci przypadków wid¿ety na formularzu musz± byæ w jaki¶ porozmieszczane i wyrównane. Zwyk³e rêczne rozmieszczenie wid¿etów sprawia k³opot je¶li u¿ytkownik zmieni rozmiar formularza. W rzeczywisto¶ci sytuacja komplikuje siê jeszcze bardziej, poniewa¿ nie mo¿na za³o¿yæ, ¿e formularz ma dany rozmiar, gdy¿ u¿ytkownicy posiadaj± ró¿ne monitory oraz rozdzielczo¶ci ekranu.
+In most cases form widgets should be reasonable placed and aligned. Positioning, aligning and resizing widgets by hand is not easy and these parameters are not adjusted when the user resizes the form. In fact the situation is even worse because you cannot assume a given form requires a given space because users have different font sizes and display resolutions.
 </p>
 <p>
-Poni¿szy przyk³ad prezentuje formularz w któym pola tekstowe i etykiety zosta³y rozmieszczone rêcznie. Niektóre z nich nie mieszcz± siê w oknie formularza. 
+The following example presents a form where text fields and labels were placed by hand. Some of them cannot fit in the form's window.
  <br><img src="img/05_04_08_form_no_fit.png">
- <br>Przyk³adowy formularz z nie mieszcz±cymi siê wid¿etami<br><br>
+ <br>An example form with widgets that cannot not fit in the window<br><br>
 </p>
 <p>
-Zastowosanie uk³adu w tym samym formularzu poprawia sytuacjê. Co wiêcej, miejsce jest lepiej zagospodarowane. Pola tekstowe s± bli¿ej siebie, w równych odstêpach.
+Using special tool called <em>widget layouts</em> can help to automatically lay out the form widgets. Widget layout is an action of grouping two or more widgets so these are well positioned and have appropriate sizes.
+</p>
+<p>
+Using layout in this form improves alignment. Moreover, its space is better developed. Text fields are closer each other, spacing is constant.
+ <br>
  <br><img src="img/05_04_08_form_well_fit.png">
- <br>Przyk³adowy formularz z uk³adem wid¿etów<br><br>
+ <br>Example form with layout used<br><br>
 </p>
 <p>
-W tej sytuacji przychodzi z pomoc± specjalna funkcja zwana <em>uk³adami wid¿etów</em>. Uk³ad wid¿etów to czynno¶æ zgrupowania dwóch lub wiêkszej liczby wid¿etów, tak by znajdowa³y siê na uporz±dkownych pozycjach i mia³y ustalone rozmiary.
-</p>
-<p>
-Istniej± dwa sposoby na wykonanie uk³adu wid¿etów.
+There are two methods to create widget layout.
 <ul>
-<li>Zaznacz dwa lub wiêcej wid¿etów, które maj± wchodziæ w sk³ad uk³adu, po czym wybierz jednen ze typów uk³adu w menu <a href="aa_05_00_menu.html#menu_format_layout">U³ó¿ wid¿ety</a>.</li>
-<li>Kliknij <a hrf="widget_containers">wid¿et kontenera</a>, po czym wybierz jednen ze typów uk³adu w menu <a href="aa_05_00_menu.html#menu_format_layout">U³ó¿ wid¿ety</a>. Wszystkie wid¿ety znajduj±ce siê wewn±trz wskazanego wid¿etu kontenera zostan± umieszczone we wspólnym uk³adzie.</li>
+<li>Select two or more widgets that should be placed in a common layout, and select one of the layout types from the context menu item <a href="aa_00_00_menu.html#menu_format_layout">Layout Widgets</a>.</li>
+<li>Click a <a hrf="widget_containers">container widget</a> (or a form surface itself), where widgets are inserted and select one of the layout types from the context menu item <a href="aa_00_00_menu.html#menu_format_layout">Layout Widgets</a>. All widgets existing within the container or within the form, being on the same level will be put into a single common layout.</li>
 </ul>
+In each of these cases you can also use <em>Format -&gt; Layout Widgets</em> menu. 
 </p>
 <p>
  <img src="img/05_04_08_form_layout_selecting.png">
- <br>Zaznaczanie wid¿etów, z których zostanie wykonany uk³ad<br>
+ <br>Selecting widgets that will be put into a layout<br>
  <br><img src="img/05_04_08_form_layout_selected.png">
- <br>Cztery wid¿ety zaznaczone<br><br>
+ <br>Four widgets are selected<br><br>
  <br><img src="img/05_04_08_form_layout_popup.png"><br>
- <br>U¿ycie menu kontekstowego do uk³adania wid¿etów w formie siatki<br><br>
+ <br>Using the context menu for putting the widgets into a grid layout<br><br>
 </p>
 <p>
-Aby utworzyæ uk³ad mo¿esz u¿yæ menu <em>Format &gt; U³ó¿ wid¿ety</em> lub klikn±æ prawym przyciskiem na zaznaczonych wid¿etach i u¿yæ podmenu <em>U³ó¿ wid¿ety</em>. Uk³ad wid¿etów jest reprezentowany w widoku projektu przez niebieski, zielony lub czerwony prostok±t narysowany lini± przerywan±.
+Widget layout is presented in the design view using a blue, green or red box drawn with broken line. This line is displayed only in the form's design view.
 </p>
 <p>
+ <br>
  <br><img src="img/05_04_08_form_layout_grid.png">
- <br>Wid¿ety u³o¿one w formie siatki<br><br>
+ <br>Widgets within a grid layout<br><br>
 </p>
 <p>
-Oprócz uk³adu w siatce, istniej± inne uk³ady wid¿etów.
+Besides the grid type, there are other widget layout types.
 <ul>
-<li>pionowy oraz poziomy
+<li>vertical
+ <br>
  <br><img src="img/05_04_08_form_layout_vertical.png">
- <br>Pionowy uk³ad wid¿etów<br>
- <br><img src="img/05_04_08_form_layout_horizontal.png">
- <br>Poziomy uk³ad wid¿etów<br>
+ <br>Vertical widget layout<br><br>
 </li>
-<li>podzial 
-TODO------------
+<li>horizontal
+ <br>
+ <br><img src="img/05_04_08_form_layout_horizontal.png">
+ <br>Horizontal widget layout<br><br>
+</li>
+<!-- TODO podzia³ poziomy / pionowy 
  <br><img src="img/05_04_08_form_layout_vertical_splitter.png">
  <br><br>
  <br><img src="img/05_04_08_form_layout_horizontal_splitter.png">
  <br><br>
-
-</li>
+</li> -->
 </ul>
 </p>
 
 <a name="form_springs"></a>
-<H4>Sprê¿yny w uk³adach wid¿etów</H4>
+<H4>Springs in widget layouts</H4>
 <p>
-<em>Sprê¿yna</em> jest specjalnym, niewidocznym elementem pozwalaj±cym dostosowywaæ pozycjê wid¿etów wewn±trz uk³adów. Wprê¿yna ,,dopycha'' wid¿et z boku, z góry lub z do³u, tak aby lepiej ustaliæ jego pozycjê i rozmiar.
+A <em>spring</em> in widget layouts is a special, invisible element allowing to adjust widget's position and size within layouts. Such a spring stretches or squeezes a widget on the right, top, bottom or left hand, so it can have desired size and position.
 </p>
-<p>Aby u¿yæ sprê¿yny:
+<p>To use a spring:
 <ol>
-<li>wybierz ikonê <img src="icons/spring.png" class="icon"> na pasku narzedziownym <em>Wid¿ety</em>;</li>
-<li>kliknij w miejscu formularza, w którym chcesz j± wstawiæ.</li>
+<li>Select <img src="icons/spring.png" class="icon"> spring icon on the <em>Widgets</em> toolbar.</li>
+<li>Click on a selected point of the form to insert the spring.</li>
 </ol>
 </p>
 <p>
-Na poni¿szym przyk³adzie sprê¿yna zosta³a wstawiona z lewej strony etykiety tekstowej ,,Osoby'', tak aby zosta³a ona wy¶wietlona po prawej stronie formularza. Nastêpnie sprê¿yna z etykiet± zosta³a po³±czona w uk³adzie poziomym.
+For the following example, the spring has been inserted on the left hand of the text label &quot;Persons&quot;. The label is thus displayed on the right hand of the form. To make the spring work, it has been put into a common horizontal layout with the label.
  <br><img src="img/05_04_08_form_spring.png">
- <br>Poziomy uk³ad sprê¿yny i etykiety tekstowej<br><br>
+ <br>Horizontal layout containing a spring and a text label<br><br>
+</p>
+<p>
+To make springs work you need create a global widget layout i.e. a layout for the form itself. Then, springs can use edges of the form as a boundary for expanding.
 </p>
 
 <a name="advanced_form_layouts"></a>
-<H4>Zaawansowane uk³ady wid¿etów</H4>
+<H4>Advanced widget layouts</H4>
 <p>
-Uk³ady wid¿etów mo¿na ³±czyæ, czyli inaczej: zagnie¿d¿aæ. Mo¿na np. czê¶æ wid¿etów po³±czyæ za pomoc± uk³adu poziomego, po czym do ca³o¶ci formularza zastosowaæ uk³ad siatkowy.
-Na poni¿szym przyk³adzie mo¿esz zobaczyæ po³±czenie dwóch uk³adów:
+Widget layouts can be combined (or nested). On the following example you can identify two nested layouts:
 </p>
 <p>
 <ol>
-<li>uk³adu poziomego ze sprê¿yn±, omówionego w poprzedniej sekcji</li>
-<li>uk³adu siatkowego grupuj±cego wid¿ety na ca³ej powierzchni formularza</li>
+<li>horizontal layout with a spring, aligning the &quot;Persons&quot; text label to the right</li>
+<li>grid layout grouping widgets on the whole form</li>
 </ol>
 </p>
 <p>
  <img src="img/05_04_08_form_advanced_layout.png">
- <br>Dwa uk³ady wid¿etów: uk³ad poziomy wewn±trz siatkowego<br><br>
+ <br>Two widget layouts combined: horizontal layout inside of a grid layout<br><br>
 </p>
 <p>
-Po otwarciu tak zaprojektowanego formularza w widoku danych, mo¿esz sprawdziæ (poprzez zmianê rozmiaru okna formularza), ¿e:
+The horizontal layout is treat in the example as a single widget by the grid layout - it takes exactly one &quot;cell&quot; of the grid.
+After opening a form designed this way in the data view, you can notice (by resizing the form) that:
 </p>
 <ul>
-<li>etykieta tekstowa ,,Osoby'', dziêki u¿yciu sprê¿yny jest stale wyrównywana do prawego brzegu formularza</li>
-<li>wid¿ety pól tekstowych zajmuj± ca³± szeroko¶æ formularza dziêki zastosowaniu uk³adu siatkowego</li>
-<li>wszystkie wid¿ety formularza s± ,,dopchniête'' maksymalnie do góry, dziêki u¿yciu sprê¿yny u do³u formularza</li>
+<li>&quot;Persons&quot; text label thanks to the spring used is constantly aligned to the to the right side of the form</li>
+<li>text fields take all of the available width thanks to putting them into the grid layout</li>
+<li>all the form's widgets are pushed to the top thanks to the spring used at the bottom of the form</li>
 </ul>
 <p>
  <img src="img/05_04_08_form_advanced_layout_view.png">
- <br>Widok danych dla formularza z dwoma uk³adami<br><br>
+ <br>The form using the two layouts displayed in data view<br><br>
 </p>
 
 <a name="layout_breaking"></a>
-<H4>Usuwanie uk³adów wid¿etów</H3>
+<H4>Removing widget layouts</H4>
 <p>
-Aby usun±æ uk³ad wid¿etów bez usuwania samych wid¿etów, wykonaj jedn± z dwóch czynno¶ci:
+To remove widget layout without removing widgets, perform one of these actions:
 <ul>
-<li>kliknij prawym przyciskiem myszy na obramowaniu uk³adu i wybierz polecenie <em>Przerwij u³o¿enie</em>.</li>
-<li>kliknij lewym przyciskiem myszy na obramowaniu uk³adu i wybierz polecenie <em>Przerwij u³o¿enie</em> z menu <em>Format</em></li>
+<li>click with the &RMB; on the layout's border and select <em>Break Layout</em> command from the context menu</li>
+<li>click with the &LMB; on the layout's border and select <em>Format -&gt; Break Layout</em> menu command</li>
 </ul>
 </p>
 
+<H4>Notes</H4>
+<p>Removing widget layout using the <em>Break Layout</em> command will not remove widgets contained in th layout. If you want to remove the widgets as well, just select the layout by clicking on its border and press <kbd>Delete</kbd> key or use <nobr><em>Edit -&gt <img src="icons/editdelete.png" class="icon"> Delete</em></nobr> menu command or context menu command.
+</p>
+
 <a name="layout_size_types"></a>
-<H4>Typy rozmiarów w uk³adach wid¿etów</H3>
+<H4>Size policies for widgets within a layout</H4>
 <p>
-Temat zostanie wprowadzony w uaktualnieniu Kexi &ver;.
-<!-- TODO 
-minimal/preferred, etc.
--->
+Instead of setting a fixed size for your widgets, in &kexi; you can choose between various widget's <em>size policies</em>. A size policy is a flexible strategy for controlling how a widget is stretched (or shrunk) depending on other neighbouring widgets and space available within the form.
+</p>
+<p>
+After putting widgets into a <em>layout</em>, typically each widget gets a proportional (<em>Preferred</em>) size policy. These widgets will be automatically resized with preferred settings, depending on their type and size of the entire layout itself. For example, three buttons put into the horizontal layout will be resized to fit their visible text.
+</p>
+<p>
+For each widget inserted into the form, there are settings for size policy available in the <em>Property Editor</em>. The settings are presented as a group of properties called <em>Size Policy</em>.
+
+ <br><img src="img/05_04_09_size_policy_properties.png">
+ <br>A group of properties for defining a widget's size policy<br><br>
+
+This group of properties contains:
+<ul>
+<li><b>Horizontal Size Policy</b> defining horizontal size of the widget,</li>
+<li><b>Vertical Size Policy</b> defining vertical size of the widget,</li>
+<li><b>Horizontal Stretch</b> defining strength of activity of the <em>Horizontal Size Policy</em>,</li>
+<li><b>Vertical Stretch</b> defining strength of activity of the <em>Vertical Size Policy</em></li>
+</ul>
+
+<H5>Values of size policies</H5>
+<p>
+There are following values available on the drop down list for <em>Horizontal Size Policy</em> and <em>Vertical Size Policy</em> properties visible in the <em>Property Editor</em>:
+</p>
+<ul>
+<li><b>Fixed</b> value means that the widget cannot be automatically resized; it should maintain the constant size defined on design time (width or height),</li>
+<li><p><b>Minimum</b> value means that the original size of the widget is set as minimal allowed, it is sufficient and there is no need for expanding the widget, but the widget will be expanded if needed. This type of policy can be used to force widget to be expanded to the whole width or height, especially if you set a <em>stretch</em> value greater than 0.
+ <br><img src="img/05_04_09_size_policy_minimum.png">
+ <br>Text field and two buttons within a grid layout (<em>Minimum</em> horizontal size policy is set for both buttons, so these are slightly wider than needed)<br><br>
+</p></li>
+<li><b>Maximum</b> value means that the original size of the widget is set as maximum allowed and can be decreased without breaking the widget's usability and readability if other widgets need more space,</li>
+<li><p><b>Preferred</b> value means that the original size of the widget is the best and preferred; the widget can be shrunk or expanded however and it will stay readable,
+ <br><img src="img/05_04_09_size_policy_preferred.png">
+ <br>Text field and two buttons within a grid layout (<em>Preferred</em> horizontal size policy is set for both buttons)<br><br>
+</p></li>
+<li><b>Expanding</b> value means that the original size of the widget is reasonable but the widget can be also shrunk; it can be expanded as well to take as much space as possible,</li>
+<li><b>Minimum Expanding</b> value means that the original size of the widget is allowed; it can be expanded to take as much space as possible,</li>
+<li><b>Ignored</b> value means that the original size of the widget is ignored; the widget can be expanded to take as much space as possible but other widgets usually will not allow for that</li>
+</ul>
+Different widget types have various default size policies; for example, button widgets have default size policy set to <em>Minimum</em> (in both directions), while text field widgets have vertical size policy set to <em>Fixed</em>.
+<p>
+<p>
+The most frequently used size policies are <em>Preferred</em>, <em>Minimum</em> and <em>Maximum</em>.
+</p>
+
+<H5>Vertical and horizontal stretch</H5>
+<p>
+<em>Vertical Stretch</em> and <em>Horizontal Stretch</em> properties accept integer values greater or equal to 0. These properties allow to fine-tune the behavior of size policies. Default value for the properties is 0. Greater value of the stretch means that the widget will be expanded more than other widgets having smaller stretch value set. For example, the following image presents two buttons where the first button has <em>Vertical Stretch</em> set to 0 and the second button has <em>Vertical Stretch</em> set to 1.
+
+ <br><img src="img/05_04_09_size_policy_vertical_stretch.png">
+ <br>Size of button widgets affected by setting <em>Vertical Stretch</em> property of the second button to 1<br><br>
+
 </p>
 
 <a name="widget_adjusting"></a>
-<H3>5.4.9. Rêczne ustalanie rozmiarów i pozycji wid¿etów</H3>
+<H3>5.4.10. Setting widgets size and position by hand</H3>
 <p>
-<!-- TODO -->
+In case when your form has no main layout set for auto-positioning and auto-resizing its widgets, you will probably want to align widget's position and size so the form can look cleaner and be easier to use. The &kexi; form designer simplifies this task by offering the following groups of commands:
+</p>
+<ul>
+<li><p>Adjusting sizes of selected widgets. The commands are available in the <em>Format -&gt; Adjust Widgets Size</em> submenu of the Menubar and in the <em>Adjust Widgets Size</em> submenu of the context menu. Toolbar's drop down button <nobr><img src="icons/aogrid.png" class="icon"> <em>Adjust Widgets Size</em></nobr> is also available.
+ <ul>
+  <li><nobr><img src="icons/aofit.png" class="icon"> <em>To Fit</em></nobr>  - sizes of the selected widgets will be altered so each widget will be resized to its preferred size and its contents; for example, text label's size will be changed to fit its text. Position of the widgets will not be changed.</li>
+  <li><nobr><img src="icons/aogrid.png" class="icon"> <em>To Grid</em></nobr> - sizes of the selected widgets will be altered so each widget's corner will be placed in the form's (or other container's) grid point. Widget's position can be slightly altered.</li>
+  <li><nobr><img src="icons/aoshortest.png" class="icon"> <em>To Shortest</em></nobr> - height of the selected widgets will be altered so that each of them will have the same height as the shortest one. Position of the widgets will not be changed.</li>
+  <li><nobr><img src="icons/aotallest.png" class="icon"> <em>To Tallest</em></nobr> - height of the selected widgets will be altered so that each of them will have the same height as the tallest one. Position of the widgets will not be changed.</li>
+  <li><nobr><img src="icons/aonarrowest.png" class="icon"> <em>To Narrowest</em></nobr> - width of the selected widgets will be altered so that each of them will have the same height as the narrowest one. Position of the widgets will not be changed.</li>
+  <li><nobr><img src="icons/aowidest.png" class="icon"> <em>To Widest</em></nobr> - width of the selected widgets will be altered so that each of them will have the same height as the widest one. Position of the widgets will not be changed.</li>
+ </ul>
+</li>
+<li><p>Aligning positions of the selected widgets. The commands are available in the <em>Format -&gt; Align Widgets Position</em> submenu of the Menubar and in the <em>Align Widgets Position</em> submenu of the context menu. Toolbar's drop down button <nobr><img src="icons/aoleft.png" class="icon"> <em>Align Widgets Position</em></nobr> is also available.
+ <ul>
+  <li><nobr><img src="icons/aoleft.png" class="icon"> <em>To Left</em></nobr> - all the selected widgets' left positions  will be moved to the position of the leftmost widget's left edge.</li>
+  <li><nobr><img src="icons/aoright.png" class="icon"> <em>To Right</em></nobr> - all the selected widgets' right positions will be moved to the position of the rightmost widget's right edge.</li>
+  <li><nobr><img src="icons/aotop.png" class="icon"> <em>To Top</em></nobr> - all the selected widgets' top positions will be moved to the position of the uppermost widget's upper edge.</li>
+  <li><nobr><img src="icons/aobottom.png" class="icon"> <em>To Bottom</em></nobr> - all the selected widgets' bottom positions will be moved to the position of the bottommost widget's bottom edge.</li>
+  <li><nobr><img src="icons/aopos2grid.png" class="icon"> <em>To Grid</em></nobr> - all the selected widgets' top-left corners will be moved so that it is positioned in the nearest grid point.</li>
+ </ul>
+ </p>
+ <p>
+ None of the above commands resizes the widgets.
+ </p>
+</li>
+</ul>
+</p>
+
+<p>
+There are also additional commands available: 
+<nobr><img src="icons/raise.png" class="icon"> <em>Bring Widget to Front</em></nobr> (i.e. above all other widgets) and <nobr><img src="icons/lower.png" class="icon"> <em>Send Widget to Back</em></nobr> (i.e. below all other widgets). These  two commands are rarely used, as it is not common to place one widget on top of other (with an exception when a container widget contains other widget inside). Also note that clicking a widget with mouse button is enough to bring the widget to front.
 </p>
 
 <a name="tab_order_editing"></a>
-<H3>5.4.10. Ustalanie kolejno¶ci tabulacji</H3>
-<!-- TODO -->
+<H3>5.4.11. Setting the tab order</H3>
+<!-- TODO move this introduction to a special section about properties related to focusing -->
 <p>
-Temat zostanie wprowadzony w uaktualnieniu Kexi &ver;.
-</p> 
+<em>Widget's focus</em> determines widget's activity available using keyboard. Focus is related to widgets displayed in form's data view. Exactly one form widget can have focus at a time. Most frequent use of focus is text entry (when a given text field is active, i.e. it is <em>focused</em>). Other example is a button widget - when focused, it is possible to &quot;press&quot; it using the <kbd>Enter</kbd> or <em>Space</em> key instead of a mouse button.
+</p>
+<p>There are a few methods of making the widgets active (moving the focus to the widget): clicking with a mouse button, rotating the mouse wheel over the widget, using the <em>Tab</em> key. The latter method is often used because of it's speed and convenience for users. Availability of the focusing methods is controlled by <em>Focus Policy</em> property of a given widget.
+</p>
+<p>
+There is relationship between focusing (activating) widgets using <em>Tab</em> key and <b>tab order</b> setting of a form. After pressing the <em>Tab</em> key, the <b>next</b> widget should be focused, so the form should know about the <em>tab order</em>.</p>
+<p>
+To alter table order for a form's widget:
+<ol>
+<li>switch to design view of the form</li>
+<li>execute <em>Edit -&gt; Edit Tab Order</em> menu command. 
+<em>Edit Tab Order</em> will appear with settings for this form.
 
-<!-- TODO wyrownywanie widzetow; layouty; rozmiary -->
+ <br><img src="img/05_04_11_tab_stop_dialog.png">
+ <br>A window for editing tab order for a form<br><br>
+
+<p>
+The window contains a list with two columns: the first column displays widget names, the second - types of the widgets. To make it easier to recognize meaning of the names and types for the user, icons related to the types are also displayed. The list contains only widgets having focus policy allowing to use the <kbd>Tab</kbd> key. 
+The window allows you can to change tab order or set the automatic tab order.
+</p>
+</li>
+<li><p>
+To change tab order, either:
+<ul>
+<li>Click a selected widget name on the widgets list and drag it to a desired position (up or down) using the mouse.
+</li>
+<li>Click a selected widget name on the widgets list and use <em>Move Up</em> or <em>Move Down</em> buttons, to move the widgets to a desired position.</li>
+<li>Click the <em>Handle tab stops automatically</em> check box to set the automatic tab order for the form. If this option has been switched on, any changes made to the list of widgets by hand are not taken into account - &kexi; will be handling the tab orders on its own. The automatic ordering means that the top-left widget will be focused first (or the top-right if your operating system uses right-to-left layout), and the order comes from the left to right (from the right to left, appropriately) and from the top to bottom.
+ <br><img src="img/05_04_11_auto_tab_stop.png">
+ <br>Automatic tab order for a form<br><br>
+</li>
+</ul>
+</p>
+</li>
+<li>
+Click the <em>OK</em> button to accept the changes or <em>Cancel</em> button to dismiss the changes.
+</li>
+</ol>
