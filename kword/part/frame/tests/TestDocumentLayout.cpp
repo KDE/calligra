@@ -65,7 +65,11 @@ void TestDocumentLayout::initForNewTest(const QString &initText) {
         cursor.insertText(initText);
         KoParagraphStyle style;
         style.setStyleId(101); // needed to do manually since we don't use the stylemanager
-        style.applyStyle(block);
+        QTextBlock b2 = doc->begin();
+        while(b2.isValid()) {
+            style.applyStyle(b2);
+            b2 = b2.next();
+        }
     }
     blockLayout = block.layout();
 }
@@ -546,11 +550,11 @@ void TestDocumentLayout::testBasicList() {
     block = doc->begin().next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 2
-    QCOMPARE(blockLayout->lineAt(0).x(), 12.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 15.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 3
-    QCOMPARE(blockLayout->lineAt(0).x(), 12.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 15.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 4
@@ -712,6 +716,67 @@ void TestDocumentLayout::testInterruptedLists() {
     QVERIFY(data);
     qDebug() << data->counterText();
     QVERIFY(data->counterText() == "1.");
+}
+
+void TestDocumentLayout::testNestedLists() {
+    initForNewTest("Root\nplants\nherbs\ncinnamon\ncurry\nroses\nhumans\nFrank\nAnkje\nOther\nSkip\n");
+
+    KoParagraphStyle h1;
+    styleManager->add(&h1);
+    KoParagraphStyle h2;
+    styleManager->add(&h2);
+    KoParagraphStyle h3;
+    styleManager->add(&h3);
+
+    KoListStyle listStyle;
+    listStyle.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevel(1);
+    h1.setListStyle(listStyle);
+    listStyle.setLevel(2);
+    h2.setListStyle(listStyle);
+    listStyle.setLevel(3);
+    h3.setListStyle(listStyle);
+
+    QTextBlock block = doc->begin().next();
+    h1.applyStyle(block);
+    block = block.next();
+    h2.applyStyle(block);
+    block = block.next();
+    h3.applyStyle(block);
+    block = block.next();
+    h3.applyStyle(block);
+    block = block.next(); // roses
+    h2.applyStyle(block);
+    block = block.next();
+    h1.applyStyle(block); // humans
+    block = block.next();
+    h2.applyStyle(block);
+    block = block.next();
+    h2.applyStyle(block);
+    block = block.next();
+    h1.applyStyle(block);
+    block = block.next();
+    h3.applyStyle(block); // notice missing h2
+
+    layout->layout();
+
+    block = doc->begin();
+    QVERIFY(block.userData() == 0);
+    block = block.next();
+    static const char* texts[] = { "1", "1.1", "1.1.1", "1.1.2", "1.2", "2", "2.1", "2.2", "3", "3.0.1" };
+    int i=0;
+    double indent=0.0;
+    while(block.isValid()) {
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+        qDebug() << "text: " << texts[i] << endl;
+        QVERIFY(data);
+        if(i < 3) {
+            qDebug() << "indent:" << data->counterWidth();
+            QVERIFY (indent < data->counterWidth()); // deeper indent, larger width
+            indent = data->counterWidth();
+        }
+        QVERIFY(data->counterText() == texts[i++]);
+    }
 }
 
 QTEST_MAIN(TestDocumentLayout)

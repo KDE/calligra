@@ -268,13 +268,12 @@ void KWTextDocumentLayout::layout() {
 
             // add linespacing
             if(! useFixedLineHeight) {
-                double linespacing = 0.0;
-                int percent = m_format.intProperty(KoParagraphStyle::FixedLineHeight);
-                if(percent != 0)
-                    linespacing = height * ((percent - 100) / 100.0);
-                else {
-                    linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);
-                    if(linespacing == 0.0)
+                double linespacing = m_format.doubleProperty(KoParagraphStyle::LineSpacing);;
+                if(linespacing == 0.0) { // unset
+                    int percent = m_format.intProperty(KoParagraphStyle::FixedLineHeight);
+                    if(percent != 0)
+                        linespacing = height * ((percent - 100) / 100.0);
+                    else if(linespacing == 0.0)
                         linespacing = height * 0.2; // default
                 }
                 height += linespacing;

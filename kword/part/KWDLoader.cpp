@@ -80,15 +80,15 @@ bool KWDLoader::load(QDomElement &root) {
         pgLayout.orientation = static_cast<KoOrientation>( paper.attribute("orientation").toInt() );
         pgLayout.ptWidth = paper.attribute("width").toDouble();
         pgLayout.ptHeight = paper.attribute("height").toDouble();
-        kDebug() << " ptWidth=" << pgLayout.ptWidth << endl;
-        kDebug() << " ptHeight=" << pgLayout.ptHeight << endl;
+        kDebug(32001) << " ptWidth=" << pgLayout.ptWidth << endl;
+        kDebug(32001) << " ptHeight=" << pgLayout.ptHeight << endl;
         if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
         {
             // Old document?
             pgLayout.ptWidth = paper.attribute("ptWidth").toDouble();
             pgLayout.ptHeight = paper.attribute("ptHeight").toDouble();
-            kDebug() << " ptWidth2=" << pgLayout.ptWidth << endl;
-            kDebug() << " ptHeight2=" << pgLayout.ptHeight << endl;
+            kDebug(32001) << " ptWidth2=" << pgLayout.ptWidth << endl;
+            kDebug(32001) << " ptHeight2=" << pgLayout.ptHeight << endl;
 
             // Still wrong?
             if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
@@ -234,6 +234,7 @@ bool KWDLoader::load(QDomElement &root) {
     {
         m_slDataBase->load(mailmerge);
     }
+#endif
 
     emit sigProgress(15);
 
@@ -243,6 +244,7 @@ bool KWDLoader::load(QDomElement &root) {
         loadStyleTemplates( stylesElem );
 
     emit sigProgress(17);
+#if 0
 
     QDomElement frameStylesElem = root.namedItem( "FRAMESTYLES" ).toElement();
     if ( !frameStylesElem.isNull() )
@@ -537,16 +539,21 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                     style = m_document->styleManager()->defaultParagraphStyle();
                 KoParagraphStyle paragStyle(*style); // tmp style.
                 fill(&paragStyle, layout);
-
                 QTextBlock block = cursor.block();
                 paragStyle.applyStyle(block);
             }
             cursor.insertText( paragraph.firstChildElement("TEXT").text() );
 
+            // re-apply char format after we added the text
+            KoCharacterStyle *style = m_document->styleManager()->characterStyle(
+                    cursor.blockCharFormat().intProperty(KoCharacterStyle::StyleId));
+            if(style) {
+                QTextBlock block = cursor.block();
+                style->applyStyle(block);
+            }
+
             QDomElement formats = paragraph.firstChildElement("FORMATS");
             if(!formats.isNull()) {
-                KoCharacterStyle *style = m_document->styleManager()->characterStyle(
-                        cursor.charFormat().intProperty(KoCharacterStyle::StyleId));
                 KoCharacterStyle defaultStyle;
                 if(style == 0) // parag is not based on any style, just text.
                     style = &defaultStyle;
@@ -772,6 +779,49 @@ void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
        //LANGUAGE
        //TEXTBACKGROUNDCOLOR
        //OFFSETFROMBASELINE
+}
+
+void KWDLoader::loadStyleTemplates( const QDomElement &stylesElem ) {
+    KoStyleManager *manager = m_document->styleManager();
+
+    QDomElement style = stylesElem.firstChildElement("STYLE");
+    while (! style.isNull() ) {
+        QString styleName = style.firstChildElement("NAME").attribute("value");
+        KoParagraphStyle *paragStyle = manager->paragraphStyle(styleName);
+        if(!paragStyle) {
+            paragStyle = new KoParagraphStyle();
+            paragStyle->setName(styleName);
+            manager->add(paragStyle);
+        }
+        fill(paragStyle, style);
+#if 0
+        if ( m_syntaxVersion < 3 )
+        {
+            // Convert old style (up to 1.2.x included)
+            // "include in TOC if chapter numbering" to the new attribute
+            if ( sty->paragLayout().counter && sty->paragLayout().counter->numbering() == KoParagCounter::NUM_CHAPTER )
+                sty->setOutline( true );
+        }
+#endif
+        QDomElement format = style.firstChildElement("FORMAT");
+        if(! format.isNull())
+            fill(paragStyle->characterStyle(), format);
+        style = style.nextSiblingElement("STYLE");
+    }
+
+    // second pass, to set the 'following'
+    style = stylesElem.firstChildElement("STYLE");
+    while (! style.isNull() ) {
+        QString styleName = style.firstChildElement("NAME").attribute("value");
+        KoParagraphStyle *paragStyle = manager->paragraphStyle(styleName);
+        Q_ASSERT(paragStyle);
+        QString following = style.namedItem("FOLLOWING").toElement().attribute("name");
+        KoParagraphStyle *next = manager->paragraphStyle(following);
+        if(next)
+            paragStyle->setNextStyle(next->styleId());
+
+        style = style.nextSiblingElement("STYLE");
+    }
 }
 
 #include "KWDLoader.moc"

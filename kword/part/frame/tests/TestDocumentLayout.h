@@ -52,7 +52,7 @@ private slots:
     void testBasicList();
     void testNumberedList();
     void testInterruptedLists(); // consecutiveNumbering
-// nested lists.
+    void testNestedLists();
 // relativeBulletSize
 
     //etc

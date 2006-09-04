@@ -70,6 +70,9 @@ private:
     void fill(KoParagraphStyle *style, QDomElement layoutElem);
     void fill(KoCharacterStyle *style, QDomElement formatElem);
 
+    // load the document wide styles
+    void loadStyleTemplates( const QDomElement &styles );
+
 private:
     KWDocument *m_document;
     KWPageSettings *m_pageSettings;
