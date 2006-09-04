@@ -48,6 +48,7 @@
 #include <KoPen.h>
 #include <KoRuler.h>
 #include <koffice_export.h>
+#include <KoTabulator.h>
 
 class Q3PopupMenu;
 class QSplitter;
@@ -86,6 +87,8 @@ class KoCharSelectDia;
 class KoTextFormat;
 class KoTextObject;
 class KoTextZoomHandler;
+class KoTabChooser;
+class KoPageLayout;
 
 class KCommand;
 class KMacroCommand;

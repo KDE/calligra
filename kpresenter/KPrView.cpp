@@ -77,6 +77,7 @@
 
 #include <KoPictureFilePreview.h>
 #include <KoCreateStyleDia.h>
+#include <KoTabChooser.h>
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -2065,9 +2066,9 @@ void KPrView::newPageLayout( const KoPageLayout &_layout )
 void KPrView::updateRuler()
 {
     //update koruler
-    QRect r=m_canvas->activePage()->getZoomPageRect();
-    getHRuler()->setFrameStartEnd( r.left(), r.right()/*+m_canvas->diffx()*/ );
-    getVRuler()->setFrameStartEnd( r.top(), r.bottom()/*+m_canvas->diffy()*/ );
+    KoRect r=m_canvas->activePage()->getPageRect();
+    getHRuler()->setActiveRange( r.left(), r.right() );
+    getVRuler()->setActiveRange( r.top(), r.bottom() );
 }
 
 void KPrView::createGUI()
@@ -3199,7 +3200,7 @@ void KPrView::scrollH( int value )
     if ( !presStarted ) {
         m_canvas->scrollX( value );
         if ( h_ruler )
-            h_ruler->setOffset( value, 0 );
+            h_ruler->setOffset( value );
     }
 }
 
@@ -3208,7 +3209,7 @@ void KPrView::scrollV( int value )
     if ( !presStarted ) {
         m_canvas->scrollY( value );
         if ( v_ruler )
-            v_ruler->setOffset( 0, value );
+            v_ruler->setOffset( value );
     }
 }
 
@@ -3577,15 +3578,16 @@ void KPrView::setupScrollbars()
 
 void KPrView::setupRulers()
 {
+#warning "Needs porting when KoRuler is fully reimplemented"
     tabChooser = new KoTabChooser( pageBase, KoTabChooser::TAB_ALL );
     tabChooser->setReadWrite(kPresenterDoc()->isReadWrite());
-    h_ruler = new KoRuler( pageBase, m_canvas, Qt::Horizontal, kPresenterDoc()->pageLayout(),
-                           KoRuler::F_INDENTS | KoRuler::F_TABS, kPresenterDoc()->unit(), tabChooser );
-    h_ruler->changeFlags(0);
+    h_ruler = new KoRuler( pageBase, Qt::Horizontal, zoomHandler() );
+    h_ruler->setUnit( kPresenterDoc()->unit() );
+    //h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
 
-    h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
-    v_ruler = new KoRuler( pageBase, m_canvas, Qt::Vertical, kPresenterDoc()->pageLayout(), 0, kPresenterDoc()->unit() );
-    v_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
+    v_ruler = new KoRuler( pageBase, Qt::Vertical, zoomHandler() );
+    v_ruler->setUnit( kPresenterDoc()->unit() );
+    //v_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
 
     int hSpace = v_ruler->minimumSizeHint().width();
     int vSpace = h_ruler->minimumSizeHint().height();
@@ -3594,7 +3596,7 @@ void KPrView::setupRulers()
     m_canvas->move( hSpace, vSpace );
     h_ruler->setGeometry( hSpace, 0, m_canvas->width(), vSpace );
     v_ruler->setGeometry( 0, vSpace, hSpace, m_canvas->height() );
-
+#if 0
     QObject::connect( h_ruler, SIGNAL( unitChanged( KoUnit::Unit ) ),
                       this, SLOT( unitChanged( KoUnit::Unit ) ) );
     QObject::connect( h_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
@@ -3615,6 +3617,7 @@ void KPrView::setupRulers()
     connect( h_ruler, SIGNAL( newLeftIndent( double ) ), this, SLOT( newLeftIndent( double ) ) );
     connect( h_ruler, SIGNAL( newFirstIndent( double ) ), this, SLOT( newFirstIndent( double ) ) );
     connect( h_ruler, SIGNAL( newRightIndent( double ) ), this, SLOT( newRightIndent( double ) ) );
+#endif
 }
 
 void KPrView::unitChanged( KoUnit::Unit u )
@@ -3745,14 +3748,14 @@ void KPrView::setTool( ToolEditMode toolEditMode )
 
 void KPrView::setRulerMouseShow( bool _show )
 {
-    v_ruler->showMousePos( _show );
-    h_ruler->showMousePos( _show );
+    v_ruler->setShowMousePosition( _show );
+    h_ruler->setShowMousePosition( _show );
 }
 
 void KPrView::setRulerMousePos( int mx, int my )
 {
-    v_ruler->setMousePos( mx, my );
-    h_ruler->setMousePos( mx, my );
+    v_ruler->updateMouseCoordinate( my );
+    h_ruler->updateMouseCoordinate( mx );
 }
 
 void KPrView::enableWebPres()
@@ -4821,6 +4824,8 @@ void KPrView::openLink()
 
 void KPrView::showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl )
 {
+#warning "Port this to the new KoRuler"
+#if 0
     KoRuler * hRuler = getHRuler();
     if ( hRuler )
     {
@@ -4830,6 +4835,7 @@ void KPrView::showRulerIndent( double _leftMargin, double _firstLine, double _ri
         hRuler->setDirection( rtl );
         actionTextDepthMinus->setEnabled( _leftMargin>0);
     }
+#endif
 }
 
 void KPrView::tabListChanged( const KoTabulatorList & tabList )
@@ -4857,6 +4863,8 @@ void KPrView::newRightIndent( double _rightIndent)
 
 void KPrView::slotUpdateRuler()
 {
+#warning "Port this to the new KoRuler"
+#if 0
     // Set the "frame start" in the ruler (tabs are relative to that position)
     bool isText=!m_canvas->applicableTextObjects().isEmpty();
     if ( isText )
@@ -4891,6 +4899,7 @@ void KPrView::slotUpdateRuler()
         refreshRuler( kPresenterDoc()->showGuideLines() );
         updateRuler();
     }
+#endif
 }
 
 // This handles Tabulators _only_
@@ -4906,12 +4915,15 @@ void KPrView::slotHRulerDoubleClicked( double ptpos )
 // This does _not_ handle Tabulators!
 void KPrView::slotHRulerDoubleClicked()
 {
+#warning "Port this to the new KoRuler"
+#if 0
     KoRuler *ruler = getHRuler();
 
     if ( m_canvas && m_canvas->currentTextObjectView() && (ruler->flags() & KoRuler::F_INDENTS) && ruler->doubleClickedIndent() )
         formatParagraph();
     else
         openPageLayoutDia();
+#endif
 }
 
 void KPrView::changeCaseOfText()
@@ -5477,6 +5489,8 @@ void KPrView::updateGridButton()
 
 void KPrView::refreshRuler( bool state )
 {
+#warning "Port this to new KoRuler"
+#if 0
     if( getHRuler() )
     {
 
@@ -5533,7 +5547,7 @@ void KPrView::refreshRuler( bool state )
             }
         }
     }
-
+#endif
 }
 
 void KPrView::addGuideLine()
@@ -6020,6 +6034,8 @@ void KPrView::updateBgSpellCheckingState()
 
 void KPrView::updateRulerInProtectContentMode()
 {
+#warning "Port this to new KoRuler"
+#if 0
     KPrTextView *edit=m_canvas->currentTextObjectView();
     if ( edit && getHRuler()) {
         if ( !edit->kpTextObject()->isProtectContent() )
@@ -6028,6 +6044,7 @@ void KPrView::updateRulerInProtectContentMode()
             getHRuler()->changeFlags(0);
         getHRuler()->repaint();
     }
+#endif
 }
 
 void KPrView::slotChangeCutState(bool b)
@@ -6273,8 +6290,8 @@ void KPrView::documentModified( bool b )
 void KPrView::loadingFinished()
 {
   setZoom( 100, true );
-  h_ruler->setPageLayout(m_pKPresenterDoc->pageLayout());
-  v_ruler->setPageLayout(m_pKPresenterDoc->pageLayout());
+  h_ruler->setRulerLength(m_pKPresenterDoc->pageLayout().ptWidth);
+  v_ruler->setRulerLength(m_pKPresenterDoc->pageLayout().ptHeight);
   slotUpdateRuler();
   m_pKPresenterDoc->updateZoomRuler();
   updateSideBar();

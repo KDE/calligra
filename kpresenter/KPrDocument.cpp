@@ -4208,8 +4208,6 @@ void KPrDocument::updateZoomRuler()
 {
     foreach ( KoView* view, views() )
     {
-        static_cast<KPrView*>(view)->getHRuler()->setZoom( m_zoomHandler->zoomedResolutionX() );
-        static_cast<KPrView*>(view)->getVRuler()->setZoom( m_zoomHandler->zoomedResolutionY() );
         static_cast<KPrView*>(view)->slotUpdateRuler();
     }
 }
@@ -4253,8 +4251,8 @@ void KPrDocument::updateRulerPageLayout()
 {
     foreach ( KoView* view, views() )
     {
-        static_cast<KPrView*>(view)->getHRuler()->setPageLayout(m_pageLayout );
-        static_cast<KPrView*>(view)->getVRuler()->setPageLayout(m_pageLayout );
+        static_cast<KPrView*>(view)->getHRuler()->setRulerLength(m_pageLayout.ptWidth );
+        static_cast<KPrView*>(view)->getVRuler()->setRulerLength(m_pageLayout.ptHeight );
     }
 }
 

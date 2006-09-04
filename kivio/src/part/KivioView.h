@@ -30,6 +30,7 @@ class KoShapeManager;
 class KoCanvasController;
 class KoZoomAction;
 class KoZoomHandler;
+class KoRuler;
 
 class KivioCanvas;
 class KivioDocument;
@@ -73,6 +74,9 @@ class KivioView : public KoView, public KoShapeControllerBase
     /// Set the new zoom and update the canvas
     void setZoom(int zoom);
 
+    /// Called when the mouse position changes on the canvas
+    void updateMousePosition(QPoint position);
+
   protected Q_SLOTS:
     /// Called by the zoom action to set the zoom
     void viewZoom(KoZoomMode::Mode mode, int zoom);
@@ -97,6 +101,8 @@ class KivioView : public KoView, public KoShapeControllerBase
     KivioCanvas* m_canvas;
     KoCanvasController* m_canvasController;
     KoZoomHandler* m_zoomHandler;
+    KoRuler* m_horizontalRuler;
+    KoRuler* m_verticalRuler;
 
     KAction* m_viewZoomIn;
     KAction* m_viewZoomOut;

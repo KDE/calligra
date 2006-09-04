@@ -45,6 +45,7 @@
 
 #include <KoGuides.h>
 #include <KoRuler.h>
+#include <KoTabulator.h>
 #include <KoQueryTrader.h>
 #include "KoPointArray.h"
 #include "global.h"

@@ -27,6 +27,7 @@
 #include <kiconloader.h>
 #include <kstdaction.h>
 #include <kicon.h>
+
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
@@ -36,6 +37,7 @@
 #include <KoZoomHandler.h>
 #include <KoPageLayout.h>
 #include <KoMainWindow.h>
+#include <KoRuler.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
@@ -93,7 +95,14 @@ void KivioView::initGUI()
   m_canvasController = new KoCanvasController(this);
   m_canvasController->setCanvas(m_canvas);
 
-  layout->addWidget(m_canvasController, 0, 0);
+  m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_zoomHandler);
+  m_horizontalRuler->setShowMousePosition(true);
+  m_verticalRuler = new KoRuler(this, Qt::Vertical, m_zoomHandler);
+  m_verticalRuler->setShowMousePosition(true);
+
+  layout->addWidget(m_horizontalRuler, 0, 1);
+  layout->addWidget(m_verticalRuler, 1, 0);
+  layout->addWidget(m_canvasController, 1, 1);
 
   KoToolManager::instance()->addControllers(m_canvasController, this);
   shell()->addDockWidget(Qt::LeftDockWidgetArea, KoToolManager::instance()->toolBox("Kivio"));
@@ -101,6 +110,11 @@ void KivioView::initGUI()
   KoShapeSelector *selector = new KoShapeSelector(0, m_canvasController, ".*");
   selector->resize(QSize(100, 200));
   selector->show();
+
+  connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
+          m_horizontalRuler, SLOT(setOffset(int)));
+  connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
+          m_verticalRuler, SLOT(setOffset(int)));
 }
 
 void KivioView::initActions()
@@ -135,6 +149,11 @@ void KivioView::setActivePage(KivioAbstractPage* page)
   m_activePage = page;
   shapeManager()->setShapes(page->shapeList());
   m_canvas->updateSize();
+  KoPageLayout layout = page->pageLayout();
+  m_horizontalRuler->setRulerLength(layout.ptWidth);
+  m_verticalRuler->setRulerLength(layout.ptHeight);
+  m_horizontalRuler->setActiveRange(layout.ptLeft, layout.ptWidth - layout.ptRight);
+  m_verticalRuler->setActiveRange(layout.ptTop, layout.ptHeight - layout.ptBottom);
 }
 
 void KivioView::addShape(KoShape* shape)
@@ -169,7 +188,6 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
   QString zoomString;
 
   if(mode == KoZoomMode::ZOOM_WIDTH) {
-    m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_WIDTH);
     zoomString = KoZoomMode::toString(mode);
     KoPageLayout layout = m_activePage->pageLayout();
     newZoom = qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) /
@@ -181,7 +199,6 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
       QTimer::singleShot(0, this, SLOT(recalculateZoom()));
     }
   } else if(mode == KoZoomMode::ZOOM_PAGE) {
-    m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PAGE);
     zoomString = KoZoomMode::toString(mode);
     KoPageLayout layout = m_activePage->pageLayout();
     double height = m_zoomHandler->resolutionY() * layout.ptHeight;
@@ -189,8 +206,7 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
     newZoom = qMin(qRound(static_cast<double>(m_canvasController->visibleHeight() * 100) / height),
                 qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) / width)) - 1;
   } else {
-    m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
-    zoomString = i18n("%1%", zoom);
+    zoomString = i18n("%1%", newZoom);
   }
 
   // Don't allow smaller zoom then 10% or bigger then 2000%
@@ -198,6 +214,7 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
     return;
   }
 
+  m_zoomHandler->setZoomMode(mode);
   m_viewZoomAction->setZoom(zoomString);
   setZoom(newZoom);
   m_canvas->setFocus();
@@ -210,6 +227,9 @@ void KivioView::resizeEvent(QResizeEvent* event)
   if(m_zoomHandler->zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
     recalculateZoom();
   }
+
+  m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX());
+  m_verticalRuler->setOffset(m_canvasController->canvasOffsetY());
 }
 
 void KivioView::viewZoomIn()
@@ -245,6 +265,12 @@ void KivioView::viewZoomOut()
 void KivioView::recalculateZoom()
 {
   viewZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoomInPercent());
+}
+
+void KivioView::updateMousePosition(QPoint position)
+{
+  m_horizontalRuler->updateMouseCoordinate(position.x());
+  m_verticalRuler->updateMouseCoordinate(position.y());
 }
 
 #include "KivioView.moc"

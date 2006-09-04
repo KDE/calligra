@@ -54,6 +54,7 @@ class KoXmlWriter;
 class QFile;
 class KoSavingContext;
 class KCommandHistory;
+class QMimeSource;
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>

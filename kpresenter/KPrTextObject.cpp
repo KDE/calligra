@@ -1927,9 +1927,12 @@ void KPrTextView::updateUI( bool updateFormat, bool force  )
     if( m_paragLayout.tabList() != parag->tabList() || force )
     {
         m_paragLayout.setTabList( parag->tabList() );
+#warning "Port this to new KoRuler"
+#if 0
         KoRuler * hr = m_canvas->getView()->getHRuler();
         if ( hr )
             hr->setTabList( parag->tabList() );
+#endif
     }
 }
 

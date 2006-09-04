@@ -31,6 +31,7 @@
 #include <KoXmlNS.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
+#include <KoUnit.h>
 
 #include "KivioView.h"
 #include "KivioMasterPage.h"
@@ -43,6 +44,8 @@ KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool single
 {
   setInstance(KivioFactory::instance(), false);
   setTemplateType("kivio_template");
+
+  setUnit(KoUnit::U_PT);
 
   m_commandHistory = new KCommandHistory(actionCollection(), true);
   connect(m_commandHistory, SIGNAL(documentRestored()),

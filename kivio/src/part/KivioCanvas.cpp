@@ -125,6 +125,7 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* event)
 {
   KoPointerEvent pointerEvent(event, viewConverter()->viewToDocument(event->pos()));
   m_tool->mouseMoveEvent(&pointerEvent);
+  m_view->updateMousePosition(event->pos());
 }
 
 void KivioCanvas::mousePressEvent(QMouseEvent* event)
