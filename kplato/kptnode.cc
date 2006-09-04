@@ -380,6 +380,10 @@ void Node::calcResourceOverbooked() {
     }
 }
 
+QStringList Node::overbookedResources() const {
+    return m_currentSchedule ? m_currentSchedule->overbookedResources() : QStringList();
+}
+
 void Node::saveRelations(QDomElement &element) const {
     QPtrListIterator<Relation> it(m_dependChildNodes);
     for (; it.current(); ++it) {

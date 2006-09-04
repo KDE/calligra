@@ -262,6 +262,8 @@ public:
     /// The assigned resource is overbooked
     virtual bool resourceOverbooked() const
         { return m_currentSchedule ? m_currentSchedule->resourceOverbooked : false; }
+    /// Return a list of overbooked resources
+    virtual QStringList overbookedResources() const;
     /// Calculates if the assigned resource is overbooked 
     /// within the duration of this node
     virtual void calcResourceOverbooked();
