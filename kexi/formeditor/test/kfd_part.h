@@ -72,7 +72,7 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		bool closeForm(Form *form);
 		bool closeForms();
 
-		virtual bool closeURL();
+		virtual bool closeUrl();
 
 	public slots:
 		/*! Creates a new blank Form. The new Form is shown and become the active Form. */

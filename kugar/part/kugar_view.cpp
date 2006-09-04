@@ -105,7 +105,7 @@ bool KugarPart::openFile()
 
 // Close the data file.
 
-bool KugarPart::closeURL()
+bool KugarPart::closeUrl()
 {
     // Nothing to do.
 

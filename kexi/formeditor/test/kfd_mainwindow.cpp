@@ -82,7 +82,7 @@ KFDMainWindow::queryClose()
 	if(!m_part)
 		return true;
 
-	return m_part->closeURL();
+	return m_part->closeUrl();
 }
 
 #include "kfd_mainwindow.moc"

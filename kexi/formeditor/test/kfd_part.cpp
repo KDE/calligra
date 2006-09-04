@@ -268,7 +268,7 @@ KFormDesignerPart::createBlankForm()
 	if(KFormDesigner::FormManager::self()->activeForm() && m_uniqueFormMode)
 	{
 		m_openingFile = true;
-		closeURL();
+		closeUrl();
 		m_openingFile = false;
 	}
 
@@ -365,7 +365,7 @@ KFormDesignerPart::closeForms()
 }
 
 bool
-KFormDesignerPart::closeURL()
+KFormDesignerPart::closeUrl()
 {
 	if(!KFormDesigner::FormManager::self()->activeForm())
 		return true;

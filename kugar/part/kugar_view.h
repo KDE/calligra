@@ -42,7 +42,7 @@ public:
 
     //protected:
     //  virtual bool openFile();
-    //  virtual bool closeURL();
+    //  virtual bool closeUrl();
 
 
 private:

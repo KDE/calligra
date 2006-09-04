@@ -46,7 +46,7 @@ KugarPart::KugarPart( QWidget *parentWidget,
 KugarPart::~KugarPart()
 {
     m_reportEngine->removeRef();
-    //  closeURL();
+    //  closeUrl();
 }
 
 bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&,

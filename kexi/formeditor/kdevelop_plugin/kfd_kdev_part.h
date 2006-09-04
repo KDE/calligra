@@ -74,7 +74,7 @@ class KFORMEDITOR_EXPORT KFormDesignerKDevPart : public Designer
 		bool   closeForm(Form *form);
 		bool   closeForms();
 
-		virtual bool closeURL();
+		virtual bool closeUrl();
 
 		static KFormDesigner::WidgetLibrary* formsLibrary();
 
