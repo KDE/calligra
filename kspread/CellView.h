@@ -59,7 +59,7 @@ public:
     LeftBorder   = 0x1,
     RightBorder  = 0x2,
     TopBorder    = 0x4,
-    BottomBorder = 0x8,
+    BottomBorder = 0x8
   };
   Q_DECLARE_FLAGS(Borders, Border)
 

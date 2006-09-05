@@ -103,6 +103,6 @@ public:
   QStringList listValidity;
 };
 
-}; // namespace KSpread
+} // namespace KSpread
 
 #endif // KSPREAD_VALIDITY

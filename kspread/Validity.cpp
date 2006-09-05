@@ -32,7 +32,7 @@ Validity::Validity()
   displayMessage = true;
   allowEmptyCell = false;
   displayValidationInformation = false;
-};
+}
 
 bool Validity::operator==( const Validity& other ) const
 {
