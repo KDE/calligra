@@ -2,9 +2,9 @@
 #  REPORTS=reports
 #endif
 
-if compile_kexi_macros_plugin
-  MACRODIR=macros
-endif
+#if compile_kexi_macros_plugin
+#  MACRODIR=macros
+#endif
 
 if compile_kross
   SCRIPTINGDIR=scripting
