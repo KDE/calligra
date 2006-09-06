@@ -48,17 +48,42 @@ KisPNGExport::~KisPNGExport()
 
 KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
+    kdDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
+    
+    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+    QString filename = m_chain->outputFile();
+    
+    if (!output)
+        return KoFilter::CreationError;
+    
+    
+    if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-
-    KDialog* kdb = new KDialog(0);
-    kdb->setCaption(i18n("PNG Export Options"));
-    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
-    kdb->setDefaultButton(KDialog::Ok);
+    
+    KDialogBase* kdb = new KDialogBase(0, "", false, i18n("PNG Export Options"), KDialogBase::Ok | KDialogBase::Cancel);
+    
+    KisImageSP img = output->currentImage();
+    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
+    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
+ 
+    KisRectIteratorPixel it = l->paintDevice()->createRectIterator(0,0, img->width(), img->height(), false);
+    KisColorSpace* cs = l->paintDevice()->colorSpace();
+    bool isThereAlpha = false;
+    while( !it.isDone() )
+    {
+        if(cs->getAlpha( it.rawData() ) != 255)
+        {
+            isThereAlpha = true;
+            break;
+        }
+        ++it;
+    }
+    
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
+    wdg->alpha->setChecked(isThereAlpha);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     if(kdb->exec() == QDialog::Rejected)
@@ -75,13 +100,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
-        return KoFilter::CreationError;
-
-
-    if (filename.isEmpty()) return KoFilter::FileNotFound;
-
-    KUrl url;
+    KURL url;
     url.setPath(filename);
 
     KisImageSP img = output->currentImage();
@@ -92,9 +111,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
 
-    KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*img->projection()));
-    KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
-
+    
     if ( (res = kpc.buildFile(url, l, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kDebug(41008) << "success !" << endl;
         return KoFilter::OK;
