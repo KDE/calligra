@@ -310,92 +310,94 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     }
 
     KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
-    for (png_uint_32 y = 0; y < height; y++) {
-        KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
-        for (int i = 0; i < number_of_passes; i++)
+    for (int i = 0; i < number_of_passes; i++)
+    {
+        for (png_uint_32 y = 0; y < height; y++) {
+            KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
             png_read_rows(png_ptr, &row_pointer, NULL, 1);
 
-        switch(color_type)
-        {
-            case PNG_COLOR_TYPE_GRAY:
-            case PNG_COLOR_TYPE_GRAY_ALPHA:
-                if(color_nb_bits == 16)
-                {
-                    Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointer);
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[0] = *(src++);
-                        if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[1] = *(src++);
-                        else d[1] = Q_UINT16_MAX;
-                        ++it;
-                    }
-                } else {
-                    Q_UINT8 *src = row_pointer;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[0] = *(src++);
-                        if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[1] = *(src++);
-                        else d[1] = Q_UINT8_MAX;
-                        ++it;
-                    }
-                }
-                //FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits
-                break;
-            case PNG_COLOR_TYPE_RGB:
-            case PNG_COLOR_TYPE_RGB_ALPHA:
-                if(color_nb_bits == 16)
-                {
-                    Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointer);
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[2] = *(src++);
-                        d[1] = *(src++);
-                        d[0] = *(src++);
-                        if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[3] = *(src++);
-                        else d[3] = Q_UINT16_MAX;
-                        ++it;
-                    }
-                } else {
-                    Q_UINT8 *src = row_pointer;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[2] = *(src++);
-                        d[1] = *(src++);
-                        d[0] = *(src++);
-                        if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[3] = *(src++);
-                        else d[3] = Q_UINT8_MAX;
-                        ++it;
-                    }
-                }
-                break;
-            case PNG_COLOR_TYPE_PALETTE:
-                switch(color_nb_bits)
-                {
-                    case 8:
+            switch(color_type)
+            {
+                case PNG_COLOR_TYPE_GRAY:
+                case PNG_COLOR_TYPE_GRAY_ALPHA:
+                    if(color_nb_bits == 16)
                     {
+                        Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointer);
+                        while (!it.isDone()) {
+                            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                            d[0] = *(src++);
+                            if(transform) cmsDoTransform(transform, d, d, 1);
+                            if(hasalpha) d[1] = *(src++);
+                            else d[1] = Q_UINT16_MAX;
+                            ++it;
+                        }
+                    } else {
                         Q_UINT8 *src = row_pointer;
                         while (!it.isDone()) {
                             Q_UINT8 *d = it.rawData();
-                            png_color c = palette[*(src++)];
-                            d[2] = c.red;
-                            d[1] = c.green;
-                            d[0] = c.blue;
-                            d[3] = Q_UINT8_MAX;
+                            d[0] = *(src++);
+                            if(transform) cmsDoTransform(transform, d, d, 1);
+                            if(hasalpha) d[1] = *(src++);
+                            else d[1] = Q_UINT8_MAX;
                             ++it;
                         }
-                        break;
                     }
-                    default: // TODO:support for 1,2 and 4 bits
-                        return KisImageBuilder_RESULT_UNSUPPORTED;
-                }
+                //FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits
+                    break;
+                case PNG_COLOR_TYPE_RGB:
+                case PNG_COLOR_TYPE_RGB_ALPHA:
+                    if(color_nb_bits == 16)
+                    {
+                        Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointer);
+                        while (!it.isDone()) {
+                            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                            d[2] = *(src++);
+                            d[1] = *(src++);
+                            d[0] = *(src++);
+                            if(transform) cmsDoTransform(transform, d, d, 1);
+                            if(hasalpha) d[3] = *(src++);
+                            else d[3] = Q_UINT16_MAX;
+                            ++it;
+                        }
+                    } else {
+                        Q_UINT8 *src = row_pointer;
+                        while (!it.isDone()) {
+                            Q_UINT8 *d = it.rawData();
+                            d[2] = *(src++);
+                            d[1] = *(src++);
+                            d[0] = *(src++);
+                            if(transform) cmsDoTransform(transform, d, d, 1);
+                            if(hasalpha) d[3] = *(src++);
+                            else d[3] = Q_UINT8_MAX;
+                            ++it;
+                        }
+                    }
+                    break;
+                case PNG_COLOR_TYPE_PALETTE:
+                    switch(color_nb_bits)
+                    {
+                        case 8:
+                        {
+                            Q_UINT8 *src = row_pointer;
+                            while (!it.isDone()) {
+                                Q_UINT8 *d = it.rawData();
+                                png_color c = palette[*(src++)];
+                                d[2] = c.red;
+                                d[1] = c.green;
+                                d[0] = c.blue;
+                                d[3] = Q_UINT8_MAX;
+                                ++it;
+                            }
+                            break;
+                        }
+                        default: // TODO:support for 1,2 and 4 bits
+                            return KisImageBuilder_RESULT_UNSUPPORTED;
+                    }
                 
-                break;
-            default:
-                return KisImageBuilder_RESULT_UNSUPPORTED;
+                    break;
+                default:
+                    return KisImageBuilder_RESULT_UNSUPPORTED;
+            }
         }
     }
     m_img->addLayer(layer, m_img->rootLayer(), 0);
