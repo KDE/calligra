@@ -172,8 +172,8 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
 
     // Read information about the png
     png_uint_32 width, height;
-    int color_nb_bits, color_type;
-    png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, NULL, NULL, NULL);
+    int color_nb_bits, color_type, interlace_type;
+    png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, NULL, NULL);
 
     // swap byteorder on little endian machines.
     #ifndef WORDS_BIGENDIAN
@@ -193,7 +193,11 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     png_charp profile_name, profile_data;
     int compression_type;
     png_uint_32 proflen;
-    
+    int number_of_passes = 1;
+
+    if (interlace_type == PNG_INTERLACE_ADAM7)
+        number_of_passes = png_set_interlace_handling(png_ptr);
+
     KoColorProfile* profile = 0;
     if(png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen))
     {
@@ -261,15 +265,11 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     }
     
     // Read image data
-    png_bytepp row_pointers = new png_bytep[height];
-    png_uint_32 row_index = 0;
+    png_bytep row_pointer = 0;
     try
     {
         png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-        for(; row_index < height; row_index++)
-        {
-            row_pointers[row_index] = new png_byte[rowbytes];
-        }
+        row_pointer = new png_byte[rowbytes];
     }
     catch(std::bad_alloc& e)
     {
@@ -277,10 +277,6 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
         // is invalid / to large.
         kDebug(41008) << "bad alloc: " << e.what() << endl;
         // Free only the already allocated png_byte instances.
-        for (png_uint_32 y = 0; y < row_index; y++) {
-            delete[] row_pointers[y];
-        }
-        delete [] row_pointers;
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return (KisImageBuilder_RESULT_FAILURE);
     }
@@ -293,11 +289,11 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     }
 //     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL );
 //     png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr); // By using this function libpng will take care of freeing memory
-    png_read_image(png_ptr, row_pointers);
+//    png_read_image(png_ptr, row_pointers);
     
     // Finish reading the file
-    png_read_end(png_ptr, end_info);
-    fclose(fp);
+//    png_read_end(png_ptr, end_info);
+//    fclose(fp);
     
     // Creating the KisImageSP
     if( ! m_img) {
@@ -315,102 +311,107 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
         }
     }
 
-    KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX);
-    for (png_uint_32 y = 0; y < height; y++) {
-        KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
-        switch(color_type)
-        {
-            case PNG_COLOR_TYPE_GRAY:
-            case PNG_COLOR_TYPE_GRAY_ALPHA:
-                if(color_nb_bits == 16)
-                {
-                    quint16 *src = reinterpret_cast<quint16 *>(row_pointers[y]);
-                    while (!it.isDone()) {
-                        quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
-                        d[0] = *(src++);
-                        if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[1] = *(src++);
-                        else d[1] = quint16_MAX;
-                        ++it;
-                    }
-                } else {
-                    quint8 *src = row_pointers[y];
-                    while (!it.isDone()) {
-                        quint8 *d = it.rawData();
-                        d[0] = *(src++);
-                        if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[1] = *(src++);
-                        else d[1] = quint8_MAX;
-                        ++it;
-                    }
-                }
-                //FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits
-                break;
-            case PNG_COLOR_TYPE_RGB:
-            case PNG_COLOR_TYPE_RGB_ALPHA:
-                if(color_nb_bits == 16)
-                {
-                    quint16 *src = reinterpret_cast<quint16 *>(row_pointers[y]);
-                    while (!it.isDone()) {
-                        quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
-                        d[2] = *(src++);
-                        d[1] = *(src++);
-                        d[0] = *(src++);
-                        if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[3] = *(src++);
-                        else d[3] = quint16_MAX;
-                        ++it;
-                    }
-                } else {
-                    quint8 *src = row_pointers[y];
-                    while (!it.isDone()) {
-                        quint8 *d = it.rawData();
-                        d[2] = *(src++);
-                        d[1] = *(src++);
-                        d[0] = *(src++);
-                        if(transform) cmsDoTransform(transform, d, d, 1);
-                        if(hasalpha) d[3] = *(src++);
-                        else d[3] = quint8_MAX;
-                        ++it;
-                    }
-                }
-                break;
-            case PNG_COLOR_TYPE_PALETTE:
-                switch(color_nb_bits)
-                {
-                    case 8:
+    KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
+    for (int i = 0; i < number_of_passes; i++)
+    {
+        for (png_uint_32 y = 0; y < height; y++) {
+            KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
+            png_read_rows(png_ptr, &row_pointer, NULL, 1);
+
+            switch(color_type)
+            {
+                case PNG_COLOR_TYPE_GRAY:
+                case PNG_COLOR_TYPE_GRAY_ALPHA:
+                    if(color_nb_bits == 16)
                     {
-                        quint8 *src = row_pointers[y];
+                        Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointer);
                         while (!it.isDone()) {
-                            quint8 *d = it.rawData();
-                            png_color c = palette[*(src++)];
-                            d[2] = c.red;
-                            d[1] = c.green;
-                            d[0] = c.blue;
-                            d[3] = quint8_MAX;
+                            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                            d[0] = *(src++);
+                            if(transform) cmsDoTransform(transform, d, d, 1);
+                            if(hasalpha) d[1] = *(src++);
+                            else d[1] = Q_UINT16_MAX;
                             ++it;
                         }
-                        break;
+                    } else {
+                        Q_UINT8 *src = row_pointer;
+                        while (!it.isDone()) {
+                            Q_UINT8 *d = it.rawData();
+                            d[0] = *(src++);
+                            if(transform) cmsDoTransform(transform, d, d, 1);
+                            if(hasalpha) d[1] = *(src++);
+                            else d[1] = Q_UINT8_MAX;
+                            ++it;
+                        }
                     }
-                    default: // TODO:support for 1,2 and 4 bits
-                        return KisImageBuilder_RESULT_UNSUPPORTED;
-                }
+                //FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits
+                    break;
+                case PNG_COLOR_TYPE_RGB:
+                case PNG_COLOR_TYPE_RGB_ALPHA:
+                    if(color_nb_bits == 16)
+                    {
+                        Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointer);
+                        while (!it.isDone()) {
+                            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                            d[2] = *(src++);
+                            d[1] = *(src++);
+                            d[0] = *(src++);
+                            if(transform) cmsDoTransform(transform, d, d, 1);
+                            if(hasalpha) d[3] = *(src++);
+                            else d[3] = Q_UINT16_MAX;
+                            ++it;
+                        }
+                    } else {
+                        Q_UINT8 *src = row_pointer;
+                        while (!it.isDone()) {
+                            Q_UINT8 *d = it.rawData();
+                            d[2] = *(src++);
+                            d[1] = *(src++);
+                            d[0] = *(src++);
+                            if(transform) cmsDoTransform(transform, d, d, 1);
+                            if(hasalpha) d[3] = *(src++);
+                            else d[3] = Q_UINT8_MAX;
+                            ++it;
+                        }
+                    }
+                    break;
+                case PNG_COLOR_TYPE_PALETTE:
+                    switch(color_nb_bits)
+                    {
+                        case 8:
+                        {
+                            Q_UINT8 *src = row_pointer;
+                            while (!it.isDone()) {
+                                Q_UINT8 *d = it.rawData();
+                                png_color c = palette[*(src++)];
+                                d[2] = c.red;
+                                d[1] = c.green;
+                                d[0] = c.blue;
+                                d[3] = Q_UINT8_MAX;
+                                ++it;
+                            }
+                            break;
+                        }
+                        default: // TODO:support for 1,2 and 4 bits
+                            return KisImageBuilder_RESULT_UNSUPPORTED;
+                    }
                 
-                break;
-            default:
-                return KisImageBuilder_RESULT_UNSUPPORTED;
+                    break;
+                default:
+                    return KisImageBuilder_RESULT_UNSUPPORTED;
+            }
         }
     }
-    m_img->addLayer(KisLayerSP(layer), m_img->rootLayer(), KisLayerSP(0));
+    m_img->addLayer(layer, m_img->rootLayer(), 0);
+
+    png_read_end(png_ptr, end_info);
+    fclose(fp);
 
     // Freeing memory
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-    
-    for (png_uint_32 y = 0; y < height; y++) {
-        delete[] row_pointers[y];
-    }
-    delete [] row_pointers;
-    
+
+    delete [] row_pointer;
+
     return KisImageBuilder_RESULT_OK;
 
 }
