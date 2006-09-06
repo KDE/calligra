@@ -31,6 +31,7 @@ class KWTextFrameSet;
 class KWTextFrame;
 class KoStyleManager;
 class QTextLayout;
+class QTextList;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -89,6 +90,7 @@ public:
     ListItemsHelper(QTextList *textList, const QFont &font);
     ~ListItemsHelper();
     void recalculate();
+    static bool needsRecalc(QTextList *textList);
 
 private:
     ListItemsPrivate *d;

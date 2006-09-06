@@ -714,12 +714,12 @@ void TestDocumentLayout::testInterruptedLists() {
     block = block.next(); // list item 3
     data = dynamic_cast<KoTextBlockData*> (block.userData());
     QVERIFY(data);
-    qDebug() << data->counterText();
+    //qDebug() << data->counterText();
     QVERIFY(data->counterText() == "1.");
 }
 
 void TestDocumentLayout::testNestedLists() {
-    initForNewTest("Root\nplants\nherbs\ncinnamon\ncurry\nroses\nhumans\nFrank\nAnkje\nOther\nSkip\n");
+    initForNewTest("Root\nplants\nherbs\ncinnamon\ncurry\nroses\nhumans\nFrank\nAnkje\nOther\nSkip\nLastItem");
 
     KoParagraphStyle h1;
     styleManager->add(&h1);
@@ -727,15 +727,22 @@ void TestDocumentLayout::testNestedLists() {
     styleManager->add(&h2);
     KoParagraphStyle h3;
     styleManager->add(&h3);
+    KoParagraphStyle h4;
+    styleManager->add(&h4);
 
     KoListStyle listStyle;
     listStyle.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevel(1);
     h1.setListStyle(listStyle);
     listStyle.setLevel(2);
+    listStyle.setListItemSuffix(".");
     h2.setListStyle(listStyle);
     listStyle.setLevel(3);
+    listStyle.setListItemSuffix("");
     h3.setListStyle(listStyle);
+    listStyle.setLevel(4);
+    listStyle.setDisplayLevel(2);
+    h4.setListStyle(listStyle);
 
     QTextBlock block = doc->begin().next();
     h1.applyStyle(block);
@@ -757,25 +764,31 @@ void TestDocumentLayout::testNestedLists() {
     h1.applyStyle(block);
     block = block.next();
     h3.applyStyle(block); // notice missing h2
+    block = block.next();
+    QVERIFY(block.isValid());
+    h4.applyStyle(block);
 
     layout->layout();
 
     block = doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
-    static const char* texts[] = { "1", "1.1", "1.1.1", "1.1.2", "1.2", "2", "2.1", "2.2", "3", "3.0.1" };
+    static const char* texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.0.1", "1.1" };
     int i=0;
     double indent=0.0;
     while(block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
-        qDebug() << "text: " << texts[i] << endl;
+        //qDebug() << "text: " << block.text();
+        //qDebug() << "expected: " << texts[i];
         QVERIFY(data);
         if(i < 3) {
-            qDebug() << "indent:" << data->counterWidth();
+            //qDebug() << "indent:" << data->counterWidth();
             QVERIFY (indent < data->counterWidth()); // deeper indent, larger width
             indent = data->counterWidth();
         }
+        //qDebug() << data->counterText();
         QVERIFY(data->counterText() == texts[i++]);
+        block = block.next();
     }
 }
 

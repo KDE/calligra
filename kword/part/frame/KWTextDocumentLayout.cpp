@@ -379,7 +379,6 @@ void KWTextDocumentLayout::layout() {
                             charStyle->fontWeight(), charStyle->fontItalic());
                 else {
                     QTextCursor cursor(m_block);
-                    cursor.setPosition(m_block.position()+1); // get font of first char as fallback
                     font = cursor.charFormat().font();
                 }
                 ListItemsHelper lih(textList, font);
@@ -438,6 +437,8 @@ public:
     QTextList *textList;
     QFontMetricsF fm;
     QFont displayFont;
+
+
 };
 
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font) {
@@ -457,9 +458,12 @@ void ListItemsHelper::recalculate() {
     // when true don't let non-numbering parags restart numbering
     bool consecutiveNumbering = format.boolProperty(KoListStyle::ConsecutiveNumbering);
     int index = format.intProperty(KoListStyle::StartValue);
-    int level = qMax(1, format.intProperty(KoListStyle::Level));
     QString prefix = format.stringProperty( KoListStyle::ListItemPrefix );
     QString suffix = format.stringProperty( KoListStyle::ListItemSuffix );
+    const int level = format.intProperty(KoListStyle::Level);
+    int displayLevel = format.intProperty(KoListStyle::DisplayLevel);
+    if(displayLevel > level || displayLevel == 0)
+        displayLevel = level;
     for(int i=0; i < d->textList->count(); i++) {
         QTextBlock tb = d->textList->item(i);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
@@ -488,11 +492,55 @@ void ListItemsHelper::recalculate() {
         }
 
         QString item("");
-        switch( static_cast<KoListStyle::Style> ( d->textList->format().style() )) {
-            case KoListStyle::DecimalItem:
-                item = QString::number(index);
+        if(displayLevel > 1) {
+            int checkLevel = level;
+            for(QTextBlock b = tb.previous(); displayLevel > 1 && b.isValid(); b=b.previous()) {
+                if(b.textList() == 0)
+                    continue;
+                QTextListFormat lf = b.textList()->format();
+                const int otherLevel  = lf.intProperty(KoListStyle::Level);
+                if(checkLevel <= otherLevel)
+                    continue;
+              /*if(needsRecalc(b->textList())) {
+                    TODO
+                } */
+                KoTextBlockData *otherData = dynamic_cast<KoTextBlockData*> (b.userData());
+Q_ASSERT(otherData);
+                if(displayLevel-1 < otherLevel) { // can't just copy it fully since we are
+                                                  // displaying less then the full counter
+                    item += otherData->partialCounterText();
+                    displayLevel--;
+                    checkLevel--;
+                    for(int i=otherLevel+1;i < level; i++) {
+                        displayLevel--;
+                        item += ".0"; // add missing counters.
+                    }
+                }
+                else { // just copy previous counter as prefix
+                    item += otherData->counterText();
+                    for(int i=otherLevel+1;i < level; i++)
+                        item += ".0"; // add missing counters.
+                    break;
+                }
+            }
+        }
+        KoListStyle::Style listStyle = static_cast<KoListStyle::Style> (
+                d->textList->format().style() );
+        if((listStyle == KoListStyle::DecimalItem || listStyle == KoListStyle::AlphaLowerItem ||
+                    listStyle == KoListStyle::UpperAlphaItem ||
+                    listStyle == KoListStyle::RomanLowerItem ||
+                    listStyle == KoListStyle::UpperRomanItem) &&
+                !(item.isEmpty() || item.endsWith('.') || item.endsWith(' '))) {
+            item += '.';
+        }
+        switch( listStyle ) {
+            case KoListStyle::DecimalItem: {
+                QString i = QString::number(index);
+                data->setPartialCounterText(i);
+                item += i;
                 width = qMax(width, d->fm.width(item));
                 break;
+            }
             case KoListStyle::AlphaLowerItem:
                 // TODO;
                 break;
@@ -531,8 +579,18 @@ void ListItemsHelper::recalculate() {
         QTextBlock tb = d->textList->item(i);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
         data->setCounterWidth(width);
-        //kDebug() << tb.text() << endl;
+        //kDebug() << data->counterText() << " " << tb.text() << endl;
         //kDebug() << "    setCounterWidth: " << width << endl;
     }
-    kDebug() << endl;
+    //kDebug() << endl;
+}
+
+// static
+bool ListItemsHelper::needsRecalc(QTextList *textList) {
+    Q_ASSERT(textList);
+    QTextBlock tb = textList->item(0);
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
+    if(data == 0)
+        return true;
+    return !data->hasCounterData();
 }
