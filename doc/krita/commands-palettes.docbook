@@ -31,9 +31,9 @@ current tool.</para>
 </screenshot>
 </para>
 <para>This tab offers you two settings. With the spinbox, slider, and
-<guibutton>1:1</guibutton> at the bottom, you can set the zoom level for the
-document. The <guilabel>Exposure</guilabel> slider and textbox can be used to
-choose the exposure level for OpenEXR images. Furthermore, the
+<guibutton>1:1</guibutton> button at the bottom, you can set the zoom level
+for the document. The <guilabel>Exposure</guilabel> slider and textbox can be
+used to choose the exposure level for OpenEXR images. Furthermore, the
 <guilabel>X</guilabel> and <guilabel>Y</guilabel> labels indicate the current
 pointer position, with (0,0) being the top left corner of the canvas.</para>
 </sect3>
@@ -65,8 +65,7 @@ levels.</para>
 
 <para>Actually, there is no tab named like this, since the tab name changes to
 reflect the name of the currently selected tool. This tab shows the
-customization options available for some specific tools. Pan, Move and
-Zoom have no options, the others are discussed below.</para>
+customization options available for the tools that have them.</para>
 
 <sect4 id="commands-palettes-controlbox-tool-brush">
 <title><guilabel>Brush</guilabel></title>
