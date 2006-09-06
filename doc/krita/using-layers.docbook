@@ -24,7 +24,7 @@ transparency, since you cannot look through a layer which has no transparency.
 (&krita; works with opaqueness instead of transparency. A layer that is 100
 percent opaque is 0 percent transparent, and vice versa.) A layer higher in
 the stack gets applied later than one lower in the stack. For example, if your
-image contains four layers, numbered from 1 (lowest) to 3 (highest), the
+image contains four layers, numbered from 1 (lowest) to 4 (highest), the
 effect that layer number 4 adds to the image, is applied to the result from
 applying layers 1 through 3.
 </para><para>

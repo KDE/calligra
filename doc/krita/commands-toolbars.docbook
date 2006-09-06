@@ -360,8 +360,11 @@ to confirm the cropping operation.
 fileref="tool-perspectivetransform.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Perspective Transform</guilabel></term>
 <listitem><para>
-This tool allows you to change the perspective of an image.
-=== To be completed ===
+This tool allows you to change the perspective of an image. Designate the area
+which should become the new image by clicking at its top-left, top-right,
+bottom-right and bottom-left corners. The area given by these four corners
+will then be transformed so that the given corners become the corners of the
+actual image.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -431,8 +434,21 @@ somewhere in the image to see color information about that point in the
 fileref="tool-perspectivegrid.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Perspective Grid</guilabel></term>
 <listitem><para>
-You can create and edit a perspective grid with this tool.
-=== To be completed ===
+You can create and edit a perspective grid with this tool. Click the &LMB; and
+drag the mouse to indicate the first two corners of the grid, then click for
+the third and fourth corners. The outline of the grid is now shown and you can
+edit it if you are not completely happy. When you switch to a different tool,
+the perspective grid will be subdivided and shown as thin gray lines.
+</para>
+<note><para>If you only see three corners instead of four, you probably
+clicked instead of dragging initially. In this case you can still click the
+handle of your now combined first and second corners and drag it to get four
+separate corners.</para></note>
+<para>
+Clicking the <guilabel>Perspective Grid</guilabel> tool again later will allow
+you to modify the grid. You can hide or remove the grid by choosing the
+<guimenuitem>Hide Perspective Grid</guimenuitem> or <guimenuitem>Clear
+Perspective Grid</guimenuitem> options from the <guimenu>View</guimenu> menu.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -450,8 +466,9 @@ linkend="selections">the Selections chapter</link>.
 fileref="tool-eraseselection.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Erase Selection</guilabel></term>
 <listitem><para>
-This tool works almost the same as the <guilabel>Paint Selection</guilabel> tool, but a selection,
-if it exists at the mouse location, is removed instead of created.
+This tool works almost the same as the <guilabel>Paint Selection</guilabel>
+tool, but a selection, if it exists at the mouse location, is removed instead
+of created.
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -460,8 +477,8 @@ fileref="tool-selectrectangular.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Select Rectangular</guilabel></term>
 <listitem><para>
 You can use this tool to select rectangular areas. Operation is similar to the
-<guilabel>Rectangle</guilabel> tool, and &Shift;, &Ctrl; and &Alt; can be used like when painting
-rectangles.
+<guilabel>Rectangle</guilabel> tool, and &Shift;, &Ctrl; and &Alt; can be used
+like when painting rectangles.
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -469,9 +486,9 @@ rectangles.
 fileref="tool-selectelliptical.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Select Elliptical</guilabel></term>
 <listitem><para>
-You can use this tool to select elliptical areas. Operation is similar
-to the <guilabel>Ellipse</guilabel> tool, and &Shift;, &Ctrl; and &Alt; can be used like when
-painting ellipses.
+You can use this tool to select elliptical areas. Operation is similar to the
+<guilabel>Ellipse</guilabel> tool, and &Shift;, &Ctrl; and &Alt; can be used
+like when painting ellipses.
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -480,9 +497,9 @@ fileref="tool-selectpolygonal.png"
 format="PNG"></imagedata> </imageobject></inlinemediaobject> <guilabel>Select
 Polygonal</guilabel></term>
 <listitem><para>
-You can use this tool to select polygonal areas. Operation is similar to
-the <guilabel>Polygon</guilabel> tool, and &Shift;, &Ctrl; and &Alt; can be used like when painting
-polygons.
+You can use this tool to select polygonal areas. Operation is similar to the
+<guilabel>Polygon</guilabel> tool, and &Shift;, &Ctrl; and &Alt; can be used
+like when painting polygons.
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -492,9 +509,10 @@ format="PNG"></imagedata> </imageobject></inlinemediaobject> <guilabel>Select
 Outline</guilabel></term>
 <listitem><para>
 You can use this tool to select custom outlined areas. Click the &LMB; and drag
-with your mouse, like when painting with the <guilabel>Brush</guilabel> tool, to define the
-outline. When you release the mouse button, the outline will be finished with a
-straight line between the current position and the start position.
+with your mouse, like when painting with the <guilabel>Brush</guilabel> tool,
+to define the outline. When you release the mouse button, the outline will be
+finished with a straight line between the current position and the start
+position.
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -529,9 +547,18 @@ fileref="tool-selectmagnetic.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Magnetic Selection</guilabel></term>
 <listitem><para>
 With this tool you can easily select a visually distinct area. Click with the
-&LMB; and drag the mouse around the area that you want to select. If the area
+&LMB; and move the mouse around the area that you want to select. If the area
 has a well enough defined boundary, the selection will be drawn nicely around
-it.
+it. You will see a number of control points appear, which connect the various
+parts of the selection boundary.
+</para><para>
+If you want more control over the area that is selected, press &Ctrl; to
+switch to manual mode. You will now have to click for each control point.
+In manual mode, you can also move control points by clicking on them with the
+&LMB; and dragging with the mouse.
+</para><para>
+When you want to return to automatic mode, simply press &Ctrl; again. You can
+switch between these two modes as often as you like.
 </para></listitem></varlistentry>
 
 </variablelist>

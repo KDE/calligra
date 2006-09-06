@@ -30,12 +30,12 @@ current tool.</para>
 </mediaobject>
 </screenshot>
 </para>
-<para>This tab offers you two settings. In the <guilabel>Zoom:</guilabel>
-slider and textbox, you can set the zoom level for the document. The
-<guilabel>Exposure:</guilabel> slider and textbox can be used to choose the
-exposure level for OpenEXR images. Furthermore, the <guilabel>X</guilabel> and
-<guilabel>Y</guilabel> labels indicate the current pointer position, with
-(0,0) being the top left corner of the canvas.</para>
+<para>This tab offers you two settings. With the spinbox, slider, and
+<guibutton>1:1</guibutton> at the bottom, you can set the zoom level for the
+document. The <guilabel>Exposure</guilabel> slider and textbox can be used to
+choose the exposure level for OpenEXR images. Furthermore, the
+<guilabel>X</guilabel> and <guilabel>Y</guilabel> labels indicate the current
+pointer position, with (0,0) being the top left corner of the canvas.</para>
 </sect3>
 
 <sect3 id="commands-palettes-controlbox-histogram">
@@ -86,11 +86,11 @@ Zoom have no options, the others are discussed below.</para>
 </para>
 <para>There are three options available on this tab.
 </para><para>
-The <guilabel>Opacity:</guilabel> slider and spin box are used to set the 
+The <guilabel>Opacity</guilabel> slider and spin box are used to set the 
 opacity when drawing (opacity is the opposite of transparency, i.e. 100%
 opaque is 0% transparent, and vice versa).
 </para><para>
-In the <guilabel>Mode:</guilabel> drop down box, you can choose a drawing
+In the <guilabel>Mode</guilabel> drop down box, you can choose a drawing
 mode. This changes the actual effect that results from drawing on the image
 (for example, only changing the saturation or lightness).
 </para><para>
@@ -149,6 +149,14 @@ options: the current foreground color, background color or pattern is
 used.</para>
 </sect4>
 
+<sect4 id="commands-palettes-controlbox-tool-bezier">
+<title><guilabel>Bezier</guilabel></title>
+<para>See <link
+linkend="commands-palettes-controlbox-tool-brush">Brush</link> for the
+description of <guilabel>Mode</guilabel> and <guilabel>Opacity</guilabel>.</para>
+</sect4>
+
+
 <sect4 id="commands-palettes-controlbox-tool-ellipse">
 <title><guilabel>Ellipse</guilabel></title>
 <para>The same options as for <link
@@ -190,10 +198,10 @@ are available here.</para>
 linkend="commands-palettes-controlbox-tool-rectangle">Rectangle</link> are
 available here, as well as two options specific to this tool.
 </para><para>
-The <guilabel>Vertices:</guilabel> drop down box is used to set the amount
+The <guilabel>Vertices</guilabel> drop down box is used to set the amount
 of vertices (points) in the star.
 </para><para>
-The <guilabel>Ratio:</guilabel> setting defines the shape of the
+The <guilabel>Ratio</guilabel> setting defines the shape of the
 star. A ratio of 0% will create a star with no inner area (when drawing the
 star, the two lines that make up a star point, overlap). Increasing the ratio
 will slowly make the star more outlined (the two lines are <quote>pulled
@@ -203,9 +211,32 @@ apart</quote>). A star with a ratio of 100% is a regular polygon.
 
 <sect4 id="commands-palettes-controlbox-tool-duplicate">
 <title><guilabel>Duplicate</guilabel></title>
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Duplicate</guilabel></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-duplicate.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Duplicate</guilabel></phrase>
+</textobject>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Duplicate</guilabel></para></caption>
+</mediaobject>
+</screenshot>
+</para>
 <para>The same options as for <link
 linkend="commands-palettes-controlbox-tool-line">Line</link>
-are available here.</para>
+are available here. In addition, there are three other options.
+</para><para>
+With the <guilabel>Healing</guilabel> and
+<guilabel>Healing radius</guilabel> options, you can specify that the
+duplication should not copy the colors, but only the <quote>structure</quote>
+of the source area.
+</para><para>
+If you enable the <guilabel>Correct the perspective</guilabel> option, the
+duplicate tool will follow your perspective grid.
+</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-paintwithfilters">
@@ -246,11 +277,11 @@ chapter</link> for more information.</para> </sect4>
 </mediaobject>
 </screenshot>
 </para>
-<para>The <guilabel>Move X:</guilabel> and <guilabel>Move Y:</guilabel>
+<!-- >The <guilabel>Move X</guilabel> and <guilabel>Move Y</guilabel>
 spin boxes show, and can be used to set, the displacement of the layer or
-selection. The same applies to <guilabel>Scale X:</guilabel> and <guilabel>Scale
-Y:</guilabel> for the scaling of the current layer or selection. Finally, 
-you can decide upon a transformation algorithm in the
+selection. The same applies to <guilabel>Scale X</guilabel> and <guilabel>Scale
+Y</guilabel> for the scaling of the current layer or selection. Finally, -->
+<para>You can choose which transformation algorithm to use in the
 <guilabel>Filter</guilabel> drop down box.</para>
 </sect4>
 
@@ -271,9 +302,9 @@ you can decide upon a transformation algorithm in the
 </screenshot>
 </para>
 <para>Set the corner coordinates of the area that should remain with the
-four spin boxes <guilabel>X:</guilabel>, <guilabel>Y:</guilabel>,
-<guilabel>Width:</guilabel> and <guilabel>Height:</guilabel>. You can also
-fill in <guilabel>Ratio:</guilabel> to determine the Y/X ratio. Check one of
+four spin boxes <guilabel>X</guilabel>, <guilabel>Y</guilabel>,
+<guilabel>Width</guilabel> and <guilabel>Height</guilabel>. You can also
+fill in <guilabel>Ratio</guilabel> to determine the Y/X ratio. Check one of
 the checkboxes to have the respective value remain constant while changing the
 size of the area. The drop down box can be used to select whether the entire
 image or only the current layer should be cropped. Clicking the
@@ -301,21 +332,21 @@ outside the area in the image.</para>
 linkend="commands-palettes-controlbox-tool-brush">Brush</link>
 are available here, as are a couple of other options.
 </para><para>
-The setting in the <guilabel>Threshold:</guilabel> slider and spin box
+The setting in the <guilabel>Threshold</guilabel> slider and spin box
 determines how near the color of a point should be to the color of the
 starting point of the fill, in order for the fill to spread out over the
 former point. A higher threshold will therefore fill areas that have less
 similar colors, a lower threshold limits the spread.
 </para><para>
-By checking the <guilabel>Use pattern</guilabel> checkbox you can choose to
-fill with the currently selected pattern instead of with the foreground color.
-</para><para>
-Checking the <guilabel>Sample merged</guilabel> checkbox changes the behavior
-of the fill: the extent to which the fill is done, is determined from the
-entire image instead of the current layer only.
-</para><para>
 If you check the <guilabel>Fill entire selection</guilabel> checkbox, the
 entire selection will be filled instead of only the neighboring area.
+</para><para>
+Checking the <guilabel>Limit to current layer</guilabel> checkbox changes the
+behavior of the fill: the extent to which the fill is done, is determined from
+the current layer only instead of the entire image.
+</para><para>
+By checking the <guilabel>Use pattern</guilabel> checkbox you can choose to
+fill with the currently selected pattern instead of with the foreground color.
 </para>
 </sect4>
 
@@ -339,11 +370,11 @@ entire selection will be filled instead of only the neighboring area.
 linkend="commands-palettes-controlbox-tool-brush">Brush</link>
 are available here, as are a couple of other options.
 </para><para>
-The <guilabel>Shape:</guilabel> drop down box can be used to select the gradient
+The <guilabel>Shape</guilabel> drop down box can be used to select the gradient
 type: <guilabel>Linear</guilabel>, <guilabel>Bi-Linear</guilabel>, <guilabel>Radial</guilabel>, 
 <guilabel>Square</guilabel>, <guilabel>Conical</guilabel> and <guilabel>Conical Symmetric</guilabel>.
 </para><para>
-The <guilabel>Repeat:</guilabel> option determines whether the gradient is
+The <guilabel>Repeat</guilabel> option determines whether the gradient is
 repeated if it does not fill the entire image. With <guilabel>None</guilabel>, the colors on the
 ends of the gradient are used to fill the remaining space. With <guilabel>Forwards</guilabel>, the
 gradient is normally repeated (connecting the back end of one occurrence with
@@ -354,7 +385,7 @@ and back to back).
 Check the <guilabel>Reverse</guilabel> checkbox to have the gradient drawn
 reversed (from back to front).
 </para><para>
-The final setting is <guilabel>Anti-alias threshold:</guilabel>, which
+The final setting is <guilabel>Anti-alias threshold</guilabel>, which
 determines how smooth the gradient will become.
 </para>
 </sect4>
@@ -409,7 +440,7 @@ If the <guilabel>Update current color</guilabel> checkbox is checked, then the
 current foreground color (when clicking with the &LMB;) or background color
 (when clicking with the &RMB;) is set to the picked color.
 </para><para>
-The checkbox <guilabel>Add to palette:</guilabel> and the accompanying
+The checkbox <guilabel>Add to palette</guilabel> and the accompanying
 dropdown box determine whether the picked color should be added to an existing
 palette. Check the checkbox, and choose the desired palette from the list, if
 you want to do so.
@@ -418,7 +449,7 @@ The checkbox <guilabel>Show colors as percentages</guilabel> switches the
 range of color values displayed from the <quote>normal</quote> range (e.g. 0 to
 255) to a scaled value between 0% and 100%.
 </para><para>
-With the <guilabel>Sample radius:</guilabel> option, you can choose the area
+With the <guilabel>Sample radius</guilabel> option, you can choose the area
 size to use when picking the color. A radius of one just picks one pixel,
 larger radii will make the picker average over the colors of the circle-shaped
 area with the chosen radius that is centered around the chosen pixel.
@@ -443,7 +474,7 @@ area with the chosen radius that is centered around the chosen pixel.
 </para>
 <para>The <guilabel>Paint Selection</guilabel>, <guilabel>Erase Selection</guilabel>,
 <guilabel>Select Rectangular</guilabel>, <guilabel>Select Elliptical</guilabel>, <guilabel>Select Polygonal</guilabel> and <guilabel>Select Outline</guilabel> tools have one option:
-the <guilabel>Action:</guilabel> to perform. You can choose between <guilabel>Add</guilabel> to, or
+the <guilabel>Action</guilabel> to perform. You can choose between <guilabel>Add</guilabel> to, or
 <guilabel>Subtract</guilabel> from the selection.</para>
 </sect4>
 
@@ -463,11 +494,11 @@ the <guilabel>Action:</guilabel> to perform. You can choose between <guilabel>Ad
 </mediaobject>
 </screenshot>
 </para>
-<para>The <guilabel>Action:</guilabel> is the same as discussed with the
+<para>The <guilabel>Action</guilabel> is the same as discussed with the
 <link linkend="commands-palettes-controlbox-tool-select">Select
 operations</link>.
 </para><para>
-The slider and spin box at <guilabel>Fuzziness:</guilabel> determine how near
+The slider and spin box at <guilabel>Fuzziness</guilabel> determine how near
 colors must be to the color at the clicked point to be added to the selection.
 </para><para>
 When the <guilabel>Sample merged</guilabel> checkbox is checked, the
@@ -478,10 +509,37 @@ of at the current layer.
 
 <sect4 id="commands-palettes-controlbox-tool-selectsimilar">
 <title><guilabel>Similar Select</guilabel></title>
-<para>The <guilabel>Action:</guilabel> and <guilabel>Fuzziness:</guilabel> 
+<para>The <guilabel>Action</guilabel> and <guilabel>Fuzziness</guilabel> 
 options are the same as with <link
 linkend="commands-palettes-controlbox-tool-selectcontiguous">Select
 contiguous</link>. </para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-selectmagnetic">
+<title><guilabel>Select Magnetic</guilabel></title>
+<para>
+<screenshot>
+<screeninfo>The <guilabel>Tool</guilabel> tab for <guilabel>Select Magnetic</guilabel></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-selectmagnetic.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Tool</guilabel> tab for <guilabel>Select Magnetic</guilabel></phrase>
+</textobject>
+<caption><para>The <guilabel>Tool</guilabel> tab for <guilabel>Select Magnetic</guilabel></para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>The <guilabel>Action</guilabel> option is the same as with the other
+<link linkend="commands-palettes-controlbox-tool-select">Select tools</link>.
+</para>
+<para>
+The <guilabel>Distance</guilabel> option determines the maximal distance at
+which boundaries to attach to, are searched for. The <guibutton>To
+Selection</guibutton> button has the same effect as double-clicking the &LMB;:
+the selection is finished.
+</para>
 </sect4>
 
 </sect3>
@@ -582,8 +640,8 @@ altering the corresponding value.
 </para>
 <para>On this tab, you can choose a gray value (indicated with a K for Key,
 the usual designation for black).</para>
-<para>The gray value can be chosen on a scale from 0 (pure black) to 255
-(pure white).</para>
+<para>The gray value can be chosen on a scale from 0 (pure white) to 255
+(pure black).</para>
 </sect3>
 
 <sect3 id="commands-palettes-colors-palettes">
