@@ -20,7 +20,7 @@
 </li>
 <li><p>
 <a name="widget_containers"></a>
-<b>Container widget</b> - a widget that can <b>contain</b> other widgets within its area. For example, frame widget or tab widget are containers. Form's surface itself is a container as well. Command button cannot be called as container because it is not possible to insert a widget inside it. In more complex cases, container widget can inserted inside a container, so nesting is possible.
+<b>Container widget</b> - a widget that can <b>contain</b> other widgets within its area. For example, frame widget or tab widget are containers. Form's surface itself is a container as well. Command button cannot be called as container because it is not possible to insert a widget inside it. In more complex cases, container widget can be inserted inside a container, so nesting is possible.
 
  <br><img src="img/05_04_01_widget_containers.png">
  <br>Example container widgets<br><br>
@@ -35,10 +35,10 @@
 <p>
 In chapter <a href="05_02_00_entering_data_into_tables.html">5.2</a> you learned about how to enter data directly into tables using their data sheet view. However, in many cases forms are better suited for data entry:
 <ul>
-<li>Table can contain too many columns to display them on your screen. Form can display such data using multiple rows.</li>
+<li>Table can contain too many columns to display them on your screen. Form can display such a data using multiple rows.</li>
 <li>Form allows to visually split data fields into logical groups, thus increasing readability.
-Labels with additional information can be inserted to give users more hints how to use the form or what given data fields mean.</li>
-<li>Command buttons can be used within forms for commonly used commands so users can use forms in a similar way as standalone applications they know.</li>
+Labels with additional information can be inserted to give users more hints on how to use the form or what given data fields mean.</li>
+<li>Command buttons can be used within forms for commonly used commands so users can use forms in a similar way as a standalone applications they know.</li>
 <li>In data sheet view displaying multi-row data text fields or images is as easy as within forms.</li>
 </ul>
 </p>
@@ -53,7 +53,7 @@ As with table or query design, you are able to use <em>Data View</em> and <em>De
 To create a new empty form, select <em>Insert</em> -&gt; <nobr><img src="icons/form_newobj.png" class="icon"> <em>Form</em></nobr> from the Menubar. Optionally, you can use <nobr><img src="icons/form_newobj.png" class="icon"> <em>New Form</em></nobr> command from drop-down button on the Project Navigator's toolbar.
 </li>
 <li>
-A new window with empty rectangular from surface will appear. Beyond the surface outer area is placed, separated from the surface using borders. You can move the borders to resize the form surface.
+A new window with empty rectangular from surface will appear. Beyond the form surface outer area is placed, separated from the surface using borders. You can move the borders to resize the form surface.
 The surface is covered with a grid painted using dots which simplifies accurate widgets positioning.<br><br>
  <br><img src="img/05_04_03_new_empty_form.png">
  <br>A window with design of a new form<br><br>
@@ -169,7 +169,7 @@ You have assigned form's data source. Now you need to do specify field widget's 
 </ol>
 </p>
 <p>
-You can now save the form's design (this is not mandatory however to test the form in action). To save, click the <nobr><img src="icons/filesave.png" class="icon"> <em>Save object changes</em></nobr> toolbar button or use the <nobr><img src="icons/filesave.png" class="icon"> <em>File -&gt; Save</em></nobr> menu command. Upon saving you will be asked for entering the form's name. Enter <em>Persons</em> as caption and click <em>OK</em> button. Form's name will be filled automatically.
+You can now save the form's design (this is not mandatory to test the form in action). To save, click the <nobr><img src="icons/filesave.png" class="icon"> <em>Save object changes</em></nobr> toolbar button or use the <nobr><img src="icons/filesave.png" class="icon"> <em>File -&gt; Save</em></nobr> menu command. Upon saving you will be asked for entering the form's name. Enter <em>Persons</em> as caption and click <em>OK</em> button. Form's name will be filled automatically.
 </p>
 <p>
 It is right moment for testing your form. Click the <nobr><img src="icons/state_data.png" class="icon"> <em>Switch to data view</em></nobr> toolbar button. Unless you made a mistake when while entering data sources, you should see form's fields filled with data from the <em>persons</em> table.<br>
@@ -196,7 +196,7 @@ It is right moment for testing your form. Click the <nobr><img src="icons/state_
 To make it easier for the form's user to identify meaning of every field widget, these should have added text labels with appropriate titles. To create text labels <nobr><img src="icons/label.png" class="icon"> <em>Label</em></nobr> widget is used.
 </p>
 <p>
-Insert three text label widgets onto the form, placing them on the left hand of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting every new label, a text cursor appears inside where you can enter desired title. Enter consecutively: <em>Name</em>, <em>Surname</em> and <em>Street</em>. Additionally, on the top of the form insert another label displaying name of the form, i.e. &quot;Persons&quot;. Enlarge this label's size and set larger font for it using <a href="aa_00_00_menu.html#menu_format_font">Format -&gt; Font</a> menu command.
+Insert three text label widgets onto the form, placing them on the left hand of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting every new label, a text cursor appears inside where you can enter desired title. Enter consecutively: <em>Name</em>, <em>Surname</em> and <em>Street</em>. Additionally, on the top of the form insert another label displaying name of the form, i.e. &quot;Persons&quot;. Enlarge this label's size and set larger font using <a href="aa_00_00_menu.html#menu_format_font">Format -&gt; Font</a> menu command.
 </p>
 <p>
  <br><img src="img/05_04_06_form_with_labels.png">
@@ -221,8 +221,8 @@ Most actions can be assigned to form button. Assigned action is executed after b
 <p>
 To assign action:
 <ol>
-<li>Switch to form's design view if you have not done so.</li>
-<li>Select the existing button widget by clicking it or put a new button widget onto the form. If you inserted a new button, enter its title and press <kbd>Enter</kbd> key.</li>
+<li>Switch to form's design view if you have not done yet.</li>
+<li>Select the existing button widget by clicking on it or put a new button widget onto the form. If you inserted a new button, enter its title and press <kbd>Enter</kbd> key.</li>
 <li>Click the button widget with the &RMB; to display context menu.</li>
 <li>From the context menu select <nobr><img src="icons/form_action.png" class="icon"> <em>Assign action...</em> command.</li>
 <li>An <em>Assigning Action to Command Button</em> dialog window will appear presenting a list of available actions. One of the actions is selected if the widget already has action assigned. Otherwise the <em>Action type</em> drop down list has <em>No type</em> item selected.</li>
@@ -237,7 +237,7 @@ To assign action:
 </p>
 
 <p>
-After switching to the form's <em>data view</em> you can try whether the action works. For example, if you assigned &quot;Delete Row&quot; action, clicking the button, the current database row will be deleted, quite similarly to executing <em>Edit &gt; Delete Row</em> menu command (depending on your settings you may be asked to confirm the removal).
+After switching to the form's <em>data view</em> you can try whether the action works. For example, if you assigned &quot;Delete Row&quot; action, clicking the button, the current database row will be deleted, similarly to executing <em>Edit &gt; Delete Row</em> menu command (depending on your settings you may be asked to confirm the removal).
 </p>
 <H4>Notes</H4>
 <ul>
@@ -327,7 +327,7 @@ For the following example, the spring has been inserted on the left hand of the 
  <br>Horizontal layout containing a spring and a text label<br><br>
 </p>
 <p>
-To make springs work you need create a global widget layout i.e. a layout for the form itself. Then, springs can use edges of the form as a boundary for expanding.
+To make springs work you need to create a global widget layout i.e. a layout for the form itself. Then, springs can use edges of the form as a boundary for expanding.
 </p>
 
 <a name="advanced_form_layouts"></a>
@@ -370,7 +370,7 @@ To remove widget layout without removing widgets, perform one of these actions:
 </p>
 
 <H4>Notes</H4>
-<p>Removing widget layout using the <em>Break Layout</em> command will not remove widgets contained in th layout. If you want to remove the widgets as well, just select the layout by clicking on its border and press <kbd>Delete</kbd> key or use <nobr><em>Edit -&gt <img src="icons/editdelete.png" class="icon"> Delete</em></nobr> menu command or context menu command.
+<p>Removing widget layout using the <em>Break Layout</em> command will not remove widgets contained in the layout. If you want to remove the widgets as well, just select the layout by clicking on its border and press <kbd>Delete</kbd> key or use <nobr><em>Edit -&gt <img src="icons/editdelete.png" class="icon"> Delete</em></nobr> menu command or context menu command.
 </p>
 
 <a name="layout_size_types"></a>
@@ -470,9 +470,9 @@ There are also additional commands available:
 <H3>5.4.11. Setting the tab order</H3>
 <!-- TODO move this introduction to a special section about properties related to focusing -->
 <p>
-<em>Widget's focus</em> determines widget's activity available using keyboard. Focus is related to widgets displayed in form's data view. Exactly one form widget can have focus at a time. Most frequent use of focus is text entry (when a given text field is active, i.e. it is <em>focused</em>). Other example is a button widget - when focused, it is possible to &quot;press&quot; it using the <kbd>Enter</kbd> or <em>Space</em> key instead of a mouse button.
+<em>Widget's focus</em> determines widget's activity available using keyboard. Focus is related to widgets displayed in form's data view. Exactly one form widget can have focus at the same time. Most frequent use of focus is text entry (when a given text field is active, i.e. it is <em>focused</em>). Other example is a button widget - when focused, it is possible to &quot;press&quot; it using the <kbd>Enter</kbd> or <em>Space</em> key instead of a mouse button.
 </p>
-<p>There are a few methods of making the widgets active (moving the focus to the widget): clicking with a mouse button, rotating the mouse wheel over the widget, using the <em>Tab</em> key. The latter method is often used because of it's speed and convenience for users. Availability of the focusing methods is controlled by <em>Focus Policy</em> property of a given widget.
+<p>There are a few methods of making the widgets active (moving the focus to the widget): clicking with a mouse button, rotating the mouse wheel over the widget, or using the <em>Tab</em> key. The latter method is often used because of it's speed and convenience for users. Availability of the focusing methods is controlled by <em>Focus Policy</em> property of a given widget.
 </p>
 <p>
 There is relationship between focusing (activating) widgets using <em>Tab</em> key and <b>tab order</b> setting of a form. After pressing the <em>Tab</em> key, the <b>next</b> widget should be focused, so the form should know about the <em>tab order</em>.</p>
@@ -488,7 +488,7 @@ To alter table order for a form's widget:
 
 <p>
 The window contains a list with two columns: the first column displays widget names, the second - types of the widgets. To make it easier to recognize meaning of the names and types for the user, icons related to the types are also displayed. The list contains only widgets having focus policy allowing to use the <kbd>Tab</kbd> key. 
-The window allows you can to change tab order or set the automatic tab order.
+The window allows you to change tab order or set the automatic tab order.
 </p>
 </li>
 <li><p>
