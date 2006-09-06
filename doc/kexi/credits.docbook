@@ -7,7 +7,7 @@
 <title>Credits and License</title>
 
 <para>
-  &kexi; Copyright 2002-2006 The &kexi; Team:
+  &kexi; Copyright 2002-2006 The &kexi; Team
   <itemizedlist>
     <title>&kexi; Developers:</title>
     <listitem>
@@ -50,8 +50,7 @@
 </para>
 
 <para>
-  Documentation Copyright &copy; 2004-2005
-  Martin A. Ellis <email>martin.ellis@kdemail.net</email>, 
+  Documentation by Martin A. Ellis <email>martin.ellis@kdemail.net</email>, 
   Jaroslaw Staniek <email>js@iidea.pl</email> 
   with contributions from Anne-Marie Mahfouf and Raphael Langerhorst.
 </para>
