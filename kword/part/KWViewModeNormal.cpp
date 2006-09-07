@@ -51,10 +51,12 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
             vm.clipRect = intersection.toRect();
             answer.append(vm );
         }
-        if(page->pageSide() == KWPage::Left)
-            offsetX = page->width() + GAP;
-        else
-            offsetX = 0.0;
+        if(m_pageSpreadMode) {
+            if(page->pageSide() == KWPage::Left)
+                offsetX = page->width() + GAP;
+            else
+                offsetX = 0.0;
+        }
     }
 
     return answer;
@@ -108,10 +110,10 @@ void KWViewModeNormal::updatePageCache() {
         double top = 0.0;
         foreach(KWPage *page, canvas()->document()->pageManager()->pages()) {
             m_pageTops.append(top);
-            top += page->height();
+            top += page->height() + GAP;
             width = qMax(width, page->width());
-            bottom = top;
         }
+        bottom = top;
     }
     m_contents = QSizeF(width, bottom);
 }
