@@ -1,6 +1,5 @@
 project(karbon)
 
-find_package(LCMS)
 
 #Set the correct compiler options
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
