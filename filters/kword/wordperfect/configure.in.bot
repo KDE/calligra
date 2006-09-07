@@ -1,8 +1,0 @@
-if test -z "$LIBWPD_LIBS"; then
-  echo ""
-  echo "You're missing libwpd 0.8 or newer. KWord's WordPerfect import filter will "
-  echo "not be compiled. You can download libwpd from http://libwpd.sf.net or "
-  echo "install it from appropriate binary package."
-  echo ""
-  all_tests=bad
-fi
