@@ -32,6 +32,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_progress_display_interface.h>
+#include <kis_iterators_pixel.h>
 
 #include "kis_png_converter.h"
 
@@ -48,7 +49,7 @@ KisPNGExport::~KisPNGExport()
 
 KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kdDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
+    kDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
     
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
@@ -63,11 +64,14 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         return KoFilter::NotImplemented;
 
     
-    KDialogBase* kdb = new KDialogBase(0, "", false, i18n("PNG Export Options"), KDialogBase::Ok | KDialogBase::Cancel);
+    KDialog* kdb = new KDialog(0);
+    kdb->setCaption( i18n("PNG Export Options") );
+    kdb->setModal(false);
     
     KisImageSP img = output->currentImage();
-    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
-    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
+    KisPaintDeviceSP pd;
+    pd = new KisPaintDevice(*img->projection());
+    KisPaintLayerSP l = new KisPaintLayer(img, QLatin1String("projection"), OPACITY_OPAQUE, pd);
  
     KisRectIteratorPixel it = l->paintDevice()->createRectIterator(0,0, img->width(), img->height(), false);
     KisColorSpace* cs = l->paintDevice()->colorSpace();
@@ -100,7 +104,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    KURL url;
+    KUrl url;
     url.setPath(filename);
 
     KisImageSP img = output->currentImage();

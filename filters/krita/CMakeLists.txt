@@ -18,8 +18,9 @@ if(TIFF_FOUND AND LIBEXIF_FOUND)
 	add_subdirectory(tiff)
 endif(TIFF_FOUND AND LIBEXIF_FOUND)
 
+message(STATUS "someone needs to port the krita plugins!")
 if(PNG_FOUND)
-    add_subdirectory(png)
+#    add_subdirectory(png)
 endif(PNG_FOUND)
 
 if(OPENEXR_FOUND)
@@ -30,33 +31,3 @@ if(IMAGEMAGICK_FOUND)
 #	add_subdirectory(magick)
 endif(IMAGEMAGICK_FOUND)
 
-
-
-#original Makefile.am contents follow:
-
-#if have_openexr
-#OPENEXR_SUBDIR=openexr
-#endif
-#
-#if include_imagemagick_filter
-#IMAGEMAGICK_SUBDIR=magick
-#endif
-#
-#if have_png
-#PNG_SUBDIR=png
-#endif
-#
-#if include_jpeg_filter
-#JPEG_SUBDIR=jpeg
-#endif
-#
-#if include_tiff_filter
-#TIFF_SUBDIR=tiff
-#endif
-#
-#if have_exif
-#LIBKISEXIF=libkisexif
-#endif
-#
-#SUBDIRS = $(IMAGEMAGICK_SUBDIR) $(OPENEXR_SUBDIR) $(PNG_SUBDIR) $(LIBKISEXIF) \
-#	$(JPEG_SUBDIR) $(TIFF_SUBDIR) raw 
