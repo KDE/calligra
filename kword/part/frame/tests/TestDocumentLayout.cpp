@@ -527,7 +527,7 @@ void TestDocumentLayout::testPageBreak() {
 }
 
 void TestDocumentLayout::testBasicList() {
-    initForNewTest("Base\nListItem\nListItem2\nNormal\nNormal");
+    initForNewTest("Base\nListItem\nListItem2: The quick brown fox jums over the lazy dog.\nNormal\nNormal");
 
     KoParagraphStyle style;
     QTextBlock block = doc->begin();
@@ -550,11 +550,13 @@ void TestDocumentLayout::testBasicList() {
     block = doc->begin().next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 2
-    QCOMPARE(blockLayout->lineAt(0).x(), 15.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 12.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 3
-    QCOMPARE(blockLayout->lineAt(0).x(), 15.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 12.0);
+    QVERIFY(blockLayout->lineCount() > 1);
+    QCOMPARE(blockLayout->lineAt(1).x(), 12.0); // make sure not only the first line is indented
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 4

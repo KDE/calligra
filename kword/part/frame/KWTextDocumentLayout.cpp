@@ -217,7 +217,7 @@ void KWTextDocumentLayout::layout() {
 
         double x() {
             double result = (m_newParag?m_format.textIndent():0.0) + m_format.leftMargin();
-            if(m_newParag && m_block.textList()) { // is a listItem
+            if(m_block.textList()) { // is a listItem
                 double indent = listIndent();
                 KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (m_block.userData());
                 Q_ASSERT(data);
@@ -574,7 +574,7 @@ Q_ASSERT(otherData);
         data->setCounterText(prefix + item + suffix);
         index++;
     }
-    width += d->fm.width(" "+ prefix + suffix); // same for all
+    width += d->fm.width(prefix + suffix); // same for all
     for(int i=0; i < d->textList->count(); i++) {
         QTextBlock tb = d->textList->item(i);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
