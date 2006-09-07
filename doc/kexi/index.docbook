@@ -9,6 +9,7 @@
   <!ENTITY intro SYSTEM "intro.docbook">
   <!ENTITY basics SYSTEM "basics.docbook">
   <!ENTITY building SYSTEM "building.docbook">
+  <!ENTITY designing_forms SYSTEM "designing_forms.docbook">
   <!ENTITY configuration SYSTEM "configuration.docbook">
   <!ENTITY credits SYSTEM "credits.docbook">
   <!ENTITY database SYSTEM "database.docbook">
