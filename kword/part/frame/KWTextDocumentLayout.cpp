@@ -232,7 +232,7 @@ void KWTextDocumentLayout::layout() {
         }
 
         /// return the y offset of the document at start of shape.
-        double docOffsetInShape() {
+        double docOffsetInShape() const {
             return m_data->documentOffset();
         }
 
