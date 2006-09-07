@@ -13,14 +13,19 @@ Canvas:
 - we should improve the canvas so that we can center the canvas vertically too
 - zooming support needs to be added to the gui (e.g. the view toolbar, zooming with mouse wheel, etc. )
 - we should add/replace the canvas at the document docker (bird eye view)
-- port drawing of page borders and the grid
+- port drawing of page borders
 
 KoPathShape:
 ------------
 
-- a KoPathShape is needed (work is underway as part of a soc work)
-- we need it fast since it is a somwhat central part of karbon as all the other shapes are derived from that
 - make sure it supports all we had with the old karbon path
+- some things that are currently lacking (taken from inkscape):
+  - inserting new points
+  - joining selected end nodes
+  - joining selected end nodes with new segment
+  - remove a segment
+  - break path at selected nodes
+  - make selected segments curves/lines
 
 Layers:
 -------
