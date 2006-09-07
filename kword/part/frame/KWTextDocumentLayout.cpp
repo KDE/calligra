@@ -231,6 +231,11 @@ void KWTextDocumentLayout::layout() {
             return m_y;
         }
 
+        /// return the y offset of the document at start of shape.
+        double docOffsetInShape() {
+            return m_data->documentOffset();
+        }
+
         /// when a line is added, update internal vars.  Return true if line does not fit in shape
         bool addLine(const QTextLine &line) {
             double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
@@ -422,6 +427,10 @@ void KWTextDocumentLayout::layout() {
             line.setLineWidth(state.width());
             line.setPosition(QPointF(state.x(), state.y()));
         }
+
+        QRectF repaintRect = line.rect();
+        repaintRect.setY(repaintRect.y() - state.docOffsetInShape());
+        state.shape->repaint(repaintRect);
     }
 }
 
