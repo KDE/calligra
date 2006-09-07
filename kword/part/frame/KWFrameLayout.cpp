@@ -184,7 +184,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
     const int columns = m_pageSettings->columns().columns/* *
         (page->pageSide() == KWPage::PageSpread ? 2: 1)*/;
     int columnsCount=columns;
-    KWTextFrame *main[columnsCount], *footer=0, *endnote=0, *header=0, *footnote=0;
+    KWTextFrame **main, *footer=0, *endnote=0, *header=0, *footnote=0;
+    main = new KWTextFrame*[columnsCount];
     main[0] = 0;
     QRectF pageRect(left, page->offsetInDocument(), width, page->height());
     foreach(KWFrame *frame, framesInPage( pageRect )) {
@@ -292,6 +293,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
                 QPointF(left + layout.ptLeft, resultingPositions[9]));
         footer->shape()->resize( QSizeF(textWidth, resultingPositions[10] - resultingPositions[9]));
     }
+    delete [] main;
 // TODO footnotes, endnotes
 }
 
