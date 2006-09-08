@@ -88,6 +88,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
     wdg->alpha->setChecked(isThereAlpha);
+    wdg->alpha->setEnabled(isThereAlpha);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     if(kdb->exec() == QDialog::Rejected)
