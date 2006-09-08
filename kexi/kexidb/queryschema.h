@@ -400,22 +400,23 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 Note however, that the same field can be returned more than once if it has attached 
 		 a different alias.
 		 For example, let t be TABLE( a, b ) and let query be defined 
-		 by "SELECT *, a AS alfa FROM t" statement. Either fieldsExpanded(true) and fieldsExpanded(false)
-		 will return [ a, b, a (alfa) ] list.
+		 by "SELECT *, a AS alfa FROM t" statement. Both fieldsExpanded(Default) 
+		 and fieldsExpanded(Unique) will return [ a, b, a (alfa) ] list.
 		 On the other hand, for query defined by "SELECT *, a FROM t" statement,
-		 fieldsExpanded(true) will return [ a, b ] list 
-		 and fieldsExpanded(false) will return [ a, b, a ] list.
+		 fieldsExpanded(Default) will return [ a, b, a ] list while
+		 fieldsExpanded(Unique) will return [ a, b ] list.
 
 		 If \a options is WithInternalFields or WithInternalFieldsAndRowID, 
 		 additional internal fields are also appended to the vector.
-		 If \a options is WithRowIDAndInternalFields, 
+
+		 If \a options is WithInternalFieldsAndRowID, 
 		 one fake BigInteger column is appended to make space for ROWID column used 
 		 by KexiDB::Cursor implementations. For example, let persons be TABLE( surname, city_id ), 
 		 let city_number reference cities.is in TABLE cities( id, name ) and let query q be defined 
 		 by "SELECT * FROM t" statement. If we want to display persons' city names instead of city_id's.
 		 To do this, cities.name has to be retrieved as well, so the following statement should be used:
 		 "SELECT * FROM persons, cities.name LEFT OUTER JOIN cities ON persons.city_id=cities.id".
-		 Thus, calling fieldsExpanded(false, true, true) will return 4 elements instead of 2:
+		 Thus, calling fieldsExpanded(WithInternalFieldsAndRowID) will return 4 elements instead of 2:
 		 persons.surname, persons.city_id, cities.name, {ROWID}. The {ROWID} item is the placeholder 
 		 used for fetching ROWID by KexiDB cursors.
 

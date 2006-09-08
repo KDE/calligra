@@ -43,6 +43,7 @@ expression.cpp \
 keywords.cpp \
 preparedstatement.cpp \
 alter.cpp \
-lookupfieldschema.cpp
+lookupfieldschema.cpp \
+simplecommandlineapp.cpp
 
 #HEADERS =

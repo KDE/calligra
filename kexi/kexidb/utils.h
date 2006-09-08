@@ -140,19 +140,38 @@ namespace KexiDB
 	/*! Variant class providing a pointer to table or query. */
 	class KEXI_DB_EXPORT TableOrQuerySchema {
 		public:
-			//! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
-			//! using \a conn connection and \a name.
+			/*! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
+			 using \a conn connection and \a name. If both table and query exists for \a name,
+			 table has priority over query. 
+			 You should check whether a query or table has been found by testing 
+			 (query() || table()) expression. */
+			TableOrQuerySchema(Connection *conn, const QCString& name);
+
+			/*! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
+			 using \a conn connection and \a name. If \a table is true, \a name is assumed 
+			 to be a table name, otherwise \a name is assumed to be a query name. 
+			 You should check whether a query or table has been found by testing 
+			 (query() || table()) expression. */
 			TableOrQuerySchema(Connection *conn, const QCString& name, bool table);
 
-			//! Creates a new TableOrQuerySchema variant object. \a tableOrQuery must be of 
-			//! class TableSchema or QuerySchema.
+			/*! Creates a new TableOrQuerySchema variant object. \a tableOrQuery must be of 
+			 class TableSchema or QuerySchema.
+			 You should check whether a query or table has been found by testing 
+			 (query() || table()) expression. */
 			TableOrQuerySchema(FieldList &tableOrQuery);
 			
-			//! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
-			//! using \a conn connection and \a id.
+			/*! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
+			 using \a conn connection and \a id.
+			 You should check whether a query or table has been found by testing 
+			 (query() || table()) expression. */
 			TableOrQuerySchema(Connection *conn, int id);
 
+			/*! Creates a new TableOrQuerySchema variant object, keeping a pointer so \a table 
+			 object. */
 			TableOrQuerySchema(TableSchema* table);
+
+			/*! Creates a new TableOrQuerySchema variant object, keeping a pointer so \a query 
+			 object. */
 			TableOrQuerySchema(QuerySchema* query);
 
 			//! \return a pointer to the query if it's provided
