@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -120,7 +120,25 @@ KisPNGConverter::~KisPNGConverter()
 {
 }
 
-KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
+class KisPNGStream {
+    public:
+        KisPNGStream(Q_UINT8* buf,  Q_UINT32 depth ) : m_depth(depth), m_posinc(8), m_buf(buf) {};
+        int nextValue()
+        {
+            if( m_posinc == 0)
+            {
+                m_posinc = 8;
+                m_buf++;
+            }
+            m_posinc -= m_depth;
+            return (( (*m_buf) >> (m_posinc) ) & ( ( 1 << m_depth ) - 1 ) );
+        }
+    private:
+        Q_UINT32 m_posinc, m_depth;
+        Q_UINT8* m_buf;
+};
+
+KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 {
     kDebug(41008) << "Start decoding PNG File" << endl;
     // open the file
@@ -376,26 +394,18 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
                     }
                     break;
                 case PNG_COLOR_TYPE_PALETTE:
-                    switch(color_nb_bits)
                     {
-                        case 8:
-                        {
-                            Q_UINT8 *src = row_pointer;
-                            while (!it.isDone()) {
-                                Q_UINT8 *d = it.rawData();
-                                png_color c = palette[*(src++)];
-                                d[2] = c.red;
-                                d[1] = c.green;
-                                d[0] = c.blue;
-                                d[3] = Q_UINT8_MAX;
-                                ++it;
-                            }
-                            break;
+                        KisPNGStream stream(row_pointer, color_nb_bits);
+                        while (!it.isDone()) {
+                            Q_UINT8 *d = it.rawData();
+                            png_color c = palette[ stream.nextValue() ];
+                            d[2] = c.red;
+                            d[1] = c.green;
+                            d[0] = c.blue;
+                            d[3] = Q_UINT8_MAX;
+                            ++it;
                         }
-                        default: // TODO:support for 1,2 and 4 bits
-                            return KisImageBuilder_RESULT_UNSUPPORTED;
                     }
-                
                     break;
                 default:
                     return KisImageBuilder_RESULT_UNSUPPORTED;
