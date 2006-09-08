@@ -550,7 +550,7 @@ class KEXI_DB_EXPORT Field
 		/*! \return custom property \a propertyName.
 		 If there is no such a property, \a defaultValue is returned. */
 		QVariant customProperty(const QByteArray& propertyName,
-			const QVariant& defaultValue = QVariant());
+			const QVariant& defaultValue = QVariant()) const;
 
 		//! Sets value \a value for custom property \a propertyName
 		void setCustomProperty(const QByteArray& propertyName, const QVariant& value);

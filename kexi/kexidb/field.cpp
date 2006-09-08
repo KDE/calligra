@@ -643,7 +643,7 @@ void Field::setExpression(KexiDB::BaseExpr *expr)
 }
 
 QVariant Field::customProperty(const QByteArray& propertyName,
-	const QVariant& defaultValue)
+	const QVariant& defaultValue) const
 {
 	if (!m_customProperties)
 		return defaultValue;
