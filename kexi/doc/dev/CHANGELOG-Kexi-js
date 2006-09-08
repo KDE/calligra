@@ -15,6 +15,30 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-09-07
+Forms
+- custom widget factories can be now loaded properly
+= X-KFormDesigner-XMLGUIFileName variable added 
+  to the KFormDesigner/WidgetFactory service type, so it's now
+  possible to specify XMLGUI file for defining toolbar actions
+  for custom widget factories
+2.0: merged
+KexiDB
+= Added SimpleCommandLineApp class - an utility for writing small 
+  command line programs and tests that support database connections
+  out of the box and provide required arguments.
+= debug areas fixed
+2.0: merged
+
+2006-09-04
+Kexi docs
+- things like 'e.g.' moved to &eg;
+- use <procedure> where appropriate
+- a chapter about forms translated to english
+i18n
+= Stephan Binner's fixes #579553 and #579330 ported to 2.0
+Forms
+- hide QRadioButton widget - current implementation is no-op
 
 ~~~~~~~~~~~~ 1.1 beta 1 release (with KOffice 1.6 beta 1)  ~~~~~~~~~~~~
 

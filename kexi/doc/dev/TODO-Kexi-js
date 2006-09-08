@@ -140,6 +140,14 @@ TODO: In Memory database/tables: how to load an sqlite file to be entirely fit i
    This should load all (used) data into memory. This is probably not a good solution 
    if your application does not run for a longer time. "
 TODO: add autovacuum support on SQLite db creation?
+
+TODO: use sqlite3_set_authorizer() to get fine-grained access control support
+TODO: use SQLite's > 3.3.6 ability to load new SQL functions and collating sequences from shared libraries and DLLs
+      http://www.sqlite.org/cvstrac/wiki?p=LoadableExtensions
+TODO: use Virtual Tables to get external virtual data like CSV live queries
+      http://www.sqlite.org/cvstrac/wiki?p=VirtualTables
+
+
 </SQLITE>
 
 <RENAME_PROPOSALS>
@@ -936,6 +944,7 @@ Combobox table edit TODO:
 === KexiDB TODO ===
 - add setValue() to cursors: this will REQUIRE a buffered cursor, since we cannot run sql 
   before fetching is done... See http://kexi-project.org/cgi-bin/irclogger_log/kexi?date=2006-08-03,Thu&sel=229#l225
+- use ThreadWeaver library for threaded KexiDB version
 
 === Kexi Table View TODO ===
 - allow to select entire rows, columns and grids as in a spreadsheet; 
@@ -966,3 +975,28 @@ KoProperty TODO
 Kexi 1.6 MUST HAVE TODOs:
 - use transliteration script: http://bugs.kde.org/show_bug.cgi?id=133170
 
+
+
+Form/TV Shortcuts:
+
+To move to the last field in the last record, in Navigation mode
+ CTRL+END
+
+To move to the first field in the first record, in Navigation mode
+ CTRL+HOME
+ 
+To move to the current field in the next record
+ CTRL+PAGE DOWN
+ 
+To move to the current field in the previous record
+ CTRL+PAGE UP
+
++To move to the record number box (record number box: A small box that displays the current record number in the lower-left corner in Datasheet view and Form view. To move to a specific record, you can type the record number in the box, and press ENTER.); then type the record number and press ENTER
+ F5
+ 
++ Add moving to next record when Tab is pressed at the last field
++ Add moving to prev record when BackTab is pressed at the 1st field
+
+
+todo: adding blob field to existing table doesnt work for the 1st time
+todo: notify and update data source after schema changes
