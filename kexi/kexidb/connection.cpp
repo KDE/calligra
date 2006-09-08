@@ -2398,9 +2398,9 @@ static void addFieldPropertyToExtendedTableSchemaData(
 	QDomElement extendedTableSchemaFieldEl = doc.createElement("field");
 	extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
 	extendedTableSchemaFieldEl.setAttribute("name", f->name());
-	if (custom)
-		extendedTableSchemaFieldEl.setAttribute("custom", "true");
 	QDomElement extendedTableSchemaFieldPropertyEl = doc.createElement("property");
+	if (custom)
+		extendedTableSchemaFieldPropertyEl.setAttribute("custom", "true");
 	extendedTableSchemaFieldEl.appendChild( extendedTableSchemaFieldPropertyEl );
 	extendedTableSchemaFieldPropertyEl.setAttribute("name", propertyName);
 	QDomElement extendedTableSchemaFieldPropertyValueEl;
