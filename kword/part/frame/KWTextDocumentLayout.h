@@ -32,6 +32,7 @@ class KWTextFrame;
 class KoStyleManager;
 class QTextLayout;
 class QTextList;
+class LayoutState;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -43,7 +44,7 @@ public:
     KWTextDocumentLayout(KWTextFrameSet *frameSet);
     ~KWTextDocumentLayout();
 
-    void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
+    void setStyleManager(KoStyleManager *sm);
 
     /// Returns the bounding rectangle of block.
     QRectF blockBoundingRect ( const QTextBlock & block ) const;
@@ -81,6 +82,8 @@ private:
 
     KWTextFrameSet *m_frameSet;
     KoStyleManager *m_styleManager;
+
+    LayoutState *m_state;
 };
 
 class ListItemsPrivate;
