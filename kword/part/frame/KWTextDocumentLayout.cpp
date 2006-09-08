@@ -517,7 +517,7 @@ void KWTextDocumentLayout::layout() {
         if (!line.isValid()) { // end of parag
             double posY = m_state->y();
             bool moreText = m_state->nextParag();
-            if(m_state->y() > posY)
+            if(m_state->shape && m_state->y() > posY)
                 m_state->shape->repaint(QRectF(0, posY,
                             m_state->shape->size().width(), m_state->y() - posY));
 
