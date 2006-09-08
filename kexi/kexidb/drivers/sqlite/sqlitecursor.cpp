@@ -444,12 +444,14 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 	}
 
 	//const uint fieldsExpandedCount = m_fieldsExpanded->count();
+	const uint maxCount = QMIN(m_fieldCount, m_fieldsExpanded->count());
+	// i - visible field's index, j - physical index
 	for( uint i=0, j=0; i<m_fieldCount; i++, j++ ) {
 //		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
 //			j++;
-		while (j < m_fieldCount && !m_fieldsExpanded->at(j)->visible)
+		while (j < maxCount && !m_fieldsExpanded->at(j)->visible)
 			j++;
-		if (j >= (m_fieldCount /*+(m_containsROWIDInfo ? 1 : 0)*/)) {
+		if (j >= (maxCount /*+(m_containsROWIDInfo ? 1 : 0)*/)) {
 			//ERR!
 			break;
 		}
