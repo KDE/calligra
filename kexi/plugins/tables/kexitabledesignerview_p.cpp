@@ -189,13 +189,17 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
 	bool visible;
 	
 	prop = &set["subType"];
-	const bool isObjectTypeGroup = set["type"].value().toInt() == (int)KexiDB::Field::BLOB;
 	kexipluginsdbg << "subType=" << prop->value().toInt() << " type=" << set["type"].value().toInt()<< endl;
-	
+
 	//if there is no more than 1 subType name or it's a PK: hide the property
-	visible = (prop->listData() && prop->listData()->keys.count() > 1 || isObjectTypeGroup)
+	visible = (prop->listData() && prop->listData()->keys.count() > 1 /*disabled || isObjectTypeGroup*/)
 		&& set["primaryKey"].value().toBool()==false;
 	setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+	prop = &set["objectType"];
+	const bool isObjectTypeGroup = set["type"].value().toInt() == (int)KexiDB::Field::BLOB; // used only for BLOBs
+	visible = isObjectTypeGroup;
+	setVisibilityIfNeeded( set, prop,  visible, changed, commandGroup );
 
 	prop = &set["unsigned"];
 	visible = KexiDB::Field::isNumericType(fieldType);
@@ -238,6 +242,13 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
 	prop = &set["autoIncrement"];
 	visible = KexiDB::Field::isAutoIncrementAllowed(fieldType);
 	setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+//! @todo remove this when BLOB supports default value
+#ifdef KEXI_NO_UNFINISHED
+	prop = &set["defaultValue"];
+	visible = !isObjectTypeGroup;
+	setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+#endif
 
 	return changed;
 }
