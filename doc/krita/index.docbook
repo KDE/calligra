@@ -10,9 +10,10 @@
   <!ENTITY tutorial-select-layer SYSTEM "tutorial-select-layer.docbook">
   <!ENTITY tutorial-quick-starts SYSTEM "tutorial-quick-starts.docbook">
   <!ENTITY tutorial-tablet SYSTEM "tutorial-tablet.docbook">
+  <!ENTITY views SYSTEM "using-views.docbook">
+  <!ENTITY layers SYSTEM "using-layers.docbook">
   <!ENTITY selections SYSTEM "using-selections.docbook">
   <!ENTITY filters SYSTEM "using-filters.docbook">
-  <!ENTITY layers SYSTEM "using-layers.docbook">
   <!ENTITY colorspaces SYSTEM "using-colorspaces.docbook">
   <!ENTITY commands SYSTEM "commands.docbook">
   <!ENTITY commands-toolbars SYSTEM "commands-toolbars.docbook">
@@ -105,6 +106,7 @@ continually working on extending &krita; and making it better in every respect.
 
 &introduction;
 &tutorial;
+&views;
 &layers;
 &selections;
 &filters;

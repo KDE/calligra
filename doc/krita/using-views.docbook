@@ -1,0 +1,166 @@
+<chapter id="views">
+<title>Views</title>
+
+<para>
+One of the most important things you need to know when working with a painting
+or image editing application, is how to adapt the view of your image to your
+(changing) needs. This chapter describes the various possibilities &krita;
+offers.
+</para>
+
+<sect1 id="views-zooming">
+<title>Zooming</title>
+
+<para>
+By zooming, you can view your images at various levels of detail.  Zooming out will show a larger part of the image, but with less detail.
+&krita; offers a couple of options that affect which part of the image is
+shown:
+</para>
+
+<variablelist>
+
+<varlistentry><term>Zooming in</term>
+<listitem><para>Zooming in allows you to see more details, but you will only
+see a smaller part of the image. You can zoom in by choosing the
+<menuchoice><guimenu>View</guimenu><guimenuitem>Zoom
+in</guimenuitem></menuchoice> menu item, by clicking the
+<inlinemediaobject><imageobject><imagedata
+fileref="toolbars-button-zoomin.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Zoom in</guilabel> button on the
+toolbar, or by pressing the <keycombo
+action="simul">&Ctrl;<keycap>+</keycap></keycombo> keys.
+You can zoom in up to 1600% (a 16:1 ratio) via a number of fixed zoom levels.
+</para></listitem>
+</varlistentry>
+
+<varlistentry><term>Zooming out</term>
+<listitem><para>Zooming out allows you to see a larger part of the image while
+losing some detail. Zooming out can be done by choosing the
+<menuchoice><guimenu>View</guimenu><guimenuitem>Zoom
+out</guimenuitem></menuchoice> menu item, by clicking the
+<inlinemediaobject><imageobject><imagedata
+fileref="toolbars-button-zoomout.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Zoom out</guilabel> button on the
+toolbar, or by pressing the <keycombo
+action="simul">&Ctrl;<keycap>-</keycap></keycombo> keys.
+You can zoom out up to 0.2% (a 1:500 ratio) via a number of fixed zoom levels.
+</para></listitem>
+</varlistentry>
+
+<varlistentry><term>Going back to 100%</term>
+<listitem><para>As viewing your image at its real size is quite handy at
+times, you can do so via the
+<menuchoice><guimenu>View</guimenu><guimenuitem>Actual
+pixels</guimenuitem></menuchoice> menu item or by pressing <keycombo
+action="simul">&Ctrl;<keycap>0</keycap></keycombo>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry><term>Zooming in and out from the <guilabel>Overview</guilabel>
+tab</term>
+<listitem><para>The <guilabel>Overview</guilabel> tab of the control box
+(usually found at the right hand side of the &krita; window) also allows you
+to change the zoom level by using the slider or the spinbox. Slightly
+different zoom levels are available here, so if zooming in or out as described
+above does not produce a view you want, you can try using this option. The
+<guibutton>1:1</guibutton> button offers another way of getting back to a 100%
+zoom.</para></listitem>
+</varlistentry>
+
+<varlistentry><term>Special zooms</term>
+<listitem><para>There are two more special ways of zooming. The
+<menuchoice><guimenu>View</guimenu><guimenuitem>Fit to
+Page</guimenuitem></menuchoice> menu item zooms your image such that it is
+as large as possible while remaining entirely visible. The
+<menuchoice><guimenu>View</guimenu><guimenuitem>Full Screen
+Mode</guimenuitem></menuchoice> menu item (pressing <keycombo
+action="simul">&Ctrl;&Shift;<keycap>F</keycap></keycombo> will also activate
+this mode) enlarges the &krita; window to fill your entire screen, removing
+the title bar as well. Although this is not a <quote>real</quote> way of
+zooming, it can help you by showing just that little bit more of your
+image.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="views-views">
+<title>Working with views</title>
+
+<para>
+Apart from changing the zoom level of your view, you can also open different
+views for the same image. This way, you can for example look at two different
+parts of your image that would not fit on your screen together otherwise.
+</para>
+
+<variablelist>
+
+<varlistentry><term>New view windows</term>
+<listitem><para>You can open a new &krita; window for your image by choosing
+<menuchoice><guimenu>View</guimenu><guimenuitem>New
+View</guimenuitem></menuchoice> Both windows are independent from each other
+(so you can select different tools, view different parts of your image,
+&etc;), but changes you make to the image in one window are immediately
+visible in the other. To close a window, use the normal window closing button.
+There is also an option <menuchoice><guimenu>View</guimenu><guimenuitem>Close
+All Views</guimenuitem></menuchoice>, which closes all newly created views and
+leaves only the original window open.</para></listitem>
+</varlistentry>
+
+<varlistentry><term>Splitting views</term>
+<listitem><para>You can also split a window into two views. Like a new window,
+one view of a split window has its own settings for brushes, zoom levels and
+the like, but both views are shown in the same window. To split your window,
+choose <menuchoice><guimenu>View</guimenu><guimenuitem>Split
+View</guimenuitem></menuchoice>. The viewing area of the &krita; window will
+then be divided into two halves. You can switch between horizontal and
+vertical division with the
+<menuchoice><guimenu>View</guimenu><guisubmenu>Splitter
+Orientation</guisubmenu></menuchoice> menu, and get back to one view by
+choosing <menuchoice><guimenu>View</guimenu><guimenuitem>Remove
+View</guimenuitem></menuchoice>.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="views-miscellaneous">
+<title>Miscellaneous view options</title>
+
+<para>
+&krita; also offers two options that can help you with knowing where you are.
+</para>
+
+<variablelist>
+
+<varlistentry><term>Rulers</term>
+<listitem><para>You can have &krita; show rulers along the sides of your
+image, indicating x and y coordinates. To do so, choose
+<menuchoice><guimenu>View</guimenu><guimenuitem>Show
+Rulers</guimenuitem></menuchoice> or press <keycombo
+action="simul">&Ctrl;<keycap>R</keycap></keycombo>. The rulers will
+automatically adapt to your zoom level to show a proper amount of
+subdivisions. To remove the rulers, choose the same menu option (now called
+<guimenuitem>Hide Rulers</guimenuitem>) or press <keycombo
+action="simul">&Ctrl;<keycap>R</keycap></keycombo> again. </para></listitem>
+</varlistentry>
+
+<varlistentry><term>Grid</term>
+<listitem><para>In order to see grid lines, choose
+<menuchoice><guimenu>View</guimenu><guimenuitem>Show
+Grid</guimenuitem></menuchoice>. You can set the distance between grid lines
+with <menuchoice><guimenu>View</guimenu><guisubmenu>Grid
+Spacing</guisubmenu></menuchoice> and you can choose different colours for the
+lines in the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+&krita;...</guimenuitem></menuchoice> dialog (see <link
+linkend="settings-preferences-grid">the Settings section</link>).
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+</chapter>
