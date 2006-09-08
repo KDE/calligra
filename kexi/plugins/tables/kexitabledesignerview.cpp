@@ -58,6 +58,9 @@
 #define COLUMN_ID_TYPE 2
 #define COLUMN_ID_DESC 3
 
+//! used only for BLOBs
+#define DEFAULT_OBJECT_TYPE_VALUE "image"
+
 //#define KexiTableDesignerView_DEBUG
 
 //! @todo remove this when BLOBs are implemented
@@ -236,16 +239,17 @@ void
 KexiTableDesignerView::getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup, 
 	QStringList& stringsList, QStringList& namesList)
 {
+/* disabled - "mime" is moved from subType to "objectType" custom property
 	if (fieldTypeGroup==KexiDB::Field::BLOBGroup) {
 		// special case: BLOB type uses "mime-based" subtypes
 //! @todo hardcoded!
 		stringsList << "image";
 		namesList << i18n("Image object type", "Image");
 	}
-	else {
-		stringsList = KexiDB::typeStringsForGroup(fieldTypeGroup);
-		namesList = KexiDB::typeNamesForGroup(fieldTypeGroup);
-	}
+	else {*/
+	stringsList = KexiDB::typeStringsForGroup(fieldTypeGroup);
+	namesList = KexiDB::typeNamesForGroup(fieldTypeGroup);
+//	}
 	kexipluginsdbg << "KexiTableDesignerView::getSubTypeListData(): subType strings: " << 
 		stringsList.join("|") << "\nnames: " << namesList.join("|") << endl;
 }
@@ -284,20 +288,32 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 #endif
 
 	//subtype
-	QStringList slist, nlist;
-	getSubTypeListData(field.typeGroup(), slist, nlist);
+	QStringList typeStringList, typeNameList;
+	getSubTypeListData(field.typeGroup(), typeStringList, typeNameList);
+/* disabled - "mime" is moved from subType to "objectType" custom property
 	QString subTypeValue;
 	if (field.typeGroup()==KexiDB::Field::BLOBGroup) {
 // special case: BLOB type uses "mime-based" subtypes
 //! @todo this should be retrieved from KexiDB::Field when BLOB supports many different mimetypes
 		subTypeValue = slist.first();
 	}
-	else {
-		subTypeValue = field.typeString();
-	}
-	set->addProperty(prop 
-		= new KoProperty::Property("subType", slist, nlist, subTypeValue, i18n("Subtype")));
+	else {*/
+	QString subTypeValue = field.typeString();
+	//}
+	set->addProperty(prop = new KoProperty::Property("subType", 
+		typeStringList, typeNameList, subTypeValue, i18n("Subtype")));
 
+	// objectType
+	QStringList objectTypeStringList, objectTypeNameList;
+//! @todo this should be retrieved from KexiDB::Field when BLOB supports many different mimetypes
+	objectTypeStringList << "image";
+	objectTypeNameList << i18n("Image object type", "Image");
+	QString objectTypeValue( field.customProperty("objectType").toString() );
+	if (objectTypeValue.isEmpty())
+		objectTypeValue = DEFAULT_OBJECT_TYPE_VALUE;
+	set->addProperty(prop = new KoProperty::Property("objectType", 
+		objectTypeStringList, objectTypeNameList, objectTypeValue, i18n("Subtype")/*todo other i18n string?*/));
+	
 	set->addProperty( prop 
 		= new KoProperty::Property("caption", QVariant(field.caption()), i18n("Caption") ) );
 	prop->setVisible(false);//always hidden
@@ -645,13 +661,14 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 		getSubTypeListData(fieldTypeGroup, slist, nlist);
 
 		QString subTypeValue;
+/* disabled - "mime" is moved from subType to "objectType" custom property
 		if (fieldType==KexiDB::Field::BLOB) {
 			// special case: BLOB type uses "mime-based" subtypes
 			subTypeValue = slist.first();
 		}
-		else {
+		else {*/
 			subTypeValue = KexiDB::Field::typeString(fieldType);
-		}
+		//}
 		KoProperty::Property *subTypeProperty = &set["subType"];
 		kexipluginsdbg << subTypeProperty->value() << endl;
 		
@@ -663,9 +680,11 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 //kexipluginsdbg << "++++++++++" << slist << nlist << endl;
 
 		//update subtype list and value
-		const bool forcePropertySetReload = (int)fieldType != (int)fieldTypeGroup; //<-- ?????
+		const bool forcePropertySetReload 
+			= KexiDB::Field::typeGroup( KexiDB::Field::typeForString(subTypeProperty->value().toString()) )
+				!= fieldTypeGroup; //<-- ?????
 //		const bool forcePropertySetReload = set["type"].value().toInt() != (int)fieldTypeGroup;
-		const bool useListData = slist.count() > 1 || fieldType==KexiDB::Field::BLOB;
+		const bool useListData = slist.count() > 1; //disabled-> || fieldType==KexiDB::Field::BLOB;
 
 		if (!useListData) {
 			slist.clear(); //empty list will be passed
@@ -888,7 +907,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 	}
 
 	if (pname=="defaultValue") {
-		KexiDB::Field::Type type = (KexiDB::Field::Type)set["type"].value().toInt();
+		KexiDB::Field::Type type = KexiDB::intToFieldType( set["type"].value().toInt() );
 		set["defaultValue"].setType((KoProperty::PropertyType)KexiDB::Field::variantType(type));
 	}
 
@@ -903,8 +922,9 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
 
 		}
-		KexiDB::Field::Type type = (KexiDB::Field::Type)set["type"].value().toInt();
+		KexiDB::Field::Type type = KexiDB::intToFieldType( set["type"].value().toInt() );
 		QString typeName;
+/* disabled - "mime" is moved from subType to "objectType" custom property
 		if (type==KexiDB::Field::BLOB) { //special case
 			//find i18n'd text
 			QStringList stringsList, namesList;
@@ -915,9 +935,9 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 			else
 				typeName = namesList[stringIndex];
 		}
-		else {
-			typeName = KexiDB::Field::typeName( KexiDB::Field::typeForString(property.value().toString()) );
-		}
+		else {*/
+		typeName = KexiDB::Field::typeName( KexiDB::Field::typeForString(property.value().toString()) );
+//		}
 //		kdDebug() << property.value().toString() << endl;
 //		kdDebug() << set["type"].value() << endl;
 //		if (KexiDB::Field::typeGroup( set["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
@@ -1045,9 +1065,12 @@ KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set ) 
 	QMap<QCString, QVariant> values = KoProperty::propertyValues(set);
 	//remove internal values, to avoid creating custom field's properties
 	QMap<QCString, QVariant>::Iterator it = values.begin();
+	KexiDB::Field *field = new KexiDB::Field();
 	while (it!=values.end()) {
 		const QString propName( it.key() );
-		if (propName=="subType" || propName=="uid" || propName=="newrow" || propName.startsWith("this:")) {
+		if (propName=="subType" || propName=="uid" || propName=="newrow" || propName.startsWith("this:")
+			|| (/*sanity*/propName=="objectType" && KexiDB::Field::BLOB != KexiDB::intToFieldType( set["type"].value().toInt() )))
+		{
 			QMap<QCString, QVariant>::Iterator it_tmp = it;
 			++it;
 			values.remove(it_tmp);
@@ -1056,7 +1079,7 @@ KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set ) 
 			++it;
 	}
 	//assign properties to the field
-	KexiDB::Field *field = new KexiDB::Field();
+	// (note that "objectType" property will be saved as custom property)
 	if (!KexiDB::setFieldProperties( *field, values )) {
 		delete field;
 		return 0;
