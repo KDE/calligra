@@ -68,7 +68,7 @@ public:
     }
 };
 
-/// layout helper
+// ---------------- layout helper ----------------
 class LayoutState {
 public:
     LayoutState(KWTextFrameSet *fs, KoStyleManager *sm) : m_frameSet(fs), m_styleManager(sm) {
@@ -76,6 +76,7 @@ public:
         m_reset = true;
     }
 
+    /// start layouting, return false when there is nothing to do
     bool start() {
         if(m_reset)
             resetPrivate();
@@ -83,6 +84,7 @@ public:
         return !(layout == 0 || m_frameSet->frameCount() <= frameNumber);
     }
 
+    /// end layouting
     void end() {
         if(layout)
             layout->endLayout();
@@ -220,7 +222,7 @@ public:
         m_fragmentIterator = m_block.begin();
         m_newParag = true;
 
-//kDebug() << "nextParag " << m_block.textList() << " for " << m_block.text() << endl;
+//kDebug()<< "nextParag " << m_block.textList() << " for " << m_block.text() << endl;
         return true;
     }
 
@@ -482,6 +484,15 @@ void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 
 void KWTextDocumentLayout::layout() {
 //kDebug() << "KWTextDocumentLayout::layout" << endl;
+    class End {
+    public:
+        End(LayoutState *state) { m_state = state; }
+        ~End() { m_state->end(); }
+    private:
+        LayoutState *m_state;
+    };
+    End ender(m_state); // poor mans finally{}
+
     if(! m_state->start())
         return;
     while(m_state->shape) {
