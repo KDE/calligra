@@ -515,9 +515,14 @@ void KWTextDocumentLayout::layout() {
     while(m_state->shape) {
         QTextLine line = m_state->layout->createLine();
         if (!line.isValid()) { // end of parag
-            if(! m_state->nextParag()) {
+            double posY = m_state->y();
+            bool moreText = m_state->nextParag();
+            if(m_state->y() > posY)
+                m_state->shape->repaint(QRectF(0, posY,
+                            m_state->shape->size().width(), m_state->y() - posY));
+
+            if(! moreText)
                 return; // done!
-            }
             newParagraph = true;
             continue;
         }
@@ -541,6 +546,8 @@ void KWTextDocumentLayout::layout() {
 
         QRectF repaintRect = line.rect();
         repaintRect.moveTop(repaintRect.y() - m_state->docOffsetInShape());
+        repaintRect.setX(0.0); // just take full width since we can't force a repaint of
+        repaintRect.setY(m_state->shape->size().width()); // where lines were before layout.
         m_state->shape->repaint(repaintRect);
     }
 }
