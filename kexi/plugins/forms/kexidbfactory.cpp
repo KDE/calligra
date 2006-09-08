@@ -71,29 +71,28 @@
 KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
 {
-//	KFormDesigner::WidgetInfo *wView = new KFormDesigner::WidgetInfo(this);
-	KexiDataAwareWidgetInfo *wView = new KexiDataAwareWidgetInfo(this);
-	wView->setPixmap("form");
-	wView->setClassName("KexiDBForm");
-	wView->setName(i18n("Form"));
-	wView->setNamePrefix(
+	KFormDesigner::WidgetInfo *wi;
+	wi = new KexiDataAwareWidgetInfo(this);
+	wi->setPixmap("form");
+	wi->setClassName("KexiDBForm");
+	wi->setName(i18n("Form"));
+	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "form"));
-	wView->setDescription(i18n("A data-aware form widget"));
-	addClass(wView);
+	wi->setDescription(i18n("A data-aware form widget"));
+	addClass(wi);
 
 #ifndef KEXI_NO_SUBFORM
-	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
-	wSubForm->setPixmap("subform");
-	wSubForm->setClassName("KexiDBSubForm");
-	wSubForm->addAlternateClassName("KexiSubForm", true/*override*/); //older
-	wSubForm->setName(i18n("Sub Form"));
-	wSubForm->setNamePrefix(
+	wi = new KexiDataAwareWidgetInfo(this);
+	wi->setPixmap("subform");
+	wi->setClassName("KexiDBSubForm");
+	wi->addAlternateClassName("KexiSubForm", true/*override*/); //older
+	wi->setName(i18n("Sub Form"));
+	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
-	wSubForm->setDescription(i18n("A form widget included in another Form"));
-	wSubForm->setAutoSyncForProperty( "formName", false );
-	addClass(wSubForm);
+	wi->setDescription(i18n("A form widget included in another Form"));
+	wi->setAutoSyncForProperty( "formName", false );
+	addClass(wi);
 #endif
-	KFormDesigner::WidgetInfo *wi;
 
 	// inherited
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KLineEdit");
@@ -187,15 +186,15 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	addClass(wi);
 
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
-	KexiDataAwareWidgetInfo *wFieldEdit = new KexiDataAwareWidgetInfo(this);
-	wFieldEdit->setPixmap("edit");
-	wFieldEdit->setClassName("KexiDBAutoField");
+	wi = new KexiDataAwareWidgetInfo(this);
+	wi->setPixmap("edit");
+	wi->setClassName("KexiDBAutoField");
 	wi->addAlternateClassName("KexiDBFieldEdit", true/*override*/); //older
-	wFieldEdit->setName(i18n("Auto Field"));
-	wFieldEdit->setNamePrefix(
+	wi->setName(i18n("Auto Field"));
+	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters", "autoField"));
-	wFieldEdit->setDescription(i18n("A widget containing an automatically selected editor and a label to edit the value of a database field of any type."));
-	addClass(wFieldEdit);
+	wi->setDescription(i18n("A widget containing an automatically selected editor and a label to edit the value of a database field of any type."));
+	addClass(wi);
 #endif
 
 /*

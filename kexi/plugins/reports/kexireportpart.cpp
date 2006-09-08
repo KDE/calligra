@@ -91,7 +91,7 @@ void
 KexiReportPart::initInstanceActions()
 {
 	KFormDesigner::FormManager::self()->createActions(
-		library(), actionCollectionForMode(Kexi::DesignViewMode));
+		library(), actionCollectionForMode(Kexi::DesignViewMode), guiClient());
 }
 
 KexiDialogTempData*

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@ class QListView;
 class KActionCollection;
 class KTextEdit;
 class KLineEdit;
+class KXMLGUIClient;
 
 namespace KoProperty {
 	class Set;
@@ -296,7 +297,9 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 			KFormDesigner::Container *container, 
 			int options = DefaultOptions) = 0;
 
-		virtual void createCustomActions(KActionCollection* ) {};
+		/*! Creates custom actions. Reimplement this if you need to add some 
+		 actions coming from the factory. */
+		virtual void createCustomActions(KActionCollection *col) {};
 
 		/*! This function can be used to add custom items in widget \a w context
 		menu \a menu. */
@@ -492,6 +495,14 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! flag useful to decide whether to hide some properties.
 		 It's value is inherited from WidgetLibrary. */
 		bool m_showAdvancedProperties;
+
+		/*! Contains name of an XMLGUI file providing toolbar buttons 
+		 (and menu items in the future?) for the factory. 
+		 Can be empty, e.g. for the main factory which has XMLGUI defined in the shell window itself
+		 (e.g. kexiformpartinstui.rc for Kexi Forms). This name is set in WidgetLibrary::loadFactories() */
+		QString m_xmlGUIFileName;
+
+		KXMLGUIClient *m_guiClient;
 
 		QGuardedPtr<QWidget> m_widget;
 		QGuardedPtr<QWidget> m_editor;

@@ -172,14 +172,14 @@ FormManager::createWidgetLibrary(FormManager* m, const QStringList& supportedFac
 	return new WidgetLibrary(_self, supportedFactoryGroups);
 }
 
-/*unused void
+void
 FormManager::setEditor(KoProperty::Editor *editor)
 {
 	m_editor = editor;
 
 	if(editor)
 		editor->changeSet(m_propSet->set());
-}*/
+}
 
 void
 FormManager::setObjectTreeView(ObjectTreeView *treeview)
@@ -191,17 +191,17 @@ FormManager::setObjectTreeView(ObjectTreeView *treeview)
 }
 
 ActionList
-FormManager::createActions(WidgetLibrary *lib, KActionCollection *parent)
+FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KXMLGUIClient* client)
 {
-	m_collection = parent;
+	m_collection = collection;
 
-	ActionList actions = lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const QCString &)));
+	ActionList actions = lib->createWidgetActions(client, m_collection, this, SLOT(insertWidget(const QCString &)));
 
 	if (m_options & HideSignalSlotConnections)
 		m_dragConnection = 0;
 	else {
 		m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"),
-			"signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), parent,
+			"signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), m_collection,
 			"drag_connection");
 		//to be exclusive with any 'widget' action
 		m_dragConnection->setExclusiveGroup("LibActionWidgets");
@@ -209,17 +209,20 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection *parent)
 		actions.append(m_dragConnection);
 	}
 
-	m_pointer = new KToggleAction(i18n("Pointer"), "mouse_pointer", KShortcut(0), this, SLOT(slotPointerClicked()), parent, "pointer");
+	m_pointer = new KToggleAction(i18n("Pointer"), "mouse_pointer", KShortcut(0), 
+		this, SLOT(slotPointerClicked()), m_collection, "pointer");
 	m_pointer->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
 	m_pointer->setChecked(true);
 	actions.append(m_pointer);
 
-	m_snapToGrid = new KToggleAction(i18n("Snap to Grid"), QString::null, KShortcut(0), 0, 0, parent, "snap_to_grid");
+	m_snapToGrid = new KToggleAction(i18n("Snap to Grid"), QString::null, KShortcut(0), 
+		0, 0, m_collection, "snap_to_grid");
 	m_snapToGrid->setChecked(true);
 	actions.append(m_snapToGrid);
 
 	// Create the Style selection action (with a combo box in toolbar and submenu items)
-	KSelectAction *m_style = new KSelectAction( i18n("Style"), CTRL + Key_S, this, SLOT(slotStyle()), parent, "change_style");
+	KSelectAction *m_style = new KSelectAction( i18n("Style"), KShortcut(0), 
+		this, SLOT(slotStyle()), m_collection, "change_style");
 	m_style->setEditable(false);
 
 	KGlobal::config()->setGroup("General");
@@ -242,7 +245,7 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection *parent)
 	m_style->setMenuAccelsEnabled(true);
 	actions.append(m_style);
 
-	lib->addCustomWidgetActions( parent );
+	lib->addCustomWidgetActions(m_collection);
 
 	return actions;
 }

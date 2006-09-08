@@ -159,7 +159,7 @@ void KexiFormPart::initInstanceActions()
 #endif
 
 	KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
-	KFormDesigner::FormManager::self()->createActions( library(), col );
+	KFormDesigner::FormManager::self()->createActions( library(), col, (KXMLGUIClient*)col->parentGUIClient() ); //guiClient() );
 
 	//connect actions provided by widget factories
 	connect( col->action("widget_assign_action"), SIGNAL(activated()), this, SLOT(slotAssignAction()));

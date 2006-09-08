@@ -91,7 +91,7 @@ void Part::createGUIClients(KexiMainWindow *win)
 	m_mainWin = win;
 	if (!m_guiClient) {
 		//create part's gui client
-		m_guiClient = new GUIClient(m_mainWin, this, false);
+		m_guiClient = new GUIClient(m_mainWin, this, false, "part");
 
 		//default actions for part's gui client:
 		KAction *act = new KAction(m_names["instanceCaption"]+"...", info()->createItemIcon(), 0, this, 
@@ -112,13 +112,14 @@ void Part::createGUIClients(KexiMainWindow *win)
 		//let init specific actions for part instances
 		for (int mode = 1; mode <= 0x01000; mode <<= 1) {
 			if (m_supportedViewModes & mode) {
-				GUIClient *instanceGuiClient = new GUIClient(m_mainWin, this, true);
+				GUIClient *instanceGuiClient = new GUIClient(m_mainWin, 
+					this, true, Kexi::nameForViewMode(mode).latin1());
 				m_instanceGuiClients.insert(mode, instanceGuiClient);
 //				initInstanceActions( mode, instanceGuiClient->actionCollection() );
 			}
 		}
 		// also add an instance common for all modes (mode==0)
-		GUIClient *instanceGuiClient = new GUIClient(m_mainWin, this, true);
+		GUIClient *instanceGuiClient = new GUIClient(m_mainWin, this, true, "allViews");
 		m_instanceGuiClients.insert(Kexi::AllViewModes, instanceGuiClient);
 //		initInstanceActions( Kexi::AllViewModes , instanceGuiClient->actionCollection() );
 
@@ -391,8 +392,11 @@ tristate Part::rename(KexiMainWindow *win, KexiPart::Item &item, const QString& 
 //-------------------------------------------------------------------------
 
 
-GUIClient::GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient)
- : QObject(part, part->info()->objectName().latin1()), KXMLGUIClient(win)
+GUIClient::GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient, const char* nameSuffix)
+ : QObject(part, 
+   (part->info()->objectName() 
+    + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString())).latin1() )
+ , KXMLGUIClient(win)
 {
 	if(!win->project()->final())
 		setXMLFile(QString::fromLatin1("kexi")+part->info()->objectName()

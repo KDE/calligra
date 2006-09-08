@@ -94,12 +94,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		enum Options { HideEventsInPopupMenu = 1, SkipFileActions = 2,
 			HideSignalSlotConnections = 4 }; //todo
 
-		/*! Creates all the KAction related to widget insertion, and plug them
-		  into the KActionCollection \a parent.
+		/*! Creates all the KActions related to widget insertion, and plug them
+		  into the \a collection. \a client XML GUI client is used to call
+			lib->addCustomWidgetActions(client).
 		  These actions are automatically connected to \ref insertWidget() slot.
 		  \return a QPtrList of the created actions.
 		 */
-		ActionList createActions(WidgetLibrary *lib, KActionCollection *parent);
+		ActionList createActions(WidgetLibrary *lib, KActionCollection* collection, KXMLGUIClient *client);
 
 		/*! Enables or disables actions \a name.
 		 KFD uses KPart's, action collection here.
@@ -438,7 +439,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		WidgetPropertySet *m_propSet;
 //		WidgetLibrary *m_lib;
-		//unused QGuardedPtr<KoProperty::Editor>  m_editor;
+		QGuardedPtr<KoProperty::Editor>  m_editor;
 		QGuardedPtr<ObjectTreeView>  m_treeview;
 		// Forms
 		QPtrList<Form> m_forms;
