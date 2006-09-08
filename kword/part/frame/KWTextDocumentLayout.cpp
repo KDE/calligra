@@ -65,6 +65,7 @@ public:
             case QPaintDevice::PdmPhysicalDpiY:
                 return 72;
         }
+        return 0; // should never be hit
     }
 };
 
@@ -201,6 +202,7 @@ public:
                 }
             }
         }
+        layout = 0;
         if(! m_block.isValid())
             return false;
         m_format = m_block.blockFormat();
@@ -368,18 +370,20 @@ KWTextDocumentLayout::~KWTextDocumentLayout() {
 }
 
 QRectF KWTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const {
-// TODO
-kDebug() << "KWTextDocumentLayout::blockBoundingRect"<< endl;
+    // nobody calls this code and I have no way of implementing it anyway...
+    Q_UNUSED(block);
+    kWarning() << "KWTextDocumentLayout::blockBoundingRect is not implemented"<< endl;
     return QRectF(0, 0, 10, 10);
 }
 
 QSizeF KWTextDocumentLayout::documentSize() const {
-// TODO
-kDebug() << "KWTextDocumentLayout::documentSize"<< endl;
+    // nobody calls this code and I have no way of implementing it anyway...
+    kWarning() << "KWTextDocumentLayout::documentSize is not implemented"<< endl;
     return QSizeF(10, 10);
 }
 
 void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) {
+    Q_UNUSED(context);
     if(document()->begin().layout()->lineCount() == 0) // only first time
         layout();
     const QRegion clipRegion = painter->clipRegion();
@@ -414,8 +418,9 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
 }
 
 QRectF KWTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const {
-// TODO
-kDebug() << "KWTextDocumentLayout::frameBoundingRect"<< endl;
+    Q_UNUSED(frame);
+    // nobody calls this code and I have no way of implementing it anyway...
+    kWarning() << "KWTextDocumentLayout::frameBoundingRect is not implemented"<< endl;
     return QRectF(0, 0, 10, 10);
 }
 
@@ -457,10 +462,11 @@ kDebug() << "KWTextDocumentLayout::pageCount"<< endl;
 }
 
 void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded) {
+    Q_UNUSED(charsAdded);
+    Q_UNUSED(charsRemoved);
     if(m_frameSet->frameCount() == 0) // nothing to do.
         return;
 
-    int end = position + qMax(charsAdded, charsRemoved);
     foreach(KWFrame *frame, m_frameSet->frames()) {
         if(frame->isCopy())
             continue;
