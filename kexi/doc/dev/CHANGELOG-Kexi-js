@@ -15,6 +15,16 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-09-08
+Table Designer
+- fixed inserting fields of type "Object"
+= "subType" has no longer a special meaning for BLOB types, 
+  "objectType" is used for this purpose
+2.0: merged
+KexiDB
+= fixed saving custom property values
+2.0: merged
+	
 2006-09-07
 Forms
 - custom widget factories can be now loaded properly
