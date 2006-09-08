@@ -81,6 +81,8 @@ public:
     bool start() {
         if(m_reset)
             resetPrivate();
+        else
+            nextParag();
         m_reset = false;
         return !(layout == 0 || m_frameSet->frameCount() <= frameNumber);
     }
@@ -94,6 +96,11 @@ public:
 
     void reset() {
         m_reset = true;
+    }
+
+    /// returns true if reset has been called.
+    bool interrupted() {
+        return m_reset;
     }
 
     void setStyleManager(KoStyleManager *sm) {
@@ -132,6 +139,7 @@ public:
 
     /// when a line is added, update internal vars.  Return true if line does not fit in shape
     bool addLine(const QTextLine &line) {
+//kDebug() << "addLine" << endl;
         double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
         bool useFixedLineHeight = height != 0.0;
         bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
@@ -295,6 +303,7 @@ public:
     void resetPrivate() {
         m_y = 0;
         m_data = 0;
+        shape =0;
         layout = 0;
         m_newShape = true;
         m_block = m_frameSet->document()->begin();
@@ -307,6 +316,7 @@ public:
             Q_ASSERT(data);
             if(data->isDirty()) {
                 // this shape needs to be recalculated.
+                data->setPosition(lastPos+1);
                 m_block = m_frameSet->document()->findBlock( lastPos+1 );
                 m_y = data->documentOffset();
 
@@ -314,11 +324,12 @@ public:
                     // block has been layouted. So use its offset.
                     m_y = m_block.layout()->lineAt(0).position().y();
                     if(m_y < data->documentOffset()) {
+                        Q_ASSERT(frameNumber > 0);
                         // since we only recalc whole parags; we need to go back a little.
                         frameNumber--;
                         shape = m_frameSet->frames()[frameNumber]->shape();
                         data = dynamic_cast<KoTextShapeData*> (shape->userData());
-                        //m_block = m_block.previous();
+                        m_newShape = false;
                     }
                 }
                 break;
@@ -326,11 +337,9 @@ public:
             lastPos = data->endPosition();
             frameNumber++;
         }
+        shape = m_frameSet->frames()[frameNumber]->shape();
+        m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
 
-        frameNumber--;
-        nextFrame();
-        if(m_data)
-            m_data->setPosition(lastPos+1);
         if(! nextParag())
             frameNumber++;
     }
@@ -501,14 +510,23 @@ void KWTextDocumentLayout::layout() {
 
     if(! m_state->start())
         return;
+    double endPos = m_state->y() + 1000;
+    bool newParagraph = true;
     while(m_state->shape) {
         QTextLine line = m_state->layout->createLine();
         if (!line.isValid()) { // end of parag
             if(! m_state->nextParag()) {
                 return; // done!
             }
+            newParagraph = true;
             continue;
         }
+        if(m_state->interrupted() || newParagraph && m_state->y() > endPos) {
+            // enough for now. Try again later.
+            m_frameSet->requestLayout();
+            return;
+        }
+        newParagraph = false;
 
         line.setLineWidth(m_state->width());
         line.setPosition(QPointF(m_state->x(), m_state->y()));
