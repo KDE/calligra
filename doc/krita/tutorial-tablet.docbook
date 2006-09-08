@@ -1,0 +1,141 @@
+<sect1 id="tutorial-tablet">
+<title>Working with tablets</title>
+
+<para>This tutorial is intended to describe you the first steps with working
+with a tablet with &krita;. The tutorial assumes you are using &Linux;.</para>
+
+<sect2 id="tutorial-tablet-configure">
+<title>Configure it</title>
+
+<para>
+As any hardware it nearly works out of the box. &Linux; should recognize it
+fine, but you might have to configure the X11 server by hand. The best way to
+do this is to follow the instruction on the Wacom &Linux; howto: <ulink
+url="http://linuxwacom.sourceforge.net/index.php/howto/main" />.
+</para><para>
+Then, in &krita;, you need to enable the various tools (in the
+<guilabel>Tablet</guilabel> section of the
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+&krita;...</guimenuitem></menuchoice> dialog) &mdash; you can find more
+information in the <link linkend="settings-preferences-tablet">tablet settings
+section</link>.
+</para>
+
+</sect2>
+
+<sect2 id="tutorial-tablet-firstcontact">
+<title>First contact with the tablet</title>
+
+<para>
+There are three devices of your tablet that you can use with &krita;:
+</para>
+
+<itemizedlist>
+<listitem><para>the cursor is the mouse that was shipped with the Wacom
+tablet</para></listitem>
+<listitem><para>the eraser is the round part on the top of the pen</para></listitem>
+<listitem><para>the stylus is the thin point on the bottom of the pen</para></listitem>
+</itemizedlist>
+
+<para>
+By default, when you use the stylus or the cursor on the tablet, the Brush
+tool and the pixel brush painting operation will get selected. The eraser
+device is associated to the <quote>pixel eraser</quote> painting operation.
+But if you select a different tool or a different painting operation with one
+device, &krita; will remember the association when you switch between devices.
+</para>
+
+</sect2>
+
+<sect2 id="tutorial-tablet-outlines">
+<title>Outlines of a flower</title>
+
+<para>
+Even if you knew how to draw before you started with a tablet, you will need
+to adapt to the tablet. It doesn't feel the same. So I suggest to start with
+something simple, like a flower, and to use a picture as a model:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>A flower</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-tablet-1.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>A flower</phrase>
+</textobject>
+<caption><para>A flower</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+First, you will need to create a new layer for the outline. I advise you to
+lock the layer with the picture, it will prevent you from making mistakes.
+</para><para>
+Drawing the outline of the flower seems pretty easy, but for your first
+experience you will have a great difficulty to precisely follow the line on
+the screen while your hand have to move on the tablet. Eventually you will get
+something like this:
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The outline of the flower</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-tablet-2.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The outline of the flower</phrase>
+</textobject>
+<caption><para>The outline of the flower</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+</sect2>
+
+<sect2 id="tutorial-tablet-colorization">
+<title>Colorization</title>
+
+<para>
+For the colorization, you will need to create a third layer. You will
+have to move it below the layer with the outlines, and do not forget to lock
+the outline layer.
+</para><para>
+It's mostly easier than the outline part, just select the color you want to
+use (either with the color selector or with the color picker), then for most
+of the work you can use the fill tool: with the mouse, click on the part you
+want to fill, as by default the fill tool will take the outline into
+consideration. On the following image, the different colors of the heart of
+the flower are not seperated by outlines, to do them I just completed the
+missing outline with a yellow or brown line to create the separation between
+the different colors.
+</para>
+
+<para>
+<screenshot>
+<screeninfo>The colored flower</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-tablet-3.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The colored flower</phrase>
+</textobject>
+<caption><para>The colored flower</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+The resulting image looks and feels like old fashion clipart, mostly because
+it lacks shadows and illumination, which are not covered by this tutorial.
+</para>
+
+</sect2>
+
+</sect1>
