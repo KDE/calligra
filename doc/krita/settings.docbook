@@ -178,6 +178,16 @@ respectively. The <guilabel>Swappiness:</guilabel> option determines how eager
 <para>
 If you have a tablet device attached, you can enable it and set its pressure
 sensitivity in this section.
+</para><para>
+You need to activate the tablet devices you want to use with &krita;. There
+are three supported devices: the cursor, the eraser and the stylus. You can
+activate them using the tablet sections. Only use the configuration options of
+a device if you use a non-Wacom tablet, and if the behavior of the tablet is
+unexpected, like moving when you press on the tablet for instance. In this
+situation, you can use the dialog to make sure you have a correct interaction:
+values (position, pressure, tilt...) are sent from the tablet to the computer
+in a given order, it might happen that some tablets do not use the default
+order. You can set this in the configuration options of a device.
 </para>
 
 </sect2>

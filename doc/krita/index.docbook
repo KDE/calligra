@@ -9,6 +9,7 @@
   <!ENTITY tutorial-starting SYSTEM "tutorial-starting.docbook">
   <!ENTITY tutorial-select-layer SYSTEM "tutorial-select-layer.docbook">
   <!ENTITY tutorial-quick-starts SYSTEM "tutorial-quick-starts.docbook">
+  <!ENTITY tutorial-tablet SYSTEM "tutorial-tablet.docbook">
   <!ENTITY selections SYSTEM "using-selections.docbook">
   <!ENTITY filters SYSTEM "using-filters.docbook">
   <!ENTITY layers SYSTEM "using-layers.docbook">
@@ -76,7 +77,7 @@
 
 <!-- Date and version information of the documentation -->
 
-<date>2006-09-06</date>
+<date>2006-09-07</date>
 <releaseinfo>1.6</releaseinfo>
 
 <!-- Abstract about this handbook -->

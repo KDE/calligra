@@ -1537,10 +1537,10 @@ and that is weird behaviour.</para></callout>
 importing code in a separate class that I instantiate here. You can also put
 all your code right in this method, but that would be a bit
 messy.</para></callout>
-<callout arearefs="import7"><para>(7) My importer returns a statuscode that I
+<callout arearefs="import7"><para>My importer returns a statuscode that I
 can then use to set the status of the import filter. &koffice; takes care of
 showing error messages.</para></callout>
-<callout arearefs="import8"><para>(8) If creating the
+<callout arearefs="import8"><para>If creating the
 <classname>KisImage</classname> has succeeded we set the document's current
 image to our newly created image. Then we are done: <literal>return
 KoFilter::OK;</literal>.</para></callout>
