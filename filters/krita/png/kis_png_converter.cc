@@ -122,7 +122,7 @@ KisPNGConverter::~KisPNGConverter()
 
 class KisPNGStream {
     public:
-        KisPNGStream(Q_UINT8* buf,  Q_UINT32 depth ) : m_depth(depth), m_posinc(8), m_buf(buf) {};
+        KisPNGStream(quint8* buf,  quint32 depth ) : m_posinc(8),m_depth(depth), m_buf(buf) {};
         int nextValue()
         {
             if( m_posinc == 0)
@@ -133,9 +133,20 @@ class KisPNGStream {
             m_posinc -= m_depth;
             return (( (*m_buf) >> (m_posinc) ) & ( ( 1 << m_depth ) - 1 ) );
         }
+        void setNextValue(int v)
+        {
+            if( m_posinc == 0)
+            {
+                m_posinc = 8;
+                m_buf++;
+                *m_buf = 0;
+            }
+            m_posinc -= m_depth;
+            *m_buf = (v << m_posinc) | *m_buf;
+        }
     private:
-        Q_UINT32 m_posinc, m_depth;
-        Q_UINT8* m_buf;
+        quint32 m_posinc, m_depth;
+        quint8* m_buf;
 };
 
 KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
@@ -342,13 +353,13 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                 case PNG_COLOR_TYPE_GRAY_ALPHA:
                     if(color_nb_bits == 16)
                     {
-                        Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointer);
+                        quint16 *src = reinterpret_cast<quint16 *>(row_pointer);
                         while (!it.isDone()) {
-                            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                            quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
                             d[0] = *(src++);
                             if(transform) cmsDoTransform(transform, d, d, 1);
                             if(hasalpha) d[1] = *(src++);
-                            else d[1] = Q_UINT16_MAX;
+                            else d[1] = quint16_MAX;
                             ++it;
                         }
                     } else {
@@ -368,15 +379,15 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                 case PNG_COLOR_TYPE_RGB_ALPHA:
                     if(color_nb_bits == 16)
                     {
-                        Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointer);
+                        quint16 *src = reinterpret_cast<quint16 *>(row_pointer);
                         while (!it.isDone()) {
-                            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                            quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
                             d[2] = *(src++);
                             d[1] = *(src++);
                             d[0] = *(src++);
                             if(transform) cmsDoTransform(transform, d, d, 1);
                             if(hasalpha) d[3] = *(src++);
-                            else d[3] = Q_UINT16_MAX;
+                            else d[3] = quint16_MAX;
                             ++it;
                         }
                     } else {
@@ -522,11 +533,68 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     png_set_compression_buffer_size(png_ptr, 8192);
     
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
-    int color_type = getColorTypeforColorSpace(img->colorSpace(), alpha);
+    int color_type = getColorTypeforColorSpace(layer->paintDevice()->colorSpace(), alpha);
     
     if(color_type == -1)
     {
         return KisImageBuilder_RESULT_UNSUPPORTED;
+    }
+    
+    // Try to compute a table of color if the colorspace is RGB8f
+    png_colorp palette ;
+    int num_palette = 0;
+    if(!alpha && layer->paintDevice()->colorSpace()->id() == KisID("RGBA") )
+    { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
+        palette = new png_color[255];
+        KisRectIteratorPixel it = layer->paintDevice()->createRectIterator(0,0, img->width(), img->height(), false);
+        bool toomuchcolor = false;
+        while( !it.isDone() )
+        {
+            const Q_UINT8* c = it.rawData();
+            bool findit = false;
+            for(int i = 0; i < num_palette; i++)
+            {
+                if(palette[i].red == c[2] &&
+                   palette[i].green == c[1] &&
+                   palette[i].blue == c[0] )
+                {
+                    findit = true;
+                    break;
+                }
+            }
+            if(!findit)
+            {
+                if( num_palette == 255)
+                {
+                    toomuchcolor = true;
+                    break;
+                }
+                palette[num_palette].red = c[2];
+                palette[num_palette].green = c[1];
+                palette[num_palette].blue = c[0];
+                num_palette++;
+            }
+            ++it;
+        }
+        if(!toomuchcolor)
+        {
+            kdDebug(41008) << "Found a palette of " << num_palette << " colors" << endl;
+            color_type = PNG_COLOR_TYPE_PALETTE;
+            if( num_palette <= 2)
+            {
+                color_nb_bits = 1;
+            } else if( num_palette <= 4)
+            {
+                color_nb_bits = 2;
+            } else if( num_palette <= 16)
+            {
+                color_nb_bits = 4;
+            } else {
+                color_nb_bits = 8;
+            }
+        } else {
+            delete palette;
+        }
     }
     
     int interlacetype = interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
@@ -539,7 +607,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
     
     png_set_sRGB(png_ptr, info_ptr, PNG_sRGB_INTENT_ABSOLUTE);
-    
+    // set the palette
+    if( color_type == PNG_COLOR_TYPE_PALETTE)
+    {
+        png_set_PLTE(png_ptr, info_ptr, palette, num_palette);
+    }
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
@@ -654,6 +726,27 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
                     }
                 }
                 break;
+            case PNG_COLOR_TYPE_PALETTE:
+            {
+                Q_UINT8 *dst = row_pointers[y];
+                KisPNGStream writestream(dst, color_nb_bits);
+                while (!it.isDone()) {
+                    const Q_UINT8 *d = it.rawData();
+                    int i;
+                    for(i = 0; i < num_palette; i++)
+                    {
+                        if(palette[i].red == d[2] &&
+                           palette[i].green == d[1] &&
+                           palette[i].blue == d[0] )
+                        {
+                            break;
+                        }
+                    }
+                    writestream.setNextValue(i);
+                    ++it;
+                }
+            }
+            break;
             default:
                 KIO::del(uri);
                 return KisImageBuilder_RESULT_UNSUPPORTED;
@@ -671,6 +764,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
         delete[] row_pointers[y];
     }
     delete[] row_pointers;
+
+    if( color_type == PNG_COLOR_TYPE_PALETTE)
+    {
+        delete palette;
+    }
 
     fclose(fp);
     
