@@ -23,6 +23,11 @@
 <surname>Mahfouf</surname>
 <affiliation><address><email>annma@kde.org</email></address></affiliation>
 </author>
+<author>
+<firstname>Alfredo</firstname>
+<surname>Beaumont Sainz</surname>
+<affiliation><address><email>alfredo.beaumont@gmail.com</email></address></affiliation>
+</author>
 <othercredit role="developer">
 <firstname>Ulrich</firstname>
 <surname>K&uuml;ttler</surname>
@@ -39,10 +44,14 @@
 <year>2005</year>
 <holder>Anne-Marie Mahfouf</holder>
 </copyright>
+<copyright>
+<year>2006</year>
+<holder>Alfredo Beaumont Sainz</holder>
+</copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2006-01-10</date>
-<releaseinfo>1.4.88</releaseinfo>
+<date>2006-09-09</date>
+<releaseinfo>1.5.90</releaseinfo>
 
 <abstract>
 <para>
@@ -150,13 +159,6 @@ like:</para>
 	  </imageobject>
 	</mediaobject>
 </screenshot>
-
-<important>
-<para>See the <link linkend="fonts">Mathematical Fonts</link> section
-for font installation details. You must install the bakoma or esstix fonts
-to get these results.
-</para>
-</important>
 
 <sect1 id="kformula-features">
 <title>More &kformula; features</title>
@@ -1166,166 +1168,26 @@ action="simul">&Ctrl;<keycap>U</keycap></keycombo>. Here is the correct
 </sect1>
 </chapter>
 
-
-<chapter id="fonts">
-<title>Mathematical Fonts</title>
-
-<para>
-It is highly recommended to use the bakoma Tex fonts found here:
-</para>
-<para>
-<ulink url="http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/">
-http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/</ulink>
-</para>
-<para>
-You need these fonts in particular: cmbx10, cmex10, cmmi10,
-cmr10, cmsy10, msam10 and msbm10. Install them into your system
-and make sure you have the install path set as a FontPath in your
-X11 configuration, then completely restart your X Server, if you
-use a display manager like &kdm;, you should also restart kdm.
-Pressing <keycombo action="simul">&Ctrl; &Alt; <keycap>Backspace</keycap>
-</keycombo> at the login should do the trick.
-If unsure, do a complete reboot.
-</para>
-
-<note><para>
-The bakoma Tex fonts are included in the source package of &kformula;, you find them in
-<filename class="directory">$<envar>KDEDIR</envar>/share/apps/kformula/fonts/</filename>.
-</para></note>
-
-<para>
-You can also use the Esstix fonts. Only try the Esstix fonts
-if the above don't work. These fonts can be obtained from 
-
-<!-- THIS SITE IS NOT ANONYMOUS ANYMORE - raphael
-<ulink url="ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip">
-ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</ulink> or
--->
-
-<ulink url="http://www.w3.org/Amaya/Distribution/esstix.tar.gz">
-http://www.w3.org/Amaya/Distribution/esstix.tar.gz</ulink>
-</para>
-
-<sect1>
-<title>Installing the fonts with &kcontrolcenter;</title>
-
-<para>
-After downloading the fonts, install them into a folder called
-<filename class="directory">esstix</filename>. You can unpack them with 
-the &kde; application &ark;. <mousebutton>Right</mousebutton> click on
-<filename>esstix.tar.gz</filename> and select <menuchoice><guimenu>Extract</guimenu>
-<guimenuitem>Extract Here</guimenuitem></menuchoice>.   
-Then start the &kde; font installer by going to the K menu and
-selecting the command <menuchoice><guimenu>Control 
-Center</guimenu><guimenuitem>System Administration</guimenuitem><guimenuitem>
-Font Installer</guimenuitem></menuchoice> You should get the following
-screen:</para>
-
-<screenshot>
-<screeninfo>Picture of the &kde; font installer</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="kfontinst1.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of the &kde; font installer</phrase></textobject>
-</mediaobject>
-</screenshot>
-
-<para>
-You will need to run the font installer with <systemitem
-class="username">root</systemitem> privileges in order to install the fonts system-wide. Click on the button
-<guibutton>Administrator Mode</guibutton> and enter your <systemitem 
-class="username">root</systemitem> password.</para> 
-
-<screenshot>
-<screeninfo>Picture of the &kde; font installer</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="kfontinst2.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of the &kde; font installer</phrase></textobject>
-	</mediaobject>
-</screenshot>
-
-<para>Click on the button 
-<guibutton>Add Fonts...</guibutton>. 
-This should bring up a pane from where you can select the folder your fonts are 
-stored in. In
-this example they are stored in <filename
-class="directory">/home/annma/esstix</filename>.</para>
-
-
-<screenshot>
-<screeninfo>Picture of font installer ready to install</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="kfontinst3.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of font installer ready to 
-install</phrase></textobject>
-	</mediaobject>
-</screenshot>
-
-<para>Select all the fonts with  <keycombo
-action="simul">&Ctrl;<keycap>A</keycap></keycombo>.</para>
-
-
-<screenshot>
-<screeninfo>Picture of the font installer installing</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="kfontinst4.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of the font installer 
-installing</phrase></textobject>
-	</mediaobject>
-</screenshot>
-
-<para>
-Click on the <guibutton>Open</guibutton> button. You will then see a progress dialog telling you it is installing the fonts.</para>
-
-<screenshot>
-<screeninfo>Picture of &kcontrolcenter; applying the fonts</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="kfontinst5.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of &kcontrolcenter; applying the 
-fonts</phrase></textobject>
-	</mediaobject>
-</screenshot>
-
-<para>&kformula; will need to be restarted in order to use the newly installed fonts. To use the Esstix fonts, open
-<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure &kformula;...</guimenuitem></menuchoice> and select <guimenu>Esstix font style</guimenu> as shown below. </para>
-
-<screenshot>
-<screeninfo>Picture of settings tab</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="kfontinst6.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of settings to select the Esstix fonts</phrase></textobject>
-	</mediaobject>
-</screenshot>
-
-<para>The <guilabel>Symbol font style</guilabel> are fonts named Symbol shipped with most distributions and the <guilabel>Computer modern (TeX) style</guilabel> fonts are the bakoma fonts mentionned above.
-</para>
-
-</sect1>
-
-</chapter>
-
 <chapter id="credits-and-licenses">
 <title>Credits and Licenses</title>
 
-<para>&kformula; copyright Ulrich K&uuml;ttler</para>
-<para>Co-developer: Andrea Rizzi</para>
+<para>&kformula; Copyright by The KFormula Team</para>
+
+<itemizedlist>
+<title>&kformula; Developers (Alphabetically)</title>
+<listitem><para>Alfredo Beaumont Sainz <email>alfredo.beaumont@gmail.com</email></para></listitem>
+<listitem><para>Ulrich K&uuml;ttler</para></listitem>
+<listitem><para>Andrea Rizzi</para></listitem>
+</itemizedlist>
 
 <para>Documentation copyright 2002 Jonathan Drews
 <email>j.e.drews@att.net</email></para>
 
 <para>Documentation copyright 2005 Anne-Marie Mahfouf
 <email>annma@kde.org</email></para>
+
+<para>Documentation copyright 2006 Alfredo Beaumont Sainz
+<email>alfredo.beaumont@gmail.com</email></para>
 <!--TRANS:CREDIT_FOR_TRANSLATORS-->
 &underFDL;
 &underGPL;
@@ -1360,14 +1222,6 @@ You must have &koffice; installed. &kformula; will not work without the rest of
 
 
 &install.compile.documentation;
-
-</sect1>
-
-<sect1 id="configuration">
-<title>Configuration</title>
-
-<para>Some fonts will not work with &kformula;. You will need to try several 
-to achieve a satisfactory rendering.</para>
 
 </sect1>
 
