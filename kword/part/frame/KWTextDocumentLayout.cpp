@@ -211,8 +211,11 @@ public:
             }
         }
         layout = 0;
-        if(! m_block.isValid())
+        if(! m_block.isValid()) {
+            QTextBlock block = m_block.previous(); // last correct one.
+            m_data->setEndPosition(block.position() + block.length());
             return false;
+        }
         m_format = m_block.blockFormat();
         if(! m_newShape) { // ignore margins at top of shape
             m_y += m_format.topMargin();
