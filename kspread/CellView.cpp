@@ -2638,7 +2638,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
 
         if ( lineWidth <= availableWidth ) {
             // We have room for the rest of the line.  End it here.
-          d->cell->strOutText() += outText.mid( pos1, breakpos - pos1 );
+          d->cell->d->strOutText += outText.mid( pos1, breakpos - pos1 );
           pos1 = breakpos;
         }
         else {
@@ -2647,10 +2647,10 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
             pos1++;
 
           if ( pos1 != 0 && breakpos != -1 ) {
-            d->cell->strOutText() += '\n' + outText.mid( pos1, breakpos - pos1 );
+            d->cell->d->strOutText += '\n' + outText.mid( pos1, breakpos - pos1 );
           }
           else
-            d->cell->strOutText() += outText.mid( pos1, breakpos - pos1 );
+            d->cell->d->strOutText += outText.mid( pos1, breakpos - pos1 );
 
           start = pos1;
           pos1 = breakpos;
