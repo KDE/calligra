@@ -375,7 +375,7 @@
             <filter id="krita_tiff">
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/tiff"/>
                 <title xml:lang="en_us">TIFF</title>
-                <stat import="threestars" export="threestars"/>
+                <stat import="fivestars" export="fivestarts"/>
             </filter>
             <filter id="krita_raw">
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/raw"/>
@@ -390,6 +390,12 @@
                 developed by &lt;a href="http://www.ilm.com"&gt;Industrial Light &amp; Magic&lt;/a&gt;
                 </note>
                 <stat import="fourstars" export="fourstars"/>
+            </filter>
+            <filter id="krita_pdf">
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/pdf"/>
+                <title xml:lang="en_us">PDF</title>
+                <note xml:lang="en_us">Portable Document Format</note>
+                <stat import="threestars" export="threestars"/>
             </filter>
             <filter id="krita_xcf">
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/xcf"/>
