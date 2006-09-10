@@ -387,7 +387,7 @@
                 <title xml:lang="en_us">OpenEXR</title>
                 <note xml:lang="en_us">
                 &lt;a href="http://www.openexr.com/"&gt;OpenEXR&lt;/a&gt; is a high dynamic-range (HDR) format &lt;br /&gt; 
-                developed by &lt;a href="http://www.ilm.com"&gt;Industrial Light &amp; Magic&lt;/a&gt;
+                developed by &lt;a href="http://www.ilm.com"&gt;Industrial Light &amp;amp; Magic&lt;/a&gt;
                 </note>
                 <stat import="fourstars" export="fourstars"/>
             </filter>
