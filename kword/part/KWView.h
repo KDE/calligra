@@ -93,6 +93,9 @@ private slots:
     void updateZoom();
     void editFrameProperties();
 
+    // actions
+    void print();
+
 private:
     KWGui *m_gui;
     KWCanvas *m_canvas;
