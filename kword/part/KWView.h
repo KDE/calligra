@@ -93,6 +93,8 @@ private slots:
     void updateZoom();
     void editFrameProperties();
 
+    void selectionChanged();
+
     // actions
     void print();
 

@@ -62,6 +62,8 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     m_currentPage = m_document->pageManager()->page(m_document->startPage());
 
     setupActions();
+
+    connect( kwcanvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 }
 
 KWView::~KWView() {
@@ -98,6 +100,7 @@ void KWView::setupActions() {
     m_actionFormatFrameSet = new KAction( i18n( "Frame/Frameset Properties" ),
             actionCollection(), "format_frameset");
     m_actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties" ) );
+    m_actionFormatFrameSet->setEnabled( false );
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
     KAction *print = new KAction("MyPrint", actionCollection(), "file_my_print");
@@ -265,4 +268,11 @@ const bool clipToPage=false; // should become a setting in the GUI
     painter.end();
 }
 
+
+void KWView::selectionChanged()
+{
+  bool shapeSelected = kwcanvas()->shapeManager()->selection()->firstSelectedShape();
+
+  m_actionFormatFrameSet->setEnabled( shapeSelected );
+}
 #include "KWView.moc"
