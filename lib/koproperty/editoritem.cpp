@@ -98,6 +98,7 @@ class GroupWidgetBase : public QWidget
 		, m_isOpen(true)
 		, m_mouseDown(false)
 		{
+			setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, 0, 1));
 		}
 
 		void setText( const QString &text )
@@ -207,7 +208,7 @@ GroupContainer::GroupContainer(const QString& title, QWidget* parent)
 : QWidget(parent)
 , d(new Private())
 {
-	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+	setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, 0, 1));
 	d->lyr = new QVBoxLayout(this);
 	d->groupWidget = new GroupWidgetBase(this);
 	d->groupWidget->setText( title );
