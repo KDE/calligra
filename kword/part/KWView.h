@@ -77,6 +77,18 @@ public:
     /// overwritten method from superclass
     QDockWidget *createToolBox();
 
+signals:
+    /// emitted when this view wants to go back in the document command-history.
+    void undo();
+    /// emitted when this view wants to go forward in the document command-history.
+    void redo();
+
+public slots:
+    /// handles undo requests
+    void editUndo();
+    /// handles redo requests
+    void editRedo();
+
 protected:
     /// overwritten method from superclass
     void resizeEvent( QResizeEvent *e );

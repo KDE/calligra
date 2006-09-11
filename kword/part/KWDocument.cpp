@@ -43,6 +43,7 @@
 
 // KDE + Qt includes
 #include <klocale.h>
+#include <kstdaction.h>
 #include <kmessagebox.h>
 #include <QIODevice>
 #include <QTimer>
@@ -116,6 +117,18 @@ KoView* KWDocument::createViewInstance(QWidget* parent) {
             view->kwcanvas()->shapeManager()->add(frame->shape());
         }
     }
+    KAction *undo = KStdAction::undo(view, SLOT(editUndo()),
+            view->actionCollection(), "koffice_undo");
+    //undo->setEnabled(m_commandHistory.isUndoAvailable());
+    KAction *redo = KStdAction::redo(view, SLOT(editRedo()),
+            view->actionCollection(), "koffice_redo");
+    //redo->setEnabled(m_commandHistory.isRedoAvailable());
+    connect(view, SIGNAL(undo()), &m_commandHistory, SLOT(undo()));
+    connect(view, SIGNAL(redo()), &m_commandHistory, SLOT(redo()));
+    // TODO extend KoCommandHistory and allow me to register all actions to update
+    //  their availability and their texts.
+    //  Use something like QList<QPointer<KAction> > m_undoCommands;
+
     return view;
 }
 
@@ -378,6 +391,9 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     setModified(false);
 }
 
+void KWDocument::addCommand(KCommand *command, bool execute) {
+    m_commandHistory.addCommand(command, execute);
+}
 
 #ifndef NDEBUG
 void KWDocument::printDebug() {

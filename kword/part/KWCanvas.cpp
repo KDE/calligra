@@ -80,7 +80,7 @@ bool KWCanvas::snapToGrid() const {
 }
 
 void KWCanvas::addCommand(KCommand *command, bool execute) {
-    //m_document->addCommand(command, execute); // TODO
+    m_document->addCommand(command, execute);
 }
 
 void KWCanvas::updateCanvas(const QRectF& rc) {

@@ -29,6 +29,7 @@
 #include <KoShapeControllerBase.h>
 #include <KoZoomMode.h>
 
+#include <kcommand.h>
 #include <QObject>
 #include <QPainter>
 #include <QRect>
@@ -196,6 +197,8 @@ public:
     KoStyleManager *styleManager() { return m_styleManager; }
     const KoStyleManager *styleManager() const { return m_styleManager; }
 
+    void addCommand(KCommand *command, bool execute = true);
+
 #ifndef NDEBUG
     /// Use a log of kDebug calls to print out the internal state of the document and its members
     void printDebug();
@@ -251,6 +254,7 @@ private:
     QMap<KoShape*, KWFrame*> m_frameMap;
 
     KoStyleManager *m_styleManager;
+    KCommandHistory m_commandHistory;
 };
 
 class PageProcessingQueue : public QObject {

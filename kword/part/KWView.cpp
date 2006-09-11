@@ -35,9 +35,11 @@
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
 #include <KoToolBox.h>
+#include <KoTextShapeData.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
+#include <QTextDocument>
 #include <QTimer>
 #include <QPrinter>
 #include <klocale.h>
@@ -54,10 +56,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
-    if ( !m_document->isReadWrite() )
-        setXMLFile( "kword_readonly.rc" );
-    else
-        setXMLFile( "kword.rc" );
+    setXMLFile( "kword.rc" );
 
     m_currentPage = m_document->pageManager()->page(m_document->startPage());
 
@@ -87,8 +86,8 @@ void KWView::setupActions() {
     if ( kwcanvas() && kwcanvas()->viewMode()->hasPages() )
         modes |= KoZoomMode::ZOOM_PAGE;
 
-    m_actionViewZoom = new KoZoomAction( modes, "viewmag", i18n( "Zoom" ),
-                                         0, actionCollection(), "view_zoom" );
+    m_actionViewZoom = new KoZoomAction( modes, i18n( "Zoom" ), 0, 0,
+            actionCollection(), "view_zoom" );
     m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     m_zoomHandler.setZoomMode( m_document->zoomMode() );
     m_zoomHandler.setZoom( m_document->zoom() );
@@ -268,11 +267,37 @@ const bool clipToPage=false; // should become a setting in the GUI
     painter.end();
 }
 
-
 void KWView::selectionChanged()
 {
   bool shapeSelected = kwcanvas()->shapeManager()->selection()->count() > 0;
 
   m_actionFormatFrameSet->setEnabled( shapeSelected );
 }
+
+void KWView::editUndo() {
+    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    if(shape) {
+        // first see if we have a text shape that we are editing and direct undo there.
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+        if(data && data->document()->isUndoAvailable()) {
+            data->document()->undo();
+            return;
+        }
+    }
+    emit undo();
+}
+
+void KWView::editRedo() {
+    KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    if(shape) {
+        // first see if we have a text shape that we are editing and direct undo there.
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+        if(data && data->document()->isRedoAvailable()) {
+            data->document()->redo();
+            return;
+        }
+    }
+    emit redo();
+}
+
 #include "KWView.moc"
