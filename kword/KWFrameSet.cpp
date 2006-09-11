@@ -658,8 +658,11 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
                                  resetChanged && lastCopy,
                                  edit,
                                  viewMode, settingsFrame, true /*transparency & double-buffering*/ );
-            if(viewMode->drawSelections() && frameViewManager)
-                frameViewManager->view(frame)->paintFrameAttributes(p, crect, viewMode, m_doc);
+            if(viewMode->drawSelections() && frameViewManager) {
+                KWFrameView* view = frameViewManager->view(frame);
+                if(view)
+                    view->paintFrameAttributes(p, crect, viewMode, m_doc);
+            }
 
             if ( !lastRealFrame || !frame->isCopy() )
             {
