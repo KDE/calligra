@@ -271,7 +271,7 @@ const bool clipToPage=false; // should become a setting in the GUI
 
 void KWView::selectionChanged()
 {
-  bool shapeSelected = kwcanvas()->shapeManager()->selection()->firstSelectedShape();
+  bool shapeSelected = kwcanvas()->shapeManager()->selection()->count() > 0;
 
   m_actionFormatFrameSet->setEnabled( shapeSelected );
 }
