@@ -17,7 +17,9 @@
  */
 #include "KWPageManager.h"
 #include "KWPage.h"
-#include "KoShape.h"
+
+#include <KoShape.h>
+#include <KoUnit.h>
 
 //#define DEBUG_PAGES
 
@@ -25,6 +27,12 @@ KWPageManager::KWPageManager() {
     m_firstPage = 1;
     m_onlyAllowAppend = false;
     m_defaultPageLayout = KoPageLayout::standardLayout();
+
+    // industry standard for bleed
+    m_padding.top = MM_TO_POINT(3);
+    m_padding.bottom = MM_TO_POINT(3);
+    m_padding.left = MM_TO_POINT(3);
+    m_padding.right = MM_TO_POINT(3);
 }
 
 KWPageManager::~KWPageManager() {
@@ -138,14 +146,14 @@ double KWPageManager::bottomOfPage(int pageNum) const {
 double KWPageManager::pageOffset(int pageNum, bool bottom) const {
     if(pageNum < m_firstPage)
         return 0;
-    double offset = 0.0;
+    double offset = m_padding.top;
     foreach(KWPage *page, m_pageList) {
         if(page->pageNumber() == pageNum) {
             if(bottom)
                 offset += page->height();
             break;
         }
-        offset += page->height();
+        offset += page->height() + m_padding.top + m_padding.bottom;
     }
     return offset;
 }

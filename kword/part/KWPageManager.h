@@ -20,6 +20,7 @@
 
 #include "kword_export.h"
 #include <KoPageLayout.h>
+#include <KoInsets.h>
 
 #include <QList>
 #include <QPointF>
@@ -132,6 +133,22 @@ public:
      */
     QList<KWPage*> pages() const;
 
+    /**
+     * Return the padding used for this document. This is used to have some space around each
+     * page outside of the printable area for page bleed.
+     */
+    const KoInsets &padding() const { return m_padding; }
+    /**
+     * Return the padding used for this document. This is used to have some space around each
+     * page outside of the printable area for page bleed.
+     */
+    KoInsets &padding() { return m_padding; }
+    /**
+     * Set a new padding used for this document. This is used to have some space around each
+     * page outside of the printable area for page bleed.
+     */
+    void setPadding(const KoInsets &padding) { m_padding = padding; }
+
 private:
     /// helper method for the topOfPage and bottomOfPage
     double pageOffset(int pageNumber, bool bottom) const;
@@ -144,6 +161,7 @@ private:
     bool m_onlyAllowAppend; // true for WP style documents.
 
     KoPageLayout m_defaultPageLayout;
+    KoInsets m_padding;
 };
 
 #endif

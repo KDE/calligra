@@ -210,10 +210,10 @@ QDockWidget *KWView::createToolBox() {
 void KWView::print() {
 // options;
 //   DPI
-//   clip to page
 //   pages
 //   fontEmbeddingEnabled();
 //   duplex
+const bool clipToPage=false; // should become a setting in the GUI
 
     QPrinter printer;
     printer.setOutputFormat(QPrinter::PdfFormat);
@@ -228,6 +228,10 @@ void KWView::print() {
     KoZoomHandler zoomer;
     zoomer.setZoomAndResolution(100, resolution, resolution);
     const int lastPage = m_document->lastPage();
+    KoInsets bleed = m_document->pageManager()->padding();
+    const int bleedOffset = clipToPage?0:POINT_TO_INCH(-bleed.left * resolution);
+    const int bleedWidth = clipToPage?0:POINT_TO_INCH((bleed.left + bleed.right) * resolution);
+    const int bleedHeigt = clipToPage?0:POINT_TO_INCH((bleed.top + bleed.bottom) * resolution);
     for(int pageNum=m_document->startPage(); pageNum <= lastPage; pageNum++) {
         KWPage *page = m_document->pageManager()->page(pageNum);
         // Note that Qt does not at this time allow us to alter the page size to an arbitairy size
@@ -236,20 +240,20 @@ void KWView::print() {
 
         painter.translate(0, -pageOffset);
         double width = page->width();
-        int clipHeight = (int) POINT_TO_INCH( resolution * page->height() );
-        int clipWidth = (int) POINT_TO_INCH( resolution * page->width() );
-        int offset = 0;
+        int clipHeight = (int) POINT_TO_INCH( resolution * page->height());
+        int clipWidth = (int) POINT_TO_INCH( resolution * page->width());
+        int offset = bleedOffset;
         if(page->pageSide() == KWPage::PageSpread) { // left part
             width /= 2;
             clipWidth /= 2;
-            offset = clipWidth;
-            painter.setClipRect(0, pageOffset, clipWidth, clipHeight);
+            painter.setClipRect(offset, pageOffset, clipWidth + bleedWidth, clipHeight + bleedHeigt);
             m_canvas->shapeManager()->paint( painter, zoomer, true );
             printer.newPage();
             painter.translate(-clipWidth, 0);
             pageNum++;
+            offset += clipWidth;
         }
-        painter.setClipRect(offset, pageOffset, clipWidth, clipHeight);
+        painter.setClipRect(offset, pageOffset, clipWidth + bleedWidth, clipHeight + bleedHeigt);
         m_canvas->shapeManager()->paint( painter, zoomer, true );
 
         painter.restore();

@@ -29,7 +29,8 @@
 /**
  * This is one viewmode strategy used by the canvas to map the internal page layout to
  * one that users want to see.
- * The document-internal structure places one page below another, which is mirrored
+ * The document-internal structure places one page below another, with page-padding in
+ * in between. This strategy is mirrored
  * in this viewmode.  Only when there is at least one PageSpread kind of page will the
  * behavior change slightly.  A pagespread type page is what the user will perceive as
  * 2 pages, but KWord internally sees as one big page with a special type.  Since it is
