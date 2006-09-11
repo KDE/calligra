@@ -30,12 +30,11 @@ void KWPageSettings::clear() {
     m_footNoteSeparatorLineWidth = 0.5; // like in OOo
     m_footNoteSeparatorLineType = Qt::SolidLine;
 
-// TODO sane defaults.
     m_mainFrame = true;
-    m_headerDistance = 10;
-    m_footerDistance = 9;
-    m_footNoteDistance = 8;
-    m_endNoteDistance = 7;
+    m_headerDistance = 10; // ~3mm
+    m_footerDistance = 10;
+    m_footNoteDistance = 10;
+    m_endNoteDistance = 10;
     m_firstHeader = KWord::HFTypeNone;
     m_firstFooter = KWord::HFTypeEvenOdd;
     m_headers = KWord::HFTypeEvenOdd;
