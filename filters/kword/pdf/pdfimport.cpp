@@ -123,7 +123,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
                            << "----------------" << endl;
             if (first) _doc.treatPage( it.current() );
             else _doc.dumpPage(data.pageIndex);
-            pd.progressBar()->advance(1);
+            pd.progressBar()->setValue(pd.progressBar()->value()+1);
             data.pageIndex++;
         }
     }
