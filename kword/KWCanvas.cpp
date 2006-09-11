@@ -1954,7 +1954,12 @@ void KWCanvas::printRTDebug( int info )
 
 void KWCanvas::setXimPosition( int x, int y, int w, int h )
 {
-    QWidget::setMicroFocusHint( x - contentsX(), y - contentsY(), w, h );
+    /* Check for hasFocus() to avoid crashes in QXIMInputContext as in bug #123941.
+       This is only a workaround, the real problem might be in Qt. See also
+       http://lists.kde.org/?l=kde-core-devel&m=115770546313922&w=2 .
+    */
+    if (hasFocus())
+      QWidget::setMicroFocusHint( x - contentsX(), y - contentsY(), w, h );
 }
 
 void KWCanvas::inlinePictureStarted()
