@@ -65,8 +65,8 @@ FormatDialog::FormatDialog( View* view, const char* name )
 	m_cells[ i ] = 0;
 
     m_view = view;
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
+    QWidget *page = mainWidget();
+
     QVBoxLayout *vbox = new QVBoxLayout( page );
     vbox->setMargin(KDialog::marginHint());
     vbox->setSpacing(KDialog::spacingHint());
