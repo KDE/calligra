@@ -165,6 +165,7 @@ VRoundRectTool::shape( bool interactive ) const
 				m_optionsWidget->roundy() );
 	}
 #endif
+        return 0;
 }
 
 bool

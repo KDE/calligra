@@ -128,6 +128,7 @@ VRectangleTool::shape( bool interactive ) const
 				m_d1,
 				m_d2 );
 #endif
+        return 0;
 }
 
 bool
