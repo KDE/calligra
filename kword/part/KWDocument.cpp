@@ -45,6 +45,7 @@
 #include <klocale.h>
 #include <kstdaction.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 #include <QIODevice>
 #include <QTimer>
 #include <QDomDocument>
@@ -108,6 +109,7 @@ void KWDocument::paintContent(QPainter&, const QRect&, bool, double, double) {
 
 bool KWDocument::saveOasis(KoStore*, KoXmlWriter*) {
     // TODO
+    return false;
 }
 
 KoView* KWDocument::createViewInstance(QWidget* parent) {
@@ -117,17 +119,13 @@ KoView* KWDocument::createViewInstance(QWidget* parent) {
             view->kwcanvas()->shapeManager()->add(frame->shape());
         }
     }
-    KAction *undo = KStdAction::undo(view, SLOT(editUndo()),
-            view->actionCollection(), "koffice_undo");
-    //undo->setEnabled(m_commandHistory.isUndoAvailable());
-    KAction *redo = KStdAction::redo(view, SLOT(editRedo()),
-            view->actionCollection(), "koffice_redo");
-    //redo->setEnabled(m_commandHistory.isRedoAvailable());
+    KAction *undo = m_commandHistory.createUndoAction(view->actionCollection());
+    connect(undo, SIGNAL(triggered(bool)), view, SLOT(editUndo()));
+    KAction *redo = m_commandHistory.createRedoAction(view->actionCollection());
+    connect(redo, SIGNAL(triggered(bool)), view, SLOT(editRedo()));
+
     connect(view, SIGNAL(undo()), &m_commandHistory, SLOT(undo()));
     connect(view, SIGNAL(redo()), &m_commandHistory, SLOT(redo()));
-    // TODO extend KoCommandHistory and allow me to register all actions to update
-    //  their availability and their texts.
-    //  Use something like QList<QPointer<KAction> > m_undoCommands;
 
     return view;
 }
@@ -271,6 +269,7 @@ void KWDocument::clear() {
 
 bool KWDocument::loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*) {
     // TODO
+    return false;
 }
 
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc ) {
@@ -392,7 +391,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 }
 
 void KWDocument::addCommand(KCommand *command, bool execute) {
-    m_commandHistory.addCommand(command, execute);
+    m_commandHistory.addCommand2(command, execute);
 }
 
 #ifndef NDEBUG

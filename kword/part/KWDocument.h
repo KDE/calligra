@@ -23,13 +23,13 @@
 
 #include "KWPageSettings.h"
 #include "KWPageManager.h"
+#include "KWMultiViewCommandHistory.h"
 #include "frame/KWFrameLayout.h"
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
 #include <KoZoomMode.h>
 
-#include <kcommand.h>
 #include <QObject>
 #include <QPainter>
 #include <QRect>
@@ -254,7 +254,7 @@ private:
     QMap<KoShape*, KWFrame*> m_frameMap;
 
     KoStyleManager *m_styleManager;
-    KCommandHistory m_commandHistory;
+    KWMultiViewCommandHistory m_commandHistory;
 };
 
 class PageProcessingQueue : public QObject {
