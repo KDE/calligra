@@ -500,7 +500,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
 		// We are already inside of a table. Tables in tables are not supported
 		// yet. So, just add that table-content as text.
 		for (DOM::Node rows=e.firstChild().firstChild();!rows.isNull();rows=rows.nextSibling())
-			if (!rows.isNull() && rows.nodeName().string().lower() == "tr")
+			if (!rows.isNull() && rows.nodeName().string().toLower() == "tr")
 				for (DOM::Node cols=rows.firstChild();!cols.isNull();cols=cols.nextSibling())
 					if (!cols.isNull())
 						parseNode(cols);
@@ -530,7 +530,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
  	//(maybe using computed sizes from khtml if thats once exported)
  	for (DOM::Node rowsnode=table_body.firstChild();!rowsnode.isNull();rowsnode=rowsnode.nextSibling()) {
  	DOM::Element rows = rowsnode;
- 	if (!rows.isNull() && rows.tagName().string().lower() == "tr") {
+ 	if (!rows.isNull() && rows.tagName().string().toLower() == "tr") {
  	    QColor obgcolor=bgcolor;
  	    if (!rows.getAttribute("bgcolor").string().isEmpty())
  	       	bgcolor=parsecolor(rows.getAttribute("bgcolor").string());
@@ -538,7 +538,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
  		ncol=0;
  		for (DOM::Node colsnode=rows.firstChild();!colsnode.isNull();colsnode=colsnode.nextSibling()) {
 			DOM::Element cols = colsnode;
-			const QString nodename = cols.isNull() ? QString::null : cols.nodeName().string().lower();
+			const QString nodename = cols.isNull() ? QString::null : cols.nodeName().string().toLower();
 			if (nodename == "td" || nodename == "th") {
 				QColor bbgcolor=bgcolor;
 				if (!cols.getAttribute("bgcolor").string().isEmpty())
@@ -636,7 +636,7 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
         _list_depth++;
         bool popstateneeded = false;
         for (DOM::Node items=e.firstChild();!items.isNull();items=items.nextSibling()) {
-                  if (items.nodeName().string().lower() == "li") {
+                  if (items.nodeName().string().toLower() == "li") {
                   		if (popstateneeded) {
                   			popState();
                   			//popstateneeded = false;
@@ -646,7 +646,7 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
                   		popstateneeded = true;
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
-                  		if (e.tagName().string().lower() == "ol")
+                  		if (e.tagName().string().toLower() == "ol")
 	                  		{
 	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","type","1");
 	                  		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");

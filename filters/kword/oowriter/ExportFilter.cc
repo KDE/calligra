@@ -1344,7 +1344,7 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
 
     QByteArray image;
 
-    QString strExtension(koStoreName.lower());
+    QString strExtension(koStoreName.toLower());
     const int result=koStoreName.findRev(".");
     if (result>=0)
     {

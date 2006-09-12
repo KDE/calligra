@@ -3,7 +3,7 @@
 add_subdirectory( kabc )
 add_subdirectory( kspread )
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SQLDIRECTORY)")
+message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir sql need test it")
 include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
 
@@ -26,31 +26,4 @@ install(TARGETS kwmailmerge_classic  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kwserialletter_classic.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-
-
-
-
-#original Makefile.am contents follow:
-
-#
-#KDE_CXXFLAGS = $(USE_RTTI)
-#INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula $(KOTEXT_INCLUDES) -I$(top_srcdir)/kword $(all_includes)
-#
-#kde_module_LTLIBRARIES = kwmailmerge_classic.la
-#
-### Plugin encapsulating the (old) internally stored style
-#kwmailmerge_classic_la_SOURCES = KWClassicSerialDataSource.cpp
-#kwmailmerge_classic_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#kwmailmerge_classic_la_LIBADD = ../libkwmailmerge_interface.la $(LIB_KDEUI) $(LIB_KOTEXT)
-#
-#METASOURCES = AUTO
-#
-#services_DATA=kwserialletter_classic.desktop
-#servicesdir=$(kde_servicesdir)
-#
-#if include_sql
-#SQLDIRECTORY=sql
-#endif
-#
-#SUBDIRS = . kabc kspread $(SQLDIRECTORY)
 #

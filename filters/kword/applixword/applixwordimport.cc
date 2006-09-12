@@ -430,7 +430,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
         return KoFilter::StorageCreationError;
     }
 
-    QByteArray cstring = str.utf8 ();
+    QByteArray cstring = str.toUtf8 ();
 
     out->write ((const char*) cstring, cstring.length());
 

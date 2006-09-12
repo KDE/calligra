@@ -411,7 +411,7 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                             Q3ValueList<ParaData>::ConstIterator it;
                             Q3ValueList<ParaData>::ConstIterator end(paraList->end());
                             for (it=paraList->begin();it!=end;++it)
-                                notestr += (*it).text.stripWhiteSpace().replace(QChar(10), m_eol, true) + m_eol;
+                                notestr += (*it).text.trimmed().replace(QChar(10), m_eol, true) + m_eol;
 
                             *m_streamOut << "[";
                             if (automatic) {
