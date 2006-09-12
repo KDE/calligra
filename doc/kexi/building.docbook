@@ -232,7 +232,13 @@ create primary key.
 
 </sect1>
 
+&enteringdataintotables;
+
+&querydesigning;
+
 &designingforms;
+
+&enteringdatausingforms;
 
 </chapter>
 
