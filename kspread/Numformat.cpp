@@ -41,7 +41,7 @@ Tomas
 
 namespace NumFormat_Local
 {
-  enum { Unknown, TimeDate, Number, Scientific, Fraction } Type;
+  enum Type { Unknown, TimeDate, Number, Scientific, Fraction };
 
   QString g_Monday;
   QString g_Tuesday;
