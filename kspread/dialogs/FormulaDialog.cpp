@@ -89,7 +89,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
 
     Q_ASSERT( m_pView->canvasWidget()->editor() );
 
-    QWidget *page = new QWidget();
+    QWidget *page = new QWidget(this);
     setMainWidget( page );
 
     QGridLayout *grid1 = new QGridLayout(page);
