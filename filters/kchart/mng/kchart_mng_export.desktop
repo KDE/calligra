@@ -1,5 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
+Name=KChart MNG Export Filter
 Type=Service
 X-KDE-Import=application/x-kchart
 X-KDE-Export=video/x-mng
