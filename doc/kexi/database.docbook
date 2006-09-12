@@ -3,10 +3,10 @@
 -->
 
 <appendix id="database">
-<title>Introduction to databases</title>
+<title>Introduction to Databases</title>
 
 <sect1 id="what-is-a-database">
-<title>What is a database?</title>
+<title>What Is a Database?</title>
 <para>
 You can define a database as a collection of data on one topic.
 It is organised in a way allowing to easily browse the information,
@@ -78,7 +78,7 @@ To sum up, you have already got a simple database with one table
 
 
 <sect1 id="database-and-spreadsheet">
-<title>Database and spreadsheet</title>
+<title>Database and Spreadsheet</title>
 <para>
 It is very likely that you have already used spreadsheet applications like
 KSpread, OpenOffice.org Calc or Microsoft Excel. If so, you will probably
@@ -106,7 +106,7 @@ capacity</link></para></listitem>
 </itemizedlist>
 
 <sect2 id="difference-database-and-spreadsheet">
-<title>How is a database different from a spreadsheet?</title>
+<title>How Is a Database Different From a Spreadsheet?</title>
 
 <para>
 Gradually exceeding the capacity of a mobile phone, expand your table
@@ -521,7 +521,7 @@ easy way as in case of spreadsheet files.
 </sect1>
 
 <sect1 id="database-design">
-<title>Database design</title>
+<title>Database Design</title>
 <para>
 Database design needs careful planning. Note that <guilabel>Contacts</guilabel>
 table redesign proposed in section 1.2 can generate problems when the
@@ -538,7 +538,7 @@ save your time on everyday use.
 </sect1>
 
 <sect1 id="who-needs-a-database">
-<title>Who needs a database?</title>
+<title>Who Needs a Database?</title>
 <itemizedlist>
 <title>Stick to spreadsheets if:</title>
 <listitem><para>
@@ -575,7 +575,7 @@ to using a database with form views.
 </sect1>
 
 <sect1 id="database-software">
-<title>Database creation software</title>
+<title>Database Creation Software</title>
 <para>
 So far you have learnt the general characteristics of databases without
 going into much detail about specific applications for designing them.

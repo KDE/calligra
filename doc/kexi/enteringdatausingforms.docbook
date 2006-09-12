@@ -4,7 +4,7 @@
  -->
 
   <sect1 id="entering-data-using-forms">
-    <title>Entering data using forms</title>
+    <title>Entering Data Using Forms</title>
     <para>
       Data entering and editing is usually database application user's task,
       not developer's. In practice it is desirable to check the form in terms

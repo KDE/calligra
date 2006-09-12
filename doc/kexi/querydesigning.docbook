@@ -3,7 +3,7 @@
 
  -->
 
-  <sect1 id="designing-database-queries">
+  <sect1 id="designing-queries">
     <title>Designing Database Queries</title>
     <para>
       A database's primary purpose is to store and help extracting information
