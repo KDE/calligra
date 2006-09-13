@@ -31,7 +31,6 @@ class TokenElement : public TokenStyleElement {
     typedef TokenStyleElement inherited;
 public:
     TokenElement( BasicElement* parent = 0 );
-    TokenElement( QChar ch, BasicElement* parent = 0 );
 
     /**
      * This is called by the container to get a command depending on

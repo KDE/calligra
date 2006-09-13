@@ -66,35 +66,6 @@ OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent 
 {
 }
 
-OperatorElement::OperatorElement( QChar ch, BasicElement* parent ) : TokenElement( ch, parent ),
-                                                           m_form( NoForm ),
-                                                           m_lspaceType( ThickMathSpace ),
-                                                           m_rspaceType( ThickMathSpace ),
-                                                           m_maxSizeType( InfinitySize ),
-                                                           m_minSizeType( RelativeSize ),
-                                                           m_minSize( 1 ),
-                                                           m_fence( false ),
-                                                           m_separator( false ),
-                                                           m_stretchy( false ),
-                                                           m_symmetric( true ),
-                                                           m_largeOp( false ),
-                                                           m_movableLimits( false ),
-                                                           m_accent( false ),
-                                                           m_customForm( false ),
-                                                           m_customFence( false ),
-                                                           m_customSeparator( false ),
-                                                           m_customLSpace( false ),
-                                                           m_customRSpace( false ),
-                                                           m_customStretchy( false ),
-                                                           m_customSymmetric( false ),
-                                                           m_customMaxSize( false ),
-                                                           m_customMinSize( false ),
-                                                           m_customLargeOp( false ),
-                                                           m_customMovableLimits( false ),
-                                                           m_customAccent( false )
-{
-}
-
 void OperatorElement::setForm( FormType type )
 {
     if ( ! m_customForm ) { // Set by an attribute has higher priority
@@ -201,6 +172,7 @@ KCommand* OperatorElement::buildCommand( Container* container, Request* request 
         KFCReplace* command = new KFCReplace( i18n("Add Operator"), container );
         OperatorRequest* opr = static_cast<OperatorRequest*>( request );
         TextElement* element = creationStrategy->createTextElement( opr->ch(), true );
+        element->setParent( this );
         command->addElement( element );
         return command;
     }
@@ -216,9 +188,11 @@ KCommand* OperatorElement::buildCommand( Container* container, Request* request 
     case req_addRoot:
     case req_addSymbol:
     case req_addOneByTwoMatrix:
-    case req_addMatrix:
+    case req_addMatrix: {
+        uint pos = static_cast<SequenceElement*>(getParent())->childPos( this );
+        cursor->setTo( getParent(), pos + 1);
         return getParent()->buildCommand( container, request );
-
+    }
     default:
         return SequenceElement::buildCommand( container, request );
     }

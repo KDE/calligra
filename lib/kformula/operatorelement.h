@@ -28,7 +28,6 @@ class OperatorElement : public TokenElement {
     typedef TokenElement inherited;
 public:
     OperatorElement( BasicElement* parent = 0 );
-    OperatorElement( QChar ch, BasicElement* parent = 0 );
     void setForm( FormType type );
 
     /**
@@ -41,9 +40,9 @@ public:
      */
     virtual KCommand* buildCommand( Container*, Request* );
 
+    virtual QString getElementName() const { return "mo"; }
 private:
     virtual bool readAttributesFromMathMLDom( const QDomElement &element );
-    virtual QString getElementName() const { return "mo"; }
     void writeMathMLAttributes( QDomElement& element ) const ;
     void writeSizeAttribute( QDomElement& element, const QString &attr, SizeType type, double length ) const ;
 

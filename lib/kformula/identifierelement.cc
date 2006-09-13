@@ -32,8 +32,6 @@ KFORMULA_NAMESPACE_BEGIN
 
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent ) {}
 
-IdentifierElement::IdentifierElement( QChar ch, BasicElement* parent ) : TokenElement( ch, parent ) {}
-
 /*
  * Token elements' content has to be of homogeneous type. Every token element
  * must (TODO: check this) appear inside a non-token sequence, and thus, if
@@ -53,7 +51,8 @@ KCommand* IdentifierElement::buildCommand( Container* container, Request* reques
         KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextRequest* tr = static_cast<TextRequest*>( request );
         for ( uint i = 0; i < tr->text().length(); i++ ) {
-            command->addElement( creationStrategy->createTextElement( tr->text()[i] ) );
+            TextElement* element = creationStrategy->createTextElement( tr->text()[i] );
+            command->addElement( element );
         }
         return command;
     }
@@ -75,9 +74,11 @@ KCommand* IdentifierElement::buildCommand( Container* container, Request* reques
     case req_addRoot:
     case req_addSymbol:
     case req_addOneByTwoMatrix:
-    case req_addMatrix:
+    case req_addMatrix: {
+        uint pos = static_cast<SequenceElement*>(getParent())->childPos( this );
+        cursor->setTo( getParent(), pos + 1);
         return getParent()->buildCommand( container, request );
-
+    }
     default:
         return SequenceElement::buildCommand( container, request );
     }

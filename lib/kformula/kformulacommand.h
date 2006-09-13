@@ -23,6 +23,7 @@
 
 #include <qmap.h>
 #include <qptrlist.h>
+#include <qptrdict.h>
 #include <qvaluevector.h>
 
 #include <kcommand.h>
@@ -222,6 +223,66 @@ public:
 
     KFCReplace(const QString &name, Container* document);
     ~KFCReplace();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+
+    /**
+     * The command that needs to be executed first if there is a selection.
+     */
+    KFCRemoveSelection* removeSelection;
+};
+
+/**
+ * Command to add a token element, with content.
+ */
+class KFCAddToken : public Command
+{
+public:
+    KFCAddToken( const QString &name, Container *document);
+    ~KFCAddToken();
+
+    virtual void execute();
+    virtual void unexecute();
+
+    /**
+     * Collect all tokens that are to be added
+     */
+    void addToken( BasicElement* element );
+
+    /**
+     * Collect content for each token
+     */
+    void addContent( BasicElement* element, BasicElement* content ) { 
+        contentList.find( element )->append( content ); 
+    }
+
+
+private:
+
+    /**
+     * List where all token elements are stored.
+     */
+    QPtrList< BasicElement > tokenList;
+
+    /**
+     * Dictionary where all content elements are stored
+     */
+    QPtrDict< QPtrList< BasicElement > > contentList;
+};
+
+/**
+ * Removes the current selection and adds any new tokens
+ * afterwards.
+ */
+class KFCReplaceToken : public KFCAddToken
+{
+public:
+
+    KFCReplaceToken(const QString &name, Container* document);
+    ~KFCReplaceToken();
 
     virtual void execute();
     virtual void unexecute();

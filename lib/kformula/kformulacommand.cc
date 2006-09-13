@@ -119,7 +119,6 @@ void KFCAdd::unexecute()
 }
 
 
-
 // ******  Remove selection command
 
 KFCRemoveSelection::KFCRemoveSelection(Container *document,
@@ -177,6 +176,103 @@ void KFCReplace::unexecute()
     }
 }
 
+
+// ******  Token Add command
+
+KFCAddToken::KFCAddToken(const QString &name, Container *document)
+        : Command(name, document)
+{
+    tokenList.setAutoDelete( true );
+}
+
+KFCAddToken::~KFCAddToken()
+{
+    QPtrDictIterator< QPtrList< BasicElement > > it( contentList );
+    QPtrList< BasicElement >* list;
+    while ( ( list = it.current() ) != 0 ) {
+        delete list;
+        ++it;
+    }
+}
+
+void KFCAddToken::execute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+    QPtrList<BasicElement> tokenListTmp = tokenList;
+    cursor->insert( tokenList, beforeCursor );
+    QPtrListIterator< BasicElement > it( tokenListTmp );
+    BasicElement* element;
+    BasicElement* current = cursor->getElement();
+    uint pos = cursor->getPos();
+    int mark = cursor->getMark();
+    while ( (element = it.current()) != 0 ) {
+        element->goInside( cursor );
+        cursor->insert( *contentList.find( element ), beforeCursor );
+        ++it;
+    }
+    setUnexecuteCursor(cursor);
+    cursor->setSelection(false);
+    testDirty();
+}
+
+
+void KFCAddToken::unexecute()
+{
+    FormulaCursor* cursor = getUnexecuteCursor();
+    QPtrListIterator< BasicElement > it( tokenList );
+    BasicElement* element;
+    BasicElement* current = cursor->getElement();
+    uint pos = cursor->getPos();
+    int mark = cursor->getMark();
+    while ( (element = it.current()) != 0 ) {
+        element->goInside( cursor );
+        cursor->remove( *contentList.find( element ), beforeCursor );
+    }
+    cursor->setTo( current, pos, mark );
+    cursor->remove(tokenList, beforeCursor);
+    //cursor->setSelection(false);
+    cursor->normalize();
+    testDirty();
+}
+
+/**
+ * Collect all tokens that are to be added
+ */
+void KFCAddToken::addToken( BasicElement* element )
+{ 
+    tokenList.append( element ); 
+    contentList.insert( element, new QPtrList< BasicElement > );
+    contentList.find( element )->setAutoDelete( true );
+}
+
+KFCReplaceToken::KFCReplaceToken(const QString &name, Container* document)
+        : KFCAddToken(name, document), removeSelection(0)
+{
+}
+
+KFCReplaceToken::~KFCReplaceToken()
+{
+    delete removeSelection;
+}
+
+void KFCReplaceToken::execute()
+{
+    if (getActiveCursor()->isSelection() && (removeSelection == 0)) {
+        removeSelection = new KFCRemoveSelection(getDocument());
+    }
+    if (removeSelection != 0) {
+        removeSelection->execute();
+    }
+    KFCAddToken::execute();
+}
+
+void KFCReplaceToken::unexecute()
+{
+    KFCAddToken::unexecute();
+    if (removeSelection != 0) {
+        removeSelection->unexecute();
+    }
+}
 
 
 KFCRemove::KFCRemove(Container *document,

@@ -42,14 +42,6 @@ TokenElement::TokenElement( BasicElement* parent ) : TokenStyleElement( parent )
 {
 }
 
-TokenElement::TokenElement( QChar ch, BasicElement* parent ) : TokenStyleElement( parent ),
-                                                               m_textOnly( true )
-{
-    TextElement* child = new TextElement( ch );
-    child->setParent( this );
-    insert( 0, child );
-}
-
 /*
  * Token elements' content has to be of homogeneous type. Every token element
  * must (TODO: check this) appear inside a non-token sequence, and thus, if
@@ -85,9 +77,11 @@ KCommand* TokenElement::buildCommand( Container* container, Request* request )
     case req_addRoot:
     case req_addSymbol:
     case req_addOneByTwoMatrix:
-    case req_addMatrix:
+    case req_addMatrix: {
+        uint pos = static_cast<SequenceElement*>(getParent())->childPos( this );
+        cursor->setTo( getParent(), pos + 1);
         return getParent()->buildCommand( container, request );
-
+    }
     default:
         return SequenceElement::buildCommand( container, request );
     }

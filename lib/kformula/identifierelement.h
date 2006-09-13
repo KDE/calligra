@@ -28,7 +28,6 @@ class IdentifierElement : public TokenElement {
     typedef TokenElement inherited;
 public:
     IdentifierElement( BasicElement* parent = 0 );
-    IdentifierElement( QChar ch, BasicElement* parent = 0 );
 
     /**
      * This is called by the container to get a command depending on
@@ -40,6 +39,7 @@ public:
      */
     virtual KCommand* buildCommand( Container*, Request* );
 
+    virtual QString getElementName() const { return "mi"; }
 protected:
 
     virtual void setStyleVariant( StyleAttributes& style );
@@ -54,7 +54,6 @@ protected:
                                 double factor ) { return 0; }
 
 private:
-    virtual QString getElementName() const { return "mi"; }
     
 };
 

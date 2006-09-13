@@ -124,19 +124,19 @@ IndexElement* OrdinaryCreationStrategy::createIndexElement()
     return new IndexElement;
 }
 
-IdentifierElement* OrdinaryCreationStrategy::createIdentifierElement( const QChar& ch )
+IdentifierElement* OrdinaryCreationStrategy::createIdentifierElement()
 {
-    return new IdentifierElement( ch );
+    return new IdentifierElement();
 }
 
-OperatorElement* OrdinaryCreationStrategy::createOperatorElement( const QChar& ch )
+OperatorElement* OrdinaryCreationStrategy::createOperatorElement()
 {
-    return new OperatorElement( ch );
+    return new OperatorElement();
 }
 
-TokenElement* OrdinaryCreationStrategy::createNumberElement( const QChar& ch )
+TokenElement* OrdinaryCreationStrategy::createNumberElement()
 {
-    return new TokenElement( ch );
+    return new TokenElement();
 }
 
 

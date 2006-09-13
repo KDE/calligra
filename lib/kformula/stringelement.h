@@ -28,7 +28,6 @@ class StringElement : public TokenElement {
     typedef TokenElement inherited;
 public:
     StringElement( BasicElement* parent = 0 );
-    StringElement( QChar ch, BasicElement* parent = 0 );
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 
 protected:

@@ -74,9 +74,9 @@ public:
     virtual RootElement* createRootElement() = 0;
     virtual SymbolElement* createSymbolElement( SymbolType type ) = 0;
     virtual IndexElement* createIndexElement() = 0;
-    virtual IdentifierElement* createIdentifierElement( const QChar& ch ) = 0;
-    virtual OperatorElement* createOperatorElement( const QChar& ch ) = 0;
-    virtual TokenElement* createNumberElement( const QChar& ch ) = 0;
+    virtual IdentifierElement* createIdentifierElement() = 0;
+    virtual OperatorElement* createOperatorElement() = 0;
+    virtual TokenElement* createNumberElement() = 0;
 	virtual QString type() const = 0;
 };
 
@@ -101,9 +101,9 @@ public:
     virtual SymbolElement* createSymbolElement( SymbolType type );
     virtual MatrixElement* createMatrixElement( uint rows, uint columns );
     virtual IndexElement* createIndexElement();
-    virtual IdentifierElement* createIdentifierElement( const QChar& ch );
-    virtual OperatorElement* createOperatorElement( const QChar& ch );
-    virtual TokenElement* createNumberElement( const QChar& ch );
+    virtual IdentifierElement* createIdentifierElement();
+    virtual OperatorElement* createOperatorElement();
+    virtual TokenElement* createNumberElement();
 	virtual QString type() const { return "Ordinary"; }
 };
 

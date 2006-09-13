@@ -952,69 +952,45 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
 
     switch ( *request ) {
     case req_addText: {
-        if ( cursor->getElement() == this && cursor->getPos() > 0 && !cursor->isSelection() ) {
-            IdentifierElement* element =
-                dynamic_cast<IdentifierElement*>( children.at( cursor->getPos()-1 ) );
-            if ( element != 0 ) {
-                element->goInsideLast( cursor );
-                return element->buildCommand( container, request );
-            }
+        KFCReplaceToken* command = new KFCReplaceToken( i18n("Add Text"), container );
+        TextRequest* tr = static_cast<TextRequest*>( request );
+        for ( uint i = 0; i < tr->text().length(); i++ ) {
+            IdentifierElement* id = creationStrategy->createIdentifierElement();
+            TextElement* text = creationStrategy->createTextElement( tr->text()[i] );
+            command->addToken( id );
+            command->addContent( id, text );
         }
-        else {
-            KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
-            TextRequest* tr = static_cast<TextRequest*>( request );
-            for ( uint i = 0; i < tr->text().length(); i++ ) {
-                command->addElement( creationStrategy->createIdentifierElement( tr->text()[i] ) );
-            }
-            return command;
-        }
-        return 0;
+        return command;
     }
     case req_addTextChar: {
-        if ( cursor->getElement() == this && cursor->getPos() > 0 && !cursor->isSelection() ) {
-            IdentifierElement* element =
-                dynamic_cast<IdentifierElement*>( children.at( cursor->getPos()-1 ) );
-            if ( element != 0 ) {
-                element->goInsideLast( cursor );
-                return element->buildCommand( container, request );
-            }
-        }
-        KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
+        KFCReplaceToken* command = new KFCReplaceToken( i18n("Add Text"), container );
         TextCharRequest* tr = static_cast<TextCharRequest*>( request );
-        IdentifierElement* element = creationStrategy->createIdentifierElement( tr->ch() );
-        command->addElement( element );
+        IdentifierElement* id = creationStrategy->createIdentifierElement();
+        TextElement* text = creationStrategy->createTextElement( tr->ch() );
+        command->addToken( id );
+        command->addContent( id, text );
         return command;
     }
 
     case req_addOperator: {
-        if ( cursor->getElement() == this && cursor->getPos() > 0 && !cursor->isSelection() ) {
-            OperatorElement* element =
-                dynamic_cast<OperatorElement*>( children.at( cursor->getPos()-1 ) );
-            if ( element != 0 ) {
-                element->goInsideLast( cursor );
-                return element->buildCommand( container, request );
-            }
-        }
-        KFCReplace* command = new KFCReplace( i18n("Add Operator"), container );
+        KFCReplaceToken* command = new KFCReplaceToken( i18n("Add Operator"), container );
         OperatorRequest* opr = static_cast<OperatorRequest*>( request );
-        OperatorElement* element = creationStrategy->createOperatorElement( opr->ch() );
-        command->addElement( element );
+        OperatorElement* op = creationStrategy->createOperatorElement();
+        TextElement* text = creationStrategy->createTextElement( opr->ch() );
+        command->addToken( op );
+        command->addContent( op, text );
         return command;
     }
 
     case req_addNumber: {
-        if ( cursor->getElement() == this && cursor->getPos() > 0 && !cursor->isSelection() ) {
-            TokenElement* element =
-                dynamic_cast<TokenElement*>( children.at( cursor->getPos()-1 ) );
-            if ( element != 0 && element->getElementName() == "mn" ) {
-                element->goInsideLast( cursor );
-                return element->buildCommand( container, request );
-            }
-        }
-        KFCReplace* command = new KFCReplace( i18n("Add Number"), container );
+        KFCReplaceToken* command = new KFCReplaceToken( i18n("Add Number"), container );
         NumberRequest* nr = static_cast<NumberRequest*>( request );
-        TokenElement* element = creationStrategy->createNumberElement( nr->ch() );
-        command->addElement( element );
+        TokenElement* num = creationStrategy->createNumberElement();
+        num->setParent( this );
+        TextElement* text = creationStrategy->createTextElement( nr->ch() );
+        text->setParent( num );
+        command->addToken( num );
+        command->addContent( num, text );
         return command;
     }
 

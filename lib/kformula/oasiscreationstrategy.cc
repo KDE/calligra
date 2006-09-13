@@ -192,19 +192,19 @@ BasicElement* OasisCreationStrategy::createOperatorElement( const QDomElement& e
     return new OperatorElement();
 }
 
-IdentifierElement* OasisCreationStrategy::createIdentifierElement( const QChar& ch )
+IdentifierElement* OasisCreationStrategy::createIdentifierElement()
 {
-    return new IdentifierElement( ch );
+    return new IdentifierElement();
 }
 
-OperatorElement* OasisCreationStrategy::createOperatorElement( const QChar& ch )
+OperatorElement* OasisCreationStrategy::createOperatorElement()
 {
-    return new OperatorElement( ch );
+    return new OperatorElement();
 }
 
-TokenElement* OasisCreationStrategy::createNumberElement( const QChar& ch )
+TokenElement* OasisCreationStrategy::createNumberElement()
 {
-    return new TokenElement( ch );
+    return new TokenElement();
 }
 
 KFORMULA_NAMESPACE_END
