@@ -41,12 +41,15 @@ KWViewModePreview::KWViewModePreview( KWCanvas* canvas )
 }
 
 QSize KWViewModePreview::contentsSize() {
+    return QSize();
 }
 
 QPointF KWViewModePreview::documentToView( const QPointF & point ) {
+    return QPointF();
 }
 
 QPointF KWViewModePreview::viewToDocument( const QPointF & point ) {
+    return QPointF();
 }
 
 void KWViewModePreview::updatePageCache() {
@@ -54,4 +57,5 @@ void KWViewModePreview::updatePageCache() {
 }
 
 QList<KWViewMode::ViewMap> KWViewModePreview::clipRectToDocument(const QRect &viewRect) const {
+    return QList<KWViewMode::ViewMap>();
 }
