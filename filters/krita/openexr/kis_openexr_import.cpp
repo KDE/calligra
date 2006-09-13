@@ -32,6 +32,8 @@
 //#include <ImfArray.h>
 //#include <drawImage.h>
 
+#include <KoCompositeOp.h>
+
 #include <iostream>
 
 #include "kis_types.h"
@@ -112,7 +114,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
         return KoFilter::CreationError;
     }
 
-    KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data()));
+    KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE, COMPOSITE_OVER, cs).data()));
 
     if (!layer) {
         return KoFilter::CreationError;

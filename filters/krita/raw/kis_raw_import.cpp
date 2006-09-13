@@ -51,6 +51,7 @@
 
 #include <KoDocument.h>
 #include <KoFilterChain.h>
+#include <KoCompositeOp.h>
 
 #include "kis_config.h"
 #include "kis_cmb_idlist.h"
@@ -211,7 +212,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             if (image.isNull()) return KoFilter::CreationError;
             image->blockSignals(true); // Don't send out signals while we're building the image
 
-            layer = dynamic_cast<KisPaintLayer*>( image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data() );
+            layer = dynamic_cast<KisPaintLayer*>( image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE, COMPOSITE_OVER, cs).data());
             if (layer.isNull()) return KoFilter::CreationError;
 
             device = layer->paintDevice();
@@ -248,7 +249,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             image = new KisImage( doc->undoAdapter(), sz.width(), sz.height(), cs, filename);
             if (image.isNull())return KoFilter::CreationError;
 
-            layer = dynamic_cast<KisPaintLayer*> (image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data());
+            layer = dynamic_cast<KisPaintLayer*> (image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE, COMPOSITE_OVER, cs).data());
             if (layer.isNull()) return KoFilter::CreationError;
 
             device = layer->paintDevice();
