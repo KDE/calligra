@@ -550,4 +550,71 @@ mode</para></caption>
 
 </sect1>
 
+<sect1 id="layers-masks">
+<title>Layer Masks</title>
+
+<para>
+Basically, a layer mask is a mask that you place on your paint layer. This
+will literally mask areas of the layer, so that the content underneath shows
+through. You can paint on it with greyscale colors: the more black the color,
+the less the layer under it will shine through, the more white, the less the
+layer under it will be shown. So complete white will let nothing through,
+complete black will let everything through. Basically, it is a bit like
+selecting a piece of your image, and then cutting it, so that the selected
+bits go away. So what is the use for a mask here? The big advantage is that it
+is non-destructive: if you decide that you masked out the wrong part of your
+layer, you can easily remove the mask and start anew, something a lot harder
+(not to say near impossible, especially in between sessions) with regular
+selection-cutting.
+</para><para>
+So, how to create a mask? There are 2 ways:
+</para>
+
+<itemizedlist>
+<listitem><para>
+Start from scratch.
+<menuchoice><guimenu>Layer</guimenu><guisubmenu>Mask</guisubmenu><guimenuitem>Create
+Mask</guimenuitem></menuchoice>. The mask starts with everything being
+retained, that is, a complete white mask. Basically you will not see any
+changes as long as you do not paint on it. 
+</para></listitem>
+<listitem><para>
+Start from the current selection.
+<menuchoice><guimenu>Layer</guimenu><guisubmenu>Mask</guisubmenu><guimenuitem>Mask
+From Selection</guimenuitem></menuchoice>. The selectedness will be converted
+to whiteness. This means that fully selected area will be visible, fully
+unselected areas will be invisible, and the rest will be partially visible,
+depending on how much the area was selected. 
+</para></listitem>
+</itemizedlist>
+
+<sect2 id="layers-masks-editing">
+<title>Editing the mask</title>
+
+<para>
+First, make sure you are editing the mask, not the layer, by making sure
+<menuchoice><guimenu>Layer</guimenu><guisubmenu>Mask</guisubmenu><guimenuitem>Edit
+Mask</guimenuitem></menuchoice> is checked. (This is checked by default.) Then
+you can paint on the layer just like before, only now you are
+painting on the mask, instead of on the layer itself. To stop painting on the
+mask, you can uncheck the <guilabel>Edit Mask</guilabel> checkbox. There's
+also the option to show the mask, through checking
+<menuchoice><guimenu>Layer</guimenu><guisubmenu>Mask</guisubmenu><guimenuitem>Show
+Mask</guimenuitem></menuchoice>. (This is not checked by
+default). This option will render the entire layer as a visual representation
+of the mask in greyscale, instead of the actual layer. This can be handy to
+see where your mask is, but it might be not as handy when you want to edit it,
+since you cannot look at the actual layer.
+</para><para>
+Other actions: you can also remove the mask if you are not satisfied with it,
+and want to start over again, or just want to remove it, with
+<menuchoice><guimenu>Layer</guimenu><guisubmenu>Mask</guisubmenu><guimenuitem>Remove
+Mask</guimenuitem></menuchoice>. You can also <quote>apply</quote> the mask,
+meaning that the mask will be made permanently. This means that the mask is
+removed, but that its effect of transparency will be committed to the layer.
+</para>
+
+</sect2>
+</sect1>
+
 </chapter>

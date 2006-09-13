@@ -12,9 +12,9 @@ offers.
 <title>Zooming</title>
 
 <para>
-By zooming, you can view your images at various levels of detail.  Zooming out will show a larger part of the image, but with less detail.
-&krita; offers a couple of options that affect which part of the image is
-shown:
+By zooming, you can view your images at various levels of detail.  Zooming out
+will show a larger part of the image, but with less detail.  &krita; offers a
+couple of options that affect which part of the image is shown:
 </para>
 
 <variablelist>
@@ -155,7 +155,8 @@ with <menuchoice><guimenu>View</guimenu><guisubmenu>Grid
 Spacing</guisubmenu></menuchoice> and you can choose different colours for the
 lines in the <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
 &krita;...</guimenuitem></menuchoice> dialog (see <link
-linkend="settings-preferences-grid">the Settings section</link>).
+linkend="settings-preferences-grid">the Grid section of the Settings
+chapter</link>).
 </para></listitem>
 </varlistentry>
 

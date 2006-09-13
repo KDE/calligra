@@ -4,8 +4,8 @@
 <para>This tutorial is intended to describe you the first steps with working
 with a tablet with &krita;. The tutorial assumes you are using &Linux;.</para>
 
-<sect2 id="tutorial-tablet-configure">
-<title>Configure it</title>
+<sect2 id="tutorial-tablet-configuring">
+<title>Configuring it</title>
 
 <para>
 As any hardware it nearly works out of the box. &Linux; should recognize it
@@ -31,10 +31,10 @@ There are three devices of your tablet that you can use with &krita;:
 </para>
 
 <itemizedlist>
-<listitem><para>the cursor is the mouse that was shipped with the Wacom
+<listitem><para>the cursor, the mouse that was shipped with the Wacom
 tablet</para></listitem>
-<listitem><para>the eraser is the round part on the top of the pen</para></listitem>
-<listitem><para>the stylus is the thin point on the bottom of the pen</para></listitem>
+<listitem><para>the eraser, the round part on the top of the pen</para></listitem>
+<listitem><para>the stylus, the thin point on the bottom of the pen</para></listitem>
 </itemizedlist>
 
 <para>

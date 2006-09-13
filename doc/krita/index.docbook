@@ -10,6 +10,7 @@
   <!ENTITY tutorial-select-layer SYSTEM "tutorial-select-layer.docbook">
   <!ENTITY tutorial-quick-starts SYSTEM "tutorial-quick-starts.docbook">
   <!ENTITY tutorial-tablet SYSTEM "tutorial-tablet.docbook">
+  <!ENTITY images SYSTEM "using-images.docbook">
   <!ENTITY views SYSTEM "using-views.docbook">
   <!ENTITY layers SYSTEM "using-layers.docbook">
   <!ENTITY selections SYSTEM "using-selections.docbook">
@@ -78,7 +79,7 @@
 
 <!-- Date and version information of the documentation -->
 
-<date>2006-09-07</date>
+<date>2006-09-13</date>
 <releaseinfo>1.6</releaseinfo>
 
 <!-- Abstract about this handbook -->
@@ -106,6 +107,7 @@ continually working on extending &krita; and making it better in every respect.
 
 &introduction;
 &tutorial;
+&images;
 &views;
 &layers;
 &selections;

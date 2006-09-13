@@ -1,0 +1,66 @@
+<chapter id="images">
+<title>Images</title>
+
+<para>
+Creating and modifying images is one of &krita;'s core functionalities. While
+most of the other chapters in this manual focus on the things you can do when
+painting or editing, this chapter shows you what you can do with respect to
+the images themselves.
+</para>
+
+<sect1 id="images-files">
+<title>Working with files</title>
+
+<para>
+Unless you are doing some quick sketching, working with &krita; will most
+likely involve files. You can open existing images &mdash; &krita; can work
+with a large number of file formats, see <link
+linkend="introduction-keyfeatures-imageformats">Image formats</link> &mdash;
+or start &krita; to create a new one. When you are done or if you want to
+continue at a later time, you can easily save your work.
+</para>
+
+<variablelist>
+
+<varlistentry><term>Opening existing files</term>
+<listitem><para>When you start &krita;, you can open an existing image with
+the <guibutton>Open Existing Document</guibutton> button at the lower left of
+the opening dialog. You can also use the
+<menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>
+menu option (<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>).
+This will bring up the <guilabel>Open Document</guilabel> dialog in which you
+can choose an image to open. The opening dialog and the
+<guimenu>File</guimenu> menu also contain a list of the most recently used
+files for quick access.</para></listitem>
+</varlistentry>
+
+<varlistentry><term>Saving your work in progress</term>
+<listitem><para>With the
+<menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>
+and <menuchoice><guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice>
+menu options (or their respective shortcuts <keycombo
+action="simul">&Ctrl;<keycap>S</keycap></keycombo> and <keycombo
+action="simul">&Ctrl;&Shift;<keycap>S</keycap></keycombo>), you can save your
+work. The former option will save the modifications to the current image, the
+latter option will show the <guilabel>Save Document</guilabel> dialog in which
+you can give a new file name for the image. If this is the first time you save
+the image, <guimenuitem>Save</guimenuitem> will ask for a file name as well.
+</para></listitem>
+</varlistentry>
+
+<varlistentry><term>Creating a new image</term>
+<listitem><para>From the opening dialog (available via the 
+<menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice>
+menu option or the <keycombo
+action="simul">&Ctrl;<keycap>N</keycap></keycombo> keys), you can create a
+fully custom document or choose one of the image templates. These templates
+offer a quick way of creating a new image.  See the <link
+linkend="tutorial-starting">Starting to know &krita;</link> tutorial.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+</chapter>
