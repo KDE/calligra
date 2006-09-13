@@ -13,7 +13,7 @@ kde4_add_plugin(karbon_shadoweffectplugin ${karbon_shadoweffectplugin_PART_SRCS}
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_shadoweffectplugin )
 
-target_link_libraries(karbon_shadoweffectplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
+target_link_libraries(karbon_shadoweffectplugin   ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
 
 install(TARGETS karbon_shadoweffectplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -22,24 +22,3 @@ install(TARGETS karbon_shadoweffectplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  shadoweffectplugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
 
-
-
-
-
-#original Makefile.am contents follow:
-
-#INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(top_srcdir)/karbon  -I$(top_srcdir)/karbon/core $(all_includes)
-#
-#kde_module_LTLIBRARIES = karbon_shadoweffectplugin.la
-#
-#karbon_shadoweffectplugin_la_SOURCES = shadoweffectplugin.cc vshadowdecorator.cc 
-#karbon_shadoweffectplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
-#					../../libkarboncommon.la
-#
-#karbon_shadoweffectplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-#
-#partpluginsdir   = $(kde_datadir)/karbon/kpartplugins
-#partplugins_DATA = shadoweffectplugin.rc
-#
-#METASOURCES = AUTO
-#
