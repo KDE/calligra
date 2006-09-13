@@ -34,6 +34,7 @@
 #include <QEvent>
 #include <Q3CString>
 
+#include <kglobalsettings.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -94,7 +95,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list->installEventFilter(this);
 
 	m_list->renameLineEdit()->installEventFilter(this);
-	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
+	connect( KGlobalSettings::self(), SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
 	slotSettingsChanged(0);
 
 	// actions

@@ -125,7 +125,7 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 	KGlobal::locale()->insertCatalog("kformdesigner");
 #endif
 
-	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
+	connect( KGlobalSettings::self(), SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
 	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
 
 //moved to createWidgetLibrary()	m_lib = new WidgetLibrary(this, supportedFactoryGroups);

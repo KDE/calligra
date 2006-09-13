@@ -37,6 +37,7 @@
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
+#include <kglobalsettings.h>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -244,7 +245,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 	d = new KexiTableViewPrivate(this);
 
-	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
+	connect( KGlobalSettings::self(), SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
 	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
 
 	m_data = new KexiTableViewData(); //to prevent crash because m_data==0
