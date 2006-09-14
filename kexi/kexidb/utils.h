@@ -377,6 +377,11 @@ namespace KexiDB
 	 \ref variantToString( const QVariant& v ) function.
 	 \a ok is set to the result of the operation. */
 	KEXI_DB_EXPORT QVariant stringToVariant( const QString& s, QVariant::Type type, bool &ok );
+
+	/*! \return true if setting default value for \a field field is allowed. Fields with unique 
+	 (and thus primary key) flags set do not accept  default values. 
+	 False is returned aslo if \a field is 0. */
+	KEXI_DB_EXPORT bool isDefaultValueAllowed( KexiDB::Field* field );
 }
 
 #endif

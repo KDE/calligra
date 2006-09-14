@@ -3070,7 +3070,10 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	const QueryColumnInfo::Vector fieldsExpanded( query.fieldsExpanded( QuerySchema::Unique ) );
 	for (uint i=0; i<fieldsExpanded.count(); i++) {
 		QueryColumnInfo *ci = fieldsExpanded.at(i);
-		if (ci->field && !ci->field->defaultValue().isNull() && !b.contains( ci )) {
+		if (ci->field && KexiDB::isDefaultValueAllowed(ci->field) 
+			&& !ci->field->defaultValue().isNull() 
+			&& !b.contains( ci ))
+		{
 			KexiDBDbg << "Connection::insertRow(): adding default value '" << ci->field->defaultValue().toString()
 				<< "' for column '" << ci->field->name() << "'" << endl;
 			b.insert( ci, ci->field->defaultValue() );
