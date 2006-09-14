@@ -68,6 +68,15 @@
 
 using namespace KexiTableDesignerCommands;
 
+//! @internal Used in tryCastQVariant() anf canCastQVariant()
+static bool isIntegerQVariant(QVariant::Type t)
+{
+	return t==QVariant::LongLong 
+		|| t==QVariant::ULongLong
+		|| t==QVariant::Int
+		|| t==QVariant::UInt;
+}
+
 //! @internal Used in tryCastQVariant()
 static bool canCastQVariant(QVariant::Type fromType, QVariant::Type toType)
 {
@@ -75,7 +84,7 @@ static bool canCastQVariant(QVariant::Type fromType, QVariant::Type toType)
    || (fromType==QVariant::CString && toType==QVariant::String)
    || (fromType==QVariant::LongLong && toType==QVariant::ULongLong)
    || ((fromType==QVariant::String || fromType==QVariant::CString) 
-	      && (toType==QVariant::LongLong || toType==QVariant::ULongLong || toType==QVariant::Int || toType==QVariant::UInt));
+	      && (isIntegerQVariant(toType) || toType==QVariant::Double));
 }
 
 /*! @internal 
@@ -87,7 +96,9 @@ static QVariant tryCastQVariant( const QVariant& fromVal, QVariant::Type toType 
 	const QVariant::Type fromType = fromVal.type();
 	if (fromType == toType)
 		return fromVal;
-	if (canCastQVariant(fromType, toType) || canCastQVariant(toType, fromType)) {
+	if (canCastQVariant(fromType, toType) || canCastQVariant(toType, fromType)
+	    || (isIntegerQVariant(fromType) && toType==QVariant::Double))
+	{
 		QVariant res( fromVal );
 		if (res.cast(toType))
 			return res;
