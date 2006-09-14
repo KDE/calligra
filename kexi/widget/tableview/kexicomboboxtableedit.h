@@ -58,12 +58,9 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		virtual QVariant value() { return KexiComboBoxBase::value(); }
 
 		virtual void clear();
-//		virtual bool cursorAtStart();
-//		virtual bool cursorAtEnd();
 
 		virtual bool valueChanged();
-//moved		virtual bool valueIsNull();
-//moved		virtual bool valueIsEmpty();
+
 		virtual QVariant visibleValueForLookupField();
 
 		/*! Reimplemented: resizes a view(). */
@@ -78,8 +75,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
-//		virtual int rightMargin();
-
+		/*! Used to handle key press events for the item. */
 		virtual bool handleKeyPress( QKeyEvent *ke, bool editorActive );
 
 		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );
@@ -93,8 +89,6 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 
 	protected slots:
 		void slotButtonClicked();
-//moved		void createPopup(bool show);
-//moved		void showPopup();
 		void slotRowAccepted(KexiTableItem *item, int row) { KexiComboBoxBase::slotRowAccepted(item, row); }
 		void slotItemSelected(KexiTableItem* item) { KexiComboBoxBase::slotItemSelected(item); }
 		void slotLineEditTextChanged(const QString &newtext) { KexiComboBoxBase::slotLineEditTextChanged(newtext); }
@@ -104,35 +98,9 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		//! internal
 		void updateFocus( const QRect& r );
 
-//moved		virtual void setValueInternal(const QVariant& add, bool removeOld);
-
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
 		void updateTextForHighlightedRow();
-
-		//! Used to select row item for an user-entered text \a str.
-		//! Only for "lookup table" mode.
-//moved		KexiTableItem* selectItemForStringInLookupTable(const QString& str);
-
-//		//! \return value (col #1 of related data) - only reasonable for 'related table data' model
-//		QString valueForID(const QVariant& val);
-
-		/*! \return value from \a returnFromColumn related to \a str value from column \a lookInColumn.
-		 If \a allowNulls is true, NULL is returend if no matched column found, else: 
-		 \a str is returned.
-		 Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string 
-		 for column #1 for id-column #0 */
-//moved		QString valueForString(const QString& str, int* row, uint lookInColumn, 
-//moved			uint returnFromColumn, bool allowNulls = false);
-
-
-		//! sets \a text for the line edit without setting a flag (d->userEnteredText) that indicates that 
-		//! the text has been entered by hand (by a user)
-//moved		void setLineEditText(const QString& text);
-
-//moved		KexiDB::LookupFieldSchema* lookupFieldSchema() const;
-
-//moved		int rowToHighlightForLookupTable() const;
 
 		//! Implemented for KexiComboBoxBase
 		virtual QWidget *internalEditor() const;

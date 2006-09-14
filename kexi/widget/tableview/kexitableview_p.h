@@ -115,12 +115,9 @@ class KexiTableViewPrivate
 	/*! used to force single skip keyPress event. */
 	bool skipKeyPress : 1;
 	
-	/*! Used to enable/disable execution of KexiTableView::vScrollBarValueChanged()
-	 when users navigates rows using keyboard, so vscrollbar tooltips are not visible then. */
-	bool vScrollBarValueChanged_enabled : 1;
+//moved	bool vScrollBarValueChanged_enabled : 1;
 
-	/*! True, if vscrollbar tooltips are enabled (true by default) */
-	bool scrollbarToolTipsEnabled : 1;
+//moved	bool scrollbarToolTipsEnabled : 1;
 
 	/*! Needed because m_horizontalHeader->isVisible() is not always accurate. True by default.  */
 	bool horizontalHeaderVisible : 1;
@@ -131,10 +128,6 @@ class KexiTableViewPrivate
 	bool moveCursorOnMouseRelease : 1;
 
 	KexiTableView::Appearance appearance;
-	
-	QLabel *scrollBarTip;
-	QTimer scrollBarTipTimer;
-	uint scrollBarTipTimerCnt; //!< helper for timeout counting
 	
 	//! brushes, fonts
 	QBrush diagonalGrayPattern;

@@ -28,7 +28,6 @@
 #define KEXITABLEVIEW_H
 
 #include <q3scrollview.h>
-#include <qtimer.h>
 #include <qvariant.h>
 #include <qtooltip.h>
 #include <q3ptrlist.h>
@@ -165,7 +164,7 @@ public:
 	virtual ~KexiTableView();
 
 	/*! \return current appearance settings */
-	Appearance appearance() const;
+	const Appearance& appearance() const;
 
 	/*! Sets appearance settings. Table view is updated automatically. */
 	void setAppearance(const Appearance& a);
@@ -181,10 +180,10 @@ public:
 	virtual void setSpreadSheetMode();
 
 	/*! \return true if vertical scrollbar's tooltips are enabled (true by default). */
-	bool scrollbarToolTipsEnabled() const;
+//moved	bool scrollbarToolTipsEnabled() const;
 
 	/*! Enables or disables vertical scrollbar's. */
-	void setScrollbarToolTipsEnabled(bool set);
+//moved	void setScrollbarToolTipsEnabled(bool set);
 
 	/*! \return maximum number of rows that can be displayed per one "page" 
 	 for current table view's size. */
@@ -197,6 +196,11 @@ public:
 	int rowPos(int row) const;
 	int columnAt(int pos) const;
 	int rowAt(int pos, bool ignoreEnd=false) const;
+
+	/*! \return last row visible on the screen (counting from 0). 
+	 The returned value is guaranteed to be smaller or equal to currentRow() or -1 
+	 if there are no rows. */
+	virtual int lastVisibleRow() const;
 
 	/*! Redraws specified cell. */
 	virtual void updateCell(int row, int col);
@@ -263,6 +267,8 @@ public:
 
 	KexiTableItem *highlightedItem() const;
 
+	/*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
+	virtual QScrollBar* verticalScrollBar() const { return Q3ScrollView::verticalScrollBar(); }
 
 public slots:
 	virtual void setData( KexiTableViewData *data, bool owner = true )
@@ -420,10 +426,6 @@ protected slots:
 
 	void slotAutoScroll();
 
-	//! internal, used after vscrollbar's value has been changed
-	void vScrollBarValueChanged(int v);
-	void vScrollBarSliderReleased();
-	void scrollBarTipTimeout();
 	//! internal, used when top header's size changed
 	void slotTopHeaderSizeChange( int section, int oldSize, int newSize );
 
@@ -432,7 +434,7 @@ protected slots:
 
 	/*! Reloads data for this widget.
 	 Handles KexiTableViewData::reloadRequested() signal. */
-	virtual void reloadData() { KexiDataAwareObjectInterface::reloadData(); }
+	virtual void reloadData();
 
 	//! Handles KexiTableViewData::rowRepaintRequested() signal
 	virtual void slotRowRepaintRequested(KexiTableItem& item);
@@ -451,6 +453,18 @@ protected slots:
 	//! Like above, not db-aware version
 	virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint)
 	{ KexiDataAwareObjectInterface::slotRowInserted(item, row, repaint); }
+
+	/*! Handles verticalScrollBar()'s valueChanged(int) signal. 
+	 Called when vscrollbar's value has been changed. */
+	virtual void vScrollBarValueChanged(int v) { KexiDataAwareObjectInterface::vScrollBarValueChanged(v); }
+
+	/*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+	virtual void vScrollBarSliderReleased() { KexiDataAwareObjectInterface::vScrollBarSliderReleased(); }
+
+	/*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible, 
+	 m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted; 
+	 else the m_scrollBarTipTimerCnt is just set to 0.*/
+	virtual void scrollBarTipTimeout() { KexiDataAwareObjectInterface::scrollBarTipTimeout(); }
 
 protected:
 	/*! Reimplementation for KexiDataAwareObjectInterface 
@@ -509,22 +523,22 @@ protected:
 	QPoint viewportToContents2( const QPoint& vp );
 
 	// event handling
-	virtual void contentsMousePressEvent(QMouseEvent*);
-	virtual void contentsMouseReleaseEvent(QMouseEvent*);
+	virtual void contentsMousePressEvent(QMouseEvent* e);
+	virtual void contentsMouseReleaseEvent(QMouseEvent* e);
 	//! @internal called by contentsMouseOrEvent() contentsMouseReleaseEvent() to move cursor
 	bool handleContentsMousePressOrRelease(QMouseEvent* e, bool release);
-	virtual void contentsMouseMoveEvent(QMouseEvent*);
-	virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
-	virtual void keyPressEvent(QKeyEvent*);
-	virtual void focusInEvent(QFocusEvent*);
-	virtual void focusOutEvent(QFocusEvent*);
-	virtual void resizeEvent(QResizeEvent *);
-	virtual void viewportResizeEvent( QResizeEvent *e );//js
+	virtual void contentsMouseMoveEvent(QMouseEvent* e);
+	virtual void contentsMouseDoubleClickEvent(QMouseEvent* e);
+	virtual void keyPressEvent(QKeyEvent* e);
+	virtual void focusInEvent(QFocusEvent* e);
+	virtual void focusOutEvent(QFocusEvent* e);
+	virtual void resizeEvent(QResizeEvent* e);
+	virtual void viewportResizeEvent(QResizeEvent *e);
 	virtual void showEvent(QShowEvent *e);
 	virtual void contentsDragMoveEvent(QDragMoveEvent *e);
-	virtual void contentsDropEvent(QDropEvent *ev);
-	virtual void viewportDragLeaveEvent( QDragLeaveEvent * );
-	virtual void paletteChange( const QPalette & );
+	virtual void contentsDropEvent(QDropEvent *e);
+	virtual void viewportDragLeaveEvent(QDragLeaveEvent *e);
+	virtual void paletteChange( const QPalette &oldPalette );
 	
 	/*! Implementation for KexiDataAwareObjectInterface */
 	virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false );

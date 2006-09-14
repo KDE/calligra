@@ -276,7 +276,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	horizontalScrollBar()->installEventFilter(this);
 	horizontalScrollBar()->raise();
 	verticalScrollBar()->raise();
-	
+
+	/*moved
 	// setup scrollbar tooltip
 	d->scrollBarTip = new QLabel("abc",0, "scrolltip",Qt::WStyle_Customize |Qt::WStyle_NoBorder|Qt::WX11BypassWM|Qt::WStyle_StaysOnTop|Qt::WStyle_Tool);
 	d->scrollBarTip->setPalette(QToolTip::palette());
@@ -287,7 +288,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	d->scrollBarTip->setLineWidth(1);
 	connect(verticalScrollBar(),SIGNAL(sliderReleased()),this,SLOT(vScrollBarSliderReleased()));
 	connect(verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(vScrollBarValueChanged(int)));
-	connect(&d->scrollBarTipTimer,SIGNAL(timeout()),this,SLOT(scrollBarTipTimeout()));
+	connect(&d->scrollBarTipTimer,SIGNAL(timeout()),this,SLOT(scrollBarTipTimeout()));*/
 	
 	//context menu
 	m_popup = new KMenu(this, "contextMenu");
@@ -841,7 +842,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		}
 	}
 
-	bool defaultValueDisplayed = this->isDefaultValueDisplayed(item, col);
+	bool defaultValueDisplayed = isDefaultValueDisplayed(item, col);
 
 	if ((item == m_insertItem /*|| m_newRowEditing*/) && cell_value.isNull()) {
 		if (!tvcol->field()->isAutoIncrement() && !tvcol->field()->defaultValue().isNull()) {
@@ -1426,77 +1427,13 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 		break;*/
 
+	bool _return;
 	if (k == Qt::Key_Shift || k == Qt::Key_Alt || k == Qt::Key_Control || k == Qt::Key_Meta) {
 		e->ignore();
 	}
-	else if (k == Qt::Key_Up && nobtn) {
-		d->vScrollBarValueChanged_enabled = false; //disable tooltip
-			selectPrevRow();
-		d->vScrollBarValueChanged_enabled = true;
-		e->accept();
-		return;
-	}
-	else if (k == Qt::Key_Down && nobtn) {
-//			curRow = qMin(rows() - 1 + (isInsertingEnabled()?1:0), curRow + 1);
-		d->vScrollBarValueChanged_enabled = false; //disable tooltip
-			selectNextRow();
-		d->vScrollBarValueChanged_enabled = true;
-		e->accept();
-		return;
-	}
-	else if (k == Qt::Key_PageUp && nobtn) {
-//			curRow -= visibleHeight() / d->rowHeight;
-//			curRow = qMax(0, curRow);
-		d->vScrollBarValueChanged_enabled = false; //disable tooltip
-			selectPrevPage();
-		d->vScrollBarValueChanged_enabled = true;
-		e->accept();
-		return;
-	}
-	else if (k == Qt::Key_PageDown && nobtn) {
-//			curRow += visibleHeight() / d->rowHeight;
-//			curRow = qMin(rows() - 1 + (isInsertingEnabled()?1:0), curRow);
-		d->vScrollBarValueChanged_enabled = false; //disable tooltip
-			selectNextPage();
-		d->vScrollBarValueChanged_enabled = true;
-		e->accept();
-		return;
-	}
-	else if (k == Qt::Key_Home) {
-		if (d->appearance.fullRowSelection) {
-			//we're in row-selection mode: home key always moves to 1st row
-			curRow = 0;//to 1st row
-		}
-		else {//cell selection mode: different actions depending on ctrl and shift keys state
-			if (nobtn) {
-				curCol = 0;//to 1st col
-			}
-			else if (e->state()==Qt::ControlModifier) {
-				curRow = 0;//to 1st row
-			}
-			else if (e->state()==(Qt::ControlModifier|Qt::ShiftModifier)) {
-				curRow = 0;//to 1st row and col
-				curCol = 0;
-			}
-		}
-	}
-	else if (k == Qt::Key_End) {
-		if (d->appearance.fullRowSelection) {
-			//we're in row-selection mode: home key always moves to last row
-			curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row
-		}
-		else {//cell selection mode: different actions depending on ctrl and shift keys state
-			if (nobtn) {
-				curCol = columns()-1;//to last col
-			}
-			else if (e->state()==Qt::ControlModifier) {
-				curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row
-			}
-			else if (e->state()==(Qt::ControlModifier|Qt::ShiftModifier)) {
-				curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row and col
-				curCol = columns()-1;//to last col
-			}
-		}
+	else if (KexiDataAwareObjectInterface::handleKeyPress(e, curRow, curCol, d->appearance.fullRowSelection)) {
+		if (e->isAccepted())
+			return;
 	}
 	else if (k == Qt::Key_Backspace && nobtn) {
 		if (!ro && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
@@ -1591,12 +1528,12 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 	}
 
-	d->vScrollBarValueChanged_enabled=false;
+	m_vScrollBarValueChanged_enabled=false;
 
 	// if focus cell changes, repaint
 	setCursorPosition(curRow, curCol);
 
-	d->vScrollBarValueChanged_enabled=true;
+	m_vScrollBarValueChanged_enabled=true;
 
 	e->accept();
 }
@@ -1669,6 +1606,11 @@ void KexiTableView::slotEditRequested()
 	createEditor(m_curRow, m_curCol);
 }
 
+void KexiTableView::reloadData() {
+	KexiDataAwareObjectInterface::reloadData();
+	updateContents();
+}
+
 void KexiTableView::createEditor(int row, int col, const QString& addText, bool removeOld)
 {
 	kDebug(44021) << "KexiTableView::createEditor('"<<addText<<"',"<<removeOld<<")"<<endl;
@@ -1716,7 +1658,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 	if (!editorWidget)
 		return;
 
-	m_editor->setValue(*bufferedValueAt(col), addText, removeOld);
+	m_editor->setValue(*bufferedValueAt(col, !removeOld/*useDefaultValueIfPossible*/), addText, removeOld);
 	if (m_editor->hasFocusableWidget()) {
 		moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
 
@@ -1733,18 +1675,15 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 	}
 }
 
-void KexiTableView::focusInEvent(QFocusEvent*)
+void KexiTableView::focusInEvent(QFocusEvent* e)
 {
+	Q_UNUSED(e);
 	updateCell(m_curRow, m_curCol);
 }
 
-
-void KexiTableView::focusOutEvent(QFocusEvent*)
+void KexiTableView::focusOutEvent(QFocusEvent* e)
 {
-	d->scrollBarTipTimer.stop();
-	d->scrollBarTip->hide();
-	
-	updateCell(m_curRow, m_curCol);
+	KexiDataAwareObjectInterface::focusOutEvent(e);
 }
 
 bool KexiTableView::focusNextPrevChild(bool /*next*/)
@@ -1871,7 +1810,7 @@ void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 //	e->acceptAction(false);
 }
 
-void KexiTableView::contentsDropEvent(QDropEvent *ev)
+void KexiTableView::contentsDropEvent(QDropEvent *e)
 {
 	if (!hasData())
 		return;
@@ -1882,14 +1821,14 @@ void KexiTableView::contentsDropEvent(QDropEvent *ev)
 			m_dragIndicatorLine = -1;
 			updateRow(row2update);
 		}
-		QPoint p = ev->pos();
+		QPoint p = e->pos();
 		int row = rowAt(p.y());
 		if ((p.y() % d->rowHeight) > (d->rowHeight*2/3) ) {
 			row++;
 		}
 		KexiTableItem *item = m_data->at(row);
 		KexiTableItem *newItem = 0;
-		emit droppedAtRow(item, row, ev, newItem);
+		emit droppedAtRow(item, row, e, newItem);
 		if (newItem) {
 			const int realRow = (row==m_curRow ? -1 : row);
 			insertItem(newItem, realRow);
@@ -1899,8 +1838,9 @@ void KexiTableView::contentsDropEvent(QDropEvent *ev)
 	}
 }
 
-void KexiTableView::viewportDragLeaveEvent( QDragLeaveEvent * )
+void KexiTableView::viewportDragLeaveEvent( QDragLeaveEvent *e )
 {
+	Q_UNUSED(e);
 	if (!hasData())
 		return;
 	if (m_dropsAtRowEnabled) {
@@ -2435,6 +2375,7 @@ void KexiTableView::setSpreadSheetMode()
 	setAppearance( a );
 }
 
+/*moved
 bool KexiTableView::scrollbarToolTipsEnabled() const
 {
 	return d->scrollbarToolTipsEnabled;
@@ -2444,6 +2385,7 @@ void KexiTableView::setScrollbarToolTipsEnabled(bool set)
 {
 	d->scrollbarToolTipsEnabled=set;
 }
+*/
 
 int KexiTableView::validRowNumber(const QString& text)
 {
@@ -2604,51 +2546,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 	return Q3ScrollView::eventFilter(o,e);
 }
 
-void KexiTableView::vScrollBarValueChanged(int v)
-{
-	Q_UNUSED(v);
-	if (!d->vScrollBarValueChanged_enabled)
-		return;
-//	kDebug(44021) << "VCHANGED: " << v << " / " << horizontalScrollBar()->maxValue() <<  endl;
-	
-//	updateContents();
-///	m_verticalHeader->update(); //<-- dirty but needed
-
-	if (d->scrollbarToolTipsEnabled) {
-		QRect r = verticalScrollBar()->sliderRect();
-		int row = rowAt(contentsY())+1;
-		if (row<=0) {
-			d->scrollBarTipTimer.stop();
-			d->scrollBarTip->hide();
-			return;
-		}
-		d->scrollBarTip->setText( i18n("Row: ") + QString::number(row) );
-		d->scrollBarTip->adjustSize();
-		d->scrollBarTip->move( 
-		 mapToGlobal( r.topLeft() + verticalScrollBar()->pos() ) + QPoint( - d->scrollBarTip->width()-5, r.height()/2 - d->scrollBarTip->height()/2) );
-		if (verticalScrollBar()->isSliderDown()) {
-			kDebug(44021) << "  isSliderDown()  " << endl;
-			d->scrollBarTipTimer.stop();
-			d->scrollBarTip->show();
-			d->scrollBarTip->raise();
-		}
-		else {
-			d->scrollBarTipTimerCnt++;
-			if (d->scrollBarTipTimerCnt>4) {
-				d->scrollBarTipTimerCnt=0;
-				d->scrollBarTip->show();
-				d->scrollBarTip->raise();
-				d->scrollBarTipTimer.start(500, true);
-			}
-		}
-	}
-	//update bottom view region
-/*	if (m_navPanel && (contentsHeight() - contentsY() - clipper()->height()) <= qMax(d->rowHeight,m_navPanel->height())) {
-		slotUpdate();
-		triggerUpdate();
-	}*/
-}
-
+/* moved
 void KexiTableView::vScrollBarSliderReleased()
 {
 	kDebug(44021) << "vScrollBarSliderReleased()" << endl;
@@ -2668,6 +2566,7 @@ void KexiTableView::scrollBarTipTimeout()
 	}
 	d->scrollBarTipTimerCnt=0;
 }
+*/
 
 void KexiTableView::slotTopHeaderSizeChange( 
 	int /*section*/, int /*oldSize*/, int /*newSize*/ )
@@ -2680,8 +2579,9 @@ void KexiTableView::setBottomMarginInternal(int pixels)
 	d->internal_bottomMargin = pixels;
 }
 
-void KexiTableView::paletteChange( const QPalette & )
+void KexiTableView::paletteChange( const QPalette &oldPalette )
 {
+	Q_UNUSED(oldPalette);
 	//update:
 	if (m_verticalHeader)
 		m_verticalHeader->setSelectionBackgroundColor( palette().active().highlight() );
@@ -2689,7 +2589,7 @@ void KexiTableView::paletteChange( const QPalette & )
 		m_horizontalHeader->setSelectionBackgroundColor( palette().active().highlight() );
 }
 
-KexiTableView::Appearance KexiTableView::appearance() const
+const KexiTableView::Appearance& KexiTableView::appearance() const
 {
 	return d->appearance;
 }
@@ -2774,6 +2674,10 @@ void KexiTableView::slotSettingsChanged(int category)
 	}
 }
 
+int KexiTableView::lastVisibleRow() const
+{
+	return rowAt( contentsY() );
+}
 
 #include "kexitableview.moc"
 

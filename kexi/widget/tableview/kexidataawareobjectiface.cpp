@@ -75,6 +75,21 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_rowWillBeDeleted = -1;
 	m_alsoUpdateNextRow = false;
 	m_verticalHeaderAlreadyAdded = false;
+	m_vScrollBarValueChanged_enabled = true;
+	m_scrollbarToolTipsEnabled = true;
+	m_scrollBarTipTimerCnt = 0;
+	m_scrollBarTip = 0;
+
+	// setup scrollbar tooltip and related members
+	m_scrollBarTip = new QLabel("",0, "vScrollBarToolTip",
+		Qt::WStyle_Customize |Qt::WStyle_NoBorder|Qt::WX11BypassWM|Qt::WStyle_StaysOnTop|Qt::WStyle_Tool);
+	m_scrollBarTip->setPalette(QToolTip::palette());
+	m_scrollBarTip->setMargin(2);
+	m_scrollBarTip->setIndent(0);
+	m_scrollBarTip->setAlignment(Qt::AlignCenter);
+	m_scrollBarTip->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
+	m_scrollBarTip->setLineWidth(1);
+
 	clearVariables();
 }
 
@@ -83,6 +98,7 @@ KexiDataAwareObjectInterface::~KexiDataAwareObjectInterface()
 	delete m_insertItem;
 	delete m_rowEditBuffer;
 	delete m_itemIterator;
+	delete m_scrollBarTip;
 	//we cannot delete m_data here... subclasses should do this
 }
 
@@ -144,19 +160,27 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 		setSorting(-1);
 //		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
 		connectToReloadDataSlot(m_data, SIGNAL(reloadRequested()));
-		if (dynamic_cast<QObject*>(this)) {
-			QObject::connect(m_data, SIGNAL(destroying()), dynamic_cast<QObject*>(this), SLOT(slotDataDestroying()));
+		QObject* thisObject = dynamic_cast<QObject*>(this);
+		if (thisObject) {
+			QObject::connect(m_data, SIGNAL(destroying()), thisObject, SLOT(slotDataDestroying()));
 			QObject::connect(m_data, SIGNAL(rowsDeleted( const Q3ValueList<int> & )), 
-				dynamic_cast<QObject*>(this), SLOT(slotRowsDeleted( const Q3ValueList<int> & )));
+				thisObject, SLOT(slotRowsDeleted( const Q3ValueList<int> & )));
 			QObject::connect(m_data, SIGNAL(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)),
-				dynamic_cast<QObject*>(this), SLOT(slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
-			QObject::connect(m_data, SIGNAL(rowDeleted()), dynamic_cast<QObject*>(this), SLOT(slotRowDeleted()));
+				thisObject, SLOT(slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
+			QObject::connect(m_data, SIGNAL(rowDeleted()), thisObject, SLOT(slotRowDeleted()));
 			QObject::connect(m_data, SIGNAL(rowInserted(KexiTableItem*,bool)), 
-				dynamic_cast<QObject*>(this), SLOT(slotRowInserted(KexiTableItem*,bool)));
+				thisObject, SLOT(slotRowInserted(KexiTableItem*,bool)));
 			QObject::connect(m_data, SIGNAL(rowInserted(KexiTableItem*,uint,bool)), 
-				dynamic_cast<QObject*>(this), SLOT(slotRowInserted(KexiTableItem*,uint,bool))); //not db-aware
+				thisObject, SLOT(slotRowInserted(KexiTableItem*,uint,bool))); //not db-aware
 			QObject::connect(m_data, SIGNAL(rowRepaintRequested(KexiTableItem&)), 
-				dynamic_cast<QObject*>(this), SLOT(slotRowRepaintRequested(KexiTableItem&)));
+				thisObject, SLOT(slotRowRepaintRequested(KexiTableItem&)));
+			// setup scrollbar's tooltip
+			QObject::connect(verticalScrollBar(),SIGNAL(sliderReleased()),
+				thisObject,SLOT(vScrollBarSliderReleased()));
+			QObject::connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
+				thisObject,SLOT(vScrollBarValueChanged(int)));
+			QObject::connect(&m_scrollBarTipTimer,SIGNAL(timeout()),
+				thisObject,SLOT(scrollBarTipTimeout()));
 		}
 	}
 
@@ -452,7 +476,9 @@ void KexiDataAwareObjectInterface::selectLastRow()
 
 void KexiDataAwareObjectInterface::selectRow(int row)
 {
+	m_vScrollBarValueChanged_enabled = false; //disable tooltip
 	setCursorPosition(row, -1);
+	m_vScrollBarValueChanged_enabled = true;
 }
 
 void KexiDataAwareObjectInterface::selectPrevRow()
@@ -708,7 +734,12 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 				//accept changes for this row:
 				kDebug() << "-- UPDATING: " << endl;
 				m_data->rowEditBuffer()->debug();
+				kDebug() << "-- BEFORE: " << endl;
+				m_currentItem->debug();
 				success = m_data->saveRowChanges(*m_currentItem);//, &msg, &desc, &faultyColumn);
+				kDebug() << "-- AFTER: " << endl;
+				m_currentItem->debug();
+
 //				if (!success) {
 //				}
 			}
@@ -1514,7 +1545,7 @@ bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiTableViewColumn& 
 	return false;
 }
 
-const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col)
+const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useDefaultValueIfPossible)
 {
 	if (m_rowEditing && m_data->rowEditBuffer())
 	{
@@ -1531,7 +1562,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col)
 		
 			//db-aware data: now, try to find a buffered value (or default one)
 			const QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->columnInfo, 
-				storedValue->isNull() /*useDefaultValueIfPossible*/);
+				storedValue->isNull() && useDefaultValueIfPossible);
 			if (cv)
 				return cv;
 			return storedValue;
@@ -1602,3 +1633,166 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
 		m_editor->setFocus();
 }
 
+bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int &curCol, 
+	bool fullRowSelection, bool *moveToFirstField, bool *moveToLastField)
+{
+	if (moveToFirstField)
+		*moveToFirstField = false;
+	if (moveToLastField)
+		*moveToLastField = false;
+
+	const bool nobtn = e->state()==Qt::NoButton;
+	const int k = e->key();
+	//kDebug() << "-----------" << e->state() << " " << k << endl;
+
+	if ((k == Qt::Key_Up && nobtn) || (k == Qt::Key_PageUp && e->state()==Qt::ControlButton)) {
+		selectPrevRow();
+		e->accept();
+	}
+	else if ((k == Qt::Key_Down && nobtn) || (k == Qt::Key_PageDown && e->state()==Qt::ControlButton)) {
+		selectNextRow();
+		e->accept();
+	}
+	else if (k == Qt::Key_PageUp && nobtn) {
+		selectPrevPage();
+		e->accept();
+	}
+	else if (k == Qt::Key_PageDown && nobtn) {
+		selectNextPage();
+		e->accept();
+	}
+	else if (k == Qt::Key_Home) {
+		if (fullRowSelection) {
+			//we're in row-selection mode: home key always moves to 1st row
+			curRow = 0;//to 1st row
+		}
+		else {//cell selection mode: different actions depending on ctrl and shift keys state
+			if (nobtn) {
+				curCol = 0;//to 1st col
+			}
+			else if (e->state()==Qt::ControlButton) {
+				curRow = 0;//to 1st row and col
+				curCol = 0;
+			}
+		}
+		if (moveToFirstField)
+			*moveToFirstField = true;
+		//do not accept yet
+		e->ignore();
+	}
+	else if (k == Qt::Key_End) {
+		if (fullRowSelection) {
+			//we're in row-selection mode: home key always moves to last row
+			curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row
+		}
+		else {//cell selection mode: different actions depending on ctrl and shift keys state
+			if (nobtn) {
+				curCol = columns()-1;//to last col
+			}
+			else if (e->state()==Qt::ControlButton) {
+				curRow = m_data->count()-1 /*+(isInsertingEnabled()?1:0)*/; //to last row and col
+				curCol = columns()-1;//to last col
+			}
+		}
+		if (moveToLastField)
+			*moveToLastField = true;
+		//do not accept yet
+		e->ignore();
+	}
+	else if (isInsertingEnabled() && (e->state()==Qt::ControlButton && k == Qt::Key_Equal
+		|| e->state()==(Qt::ControlButton|Qt::ShiftButton) && k == Qt::Key_Equal)) {
+		curRow = m_data->count(); //to the new row
+		curCol = 0;//to first col
+		if (moveToFirstField)
+			*moveToFirstField = true;
+		//do not accept yet
+		e->ignore();
+	}
+	else
+		return false;
+
+	return true;
+}
+
+void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
+{
+	Q_UNUSED(v);
+	if (!m_vScrollBarValueChanged_enabled)
+		return;
+
+	if (m_scrollbarToolTipsEnabled) {
+		const QRect r( verticalScrollBar()->sliderRect() );
+		const int row = lastVisibleRow()+1;
+		if (row<=0) {
+			m_scrollBarTipTimer.stop();
+			m_scrollBarTip->hide();
+			return;
+		}
+		m_scrollBarTip->setText( i18n("Row: ") + QString::number(row) );
+		m_scrollBarTip->adjustSize();
+		QWidget* thisWidget = dynamic_cast<QWidget*>(this);
+		m_scrollBarTip->move( 
+			thisWidget->mapToGlobal( r.topLeft() + verticalScrollBar()->pos() ) 
+				+ QPoint( - m_scrollBarTip->width()-5, 
+			r.height()/2 - m_scrollBarTip->height()/2) );
+		if (verticalScrollBar()->draggingSlider()) {
+			kDebug(44021) << "  draggingSlider()  " << endl;
+			m_scrollBarTipTimer.stop();
+			m_scrollBarTip->show();
+			m_scrollBarTip->raise();
+		}
+		else {
+			m_scrollBarTipTimerCnt++;
+			if (m_scrollBarTipTimerCnt>4) {
+				m_scrollBarTipTimerCnt=0;
+				m_scrollBarTip->show();
+				m_scrollBarTip->raise();
+				m_scrollBarTipTimer.start(500, true);
+			}
+		}
+	}
+	//update bottom view region
+/*	if (m_navPanel && (contentsHeight() - contentsY() - clipper()->height()) <= qMax(d->rowHeight,m_navPanel->height())) {
+		slotUpdate();
+		triggerUpdate();
+	}*/
+}
+
+bool KexiDataAwareObjectInterface::scrollbarToolTipsEnabled() const
+{
+	return m_scrollbarToolTipsEnabled;
+}
+
+void KexiDataAwareObjectInterface::setScrollbarToolTipsEnabled(bool set)
+{
+	m_scrollbarToolTipsEnabled = set;
+}
+
+void KexiDataAwareObjectInterface::vScrollBarSliderReleased()
+{
+	kDebug(44021) << "vScrollBarSliderReleased()" << endl;
+	m_scrollBarTip->hide();
+}
+
+void KexiDataAwareObjectInterface::scrollBarTipTimeout()
+{
+	if (m_scrollBarTip->isVisible()) {
+//		kDebug(44021) << "TIMEOUT! - hide" << endl;
+		if (m_scrollBarTipTimerCnt>0) {
+			m_scrollBarTipTimerCnt=0;
+			m_scrollBarTipTimer.start(500, true);
+			return;
+		}
+		m_scrollBarTip->hide();
+	}
+	m_scrollBarTipTimerCnt=0;
+}
+
+void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e)
+{
+	Q_UNUSED(e);
+	m_scrollBarTipTimer.stop();
+	m_scrollBarTip->hide();
+	
+	updateCell(m_curRow, m_curCol);
+}
