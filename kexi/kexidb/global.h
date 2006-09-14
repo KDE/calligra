@@ -159,4 +159,12 @@ enum ObjectTypes {
 
 }
 
+#ifndef futureI18n
+# define futureI18n QString
+#endif
+
+#ifndef FUTURE_I18N_NOOP
+# define FUTURE_I18N_NOOP(x) (x)
+#endif
+
 #endif

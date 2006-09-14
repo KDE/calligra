@@ -22,6 +22,7 @@
 #include <qfileinfo.h>
 
 #include <kcmdlineargs.h>
+#include <kdebug.h>
 
 #include <kexidb/connectiondata.h>
 #include <kexidb/drivermanager.h>
@@ -30,10 +31,16 @@ using namespace KexiDB;
 
 static KCmdLineOptions predefinedOptions[] =
 {
-	{ "drv <name>", FUTURE_I18N_NOOP("Database driver name"), 0 },
+	{ "drv", 0, 0 },
+	{ "driver <name>", FUTURE_I18N_NOOP("Database driver name"), 0 },
+	{ "u", 0, 0 },
 	{ "user <name>", FUTURE_I18N_NOOP("Database user name"), 0 },
+	{ "p", 0, 0 },
+	{ "password", FUTURE_I18N_NOOP("Prompt for password"), 0 },
+	{ "h", 0, 0 },
 	{ "host <name>", FUTURE_I18N_NOOP("Server (host) name"), 0 },
 	{ "port <number>", FUTURE_I18N_NOOP("Server's port number"), 0 },
+	{ "s", 0, 0 },
 	{ "local-socket <filename>", FUTURE_I18N_NOOP("Server's local socket filename, if needed"), 0 },
 	KCmdLineLastOption
 };
@@ -120,12 +127,25 @@ SimpleCommandLineApp::SimpleCommandLineApp(
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-	d->connData.driverName = args->getOption("drv");
+	d->connData.driverName = args->getOption("driver");
 	d->connData.userName = args->getOption("user");
 	d->connData.hostName = args->getOption("host");
 	d->connData.localSocketFileName = args->getOption("local-socket");
 	d->connData.port = args->getOption("port").toInt();
 	d->connData.useLocalSocketFile = args->isSet("local-socket");
+
+	if (args->isSet("password")) {
+		QString userAtHost = d->connData.userName;
+		if (!d->connData.userName.isEmpty())
+			userAtHost += "@";
+		userAtHost += (d->connData.hostName.isEmpty() ? "localhost" : d->connData.hostName);
+		QTextStream cout(stdout,IO_WriteOnly);
+		cout << futureI18n("Enter password for %1: ").arg(userAtHost);
+//! @todo make use of pty/tty here! (and care about portability)
+		QTextStream cin(stdin,IO_ReadOnly);
+		cin >> d->connData.password;
+		KexiDBDbg << d->connData.password << endl;
+	}
 }
 
 SimpleCommandLineApp::~SimpleCommandLineApp()
