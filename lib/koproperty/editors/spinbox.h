@@ -40,7 +40,9 @@ class IntSpinBox : public KIntSpinBox
 		IntSpinBox(int lower, int upper, int step, int value, int base=10, 
 			IntEdit *parent=0, const char *name=0);
 		virtual ~IntSpinBox() {;}
-	
+
+		virtual void setValue(const QVariant &value);
+
 		virtual bool eventFilter(QObject *o, QEvent *e);
 		QLineEdit * editor () const { return KIntSpinBox::editor(); }
 };
@@ -84,7 +86,7 @@ class DoubleSpinBox : public KDoubleSpinBox
 		QLineEdit * editor () const { return KDoubleSpinBox::editor(); }
 
 	public slots:
-		virtual void setValue ( double value );
+		virtual void setValue( const QVariant& value );
 };
 
 class KOPROPERTY_EXPORT DoubleEdit : public Widget

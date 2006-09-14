@@ -46,6 +46,16 @@ IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntE
 	delete spinwidgets;
 }
 
+void IntSpinBox::setValue(const QVariant &value)
+{
+	if (dynamic_cast<IntEdit*>(parentWidget()) && dynamic_cast<IntEdit*>(parentWidget())->isReadOnly())
+		return;
+	if (value.isNull())
+		editor()->clear();
+	else
+		KIntSpinBox::setValue(value.toInt());
+}
+
 bool
 IntSpinBox::eventFilter(QObject *o, QEvent *e)
 {
@@ -101,7 +111,8 @@ IntEdit::~IntEdit()
 QVariant
 IntEdit::value() const
 {
-	//return m_edit->cleanText().toInt();  adymo: why cleanText()
+	if (m_edit->cleanText().isEmpty())
+		return QVariant();
 	return m_edit->value();
 }
 
@@ -109,7 +120,7 @@ void
 IntEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_edit->blockSignals(true);
-	m_edit->setValue(value.toInt());
+	m_edit->setValue(value);
 	updateSpinWidgets();
 	m_edit->blockSignals(false);
 	if (emitChange)
@@ -203,11 +214,14 @@ DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 }
 
 
-void DoubleSpinBox::setValue ( double value )
+void DoubleSpinBox::setValue( const QVariant& value )
 {
-	if (static_cast<IntEdit*>(parentWidget())->isReadOnly())
+	if (dynamic_cast<DoubleEdit*>(parentWidget()) && dynamic_cast<DoubleEdit*>(parentWidget())->isReadOnly())
 		return;
-	KDoubleSpinBox::setValue(value);
+	if (value.isNull())
+		editor()->clear();
+	else
+		KDoubleSpinBox::setValue(value.toDouble());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +262,8 @@ DoubleEdit::~DoubleEdit()
 QVariant
 DoubleEdit::value() const
 {
-	//return m_edit->cleanText().toInt();  adymo: why cleanText()
+	if (m_edit->cleanText().isEmpty())
+		return QVariant();
 	return m_edit->value();
 }
 
@@ -256,7 +271,7 @@ void
 DoubleEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_edit->blockSignals(true);
-	m_edit->setValue(value.toDouble());
+	m_edit->setValue(value);
 	updateSpinWidgets();
 	m_edit->blockSignals(false);
 	if (emitChange)
