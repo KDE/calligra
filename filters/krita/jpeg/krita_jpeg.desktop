@@ -37,7 +37,6 @@ Name=Krita
 Name[eo]=Krito
 Name[hi]=के-रिता
 Name[lo]=ກຣິຕາ
-NoDisplay=true
 Path=
 StartupNotify=true
 Terminal=false
