@@ -106,7 +106,7 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool focused, const QVariant
 		QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
 //already set ouotside:		p->setPen(QPen(colorGroup().text(), 1));
 		p->drawRect(r);
-		if (val.isNull() && !field()->isNotNull()) {
+		if (val.isNull()) { // && !field()->isNotNull()) {
 			p->drawText( r, Qt::AlignCenter, "?" );
 		}
 		else if (val.toBool()) {

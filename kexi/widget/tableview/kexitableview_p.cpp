@@ -43,10 +43,10 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 	navigatorEnabled = true;
 	contextMenuEnabled = true;
 	skipKeyPress = false;
-	vScrollBarValueChanged_enabled = true;
-	scrollbarToolTipsEnabled = true;
-	scrollBarTipTimerCnt = 0;
-	scrollBarTip = 0;
+//moved	vScrollBarValueChanged_enabled = true;
+//moved	scrollbarToolTipsEnabled = true;
+//moved	scrollBarTipTimerCnt = 0;
+//moved	scrollBarTip = 0;
 	ensureCellVisibleOnShow = QPoint(-1,-1);
 	internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height()/2;
 	highlightedRow = -1;
@@ -58,7 +58,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 KexiTableViewPrivate::~KexiTableViewPrivate()
 {
 	delete pBufferPm;
-	delete scrollBarTip;
+//moved	delete scrollBarTip;
 }
 
 void KexiTableViewPrivate::clearVariables()

@@ -28,11 +28,13 @@
 
 #include <qguardedptr.h>
 
+#include <qtimer.h>
 #include <kdebug.h>
 #include <widget/utils/kexiarrowtip.h>
 #include "kexitableviewdata.h"
 
 class QObject;
+class QScrollBar;
 class KPopupMenu;
 class KexiTableItem;
 class KexiTableViewData;
@@ -84,6 +86,11 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		/*! \return currently selected row number or -1. */
 		inline int currentRow() const { return m_curRow; }
+
+		/*! \return last row visible on the screen (counting from 0). 
+		 The returned value is guaranteed to be smaller or equal to currentRow() or -1 
+		 if there are no rows. */
+		virtual int lastVisibleRow() const = 0;
 
 		/*! \return currently selected item (row data) or null. */
 		KexiTableItem *selectedItem() const { return m_currentItem; }
@@ -369,7 +376,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		bool hasDefaultValueAt(const KexiTableViewColumn& tvcol);
 
-		const QVariant* bufferedValueAt(int col);
+		const QVariant* bufferedValueAt(int col, bool useDefaultValueIfPossible = true);
 
 		//! \return a type of column \a col - one of KexiDB::Field::Type
 		int columnType(int col);
@@ -408,6 +415,12 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		/*! Enables or disables the context menu for the view. */
 		void setContextMenuEnabled(bool set) { m_contextMenuEnabled = set; }
+
+		/*! \return true if vertical scrollbar's tooltips are enabled (true by default). */
+		bool scrollbarToolTipsEnabled() const;
+
+		/*! Enables or disables vertical scrollbar's tooltip. */
+		void setScrollbarToolTipsEnabled(bool set);
 
 		/*! Typically handles pressing Enter or F2 key: 
 		 if current cell has boolean type, toggles it's value, 
@@ -449,6 +462,29 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		//! Paste current clipboard contents (e.g. to a cell)
 		virtual void paste() = 0;
+
+		/*! \return vertical scrollbar */
+		virtual QScrollBar* verticalScrollBar() const = 0;
+
+		/*! Used in KexiTableView::keyPressEvent() (and in continuous forms). 
+		 \return true when the key press event \e was consumed. 
+		 You should also check e->isAccepted(), if it's true, nothing should be done; 
+		 if it is false, you should call setCursorPosition() for the altered \a curCol 
+		 and \c curRow variables. 
+
+		 If \a moveToFirstField is not 0, *moveToFirstField will be set to true
+		 when the cursor should be moved to the first field (in tab order) and to false otherwise.
+		 If \a moveToLastField is not 0, *moveToLastField will be set to true
+		 when the cursor should be moved to the last field (in tab order) and to false otherwise.
+		 Note for forms: if moveToFirstField and moveToLastField are not 0, 
+		 \a curCol is altered after calling this method, so setCursorPosition() will set to
+		 the index of an appropriate column (field). This is needed because field widgets can be 
+		 inserted and ordered in custom tab order, so the very first field in the data source 
+		 can be other than the very first field in the form.
+
+		 Used by KexiTableView::keyPressEvent() and KexiTableView::keyPressEvent(). */
+		virtual bool handleKeyPress(QKeyEvent *e, int &curRow, int &curCol, bool fullRowSelection,
+			bool *moveToFirstField = 0, bool *moveToLastField = 0);
 
 	protected:
 		/*! Reimplementation for KexiDataAwareObjectInterface.
@@ -604,6 +640,22 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		virtual void addNewRecordRequested();
 
+		//! Call this from the subclass. */
+		virtual void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e);
+
+		/*! Handles verticalScrollBar()'s valueChanged(int) signal. 
+		 Called when vscrollbar's value has been changed. 
+		 Call this method from the subclass. */
+		virtual void vScrollBarValueChanged(int v);
+
+		/*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+		virtual void vScrollBarSliderReleased();
+
+		/*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible, 
+		 m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted; 
+		 else the m_scrollBarTipTimerCnt is just set to 0.*/
+		virtual void scrollBarTipTimeout();
+
 		//! data structure displayed for this object
 		KexiTableViewData *m_data;
 
@@ -730,6 +782,17 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		/*! Displays passive error popup label used when invalid data has been entered. */
 		QGuardedPtr<KexiArrowTip> m_errorMessagePopup;
+
+		/*! Used to enable/disable execution of vScrollBarValueChanged()
+		 when users navigate through rows using keyboard, so vscrollbar tooltips are not visible. */
+		bool m_vScrollBarValueChanged_enabled : 1;
+
+		/*! True, if vscrollbar tooltips are enabled (true by default). */
+		bool m_scrollbarToolTipsEnabled : 1;
+
+		QLabel* m_scrollBarTip; //!< scrollbar tooltip
+		QTimer m_scrollBarTipTimer; //!< scrollbar tooltip's timer
+		uint m_scrollBarTipTimerCnt; //!< helper for timeout counting (scrollbar tooltip)
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const

@@ -715,15 +715,15 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVa
 	QPixmap *pix = 0;
 	if (!key.isEmpty() && !(pix = d->pixmapCache[ key ])) {
 		//cache pixmap
-		QPixmap p = KGlobal::iconLoader()->loadIcon( key, KIcon::Small, 
+		QPixmap pm = KGlobal::iconLoader()->loadIcon( key, KIcon::Small, 
 			0, KIcon::DefaultState, 0L, true/*canReturnNull*/ );
-		if (!p.isNull()) {
-			pix = new QPixmap(p);
+		if (!pm.isNull()) {
+			pix = new QPixmap(pm);
 			d->pixmapCache.insert(key, pix);
 		}
 	}
 
-	if (pix) {
+	if (p && pix) {
 		p->drawPixmap( (w-pix->width())/2, (h-pix->height())/2, *pix );
 	}
 }
