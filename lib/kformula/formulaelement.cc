@@ -316,16 +316,21 @@ QString FormulaElement::toLatex()
 void FormulaElement::writeMathML( QDomDocument& doc, QDomNode& parent, bool oasisFormat ) const
 {
     QDomElement de;
-    if ( !oasisFormat )
+    if ( !oasisFormat ) {
         de = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
                                               "math" );
-    else
-        de =doc.createElement( "math:semantics" );
+        parent.appendChild( de );
+    }
+    else {
+        QDomElement element = doc.createElement( "math:semantics" );
+        de = doc.createElement( "math:mrow" );
+        parent.appendChild( element );
+        element.appendChild( de );
+    }
     for ( uint i = 0; i < countChildren(); ++i ) {
         const BasicElement* e = getChild( i );
         e->writeMathML( doc, de, oasisFormat );
     }
-    parent.appendChild( de );
 }
 
 KFORMULA_NAMESPACE_END
