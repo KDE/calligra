@@ -45,7 +45,6 @@ KexiComboBoxDropDownButton::~KexiComboBoxDropDownButton()
 
 void KexiComboBoxDropDownButton::drawButton(QPainter *p)
 {
-//			QStyle::PrimitiveElement e = QStyle::PE_ArrowDown;
 	int flags = QStyle::Style_Enabled | QStyle::Style_HasFocus;
 	if (isDown())
 		flags |= QStyle::Style_Down;
@@ -55,16 +54,13 @@ void KexiComboBoxDropDownButton::drawButton(QPainter *p)
 	QRect r = rect();
 	r.setHeight(r.height()+m_fixForHeight);
 	if (m_drawComplexControl) {
-//				style().drawControl(QStyle::CE_PushButton, p, this, rect(), colorGroup(), flags);
-			if (m_fixForHeight>0 && m_paintedCombo->size()!=size()) {
-				m_paintedCombo->move(0,0);
-				m_paintedCombo->setFixedSize(size()+QSize(0, m_fixForHeight)); //last chance to fix size
-			}
-
-		style().drawComplexControl( QStyle::CC_ComboBox, p, 
+		if (m_fixForHeight>0 && m_paintedCombo->size()!=size()) {
+			m_paintedCombo->move(0,0);
+			m_paintedCombo->setFixedSize(size()+QSize(0, m_fixForHeight)); //last chance to fix size
+		}
+		style().drawComplexControl( QStyle::CC_ComboBox, p,
 			m_fixForHeight>0 ? (const QWidget*)m_paintedCombo : this, r, colorGroup(),
-			flags, (uint)(QStyle::SC_ComboBoxArrow /*| QStyle::SC_ComboBoxFrame*/), //QStyle::SC_All ^ QStyle::SC_ComboBoxFrame,
-			 /*QStyle::SC_ComboBoxArrow */ QStyle::SC_None );
+			flags, (uint)(QStyle::SC_ComboBoxArrow), QStyle::SC_None );
 	}
 	else {
 		r.setWidth(r.width()+2);
