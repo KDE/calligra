@@ -9,7 +9,6 @@ Icon=krita
 MimeType=image/jpeg
 Name=Krita
 Name[x-test]=xxKritaxx
-NoDisplay=true
 Path=
 StartupNotify=true
 Terminal=false
