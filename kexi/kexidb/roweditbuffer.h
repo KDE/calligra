@@ -98,8 +98,10 @@ public:
 		{ if (m_simpleBuffer) m_simpleBuffer->insert(fname,val); }
 
 	/*! Useful only for db-aware buffer. \return value for column \a ci
-	 If there is no value assigned for the buffer, this method tries to return
-	 default value obtained from \a ci if \a useDefaultValueIfPossible is true. */
+	 If there is no value assigned for the buffer, this method tries to remember and return
+	 default value obtained from \a ci if \a useDefaultValueIfPossible is true. 
+	 Note that if the column is declared as unique (especially: primary key), 
+	 default value will not be used. */
 	const QVariant* at( QueryColumnInfo& ci, bool useDefaultValueIfPossible = true ) const;
 	
 	//! Useful only for not-db-aware buffer. \return value for field \a f

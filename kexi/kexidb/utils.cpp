@@ -1081,4 +1081,9 @@ QVariant KexiDB::stringToVariant( const QString& s, QVariant::Type type, bool &o
 	return result;
 }
 
+bool KexiDB::isDefaultValueAllowed( KexiDB::Field* field )
+{
+	return field && !field->isUniqueKey();
+}
+
 #include "utils_p.moc"

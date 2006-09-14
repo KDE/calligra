@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/roweditbuffer.h>
+#include "roweditbuffer.h"
+#include "utils.h"
 
 #include <kdebug.h>
 
@@ -55,7 +56,7 @@ const QVariant* RowEditBuffer::at( QueryColumnInfo& ci, bool useDefaultValueIfPo
 		result = &(*m_dbBufferIt).data();
 	if ( useDefaultValueIfPossible 
 		&& (!result || result->isNull()) 
-		&& ci.field && !ci.field->defaultValue().isNull()
+		&& ci.field && !ci.field->defaultValue().isNull() && KexiDB::isDefaultValueAllowed(ci.field)
 		&& !hasDefaultValueAt(ci) )
 	{
 		//no buffered or stored value: try to get a default value declared in a field, so user can modify it
