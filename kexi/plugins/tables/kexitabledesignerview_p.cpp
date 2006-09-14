@@ -138,7 +138,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 			property.setListData(*slist, *nlist);
 		}
 	}
-	if (oldValue == newValue && !forceAddCommand)
+	if (oldValue.type() == newValue.type() && oldValue == newValue && !forceAddCommand)
 		return;
 
 	const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled 
