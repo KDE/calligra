@@ -15,6 +15,58 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-09-14
+KoProperty
+- property is not changed when new and old value are both null
+- spin boxes for integer and double values: deleting the contents
+  now sets null value
+= consider unsigner long long and long long values as compatible
+2.0: merged
+KexiDB
+- do not try to insert default values into a column with unique 
+  flag declared (or even PK) 
+2.0: merged
+Table View
+- Fixed repainting after "Edit->Clear Table Contents" action
+= display question mark for null values in boolean column even 
+   if it has to be "notNull"
+2.0: merged
+Table Designer
+- set "false" as default value for columns with Yes/No types
+- when column type changes, default value is updated to match the new type
+  (e.g. casted from integer to text; incompatible values are removed)
+2.0: merged
+
+2006-09-11..13
+KoProperty
+= fixed group widget's height
+2.0: merged
+Table View
+= fixed drawing drop-down arrow for styles like ThinKeramik
+2.0: merged
+- more shortcuts added, shortcuts are now usable and a bit MSA-like
+-- CTRL+End now moves to the last field in the last record 
+    (previously: the last record)
+-- CTRL+Home now moves to the first field in the first record 
+    (previously: the first record)
+-- CTRL+PgDown now moves to the next record
+-- CTRL+PgUp now moves to the previous record
+-- CTRL+Plus or CTRL+= now moves to the new record
+= some common code moved to KexiDataAwareObjectInterface from KexiTableView,
+  thus allowing to reuse it in forms
+2.0: merged
+Forms
+- fixed tab/backtab key handling
+- fixed displaying custom label text when "Auto Label" property is off
+- handling of global shortcuts like CTRL+PgDown is now shared with 
+   Table View (accesibility: it is now possible to move to next/previous 
+   record using keyboard)
+- moving to new row sets the focus in the first data-aware widget 
+   (in tab order)
+- fixed leaving from "editing" state on "accept row changes" or moving 
+   to other record
+2.0: merged
+
 2006-09-08
 Table Designer
 - fixed inserting fields of type "Object"
@@ -59,7 +111,7 @@ Forms
 2.0: merged
 KexiDB
 = dependency on newer (>=4.1) client library removed:
-  MySQL driver now uses 'SELECTG @@version' SQL statement instead of dedicated 
+  MySQL driver now uses 'SELECT @@version' SQL statement instead of dedicated 
   API function
 = added possibility for switching off "LIMIT 1" optmization 
   for methods like Connection::querySingleString() 
@@ -126,8 +178,8 @@ CSV Import Dialog
 2006-08-14
 Table View
 - default values are displayed and work properly with editing
-- current row and column is visible as selection on the vertical 
-   and horizontal headers
+- current row and column are marked as selection on the vertical 
+   and horizontal header sections
 2.0: merged
 KexiDB
 = improved table name altering
@@ -146,7 +198,7 @@ CSV Export
 - time and object values: fixed exporting or copying to clipboard
 2.0: merged
 Main Window
-- "copy special" action is available after switching back to table data view
+= "copy special" action is available after switching back to table data view
 2.0: merged
 
 2006-08-09

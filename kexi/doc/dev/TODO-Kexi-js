@@ -39,11 +39,9 @@ TODO: change texts in projectwizard to more descriptive:
 "Authentication" --> "Database server's user authentication"
 "Database Location" --> "Database Server Location"
 
-TODO: [complexity=small] add dynamic resize for dict members like Connection::m_tables
-TODO: [complexity=big] make KexiDB really ASYNC, multithreaded!
 TODO: [complexity=big] add command line kexi tools
 
-TODO: install kexi-specific icons in apps/kexi/icons not is global
+TODO: install kexi-specific icons in apps/kexi/icons not as global
 
 TODO(GUI):
 -add "Change data source" button in project wizard
@@ -62,25 +60,8 @@ TODO(GUI):
 --opening existing Kexi projects
 --importing existing non-kexi databases
 
-TODO: implement better references (foreign key information) between tables + storage
-TODO: implement WHERE clause + storage
-TODO: implement GROUP BY clause + storage
-TODO: add server version info retrieval
-TODO: add schema to kexi__* tables on createTable()
-TODO: add support for creation temporary databases
-
-
-TODO: use KShared and KSharedPtr for Transaction and DriverManger class instead
-TODO: add kexi's global.h 
-TODO: add Q_LLONG to kexi global.h is not exists
-
-TODO: add to field's properties list: input mask, validation rule, column width
-
 FIX: corrupted database can be created sometimes (eg. for tests/newapi sqlite dbcreation)
         --reason: maybe file was not flushed and app too early exited?
-
-TODO: improove Expression class, add code for generating expression 
- strings in Connection::queryStatement()
 
 <SQLITE>
 from: http://web.utk.edu/~jplyon/sqlite/SQLite_optimization_FAQ.html
@@ -418,6 +399,17 @@ CCPASTEUR:
 	-perhaps we'd reuse KDE Menu editor GUI?
 
 === KexiDB TODO ===
+- add to field's properties list: input mask, validation rule, column width
+- improve Expression class, add code for generating expression 
+ strings in Connection::queryStatement()
+- add dynamic resize for dict members like Connection::m_tables
+- make KexiDB really ASYNC, multithreaded!
+- implement relationships (foreign key information) between tables + storage
+-- Support tree standard types of integrity rules as described at http://allenbrowne.com/ser-64.html
+    plus: Cascade to Null Relations
+- implement GROUP BY clause + storage
+- add schema to kexi__* tables on createTable()
+- add support for creation temporary databases
 - look at Connection::isReadOnly() to see if we can perform certain operations 
    requiring write access (create db, update db props, etc.)
 - reuse ConnectionData::useLocalSocketFile for connections using socket file
@@ -913,8 +905,10 @@ ALTER TABLE t1_new RENAME TO t1;
   or only its name if the image is not cropped
 - AutoField: highlighting the label when the buddy is focused
 - AutoField: handle label editing after double clicking
-- AutoField: draw required field in bold (or optionally add (*)
+- AutoField: draw required field in bold (or optionally add (*))
 - display default values in other widgets showing text
+- new action for button widgets: open table/query 
+  +with query parameters taken from a line edit
 
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
@@ -964,42 +958,26 @@ Combobox table edit TODO:
   property of the Table Designer)
 - fix repainting cells when moving down/up arrow at the window boundaries 
   (weird, win32 is not affected)
-- BUG! "edit->clear table" actions does not repaint tableview when it's in spreadsheet mode 
-  (e.g. in table/query designer)
 
 - (e.g. in table designer): in an empty row 1. drop down a type combo. 2. do not select enything an click outside
  of it. 3. 
-KoProperty TODO
-
-
-Kexi 1.6 MUST HAVE TODOs:
-- use transliteration script: http://bugs.kde.org/show_bug.cgi?id=133170
-
+- do not autoscroll vertically the contents if the current column is wider than the view 
+  (my example: 'microsoft_terminology' table's 1st column) because the text us unreadable 
+  valid even when we use arow keys only
 
 
 Form/TV Shortcuts:
-
-To move to the last field in the last record, in Navigation mode
- CTRL+END
-
-To move to the first field in the first record, in Navigation mode
- CTRL+HOME
  
-To move to the current field in the next record
- CTRL+PAGE DOWN
- 
-To move to the current field in the previous record
- CTRL+PAGE UP
-
-+To move to the record number box (record number box: A small box that displays the current record number in the lower-left corner in Datasheet view and Form view. To move to a specific record, you can type the record number in the box, and press ENTER.); then type the record number and press ENTER
++To move to the record number box (record number box: A small box that displays the current record number 
+ in the lower-left corner in Datasheet view and Form view. To move to a specific record, you can type 
+ the record number in the box, and press ENTER.); then type the record number and press ENTER
  F5
- 
 + Add moving to next record when Tab is pressed at the last field
 + Add moving to prev record when BackTab is pressed at the 1st field
 
 
 == Must-have TODOs for 1.1 ==
-todo: adding blob field to existing table doesnt work for the 1st time
+- use transliteration script: http://bugs.kde.org/show_bug.cgi?id=133170
 todo: notify and update data source after schema changes
 todo: fix things like SELECT *, cars.owner AS ab, 1.3 AS wyr1, persons.surname FROM cars LEFT OUTER JOIN persons ON cars.owner=persons.id  WHERE cars.owner > 3
       (crash - see Simple_Database.kexi - persons_and_cars query has lookup fields and OUTER JOIN is NOT PARSED
