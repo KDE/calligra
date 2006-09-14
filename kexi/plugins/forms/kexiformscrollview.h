@@ -86,6 +86,16 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		/*! @internal Used by KexiFormView in view switching. */
 		void beforeSwitchView();
 
+		/*! \return last row visible on the screen (counting from 0). 
+		 The returned value is guaranteed to be smaller or equal to currentRow() or -1 
+		 if there are no rows. 
+		 Implemented for KexiDataAwareObjectInterface. */
+//! @todo unimplemented for now, this will be used for continuous forms
+		virtual int lastVisibleRow() const;
+
+		/*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
+		virtual QScrollBar* verticalScrollBar() const { return KexiScrollView::verticalScrollBar(); }
+
 	public slots:
 		/*! Reimplemented to update resize policy. */
 		virtual void show();
@@ -112,6 +122,21 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 	public slots:
 		/*! Reimplemented to also clear command history right after final resize. */
 		virtual void refreshContentsSize();
+
+		/*! Handles verticalScrollBar()'s valueChanged(int) signal. 
+		 Called when vscrollbar's value has been changed. */
+//! @todo unused for now, will be used for continuous forms
+		virtual void vScrollBarValueChanged(int v) { KexiDataAwareObjectInterface::vScrollBarValueChanged(v); }
+
+		/*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
+//! @todo unused for now, will be used for continuous forms
+		virtual void vScrollBarSliderReleased() { KexiDataAwareObjectInterface::vScrollBarSliderReleased(); }
+
+		/*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible, 
+		 m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted; 
+		 else the m_scrollBarTipTimerCnt is just set to 0.*/
+//! @todo unused for now, will be used for continuous forms
+		virtual void scrollBarTipTimeout() { KexiDataAwareObjectInterface::scrollBarTipTimeout(); }
 
 	signals:
 		virtual void itemChanged(KexiTableItem *, int row, int col);
