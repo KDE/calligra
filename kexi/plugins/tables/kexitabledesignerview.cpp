@@ -68,6 +68,33 @@
 
 using namespace KexiTableDesignerCommands;
 
+//! @internal Used in tryCastQVariant()
+static bool canCastQVariant(QVariant::Type fromType, QVariant::Type toType)
+{
+	return (fromType==QVariant::Int && toType==QVariant::UInt)
+   || (fromType==QVariant::CString && toType==QVariant::String)
+   || (fromType==QVariant::LongLong && toType==QVariant::ULongLong)
+   || ((fromType==QVariant::String || fromType==QVariant::CString) 
+	      && (toType==QVariant::LongLong || toType==QVariant::ULongLong || toType==QVariant::Int || toType==QVariant::UInt));
+}
+
+/*! @internal 
+ \return a variant value converted from \a fromVal to \a toType type.
+ Null QVariant is returned if \a fromVal's type and \a toType type 
+ are incompatible. */
+static QVariant tryCastQVariant( const QVariant& fromVal, QVariant::Type toType )
+{
+	const QVariant::Type fromType = fromVal.type();
+	if (fromType == toType)
+		return fromVal;
+	if (canCastQVariant(fromType, toType) || canCastQVariant(toType, fromType)) {
+		QVariant res( fromVal );
+		if (res.cast(toType))
+			return res;
+	}
+	return QVariant();
+}
+
 
 KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *parent)
  : KexiDataTable(win, parent, "KexiTableDesignerView", false/*not db-aware*/)
@@ -797,9 +824,11 @@ void KexiTableDesignerView::slotRowUpdated(KexiTableItem *item)
 			/*width*/0);
 //		m_newTable->addField( field );
 
-		// not null by default is reasonable for boolean type
-		if (fieldType == KexiDB::Field::Boolean)
+		// reasonable case for boolean type: set notNull flag and "false" as default value
+		if (fieldType == KexiDB::Field::Boolean) {
 			field.setNotNull( true );
+			field.setDefaultValue( QVariant(false, 0) );
+		}
 
 		kexipluginsdbg << "KexiTableDesignerView::slotRowUpdated(): " << field.debugString() << endl;
 
@@ -891,7 +920,9 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 	}
 
 	//clear PK when these properies were set to false:
-	if ((pname=="indexed" || pname=="unique" || pname=="notNull") && property.value().toBool()==false) {
+	if ((pname=="indexed" || pname=="unique" || pname=="notNull") 
+		&& set["primaryKey"].value().toBool() && property.value().toBool()==false)
+	{
 //! @todo perhaps show a hint in help panel telling what happens?
 		changePrimaryKey = true;
 		setPrimaryKey = false;
@@ -946,10 +977,19 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 			.arg(typeName) );
 		d->setPropertyValueIfNeeded( set, "subType", property.value(), property.oldValue(),
 			changeFieldTypeCommand );
-		
+
 		kexipluginsdbg << set["type"].value() << endl;
 		const KexiDB::Field::Type newType = KexiDB::Field::typeForString(property.value().toString());
 		set["type"].setValue( newType );
+
+		// cast "defaultValue" property value to a new type
+		QVariant oldDefVal( set["defaultValue"].value() );
+		QVariant newDefVal( tryCastQVariant(oldDefVal, KexiDB::Field::variantType(type)) );
+		if (oldDefVal.type()!=newDefVal.type())
+			set["defaultValue"].setType( newDefVal.type() );
+		d->setPropertyValueIfNeeded( set, "defaultValue", newDefVal, newDefVal,
+			changeFieldTypeCommand );
+
 		d->updatePropertiesVisibility(newType, set);
 		//properties' visiblility changed: refresh prop. set
 		propertySetReloaded(true);
