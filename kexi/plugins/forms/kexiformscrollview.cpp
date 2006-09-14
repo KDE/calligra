@@ -506,6 +506,9 @@ void KexiFormScrollView::cancelEditor()
 		itemIface->setDisplayDefaultValue( dynamic_cast<QWidget*>(itemIface), displayDefaultValue );
 
 	fillDuplicatedDataItems(itemIface, m_editor->value());
+
+	// this will clear editor pointer and close message popup (if present)
+	KexiDataAwareObjectInterface::cancelEditor();
 }
 
 void KexiFormScrollView::updateAfterCancelRowEdit()
@@ -579,6 +582,12 @@ void KexiFormScrollView::cutSelection()
 void KexiFormScrollView::paste()
 {
 	handleDataWidgetAction("edit_paste");
+}
+
+int KexiFormScrollView::lastVisibleRow() const
+{
+//! @todo unimplemented for now, this will be used for continuous forms
+	return -1;
 }
 
 #include "kexiformscrollview.moc"

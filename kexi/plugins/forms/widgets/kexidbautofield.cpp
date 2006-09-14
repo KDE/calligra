@@ -521,7 +521,7 @@ KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 		}
 	}
 	// update label's text
-	changeText((cinfo && d->autoCaption) ? cinfo->captionOrAliasOrName() : QString::null);
+	changeText((cinfo && d->autoCaption) ? cinfo->captionOrAliasOrName() : d->caption);
 
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
 	if(iface)

@@ -45,7 +45,7 @@ class KexiDBComboBox::Private
 		{
 		}
 
-	KComboBox *paintedCombo;
+	KComboBox *paintedCombo; //!< fake combo used only to pass it as 'this' for QStyle (because styles use <static_cast>)
 
 	bool isEditable : 1;
 	bool buttonPressed : 1;

@@ -95,8 +95,6 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 
 		Q3PtrList<QWidget>* orderedDataAwareWidgets() const;
 		
-		int indexForDataItem( KexiDataItemInterface* item ) const;
-
 		void updateTabStopsOrder(KFormDesigner::Form* form);
 
 		void updateTabStopsOrder();
