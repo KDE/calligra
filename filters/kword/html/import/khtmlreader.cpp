@@ -96,6 +96,7 @@ HTMLReader_state *KHTMLReader::pushNewState() {
 
 
 void KHTMLReader::popState() {
+        kdDebug(30503) << "Entering popState" << endl;
 
 	HTMLReader_state *s=_state.pop();
 
@@ -111,7 +112,7 @@ void KHTMLReader::popState() {
 		{
 			state()->paragraph=s->paragraph;
 			if ((state()->layout != s->layout)) {
-				startNewLayout(false,state()->layout);
+                          if (_writer->getText(state()->paragraph).length()!=0) startNewLayout(false,state()->layout);
 			}
 		state()->format=_writer->startFormat(state()->paragraph, state()->format);
 	}
@@ -159,7 +160,7 @@ void KHTMLReader::completed() {
 
 
 void KHTMLReader::parseNode(DOM::Node node) {
-
+	kdDebug(30503) << "Entering parseNode" << endl;
         // check if this is a text node.
 	DOM::Text t=node;
 	if (!t.isNull()) {
@@ -232,6 +233,7 @@ void KHTMLReader::parse_head(DOM::Element e) {
 
 
 bool KHTMLReader::parseTag(DOM::Element e) {
+        kdDebug(30503) << "Entering parseTag for " << e.tagName().lower() << endl;
 	_PP(a);
 	_PP(p);
 	_PP(br);
@@ -259,6 +261,7 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 	_PL(h4,NAME,value,h4);
 	_PL(h5,NAME,value,h5);
 	_PL(h6,NAME,value,h6);
+        kdDebug(30503) << "Leaving parseTag" << endl;
 
 	// Don't handle the content of comment- or script-nodes.
 	if(e.nodeType() == DOM::Node::COMMENT_NODE || e.tagName().lower() == "script") {
