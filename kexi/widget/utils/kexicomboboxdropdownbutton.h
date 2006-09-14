@@ -22,6 +22,8 @@
 
 #include <kpushbutton.h>
 
+class KComboBox;
+
 //! @short A drop-down button for combo box widgets
 /*! Used in KexiComboBoxTableEdit. 
 */
@@ -40,6 +42,8 @@ class KEXIGUIUTILS_EXPORT KexiComboBoxDropDownButton : public KPushButton
 
 		int m_fixForHeight;
 		bool m_drawComplexControl : 1;
+		KComboBox *m_paintedCombo; //!< fake combo used only to pass it as 'this' for QStyle 
+		                           //!< (because styles use <static_cast>)
 };
 
 #endif
