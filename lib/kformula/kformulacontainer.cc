@@ -354,7 +354,7 @@ void Container::paste( const QDomDocument& document, QString desc )
     FormulaCursor* cursor = activeCursor();
     QPtrList<BasicElement> list;
     list.setAutoDelete( true );
-    if ( cursor->buildElementsFromDom( document.documentElement(), list ) ) {
+    if ( cursor->buildElementsFromMathMLDom( document.documentElement(), list ) ) {
         uint count = list.count();
         // You must not execute an add command that adds nothing.
         if (count > 0) {
@@ -372,7 +372,7 @@ void Container::copy()
     // read-only cursors are fine for copying.
     FormulaCursor* cursor = activeCursor();
     if (cursor != 0) {
-        QDomDocument formula = document()->createDomDocument();
+        QDomDocument formula = document()->createMathMLDomDocument();
         cursor->copy( formula );
         QClipboard* clipboard = QApplication::clipboard();
         clipboard->setData(new MimeSource(document(), formula));
@@ -526,23 +526,12 @@ bool Container::load( const QDomElement &fe )
 
 void Container::saveMathML( QTextStream& stream, bool oasisFormat )
 {
-    if ( !oasisFormat )
-    {
-        // ### TODO: Are we really using MathML 2.0 or would be MathMl 1.01 enough (like for OO)?
-        QDomDocumentType dt = QDomImplementation().createDocumentType( "math",
-                                                                       "-//W3C//DTD MathML 2.0//EN",
-                                                                       "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
-        QDomDocument doc( dt );
-        doc.insertBefore( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ), doc.documentElement() );
-        rootElement()->writeMathML( doc, doc, oasisFormat );
-        stream << doc;
-    }
-    else
-    {
-        QDomDocument doc;
-        rootElement()->writeMathML( doc, doc, oasisFormat );
-        stream << doc;
-    }
+    QDomDocument doc;
+    if ( !oasisFormat ) {
+        doc = document()->createMathMLDomDocument(); 
+   }
+    rootElement()->writeMathML( doc, doc, oasisFormat );
+    stream << doc;
 }
 
 bool Container::loadMathML( const QDomDocument &doc, bool oasisFormat )

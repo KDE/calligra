@@ -293,6 +293,11 @@ public:
     void getChildrenDom( QDomDocument& doc, QDomElement elem, uint from, uint to);
 
     /**
+     * Stores the given childrens MathML dom in the element.
+     */
+    void getChildrenMathMLDom( QDomDocument& doc, QDomNode& elem, uint from, uint to );
+
+    /**
      * Builds elements from the given node and its siblings and
      * puts them into the list.
      * Returns false if an error occures.

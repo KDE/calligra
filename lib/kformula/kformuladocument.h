@@ -186,6 +186,12 @@ public:
      */
     static QDomDocument createDomDocument();
 
+    /**
+     * Create a MathML Dom Document, deprecates KFO Dom Document for internal layout
+     * TODO: Shouldn't this go to KoDocument ?
+     */
+    QDomDocument createMathMLDomDocument();
+
 public:
 
     /**

@@ -1409,7 +1409,18 @@ void SequenceElement::getChildrenDom( QDomDocument& doc, QDomElement elem,
 {
     for (uint i = from; i < to; i++) {
         QDomElement tmpEleDom=children.at(i)->getElementDom(doc);
-	elem.appendChild(tmpEleDom);
+        elem.appendChild(tmpEleDom);
+    }
+}
+
+/**
+ * Stores the given childrens MathML dom in the element.
+ */
+void SequenceElement::getChildrenMathMLDom( QDomDocument& doc, QDomNode& parent,
+                                            uint from, uint to)
+{
+    for ( uint i = from; i < to; i++ ) {
+        children.at( i )->writeMathML( doc, parent, false );
     }
 }
 
@@ -1801,7 +1812,8 @@ bool NameSequence::isValidSelection( FormulaCursor* cursor )
     return sequence->onlyTextSelected( cursor );
 }
 
-int SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) {
+int SequenceElement::buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n) 
+{
     while (!n.isNull()) {
         int nodeNumber = 1;
         if (n.isElement()) {

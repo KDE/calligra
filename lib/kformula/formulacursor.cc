@@ -641,11 +641,12 @@ void FormulaCursor::copy( QDomDocument& doc )
     if (isSelection()) {
         SequenceElement* sequence = normal();
         if (sequence != 0) {
-            QDomElement root = doc.documentElement();
-            QDomElement de = sequence->formula()->emptyFormulaElement( doc );
+            QDomElement root = doc.createElementNS( "http://www.w3.org/1998/Math/MathML",
+                                                    "math" );
+            doc.appendChild( root );
+            QDomElement de = doc.createElement( "mrow" );
             root.appendChild( de );
-
-            sequence->getChildrenDom(doc, de, getSelectionStart(), getSelectionEnd());
+            sequence->getChildrenMathMLDom(doc, de, getSelectionStart(), getSelectionEnd());
         }
         else {
             // This must never happen.
@@ -671,6 +672,22 @@ bool FormulaCursor::buildElementsFromDom( QDomElement root, QPtrList<BasicElemen
     return false;
 }
 
+/**
+ * Inserts the elements that could be read from the MathML dom into
+ * the list. Returns true on success.
+ */
+bool FormulaCursor::buildElementsFromMathMLDom( QDomElement root, QPtrList<BasicElement>& list )
+{
+    assert( !isReadOnly() );
+    SequenceElement* sequence = normal();
+    if (sequence != 0) {
+        QDomElement e = root.firstChild().toElement();
+        if (sequence->buildChildrenFromMathMLDom(list, e.firstChild())) {
+            return true;
+        }
+    }
+    return false;
+}
 
 /**
  * Creates a new CursorData object that describes the cursor.

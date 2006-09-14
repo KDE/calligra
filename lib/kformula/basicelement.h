@@ -408,6 +408,7 @@ public:
 
 	virtual void setStyle(StyleElement*) {}
 
+    virtual QString getElementName() const { return ""; };
 protected:
 
     //Save/load support
@@ -422,7 +423,6 @@ protected:
      */
     virtual void writeDom(QDomElement element);
 
-    virtual QString getElementName() const { return ""; };
     virtual void writeMathMLAttributes( QDomElement& /*element*/ ) const {};
     virtual void writeMathMLContent( QDomDocument& /*doc*/, 
                                      QDomElement& /*element*/,

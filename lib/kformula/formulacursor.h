@@ -299,6 +299,12 @@ public:
      */
     bool buildElementsFromDom( QDomElement root, QPtrList<BasicElement>& list );
 
+    /**
+     * Inserts the elements that could be read from the MathML dom into
+     * the list. Returns true on success.
+     */
+    bool buildElementsFromMathMLDom( QDomElement root, QPtrList<BasicElement>& list );
+
     // undo/redo support
 
     /**

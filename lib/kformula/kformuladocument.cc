@@ -206,6 +206,23 @@ QDomDocument Document::createDomDocument()
                                           CURRENT_DTD_VERSION );
 }
 
+/**
+ * Create a MathML Dom Document, deprecates KFO Dom Document for internal layout
+ * TODO: Shouldn't this go to KoDocument ?
+ */
+QDomDocument Document::createMathMLDomDocument()
+{
+    QDomDocumentType dt = 
+        QDomImplementation().createDocumentType( "math",
+                                                 "-//W3C//DTD MathML 2.0//EN",
+                                                 "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
+    QDomDocument doc( dt );
+    doc.insertBefore( doc.createProcessingInstruction( "xml", 
+                                                       "version=\"1.0\" encoding=\"UTF-8\"" ),
+                      doc.documentElement() );
+    return doc;
+}
+
 void Document::registerFormula( Container* f, int pos )
 {
     if ( ( pos > -1 ) &&
