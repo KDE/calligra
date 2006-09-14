@@ -190,16 +190,27 @@ int KexiDB::idForObjectName( Connection &conn, const QString& objName, int objTy
 
 //-----------------------------------------
 
+TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QByteArray& name)
+ : m_name(name)
+{
+	m_table = conn->tableSchema(QString(name));
+	m_query = m_table ? 0 : conn->querySchema(QString(name));
+	if (!m_table && !m_query)
+		KexiDBWarn << "TableOrQuery(FieldList &tableOrQuery) : "
+			" tableOrQuery is nether table nor query!" << endl;
+}
+
+
 TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QByteArray& name, bool table)
  : m_name(name)
  , m_table(table ? conn->tableSchema(QString(name)) : 0)
  , m_query(table ? 0 : conn->querySchema(QString(name)))
 {
 	if (table && !m_table)
-		kWarning() << "TableOrQuery(Connection *conn, const QByteArray& name, bool table) : "
+		KexiDBWarn << "TableOrQuery(Connection *conn, const QByteArray& name, bool table) : "
 			"no table specified!" << endl;
 	if (!table && !m_query)
-		kWarning() << "TableOrQuery(Connection *conn, const QByteArray& name, bool table) : "
+		KexiDBWarn << "TableOrQuery(Connection *conn, const QByteArray& name, bool table) : "
 			"no query specified!" << endl;
 }
 
@@ -208,7 +219,7 @@ TableOrQuerySchema::TableOrQuerySchema(FieldList &tableOrQuery)
  , m_query(dynamic_cast<QuerySchema*>(&tableOrQuery))
 {
 	if (!m_table && !m_query)
-		kWarning() << "TableOrQuery(FieldList &tableOrQuery) : "
+		KexiDBWarn << "TableOrQuery(FieldList &tableOrQuery) : "
 			" tableOrQuery is nether table nor query!" << endl;
 }
 
@@ -217,7 +228,7 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, int id)
 	m_table = conn->tableSchema(id);
 	m_query = m_table ? 0 : conn->querySchema(id);
 	if (!m_table && !m_query)
-		kWarning() << "TableOrQuery(Connection *conn, int id) : no table or query found for id==" 
+		KexiDBWarn << "TableOrQuery(Connection *conn, int id) : no table or query found for id==" 
 			<< id << "!" << endl;
 }
 
@@ -226,7 +237,7 @@ TableOrQuerySchema::TableOrQuerySchema(TableSchema* table)
  , m_query(0)
 {
 	if (!m_table)
-		kWarning() << "TableOrQuery(TableSchema* table) : no table specified!" << endl;
+		KexiDBWarn << "TableOrQuery(TableSchema* table) : no table specified!" << endl;
 }
 
 TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
@@ -234,7 +245,7 @@ TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
  , m_query(query)
 {
 	if (!m_query)
-		kWarning() << "TableOrQuery(QuerySchema* query) : no query specified!" << endl;
+		KexiDBWarn << "TableOrQuery(QuerySchema* query) : no query specified!" << endl;
 }
 
 const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
@@ -245,7 +256,7 @@ const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
 	if (m_query)
 		return m_query->fieldsExpanded(unique ? QuerySchema::Unique : QuerySchema::Default);
 
-	kWarning() << "TableOrQuery::fields() : no query or table specified!" << endl;
+	KexiDBWarn << "TableOrQuery::fields() : no query or table specified!" << endl;
 	return QueryColumnInfo::Vector();
 }
 

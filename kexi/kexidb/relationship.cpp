@@ -68,20 +68,20 @@ Relationship::~Relationship()
 void Relationship::createIndices( QuerySchema *query, Field *field1, Field *field2 )
 {
 	if (!field1 || !field2 || !query) {
-		kWarning() << "Relationship::addRelationship(): !masterField || !detailsField || !query" << endl;
+		KexiDBWarn << "Relationship::addRelationship(): !masterField || !detailsField || !query" << endl;
 		return;
 	}
 	if (field1->isQueryAsterisk() || field2->isQueryAsterisk()) {
-		kWarning() << "Relationship::addRelationship(): relationship's fields cannot be asterisks" << endl;
+		KexiDBWarn << "Relationship::addRelationship(): relationship's fields cannot be asterisks" << endl;
 		return;
 	}
 	if (field1->table() == field2->table()) {
-		kWarning() << "Relationship::addRelationship(): fields cannot belong to the same table" << endl;
+		KexiDBWarn << "Relationship::addRelationship(): fields cannot belong to the same table" << endl;
 		return;
 	}
 //	if (!query->hasField(field1) && !query->hasField(field2)) {
 	if (!query->contains(field1->table()) || !query->contains(field2->table())) {
-		kWarning() << "Relationship::addRelationship(): fields do not belong to this query" << endl;
+		KexiDBWarn << "Relationship::addRelationship(): fields do not belong to this query" << endl;
 		return;
 	}
 //@todo: check more things: -types

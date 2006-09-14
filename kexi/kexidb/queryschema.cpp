@@ -1299,19 +1299,19 @@ QueryColumnInfo::Vector QuerySchema::orderByColumnList() const
 /*
 	new field1, Field *field2
 	if (!field1 || !field2) {
-		kWarning() << "QuerySchema::addRelationship(): !masterField || !detailsField" << endl;
+		KexiDBWarn << "QuerySchema::addRelationship(): !masterField || !detailsField" << endl;
 		return;
 	}
 	if (field1->isQueryAsterisk() || field2->isQueryAsterisk()) {
-		kWarning() << "QuerySchema::addRelationship(): relationship's fields cannot be asterisks" << endl;
+		KexiDBWarn << "QuerySchema::addRelationship(): relationship's fields cannot be asterisks" << endl;
 		return;
 	}
 	if (!hasField(field1) && !hasField(field2)) {
-		kWarning() << "QuerySchema::addRelationship(): fields do not belong to this query" << endl;
+		KexiDBWarn << "QuerySchema::addRelationship(): fields do not belong to this query" << endl;
 		return;
 	}
 	if (field1->table() == field2->table()) {
-		kWarning() << "QuerySchema::addRelationship(): fields cannot belong to the same table" << endl;
+		KexiDBWarn << "QuerySchema::addRelationship(): fields cannot belong to the same table" << endl;
 		return;
 	}
 //@todo: check more things: -types

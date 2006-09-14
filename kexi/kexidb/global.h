@@ -167,4 +167,12 @@ enum ObjectTypes {
 
 #define foreach_dict(_class, _variable, _list) foreach_list(_class, _variable, _list)
 
+#ifndef futureI18n
+# define futureI18n QString
+#endif
+
+#ifndef FUTURE_I18N_NOOP
+# define FUTURE_I18N_NOOP(x) (x)
+#endif
+
 #endif

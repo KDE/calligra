@@ -114,15 +114,15 @@ void RowEditBuffer::debug()
 	if (isDBAware()) {
 		KexiDBDbg << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() <<" items"<< endl;
 		for (DBMap::ConstIterator it = m_dbBuffer->constBegin(); it!=m_dbBuffer->constEnd(); ++it) {
-			kDebug() << "* field name=" <<it.key()->field->name()<<" val="
+			KexiDBDbg << "* field name=" <<it.key()->field->name()<<" val="
 				<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) 
 				<< (hasDefaultValueAt(*it.key()) ? " DEFAULT" : "") <<endl;
 		}
 		return;
 	}
-	kDebug() << "RowEditBuffer type=SIMPLE, " << m_simpleBuffer->count() <<" items"<< endl;
+	KexiDBDbg << "RowEditBuffer type=SIMPLE, " << m_simpleBuffer->count() <<" items"<< endl;
 	for (SimpleMap::ConstIterator it = m_simpleBuffer->constBegin(); it!=m_simpleBuffer->constEnd(); ++it) {
-		kDebug() << "* field name=" <<it.key()<<" val="
+		KexiDBDbg << "* field name=" <<it.key()<<" val="
 			<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) <<endl;
 	}
 }
