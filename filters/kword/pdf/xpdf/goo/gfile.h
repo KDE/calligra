@@ -11,6 +11,7 @@
 #ifndef GFILE_H
 #define GFILE_H
 #include <config-filters.h>
+
 #include <aconf.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -125,7 +126,7 @@ private:
   GBool doStat;			// call stat() for each entry?
 #if defined(WIN32)
   WIN32_FIND_DATA ffd;
-  Qt::HANDLE hnd;
+  HANDLE hnd;
 #elif defined(ACORN)
 #elif defined(MACOS)
 #else

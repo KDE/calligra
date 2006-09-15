@@ -338,9 +338,9 @@ GBool TTFont::drawChar(Drawable d, int w, int h, GC gc,
     // compute the colors
     xcolor.pixel = XGetPixel(image, x1 + w0/2, y1 + h0/2);
     XQueryColor(engine->display, engine->colormap, &xcolor);
-    bgR = xcolor.Qt::red;
-    bgG = xcolor.Qt::green;
-    bgB = xcolor.Qt::blue;
+    bgR = xcolor.red;
+    bgG = xcolor.green;
+    bgB = xcolor.blue;
     colors[1] = engine->findColor((r + 3*bgR) / 4,
 				  (g + 3*bgG) / 4,
 				  (b + 3*bgB) / 4);
