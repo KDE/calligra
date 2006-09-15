@@ -2922,7 +2922,7 @@ void XOutputDev::type3D1(GfxState *state, double wx, double wy,
 }
 
 inline Gulong XOutputDev::findColor(GfxRGB *x, GfxRGB *err) {
-  double Qt::gray;
+  double gray;
   int r, g, b;
   Gulong pixel;
 
@@ -2937,8 +2937,8 @@ inline Gulong XOutputDev::findColor(GfxRGB *x, GfxRGB *err) {
     err->g = x->g - (double)g / gMul;
     err->b = x->b - (double)b / bMul;
   } else if (numColors == 1) {
-    Qt::gray = 0.299 * x->r + 0.587 * x->g + 0.114 * x->b;
-    if (Qt::gray < 0.5) {
+    gray = 0.299 * x->r + 0.587 * x->g + 0.114 * x->b;
+    if (gray < 0.5) {
       pixel = colors[0];
       err->r = x->r;
       err->g = x->g;
