@@ -678,7 +678,7 @@ void CellEditor::slotCursorPositionChanged()
   Tokens tokens = d->highlighter->formulaTokens();
   uint rangeCounter = 0;
   uint currentRange = 0;
-  uint regionStart = -1;
+  int regionStart = -1;
   uint regionEnd = 0;
   bool lastWasASemicolon = false;
   d->currentToken = 0;
