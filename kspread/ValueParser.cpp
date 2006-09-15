@@ -418,7 +418,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
   if (ok)
     *ok = valid;
 
-  return Value (tmpDate);
+  return Value ( tmpDate, doc() );
 }
 
 Value ValueParser::tryParseTime (const QString& str, bool *ok)
@@ -465,11 +465,11 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
     fmtType = Time_format;
     if ( duration )
     {
-      val.setValue (tmpTime);
+      val.setValue( Value( tmpTime, doc() ) );
       fmtType = Time_format7;
     }
     else
-      val.setValue (tmpTime.time());
+      val.setValue( Value( tmpTime.time(), doc() ) );
   }
 
   if (ok)

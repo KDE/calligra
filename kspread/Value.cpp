@@ -388,24 +388,24 @@ Value::Value (const char *s)
 }
 
 // create a floating-point value from date/time
-Value::Value( const QDateTime& dt )
+Value::Value( const QDateTime& dt, const Doc* doc )
 {
   d = ValueData::null();
-  setValue( dt );
+  setValue( dt, doc );
 }
 
 // create a floating-point value from time
-Value::Value( const QTime& dt )
+Value::Value( const QTime& dt, const Doc* doc )
 {
   d = ValueData::null();
-  setValue( dt );
+  setValue( dt, doc );
 }
 
 // create a floating-point value from date
-Value::Value( const QDate& dt )
+Value::Value( const QDate& dt, const Doc* doc )
 {
   d = ValueData::null();
-  setValue( dt );
+  setValue( dt, doc );
 }
 
 // create an array value

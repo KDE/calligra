@@ -784,9 +784,9 @@ bool Sheet::fillSequenceWithInterval( const QList<Cell*>& _srcList,
       	if (type == AutoFillSequenceItem::FLOAT)
 		cell2Value = cellValue;
 	else if ( type == AutoFillSequenceItem::TIME)
-		cell2Value = Value( cellValue.asTime( doc() ).addSecs( 60*60 ) );
+		cell2Value = Value( cellValue.asTime( doc() ).addSecs( 60*60 ), doc() );
 	else if ( type == AutoFillSequenceItem::DATE)
-		cell2Value = Value ( cellValue.asDate( doc() ).addDays( 1 ) );
+		cell2Value = Value ( cellValue.asDate( doc() ).addDays( 1 ), doc() );
       }
       else
       {

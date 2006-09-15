@@ -163,14 +163,14 @@ void ValueTester::run()
     QDate dv1 = QDate( y, m, d );
     if( !dv1.isValid() ) continue;
     double serialNo = -dv1.daysTo( refDate ) + 1.0;
-    v1->setValue( dv1 );
+    v1->setValue( Value( dv1, &doc ) );
     CHECK_DATE(v1,serialNo);
     date_error = v1->asFloat() != serialNo;
   }
 
   // time value
   v1 = new Value();
-  v1->setValue( QTime( 0, 0, 0 ) );
+  v1->setValue( Value( QTime( 0, 0, 0 ), &doc ) );
   CHECK( v1->type(), Value::Integer );
   int time_error = 0; // used to  save time, bail on first error
   for( unsigned h = 0; !time_error && h < 24; h++ )
@@ -178,7 +178,7 @@ void ValueTester::run()
   for( unsigned s = 0; !time_error && s < 60; s++ )
   {
     QTime t1 = QTime( h, m, s );
-    v1->setValue( t1 );
+    v1->setValue( Value( t1, &doc ) );
     QTime t2 = v1->asTime( &doc );
     if( t1.hour() != t2.hour() ) time_error++;
     if( t1.minute() != t2.minute() ) time_error++;
@@ -190,13 +190,13 @@ void ValueTester::run()
 
   // time value (msec)
   v1 = new Value();
-  v1->setValue( QTime( 0, 0, 0 ) );
+  v1->setValue( Value( QTime( 0, 0, 0 ), &doc ) );
   CHECK( v1->type(), Value::Integer );
   int msec_error = 0; // used to  save time, bail on first error
   for( unsigned ms= 0;ms < 1000;ms++ )
   {
     QTime t1 = QTime( 1, 14, 2, ms );
-    v1->setValue( t1 );
+    v1->setValue( Value( t1, &doc ) );
     QTime t2 = v1->asTime( &doc );
     if( t1.hour() != t2.hour() ) msec_error++;
     if( t1.minute() != t2.minute() ) msec_error++;

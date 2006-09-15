@@ -233,11 +233,11 @@ Value ValueConverter::asDateTime (const Value &value) const
 
   switch (value.type()) {
     case Value::Empty:
-      val.setValue (QDateTime::currentDateTime());
+      val.setValue ( Value( QDateTime::currentDateTime(), doc() ) );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val.setValue (QDateTime::currentDateTime());
+      val.setValue ( Value( QDateTime::currentDateTime(), doc() ) );
     break;
     case Value::Integer:
       val.setValue (value.asFloat());
@@ -274,11 +274,11 @@ Value ValueConverter::asDate (const Value &value) const
 
   switch (value.type()) {
     case Value::Empty:
-      val.setValue (QDate::currentDate());
+      val.setValue ( Value( QDate::currentDate(), doc() ) );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val.setValue (QDate::currentDate());
+      val.setValue ( Value( QDate::currentDate(), doc() ) );
     break;
     case Value::Integer:
       val.setValue (value.asFloat());
@@ -313,11 +313,11 @@ Value ValueConverter::asTime (const Value &value) const
 
   switch (value.type()) {
     case Value::Empty:
-      val.setValue (QTime::currentTime());
+      val.setValue ( Value( QTime::currentTime(), doc() ) );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val.setValue (QTime::currentTime());
+      val.setValue ( Value( QTime::currentTime(), doc() ) );
     break;
     case Value::Integer:
       val.setValue (value.asInteger());

@@ -2662,7 +2662,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
 
             if ( ok )
             {
-                setCellValue( QDate( year, month, day ) );
+                setCellValue( Value( QDate( year, month, day ), sheet()->doc() ) );
                 format()->setFormatType (ShortDate_format);
                 kDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
@@ -2707,7 +2707,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
-                setCellValue( QTime( hours % 24, minutes, seconds ) );
+                setCellValue( Value( QTime( hours % 24, minutes, seconds ), sheet()->doc() ) );
                 format()->setFormatType (Time_format);
             }
         }
@@ -3485,7 +3485,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             int day   = t.right( t.length() - pos1 - 1 ).toInt();
             QDate date( year, month, day );
             if ( date.isValid() )
-              setValue( date );
+              setValue( Value( date, sheet()->doc() ) );
             else
               clear = false;
           }
@@ -3509,7 +3509,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             second  = t.right( t.length() - pos1 - 1 ).toInt();
             QTime time( hours, minutes, second );
             if ( time.isValid() )
-              setValue( time );
+              setValue( Value( time, sheet()->doc() ) );
             else
               clear = false;
           }
@@ -3677,7 +3677,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         int pos1 = t.indexOf('/',pos+1);
         int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
         int day = t.right(t.length()-pos1-1).toInt();
-        setValue( QDate(year,month,day) );
+        setValue( Value( QDate(year,month,day), sheet()->doc() ) );
         if ( value().asDate( sheet()->doc() ).isValid() ) // Should always be the case for new docs
           d->strText = locale()->formatDate( value().asDate( sheet()->doc() ), true );
         else // This happens with old docs, when format is set wrongly to date
@@ -3699,7 +3699,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         pos1 = t.indexOf(':',pos+1);
         minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
         second = t.right(t.length()-pos1-1).toInt();
-        setValue( QTime(hours,minutes,second) );
+        setValue( Value( QTime(hours,minutes,second), sheet()->doc() ) );
         if ( value().asTime( sheet()->doc() ).isValid() ) // Should always be the case for new docs
           d->strText = locale()->formatTime( value().asTime( sheet()->doc() ), true );
         else  // This happens with old docs, when format is set wrongly to time
@@ -3748,7 +3748,7 @@ QTime Cell::toTime(const KoXmlElement &element)
     pos1 = t.indexOf(':',pos+1);
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
-    setValue( Value( QTime(hours,minutes,second)) );
+    setValue( Value( QTime(hours,minutes,second), sheet()->doc() ) );
     return value().asTime( sheet()->doc() );
 }
 
@@ -3765,7 +3765,7 @@ QDate Cell::toDate(const KoXmlElement &element)
     pos1 = t.indexOf('/',pos+1);
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
-    setValue( Value( QDate(year,month,day) ) );
+    setValue( Value( QDate(year,month,day), sheet()->doc() ) );
     return value().asDate( sheet()->doc() );
 }
 

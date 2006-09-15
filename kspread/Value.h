@@ -125,25 +125,26 @@ class KSPREAD_EXPORT Value
     Value( const QString& s );
 
     Value (const char *s);
+
     /**
      * Create a floating-point value from date/time.
      *
      * Internally date/time is represented as serial-number, i.e number of
      * elapsed day since reference date. Day 61 is defined as March 1, 1900.
      */
-    Value( const QDateTime& dt );
+    Value( const QDateTime& dt, const Doc* doc );
 
     /**
      * Create a floating-point value from time.
      * See also note above.
      */
-    Value( const QTime& time );
+    Value( const QTime& time, const Doc* doc );
 
     /**
      * Create a floating-point value from date.
      * See also note above.
      */
-    Value( const QDate& date );
+    Value( const QDate& date, const Doc* doc );
 
     /**
      * Create an array of values.

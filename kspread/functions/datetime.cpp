@@ -182,7 +182,7 @@ Value func_edate (valVector args, ValueCalc *calc, FuncExtra *)
   if (!date.isValid())
     return Value::errorVALUE();
 
-  return Value (date);
+  return Value( date, calc->doc() );
 }
 
 // Function: EOMONTH
@@ -196,7 +196,7 @@ Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
   QDate date = modDate.asDate( calc->doc() );
   date.setYMD (date.year(), date.month(), date.daysInMonth());
 
-  return Value (date);
+  return Value( date, calc->doc() );
 }
 
 // Function: DAYS360
@@ -335,7 +335,7 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: weekday
 Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value v = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  Value v( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
   if (v.isError()) return v;
   QDate date = v.asDate( calc->doc() );
   int method = 1;
@@ -487,7 +487,7 @@ Value func_date (valVector args, ValueCalc *calc, FuncExtra *)
 
   QDate _date;
   if( _date.setYMD (y, m, d))
-    return Value (_date);
+    return Value( _date, calc->doc() );
   return Value::errorVALUE();
 }
 
@@ -541,25 +541,25 @@ Value func_time (valVector args, ValueCalc *calc, FuncExtra *)
   if (h < 0)
     h += 24;
 
-  return Value (QTime (h, m, s));
+  return Value( QTime (h, m, s), calc->doc() );
 }
 
 // Function: currentDate
-Value func_currentDate (valVector, ValueCalc *, FuncExtra *)
+Value func_currentDate (valVector, ValueCalc * calc, FuncExtra *)
 {
-  return Value (QDate::currentDate ());
+  return Value( QDate::currentDate(), calc->doc() );
 }
 
 // Function: currentTime
-Value func_currentTime (valVector, ValueCalc *, FuncExtra *)
+Value func_currentTime (valVector, ValueCalc * calc, FuncExtra *)
 {
-  return Value (QTime::currentTime ());
+  return Value( QTime::currentTime(), calc->doc() );
 }
 
 // Function: currentDateTime
-Value func_currentDateTime (valVector, ValueCalc *, FuncExtra *)
+Value func_currentDateTime (valVector, ValueCalc * calc, FuncExtra *)
 {
-  return Value (QDateTime::currentDateTime ());
+  return Value( QDateTime::currentDateTime(), calc->doc() );
 }
 
 // Function: dayOfYear
@@ -625,7 +625,7 @@ Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
   nDay = O % 31 + 1;
   nMonth = int(O / 31);
 
-  return Value (QDate (nYear, nMonth, nDay));
+  return Value( QDate (nYear, nMonth, nDay), calc->doc() );
 }
 
 // Function: isoWeekNum
