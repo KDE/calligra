@@ -1213,7 +1213,16 @@ QString KSpread::Oasis::encodeFormula( const QString& expr, const KLocale* local
 
             const int sheetDelimiter = tokenText.lastIndexOf( '!' );
             if ( sheetDelimiter > 0 )
-                result.append( tokenText.left( sheetDelimiter ) );
+            {
+                QString sheetName = tokenText.left( sheetDelimiter );
+                if ( sheetName.contains( ' ' ) )
+                {
+                    // sheet names with spaces have to be surrounded by apostrophes
+                    sheetName.prepend( '\'' );
+                    sheetName.append( '\'' );
+                }
+                result.append( sheetName );
+            }
 
             const int rangeDelimiter = tokenText.lastIndexOf( ':' );
             if ( rangeDelimiter > sheetDelimiter )
