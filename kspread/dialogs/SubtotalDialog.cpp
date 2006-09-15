@@ -49,7 +49,7 @@ SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection )
 {
   setCaption( i18n( "Subtotals" ) );
   setButtons( Ok|Cancel|User1 );
-  setButtonGuiItem( User1, i18n( "Remove All" ) );
+  setButtonGuiItem( User1, KGuiItem( i18n( "Remove All" ) ) );
   setButtonsOrientation( Qt::Vertical );
 
   QWidget* widget = new QWidget( this );

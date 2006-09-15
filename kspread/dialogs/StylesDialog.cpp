@@ -77,9 +77,9 @@ StyleDialog::StyleDialog( View * parent, StyleManager * manager )
 {
   setCaption( i18n( "Style Manager" ) );
   setButtons( Ok|User1|User2|User3|Close );
-  setButtonGuiItem( User1, i18n( "&New..." ) );
-  setButtonGuiItem( User2, i18n( "&Modify..." ) );
-  setButtonGuiItem( User3, i18n( "&Delete..." ) );
+  setButtonGuiItem( User1, KGuiItem( i18n( "&New..." ) ) );
+  setButtonGuiItem( User2, KGuiItem( i18n( "&Modify..." ) ) );
+  setButtonGuiItem( User3, KGuiItem( i18n( "&Delete..." ) ) );
   setButtonsOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 
