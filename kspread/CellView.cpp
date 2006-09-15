@@ -151,14 +151,14 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 
 #if 0
   if (paintingObscured == 0)
-    kDebug(36001) << "painting cell " << name() << endl;
+    kDebug(36001) << "painting cell " << d->cell->name() << endl;
   else
-    kDebug(36001) << "  painting obscured cell " << name() << endl;
+    kDebug(36001) << "  painting obscured cell " << d->cell->name() << endl;
 #endif
 
   // Sanity check: If we're working on drawing an obscured cell, that
   // means this cell should have a cell that obscures it.
-  Q_ASSERT(!(paintingObscured > 0 && d->cell->obscuringCells().isEmpty()));
+  Q_ASSERT(!(paintingObscured > 0 && d->cell->d->extra()->obscuringCells.isEmpty()));
 
   // The parameter cellref should be *this, unless this is the default cell.
   Q_ASSERT(d->cell->isDefault()
@@ -392,8 +392,8 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     // (this happens e.g. when there is an updateDepend)
     if (d->cell->d->hasExtra()) {
       QLinkedList<QPoint>           listPoints;
-      QList<Cell*>::iterator  it = d->cell->obscuringCells().begin();
-      QList<Cell*>::iterator  end = d->cell->obscuringCells().end();
+      QList<Cell*>::iterator  it = d->cell->d->extra()->obscuringCells.begin();
+      QList<Cell*>::iterator  end = d->cell->d->extra()->obscuringCells.end();
       for ( ; it != end; ++it ) {
         Cell *obscuringCell = *it;
 
@@ -769,8 +769,8 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
 #if 0 // FIXME Stefan: I think this part is superfluous with the merge check above
   // If there are extra cells, there might be more conditions.
   if (d->cell->d->hasExtra()) {
-    QList<Cell*>::const_iterator it  = d->cell->obscuringCells().begin();
-    QList<Cell*>::const_iterator end = d->cell->obscuringCells().end();
+    QList<Cell*>::const_iterator it  = d->cell->d->extra()->obscuringCells.begin();
+    QList<Cell*>::const_iterator end = d->cell->d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       Cell *cell = *it;
 
@@ -1483,8 +1483,8 @@ void CellView::paintCellBorders( QPainter& painter, const QRectF& rect,
   Sheet::LayoutDirection sheetDir =  d->cell->sheet()->layoutDirection();
 
   if (d->cell->d->hasExtra()) {
-    QList<Cell*>::const_iterator it  = d->cell->obscuringCells().begin();
-    QList<Cell*>::const_iterator end = d->cell->obscuringCells().end();
+    QList<Cell*>::const_iterator it  = d->cell->d->extra()->obscuringCells.begin();
+    QList<Cell*>::const_iterator end = d->cell->d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       Cell* cell = *it;
 
