@@ -30,6 +30,7 @@ class KLocale;
 namespace KSpread
 {
 class Cell;
+class Doc;
 class Value;
 
 /**
@@ -40,9 +41,10 @@ Value in the desired format.
 class ValueParser {
  public:
   /** constructor */
-  ValueParser (KLocale *locale);
+  ValueParser (Doc* doc);
 
-  KLocale* locale();
+  const Doc* doc() const;
+  const KLocale* locale() const;
 
   /** try to parse the text in a given cell and set value accordingly */
   void parse (const QString& str, Cell *cell);
@@ -56,7 +58,7 @@ class ValueParser {
   Value tryParseTime (const QString& str, bool *ok = 0);
  protected:
 
-  KLocale* parserLocale;
+  Doc* m_doc;
 
   // Try to parse the text as a bool/number/date/time/etc.
   // Helpers for parse.

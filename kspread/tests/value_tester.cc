@@ -22,10 +22,11 @@
 
 #include <math.h>
 
+#include <Doc.h>
 #include <Value.h>
 
 #define CHECK(x,y)  check(__FILE__,__LINE__,#x,x,y)
-#define CHECK_DATE(d,x) check(__FILE__,__LINE__,d->asDate().toString().toLatin1(),d->asFloat(),x)
+#define CHECK_DATE(d,x) check(__FILE__,__LINE__,d->asDate( &doc ).toString().toLatin1(),d->asFloat(),x)
 
 using namespace KSpread;
 
@@ -151,6 +152,7 @@ void ValueTester::run()
 
   // check all (valid) dates from 1900 to 2050
   // note: bail on first error immediately
+  Doc doc;
   QDate refDate( 1899, 12, 31 );
   v1 = new Value();
   bool date_error = 0;
@@ -177,7 +179,7 @@ void ValueTester::run()
   {
     QTime t1 = QTime( h, m, s );
     v1->setValue( t1 );
-    QTime t2 = v1->asTime();
+    QTime t2 = v1->asTime( &doc );
     if( t1.hour() != t2.hour() ) time_error++;
     if( t1.minute() != t2.minute() ) time_error++;
     if( t1.second() != t2.second() ) time_error++;
@@ -195,7 +197,7 @@ void ValueTester::run()
   {
     QTime t1 = QTime( 1, 14, 2, ms );
     v1->setValue( t1 );
-    QTime t2 = v1->asTime();
+    QTime t2 = v1->asTime( &doc );
     if( t1.hour() != t2.hour() ) msec_error++;
     if( t1.minute() != t2.minute() ) msec_error++;
     if( t1.second() != t2.second() ) msec_error++;

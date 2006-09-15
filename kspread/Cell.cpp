@@ -1763,30 +1763,30 @@ bool Cell::testValidity() const
             switch( d->extra()->validity->m_cond)
             {
               case Conditional::Equal:
-                valid = (value().asTime() == d->extra()->validity->timeMin);
+                valid = (value().asTime( sheet()->doc() ) == d->extra()->validity->timeMin);
                 break;
               case Conditional::DifferentTo:
-                valid = (value().asTime() != d->extra()->validity->timeMin);
+                valid = (value().asTime( sheet()->doc() ) != d->extra()->validity->timeMin);
                 break;
               case Conditional::Superior:
-                valid = (value().asTime() > d->extra()->validity->timeMin);
+                valid = (value().asTime( sheet()->doc() ) > d->extra()->validity->timeMin);
                 break;
               case Conditional::Inferior:
-                valid = (value().asTime() < d->extra()->validity->timeMin);
+                valid = (value().asTime( sheet()->doc() ) < d->extra()->validity->timeMin);
                 break;
               case Conditional::SuperiorEqual:
-                valid = (value().asTime() >= d->extra()->validity->timeMin);
+                valid = (value().asTime( sheet()->doc() ) >= d->extra()->validity->timeMin);
                 break;
               case Conditional::InferiorEqual:
-                valid = (value().asTime() <= d->extra()->validity->timeMin);
+                valid = (value().asTime( sheet()->doc() ) <= d->extra()->validity->timeMin);
                 break;
               case Conditional::Between:
-                valid = (value().asTime() >= d->extra()->validity->timeMin &&
-                         value().asTime() <= d->extra()->validity->timeMax);
+                valid = (value().asTime( sheet()->doc() ) >= d->extra()->validity->timeMin &&
+                         value().asTime( sheet()->doc() ) <= d->extra()->validity->timeMax);
                 break;
               case Conditional::Different:
-                valid = (value().asTime() < d->extra()->validity->timeMin ||
-                         value().asTime() > d->extra()->validity->timeMax);
+                valid = (value().asTime( sheet()->doc() ) < d->extra()->validity->timeMin ||
+                         value().asTime( sheet()->doc() ) > d->extra()->validity->timeMax);
                 break;
             default :
                 break;
@@ -1798,30 +1798,30 @@ bool Cell::testValidity() const
             switch( d->extra()->validity->m_cond)
             {
               case Conditional::Equal:
-                valid = (value().asDate() == d->extra()->validity->dateMin);
+                valid = (value().asDate( sheet()->doc() ) == d->extra()->validity->dateMin);
                 break;
               case Conditional::DifferentTo:
-                valid = (value().asDate() != d->extra()->validity->dateMin);
+                valid = (value().asDate( sheet()->doc() ) != d->extra()->validity->dateMin);
                 break;
               case Conditional::Superior:
-                valid = (value().asDate() > d->extra()->validity->dateMin);
+                valid = (value().asDate( sheet()->doc() ) > d->extra()->validity->dateMin);
                 break;
               case Conditional::Inferior:
-                valid = (value().asDate() < d->extra()->validity->dateMin);
+                valid = (value().asDate( sheet()->doc() ) < d->extra()->validity->dateMin);
                 break;
               case Conditional::SuperiorEqual:
-                valid = (value().asDate() >= d->extra()->validity->dateMin);
+                valid = (value().asDate( sheet()->doc() ) >= d->extra()->validity->dateMin);
                 break;
               case Conditional::InferiorEqual:
-                valid = (value().asDate() <= d->extra()->validity->dateMin);
+                valid = (value().asDate( sheet()->doc() ) <= d->extra()->validity->dateMin);
                 break;
               case Conditional::Between:
-                valid = (value().asDate() >= d->extra()->validity->dateMin &&
-                         value().asDate() <= d->extra()->validity->dateMax);
+                valid = (value().asDate( sheet()->doc() ) >= d->extra()->validity->dateMin &&
+                         value().asDate( sheet()->doc() ) <= d->extra()->validity->dateMax);
                 break;
               case Conditional::Different:
-                valid = (value().asDate() < d->extra()->validity->dateMin ||
-                         value().asDate() > d->extra()->validity->dateMax);
+                valid = (value().asDate( sheet()->doc() ) < d->extra()->validity->dateMin ||
+                         value().asDate( sheet()->doc() ) > d->extra()->validity->dateMax);
                 break;
             default :
                 break;
@@ -1938,13 +1938,13 @@ double Cell::getDouble ()
   //(Tomas) umm can't we simply call value().asFloat() ?
   if (isDate())
   {
-    QDate date = value().asDate();
+    QDate date = value().asDate( sheet()->doc() );
     QDate dummy (1900, 1, 1);
     return (dummy.daysTo (date) + 1);
   }
   if (isTime())
   {
-    QTime time  = value().asTime();
+    QTime time  = value().asTime( sheet()->doc() );
     QTime dummy;
     return dummy.secsTo( time );
   }
@@ -1991,7 +1991,7 @@ void Cell::convertToTime ()
     return;
 
   setValue (getDouble ());
-  QTime time = value().asDateTime().time();
+  QTime time = value().asDateTime( sheet()->doc() ).time();
   int msec = (int) ( (value().asFloat() - (int) value().asFloat()) * 1000 );
   time = time.addMSecs( msec );
   setCellText( time.toString() );
@@ -2011,7 +2011,7 @@ void Cell::convertToDate ()
   //TODO: why did we call setValue(), when we override it here?
   QDate date(1900, 1, 1);
   date = date.addDays( (int) value().asFloat() - 1 );
-  date = value().asDateTime().date();
+  date = value().asDateTime( sheet()->doc() ).date();
   setCellText (locale()->formatDate (date, true));
 }
 
@@ -2032,7 +2032,7 @@ void Cell::checkTextInput()
   // Parsing as time acts like an autoformat: we even change d->strText
   // [h]:mm:ss -> might get set by ValueParser
   if (isTime() && (formatType() != Time_format7))
-    d->strText = locale()->formatTime( value().asDateTime().time(), true);
+    d->strText = locale()->formatTime( value().asDateTime( sheet()->doc() ).time(), true);
 
   // convert first letter to uppercase ?
   if (format()->sheet()->getFirstLetterUpper() && value().isString() &&
@@ -2220,7 +2220,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
       if ( isDate() )
       {
           // serial number of date
-          QDate dd = value().asDateTime().date();
+          QDate dd = value().asDateTime( sheet()->doc() ).date();
           dataType = "Date";
           str = "%1/%2/%3";
           str = str.arg(dd.year()).arg(dd.month()).arg(dd.day());
@@ -2229,7 +2229,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
       {
           // serial number of time
           dataType = "Time";
-          str = value().asDateTime().time().toString();
+          str = value().asDateTime( sheet()->doc() ).time().toString();
       }
       else
       {
@@ -2465,14 +2465,14 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     {
       xmlWriter.addAttribute( "office:value-type", "date" );
       xmlWriter.addAttribute( "office:date-value",
-          value().asDate().toString( Qt::ISODate ) );
+          value().asDate( sheet()->doc() ).toString( Qt::ISODate ) );
       break;
     }
     case Value::fmt_Time:
     {
       xmlWriter.addAttribute( "office:value-type", "time" );
       xmlWriter.addAttribute( "office:time-value",
-          value().asTime().toString( "PThhHmmMssS" ) );
+          value().asTime( sheet()->doc() ).toString( "PThhHmmMssS" ) );
       break;
     }
     case Value::fmt_String:
@@ -3678,8 +3678,8 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
         int day = t.right(t.length()-pos1-1).toInt();
         setValue( QDate(year,month,day) );
-        if ( value().asDate().isValid() ) // Should always be the case for new docs
-          d->strText = locale()->formatDate( value().asDate(), true );
+        if ( value().asDate( sheet()->doc() ).isValid() ) // Should always be the case for new docs
+          d->strText = locale()->formatDate( value().asDate( sheet()->doc() ), true );
         else // This happens with old docs, when format is set wrongly to date
         {
           d->strText = pasteOperation( t, d->strText, op );
@@ -3700,8 +3700,8 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
         second = t.right(t.length()-pos1-1).toInt();
         setValue( QTime(hours,minutes,second) );
-        if ( value().asTime().isValid() ) // Should always be the case for new docs
-          d->strText = locale()->formatTime( value().asTime(), true );
+        if ( value().asTime( sheet()->doc() ).isValid() ) // Should always be the case for new docs
+          d->strText = locale()->formatTime( value().asTime( sheet()->doc() ), true );
         else  // This happens with old docs, when format is set wrongly to time
         {
           d->strText = pasteOperation( t, d->strText, op );
@@ -3749,7 +3749,7 @@ QTime Cell::toTime(const KoXmlElement &element)
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
     setValue( Value( QTime(hours,minutes,second)) );
-    return value().asTime();
+    return value().asTime( sheet()->doc() );
 }
 
 QDate Cell::toDate(const KoXmlElement &element)
@@ -3766,7 +3766,7 @@ QDate Cell::toDate(const KoXmlElement &element)
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
     setValue( Value( QDate(year,month,day) ) );
-    return value().asDate();
+    return value().asDate( sheet()->doc() );
 }
 
 QString Cell::pasteOperation( const QString &new_text, const QString &old_text, Paste::Operation op )
@@ -3932,7 +3932,7 @@ bool Cell::operator > ( const Cell & cell ) const
   else if(isDate())
   {
      if( cell.isDate() )
-        return value().asDate() > cell.value().asDate();
+        return value().asDate( sheet()->doc() ) > cell.value().asDate( sheet()->doc() );
      else if (cell.value().isNumber())
         return true;
      else
@@ -3941,7 +3941,7 @@ bool Cell::operator > ( const Cell & cell ) const
   else if(isTime())
   {
      if( cell.isTime() )
-        return value().asTime() > cell.value().asTime();
+        return value().asTime( sheet()->doc() ) > cell.value().asTime( sheet()->doc() );
      else if( cell.isDate())
         return true; //time are always > than date
      else if( cell.value().isNumber())
@@ -3970,7 +3970,7 @@ bool Cell::operator < ( const Cell & cell ) const
   else if(isDate())
   {
      if( cell.isDate() )
-        return value().asDateTime().date() < cell.value().asDateTime().date();
+        return value().asDateTime( sheet()->doc() ).date() < cell.value().asDateTime( sheet()->doc() ).date();
      else if( cell.value().isNumber())
         return false;
      else
@@ -3979,7 +3979,7 @@ bool Cell::operator < ( const Cell & cell ) const
   else if(isTime())
   {
      if( cell.isTime() )
-        return value().asDateTime().time() < cell.value().asDateTime().time();
+        return value().asDateTime( sheet()->doc() ).time() < cell.value().asDateTime( sheet()->doc() ).time();
      else if(cell.isDate())
         return false; //time are always > than date
      else if( cell.value().isNumber())

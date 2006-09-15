@@ -209,8 +209,8 @@ static Value getPrinc (ValueCalc *calc, Value start,
 Value func_coupnum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // dates and integers only - don't need high-precision for this
-  QDate settlement = calc->conv()->asDate (args[0]).asDate();
-  QDate maturity = calc->conv()->asDate (args[1]).asDate();
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
   int   frequency = calc->conv()->asInteger (args[2]).asInteger();
   int   basis = 0;
   bool  eom   = true;
@@ -248,9 +248,9 @@ Value func_coupnum (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ACCRINT
 Value func_accrint (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate maturity = calc->conv()->asDate (args[0]).asDate();
-  QDate firstInterest = calc->conv()->asDate (args[1]).asDate();
-  QDate settlement = calc->conv()->asDate (args[2]).asDate();
+  QDate maturity = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate firstInterest = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate settlement = calc->conv()->asDate (args[2]).asDate( calc->doc() );
 
   Value rate = args[3];
   Value par = args[4];
@@ -284,8 +284,8 @@ Value func_accrint (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ACCRINTM
 Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate issue = calc->conv()->asDate (args[0]).asDate();
-  QDate maturity = calc->conv()->asDate (args[1]).asDate();
+  QDate issue = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
   Value rate = args[2];
 
   Value par = 1000;
@@ -309,8 +309,8 @@ Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DISC
 Value func_disc (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate settlement = calc->conv()->asDate (args[0]).asDate();
-  QDate maturity = calc->conv()->asDate (args[1]).asDate();
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
   Value par = args[2];
   Value redemp = args[3];
@@ -333,8 +333,8 @@ Value func_disc (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: TBILLPRICE
 Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate settlement = calc->conv()->asDate (args[0]).asDate();
-  QDate maturity = calc->conv()->asDate (args[1]).asDate();
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
   Value discount = args[2];
 
@@ -352,8 +352,8 @@ Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: TBILLYIELD
 Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate settlement = calc->conv()->asDate (args[0]).asDate();
-  QDate maturity = calc->conv()->asDate (args[1]).asDate();
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
   Value rate = args[2];
 
@@ -370,8 +370,8 @@ Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: TBILLEQ
 Value func_tbilleq (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate settlement = calc->conv()->asDate (args[0]).asDate();
-  QDate maturity = calc->conv()->asDate (args[1]).asDate();
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
   Value discount = args[2];
 
@@ -393,8 +393,8 @@ Value func_tbilleq (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_received (valVector args, ValueCalc *calc, FuncExtra *)
 {
 
-  QDate settlement = calc->conv()->asDate (args[0]).asDate();
-  QDate maturity = calc->conv()->asDate (args[1]).asDate();
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
   Value investment = args[2];
   Value discount = args[3];
@@ -470,8 +470,8 @@ Value func_dollarfr (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: INTRATE
 Value func_intrate (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate settlement = calc->conv()->asDate (args[0]).asDate();
-  QDate maturity = calc->conv()->asDate (args[1]).asDate();
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
   Value invest = args[2];
   Value redemption = args[3];

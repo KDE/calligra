@@ -174,7 +174,7 @@ void RegisterDateTimeFunctions()
 // Function: EDATE
 Value func_edate (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date = calc->conv()->asDate (args[0]).asDate();
+  QDate date = calc->conv()->asDate (args[0]).asDate( calc->doc() );
   int months = calc->conv()->asInteger (args[1]).asInteger();
 
   date = calc->conv()->locale()->calendar()->addMonths (date, months);
@@ -193,7 +193,7 @@ Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
   if (modDate.isError()) return modDate;
 
   // modDate is currently in Date format
-  QDate date = modDate.asDate();
+  QDate date = modDate.asDate( calc->doc() );
   date.setYMD (date.year(), date.month(), date.daysInMonth());
 
   return Value (date);
@@ -203,8 +203,8 @@ Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
 // algorithm adapted from gnumeric
 Value func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate();
-  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
   bool european = false;
   if (args.count() == 3)
     european = calc->conv()->asBoolean (args[2]).asBoolean();
@@ -265,7 +265,7 @@ Value func_year (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v = calc->conv()->asDate (args[0]);
   if (v.isError()) return v;
-  QDate date = v.asDate();
+  QDate date = v.asDate( calc->doc() );
   return Value (date.year ());
 }
 
@@ -274,7 +274,7 @@ Value func_month (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v = calc->conv()->asDate (args[0]);
   if (v.isError()) return v;
-  QDate date = v.asDate();
+  QDate date = v.asDate( calc->doc() );
   return Value (date.month ());
 }
 
@@ -283,7 +283,7 @@ Value func_day (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v = calc->conv()->asDate (args[0]);
   if (v.isError()) return v;
-  QDate date = v.asDate();
+  QDate date = v.asDate( calc->doc() );
   return Value (date.day ());
 }
 
@@ -295,7 +295,7 @@ Value func_hour (valVector args, ValueCalc *calc, FuncExtra *)
   {
     Value v = calc->conv()->asTime (args[0]);
     if (v.isError()) return v;
-    time = v.asTime();
+    time = v.asTime( calc->doc() );
   }
   else
     time = QTime::currentTime ();
@@ -310,7 +310,7 @@ Value func_minute (valVector args, ValueCalc *calc, FuncExtra *)
   {
     Value v = calc->conv()->asTime (args[0]);
     if (v.isError()) return v;
-    time = v.asTime();
+    time = v.asTime( calc->doc() );
   }
   else
     time = QTime::currentTime ();
@@ -325,7 +325,7 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
   {
     Value v = calc->conv()->asTime (args[0]);
     if (v.isError()) return v;
-    time = v.asTime();
+    time = v.asTime( calc->doc() );
   }
   else
     time = QTime::currentTime ();
@@ -335,9 +335,9 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: weekday
 Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value v = calc->conv()->asDate (args[0]).asDate();
+  Value v = calc->conv()->asDate (args[0]).asDate( calc->doc() );
   if (v.isError()) return v;
-  QDate date = v.asDate();
+  QDate date = v.asDate( calc->doc() );
   int method = 1;
   if (args.count() == 2)
     method = calc->conv()->asInteger (args[1]).asInteger();
@@ -375,8 +375,8 @@ Value func_timevalue (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: years
 Value func_years (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate();
-  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
@@ -409,8 +409,8 @@ Value func_years (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: months
 Value func_months (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate();
-  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
@@ -444,8 +444,8 @@ Value func_months (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: weeks
 Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate();
-  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
@@ -470,8 +470,8 @@ Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: days
 Value func_days (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate();
-  QDate date2 = calc->conv()->asDate (args[1]).asDate();
+  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
@@ -567,7 +567,7 @@ Value func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value date = func_date (args, calc, 0);
   if (date.isError()) return date;
-  return Value (date.asDate().dayOfYear());
+  return Value (date.asDate( calc->doc() ).dayOfYear());
 }
 
 // Function: daysInMonth
@@ -631,7 +631,7 @@ Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: isoWeekNum
 Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date = calc->conv()->asDate (args[0]).asDate();
+  QDate date = calc->conv()->asDate (args[0]).asDate( calc->doc() );
   if (!date.isValid())
       return Value::errorVALUE();
 

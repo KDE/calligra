@@ -551,7 +551,12 @@ public:
   /**
    * \ingroup OpenDocument
    */
-  void loadOasisCellValidation( const KoXmlElement&body );
+  void loadOasisCellValidation( const KoXmlElement& body );
+
+  /**
+   * \ingroup OpenDocument
+   */
+  void loadOasisCalculationSettings( const KoXmlElement& body );
 
 
   virtual int supportedSpecialFormats() const;
@@ -718,6 +723,21 @@ public:
 
   int undoRedoLimit() const;
   void setUndoRedoLimit(int _val);
+
+    /**
+     * Sets the reference date.
+     * All dates are stored as numbers relative to a reference date.
+     *
+     * \param date the new reference date
+     */
+    void setReferenceDate( QDate date );
+
+    /**
+     * Returns the reference date all date are stored relative to.
+     *
+     * \return the reference date (default: 1899-12-30)
+     */
+    QDate referenceDate() const;
 
 public slots:
   void refreshInterface();

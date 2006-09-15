@@ -28,7 +28,12 @@ ValueConverter::ValueConverter (ValueParser* p) : parser( p )
 {
 }
 
-KLocale* ValueConverter::locale()
+const Doc* ValueConverter::doc() const
+{
+  return parser->doc();
+}
+
+const KLocale* ValueConverter::locale() const
 {
   return parser->locale();
 }
@@ -175,11 +180,11 @@ Value ValueConverter::asString (const Value &value) const
       if (fmt == Value::fmt_Percent)
         val = QString::number (value.asInteger() * 100) + " %";
       else if (fmt == Value::fmt_DateTime)
-        val = parser->locale()->formatDateTime (value.asDateTime());
+        val = parser->locale()->formatDateTime (value.asDateTime( doc() ));
       else if (fmt == Value::fmt_Date)
-        val = parser->locale()->formatDate (value.asDate());
+        val = parser->locale()->formatDate (value.asDate( doc() ));
       else if (fmt == Value::fmt_Time)
-        val = parser->locale()->formatTime (value.asTime());
+        val = parser->locale()->formatTime (value.asTime( doc() ));
       else
         val = QString::number (value.asInteger());
     }
@@ -187,11 +192,11 @@ Value ValueConverter::asString (const Value &value) const
     case Value::Float:
       fmt = value.format();
       if (fmt == Value::fmt_DateTime)
-        val = parser->locale()->formatDateTime (value.asDateTime());
+        val = parser->locale()->formatDateTime (value.asDateTime( doc() ));
       else if (fmt == Value::fmt_Date)
-        val = parser->locale()->formatDate (value.asDate(), true);
+        val = parser->locale()->formatDate (value.asDate( doc() ), true);
       else if (fmt == Value::fmt_Time)
-        val = parser->locale()->formatTime (value.asTime());
+        val = parser->locale()->formatTime (value.asTime( doc() ));
       else
       {
         //convert the number, change decimal point from English to local

@@ -26,6 +26,7 @@ class KLocale;
 
 namespace KSpread {
 
+class Doc;
 class ValueParser;
 
 /**
@@ -37,7 +38,7 @@ class ValueConverter {
  public:
   /** constructor */
   ValueConverter (ValueParser *parser);
- 
+
   Value asBoolean (const Value &value) const;
   Value asInteger (const Value &value) const;
   Value asFloat (const Value &value) const;
@@ -47,11 +48,12 @@ class ValueConverter {
   Value asDateTime (const Value &value) const;
   Value asDate (const Value &value) const;
   Value asTime (const Value &value) const;
-  
-  KLocale* locale();
-  
+
+  const Doc* doc() const;
+  const KLocale* locale() const;
+
  private:
-   ValueParser *parser; 
+   ValueParser *parser;
 };
 
 

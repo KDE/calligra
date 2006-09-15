@@ -688,7 +688,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        {
          // eat the aposthrophe itself
          ++i;
-         // must be followed by '!', otherwise we have a string in ''
+         // must be followed by '!' to be sheet name
          if( ex[i] == '!' )
          {
            tokenText.append( ex[i++] );
@@ -1178,6 +1178,7 @@ Value Formula::eval() const
   QString c;
   QVector<Value> args;
 
+  Doc *doc = 0;
   Sheet *sheet = 0;
   ValueParser* parser = 0;
   ValueConverter* converter = 0;
@@ -1191,7 +1192,8 @@ Value Formula::eval() const
   }
   else
   {
-    parser = new ValueParser( KGlobal::locale() );
+    doc = new Doc();
+    parser = new ValueParser( doc );
     converter = new ValueConverter( parser );
     calc = new ValueCalc( converter );
   }
@@ -1454,6 +1456,7 @@ Value Formula::eval() const
   }
 
   if (!d->sheet) {
+    delete doc;
     delete parser;
     delete converter;
     delete calc;

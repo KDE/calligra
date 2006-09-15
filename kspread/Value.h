@@ -28,6 +28,7 @@
 
 namespace KSpread
 {
+class Doc;
 class ValueData;
 
 /**
@@ -236,17 +237,17 @@ class KSPREAD_EXPORT Value
     /**
      * Sets this value to floating-point number representing the date/time.
      */
-    void setValue( const QDateTime& dt );
+    void setValue( const QDateTime& dt, const Doc* doc );
 
     /**
      * Sets this value to floating-point number representing the date.
      */
-    void setValue( const QTime& dt );
+    void setValue( const QTime& dt, const Doc* doc );
 
     /**
      * Sets this value to floating-point number representing the time.
      */
-    void setValue( const QDate& dt );
+    void setValue( const QDate& dt, const Doc* doc );
 
     /** Sets format information for this value. */
     void setFormat (Format fmt);
@@ -282,17 +283,17 @@ class KSPREAD_EXPORT Value
     /**
      * Returns the date/time representation of this value.
      */
-    QDateTime asDateTime() const;
+    QDateTime asDateTime( const Doc* doc ) const;
 
     /**
      * Returns the date representation of this value.
      */
-    QDate asDate() const;
+    QDate asDate( const Doc* doc ) const;
 
     /**
      * Returns the time representation of this value.
      */
-    QTime asTime() const;
+    QTime asTime( const Doc* doc ) const;
 
     /**
      * Return an element in the array value.

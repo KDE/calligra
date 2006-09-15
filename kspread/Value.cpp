@@ -18,6 +18,7 @@
 */
 
 #include "Value.h"
+#include "Doc.h"
 
 #include <kdebug.h>
 
@@ -556,21 +557,19 @@ QString Value::errorMessage() const
 
 // set the value as date/time
 // NOTE: date/time is stored as serial number
-// Day 61 means 1st of March, 1900
-void Value::setValue( const QDateTime& dt )
+void Value::setValue( const QDateTime& dt, const Doc* doc  )
 {
-  // reference is 31 Dec, 1899 midnight
-  QDate refDate( 1899, 12, 31 );
+  QDate refDate( doc->referenceDate() );
   QTime refTime( 0, 0 );
 
-  int i = refDate.daysTo( dt.date() ) + 1;
+  int i = refDate.daysTo( dt.date() );
   i += refTime.secsTo( dt.time() ) / 86400;
 
   setValue( i );
   d->format = fmt_DateTime;
 }
 
-void Value::setValue( const QTime& time )
+void Value::setValue( const QTime& time, const Doc* doc )
 {
   // reference time is midnight
   QTime refTime( 0, 0 );
@@ -580,26 +579,25 @@ void Value::setValue( const QTime& time )
   d->format = fmt_Time;
 }
 
-void Value::setValue( const QDate& date )
+void Value::setValue( const QDate& date, const Doc* doc )
 {
-  // reference date is 31 Dec, 1899
-  QDate refDate = QDate( 1899, 12, 31 );
-  int i = refDate.daysTo( date ) + 1;
+  QDate refDate = QDate( doc->referenceDate() );
+  int i = refDate.daysTo( date );
 
   setValue( i );
   d->format = fmt_Date;
 }
 
 // get the value as date/time
-QDateTime Value::asDateTime() const
+QDateTime Value::asDateTime( const Doc* doc ) const
 {
-  return QDateTime( asDate(), asTime() );
+  return QDateTime( asDate( doc ), asTime( doc ) );
 }
 
 // get the value as date
-QDate Value::asDate() const
+QDate Value::asDate( const Doc* doc ) const
 {
-  QDate dt( 1899, 12, 30 );
+  QDate dt( doc->referenceDate() );
 
   int i = asInteger();
   dt = dt.addDays( i );
@@ -608,7 +606,7 @@ QDate Value::asDate() const
 }
 
 // get the value as time
-QTime Value::asTime() const
+QTime Value::asTime( const Doc* doc ) const
 {
   QTime dt;
 

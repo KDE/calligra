@@ -21,6 +21,7 @@
 #include "ValueFormatter.h"
 
 #include "Cell.h"
+#include "Doc.h"
 #include "Localization.h"
 #include "Util.h"
 #include "ValueConverter.h"
@@ -84,11 +85,11 @@ QString ValueFormatter::formatText (const Value &value,
 
   //date
   else if (formatIsDate (fmtType))
-    str = dateFormat (value.asDate(), fmtType);
+    str = dateFormat (value.asDate( converter->doc() ), fmtType);
 
   //time
   else if (formatIsTime (fmtType))
-    str = timeFormat (value.asDateTime(), fmtType);
+    str = timeFormat (value.asDateTime( converter->doc() ), fmtType);
 
   //fraction
   else if (formatIsFraction (fmtType))
@@ -467,9 +468,8 @@ QString ValueFormatter::timeFormat (const QDateTime &dt, FormatType fmtType)
     return QString("%1:%2:%3").arg(hour, 2).arg(minute, 2).arg(second, 2);
   }
 
-  QDate d1(dt.date());
-  QDate d2( 1899, 12, 31 );
-  int d = d2.daysTo( d1 ) + 1;
+  QDate refDate( converter->doc()->referenceDate() );
+  int d = refDate.daysTo( dt.date() );
 
   h += d * 24;
 

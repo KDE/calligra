@@ -162,6 +162,7 @@ public:
   Q3ValueList<KoPictureKey> usedPictures;
   bool m_savingWholeDocument;
   SavedDocParts savedDocParts;
+  QDate refDate; // the reference date all dates are relative to
 };
 
 /*****************************************************************************
@@ -183,7 +184,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->locale = new Localization;
   d->styleManager = new StyleManager();
 
-  d->parser = new ValueParser( d->locale );
+  d->parser = new ValueParser( this );
   d->converter = new ValueConverter ( d->parser );
   d->calc = new ValueCalc( d->converter );
   d->calc->setDoc (this);
@@ -216,7 +217,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   connect( d->commandHistory, SIGNAL( documentRestored() ), SLOT( documentRestored() ) );
 
 
-  // Make us scripsheet if the document has a name
+  // Make us scriptable if the document has a name
   // Set a name if there is no name specified
   // NOTE Stefan: This is the ctor and the KoDocument ctor does NOT set
   //              an object name, so there's no object name at all yet.
@@ -243,6 +244,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
   d->dontCheckTitleCase = false;
+  d->refDate = QDate( 1899, 12, 30 );
 }
 
 Doc::~Doc()
@@ -935,7 +937,8 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
 
     // TODO check versions and mimetypes etc.
     loadOasisAreaName( body );
-    loadOasisCellValidation( body );
+    loadOasisCellValidation( body ); // table:content-validations
+    loadOasisCalculationSettings( body ); // table::calculation-settings
 
     // all <sheet:sheet> goes to workbook
     if ( !map()->loadOasis( body, context ) )
@@ -1583,6 +1586,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent
     int right_col  = sheet->rightColumn( unzoomItXOld( rect.right() ) );
     int top_row    = sheet->topRow( unzoomItYOld( rect.y() ), ypos );
     int bottom_row = sheet->bottomRow( unzoomItYOld( rect.bottom() ) );
+
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
@@ -1922,6 +1926,68 @@ void Doc::loadOasisCellValidation( const KoXmlElement&body )
                 else {
                     kDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
                 }
+            }
+        }
+    }
+}
+
+void Doc::loadOasisCalculationSettings( const KoXmlElement& body )
+{
+    KoXmlNode settings = KoDom::namedItemNS( body, KoXmlNS::table, "calculation-settings" );
+    kDebug() << "Calculation settings found? "<< !settings.isNull() << endl;
+    if ( !settings.isNull() )
+    {
+        KoXmlElement element;
+        forEachElement( element, settings )
+        {
+            if ( element.namespaceURI() != KoXmlNS::table )
+                continue;
+            else if ( element.tagName() ==  "case-sensitive" )
+            {
+                // TODO Stefan: mandatory for OpenFormula small group compliance
+            }
+            else if ( element.tagName() ==  "precision-as-shown" )
+            {
+                // TODO Stefan: mandatory for OpenFormula small group compliance
+            }
+            else if ( element.tagName() ==  "search-criteria-must-apply-to-whole-cell" )
+            {
+                // TODO Stefan: mandatory for OpenFormula small group compliance
+            }
+            else if ( element.tagName() ==  "automatic-find-labels" )
+            {
+                // TODO Stefan: mandatory for OpenFormula small group compliance
+            }
+            else if ( element.tagName() ==  "use-regular-expressions " )
+            {
+                // TODO Stefan: mandatory for OpenFormula small group compliance
+            }
+            else if ( element.tagName() ==  "null-year" )
+            {
+                // TODO Stefan: mandatory for OpenFormula small group compliance
+            }
+            else if ( element.tagName() ==  "null-date" )
+            {
+                d->refDate = QDate( 1899, 12, 30 );
+                QString valueType = element.attributeNS( KoXmlNS::table, "value-type", "date" );
+                if( valueType == "date" )
+                {
+                    QString value = element.attributeNS( KoXmlNS::table, "date-value", "1899-12-30" );
+                    QDate date = QDate::fromString( value, Qt::ISODate );
+                    if ( date.isValid() )
+                        d->refDate = date;
+               }
+                else
+                {
+                    kDebug() << "Doc: Error on loading null date. "
+                             << "Value type """ << valueType << """ not handled"
+                             << ", falling back to default." << endl;
+                    // TODO Stefan: I don't know why different types are possible here!
+                }
+            }
+            else if ( element.tagName() ==  "iteration" )
+            {
+                // TODO
             }
         }
     }
@@ -2299,6 +2365,17 @@ void Doc::setUndoRedoLimit(int val)
 {
   d->commandHistory->setUndoLimit(val);
   d->commandHistory->setRedoLimit(val);
+}
+
+void Doc::setReferenceDate( QDate date )
+{
+    if ( !date.isValid() ) return;
+    d->refDate.setDate( date.year(), date.month(), date.day() );
+}
+
+QDate Doc::referenceDate() const
+{
+    return d->refDate;
 }
 
 void Doc::insertPixmapKey( KoPictureKey key )

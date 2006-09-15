@@ -113,7 +113,7 @@ SET (kspreadcommon_LIB_SRCS
 	Manipulator.cpp
 	Map.cpp
 	MapAdaptor.cpp
-	Numformat.cpp
+# 	Numformat.cpp
 	Object.cpp
 	PropertyEditor.cpp
 	RecalcManager.cpp

@@ -21,19 +21,25 @@
 #include "ValueParser.h"
 
 #include "Cell.h"
+#include "Doc.h"
 #include "Format.h"
 #include "Localization.h"
 #include "Value.h"
 
 using namespace KSpread;
 
-ValueParser::ValueParser( KLocale* locale ) : parserLocale( locale )
+ValueParser::ValueParser( Doc* doc ) : m_doc( doc )
 {
 }
 
-KLocale* ValueParser::locale()
+const Doc* ValueParser::doc() const
 {
-  return parserLocale;
+    return m_doc;
+}
+
+const KLocale* ValueParser::locale() const
+{
+  return m_doc->locale();
 }
 
 void ValueParser::parse (const QString& str, Cell *cell)
@@ -65,7 +71,7 @@ void ValueParser::parse (const QString& str, Cell *cell)
 
   // Test for money number
   bool ok;
-  double money = parserLocale->readMoney (strStripped, &ok);
+  double money = m_doc->locale()->readMoney (strStripped, &ok);
   if (ok)
   {
     cell->format()->setPrecision(2);
@@ -118,7 +124,7 @@ Value ValueParser::parse (const QString &str)
 
 
   // Test for money number
-  double money = parserLocale->readMoney (strStripped, &ok);
+  double money = m_doc->locale()->readMoney (strStripped, &ok);
   if (ok)
   {
     val.setValue (money);
@@ -184,13 +190,13 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
   const QString& lowerStr = str.toLower();
 
   if ((lowerStr == "true") ||
-       (lowerStr == ki18n("true").toString(parserLocale).toLower()))
+       (lowerStr == ki18n("true").toString(m_doc->locale()).toLower()))
   {
     val.setValue (true);
     if (ok) *ok = true;
   }
   else if ((lowerStr == "false") ||
-      (lowerStr == ki18n("false").toString(parserLocale).toLower()))
+      (lowerStr == ki18n("false").toString(m_doc->locale()).toLower()))
   {
     val.setValue (false);
     if (ok) *ok = true;
@@ -202,9 +208,9 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
 double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
 {
   QString str = _str.trimmed();
-  bool neg = str.indexOf(parserLocale->negativeSign()) == 0;
+  bool neg = str.indexOf(m_doc->locale()->negativeSign()) == 0;
   if (neg)
-	str.remove( 0, parserLocale->negativeSign().length() );
+	str.remove( 0, m_doc->locale()->negativeSign().length() );
 
   /* will hold the scientific notation portion of the number.
 	 Example, with 2.34E+23, exponentialPart == "E+23"
@@ -220,7 +226,7 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
     str = str.left(EPos);
   }
 
-  int pos = str.indexOf(parserLocale->decimalSymbol());
+  int pos = str.indexOf(m_doc->locale()->decimalSymbol());
   QString major;
   QString minor;
   if ( pos == -1 )
@@ -231,14 +237,14 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
   else
   {
     major = str.left(pos);
-    minor = str.mid(pos + parserLocale->decimalSymbol().length());
+    minor = str.mid(pos + m_doc->locale()->decimalSymbol().length());
     if (isInt) *isInt = false;
   }
 
   // Remove thousand separators
-  int thlen = parserLocale->thousandsSeparator().length();
+  int thlen = m_doc->locale()->thousandsSeparator().length();
   int lastpos = 0;
-  while ( ( pos = major.indexOf( parserLocale->thousandsSeparator() ) ) > 0 )
+  while ( ( pos = major.indexOf( m_doc->locale()->thousandsSeparator() ) ) > 0 )
   {
     // e.g. 12,,345,,678,,922 Acceptable positions (from the end) are 5, 10, 15... i.e. (3+thlen)*N
     int fromEnd = major.length() - pos;
@@ -283,7 +289,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
     str2 = str;
 
 
-  // First try to understand the number using the parserLocale
+  // First try to understand the number using the m_doc->locale()
   bool isInt;
   double val = readNumber (str2, ok, &isInt);
   // If not, try with the '.' as decimal separator
@@ -333,7 +339,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
 Value ValueParser::tryParseDate (const QString& str, bool *ok)
 {
   bool valid = false;
-  QDate tmpDate = parserLocale->readDate (str, &valid);
+  QDate tmpDate = m_doc->locale()->readDate (str, &valid);
   if (!valid)
   {
     // Try without the year
@@ -341,7 +347,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
     // For instance %Y-%m-%d becomes %m-%d and %d/%m/%Y becomes %d/%m
     // If the year is in the middle, say %m-%Y/%d, we'll remove the sep.
     // before it (%m/%d).
-    QString fmt = parserLocale->dateFormatShort();
+    QString fmt = m_doc->locale()->dateFormatShort();
     int yearPos = fmt.indexOf("%Y", 0, Qt::CaseInsensitive);
     if ( yearPos > -1 )
     {
@@ -357,7 +363,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
           fmt.remove( yearPos, 1 );
       }
       //kDebug(36001) << "Cell::tryParseDate short format w/o date: " << fmt << endl;
-      tmpDate = parserLocale->readDate( str, fmt, &valid );
+      tmpDate = m_doc->locale()->readDate( str, fmt, &valid );
     }
   }
   if (valid)
@@ -369,7 +375,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
 
     // The following fixes the problem, 3/4/1955 will always be 1955
 
-    QString fmt = parserLocale->dateFormatShort();
+    QString fmt = m_doc->locale()->dateFormatShort();
     if( ( fmt.contains( "%y" ) == 1 ) && ( tmpDate.year() > 2999 ) )
       tmpDate = tmpDate.addYears( -1900 );
 
@@ -394,7 +400,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
     }
 
     //test if it's a short date or text date.
-    if (parserLocale->formatDate (tmpDate, false) == str)
+    if (m_doc->locale()->formatDate (tmpDate, false) == str)
       fmtType = TextDate_format;
     else
       fmtType = ShortDate_format;
@@ -431,26 +437,26 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
   if (!valid)
   {
     QTime tm;
-    if (parserLocale->use12Clock())
+    if (m_doc->locale()->use12Clock())
     {
-      QString stringPm = ki18n("pm").toString(parserLocale);
-      QString stringAm = ki18n("am").toString(parserLocale);
+      QString stringPm = ki18n("pm").toString(m_doc->locale());
+      QString stringAm = ki18n("am").toString(m_doc->locale());
       int pos=0;
       if((pos=str.indexOf(stringPm))!=-1)
       {
           QString tmp=str.mid(0,str.length()-stringPm.length());
           tmp=tmp.simplified();
-          tm = parserLocale->readTime(tmp+' '+stringPm, &valid);
+          tm = m_doc->locale()->readTime(tmp+' '+stringPm, &valid);
           if (!valid)
-              tm = parserLocale->readTime(tmp+":00 "+stringPm, &valid);
+              tm = m_doc->locale()->readTime(tmp+":00 "+stringPm, &valid);
       }
       else if((pos=str.indexOf(stringAm))!=-1)
       {
           QString tmp = str.mid(0,str.length()-stringAm.length());
           tmp = tmp.simplified();
-          tm = parserLocale->readTime (tmp + ' ' + stringAm, &valid);
+          tm = m_doc->locale()->readTime (tmp + ' ' + stringAm, &valid);
           if (!valid)
-              tm = parserLocale->readTime (tmp + ":00 " + stringAm, &valid);
+              tm = m_doc->locale()->readTime (tmp + ":00 " + stringAm, &valid);
       }
     }
   }
@@ -477,7 +483,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
 {
   duration = false;
   QString str = intstr.simplified().toLower();
-  QString format = parserLocale->timeFormat().simplified();
+  QString format = m_doc->locale()->timeFormat().simplified();
   if ( !withSeconds )
   {
     int n = format.indexOf("%S");
@@ -492,7 +498,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
   uint strpos = 0;
   uint formatpos = 0;
 
-  QDate refDate( 1899, 12, 31 );
+  QDate refDate( m_doc->referenceDate() );
 
   uint l  = format.length();
   uint sl = str.length();
@@ -522,7 +528,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
     {
      case 'p':
       {
-        QString s(ki18n("pm").toString(parserLocale).toLower());
+        QString s(ki18n("pm").toString(m_doc->locale()).toLower());
         int len = s.length();
         if (str.mid(strpos, len) == s)
         {
@@ -531,7 +537,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
         }
         else
         {
-          s = ki18n("am").toString(parserLocale).toLower();
+          s = ki18n("am").toString(m_doc->locale()).toLower();
           len = s.length();
           if (str.mid(strpos, len) == s)
           {
