@@ -41,21 +41,21 @@ class ValueParser {
  public:
   /** constructor */
   ValueParser (KLocale *locale);
-  
+
   KLocale* locale();
-  
+
   /** try to parse the text in a given cell and set value accordingly */
   void parse (const QString& str, Cell *cell);
 
   /** try to parse given text, don't set any cell attributes though */
   Value parse (const QString &str);
-  
+
   Value tryParseBool (const QString& str, bool *ok = 0);
   Value tryParseNumber (const QString& str, bool *ok = 0);
   Value tryParseDate (const QString& str, bool *ok = 0);
   Value tryParseTime (const QString& str, bool *ok = 0);
  protected:
- 
+
   KLocale* parserLocale;
 
   // Try to parse the text as a bool/number/date/time/etc.
@@ -64,7 +64,7 @@ class ValueParser {
   bool tryParseNumber (const QString& str, Cell *cell);
   bool tryParseDate (const QString& str, Cell *cell);
   bool tryParseTime (const QString& str, Cell *cell);
-  
+
   /** converts a string to a date/time value */
   QDateTime readTime (const QString & intstr, bool withSeconds, bool *ok,
       bool & duration);
@@ -76,9 +76,6 @@ class ValueParser {
   FormatType fmtType;
 };
 
-
 }  //namespace KSpread
 
-
 #endif  //KSPREAD_VALUEPARSER
-
