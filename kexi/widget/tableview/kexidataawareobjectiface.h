@@ -641,7 +641,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void addNewRecordRequested();
 
 		//! Call this from the subclass. */
-		virtual void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e);
+		virtual void focusOutEvent(QFocusEvent* e);
 
 		/*! Handles verticalScrollBar()'s valueChanged(int) signal. 
 		 Called when vscrollbar's value has been changed. 
