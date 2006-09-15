@@ -270,8 +270,6 @@ QString Token::sheetName() const
   int i = m_text.indexOf( '!' );
   if( i < 0 ) return QString();
   QString sheet = m_text.left( i );
-  if( sheet[0] == QChar(39) )
-    sheet = sheet.mid( 1, sheet.length()-2 );
   return sheet;
 }
 
@@ -697,10 +695,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
          else
          {
              if ( isNamedArea( tokenText ) )
-             {
-                 tokenText = tokenText.mid( 1, tokenText.length() - 2 );
                  tokens.append (Token (Token::Range, tokenText, tokenStart));
-             }
              else
                  tokens.append (Token (Token::Identifier, tokenText, tokenStart));
              tokenStart = i;
@@ -1147,7 +1142,6 @@ bool Formula::isNamedArea( const QString& expr ) const
     QString tokenText( expr );
     // check for named areas ...
     if (d->sheet) {
-        tokenText = tokenText.mid( 1, tokenText.length() - 2 ).toLower();
         const QList<Reference> areas = d->sheet->doc()->listArea();
         QList<Reference>::const_iterator it;
         for (it = areas.begin(); it != areas.end(); ++it) {
