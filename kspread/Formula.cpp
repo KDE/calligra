@@ -1145,7 +1145,7 @@ bool Formula::isNamedArea( const QString& expr ) const
         const QList<Reference> areas = d->sheet->doc()->listArea();
         QList<Reference>::const_iterator it;
         for (it = areas.begin(); it != areas.end(); ++it) {
-            if ((*it).ref_name.toLower() == tokenText) {
+            if ((*it).ref_name.toLower() == tokenText.toLower()) {
                  // we got a named area
                 return true;
             }
