@@ -2267,12 +2267,12 @@ void KPrView::setupActions()
         actionViewShowSideBar = new KToggleAction( i18n("Show Sidebar"), 0,
                                                    this, SLOT( viewShowSideBar() ),
                                                    actionCollection(), "view_showsidebar" );
-        actionViewShowSideBar->setCheckedState(i18n("Hide Sidebar"));
+        actionViewShowSideBar->setCheckedState(KGuiItem(i18n("Hide Sidebar")));
 
         actionViewShowNoteBar = new KToggleAction( i18n("Show Notebar"), 0,
                                                    this, SLOT( viewShowNoteBar() ),
                                                    actionCollection(), "view_shownotebar" );
-        actionViewShowNoteBar->setCheckedState(i18n("Hide Notebar"));
+        actionViewShowNoteBar->setCheckedState(KGuiItem(i18n("Hide Notebar")));
     }
 
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
@@ -2292,7 +2292,7 @@ void KPrView::setupActions()
     actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), 0,
                                             this, SLOT( viewGrid() ),
                                             actionCollection(), "view_grid" );
-    actionViewShowGrid->setCheckedState(i18n("Hide &Grid"));
+    actionViewShowGrid->setCheckedState(KGuiItem(i18n("Hide &Grid")));
 
     actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), 0,
                                              this, SLOT(viewSnapToGrid() ),
@@ -2583,13 +2583,13 @@ void KPrView::setupActions()
     m_actionExtraHeader = new KToggleAction( i18n( "Enable Document &Header" ), 0,
                                              this, SLOT( viewHeader() ),
                                              actionCollection(), "extra_header" );
-    m_actionExtraHeader->setCheckedState( i18n( "Disable Document &Header" ) );
+    m_actionExtraHeader->setCheckedState( KGuiItem(i18n( "Disable Document &Header" )) );
     m_actionExtraHeader->setToolTip( i18n( "Shows and hides header display for the current slide" ) );
 
     m_actionExtraFooter = new KToggleAction( i18n( "Enable Document Foo&ter" ), 0,
                                              this, SLOT( viewFooter() ),
                                              actionCollection(), "extra_footer" );
-    m_actionExtraFooter->setCheckedState( i18n( "Disable Document Foo&ter" ) );
+    m_actionExtraFooter->setCheckedState( KGuiItem(i18n( "Disable Document Foo&ter" )) );
     m_actionExtraFooter->setToolTip( i18n( "Shows and hides footer display for the current slide" ) );
 
     actionExtraConfigure = new KAction(KIcon("configure"),  i18n( "Configure KPresenter..." ), actionCollection(), "extra_configure" );
@@ -2829,7 +2829,7 @@ void KPrView::setupActions()
     actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
                                                this, SLOT( slotAllowAutoFormat() ),
                                                actionCollection(), "enable_autocorrection" );
-    actionAllowAutoFormat->setCheckedState(i18n("Disable Autocorrection"));
+    actionAllowAutoFormat->setCheckedState(KGuiItem(i18n("Disable Autocorrection")));
 
     // ------------------- Actions with a key binding and no GUI item
     action = new KAction( i18n( "Insert Non-Breaking Space" ), actionCollection(), "nonbreaking_space" );
@@ -2959,13 +2959,13 @@ void KPrView::setupActions()
     actionDisplayObjectFromMasterPage = new KToggleAction( i18n( "Hide Object From Slide Master" ), 0,
                                          this, SLOT( displayObjectFromMasterPage() ),
                                          actionCollection(), "display_object_from_master_page" );
-    actionDisplayObjectFromMasterPage->setCheckedState(i18n("Display Object From Slide Master"));
+    actionDisplayObjectFromMasterPage->setCheckedState(KGuiItem(i18n("Display Object From Slide Master")));
 
 
     actionDisplayBackgroundPage = new KToggleAction( i18n( "Hide Background" ), 0,
                                          this, SLOT( displayBackground() ),
                                          actionCollection(), "display_background" );
-    actionDisplayBackgroundPage->setCheckedState(i18n("Display Background"));
+    actionDisplayBackgroundPage->setCheckedState(KGuiItem(i18n("Display Background")));
 }
 
 void KPrView::displayObjectFromMasterPage()
