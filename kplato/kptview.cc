@@ -619,7 +619,7 @@ void View::slotProjectCalculatePessimistic() {
 void View::projectCalculate() {
     if (false /*getProject().actualEffort() > 0*/) {
         // NOTE: This can be removed when proper baselining etc is implemented
-        if (KMessageBox::warningContinueCancel(this, i18n("Progress information will be deleted if the project is recalculated."), i18n("Calculate"), i18n("Calculate")) == KMessageBox::Cancel) {
+        if (KMessageBox::warningContinueCancel(this, i18n("Progress information will be deleted if the project is recalculated."), i18n("Calculate"), KGuiItem(i18n("Calculate"))) == KMessageBox::Cancel) {
             return;
         }
     }

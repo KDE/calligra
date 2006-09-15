@@ -154,7 +154,7 @@ bool Part::loadXML(QIODevice *, const QDomDocument &document) {
         int ret = KMessageBox::warningContinueCancel(
             0, i18n("This document was created with a newer version of KPlato (syntax version: %1)\n"
                     "Opening it in this version of KPlato will lose some information.", m_syntaxVersion),
-            i18n("File-Format Mismatch"), i18n("Continue") );
+            i18n("File-Format Mismatch"), KGuiItem(i18n("Continue")) );
         if (ret == KMessageBox::Cancel)
         {
             setErrorMessage("USER_CANCELED");
