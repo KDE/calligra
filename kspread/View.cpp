@@ -978,7 +978,7 @@ void View::Private::initActions()
   actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet"));
 
   actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"),      ac, "showPageBorders");
-  actions->showPageBorders->setCheckedState(i18n("Hide Page Borders"));
+  actions->showPageBorders->setCheckedState(KGuiItem(i18n("Hide Page Borders")));
   connect( actions->showPageBorders, SIGNAL( toggled( bool ) ),
                     view, SLOT( togglePageBorders( bool ) ) );
   actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be" ) );
@@ -1147,19 +1147,19 @@ void View::Private::initActions()
   // -- settings actions --
 
   actions->showStatusBar = new KToggleAction( i18n("Show Status Bar"), ac, "showStatusBar" );
-  actions->showStatusBar->setCheckedState(i18n("Hide Status Bar"));
+  actions->showStatusBar->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
   connect( actions->showStatusBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showStatusBar( bool ) ) );
   actions->showStatusBar->setToolTip(i18n("Show the status bar"));
 
   actions->showTabBar = new KToggleAction( i18n("Show Tab Bar"), ac, "showTabBar" );
-  actions->showTabBar->setCheckedState(i18n("Hide Tab Bar"));
+  actions->showTabBar->setCheckedState(KGuiItem(i18n("Hide Tab Bar")));
   connect( actions->showTabBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showTabBar( bool ) ) );
   actions->showTabBar->setToolTip(i18n("Show the tab bar"));
 
   actions->showFormulaBar = new KToggleAction( i18n("Show Formula Bar"), ac, "showFormulaBar" );
-  actions->showFormulaBar->setCheckedState(i18n("Hide Formula Bar"));
+  actions->showFormulaBar->setCheckedState(KGuiItem(i18n("Hide Formula Bar")));
   connect( actions->showFormulaBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showFormulaBar( bool ) ) );
   actions->showFormulaBar->setToolTip(i18n("Show the formula bar"));
