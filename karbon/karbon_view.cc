@@ -1128,7 +1128,7 @@ KarbonView::initActions()
 
 	m_showPageMargins = new KToggleAction(KIcon("view_margins"), i18n("Show Page Margins"), actionCollection(), "view_show_margins");
 	connect( m_showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
-	m_showPageMargins->setCheckedState(i18n("Hide Page Margins"));
+	m_showPageMargins->setCheckedState(KGuiItem(i18n("Hide Page Margins")));
 
 	// No need for the other actions in read-only (embedded) mode
 	if( !shell() )
@@ -1216,13 +1216,13 @@ KarbonView::initActions()
 	connect(actionDistributeTop, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalTop()));
 
 	m_showRulerAction = new KToggleAction(i18n("Show Rulers"), actionCollection(), "view_show_ruler");
-	m_showRulerAction->setCheckedState(i18n("Hide Rulers"));
+	m_showRulerAction->setCheckedState(KGuiItem(i18n("Hide Rulers")));
 	m_showRulerAction->setToolTip(i18n("Shows or hides rulers"));
 	m_showRulerAction->setChecked(false);
 	connect( m_showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
 
 	m_showGridAction = new KToggleAction(KIcon("view_grid"), i18n("Show Grid"), actionCollection(), "view_show_grid");
-	m_showGridAction->setCheckedState(i18n("Hide Grid"));
+	m_showGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
 	m_showGridAction->setToolTip(i18n("Shows or hides grid"));
 	//m_showGridAction->setChecked(true);
 	connect(m_showGridAction, SIGNAL(triggered()), this, SLOT(showGrid()));
