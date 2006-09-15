@@ -129,7 +129,12 @@ void FormulaParserTester::run()
   // cell/range/identifier
   CHECK_PARSE( "A1", "c" );
   CHECK_PARSE( "Sheet1!A1", "c" );
+  CHECK_PARSE( "'Sheet1'!A1", "c" );
   CHECK_PARSE( "'Sheet One'!A1", "c" );
+  CHECK_PARSE( "2006!A1", "c" );
+  CHECK_PARSE( "2006bak!A1", "c" );
+  CHECK_PARSE( "2006bak2!A1", "c" );
+  CHECK_PARSE( "'2006bak2'!A1", "c" );
   CHECK_PARSE( "A1:B100", "r" );
   CHECK_PARSE( "Sheet1!A1:B100", "r" );
   CHECK_PARSE( "'Sheet One'!A1:B100", "r" );
