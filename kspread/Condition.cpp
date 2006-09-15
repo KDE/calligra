@@ -126,10 +126,10 @@ bool Conditions::currentCondition( Conditional & condition )
   {
     condition = *it;
 
-	if ( (*it).styleName )
-		kDebug()<<"*it :"<<  *( ( *it ).styleName ) <<endl;
-
-	kDebug()<<"*it style :"<<(  *it ).style <<endl;
+//     if ( (*it).styleName )
+//         kDebug()<<"*it :"<<  *( ( *it ).styleName ) <<endl;
+//
+//     kDebug()<<"*it style :"<<(  *it ).style <<endl;
 
 
     if ( condition.strVal1 && m_cell->value().isNumber() )
