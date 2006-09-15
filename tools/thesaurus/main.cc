@@ -281,12 +281,12 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
         // not called from an application like KWord, so make it possible
         // to replace text:
         m_replacement = true;
-        m_dialog->setButtonGuiItem( KDialog::Ok, i18n("&Replace"));
+        m_dialog->setButtonGuiItem( KDialog::Ok, KGuiItem(i18n("&Replace")));
     } else if ( command == "thesaurus_standalone" ) {
         // not called from any application, but from KThesaurus
         m_replacement = false;
         m_dialog->showButton( KDialog::Ok, false);
-        m_dialog->setButtonGuiItem( KDialog::Cancel, i18n("&Close"));
+        m_dialog->setButtonGuiItem( KDialog::Cancel, KGuiItem(i18n("&Close")));
         m_replace->setEnabled(false);
         m_replace_label->setEnabled(false);
     } else {
