@@ -533,7 +533,6 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        {
          i++;
          state = InSheetOrAreaName;
-         tokenText.append( QChar( '\'' ) );
        }
 
        // decimal dot ?
@@ -687,8 +686,8 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
 
        else
        {
-         // the aposthrophe itself
-         tokenText.append( ex[i++] );
+         // eat the aposthrophe itself
+         ++i;
          // must be followed by '!', otherwise we have a string in ''
          if( ex[i] == '!' )
          {
@@ -734,6 +733,20 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
          tokenText.append( 'E' );
          i++;
          state = InExpIndicator;
+       }
+
+       // reference sheet delimiter?
+       else if( ch == '!' )
+       {
+         tokenText.append( ex[i++] );
+         state = InCell;
+       }
+
+       // identifier?
+       else if( isIdentifier( ch ) )
+       {
+         // has to be a sheet or area name then
+         state = InIdentifier;
        }
 
        // we're done with integer number
