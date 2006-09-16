@@ -250,7 +250,7 @@ Value func_daverage (valVector args, ValueCalc *calc, FuncExtra *)
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ()) {
         res = calc->add (res, val);
@@ -276,7 +276,7 @@ Value func_dcount (valVector args, ValueCalc *calc, FuncExtra *)
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
         count++;
@@ -300,7 +300,7 @@ Value func_dcounta (valVector args, ValueCalc *calc, FuncExtra *)
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty())
         count++;
@@ -323,7 +323,7 @@ Value func_dget (valVector args, ValueCalc *calc, FuncExtra *)
   int rows = database.rows() - 1;  // first row contains column names
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       return val;
     }
 
@@ -347,7 +347,7 @@ Value func_dmax (valVector args, ValueCalc *calc, FuncExtra *)
   bool got = false;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ()) {
         if (!got) {
@@ -379,7 +379,7 @@ Value func_dmin (valVector args, ValueCalc *calc, FuncExtra *)
   bool got = false;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ()) {
         if (!got) {
@@ -411,7 +411,7 @@ Value func_dproduct (valVector args, ValueCalc *calc, FuncExtra *)
   bool got = false;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ()) {
         got = true;
@@ -453,7 +453,7 @@ Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ()) {
         avg = calc->add (avg, val);
@@ -466,7 +466,7 @@ Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
   Value res;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ())
         res = calc->add (res, calc->sqr (calc->sub (val, avg)));
@@ -492,7 +492,7 @@ Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ()) {
         avg = calc->add (avg, val);
@@ -505,7 +505,7 @@ Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
   Value res;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ())
         res = calc->add (res, calc->sqr (calc->sub (val, avg)));
