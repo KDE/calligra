@@ -664,7 +664,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             QDateTime dt( QDate( year, month, day ) );
             //            KSpreadValue kval( dt );
             // cell->setValue( kval );
-            cell->setValue( QDate( year, month, day ) );
+            cell->setValue( Value( QDate( year, month, day ), cell->sheet()->doc() ) );
             kDebug(30518) << "Set QDate: " << year << " - " << month << " - " << day << endl;
           }
         }
@@ -708,7 +708,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           {
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
             // cell->setValue( kval );
-            cell->setValue( QTime( hours % 24, minutes, seconds ) );
+            cell->setValue( Value( QTime( hours % 24, minutes, seconds ), cell->sheet()->doc() ) );
             cell->format()->setFormatType( Custom_format );
           }
         }
